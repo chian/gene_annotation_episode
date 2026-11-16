@@ -6,8 +6,6 @@ model decisions, AppService, or a complete parent-result admission claim.
 """
 import asyncio
 from copy import deepcopy
-import hashlib
-import importlib
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -15,18 +13,13 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import (
-    BVBRCDataClient, DATA_QUERY_OPERATION, DATA_RESULT_OPERATION,
-    EMPTY_ARGUMENTS, QUERY_OPERATION, RESULT_OPERATION,
-)
+from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import BVBRCDataClient, DATA_QUERY_OPERATION, DATA_RESULT_OPERATION, EMPTY_ARGUMENTS, QUERY_OPERATION
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields import COLLECTIONS, FIELD_REGISTRY
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views import FACT_SOURCES
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.episodic_workflow.root.library.execution_progress import describe_execution_target
-from gene_annotation_episode.resource_tool_information import bound_resource_tool_contracts
+from gene_annotation_episode.episodic_workflow.root.resource_tool_information import bound_resource_tool_contracts
 from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_information import make_tool_info, workflow_execution_catalogs
@@ -136,11 +129,6 @@ def launched(owner, request):
     return outcome['result']['handoff_ref']
 
 
-def function(path):
-    module, name = path.rsplit('.', 1)
-    return getattr(importlib.import_module(module), name)
-
-
 def test_v2_information_resolves_actual_catalog_and_bound_commission_routes(owner):
     actual = workflow_execution_catalogs()
     contracts = bound_resource_tool_contracts(owner.family)
@@ -208,67 +196,6 @@ PROJECTIONS = [
 ]
 
 
-@pytest.mark.parametrize('api_request,selector,additional_facts,additional_calculators', PROJECTIONS)
-def test_descriptor_uses_actual_request_selector_and_only_bound_functions(
-        owner, monkeypatch, api_request, selector, additional_facts, additional_calculators):
-    handoff = launched(owner, api_request)
-    target_reader = owner.family.job_progress_provider.targets
-    target = target_reader.read_target(handoff, owner.scope)
-    assert describe_execution_target(target)['mode'] == api_request['mode']
-    before = [tuple(row) for row in owner.store.db.execute('SELECT * FROM runtime_actions')]
-
-    def prohibited(*args, **kwargs):
-        pytest.fail('describing a retained target performed work')
-    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.encode_native_query', prohibited)
-    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.BVBRCDataService.invoke', prohibited)
-    descriptor = target_reader.describe_target(handoff, owner.scope, selector=selector)
-    assert descriptor['called_operation'] == DATA_QUERY_OPERATION
-    assert descriptor['operation'] == api_request['mode']
-    assert descriptor['collection'] == api_request['collection'] and descriptor['request'] == api_request
-    assert descriptor['request_profile'] == 'solr_query_solr_json_v1'
-    assert descriptor['request_media_type'] == 'application/solrquery+x-www-form-urlencoded'
-    assert descriptor['expected_response_media_type'] == 'application/solr+json'
-    assert descriptor['observed_response_media_type'] == 'application/solr+json; charset=utf-8'
-    assert descriptor['output_format'] == 'solr_json_envelope_v1'
-    assert descriptor['projection'] == selector['projection'] and descriptor['page_selector'] == selector['page']
-    assert descriptor['observation_basis'] == 'original_retained_response'
-    assert descriptor['status_operations'] == []
-    assert descriptor['acquisition_operations'] == [DATA_RESULT_OPERATION]
-    extractor, = descriptor['extractors']
-    assert extractor['return_fields'] == PUBLISHER_FIELDS
-    assert extractor['return_fact_sources'] == ['execution_result_refs',
-        'execution_bvbrc_pages', 'execution_bvbrc_counts', *additional_facts]
-    assert set(extractor['return_fact_sources'][1:]) <= set(FACT_SOURCES)
-    assert extractor['parser'] == 'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers.parse_data_snapshot'
-    assert extractor['implementation'] == 'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_publication.publish_bvbrc_data'
-    assert extractor['service_implementation'] == 'gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.BVBRCDataService.publish'
-    assert extractor['projection_implementation'] == 'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views.project_bvbrc_data_facts'
-    assert [name.rsplit('.', 1)[1] for name in extractor['calculators']] == [
-        'calculate_page_counts', *additional_calculators]
-    if selector['projection']['family'] == 'feature_sequence':
-        assert extractor['metadata_extractors'] == [
-            'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_feature_sequences.extract_feature_sequence_join']
-    elif selector['projection']['family'] == 'molecular_experiment':
-        assert extractor['metadata_extractors'] == [
-            'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_molecular.extract_molecular_experiment_rows']
-    else:
-        assert extractor['metadata_extractors'] == []
-    assert 'extract_collection_rows' not in json.dumps(descriptor)
-    for name in [extractor['parser'], extractor['implementation'], extractor['projection_implementation'],
-                 *extractor['metadata_extractors'], *extractor['calculators']]:
-        assert callable(function(name))
-    if api_request['mode'] == 'facet':
-        assert extractor['calculator_parameters'] == {
-            'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators.calculate_facet_fractions': {
-                'denominator_policy': 'same_response_exact_document_count'}}
-    else:
-        assert extractor['calculator_parameters'] == {}
-    assert len(owner.calls) == 1
-    assert [tuple(row) for row in owner.store.db.execute('SELECT * FROM runtime_actions')] == before
-    descriptor['projection']['family'] = 'changed'
-    assert target_reader.describe_target(handoff, owner.scope, selector=selector)['projection'] == selector['projection']
-
-
 def test_no_selector_does_not_invent_a_v2_result_projection(owner):
     handoff = launched(owner, query(mode='count'))
     descriptor = owner.family.job_progress_provider.targets.describe_target(handoff, owner.scope)
@@ -297,8 +224,6 @@ def test_result_descriptor_fields_match_actual_selected_publication(owner):
     assert grading['parse_result']['sheet']['count']['reported_value'] == 2
     assert grading['page_components']['native_row_count'] == 0
     assert len(owner.calls) == 1  # Results reused the original immediate response.
-
-
 
 
 def test_frozen_v2_information_reopens_without_replacing_original_instructions(owner, monkeypatch):

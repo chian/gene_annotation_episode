@@ -74,8 +74,8 @@ class PracticalReceiptInformation:
             raise ValueError('practical_receipt_selected_action_conflict')
         return row
 
-    def _original_assignment(self, body, snapshot, *, historical=False):
-        assignment = validate_assignment(snapshot['assignment'], historical=historical)
+    def _original_assignment(self, body, snapshot):
+        assignment = validate_assignment(snapshot['assignment'])
         if (snapshot['version'] != ASSIGNMENT_SNAPSHOT_VERSION
                 or snapshot['run_id'] != self.run_id or snapshot['episode_id'] != body['episode_id']
                 or canonical(snapshot['scope']) != canonical(body['scope'])
@@ -94,7 +94,7 @@ class PracticalReceiptInformation:
                     context = BindingContext(self.run_id, body['episode_id'],
                         json.loads(episode['path'])[-1][0], json.loads(episode['path']),
                         message['scope'], original, request)
-                    original = materialized_assignment(self.store, context, historical=historical)
+                    original = materialized_assignment(self.store, context)
                 from gene_annotation_episode.episodic_workflow.root.library.macs2_peak_assignment_identity import is_compact_assignment as is_macs2_assignment
                 if isinstance(original, dict) and is_macs2_assignment(original):
                     from gene_annotation_episode.episodic_workflow.root.library.macs2_peak_request_binding import materialized_assignment as materialized_macs2_assignment
@@ -120,7 +120,7 @@ class PracticalReceiptInformation:
                     raise ValueError('practical_receipt_original_episode_conflict')
         return assignment
 
-    def _qualify(self, body, snapshot, receiving_scope, *, historical=False):
+    def _qualify(self, body, snapshot, receiving_scope):
         body = _object(body, BODY_FIELDS, 'invalid_practical_receipt_information')
         snapshot = _object(snapshot, SNAPSHOT_FIELDS, 'invalid_practical_receipt_assignment_snapshot')
         receipt = validate_receipt(body['receipt'])
@@ -135,14 +135,14 @@ class PracticalReceiptInformation:
             self.store.validate_scope(body['scope'], parent_scope=plain(receiving_scope))
         except ValueError as error:
             raise ValueError('practical_receipt_outside_receiving_scope') from error
-        assignment = self._original_assignment(body, snapshot, historical=historical)
+        assignment = self._original_assignment(body, snapshot)
         before = validate_context(receipt['context_before'], workspace=assignment['workspace'])
         after = validate_context(receipt['context_after'], workspace=assignment['workspace'])
         changed = any(before[key] != after[key] for key in ('cwd', 'environment'))
         if after['revision'] != before['revision'] + int(changed):
             raise ValueError('practical_receipt_context_revision_conflict')
         validate_validations(receipt['validations'], assignment, receipt['outcome'], after,
-            tool_name=receipt['tool_name'], historical=historical)
+            tool_name=receipt['tool_name'])
         return body, self._selected(receipt)
 
     def _artifact_json(self, reference):
@@ -192,14 +192,14 @@ class PracticalReceiptInformation:
             source = self.store.put('source', self._source_payload(body, artifact, request), origin='tool')
             return source['id']
 
-    def read(self, reference, scope, *, historical=False):
+    def read(self, reference, scope):
         source = self.store.get(reference)
         if source.get('record_type') != 'source' or source.get('provider') != PROVIDER:
             raise ValueError('not_a_practical_receipt_source')
         try:
             body = self._artifact_json(source['artifact_ref'])
             snapshot = self._artifact_json(source['request_ref'])
-            body, selected = self._qualify(body, snapshot, scope, historical=historical)
+            body, selected = self._qualify(body, snapshot, scope)
             expected = self._source_payload(body, source['artifact_ref'], source['request_ref'])
             actual = {key: value for key, value in source.items() if key not in {'id', 'record_type', 'origin'}}
             if (source.get('origin') != 'tool' or canonical(actual) != canonical(expected)
@@ -220,8 +220,8 @@ class PracticalReceiptInformation:
                     if is_compact_assignment(assignment):
                         from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import (
                             match_practical_public_outcome, practical_outcome_view, read_request_binding)
-                        control = read_request_binding(self.store, self.run_id, body['episode_id'], historical=historical)
-                        options = {'assignment': snapshot['assignment'], 'control_version': control['version']}
+                        control = read_request_binding(self.store, self.run_id, body['episode_id'])
+                        options = {'assignment': snapshot['assignment']}
                         match_practical_public_outcome(result, recorded, reference, **options)
                         recorded = practical_outcome_view(recorded, **options)
                     from gene_annotation_episode.episodic_workflow.root.library.macs2_peak_assignment_identity import is_compact_assignment as is_macs2_assignment

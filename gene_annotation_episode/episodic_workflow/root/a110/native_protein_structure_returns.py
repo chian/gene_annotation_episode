@@ -1,4 +1,4 @@
-"""Original protein results and actual, frozen typed-delivery authority.
+"""Protein results and actual, frozen typed-delivery authority.
 
 This adapter reads existing actions, forms and semantic receipts. It neither
 executes science nor derives permissions by walking source auxiliaries. The

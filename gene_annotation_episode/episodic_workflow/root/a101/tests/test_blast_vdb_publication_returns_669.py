@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_uti
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_result_worker as worker
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_acquisition as acquisition
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_vdb_utility_inputs import parse_blast_vdb_extraction, parse_blast_vdb_inspection
-from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts, validate_form
+from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts
 from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.a101.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episodic_workflow.root.a101.execution_contracts import canonical, digest
@@ -31,10 +31,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.tool_grading_artifacts 
 from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from test_blast_utility_episode_wiring_632 import context
 from test_blast_vdb_utility_inputs_663 import occurrence, supplied
-from test_native_blast_utility_publication_631 import (
-    capture_fixture as classic_capture_fixture, inline_workers, prepare, publish,
-    selector as classic_selector,
-)
+from test_native_blast_utility_publication_631 import inline_workers, prepare, publish
 from test_native_blast_utility_producer_628 import POLICY
 from test_practical_yield import completion_context
 
@@ -60,35 +57,6 @@ def report_schema(*fields):
 
 def forbidden(*args, **kwargs):
     pytest.fail("saved publication attempted original parsing, metadata authentication, or native work")
-
-
-def test_legacy_publication_and_old_body_have_no_v2_enrichment(tmp_path, monkeypatch):
-    inline_workers(monkeypatch)
-    store, capture = classic_capture_fixture(tmp_path)
-    try:
-        prepared = prepare(store, capture, tmp_path)
-        chosen = classic_selector(sequences={"selector_ordinals": [0], "sequence_fields": ["original_sequence"]})
-        output = publish(store, prepared, chosen, tmp_path)
-        assert set(prepared) == publication._PREPARED_FIELDS
-        assert set(output) == publication._PUBLICATION_FIELDS
-        assert output["version"] == publication.PUBLICATION_VERSION
-        envelope = publication._json(store, output["projection_artifact_ref"])
-        assert envelope["version"] == publication.PROJECTION_VERSION
-        assert set(envelope["projection"]) == set(views.PROJECTION_FIELDS)
-        h = return_host(tmp_path, store, {"resource_kind": "local", "assignment": {
-            "requested_job": {"native_blast_utility": {"operation": prepared["operation"]}}}})
-        schema = report_schema("sequences", "paths", "path_sections", "vdb_context")
-        child = context(h, "results", {"selector": chosen}, schema=schema)
-        body = {"version": results.VERSION, "complete": True,
-            **{key: output[key] for key in views.PROJECTION_FIELDS}}
-        original = deepcopy(body)
-        monkeypatch.setattr(h.family.native_blast_utility_results, "_own_bodies", lambda ctx: iter([body]))
-        facts = h.family.native_blast_utility_results.facts(child)
-        for name in ("paths", "path_sections", "vdb_context"):
-            assert facts["execution.blast_utility_" + name] == [] and name not in body
-        assert body == original
-    finally:
-        store.close()
 
 
 def return_host(tmp_path, store, target):

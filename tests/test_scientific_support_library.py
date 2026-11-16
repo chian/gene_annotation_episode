@@ -2,7 +2,6 @@
 from copy import deepcopy
 import hashlib
 import json
-from pathlib import Path
 import shutil
 
 import pytest
@@ -10,10 +9,6 @@ import pytest
 from method_loop.durable import canonical, content_digest
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from test_scientific_support_metadata import support_entry
-
-
-PUBLICATION = (Path(__file__).resolve().parents[1] / "research/slotted_process_library"
-               / "publications/2026-10-21-001")
 
 
 def write(path, value):
@@ -77,29 +72,6 @@ def test_support_freezes_exact_bytes_and_semantics_detaches_reads_and_survives_r
     assert ScientificProcessLibrary.freeze(snapshot, source=source).resolve(ref) == body
     shutil.rmtree(source)
     assert ScientificProcessLibrary(snapshot).resolve(ref) == body
-
-
-def test_legacy_source_remains_exact_and_never_receives_support_metadata(tmp_path):
-    source, snapshot = tmp_path / "source", tmp_path / "snapshot"
-    original = synthetic_source(source, legacy=True)[0]
-    original_bytes = (source / "entries/A01.json").read_bytes()
-    library = ScientificProcessLibrary.freeze(snapshot, source=source)
-    assert library.entry("A01")["entry"] == original
-    assert "entry_version" not in library.entry("A01")["entry"]
-    assert "support" not in library.entry("A01")["entry"]
-    assert (snapshot / "entries/A01.json").read_bytes() == original_bytes
-    assert ScientificProcessLibrary(snapshot).entry("A01") == library.entry("A01")
-
-
-@pytest.mark.parametrize("legacy,version", [(False, "future"), (False, None), (True, "misspelled_v1")])
-def test_present_unknown_version_cannot_fall_back_to_legacy(tmp_path, legacy, version):
-    source, snapshot = tmp_path / "source", tmp_path / "snapshot"
-    body = synthetic_source(source, legacy=legacy)[0]
-    body["entry_version"] = version
-    write(source / "entries/A01.json", body)
-    with pytest.raises(ValueError, match="scientific_support_entry_invalid"):
-        ScientificProcessLibrary.freeze(snapshot, source=source)
-    assert not snapshot.exists()
 
 
 @pytest.mark.parametrize("mutation", ["body_semantic", "body_bytes", "source_bytes", "reference", "source_row"])

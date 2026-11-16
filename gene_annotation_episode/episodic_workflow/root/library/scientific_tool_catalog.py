@@ -1,4 +1,4 @@
-"""Shared Root policy assembly; actual private consumers and configuration are recorded in the ownership account."""
+"""Shared Root policy assembly."""
 from __future__ import annotations
 
 def scientific_library_available(self, source):

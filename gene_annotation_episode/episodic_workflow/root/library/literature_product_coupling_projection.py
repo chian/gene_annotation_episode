@@ -99,47 +99,6 @@ _SETTING = (r'(?:pH\s*'+_SETTING_NUMBER+r'|(?:at\s*|temperature\s*)?'+_SETTING_N
 _CONDITION = re.compile(r'\s*'+_SETTING+r'(?:\s*(?:at|and|,|;)\s*'+_SETTING+r')*\s*[.]?\s*', re.I)
 _STATISTICAL_PREFIX = re.compile(r'\b(?:SD|SEM|SE|mean|CV|variance|uncertainty|CI|activity|rate|turnover|coupling)\b', re.I)
 
-
-def _meaning_v1(witness, locations, *, unit=False, condition=False):
-    """Exact markerless saved-display policy from the immutable218pin001."""
-    if witness is None:
-        return None
-    raw = witness['quote'].encode(); flags = [False] * len(raw)
-    for location in locations:
-        if (location['artifact_ref'] == witness['artifact_ref']
-                and witness['start'] < location['end'] and location['start'] < witness['end']):
-            a = max(witness['start'], location['start']) - witness['start']
-            b = min(witness['end'], location['end']) - witness['start']
-            flags[a:b] = [True] * (b-a)
-    chunks, start = [], 0
-    while start < len(raw):
-        end = start+1
-        while end < len(raw) and flags[end] == flags[start]:
-            end += 1
-        chunks.append('[unrequested numerical operand]' if flags[start] else raw[start:end].decode())
-        start = end
-    shown = ''.join(chunks)
-    visible = re.sub(r'<[^>]+>', ' ', shown)
-    numeric = bool(_VISIBLE_NUMBER.search(visible))
-    # Known operand coordinates are masked even inside same-artifact aliases.
-    # Unknown table/prose statistics are withheld as a partial projection. Only
-    # separately selected bounded literal conditions and units bypass this.
-    safe_literal = unit or bool(condition and not _STATISTICAL_PREFIX.search(visible)
-        and _CONDITION.fullmatch(visible))
-    unresolved = numeric and not safe_literal
-    if re.search(r'<(?:table|tr|td|th)\b', witness['quote'], re.I) and numeric:
-        unresolved = True
-    # Preserve molecule/product definitions and nonnumeric qualifications even
-    # when the broad witness cannot classify its remaining numbers. This is a
-    # redacted display, not invented source positions or a reconstructed quote.
-    partial = ('[Mixed numerical source context retained; requested operand scope unresolved.] '
-        + _VISIBLE_NUMBER.sub('[unclassified numerical context withheld]', visible))
-    return {**{name: witness[name] for name in ('source_ref', 'artifact_ref', 'representation', 'start', 'end')},
-        'display_text': partial if unresolved else shown,
-        'status': 'numerical_scope_unresolved' if unresolved else 'unrequested_numbers_withheld' if any(flags) else 'selected',
-        'unavailable_reason': 'unrequested_numerical_scope_unresolved' if unresolved else None}
-
-
 # A bounded chemical identifier is not an assay value. This increment supports
 # the position/stereochemical camphor-product names in the retained207case;
 # neither arbitrary digit-prefixed prose nor numerical ranges qualify.
@@ -203,9 +162,7 @@ def _meaning(witness, locations, *, unit=False, condition=False):
 
 
 def _projection_policy(saved):
-    if 'projection_version' not in saved:
-        return _meaning_v1
-    if saved['projection_version'] != PROJECTION_VERSION:
+    if saved.get('projection_version') != PROJECTION_VERSION:
         raise ContractError('product_coupling_saved_projection_version_unsupported')
     return _meaning
 

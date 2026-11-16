@@ -109,8 +109,6 @@ def metacats_group_counts(alignment: dict, *, analysis_id: str, population: dict
     sites, requirements = [], []
     for site in counted:
         column = site['column_0based']
-        # Future calculations have a new identity incorporating the complete
-        # validated membership records. Saved v1 counts are never migrated.
         table_id = _id('metacats_counts_v2', {'analysis_id': analysis_id, 'population': population,
             'alignment_id': alignment['alignment_id'], 'artifact': alignment['artifact'], 'category_id': category_id,
             'group_order': groups, 'column': column, 'parameters': params,

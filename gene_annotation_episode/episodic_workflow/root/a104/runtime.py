@@ -2734,9 +2734,7 @@ class Workflow:
                     try:
                         Draft202012Validator(retriever_catalog[0]['input_schema']).validate(arguments)
                         tools = self.scientific_process_binding.tool_library
-                        available = self.services.tool_information_catalog(source.scope) if tools.supports_tool_info else self.services.tool_catalog(source.scope)
-                        if not tools.supports_tool_info:
-                            tools.resolve([entry['name'] for entry in tools.catalog()], available)
+                        available = self.services.tool_information_catalog(source.scope)
                         if self.scientific_tool_retriever is not None:
                             return await self.scientific_tool_retriever.retrieve(arguments['investigation'], episode_id=source.episode_id, operation_key=operation_key, available_catalog=available)
                         result = tools.retrieve_literal_test(arguments['investigation'], available_catalog=available)
@@ -2806,12 +2804,10 @@ class Workflow:
                     result['native_execution_expectations'] = context['native_execution_expectations']
         return result
 
-    def reasoning_action_schema(self, source, commit_schema=None, *, _accept_legacy_quotes=False):
+    def reasoning_action_schema(self, source, commit_schema=None):
         commit_schema = self.store.reasoning_schema() if commit_schema is None else commit_schema
         specialist = self.specialist(source)
-        schema = getattr(specialist, 'accept_reasoning_action_schema', None) if _accept_legacy_quotes else None
-        if schema is None:
-            schema = getattr(specialist, 'reasoning_action_schema', None)
+        schema = getattr(specialist, 'reasoning_action_schema', None)
         selected = schema(self.binding_context(source), commit_schema) if schema is not None else None
         result = selected if selected is not None else _object({'kind': {'type': 'string', 'const': 'reason'}, 'commit': commit_schema})
         return {**result, 'description': '\n\n'.join((value for value in (result.get('description'), self.services.reasoning_commit_requirement()) if value))}

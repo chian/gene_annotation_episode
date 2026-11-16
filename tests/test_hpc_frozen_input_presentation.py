@@ -125,13 +125,6 @@ def test_actual_plan_history_failure_preserves_launch_inputs_without_copying_fil
                     assert json.dumps(saved_file['text'], ensure_ascii=False)[1:-1] not in rendered
 
 
-def test_historical_plan_projection_preserves_unrelated_measurements_and_output_text():
-    scientific = {'native_components': {'value': None, 'units': 'nmol/min'},
-        'stdout': 'Original measured result\n',
-        'files': [{'path': 'result.txt', 'text': 'Actual observation', 'sha256': 'original'}]}
-    assert plan_outcome_view(scientific) == scientific
-
-
 def test_nested_launch_parameters_are_preserved_as_exact_operands():
     candidate = {'id': 'original', 'queue': 'assigned', 'nodes': 1, 'wall_seconds': 900,
         'units': [], 'preparation': '', 'files': [

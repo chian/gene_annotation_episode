@@ -1,4 +1,4 @@
-"""Native report source contracts, selected metric names and historical v1 shapes.
+"""Native report source contracts, selected metric names and v1 shapes.
 
 All coordinates in native cells are one-based inclusive; represented intervals
 and paired positions are zero-based, half-open/physical. Unknown RF accessions,

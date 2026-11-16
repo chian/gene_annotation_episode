@@ -149,7 +149,7 @@ class AppServiceCustody(EpisodeReturnRecords):
             if type(candidate) is dict and type(candidate.get("assignment")) is str:
                 self._json(candidate["assignment"])
             # Reuse the runtime's exact transport normalization and the saved
-            # original schema; today's catalog never rewrites old selections.
+            # original schema.
             from .runtime import _decode_recorded_action_response, _recorded_assignment_transport
             try:
                 exchanges = []
@@ -159,10 +159,10 @@ class AppServiceCustody(EpisodeReturnRecords):
                         for row in self.db.execute('SELECT request,response FROM runtime_decision_exchanges '
                             'WHERE run_id=? AND episode_id=? AND decision_index=? AND response IS NOT NULL '
                             'ORDER BY exchange_index', (self.run_id, parent.episode_id, index))]
+                _recorded_assignment_transport(sent)
                 model = _decode_recorded_action_response(response, sent["schema"],
                     recorded_selection=selected, exchanges=exchanges,
-                    exchange_schema=sent.get('contract_information', {}).get('exchange_schema'),
-                    unproven_replay=not _recorded_assignment_transport(sent)).get("selection")
+                    exchange_schema=sent.get('contract_information', {}).get('exchange_schema')).get("selection")
                 Draft202012Validator(sent["schema"]["properties"]["selection"]).validate(model)
             except (ValidationError, ValueError, TypeError, KeyError, AttributeError) as error:
                 raise AppServiceCustodyError("parent_selection_conflict" if str(error) ==

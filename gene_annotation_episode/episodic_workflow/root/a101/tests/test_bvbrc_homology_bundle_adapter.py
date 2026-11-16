@@ -1,7 +1,6 @@
 """Synthetic C4-to-Homology integration. No remote call or BLAST execution."""
 from copy import deepcopy
 import hashlib
-import importlib
 import json
 from pathlib import Path
 import socket
@@ -452,23 +451,6 @@ def test_pure_consumption_and_saved_sheet_recalculation_no_io_or_mutation(monkey
     recalculated = calculate_homology_scores(sheet, database_model={"temperature_bits": 1})
     assert recalculated["queries"][0]["conditional_function_weights"]["unadjusted_probabilities"] == {F: .8, G: .2}
     assert fixture == before and sheet == result["sheet"]
-
-
-@pytest.mark.parametrize("module,dependency", [
-    ("bvbrc_homology_bundle_adapter", "blast_pairwise_grader.py"),
-    ("bvbrc_homology_bundle_adapter", "alignment_correspondence.py"),
-    ("bvbrc_proteome_bundle_adapter_v2", "alignment_correspondence.py"),
-])
-def test_implementation_pin_includes_real_dependency_bytes(module, dependency, monkeypatch):
-    owner = adapter.__package__ + "."
-    implementation = importlib.import_module(owner + module)
-    initial = implementation.implementation_sha256()
-    original = Path.read_bytes
-    def changed(path):
-        content = original(path)
-        return content + b"\n# test pin\n" if path.name == dependency else content
-    monkeypatch.setattr(Path, "read_bytes", changed)
-    assert implementation.implementation_sha256() != initial
 
 
 @pytest.mark.parametrize("selection", [

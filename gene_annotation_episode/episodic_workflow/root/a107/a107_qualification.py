@@ -294,7 +294,7 @@ def _expression(store, args, known):
     original = read(store, args['expression_ref'], RESULT_PROVIDER)
     require(original is not None and original['axis'] == 'A107'
         and original['operation'] == 'partner.request_expression_hpc'
-        and original['scientific_profile'] in {'a107_expression_components_v1', 'a107_expression_components_v2'},
+        and original['scientific_profile'] == 'a107_expression_components_v2',
         'a107_original_native_expression_result_required')
     native = original['native_components']
     feature = native['features'][args['feature_side']]
@@ -443,8 +443,8 @@ def _expression_locus(store, args, known, *, projected_protein_ref=None):
     from .a103_publication import received_measurement
     original = read(store, args['expression_ref'], RESULT_PROVIDER)
     require(original is not None and original['axis'] == 'A107' and original['operation'] == (
-        'partner.request_expression_hpc') and original['scientific_profile'] in {
-            'a107_expression_components_v1', 'a107_expression_components_v2'},
+        'partner.request_expression_hpc') and original['scientific_profile'] ==
+            'a107_expression_components_v2',
         'a107_original_native_expression_result_required')
     native = original['native_components']
     feature = native['features'][args['feature_side']]
@@ -679,15 +679,9 @@ def received_qualifications(store, references, scope, *, full=False, known_recor
         revisions = qualification_assessment_changes(store, row, known)
         from .component_source_identity import qualification_changes
         identity_revisions = qualification_changes(store, row, known)
-        binding = row['result'].get('experiment_binding') or {}
-        legacy_experiment = (row.get('operation') == 'partner.requirement_evidence'
-            and bool(row['result'].get('partner_components'))
-            and binding.get('version') != REQUIREMENT_EXPERIMENT_BINDING_VERSION)
-        row['current'] = not changed and not revisions and not identity_revisions and not legacy_experiment and not any(other['request_ref'] == row['request_ref'] and
+        row['current'] = not changed and not revisions and not identity_revisions and not any(other['request_ref'] == row['request_ref'] and
             set(row['qualification_dependencies']) < set(other['qualification_dependencies']) for other in rows)
         row['changed_received_operand_refs'] = sorted(changed)
-        if legacy_experiment:
-            row['qualification_update_reasons'] = ['requirement_experiment_binding_not_recorded']
         if revisions:
             row['source_assessment_change_refs'] = revisions
         if identity_revisions:

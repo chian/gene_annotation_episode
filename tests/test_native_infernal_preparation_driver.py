@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 INDEX_PATH = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/compiled/NATIVE_COMPILED_INDEX_001.json"
 INDEX = json.loads(INDEX_PATH.read_text())
 CASES = INDEX["cases"]
-POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
+POLICY = LocalJobPolicy(5 * 1024 ** 3, 4 * 1024 ** 3)
 
 
 def digest(path):

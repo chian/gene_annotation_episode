@@ -47,5 +47,4 @@ cadence, number of samples or timeout. Native `native.stdout`, `native.stderr`,
 `hits.tbl` and `domains.tbl` belong to the original job/query/reference identity.
 Retain valid partial extraction and distinguish it from complete acquisition.
 Requested result references return through typed forms; the scientific parent
-interprets matches and integrates annotation evidence. Source row L6 in
-`docs/LAUNCH_INSTRUCTION_SOURCES_2026-10-22_001.md`.
+interprets matches and integrates annotation evidence.

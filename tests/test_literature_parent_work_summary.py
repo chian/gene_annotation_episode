@@ -55,45 +55,6 @@ def _returned(db, decision, *, question, credit, form, failure=None, receiver='p
     return deepcopy(action), deepcopy(result), deepcopy(form)
 
 
-def test_child_work_keeps_original_question_result_and_credit_without_historical_bodies():
-    with _database() as db:
-        form = dict(visibility=['retained-only-provenance'], changed_assessment_refs=['assessment_changed'],
-            assay=[dict(sheet_ref='source_sheet', component='measured_effect', value=6.18,
-                        unit='per_s', status='point', interpretation={'control': 'source_context_only'},
-                        measurement_keys=['retained-native-identity']),
-                   dict(sheet_ref='source_sheet', component='effect_precision', value=None,
-                        unit='unknown', status='unavailable', reasons=['variance_not_reported'])],
-            unresolved_hypothesis_refs=['hypothesis_input'], scientific_state='partial')
-        _returned(db, 1, question='Check the native turnover assay.', credit=2.0, form=form)
-        _returned(db, 7, question='Resolve construct correspondence.', credit=0.0,
-            form={**form, 'changed_assessment_refs': [], 'scientific_state': 'unresolved'})
-        _returned(db, 3, question='A different parent private question.', credit=11.0,
-            form=form, receiver='other-parent')
-        before = list(db.iterdump())
-        rows = completed_work(SimpleNamespace(db=db), SimpleNamespace(run_id='run', episode_id='parent'))
-        assert list(db.iterdump()) == before
-        assert len(rows) == 2
-        assert [row['decisions'] for row in rows] == ['1', '7']
-        assert [row['original_credit_marks'] for row in rows] == [[2.0], [0.0]]
-        assert [row['inputs']['question'] for row in rows] == [
-            'Check the native turnover assay.', 'Resolve construct correspondence.']
-        assert rows[0]['inputs']['source_refs'] == ['source_input']
-        returned = rows[0]['returned_result']
-        assert returned['admitted_scoring_sheets'] == [dict(source='literature_assay_grading_cells',
-            sheet_ref='source_sheet', results=[dict(component='measured_effect', value=6.18,
-                unit='per_s', status='point'), dict(component='effect_precision', value=None,
-                unit='unknown', status='unavailable', reasons=['variance_not_reported'])])]
-        assert returned['requested_return_values'] == {
-            'changed_assessment_refs': ['assessment_changed'],
-            'unresolved_hypothesis_refs': ['hypothesis_input'], 'scientific_state': 'partial'}
-        assert 'retained-only-provenance' not in json.dumps(rows)
-        assert '6.18' in json.dumps(rows)
-        assert 'retained-native-identity' not in json.dumps(rows)
-        assert 'source_context_only' not in json.dumps(rows)
-        assert rows[1]['returned_result']['requested_return_values']['scientific_state'] == 'unresolved'
-        assert all('private question' not in json.dumps(row) for row in rows)
-
-
 def test_failed_child_keeps_complete_failure_and_zero_credit_without_admitting_its_form():
     with _database() as db:
         failure = {'code': 'source_failure', 'message': 'First error line\nSecond error line',

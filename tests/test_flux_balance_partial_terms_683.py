@@ -53,15 +53,6 @@ def controlled_sheet(captures, *, defect=None, missing_positions=(6,)):
     return sheet, payloads
 
 
-def retain_example(name, sheet, payloads, result):
-    attempt = os.environ.get("HMMER529_ATTEMPT")
-    if attempt:
-        Path(attempt, f"fba683_{name}.json").write_text(json.dumps({
-            "fixture_identity": "synthetic expression in TEST-normalized retained677 capture; not production capture; no new solve",
-            "supplied_effective_problem": json.loads(payloads["effective_problem"]["bytes"]),
-            "supplied_solution": json.loads(payloads["solution"]["bytes"]),
-            "sheet": sheet, "calculations": result,
-        }, indent=2, allow_nan=False) + "\n")
 
 
 @pytest.mark.parametrize("defect", ["malformed_coefficient", "out_of_range_variable"])
@@ -92,7 +83,6 @@ def test_filtered_sparse_terms_do_not_establish_expected_population(captures, de
     assert result["candidate_feasibility"] != "passes_recorded_checks"
     assert any(issue["code"] == "term_population_incomplete" and issue["constraint_position"] == 0
                for issue in result["issues"])
-    retain_example(defect, sheet, payloads, result)
 
 
 def test_complete_expression_keeps_exact_count_and_zero_coefficient_needs_no_primal(captures):
@@ -106,7 +96,6 @@ def test_complete_expression_keeps_exact_count_and_zero_coefficient_needs_no_pri
     assert check["activity"]["value"] == 13  # 1*7 - 1*6 + 2*6 + 0*unknown
     assert check["equality_residual"]["value"] == 12  # recorded RHS remains 1
     assert "term_population_incomplete" not in check["activity"]["issue_codes"]
-    retain_example("complete_expression", sheet, payloads, result)
 
 
 def test_incomplete_population_with_all_retained_terms_usable_still_has_no_activity(captures):
@@ -124,7 +113,6 @@ def test_incomplete_population_with_all_retained_terms_usable_still_has_no_activ
     assert check["native_activity"]["value"] == 1
     assert check["native_minus_calculated_activity"]["value"] is None
     assert check["comparison"] == "unknown"
-    retain_example("all_retained_usable", sheet, payloads, result)
 
 
 def test_constraint_check_validator_allows_unknown_expected_but_bounds_known_count():

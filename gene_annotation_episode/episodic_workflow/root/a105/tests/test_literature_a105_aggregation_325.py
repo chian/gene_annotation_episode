@@ -199,35 +199,6 @@ def test_publication_replay_keeps_original_return_after_later_publication(tmp_pa
         assert current_sheet_refs(store, context) == heads
         assert list(store.db.iterdump()) == before
 
-@pytest.mark.parametrize('registered', [True, False])
-def test_old_publication_missing_return_is_not_reconstructed_or_written(tmp_path, monkeypatch, registered):
-    from gene_annotation_episode.episodic_workflow.root.literature_sheet_updates import TABLE
-    with Store(tmp_path) as store:
-        store.create_problem(raw_sequence='ATGGCT', molecule='dna')
-        context, args, native, _ = parent_fixture(store)
-        repo = LiteratureA105AggregationRepository(store, context.run_id, read_cells=lambda ctx, ref, components: native.fact_cells(ctx, [ref], components=components))
-        outcome = repo.populate(context, args, 'combine')
-        key = (context.run_id, context.episode_id, outcome['result']['sheet_ref'])
-        where = 'WHERE run_id=? AND episode_id=? AND sheet_ref=?'
-        if registered:
-            receipt = json.loads(store.db.execute(f'SELECT receipt FROM {TABLE} ' + where, key).fetchone()[0])
-            del receipt['returned_record_refs']
-            store.db.execute(f'UPDATE {TABLE} SET receipt=? ' + where, (json.dumps(receipt), *key))
-        else:
-            store.db.execute(f'DELETE FROM {TABLE} ' + where, key)
-        native_outcome = json.loads(store.db.execute(f'SELECT outcome FROM {repo.operations_table} WHERE operation_key=?', ('combine',)).fetchone()['outcome'])
-        store.db.execute('PRAGMA query_only=ON')
-        before = list(store.db.iterdump())
-
-        def forbidden(*args, **kwargs):
-            raise AssertionError('old saved publication must not open a transaction')
-        monkeypatch.setattr(store, 'transaction', forbidden)
-        if registered:
-            with pytest.raises(ContractError, match='literature_publication_return_not_retained'):
-                repo.populate(context, args, 'combine')
-        else:
-            assert repo.populate(context, args, 'combine') == native_outcome
-        assert list(store.db.iterdump()) == before
 
 def test_new_publication_still_rolls_back_native_sheet_if_update_fails(tmp_path, monkeypatch):
     with Store(tmp_path) as store:

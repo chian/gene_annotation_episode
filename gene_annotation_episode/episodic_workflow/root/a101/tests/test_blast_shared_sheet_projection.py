@@ -8,7 +8,6 @@ import io
 import json
 import os
 from pathlib import Path
-import shutil
 import socket
 import subprocess
 import zipfile
@@ -245,57 +244,6 @@ def test_new_record_binding_rejects_forged_records_even_with_fresh_record_digest
                      lambda: blast_hsp_facts(store, [record["id"]])):
             with pytest.raises(ContractError):
                 read()
-
-
-def test_historical_saved_reported_count_meaning_is_not_repriced(tmp_path):
-    with Store(tmp_path / "store") as store:
-        _, outcome = publish(store)
-        new = store.get(outcome["result"]["records"][0]["observation_ref"])
-        source = store.get(new["source_ref"])
-        metadata = json.loads(store.get_artifact(source["request_ref"]))
-        source_payload = {key: deepcopy(value) for key, value in source.items()
-            if key not in ("id", "record_type", "origin", "auxiliary_artifact_refs")}
-        source_payload["request_ref"] = store.artifact(json.dumps(
-            {"request": metadata["request"], "transport": {}}), "application/json")
-        legacy_source = store.put("source", source_payload, origin="external")
-        original_reference = store.get(new["source_subject_refs"][0])
-        reference_payload = {key: value for key, value in original_reference.items() if key not in ("id", "record_type", "origin")}
-        legacy_reference = store.put("reference", {**reference_payload, "source_ref": legacy_source["id"]}, origin="external")
-        payload = json.loads(json.dumps({key: value for key, value in new.items() if key not in ("id", "record_type", "origin")})
-            .replace(source["id"], legacy_source["id"]).replace(original_reference["id"], legacy_reference["id"]))
-        payload["native_blast"].pop("shared_projection")
-        next(row for row in payload["measurements"] if row["name"] == "identity_fraction")["value"]["value"] = 1
-        legacy = store.put("observation", payload, origin="tool")
-        saved = deepcopy(legacy)
-        read = read_blast_hsp(store, legacy["id"], 0, 4, permitted_inputs=[legacy["id"]], scope=None)
-        assert numeric(read)["identity_fraction"] == 1
-        assert read["measurement_semantics"] == "legacy_saved_native_reported"
-        assert blast_hsp_facts(store, [legacy["id"]])[0]["identity_fraction"] == 1
-        assert store.get(legacy["id"]) == saved
-
-
-def test_original_retained_legacy_store_remains_readable_without_changing_its_records(tmp_path):
-    original = Path(__file__).resolve().parents[5] / (
-        "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/"
-        "blast_legacy_store")
-    copied = tmp_path / "historical"
-    shutil.copytree(original, copied, copy_function=shutil.copyfile)
-    for path in copied.rglob("*"):
-        path.chmod(0o755 if path.is_dir() else 0o644)
-    copied.chmod(0o755)
-    with Store(copied) as store:
-        old_records = list(store.db.execute("SELECT id,data FROM records ORDER BY id"))
-        observations = [json.loads(row["data"]) for row in old_records
-            if json.loads(row["data"]).get("native_blast")]
-        assert observations and all("shared_projection" not in row["native_blast"] for row in observations)
-        for observation in observations:
-            view = read_blast_hsp(store, observation["id"], 0, 2,
-                permitted_inputs=[observation["id"]], scope=None)
-            assert numeric(view) == numeric(observation)
-            assert view["measurement_semantics"] == "legacy_saved_native_reported"
-            fact, = blast_hsp_facts(store, [observation["id"]])
-            assert fact["identity_fraction"] == numeric(observation).get("identity_fraction")
-        assert [tuple(row) for row in store.db.execute("SELECT id,data FROM records ORDER BY id")] == [tuple(row) for row in old_records]
 
 
 def test_union_and_database_dependence_survive_projection(tmp_path):

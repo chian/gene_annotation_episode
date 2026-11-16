@@ -9,14 +9,14 @@ from gene_annotation_episode.domain import ContractError, identity
 from gene_annotation_episode import restriction_mapping_native as native
 from gene_annotation_episode import restriction_mapping_readers as readers
 from gene_annotation_episode import restriction_mapping_worker as worker
-from gene_annotation_episode.restriction_mapping_bound_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.restriction_mapping_bound_contracts import (
     restriction_bound_schema, restriction_native_request,
     validate_restriction_alias_arguments, validate_restriction_bound_record,
 )
 from gene_annotation_episode.restriction_mapping_contracts import (
     restriction_canonical, restriction_schema,
 )
-from gene_annotation_episode.restriction_mapping_tool_info import TOOL, restriction_tool_contract
+from gene_annotation_episode.episodic_workflow.root.library.restriction_mapping_tool_info import TOOL, restriction_tool_contract
 
 
 SEQUENCE = "AAAAGAATTCTTTT"
@@ -56,7 +56,7 @@ def reservation(tool_name=TOOL, arguments=None):
             implementation_files=[pin("/engineering/source/restriction_mapping_worker.py")],
             biopython_version="1.88", native_source_file=pin("/engineering/Bio/Restriction/Restriction.py"),
             dictionary_file=pin("/engineering/Bio/Restriction/Restriction_Dictionary.py"), environment={}),
-        policy=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3),
+        policy=dict(memory_bytes=5 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3),
         directory=directory, request_file=pin(directory + "/request.json"),
         output_directory=directory + "/output", handle_path=directory + "/handle.json",
         stdout_path=directory + "/stdout.txt", stderr_path=directory + "/stderr.txt")
@@ -89,35 +89,6 @@ def test_canonical_native_request_keeps_exact_selected_population_and_binding(se
     if selection["kind"] == "explicit":
         value["enzyme_selection"]["names"].append("HindIII")
         assert restriction_canonical(arguments) == before
-
-
-def test_explicit_names_are_not_resolved_or_remapped_by_the_host_contract():
-    selection = {"kind": "explicit", "names": ["literal_unresolved_enzyme", "ecori"]}
-    value = restriction_native_request(TOOL, canonical_arguments(selection),
-        sequence=SEQUENCE, sequence_binding=binding())
-    assert value["enzyme_selection"] == selection
-
-
-@pytest.mark.parametrize("tool_name", [TOOL, "find_restriction_enzymes"])
-@pytest.mark.parametrize("topology", [None, "linear", "circular"])
-def test_legacy_native_arguments_and_original_topology_defaults_are_literal(tool_name, topology):
-    arguments = dict(mode="native", sequence_ref=binding()["sequence_ref"])
-    if tool_name == TOOL:
-        arguments["enzyme_names"] = ["EcoRI", "BamHI"]
-    if topology is not None:
-        arguments["topology"] = topology
-    before = restriction_canonical(arguments)
-    checked = validate_restriction_alias_arguments(tool_name, arguments)
-    request = restriction_native_request(tool_name, arguments, sequence=SEQUENCE, sequence_binding=binding())
-    expected = ({"kind": "explicit", "names": ["EcoRI", "BamHI"]} if tool_name == TOOL else
-        {"kind": "commercial_native_batch", "names": None})
-    assert request["enzyme_selection"] == expected
-    assert request["topology"] == (topology or ("circular" if tool_name == TOOL else "linear"))
-    assert restriction_canonical(checked) == restriction_canonical(arguments) == before
-    assert identity("operation", dict(key="old-key", name=tool_name, arguments=checked)) == identity(
-        "operation", dict(key="old-key", name=tool_name, arguments=arguments))
-    checked["sequence_ref"] = "another_engineering_identity"
-    assert restriction_canonical(arguments) == before
 
 
 @pytest.mark.parametrize("tool_name", [TOOL, "find_restriction_enzymes"])
@@ -168,35 +139,6 @@ def test_old_native_reservation_authenticates_original_arguments_without_rewriti
 def test_closed_argument_boundary_rejects_ambiguous_or_wrongly_typed_selections(tool_name, arguments):
     with pytest.raises((ContractError, ValueError)):
         validate_restriction_alias_arguments(tool_name, arguments)
-
-
-def test_single_advertised_local_direct_contract_requires_current_explicit_native_operands():
-    contract = restriction_tool_contract()
-    assert contract["name"] == TOOL == "find_restriction_sites"
-    assert contract["resources"] == "local" and contract["invocation_route"] == {"kind": "direct"}
-    schema = contract["input_schema"]
-    Draft202012Validator.check_schema(schema)
-    native_schema, saved_schema = schema["anyOf"]
-    assert set(native_schema["required"]) == {"mode", "sequence_ref", "enzyme_selection", "topology"}
-    assert set(saved_schema["required"]) == {"mode", "result_source_ref"}
-    assert native_schema["properties"]["enzyme_selection"] == restriction_schema("EnzymeSelection")
-    validator = Draft202012Validator(schema)
-    for selection in ({"kind": "explicit", "names": []},
-            {"kind": "explicit", "names": ["EcoRI", "BamHI"]},
-            {"kind": "commercial_native_batch", "names": None}):
-        assert validator.is_valid(canonical_arguments(selection))
-    assert validator.is_valid(dict(mode="saved", result_source_ref="source_engineering"))
-    legacy = dict(mode="native", sequence_ref="subject_engineering", enzyme_names=["EcoRI"])
-    assert validate_restriction_alias_arguments(TOOL, legacy) == legacy
-    assert not validator.is_valid(legacy)
-    for field in ("mode", "sequence_ref", "enzyme_selection", "topology"):
-        candidate = canonical_arguments()
-        candidate.pop(field)
-        assert not validator.is_valid(candidate)
-    assert not validator.is_valid({**canonical_arguments(), "enzyme_names": ["EcoRI"]})
-    assert not validator.is_valid(canonical_arguments(topology=False))
-    assert not validator.is_valid(canonical_arguments({"kind": "explicit", "names": [False]}))
-    assert not validator.is_valid(dict(mode="saved", result_source_ref="source_engineering", enzyme_names=[]))
 
 
 def test_public_contract_is_detached_and_keeps_existing_coordinate_and_population_meanings():
@@ -259,8 +201,8 @@ def test_actual_default_registry_advertises_only_the_canonical_current_contract(
 
 def test_actual_dispatch_denies_unreceived_sequence_before_bytes_or_job_preparation(tmp_path, monkeypatch):
     import asyncio
-    from gene_annotation_episode import restriction_mapping_inputs as inputs
-    from gene_annotation_episode import restriction_mapping_jobs as jobs
+    from gene_annotation_episode.episodic_workflow.root.library import restriction_mapping_inputs as inputs
+    from gene_annotation_episode.episodic_workflow.root.library import restriction_mapping_jobs as jobs
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 

@@ -1,7 +1,5 @@
 """Validation of optional native job notification bindings."""
 
-from copy import deepcopy
-from dataclasses import replace
 
 import pytest
 
@@ -28,10 +26,3 @@ def test_policy_requires_exact_explicit_native_notification_definition(definitio
             binding, binding, binding, binding, binding, native_job_events=definition)
 
 
-def test_native_notification_is_optional_without_invoking_policy_functions():
-    binding = {'kind': 'fixture_unexecuted_policy'}
-    legacy = PolicyBindings(forbidden, forbidden, forbidden, forbidden, forbidden,
-        binding, binding, binding, binding, binding)
-    assert legacy.native_job_events is None
-    supplied = replace(legacy, native_job_events=deepcopy(EVENTS))
-    assert supplied.native_job_events == EVENTS and legacy.native_job_events is None

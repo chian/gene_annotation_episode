@@ -63,7 +63,7 @@ class ProteinStructureReturnAncestry:
         return index
 
     def _levels(self, context):
-        """Yield each exact received prefix, never an inferred old NULL prefix."""
+        """Yield each exact received prefix."""
         self.authenticate(context, allow_unsaved=True)
         current, allowed, before = context, None, None
         while True:

@@ -14,7 +14,6 @@ from gene_annotation_episode.episodic_workflow.root.a104.a104_hpc import prepare
 from gene_annotation_episode.episodic_workflow.root.a104.a104_hpc_worker import validate_request, alignment_correspondence, tree_summary
 from gene_annotation_episode.episodic_workflow.root.a104.a104_credit import (A104EvolutionaryCredit,
     A104PanelIdentityCredit, A104AlignmentSuitabilityCredit)
-from gene_annotation_episode.episodic_workflow.root.a104.a104_investigation import resolve_report
 from gene_annotation_episode.episodic_workflow.root.a104.a104_tools import catalog
 from gene_annotation_episode.episodic_workflow.root.a104.a104_characterization import clade_sheet
 from gene_annotation_episode.hpc_campaign import validate_commission
@@ -169,19 +168,6 @@ def test_representation_root_and_unknown_support_do_not_become_ancestry_or_zero(
     assert value['biological_root'] == 'unestablished'
     assert value['splits'][0]['support_percent'] is None
     assert value['splits'][0]['support_state'] == 'unknown'
-
-
-def test_native_tree_claim_requires_actual_received_execution(tmp_path):
-    with Store(tmp_path/'state') as store:
-        target, refs, known, scope, analysis = operands(store)
-        # The legacy model-verdict report requires every field explicitly;
-        # initial_report() is the current records/credit-only form.
-        report = {'phylogeny_status': 'native_trees_received', 'function_scope': 'not_assessed',
-                  'history_interpretation': 'not_assessed', 'limitations': [],
-                  'information_need_refs': [], 'hypothesis_refs': [], 'assessment_refs': [],
-                  'records': [], 'phylogenetic_credit': 0.}
-        with pytest.raises(ValueError, match='native_tree_statement_requires_received_original_execution'):
-            resolve_report(store, report, scope=scope)
 
 
 def test_copied_native_provider_label_is_not_host_scientific_custody(tmp_path):

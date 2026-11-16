@@ -16,8 +16,8 @@ from gene_annotation_episode.episodic_workflow.root.communication import ReportB
 from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.native_atac_differential_contracts import POLICY, OPERATION, MODE
-from gene_annotation_episode.native_atac_differential_tool_info import atac_tool_information
-from gene_annotation_episode.atac_differential_return_views import (
+from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_tool_info import atac_tool_information
+from gene_annotation_episode.episodic_workflow.root.library.atac_differential_return_views import (
     FACT_SOURCES, SAVED_SOURCE, atac_fact_sources,
 )
 from gene_annotation_episode.atac_differential_result_contracts import SHEET_FORMAT, TABLE_FORMAT
@@ -173,7 +173,7 @@ def test_saved_bundle_semantics_visit_sheet_and_every_track_reference(f):
 
 
 def test_native_and_saved_origins_are_distinct_registered_facts(selected):
-    from gene_annotation_episode.native_atac_differential_results import ORIGIN, SAVED_ORIGIN
+    from gene_annotation_episode.episodic_workflow.root.native_atac_differential_results import ORIGIN, SAVED_ORIGIN
     schema = selected.owner.fact_sources('results')['execution_result_origin']['report_schema']
     assert ORIGIN != SAVED_ORIGIN
     for origin in (ORIGIN, SAVED_ORIGIN, None):
@@ -237,7 +237,7 @@ def test_actual_worker_snapshot_preserves_single_file_dependency_directory(tmp_p
     import os
     import typing_extensions
     from gene_annotation_episode.local_jobs import LocalJobPolicy
-    from gene_annotation_episode.native_atac_differential_preparation import _snapshot
+    from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_preparation import _snapshot
 
     directory = tmp_path / 'worker'
     intent = _snapshot({'directory': str(directory)}, LocalJobPolicy(**POLICY))

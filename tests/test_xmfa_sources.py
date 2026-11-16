@@ -8,11 +8,10 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
+from gene_annotation_episode.episodic_workflow.root.library.phylogeny_formats import parse_aligned_fasta
 from gene_annotation_episode.episodic_workflow.root.library.xmfa_formats import parse_mauve_xmfa
 from gene_annotation_episode.episodic_workflow.root.library.xmfa_sources import bind_xmfa_sources, validate_xmfa_bindings_for_document
-from gene_annotation_episode.episodic_workflow.root.library.xmfa_source_contracts import (
-    validate_xmfa_source_inputs, validate_xmfa_source_bindings, validate_xmfa_original_map)
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_source_contracts import validate_xmfa_source_inputs, validate_xmfa_source_bindings
 
 BASE=Path(__file__).resolve().parents[1]/'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_xmfa_boundaries/native_examples'
 

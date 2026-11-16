@@ -16,7 +16,7 @@ def sample_bindings_schema():
     nullable = {'anyOf': [deepcopy(witness), {'type': 'null'}]}
     return {'type': 'array', 'items': obj({'sample_id': {'type': 'string', 'minLength': 1}, 'identity': deepcopy(witness), 'file_refs': {'type': 'array', 'items': {**REF, 'x-reference-namespace': 'source'}, 'uniqueItems': True}, 'file_correspondence': {'type': 'array', 'items': deepcopy(witness), 'description': 'One source witness per file_refs entry, in the same order, linking that file to this sample.'}, 'arm': {'enum': ['reference', 'intervention', 'restoration', 'other', 'unknown']}, 'arm_definition': deepcopy(nullable), 'biological_unit': deepcopy(nullable), 'technical_unit': deepcopy(nullable), 'pairing': deepcopy(nullable), 'batch': deepcopy(nullable), 'sampling_time': deepcopy(nullable)})}
 
-def intervention_population_schema(*, legacy=False):
+def intervention_population_schema():
     schema = intervention_grading_input_schema()
     props = schema['properties']
     del props['version']

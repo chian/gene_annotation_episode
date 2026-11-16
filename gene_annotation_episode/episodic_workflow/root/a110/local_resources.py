@@ -22,21 +22,9 @@ from .acquisition import AcquisitionError
 
 
 VERSION = 'shared_local_resources_v3'
-PRIOR_VERSION = 'shared_local_resources_v2'
-LEGACY_VERSION = 'shared_local_resources_v1'
 DIRECTORY_ENV = 'GENE_EPISODE_LOCAL_RESOURCE_DIRECTORY'
 _LIVE = {'active', 'activating', 'deactivating', 'reloading'}
 _RESOURCE_FIELDS = {'memory_bytes', 'scratch_bytes'}
-# Original own-axis defaults.toml SHA256:
-# d8bc88d4cd0a1eb29c5da406dce3ddb28e825f0f759b02a17793fb9bb2b16fc8.
-# Reconstruct only the old ordinary default definition, never supplied limits.
-# Its count is historical descriptor data and is not an admission quantity.
-_ORIGINAL_V1_LIMITS = {'max_running_jobs': 1, 'cpu_threads': 1,
-    'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
-# Installed jobs-only own defaults.toml SHA256:
-# 31fa69b3b653de63c9f276e19bf0b40904fca4141fe0fc4c56a936ac01fe20a2.
-_ORIGINAL_V2_LIMITS = {'cpu_threads': 1,
-    'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 
 
 def _boot():
@@ -85,34 +73,27 @@ def _limits(settings):
 
 def _saved_definition(definition, directory, workflow_slice):
     if (not isinstance(definition, dict)
-            or definition.get('version') not in (VERSION, PRIOR_VERSION, LEGACY_VERSION)
+            or definition.get('version') != VERSION
             or definition.get('resource_id') != _resource_id()
             or definition.get('directory') != str(directory)
             or definition.get('workflow_slice') != workflow_slice):
         raise ValueError('local_resource_binding_conflict')
     limits = definition['limits']
-    fields = _RESOURCE_FIELDS | ({'cpu_threads'} if definition['version'] in (PRIOR_VERSION, LEGACY_VERSION) else set())
-    fields |= {'max_running_jobs'} if definition['version'] == LEGACY_VERSION else set()
-    allowed = fields | ({'cpu_threads'} if definition['version'] == VERSION else set())
-    if not isinstance(limits, dict) or not fields <= set(limits) or set(limits)-allowed:
+    allowed = _RESOURCE_FIELDS | {'cpu_threads'}
+    if not isinstance(limits, dict) or not _RESOURCE_FIELDS <= set(limits) or set(limits)-allowed:
         raise ValueError('invalid_local_resource_settings')
     if any(type(value) is not int or value <= 0 for value in limits.values()):
         raise ValueError('invalid_local_resource_limits')
 
 
 class LocalResources:
-    def __init__(self, directory, settings=None, *, workflow_slice=None, _original_defaults_version=None):
+    def __init__(self, directory, settings=None, *, workflow_slice=None):
         if settings is not None and not isinstance(settings, dict):
             raise ValueError('invalid_local_resource_settings')
-        if _original_defaults_version not in (None, LEGACY_VERSION, PRIOR_VERSION):
-            raise ValueError('original_local_resource_version_invalid')
-        if _original_defaults_version is not None and settings is not None:
-            raise ValueError('original_local_resource_defaults_require_no_settings')
         self.directory = Path(directory).expanduser().resolve()
         self.path = self.directory/'capacity.sqlite3'
         self._existing_definition = None
         self._configuration_json = None
-        self._legacy = False
         self.directory.mkdir(parents=True, exist_ok=True)
         with self._transaction() as db:
             db.execute('CREATE TABLE IF NOT EXISTS configuration (id INTEGER PRIMARY KEY CHECK(id=1), value TEXT NOT NULL)')
@@ -123,34 +104,28 @@ class LocalResources:
                 'created_at TEXT NOT NULL)')
             saved = db.execute('SELECT value FROM configuration WHERE id=1').fetchone()
             if saved is None:
-                historical_defaults = (_ORIGINAL_V1_LIMITS if _original_defaults_version == LEGACY_VERSION
-                    else _ORIGINAL_V2_LIMITS if _original_defaults_version == PRIOR_VERSION else None)
-                definition = {'version': _original_defaults_version or VERSION,
+                definition = {'version': VERSION,
                     'resource_id': _resource_id(), 'directory': str(self.directory),
-                    'limits': dict(historical_defaults) if historical_defaults is not None else _limits(settings or {})}
+                    'limits': _limits(settings or {})}
                 if workflow_slice is not None:
                     definition['workflow_slice'] = workflow_slice
                 raw = json.dumps(definition, sort_keys=True)
                 db.execute('INSERT INTO configuration VALUES(1,?)', (raw,))
                 self._existing_definition = json.loads(raw)
                 self._configuration_json = raw
-                self._legacy = definition['version'] == LEGACY_VERSION
             else:
                 definition = json.loads(saved[0])
                 _saved_definition(definition, self.directory, workflow_slice)
                 self._existing_definition = json.loads(json.dumps(definition))
-                self._legacy = definition['version'] == LEGACY_VERSION
                 self._authenticate_existing(db)
                 if settings is not None:
-                    # Preserve exact supplied/stored count metadata. It never
+                    # The supplied thread count is metadata. It never
                     # participates in capacity, availability or admission.
-                    allowed = _RESOURCE_FIELDS | {'cpu_threads'} | ({'max_running_jobs'} if self._legacy else set())
-                    if set(settings)-allowed:
+                    if set(settings)-(_RESOURCE_FIELDS | {'cpu_threads'}):
                         raise ValueError('invalid_local_resource_settings')
-                    for name in ('max_running_jobs', 'cpu_threads'):
-                        if (name in settings and (type(settings[name]) is not int
-                                or settings[name] != definition['limits'].get(name))):
-                            raise ValueError('local_resource_limits_conflict')
+                    if ('cpu_threads' in settings and (type(settings['cpu_threads']) is not int
+                            or settings['cpu_threads'] != definition['limits'].get('cpu_threads'))):
+                        raise ValueError('local_resource_limits_conflict')
                     original = {key: definition['limits'][key] for key in _RESOURCE_FIELDS}
                     requested = {**original, **{key:value for key,value in settings.items() if key in _RESOURCE_FIELDS}}
                     if _limits(requested) != original:
@@ -172,9 +147,7 @@ class LocalResources:
     def reopen(cls, definition):
         if not isinstance(definition, dict) or not isinstance(definition.get('directory'), str):
             raise ValueError('local_resource_binding_conflict')
-        value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'),
-            _original_defaults_version=(definition.get('version')
-                if definition.get('version') in (LEGACY_VERSION, PRIOR_VERSION) else None))
+        value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'))
         if value.as_record() != definition:
             raise ValueError('local_resource_binding_conflict')
         return value
@@ -247,7 +220,7 @@ class LocalResources:
                 else 'execution_unknown')
             jobs.append({'reservation_ref': row['token'], 'execution_handle': row['unit'], 'state': state,
                 'allocation': {key: row[key] for key in ('cpu_threads', 'memory_bytes', 'scratch_bytes')}})
-        # Older or independently configured registries can already have native
+        # Independently configured registries can already have native
         # services on this host. Unknown allocations conservatively occupy the
         # entire budget rather than advertising those resources as free.
         try:
@@ -275,7 +248,6 @@ class LocalResources:
         return jobs
 
     def _view(self, jobs):
-        # Stored cpu_threads/max_running_jobs remain descriptor provenance.
         # Requested threads in real reservation/job rows remain metadata;
         # only byte resources define capacity, availability and admission.
         limits = {key: self.definition['limits'][key] for key in _RESOURCE_FIELDS}

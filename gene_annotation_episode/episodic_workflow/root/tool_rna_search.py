@@ -1,4 +1,4 @@
-"""Original substantive ordinary-tool methods: tool_rna_search."""
+"""Ordinary-tool methods: tool_rna_search."""
 from __future__ import annotations
 from dataclasses import replace
 import hashlib

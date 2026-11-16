@@ -1,4 +1,4 @@
-"""Preserved root host ports defined by WorkflowReferenceAccess."""
+"""Root host ports defined by WorkflowReferenceAccess."""
 from __future__ import annotations
 from .communication import plain
 

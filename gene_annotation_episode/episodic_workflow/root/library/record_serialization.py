@@ -1,8 +1,7 @@
-"""Exact original Mapping-aware JSON and digest primitives for Root workers.
+"""Mapping-aware JSON and digest primitives for Root workers.
 
-The existing record_values plain definer is reused. Historical public names
-import these same functions; no schema, communication or episode module is
-needed to serialize a worker record.
+The record_values plain definer is reused; no schema, communication or episode
+module is needed to serialize a worker record.
 """
 import hashlib
 import json

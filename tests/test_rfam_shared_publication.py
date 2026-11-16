@@ -5,25 +5,15 @@ request seams. Historical replay uses isolated copies of actual old receipts;
 it does not regenerate a v1 result with current code or change old evidence.
 """
 from copy import deepcopy
-import hashlib
 import json
-from pathlib import Path
-import shutil
-from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import rfam_digest
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_infernal import HIT_ALIASES
-from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_views import project_rfam_batch_result
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_rfam_batch_returns import Harness, forbid_read_work, schema_for, selector
 from test_rfam_report_publication_returns import ReportHarness
-
-
-ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.fixture(autouse=True)
@@ -154,18 +144,5 @@ def test_v2_receiver_rejects_forged_saved_bindings_even_with_resealed_component_
         forbid_read_work(monkeypatch, h)
         with pytest.raises(ValueError):
             h.boundary.read(outcome["result"]["source_ref"], h.scope, episode_id=child.episode_id)
-
-
-LEGACY_RECEIPTS = {
-    "json": "tool_graders_rfam_returns_2026-10-26_240/tests_004/temporary/pytest/test_native_read_uses_actual_a0",
-    "json_partial": "tool_graders_rfam_returns_2026-10-26_240/tests_004/temporary/pytest/test_missing_partial_and_unava0",
-    "tblout": "tool_graders_rfam_returns_2026-10-26_240/tests_004/temporary/pytest/test_query_strand_population_k1",
-    "out": "tool_graders_rfam_report_returns_2026-10-26_244/tests_002/temporary/pytest/test_selected_report_keeps_nat0",
-}
-
-
-def _hashes(directory):
-    return {str(p.relative_to(directory)): hashlib.sha256(p.read_bytes()).hexdigest()
-        for p in directory.rglob("*") if p.is_file()}
 
 

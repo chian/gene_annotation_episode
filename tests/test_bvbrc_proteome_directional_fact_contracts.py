@@ -1,15 +1,11 @@
 """Finite selector/form semantics and exact nonfloating numeric transport."""
 from copy import deepcopy
 from decimal import localcontext, Inexact, Rounded, ROUND_DOWN
-import ast
-from pathlib import Path
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_directional_fact_contracts as c
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_fact_contracts as legacy
-from gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns import proteome_fact_sources
-from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema
 
 
 def all_selections():
@@ -73,23 +69,6 @@ def test_exact_decimals_ignore_caller_precision_exponents_and_traps(text, expect
 @pytest.mark.parametrize('text', ['', 'nan', 'inf', 'e-179', '1,000', '1e', '.', ' 1', True, 1.0])
 def test_conversion_never_reinterprets_invalid_or_native_unparsed_text(text):
     with pytest.raises(ValueError): c.exact_decimal(text)
-
-
-def test_all_new_parent_schemas_use_existing_closed_grammar_and_legacy_schemas_stay_exact():
-    sources = proteome_fact_sources()
-    assert len(sources) == 22
-    for value in sources.values(): validate_closed_schema(legacy.obj(value=value['report_schema']))
-    form = c.requested_form_schema_v2({'requirements': {'kind': 'requirements', 'scope': 'all'}})
-    assert form == legacy.requested_form_schema({'requirements': {'kind': 'requirements', 'scope': 'all'}})
-    assert set(c.FAMILIES.values()) <= {name.removeprefix('bvbrc_proteome_') for name in sources}
-
-
-def test_layer_zero_has_no_provider_projection_parser_or_calculator_import():
-    tree = ast.parse(Path(c.__file__).read_text())
-    imports = [node.module or '' for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)]
-    assert not any(any(word in name for word in ('bundle_v2', 'projection', 'returns', 'calculation', 'geometry')) for name in imports)
-    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_bundle_v2_contracts import DIRECTIONAL_BINDING_CODES
-    assert set(c.BINDING_CODES) == set(DIRECTIONAL_BINDING_CODES)
 
 
 def numerical_fact():

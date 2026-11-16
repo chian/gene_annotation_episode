@@ -123,14 +123,6 @@ def test_document_is_closed_copied_and_alias_length_is_not_exact_extracted_lengt
     schema = blast_preparation_document_schema(); schema.clear(); assert blast_preparation_document_schema()
 
 
-def test_legacy_operation_stays_byte_identical_and_new_version_is_not_injected():
-    op = {"version": "blast_utility_operation_v1", "program": "blastdbcmd", "mode": "info",
-        "input_occurrence_ids": [], "database_key": "db", "molecule": "dna", "parameters": {"exact_length": True}}
-    serialized = json.dumps(op, separators=(",", ":"))
-    assert json.dumps(validate_blast_utility_operation(op), separators=(",", ":")) == serialized
-    assert blast_utility_result_version_for_operation(op) == "blast_database_inspection_v1"
-
-
 def test_input_copy_receipt_preserves_missing_and_changed_states_without_fake_defaults():
     pair = {"sha256": "1" * 64, "size_bytes": 1}
     row = {"kind": "input_copy", "input_key": "source", "source_path": "/source/a", "relative_path": "inputs/a",

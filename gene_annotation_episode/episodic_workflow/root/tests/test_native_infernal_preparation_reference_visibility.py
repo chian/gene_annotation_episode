@@ -6,6 +6,7 @@ authenticator are real. Positive child forms use a declared completed-results
 port; they do not establish production capture/grading or nested execution.
 The separate workload 257 nested tests cover that larger production path.
 """
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from contextlib import contextmanager
 from copy import deepcopy
 import hashlib
@@ -107,7 +108,7 @@ class MetadataBoundary:
         self.tools = ToolRegistry(self.store, run_directory=self.store.path / 'tool-run')
         self.directory = tmp_path / 'run'
         self.resources = {'synthetic-local': {'kind': 'local', 'workspace': str(tmp_path),
-            'policy': {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3},
+            'policy': {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3},
             # Configuration only: this nonexistent software is never invoked.
             'native_infernal_preparation': [{'program': 'cmemit', 'mode': 'consensus', 'software': {
                 'executable': str(tmp_path / 'never-invoked-cmemit'), 'sha256': '0' * 64,
@@ -213,26 +214,6 @@ def test_other_source_provider_or_version_keeps_existing_recursive_receipts(boun
         assert b.access(artifact) is None
         assert b.access(auxiliary) is None
         b.assert_resolution(auxiliary, True)
-
-
-@pytest.mark.parametrize('historical_pollution', [False, True])
-def test_store_scope_or_old_receipts_cannot_authorize_unrequested_preparation_bytes(boundary,
-        monkeypatch, historical_pollution):
-    b = boundary
-    b.receipts.receive(b.context.episode_id, [b.source], kind='child_form', source_index=0)
-    if historical_pollution:
-        b.pollute_receipts(b.bundle, b.selected, b.unrequested)
-    before, retained = receipt_rows(b.store), retained_metadata(b.store)
-    with metadata_only(b.store, monkeypatch):
-        for reference in (b.bundle, b.selected, b.unrequested):
-            assert b.store.reference_subset([reference], b.scope) == [reference]
-            assert b.access(reference) is False
-            b.assert_resolution(reference, False)
-        assert b.access(b.source, 'source') is False
-        b.assert_resolution(b.source, False, 'source')
-        assert receipt_rows(b.store) == before
-        assert retained_metadata(b.store) == retained
-        assert not b.store.db.execute('SELECT 1 FROM runtime_observations').fetchone()
 
 
 @pytest.mark.parametrize('status', ['completed', 'partial'])

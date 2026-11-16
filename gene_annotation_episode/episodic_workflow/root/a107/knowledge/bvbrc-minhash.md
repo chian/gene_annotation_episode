@@ -17,9 +17,7 @@ the actual endpoint and any authorization configuration; an available operation
 description does not establish authentication or deployment.
 
 `api.bvbrc.minhash.result` runs in the results episode using the original handoff
-and the parent's fixed selector. Its action arguments are `{}`. Legacy selector
-`{}` remains valid: it records the retained native response without supplied
-pair metadata. The explicit selector also supports these choices:
+and the parent's fixed selector. Its action arguments are `{}`. The selector supports these choices:
 
 | Selected mode | Required input | Work performed |
 | --- | --- | --- |

@@ -5,6 +5,7 @@ calculator or infers a missing value, population, calibration or source call.
 """
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import json
 import math
@@ -645,7 +646,7 @@ def validate_molecular_sequence_fact_values(source, rows, *, allow_unretained=Fa
 def validate_molecular_sequence_result_worker_plan(value):
     closed(value, ("version", "directory", "selector", "source_files", "inputs", "association", "received_sheet_receipt_file", "software", "selected_environment", "policy"))
     require(value["version"] == PLAN_VERSION and type(value["directory"]) is str and value["directory"].startswith("/"))
-    require(value["policy"] == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296})
+    require(value["policy"] == {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296})
     from .molecular_sequence_execution_contracts import _software, absolute_path, environment
     absolute_path(value["directory"])
     environment(value["selected_environment"])

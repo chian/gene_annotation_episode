@@ -268,7 +268,7 @@ def _population(identity, strand, members, declaration, scope, *, uncertain=()):
 
 
 def calculate_infernal_search_scores(sheet: dict, *, parameters: dict | None = None) -> dict:
-    """Calculate only from saved v2 cells; explicit v1 conversion is separate."""
+    """Calculate only from saved cells."""
     validate_infernal_search_sheet(sheet)
     parameters = {} if parameters is None else parameters
     if (not isinstance(parameters, dict) or set(parameters) - {"hit_scope"}

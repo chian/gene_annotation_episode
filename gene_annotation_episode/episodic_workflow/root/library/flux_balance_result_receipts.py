@@ -1,6 +1,6 @@
 """Original selected FBA action, launch, worker and publication authority.
 
-These durable controls retain outcomes before credit. Historical validation
+These durable controls retain outcomes before credit. Completed-action validation
 uses frozen controls and artifact metadata; it neither loads matrices nor polls
 or reruns a native producer.
 """
@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.root.library.flux_balance_native_
 from gene_annotation_episode.episodic_workflow.root.library.flux_balance_return_views import (fba_fact_sources, requested_fba_sources,
     validate_fba_fact_values)
 from gene_annotation_episode.episodic_workflow.root.library.flux_balance_worker_contracts import OUTPUTS, validate_flux_balance_worker_plan, validate_flux_balance_worker_result
-from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (POLICY, HISTORICAL_POLICY, flux_balance_driver_argv,
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (POLICY, flux_balance_driver_argv,
     validate_flux_balance_requested_job, validate_flux_balance_run_plan, path_value)
 from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_preparation import validate_flux_balance_worker_execution
 from gene_annotation_episode.episodic_workflow.root.library.native_artifact_storage import read_json
@@ -48,26 +48,6 @@ def require(condition, code='fba_result_authority_conflict'):
 def closed(value, fields):
     require(type(value) is dict and set(value) == set(fields), 'fba_result_invalid_record')
 
-
-def _validation_policy(historical):
-    require(type(historical) is bool, 'fba_historical_validation_mode_invalid')
-    return HISTORICAL_POLICY if historical else POLICY
-
-
-def _saved_validation_mode(validate):
-    """Choose an exact envelope only for an already authenticated saved action."""
-    matches, errors = [], []
-    for historical in (False, True):
-        try:
-            validate(historical)
-        except (ValueError, TypeError, KeyError) as error:
-            errors.append(error)
-        else:
-            matches.append(historical)
-    if not matches:
-        raise errors[0]
-    require(len(matches) == 1, 'fba_saved_validation_mode_ambiguous')
-    return matches[0]
 
 def issue(code, stage, field):
     return validate_flux_balance_record('Issue', dict(code=code, stage=stage, field=field,
@@ -123,29 +103,28 @@ class FluxBalanceResultReceipts:
     def returns(self):
         return self.owner.native_flux_balance_returns
 
-    def outcome(self, receipt, *, historical=False):
-        _validation_policy(historical)
+    def outcome(self, receipt):
         result = outcome(receipt)
         original = self.returns.context(receipt['intent']['target']['origin_episode_id'])
         from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import is_compact_assignment, materialized_assignment
         if is_compact_assignment(plain(original.assignment)):
-            require(same(materialized_assignment(self.store, original, historical=historical), receipt['intent']['target']['assignment']),
+            require(same(materialized_assignment(self.store, original), receipt['intent']['target']['assignment']),
                 'fba_result_original_context_conflict')
             result['result'] = public_result_view(receipt)
         return result
 
-    def _original_practical_assignment(self, context, *, historical=False):
+    def _original_practical_assignment(self, context):
         from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import is_compact_assignment, materialized_assignment
-        return (materialized_assignment(self.store, context, historical=historical)
+        return (materialized_assignment(self.store, context)
             if is_compact_assignment(plain(context.assignment)) else plain(context.assignment))
 
-    def _practical_outcome(self, context, receipt, *, historical=False):
+    def _practical_outcome(self, context, receipt):
         from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import (
             is_compact_assignment, practical_outcome_view, read_request_binding,
         )
         if not is_compact_assignment(plain(context.assignment)):
             return receipt
-        control = read_request_binding(self.store, context.run_id, context.episode_id, historical=historical)
+        control = read_request_binding(self.store, context.run_id, context.episode_id)
         require(same(control['context'], context.as_record()) and len(control['requests']) == 1,
             'fba_result_original_context_conflict')
         return practical_outcome_view(receipt, assignment=control['requests'][0]['assignment'],
@@ -173,11 +152,11 @@ class FluxBalanceResultReceipts:
                 'fba_result_file_value_conflict')
         return file
 
-    def validate_observation(self, value, intent, *, historical=False):
-        policy = _validation_policy(historical)
+    def validate_observation(self, value, intent):
+        policy = POLICY
         from gene_annotation_episode.episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, validate_terminal_observation
         if is_terminal_target(intent['target']):
-            return validate_terminal_observation(value, intent, self.store, self.owner.run_id, historical=historical)
+            return validate_terminal_observation(value, intent, self.store, self.owner.run_id)
         from gene_annotation_episode.native_lifecycle import VERSION as native_version
         value = validate_resource_observation(value)
         native = value['native']
@@ -217,60 +196,59 @@ class FluxBalanceResultReceipts:
                 before=int(context.path[-1][1][6:]))
         return assignment
 
-    def _target(self, context, assignment, target, *, historical=False):
-        policy = _validation_policy(historical)
+    def _target(self, context, assignment, target):
+        policy = POLICY
         target = validate_target(plain(target))
         require(target['run_id'] == self.owner.run_id == context.run_id and target['resource_kind'] == 'local'
             and target['handle'] == assignment['handoff_ref'], 'fba_target_mismatch')
-        request = validate_flux_balance_requested_job(target['assignment']['requested_job'], historical=historical)
+        request = validate_flux_balance_requested_job(target['assignment']['requested_job'])
         require(target['request_sha256'] == digest(request) and target['assignment']['resource_id'] == target['resource_id'], 'fba_target_mismatch')
         self.store.validate_scope(target['scope'], parent_scope=plain(context.scope))
         resource = self.owner.resources.get(target['resource_id'])
         require(type(resource) is dict and resource['kind'] == 'local' and same(resource['policy'], policy), 'fba_resource_mismatch')
         reader = self.owner.job_progress_provider.targets
         require(same(reader.resources.get(target['resource_id']), resource) and target['resource_id'] in reader.operations, 'fba_resource_mismatch')
-        reader.operations[target['resource_id']].validate_assignment(target['assignment'], historical=historical)
+        reader.operations[target['resource_id']].validate_assignment(target['assignment'])
         if assignment['selector']['mode'] == 'native_result':
-            validate_flux_balance_result_selector(assignment['selector'], job=request, historical=historical)
+            validate_flux_balance_result_selector(assignment['selector'], job=request)
         return target
 
-    def intent(self, context, target, tool_name, arguments, operation_key, *, historical=False):
+    def intent(self, context, target, tool_name, arguments, operation_key):
         assignment = self._context(context)
         require(tool_name in ('execution.results.status', 'execution.results.collect') and type(arguments) is dict and arguments == {}, 'fba_selected_result_action_required')
         value = dict(version='flux_balance_result_intent_v1', run_id=context.run_id, episode_id=context.episode_id,
             path=plain(context.path), scope=plain(context.scope), assignment=assignment,
             original_request_sha256=digest(plain(context.request)), operation_key=operation_key,
-            tool_name=tool_name, arguments={}, target=self._target(context, assignment, target, historical=historical))
+            tool_name=tool_name, arguments={}, target=self._target(context, assignment, target))
         self._selected(value)
         return value
 
-    def _handoff_metadata(self, target, scope, *, historical=False):
+    def _handoff_metadata(self, target, scope):
         """Authenticate actual saved practical ancestry, never live science."""
-        _validation_policy(historical)
         from gene_annotation_episode.episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, read_terminal_handoff
         if is_terminal_target(target):
-            proof = read_terminal_handoff(self.store, self.owner.run_id, target, scope, historical=historical)
+            proof = read_terminal_handoff(self.store, self.owner.run_id, target, scope)
             original = self.returns.context(target['origin_episode_id'])
             self.returns.authenticate(original)
-            require(same(self._original_practical_assignment(original, historical=historical), target['assignment'])
+            require(same(self._original_practical_assignment(original), target['assignment'])
                 and same(plain(original.scope), proof['body']['scope']), 'fba_result_original_context_conflict')
-            proof['input_binding'] = self.owner.flux_balance_inputs.received(original, historical=historical)
+            proof['input_binding'] = self.owner.flux_balance_inputs.received(original)
             return proof
         reader = self.owner.job_progress_provider.targets
-        require(same(reader.read_target(target['handle'], scope, historical=historical), target), 'fba_result_target_history_conflict')
+        require(same(reader.read_target(target['handle'], scope), target), 'fba_result_target_history_conflict')
         practical = PracticalReceiptInformation(self.store, self.owner.run_id)
-        body = practical.read(target['handle'], scope, historical=historical)
+        body = practical.read(target['handle'], scope)
         source = self.store.get(target['handle'])
         snapshot = practical._artifact_json(source['request_ref'])
         target_owner = self.returns.context(body['episode_id'])
         self.returns.authenticate(target_owner)
-        require(same(self._original_practical_assignment(target_owner, historical=historical), snapshot['assignment'])
+        require(same(self._original_practical_assignment(target_owner), snapshot['assignment'])
             and same(plain(target_owner.scope), body['scope']), 'fba_result_target_context_conflict')
         target_row = practical._selected(body['receipt'])
         require(target_row['result'] is not None, 'fba_result_target_action_incomplete')
         target_result = json.loads(target_row['result'])
         require(target_result.get('status') in ('completed', 'partial')
-            and same(target_result.get('result'), self._practical_outcome(target_owner, body['receipt'], historical=historical))
+            and same(target_result.get('result'), self._practical_outcome(target_owner, body['receipt']))
             and target['handle'] in target_result.get('record_refs', []), 'fba_result_target_action_conflict')
         detail = body['receipt']['outcome'].get('native_outcome') or {}
         key = detail.get('attempt_operation_key')
@@ -278,7 +256,7 @@ class FluxBalanceResultReceipts:
         starts = practical._sources(practical._accession(target['origin_episode_id'], key))
         require(len(starts) == 1, 'fba_result_start_missing')
         start_source = starts[0]
-        start_body = practical.read(start_source['id'], scope, historical=historical)
+        start_body = practical.read(start_source['id'], scope)
         start_snapshot = practical._artifact_json(start_source['request_ref'])
         start = validate_receipt(start_body['receipt'])
         selected = practical._selected(start)
@@ -288,9 +266,9 @@ class FluxBalanceResultReceipts:
             and same(start_snapshot['assignment'], target['assignment']), 'fba_result_start_conflict')
         original = self.returns.context(target['origin_episode_id'])
         self.returns.authenticate(original)
-        require(same(self._original_practical_assignment(original, historical=historical), target['assignment'])
+        require(same(self._original_practical_assignment(original), target['assignment'])
             and same(plain(original.scope), start_body['scope']), 'fba_result_original_context_conflict')
-        original_input = self.owner.flux_balance_inputs.received(original, historical=historical)
+        original_input = self.owner.flux_balance_inputs.received(original)
         expected_file = original_input['file']
         for candidate in (body['receipt'], start):
             job = candidate['outcome'].get('facts', {}).get('requested_job') or {}
@@ -302,24 +280,24 @@ class FluxBalanceResultReceipts:
                 and native.get('attempt_operation_key') == key and native.get('attempt_id') == digest(key)
                 and same(native.get('native_flux_balance_input_binding_file'), expected_file),
                 'fba_result_original_start_identity_conflict')
-        require(same(json.loads(selected['result']).get('result'), self._practical_outcome(original, start, historical=historical)),
+        require(same(json.loads(selected['result']).get('result'), self._practical_outcome(original, start)),
             'fba_result_start_outcome_conflict')
         return {'source_record': source, 'body': body, 'assignment_snapshot': snapshot,
             'start_source_record': start_source, 'start_body': start_body,
             'start_assignment_snapshot': start_snapshot, 'start_receipt': start,
             'input_binding': original_input}
 
-    def validate_handoff(self, proof, intent, *, historical=False):
+    def validate_handoff(self, proof, intent):
         from gene_annotation_episode.episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, validate_terminal_handoff
         if is_terminal_target(intent['target']):
             closed(proof, ('source_record', 'body', 'assignment_snapshot', 'start_receipt', 'input_binding'))
-            validate_terminal_handoff(proof, intent, self.store, self.owner.run_id, historical=historical)
-            require(same(proof, self._handoff_metadata(intent['target'], intent['scope'], historical=historical)),
+            validate_terminal_handoff(proof, intent, self.store, self.owner.run_id)
+            require(same(proof, self._handoff_metadata(intent['target'], intent['scope'])),
                 'fba_result_handoff_conflict')
             return
         closed(proof, ('source_record', 'body', 'assignment_snapshot', 'start_source_record',
             'start_body', 'start_assignment_snapshot', 'start_receipt', 'input_binding'))
-        expected = self._handoff_metadata(intent['target'], intent['scope'], historical=historical)
+        expected = self._handoff_metadata(intent['target'], intent['scope'])
         require(same(proof, expected), 'fba_result_handoff_conflict')
 
     def read_handoff(self, action):
@@ -402,16 +380,16 @@ class FluxBalanceResultReceipts:
         self.validate_native(value, action.intent, observation)
         return deepcopy(value)
 
-    def validate_native(self, value, intent, observation, *, historical=False):
-        policy = _validation_policy(historical)
+    def validate_native(self, value, intent, observation):
+        policy = POLICY
         from gene_annotation_episode.episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, validate_terminal_native
         if is_terminal_target(intent['target']):
-            validate_terminal_native(value, intent, observation, self.store, self.owner.run_id, historical=historical)
+            validate_terminal_native(value, intent, observation, self.store, self.owner.run_id)
             handoff = read_control(self.action_directory(intent['episode_id'], intent['operation_key']) / 'handoff.json')
             require(handoff is not None, 'fba_native_start_mismatch')
-            self.validate_handoff(handoff, intent, historical=historical)
+            self.validate_handoff(handoff, intent)
             self.file_metadata(handoff['input_binding']['file'], value=handoff['input_binding']['receipt'])
-            plan = validate_flux_balance_run_plan(value['original_plan'], historical=historical)
+            plan = validate_flux_balance_run_plan(value['original_plan'])
             selection = intent['target']['assignment'].get('native_flux_balance_execution')
             require((selection is None and plan['version'] == 'flux_balance_run_plan_v1')
                 or (selection is not None and plan['version'] == 'flux_balance_run_plan_v2'
@@ -440,7 +418,7 @@ class FluxBalanceResultReceipts:
         closed(value, ('original_plan', 'handle', 'request', 'request_raw', 'invoke', 'invoke_file',
             'input_binding_file', 'started_marker', 'driver_started', 'plan_file', 'handle_file',
             'request_file', 'started_marker_file'))
-        plan = validate_flux_balance_run_plan(value['original_plan'], historical=historical)
+        plan = validate_flux_balance_run_plan(value['original_plan'])
         target, ident = intent['target'], plan['identity']
         require(same(plan['requested_job'], target['assignment']['requested_job']) and same(plan['policy'], policy)
             and ident['run_id'] == intent['run_id'] and ident['episode_id'] == target['origin_episode_id']
@@ -460,7 +438,7 @@ class FluxBalanceResultReceipts:
         handle, request, root = value['handle'], value['request'], Path(target['execution_id']).parent
         require(type(handle) is dict and handle.get('version') == native_version
             and handle.get('stage') in ('prepared', 'submitting', 'released')
-            and handle.get('command') == flux_balance_driver_argv(plan, historical=historical) and handle.get('cwd') == str(root)
+            and handle.get('command') == flux_balance_driver_argv(plan) and handle.get('cwd') == str(root)
             and same(handle.get('metadata', {}).get('policy'), policy)
             and all(handle.get(role) == str(root / (role + '.log')) for role in ('stdout', 'stderr')),
             'fba_native_handle_mismatch')
@@ -472,7 +450,7 @@ class FluxBalanceResultReceipts:
         for path in paths.values():
             path_value(path, absolute=True)
             require(Path(path).parent == root, 'fba_native_request_mismatch')
-        require(same(request, _request(plan, paths, historical=historical)), 'fba_native_request_mismatch')
+        require(same(request, _request(plan, paths)), 'fba_native_request_mismatch')
         require(type(value['request_raw']) is str, 'fba_native_request_mismatch')
         raw = value['request_raw'].encode('utf-8')
         self.file_metadata(value['request_file'])
@@ -501,14 +479,12 @@ class FluxBalanceResultReceipts:
             require(value['started_marker_file']['format'] == 'flux_balance_started_control_v1',
                 'fba_native_control_format_conflict')
 
-    def validate_worker(self, receipt, *, historical=False, historical_worker=False):
-        _validation_policy(historical)
-        _validation_policy(historical_worker)
+    def validate_worker(self, receipt):
         plan, capture, execution = (receipt[k] for k in ('worker_plan', 'worker_capture', 'worker_execution'))
         if plan is None:
             require(capture is None and execution is None, 'fba_worker_receipt_mismatch')
             return
-        plan = validate_flux_balance_worker_plan(plan, historical=historical)
+        plan = validate_flux_balance_worker_plan(plan)
         intent, selector = receipt['intent'], receipt['intent']['assignment']['selector']
         require(plan['directory'] == str(self.action_directory(intent['episode_id'], intent['operation_key']) / 'worker')
             and same(plan['selector'], selector), 'fba_worker_selection_mismatch')
@@ -530,8 +506,7 @@ class FluxBalanceResultReceipts:
         require(capture['version'] == 'flux_balance_worker_capture_v1', 'fba_worker_receipt_mismatch')
         self.file_metadata(capture['plan_file'], value=plan, newline=True)
         self.file_metadata(capture['execution_receipt_file'], value=execution, newline=True)
-        validate_flux_balance_worker_execution(execution, plan=plan, plan_file=capture['plan_file'],
-            historical=historical_worker, historical_source=historical)
+        validate_flux_balance_worker_execution(execution, plan=plan, plan_file=capture['plan_file'])
         for key in ('handle_file', 'request_file', 'stdout_file', 'stderr_file'):
             self.file_metadata(execution[key])
         result = capture['result']
@@ -608,14 +583,12 @@ class FluxBalanceResultReceipts:
                 and observation['native']['quiescent'] and receipt['capture'] is not None)
         return facts, complete
 
-    def validate(self, receipt, intent, *, historical=False, historical_worker=False):
-        _validation_policy(historical)
-        _validation_policy(historical_worker)
+    def validate(self, receipt, intent):
         closed(receipt, ('version', 'intent', 'handoff_proof', 'original_origins', 'observation', 'native',
             'source_action_file', 'writer_closure_file', 'capture', 'worker_plan', 'worker_capture', 'worker_execution',
             'qualified_files', 'projection', 'host_failures', 'facts', 'acquired_population', 'delivery_complete'))
         require(receipt['version'] == VERSION and same(receipt['intent'], intent), 'fba_result_receipt_mismatch')
-        self.validate_handoff(receipt['handoff_proof'], intent, historical=historical)
+        self.validate_handoff(receipt['handoff_proof'], intent)
         saved = intent['assignment']['selector']['mode'] == 'saved_sheet_recalculation'
         originals = None
         if saved:
@@ -626,18 +599,18 @@ class FluxBalanceResultReceipts:
                 'fba_saved_native_work_disallowed')
         else:
             require(receipt['original_origins'] == [], 'fba_native_origin_mismatch')
-            self.validate_observation(receipt['observation'], intent, historical=historical)
+            self.validate_observation(receipt['observation'], intent)
             if receipt['native'] is not None:
-                self.validate_native(receipt['native'], intent, receipt['observation'], historical=historical)
+                self.validate_native(receipt['native'], intent, receipt['observation'])
             if receipt['capture'] is not None:
                 require(intent['tool_name'] == 'execution.results.collect' and receipt['native'] is not None
                     and receipt['observation']['native']['terminal'] and receipt['observation']['native']['quiescent'], 'fba_writer_not_closed')
                 capture = validate_flux_balance_native_capture(receipt['capture'],
-                    original_plan=receipt['native']['original_plan'], historical=historical)
+                    original_plan=receipt['native']['original_plan'])
                 if receipt['native'].get('version') == 'terminal_native_snapshot_v1':
                     from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_capture import validate_terminal_flux_balance_files
                     validate_terminal_flux_balance_files(capture, original_plan=receipt['native']['original_plan'],
-                        command_proof=receipt['native']['command_proof'], historical=historical)
+                        command_proof=receipt['native']['command_proof'])
                 self.file_metadata(receipt['source_action_file'], value=receipt['handoff_proof']['start_receipt'])
                 self.file_metadata(receipt['writer_closure_file'], value=closure_value(receipt))
                 require(capture['source_action_receipt_ref'] == receipt['source_action_file']['artifact_ref']
@@ -646,7 +619,7 @@ class FluxBalanceResultReceipts:
                     and capture['driver_started'] is receipt['native']['driver_started'], 'fba_capture_receipt_mismatch')
             else:
                 require(receipt['source_action_file'] is None and receipt['writer_closure_file'] is None, 'fba_capture_receipt_mismatch')
-        self.validate_worker(receipt, historical=historical, historical_worker=historical_worker)
+        self.validate_worker(receipt)
         files = qualified_files(receipt['worker_capture'], receipt['worker_execution'])
         require(same(receipt['qualified_files'], files), 'fba_qualified_outputs_mismatch')
         if files['projection'] is None:
@@ -668,13 +641,13 @@ class FluxBalanceResultReceipts:
             require(receipt['worker_plan'] is None and receipt['capture'] is None and not any(receipt['facts'].values()), 'fba_status_publication_mismatch')
         return receipt
 
-    def match_outcome(self, row, receipt, *, historical=False):
+    def match_outcome(self, row, receipt):
         require(row['result'] is not None, 'fba_completed_result_required')
         actual = json.loads(row['result'])
         if 'pending_work_after_action' in actual:
             from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
             validate_pending(actual.pop('pending_work_after_action'))
-        require(same(actual, self.outcome(receipt, historical=historical)), 'fba_completed_result_mismatch')
+        require(same(actual, self.outcome(receipt)), 'fba_completed_result_mismatch')
 
     def _control_receipt(self, intent):
         root = self.action_directory(intent['episode_id'], intent['operation_key'])
@@ -688,11 +661,11 @@ class FluxBalanceResultReceipts:
             require(same(read_control(root / name), receipt[key]), 'fba_result_control_mismatch')
         return receipt
 
-    def controls(self, intent, *, historical=False, historical_worker=False):
+    def controls(self, intent):
         receipt = self._control_receipt(intent)
         if receipt is None:
             return None
-        return self.validate(receipt, intent, historical=historical, historical_worker=historical_worker)
+        return self.validate(receipt, intent)
 
     def read_staged(self, action):
         self.require_action(action)
@@ -731,33 +704,16 @@ class FluxBalanceResultReceipts:
                 receipt = self._control_receipt(intent)
                 require(receipt is not None, 'fba_result_receipt_required')
                 require(same(receipt['intent'], intent), 'fba_result_receipt_mismatch')
-                # The journal outcome and exact retained controls now identify
-                # the completed action. Each candidate envelope must also pass
-                # the original outcome/materialized-assignment comparison;
-                # no mode is admitted merely from a policy or environment hint.
-                def qualify_source(mode):
-                    validate_flux_balance_requested_job(intent['target']['assignment']['requested_job'], historical=mode)
-                    self.match_outcome(row, receipt, historical=mode)
-                historical = _saved_validation_mode(qualify_source)
+                validate_flux_balance_requested_job(intent['target']['assignment']['requested_job'])
+                self.match_outcome(row, receipt)
                 require(same(intent, self.intent(context, intent['target'], 'execution.results.collect', {},
-                    operation_key, historical=historical)), 'fba_result_intent_mismatch')
-                self.validate_handoff(receipt['handoff_proof'], intent, historical=historical)
+                    operation_key)), 'fba_result_intent_mismatch')
+                self.validate_handoff(receipt['handoff_proof'], intent)
                 if receipt['native'] is not None:
-                    self.validate_native(receipt['native'], intent, receipt['observation'], historical=historical)
-                historical_worker = False
-                if receipt['worker_execution'] is not None:
-                    require(type(receipt['worker_capture']) is dict, 'fba_worker_receipt_mismatch')
-                    plan_file = receipt['worker_capture']['plan_file']
-                    self.file_metadata(plan_file, value=receipt['worker_plan'], newline=True)
-                    self.file_metadata(receipt['worker_capture']['execution_receipt_file'],
-                        value=receipt['worker_execution'], newline=True)
-                    historical_worker = _saved_validation_mode(lambda mode:
-                        validate_flux_balance_worker_execution(receipt['worker_execution'],
-                            plan=receipt['worker_plan'], plan_file=plan_file,
-                            historical=mode, historical_source=historical))
-                receipt = self.controls(intent, historical=historical, historical_worker=historical_worker)
+                    self.validate_native(receipt['native'], intent, receipt['observation'])
+                receipt = self.controls(intent)
                 require(receipt is not None, 'fba_result_receipt_required')
-                self.match_outcome(row, receipt, historical=historical)
+                self.match_outcome(row, receipt)
                 return deepcopy(receipt)
         finally:
             _READING.reset(token)

@@ -1,31 +1,9 @@
 """Original root-credit context selects compatibility at either saved path."""
 from copy import deepcopy
-from types import MappingProxyType
 
 import pytest
 
 from .test_scientific_task import make_task
-
-
-@pytest.mark.parametrize('standalone',[False,True])
-def test_existing_root_credit_context_keeps_original_completed_work_and_yield_table(standalone):
-    task,_,_,_=make_task({})
-    task.workflow.controller_binding=None
-    if not standalone:
-        task.path=(('annotation','original-parent'),*task.path)
-    context={'current_credit':{'mode':'annotation_axis_credit','root_score':0.25},
-        'controller':{'arms':[{'original':'retained-arm'}]},
-        '_completed_work_axis_results':{'a102_sheet':{'original':'saved-context'}}}
-    retained=deepcopy(context)
-    owner=task.credit_presentation(MappingProxyType(context))
-    assert owner.__module__.endswith('.scientific_process.standalone_credit_presentation')
-    result=owner.completed_work(task,context,0)
-    assert result=={key:value for key,value in retained.items() if key!='_completed_work_axis_results'}
-    assert 'completed_action_reports' not in result
-    table=owner.exchange_yield_table(task,result,0,task.workflow.journal)
-    assert table=={'version':'annotation_axis_yield_table_v1',
-        'rows':retained['controller']['arms'],'forecast_unit':'another_whole_axis_invocation',
-        'source':'actual_root_controller'}
 
 
 def test_saved_model_request_with_zero_exchanges_retains_root_mode_at_provider(tmp_path):

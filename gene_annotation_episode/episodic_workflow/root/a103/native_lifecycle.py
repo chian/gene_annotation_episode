@@ -175,7 +175,7 @@ def start_prepared(handle, *, cancel_event=None):
     """
     body = handle.read()
     from gene_annotation_episode.workflow_budget import native_budget
-    workflow=native_budget(LocalJobPolicy(**body['metadata']['policy']),body['metadata'].get('cpu_threads',1),body['cwd'])
+    workflow=native_budget(LocalJobPolicy(**body['metadata']['policy']),body['metadata']['cpu_threads'],body['cwd'])
     if body['metadata'].get('whole_workflow_budget')!=workflow:
         raise AcquisitionError('whole_workflow_budget_identity_conflict',phase='local_preflight')
     if body['stage'] != 'prepared':
@@ -185,17 +185,10 @@ def start_prepared(handle, *, cancel_event=None):
     if hashlib.sha256(Path(paths['request']).read_bytes()).hexdigest() != body['request_sha256']:
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
             operational={**metadata, 'reason': 'native_request_identity_mismatch'})
-    # A legacy never-dispatched handle also enters the shared host gate. Its
-    # original command/request bytes remain unchanged.
-    if 'local_resources' not in metadata:
-        metadata['local_resources'] = LocalResources.configured().as_record()
-        metadata.setdefault('cpu_threads', 1)
-        metadata['enforcement']['cpu'] = 'systemd_cgroup_v2_cpu_max'
     _ensure_event_registration(handle, body)
-    if 'local_resources' in metadata:
-        resources = LocalResources.reopen(metadata['local_resources'])
-        body['capacity_reservation'] = resources.reserve(handle,
-            cpu_threads=metadata['cpu_threads'], policy=policy)
+    resources = LocalResources.reopen(metadata['local_resources'])
+    body['capacity_reservation'] = resources.reserve(handle,
+        cpu_threads=metadata['cpu_threads'], policy=policy)
     try:
         return _dispatch_prepared(handle, body, cancel_event=cancel_event)
     except BaseException:
@@ -225,9 +218,8 @@ def _dispatch_prepared(handle, body, *, cancel_event=None):
         'StandardError=file:'+str(stderr).replace('%', '%%'),
         'ExecStopPost='+' '.join(_word(str(v)) for v in (sys.executable, worker, 'report', paths['status'],
             *([handle_path] if 'statistics' in body or 'native_events' in body else [])))]
-    if 'local_resources' in body['metadata']:
-        from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
-        properties.append(f"CPUQuota={ENVIRONMENT_BOUNDS['cpu_percent']}%")
+    from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+    properties.append(f"CPUQuota={ENVIRONMENT_BOUNDS['cpu_percent']}%")
     from gene_annotation_episode.workflow_budget import SLICE as WORKFLOW_SLICE,UNIT as WORKFLOW_UNIT
     properties.extend(['BindsTo='+WORKFLOW_UNIT,'After='+WORKFLOW_UNIT])
     argv = ['systemd-run', '--user', '--quiet', '--no-block', '--service-type=exec', '--unit='+body['unit'],
@@ -262,14 +254,13 @@ def start_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_pat
 
 
 def _validate_unreleased_resume_capacity(handle, body):
-    # Existing descriptor-less workers retain their original ready/cgroup path.
-    # A supplied reservation instead must identify this exact persisted handle.
+    # The reservation must identify this exact persisted handle.
     metadata = body.get('metadata')
     if not isinstance(metadata, dict):
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
             operational={'reason': 'native_resource_metadata_required'})
     policy = LocalJobPolicy(**metadata['policy'])
-    cpu = metadata.get('cpu_threads', 1)
+    cpu = metadata['cpu_threads']
     if type(cpu) is not int or cpu < 1:
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
             operational={'reason': 'native_reservation_allocation_conflict'})
@@ -277,13 +268,11 @@ def _validate_unreleased_resume_capacity(handle, body):
     active_budget()
     if policy.memory_bytes > ENVIRONMENT_BOUNDS['memory_bytes']:
         raise ValueError('native_request_exceeds_environment_bounds')
-    if 'capacity_reservation' not in body:
-        return
     reservation = body['capacity_reservation']
     definition = reservation.get('resource') if isinstance(reservation, dict) else None
     if (not isinstance(definition, dict)
-            or definition.get('version') not in {LOCAL_RESOURCE_VERSION, 'shared_local_resources_v1'}
-            or ('local_resources' in metadata and metadata['local_resources'] != definition)
+            or definition.get('version') != LOCAL_RESOURCE_VERSION
+            or metadata['local_resources'] != definition
             or reservation.get('execution_handle') != body['unit']):
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
             operational={'reason': 'authenticated_local_resource_reservation_required'})
@@ -333,14 +322,12 @@ def resume_start(handle, *, cancel_event=None):
         group_path = Path('/sys/fs/cgroup')/group.lstrip('/')
         memory = int((group_path/'memory.max').read_text())
         swap = int((group_path/'memory.swap.max').read_text())
-        cpu = (group_path/'cpu.max').read_text().strip() if 'local_resources' in body['metadata'] else None
+        cpu = (group_path/'cpu.max').read_text().strip()
     except (OSError, ValueError):
         memory = swap = cpu = None
-    cpu_verified = True
-    if 'local_resources' in body['metadata']:
-        values = cpu.split() if cpu else []
-        cpu_verified = (len(values) == 2 and values[1].isdigit() and int(values[1]) > 0
-            and (values[0] == 'max' or (values[0].isdigit() and int(values[0]) > 0)))
+    values = cpu.split() if cpu else []
+    cpu_verified = (len(values) == 2 and values[1].isdigit() and int(values[1]) > 0
+        and (values[0] == 'max' or (values[0].isdigit() and int(values[0]) > 0)))
     from gene_annotation_episode.workflow_budget import SLICE as WORKFLOW_SLICE,UNIT as WORKFLOW_UNIT
     if (actual.get('Slice')!=WORKFLOW_SLICE or WORKFLOW_UNIT not in actual.get('BindsTo','').split()
             or not group or memory != policy.memory_bytes or swap != 0 or not cpu_verified or
@@ -425,9 +412,7 @@ def collect(handle):
                                operational={'state': view['state'], **meta})
     exit_info = meta['service_exit']
     reason = exit_info.get('SERVICE_RESULT')
-    # A completed historical receipt may contain retired settings. Reading its
-    # memory/scratch evidence cannot restore an elapsed-time control.
-    policy = LocalJobPolicy(meta['policy']['memory_bytes'], meta['policy']['scratch_bytes'])
+    policy = LocalJobPolicy(**meta['policy'])
     failure = None
     if reason == 'oom-kill':
         failure = {'resource': 'memory_bytes', 'limit': policy.memory_bytes,

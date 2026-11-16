@@ -179,14 +179,6 @@ def test_completed_and_partial_sources_share_the_declared_metadata_policy(tmp_pa
         assert verdict(value, "source") is True and verdict(value, "control") is False
 
 
-def test_provider_subset_keeps_legacy_itc_wrapper_from_classifying_other_providers(tmp_path):
-    with publication(tmp_path, provider=LIFTOVER, grant=("grade",)) as value:
-        assert verdict(value, "control", providers=(ITC,)) is None
-        assert verdict(value, "grade", providers=(ITC,)) is None
-        assert verdict(value, "control", providers=(LIFTOVER,)) is False
-        assert verdict(value, "control", providers=()) is None
-
-
 @pytest.mark.parametrize("providers", [[ITC], ("unsupported_provider",), (ITC, ITC)])
 def test_provider_selection_is_a_finite_internal_subset_tuple(tmp_path, providers):
     with publication(tmp_path) as value:

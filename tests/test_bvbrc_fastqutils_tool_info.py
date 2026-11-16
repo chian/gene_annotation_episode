@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import bvbrc_fastqutils_bundle_adapter as adapter
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_fastqutils_bundle_adapter as adapter
 from gene_annotation_episode.bvbrc_fastqutils_contracts import validate_requested_form
 from gene_annotation_episode.bvbrc_fastqutils_returns import fastqutils_fact_sources, parent_form_schema
 from gene_annotation_episode.bvbrc_fastqutils_tool_info import fastqutils_tool_contracts
@@ -57,22 +57,6 @@ def test_bound_library_supplies_parent_information_and_child_instructions(factor
     assert row['invocation_route'] == {'kind': 'commission', 'routes': [
         {'entry_role': 'launch', 'resource_id': 'selected-api', 'resource_role': 'launch_api'},
         {'entry_role': 'results', 'resource_id': 'selected-api', 'resource_role': 'results'}]}
-
-
-def test_original_recipe_and_arrays_survive_actual_assignment_contract(factory):
-    create, _ = factory
-    family = create({'selected-api': configured()})
-    value = api_assignment(query())
-    before = deepcopy(value)
-    validator = Draft202012Validator(entry(family)['input_schema'])
-    Draft202012Validator.check_schema(entry(family)['input_schema'])
-    assert validator.is_valid(value), list(validator.iter_errors(value))
-    assert family.api_execution.validate_assignment(value) == before == value
-    results = {'version': 'execution_results_assignment_v1', 'handoff_ref': 'original-handoff-required',
-        'selector': f.oracle('RESULT_SELECTOR_PRE_DOWNLOAD_002.json')}
-    assert validator.is_valid(results), list(validator.iter_errors(results))
-    results['selector']['adapter']['parameters']['documents'][0]['format'] = 'invented_format'
-    assert not validator.is_valid(results)
 
 
 @pytest.mark.parametrize('change', ['empty_inputs', 'recipe', 'output', 'resource', 'application'])

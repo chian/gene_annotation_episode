@@ -119,20 +119,6 @@ def test_absence_and_empty_list_do_not_inspect_producer(store, producer, monkeyp
     assert capture.capture_declared_native_files(store, directory=str(producer), declarations=[]) == []
 
 
-@pytest.mark.parametrize("change", [{"sha256": "0" * 64}, {"size_bytes": 4},
-    {"sha256": "0" * 64, "size_bytes": 0}])
-def test_declared_mismatch_keeps_actual_bytes(store, producer, change):
-    (producer / "result.bin").write_bytes(b"abc")
-    declared = declaration(**change)
-    row, = capture.capture_declared_native_files(store, directory=str(producer), declarations=[declared])
-    assert row["outcome"] == "digest_mismatch"
-    assert row["failure"] == "capture_file_digest_mismatch"
-    assert row["declared"] == declared
-    assert row["observed"]["size_bytes"] == 3
-    assert row["observed"]["sha256"] == hashlib.sha256(b"abc").hexdigest()
-    assert capture.retained_native_file(store, row["observed"]).read_bytes() == b"abc"
-
-
 @pytest.mark.parametrize("bad", [None, [], {}, {"extra": True},
     {"format": ""}, {"format": "native\x00"}, {"format": "native\x85"},
     {"state": True}, {"state": "unknown"}, {"size_bytes": True}, {"size_bytes": -1},

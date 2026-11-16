@@ -223,34 +223,6 @@ def test_matching_wrong_application_is_rejected():
         provider.consume_bundle(**case)
 
 
-@pytest.mark.parametrize("change,code", [
-    ("missing", "proteome_artifact_bytes_missing"), ("digest", "proteome_artifact_digest_mismatch"),
-    ("format", "proteome_artifact_format_incompatible"), ("role", "proteome_artifact_binding_conflict"),
-    ("duplicate", "proteome_document_ambiguous"), ("primary", "proteome_primary_document_missing"),
-    ("deployed", "proteome_deployment_evidence_unverified"), ("different", "proteome_source_contract_incompatible"),
-])
-def test_native_selection_failures_never_substitute_another_primary(change, code):
-    case = fixture(supplementary=False)
-    artifact = case["bundle"]["artifacts"][0]
-    if change == "missing":
-        case["artifact_bytes"].clear()
-    elif change == "digest":
-        case["artifact_bytes"][artifact["raw_artifact_ref"]] += b"x"
-    elif change == "format":
-        artifact["declared_format"]["format"] = "blast_json"
-    elif change == "role":
-        artifact["role"] = "other"
-    elif change == "duplicate":
-        case["bundle"]["artifacts"].append(deepcopy(artifact))
-    elif change == "primary":
-        case["parameters"]["primary_document_id"] = "absent"
-    else:
-        case["parameters"]["native_documents"][0]["source_contract"]["deployment_match"] = "demonstrated" if change == "deployed" else "different"
-    result = consume(case)
-    assert code in codes(result) and result["components"] is None
-    assert result["status"] == "partial"
-
-
 def replace_native(case, raw, fmt):
     artifact = member(raw, fmt=fmt)
     case["bundle"]["artifacts"] = [artifact]

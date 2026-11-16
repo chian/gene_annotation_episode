@@ -1,4 +1,4 @@
-"""Original private A110 annotation decision_waiting responsibility."""
+"""Private A110 annotation decision_waiting responsibility."""
 from __future__ import annotations
 
 def waiting_support(workflow, source, context, *, captures):

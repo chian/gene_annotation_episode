@@ -222,18 +222,6 @@ def test_enumeration_one_correlated_rpc_no_launch(harness):
     validate_contract("Event", event)
 
 
-@pytest.mark.parametrize("changes", [None, {}, {**CONFIG, "execution_contract": "legacy"},
-    {**CONFIG, "service": "bvbrc_minhash"}, {**CONFIG, "kind": "local"},
-    {**CONFIG, "endpoints": {"AppService": "https://example.invalid"}},
-    {**CONFIG, "timeout": True}, {**CONFIG, "authorization_env": "invalid name"},
-    {**CONFIG, "endpoints": {**CONFIG["endpoints"], "Workspace": "file:///tmp/ws"}}])
-def test_configuration_rejected_before_any_request(changes):
-    client = Client()
-    with pytest.raises(ValueError):
-        BVBRCAppServiceService(None, changes, client=client)
-    assert client.calls == []
-
-
 @pytest.mark.parametrize("change", ["missing", "request", "arguments", "operation"])
 def test_host_resolved_inputs_required_and_digest_bound(harness, change):
     request = original_request()

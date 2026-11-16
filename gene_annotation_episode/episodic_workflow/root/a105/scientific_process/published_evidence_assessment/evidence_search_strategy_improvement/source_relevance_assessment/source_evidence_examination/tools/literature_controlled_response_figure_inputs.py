@@ -17,7 +17,6 @@ import hashlib
 from io import BytesIO
 import json
 import math
-from pathlib import Path
 import re
 import warnings
 from PIL import Image, UnidentifiedImageError
@@ -478,7 +477,7 @@ def _pixels(context, selected, literals, scale, unit):
     spec = next((s for s in context.images if s['image_id'] == selected['image_id']))
     recipe, edge = (selected['bar_selection'], selected['terminal_edge'])
     diagnostics = []
-    result = {'version': 'controlled_response_rate_pixels_v1', 'status': 'unsupported', 'image_id': spec['image_id'], 'image_sha256': spec['byte_sha256'], 'original_image_sha256': spec['original_byte_sha256'], 'mapped_roi': None, 'recipe': deepcopy(recipe), 'terminal_edge': edge, 'image_size': None, 'qualifying_runs': [], 'pixel_edge': None, 'axis': None, 'native_ordinate': None, 'native_bounds': None, 'bound_kind': 'conditional_digitization_not_confidence_interval', 'counter_version': _COUNTER_VERSION, 'counter_module_sha256': _hash(Path(__file__).read_bytes()), 'diagnostics': diagnostics}
+    result = {'version': 'controlled_response_rate_pixels_v1', 'status': 'unsupported', 'image_id': spec['image_id'], 'image_sha256': spec['byte_sha256'], 'original_image_sha256': spec['original_byte_sha256'], 'mapped_roi': None, 'recipe': deepcopy(recipe), 'terminal_edge': edge, 'image_size': None, 'qualifying_runs': [], 'pixel_edge': None, 'axis': None, 'native_ordinate': None, 'native_bounds': None, 'bound_kind': 'conditional_digitization_not_confidence_interval', 'counter_version': _COUNTER_VERSION, 'diagnostics': diagnostics}
     if spec['error']:
         missing = any((isinstance(context.cache[spec[name], 'original'], Exception) for name in ('source_ref', 'original_source_ref')))
         result['status'] = 'dependency_unavailable' if missing else 'unsupported'

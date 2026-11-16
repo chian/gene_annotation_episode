@@ -29,7 +29,7 @@ def make_task(outcome):
     task.episode_id, task.path, task.scope = 'science', (('scientific_process', 'science'),), {}
     task.checkpoint = lambda: None
     task.workflow = SimpleNamespace(journal=journal, run_id='run', execution_binding=None,
-        wait_inputs_version=None, completed_action_inputs_version=None, execute=execute,
+        pending_work=lambda source: [],  execute=execute,
         scientific_process_binding=SimpleNamespace(validate_execution_context=lambda context: None),
         binding_context=lambda source: source,
         receive_native_outcome=lambda *args: None,

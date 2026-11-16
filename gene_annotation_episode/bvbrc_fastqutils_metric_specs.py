@@ -1,7 +1,6 @@
 """Fixed numerical meanings, units and source descriptions; no formula evaluator.
 
-Copied from the reviewed62 native and17 component registries. Scientific
-calculations remain ordinary functions in their separately owned modules.
+Scientific calculations remain ordinary functions in their separately owned modules.
 """
 from copy import deepcopy
 from .bvbrc_fastqutils_contracts import FastqUtilsContractError

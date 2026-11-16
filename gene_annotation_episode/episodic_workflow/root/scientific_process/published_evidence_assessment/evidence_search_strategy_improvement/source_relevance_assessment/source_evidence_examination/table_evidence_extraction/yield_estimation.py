@@ -46,7 +46,7 @@ class _RemainingCommissionedCredit:
 
     def as_record(self):
         return {'version': 'literature_remaining_commissioned_credit_v1',
-            'base_estimator': 'gene_annotation_episode.numerical.estimate_score_yield',
+            'base_estimator': 'gene_annotation_episode.episodic_workflow.root.numerical.estimate_score_yield',
             'maximum_credit': self.maximum_credit,
             'initial_credit': self.initial_credit,
             'forecast': 'observed_next_action_yield_bounded_by_remaining_commissioned_credit',

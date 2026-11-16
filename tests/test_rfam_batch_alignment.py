@@ -17,12 +17,10 @@ from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/alignment"
 DOCS = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/contract/examples/official-single-result.json"
 LIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/transport/live/single/003-fetch-json/response.body"
 # The alignment fixtures name their source bytes by the transport packet's original location;
 # the packet itself is kept under TRANSPORT.
-TRANSPORT_ORIGIN = "verification/tool_graders_rfam_transport_2026-10-26_234"
 TRANSPORT = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/transport"
 IDENTITY = {"artifact_ref": "fixture:synthetic-display", "hit_key": "fixture:synthetic-display/hits/test/0",
             "query_occurrence_key": "fixture:original-occurrence-0", "family_accession": "RF00001"}
@@ -35,20 +33,6 @@ def native_json(path):
     return parse_rfam_alignment_display(row["alignment"],
         hit_identity=dict(IDENTITY, artifact_ref=ref, hit_key=ref + "/hits/5S_rRNA/0"),
         query_sequence=doc["searchSequence"], native_start=row["start"], native_end=row["end"], native_strand=row["strand"])
-
-
-def report_fixture(name):
-    data = json.loads((EVIDENCE / "fixtures" / (name + ".json")).read_text())
-    recorded = Path(data["source"]["path"])
-    source = (TRANSPORT / recorded.relative_to(TRANSPORT_ORIGIN) if recorded.is_relative_to(TRANSPORT_ORIGIN)
-        else ROOT / recorded)
-    assert hashlib.sha256(source.read_bytes()).hexdigest() == data["source"]["sha256"]
-    return data
-
-
-def parse_fixture(data):
-    return parse_rfam_alignment_display(data["alignment"], **{key: data[key] for key in
-        ("hit_identity", "query_sequence", "native_start", "native_end", "native_strand")})
 
 
 def synthetic(model, query, *, mstart=1, mend=None, qstart=1, qend=None, pp=None):
@@ -107,71 +91,6 @@ def test_actual_current_json_retains_gap_and_insertion_geometry():
     insertion = [s for s in result["segments"] if s["kind"] == "query_insertion"]
     assert insertion[0]["query_interval"] == [101, 102]
     assert insertion[0]["query_text"] == "u"
-
-
-@pytest.mark.parametrize("name,query_length,paired,inserted,deleted", [
-    ("original", 119, 118, 1, 2), ("repeat", 119, 118, 1, 2),
-    ("reverse_complement", 119, 118, 1, 2), ("insertion", 120, 118, 2, 2),
-    ("deletion", 118, 117, 1, 3),
-])
-def test_actual_report_displays_are_labelled_extractions(name, query_length, paired, inserted, deleted):
-    fixture = report_fixture("native-rfam_example_" + name)
-    assert fixture["fixture_kind"] == "derived_native_report_display"
-    result = parse_fixture(fixture)
-    assert result["status"] == "complete"
-    assert result["aligned_model_intervals"] == [[0, 120]]
-    assert result["aligned_query_intervals"] == [[0, query_length]]
-    assert result["model_consensus_compared_count"] == paired
-    assert result["query_insert_count"] == inserted
-    assert result["model_delete_count"] == deleted
-    if name == "reverse_complement":
-        assert result["query_strand"] == "-"
-        assert result["paired_positions"][0]["query_position"] == 118
-        assert result["paired_positions"][-1]["query_position"] == 0
-        assert result["paired_positions"][0]["query_symbol"] == "A"
-        assert fixture["query_sequence"][118] == "T"
-
-
-def test_actual_report_truncation_does_not_create_a_model_length_or_alignment():
-    result = parse_fixture(report_fixture("native-rfam_example_prefix70"))
-    assert result["status"] == "partial"
-    assert codes(result) == {"rfam_alignment_correspondence_unrepresented"}
-    assert result["display_model_to"] == 120
-    assert result["aligned_model_intervals"] == [[0, 71]]
-    assert result["aligned_query_intervals"] == [[0, 70]]
-    assert result["truncated_model_count_3p"] == 49
-    assert result["model_consensus_compared_count"] == 70
-    assert result["model_delete_count"] == 1
-    assert result["query_insert_count"] == 0
-    segment = result["segments"][-1]
-    assert segment == {"kind": "truncated_model", "model_interval": [71, 120], "query_interval": None,
-        "model_text": "*[49]>", "query_text": "*[ 0]>", "model_count": 49, "query_count": 0,
-        "correspondence_represented": False}
-
-
-def test_upstream_native_wrapped_reverse_local_end_preserves_unrepresented_positions():
-    fixture = report_fixture("upstream-cobalamin-wrapped-local-end")
-    result = parse_fixture(fixture)
-    assert result["status"] == "partial"
-    assert codes(result) == {"rfam_alignment_correspondence_unrepresented"}
-    assert result["display_model_from"] == 1
-    assert result["display_model_to"] == 191
-    assert result["display_query_from"] == 934
-    assert result["display_query_to"] == 832
-    assert result["truncated_model_count_5p"] == 31
-    assert result["local_end_model_omitted_count"] == 61
-    assert result["local_end_query_count"] == 4
-    assert result["query_insert_count"] == result["model_delete_count"] == 1
-    assert len(result["paired_positions"]) == 98
-    assert sum(b - a for a, b in result["aligned_model_intervals"]) == 99
-    assert sum(b - a for a, b in result["aligned_query_intervals"]) == 99
-    omitted = next(s for s in result["segments"] if s["kind"] == "local_end")
-    assert omitted["correspondence_represented"] is False
-    assert not any(omitted["query_interval"][0] <= p["query_position"] < omitted["query_interval"][1]
-                   for p in result["paired_positions"])
-    means = [p for p in result["posterior_segments"] if p["meaning"] == "span_mean_placement_bin"]
-    assert means == [{"query_interval": omitted["query_interval"], "code": "7", "lower_bound": .65,
-                      "upper_bound": .75, "meaning": "span_mean_placement_bin"}]
 
 
 def test_synthetic_both_truncations_and_local_end_have_explicit_native_counts():

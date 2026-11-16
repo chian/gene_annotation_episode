@@ -70,17 +70,6 @@ def test_task_info_is_one_exact_configured_endpoint_get(monkeypatch, file):
     assert ["Authorization", "<redacted>"] in snapshot.transport["request"]["headers"]
 
 
-def test_old_task_log_request_identity_and_operands_are_unchanged(monkeypatch):
-    calls = install(monkeypatch, lambda req: Response(req.full_url))
-    client = BVBRCAnalysisClient({"AppService": ENDPOINT})
-    snapshot = client.task_log("legacy task", "stdout")
-    assert snapshot.request == {"kind": "task_log", "task_id": "legacy task", "stream": "stdout"}
-    assert calls[0].full_url.endswith("/task_info/legacy%20task/stdout")
-    with pytest.raises(ValueError, match="bvbrc_task_log_selection_invalid"):
-        client.task_log("12", "job_result_id")
-    assert len(calls) == 1
-
-
 @pytest.mark.parametrize("task_id,file", [("12", "other"), ("../12", "stdout"), ("12/x", "stdout"),
     ("x\n", "stdout"), ("", "stdout"), (True, "stdout"), ("12", []), ("..", "stdout"), ("a b", "stdout")])
 def test_invalid_new_operands_make_no_call(monkeypatch, task_id, file):

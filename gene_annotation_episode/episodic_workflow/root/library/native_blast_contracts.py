@@ -1,7 +1,6 @@
 """Pure contracts for five explicitly selected local two-sequence BLAST jobs.
 
-The option vocabulary follows the retained BLAST+ 2.17.0 installed help in
-verification/tool_graders_blast_program_boundaries_2026-10-26_290/installed_help.
+The option vocabulary follows the BLAST+ 2.17.0 installed help.
 Validation and compilation perform no discovery, file access or execution.
 """
 from __future__ import annotations

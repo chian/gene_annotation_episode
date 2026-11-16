@@ -12,25 +12,19 @@ _LIBRARY = Path(__file__).resolve().parent
 _CURRENT_PACKAGE_FILES = (_ROOT / "episodic_workflow/__init__.py",
     _LIBRARY.parent / "__init__.py", _LIBRARY / "__init__.py")
 _CURRENT = "gene_annotation_episode.episodic_workflow.root.library."
-_LEGACY = "gene_annotation_episode."
 _WORKERS = {"homer_motif_result": "native_homer_worker",
     "tf_binding_native": "tf_binding_driver", "tf_binding_result": "tf_binding_result_worker"}
 OPERATIONS = frozenset(_WORKERS)
 
 
-def module(operation, *, current=True):
+def module(operation):
     if operation not in OPERATIONS:
         raise ContractError("molecular_tool_operation_unknown")
-    return (_CURRENT if current else _LEGACY) + _WORKERS[operation]
+    return _CURRENT + _WORKERS[operation]
 
 
 def recorded_module(operation, selected):
-    # The caller still requires the complete original argv, metadata and pins.
-    # Unknown/malformed commands retain the old expected value and its error.
-    command = selected.get("command") if type(selected) is dict else None
-    if type(command) is list and len(command) > 2 and command[2] == module(operation):
-        return module(operation)
-    return module(operation, current=False)
+    return module(operation)
 
 
 def implementation_files(operation):

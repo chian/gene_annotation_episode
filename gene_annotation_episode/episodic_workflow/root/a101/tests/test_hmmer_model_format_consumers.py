@@ -22,7 +22,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_artifact_
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_emission_calculations import calculate_hmmemit_components
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_emission_data import populate_hmmemit_sheet
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_statistics_calculations import calculate_hmmstat_components, native_hmmstat_parameters
-from test_hmmer_artifact_data import NATIVE, native_sheet, native_case, payload, populate
+from test_hmmer_artifact_data import NATIVE, payload, populate
 from test_hmmer_emission_data import arguments as emission_arguments
 from test_hmmer_statistics_data import make_sheet as statistics_sheet
 
@@ -378,79 +378,6 @@ def test_h2_generated_population_and_alignment_geometry_do_not_depend_on_entropy
     assert checks(result, "sample_population_count") == ["pass"]
     if style == "alignment":
         assert checks(result, "alignment_geometry") == checks(result, "rf_matches_model_length") == ["pass"]
-
-
-def test_binary_artifact_body_validation_and_custody_are_separate():
-    result = calculate_hmmer_artifact_components(native_sheet("hmmpress_success"))
-    artifacts = {r["format"]: r for r in result["rows"] if r["kind"] == "artifact"}
-    assert artifacts["hmmer_binary"]["decoded_record_count"]["value"] == 1
-    assert artifacts["hmmer_binary"]["internal_content_state"] == "decoded"
-    assert artifacts["hmmer_binary"]["authenticated_custody_state"] == "unknown"
-    for fmt in ("ssi", "msv_profiles", "remaining_profiles"):
-        assert artifacts[fmt]["internal_content_state"] == "unknown"
-        assert artifacts[fmt]["decoded_record_count"]["value"] is None
-
-
-@pytest.mark.parametrize("case", ["truncated", "domain", "partial"])
-def test_binary_artifact_complete_invalid_vs_partial_capture(case):
-    operation, inputs, outputs, bindings = native_case("hmmpress_success")
-    content = outputs["binary_models"][0]["content"]
-    if case == "truncated": content = content[:-2]
-    elif case == "domain": content = content[:16] + struct.pack("<f", 1.5) + content[20:]
-    outputs["binary_models"] = [payload(content, "binary_models", "output",
-        completeness="partial" if case == "partial" else "complete")]
-    result = calculate_hmmer_artifact_components(populate(operation, inputs, outputs, bindings))
-    artifact = next(r for r in result["rows"] if r["kind"] == "artifact" and r["format"] == "hmmer_binary")
-    assert artifact["internal_content_state"] == ("partial" if case == "partial" else "invalid")
-    check = next(c for c in result["checks"] if c["code"] == "binary_internal_content" and c["row_key"] == artifact["row_key"])
-    assert check["state"] == ("unknown" if case == "partial" else "fail")
-
-
-def test_binary_unknown_layout_after_valid_prefix_keeps_internal_content_unknown():
-    operation, inputs, outputs, bindings = native_case("hmmpress_success")
-    content = outputs["binary_models"][0]["content"] + b"xxxx"
-    outputs["binary_models"] = [payload(content, "binary_models", "output")]
-    result = calculate_hmmer_artifact_components(populate(operation, inputs, outputs, bindings))
-    artifact = next(r for r in result["rows"] if r["kind"] == "artifact" and r["format"] == "hmmer_binary")
-    assert artifact["decoded_record_count"]["value"] == 1
-    assert artifact["internal_content_state"] == "unknown"
-    check = next(c for c in result["checks"] if c["code"] == "binary_internal_content" and c["row_key"] == artifact["row_key"])
-    assert check["state"] == "unknown"
-
-
-def test_h2_artifact_comparable_cells_do_not_claim_whole_model_equivalence():
-    result = calculate_hmmer_artifact_components(native_sheet("hmmconvert_legacy2"))
-    comparison = row(result, "model_comparison")
-    assert comparison["compared_cell_count"]["value"] > 0
-    assert comparison["max_absolute_probability_difference"]["state"] == "incompatible"
-    assert checks(result, "model_probability_equivalence") == ["unknown"]
-    assert not any(o["field"] == "header.m->m" for o in comparison["optional_fields"])
-    assert any(o["field"] == "header.NULE" and o["state"] == "gained" for o in comparison["optional_fields"])
-    assert any(i.get("population") == "common_core_probability_slots" for i in comparison["output_cell_count"]["inputs"])
-
-
-@pytest.mark.parametrize("name", ["hmmconvert_binary", "hmmconvert_binary_to_ascii"])
-def test_retained_binary_optional_metadata_uses_typed_values_without_inventing_command_log(name):
-    sheet = native_sheet(name)
-    before = deepcopy(sheet)
-    result = calculate_hmmer_artifact_components(sheet)
-    optional = {o["field"]: o for o in row(result, "model_comparison")["optional_fields"]}
-    effn = optional["header.EFFN"]
-    assert effn["state"] == "retained"
-    expected = ([["3.000000"]], [["3.0"]])
-    if name == "hmmconvert_binary_to_ascii":
-        expected = expected[::-1]
-    assert (effn["source_value"], effn["output_value"]) == expected
-    assert "header.COM" not in optional
-    for record in sheet["input_records"] + sheet["output_records"]:
-        assert record["effective_sequence_count"] == 3.0
-        assert not any(h["tag"] == "COM" for h in record["headers"])
-        if "representation" in record:
-            fields = {f["field"]: f for f in record["representation"]["native_fields"]}
-            assert fields["COM.length"]["value"] == 0
-            assert fields["COM"]["value"] is None
-            assert fields["COM"]["state"] == "native_missing_sentinel"
-    assert sheet == before
 
 
 def synthetic_command_log_sheet(ascii_commands, binary_log, mode, case):

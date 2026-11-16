@@ -8,7 +8,6 @@ from copy import deepcopy
 import base64
 import builtins
 import hashlib
-import importlib.util
 import io
 import json
 import os
@@ -30,7 +29,6 @@ from gene_annotation_episode.episodic_workflow.root.a101.tests.test_native_blast
 
 
 ROOT = Path(__file__).resolve().parents[5]
-PACKET = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/blast_convergence_bridge"
 PREFIX = "native_blast_database_convergence_"
 
 
@@ -368,8 +366,6 @@ def test_supplied_records_keep_namespace_source_order_and_conflicts(tmp_path, sc
     assert [r["status"] for r in observed] == (["incompatible", "incompatible"] if scope == "query" else ["available", "available"])
     for name, value in (("binding", binding), ("legacy-sheets", legacy), ("sheets", sheets), ("calculations", result)):
         save(tmp_path / (name + ".json"), value)
-
-
 
 
 def test_pure_bridge_no_calculation_or_io_and_saved_validation_no_interpretation(case, monkeypatch):

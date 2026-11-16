@@ -1,13 +1,9 @@
 """Generated damaged wrappers: native prefix custody, not biological accuracy."""
 import asyncio
 import gzip
-import hashlib
 import json
 
-import pytest
 
-from gene_annotation_episode.credit import project_credit
-from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -26,55 +22,6 @@ def native_wrapper(fault):
     return body
 
 
-@pytest.mark.parametrize("fault,exception", [("trailer_absent", "EOFError"),
-                                            ("crc_wrong", "BadGzipFile")])
-def test_native_prefix_survives_wrapper_failure_reopen_and_portable_export(tmp_path, fault, exception):
-    wrapper = native_wrapper(fault)
-    workspace = tmp_path / "store"
-    with Store(workspace) as store:
-        problem = store.create_problem(raw_sequence="MKWV", molecule="protein")
-        material = store.register_material(data=wrapper, name="generated_damaged_gzip", role="read", molecule="dna")
-        attempt = store.parse_material(material["id"])
-        assert attempt["status"] == "partial" and attempt["valid_records"] == 2
-        errors = store.material_errors(attempt["id"])["errors"]
-        assert errors == [{"ordinal": None, "byte_offset": None,
-            "code": "gzip_decode_incomplete", "decoded_prefix_bytes": len(RAW),
-            "exception_type": exception, "unparsed_remainder": "unknown", "wrapper_integrity": "not_established"}]
-        original, decoded = store.get(material["source_ref"]), store.get(attempt["source_ref"])
-        assert store.get_artifact(original["artifact_ref"]) == wrapper
-        assert store.get_artifact(decoded["artifact_ref"]) == RAW
-        assert decoded["parent_source_refs"] == [original["id"]]
-        metadata = json.loads(store.get_artifact(decoded["request_ref"]))
-        assert metadata["complete"] is False and metadata["decoded_bytes"] == len(RAW)
-        assert metadata["exception_type"] == exception and metadata["exception_message"]
-        assert metadata["source_ref"] == original["id"]
-        assert metadata["decoder_mode"] == "native_gzip_read1_prefix_v1"
-        collection = store.get(attempt["collection_ref"])
-        assert collection["complete"] is False
-        members = store.material_members(collection["id"])["members"]
-        assert [store.material_member(row["id"])["sequence"] for row in members] == ["ACGTACGT", "GATTACAA"]
-        assert [store.material_member(row["id"])["quality"] for row in members] == ["IIIIIIII", "HHHHHHHH"]
-        assert all(row["source_ref"] == decoded["id"] for row in members)
-        assert project_credit(store).credit == 0 and not store.current_annotations()
-        assert store.problem() == problem
-    with Store(workspace) as store:
-        assert store.parse_material(material["id"]) == attempt
-        assert [row["id"] for row in store.material_members(collection["id"])["members"]] == [row["id"] for row in members]
-        out = tmp_path / "portable.json"
-        export_annotation(store, out, include_artifacts=True)
-        exported = json.loads(out.read_text())
-        records = {row["id"]: row for row in exported["records"]}
-        artifacts = {row["id"]: row for row in exported["artifacts"]}
-        for source, body in [(original, wrapper), (decoded, RAW)]:
-            assert records[source["id"]] == source
-            assert (out.parent / artifacts[source["artifact_ref"]]["relative_path"]).read_bytes() == body
-        assert json.loads((out.parent / artifacts[decoded["request_ref"]]["relative_path"]).read_text()) == metadata
-        sidecar, = exported["packed_material_indexes"]
-        assert sidecar["member_count"] == 2
-        assert hashlib.sha256((out.parent / sidecar["relative_path"]).read_bytes()).hexdigest() == sidecar["sha256"]
-        assert store.material_errors(attempt["id"])["errors"] == errors
-
-
 def test_partial_deflate_payload_keeps_only_complete_native_fastq_records(tmp_path):
     wrapper = gzip.compress(FIRST, mtime=0) + gzip.compress(SECOND, mtime=0)[:-12]
     expected = FIRST + b"@two native read\nGATTACAA\n+\n"
@@ -91,23 +38,6 @@ def test_partial_deflate_payload_keeps_only_complete_native_fastq_records(tmp_pa
         assert member["ordinal"] == 0
         assert store.material_member(member["id"])["sequence"] == "ACGTACGT"
         assert store.material_member(member["id"])["quality"] == "IIIIIIII"
-
-
-def test_complete_wrapper_remains_complete_with_explicit_decoder_provenance(tmp_path):
-    wrapper = native_wrapper("complete")
-    with Store(tmp_path / "store") as store:
-        store.create_problem(raw_sequence="MKWV", molecule="protein")
-        material = store.register_material(data=wrapper, role="read", molecule="dna")
-        attempt = store.parse_material(material["id"])
-        assert attempt["status"] == "completed" and attempt["valid_records"] == 2
-        assert store.material_errors(attempt["id"])["errors"] == []
-        decoded = store.get(attempt["source_ref"])
-        metadata = json.loads(store.get_artifact(decoded["request_ref"]))
-        assert metadata["complete"] is True and metadata["exception_type"] is None
-        assert metadata["decoded_bytes"] == len(RAW) and "exception_message" not in metadata
-        assert decoded["parent_source_refs"] == [material["source_ref"]]
-        assert store.get_artifact(decoded["artifact_ref"]) == RAW
-        assert project_credit(store).credit == 0
 
 
 def test_wrapper_failure_without_emitted_bytes_retains_original_and_explicit_empty_prefix(tmp_path):

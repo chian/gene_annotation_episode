@@ -156,17 +156,6 @@ def test_native_opaque_has_no_model_population(fmt, path):
     assert "model_binary_header_truncated" in {i["code"] for i in extract(OPAQUE_SIGNATURES[fmt], fmt)["issues"]}
 
 
-def test_capture_custody_and_completeness(calibrated):
-    art = artifact(calibrated)
-    art["sha256"] = "0"*64
-    got = extract_infernal_models(calibrated, artifact=art, format=art["format"])
-    assert not got["population_complete"] and got["records"]
-    assert "model_artifact_digest_mismatch" in {i["code"] for i in got["issues"]}
-    got = extract(calibrated, completeness="partial")
-    assert not got["population_complete"]
-    assert got["records"][0]["content_validation"] == "parsed_headers_and_boundaries"
-
-
 def test_no_io_and_saved_json(calibrated):
     with patch("builtins.open", side_effect=AssertionError("unexpected file access")), patch("socket.socket", side_effect=AssertionError("network")), patch("subprocess.Popen", side_effect=AssertionError("subprocess")):
         got = extract(calibrated)

@@ -46,8 +46,6 @@ def _standard_bindings(store, directory, settings):
         from gene_annotation_episode.practical_service_setup import PracticalServiceFactory
         definition = supplied_services.get('definition', {})
         factory_name = supplied_services.get('factory')
-        if factory_name == 'gene_annotation_episode.execution_service_setup.ExecutionServiceFactory':
-            raise _failure('unavailable_binding', 'historical_execution_service_factory_identity')
         if factory_name == 'gene_annotation_episode.episodic_workflow.root.execution_service_setup.ExecutionServiceFactory':
             from .execution_service_setup import ExecutionServiceFactory
             try:

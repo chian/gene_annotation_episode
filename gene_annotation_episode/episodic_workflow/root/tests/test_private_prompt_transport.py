@@ -19,12 +19,6 @@ def connection(provider):
     return value
 
 
-def test_legacy_generic_context_keeps_its_original_presentation(provider):
-    value=connection(provider)
-    context={'unrelated':'original information'}
-    assert value._presentation('episode','REASONING','Original instructions',context)==(json.dumps(context,allow_nan=False),'Original instructions')
-
-
 def test_declared_renderer_reconstructs_bootstrap_update_and_lookup(provider):
     value=connection(provider);seen=[]
     def render(state,instructions,*,lookup_results=()):

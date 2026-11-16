@@ -4,7 +4,6 @@ Only population reads scientific inputs and calculates. Reconstruction validates
 committed identities and typed cells; it does not rerun a reader or grader.
 """
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.implementation_sources import source_file
 from copy import deepcopy
 from hashlib import sha256
 import json
@@ -17,7 +16,6 @@ from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.publ
 from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.prompts.literature_assay_grading_prompt import ASSAY_GRADING_OPERATION_DESCRIPTION
 from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.scoring.literature_rate_storage import LiteratureRateRepository
 PROVIDER = 'literature.a105.assay_grading'
-LEGACY_VERSION = 'literature_assay_grading_record_v1'
 VERSION = 'literature_assay_grading_record_v2'
 NAMESPACE = 'literature_assay_grading_cells'
 REQUESTED = 'requested_assay_grading_components'
@@ -37,9 +35,6 @@ def assay_grading_cells_schema():
     fields['prediction_model']['anyOf'][0]['properties']['support_refs']['items'] = {'type': 'string', 'format': 'reference'}
     return {'type': 'array', 'x-source': NAMESPACE, 'items': obj(fields, required=[*cell_schema['required'], 'sheet_ref', 'evidence_source_ref', 'evaluation_scope', 'assay_type', 'assertion_ref', 'quantity_kind', 'interpretations', 'prediction_model', 'annotation_credit'])}
 
-def legacy_assay_grading_cells_schema():
-    """Original frozen four-type parent contract; never infer new old fields."""
-    return json.loads(source_file('literature_assay_grading_legacy_cells_v1.json').read_text())
 
 def _rows(saved, sheet_ref, components):
     sheet = saved['sheet']
@@ -61,7 +56,6 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
     operations_table = 'literature_assay_grading_operations'
     received_table = 'literature_assay_grading_received'
     binding_fields = ()
-    legacy_version = LEGACY_VERSION
     requested = REQUESTED
     population_schema = staticmethod(grading_population_schema)
     read_inputs = staticmethod(read_assay_grading_inputs)
@@ -208,7 +202,7 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
 
     def read(self, sheet_ref):
         source = self.store.get(sheet_ref)
-        if source.get('record_type') != 'source' or source.get('origin') != 'tool' or source.get('provider') != self.provider or (source.get('version') not in (self.record_version, self.legacy_version)):
+        if source.get('record_type') != 'source' or source.get('origin') != 'tool' or source.get('provider') != self.provider or source.get('version') != self.record_version:
             raise ContractError('assay_grading_sheet_required')
         record = {key: value for key, value in source.items() if key not in ('id', 'record_type', 'origin')}
         if identity('source', {'origin': 'tool', 'record': record}) != sheet_ref:
@@ -225,9 +219,7 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
         outcome = json.loads(operation['outcome'])
         if set(saved) != {'version', 'selection', 'extraction', 'sheet', 'direct_record_refs', 'input_source_refs', 'record_bindings', 'artifact_bindings', 'input_component_rows'} or saved['version'] != source['version'] or saved['selection'] != request['arguments'] or (saved['input_source_refs'] != source['parent_source_refs']) or (outcome.get('status') != 'completed') or (outcome.get('result', {}).get('sheet_ref') != sheet_ref) or (outcome.get('record_refs') != [sheet_ref]) or (outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
             raise ContractError('assay_grading_saved_selection_mismatch')
-        validate_schema(saved['selection'], self.population_schema(legacy=source['version'] != self.record_version))
-        if source['version'] == self.record_version and 'experiment_ref' not in saved['selection']:
-            raise ContractError('assay_grading_saved_experiment_missing')
+        validate_schema(saved['selection'], self.population_schema())
         validate_schema(saved['extraction'], self.input_schema())
         validate_schema(saved['sheet'], self.sheet_schema())
         for reference, digest in saved['record_bindings'].items():
@@ -280,7 +272,7 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
                 row = self.store.get(reference)
             except (LookupError, ContractError):
                 continue
-            if row.get('record_type') == 'source' and row.get('provider') == self.provider and (row.get('version') in (self.record_version, self.legacy_version)):
+            if row.get('record_type') == 'source' and row.get('provider') == self.provider and row.get('version') == self.record_version:
                 self.read(reference)
                 refs.append(reference)
         return list(dict.fromkeys(refs))
@@ -290,7 +282,7 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
 
         Multiple assessments of an experiment remain distinct immutable sheets.
         Parent possession grants only the delivered cells, never private child
-        operands. Historical sheets with no experiment binding stay separate.
+        operands.
         Shared measurement keys remain on each cell; distinct experiment refs
         do not assert statistical independence.
         """
@@ -323,4 +315,4 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
             if row['prediction_model']:
                 refs.extend(row['prediction_model']['support_refs'])
         return list(dict.fromkeys((ref for ref in refs if ref is not None)))
-__all__ = ['PROVIDER', 'VERSION', 'NAMESPACE', 'REQUESTED', 'SCOPE', 'COMPONENTS', 'OPERATION_DESCRIPTION', 'LiteratureAssayGradingRepository', 'assay_grading_cells_schema', 'legacy_assay_grading_cells_schema']
+__all__ = ['PROVIDER', 'VERSION', 'NAMESPACE', 'REQUESTED', 'SCOPE', 'COMPONENTS', 'OPERATION_DESCRIPTION', 'LiteratureAssayGradingRepository', 'assay_grading_cells_schema']

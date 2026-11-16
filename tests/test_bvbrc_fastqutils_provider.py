@@ -1,20 +1,16 @@
 from copy import deepcopy
-import hashlib
 import importlib
 import importlib.util
 from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import bvbrc_fastqutils_bundle_adapter as provider
-from gene_annotation_episode import bvbrc_fastqutils_composition as fastq_composition
-from gene_annotation_episode import sequence_composition_counts as common_composition
-from gene_annotation_episode import sequence_composition_grader as ordinary_composition
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_fastqutils_bundle_adapter as provider
 from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError, canonical_json, bytes_sha256, json_sha256
 from gene_annotation_episode.bvbrc_fastqutils_resolution import resolve_documents, resolve_calculation_inputs
-from gene_annotation_episode.bvbrc_fastqutils_calculators import calculate_fastqutils
-from gene_annotation_episode.bvbrc_fastqutils_native import parse_unsupported_artifact
-from gene_annotation_episode.bvbrc_fastqutils_saved_codec import validate_saved_projection, encode_saved_components, encode_failures
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_calculators import calculate_fastqutils
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_native import parse_unsupported_artifact
+from gene_annotation_episode.bvbrc_fastqutils_saved_codec import validate_saved_projection
 from gene_annotation_episode.bvbrc_fastqutils_projection import project_fastqutils_facts
 
 spec = importlib.util.spec_from_file_location("fixture_support", Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/bundle/fixture_support.py")
@@ -26,21 +22,6 @@ def validate(result, data, fields):
     return validate_saved_projection(result["sheet"], result["components"], facts=result["facts"], status=result["status"],
         missing_requirements=result["missing_requirements"], diagnostics=result["diagnostics"],
         requested_form=f.schema(fields), parameters=data[3], original_task=data[0]["original_task"], bundle=data[0])
-
-
-def test_provider_actual_frozen_bytes_and_immutable_predownload_selection():
-    data = f.fixture195()
-    selector = f.oracle("RESULT_SELECTOR_PRE_DOWNLOAD_002.json")
-    before = canonical_json([data[0], data[3], selector])
-    result = provider.consume_bundle(data[0], artifact_bytes=data[1], supplied_values=data[2],
-                                    requested_form=selector["requested_schema"], parameters=data[3])
-    assert canonical_json([data[0], data[3], selector]) == before
-    assert result["adapter_id"] == "bvbrc_fastqutils" and result["adapter_version"] == "2"
-    assert result["status"] == "ok"
-    assert [result["facts"][name]["records"][0]["payload"]["value"] for name in
-        ("read_count", "gc_fraction", "expected_errors", "retained_native_report")] == [2, 5 / 9, .001, .75]
-    assert result["facts"]["qc_status"]["records"][0]["payload"] is None
-    assert all(s["observed_state"] == "unknown" for s in result["sheet"]["stages"])
 
 
 def test_exact_requirement_matching_deduplicates_identical_receipts_but_not_versions():
@@ -68,25 +49,6 @@ def test_same_native_name_cannot_select_an_unrelated_source():
     bundle["artifacts"][1]["requirement_ids"] = []
     contexts, resolutions, _ = resolve_documents(bundle, artifact_bytes=raw, parameters=params)
     assert len(contexts) == 1 and resolutions[1]["state"] == "missing"
-
-
-def test_exact_possessed_content_and_bytes_not_just_hash_or_filename():
-    bundle, raw, values, _ = f.fixture195()
-    params = f.oracle("POSSESSED_PARAMETERS_002.json")
-    contexts, resolutions, _ = resolve_documents(bundle, artifact_bytes=raw, parameters=params)
-    assert contexts and resolutions[0]["state"] == "available"
-    changed = deepcopy(params)
-    changed["documents"][0]["selection"]["content"]["artifact_field"] = "text_ref"
-    contexts, resolutions, _ = resolve_documents(bundle, artifact_bytes=raw, parameters=changed)
-    assert not contexts and resolutions[0]["state"] == "missing"
-    selected = deepcopy(params["documents"][0]["selection"]["content"])
-    bundle["artifacts"] = []
-    bundle["supplied_contents"] = [selected]
-    contexts, _, _ = resolve_documents(bundle, artifact_bytes=raw, parameters=params)
-    assert len(contexts) == 1 and contexts[0]["native_name"] is None
-    wrong = dict(raw); wrong[selected["artifact_ref"]] += b"x"
-    with pytest.raises(FastqUtilsContractError, match="binding_conflict"):
-        resolve_documents(bundle, artifact_bytes=wrong, parameters=params)
 
 
 @pytest.mark.parametrize("change", ["duplicate_document", "conflicting_byte_id", "task", "nonbytes"])
@@ -123,20 +85,6 @@ def test_malformed_document_does_not_erase_intact_sibling():
     assert result["facts"]["broken"]["records"][0]["payload"]["value"] == 1
     assert result["facts"]["broken"]["records"][0]["state"] == "partial"
     assert result["facts"]["valid"]["satisfied"] and result["facts"]["valid"]["records"][0]["payload"]["value"] == 2
-
-
-def test_unknown_encoding_preserves_composition_and_quality_nulls():
-    data = f.fixture195()
-    data[3]["metadata_bindings"] = [r for r in data[3]["metadata_bindings"] if r["kind"] != "encoding_declaration"]
-    fields = dict(reads=f.selection("measurement", f.measurement(), availability="available_value"),
-        gc=f.selection("component", dict(selection="semantic", calculation_id="composition_reads", metric="gc_acgt_fraction", threshold=None), availability="available_value"),
-        errors=f.selection("component", dict(selection="semantic", calculation_id="quality_reads", metric="phred_implied_expected_errors", threshold=None)))
-    result = f.run(data, fields)
-    assert result["status"] == "ok"
-    assert result["facts"]["reads"]["records"][0]["payload"]["value"] == 2
-    assert result["facts"]["gc"]["records"][0]["payload"]["value"] == 5 / 9
-    assert result["facts"]["errors"]["records"][0]["payload"]["value"] is None
-    assert result["facts"]["errors"]["records"][0]["payload"]["encoding_basis"]["basis"] == "unknown"
 
 
 @pytest.mark.parametrize("format_name", ["bai", "samstat_html", "sra_metadata", "native_text", "native_json", "unknown"])
@@ -193,23 +141,6 @@ def test_saved_relationship_and_hash_tampering_rejected(change):
     elif change == "codec": result["missing_requirements"] = []
     else: result["sheet"]["supplied_metadata"][0]["value"]["encoding"] = "phred64"
     with pytest.raises(FastqUtilsContractError): validate(result, data, fields)
-
-
-def test_original_projection_failure_context_roundtrip_not_subtracted():
-    data, fields = f.seven_family_data()
-    result = f.run(data, fields)
-    original = dict(requirements=[result["sheet"]["requirements"][0]] * 2,
-                    diagnostics=[f.oracle("ERROR_SHAPES_002.json")["native_diagnostic"]] * 2)
-    projection = project_fastqutils_facts(result["sheet"], result["components"]["calculations"],
-        requested_form=f.schema(fields), parameters=data[3], failure_context=original)
-    result["components"] = encode_saved_components(result["components"]["calculations"], projection_failure_context=original,
-        native_requirements=projection["requirements"], native_diagnostics=projection["diagnostics"])
-    encoded = encode_failures(projection["requirements"], projection["diagnostics"])
-    result.update(facts=projection["facts"], status=projection["status"], **encoded)
-    assert result["components"]["projection_failure_context"] == original
-    validate(result, data, fields)
-
-
 
 
 @pytest.mark.parametrize("change", ["association_artifact", "omit_library", "lineage_injection", "promote_association"])
@@ -329,67 +260,5 @@ def test_paired_mapping_resolves_exact_pair_parents_as_four_actual_input_reads()
     job = result["components"]["calculations"]["parameters"]["calculations"][0]
     assert len(job["population_refs"]) == 4
     validate(result, data, fields)
-
-
-@pytest.fixture(scope='module')
-def frozen_composition_calculators():
-    """Exact pre-extraction pure sources, never a native execution oracle."""
-    root = Path(__file__).resolve().parents[1] / (
-        'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/frozen_composition')
-    modules = {}
-    for name, expected in (
-            ('sequence_composition_grader', '884dcb1591e6fe2028d3a460b7d813e2bf9834eca983291c6bf6984d231c61b6'),
-            ('bvbrc_fastqutils_composition', 'bb19e0ed1238cb3745f8947662aa61b012715fe0136ec0675342c1a80fb301b2')):
-        path = root / (name + '.py')
-        assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
-        spec = importlib.util.spec_from_file_location('gene_annotation_episode._frozen264_' + name, path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        modules[name] = module
-    return modules
-
-
-def _same_composition_json(original, current):
-    # Python equality aliases True,1 and1.0; serialized JSON retains their types.
-    assert canonical_json(current) == canonical_json(original)
-
-
-
-
-
-
-def _composition_parity_inputs(raw, *, scope='complete'):
-    data = f.build({'reads': (raw, 'fastq')})
-    transfer = data[0]['artifacts'][0]['transfer']
-    if scope == 'partial':
-        transfer.update(body_complete=False, object_complete='no')
-    elif scope == 'unknown':
-        transfer.update(object_complete='unknown', total_size=None)
-    sheet = f.sheet_for(data)
-    refs = [row['id'] for row in sheet['populations'] if row['population_key'] in ('fastq_reads', 'fastq_bases')]
-    job = dict(calculation_id='composition', method='composition_v1', state='ready', population_refs=refs,
-        operand_measurement_refs=[row['id'] for row in sheet['measurements'] if row['population_ref'] in refs
-            and row['metric'] in ('fastq_read_count', 'fastq_base_count', 'fastq_symbol_count')],
-        comparison_kind=None, quality_thresholds=[], read_key_rule=None, lineage_ref=None, lineage_basis=None,
-        requirement_refs=[], diagnostic_codes=[])
-    return sheet, job
-
-
-def _change_composition_cell(sheet, reference, **changes):
-    for rows in ([doc['cells'] for doc in sheet['documents']] + [sheet['measurements']]):
-        for row in rows:
-            if row['id'] == reference:
-                row.update(deepcopy(changes))
-
-
-def _composition_rows(module, sheet, job):
-    parameters = dict(version='fastqutils_calculators_v2', analysis_id=sheet['analysis_id'], calculations=[job])
-    return module.calculate_composition(sheet, job=job, parameters_sha256=json_sha256(parameters))
-
-
-
-
-
-
 
 

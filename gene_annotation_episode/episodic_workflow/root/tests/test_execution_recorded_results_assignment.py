@@ -209,7 +209,7 @@ def require_live_path(frame, monkeypatch):
     assert seen == [True]
 
 
-@pytest.mark.parametrize("state", ["first", "pending", "partial_status", "legacy", "missing_attempt",
+@pytest.mark.parametrize("state", ["first", "pending", "partial_status", "missing_attempt",
     "failed_return", "active_child"])
 def test_results_without_successful_completed_original_projection_keeps_live_preparation(frame, monkeypatch, state):
     key = (frame.run_id, frame.parent.episode_id, frame.index)
@@ -219,9 +219,6 @@ def test_results_without_successful_completed_original_projection_keeps_live_pre
         frame.outcome(status="completed", pending_handle="execution_engineering_pending", record_refs=[])
     elif state == "partial_status":
         frame.outcome(status="partial")
-    elif state == "legacy":
-        frame.store.db.execute("UPDATE runtime_actions SET result=? WHERE run_id=? AND episode_id=? AND decision_index=?",
-            (canonical({"status": "completed"}), *key))
     elif state == "missing_attempt":
         frame.store.db.execute("DELETE FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND decision_index=?", key)
     elif state == "failed_return":

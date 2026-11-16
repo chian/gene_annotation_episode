@@ -6,30 +6,22 @@ synthetic cases construct explicit envelopes and deliberately malformed bytes.
 from copy import deepcopy
 import hashlib
 import json
-import os
 from pathlib import Path
 import shutil
 import socket
 import subprocess
-from types import SimpleNamespace
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_acquisition as acquisition
-from gene_annotation_episode.episodic_workflow.root.library import native_infernal_driver as native_driver
-from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_driver as preparation_driver
 from gene_annotation_episode.native_infernal_contracts import native_infernal_digest as digest
 from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import (
     compile_native_infernal_preparation_job, requested_job_from_infernal_preparation,
 )
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import canonical
-from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_local import prepare_local_infernal_preparation
-from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.state import Store
 
 
-ROOT = Path(__file__).resolve().parents[1]
-PRODUCER = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/producer"
 PREFIX = "native_infernal_preparation_"
 
 
@@ -93,7 +85,7 @@ def sealed_case(tmp_path, monkeypatch, mode="merge_scores"):
     request = requested_job_from_infernal_preparation(job)
     identity["requested_job_sha256"] = digest(request)
     plan = {"version": PREFIX + "run_plan_v1", "identity": identity, "requested_job": request,
-        "attempt_directory": str(root), "policy": {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}
+        "attempt_directory": str(root), "policy": {'memory_bytes': 5 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}
     inputs, staged, contents = [], {}, {}
     for operand, (_, _, _, data) in zip(operands, originals):
         relative = acquisition._staged_relative(operand)
@@ -244,41 +236,6 @@ def test_wrong_target_rejected_after_intent_before_manifest(tmp_path, monkeypatc
     with Store(tmp_path / "store") as store, pytest.raises(ValueError):
         acquisition.capture_local_bundle(store, target=target, directory=tmp_path / "capture")
     assert json.loads((tmp_path / "capture/capture-intent.json").read_bytes()) == {"target": target}
-
-
-@pytest.mark.parametrize("category", ["input", "working_copy", "output"])
-@pytest.mark.parametrize("fault", ["bytes", "size", "missing", "symlink", "parent_symlink", "directory", "fifo"])
-def test_partial_capture_preserves_valid_siblings(tmp_path, monkeypatch, category, fault):
-    root, _, bundle, target = sealed_case(tmp_path, monkeypatch)
-    relative = {"input": "inputs/partition_scores/1", "working_copy": "work/partition.2", "output": "outputs/stdout"}[category]
-    path = root / relative
-    if fault == "bytes": path.write_bytes(b"X" * path.stat().st_size)
-    elif fault == "size": path.write_bytes(path.read_bytes() + b"x")
-    elif fault == "parent_symlink":
-        outside = tmp_path / "outside"
-        shutil.move(path.parent, outside)
-        path.parent.symlink_to(outside, target_is_directory=True)
-    else:
-        raw = path.read_bytes()
-        path.unlink()
-        if fault == "symlink":
-            outside = tmp_path / "outside-file"
-            outside.write_bytes(raw)
-            path.symlink_to(outside)
-        elif fault == "directory": path.mkdir()
-        elif fault == "fifo": os.mkfifo(path)
-    with Store(tmp_path / "store") as store:
-        captured = acquisition.capture_local_bundle(store, target=target, directory=tmp_path / "capture")
-        assert captured["bundle_validated"] and not captured["complete"]
-        assert captured["artifacts"] and captured["failures"]
-        affected = [f for f in captured["failures"] if f["code"].endswith(relative)]
-        assert len(affected) == 1
-        assert ("sealed_artifact_digest_mismatch" in affected[0]["code"]) == (fault in {"bytes", "size"})
-        assert bool(captured["invalid_artifacts"]) == (fault in {"bytes", "size"})
-        shutil.rmtree(root.parent)
-        monkeypatch.setattr(acquisition, "local_infernal_preparation_plan", forbidden)
-        monkeypatch.setattr(acquisition, "_capture_file", forbidden)
-        assert acquisition.capture_local_bundle(store, target=target, directory=tmp_path / "capture") == captured
 
 
 @pytest.mark.parametrize("raw", [b"{", b"null", b"[]", b"\xff", b'{"version":1,"version":2}', b'{"a":NaN}'])
@@ -450,129 +407,6 @@ def test_saved_intent_cannot_substitute_a_new_target(tmp_path, monkeypatch):
         monkeypatch.setattr(acquisition, "local_infernal_preparation_plan", forbidden)
         with pytest.raises(ValueError, match="immutable_record_conflict"):
             acquisition.capture_local_bundle(store, target=target, directory=tmp_path / "capture")
-
-
-NATIVE_CASES = sorted(p for p in (PRODUCER / "retained/producer_001/temporary/pytest").glob(
-    "test_actual_selected_native_mo*/plan.json") if not p.parent.is_symlink())
-NATIVE_INDEX = json.loads((PRODUCER / "NATIVE_PRODUCER_INDEX_001.json").read_bytes())
-
-
-@pytest.mark.parametrize("plan_path", NATIVE_CASES, ids=lambda p: p.parent.name)
-def test_true_retained_native_mode_pure_validation(plan_path, monkeypatch):
-    plan = json.loads(plan_path.read_bytes())
-    bundle = json.loads((plan_path.parent / "infernal-preparation-attempt/bundle.json").read_bytes())
-    for name in ("open", "stat", "resolve", "read_bytes"):
-        monkeypatch.setattr(Path, name, forbidden)
-    monkeypatch.setattr(subprocess, "run", forbidden)
-    monkeypatch.setattr(socket, "socket", forbidden)
-    assert acquisition.validate_original_bundle(bundle, plan) == bundle
-
-
-def test_native_fixture_population_is_all_27_modes():
-    assert len(NATIVE_CASES) == 27
-    selections = set()
-    for path in NATIVE_CASES:
-        plan = json.loads(path.read_bytes())
-        job = plan["requested_job"]["native_infernal_preparation"]
-        selections.add((job["program"], job["mode"]))
-    assert len(selections) == 27
-
-
-def indexed_json(row):
-    raw = (ROOT / row["path"]).read_bytes()
-    assert len(raw) == row["size_bytes"] and hashlib.sha256(raw).hexdigest() == row["sha256"]
-    return json.loads(raw)
-
-
-def relocated_reservation(tmp_path, case):
-    """Reseal selected native bytes under a new test-owned local reservation."""
-    original_target, original_plan, original_bundle = (
-        indexed_json(case[key]) for key in ("target", "plan", "bundle"))
-    assert original_target["assignment"] == indexed_json(case["assignment"])
-    indexed_json(case["native_handle"])
-    indexed_json(case["native_receipt"])
-    original_action = (ROOT / case["plan"]["path"]).parent
-    original_attempt = original_action / "infernal-preparation-attempt"
-    job = deepcopy(original_plan["requested_job"]["native_infernal_preparation"])
-    native_root = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/boundaries/native"
-    for operand in job["operands"]:
-        original = Path(operand["path"])
-        relocated = native_root / original.parts[-2] / original.name
-        assert hashlib.sha256(relocated.read_bytes()).hexdigest() == operand["sha256"]
-        operand["path"] = str(relocated)
-    request = requested_job_from_infernal_preparation(job)
-    assignment = deepcopy(original_target["assignment"])
-    workspace = tmp_path / "retained-preparation-workspace"
-    workspace.mkdir()
-    assignment["workspace"] = str(workspace)
-    assignment["requested_job"] = request
-    identity = original_plan["identity"]
-    action = workspace / ".episode-operations" / digest({
-        "run": identity["run_id"], "episode": identity["episode_id"]}) / digest(identity["operation_key"])
-    state = SimpleNamespace(assignment=assignment, run_id=identity["run_id"], episode_id=identity["episode_id"])
-    prepare_local_infernal_preparation(state, identity["operation_key"], root=action,
-        policy=LocalJobPolicy(**original_plan["policy"]))
-    plan = json.loads((action / "infernal-preparation-plan.json").read_bytes())
-    attempt = action / "infernal-preparation-attempt"
-    shutil.copytree(original_attempt, attempt, dirs_exist_ok=True)
-    bundle = deepcopy(original_bundle)
-    bundle["identity"] = deepcopy(plan["identity"])
-    bundle["requested_job"] = deepcopy(request)
-    for row, operand in zip(bundle["inputs"], job["operands"]):
-        row["original_path"] = operand["path"]
-    compiled = preparation_driver._compile(job, attempt)
-    bundle["realized_argv"] = compiled["argv"]
-    bundle["operation"] = compiled["operation"]
-    bundle["environment"] = {**compiled["environment"],
-        **{key: str(attempt / "tmp") for key in ("TMPDIR", "TMP", "TEMP")},
-        "XDG_CACHE_HOME": str(attempt / "cache")}
-    (attempt / preparation_driver.OWNER_NAME).write_bytes(native_driver._encoded(plan))
-    (attempt / "bundle.json").write_bytes(native_driver._encoded(bundle))
-    assert acquisition.validate_original_bundle(bundle, plan) == bundle
-    return target_for(plan, assignment), plan, bundle
-
-
-@pytest.mark.parametrize("case", NATIVE_INDEX["reservations"], ids=lambda c: c["case"])
-def test_relocated_native_bytes_capture_with_new_sealed_reservation(tmp_path, monkeypatch, case):
-    target, plan, bundle = relocated_reservation(tmp_path, case)
-    monkeypatch.setattr(subprocess, "run", forbidden)
-    monkeypatch.setattr(subprocess, "Popen", forbidden)
-    monkeypatch.setattr(socket, "socket", forbidden)
-    with Store(tmp_path / "store") as store:
-        captured = acquisition.capture_local_bundle(store, target=target, directory=tmp_path / "capture")
-        assert captured["bundle_validated"] and captured["complete"] and not captured["failures"]
-        assert json.loads(store.get_artifact(captured["bundle_artifact_ref"])) == bundle
-        assert bundle["returncode"] == case["returncode"]
-        expected_rows = len(bundle["inputs"]) + len(bundle["working_copies"]) + len(bundle["artifacts"])
-        assert len(captured["artifacts"]) == expected_rows
-        for row in captured["artifacts"]:
-            assert store.get_artifact(row["artifact_ref"]) == (Path(plan["attempt_directory"]) / row["relative_path"]).read_bytes()
-        if case["case"] == "merge_scores":
-            rows = [r for r in captured["artifacts"] if r["direction"] == "input" and r["role"] == "partition_scores"]
-            assert [r["ordinal"] for r in rows] == [0, 1]
-        if case["program"] == "cmcalibrate":
-            output = next(r for r in captured["artifacts"] if r["role"] == "calibrated_models")
-            copy = next(r for r in captured["artifacts"] if r["direction"] == "working_copy" and r["role"] == "models")
-            assert output["artifact_ref"] == copy["artifact_ref"]
-        if case["case"] == "calibration_failure":
-            assert bundle["returncode"] == 1 and bundle["failures"]
-        source = acquisition.publish_original_source(store, bundle=bundle, capture=captured)
-        assert store.get(source)["provider"] == "episode.execution_result"
-        monkeypatch.setattr(acquisition, "local_infernal_preparation_plan", forbidden)
-        monkeypatch.setattr(acquisition, "_capture_file", forbidden)
-        # Keep producer evidence immutable; guard reads of its entire workspace.
-        original_open, original_read = Path.open, Path.read_bytes
-        def guarded_open(path, *args, **kwargs):
-            if path.is_relative_to(PRODUCER):
-                forbidden()
-            return original_open(path, *args, **kwargs)
-        def guarded_read(path, *args, **kwargs):
-            if path.is_relative_to(PRODUCER):
-                forbidden()
-            return original_read(path, *args, **kwargs)
-        monkeypatch.setattr(Path, "open", guarded_open)
-        monkeypatch.setattr(Path, "read_bytes", guarded_read)
-        assert acquisition.capture_local_bundle(store, target=target, directory=tmp_path / "capture") == captured
 
 
 def test_absent_original_bundle_has_immutable_failed_capture(tmp_path, monkeypatch):

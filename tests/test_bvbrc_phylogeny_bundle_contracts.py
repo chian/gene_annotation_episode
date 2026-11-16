@@ -1,7 +1,5 @@
 """Closed selectors and finite semantic identities; no scientific rerun."""
 from copy import deepcopy
-import ast
-from pathlib import Path
 
 import pytest
 
@@ -40,21 +38,6 @@ def test_reference_codec_is_canonical_and_scoped(kind):
         c.decode_reference(ref.replace("%2F", "%2f"))
     with pytest.raises(ContractValidationError):
         c.decode_reference(ref, expected_kind="tree" if kind != "tree" else "alignment")
-
-
-def test_original_schema_is_exact_and_contracts_import_no_calculator():
-    form = c.requested_form_schema({"n": selected("tree_tip_count"), "needs": {"metric": "missing_requirements"},
-        "q": {"metric": "qualifications", "analysis_id": "a", "slot_id": None}})
-    original = deepcopy(form)
-    assert c.validate_requested_form(form) == original and form == original
-    form["properties"]["n"]["description"] = "new context"
-    with pytest.raises(ContractValidationError):
-        c.validate_requested_form(form)
-    tree = ast.parse(Path(c.__file__).read_text())
-    assert all("calculator" not in (node.module or "") and "grader" not in (node.module or "") for node in ast.walk(tree) if isinstance(node, ast.ImportFrom))
-    assert c.QUALIFICATION_CODES and all(type(s) is str for s in c.QUALIFICATION_CODES)
-    assert not c.QUALIFICATION_CODES.intersection({"bvbrc_phylogeny_", "bvbrc_phylogeny_assembly_v1",
-        "bvbrc_phylogeny_component_set_v1", "raxml_run_log", "raxml_runs", "supplemental_documents"})
 
 
 def test_boolean_indices_and_cross_analysis_slots_are_rejected():

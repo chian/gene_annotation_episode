@@ -1,4 +1,4 @@
-"""Original complete A110 source reaction publication and saved replay."""
+"""Complete A110 source reaction publication and saved replay."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_population_contracts import BINDINGS, ContractError, LITERAL_REFERENCE_TYPES, MEANINGS_INPUT_VERSION, MEANINGS_RECORD_VERSION, _direct_references, _metadata, assessments, binding_references, canonical, deepcopy, identity, json, plain, populate_reaction_constraints, publication, publish_meanings, reaction_direct_references, reaction_population_schema, read_reaction_inputs, semantic_metadata, source_literal_label, validate_schema
 

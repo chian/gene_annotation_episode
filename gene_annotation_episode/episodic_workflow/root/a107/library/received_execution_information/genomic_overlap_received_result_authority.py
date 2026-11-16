@@ -1,6 +1,4 @@
-"""A107 original genomic overlap returns; substantive retained received-result responsibility.
-Original authority, invalid outcomes and historical source identities remain unchanged.
-"""
+"""A107 genomic overlap returns."""
 
 
 from __future__ import annotations

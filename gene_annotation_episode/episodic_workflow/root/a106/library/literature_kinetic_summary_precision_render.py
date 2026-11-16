@@ -32,18 +32,6 @@ def task_relevant(state):
         n.get('x-source') == NAMESPACE for n in (state.get('requested_form') or {}).get('properties', {}).values())
 
 
-def legacy_task_relevant(state):
-    if not task_relevant(state) or state.get('literature_kinetic_union_contract_work'):
-        return True
-    if state.get('literature_assignment', {}).get('requested_kinetic_components') or state.get('literature_assignment', {}).get('requested_kinetic_model_components'):
-        return True
-    def walk(value):
-        if isinstance(value, Mapping):
-            return value.get('evaluation_scope') == 'source_kinetic_parameter_contrast' or any(walk(v) for v in value.values())
-        return isinstance(value, (tuple, list)) and any(walk(v) for v in value)
-    return walk((state.get('last_local_outcome'), state.get('child_reports')))
-
-
 def lookup_relevant(value):
     result = value.get('result') if isinstance(value, Mapping) else None
     return bool(list(rows_from_values(value))) or any_history(value) or isinstance(result, Mapping) and (

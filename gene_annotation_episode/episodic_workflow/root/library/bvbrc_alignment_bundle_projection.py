@@ -109,7 +109,7 @@ _REQUEST_KINDS = {
 }
 
 # Only units/origins are known for an absent cell. In particular, no method or
-# population identity is invented (accepted additive contracts 025 and 026).
+# population identity is invented.
 _UNITS = {}
 for _unit, _names in {
     'rows': 'member_count', 'columns': 'site_count difference_category_count pair_identical_positions pair_substitutions pair_both_gap_positions pair_a_gap_only_positions pair_b_gap_only_positions pair_unpaired_nongap_ambiguous_positions',

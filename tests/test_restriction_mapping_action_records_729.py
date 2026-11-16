@@ -8,9 +8,7 @@ No public catalog is installed or injected by these checks.
 """
 from copy import deepcopy
 from dataclasses import replace
-import builtins
 import json
-import os
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -22,8 +20,8 @@ from gene_annotation_episode.domain import canonical, identity
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.restriction_mapping_action_records import RestrictionMappingActionRecords
-from gene_annotation_episode.restriction_mapping_returns import (
+from gene_annotation_episode.episodic_workflow.root.library.restriction_mapping_action_records import RestrictionMappingActionRecords
+from gene_annotation_episode.episodic_workflow.root.library.restriction_mapping_returns import (
     restriction_mapping_fact_sources, requested_restriction_projections,
     project_restriction_action_return, validate_frozen_restriction_return,
 )
@@ -107,8 +105,8 @@ def engineering_case(tmp_path, monkeypatch):
             input_source=prior, native_artifact=store.artifact("engineering authority stub, no native data"),
             scope=store.validate_scope(), journal=Journal(store, RUN), receipts=EpisodeReceipts(store, RUN),
             service=RestrictionMappingActionRecords(store, RUN), states={}, sources={})
-        import gene_annotation_episode.restriction_mapping_jobs as jobs
-        import gene_annotation_episode.restriction_mapping_publication as publication
+        import gene_annotation_episode.episodic_workflow.root.library.restriction_mapping_jobs as jobs
+        import gene_annotation_episode.episodic_workflow.root.library.restriction_mapping_publication as publication
         def state(self, key):
             if key not in case.states:
                 raise ValueError("engineering_unbound_operation")
@@ -133,22 +131,6 @@ def page(case, context, *, after=None, limit=64, selection=None):
 def initial(case, context, *, saved=False, sequence=None):
     case.receipts.receive(context.episode_id,
         [sequence or case.sequence, *([case.prior] if saved else [])], kind="initial")
-
-
-@pytest.mark.parametrize("alias", [ALIAS, "find_restriction_enzymes"])
-def test_engineering_native_join_is_detached_and_has_no_invented_numbers(engineering_case, alias):
-    case = engineering_case
-    context = saved_context(case)
-    initial(case, context)
-    engineering_action(case, context, tool=alias)
-    record, = page(case, context)["records"]
-    assert record["mapping"] is None and record["failure_code"] == "reader_unavailable"
-    fields = requested_restriction_projections(requested())[SOURCE]["fields"]
-    view = project_restriction_action_return(record, fields)
-    assert view["population"] is None and view["enzyme_rows"] is None
-    assert view["data_status"] == "unavailable"
-    record["sequence_ref"] = "changed detached output"
-    assert page(case, context)["records"][0]["sequence_ref"] == case.sequence
 
 
 @pytest.mark.parametrize("limit,after", [(True,None),(0,None),(-1,None),(257,None),(1,True),(1,-1),(1,1.0)])
@@ -366,7 +348,7 @@ def test_engineering_frozen_return_reads_no_live_source_or_calculation(engineeri
     def forbidden(*args,**kwargs): pytest.fail("Frozen return accessed live work")
     monkeypatch.setattr(case.service,"own_action_results",forbidden)
     monkeypatch.setattr(case.store,"get_artifact",forbidden)
-    import gene_annotation_episode.restriction_mapping_publication as publication
+    import gene_annotation_episode.episodic_workflow.root.library.restriction_mapping_publication as publication
     monkeypatch.setattr(publication,"read_published_restriction_result",forbidden)
     frozen = case.service.frozen_facts(context,sources=(SOURCE,))
     validate_frozen_restriction_return({"selected":deepcopy(expected)},requested(),frozen)
@@ -388,7 +370,5 @@ def retained_case():
         yield SimpleNamespace(store=store,service=service,context=context,selector=selector)
     finally:
         store.close()
-
-
 
 

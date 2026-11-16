@@ -1,6 +1,6 @@
 """Retain already computed CDS evidence without rerunning a native search.
 
-The native text and expected legacy detector result come from real Aurora
+The native text and expected detector result come from real Aurora
 9052184. These reader/custody checks are not a new HPC or autonomous run.
 """
 from copy import deepcopy
@@ -63,11 +63,6 @@ def retained():
             'source_request': scope['source_request']}],
         'assets': {'source_fixture_genomic': {'file': {'sha256': scope['source_file_sha256']}}}}
     return payload, admission, verified, request['query_sequence']
-
-
-def test_legacy_default_result_is_the_original_real_detector_result():
-    request, expected = original_request()
-    assert detect(request) == expected
 
 
 def test_original_verified_translation_is_retained_for_the_actual_matched_locus(retained):
@@ -137,15 +132,6 @@ def test_a_witness_cannot_change_its_admitted_source_sequence_frame_or_hit(retai
         validate_reference_translations(altered, admission)
 
 
-def test_new_requests_require_the_witness_but_historical_results_remain_readable(retained):
-    payload, admission, _, _ = retained
-    historical = {key: deepcopy(value) for key, value in payload.items() if key != 'reference_cds_verifications'}
-    validate_reference_translations(historical, {})
-    with pytest.raises(ValueError, match='requested_reference_translation_witnesses_missing'):
-        validate_reference_translations(historical, admission)
-    assert reference_translation_evidence(historical, payload['query_sequence_sha256'], []) is None
-
-
 def test_unversioned_selected_accession_keeps_its_actual_record_identity(retained):
     payload, admission, _, _ = retained
     native, request = deepcopy(payload), deepcopy(admission)
@@ -173,16 +159,13 @@ def test_negative_or_unresolved_sequences_do_not_acquire_an_exact_locus(retained
     assert unresolved['biological_residue_identity_complete'] is False
 
 
-@pytest.mark.parametrize('with_witness', [False, True])
-def test_per_use_projection_preserves_native_values_and_unresolved_sample_origin(retained, tmp_path, with_witness):
+def test_per_use_projection_preserves_native_values_and_unresolved_sample_origin(retained, tmp_path):
     payload, _, _, query = retained
     with Store(tmp_path / 'state') as store:
         target, = store.create_problem(raw_sequence=query, molecule='protein')['subject_refs']
         native = deepcopy(payload)
         native['detection'].update(component_ref=target, binding_refs=[], target_ref=target,
             target_regions=[[0, len(query)]])
-        if not with_witness:
-            del native['reference_cds_verifications']
         body = {'version': VERSION, 'axis': 'A107', 'operation': 'partner.request_detection_hpc',
             'scientific_profile': PROFILE, 'scope': store.validate_scope(), 'target_ref': target,
             'target_regions': [[0, len(query)]], 'run_id': 'retained-native-reader-control',
@@ -195,12 +178,8 @@ def test_per_use_projection_preserves_native_values_and_unresolved_sample_origin
         assert result['target_genomic_context']['state'] == 'unresolved_target_genomic_context'
         assert result['native_hits'] == native['detection']['native_hits']
         assert read(store, reference, RESULT_PROVIDER) == body
-        if with_witness:
-            encoded = result['reference_encoded_correspondence']
-            assert encoded['biological_residue_identity_complete'] is True
-            assert encoded['matches'][0]['translation']['calculated_sequence'] == query
-            assert 'submitted_target_genomic_or_sample_origin_not_established_by_reference_correspondence' in result['missing']
-            assert 'independent_confirmation' in encoded['evidence_dependence']
-        else:
-            assert 'reference_encoded_correspondence' not in result
-            assert 'target_genomic_collection_provenance_or_exact_target_placement' in result['missing']
+        encoded = result['reference_encoded_correspondence']
+        assert encoded['biological_residue_identity_complete'] is True
+        assert encoded['matches'][0]['translation']['calculated_sequence'] == query
+        assert 'submitted_target_genomic_or_sample_origin_not_established_by_reference_correspondence' in result['missing']
+        assert 'independent_confirmation' in encoded['evidence_dependence']

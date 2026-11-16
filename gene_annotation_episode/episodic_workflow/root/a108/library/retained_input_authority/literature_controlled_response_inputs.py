@@ -109,7 +109,6 @@ selection = obj({"version": {"const": "controlled_response_source_selection_v1"}
 selection["$defs"] = defs
 selection["$schema"] = "https://json-schema.org/draft/2020-12/schema"
 _SELECTION_SCHEMA = selection
-DEPENDENCIES = {'literature_assay_inputs.py': '52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e', 'literature_rate_native_inputs.py': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500', 'literature_partner_source_fields.py': '20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17', 'literature_partner_defined_units.py': 'cc6733d763ba494e3c4016a9a3be98ea6b7b6076b97dc8ef1aad5f43a8f856ca', 'literature_kinetic_inputs.py': '78e0c0094bbffa8306c26a6d134eec74f291c34177a87656ec09f925c2dd1960', 'literature_binding_visual_inputs.py': '8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718', 'literature_binding_reader.py': 'e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1', 'literature_controlled_response_calculations.py': 'a75b8f8ef4905d805be24e86236ef8303c97b5e4761acf0d849ca01aadaec023'}
 
 def controlled_response_arguments_schema():
     """Closed nominations only; numerical scientific operands are never inputs."""

@@ -89,7 +89,7 @@ def validate_expression_nmf_job(value):
     return value
 
 
-def expression_nmf_environment(software, *, attempt_directory, recorded_environment=None):
+def expression_nmf_environment(software, *, attempt_directory):
     software = validate_expression_nmf_software(software)
     root = path_value(str(attempt_directory), absolute=True)
     environment = {'PYTHONPATH': os.pathsep.join([software['module_root'], *software['dependency_roots']]),
@@ -97,15 +97,6 @@ def expression_nmf_environment(software, *, attempt_directory, recorded_environm
         'PYTHONSAFEPATH': '1',
         'TMPDIR': str(root / 'tmp'), 'TMP': str(root / 'tmp'), 'TEMP': str(root / 'tmp'),
         'XDG_CACHE_HOME': str(root / 'cache'), 'PIP_CACHE_DIR': str(root / 'cache/pip')}
-    # Retained requests keep their original environment identity for reads.
-    # Fresh builders omit these historical thread ceilings.
-    if recorded_environment is not None:
-        require(type(recorded_environment) is dict, 'invalid_nmf_runtime_environment')
-        ceilings = {key: recorded_environment[key] for key in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS')
-            if key in recorded_environment}
-        require(not ceilings or ceilings == {'OPENBLAS_NUM_THREADS': '1', 'OMP_NUM_THREADS': '1'},
-            'invalid_nmf_runtime_environment')
-        environment.update(ceilings)
     return environment
 
 
@@ -125,13 +116,9 @@ def validate_expression_nmf_requested_job(value):
     value = checked(value, NATIVE_EXPRESSION_NMF_REQUESTED_JOB_SCHEMA)
     environment = value['environment']
     expected = expression_nmf_environment(value['native_expression_nmf']['software'],
-        attempt_directory=str(PurePosixPath(environment.get('TMPDIR', '')).parent),
-        recorded_environment=environment)
+        attempt_directory=str(PurePosixPath(environment.get('TMPDIR', '')).parent))
     require(environment == expected, 'invalid_nmf_runtime_environment')
-    fresh = {key: item for key, item in environment.items()
-        if key not in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS')}
-    normalized = {**value, 'environment': fresh}
-    require(normalized == requested_job_from_expression_nmf(value['native_expression_nmf'], environment=fresh),
+    require(value == requested_job_from_expression_nmf(value['native_expression_nmf'], environment=environment),
         'nmf_requested_job_mismatch')
 
     return value
@@ -166,10 +153,7 @@ def validate_expression_nmf_run_plan(value):
         'nmf_original_attempt_mismatch')
     require(canonical(value['policy']) == canonical(validate_recorded_genomic_overlap_policy(
         value['policy'], code='nmf_original_allocation_mismatch')), 'nmf_original_allocation_mismatch')
-    require((value['policy'] == POLICY and not any(key in request['environment']
-        for key in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS')))
-        or (value['policy']['memory_bytes'] == 21474836480 and all(request['environment'].get(key) == '1'
-            for key in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS'))), 'nmf_original_allocation_mismatch')
+    require(value['policy'] == POLICY, 'nmf_original_allocation_mismatch')
     require(value['outputs'] == expression_nmf_output_files(request['native_expression_nmf']), 'nmf_output_role_mismatch')
     supplied = path_value(request['native_expression_nmf']['input']['path'], absolute=True)
     require(not supplied.is_relative_to(execution.parent) and not execution.parent.is_relative_to(supplied), 'nmf_input_output_overlap')

@@ -35,7 +35,6 @@ class TestA104ScientificTask:
         original = identity(value)
         assert type(value.task) is getattr(value.binding, 'decision_source_type', value.runtime.DecisionSource)
         if hasattr(value.binding, 'decision_source_type'):
-            assert type(value.task).__module__ == own('scientific_process.episode').__package__ + '.task'
             assert 'next' in type(value.task).__dict__
             assert not isinstance(value.task, value.runtime.DecisionSource)
         assert value.acquired == []

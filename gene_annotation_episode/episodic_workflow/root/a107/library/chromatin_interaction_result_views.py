@@ -1,6 +1,4 @@
-"""A107 original chromatin interaction result views; substantive retained received-result responsibility.
-Original authority, invalid outcomes and historical source identities remain unchanged.
-"""
+"""A107 chromatin interaction result views."""
 
 
 from __future__ import annotations

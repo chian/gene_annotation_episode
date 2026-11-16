@@ -1,7 +1,4 @@
-"""A107 original atac received fact contracts; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 atac received fact contracts."""
 from __future__ import annotations
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.root.a107.library.atac_differential_result_contracts import atac_result_schema, digest, SHEET_FORMAT, TABLE_FORMAT

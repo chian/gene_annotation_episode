@@ -10,7 +10,6 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.cli import main
-from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.state import Store
@@ -31,41 +30,6 @@ def call(tools, name, args, **kwargs):
     result = tools.execute(name, args, **kwargs)
     assert result["status"] in {"completed", "partial"}, result
     return result["result"]
-
-
-def test_repeated_semantic_target_is_listed_once_with_original_manifest_occurrences(tmp_path):
-    entries = [target(), target(), {"sequence": "MAAA", "name": "other", "molecule": "protein"}]
-    path = manifest(tmp_path, entries)
-    with Store(tmp_path / "state") as store:
-        problem = store.create_problem(manifest_path=path)
-        assert len(problem["subject_refs"]) == len(set(problem["subject_refs"])) == 2
-        assert store.db.execute("SELECT COUNT(*) FROM inputs").fetchone()[0] == 2
-        assert len(problem["material_refs"]) == 3
-        assert problem["material_refs"][0] == problem["material_refs"][1]
-        assert json.loads(store.get_artifact(problem["manifest_ref"]))["entries"] == entries
-        assert [row["name"] for row in store.targets()] == ["target", "other"]
-        projection = project_credit(store).as_record()
-        assert len(projection["targets"]) == 2 and projection["credit"] == 0
-        view = store.reasoning_view()
-        assert len(view["subjects"]) == len(view["scope"]["subject_refs"]) == 2
-        call(ToolRegistry(store, run_directory=store.path / 'tool-run'), "sequence.inspect", {"subject_ref": problem["subject_refs"][0]})
-        assert store.problem() == problem
-
-
-@pytest.mark.parametrize("declarations", [
-    ({"sample": "S1"}, {"sample": "S2"}),
-    ({"context": {"reported_temperature": 37}}, {"context": {"reported_temperature": 55}}),
-])
-def test_equal_sequences_with_distinct_caller_contexts_remain_distinct_targets(tmp_path, declarations):
-    path = manifest(tmp_path, [{**target(), **declaration} for declaration in declarations])
-    with Store(tmp_path / "state") as store:
-        problem = store.create_problem(manifest_path=path)
-        assert len(problem["subject_refs"]) == len(set(problem["subject_refs"])) == 2
-        first, second = store.targets()
-        assert first["sequence_ref"] == second["sequence_ref"]
-        assert (first["sample_ref"], first["context_source_refs"]) != (second["sample_ref"], second["context_source_refs"])
-        assert len(project_credit(store).as_record()["targets"]) == 2
-        assert len(store.reasoning_view()["subjects"]) == 2
 
 
 def test_explicit_uncertain_single_read_is_target(tmp_path):
@@ -125,44 +89,6 @@ def test_auto_unknown_assets_remain_bytes_not_sequences(tmp_path, content, repre
         page = call(tools, "material.read", {"material_ref": material["id"], "offset": 1, "limit": 3})
         assert base64.b64decode(page["content"]) == content[1:4]
         assert call(tools, "state.query", {"kind": "material"})["records"][0]["id"] == material["id"]
-
-
-def test_mixed_evidence_fastq_order_qualities_links_and_fixed_targets(tmp_path):
-    (tmp_path / "reads.fq").write_bytes(b"@r repeated\nACGT\n+\n!@+~\n@r duplicate\nTGCA\n+\n####\n")
-    path = manifest(tmp_path, [target(), {"path": "reads.fq", "name": "left", "use": "evidence",
-        "role": "read", "sample": "S1", "library": "L1", "quality_encoding": "phred33",
-        "links": [{"relation": "paired_with", "name": "right"}]},
-        {"sequence": "NNNN", "name": "right", "use": "evidence", "role": "read", "sample": "S1", "library": "L1"}])
-    with Store(tmp_path / "state") as store:
-        initial = store.create_problem(manifest_path=path)
-        targets = store.targets()
-        before = project_credit(store).as_record()
-        assert len(targets) == 1
-        reads = next(row for row in store.list("collection") if row["representation"] == "fastq")
-        assert reads["member_count"] == 2 and reads["sequence_symbols"] == 8
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        first = call(tools, "material.members", {"collection_ref": reads["id"], "limit": 1})
-        second = call(tools, "material.members", first["next_query"])
-        assert [first["members"][0]["ordinal"], second["members"][0]["ordinal"]] == [0, 1]
-        assert second["members"][0]["occurrence"] == 1
-        assert "duplicate_source_identifier" in second["members"][0]["issues"]
-        assert "sequence_ref" not in first["members"][0]
-        member = call(tools, "material.member", {"member_ref": first["members"][0]["id"], "offset": 1, "limit": 2})
-        assert (member["sequence"], member["quality"]) == ("CG", "@+")
-        reference = store.get(member["reference_ref"])
-        assert reference["molecule"] == "unspecified"
-        assert store.coverage(reference["id"]) == []
-        assert reads["sample_ref"] in reference["context_refs"]
-        assert reads["library_ref"] in reference["context_refs"]
-        assert member["member"]["quality_encoding"] == "phred33"
-        assert store.list("material_link")[0]["relation"] == "paired_with"
-        call(tools, "sequence.inspect", {"subject_ref": reference["id"]})
-        late = store.register_material(data=b"another unknown report", name="later")
-        assert store.parse_material(late["id"])["status"] == "unavailable"
-        assert store.problem() == initial and store.targets() == targets
-        after = project_credit(store).as_record()
-        assert after["credit"] == before["credit"] == 0
-        assert len(after["targets"]) == 1
 
 
 def test_partial_fasta_retains_independent_records_and_source_ordinals(tmp_path):

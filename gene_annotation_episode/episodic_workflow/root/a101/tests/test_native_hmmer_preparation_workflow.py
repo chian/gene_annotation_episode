@@ -4,6 +4,7 @@ Scientific choices and their verification horizon are explicit test fixtures.
 Practical operations, original native identities, retained data, numerical
 grading, typed returns and practical terminal estimation use production code.
 """
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 import asyncio
 from copy import deepcopy
 import json
@@ -25,7 +26,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_preparati
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_preparation_contracts import requested_job_from_hmmer_preparation
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_preparation_local import local_hmmer_preparation_plan
 from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.practical_yield import PracticalYieldEstimator
+from gene_annotation_episode.episodic_workflow.root.a101.practical_yield import PracticalYieldEstimator
 from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
@@ -367,7 +368,7 @@ def assert_native_custody(case, bundle):
         assert len(raw) == row['size_bytes'] and row['completeness'] == 'complete'
     handle = native.NativeJobHandle(Path(bundle['identity']['execution_id'])).read()
     assert handle['metadata']['policy'] == POLICY.to_dict()
-    assert handle['metadata']['verified_cgroup']['memory_max'] == 20 * 1024**3
+    assert handle['metadata']['verified_cgroup']['memory_max'] == ENVIRONMENT_BOUNDS['memory_bytes']
     assert handle['metadata']['verified_cgroup']['memory_swap_max'] == 0
     assert 'runtime_max' not in handle['metadata']['verified_cgroup']
 

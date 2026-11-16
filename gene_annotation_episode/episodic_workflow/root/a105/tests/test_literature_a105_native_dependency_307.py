@@ -6,14 +6,12 @@ do not count another experiment or calculate annotation credit.
 """
 import asyncio
 from copy import deepcopy
-from functools import partial
 import json
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a105.episode_contract_information import expand_fact_form
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_a105_worksheet import NATIVE, VERSION, VERSION_V2, QUANTITY_RELATIONS, QUANTITY_RELATIONS_V2, a105_worksheet_template, validate_a105_worksheet_links
-from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage import LiteratureKineticRepository, kinetic_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
@@ -37,15 +35,6 @@ def _link(rows):
     metadata = first['numerator']
     return {'left': {'field': 'kinetics', 'sheet_ref': first['sheet_ref'], 'component': 'numerator_parameter', 'quantity': 'cell_value'}, 'right': {'field': 'kinetics', 'sheet_ref': second['sheet_ref'], 'component': 'numerator_parameter', 'quantity': 'cell_value'}, 'relation': 'same_physical_measurement', 'support_record_refs': [metadata['physical_observation_ref'], metadata['measurement_ref']]}
 
-def test_v1_schema_remains_original_and_v2_requires_explicit_selection():
-    request = [{'field': 'kinetics', 'source': NATIVE, 'components': REQUESTED}]
-    old = a105_worksheet_template(request)['submitted_form']['properties']['assessment_context']
-    new = TEMPLATE['submitted_form']['properties']['assessment_context']
-    assert old['properties']['version']['const'] == VERSION
-    assert old['properties']['quantity_links']['items']['properties']['relation']['enum'] == list(QUANTITY_RELATIONS)
-    assert 'same_physical_measurement' not in QUANTITY_RELATIONS
-    assert new['properties']['version']['const'] == VERSION_V2
-    assert new['properties']['quantity_links']['items']['properties']['relation']['enum'] == list(QUANTITY_RELATIONS_V2)
 
 def test_pa0142_reused_numerator_links_in_selected_return_and_cold_read(tmp_path, monkeypatch):
     pdf, si, xml, transcription = _transcription()

@@ -1,4 +1,4 @@
-"""Original supplied-record schemas extracted from native_genomic_overlap_contracts; no execution admission."""
+"""Supplied-record schemas; no execution admission."""
 from __future__ import annotations
 from copy import deepcopy
 from functools import lru_cache
@@ -12,13 +12,13 @@ POLICY = {'memory_bytes': 5368709120, 'scratch_bytes': 4294967296}
 def validate_recorded_genomic_overlap_policy(value, *, code="genomic_overlap_policy_mismatch"):
     """Check retained allocations without authorizing their execution."""
     _require(type(value) is dict and set(value) == {"memory_bytes", "scratch_bytes"}, code)
-    _require(type(value["memory_bytes"]) is int and value["memory_bytes"] in (5368709120, 21474836480)
+    _require(type(value["memory_bytes"]) is int and value["memory_bytes"] == POLICY["memory_bytes"]
         and type(value["scratch_bytes"]) is int and value["scratch_bytes"] == POLICY["scratch_bytes"], code)
     return deepcopy(value)
 
 
 _EXECUTION_DEFINITIONS = {'Policy': {'type': 'object',
-            'properties': {'memory_bytes': {'enum': [5368709120, 21474836480]}, 'scratch_bytes': {'const': 4294967296}},
+            'properties': {'memory_bytes': {'enum': [5368709120]}, 'scratch_bytes': {'const': 4294967296}},
             'required': ['memory_bytes', 'scratch_bytes'],
             'additionalProperties': False},
  'ImplementationFile': {'type': 'object',
@@ -31,8 +31,7 @@ _EXECUTION_DEFINITIONS = {'Policy': {'type': 'object',
                                     'python_sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'},
                                     'python_version': {'type': 'string', 'minLength': 1},
                                     'module_root': {'type': 'string', 'minLength': 1},
-                                    'driver_module': {'enum': ['gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_driver',
-                                                               'gene_annotation_episode.native_genomic_overlap_driver']},
+                                    'driver_module': {'enum': ['gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_driver']},
                                     'implementation_files': {'type': 'array',
                                                              'items': {'$ref': '#/$defs/ImplementationFile'},
                                                              'minItems': 4},

@@ -1,4 +1,4 @@
-"""Complete original A110 native presentation with original dynamic predicates."""
+"""Complete A110 native presentation with original dynamic predicates."""
 from __future__ import annotations
 from copy import deepcopy
 import json

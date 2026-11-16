@@ -369,36 +369,6 @@ def _cytokine_sheet():
     return sheet
 
 
-def test_cytokine_csv_native_clipped_zero_and_shared_signed_difference_are_distinct():
-    raw = (FIXTURES / "source_format_cytokine_fixture.csv").read_bytes()
-    sheet = _cytokine_sheet()
-    inputs = _inputs_from_sheet(sheet)
-    fields = [_csv_field("target_percent", 1, 1, "Mtb300", "IFN-γ",
-        _request("fraction", "selected_percent", gate_key="target.marker", denominator="parent")),
-        _csv_field("clipped", 1, 3, "Mtb300", "IFN-γ (background-subtracted)",
-        _request("control", "legacy_nonnegative_difference_percentage_points", control_key="pair")),
-        _csv_field("absent_control_bg", 0, 3, "unstimulated", "IFN-γ (background-subtracted)")]
-    report = _report_input(raw, fields, profile=CYTOKINE_CSV_PROFILE)
-    association = _attach(report, [_entry(fields[0], inputs[:1], sheet["gate_definitions"][:2]),
-        _entry(fields[1], inputs, sheet["gate_definitions"], control=sheet["control_pairs"][0])])
-    binding = make_fluorescence_report_binding(report, definitions=_definitions(sheet), event_inputs=inputs, preparations=[])
-    result = _parse(raw, binding, association)
-    assert [row["value"] for row in result["reports"]] == [50, 0, None]
-    assert [row["raw"] for row in result["reports"]] == ["50.0", "0.0", ""]
-    assert [row["unit"] for row in result["reports"]] == ["percent", "percentage_points", "percentage_points"]
-    assert all(row["decimal_places"] is None for row in result["reports"])
-    assert "native_population_unknown" not in _codes(result)
-    for row in result["reports"]:
-        span = row["location"]
-        assert raw[span["byte_start"]:span["byte_end"]].decode() == row["raw"]
-    saved = _add_reports(sheet, result)
-    components = calculate_fluorescence_sheet(saved, parameters=_parameters(
-        controls=[dict(control_key="pair", include_legacy_clipping=True)], native=["clipped", "target_percent"]))
-    assert _cell(components, "control_difference_percentage_points", gate=None, control="pair")["value"] == -25
-    assert _cell(components, "legacy_nonnegative_difference_percentage_points", gate=None, control="pair")["value"] == 0
-    assert _cell(components, "native_minus_calculated", gate=None, report="clipped")["value"] == 0
-
-
 def test_cytokine_log_exact_condition_marker_occurrences_and_counts():
     raw = (FIXTURES / "source_format_cytokine_fixture.log").read_bytes()
     sheet = _cytokine_sheet()

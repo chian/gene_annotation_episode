@@ -4,6 +4,7 @@ Pointers select literal retained cells. This module never invokes a numerical
 calculator or infers a missing value, population, calibration or source call.
 """
 from __future__ import annotations
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import json
 import math
@@ -928,7 +929,7 @@ def supplied_execution_constraints(value):
     closed(value, ('policy', 'environment'))
     policy = value['policy']
     closed(policy, ('memory_bytes', 'scratch_bytes'))
-    require(type(policy['memory_bytes']) is int and 0 < policy['memory_bytes'] <= 21474836480 and (type(policy['scratch_bytes']) is int) and (0 < policy['scratch_bytes'] <= 4294967296))
+    require(type(policy['memory_bytes']) is int and 0 < policy['memory_bytes'] <= ENVIRONMENT_BOUNDS['memory_bytes'] and (type(policy['scratch_bytes']) is int) and (0 < policy['scratch_bytes'] <= 4294967296))
     environment(value['environment'])
     return value
 
@@ -1042,7 +1043,7 @@ def validate_molecular_sequence_calculation_record(value):
 ORDINARY_ORF_TOOL = OPERATIONS[0]
 ORDINARY_ORF_INTENT_VERSION = 'molecular_sequence_ordinary_intent_v1'
 ORDINARY_ORF_FACT_SOURCE = 'orf_measurements'
-ORDINARY_ORF_POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+ORDINARY_ORF_POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 ORDINARY_ORF_SAVED_INTENT_VERSION = 'molecular_sequence_ordinary_saved_intent_v1'
 ORDINARY_ORF_CALCULATOR = 'orf_measurements.calculate_orf_components'
 ORDINARY_MOLECULAR_SEQUENCE_OPERATIONS = (ORDINARY_ORF_TOOL, OPERATIONS[2], OPERATIONS[3], OPERATIONS[1])

@@ -4,7 +4,6 @@ Saved access authenticates the original selected outcome; it does not decode the
 image, recount pixels, rerun a numerical calculator or compose model prose.
 """
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a105.literature_implementation_sources import source_file
 from copy import deepcopy as cp
 from fractions import Fraction
 import hashlib
@@ -42,8 +41,7 @@ def _check(value, schema, code):
 def implementation_descriptor(*, evidence_origin='reported_source'):
     if evidence_origin not in ('reported_source', 'synthetic_fixture'):
         raise ContractError('gel_native_evidence_profile_invalid')
-    names = ('literature_gel_inputs.py', 'literature_gel_calculations.py', 'literature_gel_native_contracts.py', 'literature_gel_storage.py', 'literature_gel_render.py', 'literature_assay_inputs.py', 'literature_experimental_contracts.py', 'literature_rate_storage.py', 'literature_ratio_source_storage.py', 'literature_binding_interaction_render.py', 'communication.py', 'domain.py', 'state.py', 'episode_bindings.py', 'episode_receipts.py')
-    return {'version': 'gel_native_implementation_v1', 'provider': PROVIDER, 'record_version': VERSION, 'evidence_origin': evidence_origin, 'native_schema_sha256': _sha(gel_cells_schema()), 'pillow_version': inputs.PILLOW_VERSION, 'jsonschema_version': importlib.metadata.version('jsonschema'), 'modules': {name: _sha(source_file(name).read_bytes()) for name in names}}
+    return {'version': 'gel_native_implementation_v1', 'provider': PROVIDER, 'record_version': VERSION, 'evidence_origin': evidence_origin, 'native_schema_sha256': _sha(gel_cells_schema()), 'pillow_version': inputs.PILLOW_VERSION, 'jsonschema_version': importlib.metadata.version('jsonschema')}
 
 def _token(value):
     return quote(value, safe='-._~', encoding='utf8', errors='strict')

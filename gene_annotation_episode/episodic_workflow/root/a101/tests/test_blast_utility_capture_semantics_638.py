@@ -5,42 +5,20 @@ engineering fixtures; the check096 diagnostic bytes and saved publication are
 retained native evidence, authenticated against their original hashes.
 """
 from copy import deepcopy
-import hashlib
 import json
 from pathlib import Path
-import shutil
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_database_extraction as extraction
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_acquisition as acquisition
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_driver as driver
-from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_result_publication as publication
-from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_result_worker as worker
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import validate_blast_utility_record
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_contracts import native_blast_utility_output_completeness, producer_failure, validate_native_blast_utility_bundle
 from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from test_blast_utility_contracts_625 import binding, occurrence, operation, outcome
-from test_native_blast_utility_producer_628 import (
-    FAMILY, controlled_native, job_fixture, plan_fixture, reserved_fixture,
-)
-from test_native_blast_utility_publication_631 import (
-    capture_fixture, forbid_readers, inline_workers, payload, prepare, publish, selector,
-)
-
-
-PACKET = Path(__file__).resolve().parents[5] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/blast_utility_capture_semantics"
-FIXTURE = PACKET / "fixtures/check096-integrity"
-
-
-def retained_case():
-    provenance = json.loads((PACKET / "FIXTURE_PROVENANCE_001.json").read_text())
-    for row in provenance["files"]:
-        raw = (PACKET / row["retained_path"]).read_bytes()
-        assert len(raw) == row["size_bytes"]
-        assert hashlib.sha256(raw).hexdigest() == row["sha256"]
-    return {name: json.loads((FIXTURE / (name + ".json")).read_text())
-            for name in ("capture", "prepared", "publication")}
+from test_native_blast_utility_producer_628 import FAMILY, controlled_native, plan_fixture, reserved_fixture
+from test_native_blast_utility_publication_631 import capture_fixture, inline_workers, payload, prepare, publish, selector
 
 
 def failure_codes(result):
@@ -67,32 +45,6 @@ def test_completeness_means_captured_bytes_only_with_explicit_basis(
     before = deepcopy(bundle)
     assert native_blast_utility_output_completeness(bundle, measured) == expected
     assert bundle == before
-
-
-@pytest.mark.parametrize("returncode", [0, 7, None])
-def test_legacy_bundle_keeps_exact_missing_discriminator_semantics(tmp_path, returncode):
-    _, capture = capture_fixture(tmp_path, returncode=returncode)
-    bundle = capture["original_bundle"]
-    before = deepcopy(bundle)
-    assert "output_completeness_basis" not in bundle
-    assert validate_native_blast_utility_bundle(bundle, capture["plan"]) == before
-    assert bundle == before
-    expected = "complete" if returncode == 0 else "partial"
-    assert {row["completeness"] for row in bundle["artifacts"]} == {expected}
-    if returncode != 0:
-        forged = deepcopy(bundle)
-        forged["artifacts"][0]["completeness"] = "complete"
-        with pytest.raises(ValueError, match="bundle_output_completeness_conflict"):
-            validate_native_blast_utility_bundle(forged, capture["plan"])
-
-
-@pytest.mark.parametrize("basis", [None, "", "native_exit", 0, [], {}])
-def test_unknown_discriminator_is_rejected_without_upgrading_legacy(tmp_path, basis):
-    _, capture = capture_fixture(tmp_path)
-    bundle = deepcopy(capture["original_bundle"])
-    bundle["output_completeness_basis"] = basis
-    with pytest.raises(ValueError, match="output_completeness_basis_invalid"):
-        validate_native_blast_utility_bundle(bundle, capture["plan"])
 
 
 def test_new_failed_bundle_cannot_forge_capture_or_lose_its_basis(tmp_path, monkeypatch):
@@ -195,51 +147,6 @@ def test_partial_final_rows_preserve_symbols_without_false_inventory_failure(com
         assert failure_codes(record) == {"output_completeness_unestablished"}
 
 
-def test_new_captured_native_failure_reaches_publication_and_replays(tmp_path, monkeypatch):
-    retained = retained_case()["capture"]
-    streams = {r["role"]: (FIXTURE / "artifacts" / r["sha256"]).read_bytes()
-               for r in retained["artifacts"] if r["direction"] == "output"}
-    job = job_fixture(tmp_path, "integrity")
-    _, handle, plan, target = reserved_fixture(tmp_path, monkeypatch, job=job)
-    def use_retained_diagnostics(argv, kwargs):
-        for role, raw in streams.items():
-            kwargs[role].seek(0)
-            kwargs[role].truncate()
-            kwargs[role].write(raw)
-    native_calls = controlled_native(monkeypatch, returncode=1, after=use_retained_diagnostics)
-    bundle = driver.run_native_blast_utility(plan)
-    assert len(native_calls) == 1 and bundle["returncode"] == 1
-    assert {r["completeness"] for r in bundle["artifacts"]} == {"complete"}
-    store = Store(tmp_path / "store")
-    capture = acquisition.capture_local_utility_bundle(store, target=target, directory=tmp_path / "capture")
-    assert capture["original_bundle"] == bundle and not capture["failures"]
-    workers = inline_workers(monkeypatch)
-    prepared = prepare(store, capture, tmp_path)
-    result = payload(store, prepared)
-    assert result["scope"] == "unknown" and result["observed_checked_count"] is None
-    assert result["observed_population_count"] is None
-    assert "native_nonzero_exit" in failure_codes(result)
-    assert not {"output_inventory_incomplete", "output_writer_not_closed", "output_completeness_unestablished"} & failure_codes(result)
-    assert any(r["category"] == "execution_failure" for r in result["diagnostics"])
-    assert next(r for r in result["checks"] if r["name"] == "native_integrity")["status"] == "unknown"
-    selected = selector(integrity={"fields": ["diagnostics", "observed_checked_count", "observed_population_count"]},
-        include_checks=True, artifacts=[{"direction": "output", "role": role, "ordinal": 0} for role in ("stdout", "stderr")],
-        saved_data=["result"])
-    output = publish(store, prepared, selected, tmp_path)
-    assert output["status"]["native_state"] == "failed" and output["status"]["inventory_complete"]
-    assert output["integrity"][0]["fields"]["diagnostics"] == result["diagnostics"]
-    assert all(r["completeness"] == "complete" for r in output["artifacts"])
-    assert "output_inventory_incomplete" not in failure_codes(output)
-    assert len(workers) == 2
-    forbid_readers(monkeypatch)
-    monkeypatch.setattr(publication, "run_local_job", lambda *a, **k: pytest.fail("replay started work"))
-    shutil.rmtree(handle.path.parent)
-    shutil.rmtree(tmp_path / "selected")
-    assert prepare(store, capture, tmp_path) == prepared
-    assert publish(store, prepared, selected, tmp_path) == output
-    assert acquisition.capture_local_utility_bundle(store, target=target, directory=tmp_path / "capture") == capture
-
-
 def test_complete_captured_failed_database_products_never_become_prepared_database(tmp_path, monkeypatch):
     _, _, plan, target = reserved_fixture(tmp_path, monkeypatch)
     controlled_native(monkeypatch, returncode=7, family={key: value for key, value in FAMILY.items() if key != "njs"})
@@ -262,28 +169,3 @@ def test_complete_captured_failed_database_products_never_become_prepared_databa
     assert output["prepared_database"][0]["status"] == "unavailable"
     assert output["preparation"][0]["fields"] == {"inventory_complete": True, "compatibility": "unverified"}
 
-
-def test_check096_exact_saved_failed_publication_replays_without_reparsing(tmp_path, monkeypatch):
-    retained = retained_case()
-    capture, prepared, output = (retained[k] for k in ("capture", "prepared", "publication"))
-    assert "output_completeness_basis" not in capture["original_bundle"]
-    assert "output_inventory_incomplete" in failure_codes(output)  # Historical observation is preserved.
-    assert {r["completeness"] for r in capture["original_bundle"]["artifacts"]} == {"partial"}
-    store = Store(tmp_path / "saved-only-store")
-    for path in (FIXTURE / "artifacts").iterdir():
-        assert store.artifact(path.read_bytes()) == "artifact_" + path.name
-    assert store.put("source", acquisition._source_payload(capture), origin="tool")["id"] == capture["source_ref"]
-    forbid_readers(monkeypatch)
-    def forbidden(*args, **kwargs):
-        pytest.fail("saved replay executed work or reopened original native paths")
-    for owner, name in ((publication, "run_local_job"), (worker, "run"), (driver, "run_native_blast_utility"),
-                        (acquisition, "_capture_file"), (acquisition, "local_blast_utility_plan")):
-        monkeypatch.setattr(owner, name, forbidden)
-    before = deepcopy(retained)
-    assert acquisition._validate_saved(store, capture) == capture
-    assert publication.validate_prepared_utility_result(store, prepared) == prepared
-    assert publication.validate_utility_publication(store, source_ref=capture["source_ref"], prepared=prepared,
-        selector=output["selector"], publication=output) == output
-    assert retained == before
-    assert json.loads(store.get_artifact(capture["bundle_artifact_ref"])) == capture["original_bundle"]
-    assert json.loads(store.get_artifact(prepared["result_artifact_ref"]))["original_outcome"]["returncode"] == 1

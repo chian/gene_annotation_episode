@@ -1,4 +1,4 @@
-"""Original supplied-record schemas extracted from native_blast_vdb_utility_context; no execution admission."""
+"""Supplied-record schemas; no execution admission."""
 from __future__ import annotations
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.root.library.blast_utility_contracts import SCHEMAS

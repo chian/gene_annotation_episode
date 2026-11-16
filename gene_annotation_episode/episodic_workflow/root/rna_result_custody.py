@@ -71,11 +71,10 @@ class RnaResultCustody:
         if selected["result"] is not None:
             outcome = json.loads(selected["result"])
             expected = self._outcome(body)
-            require(set(outcome) in (set(expected), {*expected, "pending_work_after_action"}) and
+            require(set(outcome) == {*expected, "pending_work_after_action"} and
                 self.records._equal({key: outcome[key] for key in expected}, expected))
-            if "pending_work_after_action" in outcome:
-                from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
-                validate_pending(outcome["pending_work_after_action"])
+            from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
+            validate_pending(outcome["pending_work_after_action"])
         failures = [validate_rna_issue(value) for value in body["failures"]]
         saved = selector["acquisition"] == "retained_sheet_only"
         collecting = body["tool_name"] == "execution.results.collect"

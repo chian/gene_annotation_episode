@@ -3,7 +3,6 @@ from __future__ import annotations
 from .task_action_units import ActionLeaf
 from gene_annotation_episode.episodic_workflow.root.method_loop.archive import ArchivedRecord
 from .receiving_context import BindingContext
-from .workflow_values import EPISODE_BRANCH_LIFECYCLE
 from gene_annotation_episode.episodic_workflow.root.method_loop import Episode
 from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeGoal
 from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeRecord
@@ -35,8 +34,6 @@ from .episode_contract_information import validate_saved_fact_form
 class ChildDelivery:
 
     def pending_delivery(self, source, delivery_ref=None):
-        if self.episode_branch_lifecycle != EPISODE_BRANCH_LIFECYCLE:
-            return None
         rows = self.store.db.execute("SELECT a.* FROM runtime_report_attempts a JOIN runtime_actions work ON work.run_id=a.run_id AND work.episode_id=a.parent_episode_id AND work.decision_index=a.decision_index WHERE a.run_id=? AND a.parent_episode_id=? AND a.failure IS NOT NULL AND (work.result IS NULL OR json_extract(work.result,'$.status')='pending') ORDER BY a.decision_index", (self.run_id, source.episode_id)).fetchall()
         for original in rows:
             if delivery_ref is None or original['delivery_ref'] == delivery_ref:
@@ -146,7 +143,7 @@ class ChildDelivery:
                 index = action[0]
                 request = self.returned_request(spec)
                 returned = self.execution_backend.load_return(item['handle'], item['return_id'])
-                receiver = ReceiverBindingV1(self.store, self.journal, index, request.report_contract, lambda form: None, lambda form: self.receive_form(source, form, request.report_contract.schema, index), lambda: self.source_credit_view(source)['credit'], lambda original_index, credit: self.controller_value(source, original_index, credit), defer_failed_delivery=self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE)
+                receiver = ReceiverBindingV1(self.store, self.journal, index, request.report_contract, lambda form: None, lambda form: self.receive_form(source, form, request.report_contract.schema, index), lambda: self.source_credit_view(source)['credit'], lambda original_index, credit: self.controller_value(source, original_index, credit), defer_failed_delivery=True)
                 slot = None
                 with self.store.transaction():
                     parent_open = self.journal.row('runtime_episodes', source.episode_id)['state'] == 'active'

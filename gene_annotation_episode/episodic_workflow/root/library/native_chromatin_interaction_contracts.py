@@ -19,27 +19,19 @@ ATTEMPT_DIRECTORY_NAME = "chromatin-interaction-attempt"
 BUNDLE_FILENAME = "bundle.json"
 OWNER_FILENAME = ".native-chromatin-owner.json"
 STARTED_FILENAME = ".native-chromatin-started.json"
-DRIVER_MODULE = "gene_annotation_episode.native_chromatin_interaction_driver"
-HIC_READER_MODULE = "gene_annotation_episode.chromatin_hic_inputs"
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+_LIBRARY = "gene_annotation_episode.episodic_workflow.root.library."
+DRIVER_MODULE = _LIBRARY + "native_chromatin_interaction_driver"
+HIC_READER_MODULE = _LIBRARY + "chromatin_hic_inputs"
+POLICY = {'memory_bytes': 5368709120, 'scratch_bytes': 4294967296}
 TABLE_ROLES = ("bins", "contacts", "weights", "cell_states", "dense_values")
 TABLE_NAMES = ("bins.tsv", "contacts.npy", "weights.npy", "cell-states.npy", "dense-values.npy")
 REQUIRED_DEPENDENCIES = {"numpy", "h5py", "jsonschema", "attrs", "referencing", "rpds-py", "jsonschema-specifications"}
-REQUIRED_MODULES = {DRIVER_MODULE, "gene_annotation_episode.native_chromatin_interaction_contracts",
-    "gene_annotation_episode.chromatin_interaction_contracts", "gene_annotation_episode.chromatin_cooler_inputs",
-    "gene_annotation_episode.chromatin_interaction_inputs"}
-LEGACY_DRIVER_MODULE = DRIVER_MODULE
-LEGACY_REQUIRED_MODULES = REQUIRED_MODULES
-DRIVER_MODULE = "gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_driver"
-HIC_READER_MODULE = "gene_annotation_episode.episodic_workflow.root.library.chromatin_hic_inputs"
-REQUIRED_MODULES = {name.replace("gene_annotation_episode.", "gene_annotation_episode.episodic_workflow.root.library.", 1)
-    for name in LEGACY_REQUIRED_MODULES}
+REQUIRED_MODULES = {DRIVER_MODULE, _LIBRARY + "native_chromatin_interaction_contracts",
+    _LIBRARY + "chromatin_interaction_contracts", _LIBRARY + "chromatin_cooler_inputs",
+    _LIBRARY + "chromatin_interaction_inputs"}
 SUPPORTED_FORMATS = ("cooler_hdf5_v3", "hic_binary_v9")
-LEGACY_HIC_REQUIRED_MODULES = {"gene_annotation_episode.chromatin_hic_inputs",
-    "gene_annotation_episode.chromatin_hic_records",
-    "gene_annotation_episode.native_chromatin_hic_runtime"}
-HIC_REQUIRED_MODULES = {name.replace("gene_annotation_episode.", "gene_annotation_episode.episodic_workflow.root.library.", 1)
-    for name in LEGACY_HIC_REQUIRED_MODULES}
+HIC_REQUIRED_MODULES = {HIC_READER_MODULE, _LIBRARY + "chromatin_hic_records",
+    _LIBRARY + "native_chromatin_hic_runtime"}
 
 
 def require(condition, code="original_attempt_mismatch"):
@@ -91,10 +83,9 @@ def validate_chromatin_software(value, *, supported_formats=None):
     for key in ("python_executable", "module_root"):
         path_value(value[key], absolute=True)
     modules = [r["module"] for r in value["implementation_files"]]
-    legacy = value["driver_module"] == LEGACY_DRIVER_MODULE
-    required_modules = (LEGACY_REQUIRED_MODULES if legacy else REQUIRED_MODULES) | (
-        (LEGACY_HIC_REQUIRED_MODULES if legacy else HIC_REQUIRED_MODULES) if "hic_binary_v9" in formats else set())
-    require(len(set(modules)) == len(modules) and required_modules <= set(modules), "native_dependency_unavailable")
+    required_modules = REQUIRED_MODULES | (HIC_REQUIRED_MODULES if "hic_binary_v9" in formats else set())
+    require(value["driver_module"] == DRIVER_MODULE and len(set(modules)) == len(modules)
+        and required_modules <= set(modules), "native_dependency_unavailable")
     require(all(re.fullmatch(r"gene_annotation_episode(?:\.[A-Za-z_]\w*)+", n, re.ASCII) for n in modules),
         "native_dependency_unavailable")
     dependencies = value["dependencies"]

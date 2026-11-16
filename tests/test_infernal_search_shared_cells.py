@@ -1,6 +1,5 @@
 """Shared numeric authority checks using explicit synthetic cells and saved data."""
 from copy import deepcopy
-import hashlib
 import json
 from pathlib import Path
 import socket
@@ -8,11 +7,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.library.infernal_search_cells import (
-    populate_infernal_search_cells, upgrade_saved_infernal_search_sheet)
-from gene_annotation_episode.episodic_workflow.root.library.infernal_search_contracts import (
-    SHEET_SCHEMA, SCORE_SCHEMA, sheet_digest, validate_infernal_search_sheet,
-    validate_infernal_search_scores)
+from gene_annotation_episode.episodic_workflow.root.library.infernal_search_cells import populate_infernal_search_cells
+from gene_annotation_episode.episodic_workflow.root.library.infernal_search_contracts import SHEET_SCHEMA, SCORE_SCHEMA, validate_infernal_search_scores
 from gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader import calculate_infernal_search_scores
 
 
@@ -240,54 +236,3 @@ def test_saved_source_and_projection_relationship_tampering_rejected(change):
         validate_infernal_search_scores(scores, sheet=sheet)
 
 
-def test_explicit_v1_conversion_keeps_original_cells_and_lineage(monkeypatch):
-    from test_infernal_search_graders import populate
-    current = populate()
-    # Synthetic legacy-shaped saved cells from retained actual native bytes;
-    # this is an upgrade unit fixture, not a rewritten historical receipt.
-    legacy = deepcopy(current)
-    legacy["schema"] = "infernal_search_sheet_v1"
-    for key in ("sequence_populations", "source_context", "lineage"):
-        legacy.pop(key)
-    for artifact in legacy["artifacts"]:
-        artifact.pop("source_descriptor")
-    for hit in legacy["hits"]:
-        for key in ("source_details", "attribution", "query_occurrence_key", "native_rank", "native_alignment_accuracy",
-                    "native_model_boundary", "native_sequence_boundary", "correspondence", "duplicate_of"):
-            hit.pop(key)
-    saved = deepcopy(legacy)
-    def forbidden(*args, **kwargs):
-        raise AssertionError("explicit saved conversion parsed/acquired data")
-    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.infernal_search_inputs.populate_infernal_search_sheet", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.infernal_search_cells.populate_infernal_search_cells", forbidden)
-    upgraded = upgrade_saved_infernal_search_sheet(legacy)
-    assert legacy == saved
-    assert upgraded["lineage"] == {"source_sheet_schema": "infernal_search_sheet_v1", "source_sheet_digest": sheet_digest(saved)}
-    assert upgraded["hits"][0]["native_tokens"] == legacy["hits"][0]["native_tokens"]
-    assert upgraded["hits"][0]["sequence_interval"] == legacy["hits"][0]["sequence_interval"]
-    assert calculate_infernal_search_scores(upgraded)["hits"][0]["components"]["bitscore"] == 71.4
-    with pytest.raises(ValueError, match="sheet_required"):
-        calculate_infernal_search_scores(legacy)
-
-
-def test_authentic_saved_native_v1_conversion_preserves_recorded_calculation(monkeypatch):
-    directory = Path(__file__).parents[1] / (
-        "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_search_native_v1")
-    sheet_bytes = (directory / "sheet.json").read_bytes()
-    score_bytes = (directory / "scores.json").read_bytes()
-    assert hashlib.sha256(sheet_bytes).hexdigest() == "71e44e3894b71ada18dabcb0853e008bef218b28e2ef556ae0bbc9153531ea18"
-    old_sheet, old_scores = json.loads(sheet_bytes), json.loads(score_bytes)
-    before_sheet, before_scores = deepcopy(old_sheet), deepcopy(old_scores)
-    def forbidden(*args, **kwargs):
-        raise AssertionError("saved native v1 conversion performed acquisition or parsing")
-    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.infernal_search_inputs.populate_infernal_search_sheet", forbidden)
-    monkeypatch.setattr(Path, "read_bytes", forbidden)
-    monkeypatch.setattr(Path, "read_text", forbidden)
-    upgraded = upgrade_saved_infernal_search_sheet(old_sheet)
-    recalculated = calculate_infernal_search_scores(upgraded)
-    assert upgraded["lineage"]["source_sheet_digest"] == sheet_digest(old_sheet)
-    assert upgraded["publication_inputs"] == old_sheet["publication_inputs"]
-    for previous, current in zip(old_scores["hits"], recalculated["hits"]):
-        assert all(current["components"][name] == value for name, value in previous["components"].items())
-    assert recalculated["hits"][0]["components"]["evalue"] == 3.6e-22
-    assert old_sheet == before_sheet and old_scores == before_scores

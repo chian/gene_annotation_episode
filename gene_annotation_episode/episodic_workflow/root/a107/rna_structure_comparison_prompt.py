@@ -28,7 +28,7 @@ _OPERATIONS = (
     "Choose the next available operation using the recorded outcomes. execution.results.status "
     "checks the selected retained inputs and existing comparison records. execution.results.collect "
     "calculates the fixed comparison and prepares exactly the requested return. Both operations "
-    "take an empty argument object. The calculation uses the bound local limits of 20 GiB memory "
+    "take an empty argument object. The calculation uses the bound local limits of 5 GiB memory "
     "and 4 GiB scratch, with no wall-time budget. Choose between the available operations as the "
     "evidence warrants; no operation order is prescribed."
 )

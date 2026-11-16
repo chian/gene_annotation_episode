@@ -24,7 +24,6 @@ from gene_annotation_episode.episodic_workflow.root.library.native_atac_differen
 from gene_annotation_episode.episodic_workflow.root.library.atac_differential_result_contracts import PLAN_VERSION, RESULT_VERSION, require, validate_atac_result_record
 from gene_annotation_episode.episodic_workflow.root.library.atac_differential_result_worker import validate_atac_result_worker_plan, validate_atac_result_worker_result, worker_output_specs
 
-LEGACY_WORKER_MODULE = 'gene_annotation_episode.atac_differential_result_worker'
 WORKER_MODULE = 'gene_annotation_episode.episodic_workflow.root.library.atac_differential_result_worker'
 _PACKAGES = {'jsonschema': 'jsonschema', 'attrs': 'attr', 'referencing': 'referencing',
     'rpds-py': 'rpds', 'jsonschema-specifications': 'jsonschema_specifications'}
@@ -158,20 +157,18 @@ def _check_handle(handle, intent):
 
 
 def _validate_current_worker_sources(intent):
-    # Historical intent admission remains the original nonempty-pin contract.
-    # The new private worker command must name its complete receiving core.
-    current_command = [intent['interpreter']['path'], '-B', '-S', '-m',
-        WORKER_MODULE, str(Path(intent['plan']['directory']) / 'plan.json')]
-    if intent['command'] == current_command:
-        required = ('atac_differential_result_worker', 'atac_differential_contracts',
+    # The private worker command must name its complete receiving core.
+    require(intent['command'] == [intent['interpreter']['path'], '-B', '-S', '-m',
+        WORKER_MODULE, str(Path(intent['plan']['directory']) / 'plan.json')], 'atac_worker_intent_mismatch')
+    required = ('atac_differential_result_worker', 'atac_differential_contracts',
             'atac_differential_inputs', 'atac_differential_sheet',
             'atac_differential_calculations', 'atac_differential_scores',
             'atac_differential_calculation_inputs', 'atac_reference_observations',
             'atac_differential_result_views')
-        paths = {pin['path'] for pin in intent['source_pins']}
-        root = Path(intent['plan']['directory']) / 'source_snapshot/gene_annotation_episode/episodic_workflow/root/library'
-        require(all(str(root / (name + '.py')) in paths for name in required),
-            'atac_worker_intent_mismatch')
+    paths = {pin['path'] for pin in intent['source_pins']}
+    root = Path(intent['plan']['directory']) / 'source_snapshot/gene_annotation_episode/episodic_workflow/root/library'
+    require(all(str(root / (name + '.py')) in paths for name in required),
+        'atac_worker_intent_mismatch')
 
 
 def validate_prepared_atac_worker(store, value, *, plan):
@@ -188,8 +185,7 @@ def validate_prepared_atac_worker(store, value, *, plan):
     intent = execution['intent']
     require(set(intent) == {'version', 'plan', 'policy', 'command', 'environment', 'source_pins', 'interpreter', 'dependencies'}
         and intent['version'] == 'atac_worker_intent_v1' and intent['policy'] == POLICY
-        and intent['command'] in ([intent['interpreter']['path'], '-B', '-S', '-m', module, str(Path(plan['directory']) / 'plan.json')]
-            for module in (LEGACY_WORKER_MODULE, WORKER_MODULE))
+        and intent['command'] == [intent['interpreter']['path'], '-B', '-S', '-m', WORKER_MODULE, str(Path(plan['directory']) / 'plan.json')]
         and intent['source_pins'] and intent['dependencies'], 'atac_worker_intent_mismatch')
     _validate_current_worker_sources(intent)
     # Lifecycle controls use their own ordinary JSON writer. Exact retained
@@ -258,8 +254,7 @@ def prepare_atac_result_worker(store, *, plan, policy):
                         require(str(retained_native_file(store, file)) == retained['path'], 'atac_worker_input_custody_mismatch')
             intent = _snapshot(plan, policy)
             _immutable(intent_path, intent)
-        if type(intent.get('command')) is list and intent['command'][4:5] == [WORKER_MODULE]:
-            _validate_current_worker_sources(intent)
+        _validate_current_worker_sources(intent)
         plan_file = _capture(store, directory, 'plan.json', PLAN_VERSION)
         execution_path = directory / 'execution.json'
         handle = native.NativeJobHandle(directory / 'worker.handle.json')

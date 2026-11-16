@@ -11,10 +11,10 @@ import shutil
 import pytest
 
 from gene_annotation_episode.atac_differential_result_contracts import canonical, SHEET_FORMAT, TABLE_FORMAT, ROLES
-from gene_annotation_episode.atac_differential_result_worker import run_atac_result_worker, _calculate_sheet, _Tracked
-from gene_annotation_episode.native_atac_differential_preparation import build_saved_atac_worker_plan, build_native_atac_worker_plan
+from gene_annotation_episode.atac_differential_result_worker import run_atac_result_worker
+from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_preparation import build_saved_atac_worker_plan, build_native_atac_worker_plan
 from gene_annotation_episode.atac_differential_contracts import BEDGRAPH_COLUMNS
-from gene_annotation_episode.atac_differential_inputs import iter_atac_track_table_rows, parse_macs2_peaks_xls
+from gene_annotation_episode.atac_differential_inputs import parse_macs2_peaks_xls
 from gene_annotation_episode.atac_differential_sheet import build_atac_differential_sheet, select_atac_depth_counts
 from gene_annotation_episode.native_atac_differential_capture import capture_atac_native_files
 from gene_annotation_episode.state import Store
@@ -354,8 +354,6 @@ def test_native_capture_worker_uses_actual_header_and_metadata_control_mock(tmp_
 
 def captured_without_version(captured):
     return {key: value for key, value in captured.items() if key != 'version'}
-
-
 
 
 def test_native_failed_condition_preserves_second_peaks_and_depth(tmp_path, monkeypatch):

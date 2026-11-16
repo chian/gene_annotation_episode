@@ -1,14 +1,12 @@
-"""A107 original homer binding metadata; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 homer binding metadata."""
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from pathlib import Path, PurePosixPath
 import re
 from gene_annotation_episode.episodic_workflow.root.a107.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.a107.native_flux_balance_storage import decode_json
 OPERATION = 'find_enriched_motifs_with_homer'
 VARIANT = 'supplied_fasta_explicit_background_old_v1'
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 PATCH_NAMES = ('findMotifsGenome.pl', 'findKnownMotifs.pl', 'compareMotifs.pl', 'HomerConfig.pm')
 _SHA = re.compile('[0-9a-f]{64}')
 

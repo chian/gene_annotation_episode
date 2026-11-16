@@ -1,4 +1,4 @@
-"""Original improvement iterator/provider/action and shared source protocol."""
+"""Improvement iterator/provider/action and shared source protocol."""
 from .. import runtime as _original_runtime
 from .task_next import next
 from .provider import call

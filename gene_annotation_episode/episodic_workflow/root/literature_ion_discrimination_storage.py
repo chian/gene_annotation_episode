@@ -21,11 +21,6 @@ from .library.literature_ion_discrimination_inputs import (
 )
 from .library.literature_ion_discrimination_calculations import COMPONENTS, FORMULAS, populate_ion_discrimination
 
-from .library.literature_ion_discrimination_implementation import (
-    VERSION as _CURRENT_IMPLEMENTATION_VERSION,
-    prospective as _current_implementation_receipt,
-    retained as _validate_current_implementation_receipt,
-)
 
 PROVIDER = 'literature.a105.ion_discrimination'
 VERSION = 'literature_ion_discrimination_record_v1'
@@ -33,12 +28,6 @@ from gene_annotation_episode.episodic_workflow.root.library.literature_ion_discr
 REQUESTED = 'requested_ion_discrimination_components'
 VIEW = 'ion_discrimination_components'
 from gene_annotation_episode.episodic_workflow.root.library.literature_ion_discrimination_metadata import SCOPE
-_FROZEN = {
-    'literature_ion_discrimination_numbers.py': '080f5dbb79f3036186293c9c39c9faa38e17396150482d7d45774b2e4e7b9cf2',
-    'literature_ion_discrimination_inputs.py': '850cc2053c372beaf87877c2c89bc0de2509ce6f51584c4515e363f1cc769ef6',
-    'literature_ion_discrimination_calculations.py': 'b7576ca52c45b69675c4241428afcb983273fef555e4f6a85b650e1bdd3c8ce4',
-    'literature_ion_discrimination_prompt.py': '44797ebe7a49fc732e31deb61ebdebeffd608733e5246b650040b512c12cf99b',
-}
 
 
 from gene_annotation_episode.episodic_workflow.root.library.literature_ion_discrimination_return_contracts import _array
@@ -167,9 +156,6 @@ class LiteratureIonDiscriminationRepository(LiteratureRateRepository):
                 if parent not in result: result.append(parent)
         return result
 
-    def _implementation_receipt(self):
-        return _current_implementation_receipt()
-
     def populate(self, context, arguments, operation_key):
         if context.run_id != self.run_id: raise ContractError('literature_run_mismatch')
         if not isinstance(operation_key, str) or not operation_key: raise ContractError('operation_key_required')
@@ -186,7 +172,6 @@ class LiteratureIonDiscriminationRepository(LiteratureRateRepository):
             outcome = json.loads(old['outcome']); self.read(outcome['result']['sheet_ref'])
             return outcome
         source = self._native_source(context, args['source_ref'])
-        receipt = self._implementation_receipt()
         snapshots = []
         def read_source(ref, representation):
             row = self._native_source(context, ref)
@@ -209,7 +194,7 @@ class LiteratureIonDiscriminationRepository(LiteratureRateRepository):
         payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'],
             'selection': args, 'direct_input_source_refs': direct, 'input_source_refs': parents,
             'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'input_snapshots': snapshots,
-            'original_implementation': receipt, 'extraction': extraction, 'sheet': sheet}
+            'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
             self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
@@ -327,7 +312,7 @@ class LiteratureIonDiscriminationRepository(LiteratureRateRepository):
         if operation is None or operation['signature'] != canonical(request): raise ContractError('literature_sheet_not_selected_output')
         saved = self._json(source['artifact_ref'])
         if (set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs',
-                'input_source_refs', 'source_metadata', 'input_snapshots', 'original_implementation', 'extraction', 'sheet'}
+                'input_source_refs', 'source_metadata', 'input_snapshots', 'extraction', 'sheet'}
                 or saved['version'] != VERSION or saved['selection'] != request['arguments']
                 or saved['input_source_ref'] != request['arguments']['source_ref'] or source['text_ref'] != source['artifact_ref']
                 or saved['input_source_refs'] != source['parent_source_refs']
@@ -336,12 +321,6 @@ class LiteratureIonDiscriminationRepository(LiteratureRateRepository):
                 or any(canonical(self._native_provenance(request['scope'], ref)) != canonical(row) for ref, row in saved['source_metadata'].items())
                 or self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
             raise ContractError('ion_saved_source_mismatch')
-        receipt = saved['original_implementation']
-        if isinstance(receipt, dict) and receipt.get('version') == _CURRENT_IMPLEMENTATION_VERSION:
-            _validate_current_implementation_receipt(receipt)
-        elif (set(receipt) != {'version', 'files'} or receipt['version'] != 'ion_discrimination_original_implementation_v1'
-                or not isinstance(receipt['files'], dict) or any(not isinstance(v, str) or not re.fullmatch('[0-9a-f]{64}', v) for v in receipt['files'].values())):
-            raise ContractError('ion_saved_original_receipt_mismatch')
         self._validate_bindings(saved, request)
         rows = _project_saved(saved, reference, request['components']); validate_schema(rows, ion_discrimination_cells_schema())
         outcome = json.loads(operation['outcome'])

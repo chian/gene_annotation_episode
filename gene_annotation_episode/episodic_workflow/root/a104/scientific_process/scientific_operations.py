@@ -33,7 +33,7 @@ class ScientificScientificOperations:
             if tool_name in {'material.from_source', 'material.parse', 'material.read', 'source.read', 'source.locate'}:
                 self.services.authenticate_source_byte_operands(context, tool_name, arguments)
             if tool_name == 'process.revise':
-                proposed = self._proposed_selection(selection, arguments, selection['version'], context.scope)
+                proposed = self._proposed_selection(selection, arguments, context.scope)
                 self._tool_resolution(context, proposed)
                 child_selection = validate_child_selection({'version': 'scientific_process_child_selection_v1', 'parent_selection_sha256': scientific_digest(selection), 'selection': proposed})
                 operation_ref = identity('operation', {'key': operation_key, 'name': tool_name, 'arguments': arguments})

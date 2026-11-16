@@ -31,16 +31,10 @@ def _array_schema(source: str) -> dict:
     schema['$id'] = 'urn:gene-annotation:chromatin:return:' + digest(schema)
     return schema
 
-def chromatin_fact_schema_alternatives(source: str) -> tuple[dict, ...]:
-    """Current tree and the single exact supported historical field tree."""
+def chromatin_fact_schema(source: str) -> dict:
     if type(source) is not str or source not in FACT_SOURCES:
         raise ValueError('chromatin_return_unknown_source')
-    current = _array_schema(source)
-    if source == SAVED_SOURCE:
-        return (current,)
-    from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.chromatin_interaction_legacy_return_schemas import legacy_chromatin_fact_schema
-    legacy = legacy_chromatin_fact_schema(source)
-    return (current,) if current == legacy else (current, legacy)
+    return _array_schema(source)
 
 def requested_chromatin_sources(schema: dict) -> tuple[str, ...]:
     if type(schema) is not dict or type(schema.get('properties')) is not dict:

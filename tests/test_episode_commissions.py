@@ -110,9 +110,9 @@ def setup_case(tmp_path, *, run_id="commission-fixture", parent_key="root"):
                             "content_sha256": hashlib.sha256(store.get_artifact(artifact)).hexdigest()},
                            {"reference": target, "version": None,
                             "content_sha256": content_digest(store.get(target))}],
-        "constraints": {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3, 'caller_cpu': 2},
+        "constraints": {'memory_bytes': 5 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3, 'caller_cpu': 2},
         "resource_selection": {"resource_id": "caller-local", "kind": "local",
-            "allocation": {'cpu': 2, 'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3},
+            "allocation": {'cpu': 2, 'memory_bytes': 5 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3},
             "capability_binding_ref": "saved-caller-capability"},
         "expectation_snapshot_refs": ["original-duration-expectation"],
         "selected_at": "2026-10-21T12:00:00+00:00"}

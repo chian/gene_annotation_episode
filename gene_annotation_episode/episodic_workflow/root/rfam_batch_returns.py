@@ -18,10 +18,9 @@ from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.form_reference_validation import _binding_key, form_validation_value
 from gene_annotation_episode.immutable_json_records import _read
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import (RFAM_METRIC_UNITS, RFAM_MISSING_REASONS,
-    RfamParseResult, closed_object, is_int, is_text, rfam_digest, validate_rfam_result_selector)
-from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_contracts import (REPORT_FORMAT, REPORT_PARSE_VERSION,
-    RFAM_REPORT_ISSUE_CODES, RFAM_REPORT_METRIC_UNITS, RFAM_REPORT_MISSING_REASONS,
-    RfamBatchReportParseResult)
+    RfamParseResult, closed_object, rfam_digest, validate_rfam_result_selector)
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_contracts import (REPORT_FORMAT,
+    RFAM_REPORT_METRIC_UNITS, RFAM_REPORT_MISSING_REASONS)
 
 
 FACT_SOURCES = ("rfam_result_rows", "rfam_result_populations", "rfam_report_rows")
@@ -221,7 +220,6 @@ class RfamBatchReturns(EpisodeReturnRecords):
             and all(self._equal(manifest[key], original[key]) for key in _RESULT_FIELDS if key != "grading_source_ref"),
             "manifest_publication_conflict")
         batch = request["mode"] == "sequence_batch"
-        report = selector["version"] == "rfam_batch_result_selector_v3"
         identity_value = {"version": "rfam_batch_file_input_v1" if batch else "rfam_batch_input_identity_v1",
             **snapshot.request["input_operand"], "expected_job_id": handle["job_id"],
             "submission_source_ref": publication["submission_source_ref"]}
@@ -239,18 +237,6 @@ class RfamBatchReturns(EpisodeReturnRecords):
                 and parsed["representation"] == selector["representation"]
                 and type(parsed["issues"]) is list
                 and manifest["parse_digest"] == rfam_digest(parsed), "parse_schema_conflict")
-        elif report:
-            self._require(parsed.get("version") == REPORT_PARSE_VERSION, "parse_schema_conflict")
-            closed_object(parsed, RfamBatchReportParseResult.__annotations__, code=_PREFIX + "parse_schema_conflict")
-            self._require(type(parsed["issues"]) is list, "parse_schema_conflict")
-            for issue in parsed["issues"]:
-                closed_object(issue, ("code", "severity", "field", "native_query_name", "source_line"),
-                    code=_PREFIX + "parse_schema_conflict")
-                self._require(issue["code"] in RFAM_REPORT_ISSUE_CODES
-                    and issue["severity"] in {"error", "warning"}
-                    and all(issue[key] is None or is_text(issue[key])
-                        for key in ("field", "native_query_name"))
-                    and (issue["source_line"] is None or is_int(issue["source_line"], minimum=1)), "parse_schema_conflict")
         if metadata_unbound:
             self._require(any(issue.get("field") == "model_metadata_ref" and issue.get("code") in {
                 "rfam_model_metadata_conflict", "rfam_subject_out_of_scope", "rfam_batch_model_metadata_invalid"}
@@ -264,15 +250,11 @@ class RfamBatchReturns(EpisodeReturnRecords):
                     and all(manifest[key] is None for key in (
                         "sheet_schema", "sheet_digest", "calculation_schema", "calculation_digest")),
                     "unavailable_sheet_conflict")
-            elif report and parsed.get("version") == REPORT_PARSE_VERSION:
-                self._require(parsed["status"] in {"rejected", "unsupported"}, "parse_schema_conflict")
-            elif parsed.get("version") == "rfam_batch_parse_result_v1":
-                closed_object(parsed, RfamParseResult.__annotations__, code=_PREFIX + "parse_schema_conflict")
             else:
-                from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table import RfamBatchTableParseResult
-                closed_object(parsed, RfamBatchTableParseResult.__annotations__, code=_PREFIX + "parse_schema_conflict")
-                self._require(parsed["version"] == "rfam_batch_tblout_parse_result_v1", "parse_schema_conflict")
+                self._require(parsed.get("version") == "rfam_batch_parse_result_v1", "parse_schema_conflict")
+                closed_object(parsed, RfamParseResult.__annotations__, code=_PREFIX + "parse_schema_conflict")
         else:
+            self._require(shared, "parse_schema_conflict")
             sheet = self.api._artifact_json(manifest["sheet_ref"])
             calculation = self.api._artifact_json(manifest["calculation_ref"])
             self._require(self._equal(parsed.get("sheet"), sheet), "parse_sheet_conflict")
@@ -283,93 +265,44 @@ class RfamBatchReturns(EpisodeReturnRecords):
             bindings = {"source_ref": native["id"], "sheet_ref": manifest["sheet_ref"],
                 "calculation_ref": manifest["calculation_ref"], "sheet_digest": rfam_digest(sheet),
                 "calculation_digest": rfam_digest(calculation)}
-            if shared:
-                from gene_annotation_episode.episodic_workflow.root.library.infernal_search_contracts import (SHEET_SCHEMA, SCORE_SCHEMA,
-                    validate_infernal_search_sheet, validate_infernal_search_scores)
-                from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_infernal import project_rfam_infernal_result, select_rfam_common_sheet
-                validate_infernal_search_sheet(sheet)
-                validate_infernal_search_scores(calculation, sheet=sheet)
-                select_rfam_common_sheet(sheet, representation=selector["representation"])
-                self._require(manifest["sheet_schema"] == SHEET_SCHEMA
-                    and manifest["calculation_schema"] == SCORE_SCHEMA
-                    and manifest["sheet_digest"] == bindings["sheet_digest"]
-                    and manifest["calculation_digest"] == bindings["calculation_digest"]
-                    and calculation["parameters"] == {"hit_scope": "reported"}
-                    and sheet["lineage"] is None, "calculation_binding_conflict")
-                if batch:
-                    capture.update(request_file_sha256=identity_value["submitted_file_sha256"],
-                        submission_source_ref=publication["submission_source_ref"])
-                else:
-                    capture["request_sequence_sha256"] = identity_value["submitted_sequence_sha256"]
-                profile, format_name = {
-                    "json": ("rfam_single_json", "rfam_cmscan_single_json_v1"),
-                    "tblout": ("rfam_batch_tblout", "infernal_tblout_1_cmscan_1_1_5"),
-                    "out": ("rfam_batch_report", REPORT_FORMAT),
-                }[selector["representation"]]
-                context = sheet["source_context"]
-                self._require(parsed["status"] in {"complete", "partial"}
-                    and parsed["format"] == format_name
-                    and context is not None and context.get("profile") == profile
-                    and self._equal(context.get("capture"), capture)
-                    and self._equal(context.get("input_identity"), identity_value), "common_input_conflict")
-                expected_descriptor = {"profile": profile, "source_ref": native["id"],
-                    "artifact_ref": native["artifact_ref"], "source_sha256": snapshot.sha256,
-                    "source_byte_length": len(snapshot.content), "byte_hash_verified": True}
-                self._require(len(sheet["artifacts"]) == 1
-                    and sheet["artifacts"][0].get("artifact_id") == native["artifact_ref"]
-                    and self._equal(sheet["artifacts"][0].get("source_descriptor"), expected_descriptor),
-                    "common_source_conflict")
-                project = lambda: project_rfam_infernal_result(sheet, calculation,
-                    projection=selector["projection"], artifact_bindings=bindings,
-                    representation=selector["representation"])
-            elif report:
-                from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_contracts import (
-                    validate_rfam_report_sheet, validate_rfam_report_calculation)
-                from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_views import project_rfam_batch_report_result
-                self._require(parsed["version"] == REPORT_PARSE_VERSION
-                    and manifest["format"] == REPORT_FORMAT
-                    and parsed["status"] in {"complete", "partial"}, "parse_schema_conflict")
-                validate_rfam_report_sheet(sheet)
-                validate_rfam_report_calculation(calculation, sheet=sheet)
+            from gene_annotation_episode.episodic_workflow.root.library.infernal_search_contracts import (SHEET_SCHEMA, SCORE_SCHEMA,
+                validate_infernal_search_sheet, validate_infernal_search_scores)
+            from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_infernal import project_rfam_infernal_result, select_rfam_common_sheet
+            validate_infernal_search_sheet(sheet)
+            validate_infernal_search_scores(calculation, sheet=sheet)
+            select_rfam_common_sheet(sheet, representation=selector["representation"])
+            self._require(manifest["sheet_schema"] == SHEET_SCHEMA
+                and manifest["calculation_schema"] == SCORE_SCHEMA
+                and manifest["sheet_digest"] == bindings["sheet_digest"]
+                and manifest["calculation_digest"] == bindings["calculation_digest"]
+                and calculation["parameters"] == {"hit_scope": "reported"}
+                and sheet["lineage"] is None, "calculation_binding_conflict")
+            if batch:
                 capture.update(request_file_sha256=identity_value["submitted_file_sha256"],
                     submission_source_ref=publication["submission_source_ref"])
-                self._require(self._equal(sheet["capture"], capture)
-                    and self._equal(sheet["input_identity"], identity_value), "report_input_conflict")
-                project = lambda: project_rfam_batch_report_result(sheet, calculation,
-                    projection=selector["projection"], artifact_bindings=bindings)
-            elif batch:
-                from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table_grader import PARAMETERS, VERSION, validate_rfam_table_inputs
-                from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table_views import project_rfam_batch_table_result
-                validate_rfam_table_inputs(parsed)
-                capture.update(request_file_sha256=identity_value["submitted_file_sha256"],
-                    submission_source_ref=publication["submission_source_ref"])
-                self._require(self._equal(parsed["capture"], capture)
-                    and self._equal(parsed["input_identity"], identity_value), "table_input_conflict")
-                closed_object(calculation, ("version", "sheet_digest", "parse_digest", "parameters",
-                    "native_calculation", "hits", "query_strands", "population_complete"),
-                    code=_PREFIX + "calculation_schema_conflict")
-                self._require(calculation["version"] == VERSION
-                    and calculation["sheet_digest"] == rfam_digest(sheet)
-                    and calculation["parse_digest"] == rfam_digest(parsed)
-                    and calculation["parameters"] == PARAMETERS
-                    and calculation["native_calculation"].get("schema") == "infernal_search_scores_v1"
-                    and calculation["native_calculation"].get("parameters") == PARAMETERS
-                    and self._equal(calculation["native_calculation"].get("operation"), sheet.get("operation")),
-                    "calculation_binding_conflict")
-                project = lambda: project_rfam_batch_table_result(parsed, calculation,
-                    projection=selector["projection"], artifact_bindings=bindings)
             else:
-                from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_grader import validate_rfam_sheet
-                from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_views import _checked_calculation, project_rfam_batch_result
-                closed_object(parsed, RfamParseResult.__annotations__, code=_PREFIX + "parse_schema_conflict")
-                self._require(parsed["version"] == "rfam_batch_parse_result_v1"
-                    and parsed["format"] == "rfam_cmscan_single_json_v1", "parse_schema_conflict")
                 capture["request_sequence_sha256"] = identity_value["submitted_sequence_sha256"]
-                self._require(self._equal(sheet["source"], capture)
-                    and self._equal(sheet["input"], identity_value), "json_input_conflict")
-                _checked_calculation(validate_rfam_sheet(sheet), calculation)
-                project = lambda: project_rfam_batch_result(sheet, calculation,
-                    projection=selector["projection"], artifact_bindings=bindings)
+            profile, format_name = {
+                "json": ("rfam_single_json", "rfam_cmscan_single_json_v1"),
+                "tblout": ("rfam_batch_tblout", "infernal_tblout_1_cmscan_1_1_5"),
+                "out": ("rfam_batch_report", REPORT_FORMAT),
+            }[selector["representation"]]
+            context = sheet["source_context"]
+            self._require(parsed["status"] in {"complete", "partial"}
+                and parsed["format"] == format_name
+                and context is not None and context.get("profile") == profile
+                and self._equal(context.get("capture"), capture)
+                and self._equal(context.get("input_identity"), identity_value), "common_input_conflict")
+            expected_descriptor = {"profile": profile, "source_ref": native["id"],
+                "artifact_ref": native["artifact_ref"], "source_sha256": snapshot.sha256,
+                "source_byte_length": len(snapshot.content), "byte_hash_verified": True}
+            self._require(len(sheet["artifacts"]) == 1
+                and sheet["artifacts"][0].get("artifact_id") == native["artifact_ref"]
+                and self._equal(sheet["artifacts"][0].get("source_descriptor"), expected_descriptor),
+                "common_source_conflict")
+            project = lambda: project_rfam_infernal_result(sheet, calculation,
+                projection=selector["projection"], artifact_bindings=bindings,
+                representation=selector["representation"])
             if projection is not None:
                 self._require(selector["projection"] is not None and self._equal(project(), projection),
                     "saved_projection_conflict")
@@ -422,8 +355,7 @@ class RfamBatchReturns(EpisodeReturnRecords):
         for source, rows in values.items():
             validate_form({"rows": rows}, _object({"rows": descriptors[source]["report_schema"]}), lambda *_: True)
         for row in (*values.get("rfam_result_rows", []), *values.get("rfam_report_rows", [])):
-            # Shared forms already define this symbol format. Rfam's supported
-            # values are narrower than its legacy optional "unknown" value.
+            # The shared symbol format also admits "unknown"; Rfam rows never do.
             self._require(row["strand"] in {"+", "-", None}, "strand_invalid")
 
     def _values(self, form, schema):

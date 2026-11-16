@@ -15,15 +15,8 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_r
 from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_utility_returns import NativeBLASTUtilityReturns
 from test_blast_preparation_contracts_647 import MODES, operation
-from test_blast_preparation_population_647 import (
-    common, copy_input, database, occurrence, outcome, populate,
-    profile_args_from_retained_success, projection,
-)
-from test_blast_utility_contracts_625 import inspection as legacy_inspection
-from test_blast_utility_contracts_625 import operation as legacy_operation
-from test_blast_utility_result_views_629 import (
-    SOURCE, project as legacy_project, saved, selector, validate,
-)
+from test_blast_preparation_population_647 import common, copy_input, database, occurrence, outcome, populate, projection
+from test_blast_utility_result_views_629 import SOURCE, saved, selector, validate
 
 
 def list_inspection(*, count=1):
@@ -208,23 +201,6 @@ def test_prepared_alias_manifest_cannot_change_identity_method_or_dependency_clo
         selected(result, selector(prepared_database=True), prepared=prepared)
 
 
-def test_retained_rps_details_and_additional_saved_manifest_keep_actual_versions():
-    result = populate(**profile_args_from_retained_success())
-    prepared = projection(result, "additional")
-    descriptors = [saved("result", result), saved("prepared_database", prepared["manifest"])]
-    view, context = selected(result, selector(preparation={"fields": ["kind", "detail"]},
-        prepared_database=True, saved_data=["result", "prepared_database"]), prepared=prepared, saved_data=descriptors)
-    detail = view["preparation"][0]["fields"]["detail"]
-    native = detail["volumes"][0]["auxiliary_documents"][0]["rows"][0]
-    assert native["sequence_length"] == 320 and native["karlin_k"] == pytest.approx(0.0375672)
-    assert detail["profiles"][0]["disposition"] == "unknown"
-    assert [row["schema"] for row in view["saved_data"]] == [
-        "blast_database_artifact_set_v2", "native_blast_prepared_database_manifest_v1"]
-    assert view["prepared_database"][0]["manifest"]["kind"] == "rps_profile"
-    assert view["record_refs"] == [SOURCE, *[row["artifact_ref"] for row in descriptors]]
-    assert view["artifacts"] == [] and validate(json.loads(json.dumps(view)), context) == view
-
-
 def test_saved_prepared_descriptor_must_match_actual_standard_or_additional_version():
     result = alias_result(); prepared = projection(result)
     wrong = saved("prepared_database", prepared["manifest"])
@@ -305,13 +281,6 @@ def test_exact_new_operation_pairs_admit_only_their_result_channel(mode):
         validate_blast_utility_result_selector(selection, operation=wrong)
 
 
-@pytest.mark.parametrize("field", ["kind", "database_bindings", "materializations"])
-def test_new_preparation_fields_are_not_retrofitted_to_legacy_operations(field):
-    with pytest.raises(ContractError, match="preparation_fields_not_applicable"):
-        validate_blast_utility_result_selector(selector(preparation={"fields": [field]}),
-            operation=legacy_operation("create_sequence_database"))
-
-
 def test_file_inspection_cannot_select_a_fabricated_database_artifact():
     with pytest.raises(ContractError, match="artifact_selection_not_applicable"):
         validate_blast_utility_result_selector(selector(artifacts=[
@@ -324,16 +293,6 @@ def test_saved_result_version_must_agree_with_original_operation_on_replay():
     view["saved_data"][0]["schema"] = "blast_database_inspection_v1"
     with pytest.raises(ContractError, match="saved_result_version"):
         validate(view, context)
-
-
-def test_legacy_field_value_shape_and_selector_serialization_are_unchanged():
-    selection = selector(database_fields=["database_sequence_count"])
-    before = json.dumps(selection)
-    view, context = legacy_project(legacy_inspection(), selection)
-    assert view["database_fields"] == [{"source_ref": SOURCE, "database_key": "tiny",
-        **context["result"]["native_fields"][0]}]
-    assert "subject" not in view["database_fields"][0]
-    assert json.dumps(validate_blast_utility_result_selector(selection, operation=context["operation"])) == before
 
 
 def test_projection_and_prepared_validation_perform_no_io_or_native_parsing(monkeypatch):

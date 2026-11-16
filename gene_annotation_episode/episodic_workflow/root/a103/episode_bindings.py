@@ -344,7 +344,7 @@ class EpisodeBindingRegistry:
 
 
     def for_role(self, role):
-        """Retain unambiguous legacy lookup; never choose between private parents."""
+        """Look up an unambiguous role; never choose between private parents."""
         try:
             candidates = self._by_role[role]
         except KeyError as error:
@@ -418,7 +418,7 @@ class EpisodeBindingRegistry:
             child_roles = getattr(parent, 'child_roles', None)
             if not matches and role in parent.roles and child_roles is not None and role in child_roles(role):
                 matches = [parent]
-            # Older caller-supplied bindings have no private commissioning path.
+            # Caller-supplied bindings without a private commissioning path.
             if not matches:
                 matches = [binding for binding in candidates
                            if getattr(binding, 'binding_path', None) is None]
@@ -427,7 +427,7 @@ class EpisodeBindingRegistry:
                 and getattr(binding, 'commissioning_parent', 'legacy_annotation')
                     in {'legacy_annotation', 'annotation'}]
         else:
-            # A legacy parent has no path identity; only a unique role is safe.
+            # A parent without path identity; only a unique role is safe.
             matches = list(candidates)
         if len(matches) != 1:
             raise LookupError('episode_child_not_bound:' + str(parent_path) + ':' + str(role))

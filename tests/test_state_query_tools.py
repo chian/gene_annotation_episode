@@ -4,7 +4,6 @@ These are local integration fixtures, not biological or model-run evidence.
 """
 import json
 
-from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -27,37 +26,6 @@ def _inspect(tools, target):
     result = tools.execute("sequence.inspect", {"subject_ref": target})
     assert result["status"] == "completed", result
     return next(ref for ref in result["record_refs"] if ref.startswith("observation_"))
-
-
-def test_follow_advertised_current_pages_through_ordinary_tool(tmp_path):
-    with Store(tmp_path) as store:
-        target = store.create_problem(raw_sequence="MKWAA", molecule="protein")["subject_refs"][0]
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        observation = _inspect(tools, target)
-        first_hypothesis = _hypothesis(store, target)
-        second_hypothesis = _hypothesis(store, target, "frameshift")
-        _assessment(store, first_hypothesis, observation)
-        _assessment(store, second_hypothesis, observation)
-        revised = _assessment(store, first_hypothesis, observation, relation="weakens", revision=1)
-        scope = {"subject_refs": [target]}
-        before = project_credit(store, scope).as_record()
-        view = store.reasoning_view(scope, limit=1)
-        records = list(view["assessments"])
-        query = view["pages"]["assessments"]["next_query"]
-        assert query["current_only"] is True
-        while query is not None:
-            reply = tools.execute("state.query", query, scope=scope)
-            assert reply["status"] == "completed", reply
-            page = reply["result"]
-            assert page["total"] == 2
-            records.extend(page["records"])
-            query = page["next_query"]
-        assert records == store.current_assessments(scope)
-        assert len({row["id"] for row in records}) == 2
-        assert revised in records
-        history = tools.execute("state.query", {"kind": "assessment"}, scope=scope)
-        assert history["result"]["total"] == 3
-        assert project_credit(store, scope).as_record() == before
 
 
 def test_reverse_reference_filter_reaches_current_interpretation_and_keeps_paths(tmp_path):

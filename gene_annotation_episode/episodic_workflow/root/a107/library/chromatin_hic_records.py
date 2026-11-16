@@ -1,7 +1,4 @@
-"""A107 original chromatin hic records; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 chromatin hic records."""
 from __future__ import annotations
 from copy import deepcopy
 

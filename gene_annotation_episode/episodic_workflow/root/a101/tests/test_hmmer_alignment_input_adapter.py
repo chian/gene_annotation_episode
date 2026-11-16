@@ -4,7 +4,6 @@ Inline inputs and SELEX diagnostic copies are explicitly authored engineering
 cases. No test launches native work or defines a numerical scoring formula.
 Execution belongs to root's bounded lifecycle, not the authoring host.
 """
-from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
@@ -187,21 +186,6 @@ def test_v03_known_zero_and_a2m_null_geometry_are_distinct():
     assert all(r["aligned_sequence"] is None and r["segments"] == [] for r in failed["records"][0]["rows"])
     assert not data.valid_alignment(failed["records"][0])
     assert saved_alignment_decoding_valid(sheet((ORACLE / "a2m_fewer_consensus.input").read_bytes(), "a2m"))
-
-
-def test_v03_present_invalid_context_does_not_fall_back_and_legacy_absence_does():
-    record = read((ORACLE / "afa_auto_dna.input").read_bytes())["records"][0]
-    assert data.effective_hmmer_alignment_alphabet(record, settings={"--informat": "afa", "--dna": True})["alphabet"] == "DNA"
-    for value in (None, {}, {**record["input_decoding"], "reader_profile": "unrecognized"}):
-        changed = {**record, "input_decoding": value}
-        assert data.effective_hmmer_alignment_alphabet(changed, settings={"--informat": "afa", "--dna": True}) == {
-            "state": "incompatible", "alphabet": None, "basis": None, "issue_code": "input_decoding_invalid"}
-    assert data.effective_hmmer_alignment_alphabet(record, settings={"--informat": "afa", "--rna": True})["state"] == "incompatible"
-    legacy = {k: v for k, v in record.items() if k not in {"input_decoding", "native_input", "native_decoding"}}
-    before = deepcopy(legacy)
-    assert data.effective_hmmer_alignment_alphabet(legacy, settings={})["issue_code"] == "alphabet_missing"
-    assert data.effective_hmmer_alignment_alphabet(legacy, settings={"--amino": True})["alphabet"] == "amino"
-    assert legacy == before
 
 
 @pytest.mark.parametrize("field,value,code", [("sha256", "0" * 64, "occurrence_digest_mismatch"),

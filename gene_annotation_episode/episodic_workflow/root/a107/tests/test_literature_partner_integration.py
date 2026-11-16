@@ -22,7 +22,7 @@ from gene_annotation_episode.episodic_workflow.root.a107.library.literature_part
 from gene_annotation_episode.episodic_workflow.root.a107.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a107.state import Store
 from gene_annotation_episode.episodic_workflow.root.a107.tools import ToolRegistry
-from gene_annotation_episode.episodic_workflow.root.a107.tests.source_helpers import source, witness
+from gene_annotation_episode.episodic_workflow.root.a107.tests.source_helpers import source, witness, location_inputs
 from test_runtime import FixtureController, ScriptedProvider
 
 BASE = Path(__file__).parent / 'fixtures/source_records'
@@ -130,7 +130,7 @@ def test_selected_components_saved_only_reconstruction_and_exact_typed_subset(tm
     store, context, args = setup_case(tmp_path, case=case)
     with store:
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.partner.populate', args, 'selected'))
+        outcome = asyncio.run(binding.execute(context, 'literature.partner.populate', location_inputs(args), 'selected'))
         assert outcome['status'] == 'completed', outcome.get('feedback')
         current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
         selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
@@ -165,7 +165,7 @@ def test_selected_components_saved_only_reconstruction_and_exact_typed_subset(tm
         monkeypatch.setattr(calculator, 'populate_partner_components', forbidden)
         monkeypatch.setattr(sources, '_Sources', forbidden)
         store.db.execute('PRAGMA query_only=ON')
-        assert asyncio.run(restored.execute(context, 'literature.partner.populate', args, 'selected')) == outcome
+        assert asyncio.run(restored.execute(context, 'literature.partner.populate', location_inputs(args), 'selected')) == outcome
         assert form_with_facts({}, FORM, restored.facts(current, selected)) == form
 
 
@@ -179,7 +179,7 @@ def test_ordinary_partner_child_parent_delivery_preserves_scientific_meanings(tm
             'scope': plain(context.scope), 'purpose': 'Return the requested partner components and limitations',
             'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
         action = {'selection': {'kind': 'tool', 'tool': 'literature.partner.populate',
-            'arguments': args}, 'report_update': {}}
+            'arguments': location_inputs(args)}, 'report_update': {}}
         def receive(inputs):
             form, = inputs['child_reports']
             check_rows(form['measurements'], case)
@@ -225,7 +225,7 @@ def test_parent_task_and_requested_qualifications_are_rendered_once(tmp_path):
     store, context, args = setup_case(tmp_path, components=['partner_loss_fraction', 'addback_fraction'])
     with store:
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.partner.populate', args, 'selected'))
+        outcome = asyncio.run(binding.execute(context, 'literature.partner.populate', location_inputs(args), 'selected'))
         assert outcome['status'] == 'completed', outcome.get('feedback')
         rows = LiteraturePartnerRepository(store, context.run_id).project_cells([outcome['result']['sheet_ref']],
             permitted_record_refs=outcome['record_refs'], components=context.assignment['requested_partner_components'])

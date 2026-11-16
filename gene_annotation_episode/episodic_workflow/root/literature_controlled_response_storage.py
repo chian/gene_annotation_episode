@@ -10,7 +10,6 @@ import errno
 import hashlib
 import json
 import re
-from pathlib import Path
 from types import SimpleNamespace
 from urllib.parse import quote
 
@@ -66,64 +65,9 @@ from gene_annotation_episode.episodic_workflow.root.library.literature_controlle
 def implementation_descriptor(*,evidence_origin='reported_source'):
     if evidence_origin not in ('reported_source','synthetic_fixture'):
         raise ContractError('controlled_native_evidence_profile_invalid')
-    names = sorted(set(source._dependencies()) | {
-        'literature_controlled_response_storage.py','literature_controlled_response_render.py',
-        'literature_controlled_response_v3_population.py','literature_rate_storage.py','literature_ratio_source_storage.py',
-        'literature_binding_interaction_render.py','domain.py','state.py','communication.py',
-        'receiving_context.py','episode_receipts.py',
-        'literature_controlled_response_declarations.py',
-        'literature_controlled_response_selection_contracts.py',
-        'literature_controlled_response_owner_contracts.py',
-        'literature_controlled_response_v2_contracts.py',
-        'literature_controlled_response_v3_contracts.py',
-        'literature_controlled_response_return_contract.py',
-        'literature_rate_return_schema.py',
-        'literature_rate_unit_witness_schema.py',
-        'literature_experimental_contracts.py',
-        'literature_native_rate_return_schema.py',
-        'literature_ratio_source_return_schema.py'})
-    paths = {
-        'communication.py': 'gene_annotation_episode/episodic_workflow/root/communication.py',
-        'domain.py': 'gene_annotation_episode/domain.py',
-        'episode_receipts.py': 'gene_annotation_episode/episodic_workflow/root/episode_receipts.py',
-        'literature_assay_inputs.py': 'gene_annotation_episode/episodic_workflow/root/literature_assay_inputs.py',
-        'literature_binding_interaction_render.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_binding_interaction_render.py',
-        'literature_binding_reader.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_binding_reader.py',
-        'literature_binding_visual_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_binding_visual_inputs.py',
-        'literature_controlled_response_calculations.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_calculations.py',
-        'literature_controlled_response_declarations.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_declarations.py',
-        'literature_controlled_response_figure_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_figure_inputs.py',
-        'literature_controlled_response_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_inputs.py',
-        'literature_controlled_response_local_calculations.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_local_calculations.py',
-        'literature_controlled_response_owner_calculations.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_owner_calculations.py',
-        'literature_controlled_response_owner_contracts.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_owner_contracts.py',
-        'literature_controlled_response_render.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_render.py',
-        'literature_controlled_response_return_contract.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_return_contract.py',
-        'literature_controlled_response_selection_contracts.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_selection_contracts.py',
-        'literature_controlled_response_storage.py': 'gene_annotation_episode/episodic_workflow/root/literature_controlled_response_storage.py',
-        'literature_controlled_response_v2_contracts.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_v2_contracts.py',
-        'literature_controlled_response_v2_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_v2_inputs.py',
-        'literature_controlled_response_v3_contracts.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_v3_contracts.py',
-        'literature_controlled_response_v3_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_v3_inputs.py',
-        'literature_controlled_response_v3_population.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_v3_population.py',
-        'literature_experimental_contracts.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_experimental_contracts.py',
-        'literature_kinetic_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_kinetic_inputs.py',
-        'literature_native_rate_return_schema.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_native_rate_return_schema.py',
-        'literature_partner_defined_units.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_partner_defined_units.py',
-        'literature_partner_source_fields.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_partner_source_fields.py',
-        'literature_rate_native_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_rate_native_inputs.py',
-        'literature_rate_return_schema.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_rate_return_schema.py',
-        'literature_rate_storage.py': 'gene_annotation_episode/episodic_workflow/root/literature_rate_storage.py',
-        'literature_rate_unit_witness_schema.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_rate_unit_witness_schema.py',
-        'literature_ratio_source_return_schema.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_ratio_source_return_schema.py',
-        'literature_ratio_source_storage.py': 'gene_annotation_episode/episodic_workflow/root/literature_ratio_source_storage.py',
-        'receiving_context.py': 'gene_annotation_episode/episodic_workflow/root/receiving_context.py',
-        'state.py': 'gene_annotation_episode/state.py',
-    }
     return {'version':'controlled_response_native_implementation_v1','provider':PROVIDER,'record_version':VERSION,
             'evidence_origin':evidence_origin,
-            'native_schema_sha256':_sha(controlled_response_cells_schema()),
-            'modules':{name:_sha((Path(__file__).parents[3]/paths[name]).read_bytes()) for name in names}}
+            'native_schema_sha256':_sha(controlled_response_cells_schema())}
 
 
 def _registry(extraction):
@@ -686,9 +630,6 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
         if payload['evidence_origin']!=self.evidence_origin:
             raise ContractError('controlled_native_evidence_profile_mismatch')
         self._profile_selection(payload['selection'])
-        fingerprints=payload['extraction']['implementation_dependencies']['expected_module_fingerprints']
-        if any(payload['implementation_descriptor']['modules'].get(name)!=pin for name,pin in fingerprints.items()):
-            raise ContractError('controlled_native_source_implementation_binding_mismatch')
         self._runtime_original(request,signature,outcome)
         # Recheck the ORIGINAL authorized source/page/scope closure against
         # immutable records only. Scientific source bytes remain unopened.

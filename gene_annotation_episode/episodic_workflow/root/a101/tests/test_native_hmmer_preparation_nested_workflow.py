@@ -17,6 +17,7 @@ from types import SimpleNamespace
 from jsonschema import Draft202012Validator
 from method_loop.archive import iter_json
 import pytest
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.episodic_workflow.root.a101.communication import plain, validate_closed_schema, validate_form
@@ -26,7 +27,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_preparati
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_preparation_contracts import requested_job_from_hmmer_preparation
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_preparation_local import local_hmmer_preparation_plan
 from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.practical_yield import PracticalYieldEstimator
+from gene_annotation_episode.episodic_workflow.root.a101.practical_yield import PracticalYieldEstimator
 from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_prompt import render_scientific_process_prompt
@@ -405,7 +406,7 @@ def test_independent_numeric_examples_and_practical_exact_zero(native_case):
         assert not case.owner.verify_completion(case.results_context, wrong)
     handle = native.NativeJobHandle(Path(case.plan['identity']['execution_id'])).read()
     assert case.plan['policy'] == handle['metadata']['policy'] == POLICY.to_dict()
-    assert handle['metadata']['verified_cgroup']['memory_max'] == 20 * 1024**3
+    assert handle['metadata']['verified_cgroup']['memory_max'] == ENVIRONMENT_BOUNDS['memory_bytes']
     assert handle['metadata']['verified_cgroup']['memory_swap_max'] == 0
     assert 'runtime_max' not in handle['metadata']['verified_cgroup']
     assert_accounting(case)

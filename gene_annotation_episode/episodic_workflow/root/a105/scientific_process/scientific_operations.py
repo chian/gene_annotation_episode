@@ -1,6 +1,6 @@
 """scientific operations for this private A105 episode."""
 from __future__ import annotations
-from .scientific_contracts import INSTRUCTION_VERSION, LEGACY_SELECTION_VERSION, SELECTION_VERSION, _COMMON_TOOLS, _LEGACY_REVISION_ARGUMENTS, _REVISION_ARGUMENTS, _object, deepcopy, identity, inspect, plain, scientific_digest, scientific_invocation_ref, selection_fields, validate_child_selection, validate_revision_origin, validate_schema, validate_selection
+from .scientific_contracts import INSTRUCTION_VERSION, SELECTION_VERSION, _COMMON_TOOLS, _REVISION_ARGUMENTS, _object, deepcopy, identity, inspect, plain, scientific_digest, scientific_invocation_ref, selection_fields, validate_child_selection, validate_revision_origin, validate_schema, validate_selection
 from gene_annotation_episode.domain import ContractError
 
 class ScientificOperations:
@@ -16,7 +16,7 @@ class ScientificOperations:
             return None
         if scientific_digest(selection) != scientific_digest(original['selection']):
             raise ContractError('scientific_filled_identity_mismatch')
-        return self.tool_library.resolve(selection['tools']) if selection['version'] == LEGACY_SELECTION_VERSION else self.tool_library.resolve_invocations(selection['child_tool_info'])
+        return self.tool_library.resolve_invocations(selection['child_tool_info'])
 
     def _tool_resolution_for(self, selection, scope, *, context=None):
         if context is not None:
@@ -25,7 +25,7 @@ class ScientificOperations:
             closed = self._closed_tool_resolution(context, selection)
             if closed is not None:
                 return closed
-        return self.tool_library.resolve(selection['tools'], self.services.tool_catalog(scope)) if selection['version'] == LEGACY_SELECTION_VERSION else self.tool_library.resolve_invocations(selection['child_tool_info'], self._information_catalog(scope))
+        return self.tool_library.resolve_invocations(selection['child_tool_info'], self._information_catalog(scope))
 
     def _tool_resolution(self, context, selection):
         entries = self._tool_resolution_for(selection, context.scope, context=context)
@@ -36,18 +36,17 @@ class ScientificOperations:
     def catalog(self, context):
         selection = self._original_selection(context)
         resolved = self._tool_resolution(context, selection)
-        if selection['version'] != LEGACY_SELECTION_VERSION:
-            direct = [row for row in resolved if row.get('invocation_route', {'kind': 'direct'})['kind'] == 'direct']
-            if self._closed_tool_resolution(context, selection) is not None:
-                resolved = direct
-            else:
-                resolved = self.tool_library.resolve_invocations([{'name': row['name'], 'resources': row['resources']} for row in direct], self.services.tool_catalog(context.scope))
+        direct = [row for row in resolved if row.get('invocation_route', {'kind': 'direct'})['kind'] == 'direct']
+        if self._closed_tool_resolution(context, selection) is not None:
+            resolved = direct
+        else:
+            resolved = self.tool_library.resolve_invocations([{'name': row['name'], 'resources': row['resources']} for row in direct], self.services.tool_catalog(context.scope))
         entries = [{key: deepcopy(value) for key, value in row.items() if key not in {'instructions', 'invocation_route'}} for row in plain(resolved)]
         description = "Prepare a pinned thought pattern and selected actual tools for a new child using the original scientific support and library. Return its selection for a separately selected episode_child commission with the child's job, scope, constraints and typed form. Copy result.selection and revision_origin into that assignment; request scientific_process_results in the form when process provenance and existing closed results are needed. Changes no current process, starts no child and records no biological observation. Supply the actual tool names returned by process.tools for the desired alternative investigation."
         axis = self.library.resolve(selection[selection_fields(selection)[0]])
         if axis.get('entry_version') == INSTRUCTION_VERSION:
             description = "Prepare a different thought pattern and/or selected actual tools for a new child investigating the same evidence axis. Return its selection for a separately selected episode_child commission with the child's job, scope, constraints and typed return form. Copy result.selection and revision_origin into that assignment. Changes no current process, starts no child and records no biological observation. Select the actual tool/resource choices returned by process.tools for the desired investigation."
-        entries.append({'name': 'process.revise', 'description': description, 'input_schema': deepcopy(_LEGACY_REVISION_ARGUMENTS if selection['version'] == LEGACY_SELECTION_VERSION else _REVISION_ARGUMENTS)})
+        entries.append({'name': 'process.revise', 'description': description, 'input_schema': deepcopy(_REVISION_ARGUMENTS)})
         if getattr(self.services, 'workflow', None) is not None and self.tool_library.supports_tool_info:
             from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.execution_planning import catalog
             entries.extend(catalog())
@@ -74,7 +73,7 @@ class ScientificOperations:
             if tool_name in {'material.from_source', 'material.parse', 'material.read', 'source.read', 'source.locate'}:
                 self.services.authenticate_source_byte_operands(context, tool_name, arguments)
             if tool_name == 'process.revise':
-                proposed = self._proposed_selection(selection, arguments, selection['version'], context.scope)
+                proposed = self._proposed_selection(selection, arguments, context.scope)
                 self._tool_resolution(context, proposed)
                 child_selection = validate_child_selection({'version': 'scientific_process_child_selection_v1', 'parent_selection_sha256': scientific_digest(selection), 'selection': proposed})
                 operation_ref = identity('operation', {'key': operation_key, 'name': tool_name, 'arguments': arguments})
@@ -89,10 +88,7 @@ class ScientificOperations:
         self.validate_context(context)
         return validate_selection(context.assignment['selection'])
 
-    def _proposed_selection(self, initial, arguments, version, scope):
+    def _proposed_selection(self, initial, arguments, scope):
         axis_field = selection_fields(initial)[0]
-        if version == LEGACY_SELECTION_VERSION:
-            validate_schema(arguments, _LEGACY_REVISION_ARGUMENTS)
-            return self._selection({'version': version, 'annotation_ref': initial[axis_field], 'thought_ref': arguments['thought_ref'], 'tools': arguments['tools']})
         validate_schema(arguments, _REVISION_ARGUMENTS)
         return self._selection({'version': SELECTION_VERSION, 'evidence_axis': initial[axis_field], 'thought_pattern': arguments['thought_pattern'], 'child_tool_info': self.tool_library.resolve_tool_info(arguments['child_tool_info'], self._information_catalog(scope))})

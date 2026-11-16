@@ -4,7 +4,7 @@ This boundary checks declared relationships, copied values and stored-array
 populations. It does not select joins, parse artifacts or calculate scientific
 components. Source custody and numerical formula verification remain separate.
 The exact-execution and occurrence-witness interfaces are still unavailable;
-locators cannot qualify their scientific claims (review correction 002).
+locators cannot qualify their scientific claims.
 """
 from __future__ import annotations
 

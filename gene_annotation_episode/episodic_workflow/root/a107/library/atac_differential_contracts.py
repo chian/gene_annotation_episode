@@ -1,7 +1,4 @@
-"""A107 original atac differential contracts; selected request/saved-control declarations.
-
-Native dispatch bodies remain outside this finite contract owner. Literal saved/native module identities remain original.
-"""
+"""A107 atac differential contracts."""
 from __future__ import annotations
 import re
 from typing import Literal, TypeAlias, TypedDict

@@ -1,7 +1,4 @@
-"""A107 original lumpy request contracts; selected request/saved-control declarations.
-
-Native dispatch bodies remain outside this finite contract owner. Literal saved/native module identities remain original.
-"""
+"""A107 lumpy request contracts."""
 from __future__ import annotations
 from copy import deepcopy
 from decimal import Decimal, InvalidOperation

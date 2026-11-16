@@ -43,7 +43,7 @@ def actual_received_input_owner(tmp_path, *, raw=b'{"version":"supplied_v1","sam
             assert problem["intake_status"] == "completed"
         elif two_targets:
             manifest = tmp_path / "targets.json"
-            manifest.write_text(json.dumps(dict(schema_version=1, entries=[
+            manifest.write_text(json.dumps(dict(schema_version=2, entries=[
                 dict(sequence="ACGTACGT", molecule="dna", name="A"),
                 dict(sequence="TTTTCCCC", molecule="dna", name="B")])))
             store.create_problem(manifest_path=manifest)

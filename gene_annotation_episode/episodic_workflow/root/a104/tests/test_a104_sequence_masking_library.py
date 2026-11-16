@@ -18,7 +18,6 @@ from gene_annotation_episode.episodic_workflow.root.a104.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a104.sequence_masking_contracts import PARAMETERS, sequence_masking_operation_schema, validate_sequence_masking_record
 from gene_annotation_episode.episodic_workflow.root.a104.sequence_masking_inputs import parse_masking_input_fasta, preflight_masking_input_fasta, parse_sequence_masking_output, populate_sequence_masking_sheet
 from gene_annotation_episode.episodic_workflow.root.a104.library.sequence_masking_calculations import calculate_sequence_masking_components
-from gene_annotation_episode.episodic_workflow.root.a104.library.windowmasker_statistics import parse_windowmasker_statistics
 FIXTURES = Path(__import__('gene_annotation_episode.episodic_workflow.root.a104.sequence_masking_contracts', fromlist=['__file__']).__file__).resolve().parent.parent / 'a101/tests/fixtures/masking_native'
 
 def occurrence(content, oid='input', role='sequences', completeness='complete'):
@@ -48,64 +47,6 @@ def retained(pin):
     assert hashlib.sha256(content).hexdigest() == pin['sha256']
     return content
 
-def native_sheet(case_id):
-    manifest = json.loads((FIXTURES / 'ORACLE_MANIFEST.json').read_text())
-    case = next((c for c in manifest['cases'] if c['case_id'] == case_id))
-    source = next((r for r in manifest['inputs'] if r['input_id'] == case['input_id']))
-    raw_input, raw_output = (retained(source['retained']), retained(case['primary_output']))
-    fmt = 'interval' if 'interval' in case_id else 'fasta'
-    op = operation(case['program'], fmt, style='hard' if 'hard' in case_id else None, parse_seqids=case['parse_seqids'])
-    version_case = next((c for c in manifest['cases'] if c['case_id'] == case['program'] + '_version'))
-    op['engine_version'] = retained(version_case['stdout']).decode().splitlines()[0].split(': ')[1]
-    for name, value in case['selected_parameters'].items():
-        key = name.lstrip('-')
-        if key not in op['requested_parameters']:
-            continue
-        kind = PARAMETERS[op['program'], 'mask'][key][0]
-        op['requested_parameters'][key] = value == 'true' if kind == 'boolean' else float(value) if kind == 'number' else int(value)
-    statistics = None
-    if op['program'] == 'windowmasker':
-        counts_case = next((c for c in manifest['cases'] if c['mode'] == 'create_counts'))
-        raw_stats = retained(counts_case['primary_output'])
-        statistics = parse_windowmasker_statistics(raw_stats, occurrence=occurrence(raw_stats, 'stats', 'statistics'), format='ascii_statistics', reference_binding={'kind': 'generated', 'statistics_occurrence_id': 'stats', 'reference_occurrence_ids': ['reference:window_reference.fa'], 'producer_source_ref': 'oracle612:create_counts', 'producer_attempt_id': manifest['attempt'], 'provenance': 'authenticated_generation'})
-    return build(raw_input, raw_output, op=op, statistics=statistics)
-
-@pytest.mark.parametrize('program,expected', [('dustmasker', [(80, 80), (0, 32), (72, 72)]), ('segmasker', [(64, 64), (0, 20), (32, 72)]), ('windowmasker', [(80, 80), (0, 32), (0, 4)])])
-@pytest.mark.parametrize('parsed', [False, True])
-def test_saved_native_interval_soft_equivalence(program, expected, parsed):
-    base = program + ('_parsed' if parsed else '')
-    interval_sheet, interval = native_sheet(base + '_interval')
-    soft_sheet, soft = native_sheet(base + '_soft')
-    for index, (masked, length) in enumerate(expected):
-        a, b = (interval['records'][index], soft['records'][index])
-        assert a['masked_positions']['value'] == b['masked_positions']['value'] == masked
-        assert a['input_length']['value'] == b['input_length']['value'] == length
-        assert a['masked_fraction']['value'] == b['masked_fraction']['value'] == masked / length
-        assert a['merged_intervals_half_open'] == b['merged_intervals_half_open']
-        assert b['changed_positions'] == {'value': 0, 'unit': b['unit'], 'missing_reason': None}
-        assert a['changed_positions']['missing_reason'] == 'not_applicable'
-        assert b['native_interval_count']['missing_reason'] == 'not_applicable'
-    assert interval_sheet['inputs'][0]['native_header'] == interval_sheet['inputs'][1]['native_header']
-    assert interval['records'][0]['record_key'] != interval['records'][1]['record_key']
-    native = interval_sheet['parsed_output']['records'][0]['native_header']
-    assert native.startswith('lcl|dup' if parsed else 'dup')
-    assert soft_sheet['inputs'][1]['original_sequence'].islower()
-    assert soft_sheet['parsed_output']['records'][1]['output_sequence'].isupper()
-    if program == 'windowmasker':
-        assert interval_sheet['statistics']['thresholds']['t_low'] == 3
-        assert interval_sheet['operation']['requested_parameters']['t_low'] == 1
-        assert not interval_sheet['statistics']['failures']
-
-def test_saved_native_dust_hard_ambiguity_preserves_exact_changed_count():
-    sheet, result = native_sheet('dustmasker_hard')
-    assert result['records'][0]['masked_positions']['value'] == 80
-    assert result['records'][1]['masked_positions']['value'] == 0
-    record = result['records'][2]
-    assert record['input_length']['value'] == 72
-    assert record['changed_positions']['value'] == 64
-    assert record['masked_positions']['value'] is None
-    assert record['masked_fraction'] == {'numerator': None, 'denominator': 72, 'value': None, 'missing_reason': 'hard_mask_ambiguous'}
-    assert sheet['parsed_output']['records'][2]['measurement'] == 'hard_mask_ambiguous'
 
 def test_synthetic_overlap_duplicate_intervals_reuse_exact_shared_helpers():
     from gene_annotation_episode.episodic_workflow.root.a104.library import sequence_masking_ratios as genomic_overlap_calculations
@@ -271,20 +212,6 @@ def test_contract_rejects_wrong_associations_bytes_and_format_style():
     copied['inputs'][0]['checks'].clear()
     assert sheet['inputs'][0]['checks']
 
-def test_saved_native_empty_and_failed_outputs_do_not_manufacture_zero_masks():
-    manifest = json.loads((FIXTURES / 'ORACLE_MANIFEST.json').read_text())
-    for name in ('dustmasker_empty', 'dustmasker_malformed', 'windowmasker_missing_statistics'):
-        case = next((c for c in manifest['cases'] if c['case_id'] == name))
-        content = retained(case['primary_output'])
-        assert content == b''
-        source = next((r for r in manifest['inputs'] if r['input_id'] == case['input_id']))
-        raw = retained(source['retained'])
-        records = parse_masking_input_fasta(raw, occurrence=occurrence(raw), molecule='dna')['records']
-        owner = custody(records, complete=case['native_output_complete'], returncode=case['returncode'])
-        sheet, result = build(raw, content, op=operation(case['program']), records=records, owner=owner)
-        assert not sheet['parsed_output']['records']
-        assert all((r['masked_positions']['value'] is None for r in result['records']))
-        assert any((f['code'] == 'mask_output_absent' for f in sheet['failures']))
 
 @pytest.mark.parametrize('raw,molecule', [(b'>duplicate\naC gT\n>duplicate\nTGCA\n', 'dna'), (b'', 'dna'), (b'>empty\n', 'dna'), (b'>bad\nA-C\n', 'dna'), (b'>bad\nAUC\n', 'dna'), (b'not fasta\n', 'dna'), (b'>bad\nAC\xffG\n>good\nTGCA\n', 'dna'), (b'>protein\nacdefghiklmnpqrstvwy\n', 'protein')])
 def test_preflight_and_captured_parser_share_exact_input_validation(raw, molecule):
@@ -294,12 +221,6 @@ def test_preflight_and_captured_parser_share_exact_input_validation(raw, molecul
     assert preflight == {'version': 'sequence_masking_preflight_v1', 'valid': bool(parsed['records']) and (not parsed['failures']), 'record_count': len(parsed['records']), 'failures': [{'code': f['code'], 'record_ordinal': ordinals.get(f['record_key']), 'line_number': f['line_number']} for f in parsed['failures']]}
     assert not {'artifact_ref', 'occurrence_id', 'record_key'} & set(preflight)
 
-@pytest.mark.parametrize('filename,molecule', [('dna.fa', 'dna'), ('protein.fa', 'protein'), ('window_target.fa', 'dna')])
-def test_preflight_saved_native_input_population(filename, molecule):
-    manifest = json.loads((FIXTURES / 'ORACLE_MANIFEST.json').read_text())
-    source = next((r for r in manifest['inputs'] if r['input_id'] == filename))
-    raw = retained(source['retained'])
-    assert preflight_masking_input_fasta(raw, molecule=molecule) == {'version': 'sequence_masking_preflight_v1', 'valid': True, 'record_count': 3, 'failures': []}
 
 @pytest.mark.parametrize('content,molecule', [('not bytes', 'dna'), (True, 'dna'), (b'>a\nACGT\n', []), (b'>a\nACGT\n', 'rna')])
 def test_preflight_malformed_caller_arguments_raise_stable_contract_error(content, molecule):

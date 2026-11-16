@@ -1,12 +1,10 @@
 """Reader-only protocol tests; synthetic EMDB operands, no HTTP or publication authority."""
-from copy import deepcopy
 from dataclasses import replace
 import hashlib
 import json
 import pytest
 from gene_annotation_episode.acquisition import SourceSnapshot
 from gene_annotation_episode import emdb_acquisition as emdb
-
 
 
 # These are engineering EMDB-shaped JSON operands, not a retained live reply or
@@ -91,28 +89,6 @@ def test_original_artifact_digest_and_external_dto_states_are_checked():
             ("raw_artifact_ref", result["raw_artifact_ref"] + "\n")):
         with pytest.raises(ValueError):
             emdb.validate_emdb_entry_result({**result, key: altered})
-
-
-@pytest.mark.parametrize('legacy', [1, 0.125, 90.0], ids=['integer', 'fraction', 'float'])
-def test_absent_timeout_metadata_matches_valid_legacy_reader_result(legacy):
-    capture = snapshot()
-    old_policy = {'automatic_redirects': False, 'timeout_seconds': legacy}
-    before = replace(capture, transport={**capture.transport, 'request_policy': old_policy})
-    current = replace(capture, transport={**capture.transport, 'request_policy': {'automatic_redirects': False}})
-    original = deepcopy((before, current))
-    assert project(current) == project(before)
-    assert (before, current) == original
-    assert 'timeout_seconds' not in current.transport['request_policy']
-    assert emdb.emdb_entry_receipt(project(current)) == emdb.emdb_entry_receipt(project(before))
-
-
-@pytest.mark.parametrize('bad', [None, True, False, 0, -1, '3', float('nan'), float('inf'), float('-inf'), 10**400],
-    ids=['null', 'true', 'false', 'zero', 'negative', 'string', 'nan', 'infinity', 'negative-infinity', 'overflow'])
-def test_present_invalid_legacy_timeout_is_not_absence(bad):
-    capture = snapshot()
-    capture.transport['request_policy']['timeout_seconds'] = bad
-    with pytest.raises(ValueError, match='transport_policy_conflict'):
-        project(capture)
 
 
 @pytest.mark.parametrize('policy', [None, {}, {'automatic_redirects': 0}, {'automatic_redirects': True}],

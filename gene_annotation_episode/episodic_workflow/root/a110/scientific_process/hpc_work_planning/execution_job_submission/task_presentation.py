@@ -1,4 +1,4 @@
-"""Original A110 Launch context and frame presentation"""
+"""A110 Launch context and frame presentation"""
 from __future__ import annotations
 from copy import deepcopy
 import json

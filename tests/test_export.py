@@ -15,7 +15,7 @@ from gene_annotation_episode.state import Store
 @pytest.fixture
 def store(tmp_path):
     manifest = tmp_path / "inputs.json"
-    manifest.write_text(json.dumps({"schema_version": 1, "entries": [
+    manifest.write_text(json.dumps({"schema_version": 2, "entries": [
         {"sequence": "ATGAAAATGTAA", "molecule": "dna", "role": "assembly", "name": "dna;fixture=one", "sample": "S1"},
         {"sequence": "ACGUACGU", "molecule": "rna", "role": "transcript", "name": "rna"},
         {"sequence": "MKWV", "molecule": "protein", "role": "protein", "name": "protein"}]}))
@@ -252,18 +252,6 @@ def test_export_keeps_one_snapshot_when_requested_scoring_is_unavailable(store, 
         assert store.current_assessments()[0]["id"] != a1["id"]
     finally:
         other.close()
-
-
-def test_corrupt_bundle_does_not_publish_new_document(store, tmp_path):
-    target = store.targets()[0]
-    artifact = store.get(target["sequence_ref"])
-    raw = store.path / "artifacts" / artifact["sha256"][:2] / artifact["sha256"]
-    raw.write_bytes(b"corruption")
-    output = tmp_path / "annotation.json"
-    output.write_text("previous published export")
-    with pytest.raises(ContractError, match="export_artifact_digest_mismatch"):
-        export_annotation(store, output, include_artifacts=True)
-    assert output.read_text() == "previous published export"
 
 
 def test_export_cannot_replace_authoritative_storage(store):

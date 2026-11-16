@@ -13,7 +13,6 @@ _LIBRARY = Path(__file__).resolve().parent
 _CURRENT_PACKAGE_FILES = (_ROOT / "episodic_workflow/__init__.py",
     _LIBRARY.parent / "__init__.py", _LIBRARY / "__init__.py")
 _CURRENT = "gene_annotation_episode.episodic_workflow.root.library."
-_LEGACY = "gene_annotation_episode."
 _WORKERS = {
     "protein_conservation_native": "muscle_alignment_driver",
     "protein_conservation_result": "protein_conservation_result_worker",
@@ -26,22 +25,15 @@ _WORKERS = {
 OPERATIONS = frozenset(_WORKERS)
 
 
-def module(operation, *, current=True):
+def module(operation):
     if operation not in OPERATIONS:
         raise ContractError("molecular_tool_operation_unknown")
-    name = _WORKERS[operation]
-    if not current and operation == "macs2_peak_result":
-        name = "sequence_worker"
-    return (_CURRENT if current else _LEGACY) + name
+    return _CURRENT + _WORKERS[operation]
 
 
 def recorded_module(operation, selected):
-    # Unknown/malformed commands retain the original expected public command;
-    # the caller's original complete vector equality rejects them unchanged.
-    command = selected.get("command") if type(selected) is dict else None
-    if type(command) is list and len(command) > 2 and command[2] == module(operation):
-        return module(operation)
-    return module(operation, current=False)
+    # The caller owns the complete command equality.
+    return module(operation)
 
 
 def implementation_files(operation):

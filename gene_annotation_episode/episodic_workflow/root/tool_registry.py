@@ -1,4 +1,4 @@
-"""Original substantive ordinary-tool methods: tool_registry."""
+"""Ordinary-tool methods: tool_registry."""
 from __future__ import annotations
 from contextvars import ContextVar
 import json

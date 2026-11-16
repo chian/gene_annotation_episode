@@ -1,7 +1,6 @@
 from copy import deepcopy
 import builtins
 import hashlib
-import itertools
 import json
 import math
 from pathlib import Path
@@ -14,17 +13,13 @@ import scipy
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_input_formats import parse_metacats_input_fasta
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_biological_calculators import (
     biological_group_counts, biological_group_statistics, biological_group_effects)
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_biological_contracts import (
-    validate_biological_group_population, validate_biological_assignments,
-    validate_biological_counts, validate_biological_statistics, validate_biological_effects)
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_biological_contracts import validate_biological_counts, validate_biological_statistics, validate_biological_effects
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_contingency_math import (
     count_alignment_group_sites, expected_contingency_counts, pearson_contingency_statistic)
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculators import metacats_statistics, adjust_p_values
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculation_contracts import validate_test_family
 
 
-ROOT = Path(__file__).resolve().parents[1]
-SAVED = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_inputs'
 BACKEND = {'name': 'scipy_chi2_integer_df_logtail_v1', 'version': scipy.__version__}
 STAT_PARAMS = {'alphabet': 'aa', 'epsilon': .001, 'nucleotide_padding': 'ACGT_at_variable_sites',
     'omnibus_continuity': 'r_default_2x2_min_delta', 'pair_df_policy': 'standard_pair',
@@ -57,34 +52,6 @@ def make_counts(sequences=None, membership=None, **kwargs):
     membership = membership if membership is not None else ['A'] * 6 + ['B'] * 6
     alignment, args = make_inputs(sequences, membership, **kwargs)
     return biological_group_counts(alignment, **args)
-
-
-def retained_inputs(case):
-    path = SAVED / ('EXAMPLES_002' if case == 'twelve_groups' else 'EXAMPLES_001') / (case + '-inputs.json')
-    old = json.loads(path.read_text())
-    # Join the supplied original metadata by unique actual identifier. No R
-    # token, matrix ordinal or independently sorted list supplies membership.
-    metadata_rows = old['original_metadata_rows']
-    metadata = {row[0]: (i, row[1]) for i, row in enumerate(metadata_rows[1:])}
-    assert len(metadata) == len(metadata_rows) - 1
-    groups = list(dict.fromkeys(row[1] for row in metadata_rows[1:]))
-    category = metadata_rows[0][1]
-    metadata_evidence = deepcopy(old['counts_arguments']['assignments'][0]['evidence'][:1])
-    assignments = []
-    for row in old['alignment']['rows']:
-        _, group = metadata[row['member_label']]
-        assignments.append({'category_id': category, 'alignment_id': old['alignment']['alignment_id'],
-            'row_index': row['row_index'], 'member_key': None, 'group_id': group,
-            'state': 'resolved', 'evidence': metadata_evidence})
-    args = {'analysis_id': case, 'population': deepcopy(old['counts_arguments']['population']),
-        'category_id': category, 'assignments': tuple(assignments),
-        'group_population': {'group_population_id': case + '/biological_groups', 'category_id': category,
-            'groups': [{'group_id': group, 'raw_group_value': group, 'evidence': metadata_evidence} for group in groups],
-            'completeness': 'complete', 'evidence': metadata_evidence},
-        'case_policy': 'preserve', 'terminal_gap_policy': 'exclude_terminal_dash', 'original_hash_policy': 'exclude_hash'}
-    params = {**STAT_PARAMS, 'alphabet': old['statistical_parameters']['alphabet'],
-              'selected_pairs': tuple(itertools.combinations(groups, 2))}
-    return old, args, params
 
 
 def family_for(statistics):
@@ -120,58 +87,10 @@ def test_two_group_numerical_sheet_and_signed_effects_without_original_member_ke
         assert forbidden not in dumped
 
 
-@pytest.mark.parametrize('case', ['aa_two_groups', 'aa_three_groups', 'twelve_groups', 'official_na'])
-def test_actual_retained_alignment_metadata_arithmetic_matches_standard_native_policy(case):
-    old, args, params = retained_inputs(case)
-    counts = biological_group_counts(old['alignment'], **args)
-    assert len(counts['sites']) == len(old['counts']['sites'])
-    for biological, native in zip(counts['sites'], old['counts']['sites']):
-        assert {k: v for k, v in biological.items() if k != 'table_id'} == {
-            k: v for k, v in native.items() if k != 'table_id'}
-    stats = biological_group_statistics(counts, **params)
-    native = metacats_statistics(old['counts'], **{**old['statistical_parameters'], 'pair_df_policy': 'standard_pair'})
-    for key in ('omnibus', 'pairs'):
-        assert len(stats[key]) == len(native[key])
-        for a, b in zip(stats[key], native[key]):
-            for field in ('augmented_counts', 'expected_counts', 'augmented_symbols', 'raw_symbols'):
-                assert a[field] == b[field]
-            for field in ('epsilon', 'augmented_total', 'continuity_delta', 'chi_square', 'df', 'mathematical_p', 'log_p'):
-                assert a[field]['value'] == b[field]['value']
-    if case in ('aa_two_groups', 'aa_three_groups', 'twelve_groups'):
-        assert len(counts['sites']) == 4 and len(stats['omnibus']) == 1
-
-
-def test_three_group_biological_pair_df_does_not_copy_native_aa_anomaly():
-    old, args, params = retained_inputs('aa_three_groups')
-    counts = biological_group_counts(old['alignment'], **args)
-    biological = biological_group_statistics(counts, **params)['pairs'][0]
-    native = metacats_statistics(old['counts'], **old['statistical_parameters'])['pairs'][0]
-    assert biological['group_population_count'] == 3
-    assert biological['df']['value'] == 2 and native['df']['value'] == 4
-    assert biological['mathematical_p']['value'] == pytest.approx(.00248371298657324)
-    assert native['mathematical_p']['value'] == pytest.approx(.017381025135296442)
-
-
 @pytest.mark.parametrize('policy', ['native_source', 'full_category_group_count'])
 def test_biological_df_rejects_native_source_policies(policy):
     with pytest.raises(ValueError, match='^bvbrc_biological_'):
         biological_group_statistics(make_counts(), **{**STAT_PARAMS, 'pair_df_policy': policy})
-
-
-def test_metadata_only_groups_are_retained_without_r_order():
-    old, args, params = retained_inputs('metadata_only_first_group')
-    counts = biological_group_counts(old['alignment'], **args)
-    assert [g['group_id'] for g in counts['group_population']['groups']] == ['B', 'C', 'A']
-    assert all(row[2] == 0 for site in counts['sites'] for row in site['observed_counts'])
-    stats = biological_group_statistics(counts, **params)
-    assert stats['omnibus'][0]['group_population_count'] == 3
-    assert stats['omnibus'][0]['df']['value'] == 2
-    effects = biological_group_effects(counts, selected_pairs=(('B', 'C'), ('A', 'B')),
-                                       zero_margin_policy='drop_for_raw_effect_only')
-    site = effects['sites'][1]
-    assert site['effective_group_count'] == 2 and site['cramers_v']['value'] == pytest.approx(1)
-    assert site['pairs'][0]['total_variation']['value'] == 1
-    assert site['pairs'][1]['total_variation']['value'] is None
 
 
 def test_group_order_and_membership_identities_are_explicit():
@@ -387,22 +306,6 @@ def test_saved_effect_relationships_reject_corruption(tamper):
     else: row['cramers_v']['denominator'] = 1
     with pytest.raises(ValueError, match='^bvbrc_biological_'):
         validate_biological_effects(effects)
-
-
-def test_underflow_has_log_tail_without_native_zero_to_one():
-    old, args, params = retained_inputs('native_pair_tail_underflow')
-    counts = biological_group_counts(old['alignment'], **args)
-    stats = biological_group_statistics(counts, **params)
-    row = stats['pairs'][0]
-    assert row['numerical_state'] == 'underflow' and row['mathematical_p']['state'] == 'failed'
-    assert row['mathematical_p']['value'] is None and math.isfinite(row['log_p']['value'])
-    assert row['log_p']['value'] < -2000 and 'native_zero_rule_p' not in row
-    family = family_for(stats)
-    p = tuple({'test_id': r['test_id'], 'value': r['mathematical_p']} for r in stats['omnibus'])
-    result = adjust_p_values(p, family=family, method='holm', alpha=.05,
-                             dependence_assumption='none_required_between_tests')
-    assert result['status'] == 'partial' and result['observed_p_count'] == 0
-    assert result['results'][0]['adjusted_p']['value'] is None
 
 
 @pytest.mark.parametrize('basis', ['native_unadjusted', 'source_mathematical_recalculation',

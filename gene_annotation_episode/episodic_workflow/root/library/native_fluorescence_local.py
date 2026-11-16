@@ -15,8 +15,8 @@ def _root(assignment, owner):
         'run': owner['run_id'], 'episode': owner['episode_id']}) / digest(owner['operation_key'])
 
 
-def _allocation(assignment, policy, *, fresh=False):
-    validate_fluorescence_policy(policy, fresh=fresh)
+def _allocation(assignment, policy):
+    validate_fluorescence_policy(policy)
     require(assignment.get('resource_kind') == 'local'
         and type(assignment.get('resource_id')) is str, 'fluorescence_original_allocation_mismatch')
     constraints = assignment.get('constraints')
@@ -50,7 +50,7 @@ def prepare_local_fluorescence(state, operation_key, *, root, policy):
     """Reserve the exact pending practical.job.start; this function never runs it."""
     require(isinstance(policy, LocalJobPolicy) and type(operation_key) is str and bool(operation_key), 'fluorescence_selected_start_required')
     request = validate_fluorescence_requested_job(state.assignment['requested_job'])
-    _allocation(state.assignment, policy.to_dict(), fresh=True)
+    _allocation(state.assignment, policy.to_dict())
     root = directory(root)
     handle = native.NativeJobHandle(root / 'native.json')
     plan = validate_fluorescence_run_plan({'version': 'fluorescence_run_plan_v1', 'identity': {

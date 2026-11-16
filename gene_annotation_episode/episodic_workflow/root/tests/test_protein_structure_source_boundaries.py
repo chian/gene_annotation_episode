@@ -4,6 +4,7 @@ The protein bundle bytes are deliberately synthetic and not a scientific result.
 These checks exercise the actual receipt, selection and resolver methods; they
 do not assert a protein descriptor grant or production protein-host integration.
 """
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 from types import SimpleNamespace
 
@@ -135,7 +136,7 @@ def execution_host(tmp_path):
         workspace.mkdir()
         family = ExecutionEpisodes(None, store=store, directory=tmp_path / "run",
             run_id=journal.run_id, resources={"here": {"kind": "local",
-                "workspace": str(workspace), "policy": {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}}},
+                "workspace": str(workspace), "policy": {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}}},
             initial_information={}, tool_registry=ToolRegistry(store, run_directory=store.path / 'tool-run'), handoff_unit=3,
             acquired_record_unit=2, log_window_bytes=4, log_roles=["stdout", "stderr"])
         context = BindingContext(journal.run_id, "receiver", "scientific_process",

@@ -17,7 +17,7 @@ from .literature_kinetic_calculations import (
 )
 from .literature_kinetic_inputs import (
     VERSION as EXTRACTION_VERSION, SELECTION_VERSION, SUBJECT_FIELDS, CONTEXT_FIELDS,
-    COMPARISON_VALUES, QUALIFICATIONS, DEPENDENCY_RELEASES, SOURCE_KINDS,
+    COMPARISON_VALUES, QUALIFICATIONS, SOURCE_KINDS,
     COUNT_STATUSES, COUNT_REASONS, COUNT_NOTATIONS, COUNT_RELATIONS,
 )
 
@@ -293,12 +293,11 @@ def _validate_saved_kinetic(selection, extraction, calculation):
     _enum(selection["source_kind"], SOURCE_KINDS, "selection.source_kind")
     _keys(selection["comparison"], COMPARISON_VALUES, "selection.comparison")
     _keys(extraction, ("version", "source_ref", "source_kind", "operands", "comparison",
-        "calculation_inputs", "input_unavailable_reasons", "source_refs", "implementation_dependencies"), "extraction")
-    if extraction["version"] not in DEPENDENCY_RELEASES:
+        "calculation_inputs", "input_unavailable_reasons", "source_refs"), "extraction")
+    if extraction["version"] != EXTRACTION_VERSION:
         _fail("extraction.version")
     for k in ("source_ref", "source_kind"):
         _equal(selection[k], extraction[k], k)
-    _equal(extraction["implementation_dependencies"], DEPENDENCY_RELEASES[extraction["version"]], "dependencies")
     _keys(extraction["comparison"], COMPARISON_VALUES, "comparison")
     inputs = extraction["calculation_inputs"]
     _keys(inputs, ("version", "numerator", "denominator", *COMPARISON_VALUES), "inputs")

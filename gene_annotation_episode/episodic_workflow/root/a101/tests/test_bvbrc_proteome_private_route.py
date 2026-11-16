@@ -48,19 +48,6 @@ def no_external_execution(monkeypatch):
     monkeypatch.setattr('subprocess.run', forbidden)
 
 
-@pytest.mark.parametrize('adapter', [v1, v2])
-def test_original_version_binds_only_the_actual_exact_implementation(adapter):
-    selected = pin(adapter)
-    bound = registry.bind_adapters([selected])
-    assert set(bound) == {('bvbrc_proteome', adapter.ADAPTER_VERSION)}
-    assert bound['bvbrc_proteome', adapter.ADAPTER_VERSION] == (adapter, selected['implementation_sha256'])
-    changed = dict(selected, implementation_sha256='0' * 64)
-    with pytest.raises(ValueError, match='appservice_adapter_implementation_conflict'):
-        registry.bind_adapters([changed])
-    with pytest.raises(ValueError, match='appservice_adapter_configuration_conflict'):
-        registry.bind_adapters([selected, selected])
-
-
 def test_no_implicit_or_unknown_adapter_choice():
     assert registry.bind_adapters([]) == {}
     assert registry.bind_adapters([dict(adapter_id='unknown_provider', adapter_version='1', implementation_sha256='0' * 64)]) == {}

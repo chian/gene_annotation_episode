@@ -50,10 +50,10 @@ def describe_chromatin_result(target, *, selector):
     request = job["native_chromatin_interactions"]["request"]
     selected = validate_chromatin_result_selector(selector, request=request)
     saved = selected["mode"] == "saved_sheet_recalculation"
-    host = "gene_annotation_episode.native_chromatin_interaction_results.NativeChromatinInteractionResults.execute"
+    host = "gene_annotation_episode.episodic_workflow.root.native_chromatin_interaction_results.NativeChromatinInteractionResults.execute"
     collect = {
         "operation": "execution.results.collect", "implementation": host,
-        "preparation": "gene_annotation_episode.native_chromatin_interaction_preparation.prepare_chromatin_result_worker",
+        "preparation": "gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_preparation.prepare_chromatin_result_worker",
         "result_worker": "gene_annotation_episode.chromatin_interaction_result_worker.run_chromatin_result_worker",
         "calculator": "gene_annotation_episode.chromatin_interaction_calculations.calculate_chromatin_components",
         "projection": "gene_annotation_episode.chromatin_interaction_result_views.project_chromatin_result",
@@ -65,15 +65,15 @@ def describe_chromatin_result(target, *, selector):
     }
     if saved:
         collect.update(
-            saved_input_validation="gene_annotation_episode.chromatin_interaction_returns.ChromatinInteractionReturns.authenticate_received_saved_bundle",
-            worker_plan="gene_annotation_episode.native_chromatin_interaction_preparation.build_saved_chromatin_worker_plan",
+            saved_input_validation="gene_annotation_episode.episodic_workflow.root.chromatin_interaction_returns.ChromatinInteractionReturns.authenticate_received_saved_bundle",
+            worker_plan="gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_preparation.build_saved_chromatin_worker_plan",
             table_parser="gene_annotation_episode.chromatin_interaction_tables.read_chromatin_sheet_tables",
             native_input_acquisition=False,
         )
     else:
         collect.update(
-            capture="gene_annotation_episode.native_chromatin_interaction_capture.capture_chromatin_native_files",
-            worker_plan="gene_annotation_episode.native_chromatin_interaction_preparation.build_native_chromatin_worker_plan",
+            capture="gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_capture.capture_chromatin_native_files",
+            worker_plan="gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_preparation.build_native_chromatin_worker_plan",
             table_parser="gene_annotation_episode.chromatin_interaction_tables.open_chromatin_contact_tables",
             sheet_population="gene_annotation_episode.chromatin_interaction_inputs.build_chromatin_sheet",
             native_input_acquisition=False,

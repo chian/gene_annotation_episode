@@ -1,7 +1,4 @@
-"""A107 original addgene received fields; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 addgene received fields."""
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.root.a107.library.addgene_sequence_facts import FACT_SOURCE, ADDGENE_SEQUENCE_FACTS_SCHEMA
 from gene_annotation_episode.episodic_workflow.root.a107.communication import ReportBoundaryError, plain

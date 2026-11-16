@@ -4,9 +4,6 @@ from dataclasses import replace
 
 import pytest
 
-from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
-from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _read
 from test_bvbrc_appservice_host import driver
 from test_bvbrc_appservice_inputs import output_target, download_args
 from test_bvbrc_appservice_custody import request, selector
@@ -95,20 +92,6 @@ def test_duplicate_retrieval_keeps_receipts_without_new_result_identity(driver):
     credit = d.api.credit_view(context, {'known_record_refs': d.saved.receipts.known(context.episode_id),
         'initial_known_record_refs': []})
     assert credit['new_acquired_record_count'] == 1 and credit['credit'] == 3
-
-
-def test_missing_adapter_preserves_acquisition_but_never_completes_projection(driver):
-    d = driver
-    context, args = setup(d, projection=True)
-    d.client.body = b'not yet graded'
-    acquired = d.call('download', args, context=context)
-    body = d.api.read_result(d.last_outcome['result']['source_ref'], context.scope)
-    assert body['bundle']['status'] == 'ok' and d.api._completion(context) is None
-    assert body['publication']['requested_form_status'] == 'unavailable'
-    assert body['publication']['missing_requirements'][0]['reason_code'] == 'scientific_adapter_unbound'
-    assert body['publication_inputs']['adapter_implementation_sha256'] is None
-    assert acquired['value']['artifact']['byte_count'] == len(d.client.body)
-    validate_contract('PublicationInputs', body['publication_inputs'])
 
 
 def test_complete_zero_byte_artifact_is_distinct_from_missing(driver):

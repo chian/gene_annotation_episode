@@ -1,6 +1,4 @@
-"""A107 original native flux balance capture; substantive retained received-result responsibility.
-Original authority, invalid outcomes and historical source identities remain unchanged.
-"""
+"""A107 native flux balance capture."""
 
 
 from copy import deepcopy

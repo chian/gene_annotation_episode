@@ -209,18 +209,6 @@ def _adapter_results(selection, outcome, records):
     return [] if facts is None else [facts]
 
 
-def _grading_report_values(form):
-    """Retain the supplied A110 form's saved numerical and qualification fields."""
-    if not isinstance(form, Mapping):
-        return form
-    from .component_axis_reports import legacy_report_schema, report_schema
-    legacy = legacy_report_schema('A110')['properties']
-    if frozenset(form) == frozenset(legacy):
-        current = report_schema('A110')['properties']
-        return {name: value for name, value in form.items() if name in current}
-    return form
-
-
 def requested_action_history(workflow, source, *, before):
     """Retain outcomes this actor explicitly read through its own history tool.
 
@@ -356,7 +344,7 @@ def completed_action_reports(workflow, source, state, *, before, received_axis_r
             # them is labeled separately from this row's original parent gain.
             facts['admitted_child_values'] = {
                 'value_source': 'Returned child; separate from this original parent action’s earned credit',
-                'values': deepcopy(_grading_report_values(outcome['admitted_child_return']))}
+                'values': deepcopy(outcome['admitted_child_return'])}
         for key in ('feedback', 'report_delivery_failure', 'child_completion',
                 'error_code', 'errors', 'conflicts', 'notices'):
             if outcome.get(key) is not None:

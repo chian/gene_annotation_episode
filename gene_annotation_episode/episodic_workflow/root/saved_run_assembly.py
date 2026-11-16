@@ -53,19 +53,12 @@ def assemble_workflow(store, tools, provider, directory, run_id, settings, *,
                         if episode_record_receipts else None)
     if settings.get('episode_record_receipts') != expected_receipts:
         raise WorkflowError('resumption_requires_original_episode_record_receipts')
-    wait_inputs_version = 'wait_inputs_binding_v1'
-    if 'wait_inputs' in settings:
-        recorded_wait_inputs = settings['wait_inputs']
-        if recorded_wait_inputs not in ({'version': 'wait_inputs_binding_v1'},
-                                        {'version': 'wait_inputs_binding_v2'}):
-            raise WorkflowError('unsupported_wait_inputs_binding')
-        wait_inputs_version = recorded_wait_inputs['version']
-    completed_action_inputs_version = None
-    if 'completed_action_inputs' in settings:
-        recorded_completed_inputs = settings['completed_action_inputs']
-        if recorded_completed_inputs != {'version': 'completed_action_inputs_binding_v1'}:
-            raise WorkflowError('unsupported_completed_action_inputs_binding')
-        completed_action_inputs_version = recorded_completed_inputs['version']
+    if settings.get('wait_inputs') != {'version': 'wait_inputs_binding_v2'}:
+        raise WorkflowError('unsupported_wait_inputs_binding')
+    wait_inputs_version = settings['wait_inputs']['version']
+    if settings.get('completed_action_inputs') != {'version': 'completed_action_inputs_binding_v1'}:
+        raise WorkflowError('unsupported_completed_action_inputs_binding')
+    completed_action_inputs_version = settings['completed_action_inputs']['version']
     episode_branch_lifecycle = None
     if 'episode_branch_lifecycle' in settings:
         if settings['episode_branch_lifecycle'] != {'version': EPISODE_BRANCH_LIFECYCLE}:
@@ -93,8 +86,7 @@ def assemble_workflow(store, tools, provider, directory, run_id, settings, *,
                         episode_branch_lifecycle=episode_branch_lifecycle,
                         episode_record_receipts=episode_record_receipts,
                         native_job_events=native_job_events,
-                        progress_receipt_order=settings.get('episode_progress_receipts', {}).get(
-                            'version', 'legacy_grouped_v1'),
+                        progress_receipt_order=settings.get('episode_progress_receipts', {}).get('version'),
                         wait_inputs_version=wait_inputs_version,
                         completed_action_inputs_version=completed_action_inputs_version,
                         project_annotation_score=project_annotation_score,

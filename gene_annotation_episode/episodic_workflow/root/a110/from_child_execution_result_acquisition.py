@@ -1,4 +1,4 @@
-"""Original complete direct-parent results receipt implementation"""
+"""Complete direct-parent results receipt implementation"""
 from __future__ import annotations
 
 def receive_report(workflow, source, admitted, schema, index, *, redelivery=False):

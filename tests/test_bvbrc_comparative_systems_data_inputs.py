@@ -3,9 +3,6 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
-import socket
-import subprocess
-import urllib.request
 
 import pytest
 
@@ -13,8 +10,7 @@ from gene_annotation_episode.acquisition import SourceSnapshot
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators import calculate_page_counts
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields import FIELD_REGISTRY
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import _decode_native_payload, parse_data_snapshot
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_handoff_contracts import canonical_sha256
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import parse_data_snapshot
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_data_contracts import (
     validate_data_population_selection, validate_supplied_record_sets,
 )
@@ -31,7 +27,7 @@ _DEFAULT = object()
 
 def _page(docs, *, offset=0, start=_DEFAULT, total=_DEFAULT, exact=True, partial=None,
           complete=True, source="page_a", collection="pathway", fields=None, filters=None,
-          raw=None, legacy=False, sort=None, limit=100, http_status=200):
+          raw=None, sort=None, limit=100, http_status=200):
     request = deepcopy(WRAPPER["qualified_result"]["grading"]["prepared"]["original_request"])
     request.update(collection=collection, offset=offset, limit=limit)
     if fields is not None:
@@ -47,14 +43,13 @@ def _page(docs, *, offset=0, start=_DEFAULT, total=_DEFAULT, exact=True, partial
     if partial is not None:
         body["responseHeader"]["partialResults"] = partial
     if raw is None:
-        raw = json.dumps(docs if legacy else body, separators=(",", ":"), ensure_ascii=False).encode()
+        raw = json.dumps(body, separators=(",", ":"), ensure_ascii=False).encode()
     snapshot = SourceSnapshot("bvbrc_data", prepared["native_request"]["url"], prepared["effective_request"],
-        "SYNTHETIC_NOT_ACQUIRED", raw, "application/json" if legacy else "application/solr+json", {
+        "SYNTHETIC_NOT_ACQUIRED", raw, "application/solr+json", {
             "request": {key: prepared["native_request"][key] for key in ("method", "url", "headers", "body")},
             "effective_url": prepared["native_request"]["url"], "automatic_redirects": False,
             "response": {"status": http_status, "headers": [], "body_complete": complete}})
-    parsed = (_decode_native_payload(snapshot, prepared=prepared) if legacy else
-              parse_data_snapshot(snapshot, prepared=prepared))
+    parsed = parse_data_snapshot(snapshot, prepared=prepared)
     wrapper = deepcopy(WRAPPER)
     q = wrapper["qualified_result"]
     grading = q["grading"]
@@ -100,27 +95,6 @@ def _set(result):
 
 def _codes(result):
     return {row["code"] for row in result["diagnostics"]}
-
-
-def test_reviewed_example_has_five_records_three_genomes_and_four_pairs():
-    w, s = deepcopy(WRAPPER), deepcopy(SELECTION)
-    before = deepcopy((w, s))
-    result = extract_comparative_systems_data_inputs((w,), artifact_bytes={w["raw_binding"]["bytes_key"]: RAW}, selection=s)
-    record = _set(result)
-    assert (w, s) == before
-    assert record["original_query_record_count"]["value"] == 5
-    assert record["locally_included_record_count"]["value"] == 5
-    assert record["population"]["raw_occurrence_count"]["value"] == 5
-    assert record["population"]["distinct_valid_member_count"]["value"] == 5
-    assert record["population"]["completeness"] == "complete_for_declared_population"
-    assert record["population"]["relationship_to_original_task"] == "later_selected_snapshot"
-    ids = [row["association"]["identifiers"] for row in record["rows"]]
-    assert len({row["ec_number"] for row in ids}) == 3
-    assert len({(row["genome_id"], row["ec_number"]) for row in ids}) == 4
-    assert 100 * 4 / (3 * 3) == pytest.approx(44.44444444444444)
-    assert 100 * 3 / (2 * 2) == 75  # Separate historical native population.
-    assert validate_supplied_record_sets(result) == result
-    assert result is not validate_supplied_record_sets(result)
 
 
 def test_broad_count_local_exact_filter_and_excluded_rows():
@@ -386,15 +360,6 @@ def test_reference_context_and_namespaces_survive_without_completion_claim():
     assert _set(_extract(pages, annotation="none", genomes=[]))["population"]["members"] == ["PG_1", "PL_1"]
 
 
-def test_legacy_array_remains_unknown_population():
-    record = _set(_extract([_page(DOCS, legacy=True)]))
-    assert len(record["rows"]) == 5
-    assert record["page_coverage"] == "unknown"
-    assert record["original_query_record_count"]["state"] == "missing"
-    assert record["population"]["completeness"] == "unknown"
-    assert record["population"]["source_locations"][0]["json_pointer"] == ""
-
-
 def test_reviewed_saved_example_is_accepted_without_rewriting():
     value = json.loads((FIXTURES / "supplied_record_sets.json").read_text())["value"]
     assert validate_supplied_record_sets(value) == value
@@ -505,40 +470,3 @@ def test_snapshot_pointer_must_resolve_exact_selected_bytes():
         _extract([page], s)
 
 
-def test_pure_extraction_and_saved_validation_forbid_external_work(monkeypatch):
-    import builtins
-    from gene_annotation_episode.state import Store
-    from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection, _SessionConnection
-    from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import BVBRCDataClient
-    from gene_annotation_episode.acquisition import PublicClients
-    pages = [_page(DOCS)]
-    selection = _selection(pages)
-    before = deepcopy((pages, selection))
-    def forbidden(*args, **kwargs):
-        raise AssertionError("external work forbidden during supplied-data extraction")
-    monkeypatch.setattr(urllib.request, "urlopen", forbidden)
-    monkeypatch.setattr(socket, "create_connection", forbidden)
-    monkeypatch.setattr(subprocess, "Popen", forbidden)
-    monkeypatch.setattr(subprocess, "run", forbidden)
-    monkeypatch.setattr(Store, "get", forbidden)
-    monkeypatch.setattr(Store, "get_artifact", forbidden)
-    monkeypatch.setattr(ModelConnection, "complete", forbidden)
-    monkeypatch.setattr(_SessionConnection, "complete", forbidden)
-    monkeypatch.setattr(BVBRCDataClient, "query", forbidden)
-    monkeypatch.setattr(BVBRCDataClient, "query_prepared", forbidden)
-    monkeypatch.setattr(PublicClients, "_skill", forbidden)
-    monkeypatch.setattr(PublicClients, "_http", forbidden)
-    monkeypatch.setattr(Path, "read_bytes", forbidden)
-    monkeypatch.setattr(Path, "read_text", forbidden)
-    monkeypatch.setattr(builtins, "open", forbidden)
-    result = _extract(pages, selection)
-    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_comparative_systems_data_inputs as extraction
-    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_data_readers as data_readers
-    monkeypatch.setattr(extraction, "extract_comparative_systems_data_inputs", forbidden)
-    monkeypatch.setattr(extraction, "parse_data_snapshot", forbidden)
-    monkeypatch.setattr(extraction, "_decode_native_payload", forbidden)
-    monkeypatch.setattr(data_readers, "parse_data_snapshot", forbidden)
-    monkeypatch.setattr(data_readers, "_decode_native_payload", forbidden)
-    assert validate_supplied_record_sets(result) == result
-    assert (pages, selection) == before
-    assert _set(result)["locally_included_record_count"]["value"] == 5

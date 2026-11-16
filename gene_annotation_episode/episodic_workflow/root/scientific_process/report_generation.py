@@ -10,13 +10,13 @@ from collections.abc import Mapping
 from ..method_loop.durable import canonical
 from ..method_loop.episode import EpisodeCompletion
 from ..scientific_process_records import (
-    OPTION_REF_VERSION, SELECTION_VERSION, LEGACY_SELECTION_VERSION, SLOTS,
+    OPTION_REF_VERSION, SELECTION_VERSION, SLOTS,
     canonical_slot, _exact, _plain, scientific_invocation_ref,
     validate_invocation_ref, validate_option_ref, validate_revision_origin,
     selection_fields,
 )
 from ..scientific_process_reports import (
-    VERSION, LEGACY_RETURN_VERSION, RETURN_VERSION, SELECTION_REPORT_VERSION,
+    VERSION, RETURN_VERSION, SELECTION_REPORT_VERSION,
     SOURCE, _CREDIT_KINDS, _object, _reference, _yield_schema,
     _validate_report_selection, validate_process_result, credit_binding_ref,
 )
@@ -32,7 +32,7 @@ def _selection_schema(library, tool_library):
         raise ValueError("scientific_process_result_library_invalid")
     fields = {
         "version": {"type": "string", "const": SELECTION_REPORT_VERSION},
-        "source_version": {"type": "string", "enum": [LEGACY_SELECTION_VERSION, SELECTION_VERSION]},
+        "source_version": {"type": "string", "const": SELECTION_VERSION},
     }
     for slot, refs in by_slot.items():
         fields[slot] = _object({
@@ -86,15 +86,10 @@ def project_process_result(value, *, library, tool_library):
     value = validate_process_result(value, library=library, tool_library=tool_library)
     if value["version"] == RETURN_VERSION:
         return value
-    if value['version'] == LEGACY_RETURN_VERSION:
-        return {**value, 'version': RETURN_VERSION,
-            'proposed_annotation_ref': value.get('proposed_annotation_ref')}
     selection = value["selection"]
     axis_field, thought_field, tools_field = selection_fields(selection)
-    choices = ([{"name": name, "resources": None} for name in selection[tools_field]]
-        if selection["version"] == LEGACY_SELECTION_VERSION else
-        [{"name": choice["name"], "resources": choice["resources"]}
-         for choice in selection[tools_field]])
+    choices = [{"name": choice["name"], "resources": choice["resources"]}
+               for choice in selection[tools_field]]
     reported_selection = _validate_report_selection({
         "version": SELECTION_REPORT_VERSION, "source_version": selection["version"],
         "evidence_axis": selection[axis_field], "thought_pattern": selection[thought_field],

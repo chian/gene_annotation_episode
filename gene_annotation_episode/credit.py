@@ -1,8 +1,7 @@
-"""Numerical hypervolume arithmetic; the categorical annotation scorer is retired.
+"""Numerical hypervolume arithmetic.
 
 A numerical component sheet must supply actual values before annotation scoring
 can be bound. No category-to-number policy or default evidence vector exists.
-Historical run values remain in their receipts and are not reprojected here.
 """
 from __future__ import annotations
 
@@ -14,11 +13,6 @@ from .evidence_geometry import _number
 
 
 FORMULA_VERSION = "offset_normalized_product_hypervolume_v1"
-# Compatibility names for old imports, not a usable scoring configuration.
-AXES = ()
-PROJECTION_VERSION = "categorical_annotation_projection_retired_v1"
-LEGACY_INTEGRATION = "partition_product_sum_v1"
-STABLE_INTEGRATION = "equal_component_integer_mass_v1"
 
 
 class AnnotationScoringUnavailable(ValueError):
@@ -28,27 +22,6 @@ class AnnotationScoringUnavailable(ValueError):
 def unavailable_annotation_score():
     return {"status": "unavailable", "annotation_score": None,
             "reason": "numerical_evidence_component_scorer_not_bound"}
-
-
-def _retired():
-    raise AnnotationScoringUnavailable(
-        "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
-
-
-class CreditPolicy:
-    """Retired entry point retained only to give stale callers a precise error."""
-
-    def __init__(self, *args, **kwargs):
-        _retired()
-
-    @classmethod
-    def from_record(cls, value):
-        _retired()
-
-
-def project_credit(*args, **kwargs):
-    """Do not turn historical assessment labels into numerical evidence."""
-    _retired()
 
 
 @dataclass(frozen=True)

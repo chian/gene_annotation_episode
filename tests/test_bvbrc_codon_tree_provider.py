@@ -5,7 +5,6 @@ import builtins
 from copy import deepcopy
 from contextlib import contextmanager, ExitStack
 import hashlib
-import inspect
 import io
 import json
 import os
@@ -13,17 +12,15 @@ from pathlib import Path
 import socket
 import subprocess
 from unittest.mock import patch
-from urllib.parse import quote
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_inputs as provider
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_grader as grader
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_native as native
-from gene_annotation_episode import phylogeny_formats as formats
+from gene_annotation_episode.episodic_workflow.root.library import phylogeny_formats as formats
 from gene_annotation_episode.episodic_workflow.root.library import phylogeny_raxml_inputs as raxml
 from gene_annotation_episode import phylogeny_calculation_contracts as cells
-from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_common_inputs as common
 
 
 STAGING = Path(__file__).resolve().parents[1]
@@ -248,8 +245,6 @@ def native_fixture():
             "locus_bindings": [], "genome_request_sets": [request_set(populations["genomes"][0])], "family_matrices": [],
             "historical_frequencies": [], "model_associations": model_associations},
         "parameters": {"source_dialect": "retained_codon_trees", "membership_dialect": "pgfams_legacy", "family_stats_dialect": None}}
-
-
 
 
 def test_source_derived_tables_and_hand_numerical_components():

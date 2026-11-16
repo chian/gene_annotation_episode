@@ -1,6 +1,5 @@
 """Controlled shared Episode work and deterministic subset presentation tests."""
 import asyncio
-from copy import deepcopy
 from dataclasses import replace
 from functools import partial
 import json
@@ -160,37 +159,6 @@ def test_mixed_active_site_and_existing_native_rate_view_keep_both_scientific_fa
         store.close()
         rate_store.close()
 
-def test_disabled_binding_preserves_contracts_and_enabled_descriptor_hashes_dependencies(tmp_path, monkeypatch):
-    from pathlib import Path
-    store, context, args = setup(tmp_path)
-    try:
-        binding = binding_for(store, context)
-        disabled = binding_for(store, context, enabled=False)
-        default = LiteratureEpisode(disabled.services, rate_population=True)
-        assert disabled.catalog(context) == default.catalog(context)
-        assert disabled.assignment_schema('literature') == default.assignment_schema('literature')
-        assert 'requested_active_site_components' not in disabled.assignment_schema('literature')['properties']
-        assert 'literature_active_site_cells' not in disabled.fact_sources('literature')
-        assert 'active_site_population' not in disabled.as_record()['configuration']
-        original = binding.as_record()
-        rebound = LiteratureEpisode(binding.services, **original['configuration'])
-        assert rebound.as_record() == original
-        read_bytes = Path.read_bytes
-        dependencies = ('literature_active_site_inputs.py', 'literature_active_site_calculations.py', 'literature_active_site_storage.py', 'literature_active_site_render.py', 'literature_active_site_prompt.py', 'literature_product_partition_inputs.py', 'literature_rate_native_inputs.py', 'literature_partner_source_fields.py', 'literature_assay_inputs.py', 'literature_rate_domains.py')
-        for selected in dependencies:
-
-            def altered(path, selected=selected):
-                data = read_bytes(path)
-                return data + b'\n# virtual dependency hash contrast\n' if path.name == selected else data
-            monkeypatch.setattr(Path, 'read_bytes', altered)
-            assert binding.as_record()['implementation_sha256'] != original['implementation_sha256'], selected
-        monkeypatch.setattr(Path, 'read_bytes', read_bytes)
-        store.db.execute('PRAGMA query_only=ON')
-        assert rebound.as_record() == original
-        repo = rebound._active_site_repository()
-        assert not repo._installed(repo.operations_table)
-    finally:
-        store.close()
 
 def test_enabled_reference_parent_keeps_complete_active_site_task(tmp_path):
     store, context, args = setup(tmp_path)

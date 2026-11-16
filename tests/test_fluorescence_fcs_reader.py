@@ -1,8 +1,6 @@
 """Controlled caller/failure joins, not verification of native FCS decoding.
 
 The stand-in decoder deliberately supplies values independent of the stub bytes.
-Actual FlowIO writer output and retained upstream fixtures are tested separately
-in test_fluorescence_fcs_native.py under the bounded runner.
 """
 
 from copy import deepcopy

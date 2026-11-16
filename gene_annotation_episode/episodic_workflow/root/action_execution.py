@@ -306,10 +306,9 @@ class ActionExecution:
             if private_message_exchange is not None:
                 return private_message_exchange[1](self, source, child, index, schema, contract, result, request)
             delivery_ref = 'delivery_' + _digest({'run': self.run_id, 'parent': source.episode_id, 'index': index})[:24]
-            owned = self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE
             action = self.journal.row('runtime_actions', source.episode_id, index)
             frozen_index = None if action['result'] is None else json.loads(action['result']).get('delivery_resolution_index')
-            saved = self.store.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND ' + ('decision_index=?' if frozen_index is not None or not owned else 'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'), (self.run_id, source.episode_id, frozen_index if frozen_index is not None else delivery_ref if owned else index)).fetchone()
+            saved = self.store.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND ' + ('decision_index=?' if frozen_index is not None else 'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'), (self.run_id, source.episode_id, frozen_index if frozen_index is not None else delivery_ref)).fetchone()
             if saved is not None:
                 if saved['failure'] is not None:
                     raise ReportDeliveryError(Record(json.loads(saved['failure'])))
@@ -331,17 +330,15 @@ class ActionExecution:
             old = self.journal.row('runtime_actions', source.episode_id, index)
             if old['result'] is None:
                 facts = self.facts(child.source)
-                if self.receipts is not None or self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE:
-                    _, returned = admitted_report(result, request)
-                    changed = set(facts['changed_record_refs'])
-                    facts = {'committed_record_refs': returned, 'changed_record_refs': [ref for ref in returned if ref in changed]}
+                _, returned = admitted_report(result, request)
+                changed = set(facts['changed_record_refs'])
+                facts = {'committed_record_refs': returned, 'changed_record_refs': [ref for ref in returned if ref in changed]}
                 outcome = {'status': 'completed', 'record_refs': facts['committed_record_refs'], 'changed_record_refs': facts['changed_record_refs']}
                 original_delivery = self.store.db.execute('SELECT MAX(decision_index) FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND delivery_ref=?', (self.run_id, source.episode_id, 'delivery_' + _digest({'run': self.run_id, 'parent': source.episode_id, 'index': index})[:24])).fetchone()[0]
                 outcome['delivery_resolution_index'] = original_delivery
                 from .episode_source_failure import child_completion_status
                 outcome['child_completion'] = child_completion_status(self.store, self.run_id, child.source.episode_id, completion.as_record(), delivery='admitted')
-                if self.wait_inputs_version == 'wait_inputs_binding_v2' or self.completed_action_inputs_version is not None:
-                    outcome['pending_work_after_action'] = self.pending_work(source)
+                outcome['pending_work_after_action'] = self.pending_work(source)
                 self.journal.save('runtime_actions', {'episode_id': source.episode_id, 'decision_index': index, 'action': _json(selection), 'result': _json(outcome), 'credit': None})
                 old = self.journal.row('runtime_actions', source.episode_id, index)
             value = old['credit']
@@ -353,25 +350,12 @@ class ActionExecution:
             return self.controller_value(source, index, value)
 
         async def report(result, completion, request):
-            if self.receipts is not None or self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE:
-                try:
-                    return admitted_report(result, request)[0]
-                except ReportDeliveryError as error:
-                    source.feedback = error.feedback.as_record()
-                    await self.resolve_pending_deliveries(source, source._selection_view, only_delivery_ref=source.feedback['delivery_ref'])
-                    return admitted_report(result, request)[0]
-            if private_message_exchange is not None and len(private_message_exchange) == 3:
-                return private_message_exchange[2](self, source, child, index, schema, contract, result, request)
-            delivery_ref = 'delivery_' + _digest({'run': self.run_id, 'parent': source.episode_id, 'index': index})[:24]
             try:
-                admitted = contract.admit(result.as_record()['form'], audit_identifiers=(child.source.episode_id, request.goal.goal_id)).as_record()
-            except ReportBoundaryError as error:
-                feedback = self.delivery_feedback(delivery_ref, error)
-                self.save_attempt(source.episode_id, index, delivery_ref, child.source.episode_id, contract, failure=feedback)
-                raise ReportDeliveryError(Record(feedback)) from error
-            self.save_attempt(source.episode_id, index, delivery_ref, child.source.episode_id, contract, form=admitted)
-            self.receive_form(source, admitted, schema, index)
-            return admitted
+                return admitted_report(result, request)[0]
+            except ReportDeliveryError as error:
+                source.feedback = error.feedback.as_record()
+                await self.resolve_pending_deliveries(source, source._selection_view, only_delivery_ref=source.feedback['delivery_ref'])
+                return admitted_report(result, request)[0]
         scheduled = 'delay_seconds' in selection
         if scheduled:
             self.journal.schedule_child(source.episode_id, index, selection, child.source.episode_id)
@@ -395,8 +379,6 @@ class ActionExecution:
             resolved_index = None if action['result'] is None else json.loads(action['result']).get('delivery_resolution_index')
             latest = self.store.db.execute('SELECT contract FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND ' + ('decision_index=?' if resolved_index is not None else 'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'), (self.run_id, source.episode_id, resolved_index if resolved_index is not None else 'delivery_' + _digest({'run': self.run_id, 'parent': source.episode_id, 'index': index})[:24])).fetchone()
             return contract if latest is None else self.saved_delivery_contract(child.source.episode_id, json.loads(latest['contract']))
-        owned = self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE
-
         def failed_child(error):
             outcome = {'status': 'failed', 'record_refs': [], 'changed_record_refs': [], 'feedback': {'category': 'child_execution', 'exception_type': type(error).__name__}}
             from .communication import ReportBoundaryError
@@ -408,4 +390,4 @@ class ActionExecution:
             source.last_outcome, source.last_outcome_index = (outcome, index)
             source.feedback = outcome['feedback']
             return self.controller_value(source, index, value)
-        return TimedChildUnit(child, resolved_credit if owned else credit, report, self.journal, source.episode_id, index, scheduled=scheduled, delivery_contract=delivery_contract if owned else None, receive_failure=failed_child, allow_suspension=allow_suspension)
+        return TimedChildUnit(child, resolved_credit, report, self.journal, source.episode_id, index, scheduled=scheduled, delivery_contract=delivery_contract, receive_failure=failed_child, allow_suspension=allow_suspension)

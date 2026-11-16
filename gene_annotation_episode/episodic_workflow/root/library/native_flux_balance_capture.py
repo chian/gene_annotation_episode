@@ -114,10 +114,10 @@ def capture_flux_balance_native_files(store, *, original_plan: dict,
         "driver_started": driver_started, "failures": failures}, original_plan=plan)
 
 
-def validate_terminal_flux_balance_files(capture, *, original_plan, command_proof, historical=False):
+def validate_terminal_flux_balance_files(capture, *, original_plan, command_proof):
     """Match native data and controls to their original executed snapshots."""
     from gene_annotation_episode.episodic_workflow.root.terminal_scientific_evidence import terminal_file_identity
-    plan = _original_plan(original_plan, historical=historical)
+    plan = _original_plan(original_plan)
     _require(command_proof['original_plan'] == plan, 'terminal_plan_mismatch')
     snapshots = {row['path']: row for row in command_proof['output_snapshots']}
     selected = [(row['relative_path'], row['format'], row['retained']) for row in capture['files']]

@@ -9,8 +9,7 @@ from copy import deepcopy
 import json
 
 
-_EXPRESSION_PROFILES = frozenset({
-    'a107_expression_components_v1', 'a107_expression_components_v2'})
+_EXPRESSION_PROFILES = frozenset({'a107_expression_components_v2'})
 _DETECTION_PROFILE = 'a107_genomic_detection_v1'
 _NATIVE_PROFILES = _EXPRESSION_PROFILES | {_DETECTION_PROFILE}
 _QUALIFICATION_VERSION = 'a107_received_qualification_v1'

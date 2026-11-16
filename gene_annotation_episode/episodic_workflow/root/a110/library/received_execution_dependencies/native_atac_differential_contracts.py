@@ -1,4 +1,5 @@
 from __future__ import annotations
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 from decimal import Decimal, InvalidOperation
 import hashlib
@@ -8,7 +9,7 @@ from pathlib import PurePosixPath
 import re
 from jsonschema import Draft202012Validator
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.atac_differential_contracts import validate_atac_condition, validate_atac_reference, validate_atac_sample
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 RUN_PLAN_FILENAME = 'atac-plan.json'
 ATTEMPT_DIRECTORY_NAME = 'atac-differential-attempt'
 OWNER_FILENAME = '.native-atac-owner.json'

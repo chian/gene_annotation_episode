@@ -1,4 +1,4 @@
-"""Original substantive ordinary-tool methods: tool_result_grading."""
+"""Ordinary-tool methods: tool_result_grading."""
 from __future__ import annotations
 from gene_annotation_episode import materials_packing as packing
 from .tool_values import number

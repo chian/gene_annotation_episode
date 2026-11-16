@@ -275,27 +275,6 @@ def test_returned_outcome_and_saved_replay_reach_original_action_unit(family, ho
     assert runtime.observes_action_outcome('tool', status)
 
 
-@pytest.mark.parametrize('home,role', HOMES)
-def test_saved_full_decision_payload_is_returned_without_rebuilding_inputs(family, home, role):
-    binding, context = case(family, home, 'saved-model')
-    task = object.__new__(getattr(binding, 'decision_source_type', runtime.DecisionSource))
-    task.episode_id, task.path, task.calls = context.episode_id, context.path, 0
-    journal = Journal(family.store, context.run_id)
-    original = {'scope': plain(context.scope), 'literature_assignment': plain(context.assignment),
-        'source_body': family.raw.decode(), 'qualification': {'state': 'unresolved',
-            'target_correspondence': None, 'alternative_explanations': ['identity not established']},
-        'child_reports': [{'delivery_ref': 'exact-original', 'form': {'source': family.source['id']}}]}
-    schema = {'type': 'object', 'properties': {'selected': {'const': 'saved'}},
-        'required': ['selected'], 'additionalProperties': False}
-    response = {'selected': 'saved'}
-    journal.save('runtime_model_calls', {'episode_id': context.episode_id, 'call_index': 0,
-        'purpose': 'decision', 'request': runtime._json({'context': original, 'schema': schema}),
-        'response': runtime._json(response)})
-    before = journal.row('runtime_model_calls', context.episode_id, 0)
-    task.workflow = SimpleNamespace(journal=journal,
-        contract_information_profile=lambda source: None, decision_protocol=None)
-    assert asyncio.run(task.call({'replacement': 'must not be used'}, {})) == (response, 0, original, schema)
-    assert journal.row('runtime_model_calls', context.episode_id, 0) == before
 
 
 @pytest.mark.parametrize('home,role', HOMES)

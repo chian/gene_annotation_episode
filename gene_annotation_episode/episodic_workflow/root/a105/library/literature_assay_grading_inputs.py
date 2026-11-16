@@ -23,7 +23,7 @@ def source_schema(namespace):
     module, factory = SOURCE_SCHEMAS[namespace]
     return getattr(import_module('.' + module, 'gene_annotation_episode.episodic_workflow.root.a105.library'), factory)()
 
-def assay_grading_population_schema(*, legacy=False):
+def assay_grading_population_schema():
     schema = deepcopy(assay_grading_input_schema())
     props = schema['properties']
     del props['version']
@@ -43,8 +43,7 @@ def assay_grading_population_schema(*, legacy=False):
         refs['items'] = deepcopy(support)
         refs['description'] = 'Select the anchored reference records supporting this criterion. An unknown criterion with no supporting passage uses an empty list.'
     props['prediction_model']['anyOf'][0]['properties']['support_refs']['items'] = deepcopy(support)
-    if not legacy:
-        schema['required'].append('experiment_ref')
+    schema['required'].append('experiment_ref')
     return schema
 
 def _unit(raw):

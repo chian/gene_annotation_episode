@@ -10,7 +10,6 @@ from email.parser import BytesParser
 from email.policy import default
 import hashlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-import io
 import json
 import threading
 from types import SimpleNamespace
@@ -317,56 +316,6 @@ def test_decode_no_scientific_parse_and_publication_replay_precedes_calculator(h
     assert h.store.count("source") == count and h.client.calls == []
 
 
-@pytest.mark.parametrize("body,complete,status,table_state", [
-    (table_body([]), True, "completed", "empty"), (b'{"unselected":[]}', True, "partial", "missing"),
-    (table_body(None), True, "completed", "null"),
-    (b'{broken', True, "partial", "unavailable"), (table_body([]), False, "partial", "empty"),
-    (table_body([[1, "native null", None, None, None, [], None, None, None]]), True, "completed", "rows"),
-    (table_body([[1, "valid", 0.2, 1, 2, ["X"], 0.5, 0, 0], "malformed"]), True, "partial", "rows"),
-    (table_body([[1]]), True, "partial", "rows"),
-    (table_body([[1, 17, 0.2, 1, 2, ["X"], 0.5, 0, 0]]), True, "partial", "rows"),
-    (table_body([[1, "bad overlap", 0.2, 1, 2, "X", 0.5, 0, 0]]), True, "partial", "rows"),
-    (table_body([[1, "valid legacy", 0.2, 1, 2, ["X"], 0.5]]), True, "completed", "rows"),
-    (table_body([[1, "valid nine", 0.2, 1, 2, ["X"], 0.5, 0, 0]]), True, "completed", "rows")])
-def test_actual_final_partial_malformed_zero_and_null_remain_distinct(harness, body, complete, status, table_state):
-    h = harness
-    main, snapshot = engineered_protocol(h, body, complete=complete)
-    event = h.service.decode(main, snapshot)
-    assert event["handoff_ready"] and event["facts"]["response_complete"] == complete
-    result = h.service.publish(request(), SELECTOR, snapshot, h.scope, "partial")
-    assert result["status"] == status
-    table, = result["result"]["execution_enrichr_tables"]
-    assert table["table_state"] == table_state and table["response_complete"] == complete
-    assert h.store.get_artifact(h.store.get(result["result"]["source_ref"])["artifact_ref"]) == body
-    if table_state == "empty":
-        assert table["captured_returned_row_count"] == 0
-    if table_state in ("missing", "unavailable", "null"):
-        assert table["captured_returned_row_count"] is None
-    if b"native null" in body:
-        assert result["result"]["execution_enrichr_rows"][0]["statistics"]["p_value"]["state"] == "null"
-    if table_state == "rows":
-        returned = result["result"]["execution_enrichr_rows"]
-        assert len(returned) == table["captured_returned_row_count"]
-        if b"[[1]]" in body:
-            assert returned[0]["native_width"] == 1 and returned[0]["term"]["state"] == "missing"
-            assert returned[0]["native_cells"][0]["number_value"] == 1
-            assert {error["code"] for error in result["result"]["projection_errors"]} >= {
-                "unexpected_native_width", "invalid_term", "invalid_overlap"}
-        if b"bad overlap" in body:
-            assert returned[0]["overlap"]["native_kind"] == "string"
-            assert returned[0]["native_cells"][5]["string_value"] == "X"
-            assert any(error["code"] == "invalid_overlap" for error in result["result"]["projection_errors"])
-        if b'[[1, 17,' in body:
-            assert returned[0]["native_cells"][1]["number_value"] == 17
-            assert any(error["code"] == "invalid_term" for error in result["result"]["projection_errors"])
-        if b"valid legacy" in body:
-            assert returned[0]["native_width"] == 7
-            assert returned[0]["statistics"]["old_p_value"]["state"] == "missing"
-            assert "projection_errors" not in result["result"]
-        if b"valid nine" in body:
-            assert returned[0]["native_width"] == 9 and "projection_errors" not in result["result"]
-
-
 def test_original_frozen_configuration_survives_current_service_changes(harness):
     h = harness
     _, snapshot = engineered_protocol(h, table_body([]))
@@ -480,27 +429,3 @@ def test_actual_loopback_bounded_reader_preserves_prefix(local_http):
     assert counts == {"redirect": 0, "target": 0, "large": 1}
 
 
-def test_legacy_http_default_keeps_urlopen_timeout_and_metadata(monkeypatch):
-    calls = []
-    class Response(io.BytesIO):
-        status = 200
-        headers = {"Content-Type": "application/json"}
-        def geturl(self):
-            return "https://example.invalid/legacy?q=literal"
-    def opened(selected, *, timeout):
-        calls.append((selected.full_url, timeout))
-        return Response(b'{"legacy":true}')
-    def forbidden(*args, **kwargs):
-        raise AssertionError("legacy path must retain urlopen")
-    monkeypatch.setattr(urllib.request, "urlopen", opened)
-    monkeypatch.setattr(urllib.request, "build_opener", forbidden)
-    result = PublicClients(ncbi_email=None, timeout=7)._http("legacy",
-        "https://example.invalid/legacy", {"q": "literal"}, "application/json")
-    assert calls == [("https://example.invalid/legacy?q=literal", 7)]
-    assert result.content == b'{"legacy":true}' and result.request == {"q": "literal"}
-    assert result.transport == {"status": 200, "representation": "http_response_bytes",
-        "headers": {"content-type": "application/json"},
-        "effective_url": "https://example.invalid/legacy?q=literal",
-        "header_items": [("Content-Type", "application/json")],
-        "request": {"method": "GET", "url": "https://example.invalid/legacy?q=literal",
-            "headers": {"User-agent": "gene-annotation-episode/0.2", "Accept": "application/json"}}}

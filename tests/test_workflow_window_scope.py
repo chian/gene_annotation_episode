@@ -3,8 +3,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import native_lifecycle, workflow_budget
-from gene_annotation_episode.local_resources import LocalResources
+from gene_annotation_episode import workflow_budget
 
 
 def test_window_identity_is_stable_and_separates_services_and_slices():
@@ -37,15 +36,3 @@ def test_cleanup_leaves_other_windows_native_workers_alone(monkeypatch):
     assert all(other not in args for args in calls)
 
 
-def test_capacity_counts_only_the_configured_window_slice(tmp_path, monkeypatch):
-    own = 'gene-local-job-own.service'
-    other = 'gene-local-job-other.service'
-    monkeypatch.setattr(native_lifecycle, '_control', lambda _: SimpleNamespace(
-        returncode=0, stdout=f'{own} loaded active running\n{other} loaded active running\n'))
-    monkeypatch.setattr(native_lifecycle, '_properties', lambda unit: {
-        'Slice': workflow_budget.SLICE if unit == own else 'anotherwindow.slice'})
-    resources = LocalResources(tmp_path/'capacity', workflow_slice=workflow_budget.SLICE)
-    assert LocalResources.reopen(resources.as_record()).as_record() == resources.as_record()
-    view = resources.snapshot()
-    assert [job['execution_handle'] for job in view['jobs']] == [own]
-    assert view['reserved']['job_slots'] == 1

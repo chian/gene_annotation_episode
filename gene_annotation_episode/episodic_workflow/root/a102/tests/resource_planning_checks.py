@@ -218,7 +218,7 @@ def planning_recipe_observation(v, scenario='original'):
     previous_science=v.registry.for_path((('annotation','root'),('scientific_process','science')))
     catalog=previous_science.tool_library.catalog()
     tool_library=own('scientific_tool_library').ScientificToolLibrary.freeze(
-        v.output/'recipe-tool-library',catalog=catalog,tool_info=True)
+        v.output/'recipe-tool-library',catalog=catalog)
     def available(scope):events.append('tool_catalog');return deepcopy(catalog)
     services=SimpleNamespace(workflow=workflow,tool_catalog=available)
     scientific=own('scientific_process.episode').ScientificProcessEpisode(services,

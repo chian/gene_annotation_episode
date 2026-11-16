@@ -125,7 +125,7 @@ def populate_rate_observation_contrast(extraction,*,reference_group,test_group):
         'annotation_credit':None,'assay_error_rate':None}
 
 
-# Versioned reported-curve grid section; legacy complete v1 prefix is unchanged.
+# Versioned reported-curve grid section.
 GRID_SHEET_VERSION = 'a105_reported_curve_precision_v1'
 GRID_SOLVER_VERSION = 'dimensionless_profile_stationarity_log2_32_v1'
 GRID_REASONS = ('incomplete_selected_roster', 'no_point_observations', 'insufficient_entry_count',

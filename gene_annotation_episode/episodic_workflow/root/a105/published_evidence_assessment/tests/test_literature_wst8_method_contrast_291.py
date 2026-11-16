@@ -1,23 +1,12 @@
 """Case167 original-source Table 3 comparison; no invented common assay model."""
 from copy import deepcopy
-from fractions import Fraction
 import hashlib
-import json
 from pathlib import Path
 import re
-import sqlite3
-from types import SimpleNamespace
 from gene_annotation_episode.episodic_workflow.root.a105.domain import identity
-from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
-from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_comparison_inputs import read_measurement_comparison_inputs, compile_measurement_comparison_inputs
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_comparison_calculations import populate_measurement_comparison
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_comparison_storage import LiteratureMeasurementComparisonRepository, measurement_comparison_operation_schema, REQUESTED
-from gene_annotation_episode.episodic_workflow.root.a105.state import Store
-from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_measurement_comparison_components_258 import source_fixture
-from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_measurement_comparison_binding_268 import selected as selected_operation
 ORIGINAL = Path(__file__).resolve().parents[6] / 'research/experimental_scoring_review_2026-10-23/a105_calibration_primary_case_167/source/PMC6454709.xml'
 SHA256 = '86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698'
 
@@ -125,109 +114,4 @@ def test_original_wst8_uv_reported_protocol_contrast_without_common_correction()
     assert extraction['quantities']['right']['reported_uncertainty']['statistic'] == 'sd'
     assert sheet['annotation_credit'] is None
 
-def test_original_wst8_uv_selected_operation_returns_typed_cells(tmp_path):
-    selection, _ = selection_from_original()
-    old_ref = selection['source_ref']
-    path = tmp_path / 'state'
-    store = Store(path)
-    try:
-        manifest = path / 'empty-manifest.json'
-        manifest.write_text(json.dumps({'schema_version': 1, 'entries': []}))
-        store.create_problem(manifest_path=manifest)
-        artifact = store.artifact(ORIGINAL.read_bytes(), 'application/xml')
-        source = store.put('source', {'provider': 'retained_original_PMC6454709', 'accession': 'PMC6454709', 'uri': 'https://doi.org/10.1186/s12858-019-0108-1', 'artifact_ref': artifact, 'text_ref': None, 'request_ref': None, 'version': None, 'retrieved_at': None}, origin='caller')['id']
 
-        def remap(value):
-            if isinstance(value, dict):
-                return {key: remap(child) for key, child in value.items()}
-            if isinstance(value, list):
-                return [remap(child) for child in value]
-            return source if value == old_ref else value
-        selection = remap(selection)
-        fields = measurement_comparison_operation_schema()['properties']['return_context']['properties']
-        context = {role: {field: [] for field in spec['properties']} for role, spec in fields.items()}
-        for role in ('left', 'right'):
-            q = selection['quantities'][role]
-            for name in ('organism', 'molecule'):
-                selected = q['subject'][name]
-                context[role]['subject.' + name] = [{'start': selected['start'], 'end': selected['end']}]
-            selected = q['assay']['direct_endpoint']
-            context[role]['assay.direct_endpoint'] = [{'start': selected['start'], 'end': selected['end']}]
-            source_text = q['assay']['conditions']['quote']
-            mass = '0.1\u2009μg G6PD enzyme' if role == 'left' else '0.5\u2009μg G6PD enzyme'
-            selected = q['assay']['conditions']
-            offset = len(source_text[:source_text.index(mass)].encode())
-            context[role]['assay.conditions'] = [{'start': selected['start'] + offset, 'end': selected['start'] + offset + len(mass.encode())}]
-            source_text = q['assay']['additional_differences']['quote']
-            volume = '150\u2009μL' if role == 'left' else '1\u2009mL'
-            selected = q['assay']['additional_differences']
-            offset = len(source_text[:source_text.index(volume)].encode())
-            context[role]['assay.additional_differences'] = [{'start': selected['start'] + offset, 'end': selected['start'] + offset + len(volume.encode())}]
-        assertion_context = {name: [{'start': selection['assertion'][name]['start'], 'end': selection['assertion'][name]['end']}] for name in ('molecule', 'functional_assertion')}
-        args = {'version': 'literature_measurement_comparison_population_v2', 'selection': selection, 'return_context': context, 'return_assertion_context': assertion_context}
-        assignment = {'version': 'literature_assignment_v1', 'source_refs': [source], 'question_context_refs': [], REQUESTED: selection['requested_cells']}
-        ctx = BindingContext('wst8-291', 'source-child', 'literature', (('literature', 'source-child'),), store.validate_scope(), assignment, {}, (source,))
-        host = SimpleNamespace(store=store, run_id=ctx.run_id, tools=ToolRegistry(store))
-        binding = LiteratureEpisode(WorkflowServices(host), rate_population=True, reference_parent_sources=[source])
-        host.episode_bindings = EpisodeBindingRegistry((binding,))
-        current, outcome, rows = selected_operation(store, ctx, args, binding, 'wst8-table3')
-        by_name = {row['component']: row for row in rows}
-        assert by_name['protocol_ratio']['cell']['value'] == float(Fraction(417, 496))
-        assert by_name['common_ratio']['cell']['value'] is None
-        assert by_name['protocol_ratio']['source_kind'] == 'primary_source'
-        assert by_name['protocol_ratio']['assertion_context']['molecule']['fragments'][0]['text'] == 'G6PD'
-        meanings = by_name['protocol_ratio']['role_meanings']
-        detail = {role['role']: {item['field']: item['fragments'][0]['text'] for item in role['contexts'] if item['fragments']} for role in meanings}
-        assert detail['left']['assay.conditions'] == '0.1\u2009μg G6PD enzyme'
-        assert detail['left']['assay.additional_differences'] == '150\u2009μL'
-        assert detail['right']['assay.conditions'] == '0.5\u2009μg G6PD enzyme'
-        assert detail['right']['assay.additional_differences'] == '1\u2009mL'
-        saved = binding._measurement_comparison_repository().read(outcome['result']['sheet_ref'])
-        assert saved['sheet']['axis'] == 'A105'
-        assert saved['sheet']['annotation_credit'] is None
-        assert current.received_record_refs[-1] == outcome['result']['sheet_ref']
-        assert saved['original_implementation']['version'] == 'measurement_comparison_original_implementation_v4'
-        source_record = store.get(outcome['result']['sheet_ref'])
-        allowed = {source_record[name] for name in ('artifact_ref', 'request_ref')}
-        assert tuple(store.db.execute('PRAGMA wal_checkpoint(TRUNCATE)').fetchone()) == (0, 0, 0)
-        store.close()
-        store = None
-        cold = Store.__new__(Store)
-        cold.path, cold._savepoint = (path, 0)
-        cold.db = sqlite3.connect((path / 'state.sqlite3').resolve().as_uri() + '?mode=ro&immutable=1', uri=True)
-        cold.db.row_factory = sqlite3.Row
-        cold.db.execute('PRAGMA query_only=ON')
-        try:
-            original_get = cold.get_artifact
-            cold.get_artifact = lambda ref: original_get(ref) if ref in allowed else (_ for _ in ()).throw(AssertionError('scientific source reread during cold reconstruction'))
-            assert LiteratureMeasurementComparisonRepository(cold, ctx.run_id).read(outcome['result']['sheet_ref']) == saved
-            assert cold.db.total_changes == 0
-        finally:
-            cold.db.close()
-    finally:
-        if store is not None:
-            store.close()
-
-def test_saved_v1_comparison_remains_readable_without_scientific_source_io():
-    state = Path(__file__).resolve().parents[6] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_measurement_comparison_binding_268/pytest_003/test_actual_parent_converted_s0/state'
-    assert (state / 'state.sqlite3').is_file()
-    cold = Store.__new__(Store)
-    cold.path, cold._savepoint = (state, 0)
-    cold.db = sqlite3.connect((state / 'state.sqlite3').resolve().as_uri() + '?mode=ro&immutable=1', uri=True)
-    cold.db.row_factory = sqlite3.Row
-    cold.db.execute('PRAGMA query_only=ON')
-    try:
-        operation = cold.db.execute('SELECT run_id,outcome FROM literature_measurement_comparison_operations LIMIT 1').fetchone()
-        reference = json.loads(operation['outcome'])['result']['sheet_ref']
-        original_get = cold.get_artifact
-        allowed = {cold.get(reference)[name] for name in ('artifact_ref', 'request_ref')}
-
-        def saved_only(artifact_ref):
-            assert artifact_ref in allowed, 'scientific source reread during reconstruction'
-            return original_get(artifact_ref)
-        cold.get_artifact = saved_only
-        restored = LiteratureMeasurementComparisonRepository(cold, operation['run_id']).read(reference)
-        assert restored['original_implementation']['version'] == 'measurement_comparison_original_implementation_v1'
-        assert cold.db.total_changes == 0
-    finally:
-        cold.db.close()

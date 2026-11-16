@@ -11,7 +11,8 @@ from pathlib import PurePosixPath
 import re
 STAGES = ('raw', 'filtered', 'annotated')
 INPUTS = (('tumor_bam', 'tumor.bam', 'bam'), ('tumor_bai', 'tumor.bam.bai', 'bai'), ('normal_bam', 'normal.bam', 'bam'), ('normal_bai', 'normal.bam.bai', 'bai'), ('reference_fasta', 'reference.fasta', 'fasta'), ('reference_fai', 'reference.fasta.fai', 'fai'), ('reference_dictionary', 'reference.dict', 'sam_sequence_dictionary'), ('intervals', 'intervals.interval_list', 'gatk_interval_list'))
-POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}
 PACKET_VERSION = 'ordinary_somatic_variant_values_v1'
 CONTEXT_VERSION = 'somatic_variant_context_v1'
 FACT_SOURCE = 'somatic_variant_outcomes'

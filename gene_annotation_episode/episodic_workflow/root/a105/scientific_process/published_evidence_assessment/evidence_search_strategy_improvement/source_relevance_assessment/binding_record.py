@@ -9,7 +9,7 @@ class LiteratureBindingRecord:
     def as_record(self):
         implementation = _binding_source_bytes()
         implementation += _implementation_path('runtime_assets.py').read_bytes()
-        implementation += json.dumps(required_runtime_asset_fingerprints(include_pilot=False), sort_keys=True, separators=(',', ':')).encode('utf8')
+        implementation += json.dumps(required_runtime_asset_fingerprints(), sort_keys=True, separators=(',', ':')).encode('utf8')
         implementation += _implementation_path('source_locations.py').read_bytes()
         implementation += _implementation_path('api_error_feedback.py').read_bytes()
         implementation += _implementation_path('literature_progress_report_contracts.py').read_bytes()
@@ -35,7 +35,7 @@ class LiteratureBindingRecord:
                 implementation += _implementation_path(name).read_bytes()
         if self.assay_grading_population:
             configuration['assay_grading_population'] = True
-            for name in ('literature_assay_grading.py', 'literature_assay_grading_inputs.py', 'experimental_database_acquisition.py', 'experimental_database_records.py', 'experimental_database_measurements.py', 'literature_assay_grading_storage.py', 'literature_assay_grading_render.py', 'literature_assay_grading_prompt.py', 'literature_assay_grading_legacy_cells_v1.json', 'literature_a105_aggregation.py', 'literature_a105_aggregation_storage.py', 'literature_a105_aggregation_prompt.py', 'literature_a105_aggregation_render.py'):
+            for name in ('literature_assay_grading.py', 'literature_assay_grading_inputs.py', 'experimental_database_acquisition.py', 'experimental_database_records.py', 'experimental_database_measurements.py', 'literature_assay_grading_storage.py', 'literature_assay_grading_render.py', 'literature_assay_grading_prompt.py', 'literature_a105_aggregation.py', 'literature_a105_aggregation_storage.py', 'literature_a105_aggregation_prompt.py', 'literature_a105_aggregation_render.py'):
                 implementation += _implementation_path(name).read_bytes()
         if self.ion_discrimination_population:
             configuration['ion_discrimination_population'] = True

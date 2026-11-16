@@ -315,7 +315,7 @@ def _receipt_response_failure(value):
             or response["declared_body_bytes"] is not None
             and response["declared_body_bytes"] != response["retained_bytes"]):
         return "rcsb_response_incomplete"
-    # The legacy DTO also carries transport qualifications that cannot be
+    # The result DTO also carries transport qualifications that cannot be
     # reconstructed from its projected response fields, such as a bad limit.
     codes = {row["code"] for row in value["issues"]}
     for code in ("http_not_success", "transport_metadata_unavailable", "response_incomplete"):

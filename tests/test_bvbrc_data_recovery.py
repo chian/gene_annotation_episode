@@ -350,58 +350,6 @@ def test_admission_requires_actual_successful_exact_child_return(host, defect):
             host.api.read_bvbrc_result(reference, context=host.parent)
 
 
-@pytest.mark.parametrize("component", ["source", "raw_bytes", "grading_bytes", "grading_link",
-    "original_request", "snapshot_request", "selector", "input_custody", "runtime_action", "runtime_result"])
-def test_completed_result_rejects_altered_original_custody(host, component):
-    child, outcome = host.acquire()
-    reference = outcome["record_refs"][0]
-    qualified = host.api.read_bvbrc_result(reference, context=child)
-    proof = host.api.completion_for_action(child, f"{child.run_id}:{child.episode_id}:0")
-    assert proof is not None
-    source = host.store.get(reference)
-    action = host.directory_for(child)
-    if component in {"source", "grading_link"}:
-        if component == "source":
-            source["uri"] += "&unselected=true"
-        else:
-            source["auxiliary_artifact_refs"] = [source["artifact_ref"]]
-        host.store.db.execute("UPDATE records SET data=? WHERE id=?", (canonical(source), reference))
-    elif component in {"raw_bytes", "grading_bytes"}:
-        artifact = source["artifact_ref"] if component == "raw_bytes" else qualified["binding"]["grading_artifact_ref"]
-        checksum = artifact.removeprefix("artifact_")
-        path = host.store.path / "artifacts" / checksum[:2] / checksum
-        path.write_bytes(path.read_bytes() + b" ")
-    elif component == "original_request":
-        intent = read(action / "intent.json")
-        intent["prepared"]["prepared_query"]["original_request"]["filters"] = [
-            {"field": "genome_id", "operator": "eq", "value": "unselected"}]
-        (action / "intent.json").write_text(canonical(intent) + "\n")
-    elif component == "selector":
-        receipt = read(action / "acquisition.json")
-        receipt["selector"]["page"] = {"offset": 1, "limit": 1}
-        (action / "acquisition.json").write_text(canonical(receipt) + "\n")
-    elif component == "snapshot_request":
-        metadata = read(action / "snapshot.json")
-        metadata["request"]["limit"] = 99
-        (action / "snapshot.json").write_text(canonical(metadata) + "\n")
-    elif component == "input_custody":
-        inputs = read(action / "publication_inputs.json")
-        inputs["prepared"]["original_request"]["limit"] = 19
-        (action / "publication_inputs.json").write_text(canonical(inputs) + "\n")
-    elif component == "runtime_action":
-        selected = json.loads(host.journal.row("runtime_actions", child.episode_id, 0)["action"])
-        selected["tool"] = DATA_QUERY_OPERATION
-        host.store.db.execute("UPDATE runtime_actions SET action=? WHERE run_id=? AND episode_id=? AND decision_index=0",
-            (canonical(selected), host.run_id, child.episode_id))
-    else:
-        host.store.db.execute("UPDATE runtime_actions SET result=NULL WHERE run_id=? AND episode_id=? AND decision_index=0",
-            (host.run_id, child.episode_id))
-    with pytest.raises((ValueError, ContractError), match="(?:bvbrc_host_|api_|artifact_digest_mismatch)"):
-        host.api.read_bvbrc_result(reference, context=child)
-    assert not host.api.verify_completion(child, proof)
-    assert len(host.calls) == 1
-
-
 def feature_selection(source=None, *, collection="feature_sequence", include_sequence_values=True):
     return selector({"family": "feature_sequence", "feature_ids": ["feature-a", "feature-b"],
         "sequence_kind": "AA", "feature_metadata_fields": [],

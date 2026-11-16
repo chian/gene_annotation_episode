@@ -51,7 +51,7 @@ class ClosedCreditFrame:
             "timeout": 2, "response_byte_limit": 4096}}
         factory = ExecutionServiceFactory(resources, {}, 3, 2, .5)
         self.workflow = Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), object(), directory, "closed-credit-engineering",
-            controller_factory=lambda path, initial: YieldController(str(path), initial, 0, YieldParameters(100, 50)),
+            controller_factory=lambda path, initial: YieldController(str(path), initial, 0, YieldParameters()),
             project_credit=lambda *_: 0, episode_service_factory=factory,
             episode_service_binding=factory.as_record(), episode_service_inputs="actual_tool_registry_v1",
             annotation_child_roles=("launch",), episode_record_receipts=True, initial_known_record_refs=[])
@@ -223,21 +223,6 @@ def test_closed_credit_rejects_substituted_original_metadata_without_projection(
         frame.owner.credit_view(context, selection)
 
 
-def test_old_form_without_snapshot_uses_the_existing_path_without_backfill(frame, monkeypatch):
-    frame.freeze()
-    facts, form = frame.saved()
-    facts.pop(_CLOSED_CREDIT)
-    frame.save(facts, form)
-    before = canonical(frame.saved())
-    legacy = {"credit": 17, "operational_credit": 17, "legacy_fixture": True}
-    monkeypatch.setattr(frame.owner, "_live_project_credit", lambda *_: deepcopy(legacy))
-    assert frame.owner.credit_view(frame.context, frame.selection()) == legacy
-    assert _CLOSED_CREDIT not in frame.owner.facts(frame.context, {"completion": {
-        "ended_by": frame.record.ended_by, "units_consumed": 1}, "operational_credit_snapshot": {
-            "view": legacy, "selection": frame.selection()}})
-    assert canonical(frame.saved()) == before
-
-
 def test_active_nonclosure_facts_do_not_create_a_snapshot(frame):
     assert _CLOSED_CREDIT not in frame.workflow.facts(frame.child.source)
     assert frame.workflow.journal.row("runtime_forms", frame.context.episode_id) is None
@@ -292,7 +277,7 @@ def _original_completion_observation(frame, *, mode="verified", bad_original=Non
     if mode != "absent_input":
         body["practical_completion"] = deepcopy(proof)
         context["practical_completion"] = {**proof, "action_index": 0, "unit_ref": unit.as_record()}
-    controller = YieldController("engineering_epoch", 0, 0, YieldParameters(100, 50),
+    controller = YieldController("engineering_epoch", 0, 0, YieldParameters(),
         estimate_with_context=frame.owner.practical_estimator(frame.context))
     with patch.object(frame.owner, "_proof_for_action", return_value=None if mode == "unverified" else proof):
         step = controller.observe("engineering:0", Record({"credit": 3, "estimation_context": context}), is_root=False)
@@ -343,7 +328,7 @@ def test_original_verified_completion_replays_existing_controller_without_native
     monkeypatch.setattr(frame.owner.api_execution, "verify_completion", forbidden)
     monkeypatch.setattr(frame.store, "get_artifact", forbidden)
     assert frame.owner.verify_completion(frame.context, proof) is True
-    controller = YieldController("engineering_epoch", 0, 0, YieldParameters(100, 50),
+    controller = YieldController("engineering_epoch", 0, 0, YieldParameters(),
         estimate_with_context=frame.owner.practical_estimator(frame.context))
     wrapped = ExecutionContextController(controller, frame.workflow.journal, frame.context.episode_id)
     replayed = wrapped.observe_unit("engineering:0", Record(body), unit_ref=unit, is_root=False)
@@ -400,14 +385,8 @@ def test_recorded_completion_cannot_bypass_closed_snapshot_authentication(frame,
         frame.owner.verify_completion(frame.context, proof)
 
 
-@pytest.mark.parametrize("state", ["active", "legacy_closed"])
-def test_completion_without_closed_snapshot_keeps_the_original_verifier(frame, monkeypatch, state):
+def test_completion_without_closed_snapshot_keeps_the_original_verifier(frame, monkeypatch):
     proof = _completion_proof(frame)
-    if state == "legacy_closed":
-        _original_completion_observation(frame)
-        facts, form = frame.saved()
-        facts.pop(_CLOSED_CREDIT)
-        frame.save(facts, form)
     calls = []
     def original(context, key):
         calls.append((context.episode_id, key))

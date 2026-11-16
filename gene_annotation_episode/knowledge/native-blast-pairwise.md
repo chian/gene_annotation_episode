@@ -29,7 +29,7 @@ an index, select another resource, change a parameter or retry a search.
 Commission the requested job through the existing launch episode and configured
 `launch_local` child. That child owns practical preparation and selects
 `practical.job.start`. The caller's existing local lifecycle enforces its
-allocation. Verification uses 20 GiB memory, 4 GiB scratch and no wall-time cap.
+allocation. Verification uses 5 GiB memory, 4 GiB scratch and no wall-time cap.
 The native producer is one selected primitive, not a new episode or agent loop.
 
 `requested_job_from_native` constructs the exact requested argv/environment and

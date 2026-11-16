@@ -11,7 +11,6 @@ import hashlib
 import importlib.metadata
 import json
 import math
-from pathlib import Path
 from types import SimpleNamespace
 from urllib.parse import quote
 
@@ -55,33 +54,9 @@ def _check(value,schema,code):
 def implementation_descriptor(*,evidence_origin='reported_source'):
     if evidence_origin not in ('reported_source','synthetic_fixture'):
         raise ContractError('gel_native_evidence_profile_invalid')
-    names=(
-        'gene_annotation_episode/episodic_workflow/root/library/literature_gel_inputs.py',
-        'gene_annotation_episode/episodic_workflow/root/library/literature_gel_calculations.py',
-        'gene_annotation_episode/episodic_workflow/root/library/literature_gel_native_contracts.py',
-        'gene_annotation_episode/episodic_workflow/root/literature_gel_storage.py',
-        'gene_annotation_episode/episodic_workflow/root/library/literature_gel_render.py',
-        'gene_annotation_episode/episodic_workflow/root/literature_assay_inputs.py',
-        'gene_annotation_episode/episodic_workflow/root/library/literature_experimental_contracts.py',
-        'gene_annotation_episode/episodic_workflow/root/literature_rate_storage.py',
-        'gene_annotation_episode/episodic_workflow/root/literature_ratio_source_storage.py',
-        'gene_annotation_episode/episodic_workflow/root/library/literature_binding_interaction_render.py',
-        'gene_annotation_episode/episodic_workflow/root/communication.py',
-        'gene_annotation_episode/domain.py',
-        'gene_annotation_episode/state.py',
-        'gene_annotation_episode/episodic_workflow/root/receiving_context.py',
-        'gene_annotation_episode/episodic_workflow/root/episode_receipts.py',
-        'gene_annotation_episode/episodic_workflow/root/library/literature_gel_context_declarations.py',
-        'gene_annotation_episode/episodic_workflow/root/library/literature_gel_return_contracts.py',
-        'gene_annotation_episode/episodic_workflow/root/library/literature_gel_display_metadata.py',
-        'gene_annotation_episode/episodic_workflow/root/library/literature_rate_return_schema.py',
-        'gene_annotation_episode/episodic_workflow/root/library/literature_native_rate_return_schema.py',
-        'gene_annotation_episode/episodic_workflow/root/library/literature_ratio_source_return_schema.py',
-    )
     return {'version':'gel_native_implementation_v1','provider':PROVIDER,'record_version':VERSION,
         'evidence_origin':evidence_origin,'native_schema_sha256':_sha(gel_cells_schema()),
-        'pillow_version':inputs.PILLOW_VERSION,'jsonschema_version':importlib.metadata.version('jsonschema'),
-        'modules':{name:_sha((Path(__file__).parents[3] / name).read_bytes()) for name in names}}
+        'pillow_version':inputs.PILLOW_VERSION,'jsonschema_version':importlib.metadata.version('jsonschema')}
 
 
 def _token(value):

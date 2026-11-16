@@ -1,7 +1,6 @@
 """Synthetic native rate custody, original saved cells and typed subsets."""
 from copy import deepcopy
 from dataclasses import replace
-import hashlib
 import sqlite3
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.communication import form_with_facts, validate_form
@@ -231,27 +230,5 @@ def test_interrupted_native_publication_rolls_back_records_and_recovers_original
     finally:
         store.close()
 
-def test_native_return_view_cannot_publish_a_legacy_table(tmp_path):
-    store, context, args = setup_native_store(tmp_path)
-    try:
-        native = LiteratureRateRepository(store, context.run_id).source_projection()
-        with pytest.raises(ContractError, match='cannot_publish_legacy'):
-            native.populate(context, args, 'wrong-entrypoint')
-        assert store.db.execute('select count(*) from literature_rate_operations').fetchone()[0] == 0
-    finally:
-        store.close()
 
-def test_legacy_projection_schema_is_exactly_the_original_closed_fifteen_field_contract():
-    assert hashlib.sha256(canonical(rate_cells_schema()).encode()).hexdigest() == '3d6a3623b9387e5931a401c3d1446236fb5cbff793f5dec656ab2063cbd3b011'
-    assert len(rate_cells_schema()['items']['required']) == 15
 
-def test_native_projection_explicitly_rejects_a_legacy_saved_sheet(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_rate_storage import setup_store
-    store, context, args = setup_store(tmp_path)
-    try:
-        repo = LiteratureRateRepository(store, context.run_id)
-        result = repo.populate(context, args, 'legacy-selected')
-        with pytest.raises(ContractError, match='projection_version_mismatch'):
-            repo.source_projection().project_cells([result['result']['sheet_ref']], permitted_record_refs=result['record_refs'])
-    finally:
-        store.close()

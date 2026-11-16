@@ -104,7 +104,7 @@ def _selected_files(plan, bundle):
 
 
 def _materialized_files(plan, bundle, selected):
-    """646/002+003: immutable originals and realized occurrences stay separate."""
+    """Immutable originals and realized occurrences stay separate."""
     job, root = plan["requested_job"]["native_blast_utility"], Path(plan["attempt_directory"])
     receipts = [] if bundle is None else bundle["materializations"]
     by_relative = {r["relative_path"]: r for r in receipts}

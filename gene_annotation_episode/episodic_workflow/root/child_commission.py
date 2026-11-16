@@ -1,6 +1,5 @@
 """Root-owned child_commission.py"""
 from __future__ import annotations
-from .workflow_values import EPISODE_BRANCH_LIFECYCLE
 from .workflow_values import OwnedChildActionUnit
 from gene_annotation_episode.episodic_workflow.root.method_loop import PendingAction
 from .episode_journal import WorkflowError
@@ -82,20 +81,19 @@ class ChildCommission:
         by_handle = {item['handle'] for item in self.commissions.pending(source.episode_id)['items']}
         for spec in self.commissions.recover_selected(source.episode_id):
             if spec['handle'] in by_handle:
-                if self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE:
-                    try:
-                        status = self.execution_backend.status(spec['handle'])
-                    except KeyError:
-                        pass
-                    else:
-                        if status['failure'] is not None and status['execution_identity'] is None and (not status['return_available']):
-                            continue
+                try:
+                    status = self.execution_backend.status(spec['handle'])
+                except KeyError:
+                    pass
+                else:
+                    if status['failure'] is not None and status['execution_identity'] is None and (not status['return_available']):
+                        continue
                 action = self.store.db.execute("SELECT decision_index FROM runtime_actions WHERE run_id=? AND episode_id=? AND json_extract(result,'$.pending_handle')=?", (self.run_id, source.episode_id, spec['handle'])).fetchone()
                 self.dispatch_commission(source, action[0], spec)
 
     def settle_unclaimed_child_failures(self, source):
         """Account for an attempted bootstrap without inventing child science."""
-        if self.episode_branch_lifecycle != EPISODE_BRANCH_LIFECYCLE or self.journal.row('runtime_episodes', source.episode_id)['state'] != 'active':
+        if self.journal.row('runtime_episodes', source.episode_id)['state'] != 'active':
             return
         rows = self.store.db.execute("SELECT decision_index,result FROM runtime_actions WHERE run_id=? AND episode_id=? AND json_extract(result,'$.status')='pending' AND json_extract(result,'$.pending_handle') IS NOT NULL ORDER BY decision_index", (self.run_id, source.episode_id)).fetchall()
         for row in rows:

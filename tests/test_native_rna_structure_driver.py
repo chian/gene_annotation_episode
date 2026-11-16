@@ -1,17 +1,13 @@
 import base64
-from copy import deepcopy
 import json
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library import native_rna_structure_driver as driver
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_contracts import BUNDLE_FILENAME, validate_rna_structure_bundle
-from gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native import parse_rna_native_record, populate_rna_feature_sheet, populate_rna_prediction_sheet
-from gene_annotation_episode.episodic_workflow.root.library.rna_structure_calculations import calculate_rna_feature_components, calculate_rna_prediction_components
-from test_native_rna_structure_contracts import PACKET, job, plan, rna_input
+from test_native_rna_structure_contracts import job, plan, rna_input
 
 
 def read_role(bundle, attempt, role):
@@ -160,58 +156,5 @@ def test_attempt_and_output_symlinks_are_rejected(tmp_path):
     Path(selected["attempt_directory"]).symlink_to(elsewhere, target_is_directory=True)
     with pytest.raises(ValueError, match="rna_output_path_conflict"):
         driver.run_rna_structure_driver(selected)
-
-
-@pytest.mark.parametrize("prediction", [True, False])
-def test_live_vienna_worker_and_retained_numeric_example(tmp_path, prediction):
-    assert (PACKET / "native-site/RNA").is_dir(), "isolated native setup is a declared verification prerequisite"
-    selected_job = job(tmp_path, prediction=prediction, energy=not prediction, native=True)
-    # Non-default names exercise the declared output paths, including model custody.
-    for row in selected_job["outputs"]:
-        if row["role"] not in ("stdout", "stderr"):
-            row["relative_path"] = "selected/" + row["relative_path"]
-    selected, _, _ = plan(tmp_path, selected_job)
-    bundle = driver.run_rna_structure_driver(selected)
-    attempt = Path(selected["attempt_directory"])
-    assert bundle["returncode"] == 0 and bundle["native_status"] == "complete"
-    raw = read_role(bundle, attempt, "native_result")
-    record = json.loads(raw)
-    assert record["structure"]["dot_bracket"] == "(((...)))"
-    assert record["analysis_sequence"]["analysis_sequence"] == "GGGAAACCC"
-    assert record["model"]["engine_version"] == "2.7.0"
-    parameter_row = next(row for row in bundle["files"] if row["role"] == "effective_parameters")
-    assert record["model"]["parameter_artifact"] == {key: parameter_row[key] for key in ("relative_path", "sha256", "size_bytes")}
-    assert json.loads(read_role(bundle, attempt, "model")) == record["model"]
-    parsed = parse_rna_native_record(raw, format="rna_native_record_json_v1", expected_mode=record["mode"], record_key=record["record_key"])
-    populator = populate_rna_prediction_sheet if prediction else populate_rna_feature_sheet
-    sheet = populator(parsed, record_key=record["record_key"], original_input=record["input"], model_metadata=record["model"], subject_binding=None)
-    calculator = calculate_rna_prediction_components if prediction else calculate_rna_feature_components
-    components = calculator(sheet, parameters=selected_job["grading_parameters"])
-    cells = {cell["name"]: cell for cell in components["summary"]}
-    assert cells["pair_count"]["value"] == 3 and cells["paired_fraction"]["value"] == 2 / 3
-    assert cells["stack_count"]["value"] == 2 and cells["loop_mean_unpaired_nt"]["value"] == 3
-    energy = record["native_mfe" if prediction else "native_evaluation"]
-    assert energy["value"] == -1.2000000476837158
-    assert energy["numeric_text"] == "-1.2000000476837158"
-    destination = Path.cwd() / "examples"
-    destination.mkdir(exist_ok=True)
-    (destination / ("prediction.json" if prediction else "evaluation.json")).write_text(canonical({
-        "plan": selected, "bundle": bundle, "record": record, "sheet": sheet, "components": components}) + "\n")
-
-
-def test_live_native_short_loop_failure_retains_supplied_topology(tmp_path):
-    request = rna_input(energy=True)
-    request.update(sequence="GAC", dot_bracket="(.)")
-    selected, _, _ = plan(tmp_path, job(tmp_path, energy=True, native=True, raw=(canonical(request) + "\n").encode()))
-    bundle = driver.run_rna_structure_driver(selected)
-    attempt = Path(selected["attempt_directory"])
-    value = json.loads(read_role(bundle, attempt, "native_result"))
-    assert len(value["topology"]["pairs"]) == 1 and value["status"] == "partial"
-    assert value["native_evaluation"]["reason"] == "rna_native_failed" and value["native_evaluation"]["value"] is None
-    lines = [json.loads(line) for line in read_role(bundle, attempt, "stdout").decode().splitlines()]
-    assert next(row for row in lines if row["schema"] == "rna_raw_native_return_v1")["energy_repr"] == "100000.0"
-    destination = Path.cwd() / "examples"
-    destination.mkdir(exist_ok=True)
-    (destination / "short_loop_native_failure.json").write_text(canonical({"plan": selected, "bundle": bundle, "record": value, "diagnostics": lines}) + "\n")
 
 

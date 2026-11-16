@@ -160,15 +160,12 @@ class APIServiceExecution:
         except (ValueError, KeyError, OSError, TypeError):
             return False
 
-    def _context(self, context, *, verify_artifacts=True,
-                 _completed_appservice_download=False):
+    def _context(self, context, *, verify_artifacts=True):
         reader = getattr(self, '_context_reader', None)
         if reader is not None:
-            return reader(self, context, verify_artifacts=verify_artifacts,
-                _completed_appservice_download=_completed_appservice_download)
+            return reader(self, context, verify_artifacts=verify_artifacts)
         from .library.standalone_api_context import standalone_api_context
-        return standalone_api_context(self, context, verify_artifacts=verify_artifacts,
-            _completed_appservice_download=_completed_appservice_download)
+        return standalone_api_context(self, context, verify_artifacts=verify_artifacts)
 
     def validate_result_selector(self, target, selector):
         self.validate_assignment(target['assignment'], scope=target['scope'])
@@ -270,11 +267,6 @@ class APIServiceExecution:
     async def execute(self, context, name, arguments, operation_key):
         try:
             arguments = plain(arguments)
-            if (name == 'api.bvbrc_appservice.download' and type(arguments) is dict
-                    and 'max_bytes' not in arguments):
-                cached = self.appservice.legacy_cached_download(context, name, arguments, operation_key)
-                if cached is not None:
-                    return cached
             self.initialize(context)
             assignment, service, target = self._context(context)
             entry = next((row for row in self.catalog(context) if row['name'] == name), None)
@@ -319,10 +311,8 @@ class APIServiceExecution:
     def scope(self, handoff_ref):
         return self.appservice.read_handoff(handoff_ref)['scope']
 
-    def read_target(self, handoff_ref, scope, *, verify_artifacts=True,
-                    _completed_appservice_download=False):
-        return self.appservice.read_target(handoff_ref, scope,
-            **({'_completed_download': True} if _completed_appservice_download else {}))
+    def read_target(self, handoff_ref, scope, *, verify_artifacts=True):
+        return self.appservice.read_target(handoff_ref, scope)
 
     def _observation(self, target, event, snapshot, provenance=()):
         facts = deepcopy(event['facts'])

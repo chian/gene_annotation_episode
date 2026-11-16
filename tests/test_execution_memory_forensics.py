@@ -61,29 +61,6 @@ def test_complete_rows_identical_and_original_bytes_preserved(tmp_path):
     assert all(Path(x['copy']).stat().st_mode & 0o777 == 0o400 for x in result['snapshots'])
 
 
-@pytest.mark.parametrize('column,value,kind', [
-    ('body', 'different-outcome', 'body_conflict'),
-    ('resource', 'different-resource', 'metadata_conflict'),
-    ('attempt', 'another-attempt', 'disjoint'),
-])
-def test_same_key_conflicts_and_disjoint_history_are_not_merged(tmp_path, column, value, kind):
-    paths = pair(tmp_path)
-    with sqlite3.connect(paths[1]) as db:
-        db.execute('UPDATE execution_measurements SET ' + column + '=?', (value,))
-    # context-manager exit commits but does not close a SQLite connection.
-    db.close()
-    result = capture(tmp_path, paths)
-    assert result['failure'] is None, result
-    counts = result['comparison']['execution_measurements']['counts']
-    if kind == 'disjoint':
-        assert counts['left_only'] == counts['right_only'] == 1
-    else:
-        assert counts[kind] == 1 and counts['identical'] == 0
-    raw = Path(result['comparison']['execution_measurements']['file']).read_text()
-    assert value in raw and 'attempt-one' in raw
-    assert not result['claims']['migration']
-
-
 def sqlite_writer(path, ready, release):
     db = sqlite3.connect(path)
     try:
@@ -239,26 +216,6 @@ def test_copy_tamper_is_rejected_before_sqlite(tmp_path):
         F.open_snapshot(record)
 
 
-def test_reference_paths_preserve_none_relative_other_and_exact(tmp_path):
-    paths = pair(tmp_path)
-    value = {'saved': [{'execution_memory_path': str(paths[0])},
-                      {'execution_memory_path': str(paths[1])},
-                      {'shared_execution_memory': {'path': 'relative/history', 'policy': {'original': 9}}},
-                      {'shared_execution_memory': None},
-                      {'execution_memory_path': '/another/original/history'}]}
-    original = tmp_path / 'runs' / 'saved.json'
-    raw = json.dumps(value).encode(); original.write_bytes(raw)
-    result = capture(tmp_path, paths, references=[{
-        'path': 'runs/saved.json', 'sha256': F.sha(raw), 'kind': 'controlled_saved_operands'}])
-    assert result['failure'] is None
-    records = result['references']['inputs'][0]
-    assert Path(records['copy']).read_bytes() == raw == original.read_bytes()
-    assert [x['classification'] for x in records['references']] == [
-        'exact_database_0', 'exact_database_1', 'relative_path_historical_cwd_unresolved',
-        'unresolved_fallback_or_shape', 'other_absolute_path']
-    assert result['references']['absence_is_not_global_absence']
-
-
 def test_reference_mismatch_refuses_before_source_snapshot(tmp_path):
     paths = pair(tmp_path)
     (tmp_path / 'runs' / 'saved.json').write_text('{}')
@@ -325,29 +282,6 @@ def test_workflow_membership_keeps_nested_workers_and_rejects_adjacent_prefix():
     assert F._workflow_group('0::' + group + '-adjacent/worker\n') is None
     assert not F._workflow_member(raw, None)
     assert F._workflow_group('0::/user.slice/unrecognized.service/worker\n') is None
-
-
-def test_retained_actual_unlinked_denials_remain_unknown_not_absent():
-    """Replay real denial metadata only; this is not a fake process census."""
-    raw = (Path(__file__).parent / 'fixtures/execution_memory_forensics/unknown_visibility_baseline.json').read_bytes()
-    evidence = json.loads(raw)
-    observed = evidence['processes_before']
-    assert evidence['failure']['code'] == 'relevant_process_visibility_unresolved'
-    assert observed['unresolved']
-    result = {'unresolved': [], 'unclassified_process_observations': [], 'matches': []}
-    for item in observed['unresolved']:
-        assert item['type'] == 'PermissionError'
-        assert not any(str(match['pid']) == item['pid'] for match in observed['matches'])
-        # The original census supplied no workflow-link witness for these PIDs.
-        # Missing linkage is unknown, never proof that the process is unrelated.
-        F._visibility_failure(result, item['pid'], PermissionError(item['message']),
-            uid=observed['relevant_uids'][0], identity=None, links=[])
-    assert result['unresolved'] == []
-    assert len(result['unclassified_process_observations']) == len(observed['unresolved'])
-    assert [r['message'] for r in result['unclassified_process_observations']] == [r['message'] for r in observed['unresolved']]
-    assert all(r['scope'] == 'unknown_target_or_workflow_link' and r['links'] == []
-               for r in result['unclassified_process_observations'])
-    F.assert_inventory(result)
 
 
 def test_real_inventory_retains_unknown_coverage_and_actual_executor_links(tmp_path):

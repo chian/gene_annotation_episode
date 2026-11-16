@@ -1,7 +1,4 @@
-"""A107 original protease assay context declarations.
-
-Selected from the authenticated pre-organization defining owner; scientific formulas and qualifications are unchanged.
-"""
+"""A107 protease assay context declarations."""
 from __future__ import annotations
 from copy import deepcopy
 import math

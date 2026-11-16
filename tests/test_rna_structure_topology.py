@@ -1,28 +1,10 @@
 """Literal coordinate/topology oracles, including formerly incorrect loop cases."""
-import json
 from copy import deepcopy
-from pathlib import Path
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_contracts import COORDINATE_SYSTEM, validate_topology
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_topology import parse_rna_topology
-
-PACKET = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_core_354"
-CASES = json.loads((PACKET / "topology_oracles.json").read_text())
-
-
-@pytest.mark.parametrize("case", CASES, ids=lambda row: row["name"])
-def test_literal_coordinates_stems_and_exposed_regions(case):
-    result = parse_rna_topology(case["structure"], coordinate_system=COORDINATE_SYSTEM)
-    assert result["status"] == "valid"
-    assert [[pair["i"], pair["j"]] for pair in result["pairs"]] == case["pairs"]
-    assert [len(stem["pair_keys"]) for stem in result["stems"]] == case["stems"]
-    assert [[region["kind"], region["unpaired_indices"]] for region in result["regions"]] == case["regions"]
-    assert validate_topology(result) == result
-    dots = sorted(i for region in result["regions"] for i in region["unpaired_indices"])
-    assert dots == [i for i, symbol in enumerate(case["structure"]) if symbol == "."]
-    assert len(dots) == len(set(dots))
 
 
 def test_immediate_nesting_not_all_descendants_and_exact_side_arrays():

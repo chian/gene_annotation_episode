@@ -50,35 +50,6 @@ def test_dispatch_uses_fixed_child_quota_without_changing_request(prepared, monk
     assert Path(body['paths']['request']).read_bytes() == request
 
 
-@pytest.mark.parametrize('missing_resource_binding', [False, True])
-def test_legacy_never_dispatched_handle_records_new_quota_before_submission(
-        prepared, monkeypatch, missing_resource_binding):
-    native, handle, command = prepared
-    body = handle.read(); body['metadata'].pop('cpu_quota_percent', None)
-    if missing_resource_binding:
-        body['metadata'].pop('local_resources')
-    native.atomic_json(handle.path, body)
-    original = Path(body['paths']['request']).read_bytes()
-    submitted = []
-    def capture(argv, **kwargs):
-        saved = handle.read()
-        assert saved['metadata']['cpu_quota_percent'] == 100
-        assert saved['metadata']['cpu_threads'] == 4
-        assert saved['stage'] == 'submitting'
-        assert 'CPUQuota=100%' in argv
-        submitted.append(saved)
-        return SimpleNamespace(returncode=0)
-    monkeypatch.setattr(native.subprocess, 'run', capture)
-    monkeypatch.setattr(native, 'resume_start', lambda selected, **kwargs: selected)
-    assert native.start_prepared(handle) is handle
-    assert len(submitted) == 1
-    assert submitted[0]['command'] == command
-    assert Path(body['paths']['request']).read_bytes() == original
-    reservation = submitted[0]['capacity_reservation']
-    import_module(PACKAGE+'.local_resources').LocalResources.reopen(
-        reservation['resource']).release_reservation(reservation)
-
-
 @pytest.mark.parametrize('legacy', [False, True])
 @pytest.mark.parametrize('wrong_child_quota', [False, True])
 def test_resume_verifies_recorded_child_quota_with_real_authenticated_ancestor(

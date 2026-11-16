@@ -13,7 +13,7 @@ from gene_annotation_episode.atac_differential_contracts import validate_atac_pa
 from gene_annotation_episode.atac_differential_sheet import build_atac_differential_sheet
 from gene_annotation_episode.atac_reference_observations import parse_atac_bam_reference
 from test_atac_differential_inputs import NATIVE, artifact, codes
-from test_atac_differential_sheet import explicit_inputs, native_inputs
+from test_atac_differential_sheet import native_inputs
 
 
 HEADERS = (Path(__file__).resolve().parents[1]
@@ -334,17 +334,6 @@ def test_identical_header_and_input_content_in_different_selected_positions_is_n
     assert len(sheet['bam_references']) == 3
     assert sheet['bam_references'][0]['artifact'] == sheet['bam_references'][2]['artifact']
     assert not any(i['field'] == 'bam_references' for i in sheet['issues'])
-
-
-def test_explicit_tracks_and_historical_native_data_do_not_gain_invented_headers():
-    explicit = build_atac_differential_sheet(**explicit_inputs())
-    assert explicit['bam_references'] == []
-    assert not any(i['field'] == 'bam_references' for i in explicit['issues'])
-    native = build_atac_differential_sheet(**native_inputs())
-    assert native['bam_references'] == []
-    assert [(i['code'], i['binding_key']) for i in native['issues'] if i['field'] == 'bam_references'] == [
-        ('metadata_missing', 'callpeak-1:input:0'), ('metadata_missing', 'callpeak-2:input:0')]
-    assert [d['count'] for d in native['depth_selection']['conditions']] == [100, 200]
 
 
 def test_length_md5_alias_and_extra_contigs_remain_native_facts_for_the_separate_bridge():

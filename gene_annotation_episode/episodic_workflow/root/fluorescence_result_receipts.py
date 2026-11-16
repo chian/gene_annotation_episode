@@ -670,9 +670,9 @@ class FluorescenceResultReceipts:
     def match_outcome(row, receipt):
         require(row['result'] is not None, 'fluorescence_completed_result_required')
         actual = json.loads(row['result'])
-        if 'pending_work_after_action' in actual:
-            from .wait_events import validate_pending
-            validate_pending(actual.pop('pending_work_after_action'))
+        require('pending_work_after_action' in actual, 'fluorescence_completed_result_mismatch')
+        from .wait_events import validate_pending
+        validate_pending(actual.pop('pending_work_after_action'))
         require(same(actual, outcome(receipt)), 'fluorescence_completed_result_mismatch')
 
     def controls(self, intent):

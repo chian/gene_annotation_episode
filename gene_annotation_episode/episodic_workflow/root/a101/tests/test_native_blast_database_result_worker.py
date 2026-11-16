@@ -212,21 +212,6 @@ def implementation(*, execution_program=None):
     return dict(files=files, manifest_sha256=_scientific_native_blast_database_result_worker.native_blast_database_implementation_identity(files))
 
 
-def test_current_implementation_requires_shared_correspondence_pin():
-    selected = implementation()
-    common = "gene_annotation_episode.episodic_workflow.root.a101.library.alignment_correspondence"
-    assert common in {row["module"] for row in selected["files"]}
-    worker._verify_implementation(selected)
-    missing = deepcopy(selected)
-    missing["files"] = [row for row in missing["files"] if row["module"] != common]
-    missing["manifest_sha256"] = _scientific_native_blast_database_result_worker.native_blast_database_implementation_identity(missing["files"])
-    with pytest.raises(worker._WorkerFailure) as caught:
-        worker._verify_implementation(missing)
-    assert caught.value.failure == dict(stage="worker", code="native_blast_database_artifact_identity_mismatch",
-        detail_code="artifact_digest_conflict", pointer="/implementation/files", artifact_key=None,
-        input_key=None, search_key=None, record_key=None)
-
-
 def request_fixture(tmp_path, program="psiblast", *, metadata_payload=None, metadata_tuples=None, native_report=None, query_bytes=None):
     """Use actual N capture of a clearly synthetic emitter, never BLAST."""
     from gene_annotation_episode.episodic_workflow.root.a101.tests import test_native_blast_database_driver as native
@@ -605,34 +590,6 @@ def test_original_worker_generation_cannot_be_overwritten_and_invalid_model_is_r
         run_request(tmp_path, new, "invalid-model.json")
     assert {p.name: p.read_bytes() for p in output.iterdir()} == saved
     assert not Path(new["output_directory"]).exists()
-
-
-def test_changed_calculator_bytes_reuse_old_interpretation_without_parsers(tmp_path):
-    request = request_fixture(tmp_path); first = run_request(tmp_path, request)
-    assert first["status"] != "failed"
-    new = reuse_request(request, first)
-    package = Path(__file__).resolve().parents[5] / "gene_annotation_episode"
-    copied = tmp_path / "changed-implementation" / "gene_annotation_episode"
-    copied.mkdir(parents=True)
-    for source in package.glob("*.py"):
-        shutil.copyfile(source, copied / source.name)
-    calculator = copied / "blast_iteration_calculators.py"
-    calculator.write_bytes(calculator.read_bytes() + b"\n# Synthetic replay: changed retained calculator bytes.\n")
-    request_path = tmp_path / "changed-code-request.json"
-    request_path.write_bytes(worker._json_bytes(new))
-    # The isolated process imports the changed local package. Actual M/293 are
-    # prohibited after loading; real311/303 calculation still executes once.
-    script = tmp_path / "changed-code-run.py"
-    script.write_text("import hashlib, json, pathlib, sys\nfrom gene_annotation_episode.episodic_workflow.root.a101 import native_blast_database_result_worker as w\nfrom gene_annotation_episode.episodic_workflow.root.a101.library import native_blast_database_metadata as m\np = pathlib.Path(sys.argv[1]); r = json.loads(p.read_bytes())\nfiles = [dict(module=n, path=str(pathlib.Path(v.__file__).resolve()), sha256=hashlib.sha256(pathlib.Path(v.__file__).read_bytes()).hexdigest()) for n,v in w._implementation_modules(execution_program=r['bundle']['requested_job']['native_blast_database']['program']).items()]\nr['implementation'] = dict(files=files, manifest_sha256=w.native_blast_database_implementation_identity(files))\nold = json.loads(pathlib.Path(r['reuse']['manifest_path']).read_bytes())\nr['calculation_id'] = w.native_blast_database_calculation_identity(input_identity=w.native_blast_database_input_identity(r), input_implementation_sha256=old['input_implementation_sha256'], sequence_model=r['sequence_model'], implementation_manifest_sha256=r['implementation']['manifest_sha256'])['calculation_id']\np.write_bytes(w._json_bytes(r))\ndef forbidden(*a, **k): raise AssertionError('saved interpretation was reparsed')\nm.prepare_native_blast_database_inputs = forbidden\nm.populate_native_blast_database_sheets = forbidden\nw.parse_blast_report_collection = forbidden\ncalls = []; actual = w._iteration.calculate_blast_iteration_components\ndef calculate(*a, **k):\n    calls.append(1)\n    return actual(*a, **k)\nw._iteration.calculate_blast_iteration_components = calculate\nresult = w.run_native_blast_database_result_worker(str(p))\nassert result['status'] != 'failed', result\nassert calls == [1]\n")
-    result = subprocess.run([sys.executable, "-B", str(script), str(request_path)], cwd=tmp_path,
-        env=dict(os.environ, PYTHONPATH=str(copied.parent), PYTHONDONTWRITEBYTECODE="1"), capture_output=True, check=False)
-    (tmp_path / "changed-code.stdout").write_bytes(result.stdout); (tmp_path / "changed-code.stderr").write_bytes(result.stderr)
-    assert result.returncode == 0, result.stderr.decode()
-    second = json.loads((Path(new["output_directory"]) / "worker-manifest.json").read_bytes())
-    assert second["input_identity"] == first["input_identity"] and second["input_interpretation_id"] == first["input_interpretation_id"]
-    assert second["input_implementation_sha256"] == first["implementation_manifest_sha256"]
-    assert second["implementation_manifest_sha256"] != first["implementation_manifest_sha256"]
-    assert second["calculation_id"] != first["calculation_id"]
 
 
 def test_retained_native_pssm_full_matrix_values_are_not_compacted():

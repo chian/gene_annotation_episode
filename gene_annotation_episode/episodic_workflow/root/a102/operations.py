@@ -48,8 +48,7 @@ class AnnotationOperations:
                 recorded_selection=None if original is None else _runtime.json.loads(original['action']),
                 exchanges=() if original is not None or self.workflow.decision_exchanges is None else
                     self.workflow.decision_exchanges.rows(self.episode_id, index),
-                exchange_schema=saved.get('contract_information', {}).get('exchange_schema'),
-                unproven_replay=getattr(self, '_unproven_direct_response_index', None) == index)
+                exchange_schema=saved.get('contract_information', {}).get('exchange_schema'))
             # Validate selection independently: report formatting must not
             # reject a valid scientific contribution or alter its credit.
             selection = response["selection"]
@@ -62,8 +61,7 @@ class AnnotationOperations:
                 # Store owns row-level admission and preserves independent
                 # valid rows. Checking its full scientific payload here
                 # would prevent its partial-result path from ever running.
-                envelope = self.workflow.reasoning_action_schema(self, {"type": "object"},
-                    _accept_legacy_quotes=True)
+                envelope = self.workflow.reasoning_action_schema(self, {"type": "object"})
                 _runtime.Draft202012Validator(envelope).validate(selection)
                 payload = selection["commit"]
                 commit_schema = self.workflow.store.reasoning_schema()

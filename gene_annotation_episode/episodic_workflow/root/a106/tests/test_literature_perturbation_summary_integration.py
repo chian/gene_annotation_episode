@@ -25,6 +25,7 @@ from test_runtime import FixtureController, ScriptedProvider
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary import source_data, paired_data, arguments, TEXT, graph_data, IMAGE
 
 from gene_annotation_episode.episodic_workflow.root.a106.tests.perturbation_summary_fixtures import REQUESTED, source, fixture
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_integration import locations
 FORM=obj({"measurements":perturbation_summary_cells_schema()})
 
 
@@ -45,7 +46,7 @@ def test_selected_summary_saved_exact_subset_no_source_recalculation_and_read_on
     store,context,args=fixture(tmp_path,paired=paired)
     with store:
         binding=binding_for(store,context)
-        outcome=asyncio.run(binding.execute(context,'literature.perturbation.populate',args,'selected'))
+        outcome=asyncio.run(binding.execute(context,'literature.perturbation.populate',locations(args),'selected'))
         assert outcome['status']=='completed',outcome.get('feedback')
         current=replace(context,received_record_refs=(*context.received_record_refs,*outcome['record_refs']))
         sheet=outcome['result']['sheet_ref'];repo=LiteraturePerturbationRepository(store,context.run_id).summary_projection()
@@ -125,7 +126,7 @@ def test_summary_operation_in_ordinary_child_admits_exact_form_once_without_extr
             'goal':'Measure source perturbation precision under actual retained summary relationships',
             'scope':plain(context.scope),'purpose':'Return requested summary cells with uncertainty meanings',
             'schema_json':json.dumps(FORM),'initial_report_json':'{}'},'report_update':{}}
-        action={'selection':{'kind':'tool','tool':'literature.perturbation.populate','arguments':args},'report_update':{}}
+        action={'selection':{'kind':'tool','tool':'literature.perturbation.populate','arguments':locations(args)},'report_update':{}}
         def receive(inputs):
             form,=inputs['child_reports'];received.append(form)
             assert [r['component'] for r in form['measurements']]==REQUESTED
@@ -134,7 +135,7 @@ def test_summary_operation_in_ordinary_child_admits_exact_form_once_without_extr
             commit={name:[] for name in store.reasoning_schema()['required']}
             commit['source_subjects']=[{'alias':'source_subject','reference_type':'assay','source_ref':row['id'],
                 'label':'Constructed','anchor':{'source_ref':row['id'],'artifact_ref':row['artifact_ref'],
-                    'start':start,'end':start+11,'quote':'Constructed'}}]
+                    'start':start,'end':start+11}}]
             return {'selection':{'kind':'reason','commit':commit},'report_update':{}}
         scorer=ScientificFindingProgress(FindingProgressPolicy(1))
         result=asyncio.run(run_workflow(store,ToolRegistry(store),provider=ScriptedProvider([commission,action,receive]),

@@ -311,7 +311,7 @@ def finalize_scientific_command(assignment, arguments, outcome):
     return returned
 
 
-def terminal_local_job_matches(assignment, outcome, *, historical=False):
+def terminal_local_job_matches(assignment, outcome):
     """Validate only already recorded host facts, without reopening files."""
     try:
         detail = outcome['native_outcome']
@@ -323,9 +323,7 @@ def terminal_local_job_matches(assignment, outcome, *, historical=False):
         _require(profile is not None and proof['profile'] == profile[0]
             and proof['version'] == 'terminal_scientific_command_proof_v1'
             and proof['command'] == command and proof['execution_command'] == executed)
-        _require(type(historical) is bool and (not historical or profile[0] in {'native_flux_balance', 'native_atac_differential', 'native_chromatin_interactions'}))
-        plan = (profile[1](proof['original_plan'], historical=historical)
-            if profile[0] in {'native_flux_balance', 'native_atac_differential', 'native_chromatin_interactions'} else profile[1](proof['original_plan']))
+        plan = profile[1](proof['original_plan'])
         _require(plan['requested_job'] == assignment['requested_job']
             and plan['identity']['assignment_sha256'] == digest(assignment))
         actual = {name: executed[name] for name in ('cmd', 'workdir', 'env')}
@@ -340,8 +338,7 @@ def terminal_local_job_matches(assignment, outcome, *, historical=False):
             and proof['output_snapshots'] == detail['output_snapshots'])
         module = importlib.import_module('.' + _PROFILES[profile[0]][0], 'gene_annotation_episode.episodic_workflow.root.library')
         driver_argv = getattr(module, _DRIVER_ARGUMENTS[profile[0]])
-        expected_argv = (driver_argv(plan, historical=historical)
-            if profile[0] in {'native_flux_balance', 'native_atac_differential', 'native_chromatin_interactions'} else driver_argv(plan))
+        expected_argv = driver_argv(plan)
         actual_argv = list(actual['cmd'])
         actual_argv[-1] = str(selected[1])
         _require(actual_argv == expected_argv)
@@ -357,14 +354,14 @@ def terminal_local_job_matches(assignment, outcome, *, historical=False):
         return False
 
 
-def read_terminal_handoff(store, run_id, target, scope, *, historical=False):
+def read_terminal_handoff(store, run_id, target, scope):
     from .practical_receipt_information import PracticalReceiptInformation
     from gene_annotation_episode.execution_contracts import validate_target
     from .episode_return_records import EpisodeReturnRecords
     from gene_annotation_episode.episodic_workflow.root.communication import plain
     from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
     information = PracticalReceiptInformation(store, run_id)
-    body = information.read(target['handle'], scope, historical=historical)
+    body = information.read(target['handle'], scope)
     source = store.get(target['handle'])
     snapshot = information._artifact_json(source['request_ref'])
     receipt = body['receipt']
@@ -380,15 +377,15 @@ def read_terminal_handoff(store, run_id, target, scope, *, historical=False):
     from gene_annotation_episode.episodic_workflow.root.library.flux_balance_assignment_identity import is_compact_assignment
     if is_compact_assignment(plain(original.assignment)):
         from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import read_request_binding, match_practical_public_outcome
-        control = read_request_binding(store, run_id, body['episode_id'], historical=historical)
+        control = read_request_binding(store, run_id, body['episode_id'])
         match_practical_public_outcome(actual_return, receipt, target['handle'],
-            assignment=assignment, control_version=control['version'])
+            assignment=assignment)
     else:
         _require(actual_return.get('status') in ('completed', 'partial')
             and actual_return.get('result') == receipt
             and target['handle'] in actual_return.get('record_refs', []))
     _require(receipt['tool_name'] == 'exec_command'
-        and terminal_local_job_matches(assignment, receipt['outcome'], historical=historical))
+        and terminal_local_job_matches(assignment, receipt['outcome']))
     plan = receipt['outcome']['native_outcome']['scientific_command_proof']['original_plan']
     _require(plan['identity']['run_id'] == run_id
         and plan['identity']['episode_id'] == body['episode_id']
@@ -403,8 +400,8 @@ def read_terminal_handoff(store, run_id, target, scope, *, historical=False):
         'start_receipt': receipt}
 
 
-def validate_terminal_handoff(proof, intent, store, run_id, *, historical=False):
-    expected = read_terminal_handoff(store, run_id, intent['target'], intent['scope'], historical=historical)
+def validate_terminal_handoff(proof, intent, store, run_id):
+    expected = read_terminal_handoff(store, run_id, intent['target'], intent['scope'])
     allowed = set(expected)
     if 'native_flux_balance' in intent['target']['assignment']['requested_job']:
         allowed.add('input_binding')
@@ -458,11 +455,11 @@ def terminal_native_snapshot(receipts, action, observation):
     return value
 
 
-def validate_terminal_native(value, intent, observation, store, run_id, *, historical=False):
+def validate_terminal_native(value, intent, observation, store, run_id):
     _require(set(value) == {'version', 'original_plan', 'command_proof', 'plan_file',
         'started_marker', 'started_marker_file', 'driver_started'}
         and value['version'] == 'terminal_native_snapshot_v1')
-    handoff = read_terminal_handoff(store, run_id, intent['target'], intent['scope'], historical=historical)
+    handoff = read_terminal_handoff(store, run_id, intent['target'], intent['scope'])
     proof = handoff['start_receipt']['outcome']['native_outcome']['scientific_command_proof']
     _require(value['command_proof'] == proof and value['original_plan'] == proof['original_plan']
         and value['plan_file'] == terminal_file_identity(proof['plan_snapshot'], value['original_plan']['version']))
@@ -508,10 +505,10 @@ def terminal_observation(target, proof):
             'scientific_command_proof': deepcopy(proof)}}
 
 
-def validate_terminal_observation(value, intent, store, run_id, *, historical=False):
+def validate_terminal_observation(value, intent, store, run_id):
     from .progress_records import validate_resource_observation
     validate_resource_observation(value)
-    handoff = read_terminal_handoff(store, run_id, intent['target'], intent['scope'], historical=historical)
+    handoff = read_terminal_handoff(store, run_id, intent['target'], intent['scope'])
     proof = handoff['start_receipt']['outcome']['native_outcome']['scientific_command_proof']
     _require(value == terminal_observation(intent['target'], proof))
     return value

@@ -10,11 +10,7 @@ from jsonschema import Draft202012Validator
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.ensembl_acquisition import (
-    ARGUMENTS_SCHEMA, MAX_GENE_IDS, MAX_RESPONSE_BYTES, OPERATIONS, RESOURCE, TOOL, URL,
-    ensembl_discovery_refs, ensembl_request_spec, ensembl_result, ensembl_result_schema, validate_ensembl_arguments,
-    validate_ensembl_discovery, validate_ensembl_result,
-)
+from gene_annotation_episode.ensembl_acquisition import ARGUMENTS_SCHEMA, MAX_GENE_IDS, MAX_RESPONSE_BYTES, RESOURCE, URL, ensembl_discovery_refs, ensembl_request_spec, ensembl_result, ensembl_result_schema, validate_ensembl_arguments, validate_ensembl_discovery, validate_ensembl_result
 
 
 REGISTRY = "source_" + "a" * 64
@@ -129,26 +125,6 @@ def replace_evidence(captured, source_ref, raw=None, selected=None, **transport_
     previous = captured[source_ref]["snapshot"]
     captured[source_ref] = retained(previous.request if selected is None else selected,
         previous.content if raw is None else raw, **transport_changes)
-
-
-@pytest.mark.parametrize("operation", OPERATIONS)
-def test_one_fixed_legacy_resource_and_finite_native_transport(operation):
-    selected = arguments(operation)
-    before = deepcopy(selected)
-    spec = ensembl_request_spec(selected)
-    assert validate_ensembl_arguments(selected) == selected and selected == before
-    assert spec["service"] == "ensembl" and spec["url"] == URL
-    assert spec["follow_redirects"] is False and spec["max_bytes"] == selected["max_bytes"]
-    if operation == "gene_homologies":
-        assert spec["method"] == "POST" and spec["params"] == {}
-        assert spec["content_type"] == "application/x-www-form-urlencoded; charset=UTF-8"
-    else:
-        assert spec["method"] == "GET" and spec["body"] is None and spec["content_type"] is None
-        assert spec["params"]["type"] == operation
-        if operation != "registry":
-            assert spec["params"]["virtualSchema"] == "default" and spec["params"]["mart"] == CONTEXT["mart"]
-        if operation == "configuration":
-            assert spec["params"]["dataset"] == SOURCE_DATASET and spec["params"]["interface"] == "default"
 
 
 def test_generated_xml_has_only_selected_source_dataset_ids_and_native_ordered_fields():

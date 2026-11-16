@@ -15,7 +15,6 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_observation_calculations import _grid_fit, populate_reported_curve_precision, reported_curve_precision_sheet_schema
 ROOT = Path(__file__).resolve().parents[5]
 CASE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/research_reference/a105_precision_population_case_225'
-ART = ROOT / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_reported_curve_precision_228'
 ORACLE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_precision_population_review_227/ROOT_NUMERICAL_ORACLES_001.json'
 NS = {'m': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
 

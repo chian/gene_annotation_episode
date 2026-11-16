@@ -1,5 +1,5 @@
 from __future__ import annotations
-from .source_contracts import (Mapping, deepcopy, hashlib, inspect, json, Path, re, ReportBoundaryError, interpretation_schema, plain, validate_closed_schema, validate_form, ContractError, identity, obj, validate_schema, reference_in_context, scientific_digest, scientific_invocation_ref, validate_child_selection, validate_filled_process, validate_option_ref, validate_revision_origin, validate_selection, selection_fields, selector_selection, SELECTION_VERSION, LEGACY_SELECTION_VERSION, build_process_result, merge_process_results, report_sources, validate_process_result, SUPPORT_ENTRY_VERSION, support_observation_kinds, validate_support_entry, EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry, INSTRUCTION_VERSION, instruction_view, validate_instruction_entry, evidence_axis_instruction_view, alignment_site_fact_sources, requested_site_projections, project_site_action_return, validate_frozen_site_return, restriction_mapping_fact_sources, requested_restriction_projections, project_restriction_action_return, validate_frozen_restriction_return, molecular_fact_sources, merge_molecular_facts, requested_molecular_fact_sources, requested_molecular_fact_fields, validate_frozen_molecular_return, PROTEIN_ACTION_FACT_SOURCES, protein_structure_action_fact_sources, merge_protein_structure_action_facts, requested_protein_structure_action_fields, validate_frozen_protein_structure_action_return, VERSION, ROLE, ROLES, _COMMON_TOOLS, _REFERENCE, _SHA256, _SCIENTIFIC_NAMESPACES, _IMPLEMENTATION_FILES, _ITC_PARAMETER_SOURCE, _ANNOTATION_REF, _EVIDENCE_AXIS, _THOUGHT_REF, _TOOLS, _LEGACY_SELECTION, _TOOL_SELECTOR, _TOOL_INFO, _SELECTION, _CANONICAL_SELECTION, _REVISION_ORIGIN, _EVIDENCE_TASK, _ASSIGNMENT, _RECORDED_ASSIGNMENT, _REVISION_ARGUMENTS, _LEGACY_REVISION_ARGUMENTS, original_axis_task_projector, _object, _ref_schema)
+from .source_contracts import (Mapping, deepcopy, hashlib, inspect, json, Path, re, ReportBoundaryError, interpretation_schema, plain, validate_closed_schema, validate_form, ContractError, identity, obj, validate_schema, reference_in_context, scientific_digest, scientific_invocation_ref, validate_child_selection, validate_filled_process, validate_option_ref, validate_revision_origin, validate_selection, selection_fields, selector_selection, SELECTION_VERSION, build_process_result, merge_process_results, report_sources, validate_process_result, SUPPORT_ENTRY_VERSION, support_observation_kinds, validate_support_entry, EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry, INSTRUCTION_VERSION, instruction_view, validate_instruction_entry, evidence_axis_instruction_view, alignment_site_fact_sources, requested_site_projections, project_site_action_return, validate_frozen_site_return, restriction_mapping_fact_sources, requested_restriction_projections, project_restriction_action_return, validate_frozen_restriction_return, molecular_fact_sources, merge_molecular_facts, requested_molecular_fact_sources, requested_molecular_fact_fields, validate_frozen_molecular_return, PROTEIN_ACTION_FACT_SOURCES, protein_structure_action_fact_sources, merge_protein_structure_action_facts, requested_protein_structure_action_fields, validate_frozen_protein_structure_action_return, VERSION, ROLE, ROLES, _COMMON_TOOLS, _REFERENCE, _SHA256, _SCIENTIFIC_NAMESPACES, _ITC_PARAMETER_SOURCE, _ANNOTATION_REF, _EVIDENCE_AXIS, _THOUGHT_REF, _TOOL_SELECTOR, _TOOL_INFO, _SELECTION, _CANONICAL_SELECTION, _REVISION_ORIGIN, _EVIDENCE_TASK, _ASSIGNMENT, _RECORDED_ASSIGNMENT, _REVISION_ARGUMENTS, original_axis_task_projector, _object, _ref_schema)
 
 from .report_reference_access import ScientificReportReferenceAccess
 
@@ -132,45 +132,25 @@ class ScientificReportValidation(ScientificReportReferenceAccess):
         self._validate_structural_report(context, form, original_schema)
         self._validate_component_axis_report(context, form, original_schema)
         from gene_annotation_episode.episodic_workflow.root.a102.a102_investigation import (report_schema as a102_report_schema,
-            legacy_report_schema as a102_legacy_report_schema, resolve_report as resolve_a102_report)
-        if plain(original_schema) in (a102_report_schema(), a102_legacy_report_schema()):
+            resolve_report as resolve_a102_report)
+        if plain(original_schema) == a102_report_schema():
             workflow = getattr(self.services, 'workflow', None)
             if workflow is None:
                 raise ContractError('a102_report_store_required')
             resolve_a102_report(workflow.store, plain(form), scope=plain(context.scope))
-        from gene_annotation_episode.episodic_workflow.root.a103.a103_investigation import (resolve_report as resolve_a103_report,
-            legacy_report_schema as a103_legacy_report_schema,
+        from gene_annotation_episode.episodic_workflow.root.a103.a103_investigation import (
             measurement_report_schema as a103_measurement_report_schema,resolve_measurement_report)
-        from gene_annotation_episode.episodic_workflow.root.a103.domain import ContractError as A103ContractError
         a103_axis=plain(context.assignment).get('selection',{}).get('evidence_axis',{}).get('option_id')=='A103'
         a103_fields=set(plain(original_schema).get('properties',{}))
-        if a103_axis and a103_fields == set(a103_legacy_report_schema()['properties']):
-            workflow = getattr(self.services, 'workflow', None)
-            if workflow is None:
-                raise ContractError('a103_report_store_required')
-            try:
-                resolve_a103_report(workflow.store, plain(form), scope=plain(context.scope))
-            except (ContractError, A103ContractError) as error:
-                fields={
-                    'a103_association_statement_requires_actual_measurement':'context_summary',
-                    'a103_system_statement_requires_qualified_context':'functional_support',
-                    'a103_function_interpretation_requires_explicit_hypothesis_and_assessment':'functional_support',
-                    'a103_trait_statement_requires_local_feature_attribution':'functional_support',
-                    'a103_contrast_statement_requires_context_panel':'functional_support',
-                    'a103_discriminating_contrast_requires_qualified_separated_bounds':'functional_support'}
-                if str(error) not in fields:raise
-                raise ReportBoundaryError('A103 interpretation requires its declared supporting records',
-                    code=str(error),field=fields[str(error)]) from error
-        elif a103_axis and a103_fields==set(a103_measurement_report_schema()['properties']):
+        if a103_axis and a103_fields==set(a103_measurement_report_schema()['properties']):
             workflow=getattr(self.services,'workflow',None)
             if workflow is None:raise ContractError('a103_report_store_required')
             resolve_measurement_report(workflow.store,plain(form),scope=plain(context.scope))
         from gene_annotation_episode.episodic_workflow.root.a104.a104_investigation import (report_schema as a104_report_schema,
-            legacy_report_schema as a104_legacy_report_schema, resolve_report as resolve_a104_report)
+            resolve_report as resolve_a104_report)
         from gene_annotation_episode.episodic_workflow.root.a104.domain import ContractError as A104ContractError
         a104_axis = plain(context.assignment).get('selection', {}).get('evidence_axis', {}).get('option_id') == 'A104'
-        if a104_axis and set(plain(original_schema).get('properties', {})) in (
-                set(a104_report_schema()['properties']), set(a104_legacy_report_schema()['properties'])):
+        if a104_axis and set(plain(original_schema).get('properties', {})) == set(a104_report_schema()['properties']):
             workflow = getattr(self.services, 'workflow', None)
             if workflow is None:
                 raise ContractError('a104_report_store_required')

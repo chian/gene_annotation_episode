@@ -85,7 +85,7 @@ _RECORD = _object(record_key=_TEXT, search_key={"type": "null"}, query_operand=_
     native_converged={"type": "boolean", "const": True}, evidence=_object(
         origin={"const": "native_extractor_output"}, source=_object(source_ref=_REF, pointer={"const": ""}),
         source_format={"const": "ncbi_blastplus_2.17.0_tabular7"}, original_record=_TEXT,
-        extractor=_object(module={"const": "gene_annotation_episode.blast_native_iteration_records"},
+        extractor=_object(module={"const": "gene_annotation_episode.episodic_workflow.root.library.blast_native_iteration_records"},
             function={"const": "extract_blast_tabular7_convergence"}, version={"const": "1"})))
 _EXTRACTION = _object(schema={"const": "blast_native_convergence_extraction_v1"},
     status=_enum("complete", "partial", "unavailable", "incompatible"),

@@ -196,26 +196,6 @@ def test_coherently_resigned_saved_artifact_alias_conflict_is_rejected():
     with pytest.raises(ExperimentalContractError, match='gel_artifact_byte_identity_conflict'):
         gel.validate_gel_extraction(selected, extraction)
 
-def test_v2_explicit_method_contract_preserves_v1_schema_and_output():
-    selected, read, _, _, _ = make_case()
-    original = gel.read_gel_inputs(selected, read_source=read)
-    assert original['version'] == 'gel_lane_extraction_v1'
-    assert 'background_method' not in original['assignments'][0]['lanes'][0]
-    v1_schema = gel.gel_arguments_schema()
-    v2_schema = gel.gel_arguments_schema(version=gel.VERSION_V2)
-    Draft202012Validator.check_schema(v2_schema)
-    assert 'background_method' not in v1_schema['properties']['roi_assignments']['items']['properties']['lanes']['items']['properties']
-    assert 'background_method' in v2_schema['properties']['roi_assignments']['items']['properties']['lanes']['items']['required']
-    selected['version'] = gel.VERSION_V2
-    with pytest.raises(ExperimentalContractError, match='closed_fields_required'):
-        gel.validate_gel_selection(selected)
-    select_v2(selected)
-    Draft202012Validator(v2_schema).validate(selected)
-    updated = gel.read_gel_inputs(selected, read_source=read)
-    assert updated['version'] == 'gel_lane_extraction_v2'
-    corrected = updated['assignments'][0]['lanes'][1]['bands'][0]['corrected_signal']
-    assert corrected['background_method'] == 'mean'
-    assert corrected['exact'] == original['assignments'][0]['lanes'][1]['bands'][0]['corrected_signal']['exact']
 
 def test_v2_unknown_background_method_is_rejected_before_source_io():
     selected, read, _, calls, _ = make_case()

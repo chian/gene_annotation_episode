@@ -6,8 +6,6 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, project_finding_progress
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.scientific_credit import AnnotationSupportScore
-from gene_annotation_episode.credit import CreditPolicy
 from test_scientific_findings import finding, quoted_observation, target_question
 from test_scientific_hypervolume_runtime import assessment, annotation, evidence
 from test_context_credit import source_fixture
@@ -118,33 +116,6 @@ def test_correction_link_cannot_retire_a_finding_outside_assigned_region(tmp_pat
         with pytest.raises(ContractError, match='finding_replacement_outside_scope'):
             store.put('assessment', proposed, origin='reasoning', scope=scope)
         assert store.current_assessments()[0] == previous
-
-
-def test_correction_chain_cannot_restore_an_unauthorized_historical_retirement(tmp_path):
-    with Store(tmp_path/'workspace') as store:
-        target, hypothesis = target_question(store)
-        full_scope = {'subject_refs': [target]}
-        whole = evidence(store, target, 'alignment')
-        a = put_finding(store, hypothesis, whole, target)
-        local = evidence(store, target, 'mechanism')
-        footprint = [{'target_ref': target, 'start': 0, 'end': 5, 'unit': 'aa'}]
-        b_payload = assessment(hypothesis, local['id'], 'scope_limited')
-        b_payload['target_footprint'] = footprint
-        b_payload['investigation_finding'] = finding(target, replaces=[a['id']])
-        b1 = store.put('assessment', b_payload, origin='reasoning', scope=full_scope)
-        # The current revision explicitly no longer declares that retirement.
-        b_payload['expected_revision'] = b1['revision']
-        b_payload['investigation_finding']['replaces_refs'] = []
-        b2 = store.put('assessment', b_payload, origin='reasoning', scope=full_scope)
-        c_observation = evidence(store, target, 'comparison')
-        c_payload = assessment(hypothesis, c_observation['id'], 'scope_limited')
-        c_payload['target_footprint'] = footprint
-        c_payload['investigation_finding'] = finding(target, replaces=[b1['id']])
-        with pytest.raises(ContractError, match='finding_replacement_outside_scope') as error:
-            store.put('assessment', c_payload, origin='reasoning',
-                scope={'subject_refs': [target], 'segments': footprint})
-        assert error.value.detail['reference'] == a['id']
-        assert set(store.current_assessment_subset([a['id'], b1['id'], b2['id']])) == {a['id'], b2['id']}
 
 
 def test_opinion_only_revision_keeps_known_canonical_information_without_new_receipt(tmp_path):

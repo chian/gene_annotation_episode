@@ -71,7 +71,6 @@ def component_window(store, member, component, offset, limit):
 
 
 
-# Original Store/parser custody dependencies retained after axis relocation.
 import hashlib
 import os
 from pathlib import Path

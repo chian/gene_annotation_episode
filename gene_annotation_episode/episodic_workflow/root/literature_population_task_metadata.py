@@ -64,8 +64,6 @@ def population_task_metadata_specs():
             versions = (module.VERSION_V3,)
         elif family.source == 'literature_rate_grid_cells':
             versions = (module.GRID_RECORD,)
-        elif family.source == 'literature_kinetic_cells':
-            versions = (module.VERSION, module.LEGACY_VERSION)
         else:
             versions = (getattr(module, 'VERSION', repository.record_version),)
         flag = {'literature_a108_grading_cells': 'a108_context_evidence',

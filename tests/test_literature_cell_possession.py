@@ -3,17 +3,15 @@
 No primary paper, provider history or model inference is used. Reused fixtures
 are explicitly synthetic; all actual repository projection overrides execute.
 """
-import asyncio
 from copy import deepcopy
 from dataclasses import replace
 import importlib
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
 from gene_annotation_episode.domain import ContractError, canonical, obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episodic_workflow.root.literature_rate_storage import LiteratureRateRepository
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_rate_episode_integration import service_binding
 
@@ -192,22 +190,6 @@ def test_old_trusted_manual_receipt_without_binding_returns_limitation_without_b
         with pytest.raises(ContractError, match="delivery_binding_unavailable"):
             repo.receive_cells(receiver, cells, "old-manual")
         assert list(store.db.iterdump()) == before
-
-
-def test_wrong_native_legacy_view_never_supplies_cells_or_empty_admission(tmp_path):
-    store, owner, _, native, _, _, outcome = selected_case("rate_source", tmp_path)
-    with store:
-        legacy = LiteratureRateRepository(store, owner.run_id)
-        with pytest.raises(ContractError, match="projection_version_mismatch"):
-            legacy.fact_cells(owner, [outcome["result"]["sheet_ref"]], components=[])
-        with pytest.raises(ContractError, match="projection_version_mismatch"):
-            legacy.validate_empty_return_family(owner)
-        parent = replace(owner, episode_id="parent")
-        native_cells = native.project_cells([outcome["result"]["sheet_ref"]], permitted_record_refs=owner.received_record_refs,
-            components=["rate_difference"])
-        with pytest.raises(ContractError, match="projection_version_mismatch"):
-            legacy.receive_cells(parent, native_cells, "wrong-view")
-        assert native.received_cells(parent) == [] and legacy.received_cells(parent) == []
 
 
 def test_owner_cannot_be_changed_by_repointing_source_request_metadata(tmp_path):

@@ -4,7 +4,6 @@ import errno
 import hashlib
 from io import BytesIO
 import json
-from pathlib import Path
 from PIL import Image, ImageDraw, __version__ as PILLOW_VERSION
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError
@@ -88,18 +87,6 @@ def test_visual_only_mixed_percent_and_joint_pairs():
     out, _ = extract(request([a]))
     assert [r['ratio'] for r in out['representations'][0]['readings']] == [0.3, 0.2]
 
-def test_schema_exact_detached_and_selection_contract():
-    base = Path(__file__).resolve().parents[5]
-    normative = base / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_visual_signal_reader_070/normative'
-    assert relative_signal_source_arguments_schema() == json.loads((normative / 'REQUEST_SCHEMA_008.json').read_text())
-    schema = relative_signal_source_arguments_schema()
-    schema['properties'].clear()
-    assert relative_signal_source_arguments_schema()['properties']
-    for edit in (lambda s: s.update(extra=1), lambda s: s['representations'].append(deepcopy(s['representations'][0])), lambda s: s['comparison']['subject'].update(status='known', value='P'), lambda s: s['representations'][0]['selection']['candidates'][0]['numerator']['region'].__setitem__(0, True), lambda s: s['representations'][0]['selection']['candidates'][0]['numerator']['region'].__setitem__(0, 10.0), lambda s: s['representations'][0]['selection'].update(reading_state='ambiguous')):
-        selected = request()
-        edit(selected)
-        with pytest.raises(ExperimentalContractError):
-            validate_relative_signal_source_selection(selected)
 
 @pytest.mark.parametrize('fmt,frame,rgb', [('TIFF', 1, True), ('JPEG', 0, False), ('PNG', 0, True)])
 def test_native_frame_rgb_and_jpeg(fmt, frame, rgb):

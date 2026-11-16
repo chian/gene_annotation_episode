@@ -25,7 +25,6 @@ from gene_annotation_episode.episodic_workflow.root.episode_receipts import Epis
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.rfam_batch_returns import (FACT_SOURCES, IDENTIFIER_NAMESPACES,
     RfamBatchReturns, rfam_fact_sources)
-from gene_annotation_episode.rfam_discovery import result_url
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
@@ -249,9 +248,9 @@ def forbid_read_work(monkeypatch, h):
         "rfam_batch_table_grader": ["calculate_rfam_batch_table_components", "calculate_infernal_search_scores"],
         "infernal_search_grader": ["calculate_infernal_search_scores"],
         "infernal_search_inputs": ["populate_infernal_search_sheet"],
-        "infernal_search_cells": ["populate_infernal_search_cells", "upgrade_saved_infernal_search_sheet"],
+        "infernal_search_cells": ["populate_infernal_search_cells"],
         "rfam_batch_infernal": ["populate_infernal_search_cells", "populate_rfam_json_cells",
-            "populate_rfam_table_cells", "populate_rfam_report_cells", "upgrade_saved_rfam_search_sheet"],
+            "populate_rfam_table_cells", "populate_rfam_report_cells"],
         "rfam_batch_report": ["populate_rfam_batch_report_sheet"],
         "rfam_batch_report_grader": ["calculate_rfam_batch_report_components"],
     }.items():

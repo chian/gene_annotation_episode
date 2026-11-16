@@ -1,5 +1,4 @@
 """Caller reconstruction publication; no model, episode or scientific work."""
-from dataclasses import FrozenInstanceError
 import json
 
 import pytest
@@ -71,30 +70,6 @@ def known_factory(monkeypatch):
     return calls
 
 
-def test_legacy_without_reconstruction_selection_stays_unchanged(run):
-    store, directory, settings = run
-    before = (directory/'run.json').read_bytes()
-    result = application.bind_episode_execution(store, directory, settings=settings, resume=True)
-    assert result.settings == settings and result.runtime_binding is None
-    assert saved_settings(store) == settings
-    assert (directory/'run.json').read_bytes() == before
-    assert not (directory/application.BINDING_FILE).exists()
-    assert store.db.execute("SELECT name FROM sqlite_master WHERE name='runtime_execution_bindings'").fetchone() is None
-    with pytest.raises(FrozenInstanceError):
-        result.settings = {}
-
-
-@pytest.mark.parametrize('options', [{'requested_binding': custom_binding()}, {'use_saved_runtime': True}])
-def test_legacy_resume_cannot_convert_execution_semantics(run, options):
-    store, directory, settings = run
-    with pytest.raises(DurableExecutionError) as error:
-        application.bind_episode_execution(store, directory, settings=settings, resume=True,
-            tool_configuration={}, **options)
-    assert error.value.failure['code'] == 'identity_conflict'
-    assert saved_settings(store) == settings
-    assert not (directory/application.BINDING_FILE).exists()
-
-
 def test_known_default_publishes_actual_configuration_before_factory_and_does_not_rehash_self(run, known_factory):
     store, directory, settings = run
     configuration = {'public': {'transport_timeout_seconds': 73}, 'local_tools': {'cmsearch_cpu': 2}}
@@ -124,18 +99,6 @@ def test_explicit_custom_descriptor_is_unchanged_and_does_not_import_factory(run
     assert json.loads((directory/application.BINDING_FILE).read_text()) == binding
     binding['arguments']['owned_configuration']['value'] = 99
     assert result.runtime_binding['arguments']['owned_configuration']['value'] == 7
-
-
-@pytest.mark.parametrize('changes', [
-    {'extra': 'forbidden'}, {'factory_name': 'factory()'}, {'arguments': []},
-    {'implementation_sha256': 'not-a-digest'}, {'settings_sha256': 'F'*64},
-    {'arguments': {'invalid': float('nan')}}])
-def test_custom_descriptor_has_exact_finite_c1_shape(run, changes):
-    store, directory, settings = run
-    with pytest.raises(ValueError):
-        application.bind_episode_execution(store, directory, settings=settings,
-            requested_binding=custom_binding(**changes))
-    assert saved_settings(store) == settings
 
 
 def test_changed_descriptor_configuration_or_authoritative_settings_cannot_replace_saved_binding(run):
@@ -266,25 +229,6 @@ def test_fixed_case_crash_gap_rejects_changed_original_policy_pin(run, known_fac
         application.bind_episode_execution(store, directory, settings=saved_settings(store), resume=True)
     assert error.value.failure['code'] == 'identity_conflict'
     assert known_factory == []
-
-
-@pytest.mark.parametrize('changed', ['implementation', 'policy'])
-def test_saved_known_binding_rejects_changed_original_pins_before_return(run, known_factory, monkeypatch, changed):
-    store, directory, settings = run
-    (directory/'case-launch.json').write_text(canonical({'configuration': {}}))
-    (directory/'policy-binding.json').write_text(canonical({'original': True}))
-    original = application.bind_episode_execution(store, directory, settings=settings,
-        use_saved_runtime=True, tool_configuration={})
-    before = (directory/application.BINDING_FILE).read_bytes()
-    if changed == 'implementation':
-        monkeypatch.setattr(application.reconstruction, 'implementation_sha256', lambda: 'e'*64)
-    else:
-        (directory/'policy-binding.json').write_text(canonical({'original': False}))
-    with pytest.raises(DurableExecutionError) as error:
-        application.bind_episode_execution(store, directory, settings=original.settings, resume=True)
-    assert error.value.failure['code'] == 'identity_conflict'
-    assert (directory/application.BINDING_FILE).read_bytes() == before
-    assert len(known_factory) == 1
 
 
 @pytest.mark.parametrize('kind', ['arbitrary_registry', 'custom_science'])

@@ -69,11 +69,6 @@ class PendingWorkItemV1(TypedDict):
     latest_progress_ref: str | None
     return_available: bool
 
-class PendingWorkV1(TypedDict):
-    version: Literal['pending_work_v1']
-    captured_at: str
-    items: list[PendingWorkItemV1]
-
 class PendingWorkItemV2(PendingWorkItemV1):
     suspension: dict | None
     event_target: bool
@@ -198,16 +193,15 @@ def validate_condition(condition):
 
 def validate_pending(pending):
     _keys(pending, ('version', 'captured_at', 'items'))
-    if pending['version'] not in {'pending_work_v1', PENDING_VERSION} or type(pending['items']) is not list:
+    if pending['version'] != PENDING_VERSION or type(pending['items']) is not list:
         raise WaitError('invalid_wait_record')
     _utc(pending['captured_at'])
     seen = set()
     for item in pending['items']:
         fields = ('handle', 'role', 'lifecycle_state', 'selected_at', 'observed_at', 'resource_selection', 'expectation_snapshot_refs', 'latest_progress_ref', 'return_available')
-        if pending['version'] == PENDING_VERSION:
-            fields += ('suspension', 'event_target')
-            if 'original_assignment' in item:
-                fields += ('original_assignment',)
+        fields += ('suspension', 'event_target')
+        if 'original_assignment' in item:
+            fields += ('original_assignment',)
         _keys(item, fields)
         assignment = item.get('original_assignment')
         if assignment is not None:
@@ -223,9 +217,9 @@ def validate_pending(pending):
                     raise WaitError('invalid_wait_record')
             if assignment.get('evidence_refs') is not None:
                 _refs(assignment['evidence_refs'])
-        if pending['version'] == PENDING_VERSION and type(item['event_target']) is not bool:
+        if type(item['event_target']) is not bool:
             raise WaitError('invalid_wait_record')
-        if pending['version'] == PENDING_VERSION and item['suspension'] is not None:
+        if item['suspension'] is not None:
             if type(item['suspension']) is not dict:
                 raise WaitError('invalid_wait_record')
             _copy(item['suspension'])
@@ -255,7 +249,7 @@ def _duration_rows(value):
         raise WaitError('invalid_wait_record')
     return value
 
-def estimate_wait(requested_condition: EventConditionV1, pending: PendingWorkV1, progress_records, duration_expectations, own_completed_action_history) -> WaitEstimateV1:
+def estimate_wait(requested_condition: EventConditionV1, pending: PendingWorkV2, progress_records, duration_expectations, own_completed_action_history) -> WaitEstimateV1:
     """Project C6 support without inventing a report-arrival or gain model.
 
     ``duration_expectations`` is an ExecutionExpectations capture or a sequence

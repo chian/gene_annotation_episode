@@ -12,8 +12,6 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_comparison_inputs import read_measurement_comparison_inputs, compile_measurement_comparison_inputs, validate_measurement_comparison_extraction, validate_measurement_comparison_calculation_inputs, measurement_comparison_selection_schema, measurement_comparison_extraction_schema, measurement_comparison_calculation_inputs_schema, measurement_comparison_covariance_schema
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_comparison_calculations import populate_measurement_comparison, validate_measurement_comparison_sheet, measurement_comparison_sheet_schema
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_comparison_prompt import MEASUREMENT_COMPARISON_TASK
-from gene_annotation_episode.episodic_workflow.root.a105.domain import validate_schema
 ROOT = Path(__file__).resolve().parents[5]
 PACKET = Path(__file__).parent / 'fixtures/retained_reference/a105_measurement_comparison_components_258'
 ROLES = ('left', 'right', 'epsilon_signal', 'epsilon_nuisance', 'nuisance')
@@ -739,10 +737,3 @@ def test_retained_coefficient_side_owner_context_and_qualification_bindings():
     with pytest.raises(ExperimentalContractError):
         populate_measurement_comparison(bad)
 
-def test_historical_v1_records_are_not_silently_enriched():
-    from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractError
-    for name, call in [('EXTRACTION', compile_measurement_comparison_inputs), ('CALCULATION_INPUTS', populate_measurement_comparison)]:
-        original = json.loads((PACKET / ('ORIGINAL_NFN_' + name + '_ACTUAL_010.json')).read_text())
-        assert original['version'].endswith('_v1')
-        with pytest.raises(ContractError):
-            call(original)

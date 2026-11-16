@@ -35,10 +35,10 @@ def describe_atac_result(target, *, selector):
     request = job['native_atac_differential']['request']
     selected = validate_atac_result_selector(selector, request=request)
     saved = selected['mode'] == 'saved_sheet_recalculation'
-    host = 'gene_annotation_episode.native_atac_differential_results.NativeAtacDifferentialResults.execute'
+    host = 'gene_annotation_episode.episodic_workflow.root.native_atac_differential_results.NativeAtacDifferentialResults.execute'
     collect = dict(operation='execution.results.collect', implementation=host,
-        preparation='gene_annotation_episode.native_atac_differential_preparation.prepare_atac_result_worker',
-        worker_plan='gene_annotation_episode.native_atac_differential_preparation.' + ('build_saved_atac_worker_plan' if saved else 'build_native_atac_worker_plan'),
+        preparation='gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_preparation.prepare_atac_result_worker',
+        worker_plan='gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_preparation.' + ('build_saved_atac_worker_plan' if saved else 'build_native_atac_worker_plan'),
         result_worker='gene_annotation_episode.atac_differential_result_worker.run_atac_result_worker',
         calculation_inputs='gene_annotation_episode.atac_differential_calculation_inputs.prepare_atac_calculation_inputs',
         calculators=['gene_annotation_episode.atac_differential_calculations.' + name for name in
@@ -48,7 +48,7 @@ def describe_atac_result(target, *, selector):
         return_source_scope='receiving_form_requested_sources', new_native_analysis=False,
         native_input_acquisition=False, local_job_policy=deepcopy(POLICY), swap_bytes=0)
     if saved:
-        collect.update(saved_input_validation='gene_annotation_episode.atac_differential_returns.AtacDifferentialReturns.authenticate_received_saved_bundle',
+        collect.update(saved_input_validation='gene_annotation_episode.episodic_workflow.root.atac_differential_returns.AtacDifferentialReturns.authenticate_received_saved_bundle',
             table_parser='gene_annotation_episode.atac_differential_inputs.iter_atac_track_table_rows')
     else:
         collect.update(capture='gene_annotation_episode.native_atac_differential_capture.capture_atac_native_files',

@@ -1,10 +1,6 @@
 """Shared native peak custody; model examples below are engineered bytes."""
 from copy import deepcopy
-import hashlib
 import json
-from pathlib import Path
-import socket
-import subprocess
 
 import pytest
 from jsonschema import Draft202012Validator
@@ -13,22 +9,17 @@ from gene_annotation_episode.atac_differential_inputs import (
     parse_macs2_peaks_xls, parse_macs2_narrowpeak, parse_macs2_summits_bed,
 )
 from gene_annotation_episode.atac_differential_result_contracts import canonical
-from gene_annotation_episode.atac_differential_result_views import project_atac_result
 from gene_annotation_episode.atac_differential_sheet import build_atac_differential_sheet
 from gene_annotation_episode.macs2_peak_components import (
     build_macs2_peak_components, native_peak_counts, project_native_peak_window,
     macs2_peak_schema,
 )
-from gene_annotation_episode.native_atac_differential_preparation import _source_closure
 from test_atac_differential_inputs import artifact, callpeak, XLS_HEADER
 from test_atac_differential_sheet import native_inputs, reference
-from test_atac_differential_result_worker import selector
 
 
-ROOT = Path(__file__).resolve().parents[1]
 # Byte-for-byte required fixture from the immutable original:
 # verification/tool_graders_atac_result_worker_finish_2026-10-27_475/check008/FILLED_ACTUAL_NATIVE_EXAMPLE.json
-ORIGINAL = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/macs2/retained_native_475.json'
 PROFILE = 'matched_control_native_model'
 FIELDS = ('reference', 'callpeak_bindings', 'peaks_xls', 'narrowpeaks', 'summits')
 
@@ -99,78 +90,6 @@ def model_reports(*, rows=True, narrow_repeat=False, narrow_end=3190,
             descriptor['supplied_extent'] = 'partial'
         reports[key] = [parser(raw, artifact=descriptor, callpeak=binding, parse_profile=PROFILE)]
     return dict(reference=reference(), callpeak_bindings=[binding], **reports)
-
-
-def test_retained_original_sheet_and_counts_are_literal_parity_oracles(monkeypatch):
-    raw = ORIGINAL.read_bytes()
-    assert len(raw) == 77830
-    assert hashlib.sha256(raw).hexdigest() == '00591fc9b8b9bdb2e2f284500be17110bde582b5104677e8382a1f8d5e5179b3'
-    retained = json.loads(raw)
-    saved = retained['native_sheet']
-    before = deepcopy(saved)
-    def forbidden(*args, **kwargs):
-        raise AssertionError('retained peak projection attempted acquisition or native execution')
-    monkeypatch.setattr(socket, 'socket', forbidden)
-    monkeypatch.setattr(subprocess, 'Popen', forbidden)
-    actual = components(saved)
-    for key in (*FIELDS, 'peak_links', 'reference_relation', 'data_status'):
-        assert canonical(actual[key]) == canonical(saved[key])
-    assert native_peak_counts(actual) == retained['original_calculations']['summary']['native_peak_counts']
-    assert actual['issues'] == []
-    assert saved == before
-    assert actual['narrowpeaks'][1]['rows'][0]['display_score'] == 1045
-
-
-@pytest.mark.parametrize('run_order,offset,limit', [
-    (['callpeak1', 'callpeak2'], 0, 6),
-    (['callpeak2', 'callpeak1'], 1, 2),
-    (['callpeak1'], 2, 1),
-    (['callpeak2'], 30, 2),
-    ([], 0, 1),
-])
-def test_saved_native_window_equals_existing_projection_without_recalculation(run_order, offset, limit):
-    retained = json.loads(ORIGINAL.read_bytes())
-    saved, calculations = retained['native_sheet'], retained['original_calculations']
-    chosen = selector(saved, kind='native_peak_rows', intervals=calculations['selected_intervals'])
-    chosen['parameters'] = deepcopy(calculations['parameters'])
-    chosen['projection'].update(run_keys=run_order, row_window=dict(offset=offset, limit=limit))
-    old_shape = project_atac_result(saved, calculations, selector=chosen)
-    new_shape = project_native_peak_window(components(saved), run_keys=run_order,
-        row_window=dict(offset=offset, limit=limit))
-    assert canonical(new_shape) == canonical({key: old_shape[key] for key in new_shape})
-    assert new_shape['total_rows'] == 3 * len(run_order)
-    # Independent literal oracle from the retained native475 values. Neither
-    # projection function supplies its ordering, source identity or row tokens.
-    original_rows = {
-        'callpeak1': [
-            ('xls', 'deef6e58132155d9ccd42c0ae33729221e725845a6fd327db0c2b9e5ee55c6ee',
-             ['chrToy', '907', '1143', '237', '1021', '50', '55.586', '19.125', '51.6797', 'c1_peak_1']),
-            ('narrowpeak', '12fed4109e6b2c1797123ec91c7231eabc9a0af625aa0cb0e95d4a3beed08337',
-             ['chrToy', '906', '1143', 'c1_peak_1', '516', '.', '19.125', '55.586', '51.6797', '114']),
-            ('summit', '68972fd5b8088c3317119666d66bcc186502b4f886baa23e44787c437f0e75ea',
-             ['chrToy', '1020', '1021', 'c1_peak_1', '51.6797']),
-        ],
-        'callpeak2': [
-            ('xls', '5d7ef08187d35b32a58a56386bffa9a746f00345bd4e02695e47faf3477a6406',
-             ['chrToy', '2910', '3190', '281', '3021', '100', '108.597', '23.3077', '104.594', 'c2_peak_1']),
-            ('narrowpeak', '47eedfd998dd7a6fb01ce06018f816a748db103d5102f9199aae6afba4bca1bc',
-             ['chrToy', '2909', '3190', 'c2_peak_1', '1045', '.', '23.3077', '108.597', '104.594', '111']),
-            ('summit', 'e16683510e94da24cdca686073cfe28b1e9b57ebe909870bc7fedc7538ff4180',
-             ['chrToy', '3020', '3021', 'c2_peak_1', '104.594']),
-        ],
-    }
-    expected = [(run_key, representation, digest, fields)
-        for run_key in run_order for representation, digest, fields in original_rows[run_key]]
-    expected = expected[offset:offset + limit]
-    assert len(new_shape['rows']) == len(expected)
-    for observed, (run_key, representation, digest, fields) in zip(new_shape['rows'], expected, strict=True):
-        assert observed['callpeak_run_key'] == run_key
-        assert observed['representation'] == representation
-        assert observed['row']['row_ordinal'] == 0
-        assert observed['row']['name'] == ('c1_peak_1' if run_key == 'callpeak1' else 'c2_peak_1')
-        assert observed['source']['artifact_ref'] == 'artifact_' + digest
-        assert observed['source']['expected_sha256'] == digest
-        assert observed['row']['original_fields'] == fields
 
 
 def test_existing_two_condition_sheet_delegates_without_rewriting_report_bytes():
@@ -367,8 +286,3 @@ def test_original_report_associations_are_qualified_without_reassigning_native_d
     assert inputs == before
 
 
-def test_saved_worker_static_source_closure_includes_new_shared_numeric_authority():
-    paths = _source_closure(ROOT, ['gene_annotation_episode.atac_differential_result_worker'])
-    assert paths['gene_annotation_episode.macs2_peak_components'] == ROOT / 'gene_annotation_episode/macs2_peak_components.py'
-    assert 'gene_annotation_episode.atac_differential_inputs' in paths
-    assert 'gene_annotation_episode.atac_differential_result_views' in paths

@@ -3,7 +3,6 @@
 The empty binding set consumes no services object, private factory or job. It
 retains the real Journal/Store/backend and the original progress-table effects.
 """
-from copy import deepcopy
 from dataclasses import FrozenInstanceError
 
 import pytest
@@ -11,13 +10,10 @@ import pytest
 # Keep the absent-owner baseline unambiguous before any dependent imports.
 import gene_annotation_episode.episodic_workflow.root.episode_composition as composition
 from gene_annotation_episode.episodic_workflow.root import resource_records
-from gene_annotation_episode.episodic_workflow.root.communication import plain
-from gene_annotation_episode.episodic_workflow.root.episode_bindings import EpisodeBinding, EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
-from gene_annotation_episode.episodic_workflow.root.method_loop.durable import DurableExecutionError, DurableExecutionStore, canonical
+from gene_annotation_episode.episodic_workflow.root.method_loop.durable import DurableExecutionError, DurableExecutionStore
 from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider
 from gene_annotation_episode.domain import ContractError, validate_schema
-from gene_annotation_episode.launch_instructions import SELECTION_SCHEMA
 from gene_annotation_episode.state import Store
 
 
@@ -41,8 +37,6 @@ def tables(store):
 
 def uncalled_projector(*args, **kwargs):
     raise AssertionError('composition must not project credit or execute work')
-
-
 
 
 def test_empty_descriptors_construct_real_progress_provider_and_reopen(resources):
@@ -141,53 +135,6 @@ def test_actual_empty_journal_run_identity_is_rejected(resources):
     assert caught.value.failure['code'] == 'unavailable_binding'
     assert caught.value.failure['affected_refs'] == ['journal.run_id']
     assert tables(store) == before and store.db.total_changes == writes
-
-
-
-
-def descriptor(digest='a' * 64, version='scientific_process_episodes_v8'):
-    # Literal comparison input only: no private library, binding or scientific
-    # result is constructed or claimed by these compatibility checks.
-    return {'version': version, 'binding_id': 'scientific_process', 'implementation_sha256': digest,
-        'configuration': {'library': {'identity': 'unopened-engineering-library'},
-            'tool_library': {'identity': 'unopened-engineering-tools'}, 'child_roles': ['private_role']}}
-
-
-@pytest.mark.parametrize('version', [f'scientific_process_episodes_v{i}' for i in range(5, 11)])
-def test_exact_supported_descriptor_identity(version):
-    saved = descriptor(version=version)
-    assert composition.scientific_binding_compatible(deepcopy(saved), saved)
-    altered = deepcopy(saved)
-    altered['configuration']['library']['identity'] = 'different-library'
-    assert not composition.scientific_binding_compatible(altered, saved)
-
-
-def test_every_original_directed_compatibility_pair_preserves_all_other_operands():
-    pairs = composition._SCIENTIFIC_IMPLEMENTATION_COMPATIBILITY
-    assert pairs
-    for old, new in pairs:
-        recorded, actual = descriptor(old), descriptor(new)
-        assert composition.scientific_binding_compatible(actual, recorded)
-        assert composition.scientific_binding_compatible(recorded, actual) is ((new, old) in pairs)
-        for key in ('library', 'tool_library', 'child_roles'):
-            different = deepcopy(actual)
-            different['configuration'][key] = {'changed': True}
-            assert not composition.scientific_binding_compatible(different, recorded)
-        for version in ('scientific_process_episodes_v7', 'scientific_process_episodes_v9'):
-            assert not composition.scientific_binding_compatible(descriptor(new, version), descriptor(old, version))
-
-
-@pytest.mark.parametrize('change', [
-    {'binding_id': 'other'}, {'version': 'unrecognized'}, {'implementation_sha256': 'bad'},
-    {'implementation_sha256': 'A' * 64}, {'configuration': []}, {'extra': True},
-])
-def test_invalid_descriptor_shape_never_becomes_compatible(change):
-    value = {**descriptor(), **change}
-    assert not composition.scientific_binding_compatible(value, value)
-
-
-def test_unlisted_implementation_change_is_rejected():
-    assert not composition.scientific_binding_compatible(descriptor('b' * 64), descriptor())
 
 
 @pytest.mark.parametrize('availability', ['available', 'unavailable', 'authentication_required', 'unknown'])

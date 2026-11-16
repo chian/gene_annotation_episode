@@ -1,8 +1,8 @@
-"""Selected atac action controls and historical completed-action authority.
+"""Selected atac action controls and completed-action authority.
 
 These private records belong to the existing results episode. They contain no
 calculator and grant no access merely because a file or a private receipt exists.
-Historical checks use frozen controls and Store metadata, never scientific bytes.
+Completed-action checks use frozen controls and Store metadata, never scientific bytes.
 """
 from __future__ import annotations
 
@@ -33,13 +33,13 @@ from gene_annotation_episode.episodic_workflow.root.library.atac_differential_re
 from gene_annotation_episode.episodic_workflow.root.library.atac_differential_return_views import FACT_SOURCES, FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE, validate_atac_fact_values
 from gene_annotation_episode.episodic_workflow.root.library.atac_differential_result_worker import validate_atac_result_worker_plan, validate_atac_result_worker_result
 from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_capture import validate_atac_native_capture
-from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_contracts import retained_policy, POLICY, atac_driver_argv, validate_atac_requested_job, validate_atac_run_plan, _dependency_roots
+from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_contracts import POLICY, atac_driver_argv, validate_atac_requested_job, validate_atac_run_plan, _dependency_roots
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import validate_receipt
 from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from gene_annotation_episode.episodic_workflow.root.progress_records import validate_resource_observation
 
 
-from gene_annotation_episode.episodic_workflow.root.library.atac_result_receipt_values import AtacDifferentialResultIntent, AtacDifferentialHandoffProof, AtacDifferentialNativeSnapshot, AtacDifferentialOrigin, AtacDifferentialQualifiedFiles, AtacDifferentialFactGroups, AtacDifferentialSheetEvidence, AtacDifferentialResultReceipt, AtacDifferentialResultAction, _historical, _finite_json_copy, require, closed, same, artifact_references, decode, directory, regular, read_control, immutable, empty_facts, empty_files, unique, outcome, qualified_files, closure_value, VERSION, _READING, _READ_CACHE, _OUTPUTS, _TRACK_ROLES
+from gene_annotation_episode.episodic_workflow.root.library.atac_result_receipt_values import AtacDifferentialResultIntent, AtacDifferentialHandoffProof, AtacDifferentialNativeSnapshot, AtacDifferentialOrigin, AtacDifferentialQualifiedFiles, AtacDifferentialFactGroups, AtacDifferentialSheetEvidence, AtacDifferentialResultReceipt, AtacDifferentialResultAction, _finite_json_copy, require, closed, same, artifact_references, decode, directory, regular, read_control, immutable, empty_facts, empty_files, unique, outcome, qualified_files, closure_value, VERSION, _READING, _READ_CACHE, _OUTPUTS, _TRACK_ROLES
 
 
 class AtacResultCompletedReceipts:
@@ -66,7 +66,7 @@ class AtacResultCompletedReceipts:
             if receipt["capture"] is not None:
                 require(intent["tool_name"] == "execution.results.collect" and receipt["native"] is not None
                     and receipt["observation"]["native"]["terminal"] and receipt["observation"]["native"]["quiescent"])
-                capture = validate_atac_native_capture(receipt["capture"], original_plan=receipt["native"]["original_plan"], historical=_historical(intent))
+                capture = validate_atac_native_capture(receipt["capture"], original_plan=receipt["native"]["original_plan"])
                 if receipt['native'].get('version') == 'terminal_native_snapshot_v1':
                     from gene_annotation_episode.episodic_workflow.root.terminal_native_file_capture import validate_execution_file
                     plan, proof = receipt['native']['original_plan'], receipt['native']['command_proof']
@@ -190,7 +190,7 @@ class AtacResultCompletedReceipts:
                 receipt = self.controls(intent)
                 require(receipt is not None)
                 self.match_outcome(row, receipt)
-                # Only one synchronous historical read shares verified origins;
+                # Only one synchronous completed-action read shares verified origins;
                 # the next public call checks current controls and runtime again.
                 cache[cache_key] = deepcopy(receipt)
                 return deepcopy(receipt)

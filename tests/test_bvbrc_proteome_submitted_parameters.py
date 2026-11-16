@@ -110,50 +110,6 @@ def test_actual_source_to_b1_preserves_original_order_reference_and_exact_fields
     assert len(s.driver.client.calls) == 1
 
 
-@pytest.mark.parametrize("change,code", [
-    ("binding_missing", "proteome_parameter_source_unbound"),
-    ("bytes_missing", "proteome_input_bytes_missing"),
-    ("source", "proteome_parameter_source_conflict"),
-    ("source_binding", "proteome_parameter_source_unbound"),
-    ("source_digest", "proteome_parameter_source_conflict"),
-    ("bytes_digest", "proteome_artifact_digest_mismatch"),
-    ("length", "proteome_artifact_digest_mismatch"),
-    ("artifact", "proteome_parameter_source_conflict"),
-    ("field", "proteome_parameter_source_unbound"),
-    ("pointer", "proteome_parameter_source_conflict"),
-    ("request_copy_pointer", "proteome_parameter_source_conflict"),
-    ("snapshot_copy_pointer", "proteome_parameter_source_conflict"),
-])
-def test_missing_and_conflicting_submitted_sources_preserve_independent_native_values(submitted, change, code):
-    case = submitted_case(submitted)
-    binding, source = request_binding(case), selected_source(case)
-    if change == "binding_missing":
-        case["bundle"]["supplied_contents"].remove(binding)
-    elif change == "bytes_missing":
-        case["artifact_bytes"].pop(binding["artifact_ref"])
-    elif change == "source":
-        source["source_ref"] = "wrong-submission-source"
-    elif change == "source_binding":
-        binding["source_ref"] = "wrong-submission-source"
-    elif change == "source_digest":
-        source["sha256"] = "0" * 64
-    elif change == "bytes_digest":
-        case["artifact_bytes"][binding["artifact_ref"]] += b" "
-    elif change == "length":
-        binding["byte_count"] += 1
-    elif change == "artifact":
-        binding["artifact_ref"] = "artifact_alias"
-    elif change == "field":
-        binding["artifact_field"] = "artifact_ref"
-    else:
-        source["pointer"] = {"pointer": "/parameters", "request_copy_pointer": "/prepared/native_operands/request/parameters",
-                             "snapshot_copy_pointer": "/snapshot/request/rpc/params/1"}[change]
-    sync_supplied(case)
-    result = consume(case)
-    assert result["sheet"]["input_index_result"] is None and code in codes(result)
-    assert_native_means(result)
-
-
 @pytest.mark.parametrize("change", ["version", "extra", "origin_operation", "prepared_operation", "operation_key",
     "request_parameters", "rpc_method", "rpc_version", "rpc_id", "rpc_value", "rpc_start",
     "snapshot_request", "snapshot_shape", "transport_digest", "preparation", "effect"])

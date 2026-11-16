@@ -104,7 +104,7 @@ def molecular_fact_sources():
 
 
 def requested_molecular_fact_sources(schema):
-    """Unrelated historical forms do not enter the new validation path."""
+    """Molecular fact sources named by a form's ``x-source`` fields."""
     properties = schema.get("properties", {}) if isinstance(schema, Mapping) else {}
     if not isinstance(properties, Mapping):
         return ()

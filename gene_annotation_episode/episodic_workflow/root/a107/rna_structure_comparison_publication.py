@@ -6,6 +6,7 @@ authority, creates no scientific source, and assigns no credit or completion.
 """
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from contextlib import contextmanager
 from copy import deepcopy
 import fcntl
@@ -35,7 +36,7 @@ PREPARED_FIELDS = {"version", "selector_sha256", "input_data_sha256", "original_
     "comparison_sheet_sha256", "components_artifact_ref", "components_sha256", "calculator_version",
     "projection_rows_artifact_ref", "worker_receipt_artifact_ref", "projection_rows", "issues",
     "preparation_failure", "delivery_complete"}
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 _WORKER = "gene_annotation_episode.episodic_workflow.root.a107.rna_structure_comparison_worker"
 _OUTPUTS = {"sheet": "sheet.json", "components": "components.json", "projections": "projections.json",
     "worker_result": "worker-result.json"}

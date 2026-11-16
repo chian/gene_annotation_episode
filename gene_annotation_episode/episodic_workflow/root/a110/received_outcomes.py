@@ -1,4 +1,4 @@
-"""Original private A110 annotation received_outcomes responsibility."""
+"""Private A110 annotation received_outcomes responsibility."""
 from __future__ import annotations
 
 def receive_outcome(workflow, source, selection, result, index):

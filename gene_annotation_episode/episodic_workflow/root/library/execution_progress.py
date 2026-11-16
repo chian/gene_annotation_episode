@@ -266,29 +266,29 @@ class ExecutionTargetReader:
             raise ContractError('execution_target_unavailable_or_outside_scope',
                 detail={'reason': str(error)}) from error
 
-    def _read_native_receipt(self, reference, scope, reads, *, historical=False):
+    def _read_native_receipt(self, reference, scope, reads):
         """Reuse only successful immutable receipt reads in one metadata operation."""
         try:
-            key = (self.run_id, reference, canonical(plain(scope)), historical)
+            key = (self.run_id, reference, canonical(plain(scope)))
         except (ValueError, TypeError, OverflowError, RecursionError):
             # Invalid/non-JSON selections retain the original owner's errors.
-            return self.receipts.read(reference, scope, historical=historical)
+            return self.receipts.read(reference, scope)
         if key not in reads:
-            reads[key] = deepcopy(self.receipts.read(reference, scope, historical=historical))
+            reads[key] = deepcopy(self.receipts.read(reference, scope))
         return deepcopy(reads[key])
 
-    def _native(self, handle, scope, *, _seen=(), _receipt_reads=None, historical=False):
+    def _native(self, handle, scope, *, _seen=(), _receipt_reads=None):
         if handle in _seen:
             raise ValueError('native_blast_masking_receipt_ancestry_cycle')
         reads = {} if _receipt_reads is None else _receipt_reads
-        body = self._read_native_receipt(handle, scope, reads, historical=historical)
+        body = self._read_native_receipt(handle, scope, reads)
         source = self.store.get(handle)
         snapshot = json.loads(self.store.get_artifact(source['request_ref']))
         assignment, receipt = snapshot['assignment'], body['receipt']
         job = receipt['outcome'].get('facts', {}).get('requested_job')
         terminal = receipt['tool_name'] == 'exec_command'
         if terminal:
-            if not terminal_job_matches(assignment, receipt['outcome'], historical=historical):
+            if not terminal_job_matches(assignment, receipt['outcome']):
                 raise ValueError('execution_command_native_job_identity_conflict')
         elif (receipt['tool_name'] not in {'practical.job.start', 'practical.job.status', 'practical.job.collect'}
                 or not isinstance(job, dict) or not isinstance(job.get('handoff'), dict)
@@ -302,8 +302,8 @@ class ExecutionTargetReader:
             raise ValueError('practical_execution_handoff_identity_conflict')
         resource_id = assignment.get('resource_id')
         if resource_id is None:
-            # Legacy assignments predate resource IDs. A single exact bound
-            # resource is unambiguous; several candidates are never selected.
+            # The assignment schema lets a commission omit resource_id. A single
+            # exact bound resource is unambiguous; several are never selected.
             candidates = [key for key, config in self.resources.items()
                 if config['kind'] == ('local' if assignment['resource_kind'] == 'local' else 'pbs_ssh')
                 and Path(assignment['workspace']).is_relative_to(config['workspace'])]
@@ -316,10 +316,7 @@ class ExecutionTargetReader:
             raise ValueError('practical_execution_resource_identity_conflict')
         origin_episode_id = body['episode_id']
         if terminal:
-            if historical:
-                self.operations[resource_id].validate_assignment(assignment, historical=True)
-            else:
-                self.operations[resource_id].validate_assignment(assignment)
+            self.operations[resource_id].validate_assignment(assignment)
             target = validate_target({'version': 'execution_target_v1', 'handle': handle,
                 'run_id': self.run_id, 'resource_id': resource_id,
                 'resource_kind': assignment['resource_kind'], 'execution_id': job['execution_id'],
@@ -330,7 +327,7 @@ class ExecutionTargetReader:
             from gene_annotation_episode.episodic_workflow.root.library.flux_balance_contracts import validate_flux_balance_record
             if assignment.get('resource_id') != resource_id or assignment['resource_kind'] != 'local':
                 raise ValueError('native_flux_balance_resource_identity_conflict')
-            self.operations[resource_id].validate_assignment(assignment, historical=historical)
+            self.operations[resource_id].validate_assignment(assignment)
             detail = receipt['outcome'].get('native_outcome') or {}
             file = validate_flux_balance_record('File', detail.get('native_flux_balance_input_binding_file'))
             if (file['format'] != 'flux_balance_input_binding_receipt_v1'
@@ -340,7 +337,7 @@ class ExecutionTargetReader:
             if reference is not None:
                 if receipt['tool_name'] not in {'practical.job.status', 'practical.job.collect'}:
                     raise ValueError('native_flux_balance_receipt_ancestry_conflict')
-                original, prior = self._native(reference, body['scope'], _seen=(*_seen, handle), _receipt_reads=reads, historical=historical)
+                original, prior = self._native(reference, body['scope'], _seen=(*_seen, handle), _receipt_reads=reads)
                 prior_detail = prior['receipt']['outcome'].get('native_outcome') or {}
                 if (original['resource_id'] != resource_id or original['execution_id'] != job['execution_id']
                         or original['assignment']['workspace'] != assignment['workspace']
@@ -367,7 +364,7 @@ class ExecutionTargetReader:
             starts = self.receipts._sources(self.receipts._accession(origin_episode_id, operation_key))
             if len(starts) != 1:
                 raise ValueError('native_flux_balance_original_start_receipt_missing')
-            start = self._read_native_receipt(starts[0]['id'], body['scope'], reads, historical=historical)
+            start = self._read_native_receipt(starts[0]['id'], body['scope'], reads)
             start_receipt = start['receipt']
             start_job = start_receipt['outcome'].get('facts', {}).get('requested_job', {})
             start_detail = start_receipt['outcome'].get('native_outcome') or {}
@@ -422,7 +419,7 @@ class ExecutionTargetReader:
                     or any(key in constraints and constraints[key] != value
                         for key, value in plan['policy'].items())):
                 raise ValueError('native_blast_utility_original_attempt_mismatch')
-            # The immutable receipt establishes historical identity. A selected
+            # The immutable receipt establishes the saved identity. A selected
             # observation or capture separately checks current original files.
         if 'native_blast_masking' in assignment['requested_job']:
             from gene_annotation_episode.episodic_workflow.root.library.native_blast_masking_contracts import validate_native_blast_masking_plan
@@ -474,7 +471,7 @@ class ExecutionTargetReader:
                     or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
                         digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
                 raise ValueError('native_fluorescence_original_attempt_mismatch')
-            # The authenticated saved receipt establishes this historical
+            # The authenticated saved receipt establishes this saved
             # handoff even after its producer files disappear. A selected
             # observation or output read authenticates the live plan separately.
         if 'native_expression_nmf' in assignment['requested_job']:
@@ -684,22 +681,18 @@ class ExecutionTargetReader:
             'origin_episode_id': origin_episode_id, 'assignment': assignment, 'scope': body['scope']})
         return target, body
 
-    def read_target(self, handle, scope, *, include_native_receipt=False, historical=False):
-        return self._read_target(handle, scope, include_native_receipt=include_native_receipt, historical=historical)
+    def read_target(self, handle, scope, *, include_native_receipt=False):
+        return self._read_target(handle, scope, include_native_receipt=include_native_receipt)
 
-    def _read_target(self, handle, scope, *, include_native_receipt=False, _receipt_reads=None, historical=False):
+    def _read_target(self, handle, scope, *, include_native_receipt=False, _receipt_reads=None):
         try:
-            if type(historical) is not bool:
-                raise ValueError('fba_historical_validation_mode_invalid')
             if type(include_native_receipt) is not bool:
                 raise ValueError('execution_target_receipt_selection_invalid')
             source = self.store.get(handle)
             if source.get('provider') == PROVIDER:
-                target, receipt = (self._native(handle, scope, historical=historical) if _receipt_reads is None else
-                    self._native(handle, scope, _receipt_reads=_receipt_reads, historical=historical))
+                target, receipt = (self._native(handle, scope) if _receipt_reads is None else
+                    self._native(handle, scope, _receipt_reads=_receipt_reads))
                 return (target, receipt) if include_native_receipt else target
-            if historical:
-                raise ValueError('fba_historical_validation_requires_native_receipt')
             if self.api_execution is None:
                 raise ValueError('execution_target_unavailable')
             target = validate_target(self.api_execution.read_target(handle, scope))
@@ -732,7 +725,7 @@ class ExecutionTargetReader:
             if not is_native_rna_structure_target(target):
                 raise ContractError('rna_comparison_anchor_required')
             selected = validate_rna_comparison_selector(plain(selector))
-            implementation = ('gene_annotation_episode.rna_structure_comparison_results.'
+            implementation = ('gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_results.'
                 'NativeRNAStructureComparisonResults.execute')
             return {'resource_kind': 'local',
                 'service_or_program': 'gene_annotation_episode.rna_structure_comparison_calculations',
@@ -750,10 +743,10 @@ class ExecutionTargetReader:
                     'fresh_native_observation': False}, {
                     'operation': 'execution.results.collect', 'implementation': implementation,
                     'sheet_population': 'gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_inputs.populate_rna_comparison_sheet',
-                    'calculators': ['gene_annotation_episode.rna_structure_comparison_calculations.calculate_rna_comparison_components'],
+                    'calculators': ['gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_calculations.calculate_rna_comparison_components'],
                     'calculator_parameters': deepcopy(selected['parameters']),
                     'projection_implementation': 'gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views.project_rna_comparison',
-                    'saved_input_validation': 'gene_annotation_episode.rna_structure_comparison_operands.validate_rna_comparison_selected_inputs',
+                    'saved_input_validation': 'gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_operands.validate_rna_comparison_selected_inputs',
                     'calculation_basis': 'authenticated_multiple_saved_inputs',
                     'return_fields': ['comparison_sheet_artifact_ref', 'components_artifact_ref',
                         'projection_rows', 'issues', 'preparation_failure', 'delivery_complete'],
@@ -844,7 +837,7 @@ class ExecutionTargetReader:
                 if vdb:
                     value['result_selector_schema'] = deepcopy(NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V2_SCHEMA)
                     value['extractors'][1].update(
-                        parser='gene_annotation_episode.blast_vdb_utility_inputs.' + (
+                        parser='gene_annotation_episode.episodic_workflow.root.library.blast_vdb_utility_inputs.' + (
                             'parse_blast_vdb_extraction' if job['operation']['mode'] == 'extract_sequences'
                             else 'parse_blast_vdb_inspection'),
                         native_format=job['operation']['parameters']['output_format'],
@@ -873,19 +866,19 @@ class ExecutionTargetReader:
                     'parsers': ['gene_annotation_episode.episodic_workflow.root.library.sequence_masking_inputs.parse_masking_input_fasta',
                         'gene_annotation_episode.episodic_workflow.root.library.sequence_masking_inputs.parse_sequence_masking_output'],
                     'sheet_population': 'gene_annotation_episode.episodic_workflow.root.library.sequence_masking_inputs.populate_sequence_masking_sheet',
-                    'calculators': ['gene_annotation_episode.sequence_masking_calculations.calculate_sequence_masking_components'],
+                    'calculators': ['gene_annotation_episode.episodic_workflow.root.library.sequence_masking_calculations.calculate_sequence_masking_components'],
                     'projection_implementation': 'gene_annotation_episode.episodic_workflow.root.library.sequence_masking_result_views.project_masking_result',
                     'return_fields': ['source_ref', 'record_refs', 'status', 'artifacts', 'quantities',
                         'checks', 'statistics', 'failures', 'saved_data'],
                     'return_fact_sources': list(masking_fact_sources()), 'scientific_annotation_score': False}
                 if job['operation']['program'] == 'windowmasker':
-                    extractor['parsers'].append('gene_annotation_episode.windowmasker_statistics.parse_windowmasker_statistics')
+                    extractor['parsers'].append('gene_annotation_episode.episodic_workflow.root.library.windowmasker_statistics.parse_windowmasker_statistics')
                 if job['operation']['mode'] == 'convert_mask':
                     extractor['parsers'] = ['gene_annotation_episode.episodic_workflow.root.library.sequence_masking_inputs.parse_masking_input_fasta',
                         'gene_annotation_episode.episodic_workflow.root.library.blast_maskinfo_inputs.parse_blast_maskinfo']
                     extractor['sheet_population'] = 'gene_annotation_episode.episodic_workflow.root.library.blast_maskinfo_inputs.populate_mask_conversion'
                 if job['operation']['mode'] == 'create_counts':
-                    extractor['parsers'] = ['gene_annotation_episode.windowmasker_statistics.parse_windowmasker_statistics']
+                    extractor['parsers'] = ['gene_annotation_episode.episodic_workflow.root.library.windowmasker_statistics.parse_windowmasker_statistics']
                     del extractor['sheet_population']
                     extractor['calculators'] = []
                 value['extractors'][1] = extractor
@@ -1044,7 +1037,7 @@ class ExecutionTargetReader:
                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
                 value['extractors'][1] = {
                     'operation': 'execution.results.collect',
-                    'implementation': 'gene_annotation_episode.native_blast_results.NativeBLASTResults.execute',
+                    'implementation': 'gene_annotation_episode.episodic_workflow.root.native_blast_results.NativeBLASTResults.execute',
                     'parser': 'gene_annotation_episode.episodic_workflow.root.library.blast_report_collection.parse_blast_report_collection',
                     'sheet_population': 'gene_annotation_episode.episodic_workflow.root.library.blast_pairwise_results.populate_blast_pairwise_sheet',
                     'calculators': ['gene_annotation_episode.episodic_workflow.root.library.blast_pairwise_results.calculate_blast_pairwise_components'],
@@ -1057,7 +1050,7 @@ class ExecutionTargetReader:
                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
                 value['extractors'][1] = {
                     'operation': 'execution.results.collect',
-                    'implementation': 'gene_annotation_episode.native_hmmer_results.NativeHMMERResults.execute',
+                    'implementation': 'gene_annotation_episode.episodic_workflow.root.native_hmmer_results.NativeHMMERResults.execute',
                     'return_fields': ['source_ref', 'record_refs', 'rows', 'failures', 'complete'],
                     'return_fact_sources': ['execution_result_refs', 'execution_result_origin',
                         FAMILY_SOURCES[family_for_program(program)]]}
@@ -1072,7 +1065,7 @@ class ExecutionTargetReader:
                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
                 value['extractors'][1] = {
                     'operation': 'execution.results.collect',
-                    'implementation': 'gene_annotation_episode.native_hmmer_preparation_results.NativeHmmerPreparationResults.execute',
+                    'implementation': 'gene_annotation_episode.episodic_workflow.root.native_hmmer_preparation_results.NativeHmmerPreparationResults.execute',
                     'return_fields': ['source_ref', 'record_refs', 'rows', 'artifacts', 'population', 'failures', 'complete'],
                     'return_fact_sources': ['execution_result_refs', 'execution_result_origin',
                         *preparation_fact_sources()],
@@ -1089,7 +1082,7 @@ class ExecutionTargetReader:
                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
                 value['extractors'][1] = {
                     'operation': 'execution.results.collect',
-                    'implementation': 'gene_annotation_episode.native_infernal_results.NativeInfernalResults.execute',
+                    'implementation': 'gene_annotation_episode.episodic_workflow.root.native_infernal_results.NativeInfernalResults.execute',
                     'return_fields': ['source_ref', 'record_refs', 'rows', 'failures', 'complete'],
                     'return_fact_sources': ['execution_result_refs', 'execution_result_origin',
                         *(FAMILY_SOURCES[family] for family in families)]}
@@ -1104,7 +1097,7 @@ class ExecutionTargetReader:
                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
                 value['extractors'][1] = {
                     'operation': 'execution.results.collect',
-                    'implementation': 'gene_annotation_episode.native_infernal_preparation_results.NativeInfernalPreparationResults.execute',
+                    'implementation': 'gene_annotation_episode.episodic_workflow.root.native_infernal_preparation_results.NativeInfernalPreparationResults.execute',
                     'return_fields': ['source_ref', 'record_refs', 'rows', 'artifacts', 'population', 'failures', 'complete'],
                     'return_fact_sources': ['execution_result_refs', 'execution_result_origin',
                         *preparation_fact_sources()],
@@ -1120,7 +1113,7 @@ class ExecutionTargetReader:
             value['acquisition_operations'] = ['api.hmmer.result']
             value['extractors'] = [{
                 'operation': 'api.hmmer.status',
-                'implementation': 'gene_annotation_episode.api_hmmer_protocol._native_status',
+                'implementation': 'gene_annotation_episode.episodic_workflow.root.api_hmmer_protocol._native_status',
                 'return_fields': ['native_status', 'state'],
                 'return_fact_sources': ['monitoring_progress_refs', 'monitoring_execution_state', 'monitoring_result_available'],
             }, {
@@ -1219,12 +1212,12 @@ class ExecutionTargetReader:
                         envelope_decoder='gene_annotation_episode.bvbrc_analysis_protocol.decode_rpc_response',
                         calculators=['gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_grader.calculate_minhash_components'],
                         calculator_parameters={'pair_metadata': deepcopy(selected['pair_metadata']) if selected else None},
-                        projection_implementation='gene_annotation_episode.bvbrc_minhash_views.project_minhash_facts',
+                        projection_implementation='gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_views.project_minhash_facts',
                         return_fields=['source_ref', 'raw_artifact_ref', 'grading_artifact_ref', 'parse_status'],
                         return_fact_sources=['execution_result_refs', 'bvbrc_minhash_matches', 'bvbrc_minhash_counts',
                             'bvbrc_minhash_calculations', 'bvbrc_minhash_calculation_diagnostics'])
                     if selected:
-                        extractor['input_validation'] = 'gene_annotation_episode.bvbrc_minhash_host.BVBRCMinhashHost.validate_inputs'
+                        extractor['input_validation'] = 'gene_annotation_episode.episodic_workflow.root.bvbrc_minhash_host.BVBRCMinhashHost.validate_inputs'
                         extractor['native_parameter_equivalence'] = 'unestablished'
                     if selected and selected['mode'] == 'saved_sheet':
                         del extractor['parser']
@@ -1260,9 +1253,9 @@ class ExecutionTargetReader:
                     if extractor['operation'] != 'api.rfam.fetch':
                         continue
                     extractor.update(implementation='gene_annotation_episode.episodic_workflow.root.library.rfam_batch_publication.publish_rfam_batch_result',
-                        parser=('gene_annotation_episode.rfam_batch_inputs.populate_rfam_batch_json_sheet' if single_json else
+                        parser=('gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs.populate_rfam_batch_json_sheet' if single_json else
                                 'gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table.populate_rfam_batch_tblout_sheet' if batch_table else
-                                'gene_annotation_episode.rfam_batch_report.populate_rfam_batch_report_sheet' if batch_report else None),
+                                'gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report.populate_rfam_batch_report_sheet' if batch_report else None),
                         calculators=(['gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader.calculate_infernal_search_scores']
                             if single_json or batch_table or batch_report else []),
                         calculator_parameters=({'hit_scope': 'reported'}

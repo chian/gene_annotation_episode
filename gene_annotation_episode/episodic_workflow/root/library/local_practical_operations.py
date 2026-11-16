@@ -180,15 +180,11 @@ class LocalPracticalOperations:
         return {'facts': {'paths': path_facts(assignment, additional_paths=[
             *flux_balance_output_paths, *macs2_peak_output_paths, *lumpy_output_paths])}}
 
-    def validate_assignment(self, assignment, *, historical=False):
-        if type(historical) is not bool:
-            raise ValueError('fba_historical_validation_mode_invalid')
-        if historical and 'native_flux_balance' not in assignment['requested_job']:
-            raise ValueError('fba_historical_validation_requires_fba')
+    def validate_assignment(self, assignment):
         if 'native_flux_balance' in assignment['requested_job']:
-            from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY, HISTORICAL_POLICY, validate_flux_balance_requested_job
+            from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY, validate_flux_balance_requested_job
             from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_bindings import flux_balance_binding_accepts_job
-            job = validate_flux_balance_requested_job(assignment['requested_job'], historical=historical)['native_flux_balance']
+            job = validate_flux_balance_requested_job(assignment['requested_job'])['native_flux_balance']
             if not any(flux_balance_binding_accepts_job(row, job)
                     for row in self.configuration.get('native_flux_balance', [])):
                 raise ValueError('native_flux_balance_operation_mode_software_format_not_bound')
@@ -197,7 +193,7 @@ class LocalPracticalOperations:
             if not isinstance(assignment.get('resource_id'), str) or not assignment['resource_id']:
                 raise ValueError('native_flux_balance_resource_identity_required')
             confined(assignment['workspace'], self.configuration['workspace'])
-            if self.policy.to_dict() != (HISTORICAL_POLICY if historical else POLICY):
+            if self.policy.to_dict() != POLICY:
                 raise ValueError('native_flux_balance_local_policy_conflict')
         if 'native_blast_utility' in assignment['requested_job']:
             from gene_annotation_episode.episodic_workflow.root.library.native_blast_utility_contracts import validate_native_blast_utility_requested_job

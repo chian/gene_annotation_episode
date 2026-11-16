@@ -12,8 +12,8 @@ import json
 from gene_annotation_episode.episodic_workflow.root.a110.library.literature_reaction_calculations import COMPONENTS as REACTION_COMPONENTS
 
 
-_ACCOUNTING = frozenset({'a110_chemical_accounting_v1', 'a110_chemical_accounting_v2'})
-_FBA = frozenset({'a110_flux_balance_hpc_v1', 'a110_flux_balance_hpc_v2'})
+_ACCOUNTING = frozenset({'a110_chemical_accounting_v2'})
+_FBA = frozenset({'a110_flux_balance_hpc_v2'})
 _QUALIFICATIONS = frozenset({'a110_received_qualification_v1',
                             'a110_experimental_component_use_v1'})
 _COMMON = ('source_ref', 'grading_artifact_ref', 'artifact_ref', 'target_ref',

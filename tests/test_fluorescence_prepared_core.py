@@ -12,9 +12,7 @@ import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_sheet import validate_fluorescence_sheet
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views import project_fluorescence_result
-from test_fluorescence_event_calculations import (
-    _batch, _cell, _control_sheet, _file, _gate, _native_report, _parameters, _request, _sheet,
-)
+from test_fluorescence_event_calculations import _batch, _cell, _file, _gate, _native_report, _parameters, _request, _sheet
 
 
 def _preparation(state="applied"):
@@ -57,19 +55,6 @@ def _native_case(*, rows=((150,), (0,), (0,)), denominator="parent"):
     parameters = _parameters(fractions=[dict(gate_key="g", denominator=denominator)],
                              native=["report_a", "report_b"])
     return sheet, parameters
-
-
-def test_legacy_domains_parse_and_sheet_validate_without_scaling_or_byte_changes():
-    batch = _batch([[110], [20]])
-    sheet = _sheet([batch])
-    originals = [core.canonical(value) for value in (batch["domain"], batch, sheet)]
-    core._domain(batch["domain"])
-    assert core.validate_event_parse_result(batch) is batch
-    assert validate_fluorescence_sheet(sheet) is sheet
-    calculate_fluorescence_sheet(sheet, parameters=_parameters())
-    assert [core.canonical(value) for value in (batch["domain"], batch, sheet)] == originals
-    assert "scaling" not in batch["domain"]
-    assert "scaling" not in sheet["measurement_domains"][0]
 
 
 @pytest.mark.parametrize("state", ["not_applied", "applied", "unknown", "failed"])
@@ -227,23 +212,6 @@ def test_derived_negative_zero_and_missing_values_keep_existing_population_rules
             _cell(result, "selected_fraction", denominator="evaluable")["state"]) == (1, "qualified")
     assert _cell(result, "selected_intensity_sum")["value"] == -5
     assert _cell(result, "selected_intensity_mean")["value"] == -2.5
-
-
-def test_derived_control_values_use_existing_signed_and_clipped_calculations():
-    sheet = _control_sheet(prepared_control=True)
-    parameters = _parameters(controls=[dict(control_key="pair", include_legacy_clipping=True)])
-    supplied = calculate_fluorescence_sheet(sheet, parameters=parameters)
-    sheet["measurement_domains"][2]["compensation"] = _preparation()
-    for event in sheet["events"]:
-        if event["domain_key"] == "control.prepared":
-            for cell in event["values"]:
-                cell["measurement"].update(state="derived", raw=None)
-    derived = calculate_fluorescence_sheet(sheet, parameters=parameters)
-    assert derived["cells"] == supplied["cells"]
-    assert _cell(derived, "selected_fraction", gate="target.marker")["value"] == .5
-    assert _cell(derived, "selected_fraction", gate="control.marker")["value"] == .75
-    assert _cell(derived, "control_difference_percentage_points", gate=None, control="pair")["value"] == -25
-    assert _cell(derived, "legacy_nonnegative_difference_percentage_points", gate=None, control="pair")["value"] == 0
 
 
 def test_source_scoped_native_issue_suppresses_only_delta_and_deduplicates_qualifications():

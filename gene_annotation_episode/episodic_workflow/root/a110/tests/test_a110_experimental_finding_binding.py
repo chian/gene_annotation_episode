@@ -137,12 +137,5 @@ def test_experimental_finding_uses_the_selected_assay_without_changing_its_measu
             assert any("experiment" in item for item in result["missing"])
             if literal_subject:
                 assert result["experiment_binding"]["invalid_experiment_refs"] == [selected_experiment]
-        legacy = deepcopy(qualified)
-        legacy["result"].pop("experiment_binding")
-        legacy_ref = experimental.publish(store, experimental.PROVIDER, legacy)
-        historical, = received(store, [legacy_ref], context.scope)
-        assert historical["current"] is no_finding
-        assert historical["result"]["selected_components"] == original_cells
-        assert experimental.read(store, legacy_ref, qualified=True) == legacy
     finally:
         store.close()

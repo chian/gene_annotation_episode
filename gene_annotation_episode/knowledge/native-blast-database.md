@@ -50,7 +50,7 @@ malformed PSSM content or authorize another parser, installation or retry.
 
 Aurora software, runtime, inputs, databases, logs, caches and runs stay under
 `/lus/flare/projects/BioReason-Aurora-Test`; new jobs charge `EpiCalib`.
-The local 20 GiB RAM and 4 GiB scratch allowance permits synthetic engineering
+The local 5 GiB RAM and 4 GiB scratch allowance permits synthetic engineering
 checks, with no wall cap. It does not authorize local database BLAST.
 
 ## Query and output selection

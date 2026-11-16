@@ -1,6 +1,5 @@
 """One actual legacy monitor/registry/Store, with explicitly controlled native status."""
-from gene_annotation_episode.episodic_workflow.root.a103.tests.hierarchy_paths import current_module_name as _a103_current_module_name
-from gene_annotation_episode.episodic_workflow.root.a103.tests.homology_parent_private_checks import assert_parent_implementations
+
 import asyncio
 from contextlib import contextmanager
 from copy import deepcopy
@@ -14,7 +13,7 @@ import pytest
 PACKAGE = 'gene_annotation_episode.episodic_workflow.root.a103'
 
 def module(name):
-    return import_module(_a103_current_module_name(PACKAGE + '.' + name))
+    return import_module(PACKAGE + '.' + name)
 
 def forbidden(*a, **kw):
     raise AssertionError('no process/network/native submission in task checks')
@@ -96,15 +95,6 @@ def f(tmp_path):
     with actual(tmp_path) as value:
         yield value
 
-def test_actual_constructor_descriptor_and_distinct_family(f, tmp_path):
-    assert set(f.bindings) == {'job_launch', 'job_monitor', 'job_results'}
-    assert f.binding.binding_path == 'legacy_annotation/homology_job_monitoring' and f.binding.roles == ('job_monitor',)
-    assert f.binding.commissioning_parent == 'legacy_annotation'
-    assert f.binding.as_record()['binding_id'] == 'legacy_annotation/homology_job_monitoring'
-    assert f.binding.as_record()['registry_directory'] == str(f.jobs.directory)
-    assert f.binding.credit_kind('job_monitor') == 'monitoring'
-    assert_parent_implementations(tmp_path / 'paired-parents', 'job_monitor')
-    assert f.jobs._row(f.assignment['job_ref'])['submission_requested'] == 0
 
 def test_actual_build_selects_registered_legacy_monitor(f):
     assert type(f.task) is getattr(f.binding, 'decision_source_type', f.runtime.DecisionSource)
@@ -247,26 +237,6 @@ def test_original_instruction_composition_and_caller_yield(f):
         assert f.runtime.Workflow.controller(f.workflow, f.task.path) is sentinel
     assert calls == [(f.task.path, f.journal.row('runtime_episodes', f.episode_id)['initial_credit'])]
 
-@pytest.mark.parametrize('declared', [False, True], ids=['legacy', 'declared'])
-def test_pending_original_decision_and_completed_replay(f, declared):
-    state = {'working_state': f.binding.working_state(f.task), 'scope': f.task.scope}
-    schema = f.runtime._object({'selection': f.runtime._object({'kind': {'const': 'tool'}, 'tool': {'const': 'homology.sample'}, 'arguments': f.runtime._object({})}), 'report_update': f.runtime._object({})})
-    response = {'selection': {'kind': 'tool', 'tool': 'homology.sample', 'arguments': {}}, 'report_update': {}}
-    f.journal.save('runtime_model_calls', {'episode_id': f.episode_id, 'call_index': 0, 'purpose': 'decision', 'request': json.dumps({'context': state, 'schema': schema}), 'response': None})
-    provider = object.__new__(module('providers')._SessionConnection)
-    provider.scientific_prompt_states = {}
-    calls = []
-
-    async def complete(episode, role, instructions, context, output_schema, **kw):
-        calls.append(provider._presentation(episode, role, instructions, context, **kw))
-        return deepcopy(response)
-    f.workflow.provider = SimpleNamespace(has_session=lambda *a: True, complete=complete)
-    if declared:
-        f.workflow.provider.complete_with_presentation = complete
-    assert asyncio.run(f.task.call({}, schema))[0] == response and len(calls) == 1
-    f.task.calls = 0
-    assert asyncio.run(f.task.call({}, schema))[0] == response and len(calls) == 1
-    assert f.store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 0
 
 def test_ready_owned_child_precedes_new_decision(f):
     child = object()

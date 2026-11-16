@@ -14,7 +14,7 @@ from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _read
 from gene_annotation_episode.state import Store
 from test_bvbrc_proteome_directional import native
-from test_bvbrc_proteome_directional_projection import forbid_construction, selector
+from test_bvbrc_proteome_directional_projection import selector
 from test_bvbrc_proteome_directional_returns import DirectionalDriver
 
 
@@ -186,53 +186,4 @@ def test_partial_publication_rejects_fabricated_completion_proof(driver):
     with pytest.raises(ValueError, match='completion_conflict'):
         d.api.read_result(body['source_ref'], d.context.scope)
 
-
-def test_latest_partial_supersedes_completion_but_historical_admission_survives(driver, monkeypatch):
-    d = driver
-    start(d)
-    args = d.native_arguments()
-    _, first_key = d.selection('download', args, context=d.context)
-    _, later_key = d.selection('download', args, context=d.context)
-    publications = d.api.appservice.publications
-    grade = publications._grade
-    d.client.body, d.client.native_complete = b'not a native report\n', False
-    def interrupted(context, inputs, bundle, origin, stamp, *, current_acquisition):
-        if origin['operation_key'] == later_key:
-            raise KeyboardInterrupt()
-        return grade(context, inputs, bundle, origin, stamp, current_acquisition=current_acquisition)
-    monkeypatch.setattr(publications, '_grade', interrupted)
-    with pytest.raises(KeyboardInterrupt): d.invoke(d.context, 'download', args, later_key)
-    later_directory = action_directory(d, later_key)
-    retained = _read(later_directory / 'call_response.json')
-    frozen_inputs = _read(later_directory / 'publication_inputs.json')
-    assert frozen_inputs['prior_acquisition_receipt_refs'] == [d.manifest['source_ref']]
-    monkeypatch.setattr(publications, '_grade', grade)
-    d.client.body, d.client.native_complete = native('2011'), True
-    first = d.invoke(d.context, 'download', args, first_key)
-    assert first['status'] == 'completed'
-    d.native = d.records.read(first['result']['support_receipt_ref'])
-    original = deepcopy(d.publication())
-    form, key, refs = d.admit_numeric()
-    proof = d.api._completion(d.context)
-    assert proof['operation_key'] == first_key
-    calls = deepcopy(d.client.calls)
-    later = d.invoke(d.context, 'download', args, later_key)
-    assert later['status'] == 'partial' and d.client.calls == calls
-    publication = _read(later_directory / 'bundle_publication.json')['value']
-    assert publication['completion_proof'] is None and publication['result_record_refs']
-    assert d.api._completion(d.context) is None and not d.api.verify_completion(d.context, proof)
-    latest = d.api.facts(d.context, {})[SOURCE]
-    assert latest and latest[0]['source_ref'] != form['fact0'][0]['source_ref']
-    assert _read(later_directory / 'call_response.json') == retained
-    assert _read(later_directory / 'publication_inputs.json') == frozen_inputs
-    forbidden = forbid_construction(monkeypatch)
-    monkeypatch.setattr(d.client, 'rpc', forbidden)
-    monkeypatch.setattr(d.client, 'download', forbidden)
-    actions = [dict(row) for row in d.store.db.execute('SELECT * FROM runtime_actions ORDER BY episode_id,decision_index')]
-    assert d.api.read_result(original['source_ref'], d.context.scope) == original
-    assert d.family.received_report_facts(d.parent)[SOURCE] == form['fact0']
-    assert d.family.received_form_references(d.parent, form, d.schema, key) == refs
-    assert form['fact0'][0]['value']['cell']['value'] == 1
-    assert d.invoke(d.context, 'download', args, later_key) == later
-    assert [dict(row) for row in d.store.db.execute('SELECT * FROM runtime_actions ORDER BY episode_id,decision_index')] == actions
 

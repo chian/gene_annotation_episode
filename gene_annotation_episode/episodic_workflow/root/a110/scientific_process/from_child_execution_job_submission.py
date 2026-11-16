@@ -1,4 +1,4 @@
-"""Original complete direct-parent launch receipt implementation"""
+"""Complete direct-parent launch receipt implementation"""
 from __future__ import annotations
 from .. import runtime as _original_runtime
 

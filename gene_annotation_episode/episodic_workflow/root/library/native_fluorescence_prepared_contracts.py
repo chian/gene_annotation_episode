@@ -29,10 +29,7 @@ def validate_selected_software(software, *, methods, profiles):
     implementation = {row['path'] for row in software['implementation_files']}
     from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import _software_implementation_root
     root = _software_implementation_root(software)
-    if root is None:
-        # Preserve the original direct extra-closure validator's scope.
-        root = PurePosixPath(software['module_root']) / 'gene_annotation_episode'
-    require({str(root / name) for name in required} <= implementation,
+    require(root is not None and {str(root / name) for name in required} <= implementation,
         'fluorescence_selected_implementation_closure_missing')
     if not methods:
         return

@@ -3,21 +3,18 @@
 Only the five native parameter/contrast meanings are exposed by this route.
 The source model/covariance reader is unfinished work, not a paper finding.
 """
-from gene_annotation_episode.episodic_workflow.root.a105.literature_implementation_sources import source_file
 from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
-import re
 from gene_annotation_episode.episodic_workflow.root.a105.communication import plain
 from gene_annotation_episode.episodic_workflow.root.a105.domain import canonical, identity, obj
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_storage import LiteratureRateRepository
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_inputs import read_kinetic_inputs, kinetic_arguments_schema, SUBJECT_FIELDS, CONTEXT_FIELDS, PARAMETER_UNITS, COMPARISON_VALUES, QUALIFICATIONS, COUNT_STATUSES, COUNT_REASONS, COUNT_NOTATIONS, COUNT_RELATIONS, VERSION as EXTRACTION_VERSION, LEGACY_VERSION as LEGACY_EXTRACTION_VERSION
+from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_inputs import read_kinetic_inputs, kinetic_arguments_schema, SUBJECT_FIELDS, CONTEXT_FIELDS, PARAMETER_UNITS, COMPARISON_VALUES, QUALIFICATIONS, COUNT_STATUSES, COUNT_REASONS, COUNT_NOTATIONS, COUNT_RELATIONS, VERSION as EXTRACTION_VERSION
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_calculations import populate_kinetic_contrast, COMPONENTS as ALL_COMPONENTS, FORMULAS, REASONS, CONDITIONAL_CODES
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_validation import validate_saved_kinetic, witnesses
 PROVIDER = 'literature.a105.kinetic_population'
-LEGACY_VERSION = 'literature_kinetic_population_record_v2'
 VERSION = 'literature_kinetic_population_record_v3'
 COMPONENTS = ALL_COMPONENTS[:5]
 FORMULA_CODES = {name: 'kinetic_' + name for name in COMPONENTS}
@@ -26,11 +23,7 @@ EVALUATION_SCOPE = 'source_kinetic_parameter_contrast'
 MODEL_INPUT_STATUS = 'not_supplied_by_native_operation'
 MODEL_CAPABILITY = 'unimplemented'
 _REQUEST = ('run_id', 'episode_id', 'operation_key', 'selected_tool', 'scope', 'assignment', 'requested_components', 'arguments')
-_PAYLOAD = ('version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'selection', 'extraction', 'calculation', 'cells', 'role_bindings', 'comparison_bindings', 'requested_components', 'implementation_dependencies')
-_LEGACY_FROZEN = {'literature_kinetic_calculations.py': '1ca423165e40b99140bb1a1b431081e240d1ae788f7b5d933823817a6c397f50', 'literature_kinetic_inputs.py': '78e0c0094bbffa8306c26a6d134eec74f291c34177a87656ec09f925c2dd1960', 'literature_assay_inputs.py': '52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e', 'literature_rate_native_inputs.py': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500', 'literature_partner_source_fields.py': '20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17', 'literature_experimental_contracts.py': '0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc'}
-_FROZEN = {**_LEGACY_FROZEN, 'literature_kinetic_inputs.py': 'aba2c8a2432901baf2538139cdf8649083a7537c45742dab45e113f0718f6ace', 'literature_partner_source_fields.py': '6683a39272203ff0b2844c951ab13b2333ae0ae16e3966c4eb932970f30764a8'}
-_SOURCE_LOCATION_FROZEN = {**_FROZEN, 'literature_assay_inputs.py': '2d98f2e552a79c1a262c6507b0ab945641daabc1645a8b910a52aa8a939b997c'}
-_LEGACY_SAVED_IMPLEMENTATION = {'literature_kinetic_validation.py': '25c190269a33fe84f5c3d122e150d5f4acb61b724390f9a63995882d7da6463d', 'literature_kinetic_storage.py': 'ed571ce8966dd7cbf9363f1e5c38c6d431607be06073a5c957d3ff943ef3b7dc'}
+_PAYLOAD = ('version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'selection', 'extraction', 'calculation', 'cells', 'role_bindings', 'comparison_bindings', 'requested_components')
 
 def _fail(code):
     raise ContractError('literature_kinetic_' + code)
@@ -46,29 +39,6 @@ def _selected(assignment):
     if not isinstance(values, (list, tuple)) or any((type(v) is not str or v not in COMPONENTS for v in values)) or len(values) != len(set(values)):
         _fail('component_selection_invalid')
     return list(values)
-
-def _dependencies():
-    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_validation import VERSION as validator
-    names = [*_FROZEN, 'literature_kinetic_validation.py', 'literature_kinetic_storage.py']
-    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
-    if any((hashes[name] != expected for name, expected in _SOURCE_LOCATION_FROZEN.items())):
-        _fail('implementation_dependency_mismatch')
-    return {'sha256': hashes, 'validation_version': validator}
-
-def _validate_dependency_receipt(receipt, version):
-    """Authenticate a saved release declaration, without reattesting new code.
-
-    Content-addressed payload and original operation authentication retain the
-    original validator/storage fingerprints. They describe the selected work,
-    not the implementation currently reopening its immutable result.
-    """
-    if type(receipt) is not dict or set(receipt) != {'sha256', 'validation_version'} or type(receipt['sha256']) is not dict:
-        _fail('saved_dependency_mismatch')
-    releases = (_LEGACY_FROZEN,) if version == LEGACY_VERSION else (_FROZEN, _SOURCE_LOCATION_FROZEN)
-    expected = releases[0]
-    hashes = receipt['sha256']
-    if set(hashes) != {*expected, 'literature_kinetic_validation.py', 'literature_kinetic_storage.py'} or any((type(value) is not str or re.fullmatch('[a-f0-9]{64}', value) is None for value in hashes.values())) or (not any((all((hashes[name] == sha for name, sha in release.items())) for release in releases))) or (version == LEGACY_VERSION and any((hashes[name] != sha for name, sha in _LEGACY_SAVED_IMPLEMENTATION.items()))) or (receipt['validation_version'] != ('a105_kinetic_saved_validation_v2' if version == LEGACY_VERSION else 'a105_kinetic_saved_validation_v3')):
-        _fail('saved_dependency_mismatch')
 
 def _signature(request):
     return canonical({k: request[k] for k in _REQUEST if k != 'selected_tool'})
@@ -190,7 +160,7 @@ class LiteratureKineticRepository(LiteratureRateRepository):
         validate_saved_kinetic(request['arguments'], extraction, calculation)
         direct = list(extraction['source_refs'])
         root = self._native_source(context, extraction['source_ref'])
-        saved = {'version': VERSION, 'input_source_ref': extraction['source_ref'], 'input_artifact_ref': root['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': self._parents(context.scope, direct), 'selection': request['arguments'], 'extraction': extraction, 'calculation': calculation, 'cells': {k: deepcopy(calculation['cells'][k]) for k in COMPONENTS}, 'requested_components': request['requested_components'], 'implementation_dependencies': _dependencies()}
+        saved = {'version': VERSION, 'input_source_ref': extraction['source_ref'], 'input_artifact_ref': root['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': self._parents(context.scope, direct), 'selection': request['arguments'], 'extraction': extraction, 'calculation': calculation, 'cells': {k: deepcopy(calculation['cells'][k]) for k in COMPONENTS}, 'requested_components': request['requested_components']}
         with self.store.transaction():
             self._install()
             created, records = ([], [])
@@ -228,7 +198,7 @@ class LiteratureKineticRepository(LiteratureRateRepository):
 
     def _read(self, sheet_ref):
         source = self.store.get(sheet_ref)
-        if source.get('id') != sheet_ref or source.get('record_type') != 'source' or source.get('provider') != PROVIDER or (source.get('version') not in (LEGACY_VERSION, VERSION)) or (source.get('origin') != 'tool') or (not source.get('request_ref')):
+        if source.get('id') != sheet_ref or source.get('record_type') != 'source' or source.get('provider') != PROVIDER or source.get('version') != VERSION or (source.get('origin') != 'tool') or (not source.get('request_ref')):
             _fail('sheet_required')
         value = {k: v for k, v in source.items() if k not in ('id', 'record_type', 'origin')}
         if identity('source', {'origin': 'tool', 'record': value}) != sheet_ref:
@@ -249,10 +219,9 @@ class LiteratureKineticRepository(LiteratureRateRepository):
             _fail('saved_fields_mismatch')
         if saved['version'] != source['version'] or not _same(saved['selection'], request['arguments']) or saved['input_source_ref'] != request['arguments']['source_ref'] or (saved['direct_input_source_refs'] != saved['extraction']['source_refs']) or (saved['requested_components'] != request['requested_components']) or (source.get('parent_source_refs') != saved['input_source_refs']) or (source.get('text_ref') != source['artifact_ref']) or (saved['input_source_refs'] != self._parents(request['scope'], saved['direct_input_source_refs'])):
             _fail('saved_mismatch')
-        expected_extraction = LEGACY_EXTRACTION_VERSION if saved['version'] == LEGACY_VERSION else EXTRACTION_VERSION
+        expected_extraction = EXTRACTION_VERSION
         if saved['extraction']['version'] != expected_extraction:
             _fail('saved_version_mismatch')
-        _validate_dependency_receipt(saved['implementation_dependencies'], saved['version'])
         validate_saved_kinetic(saved['selection'], saved['extraction'], saved['calculation'])
         if not _same(saved['cells'], {k: saved['calculation']['cells'][k] for k in COMPONENTS}):
             _fail('cells_mismatch')

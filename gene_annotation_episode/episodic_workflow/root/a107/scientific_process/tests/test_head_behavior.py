@@ -46,7 +46,7 @@ class TestPrivateScientificHead(ScientificHeadBoundaryChecks):
             credits.append(source.episode_id)
             return scientific.binding.credit_view(scientific.context, None)
         task.workflow = SimpleNamespace(run_id=scientific.context.run_id, execution_binding=None,
-            wait_inputs_version=None, completed_action_inputs_version=None,
+            pending_work=lambda source: [],
             scientific_process_binding=scientific.binding, binding_context=lambda source: scientific.context,
             journal=SimpleNamespace(row=lambda table, episode, index: saved.get(index),
                 save=lambda table, row: saved.__setitem__(row['decision_index'], deepcopy(row)), measure=lambda *args: nullcontext()),
@@ -60,7 +60,7 @@ class TestPrivateScientificHead(ScientificHeadBoundaryChecks):
         assert first == saved and len(scientific.calls) == 1
         assert receipts == [(3,status)] and credits == [task.episode_id]
         assert json.loads(saved[3]['action']) == selection
-        assert json.loads(saved[3]['result']) == scientific.outcome
+        assert json.loads(saved[3]['result']) == {**scientific.outcome, 'pending_work_after_action': []}
 
     def test_next_revisits_actual_outcome_with_same_goal_and_progress_definition(self, scientific):
         task = self.task(scientific); seen = []; units = [object(), object()]
@@ -133,20 +133,6 @@ class TestPrivateScientificHead(ScientificHeadBoundaryChecks):
             'last_local_outcome':{'status':'unavailable','feedback':{'code':'no_controlled_measurement'},'record_refs':[]},
             'feedback':{'status':'unavailable','detail':'Target correspondence remains unresolved.'}}
 
-
-    def compare_presentations(self,state):
-        original=self.module('providers')._SessionConnection._presentation
-        private=self.module('scientific_process.presentation').present_scientific_context
-        frames=self.module('decision_context');left=SimpleNamespace(scientific_prompt_states={});right=SimpleNamespace(scientific_prompt_states={})
-        instructions='Keep actual partial findings. '+frames.INSTRUCTIONS
-        later={**deepcopy(state),'feedback':{'status':'invalid','detail':'Original missing operand remains unresolved.'}}
-        lookup={'version':frames.VERSION,'kind':'decision_lookup_result','result':{'status':'unavailable','feedback':{'code':'original_lookup_failure'}}}
-        inputs=[deepcopy(state),frames.state_frame(state),frames.state_frame(later,state),lookup]
-        saved=deepcopy(inputs)
-        for context in inputs:
-            assert private(right,'scientific-test','REASONING',instructions,context)==original(left,'scientific-test','REASONING',instructions,context)
-            assert right.scientific_prompt_states==left.scientific_prompt_states
-        assert inputs==saved
 
     def test_declared_renderer_and_legacy_provider_receive_exact_original_operands(self,scientific):
         task=self.task(scientific);calls=[];state=self.ordinary_state();schema={'type':'object'}

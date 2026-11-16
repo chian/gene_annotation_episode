@@ -81,8 +81,7 @@ def build_saved_flux_balance_worker_plan(*, directory: str, sheet: dict, selecto
         "directory": directory, "sheet": sheet, "selector": selector})
 
 
-def validate_flux_balance_worker_plan(value: dict, *, historical=False) -> dict:
-    _require(type(historical) is bool, "historical_validation_mode_invalid")
+def validate_flux_balance_worker_plan(value: dict) -> dict:
     _finite(value)
     _require(type(value) is dict and value.get("version") == PLAN_VERSION
         and type(value.get("mode")) is str and value["mode"] in ("native_result", "saved_sheet_recalculation"), "plan_invalid")
@@ -93,8 +92,8 @@ def validate_flux_balance_worker_plan(value: dict, *, historical=False) -> dict:
     selector = validate_flux_balance_result_selector(value["selector"])
     _require(selector["mode"] == value["mode"], "mode_mismatch", "/selector/mode")
     if native:
-        original = validate_flux_balance_run_plan(value["original_plan"], historical=historical)
-        validate_flux_balance_native_capture(value["capture"], original_plan=original, historical=historical)
+        original = validate_flux_balance_run_plan(value["original_plan"])
+        validate_flux_balance_native_capture(value["capture"], original_plan=original)
         inputs = [original["attempt_directory"], *_input_paths(original), *_input_paths(value["capture"])]
     else:
         retained = _retained(value["sheet"], "/sheet")

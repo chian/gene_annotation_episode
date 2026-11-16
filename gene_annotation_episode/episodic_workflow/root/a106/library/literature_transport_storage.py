@@ -50,7 +50,7 @@ class LiteratureTransportRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = "literature_transport_response_record_v2"
-    readable_record_versions = ("literature_transport_response_record_v1", record_version)
+    readable_record_versions = (record_version,)
     operations_table = "literature_transport_operations"
     received_table = "literature_transport_received"
     binding_fields = tuple(BINDINGS)

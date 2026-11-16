@@ -96,7 +96,7 @@ class APIServiceExecution:
         return self._uniprot_returns
 
     def __getattr__(self, name):
-        # Preserve existing inspection ports for the unchanged legacy binding.
+        # Inspection ports of the HMMER API binding.
         legacy = self.__dict__.get('legacy')
         if legacy is not None:
             return getattr(legacy, name)
@@ -150,7 +150,7 @@ class APIServiceExecution:
     def capabilities(self, resource_id):
         if resource_id in self.services:
             return self.services[resource_id].capabilities()
-        # Legacy schemas are fixed and do not require an invented query.
+        # HMMER API schemas are fixed and do not require an invented query.
         return [{'name': name} for name in ('api.hmmer.databases', 'api.hmmer.prepare',
             'api.hmmer.submit', 'api.hmmer.status', 'api.hmmer.check_handoff')]
 
@@ -189,8 +189,7 @@ class APIServiceExecution:
             return self.store.get(context.assignment['handoff_ref']).get('provider') == LEGACY_PROVIDER
         return plain(context.assignment).get('version') == 'api_execution_assignment_v1'
 
-    def _context(self, context, *, verify_artifacts=True,
-                 _completed_appservice_download=False):
+    def _context(self, context, *, verify_artifacts=True):
         if context.run_id != self.run_id:
             raise ValueError('api_execution_run_conflict')
         if context.role == 'launch_api':
@@ -202,8 +201,7 @@ class APIServiceExecution:
         if set(raw) != {'version', 'handoff_ref', 'selector'} or raw['version'] != 'execution_results_assignment_v1':
             raise ValueError('invalid_api_results_assignment')
         target = self.read_target(raw['handoff_ref'], context.scope,
-            verify_artifacts=verify_artifacts,
-            **({'_completed_appservice_download': True} if _completed_appservice_download else {}))
+            verify_artifacts=verify_artifacts)
         self.validate_result_selector(target, raw['selector'])
         return target['assignment'], self.services[target['resource_id']], target
 
@@ -331,11 +329,6 @@ class APIServiceExecution:
             return await self._legacy_binding().execute(context, name, arguments, operation_key)
         try:
             arguments = plain(arguments)
-            if (name == 'api.bvbrc_appservice.download' and type(arguments) is dict
-                    and 'max_bytes' not in arguments):
-                cached = self.appservice.legacy_cached_download(context, name, arguments, operation_key)
-                if cached is not None:
-                    return cached
             self.initialize(context)
             assignment, service, target = self._context(context)
             entry = next((row for row in self.catalog(context) if row['name'] == name), None)
@@ -632,14 +625,10 @@ class APIServiceExecution:
         body = self._artifact_json(self.store.get(handoff_ref)['artifact_ref'])
         return self._read_handoff(handoff_ref, body['scope'])['scope']
 
-    def read_target(self, handoff_ref, scope, *, verify_artifacts=True,
-                    _completed_appservice_download=False):
+    def read_target(self, handoff_ref, scope, *, verify_artifacts=True):
         from .bvbrc_appservice_records import PROVIDER as APPSERVICE_PROVIDER
         if self.store.get(handoff_ref).get('provider') == APPSERVICE_PROVIDER:
-            return self.appservice.read_target(handoff_ref, scope,
-                **({'_completed_download': True} if _completed_appservice_download else {}))
-        if _completed_appservice_download:
-            raise ValueError('appservice_cached_download_context_conflict')
+            return self.appservice.read_target(handoff_ref, scope)
         if self.store.get(handoff_ref).get('provider') == LEGACY_PROVIDER:
             return self._legacy_binding().read_target(handoff_ref, scope)
         body = self._read_handoff(handoff_ref, scope,

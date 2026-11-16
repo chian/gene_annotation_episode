@@ -72,16 +72,16 @@ class WorkflowSetup:
         if episode_record_receipts and (not isinstance(initial_known_record_refs, (list, tuple)) or any((not isinstance(ref, str) or not ref for ref in initial_known_record_refs))):
             raise ValueError('receipt_binding_requires_explicit_initial_known_record_refs')
         self.episode_record_receipts = episode_record_receipts
-        if wait_inputs_version not in {'wait_inputs_binding_v1', 'wait_inputs_binding_v2'}:
+        if wait_inputs_version != 'wait_inputs_binding_v2':
             raise ValueError('unsupported_wait_inputs_binding')
         self.wait_inputs_version = wait_inputs_version
-        if completed_action_inputs_version not in {None, 'completed_action_inputs_binding_v1'}:
+        if completed_action_inputs_version != 'completed_action_inputs_binding_v1':
             raise ValueError('unsupported_completed_action_inputs_binding')
         self.completed_action_inputs_version = completed_action_inputs_version
         self.episode_application_services_binding = service_binding(episode_service_factory, episode_service_binding, inputs=episode_service_inputs)
         if self.episode_application_services_binding is not None and any((value is not None for value in (episode_binding_factories, episode_binding_descriptors, role_credit_bindings, job_progress_provider))):
             raise ValueError('episode_service_factory_and_direct_services_are_exclusive')
-        if progress_receipt_order not in {'received_progress_order_v1', 'legacy_grouped_v1'}:
+        if progress_receipt_order != 'received_progress_order_v1':
             raise ValueError('unsupported_progress_receipt_order')
         self.progress_receipt_order = progress_receipt_order
         self.store, self.tools, self.provider = (store, tools, provider)

@@ -1,4 +1,4 @@
-"""Original selected FBA action, launch, worker and publication authority.
+"""Selected FBA action, launch, worker and publication authority.
 
 These durable controls retain outcomes before credit. Historical validation
 uses frozen controls and artifact metadata; it neither loads matrices nor polls

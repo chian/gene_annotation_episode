@@ -6,4 +6,5 @@ G1 owns scientific records; these checks validate supplied execution facts and
 associations, never observe files, grant source authority or execute work.
 """
 from __future__ import annotations
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}

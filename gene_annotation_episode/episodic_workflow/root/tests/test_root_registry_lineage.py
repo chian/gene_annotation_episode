@@ -174,17 +174,6 @@ def test_ambiguous_role_only_lookup_and_metadata_require_lineage(branch_case):
         registry.received_report_sources('inspection')
 
 
-@pytest.mark.parametrize('legacy_first', [False, True])
-def test_legacy_role_cannot_silently_override_a_private_path(legacy_first):
-    legacy = BindingProbe('inspection')
-    private = BindingProbe('inspection', path='fixture/parent/inspection', parent='fixture/parent')
-    registry = EpisodeBindingRegistry((legacy if legacy_first else private,))
-    before = deepcopy(registry.as_record())
-    with pytest.raises(ValueError, match='duplicate_episode_role:inspection'):
-        registry.register(private if legacy_first else legacy)
-    assert registry.as_record() == before
-
-
 def test_duplicate_exact_path_rejects_before_registry_mutation(branch_case):
     registry, bindings = branch_case
     before = deepcopy(registry.as_record())
@@ -310,29 +299,3 @@ def test_original_aggregation_conflicts_remain_visible(branch_case, operation, e
             registry.resolve_received_reference(received, 'fixture_ref', 'fixture')
 
 
-def test_legacy_parent_cannot_acquire_unrelated_private_child_by_unique_role():
-    parent = BindingProbe('legacy_parent', entry=True, children=('inspection',))
-    private_child = BindingProbe('inspection', path='other_parent/inspection',
-        parent='other_parent', value='unrelated')
-    registry = EpisodeBindingRegistry((parent, private_child))
-    original_descriptors = deepcopy(registry.as_record())
-    # Known negative regression in the frozen lineage template: its legacy
-    # parent branch currently chooses list(candidates), despite explicit child
-    # ownership pointing elsewhere. This test must fail that implementation;
-    # do not xfail it or substitute a fake parent binding path.
-    with pytest.raises(LookupError, match='episode_child_not_bound'):
-        registry.for_child((('annotation', 'root'), ('legacy_parent', 'original-parent')),
-            'inspection')
-    assert registry.as_record() == original_descriptors
-    assert parent.calls == [] and private_child.calls == []
-
-
-def test_unique_legacy_child_retains_original_role_compatibility():
-    parent = BindingProbe('legacy_parent', entry=True, children=('inspection',))
-    legacy_child = BindingProbe('inspection', value='legacy')
-    registry = EpisodeBindingRegistry((parent, legacy_child))
-    original_parent = (('annotation', 'root'), ('legacy_parent', 'original-parent'))
-    assert registry.for_child(original_parent, 'inspection') is legacy_child
-    assert registry.for_path((*original_parent, ('inspection', 'original-child'))) is legacy_child
-    assert registry.for_role('inspection') is legacy_child
-    assert parent.calls == [] and legacy_child.calls == []

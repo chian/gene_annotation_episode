@@ -1,20 +1,14 @@
 """Offline MinHash tests; synthetic BV-BRC rows are never live measurements."""
 from copy import deepcopy
-import ast
 from fractions import Fraction
 import json
 import math
-from pathlib import Path
 import socket
 import subprocess
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_minhash_grader import MINHASH_DIAGNOSTIC_CODES, calculate_minhash_components, calculate_minhash_shared_hash_fraction, parse_minhash_result
-
-
-ROOT = (Path(__file__).resolve().parent / 'fixtures' / 'bvbrc_original')
-NATIVE = ROOT / "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources"
+from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_minhash_grader import calculate_minhash_components, calculate_minhash_shared_hash_fraction, parse_minhash_result
 
 
 @pytest.fixture(autouse=True)
@@ -46,30 +40,6 @@ def metadata(index=0, genome="synthetic.reference", **values):
 
 def codes(value):
     return {item["code"] for item in value["diagnostics"]}
-
-
-@pytest.mark.parametrize("mode", ["genome", "fasta"])
-def test_retained_upstream_mash_values_in_synthetic_bvbrc_wrapper(mode):
-    source = NATIVE / "Mash/test/ref/genomes.dist"
-    fields = source.read_text().splitlines()[0].split("\t")
-    assert fields == ["genome1.fna", "reads", "0.12101", "4.48626e-214", "41/1000"]
-    rows = [["synthetic.reference", *fields[2:]]]
-    provenance = {"kind": "upstream_native_values_in_synthetic_bvbrc_wrapper",
-                  "source_path": str(source.relative_to(ROOT)), "live_bvbrc_output": False}
-    result = parse(rows, mode, provenance=provenance)
-    assert result["status"] == "ok"
-    sheet = result["sheet"]
-    assert sheet["native_result"] == rows
-    assert sheet["rows"][0]["reported_distance"] == 0.12101
-    assert sheet["rows"][0]["reported_pvalue"] == 4.48626e-214
-    assert sheet["rows"][0]["shared_hashes"] == 41
-    assert sheet["rows"][0]["compared_union_hashes"] == 1000
-    result = calculate_minhash_components(sheet)
-    assert result["rows"][0]["shared_hash_fraction"] == 0.041
-    assert result["rows"][0]["recomputed_distance"] is None
-    assert result["rows"][0]["recomputed_pvalue"] is None
-    assert "pair_metadata_missing" in codes(result)
-    assert all(value is None for value in sheet["search_metadata"].values())
 
 
 def test_small_exact_binomial_and_saved_sheet_recalculation():

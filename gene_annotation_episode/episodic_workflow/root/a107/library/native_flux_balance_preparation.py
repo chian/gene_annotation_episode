@@ -1,6 +1,4 @@
-"""A107 original native flux balance preparation; substantive retained received-result responsibility.
-Original authority, invalid outcomes and historical source identities remain unchanged.
-"""
+"""A107 native flux balance preparation."""
 
 
 from contextlib import contextmanager

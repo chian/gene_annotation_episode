@@ -1,4 +1,4 @@
-"""Exact original historical receiving slice; integration and dependency review pending."""
+"""A110 received execution information."""
 from __future__ import annotations
 import base64
 from copy import deepcopy

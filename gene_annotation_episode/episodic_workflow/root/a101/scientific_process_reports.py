@@ -16,14 +16,13 @@ from gene_annotation_episode.episodic_workflow.root.a101.method_loop.episode imp
 from .communication import CODE
 from .domain import identity
 from .episode_reports import report_sources as episode_report_sources
-from .scientific_process_records import (OPTION_REF_VERSION, SELECTION_VERSION, LEGACY_SELECTION_VERSION,
+from .scientific_process_records import (OPTION_REF_VERSION, SELECTION_VERSION,
     SLOTS, canonical_slot, _exact, _plain, scientific_invocation_ref, validate_invocation_ref,
     validate_option_ref, validate_revision_origin, validate_selection, selection_fields)
 from .tool_information import RESOURCE_KINDS
 
 
 VERSION = "scientific_process_result_v1"
-LEGACY_RETURN_VERSION = "scientific_process_result_v2"
 RETURN_VERSION = "scientific_process_result_v3"
 SELECTION_REPORT_VERSION = "scientific_process_selection_report_v1"
 SOURCE = "scientific_process_results"
@@ -64,7 +63,7 @@ def _selection_schema(library, tool_library):
         raise ValueError("scientific_process_result_library_invalid")
     fields = {
         "version": {"type": "string", "const": SELECTION_REPORT_VERSION},
-        "source_version": {"type": "string", "enum": [LEGACY_SELECTION_VERSION, SELECTION_VERSION]},
+        "source_version": {"type": "string", "const": SELECTION_VERSION},
     }
     for slot, refs in by_slot.items():
         fields[slot] = _object({
@@ -121,7 +120,7 @@ def _validate_report_selection(value, *, library=None, tool_library=None):
     code = "scientific_process_selection_report_invalid"
     _exact(value, "version source_version evidence_axis thought_pattern child_tool_info", code)
     if (value["version"] != SELECTION_REPORT_VERSION
-            or value["source_version"] not in (LEGACY_SELECTION_VERSION, SELECTION_VERSION)):
+            or value["source_version"] != SELECTION_VERSION):
         raise ValueError(code)
     refs = [validate_option_ref(value[name]) for name in SLOTS]
     if (tuple(canonical_slot(ref["slot"]) for ref in refs) != SLOTS
@@ -133,23 +132,19 @@ def _validate_report_selection(value, *, library=None, tool_library=None):
     choices = value["child_tool_info"]
     if not isinstance(choices, list):
         raise ValueError(code)
-    legacy = value["source_version"] == LEGACY_SELECTION_VERSION
     seen = set()
     for choice in choices:
         _exact(choice, "name resources", code)
         name, resource = choice["name"], choice["resources"]
         if (not isinstance(name, str) or CODE.fullmatch(name) is None
-                or (resource is not None if legacy else resource not in RESOURCE_KINDS)):
+                or resource not in RESOURCE_KINDS):
             raise ValueError(code)
         key = name, resource
         if key in seen:
             raise ValueError(code)
         seen.add(key)
     if tool_library is not None:
-        if legacy:
-            tool_library.resolve([choice["name"] for choice in choices])
-        else:
-            tool_library.resolve_tool_info(choices)
+        tool_library.resolve_tool_info(choices)
     return value
 
 
@@ -162,7 +157,7 @@ def validate_process_result(value, *, library=None, tool_library=None):
     if value.get('proposed_annotation_ref') is not None:
         _semantic_ref(value['proposed_annotation_ref'], re.compile(r'hypothesis_[0-9a-f]{24,64}\Z'),
             'scientific_process_result_proposed_annotation_invalid')
-    if value["version"] not in (VERSION, LEGACY_RETURN_VERSION, RETURN_VERSION):
+    if value["version"] not in (VERSION, RETURN_VERSION):
         raise ValueError("scientific_process_result_version_invalid")
     validate_invocation_ref(value["invocation_ref"])
     parent = value["parent_invocation_ref"]
@@ -187,10 +182,7 @@ def validate_process_result(value, *, library=None, tool_library=None):
             for name in (axis_field, thought_field):
                 library.resolve(selection[name])
         if tool_library is not None:
-            if selection["version"] == LEGACY_SELECTION_VERSION:
-                tool_library.resolve(selection[tools_field])
-            else:
-                tool_library.resolve_tool_info(selection[tools_field])
+            tool_library.resolve_tool_info(selection[tools_field])
         value["selection"] = selection
     else:
         value["selection"] = _validate_report_selection(value["selection"],
@@ -226,15 +218,10 @@ def project_process_result(value, *, library, tool_library):
     value = validate_process_result(value, library=library, tool_library=tool_library)
     if value["version"] == RETURN_VERSION:
         return value
-    if value['version'] == LEGACY_RETURN_VERSION:
-        return {**value, 'version': RETURN_VERSION,
-            'proposed_annotation_ref': value.get('proposed_annotation_ref')}
     selection = value["selection"]
     axis_field, thought_field, tools_field = selection_fields(selection)
-    choices = ([{"name": name, "resources": None} for name in selection[tools_field]]
-        if selection["version"] == LEGACY_SELECTION_VERSION else
-        [{"name": choice["name"], "resources": choice["resources"]}
-         for choice in selection[tools_field]])
+    choices = [{"name": choice["name"], "resources": choice["resources"]}
+        for choice in selection[tools_field]]
     reported_selection = _validate_report_selection({
         "version": SELECTION_REPORT_VERSION, "source_version": selection["version"],
         "evidence_axis": selection[axis_field], "thought_pattern": selection[thought_field],

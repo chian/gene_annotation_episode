@@ -41,13 +41,12 @@ STARTED_FILENAME = "homer-wrapper-started.json"
 REALIZATION_FILENAME = "homer-realization.json"
 COMPLETION_FILENAME = "homer-completion.json"
 OUTPUT_MANIFEST_FILENAME = "homer-output-manifest.json"
-WORKER_MODULE = "gene_annotation_episode.native_homer_worker"
 CURRENT_WORKER_MODULE = "gene_annotation_episode.episodic_workflow.root.library.native_homer_worker"
 CURRENT_SOFTWARE_VERSION = "root_homer_native_software_v1"
 
 ENVIRONMENT_SELECTION = {"version": "homer_execution_selection_v1",
     "environment_realization": "operation_scoped_tmp_and_cache_v1"}
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': 5368709120, 'scratch_bytes': 4294967296}
 INPUT_ROLES = ("target_bed", "reference_fasta", "background_bed")
 ROLES = ("known_results", "known_pwm", "denovo_pwm", "denovo_combined_pwm",
     "denovo_nonredundant_pwm", "sequence_table", "group_weights", "normalization_table", "native_log")
@@ -171,7 +170,7 @@ def validate_homer_software(value):
     value = _copy(value)
     _closed(value, ("version", "python", "python_home", "python_version", "import_roots",
         "software_files_file"), "software_fields_invalid")
-    _require(value["version"] in ("homer_native_software_v1", CURRENT_SOFTWARE_VERSION) and _text(value["python_version"]),
+    _require(value["version"] == CURRENT_SOFTWARE_VERSION and _text(value["python_version"]),
         "software_invalid")
     _pin(value["python"]); _pin(value["software_files_file"]); _path(value["python_home"])
     roots = value["import_roots"]
@@ -324,7 +323,7 @@ def _payload(plan):
 
 def homer_adapter_argv(plan):
     return [plan["software"]["python"]["path"], "-B", "-S", "-m",
-        (CURRENT_WORKER_MODULE if plan["software"]["version"] == CURRENT_SOFTWARE_VERSION else WORKER_MODULE),
+        CURRENT_WORKER_MODULE,
         "--native-plan", PLAN_FILENAME, "--selected-payload-sha256", plan["selected_payload_sha256"]]
 
 
@@ -603,25 +602,20 @@ def verify_homer_start_inputs(plan, *, verify_loaded=False):
         _require(file_pin(row["path"]) == row, "software_file_identity_conflict")
     _require(len(set(paths)) == len(paths) and inventory["path"] not in paths, "software_inventory_path_conflict")
     package = Path(__file__).absolute().parents[3]
-    if software["version"] == CURRENT_SOFTWARE_VERSION:
-        library = Path(__file__).absolute().parent
-        root = library.parent
-        # Explicit current native entry/custody inputs. Every selected inventory
-        # byte was checked above; the unchanged loaded-module check below also
-        # requires all actual runtime dependencies before native execution.
-        required = {software["python"]["path"],
-            *(str(library / name) for name in ("native_homer_execution.py", "native_homer_worker.py",
-                "native_artifact_storage.py", "retained_file_read.py", "retained_file_pin.py", "record_serialization.py")),
-            *(str(root / name) for name in ("communication.py", "receiving_context.py")),
-            *(str(package / name) for name in ("native_lifecycle.py", "acquisition.py",
-                "execution_contracts.py", "local_jobs.py", "molecular_measurement_tools.py",
-                "native_file_capture.py", "native_file_identity.py", "domain.py")),
-            *(str(path / "__init__.py") for path in
-                (package, package / "episodic_workflow", root, library))}
-    else:
-        # Original supplied/public deployments retain their original path set.
-        required = {software["python"]["path"], str(package / "native_homer_execution.py"),
-            str(package / "native_homer_worker.py")}
+    library = Path(__file__).absolute().parent
+    root = library.parent
+    # Explicit current native entry/custody inputs. Every selected inventory
+    # byte was checked above; the unchanged loaded-module check below also
+    # requires all actual runtime dependencies before native execution.
+    required = {software["python"]["path"],
+        *(str(library / name) for name in ("native_homer_execution.py", "native_homer_worker.py",
+            "native_artifact_storage.py", "retained_file_read.py", "retained_file_pin.py", "record_serialization.py")),
+        *(str(root / name) for name in ("communication.py", "receiving_context.py")),
+        *(str(package / name) for name in ("native_lifecycle.py", "acquisition.py",
+            "execution_contracts.py", "local_jobs.py", "molecular_measurement_tools.py",
+            "native_file_capture.py", "native_file_identity.py", "domain.py")),
+        *(str(path / "__init__.py") for path in
+            (package, package / "episodic_workflow", root, library))}
     _require(required <= set(paths), "software_inventory_entry_closure_missing")
     # The original worker checks its actually imported modules after loading
     # this validator. Host dispatch need not import a scientific implementation.

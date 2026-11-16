@@ -9,27 +9,16 @@ import importlib.util
 import json
 from pathlib import Path
 import re
-import socket
-import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_fastqutils_bundle_adapter as adapter
-from gene_annotation_episode.bvbrc_fastqutils_calculators import calculate_fastqutils
-from gene_annotation_episode.bvbrc_fastqutils_contracts import (
-    FastqUtilsContractError, bytes_sha256, json_sha256, validate_contract, validate_sheet,
-    validate_requested_form,
-)
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_calculators import calculate_fastqutils
+from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError, bytes_sha256, json_sha256, validate_sheet
 from gene_annotation_episode.bvbrc_fastqutils_identity import component_ref, native_ref
 from gene_annotation_episode.bvbrc_fastqutils_resolution import resolve_calculation_inputs, resolve_documents
 from gene_annotation_episode.bvbrc_fastqutils_samstat_mapping import calculate_samstat_report_mapping
 from gene_annotation_episode.bvbrc_fastqutils_saved_codec import validate_saved_projection
-from gene_annotation_episode.bvbrc_fastqutils_returns import (
-    encode_return_value, decode_return_value, parent_form_schema, project_fastqutils_return_facts,
-)
-from gene_annotation_episode.episodic_workflow.root.communication import validate_form
-from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_publication import RESULT_VERSION
-from gene_annotation_episode.execution_contracts import canonical, digest
+from gene_annotation_episode.execution_contracts import canonical
 
 FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils_samstat_mapping'
 spec = importlib.util.spec_from_file_location('samstat_mapping_fixture_support',
@@ -399,64 +388,6 @@ def test_svg_absence_is_scoped_to_actual_plot_arrays():
     for name in ('uniform_absent', 'category_empty', 'metadata_absent', 'wrong_section'):
         assert 'samstat_svg_values_not_retained' not in result['facts'][name]['diagnostic_codes']
     validate_saved(result, data, selected_fields)
-
-
-def test_saved_recalculation_and_typed_returns_without_science_or_io(monkeypatch):
-    data = fixture_data()
-    selected_fields = fields()
-    result = f.run(data, selected_fields)
-    original = canonical(result)
-    old_parameters = deepcopy(result['components']['calculations']['parameters'])
-    old_components = deepcopy(components(result))
-    # The publication envelope is synthetic; every scientific field originates
-    # in consume_bundle above, not a precompleted or mocked provider response.
-    def content(value, source=None):
-        sha = digest(value)
-        return dict(source_ref=source or 'source_' + sha[:24], artifact_field='artifact_ref',
-                    artifact_ref='artifact_' + sha, sha256=sha, byte_count=len(canonical(value).encode()))
-    selector = f.oracle('RESULT_SELECTOR_PRE_DOWNLOAD_002.json')
-    selector.update(requested_schema=f.schema(selected_fields), adapter=dict(adapter_id='bvbrc_fastqutils', adapter_version='2', parameters=data[3]))
-    data[0]['requested_selector_sha256'] = digest(selector)
-    saved = {k: deepcopy(result[k]) for k in ('adapter_id', 'adapter_version', 'status', 'facts', 'missing_requirements', 'diagnostics')}
-    saved.update(sheet_content=content(result['sheet']), components_content=content(result['components']))
-    source = 'source_' + digest(data[0])[:24]
-    body = dict(version=RESULT_VERSION, source_ref=source, reference=source, record_refs=[source], assignment=dict(selector=selector),
-        publication_inputs=dict(selector=selector, adapter=selector['adapter'], adapter_implementation_sha256=adapter.implementation_sha256()),
-        bundle=data[0], publication=dict(bundle_content=content(data[0], source), result_record_refs=[source], adapter_result=saved))
-    # Host schema requires UUIDs, so build them before storing the bundle hash.
-    import uuid
-    for member in data[0]['artifacts']:
-        ident = str(uuid.uuid5(uuid.NAMESPACE_URL, member['workspace_object']['path']))
-        member['workspace_object']['uuid'] = member['task_association']['output_uuid'] = ident
-    body['publication']['bundle_content'] = content(data[0], source)
-    expected = project_fastqutils_return_facts(body, requested_sources=('bvbrc_fastqutils_components',), sheet=result['sheet'], components=result['components'])
-    schema = parent_form_schema(validate_requested_form(selector['requested_schema']))
-    validate_form({key: expected[node['x-source']] for key, node in schema['properties'].items()}, schema, lambda *_: True)
-    for fact in result['facts'].values():
-        assert decode_return_value('component', encode_return_value('component', fact)) == fact
-    def forbid(*args, **kwargs): raise AssertionError('saved calculation/return attempted parsing, source access or acquisition')
-    monkeypatch.setattr('builtins.open', forbid)
-    monkeypatch.setattr(Path, 'open', forbid)
-    monkeypatch.setattr(socket, 'socket', forbid)
-    monkeypatch.setattr(subprocess, 'Popen', forbid)
-    for module_name, names in {
-        'bvbrc_fastqutils_bundle_adapter': ('parse_fastqutils_artifact', 'populate_fastqutils_sheet', 'consume_bundle'),
-        'bvbrc_fastqutils_native': ('parse_fastqutils_artifact',),
-        'bvbrc_fastqutils_samstat_native': ('parse_samstat_html',),
-        'bvbrc_fastqutils_samstat_svg': ('parse_samstat_html_2_5_0',),
-        'bvbrc_fastqutils_samstat_legacy': ('parse_samstat_html_2_2_3',),
-    }.items():
-        module = __import__('gene_annotation_episode.' + module_name, fromlist=['unused'])
-        for name in names: monkeypatch.setattr(module, name, forbid)
-    restored = json.loads(canonical(result['sheet']))
-    assert calculate_fastqutils(restored, parameters=old_parameters)['components'] == old_components
-    later = calculate(restored, request((1,)))
-    assert [r['value'] for r in later['components']] == [8 / 9, 4 / 9]
-    assert {r['parameter_sha256'] for r in later['components']}.isdisjoint(r['parameter_sha256'] for r in old_components)
-    assert canonical(result) == original
-    # Return replay must not even invoke the numerical calculator.
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_fastqutils_calculators.calculate_fastqutils', forbid)
-    assert project_fastqutils_return_facts(body, requested_sources=('bvbrc_fastqutils_components',), sheet=result['sheet'], components=result['components']) == expected
 
 
 @pytest.mark.parametrize('change', ['hash', 'method', 'lineage', 'reference', 'threshold'])

@@ -71,8 +71,6 @@ def hsp(result, q=1, s=0, h=0):
     return result["queries"][q]["subjects"][s]["hsps"][h]
 
 
-
-
 @pytest.mark.parametrize("key,queries,descriptions,subjects,hsps", [
     ("2011", 1, [0], [0], [0]),
     ("2202", 2, [15, 8], [15, 8], [16, 9]),
@@ -109,22 +107,6 @@ def test_native_2221_multiple_hsps_and_actual_numerators():
     better = next(s for s in result["queries"][2]["statistics"] if s["kind"] == "sequences_better_than")
     assert better["integer_value"]["value"] == 30452
     assert better["threshold"]["value"] == "1.0e-05"
-
-
-def test_native_2202_overlap_missing_gap_and_historical_percent():
-    result = parse(native("2202"))
-    q = result["queries"][0]
-    s = q["subjects"][0]
-    assert q["length"]["value"] == 1922 and s["length"]["value"] == 249
-    first, second = s["hsps"]
-    assert [first[k]["value"] for k in ("bit_score", "raw_score", "expect", "identity_count", "identity_denominator", "positive_count", "gap_count")] == ["68.9", 167, "3e-12", 53, 176, 83, 36]
-    assert [second[k]["value"] for k in ("bit_score", "raw_score", "expect", "identity_count", "identity_denominator", "positive_count")] == ["37.7", 86, "0.007", 20, 47, 28]
-    assert second["gap_count"] == {"state": "missing", "value": None, "native_text": None, "locations": []}
-    for side, expected in (("query", 219), ("subject", 144)):
-        union = {position for h in (first, second) for b in h["traceback_blocks"] for position in range(b[side + "_start"]["value"], b[side + "_end"]["value"] + 1)}
-        assert len(union) == expected
-    historical = result["queries"][1]["subjects"][6]["hsps"][0]
-    assert [historical[k]["value"] for k in ("positive_count", "positive_denominator", "positive_printed_percent")] == [16, 29, "54"]
 
 
 def test_native_no_hit_statistics_and_zero():

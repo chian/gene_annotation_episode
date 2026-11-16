@@ -84,9 +84,9 @@ class ResultAcquisitionCompletion:
             proof = validate_completion_proof(plain(proof))
         except (ValueError, TypeError):
             return False
-        historical = self._closed_completion_verdict(context, proof)
-        if historical is not None:
-            return historical
+        closed_verdict = self._closed_completion_verdict(context, proof)
+        if closed_verdict is not None:
+            return closed_verdict
         if self.native_flux_balance_results is not None and self.native_flux_balance_results.applies(context):
             return proof == self.native_flux_balance_results.completion(context)
         if self.native_blast_masking_results.applies(context):

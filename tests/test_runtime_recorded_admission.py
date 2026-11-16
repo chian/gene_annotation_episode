@@ -12,8 +12,6 @@ from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeGo
 from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.communication import plain
-from gene_annotation_episode.episodic_workflow.root.episode_commissions import CommissionCoordinator
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
@@ -244,29 +242,6 @@ def test_later_or_unrelated_receipt_cannot_authenticate_original_projection(fram
     assert frame.calls == []
 
 
-@pytest.mark.parametrize("missing", ["action", "result", "projection", "partial_process_revision"])
-def test_first_delivery_or_legacy_missing_projection_keeps_full_callbacks(frame, missing):
-    if missing == "action":
-        frame.store.db.execute("DELETE FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=?",
-            (frame.run_id, frame.episode_id, frame.index))
-    elif missing == "result":
-        frame.store.db.execute("UPDATE runtime_actions SET result=NULL "
-            "WHERE run_id=? AND episode_id=? AND decision_index=?", (frame.run_id, frame.episode_id, frame.index))
-    elif missing == "projection":
-        frame.store.db.execute("UPDATE runtime_actions SET result=? "
-            "WHERE run_id=? AND episode_id=? AND decision_index=?",
-            (canonical({"status": "completed"}), frame.run_id, frame.episode_id, frame.index))
-    else:
-        # _attempt also supports this existing tool-owned child-return path.
-        # A partial outcome is not eligible for the completed-return shortcut.
-        frame.journal.save("runtime_actions", {"episode_id": frame.episode_id, "decision_index": frame.index,
-            "action": canonical({"kind": "tool", "tool": "process.revise", "arguments": {}})})
-        frame.outcome(status="partial")
-    assert frame.proof.recorded_admission_references(frame.context(), frame.form, frame.schema, frame.index) is None
-    assert frame.replay() == frame.references
-    assert frame.calls == ["progress", "specialist"]
-
-
 def test_paged_member_without_ordinary_receipt_keeps_existing_delivery_path(frame, monkeypatch):
     material = frame.store.register_material(data=b">engineering member\nACGT\n", name="engineering member",
         format="fasta", molecule="dna")
@@ -297,38 +272,6 @@ def test_paged_member_without_ordinary_receipt_keeps_existing_delivery_path(fram
 def test_explicit_redelivery_keeps_the_new_delivery_path(frame):
     assert frame.replay(redelivery=True) == frame.references
     assert frame.calls == ["progress", "specialist"]
-
-
-@pytest.mark.parametrize("dispatch_completed", [False, True])
-def test_original_pending_commission_still_runs_first_return_admission(frame, dispatch_completed):
-    key = (frame.run_id, frame.episode_id, frame.index)
-    frame.store.db.execute("DELETE FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=?", key)
-    frame.store.db.execute("DELETE FROM runtime_record_receipts WHERE run_id=? AND episode_id=?",
-        (frame.run_id, frame.episode_id))
-    child = frame.proof.context(frame.child_id)
-    coordinator = CommissionCoordinator(frame.store, frame.journal, SimpleNamespace())
-    selected = {"kind": "episode_child", "role": child.role, "assignment": {}, "scope": frame.scope,
-        "purpose": "Return only the selected engineering files", "schema_json": canonical(frame.schema)}
-    spec = coordinator.select(parent={"episode_id": frame.episode_id, "path": plain(frame.path),
-            "goal_id": frame.request.goal.goal_id},
-        child={"episode_id": child.episode_id, "role": child.role, "key": child.path[-1][1],
-            "path": plain(child.path), "request": plain(child.request), "scope": plain(child.scope)},
-        original_decision_index=frame.index, selection=selected,
-        runtime_binding={"factory_module": "engineering", "factory_name": "not_dispatched",
-            "arguments": {}, "implementation_sha256": "a" * 64, "settings_sha256": "b" * 64},
-        input_versions=[], constraints={}, resource_selection=None, expectation_snapshot_refs=[],
-        selected_at="2026-10-30T00:00:00+00:00")
-    pending = json.loads(frame.journal.row("runtime_actions", frame.episode_id, frame.index)["result"])
-    assert pending == {"status": "pending", "pending_handle": spec["handle"],
-        "selected_at": "2026-10-30T00:00:00+00:00"}
-    if dispatch_completed:
-        # A completed dispatch envelope is still a commission, not the child
-        # return projection written later by _admit_return.
-        frame.outcome(status="completed", record_refs=[])
-    assert frame.proof.recorded_admission_references(frame.context(), frame.form, frame.schema, frame.index) is None
-    assert frame.replay() == frame.references
-    assert frame.calls == ["progress", "specialist"]
-    assert set(frame.references) <= set(frame.receipts.known(frame.episode_id))
 
 
 @pytest.mark.parametrize("mode", ["no_receipts", "job_source"])

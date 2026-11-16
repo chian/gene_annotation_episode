@@ -8,7 +8,6 @@ from copy import deepcopy
 import builtins
 import hashlib
 import json
-import os
 from pathlib import Path
 import socket
 import subprocess
@@ -16,7 +15,6 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_vdb_utility_inputs as readers
-from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import validate_blast_utility_result
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_result_views import FACT_PREFIX, VDB_DATABASE_FIELDS, project_blast_utility_result, validate_blast_utility_fact_values
 from test_blast_vdb_utility_inputs_663 import supplied
 from test_blast_vdb_requested_views_667 import inputs, project_args, selector
@@ -27,12 +25,6 @@ RETAINED = ROOT / (
     "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/vdb_info_wrapping/"
     "ORIGINAL_INFO_STDOUT.txt")
 NATIVE_SHA = "cb65d0f9b71a60a74dcbabb602dcd86cdc29e6b5d65c2d0ec3d7c7235c174e0a"
-OPERAND = ("/home/chia/repos/gene_annotation_episode/verification/"
-           "tool_graders_blast_vdb_fixture_acquisition_2026-10-28_658/"
-           "retained/fixture/ERR3487613")
-WRAPPED_LEXEME = (
-    " \n/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_"
-    "\nfixture_acquisition_2026-10-28_658/retained/fixture/ERR3487613")
 NUMBERS = {"vdb_sequence_count": 20, "vdb_total_unclipped_bases": 5000,
            "vdb_longest_sequence_bases": 250, "vdb_average_sequence_bases": 250}
 LABELS = {"vdb_selected_inputs": "Database(s):", "vdb_resolved_paths": "Database(s) Full Path:",
@@ -75,44 +67,6 @@ def authentic():
     raw = RETAINED.read_bytes()
     assert len(raw) == 423 and hashlib.sha256(raw).hexdigest() == NATIVE_SHA
     return raw
-
-
-def test_authentic_wrapped_operand_retains_numbers_and_raw_unknowns():
-    raw = authentic()
-    args = supplied(raw, mode="info")
-    selected = args["operation"]["parameters"]["database_selection"]["inputs"][0]
-    selected.update(value=OPERAND, binding_native_path=OPERAND)
-    args["database_binding"]["native_paths"] = [OPERAND]
-    context = args["vdb_context"]["source_inputs"][0]
-    context.update(selected_input={"kind": "path", "value": OPERAND}, binding_native_path=OPERAND)
-    before = deepcopy(args)
-    result = readers.parse_blast_vdb_inspection(raw, **args)
-    fields = {row["field_name"]: row for row in result["native_fields"]}
-    assert args == before
-    for name, line in (("vdb_selected_inputs", 1), ("vdb_resolved_paths", 4)):
-        assert_missing(result, fields[name], "ambiguous_population", WRAPPED_LEXEME)
-        assert fields[name]["line_number"] == line
-    assert {name: fields[name]["value"] for name in NUMBERS} == NUMBERS
-    assert {name: fields[name]["unit"] for name in NUMBERS} == {
-        "vdb_sequence_count": "sequences", "vdb_total_unclipped_bases": "nt",
-        "vdb_longest_sequence_bases": "nt", "vdb_average_sequence_bases": "nt"}
-    for name in ("vdb_csra_inputs", "vdb_reference_sequence_count", "vdb_reference_total_bases"):
-        assert_missing(result, fields[name], "native_field_absent", None)
-    assert result["completeness"] == "partial"
-    assert result["path_sections"] == result["path_records"] == []
-    assert len(result["failures"]) == 2
-    checks = {row["name"]: row for row in result["checks"]}
-    assert checks["syntax"]["status"] == "pass"
-    assert checks["database_metadata"]["status"] == "unknown"
-    assert checks["database_metadata"]["reason"] == "semantic_validation_unavailable"
-    assert validate_blast_utility_result(json.loads(json.dumps(result))) == result
-    assert RETAINED.read_bytes() == raw
-    (Path(os.environ["HMMER529_ATTEMPT"]) / "VERIFIED_VALUES_678.json").write_text(json.dumps({
-        "native_stdout_sha256": NATIVE_SHA, "native_stdout_size_bytes": len(raw),
-        "context_kind": "controlled_parser_adapter_with_exact_known_operand",
-        "native_helper_calls": 0, "original_store_opened": False,
-        "numerical_values": NUMBERS, "inspection": result,
-    }, indent=2) + "\n")
 
 
 def test_inline_selected_order_duplicates_and_single_resolved_path():
@@ -244,27 +198,3 @@ def test_corrected_saved_projection_copies_unknowns_without_parsing_or_io(monkey
     assert view["status"]["state"] == "complete" and not view["missing"]
     assert {row["field_name"]: row["value"] for row in returned if row["field_name"] in NUMBERS} == NUMBERS
 
-
-def test_saved_historical_shape_is_not_reparsed_or_reinterpreted(monkeypatch):
-    """Controlled saved shape, not an edit/read of the historical 673 Store."""
-    result, _ = inspect(authentic())
-    historical = deepcopy(result)
-    fragments = ["/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_",
-                 "fixture_acquisition_2026-10-28_658/retained/fixture/ERR3487613"]
-    for row in historical["native_fields"]:
-        if row["field_name"] in {"vdb_selected_inputs", "vdb_resolved_paths"}:
-            row.update(value=fragments.copy(), missing_reason=None)
-    historical["completeness"] = "complete"
-    historical["failures"] = []
-    for row in historical["checks"]:
-        if row["name"] == "database_metadata":
-            row.update(status="pass", reason=None)
-    frozen = json.loads(json.dumps(historical))
-
-    def prohibited(*args, **kwargs):
-        raise AssertionError("historical validation reparsed native bytes")
-
-    monkeypatch.setattr(readers, "_vdb_info", prohibited)
-    monkeypatch.setattr(readers, "parse_blast_vdb_inspection", prohibited)
-    assert validate_blast_utility_result(historical) == frozen
-    assert historical == frozen

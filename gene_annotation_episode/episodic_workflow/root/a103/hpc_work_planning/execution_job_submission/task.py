@@ -91,14 +91,14 @@ class LaunchTask(LaunchDecisionState, LaunchTaskState, LaunchDecisionDelivery, L
             original = self.workflow.journal.row('runtime_actions', self.episode_id, index)
             call = self.workflow.journal.row('runtime_model_calls', self.episode_id, index) if original is None and self.workflow.decision_exchanges is not None else None
             saved = {} if call is None else _live_original_runtime.json.loads(call['request'])
-            response = _live_original_runtime._decode_recorded_action_response(response, schema, recorded_selection=None if original is None else _live_original_runtime.json.loads(original['action']), exchanges=() if original is not None or self.workflow.decision_exchanges is None else self.workflow.decision_exchanges.rows(self.episode_id, index), exchange_schema=saved.get('contract_information', {}).get('exchange_schema'), unproven_replay=getattr(self, '_unproven_direct_response_index', None) == index)
+            response = _live_original_runtime._decode_recorded_action_response(response, schema, recorded_selection=None if original is None else _live_original_runtime.json.loads(original['action']), exchanges=() if original is not None or self.workflow.decision_exchanges is None else self.workflow.decision_exchanges.rows(self.episode_id, index), exchange_schema=saved.get('contract_information', {}).get('exchange_schema'))
             selection = response['selection']
             if self._delivery_resolution_ref is not None:
                 _live_original_runtime.Draft202012Validator(schema).validate(response)
                 if response['report_update'] != self.report_values:
                     raise ValueError('delivery_resolution_must_preserve_current_interpretation')
             if self.workflow.permits_common_action(self, 'reason') and isinstance(selection, _live_original_runtime.Mapping) and (selection.get('kind') == 'reason'):
-                envelope = self.workflow.reasoning_action_schema(self, {'type': 'object'}, _accept_legacy_quotes=True)
+                envelope = self.workflow.reasoning_action_schema(self, {'type': 'object'})
                 _live_original_runtime.Draft202012Validator(envelope).validate(selection)
                 payload = selection['commit']
                 commit_schema = self.workflow.store.reasoning_schema()

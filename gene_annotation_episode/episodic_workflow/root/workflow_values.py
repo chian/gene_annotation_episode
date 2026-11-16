@@ -258,7 +258,7 @@ class FeedbackEpisode(Episode):
 
     async def _stop_end_async(self, ctx, scope, records, step):
         workflow = self.source.workflow
-        if workflow.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE and workflow.execution_binding is not None:
+        if workflow.execution_binding is not None:
             while step.stop:
                 item = await workflow.next_branch_return(self.source, self._view(ctx, scope, records))
                 if item is None:

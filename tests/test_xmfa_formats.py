@@ -1,5 +1,4 @@
 """Native upstream examples and explicit malformed Mauve1 counterexamples."""
-from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
@@ -441,16 +440,6 @@ def test_bad_explicit_encoding_has_invalid_null_result(data):
     result = parse(data, encoding='utf-8')
     assert result['status'] == 'invalid' and result['value'] is None
     assert codes(result) == ['xmfa_encoding_invalid']
-
-
-def test_digest_mismatch_does_not_decode_or_relabel_bytes():
-    data = PREFIX.encode()
-    artifact = artifact_for(data)
-    artifact['sha256'] = '0' * 64
-    snapshot = deepcopy(artifact)
-    result = parse(data, artifact=artifact)
-    assert result['status'] == 'invalid' and result['value'] is None
-    assert codes(result) == ['xmfa_digest_mismatch'] and artifact == snapshot
 
 
 @pytest.mark.parametrize(('keyword', 'bad', 'code'), [

@@ -1,51 +1,10 @@
 """Finite shared SAMstat vocabulary and exact historical requested grammars."""
-from copy import deepcopy
-import hashlib
-import json
-from pathlib import Path
 
 import pytest
 
 from gene_annotation_episode import bvbrc_fastqutils_contracts as c
 from gene_annotation_episode.bvbrc_fastqutils_metric_specs import metric_spec,component_spec
 from gene_annotation_episode.bvbrc_fastqutils_samstat_specs import SAMSTAT_METRICS,SAMSTAT_COMPONENTS
-
-
-def form(metric='fastq_read_count',section='fastq_summary'):
-    return dict(version='fastqutils_projection_v2',fields=[dict(field='number',selection=dict(
-        target=dict(kind='measurement',selector=dict(selection='semantic',document_id='report',
-                    section_key=section,section_ordinal=0,metric=metric,rows=dict(kind='all'),axis=dict(kind='all'))),
-        cardinality='one_target',expected_cardinality=1,availability_requirement='typed_state'))])
-
-
-def test_three_exact_requested_generations_are_preserved():
-    current=c.make_requested_schema(form())
-    assert c.validate_requested_form(current)==form()
-    for definitions in (c._LEGACY_DEFS,c._CUTADAPT_DEFS):
-        historical=deepcopy(current)
-        historical['$defs']=c._definition_closure('ProjectedField',definitions)
-        assert c.validate_requested_form(historical)==form()
-    frozen=Path(c.__file__).with_name('bvbrc_fastqutils_legacy_cutadapt_schemas.json').read_bytes()
-    assert hashlib.sha256(frozen).hexdigest()=='284c037c69b7513e8b6e9d0c0955c76d3b7dae6b6beb508634cd8bd96ec541dd'
-
-
-@pytest.mark.parametrize('historical',[c._LEGACY_DEFS,c._CUTADAPT_DEFS])
-def test_new_metric_cannot_claim_either_historical_generation(historical):
-    request=form('samstat_alignment_total_count','samstat_summary')
-    schema=c.make_requested_schema(request)
-    assert c.validate_requested_form(schema)==request
-    schema['$defs']=c._definition_closure('ProjectedField',historical)
-    with pytest.raises(c.FastqUtilsContractError): c.validate_requested_form(schema)
-
-
-@pytest.mark.parametrize('mutation',['mixed','extra','weak','reduced'])
-def test_mixed_and_weakened_requested_shapes_rejected(mutation):
-    schema=c.make_requested_schema(form())
-    if mutation=='mixed': schema['$defs']['MeasurementPayload']=deepcopy(c._CUTADAPT_DEFS['MeasurementPayload'])
-    elif mutation=='extra': schema['properties']['number']['additionalProperties']=True
-    elif mutation=='weak': schema['$defs']['MeasurementPayload']['additionalProperties']=True
-    else: schema['$defs']['MeasurementPayload']['properties']['quantity']['enum'].pop()
-    with pytest.raises(c.FastqUtilsContractError): c.validate_requested_form(schema)
 
 
 def test_all_sixty_native_specs_are_concrete_and_independently_accessible():

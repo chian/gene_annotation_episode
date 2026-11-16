@@ -5,7 +5,6 @@ is fabricated. The real resource and original HomologyEpisode execute methods
 remain connected; only jobs.environment is controlled to exercise its original
 returned value / exception translation. Real order identities are retained.
 """
-from gene_annotation_episode.episodic_workflow.root.a103.tests.hierarchy_paths import current_module_name as _a103_current_module_name
 import asyncio
 from dataclasses import replace
 from copy import deepcopy
@@ -20,7 +19,7 @@ from unittest.mock import patch
 PACKAGE = 'gene_annotation_episode.episodic_workflow.root.a103'
 
 def own(name):
-    return import_module(_a103_current_module_name(PACKAGE + '.' + name))
+    return import_module(PACKAGE + '.' + name)
 NATIVE_MODES = ('returned', 'value_error', 'key_error', 'os_error', 'sqlite_error', 'subprocess_error', 'type_error')
 
 def native_fixture(directory, store, journal):
@@ -101,45 +100,3 @@ def native_trace(v, mode='returned'):
         reopened.close()
     return {'constructor_classes': {r: type(b).__module__ + '.' + type(b).__qualname__ for r, b in adapter.homology.items()}, 'jobs_type': type(v.jobs).__module__ + '.' + type(v.jobs).__qualname__, 'registry': v.jobs.config, 'assignment': assigned, 'context': {'episode_id': identity, 'path': v.runtime._plain(path), 'run_id': v.journal.run_id}, 'job': before, 'observation': observed, 'calls': calls, 'descriptor': adapter.as_record(), 'controlled_port': 'HomologyJobs.environment', 'native_science_executed': False, 'native_handoff_established': False}
 
-def reconstruction_trace(v, mode='valid'):
-    """Original rejection versus explicit current-V2 reconstruction, no migration."""
-    composition = own('episode_composition')
-    connected = hasattr(composition, 'RESOURCE_BINDINGS')
-    bindings = [own(h.replace('/', '.') + '.episode').ResourceEpisode(v.services, resource_adapters=(v.native,)) for h in (v.home,)]
-    descriptors = [b.as_record() for b in bindings]
-    projector = own('resource_operational_credit').ResourceOperationalCredit(v.native.information, handoff_unit=2, acquired_record_unit=3)
-    roles = {v.role: {'definition': projector.as_record(), 'project': projector}}
-    jobs = v.native.homology
-    events = []
-    if mode == 'missing_jobs':
-        jobs = None
-    elif mode == 'missing_credit':
-        roles = {}
-    elif mode == 'changed_fingerprint':
-        descriptors[0]['implementation_sha256'] = '0' * 64
-    elif mode == 'old_adapter':
-        descriptors[0]['configuration']['resource_adapters'][0]['version'] = 'homology_resource_adapter_v1'
-    elif mode == 'changed_registry':
-        descriptors[0]['configuration']['resource_adapters'][0]['resource_id'] = 'unowned-registry'
-    elif mode == 'duplicate_binding':
-        descriptors *= 2
-    elif mode == 'malformed_adapters':
-        descriptors[0]['configuration']['resource_adapters'] = {}
-    else:
-        assert mode == 'valid'
-
-    def capability(adapter):
-        events.append(adapter.resource_id)
-        return {'resource_id': adapter.resource_id, 'kind': 'local', 'availability': 'unavailable', 'observed_at': 'controlled-constructor-observation', 'provenance_refs': [adapter.jobs.config['registry_ref']], 'knowledge_entry_ids': [], 'tool_names': []}
-    try:
-        with patch.object(type(v.native), 'capability', capability):
-            result = composition.compose_episode_bindings(v.services, store=v.store, journal=v.journal, execution_backend=None, descriptors=descriptors, job_episodes=jobs, resource_estimator=v.native.resource_estimator, role_credit_bindings=roles)
-    except own('method_loop.durable').DurableExecutionError as error:
-        assert not connected or mode != 'valid'
-        assert events == []
-        return {'connected': connected, 'status': 'raised', 'type': type(error).__module__ + '.' + type(error).__qualname__, 'failure': deepcopy(error.failure), 'message': str(error), 'observed_resources': events}
-    assert connected and mode == 'valid' and (len(result.bindings) == 1)
-    binding = result.bindings[0]
-    assert type(binding) is type(v.binding) and binding.as_record() == descriptors[0]
-    assert binding.adapters[v.native.resource_id].jobs is v.jobs and events == [v.native.resource_id]
-    return {'connected': True, 'status': 'returned', 'binding': binding.as_record(), 'role': binding.roles[0], 'observed_resources': events, 'actual_jobs_identity': True, 'actual_store_identity': binding.adapters[v.native.resource_id].store is v.store}

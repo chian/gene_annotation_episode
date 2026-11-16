@@ -1,6 +1,4 @@
-"""A107 original native chromatin interaction capture; substantive retained received-result responsibility.
-Original authority, invalid outcomes and historical source identities remain unchanged.
-"""
+"""A107 native chromatin interaction capture."""
 
 
 from __future__ import annotations

@@ -1,8 +1,6 @@
 """Finite result tests on explicit synthetic retained producer artifacts.
 
-The fixture software declarations are not an installed-producer claim. Root
-owns authentic original execution and full episode verification. Run this file
-only through the coordinator's existing bounded verification lifecycle.
+The fixture software declarations are not an installed-producer claim.
 """
 import builtins
 from copy import deepcopy
@@ -206,66 +204,6 @@ def test_foreign_batch_or_bytes_never_become_measurements(tmp_path, change):
         values = [row["value"] for row in output(plan, "projection")["rows"]]
         assert values == ([.625, 62.5, 165, 150] if change == "manifest" else [None] * 4)
         assert any(row["value"] == .625 for row in output(plan, "calculations")["cells"] if row["request"]["gate_key"] == "gate-1")
-
-
-@pytest.mark.parametrize("change,issue_code", [("absent", "source_unavailable"),
-    ("bytes", "retained_artifact_mismatch"), ("identity", "retained_artifact_mismatch"), ("intact", None)])
-def test_support_custody_qualifies_only_dependent_control_and_survives_saved_recalculation(
-        tmp_path, monkeypatch, change, issue_code):
-    with Store(tmp_path / "store") as store:
-        plan = native_plan(store, tmp_path / "case", count=4, paired_controls=True)
-        requests = plan["selector"]["selection"]["requests"]
-        requests.extend(_request("control", metric, control_key=f"pair-{index}")
-            for index in range(2) for metric in ("control_difference_fraction",
-                "control_difference_percentage_points", "legacy_nonnegative_difference_percentage_points"))
-        captured = next(row for row in plan["capture"]["files"] if row["role"] == "support_input:0")
-        if change == "absent":
-            captured["retained"] = None
-        elif change == "bytes":
-            Path(captured["retained"]["path"]).write_bytes(b"corrupted captured evidence")
-        elif change == "identity":
-            captured["retained"] = _retain(store, tmp_path / "changed", b"different evidence", "json")
-        before = deepcopy(plan["original_plan"]["requested_job"]["native_fluorescence"])
-        result = worker.execute_fluorescence_worker(plan)
-        assert result["native_binding"] and result["original_events_acquired"]
-        assert result["native_outcome"] == ("complete" if issue_code is None else "partial")
-        assert result["analysis_complete"] is (issue_code is None)
-        sheet, calculations, projection = (output(plan, role) for role in ("sheet", "calculations", "projection"))
-        assert sheet["control_pairs"] == before["definitions"]["control_pairs"]
-        assert sheet["gate_definitions"] == before["definitions"]["gates"]
-        assert sheet["population_definitions"] == before["definitions"]["populations"]
-        assert [row["comparison_basis"] for row in sheet["measurement_domains"]] == [
-            row["domain"]["comparison_basis"] for row in before["inputs"]]
-        assert [row["analyte"] for row in sheet["channels"]] == [row["channels"][0]["analyte"] for row in before["inputs"]]
-        assert [row["value"] for row in calculations["cells"] if row["request"]["metric"] == "selected_event_count"] == [5] * 4
-        assert [row["value"] for row in calculations["cells"] if row["request"]["metric"] == "retained_event_count"] == [8] * 4
-        assert [row["value"] for row in calculations["cells"] if row["request"]["metric"] == "selected_fraction"] == [.625] * 4
-        assert [row["value"] for row in calculations["cells"] if row["request"]["metric"] == "selected_intensity_mean"] == [165] * 4
-        expected_control = [0] * 3 if issue_code is None else [None] * 3
-        assert [row["value"] for row in projection["rows"]] == [.625, 62.5, 165, 150, *expected_control, 0, 0, 0]
-        assert all(row in calculations["cells"] for row in projection["rows"])
-        assert sheet["issues"] == ([] if issue_code is None else [core.issue(issue_code, "input", control_key="pair-0")])
-        assert not any(problem["code"] == "control_pair_incompatible" for row in projection["rows"] for problem in row["issues"])
-        if issue_code is not None:
-            assert any(row["input_index"] == 0 and row["role"] == "support_input:0" for row in result["failures"])
-            assert all(row["state"] == "unavailable" and row["population"]["extent"] == "unavailable"
-                for row in projection["rows"] if row["request"]["control_key"] == "pair-0")
-
-        raw = (Path(plan["directory"]) / "sheet.json").read_bytes()
-        retained = _retain(store, tmp_path / "supplied", raw, core.SHEET_SCHEMA)
-        saved = build_saved_fluorescence_worker_plan(directory=str(tmp_path / "saved"), sheet=retained,
-            selector=selector(selected=deepcopy(plan["selector"]["selection"]), file=retained["file"],
-                parameters=deepcopy(before["parameters"])))
-        shutil.rmtree(tmp_path / "case")
-        def forbidden(*args, **kwargs): pytest.fail("saved support qualification reacquired native input")
-        monkeypatch.setattr(worker, "_native", forbidden)
-        monkeypatch.setattr("socket.socket", forbidden)
-        monkeypatch.setattr("subprocess.Popen", forbidden)
-        recalculated = worker.execute_fluorescence_worker(saved)
-        assert recalculated["analysis_complete"] and recalculated["failures"] == []
-        assert not recalculated["original_events_acquired"] and recalculated["native_outcome"] == "not_applicable"
-        assert output(saved, "projection") == projection
-        assert (Path(saved["directory"]) / "sheet.json").read_bytes() == raw
 
 
 @pytest.mark.parametrize("unavailable", [False, True])

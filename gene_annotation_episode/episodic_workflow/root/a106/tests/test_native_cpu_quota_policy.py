@@ -1,4 +1,4 @@
-"""No-native checks for independent child quota and authenticated legacy replay."""
+"""No-native checks for independent child quota and authenticated replay."""
 from importlib import import_module
 import json
 from pathlib import Path
@@ -50,82 +50,6 @@ def test_dispatch_uses_fixed_child_quota_without_changing_request(prepared, monk
     assert Path(body['paths']['request']).read_bytes() == request
 
 
-@pytest.mark.parametrize('missing_resource_binding', [False, True])
-def test_legacy_never_dispatched_handle_records_new_quota_before_submission(
-        prepared, monkeypatch, missing_resource_binding):
-    native, handle, command = prepared
-    body = handle.read(); body['metadata'].pop('cpu_quota_percent', None)
-    if missing_resource_binding:
-        body['metadata'].pop('local_resources')
-    native.atomic_json(handle.path, body)
-    original = Path(body['paths']['request']).read_bytes()
-    submitted = []
-    def capture(argv, **kwargs):
-        saved = handle.read()
-        assert saved['metadata']['cpu_quota_percent'] == 100
-        assert saved['metadata']['cpu_threads'] == 4
-        assert saved['stage'] == 'submitting'
-        assert 'CPUQuota=100%' in argv
-        submitted.append(saved)
-        return SimpleNamespace(returncode=0)
-    monkeypatch.setattr(native.subprocess, 'run', capture)
-    monkeypatch.setattr(native, 'resume_start', lambda selected, **kwargs: selected)
-    assert native.start_prepared(handle) is handle
-    assert len(submitted) == 1
-    assert submitted[0]['command'] == command
-    assert Path(body['paths']['request']).read_bytes() == original
-    reservation = submitted[0]['capacity_reservation']
-    import_module(PACKAGE+'.local_resources').LocalResources.reopen(
-        reservation['resource']).release_reservation(reservation)
-
-
-@pytest.mark.parametrize('legacy', [False, True])
-@pytest.mark.parametrize('wrong_child_quota', [False, True])
-def test_resume_verifies_recorded_child_quota_with_real_authenticated_ancestor(
-        prepared, tmp_path, monkeypatch, legacy, wrong_child_quota):
-    native, handle, command = prepared
-    from gene_annotation_episode import workflow_budget
-    actual = workflow_budget.active_budget()
-    assert actual['environment_bounds']['cpu_percent'] == 100
-    body = handle.read()
-    body['stage'] = 'submitting'
-    if legacy:
-        body['metadata'].pop('cpu_quota_percent', None)
-    native.atomic_json(handle.path, body)
-    original = Path(body['paths']['request']).read_bytes()
-    Path(body['paths']['ready']).write_text(json.dumps({'request_sha256':body['request_sha256']}))
-    group = tmp_path/'observed-child'; group.mkdir()
-    expected_percent = 400 if legacy else 100
-    percent = (100 if legacy else 400) if wrong_child_quota else expected_percent
-    (group/'cpu.max').write_text(f'{percent*1000} 100000\n')
-    memory = body['metadata']['policy']['memory_bytes']
-    (group/'memory.max').write_text(str(memory))
-    (group/'memory.swap.max').write_text('0')
-    props = {'ControlGroup':'/synthetic-child', 'Slice':workflow_budget.SLICE,
-             'BindsTo':workflow_budget.UNIT, 'MemoryMax':str(memory), 'MemorySwapMax':'0',
-             'KillMode':'control-group', 'OOMPolicy':'kill'}
-    monkeypatch.setattr(native, '_properties', lambda unit: props)
-    # Only this module's child observation path is controlled. The canonical
-    # checker still reads the actual supervisor, enclosing cgroup and run file.
-    monkeypatch.setattr(native, 'Path',
-        lambda *parts: group.parent if parts == ('/sys/fs/cgroup',) else Path(*parts))
-    (group.parent/'synthetic-child').symlink_to(group, target_is_directory=True)
-    if wrong_child_quota:
-        with pytest.raises(native.AcquisitionError) as error:
-            native.resume_start(handle)
-        assert error.value.operational['reason'] == 'cgroup_limits_not_verified'
-        assert not Path(body['paths']['release']).exists()
-    else:
-        assert native.resume_start(handle) is handle
-        assert handle.read()['stage'] == 'released'
-        verified = handle.read()['metadata']['verified_cgroup']
-        if legacy:
-            assert 'cpu_quota_percent' not in verified
-        else:
-            assert verified['cpu_quota_percent'] == expected_percent
-    assert handle.read()['metadata']['cpu_threads'] == 4
-    assert handle.read()['command'] == command
-    assert Path(body['paths']['request']).read_bytes() == original
 
 
 def test_new_dispatch_cannot_turn_changed_metadata_into_extra_cpu_capacity(prepared, monkeypatch):

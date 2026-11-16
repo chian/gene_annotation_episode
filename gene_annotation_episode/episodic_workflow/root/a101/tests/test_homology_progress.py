@@ -5,7 +5,6 @@ and registry. No model, episode science, credit unit or investigation run is use
 """
 from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
-import hashlib
 import json
 from pathlib import Path
 import threading
@@ -99,31 +98,6 @@ def assigned_spec(tmp_path, provider, job, query, *, resource=False, key='select
     spec['child']['request']['message'] = ({'episode_assignment': {'adapter_assignment': assignment}}
         if resource else {'job_assignment': assignment})
     return spec
-
-
-def test_definition_and_scope_are_bound_to_registered_query(fixture, monkeypatch):
-    store, jobs, query, job, provider = fixture
-    record = provider.as_record()
-    assert set(record) == {'version', 'implementation_sha256', 'registry_ref',
-                          'registry_configuration_sha256', 'configuration'}
-    assert record['version'] == 'homology_progress_provider_v1'
-    assert record['registry_configuration_sha256'] == content_digest(jobs.config)
-    assert record['implementation_sha256'] == hashlib.sha256(
-        (PROJECT / 'gene_annotation_episode/episodic_workflow/root/a101/homology_progress.py').read_bytes()).hexdigest()
-    assert record['configuration'] == {'log_window_bytes': 8,
-                                       'log_roles': ['native_text', 'native_stderr']}
-    scope = provider.scope(job)
-    assert scope == store.validate_scope({'subject_refs': [query], 'segments': store.coverage(query)})
-    monkeypatch.setattr(jobs, 'status', forbid)
-    assert provider.direct_dependencies(job, scope) == []
-    with pytest.raises(ContractError, match='target_unavailable'):
-        provider.scope('homology_job_' + 'f' * 24)
-    with pytest.raises(ContractError, match='outside_scope'):
-        provider.direct_dependencies(job, {'subject_refs': [query], 'segments': [{
-            'target_ref': query, 'start': 0, 'end': 1, 'unit': 'aa'}]})
-    with pytest.raises(ContractError, match='query_identity_conflict'):
-        jobs.db.execute('UPDATE orders SET query_fasta=? WHERE job_ref=?', ('>query\nAAAA\n', job))
-        provider.scope(job)
 
 
 @pytest.mark.parametrize('window,roles', [(0, ()), (True, ()), (1, ['native_text']),

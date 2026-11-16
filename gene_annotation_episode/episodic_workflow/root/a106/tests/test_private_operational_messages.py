@@ -51,17 +51,6 @@ def outgoing(edge):
     return workflow,source,selection,context,target,calls,schema
 
 
-def test_named_parent_request_uses_actual_child_binding_path_and_original_admission(edge):
-    parent,child,role,binding=edge
-    workflow,source,selection,context,target,calls,schema=outgoing(edge)
-    callback=binding.child_request_preparer_for_binding(role,child)
-    assert callback.__module__==AXIS+'.'+parent.replace('/','.')+'.to_child_'+Path(child).name
-    result=callback(workflow,source,selection,7)
-    assert result=={'scope':selection['scope'],'role':role,'schema':schema,
-        'report_declaration':{'original':'declaration'},'initial':{},
-        'episode_assignment':{'admitted':'original'},'scientific_process':None,'assignment':None}
-    assert calls==[(context,role,selection['assignment'],selection['scope'],'original-run:original-parent:7')]
-
 
 def test_required_typed_result_is_checked_before_child_admission(edge):
     _,child,role,binding=edge
@@ -80,51 +69,6 @@ def test_same_role_other_binding_cannot_enter_this_named_endpoint(edge):
         binding.child_request_preparer_for_binding(role,child)(workflow,source,selection,7)
     assert calls==[]
 
-
-@pytest.mark.parametrize('redelivery',[False,True])
-def test_saved_counterpart_dispatch_retains_private_path_and_receipt_identity(edge,tmp_path,monkeypatch,redelivery):
-    parent,child,role,binding=edge
-    runtime=import_module(AXIS+'.runtime');Store=import_module(AXIS+'.state').Store
-    Journal=import_module(AXIS+'.episode_journal').Journal
-    ParentRecords=import_module(AXIS+'.episode_return_records').EpisodeReturnRecords
-    monkeypatch.setattr(ParentRecords,'recorded_admission_references',lambda *args:None)
-    source=SimpleNamespace(path=(('annotation','root'),(binding.roles[0],'parent')),episode_id='parent',scope={})
-    receiver=binding.child_report_receiver_for_binding(role,child);calls=[]
-    assert receiver.__module__==AXIS+'.'+parent.replace('/','.')+'.from_child_'+Path(child).name
-    def choose(actual_role,actual_path):
-        calls.append((actual_role,actual_path));assert (actual_role,actual_path)==(role,child)
-        return receiver
-    binding.child_report_receiver_for_binding=choose
-    with Store(tmp_path/'state') as store:
-        store.create_problem(raw_sequence='ATGGCT', molecule='dna')
-        source.scope=store.validate_scope()
-        journal=Journal(store,'original-run')
-        journal.save('runtime_episodes',{'episode_id':'child','path':json.dumps(source.path+((role,'original-child'),)),
-            'request':'{}','initial_credit':0,'state':'yielded','completion':None,'archive':None})
-        journal.save('runtime_actions',{'episode_id':'parent','decision_index':8,
-            'action':json.dumps({'kind':'redeliver_report','delivery_ref':'original-delivery'} if redelivery else
-                {'kind':'episode_child','role':role}),'result':None,'credit':None})
-        journal.save('runtime_report_attempts',{'parent_episode_id':'parent','decision_index':8,
-            'delivery_ref':'original-delivery','child_episode_id':'child','contract':'{}','form':'{}','failure':None})
-        receipts=[];progress=[]
-        workflow=SimpleNamespace(run_id='original-run',store=store,journal=journal,
-            specialist=lambda source:binding,is_job_source=lambda source:False,binding_context=lambda source:source,
-            progress_provider=SimpleNamespace(receive_form=lambda *args:progress.append(args),
-                _receive_progress=lambda *args:progress.append(args)),
-            native_timing_information=None,job_episodes=None,receive_tool_attributions=lambda *args,**kwargs:[],
-            receipts=SimpleNamespace(receive=lambda *args,**kwargs:receipts.append((args,kwargs))),
-            episode_bindings=SimpleNamespace(received_form_references=lambda *args:['original-qualified-result'],
-                for_child=lambda *args:SimpleNamespace(binding_path=child)))
-        references=runtime.Workflow._receive_form(workflow,source,{}, {'type':'object','properties':{},'required':[],'additionalProperties':False},8,redelivery=redelivery)
-        assert references==['original-qualified-result'] and calls==[(role,child)]
-        assert len(progress)==1
-        if role=='monitor':
-            schema={'type':'object','properties':{},'required':[],'additionalProperties':False}
-            signature=import_module(AXIS+'.method_loop.durable').content_digest({
-                'form':{},'schema':schema,'scope':import_module(AXIS+'.communication').plain(source.scope)})
-            assert progress==[('parent',[],signature,'original-run:parent:8:typed_form')]
-        assert receipts==[(('parent',['original-qualified-result']),
-            {'kind':'report_redelivery' if redelivery else 'child_form','source_index':8})]
 
 
 def test_original_hpc_handoff_requirement_precedes_native_assignment(edge):

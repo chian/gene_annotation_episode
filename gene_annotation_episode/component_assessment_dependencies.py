@@ -68,7 +68,7 @@ def qualification_assessment_changes(store, qualification, known):
     dependency = assessment_dependencies(store, finding['assessment_ref'], known,
         anchor=deepcopy(finding.get('assessment_revision_dependency')))
     if dependency is None:
-        return []  # Historical result without an admitted original identity.
+        return []  # No admitted original identity.
     return sorted(correction_refs(dependency) - set(qualification['qualification_dependencies']))
 
 

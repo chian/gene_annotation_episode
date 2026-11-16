@@ -1,4 +1,4 @@
-"""Original A110 parent request envelope for published_evidence_assessment.
+"""A110 parent request envelope for published_evidence_assessment.
 
 The child retains its own assignment admission and typed response.
 """

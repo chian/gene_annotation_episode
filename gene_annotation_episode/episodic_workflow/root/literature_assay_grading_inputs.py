@@ -125,7 +125,7 @@ def source_schema(namespace):
     return getattr(import_module('.' + module, __package__), factory)()
 
 
-def assay_grading_population_schema(*, legacy=False):
+def assay_grading_population_schema():
     schema = deepcopy(assay_grading_input_schema())
     props = schema['properties']
     del props['version']
@@ -148,8 +148,6 @@ def assay_grading_population_schema(*, legacy=False):
                               for role in ROLES})
     props['quantities']['required'] = list(REQUIRED_ROLES)
     schema['required'] = list(props)
-    # Historical selections predate this binding. New population requires it;
-    # old committed selections remain readable without inventing an identity.
     props['experiment_ref'] = {**deepcopy(REF), 'x-reference-namespace': 'reference',
         'description': 'Possessed source-anchored assay reference identifying this experiment. Reuse it for another assessment of the same experiment; different experiments use distinct references even when they share a protocol type or paper.'}
     support = {**deepcopy(REF), 'x-reference-namespace': 'reference',
@@ -160,8 +158,7 @@ def assay_grading_population_schema(*, legacy=False):
         refs['description'] = ('Select the anchored reference records supporting this criterion. '
             'An unknown criterion with no supporting passage uses an empty list.')
     props['prediction_model']['anyOf'][0]['properties']['support_refs']['items'] = deepcopy(support)
-    if not legacy:
-        schema['required'].append('experiment_ref')
+    schema['required'].append('experiment_ref')
     return schema
 
 

@@ -1,4 +1,4 @@
-"""Original private scientific task presentation."""
+"""Private scientific task presentation."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a110.library.scientific_decision_presentation import Mapping, _pick, _record, _registered_return_schema_view, _scalar, _schema, _section, _table, _values, is_published_scientific_context, render_episode_steering, schema_fingerprint, text_instructions
 

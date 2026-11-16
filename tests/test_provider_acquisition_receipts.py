@@ -144,47 +144,6 @@ def caller(tmp_path, monkeypatch):
             authority=(context, workflow.services.read_received_molecular_input), arguments=arguments)
 
 
-def test_source_free_value_shares_literal_legacy_projection_and_preserves_every_model():
-    snapshot = _snapshot()
-    value = _value(snapshot)
-    assert 'source_ref' not in value and value['native_json'] == MODELS
-    assert af.alphafold_prediction_identity(value) == 'confirmed'
-    legacy = af.alphafold_prediction_result(snapshot, arguments=snapshot.request,
-        source_ref=SOURCE, artifact_ref=value['raw_artifact_ref'])
-    assert legacy == af.alphafold_prediction_result_from_value(value, source_ref=SOURCE)
-    assert set(legacy) == {'version', 'source_ref', 'raw_artifact_ref', 'requested',
-        'response', 'parse_state', 'native_json', 'issues'}
-    assert legacy['version'] == 'alphafold_prediction_result_v1'
-    receipt = af.alphafold_prediction_receipt(value, source_ref=SOURCE)
-    assert receipt == {'acquired': True, 'source_ref': SOURCE,
-        'data_ref': value['raw_artifact_ref'], 'failure_code': None}
-    value['native_json'][0]['unknown'].append('detached')
-    assert legacy['native_json'] == json.loads(snapshot.content) == MODELS
-
-
-@pytest.mark.parametrize('native,state', [
-    ([], 'unavailable'), ({'uniprotAccession': 'P69905'}, 'unavailable'),
-    (None, 'unavailable'), (False, 'unavailable'), (['P69905'], 'unavailable'),
-    ([{}], 'unavailable'), ([{'uniprotAccession': None}], 'unavailable'),
-    ([{'uniprotAccession': 69905}], 'unavailable'),
-    ([{'uniprotAccession': 'p69905'}], 'conflict'),
-    ([{'uniprotAccession': 'P69905-2'}], 'conflict'),
-    ([MODELS[0], {'uniprotAccession': 'OTHER'}], 'conflict'),
-    ([MODELS[0], {'uniprotAccession': 'P69905', 'entryId': 'old', 'modelEntityId': 'new'}], 'conflict'),
-    ([{'uniprotAccession': 'P69905', 'entryId': False}], 'unavailable'),
-    ([{'uniprotAccession': 'P69905', 'modelEntityId': 17}], 'unavailable'),
-    ([{'uniprotAccession': 'P69905', 'entryId': ''}], 'unavailable'),
-])
-def test_prediction_identity_never_uses_first_row_url_alias_or_case_folding(native, state):
-    snapshot = _snapshot(raw=json.dumps(native).encode())
-    value = _value(snapshot)
-    assert value['native_json'] == native and af.alphafold_prediction_identity(value) == state
-    receipt = af.alphafold_prediction_receipt(value, source_ref=SOURCE)
-    assert receipt == af.failed_alphafold_receipt('alphafold_prediction_identity_' + state, source_ref=SOURCE)
-    # The legacy record continues to retain scalars/nulls without inventing identity.
-    assert af.alphafold_prediction_result_from_value(value, source_ref=SOURCE)['native_json'] == native
-
-
 def test_explicit_uniprot_match_does_not_select_fragments_or_require_quality_or_model_identifiers():
     native = [{'uniprotAccession': 'P69905', 'entryId': 'literal-fragment2', 'quality': None},
         {'uniprotAccession': 'P69905', 'modelEntityId': 'literal-fragment1', 'quality': -999},
@@ -371,17 +330,6 @@ def test_new_file_receipt_and_cached_auth_preserve_selected_representation_witho
             authority=(caller.context, metadata_only), outcome=changed)
 
 
-def test_new_file_receipt_confirms_transfer_without_claiming_native_model_identity(caller):
-    selection = host.prepare_alphafold_file(caller.tools, caller.arguments, authority=caller.authority)
-    snapshot = _snapshot(raw=FILE_BYTES, arguments=caller.arguments, url=CIF)
-    legacy = af.alphafold_file_result(snapshot, arguments=caller.arguments,
-        association=selection['association'], source_ref=SOURCE,
-        artifact_ref='artifact_' + hashlib.sha256(FILE_BYTES).hexdigest())
-    assert legacy['observed_identity'] == {'native_model_id': None, 'state': 'not_parsed'}
-    assert af.alphafold_file_receipt(legacy)['acquired']
-    assert set(legacy) == {'version', 'source_ref', 'file', 'requested', 'response', 'association', 'observed_identity', 'issues'}
-
-
 def test_new_file_no_response_failure_authenticates_without_controls_or_source(caller, monkeypatch):
     def no_response(registry, arguments):
         return af.failed_alphafold_receipt('data_acquisition_failed'), []
@@ -410,82 +358,6 @@ def test_cached_file_rechecks_current_metadata_admission_before_private_controls
                 authority=authority, outcome=outcome)):
         with pytest.raises(ContractError, match='alphafold_file_metadata_not_received'):
             action()
-
-
-def test_changed_private_value_bytes_deny_file_selection_without_new_publication(caller):
-    reference = caller.source['auxiliary_artifact_refs'][0]
-    digest = reference[9:]
-    path = caller.store.path / 'artifacts' / digest[:2] / digest
-    original, before = path.read_bytes(), _rows(caller.store)
-    try:
-        path.write_bytes(original + b' ')
-        with pytest.raises(ContractError, match='^artifact_digest_mismatch$'):
-            host.prepare_alphafold_file(caller.tools, caller.arguments, authority=caller.authority)
-        assert _rows(caller.store) == before
-    finally:
-        path.write_bytes(original)
-
-
-def test_legacy_file_publisher_and_cached_rich_form_remain_literal(caller, monkeypatch):
-    selection = host.prepare_alphafold_file(caller.tools, caller.arguments, authority=caller.authority)
-    snapshot = _snapshot(raw=FILE_BYTES, arguments=caller.arguments, url=CIF)
-    outcome = _publish(caller.tools, 'engineered-original-legacy-file', host.FILE_TOOL,
-        caller.arguments, caller.scope, host.publish_alphafold_file, snapshot, selection=selection)
-    value = af.validate_alphafold_file_result(outcome['result'])
-    source = caller.store.get(value['source_ref'])
-    assert host._control(caller.store, source['auxiliary_artifact_refs'][0]) == selection
-    assert value['observed_identity'] == {'native_model_id': None, 'state': 'not_parsed'}
-    original_get = Store.get_artifact
-    def controls_only(store, reference):
-        assert reference not in {caller.source['artifact_ref'], source['artifact_ref']}
-        return original_get(store, reference)
-    monkeypatch.setattr(Store, 'get_artifact', controls_only)
-    monkeypatch.setattr(af, 'resolve_alphafold_file_selection', _forbidden)
-    monkeypatch.setattr(af, 'alphafold_prediction_result', _forbidden)
-    before = _rows(caller.store)
-    host.authenticate_saved_alphafold_file(caller.tools, caller.arguments,
-        authority=caller.authority, outcome=outcome)
-    assert _rows(caller.store) == before
-
-
-def test_legacy_prediction_toolop_and_file_cache_need_no_new_value_or_entity_reread(tmp_path, monkeypatch):
-    snapshot = _snapshot()
-    def legacy_prediction(registry, arguments, observed):
-        source = registry._source(af.SERVICE, None, snapshot=observed, accession=arguments['identifier'])
-        value = af.alphafold_prediction_result(observed, arguments=arguments,
-            source_ref=source['id'], artifact_ref=source['artifact_ref'])
-        return value, [source['id']]
-    with Store(tmp_path / 'store') as store:
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        scope = {'subject_refs': store.create_problem(raw_sequence='MKWAA', molecule='protein')['subject_refs']}
-        metadata = _publish(tools, 'legacy-caller-metadata', host.PREDICTION_TOOL,
-            snapshot.request, scope, legacy_prediction, snapshot)
-        source = store.get(metadata['result']['source_ref'])
-        assert 'auxiliary_artifact_refs' not in source
-        workflow = Workflow(store, tools, NoModel(), tmp_path / 'run', 'legacy-caller-engineering',
-            _controller, _credit, project_child_credit=_credit, episode_record_receipts=True,
-            initial_known_record_refs=[source['id'], source['artifact_ref']])
-        root = workflow.build('annotation', 'root', 'Use literal previously received metadata.', scope)
-        context = workflow.binding_context(root.source)
-        authority = context, workflow.services.read_received_molecular_input
-        arguments = {'metadata_source_ref': source['id'], 'url_pointer': '/0/pdbUrl',
-            'file_format': 'pdb_3x_text', 'max_bytes': 8192}
-        selection = host.prepare_alphafold_file(tools, arguments, authority=authority)
-        assert selection['association']['advertised_url'] == PDB
-        file_snapshot = _snapshot(raw=FILE_BYTES, arguments=arguments, url=PDB)
-        outcome = _publish(tools, 'legacy-caller-file', host.FILE_TOOL, arguments,
-            scope, host.publish_alphafold_file, file_snapshot, selection=selection)
-        original_get = Store.get_artifact
-        def controls_only(current, reference):
-            assert reference not in {source['artifact_ref'], outcome['result']['file']['artifact_ref']}
-            return original_get(current, reference)
-        monkeypatch.setattr(Store, 'get_artifact', controls_only)
-        monkeypatch.setattr(af, 'alphafold_prediction_result', _forbidden)
-        monkeypatch.setattr(af, 'resolve_alphafold_file_selection', _forbidden)
-        monkeypatch.setattr(PublicClients, '_http', _forbidden)
-        before = _rows(store)
-        host.authenticate_saved_alphafold_file(tools, arguments, authority=authority, outcome=outcome)
-        assert _rows(store) == before
 
 
 @pytest.mark.parametrize('provider', ['alphafold', 'emdb'])

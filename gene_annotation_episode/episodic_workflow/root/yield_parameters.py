@@ -14,7 +14,7 @@ def _category_yield_parameters(controller_binding):
     definition = controller_binding.get('definition')
     if not isinstance(definition, Mapping):
         return None
-    keys = ('window_size', 'subsample_size', 'uncertainty_alpha')
+    keys = ('uncertainty_alpha',)
     if 'version' not in definition and 'uncertainty_alpha' in definition:
         parameters = definition
     else:

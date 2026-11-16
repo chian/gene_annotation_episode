@@ -355,7 +355,7 @@ class _View:
             return "native_partial_results"
         if codes.intersection({"bvbrc_response_service_mismatch", "bvbrc_response_request_mismatch", "bvbrc_provider_http_error"}):
             return "incompatible_input"
-        if codes.intersection({"bvbrc_unsupported_media_type", "bvbrc_expected_native_row_array", "bvbrc_expected_solr_response"}):
+        if codes.intersection({"bvbrc_unsupported_media_type", "bvbrc_expected_solr_response"}):
             return "native_format_unverified"
         if "bvbrc_population_metadata_conflict" in codes:
             return "population_conflict"

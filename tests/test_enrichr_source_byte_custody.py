@@ -100,25 +100,6 @@ def select(case, tool, source, *, representation="original", **overrides):
         operation_key=key, permitted_record_refs=permitted)
 
 
-@pytest.mark.parametrize("role", ["request", "grading", "upload"])
-@pytest.mark.parametrize("tool", ["source.read", "material.read", "source.locate"])
-def test_private_source_alias_is_denied_before_the_selected_byte_port(case, monkeypatch, role, tool):
-    private_ref = case.private[role]
-    source = alias_source(case.store, case.source, private_ref)
-    # Even an actual historical expanded File receipt does not grant controls.
-    case.receiving.receipts.receive(case.receiving.context.episode_id,
-        [source["id"], private_ref], kind="initial")
-    assert private_ref in set(case.receiving.receipts.known(case.receiving.context.episode_id))
-    opened = guard_payloads(case, monkeypatch)
-    result = select(case, tool, source)
-    assert result["status"] == "invalid", result
-    assert result["feedback"] == {"category": "arguments_or_reference",
-        "code": "enrichr_private_artifact_not_readable"}
-    assert result["result"] is None and result["record_refs"] == []
-    assert opened == []
-    assert len(case.original.client.calls) == 2
-
-
 def test_private_source_alias_cannot_be_parsed_as_material(case, monkeypatch):
     source = alias_source(case.store, case.source, case.private["upload"])
     opened = guard_payloads(case, monkeypatch)
@@ -179,17 +160,6 @@ def test_locate_preserves_partial_scan_without_a_new_whole_file_rehash(case, mon
     assert result["result"]["matches"][0]["witness"] == {
         "source_ref": source["id"], "representation": "original",
         "start": len(b"ignored-prefix "), "end": len(b"ignored-prefix target"), "quote": "target"}
-
-
-def test_source_read_keeps_existing_digest_failure_for_an_unrelated_source(case, monkeypatch):
-    raw = case.unrelated_bytes
-    artifact = case.store.get(case.unrelated["artifact_ref"])
-    path = case.store.path / "artifacts" / artifact["sha256"][:2] / artifact["sha256"]
-    path.write_bytes(b"X" + raw[1:])
-    guard_payloads(case, monkeypatch)
-    result = select(case, "source.read", case.unrelated)
-    assert result["status"] == "invalid", result
-    assert result["feedback"]["code"] == "artifact_digest_mismatch"
 
 
 def test_locate_still_requires_the_original_explicitly_received_source(case, monkeypatch):

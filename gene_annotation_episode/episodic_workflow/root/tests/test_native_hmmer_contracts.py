@@ -5,7 +5,7 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode.native_hmmer_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_hmmer_contracts import (
     NATIVE_HMMER_JOB_SCHEMA, NATIVE_HMMER_REQUESTED_JOB_SCHEMA, PROGRAMS,
     compile_native_hmmer_job, operand_contract, output_contract,
     requested_job_from_native, validate_native_hmmer_job, validate_native_hmmer_requested_job,

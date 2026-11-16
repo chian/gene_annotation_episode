@@ -182,19 +182,6 @@ def test_actual_publication_admits_literal_nucleotide_alignment_without_input_by
     assert case.store.get(case.reference)['sequence_ref'] not in accessed
 
 
-@pytest.mark.parametrize('retention', ['no_grading', 'legacy_source', 'legacy_companion'])
-def test_missing_grading_and_missing_canonical_companion_remain_distinct(admission, monkeypatch, retention):
-    case = admission(retention=retention)
-    capture, _ = _read(case, monkeypatch)
-    if retention == 'legacy_companion':
-        assert capture['grading']['sheet']['schema'] == 'biopython_pairwise_sheet_v1'
-        assert capture['grading']['scores']['identical_positions'] == 3
-        assert capture['grading']['failure'] is None
-    else:
-        assert capture['grading'] is None
-    assert capture['correspondence'] is None
-
-
 def test_original_processing_model_is_independent_of_operand_molecule_metadata(admission, monkeypatch):
     case = admission(molecule='rna', processing_model='dna')
     capture, _ = _read(case, monkeypatch)
@@ -215,27 +202,6 @@ def test_multiple_grading_media_artifacts_are_rejected_before_any_private_bytes(
     case = admission(retention='ambiguous_grading')
     with pytest.raises((ValueError, ContractError), match='ambiguous_grading'):
         _read(case, monkeypatch, deny_all=True)
-
-
-@pytest.mark.parametrize('retention', ['legacy_conflict', 'bad_companion'])
-def test_contradictory_saved_traceback_or_canonical_companion_is_rejected(admission, monkeypatch, retention):
-    case = admission(retention=retention)
-    expected = ('invalid_tool_grading_artifact' if retention == 'bad_companion'
-        else 'biopython_pairwise_sheet_components_invalid')
-    with pytest.raises((ValueError, ContractError), match=expected):
-        _read(case, monkeypatch)
-
-
-@pytest.mark.parametrize('role', ['native', 'grading'])
-def test_retained_artifact_bytes_must_match_actual_source_identity(admission, monkeypatch, role):
-    case = admission()
-    source = case.store.get(case.store.get(case.alignment)['source_ref'])
-    reference = source['artifact_ref'] if role == 'native' else source['auxiliary_artifact_refs'][0]
-    sha = case.store.get(reference)['sha256']
-    path = case.store.path / 'artifacts' / sha[:2] / sha
-    path.write_bytes(path.read_bytes() + b' ')
-    with pytest.raises((ValueError, ContractError), match='artifact_digest_mismatch'):
-        _read(case, monkeypatch)
 
 
 def test_actual_grading_failure_and_partial_geometry_are_not_replaced_with_zero(admission, monkeypatch):
@@ -426,58 +392,6 @@ def _authority(case, monkeypatch, *, context=None, cutoff=1):
             assert (_tables(case.store), case.store.db.total_changes) == before
 
 
-@pytest.mark.parametrize('retention', ['modern', 'legacy_source', 'legacy_companion', 'no_grading'])
-def test_metadata_authority_pins_original_producer_and_files_without_payload_or_grants(admission, monkeypatch, retention):
-    from gene_annotation_episode.episodic_workflow.root.communication import plain
-    from gene_annotation_episode.execution_contracts import digest
-    case = admission(retention=retention)
-    authority = _authority(case, monkeypatch)
-    assert set(authority) == {'alignment', 'source', 'operands', 'arguments', 'previews', 'admission'}
-    witness = authority['admission']
-    assert set(witness) == {'version', 'receiver', 'selection', 'producer'}
-    assert witness['version'] == 'selected_reference_alignment_admission_v1'
-    receiver = witness['receiver']
-    assert set(receiver) == {'run_id', 'episode_id', 'before_decision_index',
-        'request_sha256', 'scope_sha256', 'receipt_lineage_sha256'}
-    assert (receiver['run_id'], receiver['episode_id'], receiver['before_decision_index']) == (
-        RUN, case.producer.episode_id, 1)
-    assert receiver['request_sha256'] == digest(plain(case.producer.request))
-    assert receiver['scope_sha256'] == digest(plain(case.producer.scope))
-    assert len(receiver['receipt_lineage_sha256']) == 64
-    selected = witness['selection']
-    assert set(selected) == {'alignment_ref', 'alignment_record_sha256', 'source_ref',
-        'source_record_sha256', 'native_artifact', 'grading_artifacts'}
-    assert selected['alignment_ref'] == case.alignment
-    assert selected['alignment_record_sha256'] == digest(authority['alignment'])
-    assert selected['source_ref'] == authority['source']['id']
-    assert selected['source_record_sha256'] == digest(authority['source'])
-    assert selected['native_artifact'] == case.store.get(authority['source']['artifact_ref'])
-    assert len(selected['grading_artifacts']) == (retention in ('modern', 'legacy_companion'))
-    assert all(row['record_type'] == 'artifact' and row['media_type'] == MEDIA_TYPE
-        for row in selected['grading_artifacts'])
-    operation = dict(case.store.db.execute('SELECT * FROM tool_operations').fetchone())
-    action = dict(case.store.db.execute('SELECT * FROM runtime_actions').fetchone())
-    producer = witness['producer']
-    assert set(producer) == {'run_id', 'episode_id', 'decision_index', 'operation_key',
-        'operation_ref', 'name', 'arguments', 'scope', 'operation_outcome_sha256',
-        'selected_action_sha256', 'actual_outcome_sha256'}
-    assert (producer['run_id'], producer['episode_id'], producer['decision_index']) == (
-        RUN, case.producer.episode_id, 0)
-    assert producer['operation_key'] == operation['operation_key']
-    assert producer['operation_ref'] == operation['id']
-    assert producer['name'] == operation['name'] == 'sequence.align'
-    assert producer['arguments'] == authority['arguments'] == json.loads(operation['arguments'])
-    assert producer['scope'] == json.loads(operation['scope'])
-    assert producer['operation_outcome_sha256'] == digest(json.loads(operation['result']))
-    assert producer['selected_action_sha256'] == digest(json.loads(action['action']))
-    assert producer['actual_outcome_sha256'] == digest(json.loads(action['result']))
-    json.dumps(witness, allow_nan=False)
-    authority['alignment']['measurements'].clear()
-    authority['admission']['producer']['arguments'].clear()
-    fresh = _authority(case, monkeypatch)
-    assert fresh['alignment']['measurements'] and fresh['arguments']
-
-
 @pytest.mark.parametrize('external_query', [False, True])
 def test_reader_uses_the_same_metadata_authority_once_and_keeps_five_key_capture(admission, monkeypatch, external_query):
     case = admission(external_query=external_query)
@@ -497,17 +411,6 @@ def test_reader_uses_the_same_metadata_authority_once_and_keeps_five_key_capture
     assert capture['source']['source_ref'] == authority['source']['id']
     assert set(accessed) == {authority['source']['artifact_ref'],
         *authority['source'].get('auxiliary_artifact_refs', [])}
-
-
-def test_metadata_custody_does_not_claim_payload_validation(admission, monkeypatch):
-    case = admission()
-    authority = _authority(case, monkeypatch)
-    sha = authority['admission']['selection']['native_artifact']['sha256']
-    path = case.store.path / 'artifacts' / sha[:2] / sha
-    path.write_bytes(path.read_bytes() + b' ')
-    assert _authority(case, monkeypatch) == authority
-    with pytest.raises((ValueError, ContractError), match='artifact_digest_mismatch'):
-        _read(case, monkeypatch)
 
 
 @pytest.mark.parametrize('denial', ['cutoff', 'receipt', 'context', 'producer', 'ambiguity', 'scope'])

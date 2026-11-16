@@ -424,17 +424,6 @@ def replace_role(payloads, role, value):
     payloads[role] = {"file": file(raw, payloads[role]["file"]["format"]), "bytes": raw, "state": "present"}
 
 
-def test_normalized_complete_bundle_does_not_copy_solution_into_legacy_objective(captures):
-    payloads, expected = bundle(captures)
-    result = parse_fba_capture(payloads, expected=expected)
-    assert result["issues"] == []
-    assert result["native"]["solve_call_count"] == 1
-    assert result["native"]["request_realization"] == "exact"
-    assert result["native"]["objective"]["state"] == "missing"
-    assert result["native_solution"]["native"]["native_cobra_objective"]["value"] == -2.75
-    assert len(result["retained_files"]) == 8
-
-
 @pytest.mark.parametrize("change", ["attempt", "software", "source", "model", "role", "solver", "distribution", "unsealed", "problem_hash"])
 def test_manifest_identity_conflicts_preserve_independent_csv(captures, change):
     payloads, expected = bundle(captures)
@@ -453,20 +442,6 @@ def test_manifest_identity_conflicts_preserve_independent_csv(captures, change):
     assert codes(result) & {"artifact_identity_conflict", "model_identity_conflict", "writer_not_closed"}
     assert result["native"]["request_realization"] == "unknown"
     assert [row["flux"]["value"] for row in result["native"]["flux_rows"]] == [7, 6, 6]
-
-
-def test_legacy_csv_only_keeps_unknown_solve_count_request_and_problem(captures):
-    payloads, expected = bundle(captures)
-    for role in ROLES:
-        if role != "flux_csv": payloads[role] = {"file": None, "bytes": None, "state": "absent"}
-    result = parse_fba_capture(payloads, expected=expected)
-    assert result["native"]["solve_call_count"] is None
-    assert result["native"]["execution_outcome"] == "unknown"
-    assert result["original_request_file"] is None
-    assert result["native"]["objective_request"] is None
-    assert result["native"]["constraint_changes"] is None
-    assert result["problems"]["effective"] is None
-    assert len(result["native"]["flux_rows"]) == 3
 
 
 def test_truncated_csv_and_missing_model_do_not_fabricate_full_data(captures):
@@ -583,22 +558,6 @@ def test_captured_software_version_conflict_cannot_keep_exact_realization(captur
     assert "artifact_identity_conflict" in codes(result)
     assert result["native"]["request_realization"] == "mismatch"
     assert result["native_solution"]["native"]["configuration_after_solve"]["cobra_version"] == "other"
-
-
-@pytest.mark.parametrize("format", ["biomni_fba_log_v1", "utf8_text"])
-def test_only_declared_legacy_log_grammar_populates_rounded_objective(captures, format):
-    payloads, expected = bundle(captures)
-    raw = b"# Flux Balance Analysis (FBA) Research Log\n\n## Step 4: Solving FBA optimization problem\n- Optimization status: optimal\n- Objective value: -2.750000\n\n## Step 5: Analyzing flux distribution\n- Number of active reactions (flux > 1e-6): 3\n"
-    payloads["native_log"] = {"file": file(raw, format), "bytes": raw, "state": "present"}
-    payloads["manifest"] = {"file": None, "bytes": None, "state": "absent"}
-    result = parse_fba_capture(payloads, expected=expected)
-    objective = result["native"]["objective"]
-    if format == "utf8_text":
-        assert objective["state"] == "missing"
-    else:
-        assert objective["value"] == -2.75 and objective["native_token"] == "-2.750000"
-        assert objective["precision"] == "formatted_6dp"
-        assert result["native"]["source_active_count"] == 3
 
 
 def test_role_addressed_request_hashes_original_bytes_before_retained_binding(captures):

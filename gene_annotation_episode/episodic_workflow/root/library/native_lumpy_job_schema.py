@@ -4,7 +4,6 @@ from gene_annotation_episode.episodic_workflow.root.library import native_atac_d
 
 OPERATION = 'detect_and_characterize_structural_variations'
 MODE = 'lumpy_pe_sr_vcf'
-DRIVER_MODULE = 'gene_annotation_episode.native_lumpy_execution'
 RUN_PLAN_FILENAME = 'lumpy-plan.json'
 ATTEMPT_DIRECTORY_NAME = 'lumpy-attempt'
 OWNER_FILENAME = '.native-lumpy-owner.json'

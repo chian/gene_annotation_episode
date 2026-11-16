@@ -21,8 +21,7 @@ ATTEMPT_DIRECTORY_NAME = "rna-structure-attempt"
 OWNER_FILENAME = ".native-rna-structure-owner.json"
 STARTED_FILENAME = ".native-rna-structure-started.json"
 POLICY = {'memory_bytes': 5368709120, 'scratch_bytes': 4294967296}
-# Stored allocations remain literal historical data, not launch authority.
-_RECORDED_MEMORY_BYTES = (5368709120, 21474836480)
+_RECORDED_MEMORY_BYTES = (5368709120,)
 from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_job_schema import (WORKER_MODULE, INPUT_NAMES, ROLE_FORMATS, _TEXT, _SHA, _NULL, _COUNT, _ENV, _SETTINGS, MODEL_SPEC_SCHEMA, SOFTWARE_SCHEMA, PARAMETERS_SCHEMA, _INPUT, _OUTPUT, NATIVE_RNA_STRUCTURE_JOB_SCHEMA, NATIVE_RNA_STRUCTURE_REQUESTED_JOB_SCHEMA)
 
 

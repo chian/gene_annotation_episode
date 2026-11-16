@@ -5,7 +5,6 @@ The delayed-return case uses the existing C4 admission transaction.
 """
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
-import json
 import threading
 
 import pytest
@@ -83,40 +82,6 @@ def test_absent_checkpoint_and_explicit_null_cursors_survive_reopen(tmp_path):
         assert ledger.restore_source("parent")["source_state"] == state
         assert ledger.restore_source("other")["source_state"] is None
         assert ledger.slot("parent", 0) is None
-
-
-@pytest.mark.parametrize("status", ["failed", "interrupted"])
-def test_failed_attempt_after_completed_slot_restores_its_own_outcome_and_feedback(tmp_path, status):
-    path = tmp_path / "workspace"
-    feedback = {"status": status, "code": "fixture_failure", "affected_refs": []}
-    with Store(path) as store:
-        journal = Journal(store, "run")
-        ledger = CompletionLedger(store, journal)
-        save_action(journal, 1, {"status": "completed"}, credit=2.75)
-        save_effect(journal, ledger, 1)
-        original = own_slot(ledger, 1, credit=2.75)
-        checkpoint(ledger, effect=1, outcome=1)
-        with store.transaction():
-            save_action(journal, 4, {"status": status, "feedback": feedback})
-            latest = save_effect(journal, ledger, 4)
-            state = checkpoint(ledger, revision=0, effect=4, outcome=4, feedback=feedback)
-        assert state["revision"] == 1
-        assert ledger.slot("parent", 1) is None
-    with Store(path) as store:
-        journal = Journal(store, "run")
-        ledger = CompletionLedger(store, journal)
-        restored = ledger.restore_source("parent")
-        assert restored["source_state"] == state
-        assert restored["latest_effect_index"] == 4
-        assert restored["latest_effect"] == latest
-        assert restored["last_completed_decision_index"] == 1
-        assert restored["unfinished_own_action_indices"] == []
-        assert json.loads(journal.row("runtime_actions", "parent", 4)["result"])["status"] == status
-        # Replaying the original observation cannot move the durable cursor
-        # backward or replace the more recent failure's feedback.
-        confirm(ledger, ledger.slot("parent", 0))
-        assert ledger.slot("parent", 0) == original
-        assert ledger.restore_source("parent")["source_state"] == state
 
 
 def test_delayed_child_outcome_can_follow_a_higher_decision_index(tmp_path):

@@ -235,9 +235,8 @@ class AppServicePreparation:
                 local_failure = _failure("capability_unavailable", phase="association", effect_outcome=None)
             else:
                 _url(entry["url"])
-            call = {"url": entry["url"], "byte_range": arguments["byte_range"]}
-            if "max_bytes" in arguments:
-                call["max_bytes"] = arguments["max_bytes"]
+            call = {"url": entry["url"], "byte_range": arguments["byte_range"],
+                "max_bytes": arguments["max_bytes"]}
         else:
             raise ContractError("bvbrc_appservice_operation_not_available")
 

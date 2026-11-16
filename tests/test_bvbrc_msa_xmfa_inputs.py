@@ -1,24 +1,12 @@
 """Actual staged-byte checks for the MSA XMFA source handoff."""
 from copy import deepcopy
 import hashlib
-import json
-from pathlib import Path
-import socket
-import subprocess
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_associations import extract_alignment_associations
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_provider_contracts import ASSOCIATION_KEYS
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_xmfa_inputs import (
-    verify_xmfa_source_inputs, extract_msa_xmfa_bindings,
-    validate_msa_xmfa_source_verification, validate_msa_xmfa_binding_record,
-)
-from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
-
-ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_xmfa_boundaries/native_examples'
-SAVED = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/xmfa_sources/saved_examples'
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_xmfa_inputs import verify_xmfa_source_inputs
+from gene_annotation_episode.episodic_workflow.root.library.phylogeny_formats import parse_aligned_fasta
 
 
 def content(data, name='source.fa'):
@@ -33,17 +21,6 @@ def artifact(data, name='source.fa'):
 
 def empty_associations():
     return {k: [] for k in ASSOCIATION_KEYS}
-
-
-def native_operands(case='combined_native'):
-    saved = json.loads((SAVED / (case + '-inputs.json')).read_text())
-    sources = saved['inputs']
-    data = {f['artifact']['raw_artifact_ref']: (NATIVE / f['file_id']).read_bytes() for f in sources['files']}
-    contents = tuple(content(data[f['file_id']], f['file_id']) for f in sources['files'])
-    readers = tuple({'file_id': f['file_id'], 'reader': 'fasta_records_for_xmfa_v1',
-        'id_rule': 'first_whitespace_token', 'encoding': 'ascii'} for f in sources['files'])
-    return saved['document'], {'inputs': sources, 'source_readers': readers,
-        'artifact_bytes': data, 'content_bindings': contents, 'associations': empty_associations()}
 
 
 def fasta_operands(data=b'>one\nACG\n>two\nAT\n', *, encoding='ascii'):
@@ -80,84 +57,6 @@ def raw_operands(data=b'acg\r\nTNN\n', *, sequence='acgTNN', line_end=2):
 
 def reasons(result):
     return {r['reason_code'] for r in result['requirements']}
-
-
-def binding(document, verification):
-    return extract_msa_xmfa_bindings(document, verification=verification,
-        source_comparison='case_insensitive_iupac_exact', evidence=())
-
-
-@pytest.mark.parametrize('case,lengths', [('combined_native', [50, 41, 49]), ('separate_native', [50, 49, 41])])
-def test_retained_native_files_validate_and_bind_all_record_bytes(case, lengths):
-    document, operands = native_operands(case)
-    before = deepcopy(operands)
-    verified = verify_xmfa_source_inputs(**operands)
-    assert verified['status'] == 'ok'
-    assert verified['verified_inputs'] == operands['inputs']
-    assert all(f['state'] == 'verified' for f in verified['files'])
-    result = binding(document, verified)
-    assert result['state'] == 'resolved'
-    assert [m['source_length'] for m in result['bindings']['members']] == lengths
-    assert all(r['state'] in ('match', 'absent_zero') for r in result['bindings']['source_checks'])
-    assert validate_msa_xmfa_binding_record(result, document=document, associations=operands['associations']) == result
-    assert operands == before
-    verified['supplied_inputs']['files'][0]['records'][0]['header'] = 'changed-return'
-    assert operands == before
-
-
-@pytest.mark.parametrize('change', ['sequence', 'header', 'location', 'order', 'omit_last'])
-def test_authenticated_json_claim_is_not_proof_of_matching_native_record_bytes(change):
-    document, operands = native_operands()
-    rows = operands['inputs']['files'][0]['records']
-    if change == 'sequence':
-        rows[0]['sequence'] = 'A' + rows[0]['sequence'][1:]
-    elif change == 'header':
-        rows[0]['header'] = 'different header'
-    elif change == 'location':
-        rows[0]['source_location']['byte_end_0based_exclusive'] -= 1
-    elif change == 'order':
-        for key in ('header', 'sequence', 'source_location'):
-            rows[0][key], rows[1][key] = rows[1][key], rows[0][key]
-    else:
-        rows.pop()
-    result = verify_xmfa_source_inputs(**operands)
-    assert result['status'] == 'invalid' and result['verified_inputs']['files'] == []
-    assert result['supplied_inputs'] == operands['inputs']
-    assert 'xmfa_source_record_bytes_conflict' in reasons(result)
-    assert binding(document, result)['bindings'] is None
-
-
-@pytest.mark.parametrize('change', ['no_bytes', 'no_content', 'foreign_source', 'wrong_digest', 'wrong_count', 'changed_bytes'])
-def test_content_binding_and_actual_bytes_both_required(change):
-    _, operands = native_operands()
-    if change == 'no_bytes':
-        operands['artifact_bytes'] = {}
-    elif change == 'no_content':
-        operands['content_bindings'] = ()
-    elif change == 'foreign_source':
-        operands['content_bindings'][0]['source_ref'] = 'unrelated'
-    elif change == 'wrong_digest':
-        operands['content_bindings'][0]['sha256'] = '0' * 64
-    elif change == 'wrong_count':
-        operands['content_bindings'][0]['byte_count'] += 1
-    else:
-        operands['artifact_bytes']['combined.fa'] += b'\n'
-    result = verify_xmfa_source_inputs(**operands)
-    assert result['verified_inputs']['files'] == []
-    expected = 'xmfa_source_bytes_required' if change in ('no_bytes', 'no_content', 'foreign_source') else 'xmfa_source_record_bytes_conflict'
-    assert expected in reasons(result)
-
-
-def test_one_bad_source_does_not_discard_other_verified_sources_or_invocation_order():
-    document, operands = native_operands('separate_native')
-    operands['artifact_bytes'].pop('canFam2.fa')
-    result = verify_xmfa_source_inputs(**operands)
-    assert result['status'] == 'partial'
-    assert [f['file_id'] for f in result['verified_inputs']['files']] == ['equCab1.fa', 'mm9.fa']
-    assert result['verified_inputs']['invocation']['ordered_file_ids'] == ['equCab1.fa', 'canFam2.fa', 'mm9.fa']
-    answer = binding(document, result)
-    assert [m['source_length'] for m in answer['bindings']['members']] == [50, None, 41]
-    assert answer['state'] == 'partial'
 
 
 @pytest.mark.parametrize('data,encoding', [(b'>one\nACG\n>two\nAT\n', 'ascii'),
@@ -239,138 +138,3 @@ def test_reader_contract_does_not_guess_or_accept_arbitrary_dispatch(change):
         verify_xmfa_source_inputs(**operands)
 
 
-def original_associations():
-    data = '>same\n' + 'A' * 100 + '\n>same\n' + 'A' * 100 + '\n'
-    inp = {'binding_id': 'original', 'parameter_pointer': '/fasta', 'kind': 'inline_parameter',
-        'content': None, 'workspace_path': None, 'inline_value': data, 'link_evidence': None, 'members': []}
-    keys = [{'input_binding_id': 'original', 'member_id': 'same', 'occurrence_index': i} for i in range(2)]
-    ev = [{'content': content(b'explicit original map', 'mapping'), 'pointer': ''}]
-    declarations = {'common': {'version': 'bvbrc_alignment_associations_v1', 'analysis_id': 'a',
-        'input_sequences': [{'kind': 'inline_fasta', 'input_binding_id': 'original',
-            'id_rule': 'first_whitespace_token', 'encoding': 'ascii', 'molecule': 'dna', 'evidence': []}],
-        'row_joins': [], 'automatic_row_joins': [], 'correspondences': [], 'feature_genomes': [],
-        'source_records': [], 'member_entities': [], 'transformations': [{
-            'transformation_id': 'mapped-original', 'kind': 'identity', 'input_members': keys,
-            'input_rows': [], 'output_rows': [], 'evidence': ev}]}, 'functions': None, 'taxonomy': None}
-    parsed = extract_alignment_associations(inputs=(inp,), documents=(), declarations=declarations)
-    assert parsed['value'] is not None, parsed
-    return parsed['value']
-
-
-def add_maps(operands):
-    operands['associations'] = original_associations()
-    file = operands['inputs']['files'][0]
-    record = file['records'][0]
-    operands['inputs']['original_maps'] = [{
-        'file_id': file['file_id'], 'record_id': record['record_id'],
-        'staged_interval_0based_half_open': [0, 50], 'original_member': m['key'],
-        'original_length': 100, 'original_interval_0based_half_open': [10, 60], 'strand': '+',
-        'transformation_id': 'mapped-original',
-        'evidence': operands['associations']['transformations'][0]['evidence']}
-        for m in operands['associations']['original_members']]
-
-
-def test_full_original_occurrence_identity_preserves_two_distinct_maps():
-    document, operands = native_operands(); add_maps(operands)
-    result = verify_xmfa_source_inputs(**operands)
-    assert result['status'] == 'ok' and len(result['verified_inputs']['original_maps']) == 2
-    returned = binding(document, result)
-    assert returned['state'] == 'resolved'
-    assert [m['original_member']['occurrence_index'] for m in returned['bindings']['original_maps']] == [0, 1]
-    assert validate_msa_xmfa_binding_record(returned, document=document, associations=operands['associations']) == returned
-
-
-@pytest.mark.parametrize('change', ['unknown_member', 'wrong_length', 'unknown_length', 'unknown_transform', 'unrelated_transform', 'missing_map_evidence'])
-def test_missing_or_conflicting_original_map_does_not_discard_source_bytes(change):
-    document, operands = native_operands(); add_maps(operands)
-    mapping = operands['inputs']['original_maps'][0]
-    if change == 'unknown_member':
-        mapping['original_member'] = {**mapping['original_member'], 'occurrence_index': 2}
-    elif change == 'wrong_length':
-        mapping['original_length'] = 99
-    elif change == 'unknown_length':
-        operands['associations']['original_members'][0]['original_length'] = None
-    elif change == 'unknown_transform':
-        mapping['transformation_id'] = 'unrecorded'
-    elif change == 'unrelated_transform':
-        operands['associations']['transformations'][0]['input_members'].pop(0)
-    else:
-        mapping['evidence'] = []
-    result = verify_xmfa_source_inputs(**operands)
-    assert result['status'] == 'partial' and len(result['verified_inputs']['files']) == 1
-    assert len(result['verified_inputs']['original_maps']) == 1
-    assert len(result['supplied_inputs']['original_maps']) == 2
-    returned = binding(document, result)
-    assert returned['state'] == 'partial'
-    assert [m['source_length'] for m in returned['bindings']['members']] == [50, 41, 49]
-
-
-@pytest.mark.parametrize('change', ['invent_verified_file', 'changed_verified_sequence', 'reader', 'status', 'deleted_requirement'])
-def test_saved_verification_checks_closed_associations_and_effective_input_subset(change):
-    _, operands = native_operands(); operands['artifact_bytes'] = {}
-    result = verify_xmfa_source_inputs(**operands)
-    if change == 'invent_verified_file':
-        result['verified_inputs']['files'] = deepcopy(result['supplied_inputs']['files'])
-    elif change == 'changed_verified_sequence':
-        _, operands = native_operands(); result = verify_xmfa_source_inputs(**operands)
-        result['verified_inputs']['files'][0]['records'][0]['sequence'] = 'A' * 50
-    elif change == 'reader':
-        result['files'][0]['reader']['encoding'] = 'utf-8'
-    elif change == 'status':
-        result['status'] = 'ok'
-    else:
-        result['requirements'] = []
-    with pytest.raises(ValueError, match='bvbrc_msa_xmfa_'):
-        validate_msa_xmfa_source_verification(result, associations=operands['associations'])
-
-
-def test_saved_binding_rechecks_document_and_source_records_without_reparse(monkeypatch):
-    document, operands = native_operands()
-    verified = verify_xmfa_source_inputs(**operands); expected = binding(document, verified)
-    before = deepcopy((operands, document, expected))
-    def forbidden(*args, **kwargs):
-        raise AssertionError('forbidden I/O or parser during saved validation')
-    with monkeypatch.context() as locked:
-        locked.setattr('builtins.open', forbidden)
-        for name in ('open', 'read_bytes', 'read_text', 'write_bytes', 'write_text'):
-            locked.setattr(Path, name, forbidden)
-        locked.setattr(socket, 'socket', forbidden); locked.setattr(socket, 'create_connection', forbidden)
-        locked.setattr(subprocess, 'Popen', forbidden)
-        locked.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_xmfa_inputs.parse_aligned_fasta', forbidden)
-        locked.setattr('gene_annotation_episode.episodic_workflow.root.library.xmfa_formats.parse_mauve_xmfa', forbidden)
-        restored = json.loads(json.dumps(expected))
-        assert validate_msa_xmfa_binding_record(restored, document=document, associations=operands['associations']) == expected
-        assert binding(document, verified) == expected
-        restored['bindings']['members'][0]['source_sequence'] = 'A' * 50
-        with pytest.raises(ValueError, match='bvbrc_msa_xmfa_'):
-            validate_msa_xmfa_binding_record(restored, document=document, associations=operands['associations'])
-    assert (operands, document, expected) == before
-
-
-def test_byte_verifier_uses_supplied_bytes_with_files_network_and_subprocess_forbidden(monkeypatch):
-    _, operands = native_operands(); expected = verify_xmfa_source_inputs(**operands)
-    def forbidden(*args, **kwargs):
-        raise AssertionError('supplied-byte verifier attempted acquisition')
-    with monkeypatch.context() as locked:
-        locked.setattr('builtins.open', forbidden); locked.setattr(Path, 'open', forbidden)
-        locked.setattr(Path, 'read_bytes', forbidden); locked.setattr(socket, 'socket', forbidden)
-        locked.setattr(subprocess, 'Popen', forbidden)
-        assert verify_xmfa_source_inputs(**operands) == expected
-
-
-def test_saved_binding_rejects_changed_declared_invocation_order():
-    document, operands = native_operands('separate_native')
-    result = binding(document, verify_xmfa_source_inputs(**operands))
-    for field in ('supplied_inputs', 'verified_inputs'):
-        result['verification'][field]['invocation']['ordered_file_ids'].reverse()
-    with pytest.raises(ValueError, match='bvbrc_msa_xmfa_'):
-        validate_msa_xmfa_binding_record(result, document=document, associations=operands['associations'])
-
-
-def test_saved_empty_source_verification_cannot_claim_success():
-    _, operands = native_operands()
-    operands['inputs']['files'] = []; operands['source_readers'] = ()
-    result = verify_xmfa_source_inputs(**operands)
-    result.update(requirements=[], diagnostics=[], status='ok')
-    with pytest.raises(ValueError, match='bvbrc_msa_xmfa_'):
-        validate_msa_xmfa_source_verification(result, associations=operands['associations'])

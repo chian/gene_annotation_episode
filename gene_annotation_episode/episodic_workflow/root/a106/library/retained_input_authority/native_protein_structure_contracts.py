@@ -4,7 +4,6 @@ No acquisition, source authorization, alignment or numerical calculation lives
 here. Scientific record definitions and structural validation remain in A.
 """
 from __future__ import annotations
-from .retained_native_read_profiles import retained_policy_schema
 from copy import deepcopy
 from datetime import datetime
 from functools import lru_cache
@@ -98,7 +97,7 @@ class AttemptIdentity(TypedDict):
     requested_job_sha256: str
 
 class ProteinPolicy(TypedDict):
-    memory_bytes: Literal[21474836480]
+    memory_bytes: int
     scratch_bytes: Literal[4294967296]
 
 class NativeProteinRunPlan(TypedDict):
@@ -179,7 +178,8 @@ ATTEMPT_DIRECTORY_NAME = 'protein-structure-attempt'
 BUNDLE_FILENAME = 'bundle.json'
 WORKER_INPUT_FILENAME = 'worker-input.json'
 STARTED_FILENAME = '.native-protein-structure-started.json'
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 NATIVE_FORMATS = {'inspect': 'protein_structure_inventory_native_v1', 'extract_sequence': 'protein_structure_sequence_native_v1', 'compare': 'protein_structure_native_v1'}
 _TEXT = {'type': 'string', 'minLength': 1, 'pattern': '^[^\\u0000]+$'}
 _SHA = {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}
@@ -196,15 +196,14 @@ def _array(item, **kwargs):
 def _nullable(item):
     return {'anyOf': [item, _NULL]}
 
-def _definitions(*, action_custody=False, retained_read=False):
-    _require(type(retained_read) is bool)
+def _definitions(*, action_custody=False):
     definitions = science.protein_structure_schema_definitions(action_custody=action_custody)
     own = {'InspectRequest': obj({'version': {'const': 'protein_structure_inspect_request_v1'}, 'operation': {'const': 'inspect'}, 'structure_file': _ref('FileIdentity'), 'inventory': _ref('InventorySelection')}), 'ExtractRequest': obj({'version': {'const': 'protein_structure_extract_request_v1'}, 'operation': {'const': 'extract_sequence'}, 'selection': _ref('StructureSelection'), 'supplied_metadata_files': _array(_ref('FileIdentity'))}), 'CompareRequest': obj({'version': {'const': 'protein_structure_compare_request_v1'}, 'operation': {'const': 'compare'}, 'fixed_selection': _ref('StructureSelection'), 'moving_selection': _ref('StructureSelection'), 'correspondence': _ref('CorrespondenceInput'), 'parameters': _ref('CalculationParameters'), 'supplied_metadata_files': _array(_ref('FileIdentity'))}), 'Software': obj({'python_executable': _TEXT, 'python_sha256': _SHA, 'python_version': _TEXT, 'driver_module': {'const': DRIVER_MODULE}, 'worker_module': {'const': WORKER_MODULE}, 'implementation_files': _array(obj({'module': _TEXT, 'sha256': _SHA}), minItems=1), 'numpy_version': _TEXT, 'biopython_version': _TEXT, 'implementation': {'const': 'gene_annotation_episode_corrected_protein_structure_v1'}, 'algorithm': {'const': 'unweighted_proper_rigid_ca_svd_v1'}}), 'InputFile': obj({'input_id': _TEXT, 'role': _ref('InputRole'), 'file_identity': _ref('FileIdentity'), 'path': _TEXT, 'staged_relative_path': _TEXT}), 'OutputFile': obj({'role': {'enum': ['native_result', 'sequence', 'residue_map', 'stdout', 'stderr']}, 'relative_path': _TEXT, 'format': {'enum': [*NATIVE_FORMATS.values(), 'ascii_protein_sequence_v1', 'protein_structure_sequence_v1', 'text']}}), 'AttemptIdentity': obj({**{name: _TEXT for name in ('run_id', 'episode_id', 'resource_id', 'execution_id', 'operation_key')}, 'attempt_id': _SHA, 'requested_job_sha256': _SHA}), 'WorkerFile': obj({'input_id': _TEXT, 'role': _ref('InputRole'), 'file_identity': _ref('FileIdentity'), 'path': _TEXT}), 'ManifestFile': obj({'kind': {'enum': ['input', 'control', 'output']}, 'role': _ref('ManifestRole'), 'input_id': _nullable(_TEXT), 'format': _TEXT, 'relative_path': _TEXT, 'state': {'enum': ['present', 'absent']}, 'sha256': _nullable(_SHA), 'byte_length': _nullable(_COUNT)})}
     own['ScientificRequest'] = {'oneOf': [_ref(name) for name in ('InspectRequest', 'ExtractRequest', 'CompareRequest')]}
     own['NativeProteinJob'] = obj({'version': {'const': 'native_protein_structure_job_v1'}, 'program': {'const': 'protein_structure_python'}, 'request': _ref('ScientificRequest'), 'software': _ref('Software'), 'inputs': _array(_ref('InputFile'), minItems=1), 'outputs': _array(_ref('OutputFile'), minItems=3), 'environment': _ENV})
     own['RequestedProteinJob'] = obj({'argv': _array(_TEXT, minItems=1), 'environment': _ENV, 'native_protein_structure': _ref('NativeProteinJob')})
     own['NativeProteinBinding'] = obj({'operation': {'enum': list(NATIVE_FORMATS)}, 'scientific_mode': _nullable(_ref('ScientificMode')), 'software': _ref('Software')})
-    own['NativeProteinRunPlan'] = obj({'version': {'const': 'native_protein_structure_run_plan_v1'}, 'identity': _ref('AttemptIdentity'), 'requested_job': _ref('RequestedProteinJob'), 'attempt_directory': _TEXT, 'policy': retained_policy_schema() if retained_read else obj({k: {'const': v} for k, v in POLICY.items()})})
+    own['NativeProteinRunPlan'] = obj({'version': {'const': 'native_protein_structure_run_plan_v1'}, 'identity': _ref('AttemptIdentity'), 'requested_job': _ref('RequestedProteinJob'), 'attempt_directory': _TEXT, 'policy': obj({k: {'const': v} for k, v in POLICY.items()})})
     own['WorkerInput'] = obj({'version': {'const': 'protein_structure_worker_input_v1'}, 'request': _ref('ScientificRequest'), 'software': _ref('Software'), 'files': _array(_ref('WorkerFile'), minItems=1)})
     shared = {'producer': _ref('Software'), 'state': _ref('State'), 'issues': _array(_ref('StructuredIssue'))}
     own['InspectionNative'] = obj({**shared, 'version': {'const': NATIVE_FORMATS['inspect']}, 'request': _ref('InspectRequest'), 'parsed': _ref('ParsedStructure'), 'inventory': _ref('StructureInventory')})
@@ -216,9 +215,9 @@ def _definitions(*, action_custody=False, retained_read=False):
         raise RuntimeError('protein_structure_definition_owner_conflict')
     return {**definitions, **own}
 
-def protein_structure_execution_schema(type_name: str, *, bindings=None, action_custody=False, retained_read=False) -> dict:
+def protein_structure_execution_schema(type_name: str, *, bindings=None, action_custody=False) -> dict:
     """A self-contained local schema resource, safe inside larger alternatives."""
-    definitions = _definitions(action_custody=action_custody, retained_read=retained_read)
+    definitions = _definitions(action_custody=action_custody)
     _require(type_name in definitions)
     root = _ref(type_name)
     if bindings is not None:
@@ -242,18 +241,18 @@ def _require(condition, code='invalid_schema'):
         raise ValueError(code)
 
 @lru_cache(maxsize=None)
-def _execution_validator(type_name, action_custody=False, retained_read=False):
+def _execution_validator(type_name, action_custody=False):
     """Reuse fixed schema construction, never a payload's validation result.
 
     Only successful, known type names enter this finite cache. Binding-specific
     schemas are still built from each caller's current supplied bindings.
     The cached schema is private; public documents are detached copies.
     """
-    document = protein_structure_execution_schema(type_name, action_custody=action_custody, retained_read=retained_read)
+    document = protein_structure_execution_schema(type_name, action_custody=action_custody)
     registry = Registry().with_resource(document['$id'], Resource.from_contents(document)).crawl()
     return _STRICT(document, registry=registry)
 
-def _checked(value, type_name, *, retained_read=False):
+def _checked(value, type_name):
 
     def plain(v):
         _require(type(v) in (dict, list, str, int, float, bool, type(None)))
@@ -269,7 +268,7 @@ def _checked(value, type_name, *, retained_read=False):
         elif type(v) is float:
             _require(math.isfinite(v))
     plain(value)
-    _require(_execution_validator(type_name, science._contains_action_custody(value), retained_read=retained_read).is_valid(value))
+    _require(_execution_validator(type_name, science._contains_action_custody(value)).is_valid(value))
     return deepcopy(value)
 
 def _path(value, *, absolute):
@@ -473,8 +472,8 @@ def realized_environment(job, attempt_directory):
     root = _path(attempt_directory, absolute=True)
     return {**job['environment'], 'PYTHONDONTWRITEBYTECODE': '1', 'TMPDIR': str(root / 'tmp'), 'TMP': str(root / 'tmp'), 'TEMP': str(root / 'tmp'), 'XDG_CACHE_HOME': str(root / 'cache'), 'PIP_CACHE_DIR': str(root / 'cache' / 'pip')}
 
-def validate_protein_structure_run_plan(value: NativeProteinRunPlan, *, retained_read=False) -> NativeProteinRunPlan:
-    value = _checked(value, 'NativeProteinRunPlan', retained_read=retained_read)
+def validate_protein_structure_run_plan(value: NativeProteinRunPlan) -> NativeProteinRunPlan:
+    value = _checked(value, 'NativeProteinRunPlan')
     request = validate_protein_structure_requested_job(value['requested_job'])
     owner = value['identity']
     execution = _path(owner['execution_id'], absolute=True)
@@ -495,8 +494,8 @@ def manifest_files(job: NativeProteinJob) -> list[dict]:
     rows += [{'kind': 'output', 'input_id': None, **r} for r in job['outputs']]
     return rows
 
-def validate_protein_structure_bundle(value: NativeProteinBundle, *, plan: NativeProteinRunPlan, retained_read=False) -> NativeProteinBundle:
-    plan = validate_protein_structure_run_plan(plan, retained_read=retained_read)
+def validate_protein_structure_bundle(value: NativeProteinBundle, *, plan: NativeProteinRunPlan) -> NativeProteinBundle:
+    plan = validate_protein_structure_run_plan(plan)
     value = _checked(value, 'NativeProteinBundle')
     job = plan['requested_job']['native_protein_structure']
     _require(science.same(value['identity'], plan['identity']) and science.same(value['requested_job'], plan['requested_job']) and science.same(value['software'], job['software']), 'original_commission_mismatch')

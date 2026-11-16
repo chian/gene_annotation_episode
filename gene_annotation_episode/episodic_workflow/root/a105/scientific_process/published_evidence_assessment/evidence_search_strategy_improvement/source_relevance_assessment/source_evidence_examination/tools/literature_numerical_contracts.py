@@ -4,14 +4,6 @@ This bounded catalog names existing return schemas, not new readers or scores.
 New legacy decisions can freeze their available declarations before selection.
 Saved validation uses only that snapshot; it never substitutes today's factory.
 
-Private declaration split, 2026-11-11:
-A105 retains the numerical families declared by its private rate/assay
-binding. A108 contextual grading and aggregation are not declared here.
-The private service exposes this module through literature_numerical_contracts;
-snapshot validation and expansion keep the original saved transport format.
-
-Root contract-information expansion and schema/JSON helper dependencies remain;
-this split does not claim their independent parsing implementations are private.
 """
 from __future__ import annotations
 from collections.abc import Mapping

@@ -81,12 +81,10 @@ def prohibit_reextraction(h, monkeypatch):
     monkeypatch.setattr(h.client, "rpc", forbidden)
 
 
-@pytest.mark.parametrize("mode", ["legacy", "native_result", "saved_sheet"])
+@pytest.mark.parametrize("mode", ["native_result", "saved_sheet"])
 def test_recorded_commission_uses_original_child_and_frozen_inputs(commission_host, monkeypatch, mode):
     h = commission_host
     parent, native, selector, _, material = setup_inputs(h)
-    if mode == "legacy":
-        selector = {}
     index = 1
     child = recorded_child(h, parent, native, selector, index)
     reference = publish_child(h, parent, child, index)

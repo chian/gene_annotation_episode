@@ -1,4 +1,4 @@
-"""Original supplied-record schemas extracted from native_rna_structure_contracts; no execution admission."""
+"""Supplied-record schemas; no execution admission."""
 from __future__ import annotations
 from gene_annotation_episode.execution_contracts import obj
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_contracts import OPERATIONS, PAIR_TYPES
@@ -24,7 +24,7 @@ MODEL_SPEC_SCHEMA = obj({"schema": {"const": "vienna_rna_model_spec_v1"}, **_SET
     "parameters": {"oneOf": [obj({"kind": {"const": "turner2004"}, "operand_role": _NULL}),
         obj({"kind": {"const": "supplied_parameter_file"}, "operand_role": {"const": "model_parameter_input"}})]}})
 SOFTWARE_SCHEMA = obj({"python_executable": _TEXT, "python_sha256": _SHA,
-    "python_version": {"anyOf": [_TEXT, _NULL]}, "worker_module": {"enum": [WORKER_MODULE, "gene_annotation_episode.native_rna_structure_worker"]},
+    "python_version": {"anyOf": [_TEXT, _NULL]}, "worker_module": {"enum": [WORKER_MODULE]},
     "worker_source_sha256": _SHA, "viennarna_distribution_version": {"anyOf": [_TEXT, _NULL]},
     "rna_module_sha256": {"anyOf": [_SHA, _NULL]}, "rna_extension_sha256": {"anyOf": [_SHA, _NULL]}})
 PARAMETERS_SCHEMA = obj({"schema": {"const": "rna_calculation_parameters_v1"},

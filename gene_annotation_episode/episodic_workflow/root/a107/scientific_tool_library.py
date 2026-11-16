@@ -19,7 +19,6 @@ from gene_annotation_episode.episodic_workflow.root.a107.method_loop.durable imp
 from .tool_schema_validation import check_tool_schema
 
 
-VERSION = "scientific_tool_library_v1"
 INFO_VERSION = "scientific_tool_library_v2"
 
 
@@ -100,12 +99,8 @@ def _tool_information(catalog, resource_catalogs):
             [{'name': key[0], 'resources': key[1], 'contract': profiles[key]} for key in ordered])
 
 
-def catalog(*, retrieval_mode=None, tool_info=False):
-    method = ("A single configured FAST call selects relevant names from the complete real map. "
-        if retrieval_mode == "semantic_fast_v1" else
-        "This explicit literal test retriever matches words in real tool names and descriptions. ")
-    if tool_info:
-        return [{"name": "process.tools", "description":
+def catalog():
+    return [{"name": "process.tools", "description":
             "Retrieve actual operation information for the desired child investigation. "
             "Parent rows contain name, description and one API/local/HPC resource kind. "
             "Select by name plus resources; the host supplies matching frozen instructions and "
@@ -114,27 +109,19 @@ def catalog(*, retrieval_mode=None, tool_info=False):
             "input_schema": {"type": "object", "properties": {
                 "investigation": {"type": "string", "minLength": 1}},
                 "required": ["investigation"], "additionalProperties": False}}]
-    return [{"name": "process.tools", "description":
-        "Retrieve zero or more actual callable tools relevant to the desired child investigation. "
-        + method + "Copy result.tools "
-        "directly into the child's selection.tools slot. Results include original callable contracts; "
-        "retrieval runs no scientific operation and selects no child.",
-        "input_schema": {"type": "object", "properties": {
-            "investigation": {"type": "string", "minLength": 1}},
-            "required": ["investigation"], "additionalProperties": False}}]
 
 
 class ScientificToolLibrary:
     @classmethod
-    def freeze(cls, directory, *, catalog, tool_info=False, resource_catalogs=None):
-        if type(tool_info) is not bool or resource_catalogs is not None and not isinstance(resource_catalogs, Mapping):
+    def freeze(cls, directory, *, catalog, resource_catalogs=None):
+        if resource_catalogs is not None and not isinstance(resource_catalogs, Mapping):
             raise ValueError('scientific_tool_info_configuration_invalid')
         directory = Path(directory)
         if (directory / "index.json").is_file():
             existing = cls(directory)
             if existing.catalog() != list(_catalog(catalog).values()):
                 raise ValueError("scientific_tool_catalog_changed")
-            if existing.supports_tool_info and resource_catalogs is not None:
+            if resource_catalogs is not None:
                 for kind, values in resource_catalogs.items():
                     for key, entry in _profiles(values, kind).items():
                         if (key not in existing._resource_contracts
@@ -143,10 +130,10 @@ class ScientificToolLibrary:
             return existing
         if directory.exists() and (not directory.is_dir() or any(directory.iterdir())):
             raise ValueError("scientific_tool_snapshot_invalid")
-        content = {"version": VERSION, "tools": list(_catalog(catalog).values())}
-        if tool_info:
-            information, contracts = _tool_information(content['tools'], resource_catalogs)
-            content.update(version=INFO_VERSION, tool_info=information, resource_contracts=contracts)
+        tools = list(_catalog(catalog).values())
+        information, contracts = _tool_information(tools, resource_catalogs)
+        content = {"version": INFO_VERSION, "tools": tools, "tool_info": information,
+            "resource_contracts": contracts}
         value = {**content, "catalog_sha256": content_digest(content)}
         directory.parent.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(prefix=".scientific-tools-", dir=directory.parent) as temporary:
@@ -157,8 +144,7 @@ class ScientificToolLibrary:
             except OSError as error:
                 if error.errno not in (errno.EEXIST, errno.ENOTEMPTY):
                     raise
-                return cls.freeze(directory, catalog=catalog, tool_info=tool_info,
-                                  resource_catalogs=resource_catalogs)
+                return cls.freeze(directory, catalog=catalog, resource_catalogs=resource_catalogs)
         return cls(directory)
 
     def __init__(self, directory):
@@ -166,40 +152,37 @@ class ScientificToolLibrary:
         path = self.directory / "index.json"
         raw = path.read_bytes()
         value = json.loads(raw)
-        fields = ({'version', 'tools', 'tool_info', 'resource_contracts', 'catalog_sha256'}
-                  if value.get('version') == INFO_VERSION else {'version', 'tools', 'catalog_sha256'})
-        if (set(value) != fields or value['version'] not in {VERSION, INFO_VERSION}
+        fields = {'version', 'tools', 'tool_info', 'resource_contracts', 'catalog_sha256'}
+        if (set(value) != fields or value['version'] != INFO_VERSION
                 or value["catalog_sha256"] != content_digest({key: item for key, item in value.items()
                                                             if key != 'catalog_sha256'})
                 or raw != (canonical(value) + "\n").encode("utf-8")):
             raise ValueError("scientific_tool_snapshot_changed")
         self._tools = _catalog(value["tools"])
-        self.supports_tool_info = value['version'] == INFO_VERSION
-        self._information, self._resource_contracts = {}, {}
-        if self.supports_tool_info:
-            from .tool_information import tool_info_selection
-            rows = tool_info_selection(value['tool_info'])
-            if any(set(row) != {'name', 'description', 'resources', 'instructions'} for row in rows):
+        self._resource_contracts = {}
+        from .tool_information import tool_info_selection
+        rows = tool_info_selection(value['tool_info'])
+        if any(set(row) != {'name', 'description', 'resources', 'instructions'} for row in rows):
+            raise ValueError('scientific_tool_snapshot_changed')
+        self._information = {(row['name'], row['resources']): row for row in rows}
+        for entry in value['resource_contracts']:
+            if set(entry) != {'name', 'resources', 'contract'}:
                 raise ValueError('scientific_tool_snapshot_changed')
-            self._information = {(row['name'], row['resources']): row for row in rows}
-            for entry in value['resource_contracts']:
-                if set(entry) != {'name', 'resources', 'contract'}:
-                    raise ValueError('scientific_tool_snapshot_changed')
-                key = entry['name'], entry['resources']
-                profile = _profiles([entry['contract']], entry['resources'])
-                if key not in profile or key in self._resource_contracts:
-                    raise ValueError('scientific_tool_snapshot_changed')
-                self._resource_contracts[key] = profile[key]
-            if set(self._information) != set(self._resource_contracts):
+            key = entry['name'], entry['resources']
+            profile = _profiles([entry['contract']], entry['resources'])
+            if key not in profile or key in self._resource_contracts:
                 raise ValueError('scientific_tool_snapshot_changed')
-            for key, information in self._information.items():
-                if information['description'] != self._resource_contracts[key].get('description'):
-                    raise ValueError('scientific_tool_snapshot_changed')
-            from .tool_information import comparable_contract
-            for key, entry in _profiles(value['tools']).items():
-                if (key not in self._resource_contracts or comparable_contract(entry)
-                        != comparable_contract(self._resource_contracts[key])):
-                    raise ValueError('scientific_tool_snapshot_changed')
+            self._resource_contracts[key] = profile[key]
+        if set(self._information) != set(self._resource_contracts):
+            raise ValueError('scientific_tool_snapshot_changed')
+        for key, information in self._information.items():
+            if information['description'] != self._resource_contracts[key].get('description'):
+                raise ValueError('scientific_tool_snapshot_changed')
+        from .tool_information import comparable_contract
+        for key, entry in _profiles(value['tools']).items():
+            if (key not in self._resource_contracts or comparable_contract(entry)
+                    != comparable_contract(self._resource_contracts[key])):
+                raise ValueError('scientific_tool_snapshot_changed')
         self._file_sha256 = hashlib.sha256(raw).hexdigest()
         self._record = {"version": value['version'], "catalog_sha256": value["catalog_sha256"]}
 
@@ -217,24 +200,6 @@ class ScientificToolLibrary:
         self._check()
         return deepcopy(list(self._tools.values()))
 
-    def resolve(self, names, available_catalog=None):
-        self._check()
-        names = tool_names(names)
-        available = None if available_catalog is None else _catalog(available_catalog)
-        result = []
-        for name in names:
-            if name not in self._tools:
-                raise ValueError("scientific_tool_unknown:" + name)
-            if available is not None and available.get(name) != self._tools[name]:
-                raise ValueError("scientific_tool_contract_changed:" + name)
-            result.append(deepcopy(self._tools[name]))
-        return result
-
-    def _require_tool_info(self):
-        self._check()
-        if not self.supports_tool_info:
-            raise ValueError('scientific_tool_info_not_in_legacy_snapshot')
-
     def _matches_information_contract(self, key, entry):
         from .tool_information import comparable_contract
         return (comparable_contract(entry) == comparable_contract(self._resource_contracts[key])
@@ -243,7 +208,7 @@ class ScientificToolLibrary:
                  or entry['instructions'] == self._information[key]['instructions']))
 
     def parent_tool_info(self, available_catalog=None):
-        self._require_tool_info()
+        self._check()
         from .tool_information import parent_view
         keys = list(self._information)
         if available_catalog is not None:
@@ -255,7 +220,7 @@ class ScientificToolLibrary:
         return parent_view([self._information[key] for key in keys])
 
     def resolve_tool_info(self, selection, available_catalog=None):
-        self._require_tool_info()
+        self._check()
         from .tool_information import tool_info_selection
         supplied = tool_info_selection(selection)
         available = None if available_catalog is None else _profiles(available_catalog)
@@ -293,22 +258,9 @@ class ScientificToolLibrary:
         ignored = {"a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "how",
             "i", "in", "is", "it", "of", "on", "or", "that", "the", "this", "to", "with"}
         terms = set(re.findall(r"[a-z0-9]+", investigation.casefold())) - ignored
-        if self.supports_tool_info:
-            rows = [row for row in self.parent_tool_info(available_catalog) if terms & set(re.findall(
-                r'[a-z0-9]+', (row['name'] + ' ' + row['description']).casefold()))]
-            return {'investigation': investigation, 'child_tool_info': rows}
-        selected = []
-        for entry in self.catalog():
-            words = set(re.findall(r"[a-z0-9]+", (entry["name"] + " " +
-                entry.get("description", "")).casefold()))
-            if terms & words:
-                selected.append(entry["name"])
-        return {"investigation": investigation, "tools": selected,
-            "catalog": self.resolve(selected)}
-
-    def retrieve(self, investigation, available_catalog=None):
-        """Compatibility name for the original, explicitly literal test mode."""
-        return self.retrieve_literal_test(investigation, available_catalog=available_catalog)
+        rows = [row for row in self.parent_tool_info(available_catalog) if terms & set(re.findall(
+            r'[a-z0-9]+', (row['name'] + ' ' + row['description']).casefold()))]
+        return {'investigation': investigation, 'child_tool_info': rows}
 
 
-__all__ = ["ScientificToolLibrary", "catalog", "tool_names", "VERSION", "INFO_VERSION"]
+__all__ = ["ScientificToolLibrary", "catalog", "tool_names", "INFO_VERSION"]

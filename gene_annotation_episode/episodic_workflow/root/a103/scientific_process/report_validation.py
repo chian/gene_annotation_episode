@@ -1,9 +1,8 @@
 """Validate A103 gene-context returns with their original report contract."""
 
-from ..communication import ReportBoundaryError, plain
+from ..communication import plain
 from ..domain import ContractError
-from ..a103_investigation import (resolve_report, legacy_report_schema,
-    measurement_report_schema, resolve_measurement_report)
+from ..a103_investigation import measurement_report_schema, resolve_measurement_report
 
 
 def validate_axis_report(binding, context, form, schema):
@@ -11,25 +10,7 @@ def validate_axis_report(binding, context, form, schema):
     if axis != 'A103':
         return
     fields = set(plain(schema).get('properties', {}))
-    if fields == set(legacy_report_schema()['properties']):
-        workflow = getattr(binding.services, 'workflow', None)
-        if workflow is None:
-            raise ContractError('a103_report_store_required')
-        try:
-            resolve_report(workflow.store, plain(form), scope=plain(context.scope))
-        except ContractError as error:
-            names = {
-                'a103_association_statement_requires_actual_measurement': 'context_summary',
-                'a103_system_statement_requires_qualified_context': 'functional_support',
-                'a103_function_interpretation_requires_explicit_hypothesis_and_assessment': 'functional_support',
-                'a103_trait_statement_requires_local_feature_attribution': 'functional_support',
-                'a103_contrast_statement_requires_context_panel': 'functional_support',
-                'a103_discriminating_contrast_requires_qualified_separated_bounds': 'functional_support'}
-            if str(error) not in names:
-                raise
-            raise ReportBoundaryError('A103 interpretation requires its declared supporting records',
-                code=str(error), field=names[str(error)]) from error
-    elif fields == set(measurement_report_schema()['properties']):
+    if fields == set(measurement_report_schema()['properties']):
         workflow = getattr(binding.services, 'workflow', None)
         if workflow is None:
             raise ContractError('a103_report_store_required')

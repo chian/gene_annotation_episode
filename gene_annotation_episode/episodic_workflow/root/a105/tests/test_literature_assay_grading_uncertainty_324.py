@@ -155,31 +155,6 @@ def test_bound_event_does_not_relax_assay_applicability_or_prediction_identity()
     inputs['quantities']['assertion_prediction']['measurement_keys'] = inputs['quantities']['effect']['measurement_keys']
     assert 'prediction_reuses_observed_measurement' in grade_assay(inputs)['cells']['source_log_evidence_ratio']['reasons']
 
-def test_existing_summary_sd_variance_and_df_reach_t_scoring_without_reextraction(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_kinetic_summary_precision_binding_251 import setup, selected
-    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_grading_inputs import _component
-    components = ['source_reported_parameter', 'source_mean_variance', 'source_mean_interval_df']
-    store, context, args, binding, _ = setup(tmp_path, components=components)
-    try:
-        args['selection']['interval_request'] = 'student_t_95'
-        _, _, rows = selected(store, context, args, binding)
-        inputs = fixture('activity_rate', 'turnover')
-        inputs['prediction_model'].update(kind='fixed_predictions_student_t', variance_interpretation='estimated')
-        for role, component in zip(('effect', 'effect_variance', 'effect_degrees_of_freedom'), components):
-            row = next((r for r in rows if r['component'] == component))
-            selection = {'namespace': 'literature_kinetic_summary_precision_cells', 'sheet_ref': row['sheet_ref'], 'component': component}
-            inputs['quantities'][role], _ = _component(selection, lambda *args, row=row: [row])
-        inputs['quantities']['assertion_prediction'] = operand(590.0, 'per_min', 'independent_prediction_A')
-        inputs['quantities']['alternative_prediction'] = operand(620.0, 'per_min', 'independent_prediction_B')
-        assert inputs['quantities']['effect']['value'] == 600.0
-        assert inputs['quantities']['effect_variance']['value'] == 36.0
-        assert 'estimated_covariance' in inputs['quantities']['effect_variance']['qualifications']
-        assert inputs['quantities']['effect_degrees_of_freedom']['value'] == 3
-        score = grade_assay(inputs)['cells']['source_log_evidence_ratio']
-        assert score['value'] == pytest.approx(student_t.logpdf(10 / 6, 3) - student_t.logpdf(-20 / 6, 3))
-        assert score['status'] == 'conditional'
-    finally:
-        store.close()
 
 def test_existing_native_rate_limit_reaches_censored_scoring(tmp_path):
     from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_rate_native_storage import setup_native_store

@@ -62,13 +62,6 @@ class ControlledSession(_SessionConnection):
         return self.trace.get('wire', '{"controlled":true}')
 
 
-class LegacyFiveArgumentSession(ControlledSession):
-    async def complete(self, episode_id, role, instructions, context, schema):
-        self.trace.setdefault('legacy_calls', []).append(
-            (episode_id, role, instructions, context, schema))
-        return self.trace['legacy_result']
-
-
 def connection_at(tmp_path, *, session_type=ControlledSession, image_resolver=None, **settings):
     connection = ModelConnection(configuration(), tmp_path / 'connection', tmp_path,
                                  image_resolver=image_resolver)
@@ -132,33 +125,6 @@ async def selected_call(connection, context, schema, *, renderer=controlled_rend
     return await connection.complete_with_presentation(
         'engineering-episode', 'REASONING', 'original instructions', context, schema,
         prompt_renderer=renderer, declared_presenter=presenter)
-
-
-def test_default_complete_preserves_five_argument_custom_session(tmp_path):
-    async def exercise():
-        expected = object()
-        connection, sessions = connection_at(tmp_path, session_type=LegacyFiveArgumentSession,
-                                             legacy_result=expected)
-        context, schema = {'label': 'legacy'}, {'type': 'object'}
-        result = await connection.complete('engineering-episode', 'REASONING',
-                                           'original instructions', context, schema)
-        assert result is expected
-        call, = sessions[0].trace['legacy_calls']
-        assert call[:3] == ('engineering-episode', 'REASONING', 'original instructions')
-        assert call[3] is context and call[4] is schema
-        assert_retired(connection, sessions[0])
-    asyncio.run(exercise())
-
-
-def test_explicit_hook_does_not_retry_incompatible_custom_session(tmp_path):
-    async def exercise():
-        connection, sessions = connection_at(tmp_path, session_type=LegacyFiveArgumentSession,
-                                             legacy_result=object())
-        with pytest.raises(TypeError, match='prompt_renderer'):
-            await selected_call(connection, {'label': 'selected'}, {})
-        assert len(sessions) == 1 and 'legacy_calls' not in sessions[0].trace
-        assert_retired(connection, sessions[0])
-    asyncio.run(exercise())
 
 
 @pytest.mark.parametrize('mode', ['ordinary', 'full'])

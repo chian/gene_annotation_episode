@@ -10,7 +10,7 @@ from gene_annotation_episode.domain import ContractError, obj
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_assessments import EXPERIMENT_TYPES
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_storage import LiteraturePerturbationRepository, perturbation_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_summary_storage import perturbation_summary_cells_schema
-from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_integration import setup_case, binding_for
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_integration import setup_case, binding_for, locations
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary_integration import fixture as summary_fixture
 
 
@@ -36,7 +36,7 @@ def test_multiple_experiments_revisions_parent_numbers_and_saved_reconstruction(
         binding = binding_for(store, context)
         repo = LiteraturePerturbationRepository(store, context.run_id)
         context, args = identify(store, context, args)
-        original = asyncio.run(binding.execute(context, "literature.perturbation.populate", args, "original"))
+        original = asyncio.run(binding.execute(context, "literature.perturbation.populate", locations(args), "original"))
         assert original["status"] == "completed", original
         first = original["result"]["sheet_ref"]
         context = replace(context, received_record_refs=tuple(dict.fromkeys((*context.received_record_refs, *original["record_refs"]))))
@@ -44,7 +44,7 @@ def test_multiple_experiments_revisions_parent_numbers_and_saved_reconstruction(
         revision["experiment_assessment"].update(revises_sheet_ref=first,
             revision_reason="Restrict the conclusion to the experimentally measured endpoint.",
             conclusion="The measured endpoint changes; a direct catalytic function is not established.")
-        revised = asyncio.run(binding.execute(context, "literature.perturbation.populate", revision, "revision"))
+        revised = asyncio.run(binding.execute(context, "literature.perturbation.populate", locations(revision), "revision"))
         assert revised["status"] == "completed", revised
         second = revised["result"]["sheet_ref"]
         assert first != second

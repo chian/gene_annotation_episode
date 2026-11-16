@@ -16,7 +16,7 @@ INSTRUCTIONS = (
     'by 1000; a zero denominator is an explicit failure. Preserve negative raw values and reject fitting them. The native '
     'mode fixes random initialization, coordinate descent, Frobenius loss, no regularization and no coordinate shuffling. '
     'Rank may exceed the smaller matrix dimension with random initialization. Numerical iteration count is a solver '
-    'parameter. Use the explicitly selected pinned software and local allocation: 20 GiB RAM, 4 GiB scratch, zero swap '
+    'parameter. Use the explicitly selected pinned software and local allocation: 5 GiB RAM, 4 GiB scratch, zero swap '
     'and no wall-time cap. Commission through launch and its local-compute child; preparation reserves the selected '
     'pending practical.job.start and the existing host starts the original handle. Poll/collect that same handle. '
     'Input/resource failures and native warnings are returned facts; the responsible episode decides any repair or new '

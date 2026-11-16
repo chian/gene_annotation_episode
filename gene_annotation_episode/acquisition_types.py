@@ -2,7 +2,7 @@
 
 The acquisition clients re-export these exact objects. Defining provenance is
 this reusable infrastructure module; no service, transport or retry policy is
-implemented here. Historical acquisition module names remain valid aliases.
+implemented here.
 """
 from __future__ import annotations
 from dataclasses import dataclass

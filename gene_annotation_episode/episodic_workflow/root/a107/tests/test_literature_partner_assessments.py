@@ -13,6 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.a107.tests.test_literature_p
 from gene_annotation_episode.episodic_workflow.root.a107.tests.test_literature_partner_native_integration import setup_case as native_case
 from gene_annotation_episode.episodic_workflow.root.a107.tests.test_literature_partner_defined_integration import setup_case as defined_case
 from test_literature_perturbation_assessments import identify
+from gene_annotation_episode.episodic_workflow.root.a107.tests.source_helpers import location_inputs
 
 
 @pytest.mark.parametrize("case", ["matched", "censored", "primary_crossed", "matched_native", "nadh"])
@@ -28,7 +29,7 @@ def test_partner_revision_preserves_one_experiment_source_uncertainty_and_parent
         binding = binding_for(store, context)
         repo = LiteraturePartnerRepository(store, context.run_id)
         tool = "literature.partner.source.populate" if "input_mode" in args else "literature.partner.populate"
-        first = asyncio.run(binding.execute(context, tool, args, "first"))
+        first = asyncio.run(binding.execute(context, tool, location_inputs(args), "first"))
         assert first["status"] == "completed", first.get("feedback")
         first_ref = first["result"]["sheet_ref"]
         context = replace(context, received_record_refs=tuple(dict.fromkeys((*context.received_record_refs, *first["record_refs"]))))

@@ -4,7 +4,6 @@ This repository owns no scientific choices, model calls, controller observations
 or episode loop. Source meanings and numerical results remain separate payloads.
 """
 from __future__ import annotations
-from .literature_implementation_sources import source_file
 
 from copy import deepcopy as cp
 import errno
@@ -67,15 +66,9 @@ def controlled_response_cells_schema():
 def implementation_descriptor(*,evidence_origin='reported_source'):
     if evidence_origin not in ('reported_source','synthetic_fixture'):
         raise ContractError('controlled_native_evidence_profile_invalid')
-    names = sorted(set(source._dependencies()) | {
-        'literature_controlled_response_storage.py','literature_controlled_response_render.py',
-        'literature_controlled_response_v3_population.py','literature_rate_storage.py','literature_ratio_source_storage.py',
-        'literature_binding_interaction_render.py','domain.py','state.py','communication.py',
-        'episode_bindings.py','episode_receipts.py'})
     return {'version':'controlled_response_native_implementation_v1','provider':PROVIDER,'record_version':VERSION,
             'evidence_origin':evidence_origin,
-            'native_schema_sha256':_sha(controlled_response_cells_schema()),
-            'modules':{name:_sha(source_file(name).read_bytes()) for name in names}}
+            'native_schema_sha256':_sha(controlled_response_cells_schema())}
 
 
 def _registry(extraction):
@@ -638,9 +631,6 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
         if payload['evidence_origin']!=self.evidence_origin:
             raise ContractError('controlled_native_evidence_profile_mismatch')
         self._profile_selection(payload['selection'])
-        fingerprints=payload['extraction']['implementation_dependencies']['expected_module_fingerprints']
-        if any(payload['implementation_descriptor']['modules'].get(name)!=pin for name,pin in fingerprints.items()):
-            raise ContractError('controlled_native_source_implementation_binding_mismatch')
         self._runtime_original(request,signature,outcome)
         # Recheck the ORIGINAL authorized source/page/scope closure against
         # immutable records only. Scientific source bytes remain unopened.

@@ -259,9 +259,7 @@ def validate_predicate(value):
     return value
 
 
-def validate_assignment(value, *, historical=False):
-    if type(historical) is not bool:
-        raise ValueError('fba_historical_validation_mode_invalid')
+def validate_assignment(value):
     value = _object(value, code='invalid_practical_assignment')
     required = {'version', 'assignment_id', 'resource_kind', 'workspace',
         'endpoint', 'requested_job', 'progress_requirements', 'completion_keys',
@@ -279,8 +277,6 @@ def validate_assignment(value, *, historical=False):
         raise ValueError('invalid_practical_assignment')
     _path(value['workspace'])
     job = _object(value['requested_job'], code='invalid_practical_job')
-    if historical and not {'native_flux_balance', 'native_atac_differential', 'native_chromatin_interactions'}.intersection(job):
-        raise ValueError('fba_historical_validation_requires_fba')
     if 'scientific_manifest' in value:
         manifest = _object(value['scientific_manifest'], {'path', 'sha256', 'size_bytes', 'format'})
         _path(manifest['path'])
@@ -312,7 +308,7 @@ def validate_assignment(value, *, historical=False):
             raise ValueError('native_blast_masking_resource_identity_required')
     elif 'native_flux_balance' in job:
         from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import validate_flux_balance_requested_job
-        job = validate_flux_balance_requested_job(job, historical=historical)
+        job = validate_flux_balance_requested_job(job)
         if value['resource_kind'] != 'local':
             raise ValueError('native_flux_balance_local_resource_required')
         if not value.get('resource_id'):
@@ -588,19 +584,16 @@ def _utility_completed_outputs(assignment, outcome, job):
         for row in bundle['artifacts'] if row['sha256'] is not None and row['completeness'] == 'complete')}
 
 
-def terminal_job_matches(assignment, outcome, *, historical=False):
+def terminal_job_matches(assignment, outcome):
     """Qualify an actual scheduler submission/observation, not a worker plan.
 
     The immutable selected command receipt owns these facts. Its captured
     script and scheduler event bind the native job to the original assignment;
     qsub's actual argv is not the scientific program's argv.
     """
-    if type(historical) is not bool or (historical and (assignment['resource_kind'] != 'local'
-            or not {'native_flux_balance', 'native_atac_differential', 'native_chromatin_interactions'}.intersection(assignment['requested_job']))):
-        raise ValueError('fba_historical_validation_mode_invalid')
     if assignment['resource_kind'] == 'local':
         from .terminal_scientific_evidence import terminal_local_job_matches
-        return terminal_local_job_matches(assignment, outcome, historical=historical)
+        return terminal_local_job_matches(assignment, outcome)
     job = outcome.get('facts', {}).get('requested_job')
     command = outcome.get('facts', {}).get('command')
     detail = outcome.get('native_outcome') or {}
@@ -648,9 +641,9 @@ def terminal_job_matches(assignment, outcome, *, historical=False):
             for event in events))
 
 
-def _job_matches(assignment, job, tool_name, outcome, *, historical=False):
+def _job_matches(assignment, job, tool_name, outcome):
     if tool_name == 'exec_command':
-        return terminal_job_matches(assignment, outcome, historical=historical)
+        return terminal_job_matches(assignment, outcome)
     return bool(job is not None and tool_name in JOB_TOOLS
         and job['requested_job_sha256'] == digest(assignment['requested_job'])
         and job['argv'] == assignment['requested_job']['argv']
@@ -722,13 +715,13 @@ def requested_job_role_paths(assignment, job, roles):
     return [declared[role] for role in roles]
 
 
-def assess_validations(assignment, outcome, context, *, checked_at=None, tool_name=None, historical=False):
+def assess_validations(assignment, outcome, context, *, checked_at=None, tool_name=None):
     """Assess original requirements actually observed by this action, without I/O.
 
     Absence of a fact is not a negative observation. Context is always supplied;
     paths and native outcomes qualify only the requirements they actually test.
     """
-    assignment = validate_assignment(assignment, historical=historical)
+    assignment = validate_assignment(assignment)
     outcome = validate_outcome(outcome)
     context = validate_context(context, workspace=assignment['workspace'])
     checked_at = checked_at or datetime.now(timezone.utc).isoformat()
@@ -764,7 +757,7 @@ def assess_validations(assignment, outcome, context, *, checked_at=None, tool_na
             observed = facts.get('requested_job')
             if observed is None:
                 continue
-            satisfied = (_job_matches(assignment, observed, tool_name, outcome, historical=historical)
+            satisfied = (_job_matches(assignment, observed, tool_name, outcome)
                 and observed['status'] in {'submitted', 'running', 'completed'}
                 and observed['handoff'] is not None)
             if 'native_blast_utility' in assignment['requested_job'] and observed['status'] == 'completed':
@@ -777,7 +770,7 @@ def assess_validations(assignment, outcome, context, *, checked_at=None, tool_na
                 if 'output_roles' in predicate else predicate['output_paths'])
             selected_paths = [paths.get(path) for path in requested_paths]
             observed = {'requested_job': job, 'paths': selected_paths}
-            satisfied = (_job_matches(assignment, job, tool_name, outcome, historical=historical)
+            satisfied = (_job_matches(assignment, job, tool_name, outcome)
                 and job['status'] == 'completed' and job['returncode'] == 0
                 and set(requested_paths) <= set(job['output_paths'])
                 and all(path is not None and path['exists'] and path['object_type'] == 'file'
@@ -793,12 +786,12 @@ def assess_validations(assignment, outcome, context, *, checked_at=None, tool_na
     return values
 
 
-def validate_validations(value, assignment, outcome, context, *, tool_name=None, historical=False):
+def validate_validations(value, assignment, outcome, context, *, tool_name=None):
     """Check supplied assessments against exact actual facts, preserving their times."""
     if not isinstance(value, list):
         raise ValueError('invalid_practical_validations')
     expected = {item['key']: item for item in assess_validations(assignment, outcome, context,
-        checked_at='1970-01-01T00:00:00+00:00', tool_name=tool_name, historical=historical)}
+        checked_at='1970-01-01T00:00:00+00:00', tool_name=tool_name)}
     result, seen = [], set()
     for raw in value:
         item = validate_validation(raw)

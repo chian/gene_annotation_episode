@@ -50,8 +50,6 @@ def catalog():
         for name, (text, schema) in definitions.items()}
     from .component_source_identity import catalog as identity_catalog
     entries.update(identity_catalog())
-    # Optional associations extend the existing tools without changing the
-    # required arguments or meaning of historical requests.
     entries['partner.requirement_evidence']['input_schema']['properties'].update(
         component_identity_ref=nullable, subject_identity_ref=nullable,
         subject_alignment_ref=nullable)

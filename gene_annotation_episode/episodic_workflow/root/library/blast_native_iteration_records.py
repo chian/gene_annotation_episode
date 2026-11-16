@@ -447,7 +447,7 @@ def extract_blast_tabular7_convergence(report_contents: bytes, *, artifact_key: 
                 query_operand=_copy(query_operand, "/query_operand") if scoped else None, native_converged=True,
                 evidence=dict(origin="native_extractor_output", source=dict(source_ref=source_ref, pointer=""),
                     source_format="ncbi_blastplus_2.17.0_tabular7", original_record=report["native_text"],
-                    extractor=dict(module="gene_annotation_episode.blast_native_iteration_records",
+                    extractor=dict(module="gene_annotation_episode.episodic_workflow.root.library.blast_native_iteration_records",
                                    function="extract_blast_tabular7_convergence", version="1"))))
     if incompatible:
         result["status"] = "incompatible"

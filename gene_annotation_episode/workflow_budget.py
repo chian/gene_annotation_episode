@@ -2,7 +2,6 @@
 
 This module intentionally uses only the standard library. The shell launcher
 starts it inside an owned service before importing application or test code.
-The historical module name is retained for existing callers.
 CPU and RAM are environment constraints; the episode iterator owns scientific
 continuation.
 """

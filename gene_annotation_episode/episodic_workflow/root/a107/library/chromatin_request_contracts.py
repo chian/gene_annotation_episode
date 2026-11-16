@@ -1,8 +1,6 @@
-"""A107 original chromatin request contracts; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 chromatin request contracts."""
 from __future__ import annotations
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import hashlib
 import json
@@ -13,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.root.a107.library.chromatin_inter
 RUN_PLAN_FILENAME = 'chromatin-plan.json'
 DRIVER_MODULE = 'gene_annotation_episode.native_chromatin_interaction_driver'
 HIC_READER_MODULE = 'gene_annotation_episode.chromatin_hic_inputs'
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 REQUIRED_DEPENDENCIES = {'numpy', 'h5py', 'jsonschema', 'attrs', 'referencing', 'rpds-py', 'jsonschema-specifications'}
 REQUIRED_MODULES = {DRIVER_MODULE, 'gene_annotation_episode.native_chromatin_interaction_contracts', 'gene_annotation_episode.chromatin_interaction_contracts', 'gene_annotation_episode.chromatin_cooler_inputs', 'gene_annotation_episode.chromatin_interaction_inputs'}
 SUPPORTED_FORMATS = ('cooler_hdf5_v3', 'hic_binary_v9')

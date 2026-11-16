@@ -7,12 +7,10 @@ import asyncio
 from copy import deepcopy
 import hashlib
 import json
-import os
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
 from method_loop.episode import ClosedChildUnit
-import pytest
 
 from gene_annotation_episode import native_lifecycle
 from gene_annotation_episode import vcf_result_measurements as core
@@ -26,7 +24,7 @@ from gene_annotation_episode.native_file_capture import retained_native_file
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.episodic_workflow.root.library.molecular_value_presentation import _selected_molecular_text, _selected_molecular_view
 from gene_annotation_episode.state import Store
@@ -38,7 +36,7 @@ PUBLICATION = ROOT / "research/slotted_process_library/publications/2026-10-24-0
 NATIVE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/vcf_results/expected.testExposureOfSmithWatermanParameters.M2.gatk4.vcf"
 QUESTION = ("For the supplied Mutect2 VCF, what native record, ALT-token and sample-cell populations "
     "and selected reported GT, AD, FAD and AF values are retained? Return the controlled VCF result groups.")
-POLICY = dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
+POLICY = dict(memory_bytes=5 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
 SOURCE = "vcf_result_outcomes"
 
 
@@ -60,14 +58,6 @@ def _controller(path, initial):
     def estimate(history, parameters, contexts):
         return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= horizon else 1),
             parameters, dict(engineering_fixture="three_explicit_result_operations"))
-    return YieldController(str(path), initial, 0, estimate_with_context=estimate)
-
-
-def _single_saved_result_controller(path, initial):
-    """Stable fixture callable used for both execution and reconstruction."""
-    def estimate(history, parameters, contexts):
-        return YieldEstimate(len(history), NumericBand.exact(0 if history else 1),
-            parameters, dict(engineering_fixture="one_explicit_saved_result_read"))
     return YieldController(str(path), initial, 0, estimate_with_context=estimate)
 
 
@@ -178,22 +168,6 @@ class VcfProvider:
 
     async def release(self, episode_id):
         pass
-
-
-def _saved_workflow(store, directory, run_id, scope, references, factory, *, scientific=None):
-    tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY))
-    factory.configure_tool_registry(tools)
-    if scientific is None:
-        scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory, source_directory=PUBLICATION,
-            tool_catalog=tools.catalog(), child_roles=["scientific_process"])
-    library = ScientificProcessLibrary(directory / "scientific-process-library")
-    provider = VcfProvider(store, library, scope, None, result_refs=references)
-    application = factory(store, run_id=run_id, directory=directory, tool_registry=tools)
-    workflow = Workflow(store, tools, provider, directory, run_id, _single_saved_result_controller, _zero,
-        project_child_credit=_zero, episode_binding_descriptors=[deepcopy(scientific), *application.episode_binding_descriptors],
-        role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider,
-        episode_record_receipts=True, initial_known_record_refs=references)
-    return tools, workflow, provider, scientific
 
 
 def test_supplied_native_vcf_saved_modes_typed_parent_return_and_closed_replay(tmp_path, monkeypatch):
@@ -339,11 +313,5 @@ def test_supplied_native_vcf_saved_modes_typed_parent_return_and_closed_replay(t
         raise
     finally:
         audit_path.write_text(json.dumps(proof, indent=2, allow_nan=False) + "\n")
-
-
-
-
-
-
 
 

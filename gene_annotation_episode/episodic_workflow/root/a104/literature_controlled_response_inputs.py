@@ -140,14 +140,6 @@ selection["$defs"] = defs
 selection["$schema"] = "https://json-schema.org/draft/2020-12/schema"
 
 _SELECTION_SCHEMA = selection
-DEPENDENCIES = {'literature_assay_inputs.py': '52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e',
- 'literature_rate_native_inputs.py': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500',
- 'literature_partner_source_fields.py': '20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17',
- 'literature_partner_defined_units.py': 'cc6733d763ba494e3c4016a9a3be98ea6b7b6076b97dc8ef1aad5f43a8f856ca',
- 'literature_kinetic_inputs.py': '78e0c0094bbffa8306c26a6d134eec74f291c34177a87656ec09f925c2dd1960',
- 'literature_binding_visual_inputs.py': '8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718',
- 'literature_binding_reader.py': 'e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1',
- 'literature_controlled_response_calculations.py': 'a75b8f8ef4905d805be24e86236ef8303c97b5e4761acf0d849ca01aadaec023'}
 
 _MEANINGS = ("endpoint", "normalization", "subject_construct", "condition", "physical_observation")
 _UNKNOWN = ("unknown", "none", "unspecified", "unreported")
@@ -1366,8 +1358,7 @@ _RESULT_FIELDS = {'Diagnostic': ('code', 'field', 'domain', 'source_refs'),
  'RequestedModel': ('variance_status', 'model_kind'),
  'EffectiveModel': ('variance_status', 'model_kind', 'diagnostics'),
  'DependencyRecord': ('reader_contract_version',
-                      'calculator_contract_version',
-                      'expected_module_fingerprints')}
+                      'calculator_contract_version')}
 _ROOT_FIELDS = ('version', 'selection', 'sources', 'images', 'arms', 'relationships', 'covariance', 'requested_model', 'effective_model', 'calculation_inputs', 'diagnostics', 'implementation_dependencies')
 
 
@@ -1527,8 +1518,7 @@ def _validate_v1_saved_science(arguments, extraction):
     _closed(extraction, _ROOT_FIELDS, "extraction")
     if extraction["version"] != VERSION or extraction["selection"] != selected:
         _fail("saved_selection_mismatch", "extraction")
-    expected_dependencies = {"reader_contract_version": VERSION, "calculator_contract_version": INPUT_VERSION,
-                             "expected_module_fingerprints": DEPENDENCIES}
+    expected_dependencies = {"reader_contract_version": VERSION, "calculator_contract_version": INPUT_VERSION}
     if extraction["implementation_dependencies"] != expected_dependencies:
         _fail("saved_dependency_contract_mismatch", "implementation_dependencies")
     source_map = {}
@@ -1774,7 +1764,7 @@ def validate_controlled_response_extraction(arguments, extraction):
         measurement_checks=None)
 
 
-__all__ = ["VERSION", "SELECTION_VERSION", "COVARIANCE_VERSION", "DEPENDENCIES",
+__all__ = ["VERSION", "SELECTION_VERSION", "COVARIANCE_VERSION",
     "controlled_response_arguments_schema", "validate_controlled_response_selection",
     "read_controlled_response_inputs", "validate_controlled_response_extraction"]
 
@@ -2173,21 +2163,19 @@ def finish_controlled_response_inputs(context, *, arms, companion_arms=None, cov
         covariance["provided_owner_projection"] = []
     effective = _effective_model(requested, covariance, arms)
     parsed = _calculation_inputs(arms, relationships, covariance, effective)
-    version, input_version, dependencies = VERSION, INPUT_VERSION, DEPENDENCIES
+    version, input_version = VERSION, INPUT_VERSION
     if context.profile == "v2":
         from .literature_controlled_response_owner_calculations import validate_controlled_response_owner_inputs
-        from .literature_controlled_response_v2_inputs import _dependencies
         version, input_version = "controlled_response_source_extraction_v2", "controlled_response_owner_inputs_v2"
         parsed["version"] = input_version
         validate_controlled_response_owner_inputs(parsed)
-        dependencies = _dependencies()
     else:
         validate_controlled_response_inputs(parsed)
     result = {"version": version, "selection": deepcopy(context.arguments), "sources": deepcopy(context.roster),
         "images": deepcopy(context.images), "arms": {r:deepcopy(dict(a)) if a is not None else None for r,a in arms.items()},
         "relationships": relationships, "covariance": covariance, "requested_model": requested, "effective_model": effective,
         "calculation_inputs": parsed, "diagnostics": [], "implementation_dependencies": {
-            "reader_contract_version": version, "calculator_contract_version": input_version, "expected_module_fingerprints": deepcopy(dependencies)}}
+            "reader_contract_version": version, "calculator_contract_version": input_version}}
     if context.profile == "v2":
         result["representation_reconciliations"] = _representations(arms)
     result["diagnostics"] = _unique_diagnostics(result, stable=context.profile == "v2")
@@ -2366,8 +2354,7 @@ def _validate_v2_saved_science(arguments, extraction, *, measurement_checks):
         raise ExperimentalContractError("saved_extraction_schema_invalid","extraction") from error
     if extraction["selection"]!=selected:
         _fail("saved_selection_mismatch","extraction")
-    dependencies={"reader_contract_version":"controlled_response_source_extraction_v2", "calculator_contract_version":"controlled_response_owner_inputs_v2",
-        "expected_module_fingerprints":facade._dependencies()}
+    dependencies={"reader_contract_version":"controlled_response_source_extraction_v2", "calculator_contract_version":"controlled_response_owner_inputs_v2"}
     if extraction["implementation_dependencies"]!=dependencies:
         _fail("saved_dependency_contract_mismatch","implementation_dependencies")
     sources=facade._saved_roster(selected,extraction)
@@ -2884,7 +2871,7 @@ def _validate_v3_saved_science(arguments, extraction, *, measurement_checks):
     if extraction["selection"] != selected:
         _fail("saved_selection_mismatch", "extraction")
     expected_dependencies = {"reader_contract_version": "controlled_response_source_extraction_v3",
-        "calculator_contract_version": "controlled_response_owner_inputs_v2", "expected_module_fingerprints": facade._dependencies()}
+        "calculator_contract_version": "controlled_response_owner_inputs_v2"}
     if extraction["implementation_dependencies"] != expected_dependencies:
         _fail("saved_dependency_contract_mismatch", "implementation_dependencies")
     sources = old_facade._saved_roster(selected, extraction)

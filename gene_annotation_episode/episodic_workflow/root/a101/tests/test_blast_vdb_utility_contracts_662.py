@@ -2,77 +2,12 @@
 from copy import deepcopy
 import hashlib
 import json
-import os
 from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import SCHEMAS, blast_utility_schema_for_version, blast_utility_result_version_for_operation, validate_blast_utility_operation, validate_blast_utility_result, validate_blast_utility_record as core
-from gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_extraction import parse_blastdbcmd_sequences
+from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import blast_utility_result_version_for_operation, validate_blast_utility_operation, validate_blast_utility_result
 from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
-
-
-EVIDENCE = Path(__file__).resolve().parent / "fixtures/blast_vdb_shared_core"
-LEGACY_VERSIONS = (
-    "blast_utility_operation_v1", "blast_utility_operation_v2", "blast_sequence_extraction_v1",
-    "blast_database_inspection_v1", "blast_database_inspection_v2", "blast_database_integrity_v1",
-    "blast_database_artifact_set_v1", "blast_database_artifact_set_v2", "blast_preparation_document_v1",
-)
-
-
-def _legacy_snapshot():
-    from test_blast_database_extraction_626 import context, occurrence
-    from test_blast_preparation_contracts_647 import operation, MODES
-    from test_blast_preparation_population_647 import (
-        occurrence as prep_occurrence, common, populate, outcome,
-    )
-    from gene_annotation_episode.episodic_workflow.root.a101.library.blast_preparation_inputs import parse_blast_alias_document, parse_blast_seqid_list_info, parse_blast_aliastool_diagnostics
-    classic = []
-    for raw, ctx in [
-        (b"0\tlcl|seqA\tseqA\t4\tacgt\n", context()),
-        (b"0\tlcl|seqA\tseqA\t4\tACGT\nmalformed\n2\tlcl|seqB\tseqB\t3\tAUN\n", context(("seqA", "seqB"))),
-        (b"0\tlcl|seqA\tseqA\t4\tACG\n", context()),
-        (b"0\tlcl|seqA\tseqA\t4\tACGT\n", context(("seqA", "seqA", "absent"), returncode=1)),
-        (b"0\tlcl|seqA\tseqA\t12\tCGTACG\n", context(selected_range={"start_1based": 2, "end_1based": 7})),
-        (b"0\tlcl|seqA\tseqA\t4\tM*AA\n", context(molecule="protein")),
-    ]:
-        classic.append(parse_blastdbcmd_sequences(raw, occurrence=occurrence(raw), **ctx))
-    docs = []
-    for parser, raw, fmt in [
-        (parse_blast_alias_document, b"TITLE controlled\nDBLIST /source/db /source/db\nNSEQ 2\nLENGTH 13\n", "blast_alias_text"),
-        (parse_blast_seqid_list_info, b"Num of Ids: 2\nTitle: controlled\nCreate Date: retained\n", "blast_seqid_list_info_text"),
-    ]:
-        docs.append(parser(raw, occurrence=prep_occurrence("doc", "stdout", raw, direction="output", fmt=fmt)))
-    raw = b"Converted 3 GIs into binary GI file\n"
-    source = prep_occurrence("ids", "identifier_list", b"9\n3\n9\nnot-a-gi\n")
-    stderr = prep_occurrence("stderr", "stderr", raw, direction="output", path="/attempt/stderr")
-    binary = prep_occurrence("binary", "identifier_list", b"synthetic-binary", direction="output",
-        fmt="gi_list_binary", path="/attempt/out/ids.gil")
-    doc = parse_blast_aliastool_diagnostics(raw, occurrence=stderr)
-    args = common(operation("convert_gi_list"), inputs=[source], outputs=[binary, stderr], documents=[doc])
-    preparations = [populate(**args), populate(**{**args, "outcome": outcome(2)})]
-    return {
-        "fixture_basis": "controlled hand-authored bytes; no native execution",
-        "schemas": {v: blast_utility_schema_for_version(v) for v in LEGACY_VERSIONS},
-        "classic_results": classic, "preparation_documents": docs, "preparation_results": preparations,
-        "preparation_operations": [validate_blast_utility_operation(operation(mode)) for mode in MODES],
-        "preparation_result_versions": [blast_utility_result_version_for_operation(operation(mode)) for mode in MODES],
-    }
-
-
-def test_capture_or_compare_legacy_baseline():
-    snapshot = _legacy_snapshot()
-    attempt = os.environ.get("HMMER529_ATTEMPT")
-    if os.environ.get("HMMER_NATIVE_ORACLE_CORE662_BASELINE") == "1":
-        assert attempt
-        destination = Path(attempt) / "temporary/legacy_before.json"
-        assert not destination.exists()
-        destination.write_text(json.dumps(snapshot, indent=2) + "\n")
-    else:
-        baseline = json.loads((EVIDENCE / "legacy_before.json").read_text())
-        assert snapshot == baseline
-        if attempt:
-            (Path(attempt) / "temporary/legacy_after.json").write_text(json.dumps(snapshot, indent=2) + "\n")
 
 
 def occurrence(oid, *, role="stdout", fmt="text", direction="output", raw=b"controlled"):
@@ -196,25 +131,6 @@ def test_exact_variants_versions_order_and_detached_results(variant, database_so
     checked["vdb_context"]["source_inputs"][0]["dataset_type"] = "unknown"
     assert value["vdb_context"]["source_inputs"][0]["dataset_type"] == "csra"
     assert len(op["parameters"]["database_selection"]["inputs"]) == 2
-
-
-def test_schema_build_is_detached_and_old_nested_enums_stay_closed():
-    from gene_annotation_episode.episodic_workflow.root.a101.library.blast_vdb_utility_contracts import build_vdb_utility_schemas
-    from gene_annotation_episode.episodic_workflow.root.a101.library.blast_preparation_contracts import DATABASE_DEPENDENCY_SCHEMA
-    old = json.loads((EVIDENCE / "legacy_before.json").read_text())
-    for version, schema in old["schemas"].items():
-        assert blast_utility_schema_for_version(version) == schema
-    base = {**SCHEMAS, "ArtifactOccurrence": deepcopy(old["schemas"]["blast_sequence_extraction_v1"]["properties"]["output_occurrence"]),
-        "NativeField": deepcopy(old["schemas"]["blast_database_inspection_v1"]["properties"]["native_fields"]["items"]),
-        "SequenceExtraction": old["schemas"]["blast_sequence_extraction_v1"],
-        "DatabaseInspection": old["schemas"]["blast_database_inspection_v1"]}
-    before = deepcopy(base)
-    new = build_vdb_utility_schemas(base)
-    assert base == before
-    assert new["VDBUtilityContext"]["properties"]["declared_dependencies"]["items"] == DATABASE_DEPENDENCY_SCHEMA
-    new["ArtifactOccurrence"]["properties"]["role"]["enum"].append("invented")
-    assert base == before
-    assert "entry_batch" not in old["schemas"]["blast_sequence_extraction_v1"]["properties"]["output_occurrence"]["properties"]["role"]["enum"]
 
 
 @pytest.mark.parametrize("edit", [

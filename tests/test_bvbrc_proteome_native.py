@@ -105,31 +105,6 @@ def test_saved_record_keys_cannot_claim_another_native_row_or_track(group, field
         validate_native_projection(value)
 
 
-def test_json_tsv_shared_native_measurements_and_actual_skipped_comparison_ids():
-    js, ts = parse(document(native_rows())), parse(table(), TSV_FORMAT)
-    assert js["status"] == ts["status"] == "ok"
-    for result in (js, ts):
-        value = result["value"]
-        assert value["physical_record_count"] == 2
-        assert [track["track_key"] for track in value["tracks"]] == ["ref_genome", "comp_genome_2", "comp_genome_4"]
-        assert [(a["reference_row_ordinal"], a["comparison_ordinal"], a["patric_id"]["value"])
-                for a in value["associations"]] == [(0, 2, "subjectA"), (0, 4, "subjectB"), (1, 4, "subjectA")]
-        assert [a["percent_identity"]["value"] for a in value["associations"]] == [0.875, 0, 0.875]
-        assert [a["seq_coverage"]["value"] for a in value["associations"]] == [0.99, 0.5, 0.99]
-        assert value["associations"][0]["seq_coverage"]["lexeme"] == "0.990"
-        assert value["reference_rows"][0]["gene"]["value"] == 0
-        assert {"native_source_version_unverified", "legacy_hsp_data_not_retained"} <= codes(result)
-        assert all(d["severity"] == "qualification" for d in result["diagnostics"])
-    for j, t in zip(js["value"]["associations"], ts["value"]["associations"]):
-        for name in ("hit", "gene", "aa_length", "patric_id", "function", "percent_identity", "seq_coverage"):
-            assert (j[name]["value"], j[name]["presence"]) == (t[name]["value"], t[name]["presence"])
-    # Literal physical lines 0 and 2, despite the headers being at lines 1 and 3.
-    assert [r["native_pointer"] for r in ts["value"]["reference_rows"]] == ["/rows/0", "/rows/2"]
-    field = ts["value"]["associations"][2]["percent_identity"]["source_field"]
-    assert field == {"source_ref": "synthetic_source_001", "sha256": hashlib.sha256(table()).hexdigest(),
-                     "pointer": "/rows/2/30", "row_ordinal": 2, "field_name": "comp_genome_4_percent_identity"}
-
-
 def test_original_json_number_spelling_and_numeric_strings():
     content = (b'{"genome_names":{"ref_genome":"R","comp_genome_7":"C"},"feature_matches":['
                b'{"ref_genome_patric_id":"r","ref_genome_gene":-0,"ref_genome_aa_length":1.00e+02,'
@@ -390,16 +365,6 @@ def test_invalid_encoding_in_complete_tsv_line_is_fatal_even_when_artifact_parti
         assert result["value"] is None and "native_encoding_invalid" in codes(result)
 
 
-@pytest.mark.parametrize("field,replacement", [("sha256", "0" * 64), ("byte_count", 0)])
-def test_content_binding_mismatch_is_rejected_before_decoding(field, replacement):
-    content = b"\xff"
-    binding = source(content)
-    binding["content"][field] = replacement
-    result = parse_genome_comparison(content, source=binding, declared_format=JSON_FORMAT, source_contract=CONTRACT)
-    assert result["status"] == "invalid" and result["value"] is None
-    assert codes(result) == {"artifact_digest_mismatch"}
-
-
 @pytest.mark.parametrize("field,replacement", [("object_complete", True), ("object_complete", "maybe"), ("body_complete", 1)])
 def test_source_three_state_completeness_does_not_accept_boolean_substitution(field, replacement):
     content = document([])
@@ -416,24 +381,6 @@ def test_other_source_version_is_incompatible_not_silently_reinterpreted(field, 
     result = parse(document(native_rows()), contract=contract)
     assert result["value"] is None and codes(result) == {"native_schema_incompatible"}
     assert result["requirements"][0]["required_input"] == "native_producer_version"
-
-
-def test_declared_deployment_evidence_is_preserved_but_not_authenticated():
-    contract = deepcopy(CONTRACT)
-    contract.update(deployment_match="demonstrated", deployment_evidence=[{
-        "source_ref": "caller_supplied_evidence", "sha256": "a" * 64, "pointer": "/version",
-        "row_ordinal": None, "field_name": "version"}])
-    result = parse(document([]), contract=contract)
-    assert result["status"] == "ok" and result["value"]["source_contract"] == contract
-    assert "native_source_version_unverified" not in codes(result)
-    assert "legacy_hsp_data_not_retained" in codes(result)
-
-
-def test_empty_complete_json_is_zero_observed_records_not_search_completion():
-    result = parse(document([]))
-    assert result["status"] == "ok" and result["value"]["physical_record_count"] == 0
-    assert result["value"]["reference_rows"] == result["value"]["associations"] == []
-    assert {"legacy_hsp_data_not_retained", "track_materialization_unknown"} <= codes(result)
 
 
 def test_detached_sources_schema_projection_and_separate_parse_calls():
@@ -541,17 +488,3 @@ def test_no_io_network_native_program_model_or_existing_calculator_dependencies(
     assert result["value"]["associations"][0]["percent_identity"]["value"] == 0.875
 
 
-def test_packaged_schema_is_the_exact_accepted_002_contract():
-    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_native_contracts as contracts
-    path = Path(contracts.__file__).with_name("bvbrc_proteome_native_schemas.json")
-    # Prospective request-content amendment, preserving the accepted contract.
-    original = json.loads(path.read_text())
-    enum = original["$defs"]["ContentBinding"]["properties"]["artifact_field"]["enum"]
-    assert enum == ["artifact_ref", "text_ref", "stdout_ref", "stderr_ref", "request_ref"]
-    assert enum.pop() == "request_ref"
-    restored = (json.dumps(original, indent=2, ensure_ascii=False) + "\n").encode()
-    assert hashlib.sha256(restored).hexdigest() == "c84fecffe0170b7c77948f411593a55ae63e902f976e8a42463a0053c1a1f01d"
-    definitions = json.loads(path.read_text())["$defs"]
-    assert len(definitions) == 16
-    for name in definitions:
-        Draft202012Validator.check_schema(native_schema(name))

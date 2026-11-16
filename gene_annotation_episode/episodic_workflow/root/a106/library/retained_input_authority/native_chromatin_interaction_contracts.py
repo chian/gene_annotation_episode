@@ -18,7 +18,8 @@ OWNER_FILENAME = '.native-chromatin-owner.json'
 STARTED_FILENAME = '.native-chromatin-started.json'
 DRIVER_MODULE = 'gene_annotation_episode.native_chromatin_interaction_driver'
 HIC_READER_MODULE = 'gene_annotation_episode.chromatin_hic_inputs'
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 TABLE_ROLES = ('bins', 'contacts', 'weights', 'cell_states', 'dense_values')
 TABLE_NAMES = ('bins.tsv', 'contacts.npy', 'weights.npy', 'cell-states.npy', 'dense-values.npy')
 REQUIRED_DEPENDENCIES = {'numpy', 'h5py', 'jsonschema', 'attrs', 'referencing', 'rpds-py', 'jsonschema-specifications'}

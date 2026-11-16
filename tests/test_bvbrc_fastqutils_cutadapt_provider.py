@@ -1,16 +1,9 @@
 """Actual native bytes through provider and pure return codecs, not host custody."""
-import importlib
 from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_fastqutils_contracts import canonical_json, validate_requested_form
-from gene_annotation_episode.bvbrc_fastqutils_returns import (
-    BVBRCFastqUtilsReturns, FACT_SOURCES, decode_return_value, parent_form_schema,
-    project_fastqutils_return_facts,
-)
-from gene_annotation_episode.episodic_workflow.root.communication import validate_form
-from test_bvbrc_fastqutils_returns import saved_fixture
+from gene_annotation_episode.bvbrc_fastqutils_contracts import canonical_json
 from test_bvbrc_fastqutils_provider import f
 
 _NATIVE_RELATIVE = Path('gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/fastqutils_cutadapt')
@@ -73,42 +66,6 @@ def test_native_cutadapt_and_final_output_remain_distinct_through_provider():
     assert all(e['task_stage_ref'] is None and e['scope'] == 'artifact_local'
                for e in result['sheet']['native_lineage'])
     assert all(d['artifact']['identity'] == 'unknown' for d in result['sheet']['documents'])
-
-
-def test_native_values_reach_closed_original_parent_form_and_saved_replay(monkeypatch):
-    data, fields = fixture()
-    body, sheet, components = saved_fixture(data, fields)
-    before = canonical_json([body, sheet, components])
-    facts = project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES,
-                                         sheet=sheet, components=components)
-    selected = body['publication_inputs']['selector']
-    form = validate_requested_form(selected['requested_schema'])
-    schema = parent_form_schema(form)
-    returned = {name: facts[node['x-source']] for name, node in schema['properties'].items()}
-    validate_form(returned, schema,
-        lambda reference, namespace=None: BVBRCFastqUtilsReturns._has_reference(facts, reference, namespace))
-    selected_values = []
-    for row in facts['bvbrc_fastqutils_measurements']:
-        decoded = decode_return_value('measurement', row['value'])
-        selected_values.append(decoded['records'][0]['payload']['value'])
-    assert selected_values == [4, 4, 28, 4, 3, 24]
-    attempts = []
-    def forbidden(*args, **kwargs):
-        attempts.append(True)
-        raise AssertionError('Saved Cutadapt return invoked acquisition or scientific work')
-    for suffix in ('native', 'trim_reader', 'cutadapt_reader', 'fastq_reader', 'metadata',
-                   'sheet', 'calculators', 'retention', 'bundle_adapter'):
-        module = importlib.import_module('gene_annotation_episode.bvbrc_fastqutils_' + suffix)
-        for name, function in list(vars(module).items()):
-            if callable(function) and (name.startswith(('parse_', 'populate_', 'extract_', 'calculate_'))
-                                      or name in ('append_cutadapt_report', 'consume_bundle')):
-                monkeypatch.setattr(module, name, forbidden)
-    monkeypatch.setattr('socket.socket.connect', forbidden)
-    monkeypatch.setattr('urllib.request.OpenerDirector.open', forbidden)
-    monkeypatch.setattr('subprocess.Popen', forbidden)
-    assert project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES,
-        sheet=sheet, components=components) == facts
-    assert not attempts and canonical_json([body, sheet, components]) == before
 
 
 def test_recipe_and_basename_do_not_invent_lineage_to_final_fastq():

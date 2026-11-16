@@ -109,20 +109,19 @@ class AlignmentSiteActionRecords(EpisodeReturnRecords):
                 and self._equal(result.get(marker), alignment[marker]), 'native_hsp_result_conflict')
             binding = self._binding(alignment, original)
             artifact = result.get('site_grading_artifact_ref')
-            grading = self._grading(artifact, original) if artifact is not None else None
-            if grading is not None and grading.get('sheet') is not None:
+            self._require(artifact is not None, 'grading_envelope_invalid')
+            grading = self._grading(artifact, original)
+            if grading.get('sheet') is not None:
                 sheet = grading['sheet']
                 self._require(sheet.get('schema') == 'blast_hsp_column_sheet_v1'
                     and self._equal(sheet['native_input'], native)
                     and self._equal(sheet['requested_window'], {key: args[key] for key in
                         ('column_offset', 'column_limit')}), 'native_hsp_sheet_conflict')
-        if grading is not None and grading.get('sheet') is not None:
+        if grading.get('sheet') is not None:
             self._sheet_identity(grading['sheet'], alignment, original)
-        self._require(grading is None or isinstance(grading, dict), 'grading_envelope_invalid')
-        availability = ('legacy_result_ungraded' if grading is None else
-                        'grading_unavailable' if grading.get('sheet') is None or grading.get('scores') is None
+        availability = ('grading_unavailable' if grading.get('sheet') is None or grading.get('scores') is None
                         else 'bound')
-        normalized = None if grading is None else {key: grading.get(key) for key in ('sheet', 'scores', 'failure')}
+        normalized = {key: grading.get(key) for key in ('sheet', 'scores', 'failure')}
         value = {'decision_index': row['decision_index'], 'operation_ref': expected_id,
             'tool_name': action['tool'], 'operation_status': saved['status'], 'arguments': args,
             'binding': binding, 'grading_artifact_ref': artifact, 'grading': normalized,
@@ -181,8 +180,9 @@ class AlignmentSiteActionRecords(EpisodeReturnRecords):
                 if value.get('sheet') is None or value['sheet'].get('schema') == 'reference_site_comparison_sheet_v1':
                     candidates.append((reference, value))
         self._require(len(candidates) <= 1, 'ambiguous_site_grading')
-        artifact, grading = candidates[0] if candidates else (None, None)
-        if grading is not None and grading.get('sheet') is not None:
+        self._require(bool(candidates), 'grading_envelope_invalid')
+        artifact, grading = candidates[0]
+        if grading.get('sheet') is not None:
             sheet = grading['sheet']
             selection = ({'kind': 'reference_positions', 'positions': args['positions']}
                 if 'positions' in args else {'kind': 'reference_window', **args['window']})

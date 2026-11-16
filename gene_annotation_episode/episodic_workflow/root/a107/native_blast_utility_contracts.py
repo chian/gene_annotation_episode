@@ -6,6 +6,7 @@ It does not discover resources, create a database, or choose a follow-up check.
 """
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import json
 from pathlib import PurePosixPath
@@ -55,16 +56,11 @@ OUTPUT_SCHEMA = _object({"role": {"enum": ["stdout", "stderr", "database_family"
     "path_kind": {"enum": ["file", "prefix"]}, "relative_path": _STR,
     "format": {"enum": ["text", "blastdb_family", "blastdbcmd_tabular_v1",
                           "blastdb_info_text", "blastdb_metadata_json", "blastdbcheck_text"]}})
-# Both old native schema objects historically embedded this exact v1+v2 union.
-# Freeze it instead of pointing them at the expanding current registry.
-_HISTORICAL_OPERATION_SCHEMA = {"anyOf": [blast_utility_schema_for_version(version)
-    for version in ("blast_utility_operation_v1", "blast_utility_operation_v2")]}
 NATIVE_BLAST_UTILITY_JOB_SCHEMA = _object({"version": {"const": JOB_VERSION},
-    "operation": _HISTORICAL_OPERATION_SCHEMA, "software": SOFTWARE_SCHEMA, "environment": _ENV,
+    "operation": blast_utility_schema_for_version("blast_utility_operation_v1"), "software": SOFTWARE_SCHEMA, "environment": _ENV,
     "inputs": {"type": "array", "items": INPUT_SCHEMA},
     "databases": {"type": "array", "maxItems": 1, "items": DATABASE_OPERAND_SCHEMA},
     "outputs": {"type": "array", "minItems": 2, "maxItems": 3, "items": OUTPUT_SCHEMA}})
-# Keep the old object branch byte-for-byte representable; new fields are v2 only.
 from .blast_preparation_contracts import MATERIALIZATION_ENTRY_SCHEMA
 from .native_blast_database_contracts import DATABASE_OPERAND_SCHEMA as ADDITIONAL_DATABASE_OPERAND_SCHEMA
 INPUT_SCHEMA_V2 = deepcopy(INPUT_SCHEMA)
@@ -92,7 +88,7 @@ MATERIALIZATIONS_SCHEMA = _object({
         "entries": {"type": "array", "minItems": 1, "items": _ENTRY}})}})
 NATIVE_BLAST_UTILITY_JOB_V1_SCHEMA = NATIVE_BLAST_UTILITY_JOB_SCHEMA
 NATIVE_BLAST_UTILITY_JOB_V2_SCHEMA = _object({"version": {"const": JOB_VERSION_V2},
-    "operation": deepcopy(_HISTORICAL_OPERATION_SCHEMA), "software": SOFTWARE_SCHEMA, "environment": _ENV,
+    "operation": blast_utility_schema_for_version("blast_utility_operation_v2"), "software": SOFTWARE_SCHEMA, "environment": _ENV,
     "inputs": {"type": "array", "items": INPUT_SCHEMA_V2},
     "databases": {"type": "array", "items": {"anyOf": [DATABASE_OPERAND_SCHEMA, ADDITIONAL_DATABASE_OPERAND_SCHEMA]}},
     "outputs": {"type": "array", "minItems": 2, "items": OUTPUT_SCHEMA_V2},
@@ -577,7 +573,7 @@ def validate_native_blast_utility_plan(value: dict) -> dict:
     if job["version"] == JOB_VERSION_V3:
         paths.extend(row["path"] for row in [job["offline_execution"]["launcher"], *job["offline_execution"]["runtime_files"]])
         paths.extend(row["path"] for row in job["offline_execution"]["runtime_aliases"])
-        if policy != {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}:
+        if policy != {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}:
             _error("vdb_selected_local_allocation_conflict")
     if any(_producer_path(path, absolute=True).is_relative_to(root) for path in paths):
         _error("supplied_material_inside_attempt")

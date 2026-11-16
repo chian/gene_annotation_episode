@@ -1,7 +1,7 @@
 """Literal parent-private terminal construction, saved families and credit routing.
 
-New construction selects the six predefined children. Saved descriptors retain
-their exact parent families; historical source identity remains literal.
+Construction selects the six predefined children. Saved descriptors retain
+their exact parent families.
 """
 from copy import deepcopy
 import json
@@ -10,7 +10,6 @@ from .method_loop.durable import canonical
 from .episode_application_services import EpisodeApplicationServices
 
 OWNER = 'root.terminal_execution'
-LEGACY_VERSION = 'terminal_execution_episodes_v1'
 ENTRIES = (
     ('local', 'launch_local', 'local_job_execution', 'root_local_terminal_execution'),
     ('hpc', 'launch_hpc', 'hpc_job_execution', 'root_hpc_terminal_execution'),
@@ -85,11 +84,6 @@ def original_configuration(value):
     return value
 
 
-def legacy_descriptor(configuration):
-    return {'binding_id': 'terminal_execution', 'version': LEGACY_VERSION,
-            'configuration': original_configuration(configuration)}
-
-
 def fixed_descriptors(configuration, *, parents=PARENTS):
     configuration = original_configuration(configuration)
     return tuple({'binding_id': identifier, 'version': identifier + '_v1',
@@ -104,20 +98,6 @@ def construct_fixed_children(services, *, store, directory, configuration, paren
                      for parent, kind, role, path, identifier in selected_entries(configuration, parents))
     validate_fixed_group(bindings, configuration)
     return bindings
-
-
-def expand_original_descriptor(descriptor, services, *, store, directory):
-    """Retain exact historical data separately from the current child records."""
-    if (type(descriptor) is not dict or set(descriptor) != {'binding_id', 'version', 'configuration'}
-            or descriptor['binding_id'] != 'terminal_execution' or descriptor['version'] != LEGACY_VERSION):
-        raise ValueError('root_terminal_original_descriptor_required')
-    configuration = original_configuration(descriptor['configuration'])
-    if canonical(descriptor) != canonical(legacy_descriptor(configuration)):
-        raise ValueError('root_terminal_original_descriptor_conflict')
-    bindings = construct_fixed_children(services, store=store, directory=directory, configuration=configuration)
-    return bindings, {'original_descriptor': deepcopy(descriptor),
-                      'current_descriptors': [b.as_record() for b in bindings],
-                      'owner': OWNER, 'binding_paths': [b.binding_path for b in bindings]}
 
 
 def _project(bindings):

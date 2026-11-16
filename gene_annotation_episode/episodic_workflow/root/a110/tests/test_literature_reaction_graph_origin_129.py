@@ -8,6 +8,7 @@ import pytest
 
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_native_integration_129 import setup_case, binding_for, source
+from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_integration import location_inputs
 
 
 @pytest.mark.parametrize('kind,expected', [('primary_source', 'reported'), ('retained_extraction', 'reported'),
@@ -17,7 +18,7 @@ def test_native_source_kind_origin_survives_normalization_saved_cells_and_typed_
     with store:
         args['source_kind'] = kind
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'origin'))
+        outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', location_inputs(args), 'origin'))
         assert outcome['status'] == 'completed', outcome
         assert outcome['result']['ratio_origin'] == expected
         assert outcome['result']['cells']['ratio_mean']['origin'] == expected
@@ -27,7 +28,7 @@ def test_native_source_kind_origin_survives_normalization_saved_cells_and_typed_
         saved = adapter.read(outcome['result']['sheet_ref'])
         assert saved['extraction']['calculation_inputs']['ratio']['origin'] == expected
         assert saved['sheet']['inputs']['ratio']['origin'] == expected
-        assert asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'origin')) == outcome
+        assert asyncio.run(binding.execute(context, 'literature.reaction.populate', location_inputs(args), 'origin')) == outcome
 
 
 @pytest.mark.parametrize('version', ['a110_source_reaction_measurements_v1', 'a110_source_reaction_measurements_v2'])
@@ -35,7 +36,7 @@ def test_legacy_prepared_graph_origin_is_unchanged(tmp_path, version):
     store, context, args = setup_case(tmp_path / 'state')
     with store:
         binding = binding_for(store, context)
-        initial = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'prepare-fixture'))
+        initial = asyncio.run(binding.execute(context, 'literature.reaction.populate', location_inputs(args), 'prepare-fixture'))
         saved = binding.literature_reaction_repository().read(initial['result']['sheet_ref'])
         data = deepcopy(saved['extraction']['observations'])
         data['version'] = version
@@ -45,7 +46,7 @@ def test_legacy_prepared_graph_origin_is_unchanged(tmp_path, version):
         dataset = source(store, canonical(data), [args['source_ref']])
         context = replace(context, received_record_refs=(*context.received_record_refs, dataset['id']))
         args.update(data_source_ref=dataset['id'], source_kind='graph_extraction')
-        outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'legacy-graph'))
+        outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', location_inputs(args), 'legacy-graph'))
         assert outcome['status'] == 'completed', outcome
         assert outcome['result']['ratio_origin'] == 'graph_derived'
         assert outcome['result']['cells']['ratio_mean']['origin'] == 'graph_derived'

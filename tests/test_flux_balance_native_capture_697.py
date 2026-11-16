@@ -8,9 +8,6 @@ import hashlib
 import json
 import os
 from pathlib import Path
-import socket
-import subprocess
-import sys
 
 import pytest
 
@@ -25,11 +22,6 @@ from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_
     validate_flux_balance_run_plan,
 )
 from gene_annotation_episode.state import Store
-
-
-ORIGINAL688 = (Path(__file__).resolve().parents[1] / "verification" /
-    "tool_graders_hmmer_map_verification_2026-10-28_529" /
-    "check151c_producer688/producer-emissions")
 
 
 @pytest.fixture
@@ -125,37 +117,6 @@ def issues(value):
 def all_native_retained(value):
     assert len(value["files"]) == 8
     assert all(row["retained"] is not None for row in value["files"])
-
-
-@pytest.mark.parametrize("format_", ["sbml", "cobra_json"])
-def test_original688_native_bytes_real_store(store, format_, monkeypatch):
-    plan_path = ORIGINAL688 / format_ / "selected-plan.json"
-    plan = json.loads(plan_path.read_text())
-    before = {row["role"]: (Path(plan["attempt_directory"]) / row["relative_path"]).read_bytes() for row in plan["outputs"]}
-    controls_before = {name: (Path(plan["attempt_directory"]) / name).read_bytes() for name in (OWNER_FILENAME, STARTED_FILENAME)}
-    forbidden = lambda *a, **k: pytest.fail("capture must not launch, acquire, publish, grant or connect")
-    with monkeypatch.context() as patch:
-        patch.setattr(subprocess, "Popen", forbidden)
-        patch.setattr(socket.socket, "connect", forbidden)
-        patch.setattr(store, "put", forbidden)
-        value = collect(store, plan)
-    all_native_retained(value)
-    assert value["failures"] == []
-    assert list(value["controls"]) == ["owner", "started", "environment"]
-    assert value["controls"]["environment"] is None
-    for row, expected in zip(value["files"], plan["outputs"]):
-        assert {k: row[k] for k in expected} == expected
-        data = before[row["role"]]
-        file = row["retained"]["file"]
-        assert file == {"artifact_ref": "artifact_" + hashlib.sha256(data).hexdigest(),
-            "sha256": hashlib.sha256(data).hexdigest(), "size_bytes": len(data), "format": row["format"]}
-        assert retained_native_file(store, file).read_bytes() == data
-        assert (Path(plan["attempt_directory"]) / row["relative_path"]).read_bytes() == data
-    for key, filename in (("owner", OWNER_FILENAME), ("started", STARTED_FILENAME)):
-        assert Path(value["controls"][key]["path"]).read_bytes() == controls_before[filename]
-    assert store.db.execute("SELECT COUNT(*) FROM records").fetchone()[0] == 0
-    assert "gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver" not in sys.modules
-    assert "gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_cobra_glpk" not in sys.modules
 
 
 @pytest.mark.parametrize("damage", ["missing", "changed", "symlink", "directory", "fifo"])

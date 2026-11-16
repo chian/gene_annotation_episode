@@ -1,10 +1,6 @@
 """Synthetic source extractions check condition identity, not biological truth."""
-import json
-from pathlib import Path
 
-from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import REASONING_SCHEMA
-from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.episodic_workflow.root.task_action_contracts import _action_generation_schema
 from gene_annotation_episode.state import Store
 
@@ -37,50 +33,6 @@ def contexts(source, anchor):
         "attributes": [{"name": "temperature", "value": {"type": "number", "value": 30, "unit_ref": None}}],
         "related_refs": ["@construct"]}]
     return data
-
-
-def test_source_condition_retains_actual_entity_and_is_used_by_the_existing_reasoning_call(tmp_path):
-    store, source, anchor = setup(tmp_path / "state")
-    with store:
-        data = contexts(source, anchor)
-        data["observations"] = [{"alias": "growth", "kind": "growth_assay",
-            "subject_refs": ["@construct"], "source_subject_refs": ["@construct"],
-            "source_ref": source["id"], "anchor": anchor, "dependencies": ["@medium"],
-            "measurements": [{"name": "observed_growth", "value": {"type": "enum", "value": "growth"}}]}]
-        result = store.commit_reasoning(data, store.validate_scope(None), "source-conditions")
-        assert result["status"] == "completed", result
-        condition = store.get(result["aliases"]["medium"])
-        observation = store.get(result["aliases"]["growth"])
-        assert condition["origin"] == "extracted" and condition["anchor"] == anchor
-        assert condition["related_refs"] == [result["aliases"]["construct"]]
-        assert condition["related_refs"] != store.problem()["subject_refs"]
-        assert observation["dependencies"] == [condition["id"]]
-        assert observation["source_subject_refs"] == [result["aliases"]["construct"]]
-        assert project_credit(store).credit == 0  # acquisition/extraction is not an annotation
-        assert store.commit_reasoning(data, store.validate_scope(None), "source-conditions") == result
-        # Link the condition through an explicitly unresolved, transferred
-        # interpretation. This fixture tests provenance/closure, not a claim
-        # that a short DNA fragment's physiological role was established.
-        interpretation = payload()
-        target = store.problem()["subject_refs"][0]
-        interpretation["hypotheses"] = [{"alias": "role", "subject_refs": [target],
-            "predicate": "growth_capability", "value": {"type": "enum", "value": "growth"},
-            "context_refs": [condition["id"]]}]
-        interpretation["assessments"] = [{"extent_basis": "inferred_extent", "alias": "assessment", "hypothesis_ref": "@role",
-            "observation_ref": observation["id"], "relation": "mixed", "applicability": "transfer",
-            "condition_refs": [condition["id"]], "assumption_refs": [], "expected_revision": 0,
-            "target_footprint": store.coverage(target)}]
-        interpretation["annotation_updates"] = [{"alias": "account", "subject_ref": target,
-            "footprint_kind": "whole_input_context", "coherent_sets": [{"context_refs": [condition["id"]],
-                "interpretations": [{"hypothesis_ref": "@role", "disposition": "unresolved", "assessment_refs": ["@assessment"]}]}],
-            "alternative_refs": [], "resolution": "unresolved", "expected_revision": 0}]
-        linked = store.commit_reasoning(interpretation, store.validate_scope(None), "condition-linked-interpretation")
-        assert linked["status"] == "completed", linked
-        output = export_annotation(store, tmp_path / "annotation.json")
-        exported = json.loads(Path(output["json"]["path"]).read_text())
-        rows = {r["id"]: r for r in exported["records"]}
-        assert rows[condition["id"]] == condition
-        assert rows[observation["id"]]["source_subject_refs"] == observation["source_subject_refs"]
 
 
 def test_partial_context_extraction_does_not_discard_prior_source_entity_or_rewrite_its_name(tmp_path):

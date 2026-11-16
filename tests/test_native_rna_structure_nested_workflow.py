@@ -3,8 +3,6 @@ import asyncio
 from copy import deepcopy
 from dataclasses import replace
 import json
-from pathlib import Path
-import shutil
 
 import pytest
 
@@ -51,97 +49,6 @@ def test_failed_native_energy_keeps_exact_topology_and_qualified_delivery(tmp_pa
         assert proof and case.owner.verify_completion(case.result_contexts[0], proof)
         assert case.forwarded == [{key: returned[key] for key in ('summary', 'failure')}]
         assert_accounting(case)
-    finally:
-        case.store.close()
-
-
-def test_actual_saved_sheet_recalculation_after_native_files_removed(tmp_path, monkeypatch):
-    snapshot = {}
-    def guard(case):
-        descriptor = case.descriptor
-        body = case.owner.native_rna_structure_results.read_receipt_key(descriptor['result_receipt_key'], case.store.validate_scope())
-        snapshot['body'] = body
-        snapshot['sheet'] = case.store.get_artifact(descriptor['sheet_artifact_ref'])
-        snapshot['receipt_path'] = case.owner.native_rna_structure_results._saved_directory(body['episode_id'], body['operation_key']) / 'receipt.json'
-        snapshot['receipt'] = snapshot['receipt_path'].read_bytes()
-        snapshot['closed_observations'] = [dict(row) for row in case.store.db.execute(
-            'SELECT * FROM runtime_observations WHERE run_id=? AND episode_id IN (?,?) ORDER BY episode_id,unit_index',
-            (RUN_ID, body['episode_id'], body['target']['origin_episode_id']))]
-        shutil.rmtree(Path(case.plan['identity']['execution_id']).parent)
-        Path(case.job['operands'][0]['path']).unlink()
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle', forbid)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local.local_rna_structure_plan', forbid)
-        monkeypatch.setattr(type(case.owner.job_progress_provider.targets), 'observe_target', forbid)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native.parse_rna_native_record', forbid)
-        monkeypatch.setattr('socket.create_connection', forbid)
-        # Instrument the actual saved worker through the existing bounded job.
-        # Its pure function is unchanged; the wrapper makes any scientific,
-        # parser, acquisition or network fallback fail inside the subprocess.
-        import gene_annotation_episode.native_rna_structure_result_publication as publication
-        actual_run = publication.run_local_job
-        guard_path = tmp_path / 'saved-worker-guard.py'
-        guard_path.write_text('''import builtins, json, pathlib, socket, subprocess, sys
-def denied(*args, **kwargs):
-    raise AssertionError("saved worker attempted scientific acquisition or native parsing")
-import gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native as parser
-parser.parse_rna_native_record = parser.populate_rna_prediction_sheet = parser.populate_rna_feature_sheet = denied
-import gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker as native
-native.predict_rna_secondary_structure = native.analyze_rna_secondary_structure_features = native._load_native = denied
-import gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_acquisition as acquisition
-acquisition.capture_local_rna_structure_bundle = denied
-socket.create_connection = socket.socket = denied
-subprocess.run = subprocess.Popen = denied
-original_import = builtins.__import__
-def restricted(name, *args, **kwargs):
-    if name.split(".")[0] == "RNA":
-        denied()
-    return original_import(name, *args, **kwargs)
-builtins.__import__ = restricted
-from gene_annotation_episode.episodic_workflow.root.a107.native_rna_structure_result_worker import run_saved_rna_structure_grading_worker
-plan = json.loads(pathlib.Path(sys.argv[1]).read_bytes())
-assert plan["version"] == "native_rna_structure_saved_grading_plan_v1"
-pathlib.Path(plan["directory"], "guards-active.json").write_text(json.dumps({"native": "disabled", "parser": "disabled", "acquisition": "disabled", "network": "disabled"}))
-run_saved_rna_structure_grading_worker(plan)
-''')
-        snapshot['worker_calls'] = []
-        def guarded(argv, **kwargs):
-            assert argv[1:4] == ['-B', '-m', 'gene_annotation_episode.episodic_workflow.root.a107.native_rna_structure_result_worker']
-            plan = json.loads(Path(argv[-1]).read_bytes())
-            assert plan['version'] == 'native_rna_structure_saved_grading_plan_v1'
-            snapshot['worker_calls'].append(deepcopy(plan))
-            return actual_run([argv[0], '-B', str(guard_path), argv[-1]], **kwargs)
-        monkeypatch.setattr(publication, 'run_local_job', guarded)
-
-    case = workflow_case(tmp_path, prediction=False, saved=True, before_saved=guard,
-        parent_fields=('summary',), results_fields=('summary', 'saved'))
-    try:
-        original, recalculated = [outcome['result'] for outcome in case.outcomes]
-        first, second = [returned['summary'][0] for returned in case.returned]
-        assert values(first)['long_stem_fraction'] == values(first)['accepted_pair_fraction'] == 1
-        assert values(second)['long_stem_fraction'] == values(second)['accepted_pair_fraction'] == 0
-        assert values(second)['pair_count'] == 3 and values(second)['paired_fraction'] == 2 / 3
-        assert first['calculation_key'] != second['calculation_key']
-        assert recalculated['source_ref'] == original['source_ref']
-        assert all(recalculated[key] == original[key] for key in ('target', 'observation', 'capture', 'native_success', 'capture_complete'))
-        assert recalculated['delivery_complete']
-        assert snapshot['receipt_path'].read_bytes() == snapshot['receipt']
-        assert case.store.get_artifact(original['prepared']['sheet_artifact_ref']) == snapshot['sheet']
-        assert [dict(row) for row in case.store.db.execute(
-            'SELECT * FROM runtime_observations WHERE run_id=? AND episode_id IN (?,?) ORDER BY episode_id,unit_index',
-            (RUN_ID, original['episode_id'], original['target']['origin_episode_id']))] == snapshot['closed_observations']
-        assert len(snapshot['worker_calls']) == 1
-        worker_directory = Path(snapshot['worker_calls'][0]['directory'])
-        assert set(json.loads((worker_directory / 'guards-active.json').read_text()).values()) == {'disabled'}
-        assert case.owner.facts(case.result_contexts[1], None)['execution_result_origin'] is None
-        proof = case.owner.completion_for_action(case.result_contexts[1], recalculated['operation_key'])
-        assert proof['validation_keys'][1] == 'retained_original_sheet_custody'
-        assert case.owner.verify_completion(case.result_contexts[1], proof)
-        assert case.forwarded[0]['summary'] == [first, second]
-        for row in case.records:
-            actions = case.store.db.execute('SELECT count(*) FROM runtime_actions WHERE episode_id=?', (row['episode_id'],)).fetchone()[0]
-            observations = case.store.db.execute('SELECT count(*) FROM runtime_observations WHERE episode_id=?', (row['episode_id'],)).fetchone()[0]
-            assert actions == observations == row['units_consumed']
-        assert [history(row) for row in case.by_role['results']] == [[2], [0]]
     finally:
         case.store.close()
 

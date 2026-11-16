@@ -73,10 +73,7 @@ def _limits(settings):
 
 
 def _validate_custom_initialization(directory, settings, workflow_slice):
-    # Reject malformed custom values before opening storage. Fresh directories
-    # and ordinary DELETE-journal fixtures retain exact filesystem bytes.
-    # Arbitrary retained journal modes keep their original read semantics; no
-    # universal WAL sidecar immutability is claimed or used as an admission gate.
+    # Reject malformed custom values before opening storage.
     if settings is None:
         return
     if not isinstance(settings, dict):
@@ -101,24 +98,15 @@ def _validate_custom_initialization(directory, settings, workflow_slice):
     if definition is None:
         _limits(settings)
         return
-    if (definition.get('version') not in {VERSION, 'shared_local_resources_v1'}
+    if (definition.get('version') != VERSION
             or definition.get('resource_id') != _resource_id()
             or definition.get('directory') != str(selected)
             or definition.get('workflow_slice') != workflow_slice):
         raise ValueError('local_resource_binding_conflict')
     limits = definition['limits']
-    if definition['version'] == 'shared_local_resources_v1':
-        if (not isinstance(limits, dict)
-                or set(limits) != {'max_running_jobs', 'cpu_threads', 'memory_bytes', 'scratch_bytes'}
-                or any(type(value) is not int or value <= 0 for value in limits.values())):
-            raise ValueError('local_resource_binding_conflict')
-        if (any(type(value) is not int for value in settings.values())
-                or {**limits, **settings} != limits):
-            raise ValueError('local_resource_limits_conflict')
-    else:
-        _limits(limits)
-        if _limits({**limits, **settings}) != limits:
-            raise ValueError('local_resource_limits_conflict')
+    _limits(limits)
+    if _limits({**limits, **settings}) != limits:
+        raise ValueError('local_resource_limits_conflict')
 
 
 class LocalResources:
@@ -145,26 +133,15 @@ class LocalResources:
                 db.execute('INSERT INTO configuration VALUES(1,?)', (json.dumps(definition, sort_keys=True),))
             else:
                 definition = json.loads(saved[0])
-                if (definition.get('version') not in {VERSION, 'shared_local_resources_v1'} or definition.get('resource_id') != _resource_id()
+                if (definition.get('version') != VERSION or definition.get('resource_id') != _resource_id()
                         or definition.get('directory') != str(self.directory)
                         or definition.get('workflow_slice') != workflow_slice):
                     raise ValueError('local_resource_binding_conflict')
-                if definition['version'] == 'shared_local_resources_v1':
-                    # Authenticate the retained policy; count is historical data.
-                    limits = definition['limits']
-                    if (not isinstance(limits, dict)
-                            or set(limits) != {'max_running_jobs', 'cpu_threads', 'memory_bytes', 'scratch_bytes'}
-                            or any(type(value) is not int or value <= 0 for value in limits.values())):
-                        raise ValueError('local_resource_binding_conflict')
-                    if settings is not None and (any(type(value) is not int for value in settings.values())
-                            or {**limits, **settings} != limits):
+                _limits(definition['limits'])
+                if settings is not None:
+                    requested = {**definition['limits'], **settings}
+                    if _limits(requested) != definition['limits']:
                         raise ValueError('local_resource_limits_conflict')
-                else:
-                    _limits(definition['limits'])
-                    if settings is not None:
-                        requested = {**definition['limits'], **settings}
-                        if _limits(requested) != definition['limits']:
-                            raise ValueError('local_resource_limits_conflict')
             self.definition = definition
 
     @classmethod
@@ -179,37 +156,7 @@ class LocalResources:
         return cls(directory, settings)
 
     @classmethod
-    def _reopen_historical(cls, definition):
-        # Saved v1 definitions retain their authenticated resource identity. Never
-        # rewrite them or enforce their retired job count during admission.
-        if not isinstance(definition, dict):
-            raise ValueError('local_resource_binding_conflict')
-        required = {'version', 'resource_id', 'directory', 'limits'}
-        if (set(definition) not in (required, required | {'workflow_slice'})
-                or definition['version'] != 'shared_local_resources_v1'
-                or definition['resource_id'] != _resource_id()):
-            raise ValueError('local_resource_binding_conflict')
-        limits = definition['limits']
-        if (not isinstance(limits, dict)
-                or set(limits) != {'max_running_jobs', 'cpu_threads', 'memory_bytes', 'scratch_bytes'}
-                or any(type(value) is not int or value <= 0 for value in limits.values())):
-            raise ValueError('local_resource_binding_conflict')
-        value = object.__new__(cls)
-        value.directory = Path(definition['directory']).expanduser().resolve()
-        value.path = value.directory/'capacity.sqlite3'
-        if str(value.directory) != definition['directory'] or not value.path.is_file():
-            raise ValueError('local_resource_binding_conflict')
-        with value._transaction() as db:
-            saved = db.execute('SELECT value FROM configuration WHERE id=1').fetchone()
-            if saved is None or json.loads(saved[0]) != definition:
-                raise ValueError('local_resource_binding_conflict')
-        value.definition = json.loads(json.dumps(definition))
-        return value
-
-    @classmethod
     def reopen(cls, definition):
-        if definition.get('version') == 'shared_local_resources_v1':
-            return cls._reopen_historical(definition)
         value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'))
         if value.as_record() != definition:
             raise ValueError('local_resource_binding_conflict')

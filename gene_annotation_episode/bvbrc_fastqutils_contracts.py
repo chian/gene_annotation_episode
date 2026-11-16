@@ -18,12 +18,6 @@ from jsonschema import Draft202012Validator, validators
 
 _SCHEMA = json.loads(files(__package__).joinpath('bvbrc_fastqutils_schemas.json').read_text())
 _DEFS = _SCHEMA['$defs']
-_LEGACY_DEFS = json.loads(files(__package__).joinpath(
-    'bvbrc_fastqutils_legacy_v2_schemas.json').read_text())['$defs']
-_CUTADAPT_DEFS = json.loads(files(__package__).joinpath(
-    'bvbrc_fastqutils_legacy_cutadapt_schemas.json').read_text())['$defs']
-# Both parser test generations name the same exact frozen208 grammar.
-_LEGACY_CUTADAPT_DEFS = _CUTADAPT_DEFS
 _FAILURES = frozenset(_DEFS['ContractFailure']['properties']['code']['enum'])
 _POINTER = re.compile(r'(?:/(?:[^~/]|~[01])*)*\Z')
 _INTEGER = re.compile(r'(?:0|[1-9][0-9]*)\Z')
@@ -169,8 +163,8 @@ def validate_parameters(value: dict) -> dict:
     return result
 
 
-def _definition_closure(name, definitions=None):
-    definitions = _DEFS if definitions is None else definitions
+def _definition_closure(name):
+    definitions = _DEFS
     retained = {}
 
     def walk(value):
@@ -221,20 +215,7 @@ def validate_requested_form(schema: dict) -> dict:
         fields.append({'field': field, 'selection': deepcopy(node['x-bvbrc-fastqutils'])})
     form = {'version': 'fastqutils_projection_v2', 'fields': fields}
     expected = make_requested_schema(form)
-    if canonical_json(schema) != canonical_json(expected):
-        # Exact historical grammar only, not arbitrary subsets or weakened
-        # definitions. Keep the original field order and selectors unchanged.
-        matched = False
-        for historical in (_CUTADAPT_DEFS, _LEGACY_DEFS):
-            legacy_validator = _StrictValidator({'$ref': '#/$defs/RequestedForm', '$defs': historical})
-            if not legacy_validator.is_valid(form):
-                continue
-            historical_expected = deepcopy(expected)
-            historical_expected['$defs'] = _definition_closure('ProjectedField', historical)
-            if canonical_json(schema) == canonical_json(historical_expected):
-                matched = True
-                break
-        _require(matched, 'requested_form_invalid')
+    _require(canonical_json(schema) == canonical_json(expected), 'requested_form_invalid')
     return form
 
 

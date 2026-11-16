@@ -1,8 +1,8 @@
 """Typed A106 operands projected from original saved perturbation measurements.
 
 This view copies calculated cells and their original dependencies; it performs
-no new scientific calculation. Historical point/summary return contracts remain
-unchanged, and possession of those older views does not grant this new view.
+no new scientific calculation. Possession of the point or summary return views
+does not grant this view.
 """
 from copy import deepcopy
 import hashlib

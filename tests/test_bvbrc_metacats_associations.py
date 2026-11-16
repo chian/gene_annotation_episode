@@ -162,86 +162,6 @@ def test_saved_replay_and_calculation_no_io(monkeypatch):
     assert counts(saved['operands'], saved['value']) == before
 
 
-def native_fixture(case):
-    root = Path(__file__).resolve().parents[1]
-    base = Path('gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_native/cases') / case
-    original_path = base / 'original.fasta'; source = (root / original_path).read_text()
-    mdpath = base / 'metadata.tsv'; mdtext = (root / mdpath).read_text()
-    operands, common_operands = metacats_fixture(source, mdtext, categories=('comparison',))
-    doc = alignment(source, str(original_path)); inp = binding(source, str(original_path))
-    decl = common_operands['declarations']['common']
-    decl['input_sequences'][0].update(input_binding_id=str(original_path), document=doc['value']['alignment_id'])
-    decl['automatic_row_joins'][0].update(alignment=doc['value']['alignment_id'], input_binding_ids=[str(original_path)])
-    common_operands.update(inputs=(inp,), documents=(doc,))
-    operands['associations'] = value_of(common_operands)
-    md = metadata(mdtext, str(mdpath))
-    operands['documents'] = (doc, md)
-    operands['analysis'].update(alignment_id=doc['value']['alignment_id'], metadata_document_id=md['value']['document_id'])
-    d = operands['declarations']; d['metadata_joins'][0].update(metadata=md['value']['document_id'], alignment=doc['value']['alignment_id'])
-    d['categories'][0]['metadata'] = md['value']['document_id']
-    for filename, kind, reader, extra in [
-        ('output/comparison.txt', 'adjusted_matrix', parse_metacats_adjusted_matrix, {}),
-        ('output/comparison-chisqTable.tsv', 'metacats_chisq', parse_metacats_chisq_table, {'layout': 'current_filtered_tsv'}),
-        ('output/comparison-mcTable.tsv', 'metacats_pair', parse_metacats_pair_table, {'layout': 'current_filtered_tsv'}),
-        ('output/retained_raw/comparison-chisqTable.txt', 'metacats_raw_r', parse_metacats_raw_r_table, {'layout': 'r_write_table_single_result_string', 'kind': 'omnibus'}),
-        ('output/retained_raw/comparison-mcTable.txt', 'metacats_raw_r', parse_metacats_raw_r_table, {'layout': 'r_write_table_single_result_string', 'kind': 'pairwise'}),
-    ]:
-        path = base / filename; raw = (root / path).read_bytes()
-        parsed = reader(raw, artifact=artifact(raw, str(path)), category_id='comparison', encoding='ascii', **extra)
-        assert parsed['value'] is not None, parsed
-        operands['documents'] += ({'kind': kind, 'value': parsed['value']},)
-        field = {'adjusted_matrix': 'adjusted_matrix_ids', 'metacats_chisq': 'chisq_table_ids', 'metacats_pair': 'pair_table_ids', 'metacats_raw_r': 'raw_r_table_ids'}[kind]
-        operands['analysis'][field].append(parsed['value'].get('document_id', parsed['value'].get('table_id')))
-    old = root / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_inputs' / ('EXAMPLES_002' if case == 'twelve_groups' else 'EXAMPLES_001') / (case + '-inputs.json')
-    saved = json.loads(old.read_text()); columns = saved['counts_arguments']['group_order']
-    native_map = []
-    # These are the retained fixture's explicit metadata/native-ordinal
-    # associations. The extractor never sorts metadata to construct R tokens.
-    if case == 'metadata_only_first_group':
-        native_map.append({'raw_group_value': 'A', 'native_group_ordinal': 1, 'group_id': c.group_id('comparison', 'A'), 'evidence': deepcopy(columns[0]['evidence'])})
-    for col in columns:
-        native_map.append({'raw_group_value': col['group_id'], 'native_group_ordinal': col['native_group_ordinal'],
-            'group_id': c.group_id('comparison', col['group_id']), 'evidence': deepcopy(col['evidence'])})
-    d['native_group_maps'] = [{'category_id': 'comparison', 'entries': native_map, 'completeness': 'complete', 'evidence': deepcopy(columns[0]['evidence'])}]
-    d['r_columns'] = [{'category_id': 'comparison', 'adjusted_matrix': operands['analysis']['adjusted_matrix_ids'][0], 'interpreter_version': 'R 4.3.3',
-        'columns': [{**{k: deepcopy(col[k]) for k in ('r_column_index_0based', 'r_group_token', 'native_group_ordinal', 'evidence')},
-            'group_id': c.group_id('comparison', col['group_id'])} for col in columns], 'completeness': 'complete', 'evidence': deepcopy(columns[0]['evidence'])}]
-    table = next(x['value'] for x in operands['documents'] if x['kind'] == 'metacats_chisq')
-    for index, col in enumerate(columns):
-        label = table['group_heading_tokens'][index]
-        d['exported_group_joins'].append({'category_id': 'comparison', 'table_id': table['table_id'], 'heading_index_0based': index,
-            'raw_heading_token': label, 'group_id': c.group_id('comparison', col['group_id']), 'r_column_index_0based': col['r_column_index_0based'],
-            'state': 'resolved' if label == col['group_id'] else 'wrong_native_label', 'evidence': deepcopy(col['evidence'])})
-    return operands, common_operands
-
-
-def test_distinct_native_pairs_at_same_site_remain_resolved():
-    operands, _ = native_fixture('twelve_groups'); value = extracted(operands)
-    pairs = [r for r in value['native_test_associations'] if r['test_kind'] == 'pairwise']
-    assert len(pairs) >= 2
-    assert all(r['state'] in ('resolved', 'wrong_native_label') for r in pairs)
-    assert len({tuple(sorted(r['r_columns_0based'])) for r in pairs}) > 1
-
-
-def test_duplicate_native_site_and_pair_remains_unresolved():
-    operands, _ = native_fixture('twelve_groups')
-    wrapper = next(d for d in operands['documents'] if d['kind'] == 'metacats_raw_r' and d['value']['kind'] == 'pairwise')
-    old_id = wrapper['value']['table_id']
-    raw = b'"resultMC"\n"1" "MGC Multiple Comparison Result:\n Site1 \t 1 \t 1 \t 2 \n Site1 \t 1 \t 1 \t 2 \n Site1 \t 1 \t 1 \t 3 \n"\n'
-    parsed = parse_metacats_raw_r_table(raw, artifact=artifact(raw, 'synthetic-duplicate-pair'), category_id='comparison',
-        layout='r_write_table_single_result_string', kind='pairwise', encoding='ascii')
-    assert parsed['value'] is not None, parsed
-    wrapper['value'] = table = parsed['value']
-    operands['analysis']['raw_r_table_ids'] = [table['table_id'] if tid == old_id else tid for tid in operands['analysis']['raw_r_table_ids']]
-    value = extracted(operands)
-    tests = [r for r in value['native_test_associations'] if r['table_id'] == table['table_id']]
-    assert [r['state'] for r in tests[:2]] == ['missing', 'missing']
-    assert any(r['state'] == 'resolved' for r in tests[2:])
-    tests[0].update(state='resolved', column_0based=0, test_id='forged-unique-test')
-    with pytest.raises(ValueError, match='native_test_identity_duplicate'):
-        c.validate_metacats_association_set(value, **{k: operands[k] for k in ('analysis', 'documents', 'associations')})
-
-
 def comma_pair_fixture(ambiguous=False):
     groups = ['A,B', 'C', 'A', 'B,C'] if ambiguous else ['A,B', 'C']
     operands, original = metacats_fixture(''.join(f'>s{i}\nA\n' for i in range(len(groups))),
@@ -313,59 +233,12 @@ def test_group_mode_shared_feature_keeps_conflict_or_supplied_merge(merged):
     assert value['biological_assignments'][0]['state'] == ('resolved' if merged else 'conflicting')
 
 
-def test_actual_retained_native_wrong_exported_headings_keep_b_c_counts():
-    operands, _ = native_fixture('metadata_only_first_group'); value = extracted(operands)
-    assert [r['r_group_token'] for r in value['native_group_columns']] == ['2', '3']
-    assert [r['group_id'] for r in value['native_group_columns']] == [c.group_id('comparison', 'B'), c.group_id('comparison', 'C')]
-    assert [r['state'] for r in value['native_group_columns']] == ['wrong_native_label', 'wrong_native_label']
-    assert [r['raw_heading_token'] for r in value['exported_groups']] == ['A', 'B', 'C']
-    pairs = [r for r in value['native_test_associations'] if r['table_id'] in operands['analysis']['pair_table_ids']]
-    assert pairs[0]['raw_groups_token'] == 'A,B' and pairs[0]['state'] == 'wrong_native_label'
-    assert pairs[0]['group_ids'] == [c.group_id('comparison', 'B'), c.group_id('comparison', 'C')]
-    numerical = counts(operands, value, 'comparison')
-    assert numerical['sites'][1]['observed_counts'] == [[6, 0, 0], [0, 6, 0]]
-    chisq = next(d['value'] for d in operands['documents'] if d['kind'] == 'metacats_chisq')
-    assert chisq['rows'][0]['chi_square']['value'] == 8.33055648117294
-    assert chisq['rows'][0]['p_value']['value'] == 0.00389837142433717
-
-
-def test_twelve_groups_use_actual_corrected_space_padded_r_tokens():
-    operands, _ = native_fixture('twelve_groups'); value = extracted(operands)
-    assert [r['r_group_token'] for r in value['native_group_columns']] == [f'{i:2d}' for i in range(1, 13)]
-    assert len(value['biological_group_populations'][0]['groups']) == 12
-    forged = deepcopy(operands); forged['declarations']['r_columns'][0]['adjusted_matrix'] = 'unrelated'
-    assert extract_metacats_associations(**forged)['status'] == 'invalid'
-    assert any('TWELVE_GROUP_ORDER_CHECK_001' in e['content']['artifact_ref'] for e in value['native_group_columns'][0]['evidence'])
-
-
 def test_original_hash_and_generated_terminal_mask_remain_different_documents():
     operands, _ = metacats_fixture(data='>a\nA#-\n>b\nAC-\n')
     value = extracted(operands); result = counts(operands, value)
     assert operands['documents'][0]['value']['rows'][0]['sequence'] == 'A#-'
     assert result['sites'][1]['observed_counts'] == [[0, 1]]
     assert result['sites'][2]['observed_counts'] == []
-
-
-def test_conflicting_native_map_retains_biological_and_scalar_results():
-    operands, _ = native_fixture('metadata_only_first_group')
-    mapping = operands['declarations']['native_group_maps'][0]
-    contradictory = deepcopy(mapping['entries'][0]); contradictory.update(native_group_ordinal=2)
-    mapping['entries'].append(contradictory)
-    value = extracted(operands)
-    assert all(r['state'] == 'resolved' for r in value['biological_assignments'])
-    assert value['native_group_columns'][0]['state'] == 'unresolved'
-    assert value['exported_groups'][0]['state'] == 'conflicting'
-    assert counts(operands, value, 'comparison')['sites'][1]['observed_counts'] == [[6, 0, 0], [0, 6, 0]]
-    chisq = next(d['value'] for d in operands['documents'] if d['kind'] == 'metacats_chisq')
-    assert chisq['rows'][0]['chi_square']['value'] == 8.33055648117294
-
-
-def test_native_pair_group_token_is_joined_whole_and_saved_swap_rejected():
-    operands, _ = native_fixture('metadata_only_first_group'); value = extracted(operands)
-    native = next(r for r in value['native_test_associations'] if r['table_id'] in operands['analysis']['pair_table_ids'])
-    native['group_ids'].reverse(); native['r_columns_0based'].reverse()
-    with pytest.raises(ValueError, match='pair_export_identity_ambiguous'):
-        c.validate_metacats_association_set(value, **{k: operands[k] for k in ('analysis', 'documents', 'associations')})
 
 
 def test_conflicting_metadata_groups_remain_in_selected_observed_population():

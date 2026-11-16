@@ -36,7 +36,7 @@ def run_selected_literature_unit(store, context, binding, selection, *, decision
         raise AssertionError('No provider is selected by this source-operation boundary')
     host.store,host.run_id,host.journal=store,context.run_id,journal
     host.execution_binding=host.inprocess_replay=None
-    host.wait_inputs_version=host.completed_action_inputs_version=None
+    host.pending_work=lambda source: []
     host.progress_provider=host.native_timing_information=None
     host.receipts=receipts
     host.provider=SimpleNamespace(complete=unselected)

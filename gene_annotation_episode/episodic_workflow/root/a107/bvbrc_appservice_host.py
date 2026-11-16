@@ -125,64 +125,6 @@ class BVBRCAppServiceHost:
             refs.extend(_read(definition)['source_refs'])
         return list(dict.fromkeys(refs))
 
-    def legacy_cached_download(self, context, name, arguments, key):
-        """Admit only an authenticated, already-published uncapped old action.
-
-        This read permits no invocation and inserts no operand/default. Fresh
-        downloads, including a new action repeating old arguments, need a cap.
-        """
-        if name != 'api.bvbrc_appservice.download' or type(arguments) is not dict or 'max_bytes' in arguments:
-            return None
-        validate_contract('Arguments_download', arguments)
-        self.custody.authenticate(context)
-        self.custody._require(context.role == 'results' and self.owns_context(context),
-            'appservice_cached_download_context_conflict')
-        selected = self.api._selected(context, name, arguments, key)
-        self.custody.possession(context, plain(context.assignment)['handoff_ref'])
-        directory = self.api._episode_directory(context.episode_id) / 'actions' / digest(key)
-        if not (directory / 'intent.json').exists() or not (directory / 'outcome.json').exists():
-            return None
-        _, service, _ = self.api._context(context, _completed_appservice_download=True)
-        self.custody._require(service.service == SERVICE,
-            'appservice_cached_download_context_conflict')
-        self.api._manifest(context, create=False)
-        try:
-            intent, outcome = _read(directory / 'intent.json'), _read(directory / 'outcome.json')
-        except FileNotFoundError:
-            return None
-        except OSError as error:
-            raise ValueError('appservice_cached_download_unavailable') from error
-        original = dict(run_id=self.run_id, episode_id=context.episode_id, name=name,
-            arguments=arguments, assignment_sha256=digest(context.assignment), operation_key=key)
-        self.custody._require(all(canonical(intent.get(field)) == canonical(value)
-            for field, value in original.items()), 'appservice_cached_download_intent_conflict')
-        prepared = validate_contract('PreparedOperation', intent['prepared'])
-        call = prepared['native_operands']['call']
-        self.custody._require(prepared['operation'] == name and prepared['native_kind'] == 'download'
-            and prepared['purpose'] == 'acquisition' and not prepared['effects'] and not prepared['mutates_remote']
-            and set(call) == {'url', 'byte_range'}
-            and 'max_bytes' not in download_request(call, arguments=arguments),
-            'appservice_cached_download_intent_conflict')
-        origin = self.records._origin(context, prepared, key, _completed_download=True)
-        result = outcome.get('result') or {}
-        reference = result.get('support_receipt_ref')
-        self.custody._require(outcome.get('status') in {'completed', 'partial'}
-            and outcome.get('operation_ref') == identity('api_operation', {'key': key})
-            and reference in outcome.get('record_refs', []),
-            'appservice_cached_download_outcome_conflict')
-        receipt = self.records.read(reference, _completed_download=True)
-        common = receipt['value'] if receipt['contract'] == 'AcquisitionReceipt' else _common(receipt)
-        self.custody._require(result.get('service') == SERVICE
-            and result.get('receipt_contract') == receipt['contract']
-            and canonical(common['origin']) == canonical(origin),
-            'appservice_cached_download_outcome_conflict')
-        self.custody._require(selected['result'] is not None,
-            'appservice_cached_download_outcome_conflict')
-        actual = json.loads(selected['result'])
-        self.custody._require(all(field in actual and canonical(actual[field]) == canonical(value)
-            for field, value in outcome.items()), 'appservice_cached_download_outcome_conflict')
-        return deepcopy(outcome)
-
     async def execute_locked(self, context, assignment, service, target, name, arguments, key, directory):
         from .api_service_execution import _now, _outcome
         intent_path, outcome_path = directory / 'intent.json', directory / 'outcome.json'

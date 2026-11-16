@@ -5,6 +5,7 @@ here. Scientific record definitions and structural validation remain in A.
 """
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 from datetime import datetime
 from functools import lru_cache
@@ -122,7 +123,7 @@ class AttemptIdentity(TypedDict):
 
 
 class ProteinPolicy(TypedDict):
-    memory_bytes: Literal[21474836480]
+    memory_bytes: Literal[5368709120]
     scratch_bytes: Literal[4294967296]
 
 
@@ -249,7 +250,7 @@ BUNDLE_FILENAME = "bundle.json"
 WORKER_INPUT_FILENAME = "worker-input.json"
 OWNER_FILENAME = ".native-protein-structure-owner.json"
 STARTED_FILENAME = ".native-protein-structure-started.json"
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 NATIVE_FORMATS = {"inspect": "protein_structure_inventory_native_v1",
     "extract_sequence": "protein_structure_sequence_native_v1", "compare": "protein_structure_native_v1"}
 

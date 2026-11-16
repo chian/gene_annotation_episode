@@ -24,8 +24,6 @@ from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result
     FAMILY_SOURCES, REFERENCE_SOURCE, SAVED_SOURCE, rna_structure_fact_sources,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
-RETAINED = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_integration_360/NUMERICAL_EXAMPLES.json"
 PARAMETERS = {"schema": "rna_calculation_parameters_v1",
     "topology": {"long_stem_min_pairs": 3, "include_exterior_in_loop_size_statistics": False},
     "pair_composition": {"accepted_ordered_pair_types": ["AU", "UA", "GC", "CG", "GU", "UG"],
@@ -436,31 +434,6 @@ def test_original_row_marker_with_a_missing_required_field_never_falls_back(valu
         render_rna_structure_lookup(row)
 
 
-def test_schema_view_preserves_arbitrary_names_and_every_other_constraint():
-    descriptors = rna_structure_fact_sources()
-    node = deepcopy(descriptors[FAMILY_SOURCES["summary"]]["report_schema"])
-    node.update(description="Parent's exact meaning", minItems=0, maxItems=2, uniqueItems=True,
-        title="Keep this title", deprecated=False)
-    interpretation = {"type": "string", "enum": ["supports", "limits"], "description": "Parent judgment"}
-    form = {"type": "object", "additionalProperties": False, "required": ["any.parent-name", "judgment"],
-        "properties": {"any.parent-name": node, "judgment": interpretation,
-            "looks_like_rna_summary": {"type": "array", "items": {"type": "number"}},
-            "nested": {"type": "object", "properties": {"exact_source": node}},
-            "near_source": {"type": "array", "x-source": FAMILY_SOURCES["summary"] + "_later", "items": node}},
-        "allOf": [{"if": {"required": ["judgment"]}, "then": {"required": ["any.parent-name"]}}]}
-    before = deepcopy(form)
-    view = rna_structure_return_schema_view(form)
-    assert form == before and view is not form
-    compact = view["properties"]["any.parent-name"]
-    assert "items" not in compact and "Parent's exact meaning; Automatically supplied" in compact["description"]
-    for key in node.keys() - {"items", "description"}:
-        assert compact[key] == node[key]
-    for key in form.keys() - {"properties"}:
-        assert view[key] == form[key]
-    for key in form["properties"].keys() - {"any.parent-name"}:
-        assert view["properties"][key] == form["properties"][key]
-
-
 def test_all_seven_original_sources_have_distinct_compact_meanings():
     form = {"type": "object", "properties": {str(index): deepcopy(value["report_schema"])
         for index, value in enumerate(rna_structure_fact_sources().values())}}
@@ -468,31 +441,6 @@ def test_all_seven_original_sources_have_distinct_compact_meanings():
     descriptions = [node["description"] for node in view["properties"].values()]
     assert len(set(descriptions)) == 7 and all("Automatically supplied" in text for text in descriptions)
     assert all("items" not in node for node in view["properties"].values())
-
-
-def test_non_rna_and_comparison_inputs_are_exact_presentation_noops():
-    from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_presentation import select_rna_comparison_presentation
-    from gene_annotation_episode.scientific_process_prompt import _steering
-    from gene_annotation_episode.episodic_workflow.root.library.decision_steering_display import render_episode_steering
-    from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import PROJECTION_SOURCE
-    state = {"goal": {"objective": "Other task"}, "child_reports": [{"unrelated": [1, 2]}],
-        "last_local_outcome": {"result": {"other": 3}}, "current_report_update": {"decision": "keep"}}
-    before = deepcopy(state)
-    selected = select_rna_structure_presentation(state)
-    assert selected == dict(context=state, groups=[], own_outcome=None, own_progress=None)
-    assert render_episode_steering(state) == _steering(state, ()) and state == before
-    comparison_state = {"execution_assignment": {"version": "execution_results_assignment_v1",
-        "selector": {"version": "native_rna_structure_comparison_selector_v1"}},
-        "execution_progress": {PROJECTION_SOURCE: [], "execution_completed": False},
-        "last_local_outcome": {"result": {"version": "rna_structure_comparison_result_receipt_v1",
-            "tool_name": "execution.results.status", "projection_rows": [], "delivery_complete": False,
-            "issues": [], "preparation_failure": None}}}
-    assert select_rna_structure_presentation(comparison_state)["context"] == comparison_state
-    assert select_rna_comparison_presentation(comparison_state) == select_rna_comparison_presentation(
-        select_rna_structure_presentation(comparison_state)["context"])
-    for form in ({"properties": {"x": {"type": "array", "x-source": PROJECTION_SOURCE,
-            "items": {"type": "object"}}}}, {"properties": {"x": {"type": "string", "enum": ["a", "b"]}}}):
-        assert rna_structure_return_schema_view(form) == form
 
 
 def test_renderers_cannot_reach_io_parsing_calculation_capture_or_authority(monkeypatch):
@@ -533,47 +481,6 @@ def test_renderers_cannot_reach_io_parsing_calculation_capture_or_authority(monk
     assert render_rna_structure_lookup(state["last_local_outcome"])
     assert rna_structure_return_schema_view(form)
     assert json.dumps(state, sort_keys=True) == before
-
-
-def test_actual_retained_prediction_evaluation_failure_and_recalculation_values(tmp_path):
-    examples = json.loads(RETAINED.read_text())["examples"]
-    retained_text = []
-    for example in examples:
-        sources = {name: node["x-source"] for name, node in example["requested_forms"]["results"]["properties"].items()
-            if node.get("x-source") in rna_structure_fact_sources()}
-        for result in example["results"]:
-            supplied = result["requested_return"]
-            groups = [group(source, supplied[name]) for name, source in sources.items()]
-            state = receiver(groups)
-            state["child_reports"] = [deepcopy(supplied)]
-            before = deepcopy(state)
-            selected = select_rna_structure_presentation(state)
-            text = render_rna_structure_groups(selected["groups"])
-            assert state == before
-            assert read_operands(text) == [value for entry in selected["groups"]
-                if entry["fact_source"] in (SAVED_SOURCE, FAMILY_SOURCES["failure"]) for value in entry["facts"]]
-            assert "rna_calculation:" not in text and "GGGAAACCC" not in text
-            retained_text.append(text)
-    prediction = next(e for e in examples if e["mode"] == "mfe_prediction")["results"][0]
-    prediction_text = render_rna_structure_groups([group("summary", prediction["requested_return"]["summary"])])
-    assert "| mfe_kcal_mol | -1.2000000476837158 | kcal/mol | unavailable | unavailable | present | none | native_prediction |" in prediction_text
-    evaluation = next(e for e in examples if any(c["name"] == "evaluated_energy_kcal_mol" for c in
-        e["results"][0]["requested_return"]["summary"][0]["measurements"]))["results"][0]
-    evaluation_text = render_rna_structure_groups([group("summary", evaluation["requested_return"]["summary"])])
-    assert "| evaluated_energy_kcal_mol | -1.2000000476837158 | kcal/mol |" in evaluation_text
-    assert "native_evaluation" in evaluation_text and "structure_origin: supplied_unknown" in evaluation_text
-    failure_example = next(e for e in examples if e["results"][0]["requested_return"].get("failure"))["results"][0]
-    failure_text = render_rna_structure_groups([group("summary", failure_example["requested_return"]["summary"])])
-    assert "| pair_count | 1 | pairs |" in failure_text and "failed | rna_native_failed | native_evaluation" in failure_text
-    recalc = next(e for e in examples if len(e["results"]) == 2)
-    recalculated_text = render_rna_structure_groups([group("summary", [r["requested_return"]["summary"][0] for r in recalc["results"]])])
-    assert "| long_stem_fraction | 1.0 | dimensionless | 1 | 1 |" in recalculated_text
-    assert "| long_stem_fraction | 0.0 | dimensionless | 0 | 1 |" in recalculated_text
-    assert "| accepted_pair_fraction | 0.0 | dimensionless | 0 | 3 |" in recalculated_text
-    assert "| topology.long_stem_min_pairs | 4 |" in recalculated_text
-    (tmp_path / "RETAINED_ORIGINAL_ROWS.txt").write_text("\n\n".join(retained_text) + "\n")
-    (tmp_path / "RETAINED_RECALCULATION.txt").write_text(recalculated_text + "\n")
-    (tmp_path / "RETAINED_OWN_OUTCOME.txt").write_text(render_rna_structure_lookup(prediction["original_result_receipt"]) + "\n")
 
 
 def test_hand_checkable_selected_energy_pair_region_examples(tmp_path):

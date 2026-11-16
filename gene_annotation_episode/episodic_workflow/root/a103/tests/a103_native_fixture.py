@@ -27,7 +27,7 @@ from gene_annotation_episode.episodic_workflow.root.a103.numerical import YieldC
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import HomologyJobs,FileAsset,digest as file_digest
 from gene_annotation_episode.episodic_workflow.root.a101.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.resource_estimation import ResourceToolEstimator
+from gene_annotation_episode.episodic_workflow.root.a103.resource_estimation import ResourceToolEstimator
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episodic_workflow.root.a103.tests.a103_parent_dispatch import pending_sequence_requests
 

@@ -8,13 +8,7 @@ from urllib.parse import urlencode
 from jsonschema import Draft202012Validator
 import pytest
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.molecular_provider_acquisition import (
-    MAX_RESPONSE_BYTES, OPERATIONS, PROVIDER_ARGUMENTS_SCHEMAS,
-    provider_request_spec, provider_result, provider_result_schema,
-    validate_provider_arguments, validate_provider_result,
-    provider_value, provider_receipt,
-)
-
+from gene_annotation_episode.molecular_provider_acquisition import OPERATIONS, provider_request_spec, provider_result, provider_result_schema, validate_provider_result, provider_value, provider_receipt
 
 
 SOURCE = "source_" + "a" * 24
@@ -170,30 +164,6 @@ def test_artifact_ref_must_identify_actual_response_bytes(reference):
     operation = "public.reactome.record"
     with pytest.raises(ValueError):
         provider_result(operation, snapshot(operation), source_ref=SOURCE, artifact_ref=reference)
-
-
-@pytest.mark.parametrize('operation', OPERATIONS)
-def test_absent_timeout_metadata_matches_original_result_and_receipt(operation):
-    capture = snapshot(operation)
-    current = replace(capture, transport={**deepcopy(capture.transport), 'request_policy': {'automatic_redirects': False}})
-    originals = deepcopy((capture, current))
-    assert result(current, operation) == result(capture, operation)
-    artifact = 'artifact_' + hashlib.sha256(capture.content).hexdigest()
-    before = provider_value(operation, capture, artifact_ref=artifact)
-    after = provider_value(operation, current, artifact_ref=artifact)
-    assert after == before
-    assert provider_receipt(after, source_ref=SOURCE) == provider_receipt(before, source_ref=SOURCE)
-    assert (capture, current) == originals
-    assert 'timeout_seconds' not in current.transport['request_policy']
-
-
-@pytest.mark.parametrize('bad', [None, True, False, 0, -1, '90', float('nan'), float('inf'), float('-inf'), 10**400],
-    ids=['null', 'true', 'false', 'zero', 'negative', 'string', 'nan', 'infinity', 'negative-infinity', 'overflow'])
-def test_present_invalid_legacy_timeout_is_not_absence(bad):
-    capture = snapshot('public.quickgo.term')
-    capture.transport['request_policy']['timeout_seconds'] = bad
-    with pytest.raises(ValueError, match='transport_policy_conflict'):
-        result(capture, 'public.quickgo.term')
 
 
 @pytest.mark.parametrize('policy', [None, {}, {'automatic_redirects': 0}, {'automatic_redirects': True}],

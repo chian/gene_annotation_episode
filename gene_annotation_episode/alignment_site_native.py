@@ -272,7 +272,7 @@ def _selected_reference_alignment_authority(store, context, alignment_ref, *, be
     require(len(grading_refs) <= 1, 'ambiguous_grading')
 
     # Retain only metadata identities. The existing receipt checks above own
-    # admission; hashing raw manifests adds no interpretation of legacy fields.
+    # admission; hashing raw manifests adds no interpretation of their fields.
     receipt_lineage, current, through, seen = [], context.episode_id, None, set()
     while current is not None and current not in seen:
         seen.add(current)
@@ -318,7 +318,7 @@ def read_selected_reference_alignment(store, context, alignment_ref, *, before_d
     Original action, receipt, record and scope authentication precedes every
     native/grading byte read. Existing readers validate retained measured cells;
     no aligner or public scientific calculator runs and nothing is recomputed
-    for publication. Legacy grading and missing companions remain literal.
+    for publication. Grading and missing companions remain literal.
     """
     from .tool_grading_artifacts import source_tool_grading_entries
 
@@ -356,7 +356,7 @@ def read_selected_reference_alignment(store, context, alignment_ref, *, before_d
             _reference_alignment_sheet(grading['sheet'], native, molecule=arguments['molecule'])
         correspondence = body.get('correspondence')
         # The existing retained-artifact reader already authenticates a present
-        # canonical companion. A missing legacy companion remains missing; no
+        # canonical companion. A missing companion remains missing; no
         # scores are promoted and no replacement companion/failure is invented.
     capture = dict(source=descriptor, operands=operands, grading=grading,
         correspondence=correspondence, original_mappings=original_mappings(store, operands))

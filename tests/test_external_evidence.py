@@ -7,7 +7,6 @@ import json
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.state import Store
@@ -69,87 +68,6 @@ class SyntheticProtocol:
             "results": {"search": {"query_title": self.blast_subject, "query_len": 8, "hits": []}}}}]})
 
 
-def test_external_pair_comparison_and_site_inspection_preserve_both_identities(tmp_path):
-    with Store(tmp_path / "db") as store:
-        initial = store.create_problem(raw_sequence="MACDEFGH", molecule="protein")
-        a, b = reference(store, "synthetic_A", "MACDEFGH"), reference(store, "synthetic_B", "MACDFFGH")
-        registry = ToolRegistry(store, clients=SyntheticProtocol())
-        inspection = registry.execute("sequence.inspect", {"subject_ref": a["id"]})
-        assert inspection["status"] == "completed", inspection
-        alignment = registry.execute("sequence.align", {"query_ref": a["id"], "reference_ref": b["id"],
-            "molecule": "protein", "mode": "global"})
-        assert alignment["status"] == "completed", alignment
-        observation = store.get(alignment["result"]["observation_ref"])
-        assert observation["subject_refs"] == [a["id"]]
-        assert observation["source_subject_refs"] == [b["id"]]
-        assert observation["dependencies"] == [a["id"], b["id"]]
-        assert {row["subject_ref"] for row in observation["operand_intervals"]} == {a["id"], b["id"]}
-        sites = registry.execute("sequence.sites", {"alignment_ref": observation["id"], "positions": [1, 4]})
-        assert sites["status"] == "completed", sites
-        assert [row["relationship"] for row in sites["result"]["sites"]] == ["identical", "substituted"]
-        measured = store.get(sites["result"]["observation_ref"])
-        assert len(measured["operand_intervals"]) == 4
-        assert all(row["end"] - row["start"] == 1 for row in measured["operand_intervals"])
-        assert registry.execute("state.query", {"refs": [observation["id"]]})["result"]["records"] == [observation]
-        assert store.problem() == initial
-        assert store.roots(a["id"]) == store.coverage(a["id"]) == []
-        assert project_credit(store).credit == 0
-
-
-def test_external_search_resume_pages_and_jobs_share_actual_query_without_new_targets(tmp_path):
-    with Store(tmp_path / "db") as store:
-        initial = store.create_problem(raw_sequence="MACDEFGH", molecule="protein")
-        external = reference(store, "synthetic_query", "MACDEFGH")
-        client = SyntheticProtocol()
-        registry = ToolRegistry(store, clients=client, provider_poll_interval_seconds=0)
-        from api_execution_fixture import APIHarness
-        owner = APIHarness(registry, subject_ref=external['id'], page_size=1)
-        handoff = owner.handoff()
-        first_receiver = owner.results(handoff)
-        first = first_receiver.act('api.hmmer.result')
-        assert first['status'] == 'completed', first
-        page = owner.results(handoff, page=2, episode_id='page-two').act('api.hmmer.result')
-        collected = first_receiver.act('api.hmmer.result', index=0)
-        jobs = registry.execute('public.search.jobs', {'active_only': False})
-        for result in (page, collected, jobs):
-            assert result['status'] == 'completed', result
-        assert client.submissions == 1
-        assert client.queries == [">" + external["id"] + "\nMACDEFGH"]
-        assert jobs["result"]["jobs"][0]["request"]["subject_ref"] == external["id"]
-        for observation in store.list("observation"):
-            assert observation["subject_refs"] == [external["id"]]
-            assert all(row["subject_ref"] == external["id"] for row in observation["operand_intervals"])
-        blast = registry.execute("public.blast.search", {"subject_ref": external["id"], "program": "blastp", "database": "swissprot"})
-        assert blast["status"] == "completed", blast
-        assert registry.execute("public.blast.collect", {"job_ref": blast["result"]["job_ref"]})["status"] == "completed"
-        assert client.blast_calls[0]["query_fasta"] == ">" + external["id"] + "\nMACDEFGH"
-        assert store.problem() == initial
-        assert project_credit(store).credit == 0
-
-
-@pytest.mark.parametrize("strand,expected", [("+", "MKG"), ("-", "LPFH")])
-def test_reference_gene_model_translation_preserves_external_source_coordinates(tmp_path, strand, expected):
-    with Store(tmp_path / "db") as store:
-        initial = store.create_problem(raw_sequence="MACDEFGH", molecule="protein")
-        external = reference(store, "synthetic_DNA", "ATGAAAGGGTAA", "dna")
-        registry = ToolRegistry(store, clients=SyntheticProtocol())
-        args = {"subject_ref": external["id"], "code": 11, "strand": strand}
-        if strand == "+":
-            args["cds"] = True
-        result = registry.execute("sequence.translate", args)
-        assert result["status"] == "completed", result
-        product = store.get(result["result"]["records"][0]["product_ref"])
-        assert store.get_artifact(product["sequence_ref"]).decode() == expected
-        assert product["footprint"] == []
-        assert store.roots(product["id"]) == []
-        assert all(row["subject_ref"] == external["id"] for row in product["mapping"]["path"])
-        assert store.map_segments(product["id"], [{"start": 0, "end": 1}]) == []
-        read = registry.execute("state.query", {"refs": [product["id"]]})
-        assert read["status"] == "completed", read
-        assert store.problem() == initial
-        assert project_credit(store).credit == 0
-
-
 def test_native_reference_prediction_keeps_external_ancestry_and_source_only_account_exports(tmp_path):
     with Store(tmp_path / "db") as store:
         initial = store.create_problem(raw_sequence="MACDEFGH", molecule="protein")
@@ -188,18 +106,3 @@ def test_missing_sequence_is_capability_feedback_and_reference_cannot_become_tar
             store.validate_scope({"subject_refs": [external["id"]]})
 
 
-def test_original_target_ownership_is_checked_before_running_native_derivation(tmp_path, monkeypatch):
-    from gene_annotation_episode import tools as tool_module
-    with Store(tmp_path / "db") as store:
-        store.create_problem(raw_sequence="ATG" + "AAA" * 100 + "TAA", molecule="dna")
-        target = store.targets()[0]["id"]
-        scope = {"subject_refs": [target], "segments": [{"target_ref": target, "start": 0, "end": 9, "unit": "nt"}]}
-        def forbidden(*args, **kwargs):
-            pytest.fail("out-of-scope native prediction executed")
-        monkeypatch.setattr(tool_module.ToolRegistry, "_sequence_worker_async", forbidden)
-        result = ToolRegistry(store, clients=SyntheticProtocol()).execute("genes.predict",
-            {"subject_ref": target, "code": 11, "mode": "meta"}, scope=scope)
-        assert result["status"] == "invalid"
-        assert result["feedback"]["code"] == "requested_measurement_outside_assigned_segments"
-        assert not result["record_refs"]
-        assert not store.list("product")

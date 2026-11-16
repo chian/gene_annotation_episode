@@ -1,5 +1,4 @@
 """Actual finite result process, immutable control capture and original replay."""
-from copy import deepcopy
 import json
 from pathlib import Path
 import shutil
@@ -8,7 +7,7 @@ import pytest
 
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.native_atac_differential_contracts import POLICY
-from gene_annotation_episode.native_atac_differential_preparation import prepare_atac_result_worker, validate_prepared_atac_worker, build_saved_atac_worker_plan
+from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_preparation import prepare_atac_result_worker, validate_prepared_atac_worker, build_saved_atac_worker_plan
 from gene_annotation_episode.native_file_capture import capture_native_file, retained_native_file
 from gene_annotation_episode.state import Store
 from gene_annotation_episode import native_lifecycle as native
@@ -32,7 +31,7 @@ def test_actual_worker_is_bounded_frozen_and_replays_after_original_sources_remo
         capture = prepare_atac_result_worker(store, plan=plan, policy=LocalJobPolicy(**POLICY))
         execution = json.loads(retained_native_file(store, capture['execution_receipt_file']).read_bytes())
         assert execution['returncode'] == 0 and execution['terminal'] and execution['quiescent']
-        assert execution['metadata']['verified_cgroup'] == dict(memory_max=21474836480, memory_swap_max=0, kill_mode='control-group', oom_policy='kill')
+        assert execution['metadata']['verified_cgroup'] == dict(memory_max=5368709120, memory_swap_max=0, kill_mode='control-group', oom_policy='kill')
         assert capture['result']['state'] == 'produced'
         assert all(r['capture']['outcome'] == 'verified' for r in capture['outputs'])
         assert {r['distribution'] for r in execution['intent']['dependencies']} >= {'jsonschema', 'attrs', 'referencing', 'rpds-py', 'jsonschema-specifications'}

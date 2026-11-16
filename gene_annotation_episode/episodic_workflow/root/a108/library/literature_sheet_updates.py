@@ -110,8 +110,7 @@ def _register(repository, context, arguments, outcome, method):
 
 def _adapter(store, run_id, name):
     module, cls = name.split(':')
-    implementation_module = {'gene_annotation_episode.episodic_workflow.root.a108.literature_a108_grading': 'gene_annotation_episode.episodic_workflow.root.a108.library.literature_a108_grading', 'gene_annotation_episode.episodic_workflow.root.a108.literature_a108_grading_inputs': 'gene_annotation_episode.episodic_workflow.root.a108.library.literature_a108_grading_inputs', 'gene_annotation_episode.episodic_workflow.root.a108.literature_a108_grading_storage': 'gene_annotation_episode.episodic_workflow.root.a108.library.literature_a108_grading_storage', 'gene_annotation_episode.episodic_workflow.root.a108.literature_a108_aggregation': 'gene_annotation_episode.episodic_workflow.root.a108.library.literature_a108_aggregation', 'gene_annotation_episode.episodic_workflow.root.a108.literature_a108_aggregation_storage': 'gene_annotation_episode.episodic_workflow.root.a108.library.literature_a108_aggregation_storage', 'gene_annotation_episode.episodic_workflow.root.a108.literature_a108_storage': 'gene_annotation_episode.episodic_workflow.root.a108.library.literature_a108_storage', 'gene_annotation_episode.episodic_workflow.root.a108.literature_a108_sources': 'gene_annotation_episode.episodic_workflow.root.a108.library.literature_a108_sources', 'gene_annotation_episode.episodic_workflow.root.a108.literature_required_grading': 'gene_annotation_episode.episodic_workflow.root.a108.library.literature_required_grading'}.get(module, module)
-    factory = getattr(import_module(implementation_module), cls)
+    factory = getattr(import_module(module), cls)
 
     def read_cells(context, *selection):
         ref, components = selection[-2:]
@@ -313,7 +312,6 @@ def current_scoring_sheets(store, context):
     """Project saved current evidence sheets, without another grading action.
 
     Only this episode's own calculations and exact admitted cells participate.
-    Old scientific artifacts and archived report forms remain historical.
     """
     rows = _rows(store, context)
     if not rows:

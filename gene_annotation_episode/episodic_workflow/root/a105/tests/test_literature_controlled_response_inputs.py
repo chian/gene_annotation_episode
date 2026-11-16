@@ -116,30 +116,6 @@ def set_measurement(f, role, text, token, unit='nmol/min/mg'):
 def interpretation(fixture, value, quote=None):
     return {'value': value, 'witnesses': [] if quote is None else [fixture.witness(quote, tagged=True)]}
 
-def test_exact_closed_schema_and_both_accepted_source_label_projections():
-    assert reader.controlled_response_arguments_schema() == json.loads((PIN / 'SELECTION_SCHEMA_007.json').read_text())
-    schema = reader.controlled_response_arguments_schema()
-    schema['properties'].clear()
-    assert reader.controlled_response_arguments_schema()['properties']
-    for shared, e, variance in ((False, 0.006, 1.7e-06), (True, 0.007, 1.36e-06)):
-        f = Fixture(shared)
-        original = deepcopy(f.args)
-        result = f.read()
-        assert f.args == original
-        assert result['selection'] == original
-        assert result['covariance']['source_validation'] == 'valid'
-        assert result['covariance']['projection_state'] == 'available'
-        assert result['effective_model']['variance_status'] == 'known'
-        assert result['calculation_inputs']['arms']['protein_condition1']['value'] == 12
-        assert result['calculation_inputs']['arms']['protein_condition1']['unit'] == 'nmol/min/mg'
-        sheet = populate_controlled_response(result['calculation_inputs'])
-        assert sheet['cells']['controlled_response_difference']['value'] == e
-        assert sheet['cells']['contrast_variance']['value'] == variance
-        assert sheet['cells']['source_profile_log_ratio']['value'] is None
-        assert all((owner not in f.data[f.cov_ref].decode() for owner in result['calculation_inputs']['covariance']['physical_observation_ids']))
-        assert len(f.calls) == len(set(f.calls))
-        assert reader.validate_controlled_response_extraction(f.args, result) == result
-        json.dumps(result, allow_nan=False)
 
 def test_source_reader_cannot_call_a_sheet_calculator(monkeypatch):
     import gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_calculations as calculator

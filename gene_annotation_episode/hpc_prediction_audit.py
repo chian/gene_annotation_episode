@@ -27,21 +27,14 @@ def audit(directory):
         episodes = {identity: json.loads(path) for identity, path in
                     db.execute('SELECT episode_id,path FROM runtime_episodes')}
         submissions = []
-        for tool, result in db.execute("SELECT json_extract(action,'$.tool'),result FROM runtime_actions WHERE "
-                "json_extract(action,'$.tool') IN ('exec_command','practical.job.start') AND result IS NOT NULL"):
+        for (result,) in db.execute("SELECT result FROM runtime_actions WHERE "
+                "json_extract(action,'$.tool')='exec_command' AND result IS NOT NULL"):
             outcome = (json.loads(result).get('result') or {}).get('outcome', {})
-            if tool == 'exec_command':
-                for event in (outcome.get('native_outcome') or {}).get('scheduler_events', []):
-                    native = event.get('native_job')
-                    if event.get('command') == 'qsub' and event.get('returncode') == 0 and native:
-                        submissions.append({'attempt_id': native['submission_event'],
-                            'job_id': native['job_id']})
-            else:
-                # Historical immutable runs used this tool name. It is read
-                # here only; the current execution catalog does not expose it.
-                native = outcome.get('native_outcome') or {}
-                if native.get('attempt_id'):
-                    submissions.append({'attempt_id': native['attempt_id'], 'job_id': native.get('pbs_job_id')})
+            for event in (outcome.get('native_outcome') or {}).get('scheduler_events', []):
+                native = event.get('native_job')
+                if event.get('command') == 'qsub' and event.get('returncode') == 0 and native:
+                    submissions.append({'attempt_id': native['submission_event'],
+                        'job_id': native['job_id']})
     predictors = {key: path for key, path in episodes.items() if path[-1][0] == 'hpc_prediction'}
     executors = {key: path for key, path in episodes.items() if path[-1][0] == 'hpc_execution'}
     comparisons = [row for row in values('comparison') if row['episode_id'] in predictors]

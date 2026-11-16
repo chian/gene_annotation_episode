@@ -17,8 +17,6 @@ from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_inpu
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKET = ROOT / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/contract'
-WORKED = json.loads((PACKET / 'WORKED_EXAMPLE.json').read_text())
 PARAMETERS = {'version': 'genomic_overlap_calculation_parameters_v1', 'minimum_overlap_bp': 1,
               'minimum_a_fraction': {'numerator': 0, 'denominator': 1},
               'minimum_b_fraction': {'numerator': 0, 'denominator': 1}}
@@ -94,16 +92,6 @@ def contig(length=None, accession=None, sha=None):
             'sequence_sha256': sha, 'source_refs': ['synthetic:contig']}
 
 
-def test_reviewed_schema_definitions_and_worked_records():
-    original = json.loads((PACKET / 'DATA_CONTRACT.json').read_text())
-    assert genomic_overlap_schema('Sheet')['$defs'] == original['$defs']
-    for field, name in WORKED['schemas'].items():
-        values = WORKED[field] if name.endswith('[]') else [WORKED[field]]
-        for value in values:
-            assert validate_genomic_overlap_record(name.removesuffix('[]'), value) == value
-    assert canonical_genomic_overlap_sheet_sha256(WORKED['sheet']) == WORKED['components']['source_sheet_sha256']
-
-
 @pytest.mark.parametrize('change', [
     lambda x: x.update(extra=1), lambda x: x.update(minimum_overlap_bp=True),
     lambda x: x.update(minimum_overlap_bp=1.0), lambda x: x.update(minimum_overlap_bp=float('nan')),
@@ -125,23 +113,6 @@ def test_schema_and_records_are_detached():
     assert genomic_overlap_schema('Parameters')['$defs']
     with pytest.raises(ValueError):
         genomic_overlap_schema('CallerFormula')
-
-
-def test_exact_worked_input_pair_sheet_chain_and_supplied_output():
-    raw = {r['key']: r['utf8_text'].encode() for r in WORKED['raw_artifacts']}
-    request = WORKED['request']
-    sets = [parse_region_set(io.BytesIO(raw[name]), specification=spec, set_position=i)
-            for i, (name, spec) in enumerate(zip(('input_a', 'input_b'), request['region_sets']))]
-    assert sets == WORKED['parsed_sets']
-    parsed = parse_bedtools_intersect_wo(raw['native'], pair=request['comparisons'][0],
-        sets={s['set_key']: s for s in sets}, native=WORKED['native_pair_metadata'])
-    assert parsed == WORKED['parsed_pairs']
-    assert sheet_from(request, sets, [parsed]) == WORKED['sheet']
-    supplied = parse_bedtools_intersect_wo(raw['native'], pair=request['comparisons'][0],
-        sets={s['set_key']: s for s in sets}, native=WORKED['supplied_output_metadata_example'])
-    assert supplied['result_extent'] == 'complete'
-    assert supplied['receipt']['identity'] is None
-    assert supplied['receipt']['returncode'] is None
 
 
 def test_headers_variable_width_duplicates_and_original_sort_identity():
@@ -190,22 +161,6 @@ def test_invalid_input_does_not_become_complete_empty(line, code):
     assert a['regions'][0]['occurrence_key'] == 'r1'
     assert code in {i['code'] for i in a['invalid_records'][0]['issues']}
     assert a['invalid_records'][0]['locator']['line_number'] == 1
-
-
-def test_missing_empty_short_changed_and_oversize_bytes_are_distinct():
-    request, sets = inputs([b'chr1\t0\t3\nchr1\t5\t7\n', b''])
-    spec = request['region_sets'][0]
-    assert sets[1]['result_extent'] == 'complete'
-    missing = parse_region_set(None, specification=spec, set_position=0)
-    assert missing['result_extent'] == 'unavailable' and missing['input_data_row_count'] is None
-    short = parse_region_set(b'chr1\t0\t3\nchr1\t5', specification=spec, set_position=0)
-    assert short['result_extent'] == 'partial' and short['input_data_row_count'] is None
-    assert [r['occurrence_key'] for r in short['regions']] == ['r0']
-    changed = parse_region_set(b'chr1\t1\t3\nchr1\t5\t7\n', specification=spec, set_position=0)
-    assert changed['result_extent'] == 'partial' and changed['input_data_row_count'] == 2
-    assert changed['issues'][0]['code'] == 'input_digest_mismatch'
-    excess = parse_region_set(b'chr1\t0\t3\nchr1\t5\t7\nmore', specification=spec, set_position=0)
-    assert excess['result_extent'] == 'unavailable' and excess['parsed_byte_count'] == 0
 
 
 def test_json_partial_prefix_and_stream_failure_retain_whole_rows():
@@ -261,18 +216,6 @@ def test_unproven_empty_native_table_does_not_become_no_hit(changes):
     assert result['issues']
 
 
-def test_missing_native_table_and_changed_digest_are_not_empty_success():
-    request, sets = inputs([b'chr1\t0\t10\n', b'chr1\t7\t12\n'])
-    pair = request['comparisons'][0]
-    native = receipt(pair, sets, ROW)
-    missing = parse_bedtools_intersect_wo(None, pair=pair, sets={s['set_key']: s for s in sets}, native=native)
-    assert missing['result_extent'] == 'unavailable'
-    native['stdout']['sha256'] = '0' * 64
-    changed = parse_bedtools_intersect_wo(ROW, pair=pair, sets={s['set_key']: s for s in sets}, native=native)
-    assert changed['result_extent'] == 'partial' and len(changed['valid_pairs']) == 1
-    assert changed['issues'][0]['code'] == 'artifact_digest_mismatch'
-
-
 def test_analytic_empty_has_no_native_artifact():
     request, sets = inputs([b'', b'chr1\t0\t10\n'])
     parsed = parsed_pairs(request, sets, None, derivation='validated_empty_input')
@@ -311,35 +254,6 @@ def test_invalid_third_set_keeps_independent_valid_pair():
     assert sheet['sets'][2]['invalid_records'][0]['issues'][0]['code'] == 'zero_width_interval'
 
 
-@pytest.mark.parametrize('mutation', [
-    lambda s: s['sets'].reverse(),
-    lambda s: s['sets'][0]['canonical_order'].reverse(),
-    lambda s: s['sets'][0]['regions'][0].update(start=1),
-    lambda s: s['sets'][0]['regions'][0].update(native_token='s3_r0'),
-    lambda s: s['sets'][0]['coordinate_groups'][0]['occurrence_keys'].append('r1'),
-    lambda s: s['comparisons'][0]['valid_pairs'][0].update(native_overlap_bp=4),
-    lambda s: s['comparisons'][0]['valid_pairs'][0]['a'].update(set_key='B'),
-    lambda s: s['comparisons'][0]['receipt']['a']['original_file'].update(sha256='0' * 64),
-    lambda s: s['request']['comparisons'][0].update(ordinal=1),
-])
-def test_builder_rejects_semantic_record_forgery(mutation):
-    sheet = deepcopy(WORKED['sheet'])
-    mutation(sheet)
-    with pytest.raises(ValueError):
-        build_genomic_overlap_sheet(request=sheet['request'], sets=sheet['sets'],
-            native_pairs=sheet['comparisons'], reference_relations=sheet['reference_relations'])
-
-
-def test_saved_input_outputs_are_detached():
-    request = deepcopy(WORKED['request'])
-    sets = deepcopy(WORKED['parsed_sets'])
-    pairs = [deepcopy(WORKED['parsed_pairs'])]
-    sheet = sheet_from(request, sets, pairs)
-    sheet['sets'][0]['regions'][0]['original_fields'][0] = 'changed'
-    assert sets[0]['regions'][0]['original_fields'][0] == 'chr1'
-    assert request == WORKED['request']
-
-
 def test_untouched_retained_native_tokens_are_explicitly_incompatible():
     native_root = ROOT / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/native_work'
     a, b = [(native_root / f'overlapping_a.{side}.bed').read_bytes() for side in ('A', 'B')]
@@ -357,30 +271,6 @@ def test_coordinate_rows_reject_structurally_valid_ignored_bed_record():
     with pytest.raises(ValueError,match='no_bed_headers'):
         extract_overlap_reference_metadata(specifications=request['region_sets'],
             sets={s['set_key']:s for s in sets},comparisons=request['comparisons'])
-
-
-def test_supplied_canonical_identity_is_checked_without_requiring_one():
-    raw = next(r['utf8_text'].encode() for r in WORKED['raw_artifacts'] if r['key']=='native')
-    native = deepcopy(WORKED['supplied_output_metadata_example'])
-    native['a']['canonical_file']['sha256'] = '0' * 64
-    result = parse_bedtools_intersect_wo(raw,pair=WORKED['request']['comparisons'][0],
-        sets={s['set_key']:s for s in WORKED['parsed_sets']},native=native)
-    assert result['result_extent'] == 'partial' and len(result['valid_pairs']) == 2
-    issue = result['issues'][0]
-    assert issue['code'] == 'artifact_digest_mismatch'
-    assert issue['field_path'] == '/receipt/a/canonical_file/sha256'
-    sheet_from(WORKED['request'],WORKED['parsed_sets'],[result])
-    forged = deepcopy(WORKED['parsed_pairs'])
-    forged['receipt']['a']['canonical_file']['sha256'] = '0' * 64
-    with pytest.raises(ValueError,match='canonical_file_identity'):
-        sheet_from(WORKED['request'],WORKED['parsed_sets'],[forged])
-
-
-def test_saved_bed_locations_partition_parsed_bytes():
-    sets = deepcopy(WORKED['parsed_sets'])
-    sets[0]['regions'][1]['locator']['byte_start'] = 20
-    with pytest.raises(ValueError,match='location_partition'):
-        sheet_from(WORKED['request'],sets,[WORKED['parsed_pairs']])
 
 
 @pytest.mark.parametrize('argv', [

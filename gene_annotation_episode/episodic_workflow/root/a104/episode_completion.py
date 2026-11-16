@@ -335,7 +335,6 @@ class CompletionLedger:
         An ordinary outcome awaiting projection/staging remains unfinished;
         executed failures awaiting observation do too. Rejected requests and
         independently executing children do not.
-        Legacy actions without slots retain unknown historical completion order.
         """
         _text(episode_id, "episode_id")
         with self.store.read_snapshot():

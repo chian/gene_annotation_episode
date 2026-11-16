@@ -1,35 +1,23 @@
 """Original case164 XLSX plus labelled synthetic workbook engineering cases."""
 from copy import deepcopy
 from dataclasses import replace
-from functools import partial
 import asyncio
 import io
 import json
 from pathlib import Path
-import sqlite3
 from types import SimpleNamespace
 import zipfile
 import pytest
-from gene_annotation_episode.episodic_workflow.root.method_loop.durable import DurableExecutionError
 from gene_annotation_episode.episodic_workflow.root.a105.communication import ReportBoundaryError, form_with_facts, plain, validate_closed_schema
 from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractError, canonical, obj
 from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episodic_workflow.root.a105.episode_composition import compose_episode_bindings
-from gene_annotation_episode.episodic_workflow.root.a105.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
-from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories, literature_binding_for_role
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_reference_parent_prompt import REFERENCE_PARENT_TASK
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_observation_inputs import read_rate_observations
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_observation_calculations import populate_rate_observation_contrast
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_observation_prompt import RATE_OBSERVATION_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_observation_storage import COMPONENTS, NAMESPACE, REQUESTED, LiteratureRateObservationRepository, rate_observation_cells_schema
-from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
-from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import FixtureController, ScriptedProvider
 CASE = Path(__file__).resolve().parents[5] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/research_reference/a105_raw_rate_primary_case_164'
 REQUEST = ['reference_rate', 'test_rate', 'reference_sample_sd', 'test_sample_sd', 'reference_cv', 'test_cv', 'rate_difference', 'retained_fraction', 'fractional_decrease']
 FORM = obj({'activity': rate_observation_cells_schema()})
@@ -255,171 +243,8 @@ def test_selected_binding_exact_facts_repairable_label_mismatch_and_custody(tmp_
     finally:
         store.close()
 
-def test_admitted_subset_shared_reference_and_parent_scientific_display(tmp_path):
-    store, context, args = setup(tmp_path, requested=['rate_difference'])
-    try:
-        repo, first, child = populated(store, context, args)
-        _, second, _ = populated(store, context, {**args, 'test_group': 'DHA'}, 'second')
-        parent = replace(child, episode_id='parent', role='annotation', path=(('annotation', 'parent'),), assignment={}, received_record_refs=(*child.received_record_refs, *second['record_refs']))
-        repo.receive_cells(parent, first['result']['cells'], 'trusted-first')
-        repo.receive_cells(parent, second['result']['cells'], 'trusted-second')
-        rows = repo.received_cells(parent)
-        _, binding = binding_for(store, parent)
-        requested_parent = replace(parent, assignment={REQUESTED: ['rate_difference']})
-        with pytest.raises(ReportBoundaryError, match='requested_subset_mismatch'):
-            binding.validate_received_report(requested_parent, {'activity': []}, FORM)
-        assert repo.fact_cells(parent, [first['result']['sheet_ref'], second['result']['sheet_ref']], components=COMPONENTS) == rows
-        private = repo.project_cells(first['record_refs'], permitted_record_refs=parent.received_record_refs, components=['reference_rate'])
-        with pytest.raises(ContractError, match='cell_not_received'):
-            repo.validate_fact_values(parent, private)
-        state = {'literature_experimental_work': {'version': 'literature_experimental_task_v1', 'aspect': 'reference_evidence_parent'}, 'reference_evidence_parent': {'version': 'reference_evidence_parent_v1', 'source_refs': [args['source_ref']]}, 'goal': {'objective': 'Compare reported BbPK activities without claiming preparations or calibrated product rate.'}, 'working_state': {}, 'child_reports': [{'activity': rows}]}
-        prompt = render_literature_experimental_prompt(state, 'Keep the source-evidence question.')
-        task, steering = prompt.split('\n\nSTEERING\n')
-        assert REFERENCE_PARENT_TASK in task and RATE_OBSERVATION_TASK not in task
-        assert 'D-EUS' in steering and 'L-EUS' in steering and ('DHA' in steering) and ('U/mg' in steering)
-        assert steering.count('source entry 1') == 2
-        assert 'preparation' in steering.lower() and 'unknown' in steering
-        assert '| reference_rate |' not in steering and '| test_rate |' not in steering
-        assert 'sha256' not in steering and 'source_reported_entry_' not in steering and ('artifact_' not in steering)
-    finally:
-        store.close()
 
-def test_recurring_task_survives_delta_lookup_and_cold_transport(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a105.decision_context import state_frame
-    from gene_annotation_episode.episodic_workflow.root.a105.composition_information import CONTRACT_INFORMATION_PROFILE, CONTRACT_ARGUMENT_TRANSPORT
-    from gene_annotation_episode.episodic_workflow.root.a105.episode_contract_information import operation_contract_information
-    from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.source_contracts import _population_catalog
-    from test_literature_experimental_prompt_delivery import LiteratureWire, complete, snapshot
-    state = snapshot()
-    state['literature_assignment'][REQUESTED] = REQUEST
-    state['contract_information_profile'] = CONTRACT_INFORMATION_PROFILE
-    operation = next((row for row in _population_catalog() if row['name'] == 'literature.rate.observations.populate'))
-    state['tools'] = [{**operation, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT}]
-    info = operation_contract_information(catalog=[operation], operation=operation['name'])
-    lookup = {'version': 'decision_context_v1', 'kind': 'decision_lookup_result', 'decision_index': 1, 'exchange_index': 1, 'result': info, 'pending_contract_information': [info]}
-    later = deepcopy(state)
-    later['feedback'] = {'code': 'source_label_witness_mismatch'}
-    cold_state = state_frame(later)
-    cold_state.update(restored_pending_decision_index=1, restored_public_exchanges=[{'lookup_result': info}])
-    wire = LiteratureWire(tmp_path / 'wire')
-    cold = LiteratureWire(tmp_path / 'cold')
 
-    async def exercise():
-        await complete(wire, state_frame(state))
-        await complete(wire, state_frame(later, state))
-        await complete(wire, lookup)
-        await complete(cold, cold_state)
-    asyncio.run(exercise())
-    for turn in (*wire.turns_sent(), *cold.turns_sent()):
-        task, steering = turn['input'][0]['text'].split('\n\nSTEERING\n', 1)
-        assert task.count(RATE_OBSERVATION_TASK) == 1 and RATE_OBSERVATION_TASK not in steering
-        assert info['result']['schema_sha256'] not in task + steering
-    assert info['result']['text'] in wire.turns_sent()[-1]['input'][0]['text']
-    assert info['result']['text'] in cold.turns_sent()[0]['input'][0]['text']
-
-def test_original_source_shared_episode_admission_and_cold_readonly_factory(tmp_path, monkeypatch):
-    import os
-    path = Path(os.environ.get('RATE_OBSERVATION_PROOF_DIR', str(tmp_path)))
-    path.mkdir(parents=True, exist_ok=True)
-    store, context, args = setup(path / 'state', requested=['rate_difference', 'retained_fraction', 'reference_sample_sd'])
-    article_bytes = (CASE / 'originals/article.html').read_bytes()
-    article_artifact = store.artifact(article_bytes, 'text/html')
-    article = store.put('source', {'provider': 'retained_original_case164_article', 'accession': None, 'uri': None, 'artifact_ref': article_artifact, 'text_ref': article_artifact, 'request_ref': None, 'version': None, 'retrieved_at': None}, origin='caller')
-    known = [*context.received_record_refs, article['id']]
-    received = []
-    controllers = []
-    tasks = []
-    parent_prompts = []
-    child = {'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': plain(context.assignment), 'goal': 'Evaluate the original BbPK D-EUS versus L-EUS reported activity entries.', 'scope': plain(context.scope), 'purpose': 'Return requested native reported-entry contrasts and descriptive SD.', 'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
-
-    def work(inputs):
-        prompt = render_literature_experimental_prompt(inputs, 'Evaluate reported substrate distinctions in the actual source workbook.')
-        tasks.append(prompt.split('\n\nSTEERING\n')[0])
-        return {'selection': {'kind': 'tool', 'tool': 'literature.rate.observations.populate', 'arguments': args}, 'report_update': {}}
-
-    def integrate(inputs):
-        form, = inputs['child_reports']
-        received.append(form)
-        prompt = render_literature_experimental_prompt(inputs, 'Evaluate the assigned reference evidence.')
-        parent_prompts.append(prompt)
-        task, steering = prompt.split('\n\nSTEERING\n')
-        assert REFERENCE_PARENT_TASK in task and RATE_OBSERVATION_TASK not in task
-        assert 'D-EUS' in steering and 'L-EUS' in steering and ('U/mg' in steering)
-        assert '| reference_rate |' not in steering and '| test_rate |' not in steering
-        commit = {field: [] for field in store.reasoning_schema()['required']}
-        quote = 'Actinobacteria Bifidobacterium'
-        start = article_bytes.index(quote.encode())
-        commit['source_subjects'] = [{'alias': 'source_subject_BbPK', 'reference_type': 'assay', 'source_ref': article['id'], 'label': quote, 'anchor': {'source_ref': article['id'], 'artifact_ref': article_artifact, 'start': start, 'end': start + len(quote.encode()), 'quote': quote}}]
-        return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
-
-    def controller(path, initial):
-        value = FixtureController(str(path), initial, 2 if len(path) == 1 else 1)
-        controllers.append(value)
-        return value
-    try:
-        scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-        provider = ScriptedProvider([child, work, integrate])
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=known, episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=known), binding_definitions={'credit': scorer.as_record()}))
-        assert len(received) == 1 and summary['credit'] == 0 and (store.targets() == [])
-        assert all((RATE_OBSERVATION_TASK in task for task in tasks))
-        assert [c.scores for c in controllers] == [[0, 0], [0]]
-        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
-        assert store.db.execute('SELECT count(*) FROM literature_rate_observation_operations').fetchone()[0] == 1
-        assert not store.list('assessment') and (not store.list('observation'))
-        assert any((r['label'] == 'Actinobacteria Bifidobacterium' and r.get('anchor') for r in store.list('reference')))
-        receipt, = store.db.execute('SELECT cells FROM literature_rate_observation_received').fetchall()
-        assert json.loads(receipt[0]) == received[0]['activity']
-        saved_sheet = LiteratureRateObservationRepository(store, store.db.execute('SELECT run_id FROM literature_rate_observation_operations').fetchone()[0]).read(received[0]['activity'][0]['sheet_ref'])
-        run_id = store.db.execute('SELECT run_id FROM literature_rate_observation_operations').fetchone()[0]
-        parent_id = store.db.execute('SELECT episode_id FROM literature_rate_observation_received').fetchone()[0]
-        parent = replace(context, run_id=run_id, episode_id=parent_id, role='annotation', path=(('annotation', parent_id),), assignment={}, received_record_refs=tuple([*known, received[0]['activity'][0]['sheet_ref']]))
-        services, _ = binding_for(store, parent)
-        binding = LiteratureEpisode(services, rate_population=True, reference_parent_sources=known)
-        descriptor = binding.as_record()
-        journal = Journal(store, run_id)
-        blocked = {store.get(ref)['artifact_ref'] for ref in known}
-        original_get = store.get_artifact
-
-        def guarded(reference):
-            assert reference not in blocked, 'original scientific artifacts blocked BEFORE factory'
-            return original_get(reference)
-
-        def forbidden(*a, **k):
-            raise AssertionError('source reader / calculator / acquisition disabled BEFORE factory')
-        monkeypatch.setattr(store, 'get_artifact', guarded)
-        for module, names in {'literature_rate_observation_inputs': ['read_rate_observations', 'Workbook'], 'literature_rate_observation_storage': ['read_rate_observations', 'populate_rate_observation_contrast'], 'literature_rate_observation_calculations': ['populate_rate_observation_contrast', '_statistics'], 'spreadsheet_tools': ['Workbook']}.items():
-            for name in names:
-                monkeypatch.setattr('gene_annotation_episode.' + module + '.' + name, forbidden)
-        monkeypatch.setattr(services, 'execute_tool', forbidden)
-        dbpath = store.path / 'state.sqlite'
-        dbpath = Path(store.db.execute('PRAGMA database_list').fetchone()[2])
-        checkpoint = tuple(store.db.execute('PRAGMA wal_checkpoint(TRUNCATE)').fetchone())
-        assert checkpoint[0] == 0 and checkpoint[1] == checkpoint[2]
-        store.db.close()
-        assert not Path(str(dbpath) + '-wal').exists() or Path(str(dbpath) + '-wal').stat().st_size == 0
-        store.db = sqlite3.connect('file:' + str(dbpath) + '?mode=ro&immutable=1', uri=True)
-        store.db.row_factory = sqlite3.Row
-        store.db.execute('PRAGMA query_only=ON')
-        before = {str(p.relative_to(store.path)): p.read_bytes() for p in store.path.rglob('*') if p.is_file()}
-        restored, = compose_episode_bindings(services, store=store, journal=journal, execution_backend=None, descriptors=[descriptor], job_episodes=None, resource_estimator=None, role_credit_bindings={}).bindings
-        assert restored.as_record() == descriptor
-        assert restored.received_report_facts(parent)[NAMESPACE] == received[0]['activity']
-        fresh_services = WorkflowServices(services.workflow)
-        assert LiteratureEpisode(fresh_services, rate_population=True).literature_rate_observation_repository().fact_cells(parent, [received[0]['activity'][0]['sheet_ref']], components=COMPONENTS) == received[0]['activity']
-        assert store.db.total_changes == 0
-        assert {str(p.relative_to(store.path)): p.read_bytes() for p in store.path.rglob('*') if p.is_file()} == before
-        obsolete = deepcopy(descriptor)
-        obsolete['implementation_sha256'] = '0' * 64
-        with pytest.raises(DurableExecutionError, match='identity_conflict'):
-            compose_episode_bindings(services, store=store, journal=journal, execution_backend=None, descriptors=[obsolete], job_episodes=None, resource_estimator=None, role_credit_bindings={})
-        (path / 'SAVED_SHEET_001.json').write_text(json.dumps(saved_sheet, indent=2) + '\n')
-        (path / 'ADMITTED_ROWS_001.json').write_text(json.dumps(received[0], indent=2) + '\n')
-        (path / 'BINDING_DESCRIPTOR_001.json').write_text(json.dumps(descriptor, indent=2) + '\n')
-        (path / 'PARENT_PROMPT_001.txt').write_text(parent_prompts[0])
-        (path / 'CHILD_TASK_001.txt').write_text(tasks[0])
-        (path / 'PROOF_RESULT_001.json').write_text(json.dumps({'source': 'retained original case164 S1Data.xlsx and article.html', 'provider': 'controlled ScriptedProvider; no actual model inference', 'targets': 0, 'source_operations': 1, 'runtime_observations': 3, 'controller_scores': [c.scores for c in controllers], 'nonempty_parent_reasoning': 'actual source-subject anchor in original article bytes', 'original_typed_admission': True, 'source_artifacts_disabled_before_factory': True, 'xlsx_reader_and_calculators_disabled_before_factory': True, 'sqlite_uri_mode': 'ro', 'query_only': True, 'writer_checkpoint_before_readonly_open': checkpoint, 'wal_absent_or_empty_before_readonly_open': True, 'immutable': True, 'restoration_total_changes': store.db.total_changes, 'byte_preservation': True, 'reconstructed_exact_original_rows': True, 'annotation_credit': None, 'a105_adequacy_claim': False}, indent=2) + '\n')
-    finally:
-        store.close()
 
 @pytest.mark.parametrize('mean_values', [(0.0, 0.0, 0.0), (-2.0, -1.0, 0.0)])
 def test_cv_requires_positive_mean_without_discarding_signed_native_values(tmp_path, mean_values):

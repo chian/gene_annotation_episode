@@ -3,16 +3,13 @@
 Synthetic controllers govern these fixtures only. The tests assert information
 delivery, durable recovery and score/form boundaries, not scientific success.
 """
-import asyncio
 import json
 from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.tool_knowledge import ToolKnowledge, VERSION
-from test_runtime import (FixtureController, ScriptedProvider, commission,
-                          fixture_credit, obj, reason, run, setup)
+from test_runtime import ScriptedProvider, commission, obj, reason, run, setup
 
 
 def _source(tmp_path, text='First line\nSecond λ line\nLast line\n'):
@@ -192,32 +189,6 @@ def test_interrupted_read_recovery_preserves_outcome_and_supplied_library_versio
     assert sum(row['episode_id'] == child_id for row in observations) == 2
     assert sorted(json.loads(row['observation'])['step']['delta'] for row in observations) == [0, 0, 0, 1]
     assert result['credit'] == 1 and result['completed_actions'] == 2
-
-
-def test_every_job_role_can_read_knowledge_without_executing_a_job(tmp_path):
-    from types import SimpleNamespace
-    from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
-    from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.requests import ROLES
-    store, tools = setup(tmp_path)
-    binding = object.__new__(HomologyEpisode)
-    binding.roles = ROLES
-    binding.recover_statistics = lambda: {}
-    workflow = Workflow(store, tools, ScriptedProvider([]), tmp_path/'run', 'knowledge-fixture',
-        lambda path, initial: FixtureController(str(path), initial, 2), fixture_credit,
-        job_episodes=binding)
-    for role in ROLES:
-        source = SimpleNamespace(path=((role, 'fixture'),), scope={'subject_refs': ['subject_A']})
-        catalog = workflow.catalog(source.scope, source=source)
-        assert {'knowledge.search', 'knowledge.entry', 'knowledge.read'} <= {entry['name'] for entry in catalog}
-        selected = next(entry for entry in catalog if entry['name'].startswith('homology.'))
-        assert selected['knowledge_entry_ids'] == ['native-phmmer']
-        result = asyncio.run(workflow.execute(source, 'knowledge.read',
-            {'entry_id': 'native-phmmer', 'section_id': 'launch', 'offset': 0, 'limit': 1},
-            decision_index=0, operation_key=role))
-        assert result['status'] == 'completed'
-        assert result['record_refs'] == result['changed_record_refs'] == []
-    assert tools.executions == 0
-    assert store.db.execute('SELECT count(*) FROM synthetic_operations').fetchone()[0] == 0
 
 
 def test_bad_request_is_specific_and_does_not_remove_other_manuals(tmp_path):

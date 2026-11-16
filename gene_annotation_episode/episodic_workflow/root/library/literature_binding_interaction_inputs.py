@@ -30,7 +30,7 @@ No scientific numbers or covariance are accepted as direct request fields.
 
 Output retains the full selection, authenticated raw witnesses/candidates,
 native-versus-canonical values, finite per-field statuses, canonical048 inputs
-or an explicit common-kind failure, source roster and dependency fingerprints.
+or an explicit common-kind failure and source roster.
 Source-cell identity is separate from actual physical-fit identity. Unknown
 context never creates a known identity or suppresses a valid raw parameter.
 
@@ -48,13 +48,12 @@ from html import unescape
 import hashlib
 import json
 import math
-from pathlib import Path
 import re
 
 from gene_annotation_episode.domain import ContractError
 from .literature_binding_reader import _measurement, _SCALES
 from .literature_binding_visual_inputs import (
-    _Inputs, _box, _inside, _witness_shape, ATTRIBUTION, PILLOW_VERSION,
+    _Inputs, _box, _inside, _witness_shape, ATTRIBUTION,
 )
 from .literature_binding_interaction_calculations import INPUT_VERSION as CALC_INPUT_VERSION, validate_binding_interaction_inputs
 from gene_annotation_episode.episodic_workflow.root.library.literature_binding_interaction_return_contracts import ROLES, ID_FIELDS, CONTEXT_FIELDS, RELATIONS
@@ -73,13 +72,6 @@ from gene_annotation_episode.episodic_workflow.root.library.literature_binding_i
 from gene_annotation_episode.episodic_workflow.root.library.literature_binding_interaction_return_contracts import UNCERTAINTY_REASONS
 from gene_annotation_episode.episodic_workflow.root.library.literature_binding_interaction_return_contracts import ROLE_UNAVAILABLE_REASONS
 from gene_annotation_episode.episodic_workflow.root.library.literature_binding_interaction_return_contracts import CALCULATION_INPUT_STATUSES
-_FROZEN = {
-    "literature_binding_visual_inputs.py": "8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718",
-    "literature_binding_reader.py": "e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1",
-    "literature_experimental_contracts.py": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc",
-}
-# Separately owned053 correction; released contract is part of this reader's API.
-CALCULATOR_SHA256 = "ac7ea12c105e16df5085942090ec8e3f96c618b4f5866283325c46c92804b432"
 _DECIMAL = r"[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?"
 _SCALAR = re.compile(rf"\s*(?P<approx>about\s+|approximately\s+|[~≈∼]\s*)?"
     rf"(?P<relation>>=|<=|≥|≤|>|<|at\s+least\s+|at\s+most\s+)?"
@@ -243,16 +235,6 @@ def _digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False,
         separators=(",", ":"), allow_nan=False).encode()).hexdigest()
 
-
-def _dependencies():
-    from ..literature_binding_interaction_release import prospective
-    try:
-        return prospective(PILLOW_VERSION)
-    except ValueError as error:
-        field = ("implementation.calculator" if error.args == (
-            "gene_annotation_episode/episodic_workflow/root/library/literature_binding_interaction_calculations.py",)
-            else "implementation")
-        _fail("binding_interaction_frozen_dependency_mismatch", field)
 
 def _source_requests(arguments):
     result = [(arguments["source_ref"], "original")]
@@ -675,7 +657,6 @@ def read_binding_interaction_inputs(arguments, *, read_source):
     _validate(arguments)
     if not callable(read_source):
         _fail("source_reader_required", "read_source")
-    dependencies = _dependencies()
     selection = deepcopy(arguments)
     acquired, roster = {}, []
     # Authorization errors cross the action boundary before _Inputs' local
@@ -731,7 +712,7 @@ def read_binding_interaction_inputs(arguments, *, read_source):
         "relationships": relationships, "geometry_overlaps": _overlaps(roles),
         "calculation_input_status": status, "calculation_inputs": calculation_inputs,
         "source_refs": list(dict.fromkeys(row["source_ref"] for row in roster)),
-        "source_representations": roster, "implementation_dependencies": dependencies,
+        "source_representations": roster,
         "interpretation_attribution": ATTRIBUTION}
 
 
@@ -780,4 +761,4 @@ def binding_interaction_arguments_schema():
 
 __all__ = ["VERSION", "OUTPUT_VERSION", "ROLES", "ID_FIELDS", "KINDS", "STATISTICS", "BASES", "REPETITIONS",
     "UNIT_RELATIONS", "MEASUREMENT_STATUSES", "SCALAR_STATUSES", "UNCERTAINTY_REASONS", "ROLE_UNAVAILABLE_REASONS",
-    "CALCULATION_INPUT_STATUSES", "CALCULATOR_SHA256", "binding_interaction_arguments_schema", "read_binding_interaction_inputs"]
+    "CALCULATION_INPUT_STATUSES", "binding_interaction_arguments_schema", "read_binding_interaction_inputs"]

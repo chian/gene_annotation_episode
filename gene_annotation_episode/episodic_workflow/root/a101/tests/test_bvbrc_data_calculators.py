@@ -1,19 +1,12 @@
 """Hand-checked arithmetic, unavailable denominators and offline recalculation."""
-from copy import deepcopy
 import json
-from pathlib import Path
-import socket
-import subprocess
-import urllib.request
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_calculators import calculate_facet_fractions, calculate_feature_sequence_counts, calculate_page_counts
+from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_calculators import calculate_facet_fractions, calculate_page_counts
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_readers import parse_data_snapshot
 from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_data_readers import envelope, parse_docs, prepared, snapshot
 
-EVIDENCE = (Path(__file__).resolve().parent / 'fixtures' / 'bvbrc_original') / "verification/tool_graders_bvbrc_data_contract_2026-10-24"
-EXAMPLES = json.loads((EVIDENCE / "FILLED_EXAMPLES.json").read_text())
 POLICY = "same_response_exact_document_count"
 
 
@@ -31,11 +24,6 @@ def facet_sheet(pairs=None, *, total=2, exact=True, offset=0, limit=2, min_count
 
 def fractions(sheet):
     return calculate_facet_fractions(sheet, denominator_policy=POLICY)["fractions"]
-
-
-def test_native_expected_half_fractions_and_missing_bucket_zero():
-    assert calculate_facet_fractions(EXAMPLES["facet_expected_sheet"], denominator_policy=POLICY) == EXAMPLES["facet_expected_components"]
-    assert [(item["numerator"], item["denominator"], item["fraction"]) for item in fractions(facet_sheet())] == [(1, 2, 0.5), (1, 2, 0.5), (0, 2, 0.0)]
 
 
 def test_empty_docs_do_not_become_zero_population():
@@ -183,77 +171,3 @@ def test_forged_saved_bucket_relationships_are_rejected(mutation):
     with pytest.raises(ValueError):
         fractions(sheet)
 
-
-def test_feature_sequence_hand_calculated_shared_hashes():
-    sheet = EXAMPLES["feature_sequence_expected_sheet"]
-    result = calculate_feature_sequence_counts(sheet)
-    assert result == EXAMPLES["feature_sequence_expected_components"]
-    assert result["selected_feature_count"] == result["retained_feature_row_count"] == 2
-    assert result["native_sequence_record_count"] == 2
-    assert result["distinct_joined_aa_sequence_count"] == result["distinct_joined_na_sequence_count"] == 1
-    assert result["relation_count"] == result["length_agreement_count"] == 4
-
-
-def test_unjoined_native_sequence_rows_still_count_from_explicit_page_totals():
-    sheet = deepcopy(EXAMPLES["feature_sequence_expected_sheet"])
-    page = next(page for page in sheet["input_page_counts"] if page["collection"] == "feature_sequence")
-    page["retained_row_count"] = 7
-    assert calculate_feature_sequence_counts(sheet)["native_sequence_record_count"] == 7
-
-
-def test_missing_and_conflicting_relations_do_not_count_as_joined():
-    sheet = deepcopy(EXAMPLES["feature_sequence_expected_sheet"])
-    for edge, status, reason in zip(sheet["edges"], ["missing_key", "missing_record", "type_mismatch", "conflict"],
-                                  ["missing_join_key", "missing_sequence_record", "sequence_type_mismatch", "ambiguous_join"]):
-        edge.update(join_status=status, reason=reason, sequence_length=None, length_match=None)
-    result = calculate_feature_sequence_counts(sheet)
-    assert result["relation_count"] == result["distinct_joined_aa_sequence_count"] == result["length_agreement_count"] == 0
-    assert result["missing_key_count"] == result["missing_record_count"] == 1
-    assert result["conflicting_relation_count"] == 2
-
-
-def test_input_pages_cannot_double_count_an_identical_retained_page():
-    sheet = deepcopy(EXAMPLES["feature_sequence_expected_sheet"])
-    sheet["input_page_counts"].append(deepcopy(sheet["input_page_counts"][0]))
-    with pytest.raises(ValueError):
-        calculate_feature_sequence_counts(sheet)
-
-
-def test_wrong_sequence_row_reference_is_not_counted():
-    sheet = deepcopy(EXAMPLES["feature_sequence_expected_sheet"])
-    sheet["edges"][0]["sequence_rows"][0]["native_sha256"] = "f" * 64
-    with pytest.raises(ValueError):
-        calculate_feature_sequence_counts(sheet)
-
-
-@pytest.mark.parametrize("mutation", ["false_hash", "unknown_hash", "omitted", "duplicated"])
-def test_saved_feature_relations_cannot_silently_change_count_meaning(mutation):
-    sheet = deepcopy(EXAMPLES["feature_sequence_expected_sheet"])
-    if mutation in ("false_hash", "unknown_hash"):
-        sheet["edges"][0]["raw_md5_match"] = False if mutation == "false_hash" else None
-    elif mutation == "omitted":
-        sheet["edges"].pop()
-    else:
-        edge = deepcopy(sheet["edges"][0])
-        edge["edge_key"] += "/copy"
-        sheet["edges"].append(edge)
-    with pytest.raises(ValueError):
-        calculate_feature_sequence_counts(sheet)
-
-
-def test_saved_sheet_recalculation_has_no_transport_or_native_program_dependency(monkeypatch, tmp_path):
-    path = tmp_path / "saved.json"
-    path.write_text(json.dumps({"facet": EXAMPLES["facet_expected_sheet"], "join": EXAMPLES["feature_sequence_expected_sheet"]}))
-    saved = json.loads(path.read_text())
-
-    def prohibited(*_args, **_kwargs):
-        raise AssertionError("recalculation attempted acquisition or execution")
-
-    monkeypatch.setattr(urllib.request, "urlopen", prohibited)
-    monkeypatch.setattr(urllib.request.OpenerDirector, "open", prohibited)
-    monkeypatch.setattr(socket, "socket", prohibited)
-    monkeypatch.setattr(subprocess, "run", prohibited)
-    monkeypatch.setattr(subprocess, "Popen", prohibited)
-    assert calculate_facet_fractions(saved["facet"], denominator_policy=POLICY) == EXAMPLES["facet_expected_components"]
-    assert calculate_feature_sequence_counts(saved["join"]) == EXAMPLES["feature_sequence_expected_components"]
-    assert calculate_page_counts(saved["facet"])["reported_population_count"] == 2

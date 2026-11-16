@@ -61,7 +61,6 @@ def _rows(saved, sheet_ref, components):
 class LiteratureInterventionRepository(LiteratureAssayGradingRepository):
     provider = PROVIDER
     record_version = VERSION
-    legacy_version = VERSION
     requested = REQUESTED
     operations_table = "literature_intervention_grading_operations"
     received_table = "literature_intervention_grading_received"

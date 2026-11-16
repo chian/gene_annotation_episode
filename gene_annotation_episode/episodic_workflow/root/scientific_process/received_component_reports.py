@@ -4,7 +4,7 @@ import json
 from ..communication import plain, validate_closed_schema, validate_form
 from gene_annotation_episode.domain import ContractError, canonical, obj
 from ..episode_return_records import EpisodeReturnRecords
-from ..library.component_received_reports import (PATHS, legacy_report_schema, report_schema, report_axis, _component_records, _merge_result, _mark_revisions, dependence, native_dependence, cross_dependence, mark_native_execution)
+from ..library.component_received_reports import (PATHS, report_schema, report_axis, _component_records, _merge_result, _mark_revisions, dependence, native_dependence, cross_dependence, mark_native_execution)
 def resolve_report(store, report, *, context, services, axis=None):
     report = plain(report)
     selected = report.get('axis') if axis is None else axis
@@ -16,15 +16,7 @@ def resolve_report(store, report, *, context, services, axis=None):
     def permitted(reference, namespace):
         return (reference in known and reference in store.reference_subset([reference], scope)
             and (namespace is None or store.get(reference)['record_type'] == namespace))
-    legacy = 'paths' in report
-    validate_form(report, legacy_report_schema(selected) if legacy else report_schema(selected), permitted)
-    for path in report.get('paths', {}).values():
-        if path['status'] in {'evidence_returned', 'partial'} and not (
-                path['evidence_refs'] or path['assessment_refs']):
-            raise ContractError('component_axis_path_requires_received_evidence')
-        if any(not set(store.get(ref).get('evidence_refs', [])) <= known
-                for ref in path['assessment_refs']):
-            raise ContractError('component_axis_assessment_evidence_not_received')
+    validate_form(report, report_schema(selected), permitted)
     records = _component_records(store, report, context, services)
     from ..library.component_native_received_records import received_components, execution_findings as native_execution_findings
     native_components = received_components(store, report['native_component_records'], scope, axis=selected, known=known)

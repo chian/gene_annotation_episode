@@ -12,10 +12,8 @@ from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.launch_instructions import LaunchInstructions
-from gene_annotation_episode.episodic_workflow.root.practical_execution_records import (
-    ASSIGNMENT_SCHEMA, validate_assignment)
 from gene_annotation_episode.episodic_workflow.root.resource_episodes import ResourceEpisodes
-from gene_annotation_episode.resource_records import LAUNCH_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.resource_records import LAUNCH_SCHEMA
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from test_runtime import FixtureController, obj, setup
 
@@ -293,57 +291,6 @@ def test_selected_saved_and_interrupted_contexts_survive_source_revision(tmp_pat
     assert store.db.execute('SELECT observation FROM runtime_observations ORDER BY unit_index LIMIT 1').fetchone()[0] == observation
     assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 2
     assert LaunchInstructions.freeze(tmp_path / 'future-run', source=source).context()['library_id'] != selection['library_id']
-
-
-def test_practical_assignment_pins_are_optional_and_precede_initial_native_probe(tmp_path, monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
-    from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
-    from gene_annotation_episode.state import Store
-    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
-    from test_practical_runtime import make_assignment
-
-    source = library_source(tmp_path)
-    spec = make_assignment(tmp_path / 'project')
-    assert validate_assignment(spec.assignment) == spec.assignment
-    assert Draft202012Validator(ASSIGNMENT_SCHEMA).is_valid(spec.assignment)
-    with Store(tmp_path / 'state') as store:
-        subject, = store.create_problem(raw_sequence='MARGKK', molecule='protein')['subject_refs']
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        tools.launch_instruction_library_directory = source
-        directory = tmp_path / 'run'
-        resources = {'local': {'kind': 'local', 'workspace': str(spec.workspace),
-            'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}}}
-        value = Workflow(store, tools, Provider([]), directory, 'practical-library-fixture',
-            lambda path, initial: FixtureController(str(path), initial, 1), lambda *_: 0,
-            root_role='launch_local', episode_binding_factories=(
-                lambda services: PracticalResourceEpisodes(services, directory=directory,
-                    resources=resources),))
-        selection = value.launch_instructions.select([
-            {'entry_id': 'fixture-launch', 'section_id': 'work'}])
-        valid = {**spec.assignment, 'launch_instructions': selection}
-        assert validate_assignment(valid) == valid
-        assert Draft202012Validator(ASSIGNMENT_SCHEMA).is_valid(valid)
-        probes = []
-        original = LocalPracticalOperations.initial_outcome
-        def initial(operations, assignment):
-            probes.append(deepcopy(assignment))
-            return original(operations, assignment)
-        monkeypatch.setattr(LocalPracticalOperations, 'initial_outcome', initial)
-        invalid = deepcopy(valid)
-        invalid['launch_instructions']['sections'][0]['sha256'] = '0' * 64
-        with pytest.raises(ValueError, match='launch_instruction_selection_digest_mismatch'):
-            value.build('launch_local', 'root', 'Run the original assignment',
-                {'subject_refs': [subject]}, episode_assignment=invalid)
-        assert probes == []
-        root = value.build('launch_local', 'root', 'Run the original assignment',
-            {'subject_refs': [subject]}, episode_assignment=valid)
-        assert probes == [valid]
-        value.provider = Provider([action('launch.instructions.entry', {'entry_id': 'fixture-launch'})])
-        asyncio.run(root.source.call({}, value.action_schema(root.source)))
-        supplied, = value.provider.contexts
-        assert supplied['selected_launch_instructions']['selection'] == selection
-        assert supplied['selected_launch_instructions']['sections'][0]['text'] == (source / 'work.md').read_text()
-        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
 
 
 @pytest.mark.parametrize('resource_kind', ['api', 'local', 'hpc'])

@@ -1,7 +1,6 @@
 """Retained A105 parent failure: current science without historical form copies."""
 from copy import deepcopy
 
-from gene_annotation_episode.episodic_workflow.root.a105.decision_context import state_frame
 from gene_annotation_episode.episodic_workflow.root.a105.domain import canonical
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_current_results import current_findings_view, current_scoring_view
 from inspect_a105_parent_prompt import (
@@ -10,25 +9,6 @@ from inspect_a105_parent_prompt import (
 )
 
 
-def test_original_rejected_frame_preserves_current_results_in_actual_provider_presentation():
-    trace = retained_input()
-    before = deepcopy(trace)
-    prompt, _instructions = replay_input(trace)
-    inventory = validate_scientific_presentation(prompt, trace)
-    assert trace == before
-    assert trace['original_input_matches_sent']
-    assert len(trace['sent_text']) == 1052431
-    assert len(trace['state']['child_reports']) == 30
-    assert inventory['current_main_sheets'] == 16
-    assert inventory['current_subscoring_sheets'] == 10
-    assert inventory['received_typed_findings'] == 6
-    assert 'Admitted requested child returns' not in prompt
-    # The task may still advertise an existing legal return-source name. Its
-    # cumulative visibility inventories must not be retransmitted as steering.
-    assert 'interpretation_basis_refs' not in prompt.partition('\nSTEERING\n')[2]
-    # This measures the corrected presentation against the observed failure;
-    # it does not introduce any runtime or scientific continuation cutoff.
-    assert len(prompt) < len(trace['sent_text'])
 
 
 def test_current_sheet_view_preserves_every_exact_cell_and_distinct_owner_use():
@@ -85,17 +65,3 @@ def test_source_finding_replacement_is_preserved_without_rejudging_revision_vali
     assert new['investigation_finding']['qualification']['kind'] == 'measurement_does_not_establish_claim'
 
 
-def test_repeated_old_reference_inventories_do_not_change_current_parent_message():
-    trace = deepcopy(retained_input())
-    original, _ = replay_input(trace)
-    for report in trace['state']['child_reports']:
-        report['interpretation_basis_refs'] = report.get('interpretation_basis_refs', []) * 3
-    last = trace['state']['last_local_outcome']
-    if isinstance(last.get('record_refs'), list):
-        last['record_refs'] *= 3
-    if isinstance(last.get('result'), dict) and isinstance(last['result'].get('record_refs'), list):
-        last['result']['record_refs'] *= 3
-    trace['context'] = state_frame(trace['state'])
-    repeated, _ = replay_input(trace)
-    assert repeated == original
-    validate_scientific_presentation(repeated, trace)

@@ -119,7 +119,7 @@ def validate_rfam_sheet(sheet):
 
 
 def calculate_rfam_batch_components(sheet: RfamBatchSheet, *, parameters: RfamCalculationParameters) -> dict:
-    """Delegate new calculations; explicit legacy conversion is a separate API."""
+    """Delegate calculations to the common Infernal calculator."""
     from . import infernal_search_grader
     from .rfam_batch_infernal import select_rfam_common_sheet
     validate_rfam_parameters(parameters)

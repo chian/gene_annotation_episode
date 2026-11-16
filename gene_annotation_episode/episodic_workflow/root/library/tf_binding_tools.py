@@ -52,8 +52,8 @@ _ARTIFACT = re.compile(r'^artifact_[0-9a-f]{64}$')
 _SCORE_NAME = re.compile(r'^scores-[0-9]{6,}\.f32$')
 _FORMATS = {'dna': ('fasta', 'raw_dna'),
     'matrix': ('jaspar_json', 'jaspar_pfm', 'acgt_count_json')}
-_WORKERS = {'tf_binding_native': 'gene_annotation_episode.tf_binding_driver',
-    'tf_binding_result': 'gene_annotation_episode.tf_binding_result_worker'}
+_WORKERS = {'tf_binding_native': 'gene_annotation_episode.episodic_workflow.root.library.tf_binding_driver',
+    'tf_binding_result': 'gene_annotation_episode.episodic_workflow.root.library.tf_binding_result_worker'}
 
 
 def _require(condition, code):

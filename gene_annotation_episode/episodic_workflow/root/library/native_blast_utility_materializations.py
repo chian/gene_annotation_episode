@@ -152,7 +152,7 @@ def _validate_materialization_selection(job, inputs, dbs):
                  'database_copy_closure_conflict')
         _require([r['source_path'] for r in copy['native_paths']] == db['native_paths'],
                  'database_copy_native_paths_conflict')
-        # The initial port has no selected alias lexical relocation contract.
+        # There is no selected alias lexical relocation contract.
         _require(not any(PurePosixPath(s).suffix in {'.nal', '.pal', '.nvl', '.pvl'} for s in sources),
                  'database_alias_relocation_unsupported')
         prefix_map = {r['source_path']: str(_relative(r['relative_path'])) for r in copy['native_paths']}

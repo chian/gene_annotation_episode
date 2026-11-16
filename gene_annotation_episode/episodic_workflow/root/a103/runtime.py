@@ -223,7 +223,7 @@ def _wait_estimate_operation():
     return {'name': 'episode.estimate_wait', 'description': 'Inspect the supported estimate for a proposed wait using your received progress, original duration snapshots and completed own-action history. Unknown event probabilities and gains remain unknown. This tool selects no wait, timer, resource or work.', 'input_schema': _object({'condition': _wait_condition_schema()})}
 _ASSIGNMENT_TRANSPORT = 'atomic_composed_episode_assignment_json_v1'
 
-def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
+def _action_generation_schema(schema):
     """Translate action JSON Schema; unlike return forms it includes goal text.
 
     Goals and tool input contracts are instructions into an episode, not its
@@ -236,7 +236,7 @@ def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
             return [translate(item) for item in value]
         if not isinstance(value, dict):
             return value
-        if _json_episode_assignment(value, composed=not _legacy_episode_assignments):
+        if _json_episode_assignment(value):
             properties = value['properties']
             return translate({**value, 'properties': {**properties, 'assignment': {'type': 'string', 'description': 'JSON encoding of the exact parent-selected episode assignment. Preserve all supplied fields and values, including constraints, allocations, input versions and selections. Preserve omitted fields and explicit nulls. The host validates this complete original schema: ' + _json(properties['assignment'])}}})
         if _json_tool_arguments(value):
@@ -279,10 +279,10 @@ def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
         return result
     return translate(schema)
 
-def _json_episode_assignment(schema, *, composed=True):
+def _json_episode_assignment(schema):
     properties = schema.get('properties', {})
     kind, assignment = (properties.get(name) for name in ('kind', 'assignment'))
-    return isinstance(kind, dict) and kind.get('const') == 'episode_child' and isinstance(assignment, dict) and (assignment.get('type') == 'object' or (composed and bool({'allOf', 'anyOf', 'oneOf', '$ref', '$dynamicRef', '$recursiveRef'}.intersection(assignment))))
+    return isinstance(kind, dict) and kind.get('const') == 'episode_child' and isinstance(assignment, dict) and (assignment.get('type') == 'object' or bool({'allOf', 'anyOf', 'oneOf', '$ref', '$dynamicRef', '$recursiveRef'}.intersection(assignment)))
 
 def _json_tool_arguments(schema):
     """Composed inputs retain their own JSON reference/presence semantics."""
@@ -306,18 +306,17 @@ def _embedded_tool_schema(schema):
         schema = {**schema, '$id': 'urn:gene-annotation:tool-input:' + _digest(schema)}
     return schema
 
-def _decode_action_response(value, schema, *, _legacy_episode_assignments=False):
+def _decode_action_response(value, schema):
     """Undo only the provider's optional-property representation.
 
     Strict structured output represents absent optional fields as null. A null
     is removed only where the original host contract made that field optional;
     required nulls remain invalid. Atomic assignment/argument objects preserve
-    every supplied value. Historical expanded assignments use their original
-    decoder only through explicit recorded-transport/selection verification.
+    every supplied value.
     """
 
     def decode(item, contract):
-        return _decode_action_response(item, contract, _legacy_episode_assignments=_legacy_episode_assignments)
+        return _decode_action_response(item, contract)
     if not isinstance(schema, dict):
         return value
     if 'anyOf' in schema:
@@ -348,23 +347,28 @@ def _decode_action_response(value, schema, *, _legacy_episode_assignments=False)
         required = set(schema.get('required', []))
         properties = schema.get('properties', {})
         encoded = _json_tool_arguments(schema)
-        encoded_assignment = _json_episode_assignment(schema, composed=not _legacy_episode_assignments)
+        encoded_assignment = _json_episode_assignment(schema)
         return {key: (parse_json_object(item) if isinstance(item, str) else item) if encoded and key == 'arguments' or (encoded_assignment and key == 'assignment') else decode(item, properties.get(key, {})) for key, item in value.items() if not (key in properties and key not in required and (item is None))}
     if isinstance(value, list) and schema.get('type') == 'array':
         return [decode(item, schema['items']) for item in value]
     return value
 
 def _recorded_action_generation_schema(generated, schema):
-    """Match only the current and immediately preceding assignment transports."""
-    return _same_action_schema_required_members(generated, _action_generation_schema(schema)) or _same_action_schema_required_members(generated, _action_generation_schema(schema, _legacy_episode_assignments=True))
+    """Match the recorded generated schema with the current assignment transport."""
+    return _same_action_schema_required_members(generated, _action_generation_schema(schema))
 
 def _recorded_assignment_transport(saved):
-    """Validate the private current-generator proof without inferring old data."""
-    if 'assignment_transport' not in saved:
-        return False
-    if saved['assignment_transport'] != {'version': _ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _digest(saved['schema'])}:
+    """Validate the generator proof of a saved direct decision request.
+
+    A decision saved under the exchange protocol is proven by its recorded
+    exchanges and carries no transport member.
+    """
+    if saved.get('decision_protocol') == DECISION_EXCHANGE_PROTOCOL:
+        if 'assignment_transport' in saved:
+            raise ValueError('original_assignment_transport_mismatch')
+        return
+    if saved.get('assignment_transport') != {'version': _ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _digest(saved['schema'])}:
         raise ValueError('original_assignment_transport_mismatch')
-    return True
 
 def _same_action_schema_required_members(left, right):
     """Only schema required-member order is lost by markerless serialization."""
@@ -383,59 +387,24 @@ def _same_action_schema_required_members(left, right):
     original = normalized(left)
     return original is not None and original == normalized(right)
 
-def _decode_recorded_action_response(value, schema, *, recorded_selection=None, exchanges=(), exchange_schema=None, unproven_replay=False):
-    """Preserve an authoritative old selection without guessing absent values.
-
-    A completed/selected action proves its entire original normalized selection.
-    Before admission, an immutable matching exchange proves the original wire
-    representation. The compatibility branch deliberately retains the old
-    decoder, including its limits; it does not repair historical scientific data.
-    """
+def _decode_recorded_action_response(value, schema, *, recorded_selection=None, exchanges=(), exchange_schema=None):
+    """Decode a recorded response and verify it against its recorded selection and exchange contract."""
     decoded = _decode_action_response(value, schema)
     if not isinstance(decoded, dict):
-        return decoded
-
-    def without_transport_proof():
-        if unproven_replay:
-            historical = _decode_action_response(value, schema, _legacy_episode_assignments=True)
-            if _json(historical.get('selection')) != _json(decoded.get('selection')):
-                raise ValueError('original_assignment_transport_unavailable')
         return decoded
     if recorded_selection is not None:
         if _json(decoded.get('selection')) == _json(recorded_selection):
             return decoded
-        historical = _decode_action_response(value, schema, _legacy_episode_assignments=True)
-        if _json(historical.get('selection')) == _json(recorded_selection):
-            return historical
         raise ValueError('original_action_response_selection_mismatch')
     if not exchanges:
-        return without_transport_proof()
+        return decoded
     selected_schema = _object({'response_type': {'type': 'string', 'const': 'select_action'}, **schema['properties']})
     selected_schema['required'] = ['response_type', *schema['required']]
     if exchange_schema is not None:
         original = exchange_schema.get('properties', {}).get('response', {}).get('anyOf', [])
         if len(original) != 2 or _json(original[1]) != _json(selected_schema):
             raise ValueError('original_action_exchange_schema_mismatch')
-    for row in exchanges:
-        if not row.get('response_recorded') or not isinstance(row.get('response'), dict):
-            continue
-        original = row.get('response', {}).get('response', {})
-        if not isinstance(original, dict) or original.get('response_type') != 'select_action' or _json(original) != _json({'response_type': 'select_action', **value}):
-            continue
-        generated = row['request'].get('output_schema', {})
-        if exchange_schema is not None:
-            if _same_action_schema_required_members(generated, _action_generation_schema(exchange_schema)):
-                return decoded
-            if _same_action_schema_required_members(generated, _action_generation_schema(exchange_schema, _legacy_episode_assignments=True)):
-                return _decode_action_response(value, schema, _legacy_episode_assignments=True)
-            continue
-        alternatives = generated.get('properties', {}).get('response', {}).get('anyOf', [])
-        if len(alternatives) == 2:
-            if _same_action_schema_required_members(alternatives[1], _action_generation_schema(selected_schema)):
-                return decoded
-            if _same_action_schema_required_members(alternatives[1], _action_generation_schema(selected_schema, _legacy_episode_assignments=True)):
-                return _decode_action_response(value, schema, _legacy_episode_assignments=True)
-    return without_transport_proof()
+    return decoded
 
 @dataclass(frozen=True)
 class TimedChildUnit(ChildEpisodeUnit):
@@ -788,7 +757,7 @@ class DecisionSource:
             schema = saved['schema']
             context = saved['context']
             try:
-                recorded_transport = _recorded_assignment_transport(saved)
+                _recorded_assignment_transport(saved)
             except ValueError as error:
                 raise WorkflowError(str(error)) from error
             if (profile is None) != ('contract_information' not in saved):
@@ -802,7 +771,6 @@ class DecisionSource:
             if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL and saved.get('decision_protocol') != DECISION_EXCHANGE_PROTOCOL:
                 raise WorkflowError('pending_decision_requires_original_protocol')
             if row['response'] is not None:
-                self._unproven_direct_response_index = index if self.workflow.decision_protocol is None and (not recorded_transport) else None
                 if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
                     if profile is not None:
                         self.validate_contract_exchange_history(saved, index)
@@ -887,10 +855,9 @@ class DecisionSource:
         if not has_session(self.episode_id, 'REASONING') and 'restored_episode_history' not in context:
             context = {**context, 'restored_episode_history': self.workflow.history_preview(self, before=index)}
         context = instructional_model_context(context)
-        transport = saved.get('assignment_transport') if row is not None else {'version': _ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _digest(schema)}
+        transport = saved['assignment_transport'] if row is not None else {'version': _ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _digest(schema)}
         saved = {'context': context, 'schema': schema, **({'literature_numerical_contracts': saved['literature_numerical_contracts']} if 'literature_numerical_contracts' in saved else {})}
-        if transport is not None:
-            saved['assignment_transport'] = transport
+        saved['assignment_transport'] = transport
         if self.workflow.receipts is not None and (not self.workflow.is_job_source(self)) and (not self.workflow.uses_received_record_context(self)):
             self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'], kind='decision_input', source_index=index)
         journal.save('runtime_model_calls', {'episode_id': self.episode_id, 'call_index': index, 'purpose': 'decision', 'request': _json(saved), 'response': None})
@@ -1278,14 +1245,14 @@ class DecisionSource:
             original = self.workflow.journal.row('runtime_actions', self.episode_id, index)
             call = self.workflow.journal.row('runtime_model_calls', self.episode_id, index) if original is None and self.workflow.decision_exchanges is not None else None
             saved = {} if call is None else json.loads(call['request'])
-            response = _decode_recorded_action_response(response, schema, recorded_selection=None if original is None else json.loads(original['action']), exchanges=() if original is not None or self.workflow.decision_exchanges is None else self.workflow.decision_exchanges.rows(self.episode_id, index), exchange_schema=saved.get('contract_information', {}).get('exchange_schema'), unproven_replay=getattr(self, '_unproven_direct_response_index', None) == index)
+            response = _decode_recorded_action_response(response, schema, recorded_selection=None if original is None else json.loads(original['action']), exchanges=() if original is not None or self.workflow.decision_exchanges is None else self.workflow.decision_exchanges.rows(self.episode_id, index), exchange_schema=saved.get('contract_information', {}).get('exchange_schema'))
             selection = response['selection']
             if self._delivery_resolution_ref is not None:
                 Draft202012Validator(schema).validate(response)
                 if response['report_update'] != self.report_values:
                     raise ValueError('delivery_resolution_must_preserve_current_interpretation')
             if self.workflow.permits_common_action(self, 'reason') and isinstance(selection, Mapping) and (selection.get('kind') == 'reason'):
-                envelope = self.workflow.reasoning_action_schema(self, {'type': 'object'}, _accept_legacy_quotes=True)
+                envelope = self.workflow.reasoning_action_schema(self, {'type': 'object'})
                 Draft202012Validator(envelope).validate(selection)
                 payload = selection['commit']
                 commit_schema = self.workflow.store.reasoning_schema()
@@ -1478,7 +1445,7 @@ class Workflow:
         if episode_record_receipts and (not isinstance(initial_known_record_refs, (list, tuple)) or any((not isinstance(ref, str) or not ref for ref in initial_known_record_refs))):
             raise ValueError('receipt_binding_requires_explicit_initial_known_record_refs')
         self.episode_record_receipts = episode_record_receipts
-        if wait_inputs_version not in {'wait_inputs_binding_v1', 'wait_inputs_binding_v2'}:
+        if wait_inputs_version != 'wait_inputs_binding_v2':
             raise ValueError('unsupported_wait_inputs_binding')
         self.wait_inputs_version = wait_inputs_version
         if completed_action_inputs_version not in {None, 'completed_action_inputs_binding_v1'}:
@@ -1487,7 +1454,7 @@ class Workflow:
         self.episode_application_services_binding = service_binding(episode_service_factory, episode_service_binding, inputs=episode_service_inputs)
         if self.episode_application_services_binding is not None and any((value is not None for value in (episode_binding_factories, episode_binding_descriptors, role_credit_bindings, job_progress_provider))):
             raise ValueError('episode_service_factory_and_direct_services_are_exclusive')
-        if progress_receipt_order not in {'received_progress_order_v1', 'legacy_grouped_v1'}:
+        if progress_receipt_order != 'received_progress_order_v1':
             raise ValueError('unsupported_progress_receipt_order')
         self.progress_receipt_order = progress_receipt_order
         self.store, self.tools, self.provider = (store, tools, provider)
@@ -2430,14 +2397,12 @@ class Workflow:
         captures = [context[key] for key in ('execution_expectations', 'native_execution_expectations') if context.get(key) is not None]
         with self.store.read_snapshot():
             arguments = {}
-            metadata = None
-            if self.wait_inputs_version == 'wait_inputs_binding_v2':
-                arguments['include_identities'] = True
-                metadata = self.source_controller_credit(source)
-                if metadata is not None:
-                    arguments['local_return_history'] = self.local_return_history.capture(source.episode_id, **metadata)
+            arguments['include_identities'] = True
+            metadata = self.source_controller_credit(source)
+            if metadata is not None:
+                arguments['local_return_history'] = self.local_return_history.capture(source.episode_id, **metadata)
             support = self.wait_inputs.capture(source.episode_id, pending=context['pending_work'], known_progress_refs=self.progress_selection(source)['known_progress_refs'], current_duration_expectations=captures, **arguments)
-            if self.wait_inputs_version == 'wait_inputs_binding_v2' and metadata is None:
+            if metadata is None:
                 support['local_return_history_unavailable_reason'] = 'controller_credit_binding_unavailable'
             if self.native_event_information is not None:
                 support['native_event_targets'] = _plain(context.get('native_event_targets', []))
@@ -2623,7 +2588,7 @@ class Workflow:
         return arguments
 
     def receive_outcome(self, source, selection, result, index):
-        if self.progress_provider is not None and self.progress_receipt_order == 'received_progress_order_v1':
+        if self.progress_provider is not None:
             self.progress_provider.receive_outcome(source.episode_id, result, source.scope, f'{self.run_id}:{source.episode_id}:{index}:own_progress')
         if self.receipts is not None and (not self.is_job_source(source)):
             references = list(result.get('record_refs', []))
@@ -2844,10 +2809,6 @@ class Workflow:
         message = source.request['message'] if isinstance(source.request, Mapping) else source.request.message.as_record()
         initial = list(message.get('episode_assignment', {}).get('known_progress_refs', []))
         references = [*initial, *self.services.received_progress_refs(source.episode_id)]
-        if self.progress_receipt_order == 'received_progress_order_v1':
-            return {'known_progress_refs': list(dict.fromkeys(references)), 'initial_progress_refs': list(initial)}
-        rows = self.store.db.execute("SELECT refs.value FROM runtime_actions actions JOIN json_each(actions.result,'$.progress_refs') refs WHERE actions.run_id=? AND actions.episode_id=? AND (json_extract(actions.result,'$.status') IN ('completed','partial') OR (json_extract(actions.action,'$.kind') IN ('tool','reason') AND json_extract(actions.result,'$.status') IN ('failed','unavailable'))) ORDER BY actions.decision_index, refs.key", (self.run_id, source.episode_id))
-        references.extend((row[0] for row in rows))
         return {'known_progress_refs': list(dict.fromkeys(references)), 'initial_progress_refs': list(initial)}
 
     def source_credit_binding(self, source):
@@ -3576,12 +3537,10 @@ class Workflow:
                     result['native_execution_expectations'] = context['native_execution_expectations']
         return result
 
-    def reasoning_action_schema(self, source, commit_schema=None, *, _accept_legacy_quotes=False):
+    def reasoning_action_schema(self, source, commit_schema=None):
         commit_schema = self.store.reasoning_schema() if commit_schema is None else commit_schema
         specialist = self.specialist(source)
-        schema = getattr(specialist, 'accept_reasoning_action_schema', None) if _accept_legacy_quotes else None
-        if schema is None:
-            schema = getattr(specialist, 'reasoning_action_schema', None)
+        schema = getattr(specialist, 'reasoning_action_schema', None)
         selected = schema(self.binding_context(source), commit_schema) if schema is not None else None
         result = selected if selected is not None else _object({'kind': {'type': 'string', 'const': 'reason'}, 'commit': commit_schema})
         return {**result, 'description': '\n\n'.join((value for value in (result.get('description'), self.services.reasoning_commit_requirement()) if value))}
@@ -3791,8 +3750,7 @@ class Workflow:
                 outcome['delivery_resolution_index'] = original_delivery
                 from .episode_source_failure import child_completion_status
                 outcome['child_completion'] = child_completion_status(self.store, self.run_id, child.source.episode_id, completion.as_record(), delivery='admitted')
-                if self.wait_inputs_version == 'wait_inputs_binding_v2' or self.completed_action_inputs_version is not None:
-                    outcome['pending_work_after_action'] = self.pending_work(source)
+                outcome['pending_work_after_action'] = self.pending_work(source)
                 self.journal.save('runtime_actions', {'episode_id': source.episode_id, 'decision_index': index, 'action': _json(selection), 'result': _json(outcome), 'credit': None})
                 old = self.journal.row('runtime_actions', source.episode_id, index)
             value = old['credit']
@@ -4214,24 +4172,16 @@ def assemble_workflow(store, tools, provider, directory, run_id, settings, *, co
     expected_receipts = {'version': 'explicit_store_record_receipts_v1', 'enabled': True} if episode_record_receipts else None
     if settings.get('episode_record_receipts') != expected_receipts:
         raise WorkflowError('resumption_requires_original_episode_record_receipts')
-    wait_inputs_version = 'wait_inputs_binding_v1'
-    if 'wait_inputs' in settings:
-        recorded_wait_inputs = settings['wait_inputs']
-        if recorded_wait_inputs not in ({'version': 'wait_inputs_binding_v1'}, {'version': 'wait_inputs_binding_v2'}):
-            raise WorkflowError('unsupported_wait_inputs_binding')
-        wait_inputs_version = recorded_wait_inputs['version']
-    completed_action_inputs_version = None
-    if 'completed_action_inputs' in settings:
-        recorded_completed_inputs = settings['completed_action_inputs']
-        if recorded_completed_inputs != {'version': 'completed_action_inputs_binding_v1'}:
-            raise WorkflowError('unsupported_completed_action_inputs_binding')
-        completed_action_inputs_version = recorded_completed_inputs['version']
-    episode_branch_lifecycle = None
-    if 'episode_branch_lifecycle' in settings:
-        if settings['episode_branch_lifecycle'] != {'version': EPISODE_BRANCH_LIFECYCLE}:
-            raise WorkflowError('unsupported_episode_branch_lifecycle')
-        episode_branch_lifecycle = EPISODE_BRANCH_LIFECYCLE
-    return Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit, credit_binding=_credit_binding_from_settings(settings), restoration_settings=settings['restoration'], execution_expectations=execution_expectations, job_episodes=job_episodes, resource_estimator=resource_estimator, native_timing_information=native_timing_information, initial_known_record_refs=initial_known_record_refs, episode_binding_factories=episode_binding_factories, episode_binding_descriptors=episode_binding_descriptors, role_credit_bindings=role_credit_bindings, job_progress_provider=job_progress_provider, execution_binding=execution_binding, episode_service_factory=episode_service_factory, episode_service_binding=episode_service_binding, episode_service_inputs=episode_service_inputs, annotation_child_roles=annotation_child_roles, decision_protocol=decision_protocol, root_action_boundary=settings.get('root_action_boundary'), episode_branch_lifecycle=episode_branch_lifecycle, episode_record_receipts=episode_record_receipts, native_job_events=native_job_events, progress_receipt_order=settings.get('episode_progress_receipts', {}).get('version', 'legacy_grouped_v1'), wait_inputs_version=wait_inputs_version, completed_action_inputs_version=completed_action_inputs_version, project_annotation_score=project_annotation_score, annotation_score_binding={'projector': bindings['annotation_score'], 'versions': versions['annotation_score'], 'definition': settings.get('binding_definitions', {}).get('annotation_score'), 'scope_source': 'context.scope', 'meaning': 'Annotation support, separately bound from investigation progress and numerical yield.'} if project_annotation_score is not None else None, project_child_credit=project_child_credit, child_credit_binding={'kind': 'custom', 'projector': settings['bindings']['scientific_child_credit'], 'versions': settings['binding_versions']['scientific_child_credit'], 'definition': settings.get('binding_definitions', {}).get('scientific_child_credit'), 'scope_source': 'context.scope', 'assignment_source': 'original_parent_commission', 'meaning': 'Local scientific investigation credit; not an additive parent task score.'} if project_child_credit is not None else None, controller_binding={'factory': settings['bindings']['controller'], 'versions': settings['binding_versions']['controller'], 'definition': settings.get('binding_definitions', {}).get('controller') if settings['controller'] is None else settings['controller']})
+    if settings.get('wait_inputs') != {'version': 'wait_inputs_binding_v2'}:
+        raise WorkflowError('unsupported_wait_inputs_binding')
+    wait_inputs_version = settings['wait_inputs']['version']
+    if settings.get('completed_action_inputs') != {'version': 'completed_action_inputs_binding_v1'}:
+        raise WorkflowError('unsupported_completed_action_inputs_binding')
+    completed_action_inputs_version = settings['completed_action_inputs']['version']
+    if settings.get('episode_branch_lifecycle') != {'version': EPISODE_BRANCH_LIFECYCLE}:
+        raise WorkflowError('unsupported_episode_branch_lifecycle')
+    episode_branch_lifecycle = EPISODE_BRANCH_LIFECYCLE
+    return Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit, credit_binding=_credit_binding_from_settings(settings), restoration_settings=settings['restoration'], execution_expectations=execution_expectations, job_episodes=job_episodes, resource_estimator=resource_estimator, native_timing_information=native_timing_information, initial_known_record_refs=initial_known_record_refs, episode_binding_factories=episode_binding_factories, episode_binding_descriptors=episode_binding_descriptors, role_credit_bindings=role_credit_bindings, job_progress_provider=job_progress_provider, execution_binding=execution_binding, episode_service_factory=episode_service_factory, episode_service_binding=episode_service_binding, episode_service_inputs=episode_service_inputs, annotation_child_roles=annotation_child_roles, decision_protocol=decision_protocol, root_action_boundary=settings.get('root_action_boundary'), episode_branch_lifecycle=episode_branch_lifecycle, episode_record_receipts=episode_record_receipts, native_job_events=native_job_events, progress_receipt_order=settings['episode_progress_receipts']['version'], wait_inputs_version=wait_inputs_version, completed_action_inputs_version=completed_action_inputs_version, project_annotation_score=project_annotation_score, annotation_score_binding={'projector': bindings['annotation_score'], 'versions': versions['annotation_score'], 'definition': settings.get('binding_definitions', {}).get('annotation_score'), 'scope_source': 'context.scope', 'meaning': 'Annotation support, separately bound from investigation progress and numerical yield.'} if project_annotation_score is not None else None, project_child_credit=project_child_credit, child_credit_binding={'kind': 'custom', 'projector': settings['bindings']['scientific_child_credit'], 'versions': settings['binding_versions']['scientific_child_credit'], 'definition': settings.get('binding_definitions', {}).get('scientific_child_credit'), 'scope_source': 'context.scope', 'assignment_source': 'original_parent_commission', 'meaning': 'Local scientific investigation credit; not an additive parent task score.'} if project_child_credit is not None else None, controller_binding={'factory': settings['bindings']['controller'], 'versions': settings['binding_versions']['controller'], 'definition': settings.get('binding_definitions', {}).get('controller') if settings['controller'] is None else settings['controller']})
 
 async def run_workflow(store, tools, *, provider=None, provider_config=None, run_dir=None, resume=False, controller_settings=None, credit_policy=None, controller_factory=None, project_credit=None, goal=None, restoration_settings=None, execution_expectations=None, job_episodes=None, binding_definitions=None, project_child_credit=None, resource_estimator=None, project_annotation_score=None, initial_known_record_refs=None, native_timing_information=None, episode_binding_factories=None, episode_binding_descriptors=None, role_credit_bindings=None, job_progress_provider=None, execution_binding=None, episode_service_factory=None, episode_service_binding=None, episode_record_receipts=False, native_job_events=None, episode_service_inputs=None, annotation_child_roles=None, decision_protocol=_DEFAULT_DECISION_PROTOCOL):
     """Bind standard scientific channels or execute the caller's explicit policy.

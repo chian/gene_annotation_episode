@@ -121,19 +121,6 @@ def test_absent_and_empty_associations_do_not_infer_path_basename_equivalence():
     assert_numbers(calculate(other), adjusted=False)
 
 
-def test_exact_native_identity_can_use_old_rules_with_empty_list_but_not_selected_malformed_assertion():
-    args = sequence_inputs(native_database="curated-proteins")
-    # Original invocation also uses the exact semantic identity in this case.
-    args["search"]["normalized"]["search"]["request"] = {"db": "curated-proteins"}
-    args["database_population_associations"] = []
-    out = calculate(args)
-    assert out["components"]["function_weights"]["representation_adjusted_probabilities"] == pytest.approx({"F": 2/7, "G": 5/7})
-    assert out["components"]["database_sheet"]["database_population_relation"]["status"] == "unavailable"
-    args["database_population_associations"] = sequence_inputs()["database_population_associations"]
-    args["database_population_associations"][0]["assertion_record"]["value"] = {"available": True}
-    assert_numbers(calculate(args), adjusted=False)
-
-
 @pytest.mark.parametrize("change,expected", [
     (lambda a: a["database_population_associations"][0]["assertion_record"]["value"].update(database_manifest_sha256="9" * 64), PREFIX + "manifest_identity_conflict"),
     (lambda a: a["database_population_associations"][0]["assertion_record"]["value"].update(native_database_operand="/different/proteins"), PREFIX + "native_operand_conflict"),
@@ -320,16 +307,6 @@ def test_public_builder_requires_explicit_reference_and_calculation_context():
             grader.build_database_sheet(**other)
 
 
-def test_old_sheet_version_never_discovers_population_keys():
-    args = sequence_inputs()
-    args["database_population_associations"] = None
-    args["report_source"].pop("source_ref")
-    sheet = sequence.populate_blast_sequence_database_sheet(**args)
-    sheet["database_population_associations"] = []
-    with pytest.raises(ValueError, match="blast_sequence_database_sheet_fields_invalid"):
-        sequence.calculate_blast_sequence_database_components(sheet)
-
-
 def test_v3_report_source_identity_is_preserved_and_missing_identity_disables_adjustment():
     args = sequence_inputs()
     database, _ = assert_numbers(calculate(args))
@@ -350,14 +327,3 @@ def test_report_source_alias_different_bytes_and_artifact_is_incompatible():
     assert database["database_population_relation"]["status"] == "incompatible"
     assert PREFIX + "report_used_as_population_source" in database["database_population_relation"]["reason_codes"]
 
-
-@pytest.mark.parametrize("version", [sequence.SHEET_SCHEMA, sequence.SHEET_SCHEMA_V2])
-def test_old_declared_versions_keep_exact_four_field_report_source(version):
-    args = sequence_inputs()
-    args["database_population_associations"] = None
-    args["report_source"].pop("source_ref")
-    sheet = sequence.populate_blast_sequence_database_sheet(**args)
-    sheet["schema"] = version
-    sheet["report_source"]["source_ref"] = "source:original-report"
-    with pytest.raises(ValueError, match="blast_sequence_database_report_source_fields_invalid"):
-        sequence.calculate_blast_sequence_database_components(sheet)

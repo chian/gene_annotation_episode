@@ -1,7 +1,4 @@
-"""A107 original fluorescence configured tool contracts; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 fluorescence configured tool contracts."""
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.root.a107.library.fluorescence_configured_capabilities import expand_fluorescence_tool_instructions
 from gene_annotation_episode.episodic_workflow.root.a107.native_fluorescence_contracts import JOB_SCHEMA, JOB_V2_SCHEMA, NATIVE_FLUORESCENCE_REQUESTED_JOB_SCHEMA, validate_fluorescence_bindings

@@ -1,7 +1,7 @@
 """Actual Store/Journal receipt checks with authored BAM/software identities.
 
 Opaque bytes are deliberately not parsed or executed. This verifies authority,
-not biological data or deployment. Run only with a pinned bounded runner.
+not biological data or deployment.
 """
 from copy import deepcopy
 from dataclasses import replace
@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.episode_bindings import Bind
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.atac_differential_operands import validate_atac_job_inputs
+from gene_annotation_episode.episodic_workflow.root.atac_differential_operands import validate_atac_job_inputs
 from gene_annotation_episode.native_atac_differential_contracts import (
     REQUIRED_DEPENDENCIES, REQUIRED_MODULES, OPERATION, MODE, requested_job_from_atac)
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
@@ -97,7 +97,6 @@ def context(f, *, parent=None, role="annotation", index=0, assigned=None, persis
             f.journal.save("runtime_actions", {"episode_id": parent.episode_id, "decision_index": index,
                 "action": canonical(selection), "result": None, "credit": None})
     return result
-
 
 
 @pytest.fixture
@@ -211,5 +210,3 @@ def test_input_authority_does_not_reopen_inputs_or_install_receipts(f,monkeypatc
     assert list(f.store.db.iterdump())==before
 
 
-def test_other_jobs_do_not_install_or_query_context(f):
-    assert validate_atac_job_inputs(f.store,None,{'requested_job':{}},reference_access=None)==[]

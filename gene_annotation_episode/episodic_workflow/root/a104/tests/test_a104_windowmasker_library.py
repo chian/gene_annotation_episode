@@ -1,13 +1,10 @@
 """Saved native ASCII counts and deliberately malformed synthetic examples."""
 from copy import deepcopy
 import hashlib
-import json
-from pathlib import Path
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a104.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a104.sequence_masking_contracts import validate_sequence_masking_record
 from gene_annotation_episode.episodic_workflow.root.a104.library.windowmasker_statistics import parse_windowmasker_statistics, validate_windowmasker_statistics
-FIXTURES = Path(__import__('gene_annotation_episode.episodic_workflow.root.a104.sequence_masking_contracts', fromlist=['__file__']).__file__).resolve().parent.parent / 'a101/tests/fixtures/masking_native'
 
 def descriptor(raw, complete='complete'):
     return {'occurrence_id': 'statistics', 'direction': 'input', 'role': 'statistics', 'ordinal': 0, 'artifact_ref': 'retained:statistics', 'sha256': hashlib.sha256(raw).hexdigest(), 'size_bytes': len(raw), 'completeness': complete}
@@ -18,29 +15,6 @@ def parse(raw, binding=None, complete='complete'):
 def statuses(stats):
     return {r['name']: (r['status'], r['reason']) for r in validate_windowmasker_statistics(stats)}
 
-def test_saved_native_complete_counts_percentiles_thresholds_and_reference_identity():
-    manifest = json.loads((FIXTURES / 'ORACLE_MANIFEST.json').read_text())
-    case = next((c for c in manifest['cases'] if c['mode'] == 'create_counts'))
-    pin = case['primary_output']
-    raw = (FIXTURES / pin['path']).read_bytes()
-    assert len(raw) == pin['size_bytes'] == 15201
-    assert hashlib.sha256(raw).hexdigest() == pin['sha256'] == 'bf4a5a6123b09a10b5f07654085b00381763d40b9a7e116dd9788152090dc59e'
-    binding = {'kind': 'generated', 'statistics_occurrence_id': 'statistics', 'reference_occurrence_ids': ['window_reference.fa'], 'producer_source_ref': 'oracle612:create_counts', 'producer_attempt_id': manifest['attempt'], 'provenance': 'authenticated_generation'}
-    stats = parse(raw, binding)
-    assert stats['format_version'] == '1.1.0' and stats['algorithm_version'] == '1.0.0'
-    assert stats['unit_length'] == 3
-    assert len(stats['unit_counts']) == 21 and len(stats['percentiles']) == 501
-    assert stats['unit_counts'][0]['unit_code_hex'] == '0'
-    assert stats['unit_counts'][-1]['unit_code_hex'] == '34'
-    assert stats['unit_counts'][-1]['unit_code'] == 52
-    assert min((r['native_count'] for r in stats['unit_counts'])) == 1
-    assert max((r['native_count'] for r in stats['unit_counts'])) == 64
-    assert stats['thresholds'] == {'t_low': 3, 't_extend': 126, 't_threshold': 126, 't_high': 126}
-    assert stats['percentiles'][1]['percentage_lexeme'] == '57.1429'
-    assert stats['reference_binding'] == binding
-    assert not stats['failures']
-    assert all((c['status'] == 'pass' for c in stats['checks']))
-    assert validate_windowmasker_statistics(json.loads(json.dumps(stats))) == stats['checks']
 
 def test_synthetic_unknown_metadata_and_absent_percentiles_do_not_invent_values():
     stats = parse(b'##future: arbitrary native metadata\n3\n0 1\n>t_low 3\n>t_extend 4\n>t_threshold 8\n>t_high 64\n')

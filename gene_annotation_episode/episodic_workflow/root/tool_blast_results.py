@@ -1,4 +1,4 @@
-"""Original substantive ordinary-tool methods: tool_blast_results."""
+"""Ordinary-tool methods: tool_blast_results."""
 from __future__ import annotations
 from dataclasses import replace
 from gene_annotation_episode.acquisition import SourceSnapshot

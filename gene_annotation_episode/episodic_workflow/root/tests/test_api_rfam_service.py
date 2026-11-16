@@ -492,25 +492,6 @@ def test_rfam_instructions_and_numerical_sources_reach_only_actual_owners(harnes
     assert h.client.calls == []
 
 
-def test_report_selection_is_explicit_and_old_report_selection_stays_artifact_only(harness):
-    h = harness
-    original = h.request["subject_ref"]
-    batch = {"version": "rfam_batch_request_v2", "mode": "sequence_batch", "subject_refs": [original]}
-    report = {"version": "rfam_batch_result_selector_v3", "representation": "out",
-        "model_metadata_ref": None, "projection": {"family": "hit", "rows": {"offset": 0, "limit": 1},
-            "metrics": ["native_bias_bits", "native_alignment_accuracy", "query_insert_count"]}}
-    assert h.service.result_catalog(batch, report)
-    for version in ("rfam_batch_result_selector_v1", "rfam_batch_result_selector_v2"):
-        assert h.service.result_catalog(batch, {**SELECTOR, "version": version, "representation": "out"})
-        with pytest.raises(ValueError):
-            h.service.result_catalog(batch, {**report, "version": version})
-    with pytest.raises(ValueError, match="rfam_report_batch_request_required"):
-        h.service.result_catalog(h.request, report)
-    with pytest.raises(ValueError, match="rfam_projection_invalid"):
-        h.service.result_catalog(batch, {**report, "model_metadata_ref": "unverified-model-source"})
-    assert h.client.calls == []
-
-
 def test_table_only_native_metrics_do_not_change_json_metric_meanings(harness):
     h = harness
     selected = {**SELECTOR, "version": "rfam_batch_result_selector_v2", "representation": "tblout",

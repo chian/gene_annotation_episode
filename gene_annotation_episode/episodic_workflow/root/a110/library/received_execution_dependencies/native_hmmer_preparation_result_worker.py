@@ -75,20 +75,18 @@ def qualified_occurrences(bundle, bundle_ref, capture):
         problems.append(failure('native', PREFIX + 'native_execution_unsuccessful', bundle_ref + '#/returncode'))
     return (result, unique_failures(problems))
 
-def effective_metadata(bundle, occurrences, *, include_map_context=True):
+def effective_metadata(bundle, occurrences):
     """Project original producer facts; imported declarations stay explicit.
 
     This function authenticates no external producer history. A current build
     has its own recorded ABI, attempt and input/output association. A caller's
     imported declaration remains a declaration, including any mismatch.
     """
-    if type(include_map_context) is not bool:
-        raise ContractError(PREFIX + 'map_context_selection_invalid')
     job = bundle['requested_job']['native_hmmer_preparation']
     original = deepcopy(job['input_metadata'])
     metadata, problems = (deepcopy(original), [])
     lookup = {(r['direction'], r['role'], r['ordinal']): r for r in occurrences}
-    if bundle['program'] == 'alimask' and include_map_context:
+    if bundle['program'] == 'alimask':
         from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.hmmer_alignment_preparation_calculations import resolve_alimask_map_context
         alignment = lookup.get(('input', 'alignment', 0))
         if alignment is not None and alignment['completeness'] == 'complete':

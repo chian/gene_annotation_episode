@@ -84,7 +84,7 @@ def _shape(value, schema, pointer=""):
 
 
 def _record_relationships(value, schema, pointer=""):
-    """Closed field relationships only; scientific compatibility belongs to342."""
+    """Closed field relationships only; scientific compatibility is checked elsewhere."""
     if schema is _ASSIGNMENT:
         required = {"whole_sequence": {"member_key"}, "feature": {"member_key", "feature_identifier"},
                     "sample": {"sample_key"}}[value["assignment_scope"]]
@@ -236,7 +236,7 @@ def _report_matches(sheet, report):
 
 
 def populate_native_blast_vdb_function_sheets(base_sheet_set, *, prepared_inputs, artifact_catalog) -> dict:
-    """Populate actual342 sheets after the VDB merge, preserving local failures.
+    """Populate sheets after the VDB merge, preserving local failures.
 
 This consumes validation envelopes and catalog facts already supplied by the
 caller. It does not read catalog paths or populate/reparse the base VDB sheet.
@@ -321,7 +321,7 @@ Each scientific sheet retains its complete base and342's exact LinkResults.
                 continue
             units.append((validation, pointer, search, _usable_records(validation, pointer, unit), sheet))
 
-    # Dependency/census keys are strict342 record identities. Cross-envelope
+    # Dependency/census keys are strict record identities. Cross-envelope
     # collisions reject every conflicting record, never an earlier source.
     owners = {}
     for index, (_, _, _, unit, _) in enumerate(units):

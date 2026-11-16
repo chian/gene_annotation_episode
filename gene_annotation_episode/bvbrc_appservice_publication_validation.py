@@ -18,9 +18,8 @@ class AppServicePublicationValidation:
                and type(snapshot.request) is dict
                and snapshot.request.get("kind") == "download"
                and _same(snapshot.request.get("requested_byte_range"), inputs["current_operation"]["arguments"]["byte_range"])
-               and ("max_bytes" in snapshot.request) == ("max_bytes" in inputs["current_operation"]["arguments"])
-               and ("max_bytes" not in snapshot.request or _same(snapshot.request["max_bytes"],
-                    inputs["current_operation"]["arguments"]["max_bytes"])),
+               and "max_bytes" in snapshot.request and _same(snapshot.request["max_bytes"],
+                    inputs["current_operation"]["arguments"]["max_bytes"]),
                "publication_dependency_conflict")
         current = inputs["current_snapshot"]
         content = current["content"]

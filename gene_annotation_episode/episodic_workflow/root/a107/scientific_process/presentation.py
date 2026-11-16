@@ -1,4 +1,4 @@
-"""Original A107 scientific presentation precedence."""
+"""A107 scientific presentation precedence."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a107.providers import DECISION_CONTEXT_VERSION, apply_state_frame, deepcopy, infernal_receiver_context, is_api_launch_context, json, render_api_launch_prompt
 from gene_annotation_episode.episodic_workflow.root.a107.library.scientific_decision_presentation import _ordinary_runtime_receiver_context, _rna_comparison_receiver_context, is_published_scientific_context, text_instructions

@@ -1,4 +1,4 @@
-"""Preserved root host ports defined by WorkflowResultReceipts."""
+"""Root host ports defined by WorkflowResultReceipts."""
 from __future__ import annotations
 
 class WorkflowResultReceipts:

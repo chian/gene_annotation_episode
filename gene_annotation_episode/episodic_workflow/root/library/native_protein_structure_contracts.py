@@ -65,10 +65,8 @@ class Software(TypedDict):
     python_executable: str
     python_sha256: str
     python_version: str
-    driver_module: Literal["gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver",
-        "gene_annotation_episode.native_protein_structure_driver"]
-    worker_module: Literal["gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker",
-        "gene_annotation_episode.native_protein_structure_worker"]
+    driver_module: Literal["gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver"]
+    worker_module: Literal["gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker"]
     implementation_files: list[ImplementationFile]
     numpy_version: str
     biopython_version: str
@@ -125,7 +123,7 @@ class AttemptIdentity(TypedDict):
 
 
 class ProteinPolicy(TypedDict):
-    memory_bytes: Literal[5368709120, 21474836480]
+    memory_bytes: Literal[5368709120]
     scratch_bytes: Literal[4294967296]
 
 

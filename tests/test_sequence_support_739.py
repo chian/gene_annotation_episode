@@ -4,7 +4,6 @@ No fixture is a new biological annotation. Native acquisition is never repeated
 here; retained source inputs and actual Bio extraction remain distinguishable.
 """
 from copy import deepcopy
-from dataclasses import asdict
 from contextlib import contextmanager
 from email.message import Message
 import builtins
@@ -13,7 +12,6 @@ import http.client
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import io
 import json
-import os
 from pathlib import Path
 import socket
 import threading
@@ -374,53 +372,12 @@ def test_bounded_http_error_retains_status_and_bounded_body_without_retry(monkey
     assert failure.value.snapshot.transport['body_capture_failure'] == 'provider_response_byte_limit'
 
 
-def test_historical_unbounded_http_signature_and_failed_body_are_preserved(monkeypatch):
-    calls = []
-    response = Received(b'complete historical mode')
-    def receive(request, **kwargs): calls.append(request); return response
-    monkeypatch.setattr(urllib.request, 'urlopen', receive)
-    snapshot = PublicClients()._http('selected', 'https://selected.example/entity', {}, 'application/json',
-                                  json_body={'selected': ['a', 'b']})
-    assert response.requested_sizes == [-1] and snapshot.content == b'complete historical mode'
-    assert calls[0].get_method() == 'POST' and json.loads(calls[0].data) == {'selected': ['a', 'b']}
-    assert 'response_byte_limit' not in snapshot.transport
-    def fail(request, **kwargs):
-        raise urllib.error.HTTPError(request.full_url, 503, 'labelled historical transport', Message(), io.BytesIO(b'full error'))
-    monkeypatch.setattr(urllib.request, 'urlopen', fail)
-    with pytest.raises(AcquisitionError) as error:
-        PublicClients()._http('selected', 'https://selected.example/entity', {}, 'application/json')
-    assert error.value.snapshot.content == b'full error'
-    assert error.value.snapshot.transport['body_complete'] is True
-
-
 @pytest.mark.parametrize('limit', [0, -1, True, 3.0, '3'])
 def test_invalid_explicit_transport_limit_rejects_before_network(limit, monkeypatch):
     def forbidden(*args, **kwargs): raise AssertionError('invalid request sent')
     monkeypatch.setattr(urllib.request, 'urlopen', forbidden)
     with pytest.raises(ValueError, match='explicit_response_byte_limit_required'):
         PublicClients()._http('selected', 'https://selected.example/entity', {}, 'text/plain', max_bytes=limit)
-
-
-def test_new_molecular_requests_preserve_all_explicit_ids_and_bounds(monkeypatch):
-    calls = []
-    client = PublicClients()
-    def record(*args, **kwargs): calls.append((args, kwargs)); return 'captured'
-    monkeypatch.setattr(client, '_http', record)
-    # A stored Addgene credential routes addgene_sequences around _http to a
-    # live login. This test is about the public-page request, so no credential.
-    from gene_annotation_episode import addgene_access
-    monkeypatch.setattr(addgene_access, 'configured_addgene_credential', lambda: None)
-    assert client.ncbi_gene(['2', '10'], max_bytes=500) == 'captured'
-    assert calls[-1][0][2]['db'] == 'gene' and calls[-1][0][2]['id'] == '2,10'
-    assert calls[-1][1] == {'max_bytes': 500}
-    client.addgene_sequences('50005', max_bytes=200)
-    assert calls[-1][0][1] == 'https://www.addgene.org/50005/sequences/'
-    client.ncbi_search('gene', 'supplied selected term', max_bytes=100)
-    assert calls[-1][0][2]['db'] == 'gene' and calls[-1][1] == {'max_bytes': 100}
-    client.ncbi_sequence('AJ320226.1', max_bytes=200)
-    assert calls[-1][0][2]['db'] == 'nuccore' and calls[-1][1] == {'max_bytes': 200}
-    client.ncbi_sequence('AJ320226.1')
-    assert calls[-1][1] == {}  # Historical unbounded caller signature preserved.
 
 
 @pytest.mark.parametrize('ids', [[], ['2', '2'], [2], ['2,10'], ['２'], '2', [True]])

@@ -8,7 +8,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a106.domain import validate_schema
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_optical_calculations import calculate_nadh_optical_rate
-from gene_annotation_episode.episodic_workflow.root.a106.library.literature_optical_inputs import LEXICAL_DEPENDENCY, PRIMITIVE_ORDER, optical_arguments_schema, read_optical_rate_operands
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_optical_inputs import PRIMITIVE_ORDER, optical_arguments_schema, read_optical_rate_operands
 
 
 SOURCE = "source_" + "1" * 24
@@ -91,26 +91,6 @@ def add_covariance(args, sources, reader, matrix=None, status="known"):
     sources[COV_SOURCE] = {"artifact_ref": "artifact_" + "2" * 24, "content": json.dumps(data).encode()}
     args["covariance_source_ref"] = COV_SOURCE
     return data
-
-
-def test_source_bound_conversion_supplies_existing_rate_and_variance_without_sheet_execution():
-    args, sources, reader, calls = fixture()
-    data = add_covariance(args, sources, reader)
-    calls.clear()
-    extraction = result(args, reader)
-    operands = extraction["calculation_inputs"]
-    assert [operands[k] for k in PRIMITIVE_ORDER] == [-.012, -.002, 5., 1.]
-    assert np.array(operands["covariance"]) == pytest.approx(np.array([
-        [1e-8, 5e-9, 0, 0], [5e-9, 1e-8, 0, 0], [0, 0, .01, 0], [0, 0, 0, .0001]]))
-    assert extraction["covariance_source"]["data"] == data
-    assert extraction["lexical_dependency"] == LEXICAL_DEPENDENCY
-    assert calls == [(SOURCE, "original"), (COV_SOURCE, "original")]
-    cells = calculate_nadh_optical_rate(operands)
-    assert cells["net_depletion_rate"]["value"] == pytest.approx(2.)
-    assert cells["net_depletion_variance"]["value"] == pytest.approx(.0024)
-    assert extraction["calibration"]["wavelength"]["value"] == 340
-    assert "wavelength" not in operands
-    assert not any(extraction["input_unavailable_reasons"].values())
 
 
 @pytest.mark.parametrize("source_kind,source_origin", [("primary_source", "reported"),

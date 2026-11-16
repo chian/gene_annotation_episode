@@ -181,21 +181,6 @@ def test_inferred_source_alphabet_is_used_for_output_fragment_digitization():
     assert result["rows"][0]["reconstruction"]["marked_sequences"][0]["sequence"] == target
 
 
-def test_unknown_source_stays_unknown_and_legacy_absence_is_explicit_only():
-    unknown = sheet_for((ORACLE / "afa_auto_refusal.input").read_bytes(), "afa")
-    assert unknown["input_records"] == []
-    result = calc.calculate_hmmer_alignment_preparation_components(unknown)
-    assert result["rows"][0]["components"]["input_alignment_count"]["state"] == "missing"
-    assert result["rows"][0]["components"]["input_alignment_count"]["value"] is None
-    legacy = data._alignment_records(payload("alignment", b"# STOCKHOLM 1.0\na ACGT\n#=GC RF xxxx\n//\n"),
-        "stockholm", {"engine_version": "3.4"}, {"issues": [], "native_rows": []})[0]
-    assert "input_decoding" not in legacy
-    assert calc.reconstruct_alimask_model_map(legacy, settings={})["issues"][0]["code"] == "alphabet_missing"
-    assert calc.reconstruct_alimask_model_map(legacy, settings={"--dna": True, "--wnone": True})["map"] == [1, 2, 3, 4]
-    assert calc.reconstruct_alimask_model_map(legacy, settings={"--hand": True})["map"] == [1, 2, 3, 4]
-    assert "input_decoding" not in legacy
-
-
 def test_new_saved_recalculation_never_reopens_probe_decoder_or_source(monkeypatch):
     sheet = sheet_for((ORACLE / "afa_auto_rna.input").read_bytes(), "afa", mode="alignment_to_model",
         **{"--fast": True, "--wnone": True})

@@ -70,19 +70,11 @@ def _invocation(bundle, records):
         operands.append({'role': 'query' if axis == 'query' else 'subject', **descriptor, 'record_ordinal': 0, 'native_title': row['native_title'], 'identity': {'namespace': 'sequence_sha256', 'value': row['sequence_sha256'], 'version': None}})
     return ({'execution_program': bundle['program'], 'scientific_mode': 'pairwise', 'resource_kind': 'local', 'query_kind': 'sequence', 'reference_kind': 'sequence', 'request': bundle['requested_job'], 'effective_options': {**options, 'requested_hit_limit': int(options['-max_target_seqs']) if '-max_target_seqs' in options else None, 'requested_hsp_limit': int(options['-max_hsps']) if '-max_hsps' in options else None}, 'operands': operands, 'completion': {'native_returncode': bundle['returncode'], 'producer_complete': bundle['returncode'] == 0 and (not bundle['failures'])}}, bindings)
 
-def _hsp_values(component, common=None, *, archived_values=None):
+def _hsp_values(component, common):
     if component is None:
         return {}
     if common is None:
-        if archived_values is None:
-            raise ValueError('native_blast_common_hsp_components_required')
-        counts, scores = (component['counts'], component['native_scores'])
-        values = {name: scores[source] for name, source in (('native_score_bits', 'bit_score'), ('native_raw_score', 'score'), ('native_evalue', 'evalue'))}
-        values.update({name: counts.get(source) for name, source in (('alignment_columns', 'alignment_columns'), ('paired_positions', 'paired_columns'), ('identical_positions', 'identical_pairs'), ('query_gap_columns', 'query_gap_columns'), ('reference_gap_columns', 'reference_gap_columns'), ('query_aligned_positions', 'paired_query_positions'), ('reference_aligned_positions', 'paired_reference_positions'))})
-        values['substituted_positions'] = archived_values['substituted_positions']
-        values.update({name: component['denominators'][name] for name in ('query_length', 'reference_length')})
-        values.update(component['fractions'])
-        return values
+        raise ValueError('native_blast_common_hsp_components_required')
     counts, scores = (common['counts'], component['native_scores'])
     values = {name: scores[source] for name, source in (('native_score_bits', 'bit_score'), ('native_raw_score', 'score'), ('native_evalue', 'evalue'))}
     values.update({name: counts.get(source) for name, source in (('alignment_columns', 'alignment_columns'), ('paired_positions', 'paired_positions'), ('identical_positions', 'identical_positions'), ('substituted_positions', 'substituted_positions'), ('query_gap_columns', 'query_gap_columns'), ('reference_gap_columns', 'reference_gap_columns'))})

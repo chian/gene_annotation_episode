@@ -48,7 +48,6 @@ class LiteratureBindingModelRepository(LiteratureBindingRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = "literature_binding_model_record_v2"
-    readable_record_versions = ("literature_binding_model_record_v1", record_version)
     operations_table = "literature_binding_model_operations"
     received_table = "literature_binding_model_received"
 

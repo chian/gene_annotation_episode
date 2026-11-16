@@ -3,7 +3,6 @@ from copy import deepcopy
 import hashlib
 from pathlib import Path
 import platform
-import stat
 import sys
 from types import SimpleNamespace
 
@@ -72,60 +71,6 @@ def _native_files(tmp_path):
         macs2_version="2.2.9.1", import_roots=[str(root)], files=[_pin(path) for path in files])
 
 
-def test_driver_contract_is_detached_and_has_no_macs2_requirement():
-    record = _metadata()
-    selected = contracts.validate_driver_runtime(record,
-        required_modules=("gene_annotation_episode.fixture_driver",), required_dependencies=("runtime_fixture",))
-    assert selected == record and selected is not record
-    selected["implementation_files"][0]["sha256"] = "f" * 64
-    assert record["implementation_files"][0]["sha256"] == "1" * 64
-    schema = contracts.driver_runtime_schema()
-    assert schema == contracts.atac_execution_schema("DriverRuntime")
-    assert set(schema["properties"]) == set(record)
-    schema["properties"].clear()
-    assert contracts.driver_runtime_schema()["properties"]
-
-
-@pytest.mark.parametrize("changed", ["module_duplicate", "module_name", "dependency_duplicate",
-    "pin_duplicate", "relative_interpreter", "relative_package"])
-def test_driver_contract_rejects_ambiguous_names_or_nonabsolute_paths(changed):
-    record = _metadata()
-    if changed == "module_duplicate":
-        record["implementation_files"].append(deepcopy(record["implementation_files"][0]))
-    elif changed == "module_name":
-        record["implementation_files"][0]["module"] = "other_package.fixture_driver"
-    elif changed == "dependency_duplicate":
-        duplicate = deepcopy(record["dependencies"][0])
-        duplicate["distribution"] = "RUNTIME_fixture"
-        record["dependencies"].append(duplicate)
-    elif changed == "pin_duplicate":
-        record["dependencies"][0]["files"] *= 2
-    elif changed == "relative_interpreter":
-        record["python_executable"] = "bin/python"
-    else:
-        record["dependencies"][0]["package_root"] = "site/runtime_fixture"
-    with pytest.raises(ValueError):
-        contracts.validate_driver_runtime(record)
-
-
-@pytest.mark.parametrize("missing", ["module", "dependency", "callpeak", "bdgdiff", "parser", "numpy"])
-def test_atac_contract_keeps_original_driver_and_native_requirements(missing):
-    value = fake_software()
-    assert contracts.validate_atac_software(value) == value
-    if missing == "module":
-        value["driver_runtime"]["implementation_files"] = [r for r in value["driver_runtime"]["implementation_files"]
-            if r["module"] != contracts.DRIVER_MODULE]
-    elif missing == "dependency":
-        value["driver_runtime"]["dependencies"] = [r for r in value["driver_runtime"]["dependencies"]
-            if r["distribution"] != "jsonschema"]
-    else:
-        suffix = {"callpeak": "/MACS2/callpeak_cmd.py", "bdgdiff": "/MACS2/bdgdiff_cmd.py",
-            "parser": "/MACS2/IO/Parser.", "numpy": "/numpy/__init__.py"}[missing]
-        value["macs2_runtime"]["files"] = [r for r in value["macs2_runtime"]["files"] if suffix not in r["path"]]
-    with pytest.raises(ValueError, match="native_dependency_unavailable"):
-        contracts.validate_atac_software(value)
-
-
 def test_verify_driver_uses_actual_pins_without_native_software(tmp_path, monkeypatch):
     record, _, _, _ = _actual_driver(tmp_path, monkeypatch)
     assert driver.verify_driver_runtime(record) is None
@@ -166,36 +111,6 @@ def test_atac_verifier_delegates_driver_and_retains_native_hash_checks(tmp_path,
     with pytest.raises(ValueError, match="native_dependency_unavailable"):
         driver.verify_software(value)
     assert calls == [value["driver_runtime"], value["driver_runtime"]]
-
-
-def test_freezer_copies_only_selected_source_closure_and_never_imports_it(tmp_path, monkeypatch):
-    source = tmp_path / "original"
-    originals = {
-        "gene_annotation_episode/__init__.py": b"# engineering package\n",
-        "gene_annotation_episode/fixture_driver.py": b"from .leaf_fixture import VALUE\nraise RuntimeError('must not import')\n",
-        "gene_annotation_episode/leaf_fixture.py": b"VALUE = 'retained driver bytes'\n",
-    }
-    for name, raw in originals.items():
-        _write(source / name, raw)
-    dependency = _metadata()["dependencies"]
-    monkeypatch.setattr(software, "_dependency_bindings", lambda: deepcopy(dependency))
-    target = tmp_path / "snapshot"
-    arguments = dict(module_root=str(source), snapshot_directory=str(target),
-        driver_modules=("gene_annotation_episode.fixture_driver",), policy=LocalJobPolicy(**contracts.POLICY))
-    result = software.freeze_driver_runtime(**arguments)
-    assert result["module_root"] == str(target) and result["dependencies"] == dependency
-    expected = sorted(name.removesuffix(".py").replace("/", ".") for name in originals)
-    assert [r["module"] for r in result["implementation_files"]] == expected
-    assert contracts.DRIVER_MODULE not in expected
-    for name, raw in originals.items():
-        assert (target / name).read_bytes() == raw
-        assert stat.S_IMODE((target / name).stat().st_mode) == 0o444
-    before = {name: _pin(target / name) for name in originals}
-    assert software.freeze_driver_runtime(**arguments) == result
-    _write(source / "gene_annotation_episode/leaf_fixture.py", b"VALUE = 'changed original'\n")
-    with pytest.raises(ValueError):
-        software.freeze_driver_runtime(**arguments)
-    assert {name: _pin(target / name) for name in originals} == before
 
 
 def test_freezer_enforces_supplied_scratch_budget_before_copy(tmp_path, monkeypatch):

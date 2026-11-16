@@ -1,4 +1,4 @@
-"""Complete original A110 direct results presentation"""
+"""Complete A110 direct results presentation"""
 from __future__ import annotations
 from copy import deepcopy
 import json

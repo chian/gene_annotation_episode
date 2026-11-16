@@ -8,7 +8,6 @@ from __future__ import annotations
 from copy import deepcopy
 import hashlib
 import json
-from pathlib import Path
 from types import SimpleNamespace
 
 from .communication import plain
@@ -44,15 +43,6 @@ def _walk(value):
 
 def _unique(values):
     return list(dict.fromkeys(values))
-
-
-def _calculator_implementation_descriptor():
-    #009 binds the actual numerical semantics and their input contract, not
-    # only the thin wrapper. Saved reads never rehash future current modules.
-    return {'version': 'relative_signal_calculator_implementation_v1', 'modules': {
-        name: _sha((Path(__file__).parent/'library'/name).read_bytes()) for name in (
-            'literature_ratio_source_inputs.py', 'literature_ratio_source_calculations.py',
-            'literature_ratio_source_validation.py')}}
 
 
 def ratio_source_population_schema():
@@ -355,7 +345,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
                 return row['id']
             bindings, measurements = self._bindings(extraction, root['id'], publish)
             calculation = {'version': 'relative_signal_calculation_v2', 'input_extraction_sha256': _sha(extraction),
-                'calculator_implementation_sha256': _sha(_calculator_implementation_descriptor()), 'sheet': sheet}
+                'sheet': sheet}
             calculation_ref = self.store.artifact(canonical(calculation), 'application/json')
             payload = {'version': VERSION, 'input_source_ref': root['id'], 'input_artifact_ref': root['artifact_ref'],
                 'direct_input_source_refs': direct, 'input_source_refs': closure, 'input_view_refs': views,
@@ -436,13 +426,10 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
                     or 'artifact_' + item['display_sha256'] != actual['image_artifact_ref']):
                 raise ContractError('relative_signal_saved_view_identity_mismatch')
         calculation = self._json(payload['calculation_artifact_ref'])
-        if (set(calculation) != {'version', 'input_extraction_sha256', 'calculator_implementation_sha256', 'sheet'}
+        if (set(calculation) != {'version', 'input_extraction_sha256', 'sheet'}
                 or calculation['version'] != 'relative_signal_calculation_v2'
                 or calculation['input_extraction_sha256'] != _sha(payload['extraction'])
-                or calculation['sheet'] != payload['sheet']
-                or type(calculation['calculator_implementation_sha256']) is not str
-                or len(calculation['calculator_implementation_sha256']) != 64
-                or any(ch not in '0123456789abcdef' for ch in calculation['calculator_implementation_sha256'])):
+                or calculation['sheet'] != payload['sheet']):
             raise ContractError('relative_signal_saved_calculation_mismatch')
         bindings, measurements = self._bindings(payload['extraction'], payload['input_source_ref'])
         expected_refs = _unique([sheet_ref, *self._entity_refs(bindings),

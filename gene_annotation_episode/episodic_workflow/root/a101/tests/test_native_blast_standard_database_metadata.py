@@ -896,36 +896,6 @@ def record_metadata(inputs, *, ordinals=(0, 1), raw=None, **kwargs):
     return payload
 
 
-def test_record_v2_retained337_bytes_and339_wire_with_exact_v1_replay(tmp_path):
-    retained = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/blast_standard_database_metadata_before"
-    public = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/blast_fasta_record_public_associations"
-    saved = json.loads((retained / "supplied_inputs.json").read_text())
-    inputs = saved["inputs"]
-    inputs.update(contents={k: bytes.fromhex(v) for k, v in saved["contents_hex"].items()},
-                  subject_contents={k: bytes.fromhex(v) for k, v in saved["subject_contents_hex"].items()})
-    old = run(inputs)
-    assert old == json.loads((retained / "sheets.json").read_text())
-    assert calculate(old) == json.loads((retained / "components.json").read_text())
-    raw = (public / "new_wire_payload_v2.json").read_bytes()
-    descriptor = json.loads((public / "new_descriptor_v2.json").read_text())
-    inputs["artifact_catalog"]["retained_sources"].append(dict(source_ref="source-metadata-v2-339",
-        **{k: descriptor[k] for k in ("artifact_ref", "sha256", "size_bytes")}))
-    inputs["contents"][descriptor["artifact_ref"]] = raw
-    inputs["metadata_payloads"] = [dict(descriptor=descriptor, payload=json.loads(raw))]
-    sheets = run(inputs)
-    proofs = sheets["prepared_inputs"]["sequence_proofs"]
-    assert [r["status"] for r in proofs] == ["available", "available"]
-    assert [r["binding"]["binding"]["record_locator"]["record_ordinal"] for r in proofs] == [0, 1]
-    assert [r["symbols"] for r in proofs] == ["ACDEFGHIKL", "ACDEPQRSTV"]
-    assert sheets["sequence"][0]["sheet"]["schema"] == "blast_sequence_database_result_sheet_v2"
-    comp = calculate(sheets)["components"]
-    assert comp["database_sheet"]["schema"] == "blast_database_sheet_v2"
-    assert comp["function_weights"]["function_masses"] == {"F": 1, "G": .25}
-    assert comp["function_weights"]["unadjusted_probabilities"] == {"F": .8, "G": .2}
-    assert all(r["functions"][0]["source"] == "source-metadata" for r in sheets["sequence"][0]["sheet"]["reference_metadata"])
-    save_example(tmp_path, inputs, sheets, calculate(sheets))
-
-
 @pytest.mark.parametrize("same_content,assigned", [(False, True), (True, True), (False, False)])
 def test_record_v2_full_sequence_grouping_and_absent_function_assignment(same_content, assigned):
     inputs = fixture()

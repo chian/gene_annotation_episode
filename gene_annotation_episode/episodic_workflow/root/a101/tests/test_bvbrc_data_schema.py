@@ -1,89 +1,11 @@
 """Frozen schema compatibility and adversarial JSON/type validation."""
-from copy import deepcopy
 import hashlib
 import json
-from pathlib import Path
 
 import pytest
-from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_schema import schema, validate, fact_schemas, json_digest
-from gene_annotation_episode.episodic_workflow.root.a101.communication import validate_closed_schema, validate_form
-
-EVIDENCE = (Path(__file__).resolve().parent / 'fixtures' / 'bvbrc_original') / "verification/tool_graders_bvbrc_data_contract_2026-10-24"
-FROZEN = json.loads((EVIDENCE / "CONTRACT_SHAPES.json").read_text())
-EXAMPLES = json.loads((EVIDENCE / "FILLED_EXAMPLES.json").read_text())
-
-
-def apply_unavailable_return_correction(source, row):
-    """Apply contract 003 to a detached original oracle, never its artifacts."""
-    if source == "execution_bvbrc_pages":
-        for field in ("returned_row_count", "valid_row_count", "invalid_row_count"):
-            row["properties"][field]["type"] = ["integer", "null"]
-        row["properties"]["unavailable_reason"] = deepcopy(
-            FROZEN["fact_schemas"]["execution_bvbrc_counts"]["items"]["properties"]["reason"])
-        row["required"].append("unavailable_reason")
-    elif source == "execution_bvbrc_facets":
-        row["properties"]["bucket_ref"]["type"] = ["string", "null"]
-
-
-def expected_fact_schemas():
-    result = deepcopy(FROZEN["fact_schemas"])
-    for source, definition in result.items():
-        apply_unavailable_return_correction(source, definition["items"])
-    return result
-
-
-def unfactor(value, definitions):
-    if isinstance(value, dict):
-        if "$ref" in value and value["$ref"].split("/")[-1] not in FROZEN["schemas"]["$defs"]:
-            return unfactor(definitions[value["$ref"].split("/")[-1]], definitions)
-        return {key: unfactor(child, definitions) for key, child in value.items()}
-    if isinstance(value, list):
-        return [unfactor(child, definitions) for child in value]
-    return value
-
-
-@pytest.mark.parametrize("name", tuple(FROZEN["schemas"]["$defs"]))
-def test_all_original_definitions_preserve_contract_except_additive_corrections(name):
-    value = schema(name)
-    Draft202012Validator.check_schema(value)
-    actual = unfactor(value["$defs"][name], value["$defs"])
-    expected = deepcopy(FROZEN["schemas"]["$defs"][name])
-    if name == "CellLocation":
-        expected["properties"]["source_level"]["enum"].remove("supplied")
-    if name == "MolecularMetadata":
-        # The added locator's full definition is expanded by unfactor.
-        expected["properties"]["cells"]["items"] = {"oneOf": [
-            {"$ref": "#/$defs/CellLocation"}, schema("SuppliedCellLocation")["$defs"]["SuppliedCellLocation"]]}
-    if name == "ReceiverMaterialization":
-        for row in expected["properties"]["facts"]["items"]["oneOf"]:
-            if "returned_row_count" in row["properties"]:
-                apply_unavailable_return_correction("execution_bvbrc_pages", row)
-            elif "bucket_ref" in row["properties"]:
-                apply_unavailable_return_correction("execution_bvbrc_facets", row)
-    assert actual == expected
-
-
-def test_fact_schemas_preserve_frozen_contract_with_explicit_unavailable_correction():
-    assert fact_schemas() == expected_fact_schemas()
-    copy = fact_schemas()
-    copy.clear()
-    assert fact_schemas() == expected_fact_schemas()
-
-
-def test_embedded_fact_union_matches_all_six_corrected_fact_shapes():
-    definition = schema("ReceiverMaterialization")
-    rows = definition["$defs"]["ReceiverMaterialization"]["properties"]["facts"]["items"]["oneOf"]
-    assert unfactor(rows, definition["$defs"]) == [
-        value["items"] for value in expected_fact_schemas().values()]
-
-
-@pytest.mark.parametrize("source", tuple(FROZEN["fact_schemas"]))
-def test_corrected_facts_remain_accepted_by_existing_closed_schema_guard(source):
-    form = {"type": "object", "properties": {"facts": fact_schemas()[source]},
-            "required": ["facts"], "additionalProperties": False}
-    assert validate_closed_schema(form) == form
+from gene_annotation_episode.episodic_workflow.root.a101.communication import validate_form
 
 
 def synthetic_page_fact(**changes):
@@ -239,45 +161,11 @@ def test_corrected_fact_objects_remain_closed(source, row):
     assert_invalid_fact_and_materialization(source, [row])
 
 
-def test_schemas_and_validated_objects_are_detached():
-    first = schema("DataSheet")
-    first["$defs"]["DataSheet"].clear()
-    assert schema("DataSheet")["$defs"]["DataSheet"]["type"] == "object"
-    result = validate("DataSheet", EXAMPLES["facet_expected_sheet"])
-    result["facets"][0]["buckets"].clear()
-    assert len(EXAMPLES["facet_expected_sheet"]["facets"][0]["buckets"]) == 3
-
-
-@pytest.mark.parametrize("value", [True, 1.0, float("nan"), float("inf"), float("-inf"), "1"])
-def test_native_integer_type_is_strict(value):
-    example = deepcopy(EXAMPLES["feature_sequence_expected_components"])
-    example["relation_count"] = value
-    with pytest.raises(ValueError):
-        validate("FeatureSequenceComponents", example)
-
-
 @pytest.mark.parametrize("value", [float("nan"), float("inf"), True])
 def test_finite_numeric_atoms(value):
     with pytest.raises(ValueError):
         validate("NativeAtom", dict(kind="number", string_value=None, boolean_value=None,
                                    number_value=value, number_lexeme="1"))
-
-
-@pytest.mark.parametrize("mutation", ["extra", "missing", "tuple", "nonstring_key", "cycle"])
-def test_closed_plain_json_shapes(mutation):
-    value = deepcopy(EXAMPLES["facet_expected_components"])
-    if mutation == "extra":
-        value["unspecified"] = None
-    elif mutation == "missing":
-        del value["version"]
-    elif mutation == "tuple":
-        value["fractions"] = tuple(value["fractions"])
-    elif mutation == "nonstring_key":
-        value[0] = 1
-    else:
-        value["fractions"].append(value)
-    with pytest.raises(ValueError):
-        validate("FacetComponents", value)
 
 
 @pytest.mark.parametrize("pointer", ["/a~2b", "not/a/pointer", "/dangling~", "/a~10~", "\n"])

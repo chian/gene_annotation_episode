@@ -174,16 +174,6 @@ def test_two_metabolite_hand_example_and_detached_native_numbers():
     assert sheet == before
 
 
-def test_violating_candidate_does_not_erase_native_optimal_claim():
-    result = calc(make_sheet((10.0, 12.0, 12.0)))
-    assert [row["equality_residual"]["value"] for row in result["constraint_checks"]] == [-2, 0]
-    assert result["objective"]["full_calculated"]["value"] == 12
-    assert result["objective"]["legacy_minus_calculated"]["value"] == -2
-    assert result["candidate_feasibility"] == "fails_recorded_checks"
-    assert result["native_solver_status"] == "optimal"
-    assert result["violated_constraint_count"] == 1
-
-
 def test_missing_ab_preserves_other_fluxes_and_sparse_objective():
     sheet = make_sheet()
     sheet["native_solution"]["native"]["reaction_values"][1]["flux"] = number()
@@ -266,22 +256,6 @@ def test_negative_flux_and_infinite_sides_are_not_zero_violations():
     assert result["objective"]["full_calculated"]["value"] == -2
     assert result["active_count"] == 3
     assert result["candidate_feasibility"] == "passes_recorded_checks"
-
-
-def test_missing_tolerances_preserve_numbers_without_finite_side_counts():
-    sheet = make_sheet((10.0, 12.0, 12.0))
-    settings = parameters(sheet)
-    for key in settings:
-        if isinstance(settings[key], list):
-            settings[key] = []
-    settings["objective_absolute_tolerance"] = None
-    result = calculate_flux_balance_sheet(sheet, parameters=settings)
-    assert result["constraint_checks"][0]["equality_residual"]["value"] == -2
-    assert result["constraint_checks"][0]["comparison"] == "unknown"
-    assert result["evaluated_reaction_bound_count"] == result["evaluated_variable_bound_count"] == 0
-    assert result["candidate_feasibility"] == "partial_checks"
-    assert result["objective"]["legacy_minus_calculated"]["value"] == -2
-    assert result["objective"]["legacy_comparison"] == "unknown"
 
 
 def test_missing_bound_prevents_vacuous_pass():
@@ -398,18 +372,6 @@ def test_objective_disagreement_alone_is_not_constraint_infeasibility():
     result = calc(sheet)
     assert result["objective"]["glpk_comparison"] == "conflicts"
     assert result["candidate_feasibility"] == "passes_recorded_checks"
-
-
-def test_formatted_objective_rounding_and_unknown_precision_remain_explicit():
-    sheet = make_sheet()
-    sheet["native"]["objective"] = number(10.0, precision="formatted_6dp")
-    sheet["problems"]["effective"]["objective"]["interface_offset"] = number(4e-7)
-    result = calc(sheet)
-    assert result["objective"]["legacy_minus_calculated"]["value"] != 0
-    assert result["objective"]["legacy_comparison"] == "agrees"
-    sheet["native"]["objective"]["precision"] = "unknown"
-    result = calc(sheet)
-    assert result["objective"]["legacy_comparison"] == "unknown"
 
 
 @pytest.mark.parametrize("case", ["unknown_precision", "different_flux", "conflicting_bounds"])
@@ -780,8 +742,3 @@ def test_retained_677_point_normalized_only_for_numerical_verification():
     assert result["evaluated_variable_bound_count"] == 11
     assert result["candidate_feasibility"] == "passes_recorded_checks"
     assert result["max_abs_balance_residual"]["value"] is None  # source units are unknown
-    attempt = os.environ.get("HMMER529_ATTEMPT")
-    if attempt:
-        Path(attempt, "fba679_numerical_examples.json").write_text(json.dumps({
-            "fixture_identity": "test-only transformation of retained677 API probe; no new solve; no production capture",
-            "source_hashes": pins, "sheet": sheet, "calculations": result}, indent=2, allow_nan=False) + "\n")

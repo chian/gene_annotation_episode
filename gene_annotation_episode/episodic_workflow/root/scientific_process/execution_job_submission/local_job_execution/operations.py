@@ -77,8 +77,8 @@ class LocalExecutionOperations:
         from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import is_compact_assignment
         if is_compact_assignment(plain(context.assignment)):
             from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import practical_outcome_view, read_request_binding
-            control = read_request_binding(self.store, context.run_id, context.episode_id)
-            outcome = {**outcome, 'result': practical_outcome_view(outcome['result'], assignment=plain(practical_context.assignment), control_version=control['version'])}
+            read_request_binding(self.store, context.run_id, context.episode_id)
+            outcome = {**outcome, 'result': practical_outcome_view(outcome['result'], assignment=plain(practical_context.assignment))}
             outcome.pop('operation_ref', None)
         from gene_annotation_episode.episodic_workflow.root.library.lumpy_request_binding import is_compact_assignment as is_lumpy_assignment, practical_outcome_view as lumpy_outcome_view
         if is_lumpy_assignment(plain(context.assignment)):

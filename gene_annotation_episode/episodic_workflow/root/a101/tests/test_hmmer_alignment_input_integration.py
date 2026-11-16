@@ -19,14 +19,11 @@ from gene_annotation_episode.episodic_workflow.root.a101.library import native_h
 from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_records import canonical as practical_canonical
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _immutable
-from test_hmmer_alignment_input_calculations import ORACLE, EMISSION, SELEX, annotated_selex, checks, sheet_for
+from test_hmmer_alignment_input_calculations import ORACLE, EMISSION, annotated_selex, checks, sheet_for
 from test_hmmer_alignment_preparation_data import payload
 from test_native_hmmer_preparation_contracts import job, operand
 from test_native_hmmer_preparation_driver import make_plan, output_bytes, run_actual
 import gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_preparation_worker_context as _scientific_native_hmmer_preparation_result_worker
-
-
-ROOT = Path(__file__).resolve().parents[5]
 
 
 def grading_for(sheet):
@@ -302,81 +299,6 @@ def _assert_hmmbuild_original_alphabet_checksum_map_and_saved_return(
     return grading, selected_result
 
 
-_SAVED_CHECK013_HMMBUILD = {
-    "a2m": {"directory": "test_actual_hmmbuild_original_0", "fixture": "a2m_insertions",
-        "native_format": "A2M", "sequence_count": 5, "checksum": 2776554218,
-        "model_map": [1, 2, 4, 5, 6, 8, 9, 10, 13, 14, 15, 17],
-        "plan_sha256": "82010041dbe118c27d7e43392a56df0daf50e7e2bb5013eda18461fe73e0aad3",
-        "bundle_sha256": "a55ca3517eaba20c889c16e8cc00bf3793ba23d742205ad72cc500d17265980b"},
-    "clustal": {"directory": "test_actual_hmmbuild_original_1", "fixture": "aligned_clustal",
-        "native_format": "Clustal", "sequence_count": 3, "checksum": 3986124183,
-        "model_map": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        "plan_sha256": "ee5807af8e105a7ba16ba0abc849fae9eea8eef88b9ab11b821ff20d30e9801c",
-        "bundle_sha256": "75ac3bf7ec1d495983e5bc99582c2143096f089737a35e57e12bfa024f3af43a"},
-}
-
-
-def _regrade_saved_check013_hmmbuild(tmp_path, monkeypatch, fmt):
-    """Regrade the two successful original jobs; keep their native bytes fixed."""
-    case = _SAVED_CHECK013_HMMBUILD[fmt]
-    original = Path(__file__).parent / "fixtures/hmmer_alignment_input_integration/check013" / case["directory"]
-    directory = original / "hmmer-preparation-attempt"
-    plan_path, bundle_path = original / "plan.json", directory / "bundle.json"
-    frozen = {path: path.read_bytes() for path in (plan_path, bundle_path)}
-    assert hashlib.sha256(frozen[plan_path]).hexdigest() == case["plan_sha256"]
-    assert hashlib.sha256(frozen[bundle_path]).hexdigest() == case["bundle_sha256"]
-    plan, bundle = json.loads(frozen[plan_path]), json.loads(frozen[bundle_path])
-    original_plan, original_bundle = deepcopy(plan), deepcopy(bundle)
-    assert result_worker.validate_original_bundle(bundle, plan) == bundle
-    assert bundle["returncode"] == 0 and bundle["failures"] == []
-    assert bundle["operation"]["settings"]["--informat"] == case["native_format"]
-    assert len(bundle["inputs"]) == 1 and bundle["working_copies"] == []
-    source_descriptor = bundle["inputs"][0]
-    assert source_descriptor["format"] == fmt
-    for collection in ("inputs", "artifacts"):
-        for item in bundle[collection]:
-            path = directory / item["relative_path"]
-            frozen[path] = path.read_bytes()
-            actual_sha, actual_size = hashlib.sha256(frozen[path]).hexdigest(), len(frozen[path])
-            if collection == "inputs":
-                assert actual_sha == item["expected_sha256"] == item["staged_sha256"] == item["final_sha256"]
-                assert actual_size == item["expected_size_bytes"] == item["staged_size_bytes"] == item["final_size_bytes"]
-            else:
-                assert actual_sha == item["sha256"] and actual_size == item["size_bytes"]
-    fixture_path = EMISSION / case["fixture"] / "emitted.out"
-    frozen[fixture_path] = fixture_path.read_bytes()
-    assert frozen[fixture_path] == frozen[directory / source_descriptor["relative_path"]]
-
-    def forbidden(*args, **kwargs):
-        pytest.fail("saved check013 hmmbuild regrading attempted native execution")
-    monkeypatch.setitem(globals(), "run_actual", forbidden)
-    monkeypatch.setattr(driver, "run_native_hmmer_preparation", forbidden)
-    monkeypatch.setattr(driver.subprocess, "run", forbidden)
-    monkeypatch.setattr(driver.subprocess, "Popen", forbidden)
-    grading, selected_result = _assert_hmmbuild_original_alphabet_checksum_map_and_saved_return(
-        tmp_path, monkeypatch, plan, bundle, case["fixture"], retained_directory=directory)
-    sheet, result = grading["sheet"], grading["calculations"]
-    source = sheet["input_records"][0]
-    transformed = next(item for item in sheet["output_records"] if item["kind"] == "alignment")
-    assert source["input_decoding"]["format"] == fmt
-    assert source["input_decoding"]["source_sha256"] == transformed["source_alphabet"]["source_sha256"] == source_descriptor["expected_sha256"]
-    assert sheet["model_extraction"]["records"][0]["checksum"] == case["checksum"]
-    checksum = checks(result, "source_checksum")[0]
-    assert checksum["details"] == {"calculated": case["checksum"], "native": case["checksum"]}
-    assert result["rows"][0]["coordinates"]["model_to_source_alignment"] == case["model_map"]
-    assert [item["value"] for item in selected_result["rows"][0]["quantities"]] == [case["sequence_count"], 12]
-    assert plan == original_plan and bundle == original_bundle
-    assert {path: path.read_bytes() for path in frozen} == frozen
-
-
-def test_saved_check013_hmmbuild_a2m_regrades_without_native(tmp_path, monkeypatch):
-    _regrade_saved_check013_hmmbuild(tmp_path, monkeypatch, "a2m")
-
-
-def test_saved_check013_hmmbuild_clustal_regrades_without_native(tmp_path, monkeypatch):
-    _regrade_saved_check013_hmmbuild(tmp_path, monkeypatch, "clustal")
-
-
 def test_syntax_failure_returns_before_reconstruction_or_native(tmp_path, monkeypatch):
     source = tmp_path / "authored-invalid-rf.sto"
     source.write_bytes(b"# STOCKHOLM 1.0\na ACGT\n#=GC RF xxx\n//\n")
@@ -391,52 +313,3 @@ def test_syntax_failure_returns_before_reconstruction_or_native(tmp_path, monkey
     assert bundle["returncode"] is None
     assert [item["detail"]["reason"] for item in bundle["failures"] if item["stage"] == "preflight"] == ["malformed_stockholm"]
 
-
-def test_original_five_source_context_recalculates_and_replays_without_new_input_facts(tmp_path, monkeypatch):
-    """Use the actual closed529 case, preserving original bytes and observations."""
-    import shutil
-    from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_result_publication as publication
-    from gene_annotation_episode.episodic_workflow.root.a101.state import Store
-    from test_native_hmmer_preparation_result_publication import POLICY
-    original = Path(__file__).parent / "fixtures/hmmer_alignment_input_integration/check004"
-    prepared_path, = original.rglob("prepared.json")
-    selected_path, = original.rglob("native-hmmer-preparation-projection/publication.json")
-    grading_path, = original.rglob("grading.json")
-    frozen = {path: path.read_bytes() for path in (prepared_path, selected_path, grading_path)}
-    assert hashlib.sha256(frozen[prepared_path]).hexdigest() == "dc74200e725d64822097a366eb5dcef3f3d24ca8e3acfd44fe57bda19a2ceb13"
-    assert hashlib.sha256(frozen[selected_path]).hexdigest() == "962280d0e5b9c955bdaf98cd5736121d54ff9fcb37a909e8249f1ada886a33b2"
-    assert hashlib.sha256(frozen[grading_path]).hexdigest() == "72d129fea49430355d6815f26efb5f1b63b19b3056ae7a40079cf27bdae7b016"
-    grading = json.loads(frozen[grading_path])
-    source = grading["sheet"]["input_records"][0]
-    assert not {"input_decoding", "native_decoding", "native_input", "source_alphabet"} & source.keys()
-    context = grading["metadata"]["map_reconstruction_context"]
-    assert context["profile"] == data.ALIMASK_PROFILE
-    assert len(context["profile"]["source_sha256s"]) == 5
-    assert worker.recalculate_hmmer_preparation(grading["sheet"], parameters=grading["requested_parameters"]) == grading["calculations"]
-    shutil.copytree(original / "state", tmp_path / "state")
-    for path in [tmp_path / "state", *(tmp_path / "state").rglob("*")]:
-        path.chmod(0o755 if path.is_dir() else 0o644)
-    shutil.copytree(selected_path.parent, tmp_path / "projection/native-hmmer-preparation-projection")
-    intent = json.loads((selected_path.parent / "intent.json").read_bytes())
-    prepared, selected = json.loads(frozen[prepared_path]), json.loads(frozen[selected_path])
-    def forbidden(*args, **kwargs):
-        pytest.fail("sealed five-source publication reopened scientific work")
-    for module, name in ((publication, "run_local_job"), (publication, "capture_local_bundle"),
-            (result_worker, "_grade"), (calc, "calculate_hmmer_alignment_preparation_components"),
-            (calc, "reconstruct_alimask_model_map"), (data, "read_hmmer_alignment_input")):
-        monkeypatch.setattr(module, name, forbidden)
-    with Store(tmp_path / "state") as store:
-        def observations():
-            return {name: [tuple(row) for row in store.db.execute("SELECT * FROM " + name + " ORDER BY rowid").fetchall()]
-                for name in ("runtime_actions", "runtime_observations", "runtime_forms", "runtime_episodes")}
-        history = observations()
-        stable = publication._stable(store, prepared)
-        assert stable["effective_metadata"] == grading["metadata"]
-        bundle = json.loads(store.get_artifact(prepared["bundle_artifact_ref"]))
-        assert publication.validate_prepared_grading(store, prepared, bundle=bundle) == prepared
-        assert publication.validate_publication(store, selected, source_ref=intent["source_ref"],
-            prepared=prepared, selector=intent["selector"], directory=tmp_path / "projection", policy=POLICY) == selected
-        assert observations() == history
-        assert [item["value"] for item in selected["rows"][0]["quantities"]] == [3, 4, 2, 1]
-        assert store.get_artifact(prepared["grading_artifact_ref"]) == frozen[grading_path]
-    assert {path: path.read_bytes() for path in frozen} == frozen

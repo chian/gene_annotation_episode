@@ -1,7 +1,7 @@
 """Original explicit raw API context reader for service clients and cross-context reads."""
 from ..communication import plain
 
-def standalone_api_context(api, context, *, verify_artifacts=True, _completed_appservice_download=False):
+def standalone_api_context(api, context, *, verify_artifacts=True):
     if context.run_id != api.run_id:
         raise ValueError('api_execution_run_conflict')
     if context.role == 'launch_api':
@@ -12,6 +12,6 @@ def standalone_api_context(api, context, *, verify_artifacts=True, _completed_ap
     raw = plain(context.assignment)
     if set(raw) != {'version', 'handoff_ref', 'selector'} or raw['version'] != 'execution_results_assignment_v1':
         raise ValueError('invalid_api_results_assignment')
-    target = api.read_target(raw['handoff_ref'], context.scope, verify_artifacts=verify_artifacts, **{'_completed_appservice_download': True} if _completed_appservice_download else {})
+    target = api.read_target(raw['handoff_ref'], context.scope, verify_artifacts=verify_artifacts)
     api.validate_result_selector(target, raw['selector'])
     return (target['assignment'], api.services[target['resource_id']], target)

@@ -241,7 +241,7 @@ reconsider current capacity. Do not resubmit an already handed-off SECOND job.
     with Store(directory/'state') as store:
         if store.db.execute('SELECT 1 FROM problem').fetchone() is None:
             manifest = directory/'caller-inputs.json'
-            manifest.write_text(json.dumps({'schema_version': 1, 'entries': []}))
+            manifest.write_text(json.dumps({'schema_version': 2, 'entries': []}))
             store.create_problem(manifest_path=manifest, caller_context=objective)
         def progress(*_):
             # Original native preparation is verifiable operational progress;

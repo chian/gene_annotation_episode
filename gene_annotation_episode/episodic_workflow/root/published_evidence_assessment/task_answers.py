@@ -15,7 +15,7 @@ def validate_lead(store, context, value, outcome):
     if task['kind'] != 'verified_source_leads':
         raise ContractError('literature_lead_outside_original_search_task')
     value = _resolve(plain(value), outcome.get('aliases', {}))
-    validate_schema(value, source_location_inputs(lead_schema(), allow_legacy_quote=True))
+    validate_schema(value, source_location_inputs(lead_schema()))
     if value['proposed_annotation_ref'] != proposed or value['witness']['source_ref'] != value['source_ref']:
         raise ContractError('literature_lead_question_or_source_mismatch')
     if not value['relevance_rationale'].strip():

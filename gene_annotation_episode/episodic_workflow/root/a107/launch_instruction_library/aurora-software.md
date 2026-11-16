@@ -1,8 +1,7 @@
 # Aurora software, preparation and reuse
 
-The saved 2026-10-22 workspace directory and manual execution record identify
-these existing preparations. These are historical observations to verify when
-needed, not proof of present availability or compatibility.
+These existing preparations were observed in the project workspace. Verify them
+when needed; they are not proof of present availability or compatibility.
 
 | Component | Observed location |
 | --- | --- |
@@ -12,11 +11,7 @@ needed, not proof of present availability or compatibility.
 | Run artifacts | `/lus/flare/projects/BioReason-Aurora-Test/chian/runs` |
 | Data-lake directory; contents uninspected | `/lus/flare/projects/BioReason-Aurora-Test/cgrams/gentner-data-lake` |
 
-Job `8953621.aurora-pbs-0001.hostmgmt.cm.aurora.alcf.anl.gov` used Python 3.12.12,
-Biopython 1.87 and Gentner's `AnalysisExecutor` for 17 global BLOSUM62 protein
-comparisons. The historical source/input hashes, scores, return code and timings
-are retained in `verification/aurora_bioinformatics_2026-10-22_001/`. That evidence
-does not validate other stages, databases or present compatibility. Read the
+Read the
 deployment's own `AGENTS.md`, `MEMORY.md` and relevant instructions before changes.
 Do not reinstall or recalculate simply because a new episode started.
 
@@ -44,7 +39,6 @@ describes module-provided environments and extending them with a venv. Such
 documentation supplies technical options, not proof that a module, interpreter
 or environment is available in the selected configuration. Choose any needed
 preparation within the actual assignment workspace and retain its result.
-Modules must be loaded again in a new shell when required. The historical manual
-run encountered system Python 3.6 in a diagnostic wrapper; neither `python3` nor
-an old path proves a suitable version. Keep new environments, package caches and
+Modules must be loaded again in a new shell when required. Neither `python3` nor
+an existing path proves a suitable version. Keep new environments, package caches and
 temporary builds under `/lus/flare/projects/BioReason-Aurora-Test`.

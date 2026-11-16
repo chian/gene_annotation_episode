@@ -209,14 +209,12 @@ async def run(args):
                 episode_service_inputs='actual_tool_registry_v1', decision_protocol=PROTOCOL,
                 annotation_child_roles=child_roles)
             if args.resume:
-                # Reconstruct the original commission, including older runs
-                # whose prepared record predates root_goal. New presentation
-                # code must never silently rewrite a live/historical objective.
+                # Resume keeps the original commission's objective.
                 original = store.db.execute("SELECT json_extract(request,'$.goal.objective') "
                     "FROM runtime_episodes WHERE run_id=? AND json(path)=json(?)",
                     (prepared['run_id'], json.dumps([['annotation', 'root']]))).fetchone()
                 retained = None if original is None else original[0]
-                goal = prepared.get('root_goal', retained)
+                goal = prepared['root_goal']
                 if (not isinstance(goal, str) or not goal.strip()
                         or retained is not None and goal != retained):
                     raise ValueError('resume_requires_original_retained_root_goal')

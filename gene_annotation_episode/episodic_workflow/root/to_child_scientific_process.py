@@ -1,5 +1,4 @@
-"""Actual private parent request for the original annotation -> scientific_process edge."""
-from gene_annotation_episode.episodic_workflow.root import action_execution as _original
+"""Private parent request for the annotation -> scientific_process edge."""
 
 
 def prepare_request(workflow, source, selection, index, scope, role, selected_owner):

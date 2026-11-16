@@ -17,7 +17,6 @@ from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_forma
 
 ROOT = Path(__file__).resolve().parents[1]
 CASES = ROOT / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_native/cases"
-LEGACY = ROOT / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_metacats_boundaries/additional_sources/bvbrc_metacats/docs/example_output.tsv"
 HEADER = b"Position\tChi-square_value\tP-value\tDegrees_of_freedom\tFewer_5\tA\tB\n"
 PAIR = b"Position\tMultiple_comparison_p-value\tGroups\n"
 RAW = "r_write_table_single_result_string"
@@ -145,28 +144,6 @@ def test_twelve_group_positions_and_supplied_padding_remain_distinct():
     matrix = parse(data, "matrix")["value"]
     assert [r["native_group_token"] for r in matrix["rows"]] == [" 1", "10", " 2"]
     assert [r["native_member_token"] for r in matrix["rows"]] == ["z", "a", "z"]
-
-
-def test_official_na_full_population_raw_tokens_and_legacy_layout():
-    _, raw = native("official_na", "output/retained_raw/GROUP-chisqTable.txt", "omnibus")
-    rows = raw["value"]["omnibus_rows"]
-    assert len([r for r in rows if r["chi_square"]["state"] == "available"]) == 312
-    assert rows[19]["position"]["value"] == 20
-    assert rows[19]["chi_square"]["value"] == 13.993712243466
-    assert rows[19]["p_value"]["value"] == 0.00291372399137316
-    assert rows[19]["positional_groups"][1]["raw_token"] == "group2(2_C,_4_T) "
-    data = LEGACY.read_bytes()
-    result = parse(data, layout="legacy_example_tsv")
-    assert result["status"] == "partial"
-    assert result["value"]["header_tokens"][-1] == ""
-    assert result["value"]["group_heading_tokens"] == ["Group 1 Residue Diversity", "Group 2 Residue Diversity", ""]
-    first = result["value"]["rows"][0]
-    assert (first["position_token"], first["position_1based"], first["position_qualification"]) == ("14*", 14, "legacy_star")
-    assert first["fewer_5_token"] is None
-    assert first["chi_square"]["value"] == 7.139 and first["p_value"]["value"] == 0.007543
-    assert first["group_cells"][2] == {"heading_index": 2, "raw_token": "", "symbol_counts": []}
-    assert_number_ranges(result, data)
-    assert parse(data)["status"] == "invalid"
 
 
 def test_ordered_metadata_duplicates_empty_extra_cells_and_unknown_columns():

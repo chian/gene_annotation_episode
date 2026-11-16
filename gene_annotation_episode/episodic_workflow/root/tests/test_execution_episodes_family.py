@@ -86,14 +86,6 @@ def selection(ctx, references, initial=()):
             'initial_known_record_refs': list(initial)}
 
 
-@pytest.mark.parametrize('role', ['launch_local', 'launch_hpc'])
-def test_native_launch_return_contracts_use_current_terminal_provider(host, role):
-    from gene_annotation_episode.terminal_execution_episodes import TerminalExecutionEpisodes
-    expected = TerminalExecutionEpisodes.fact_sources(None, role)
-    actual = host.family.fact_sources(role)
-    assert {name: actual[name] for name in expected} == expected
-
-
 def test_one_owner_and_data_descriptor_reconstruct_all_operands(host):
     h = host
     registry = EpisodeBindingRegistry([h.family])

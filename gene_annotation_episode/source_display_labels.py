@@ -3,7 +3,7 @@ from .domain import LABEL
 
 
 def source_literal_label(value):
-    """Preserve valid historical labels, formatting only inadmissible previews.
+    """Preserve valid labels, formatting only inadmissible previews.
 
     Publication retains the complete value and exact source anchor separately.
     Whitespace formatting or a truncated preview supplies no new identity.

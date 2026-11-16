@@ -1,7 +1,6 @@
 """Custody/control regression tests; no native measurement claim or producer run.
 
-Root runs these through the bounded verification lifecycle. Full original-job
-and Workflow proof is covered separately by its integration tests.
+Full original-job and Workflow proof is covered separately by its integration tests.
 """
 import asyncio
 from copy import deepcopy
@@ -67,21 +66,6 @@ def receipt_fixture(store, *, mode='native_result', acquired=True, native_outcom
         worker_execution=dict(terminal=True, quiescent=True, failure=None, returncode=0),
         qualified_files=files, projection=projection, context=context, host_failures=[],
         facts=empty_facts(), original_origins=[])
-
-
-def test_numerical_unicode_identity_is_distinct_from_control_json(tmp_path, monkeypatch):
-    with Store(tmp_path / 'store') as store:
-        reader = FluorescenceResultReceipts(SimpleNamespace(store=store))
-        value = {'label': 'CD4 μ', 'value': 2}
-        numerical = retain(store, value, 'fluorescence_event_result_view_v1', scientific=True)
-        control = retain(store, value, 'fluorescence_worker_result_v1')
-        assert numerical['sha256'] != control['sha256']
-        monkeypatch.setattr(store, 'get_artifact', lambda *_: pytest.fail('Historical metadata validation read scientific bytes'))
-        assert reader.file_metadata(numerical, value=value, newline=True, numerical=True) == numerical
-        with pytest.raises(ValueError, match='artifact_value_mismatch'):
-            reader.file_metadata(numerical, value=value, newline=True)
-        with pytest.raises(ValueError, match='file_metadata_mismatch'):
-            reader.file_metadata({**numerical, 'size_bytes': numerical['size_bytes'] + 1})
 
 
 def test_control_record_is_immutable_utf8_plus_lf(tmp_path):

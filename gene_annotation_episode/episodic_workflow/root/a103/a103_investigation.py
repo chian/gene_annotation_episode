@@ -21,38 +21,12 @@ TASKS = ('locus_identity','neighborhood_organization','component_attribution','c
     'fusion_and_regions','cooccurrence','functional_contrast','synthesis')
 
 
-def legacy_report_schema():
-    """Historical model-verdict contract; new commissions use saved grading."""
+def report_schema():
     refs = {'type':'array','items':{'type':'string','format':'reference'},'uniqueItems':True}
-    schema = obj({'context_summary':{'type':'string','enum':['not_assessed','locus_only','organization_measured',
-            'association_measured','no_locus','incomplete_context']},
-        'scope_status':{'type':'string','enum':['not_assessed','unresolved','partial','represented']},
-        'functional_support':{'type':'string','enum':['not_assessed','system_association','local_trait_evidence',
-            'contrast_qualified','contradicted'],
-            'description':'Use not_assessed when no explicit functional hypothesis and assessment have been created. '
-                'Measured context may still be association_measured and earn credit. system_association, '
-                'contrast_qualified and contradicted require actual hypothesis_refs and assessment_refs; '
-                'local_trait_evidence requires a qualified fusion with mapped local target features.'},
-        'limitations':{'type':'array','uniqueItems':True,'items':{'type':'string','enum':[
-            'unmapped_target','reference_context_only','ambiguous_locus','partial_sequence','incomplete_assembly',
-            'unexamined_flanks','neighbor_identity_unresolved','source_labels_only','optional_module',
-            'related_genome_sampling','unknown_detection_scope','alternatives_unassessed',
-            'regulatory_direction_unestablished','exact_chemistry_unestablished','unresolved_primary_variant',
-            'native_execution_failed','native_admission_unavailable','missing_original_operands']}},
-        'information_need_refs':refs,
-        'hypothesis_refs':{**deepcopy(refs),'items':{'type':'string','format':'reference','x-reference-namespace':'hypothesis'}},
-        'assessment_refs':{**deepcopy(refs),'items':{'type':'string','format':'reference','x-reference-namespace':'assessment'}},
-        'records':{**deepcopy(refs),'x-source':CONTEXT_RECORD_SOURCE,
+    schema = obj({'records':{**deepcopy(refs),'x-source':CONTEXT_RECORD_SOURCE,
             'description':'Actual context measurements, native grades, per-use attachments, local features and received information for parent recomputation.'},
         'context_credit':{'type':'number','x-source':'credit',
             'description':'Host-calculated A103 context progress; not a probability of exact function.'}})
-    validate_closed_schema(schema)
-    return schema
-
-
-def report_schema():
-    original = legacy_report_schema()['properties']
-    schema = obj({name: deepcopy(original[name]) for name in ('records', 'context_credit')})
     validate_closed_schema(schema)
     return schema
 
@@ -181,35 +155,14 @@ def create_a103_workflow(store,tools,provider,directory,run_id,controller_factor
 
 def resolve_report(store,report,*,scope):
     from .a103_credit import A103ContextCredit
-    from .a103_publication import received_measurement
-    legacy = 'context_summary' in report
-    validate_form(report,legacy_report_schema() if legacy else report_schema(),lambda ref,namespace:
+    validate_form(report,report_schema(),lambda ref,namespace:
         ref in store.reference_subset([ref],scope) and (namespace is None or store.get(ref)['record_type']==namespace))
     view = A103ContextCredit().read_details(store,scope,known_record_refs=report['records'],details_limit=24,details_offset=0)
     sheets = view['a103_sheet']
-    if not legacy:
-        return {'context_sheets': sheets, 'tool_attachments': view['tool_attachments'],
-            'target_sheets': view['target_sheets'],
-            'receiving_scope_credit': view['credit'], 'child_reported_credit': report['context_credit'],
-            'reporting': 'saved_context_grading; no_separate_function_verdict'}
-    if report['context_summary']=='association_measured' and not any(sheets[k] for k in ('recurrence','fusion','cooccurrence','native_channel')):
-        raise ContractError('a103_association_statement_requires_actual_measurement')
-    if report['functional_support']=='system_association' and view['credit']<=0:
-        raise ContractError('a103_system_statement_requires_qualified_context')
-    if report['functional_support'] in {'system_association','contrast_qualified','contradicted'} and not (
-            report['hypothesis_refs'] and report['assessment_refs']):
-        raise ContractError('a103_function_interpretation_requires_explicit_hypothesis_and_assessment')
-    if report['functional_support']=='local_trait_evidence' and not any(
-            r['producer_operation']=='context.fusion' and r['score'] is not None for r in view['tool_attachments']):
-        raise ContractError('a103_trait_statement_requires_local_feature_attribution')
-    if report['functional_support'] in {'contrast_qualified','contradicted'} and not sheets['functional_contrast']:
-        raise ContractError('a103_contrast_statement_requires_context_panel')
-    if report['functional_support']=='contrast_qualified' and not any(
-            r.get('qualified_panel',{}).get('contrast_bounds',[0,1])[0]>0 for r in sheets['functional_contrast']):
-        raise ContractError('a103_discriminating_contrast_requires_qualified_separated_bounds')
-    return {'receiving_scope_credit':view['credit'],'child_reported_credit':report['context_credit'],
-        'context_sheets':sheets,'tool_attachments':view['tool_attachments'],
-        'target_sheets':view['target_sheets'],'information_need_refs':report['information_need_refs']}
+    return {'context_sheets': sheets, 'tool_attachments': view['tool_attachments'],
+        'target_sheets': view['target_sheets'],
+        'receiving_scope_credit': view['credit'], 'child_reported_credit': report['context_credit'],
+        'reporting': 'saved_context_grading; no_separate_function_verdict'}
 
 
 @dataclass(frozen=True)

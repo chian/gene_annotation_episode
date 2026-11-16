@@ -27,7 +27,7 @@ def _allocation(assignment, policy):
 
 def _environment(plan):
     return expression_nmf_environment(plan['requested_job']['native_expression_nmf']['software'],
-        attempt_directory=plan['attempt_directory'], recorded_environment=plan['requested_job']['environment'])
+        attempt_directory=plan['attempt_directory'])
 
 
 def _invoke(plan):

@@ -43,7 +43,7 @@ def test_actual_returned_outcome_is_observed_and_replayed_once(private,tmp_path,
     with Store(tmp_path/'state') as store:
         journal=Journal(store,'private-a108')
         task.workflow=SimpleNamespace(run_id='private-a108',journal=journal,
-            execution_binding=None,wait_inputs_version=None,completed_action_inputs_version=None,
+            execution_binding=None,pending_work=lambda source:{'items':[]},
             execute=execute,receive_native_outcome=lambda *args: None,
             receive_outcome=lambda source,selection,outcome,index: receipts.append((index,outcome['status'])),
             automatic_score_updates=score,source_credit_view=credit,
@@ -54,7 +54,7 @@ def test_actual_returned_outcome_is_observed_and_replayed_once(private,tmp_path,
         assert receipts==[(7,status)] and grades==[(7,status)] and projections==[(7,status)]
         saved=journal.row('runtime_actions','episode-original',7)
         assert json.loads(saved['action'])==selected
-        assert json.loads(saved['result'])==result
+        assert json.loads(saved['result'])=={**result,'pending_work_after_action':{'items':[]}}
         assert saved['credit']==0.0
         assert runtime.observes_action_outcome('tool',status)
 

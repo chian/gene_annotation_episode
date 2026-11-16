@@ -88,7 +88,7 @@ def diagnose(directory, retain, *, inspect_constructed=None):
         'instructions': 'No action or acquisition is executed.',
         'input_schema': module('domain').obj({'record': {'type': 'string'}})}]
     tools_library = module('scientific_tool_library').ScientificToolLibrary.freeze(
-        directory / 'scientific-tool-library', catalog=catalog, tool_info=True)
+        directory / 'scientific-tool-library', catalog=catalog)
     run_id = 'a104-saved-binding-observations'
     clients = Responses()
     def observe(identity, call):

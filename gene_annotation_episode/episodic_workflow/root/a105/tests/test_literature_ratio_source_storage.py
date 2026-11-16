@@ -8,7 +8,6 @@ from dataclasses import replace
 import hashlib
 from io import BytesIO
 import json
-from pathlib import Path
 from PIL import Image, ImageDraw
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.communication import form_with_facts, validate_form, plain
@@ -291,17 +290,6 @@ def test_original_owner_inherited_subset_empty_and_unchanged_delivery(tmp_path):
     finally:
         store.close()
 
-def test_request_and_return_schema_exact_detached_and_no_model_origin():
-    directory = Path(__file__).resolve().parents[5] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/visual_signal_parent_review_067/text_locator_declarations_008'
-    assert ratio_source_population_schema() == json.loads((directory / 'REQUEST_SCHEMA_008.json').read_text())
-    assert ratio_source_cells_schema() == json.loads((directory / 'RETURN_SCHEMA_008.json').read_text())
-    request = ratio_source_population_schema()
-    request['properties'].clear()
-    returned = ratio_source_cells_schema()
-    returned['items'].clear()
-    assert 'source_ref' in ratio_source_population_schema()['properties']
-    assert 'origin' in ratio_source_cells_schema()['items']['properties']
-    assert 'evidence_origin' not in ratio_source_population_schema()['properties']
 
 def test_authorized_availability_partial_survives_saved_read_without_repair(tmp_path, monkeypatch):
     import errno

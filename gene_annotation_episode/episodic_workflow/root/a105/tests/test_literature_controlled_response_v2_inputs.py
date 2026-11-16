@@ -7,7 +7,6 @@ from copy import deepcopy as cp
 from fractions import Fraction
 import errno
 import hashlib
-import types
 from io import BytesIO
 import json
 from pathlib import Path
@@ -100,15 +99,6 @@ class Fixture:
 def forbidden(*args, **kwargs):
     raise AssertionError('forbidden source/decode/counter/model/sheet operation')
 
-def test_runtime_constructors_equal_all_exact_declarations_and_are_detached():
-    for fn, path in ((reader.controlled_response_v2_arguments_schema, DESIGN / 'SELECTION_SCHEMA_V2_001.json'), (reader._graph_schema, BASE / 'a105_controlled_graph_design_061/GRAPH_RESULT_SCHEMA_002.json'), (reader._sheet_schema, BASE / 'a105_controlled_adapter_design_065/OWNER_OUTPUT_SCHEMA_004.json'), (reader._extraction_schema, DESIGN / 'EXTRACTION_SCHEMA_V2_001.json')):
-        actual = fn()
-        assert actual == json.loads(path.read_text())
-        Draft202012Validator.check_schema(actual)
-        actual['properties'].clear()
-        assert fn()['properties']
-    assert reader.__all__ == ['controlled_response_v2_arguments_schema', 'validate_controlled_response_v2_selection', 'read_controlled_response_v2_inputs', 'validate_controlled_response_v2_extraction']
-    assert shared.__all__ == ['VERSION', 'SELECTION_VERSION', 'COVARIANCE_VERSION', 'DEPENDENCIES', 'controlled_response_arguments_schema', 'validate_controlled_response_selection', 'read_controlled_response_inputs', 'validate_controlled_response_extraction']
 
 @pytest.mark.parametrize('index', range(14), ids=[c['name'] for c in CASES])
 def test_actual_fourteen_sources_pixels_saved_science_and_separate068(index):
@@ -445,21 +435,8 @@ def test_graph_tampering_rejected_even_with_measurement_duplication_updated(fiel
     with pytest.raises(ExperimentalContractError):
         reader.validate_controlled_response_v2_extraction(f.args, x)
 
-def _load(name, path):
-    module = types.ModuleType(name)
-    module.__file__ = str(path)
-    module.__package__ = name.rpartition('.')[0]
-    exec(compile(path.read_bytes(), str(path), 'exec'), module.__dict__)
-    return module
 
 
-def test_source_reader_calls_no_sheet_populator_and_rejects_v1_before_io(monkeypatch):
-    monkeypatch.setattr(owner, 'populate_controlled_response_owner', forbidden)
-    assert Fixture().read()['calculation_inputs']['version'] == 'controlled_response_owner_inputs_v2'
-    args = Fixture().args
-    args['version'] = 'controlled_response_source_selection_v1'
-    with pytest.raises(ExperimentalContractError):
-        reader.read_controlled_response_v2_inputs(args, read_source=forbidden)
 
 def test_actual_crop_original_closure_pixels_and_signed_negative_ticks():
     f = Fixture()
@@ -656,13 +633,6 @@ def test_reported_CI_printed_unit_conflict_is_not_graph_pixel_uncertainty():
     assert any((d['code'] == 'source_uncertainty_unit_conflicting' for d in unc['diagnostics']))
     assert s['cells']['contrast_variance']['value'] == 3e-07
 
-def test_original_v1_facades_do_not_admit_new_profile_or_perform_its_IO():
-    f = Fixture()
-    with pytest.raises(ExperimentalContractError, match='controlled_selection_schema_invalid'):
-        shared.read_controlled_response_inputs(f.args, read_source=forbidden)
-    x = f.read()
-    with pytest.raises(ExperimentalContractError, match='controlled_selection_schema_invalid'):
-        shared.validate_controlled_response_extraction(f.args, x)
 
 def test_request_object_key_order_does_not_reassign_scientific_owner_roles():
     f = Fixture()

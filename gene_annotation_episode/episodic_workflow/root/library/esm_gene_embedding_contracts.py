@@ -177,21 +177,15 @@ def _file(value):
 
 
 def esm_worker_module(driver):
-    """Choose the supplied implementation pair without reading deployment files.
+    """Require the supplied implementation pair without reading deployment files.
 
-    Historical declarations keep their original names and pins. The private
-    pair must be supplied together and cannot be mixed with the historical pair.
-    The existing driver validator still authenticates declaration structure.
+    The driver validator still authenticates declaration structure.
     """
-    original = ("gene_annotation_episode.esm_gene_embedding_worker",
-        "gene_annotation_episode.esm_gene_embedding_contracts")
     current = ("gene_annotation_episode.episodic_workflow.root.library.esm_gene_embedding_worker",
         "gene_annotation_episode.episodic_workflow.root.library.esm_gene_embedding_contracts")
     names = {row["module"] for row in driver["implementation_files"]}
-    if names.intersection(current):
-        _require(set(current) <= names and not names.intersection(original), "selected_worker_module_conflict")
-        return current[0]
-    return original[0]
+    _require(set(current) <= names, "selected_worker_module_conflict")
+    return current[0]
 
 
 def validate_esm_deployment(value):

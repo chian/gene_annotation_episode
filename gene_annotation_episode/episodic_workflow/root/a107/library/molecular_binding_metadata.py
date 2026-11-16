@@ -1,7 +1,4 @@
-"""A107 original molecular binding metadata; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 molecular binding metadata."""
 import json
 from gene_annotation_episode.episodic_workflow.root.a107.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a107.execution_contracts import canonical

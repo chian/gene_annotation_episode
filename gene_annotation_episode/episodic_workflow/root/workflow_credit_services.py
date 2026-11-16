@@ -1,4 +1,4 @@
-"""Preserved root host ports defined by WorkflowCreditServices."""
+"""Root host ports defined by WorkflowCreditServices."""
 from __future__ import annotations
 import json
 from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef

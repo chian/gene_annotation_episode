@@ -27,12 +27,8 @@ from gene_annotation_episode.native_control_records import immutable, read_contr
 ASSIGNMENT_VERSION = 'flux_balance_scientific_assignment_v1'
 LAUNCH_VERSION = 'flux_balance_scientific_launch_v1'
 REQUEST_VERSION = 'flux_balance_scientific_request_v1'
-LEGACY_CONTROL_VERSION = 'flux_balance_request_binding_v1'
 CONTROL_VERSION = 'flux_balance_request_binding_v2'
-# The immutable original control, rather than a mutable public result tag,
-# fixes which exact projection is valid throughout recovery and closed replay.
-_PUBLIC_VERSIONS = {LEGACY_CONTROL_VERSION: 'flux_balance_practical_outcome_v1',
-                    CONTROL_VERSION: 'flux_balance_practical_outcome_v2'}
+PUBLIC_OUTCOME_VERSION = 'flux_balance_practical_outcome_v2'
 _TEXT = {'type': 'string', 'minLength': 1}
 _SOURCE_FIELDS = ('artifact_ref', 'text_ref', 'request_ref', 'stdout_ref', 'stderr_ref')
 OUTPUT_ROLES = ('original_model', 'selected_request', 'effective_model', 'effective_problem',
@@ -154,7 +150,7 @@ def _resolve_file(store, selection, records):
         'size_bytes': metadata['size'], 'format': selection['format']}
 
 
-def _materialize(store, row, *, historical=False):
+def _materialize(store, row):
     selection, binding = row['selection'], row['binding']
     request, records = selection['request'], {item['reference']: item['record'] for item in row['witness_records']}
     model_selection = request['model_input']
@@ -186,7 +182,7 @@ def _materialize(store, row, *, historical=False):
     software = binding['software']
     lifecycle = str(Path(row['workspace']) / '.fba-selected-runtime' / row['assignment_id'])
     environment = flux_balance_environment(software, attempt_directory=str(Path(lifecycle) / ATTEMPT_DIRECTORY_NAME),
-        lifecycle_directory=lifecycle, historical=historical)
+        lifecycle_directory=lifecycle)
     assignment = {'version': 'practical_assignment_v1', 'assignment_id': row['assignment_id'],
         'resource_id': row['resource_id'], 'resource_kind': 'local', 'workspace': row['workspace'],
         'endpoint': selection['endpoint'], 'requested_job': {
@@ -200,7 +196,7 @@ def _materialize(store, row, *, historical=False):
             'environment_realization': 'operation_scoped_tmp_and_cache_v1'}}
     if 'launch_instructions' in selection:
         assignment['launch_instructions'] = deepcopy(selection['launch_instructions'])
-    return validate_assignment(assignment, historical=historical)
+    return validate_assignment(assignment)
 
 
 def _table_exists(store):
@@ -213,15 +209,14 @@ def _commission(custody, context):
     return custody._commission(context, unsaved=saved is None)
 
 
-def read_request_binding(store, run_id, episode_id, *, historical=False):
+def read_request_binding(store, run_id, episode_id):
     """Read only this host's original control and authenticate its commission."""
-    _require(type(historical) is bool, 'historical_validation_mode_invalid')
     _require(_table_exists(store), 'original_control_missing')
     saved = store.db.execute(f'SELECT file FROM {_TABLE} WHERE run_id=? AND episode_id=?',
         (run_id, episode_id)).fetchone()
     _require(saved is not None, 'original_control_missing')
     file = validate_flux_balance_record('File', json.loads(saved['file']))
-    _require(file['format'] in _PUBLIC_VERSIONS, 'control_format_conflict')
+    _require(file['format'] == CONTROL_VERSION, 'control_format_conflict')
     raw = retained_native_file(store, file).read_bytes()
     value = json.loads(raw)
     _require(raw == canonical(value).encode('utf-8') and value['version'] == file['format']
@@ -233,7 +228,7 @@ def read_request_binding(store, run_id, episode_id, *, historical=False):
         else context.role == 'launch_local' and is_compact_assignment(plain(context.assignment)),
         'original_context_conflict')
     for row in value['requests']:
-        _require(_materialize(store, row, historical=historical) == row['assignment'], 'materialization_conflict')
+        _require(_materialize(store, row) == row['assignment'], 'materialization_conflict')
     if context.role == 'launch':
         original = plain(context.assignment)
         _require(set(original['requests']) == {row['resource_id'] for row in value['requests']}, 'selection_conflict')
@@ -242,7 +237,7 @@ def read_request_binding(store, run_id, episode_id, *, historical=False):
                 'resource_id': row['resource_id']}, 'selection_conflict')
     else:
         parent, _ = _commission(custody, context)
-        original = read_request_binding(store, run_id, parent.episode_id, historical=historical)
+        original = read_request_binding(store, run_id, parent.episode_id)
         _require(value['parent_file'] == original['file'] and len(value['requests']) == 1
             and value['version'] == original['version'], 'parent_control_conflict')
         row = value['requests'][0]
@@ -251,25 +246,24 @@ def read_request_binding(store, run_id, episode_id, *, historical=False):
     return {**deepcopy(value), 'file': file}
 
 
-def materialized_assignment(store, context, *, historical=False):
-    control = read_request_binding(store, context.run_id, context.episode_id, historical=historical)
+def materialized_assignment(store, context):
+    control = read_request_binding(store, context.run_id, context.episode_id)
     _require(control['context'] == context.as_record() and len(control['requests']) == 1,
         'original_context_conflict')
     return deepcopy(control['requests'][0]['assignment'])
 
 
-def practical_outcome_view(receipt, *, assignment=None, control_version=LEGACY_CONTROL_VERSION):
+def practical_outcome_view(receipt, *, assignment=None):
     """Project facts under the original control's fixed presentation contract."""
     if receipt is None:
         return None
-    _require(control_version in _PUBLIC_VERSIONS, 'public_outcome_version_conflict')
     facts = receipt['outcome'].get('facts', {})
     job = facts.get('requested_job')
     native = receipt['outcome'].get('native_outcome') or {}
     failure = native.get('failure') or {}
     outputs = [{key: row[key] for key in ('role', 'available', 'bytes', 'writer_closed') if key in row}
         for row in native.get('observed_outputs', [])]
-    if control_version == CONTROL_VERSION and outputs:
+    if outputs:
         from gene_annotation_episode.episodic_workflow.root.practical_execution_records import flux_balance_role_paths
         _require(type(assignment) is dict and type(job) is dict
             and job.get('requested_job_sha256') == digest(assignment['requested_job']),
@@ -282,22 +276,21 @@ def practical_outcome_view(receipt, *, assignment=None, control_version=LEGACY_C
             _require(row.get('role') in roles, 'public_output_role_conflict')
             row['role'] = roles[row['role']]
         _require(len(outputs) == len({row['role'] for row in outputs}), 'public_output_role_ambiguous')
-    return {'version': _PUBLIC_VERSIONS[control_version], 'operation': receipt['tool_name'],
+    return {'version': PUBLIC_OUTCOME_VERSION, 'operation': receipt['tool_name'],
         'job': None if job is None else {key: job[key] for key in ('status', 'returncode')},
         'outputs': outputs,
         'failure': {key: failure[key] for key in ('code', 'exception_type', 'errno') if key in failure} or None,
         'validations': [{'key': row['key'], 'satisfied': row['satisfied']} for row in receipt['validations']]}
 
 
-def match_practical_public_outcome(value, receipt, reference, *, assignment=None,
-                                   control_version=LEGACY_CONTROL_VERSION):
+def match_practical_public_outcome(value, receipt, reference, *, assignment=None):
     """Authenticate the exact committed view; pending metadata belongs to runtime."""
     value = deepcopy(plain(value))
     if 'pending_work_after_action' in value:
         from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
         validate_pending(value.pop('pending_work_after_action'))
     expected = {'status': 'completed', 'record_refs': [reference], 'changed_record_refs': [reference],
-        'result': practical_outcome_view(receipt, assignment=assignment, control_version=control_version)}
+        'result': practical_outcome_view(receipt, assignment=assignment)}
     _require(canonical(value) == canonical(expected), 'public_outcome_conflict')
 
 
@@ -361,14 +354,13 @@ class FluxBalanceRequestBindings:
                 body = information.read(sources[0]['id'], context.scope)
                 _require(canonical(body['receipt']) == canonical(receipt), 'original_practical_receipt_conflict')
 
-    def _write(self, context, rows, parent_file=None, *, version=CONTROL_VERSION):
-        _require(version in _PUBLIC_VERSIONS, 'control_format_conflict')
-        value = {'version': version, 'run_id': context.run_id, 'episode_id': context.episode_id,
+    def _write(self, context, rows, parent_file=None):
+        value = {'version': CONTROL_VERSION, 'run_id': context.run_id, 'episode_id': context.episode_id,
             'context': context.as_record(), 'requests': rows, 'parent_file': parent_file}
         root = self.owner.directory / 'fba-request-bindings' / digest([context.run_id, context.episode_id])
         root.mkdir(parents=True, exist_ok=True)
         immutable(root / 'materialization.json', value)
-        file = capture_native_file(self.store, directory=str(root), relative_path='materialization.json', format=version)
+        file = capture_native_file(self.store, directory=str(root), relative_path='materialization.json', format=CONTROL_VERSION)
         with self.store.transaction():
             old = self.store.db.execute(f'SELECT file FROM {_TABLE} WHERE run_id=? AND episode_id=?',
                 (context.run_id, context.episode_id)).fetchone()
@@ -424,7 +416,8 @@ class FluxBalanceRequestBindings:
         previous = read_control(root / 'materialization.json')
         if previous is not None:
             _require(previous['context'] == context.as_record(), 'original_context_conflict')
-            return self._write(context, previous['requests'], previous['parent_file'], version=previous['version'])
+            _require(previous['version'] == CONTROL_VERSION, 'control_format_conflict')
+            return self._write(context, previous['requests'], previous['parent_file'])
         return None
 
     def initialize_launch(self, context):
@@ -456,10 +449,10 @@ class FluxBalanceRequestBindings:
         selection = plain(context.assignment)
         row, = [row for row in original['requests'] if row['resource_id'] == selection['resource_id']]
         _require(selection == row['selection'], 'selection_conflict')
-        return self._write(context, [row], original['file'], version=original['version'])
+        return self._write(context, [row], original['file'])
 
 
-__all__ = ['ASSIGNMENT_VERSION', 'LAUNCH_VERSION', 'LEGACY_CONTROL_VERSION', 'CONTROL_VERSION', 'OUTPUT_ROLES',
+__all__ = ['ASSIGNMENT_VERSION', 'LAUNCH_VERSION', 'CONTROL_VERSION', 'OUTPUT_ROLES',
     'is_compact_assignment', 'is_compact_launch', 'scientific_request_schema',
     'resource_assignment_schema', 'launch_assignment_schema', 'validate_compact_assignment',
     'read_request_binding', 'materialized_assignment', 'FluxBalanceRequestBindings']

@@ -1,8 +1,9 @@
-"""Exact original historical receiving slice; integration and dependency review pending."""
+"""A110 received execution information."""
 from __future__ import annotations
 import json
 from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a110.local_jobs import LocalJobPolicy
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 
 def confined(path, workspace):
     path = Path(path)
@@ -107,7 +108,7 @@ class HistoricalLocalAssignmentValidation:
             if not assignment.get('resource_id'):
                 raise ValueError('native_blast_utility_resource_identity_required')
             confined(assignment['workspace'], self.configuration['workspace'])
-            if self.policy.memory_bytes > 20 * 1024 ** 3 or self.policy.scratch_bytes > 4 * 1024 ** 3:
+            if self.policy.memory_bytes > ENVIRONMENT_BOUNDS['memory_bytes'] or self.policy.scratch_bytes > 4 * 1024 ** 3:
                 raise ValueError('native_blast_utility_local_policy_conflict')
         if 'native_blast_masking' in assignment['requested_job']:
             from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_information.historical_native_blast_masking_contracts import validate_native_blast_masking_requested_job
@@ -120,7 +121,7 @@ class HistoricalLocalAssignmentValidation:
             if not assignment.get('resource_id'):
                 raise ValueError('native_blast_masking_resource_identity_required')
             confined(assignment['workspace'], self.configuration['workspace'])
-            if self.policy.memory_bytes > 20 * 1024 ** 3 or self.policy.scratch_bytes > 4 * 1024 ** 3:
+            if self.policy.memory_bytes > ENVIRONMENT_BOUNDS['memory_bytes'] or self.policy.scratch_bytes > 4 * 1024 ** 3:
                 raise ValueError('native_blast_masking_local_policy_conflict')
         if 'native_fluorescence' in assignment['requested_job']:
             from gene_annotation_episode.episodic_workflow.root.a110.native_fluorescence_contracts import POLICY, validate_fluorescence_requested_job

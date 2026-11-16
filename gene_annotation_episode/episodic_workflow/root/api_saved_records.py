@@ -190,16 +190,12 @@ class APISavedRecords:
         body = self._artifact_json(self.store.get(handoff_ref)['artifact_ref'])
         return self._read_handoff(handoff_ref, body['scope'])['scope']
 
-    def read_target(self, handoff_ref, scope, *, verify_artifacts=True, _enrichr_history=None,
-                    _completed_appservice_download=False):
+    def read_target(self, handoff_ref, scope, *, verify_artifacts=True, _enrichr_history=None):
         from .bvbrc_appservice_records import PROVIDER as APPSERVICE_PROVIDER
         if _enrichr_history is not None and self.store.get(handoff_ref).get('provider') != PROVIDER:
             raise ValueError('enrichr_original_context_conflict')
         if self.store.get(handoff_ref).get('provider') == APPSERVICE_PROVIDER:
-            return self.appservice.read_target(handoff_ref, scope,
-                **({'_completed_download': True} if _completed_appservice_download else {}))
-        if _completed_appservice_download:
-            raise ValueError('appservice_cached_download_context_conflict')
+            return self.appservice.read_target(handoff_ref, scope)
         if self.store.get(handoff_ref).get('provider') == LEGACY_PROVIDER:
             return self._legacy_binding().read_target(handoff_ref, scope)
         body = self._read_handoff(handoff_ref, scope,
@@ -299,10 +295,10 @@ class APISavedRecords:
                         raise ValueError('api_result_runtime_outcome_conflict')
                     if exact_publication:
                         from gene_annotation_episode.episodic_workflow.root.episode_return_records import _same
-                        if enrichr and 'pending_work_after_action' in actual:
-                            from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
-                            validate_pending(actual['pending_work_after_action'])
-                        actual.pop('pending_work_after_action', None)
+                        if 'pending_work_after_action' not in actual:
+                            raise ValueError(assignment['service'] + '_original_receipt_conflict')
+                        from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
+                        validate_pending(actual.pop('pending_work_after_action'))
                         if not _same(actual, outcome):
                             raise ValueError(assignment['service'] + '_original_receipt_conflict')
                 source = self.store.get(receipt['source_ref'])

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-def bind_adapters(configured, *, retained_reader=False):
+def bind_adapters(configured):
     import gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_homology_bundle_adapter as homology
     import gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_gene_tree_bundle_adapter as gene_tree
     import gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_codon_tree_bundle_adapter as codon_tree
@@ -29,7 +29,7 @@ def bind_adapters(configured, *, retained_reader=False):
         if implementation is None:
             continue
         from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.adapter_source_identity import authenticate_adapter_source
-        authenticate_adapter_source(implementation.ADAPTER_ID, implementation.ADAPTER_VERSION, implementation.__name__, row['implementation_sha256'], implementation.implementation_sha256(), retained_reader=retained_reader)
+        authenticate_adapter_source(implementation.ADAPTER_ID, implementation.ADAPTER_VERSION, implementation.__name__, row['implementation_sha256'], implementation.implementation_sha256())
         bound[key] = (implementation, row['implementation_sha256'])
     return bound
 

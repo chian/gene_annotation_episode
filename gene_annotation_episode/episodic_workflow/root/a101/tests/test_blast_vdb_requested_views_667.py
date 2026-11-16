@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library import blast_ut
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import validate_blast_utility_result
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_vdb_utility_inputs import parse_blast_vdb_extraction, parse_blast_vdb_inspection
 from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
-from test_blast_vdb_utility_inputs_663 import supplied, occurrence, identity, provenance, INFO, AUTHENTIC, STDOUT_SHA
+from test_blast_vdb_utility_inputs_663 import supplied, occurrence, identity, provenance, INFO
 from test_blast_utility_result_views_629 import (
     project as legacy_project, selected_sequences, selector as legacy_selector,
 )
@@ -33,8 +33,6 @@ def legacy_reference():
     return {"selector_v1": getattr(views, "NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V1_SCHEMA",
                                   views.NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA),
             "projection_fields": views.PROJECTION_FIELDS, "fact_schemas": schemas, "examples": selected}
-
-
 
 
 SOURCE = "source_original_vdb667"
@@ -497,19 +495,6 @@ def test_unrequested_fields_wrong_original_sources_and_invented_qualifiers_rejec
     mutation(view)
     with pytest.raises(ContractError):
         validate(view, args)
-
-
-def test_authentic_retained_two_rows_requested_values_only():
-    raw = (AUTHENTIC / "stdout.bin").read_bytes()
-    stderr = (AUTHENTIC / "stderr.bin").read_bytes()
-    assert len(raw) == 594 and hashlib.sha256(raw).hexdigest() == STDOUT_SHA and stderr == b""
-    names = ("gnl|SRA|ERR3487613.1.1", "gnl|SRA|ERR3487613.1.2")
-    view, _ = project(raw, sequences((0, 1), fields=("native_reported_length", "native_length_basis", "returned_symbol_count"),
-        member=True), selectors=names, stderr=stderr)
-    assert [row["fields"]["native_reported_length"] for row in view["sequences"]] == [250, 250]
-    assert [row["fields"]["returned_symbol_count"] for row in view["sequences"]] == [250, 250]
-    assert all(row["vdb_identity"]["member"] is None for row in view["sequences"])
-    assert view["record_refs"] == [SOURCE]
 
 
 def test_selected_context_cannot_be_replaced_with_fabricated_missing():

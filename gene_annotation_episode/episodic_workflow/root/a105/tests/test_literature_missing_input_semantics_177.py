@@ -3,18 +3,8 @@
 The retained v1 stores were produced by real selected writers before the change;
 tests never relabel a prospective result as historical output.
 """
-from copy import deepcopy
-import hashlib
-import importlib.util
-import json
-from pathlib import Path
-import shutil
-import sqlite3
 import pytest
-from gene_annotation_episode.episodic_workflow.root.a105.communication import form_with_facts, validate_form
 from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractError, obj, validate_schema
-from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import BindingContext
-from gene_annotation_episode.episodic_workflow.root.a105.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_transport_calculations as transport
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_binding_models as binding
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_transport_storage import LiteratureTransportRepository, transport_response_cells_schema
@@ -23,14 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_t
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_binding_models import sheet, model
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_transport_storage import fixture as transport_fixture
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_binding_model_storage import fixture as binding_fixture
-HERE = Path(__file__).resolve().parents[5] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_missing_input_semantics_177'
-LEGACY = json.loads((HERE / 'LEGACY_RECEIPT_001.json').read_text())
 
-def baseline(name):
-    spec = importlib.util.spec_from_file_location('gene_annotation_episode._baseline177_' + name, HERE / 'baseline' / (name + '.py'))
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
 
 @pytest.mark.parametrize('primitive', transport.PRIMITIVE_ORDER)
 def test_partial_concentrations_establish_only_missing_input(primitive):
@@ -59,14 +42,6 @@ def test_distinct_missing_transport_inputs(field, key, reason, component):
 
 
 
-def test_absent_binding_model_retains_native_contrast_without_publication_claim():
-    source = sheet(100, 200)
-    result = binding.populate_binding_model(source, None)
-    old = baseline('literature_binding_models').populate_binding_model(source, None)
-    assert result['cells']['log_parameter_contrast'] == old['cells']['log_parameter_contrast']
-    assert result['model'] is None
-    assert all((cell['unavailable_reason'] == 'binding_sampling_model_not_supplied' for name, cell in result['cells'].items() if name != 'log_parameter_contrast'))
-    assert source['cells']['native_parameter_ratio']['value'] == 2
 
 @pytest.mark.parametrize('kind', ['transport', 'binding'])
 def test_new_selected_writer_publishes_v2_and_new_typed_missing_labels(tmp_path, kind):
@@ -92,83 +67,6 @@ def test_new_selected_writer_publishes_v2_and_new_typed_missing_labels(tmp_path,
         assert repo.populate(context, args, 'new-v2-selected') == outcome
         assert not store.list('observation')
 
-def forbid(*_args, **_kwargs):
-    raise AssertionError('saved v1 projection must not read scientific inputs or recalculate')
 
-def open_readonly(path):
-    assert not Path(str(path / 'state.sqlite3') + '-wal').exists()
-    store = Store.__new__(Store)
-    store.path = path
-    store._savepoint = 0
-    store.db = sqlite3.connect(f"file:{path / 'state.sqlite3'}?mode=ro&immutable=1", uri=True)
-    store.db.row_factory = sqlite3.Row
-    store.db.execute('PRAGMA query_only=ON')
-    return store
 
-@pytest.mark.parametrize('name', sorted(LEGACY))
-def test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts(name, monkeypatch):
-    item = LEGACY[name]
-    cls = LiteratureTransportRepository if item['kind'] == 'transport' else LiteratureBindingModelRepository
-    schema = transport_response_cells_schema if item['kind'] == 'transport' else binding_model_cells_schema
-    path = HERE / 'legacy' / name
-    before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in path.rglob('*') if p.is_file()}
-    for module, names in {'literature_transport_storage': ('read_transport_inputs', 'populate_transport_response', '_quantity_key'), 'literature_binding_model_storage': ('read_binding_model', 'populate_binding_model', 'binding_model_operand_keys'), 'literature_binding_storage': ('read_binding_parameter_table', 'populate_binding_contrast'), 'literature_activity_calculations': ('populate_corrected_activity',), 'literature_prose_reader': ('read_jats_quantity',)}.items():
-        for function in names:
-            monkeypatch.setattr(f'gene_annotation_episode.episodic_workflow.root.a105.library.{module}.{function}', forbid)
-    with open_readonly(path) as store:
-        original = store.get_artifact
-        allowed = {store.get(row['id'])[field] for row in store.list('source') if row['origin'] == 'tool' for field in ('artifact_ref', 'request_ref')}
 
-        def saved_only(ref):
-            assert ref in allowed
-            return original(ref)
-        monkeypatch.setattr(store, 'get_artifact', saved_only)
-        repo = cls(store, item['run_id'])
-        ref = item['outcome']['result']['sheet_ref']
-        assert repo.read(ref) == item['payload']
-        owner = BindingContext(**item['context'])
-        assert repo.populate(owner, item['arguments'], 'original-v1-selected') == item['outcome']
-        projected = repo.project_cells([ref], permitted_record_refs=[ref])
-        assert projected == item['projected']
-        for row_schema in (item['schema'], schema()):
-            validate_schema(projected, row_schema)
-            namespace = 'literature_transport_cells' if item['kind'] == 'transport' else 'literature_binding_model_cells'
-            form_schema = obj({'rows': row_schema})
-            form = form_with_facts({}, form_schema, {namespace: projected})
-            assert validate_form(form, form_schema, lambda r, n: store.get(r)['record_type'] == n) == form
-        receiver = BindingContext(**item['receiver'])
-        assert repo.received_cells(receiver) == item['received_subset']
-        assert repo.fact_cells(receiver, [ref], components=repo.components) == item['received_subset']
-        with pytest.raises(ContractError, match='not_received'):
-            repo.project_cells([ref], permitted_record_refs=[])
-        altered = deepcopy(projected[:1])
-        altered[0]['value'] = 999
-        with pytest.raises(ContractError, match='differs_from_saved'):
-            repo.validate_returned_values(altered, permitted_record_refs=[ref])
-        with pytest.raises(sqlite3.OperationalError, match='readonly'):
-            store.db.execute('DELETE FROM records')
-    assert before == {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in path.rglob('*') if p.is_file()}
-
-@pytest.mark.parametrize('name', ['transport_missing', 'binding_missing'])
-@pytest.mark.parametrize('bad', ['version', 'artifact'])
-def test_authentic_v1_rejects_bad_record_version_or_mutated_artifact(tmp_path, name, bad):
-    item = LEGACY[name]
-    path = tmp_path / name
-    shutil.copytree(HERE / 'legacy' / name, path)
-    with Store(path) as store:
-        cls = LiteratureTransportRepository if item['kind'] == 'transport' else LiteratureBindingModelRepository
-        repo = cls(store, item['run_id'])
-        ref = item['outcome']['result']['sheet_ref']
-        source = store.get(ref)
-        if bad == 'version':
-            row = json.loads(store.db.execute('SELECT data FROM records WHERE id=?', (ref,)).fetchone()[0])
-            row['version'] = 'unsupported_v999'
-            store.db.execute('UPDATE records SET data=? WHERE id=?', (json.dumps(row), ref))
-            reason = 'version_mismatch'
-        else:
-            digest = source['artifact_ref'].removeprefix('artifact_')
-            artifact_path = path / 'artifacts' / digest[:2] / digest
-            artifact_path.write_bytes(artifact_path.read_bytes() + b' ')
-            reason = 'artifact_digest_mismatch'
-        with pytest.raises(ContractError, match=reason):
-            repo.read(ref)

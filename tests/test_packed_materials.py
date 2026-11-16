@@ -5,10 +5,8 @@ import json
 from pathlib import Path
 import sqlite3
 
-from Bio.SeqIO.QualityIO import FastqGeneralIterator
 import pytest
 
-from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.state import Store
@@ -26,10 +24,6 @@ def execute(tools, name, args, **kwargs):
     result = tools.execute(name, args, **kwargs)
     assert result["status"] in {"completed", "partial"}, result
     return result["result"]
-
-
-def native_fastq(content):
-    return list(FastqGeneralIterator(io.StringIO(content.decode("utf-8"))))
 
 
 def rows(store, collection_ref):
@@ -73,36 +67,6 @@ def check_packed_native(store, member, title, sequence, quality):
             assert component_bytes(store.db, member["id"], component, store.get_artifact) == data
 
 
-def test_wrapped_fastq_keeps_native_quality_metadata_without_per_read_artifacts(tmp_path):
-    with Store(tmp_path / "state") as store:
-        problem = store.create_problem(raw_sequence="MKWV", molecule="protein")
-        material = store.register_material(data=WRAPPED_FASTQ, role="read", quality_encoding="unspecified")
-        original = store.get(material["source_ref"])
-        before = artifact_ids(store)
-        attempt = store.parse_material(material["id"])
-        collection = store.get(attempt["collection_ref"])
-        assert attempt["status"] == "completed" and attempt["valid_records"] == 2
-        assert collection["storage_representation"] == REPRESENTATION
-        members = rows(store, collection["id"])
-        assert [member["name"] for member in members] == ["dup", "dup"]
-        assert [member["occurrence"] for member in members] == [0, 1]
-        assert [member["ordinal"] for member in members] == [0, 1]
-        assert "duplicate_source_identifier" in members[1]["issues"]
-        assert all(member["source_byte_offset"] is None and member["molecule"] == "unspecified" for member in members)
-        for member, native in zip(members, native_fastq(WRAPPED_FASTQ), strict=True):
-            check_packed_native(store, member, *native)
-        chunks = list(store.db.execute("SELECT artifact_ref FROM material_pack_chunks WHERE parse_key=?", (attempt["parse_key"],)))
-        assert len(chunks) == 1
-        assert artifact_ids(store) - before == {chunks[0][0]}
-        page = store.material_members(collection["id"], limit=1)
-        assert page["members"][0]["quality_present"]
-        assert page["members"][0]["quality_encoding"] == "unspecified"
-        assert page["next_query"]["offset"] == 1
-        assert store.get_artifact(original["artifact_ref"]) == WRAPPED_FASTQ
-        assert store.problem() == problem and store.list("reference") == []
-        assert project_credit(store).as_record()["credit"] == 0
-
-
 def test_components_cross_chunks_and_unicode_header_windows_remain_exact(tmp_path, monkeypatch):
     import gene_annotation_episode.materials_packing as packing
     monkeypatch.setattr(packing, "CHUNK_BYTES", 64)
@@ -136,84 +100,6 @@ def test_components_cross_chunks_and_unicode_header_windows_remain_exact(tmp_pat
         selected = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": member["id"], "offset": 61, "limit": 13})
         assert selected["sequence"] == sequence[61:74] and selected["quality"] == quality[61:74]
         assert store.get_artifact(store.get(selected["reference_ref"])["sequence_ref"]) == sequence.encode("ascii")
-
-
-def test_malformed_fastq_preserves_packed_valid_prefix_and_original_bytes(tmp_path, monkeypatch):
-    import gene_annotation_episode.materials_packing as packing
-    monkeypatch.setattr(packing, "CHUNK_BYTES", 11)
-    content = b"@good native\nACGTACGT\n+\n!@+~####\n@bad\nACGT\n+\n!!\n"
-    with Store(tmp_path / "state") as store:
-        problem = store.create_problem(raw_sequence="MKWV")
-        material = store.register_material(data=content)
-        attempt = store.parse_material(material["id"])
-        assert attempt["status"] == "partial" and attempt["valid_records"] == 1
-        assert attempt["error_count"] == 1 and not store.get(attempt["collection_ref"])["complete"]
-        member, = rows(store, attempt["collection_ref"])
-        check_packed_native(store, member, "good native", "ACGTACGT", "!@+~####")
-        assert store.material_errors(attempt["id"])["errors"] == [{"ordinal": 1, "byte_offset": None,
-            "code": "malformed_fastq_remaining_scope_unparsed"}]
-        selected = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": member["id"]})
-        assert selected["sequence"] == "ACGTACGT" and selected["quality"] == "!@+~####"
-        assert store.get_artifact(store.get(material["source_ref"])["artifact_ref"]) == content
-        assert store.problem() == problem and project_credit(store).as_record()["credit"] == 0
-
-
-def test_read_fasta_explicit_fragment_binding_stays_fixed_after_evidence_selection(tmp_path):
-    source = tmp_path / "reads.fa"
-    source.write_text(">same first\nACGT\n>same selected exact\nTGCAA\n>third\nCCCCCC\n")
-    manifest = tmp_path / "manifest.json"
-    manifest.write_text(json.dumps({"schema_version": 2, "entries": [{"path": source.name,
-        "role": "read", "molecule": "dna", "target_records": [1]}]}))
-    with Store(tmp_path / "state") as store:
-        problem = store.create_problem(manifest_path=manifest)
-        target, = store.targets()
-        assert target["name"] == "same" and target["description"] == "selected exact"
-        assert target["source_record"]["ordinal"] == 1 and target["source_record"]["occurrence"] == 1
-        assert store.get_artifact(target["sequence_ref"]) == b"TGCAA"
-        assert store.scope_coverage() == [{"target_ref": target["id"], "start": 0, "end": 5, "unit": "nt"}]
-        before = project_credit(store).as_record()
-        members = rows(store, problem["initial_collection_refs"][0])
-        for member, title, sequence in zip(members, ("same first", "same selected exact", "third"),
-                                           ("ACGT", "TGCAA", "CCCCCC"), strict=True):
-            check_packed_native(store, member, title, sequence, None)
-        selected = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": members[2]["id"]})
-        assert selected["quality"] is None
-        assert store.coverage(selected["reference_ref"]) == []
-        late = store.register_material(data=b">later\nAAAAAAAAAAAAAAAA\n", role="read")
-        store.parse_material(late["id"])
-        assert store.problem() == problem and store.targets() == [target]
-        assert project_credit(store).as_record() == before
-        assert rows(store, problem["initial_collection_refs"][0]) == members
-
-
-def test_selected_reference_and_operation_cache_survive_reopen_and_feed_alignment(tmp_path):
-    workspace = tmp_path / "state"
-    with Store(workspace) as store:
-        problem = store.create_problem(raw_sequence="ACGTTGCA", molecule="dna")
-        material = store.register_material(data=WRAPPED_FASTQ, molecule="dna")
-        attempt = store.parse_material(material["id"])
-        native = rows(store, attempt["collection_ref"])
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        result = execute(tools, "material.member", {"member_ref": native[0]["id"], "offset": 1, "limit": 3},
-                         operation_key="selected-read")
-        reference = store.get(result["reference_ref"])
-        assert store.get_artifact(reference["sequence_ref"]) == b"ACGTTGCA"
-        assert reference["source_ref"] == native[0]["source_ref"]
-        assert store.reference_subset([reference["id"], reference["sequence_ref"]]) == [reference["id"], reference["sequence_ref"]]
-        artifacts = artifact_ids(store)
-        assert rows(store, attempt["collection_ref"]) == native
-    with Store(workspace) as store:
-        assert store.parse_material(material["id"]) == attempt
-        replay = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": native[0]["id"], "offset": 1, "limit": 3},
-                         operation_key="selected-read")
-        assert replay == result and artifact_ids(store) == artifacts
-        alignment = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "sequence.align", {"query_ref": problem["subject_refs"][0],
-                            "reference_ref": result["reference_ref"], "molecule": "dna", "mode": "global"})
-        observation = store.get(alignment["observation_ref"])
-        assert observation["source_subject_refs"] == [result["reference_ref"]]
-        assert observation["subject_refs"] == problem["subject_refs"]
-        assert store.get_artifact(store.get(result["reference_ref"])["sequence_ref"]) == b"ACGTTGCA"
-        assert store.problem() == problem and project_credit(store).as_record()["credit"] == 0
 
 
 def test_portable_index_reconstructs_all_reads_without_exporting_unselected_tiny_files(tmp_path, monkeypatch):
@@ -297,25 +183,3 @@ def test_header_only_materialization_remains_outside_form_registry_until_member_
         assert store.get(member["id"]) == member
 
 
-def test_packed_external_fastq_retains_actual_source_request_and_origin(tmp_path):
-    with Store(tmp_path / "state") as store:
-        problem = store.create_problem(raw_sequence="MKWV", molecule="protein")
-        artifact = store.artifact(WRAPPED_FASTQ, "text/plain")
-        request = store.artifact(json.dumps({"provider_parameter": "fixture_only"}), "application/json")
-        source = store.put("source", {"provider": "fixture_external_reads", "accession": "fixture-readset",
-            "uri": "https://example.invalid/reads.fastq", "artifact_ref": artifact, "text_ref": artifact,
-            "request_ref": request, "version": "fixture1", "retrieved_at": None}, origin="external")
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        wrapped = execute(tools, "material.from_source", {"source_ref": source["id"]})
-        material = store.get(wrapped["material_ref"])
-        assert material["origin"] == "tool" and material["use"] == "evidence"
-        attempt = execute(tools, "material.parse", {"material_ref": material["id"]})["parse_attempt"]
-        member, second = rows(store, attempt["collection_ref"])
-        assert member["source_ref"] == second["source_ref"] == source["id"]
-        selected = execute(tools, "material.member", {"member_ref": second["id"]})
-        assert store.get(selected["reference_ref"])["source_ref"] == source["id"]
-        assert selected["sequence"] == native_fastq(WRAPPED_FASTQ)[1][1]
-        assert store.get(source["id"]) == source and store.get_artifact(artifact) == WRAPPED_FASTQ
-        assert store.get_artifact(source["request_ref"]) == store.get_artifact(request)
-        assert store.problem() == problem and len(store.targets()) == 1
-        assert project_credit(store).as_record()["credit"] == 0

@@ -11,11 +11,9 @@ from .domain import ContractError, canonical, obj
 from .episode_return_records import EpisodeReturnRecords
 
 
-VERSION = 'component_axis_report_v1'
 GRADING_REPORT_VERSION = 'component_axis_saved_grading_report_v2'
 SCORING_SHEET_VERSION = 'component_axis_scoring_sheet_v1'
 SCORING_FACT = 'component_axis_scoring_sheets'
-PATH_STATES = ('not_assessed', 'evidence_returned', 'partial', 'unavailable', 'inapplicable')
 PATHS = {'A107': ('requirement', 'presence', 'expression', 'coexpression', 'interaction')}
 
 
@@ -38,7 +36,7 @@ def validate_native_return_channels(selection, schema):
 
     Preparation-only work may return empty components and its real execution
     findings. This does not choose an investigation, run a job or widen a
-    receipt. Historical closed commissions retain their original contracts.
+    receipt.
     """
     from .component_axis_native_contracts import OPERATIONS
     from .component_axis_native_hpc import FACT_SOURCE, EXECUTION_SOURCE
@@ -66,23 +64,12 @@ def _refs(namespace=None):
     return {'type': 'array', 'items': item, 'uniqueItems': True}
 
 
-def legacy_report_schema(axis):
-    """Original closed contract for immutable historical path verdicts."""
+def report_schema(axis):
+    """Return exact saved numerical/qualification facts, without path verdicts."""
     if axis not in PATHS:
         raise ContractError('component_axis_not_supported')
-    path = obj({'status': {'type': 'string', 'enum': list(PATH_STATES)}, 'evidence_refs': _refs(),
-        'assessment_refs': _refs('assessment'),
-        'limitations': {**_refs(), 'description':
-            'Actual received records retaining applicable qualifications or missing reasons. '
-            'The scientific text remains in those saved records.'}})
     result = obj({'axis': {'type': 'string', 'const': axis},
-        'report_version': {'type': 'string', 'const': VERSION},
-        'paths': obj({name: deepcopy(path) for name in PATHS[axis]}),
-        'scope_status': {'type': 'string', 'enum': ['not_assessed', 'unresolved', 'partial', 'represented']},
-        'correspondence_refs': {**_refs(), 'description':
-            'Received correspondence evidence for particular subjects, partners, regions or '
-            'features. Listing a reference alone establishes no target transfer.'},
-        'information_need_refs': _refs(),
+        'report_version': {'type': 'string', 'const': GRADING_REPORT_VERSION},
         'records': {**_refs(), 'x-source': 'committed_record_refs'},
         **cell_views(axis),
         'controller_progress': {'type': 'number', 'x-source': 'credit', 'description':
@@ -102,16 +89,6 @@ def legacy_report_schema(axis):
     return result
 
 
-def report_schema(axis):
-    """Return exact saved numerical/qualification facts, without path verdicts."""
-    original = legacy_report_schema(axis)['properties']
-    schema = obj({name: deepcopy(node) for name, node in original.items()
-        if node.get('x-source') is not None or name in ('axis', 'report_version')})
-    schema['properties']['report_version']['const'] = GRADING_REPORT_VERSION
-    validate_closed_schema(schema)
-    return schema
-
-
 def initial_report(axis):
     return {'axis': axis, 'report_version': GRADING_REPORT_VERSION}
 
@@ -120,13 +97,12 @@ def report_axis(schema):
     properties = plain(schema).get('properties', {})
     axis = properties.get('axis', {}).get('const')
     version = properties.get('report_version', {}).get('const')
-    if axis not in PATHS or version not in {VERSION, GRADING_REPORT_VERSION}:
+    if axis not in PATHS or version != GRADING_REPORT_VERSION:
         return None
-    for candidate in (report_schema(axis), legacy_report_schema(axis)):
-        expected = candidate['properties']
-        if (version == expected['report_version']['const'] and set(properties) == set(expected) and all(
-                properties[name].get('x-source') == field.get('x-source') for name, field in expected.items())):
-            return axis
+    expected = report_schema(axis)['properties']
+    if set(properties) == set(expected) and all(
+            properties[name].get('x-source') == field.get('x-source') for name, field in expected.items()):
+        return axis
     return None
 
 
@@ -242,15 +218,7 @@ def resolve_report(store, report, *, context, services, axis=None):
     def permitted(reference, namespace):
         return (reference in known and reference in store.reference_subset([reference], scope)
             and (namespace is None or store.get(reference)['record_type'] == namespace))
-    legacy = 'paths' in report
-    validate_form(report, legacy_report_schema(selected) if legacy else report_schema(selected), permitted)
-    for path in report.get('paths', {}).values():
-        if path['status'] in {'evidence_returned', 'partial'} and not (
-                path['evidence_refs'] or path['assessment_refs']):
-            raise ContractError('component_axis_path_requires_received_evidence')
-        if any(not set(store.get(ref).get('evidence_refs', [])) <= known
-                for ref in path['assessment_refs']):
-            raise ContractError('component_axis_assessment_evidence_not_received')
+    validate_form(report, report_schema(selected), permitted)
     records = _component_records(store, report, context, services)
     from .component_axis_native_hpc import received_components, execution_findings as native_execution_findings
     native_components = received_components(store, report['native_component_records'], scope, known=known)

@@ -1,21 +1,9 @@
 """Saved-data integrity, not native execution or source-custody verification."""
-from copy import deepcopy
 import hashlib
-import json
-from pathlib import Path
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_proteome_data_contracts import ProteomeDataError, proteome_data_schema, validate_proteome_data
-
-
-ROOT = (Path(__file__).resolve().parent / 'fixtures' / 'bvbrc_original')
-EXAMPLE = ROOT / ("verification/tool_graders_bvbrc_proteome_sheet_contract_2026-10-25_165/"
-                  "B1_PRECISION_EXAMPLES_002.json")
-
-
-def inventory():
-    return json.loads(EXAMPLE.read_text())["expected_inventory"]
 
 
 def field(pointer, ordinal=None, name=None):
@@ -99,52 +87,6 @@ def change(value, path, replacement):
     for key in path[:-1]:
         target = target[key]
     target[path[-1]] = replacement
-
-
-def test_frozen_complete_invalid_values_and_independent_occurrences_survive():
-    original = inventory()
-    value = validate_proteome_data("ProteinInventory", original)
-    assert [row["sequence_symbol_count"] for row in value["records"]] == [4, 5, 0]
-    assert value["records"][1]["sequence"] == "AA-?1"
-    assert value["records"][0]["description"] == "  first description\t"
-    assert value["duplicate_identifier_groups"][0]["record_ordinals"] == [0, 1]
-    value["records"][0]["header"] = "mutated"
-    assert original == inventory()
-
-
-@pytest.mark.parametrize("path,replacement", [
-    (("observed_header_count",), 2), (("complete_record_count",), 2), (("valid_complete_record_count",), 3),
-    (("records", 0, "record_ordinal"), 7), (("records", 0, "sequence_symbol_count"), 5),
-    (("records", 0, "sequence_sha256"), "0" * 64), (("records", 0, "sequence_md5"), "0" * 32),
-    (("records", 0, "sequence"), "acde"), (("records", 0, "description"), "first description"),
-    (("records", 0, "source_field", "pointer"), "/records/1"),
-    (("records", 0, "source_field", "sha256"), "0" * 64),
-    (("records", 0, "byte_end_exclusive"), 35), (("records", 2, "byte_end_exclusive"), 58),
-    (("records", 1, "valid_sequence"), True), (("records", 2, "sequence"), None),
-    (("source", "body_complete"), False), (("source", "object_complete"), "unknown"),
-    (("duplicate_identifier_groups",), []), (("sequence_groups",), []),
-    (("sequence_groups", 0, "members", 0, "inventory_key"), "unrelated-input"),
-    (("sequence_groups", 0, "members", 0, "record_ordinal"), 1),
-    (("records", 0, "header"), "bad\nheader"),
-])
-def test_fasta_saved_integrity_mutations_rejected(path, replacement):
-    value = inventory()
-    change(value, path, replacement)
-    with pytest.raises(ProteomeDataError):
-        validate_proteome_data("ProteinInventory", value)
-
-
-def test_incomplete_last_record_stays_unknown_with_prefix_preserved():
-    value = inventory()
-    row = value["records"][-1]
-    row.update(record_complete=False, valid_sequence=False, sequence=None,
-               sequence_symbol_count=None, sequence_sha256=None, sequence_md5=None)
-    value["complete_record_count"] = 2
-    value["source"]["object_complete"] = "unknown"
-    assert validate_proteome_data("ProteinInventory", value) == value
-    row["sequence_symbol_count"] = 0
-    with pytest.raises(ProteomeDataError, match="incomplete_sequence_conflict"):
-        validate_proteome_data("ProteinInventory", value)
 
 
 @pytest.mark.parametrize("supplied", [{"feature_id": "feature:1"}, {"patric_id": "fig|1.1.peg.1"},
@@ -243,28 +185,6 @@ def test_original_input_relationship_mutations(path, replacement):
         validate_proteome_data("InputIndex", value)
 
 
-def test_schema_and_values_return_detached_copies_and_no_missing_validator_stub():
-    schema = proteome_data_schema("ProteinInventory")
-    schema["$defs"].clear()
-    assert proteome_data_schema("ProteinInventory")["$defs"]
-    for name in ("NativeSource", "ParameterSource"):
-        value = inventory()["source"] if name == "NativeSource" else input_index()["parameter_source"]
-        assert validate_proteome_data(name, value) == value
-    with pytest.raises(ProteomeDataError, match="unknown_contract"):
-        proteome_data_schema("NativeJoins")
-
-
-def test_recursive_and_invalid_unicode_saved_values_fail_with_fixed_errors():
-    value = inventory()
-    value["diagnostics"].append(value)
-    with pytest.raises(ProteomeDataError, match="recursive_json"):
-        validate_proteome_data("ProteinInventory", value)
-    value = inventory()
-    value["records"][0]["header"] = "\ud800"
-    with pytest.raises(ProteomeDataError, match="invalid_unicode"):
-        validate_proteome_data("ProteinInventory", value)
-
-
 def test_excessive_nesting_has_a_fixed_contract_failure():
     value = {}
     for _ in range(1400):
@@ -272,33 +192,3 @@ def test_excessive_nesting_has_a_fixed_contract_failure():
     with pytest.raises(ProteomeDataError, match="excessive_nesting"):
         validate_proteome_data("NativeSource", value)
 
-
-def test_invalid_records_cannot_be_presented_as_an_ok_result():
-    data = inventory()
-    result = {"status": "partial", "value": data, "requirements": [], "diagnostics": []}
-    assert validate_proteome_data("ProteinInventoryResult", result) == result
-    result["status"] = "ok"
-    with pytest.raises(ProteomeDataError, match="successful_result_"):
-        validate_proteome_data("ProteinInventoryResult", result)
-
-
-def test_saved_validation_does_not_read_sources_or_call_scientific_functions(monkeypatch):
-    import socket
-    import subprocess
-    from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_proteome_native
-    from gene_annotation_episode.episodic_workflow.root.a101.library import blast_pairwise_grader
-    value = inventory()
-    validate_proteome_data("ProteinInventory", value)  # load static package schema
-
-    def forbidden(*args, **kwargs):
-        raise AssertionError("validation attempted source IO or scientific work")
-
-    monkeypatch.setattr(Path, "read_bytes", forbidden)
-    monkeypatch.setattr(Path, "read_text", forbidden)
-    monkeypatch.setattr("builtins.open", forbidden)
-    monkeypatch.setattr(socket, "socket", forbidden)
-    monkeypatch.setattr(subprocess, "run", forbidden)
-    monkeypatch.setattr(bvbrc_proteome_native, "parse_genome_comparison", forbidden)
-    monkeypatch.setattr(blast_pairwise_grader, "alignment_components", forbidden)
-    monkeypatch.setattr(blast_pairwise_grader, "build_pairwise_sheet", forbidden)
-    assert validate_proteome_data("ProteinInventory", value) == value

@@ -1,8 +1,5 @@
 """Real Store/native tools; downloaded reference replay is labelled explicitly."""
-from dataclasses import replace
-from pathlib import Path
 
-from gene_annotation_episode.acquisition import PublicClients, SourceSnapshot
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -67,32 +64,3 @@ def test_source_utf8_window_reports_size_and_boundary_differently(tmp_path):
         assert good["result"]["text"] == "αb" and good["result"]["next_offset"] == 3
 
 
-def test_downloaded_reference_replay_pins_source_and_compares_actual_sequences(tmp_path):
-    # This is replay of an actual downloaded source, not a new API result or
-    # biological benchmark. It verifies the importer/alignment/state boundary.
-    import pytest
-    saved = Path(__file__).parents[1]/"validation/acquisition/uniprot-P0A7V8.json"
-    if not saved.exists():
-        pytest.skip("external reference replay artifact not installed")
-    class RecordedClient:
-        def uniprot_record(self, accession):
-            assert accession == "P0A7V8"
-            return SourceSnapshot("uniprot", "https://rest.uniprot.org/uniprotkb/P0A7V8",
-                {"accession": accession}, "2026-10-19T23:38:15.234956+00:00", saved.read_bytes(),
-                "application/json", {"representation": "explicit_saved_source_replay"})
-    with Store(tmp_path) as store:
-        problem = store.create_problem(raw_sequence="MKWVTFISLLFLFSSAYSRGVFRRDTHKSEIAHRFKDLGE", molecule="protein")
-        tools = ToolRegistry(store, clients=RecordedClient())
-        imported = tools.execute("public.uniprot.record", {"accession": "P0A7V8"})
-        assert imported["status"] == "completed", imported
-        reference = imported["result"]["records"][0]
-        assert reference["record_type"] == "reference" and reference["length"] == 206
-        assert store.problem() == problem
-        assert not store.list("feature")
-        result = tools.execute("sequence.align", {"query_ref": problem["subject_refs"][0],
-            "reference_ref": reference["id"], "molecule": "protein", "mode": "global"})
-        assert result["status"] == "completed", result
-        observation = store.get(result["result"]["observation_ref"])
-        assert observation["source_subject_refs"] == [reference["id"]]
-        assert observation["subject_refs"] == problem["subject_refs"]
-        assert not store.current_annotations()

@@ -1,7 +1,4 @@
-"""A107 original enrichr received contracts; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 enrichr received contracts."""
 from __future__ import annotations
 TABLE_SOURCE = 'execution_enrichr_tables'
 ROW_SOURCE = 'execution_enrichr_rows'

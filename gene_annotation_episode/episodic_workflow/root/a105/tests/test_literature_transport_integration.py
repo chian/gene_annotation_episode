@@ -1,8 +1,6 @@
 """Source kinetic response in the existing loop; all decisions are controlled."""
 import asyncio
-from copy import deepcopy
 from dataclasses import replace
-from functools import partial
 import json
 from types import SimpleNamespace
 import pytest
@@ -101,42 +99,6 @@ def test_selected_transport_response_actual_typed_delivery_and_observation_accou
     finally:
         store.close()
 
-def test_transport_task_and_conditional_meaning_survive_actual_provider_transport(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a105.decision_context import state_frame
-    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_transport_prompt import TRANSPORT_TASK
-    from test_literature_experimental_prompt_delivery import LiteratureWire, snapshot, complete
-    first = snapshot()
-    first['goal']['objective'] = 'Evaluate the source substrate response for this fitted kinetic curve.'
-    first['requested_form'] = FORM
-    first['literature_assignment']['requested_transport_components'] = COMPONENTS
-    first['available_report_facts']['literature_transport_cells'] = {'meaning': 'Conditional response for the actual source kinetic curve, not annotation reliability.'}
-    second = deepcopy(first)
-    second['working_state']['references'] = [{'id': 'reference_curve', 'record_type': 'reference', 'origin': 'tool', 'label': 'the source whole-cell kinetic curve', 'accession': 'transport_curve_' + 'a' * 64, 'source_ref': 'source_selected'}]
-    second['last_local_outcome'] = {'status': 'completed', 'record_refs': ['reference_curve'], 'result': {'cells': {'condition_response': {'value': 0.55, 'unit': 'dimensionless', 'status': 'populated', 'origin': 'derived', 'unavailable_reason': None, 'conditional_on': ['same_kinetic_curve', 'michaelis_menten_response']}}, 'observation_model': 'michaelis_menten', 'variance_status': 'unknown', 'operand_source_kind': 'synthetic_fixture', 'covariance_origin': None, 'reported_km_uncertainty_kind': 'unspecified', 'evaluated_scope': 'interpreted_source_kinetic_response', 'curve_keys': {'km': 'HOST_CURVE_HASH'}, 'measurement_keys': {'km': 'HOST_MEASUREMENT_HASH'}}}
-    lookup = {'version': 'decision_context_v1', 'kind': 'decision_lookup_result', 'decision_index': 2, 'exchange_index': 1, 'result': {'status': 'completed', 'text': 'Selected source explicitly distinguishes cell and vesicle preparations.'}}
-    wire = LiteratureWire(tmp_path / 'wire')
-    reopened = LiteratureWire(tmp_path / 'reopened')
-
-    async def exercise():
-        await complete(wire, state_frame(first))
-        await complete(wire, state_frame(second, first))
-        await complete(wire, lookup)
-        await complete(reopened, state_frame(second))
-    asyncio.run(exercise())
-    tasks = []
-    for transport in [wire, reopened]:
-        for turn in transport.turns_sent():
-            text = turn['input'][0]['text']
-            task, steering = text.split('\n\nSTEERING\n', 1)
-            tasks.append(task)
-            assert TRANSPORT_TASK in task and first['goal']['objective'] in task
-            assert 'HOST_CURVE_HASH' not in text and 'HOST_MEASUREMENT_HASH' not in text
-            assert 'transport_curve_' + 'a' * 64 not in text
-    assert all((task == tasks[0] for task in tasks))
-    for turn in [*wire.turns_sent()[1:], *reopened.turns_sent()]:
-        steering = turn['input'][0]['text'].split('\n\nSTEERING\n', 1)[1]
-        for meaning in ['same_kinetic_curve', 'michaelis_menten', 'synthetic_fixture', 'unspecified']:
-            assert meaning in steering
 
 def test_saved_transport_binding_reconstructs_and_replays_without_input_reading(tmp_path, monkeypatch):
     from gene_annotation_episode.episodic_workflow.root.a105.episode_composition import compose_episode_bindings

@@ -1,4 +1,4 @@
-"""Original supplied-record schemas extracted from native_blast_vdb_utility_execution; no execution admission."""
+"""Supplied-record schemas; no execution admission."""
 from __future__ import annotations
 
 VERSION = "native_blast_vdb_offline_execution_v1"

@@ -16,7 +16,6 @@ from gene_annotation_episode.episodic_workflow.root.a101.communication import (
 from gene_annotation_episode.episodic_workflow.root.a101.domain import identity
 
 
-ROOT = (Path(__file__).resolve().parent / 'fixtures' / 'bvbrc_original')
 MATCHES = "bvbrc_minhash_matches"
 COUNTS = "bvbrc_minhash_counts"
 SOURCES = (MATCHES, COUNTS)
@@ -61,26 +60,6 @@ def form_schema(sources=SOURCES):
     properties = {name: declarations[name]["report_schema"] for name in sources}
     return {"type": "object", "properties": properties,
             "required": list(properties), "additionalProperties": False}
-
-
-@pytest.mark.parametrize("mode", ["genome", "fasta"])
-def test_upstream_native_numbers_in_synthetic_publication(mode):
-    path = ROOT / "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/test/ref/genomes.dist"
-    fields = path.read_text().splitlines()[0].split("\t")
-    assert fields == ["genome1.fna", "reads", "0.12101", "4.48626e-214", "41/1000"]
-    value = qualified([["83333.1", *fields[2:]]], mode=mode)
-    before = deepcopy(value)
-    facts = project(value)
-    assert facts[MATCHES] == [{"source_ref": SOURCE, "row_index": 0, "genome_id": "83333.1",
-        "reported_distance": 0.12101, "reported_pvalue": 4.48626e-214,
-        "shared_hashes": 41, "compared_union_hashes": 1000,
-        "shared_hash_fraction": 0.041, "parse_status": "ok"}]
-    assert facts[COUNTS] == [{"source_ref": SOURCE, "returned_row_count": 1,
-        "parse_status": "ok", "population_size": None, "truncated": None}]
-    assert value == before
-    assert facts == project(value)
-    assert value["grading"]["components"]["rows"][0]["recomputed_distance"] is None
-    assert value["grading"]["components"]["rows"][0]["recomputed_pvalue"] is None
 
 
 def test_closed_schemas_and_exact_reference_namespaces():

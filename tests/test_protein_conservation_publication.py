@@ -14,7 +14,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library import protein_conservation_publication as publication
 from gene_annotation_episode.episodic_workflow.root.library import protein_conservation_result_contracts as contracts
-from gene_annotation_episode import phylogeny_calculators, phylogeny_formats
+from gene_annotation_episode.episodic_workflow.root.library import phylogeny_calculators, phylogeny_formats
 from gene_annotation_episode import phylogeny_calculation_contracts as numerical
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry

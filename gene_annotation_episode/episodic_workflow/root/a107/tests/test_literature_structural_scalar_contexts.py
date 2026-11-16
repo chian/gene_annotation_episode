@@ -29,6 +29,7 @@ from gene_annotation_episode.episodic_workflow.root.a107.runtime import run_work
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a107.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
+from gene_annotation_episode.episodic_workflow.root.a107.tests.source_helpers import location_inputs, source_artifacts
 
 
 SOURCE = 'source_' + 'a' * 24
@@ -288,7 +289,7 @@ def test_selected_table_population_and_source_free_saved_reconstruction(tmp_path
     store, context, args, raw = table_case(tmp_path, censored=censored)
     with store:
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.partner.source.populate', args, 'table'))
+        outcome = asyncio.run(binding.execute(context, 'literature.partner.source.populate', location_inputs(args), 'table'))
         assert outcome['status'] == 'completed', outcome.get('feedback')
         current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
         selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
@@ -303,10 +304,11 @@ def test_selected_table_population_and_source_free_saved_reconstruction(tmp_path
         assert store.get_artifact(store.get(args['source_ref'])['artifact_ref']) == raw
         descriptor = binding.as_record()
         sheet = store.get(outcome['result']['sheet_ref'])
-    # Reopen durable authority after the publishing Store has closed. Only the
-    # saved sheet/request artifacts may be read by this reconstructed binding.
+    # Reopen durable authority after the publishing Store has closed. Only the saved
+    # sheet/request artifacts and the selected source bytes may be read by this
+    # reconstructed binding; no source parsing or calculation may rerun.
     with Store(tmp_path) as reopened:
-        allowed = {sheet['artifact_ref'], sheet['request_ref']}
+        allowed = {sheet['artifact_ref'], sheet['request_ref']} | source_artifacts(reopened, args)
         read = reopened.get_artifact
         def saved_only(ref):
             assert ref in allowed, 'saved replay attempted to reopen original source'
@@ -330,14 +332,12 @@ def test_selected_table_population_and_source_free_saved_reconstruction(tmp_path
         ):
             for name in names:
                 monkeypatch.setattr(module, name, forbidden)
-        monkeypatch.setattr(_Sources, 'source', forbidden)
-        monkeypatch.setattr(_Sources, 'witness', forbidden)
         services = binding_for(reopened, context).services
         restored, = compose_episode_bindings(services, store=reopened,
             journal=Journal(reopened, context.run_id), execution_backend=None,
             descriptors=[descriptor], job_episodes=None, resource_estimator=None, role_credit_bindings={}).bindings
         reopened.db.execute('PRAGMA query_only=ON')
-        assert asyncio.run(restored.execute(context, 'literature.partner.source.populate', args, 'table')) == outcome
+        assert asyncio.run(restored.execute(context, 'literature.partner.source.populate', location_inputs(args), 'table')) == outcome
         assert form_with_facts({}, FORM, restored.facts(current, selected)) == form
         restored.validate_report(current, form, FORM)
 
@@ -350,7 +350,7 @@ def test_table_values_cross_the_ordinary_typed_parent_boundary(tmp_path):
             'assignment': plain(context.assignment), 'goal': 'Read the synthetic partner-removal table',
             'scope': plain(context.scope), 'purpose': 'Return the requested experimental partner components',
             'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
-        action = {'selection': {'kind': 'tool', 'tool': 'literature.partner.source.populate', 'arguments': args}, 'report_update': {}}
+        action = {'selection': {'kind': 'tool', 'tool': 'literature.partner.source.populate', 'arguments': location_inputs(args)}, 'report_update': {}}
         def receive(inputs):
             form, = inputs['child_reports']
             check_rows(form['measurements'])

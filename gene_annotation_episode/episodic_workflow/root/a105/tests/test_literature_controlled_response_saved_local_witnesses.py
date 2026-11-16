@@ -5,11 +5,8 @@ Legacy-shape tests exercise retained-record consistency, not migration of an old
 native implementation descriptor into a new implementation generation.
 """
 from copy import deepcopy as cp
-import importlib.util
-from pathlib import Path
 from PIL import Image
 import pytest
-from jsonschema import Draft202012Validator
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_inputs as shared
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_v3_inputs as source
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_v3_population as population
@@ -153,15 +150,6 @@ def test_saved_local_associations_cannot_be_substituted_deleted_or_reordered(mut
     with pytest.raises(ExperimentalContractError):
         source.validate_controlled_response_v3_extraction(f.args, result)
 
-def test_legacy_shape_uses_existing_retained_witnesses_and_cannot_fill_missing_ones():
-    f = Fixture()
-    result = legacy_shape(f.read())
-    Draft202012Validator(source._extraction_schema()).validate(result)
-    assert source.validate_controlled_response_v3_extraction(f.args, result) == result
-    f.args['variance_status'] = dict(value='unknown', witnesses=[])
-    missing = legacy_shape(f.read())
-    with pytest.raises(ExperimentalContractError, match='saved_witness_missing:local_pair_assignments.variance_status'):
-        source.validate_controlled_response_v3_extraction(f.args, missing)
 
 def test_saved_local_reconstruction_opens_no_sources_or_images_or_calculators(monkeypatch):
     f = unique_local_fixture()

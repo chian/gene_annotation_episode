@@ -2,7 +2,7 @@
 
 Parsers retain source facts; the common calculator alone publishes numerical
 components. Validation checks custody and relationships without parsing source
-text or calling a calculator. Legacy sheets require an explicit pure upgrade.
+text or calling a calculator.
 """
 from __future__ import annotations
 
@@ -293,7 +293,7 @@ def _saved_input_links(sheet):
 
 
 def validate_infernal_search_sheet(sheet: dict) -> dict:
-    """Validate saved v2 relationships; never upgrade, parse or calculate."""
+    """Validate saved relationships; never parse or calculate."""
     finite_copy(sheet)
     if not isinstance(sheet, dict) or sheet.get("schema") != SHEET_SCHEMA:
         raise ValueError("infernal_search_sheet_required")

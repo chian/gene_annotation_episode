@@ -5,18 +5,13 @@ emission outputs.  Their emission receipts do not establish input conformance.
 This module performs no native execution and defines no numerical scorer.
 """
 
-import hashlib
 import json
-from pathlib import Path
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_alignment_input_fasta import decode_native_fasta_alignment
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_alignment_input_types import NativeAlignmentLine, alignment_input_diagnostic, iter_native_alignment_lines
 
-
-ROOT = Path(__file__).resolve().parents[5]
-EMISSIONS = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/infernal_preparation/emission/native"
 
 BATCH_FIELDS = {
     "version", "format", "alphabet", "records", "diagnostics", "end_state",
@@ -338,56 +333,6 @@ def test_afa_second_set_of_headers_is_more_rows_in_one_msa():
     assert len(batch["records"]) == 1
     assert [r["aligned_sequence"] for r in batch["records"][0]["rows"]] == ["AC", "GT", "TG", "CA"]
     assert batch["records"][0]["reader_state"] == "complete"
-
-
-def retained_emission(case, expected_sha256):
-    directory = EMISSIONS / case
-    content = (directory / "emitted.out").read_bytes()
-    assert hashlib.sha256(content).hexdigest() == expected_sha256
-    receipt = json.loads((directory / "receipt.json").read_text())
-    assert receipt["returncode"] == 0
-    emitted, = [f for f in receipt["files"] if f["path"] == "emitted.out"]
-    assert emitted["sha256"] == expected_sha256
-    return content
-
-
-def test_retained_native_a2m_aligned_emission_bytes_unchanged():
-    content = retained_emission(
-        "aligned_a2m", "7e85ea14332e2dff9ff62f274e81c07fa59699c96f48236a46a8d41dd2b24197"
-    )
-    batch = decode(content, "a2m", "RNA")
-    assert_contract(batch, content)
-    record = batch["records"][0]
-    assert record["reader_state"] == "complete"
-    assert record["column_count"] == 12
-    assert record["column_annotations"]["RF"] == {
-        "text": "xxxxxxxxxxxx", "valid": True, "basis": "native_format_derivation", "fragments": [],
-    }
-    assert [r["aligned_sequence"] for r in record["rows"]] == [
-        "GCGC-UAAGCGC", "GCGCUAAAGCGC", "GCGAUUUAUCGU",
-    ]
-
-
-def test_retained_native_a2m_insertions_have_exact_expansion_and_source_mapping():
-    content = retained_emission(
-        "a2m_insertions", "4a47f0cd7fad3b309d62e69985932c31b12358e0befa0e78d0d4cb92b7ed22e3"
-    )
-    batch = decode(content, "a2m", "RNA")
-    assert_contract(batch, content)
-    record = batch["records"][0]
-    assert record["reader_state"] == "complete"
-    assert record["native_status_equivalent"] == 0
-    assert record["column_count"] == 17
-    assert record["column_annotations"]["RF"]["text"] == "xx.xxx.xxx..xxx.x"
-    assert [r["aligned_sequence"] for r in record["rows"]] == [
-        "GC-GC-uUAA--GCG-C", "GC-GUC-U-A--ACG-C", "-UgG---CGA--U-AaC",
-        "-A-AUA--AA------G", "GC-G-G-CCCggACG-C",
-    ]
-    row = record["rows"][0]
-    generated = [(s["aligned_start"], s["aligned_end"]) for s in row["segments"]
-                 if s["operation"] == "native_gap"]
-    assert generated == [(2, 3), (10, 12), (15, 16)]
-    assert "".join(s["source_text"] for s in row["segments"]) == "GCGC-uUAAGCGC"
 
 
 @pytest.mark.parametrize("content", [

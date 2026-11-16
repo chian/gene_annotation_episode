@@ -1,6 +1,4 @@
-"""A107 original atac differential result receipts; substantive retained received-result responsibility.
-Original authority, invalid outcomes and historical source identities remain unchanged.
-"""
+"""A107 atac differential result receipts."""
 
 
 from __future__ import annotations

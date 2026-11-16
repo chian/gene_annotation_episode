@@ -213,8 +213,7 @@ RNA_FAILURE_ROW_SCHEMA = obj({"family": {"const": "failure"}, "record_key": _OLD
     "result_receipt_key": _old_identifier("native_rna_structure_result_receipt"),
     "issue_ordinal": COUNT, "issue": _OLD_ISSUE})
 SOFTWARE_SCHEMA = obj({"python_executable": _OLD_ID, "python_sha256": SHA256,
-    "python_version": nullable(_OLD_ID), "worker_module": {"enum": ["gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker",
-        "gene_annotation_episode.native_rna_structure_worker"]},
+    "python_version": nullable(_OLD_ID), "worker_module": {"enum": ["gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker"]},
     "worker_source_sha256": SHA256, "viennarna_distribution_version": nullable(_OLD_ID),
     "rna_module_sha256": nullable(SHA256), "rna_extension_sha256": nullable(SHA256)})
 MEMBER_SCHEMA = {"oneOf": [

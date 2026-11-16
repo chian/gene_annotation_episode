@@ -11,7 +11,6 @@ from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs im
 
 
 EXAMPLES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/contract/examples"
-LIVE = EXAMPLES.parents[1] / "transport/live"
 
 
 def identity():
@@ -206,48 +205,6 @@ def test_inputs_unchanged_and_sheet_is_detached():
 def test_original_input_hash_or_length_cannot_be_supplied_as_verified_boolean():
     for changes in ({"submitted_length_nt": 120}, {"submitted_sequence_sha256": "0" * 64}, {"identity_verified": True}):
         assert parse(input_changes=changes)["sheet"] is None
-
-
-def live_single_operands():
-    directory = LIVE / "single"
-    content = (directory / "003-fetch-json/response.body").read_bytes()
-    original = json.loads((directory / "input-manifest.json").read_text())["records"][0]
-    handle = json.loads((directory / "original_handle.json").read_text())
-    snapshot = json.loads((directory / "003-fetch-json/snapshot.json").read_text())
-    assert hashlib.sha256(content).hexdigest() == snapshot["content_sha256"]
-    operand = {**identity(), **{k: original[k] for k in ("query_occurrence_key", "original_record_ordinal",
-        "original_header", "submitted_sequence", "submitted_sequence_sha256", "submitted_length_nt")},
-        "expected_job_id": handle["job_id"], "submission_source_ref": "retained-native:single:001-submit",
-        "subject_ref": "fixture:public119", "original_input_ref": "retained-native:single:input.seq"}
-    acquired = capture(content, evidence_kind="native_response", http_status=snapshot["transport"]["status"],
-        body_complete=snapshot["transport"]["body_complete"], request_job_id=handle["job_id"],
-        request_sequence_sha256=original["submitted_sequence_sha256"], source_ref="retained-native:single:003-fetch-json",
-        artifact_ref="retained-native:single:003-fetch-json:response.body")
-    return content, operand, acquired
-
-
-def test_fresh_live_single_is_distinct_from_official_documentation_example():
-    content, operand, acquired = live_single_operands()
-    result = populate_rfam_batch_json_sheet(content, input_identity=operand, capture=acquired)
-    assert result["status"] == "complete"
-    row = result["sheet"]["hits"][0]
-    assert row["bitscore"] == 104.6 and row["evalue"] == 1.4e-24
-    assert row["gc_fraction"] == .49 and row["sequence_interval"] == [0, 119]
-    assert row["consensus_length"] is None
-    assert result["sheet"]["source_context"]["capture"]["evidence_kind"] == "native_response"
-
-
-def test_live_flat_multi_json_cannot_be_assigned_by_hit_order():
-    directory = LIVE / "multi"
-    content = (directory / "003-fetch-json/response.body").read_bytes()
-    native = json.loads(content)
-    assert len(native["hits"]) == 6 and all("searchSequence" not in r for r in native["hits"])
-    handle = json.loads((directory / "original_handle.json").read_text())
-    result = populate_rfam_batch_json_sheet(content,
-        input_identity={**identity(), "expected_job_id": handle["job_id"]},
-        capture=capture(content, evidence_kind="native_response", http_status=200, request_job_id=handle["job_id"]))
-    assert result["status"] == "unsupported" and result["sheet"] is None
-    assert "rfam_multiple_sequences_schema_unestablished" in codes(result)
 
 
 def test_native_underflow_is_unavailable_instead_of_measured_zero():

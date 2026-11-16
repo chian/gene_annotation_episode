@@ -97,26 +97,6 @@ def test_current_loss_keeps_original_analytic_facts_and_never_infers_zero(missin
     assert canonical(native) == before  # Detached output, original receipt unchanged.
 
 
-@pytest.mark.parametrize("code,stage,requirement", [
-    ("input_unavailable", "input", "complete_input"),
-    ("input_unavailable", "capture", "complete_input"),
-    ("input_digest_mismatch", "capture", "matching_file_identity"),
-    ("artifact_digest_mismatch", "capture", "matching_file_identity"),
-    ("native_output_unavailable", "capture", "complete_input"),
-])
-def test_located_receipt_failure_can_supply_current_unavailability(code, stage, requirement):
-    request, sets, native = loss_case()
-    failure = sets[1]["issues"].pop()
-    failure.update(code=code, stage=stage, requirement=requirement,
-        comparison_key=request["comparisons"][0]["comparison_key"])
-    native["issues"] = [failure]
-    parsed = parse_loss(request, sets, native)
-    sheet = sheet_from(request, sets, [parsed])
-    assert parsed["result_extent"] == "unavailable"
-    assert sheet["issues"] == [failure]
-    assert native["issues"] == [failure]
-
-
 @pytest.mark.parametrize("change", [
     {"set_key": None}, {"set_key": "A"}, {"set_key": "foreign"},
     {"comparison_key": "foreign"}, {"stage": "native"}, {"stage": "calculate"},

@@ -1,7 +1,4 @@
-"""A107 original macs2 request contracts; selected request/saved-control declarations.
-
-Native dispatch bodies remain outside this finite contract owner. Literal saved/native module identities remain original.
-"""
+"""A107 macs2 request contracts."""
 from __future__ import annotations
 from copy import deepcopy
 from datetime import datetime

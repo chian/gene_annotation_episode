@@ -28,7 +28,7 @@ def digest(value):
 def make_history(path):
     scope = ExecutionClass(phase="protein_homology_search", backend="local", resource_id="fixture-host",
         implementation_sha256=digest("fixture-program"), parameters_sha256=digest("fixture-params"),
-        memory_bytes=20*1024**3, scratch_bytes=4*1024**3, cpu_threads=1,
+        memory_bytes=5*1024**3, scratch_bytes=4*1024**3, cpu_threads=1,
         query_residues=253, reference_residues=209017843, reference_records=575748,
         reference_state="available")
     append(path, scope, "first", 2)

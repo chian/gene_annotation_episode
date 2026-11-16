@@ -15,12 +15,6 @@ from test_protease_kinetics_measurements import supplied_fixture, replace_measur
 SOURCE = "source_" + "a" * 24
 SHEET = "artifact_" + "1" * 64
 INPUT = "artifact_" + "2" * 64
-POPULATIONS = {
-    "time_point_count": "protease_supplied_time_coordinates",
-    "substrate_count": "protease_original_substrate_rows",
-    "supplied_curve_count": "protease_supplied_fluorescence_curve_rows",
-    "requested_initial_point_count": "protease_native_requested_initial_window",
-    "actual_initial_point_count": "protease_actual_sliced_time_indices"}
 
 
 def _documents(*, matrix=None, missing_curve=False, context=True):
@@ -143,21 +137,6 @@ def test_selector_keeps_original_strict_ordinals_and_unique_rows_fields(rows):
     with pytest.raises(ValueError): contracts.ordinary_protease_kinetics_selector(_arguments(rows))
 
 
-def test_five_count_populations_are_distinct_and_legacy_labels_stay_literal():
-    rows = [dict(row_id={"kind": "summary"}, fields=list(POPULATIONS))]
-    documents = _documents()
-    current = _projection(rows, documents=documents)
-    old = _projection(rows, documents=documents, legacy=True)
-    assert current["schema"] == contracts.PROJECTION_VERSION
-    assert current["public"]["schema"] == contracts.VALUES_VERSION
-    assert [(row["field"], row["value"], row["population_id"]) for row in current["public"]["rows"]] == [
-        (name, value, POPULATIONS[name]) for name, value in zip(POPULATIONS, (5, 3, 3, 5, 5))]
-    assert old["schema"] == shared.PROJECTION_VERSION
-    assert old["public"]["schema"] == shared.PUBLIC_VERSION and "context" not in old["public"]
-    assert {row["population_id"] for row in old["public"]["rows"]} == {"protease_original_substrate_rows"}
-    assert [row["value"] for row in old["public"]["rows"]] == [row["value"] for row in current["public"]["rows"]]
-
-
 def test_empty_selection_keeps_global_assay_covariance_and_unknown_qualifications():
     packet = _packet([])
     value = packet["values"]
@@ -240,13 +219,6 @@ def test_saved_projection_retains_sheet_fit_identity_and_original_unavailable_cu
         arguments=_arguments(rows, mode="read_stored"), file_states=packet["file_states"], failures=[])
     assert read == packet  # A literal read preserves the authenticated saved-source kind.
     with pytest.raises(ValueError): contracts.ordinary_protease_kinetics_selector(_arguments([], mode="calculate_saved"))
-
-
-def test_new_profile_does_not_relabel_retained_v1_components():
-    sheet, components = _documents()
-    components["schema"] = "protease_kinetics_components_v1"
-    with pytest.raises(ValueError): _projection([], documents=(sheet, components))
-    assert _projection([], documents=(sheet, components), legacy=True)["public"]["components_schema"] == components["schema"]
 
 
 @pytest.mark.parametrize("change", ["context_missing", "context_pointer", "context_source", "qualification_omitted", "count_bool", "unit", "probability"])

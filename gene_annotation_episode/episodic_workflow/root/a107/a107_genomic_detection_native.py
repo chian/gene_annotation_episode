@@ -1,7 +1,6 @@
 """Run a pinned phmmer and the original scoped detector on an allocation.
 
-This is a new receipt profile over the existing A103 detector, not a fabricated
-legacy parsed-search receipt. No family/function score is calculated here.
+This is a receipt profile over the A103 detector. No family/function score is calculated here.
 """
 import base64
 from copy import deepcopy
@@ -50,11 +49,8 @@ def matched_reference_translations(detection, verified_cds):
 def validate_reference_translations(native, request):
     """Authenticate retained witness identities without recalculating translation."""
     retained = native.get('reference_cds_verifications')
-    if retained is None:
-        require(request.get('reference_cds_verifications_version') is None,
-            'a107_requested_reference_translation_witnesses_missing')
-        return  # Historical native publications remain readable as originally saved.
-    require(request.get('reference_cds_verifications_version') in (None, REFERENCE_CDS_VERSION),
+    require(retained is not None, 'a107_requested_reference_translation_witnesses_missing')
+    require(request.get('reference_cds_verifications_version') == REFERENCE_CDS_VERSION,
         'a107_requested_reference_translation_version_conflict')
     require(retained['version'] == REFERENCE_CDS_VERSION, 'a107_reference_translation_version_conflict')
     admitted = {(row['source_ref'], row['accession']): row for row in request['genomic_records']}
@@ -102,9 +98,7 @@ def validate_reference_translations(native, request):
 
 
 def reference_translation_evidence(native, sequence_sha256, unresolved_symbols):
-    retained = native.get('reference_cds_verifications')
-    if retained is None:
-        return None
+    retained = native['reference_cds_verifications']
     exact = [deepcopy(row) for row in retained['matches'] if row['sequence_sha256'] == sequence_sha256]
     return {'version': REFERENCE_CDS_VERSION,
         'state': ('verified_reference_CDS_literal_sequence_correspondence' if exact else
@@ -177,7 +171,7 @@ def calculate(request, unit):
     require(executed.returncode == 0, 'a107_detector_phmmer_nonzero_exit:'+str(executed.returncode))
     # The original detector independently parses the complete one-query native
     # output, checks program/query/termination and verifies CDS translations.
-    # Null legacy handles below are transport placeholders, never Source IDs.
+    # Null handles below are transport placeholders, never Source IDs.
     verified_cds = []
     proof = detect({'native_path': str(native), 'database_path': str(database_path),
         'search_metadata': {'database_sha256': sha(database), 'native_parameters': {

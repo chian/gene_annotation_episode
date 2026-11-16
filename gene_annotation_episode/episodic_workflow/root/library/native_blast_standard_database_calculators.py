@@ -297,7 +297,7 @@ def _calculate(sheet_set, *, sequence_model, diagnostics=None, _retain_correspon
     facts = populate_native_blast_database_search_facts(collection, source_statuses=statuses, search_bindings=bindings)
     out["search_facts"] = [{k: r[k] for k in ("search_key", "status", "counts")} for r in facts]
     # The common facts helper labels the native table control count as HSPs;
-    # standard rows give it the distinct alignment-row unit mandated by327.
+    # standard rows give it the distinct alignment-row unit.
     for row in out["search_facts"]: row["counts"]["declared_alignment_row_count"]["unit"] = "alignment_row"
     out["native_search_statistics"] = _statistic_rows(collection, statuses)
     states = {views._hash(r["search_key"]): r["status"] for r in statuses}

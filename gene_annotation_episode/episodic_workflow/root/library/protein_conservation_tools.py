@@ -299,12 +299,8 @@ def _worker_control(worker, request, operation, invocation, stage):
     _require(selected['version'] == 'ordinary_molecular_execution_v1'
         and _same(worker['request'], request)
         and _same(selected['request'], dict(operation=operation, arguments=dict(request=request)))
-        # Recognize exact old metadata names; dispatch still uses only _WORKERS.
-        and any(selected['command'] == [selected['python']['path'], '-m', module,
+        and selected['command'] == [selected['python']['path'], '-m', _WORKERS[operation],
             str(directory / 'worker-request.json'), str(directory / 'worker-result.json')]
-            for module in (_WORKERS[operation],
-                {'protein_conservation_native': 'gene_annotation_episode.muscle_alignment_driver',
-                 'protein_conservation_result': 'gene_annotation_episode.protein_conservation_result_worker'}[operation]))
         and original['command'] == selected['command']
         and original['cwd'] == selected['cwd'] == str(directory)
         and original['stdout'] == str(directory / 'stdout') and original['stderr'] == str(directory / 'stderr')

@@ -4,10 +4,8 @@ from copy import deepcopy
 import pytest
 
 from method_loop.durable import content_digest
-from gene_annotation_episode.credit import CreditPolicy
 from gene_annotation_episode.domain import (FINDING_QUALIFICATIONS,
     OBSERVATION_KINDS, PREDICATES, RECORD_SCHEMAS)
-from gene_annotation_episode.scientific_credit import AnnotationSupportScore
 from gene_annotation_episode.episodic_workflow.root.scientific_support_metadata import (
     annotation_policy_routes, support_observation_kinds, validate_support_entry)
 
@@ -33,17 +31,6 @@ def support_entry():
             "source_locator": "Engineering fixture",
             "observation": "Invented instruction provenance.",
             "limit": "No biological observation or adopted catalog entry."}]}
-
-
-def runtime_binding(projector, *, fixed_case=False):
-    definition = projector.as_record()
-    if fixed_case:
-        definition = {"policy_source_sha256": "a" * 64,
-            "policy_parameters_sha256": "b" * 64, "definition": definition}
-    return {"projector": "gene_annotation_episode.scientific_credit.AnnotationSupportScore",
-        "versions": {"requirement": "same_caller_injected_executable"},
-        "definition": definition, "scope_source": "context.scope",
-        "meaning": "Annotation support, separately bound from investigation progress and numerical yield."}
 
 
 def test_support_validation_detaches_all_content_and_returns_sorted_kind_union():
@@ -132,23 +119,6 @@ def test_duplicate_operand_identity_and_duplicate_source_rows_are_invalid():
     entry["evidence"].append(deepcopy(entry["evidence"][0]))
     with pytest.raises(ValueError, match="scientific_support_entry_invalid"):
         validate_support_entry(entry)
-
-
-
-
-
-
-def assert_unavailable(result, reason):
-    assert result["status"] == "unavailable" and result["reason"] == reason
-    assert all(result[key] is None for key in ("annotation_binding_sha256", "policy",
-        "projection_version", "formula_version", "integration_arithmetic"))
-    assert result["routes"] == [{"observation_kind": "alignment", "status": "unavailable", "axis": None}]
-
-
-
-
-
-
 
 
 @pytest.mark.parametrize("invalid", [["unknown"], ["alignment", "alignment"], "alignment",

@@ -13,7 +13,7 @@ def _object(properties):
     return {'type': 'object', 'properties': properties, 'required': list(properties), 'additionalProperties': False}
 _ASSIGNMENT_TRANSPORT = 'atomic_composed_episode_assignment_json_v1'
 
-def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
+def _action_generation_schema(schema):
     """Translate action JSON Schema; unlike return forms it includes goal text.
 
     Goals and tool input contracts are instructions into an episode, not its
@@ -26,7 +26,7 @@ def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
             return [translate(item) for item in value]
         if not isinstance(value, dict):
             return value
-        if _json_episode_assignment(value, composed=not _legacy_episode_assignments):
+        if _json_episode_assignment(value):
             properties = value['properties']
             return translate({**value, 'properties': {**properties, 'assignment': {'type': 'string', 'description': 'JSON encoding of the exact parent-selected episode assignment. Preserve all supplied fields and values, including constraints, allocations, input versions and selections. Preserve omitted fields and explicit nulls. The host validates this complete original schema: ' + _json(properties['assignment'])}}})
         if _json_tool_arguments(value):
@@ -69,10 +69,10 @@ def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
         return result
     return translate(schema)
 
-def _json_episode_assignment(schema, *, composed=True):
+def _json_episode_assignment(schema):
     properties = schema.get('properties', {})
     kind, assignment = (properties.get(name) for name in ('kind', 'assignment'))
-    return isinstance(kind, dict) and kind.get('const') == 'episode_child' and isinstance(assignment, dict) and (assignment.get('type') == 'object' or (composed and bool({'allOf', 'anyOf', 'oneOf', '$ref', '$dynamicRef', '$recursiveRef'}.intersection(assignment))))
+    return isinstance(kind, dict) and kind.get('const') == 'episode_child' and isinstance(assignment, dict) and (assignment.get('type') == 'object' or (bool({'allOf', 'anyOf', 'oneOf', '$ref', '$dynamicRef', '$recursiveRef'}.intersection(assignment))))
 
 def _json_tool_arguments(schema):
     """Composed inputs retain their own JSON reference/presence semantics."""
@@ -88,18 +88,17 @@ def _json_tool_arguments(schema):
     keywords = {'allOf', 'anyOf', 'oneOf', '$ref', '$dynamicRef', '$recursiveRef', 'if', 'then', 'else', 'dependentRequired', 'dependentSchemas', 'maxProperties'}
     return any((isinstance(node, dict) and keywords.intersection(node) for _, node in _schema_nodes(properties['arguments'])))
 
-def _decode_action_response(value, schema, *, _legacy_episode_assignments=False):
+def _decode_action_response(value, schema):
     """Undo only the provider's optional-property representation.
 
     Strict structured output represents absent optional fields as null. A null
     is removed only where the original host contract made that field optional;
     required nulls remain invalid. Atomic assignment/argument objects preserve
-    every supplied value. Historical expanded assignments use their original
-    decoder only through explicit recorded-transport/selection verification.
+    every supplied value.
     """
 
     def decode(item, contract):
-        return _decode_action_response(item, contract, _legacy_episode_assignments=_legacy_episode_assignments)
+        return _decode_action_response(item, contract)
     if not isinstance(schema, dict):
         return value
     if 'anyOf' in schema:
@@ -130,23 +129,26 @@ def _decode_action_response(value, schema, *, _legacy_episode_assignments=False)
         required = set(schema.get('required', []))
         properties = schema.get('properties', {})
         encoded = _json_tool_arguments(schema)
-        encoded_assignment = _json_episode_assignment(schema, composed=not _legacy_episode_assignments)
+        encoded_assignment = _json_episode_assignment(schema)
         return {key: (parse_json_object(item) if isinstance(item, str) else item) if encoded and key == 'arguments' or (encoded_assignment and key == 'assignment') else decode(item, properties.get(key, {})) for key, item in value.items() if not (key in properties and key not in required and (item is None))}
     if isinstance(value, list) and schema.get('type') == 'array':
         return [decode(item, schema['items']) for item in value]
     return value
 
 def _recorded_action_generation_schema(generated, schema):
-    """Match only the current and immediately preceding assignment transports."""
-    return _same_action_schema_required_members(generated, _action_generation_schema(schema)) or _same_action_schema_required_members(generated, _action_generation_schema(schema, _legacy_episode_assignments=True))
+    """Match the current assignment transport."""
+    return _same_action_schema_required_members(generated, _action_generation_schema(schema))
 
 def _recorded_assignment_transport(saved):
-    """Validate the private current-generator proof without inferring old data."""
-    if 'assignment_transport' not in saved:
-        return False
-    if saved['assignment_transport'] != {'version': _ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _digest(saved['schema'])}:
+    """Validate the private current-generator proof of a direct decision request.
+
+    A decision-exchange request carries its protocol marker and no transport proof.
+    """
+    from .decision_context import PROTOCOL
+    if 'assignment_transport' not in saved and saved.get('decision_protocol') == PROTOCOL:
+        return
+    if saved.get('assignment_transport') != {'version': _ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _digest(saved['schema'])}:
         raise ValueError('original_assignment_transport_mismatch')
-    return True
 
 def _same_action_schema_required_members(left, right):
     """Only schema required-member order is lost by markerless serialization."""
@@ -165,56 +167,19 @@ def _same_action_schema_required_members(left, right):
     original = normalized(left)
     return original is not None and original == normalized(right)
 
-def _decode_recorded_action_response(value, schema, *, recorded_selection=None, exchanges=(), exchange_schema=None, unproven_replay=False):
-    """Preserve an authoritative old selection without guessing absent values.
-
-    A completed/selected action proves its entire original normalized selection.
-    Before admission, an immutable matching exchange proves the original wire
-    representation. The compatibility branch deliberately retains the old
-    decoder, including its limits; it does not repair historical scientific data.
-    """
+def _decode_recorded_action_response(value, schema, *, recorded_selection=None, exchanges=(), exchange_schema=None):
+    """Decode a recorded response and require its recorded selection, when one exists."""
     decoded = _decode_action_response(value, schema)
     if not isinstance(decoded, dict):
-        return decoded
-
-    def without_transport_proof():
-        if unproven_replay:
-            historical = _decode_action_response(value, schema, _legacy_episode_assignments=True)
-            if _json(historical.get('selection')) != _json(decoded.get('selection')):
-                raise ValueError('original_assignment_transport_unavailable')
         return decoded
     if recorded_selection is not None:
         if _json(decoded.get('selection')) == _json(recorded_selection):
             return decoded
-        historical = _decode_action_response(value, schema, _legacy_episode_assignments=True)
-        if _json(historical.get('selection')) == _json(recorded_selection):
-            return historical
         raise ValueError('original_action_response_selection_mismatch')
-    if not exchanges:
-        return without_transport_proof()
-    selected_schema = _object({'response_type': {'type': 'string', 'const': 'select_action'}, **schema['properties']})
-    selected_schema['required'] = ['response_type', *schema['required']]
-    if exchange_schema is not None:
+    if exchanges and exchange_schema is not None:
+        selected_schema = _object({'response_type': {'type': 'string', 'const': 'select_action'}, **schema['properties']})
+        selected_schema['required'] = ['response_type', *schema['required']]
         original = exchange_schema.get('properties', {}).get('response', {}).get('anyOf', [])
         if len(original) != 2 or _json(original[1]) != _json(selected_schema):
             raise ValueError('original_action_exchange_schema_mismatch')
-    for row in exchanges:
-        if not row.get('response_recorded') or not isinstance(row.get('response'), dict):
-            continue
-        original = row.get('response', {}).get('response', {})
-        if not isinstance(original, dict) or original.get('response_type') != 'select_action' or _json(original) != _json({'response_type': 'select_action', **value}):
-            continue
-        generated = row['request'].get('output_schema', {})
-        if exchange_schema is not None:
-            if _same_action_schema_required_members(generated, _action_generation_schema(exchange_schema)):
-                return decoded
-            if _same_action_schema_required_members(generated, _action_generation_schema(exchange_schema, _legacy_episode_assignments=True)):
-                return _decode_action_response(value, schema, _legacy_episode_assignments=True)
-            continue
-        alternatives = generated.get('properties', {}).get('response', {}).get('anyOf', [])
-        if len(alternatives) == 2:
-            if _same_action_schema_required_members(alternatives[1], _action_generation_schema(selected_schema)):
-                return decoded
-            if _same_action_schema_required_members(alternatives[1], _action_generation_schema(selected_schema, _legacy_episode_assignments=True)):
-                return _decode_action_response(value, schema, _legacy_episode_assignments=True)
-    return without_transport_proof()
+    return decoded

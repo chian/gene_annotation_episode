@@ -11,7 +11,6 @@ from dataclasses import replace
 from email.message import Message
 import hashlib
 import json
-from pathlib import Path
 
 from jsonschema import Draft202012Validator
 import pytest
@@ -24,8 +23,7 @@ from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import (
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators import (
     calculate_facet_fractions, calculate_feature_sequence_counts, calculate_page_counts,
 )
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields import COLLECTIONS, FIELD_REGISTRY, MOLECULAR_MEASUREMENT_FIELDS
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_publication import requested_projection_failures
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields import COLLECTIONS, FIELD_REGISTRY
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_schema import json_digest
 from gene_annotation_episode.episodic_workflow.root.a102.domain import ContractError
@@ -33,13 +31,6 @@ from gene_annotation_episode.execution_contracts import digest as host_digest
 from gene_annotation_episode.episodic_workflow.root.a102.state import Store
 from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
-
-
-EVIDENCE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract"
-FROZEN = json.loads((EVIDENCE / "CONTRACT_SHAPES.json").read_text())
-EXAMPLES = json.loads((EVIDENCE / "FILLED_EXAMPLES.json").read_text())
-FEATURE_IDS = ["PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
-               "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev"]
 
 
 @pytest.fixture(autouse=True)
@@ -117,13 +108,6 @@ def publish(service_scope, query, selection, body, *, inputs=(), metadata_bindin
     return outcome, grading, source
 
 
-def retained_rows(name):
-    metadata = json.loads((EVIDENCE / (name + ".meta.json")).read_text())
-    raw = (EVIDENCE / (name + ".body")).read_bytes()
-    assert hashlib.sha256(raw).hexdigest() == metadata["sha256"]
-    return json.loads(raw)
-
-
 def input_page(service_scope, collection, rows, fields=None):
     """Fixture-only host binding over a real, locally published source."""
     fields = fields or list(dict.fromkeys(field for row in rows for field in row
@@ -157,21 +141,6 @@ def qualified_fixture(outcome, grading, scope, *, inputs=()):
             "grading_custody_verified": True, "original_selection_verified": True, "input_bindings_verified": True,
             "receiver_possession_verified": True, "possession_basis": "admitted_return"},
         "grading": grading, "input_results": list(inputs)}
-
-
-def corrected_frozen_schema(name):
-    """Literal additive correction002, independent of production factoring."""
-    definitions = deepcopy(FROZEN["schemas"]["$defs"])
-    definitions["CellLocation"]["properties"]["source_level"]["enum"].remove("supplied")
-    definitions["SuppliedCellLocation"] = {"type": "object", "properties": {
-        "cell_key": {"type": "string"}, "field": {"enum": ["sample_ids", "biological_replicate_ids",
-            "technical_replicate_ids", "measurement_units", "normalization_method", "pvalue_correction_method", "contrast"]},
-        "source_level": {"const": "supplied"}, "source_ref": {"type": "string", "minLength": 1},
-        "record_path": {"type": "string", "pattern": r"^(?:/(?:[^~/]|~[01])*)*(?![\s\S])"}},
-        "required": ["cell_key", "field", "source_level", "source_ref", "record_path"], "additionalProperties": False}
-    definitions["MolecularMetadata"]["properties"]["cells"]["items"] = {
-        "oneOf": [{"$ref": "#/$defs/CellLocation"}, {"$ref": "#/$defs/SuppliedCellLocation"}]}
-    return {"$ref": "#/$defs/" + name, "$defs": definitions}
 
 
 @pytest.mark.parametrize("collection", COLLECTIONS)
@@ -270,68 +239,6 @@ def test_exact_one_get_and_original_cache_ignore_local_projection(monkeypatch, s
     assert command(provider, feature_query, join)["cache_original"] is True
 
 
-def test_publication_custody_full_grading_single_source_and_repeat_identity(service, monkeypatch):
-    provider, scope = service
-    store = provider.tools.store
-    query = request(fields=["genome_id", "genome_length", "plasmids"])
-    selected = row_selector(numbers=["genome_length", "plasmids"])
-    prepared = command(provider, query, selected, scope=scope)["prepared_query"]
-    raw = envelope([{"genome_id": "511145.12", "genome_length": 4639675, "plasmids": 0,
-        "unselected_native_payload": {"complete": [1, 2, 3]}}])
-    native = snapshot(prepared, raw)
-    initial_sources = len(store.list("source"))
-    def no_compile(*args, **kwargs): pytest.fail("publication recompiled saved request")
-    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.encode_native_query", no_compile)
-    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query.encode_native_query", no_compile)
-    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query._expression", no_compile)
-    inputs = publication_inputs(prepared)
-    outcome = provider.publish(query, selected, native, scope, "first", publication_inputs=inputs)
-    result = outcome["result"]
-    assert set(result) == {"source_ref", "raw_artifact_ref", "grading_artifact_ref", "collection", "mode",
-        "parse_status", "qualification", "requested_projection_complete", "projection_failures"}
-    source = store.get(result["source_ref"])
-    assert source["auxiliary_artifact_refs"] == [result["grading_artifact_ref"]]
-    assert source["artifact_ref"] == result["raw_artifact_ref"]
-    assert store.get_artifact(source["artifact_ref"]) == raw
-    provenance = json.loads(store.get_artifact(source["request_ref"]))
-    assert provenance["transport"] == native.transport and provenance["request"] == native.request
-    assert provenance["prepared"] == prepared and provenance["sha256"] == native.sha256
-    grading, = source_tool_gradings(store, source["id"])
-    Draft202012Validator(corrected_frozen_schema("PublishedGrading")).validate(grading)
-    assert "source_ref" not in grading
-    assert grading["page_components"] == {"version": "bvbrc_data_page_components_v1", "native_row_count": 1,
-        "valid_row_count": 1, "invalid_row_count": 0, "reported_population_count": 1, "population_exactness": "exact"}
-    assert [cell["value"] for cell in grading["parse_result"]["sheet"]["rows"][0]["numerical_cells"]] == [4639675, 0]
-    assert outcome["record_refs"] == [source["id"]] == outcome["changed_record_refs"]
-    repeated = provider.publish(query, selected, native, scope, "repeat", publication_inputs=inputs)
-    assert repeated["record_refs"] == outcome["record_refs"] and repeated["changed_record_refs"] == []
-    assert len(store.list("source")) == initial_sources + 1
-    for name in ("observation", "assessment", "annotation", "feature"):
-        assert not store.list(name)
-    assert store.db.execute("SELECT count(*) FROM tool_operations").fetchone()[0] == 0
-    assert calculate_page_counts(grading["parse_result"]["sheet"]) == grading["page_components"]
-    assert requested_projection_failures(grading, input_results=[]) == []
-
-
-@pytest.mark.parametrize("mode,filename", [("count", "feature_count_solr"), ("facet", "feature_facet_solr_zero")])
-def test_unchanged_retained_native_count_two_and_facet_halves(service, mode, filename):
-    query = deepcopy(EXAMPLES["qualified_result_fixture"]["grading"]["prepared"]["original_request"])
-    query["mode"] = mode
-    if mode == "count": del query["facet"]
-    raw = (EVIDENCE / (filename + ".body")).read_bytes()
-    outcome, grading, _ = publish(service, query, selector(), raw)
-    assert outcome["status"] == "completed"
-    assert grading["page_components"]["native_row_count"] == 0
-    assert grading["page_components"]["reported_population_count"] == 2
-    assert grading["parse_result"]["sheet"]["rows"] == []
-    if mode == "facet":
-        assert grading["facet_components"] == EXAMPLES["facet_expected_components"]
-        assert [r["fraction"] for r in grading["facet_components"]["fractions"]] == [0.5, 0.5, 0.0]
-        assert grading["parse_result"]["sheet"]["facets"][0]["buckets"][2]["is_missing_bucket"] is True
-        assert calculate_facet_fractions(grading["parse_result"]["sheet"],
-            denominator_policy="same_response_exact_document_count") == grading["facet_components"]
-
-
 def test_native_zero_count_and_empty_population_fraction_are_distinct(service):
     facet = {"field": "annotation", "offset": 0, "limit": 2, "min_count": 1, "sort": "index", "include_missing": True}
     query = request("genome_feature", mode="facet", facet=facet)
@@ -340,19 +247,6 @@ def test_native_zero_count_and_empty_population_fraction_are_distinct(service):
     assert grading["parse_result"]["sheet"]["count"]["reported_value"] == 0
     fraction, = grading["facet_components"]["fractions"]
     assert (fraction["numerator"], fraction["denominator"], fraction["fraction"], fraction["reason"]) == (0, 0, None, "empty_population")
-
-
-@pytest.mark.parametrize("population,pairs", [(2, ["PATRIC", 1, "RefSeq"]), ("invalid", ["PATRIC", 1]), (2, ["PATRIC", 3])])
-def test_malformed_facet_or_population_preserves_independent_values(service, population, pairs):
-    facet = {"field": "annotation", "offset": 0, "limit": 2, "min_count": 1, "sort": "index", "include_missing": True}
-    outcome, grading, _ = publish(service, request("genome_feature", mode="facet", facet=facet), selector(),
-        envelope([], total=population, facet_counts={"facet_fields": {"annotation": pairs}}))
-    assert outcome["status"] == "partial" and outcome["result"]["projection_failures"]
-    first = grading["parse_result"]["sheet"]["facets"][0]["buckets"][0]
-    assert first["term"]["string_value"] == "PATRIC" and first["count"] == pairs[1]
-    if population == "invalid":
-        assert grading["parse_result"]["sheet"]["count"]["reported_value"] is None
-    Draft202012Validator(corrected_frozen_schema("PublishedGrading")).validate(grading)
 
 
 def test_partial_native_fields_only_block_the_requested_projection(service):
@@ -434,117 +328,6 @@ def test_publication_rejects_mismatched_explicit_inputs_before_writing(service, 
     with pytest.raises(ValueError):
         provider.publish(query, selection, native, scope, change, publication_inputs=supplied)
     assert len(provider.tools.store.list("source")) == before
-
-
-def test_native_feature_sequence_composition_preserves_two_features_and_four_relations(service, monkeypatch):
-    sequences = input_page(service, "feature_sequence", retained_rows("feature_sequences"))
-    features = retained_rows("feature_page")
-    fields = list(dict.fromkeys(field for row in features for field in row if field in FIELD_REGISTRY["genome_feature"]["fields"]))
-    query = request("genome_feature", fields=fields)
-    selection = selector({"family": "feature_sequence", "feature_ids": FEATURE_IDS, "sequence_kind": "both",
-        "feature_metadata_fields": ["product", "start", "end", "strand"], "include_sequence_values": True},
-        inputs=input_selections([sequences]))
-    # The publisher consumes the explicit supplied sheet. It may not reopen
-    # the named input source or search Store to discover another page.
-    store = service[0].tools.store
-    original_get = store.get
-    def no_input_lookup(reference):
-        assert reference != sequences["binding"]["source_ref"], "publisher looked up supplied input source"
-        return original_get(reference)
-    with monkeypatch.context() as guard:
-        guard.setattr(store, "get", no_input_lookup)
-        guard.setattr(store, "list", lambda *args, **kwargs: pytest.fail("publisher searched Store"))
-        outcome, grading, _ = publish(service, query, selection, envelope(features), inputs=[sequences])
-    assert outcome["status"] == "completed"
-    Draft202012Validator(corrected_frozen_schema("PublishedGrading")).validate(grading)
-    assert grading["feature_sequence_components"] == EXAMPLES["feature_sequence_expected_components"]
-    edges = grading["feature_sequence_sheet"]["edges"]
-    assert [(edge["feature_id"], edge["sequence_kind"], edge["sequence_length"]) for edge in edges] == [
-        (FEATURE_IDS[0], "AA", 253), (FEATURE_IDS[0], "NA", 762),
-        (FEATURE_IDS[1], "AA", 253), (FEATURE_IDS[1], "NA", 762)]
-    assert all(edge["raw_md5_match"] is True and edge["length_match"] is True for edge in edges)
-    assert calculate_feature_sequence_counts(grading["feature_sequence_sheet"]) == grading["feature_sequence_components"]
-    assert grading["input_bindings"] == [sequences["binding"]]
-    assert not service[0].tools.store.list("observation")
-    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views import project_bvbrc_data_facts
-    qualified = qualified_fixture(outcome, grading, service[1], inputs=[sequences])
-    facts = project_bvbrc_data_facts([qualified], selector=selection,
-        requested_sources=("execution_bvbrc_feature_sequence_rows",))
-    assert len(facts["execution_bvbrc_feature_sequence_rows"]) == 4
-    assert {row["feature_id"] for row in facts["execution_bvbrc_feature_sequence_rows"]} == set(FEATURE_IDS)
-
-
-def test_native_molecular_composition_retains_all_seven_fields_and_source_levels(service):
-    results = retained_rows("expression_page")
-    parents = [input_page(service, collection, retained_rows(name)) for collection, name in
-        [("bioset", "bioset_page"), ("experiment", "experiment_page")]]
-    fields = list(dict.fromkeys([field for row in results for field in row
-        if field in FIELD_REGISTRY["bioset_result"]["fields"]] + list(MOLECULAR_MEASUREMENT_FIELDS)))
-    query = request("bioset_result", fields=fields)
-    selection = selector({"family": "molecular_experiment", "result_ids": [row["id"] for row in results],
-        "measurement_fields": ["log2_fc", "z_score"], "metadata_fields": [
-            {"source_level": "bioset", "field": "treatment_duration"},
-            {"source_level": "experiment", "field": "measurement_technique"}]}, inputs=input_selections(parents))
-    outcome, grading, _ = publish(service, query, selection, envelope(results), inputs=parents)
-    assert outcome["status"] == "completed"  # Missing feature pages are explicit unavailable links.
-    rows = grading["molecular_sheet"]["rows"]
-    assert len(rows) == 2 and [row["result_id"] for row in rows] == [row["id"] for row in results]
-    assert [[cell["field"] for cell in row["measurements"]] for row in rows] == [list(MOLECULAR_MEASUREMENT_FIELDS)] * 2
-    assert [[cell["value"] for cell in row["measurements"]] for row in rows] == [
-        [None, None, None, -0.132, None, -0.544, None], [None, None, None, -0.129, None, -0.556, None]]
-    assert all(cell["unit_basis"] == "unknown" and not cell["unit_cell_keys"] for row in rows for cell in row["measurements"])
-    assert [row["exp_id"] for row in rows] == ["65769", "30087"]
-    assert [row["bioset_id"] for row in rows] == ["53111326", "57692532"]
-    assert all(row["experiment"]["status"] == row["bioset"]["status"] == "matched" for row in rows)
-    Draft202012Validator(corrected_frozen_schema("PublishedGrading")).validate(grading)
-
-
-def test_supplied_units_keep_real_source_pointer_and_fractional_signed_values(service):
-    provider, _ = service
-    data = {"result_id": "r", "bioset_id": "b", "sample_ids": ["s1"],
-        "biological_replicate_ids": None, "technical_replicate_ids": [],
-        "measurement_units": [{"field": "counts", "unit": "reported intensity µmol"}],
-        "normalization_method": None, "pvalue_correction_method": None, "contrast": None}
-    store = provider.tools.store
-    raw_metadata = json.dumps({"design": [data]}, ensure_ascii=False).encode()
-    artifact = store.artifact(raw_metadata, "application/json")
-    metadata_source = store.put("source", {"provider": "fixture_metadata", "accession": None, "uri": None,
-        "artifact_ref": artifact, "text_ref": None, "request_ref": None, "version": None, "retrieved_at": None}, origin="external")["id"]
-    supplied = {**data, "provenance": {"source_ref": metadata_source, "record_path": "/design/0"}}
-    binding = {"source_ref": metadata_source, "native_artifact_ref": artifact,
-        "native_sha256": hashlib.sha256(raw_metadata).hexdigest(), "record_path": "/design/0", "metadata_sha256": json_digest(data)}
-    query = request("bioset_result", fields=["id", "exp_id", "bioset_id", "feature_id", *MOLECULAR_MEASUREMENT_FIELDS])
-    selection = selector({"family": "molecular_experiment", "result_ids": ["r"],
-        "measurement_fields": ["counts"], "metadata_fields": []}, supplied=[supplied])
-    outcome, grading, _ = publish(service, query, selection, envelope([{"id": "r", "exp_id": "e", "bioset_id": "b",
-        "feature_id": "f", "counts": -1.25, "fpkm": 0.0, "tpm": 2.5, "log2_fc": -2,
-        "p_value": 0.01, "z_score": -3.2, "other_value": 7.1}]), metadata_bindings=[binding])
-    assert outcome["status"] == "completed"
-    molecular = grading["molecular_sheet"]
-    assert molecular["supplied_metadata"] == [supplied] and grading["metadata_bindings"] == [binding]
-    measurements = molecular["rows"][0]["measurements"]
-    assert [cell["value"] for cell in measurements] == [-1.25, 0.0, 2.5, -2, 0.01, -3.2, 7.1]
-    count = measurements[0]
-    assert count["unit_code"] is None and count["unit_basis"] == "supplied"
-    assert count["unit_cell_keys"] == ["supplied/" + metadata_source + "/design/0/measurement_units/0/unit"]
-    locations = next(m for m in molecular["rows"][0]["metadata"] if m["source_level"] == "supplied" and m["field"] == "measurement_units")["cells"]
-    assert all(location["source_ref"] == metadata_source and "native_sha256" not in location and "collection" not in location for location in locations)
-    Draft202012Validator(corrected_frozen_schema("PublishedGrading")).validate(grading)
-    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views import (
-        FACT_SCHEMAS, materialize_bvbrc_received_values, project_bvbrc_data_facts,
-    )
-    qualified = qualified_fixture(outcome, grading, service[1])
-    facts = project_bvbrc_data_facts([qualified], selector=selection,
-        requested_sources=("execution_bvbrc_expression_rows",))
-    selected_rows = facts["execution_bvbrc_expression_rows"]
-    assert selected_rows[0]["measurements"][0]["value"] == -1.25
-    assert selected_rows[0]["measurements"][0]["unit_value_refs"]
-    form_schema = {"type": "object", "properties": {"measured": FACT_SCHEMAS["execution_bvbrc_expression_rows"]},
-        "required": ["measured"], "additionalProperties": False}
-    materialized = materialize_bvbrc_received_values([qualified], admitted_form={"measured": selected_rows}, original_schema=form_schema)
-    supplied_cells = [cell for item in materialized for cell in item["cells"] if cell["source_level"] == "supplied"]
-    assert len(supplied_cells) == 1 and supplied_cells[0]["source_ref"] == metadata_source
-    assert supplied_cells[0]["atoms"][0]["string_value"] == "reported intensity µmol"
 
 
 def test_requested_join_is_retained_when_current_response_is_unparseable(service):

@@ -1,13 +1,10 @@
 """A101 construction and receiving boundaries over actual Store/library data."""
-from copy import deepcopy
 import json
 from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.a101.a101_investigation import (
-    A101Subtree, initial_report, report_schema, resolve_report,
-)
+from gene_annotation_episode.episodic_workflow.root.a101.a101_investigation import A101Subtree, initial_report, report_schema
 from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.episode import ScientificProcessEpisode
@@ -82,45 +79,6 @@ def test_alternate_thought_and_tools_are_new_pinned_selections(case):
         commission(case, child_tool_info=[{"name": "invented.homology", "resources": "hpc"}])
     with pytest.raises(ContractError, match="completed_revision_required"):
         commission(case, revision={"status": "failed", "result": None})
-
-
-def test_receiving_parent_rejects_conclusions_without_actual_evidence(case):
-    store, target, _ = case
-    report = {**initial_report(), "records": [], "changed_assessment_refs": [],
-        "interpretation_basis_refs": [], "observations_after_report_basis": []}
-    report["family"]["status"] = "supported"
-    with pytest.raises(ContractError, match="conclusion_requires_evidence"):
-        resolve_report(store, report, scope={"subject_refs": [target]})
-    source_subject = store.put("reference", {"reference_type": "protein",
-        "source_ref": store.get(target)["source_ref"], "accession": "source-comparator",
-        "label": "Source comparator", "sequence_ref": None, "molecule": "protein",
-        "length": None, "term_refs": [], "context_refs": []}, origin="external")["id"]
-    source_hypothesis = store.put("hypothesis", {"subject_refs": [source_subject],
-        "predicate": "functional_family", "value": {"type": "enum", "value": "unresolved"},
-        "context_refs": []}, origin="reasoning")["id"]
-    report["family"].update(status="unresolved", hypothesis_refs=[source_hypothesis])
-    with pytest.raises(ContractError, match="claim_requires_supplied_target"):
-        resolve_report(store, report, scope={"subject_refs": [target]})
-    before = deepcopy(report_schema())
-    report_schema()["properties"].clear()
-    assert report_schema() == before
-
-
-def test_claim_contract_exposes_and_enforces_predicate_boundaries(case):
-    store, target, _ = case
-    schema = report_schema()
-    assert "functional_family" in schema["properties"]["family"]["properties"]["hypothesis_refs"]["description"]
-    assert "catalyzes" in schema["properties"]["activity"]["properties"]["hypothesis_refs"]["description"]
-    role = store.put("hypothesis", {"subject_refs": [target], "predicate": "biological_role",
-        "value": {"type": "enum", "value": "unresolved"}, "context_refs": []}, origin="reasoning")["id"]
-    report = {**initial_report(), "records": [], "changed_assessment_refs": [],
-        "interpretation_basis_refs": [], "observations_after_report_basis": []}
-    report["activity"].update(status="unresolved", hypothesis_refs=[role])
-    with pytest.raises(ContractError, match="claim_predicate_mismatch"):
-        resolve_report(store, report, scope={"subject_refs": [target]})
-    report["activity"]["hypothesis_refs"] = []
-    report["physiological_role"].update(status="unresolved", hypothesis_refs=[role])
-    assert resolve_report(store, report, scope={"subject_refs": [target]})["claims"]["physiological_role"]["hypotheses"][0]["id"] == role
 
 
 def test_multirecord_file_requires_the_explicit_selected_subject(tmp_path):

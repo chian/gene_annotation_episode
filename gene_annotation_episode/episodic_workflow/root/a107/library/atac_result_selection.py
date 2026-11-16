@@ -1,7 +1,4 @@
-"""A107 original atac result selection; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 atac result selection."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a107.library.atac_differential_result_contracts import atac_result_schema, validate_atac_result_record, require, digest
 

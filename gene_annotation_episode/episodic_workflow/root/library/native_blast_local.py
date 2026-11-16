@@ -41,11 +41,6 @@ def _environment(root):
         "TEMP": str(root), "XDG_CACHE_HOME": str(root / "cache")}
 
 
-def _historical_command(root):
-    # A retained command identity only; never import or dispatch the old module.
-    return [sys.executable, "-m", "gene_annotation_episode.native_blast_driver", str(root / PLAN_NAME)]
-
-
 def _owned_environment(root, original):
     """Join the retained owner record; do not authenticate a currently live job."""
     code = "native_blast_original_driver_request_conflict"
@@ -168,7 +163,7 @@ def local_blast_plan(assignment, execution_id):
     if (plan["requested_job"] != request or owner["execution_id"] != str(handle)
             or owner["resource_id"] != resource or root != _root(assignment, owner)
             or owner["attempt_id"] != native_blast_digest(owner["operation_key"])
-            or original.get("command") not in (_command(root), _historical_command(root)) or original.get("cwd") != str(root)
+            or original.get("command") != _command(root) or original.get("cwd") != str(root)
             or original.get("metadata", {}).get("policy") != plan["policy"]
             or plan["attempt_directory"] != str(root / ATTEMPT_NAME)
             or _read(root / "invoke.json") != _invoke(request, Path(plan["attempt_directory"]))):
@@ -193,15 +188,9 @@ def local_blast_plan(assignment, execution_id):
     expected = {"command": original["command"], "cwd": str(root),
         "file_bytes": plan["policy"]["scratch_bytes"], "ready_path": paths["ready"],
         "release_path": paths["release"], "result_path": paths["result"],
-        "stdin_path": None, "env": _environment(root)}
-    saved_request = _read_json(path)
-    # Preserve the complete original global-driver/base-environment acceptance
-    # path, including metadata fields the original reader did not inspect.
-    legacy = original["command"] == _historical_command(root) and saved_request == expected
-    if not legacy:
-        expected["env"] = _owned_environment(root, original)
-        if saved_request != expected:
-            raise ValueError("native_blast_original_driver_request_conflict")
+        "stdin_path": None, "env": _owned_environment(root, original)}
+    if _read_json(path) != expected:
+        raise ValueError("native_blast_original_driver_request_conflict")
     owner_path = _confined_file(Path(plan["attempt_directory"]), OWNER_NAME)
     if owner_path.exists() and _read_json(owner_path) != plan:
         raise ValueError("native_blast_original_attempt_owner_conflict")

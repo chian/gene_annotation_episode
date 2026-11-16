@@ -61,11 +61,8 @@ def local_hmmer_plan(assignment, execution_id):
             or owner.get('attempt_id') != digest(owner.get('operation_key'))
             or handle.parent.parent.name != digest({'run': owner.get('run_id'),
                                                     'episode': owner.get('episode_id')})
-            or native_request.get('command') not in (
-                [sys.executable, '-m', 'gene_annotation_episode.native_hmmer_driver',
-                    str(handle.parent/'hmmer-plan.json')],
-                [sys.executable, '-m', 'gene_annotation_episode.episodic_workflow.root.library.native_hmmer_driver',
-                    str(handle.parent/'hmmer-plan.json')])
+            or native_request.get('command') != [sys.executable, '-m', 'gene_annotation_episode.episodic_workflow.root.library.native_hmmer_driver',
+                    str(handle.parent/'hmmer-plan.json')]
             or native_request.get('cwd') != str(handle.parent)
             or native_request.get('metadata', {}).get('policy') != plan.get('policy')
             or plan.get('attempt_directory') != str(handle.parent/'hmmer-attempt')):

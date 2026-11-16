@@ -349,26 +349,6 @@ def test_interrupted_dispatch_appends_exact_restoration_retry_without_rewriting(
     assert count(store, 'runtime_model_calls') == count(store, 'runtime_observations') == 1
 
 
-def test_injected_legacy_default_and_markerless_resume_do_not_migrate(tmp_path):
-    store, tools = setup(tmp_path)
-    with pytest.raises(KeyboardInterrupt):
-        run(store, tools, ScriptedProvider([reason(0), KeyboardInterrupt()]), tmp_path / 'run')
-    original = store.db.execute('SELECT request FROM runtime_model_calls WHERE response IS NULL').fetchone()[0]
-    settings = json.loads(store.db.execute('SELECT settings FROM runtime_runs').fetchone()[0])
-    assert 'decision_protocol' not in settings
-    assert settings['root_action_boundary'] == 'root_episode_commissioning_v1'
-    assert json.loads(original)['context']['tools'] == []
-    with pytest.raises(WorkflowError, match='original_decision_protocol'):
-        run(store, tools, ScriptedProvider([]), None, resume=True, decision_protocol=PROTOCOL)
-    resumed = ScriptedProvider([reason(0)])
-    result = run(store, tools, resumed, None, resume=True)
-    assert result['completed_actions'] == 2
-    assert count(store, 'runtime_actions') == count(store, 'runtime_observations') == 2
-    assert tools.executions == 0
-    assert resumed.contexts[0] == json.loads(original)['context']
-    assert store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_decision_exchanges'").fetchone() is None
-
-
 def test_common_assembly_loads_saved_protocol_and_rejects_rebinding(tmp_path):
     store, tools = setup(tmp_path)
     with pytest.raises(KeyboardInterrupt):

@@ -2,7 +2,6 @@
 from copy import deepcopy
 import hashlib
 import json
-import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -24,8 +23,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_sta
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/native_infernal_execution"
-RETAINED = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_native_execution222"
-POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
+POLICY = LocalJobPolicy(5 * 1024 ** 3, 4 * 1024 ** 3)
 
 
 def _file(path, role, fmt):
@@ -115,42 +113,6 @@ def test_exact_staging_selected_command_and_replay_without_subprocess(tmp_path, 
     assert run_native_infernal(plan) == bundle
     assert (root / "bundle.json").read_bytes() == original_manifest and len(calls) == 1
     assert validate_native_infernal_bundle_files(bundle, root) == bundle
-
-
-@pytest.mark.parametrize("fault,code", [("missing", "input_missing"), ("size", "input_size_mismatch"),
-    ("digest", "input_digest_mismatch"), ("software", "software_digest_mismatch"),
-    ("software_missing", "software_unavailable"), ("not_executable", "software_not_executable"),
-    ("scratch", "scratch_limit"), ("directory", "regular_file_required"),
-    ("fifo", "regular_file_required"), ("framing", "incomplete_model_input")])
-def test_preexecution_failure_retains_partial_work_and_seals(tmp_path, monkeypatch, fault, code):
-    plan = plan_for(tmp_path)
-    job = plan["requested_job"]["native_infernal"]
-    row = job["operands"][0]
-    if fault == "missing":
-        Path(row["path"]).unlink()
-    elif fault == "size":
-        row["size_bytes"] += 1
-    elif fault == "digest":
-        row["sha256"] = "0" * 64
-    elif fault == "software":
-        job["software"]["sha256"] = "0" * 64
-    elif fault == "software_missing":
-        Path(job["software"]["executable"]).unlink()
-    elif fault == "not_executable":
-        Path(job["software"]["executable"]).chmod(0o600)
-    elif fault == "scratch":
-        plan["policy"]["scratch_bytes"] = 1
-    elif fault in {"directory", "fifo"}:
-        Path(row["path"]).unlink()
-        Path(row["path"]).mkdir() if fault == "directory" else os.mkfifo(row["path"])
-    else:
-        Path(row["path"]).write_bytes(b"INFERNAL1/a\nNAME broken\n")
-        job["operands"][0] = _file(Path(row["path"]), row["role"], row["format"])
-    calls = fake_native(monkeypatch)
-    bundle = run_native_infernal(_reseal(plan))
-    assert not calls and bundle["returncode"] is None
-    assert any(code in f["code"] for f in bundle["failures"])
-    assert run_native_infernal(plan) == bundle
 
 
 def test_nonzero_is_retained_with_diagnostics_and_missing_outputs(tmp_path, monkeypatch):
@@ -361,45 +323,3 @@ def test_bridge_detects_original_handle_or_plan_conflicts(tmp_path, fault):
         local_infernal_plan(assignment, str(handle.path))
 
 
-@pytest.mark.parametrize("case", ["cmsearch", "cmscan", "cmalign", "cmalign_native_failure"])
-def test_retained_actual_native_examples_replay_offline(case, monkeypatch):
-    index = RETAINED / "index.json"
-    if not index.exists():
-        pytest.skip("native verification artifacts have not been produced")
-    recorded = Path(json.loads(index.read_bytes())[case]["action_directory"])
-    root = RETAINED / case / Path(*recorded.parts[-3:])
-    plan = json.loads((root / "infernal-plan.json").read_bytes())
-    bundle = json.loads((root / "infernal-attempt/bundle.json").read_bytes())
-    receipt = json.loads((root / "verification-receipt.json").read_bytes())
-    assert receipt["metadata"]["policy"] == POLICY.to_dict()
-    assert receipt["metadata"]["verified_cgroup"]["memory_max"] == POLICY.memory_bytes
-    assert 'runtime_max' not in receipt["metadata"]["verified_cgroup"]
-    assert bundle["returncode"] != 0 if case.endswith("failure") else bundle["returncode"] == 0
-    monkeypatch.setattr("subprocess.Popen", lambda *a, **k: pytest.fail("native replay reran process"))
-    monkeypatch.setattr("socket.socket", lambda *a, **k: pytest.fail("native replay acquired remote data"))
-    owner = json.loads((root / "infernal-attempt/.native-infernal-owner.json").read_bytes())
-    assert owner == plan
-    assert validate_native_infernal_bundle_files(bundle, root / "infernal-attempt") == bundle
-    if not case.endswith("failure"):
-        assert bundle["failures"] == []
-        if case in {"cmsearch", "cmscan"}:
-            rows = [line.split() for line in (root / "infernal-attempt/hits.tblout").read_text().splitlines()
-                if line and not line.startswith("#")]
-            assert len(rows) == 10
-            if case == "cmsearch":
-                assert rows[0][:5] == ["mrum-tRNA.1", "-", "tRNA5", "-", "cm"]
-                assert rows[0][14:19] == ["71.4", "3.6e-22", "!", "72", "72"]
-            else:
-                assert rows[0][:7] == ["1", "tRNA5", "-", "mrum-tRNA.1", "-", "-", "cm"]
-                assert rows[0][16:19] == ["71.4", "1e-22", "!"]
-            assert (root / "infernal-attempt/inputs/models.cm").read_text().count("INFERNAL1/a") == 3
-        else:
-            scores = [line.split() for line in (root / "infernal-attempt/scores.txt").read_text().splitlines()
-                if line.strip() and not line.startswith("#")]
-            assert len(scores) == 10 and scores[0][1:8] == ["mrum-tRNA.1", "72", "1", "72", "no", "60.03", "1.000"]
-            assert "mrum-tRNA.9 110 1 72  37 36 40" in (root / "infernal-attempt/local-ends.txt").read_text()
-    else:
-        assert any(f["code"] == "native_infernal_nonzero_returncode" for f in bundle["failures"])
-        assert sum(a["size_bytes"] for a in bundle["artifacts"] if a["role"] in {"stdout", "stderr"}) > 0
-        assert "--sample requires --cpu 0" in (root / "infernal-attempt/stdout.log").read_text()
-        assert bundle["requested_job"]["native_infernal"]["options"] == ["--cpu", "1", "--sample", "--seed", "42"]

@@ -14,9 +14,7 @@ import gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_view
 from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, reference_resolver, validate_closed_schema, validate_form,
 )
-from test_bvbrc_minhash_views import (
-    COUNTS, MATCHES, SOURCE, SOURCE_TWO, form_schema, no_external_work, qualified,
-)
+from test_bvbrc_minhash_views import COUNTS, MATCHES, SOURCE, SOURCE_TWO, form_schema, qualified
 
 
 CALCULATIONS = "bvbrc_minhash_calculations"
@@ -69,22 +67,6 @@ def supplied(metadata=None, native=None, *, mode="genome", original=None):
 
 def project(value, requested=FAMILIES):
     return views.project_minhash_facts([value], requested_sources=requested)
-
-
-def test_optional_v1_calculations_preserve_existing_match_and_count_values():
-    value = qualified([["83333.1", "0.02", "0.001", "41/1000"],
-                       ["83333.1", "0.03", "0.002", "20/1000"]])
-    before = deepcopy(value)
-    legacy = project(value, (MATCHES, COUNTS))
-    facts = project(value)
-    assert {name: facts[name] for name in (MATCHES, COUNTS)} == legacy
-    assert [row["shared_hash_fraction"] for row in facts[CALCULATIONS]] == [0.041, 0.02]
-    for row in facts[CALCULATIONS]:
-        assert all(row[name] is None for name in (*METADATA_FIELDS, *QUANTITIES[1:]))
-        assert row["parse_status"] == "ok"
-        assert row["native_parameter_equivalence"] == "unestablished"
-        assert row["diagnostic_codes"] == ["pair_metadata_missing"]
-    assert value == before
 
 
 @pytest.mark.parametrize("mode", ["genome", "fasta"])

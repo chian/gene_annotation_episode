@@ -84,7 +84,7 @@ class ScientificHeadBoundaryChecks:
             'input_schema': obj({'record': {'type': 'string'}}),
         }]
         tool_library = self.module('scientific_tool_library').ScientificToolLibrary.freeze(
-            tmp_path/'scientific-tool-library', catalog=catalog, tool_info=True)
+            tmp_path/'scientific-tool-library', catalog=catalog)
         with self.module('state').Store(tmp_path/'state') as store:
             problem = store.create_problem(raw_sequence='ATGAAATAA', molecule='dna', role='gene')
             target = problem['subject_refs'][0]

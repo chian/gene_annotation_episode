@@ -16,8 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.method_loop.durable import c
 from gene_annotation_episode.episodic_workflow.root.method_loop.identities import UnitRef
 
 from gene_annotation_episode.episodic_workflow.root.episode_admission import admit_return
-from gene_annotation_episode.episodic_workflow.root.episode_completion import (
-    CompletionLedger, EFFECT_VERSION, SLOT_VERSION, SOURCE_RESTORE_VERSION)
+from gene_annotation_episode.episodic_workflow.root.episode_completion import CompletionLedger, EFFECT_VERSION, SOURCE_RESTORE_VERSION
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal, WorkflowError
 from gene_annotation_episode.state import Store
 from test_episode_admission import receiver_for, seal_return, setup_case
@@ -345,28 +344,6 @@ def test_effect_and_selected_action_share_outer_rollback(tmp_path):
         assert journal.row("runtime_actions", "parent", 0) is None
         assert ledger.restore_source("parent")["next_call_index"] == 0
         assert ledger.restore_source("parent")["latest_effect"] is None
-
-
-def test_episode_and_run_scopes_and_legacy_calls_do_not_invent_order(tmp_path):
-    with Store(tmp_path / "workspace") as store:
-        journal = Journal(store, "first-run")
-        ledger = CompletionLedger(store, journal)
-        call(journal, 0)
-        action(journal, 0)
-        call(journal, 1)
-        # Legacy actions/calls have no recoverable historical completion order.
-        assert ledger.slot("parent", 0) is None
-        assert ledger.restore_source("parent")["next_call_index"] == 0
-        for episode in ("parent", "sibling"):
-            action(journal, 0, episode=episode)
-            assert stage(ledger, 0, episode=episode)["sequence"] == 0
-        other_journal = Journal(store, "second-run")
-        other = CompletionLedger(store, other_journal)
-        assert other.slot("parent", 0) is None
-        assert other.restore_source("parent")["latest_effect"] is None
-        assert other.restore_source("parent")["next_call_index"] == 0
-        action(other_journal, 0)
-        assert stage(other, 0)["version"] == SLOT_VERSION
 
 
 def test_constructor_joins_outer_store_transaction(tmp_path):

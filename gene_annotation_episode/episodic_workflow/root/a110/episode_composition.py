@@ -61,10 +61,7 @@ def scientific_binding_compatible(actual, recorded):
     if (type(actual) is not dict or type(recorded) is not dict
             or set(actual) != fields or set(recorded) != fields
             or any(type(value['version']) is not str
-                or value['version'] not in {'scientific_process_episodes_v5',
-                'scientific_process_episodes_v6', 'scientific_process_episodes_v7',
-                'scientific_process_episodes_v8', 'scientific_process_episodes_v9',
-                'scientific_process_episodes_v10', 'scientific_process_episode_v10'}
+                or value['version'] != 'scientific_process_episode_v10'
                 or value['binding_id'] != 'scientific_process'
                 or type(value['configuration']) is not dict
                 or type(value['implementation_sha256']) is not str

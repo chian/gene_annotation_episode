@@ -1,6 +1,5 @@
 """Engineering return-owner controls; no native or Workflow execution claim."""
 from copy import deepcopy
-import json
 from types import SimpleNamespace
 
 import pytest
@@ -8,12 +7,10 @@ from gene_annotation_episode.episodic_workflow.root.method_loop.identities impor
 from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal, EpisodeRequest
 
 from gene_annotation_episode.episodic_workflow.root.episode_bindings import BindingContext
-from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.library.flux_balance_model_tools import validate_flux_balance_model_view
-from gene_annotation_episode.episodic_workflow.root.library.flux_balance_result_contracts import fba_result_schema
 from gene_annotation_episode.episodic_workflow.root.library.flux_balance_return_views import (
     fba_fact_sources, requested_fba_sources, validate_fba_fact_values,
 )
@@ -122,64 +119,6 @@ def freeze(case):
     return facts, outgoing
 
 
-def test_mixed_legacy_child_and_ordinary_owner_keep_their_actual_origin_roles(case):
-    """Recorded engineering legacy child; ordinary facts retain scientific ownership."""
-    parent, declared = case.context, schema(SAVED)
-    path = (*parent.path, ("results", "child_0"))
-    episode = EpisodeRef(parent.run_id, path).episode_id
-    manifest = EpisodeReceipts(case.store, parent.run_id).bind(episode, parent.episode_id)
-    assignment = {"version": "execution_results_assignment_v1", "handoff_ref": "engineering_handoff",
-        "selector": {"version": "flux_balance_result_selector_v1"}}
-    contract = TypedReportContract("Return the recorded sheet", declared, lambda *_: True)
-    goal = EpisodeGoal.child(EpisodeGoal.from_record(plain(parent.request)["goal"]),
-        objective="Preserve the legacy sheet", result_contract=declared)
-    request = EpisodeRequest(goal, Record({"scope": parent.scope, "episode_assignment": assignment,
-        "initial_report": {}, "knowledge_inheritance": manifest}), contract).as_record()
-    child = BindingContext(parent.run_id, episode, "results", path, parent.scope, assignment, request)
-    case.journal.save("runtime_episodes", {"episode_id": episode, "path": canonical(path),
-        "request": canonical(request), "initial_credit": 0, "state": "active", "completion": None, "archive": None})
-    action = {"kind": "episode_child", "role": "results", "assignment": assignment, "scope": parent.scope,
-        "goal": "Preserve the legacy sheet", "initial_report_json": "{}",
-        "purpose": contract.decision, "schema_json": canonical(declared)}
-    case.journal.save("runtime_actions", {"episode_id": parent.episode_id, "decision_index": 0,
-        "action": canonical(action), "result": None, "credit": None})
-    legacy_file = file("flux_balance_sheet_v1")
-    legacy_file["artifact_ref"] = case.store.artifact(b"fixture", "application/json")
-    legacy_file["sha256"] = legacy_file["artifact_ref"][9:]
-    legacy = {"flux_balance_measurements": [], SAVED: [legacy_file], "flux_balance_failures": []}
-    original_action = {"kind": "tool", "tool": "execution.results.collect", "arguments": {}}
-    original_outcome = {"status": "completed", "engineering_facts": legacy}
-    case.journal.save("runtime_actions", {"episode_id": child.episode_id, "decision_index": 0,
-        "action": canonical(original_action), "result": canonical(original_outcome), "credit": None})
-    class LegacyHost:
-        def applies(self, context):
-            return context.episode_id == child.episode_id and context.role == "results"
-        def own_fact_groups(self, context, *, verify_artifacts):
-            assert canonical(plain(context.as_record())) == canonical(plain(child.as_record()))
-            row = case.store.db.execute("SELECT action,result FROM runtime_actions WHERE episode_id=?",
-                (child.episode_id,)).fetchone()
-            assert json.loads(row["action"]) == original_action
-            assert json.loads(row["result"]) == original_outcome
-            return deepcopy(legacy)
-    case.owner.results = LegacyHost()
-    child_form = form(legacy, declared)
-    case.journal.save("runtime_forms", {"episode_id": child.episode_id,
-        "facts": canonical(legacy), "form": canonical(child_form)})
-    case.journal.save("runtime_report_attempts", {"parent_episode_id": parent.episode_id,
-        "decision_index": 0, "delivery_ref": "engineering_legacy_delivery", "child_episode_id": child.episode_id,
-        "contract": canonical(request["report_contract"]), "form": canonical(child_form), "failure": None})
-    admitted = case.owner.record_admission(parent, child_form, declared,
-        f"{parent.run_id}:{parent.episode_id}:0:typed_form")
-    assert admitted == [legacy_file["artifact_ref"]]
-    case.backend.rows = [record(1, **{MODEL: [unavailable_view()]})]
-    facts, outgoing = freeze(case)
-    assert facts[SAVED] == [legacy_file] and facts[MODEL] == [unavailable_view()]
-    identities = facts[ORDINARY_PREFIX]["identities"]
-    assert identities[SAVED][0]["origins"] == [child.episode_id]
-    assert identities[MODEL][0]["origins"] == [parent.episode_id]
-    case.owner.validate_received_report(parent, outgoing, case.schema)
-
-
 def test_same_source_distinct_views_and_distinct_sources_identical_values_survive(case):
     first, second = unavailable_view(0), unavailable_view(4)
     case.backend.rows = [record(0, **{MODEL: [first]}), record(1, **{MODEL: [second]}),
@@ -258,11 +197,3 @@ def test_edited_model_source_does_not_admit_other_file_formats(format_):
         validate_fba_fact_values(EDITED, [file(format_)])
 
 
-@pytest.mark.parametrize("source,kind", [("flux_balance_measurements", "FBAProjection"),
-    (SAVED, "FBASavedSheetReference"), ("flux_balance_failures", "FBAResultIssue")])
-def test_three_legacy_item_schemas_remain_exact(source, kind):
-    expected = fba_result_schema(kind)
-    if source == SAVED:
-        expected["properties"]["artifact_ref"].update(format="reference", **{"x-reference-namespace": "artifact"})
-    assert fba_fact_sources()[source]["report_schema"] == {
-        "type": "array", "items": expected, "x-source": source}

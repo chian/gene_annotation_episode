@@ -324,7 +324,7 @@ class LiteratureA106SubscoreRepository(LiteratureAssayGradingRepository):
     # Reuse only immutable persistence, projection and receipt helpers. Final
     # publication reads possessed assessment cells; it never reruns a grader.
     provider = PROVIDER
-    record_version = legacy_version = VERSION
+    record_version = VERSION
     requested = REQUESTED
     components = COMPONENTS
     operations_table = "literature_a106_subscore_operations"

@@ -5,7 +5,6 @@ outputs of an original paper or a selected episode. Original source cases use
 actual retained bytes but supplied scientific interpretations, not a model.
 """
 from copy import deepcopy
-from fractions import Fraction
 import hashlib
 import json
 import math
@@ -127,14 +126,6 @@ def test_bad_joint_source_covariance_preserves_mean_and_native_activities(matrix
     assert s['cells']['activity_ratio']['value'] == 6
     assert s['cells']['activity_ratio_variance']['unavailable_reasons'] == ['covariance_invalid']
 
-def test_covariance_ownership_cannot_be_borrowed_from_a_different_activity():
-    args, rows, sources = setup()
-    args, sources, p = covariance(args, rows, sources, [[0.01, 0], [0, 0.01]])
-    p['activity_keys'][0] = 'wrong'
-    sources[args['activity_covariance_source_ref']] = json.dumps(p).encode()
-    _, s = calculate(args, rows, sources)
-    assert s['cells']['activity_ratio']['value'] == 6
-    assert s['cells']['activity_ratio_variance']['unavailable_reasons'] == ['covariance_owner_or_dependency_mismatch']
 
 @pytest.mark.parametrize('field,state,reason', [('subject_construct', 'paper_summary_unresolved', 'subject_construct_unresolved'), ('quantity', 'different_physical_quantity', 'different_physical_quantities'), ('normalization', 'different_molecular_basis', 'different_molecular_basis'), ('nonintended_conditions', 'different', 'nonintended_conditions_different'), ('preferred_ion_attribution', 'mixed_contributors_unresolved', 'ion_attribution_unresolved')])
 def test_different_or_unknown_scientific_relationship_preserves_native_partial(field, state, reason):

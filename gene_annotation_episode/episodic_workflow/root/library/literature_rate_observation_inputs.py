@@ -161,7 +161,6 @@ def read_rate_observations(content, arguments, *, artifact_ref):
         'meanings':meanings,'entries':entries,'grouping':'unknown','physical_conversion':'unknown'}
 
 
-# Explicit grid version; the complete legacy v1 implementation above is retained.
 from gene_annotation_episode.episodic_workflow.root.library.literature_rate_observation_input_contracts import GRID_INPUT_VERSION
 from gene_annotation_episode.episodic_workflow.root.library.literature_rate_observation_input_contracts import GRID_SOURCE_STATUSES
 from gene_annotation_episode.episodic_workflow.root.library.literature_rate_observation_input_contracts import GRID_ENTRY_REASONS

@@ -1,7 +1,7 @@
 """Original generic AppService bundle fixture and schema, unchanged."""
 from copy import deepcopy
 import hashlib
-from gene_annotation_episode import bvbrc_annotation_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_annotation_contracts as contracts
 from .annotation_native_fixtures import encoded, gto
 
 def selection(kind="features", *, ordinals=None, members=None, offset=0, limit=50, document_id="genome"):

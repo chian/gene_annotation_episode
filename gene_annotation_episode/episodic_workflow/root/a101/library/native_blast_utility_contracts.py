@@ -53,8 +53,6 @@ OUTPUT_SCHEMA = _object({"role": {"enum": ["stdout", "stderr", "database_family"
     "path_kind": {"enum": ["file", "prefix"]}, "relative_path": _STR,
     "format": {"enum": ["text", "blastdb_family", "blastdbcmd_tabular_v1",
                           "blastdb_info_text", "blastdb_metadata_json", "blastdbcheck_text"]}})
-# Both old native schema objects historically embedded this exact v1+v2 union.
-# Freeze it instead of pointing them at the expanding current registry.
 _HISTORICAL_OPERATION_SCHEMA = {"anyOf": [blast_utility_schema_for_version(version)
     for version in ("blast_utility_operation_v1", "blast_utility_operation_v2")]}
 NATIVE_BLAST_UTILITY_JOB_SCHEMA = _object({"version": {"const": JOB_VERSION},
@@ -461,7 +459,6 @@ FAILURE_STAGES = {
     "original_input_changed": "inputs",
 }
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_vdb_utility_execution import OFFLINE_FAILURE_CODES
-from gene_annotation_episode.episodic_workflow.root.a101.library.retained_input_authority.retained_blast_policy_fields import validate_retained_blast_policy_fields
 FAILURE_STAGES.update({code: "execution" for code in OFFLINE_FAILURE_CODES})
 DATABASE_ROLES = frozenset({"manifest", "database_file", "preparation_receipt",
     "metadata_manifest", "input_manifest", "offline_configuration"})
@@ -560,15 +557,18 @@ def validate_native_blast_utility_plan(value: dict) -> dict:
     if execution.name != 'native.json' or root != execution.parent / ATTEMPT_NAME:
         _error('plan_directory_conflict')
     policy = plan['policy']
-    if type(policy) is not dict or set(policy) not in ({'memory_bytes', 'scratch_bytes'}, {'memory_bytes', 'scratch_bytes', 'wall_seconds'}):
+    if type(policy) is not dict or set(policy) != {'memory_bytes', 'scratch_bytes'}:
         _error('explicit_policy_required')
-    validate_retained_blast_policy_fields(policy)
+    for name in ('memory_bytes', 'scratch_bytes'):
+        if type(policy[name]) is not int or policy[name] <= 0:
+            raise ValueError(f'invalid_local_job_{name}')
     job = request['native_blast_utility']
     paths = [job['software']['executable'], *[r['path'] for r in job['inputs']], *[r['original_path'] for r in database_file_selections(job)], *[p for db in utility_database_operands(job) for p in db['native_paths']]]
     if job['version'] == JOB_VERSION_V3:
         paths.extend((row['path'] for row in [job['offline_execution']['launcher'], *job['offline_execution']['runtime_files']]))
         paths.extend((row['path'] for row in job['offline_execution']['runtime_aliases']))
-        if policy not in ({'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}, {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3, 'wall_seconds': None}):
+        from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+        if policy != {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}:
             _error('vdb_selected_local_allocation_conflict')
     if any((_producer_path(path, absolute=True).is_relative_to(root) for path in paths)):
         _error('supplied_material_inside_attempt')

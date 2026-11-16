@@ -4,10 +4,7 @@ from .source_contracts import ContractError
 
 class SourceInterpretation:
 
-    def reasoning_action_schema(self, context, commit_schema, *, _accept_legacy_quotes=False):
-        return None
-
-    def accept_reasoning_action_schema(self, context, commit_schema):
+    def reasoning_action_schema(self, context, commit_schema):
         return None
 
     def reasoning_has_task_content(self, context, selection):

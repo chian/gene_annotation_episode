@@ -232,7 +232,7 @@ def _wait_estimate_operation():
 _ASSIGNMENT_TRANSPORT = 'atomic_composed_episode_assignment_json_v1'
 
 
-def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
+def _action_generation_schema(schema):
     """Translate action JSON Schema; unlike return forms it includes goal text.
 
     Goals and tool input contracts are instructions into an episode, not its
@@ -244,7 +244,7 @@ def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
             return [translate(item) for item in value]
         if not isinstance(value, dict):
             return value
-        if _json_episode_assignment(value, composed=not _legacy_episode_assignments):
+        if _json_episode_assignment(value):
             properties = value['properties']
             return translate({**value, 'properties': {**properties, 'assignment': {
                 'type': 'string', 'description': 'JSON encoding of the exact parent-selected episode '
@@ -317,13 +317,13 @@ def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
     return translate(schema)
 
 
-def _json_episode_assignment(schema, *, composed=True):
+def _json_episode_assignment(schema):
     properties = schema.get('properties', {})
     kind, assignment = (properties.get(name) for name in ('kind', 'assignment'))
     return (isinstance(kind, dict) and kind.get('const') == 'episode_child'
             and isinstance(assignment, dict) and (assignment.get('type') == 'object'
-                or composed and bool({'allOf', 'anyOf', 'oneOf', '$ref', '$dynamicRef',
-                                      '$recursiveRef'}.intersection(assignment))))
+                or bool({'allOf', 'anyOf', 'oneOf', '$ref', '$dynamicRef',
+                         '$recursiveRef'}.intersection(assignment))))
 
 
 def _json_tool_arguments(schema):
@@ -354,18 +354,15 @@ def _embedded_tool_schema(schema):
         schema = {**schema, '$id': 'urn:gene-annotation:tool-input:' + _digest(schema)}
     return schema
 
-def _decode_action_response(value, schema, *, _legacy_episode_assignments=False):
+def _decode_action_response(value, schema):
     """Undo only the provider's optional-property representation.
 
     Strict structured output represents absent optional fields as null. A null
     is removed only where the original host contract made that field optional;
     required nulls remain invalid. Atomic assignment/argument objects preserve
-    every supplied value. Historical expanded assignments use their original
-    decoder only through explicit recorded-transport/selection verification.
+    every supplied value.
     """
-    def decode(item, contract):
-        return _decode_action_response(item, contract,
-            _legacy_episode_assignments=_legacy_episode_assignments)
+    decode = _decode_action_response
 
     if not isinstance(schema, dict):
         return value
@@ -408,8 +405,7 @@ def _decode_action_response(value, schema, *, _legacy_episode_assignments=False)
         required = set(schema.get("required", []))
         properties = schema.get("properties", {})
         encoded = _json_tool_arguments(schema)
-        encoded_assignment = _json_episode_assignment(schema,
-            composed=not _legacy_episode_assignments)
+        encoded_assignment = _json_episode_assignment(schema)
         return {key: (parse_json_object(item) if isinstance(item, str) else item)
                 if encoded and key == 'arguments' or encoded_assignment and key == 'assignment'
                 else decode(item, properties.get(key, {}))
@@ -421,20 +417,15 @@ def _decode_action_response(value, schema, *, _legacy_episode_assignments=False)
 
 
 def _recorded_action_generation_schema(generated, schema):
-    """Match only the current and immediately preceding assignment transports."""
-    return (_same_action_schema_required_members(generated, _action_generation_schema(schema))
-        or _same_action_schema_required_members(generated,
-            _action_generation_schema(schema, _legacy_episode_assignments=True)))
+    """Match the current assignment transport."""
+    return _same_action_schema_required_members(generated, _action_generation_schema(schema))
 
 
 def _recorded_assignment_transport(saved):
-    """Validate the private current-generator proof without inferring old data."""
-    if 'assignment_transport' not in saved:
-        return False
-    if saved['assignment_transport'] != {'version': _ASSIGNMENT_TRANSPORT,
-            'action_schema_sha256': _digest(saved['schema'])}:
+    """Validate the private current-generator proof when one is recorded."""
+    if 'assignment_transport' in saved and saved['assignment_transport'] != {
+            'version': _ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _digest(saved['schema'])}:
         raise ValueError('original_assignment_transport_mismatch')
-    return True
 
 
 def _same_action_schema_required_members(left, right):
@@ -458,34 +449,21 @@ def _same_action_schema_required_members(left, right):
 
 
 def _decode_recorded_action_response(value, schema, *, recorded_selection=None, exchanges=(),
-        exchange_schema=None, unproven_replay=False):
-    """Preserve an authoritative old selection without guessing absent values.
+        exchange_schema=None):
+    """Decode a recorded response and verify it against its recorded selection.
 
-    A completed/selected action proves its entire original normalized selection.
-    Before admission, an immutable matching exchange proves the original wire
-    representation. The compatibility branch deliberately retains the old
-    decoder, including its limits; it does not repair historical scientific data.
+    A completed/selected action proves its entire normalized selection. Before
+    admission, an immutable matching exchange proves the wire representation.
     """
     decoded = _decode_action_response(value, schema)
     if not isinstance(decoded, dict):
         return decoded
-
-    def without_transport_proof():
-        if unproven_replay:
-            historical = _decode_action_response(value, schema, _legacy_episode_assignments=True)
-            if _json(historical.get('selection')) != _json(decoded.get('selection')):
-                raise ValueError('original_assignment_transport_unavailable')
-        return decoded
-
     if recorded_selection is not None:
         if _json(decoded.get('selection')) == _json(recorded_selection):
             return decoded
-        historical = _decode_action_response(value, schema, _legacy_episode_assignments=True)
-        if _json(historical.get('selection')) == _json(recorded_selection):
-            return historical
         raise ValueError('original_action_response_selection_mismatch')
     if not exchanges:
-        return without_transport_proof()
+        return decoded
     selected_schema = _object({'response_type': {'type': 'string', 'const': 'select_action'},
         **schema['properties']})
     selected_schema['required'] = ['response_type', *schema['required']]
@@ -506,18 +484,12 @@ def _decode_recorded_action_response(value, schema, *, recorded_selection=None, 
         if exchange_schema is not None:
             if _same_action_schema_required_members(generated, _action_generation_schema(exchange_schema)):
                 return decoded
-            if _same_action_schema_required_members(generated, _action_generation_schema(
-                    exchange_schema, _legacy_episode_assignments=True)):
-                return _decode_action_response(value, schema, _legacy_episode_assignments=True)
             continue
         alternatives = generated.get('properties', {}).get('response', {}).get('anyOf', [])
         if len(alternatives) == 2:
             if _same_action_schema_required_members(alternatives[1], _action_generation_schema(selected_schema)):
                 return decoded
-            if _same_action_schema_required_members(alternatives[1],
-                    _action_generation_schema(selected_schema, _legacy_episode_assignments=True)):
-                return _decode_action_response(value, schema, _legacy_episode_assignments=True)
-    return without_transport_proof()
+    return decoded
 
 @dataclass(frozen=True)
 class TimedChildUnit(ChildEpisodeUnit):
@@ -951,7 +923,7 @@ class DecisionSource:
             schema = saved["schema"]
             context = saved["context"]
             try:
-                recorded_transport = _recorded_assignment_transport(saved)
+                _recorded_assignment_transport(saved)
             except ValueError as error:
                 raise WorkflowError(str(error)) from error
             if (profile is None) != ('contract_information' not in saved):
@@ -966,8 +938,6 @@ class DecisionSource:
                     and saved.get('decision_protocol') != DECISION_EXCHANGE_PROTOCOL):
                 raise WorkflowError('pending_decision_requires_original_protocol')
             if row["response"] is not None:
-                self._unproven_direct_response_index = (index if self.workflow.decision_protocol is None
-                    and not recorded_transport else None)
                 if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
                     if profile is not None:
                         self.validate_contract_exchange_history(saved, index)
@@ -1639,8 +1609,7 @@ class DecisionSource:
                 recorded_selection=None if original is None else json.loads(original['action']),
                 exchanges=() if original is not None or self.workflow.decision_exchanges is None else
                     self.workflow.decision_exchanges.rows(self.episode_id, index),
-                exchange_schema=saved.get('contract_information', {}).get('exchange_schema'),
-                unproven_replay=getattr(self, '_unproven_direct_response_index', None) == index)
+                exchange_schema=saved.get('contract_information', {}).get('exchange_schema'))
             # Validate selection independently: report formatting must not
             # reject a valid scientific contribution or alter its credit.
             selection = response["selection"]
@@ -1653,8 +1622,7 @@ class DecisionSource:
                 # Store owns row-level admission and preserves independent
                 # valid rows. Checking its full scientific payload here
                 # would prevent its partial-result path from ever running.
-                envelope = self.workflow.reasoning_action_schema(self, {"type": "object"},
-                    _accept_legacy_quotes=True)
+                envelope = self.workflow.reasoning_action_schema(self, {"type": "object"})
                 Draft202012Validator(envelope).validate(selection)
                 payload = selection["commit"]
                 commit_schema = self.workflow.store.reasoning_schema()
@@ -1926,7 +1894,7 @@ class Workflow:
         if self.episode_application_services_binding is not None and any(value is not None for value in
                 (episode_binding_factories, episode_binding_descriptors, role_credit_bindings, job_progress_provider)):
             raise ValueError('episode_service_factory_and_direct_services_are_exclusive')
-        if progress_receipt_order not in {'received_progress_order_v1', 'legacy_grouped_v1'}:
+        if progress_receipt_order != 'received_progress_order_v1':
             raise ValueError('unsupported_progress_receipt_order')
         self.progress_receipt_order = progress_receipt_order
         self.store, self.tools, self.provider = store, tools, provider
@@ -3397,7 +3365,7 @@ class Workflow:
         return arguments
 
     def receive_outcome(self, source, selection, result, index):
-        if self.progress_provider is not None and self.progress_receipt_order == 'received_progress_order_v1':
+        if self.progress_provider is not None:
             self.progress_provider.receive_outcome(source.episode_id, result, source.scope,
                 f'{self.run_id}:{source.episode_id}:{index}:own_progress')
         from .episode import is_annotation_parent
@@ -3688,17 +3656,6 @@ class Workflow:
                    else source.request.message.as_record())
         initial = list(message.get('episode_assignment', {}).get('known_progress_refs', []))
         references = [*initial, *self.services.received_progress_refs(source.episode_id)]
-        if self.progress_receipt_order == 'received_progress_order_v1':
-            return {'known_progress_refs': list(dict.fromkeys(references)),
-                    'initial_progress_refs': list(initial)}
-        rows = self.store.db.execute("SELECT refs.value FROM runtime_actions actions "
-            "JOIN json_each(actions.result,'$.progress_refs') refs "
-            "WHERE actions.run_id=? AND actions.episode_id=? "
-            "AND (json_extract(actions.result,'$.status') IN ('completed','partial') "
-            "OR (json_extract(actions.action,'$.kind') IN ('tool','reason') "
-            "AND json_extract(actions.result,'$.status') IN ('failed','unavailable'))) "
-            "ORDER BY actions.decision_index, refs.key", (self.run_id, source.episode_id))
-        references.extend(row[0] for row in rows)
         return {'known_progress_refs': list(dict.fromkeys(references)),
                 'initial_progress_refs': list(initial)}
 
@@ -4601,12 +4558,7 @@ class Workflow:
                     try:
                         Draft202012Validator(retriever_catalog[0]['input_schema']).validate(arguments)
                         tools = self.scientific_process_binding.tool_library
-                        available = (self.services.tool_information_catalog(source.scope)
-                            if tools.supports_tool_info else self.services.tool_catalog(source.scope))
-                        # Legacy name-only selections keep their original direct
-                        # map. Resource information never extends that map.
-                        if not tools.supports_tool_info:
-                            tools.resolve([entry['name'] for entry in tools.catalog()], available)
+                        available = self.services.tool_information_catalog(source.scope)
                         if self.scientific_tool_retriever is not None:
                             return await self.scientific_tool_retriever.retrieve(arguments['investigation'],
                                 episode_id=source.episode_id, operation_key=operation_key,
@@ -4696,13 +4648,10 @@ class Workflow:
                     result['native_execution_expectations'] = context['native_execution_expectations']
         return result
 
-    def reasoning_action_schema(self, source, commit_schema=None, *, _accept_legacy_quotes=False):
+    def reasoning_action_schema(self, source, commit_schema=None):
         commit_schema = self.store.reasoning_schema() if commit_schema is None else commit_schema
         specialist = self.specialist(source)
-        schema = (getattr(specialist, 'accept_reasoning_action_schema', None)
-                  if _accept_legacy_quotes else None)
-        if schema is None:
-            schema = getattr(specialist, 'reasoning_action_schema', None)
+        schema = getattr(specialist, 'reasoning_action_schema', None)
         selected = schema(self.binding_context(source), commit_schema) if schema is not None else None
         result = selected if selected is not None else _object({
             'kind': {'type': 'string', 'const': 'reason'}, 'commit': commit_schema})
@@ -5463,8 +5412,7 @@ def assemble_workflow(store, tools, provider, directory, run_id, settings, *,
                         root_action_boundary=settings.get('root_action_boundary'),
                         episode_branch_lifecycle=episode_branch_lifecycle,
                         episode_record_receipts=episode_record_receipts,
-                        progress_receipt_order=settings.get('episode_progress_receipts', {}).get(
-                            'version', 'legacy_grouped_v1'),
+                        progress_receipt_order=settings.get('episode_progress_receipts', {}).get('version'),
                         wait_inputs_version=wait_inputs_version,
                         completed_action_inputs_version=completed_action_inputs_version,
                         project_annotation_score=project_annotation_score,

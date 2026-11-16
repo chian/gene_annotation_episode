@@ -217,7 +217,7 @@ _RESULT["allOf"] = [{"if": {"properties": {"operation": {"const": operation}}},
 _RESULT["$id"] = "urn:gene-annotation:molecular-provider:" + hashlib.sha256(
     json.dumps(_RESULT, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
-# The private evidence has no invented Source identity. The legacy schema above
+# The private evidence has no invented Source identity. The result schema above
 # remains literal; a real Source is attached only by its existing public wrapper.
 _VALUE = deepcopy(_RESULT)
 _VALUE.pop("$id")
@@ -611,7 +611,7 @@ def _receipt_response_failure(value):
 
 def _receipt_native_failure(value):
     operation, arguments, native = value["operation"], value["requested"], value["native_json"]
-    # This invokes the same native identity/parser authority as the legacy DTO.
+    # This invokes the same native identity/parser authority as the result DTO.
     # MIME is a retained qualification, not an identity or transfer assertion.
     _, issues = _native_qualification(operation, arguments, value["parse_state"],
         value["decode_error"], native, value["native_text"], value["native_fields"])

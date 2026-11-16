@@ -29,7 +29,7 @@ _INSTRUCTIONS = {
 }
 _COMMON = ("Declare the selected Software interpreter, version, dependency versions and implementation hashes, exact input artifacts, SHA-256/byte lengths and absolute authorized staging paths. "
     "The closed requested_job contains the compiled worker argv, explicit environment and native_protein_structure job. Output paths are fixed: result.json, stdout.log, stderr.log, with the extraction outputs described above. "
-    "Commission launch and its configured launch_local child with 20 GiB RAM, 4 GiB scratch, zero swap and no wall-time budget. Preparation only reserves the attempt; the owning child selects practical.job.start. "
+    "Commission launch and its configured launch_local child with 5 GiB RAM, 4 GiB scratch, zero swap and no wall-time budget. Preparation only reserves the attempt; the owning child selects practical.job.start. "
     "Status reads the original durable identity and available logs; a retry requires a separately selected failed-attempt retry. The sealed bundle retains the original plan, worker input, complete declared files and structured failures. "
     "Native execution success, complete capture and delivery of the parent's requested typed results remain separate. Resource choice and further investigation belong to the episode. This entry provides no API or HPC deployment and grants no direct execution operation to the root.")
 

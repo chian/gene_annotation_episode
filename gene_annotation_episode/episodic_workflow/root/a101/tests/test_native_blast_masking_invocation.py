@@ -3,6 +3,7 @@
 Controlled process outcomes below are synthetic custody faults. The four final
 native cases use only explicit runner-staged binaries and tiny supplied inputs.
 """
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import hashlib
 import json
@@ -29,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 
 ROOT = Path(__file__).resolve().parents[5]
 FIXTURES = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/masking_native"
-POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}
 LEGACY_MODES = (("dustmasker", "mask"), ("segmasker", "mask"),
                 ("windowmasker", "mask"), ("windowmasker", "create_counts"))
 

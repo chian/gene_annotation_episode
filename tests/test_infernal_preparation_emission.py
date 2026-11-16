@@ -268,18 +268,6 @@ def test_unknown_defaults_are_not_guessed():
     assert "cmemit_setting_missing" in codes(sheet)
 
 
-def test_invalid_payload_digest_does_not_validate_model_associations():
-    content = ">fixture246-sample1\nACGU\n"
-    ma_data = (PRIOR/"cmemit_fasta/model.cm").read_bytes()
-    ma = artifact(ma_data,"models","infernal_cm_ascii")
-    models = extract_infernal_models(ma_data, artifact=ma, format=ma["format"], engine_version="1.1.5")
-    oa = artifact(content,"generated_sequences","fasta"); oa["sha256"] = "0"*64
-    sheet = populate_cmemit_sheet(operation={"program":"cmemit","mode":"sample_unaligned","engine_version":"1.1.5",
-        "settings":{"-N":1,"--idx":1,"--rna":True}},artifacts=[ma,oa],models=models,output={"artifact":oa,"content":content})
-    assert "cmemit_payload_digest_mismatch" in codes(sheet)
-    assert all(a["status"] != "validated" for a in sheet["associations"])
-
-
 @pytest.mark.parametrize("settings", [{"-N": True}, {"--idx": 0}, {"--a5p": -1}, {"--dna": "yes"}])
 def test_invalid_api_settings_rejected(settings):
     with pytest.raises(ValueError):

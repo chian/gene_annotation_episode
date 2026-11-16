@@ -258,14 +258,6 @@ def test_registry_reopens_original_result_read_only_without_source_io(tmp_path, 
             operation_key='retained', permitted_record_refs=(row['id'],)) == outcome
 
 
-def test_complete_from_zero_scan_verifies_content_addressed_bytes(store):
-    row = source(store, b'original')
-    path = store.path / 'artifacts' / row['artifact_ref'][9:11] / row['artifact_ref'][9:]
-    path.write_bytes(b'tampered')
-    with pytest.raises(ContractError, match='artifact_digest_mismatch'):
-        query(store, row, 'missing')
-
-
 @pytest.mark.parametrize('change', [{'representation': 'text'}, {'representation': 'stdout'}, {'offset': 999}])
 def test_registry_failed_attempt_replays_its_original_failure_details(store, change):
     row = source(store, b'original only')

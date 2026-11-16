@@ -174,36 +174,6 @@ def test_async_single_unit_uses_restored_offset_without_controller_history(start
     assert unit.unit_ref == UnitRef(views[0].episode_ref.episode_id, starting_unit_index)
 
 
-@pytest.mark.parametrize("asynchronous", [False, True])
-@pytest.mark.parametrize("optional_port", [None, "not callable"])
-def test_legacy_episode_observer_keeps_its_original_signature(asynchronous, optional_port):
-    controller = LegacyController()
-    controller.observe_unit = optional_port
-    value = FixtureValue(-3)
-    episode, context = fixture_episode(controller,
-        leaves([value], extract=lambda item: item, result=lambda _, item: item))
-
-    record = run_episode(episode, context, asynchronous)
-
-    assert controller.observations == [("legacy", "unit-0", value, None, True)]
-    assert record.units_consumed == 1
-    assert record.unit_records[0].controller_input is value
-
-
-@pytest.mark.parametrize("identity_aware", [False, True])
-@pytest.mark.parametrize("nested", [False, True])
-def test_direct_advance_without_identity_uses_only_legacy_observe(identity_aware, nested):
-    controller = IdentityController() if identity_aware else LegacyController()
-    runtime = ControllerRuntime()
-    path = (("fixture", "root"), ("fixture", "child")) if nested else (("fixture", "root"),)
-    scope = runtime.open_scope(path, lambda _: controller)
-    opaque_value = object()
-
-    runtime.advance(scope, 17, opaque_value)
-
-    assert controller.observations == [("legacy", "17", opaque_value, None, not nested)]
-
-
 def test_direct_advance_with_actual_identity_uses_optional_port_once():
     controller = IdentityController()
     runtime = ControllerRuntime()
@@ -216,18 +186,6 @@ def test_direct_advance_with_actual_identity_uses_optional_port_once():
     assert controller.observations == [("identity", "readable label", opaque_value, unit_ref, False)]
     assert controller.observations[0][2] is opaque_value
     assert controller.observations[0][3] is unit_ref
-
-
-def test_direct_advance_with_identity_keeps_a_legacy_observer_unchanged():
-    controller = LegacyController()
-    runtime = ControllerRuntime()
-    scope = runtime.open_scope((("fixture", "root"),), lambda _: controller)
-    unit_ref = UnitRef(EpisodeRef("actual-run", scope).episode_id, 8)
-    opaque_value = object()
-
-    runtime.advance(scope, "readable label", opaque_value, unit_ref=unit_ref)
-
-    assert controller.observations == [("legacy", "readable label", opaque_value, None, True)]
 
 
 @pytest.mark.parametrize("unit_ref", ["unit-0", {"episode_id": "missing", "unit_index": 0}, object()])

@@ -1,7 +1,7 @@
 """Original resource-child FBA input controls, outside selected native work.
 
 Only this host's fixed immutable receiving-context controls are replayed.
-Arbitrary supplied receipt JSON is never accepted as historical authority.
+Arbitrary supplied receipt JSON is never accepted as authority.
 """
 from copy import deepcopy
 import hashlib
@@ -43,8 +43,7 @@ class FluxBalanceExecutionInputs:
         return bind_flux_balance_job_inputs(self.store, context, assignment,
             input_versions=input_versions, reference_access=self.owner.resolve_received_reference)
 
-    def _original(self, context, *, historical=False):
-        _require(type(historical) is bool, "historical_validation_mode_invalid")
+    def _original(self, context):
         _require(isinstance(context, BindingContext) and context.run_id == self.owner.run_id
             and context.role == "launch_local" and len(context.path) > 1
             and context.path[-2][0] == "launch", "original_resource_context_required")
@@ -58,9 +57,9 @@ class FluxBalanceExecutionInputs:
         _require(parent.role == "launch", "original_launch_required")
         from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import is_compact_assignment, materialized_assignment, read_request_binding
         if is_compact_assignment(plain(context.assignment)):
-            control = read_request_binding(self.store, context.run_id, context.episode_id, historical=historical)
-            return materialized_assignment(self.store, context, historical=historical), control['requests'][0]['input_versions']
-        assignment = validate_assignment(plain(context.assignment), historical=historical)
+            control = read_request_binding(self.store, context.run_id, context.episode_id)
+            return materialized_assignment(self.store, context), control['requests'][0]['input_versions']
+        assignment = validate_assignment(plain(context.assignment))
         _require("native_flux_balance" in assignment["requested_job"], "original_fba_assignment_required")
         original = plain(parent.assignment)
         versions = original.get("immutable_input_versions")
@@ -79,7 +78,7 @@ class FluxBalanceExecutionInputs:
                 (context.run_id, context.episode_id)).fetchone() is None
             for table in ('runtime_actions', 'runtime_model_calls', 'runtime_forms', 'runtime_observations'))
 
-    def _validate(self, context, assignment, versions, receipt, file, *, historical=False):
+    def _validate(self, context, assignment, versions, receipt, file):
         file = validate_flux_balance_record("File", file)
         raw = canonical(receipt).encode("utf-8")
         sha = hashlib.sha256(raw).hexdigest()
@@ -89,10 +88,10 @@ class FluxBalanceExecutionInputs:
         _require(read_bytes(root / "input-binding.json") == raw, "control_bytes_conflict")
         # This reads only the captured internal control, never a model/prior.
         _require(read_bytes(retained_native_file(self.store, file)) == raw, "retained_control_conflict")
-        receipt = self._validate_frozen_receipt(context, assignment, versions, receipt, historical=historical)
+        receipt = self._validate_frozen_receipt(context, assignment, versions, receipt)
         return {"receipt": receipt, "file": file}
 
-    def _validate_frozen_receipt(self, context, assignment, versions, receipt, *, historical=False):
+    def _validate_frozen_receipt(self, context, assignment, versions, receipt):
         # Only our original receiving control reaches this port. Admission
         # already checked protected-reference access. Rechecking a mutable
         # source alias today would replace that original permission decision.
@@ -108,8 +107,7 @@ class FluxBalanceExecutionInputs:
             raise ValueError('flux_balance_execution_input_original_control_invalid') from error
         return validate_flux_balance_input_binding_receipt(self.store, receipt,
             context=context, assignment=assignment, input_versions=versions,
-            reference_access=lambda _context, reference, namespace: (reference, namespace) in allowed,
-            historical=historical)
+            reference_access=lambda _context, reference, namespace: (reference, namespace) in allowed)
 
     def initialize(self, context):
         """Freeze this actual commissioned child's binding before its decisions."""
@@ -142,17 +140,17 @@ class FluxBalanceExecutionInputs:
         _require(self.records._equal(assignment, state.assignment), "state_assignment_conflict")
         return self.received(context)
 
-    def received(self, context, *, required=True, historical=False):
+    def received(self, context, *, required=True):
         """Read this receiving context's original control without rebinding it."""
         _require(type(required) is bool, "invalid_control_requirement")
-        assignment, versions = self._original(context, historical=historical)
+        assignment, versions = self._original(context)
         root = self._directory(context)
         receipt = read_control(root / "input-binding.json")
         file = read_control(root / "input-binding-file.json")
         if not required and receipt is None and file is None and self._new_control_allowed(context):
             return None
         _require(receipt is not None and file is not None, "original_control_required")
-        return deepcopy(self._validate(context, assignment, versions, receipt, file, historical=historical))
+        return deepcopy(self._validate(context, assignment, versions, receipt, file))
 
 
 __all__ = ["FluxBalanceExecutionInputs"]

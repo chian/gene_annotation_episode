@@ -107,7 +107,6 @@ FAMILIES = {
         ('results', 'scientific_process/published_evidence_assessment/execution_result_acquisition', 'root_scientific_process_published_evidence_assessment_execution_result_acquisition'),
     ),
 }
-# Original annotation aliases remain explicit historical descriptors.
 ENTRIES = FAMILIES['annotation']
 IDENTIFIERS = tuple(row[2] for parent in PARENTS for row in FAMILIES[parent])
 

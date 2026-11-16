@@ -83,7 +83,6 @@ def current_assessments(repository):
     """Read current assessments, retaining one head per experiment/question key.
 
     This is an inventory, not a numerical aggregate or an independence count.
-    Historical unlinked sheets remain available through their original APIs.
     """
     histories, superseded = {}, set()
     for row in repository.store.db.execute(

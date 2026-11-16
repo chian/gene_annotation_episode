@@ -1,4 +1,4 @@
-"""Private Launch integration checks; see LAUNCH_CONNECTED_TEST_PORTS.md.
+"""Private Launch integration checks.
 
 Actual Store/Journal, HPC planning, private constructors, registry, runtime
 selection, task execution and report validation are exercised. The provider,
@@ -367,6 +367,7 @@ class LaunchConnectedChecks:
         w.receive_outcome = lambda source, selection, result, index: observations.append((index, deepcopy(result)))
         w.controller_value = lambda source, index, credit: {"index": index, "credit": credit}
         w.wait_inputs_version = w.completed_action_inputs_version = None
+        w.pending_work = lambda source: []
         return SimpleNamespace(task=task, workflow=w, executions=executions,
             observations=observations, projections=projections)
 
@@ -460,26 +461,6 @@ class LaunchConnectedChecks:
             "facts": json.dumps(facts), "form": json.dumps(form)})
         assert json.loads(v.journal.row("runtime_forms", v.context.episode_id)["form"]) == form
 
-    @pytest.mark.parametrize("filename", ["task_decision.py", "to_child_hpc_job_execution.py",
-                                       "from_child_hpc_job_execution.py"])
-    def test_dependent_parent_fingerprints_follow_current_launch_sources(
-            self, connected, monkeypatch, filename):
-        v = connected
-        home = Path(importlib.import_module(v.launch.__module__).__file__).parent
-        selected = home / filename
-        assert selected.is_file()
-        before = {path: parent.as_record() for path, parent in v.parents.items()}
-        read = Path.read_bytes
-        def changed(path):
-            original = read(path)
-            return original + b"\n# controlled source digest observation\n" if path == selected else original
-        monkeypatch.setattr(Path, "read_bytes", changed)
-        after = {path: parent.as_record() for path, parent in v.parents.items()}
-        prefix = ("scientific_process/" if self.binding_path.startswith("scientific_process/") else "")
-        for path in before:
-            assert before[path]["configuration"] == after[path]["configuration"]
-            affected = path.startswith("scientific_process/") == bool(prefix)
-            assert (before[path]["implementation_sha256"] != after[path]["implementation_sha256"]) is affected
 
     def test_runtime_build_selects_actual_private_task(self, connected, monkeypatch):
         v = connected
@@ -525,7 +506,8 @@ class LaunchConnectedChecks:
                 "execution_resource_capabilities"]),
             "launch_instruction_library": {"preserved": "original selected library"}}
         schema = v.runtime.Workflow.action_schema(w, task)
-        request = {"context": original, "schema": schema}
+        request = {"context": original, "schema": schema, "assignment_transport": {
+            "version": v.runtime._ASSIGNMENT_TRANSPORT, "action_schema_sha256": v.runtime._digest(schema)}}
         v.journal.save("runtime_model_calls", {"episode_id": task.episode_id, "call_index": 0,
             "purpose": "decision", "request": json.dumps(request), "response": None})
         response = {"selection": {"kind": "tool", "tool": "execution.capabilities", "arguments": {}},
@@ -536,7 +518,7 @@ class LaunchConnectedChecks:
             return response
         if declared_renderer:
             # The private task hands its declared renderer only to the genuine provider type
-            # (task_decision.decision_completion); built as in test_private_task_refinement.py.
+            # (task_decision.decision_completion).
             w.provider = object.__new__(self.module("providers").ModelConnection)
             w.provider.worker_lock = asyncio.Lock()
             w.provider.workers = {}
@@ -577,7 +559,7 @@ class LaunchConnectedChecks:
         progress, receipts, cached = [], [], {"references": None}
         w.progress_provider = SimpleNamespace(receive_form=lambda *args: progress.append(args))
         w.receipts = SimpleNamespace(receive=lambda *args, **kwargs: receipts.append((args, kwargs)))
-        # Registry receipt references are a controlled port here, as in test_private_task_refinement.py.
+        # Registry receipt references are a controlled port here.
         monkeypatch.setattr(v.registry, "received_form_references", lambda *args: [])
         monkeypatch.setattr(self.module("episode_return_records").EpisodeReturnRecords,
             "recorded_admission_references", lambda *args: cached["references"])

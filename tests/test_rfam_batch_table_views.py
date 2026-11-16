@@ -1,7 +1,6 @@
 """Actual retained batch arithmetic and explicit synthetic population changes."""
 from copy import deepcopy
 import json
-from pathlib import Path
 
 import pytest
 
@@ -159,24 +158,3 @@ def test_native_model_span_and_bias_are_available_without_inventing_alignment_or
         {"name": "represented_model_positions", "reason": "not_reported"}]
 
 
-def test_old_saved_table_calculation_keeps_its_original_requested_view(monkeypatch):
-    directory = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/live_workflow"
-    parsed = json.loads((directory / "parse.json").read_text())
-    original = json.loads((directory / "calculation.json").read_text())
-    expected = json.loads((directory / "publication.json").read_text())["projection"]
-    assert parsed["version"] == "rfam_batch_tblout_parse_result_v1"
-    assert original["version"] == "rfam_batch_table_calculation_v1"
-    def forbidden(*args, **kwargs):
-        raise AssertionError("Historical table projection attempted new numerical work")
-    for path in (
-        "rfam_batch_table.populate_rfam_batch_tblout_sheet",
-        "rfam_batch_table_grader.calculate_rfam_batch_table_components",
-        "infernal_search_grader.calculate_infernal_search_scores",
-        "infernal_search_cells.upgrade_saved_infernal_search_sheet",
-        "rfam_batch_infernal.upgrade_saved_rfam_search_sheet",
-    ):
-        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library." + path, forbidden)
-    actual = project_rfam_batch_table_result(parsed, original, projection=expected["selection"],
-        artifact_bindings={**{key: expected[key] for key in ("source_ref", "sheet_ref", "calculation_ref")},
-            "sheet_digest": rfam_digest(parsed["sheet"]), "calculation_digest": rfam_digest(original)})
-    assert actual == expected

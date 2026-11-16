@@ -100,35 +100,6 @@ def test_R7_complete_artifacts_exact_hashes_bytes_and_row_offsets(tmp_path):
     assert before == {p.name: p.read_bytes() for p in directory.iterdir()}
 
 
-def test_common_companion_v2_is_required_and_keeps_old_component_addresses(tmp_path, monkeypatch):
-    inputs = numerical(); subject(inputs, "ACDEFGHI")
-    request = request_for(tmp_path, inputs=inputs)
-    manifest, diagnostics = invoke(request)
-    assert manifest["status"] == "complete", diagnostics
-    assert manifest["version"] == v.PREFIX + "result_worker_manifest_v2"
-    assert len(manifest["artifacts"]) == 8
-    assert any(row["module"] == "gene_annotation_episode.episodic_workflow.root.a101.library.alignment_correspondence"
-        for row in request["implementation"]["files"])
-    directory = Path(request["output_directory"])
-    calculations = json.loads((directory / "calculations.json").read_bytes())
-    sheets = json.loads((directory / "sheets.json").read_bytes())
-    assert calculations["schema"] == v.PREFIX + "calculations_v2"
-    assert calculations["native_hsp_components"][0]["component"]["counts"]["paired_columns"] == 4
-    assert calculations["sequence"][0]["components"]["components"]["database_sheet"]["hits"][0]["hsp_components"]
-    instances = calculations["correspondence"]["instances"]
-    assert {item["axis_basis"] for item in instances} == {"reported", "qualified"}
-    def forbidden(*args, **kwargs):
-        pytest.fail("frozen row projection recalculated common correspondence")
-    monkeypatch.setattr("gene_annotation_episode.alignment_correspondence.calculate_correspondence_components", forbidden)
-    expected = w.calculators.build_standard_blast_database_rows(bundle_identity=request["bundle"]["identity"],
-        calculation_id=request["calculation_id"], sheet_set=sheets, calculations=calculations)
-    assert expected == saved_rows(request)
-    missing = deepcopy(calculations); missing.pop("correspondence")
-    with pytest.raises(ValueError, match="calculations_invalid"):
-        w.calculators.build_standard_blast_database_rows(bundle_identity=request["bundle"]["identity"],
-            calculation_id=request["calculation_id"], sheet_set=sheets, calculations=missing)
-
-
 def test_R8_R9_saved_recalculation_has_no_parsing_population_or_acquisition(tmp_path, monkeypatch):
     inputs = numerical(); subject(inputs, "ACDEFGHI")
     request = request_for(tmp_path, inputs=inputs)

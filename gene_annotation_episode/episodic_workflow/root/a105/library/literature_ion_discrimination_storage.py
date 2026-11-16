@@ -4,7 +4,6 @@ Only population reads scientific artifacts and invokes the frozen reader and
 calculator. Reconstruction copies original facts and checks their custody; it
 does not reattest current scientific code or reinterpret original evidence.
 """
-from gene_annotation_episode.episodic_workflow.root.a105.literature_implementation_sources import source_file
 from copy import deepcopy
 import hashlib
 import json
@@ -23,7 +22,6 @@ NAMESPACE = 'literature_ion_discrimination_cells'
 REQUESTED = 'requested_ion_discrimination_components'
 VIEW = 'ion_discrimination_components'
 SCOPE = 'source_ion_discrimination'
-_FROZEN = {'literature_ion_discrimination_numbers.py': '080f5dbb79f3036186293c9c39c9faa38e17396150482d7d45774b2e4e7b9cf2', 'literature_ion_discrimination_inputs.py': '850cc2053c372beaf87877c2c89bc0de2509ce6f51584c4515e363f1cc769ef6', 'literature_ion_discrimination_calculations.py': 'b7576ca52c45b69675c4241428afcb983273fef555e4f6a85b650e1bdd3c8ce4', 'literature_ion_discrimination_prompt.py': '44797ebe7a49fc732e31deb61ebdebeffd608733e5246b650040b512c12cf99b'}
 
 def _array(schema):
     return {'type': 'array', 'items': deepcopy(schema)}
@@ -181,12 +179,6 @@ class LiteratureIonDiscriminationRepository(LiteratureRateRepository):
                     result.append(parent)
         return result
 
-    def _implementation_receipt(self):
-        actual = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in _FROZEN}
-        if actual != _FROZEN:
-            raise ContractError('ion_discrimination_prospective_dependency_mismatch')
-        return {'version': 'ion_discrimination_original_implementation_v1', 'files': actual}
-
     def populate(self, context, arguments, operation_key):
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
@@ -205,7 +197,6 @@ class LiteratureIonDiscriminationRepository(LiteratureRateRepository):
             self.read(outcome['result']['sheet_ref'])
             return outcome
         source = self._native_source(context, args['source_ref'])
-        receipt = self._implementation_receipt()
         snapshots = []
 
         def read_source(ref, representation):
@@ -230,7 +221,7 @@ class LiteratureIonDiscriminationRepository(LiteratureRateRepository):
             snapshots = [{'selection': deepcopy(extraction['operands'][role]['selection']), 'row': deepcopy(extraction['operands'][role]['row'])} for role in ('preferred', 'alternative')]
         direct = extraction['source_refs']
         parents = self._ancestors(context.scope, [*direct, *(s['selection']['sheet_ref'] for s in snapshots)])
-        payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'selection': args, 'direct_input_source_refs': direct, 'input_source_refs': parents, 'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'input_snapshots': snapshots, 'original_implementation': receipt, 'extraction': extraction, 'sheet': sheet}
+        payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'selection': args, 'direct_input_source_refs': direct, 'input_source_refs': parents, 'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'input_snapshots': snapshots, 'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
             self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
@@ -342,11 +333,8 @@ class LiteratureIonDiscriminationRepository(LiteratureRateRepository):
         if operation is None or operation['signature'] != canonical(request):
             raise ContractError('literature_sheet_not_selected_output')
         saved = self._json(source['artifact_ref'])
-        if set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs', 'input_source_refs', 'source_metadata', 'input_snapshots', 'original_implementation', 'extraction', 'sheet'} or saved['version'] != VERSION or saved['selection'] != request['arguments'] or (saved['input_source_ref'] != request['arguments']['source_ref']) or (source['text_ref'] != source['artifact_ref']) or (saved['input_source_refs'] != source['parent_source_refs']) or (self._ancestors(request['scope'], [*saved['direct_input_source_refs'], *(s['selection']['sheet_ref'] for s in saved['input_snapshots'])]) != saved['input_source_refs']) or (set(saved['source_metadata']) != set(saved['input_source_refs'])) or any((canonical(self._native_provenance(request['scope'], ref)) != canonical(row) for ref, row in saved['source_metadata'].items())) or (self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
+        if set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs', 'input_source_refs', 'source_metadata', 'input_snapshots', 'extraction', 'sheet'} or saved['version'] != VERSION or saved['selection'] != request['arguments'] or (saved['input_source_ref'] != request['arguments']['source_ref']) or (source['text_ref'] != source['artifact_ref']) or (saved['input_source_refs'] != source['parent_source_refs']) or (self._ancestors(request['scope'], [*saved['direct_input_source_refs'], *(s['selection']['sheet_ref'] for s in saved['input_snapshots'])]) != saved['input_source_refs']) or (set(saved['source_metadata']) != set(saved['input_source_refs'])) or any((canonical(self._native_provenance(request['scope'], ref)) != canonical(row) for ref, row in saved['source_metadata'].items())) or (self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
             raise ContractError('ion_saved_source_mismatch')
-        receipt = saved['original_implementation']
-        if set(receipt) != {'version', 'files'} or receipt['version'] != 'ion_discrimination_original_implementation_v1' or (not isinstance(receipt['files'], dict)) or any((not isinstance(v, str) or not re.fullmatch('[0-9a-f]{64}', v) for v in receipt['files'].values())):
-            raise ContractError('ion_saved_original_receipt_mismatch')
         self._validate_bindings(saved, request)
         rows = _project_saved(saved, reference, request['components'])
         validate_schema(rows, ion_discrimination_cells_schema())

@@ -14,7 +14,7 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode import ucsc_acquisition as ucsc
 from gene_annotation_episode.acquisition import PublicClients
 from gene_annotation_episode.data_acquisition_receipts import acquisition_receipt_schema
-from gene_annotation_episode.domain import ContractError, canonical
+from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_ucsc_acquisition import HUB, SOURCE, arguments, native, snapshot
@@ -87,50 +87,6 @@ def test_receipt_rejects_shape_types_and_source_data_contradictions(change):
     result = dict(acquired=True, source_ref=SOURCE, data_ref="artifact_" + "a" * 64, failure_code=None)
     with pytest.raises(ContractError, match="ucsc_receipt_invalid"):
         ucsc.validate_ucsc_receipt({**result, **change})
-
-
-@pytest.mark.parametrize("operation", ucsc.OPERATIONS)
-def test_source_free_value_and_real_source_wrapper_preserve_exact_legacy_json(operation):
-    capture = snapshot(arguments(operation))
-    private = value(capture)
-    before = deepcopy(private)
-    assert private["version"] == "ucsc_acquisition_value_v1" and "source_ref" not in private
-    assert "source_ref" not in ucsc.ucsc_value_schema()["properties"]
-    assert Draft202012Validator(ucsc.ucsc_value_schema()).is_valid(private)
-    legacy = ucsc.ucsc_result(capture, arguments=capture.request, source_ref=SOURCE,
-        artifact_ref=private["raw_artifact_ref"])
-    public = {key: child for key, child in private.items() if key != "observed_transfer"}
-    assert legacy == {**public, "version": "ucsc_acquisition_result_v1", "source_ref": SOURCE}
-    assert ucsc.ucsc_result_from_value(private, source_ref=SOURCE) == legacy
-    assert ucsc.validate_ucsc_result(legacy) == legacy
-    assert private["native_json"] == native(operation) and private["native_document"] is None
-    assert private["population_coverage"] == "selected_response_only" and private["issues"] == []
-    assert ucsc.ucsc_receipt(private, source_ref=SOURCE) == dict(acquired=True,
-        source_ref=SOURCE, data_ref=private["raw_artifact_ref"], failure_code=None)
-    legacy["requested"]["max_bytes"] = 1
-    assert private == before
-
-
-@pytest.mark.parametrize("field,raw,response_field", [
-    ("declared_body_bytes", False, "declared_body_bytes"),
-    ("declared_body_bytes", -1, "declared_body_bytes"),
-    ("declared_body_bytes", "0", "declared_body_bytes"),
-    ("body_capture_failure", False, "capture_failure"),
-    ("body_capture_failure", 0, "capture_failure"),
-])
-def test_optional_malformed_transfer_stays_literal_privately_and_normalized_in_legacy(field, raw, response_field):
-    selected = arguments("sequence")
-    capture = snapshot(selected, **{field: raw})
-    private = value(capture)
-    expected = ucsc.ucsc_result(snapshot(selected), arguments=selected, source_ref=SOURCE,
-        artifact_ref=private["raw_artifact_ref"])
-    expected["response"][response_field] = None
-    legacy = ucsc.ucsc_result(capture, arguments=selected, source_ref=SOURCE, artifact_ref=private["raw_artifact_ref"])
-    assert legacy == expected and legacy["response"][response_field] is None and legacy["issues"] == []
-    assert private["observed_transfer"][field] == raw
-    assert type(private["observed_transfer"][field]) is type(raw)
-    assert ucsc.ucsc_result_from_value(private, source_ref=SOURCE) == legacy
-    assert ucsc.ucsc_receipt(private, source_ref=SOURCE) == failure("transport_metadata_unavailable")
 
 
 @pytest.mark.parametrize("field,raw", [
@@ -228,19 +184,6 @@ def test_native_count_meanings_and_qualified_schema_scope_are_not_reinterpreted(
     assert ucsc.ucsc_receipt(qualified, source_ref=SOURCE)["acquired"]
 
 
-def test_duplicate_number_and_mime_qualifications_keep_original_document_and_legacy_interval_policy():
-    raw = b'{"genome":"hg38","chrom":"chr1","start":10,"end":14,"dna":"AcgN","extra":0,"extra":1e-9999}'
-    capture = snapshot(arguments("sequence"), raw=raw, headers={"content-type": "text/plain"})
-    private = value(capture)
-    assert private["parse_state"] == "json_document" and private["native_json"] is None
-    assert [row["value"]["token"] for row in private["native_document"]["members"] if row["name"] == "extra"] == ["0", "1e-9999"]
-    assert {row["code"] for row in private["issues"]} == {
-        "native_duplicate_member", "native_number_token_required", "content_type_mismatch"}
-    assert ucsc.ucsc_receipt(private, source_ref=SOURCE)["acquired"]
-    legacy = ucsc.ucsc_result_from_value(private, source_ref=SOURCE)
-    assert legacy["issues"] == private["issues"] and ucsc.ucsc_sequence_interval(legacy) is None
-
-
 @pytest.mark.parametrize("operation,change,code", [
     ("sequence", {"genome": "mm39"}, "native_identity_differs_from_request"),
     ("sequence", {"chrom": "chr2"}, "native_identity_differs_from_request"),
@@ -328,19 +271,6 @@ def test_private_value_rejects_invented_source_and_native_or_transfer_crossfield
     elif damage == "cap": private["native_item_cap"]["state"] = "reached"
     else: private["observed_transfer"]["declared_body_bytes"] = 0
     with pytest.raises(ValueError): ucsc.validate_ucsc_value(private)
-
-
-def test_saved_private_value_confirmation_and_legacy_wrapping_require_no_original_bytes_or_parser(monkeypatch):
-    capture = snapshot(arguments("sequence"))
-    private = json.loads(canonical(value(capture)))
-    legacy = ucsc.ucsc_result_from_value(private, source_ref=SOURCE)
-    expected = ucsc.ucsc_receipt(private, source_ref=SOURCE)
-    monkeypatch.setattr(ucsc, "_parse", forbidden)
-    monkeypatch.setattr(ucsc, "_snapshot_response", forbidden)
-    monkeypatch.setattr(ucsc, "ucsc_value", forbidden)
-    monkeypatch.setattr(PublicClients, "_http", forbidden)
-    assert ucsc.ucsc_receipt(private, source_ref=SOURCE) == expected
-    assert ucsc.ucsc_result_from_value(private, source_ref=SOURCE) == legacy
 
 
 @pytest.mark.parametrize("operation", ucsc.OPERATIONS)

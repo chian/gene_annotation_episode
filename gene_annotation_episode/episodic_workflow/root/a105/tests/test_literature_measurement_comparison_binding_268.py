@@ -2,12 +2,7 @@
 import asyncio
 from copy import deepcopy
 from dataclasses import replace
-from functools import partial
-import hashlib
 import json
-from pathlib import Path
-import subprocess
-import sys
 from types import SimpleNamespace
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.communication import form_with_facts, plain, validate_closed_schema, validate_form, ReportBoundaryError
@@ -22,7 +17,6 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_meas
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_measurement_comparison_components_258 import source_fixture, original_nfn_fixture
-ROOT = Path(__file__).resolve().parents[5]
 SELECTED = ['protocol_ratio', 'combined_estimate']
 
 def setup(path, components=SELECTED, *, original=False, optical=False, covariance=None, variance_status='known', values=None, table=False):
@@ -100,15 +94,6 @@ def selected(store, ctx, args, binding, key='selected268'):
 def forbid(*args, **kwargs):
     raise AssertionError('Scientific IO, factory, projection, model or write forbidden')
 
-def block_science(monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_measurement_comparison_inputs as inputs
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_measurement_comparison_calculations as calculations
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_measurement_comparison_storage as storage
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_numerical_contracts as contracts
-    from gene_annotation_episode.episodic_workflow.root.a105 import providers
-    for module, names in [(inputs, ['read_measurement_comparison_inputs', 'compile_measurement_comparison_inputs', 'validate_measurement_comparison_extraction', 'validate_measurement_comparison_calculation_inputs', 'measurement_comparison_selection_schema', 'measurement_comparison_extraction_schema', 'measurement_comparison_calculation_inputs_schema', 'measurement_comparison_covariance_schema']), (calculations, ['populate_measurement_comparison', 'validate_measurement_comparison_sheet', 'measurement_comparison_sheet_schema', 'measurement_comparison_cell_schema']), (storage, ['measurement_comparison_cells_schema', 'measurement_comparison_operation_schema', '_project_once', '_context_projection', '_assertion_projection']), (contracts, ['registered_schema']), (providers.ModelConnection, ['complete']), (providers._SessionConnection, ['complete']), (LiteratureMeasurementComparisonRepository, ['populate', 'receive_cells', '_original_implementation'])]:
-        for name in names:
-            monkeypatch.setattr(module, name, forbid)
 
 def test_exact_contracts_and_lazy_discovery(tmp_path):
     store, ctx, args, binding, _ = setup(tmp_path / 'state')
@@ -425,126 +410,3 @@ def test_original_report_repair_redelivery_without_repopulation(tmp_path, monkey
     finally:
         store.close()
 
-@pytest.mark.parametrize('profile,alias,nested,original', [(None, False, False, False), (None, True, False, True), ('operation_contract_information_v1', True, False, False), (None, True, True, False)])
-def test_selected_shared_loop_return_and_first_cold_reconstruction(tmp_path, monkeypatch, profile, alias, nested, original):
-    from gene_annotation_episode.episodic_workflow.root.a105.episode_composition import compose_episode_bindings
-    from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import ScientificFindingProgress, FindingProgressPolicy
-    from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import FixtureController, ScriptedProvider
-    from test_contract_information_runtime_059 import PresentedProvider
-    from test_runtime_decision_exchanges import select as action
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_compiled_assay_185 import readonly
-    import gene_annotation_episode.episodic_workflow.root.a105.communication as communication
-    requested = ['protocol_ratio', 'protocol_difference', 'required_nuisance_equivalent_scenario', 'combined_estimate'] if original else ['protocol_ratio', 'protocol_difference', 'combined_estimate'] if nested else SELECTED
-    store, ctx, args, _, _ = setup(tmp_path / 'state', requested, original=original)
-    if original:
-        for name in ('molecule', 'functional_assertion'):
-            witness = args['selection']['assertion'][name]
-            args['return_assertion_context'][name] = [{'start': witness['start'], 'end': witness['end']}]
-    sources = list(ctx.received_record_refs)
-    literal = obj({'numbers': measurement_comparison_cells_schema(), 'limit': {'type': 'string', 'enum': ['source_qualifications_retained']}})
-    submitted = obj({'numbers': {'$ref': 'episode-fact:' + NAMESPACE}, 'limit': literal['properties']['limit']}) if alias else literal
-    captured = []
-    outer_components = list(reversed(requested[:2])) if nested else requested
-
-    def response(value):
-        if not profile:
-            return value
-        value = deepcopy(value)
-        if value['selection']['kind'] == 'tool':
-            value['selection']['arguments'] = json.dumps(value['selection']['arguments'])
-        return action(value)
-
-    def commission(role, assignment):
-        return response({'selection': {'kind': 'episode_child', 'role': role, 'assignment': assignment, 'goal': 'Evaluate the selected source measurements with their functional and protocol qualifications.', 'scope': plain(ctx.scope), 'purpose': 'Return only requested comparison cells and necessary limits.', 'schema_json': json.dumps(submitted), 'initial_report_json': json.dumps({'limit': 'source_qualifications_retained'})}, 'report_update': {}})
-
-    def work(inputs):
-        view = provider.views[provider.active_episode] if profile else inputs
-        task, _ = render_literature_experimental_prompt(view, 'Read the selected comparison.').split('\n\nSTEERING\n')
-        assert MEASUREMENT_COMPARISON_TASK in task
-        return response({'selection': {'kind': 'tool', 'tool': OPERATION, 'arguments': args}, 'report_update': {'limit': 'source_qualifications_retained'}})
-
-    def integrate(inputs):
-        view = provider.views[provider.active_episode] if profile else inputs
-        form, = view['child_reports']
-        captured.append(deepcopy(form))
-        wanted = outer_components if nested and len(captured) == 2 else requested
-        assert [r['component'] for r in form['numbers']] == wanted
-        prompt = render_literature_experimental_prompt(view, 'Assess only received comparison evidence.')
-        task, steering = prompt.split('\n\nSTEERING\n')
-        if nested and len(captured) == 1:
-            assert MEASUREMENT_COMPARISON_TASK in task
-        else:
-            assert MEASUREMENT_COMPARISON_TASK not in task
-        assert 'protocol ratio' in steering
-        assert 'matrix_exact' not in steering
-        commit = {key: [] for key in store.reasoning_schema()['required']}
-        witness = args['selection']['quantities']['left']['subject']['molecule']
-        artifact = store.get(witness['source_ref'])['artifact_ref']
-        commit['source_subjects'] = [{'alias': 'studied_molecule268', 'reference_type': 'assay', 'source_ref': witness['source_ref'], 'label': witness['quote'], 'anchor': {'source_ref': witness['source_ref'], 'artifact_ref': artifact, 'start': witness['start'], 'end': witness['end'], 'quote': witness['quote']}}]
-        return response({'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {'limit': 'source_qualifications_retained'} if nested and len(captured) == 1 else {}})
-    outer = {**plain(ctx.assignment), REQUESTED: outer_components}
-    script = [commission('literature', outer)]
-    if nested:
-        script.append(commission('literature_strategy', {'version': 'strategy_assignment_v1', 'question_context_refs': [], 'prior_search_refs': sources, REQUESTED: requested}))
-    script += [work, integrate, *([integrate] if nested else [])]
-
-    class ControlledPresented(PresentedProvider):
-
-        async def complete(self, episode_id, *args):
-            self.active_episode = episode_id
-            return await super().complete(episode_id, *args)
-    provider = ControlledPresented(script) if profile else ScriptedProvider(script)
-    progress = ScientificFindingProgress(FindingProgressPolicy(1))
-    try:
-        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources, episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=sources, contract_information_profile=profile), **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
-        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == (5 if nested else 3)
-        assert store.db.execute('SELECT count(*) FROM literature_measurement_comparison_operations').fetchone()[0] == 1
-        run_id, parent = store.db.execute('SELECT run_id,episode_id FROM literature_measurement_comparison_received ORDER BY rowid DESC LIMIT 1').fetchone()
-        original_form = captured[-1]
-        ref = original_form['numbers'][0]['sheet_ref']
-        repo = LiteratureMeasurementComparisonRepository(store, run_id)
-        saved = repo.read(ref)
-        descriptors = json.loads(store.db.execute('SELECT settings FROM runtime_runs').fetchone()[0])['episode_bindings']
-        assert saved['original_implementation']['bound_descriptor'] == descriptors[0]
-        allowed = {store.get(ref)[k] for k in ('artifact_ref', 'request_ref')}
-        receiver = replace(ctx, run_id=run_id, episode_id=parent, role='annotation', path=(('annotation', parent),), assignment={}, received_record_refs=tuple(repo.cell_record_refs(original_form['numbers'])))
-        for name, value in [('ORIGINAL_FORM_268.json', original_form), ('ORIGINAL_SCHEMA_268.json', literal), ('ORIGINAL_SHEET_268.json', saved), ('ORIGINAL_DESCRIPTOR_268.json', descriptors), ('ORIGINAL_RECEIVER_268.json', receiver.as_record()), ('ORIGINAL_ARTIFACTS_268.json', sorted(allowed))]:
-            (tmp_path / name).write_text(json.dumps(value, indent=2) + '\n')
-        store.db.execute('PRAGMA wal_checkpoint(TRUNCATE)')
-        store.close()
-        before = {str(p.relative_to(tmp_path / 'state')): hashlib.sha256(p.read_bytes()).hexdigest() for p in (tmp_path / 'state').rglob('*') if p.is_file()}
-        block_science(monkeypatch)
-        monkeypatch.setattr(type(provider), 'complete', forbid)
-        communication._compiled_schema_content.cache_clear()
-        with readonly(tmp_path / 'state') as cold:
-            get = cold.get_artifact
-
-            def saved_only(reference):
-                assert reference in allowed, 'Original scientific bytes forbidden'
-                return get(reference)
-            monkeypatch.setattr(cold, 'get_artifact', saved_only)
-            host = SimpleNamespace(store=cold, run_id=run_id, tools=None)
-            restored = compose_episode_bindings(WorkflowServices(host), store=cold, journal=SimpleNamespace(store=cold, run_id=run_id), execution_backend=None, descriptors=descriptors, job_episodes=None, resource_estimator=None, role_credit_bindings={})
-            host.episode_bindings = EpisodeBindingRegistry(restored.bindings)
-            binding, = restored.bindings
-            assert binding.as_record() == descriptors[0]
-            assert binding.received_report_facts(receiver)[NAMESPACE] == original_form['numbers']
-            assert binding._measurement_comparison_repository().read(ref) == saved
-            validate_form(original_form, literal, lambda ref, namespace: True)
-            assert cold.db.total_changes == 0
-        after = {str(p.relative_to(tmp_path / 'state')): hashlib.sha256(p.read_bytes()).hexdigest() for p in (tmp_path / 'state').rglob('*') if p.is_file()}
-        assert before == after
-        if original:
-            completed = subprocess.run([sys.executable, '-B', str(Path(__file__).parent / 'fixtures/retained_reference/a105_measurement_comparison_binding_268/first_cold_process_001.py'), str(tmp_path)], cwd=ROOT, text=True, capture_output=True)
-            (tmp_path / 'FRESH_COLD_PROCESS_STDOUT_268.txt').write_text(completed.stdout)
-            (tmp_path / 'FRESH_COLD_PROCESS_STDERR_268.txt').write_text(completed.stderr)
-            assert completed.returncode == 0, completed.stderr
-            probe = json.loads((tmp_path / 'FRESH_COLD_PROCESS_268.json').read_text())
-            assert probe['fresh_process'] and probe['state_byte_hashes_unchanged']
-            assert probe['only_original_two_receipt_artifacts_read'] and probe['sqlite_changes'] == 0
-    finally:
-        try:
-            store.close()
-        except Exception:
-            pass

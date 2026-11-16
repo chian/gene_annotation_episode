@@ -1,7 +1,4 @@
-"""A107 original chromatin received fact contracts; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 chromatin received fact contracts."""
 from __future__ import annotations
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.root.a107.library.chromatin_interaction_contracts import chromatin_record_schema, validate_chromatin_record
@@ -57,15 +54,10 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode.episodic_workflow.root.a107.library.chromatin_interaction_contracts import canonical_chromatin_record
 
 def chromatin_fact_schema_alternatives(source: str) -> tuple[dict, ...]:
-    """Current tree and the single exact supported historical field tree."""
+    """The fact tree accepted for a source."""
     if type(source) is not str or source not in FACT_SOURCES:
         raise ValueError('chromatin_return_unknown_source')
-    current = _array_schema(source)
-    if source == SAVED_SOURCE:
-        return (current,)
-    from gene_annotation_episode.episodic_workflow.root.a107.library.chromatin_interaction_legacy_return_schemas import legacy_chromatin_fact_schema
-    legacy = legacy_chromatin_fact_schema(source)
-    return (current,) if current == legacy else (current, legacy)
+    return (_array_schema(source),)
 
 def requested_chromatin_sources(schema: dict) -> tuple[str, ...]:
     if type(schema) is not dict or type(schema.get('properties')) is not dict:

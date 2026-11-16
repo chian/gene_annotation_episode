@@ -9,9 +9,7 @@ measured activity.
 The configured service is `bvbrc_data`. Its default Data API location is
 `https://www.bv-brc.org/api`. A caller can explicitly configure another BV-BRC
 deployment's base URL and request timeout. The query does not accept a URL,
-credentials or arbitrary HTTP method. Public data was retrieved without an
-authorization token during verification on 2026-10-23. That observation does not
-guarantee future service availability.
+credentials or arbitrary HTTP method.
 
 ## Specify the actual query
 

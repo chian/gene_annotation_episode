@@ -27,8 +27,7 @@ class LocalTaskActionOutcomes:
                 recorded_selection=None if original is None else json.loads(original['action']),
                 exchanges=() if original is not None or self.workflow.decision_exchanges is None else
                     self.workflow.decision_exchanges.rows(self.episode_id, index),
-                exchange_schema=saved.get('contract_information', {}).get('exchange_schema'),
-                unproven_replay=getattr(self, '_unproven_direct_response_index', None) == index)
+                exchange_schema=saved.get('contract_information', {}).get('exchange_schema'))
             # Validate selection independently: report formatting must not
             # reject a valid scientific contribution or alter its credit.
             selection = response["selection"]
@@ -95,10 +94,7 @@ class LocalTaskActionOutcomes:
                     decision_index=index, operation_key=key)
                 if inspect.isawaitable(result):
                     result = await result
-            if (self.workflow.execution_binding is not None
-                    or self.workflow.wait_inputs_version == 'wait_inputs_binding_v2'
-                    or self.workflow.completed_action_inputs_version is not None):
-                result = {**result, 'pending_work_after_action': self.workflow.pending_work(self)}
+            result = {**result, 'pending_work_after_action': self.workflow.pending_work(self)}
             with (self.workflow.store.transaction() if self.workflow.execution_binding is not None else nullcontext()):
                 journal.save("runtime_actions", {"episode_id": self.episode_id, "decision_index": index,
                     "action": _json(selection), "result": _json(result), "credit": None})

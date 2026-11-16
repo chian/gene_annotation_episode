@@ -6,6 +6,7 @@ outcome, and checks byte/schema/selection joins. It never calculates intervals.
 """
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 import ast
 from contextlib import ExitStack, contextmanager
 from copy import deepcopy
@@ -67,7 +68,7 @@ class WorkerCapture(TypedDict):
     failures: list[dict]
 
 
-_POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
+_POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}
 _MODULE = "gene_annotation_episode.episodic_workflow.root.a103.genomic_overlap_result_worker"
 _PLAN = "genomic_overlap_result_worker_plan_v1"
 _EXECUTION = "genomic_overlap_worker_execution_v1"

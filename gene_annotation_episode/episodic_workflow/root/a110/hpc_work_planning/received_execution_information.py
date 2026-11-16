@@ -1,4 +1,4 @@
-"""This recipient selects its explicitly declared original A110 result readers."""
+"""This recipient selects its explicitly declared A110 result readers."""
 
 def received_execution_information(context, catalog, *, configuration_only=False):
     return catalog.configured('hpc_work_planning') if configuration_only else catalog.received('hpc_work_planning', context)

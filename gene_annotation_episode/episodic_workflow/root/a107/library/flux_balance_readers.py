@@ -1,6 +1,4 @@
-"""A107 original retained result worker dependency: flux_balance_readers.
-Scientific bodies, invalid outcomes and original byte qualifications are retained.
-"""
+"""A107 result worker dependency: flux_balance_readers."""
 
 
 from __future__ import annotations

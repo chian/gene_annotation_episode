@@ -1,8 +1,8 @@
-"""Selected atac action controls and historical completed-action authority.
+"""Selected atac action controls and completed-action authority.
 
 These private records belong to the existing results episode. They contain no
 calculator and grant no access merely because a file or a private receipt exists.
-Historical checks use frozen controls and Store metadata, never scientific bytes.
+Completed-action checks use frozen controls and Store metadata, never scientific bytes.
 """
 from __future__ import annotations
 
@@ -33,13 +33,13 @@ from gene_annotation_episode.episodic_workflow.root.library.atac_differential_re
 from gene_annotation_episode.episodic_workflow.root.library.atac_differential_return_views import FACT_SOURCES, FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE, validate_atac_fact_values
 from gene_annotation_episode.episodic_workflow.root.library.atac_differential_result_worker import validate_atac_result_worker_plan, validate_atac_result_worker_result
 from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_capture import validate_atac_native_capture
-from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_contracts import retained_policy, POLICY, atac_driver_argv, validate_atac_requested_job, validate_atac_run_plan, _dependency_roots
+from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_contracts import POLICY, atac_driver_argv, validate_atac_requested_job, validate_atac_run_plan, _dependency_roots
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import validate_receipt
 from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from gene_annotation_episode.episodic_workflow.root.progress_records import validate_resource_observation
 
 
-from gene_annotation_episode.episodic_workflow.root.library.atac_result_receipt_values import AtacDifferentialResultIntent, AtacDifferentialHandoffProof, AtacDifferentialNativeSnapshot, AtacDifferentialOrigin, AtacDifferentialQualifiedFiles, AtacDifferentialFactGroups, AtacDifferentialSheetEvidence, AtacDifferentialResultReceipt, AtacDifferentialResultAction, _historical, _finite_json_copy, require, closed, same, artifact_references, decode, directory, regular, read_control, immutable, empty_facts, empty_files, unique, outcome, qualified_files, closure_value, VERSION, _READING, _READ_CACHE, _OUTPUTS, _TRACK_ROLES
+from gene_annotation_episode.episodic_workflow.root.library.atac_result_receipt_values import AtacDifferentialResultIntent, AtacDifferentialHandoffProof, AtacDifferentialNativeSnapshot, AtacDifferentialOrigin, AtacDifferentialQualifiedFiles, AtacDifferentialFactGroups, AtacDifferentialSheetEvidence, AtacDifferentialResultReceipt, AtacDifferentialResultAction, _finite_json_copy, require, closed, same, artifact_references, decode, directory, regular, read_control, immutable, empty_facts, empty_files, unique, outcome, qualified_files, closure_value, VERSION, _READING, _READ_CACHE, _OUTPUTS, _TRACK_ROLES
 
 
 class AtacResultNativeReceipts:
@@ -63,12 +63,12 @@ class AtacResultNativeReceipts:
     def validate_handoff(self, proof, intent):
         from gene_annotation_episode.episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, validate_terminal_handoff
         if is_terminal_target(intent['target']):
-            validate_terminal_handoff(proof, intent, self.store, self.owner.run_id, historical=_historical(intent))
+            validate_terminal_handoff(proof, intent, self.store, self.owner.run_id)
             return
         closed(proof, AtacDifferentialHandoffProof.__annotations__)
         source, body, snapshot, start = (proof[name] for name in AtacDifferentialHandoffProof.__annotations__)
         practical = PracticalReceiptInformation(self.store, self.owner.run_id)
-        qualified, selected = practical._qualify(body, snapshot, intent["scope"], historical=_historical(intent))
+        qualified, selected = practical._qualify(body, snapshot, intent["scope"])
         require(same(qualified, body) and selected["result"] is not None)
         self._artifact_value(source["artifact_ref"], body)
         self._artifact_value(source["request_ref"], snapshot)
@@ -223,13 +223,13 @@ class AtacResultNativeReceipts:
     def validate_native(self, value, intent, observation):
         from gene_annotation_episode.episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, validate_terminal_native
         if is_terminal_target(intent['target']):
-            validate_terminal_native(value, intent, observation, self.store, self.owner.run_id, historical=_historical(intent))
+            validate_terminal_native(value, intent, observation, self.store, self.owner.run_id)
             return
         from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_local import _request
         from gene_annotation_episode.native_lifecycle import VERSION as native_version
         closed(value, AtacDifferentialNativeSnapshot.__annotations__)
-        plan = validate_atac_run_plan(value["original_plan"], historical=_historical(intent))
-        policy = retained_policy(plan['policy'], historical=_historical(intent))
+        plan = validate_atac_run_plan(value["original_plan"])
+        policy = POLICY
         target, ident = intent["target"], plan["identity"]
         require(same(plan["requested_job"], target["assignment"]["requested_job"])
             and same(plan["policy"], policy) and ident["run_id"] == intent["run_id"]
@@ -244,14 +244,14 @@ class AtacResultNativeReceipts:
         root = Path(target["execution_id"]).parent
         require(type(handle) is dict and handle.get("version") == native_version
             and handle.get("stage") in {"prepared", "submitting", "released"}
-            and handle.get("command") == atac_driver_argv(plan, historical=_historical(intent)) and handle.get("cwd") == str(root)
+            and handle.get("command") == atac_driver_argv(plan) and handle.get("cwd") == str(root)
             and same(handle.get("metadata", {}).get("policy"), policy))
         paths = handle.get("paths")
         require(type(paths) is dict and {"request", "ready", "release", "status", "result", "launcher"} <= paths.keys()
             and not paths.keys() - {"request", "ready", "release", "status", "result", "launcher", "statistics", "native_events"}
             and len(set(paths.values())) == len(paths) and all(type(p) is str and Path(p).parent == root
                 and str(Path(p)) == p for p in paths.values()))
-        require(same(request, _request(plan, paths, historical=_historical(intent))))
+        require(same(request, _request(plan, paths)))
         require(type(value["request_raw"]) is str)
         raw = value["request_raw"].encode("utf-8")
         require(same(decode(raw, canonical_bytes=False), request))
@@ -279,12 +279,12 @@ class AtacResultNativeReceipts:
     def validate_observation(self, value, intent):
         from gene_annotation_episode.episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, validate_terminal_observation
         if is_terminal_target(intent['target']):
-            validate_terminal_observation(value, intent, self.store, self.owner.run_id, historical=_historical(intent))
+            validate_terminal_observation(value, intent, self.store, self.owner.run_id)
             return value
         from gene_annotation_episode.native_lifecycle import VERSION as native_version
         value = validate_resource_observation(value)
         native = value["native"]
-        policy = retained_policy(native.get('metadata', {}).get('policy'), historical=_historical(intent))
+        policy = POLICY
         require(native.get("execution_id") == intent["target"]["execution_id"]
             and native.get("version") == native_version and type(native.get("terminal")) is bool
             and type(native.get("quiescent")) is bool and same(native.get("metadata", {}).get("policy"), policy))

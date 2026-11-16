@@ -5,7 +5,6 @@ from pathlib import Path
 
 _ASSETS = (
     'library/retained_input_authority/bvbrc_appservice_schemas.json',
-    'library/retained_input_authority/literature_assay_grading_legacy_cells_v1.json',
 )
 
 

@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.root.library.flux_balance_worker_
 from gene_annotation_episode.local_jobs import LocalJobPolicy, check_scratch_budget
 from gene_annotation_episode.native_file_capture import (NativeFileCaptureError, capture_native_file,
     capture_declared_native_files, retained_native_file)
-from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (ATTEMPT_DIRECTORY_NAME, POLICY, HISTORICAL_POLICY,
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (ATTEMPT_DIRECTORY_NAME, POLICY,
     flux_balance_environment, path_value, validate_flux_balance_software)
 from gene_annotation_episode.episodic_workflow.root.library.native_artifact_storage import (
     confined_file, decode_json, directory, immutable_bytes)
@@ -53,11 +53,6 @@ def _require(condition, code):
 
 def _same(left, right):
     return canonical(left) == canonical(right)
-
-
-def _validation_policy(historical):
-    _require(type(historical) is bool, "historical_validation_mode_invalid")
-    return HISTORICAL_POLICY if historical else POLICY
 
 
 def _json(raw):
@@ -170,13 +165,12 @@ def _dependency_roots(rows):
     return roots({"dependencies": rows})
 
 
-def _environment(root, common, home, dependencies, *, historical=False):
-    _validation_policy(historical)
+def _environment(root, common, home, dependencies):
     return {"PYTHONPATH": os.pathsep.join([str(root / "source_snapshot"), *_dependency_roots(dependencies)]),
         "PYTHONHOME": home, "PYTHONNOUSERSITE": "1", "PYTHONSAFEPATH": "1",
         "PYTHONDONTWRITEBYTECODE": "1", "TMPDIR": str(common), "TMP": str(common), "TEMP": str(common),
         "XDG_CACHE_HOME": str(root / "cache"), "PIP_CACHE_DIR": str(root / "cache/pip"),
-        **({"OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1"} if historical else {})}
+        }
 
 
 def _selected_source_pins(software, root):
@@ -195,9 +189,9 @@ def _selected_source_pins(software, root):
     return result
 
 
-def _selected_environment(root, software, *, historical=False):
+def _selected_environment(root, software):
     environment = flux_balance_environment(software,
-        attempt_directory=str(root / ATTEMPT_DIRECTORY_NAME), lifecycle_directory=str(root), historical=historical)
+        attempt_directory=str(root / ATTEMPT_DIRECTORY_NAME), lifecycle_directory=str(root))
     # The selected application bytes are copied unchanged; dependency and
     # interpreter-home identities remain the explicitly selected originals.
     environment["PYTHONPATH"] = os.pathsep.join(
@@ -275,8 +269,8 @@ def _all_pins(intent):
         *(pin for row in intent["dependencies"] for pin in row["files"])]
 
 
-def _validate_selected_intent(value, plan, *, historical=False):
-    policy = _validation_policy(historical)
+def _validate_selected_intent(value, plan):
+    policy = POLICY
     _require(type(value) is dict and set(value) == {"version", "plan", "execution_directory", "policy",
         "command", "environment", "source_pins", "interpreter", "software"}
         and value["version"] == _SELECTED_INTENT_VERSION
@@ -290,18 +284,18 @@ def _validate_selected_intent(value, plan, *, historical=False):
         "selected_runtime_mismatch")
     pins = [_pin(pin) for pin in _all_pins(value)]
     _require(len({pin["path"] for pin in pins}) == len(pins), "duplicate_pin")
-    _require(_same(value["environment"], _selected_environment(root, software, historical=historical)), "environment_mismatch")
+    _require(_same(value["environment"], _selected_environment(root, software)), "environment_mismatch")
     return value
 
 
-def _validate_intent(value, plan, *, software=None, historical=False):
-    policy = _validation_policy(historical)
+def _validate_intent(value, plan, *, software=None):
+    policy = POLICY
     if software is not None:
         selected = validate_flux_balance_software(software)
         _require(type(value) is dict and value.get("version") == _SELECTED_INTENT_VERSION
             and _same(value.get("software"), selected), "selected_software_mismatch")
     if type(value) is dict and value.get("version") == _SELECTED_INTENT_VERSION:
-        return _validate_selected_intent(value, plan, historical=historical)
+        return _validate_selected_intent(value, plan)
     _require(type(value) is dict and set(value) == {"version", "plan", "execution_directory", "policy",
         "command", "environment", "source_pins", "interpreter", "dependencies", "python_version",
         "python_home", "runtime_files"} and value["version"] == _INTENT_VERSION
@@ -331,8 +325,7 @@ def _validate_intent(value, plan, *, software=None, historical=False):
         and value["interpreter"]["path"] == str(root / "runtime/python"), "source_missing")
     _require(all(Path(p["path"]).is_relative_to(Path(value["python_home"]) / "lib")
         for p in value["runtime_files"]), "runtime_invalid")
-    _require(_same(value["environment"], _environment(root, common, value["python_home"], value["dependencies"],
-        historical=historical)),
+    _require(_same(value["environment"], _environment(root, common, value["python_home"], value["dependencies"])),
         "environment_mismatch")
     return value
 
@@ -342,8 +335,8 @@ def _verify_pins(intent):
         _require(_same(file_pin(pin["path"]), pin), "runtime_changed")
 
 
-def _controls(body, request, intent, *, historical=False):
-    policy = _validation_policy(historical)
+def _controls(body, request, intent):
+    policy = POLICY
     common, root, output = _layout(intent["plan"])
     _require(type(body) is dict and body.get("version") == native.VERSION
         and body.get("stage") in ("prepared", "submitting", "released")
@@ -368,11 +361,10 @@ def _controls(body, request, intent, *, historical=False):
     return body
 
 
-def validate_flux_balance_worker_execution(value, *, plan, plan_file,
-        historical=False, historical_source=False):
+def validate_flux_balance_worker_execution(value, *, plan, plan_file):
     """Validate original frozen execution records without current runtime I/O."""
-    policy = _validation_policy(historical)
-    plan = validate_flux_balance_worker_plan(plan, historical=historical_source)
+    policy = POLICY
+    plan = validate_flux_balance_worker_plan(plan)
     _file(plan_file, PLAN_VERSION)
     _require(type(value) is dict and set(value) == {"version", "plan_file", "intent", "terminal", "quiescent",
         "policy", "returncode", "metadata", "failure", "handle_file", "request_file", "stdout_file", "stderr_file",
@@ -383,8 +375,8 @@ def validate_flux_balance_worker_execution(value, *, plan, plan_file,
             ("request_file", "native_local_job_request"), ("stdout_file", "native_worker_stdout"),
             ("stderr_file", "native_worker_stderr")):
         _file(value[name], format_)
-    intent = _validate_intent(value["intent"], plan, historical=historical)
-    body = _controls(value["handle"], value["request"], intent, historical=historical)
+    intent = _validate_intent(value["intent"], plan)
+    body = _controls(value["handle"], value["request"], intent)
     _require(type(value["request_raw"]) is str, "request_mismatch")
     raw = value["request_raw"].encode("utf-8")
     _require(_same(_json(raw), value["request"]) and hashlib.sha256(raw).hexdigest() ==

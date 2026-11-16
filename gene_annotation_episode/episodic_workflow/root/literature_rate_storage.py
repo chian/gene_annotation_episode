@@ -447,13 +447,9 @@ class LiteratureRateRepository:
             raise ContractError("literature_sheet_not_selected_output")
         payload = json.loads(self.store.get_artifact(source["artifact_ref"]))
         native = self.provider == PROVIDER and payload.get("version") == NATIVE_RECORD_VERSION
-        # An adapter can explicitly retain exact old payloads while publishing
-        # a newer version. Reading never upgrades or recalculates those cells.
-        readable_versions = getattr(self, "readable_record_versions", (self.record_version,))
-        if not native and payload.get("version") not in readable_versions:
+        if not native and payload.get("version") != self.record_version:
             raise ContractError("literature_rate_sheet_version_mismatch")
-        if (hasattr(self, "readable_record_versions")
-                and source.get("version") != payload.get("version")):
+        if source.get("version") != payload.get("version"):
             raise ContractError("literature_rate_sheet_version_mismatch")
         if source.get("parent_source_refs") != payload.get("input_source_refs", [payload["input_source_ref"]]):
             raise ContractError("literature_rate_sheet_source_mismatch")

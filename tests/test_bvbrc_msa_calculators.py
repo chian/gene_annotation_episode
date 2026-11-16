@@ -12,14 +12,13 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_formats
-from gene_annotation_episode import phylogeny_formats
+from gene_annotation_episode.episodic_workflow.root.library import phylogeny_formats
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_calculation_contracts import (
     CATEGORIES, validate_msa_entropy_components, validate_msa_reference_components,
 )
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_calculators import msa_native_entropy, msa_reference_differences
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_formats import parse_msa_frequency_table
-from gene_annotation_episode.phylogeny_calculators import alignment_components
-from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
+from gene_annotation_episode.episodic_workflow.root.library.phylogeny_formats import parse_aligned_fasta
 
 
 NATIVE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_metacats_boundaries/native_examples'
@@ -88,27 +87,6 @@ def differences(al, *, pop=None, ref=None, correspondence=(), case_policy='upper
     return msa_reference_differences(al, analysis_id='analysis', population=population(al) if pop is None else pop,
         reference=reference(al) if ref is None else ref, member_row_indices=members,
         alphabet=alphabet, case_policy=case_policy, original_correspondences=correspondence)
-
-
-def test_native_dna_values_and_distinct_canonical_only_population():
-    al, table = native('dna')
-    result = entropy(al, table=table)
-    second, third = result['sites'][1:3]
-    assert result['status'] == 'ok'
-    assert second['symbol_counts'] == [{'symbol': '-', 'count': 1}, {'symbol': 'A', 'count': 2}]
-    assert second['eligible_count']['value'] == 3
-    assert second['internal_gap_count']['value'] == 1
-    assert second['terminal_gap_excluded_count']['value'] == 1
-    assert second['literal_entropy_bits']['value'] == pytest.approx(0.9182958340544896)
-    assert second['native_score_recalculated']['value'] == 92
-    assert third['symbol_counts'] == [{'symbol': 'C', 'count': 3}, {'symbol': 'T', 'count': 1}]
-    assert third['literal_entropy_bits']['value'] == pytest.approx(0.8112781244591328)
-    assert third['native_score_recalculated']['value'] == 81
-    assert all(site['score_residual']['value'] == 0 for site in result['sites'])
-    canonical = alignment_components(al, population=population(al), alphabet='dna', case_policy='uppercase')
-    assert canonical['sites'][1]['canonical_entropy_bits']['value'] == 0
-    assert canonical['sites'][1]['canonical_entropy_bits']['denominator'] == 2
-    assert second['literal_entropy_bits']['denominator'] == 3
 
 
 def test_native_protein_internal_deletion_tie_has_literal_entropy_one():

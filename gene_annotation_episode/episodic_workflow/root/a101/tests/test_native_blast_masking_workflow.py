@@ -18,6 +18,7 @@ from types import SimpleNamespace
 from jsonschema import Draft202012Validator
 from method_loop.archive import iter_json
 import pytest
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.episodic_workflow.root.a101.communication import plain, validate_closed_schema, validate_form
@@ -281,7 +282,7 @@ def test_selected_contracts_grants_and_practical_accounting(native_case):
     assert proof and case.owner.verify_completion(case.results_context, proof)
     handle = native.NativeJobHandle(Path(case.plan['identity']['execution_id'])).read()
     assert handle['metadata']['policy'] == POLICY
-    assert handle['metadata']['verified_cgroup']['memory_max'] == 20 * 1024**3
+    assert handle['metadata']['verified_cgroup']['memory_max'] == ENVIRONMENT_BOUNDS['memory_bytes']
     assert handle['metadata']['verified_cgroup']['memory_swap_max'] == 0
     assert 'runtime_max' not in handle['metadata']['verified_cgroup']
     root_known = set(case.flow.receipts.known(case.root_context.episode_id))

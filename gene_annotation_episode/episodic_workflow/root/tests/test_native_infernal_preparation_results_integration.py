@@ -25,7 +25,7 @@ from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation
 from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import requested_job_from_infernal_preparation
 from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_local import local_infernal_preparation_plan
 from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.practical_yield import PracticalYieldEstimator
+from gene_annotation_episode.episodic_workflow.root.practical_yield import PracticalYieldEstimator
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
@@ -117,7 +117,7 @@ def run_case(tmp_path, program='cmemit', mode='consensus', *, selectors=None, fo
         def estimate(raw, parameters, contexts):
             return YieldEstimate(len(raw), NumericBand.exact(0 if len(raw) >= 1 + len(selectors) else 1),
                 parameters, {'fixture': 'selected_engineering_cases'})
-        return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+        return YieldController(str(path), initial, 0, YieldParameters(),
             estimate_with_context=estimate if path[-1][0] == 'annotation' else None)
 
     class Choices:

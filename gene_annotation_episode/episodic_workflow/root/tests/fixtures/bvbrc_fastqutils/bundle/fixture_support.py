@@ -4,11 +4,11 @@ import json
 from pathlib import Path
 
 from gene_annotation_episode.bvbrc_fastqutils_contracts import bytes_sha256, canonical_json, make_requested_schema
-from gene_annotation_episode.bvbrc_fastqutils_bundle_adapter import consume_bundle
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_bundle_adapter import consume_bundle
 from gene_annotation_episode.bvbrc_fastqutils_resolution import resolve_documents
-from gene_annotation_episode.bvbrc_fastqutils_native import parse_fastqutils_artifact
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_native import parse_fastqutils_artifact
 from gene_annotation_episode.bvbrc_fastqutils_metadata import extract_fastqutils_metadata
-from gene_annotation_episode.bvbrc_fastqutils_sheet import populate_fastqutils_sheet
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_sheet import populate_fastqutils_sheet
 
 ROOT = Path(__file__).parent
 

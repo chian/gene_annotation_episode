@@ -22,7 +22,3 @@ def assay_grading_cells_schema():
         criterion['properties']['support_refs']['items'] = {'type': 'string', 'format': 'reference'}
     fields['prediction_model']['anyOf'][0]['properties']['support_refs']['items'] = {'type': 'string', 'format': 'reference'}
     return {'type': 'array', 'x-source': NAMESPACE, 'items': obj(fields, required=[*cell_schema['required'], 'sheet_ref', 'evidence_source_ref', 'evaluation_scope', 'assay_type', 'assertion_ref', 'quantity_kind', 'interpretations', 'prediction_model', 'annotation_credit'])}
-
-def legacy_assay_grading_cells_schema():
-    """Original frozen four-type parent contract; never infer new old fields."""
-    return json.loads(Path(__file__).with_name('literature_assay_grading_legacy_cells_v1.json').read_text())

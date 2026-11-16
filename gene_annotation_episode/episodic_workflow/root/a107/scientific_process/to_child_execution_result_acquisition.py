@@ -1,4 +1,4 @@
-"""Original A107 scientific parent request for execution_result_acquisition."""
+"""A107 scientific parent request for execution_result_acquisition."""
 from __future__ import annotations
 from .. import runtime as _original_runtime
 

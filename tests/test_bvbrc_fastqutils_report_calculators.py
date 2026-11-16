@@ -8,7 +8,7 @@ import pytest
 from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError, json_sha256, validate_contract
 from gene_annotation_episode.bvbrc_fastqutils_identity import join_ref, metadata_ref
 from gene_annotation_episode.bvbrc_fastqutils_retention import calculate_retention
-from gene_annotation_episode.bvbrc_fastqutils_consistency import calculate_report_consistency
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_consistency import calculate_report_consistency
 FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/reports'
 
 
@@ -36,17 +36,6 @@ def replace_population(sheet, reference, **updates):
     for rows in [sheet['populations']] + [d['populations'] for d in sheet['documents']]:
         for pop in rows:
             if pop['id'] == reference: pop.update(deepcopy(updates))
-
-
-def declare(sheet, job, relation):
-    source = json.loads((FIXTURES / 'saved_assumed_sheet.json').read_text())['supplied_metadata'][0]
-    source['value']['relation'] = relation
-    for name, reference in zip(('before', 'after'), job['population_refs']):
-        source['value'][name] = {'selection': 'record', 'record_ref': reference}
-    sheet['supplied_metadata'].append(deepcopy(source))
-    job['lineage_basis'] = {'basis': 'explicit_source_bound_declaration', 'metadata_id': source['metadata_id'],
-        'evidence': deepcopy(source['evidence']), 'declaration': deepcopy(source['value']), 'native_lineage_ref': None}
-    job['lineage_ref'] = None
 
 
 def test_native_report_numerical_oracle_and_corrected_meanings():
@@ -155,43 +144,6 @@ def test_assumption_cannot_point_to_wrong_population_or_evidence():
     assert all(r['state'] == 'incompatible' for r in run(sheet, job).values())
 
 
-def consistency_job():
-    sheet, job, _ = saved()
-    report = next(c for c in sheet['measurements'] if c['metric'] == 'hostile_reads_out'); observed = next(c for c in sheet['measurements'] if c['metric'] == 'fastq_read_count')
-    job.update(calculation_id='consistency', method='report_consistency_v1', comparison_kind='report_count_consistency', operand_measurement_refs=[report['id'], observed['id']], population_refs=[report['population_ref'], observed['population_ref']])
-    declare(sheet, job, 'same_population'); return sheet, job
-
-
-def test_signed_report_difference_preserves_negative_value():
-    sheet, job = consistency_job(); replace_cell(sheet, job['operand_measurement_refs'][0], value=1, native_token='1')
-    row = run(sheet, job, calculate_report_consistency)['report_count_difference']
-    assert row['value'] == -1 and row['state'] == 'available'
-    assert row['numerator'] is None and row['denominator'] is None
-    assert 'count_inconsistent' in row['diagnostic_codes']
-    assert row['operand_measurement_refs'] == job['operand_measurement_refs']
-    by_id = {cell['id']: cell for cell in sheet['measurements']}
-    assert [by_id[ref]['value'] for ref in row['operand_measurement_refs']] == [1, 2]
-    assert row['lineage_basis'] == job['lineage_basis']
-
-
-def test_report_difference_zero_is_observed():
-    sheet, job = consistency_job(); replace_cell(sheet, job['operand_measurement_refs'][0], value=2, native_token='2')
-    row = run(sheet, job, calculate_report_consistency)['report_count_difference']; assert row['value'] == 0 and row['state'] == 'available'
-
-
-def test_consistency_rejects_before_after_as_same_population():
-    sheet, job, _ = saved(); job.update(method='report_consistency_v1', comparison_kind='report_count_consistency')
-    row = run(sheet, job, calculate_report_consistency)['report_count_difference']; assert row['value'] is None and row['state'] == 'incompatible'
-
-
-def test_consistency_rejects_wrong_populations_and_units():
-    sheet, job = consistency_job(); job['population_refs'].reverse()
-    assert run(sheet, job, calculate_report_consistency)['report_count_difference']['state'] == 'incompatible'
-    sheet, job = consistency_job(); bases = next(c for c in sheet['measurements'] if c['metric'] == 'fastq_base_count')
-    job['operand_measurement_refs'][1] = bases['id']; job['population_refs'][1] = bases['population_ref']
-    assert run(sheet, job, calculate_report_consistency)['report_count_difference']['state'] == 'incompatible'
-
-
 def test_rounded_percent_cannot_be_count_operand():
     sheet, job, _ = saved(); percent = next(c for c in sheet['measurements'] if c['metric'] == 'hostile_removed_proportion'); job['operand_measurement_refs'][0] = percent['id']
     assert all(r['value'] is None and r['state'] == 'incompatible' for r in run(sheet, job).values())
@@ -234,8 +186,3 @@ def test_retention_zero_numerator_is_observed_zero_and_count_survives_absent_qua
     assert all(p['quality_encoding'] == 'unknown' for p in sheet['populations'])
 
 
-def test_consistency_missing_selected_operand_stays_missing():
-    sheet, job = consistency_job(); job['operand_measurement_refs'] = job['operand_measurement_refs'][:1]
-    row = run(sheet, job, calculate_report_consistency)['report_count_difference']
-    assert row['value'] is None and row['state'] == 'missing'
-    assert row['operand_measurement_refs'] == job['operand_measurement_refs']

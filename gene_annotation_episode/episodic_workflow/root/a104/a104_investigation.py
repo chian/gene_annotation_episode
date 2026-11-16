@@ -45,32 +45,12 @@ def parent_generation_schema(frame, schema):
     return result
 
 
-def legacy_report_schema():
-    """Historical model-verdict contract; new commissions use saved grading."""
+def report_schema():
     refs = {'type': 'array', 'items': {'type': 'string', 'format': 'reference'}, 'uniqueItems': True}
-    return obj({'phylogeny_status': {'type': 'string', 'enum': ['not_assessed', 'execution_pending',
-        'native_trees_received', 'placement_measured', 'histories_compared', 'partial', 'uninformative']},
-        'function_scope': {'type': 'string', 'enum': ['not_assessed', 'specificity_unresolved',
-            'reference_clade_qualified', 'mixed_function_clade', 'contradicted']},
-        'history_interpretation': {'type': 'string', 'enum': ['not_assessed', 'compatible_at_examined_scope',
-            'discordant_cause_unresolved', 'duplication_loss_requires_further_work', 'local_scope_only', 'topology_unresolved']},
-        'limitations': {'type': 'array', 'uniqueItems': True, 'items': {'type': 'string', 'enum': [
-            'partial_input', 'region_only', 'uncharacterized_references', 'mixed_functions', 'missing_taxa',
-            'paralog_mapping', 'unresolved_branches', 'rooting_unestablished', 'organismal_reference_proxy',
-            'phylogenetic_outlier', 'mobile_family_scope', 'native_execution_pending',
-            'missing_A105_characterization', 'alternative_models_unassessed', 'restricted_taxon_scope']}},
-        'information_need_refs': deepcopy(refs),
-        'hypothesis_refs': {**deepcopy(refs), 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'hypothesis'}},
-        'assessment_refs': {**deepcopy(refs), 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'assessment'}},
-        'records': {**deepcopy(refs), 'x-source': RECORD_SOURCE,
+    schema = obj({'records': {**refs, 'x-source': RECORD_SOURCE,
             'description': 'Actual received native tree measurements, per-use grades, retained phylogenies and shared needs; no implicit upstream receipt.'},
         'phylogenetic_credit': {'type': 'number', 'x-source': 'credit',
             'description': 'Host-calculated native evolutionary investigation progress. Branch support is not functional confidence.'}})
-
-
-def report_schema():
-    original = legacy_report_schema()['properties']
-    schema = obj({name: deepcopy(original[name]) for name in ('records', 'phylogenetic_credit')})
     validate_closed_schema(schema)
     return schema
 
@@ -101,57 +81,16 @@ def received_records(store, known, scope, *, committed=()):
 
 def resolve_report(store, report, *, scope):
     from .a104_credit import A104EvolutionaryCredit
-    from .a104_publication import received_measurement
-    legacy = 'phylogeny_status' in report
-    validate_form(report, legacy_report_schema() if legacy else report_schema(), lambda reference, namespace:
+    validate_form(report, report_schema(), lambda reference, namespace:
         reference in store.reference_subset([reference], scope)
         and (namespace is None or store.get(reference)['record_type'] == namespace))
     view = A104EvolutionaryCredit().read_details(store, scope, known_record_refs=report['records'],
                                                 details_limit=128, details_offset=0)
     require(math.isclose(report['phylogenetic_credit'], view['credit'], abs_tol=1e-12), 'a104_report_numeric_credit_conflict')
-    if not legacy:
-        return {'receiving_scope_credit': view['credit'], 'child_reported_credit': report['phylogenetic_credit'],
-            'evolutionary_sheets': view['a104_sheet'], 'tool_attachments': view['tool_attachments'],
-            'target_sheets': view['target_sheets'],
-            'reporting': 'saved_native_tree_and_per_use_grading; no_separate_history_or_function_verdict'}
-    measurements = [value for reference in report['records'] if (value := received_measurement(store, reference)) is not None]
-    placements = [value for value in measurements if value['grade']['kind'] == 'placement']
-    histories = [value['body'] for value in measurements if value['grade']['kind'] == 'history_comparison']
-    if report['phylogeny_status'] == 'native_trees_received':
-        from .a104_hpc import native_body
-        require(any(native_body(store, reference) is not None for reference in report['records']),
-                'a104_native_tree_statement_requires_received_original_execution')
-    if report['phylogeny_status'] == 'placement_measured':
-        require(placements, 'a104_placement_statement_requires_native_measurement')
-    if report['phylogeny_status'] == 'histories_compared':
-        require(histories, 'a104_history_statement_requires_actual_two_tree_comparison')
-    if report['history_interpretation'] == 'compatible_at_examined_scope':
-        require(any(row['raw_value'] is not None and row['comparison']['rf']['value'] == 0 for row in histories),
-                'a104_history_agreement_requires_supported_native_comparison')
-    if report['history_interpretation'] == 'discordant_cause_unresolved':
-        require(any(row['comparison']['rf']['value'] is not None and row['comparison']['rf']['value'] > 0
-                    for row in histories),
-                'a104_discordance_statement_requires_native_comparison')
-    characterized = [row['sheets']['reference_characterization'] for row in view['tool_attachments']
-                     if 'reference_characterization' in row['sheets']]
-    if report['function_scope'] == 'reference_clade_qualified':
-        require(any(row['all_sampled_references_have_one_observed_activity'] for row in characterized),
-                'a104_function_clade_requires_exact_characterized_reference_links')
-    if report['function_scope'] == 'mixed_function_clade':
-        require(any(row['status'] == 'mixed_characterized_functions' for row in characterized),
-                'a104_mixed_function_statement_requires_characterized_members')
-    if report['function_scope'] in {'reference_clade_qualified', 'contradicted'}:
-        require(report['hypothesis_refs'] and report['assessment_refs'], 'a104_function_statement_requires_explicit_hypothesis_and_assessment')
-        hypotheses = {reference: store.get(reference) for reference in report['hypothesis_refs']}
-        assessments = [store.get(reference) for reference in report['assessment_refs']]
-        require(all(any(set(store.roots(subject)) & set(scope['subject_refs']) for subject in row['subject_refs'])
-                    for row in hypotheses.values()), 'a104_function_hypothesis_requires_original_target')
-        relation = 'strengthens' if report['function_scope'] == 'reference_clade_qualified' else 'weakens'
-        require(any(row['hypothesis_ref'] in hypotheses and row['relation'] == relation for row in assessments),
-                'a104_function_statement_requires_corresponding_assessment_relation')
     return {'receiving_scope_credit': view['credit'], 'child_reported_credit': report['phylogenetic_credit'],
-            'evolutionary_sheets': view['a104_sheet'], 'tool_attachments': view['tool_attachments'],
-            'target_sheets': view['target_sheets'], 'information_need_refs': report['information_need_refs']}
+        'evolutionary_sheets': view['a104_sheet'], 'tool_attachments': view['tool_attachments'],
+        'target_sheets': view['target_sheets'],
+        'reporting': 'saved_native_tree_and_per_use_grading; no_separate_history_or_function_verdict'}
 
 
 class A104Subtree:

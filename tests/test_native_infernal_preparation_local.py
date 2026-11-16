@@ -41,7 +41,7 @@ def test_reservation_does_not_dispatch_and_preserves_original_policy(tmp_path, m
     plan = local_infernal_preparation_plan(state.assignment, str(handle.path))
     assert plan["requested_job"] == state.assignment["requested_job"]
     assert plan["identity"]["run_id"] == state.run_id and plan["identity"]["episode_id"] == state.episode_id
-    assert plan["policy"] == {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
+    assert plan["policy"] == {'memory_bytes': 5 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
     invoke = json.loads((root / "invoke.json").read_bytes())
     assert invoke == {"cwd": plan["attempt_directory"], "argv": state.assignment["requested_job"]["argv"],
         "environment": state.assignment["requested_job"]["environment"],

@@ -7,7 +7,6 @@ the already authorized receiver views and possessed meaning records.
 """
 from collections.abc import Mapping
 from copy import deepcopy
-from functools import cache
 from importlib import import_module
 import json
 import math
@@ -227,41 +226,6 @@ def _adapter_results(selection, outcome, records):
     return result
 
 
-@cache
-def _axis_report_fields(module_name, axis=None, include_sequence_credit=None):
-    module = import_module('.' + module_name, __package__)
-    arguments = (() if axis is None else (axis,))
-    options = ({} if include_sequence_credit is None else
-        {'include_sequence_credit': include_sequence_credit})
-    return (frozenset(module.legacy_report_schema(*arguments, **options)['properties']),
-            frozenset(module.report_schema(*arguments, **options)['properties']))
-
-
-def _grading_report_values(form):
-    """Project known old forms without repeating separate agent verdicts.
-
-    Original typed forms remain immutable. Unknown/custom report schemas and
-    purpose-specific grading contents are preserved rather than key-filtered.
-    """
-    if not isinstance(form, Mapping):
-        return form
-    fields = frozenset(form)
-    specifications = [
-        ('a101_investigation', None, 'sequence_credit' in form),
-        ('a102_investigation', None, None),
-        ('a103_investigation', None, None),
-        ('a104_investigation', None, None),
-        ('a102_structural_report', None, None),
-    ]
-    if form.get('axis') in ('A107', 'A110'):
-        specifications.append(('component_axis_reports', form['axis'], None))
-    for module, axis, include_credit in specifications:
-        legacy, current = _axis_report_fields(module, axis, include_credit)
-        if fields == legacy:
-            return {name: value for name, value in form.items() if name in current}
-    return form
-
-
 def requested_action_history(workflow, source, *, before):
     """Retain outcomes this actor explicitly read through its own history tool.
 
@@ -397,7 +361,7 @@ def completed_action_reports(workflow, source, state, *, before, received_axis_r
             # them is labeled separately from this row's original parent gain.
             facts['admitted_child_values'] = {
                 'value_owner': 'Returned child; separate from this original parent action’s earned credit',
-                'values': deepcopy(_grading_report_values(outcome['admitted_child_return']))}
+                'values': deepcopy(outcome['admitted_child_return'])}
         for key in ('feedback', 'report_delivery_failure', 'child_completion',
                 'error_code', 'errors', 'conflicts', 'notices'):
             if outcome.get(key) is not None:

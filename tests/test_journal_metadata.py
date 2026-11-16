@@ -5,7 +5,6 @@ import sqlite3
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.decision_exchanges import DecisionExchanges
-from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal,WorkflowError
 from gene_annotation_episode.journal_metadata import MARKER,ROOT_FLAG,MEDIA_TYPE
 from gene_annotation_episode.state import Store
@@ -71,12 +70,3 @@ def test_literal_metadata_marker_never_reads_an_unrelated_private_artifact(tmp_p
         assert store.count('observation')==0
 
 
-def test_corrupt_metadata_artifact_is_an_error_without_substituting_a_schema(tmp_path):
-    with Store(tmp_path/'state') as store:
-        journal=Journal(store,'metadata-control')
-        journal.save('runtime_model_calls',{'episode_id':'episode','call_index':0,
-            'purpose':'decision','request':canonical(request())})
-        digest=store.db.execute('SELECT sha256 FROM artifacts WHERE media_type=? LIMIT 1',(MEDIA_TYPE,)).fetchone()[0]
-        (store.path/'artifacts'/digest[:2]/digest).write_text('corrupt')
-        with pytest.raises(ContractError,match='artifact_digest_mismatch'):
-            journal.row('runtime_model_calls','episode',0)

@@ -119,8 +119,8 @@ def calculate(store, original, known):
     args = original['arguments']
     refs = set(original['operand_refs'])
     native = native_read(store, args['accounting_ref'], RESULT_PROVIDER)
-    require(native is not None and native['axis'] == 'A110' and native['scientific_profile'] in {
-        'a110_chemical_accounting_v1', 'a110_chemical_accounting_v2'}, 'a110_original_chemical_accounting_required')
+    require(native is not None and native['axis'] == 'A110' and native['scientific_profile'] ==
+        'a110_chemical_accounting_v2', 'a110_original_chemical_accounting_required')
     selected = [row for row in native['native_components']['reactions'] if row['reaction_id'] == args['reaction_id']]
     require(len(selected) == 1, 'a110_particular_returned_reaction_required')
     reaction = selected[0]
@@ -265,8 +265,7 @@ def received(store, references, scope, *, known=None):
                     link[field+'_retained'] = {'source_ref': reference, 'artifact_ref': store.get(reference)['artifact_ref'],
                         'pointer': '/result/component_correspondence/'+field, 'count': len(symbols), 'preview': symbols[:8]}
         rows.append(row)
-    from .a110_experimental_qualification import (
-        received as experimental_received, EXPERIMENT_BINDING_VERSION)
+    from .a110_experimental_qualification import received as experimental_received
     rows.extend(experimental_received(store, references, scope))
     for row in rows:
         changed = [ref for ref, value in row['operand_signatures'].items() if ref in known and digest(store.get(ref)) != value]
@@ -274,15 +273,9 @@ def received(store, references, scope, *, known=None):
         revisions = qualification_assessment_changes(store, row, known)
         from .component_source_identity import qualification_changes
         identity_revisions = qualification_changes(store, row, known)
-        binding = row['result'].get('experiment_binding') or {}
-        legacy_experiment = (row.get('qualification_kind') == 'experimental_component_use'
-            and row['result'].get('source_function_finding') is not None
-            and binding.get('version') != EXPERIMENT_BINDING_VERSION)
-        row['current'] = not changed and not revisions and not identity_revisions and not legacy_experiment and not any(other['request_ref'] == row['request_ref'] and
+        row['current'] = not changed and not revisions and not identity_revisions and not any(other['request_ref'] == row['request_ref'] and
             set(row['qualification_dependencies']) < set(other['qualification_dependencies']) for other in rows)
         row['changed_received_operand_refs'] = changed
-        if legacy_experiment:
-            row['qualification_update_reasons'] = ['experimental_finding_experiment_binding_not_recorded']
         if revisions:
             row['source_assessment_change_refs'] = revisions
         if identity_revisions:

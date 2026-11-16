@@ -22,7 +22,6 @@ _CONTEXT = ('molecule', 'construct', 'preparation', 'condition', 'measured_entit
 _MEANINGS = ('measurement_identity', 'condition', 'measured_entity', 'interval')
 _QUALIFICATIONS = ('reported_point', 'source_qualified_approximate', 'unknown', 'conflicting')
 _INTERPRETATIONS = {'signal_kind': ('absorbance_slope', 'absorbance_difference', 'static_absorbance', 'unknown'), 'relation': ('applicable_extinction_relation', 'not_applicable', 'unknown', 'conflicting'), 'blank_role': ('matched_no_reaction_background', 'condition_reference', 'component_omission', 'unknown', 'conflicting'), 'same_endpoint': ('same', 'different', 'unknown'), 'matched_window': ('same', 'different', 'unknown'), 'rate_window': ('source_supported_rate_interval', 'interval_mean_only', 'static_only', 'unknown')}
-_LEXICAL_DEPENDENCY = {'module': 'gene_annotation_episode.literature_rate_native_inputs', 'sha256_at_release': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500', 'interface': "_number(selection,sources,role='rate'); _field_contexts", 'scope_module': 'gene_annotation_episode.literature_partner_source_fields', 'scope_sha256_at_release': '20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17', 'custody_module': 'gene_annotation_episode.literature_assay_inputs', 'custody_sha256_at_release': '52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e'}
 _WITNESS = ('source_ref', 'representation', 'start', 'end', 'quote', 'artifact_ref')
 _NUMBER = re.compile('[+−-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+−-]?[0-9]+)?\\Z')
 _REF = re.compile('(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)\\Z')
@@ -289,11 +288,10 @@ def _covariance(source, observations, scales, refs, witnesses):
 
 def validate_optical_extraction(extraction):
     """Validate saved035 relationships; return an independent, unchanged copy."""
-    _keys(extraction, ('version', 'source_ref', 'source_kind', 'context', *_INTERPRETATIONS, 'signals', 'calibration', 'covariance_source', 'calculation_inputs', 'input_unavailable_reasons', 'dependencies', 'source_refs', 'lexical_dependency'), 'extraction')
+    _keys(extraction, ('version', 'source_ref', 'source_kind', 'context', *_INTERPRETATIONS, 'signals', 'calibration', 'covariance_source', 'calculation_inputs', 'input_unavailable_reasons', 'dependencies', 'source_refs'), 'extraction')
     _enum(extraction['version'], ('a105_optical_inputs_v1',), 'version')
     _enum(extraction['source_kind'], ('primary_source', 'retained_extraction', 'synthetic_fixture'), 'source_kind')
     _text(extraction['source_ref'], 'source_ref', reference=True)
-    _same(extraction['lexical_dependency'], _LEXICAL_DEPENDENCY, 'dependency', 'lexical_dependency')
     witnesses = _Witnesses(extraction['source_ref'])
     _keys(extraction['context'], _CONTEXT, 'context')
     for name in _CONTEXT:

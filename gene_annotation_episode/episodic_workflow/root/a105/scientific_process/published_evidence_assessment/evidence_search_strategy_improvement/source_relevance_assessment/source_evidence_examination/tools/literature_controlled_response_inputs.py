@@ -72,7 +72,6 @@ selection = obj({'version': {'const': 'controlled_response_source_selection_v1'}
 selection['$defs'] = defs
 selection['$schema'] = 'https://json-schema.org/draft/2020-12/schema'
 _SELECTION_SCHEMA = selection
-DEPENDENCIES = {'literature_assay_inputs.py': '52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e', 'literature_rate_native_inputs.py': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500', 'literature_partner_source_fields.py': '20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17', 'literature_partner_defined_units.py': 'cc6733d763ba494e3c4016a9a3be98ea6b7b6076b97dc8ef1aad5f43a8f856ca', 'literature_kinetic_inputs.py': '78e0c0094bbffa8306c26a6d134eec74f291c34177a87656ec09f925c2dd1960', 'literature_binding_visual_inputs.py': '8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718', 'literature_binding_reader.py': 'e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1', 'literature_controlled_response_calculations.py': 'a75b8f8ef4905d805be24e86236ef8303c97b5e4761acf0d849ca01aadaec023'}
 _MEANINGS = ('endpoint', 'normalization', 'subject_construct', 'condition', 'physical_observation')
 _UNKNOWN = ('unknown', 'none', 'unspecified', 'unreported')
 _NUMBER_PATTERN = re.compile('[+−-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+−-]?[0-9]+)?\\Z')
@@ -982,7 +981,7 @@ def read_controlled_response_inputs(arguments, *, read_source):
             else:
                 arms[role] = _arm(context, nominated, 'arms.' + role)
         return finish_controlled_response_inputs(context, arms=arms)
-_RESULT_FIELDS = {'Diagnostic': ('code', 'field', 'domain', 'source_refs'), 'SourceRecord': ('source_ref', 'representation', 'artifact_ref', 'byte_sha256', 'state', 'diagnostics'), 'WitnessRecord': ('selection', 'artifact_ref', 'byte_sha256', 'canonical_locator', 'authentication', 'attribution', 'diagnostics'), 'TextLocator': ('kind', 'source_ref', 'artifact_ref', 'byte_sha256', 'start', 'end'), 'ImageLocator': ('kind', 'original_source_ref', 'original_artifact_ref', 'original_byte_sha256', 'region'), 'InterpretationExtraction': ('selection', 'witnesses', 'effective_value', 'diagnostics'), 'MeaningExtraction': ('selection', 'witnesses', 'canonical_witness', 'canonical_correspondence', 'resolved_state', 'canonical_id', 'diagnostics'), 'NumberCandidate': ('selection', 'witness', 'raw_expression', 'native_value', 'relation', 'approximate', 'source_locator', 'status', 'diagnostics'), 'UnitRecord': ('selection', 'witness', 'raw_unit', 'canonical_unit', 'exact_scale', 'native_registry_unit', 'definition_witnesses', 'status', 'diagnostics'), 'Rational': ('numerator', 'denominator'), 'CanonicalDisplay': ('value', 'threshold', 'unit', 'relation', 'approximate', 'diagnostics'), 'MeasurementExtraction': ('selection', 'candidates', 'fragments', 'unit', 'graph_witnesses', 'reading_status', 'source_observation_id', 'canonical_display', 'pixel_result', 'diagnostics'), 'UncertaintyExtraction': ('selection', 'meanings', 'magnitude', 'interval', 'unit', 'effective_unit', 'confidence_level', 'count', 'canonical', 'diagnostics'), 'IntervalRecord': ('selection', 'witness', 'raw_values', 'values', 'status', 'diagnostics'), 'ConfidenceRecord': ('selection', 'witness', 'value', 'status', 'diagnostics'), 'CountRecord': ('selection', 'witness', 'reading', 'diagnostics'), 'UncertaintyCanonical': ('statistic', 'magnitude', 'interval', 'confidence_level', 'count', 'repetition_basis', 'estimate_basis'), 'ArmExtraction': ('selection', 'context', 'protein_arrangement', 'meanings', 'intended_factor_level', 'measurement', 'reported_uncertainty', 'calculation_operand', 'diagnostics'), 'RelationshipExtraction': ('condition1_target', 'condition0_target', 'condition_levels_relation', 'subject_construct_across_conditions', 'condition1_control_application', 'condition0_control_application', 'control_reference_reuse', 'nonintended_conditions', 'intended_factor'), 'CovarianceBindingExtraction': ('selection', 'label_witness', 'owner_witness', 'correspondence', 'source_variable_index', 'resolved_owner_id', 'state', 'diagnostics'), 'CovarianceSourceVariable': ('index', 'label', 'label_witness', 'unit', 'unit_witness', 'description', 'description_witness', 'native_registry_unit', 'exact_scale', 'diagnostics'), 'CovarianceExtraction': ('selection', 'source_ref', 'artifact_ref', 'byte_sha256', 'raw_text', 'variables', 'matrix_tokens', 'exact_matrix', 'source_model', 'bindings', 'projection_indices', 'projected_exact_matrix', 'calculation_covariance', 'source_validation', 'projection_state', 'diagnostics'), 'RequestedModel': ('variance_status', 'model_kind'), 'EffectiveModel': ('variance_status', 'model_kind', 'diagnostics'), 'DependencyRecord': ('reader_contract_version', 'calculator_contract_version', 'expected_module_fingerprints')}
+_RESULT_FIELDS = {'Diagnostic': ('code', 'field', 'domain', 'source_refs'), 'SourceRecord': ('source_ref', 'representation', 'artifact_ref', 'byte_sha256', 'state', 'diagnostics'), 'WitnessRecord': ('selection', 'artifact_ref', 'byte_sha256', 'canonical_locator', 'authentication', 'attribution', 'diagnostics'), 'TextLocator': ('kind', 'source_ref', 'artifact_ref', 'byte_sha256', 'start', 'end'), 'ImageLocator': ('kind', 'original_source_ref', 'original_artifact_ref', 'original_byte_sha256', 'region'), 'InterpretationExtraction': ('selection', 'witnesses', 'effective_value', 'diagnostics'), 'MeaningExtraction': ('selection', 'witnesses', 'canonical_witness', 'canonical_correspondence', 'resolved_state', 'canonical_id', 'diagnostics'), 'NumberCandidate': ('selection', 'witness', 'raw_expression', 'native_value', 'relation', 'approximate', 'source_locator', 'status', 'diagnostics'), 'UnitRecord': ('selection', 'witness', 'raw_unit', 'canonical_unit', 'exact_scale', 'native_registry_unit', 'definition_witnesses', 'status', 'diagnostics'), 'Rational': ('numerator', 'denominator'), 'CanonicalDisplay': ('value', 'threshold', 'unit', 'relation', 'approximate', 'diagnostics'), 'MeasurementExtraction': ('selection', 'candidates', 'fragments', 'unit', 'graph_witnesses', 'reading_status', 'source_observation_id', 'canonical_display', 'pixel_result', 'diagnostics'), 'UncertaintyExtraction': ('selection', 'meanings', 'magnitude', 'interval', 'unit', 'effective_unit', 'confidence_level', 'count', 'canonical', 'diagnostics'), 'IntervalRecord': ('selection', 'witness', 'raw_values', 'values', 'status', 'diagnostics'), 'ConfidenceRecord': ('selection', 'witness', 'value', 'status', 'diagnostics'), 'CountRecord': ('selection', 'witness', 'reading', 'diagnostics'), 'UncertaintyCanonical': ('statistic', 'magnitude', 'interval', 'confidence_level', 'count', 'repetition_basis', 'estimate_basis'), 'ArmExtraction': ('selection', 'context', 'protein_arrangement', 'meanings', 'intended_factor_level', 'measurement', 'reported_uncertainty', 'calculation_operand', 'diagnostics'), 'RelationshipExtraction': ('condition1_target', 'condition0_target', 'condition_levels_relation', 'subject_construct_across_conditions', 'condition1_control_application', 'condition0_control_application', 'control_reference_reuse', 'nonintended_conditions', 'intended_factor'), 'CovarianceBindingExtraction': ('selection', 'label_witness', 'owner_witness', 'correspondence', 'source_variable_index', 'resolved_owner_id', 'state', 'diagnostics'), 'CovarianceSourceVariable': ('index', 'label', 'label_witness', 'unit', 'unit_witness', 'description', 'description_witness', 'native_registry_unit', 'exact_scale', 'diagnostics'), 'CovarianceExtraction': ('selection', 'source_ref', 'artifact_ref', 'byte_sha256', 'raw_text', 'variables', 'matrix_tokens', 'exact_matrix', 'source_model', 'bindings', 'projection_indices', 'projected_exact_matrix', 'calculation_covariance', 'source_validation', 'projection_state', 'diagnostics'), 'RequestedModel': ('variance_status', 'model_kind'), 'EffectiveModel': ('variance_status', 'model_kind', 'diagnostics'), 'DependencyRecord': ('reader_contract_version', 'calculator_contract_version')}
 _ROOT_FIELDS = ('version', 'selection', 'sources', 'images', 'arms', 'relationships', 'covariance', 'requested_model', 'effective_model', 'calculation_inputs', 'diagnostics', 'implementation_dependencies')
 
 def _saved_witness(record, selected, sources, field):
@@ -1127,7 +1126,7 @@ def _validate_v1_saved_science(arguments, extraction):
     _closed(extraction, _ROOT_FIELDS, 'extraction')
     if extraction['version'] != VERSION or extraction['selection'] != selected:
         _fail('saved_selection_mismatch', 'extraction')
-    expected_dependencies = {'reader_contract_version': VERSION, 'calculator_contract_version': INPUT_VERSION, 'expected_module_fingerprints': DEPENDENCIES}
+    expected_dependencies = {'reader_contract_version': VERSION, 'calculator_contract_version': INPUT_VERSION}
     if extraction['implementation_dependencies'] != expected_dependencies:
         _fail('saved_dependency_contract_mismatch', 'implementation_dependencies')
     source_map = {}
@@ -1360,7 +1359,7 @@ def _validate_v1_saved_science(arguments, extraction):
 def validate_controlled_response_extraction(arguments, extraction):
     selected = validate_controlled_response_selection(arguments)
     return validate_controlled_response_saved_science(selected, extraction, measurement_checks=None)
-__all__ = ['VERSION', 'SELECTION_VERSION', 'COVARIANCE_VERSION', 'DEPENDENCIES', 'controlled_response_arguments_schema', 'validate_controlled_response_selection', 'read_controlled_response_inputs', 'validate_controlled_response_extraction']
+__all__ = ['VERSION', 'SELECTION_VERSION', 'COVARIANCE_VERSION', 'controlled_response_arguments_schema', 'validate_controlled_response_selection', 'read_controlled_response_inputs', 'validate_controlled_response_extraction']
 
 class _StageValue(dict):
 
@@ -1711,17 +1710,15 @@ def finish_controlled_response_inputs(context, *, arms, companion_arms=None, cov
         covariance['provided_owner_projection'] = []
     effective = _effective_model(requested, covariance, arms)
     parsed = _calculation_inputs(arms, relationships, covariance, effective)
-    version, input_version, dependencies = (VERSION, INPUT_VERSION, DEPENDENCIES)
+    version, input_version = (VERSION, INPUT_VERSION)
     if context.profile == 'v2':
         from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.scoring.literature_controlled_response_owner_calculations import validate_controlled_response_owner_inputs
-        from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.tools.literature_controlled_response_v2_inputs import _dependencies
         version, input_version = ('controlled_response_source_extraction_v2', 'controlled_response_owner_inputs_v2')
         parsed['version'] = input_version
         validate_controlled_response_owner_inputs(parsed)
-        dependencies = _dependencies()
     else:
         validate_controlled_response_inputs(parsed)
-    result = {'version': version, 'selection': deepcopy(context.arguments), 'sources': deepcopy(context.roster), 'images': deepcopy(context.images), 'arms': {r: deepcopy(dict(a)) if a is not None else None for r, a in arms.items()}, 'relationships': relationships, 'covariance': covariance, 'requested_model': requested, 'effective_model': effective, 'calculation_inputs': parsed, 'diagnostics': [], 'implementation_dependencies': {'reader_contract_version': version, 'calculator_contract_version': input_version, 'expected_module_fingerprints': deepcopy(dependencies)}}
+    result = {'version': version, 'selection': deepcopy(context.arguments), 'sources': deepcopy(context.roster), 'images': deepcopy(context.images), 'arms': {r: deepcopy(dict(a)) if a is not None else None for r, a in arms.items()}, 'relationships': relationships, 'covariance': covariance, 'requested_model': requested, 'effective_model': effective, 'calculation_inputs': parsed, 'diagnostics': [], 'implementation_dependencies': {'reader_contract_version': version, 'calculator_contract_version': input_version}}
     if context.profile == 'v2':
         result['representation_reconciliations'] = _representations(arms)
     result['diagnostics'] = _unique_diagnostics(result, stable=context.profile == 'v2')
@@ -1898,8 +1895,8 @@ def _validate_v2_saved_science(arguments, extraction, *, measurement_checks):
         raise ExperimentalContractError('saved_extraction_schema_invalid', 'extraction') from error
     if extraction['selection'] != selected:
         _fail('saved_selection_mismatch', 'extraction')
-    dependencies = {'reader_contract_version': 'controlled_response_source_extraction_v2', 'calculator_contract_version': 'controlled_response_owner_inputs_v2', 'expected_module_fingerprints': facade._dependencies()}
-    if extraction['implementation_dependencies'] != dependencies and (not any((extraction['implementation_dependencies'] == {**dependencies, 'expected_module_fingerprints': release['modules']} for release in facade._RETAINED_SAVED_DEPENDENCY_RELEASES))):
+    dependencies = {'reader_contract_version': 'controlled_response_source_extraction_v2', 'calculator_contract_version': 'controlled_response_owner_inputs_v2'}
+    if extraction['implementation_dependencies'] != dependencies:
         _fail('saved_dependency_contract_mismatch', 'implementation_dependencies')
     sources = facade._saved_roster(selected, extraction)
 
@@ -2310,7 +2307,6 @@ class _SavedV3SourceContext(_SavedSourceContext):
 
     def __init__(self, arguments, extraction):
         super().__init__(arguments, extraction)
-        self._saved_implementation_dependencies = deepcopy(extraction['implementation_dependencies'])
         _initialize_v3_registries(self)
         self.documents = {}
         rows = extraction['covariance_document_scopes']
@@ -2373,8 +2369,8 @@ def _validate_v3_saved_science(arguments, extraction, *, measurement_checks):
         raise ExperimentalContractError('saved_extraction_schema_invalid', 'extraction') from error
     if extraction['selection'] != selected:
         _fail('saved_selection_mismatch', 'extraction')
-    expected_dependencies = {'reader_contract_version': 'controlled_response_source_extraction_v3', 'calculator_contract_version': 'controlled_response_owner_inputs_v2', 'expected_module_fingerprints': facade._dependencies()}
-    if extraction['implementation_dependencies'] != expected_dependencies and (not any((extraction['implementation_dependencies'] == {**expected_dependencies, 'expected_module_fingerprints': release['modules']} for release in facade._RETAINED_SAVED_DEPENDENCY_RELEASES))):
+    expected_dependencies = {'reader_contract_version': 'controlled_response_source_extraction_v3', 'calculator_contract_version': 'controlled_response_owner_inputs_v2'}
+    if extraction['implementation_dependencies'] != expected_dependencies:
         _fail('saved_dependency_contract_mismatch', 'implementation_dependencies')
     sources = old_facade._saved_roster(selected, extraction)
 

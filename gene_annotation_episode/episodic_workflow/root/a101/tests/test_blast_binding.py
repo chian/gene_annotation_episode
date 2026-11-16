@@ -9,18 +9,10 @@ import zipfile
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.acquisition import AcquisitionError, PublicClients, SourceSnapshot
-from gene_annotation_episode.credit import AnnotationScoringUnavailable, project_credit
 from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a101.tool_grading_artifacts import source_tool_gradings
-
-
-def assert_retired_annotation_scorer(store, scope=None):
-    # Tool measurements are verified independently below. The removed
-    # category-to-number scorer is neither a zero score nor a tool grader.
-    with pytest.raises(AnnotationScoringUnavailable, match='categorical_annotation_scoring_retired'):
-        project_credit(store, scope)
 
 
 def stored_database_grading(store, source_ref):
@@ -165,7 +157,6 @@ def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_pat
         assert component['fractions']['reference_paired_coverage'] == (reference_interval[1] - reference_interval[0]) / 18
         assert grading['probabilities']['unadjusted_probabilities'] is None
         assert not store.current_annotations()
-        assert_retired_annotation_scorer(store)
         assert tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')==response
         assert [c[0] for c in client.calls]==['submit','status','fetch']
 
@@ -235,18 +226,6 @@ def test_explicit_empty_hits_and_absent_hits_stay_distinct(tmp_path,missing):
         assert grading['sheet']['search_limits']['hit_array_present'] is (not missing)
         assert grading['sheet']['search_limits']['reported_hit_count'] == (None if missing else 0)
         assert grading['probabilities']['unadjusted_probabilities'] is None
-        assert_retired_annotation_scorer(store)
-
-
-def test_missing_contact_is_durable_known_not_sent_and_old_rid_paths_removed(tmp_path):
-    client=PublicClients(access_dir=tmp_path/'access');client.ncbi_email=None
-    store,tools,target,(a,b)=setup(tmp_path,client)
-    with store:
-        failed=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastn','database':'core_nt'},operation_key='no-contact')
-        assert failed['status']=='unavailable' and failed['feedback']['submission_state']=='not_submitted'
-        assert failed['feedback']['cause']['submission_outcome']=='not_sent'
-        assert not failed['feedback']['collectable']
-        assert all(name not in tools.catalog() for name in ['public.blast.submit','public.blast.fetch','public.blast.status'])
 
 
 @pytest.mark.parametrize("redirect", [False, True])
@@ -414,10 +393,8 @@ def test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_pare
         assert returned['matches'][0]['hsp_ref'] == observation
         assert returned['matches'][0]['query_coverage'] == 6/12
         assert returned['matches'][0]['target_coverage'] == 2/18
-        assert_retired_annotation_scorer(store, selected)
         other=tools.execute('library.select',{'library_ref':target['id'],'member_refs':[b['member_ref']]})['result']['scope']
         assert store.reference_subset([observation, assessment['id'], account['id']], other) == []
-        assert_retired_annotation_scorer(store, other)
 
 
 @pytest.mark.parametrize('configured',[False,True])
@@ -483,24 +460,8 @@ def test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback(tmp
         diagnostic=json.loads(store.get_artifact(result['feedback']['diagnostic_ref']))
         assert store.get_artifact(diagnostic['content_ref'])==body
         assert store.count('observation')==0
-        assert_retired_annotation_scorer(store)
 
 
-def test_legacy_search_protocol_wait_has_one_receipt_and_root_cannot_search(tmp_path):
-    client=Client();client.pending=2
-    store,tools,target,(a,b)=setup(tmp_path,client)
-    with store:
-        arguments = {'subject_ref': a['id'], 'program': 'blastn', 'database': 'nt'}
-        asyncio.run(assert_root_execution_rejected(store, tools, tmp_path/'run',
-            'public.blast.search', arguments))
-        assert client.calls == []
-        result = tools.execute('public.blast.search', arguments, operation_key='legacy-protocol-wait')
-        assert result['status'] == 'completed'
-        assert [c[0] for c in client.calls]==['submit','status','status','status','fetch']
-        assert store.db.execute("SELECT count(*) FROM tool_operations WHERE operation_key='legacy-protocol-wait'").fetchone()[0] == 1
-        assert tools.execute('public.blast.search', arguments, operation_key='legacy-protocol-wait') == result
-        assert [c[0] for c in client.calls]==['submit','status','status','status','fetch']
-        assert store.count('observation')==1 and not store.current_annotations()
         # A current API child selects each status request itself. Its actual
         # own-action/parent-return accounting is verified separately.
 
@@ -559,7 +520,6 @@ def test_inferred_transfer_keeps_source_geometry_separate_from_retired_credit(tm
         assert fact['hsp_ref'] == observation and fact['reference_ref'] == reference
         assert fact['query_coverage'] == 6/12 and fact['target_coverage'] == 2/18
         assert 'episode.credit' not in tools.catalog()
-        assert_retired_annotation_scorer(store, scope)
 
 
 @pytest.mark.parametrize('program',['blastx','tblastn','tblastx'])

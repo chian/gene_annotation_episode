@@ -1,4 +1,4 @@
-"""Original A110 scientific_process/hpc_work_planning/hpc_allocation_execution request to execution_result_acquisition."""
+"""A110 scientific_process/hpc_work_planning/hpc_allocation_execution request to execution_result_acquisition."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a110.runtime import ContractInformationError, Episode, EpisodeGoal, EpisodeRequest, Record, _plain, validate_saved_fact_form
 

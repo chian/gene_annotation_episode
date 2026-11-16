@@ -20,19 +20,6 @@ def environment():
         XDG_CACHE_HOME='/declared/cache', PIP_CACHE_DIR='/declared/cache/pip')
 
 
-def original_environment():
-    # Independent source audit pins this exact original function body. The
-    # selected helpers are original AST-identical definitions, not mocks.
-    raw = Path(__file__).with_name('fixtures').joinpath('a107_original_native_environment.py').read_bytes()
-    namespace = dict(atac.__dict__)
-    exec(compile(raw, 'authenticated_original_native_environment', 'exec'), namespace)
-    return namespace['_environment']
-
-
-
-
-
-
 @pytest.mark.parametrize('owner', [lumpy_request_binding, macs2_peak_request_binding])
 def test_actual_compact_request_caller_uses_selected_owner_and_empty_bindings(owner):
     schema = owner.scientific_request_schema()

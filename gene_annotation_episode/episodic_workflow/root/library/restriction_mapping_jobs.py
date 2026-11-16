@@ -90,14 +90,10 @@ def _software_location(software):
         and type(row.get("path")) is str
         and Path(row["path"]).name == "restriction_mapping_worker.py"]
         if type(rows) is list else [])
-    if len(workers) != 1:
-        # The original command builder did not validate software. Retain its
-        # legacy command until the original software/sibling validator runs.
-        return "gene_annotation_episode.restriction_mapping_worker", None
+    _require(len(workers) == 1, "software_conflict")
     package = Path(workers[0]["path"]).parent
-    if package.parts[-4:] == ("gene_annotation_episode", "episodic_workflow", "root", "library"):
-        return "gene_annotation_episode.episodic_workflow.root.library.restriction_mapping_worker", package.parents[3]
-    return "gene_annotation_episode.restriction_mapping_worker", package.parent
+    _require(package.parts[-4:] == ("gene_annotation_episode", "episodic_workflow", "root", "library"), "software_conflict")
+    return "gene_annotation_episode.episodic_workflow.root.library.restriction_mapping_worker", package.parents[3]
 
 
 def _command(reservation):

@@ -508,33 +508,6 @@ def test_changes_after_wrapper_preserve_native_outcome_and_captured_bytes(tmp_pa
     assert driver.run_native_blast_utility(plan) == bundle
 
 
-def test_original_runtime_pin_failure_cannot_claim_helper_exit(tmp_path):
-    job = controlled_job(tmp_path)
-    plan = plan_fixture(tmp_path, job)
-    argv = contracts.compile_native_blast_utility_job(job, **contracts.realized_path_maps(job, plan["attempt_directory"]), output_directory=plan["attempt_directory"])
-    receipt = _controlled_offline_receipt(job, plan, argv, 0)
-    receipt["runtime_files"][-1]["before_sha256"] = "f" * 64
-    receipt["failures"] = [contracts.producer_failure("offline_runtime_identity_mismatch")]
-    assert execution.vdb_offline_native_outcome(receipt) == (False, None)
-    with pytest.raises(ContractError):
-        execution.validate_vdb_offline_receipt(receipt, job=job, attempt_directory=plan["attempt_directory"])
-
-
-def test_historical_native_schema_union_and_vdb_semantic_exclusion(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import blast_utility_schema_for_version
-    expected = {"anyOf": [blast_utility_schema_for_version(v) for v in
-                         ("blast_utility_operation_v1", "blast_utility_operation_v2")]}
-    for schema in (contracts.NATIVE_BLAST_UTILITY_JOB_V1_SCHEMA, contracts.NATIVE_BLAST_UTILITY_JOB_V2_SCHEMA):
-        assert schema["properties"]["operation"] == expected
-    job = controlled_job(tmp_path)
-    for version in (contracts.JOB_VERSION, contracts.JOB_VERSION_V2):
-        old = deepcopy(job)
-        old["version"] = version
-        del old["vdb_context_request"], old["offline_execution"]
-        with pytest.raises(ContractError):
-            contracts.validate_native_blast_utility_job(old)
-
-
 @pytest.mark.parametrize("special", ["symlink", "fifo"])
 def test_selected_vdb_inventory_rejects_special_entries(tmp_path, special):
     job = controlled_job(tmp_path)

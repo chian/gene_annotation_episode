@@ -5,7 +5,7 @@ from jsonschema import Draft202012Validator, SchemaError, ValidationError
 import pytest
 
 from gene_annotation_episode import tool_schema_validation as validation
-from gene_annotation_episode.resource_tool_information import _contract
+from gene_annotation_episode.episodic_workflow.root.resource_tool_information import _contract
 from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import _catalog, _profiles
 
 

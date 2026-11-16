@@ -48,7 +48,7 @@ def _basis_map_schema(roles):
     basis = {'type': 'object', 'properties': {name: {'type': 'string', 'enum': list(INTERPRETATION_BASES)} for name in INTERPRETATION_BASIS_FIELDS}, 'required': list(INTERPRETATION_BASIS_FIELDS), 'additionalProperties': False}
     return {'type': 'object', 'properties': {role: deepcopy(basis) for role in roles}, 'required': [], 'minProperties': 1, 'additionalProperties': False}
 
-def perturbation_summary_cells_schema(*, include_interpretation_basis=True, include_covariance_interpretations=True):
+def perturbation_summary_cells_schema():
     """Original point meanings plus numerical summary and covariance cells."""
     schema = deepcopy(perturbation_cells_schema())
     properties = schema['items']['properties']
@@ -62,15 +62,11 @@ def perturbation_summary_cells_schema(*, include_interpretation_basis=True, incl
     properties.update({'statistic_method': {'type': 'string', 'enum': list(METHODS)}, 'variance_status': {'type': 'string', 'enum': list(VARIANCE_STATUSES)}, 'variance_scope': {'type': 'string', 'enum': list(VARIANCE_SCOPES)}, 'lower': {'type': ['number', 'null']}, 'upper': {'type': ['number', 'null']}, 'bound_kind': {'type': 'string', 'enum': list(BOUND_KINDS)}, 'lower_error_cap': {'type': ['number', 'null']}, 'upper_error_cap': {'type': ['number', 'null']}, 'error_cap_scale': {'type': 'string', 'enum': list(SCALES)}, 'spread_reading': {'type': 'string', 'enum': ['not_applicable', 'unresolved', 'symmetric_compatible', 'asymmetric_readings', 'reported_interval']}, 'measurement_role': {'type': ['string', 'null'], 'enum': [None, *ROLES]}, 'summary_kind': {'type': 'string', 'enum': list(SUMMARY_KINDS)}, 'value_scale': {'type': 'string', 'enum': list(SCALES)}, 'summary_scale': {'type': 'string', 'enum': list(SCALES)}, 'spread_kind': {'type': 'string', 'enum': list(SPREAD_KINDS)}, 'spread_scale': {'type': 'string', 'enum': list(SCALES)}, 'count_unit': {'type': 'string', 'enum': list(UNIT_KINDS)}, 'independence': {'type': 'string', 'enum': ['independent', 'not_independent', 'unknown']}, 'n': {'type': ['integer', 'null'], 'minimum': 1}, 'reported_coverage': {'type': ['number', 'null'], 'exclusiveMinimum': 0, 'exclusiveMaximum': 1}})
     schema['items']['required'] = list(properties)
     schema['x-source'] = NAMESPACE
-    if not include_interpretation_basis:
-        return schema
     properties['statistical_interpretation_basis'] = _basis_map_schema(ROLES)
     groups = {}
     for component in COMPONENTS:
         groups.setdefault(_contributing_roles(component), []).append(component)
     schema['items']['allOf'] = [{'if': {'properties': {'component': {'enum': names}}}, 'then': {'properties': {'statistical_interpretation_basis': _basis_map_schema(roles)}}} for roles, names in groups.items()]
-    if not include_covariance_interpretations:
-        return schema
     properties['covariance_interpretations'] = _covariance_schema()
     for pairs in ((), (('W', 'K'),), (('K', 'R'),), (('W', 'K'), ('W', 'R'), ('K', 'R'))):
         names = [name for name in COMPONENTS if _covariance_pairs(name) == pairs]

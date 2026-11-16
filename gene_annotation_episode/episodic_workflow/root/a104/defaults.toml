@@ -4,7 +4,7 @@
 # Scratch is an aggregate monitored limit (possible overshoot), with a hard
 # per-file limit. Time is intentionally unset pending the user's yield/credit
 # design. These are not scientific stopping rules or score thresholds.
-memory_bytes = 21474836480
+memory_bytes = 5368709120
 scratch_bytes = 4294967296
 
 
@@ -12,7 +12,7 @@ scratch_bytes = 4294967296
 # Shared host/account budget for this application's local native jobs.
 # Each job reserves byte capacity before dispatch, across registries and runs.
 # Effective memory is capped by the fixed whole-workflow environment.
-memory_bytes = 21474836480
+memory_bytes = 5368709120
 scratch_bytes = 4294967296
 
 

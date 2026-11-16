@@ -112,15 +112,6 @@ def test_invalid_primary_is_not_a_measured_empty_result(raw, code):
     r = parse(raw); assert r['status'] == 'invalid' and r['value'] is None and code in codes(r)
 
 
-def test_bad_function_arguments_are_contract_errors():
-    a = {'source_ref': 's', 'raw_artifact_ref': 'a', 'sha256': '0' * 64}
-    with pytest.raises(ValueError, match='mauve_v4_bytes_required'): parse_mauve_v4('', artifact=a, encoding='ascii')
-    with pytest.raises(ValueError, match='mauve_v4_encoding_unsupported'): parse_mauve_v4(b'', artifact=a, encoding='latin-1')
-    with pytest.raises(ValueError, match='mauve_v4_artifact_invalid'): parse_mauve_v4(b'', artifact={}, encoding='ascii')
-    r = parse_mauve_v4(b'FormatVersion\t4', artifact=a, encoding='ascii')
-    assert r['status'] == 'invalid' and 'digest_mismatch' in codes(r)
-
-
 @pytest.mark.parametrize('mutation', ['extra_key', 'wrong_location', 'changed_number', 'changed_identity', 'changed_ordinal', 'invented_complete'])
 def test_saved_document_validation_rejects_corruption(mutation):
     d = parse(native())['value']

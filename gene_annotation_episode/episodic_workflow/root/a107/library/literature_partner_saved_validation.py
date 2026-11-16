@@ -20,9 +20,8 @@ def _validate_saved(self, sheet_ref, saved):
     operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
     require(operation is not None and operation['signature'] == canonical({'arguments': args, 'scope': request['scope']}))
     marked = 'native_operand_bindings' in saved
-    typed_literal_roles = 'literal_reference_roles_version' in saved
-    require(not typed_literal_roles or saved['literal_reference_roles_version'] == LITERAL_REFERENCE_ROLES_VERSION)
-    require(set(saved) == {'version', 'input_source_ref', 'input_artifact_ref', 'input_source_refs', 'direct_input_source_refs', 'data_source_ref', 'extraction', 'experimental_bindings', 'factor_bindings', 'sheet'} | ({'native_operand_bindings'} if marked else set()) | ({'literal_reference_roles_version'} if typed_literal_roles else set()) | ({'experiment_assessment'} if assessment is not None else set()))
+    require(saved.get('literal_reference_roles_version') == LITERAL_REFERENCE_ROLES_VERSION)
+    require(set(saved) == {'version', 'input_source_ref', 'input_artifact_ref', 'input_source_refs', 'direct_input_source_refs', 'data_source_ref', 'extraction', 'experimental_bindings', 'factor_bindings', 'sheet'} | ({'native_operand_bindings'} if marked else set()) | {'literal_reference_roles_version'} | ({'experiment_assessment'} if assessment is not None else set()))
     require(source['version'] == self.record_version and source['text_ref'] == source['artifact_ref'])
     native = args.get('input_mode') == 'native_source_spans'
     require(extraction['version'] == (_native_version(args) if native else 'literature_partner_inputs_extraction_v1') and extraction['arguments'] == args)
@@ -58,7 +57,7 @@ def _validate_saved(self, sheet_ref, saved):
     native_common, interpretation = ({}, extraction['literals'])
     if marked:
         require(native)
-        projection, native_records, native_common, interpretation = _native_operand_projection(extraction, legacy_reference_types=not typed_literal_roles)
+        projection, native_records, native_common, interpretation = _native_operand_projection(extraction)
         require(saved['native_operand_bindings'] == projection)
         for reference, (kind, record) in native_records.items():
             require(self.store.get(reference) == {'id': reference, 'record_type': kind, 'origin': 'tool', **record})
@@ -74,11 +73,11 @@ def _validate_saved(self, sheet_ref, saved):
         if entry is None:
             require(reference is None)
         else:
-            record = _binding_record(literal, kind, entry, legacy_reference_types=not typed_literal_roles)
+            record = _binding_record(literal, kind, entry)
             require(reference == identity(kind, {'origin': 'tool', 'record': record}))
             require(self.store.get(reference) == {'id': reference, 'record_type': kind, 'origin': 'tool', **record})
             if kind == 'context':
-                role = _condition_role(literal, entry, legacy_reference_types=not typed_literal_roles)
+                role = _condition_role(literal, entry)
                 role_ref = record['related_refs'][0]
                 require(self.store.get(role_ref) == {'id': role_ref, 'record_type': 'reference', 'origin': 'tool', **role})
     factors = saved['factor_bindings']
@@ -94,7 +93,7 @@ def _validate_saved(self, sheet_ref, saved):
     require(outcome['status'] == 'completed' and outcome['feedback'] is None)
     require(isinstance(outcome['changed_record_refs'], list) and len(set(outcome['changed_record_refs'])) == len(outcome['changed_record_refs']) and (set(outcome['changed_record_refs']) <= set(outcome['record_refs'])))
     require(outcome['operation_ref'] == identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']}))
-    require(outcome['record_refs'] == list(dict.fromkeys([sheet_ref, *saved['input_source_refs'], *(saved['experimental_bindings'][field] for field in BINDINGS if saved['experimental_bindings'][field]), *(native_records if native_records is not None else _condition_refs(extraction, legacy_reference_types=not typed_literal_roles)), *(factors[name] for name in sorted(factors))])))
+    require(outcome['record_refs'] == list(dict.fromkeys([sheet_ref, *saved['input_source_refs'], *(saved['experimental_bindings'][field] for field in BINDINGS if saved['experimental_bindings'][field]), *(native_records if native_records is not None else _condition_refs(extraction)), *(factors[name] for name in sorted(factors))])))
     require(outcome['result'] == {'sheet_ref': sheet_ref, 'cells': extraction['cells'], 'assay_interpretation': interpretation, **_metadata(extraction, factors), **({'experiment_assessment': assessment} if assessment is not None else {})})
 
 def _validate_native_saved(self, args, evidence, inputs, *, version=None):

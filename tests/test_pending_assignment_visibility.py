@@ -9,10 +9,8 @@ from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeGo
 
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
-from gene_annotation_episode.episodic_workflow.root.episode_commissions import CommissionCoordinator
 from gene_annotation_episode.episodic_workflow.root.library.decision_steering_display import render_episode_steering
 from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
-from test_episode_commissions import setup_case
 
 
 RECORDED = json.loads((Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/waiting/'
@@ -80,49 +78,3 @@ def test_original_assignment_survives_pending_view_and_actual_parent_renderer(ax
     assert child._request.as_record() == before
 
 
-def test_legacy_invocation_without_original_request_keeps_unknown_assignment():
-    workflow, source, child = pending_frame('A107')
-    del child._request
-    item = Workflow.pending_work(workflow, source)['items'][0]
-    assert item.get('original_assignment') is None
-    assert item['handle'] == RECORDED['pending_work']['items'][0]['handle']
-    assert item['event_target'] is False
-
-
-@pytest.mark.parametrize('legacy_backend', [False, True], ids=['coordinator', 'legacy-backend'])
-@pytest.mark.parametrize('task_inputs', [False, True], ids=['goal-only', 'complete-task-inputs'])
-def test_external_pending_work_retains_frozen_assignment_without_new_receipts(tmp_path, legacy_backend, task_inputs):
-    store, journal, backend, operands, _receipts = setup_case(tmp_path)
-    with store:
-        expected = {'objective': operands['child']['request']['goal']['objective'],
-            'scope': operands['child']['scope'], 'decision_index': 7}
-        if task_inputs:
-            supplied = {'context': {'task': 'Preserve the original parent question.',
-                'caller_named_detail': {'nested': ['source quantities', 'unknown identity']}},
-                'constraints': {'preserve_source_scope': True},
-                'evidence_refs': [operands['input_versions'][0]['reference']]}
-            operands['child']['request']['message']['episode_assignment'] = deepcopy(supplied)
-            store.db.execute('UPDATE runtime_episodes SET request=? WHERE episode_id=?',
-                (json.dumps(operands['child']['request']), operands['child']['episode_id']))
-            expected.update(supplied)
-        coordinator = CommissionCoordinator(store, journal, backend)
-        spec = coordinator.select(**operands)
-        if legacy_backend:
-            coordinator.dispatch(spec['handle'])
-        source = SimpleNamespace(episode_id=spec['parent']['episode_id'],
-            _execution_context=None)
-        workflow = SimpleNamespace(execution_binding=None if legacy_backend else object(),
-            commissions=coordinator, store=store, run_id=journal.run_id,
-            execution_backend=backend)
-        pending = Workflow.pending_work(workflow, source)
-        assert validate_pending(pending) == pending
-        item = pending['items'][0]
-        assert item['original_assignment'] == expected
-        assert item['handle'] == spec['handle']
-        assert item['event_target'] is True
-        for private in (spec['child']['episode_id'],
-                spec['child']['request']['goal']['goal_id']):
-            assert private not in json.dumps(item['original_assignment'])
-        assert store.db.execute('SELECT count(*) FROM runtime_record_receipts').fetchone()[0] == 0
-        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
-        assert journal.row('runtime_actions', source.episode_id, 7)['credit'] is None

@@ -137,18 +137,3 @@ def test_published_predictions_enter_saved_a106_inputs_without_manufacturing_a_s
         assert saved["sheet"]["cells"]["source_log_evidence_ratio"]["value"] is None
 
 
-def test_saved_a106_binding_detects_table_reader_implementation_changes(monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-
-    binding = LiteratureEpisodes(None, rate_population=True, a106_intervention=True)
-    before = binding.as_record()
-    original_read = Path.read_bytes
-
-    def changed_read(path):
-        body = original_read(path)
-        return body + b"\n# changed table association implementation\n" if path.name == "literature_intervention_table.py" else body
-
-    monkeypatch.setattr(Path, "read_bytes", changed_read)
-    after = binding.as_record()
-    assert before["configuration"] == after["configuration"]
-    assert before["implementation_sha256"] != after["implementation_sha256"]

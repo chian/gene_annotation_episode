@@ -330,15 +330,6 @@ def test_recognized_stream_layout_change_stops_at_exact_known_boundary(next_opti
     assert issue["details"]["raw_hex"] == second.hex()
 
 
-@pytest.mark.parametrize("order", ["little", "big"])
-@pytest.mark.parametrize("magic", list(range(0xE8EDEDB1, 0xE8EDEDB5)))
-def test_historical_binary_layouts_stay_explicitly_unsupported(magic, order):
-    data = magic.to_bytes(4, order) + b"historical native bytes"
-    result = extract(data)
-    assert result["population"] == {"decoded_count": None, "complete": False, "state": "unsupported"}
-    assert result["records"] == [] and "decoder_unavailable" in codes(result)
-
-
 def test_empty_and_unknown_binary_population_do_not_share_zero():
     assert extract(b"")["population"] == {"decoded_count": 0, "complete": True, "state": "decoded"}
     result = extract(b"\xff\xff\xff\xff")

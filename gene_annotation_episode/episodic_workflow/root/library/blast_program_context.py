@@ -1,7 +1,6 @@
 """BLAST executable identity and alignment geometry are separate facts.
 
-This is not an execution or API allowlist. The source-qualified aliases are
-documented in verification/tool_graders_blast_collection_2026-10-26_293/.
+This is not an execution or API allowlist.
 NCBI's BlastNumber2Program, GetBlastProgramName and TBLASTN/PSI option
 constructors establish the reported tokens; no version-number allowlist is used.
 """

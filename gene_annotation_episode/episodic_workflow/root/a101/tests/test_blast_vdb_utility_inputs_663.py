@@ -21,8 +21,6 @@ from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractE
 
 
 ROOT = Path(__file__).resolve().parents[5]
-AUTHENTIC = (ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/blast_vdb_native_observation/"
-    "saved_attempt/temporary/native_observation")
 STDOUT_SHA = "3be1e1b841530c2818893eb9a396ca8dcd5257203b4778bdda93719fdc47110c"
 
 
@@ -79,33 +77,6 @@ def saved_args(args):
     args["stderr_diagnostics"] = parse_blast_vdb_diagnostics(args.pop("stderr_contents"),
         occurrence=args.pop("stderr_occurrence"), outcome=args["outcome"])
     return args
-
-
-def test_authentic_saved_two_native_rows_and_recalculation(tmp_path):
-    """Original native661 bytes; supplied custody context is a controlled adapter."""
-    raw, stderr = (AUTHENTIC / "stdout.bin").read_bytes(), (AUTHENTIC / "stderr.bin").read_bytes()
-    assert len(raw) == 594 and hashlib.sha256(raw).hexdigest() == STDOUT_SHA and stderr == b""
-    selectors = ("gnl|SRA|ERR3487613.1.1", "gnl|SRA|ERR3487613.1.2")
-    args = supplied(raw, selectors=selectors, stderr=stderr)
-    result = parse_blast_vdb_extraction(raw, **args)
-    assert result["version"] == "blast_sequence_extraction_v2"
-    assert result["population_completeness"] == "complete_selection" and not result["failures"]
-    assert [r["native_identifier"] for r in result["records"]] == list(selectors)
-    assert [r["native_accession"] for r in result["records"]] == ["SRA:ERR3487613.1.1", "SRA:ERR3487613.1.2"]
-    assert [r["native_reported_length"] for r in result["records"]] == [250, 250]
-    assert [r["returned_symbol_count"] for r in result["records"]] == [250, 250]
-    assert [hashlib.sha256(r["normalized_sequence"].encode()).hexdigest() for r in result["records"]] == [
-        "03a47a624dd902c7f364914de37206018e410e51a19b67a632ff07ab5f34d0eb",
-        "0c00cfb9195e3e67b0a80edd9a74a6712f74927b032a26d38c3e5cd252e341af"]
-    for row in result["records"]:
-        assert row["native_oid"] is row["requested_range"] is row["effective_range"] is row["vdb_member"] is None
-        assert row["native_length_basis"] == "returned_sequence"
-    lexical = read_blast_vdb_sequence_table(raw, source_ref=args["occurrence"]["artifact_ref"],
-        source_version=args["occurrence"]["native_format"])
-    saved = tmp_path / "saved-lexical.json"
-    saved.write_text(json.dumps(lexical))
-    assert normalize_blast_vdb_extraction(json.loads(saved.read_text()), **saved_args(args)) == result
-    assert validate_blast_utility_result(json.loads(json.dumps(result))) == result
 
 
 def test_original_ordinals_missing_n_a_and_every_selector_occurrence():

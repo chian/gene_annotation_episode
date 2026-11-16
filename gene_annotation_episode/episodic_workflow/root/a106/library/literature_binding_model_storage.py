@@ -31,10 +31,9 @@ def binding_model_population_schema():
 def _model_metadata(sheet):
     model = sheet["model"]
     return {
-        # Preserve the exact old projection. A missing selected input in v2
-        # establishes no claim about absence from the underlying publication.
-        "model_kind": ("known_normal_log_parameters" if model is not None else
-                       "unreported" if sheet["version"] == "binding_model_sheet_v1" else "not_supplied"),
+        # A missing selected input establishes no claim about absence from
+        # the underlying publication.
+        "model_kind": "known_normal_log_parameters" if model is not None else "not_supplied",
         "variance_status": model["variance_status"] if model is not None else "not_supplied",
         "censoring_model": model["censoring_model"] if model is not None else "not_supplied",
         "model_origin": model["origin"] if model is not None else "not_supplied",
@@ -45,7 +44,7 @@ class LiteratureBindingModelRepository(LiteratureBindingRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = "literature_binding_model_record_v2"
-    readable_record_versions = ("literature_binding_model_record_v1", record_version)
+    readable_record_versions = (record_version,)
     operations_table = "literature_binding_model_operations"
     received_table = "literature_binding_model_received"
 
@@ -231,7 +230,7 @@ def binding_model_cells_schema():
         "parameter_kind": {"type": "string", "enum": list(PARAMETER_KINDS)},
         "contrast_meaning": {"type": "string", "enum": ["test_parameter_exceeds_reference"]},
         "evaluated_scope": {"type": "string", "enum": ["interpreted_source_parameter_contrast"]},
-        "model_kind": {"type": "string", "enum": ["unreported", "not_supplied", "known_normal_log_parameters"]},
+        "model_kind": {"type": "string", "enum": ["not_supplied", "known_normal_log_parameters"]},
         "variance_status": {"type": "string", "enum": ["not_supplied", "known", "estimated", "unknown"]},
         "censoring_model": {"type": "string", "enum": ["not_supplied", "none", "threshold_of_log_estimate", "unknown"]},
         "model_origin": {"type": "string", "enum": ["not_supplied", "reported", "derived", "synthetic"]},

@@ -1653,7 +1653,6 @@ _COMPONENTS = {'gc_acgt_fraction': {'metric': 'gc_acgt_fraction',
                              'source_contract': '193 CONTRACT_001 section6 plus195 additive '
                                                 'source/assumption corrections'}}
 
-# Explicit additive003 interpretation/basis corrections; no arithmetic changes.
 _METRICS['phred_histogram_count'].update({'encoding_basis_by_format': {'sam_1_6': {'basis': 'native_sam_phred',
                                           'encoding': 'phred33'},
                               'bam_1': {'basis': 'native_bam_phred',

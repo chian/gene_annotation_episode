@@ -1,7 +1,6 @@
 """Pure selected native-database contracts; no discovery, I/O or scoring.
 
-The schemas describe custody and invocation, not numerical result sheets. The
-accepted contract is workload 310 (001 plus 002), implemented by workload 313.
+The schemas describe custody and invocation, not numerical result sheets.
 All public validators return independent finite JSON values and raise ValueError
 with a stable native_blast_database_* code. A valid record proves no deployment.
 """

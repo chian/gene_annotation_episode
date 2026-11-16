@@ -135,7 +135,8 @@ class AppServiceCustody(EpisodeReturnRecords):
                 exchanges = []
                 if selected is None and self._table('runtime_decision_exchanges'):
                     exchanges = [{'request': self._json(row['request']), 'response': self._json(row['response']), 'response_recorded': True} for row in self.db.execute('SELECT request,response FROM runtime_decision_exchanges WHERE run_id=? AND episode_id=? AND decision_index=? AND response IS NOT NULL ORDER BY exchange_index', (self.run_id, parent.episode_id, index))]
-                model = _decode_recorded_action_response(response, sent['schema'], recorded_selection=selected, exchanges=exchanges, exchange_schema=sent.get('contract_information', {}).get('exchange_schema'), unproven_replay=not _recorded_assignment_transport(sent)).get('selection')
+                _recorded_assignment_transport(sent)
+                model = _decode_recorded_action_response(response, sent['schema'], recorded_selection=selected, exchanges=exchanges, exchange_schema=sent.get('contract_information', {}).get('exchange_schema')).get('selection')
                 Draft202012Validator(sent['schema']['properties']['selection']).validate(model)
             except (ValidationError, ValueError, TypeError, KeyError, AttributeError) as error:
                 raise AppServiceCustodyError('parent_selection_conflict' if str(error) == 'original_action_response_selection_mismatch' else 'parent_selection_invalid') from error

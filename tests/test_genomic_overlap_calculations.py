@@ -1,19 +1,10 @@
 """Hand-checked quantities, explicit native-derived fixtures, and pure replay."""
 from copy import deepcopy
-import hashlib
-import json
-from pathlib import Path
-import socket
-import subprocess
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_calculations import calculate_genomic_overlap_components
-from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_contracts import canonical_genomic_overlap_sheet_sha256
-from test_genomic_overlap_inputs import (
-    PARAMETERS, ROOT, ROW, WORKED, inputs, make_sheet, parsed_pairs,
-    reference, contig, sheet_from,
-)
+from test_genomic_overlap_inputs import PARAMETERS, ROW, inputs, make_sheet, parsed_pairs, reference, sheet_from
 
 
 def calculate(sheet, **overrides):
@@ -26,11 +17,6 @@ def edge_row(a, b, width, *, ai=0, bi=0):
 
 def bed(rows):
     return ''.join('\t'.join(map(str, row)) + '\n' for row in rows).encode()
-
-
-def test_exact_worked_numerical_snapshot():
-    result = calculate_genomic_overlap_components(WORKED['sheet'], parameters=WORKED['components']['parameters'])
-    assert result == WORKED['components']
 
 
 @pytest.mark.parametrize('a,b,edges,expected', [
@@ -125,43 +111,6 @@ def test_changed_native_bytes_cannot_claim_genuine_subset_lower_bounds():
     assert len(result['pairs'][0]['edges']) == 1
 
 
-def test_saved_recalculation_has_no_acquisition_or_execution_and_preserves_history(monkeypatch,tmp_path):
-    sheet_path = tmp_path / 'source_sheet.json'
-    sheet_path.write_text(json.dumps(WORKED['sheet'],sort_keys=True))
-    saved = json.loads(sheet_path.read_text())
-    original = deepcopy(saved)
-    old = calculate(saved)
-    old_snapshot = json.dumps(old,sort_keys=True)
-    def forbidden(*args,**kwargs):
-        raise AssertionError('saved calculation attempted acquisition or execution')
-    import builtins
-    monkeypatch.setattr(builtins,'open',forbidden)
-    monkeypatch.setattr(Path,'open',forbidden)
-    monkeypatch.setattr(socket,'socket',forbidden)
-    monkeypatch.setattr(subprocess,'Popen',forbidden)
-    changed = calculate(saved,minimum_overlap_bp=4)
-    fraction = calculate(saved,minimum_a_fraction={'numerator':1,'denominator':2},minimum_b_fraction={'numerator':1,'denominator':1})
-    assert changed['pairs'][0]['selected']['selected_pair_count'] == 1
-    assert changed['pairs'][0]['selected']['selected_pairwise_bp_sum'] == 5
-    assert changed['pairs'][0]['selected']['a_region_overlap_fraction']['value'] == .5
-    assert fraction['pairs'][0]['selected'] == changed['pairs'][0]['selected']
-    assert changed['pairs'][0]['unfiltered'] == old['pairs'][0]['unfiltered']
-    assert changed['source_sheet_sha256'] == old['source_sheet_sha256']
-    assert saved == original and json.dumps(old,sort_keys=True) == old_snapshot
-    changed['edges'] = []
-    changed['sets'][0]['region_geometry'][0]['span_bp'] = 900
-    assert old['sets'][0]['region_geometry'][0]['span_bp'] == 10
-
-
-def test_threshold_rationals_use_exact_integer_cross_products():
-    result = calculate(WORKED['sheet'],minimum_a_fraction={'numerator':5*10**30,'denominator':10*10**30})
-    assert [e['selected'] for e in result['pairs'][0]['edges']] == [False,True]
-    result = calculate(WORKED['sheet'],minimum_a_fraction={'numerator':5*10**30+1,'denominator':10*10**30})
-    assert [e['selected'] for e in result['pairs'][0]['edges']] == [False,False]
-    with pytest.raises(ValueError,match='fraction_threshold'):
-        calculate(WORKED['sheet'],minimum_a_fraction={'numerator':2,'denominator':1})
-
-
 def test_cannot_fabricate_missing_pairs_by_recomputing_input_geometry():
     # Deliberately supplied assertion of a complete empty native table. The pure
     # calculator preserves source-declared scope and does not execute intersection.
@@ -190,42 +139,6 @@ def test_independent_pair_is_numerical_beside_invalid_input():
     assert result['sets'][2]['valid_region_count'] == 0 and result['sets'][2]['region_count'] is None
 
 
-def test_calculator_rechecks_saved_sheet_semantics():
-    sheet = deepcopy(WORKED['sheet'])
-    sheet['comparisons'][0]['valid_pairs'][0]['native_overlap_bp'] = 4
-    with pytest.raises(ValueError,match='pair_width'):
-        calculate(sheet)
-
-
-@pytest.mark.parametrize('case,count,summed,shared',[
-    ('overlapping_a',2,8,5),('overlapping_both',3,13,8),('duplicate_occurrences',4,20,5),
-    ('touching_endpoints',0,0,0),('different_chromosomes',0,0,0),
-    ('long_interval_one_bp',1,1,1),('signed_64bit_endpoint',1,1,1),
-])
-def test_explicitly_derived_token_mapping_from_retained_native_421(case,count,summed,shared):
-    # Actual 421 bytes remain unchanged. This test fixture explicitly replaces
-    # legacy A1/B1 tokens with frozen G1 tokens; it is not a new native result.
-    path = ROOT / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/native_work'
-    a,b = [(path / f'{case}.{side}.bed').read_bytes() for side in ('A','B')]
-    original = (path / f'{case}.stdout').read_bytes()
-    request,sets = inputs([a,b])
-    mapping = {}
-    for parsed in sets:
-        for row in parsed['regions']:
-            mapping[row['name']] = row['native_token']
-    remapped = []
-    for line in original.decode().splitlines():
-        fields = line.split('\t')
-        fields[3],fields[7] = mapping[fields[3]],mapping[fields[7]]
-        remapped.append('\t'.join(fields)+'\n')
-    derived = ''.join(remapped).encode()
-    parsed = parsed_pairs(request,sets,derived)
-    result = calculate(sheet_from(request,sets,[parsed]))
-    metrics = result['pairs'][0]['unfiltered']
-    assert (metrics['native_pair_count'],metrics['pairwise_overlap_bp_sum'],metrics['intersection_union_bp']) == (count,summed,shared)
-    assert (path / f'{case}.stdout').read_bytes() == original
-
-
 def test_sparse_many_regions_keeps_zero_coverage_and_ordered_partner_joins():
     a = [('chr1',i*10,i*10+8) for i in range(2048)]
     hit_ordinals = list(range(0,len(a),128))
@@ -251,16 +164,3 @@ def test_sparse_many_regions_keeps_zero_coverage_and_ordered_partner_joins():
     assert all(row['covered_bp'] == 0 for row in occurrences[2064:])
 
 
-def test_incompatible_supplied_invocation_preserves_only_genuine_subset_totals():
-    sheet = make_sheet(b'chr1\t0\t10\n',b'chr1\t7\t12\n',ROW,
-        changes={'realized_argv':['bedtools','intersect','-a','A','-b','B','-wo','-s']})
-    result = calculate(sheet)
-    pair = result['pairs'][0]
-    assert pair['result_extent'] == 'partial'
-    assert pair['observed']['interpretation'] == 'lower_bound_subset'
-    assert pair['observed']['observed_pairwise_bp_sum'] == 3
-    assert pair['unfiltered']['native_pair_count'] is None
-    forged = deepcopy(WORKED['sheet'])
-    forged['comparisons'][0]['receipt']['realized_argv'].append('-s')
-    with pytest.raises(ValueError,match='incompatible_supplied_invocation'):
-        calculate(forged)

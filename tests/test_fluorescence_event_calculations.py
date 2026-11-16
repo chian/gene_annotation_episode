@@ -1,10 +1,8 @@
 """Synthetic numerical fixtures only; no biological observation is claimed."""
 
-import ast
 import builtins
 from copy import deepcopy
 import hashlib
-import inspect
 import json
 
 import pytest
@@ -332,79 +330,6 @@ def _control_sheet(*, prepared_control=False):
     return _sheet(batches, gates=gates, controls=[pair])
 
 
-def test_packet548_signed_control_difference_and_optional_clipping_are_distinct():
-    sheet = _control_sheet()
-    parameters = _parameters(controls=[dict(control_key="pair", include_legacy_clipping=True)])
-    result = calculations.calculate_fluorescence_sheet(sheet, parameters=parameters)
-    assert _cell(result, "selected_fraction", gate="target.marker")["value"] == 2 / 4
-    assert _cell(result, "selected_fraction", gate="control.marker")["value"] == 3 / 4
-    for metric, expected in [("control_difference_fraction", -.25),
-                             ("control_difference_percentage_points", -25),
-                             ("legacy_nonnegative_difference_percentage_points", 0)]:
-        cell = _cell(result, metric, gate=None, control="pair")
-        assert cell["value"] == expected
-        assert cell["state"] == "present"
-        assert cell["population"]["denominator"] == "paired_controls"
-        assert cell["population"]["sample_key"] is None
-    requests = [cell["request"] for cell in result["cells"] if cell["request"]["kind"] == "fraction"]
-    assert [(request["gate_key"], request["metric"]) for request in requests] == [
-        ("target.marker", "selected_fraction"), ("target.marker", "selected_percent"),
-        ("control.marker", "selected_fraction"), ("control.marker", "selected_percent")]
-    parameters["control_requests"][0]["include_legacy_clipping"] = False
-    parameters["fraction_requests"] = [dict(gate_key="control.marker", denominator="parent")]
-    without_clipping = calculations.calculate_fluorescence_sheet(sheet, parameters=parameters)
-    assert not any(cell["request"]["metric"].startswith("legacy") for cell in without_clipping["cells"])
-    assert len([cell for cell in without_clipping["cells"] if cell["request"]["kind"] == "fraction"]) == 4
-    assert len({canonical(cell["request"]) for cell in without_clipping["cells"]}) == len(without_clipping["cells"])
-
-
-@pytest.mark.parametrize("fault", ["analyte", "missing_analyte", "unit", "missing_unit", "domain_basis",
-                                   "primary_basis", "operator", "ancestor", "subset"])
-def test_control_comparison_requires_documented_same_meaning_at_every_level(fault):
-    sheet = _control_sheet(prepared_control=fault in {"domain_basis", "primary_basis"})
-    marker_channel = sheet["channels"][3]
-    if fault == "analyte":
-        marker_channel["analyte"]["identifier"] = "different supplied analyte"
-    elif fault == "missing_analyte":
-        marker_channel["analyte"] = None
-    elif fault == "unit":
-        marker_channel["unit"] = "different_units"
-    elif fault == "missing_unit":
-        marker_channel["unit"] = None
-    elif fault == "domain_basis":
-        sheet["measurement_domains"][2]["comparison_basis"] = None
-    elif fault == "primary_basis":
-        sheet["measurement_domains"][1]["comparison_basis"] = None
-    elif fault == "operator":
-        sheet["gate_definitions"][3]["lower"]["inclusive"] = True
-    elif fault == "ancestor":
-        sheet["gate_definitions"][2].update(kind="pass_all", domain_key=None, channel_key=None,
-                                             lower=None, upper=None)
-    else:
-        sheet["population_definitions"][1].update(kind="subset", event_ordinals=list(range(6)))
-    parameters = _parameters(controls=[dict(control_key="pair", include_legacy_clipping=False)])
-    result = calculations.calculate_fluorescence_sheet(sheet, parameters=parameters)
-    difference = _cell(result, "control_difference_fraction", gate=None, control="pair")
-    assert difference["value"] is None
-    assert any(problem["code"] == "control_pair_incompatible" for problem in difference["issues"])
-    assert _cell(result, "selected_fraction", gate="target.marker")["value"] == .5
-    assert _cell(result, "selected_fraction", gate="control.marker")["value"] is not None
-
-
-def test_control_fraction_missing_value_uses_same_explicit_denominator_rules():
-    sheet = _control_sheet()
-    sheet["events"][3]["values"][1]["measurement"].update(value=None, state="missing", raw=None)
-    parameters = _parameters(controls=[dict(control_key="pair", include_legacy_clipping=False)])
-    full = calculations.calculate_fluorescence_sheet(sheet, parameters=parameters)
-    assert _cell(full, "control_difference_fraction", gate=None, control="pair")["value"] is None
-    sheet["control_pairs"][0]["denominator"] = "evaluable"
-    subset = calculations.calculate_fluorescence_sheet(sheet, parameters=parameters)
-    assert _cell(subset, "selected_fraction", gate="target.marker")["value"] == 1 / 3
-    difference = _cell(subset, "control_difference_fraction", gate=None, control="pair")
-    assert difference["value"] == 1 / 3 - 3 / 4
-    assert difference["state"] == "qualified"
-
-
 def test_missing_invalid_selected_intensities_preserve_finite_subset_and_actual_zero():
     batch = _batch([[150, 0], [150, None], [150, 4], [150, None]])
     batch["events"][3]["values"][1]["measurement"].update(state="invalid", raw="not numeric")
@@ -511,40 +436,6 @@ def test_saved_only_recalculation_forbids_files_network_subprocess_and_llm(monke
     assert saved["events"][0]["values"][0]["measurement"]["state"] == "supplied_predicted"
 
 
-def test_projection_copies_exact_saved_cells_and_never_calls_calculator(monkeypatch):
-    sheet = _sheet([_batch([[100], [125], [300]])])
-    result = calculations.calculate_fluorescence_sheet(sheet, parameters=_standard_parameters())
-    # Standalone shape validation cannot authenticate an artifact's numeric
-    # truth. The view must copy this saved value, even when it differs from a
-    # recomputation; the future result binding owns artifact authentication.
-    _cell(result, "selected_intensity_mean")["value"] = 163.125
-    saved_bytes = canonical(result)
-    selected = [_cell(result, "selected_percent"), _cell(result, "selected_intensity_mean"),
-                _cell(result, "selected_event_count")]
-    selection = dict(requests=[deepcopy(cell["request"]) for cell in selected], offset=1, limit=1)
-
-    def forbidden(*args, **kwargs):
-        raise AssertionError("Calculator called during saved projection")
-
-    monkeypatch.setattr(calculations, "calculate_fluorescence_sheet", forbidden)
-    monkeypatch.setattr(calculations, "evaluate_gate_membership", forbidden)
-    monkeypatch.setattr(calculations, "_Calculation", forbidden)
-    view = views.project_fluorescence_result(sheet, result, selection=selection)
-    assert len(view["rows"]) == 1
-    assert canonical(view["rows"][0]) == canonical(selected[1])
-    assert view["total_selected_rows"] == 3 and view["returned_row_count"] == 1
-    assert view["has_more"] and view["status"] == "calculated"
-    assert set(view) == {"schema", "selection", "rows", "total_selected_rows", "returned_row_count",
-                         "has_more", "status", "issues"}
-    view["rows"][0]["population"]["sample_key"] = "changed"
-    view["selection"]["requests"][0]["metric"] = "changed"
-    assert canonical(result) == saved_bytes
-    assert selection["requests"][0]["metric"] == "selected_percent"
-    tree = ast.parse(inspect.getsource(views))
-    imports = [node.module or "" for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)]
-    assert all("calculation" not in name for name in imports)
-
-
 def test_projection_scopes_status_and_issues_to_selected_requests_before_pagination():
     sheet = _sheet([_batch([[150]]), _batch([], sample="other", extent="unavailable")],
                    gates=[_gate(), _gate("other.g", sample="other")])
@@ -596,9 +487,3 @@ def test_projection_rejects_wrong_saved_contracts(fault, code):
     assert error.value.code == code
 
 
-def test_conflicting_duplicate_control_request_flags_reject():
-    parameters = _parameters(controls=[dict(control_key="pair", include_legacy_clipping=True),
-                                       dict(control_key="pair", include_legacy_clipping=False)])
-    with pytest.raises(FluorescenceContractError) as error:
-        calculations.calculate_fluorescence_sheet(_control_sheet(), parameters=parameters)
-    assert error.value.code == "invalid_parameters"

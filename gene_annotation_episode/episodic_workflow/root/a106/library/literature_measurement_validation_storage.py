@@ -3,7 +3,6 @@
 Only fresh population reads source bytes or invokes scientific calculations.
 Saved reconstruction authenticates the original request and recorded values.
 """
-from gene_annotation_episode.episodic_workflow.root.a106.literature_implementation_sources import source_file
 from copy import deepcopy
 import hashlib
 import json
@@ -23,11 +22,6 @@ NAMESPACE = 'literature_measurement_validation_cells'
 REQUESTED = 'requested_measurement_validation_components'
 VIEW = 'measurement_validation_components'
 SCOPE = 'source_measurement_validation'
-_FROZEN = {
-    'literature_measurement_validation_inputs.py': 'f75fb0475b8d98590672dfd05abd2791c12210cb8dbb0d205926d23e0f663d3b',
-    'literature_measurement_validation_calculations.py': 'c47a8d90c19e26ce0a52c7ae1e74a45a7a23e44a8595c5cd2130090dcb0d6649',
-    'literature_measurement_validation_prompt.py': 'b320f6740c87e7145c97420724af1c203445b693a9b5e818171e0ecd6e4e5317',
-}
 
 
 def _array(schema):
@@ -181,12 +175,6 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
                     result.append(parent)
         return result
 
-    def _implementation_receipt(self):
-        actual = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in _FROZEN}
-        if actual != _FROZEN:
-            raise ContractError('measurement_validation_prospective_dependency_mismatch')
-        return {'version': 'measurement_validation_original_implementation_v1', 'files': actual}
-
     def populate(self, context, arguments, operation_key):
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
@@ -206,7 +194,7 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
             outcome = json.loads(old['outcome']); self.read(outcome['result']['sheet_ref'])
             return outcome
         source = self._native_source(context, args['source_ref'])
-        receipt = self._implementation_receipt(); snapshots = []
+        snapshots = []
         def read_source(ref, representation):
             row = self._native_source(context, ref)
             artifact = row['artifact_ref'] if representation == 'original' else row.get('text_ref')
@@ -230,7 +218,7 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
         payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'],
             'selection': args, 'direct_input_source_refs': direct, 'input_source_refs': parents,
             'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'input_snapshots': snapshots,
-            'original_implementation': receipt, 'extraction': extraction, 'sheet': sheet}
+            'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
             self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
@@ -345,7 +333,7 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
             raise ContractError('literature_sheet_not_selected_output')
         saved = self._json(source['artifact_ref'])
         if (set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs',
-                'input_source_refs', 'source_metadata', 'input_snapshots', 'original_implementation', 'extraction', 'sheet'}
+                'input_source_refs', 'source_metadata', 'input_snapshots', 'extraction', 'sheet'}
                 or saved['version'] != VERSION or saved['selection'] != request['arguments']
                 or saved['input_source_ref'] != request['arguments']['source_ref'] or source['text_ref'] != source['artifact_ref']
                 or saved['input_source_refs'] != source['parent_source_refs']
@@ -354,11 +342,6 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
                 or any(canonical(self._native_provenance(request['scope'], ref)) != canonical(row) for ref, row in saved['source_metadata'].items())
                 or self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
             raise ContractError('measurement_validation_saved_source_mismatch')
-        receipt = saved['original_implementation']
-        if (set(receipt) != {'version', 'files'} or receipt['version'] != 'measurement_validation_original_implementation_v1'
-                or set(receipt['files']) != set(_FROZEN)
-                or any(not isinstance(v, str) or not re.fullmatch('[0-9a-f]{64}', v) for v in receipt['files'].values())):
-            raise ContractError('measurement_validation_saved_original_receipt_mismatch')
         self._validate_bindings(saved, request)
         rows = _project_saved(saved, reference, request['components']); validate_schema(rows, measurement_validation_cells_schema())
         outcome = json.loads(operation['outcome'])

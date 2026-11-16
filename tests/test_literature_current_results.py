@@ -2,7 +2,7 @@
 from copy import deepcopy
 import json
 
-from gene_annotation_episode.episodic_workflow.root.library.literature_current_results import current_interpretation_view, render_current_scoring_results
+from gene_annotation_episode.episodic_workflow.root.library.literature_current_results import render_current_scoring_results
 
 
 class Display:
@@ -44,18 +44,3 @@ def test_different_conditions_and_criteria_remain_tied_to_exact_saved_sheet():
     assert rendered.count('Saved criterion result') == 2
 
 
-def test_custom_field_names_use_declared_meaning_and_keep_uncovered_cells():
-    sheets = [saved_sheet('source_a', condition='aerobic', criterion={})]
-    report = {'inventory_named_by_parent': ['reference_old'],
-        'numbers_named_by_parent': sheets[0]['cells'],
-        'custom_unresolved_question': ['hypothesis_x'],
-        'historical_uncovered_numbers': [{**sheets[0]['cells'][0], 'sheet_ref': 'source_old'}]}
-    schema = {'properties': {
-        'inventory_named_by_parent': {'x-source': 'interpretation_basis_refs'},
-        'numbers_named_by_parent': {'x-source': 'literature_assay_grading_cells'},
-        'historical_uncovered_numbers': {'x-source': 'literature_assay_grading_cells'}}}
-    before = deepcopy(report)
-    result = current_interpretation_view(report, schema, sheets)
-    assert report == before
-    assert result == {'custom_unresolved_question': ['hypothesis_x'],
-        'historical_uncovered_numbers': report['historical_uncovered_numbers']}

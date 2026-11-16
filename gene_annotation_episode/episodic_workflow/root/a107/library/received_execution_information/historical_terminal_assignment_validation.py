@@ -1,4 +1,4 @@
-"""Exact original historical receiving slice; integration and dependency review pending."""
+"""A107 received execution information."""
 from __future__ import annotations
 import hashlib
 import json

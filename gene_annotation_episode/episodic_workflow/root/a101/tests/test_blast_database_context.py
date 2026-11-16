@@ -1,7 +1,5 @@
 """Additive context/geometry ports: no search or acquisition is executed."""
 from copy import deepcopy
-import json
-from pathlib import Path
 
 import pytest
 
@@ -94,15 +92,6 @@ def test_population_conflicts_disable_only_correction(identity, request_values, 
     assert scores["representation_adjusted_probabilities"] is None
     assert scores["unadjusted_probabilities"] == {"F": 2/3, "G": 1/3}
     assert sheet["normalized_result"] == native
-
-
-def test_null_ports_exactly_preserve_saved_legacy_sheets_and_models():
-    cases = json.loads((Path(__file__).resolve().parent / "fixtures/blast_explicit_associations/legacy_prechange.json").read_text())["cases"]
-    for case in cases:
-        actual = build_database_sheet(**case["arguments"], geometry_program=None, calculation_context=None)
-        assert actual == case["sheet"]
-        assert "calculation_context" not in actual
-        assert calculate_database_probabilities(actual) == case["calculations"][0]
 
 
 @pytest.mark.parametrize("value", [True, "blastp", {}, {"reporting": {}},

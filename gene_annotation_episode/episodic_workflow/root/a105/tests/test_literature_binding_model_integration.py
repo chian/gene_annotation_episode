@@ -5,9 +5,7 @@ use explicitly synthetic parameter tables and model sources with scripted
 decisions/controllers, never a model-backed experimental claim.
 """
 import asyncio
-from copy import deepcopy
 from dataclasses import replace
-from functools import partial
 import json
 from types import SimpleNamespace
 import pytest
@@ -86,42 +84,6 @@ def test_primary_without_error_model_preserves_limit_and_specific_unknown(tmp_pa
     finally:
         store.close()
 
-def test_binding_model_task_and_conditions_survive_delta_lookup_and_restart(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a105.decision_context import state_frame
-    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_prompt import BINDING_MODEL_TASK
-    from test_literature_experimental_prompt_delivery import LiteratureWire, snapshot, complete
-    first = snapshot()
-    first['goal']['objective'] = 'Evaluate this supplied synthetic binding log-parameter model.'
-    first['requested_form'] = FORM
-    first['literature_assignment']['requested_binding_model_components'] = COMPONENTS
-    first['available_report_facts']['literature_binding_model_cells'] = {'meaning': 'Conditional source parameter contrast; full covariance and threshold model remain explicit.'}
-    second = deepcopy(first)
-    second['last_local_outcome'] = {'status': 'completed', 'result': {'cells': {'source_profile_log_ratio': {'value': 0.7, 'relation': 'eq', 'unit': 'dimensionless', 'status': 'populated', 'origin': 'derived', 'conditional_on': ['supplied_log_covariance', 'known_normal_log_parameters', 'threshold_censoring_of_log_estimate'], 'unavailable_reason': None}}, 'parameter_kind': 'ic50', 'model_kind': 'known_normal_log_parameters', 'variance_status': 'known', 'censoring_model': 'threshold_of_log_estimate', 'model_origin': 'synthetic', 'source_uncertainty_basis': 'fit_to_averaged_curve', 'measurement_keys': {'reference': 'HOST_MEASUREMENT_HASH'}, 'diagnostics': {'value': 'HOST_FIT_DIAGNOSTIC'}}}
-    lookup = {'version': 'decision_context_v1', 'kind': 'decision_lookup_result', 'decision_index': 2, 'exchange_index': 1, 'result': {'status': 'completed', 'text': 'Selected synthetic model description: known covariance with explicit threshold reporting.'}}
-    wire = LiteratureWire(tmp_path / 'wire')
-    restarted = LiteratureWire(tmp_path / 'restarted')
-
-    async def exercise():
-        await complete(wire, state_frame(first))
-        await complete(wire, state_frame(second, first))
-        await complete(wire, lookup)
-        await complete(restarted, state_frame(second))
-    asyncio.run(exercise())
-    tasks = []
-    for transport in [wire, restarted]:
-        for turn in transport.turns_sent():
-            text = turn['input'][0]['text']
-            task, steering = text.split('\n\nSTEERING\n', 1)
-            tasks.append(task)
-            assert BINDING_MODEL_TASK in task
-            assert first['goal']['objective'] in task
-            assert 'HOST_MEASUREMENT_HASH' not in text
-            assert 'HOST_FIT_DIAGNOSTIC' not in text
-    assert all((task == tasks[0] for task in tasks))
-    for turn in [*wire.turns_sent()[1:], *restarted.turns_sent()]:
-        steering = turn['input'][0]['text'].split('\n\nSTEERING\n', 1)[1]
-        for meaning in ['known_normal_log_parameters', 'threshold_of_log_estimate', 'synthetic', 'threshold_censoring_of_log_estimate', 'fit_to_averaged_curve']:
-            assert meaning in steering
 
 @pytest.mark.parametrize('limit', [False, True])
 def test_selected_model_action_returns_conditional_values_once(tmp_path, limit):

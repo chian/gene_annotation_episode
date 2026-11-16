@@ -17,17 +17,11 @@ import pytest
 
 from gene_annotation_episode.execution_contracts import digest
 from gene_annotation_episode.episodic_workflow.root.library.flux_balance_contracts import validate_flux_balance_record
-from gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers import (
-    parse_cobra_glpk_model_capture, parse_cobra_glpk_problem_capture,
-    parse_cobra_glpk_solution_capture, parse_fba_capture,
-)
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers import parse_cobra_glpk_model_capture, parse_cobra_glpk_problem_capture, parse_fba_capture
 from gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet import populate_flux_balance_sheet
 from gene_annotation_episode.episodic_workflow.root.a110.flux_balance_calculations import calculate_flux_balance_sheet
 from test_flux_balance_core_679 import parameters
-from test_flux_balance_readers_680 import (
-    bound, bundle, captures, encode, file, location, missing, number, parsed,
-    parse_model, parse_problem, parse_solution, replace_role,
-)
+from test_flux_balance_readers_680 import bound, bundle, captures, encode, file, location, missing, number, parsed, parse_model, parse_solution, replace_role
 from test_flux_balance_parser_recovery_686 import relocated
 
 
@@ -55,17 +49,6 @@ def select(payloads, expected, edit):
     selected["attempt"] = deepcopy(expected)
     replace_role(payloads, "selected_request", selected)
     update_manifest(payloads, expected)
-
-
-def retained(name, payloads, result):
-    attempt = os.environ.get("HMMER529_ATTEMPT")
-    if attempt:
-        Path(attempt, f"fba689_{name}.json").write_text(json.dumps({
-            "fixture_identity": "synthetic supplied-byte records using TEST-normalized677 inputs; no solve or production capture",
-            "manifest": json.loads(payloads["manifest"]["bytes"]),
-            "selected_request": json.loads(payloads["selected_request"]["bytes"]),
-            "result": result,
-        }, indent=2, allow_nan=False) + "\n")
 
 
 def synthetic_bundle(captures, *, constraints=None, objective="model_default", options=None):
@@ -168,27 +151,6 @@ def audit(profile="sbml"):
     return {"version": "cobra_fba_source_audit_v1", "input_profile": profile,
         "original_model": location("original_model", ""),
         "xml_elements": elements if profile == "sbml" else None, "issues": []}
-
-
-@pytest.mark.parametrize("state", ["absent", "null"])
-def test_old_optional_absence_and_null_remain_distinct(captures, state):
-    payload = deepcopy(captures["models"])
-    if state == "null":
-        payload["source_audit"] = None
-        for phase in ("loaded_original", "effective"):
-            payload[phase]["native_capture_evidence"] = None
-    result = parse_model(payload, captures)
-    assert ("source_audit" in result) == (state == "null")
-    assert ("native_capture_evidence" in result["effective"]) == (state == "null")
-    if state == "null":
-        assert result["source_audit"] is result["effective"]["native_capture_evidence"] is None
-    payloads, expected = bundle(captures)
-    if state == "null":
-        edit_role(payloads, expected, "manifest", lambda m: m.update(request_application=None))
-    result = parse_fba_capture(payloads, expected=expected)
-    assert result["native"]["objective_application"] == "unknown"
-    assert result["native"]["constraint_changes"] == []
-    assert result["native"]["request_realization"] == "exact"  # retained legacy assertion, contract010
 
 
 @pytest.mark.parametrize("load_failed", [False, True])
@@ -304,7 +266,6 @@ def test_known_no_changes_stays_empty_with_exact_observed_default(captures, cons
     assert result["native"]["objective_application"] == "model_default"
     assert result["native"]["request_realization"] == "exact"
     assert json.loads(payloads["selected_request"]["bytes"])["requested_job"]["native_flux_balance"]["constraints"] == constraints
-    retained("known_no_changes_" + str(constraints is None), payloads, result)
 
 
 def test_null_application_changes_remain_unknown(captures):
@@ -333,7 +294,6 @@ def test_exact_bound_application_and_digest_before_source_binding(captures):
     assert actual["requested_lower"]["source"] == {"file": payloads["selected_request"]["file"],
         "pointer": "/requested_job/native_flux_balance/constraints/0/lower"}
     assert payloads == original
-    retained("exact_bound_and_original_digest", payloads, result)
 
 
 @pytest.mark.parametrize("defect", ["bound_value", "order", "reaction_id", "position"])
@@ -401,7 +361,6 @@ def test_applied_bound_requires_both_model_and_solver_readback(captures, defect,
     assert result["native"]["constraint_changes"][0]["application"] == "unknown"
     if realization == "mismatch":
         assert issue_at(result, "/request_application/constraint_changes/0")
-    retained("bound_readback_" + defect, payloads, result)
 
 
 @pytest.mark.parametrize("objective", ["model_default", "single_reaction"])
@@ -459,7 +418,6 @@ def test_rejected_unsupported_optimality_and_partial_application_preserve_rows(c
     assert [row["application"] for row in result["native"]["constraint_changes"]] == ["applied", "rejected", "not_attempted"]
     assert result["native"]["objective_application"] == "not_attempted"
     assert result["native"]["solve_call_count"] == 0 and result["native"]["request_realization"] == "mismatch"
-    retained("partial_application", payloads, result)
     payloads, expected = synthetic_bundle(captures, options={"optimality_tolerance": 1e-6})
     no_solve(payloads, expected)
     def reject(manifest):
@@ -545,7 +503,6 @@ def test_new_evidence_populates_same_saved_sheet_and_calculator_without_io(captu
     assert calculated["active_count"] == 3
     assert saved["native"]["constraint_changes"][0]["application"] == "applied"
     assert saved["models"]["source_audit"]["xml_elements"][1]["text"] == ""
-    retained("saved_sheet_no_io", payloads, {"sheet": saved, "calculations": calculated})
 
 
 def test_opaque_earlier_pass_getters_do_not_replace_unestablished_final_point(captures):

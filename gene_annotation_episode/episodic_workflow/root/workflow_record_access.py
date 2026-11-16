@@ -1,4 +1,4 @@
-"""Preserved root host ports defined by WorkflowRecordAccess."""
+"""Root host ports defined by WorkflowRecordAccess."""
 from __future__ import annotations
 import json
 

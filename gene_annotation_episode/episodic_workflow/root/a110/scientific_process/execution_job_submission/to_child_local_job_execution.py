@@ -1,4 +1,4 @@
-"""Original private A110 Launch envelope for local_job_execution."""
+"""Private A110 Launch envelope for local_job_execution."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a110.runtime import ContractInformationError, Episode, EpisodeGoal, EpisodeRequest, Record, _plain, validate_saved_fact_form
 

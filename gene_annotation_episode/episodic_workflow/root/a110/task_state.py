@@ -1,4 +1,4 @@
-"""Original private A110 annotation task_state responsibility."""
+"""Private A110 annotation task_state responsibility."""
 from __future__ import annotations
 
 def working_state(workflow, source):

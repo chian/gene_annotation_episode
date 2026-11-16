@@ -6,11 +6,11 @@ from gene_annotation_episode.episodic_workflow.root.a106.library.standalone_api_
 
 class OperationalAssignment:
 
-    def _api_context(self, api, context, *, verify_artifacts=True, _completed_appservice_download=False):
+    def _api_context(self, api, context, *, verify_artifacts=True):
         if context.run_id != api.run_id:
             raise ValueError('api_execution_run_conflict')
         if context.role != 'launch_api':
-            return standalone_api_context(api, context, verify_artifacts=verify_artifacts, _completed_appservice_download=_completed_appservice_download)
+            return standalone_api_context(api, context, verify_artifacts=verify_artifacts)
         assignment = api.validate_assignment(context.assignment, scope=context.scope)
         return (assignment, api.services[assignment['resource_id']], None)
 

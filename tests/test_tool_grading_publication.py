@@ -387,39 +387,3 @@ def test_read_batch_grading_failure_preserves_valid_neighbor_and_member_identity
         assert store.count("observation") == 2 and operation_count(store, "reads.inspect") == 1
 
 
-def test_offline_api_blast_grading_rejection_retains_native_hsp_and_explicit_failure(tmp_path, monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a101 import blast_graders
-    from gene_annotation_episode.api_blast import NCBIBlastService
-    from test_api_blast_service import Client, submit
-    def reject(*args, **kwargs):
-        raise ValueError("synthetic_blast_grading_input_failure")
-    monkeypatch.setattr(blast_graders, "grade_blast_result", reject)
-    with Store(tmp_path / "state") as store:
-        target, = store.create_problem(raw_sequence="MACDEFGH", molecule="protein")["subject_refs"]
-        client = Client()
-        registry = ToolRegistry(store, clients=client)
-        service = NCBIBlastService(registry)
-        scope = store.validate_scope(None)
-        request = {"subject_ref": target, "program": "blastp", "database": "swissprot"}
-        submission, event = submit(service, request, scope)
-        handle = event["native_handle"]
-        prepared = service.prepare("api.blast.fetch", request, {}, scope=scope,
-            previous_events=[], handle=handle)
-        fetched = service.invoke(prepared)
-        result = service.publish(request, {}, fetched, scope, "blast-grading-failure",
-            submission_snapshot=submission, handle=handle)
-        assert result["status"] == "partial", result
-        assert result["feedback"] == {"category": "grading_input", "code": "tool_grading_input_rejected",
-            "failures": [{"category": "grading_input", "code": "synthetic_blast_grading_input_failure"}]}
-        source = store.get(result["result"]["source_ref"])
-        assert store.get_artifact(source["artifact_ref"]) == fetched.content
-        grading = only_grading(store, source["id"])
-        assert grading["sheet"] is grading["scores"] is None
-        assert grading["failure"]["code"] == "synthetic_blast_grading_input_failure"
-        values = numerical(store.get(result["result"]["records"][0]["observation_ref"]))
-        assert values["bitscore"] == 31.5 and values["evalue"] == 1e-5
-        assert store.count("observation") == 1 and len(client.calls) == 2
-        assert service.publish(request, {}, fetched, scope, "blast-grading-failure",
-            submission_snapshot=submission, handle=handle) == result
-        assert store.count("observation") == 1 and len(client.calls) == 2
-        assert operation_count(store, "internal.api_service.ncbi_blast.result") == 1

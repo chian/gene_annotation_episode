@@ -1,4 +1,4 @@
-"""Original supplied-record schemas extracted from native_protein_structure_contracts; no execution admission."""
+"""Supplied-record schemas; no execution admission."""
 from __future__ import annotations
 from copy import deepcopy
 from gene_annotation_episode.execution_contracts import digest
@@ -7,11 +7,7 @@ from gene_annotation_episode.episodic_workflow.root.library import protein_struc
 
 DRIVER_MODULE = "gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver"
 WORKER_MODULE = "gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker"
-# Original records keep the exact producer modules and source pins they saved.
-# This finite pair list does not authorize another command or alter a record.
-_RECORDED_MODULE_PAIRS = ((DRIVER_MODULE, WORKER_MODULE),
-    ("gene_annotation_episode.native_protein_structure_driver",
-     "gene_annotation_episode.native_protein_structure_worker"))
+_RECORDED_MODULE_PAIRS = ((DRIVER_MODULE, WORKER_MODULE),)
 RUN_PLAN_FILENAME = "protein-structure-plan.json"
 ATTEMPT_DIRECTORY_NAME = "protein-structure-attempt"
 BUNDLE_FILENAME = "bundle.json"
@@ -19,8 +15,7 @@ WORKER_INPUT_FILENAME = "worker-input.json"
 OWNER_FILENAME = ".native-protein-structure-owner.json"
 STARTED_FILENAME = ".native-protein-structure-started.json"
 POLICY = {'memory_bytes': 5368709120, 'scratch_bytes': 4294967296}
-# Historical records retain their original allocation; this is not launch authority.
-_RECORDED_MEMORY_BYTES = (5368709120, 21474836480)
+_RECORDED_MEMORY_BYTES = (5368709120,)
 NATIVE_FORMATS = {"inspect": "protein_structure_inventory_native_v1",
     "extract_sequence": "protein_structure_sequence_native_v1", "compare": "protein_structure_native_v1"}
 

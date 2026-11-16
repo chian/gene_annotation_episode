@@ -1,4 +1,4 @@
-"""Preserved root host ports defined by WorkflowProgressServices."""
+"""Root host ports defined by WorkflowProgressServices."""
 from __future__ import annotations
 from .communication import plain
 from .episode_bindings import native_observation_options

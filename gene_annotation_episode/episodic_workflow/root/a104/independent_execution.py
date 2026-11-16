@@ -119,7 +119,6 @@ def _saved_episode_factories(settings, directory=None):
                 descriptor=descriptor, directory=directory))
         else:
             raise _failure('unavailable_binding', str(descriptor.get('binding_id', 'episode_binding')))
-    # Missing descriptors preserve old saved runs' original two scientific roles.
     return tuple(factories)
 
 

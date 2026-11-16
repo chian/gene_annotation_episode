@@ -18,28 +18,12 @@ from gene_annotation_episode.episodic_workflow.root.a107.method_loop.durable imp
 
 from .boundary_validation import ModelOutputError, schema_failure_diagnostic
 from .domain import identity
-from .scientific_tool_library import tool_names
 from .tool_information import selectors as tool_selectors
 
 
 VERSION = "scientific_tool_retrieval_v1"
 SEMANTIC = "semantic_fast_v1"
 LITERAL = "literal_test_v1"
-INSTRUCTIONS = """Retrieve actual callable tools for the parent's desired investigation.
-Return only {"tools":[actual callable names]} under the supplied schema. Inspect
-the complete supplied map: names, descriptions and exact input contracts. Select
-all operations useful for carrying out this investigation with the available
-capabilities, including prerequisites and reading/checking their real results.
-Keep the set relevant to this investigation. Do not select an operation merely
-because its description shares a word. Source/data reading can be useful, but a
-scientific data question does not itself request an unrelated publication search
-or literature-reading investigation. There is no fixed group or selection quota.
-Do not invent tools, capabilities, tool arguments or replacements for an absent
-operation. When a specialized capability is absent, select only actually useful
-available operations; an empty selection is permitted. This retrieval supplies
-information: do no scientific work, choose no hypothesis, job, resource, action,
-child episode or timer, and return no findings, plan or scientific judgment.
-"""
 TOOL_INFO_INSTRUCTIONS = """Select actual tool/resource variants for the parent's desired investigation.
 Return only {"child_tool_info":[{"name":actual_name,"resources":actual_resource_kind}]}
 under the supplied schema. Inspect the complete supplied metadata map of actual
@@ -75,21 +59,6 @@ def configuration(value):
             or value.get("mode") not in {SEMANTIC, LITERAL}):
         raise ValueError("scientific_tool_retrieval_configuration_invalid")
     return value
-
-
-def output_schema(names, *, transport=False):
-    """The map supplies the enum; uniqueness is additionally checked on return."""
-    names = tool_names(list(names))
-    selected = {"type": "array", "items": {"type": "string"}}
-    if names:
-        selected["items"]["enum"] = names
-    else:
-        # JSON Schema forbids an empty enum. An empty map has no valid names.
-        selected["maxItems"] = 0
-    if not transport:
-        selected["uniqueItems"] = True
-    return {"type": "object", "properties": {"tools": selected},
-        "required": ["tools"], "additionalProperties": False}
 
 
 def tool_info_output_schema(rows, *, transport=False):
@@ -149,23 +118,19 @@ class ScientificToolRetriever:
                 or not isinstance(episode_id, str) or not episode_id
                 or not isinstance(operation_key, str) or not operation_key):
             return _outcome("invalid", operation_ref, code="scientific_tool_retrieval_input_invalid")
-        has_info = self.library.supports_tool_info
-        catalog = (self.library.parent_tool_info(available_catalog) if has_info else self.library.catalog())
+        catalog = self.library.parent_tool_info(available_catalog)
         names = [entry["name"] for entry in catalog]
-        if not has_info:
-            self.library.resolve(names, available_catalog)
-        schema = tool_info_output_schema(catalog) if has_info else output_schema(names)
-        instructions = TOOL_INFO_INSTRUCTIONS if has_info else INSTRUCTIONS
+        schema = tool_info_output_schema(catalog)
+        instructions = TOOL_INFO_INSTRUCTIONS
         context = {"investigation": investigation, "catalog": catalog}
         call_id = "scientific_tool_retrieval_" + content_digest({
             "run_id": self.run_id, "episode_id": episode_id, "operation_key": operation_key})[:32]
-        request = {"version": "scientific_tool_retrieval_request_v2" if has_info else "scientific_tool_retrieval_request_v1",
+        request = {"version": "scientific_tool_retrieval_request_v2",
             "invocation": {"run_id": self.run_id, "episode_id": episode_id,
                 "operation_key": operation_key}, "configuration": self.configuration,
             "library": self.library.as_record(), "call_identity": call_id,
             "role": "FAST", "instructions": instructions, "context": context,
-            "selection_schema": schema, "output_schema": tool_info_output_schema(catalog, transport=True)
-                if has_info else output_schema(names, transport=True)}
+            "selection_schema": schema, "output_schema": tool_info_output_schema(catalog, transport=True)}
         serialized, digest = canonical(request), content_digest(request)
         key, token = (self.run_id, episode_id, operation_key), uuid.uuid4().hex
         with self.store.transaction():
@@ -186,8 +151,7 @@ class ScientificToolRetriever:
                 (*key, digest, serialized, token))
         if not names:
             result = _outcome("completed", operation_ref,
-                result={"investigation": investigation, "child_tool_info": []} if has_info else
-                       {"investigation": investigation, "tools": [], "catalog": []})
+                result={"investigation": investigation, "child_tool_info": []})
             self._publish(key, digest, token, None, result)
             return result
         response = None
@@ -208,17 +172,11 @@ class ScientificToolRetriever:
                         deepcopy(context), deepcopy(request["output_schema"]))
                     response = json.loads(canonical(response))
                     Draft202012Validator(schema).validate(response)
-                    if has_info:
-                        selected = tool_selectors(response['child_tool_info'])
-                        canonical_rows = self.library.resolve_tool_info(selected, available_catalog)
-                        from .tool_information import parent_view
-                        result = _outcome('completed', operation_ref, result={
-                            'investigation': investigation, 'child_tool_info': parent_view(canonical_rows)})
-                    else:
-                        selected = tool_names(response["tools"])
-                        result = _outcome("completed", operation_ref, result={
-                            "investigation": investigation, "tools": selected,
-                            "catalog": self.library.resolve(selected, available_catalog)})
+                    selected = tool_selectors(response['child_tool_info'])
+                    canonical_rows = self.library.resolve_tool_info(selected, available_catalog)
+                    from .tool_information import parent_view
+                    result = _outcome('completed', operation_ref, result={
+                        'investigation': investigation, 'child_tool_info': parent_view(canonical_rows)})
             except ValidationError as error:
                 result = _outcome("invalid", operation_ref,
                     code="scientific_tool_retrieval_output_invalid",
@@ -263,5 +221,5 @@ class ScientificToolRetriever:
                     await released
 
 
-__all__ = ["ScientificToolRetriever", "configuration", "output_schema", "VERSION",
+__all__ = ["ScientificToolRetriever", "configuration", "VERSION",
     "SEMANTIC", "LITERAL", "tool_info_output_schema", "TOOL_INFO_INSTRUCTIONS"]

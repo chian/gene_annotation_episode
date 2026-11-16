@@ -6,7 +6,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.domain import validate_schema
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_optical_calculations import calculate_nadh_optical_rate
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_optical_inputs import LEXICAL_DEPENDENCY, PRIMITIVE_ORDER, optical_arguments_schema, read_optical_rate_operands
+from gene_annotation_episode.episodic_workflow.root.a105.library.literature_optical_inputs import PRIMITIVE_ORDER, optical_arguments_schema, read_optical_rate_operands
 SOURCE = 'source_' + '1' * 24
 COV_SOURCE = 'source_' + '2' * 24
 ARTIFACT = 'artifact_' + '1' * 24
@@ -62,7 +62,6 @@ def test_source_bound_conversion_supplies_existing_rate_and_variance_without_she
     assert [operands[k] for k in PRIMITIVE_ORDER] == [-0.012, -0.002, 5.0, 1.0]
     assert np.array(operands['covariance']) == pytest.approx(np.array([[1e-08, 5e-09, 0, 0], [5e-09, 1e-08, 0, 0], [0, 0, 0.01, 0], [0, 0, 0, 0.0001]]))
     assert extraction['covariance_source']['data'] == data
-    assert extraction['lexical_dependency'] == LEXICAL_DEPENDENCY
     assert calls == [(SOURCE, 'original'), (COV_SOURCE, 'original')]
     cells = calculate_nadh_optical_rate(operands)
     assert cells['net_depletion_rate']['value'] == pytest.approx(2.0)

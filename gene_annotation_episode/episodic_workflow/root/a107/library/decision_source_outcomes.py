@@ -1,4 +1,4 @@
-"""Shared original source protocol decision_source_outcomes."""
+"""Decision source protocol: decision_source_outcomes."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a107 import runtime as _original_runtime
 

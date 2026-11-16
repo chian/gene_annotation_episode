@@ -300,8 +300,7 @@ def validate_effects(value):
             _cell(row[key], unit=unit, population=row['raw_table_id'])
         require(row['native_fewer_5_recalculated'] in ('Y', 'N', None), 'sparse_flag_invalid')
         _adequacy(row['raw_adequacy'], row['raw_table_id'])
-        if row['augmented_adequacy'] is not None:
-            _adequacy(row['augmented_adequacy'], row['augmented_adequacy']['table_id'])
+        require(row['augmented_adequacy'] is None, 'shape_invalid')
         require(type(row['pairs']) is list, 'pairs_invalid')
         for pair in row['pairs']:
             shape(pair, {'group_ids', 'frequency_deltas', 'total_variation'})

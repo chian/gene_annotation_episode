@@ -1,4 +1,4 @@
-"""Original A110 numerical and semantic scientific return schemas."""
+"""A110 numerical and semantic scientific return schemas."""
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_population_contracts import BASES, BINDINGS, COMPONENTS, CONDITIONAL_CODES, DEMAND_FIELDS, FORMULA_CODES, MEANINGS_NAMESPACE, MODEL_FIELDS, REASONS, RESOURCE_FIELDS, SOURCE_KINDS, _FIXED_METADATA, deepcopy, obj, reaction_return_view_requirements
 
 def reaction_cells_schema():

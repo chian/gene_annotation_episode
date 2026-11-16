@@ -1,7 +1,4 @@
-"""A107 original fluorescence native report contracts; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 fluorescence native report contracts."""
 from __future__ import annotations
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.root.a107.library.received_execution_information import historical_fluorescence_contracts as core

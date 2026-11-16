@@ -1,4 +1,4 @@
-"""Original substantive ordinary-tool methods: tool_rfam_results."""
+"""Ordinary-tool methods: tool_rfam_results."""
 from __future__ import annotations
 import json
 from gene_annotation_episode.acquisition import RfamModelSnapshots

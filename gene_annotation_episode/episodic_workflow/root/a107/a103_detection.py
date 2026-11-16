@@ -53,8 +53,7 @@ def detect(request, *, verified_cds=None):
             features.append({'accession':record.id,'feature_index':index,'sequence_sha256':sha,
                              'in_searched_database':sha in known_hashes})
             if verified_cds is not None:
-                # Retain the calculation already performed above. The default
-                # legacy return and the translation/scoring rules are unchanged.
+                # Retain the calculation already performed above.
                 verified_cds.append({'accession':record.id,
                     'selected_accession':binding.get('selected_accession',binding['accession']),
                     'record_length':len(record),

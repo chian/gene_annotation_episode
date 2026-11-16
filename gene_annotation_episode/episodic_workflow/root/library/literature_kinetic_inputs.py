@@ -21,7 +21,6 @@ from .literature_rate_native_inputs import (
 )
 
 
-LEGACY_VERSION = "a105_kinetic_source_extraction_v2"
 VERSION = "a105_kinetic_source_extraction_v3"
 SELECTION_VERSION = "a105_kinetic_source_selection_v1"
 SOURCE_KINDS = ("primary_source", "synthetic_fixture")
@@ -41,20 +40,6 @@ COMPARISON_VALUES = {
     "comparison_scope": ("reported_protocols", "common_conditions", "unknown", "conflicting"),
     "nonintended_conditions_relationship": ("matched", "different", "unknown", "conflicting"),
 }
-LEGACY_DEPENDENCIES = {
-    "custody_module": "gene_annotation_episode.literature_assay_inputs",
-    "custody_sha256": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e",
-    "scalar_module": "gene_annotation_episode.literature_rate_native_inputs",
-    "scalar_sha256": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
-    "scalar_scope_module": "gene_annotation_episode.literature_partner_source_fields",
-    "scalar_scope_sha256": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17",
-}
-DEPENDENCIES = {**LEGACY_DEPENDENCIES,
-    "scalar_scope_sha256": "6683a39272203ff0b2844c951ab13b2333ae0ae16e3966c4eb932970f30764a8"}
-DEPENDENCY_RELEASES = {LEGACY_VERSION: LEGACY_DEPENDENCIES, VERSION: DEPENDENCIES}
-# These are expected release fingerprints, not a runtime attestation. The pure
-# reader performs no implementation-file IO. A storage integrator must pin and
-# authenticate actual dependencies; verification receipts record actual hashes.
 _NUMBER = r"[+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+−-]?[0-9]+)?"
 _TRANSLATE = str.maketrans({"−": "-", "⁻": "-", "¹": "1", "µ": "u", "μ": "u"})
 _TAGS = re.compile(r"</?[A-Za-z_][^<>]*>")
@@ -595,12 +580,10 @@ def read_kinetic_inputs(selection, *, read_source):
     inputs = validate_kinetic_inputs(inputs)
     return deepcopy({"version": VERSION, "source_ref": selection["source_ref"], "source_kind": selection["source_kind"],
         "operands": operands, "comparison": comparison, "calculation_inputs": inputs,
-        "input_unavailable_reasons": reasons, "source_refs": list(sources.references),
-        "implementation_dependencies": DEPENDENCIES})
+        "input_unavailable_reasons": reasons, "source_refs": list(sources.references)})
 
 
-__all__ = ["VERSION", "LEGACY_VERSION", "SELECTION_VERSION", "SOURCE_KINDS", "PARAMETER_UNITS",
+__all__ = ["VERSION", "SELECTION_VERSION", "SOURCE_KINDS", "PARAMETER_UNITS",
            "SUBJECT_FIELDS", "CONTEXT_FIELDS", "QUALIFICATIONS", "COMPARISON_VALUES",
-           "DEPENDENCIES", "LEGACY_DEPENDENCIES", "DEPENDENCY_RELEASES",
            "COUNT_STATUSES", "COUNT_REASONS", "COUNT_NOTATIONS", "COUNT_RELATIONS",
            "kinetic_arguments_schema", "read_kinetic_inputs"]

@@ -36,8 +36,7 @@ from .retained_file_pin import file_pin
 
 OPERATION = 'detect_and_characterize_structural_variations'
 MODE = 'lumpy_pe_sr_vcf'
-DRIVER_MODULE = 'gene_annotation_episode.native_lumpy_execution'
-CURRENT_DRIVER_MODULE = 'gene_annotation_episode.episodic_workflow.root.library.native_lumpy_execution'
+DRIVER_MODULE = 'gene_annotation_episode.episodic_workflow.root.library.native_lumpy_execution'
 
 RUN_PLAN_FILENAME = 'lumpy-plan.json'
 ATTEMPT_DIRECTORY_NAME = 'lumpy-attempt'
@@ -98,9 +97,8 @@ SCHEMAS = {'Binding': obj(operation={'const': OPERATION}, mode={'const': MODE}, 
     'RunPlan': PLAN, 'CommandSeal': SEAL}
 _STRICT = validators.extend(Draft202012Validator, type_checker=Draft202012Validator.TYPE_CHECKER.redefine(
     'integer', lambda checker, value: type(value) is int))
-_REQUIRED_MODULES = (DRIVER_MODULE, 'gene_annotation_episode.native_atac_differential_reference')
-_CURRENT_REQUIRED_MODULES = (
-    CURRENT_DRIVER_MODULE,
+_REQUIRED_MODULES = (
+    DRIVER_MODULE,
     'gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_reference',
     'gene_annotation_episode.__init__',
     'gene_annotation_episode.episodic_workflow.__init__',
@@ -179,10 +177,7 @@ def _runtime(value):
 
 
 def _current_driver(driver):
-    names = {row['module'] for row in driver['implementation_files']}
-    # An originally admissible inventory retains its original interpretation,
-    # including any extra supplied modules. It cannot select a current command.
-    return CURRENT_DRIVER_MODULE in names and DRIVER_MODULE not in names
+    return DRIVER_MODULE in {row['module'] for row in driver['implementation_files']}
 
 
 def _current_module_sources(module_root):
@@ -195,7 +190,7 @@ def _current_module_sources(module_root):
     import ast
     from .native_driver_source import _source_closure
     root = Path(module_root)
-    seeds = list(_CURRENT_REQUIRED_MODULES)
+    seeds = list(_REQUIRED_MODULES)
     while True:
         sources = _source_closure(module_root, seeds)
         additional = set()
@@ -230,7 +225,7 @@ def _verify_lumpy_driver_runtime(driver):
     # Preserve the original file/dependency verification and error order first.
     verify_driver_runtime(driver)
     if _current_driver(driver):
-        selected = Path(driver['module_root']) / (CURRENT_DRIVER_MODULE.replace('.', '/') + '.py')
+        selected = Path(driver['module_root']) / (DRIVER_MODULE.replace('.', '/') + '.py')
         require(Path(__file__).resolve(strict=True) == selected.resolve(strict=True),
                 'native_dependency_unavailable')
         required = _current_module_sources(driver['module_root'])
@@ -243,7 +238,7 @@ def _verify_lumpy_driver_runtime(driver):
 def _software(value):
     result = _record('SoftwareBinding', value)
     shared.validate_driver_runtime(result['driver_runtime'],
-        required_modules=(_CURRENT_REQUIRED_MODULES if _current_driver(result['driver_runtime']) else _REQUIRED_MODULES),
+        required_modules=_REQUIRED_MODULES,
         required_dependencies=_REQUIRED_DEPENDENCIES)
     _runtime(result['native_runtime'])
     return result
@@ -313,15 +308,12 @@ def _current_environment(value):
 
 def requested_job_from_lumpy(job, *, environment):
     job = validate_lumpy_native_job(job)
-    if _current_driver(job['software']['driver_runtime']):
-        _current_environment(environment)
-    else:
-        shared._environment(environment)
+    _current_environment(environment)
     driver = job['software']['driver_runtime']
 
     require(environment.get('PYTHONPATH') == os.pathsep.join([driver['module_root'], *shared._dependency_roots(driver)]), 'native_dependency_unavailable')
     return dict(argv=[driver['python_executable'], '-B', '-S', '-m',
-        CURRENT_DRIVER_MODULE if _current_driver(driver) else DRIVER_MODULE, RUN_PLAN_FILENAME],
+        DRIVER_MODULE, RUN_PLAN_FILENAME],
         environment=deepcopy(environment), native_lumpy=job)
 
 
@@ -485,21 +477,15 @@ def _driver_environment(plan):
         'PYTHONPATH': os.pathsep.join([driver['module_root'], *shared._dependency_roots(driver)]),
         'TMP': str(root / 'tmp'), 'TEMP': str(root / 'tmp'), 'TMPDIR': str(root / 'tmp'),
         'XDG_CACHE_HOME': str(root / 'cache'), 'PIP_CACHE_DIR': str(root / 'cache/pip')}
-    if _current_driver(driver):
-        environment.pop('OMP_NUM_THREADS', None)
-        environment.pop('OPENBLAS_NUM_THREADS', None)
+    environment.pop('OMP_NUM_THREADS', None)
+    environment.pop('OPENBLAS_NUM_THREADS', None)
     return environment
 
 
 def _native_environment(plan):
     root = PurePosixPath(plan['attempt_directory'])
-    if _current_driver(plan['requested_job']['native_lumpy']['software']['driver_runtime']):
-        return dict(PATH='/usr/bin:/bin', LC_ALL='C.UTF-8',
+    return dict(PATH='/usr/bin:/bin', LC_ALL='C.UTF-8',
             TMP=str(root / 'tmp'), TEMP=str(root / 'tmp'), TMPDIR=str(root / 'tmp'), XDG_CACHE_HOME=str(root / 'cache'))
-    # Original recorded seals retain their original environment as historical
-    # data. This Root driver refuses fresh execution of that original identity.
-    return dict(PATH='/usr/bin:/bin', LC_ALL='C.UTF-8', OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1',
-        TMP=str(root / 'tmp'), TEMP=str(root / 'tmp'), TMPDIR=str(root / 'tmp'), XDG_CACHE_HOME=str(root / 'cache'))
 
 
 def lumpy_command_argv(plan):

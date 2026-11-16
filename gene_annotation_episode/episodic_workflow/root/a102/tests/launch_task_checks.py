@@ -7,7 +7,6 @@ results, fix receiving authority, or establish a complete workflow reopening.
 import asyncio
 from contextlib import contextmanager, nullcontext
 from copy import deepcopy
-import hashlib
 from importlib import import_module
 import json
 from pathlib import Path
@@ -33,13 +32,6 @@ def capture(call):
         return {'status':'returned','value':call()}
     except Exception as error:
         return {'status':'raised','type':type(error).__module__+'.'+type(error).__qualname__,'message':str(error)}
-
-
-def source_hashes():
-    axis = Path(__file__).resolve().parents[1]
-    root = axis.parents[3]
-    return {str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest()
-        for p in sorted(axis.rglob('*.py')) if 'tests' not in p.relative_to(axis).parts}
 
 
 @contextmanager
@@ -153,33 +145,6 @@ def configuration_observations(v):
         'unsupported_foreign_role':capture(lambda:binding.assignment_schema('launch_local')),
         'yield_binding':capture(lambda:{'class':type(binding.yield_controller(context,0.,'original-epoch')).__name__})}
 
-
-def run_probe(output):
-    output=Path(output).resolve();output.mkdir(parents=True,exist_ok=False)
-    report={'version':'a102_launch_private_actual_probe_v1','homes':{},'source_map':source_hashes(),
-        'helper_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'diagnostic_completed':False,
-        'external_work':False,'full_saved_restoration':False}
-    destination=output/'launch-task-probe.json'
-    def retain():destination.write_text(json.dumps(report,indent=2)+'\n')
-    retain()
-    for ordinal,home in enumerate(HOMES):
-        row={};report['homes'][home]=row;retain()
-        with fixture(home,output/str(ordinal)/'binding') as value:
-            row.update(configuration_observations(value))
-            row['estimator_identity_and_saved_replay']=estimator_observations(value)
-            row['instruction_services']={case+';exchange='+str(exchange).lower():instruction_observation(value,case,exchange)
-                for case in INSTRUCTION_CASES for exchange in (False,True)}
-        row['outcomes']={}
-        for status in ('completed','invalid','failed','unavailable'):
-            with fixture(home,output/str(ordinal)/status) as value:
-                row['outcomes'][status]=action_trace(value,status)
-            retain()
-        with fixture(home,output/str(ordinal)/'wait') as value:
-            row['wait']=action_trace(value,kind='wait')
-        retain()
-    assert source_hashes()==report['source_map']
-    report['diagnostic_completed']=True;retain()
-    return report
 
 """Original lexical estimator identities, actual numerical states and saved replay.
 

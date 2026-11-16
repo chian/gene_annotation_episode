@@ -112,7 +112,6 @@ def populate_rate_observation_contrast(extraction,*,reference_group,test_group):
         'annotation_credit':None,'assay_error_rate':None}
 
 
-# Versioned reported-curve grid section; legacy complete v1 prefix is unchanged.
 from gene_annotation_episode.episodic_workflow.root.library.literature_reported_curve_precision_contracts import GRID_SHEET_VERSION
 from gene_annotation_episode.episodic_workflow.root.library.literature_reported_curve_precision_contracts import GRID_SOLVER_VERSION
 from gene_annotation_episode.episodic_workflow.root.library.literature_reported_curve_precision_contracts import GRID_REASONS

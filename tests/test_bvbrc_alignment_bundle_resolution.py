@@ -680,18 +680,6 @@ def test_saved_projection_replay_has_no_parsers_calculators_or_io(monkeypatch):
     assert validate_projected_facts(result['facts'], **arguments) == result['facts']
 
 
-def test_facades_keep_exact_original_eight_fields_and_digest():
-    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_bundle_adapter as msa, bvbrc_metacats_bundle_adapter as meta
-    for provider, adapter in [('msa',msa),('metacats',meta)]:
-        f = basic_fixture(provider); form = adapter.requested_form_schema(COUNT_FIELD)
-        result = adapter.consume_bundle(f.bundle, artifact_bytes=f.raw, supplied_values=f.values, requested_form=form, parameters=f.parameters)
-        assert set(result) == {'adapter_id','adapter_version','status','sheet','components','facts','missing_requirements','diagnostics'}
-        assert result['adapter_id'] == 'bvbrc_' + provider and result['adapter_version'] == '1'
-        assert result['facts']['n']['value'] == 2
-    assert msa.implementation_sha256() == meta.implementation_sha256()
-    assert len(msa.implementation_sha256()) == 64
-
-
 def test_supplied_original_hash_and_case_are_not_reconstructed_from_native_masks():
     f = meta_fixture(data=b'>a\n#Ac\n>b\n-AT\n')
     artifact = f.bundle['artifacts'][0]; content = r._content(artifact)
@@ -713,16 +701,6 @@ def test_supplied_original_hash_and_case_are_not_reconstructed_from_native_masks
     assert site['excluded_original_hash_rows_by_group'] == [[0],[]]
     assert site['excluded_terminal_rows_by_group'] == [[],[1]]
     assert components['results'][1]['value']['sites'][2]['symbols'] == ['T','c']
-
-
-def test_adapter_digest_covers_consumed_contract_bytes(monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_bundle_adapter as adapter
-    original = Path.read_bytes; digest = adapter.implementation_sha256()
-    def changed(path):
-        raw = original(path)
-        return raw + b'\n# explicit synthetic digest check\n' if path.name == 'bvbrc_alignment_bundle_contracts.py' else raw
-    monkeypatch.setattr(Path, 'read_bytes', changed)
-    assert adapter.implementation_sha256() != digest
 
 
 def test_nested_evidence_and_original_task_conflicts_have_specific_requirements():

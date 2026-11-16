@@ -22,20 +22,6 @@ def test_original_blast_query_geometry_and_invalid_kind(axis,program,query,repor
 
 
 @pytest.mark.parametrize('axis',AXES)
-def test_native_blast_retained_version_fields_and_conditional_argv(axis):
-    module=owner(axis,'native_blast_utility_contracts')
-    assert 'realized_token' not in module._ENTRY['properties'] and 'realized_token' not in module._ENTRY['required']
-    assert module.INPUT_SCHEMA_V3['properties']['role']=={'enum':['entry_batch','database_list']}
-    assert module.INPUT_SCHEMA_V3['properties']['format']=={'const':'text'}
-    assert {'sequence_input','taxid_map','identifier_list'}<=set(module.INPUT_SCHEMA_V2['properties']['role']['enum'])
-    assert 'gi_list_binary' in module.INPUT_SCHEMA_V2['properties']['format']['enum']
-    schema={'allOf':module.NATIVE_BLAST_UTILITY_REQUESTED_JOB_SCHEMA['allOf']}
-    validator=Draft202012Validator(schema)
-    assert validator.is_valid({'native_blast_utility':{'version':module.JOB_VERSION},'argv':['tool']})
-    assert not validator.is_valid({'native_blast_utility':{'version':module.JOB_VERSION},'argv':['']})
-    assert all(module.FAILURE_STAGES[code]=='execution' for code in module.OFFLINE_FAILURE_CODES)
-
-@pytest.mark.parametrize('axis',AXES)
 def test_hmmer_original_program_modes_and_calibration_domain(axis):
     module=owner(axis,'native_hmmer_contracts')
     validator=Draft202012Validator({'allOf':module.NATIVE_HMMER_JOB_SCHEMA['allOf']})

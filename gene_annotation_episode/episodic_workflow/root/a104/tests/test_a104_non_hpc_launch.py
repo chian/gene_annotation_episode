@@ -85,7 +85,6 @@ def test_actual_non_hpc_admission_and_actions(launch_frame, launch_home):
     assert frame.binding.allowed_children(frame.context, {}) == ('launch_hpc',)
     record = frame.binding.as_record()
     assert record == frame.binding.as_record()
-    assert 'implementation_sha256' not in record
     assert record['configuration']['resources'] == resources()
 
 

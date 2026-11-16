@@ -12,7 +12,6 @@ import errno
 import hashlib
 import json
 import math
-from pathlib import Path
 import re
 
 from jsonschema import Draft202012Validator
@@ -36,26 +35,6 @@ def validate_controlled_response_v2_selection(arguments):
 
 def _graph_request(selected, measurement):
     return {"version": "controlled_response_rate_figure_selection_v1", "images": cp(selected["images"]), "measurement": cp(measurement)}
-
-
-def _dependencies():
-    names = [*shared.DEPENDENCIES, "literature_controlled_response_inputs.py", "literature_controlled_response_v2_inputs.py",
-        "literature_controlled_response_figure_inputs.py", "literature_controlled_response_owner_calculations.py"]
-    paths = {
-        'literature_assay_inputs.py': 'gene_annotation_episode/episodic_workflow/root/literature_assay_inputs.py',
-        'literature_rate_native_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_rate_native_inputs.py',
-        'literature_partner_source_fields.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_partner_source_fields.py',
-        'literature_partner_defined_units.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_partner_defined_units.py',
-        'literature_kinetic_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_kinetic_inputs.py',
-        'literature_binding_visual_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_binding_visual_inputs.py',
-        'literature_binding_reader.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_binding_reader.py',
-        'literature_controlled_response_calculations.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_calculations.py',
-        'literature_controlled_response_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_inputs.py',
-        'literature_controlled_response_v2_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_v2_inputs.py',
-        'literature_controlled_response_figure_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_figure_inputs.py',
-        'literature_controlled_response_owner_calculations.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_owner_calculations.py',
-    }
-    return {name:hashlib.sha256((Path(__file__).parents[4]/paths[name]).read_bytes()).hexdigest() for name in names}
 
 
 def _read_graph(context, selected):
@@ -286,7 +265,7 @@ def _validate_graph(selected, result, *, sources, images, request):
     spec = next(i for i in actual_images if i["image_id"] == selected["image_id"])
     if pixels["recipe"] != selected["bar_selection"] or pixels["terminal_edge"] != selected["terminal_edge"] or pixels["image_id"] != selected["image_id"]:
         shared._fail("saved_graph_recipe_mismatch", "pixels")
-    if pixels["counter_module_sha256"] != _dependencies()["literature_controlled_response_figure_inputs.py"] or pixels["image_sha256"] != spec["byte_sha256"] or pixels["original_image_sha256"] != spec["original_byte_sha256"]:
+    if pixels["image_sha256"] != spec["byte_sha256"] or pixels["original_image_sha256"] != spec["original_byte_sha256"]:
         shared._fail("saved_graph_image_identity_mismatch", "pixels")
     recipe,edge = selected["bar_selection"],selected["terminal_edge"]
     roi = recipe["roi"]

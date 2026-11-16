@@ -7,7 +7,6 @@ the already authorized receiver views and possessed meaning records.
 """
 from collections.abc import Mapping
 from copy import deepcopy
-from functools import cache
 import json
 import math
 
@@ -208,24 +207,6 @@ def _evolutionary_results(selection, outcome, records):
     return [] if facts is None else [facts]
 
 
-@cache
-def _evolutionary_report_fields():
-    from . import a104_investigation
-    return tuple((frozenset(module.legacy_report_schema()['properties']),
-                  frozenset(module.report_schema()['properties']))
-                 for module in (a104_investigation,))
-
-
-def _grading_report_values(form):
-    if not isinstance(form, Mapping):
-        return form
-    fields = frozenset(form)
-    for legacy, current in _evolutionary_report_fields():
-        if fields == legacy:
-            return {name: value for name, value in form.items() if name in current}
-    return form
-
-
 def requested_action_history(workflow, source, *, before):
     """Retain outcomes this actor explicitly read through its own history tool.
 
@@ -361,7 +342,7 @@ def completed_action_reports(workflow, source, state, *, before, received_axis_r
             # them is labeled separately from this row's original parent gain.
             facts['admitted_child_values'] = {
                 'value_source': 'Returned child; separate from this original parent action’s earned credit',
-                'values': deepcopy(_grading_report_values(outcome['admitted_child_return']))}
+                'values': deepcopy(outcome['admitted_child_return'])}
         for key in ('feedback', 'report_delivery_failure', 'child_completion',
                 'error_code', 'errors', 'conflicts', 'notices'):
             if outcome.get(key) is not None:

@@ -231,9 +231,7 @@ def build_biopython_pairwise_sheet(native: dict, *, molecule: str) -> dict:
     missing traceback for ``aligned=True`` supplies no zero measurements.
 
     ``biopython_pairwise_native_v2`` deliberately omits derived convenience
-    measurements. Markerless legacy results retain their original required
-    reported-field checks; any supplied reported values still retain conflicts.
-    Both formats populate this same sheet and use the same calculator.
+    measurements; any supplied reported values still retain conflicts.
     """
     if type(native) is not dict:
         raise ValueError("biopython_pairwise_native_object_required")
@@ -244,8 +242,7 @@ def build_biopython_pairwise_sheet(native: dict, *, molecule: str) -> dict:
         raise ValueError("biopython_pairwise_aligned_boolean_required")
     if type(native.get("mode")) is not str or native["mode"] not in {"local", "global"}:
         raise ValueError("biopython_pairwise_mode_required")
-    native_format = native.get("native_format")
-    if native_format is not None and native_format != "biopython_pairwise_native_v2":
+    if native.get("native_format") != "biopython_pairwise_native_v2":
         raise ValueError("biopython_pairwise_native_format_unknown")
     issues = []
     aligned = native["aligned"]
@@ -263,7 +260,7 @@ def build_biopython_pairwise_sheet(native: dict, *, molecule: str) -> dict:
     reported = {field: _number(native.get(field), field, issues,
         integer=field.endswith("positions"), minimum=0,
         maximum=None if field.endswith("positions") else 1,
-        required=aligned and native_format is None)
+        required=False)
         for field in _REPORTED_FIELDS}
     counts = None
     geometry, correspondence = _empty_geometry(), []

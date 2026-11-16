@@ -3,7 +3,6 @@
 These host functions read experimental quantities and preserve source meanings.
 """
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a106.literature_implementation_sources import source_file
 from copy import deepcopy as cp
 import json
 from functools import lru_cache
@@ -67,8 +66,8 @@ def _schemas():
     ED['Assignment']=cp(D['Assignment'])
     ED['ScopeRelationExtraction']=obj({'selection':cp(D['ScopeRelation']),'witnesses':arr(ref('WitnessRecord')),
         'effective_value':cp(D['ScopeRelation']['properties']['value'])})
-    # Optional only for saved legacy extractions. Live reads retain each local
-    # interpretation's actual witnesses independently of any whole-model request.
+    # Reads retain each local interpretation's actual witnesses independently
+    # of any whole-model request.
     E['properties']['local_pair_extractions']=arr(obj({'pair_key':T,
         'admissibility':obj({'selection':cp(D['LocalPairNomination']['properties']['admissibility']),
             'witnesses':arr(ref('WitnessRecord')),'effective_value':enum('compatible','unknown','conflicting')}),
@@ -98,12 +97,9 @@ def _schemas():
         ('partial_calculation_inputs',null(ref('OwnerInputs'))),
         ('partial_projection_state',enum('not_required','ready','unsupported_origin_projection','unavailable_group_identity')),
         ('component_local_inputs',ref('LocalInputs'))]:E['properties'][name]=shape
-    E['required'] += ['companion_extractions','projection_status','final_projection_basis','reconciliation_decisions','joint_scope_extractions','alternative_inputs',
+    E['required'] += ['companion_extractions','local_pair_extractions','projection_status','final_projection_basis','reconciliation_decisions','joint_scope_extractions','alternative_inputs',
         'partial_calculation_inputs','partial_projection_state','component_local_inputs']
     ED['DependencyRecord']['properties']['reader_contract_version']={'const':'controlled_response_source_extraction_v3'}
-    for name in ['literature_controlled_response_v3_inputs.py','literature_controlled_response_local_calculations.py']:
-        ED['DependencyRecord']['properties']['expected_module_fingerprints']['properties'][name]=cp(v2.SHA)
-        ED['DependencyRecord']['properties']['expected_module_fingerprints']['required'].append(name)
     
     # Standalone component-local PARSED input: never a four-arm OwnerInputs wrapper.
     LD=cp(v2._extraction_schema()['$defs'])
@@ -294,14 +290,6 @@ def validate_controlled_response_v3_selection(arguments):
             if value["role"] != prefix + row["condition"]:
                 shared._fail("local_pair_role_mismatch", "local_pair_assignments." + name)
     return selected
-
-
-def _dependencies():
-    import hashlib
-    from pathlib import Path
-    names = list(v2._dependencies()) + ['literature_controlled_response_v3_inputs.py',
-        'literature_controlled_response_local_calculations.py']
-    return {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
 
 
 def _selector(role, key=None):
@@ -558,8 +546,8 @@ def _finish_v3(context, *, arms, companion_arms, covariance_scopes):
         'images': cp(context.images), 'arms': {r: cp(dict(a)) if a else None for r, a in arms.items()},
         'relationships': relationships, 'covariance': base_covariance, 'requested_model': requested, 'effective_model': effective,
         'calculation_inputs': projection, 'representation_reconciliations': shared._representations(arms), 'diagnostics': [],
-        'implementation_dependencies': cp(context._saved_implementation_dependencies) if isinstance(context, shared._SavedV3SourceContext) else {'reader_contract_version': 'controlled_response_source_extraction_v3',
-            'calculator_contract_version': 'controlled_response_owner_inputs_v2', 'expected_module_fingerprints': _dependencies()},
+        'implementation_dependencies': {'reader_contract_version': 'controlled_response_source_extraction_v3',
+            'calculator_contract_version': 'controlled_response_owner_inputs_v2'},
         'companion_extractions': [{'reading_key': s['reading_key'], 'primary_role': s['role'], 'reading': cp(dict(a))} for s, a in companion_arms],
         'projection_status': 'ready' if projection is not None else 'unresolved_active_reconciliation', 'final_projection_basis': basis,
         'reconciliation_decisions': decisions, 'joint_scope_extractions': joint_rows, 'alternative_inputs': alternatives,
@@ -583,7 +571,7 @@ def validate_controlled_response_v3_extraction(arguments, extraction):
             if arm['graph_details'] is None or arm['graph_details']['measurement'] != measurement:
                 shared._fail('saved_graph_measurement_mismatch', 'measurement')
             return v2._validate_graph(selected, arm['graph_details'], sources={(s['source_ref'], s['representation']): s for s in source_records},
-                images=image_records, request=arguments, source_dependencies=extraction["implementation_dependencies"])
+                images=image_records, request=arguments)
         return v2._validate_measurement(selected, measurement, source_records=source_records, image_records=image_records)
     return shared.validate_controlled_response_saved_science(arguments, extraction, measurement_checks=check)
 

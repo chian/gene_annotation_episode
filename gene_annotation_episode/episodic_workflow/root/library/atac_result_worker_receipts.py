@@ -1,8 +1,8 @@
-"""Selected atac action controls and historical completed-action authority.
+"""Selected atac action controls and completed-action authority.
 
 These private records belong to the existing results episode. They contain no
 calculator and grant no access merely because a file or a private receipt exists.
-Historical checks use frozen controls and Store metadata, never scientific bytes.
+Completed-action checks use frozen controls and Store metadata, never scientific bytes.
 """
 from __future__ import annotations
 
@@ -33,13 +33,13 @@ from gene_annotation_episode.episodic_workflow.root.library.atac_differential_re
 from gene_annotation_episode.episodic_workflow.root.library.atac_differential_return_views import FACT_SOURCES, FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE, validate_atac_fact_values
 from gene_annotation_episode.episodic_workflow.root.library.atac_differential_result_worker import validate_atac_result_worker_plan, validate_atac_result_worker_result
 from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_capture import validate_atac_native_capture
-from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_contracts import retained_policy, POLICY, atac_driver_argv, validate_atac_requested_job, validate_atac_run_plan, _dependency_roots
+from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_contracts import POLICY, atac_driver_argv, validate_atac_requested_job, validate_atac_run_plan, _dependency_roots
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import validate_receipt
 from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from gene_annotation_episode.episodic_workflow.root.progress_records import validate_resource_observation
 
 
-from gene_annotation_episode.episodic_workflow.root.library.atac_result_receipt_values import AtacDifferentialResultIntent, AtacDifferentialHandoffProof, AtacDifferentialNativeSnapshot, AtacDifferentialOrigin, AtacDifferentialQualifiedFiles, AtacDifferentialFactGroups, AtacDifferentialSheetEvidence, AtacDifferentialResultReceipt, AtacDifferentialResultAction, _historical, _finite_json_copy, require, closed, same, artifact_references, decode, directory, regular, read_control, immutable, empty_facts, empty_files, unique, outcome, qualified_files, closure_value, VERSION, _READING, _READ_CACHE, _OUTPUTS, _TRACK_ROLES
+from gene_annotation_episode.episodic_workflow.root.library.atac_result_receipt_values import AtacDifferentialResultIntent, AtacDifferentialHandoffProof, AtacDifferentialNativeSnapshot, AtacDifferentialOrigin, AtacDifferentialQualifiedFiles, AtacDifferentialFactGroups, AtacDifferentialSheetEvidence, AtacDifferentialResultReceipt, AtacDifferentialResultAction, _finite_json_copy, require, closed, same, artifact_references, decode, directory, regular, read_control, immutable, empty_facts, empty_files, unique, outcome, qualified_files, closure_value, VERSION, _READING, _READ_CACHE, _OUTPUTS, _TRACK_ROLES
 
 
 class AtacResultWorkerReceipts:
@@ -49,7 +49,7 @@ class AtacResultWorkerReceipts:
         if plan is None:
             require(capture is None and execution is None)
             return
-        plan = validate_atac_result_worker_plan(plan, historical=_historical(receipt['intent']))
+        plan = validate_atac_result_worker_plan(plan)
         intent, selector = receipt["intent"], receipt["intent"]["assignment"]["selector"]
         root = self.action_directory(intent["episode_id"], intent["operation_key"]) / "worker"
         require(plan["directory"] == str(root) and same(plan["selector"], selector))
@@ -72,7 +72,7 @@ class AtacResultWorkerReceipts:
             require(execution is None)
             return
         validate_atac_result_record("WorkerCapture", capture)
-        policy = retained_policy(execution.get('policy') if type(execution) is dict else None, historical=_historical(receipt['intent']))
+        policy = POLICY
         closed(execution, ("version", "plan_file", "intent", "terminal", "quiescent", "policy", "returncode",
             "metadata", "failure", "handle_file", "request_file", "stdout_file", "stderr_file"))
         require(execution["version"] == "atac_worker_execution_v1"
@@ -103,9 +103,7 @@ class AtacResultWorkerReceipts:
         required = ("atac_differential_result_worker", "atac_differential_contracts", "atac_differential_inputs",
             "atac_differential_sheet", "atac_differential_calculations", "atac_differential_scores",
             "atac_differential_calculation_inputs", "atac_reference_observations", "atac_differential_result_views")
-        legacy_sources = all(str(root / "source_snapshot/gene_annotation_episode" / (name + ".py")) in paths for name in required)
-        current_sources = all(str(root / "source_snapshot/gene_annotation_episode/episodic_workflow/root/library" / (name + ".py")) in paths for name in required)
-        require(legacy_sources or current_sources)
+        require(all(str(root / "source_snapshot/gene_annotation_episode/episodic_workflow/root/library" / (name + ".py")) in paths for name in required))
         names = []
         for dependency in selected["dependencies"]:
             closed(dependency, ("distribution", "version", "package_root", "files"))
@@ -120,10 +118,8 @@ class AtacResultWorkerReceipts:
         require(len(names) == len(set(names))
             and {"jsonschema", "attrs", "referencing", "rpds-py", "jsonschema-specifications"} <= set(names))
         require(selected["interpreter"]["path"] == str(root / "runtime/python")
-            and ((legacy_sources and selected["command"] == [str(root / "runtime/python"), "-B", "-S", "-m",
-                "gene_annotation_episode.atac_differential_result_worker", str(root / "plan.json")])
-                or (current_sources and selected["command"] == [str(root / "runtime/python"), "-B", "-S", "-m",
-                "gene_annotation_episode.episodic_workflow.root.library.atac_differential_result_worker", str(root / "plan.json")])))
+            and selected["command"] == [str(root / "runtime/python"), "-B", "-S", "-m",
+                "gene_annotation_episode.episodic_workflow.root.library.atac_differential_result_worker", str(root / "plan.json")])
         environment = selected["environment"]
         require(type(environment) is dict and all(type(k) is str and type(v) is str for k, v in environment.items()))
         expected = {"PYTHONPATH": os.pathsep.join([str(root / "source_snapshot"), *_dependency_roots(selected)]),

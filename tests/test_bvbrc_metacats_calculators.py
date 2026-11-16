@@ -11,7 +11,7 @@ import subprocess
 import pytest
 import scipy
 
-from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
+from gene_annotation_episode.episodic_workflow.root.library.phylogeny_formats import parse_aligned_fasta
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_values import numeric_cell
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculators import (
     metacats_group_counts, metacats_statistics, metacats_effects,
@@ -304,7 +304,7 @@ def test_saved_counts_recalculate_with_changed_parameters_without_io(monkeypatch
     monkeypatch.setattr(Path, 'read_text', forbidden)
     monkeypatch.setattr(socket, 'socket', forbidden)
     monkeypatch.setattr(subprocess, 'Popen', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.phylogeny_formats.parse_aligned_fasta', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.phylogeny_formats.parse_aligned_fasta', forbidden)
     saved = json.loads(serialized)
     assert metacats_statistics(saved, **PARAMS) == initial
     changed = metacats_statistics(saved, **{**PARAMS, 'epsilon': .5})

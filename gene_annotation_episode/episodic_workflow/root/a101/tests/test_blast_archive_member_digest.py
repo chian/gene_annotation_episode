@@ -83,27 +83,6 @@ def _assert_member_identities(result, raw, members):
         assert native["document"] == json.loads(payload)
 
 
-def test_retained_ncbi_members_numerics_and_legacy_reader_shape(retained):
-    raw, members, document = retained
-    result = _collect(raw)
-    _assert_member_identities(result, raw, members)
-    search, = result["searches"]
-    old = parse_blast_json(raw, mode="database", resource="api")
-    assert old["native"]["archive_member"] == {"ordinal": 1, "name": "DTKE1D4G016_1.json"}
-    assert old["native"]["sha256"] == _sha(raw)
-    assert search["search_key"] == {"artifact_key": "retained", "member_ordinal": 1,
-        "report_index": 0, "search_pointer": "/BlastOutput2/report/results/search"}
-    assert search["normalized"]["hits"] == old["hits"]
-    assert search["normalized"]["query"] == old["query"]
-    assert search["normalized"]["search"]["statistics"] == old["search"]["statistics"]
-    assert [hit["hsps"][0]["score"] for hit in old["hits"]] == [1358, 87, 72, 71, 70, 69, 69]
-    assert [hit["hsps"][0]["identity"] for hit in old["hits"]] == [253, 31, 38, 23, 15, 22, 22]
-    assert search["native"]["report"] == document["BlastOutput2"]["report"]
-    assert search["native"]["search"] == document["BlastOutput2"]["report"]["results"]["search"]
-    assert search["program_context"]["geometry_program"] == "blastp"
-    assert not result["issues"] and not search["issues"]
-
-
 def test_duplicate_member_names_keep_distinct_bytes_and_every_report_ordinal(retained):
     _, retained_members, document = retained
     # A synthetic second wrapper repeats retained native records; it is neither

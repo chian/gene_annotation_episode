@@ -26,7 +26,6 @@ from gene_annotation_episode.native_file_capture import NativeFileCaptureError, 
 from gene_annotation_episode.episodic_workflow.root.library.native_source_snapshot import _source_closure, _copy_exact
 
 WORKER_MODULE = "gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_worker"
-HISTORICAL_WORKER_MODULE = "gene_annotation_episode.fluorescence_result_worker"
 INTENT_VERSION = "fluorescence_worker_intent_v1"
 EXECUTION_VERSION = "fluorescence_worker_execution_v1"
 CAPTURE_VERSION = "fluorescence_worker_capture_v1"
@@ -110,7 +109,7 @@ def _validate_intent(intent, plan):
     root = Path(plan["directory"])
     command = intent["command"]
     require(type(command) is list and len(command) == 6
-        and command[4] in (WORKER_MODULE, HISTORICAL_WORKER_MODULE)
+        and command[4] == WORKER_MODULE
         and command == [str(root / "runtime/python"), "-B", "-S", "-m", command[4], str(root / "plan.json")],
             "worker_execution_mismatch")
     require(type(intent["source_pins"]) is list and intent["source_pins"] and type(intent["runtime_files"]) is list
@@ -330,7 +329,7 @@ def prepare_fluorescence_result_worker(store, *, plan, policy):
         execution_path = root / "execution.json"
         handle = native.NativeJobHandle(root / "worker.handle.json")
         if not execution_path.exists():
-            validate_fluorescence_policy(intent["policy"], fresh=True)
+            validate_fluorescence_policy(intent["policy"])
             _verify_pins(intent)
             if not handle.path.exists():
                 native.prepare_job(intent["command"], cwd=root, policy=policy, handle_path=handle.path,

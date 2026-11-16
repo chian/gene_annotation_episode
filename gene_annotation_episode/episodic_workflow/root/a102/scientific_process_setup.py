@@ -12,7 +12,7 @@ def prepare_scientific_binding(*, run_directory, source_directory, tool_catalog,
     library = ScientificProcessLibrary.freeze(
         Path(run_directory) / "scientific-process-library", source=source_directory)
     tools = ScientificToolLibrary.freeze(
-        Path(run_directory) / "scientific-tool-library", catalog=tool_catalog, tool_info=True,
+        Path(run_directory) / "scientific-tool-library", catalog=tool_catalog,
         resource_catalogs=resource_catalogs)
     # Service methods are used only by an actual Episode invocation; descriptor
     # preparation intentionally owns no executable workflow or model connection.

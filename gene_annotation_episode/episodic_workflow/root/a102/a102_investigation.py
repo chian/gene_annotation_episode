@@ -13,16 +13,9 @@ from .scientific_tool_library import ScientificToolLibrary
 VERSION = 'a102_investigation_v1'
 TASKS = ('model_inventory', 'target_model_correspondence', 'structural_discovery', 'native_comparison', 'functional_feature_geometry', 'functional_contrast', 'reference_attribution', 'local_trait_attribution', 'interface_constraints', 'synthesis')
 
-def legacy_report_schema():
-    """Historical model-verdict contract; new commissions use saved grading."""
-    refs = {'type': 'array', 'items': {'type': 'string', 'format': 'reference'}, 'uniqueItems': True}
-    schema = obj({'structural_summary': {'type': 'string', 'enum': ['not_assessed', 'native_geometry_retained', 'partial_geometry', 'no_model', 'no_informative_match']}, 'scope_status': {'type': 'string', 'enum': ['not_assessed', 'unresolved', 'partial', 'represented']}, 'functional_support': {'type': 'string', 'enum': ['not_assessed', 'fold_only', 'local_trait_evidence', 'feature_qualified', 'contrast_qualified', 'contradicted']}, 'limitations': {'type': 'array', 'items': {'type': 'string', 'enum': ['predicted_target', 'predicted_reference', 'construct_difference', 'missing_coordinates', 'partial_match', 'ambiguous_mapping', 'unresolved_primary_variant', 'no_model', 'no_informative_match', 'function_features_unassessed', 'alternatives_unassessed', 'native_software_unbound', 'subunit_scope', 'fragment_input', 'unknown_full_length']}, 'uniqueItems': True}, 'information_need_refs': refs, 'records': {**deepcopy(refs), 'x-source': 'committed_record_refs', 'description': 'Actual received and committed sources, bound maps and automatically graded structural results for the parent to recompute.'}, 'structural_credit': {'type': 'number', 'x-source': 'credit', 'description': 'Host-calculated A102 native correspondence B; not a function probability.'}})
-    validate_closed_schema(schema)
-    return schema
-
 def report_schema():
-    original = legacy_report_schema()['properties']
-    schema = obj({name: deepcopy(original[name]) for name in ('records', 'structural_credit')})
+    refs = {'type': 'array', 'items': {'type': 'string', 'format': 'reference'}, 'uniqueItems': True}
+    schema = obj({'records': {**deepcopy(refs), 'x-source': 'committed_record_refs', 'description': 'Actual received and committed sources, bound maps and automatically graded structural results for the parent to recompute.'}, 'structural_credit': {'type': 'number', 'x-source': 'credit', 'description': 'Host-calculated A102 native correspondence B; not a function probability.'}})
     validate_closed_schema(schema)
     return schema
 
@@ -85,28 +78,10 @@ def resolve_report(store, report, *, scope):
     from .a102_credit import A102StructuralCredit
     from .a102_publication import received_grade
     scope = store.validate_scope(plain(scope))
-    legacy = 'structural_summary' in report
-    validate_form(report, legacy_report_schema() if legacy else report_schema(), lambda ref, namespace: ref in store.reference_subset([ref], scope) and (namespace is None or store.get(ref)['record_type'] == namespace))
+    validate_form(report, report_schema(), lambda ref, namespace: ref in store.reference_subset([ref], scope) and (namespace is None or store.get(ref)['record_type'] == namespace))
     native = [row for ref in report['records'] if (row := received_grade(store, ref)) is not None]
-    if legacy and report['structural_summary'] == 'native_geometry_retained' and (not native):
-        raise ContractError('a102_native_geometry_statement_requires_native_records')
     projection = A102StructuralCredit().read_details(store, scope, known_record_refs=report['records'], details_limit=24, details_offset=0)
-    features = projection['functional_sheets']['features']
-    panels = projection['functional_sheets']['contrasts']
-    if not legacy:
-        return {'native_comparisons': native, 'functional_sheets': projection['functional_sheets'], 'tool_attachments': projection['tool_attachments'], 'target_sheets': projection['target_sheets'], 'child_reported_credit': report['structural_credit'], 'receiving_scope_credit': projection['credit'], 'reporting': 'saved_native_and_per_use_grading; no_separate_function_verdict'}
-    support = report['functional_support']
-    if support == 'fold_only' and (not projection['credit'] > 0):
-        raise ContractError('a102_fold_statement_requires_eligible_native_correspondence')
-    if support == 'feature_qualified' and (not any((row['E'] is not None and row['E'] > 0 for row in features))):
-        raise ContractError('a102_feature_statement_requires_received_feature_sheet')
-    if support == 'local_trait_evidence' and (not any((row['score'] is not None for row in projection['functional_sheets']['traits']))):
-        raise ContractError('a102_local_trait_statement_requires_received_trait_sheet')
-    if support == 'contrast_qualified' and (not any((row['A102_f'] is not None and row['A102_f'] > 0 for row in panels))):
-        raise ContractError('a102_contrast_statement_requires_received_contrast_sheet')
-    if support == 'contradicted' and (not any((any((feature['state'] in {'established_absent', 'established_incompatible'} for feature in row['features'])) for row in features))):
-        raise ContractError('a102_contradiction_requires_grounded_incompatible_feature')
-    return {'native_comparisons': native, 'functional_sheets': projection['functional_sheets'], 'tool_attachments': projection['tool_attachments'], 'target_sheets': projection['target_sheets'], 'child_reported_credit': report['structural_credit'], 'receiving_scope_credit': projection['credit'], 'information_need_refs': list(report['information_need_refs'])}
+    return {'native_comparisons': native, 'functional_sheets': projection['functional_sheets'], 'tool_attachments': projection['tool_attachments'], 'target_sheets': projection['target_sheets'], 'child_reported_credit': report['structural_credit'], 'receiving_scope_credit': projection['credit'], 'reporting': 'saved_native_and_per_use_grading; no_separate_function_verdict'}
 
 @dataclass(frozen=True)
 class A102ServiceFactory:

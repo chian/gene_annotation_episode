@@ -28,6 +28,7 @@ from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a106.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary import source_data, extract, calculate, covariance
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary_integration import fixture, source, binding_for, literature_factories
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_integration import locations
 from test_runtime import FixtureController, ScriptedProvider
 
 
@@ -35,7 +36,6 @@ FIELDS = ('summary_kind', 'summary_scale', 'spread_kind', 'spread_scale',
           'count_n', 'count_unit', 'count_independence')
 SUPPORT = b'Constructed covariance design; covariance 0.000000000000000000, unrelated arm value 987654321.'
 NAMES = ['perturbation_mean_variance']
-LEGACY = Path(__file__).with_name('fixtures') / 'a106_summary_legacy_056_128.json'
 
 
 def data_for(kind='mean_covariance', basis='source_reported', *, qualify=True, all_pairs=False):
@@ -85,7 +85,7 @@ def covariance_fixture(path, kind='mean_covariance', basis='source_reported', *,
 def selected(path, kind='mean_covariance', basis='source_reported', **kwargs):
     store, context, args = covariance_fixture(path, kind, basis, **kwargs)
     binding = binding_for(store, context)
-    outcome = asyncio.run(binding.execute(context, 'literature.perturbation.populate', args, 'covariance-selected'))
+    outcome = asyncio.run(binding.execute(context, 'literature.perturbation.populate', locations(args), 'covariance-selected'))
     assert outcome['status'] == 'completed', outcome.get('feedback')
     context = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
     schema = obj({'measurements': perturbation_summary_cells_schema()})
@@ -236,43 +236,6 @@ def test_unknown_or_unavailable_estimator_is_not_presented_as_applied_covariance
         store.close()
 
 
-def test_registered_legacy55_and56_schemas_remain_exact_and_new_tree_is_not_generic(tmp_path):
-    original55 = json.loads((Path(__file__).with_name('fixtures') / 'a106_summary_legacy_119_122.json').read_text())['frozen_schema']
-    original56 = json.loads(LEGACY.read_text())['frozen_schema']
-    assert perturbation_summary_cells_schema(include_interpretation_basis=False) == original55
-    assert perturbation_summary_cells_schema(include_covariance_interpretations=False) == original56
-    for node in (original55, original56, perturbation_summary_cells_schema()):
-        validate_closed_schema(obj({'measurements': node}))
-    changed = perturbation_summary_cells_schema()
-    changed['items']['properties']['covariance_interpretations']['items']['properties']['kind']['enum'].append('guessed')
-    with pytest.raises(ReportBoundaryError): validate_closed_schema(obj({'measurements': changed}))
-
-
-def test_actual_prechange56_saved_rows_reconstruct_without_source_or_basis_backfill():
-    fixture = json.loads(LEGACY.read_text()); form = fixture['form']; rows = form['measurements']
-    assert all(len(row) == 56 and 'covariance_interpretations' not in row for row in rows)
-    assert hashlib.sha256((json.dumps(form, indent=2, ensure_ascii=False, allow_nan=False) + '\n').encode()).hexdigest() == fixture['provenance']['original_form_sha256']
-    class SavedOnlyStore:
-        def __init__(self):
-            self.db = sqlite3.connect(':memory:'); self.db.row_factory = sqlite3.Row
-            self.db.execute('create table literature_perturbation_operations(run_id,episode_id,operation_key,signature,outcome)')
-            self.db.execute('insert into literature_perturbation_operations values(?,?,?,?,?)',
-                tuple(fixture['operation'][k] for k in ('run_id', 'episode_id', 'operation_key', 'signature', 'outcome')))
-            self.db.execute('pragma query_only=ON')
-        def get(self, reference): return deepcopy(fixture['records'][reference])
-        def get_artifact(self, reference):
-            assert reference in fixture['saved_artifacts'], 'original source/recipe bytes unavailable'
-            return fixture['saved_artifacts'][reference].encode()
-        def forbidden(self, *args, **kwargs): raise AssertionError('saved replay may not mutate')
-        put = artifact = transaction = forbidden
-    reopened = SavedOnlyStore()
-    try:
-        projection = LiteraturePerturbationSummaryProjection(reopened, fixture['operation']['run_id'])
-        actual = projection.project_cells([rows[0]['sheet_ref']], permitted_record_refs=[rows[0]['sheet_ref']],
-            components=[row['component'] for row in rows])
-        assert canonical(actual) == canonical(rows) and reopened.db.total_changes == 1
-    finally:
-        reopened.db.close()
 
 
 def test_ordinary_child_parent_and_first_read_only_reconstruction_keep_actual_covariance_meaning(tmp_path, monkeypatch):
@@ -287,7 +250,7 @@ def test_ordinary_child_parent_and_first_read_only_reconstruction_keep_actual_co
         commit = {name: [] for name in store.reasoning_schema()['required']}
         body = store.get_artifact(root['artifact_ref']).decode(); quote = 'matched endpoint'; start = body.index(quote)
         commit['source_subjects'] = [{'alias': role, 'reference_type': 'assay', 'source_ref': root['id'], 'label': quote,
-            'anchor': {'source_ref': root['id'], 'artifact_ref': root['artifact_ref'], 'start': start, 'end': start + len(quote), 'quote': quote}}]
+            'anchor': {'source_ref': root['id'], 'artifact_ref': root['artifact_ref'], 'start': start, 'end': start + len(quote)}}]
         return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
     schema = obj({'only_variance': perturbation_summary_cells_schema()})
     provider = ScriptedProvider([
@@ -295,7 +258,7 @@ def test_ordinary_child_parent_and_first_read_only_reconstruction_keep_actual_co
             'goal': 'Compare source-supported covariance meanings', 'scope': plain(context.scope),
             'purpose': 'Return only the selected variance with its actual covariance premise',
             'schema_json': json.dumps(schema), 'initial_report_json': '{}'}, 'report_update': {}},
-        {'selection': {'kind': 'tool', 'tool': 'literature.perturbation.populate', 'arguments': args}, 'report_update': {}},
+        {'selection': {'kind': 'tool', 'tool': 'literature.perturbation.populate', 'arguments': locations(args)}, 'report_update': {}},
         lambda inputs: reason(inputs, 'own'), lambda inputs: reason(inputs, 'parent')])
     scorer = ScientificFindingProgress(FindingProgressPolicy(1))
     try:

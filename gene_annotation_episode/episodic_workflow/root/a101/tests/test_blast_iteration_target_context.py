@@ -98,16 +98,6 @@ def test_complete_search_address_is_required(field, value):
                for issue in result["issues"])
 
 
-def test_old_global_context_is_retained_only_in_unchanged_v1_contract():
-    args = example()
-    args["target_context"] = args.pop("target_contexts")[0]["target_context"]
-    sheet, result = run(args)
-    assert sheet["schema"] == "blast_iteration_sheet_v1" and "target_contexts" not in sheet
-    assert result["schema"] == "blast_iteration_components_v1"
-    assert all("target_context_qualification" not in row for row in result["searches"])
-    assert [taxonomy(row)["ranks"][0]["target_matching_fraction"] for row in result["searches"]] == [1.0, 1.0]
-
-
 @pytest.mark.parametrize("bad", [False, {}, "bad", [False], [{"search_key": {}, "target_context": {}}]])
 def test_invalid_target_context_rows_fail_the_sheet_contract(bad):
     args = example()

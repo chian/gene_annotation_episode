@@ -1,7 +1,4 @@
-"""A107 original atac control json; selected request/saved-control declarations.
-
-Native dispatch bodies remain outside this finite contract owner. Literal saved/native module identities remain original.
-"""
+"""A107 atac control json."""
 from __future__ import annotations
 import json
 from gene_annotation_episode.episodic_workflow.root.a107.library.atac_execution_contracts import require

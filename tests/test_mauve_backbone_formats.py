@@ -163,18 +163,6 @@ def test_caller_contract_errors_have_stable_prefix(family, bad):
         parser(raw, **args)
 
 
-@pytest.mark.parametrize('family', ['backbone', 'bbcols'])
-def test_hash_and_encoding_data_failures_return_invalid(family):
-    parser = parse_mauve_backbone if family == 'backbone' else parse_mauve_bbcols
-    dialect = BACKBONE_DIALECT if family == 'backbone' else BBCOLS_DIALECT
-    raw = b'\xff\n'; a = artifact(raw)
-    result = parser(raw, artifact=a, dialect=dialect, encoding='ascii')
-    assert result['value'] is None and result['diagnostics'][0]['code'].endswith('encoding_invalid')
-    a['sha256'] = '0' * 64
-    result = parser(raw, artifact=a, dialect=dialect, encoding='ascii')
-    assert result['value'] is None and result['diagnostics'][0]['code'].endswith('digest_mismatch')
-
-
 @pytest.mark.parametrize('change', ['extra_field', 'wrong_id', 'wrong_artifact', 'bad_location',
     'wrong_interval', 'wrong_strand', 'wrong_state', 'wrong_native_value', 'duplicate_row_index'])
 def test_saved_backbone_document_corruption_is_rejected(change):

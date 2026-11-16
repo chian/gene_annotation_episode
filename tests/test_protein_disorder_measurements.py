@@ -1,4 +1,4 @@
-"""Supplied-data controls; engineered whole-wrapper controls require bounded529.
+"""Supplied-data controls.
 
 Engineered score strings test postprocessing, not IUPred scientific execution.
 """

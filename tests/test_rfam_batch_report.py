@@ -425,24 +425,3 @@ def test_projection_requires_exact_supplied_artifact_digests():
                 "calculation_ref": "saved", "sheet_digest": rfam_digest(sheet), "calculation_digest": "0" * 64})
 
 
-def test_legacy_alignment_outputs_exactly_match_the_preexisting_retained_objects():
-    from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_alignment import parse_rfam_alignment_display
-    root = Path(__file__).resolve().parents[1]
-    evidence = root / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/alignment"
-    for name in ("native-rfam_example_original", "native-rfam_example_repeat", "native-rfam_example_reverse_complement",
-                 "native-rfam_example_prefix70", "native-rfam_example_insertion", "native-rfam_example_deletion",
-                 "upstream-cobalamin-wrapped-local-end"):
-        fixture = json.loads((evidence / "fixtures" / (name + ".json")).read_text())
-        expected = json.loads((evidence / "examples" / (name + ".components.json")).read_text())
-        result = parse_rfam_alignment_display(fixture["alignment"], **{key: fixture[key] for key in
-            ("hit_identity", "query_sequence", "native_start", "native_end", "native_strand")})
-        assert result == expected
-    for name, path in (
-        ("live-single", root / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/transport/live/single/003-fetch-json/response.body"),
-        ("official-documentation-single", root / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/contract/examples/official-single-result.json")):
-        expected = json.loads((evidence / "examples" / (name + ".components.json")).read_text())["rows"][0]
-        original = json.loads(path.read_text())
-        hit = original["hits"]["5S_rRNA"][0]
-        actual = parse_rfam_alignment_display(hit["alignment"], hit_identity=expected["hit_identity"],
-            query_sequence=original["searchSequence"], native_start=hit["start"], native_end=hit["end"], native_strand=hit["strand"])
-        assert actual == expected

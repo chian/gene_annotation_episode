@@ -6,12 +6,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import (
-    COMPONENTS_SCHEMA, PARSE_SCHEMA, SHEET_SCHEMA, TABLE_SCHEMA, VIEW_SCHEMA,
-    FluorescenceContractError, canonical, digest, finite, issue,
-    validate_calculation_parameters, validate_components, validate_csv_request,
-    validate_event_parse_result, validate_selection, validate_snapshot_request,
-)
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import COMPONENTS_SCHEMA, PARSE_SCHEMA, SHEET_SCHEMA, TABLE_SCHEMA, VIEW_SCHEMA, FluorescenceContractError, canonical, digest, finite, issue, validate_components, validate_csv_request, validate_event_parse_result, validate_selection, validate_snapshot_request
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_sheet import (
     populate_fluorescence_sheet, validate_fluorescence_sheet,
 )
@@ -409,23 +404,6 @@ def test_request_ports_require_positional_bindings_and_explicit_measurement_orig
     context = request_context()
     format_spec["header"] = 1
     assert_error("invalid_parameters", validate_csv_request, **context, format_spec=format_spec)
-
-
-def test_parameter_requests_are_closed_unique_and_sample_joined():
-    sheet = sheet_fixture()
-    params = parameters_fixture()
-    assert validate_calculation_parameters(params, sheet=sheet) is params
-    params["fraction_requests"].append(deepcopy(params["fraction_requests"][0]))
-    assert_error("invalid_parameters", validate_calculation_parameters, params, sheet=sheet)
-    params = parameters_fixture()
-    params["intensity_requests"] = [dict(gate_key="gate", domain_key="raw", channel_key="other")]
-    assert_error("invalid_parameters", validate_calculation_parameters, params, sheet=sheet)
-    sheet["control_pairs"] = [dict(key="pair", target_gate_key="gate", control_gate_key="gate", denominator="parent",
-                                    comparison_basis=dict(key="basis", evidence_file=file_identity("d")))]
-    params = parameters_fixture()
-    params["control_requests"] = [dict(control_key="pair", include_legacy_clipping=False),
-                                   dict(control_key="pair", include_legacy_clipping=True)]
-    assert_error("invalid_parameters", validate_calculation_parameters, params, sheet=sheet)
 
 
 def test_components_and_selection_return_original_objects_without_recalculation():

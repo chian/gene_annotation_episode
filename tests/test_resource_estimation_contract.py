@@ -10,7 +10,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema, validate_form
 from gene_annotation_episode.episodic_workflow.root.execution_expectations import ExecutionExpectations, capture_execution_scopes
-from gene_annotation_episode.resource_estimation import ResourceToolEstimator, recorded_estimate, report_source
+from gene_annotation_episode.episodic_workflow.root.resource_estimation import ResourceToolEstimator, recorded_estimate, report_source
 from gene_annotation_episode.run_statistics import ExecutionClass, RunHistory, RunStatistic
 
 
@@ -22,7 +22,7 @@ def digest(value):
 def scope():
     return ExecutionClass(phase='protein_homology_search', backend='local', resource_id='fixture-host',
         implementation_sha256=digest('program'), parameters_sha256=digest('parameters-and-corpus'),
-        memory_bytes=20*1024**3, scratch_bytes=4*1024**3, cpu_threads=1, query_residues=253,
+        memory_bytes=5*1024**3, scratch_bytes=4*1024**3, cpu_threads=1, query_residues=253,
         reference_residues=10000, reference_records=100, reference_state='available',
         duration_measure='systemd_service_wall_seconds')
 

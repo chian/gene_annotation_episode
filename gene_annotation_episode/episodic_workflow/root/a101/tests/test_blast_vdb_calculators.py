@@ -6,7 +6,6 @@ import json
 from pathlib import Path
 import socket
 import subprocess
-import types
 
 import pytest
 
@@ -659,19 +658,6 @@ def _canonical(value):
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
 
 
-@pytest.fixture(scope="module")
-def before_shared_authority():
-    """Pinned test-only arithmetic baseline; its dependencies are current ports."""
-    path = Path(__file__).resolve().parent / "fixtures/blast_vdb_calculator_before_shared_authority.py"
-    raw = path.read_bytes()
-    assert hashlib.sha256(raw).hexdigest() == "5c47851f0d5e8987631cf022fac540d2a6d5268b1a30520ea7944ec4fce4d011"
-    baseline = types.ModuleType("gene_annotation_episode._vdb_before_shared_authority")
-    baseline.__file__ = str(path)
-    baseline.__package__ = "gene_annotation_episode"
-    exec(compile(raw, str(path), "exec"), baseline.__dict__)
-    return baseline
-
-
 def _shared_authority_case(case):
     if case in {"feature_forward", "feature_reverse", "feature_offset", "feature_code_conflict", "native_member_length_conflict"}:
         values = translated_case(reverse=case in {"feature_reverse", "native_member_length_conflict"},
@@ -738,8 +724,6 @@ def _shared_authority_case(case):
         document["BlastOutput2"][0]["report"]["results"]["search"]["query_len"] = 4
         collection = collect(selected=selected, raw=json.dumps(document).encode())
     return inputs(collection["searches"][0])
-
-
 
 
 @pytest.mark.parametrize("case", [

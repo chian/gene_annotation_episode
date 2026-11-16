@@ -35,7 +35,6 @@ class LiteratureTransportRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = "literature_transport_response_record_v2"
-    readable_record_versions = ("literature_transport_response_record_v1", record_version)
     operations_table = "literature_transport_operations"
     received_table = "literature_transport_received"
     binding_fields = tuple(BINDINGS)
@@ -221,7 +220,7 @@ class LiteratureTransportRepository(LiteratureRateRepository):
         source = self.store.get(sheet_ref)
         request = json.loads(self.store.get_artifact(source["request_ref"]))
         args = request["arguments"]
-        if (source["version"] not in self.readable_record_versions or saved["km_sheet_ref"] != args["km_sheet_ref"]
+        if (source["version"] != self.record_version or saved["km_sheet_ref"] != args["km_sheet_ref"]
                 or saved["covariance_source_ref"] != args["covariance_source_ref"]
                 or self.store.get(saved["input_source_ref"])["artifact_ref"] != saved["input_artifact_ref"]):
             raise ContractError("literature_transport_sheet_source_mismatch")

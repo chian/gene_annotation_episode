@@ -1,4 +1,4 @@
-"""Original controlled runtime fixtures relocated for A105 tests; no live science."""
+"""Controlled runtime fixtures for A105 tests; no live science."""
 from copy import deepcopy
 from types import SimpleNamespace
 

@@ -5,6 +5,7 @@ the original launch/local commission, bounded result worker, deterministic
 numbers, typed form admission and practical terminal estimator are real paths.
 No configured-model scientific judgment or annotation credit is claimed.
 """
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 import asyncio
 from copy import deepcopy
 import json
@@ -25,11 +26,11 @@ from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure
 from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local import local_rna_structure_plan
 from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
-from gene_annotation_episode.practical_yield import PracticalYieldEstimator
+from gene_annotation_episode.episodic_workflow.root.practical_yield import PracticalYieldEstimator
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import FAMILY_SOURCES, REFERENCE_SOURCE, SAVED_SOURCE, rna_structure_fact_sources
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
@@ -194,7 +195,7 @@ def workflow_case(tmp_path, *, prediction=True, energy=False, failed=False, sele
                 horizon = 1 if nested and len(path) == 2 else 3 if saved else 2
             return YieldEstimate(len(raw), NumericBand.exact(0 if len(raw) >= horizon else 1), parameters,
                 {'fixture': 'explicit_scientific_boundary_verification_horizon'})
-        return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+        return YieldController(str(path), initial, 0, YieldParameters(),
             estimate_with_context=estimate if path[-1][0] in {'annotation', 'scientific_process'} else None)
 
     class Choices:
@@ -406,7 +407,7 @@ def test_real_selected_tool_to_native_sheet_and_requested_typed_return(tmp_path,
         assert entry['instructions'] and entry['description'] and entry['resources'] == 'local'
         handle = native.NativeJobHandle(Path(case.plan['identity']['execution_id'])).read()
         assert handle['metadata']['policy'] == case.plan['policy'] == POLICY
-        assert handle['metadata']['verified_cgroup']['memory_max'] == 20 * 1024**3
+        assert handle['metadata']['verified_cgroup']['memory_max'] == ENVIRONMENT_BOUNDS['memory_bytes']
         assert handle['metadata']['verified_cgroup']['memory_swap_max'] == 0
         assert 'runtime_max' not in handle['metadata']['verified_cgroup']
         target = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff, case.scope, selector=case.selector)

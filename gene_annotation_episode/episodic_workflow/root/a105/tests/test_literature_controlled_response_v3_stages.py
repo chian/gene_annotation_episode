@@ -1,15 +1,12 @@
 """Constructed source bytes/pixels for shared v3 stages; no paper/model run."""
 from copy import deepcopy as cp
-import errno
 from pathlib import Path
 import runpy
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_inputs as shared
-from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_v2_inputs as legacy
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_v3_inputs as v3
 from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError
-ROOT = Path(__file__).resolve().parents[5]
 Fixture = runpy.run_path(str(Path(__file__).with_name('test_literature_controlled_response_v2_inputs.py')))['Fixture']
 ROLES = shared.PRIMITIVE_ORDER
 
@@ -62,28 +59,6 @@ def stages(context):
         scopes.append(shared.bind_controlled_response_covariance_scope(context, scope, document, readings=[(s, rows[shared._selector_key(s)]) for s in selectors]))
     return (rows, scopes)
 
-def test_explicit_profile_original_registry_order_and_exact_legacy_primary_payloads():
-    f = fixture(companion=True)
-    original = Fixture().read()
-    f.args['arms'] = dict(reversed(list(f.args['arms'].items())))
-    with shared.open_controlled_response_sources(f.args, read_source=f.source) as context:
-        assert context.profile == 'v3'
-        assert list(context._reading_registry) == [(r, None) for r in ROLES] + [(ROLES[0], 'same-A')]
-        rows, scopes = stages(context)
-        for role in ROLES:
-            assert rows[role, None] == original['arms'][role]
-        assert scopes[0]['whole_projection'] == original['covariance']
-        assert scopes[0]['document'] == scopes[1]['document'] == scopes[2]['document']
-        assert scopes[2]['whole_projection'] is None
-        assert [r['reading']['role'] for r in scopes[2]['bindings']] == [ROLES[2], ROLES[3]]
-        with pytest.raises(TypeError):
-            context._reading_registry[ROLES[0], 'forged'] = None
-        with pytest.raises(AttributeError):
-            context.profile = 'v1'
-    assert f.calls == shared._reference_closure(f.args)
-    assert not context._reading_registry and (not context._scope_registry)
-    assert not context._stage_records and (not context._document_records) and (not context._covariance_facts)
-    assert not context.cache and (not context.visual.decoded) and (not context.native.cache)
 
 def test_full_document_is_parsed_once_but_each_scope_has_its_own_token(monkeypatch):
     f = fixture()
@@ -192,15 +167,6 @@ def test_documents_retain_full_original_invalid_unused_rows(kind):
             assert bound['whole_projection']['calculation_covariance'] is None
         assert rows[ROLES[2], None]['calculation_operand']['value'] == 8
 
-@pytest.mark.parametrize('version', ['controlled_response_source_selection_v1', 'controlled_response_source_selection_v2'])
-def test_legacy_selector_keyword_is_rejected_without_changing_legacy_calls(version):
-    f = Fixture()
-    if version.endswith('_v1'):
-        f.args['arms'][ROLES[3]]['measurement'] = cp(f.args['arms'][ROLES[1]]['measurement'])
-    f.args['version'] = version
-    with shared.open_controlled_response_sources(f.args, read_source=f.source) as context:
-        with pytest.raises(ExperimentalContractError, match='unsupported_stage_selector'):
-            shared.read_controlled_response_arm_science(context, context.arguments['arms'][ROLES[0]], reading_selector=dict(role=ROLES[0], reading_key=None))
 
 @pytest.mark.parametrize('scope', [dict(kind='base', index=0), dict(kind='joint', index=True), dict(kind='joint', index=7), dict(kind='local', index=-1), dict(kind='base', index=None, extra=1)])
 def test_scope_keys_reject_nonoriginal_or_malformed_bindings(scope):
@@ -304,22 +270,6 @@ def test_finish_requires_complete_original_order_stage_rosters():
             with pytest.raises(ExperimentalContractError):
                 shared.finish_controlled_response_inputs(context, arms=arms, companion_arms=companions, covariance_scopes=covariance_scopes)
 
-def test_equal_companion_measurements_still_have_distinct_saved_selector_callbacks():
-    f = fixture(companion=True)
-    second = cp(f.args['companion_readings'][0])
-    second['reading_key'] = 'same-A-2'
-    f.args['companion_readings'].append(second)
-    result = v3.read_controlled_response_v3_inputs(f.args, read_source=f.source)
-    seen = []
-
-    def check(selector, selected, measurement, *, source_records, image_records):
-        seen.append(cp(selector))
-        if selected and selected['kind'] == 'linear_bar':
-            arm = result['arms'][selector['role']]
-            return legacy._validate_graph(selected, arm['graph_details'], sources={(s['source_ref'], s['representation']): s for s in source_records}, images=image_records, request=f.args, implementation_fingerprints=result['implementation_dependencies']['expected_module_fingerprints'])
-        return legacy._validate_measurement(selected, measurement, source_records=source_records, image_records=image_records)
-    assert shared.validate_controlled_response_saved_science(f.args, result, measurement_checks=check) == result
-    assert seen == [dict(role=r, reading_key=None) for r in ROLES] + [dict(role=ROLES[0], reading_key='same-A'), dict(role=ROLES[0], reading_key='same-A-2')]
 
 def test_empty_received_covariance_text_retains_original_empty_bytes_as_unsupported():
     f = fixture()

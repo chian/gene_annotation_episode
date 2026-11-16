@@ -6,15 +6,11 @@ before this correction; they are not relabeled outputs from the new code.
 import asyncio
 from copy import deepcopy
 from dataclasses import replace
-from functools import partial
 import hashlib
-import importlib.util
 import json
 from pathlib import Path
-import shutil
 import sqlite3
 from types import SimpleNamespace
-import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.communication import form_with_facts, plain, validate_form
 from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractError, canonical, obj
 from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import BindingContext, EpisodeBindingRegistry
@@ -27,12 +23,9 @@ from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures 
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
-from gene_annotation_episode.episodic_workflow.root.method_loop.durable import DurableExecutionError
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_active_site_inputs import TEXT
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_active_site_storage import setup
 from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import FixtureController, ScriptedProvider
-HERE = Path(__file__).resolve().parents[5] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_active_site_reconstruction_182'
-LEGACY = json.loads((HERE / 'LEGACY_RECEIPT_001.json').read_text())
 REQUESTED = ['sites_per_total_monomer', 'conditional_nominal_to_active_denominator_factor']
 FORM = obj({'amounts': active_site_cells_schema()})
 
@@ -70,114 +63,11 @@ def services_for(store, run_id):
     host = SimpleNamespace(store=store, run_id=run_id, tools=None)
     return (host, WorkflowServices(host))
 
-@pytest.mark.parametrize('name', sorted(LEGACY))
-def test_authentic_v1_original_payload_rows_and_admitted_subset_without_science(name, monkeypatch):
-    item = LEGACY[name]
-    path = HERE / 'legacy' / name
-    before = hashes(path)
-    disable_science(monkeypatch)
-    with readonly(path) as store:
-        saved_artifacts_only(monkeypatch, store)
-        repo = LiteratureActiveSiteRepository(store, item['run_id'])
-        host, services = services_for(store, item['run_id'])
-        binding = LiteratureEpisode(services, **item['binding_descriptor']['configuration'])
-        host.episode_bindings = EpisodeBindingRegistry((binding,))
-        assert binding.as_record()['implementation_sha256'] != item['binding_descriptor']['implementation_sha256']
-        assert binding.as_record()['configuration'] == item['binding_descriptor']['configuration']
-        ref = item['outcome']['result']['sheet_ref']
-        context, receiver = (BindingContext(**item['context']), BindingContext(**item['receiver']))
-        assert repo.read(ref) == item['payload']
-        assert repo.populate(context, item['arguments'], 'original-v1-selected') == item['outcome']
-        assert repo.project_cells([ref], permitted_record_refs=[ref]) == item['all_rows']
-        assert repo.received_cells(receiver) == item['admitted_rows']
-        assert repo.fact_cells(receiver, [ref], components=repo.components) == item['admitted_rows']
-        assert binding._active_site_repository().received_cells(receiver) == item['admitted_rows']
-        for schema in (item['schema'], active_site_cells_schema()):
-            contract = obj({'amounts': schema})
-            form = form_with_facts({}, contract, {'literature_active_site_cells': item['admitted_rows']})
-            assert validate_form(form, contract, lambda r, namespace: store.get(r)['record_type'] == namespace) == form
-        private = repo.project_cells([ref], permitted_record_refs=[ref], components=['protein_mass_concentration'])
-        with pytest.raises(ContractError, match='cell_not_received'):
-            repo.validate_fact_values(receiver, private)
-        with pytest.raises(ContractError, match='not_received'):
-            repo.project_cells([ref], permitted_record_refs=[])
-        with pytest.raises(ContractError, match='not_received'):
-            repo.populate(replace(context, received_record_refs=()), item['arguments'], 'original-v1-selected')
-        altered = deepcopy(item['admitted_rows'])
-        altered[0]['interpretations']['amount_linkage']['value'] = 'different'
-        with pytest.raises(ContractError, match='differs_from_saved'):
-            repo.validate_fact_values(receiver, altered)
-        assert store.db.total_changes == 0
-        with pytest.raises(sqlite3.OperationalError, match='readonly'):
-            store.db.execute('DELETE FROM records')
-    assert hashes(path) == before
 
 
 
-@pytest.mark.parametrize('mutation', ['signature', 'outcome_value', 'outcome_meaning', 'outcome_omission', 'outcome_status', 'operation_ref', 'provider', 'origin', 'source_identity', 'unselected_copy'])
-def test_selected_output_authentication_rejects_corruption(tmp_path, mutation):
-    path = tmp_path / mutation
-    shutil.copytree(HERE / 'legacy/point', path)
-    item = LEGACY['point']
-    ref = item['outcome']['result']['sheet_ref']
-    with Store(path) as store:
-        repo = LiteratureActiveSiteRepository(store, item['run_id'])
-        if mutation == 'signature':
-            store.db.execute("UPDATE literature_active_site_operations SET signature='{}'")
-        elif mutation.startswith('outcome') or mutation == 'operation_ref':
-            changed = deepcopy(item['outcome'])
-            if mutation == 'outcome_value':
-                changed['result']['cells'][0]['value'] = 900
-            elif mutation == 'outcome_meaning':
-                changed['result']['cells'][0]['interpretations']['amount_linkage']['value'] = 'different'
-            elif mutation == 'outcome_omission':
-                changed['result']['cells'].pop()
-            elif mutation == 'outcome_status':
-                changed['status'] = 'attempted'
-            else:
-                changed['operation_ref'] = 'operation_' + '0' * 24
-            store.db.execute('UPDATE literature_active_site_operations SET outcome=?', (canonical(changed),))
-        elif mutation == 'unselected_copy':
-            source = store.get(ref)
-            record = {k: v for k, v in source.items() if k not in ('id', 'origin', 'record_type')}
-            record['accession'] = 'synthetic-unselected-copy'
-            ref = store.put('source', record, origin='tool')['id']
-        else:
-            source = store.get(ref)
-            if mutation == 'provider':
-                source['provider'] = 'copied-provider'
-            elif mutation == 'origin':
-                source['origin'] = 'caller'
-            else:
-                source['accession'] = 'identity-mutation'
-            store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(source), ref))
-        with pytest.raises(ContractError):
-            repo.read(ref)
 
-@pytest.mark.parametrize('which', ['artifact_ref', 'request_ref'])
-def test_corrupt_saved_artifact_bytes_are_rejected(tmp_path, which):
-    path = tmp_path / which
-    shutil.copytree(HERE / 'legacy/point', path)
-    with Store(path) as store:
-        item = LEGACY['point']
-        ref = item['outcome']['result']['sheet_ref']
-        digest = store.get(ref)[which].removeprefix('artifact_')
-        artifact = path / 'artifacts' / digest[:2] / digest
-        artifact.write_bytes(artifact.read_bytes() + b' ')
-        with pytest.raises(ContractError, match='digest_mismatch'):
-            LiteratureActiveSiteRepository(store, item['run_id']).read(ref)
 
-def test_foreign_run_and_changed_selected_scope_are_rejected(tmp_path):
-    shutil.copytree(HERE / 'legacy/point', tmp_path / 'state')
-    item = LEGACY['point']
-    with Store(tmp_path / 'state') as store:
-        ref = item['outcome']['result']['sheet_ref']
-        with pytest.raises(ContractError, match='run_mismatch'):
-            LiteratureActiveSiteRepository(store, 'foreign-run').read(ref)
-        context = BindingContext(**item['context'])
-        changed_scope = {'subject_refs': []}
-        with pytest.raises(ContractError, match='operation_key_reused'):
-            LiteratureActiveSiteRepository(store, item['run_id']).populate(replace(context, scope=changed_scope), item['arguments'], 'original-v1-selected')
 
 def test_genuine_empty_cold_binding_does_not_install_tables(tmp_path, monkeypatch):
     store, context, _ = setup(tmp_path)

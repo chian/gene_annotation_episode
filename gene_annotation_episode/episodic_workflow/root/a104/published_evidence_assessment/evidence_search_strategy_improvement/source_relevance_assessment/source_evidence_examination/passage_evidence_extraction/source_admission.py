@@ -7,7 +7,7 @@ class LiteratureSourceAdmission:
 
     def _tool_arguments(self, context, tool_name, arguments):
         assignment = self._validate_assignment(context.role, context.assignment, context.scope, context=context)
-        entries = {entry['name']: entry for entry in self.catalog(context, _accept_legacy_quotes=True)}
+        entries = {entry['name']: entry for entry in self.catalog(context)}
         if tool_name not in entries:
             raise ContractError('tool_not_available_to_literature_role')
         arguments = plain(arguments)

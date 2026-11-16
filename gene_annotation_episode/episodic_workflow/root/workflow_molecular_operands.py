@@ -1,4 +1,4 @@
-"""Preserved root host ports defined by WorkflowMolecularOperands."""
+"""Root host ports defined by WorkflowMolecularOperands."""
 from __future__ import annotations
 import json
 from .communication import plain

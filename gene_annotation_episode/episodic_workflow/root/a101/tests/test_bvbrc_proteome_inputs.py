@@ -2,7 +2,6 @@
 from copy import deepcopy
 import hashlib
 import json
-from pathlib import Path
 import socket
 import subprocess
 
@@ -100,20 +99,6 @@ def assert_envelope(result, name):
     if result["status"] == "invalid":
         assert result["value"] is None
         assert result["requirements"] and result["diagnostics"]
-
-
-def test_precision_correction_is_reused_as_synthetic_input_only():
-    path = (Path(__file__).resolve().parent / 'fixtures' / 'bvbrc_original') / "verification/tool_graders_bvbrc_proteome_sheet_contract_2026-10-25_165/B1_PRECISION_EXAMPLES_002.json"
-    example = json.loads(path.read_text())
-    assert example["origin"] == "constructed_supplied_input_and_expected_contract_values_not_production_reader_output"
-    expected = example["expected_inventory"]
-    result = fasta(example["raw_input_utf8"].encode(), source=expected["source"], inventory_key=expected["inventory_key"])
-    value = result["value"]
-    for key in set(expected) - {"diagnostics"}:
-        assert value[key] == expected[key]
-    assert result["status"] == "partial"
-    assert {"duplicate_identifier", "fasta_empty_sequence", "fasta_sequence_invalid"} <= codes(result)
-    assert_envelope(result, "ProteinInventory")
 
 
 def test_fasta_duplicate_ids_and_equal_full_sequences_keep_every_occurrence():

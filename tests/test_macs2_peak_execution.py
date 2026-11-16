@@ -25,7 +25,6 @@ from gene_annotation_episode.atac_differential_inputs import (
 )
 from gene_annotation_episode.macs2_peak_components import build_macs2_peak_components
 from gene_annotation_episode.macs2_peak_result_contracts import project_macs2_peak_values
-from gene_annotation_episode import macs2_peak_result_worker as result_worker
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
@@ -505,52 +504,6 @@ def test_successful_process_with_missing_native_role_keeps_failure_unknown_count
     assert value['failures'] == seal['failures']
     assert any(row['code'] == 'native_output_unavailable' and row['file_key'] == 'summits'
         for row in value['failures'])
-
-
-@pytest.mark.parametrize('explicit_qualification', [False, True])
-def test_engineered_retained_sha_conflict_excludes_bad_body_and_keeps_valid_siblings(tmp_path, monkeypatch,
-        explicit_qualification):
-    plan = plan_fixture(tmp_path)
-    mocked_command(monkeypatch)
-    seal = native.run_macs2_peak(plan)
-    roles, bad_path = [], None
-    for specification in plan['outputs']:
-        role = specification['role']
-        raw = output_path(plan, role).read_bytes()
-        if role == 'narrowpeak':
-            raw = b'conflicting retained bytes must not be consumed as the original native peak\n'
-        file = file_identity(raw, specification['format'])
-        path = tmp_path / 'retained' / 'artifacts' / file['sha256'][:2] / file['sha256']
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(raw)
-        qualification = (dict(code='native_output_identity_conflict')
-            if role == 'narrowpeak' and explicit_qualification else None)
-        if role == 'narrowpeak':
-            bad_path = path
-        roles.append(dict(specification=deepcopy(specification),
-            source_ref='source_' + digest(dict(engineered_role=role))[:24],
-            file=file, path=str(path), availability='retained', qualification=qualification))
-    original_regular = result_worker._regular
-    def only_valid_siblings(path):
-        assert Path(path) != bad_path, 'worker consumed a body conflicting with the sealed original native role'
-        return original_regular(path)
-    def forbidden(*args, **kwargs):
-        raise AssertionError('retained output parsing attempted native execution')
-    monkeypatch.setattr(result_worker, '_regular', only_valid_siblings)
-    monkeypatch.setattr(native, 'run_macs2_peak', forbidden)
-    output = tmp_path / 'parsed'
-    output.mkdir()
-    result = result_worker.run_macs2_peak_result_job(request=dict(
-        version=result_worker.REQUEST_VERSION, mode='parse', row_window=dict(offset=0, limit=6),
-        native=dict(plan=plan, seal=seal, roles=roles), saved=None), output_directory=str(output))
-    value = result['value']
-    assert value['native_outcome'] == 'succeeded' and value['status'] == 'partial'
-    assert [row['count'] for row in value['native_peak_counts']] == [1, None, 1]
-    assert value['peak_window']['total_rows'] is None
-    assert [row['representation'] for row in value['peak_window']['rows']] == ['xls', 'summit']
-    assert any(row['code'] == 'artifact_digest_mismatch' and row['stage'] == 'capture'
-        and row['file_key'] == 'narrowpeak' for row in value['failures'])
-    assert any(row['field'] == 'native_output_identity_conflict' for row in value['issues'])
 
 
 @pytest.mark.parametrize('ordinal', [0, 1])

@@ -50,7 +50,7 @@ def test_no_population_parser_calculator_source_or_file_access(monkeypatch):
     assert validate_optical_extraction(extraction) == extraction
     assert validate_optical_selection(args, extraction) == args
 
-@pytest.mark.parametrize('path', [(), ('context',), ('signals',), ('calibration',), ('signal_kind',), ('signals', 'sample'), ('signals', 'sample', 'meanings'), ('signals', 'sample', 'qualification'), ('signals', 'sample', 'number'), ('signals', 'sample', 'number', 'selector'), ('signals', 'sample', 'number', 'selector', 'witness'), ('signals', 'sample', 'unit'), ('covariance_source',), ('covariance_source', 'data'), ('calculation_inputs',), ('input_unavailable_reasons',), ('dependencies', 0), ('lexical_dependency',)])
+@pytest.mark.parametrize('path', [(), ('context',), ('signals',), ('calibration',), ('signal_kind',), ('signals', 'sample'), ('signals', 'sample', 'meanings'), ('signals', 'sample', 'qualification'), ('signals', 'sample', 'number'), ('signals', 'sample', 'number', 'selector'), ('signals', 'sample', 'number', 'selector', 'witness'), ('signals', 'sample', 'unit'), ('covariance_source',), ('covariance_source', 'data'), ('calculation_inputs',), ('input_unavailable_reasons',), ('dependencies', 0)])
 @pytest.mark.parametrize('mode', ['extra', 'missing'])
 def test_every_record_closed_and_every_field_required(path, mode):
     _, extraction = saved(cov=True)
@@ -220,7 +220,7 @@ def test_alias_groups_original_text_equal_values_and_physical_reuse():
     extraction['covariance_source']['data']['covariance'][1][1] *= 2
     reject(extraction, 'reuse')
 
-@pytest.mark.parametrize('mutation', [lambda e: e['lexical_dependency'].update(sha256_at_release='0' * 64), lambda e: e['source_refs'].append(SOURCE), lambda e: e['source_refs'].append('source_' + 'a' * 24), lambda e: e['source_refs'].reverse(), lambda e: e['calculation_inputs'].update(sample_slope=0), lambda e: e['calculation_inputs'].update(epsilon=True), lambda e: e['input_unavailable_reasons'].update(covariance=['invented']), lambda e: e['calculation_inputs']['primitive_observation_refs'].__setitem__(0, None)])
+@pytest.mark.parametrize('mutation', [lambda e: e['source_refs'].append(SOURCE), lambda e: e['source_refs'].append('source_' + 'a' * 24), lambda e: e['source_refs'].reverse(), lambda e: e['calculation_inputs'].update(sample_slope=0), lambda e: e['calculation_inputs'].update(epsilon=True), lambda e: e['input_unavailable_reasons'].update(covariance=['invented']), lambda e: e['calculation_inputs']['primitive_observation_refs'].__setitem__(0, None)])
 def test_dependency_roster_projection_and_reasons_cannot_drift(mutation):
     _, extraction = saved(cov=True)
     mutation(extraction)

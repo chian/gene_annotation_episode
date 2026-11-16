@@ -103,8 +103,7 @@ def _validate_key_request(operation, inputs):
 def grade_infernal_preparation(*, operation, inputs, outputs, parameters):
     """Return an independently retained sheet and recalculable components.
 
-    ``inputs``/``outputs`` are explicit role -> list[Payload] maps as frozen in
-    work247. No filename inference, automatic conversion, repair or resubmission
+    ``inputs``/``outputs`` are explicit role -> list[Payload] maps. No filename inference, automatic conversion, repair or resubmission
     is performed. Native parsing can return partial useful records and issues;
     a wrong custody envelope is rejected before any result is interpreted.
     """

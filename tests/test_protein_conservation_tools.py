@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.root.library.protein_conservation
 )
 
 
-POLICY = dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
+POLICY = dict(memory_bytes=5 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
 PARAMETERS = dict(threads=1, randseed=1, perturb=0, perm='none', consiters=2, refineiters=100)
 SOFTWARE = dict(path='/caller-selected/muscle', sha256='a' * 64, size_bytes=3587040)
 

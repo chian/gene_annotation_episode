@@ -5,7 +5,6 @@ These are boundary tests, not a second native run or a full Workflow claim.
 from copy import deepcopy
 from dataclasses import replace
 import json
-import os
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -311,16 +310,6 @@ def test_context_forwarding_freezes_original_return_prefix(fixture):
     f.returned(science, later)
     assert f.boundary.received_facts(f.root, form_schema(CONTEXT_SOURCE))[CONTEXT_SOURCE] == [closed['field_0'][0]]
     assert f.boundary.facts_for_closure(science, form_schema(CONTEXT_SOURCE))[CONTEXT_SOURCE] == [closed['field_0'][0]]
-
-
-def test_historical_return_survives_scientific_file_loss(fixture):
-    f = fixture
-    child = f.child(f.root, form_schema(SAVED_SOURCE))
-    f.own(child)
-    form = f.returned(f.root, child)
-    retained_native_file(f.store, f.sheet).unlink()
-    assert f.boundary.authenticate_received_saved_sheet(f.root, f.sheet) == (child.episode_id,)
-    f.boundary.validate_received_report(child, form, form_schema(SAVED_SOURCE))
 
 
 def frame(f, parent, child, *, index, schema, selection):

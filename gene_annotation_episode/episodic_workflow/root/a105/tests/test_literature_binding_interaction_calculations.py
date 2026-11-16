@@ -1,8 +1,6 @@
 """Synthetic-only scientific and numerical checks; no retained paper fixtures."""
 from copy import deepcopy
 import ast
-from functools import lru_cache
-import importlib.util
 import json
 import math
 from pathlib import Path
@@ -529,40 +527,4 @@ def test_partial_reported_uncertainty_does_not_select_or_upgrade_a_separate_mode
         assert result['cells']['signed_profile_log_ratio']['value'] is None
     with pytest.raises(ExperimentalContractError):
         populate_binding_interaction(inputs, old_model)
-
-@lru_cache(maxsize=1)
-def _baseline_module():
-    path = Path(__file__).resolve().parents[5] / 'verification' / 'literature_reference_evidence_2026-10-25_001' / 'a105_binding_partial_uncertainty_053' / 'baseline_001' / 'gene_annotation_episode' / 'literature_binding_interaction_calculations.py'
-    spec = importlib.util.spec_from_file_location('gene_annotation_episode._binding_interaction_baseline_053', path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-def _complete_baseline_cases():
-    cases = [example(values) for values in ((5, 40, 2, 4), (5, 4, 2, 40), (2, 4, 5, 40), (1e-300, 1e+300, 1e+300, 1e-300), (1e+300, 1e-300, 1e-300, 1e+300))]
-    for statistic in ('sd', 'sem', 'unspecified', 'confidence_interval'):
-        inputs = example()
-        operand = inputs['operands'][ROLES[0]]
-        operand['uncertainty'].update(statistic=statistic, exact_count=8, minimum_count=3, basis='between_independent_fitted_parameters', repetition_basis='biological_preparations')
-        if statistic == 'confidence_interval':
-            operand['uncertainty'].update(interval=[-1, 6], confidence_level=0.95)
-        else:
-            operand['reported_spread'] = 0.1
-        cases.append(inputs)
-    for scope in ('reported_protocols', 'common_conditions'):
-        for status in ('matched', 'not_matched', 'unknown', 'conflicting'):
-            inputs = example()
-            inputs['comparison_scope'] = scope
-            inputs['relationships']['common_conditions'] = {'status': status, 'sources': [] if status == 'unknown' else [witness(10)]}
-            cases.append(inputs)
-    for relations in (('gt', 'eq', 'eq', 'eq'), ('lt', 'gt', 'eq', 'eq'), ('lt', 'eq', 'eq', 'gt')):
-        inputs = example()
-        for role, relation in zip(ROLES, relations):
-            inputs['operands'][role]['relation'] = relation
-        cases.append(inputs)
-    inputs = example()
-    inputs['parameter_kind'] = 'reported_hill_kd'
-    cases.append(inputs)
-    return cases
-
 

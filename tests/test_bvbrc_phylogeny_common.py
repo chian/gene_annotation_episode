@@ -13,7 +13,7 @@ from unittest.mock import patch
 
 import pytest
 
-from gene_annotation_episode import phylogeny_formats as formats
+from gene_annotation_episode.episodic_workflow.root.library import phylogeny_formats as formats
 from gene_annotation_episode.episodic_workflow.root.library import phylogeny_raxml_inputs as raxml
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_native as codon_native
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_common_inputs as inputs

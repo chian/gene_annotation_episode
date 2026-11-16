@@ -135,7 +135,7 @@ _EXECUTION_INFORMATION = (
     "argv; validate_native_hmmer_preparation_requested_job checks its exact relationship to the "
     "typed job. Mode/path flags are compiler-owned except alimask's selected range flag. "
     "Commission through launch and the configured local child; that child selects practical.job.start. "
-    "The original attempt and caller-owned allocation remain bound, with local limits of 20 GiB RAM "
+    "The original attempt and caller-owned allocation remain bound, with local limits of 5 GiB RAM "
     "and 4 GiB scratch and no wall-time cap. API/HPC preparation bindings are unfinished and are not "
     "substitute routes. Monitoring uses the existing generic local-resource task instructions: "
     "observe the same execution identity, native state, available outputs and selected stdout/stderr "

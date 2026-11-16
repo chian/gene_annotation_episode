@@ -49,7 +49,7 @@ class OutcomeReceipts:
         return arguments
 
     def receive_outcome(self, source, selection, result, index):
-        if self.progress_provider is not None and self.progress_receipt_order == 'received_progress_order_v1':
+        if self.progress_provider is not None:
             self.progress_provider.receive_outcome(source.episode_id, result, source.scope, f'{self.run_id}:{source.episode_id}:{index}:own_progress')
         if self.receipts is not None and (not self.is_job_source(source)):
             references = list(result.get('record_refs', []))
@@ -186,8 +186,4 @@ class OutcomeReceipts:
         message = source.request['message'] if isinstance(source.request, Mapping) else source.request.message.as_record()
         initial = list(message.get('episode_assignment', {}).get('known_progress_refs', []))
         references = [*initial, *self.services.received_progress_refs(source.episode_id)]
-        if self.progress_receipt_order == 'received_progress_order_v1':
-            return {'known_progress_refs': list(dict.fromkeys(references)), 'initial_progress_refs': list(initial)}
-        rows = self.store.db.execute("SELECT refs.value FROM runtime_actions actions JOIN json_each(actions.result,'$.progress_refs') refs WHERE actions.run_id=? AND actions.episode_id=? AND (json_extract(actions.result,'$.status') IN ('completed','partial') OR (json_extract(actions.action,'$.kind') IN ('tool','reason') AND json_extract(actions.result,'$.status') IN ('failed','unavailable'))) ORDER BY actions.decision_index, refs.key", (self.run_id, source.episode_id))
-        references.extend((row[0] for row in rows))
         return {'known_progress_refs': list(dict.fromkeys(references)), 'initial_progress_refs': list(initial)}

@@ -1,5 +1,4 @@
 from copy import deepcopy
-import hashlib
 import json
 from pathlib import Path
 import socket
@@ -446,14 +445,6 @@ def test_saved_sheet_recalculation_uses_no_native_text_parser_network_or_process
 def test_unknown_parameters_are_rejected(parameters):
     with pytest.raises(ValueError,match="parameters_invalid"):
         calculate_infernal_search_scores(populate(),parameters=parameters)
-
-
-def test_all_calculated_cell_definitions_have_meanings_and_native_fixture_hashes_match():
-    scores=calculate_infernal_search_scores(populate())
-    for definition in scores["definitions"].values():
-        assert set(definition)=={"inputs","formula_or_native_source","units","population","denominator","kind","coordinate_convention","uncertainty","missing_behavior"}
-    for row in json.loads((FIXTURES/"MANIFEST.json").read_text()):
-        assert hashlib.sha256((FIXTURES/row["path"]).read_bytes()).hexdigest()==row["sha256"]
 
 
 def test_no_input_mutation_and_finite_json_validation():

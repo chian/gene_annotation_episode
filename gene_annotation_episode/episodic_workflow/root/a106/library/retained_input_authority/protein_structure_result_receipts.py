@@ -352,7 +352,7 @@ class ProteinResultReceipts:
             _require(same(failure, issue(failure['code'], stage='capture', field='request' if plan is None else 'manifest')))
             return
         _require(plan is not None and file is not None and (bundle is not None))
-        validate_protein_structure_bundle(bundle, plan=plan, retained_read=True)
+        validate_protein_structure_bundle(bundle, plan=plan)
         self._artifact(file['artifact_ref'], value=bundle)
         _require(len(capture['files']) == len(bundle['files']))
         failures = []

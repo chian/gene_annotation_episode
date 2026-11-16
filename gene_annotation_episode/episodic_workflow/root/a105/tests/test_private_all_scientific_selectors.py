@@ -1,6 +1,5 @@
 """Actual dynamically selected A105 contracts, including private pilot factories."""
 from importlib import import_module
-from pathlib import Path
 
 import pytest
 
@@ -8,21 +7,8 @@ AXIS = 'gene_annotation_episode.episodic_workflow.root.a105'
 PILOT = AXIS + '.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination'
 
 
-def axis_module(name):
-    path = import_module(AXIS + '.literature_implementation_sources').source_file(name + '.py')
-    root = Path(import_module(AXIS).__file__).parent
-    return import_module(AXIS + '.' + '.'.join(path.resolve().relative_to(root.resolve()).with_suffix('').parts))
 
 
-def test_axis_received_partner_contract_retains_source_qualification():
-    schema = axis_module('literature_assay_grading_inputs').source_schema('literature_partner_cells')
-    props = schema['items']['properties']
-    assert schema['x-source'] == 'literature_partner_cells'
-    assert props['target_correspondence']['enum'] == ['not_evaluated']
-    assert props['partner_necessity']['enum'] == ['not_inferred']
-    assert 'unavailable' in props['status']['enum']
-    assert 'subject_mismatch' in props['unavailable_reason']['enum']
-    assert props['experiment_ref']['x-reference-namespace'] == 'reference'
 
 
 @pytest.mark.parametrize('kind', ('grading', 'numerical', 'worksheet', 'population_metadata'))

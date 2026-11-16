@@ -1,10 +1,10 @@
 """Exact A108 numerical declarations, separate from investigation instructions.
 
 This bounded catalog names existing return schemas, not new readers or scores.
-New legacy decisions can freeze their available declarations before selection.
+Decisions freeze their available declarations before selection.
 Saved validation uses only that snapshot; it never substitutes today's factory.
 
-Private declaration split, 2026-11-11: only A108 original-observation grading
+Only A108 original-observation grading
 and contextual aggregation schemas are declared. The private service exposes
 this module through literature_numerical_contracts. Snapshot validation and
 expansion use the original saved format without a foreign schema registry.

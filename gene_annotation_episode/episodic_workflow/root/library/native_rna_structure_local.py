@@ -13,9 +13,7 @@ from gene_annotation_episode.immutable_json_records import _immutable, _read
 
 
 def _command(root, worker_module):
-    # The already validated software selects its original driver/worker pair.
     drivers = {
-        "gene_annotation_episode.native_rna_structure_worker": "gene_annotation_episode.native_rna_structure_driver",
         "gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker":
             "gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_driver",
     }

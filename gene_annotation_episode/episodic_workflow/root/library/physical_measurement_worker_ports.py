@@ -14,20 +14,15 @@ _CURRENT_PACKAGE_FILES = (_PACKAGE / "episodic_workflow/__init__.py",
 OPERATIONS = frozenset({"itc_binding", "liftover_point", "circular_dichroism"})
 
 
-def module(operation, *, current=True):
+def module(operation):
     if operation not in OPERATIONS:
         raise ContractError("molecular_tool_operation_unknown")
-    return ("gene_annotation_episode.episodic_workflow.root.library.physical_measurement_worker"
-        if current else "gene_annotation_episode.sequence_worker")
+    return "gene_annotation_episode.episodic_workflow.root.library.physical_measurement_worker"
 
 
 def recorded_module(operation, selected):
-    # Full original command/request/policy/source checks remain in the custodian.
-    # A malformed or unrelated command retains the original expected value.
-    command = selected.get("command") if type(selected) is dict else None
-    if type(command) is list and len(command) > 2 and command[2] == module(operation):
-        return module(operation)
-    return module(operation, current=False)
+    # Full command/request/policy/source checks remain in the custodian.
+    return module(operation)
 
 
 def implementation_files(operation):

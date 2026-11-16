@@ -28,19 +28,19 @@ def obj(properties: dict, required: list[str] | None = None) -> dict:
             "required": list(properties) if required is None else required, "additionalProperties": False}
 
 
-def source_location_inputs(schema, *, allow_legacy_quote=False):
-    """Expose source locations as inputs; retained records still contain quotes.
+def source_location_inputs(schema):
+    """Expose source locations as inputs; stored records contain the quotes the host reads.
 
     Only the two existing literal UTF-8 witness contracts are projected. Image
     readings, cell selections and scientific text fields are not quotations of
     a retained byte interval and must keep their own input contracts.
     """
     if isinstance(schema, list):
-        return [source_location_inputs(value, allow_legacy_quote=allow_legacy_quote)
+        return [source_location_inputs(value)
                 for value in schema]
     if not isinstance(schema, dict):
         return schema
-    result = {key: source_location_inputs(value, allow_legacy_quote=allow_legacy_quote)
+    result = {key: source_location_inputs(value)
               for key, value in schema.items()}
     properties = result.get("properties")
     if isinstance(properties, dict) and (set(properties) in (
@@ -49,8 +49,7 @@ def source_location_inputs(schema, *, allow_legacy_quote=False):
             or set(properties) == {"kind", "source_ref", "representation", "start", "end", "quote"}
             and properties["kind"].get("const") == "text"):
         result["required"] = [key for key in result.get("required", properties) if key != "quote"]
-        if not allow_legacy_quote:
-            properties.pop("quote")
+        properties.pop("quote")
         result["description"] = (
             "Select the retained source and half-open UTF-8 byte interval [start, end). "
             "The host reads and stores the exact quotation within this action. "

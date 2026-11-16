@@ -68,7 +68,7 @@ def _basis_map_schema(roles):
         "required": [], "minProperties": 1, "additionalProperties": False}
 
 
-def perturbation_summary_cells_schema(*, include_interpretation_basis=True, include_covariance_interpretations=True):
+def perturbation_summary_cells_schema():
     """Original point meanings plus numerical summary and covariance cells."""
     schema = deepcopy(perturbation_cells_schema())
     properties = schema["items"]["properties"]
@@ -104,11 +104,6 @@ def perturbation_summary_cells_schema(*, include_interpretation_basis=True, incl
     })
     schema["items"]["required"] = list(properties)
     schema["x-source"] = NAMESPACE
-    if not include_interpretation_basis:
-        # Exact original55-field contract for actual historical v2 forms.
-        return schema
-    # Optional only for historical records that never supplied basis metadata.
-    # Exact saved-value validation forbids dropping it from basis-bearing rows.
     properties["statistical_interpretation_basis"] = _basis_map_schema(ROLES)
     groups = {}
     for component in COMPONENTS:
@@ -116,9 +111,6 @@ def perturbation_summary_cells_schema(*, include_interpretation_basis=True, incl
     schema["items"]["allOf"] = [{"if": {"properties": {"component": {"enum": names}}},
         "then": {"properties": {"statistical_interpretation_basis": _basis_map_schema(roles)}}}
         for roles, names in groups.items()]
-    if not include_covariance_interpretations:
-        # Exact122 registered56-field contract, including its original allOf.
-        return schema
     properties["covariance_interpretations"] = _covariance_schema()
     for pairs in ((), (("W", "K"),), (("K", "R"),), (("W", "K"), ("W", "R"), ("K", "R"))):
         names = [name for name in COMPONENTS if _covariance_pairs(name) == pairs]

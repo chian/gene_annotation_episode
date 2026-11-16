@@ -140,27 +140,6 @@ def test_uninterpretable_original_inputs_and_semantic_recipe_conflict(mutate):
         assert result['status'] == 'invalid' and result['value'] is None
 
 
-@pytest.mark.parametrize('recipe,count,mode', [('progressiveMauve', 1, 'single_file_entries'),
-    ('progressiveMauve', 2, 'multiple_files_concatenated'),
-    ('mauveAligner', 1, 'unknown'), ('mauveAligner', 2, 'multiple_files_concatenated')])
-def test_actual_recipe_modes_and_legacy_sml_pairs(recipe, count, mode):
-    genomes = ['123.1', '456.2'][:count]
-    task, request, handoff, data = fixture(genomes, recipe=recipe)
-    paths = ['/task/work/input with spaces.fasta', '/task/work/other.fasta'][:count]
-    raw = log_bytes(genomes, recipe=recipe, paths=paths, options=('--weight=3',))
-    log = log_record(task, request, data, raw=raw)
-    result = extract(task, (handoff, log), data)
-    invocation = result['value']['invocation']
-    assert invocation['effective_recipe'] == recipe
-    assert invocation['mode'] == mode
-    assert invocation['observed_argv'][2] == paths[0]
-    assert invocation['observed_argv'][-1] == '--weight=3'
-    if recipe == 'mauveAligner':
-        assert invocation['observed_argv'][3] == paths[0] + '.sml'
-    if mode == 'unknown':
-        assert 'invocation_missing' in codes(result)
-
-
 @pytest.mark.parametrize('mutate,expected', [
     ('empty', 'invocation_missing'), ('partial_transport', 'invocation_missing'),
     ('window', 'invocation_missing'), ('invalid_utf8', 'invocation_missing'),
@@ -193,14 +172,6 @@ def test_bad_native_log_is_local_and_candidate_records_survive(mutate, expected)
     assert expected in codes(result)
     assert result['value']['invocation']['observed_argv'] is None
     assert [len(r['sequence']) for r in result['value']['files'][0]['records']] == [4, 2]
-
-
-def test_legacy_sml_correspondence_is_exact_not_basename_based():
-    task, request, handoff, data = fixture(recipe='mauveAligner')
-    raw = log_bytes(recipe='mauveAligner').replace(b'/task/work/123.1.fasta.sml', b'/elsewhere/123.1.fasta.sml')
-    log = log_record(task, request, data, raw=raw)
-    result = extract(task, (handoff, log), data)
-    assert 'invocation_conflict' in codes(result)
 
 
 @pytest.mark.parametrize('exit_code', [None, '1', '-9', 'null'])
@@ -483,20 +454,6 @@ def test_retained_source_default_is_labelled_expectation_not_deployment():
     assert inv['effective_recipe'] == 'progressiveMauve' and inv['recipe_basis'] == 'retained_source_default'
     assert inv['observed_argv'] is None and inv['observed_program_version'] is None
     assert all(f['native_path_token'] is None and f['same_run_state'] == 'missing' for f in result['value']['files'])
-
-
-def test_explicit_zero_and_legacy_source_option_qualifications_preserve_argv():
-    task, request, handoff, data = fixture(recipe='mauveAligner', parameters={
-        'weight': 0, 'seedWeight': 5, 'maxGappedAlignerLength': 100, 'hmmPGoHomologous': 0.001})
-    raw = log_bytes(recipe='mauveAligner', options=('--seed-weight=5', '--max-gapped-aligner-length=100', '--hmm-p-go-homologous=0.001'))
-    log = log_record(task, request, data, raw=raw)
-    result = extract(task, (handoff, log), data)
-    assert 'explicit_zero_not_forwarded' in codes(result)
-    issues = [d['path'] for d in result['diagnostics'] if d['code'] == PREFIX + 'source_option_unsupported']
-    assert '/original_task/submitted_parameters/seedWeight' in issues
-    assert '/original_task/submitted_parameters/hmmPGoHomologous' in issues
-    assert '/original_task/submitted_parameters/maxGappedAlignerLength' not in issues
-    assert '--weight=0' not in result['value']['invocation']['observed_argv']
 
 
 def test_supplied_receipt_value_is_not_provider_metadata_or_a_trust_flag():

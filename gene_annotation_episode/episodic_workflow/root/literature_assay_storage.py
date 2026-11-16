@@ -27,14 +27,12 @@ BINDINGS = {'assay_ref': 'reference', 'assayed_subject_ref': 'reference', 'organ
     'expression_host_ref': 'reference', 'measured_entity_ref': 'reference',
     'asserted_input_ref': 'reference', 'asserted_output_ref': 'reference'}
 REASONS = ('endpoint_requires_different_model', 'assayed_molecule_unresolved', 'source_endpoint_unresolved', 'source_endpoint_conflicting',
-    'source_measurement_unavailable', 'correction_inputs_unreported', 'numerical_model_range',
-    'primitive_covariance_unreported', 'distinct_residual_variance_unreported',
+    'source_measurement_unavailable', 'numerical_model_range',
     'invalid_propagated_variance', 'positive_effect_variance_required',
-    'known_variance_required', 'observation_model_unspecified')
-# Legacy reasons remain valid for exact saved v1 returns. New population only
-# describes supplied operands; it cannot establish publication-level absence.
-REASONS += ('correction_inputs_not_supplied', 'primitive_covariance_not_supplied',
-            'distinct_residual_variance_not_supplied')
+    'known_variance_required', 'observation_model_unspecified',
+    # Population only describes supplied operands; it cannot establish publication-level absence.
+    'correction_inputs_not_supplied', 'primitive_covariance_not_supplied',
+    'distinct_residual_variance_not_supplied')
 CONDITIONS = ('source_role_assignments', 'first_order_covariance_propagation',
               'known_variance', 'known_normal_nonnegative_presence')
 
@@ -43,7 +41,6 @@ class LiteratureAssayRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = 'literature_assay_population_record_v2'
-    readable_record_versions = ('literature_assay_population_record_v1', record_version)
     operations_table = 'literature_assay_operations'
     received_table = 'literature_assay_received'
     binding_fields = tuple(BINDINGS)

@@ -276,8 +276,7 @@ def _replay_publication(repository, context, outcome):
         return outcome
     if ('returned_record_refs' not in receipt
             or receipt['publication_operation_ref'] != outcome.get('operation_ref')):
-        # Old publication did not save its merged return. Current heads cannot
-        # reconstruct that historical result without changing what was returned.
+        # Current heads cannot reconstruct a merged return that was not saved.
         raise ContractError('literature_publication_return_not_retained')
     return {**outcome, **{field: receipt['returned_record_refs'][field]
         for field in ('record_refs', 'changed_record_refs') if field in receipt['returned_record_refs']}}

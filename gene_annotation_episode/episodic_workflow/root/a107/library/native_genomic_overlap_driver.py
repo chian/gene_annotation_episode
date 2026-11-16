@@ -1,6 +1,4 @@
-"""A107 original retained result worker dependency: native_genomic_overlap_driver.
-Scientific bodies, invalid outcomes and original byte qualifications are retained.
-"""
+"""A107 result worker dependency: native_genomic_overlap_driver."""
 
 
 from __future__ import annotations

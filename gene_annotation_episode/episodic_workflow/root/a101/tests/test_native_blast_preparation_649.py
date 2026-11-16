@@ -326,16 +326,6 @@ def test_selected_vs_realized_maps_and_forged_bundle_members_reject(tmp_path,mon
         with pytest.raises(ValueError): contracts.validate_native_blast_utility_bundle(wrong,plan)
 
 
-def test_legacy_jobs_reject_v2_operation_without_changing_v1_shape(tmp_path):
-    legacy=job_fixture(tmp_path/'legacy')
-    old=contracts.requested_job_from_native_blast_utility(legacy)
-    assert 'materializations' not in old['native_blast_utility']
-    assert all('output_key' not in row for row in old['native_blast_utility']['outputs'])
-    assert contracts.validate_native_blast_utility_requested_job(old)==old
-    legacy['operation']=preparation_job(tmp_path/'new','convert_gi_list')['operation']
-    with pytest.raises(ValueError): contracts.validate_native_blast_utility_job(legacy)
-
-
 def test_bound_seqid_and_inline_aggregate_use_exact_prepared_paths(tmp_path):
     bound=preparation_job(tmp_path/'bound','convert_seqid_list',bound=True)
     args=contracts.requested_job_from_native_blast_utility(bound)['argv']
@@ -348,19 +338,6 @@ def test_bound_seqid_and_inline_aggregate_use_exact_prepared_paths(tmp_path):
     args=contracts.requested_job_from_native_blast_utility(job)['argv']
     a,b=[r['native_paths'][0] for r in job['databases']]
     assert args[-2:]==['-dblist',f'{b} {a} {b}']
-
-
-@pytest.mark.parametrize('legacy',[False,True])
-def test_old_style_is_independent_from_legacy_and_keeps_selected_outputs(tmp_path,monkeypatch,legacy):
-    job=preparation_job(tmp_path,'create_megablast_index',old=True)
-    job['operation']['parameters']['legacy']=legacy
-    args=contracts.requested_job_from_native_blast_utility(job)['argv']
-    assert args[args.index('-old_style_index')+1]=='true'
-    assert args[args.index('-legacy')+1]==str(legacy).lower()
-    assert args[args.index('-output')+1]=='result/old'
-    calls=controlled(monkeypatch,job); plan=plan_fixture(tmp_path,job)
-    result=driver.run_native_blast_utility(plan)
-    assert len(calls)==1 and result['returncode']==0
 
 
 @pytest.mark.parametrize('mode',['create_megablast_index','convert_gi_list'])
@@ -488,11 +465,3 @@ def test_v2_title_omission_empty_and_nonempty_are_distinct(tmp_path,monkeypatch,
     assert bundle['realized_argv']==calls[0]
     assert contracts.validate_native_blast_utility_bundle(bundle,plan)==bundle
 
-
-def test_legacy_requested_job_keeps_the_nonempty_argument_rule(tmp_path):
-    request=contracts.requested_job_from_native_blast_utility(job_fixture(tmp_path))
-    assert contracts.validate_native_blast_utility_requested_job(request)==request
-    wrong=deepcopy(request)
-    wrong['argv'].append('')
-    assert not contracts.Draft202012Validator(contracts.NATIVE_BLAST_UTILITY_REQUESTED_JOB_SCHEMA).is_valid(wrong)
-    with pytest.raises(ValueError): contracts.validate_native_blast_utility_requested_job(wrong)

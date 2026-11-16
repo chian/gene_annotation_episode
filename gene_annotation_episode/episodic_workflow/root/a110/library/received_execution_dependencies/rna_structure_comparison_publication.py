@@ -1,4 +1,5 @@
 from __future__ import annotations
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a110.execution_contracts import canonical, digest
@@ -12,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.a110.library.received_execut
 RESOLVED_VERSION = 'rna_structure_comparison_resolved_operands_v1'
 PREPARED_VERSION = 'rna_structure_comparison_prepared_v1'
 PREPARED_FIELDS = {'version', 'selector_sha256', 'input_data_sha256', 'original_receipt_keys', 'selected_input_digests', 'result_receipt_key', 'calculation_key', 'comparison_sheet_artifact_ref', 'comparison_sheet_sha256', 'components_artifact_ref', 'components_sha256', 'calculator_version', 'projection_rows_artifact_ref', 'worker_receipt_artifact_ref', 'projection_rows', 'issues', 'preparation_failure', 'delivery_complete'}
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 _WORKER = 'gene_annotation_episode.rna_structure_comparison_worker'
 _OUTPUTS = {'sheet': 'sheet.json', 'components': 'components.json', 'projections': 'projections.json', 'worker_result': 'worker-result.json'}
 _RECEIPT_VERSION = 'rna_structure_comparison_worker_receipt_v1'

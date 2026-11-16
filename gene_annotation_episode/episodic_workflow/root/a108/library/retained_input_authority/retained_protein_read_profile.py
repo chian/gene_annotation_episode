@@ -1,16 +1,9 @@
-"""Passive original protein receipt fields; never execution configuration.
-
-Original336 source pins: contracts44e7308e, preparationc23a4445,
-receipts941ffebd and lifecycle7956bc45. Exact bytes and full hashes live in
-tests/fixtures/retained_protein_source_provenance_336/PROVENANCE.json.
-The shared pure profile owner supplies the two exact recorded policy shapes.
-"""
+"""Passive protein receipt fields; never execution configuration."""
 from .retained_native_read_profiles import retained_metadata, retained_cgroup
 from .protein_structure_contracts import same
 
 
 def retained_protein_metadata_matches(metadata, *, released):
-    """Check the original optional wall-field relationship without a policy."""
     if type(metadata) is not dict or type(released) is not bool:
         return False
     try:
@@ -21,15 +14,11 @@ def retained_protein_metadata_matches(metadata, *, released):
     enforcement = metadata.get('enforcement')
     if type(enforcement) is not dict:
         return False
-    # Preserve the original protein predicates; unrelated metadata is checked
-    # by its original handle/receipt owner, not rewritten or synthesized here.
+    # Unrelated metadata is checked by its handle/receipt owner.
     for key in ('memory', 'swap'):
         if not same(enforcement.get(key), expected['enforcement'][key]):
             return False
-    if 'wall_time' in expected['enforcement']:
-        if not same(enforcement.get('wall_time'), expected['enforcement']['wall_time']):
-            return False
-    elif 'wall_time' in enforcement:
+    if 'wall_time' in enforcement:
         return False
     actual = metadata.get('verified_cgroup')
     if released:
@@ -38,9 +27,6 @@ def retained_protein_metadata_matches(metadata, *, released):
         for key in ('memory_max', 'memory_swap_max'):
             if not same(actual.get(key), cgroup[key]):
                 return False
-        if 'runtime_max' in cgroup:
-            if not same(actual.get('runtime_max'), cgroup['runtime_max']):
-                return False
-        elif 'runtime_max' in actual:
+        if 'runtime_max' in actual:
             return False
     return True

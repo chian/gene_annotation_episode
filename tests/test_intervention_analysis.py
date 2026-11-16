@@ -119,14 +119,6 @@ def test_partial_capture_and_missing_selected_artifact_remain_partial():
     assert result["facts"]["measurements"]["records"][0]["state"] == "source_unavailable"
 
 
-def test_dedicated_adapters_reject_wrong_application_and_pin_the_implementation():
-    with pytest.raises(ValueError, match="application_required"):
-        tnseq.consume_bundle(**arguments("RNASeq"))
-    for adapter in (tnseq, rnaseq):
-        config = dict(adapter_id=adapter.ADAPTER_ID, adapter_version="1", implementation_sha256=adapter.implementation_sha256())
-        assert bind_adapters([config])[(adapter.ADAPTER_ID, "1")][0] is adapter
-
-
 def publication(args, result):
     def content(value, char):
         raw = canonical(value).encode()

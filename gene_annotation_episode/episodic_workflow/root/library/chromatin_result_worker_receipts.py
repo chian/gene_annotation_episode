@@ -1,8 +1,8 @@
-"""Selected chromatin action controls and historical completed-action authority.
+"""Selected chromatin action controls and completed-action authority.
 
 These private records belong to the existing results episode. They contain no
 calculator and grant no access merely because a file or a private receipt exists.
-Historical checks use frozen controls and Store metadata, never scientific bytes.
+Completed-action checks use frozen controls and Store metadata, never scientific bytes.
 """
 from __future__ import annotations
 
@@ -32,13 +32,13 @@ from gene_annotation_episode.episodic_workflow.root.library.chromatin_interactio
 from gene_annotation_episode.episodic_workflow.root.library.chromatin_interaction_return_views import FACT_SOURCES, FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE, validate_chromatin_fact_values
 from gene_annotation_episode.episodic_workflow.root.library.chromatin_interaction_result_worker import validate_chromatin_result_worker_plan, validate_chromatin_result_worker_result, _validate_capture
 from gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_capture import validate_chromatin_native_capture
-from gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_contracts import retained_policy, POLICY, TABLE_ROLES, TABLE_NAMES, chromatin_driver_argv, validate_chromatin_requested_job, validate_chromatin_run_plan, _dependency_roots
+from gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_contracts import POLICY, TABLE_ROLES, TABLE_NAMES, chromatin_driver_argv, validate_chromatin_requested_job, validate_chromatin_run_plan, _dependency_roots
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import validate_receipt
 from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from gene_annotation_episode.episodic_workflow.root.progress_records import validate_resource_observation
 
 
-from gene_annotation_episode.episodic_workflow.root.library.chromatin_result_receipt_values import ChromatinInteractionResultIntent, ChromatinInteractionHandoffProof, ChromatinInteractionNativeSnapshot, ChromatinInteractionOrigin, ChromatinInteractionQualifiedFiles, ChromatinInteractionFactGroups, ChromatinInteractionSheetEvidence, ChromatinInteractionResultReceipt, ChromatinInteractionResultAction, _historical, _finite_json_copy, require, closed, same, decode, directory, regular, read_control, immutable, empty_facts, empty_files, unique, outcome, qualified_files, closure_value, VERSION, _READING, _READ_CACHE, _OUTPUTS
+from gene_annotation_episode.episodic_workflow.root.library.chromatin_result_receipt_values import ChromatinInteractionResultIntent, ChromatinInteractionHandoffProof, ChromatinInteractionNativeSnapshot, ChromatinInteractionOrigin, ChromatinInteractionQualifiedFiles, ChromatinInteractionFactGroups, ChromatinInteractionSheetEvidence, ChromatinInteractionResultReceipt, ChromatinInteractionResultAction, _finite_json_copy, require, closed, same, decode, directory, regular, read_control, immutable, empty_facts, empty_files, unique, outcome, qualified_files, closure_value, VERSION, _READING, _READ_CACHE, _OUTPUTS
 
 
 class ChromatinResultWorkerReceipts:
@@ -48,7 +48,7 @@ class ChromatinResultWorkerReceipts:
         if plan is None:
             require(capture is None and execution is None)
             return
-        plan = validate_chromatin_result_worker_plan(plan, historical=_historical(receipt['intent']))
+        plan = validate_chromatin_result_worker_plan(plan)
         intent, selector = receipt["intent"], receipt["intent"]["assignment"]["selector"]
         root = self.action_directory(intent["episode_id"], intent["operation_key"]) / "worker"
         selected = self._selected(intent)
@@ -89,7 +89,7 @@ class ChromatinResultWorkerReceipts:
             require(execution is None)
             return
         validate_chromatin_record("WorkerCapture", capture)
-        policy = retained_policy(execution.get('policy') if type(execution) is dict else None, historical=_historical(receipt['intent']))
+        policy = POLICY
         closed(execution, ("version", "plan_file", "intent", "terminal", "quiescent", "policy", "returncode",
             "metadata", "failure", "handle_file", "request_file", "stdout_file", "stderr_file"))
         require(execution["version"] == "chromatin_worker_execution_v1"
@@ -117,9 +117,7 @@ class ChromatinResultWorkerReceipts:
         require(len(paths) == len(set(paths)) and all(Path(p).is_relative_to(root / "source_snapshot") for p in paths))
         required = ("chromatin_interaction_result_worker", "chromatin_interaction_contracts", "chromatin_interaction_inputs",
             "chromatin_interaction_tables", "chromatin_interaction_calculations", "chromatin_interaction_result_views")
-        legacy_sources = all(str(root / "source_snapshot/gene_annotation_episode" / (name + ".py")) in paths for name in required)
-        current_sources = all(str(root / "source_snapshot/gene_annotation_episode/episodic_workflow/root/library" / (name + ".py")) in paths for name in required)
-        require(legacy_sources or current_sources)
+        require(all(str(root / "source_snapshot/gene_annotation_episode/episodic_workflow/root/library" / (name + ".py")) in paths for name in required))
         names = []
         for dependency in selected["dependencies"]:
             validate_chromatin_record("DependencyBinding", dependency)
@@ -129,18 +127,14 @@ class ChromatinResultWorkerReceipts:
             require(len({p["path"] for p in dependency["files"]}) == len(dependency["files"]))
         require(len(names) == len(set(names)) and {"numpy", "jsonschema", "attrs", "referencing", "rpds-py", "jsonschema-specifications"} <= set(names))
         require(selected["interpreter"]["path"] == str(root / "runtime/python")
-            and ((legacy_sources and selected["command"] == [str(root / "runtime/python"), "-B", "-S", "-m",
-                "gene_annotation_episode.chromatin_interaction_result_worker", str(root / "plan.json")])
-                or (current_sources and selected["command"] == [str(root / "runtime/python"), "-B", "-S", "-m",
-                "gene_annotation_episode.episodic_workflow.root.library.chromatin_interaction_result_worker", str(root / "plan.json")])))
+            and selected["command"] == [str(root / "runtime/python"), "-B", "-S", "-m",
+                "gene_annotation_episode.episodic_workflow.root.library.chromatin_interaction_result_worker", str(root / "plan.json")])
         environment = selected["environment"]
         validate_chromatin_record("Environment", environment)
         expected = {"PYTHONPATH": os.pathsep.join([str(root / "source_snapshot"), *_dependency_roots(selected)]),
             "PYTHONNOUSERSITE": "1", "PYTHONSAFEPATH": "1", "PYTHONDONTWRITEBYTECODE": "1",
             "TMPDIR": str(root / "tmp"), "TMP": str(root / "tmp"), "TEMP": str(root / "tmp"),
-            "XDG_CACHE_HOME": str(root / "cache"), "PIP_CACHE_DIR": str(root / "cache/pip"),
-            **({'OPENBLAS_NUM_THREADS': '1', 'OMP_NUM_THREADS': '1'}
-                if _historical(receipt['intent']) and policy['memory_bytes'] == 21474836480 else {})}
+            "XDG_CACHE_HOME": str(root / "cache"), "PIP_CACHE_DIR": str(root / "cache/pip")}
         require(all(environment[k] == v for k, v in expected.items()) and Path(environment["PYTHONHOME"]).is_absolute())
         metadata = execution["metadata"]
         require(type(metadata) is dict and same(metadata.get("policy"), policy))

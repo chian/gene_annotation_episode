@@ -1,4 +1,5 @@
 """Reservation, exact reopening, and actual child-selected local dispatch."""
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import hashlib
 import json
@@ -109,6 +110,6 @@ def test_actual_reservation_cli_dispatch_and_original_bundle(tmp_path):
     attempt = Path(plan["attempt_directory"])
     bundle = validate_preparation_bundle_files(json.loads((attempt / "bundle.json").read_bytes()), attempt)
     assert bundle["returncode"] == 0 and bundle["failures"] == []
-    assert result.metadata["verified_cgroup"]["memory_max"] == 20 * 1024**3
+    assert result.metadata["verified_cgroup"]["memory_max"] == ENVIRONMENT_BOUNDS['memory_bytes']
     assert 'runtime_max' not in result.metadata["verified_cgroup"]
     assert native.collect(handle).returncode == 0

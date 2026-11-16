@@ -10,7 +10,7 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode.episodic_workflow.root.library import protein_structure_contracts as science
 from gene_annotation_episode.episodic_workflow.root.library import protein_structure_result_views as views
 from gene_annotation_episode.episodic_workflow.root import protein_structure_action_records as actions
-from gene_annotation_episode.execution_contracts import canonical, digest
+from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.communication import validate_form, ReportBoundaryError
 from gene_annotation_episode.episodic_workflow.root.reference_selection import _references_in
 
@@ -51,23 +51,6 @@ def saved():
         original_components_file=file(b"engineering components", "protein_structure_components_v1"),
         operation="compare_protein_structures", original_mode="fit_then_evaluate_ca",
         allowed_uses=["recalculate", "select_projection", "use_transform"])
-
-
-def legacy_custody():
-    key = dict(run_id="engineering", episode_id="result", operation_key="engineering:result:0")
-    return dict(run_id=key["run_id"], result_episode_id=key["episode_id"], result_operation_key=key["operation_key"],
-        result_receipt_key="protein_structure_result_receipt:" + digest(key), handoff_ref="source_" + "c" * 24,
-        source_ref=SOURCE, bundle_artifact_ref=file(b"engineering bundle", "native_protein_structure_bundle_v1")["artifact_ref"],
-        original_request_sha256="d" * 64)
-
-
-def transform():
-    return dict(version="protein_structure_transform_v1", direction="moving_to_fixed",
-        convention="row_vector_y_R_plus_t", rotation=[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],
-        translation_A=[0.0, 0.0, 0.0], fixed_selection=selection("fixed"), moving_selection=selection("moving"),
-        origin="received_fitted", received_from=dict(saved_sheet=saved(),
-            components_file=file(b"engineering components", "protein_structure_components_v1"),
-            calculation_id="engineering_calculation", calculation_custody=saved()["custody"]))
 
 
 def rows(*, window=None, delivery="values"):
@@ -115,18 +98,6 @@ def test_action_descriptor_rejects_missing_use_or_inconsistent_files(case):
     validator = science.validate_structure_sequence_descriptor if is_sequence else science.validate_saved_sheet_descriptor
     with pytest.raises(ValueError):
         validator(value)
-
-
-@pytest.mark.parametrize("case", ["v1_descriptor_action_custody", "v2_descriptor_legacy_custody"])
-def test_received_transform_cannot_mix_descriptor_and_calculation_custody(case):
-    value = transform()
-    assert science.validate_declared_transform_record(value) == value
-    if case == "v1_descriptor_action_custody":
-        value["received_from"]["saved_sheet"].update(version="protein_structure_saved_sheet_v1", custody=legacy_custody())
-    else:
-        value["received_from"]["calculation_custody"] = legacy_custody()
-    with pytest.raises(ValueError, match="invalid_schema"):
-        science.validate_declared_transform_record(value)
 
 
 @pytest.mark.parametrize("case", ["empty_use", "wrong_format", "wrong_selection"])

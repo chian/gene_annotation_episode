@@ -1,7 +1,4 @@
-"""A107 original flux balance received fact contracts; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 flux balance received fact contracts."""
 from gene_annotation_episode.episodic_workflow.root.a107.library.flux_balance_result_contracts import fba_result_schema
 from gene_annotation_episode.episodic_workflow.root.a107.library.received_execution_information.historical_flux_balance_contracts import flux_balance_schema
 from gene_annotation_episode.episodic_workflow.root.a107.library.flux_balance_model_tools import flux_balance_model_schema

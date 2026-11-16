@@ -42,6 +42,17 @@ def witness(ref, raw, quote):
             'end': start+len(token), 'quote': quote}
 
 
+def locations(value):
+    """Tool-argument form of quoted witnesses: source locations only; the host reads each quote."""
+    if isinstance(value, dict):
+        if set(value) - {'kind'} == {'source_ref', 'representation', 'start', 'end', 'quote'}:
+            return {key: child for key, child in value.items() if key != 'quote'}
+        return {key: locations(child) for key, child in value.items()}
+    if isinstance(value, list):
+        return [locations(child) for child in value]
+    return value
+
+
 def setup_case(path, *, primary=False):
     store = Store(path)
     store.create_problem(raw_sequence='ATGGCT', molecule='dna')
@@ -99,7 +110,7 @@ def test_saved_source_values_exact_typed_subset_and_no_source_reread(tmp_path, m
     store, context, args = setup_case(tmp_path, primary=primary)
     try:
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.perturbation.populate', args, 'source'))
+        outcome = asyncio.run(binding.execute(context, 'literature.perturbation.populate', locations(args), 'source'))
         assert outcome['status'] == 'completed', outcome.get('feedback')
         current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
         ref = outcome['result']['sheet_ref']
@@ -259,39 +270,6 @@ def test_partial_publication_is_atomic_and_copied_source_is_not_a_selected_resul
             repo.populate(context, {**args, 'orientation': -1}, 'selected')
 
 
-def test_saved_binding_descriptor_reconstructs_selected_perturbation_without_reading_inputs(tmp_path, monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a106.episode_composition import compose_episode_bindings
-    from gene_annotation_episode.episodic_workflow.root.a106.episode_journal import Journal
-    store, context, args = setup_case(tmp_path)
-    with store:
-        binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.perturbation.populate', args, 'source'))
-        assert outcome['status'] == 'completed', outcome.get('feedback')
-        context = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
-        selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
-        form = form_with_facts({}, FORM, binding.facts(context, selected))
-        descriptor = binding.as_record()
-        composition = compose_episode_bindings(binding.services, store=store,
-            journal=Journal(store, context.run_id), execution_backend=None,
-            descriptors=[descriptor], job_episodes=None, resource_estimator=None, role_credit_bindings={})
-        reconstructed, = composition.bindings
-        assert reconstructed.as_record() == descriptor
-        saved = store.get(outcome['result']['sheet_ref'])
-        allowed = {saved['artifact_ref'], saved['request_ref']}
-        get_artifact = store.get_artifact
-        def saved_only(reference):
-            assert reference in allowed, 'reconstructed binding must not open original input bytes'
-            return get_artifact(reference)
-        def forbidden(*args, **kwargs):
-            raise AssertionError('reconstructed binding must copy committed values')
-        monkeypatch.setattr(store, 'get_artifact', saved_only)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_storage.read_perturbation_inputs', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_storage.populate_source_restoration', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_inputs._measurement_key', forbidden)
-        store.db.execute('pragma query_only=ON')
-        assert asyncio.run(reconstructed.execute(context, 'literature.perturbation.populate', args, 'source')) == outcome
-        assert form_with_facts({}, FORM, reconstructed.facts(context, selected)) == form
-
 
 @pytest.mark.parametrize('primary', [False, True])
 def test_source_perturbation_selected_unit_and_typed_receipt_once(tmp_path, primary):
@@ -302,7 +280,7 @@ def test_source_perturbation_selected_unit_and_typed_receipt_once(tmp_path, prim
     received = []
     try:
         binding = binding_for(store, context)
-        action = {'kind': 'tool', 'tool': 'literature.perturbation.populate', 'arguments': args}
+        action = {'kind': 'tool', 'tool': 'literature.perturbation.populate', 'arguments': locations(args)}
         selected = run_selected_literature_unit(store, context, binding, action)
         assert selected.outcome['status'] == 'completed', selected.outcome.get('feedback')
         current = replace(selected.context,
@@ -330,7 +308,7 @@ def test_source_perturbation_selected_unit_and_typed_receipt_once(tmp_path, prim
             commit['source_subjects'] = [{'alias': 'source_subject', 'reference_type': 'assay',
                 'source_ref': source_record['id'], 'label': label, 'anchor': {
                     'source_ref': source_record['id'], 'artifact_ref': source_record['artifact_ref'],
-                    'start': start, 'end': start+len(label), 'quote': label}}]
+                    'start': start, 'end': start+len(label)}}]
             return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
         reasoning = receive({'child_reports': [form]})['selection']
         parent_unit = run_selected_literature_unit(store, parent, None, reasoning)

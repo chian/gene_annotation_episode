@@ -1,3 +1,4 @@
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 from pathlib import PurePosixPath
 import os
@@ -8,7 +9,7 @@ ATTEMPT_DIRECTORY_NAME = 'expression-nmf-attempt'
 OWNER_FILENAME = '.native-expression-nmf-owner.json'
 STARTED_FILENAME = '.native-expression-nmf-started.json'
 DRIVER_MODULE = 'gene_annotation_episode.native_expression_nmf_driver'
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 ARTIFACT_NAMES = {'original_input': 'original-input.bin', 'input_data': 'input.json', 'prepared_data': 'prepared.json', 'factors': 'factors.json', 'manifest': 'fit-manifest.json'}
 ARTIFACT_FORMATS = {'original_input': 'expression_delimited_bytes_v1', 'input_data': 'expression_nmf_input_v1', 'prepared_data': 'expression_nmf_prepared_v1', 'factors': 'expression_nmf_factors_v1', 'manifest': 'expression_nmf_native_manifest_v1'}
 

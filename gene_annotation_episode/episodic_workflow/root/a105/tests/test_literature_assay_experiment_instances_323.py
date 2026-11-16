@@ -2,7 +2,6 @@
 import asyncio
 from copy import deepcopy
 from dataclasses import replace
-from functools import partial
 import json
 from types import SimpleNamespace
 import pytest
@@ -14,8 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_services import
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_a105_worksheet import VERSION, a105_worksheet_template
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_grading import COMPONENTS
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_grading_storage import LiteratureAssayGradingRepository, REQUESTED, NAMESPACE, legacy_assay_grading_cells_schema, LEGACY_VERSION, PROVIDER
-from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_grading_storage import LiteratureAssayGradingRepository, REQUESTED, NAMESPACE, PROVIDER
 from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
@@ -98,40 +96,7 @@ def test_new_assessments_require_possessed_source_anchored_experiment_identity(t
         with pytest.raises(ContractError, match='record_not_received'):
             repo.populate(replace(context, received_record_refs=refs), args, 'unreceived')
 
-def test_original_four_type_parent_contract_is_still_admitted():
-    schema = legacy_assay_grading_cells_schema()
-    assert 'experiment_ref' not in schema['items']['properties']
-    assert len(schema['items']['properties']['assay_type']['enum']) == 4
-    validate_closed_schema(obj({'experiment': schema}))
 
-def test_legacy_saved_assessment_does_not_invent_experiment_identity(tmp_path):
-    with Store(tmp_path) as store:
-        store.create_problem(raw_sequence='ATGGCT', molecule='dna')
-        context, args, _ = grading_fixture(store)
-        repo = LiteratureAssayGradingRepository(store, context.run_id)
-        result = repo.populate(context, args, 'new')
-        saved = deepcopy(repo.read(result['result']['sheet_ref']))
-        saved['version'] = LEGACY_VERSION
-        del saved['selection']['experiment_ref']
-        saved['extraction']['quantities'].pop('effect_degrees_of_freedom', None)
-        request = {'run_id': context.run_id, 'episode_id': context.episode_id, 'operation_key': 'historical', 'arguments': saved['selection'], 'scope': plain(context.scope), 'requested_components': list(COMPONENTS)}
-        artifact = store.artifact(canonical(saved), 'application/json')
-        request_ref = store.artifact(canonical(request), 'application/json')
-        source = store.put('source', {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref, 'version': LEGACY_VERSION, 'retrieved_at': None, 'parent_source_refs': saved['input_source_refs']}, origin='tool', scope=plain(context.scope))
-        ref = source['id']
-        rows = deepcopy(result['result']['cells'])
-        for row in rows:
-            row['sheet_ref'] = ref
-            del row['experiment_ref']
-        validate_schema(rows, legacy_assay_grading_cells_schema())
-        outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': context.run_id, 'episode_id': context.episode_id, 'key': 'historical'}), 'record_refs': [ref], 'changed_record_refs': [ref], 'result': {'sheet_ref': ref, 'cells': rows}, 'feedback': None}
-        store.db.execute('INSERT INTO literature_assay_grading_operations VALUES(?,?,?,?,?)', (context.run_id, context.episode_id, 'historical', canonical(request), canonical(outcome)))
-        assert repo.read(ref) == saved
-        context = replace(context, received_record_refs=[*context.received_record_refs, ref])
-        assert repo.populate(context, saved['selection'], 'historical') == outcome
-        groups = repo.experiment_sheets(context)
-        assert len(groups) == 1 and groups[0]['experiment_ref'] is None
-        assert groups[0]['sheets'][0]['sheet_ref'] == ref
 
 def test_two_children_deliver_separate_experiments_to_same_parent_through_actual_loop(tmp_path):
     with Store(tmp_path / 'store') as store:

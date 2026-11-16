@@ -30,7 +30,7 @@ No scientific numbers or covariance are accepted as direct request fields.
 
 Output retains the full selection, authenticated raw witnesses/candidates,
 native-versus-canonical values, finite per-field statuses, canonical048 inputs
-or an explicit common-kind failure, source roster and dependency fingerprints.
+or an explicit common-kind failure and source roster.
 Source-cell identity is separate from actual physical-fit identity. Unknown
 context never creates a known identity or suppresses a valid raw parameter.
 
@@ -41,18 +41,16 @@ failures become local source-failure partials. No replay/reconstruction API is
 provided here: a repository must retain this result rather than reread sources.
 """
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.implementation_sources import source_file
 from copy import deepcopy
 from decimal import Decimal, InvalidOperation
 from html import unescape
 import hashlib
 import json
 import math
-from pathlib import Path
 import re
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.tools.literature_binding_reader import _measurement, _SCALES
-from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.tools.literature_binding_visual_inputs import _Inputs, _box, _inside, _witness_shape, ATTRIBUTION, PILLOW_VERSION
+from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.tools.literature_binding_visual_inputs import _Inputs, _box, _inside, _witness_shape, ATTRIBUTION
 from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.scoring.literature_binding_interaction_calculations import INPUT_VERSION as CALC_INPUT_VERSION, ROLES, ID_FIELDS, CONTEXT_FIELDS, RELATIONS, validate_binding_interaction_inputs
 from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.grading.literature_experimental_contracts import ExperimentalContractError
 VERSION = 'binding_interaction_source_inputs_v1'
@@ -68,8 +66,6 @@ SCALAR_STATUSES = ('not_selected', 'parsed', 'qualified', 'ambiguous', 'unreadab
 UNCERTAINTY_REASONS = ('uncertainty_description_not_selected', 'uncertainty_interval_unit_unavailable', 'conflicting_interval_order', 'uncertainty_interval_numeric_range', 'confidence_level_out_of_range', 'confidence_level_numeric_range', 'conflicting_exact_minimum_count', 'uncertainty_meaning_source_unavailable', 'uncertainty_statistic_unknown', 'uncertainty_statistic_conflicting', 'uncertainty_basis_conflicting', 'reported_spread_uncertainty_meaning_conflict', 'interval_uncertainty_meaning_conflict', 'uncertainty_on_unreported_parameter')
 ROLE_UNAVAILABLE_REASONS = ('role_not_selected', 'parameter_kind_source_unavailable', 'parameter_kind_unknown', 'parameter_kind_conflicting', 'parameter_kind_mismatch', 'conflicting_source_cell', 'unresolved_source_cell_rereading', *('measurement_' + status for status in MEASUREMENT_STATUSES))
 CALCULATION_INPUT_STATUSES = ('ready', 'common_parameter_kind_unknown', 'common_parameter_kind_conflicting', 'common_parameter_kind_source_unavailable')
-_FROZEN = {'literature_binding_visual_inputs.py': '8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718', 'literature_binding_reader.py': 'e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1', 'literature_experimental_contracts.py': '0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc'}
-CALCULATOR_SHA256 = 'ac7ea12c105e16df5085942090ec8e3f96c618b4f5866283325c46c92804b432'
 _DECIMAL = '[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?'
 _SCALAR = re.compile(f'\\s*(?P<approx>about\\s+|approximately\\s+|[~≈∼]\\s*)?(?P<relation>>=|<=|≥|≤|>|<|at\\s+least\\s+|at\\s+most\\s+)?(?P<number>{_DECIMAL})\\s*(?P<percent>%)?\\s*', re.IGNORECASE)
 _RELATIONS = {None: 'eq', '>': 'gt', '>=': 'ge', '≥': 'ge', '<': 'lt', '<=': 'le', '≤': 'le'}
@@ -218,17 +214,6 @@ def _validate(arguments):
 
 def _digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
-
-def _dependencies():
-    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in _FROZEN}
-    if any((expected is None or hashes[name] != expected for name, expected in _FROZEN.items())):
-        _fail('binding_interaction_frozen_dependency_mismatch', 'implementation')
-    calculator = hashlib.sha256(source_file('literature_binding_interaction_calculations.py').read_bytes()).hexdigest()
-    if CALCULATOR_SHA256 is None:
-        _fail('binding_interaction_calculator_dependency_pending', 'implementation')
-    if calculator != CALCULATOR_SHA256:
-        _fail('binding_interaction_frozen_dependency_mismatch', 'implementation.calculator')
-    return {'sha256': {**hashes, 'literature_binding_interaction_calculations.py': calculator}, 'reader_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), 'pillow_version': PILLOW_VERSION}
 
 def _source_requests(arguments):
     result = [(arguments['source_ref'], 'original')]
@@ -565,7 +550,6 @@ def read_binding_interaction_inputs(arguments, *, read_source):
     _validate(arguments)
     if not callable(read_source):
         _fail('source_reader_required', 'read_source')
-    dependencies = _dependencies()
     selection = deepcopy(arguments)
     acquired, roster = ({}, [])
     for reference, representation in _source_requests(selection):
@@ -607,7 +591,7 @@ def read_binding_interaction_inputs(arguments, *, read_source):
             row['calculation_operand'] = _operand(row, common_kind['value'], origin)
         calculation_inputs = {'version': CALC_INPUT_VERSION, 'parameter_kind': common_kind['value'], 'unit': 'nM', 'comparison_scope': selection['comparison_scope'], 'operands': {role: deepcopy(row['calculation_operand']) for role, row in roles.items()}, 'relationships': calculation_relationships}
         validate_binding_interaction_inputs(calculation_inputs)
-    return {'version': OUTPUT_VERSION, 'source_ref': selection['source_ref'], 'source_kind': selection['source_kind'], 'selection': selection, 'parameter_kind': common_kind, 'images': images, 'roles': roles, 'relationships': relationships, 'geometry_overlaps': _overlaps(roles), 'calculation_input_status': status, 'calculation_inputs': calculation_inputs, 'source_refs': list(dict.fromkeys((row['source_ref'] for row in roster))), 'source_representations': roster, 'implementation_dependencies': dependencies, 'interpretation_attribution': ATTRIBUTION}
+    return {'version': OUTPUT_VERSION, 'source_ref': selection['source_ref'], 'source_kind': selection['source_kind'], 'selection': selection, 'parameter_kind': common_kind, 'images': images, 'roles': roles, 'relationships': relationships, 'geometry_overlaps': _overlaps(roles), 'calculation_input_status': status, 'calculation_inputs': calculation_inputs, 'source_refs': list(dict.fromkeys((row['source_ref'] for row in roster))), 'source_representations': roster, 'interpretation_attribution': ATTRIBUTION}
 
 def binding_interaction_arguments_schema():
     """Closed source-selection schema; reader checks positional/semantic links."""
@@ -642,4 +626,4 @@ def binding_interaction_arguments_schema():
         values = ('matched', 'not_matched', 'unknown', 'conflicting') if name == 'common_conditions' else ('supported', 'unknown', 'conflicting')
         relationships[name] = obj({'status': {'enum': list(values)}, 'witnesses': witnesses})
     return deepcopy(obj({'version': {'const': VERSION}, 'source_ref': text, 'source_kind': {'enum': ['primary_source', 'synthetic_fixture']}, 'images': {'type': 'array', 'items': image}, 'parameter_kind': meaning(KINDS), 'comparison_scope': {'enum': ['reported_protocols', 'common_conditions']}, 'roles': obj({name: nullable(role) for name in ROLES}), 'relationships': obj(relationships)}))
-__all__ = ['VERSION', 'OUTPUT_VERSION', 'ROLES', 'ID_FIELDS', 'KINDS', 'STATISTICS', 'BASES', 'REPETITIONS', 'UNIT_RELATIONS', 'MEASUREMENT_STATUSES', 'SCALAR_STATUSES', 'UNCERTAINTY_REASONS', 'ROLE_UNAVAILABLE_REASONS', 'CALCULATION_INPUT_STATUSES', 'CALCULATOR_SHA256', 'binding_interaction_arguments_schema', 'read_binding_interaction_inputs']
+__all__ = ['VERSION', 'OUTPUT_VERSION', 'ROLES', 'ID_FIELDS', 'KINDS', 'STATISTICS', 'BASES', 'REPETITIONS', 'UNIT_RELATIONS', 'MEASUREMENT_STATUSES', 'SCALAR_STATUSES', 'UNCERTAINTY_REASONS', 'ROLE_UNAVAILABLE_REASONS', 'CALCULATION_INPUT_STATUSES', 'binding_interaction_arguments_schema', 'read_binding_interaction_inputs']

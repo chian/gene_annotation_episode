@@ -1,7 +1,6 @@
 """Caller-supplied memory/scratch policy and staged-file scratch preflight.
 
-These are the original LocalJobPolicy and check_scratch_budget bodies. The
-module stays beside defaults.toml and preserves the actual inherited workflow
+The module stays beside defaults.toml and applies the inherited workflow
 memory ceiling. Process creation and lifetime remain in native_lifecycle.
 """
 from __future__ import annotations

@@ -15,7 +15,7 @@ from .communication import plain
 from .domain import identity
 from .scientific_process_records import (scientific_digest, scientific_invocation_ref,
     validate_child_selection, validate_revision_origin, validate_selection,
-    selection_fields, LEGACY_SELECTION_VERSION)
+    selection_fields)
 from .scientific_process_reports import credit_binding_ref, validate_process_result
 
 
@@ -132,10 +132,7 @@ class ScientificProcessProvenance:
                 raise ValueError("scientific_preparation_library_mismatch")
             self.library.resolve(selection[name])
         if self.tool_library is not None:
-            if selection['version'] == LEGACY_SELECTION_VERSION:
-                self.tool_library.resolve(selection['tools'])
-            else:
-                self.tool_library.resolve_tool_info(selection['child_tool_info'])
+            self.tool_library.resolve_tool_info(selection['child_tool_info'])
         return selection
 
     def _preparation(self, invocation, preparation_ref):
@@ -170,18 +167,14 @@ class ScientificProcessProvenance:
         if not isinstance(arguments, dict) or set(arguments) != {thought_field, tools_field}:
             raise ValueError("scientific_preparation_arguments_invalid")
         proposal = validate_child_selection(_load(row["proposal"]))
-        proposed_tools = arguments[tools_field]
-        if selection['version'] != LEGACY_SELECTION_VERSION:
-            if self.tool_library is None:
-                raise ValueError('scientific_preparation_tool_library_required')
-            proposed_tools = self.tool_library.resolve_tool_info(proposed_tools)
+        if self.tool_library is None:
+            raise ValueError('scientific_preparation_tool_library_required')
+        proposed_tools = self.tool_library.resolve_tool_info(arguments[tools_field])
         proposed = validate_selection({'version': selection['version'],
             axis_field: selection[axis_field], thought_field: arguments[thought_field],
             tools_field: proposed_tools})
         for name in (axis_field, thought_field):
             self.library.resolve(proposed[name])
-        if self.tool_library is not None and selection['version'] == LEGACY_SELECTION_VERSION:
-            self.tool_library.resolve(proposed["tools"])
         origin = validate_revision_origin(_load(row["revision_origin"]))
         expected_operation = identity("operation", {
             "key": f'{self.journal.run_id}:{invocation["episode_id"]}:{row["decision_index"]}',
@@ -280,11 +273,9 @@ class ScientificProcessProvenance:
                     if parent["invocation_ref"] is None:
                         return None
                     selection = self._selection(parent)
-                    # Legacy name-only selections contain no four-field
-                    # ToolInfos. Do not manufacture their missing guidance.
                     return _detached({"version": "scientific_parent_task_v1",
                         "scientific_question": parent["goal"]["objective"],
-                        "selected_tool_info": selection.get("child_tool_info", [])})
+                        "selected_tool_info": selection["child_tool_info"]})
                 parent = self._parent(parent["path"], {"goal": parent["goal"]}, parent["scope"])
             return None
 

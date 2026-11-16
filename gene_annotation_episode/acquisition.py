@@ -1026,13 +1026,6 @@ except Exception as error:
         return replace(snapshot, request=deepcopy(arguments), media_type=spec["media_type"])
 
 
-def parse_uniprot(content: bytes) -> list[dict[str, Any]]:
-    """Legacy keys from the shared native parser; original request is unknown."""
-    from .uniprot_native import legacy_uniprot_records, parse_uniprot_native
-    parsed = parse_uniprot_native(content, request=None, response_headers=None)
-    return legacy_uniprot_records(parsed, content)
-
-
 def parse_genbank(content: bytes) -> list[dict[str, Any]]:
     """Preserve the fetched record's feature coordinates and source semantics.
 
@@ -1239,23 +1232,6 @@ def article_details(content: bytes) -> dict[str, Any]:
 def article_sections(content: bytes) -> list[dict[str, Any]]:
     """Ordered original article text; shared parser retains primary metadata."""
     return article_details(content)['sections']
-
-
-def uniprot_pagination(snapshot: SourceSnapshot) -> dict[str, Any]:
-    """Compatibility fields from the same native/header interpretation."""
-    from .uniprot_native import parse_uniprot_native
-    request = None
-    if "query" in snapshot.request:
-        request = {"operation": "search", **{key: snapshot.request[key]
-                   for key in ("query", "size", "cursor") if key in snapshot.request}}
-    elif "accession" in snapshot.request:
-        request = {"operation": "record", "accession": snapshot.request["accession"]}
-    response = snapshot.transport.get("response")
-    headers = response.get("headers") if isinstance(response, dict) else None
-    page = parse_uniprot_native(snapshot.content, request=request, response_headers=headers)["page"]
-    return {"next_cursor": page["next_cursor"], "total_results": page["total_results"]["value"],
-            "release": page["release"]["value"], "release_date": page["release_date"]["value"],
-            "pagination_metadata_available": page["pagination_metadata_available"]}
 
 
 def parse_hmmer(content: bytes, *, algorithm: str) -> dict[str, Any]:

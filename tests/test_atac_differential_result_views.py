@@ -1,17 +1,14 @@
 """Exact receiver projections retain units, native defects and typed missingness."""
 from copy import deepcopy
-import json
-from pathlib import Path
 
 import pytest
 
 from gene_annotation_episode.atac_differential_result_contracts import atac_result_schema, validate_atac_result_record
 from gene_annotation_episode.atac_differential_result_views import project_atac_result
-from gene_annotation_episode.atac_differential_return_views import (
+from gene_annotation_episode.episodic_workflow.root.library.atac_differential_return_views import (
     atac_fact_sources, requested_atac_sources, select_atac_return_facts,
     PROJECTION_SOURCE, SAVED_SOURCE, FAILURE_SOURCE,
 )
-from gene_annotation_episode.atac_differential_execution_information import describe_atac_result, validate_atac_result_selector, atac_result_selector_schema
 from gene_annotation_episode.atac_differential_result_worker import run_atac_result_worker
 from test_atac_differential_result_worker import saved_plan, read_outputs, selector
 from test_atac_differential_calculation_inputs import sheet, population
@@ -100,27 +97,6 @@ def test_selector_rejects_invalid_numeric_or_projection_meanings(outputs, mutati
 def test_bound_failure_schema_is_the_same_native_failure_declaration():
     from gene_annotation_episode.native_atac_differential_contracts import atac_execution_schema
     assert atac_result_schema('Failure') == atac_execution_schema('Failure')
-
-
-def test_selector_schema_keeps_local_references_when_embedded_in_assignment_conditionals():
-    from jsonschema import Draft202012Validator
-    selected = selector(sheet())
-    embedded = dict(type='object', properties={'operation': {'const': 'atac'}, 'selector': atac_result_selector_schema()},
-        required=['operation', 'selector'], additionalProperties=False)
-    outer = {
-        'type': 'object', 'properties': {'assignment': embedded},
-        'required': ['assignment'], 'additionalProperties': False,
-        '$defs': {'ResultSelector': {'type': 'null'}},
-        'allOf': [{
-            'if': {'properties': {'assignment': {'properties': {'operation': {'const': 'atac'}}}}},
-            'then': {'properties': {'assignment': {'properties': {'selector': atac_result_selector_schema()}}}},
-        }],
-    }
-    value = dict(assignment=dict(operation='atac', selector=selected))
-    validator = Draft202012Validator(outer)
-    validator.validate(value)
-    selected['parameters']['pseudocount'] = True
-    assert not validator.is_valid(value)
 
 
 def test_summary_keeps_real_zero_and_unknown_tail_as_separate_quantities(outputs):

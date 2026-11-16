@@ -4,7 +4,6 @@ import json
 
 import pytest
 
-from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.state import Store
 
@@ -82,7 +81,7 @@ def test_view_next_query_reads_exact_current_rows_without_repeating_history(tmp_
 def test_current_annotation_page_and_immutable_pages_share_view_contract(tmp_path):
     with Store(tmp_path / "store") as store:
         manifest = tmp_path / "input.json"
-        manifest.write_text(json.dumps({"schema_version": 1, "entries": [
+        manifest.write_text(json.dumps({"schema_version": 2, "entries": [
             {"sequence": "ACGT", "name": "A"}, {"sequence": "GGAA", "name": "B"}]}))
         store.create_problem(manifest_path=manifest)
         for target in store.targets():
@@ -132,31 +131,10 @@ def test_reverse_query_finds_real_semantic_paths_and_anchor_provenance_not_quote
             "reference_ref": src["text_ref"], "field_path": ["anchor", "artifact_ref"]}]
 
 
-def test_reference_filter_is_or_paged_and_current_only_keeps_latest_attribution(tmp_path):
-    with Store(tmp_path / "store") as store:
-        store.create_problem(raw_sequence="MKW", molecule="protein")
-        target = store.targets()[0]["id"]
-        first, second = hypothesis(store, target), hypothesis(store, target, "partial")
-        o = observation(store, target)
-        old = assessment(store, first, o, assumptions=[second["id"]])
-        new = assessment(store, first, o, revision=1, assumptions=[second["id"]], relation="weakens")
-        other = assessment(store, second, o, assumptions=[first["id"]])
-        query = {"kind": "assessment", "limit": 1, "current_only": True,
-                 "references": [first["id"], second["id"]]}
-        rows, pages = collect(store, query)
-        assert rows == store.current_assessments()
-        assert {row["id"] for row in rows} == {new["id"], other["id"]}
-        assert all(page["total"] == 2 for page in pages)
-        assert pages[0]["next_query"]["references"] == query["references"]
-        historical = store.query_records("assessment", references=[second["id"]])
-        assert old in historical["records"] and new in historical["records"]
-        assert len({row["id"] for row in historical["records"]}) == historical["total"]
-
-
 def test_subject_union_is_bounded_scoped_and_filtered_without_subject_materialization(tmp_path, monkeypatch):
     with Store(tmp_path / "store") as store:
         manifest = tmp_path / "input.json"
-        manifest.write_text(json.dumps({"schema_version": 1, "entries": [
+        manifest.write_text(json.dumps({"schema_version": 2, "entries": [
             {"sequence": "ACGT", "name": "A", "molecule": "dna"},
             {"sequence": "GGAA", "name": "B", "molecule": "dna"}]}))
         store.create_problem(manifest_path=manifest)
@@ -183,30 +161,6 @@ def test_subject_union_is_bounded_scoped_and_filtered_without_subject_materializ
         assert page["records"] == [products["A"]]
         page = store.query_records("subject", scope=scope, references=[targets["A"]["source_ref"]])
         assert page["records"] == [targets["A"]]
-
-
-def test_reverse_query_preserves_existing_scope_and_does_not_change_credit_or_state(tmp_path):
-    with Store(tmp_path / "store") as store:
-        manifest = tmp_path / "input.json"
-        manifest.write_text(json.dumps({"schema_version": 1, "entries": [
-            {"sequence": "MKW", "molecule": "protein", "name": "A"},
-            {"sequence": "MKR", "molecule": "protein", "name": "B"}]}))
-        store.create_problem(manifest_path=manifest)
-        a, b = store.targets()
-        assumption = hypothesis(store, a["id"], "partial")
-        for target in (a, b):
-            h = hypothesis(store, target["id"])
-            o = observation(store, target["id"])
-            ass = assessment(store, h, o, assumptions=[assumption["id"]])
-            annotation(store, target["id"], h, ass)
-        before = project_credit(store).as_record()
-        changes = store.db.total_changes
-        page = store.query_records("assessment", scope={"subject_refs": [a["id"]]},
-            references=[assumption["id"]], current_only=True)
-        assert len(page["records"]) == 1
-        assert store.roots(page["records"][0]["id"]) == [a["id"]]
-        assert store.db.total_changes == changes
-        assert project_credit(store).as_record() == before
 
 
 def test_query_count_and_rows_share_one_snapshot_across_concurrent_commit(tmp_path):

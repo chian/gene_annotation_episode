@@ -1,4 +1,4 @@
-"""Actual predefined annotation parent; preserves the unbound legacy action API."""
+"""Predefined annotation parent."""
 from hashlib import sha256
 from importlib import import_module
 from pathlib import Path

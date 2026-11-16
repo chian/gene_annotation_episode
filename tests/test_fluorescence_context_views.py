@@ -6,7 +6,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_context_views import project_fluorescence_context
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_contracts import CONTEXT_FIELDS, validate_fluorescence_context
-from test_fluorescence_event_calculations import _batch, _basis, _file, _gate, _location, _parameters, _request, _sheet
+from test_fluorescence_event_calculations import _batch, _file, _gate, _location, _parameters, _request, _sheet
 
 
 def test_pagination_selects_actual_page_dependencies_and_requested_fields():
@@ -49,19 +49,6 @@ def test_parent_gate_and_prepared_domain_closure_does_not_copy_correspondence():
     assert [row["key"] for row in context["domains"]] == ["s.raw", "s.prepared"]
     assert all("correspondence" not in row for row in context["domains"])
     assert not context["samples"] and not context["sources"]
-
-
-def test_control_page_resolves_both_branches_but_no_unrelated_sample():
-    batches = [_batch([[100]], sample=s) for s in ("a", "b", "unused")]
-    gates = [_gate(s + ".g", sample=s) for s in ("a", "b", "unused")]
-    pair = dict(key="pair", target_gate_key="a.g", control_gate_key="b.g", denominator="parent", comparison_basis=_basis())
-    sheet = _sheet(batches, gates=gates, controls=[pair])
-    parameters = _parameters(controls=[dict(control_key="pair", include_legacy_clipping=False)])
-    components = calculate_fluorescence_sheet(sheet, parameters=parameters)
-    selected = dict(requests=[_request("control", "control_difference_percentage_points", control_key="pair")], offset=0, limit=1)
-    context = project_fluorescence_context(sheet, components, selection=selected, context_fields=["samples", "control_pairs"])
-    assert [row["key"] for row in context["samples"]] == ["a", "b"]
-    assert context["control_pairs"] == [pair] and not context["gates"]
 
 
 def test_existing_saved_native_link_context_resolves_requested_definition_only():

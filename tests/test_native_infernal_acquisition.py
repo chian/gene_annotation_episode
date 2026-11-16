@@ -11,56 +11,17 @@ from pathlib import Path
 import shutil
 import socket
 import subprocess
-from types import SimpleNamespace
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library import native_infernal_acquisition as acquisition
-from gene_annotation_episode.episodic_workflow.root.library import native_infernal_driver as native_driver
 from gene_annotation_episode.native_infernal_contracts import (compile_native_infernal_job,
     native_infernal_digest as digest, requested_job_from_infernal)
-from gene_annotation_episode.episodic_workflow.root.library.native_infernal_local import prepare_local_infernal
-from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import canonical
 from gene_annotation_episode.state import Store
 
 
 FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/native_infernal_acquisition'
-NATIVE_FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_native_execution222'
-NATIVE_INDEX = NATIVE_FIXTURES / 'index.json'
-
-
-def relocated_native_case(tmp_path, case):
-    """Seal a new local reservation around unchanged retained native file bytes."""
-    record = json.loads(NATIVE_INDEX.read_bytes())[case]
-    source_action = NATIVE_FIXTURES / case / Path(*Path(record['action_directory']).parts[-3:])
-    original_plan = json.loads((source_action / 'infernal-plan.json').read_bytes())
-    original_bundle = json.loads((source_action / 'infernal-attempt/bundle.json').read_bytes())
-    assignment = json.loads((source_action / 'assignment.json').read_bytes())
-    workspace = tmp_path / 'retained-native-workspace'
-    workspace.mkdir()
-    assignment['workspace'] = str(workspace)
-    identity = original_plan['identity']
-    action = workspace / '.episode-operations' / digest({
-        'run': identity['run_id'], 'episode': identity['episode_id']}) / digest(identity['operation_key'])
-    state = SimpleNamespace(assignment=assignment, run_id=identity['run_id'], episode_id=identity['episode_id'])
-    prepare_local_infernal(state, identity['operation_key'], root=action,
-        policy=LocalJobPolicy(**original_plan['policy']))
-    plan = json.loads((action / 'infernal-plan.json').read_bytes())
-    root = action / 'infernal-attempt'
-    shutil.copytree(source_action / 'infernal-attempt', root)
-    bundle = deepcopy(original_bundle)
-    bundle['identity'] = deepcopy(plan['identity'])
-    bundle['requested_job'] = deepcopy(plan['requested_job'])
-    job = plan['requested_job']['native_infernal']
-    bundle['environment'] = native_driver._environment(job, root)
-    inputs = {row['role']: str(root / row['relative_path']) for row in bundle['inputs']}
-    bundle['realized_argv'] = compile_native_infernal_job(job, input_paths=inputs,
-        output_directory=str(root))['argv']
-    (root / '.native-infernal-owner.json').write_bytes(native_driver._encoded(plan))
-    (root / 'bundle.json').write_bytes(native_driver._encoded(bundle))
-    assert native_driver.validate_native_infernal_bundle_files(bundle, root) == bundle
-    return root, plan, bundle, make_target(plan, assignment)
 
 
 def forbidden(*args, **kwargs):
@@ -116,7 +77,7 @@ def sealed_case(tmp_path, monkeypatch, program='cmsearch'):
     identity['requested_job_sha256'] = digest(request)
     plan = {'version': 'native_infernal_run_plan_v1', 'identity': identity,
         'requested_job': request, 'attempt_directory': str(root),
-        'policy': {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}
+        'policy': {'memory_bytes': 5 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}
     inputs = []
     for operand in job['operands']:
         relative = acquisition._staged_relative(operand)
@@ -510,23 +471,3 @@ def test_source_keeps_all_captured_bytes_and_ignores_projection(tmp_path, monkey
             acquisition.publish_original_source(store, bundle=changed, capture=capture, prepared=one)
 
 
-@pytest.mark.parametrize('case', ['cmsearch', 'cmscan', 'cmalign', 'cmalign_native_failure'])
-def test_relocated_retained_native_bytes_use_new_sealed_plan_lookup(tmp_path, monkeypatch, case):
-    if not NATIVE_INDEX.is_file():
-        pytest.skip('workload 222 retained native examples are not installed')
-    original, plan, bundle, target = relocated_native_case(tmp_path, case)
-    monkeypatch.setattr(subprocess, 'run', forbidden)
-    monkeypatch.setattr(subprocess, 'Popen', forbidden)
-    monkeypatch.setattr(socket, 'create_connection', forbidden)
-    with Store(tmp_path / 'state') as store:
-        capture = acquisition.capture_local_bundle(store, target=target, directory=tmp_path / 'capture')
-        assert capture['complete'] and capture['bundle_validated'], capture['failures']
-        assert len(capture['artifacts']) == len(bundle['inputs']) + len(bundle['artifacts'])
-        for row in capture['artifacts']:
-            assert store.get_artifact(row['artifact_ref']) == (original / row['relative_path']).read_bytes()
-        source = acquisition.publish_original_source(store, bundle=bundle, capture=capture, prepared=None)
-        assert store.get(source)['artifact_ref'] == capture['bundle_artifact_ref']
-        monkeypatch.setattr(acquisition, 'local_infernal_plan', forbidden)
-        monkeypatch.setattr(acquisition, 'artifact_file', forbidden)
-        assert acquisition.capture_local_bundle(store, target=target, directory=tmp_path / 'capture') == capture
-        assert bundle['returncode'] == (1 if case == 'cmalign_native_failure' else 0)

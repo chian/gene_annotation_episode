@@ -22,12 +22,12 @@ def exchange_for_improvement(workflow, source, role):
     from .legacy_annotation.task import LegacyAnnotationTask
     if type(source) is AnnotationTask and len(path) == 1 and (path[0][0] == 'annotation'):
         from .to_child_legacy_annotation import prepare_request
-        from .from_child_legacy_annotation import admit_return, admit_unowned_return
-        return (prepare_request, admit_return, admit_unowned_return)
+        from .from_child_legacy_annotation import admit_return
+        return (prepare_request, admit_return)
     if type(source) is LegacyAnnotationTask and _implicit_parent(source, path) == 'legacy_annotation':
         from .legacy_annotation.to_child_legacy_annotation import prepare_request
-        from .legacy_annotation.from_child_legacy_annotation import admit_return, admit_unowned_return
-        return (prepare_request, admit_return, admit_unowned_return)
+        from .legacy_annotation.from_child_legacy_annotation import admit_return
+        return (prepare_request, admit_return)
     return None
 
 
@@ -65,12 +65,12 @@ def exchange_for_scientific_child(workflow, source, role, *, owner=None):
     from .scientific_process.decision_source import ScientificDecisionSource
     if type(source) is AnnotationTask and len(path) == 1 and (path[0][0] == 'annotation'):
         from .to_child_scientific_process import prepare_request
-        from .from_child_scientific_process import admit_return, admit_unowned_return
-        return (prepare_request, admit_return, admit_unowned_return)
+        from .from_child_scientific_process import admit_return
+        return (prepare_request, admit_return)
     if type(source) is ScientificDecisionSource and path[-1][0] == 'scientific_process':
         from .scientific_process.to_child_scientific_process import prepare_request
-        from .scientific_process.from_child_scientific_process import admit_return, admit_unowned_return
-        return (prepare_request, admit_return, admit_unowned_return)
+        from .scientific_process.from_child_scientific_process import admit_return
+        return (prepare_request, admit_return)
     return None
 
 

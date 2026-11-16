@@ -17,7 +17,7 @@ class SourceTaskAction:
                 if response['report_update'] != self.report_values:
                     raise ValueError('delivery_resolution_must_preserve_current_interpretation')
             if self.workflow.permits_common_action(self, 'reason') and isinstance(selection, Mapping) and (selection.get('kind') == 'reason'):
-                envelope = self.workflow.reasoning_action_schema(self, {'type': 'object'}, _accept_legacy_quotes=True)
+                envelope = self.workflow.reasoning_action_schema(self, {'type': 'object'})
                 Draft202012Validator(envelope).validate(selection)
                 payload = selection['commit']
                 commit_schema = self.workflow.store.reasoning_schema()

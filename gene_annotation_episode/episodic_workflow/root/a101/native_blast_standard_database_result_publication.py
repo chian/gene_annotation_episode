@@ -182,7 +182,8 @@ def _original_handoff(store, context, target, attempt):
 
 
 def _policy(policy):
-    if not isinstance(policy, LocalJobPolicy) or policy.to_dict() != {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}:
+    from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+    if not isinstance(policy, LocalJobPolicy) or policy.to_dict() != {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}:
         raise ContractError('native_blast_standard_database_explicit_grading_policy_required')
     return policy
 

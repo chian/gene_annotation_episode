@@ -13,7 +13,6 @@ import zipfile
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_concentration_window_inputs as I
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_concentration_window_calculations as C
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_concentration_window_prompt import CONCENTRATION_WINDOW_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError
 ROOT = Path(__file__).resolve().parents[5]
 V = ROOT / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/concentration_window'
@@ -112,12 +111,6 @@ def covariance(selection, sources):
     sources['synthetic:joint_covariance'] = json.dumps(doc).encode()
     return doc
 
-def test_exact_released_schemas_and_task():
-    schemas = load('SCHEMAS_003.json')
-    for name, factory in [('SELECTION', I.concentration_window_selection_schema), ('EXTRACTION', I.concentration_window_extraction_schema), ('CALCULATION_INPUTS', I.concentration_window_calculation_inputs_schema), ('SHEET', I.concentration_window_sheet_schema), ('COVARIANCE_DOCUMENT', I.concentration_window_covariance_schema)]:
-        assert factory() == schemas[name]
-    assert CONCENTRATION_WINDOW_TASK == (V / 'TASK_PROPOSAL_001.txt').read_text().rstrip()
-    assert len(CONCENTRATION_WINDOW_TASK.split('\n\n')) == 3
 
 def test_original_workbook_exact_numerics_and_meanings(original, tmp_path):
     selection, sources = original

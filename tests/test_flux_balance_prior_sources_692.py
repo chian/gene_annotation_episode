@@ -5,7 +5,6 @@ records exercise byte/address admission only, not real provider provenance.
 """
 from copy import deepcopy
 import builtins
-import importlib.util
 import io
 import json
 import os
@@ -222,8 +221,6 @@ def test_model_artifact_reference_has_its_actual_original_model_association(capt
     assert_independent_work(result)
 
 
-
-
 def test_prior_bytes_populate_same_sheet_and_saved_calculator_without_external_work(captures):
     payloads, expected, extra = with_prior(captures, kind="both")
     before = deepcopy((payloads, expected, extra))
@@ -245,12 +242,6 @@ def test_prior_bytes_populate_same_sheet_and_saved_calculator_without_external_w
     assert calculated["objective"]["native_basis_calculated"]["value"] == -4.25
     assert calculated["objective"]["full_calculated"]["value"] == -2.75
     assert calculated["active_count"] == 3
-    if os.environ.get("HMMER529_ATTEMPT"):
-        Path(os.environ["HMMER529_ATTEMPT"], "fba692_saved_example.json").write_text(json.dumps({
-            "fixture_identity": "Synthetic prior bytes and TEST-normalized677 scientific records; no native solve or host authority",
-            "selected_request": json.loads(payloads["selected_request"]["bytes"]),
-            "sheet": sheet, "calculations": calculated,
-        }, indent=2, allow_nan=False) + "\n")
 
 
 def test_selected_native_file_needs_no_duplicate_prior_payload(captures):

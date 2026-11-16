@@ -103,20 +103,6 @@ def observe(home,directory):
         row.update(execution_keys=f.execution_keys,received=f.received,projections=f.projections)
         return row
 
-def run_probe(output):
-    from gene_annotation_episode.workflow_budget import active_budget
-    output=Path(output).resolve(); assert output.is_relative_to(Path(active_budget()['run_directory']).resolve())
-    output.mkdir(parents=True,exist_ok=True); axis=Path(module('runtime').__file__).parent; repository=axis.parents[3]
-    report={'version':'a103_launch_task_actual_probe_v1','owners':{},'diagnostic_completed':False,
-        'helper_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        'source_hashes':{str(p.relative_to(repository)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(axis.rglob('*.py')) if 'tests' not in p.relative_to(axis).parts},
-        'scope':'Actual standalone Launch/three child constructors, registry paths, capability/invalid action and replay. Synthetic child admission only; no native custody/autonomy.'}
-    destination=output/'launch-task-probe.json'
-    for home in HOMES:
-        try: report['owners'][home]=observe(home,output/'owners'/home)
-        except Exception as error: report['owners'][home]={'diagnostic_error':{'type':type(error).__module__+'.'+type(error).__qualname__,'message':str(error)}}
-        destination.write_text(json.dumps(report,indent=2)+'\n')
-    report['diagnostic_completed']=True; destination.write_text(json.dumps(report,indent=2)+'\n'); return report
 
 class LaunchTaskBehavior:
     @pytest.fixture
@@ -280,33 +266,6 @@ class LaunchTaskBehavior:
         if scenario in {'minimal','unrecognized-bootstrap'}: assert observed==(json.dumps(context,allow_nan=False),instructions)
         if scenario=='hpc-override': assert observed[0]==module('library.hpc_prompt').render_hpc_prompt(context,instructions)
         if scenario=='selected-full': assert observed[0]==module('scientific_process_prompt').render_selected_execution_prompt(context,instructions)
-
-    @pytest.mark.parametrize('declared',[False,True],ids=['legacy','declared'])
-    def test_original_pending_decision_and_completed_replay(self,actual_task,declared):
-        f=actual_task; state=self.presentation_state(f); providers=module('providers')
-        f.workflow.is_job_source=lambda s:False
-        f.workflow.permits_common_action=lambda s,action:action in f.binding.permitted_common_actions(f.context)
-        f.workflow.native_event_information=None; f.workflow.decision_protocol=None
-        f.workflow.services=SimpleNamespace(instructions=module('runtime_prompt').instructions)
-        schema=f.runtime._object({'selection':f.runtime._object({'kind':{'const':'tool'},'tool':{'const':'execution.capabilities'},'arguments':f.runtime._object({})}),
-            'report_update':f.runtime._object({})})
-        response={'selection':{'kind':'tool','tool':'execution.capabilities','arguments':{}},'report_update':{}}
-        f.journal.save('runtime_model_calls',{'episode_id':f.context.episode_id,'call_index':0,'purpose':'decision',
-            'request':json.dumps({'context':state,'schema':schema}),'response':None})
-        session=object.__new__(providers._SessionConnection); session.scientific_prompt_states={}; calls=[]
-        async def complete(episode,role,instructions,context,output_schema,**kw):
-            calls.append((session._presentation(episode,role,instructions,context,**kw),kw,(episode,role,instructions,deepcopy(context))))
-            return deepcopy(response)
-        f.workflow.provider=SimpleNamespace(has_session=lambda *a:True,complete=complete)
-        if declared: f.workflow.provider.complete_with_presentation=complete
-        assert asyncio.run(f.task.call({},schema))[0]==response and len(calls)==1
-        assert calls[0][1]==({'prompt_renderer':f.binding.decision_prompt_renderer}
-            if declared and hasattr(f.binding,'decision_source_type') else {})
-        original=object.__new__(providers._SessionConnection); original.scientific_prompt_states={}
-        assert calls[0][0]==original._presentation(*calls[0][2])
-        f.task.calls=0
-        assert asyncio.run(f.task.call({},schema))[0]==response and len(calls)==1
-        assert f.store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0]==0
 
     @pytest.mark.parametrize('mode',['returned','raised'])
     def test_original_instruction_service_callback(self,actual_task,mode):

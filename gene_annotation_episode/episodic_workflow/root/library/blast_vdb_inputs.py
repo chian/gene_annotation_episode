@@ -1,6 +1,5 @@
 """Supplied-data VDB sheets, three native parsers, and explicit metadata joins.
 
-The closed interfaces are frozen in verification/tool_graders_blast_vdb_2026-10-26_312.
 No acquisition, resource selection, confidence calculation or inferred alias occurs
 here. Native source text is retained in each record so a saved bound sheet can
 recheck extracted fields without opening its source_ref. External custody remains

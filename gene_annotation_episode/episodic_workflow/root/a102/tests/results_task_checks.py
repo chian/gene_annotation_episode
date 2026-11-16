@@ -33,11 +33,6 @@ def capture(call):
     try:return {'status':'returned','value':call()}
     except Exception as error:return {'status':'raised','type':type(error).__module__+'.'+type(error).__qualname__,
         'message':str(error),'code':getattr(error,'code',None)}
-def source_hashes():
-    axis=Path(__file__).resolve().parents[1];root=axis.parents[3]
-    return {str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest()
-        for p in sorted(axis.rglob('*.py')) if 'tests' not in p.relative_to(axis).parts}
-
 def path_for(home):
     return (('annotation','original-root'),)+tuple((ROLES[part],'child_0' if part=='execution_result_acquisition'
         else 'original-'+str(i)) for i,part in enumerate(home.split('/')))
@@ -372,31 +367,6 @@ def configuration_observations(v):
         'initialization':capture(lambda:(b.initialize(v.context),True)[1]),
         'instructions':b.instructions(v.context),'actions':b.permitted_common_actions(v.context),
         'catalog':b.catalog(v.context)}
-
-
-def run_probe(output,workspace):
-    output=Path(output);observations={}
-    for home in HOMES:
-        location=home.replace('/','__');stable=Path(workspace)/location
-        with fixture(home,output/location/'configuration',stable) as v:
-            values=configuration_observations(v)
-            values['instruction_services']={case+';exchange='+str(exchange).lower():instruction_observation(v,case,exchange)
-                for case in INSTRUCTION_CASES for exchange in (False,True)}
-            values['estimators']=estimator_observations(v)
-            values['yield_profiles']={mode:yield_trace(v,mode) for mode in ('finite','unbounded','missing_unbounded','typed','api')}
-        values['acquisitions']={}
-        for case in ('partial','terminal','oserror','invalid'):
-            with fixture(home,output/location/case,stable) as v:values['acquisitions'][case]=acquisition_trace(v,case)
-        with fixture(home,output/location/'coverage',stable) as v:values['coverage']=coverage_trace(v)
-        with fixture(home,output/location/'parent_exchange',stable) as v:values['parent_exchange']=parent_exchange_trace(v)
-        with fixture(home,output/location/'connected_build',stable) as v:values['connected_build']=connected_build_trace(v)
-        values['actions']={}
-        for status in ('completed','partial','invalid','failed','unavailable'):
-            with fixture(home,output/location/('action_'+status),stable) as v:values['actions'][status]=action_trace(v,status)
-        observations[home]=values
-    return {'homes':observations,'source_map':source_hashes(),'helper_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        'diagnostic_completed':True,'external_work':False,'independent_native_handoff_authentication':False,
-        'fixture_tool_boundary':{'kind':'explicit_inactive_ordinary_tool_port','production_constructor_exercised':False}}
 
 
 def connected_build_trace(v):

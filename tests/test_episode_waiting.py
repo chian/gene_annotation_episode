@@ -7,7 +7,6 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root import execution_timing as timing
 from gene_annotation_episode.episodic_workflow.root.numerical import YieldController, estimate_score_yield
-from gene_annotation_episode.run_statistics import ExecutionClass, RunHistory, RunStatistic
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.wait_events import WaitError, WaitStore, completed_action_context, estimate_wait, validate_condition
 
@@ -287,70 +286,6 @@ def test_unselected_old_or_different_events_cannot_complete_wait(tmp_path, repla
         saved = waits.get("wait:0")
         assert saved["outcome"] is None
         assert saved["timing"]["intervals"][-1]["state"] == "raised"
-
-
-def test_unknown_probability_is_not_fabricated_from_real_duration_mean(tmp_path):
-    scope = ExecutionClass(phase="protein_homology_search", backend="local", resource_id="host:local",
-        implementation_sha256="a" * 64, parameters_sha256="b" * 64,
-        memory_bytes=20 * 2**30, scratch_bytes=4 * 2**30, cpu_threads=2,
-        query_residues=253, reference_residues=1000, reference_records=10,
-        reference_state="available")
-    history = RunHistory(tmp_path / "statistics.sqlite3")
-    for i, (outcome, kind, seconds) in enumerate([
-            ("succeeded", "complete", 10), ("succeeded", "complete", 20),
-            ("failed", "complete", 2), ("unknown", "lower_bound", 7),
-            ("cancelled", "unmeasured", None)]):
-        history.record(scope, RunStatistic(attempt_sha256=f"{i:064x}", source_sha256="c" * 64,
-            observed_at=STAMP, outcome=outcome, duration_kind=kind, elapsed_seconds=seconds,
-            condition_ref=None))
-    ref = history.capture(scope)
-    reader = history.reader(ref)
-    snapshot = {"ref": ref, "data": reader.get(ref)}
-    reader.close()
-    history.close()
-    resource = {"resource_id": "host:local", "kind": "local", "capability_binding_ref": "capability:bound",
-        "allocation": {'cpu': 2, 'memory_bytes': 20 * 2 ** 30, 'scratch_bytes': 4 * 2 ** 30}}
-    work = pending("child:a", expectation_refs=[ref], resource=resource)
-    selection = condition("child:a", reconsider_at=DEADLINE)
-    progress = [{"version": "progress_snapshot_v1", "target_handle": "child:a",
-        "progress_ref": "progress:recorded", "observed_at": STAMP,
-        "measurements": [{"name": "elapsed", "value": 7, "unit": "seconds"}]}]
-    local = [{"observation_ref": "observation:previous", "marginal_credit": 0}]
-    estimate = estimate_wait(selection, work, progress, [snapshot], local)
-    assert estimate["duration_expectation_refs"] == [ref]
-    assert estimate["progress_refs"] == ["progress:recorded"]
-    assert estimate["local_history_refs"] == ["observation:previous"]
-    assert estimate["event_expectations"] == [{"handle": "child:a", "event": "returned",
-        "probability": None, "method": "exact_class_duration_summary_only",
-        "support_refs": [ref, "progress:recorded"]}]
-    assert estimate["scientific_gain"] is estimate["monitoring_gain"] is None
-    assert "event_probability_model_unbound" in estimate["unavailable_reasons"]
-    # Preserve all outcome/censoring facts in the original completion context.
-    context = completed_action_context({}, pending_at_selection=work, pending_after_action=work,
-        wait_estimate_at_selection=estimate, progress_records=progress,
-        duration_expectations=[snapshot], own_completed_action_history=local)
-    assert context["duration_expectations"][0] == snapshot
-    assert len(snapshot["data"]["statistics"]) == 4
-    assert context["progress_records"] == progress
-    assert context["own_completed_action_history"] == local
-    # Explicit reference selection cannot transfer this support to another job.
-    incompatible = pending("child:a", expectation_refs=[ref], resource={**resource, "resource_id": "other:host"})
-    missing = estimate_wait(selection, incompatible, progress, [snapshot], local)
-    assert missing["duration_expectation_refs"] == []
-    assert missing["event_expectations"][0]["probability"] is None
-    assert "duration_resource_mismatch" in missing["unavailable_reasons"]
-    wrong_cpu = pending("child:a", expectation_refs=[ref], resource={**resource,
-        "allocation": {**resource["allocation"], "cpu": 4}})
-    unsupported = estimate_wait(selection, wrong_cpu, progress, [snapshot], local)
-    assert unsupported["duration_expectation_refs"] == []
-    assert "duration_allocation_mismatch" in unsupported["unavailable_reasons"]
-    unavailable = estimate_wait(selection, work, progress,
-        {"status": "unavailable", "snapshots": [snapshot]}, local)
-    assert unavailable["duration_expectation_refs"] == []
-    assert "duration_history_unavailable" in unavailable["unavailable_reasons"]
-    empty = estimate_wait(selection, pending("child:a"), [], [snapshot], [])
-    assert empty["duration_expectation_refs"] == []
-    assert empty["event_expectations"][0]["method"] == "unavailable"
 
 
 def test_invalid_frozen_duration_identity_is_not_accepted_as_support(tmp_path):

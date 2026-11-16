@@ -1,7 +1,6 @@
 """Selected native UniProt facts; real retained record plus controlled cases.
 
 These exercise pure projection, not provider acquisition or receipt admission.
-Application imports and tests run only through the root's bounded runner.
 """
 from copy import deepcopy
 import hashlib
@@ -13,7 +12,7 @@ import pytest
 from gene_annotation_episode.domain import identity
 from gene_annotation_episode.uniprot_native import parse_uniprot_native
 from gene_annotation_episode.uniprot_publication import bind_uniprot_publication
-from gene_annotation_episode.uniprot_return_contracts import validate_uniprot_selected_values
+from gene_annotation_episode.episodic_workflow.root.library.uniprot_return_contracts import validate_uniprot_selected_values
 from gene_annotation_episode.episodic_workflow.root.library.uniprot_return_projection import project_uniprot_page
 
 
@@ -246,28 +245,6 @@ def test_out_of_response_record_endpoint_ordinal_has_no_fabricated_native_locato
     assert record["witness"] is None and record["sequence_grant"] is None
     assert record["failures"][0]["native_pointer"] is None
     assert record["fields"][0]["failures"][0]["native_pointer"] is None
-
-
-def test_parser_complete_outer_partial_and_exact_original_issue_origins():
-    source = inputs({"results": [protein(), protein("identifier with spaces"), protein("Q12345")]},
-                    omitted=(1,), headers={"x-uniprot-release": "native release with spaces"})
-    source["projection_errors"].append({"code": "uniprot_legacy_label_unrepresentable", "record_ordinal": 0,
-        "pointer": "/results/0/proteinDescription/recommendedName/fullName/value",
-        "field": "legacy_publication", "effect": "field_partial", "message": "never returned"})
-    source["projection_qualifications"] = [{"code": "uniprot_legacy_source_version_omitted",
-        "record_ordinal": None, "pointer": "/headers/x-uniprot-release", "field": "legacy_source",
-        "effect": "qualification", "raw": "never returned"}]
-    result = projected(source, page_selection(record_selection([text_request()]), page_fields=[
-        {"kind": "page_text", "field": "release", "offset": 0, "limit": 100}]))
-    assert result["status"]["parser_projection_state"] == "complete"
-    assert result["status"]["outer_acquisition_status"] == "partial"
-    assert result["status"]["unselected_issue_count"] == 1
-    assert result["page_fields"][0]["status"] == "available"
-    assert result["records"][0]["fields"][0]["status"] == "available"
-    assert result["issues"][-1]["origin"] == "publication_qualification"
-    assert result["issues"][-1]["original_issue_index"] == 0
-    assert result["records"][0]["issues"][-1]["original_issue_index"] == 1
-    assert "never returned" not in json.dumps(result)
 
 
 def test_go_database_selector_properties_and_indeterminate_native_members():

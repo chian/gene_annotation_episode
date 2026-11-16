@@ -1,4 +1,4 @@
-"""Import-compatible Rfam report delegate to the common Infernal calculator."""
+"""Rfam report delegate to the common Infernal calculator."""
 from __future__ import annotations
 
 from gene_annotation_episode.episodic_workflow.root.library import infernal_search_grader

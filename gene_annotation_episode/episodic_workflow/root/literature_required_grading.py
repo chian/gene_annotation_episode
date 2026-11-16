@@ -167,7 +167,7 @@ def execute(context, selection, operation_key, repository, *, authorize_source_a
         # Validate the routing envelope here too: restored/direct actions must
         # obey exactly the same rule as newly validated model selections.
         validate_schema(selection, source_location_inputs(
-            action_schema({'type': 'object'}, repository.population_schema()), allow_legacy_quote=True))
+            action_schema({'type': 'object'}, repository.population_schema())))
         if any(not isinstance(payload.get(section, []), list) for section in SCIENTIFIC_SECTIONS):
             raise ContractError('representation_error')
         scientific = [row for section in SCIENTIFIC_SECTIONS for row in payload.get(section, [])]

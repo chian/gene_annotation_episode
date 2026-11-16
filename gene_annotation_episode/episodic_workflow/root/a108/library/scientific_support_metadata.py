@@ -1,7 +1,6 @@
-"""Historical instruction validation and explicit scoring-route availability.
+"""Instruction validation and explicit scoring-route availability.
 
-Instruction metadata neither supplies evidence nor chooses a projector. The
-old observation-kind-to-score-axis dispatch is retired. No replacement field
+Instruction metadata neither supplies evidence nor chooses a projector. No field
 mapping is inferred from an arbitrary numeric scorer or tool-output category.
 """
 from __future__ import annotations

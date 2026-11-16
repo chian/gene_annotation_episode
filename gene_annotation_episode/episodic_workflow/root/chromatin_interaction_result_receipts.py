@@ -1,8 +1,8 @@
-"""Selected chromatin action controls and historical completed-action authority.
+"""Selected chromatin action controls and completed-action authority.
 
 These private records belong to the existing results episode. They contain no
 calculator and grant no access merely because a file or a private receipt exists.
-Historical checks use frozen controls and Store metadata, never scientific bytes.
+Completed-action checks use frozen controls and Store metadata, never scientific bytes.
 """
 from __future__ import annotations
 
@@ -32,13 +32,13 @@ from gene_annotation_episode.episodic_workflow.root.library.chromatin_interactio
 from gene_annotation_episode.episodic_workflow.root.library.chromatin_interaction_return_views import FACT_SOURCES, FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE, validate_chromatin_fact_values
 from gene_annotation_episode.episodic_workflow.root.library.chromatin_interaction_result_worker import validate_chromatin_result_worker_plan, validate_chromatin_result_worker_result, _validate_capture
 from gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_capture import validate_chromatin_native_capture
-from gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_contracts import retained_policy, POLICY, TABLE_ROLES, TABLE_NAMES, chromatin_driver_argv, validate_chromatin_requested_job, validate_chromatin_run_plan, _dependency_roots
+from gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_contracts import POLICY, TABLE_ROLES, TABLE_NAMES, chromatin_driver_argv, validate_chromatin_requested_job, validate_chromatin_run_plan, _dependency_roots
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import validate_receipt
 from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from gene_annotation_episode.episodic_workflow.root.progress_records import validate_resource_observation
 
 
-from gene_annotation_episode.episodic_workflow.root.library.chromatin_result_receipt_values import ChromatinInteractionResultIntent, ChromatinInteractionHandoffProof, ChromatinInteractionNativeSnapshot, ChromatinInteractionOrigin, ChromatinInteractionQualifiedFiles, ChromatinInteractionFactGroups, ChromatinInteractionSheetEvidence, ChromatinInteractionResultReceipt, ChromatinInteractionResultAction, _historical, _finite_json_copy, require, closed, same, decode, directory, regular, read_control, immutable, empty_facts, empty_files, unique, outcome, qualified_files, closure_value, VERSION, _READING, _READ_CACHE, _OUTPUTS
+from gene_annotation_episode.episodic_workflow.root.library.chromatin_result_receipt_values import ChromatinInteractionResultIntent, ChromatinInteractionHandoffProof, ChromatinInteractionNativeSnapshot, ChromatinInteractionOrigin, ChromatinInteractionQualifiedFiles, ChromatinInteractionFactGroups, ChromatinInteractionSheetEvidence, ChromatinInteractionResultReceipt, ChromatinInteractionResultAction, _finite_json_copy, require, closed, same, decode, directory, regular, read_control, immutable, empty_facts, empty_files, unique, outcome, qualified_files, closure_value, VERSION, _READING, _READ_CACHE, _OUTPUTS
 
 
 from gene_annotation_episode.episodic_workflow.root.library.chromatin_result_native_receipts import ChromatinResultNativeReceipts
@@ -80,7 +80,7 @@ class ChromatinInteractionResultReceipts(ChromatinResultNativeReceipts, Chromati
         require(same(json.loads(row["action"]), {"kind": "tool", "tool": intent["tool_name"], "arguments": {}}))
         return row
 
-    def _target(self, context, assignment, target, *, current_binding=True):
+    def _target(self, context, assignment, target):
         target = validate_target(_finite_json_copy(target))
         require(target["run_id"] == self.owner.run_id == context.run_id and target["resource_kind"] == "local"
             and target["handle"] == assignment["handoff_ref"])
@@ -88,13 +88,12 @@ class ChromatinInteractionResultReceipts(ChromatinResultNativeReceipts, Chromati
         require(target["request_sha256"] == digest(requested)
             and target["assignment"]["resource_id"] == target["resource_id"])
         self.store.validate_scope(target["scope"], parent_scope=plain(context.scope))
-        if current_binding:
-            resource = self.owner.resources.get(target["resource_id"])
-            require(type(resource) is dict and resource["kind"] == "local" and same(resource["policy"], POLICY))
-            reader = self.owner.job_progress_provider.targets
-            require(same(reader.resources.get(target["resource_id"]), resource)
-                and target["resource_id"] in reader.operations)
-            reader.operations[target["resource_id"]].validate_assignment(target["assignment"])
+        resource = self.owner.resources.get(target["resource_id"])
+        require(type(resource) is dict and resource["kind"] == "local" and same(resource["policy"], POLICY))
+        reader = self.owner.job_progress_provider.targets
+        require(same(reader.resources.get(target["resource_id"]), resource)
+            and target["resource_id"] in reader.operations)
+        reader.operations[target["resource_id"]].validate_assignment(target["assignment"])
         selector = assignment["selector"]
         from gene_annotation_episode.episodic_workflow.root.library.chromatin_interaction_execution_information import validate_chromatin_result_selector
         request = requested["native_chromatin_interactions"]["request"]
@@ -109,7 +108,7 @@ class ChromatinInteractionResultReceipts(ChromatinResultNativeReceipts, Chromati
             "episode_id": context.episode_id, "path": plain(context.path), "scope": plain(context.scope),
             "assignment": assignment, "original_request_sha256": digest(plain(context.request)),
             "operation_key": operation_key, "tool_name": tool_name, "arguments": {},
-            "target": self._target(context, assignment, target, current_binding=(context.episode_id, operation_key) not in _READING.get())}
+            "target": self._target(context, assignment, target)}
         self._selected(value)
         return value
 

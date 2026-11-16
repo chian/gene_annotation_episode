@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.method_loop.episode import E
 from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 import pytest
 
-from gene_annotation_episode import chromatin_interaction_operands as operands
+from gene_annotation_episode.episodic_workflow.root import chromatin_interaction_operands as operands
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
@@ -314,37 +314,6 @@ def test_original_context_identity_cannot_be_replaced(f, fault):
         validate(f, using=changed)
 
 
-@pytest.mark.parametrize("fault", ["missing", "altered", "legacy", "prefix", "wrong_parent", "cycle", "ancestor_manifest"])
-def test_original_manifest_and_actual_path_ancestry_are_required(f, fault):
-    child = context(f, parent=f.root, role="launch", persist=False)
-    request = plain(child.request)
-    if fault == "missing":
-        del request["message"]["knowledge_inheritance"]
-    elif fault == "altered":
-        request["message"]["knowledge_inheritance"]["through_receipt_index"] += 1
-    elif fault == "legacy":
-        f.store.db.execute("UPDATE runtime_receipt_inheritance SET received_report_prefix=NULL WHERE episode_id=?", (child.episode_id,))
-        request["message"]["knowledge_inheritance"].pop("received_report_prefix")
-    elif fault == "prefix":
-        prefix = {"version": "frozen_received_report_prefix_v1", "attempts": [{"decision_index": 0,
-            "delivery_ref": "unreceived", "child_episode_id": "unreceived", "contract_sha256": "1" * 64,
-            "form_sha256": "2" * 64}]}
-        f.store.db.execute("UPDATE runtime_receipt_inheritance SET received_report_prefix=? WHERE episode_id=?",
-            (canonical(prefix), child.episode_id))
-    elif fault == "wrong_parent":
-        sibling = context(f, parent=f.root, role="scientific_process", index=1)
-        f.store.db.execute("UPDATE runtime_receipt_inheritance SET parent_episode_id=? WHERE episode_id=?",
-            (sibling.episode_id, child.episode_id))
-        request["message"]["knowledge_inheritance"] = f.receipts.manifest(child.episode_id)
-    elif fault == "cycle":
-        f.store.db.execute("UPDATE runtime_receipt_inheritance SET parent_episode_id=? WHERE episode_id=?",
-            (child.episode_id, f.root.episode_id))
-    else:
-        f.store.db.execute("UPDATE runtime_receipt_inheritance SET through_receipt_index=999 WHERE episode_id=?", (f.root.episode_id,))
-    with fails("invalid_context"):
-        validate(f, using=replace(child, request=request))
-
-
 @pytest.mark.parametrize("table", ["runtime_actions", "runtime_forms", "runtime_model_calls", "runtime_observations"])
 def test_unsaved_construction_cannot_hide_existing_history(f, table):
     child = context(f, parent=f.root, role="launch", persist=False)
@@ -598,11 +567,6 @@ def test_metadata_only_boundary_never_reads_bytes_executes_or_writes_authority(f
 def test_malformed_present_native_key_does_not_silently_opt_out(f, value):
     with fails("invalid_requested_job"):
         validate(f, {"requested_job": {"native_chromatin_interactions": value}})
-
-
-def test_unrelated_request_needs_no_context_or_provider(f):
-    assert operands.validate_chromatin_job_inputs(f.store, None,
-        {"requested_job": {"argv": ["ordinary"]}}, reference_access=None) == []
 
 
 def test_missing_runtime_schema_and_receipts_are_not_installed(f):

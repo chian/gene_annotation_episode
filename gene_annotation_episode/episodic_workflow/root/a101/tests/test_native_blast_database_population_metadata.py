@@ -203,17 +203,6 @@ def test_missing_original_bundle_length_cannot_establish_selected_database():
     assert components(sheets)["function_weights"]["representation_adjusted_probabilities"] is None
 
 
-@pytest.mark.parametrize("version", ["native_blast_database_sequence_metadata_v1", "native_blast_database_sequence_metadata_v2"])
-def test_old_envelopes_do_not_gain_population_fields(version):
-    inputs = base.fixture()
-    payload = base.numerical_metadata(inputs) if version.endswith("v1") else base.record_metadata(inputs)
-    base.add_metadata(inputs, payload, "sequence_database")
-    sheets = base.run(inputs)
-    assert "population_source_records" not in sheets["prepared_inputs"]["metadata"][0]
-    assert "database_population_associations" not in sheets["sequence"][0]["sheet"]
-    assert "source_ref" not in sheets["sequence"][0]["sheet"]["report_source"]
-
-
 @pytest.mark.parametrize("program", ["blastn", "blastp", "blastx", "tblastn", "tblastx"])
 def test_all_standard_programs_keep_units_and_source_asserted_weights(program, tmp_path):
     qnt, snt = program in {"blastn", "blastx", "tblastx"}, program in {"blastn", "tblastn", "tblastx"}

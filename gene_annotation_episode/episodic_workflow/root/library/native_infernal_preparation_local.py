@@ -88,13 +88,9 @@ def local_infernal_preparation_plan(assignment, execution_id):
     plan = validate_preparation_plan(_read(root / "infernal-preparation-plan.json"))
     owner = plan["identity"]
     original = native.NativeJobHandle(handle).read()
-    # Read-only recognition of the exact original reservation command. Fresh
-    # preparation uses _command(root); no saved command or request is rewritten.
-    original_command = [sys.executable, "-m", "gene_annotation_episode.native_infernal_preparation_driver",
-        str(root / "infernal-preparation-plan.json")]
     if (plan["requested_job"] != request or assignment.get("resource_kind") != "local"
             or owner["execution_id"] != str(handle) or owner["resource_id"] != assignment.get("resource_id")
-            or root != _expected_root(assignment, owner) or original.get("command") not in (_command(root), original_command)
+            or root != _expected_root(assignment, owner) or original.get("command") != _command(root)
             or original.get("cwd") != str(root) or original.get("metadata", {}).get("policy") != plan["policy"]
             or plan["attempt_directory"] != str(root / "infernal-preparation-attempt")
             or _read(root / "invoke.json") != _invoke(request, Path(plan["attempt_directory"]))):

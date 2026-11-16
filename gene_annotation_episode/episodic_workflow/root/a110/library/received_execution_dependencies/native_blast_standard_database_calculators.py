@@ -4,8 +4,7 @@ import re
 from gene_annotation_episode.episodic_workflow.root.a110.blast_pairwise_grader import validate_blast_correspondence_instance
 from gene_annotation_episode.episodic_workflow.root.a110.alignment_correspondence import validate_correspondence_artifacts, _same
 import gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.native_blast_standard_database_result_views as views
-CALCULATION_SCHEMA = views.PREFIX + 'calculations_v1'
-CALCULATION_SCHEMA_V2 = views.PREFIX + 'calculations_v2'
+CALCULATION_SCHEMA = views.PREFIX + 'calculations_v2'
 _CALC_FIELDS = {'schema', 'sequence_model', 'sequence', 'pssm', 'search_facts', 'native_search_statistics', 'native_hsp_components', 'qualified_hsp_components', 'issues'}
 
 def _at(value, pointer):
@@ -46,7 +45,7 @@ def validate_sequence_model(model):
 
 def validate_standard_blast_correspondence(calculations, *, admission=False):
     """Compare the required v2 common companion to its unchanged legacy cells."""
-    if set(calculations) != _CALC_FIELDS | {'correspondence'} or calculations['schema'] != CALCULATION_SCHEMA_V2:
+    if set(calculations) != _CALC_FIELDS | {'correspondence'} or calculations['schema'] != CALCULATION_SCHEMA:
         raise ValueError(views.PREFIX + 'correspondence_calculations_invalid')
     companion = validate_correspondence_artifacts(calculations['correspondence'], admission=admission)
     expected = {(f'/native_hsp_components/{i}/component', 'reported') for i in range(len(calculations['native_hsp_components']))}

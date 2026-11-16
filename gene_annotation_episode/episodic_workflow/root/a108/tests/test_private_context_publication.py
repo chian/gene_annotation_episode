@@ -12,6 +12,14 @@ from gene_annotation_episode.episodic_workflow.root.a108.library.literature_a108
 from gene_annotation_episode.episodic_workflow.root.a108.library.literature_a108_grading_storage import LiteratureA108GradingRepository, REQUESTED
 from gene_annotation_episode.episodic_workflow.root.a108.library.literature_a108_aggregation_storage import LiteratureA108AggregationRepository
 
+def selected_locations(value):
+    """The model-facing form: source locations only; the host reads the quotation."""
+    if isinstance(value, dict):
+        return {key: selected_locations(item) for key, item in value.items() if key != 'quote'}
+    if isinstance(value, list):
+        return [selected_locations(item) for item in value]
+    return value
+
 def context_fixture(store, requested=True):
     target, = store.create_problem(raw_sequence='MARG', molecule='protein')['subject_refs']
     term = store.put('term', {'namespace': 'synthetic_function', 'accession': 'thermal', 'label': 'thermal', 'term_type': 'family', 'source_ref': store.targets()[0]['source_ref'], 'anchor': None}, origin='external')['id']
@@ -60,7 +68,7 @@ def test_required_interpretation_rejects_missing_typed_finding_before_saving(tmp
     with Store(tmp_path / 'state') as store:
         context, arguments = context_fixture(store)
         grading = LiteratureA108GradingRepository(store, context.run_id)
-        result = literature_required_grading.execute(context, {'kind': 'reason', 'commit': {'assessments': [{'alias': 'missing'}]}, 'evidence_processing': {'kind': 'graded', 'gradings': [{'arguments': json.dumps(arguments)}]}}, 'original-action', grading, authorize_source_access=lambda *args: None)
+        result = literature_required_grading.execute(context, {'kind': 'reason', 'commit': {'assessments': [{'alias': 'missing'}]}, 'evidence_processing': {'kind': 'graded', 'gradings': [{'arguments': json.dumps(selected_locations(arguments))}]}}, 'original-action', grading, authorize_source_access=lambda *args: None)
         assert result['status'] == 'invalid'
         assert result['feedback']['code'] == 'evidence_assessment_source_finding_required'
         assert result['record_refs'] == []
@@ -83,7 +91,7 @@ def test_same_action_saves_typed_finding_and_context_sheet_before_progress_witho
         commit = {name: [] for name in REASONING_SCHEMA['required']}
         commit['observations'] = [{'alias': 'context_observation', 'subject_refs': [target], 'source_subject_refs': [original], 'kind': 'context_measurement', 'source_ref': source, 'measurements': [], 'dependencies': [original], 'anchor': original_record['anchor']}]
         commit['assessments'] = [{'alias': 'context_finding', 'hypothesis_ref': proposal['id'], 'observation_ref': '@context_observation', 'relation': 'does_not_discriminate', 'applicability': 'contextual', 'extent_basis': 'inferred_extent', 'condition_refs': [], 'assumption_refs': [], 'expected_revision': 0, 'investigation_finding': finding}]
-        selection = {'kind': 'reason', 'commit': commit, 'evidence_processing': {'kind': 'graded', 'gradings': [{'arguments': json.dumps(arguments)}]}}
+        selection = {'kind': 'reason', 'commit': selected_locations(commit), 'evidence_processing': {'kind': 'graded', 'gradings': [{'arguments': json.dumps(selected_locations(arguments))}]}}
         binding = LiteratureEpisode(SimpleNamespace(workflow=SimpleNamespace(store=store, run_id=context.run_id)))
         binding._tool_arguments = lambda context, name, arguments: arguments
         task = object.__new__(binding.decision_source_type)
@@ -109,7 +117,7 @@ def test_same_action_saves_typed_finding_and_context_sheet_before_progress_witho
 
         async def unchanged(source, index, result):
             return result
-        task.workflow = SimpleNamespace(run_id=context.run_id, journal=Journal(store, context.run_id), store=store, execution_binding=None, wait_inputs_version=None, completed_action_inputs_version=None, specialist=lambda source: binding, binding_context=lambda source: context, receive_native_outcome=lambda *args: None, receive_outcome=lambda *args: None, automatic_score_updates=unchanged, source_credit_view=progress, controller_value=lambda source, index, credit: {'credit': credit, 'index': index})
+        task.workflow = SimpleNamespace(run_id=context.run_id, journal=Journal(store, context.run_id), store=store, execution_binding=None, pending_work=lambda source:{'items':[]}, specialist=lambda source: binding, binding_context=lambda source: context, receive_native_outcome=lambda *args: None, receive_outcome=lambda *args: None, automatic_score_updates=unchanged, source_credit_view=progress, controller_value=lambda source, index, credit: {'credit': credit, 'index': index})
         assert asyncio.run(task.execute(selection, 4)) == {'credit': 0.0, 'index': 4}
         assert len(observed) == 1
         assert asyncio.run(task.execute(selection, 4)) == {'credit': 0.0, 'index': 4}

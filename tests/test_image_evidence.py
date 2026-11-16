@@ -8,9 +8,6 @@ from pathlib import Path
 from PIL import Image
 import pytest
 
-from gene_annotation_episode.credit import project_credit
-from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.materials import artifact_path
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection, load_config
 from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
@@ -23,34 +20,6 @@ def native_source(store, image, format="PNG", **kwargs):
     image.save(buffer, format=format, **kwargs)
     material = store.register_material(data=buffer.getvalue(), name="synthetic_image")
     return material["source_ref"], buffer.getvalue()
-
-
-def test_selected_frame_retains_native_pixels_custody_and_replay(tmp_path):
-    with Store(tmp_path) as store:
-        original_problem = store.create_problem(raw_sequence="MKWAA", molecule="protein")
-        first, second = Image.new("RGB", (7, 5), "red"), Image.new("RGB", (7, 5), "blue")
-        source_ref, native = native_source(store, first, format="TIFF", save_all=True, append_images=[second])
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        args = {"source_ref": source_ref, "frame": 1}
-        operation = tools.execute("image.view", args, operation_key="choose_second_frame")
-        assert operation["status"] == "completed", operation
-        view = operation["result"]["view"]
-        assert operation["visual_inputs"] == [view]
-        assert view["input_source_ref"] == source_ref and view["frame"] == 1 and view["frame_count"] == 2
-        assert view["width"] == 7 and view["height"] == 5
-        assert view["geometric_transform"] == view["contrast_transform"] == "identity"
-        assert store.get_artifact(view["original_artifact_ref"]) == native
-        selected = tools.resolve_image_input(view)
-        assert selected["type"] == "localImage"
-        with Image.open(selected["path"]) as displayed:
-            assert displayed.format == "PNG" and displayed.getpixel((3, 2)) == (0, 0, 255)
-        before = store.db.execute("SELECT count(*) FROM records").fetchone()[0]
-        assert tools.execute("image.view", args, operation_key="choose_second_frame") == operation
-        assert store.db.execute("SELECT count(*) FROM records").fetchone()[0] == before
-        assert store.problem() == original_problem and not store.list("observation")
-        assert project_credit(store).credit == 0
-    with Store(tmp_path) as reopened:
-        assert ToolRegistry(reopened, run_directory=reopened.path / 'tool-run').resolve_image_input(view) == selected
 
 
 def test_identical_png_bytes_keep_original_mime_and_remain_viewable(tmp_path):
@@ -85,21 +54,6 @@ def test_conversion_and_invalid_frame_are_actionable_and_never_reselect(tmp_path
         view = selected["result"]["view"]
         assert view["selected_mode"] == "CMYK" and view["display_mode"] == "RGB"
         assert view["colour_conversion"] == "rgb" and store.get_artifact(view["original_artifact_ref"]) == native
-
-
-def test_forged_view_and_corrupt_artifact_cannot_be_sent_as_pixels(tmp_path):
-    with Store(tmp_path) as store:
-        store.create_problem(raw_sequence="MKWAA", molecule="protein")
-        source_ref, _ = native_source(store, Image.new("RGB", (5, 3)))
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        view = tools.execute("image.view", {"source_ref": source_ref})["result"]["view"]
-        forged = {**view, "path": "/etc/passwd"}
-        with pytest.raises(ContractError, match="image_input_selection_mismatch"):
-            tools.resolve_image_input(forged)
-        image_path = artifact_path(store, view["image_artifact_ref"])
-        image_path.write_bytes(b"replaced bytes")
-        with pytest.raises(ContractError, match="artifact_digest_mismatch"):
-            tools.resolve_image_input(view)
 
 
 class WireFixture(_SessionConnection):

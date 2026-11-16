@@ -1,5 +1,6 @@
 """Private native result acquisition; original action and returned outcome preserved."""
 from __future__ import annotations
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import json
 from pathlib import Path
@@ -63,7 +64,7 @@ class NativeBLASTDatabaseResultAcquisition(NativeBLASTDatabaseResultRecords):
                     original = self.owner.native_blast_database_returns.resolve_saved_function_input(context, descriptor)
                     if original['target'] != target:
                         raise ContractError('native_blast_database_return_unauthorized')
-                    prepared = prepare_native_blast_database_grading(self.store, context=context, target=target, capture=None, selector=selector, directory=directory / 'grading', policy=LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3), original_body=original)
+                    prepared = prepare_native_blast_database_grading(self.store, context=context, target=target, capture=None, selector=selector, directory=directory / 'grading', policy=LocalJobPolicy(ENVIRONMENT_BOUNDS['memory_bytes'], 4 * 1024 ** 3), original_body=original)
                     body['preparation'] = prepared
                     publication = publish_selected_native_blast_database_rows(self.store, context=context, preparation=prepared, selector=selector, directory=directory / 'publication')
                     body.update(publication=publication, record_refs=publication['record_refs'], failures=publication['failures'], complete=publication['complete'])
@@ -79,7 +80,7 @@ class NativeBLASTDatabaseResultAcquisition(NativeBLASTDatabaseResultRecords):
                     source = self.store.put('source', _source_payload(bundle, capture), origin='tool')['id']
                     body['record_refs'] = [source]
                     try:
-                        prepared = prepare_native_blast_database_grading(self.store, context=context, target=target, capture=capture, selector=selector, directory=directory / 'grading', policy=LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3))
+                        prepared = prepare_native_blast_database_grading(self.store, context=context, target=target, capture=capture, selector=selector, directory=directory / 'grading', policy=LocalJobPolicy(ENVIRONMENT_BOUNDS['memory_bytes'], 4 * 1024 ** 3))
                         body['preparation'] = prepared
                         publication = publish_selected_native_blast_database_rows(self.store, context=context, preparation=prepared, selector=selector, directory=directory / 'publication')
                         body.update(publication=publication, record_refs=publication['record_refs'], failures=publication['failures'], complete=publication['complete'])

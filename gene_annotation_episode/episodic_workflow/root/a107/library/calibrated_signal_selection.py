@@ -1,7 +1,4 @@
-"""A107 original calibrated signal selection declarations.
-
-Selected from the authenticated pre-organization defining owner; scientific formulas and qualifications are unchanged.
-"""
+"""A107 calibrated signal selection declarations."""
 from __future__ import annotations
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.root.a107.domain import obj

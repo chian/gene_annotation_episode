@@ -22,9 +22,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_calculators as calc
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_native as native
-from gene_annotation_episode import phylogeny_formats as formats
-
-
+from gene_annotation_episode.episodic_workflow.root.library import phylogeny_formats as formats
 ROOT = Path(__file__).resolve().parents[1]
 NATIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries/official_example/test9_genome_dir"
 POP_KEYS = ("alignments", "leaves", "composition", "taxonomy", "genomes", "families", "bootstraps", "native")

@@ -1,4 +1,4 @@
-"""Original substantive ordinary-tool methods: tool_chemistry_results."""
+"""Ordinary-tool methods: tool_chemistry_results."""
 from __future__ import annotations
 from gene_annotation_episode.acquisition import SourceSnapshot
 from gene_annotation_episode.domain import ContractError

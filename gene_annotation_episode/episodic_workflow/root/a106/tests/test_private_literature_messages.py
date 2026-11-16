@@ -44,18 +44,6 @@ def outgoing_fixture(edge):
     return workflow,source,selected,parent,child,calls,schema
 
 
-def test_parent_owns_original_scoped_request_and_child_admission(edge):
-    home,role,name,binding=edge
-    workflow,source,selection,parent,child,calls,schema=outgoing_fixture(edge)
-    handler=binding.child_request_preparer(role)
-    assert handler.__module__==AXIS+'.'+home+'.to_child_'+name
-    result=handler(workflow,source,selection,6)
-    assert result['scope']==selection['scope'] and result['schema'] is schema
-    assert result['role']==role and result['initial']=={}
-    assert result['report_declaration']=={'original':'contract-declaration'}
-    assert result['episode_assignment']=={'admitted':'original'}
-    assert calls==[(parent,role,selection['assignment'],selection['scope'],'run-original:original-parent:6')]
-
 
 def test_missing_required_typed_result_is_rejected_before_child_admission(edge):
     *_,binding=edge
@@ -66,45 +54,3 @@ def test_missing_required_typed_result_is_rejected_before_child_admission(edge):
     assert calls==[]
 
 
-@pytest.mark.parametrize('redelivery',[False,True])
-def test_receipt_dispatch_uses_saved_original_child_counterpart(edge,tmp_path,monkeypatch,redelivery):
-    home,role,name,binding=edge
-    runtime=import_module(AXIS+'.runtime');Store=import_module(AXIS+'.state').Store
-    Journal=import_module(AXIS+'.episode_journal').Journal
-    ParentRecords=import_module(AXIS+'.episode_return_records').EpisodeReturnRecords
-    monkeypatch.setattr(ParentRecords,'recorded_admission_references',lambda *args:None)
-    source=SimpleNamespace(path=(('annotation','root'),(binding.roles[0],'parent')),episode_id='parent',scope={})
-    called=[]
-    receiver=binding.child_report_receiver(role)
-    def selected_receiver(actual_role):
-        assert actual_role==role
-        assert receiver.__module__==AXIS+'.'+home+'.from_child_'+name
-        called.append(actual_role)
-        return receiver
-    binding.child_report_receiver=selected_receiver
-    with Store(tmp_path/'state') as store:
-        store.create_problem(raw_sequence='ATGGCT', molecule='dna')
-        source.scope=store.validate_scope()
-        journal=Journal(store,'original-run')
-        child_path=source.path+((role,'original-child'),)
-        journal.save('runtime_episodes',{'episode_id':'child','path':json.dumps(child_path),
-            'request':'{}','initial_credit':0,'state':'yielded','completion':None,'archive':None})
-        journal.save('runtime_actions',{'episode_id':'parent','decision_index':8,
-            'action':json.dumps({'kind':'redeliver_report','delivery_ref':'original-delivery'} if redelivery else
-                {'kind':'episode_child','role':role}), 'result':None,'credit':None})
-        journal.save('runtime_report_attempts',{'parent_episode_id':'parent','decision_index':8,
-            'delivery_ref':'original-delivery','child_episode_id':'child','contract':'{}','form':'{}','failure':None})
-        receipts=[];progress=[]
-        workflow=SimpleNamespace(run_id='original-run',store=store,journal=journal,
-            specialist=lambda source:binding,is_job_source=lambda source:False,binding_context=lambda source:source,
-            progress_provider=SimpleNamespace(receive_form=lambda *args:progress.append(args)),
-            native_timing_information=None,job_episodes=None,receive_tool_attributions=lambda *args,**kwargs:[],
-            receipts=SimpleNamespace(receive=lambda *args,**kwargs:receipts.append((args,kwargs))),
-            episode_bindings=SimpleNamespace(received_form_references=lambda *args:['typed-finding','saved-sheet'],
-                # The registry names the original child binding by its home path.
-                for_child=lambda path,actual_role:SimpleNamespace(binding_path=(home+'.'+name).replace('.','/'))))
-        references=runtime.Workflow._receive_form(workflow,source,{}, {'type':'object','properties':{},'required':[],'additionalProperties':False},8,redelivery=redelivery)
-        assert references==['typed-finding','saved-sheet'] and called==[role]
-        assert len(progress)==1
-        assert receipts==[(('parent',['typed-finding','saved-sheet']),
-            {'kind':'report_redelivery' if redelivery else 'child_form','source_index':8})]

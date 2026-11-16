@@ -1,7 +1,4 @@
-"""A107 original molecular publication bytes declarations.
-
-Selected from the authenticated pre-organization defining owner; scientific formulas and qualifications are unchanged.
-"""
+"""A107 molecular publication bytes declarations."""
 import hashlib
 
 def _publication_bytes(store, reference):

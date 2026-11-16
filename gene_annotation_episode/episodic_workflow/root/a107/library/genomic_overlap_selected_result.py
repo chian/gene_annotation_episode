@@ -1,7 +1,4 @@
-"""A107 original genomic overlap selected result; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 genomic overlap selected result."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a107.library.received_execution_information.historical_genomic_overlap_contracts import validate_genomic_overlap_record
 

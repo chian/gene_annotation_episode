@@ -5,7 +5,7 @@ from gene_annotation_episode.episodic_workflow.root.a107.library.literature_part
 
 class LiteratureSourceOperations:
 
-    def catalog(self, context, *, _accept_legacy_quotes=False):
+    def catalog(self, context):
         self._role(context.role)
         available = self.services.tool_catalog(context.scope)
         entries = [{'name': name, **entry} for name, entry in available.items()] if isinstance(available, Mapping) else list(available)
@@ -28,7 +28,7 @@ class LiteratureSourceOperations:
             from gene_annotation_episode.episodic_workflow.root.a107.composition_information import CONTRACT_ARGUMENT_TRANSPORT
             populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
         result.extend(populations)
-        return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'], allow_legacy_quote=_accept_legacy_quotes)} for entry in result]
+        return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'])} for entry in result]
 
     async def execute(self, context, tool_name, arguments, operation_key):
         try:
@@ -49,7 +49,7 @@ class LiteratureSourceOperations:
 
     def _tool_arguments(self, context, tool_name, arguments):
         assignment = self._validate_assignment('literature_table', context.assignment, context.scope, context=context)
-        entries = {entry['name']: entry for entry in self.catalog(context, _accept_legacy_quotes=True)}
+        entries = {entry['name']: entry for entry in self.catalog(context)}
         if tool_name not in entries:
             raise ContractError('tool_not_available_to_literature_role')
         arguments = plain(arguments)
@@ -88,7 +88,7 @@ class LiteratureSourceOperations:
         from gene_annotation_episode.episodic_workflow.root.a107.library.literature_assay_inputs import materialize_text_witness_inputs
 
         def read_source(ref, representation):
-            source = repository._native_source(context, ref)
+            source = repository._source(context, ref)
             self._tool_arguments(context, 'source.read', {'source_ref': ref, 'representation': representation})
             artifact = source.get('artifact_ref' if representation == 'original' else 'text_ref')
             if artifact is None:

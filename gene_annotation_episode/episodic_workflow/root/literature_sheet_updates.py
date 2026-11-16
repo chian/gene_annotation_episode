@@ -16,7 +16,6 @@ from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, canonical, identity
 
 from .library.literature_sheet_dependency_contracts import VERSION
-from .library.literature_saved_adapter_definitions import defining_adapter_coordinates
 TABLE = 'literature_sheet_dependencies'
 CURRENT = 'literature_current_scoring_sheets'
 
@@ -170,7 +169,6 @@ def _register(repository, context, arguments, outcome, method):
 
 def _adapter(store, run_id, name):
     module, cls = name.split(':')
-    module, cls = defining_adapter_coordinates(module, cls)
     factory = getattr(import_module(module), cls)
     def read_cells(context, *selection):
         ref, components = selection[-2:]

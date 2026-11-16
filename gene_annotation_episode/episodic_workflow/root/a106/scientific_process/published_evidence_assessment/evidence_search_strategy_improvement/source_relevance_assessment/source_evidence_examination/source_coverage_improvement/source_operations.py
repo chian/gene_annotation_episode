@@ -8,20 +8,16 @@ class LiteratureOperations:
         self._role(context.role)
         return ('tool', 'reason', 'child', 'wait', 'redeliver_report')
 
-    def reasoning_action_schema(self, context, commit_schema, *, _accept_legacy_quotes=False):
+    def reasoning_action_schema(self, context, commit_schema):
         repository = self._required_grading_repository(context)
         leads = context.assignment.get('literature_task', {}).get('kind') == 'verified_source_leads'
         if repository is None and (not leads):
             return None
-        schema = obj({'kind': {'const': 'reason'}, 'commit': deepcopy(commit_schema)}) if repository is None else _required_grading_logic(repository).action_schema(commit_schema, source_location_inputs(repository.population_schema(), allow_legacy_quote=_accept_legacy_quotes))
+        schema = obj({'kind': {'const': 'reason'}, 'commit': deepcopy(commit_schema)}) if repository is None else _required_grading_logic(repository).action_schema(commit_schema, source_location_inputs(repository.population_schema()))
         if leads:
             from gene_annotation_episode.episodic_workflow.root.a106.library.literature_commission_contracts import lead_schema
             schema['properties']['source_lead'] = lead_schema()
-        return source_location_inputs(schema, allow_legacy_quote=_accept_legacy_quotes)
-
-    def accept_reasoning_action_schema(self, context, commit_schema):
-        """Admit original quoted actions without requesting quotes from a model."""
-        return self.reasoning_action_schema(context, commit_schema, _accept_legacy_quotes=True)
+        return source_location_inputs(schema)
 
     def reasoning_has_task_content(self, context, selection):
         from gene_annotation_episode.episodic_workflow.root.a106.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.goal import commissioned_task
@@ -31,7 +27,7 @@ class LiteratureOperations:
         task, _ = commissioned_task(context)
         if task['kind'] != 'verified_source_leads':
             return False
-        validate_schema(plain(selection['source_lead']), source_location_inputs(lead_schema(), allow_legacy_quote=True))
+        validate_schema(plain(selection['source_lead']), source_location_inputs(lead_schema()))
         return True
 
     def execute_reasoning(self, context, selection, operation_key):
@@ -56,7 +52,7 @@ class LiteratureOperations:
             return None
         return _required_grading_logic(repository).execute(context, selection, operation_key, repository, authorize_source_access=lambda ref, representation: self._tool_arguments(context, 'source.read', {'source_ref': ref, 'representation': representation}))
 
-    def catalog(self, context, *, _accept_legacy_quotes=False):
+    def catalog(self, context):
         self._role(context.role)
         available = self.services.tool_catalog(context.scope)
         entries = [{'name': name, **entry} for name, entry in available.items()] if isinstance(available, Mapping) else list(available)
@@ -79,7 +75,7 @@ class LiteratureOperations:
             from gene_annotation_episode.episodic_workflow.root.a106.composition_information import CONTRACT_ARGUMENT_TRANSPORT
             populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
         result.extend(populations)
-        return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'], allow_legacy_quote=_accept_legacy_quotes)} for entry in result]
+        return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'])} for entry in result]
 
     async def execute(self, context, tool_name, arguments, operation_key):
         try:
@@ -124,7 +120,7 @@ class LiteratureOperations:
 
     def _tool_arguments(self, context, tool_name, arguments):
         assignment = self._validate_assignment('literature_ordered', context.assignment, context.scope, context=context)
-        entries = {entry['name']: entry for entry in self.catalog(context, _accept_legacy_quotes=True)}
+        entries = {entry['name']: entry for entry in self.catalog(context)}
         if tool_name not in entries:
             raise ContractError('tool_not_available_to_literature_role')
         arguments = plain(arguments)

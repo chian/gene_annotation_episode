@@ -1,7 +1,6 @@
 """Primary table inputs through ordinary episodes; controlled decisions only."""
 import asyncio
 from dataclasses import replace
-from functools import partial
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -116,17 +115,3 @@ def test_primary_selected_child_return_preserves_limit_once_with_ordinary_accoun
     finally:
         store.close()
 
-def test_native_text_retains_binding_task_and_limit_meaning(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a105.decision_context import state_frame
-    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_prompt import BINDING_TASK
-    from test_literature_experimental_prompt_delivery import LiteratureWire, snapshot, complete
-    state = snapshot()
-    state['last_local_outcome'] = {'status': 'completed', 'result': {'cells': {'native_parameter_ratio': {'value': 15.9375, 'relation': 'gt', 'unit': 'fraction', 'status': 'reported_limit', 'origin': 'derived', 'unavailable_reason': None, 'bound_kind': 'reported_limit_arithmetic', 'confidence_bound': None, 'parameter_identification_bound': None}}, 'parameter_kind': 'ic50', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 3, 'independent_preparation_count': None}}
-    wire = LiteratureWire(tmp_path / 'wire')
-    asyncio.run(complete(wire, state_frame(state)))
-    text = wire.turns_sent()[0]['input'][0]['text']
-    task, steering = text.split('\n\nSTEERING\n', 1)
-    assert BINDING_TASK in task
-    assert 'reported_limit_arithmetic' in steering and 'gt' in steering
-    assert 'confidence_bound' in steering and 'parameter_identification_bound' in steering
-    assert 'fit_to_averaged_curve' in steering

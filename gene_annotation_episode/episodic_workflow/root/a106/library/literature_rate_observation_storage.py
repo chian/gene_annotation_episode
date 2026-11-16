@@ -1,6 +1,5 @@
 """Selected source-cell operation, saved numerical sheet and exact subset custody."""
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a106.literature_implementation_sources import source_file, LITERATURE_BINDING_SOURCES
 from copy import deepcopy
 import hashlib
 import json
@@ -501,19 +500,6 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
     @staticmethod
     def _components(components):return _grid_selector_keys(components)
 
-    @staticmethod
-    def _receipt_files():
-        return ('literature_rate_observation_inputs.py','literature_rate_observation_calculations.py',
-            'literature_rate_observation_storage.py','literature_rate_observation_prompt.py',
-            'literature_rate_storage.py','spreadsheet_tools.py',*LITERATURE_BINDING_SOURCES,
-            'communication.py','literature_numerical_contracts.py','literature_numerical_return_presentation.py',
-            'literature_experimental_prompt.py','literature_reference_parent_prompt.py')
-
-    def _original_implementation(self):
-        from pathlib import Path
-        return {'version':'reported_curve_original_implementation_v1',
-            'files':{name:hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in self._receipt_files()}}
-
     def _all_ancestors(self,scope,references):
         return list(dict.fromkeys(ref for reference in references for ref in self._ancestors(scope,reference)))
 
@@ -553,8 +539,7 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
         payload={'version':GRID_RECORD,'input_source_ref':args['grid']['source_ref'],'input_artifact_ref':artifact,
             'direct_input_source_refs':direct,'input_source_refs':ancestors,'context_artifacts':context_artifacts,
             'source_metadata':{r:plain(self._native_provenance(context.scope,r)) for r in ancestors},
-            'selection':args,'extraction':extraction,'sheet':sheet,'projected_cells':rows,
-            'original_implementation':self._original_implementation()}
+            'selection':args,'extraction':extraction,'sheet':sheet,'projected_cells':rows}
         with self.store.transaction():
             self._install();sheet_artifact=self.store.artifact(canonical(payload),'application/json')
             request_ref=self.store.artifact(canonical(request),'application/json')
@@ -593,7 +578,7 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
             (self.run_id,request['episode_id'],request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
         if operation is None or operation['signature']!=canonical(request):raise ContractError('literature_sheet_not_selected_output')
         saved=self._json_artifact(source['artifact_ref'])
-        if (set(saved)!={'version','input_source_ref','input_artifact_ref','direct_input_source_refs','input_source_refs','context_artifacts','source_metadata','selection','extraction','sheet','projected_cells','original_implementation'}
+        if (set(saved)!={'version','input_source_ref','input_artifact_ref','direct_input_source_refs','input_source_refs','context_artifacts','source_metadata','selection','extraction','sheet','projected_cells'}
                 or saved['version']!=GRID_RECORD or saved['selection']!=request['arguments']
                 or saved['input_source_ref']!=request['arguments']['grid']['source_ref']
                 or saved['input_source_refs']!=source['parent_source_refs']):
@@ -706,11 +691,6 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
                     or state=='conditional_scenario' and (cell['conditional_value'] is None or cell['value'] is not None)
                     or state=='unavailable' and (cell['value'] is not None or cell['conditional_value'] is not None)):
                 raise ContractError('rate_grid_saved_value_binding_mismatch')
-        receipt=saved['original_implementation']
-        if (set(receipt)!={'version','files'} or receipt['version']!='reported_curve_original_implementation_v1'
-                or set(receipt['files'])!=set(self._receipt_files())
-                or any(type(h) is not str or re.fullmatch('[0-9a-f]{64}',h) is None for h in receipt['files'].values())):
-            raise ContractError('rate_grid_saved_original_implementation_mismatch')
         expected={'sheet_ref':sheet_ref,'view':GRID_VIEW,'record_version':GRID_RECORD,
             'cells':_project_grid_saved(saved,sheet_ref,request['components'])}
         validate_schema(expected['cells'],rate_grid_cells_schema())

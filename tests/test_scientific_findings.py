@@ -6,13 +6,10 @@ import json
 import pytest
 
 from gene_annotation_episode.domain import ContractError, identity
-from gene_annotation_episode.scientific_credit import AnnotationSupportScore
-from gene_annotation_episode.credit import CreditPolicy
 from gene_annotation_episode.scientific_findings import FindingIdentity
 from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, project_finding_progress
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
-from gene_annotation_episode.episodic_workflow.root.task_action_contracts import _action_generation_schema
 from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from test_runtime import FixtureController, ScriptedProvider, obj
 from test_scientific_hypervolume_runtime import assessment, annotation, evidence
@@ -106,8 +103,6 @@ def test_explicit_equivalence_and_correction_remain_structured_in_actual_commit(
         assert store.get(previous['id']) == previous
         assert store.current_assessments()[0] == current
         assert store.commit_reasoning(payload, {'subject_refs': [target]}, 'synthetic-correction') == result
-
-
 
 
 @pytest.mark.parametrize('defect,code', [
@@ -231,49 +226,6 @@ def test_long_equivalence_chain_is_iterative_and_reuses_resolved_meaning(tmp_pat
         normalizer = FindingIdentity(ReadOnlyOverlay())
         assert normalizer.finding(previous) == normalizer.finding(first)
         assert len(normalizer._claims) == 1101
-
-
-def test_source_domain_and_superfamily_categories_survive_commit_and_reopen(tmp_path):
-    """Preserve literal source categories without relabeling earlier terms."""
-    directory = tmp_path/'workspace'
-    with Store(directory) as store:
-        target, _ = target_question(store)
-        text = 'Synthetic EEP: domain; Synthetic EEP superfamily: homologous_superfamily.'
-        artifact = store.artifact(text)
-        source = store.put('source', {'provider': 'synthetic_classification', 'accession': None,
-            'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
-            'version': None, 'retrieved_at': None}, origin='external')
-        anchor = {'source_ref': source['id'], 'artifact_ref': artifact,
-                  'start': 0, 'end': len(text), 'quote': text}
-        legacy = store.put('term', {'namespace': 'source_local', 'accession': identity('source_term',
-            {'source_ref': source['id'], 'label': 'Synthetic EEP', 'anchor': anchor}),
-            'label': 'Synthetic EEP', 'term_type': 'family',
-            'source_ref': source['id'], 'anchor': anchor}, origin='extracted')
-        schema = store.reasoning_schema()
-        assert {'domain', 'homologous_superfamily'} <= set(
-            schema['properties']['terms']['items']['properties']['term_type']['enum'])
-        provider_schema = _action_generation_schema(schema)
-        assert {'domain', 'homologous_superfamily'} <= set(
-            provider_schema['properties']['terms']['items']['properties']['term_type']['enum'])
-        payload = {name: [] for name in schema['required']}
-        payload['terms'] = [{'alias': key, 'label': label, 'term_type': key,
-            'source_ref': source['id'], 'anchor': anchor} for key, label in
-            [('domain', 'Synthetic EEP'), ('homologous_superfamily', 'Synthetic EEP superfamily')]]
-        result = store.commit_reasoning(payload, {'subject_refs': [target]}, 'source-category-fixture')
-        assert result['status'] == 'completed' and result['errors'] == []
-        current = {key: store.get(ref) for key, ref in result['aliases'].items()}
-        assert {key: row['term_type'] for key, row in current.items()} == {
-            'domain': 'domain', 'homologous_superfamily': 'homologous_superfamily'}
-        assert store.get(legacy['id']) == legacy
-        normalized = FindingIdentity(store)
-        assert normalized.entity(current['domain']['id']) != normalized.entity(legacy['id'])
-        # Recording classifications alone creates no investigation finding.
-        assert project_finding_progress(store, {'subject_refs': [target]}, FindingProgressPolicy(1),
-            known_assessment_refs=[])['credit'] == 0
-    with Store(directory) as store:
-        assert store.get(legacy['id']) == legacy
-        assert {key: store.get(row['id'])['term_type'] for key, row in current.items()} == {
-            'domain': 'domain', 'homologous_superfamily': 'homologous_superfamily'}
 
 
 def test_iterative_child_returns_typed_findings_through_existing_parent_form(tmp_path):

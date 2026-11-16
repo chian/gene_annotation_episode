@@ -1,5 +1,4 @@
 """Synthetic supplied material, actual Store ownership/revisions/forms/export."""
-from copy import deepcopy
 import json
 from pathlib import Path
 import pytest
@@ -137,48 +136,6 @@ def test_context_commit_preserves_independent_rows_and_empty_export(tmp_path):
 def choices_not_required(document):
     # Mask reference closure keeps the actual immutable selection rows.
     return any(row['record_type']=='read_selection' for row in document['records'])
-
-
-def test_context_runtime_signed_revisions_return_actual_parent_facts_without_extra_turns(tmp_path):
-    """Scripted reasoning + test-only continuation; no model/provider/native calls."""
-    import asyncio
-    from test_runtime import ScriptedProvider, FixtureController, obj
-    from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
-    from gene_annotation_episode.credit import project_credit
-    with Store(tmp_path/'s') as s:
-        target,reads,full,subsets,_=fixture(s,tmp_path)
-        sample,h,o=context_science(s,target)
-        schema=obj({'changed':{'type':'array','items':{'type':'string','format':'reference','x-reference-namespace':'annotation'},'x-source':'changed_annotation_refs'},'score':{'type':'number','x-source':'credit'}})
-        commission={'selection':{'kind':'child','goal':'Iteratively refine the supplied sample context attribution','scope':full,'purpose':'Receive the actual current allocation revisions and score','schema_json':json.dumps(schema),'initial_report_json':'{}'},'report_update':{}}
-        def first(context):
-            payload={key:[] for key in s.reasoning_schema()['required']}
-            payload['assessments']=[{'alias':'a',**assessment_record(h,o,full,full)}]
-            payload['annotation_updates']=[{'alias':'n',**annotation_record(sample,h,{'id':'@a'},full,full)}]
-            return {'selection':{'kind':'reason','commit':payload},'report_update':{}}
-        def withdraw(context):
-            assert context['current_credit']>0
-            assert context['current_evidence_vector']['empirical']>0
-            payload={key:[] for key in s.reasoning_schema()['required']}
-            payload['assessments']=[{'alias':'a',**assessment_record(h,o,full,{'subject_refs':[]},1)}]
-            payload['annotation_updates']=[{'alias':'n',**annotation_record(sample,h,{'id':'@a'},full,{'subject_refs':[]},1)}]
-            return {'selection':{'kind':'reason','commit':payload},'report_update':{}}
-        def parent(context):
-            report,=context['child_reports']
-            assert report['score']==context['current_credit']==0
-            assert set(report['changed'])=={r['id'] for r in s.list('annotation')}
-            assert len(report['changed'])==2
-            assert s.current_annotations()[0]['context_scope']=={'subject_refs':[]}
-            return {'selection':{'kind':'tool','tool':'state.query','arguments':{'kind':'annotation','limit':2,'current_only':True}},'report_update':{}}
-        provider=ScriptedProvider([commission,first,withdraw,parent])
-        result=asyncio.run(run_workflow(s,ToolRegistry(s, run_directory=s.path / 'tool-run'),provider=provider,run_dir=tmp_path/'run',controller_factory=lambda path,initial:FixtureController(str(path),initial,2)))
-        assert result['completed_actions']==2 and len(provider.contexts)==4
-        episodes=list(s.db.execute('SELECT episode_id,path FROM runtime_episodes'))
-        child=next(row['episode_id'] for row in episodes if len(json.loads(row['path']))==2)
-        child_deltas=[json.loads(row[0])['step']['delta'] for row in s.db.execute('SELECT observation FROM runtime_observations WHERE episode_id=? ORDER BY unit_index',(child,))]
-        assert len(child_deltas)==2 and child_deltas[0]>0 and child_deltas[1]<0
-        assert sum(child_deltas)==pytest.approx(0)
-        assert s.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]==4
-        assert project_credit(s).credit==0
 
 
 def test_export_current_context_allocation_uses_mask_not_physical_source_extent(tmp_path):

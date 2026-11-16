@@ -39,11 +39,6 @@ class APIServiceOperations:
             return await self._legacy_binding().execute(context, name, arguments, operation_key)
         try:
             arguments = plain(arguments)
-            if (name == 'api.bvbrc_appservice.download' and type(arguments) is dict
-                    and 'max_bytes' not in arguments):
-                cached = self.appservice.legacy_cached_download(context, name, arguments, operation_key)
-                if cached is not None:
-                    return cached
             self.initialize(context)
             assignment, service, target = self._context(context)
             entry = next((row for row in self.catalog(context) if row['name'] == name), None)

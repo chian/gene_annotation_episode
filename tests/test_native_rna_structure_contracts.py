@@ -1,7 +1,6 @@
 from copy import deepcopy
 import hashlib
 import json
-import os
 from pathlib import Path
 import platform
 import sys
@@ -16,7 +15,6 @@ from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure
 from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_tool_info import rna_structure_tool_contracts, rna_structure_tool_information
 
 REPO = Path(__file__).resolve().parents[1]
-PACKET = REPO / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_producer_357"
 
 
 def sha(path):
@@ -48,19 +46,15 @@ def rna_input(*, prediction=False, energy=False):
     return value
 
 
-def software(*, native=False):
+def software():
     result = {"python_executable": sys.executable, "python_sha256": sha(sys.executable),
         "python_version": platform.python_version(), "worker_module": "gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker",
         "worker_source_sha256": sha(REPO / "gene_annotation_episode/episodic_workflow/root/library/native_rna_structure_worker.py"),
         "viennarna_distribution_version": None, "rna_module_sha256": None, "rna_extension_sha256": None}
-    if native:
-        observed = json.loads((PACKET / "probe.json").read_bytes())
-        result.update(viennarna_distribution_version=observed["distribution_version"],
-            rna_module_sha256=observed["module_sha256"], rna_extension_sha256=observed["extension_sha256"])
     return result
 
 
-def job(tmp_path, *, prediction=False, energy=False, native=False, raw=None, parameter_file=None):
+def job(tmp_path, *, prediction=False, energy=False, raw=None, parameter_file=None):
     request = rna_input(prediction=prediction, energy=energy)
     path = tmp_path / "supplied-input.json"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -81,8 +75,8 @@ def job(tmp_path, *, prediction=False, energy=False, native=False, raw=None, par
     return {"version": "native_rna_structure_job_v1", "program": "rna_structure_python",
         "operation": "predict_rna_secondary_structure" if prediction else "analyze_rna_secondary_structure_features",
         "mode": "mfe_prediction" if prediction else "supplied_features", "record_key": request["record_key"],
-        "software": software(native=native), "model": selected_model, "operands": operands, "outputs": outputs,
-        "environment": {"PYTHONPATH": str(PACKET / "native-site") + os.pathsep + str(REPO) if native else str(REPO)},
+        "software": software(), "model": selected_model, "operands": operands, "outputs": outputs,
+        "environment": {"PYTHONPATH": str(REPO)},
         "grading_parameters": parameters()}
 
 

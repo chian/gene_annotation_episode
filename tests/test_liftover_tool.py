@@ -18,12 +18,12 @@ from gene_annotation_episode import liftover_measurements, molecular_measurement
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import canonical, obj
 from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.liftover_tools import LIFTOVER_TOOL, liftover_tool_contract
+from gene_annotation_episode.episodic_workflow.root.library.liftover_tools import LIFTOVER_TOOL, liftover_tool_contract
 from gene_annotation_episode.materials import source_for_artifact
 from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import source_tool_grading_entries
@@ -118,7 +118,7 @@ def test_registered_liftover_native_source_delivery_and_saved_views(tmp_path, mo
         assert gzip_source["artifact_ref"] == gzip_file and malformed_source["artifact_ref"] == malformed_file
         evidence = [chain_source["id"], chain_file, gzip_file, malformed_file]
         assert store.reference_subset(evidence, scope) == evidence
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=dict(memory_bytes=5 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
         contract = tools.catalog()[LIFTOVER_TOOL]
         assert contract["resources"] == "local" and contract["input_schema"] == liftover_tool_contract()["input_schema"]
         descriptor, selected = _libraries(directory, tools)

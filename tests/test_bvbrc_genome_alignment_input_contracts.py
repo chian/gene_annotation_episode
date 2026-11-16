@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignme
     validate_genome_alignment_inputs, validate_genome_alignment_associations,
     validate_genome_alignment_native_member,
 )
-from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
+from gene_annotation_episode.episodic_workflow.root.library.phylogeny_formats import parse_aligned_fasta
 
 
 def content(raw, name):
@@ -313,6 +313,6 @@ def test_saved_validation_uses_no_io_native_program_or_parser(monkeypatch):
     monkeypatch.setattr(Path, 'open', forbidden)
     monkeypatch.setattr(socket, 'socket', forbidden)
     monkeypatch.setattr(subprocess, 'Popen', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.phylogeny_formats.parse_aligned_fasta', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.phylogeny_formats.parse_aligned_fasta', forbidden)
     assert validate_genome_alignment_inputs(v) == before
     assert validate_genome_alignment_associations(associations) == associations

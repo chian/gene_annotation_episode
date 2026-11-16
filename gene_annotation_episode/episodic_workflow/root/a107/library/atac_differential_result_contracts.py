@@ -1,7 +1,4 @@
-"""A107 original atac differential result contracts; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 atac differential result contracts."""
 from __future__ import annotations
 from copy import deepcopy
 import hashlib

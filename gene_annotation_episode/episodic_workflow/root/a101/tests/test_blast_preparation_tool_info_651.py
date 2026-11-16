@@ -3,7 +3,7 @@
 The reused 649 fixtures create controlled bytes only. These checks establish
 configuration/schema/runtime parity, not native validity or a full Workflow.
 """
-import ast
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import hashlib
 from itertools import product
@@ -13,13 +13,12 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_contracts import LEGACY_MODES, PREPARATION_MODES, NATIVE_BLAST_UTILITY_REQUESTED_JOB_SCHEMA, native_blast_utility_job_schema, requested_job_from_native_blast_utility, validate_native_blast_utility_job
+from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_contracts import PREPARATION_MODES, requested_job_from_native_blast_utility, validate_native_blast_utility_job
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_utility_tool_info import (
     native_blast_utility_binding_accepts_job, native_blast_utility_tool_contracts,
     validate_native_blast_utility_bindings,
 )
 from test_native_blast_preparation_649 import preparation_job, supplied, output, entry
-from test_native_blast_utility_producer_628 import job_fixture
 
 
 VARIANTS = {
@@ -41,7 +40,6 @@ VARIANTS = {
         for kind, fmt in product(('rps', 'delta', 'cobalt'), ('pssm_asn1_text', 'pssm_asn1_binary'))],
 }
 CASES = [(pair, variant) for pair in PREPARATION_MODES for variant in VARIANTS[pair[1]]]
-PACKET = Path(__file__).resolve().parent / 'fixtures/blast_preparation_tool_info'
 
 
 def software(program):
@@ -137,28 +135,6 @@ def test_every_variant_has_exact_descriptor_and_acceptance_parity(tmp_path, pair
         {'entry_role': 'launch', 'resource_id': 'chosen', 'resource_role': 'launch_local'}]
 
 
-def test_mixed_legacy_and_preparation_rows_only_expose_selected_pairs():
-    legacy = [{'program': p, 'mode': m, 'software': software(p), 'molecules': ['dna', 'protein']}
-              for p, m in LEGACY_MODES]
-    new = []
-    for pair in PREPARATION_MODES:
-        variants = VARIANTS[pair[1]]
-        row = binding(pair, variants[0])
-        row['variants'] = deepcopy(variants)
-        row['molecules'] = list(dict.fromkeys(molecule(pair, v) for v in variants))
-        new.append(row)
-    rows = legacy + new
-    assert sum(len(row['variants']) for row in new) == 32
-    assert validate_native_blast_utility_bindings(rows) == rows
-    descriptors = native_blast_utility_tool_contracts(rows, resource_kind='local', resource_id='selected-local')
-    assert [d['name'] for d in descriptors] == ['native.' + r['program'] + '.' + r['mode'] for r in rows]
-    assert len(descriptors) == 14
-    assert native_blast_utility_tool_contracts([], resource_kind='local', resource_id='selected-local') == []
-    assert len(native_blast_utility_tool_contracts(new[:1], resource_kind='local', resource_id='one')) == 1
-
-
-
-
 @pytest.mark.parametrize('mode,bad', [
     ('convert_gi_list', {'unknown': True}),
     ('convert_seqid_list', {'database_binding': None}),
@@ -193,15 +169,6 @@ def test_missing_unknown_and_duplicate_binding_values_fail(change):
     elif change == 'program_type': row['program'] = []
     else: row['variants'] = [{'unselected': float('nan' if change == 'nan' else 'inf')}]
     with pytest.raises(ValueError): validate_native_blast_utility_bindings([row])
-
-
-def test_duplicate_rows_and_new_fields_on_legacy_are_rejected():
-    row = binding(('makembindex', 'show_filters'), {})
-    with pytest.raises(ValueError): validate_native_blast_utility_bindings([row, deepcopy(row)])
-    legacy = {'program': 'blastdbcmd', 'mode': 'info', 'software': software('blastdbcmd'), 'molecules': ['dna']}
-    with pytest.raises(ValueError): validate_native_blast_utility_bindings([{**legacy, 'variants': [{}]}])
-    with pytest.raises(ValueError): validate_native_blast_utility_bindings([{**legacy, 'molecules': ['unknown']}])
-    with pytest.raises(ValueError): validate_native_blast_utility_bindings({'bindings': [row]})
 
 
 @pytest.mark.parametrize('pair,variant', CASES)
@@ -286,7 +253,7 @@ def test_actual_practical_admission_matches_descriptor_for_bound_and_unbound_var
     variant = {'profile_type': 'rps', 'input_format': 'pssm_asn1_text'}
     job = selected_job(tmp_path, pair, variant)
     request = requested_job_from_native_blast_utility(job)
-    policy = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
+    policy = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}
     assignment = {'resource_kind': 'local', 'resource_id': 'configured-local',
         'workspace': str(tmp_path), 'requested_job': request, 'constraints': {'allocation': policy}}
     for selected, accepted in [(variant, True),

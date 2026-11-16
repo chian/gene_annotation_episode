@@ -9,23 +9,18 @@ class LiteratureTaskOperations:
             return self._assay_grading_repository()
         return None
 
-    def reasoning_action_schema(self, context, commit_schema, *, _accept_legacy_quotes=False):
+    def reasoning_action_schema(self, context, commit_schema):
         repository = self._required_grading_repository(context)
         leads = context.assignment.get('literature_task', {}).get('kind') == 'verified_source_leads'
         if repository is None and not leads:
             return None
         from gene_annotation_episode.episodic_workflow.root.literature_required_grading import action_schema
         schema = (obj({'kind': {'const': 'reason'}, 'commit': deepcopy(commit_schema)}) if repository is None else
-            action_schema(commit_schema, source_location_inputs(repository.population_schema(),
-                allow_legacy_quote=_accept_legacy_quotes)))
+            action_schema(commit_schema, source_location_inputs(repository.population_schema())))
         if leads:
             from gene_annotation_episode.episodic_workflow.root.library.literature_task_answer_schemas import lead_schema
             schema['properties']['source_lead'] = lead_schema()
-        return source_location_inputs(schema, allow_legacy_quote=_accept_legacy_quotes)
-
-    def accept_reasoning_action_schema(self, context, commit_schema):
-        """Admit original quoted actions without requesting quotes from a model."""
-        return self.reasoning_action_schema(context, commit_schema, _accept_legacy_quotes=True)
+        return source_location_inputs(schema)
 
     def reasoning_has_task_content(self, context, selection):
         from .commission_contract import commissioned_task
@@ -35,7 +30,7 @@ class LiteratureTaskOperations:
         task, _ = commissioned_task(context)
         if task['kind'] != 'verified_source_leads':
             return False
-        validate_schema(plain(selection['source_lead']), source_location_inputs(lead_schema(), allow_legacy_quote=True))
+        validate_schema(plain(selection['source_lead']), source_location_inputs(lead_schema()))
         return True
 
     def execute_reasoning(self, context, selection, operation_key):
@@ -71,7 +66,7 @@ class LiteratureTaskOperations:
             authorize_source_access=lambda ref, representation: self._tool_arguments(
                 context, 'source.read', {'source_ref': ref, 'representation': representation}))
 
-    def catalog(self, context, *, _accept_legacy_quotes=False):
+    def catalog(self, context):
         self._role(context.role)
         available = self.services.tool_catalog(context.scope)
         entries = ([{"name": name, **entry} for name, entry in available.items()]
@@ -118,10 +113,7 @@ class LiteratureTaskOperations:
         if self._enabled('a106_intervention', context):
             from gene_annotation_episode.episodic_workflow.root.scientific_process.published_evidence_assessment.analysis_contract import contract_catalog
             result.extend(contract_catalog(self.services))
-        # Publish location-only input contracts to the model. Internal ingress
-        # additionally accepts exact legacy quotes, which the source reader
-        # still validates rather than replacing a mismatching caller value.
-        return [{**entry, 'input_schema': source_location_inputs(
-                    entry['input_schema'], allow_legacy_quote=_accept_legacy_quotes)}
+        # Publish location-only input contracts to the model.
+        return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'])}
                 for entry in result]
 

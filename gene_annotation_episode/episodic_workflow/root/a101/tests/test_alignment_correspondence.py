@@ -1,15 +1,12 @@
 """Common numerical authority across native correspondence entry paths."""
 from copy import deepcopy
-import json
 
 import pytest
 
 from gene_annotation_episode import alignment_correspondence as common
 from gene_annotation_episode import biopython_pairwise_grader as bio
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_pairwise_grader as blast
-from gene_annotation_episode.tool_grading_artifacts import (
-    retain_tool_grading, source_tool_gradings, validate_tool_correspondence,
-)
+from gene_annotation_episode.tool_grading_artifacts import validate_tool_correspondence
 
 
 def bio_native():
@@ -86,18 +83,6 @@ def test_missing_and_explicit_zero_do_not_manufacture_saved_tracebacks():
     assert absent["scores"]["paired_identity"] is None
 
 
-def test_historical_substitution_cell_is_a_saved_fact_and_new_values_use_common_output():
-    from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_pairwise_worker_values import _hsp_values
-    legacy, _, calculated = blast.alignment_component_artifacts(blast_hsp(), program="blastn",
-        query_length=4, reference_length=5)
-    assert _hsp_values(legacy, calculated["rows"][0])["substituted_positions"] == 0
-    archived = {"substituted_positions": 17}
-    assert _hsp_values(legacy, archived_values=archived)["substituted_positions"] == 17
-    assert archived == {"substituted_positions": 17}
-    with pytest.raises(ValueError, match="common_hsp_components_required"):
-        _hsp_values(legacy)
-
-
 def test_qualified_reference_denominator_does_not_replace_native_span_bound():
     hsp = blast_hsp(); hsp["hit_to"] = 6
     legacy, sheet, calculated = blast.alignment_component_artifacts(hsp, program="blastn",
@@ -131,26 +116,6 @@ def test_observed_union_partial_population_and_conflicting_identity_are_separate
     assert partial["union"]["fractions"]["query_original_complete_coverage"] is None
     assert partial["selected"]["query"]["observed_numerator"] == 4
     assert partial["selected"]["query"]["complete_value"] is None
-
-
-@pytest.mark.parametrize("execution,producer,legacy,success", [
-    ("completed", "complete", 1, 1), ("unknown", "complete", 1, None),
-    ("completed", "unknown", 1, None), ("unknown", "unknown", 1, None),
-    ("failed", "complete", None, None), ("completed", "incomplete", None, None),
-])
-def test_legacy_nonfailure_qualification_does_not_establish_execution_success(execution, producer, legacy, success):
-    _, sheet, calculated = blast.build_pairwise_artifacts(normalized([blast_hsp()]),
-        population={"original_rows_complete": True, "execution_state": execution,
-            "producer_state": producer, "explicit_zero_result": False},
-        selected_intervals={"query": [0, 4], "reference": None})
-    selected = calculated["selected"]["query"]
-    assert selected["execution_qualified_value"] == legacy
-    assert selected["execution_success_value"] == success
-    assert "unknown is not successful execution" in calculated["definitions"]["selected"]["query"]["missing_behavior"]
-    sheet["population"]["original_rows_complete"] = False
-    incomplete = common.calculate_correspondence_components(sheet)["selected"]["query"]
-    assert incomplete["observed_numerator"] == 4
-    assert incomplete["execution_success_numerator"] is None
 
 
 @pytest.mark.parametrize("execution,producer", [("failed", "complete"), ("completed", "incomplete")])
@@ -225,40 +190,3 @@ def test_frozen_earlier_common_components_keep_stored_compatibility_cells(monkey
     validate_tool_correspondence(grading, companion)
     assert companion == original
 
-
-class _Store:
-    def __init__(self):
-        self.records = {"native": {"record_type": "artifact"}}
-        self.raw = {}
-    def get(self, ref):
-        return self.records[ref]
-    def artifact(self, raw, media):
-        ref = "artifact_" + str(len(self.raw))
-        self.raw[ref] = raw
-        self.records[ref] = {"record_type": "artifact", "media_type": media}
-        return ref
-    def get_artifact(self, ref):
-        return self.raw[ref]
-
-
-def test_v2_retention_keeps_legacy_closed_shape_and_explicit_failure_and_v1_reads():
-    store = _Store()
-    grading = bio.grade_biopython_pairwise(bio_native(), molecule="dna", _retain_correspondence=True)
-    ref = retain_tool_grading(store, provider="biopython.alignment", native_artifact_ref="native", grading=grading)
-    body = json.loads(store.raw[ref])
-    assert body["schema"] == "tool_grading_artifact_v2"
-    assert set(body) == {"schema", "provider", "native_artifact_ref", "grading", "correspondence"}
-    assert set(body["grading"]) == {"sheet", "scores"}
-    store.records["source"] = {"record_type": "source", "provider": "biopython.alignment",
-        "artifact_ref": "native", "auxiliary_artifact_refs": [ref]}
-    assert source_tool_gradings(store, "source") == [body["grading"]]
-    with pytest.raises(ValueError, match="correspondence_required"):
-        retain_tool_grading(store, provider="biopython.alignment", native_artifact_ref="native", grading=body["grading"])
-    failure = {"sheet": None, "scores": None, "failure": {"code": "invalid", "category": "grading_input"}}
-    failure_ref = retain_tool_grading(store, provider="biopython.alignment", native_artifact_ref="native", grading=failure)
-    assert json.loads(store.raw[failure_ref])["schema"] == "tool_grading_artifact_v1"
-    old = {"schema": "tool_grading_artifact_v1", "provider": "biopython.alignment",
-        "native_artifact_ref": "native", "grading": body["grading"]}
-    old_ref = store.artifact(json.dumps(old), store.records[ref]["media_type"])
-    store.records["source"]["auxiliary_artifact_refs"] = [old_ref]
-    assert source_tool_gradings(store, "source") == [body["grading"]]

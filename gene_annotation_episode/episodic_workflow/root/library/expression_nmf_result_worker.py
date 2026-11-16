@@ -115,8 +115,7 @@ def _native(plan, root):
         expected_input_identity={k: job['input'][k] for k in ('sha256', 'size_bytes')})
     failures = unique_issues(failures, loaded['failures'])
     manifest, bound = loaded['manifest'], True
-    expected_environment = expression_nmf_environment(job['software'], attempt_directory=original['attempt_directory'],
-        recorded_environment=original['requested_job']['environment'])
+    expected_environment = expression_nmf_environment(job['software'], attempt_directory=original['attempt_directory'])
     expected_environment.update({k: str(Path(original['identity']['execution_id']).parent) for k in ('TMPDIR', 'TMP', 'TEMP')})
     expected_execution = {'identity': original['identity'], 'software_sha256': digest(job['software']),
         'requested_job_sha256': digest(original['requested_job']), 'realized_environment': expected_environment}

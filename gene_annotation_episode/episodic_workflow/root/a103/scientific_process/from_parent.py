@@ -1,6 +1,6 @@
 """Private A103 scientific from parent."""
 from __future__ import annotations
-from .contracts import ContractError, EVIDENCE_AXIS_VERSION, INSTRUCTION_VERSION, LEGACY_SELECTION_VERSION, ROLE, SELECTION_VERSION, SUPPORT_ENTRY_VERSION, _ASSIGNMENT, _LEGACY_REVISION_ARGUMENTS, _RECORDED_ASSIGNMENT, _REFERENCE, _REVISION_ARGUMENTS, _SHA256, _object, deepcopy, interpretation_schema, json, plain, re, scientific_digest, scientific_invocation_ref, selection_fields, selector_selection, validate_child_selection, validate_closed_schema, validate_evidence_axis_entry, validate_filled_process, validate_instruction_entry, validate_revision_origin, validate_schema, validate_selection, validate_support_entry
+from .contracts import ContractError, EVIDENCE_AXIS_VERSION, INSTRUCTION_VERSION, ROLE, SELECTION_VERSION, SUPPORT_ENTRY_VERSION, _ASSIGNMENT, _RECORDED_ASSIGNMENT, _REFERENCE, _REVISION_ARGUMENTS, _SHA256, _object, deepcopy, interpretation_schema, json, plain, re, scientific_digest, scientific_invocation_ref, selection_fields, selector_selection, validate_child_selection, validate_closed_schema, validate_evidence_axis_entry, validate_filled_process, validate_instruction_entry, validate_revision_origin, validate_schema, validate_selection, validate_support_entry
 
 class ScientificAssignment:
 
@@ -32,10 +32,7 @@ class ScientificAssignment:
                     raise ContractError('scientific_support_metadata_required')
                 else:
                     validate_support_entry(entry)
-        if selection['version'] == LEGACY_SELECTION_VERSION:
-            self.tool_library.resolve(selection['tools'])
-        else:
-            self.tool_library.resolve_tool_info(selection['child_tool_info'])
+        self.tool_library.resolve_tool_info(selection['child_tool_info'])
         return selection
 
     def _assignment(self, value, scope, *, materialize=False, context=None):
@@ -98,11 +95,10 @@ class ScientificAssignment:
         initial = self._selection(preparation['selection'])
         arguments = _object(preparation['arguments'], 'scientific_revision_preparation_invalid')
         proposal = validate_child_selection(preparation['proposal'])
-        argument_schema = _LEGACY_REVISION_ARGUMENTS if proposal['selection']['version'] == LEGACY_SELECTION_VERSION else _REVISION_ARGUMENTS
-        validate_schema(arguments, argument_schema)
+        validate_schema(arguments, _REVISION_ARGUMENTS)
         prepared_origin = validate_revision_origin(preparation['revision_origin'])
         expected_invocation = scientific_invocation_ref(context.run_id, expected_path)
-        if preparation['operation_ref'] != origin['preparation_operation_ref'] or preparation['invocation_ref'] != expected_invocation or origin['parent_invocation_ref'] != expected_invocation or (prepared_origin != origin) or (proposal['parent_selection_sha256'] != scientific_digest(initial)) or (proposal['selection'] != assignment['selection']) or (proposal['selection'] != self._proposed_selection(initial, arguments, proposal['selection']['version'], context.scope)):
+        if preparation['operation_ref'] != origin['preparation_operation_ref'] or preparation['invocation_ref'] != expected_invocation or origin['parent_invocation_ref'] != expected_invocation or (prepared_origin != origin) or (proposal['parent_selection_sha256'] != scientific_digest(initial)) or (proposal['selection'] != assignment['selection']) or (proposal['selection'] != self._proposed_selection(initial, arguments, context.scope)):
             raise ContractError('scientific_revision_preparation_mismatch')
 
     def prepare_invocation(self, parent, role, inputs, scope, operation_key, *, invocation, closed_context=None):
@@ -250,11 +246,8 @@ class ScientificAssignment:
         self.validate_context(context)
         return validate_selection(context.assignment['selection'])
 
-    def _proposed_selection(self, initial, arguments, version, scope):
+    def _proposed_selection(self, initial, arguments, scope):
         axis_field = selection_fields(initial)[0]
-        if version == LEGACY_SELECTION_VERSION:
-            validate_schema(arguments, _LEGACY_REVISION_ARGUMENTS)
-            return self._selection({'version': version, 'annotation_ref': initial[axis_field], 'thought_ref': arguments['thought_ref'], 'tools': arguments['tools']})
         validate_schema(arguments, _REVISION_ARGUMENTS)
         return self._selection({'version': SELECTION_VERSION, 'evidence_axis': initial[axis_field], 'thought_pattern': arguments['thought_pattern'], 'child_tool_info': self.tool_library.resolve_tool_info(arguments['child_tool_info'], self._information_catalog(scope))})
 

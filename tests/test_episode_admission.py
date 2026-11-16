@@ -128,44 +128,6 @@ def receiver_for(store, spec, contract, receipts, *, projector=None):
         lambda index, credit: Value({"credit": credit, "estimation_action_index": index}))
 
 
-@pytest.mark.parametrize("pending", [False, True])
-def test_admission_completes_original_action_and_replays_frozen_received_credit(tmp_path, pending):
-    store, spec, returned, contract, saved, receipts = setup_case(tmp_path, pending=pending, sourced=True)
-    with store:
-        receiver = receiver_for(store, spec, contract, receipts)
-        original_call = tuple(store.db.execute("SELECT * FROM runtime_model_calls").fetchone())
-        admitted = admit_return(spec, returned, receiver)
-        assert admitted["state"] == "admitted"
-        assert admitted["original_decision_index"] == 7
-        assert admitted["controller_input"] == {"credit": 5, "estimation_action_index": 7}
-        assert admitted["received_record_refs"] == [saved["id"]]
-        action = receiver.journal.row("runtime_actions", spec["parent"]["episode_id"], 7)
-        assert json.loads(action["result"])["record_refs"] == [saved["id"]]
-        assert json.loads(action["result"])["changed_record_refs"] == [saved["id"]]
-        assert action["credit"] == 5 and json.loads(action["timing"]) == {"original": "timing"}
-        assert tuple(store.db.execute("SELECT * FROM runtime_model_calls").fetchone()) == original_call
-        assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 0
-        snapshot = store.db.execute("SELECT expectation_snapshot_refs,credit_snapshot FROM "
-                                    "runtime_return_admissions").fetchone()
-        assert json.loads(snapshot[0]) == spec["expectation_snapshot_refs"] and snapshot[1] == 5
-        # Scientific withdrawal changes today's projection; history remains the
-        # actual original parent receipt and is never repriced on replay.
-        put_finding(store, saved["hypothesis_ref"], store.get(saved["observation_ref"]),
-                    saved["investigation_finding"]["source_claim"]["subject_refs"][0],
-                    revision=saved["revision"], withdraw=True)
-        def must_not_reproject():
-            raise AssertionError("replay projected new historical credit")
-        replay = admit_return(spec, returned, replace(receiver,
-            project_received_credit=must_not_reproject,
-            receive_references=lambda form: (_ for _ in ()).throw(AssertionError("redelivery"))))
-        assert replay == admitted
-    # A new connection recovers the same immutable row without a live receiver.
-    with Store(tmp_path / "workspace") as reopened:
-        new_receipts = EpisodeReceipts(reopened, spec["run_id"])
-        receiver = receiver_for(reopened, spec, contract, new_receipts, projector=must_not_reproject)
-        assert admit_return(spec, returned, receiver) == admitted
-
-
 def test_failure_preserves_closed_child_work_and_supports_existing_redelivery(tmp_path):
     store, spec, returned, contract, saved, receipts = setup_case(tmp_path, sourced=True)
     with store:

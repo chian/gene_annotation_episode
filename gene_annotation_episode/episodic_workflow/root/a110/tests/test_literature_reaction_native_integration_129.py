@@ -25,6 +25,7 @@ from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a110.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_native_inputs_129 import recipe, number, witness
 from test_runtime import FixtureController, ScriptedProvider
+from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_integration import location_inputs
 
 
 def source(store, raw, parents=()):
@@ -75,53 +76,6 @@ def binding_for(store, context):
     binding = LiteratureEpisode(WorkflowServices(host))
     host.episode_bindings = EpisodeBindingRegistry((binding,))
     return binding
-
-
-@pytest.mark.parametrize('requested', [False, True])
-def test_selected_existing_operation_saved_views_and_first_read_only_reconstruction(tmp_path, monkeypatch, requested):
-    store, context, args = setup_case(tmp_path / 'state', requested=requested)
-    with store:
-        binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'selected'))
-        assert outcome['status'] == 'completed', outcome
-        current = replace(context, received_record_refs=tuple(dict.fromkeys((*context.received_record_refs, *outcome['record_refs']))))
-        properties = {'score': reaction_semantic_cells_schema()}
-        if requested:
-            properties['native'] = native_observations_schema()
-        form_schema = obj(properties)
-        selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
-        form = form_with_facts({}, form_schema, binding.facts(current, selected))
-        binding.validate_report(current, form, form_schema)
-        assert form['score'][0]['value'] is None
-        assert form['score'][0]['independent_n'] is None
-        if requested:
-            native, = form['native']
-            assert native['reported_count'] == 4 and native['independent_n'] is None
-            assert native['count_basis'] == 'technical_repeat'
-            assert native['uncertainty_kind'] == 'sample_sd' and native['uncertainty_value'] == .2
-            assert native['ratio_form'] == 'reported_point'
-            assert 'component' not in native
-        else:
-            assert all('reported_count' not in row for row in form['score'])
-        ref = outcome['result']['sheet_ref']
-        saved = store.get(ref)
-        descriptor = binding.as_record()
-        allowed = {saved['artifact_ref'], saved['request_ref']}
-        get_artifact = store.get_artifact
-        def saved_only(reference):
-            assert reference in allowed, 'read-only reconstruction may not read scientific source bytes'
-            return get_artifact(reference)
-        def forbidden(*args, **kwargs):
-            raise AssertionError('saved reconstruction must not rerun parsing/calculation')
-        monkeypatch.setattr(store, 'get_artifact', saved_only)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage.read_reaction_inputs', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage.populate_reaction_constraints', forbidden)
-        store.db.execute('PRAGMA query_only=ON')
-        # Reconstruct only after entering read-only mode, before any new receipt exists.
-        restored = binding_for(store, context)
-        assert restored.as_record() == descriptor
-        assert asyncio.run(restored.execute(context, 'literature.reaction.populate', args, 'selected')) == outcome
-        assert form_with_facts({}, form_schema, restored.facts(current, selected)) == form
 
 
 @pytest.mark.parametrize('requested', [False, True])
@@ -234,7 +188,7 @@ def test_unreceived_new_selector_source_rejected_before_bytes(tmp_path, monkeypa
             assert ref != forbidden['artifact_ref'], 'unauthorized bytes were touched'
             return old(ref)
         monkeypatch.setattr(store, 'get_artifact', guarded)
-        outcome = asyncio.run(binding_for(store, context).execute(context, 'literature.reaction.populate', args, 'denied'))
+        outcome = asyncio.run(binding_for(store, context).execute(context, 'literature.reaction.populate', location_inputs(args), 'denied'))
         assert outcome['status'] == 'invalid'
         assert 'not_received' in str(outcome)
         assert store.db.execute('select count(*) from literature_reaction_operations').fetchone()[0] == 0
@@ -257,7 +211,7 @@ def test_native_position_subset_does_not_expand_from_globally_known_sheet(tmp_pa
         args['data_source_ref'] = dataset['id']
         context = replace(context, received_record_refs=(*context.received_record_refs, extra['id'], dataset['id']))
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'two-units'))
+        outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', location_inputs(args), 'two-units'))
         assert outcome['status'] == 'completed', outcome
         owner = replace(context, received_record_refs=tuple(dict.fromkeys((*context.received_record_refs, *outcome['record_refs']))))
         adapter = binding.literature_reaction_repository().native_observations_projection()
@@ -285,7 +239,7 @@ def test_mixed_old_prepared_and_native_sheets_preserve_aggregate_and_skip_missin
     store, context, args = setup_case(tmp_path / 'state')
     with store:
         binding = binding_for(store, context)
-        native = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'native'))
+        native = asyncio.run(binding.execute(context, 'literature.reaction.populate', location_inputs(args), 'native'))
         assert native['status'] == 'completed', native
         normalized = binding.literature_reaction_repository().read(native['result']['sheet_ref'])['extraction']['observations']
         # Both historical v1 and v2 prepared routes remain available alongside
@@ -299,7 +253,7 @@ def test_mixed_old_prepared_and_native_sheets_preserve_aggregate_and_skip_missin
             dataset = source(store, canonical(data), [args['source_ref']])
             context = replace(context, received_record_refs=(*context.received_record_refs, dataset['id']))
             selected_args = {**args, 'data_source_ref': dataset['id']}
-            outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', selected_args, version))
+            outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', location_inputs(selected_args), version))
             assert outcome['status'] == 'completed', outcome
             prepared.append(outcome)
         all_refs = tuple(dict.fromkeys((*context.received_record_refs, *native['record_refs'],

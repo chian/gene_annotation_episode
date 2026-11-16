@@ -168,21 +168,6 @@ def test_missing_time_and_unidentifiable_expectations_stay_unavailable(saved, mo
     assert unavailable["rows"][0]["expected_yield"]["unavailable_reason"] == "unidentifiable"
 
 
-def test_lookup_failure_is_null_and_separate_from_zero_negative_and_unobserved_completions(saved):
-    _, journal = saved
-    for index, status in enumerate(("failed", "completed", "partial", "completed")):
-        attempt(journal, index, {"kind": "tool", "tool": "fixture.operation"}, status=status,
-                credit=None if index == 0 else 100)
-    observe(journal, 1, 0, 0, legacy=True)
-    observe(journal, 2, 1, -2)
-    records = history.lookup_attempts(journal, "owner", before=4, query=query())["records"]
-    assert [row["status"] for row in records] == ["failed", "completed", "partial", "completed"]
-    assert [row["completed_gain"] for row in records] == [None, 0, -2, None]
-    assert records[1]["completion"]["completion_sequence"] is None
-    assert records[1]["completion"]["unit_ref"] is None
-    assert records[3]["completion"] is None
-
-
 def test_lookup_is_own_prior_attempts_with_category_filter_and_deterministic_pages(saved):
     store, journal = saved
     for index in range(5):

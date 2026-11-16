@@ -24,8 +24,6 @@ class SignedRootEpisodeBinding(RootCredit, RootYield):
     @classmethod
     def from_record(cls, record):
         from .numerical import AnnotationAxisYieldController, YieldParameters
-        if isinstance(record, dict) and record.get('version') == 'signed_root_episode_binding_v1':
-            raise ValueError('legacy_signed_root_scalar_credit_incompatible')
         if not isinstance(record, dict) or set(record) != {'version', 'initial_known_record_refs', 'root_task', 'annotation_support'} or record['version'] != 'signed_root_episode_binding_v2':
             raise ValueError('explicit_signed_root_episode_binding_required')
         task = record['root_task']

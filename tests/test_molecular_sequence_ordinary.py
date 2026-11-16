@@ -373,7 +373,7 @@ def test_uncertain_observation_leaves_original_attempt_unpublished(selected_call
 def test_closed_resource_failure_remains_a_real_failed_carrier(selected_call, monkeypatch):
     prepared, calls = _prepared(selected_call)
     error = AcquisitionError("local_job_resource_limit", phase="local_execution",
-        diagnostic={"engineering_fixture": True}, operational={"resource": "memory_bytes", "limit": 21474836480})
+        diagnostic={"engineering_fixture": True}, operational={"resource": "memory_bytes", "limit": 5368709120})
     _lifecycle(monkeypatch, prepared, views=("returned",), code=-9, collect_error=error)
     result = ordinary.run_ordinary_orf_attempt(prepared)
     assert result["returncode"] == -9

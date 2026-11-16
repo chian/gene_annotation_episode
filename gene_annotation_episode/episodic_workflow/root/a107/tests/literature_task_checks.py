@@ -52,14 +52,6 @@ def binding(home):
     yield value
     db.close()
 
-def test_original_assignment_schema_is_preserved(binding):
-    ROLE = binding.roles[0]
-    expected = json.loads((Path(__file__).parent / 'fixtures/private_literature/original_assignment_schemas.json').read_text())[binding.binding_path]
-    assert binding.assignment_schema(ROLE) == expected['schema']
-    assert binding._validate_assignment(ROLE, context(binding).assignment, {}) == plain(context(binding).assignment)
-    assert binding.roles == (ROLE,)
-    with pytest.raises(ValueError, match='unsupported_literature_role'):
-        binding.assignment_schema('scientific_process')
 
 def test_private_task_and_messages_are_declared(binding):
     HOME = type(binding).__module__.rsplit('.', 1)[0]
@@ -133,6 +125,7 @@ def test_original_task_observes_returned_action_and_replays_without_reexecution(
     def execute(*args, **kwargs): calls.append((args, kwargs)); return outcome
     workflow = SimpleNamespace(run_id='run', journal=journal, execution_binding=None, inprocess_replay=None,
         wait_inputs_version=None, completed_action_inputs_version=None,
+        pending_work=lambda source: [],
         execute=execute, receive_native_outcome=lambda *args: events.append('native'),
         receive_outcome=lambda *args: events.append('receive'), automatic_score_updates=score,
         source_credit_view=lambda source: {'credit': 2.0}, controller_value=lambda source, index, credit: credit)
@@ -143,7 +136,7 @@ def test_original_task_observes_returned_action_and_replays_without_reexecution(
     assert asyncio.run(task.execute(selection, 0)) == 2.0
     assert events == ['native', 'receive', 'score']
     assert len(calls) == 1
-    assert json.loads(journal.row('runtime_actions', 'episode', 0)['result']) == outcome
+    assert json.loads(journal.row('runtime_actions', 'episode', 0)['result']) == {**outcome, 'pending_work_after_action': []}
     assert journal.row('runtime_actions', 'episode', 0)['credit'] == 2.0
     assert task.last_outcome_index == 0
     assert asyncio.run(task.execute(selection, 0)) == 2.0
@@ -285,22 +278,6 @@ def actual_source_schema(home):
     source = SimpleNamespace(scope=context.scope, path=context.path, interpret_schema={'type': 'object', 'properties': {}, 'additionalProperties': False})
     return binding, workflow, source, context, Workflow.action_schema(workflow, source)
 
-def test_exact_callbacks_are_configuration_capabilities_and_preserve_runtime_fallback(home):
-    binding, workflow, source, context, schema = actual_source_schema(home)
-    assert binding.reasoning_action_schema.__module__ == home + '.configuration'
-    assert binding.accept_reasoning_action_schema.__module__ == home + '.configuration'
-    assert binding.reasoning_has_task_content.__module__ == home + '.configuration'
-    assert binding.execute_reasoning.__module__ == home + '.configuration'
-    assert binding.reasoning_action_schema(context, {}) is None
-    assert binding.accept_reasoning_action_schema(context, {}) is None
-    assert binding.reasoning_has_task_content(context, {}) is False
-    assert binding.execute_reasoning(context, {}, 'original-operation') is None
-    commit = {'type': 'object', 'properties': {'claims': {'type': 'array'}}, 'required': ['claims'], 'additionalProperties': False}
-    actual = Workflow.reasoning_action_schema(workflow, source, commit)
-    workflow.specialist = lambda source: SimpleNamespace()
-    expected = Workflow.reasoning_action_schema(workflow, source, commit)
-    assert actual == expected
-    assert actual['properties']['kind']['const'] == 'reason'
 
 @pytest.mark.parametrize('selection', [
     {'kind': 'reason', 'commit': {}},
@@ -327,26 +304,6 @@ def test_current_source_schema_rejects_before_acquisition_even_with_recorded_sel
     assert source.apply_response(response, 0, {'visible_record_refs': []}, schema) is None
     assert source.feedback['status'] == 'invalid' and source.feedback['category'] == 'action_contract'
     assert effects == [(0, 'rejected')] and acquisitions == []
-
-def test_legacy_selection_contract_still_preserves_job_acquisition_failure_identity():
-    # A controlled permissive saved contract illustrates why present catalog
-    # exclusion is not authority to erase the historical error handler. It is
-    # not evidence that an original source workflow offered a job action.
-    home = HOMES[0]
-    binding, workflow, declaration, context, current = actual_source_schema(home)
-    module = import_module(home + '.task_action'); source = object.__new__(module.SourceTaskAction)
-    source.workflow = workflow; source.episode_id = 'source'; source.scope = declaration.scope; source.path = declaration.path
-    source._delivery_resolution_ref = None; source.report_values = {}; source.interpret_schema = declaration.interpret_schema
-    effects = []; source.record_effect = lambda index, effect: effects.append((index, effect))
-    selection = {'kind': 'job_child', 'role': 'launch', 'existing_job_ref': 'job-original'}
-    workflow.journal = SimpleNamespace(row=lambda table, *args: {'action': json.dumps(selection)} if table == 'runtime_actions' else None)
-    workflow.decision_exchanges = None; workflow.execution_binding = None; workflow.store = SimpleNamespace(transaction=lambda: nullcontext())
-    def unavailable(*args): raise OSError('controlled original acquisition failure')
-    workflow.selected = unavailable
-    schema = {'type': 'object', 'properties': {'selection': {'type': 'object'}, 'report_update': declaration.interpret_schema}}
-    assert source.apply_response({'selection': selection, 'report_update': {}}, 0, {'visible_record_refs': []}, schema) is None
-    assert source.feedback == {'status': 'failed', 'category': 'job_assignment', 'code': 'job_operation_failed', 'exception_type': 'OSError', 'role': 'launch', 'job_ref': 'job-original'}
-    assert effects == [(0, 'rejected')]
 
 
 from gene_annotation_episode.episodic_workflow.root.a107.state import Store
@@ -436,7 +393,6 @@ def partner_fixture(path, *, mode='matched', page=True, extra_unit=False):
         {'page': {'source_ref': records['root']['id']}} if page else {}, {},
         tuple(row['id'] for key, row in records.items() if key != 'ancestor'))
     return store, context, args, records
-
 
 
 """Real local A107 numerical/publication boundaries with declared synthetic inputs.

@@ -1,14 +1,12 @@
 """Original public fluorescence delegated observation and selected-action custody.
 
-These are the original two GenomicOverlapResultReceipts methods actually used
-by the public fluorescence receipt owner. Its historical policy stays distinct
-from the adapted current Root fluorescence observation policy.
+These two methods are used by the public fluorescence receipt owner.
 """
 import json
 from gene_annotation_episode.native_control_records import require, same
 from gene_annotation_episode.episodic_workflow.root.progress_records import validate_resource_observation
 
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': 5368709120, 'scratch_bytes': 4294967296}
 
 
 class OriginalFluorescenceObservation:

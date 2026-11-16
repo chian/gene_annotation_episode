@@ -1,4 +1,4 @@
-"""Rfam source contracts, requested aliases and closed historical v1 shapes.
+"""Rfam source contracts, requested aliases and closed v1 shapes.
 
 New numerical sheets and definitions belong to infernal_search_contracts and
 infernal_search_grader. Native observations retain their original meanings.
@@ -207,10 +207,7 @@ class RfamParseResult(TypedDict):
 
 
 class RfamCommonParseResult(TypedDict):
-    """New format envelopes share one Infernal numerical sheet and calculator.
-
-    The older RfamParseResult/RfamBatchSheet shapes remain historical contracts.
-    """
+    """Format envelopes share one Infernal numerical sheet and calculator."""
     version: Literal["rfam_batch_parse_result_v2"]
     representation: Literal["json", "tblout", "out"]
     status: Literal["complete", "partial", "rejected", "unsupported"]

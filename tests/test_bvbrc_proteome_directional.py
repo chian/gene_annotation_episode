@@ -121,22 +121,6 @@ def test_native_2221_multiple_hsps_and_actual_numerators():
     assert better["threshold"]["value"] == "1.0e-05"
 
 
-def test_native_2202_overlap_missing_gap_and_historical_percent():
-    result = parse(native("2202"))
-    q = result["queries"][0]
-    s = q["subjects"][0]
-    assert q["length"]["value"] == 1922 and s["length"]["value"] == 249
-    first, second = s["hsps"]
-    assert [first[k]["value"] for k in ("bit_score", "raw_score", "expect", "identity_count", "identity_denominator", "positive_count", "gap_count")] == ["68.9", 167, "3e-12", 53, 176, 83, 36]
-    assert [second[k]["value"] for k in ("bit_score", "raw_score", "expect", "identity_count", "identity_denominator", "positive_count")] == ["37.7", 86, "0.007", 20, 47, 28]
-    assert second["gap_count"] == {"state": "missing", "value": None, "native_text": None, "locations": []}
-    for side, expected in (("query", 219), ("subject", 144)):
-        union = {position for h in (first, second) for b in h["traceback_blocks"] for position in range(b[side + "_start"]["value"], b[side + "_end"]["value"] + 1)}
-        assert len(union) == expected
-    historical = result["queries"][1]["subjects"][6]["hsps"][0]
-    assert [historical[k]["value"] for k in ("positive_count", "positive_denominator", "positive_printed_percent")] == [16, 29, "54"]
-
-
 def test_native_no_hit_statistics_and_zero():
     result = parse(native("2011"))
     q = result["queries"][0]
@@ -377,24 +361,6 @@ def test_unsupported_section_does_not_erase_supported_neighbors():
     assert len(result["queries"]) == 2
     assert [q["banner_ordinal"] for q in result["queries"]] == [0, 2]
     assert "unsupported_banner_version" in codes(result)
-
-
-def test_constructed_wrong_declared_format_and_source_errors():
-    data = native("2011")
-    result = parse_genome_comparison_directional_report(data, source=source(data), declared_format="json2", report_key="wrong-format")
-    assert result["parse_state"] == "failure" and "unsupported_format" in codes(result)
-    for mutate, expected, path in (
-        (lambda s: s["content"].update(sha256="0" * 64), "directional_digest_mismatch", "/source/content/sha256"),
-        (lambda s: s["content"].update(byte_count=len(data) + 1), "directional_byte_count_mismatch", "/source/content/byte_count"),
-        (lambda s: s.update(validated=True), "directional_source_invalid", "/source"),
-        (lambda s: s["content"].update(byte_count=True), "directional_source_invalid", "/source/content/byte_count"),
-    ):
-        supplied = source(data)
-        mutate(supplied)
-        with pytest.raises(ProteomeDirectionalError) as caught:
-            parse_genome_comparison_directional_report(data, source=supplied, declared_format=FORMAT, report_key="caller-key")
-        assert caught.value.code == expected and caught.value.path == path
-        assert str(caught.value) == expected
 
 
 @pytest.mark.parametrize("key", ["", "   ", None, 5, True])

@@ -47,7 +47,7 @@ def _effective_configuration(provider_config=None, controller_settings=None):
     controller.update(supplied.get("controller", {}))
     if controller_settings is not None:
         controller.update(controller_settings)
-    unknown = set(controller) - {"cost", "window_size", "subsample_size", "uncertainty_alpha"}
+    unknown = set(controller) - {"cost", "uncertainty_alpha"}
     if unknown:
         raise ValueError(f"unknown controller settings: {sorted(unknown)}")
     from .numerical import YieldParameters

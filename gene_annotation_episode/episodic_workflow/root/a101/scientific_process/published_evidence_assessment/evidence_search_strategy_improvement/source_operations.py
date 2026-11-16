@@ -8,10 +8,7 @@ class LiteratureOperations:
         self._role(context.role)
         return ('tool', 'child', 'redeliver_report')
 
-    def reasoning_action_schema(self, context, commit_schema, *, _accept_legacy_quotes=False):
-        return None
-
-    def accept_reasoning_action_schema(self, context, commit_schema):
+    def reasoning_action_schema(self, context, commit_schema):
         return None
 
     def reasoning_has_task_content(self, context, selection):
@@ -20,7 +17,7 @@ class LiteratureOperations:
     def execute_reasoning(self, context, selection, operation_key):
         raise ContractError('a101_literature_reasoning_not_commissioned')
 
-    def catalog(self, context, *, _accept_legacy_quotes=False):
+    def catalog(self, context):
         self._role(context.role)
         available = self.services.tool_catalog(context.scope)
         entries = [{'name': name, **entry} for name, entry in available.items()] if isinstance(available, Mapping) else list(available)
@@ -39,7 +36,7 @@ class LiteratureOperations:
                     continue
                 entry['input_schema'] = {'anyOf': branches}
             result.append(entry)
-        return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'], allow_legacy_quote=_accept_legacy_quotes)} for entry in result]
+        return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'])} for entry in result]
 
     async def execute(self, context, tool_name, arguments, operation_key):
         try:
@@ -52,7 +49,7 @@ class LiteratureOperations:
 
     def _tool_arguments(self, context, tool_name, arguments):
         assignment = self._validate_assignment('literature_strategy', context.assignment, context.scope, context=context)
-        entries = {entry['name']: entry for entry in self.catalog(context, _accept_legacy_quotes=True)}
+        entries = {entry['name']: entry for entry in self.catalog(context)}
         if tool_name not in entries:
             raise ContractError('tool_not_available_to_a101_literature_role')
         arguments = plain(arguments)

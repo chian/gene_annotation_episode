@@ -1,7 +1,4 @@
-"""A107 original addgene sequence facts; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 addgene sequence facts."""
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.root.a107.library import addgene_sequence_native as native
 FACT_SOURCE = 'execution_addgene_sequence_facts'

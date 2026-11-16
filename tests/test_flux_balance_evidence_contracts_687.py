@@ -7,7 +7,6 @@ The separately retained679 example is an old test normalization, not a producer.
 from copy import deepcopy
 import json
 import math
-import os
 from pathlib import Path
 
 import pytest
@@ -458,32 +457,6 @@ def test_unknown_application_and_observed_mismatch_do_not_invent_applied_state()
     assert validate_flux_balance_record("FBARequestApplication", value)["objective_application"] == "unknown"
 
 
-def test_original_selected_null_and_empty_constraints_keep_distinct_digests():
-    pin = dict(path="/synthetic687/model.sbml", sha256=FILES["original_model"]["sha256"],
-        size_bytes=FILES["original_model"]["size_bytes"])
-    software = dict(version="fba_software_v1", python={**pin, "path": "/synthetic687/bin/python"},
-        python_version="synthetic", python_home="/synthetic687", module_root="/synthetic687/modules",
-        dependency_roots=[], implementation_files=[], runtime_files=[], distributions=[],
-        solver_interface="optlang.glpk_interface", solver_runtime_files=[])
-    job = dict(version="native_flux_balance_job_v1", operation="perform_flux_balance_analysis",
-        mode="steady_state_linear_fba", source_alias="biomni.tool.systems_biology.perform_flux_balance_analysis",
-        model_input=dict(file=pin, artifact_ref=None, format="sbml", original_loader_selection="sbml_file",
-            repository_identifier=None, acquisition_receipt_file=None), constraints=None,
-        objective=dict(kind="model_default", reaction_id=None), solver_options=dict.fromkeys(OPTION_NAMES),
-        software=software, output_prefix="synthetic687", flux_output_name="flux.csv", source_function_sha256="d" * 64)
-    selected = dict(version="flux_balance_selected_request_v1", attempt=manifest()["attempt"],
-        requested_job=dict(argv=["/synthetic687/bin/python"], environment={}, native_flux_balance=job))
-    unknown_spelling = validate_flux_balance_record("SelectedRequestPayload", selected)
-    selected["requested_job"]["native_flux_balance"]["constraints"] = []
-    empty_spelling = validate_flux_balance_record("SelectedRequestPayload", selected)
-    assert unknown_spelling["requested_job"]["native_flux_balance"]["constraints"] is None
-    assert empty_spelling["requested_job"]["native_flux_balance"]["constraints"] == []
-    assert digest(unknown_spelling) != digest(empty_spelling)
-    # Both known no-change selections have an empty application population.
-    # Comparing either raw selection to the application is the later parser's job.
-    assert validate_flux_balance_record("FBARequestApplication", application())["constraint_changes"] == []
-
-
 def test_retained_old_sheet_digest_and_new_examples_are_saved_as_verification_only():
     path = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/VERIFIED_NUMERICAL_EXAMPLE_001.json"
     old = json.loads(path.read_text())
@@ -502,8 +475,6 @@ def test_retained_old_sheet_digest_and_new_examples_are_saved_as_verification_on
         native_manifest=validate_flux_balance_record("FBANativeManifest", value),
         old_fixture_identity=old["fixture_identity"], old_sheet_sha256=digest(sheet),
         old_record_unchanged=True, old_optional_members_absent=True)
-    if os.environ.get("HMMER529_ATTEMPT"):
-        Path(os.environ["HMMER529_ATTEMPT"], "contracts687_examples.json").write_text(json.dumps(examples, indent=2, allow_nan=False) + "\n")
 
 
 @pytest.mark.parametrize("raw, expected", [

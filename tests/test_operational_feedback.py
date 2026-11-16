@@ -8,11 +8,10 @@ import urllib.request
 
 import pytest
 
-from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
-from gene_annotation_episode.provider_jobs import RemoteSearches
+from gene_annotation_episode.acquisition import PublicClients, SourceSnapshot
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
-from test_public_search import Client, JOB, snapshot
+from test_public_search import Client, snapshot
 
 
 class HTTPResponse:

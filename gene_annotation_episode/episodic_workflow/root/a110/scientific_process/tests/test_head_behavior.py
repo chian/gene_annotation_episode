@@ -134,20 +134,6 @@ class TestPrivateScientificHead(ScientificHeadBoundaryChecks):
             'feedback':{'status':'unavailable','detail':'Target correspondence remains unresolved.'}}
 
 
-    def compare_presentations(self,state):
-        original=self.module('providers')._SessionConnection._presentation
-        private=self.module('scientific_process.presentation').present_scientific_context
-        frames=self.module('decision_context');left=SimpleNamespace(scientific_prompt_states={});right=SimpleNamespace(scientific_prompt_states={})
-        instructions='Keep actual partial findings. '+frames.INSTRUCTIONS
-        later={**deepcopy(state),'feedback':{'status':'invalid','detail':'Original missing operand remains unresolved.'}}
-        lookup={'version':frames.VERSION,'kind':'decision_lookup_result','result':{'status':'unavailable','feedback':{'code':'original_lookup_failure'}}}
-        inputs=[deepcopy(state),frames.state_frame(state),frames.state_frame(later,state),lookup]
-        saved=deepcopy(inputs)
-        for context in inputs:
-            assert private(right,'scientific-test','REASONING',instructions,context)==original(left,'scientific-test','REASONING',instructions,context)
-            assert right.scientific_prompt_states==left.scientific_prompt_states
-        assert inputs==saved
-
     def test_declared_renderer_and_legacy_provider_receive_exact_original_operands(self,scientific):
         task=self.task(scientific);calls=[];state=self.ordinary_state();schema={'type':'object'}
         async def complete(*args,**kwargs):calls.append((args,kwargs));return {'status':'unresolved'}

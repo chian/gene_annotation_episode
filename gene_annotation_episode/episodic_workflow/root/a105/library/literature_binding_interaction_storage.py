@@ -7,7 +7,6 @@ recomputing science. Only eight native components are callable. A requested raw
 parameter row alone expands that role's native/canonical candidates and partial
 uncertainty; derived rows contain no unrequested operand numbers.
 """
-from gene_annotation_episode.episodic_workflow.root.a105.literature_implementation_sources import source_file
 from copy import deepcopy
 import hashlib
 import json
@@ -26,12 +25,7 @@ EVALUATION_SCOPE = 'source_binding_discrimination_interaction'
 MODEL_INPUT_STATUS = 'not_supplied_by_native_operation'
 MODEL_CAPABILITY = 'unimplemented'
 _REQUEST = ('run_id', 'episode_id', 'operation_key', 'selected_tool', 'scope', 'assignment', 'requested_components', 'arguments')
-_PAYLOAD = ('version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'source_records', 'selection', 'extraction', 'calculation', 'cells', 'role_bindings', 'comparison_bindings', 'common_kind_binding', 'requested_components', 'implementation_dependencies')
-_FROZEN = {'literature_binding_interaction_inputs.py': 'd17ad5095cb08c2da8c51210544c2fd22871e8fddbaade689ee7809e82a95f92', 'literature_binding_interaction_calculations.py': 'ac7ea12c105e16df5085942090ec8e3f96c618b4f5866283325c46c92804b432', 'literature_binding_visual_inputs.py': '8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718', 'literature_binding_reader.py': 'e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1', 'literature_experimental_contracts.py': '0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc', 'literature_rate_storage.py': '171eb81f23bcf5b8c048807a093a066f42674f960ac59826cbcb4ae3d94490b4'}
-_COMPATIBLE_RATE_STORAGE = (_FROZEN['literature_rate_storage.py'], '66f7b53adfb4fd873386fd04a3bff681c871f29a69848e94567c1792420be541', '97d5a4e2bdfe5b3ed7bc106bf9b01ffd949563097a7a1da675b6954386b02621', '90a79ae69fe8b347c7c523c95865b3ebad8e237c41fd031a3324e88b91d66f4f')
-_ORIGINAL_DEPENDENCIES = {'sha256': {**_FROZEN, 'literature_binding_interaction_validation.py': 'f8bae57a55bc7417acd83788a9082b8f0b7c9298f84cb7c0a9482f2f59673ebc', 'literature_binding_interaction_storage.py': '0dd5b0bbee30809560a1b39715c05c493c38d94581bbd255ebcbcdee2f6b749e', 'literature_binding_interaction_render.py': '8f721dc277d444ce051117f94c03e6e7f016f40c6f3318db49348ccf5f316b3c'}, 'validation_version': 'binding_interaction_saved_validation_v1'}
-_PREVIOUS_DEPENDENCIES = {'sha256': {**_ORIGINAL_DEPENDENCIES['sha256'], 'literature_rate_storage.py': '66f7b53adfb4fd873386fd04a3bff681c871f29a69848e94567c1792420be541', 'literature_binding_interaction_storage.py': '3fe2db26d4217aa99d081fb3aaa0634c778de054adfdeed523a25afc3d7f6582'}, 'validation_version': 'binding_interaction_saved_validation_v1'}
-_PRE_CONNECTION_DEPENDENCIES = {'sha256': {**_ORIGINAL_DEPENDENCIES['sha256'], 'literature_rate_storage.py': '97d5a4e2bdfe5b3ed7bc106bf9b01ffd949563097a7a1da675b6954386b02621', 'literature_binding_interaction_storage.py': '528059a909ee3ddd90ea779f63958539f4390f868164e8d8da81182ade4bc509'}, 'validation_version': 'binding_interaction_saved_validation_v1'}
+_PAYLOAD = ('version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'source_records', 'selection', 'extraction', 'calculation', 'cells', 'role_bindings', 'comparison_bindings', 'common_kind_binding', 'requested_components')
 
 def _fail(code):
     raise ContractError('literature_binding_interaction_' + code)
@@ -47,17 +41,6 @@ def _selected(assignment):
     if not isinstance(values, (list, tuple)) or any((type(v) is not str or v not in COMPONENTS for v in values)) or len(values) != len(set(values)):
         _fail('component_selection_invalid')
     return list(values)
-
-def _dependencies(saved=...):
-    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_interaction_validation import VERSION as validator
-    names = [*_FROZEN, 'literature_binding_interaction_validation.py', 'literature_binding_interaction_storage.py', 'literature_binding_interaction_render.py']
-    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
-    if any((hashes[name] not in _COMPATIBLE_RATE_STORAGE if name == 'literature_rate_storage.py' else hashes[name] != expected for name, expected in _FROZEN.items())):
-        _fail('implementation_dependency_mismatch')
-    current = {'sha256': hashes, 'validation_version': validator}
-    if saved is not ... and (not any((_same(saved, snapshot) for snapshot in (current, _ORIGINAL_DEPENDENCIES, _PREVIOUS_DEPENDENCIES, _PRE_CONNECTION_DEPENDENCIES)))):
-        _fail('implementation_dependency_mismatch')
-    return current
 
 def _signature(request):
     return canonical({k: request[k] for k in _REQUEST if k != 'selected_tool'})
@@ -210,7 +193,7 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
         direct = list(extraction['source_refs'])
         root = self._native_source(context, extraction['source_ref'])
         sources = self._parents(context.scope, direct)
-        saved = {'version': VERSION, 'input_source_ref': extraction['source_ref'], 'input_artifact_ref': root['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': sources, 'source_records': {ref: self._native_provenance(context.scope, ref) for ref in sources}, 'selection': request['arguments'], 'extraction': extraction, 'calculation': calculation, 'cells': cells, 'requested_components': request['requested_components'], 'implementation_dependencies': _dependencies()}
+        saved = {'version': VERSION, 'input_source_ref': extraction['source_ref'], 'input_artifact_ref': root['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': sources, 'source_records': {ref: self._native_provenance(context.scope, ref) for ref in sources}, 'selection': request['arguments'], 'extraction': extraction, 'calculation': calculation, 'cells': cells, 'requested_components': request['requested_components']}
         with self.store.transaction():
             created, records = ([], [])
 
@@ -265,7 +248,6 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
         if outcome.get('status') != 'completed' or outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']}) or outcome.get('result', {}).get('sheet_ref') != sheet_ref:
             _fail('operation_mismatch')
         saved = self._artifact_json(source['artifact_ref'])
-        _dependencies(saved['implementation_dependencies'])
         if set(saved) != set(_PAYLOAD) or saved['version'] != VERSION or (not _same(saved['selection'], request['arguments'])) or (saved['input_source_ref'] != request['arguments']['source_ref']) or (saved['direct_input_source_refs'] != saved['extraction']['source_refs']) or (saved['requested_components'] != request['requested_components']) or (source.get('parent_source_refs') != saved['input_source_refs']) or (source.get('text_ref') != source['artifact_ref']) or (saved['input_source_refs'] != self._parents(request['scope'], saved['direct_input_source_refs'])):
             _fail('saved_mismatch')
         self._image_lineage(request['scope'], saved['selection'])

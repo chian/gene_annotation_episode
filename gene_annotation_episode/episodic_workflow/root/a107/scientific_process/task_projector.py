@@ -1,4 +1,4 @@
-"""Original A107 finding progress selection."""
+"""A107 finding progress selection."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a107.communication import plain
 from gene_annotation_episode.episodic_workflow.root.a107.domain import ContractError

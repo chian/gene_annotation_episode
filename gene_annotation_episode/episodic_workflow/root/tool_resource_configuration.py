@@ -1,4 +1,4 @@
-"""Original substantive ordinary-tool methods: tool_resource_configuration."""
+"""Ordinary-tool methods: tool_resource_configuration."""
 from __future__ import annotations
 import json
 from gene_annotation_episode.domain import ContractError

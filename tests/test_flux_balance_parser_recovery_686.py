@@ -51,13 +51,6 @@ def prepend_malformed(payload, field):
         for i, row in enumerate(payload["effective"][field])]
 
 
-def retain(name, supplied, result):
-    attempt = os.environ.get("HMMER529_ATTEMPT")
-    if attempt:
-        Path(attempt, f"fba686_{name}.json").write_text(json.dumps({
-            "fixture_identity": "controlled malformed TEST-normalized retained 677 records; no new solve or production capture",
-            "supplied": supplied, "returned": result, "caller_bytes_unchanged": True,
-        }, indent=2, allow_nan=False) + "\n")
 
 
 def read_payload(payload, captures, kind, *, models=None, name):
@@ -78,7 +71,6 @@ def read_payload(payload, captures, kind, *, models=None, name):
     assert payload == before and encode(payload) == raw
     assert hashlib.sha256(raw).hexdigest() == raw_sha256
     assert validate_flux_balance_record(record, result) == result
-    retain(name, payload, result)
     return result
 
 
@@ -328,7 +320,6 @@ def test_bundle_solution_model_join_keeps_row_index_after_solution_filters(captu
     assert [row["flux"]["value"] for row in result["native"]["flux_rows"]] == [7, 6, 6]
     assert result["native_solution"]["native"]["point_state"] == point_state
     assert result["problems"]["loaded_original"]["representation"] == "complete_continuous_linear"
-    retain("bundle_model_join_" + point_state, source, result)
 
 
 def test_recovery_bundle_uses_no_files_network_subprocess_or_imports(captures, monkeypatch):

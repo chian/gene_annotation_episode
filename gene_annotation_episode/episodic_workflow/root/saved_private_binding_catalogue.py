@@ -160,15 +160,15 @@ def _reopen_head(services, *, descriptor, assets):
     from .a105.scientific_tool_library import ScientificToolLibrary
     reference = 'scientific_process'
     try:
-        if descriptor.get('version') not in {'scientific_process_episodes_v5', 'scientific_process_episodes_v6', 'scientific_process_episodes_v7', 'scientific_process_episodes_v8', 'scientific_process_episodes_v9', 'scientific_process_episodes_v10', 'scientific_process_episode_v10'}:
+        if descriptor.get('version') not in {'scientific_process_episodes_v10', 'scientific_process_episode_v10'}:
             raise _failure('unavailable_binding', reference)
         configuration = descriptor['configuration']
         expected = {'library', 'tool_library', 'child_roles'}
-        if descriptor['version'] == 'scientific_process_episodes_v6' or (descriptor['version'] in {'scientific_process_episodes_v7', 'scientific_process_episodes_v8', 'scientific_process_episodes_v9', 'scientific_process_episodes_v10', 'scientific_process_episode_v10'} and 'tool_retrieval' in configuration):
+        if 'tool_retrieval' in configuration:
             expected.add('tool_retrieval')
-        if descriptor['version'] in {'scientific_process_episodes_v8', 'scientific_process_episodes_v9', 'scientific_process_episodes_v10', 'scientific_process_episode_v10'} and 'contract_information_profile' in configuration:
+        if 'contract_information_profile' in configuration:
             expected.add('contract_information_profile')
-        if descriptor['version'] in {'scientific_process_episodes_v10', 'scientific_process_episode_v10'} and 'yield_bindings' in configuration:
+        if 'yield_bindings' in configuration:
             expected.add('yield_bindings')
         if set(configuration) != expected:
             raise _failure('unavailable_binding', reference)

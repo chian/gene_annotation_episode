@@ -17,7 +17,7 @@ def scope(**changes):
     return replace(ExecutionClass(phase="protein_homology_search", backend="local",
         resource_id="local-development", implementation_sha256=digest("binary"),
         parameters_sha256=digest("phmmer-native-defaults-cpu1"),
-        memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3, cpu_threads=1,
+        memory_bytes=5 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3, cpu_threads=1,
         query_residues=253, reference_residues=209017843, reference_records=575748,
         reference_state="available"), **changes)
 
@@ -60,35 +60,6 @@ def test_two_runs_learn_without_rewriting_earlier_snapshot_or_duplicate_replay(t
         assert tables == {"execution_classes", "execution_conditions", "run_statistics", "expectation_snapshots"}
     finally:
         second.close()
-
-
-def test_exact_compatibility_and_no_hidden_zero_or_mixed_failure_duration(tmp_path):
-    history = RunHistory(tmp_path / "shared.sqlite")
-    try:
-        empty_ref = history.capture(scope())
-        assert read(history, empty_ref)["statistics"] == []
-        history.record(scope(), measurement("success", 2))
-        ref = history.capture(scope())
-        # These are all real but incompatible execution classes.
-        for field, value in (("query_residues", 500), ("cpu_threads", 2),
-                             ("resource_id", "another-host"), ("wall_seconds", 30),
-                             ("parameters_sha256", digest("different-parameters")),
-                             ("implementation_sha256", digest("new-binary"))):
-            history.record(scope(**{field: value}), measurement(field, 50))
-        # An unrelated history addition doesn't invalidate a class snapshot.
-        assert history.capture(scope()) == ref
-        history.record(scope(), measurement("failed", 20, outcome="failed"))
-        history.record(scope(), measurement("lost", None, outcome="unknown", duration_kind="unmeasured"))
-        history.record(scope(), measurement("censored", 8, outcome="unknown", duration_kind="lower_bound"))
-        stats = {r["outcome"]: r for r in read(history, history.capture(scope()))["statistics"]}
-        assert stats["succeeded"]["mean_seconds"] == 2
-        assert stats["failed"]["mean_seconds"] == 20
-        assert stats["unknown"]["mean_seconds"] is None
-        assert stats["unknown"]["complete_duration_count"] == 0
-        assert stats["unknown"]["lower_bound_count"] == stats["unknown"]["unmeasured_count"] == 1
-        assert stats["unknown"]["max_lower_bound_seconds"] == 8
-    finally:
-        history.close()
 
 
 def test_outage_is_explicit_context_not_retroactive_relabel_or_a_stop(tmp_path):

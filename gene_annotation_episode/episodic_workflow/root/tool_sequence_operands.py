@@ -96,6 +96,6 @@ class ToolSequenceOperands:
             'associations': associations, 'footprint': footprint}
 
     def _prepare_orf_sequence_operand(self, subject_ref: str, *, scope) -> dict:
-        """Compatibility freezer preserving the original ORF operand record."""
+        """Freeze the ORF operand record."""
         return self._prepare_molecular_sequence_operand("annotate_open_reading_frames", subject_ref, scope=scope)
 

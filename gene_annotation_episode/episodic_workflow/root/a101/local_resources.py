@@ -80,7 +80,7 @@ def _saved_limits(limits):
 
 
 class LocalResources:
-    def __init__(self, directory, settings=None, *, workflow_slice=None, _restoring_definition=None):
+    def __init__(self, directory, settings=None, *, workflow_slice=None):
         if settings is not None and not isinstance(settings, dict):
             raise ValueError('invalid_local_resource_settings')
         self.directory = Path(directory).expanduser().resolve()
@@ -99,16 +99,10 @@ class LocalResources:
                     'directory': str(self.directory), 'limits': _limits(settings or {})}
                 if workflow_slice is not None:
                     definition['workflow_slice'] = workflow_slice
-                # Preserve constructor-before-comparison restoration. Only
-                # an exact new default requests the new default identity.
-                historical = {**definition, 'version': 'shared_local_resources_v1',
-                    'limits': {**definition['limits'], 'max_running_jobs': 1, 'cpu_threads': 1}}
-                if settings is None and _restoring_definition is not None and _restoring_definition != definition:
-                    definition = historical
                 db.execute('INSERT INTO configuration VALUES(1,?)', (json.dumps(definition, sort_keys=True),))
             else:
                 definition = json.loads(saved[0])
-                if (definition.get('version') not in (VERSION, 'shared_local_resources_v1') or definition.get('resource_id') != _resource_id()
+                if (definition.get('version') != VERSION or definition.get('resource_id') != _resource_id()
                         or definition.get('directory') != str(self.directory)
                         or definition.get('workflow_slice') != workflow_slice):
                     raise ValueError('local_resource_binding_conflict')
@@ -143,8 +137,7 @@ class LocalResources:
 
     @classmethod
     def reopen(cls, definition):
-        value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'),
-                    _restoring_definition=definition)
+        value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'))
         if value.as_record() != definition:
             raise ValueError('local_resource_binding_conflict')
         return value

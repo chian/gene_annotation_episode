@@ -759,9 +759,9 @@ class GenomicOverlapResultReceipts(MolecularResultActions):
     def match_outcome(row, receipt):
         require(row["result"] is not None)
         actual = json.loads(row["result"])
-        if "pending_work_after_action" in actual:
-            from .wait_events import validate_pending
-            validate_pending(actual.pop("pending_work_after_action"))
+        require("pending_work_after_action" in actual)
+        from .wait_events import validate_pending
+        validate_pending(actual.pop("pending_work_after_action"))
         require(same(actual, outcome(receipt)))
 
     def controls(self, intent):

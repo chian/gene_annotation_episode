@@ -16,7 +16,6 @@ from .domain import identity
 
 OPTION_REF_VERSION = "scientific_process_option_ref_v1"
 SELECTION_VERSION = "scientific_process_selection_v3"
-LEGACY_SELECTION_VERSION = "scientific_process_selection_v2"
 SELECTION_VIEW_VERSION = "scientific_process_selection_view_v1"
 FILLED_PROCESS_VERSION = "filled_scientific_process_v1"
 REVISION_VERSION = "scientific_process_revision_v1"
@@ -37,7 +36,7 @@ def scientific_digest(value) -> str:
 
 
 def canonical_slot(value):
-    """Compare slot meanings without rewriting an old pinned option record."""
+    """Compare slot meanings: both slot names denote the evidence axis."""
     return 'evidence_axis' if value == LEGACY_EVIDENCE_SLOT else value
 
 
@@ -105,12 +104,9 @@ def validate_selection(value) -> dict:
     code = "scientific_process_selection_invalid"
     if not isinstance(value, dict):
         raise ValueError(code)
-    if value.get('version') == LEGACY_SELECTION_VERSION:
-        fields = ('annotation_ref', 'thought_ref', 'tools')
-    elif value.get('version') == SELECTION_VERSION:
-        fields = ('evidence_axis', 'thought_pattern', 'child_tool_info')
-    else:
+    if value.get('version') != SELECTION_VERSION:
         raise ValueError(code)
+    fields = ('evidence_axis', 'thought_pattern', 'child_tool_info')
     _exact(value, 'version ' + ' '.join(fields), code)
     refs = []
     for name, slot in zip(fields[:2], SLOTS):
@@ -121,40 +117,29 @@ def validate_selection(value) -> dict:
         refs.append(ref)
     if len({ref["library_id"] for ref in refs}) != 1:
         raise ValueError(code)
-    if value['version'] == LEGACY_SELECTION_VERSION:
-        from .scientific_tool_library import tool_names
-        value['tools'] = tool_names(value['tools'])
-    else:
-        from .tool_information import INFO_FIELDS, tool_info_selection
-        information = tool_info_selection(value['child_tool_info'])
-        if any(set(row) != INFO_FIELDS for row in information):
-            raise ValueError('scientific_canonical_tool_info_required')
-        value['child_tool_info'] = information
+    from .tool_information import INFO_FIELDS, tool_info_selection
+    information = tool_info_selection(value['child_tool_info'])
+    if any(set(row) != INFO_FIELDS for row in information):
+        raise ValueError('scientific_canonical_tool_info_required')
+    value['child_tool_info'] = information
     return value
 
 
 def selection_fields(value):
     """Read a versioned identity without normalizing its original dictionary."""
-    version = value.get('version')
-    if version == LEGACY_SELECTION_VERSION:
-        return 'annotation_ref', 'thought_ref', 'tools'
-    if version == SELECTION_VERSION:
-        return 'evidence_axis', 'thought_pattern', 'child_tool_info'
-    raise ValueError('scientific_process_selection_invalid')
+    if value.get('version') != SELECTION_VERSION:
+        raise ValueError('scientific_process_selection_invalid')
+    return 'evidence_axis', 'thought_pattern', 'child_tool_info'
 
 
 def selector_selection(value):
     value = validate_selection(value)
-    if value['version'] == LEGACY_SELECTION_VERSION:
-        return value
     from .tool_information import selectors
     return {**value, 'child_tool_info': selectors(value['child_tool_info'])}
 
 
 def parent_selection_view(value):
     value = validate_selection(value)
-    if value['version'] == LEGACY_SELECTION_VERSION:
-        return value
     from .tool_information import parent_view
     return {**value, 'version': SELECTION_VIEW_VERSION,
             'child_tool_info': parent_view(value['child_tool_info'])}
@@ -242,4 +227,4 @@ __all__ = ["scientific_digest", "validate_option_ref", "validate_selection",
            "validate_filled_process", "validate_revision", "validate_child_selection",
            "scientific_invocation_ref", "validate_invocation_ref", "validate_revision_origin",
            "selection_fields", "selector_selection", "parent_selection_view", "validate_parent_selection_view",
-           "canonical_slot", "SELECTION_VERSION", "LEGACY_SELECTION_VERSION", "SELECTION_VIEW_VERSION"]
+           "canonical_slot", "SELECTION_VERSION", "SELECTION_VIEW_VERSION"]

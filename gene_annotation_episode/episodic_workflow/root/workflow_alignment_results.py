@@ -1,4 +1,4 @@
-"""Preserved root host ports defined by WorkflowAlignmentResults."""
+"""Root host ports defined by WorkflowAlignmentResults."""
 from __future__ import annotations
 
 class WorkflowAlignmentResults:

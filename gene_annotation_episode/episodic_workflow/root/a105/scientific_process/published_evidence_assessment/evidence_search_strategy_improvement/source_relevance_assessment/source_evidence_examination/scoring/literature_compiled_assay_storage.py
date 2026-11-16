@@ -5,7 +5,6 @@ original receipts and content-addressed snapshots without upstream acquisition,
 unit conversion, scientific arithmetic or additional controller observations.
 """
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.implementation_sources import source_file
 from copy import deepcopy
 import hashlib
 import json
@@ -285,14 +284,6 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         except (TypeError, ValueError) as error:
             raise ContractError('compiled_assay_saved_json_invalid') from error
 
-    @staticmethod
-    def _common_receipt_files():
-        return ('literature_compiled_assay_inputs.py', 'literature_compiled_assay_calculations.py', 'literature_assay_inputs.py', 'literature_experimental_contracts.py', 'literature_product_coupling_inputs.py', 'literature_product_coupling_storage.py', 'literature_measurement_validation_inputs.py', 'literature_kinetic_inputs.py', 'literature_kinetic_storage.py', 'literature_partner_source_fields.py', 'literature_compiled_assay_storage.py', 'literature_compiled_assay_prompt.py', 'literature_compiled_assay_render.py')
-
-    def _common_implementation_receipt(self):
-        files = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in self._common_receipt_files()}
-        return {'version': 'common_assessment_original_implementation_v1', 'files': files}
-
     def _populate_common(self, context, arguments, operation_key):
         from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.tools.literature_compiled_assay_inputs import common_assessment_population_schema, read_common_assessment_inputs
         from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.scoring.literature_compiled_assay_calculations import populate_common_assessment
@@ -365,7 +356,7 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         selected = [item['selection'] for item in snapshots]
         direct = extraction['source_refs']
         parents = self._ancestors(context.scope, [*direct, *(s['sheet_ref'] for s in selected)])
-        payload = {'version': VERSION_V3, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': parents, 'selection': args, 'component_selections': selected, 'input_snapshots': snapshots, 'public_input_records': public_records, 'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'original_implementation': self._common_implementation_receipt(), 'extraction': extraction, 'sheet': sheet}
+        payload = {'version': VERSION_V3, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': parents, 'selection': args, 'component_selections': selected, 'input_snapshots': snapshots, 'public_input_records': public_records, 'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
             self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
@@ -391,7 +382,6 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
     def _read_common_bound(self, reference):
         """Authenticate closed records without scientific source IO/arithmetic."""
         from collections import Counter
-        import re
         from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.tools.literature_compiled_assay_inputs import common_assessment_population_schema, common_assessment_inputs_schema, COMMON_ROLES
         from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.scoring.literature_compiled_assay_calculations import common_assessment_sheet_schema, _COMMON_FORMULAS, _COMMON_MEANINGS
         source = self.store.get(reference)
@@ -408,7 +398,7 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         if operation is None or operation['signature'] != canonical(request):
             raise ContractError('literature_sheet_not_selected_output')
         saved = self._json(source['artifact_ref'])
-        keys = {'version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'selection', 'component_selections', 'input_snapshots', 'public_input_records', 'source_metadata', 'original_implementation', 'extraction', 'sheet'}
+        keys = {'version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'selection', 'component_selections', 'input_snapshots', 'public_input_records', 'source_metadata', 'extraction', 'sheet'}
         if set(saved) != keys or saved['version'] != VERSION_V3 or saved['selection'] != request['arguments'] or (saved['input_source_ref'] != request['arguments']['source_ref']) or (saved['input_source_refs'] != source['parent_source_refs']) or (saved['input_artifact_ref'] != self.store.get(saved['input_source_ref'])['artifact_ref']):
             raise ContractError('common_assessment_saved_selection_mismatch')
         selected = saved['component_selections']
@@ -457,9 +447,6 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
             raise ContractError('common_assessment_saved_covariance_binding_mismatch')
         if sheet['host_custody'] != {'source_refs': e['source_refs'], 'source_artifacts': e['source_artifacts'], 'withheld_locations': e['numerical_scope_locations']} or [c['component'] for c in sheet['cells']] != request['components'] or sheet['assertion_resolution'] != request['arguments']['assertion']['resolution'] or (sheet['question'] != request['arguments']['assertion']['question']):
             raise ContractError('common_assessment_saved_sheet_binding_mismatch')
-        receipt = saved['original_implementation']
-        if set(receipt) != {'version', 'files'} or receipt['version'] != 'common_assessment_original_implementation_v1' or set(receipt['files']) != set(self._common_receipt_files()) or any((type(h) is not str or re.fullmatch('[0-9a-f]{64}', h) is None for h in receipt['files'].values())):
-            raise ContractError('common_assessment_saved_original_receipt_mismatch')
         for cell in sheet['cells']:
             name = cell['component']
             native = name.startswith('estimate_')

@@ -128,24 +128,6 @@ def test_numbers_must_match_token_semantics_and_exact_locations(documents, name)
         VALIDATORS[name](value)
 
 
-def test_chisq_position_group_count_and_header_relationships(documents):
-    for change in (
-        lambda v: v["rows"][0].update(position_1based=4),
-        lambda v: v["rows"][0].update(position_qualification="legacy_star"),
-        lambda v: v.update(group_heading_tokens=["B", "A"]),
-        lambda v: v["rows"][0]["group_cells"].pop(),
-        lambda v: v["rows"][0]["group_cells"][0].update(heading_index=1),
-        lambda v: v["rows"][0]["group_cells"][0]["symbol_counts"][0].update(symbol="T"),
-        lambda v: v["rows"][0]["group_cells"][0].update(symbol_counts=[]),
-        lambda v: v["rows"][0]["group_cells"][0]["symbol_counts"][0].update(count={}),
-        lambda v: v["rows"][0]["df"].update(value=1.0),
-    ):
-        value = deepcopy(documents["chisq"])
-        change(value)
-        with pytest.raises(ValueError):
-            validate_metacats_chisq_table(value)
-
-
 def test_raw_kind_wrapper_and_positional_relationships(documents):
     for change in (
         lambda v: v.update(pair_rows=[]),

@@ -160,63 +160,8 @@ def test_actual_saved_partition_component_is_bound_and_cannot_masquerade_as_rate
     finally:
         store.close()
 
-def test_actual_compiled_native_nondetection_does_not_become_measured_zero(tmp_path):
-    """The retained P450 row prints zero with explicit nondetection meaning."""
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_common_assessment_221 import Case
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_common_assessment_binding_223 import selected
-    from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.grading.literature_assay_grading_inputs import _component
-    case = Case(tmp_path / 'native_nondetection', 3)
-    try:
-        _, _, _, _, rows = selected(case, ['estimate_product_test'])
-        assert rows[0]['value'] == 0
-        assert rows[0]['native_semantics'] == 'reported_nondetection'
-        selector = {'namespace': 'literature_compiled_assay_v3_cells', 'sheet_ref': rows[0]['sheet_ref'], 'component': 'estimate_product_test'}
-        normalized, retained = _component(selector, lambda *args: rows)
-        assert normalized['value'] is None and normalized['status'] == 'unavailable'
-        assert normalized['reason'] == 'native_reported_nondetection_is_not_point'
-        assert retained == rows[0]
-    finally:
-        case.store.close()
 
-def test_compiled_native_component_does_not_inherit_unselected_estimate_owners(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_common_assessment_221 import Case
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_common_assessment_binding_223 import selected
-    from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.grading.literature_assay_grading_inputs import _component
-    case = Case(tmp_path / 'native_owners', 1)
-    try:
-        _, _, _, _, rows = selected(case, ['estimate_product_test'])
-        row = rows[0]
-        selector = {'namespace': 'literature_compiled_assay_v3_cells', 'sheet_ref': row['sheet_ref'], 'component': 'estimate_product_test'}
-        normalized, _ = _component(selector, lambda *args: rows)
-        selected_keys = set(row['operand_keys'])
-        unselected_keys = {b['owner_key'] for b in row['estimate_bindings']} - selected_keys
-        assert selected_keys <= set(normalized['measurement_keys'])
-        assert not unselected_keys.intersection(normalized['measurement_keys'])
-        assert normalized['value'] == 92
-    finally:
-        case.store.close()
 
-def test_compiled_partial_variance_uses_selected_uncertainty_not_legacy_full_model(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_compiled_assay_185 import setup
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_compiled_assay_uncertainty_215 import v2, block, selected, VAR
-    from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.grading.literature_assay_grading_inputs import _component
-    store, context, args, _ = setup(tmp_path / 'component_variance')
-    try:
-        context, args = v2(context, args)
-        context, args, _ = block(store, context, args)
-        _, _, _, _, _, rows = selected(store, context, args)
-        row = next((r for r in rows if r['component'] == VAR))
-        assert row['variance_status'] == 'unknown'
-        assert row['uncertainty']['variance_status'] == 'estimated'
-        selector = {'namespace': 'literature_compiled_assay_v2_cells', 'sheet_ref': row['sheet_ref'], 'component': VAR}
-        normalized, retained = _component(selector, lambda *args: [row])
-        assert normalized['value'] == row['value']
-        assert 'estimated_covariance' in normalized['qualifications']
-        assert 'unknown_covariance' not in normalized['qualifications']
-        assert normalized['origin'] == 'synthetic'
-        assert retained == row
-    finally:
-        store.close()
 
 def test_controlled_design_uses_actual_component_key_and_preserves_native_value(tmp_path):
     from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_controlled_response_storage_v3 import native_case

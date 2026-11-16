@@ -1,7 +1,4 @@
-"""A107 original fluorescence configured capabilities; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 fluorescence configured capabilities."""
 _LEGACY_LIMIT = 'Performing new compensation or transformations, and importing numerical reports from other software, remain unavailable in this implementation.'
 _METHODS = {'fcs_scale_flowio_1_4_0', 'spill_compensate_flowutils_1_2_2'}
 _PROFILES = {'biomni_facs_log_548_v1': 'the retained FACS population log', 'biomni_cytokine_log_548_v1': 'the retained cytokine population log', 'biomni_cytokine_csv_548_v1': 'the retained cytokine frequency CSV'}

@@ -14,14 +14,14 @@ from types import MethodType, SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.communication import plain
-from gene_annotation_episode.atac_differential_result_receipts import (
+from gene_annotation_episode.episodic_workflow.root.atac_differential_result_receipts import (
     AtacDifferentialResultReceipts, empty_facts, empty_files, outcome,
 )
-from gene_annotation_episode.atac_differential_returns import AtacDifferentialReturns
-from gene_annotation_episode.atac_differential_return_views import (
+from gene_annotation_episode.episodic_workflow.root.atac_differential_returns import AtacDifferentialReturns
+from gene_annotation_episode.episodic_workflow.root.library.atac_differential_return_views import (
     PROJECTION_SOURCE, SAVED_SOURCE, FAILURE_SOURCE,
 )
-from gene_annotation_episode.native_atac_differential_results import (
+from gene_annotation_episode.episodic_workflow.root.native_atac_differential_results import (
     NativeAtacDifferentialResults, ORIGIN, SAVED_ORIGIN,
 )
 from gene_annotation_episode.native_atac_differential_contracts import POLICY

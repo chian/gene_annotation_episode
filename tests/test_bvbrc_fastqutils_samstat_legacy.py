@@ -1,5 +1,4 @@
 """Pinned native2.2.3 measurements plus explicitly mutated negative fixtures."""
-from copy import deepcopy
 from functools import lru_cache
 import hashlib
 import json
@@ -9,7 +8,7 @@ import re
 import pytest
 
 from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError, validate_native_document
-from gene_annotation_episode.bvbrc_fastqutils_samstat_legacy import parse_samstat_html_2_2_3
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_samstat_legacy import parse_samstat_html_2_2_3
 
 FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils_samstat_legacy'
 

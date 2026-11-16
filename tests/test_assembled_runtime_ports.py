@@ -23,20 +23,6 @@ def forbidden(*args, **kwargs):
     raise AssertionError('No selected work, numerical observation or transport is allowed')
 
 
-def test_service_input_protocol_keeps_legacy_record_and_requires_explicit_mode():
-    expected = {'version': 'episode_application_services_v1',
-        'factory': __name__+'.forbidden', 'definition': {'fixture': True}}
-    assert service_binding(forbidden, {'fixture': True}) == expected
-    assert service_binding(None, None) is None
-    assert service_binding(forbidden, {'fixture': True}, inputs=MODE) == {
-        **expected, 'version': 'episode_application_services_v2', 'inputs': MODE}
-    for value in ('unknown', False, [], {}):
-        with pytest.raises(ValueError, match='unsupported_episode_service_inputs'):
-            service_binding(forbidden, {'fixture': True}, inputs=value)
-    with pytest.raises(ValueError, match='requires_factory'):
-        service_binding(None, None, inputs=MODE)
-
-
 @pytest.mark.parametrize('mode', [None, MODE])
 def test_factory_receives_the_same_actual_map_only_in_explicit_mode(tmp_path, mode):
     calls = []

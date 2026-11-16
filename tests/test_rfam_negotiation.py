@@ -12,10 +12,7 @@ from urllib.parse import urlsplit
 import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients
-from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.episodic_workflow.root.library.rna_evidence import model_header
-from gene_annotation_episode.state import Store
-from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 MODEL = (b"INFERNAL1/a [synthetic transport fixture]\nNAME tRNA\nACC RF00005\n"
@@ -100,38 +97,3 @@ def test_native_http_negotiation_retains_error_and_corrected_received_mime():
         assert [row["accept"] for row in calls] == ["text/plain", "*/*", "application/json"]
 
 
-def test_selected_model_tool_uses_native_capture_and_replays_without_http(tmp_path):
-    with server() as (base, calls), Store(tmp_path / "store") as store:
-        problem = store.create_problem(raw_sequence="ACGT", molecule="dna")
-        tools = ToolRegistry(store, clients=local_client(base))
-        arguments = {"accession": "RF00005"}
-        result = tools.execute("public.rfam.model", arguments, operation_key="selected-model")
-        assert result["status"] == "completed", result
-        family = store.get(result["result"]["model_ref"])
-        source = store.get(family["source_ref"])
-        capture = json.loads(store.get_artifact(source["request_ref"]))
-        assert capture["transport"]["request"]["headers"]["Accept"] == "*/*"
-        assert capture["transport"]["headers"]["content-type"] == "application/x-infernal-cm"
-        assert store.get_artifact(source["artifact_ref"]) == MODEL
-        assert family["accession"] == "RF00005" and family["reference_type"] == "family"
-        assert family["sequence_ref"] is None and family["length"] is None
-        assert tools.execute("public.rfam.model", arguments, operation_key="selected-model") == result
-        assert len(calls) == 2 and store.problem() == problem
-        assert not store.current_annotations() and project_credit(store).credit == 0
-
-
-def test_broad_accept_does_not_turn_nonmodel_response_into_family_or_annotation(tmp_path):
-    body = b'{"detail":"synthetic HTTP200 response that is not a CM"}'
-    with server(model=body, model_type="application/json") as (base, calls), Store(tmp_path / "store") as store:
-        store.create_problem(raw_sequence="ACGT")
-        tools = ToolRegistry(store, clients=local_client(base))
-        result = tools.execute("public.rfam.model", {"accession": "RF00005"}, operation_key="invalid-model")
-        assert result["status"] == "partial"
-        assert result["feedback"]["code"] == "single_infernal_covariance_model_required"
-        source, = [store.get(ref) for ref in result["record_refs"]]
-        assert source["record_type"] == "source"
-        assert store.get_artifact(source["artifact_ref"]) == body
-        capture = json.loads(store.get_artifact(source["request_ref"]))
-        assert capture["transport"]["headers"]["content-type"] == "application/json"
-        assert not store.list("reference") and not store.current_annotations()
-        assert project_credit(store).credit == 0 and len(calls) == 2

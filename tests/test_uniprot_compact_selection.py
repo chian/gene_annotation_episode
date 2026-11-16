@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode import uniprot_return_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import uniprot_return_contracts as contracts
 from gene_annotation_episode.episodic_workflow.root.episode_contract_information import (
     ContractInformationError, expand_fact_form, validate_saved_fact_form,
 )
@@ -95,10 +95,3 @@ def test_malformed_selection_is_a_typed_contract_error():
         expand(form({'$ref': 'episode-fact:' + SOURCE, PARAMETER: None}))
 
 
-def test_unparameterized_and_literal_forms_keep_their_meanings():
-    empty = contracts.uniprot_fact_sources()[SOURCE]['report_schema']
-    assert expand(form({'$ref': 'episode-fact:' + SOURCE}))['expanded_schema'] == form(empty)
-    literal = form(contracts.uniprot_selected_return_schema(selection()))
-    result = expand(literal)
-    assert result['expanded_schema'] == literal
-    assert result['declaration']['fact_references'] == []

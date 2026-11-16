@@ -40,7 +40,7 @@ OUTPUTS = (
     ("tumor_header", "tumor.header.sam", "sam_header_text"),
     ("normal_header", "normal.header.sam", "sam_header_text"),
 )
-POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
+POLICY = {'memory_bytes': 5 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 PACKET_VERSION = "ordinary_somatic_variant_values_v1"
 SOURCE_VERSION = "ordinary_somatic_variant_result_v1"
 CONTEXT_VERSION = "somatic_variant_context_v1"
@@ -101,7 +101,7 @@ def _literal(value, code):
 
 def validate_somatic_parameters(value):
     closed(value, "java_heap_mb pair_hmm_implementation", "parameters_invalid")
-    require(type(value["java_heap_mb"]) is int and 1 <= value["java_heap_mb"] < 20 * 1024,
+    require(type(value["java_heap_mb"]) is int and 1 <= value["java_heap_mb"] < 5 * 1024,
         "java_heap_invalid")
     require(value["pair_hmm_implementation"] == "LOGLESS_CACHING", "pair_hmm_profile_invalid")
     return deepcopy(value)

@@ -129,7 +129,7 @@ def _observation_extent(store, observation):
 
     A product's explicit native derivation path can map actual query symbols
     into original input units, including reverse, framed and compound paths.
-    An older aggregate parent footprint is not a residue map: its fractional
+    An aggregate parent footprint is not a residue map: its fractional
     query coverage continues to scale the evidence operand rather than invent
     coordinates. An exactly mapped interval is not scaled by coverage again.
     Reported external experiments cannot supply native target coordinates by

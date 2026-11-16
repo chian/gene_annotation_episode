@@ -112,7 +112,7 @@ def _parse(raw, binding):
 def run_fluorescence_driver(plan):
     """Run inside the already selected bounded subprocess; never launch work."""
     plan = validate_fluorescence_run_plan(plan)
-    validate_fluorescence_policy(plan['policy'], fresh=True)
+    validate_fluorescence_policy(plan['policy'])
     job = plan['requested_job']['native_fluorescence']
     attempt = directory(plan['attempt_directory'])
     attempt.mkdir(parents=True, exist_ok=True)

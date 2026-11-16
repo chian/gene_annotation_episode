@@ -15,7 +15,7 @@ import json
 from gene_annotation_episode.acquisition import SourceSnapshot
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields import FIELD_REGISTRY
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import _decode_native_payload, parse_data_snapshot
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import parse_data_snapshot
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_handoff_contracts import canonical_sha256, validate_shape
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_data_contracts import (
     _require, _scalar_identifier, _scalar_string, validate_data_population_selection,
@@ -154,10 +154,7 @@ def _check_input(wrapper, artifact_bytes):
             "effective_url": custody["effective_url"], "automatic_redirects": False,
             "response": {"status": transport["http_status"], "body_complete": transport["body_complete"],
                          "headers": deepcopy(transport["headers"]), "failure_code": transport["failure_code"]}})
-    checked = (parse_data_snapshot(snapshot, prepared=prepared)
-               if custody["native_profile"] == "solr_json_envelope_v1" else
-               _decode_native_payload(snapshot, prepared=prepared,
-                                      qualified_request=sheet["qualification"]["request_matches"]))
+    checked = parse_data_snapshot(snapshot, prepared=prepared)
     _require(_same(checked, parsed), "native_parse_correspondence_mismatch")
     # The established reader has already rejected duplicate keys/non-JSON
     # constants. Retain raw fields (including unselected/complex fields) with
@@ -301,8 +298,7 @@ def _extract_set(selected, inputs):
                 _require(location["raw_artifact_ref"] == binding["native_artifact_ref"], "snapshot_artifact_mismatch")
                 _pointer(payload, location["json_pointer"])
                 evidence["source_locations"].append(deepcopy(location))
-        good = (sheet["custody"]["native_profile"] == "solr_json_envelope_v1"
-                and all(sheet["qualification"][key] for key in ("service_matches", "request_matches", "http_success",
+        good = (all(sheet["qualification"][key] for key in ("service_matches", "request_matches", "http_success",
                     "format_valid", "population_metadata_valid", "transport_complete"))
                 and sheet["qualification"]["native_partial_results"] is not True)
         http_failed = http_failed or not sheet["qualification"]["http_success"]
@@ -322,8 +318,8 @@ def _extract_set(selected, inputs):
             codes.append("population_incomplete")
         if not sheet["qualification"]["population_metadata_valid"]:
             codes.append("population_incompatible")
-        native_rows = payload["response"]["docs"] if type(payload) is dict else payload
-        population_locations.append(_location(binding, pointer="/response/docs" if type(payload) is dict else ""))
+        native_rows = payload["response"]["docs"]
+        population_locations.append(_location(binding, pointer="/response/docs"))
         query_genomes = _query_genomes(grading["prepared"])
         for native, raw_row in zip(sheet["rows"], native_rows, strict=True):
             association = _association(selected, binding, native, raw_row)

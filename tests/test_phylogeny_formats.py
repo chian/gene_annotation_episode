@@ -12,8 +12,8 @@ import unittest
 from unittest.mock import patch
 import xml.etree.ElementTree as ET
 
-from gene_annotation_episode import phylogeny_formats as formats
-from gene_annotation_episode.phylogeny_format_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library import phylogeny_formats as formats
+from gene_annotation_episode.episodic_workflow.root.library.phylogeny_format_contracts import (
     validate_alignment_document, validate_tree_record,
 )
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract

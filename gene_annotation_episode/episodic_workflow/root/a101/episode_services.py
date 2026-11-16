@@ -562,17 +562,7 @@ class WorkflowServices:
 
     def protein_structure_input_authority(self):
         from gene_annotation_episode.episodic_workflow.root.a101.library.retained_input_authority.protein_structure_action_records import ProteinStructureActionRecords
-        registry = getattr(self.workflow, 'episode_bindings', None)
-        for_role = getattr(registry, 'for_role', None)
-        try:
-            owner = for_role('results') if callable(for_role) else None
-        except LookupError:
-            owner = None
-        legacy = getattr(owner, 'native_protein_structure_returns', None)
-        if legacy is not None:
-            from gene_annotation_episode.episodic_workflow.root.a101.library.retained_input_authority.retained_protein_owner import reader_from_bound_owner
-            legacy = reader_from_bound_owner(self.workflow, owner)
-        return ProteinStructureActionRecords(self.workflow.store, self.workflow.run_id, legacy_returns=legacy)
+        return ProteinStructureActionRecords(self.workflow.store, self.workflow.run_id)
 
     def protein_structure_reference_access(self, context, reference, namespace):
         return self.protein_structure_input_authority().retained_reference_access(

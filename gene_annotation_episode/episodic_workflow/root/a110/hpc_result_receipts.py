@@ -17,18 +17,14 @@ from .episode_return_records import EpisodeReturnRecords
 
 
 def planned_input_files(plan):
-    """Read original supplied inputs from current or historical HPC plans.
+    """Read the original supplied inputs of an HPC plan.
 
     This is planned byte identity, not proof that a path was staged or executed.
     The actual received execution/result receipts remain separately required.
-    Neither the immutable plan nor its historical field meanings are changed.
     """
-    fields = [name for name in ('supplied_files', 'files_to_stage') if name in plan]
-    if not fields:
+    if 'supplied_files' not in plan:
         raise ContractError('hpc_scientific_original_plan_files_missing')
-    rows = plan[fields[0]]
-    if len(fields) > 1 and plain(rows) != plain(plan[fields[1]]):
-        raise ContractError('hpc_scientific_original_plan_files_conflict')
+    rows = plan['supplied_files']
     if not isinstance(rows, (list, tuple)):
         raise ContractError('hpc_scientific_original_plan_files_invalid')
     seen = {}

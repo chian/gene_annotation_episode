@@ -24,9 +24,8 @@ SPECIFIC = {
     'execution': ('missing_directory', 'missing_projector', 'invalid_projector'),
     'monitor': ('missing_backend', 'missing_projector', 'invalid_projector'),
     'hpc': ('missing_directory', 'missing_projector', 'invalid_projector'),
-    'literature': ('changed_fingerprint',),
-    'scientific': ('missing_directory', 'changed_fingerprint', 'changed_library',
-                   'changed_tool_library'),
+    'literature': (),
+    'scientific': ('missing_directory', 'changed_library', 'changed_tool_library'),
 }
 CASES = tuple((home, kind, case) for home, kind in REPRESENTATIVES.items()
               for case in (*COMMON, *SPECIFIC[kind]))
@@ -34,7 +33,7 @@ CASES = tuple((home, kind, case) for home, kind in REPRESENTATIVES.items()
 
 def expected_failure(home, kind, case, role):
     code, reference = 'unavailable_binding', home
-    if case in {'changed_version', 'changed_fingerprint', 'duplicate_path'}:
+    if case in {'changed_version', 'duplicate_path'}:
         code = 'identity_conflict'
         reference = 'episode_bindings' if case == 'duplicate_path' else home
     if case == 'changed_version' and kind == 'scientific':
@@ -74,10 +73,6 @@ def diagnose_with_controls(directory, retain):
                 kwargs['role_credit_bindings'] = {role: {
                     'definition': original['role_credit_bindings'][role]['definition'],
                     'project': None}}
-            elif case == 'changed_fingerprint':
-                assert 'implementation_sha256' in descriptor
-                descriptor['implementation_sha256'] = (
-                    '0' if descriptor['implementation_sha256'][0] != '0' else '1') + descriptor['implementation_sha256'][1:]
             elif case in {'changed_library', 'changed_tool_library'}:
                 key = 'library' if case == 'changed_library' else 'tool_library'
                 # A changed recorded library, never changed owned files.

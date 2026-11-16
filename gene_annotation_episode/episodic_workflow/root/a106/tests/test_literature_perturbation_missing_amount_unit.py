@@ -14,6 +14,7 @@ from gene_annotation_episode.episodic_workflow.root.a106.library.literature_pert
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_summary_storage import LiteraturePerturbationSummaryProjection, perturbation_summary_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary import source_data, extract, calculate, figure_fixture, IMAGE, DATA, SOURCE, TEXT, arguments
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary_integration import fixture, source, binding_for
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_integration import locations
 
 
 def missing_amount_data():
@@ -126,7 +127,7 @@ def test_selected_typed_unknown_unit_and_exact_saved_replay_without_sources(tmp_
             'requested_perturbation_summary_components': names},
             received_record_refs=(*context.received_record_refs, retained['id']))
         binding = binding_for(store, context)
-        result = asyncio.run(binding.execute(context, 'literature.perturbation.populate', args, 'unit-selected'))
+        result = asyncio.run(binding.execute(context, 'literature.perturbation.populate', locations(args), 'unit-selected'))
         assert result['status'] == 'completed', result.get('feedback')
         assert result['result']['exposure_unit'] == 'unreported'
         sheet = result['result']['sheet_ref']

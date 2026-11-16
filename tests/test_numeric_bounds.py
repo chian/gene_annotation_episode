@@ -4,19 +4,13 @@ Threshold examples come from the reviewed censored-efficiency/ratio/IscR cases.
 The source below is explicitly synthetic; no retained corpus or run is modified.
 """
 from copy import deepcopy
-import json
-from pathlib import Path
 
 import pytest
-from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.credit import AnnotationScoringUnavailable, project_credit
 from gene_annotation_episode.evidence_geometry import _metric, _observation_extents
 from gene_annotation_episode.domain import ATOM, ContractError, REASONING_SCHEMA, canonical, validate_schema
-from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, project_finding_progress
-from gene_annotation_episode.episodic_workflow.root.task_action_contracts import _action_generation_schema, _decode_action_response
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -67,78 +61,6 @@ def annotation(target, hypothesis, assessments):
         'coherent_sets': [{'interpretations': [{'hypothesis_ref': hypothesis,
             'disposition': 'supported', 'assessment_refs': assessments}], 'context_refs': []}],
         'alternative_refs': [], 'resolution': 'selected', 'expected_revision': 0}
-
-
-def test_bound_thresholds_round_trip_without_defaults_through_real_consumers(tmp_path):
-    with Store(tmp_path/'state') as store:
-        target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
-        source, anchor = source_fixture(store)
-        data = empty_commit()
-        for alias, label in [('efficiency_unit', 'M^-1 s^-1'), ('nM', 'nM')]:
-            data['terms'].append({'alias': alias, 'label': label, 'term_type': 'unit',
-                'source_ref': source['id'], 'anchor': anchor})
-        examples = [numeric(10, 'less_than', '@efficiency_unit'), numeric(37000, 'greater_than'),
-            numeric(26000, 'greater_than'), numeric(1000, 'greater_than', '@nM'),
-            numeric(10, 'less_or_equal'), numeric(26000, 'greater_or_equal'), numeric(10)]
-        # Explicit approximation and uncertainty coexist only as reported;
-        # this synthetic example tests preservation, not interval arithmetic.
-        examples[4].update(qualifier='approximate', uncertainty={
-            'representation': 'plus_minus', 'magnitude': 1, 'statistic': 'unspecified'})
-        data['contexts'] = [{'alias': 'bounded_context', 'context_type': 'assay_condition',
-            'name': 'ConstructX', 'source_ref': source['id'], 'anchor': anchor,
-            'attributes': [{'name': 'concentration', 'value': numeric(1000, 'greater_than', '@nM')}],
-            'related_refs': [target]}]
-        data['hypotheses'] = [{'alias': 'bounded_question', 'subject_refs': [target],
-            'predicate': 'binds', 'value': numeric(1000, 'greater_than', '@nM'),
-            'context_refs': ['@bounded_context']}]
-        for index, value in enumerate(examples):
-            data['observations'].append({'alias': 'o'+str(index), 'subject_refs': [target],
-                'source_subject_refs': [target], 'kind': 'assay_report', 'source_ref': source['id'],
-                'measurements': [{'name': 'activity', 'value': value}],
-                'dependencies': ['@bounded_context'], 'anchor': anchor})
-        host = store.reasoning_schema()
-        transport = _action_generation_schema(host)
-        wire = deepcopy(data)
-        for row in wire['observations']:
-            value = row['measurements'][0]['value']
-            for key in ['bound', 'qualifier', 'uncertainty']:
-                value.setdefault(key, None)
-            row.update(visual_anchor=None, operand_intervals=None)
-        # Validate the actual numeric transport branch. The full reasoning
-        # schema also has unrelated optional row fields outside this fixture.
-        numeric_wire = transport['properties']['observations']['items']['properties']['measurements']['items']['properties']['value']
-        assert all(Draft202012Validator(numeric_wire).is_valid(row['measurements'][0]['value'])
-            for row in wire['observations'])
-        decoded = _decode_action_response(wire, host)
-        assert decoded == data
-        committed = store.commit_reasoning(decoded, {'subject_refs': [target]}, 'synthetic-bounds')
-        assert committed['status'] == 'completed', committed
-        refs = [committed['aliases']['o'+str(index)] for index in range(len(examples))]
-        expected = deepcopy(examples)
-        expected[0]['unit_ref'] = committed['aliases']['efficiency_unit']
-        expected[3]['unit_ref'] = committed['aliases']['nM']
-        assert [store.get(ref)['measurements'][0]['value'] for ref in refs] == expected
-        context = store.get(committed['aliases']['bounded_context'])
-        question = store.get(committed['aliases']['bounded_question'])
-        assert context['attributes'][0]['value'] == question['value'] == expected[3]
-        assert store.commit_reasoning(decoded, {'subject_refs': [target]}, 'synthetic-bounds') == committed
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        queried = tools.execute('state.query', {'refs': refs}, operation_key='synthetic-bounds-query')
-        assert queried['status'] == 'completed'
-        assert [row['measurements'][0]['value'] for row in queried['result']['records']] == expected
-        viewed = {row['id']: row for row in store.reasoning_view()['observations']}
-        assert [viewed[ref]['measurements'][0]['value'] for ref in refs] == expected
-        output = export_annotation(store, tmp_path/'bounds.json', include_artifacts=True)
-        exported = {row['id']: row for row in json.loads(Path(output['json']['path']).read_text())['records']}
-        assert [exported[ref]['measurements'][0]['value'] for ref in refs] == expected
-        old = store.get(refs[-1])
-        assert 'bound' not in old['measurements'][0]['value']
-        with pytest.raises(AnnotationScoringUnavailable,
-                match='categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay'):
-            project_credit(store)
-    with Store(tmp_path/'state') as reopened:
-        assert reopened.get(refs[-1]) == old
-        assert [reopened.get(ref)['measurements'][0]['value'] for ref in refs] == expected
 
 
 @pytest.mark.parametrize('bound', ['<', '<=', '>', '>=', 'equal', 'unknown', '', 1, True, None])

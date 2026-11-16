@@ -1,6 +1,4 @@
-"""A107 original terminal native file capture; substantive retained received-result responsibility.
-Original authority, invalid outcomes and historical source identities remain unchanged.
-"""
+"""A107 terminal native file capture."""
 
 
 from copy import deepcopy

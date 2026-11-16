@@ -56,15 +56,3 @@ def head_state(vector=False):
     view=SimpleNamespace(child_reports=(),controller_state=controller,model_inputs=lambda value,**kwargs:value)
     return task.decision_state(view)
 
-
-def test_current_head_state_does_not_present_unavailable_legacy_job_choices():
-    assert 'job_episode_options' not in head_state()
-
-
-def test_head_state_retains_original_vector_and_historical_job_result_summary():
-    state=head_state(vector=True)
-    assert state['current_credit']=={'mode':'annotation_axis_credit','root_score':2.5}
-    assert state['controller']=={'arms':[],'annotation_credits':[],'root_score':2.5,'decision':'continue'}
-    assert state['last_local_outcome']=={'status':'failed','record_ref_count':1,'changed_record_ref_count':0}
-    assert state['feedback'] is None
-    assert state['proposed_annotations']==state['annotation_comparisons']==[]

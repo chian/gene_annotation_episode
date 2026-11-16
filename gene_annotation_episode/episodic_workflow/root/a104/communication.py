@@ -157,11 +157,9 @@ def _compile_closed_schema(schema):
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
             if blast_utility_sources is None:
                 from .blast_utility_result_views import blast_utility_fact_sources
-                from .blast_utility_historical_fact_schemas import blast_utility_historical_fact_schemas
-                historical = blast_utility_historical_fact_schemas()
-                blast_utility_sources = {key: (value['report_schema'], *historical.get(key, ())) for key, value in blast_utility_fact_sources().items()}
-            expected = blast_utility_sources.get(source, ())
-            if not expected or not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}:
+                blast_utility_sources = {key: value['report_schema'] for key, value in blast_utility_fact_sources().items()}
+            expected = blast_utility_sources.get(source)
+            if expected is None or not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(expected, sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: BLAST utility fact schema must match its registered source', code='invalid_schema')
             return
         if isinstance(source, str) and source.startswith('execution.masking_'):
@@ -315,9 +313,9 @@ def _compile_closed_schema(schema):
         if source == 'literature_assay_grading_cells':
             if depth != 1:
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
-            from .literature_assay_grading_storage import assay_grading_cells_schema, legacy_assay_grading_cells_schema
-            expected = (assay_grading_cells_schema(), legacy_assay_grading_cells_schema())
-            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) not in {json.dumps(item, sort_keys=True, allow_nan=False) for item in expected}:
+            from .literature_assay_grading_storage import assay_grading_cells_schema
+            expected = assay_grading_cells_schema()
+            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(expected, sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: assay grading fact schema must match its registered source', code='invalid_schema')
             return
         if source == 'literature_a105_aggregation_cells':

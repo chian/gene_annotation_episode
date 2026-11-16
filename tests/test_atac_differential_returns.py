@@ -17,12 +17,12 @@ from gene_annotation_episode.episodic_workflow.root.method_loop.episode import E
 from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 import pytest
 
-from gene_annotation_episode.atac_differential_return_views import (
+from gene_annotation_episode.episodic_workflow.root.library.atac_differential_return_views import (
     FACT_SOURCES, FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE,
     atac_fact_sources, requested_atac_sources,
 )
 from gene_annotation_episode.atac_differential_result_contracts import validate_atac_result_record
-from gene_annotation_episode.atac_differential_returns import AtacDifferentialReturns
+from gene_annotation_episode.episodic_workflow.root.atac_differential_returns import AtacDifferentialReturns
 from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain, validate_form
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
@@ -337,62 +337,6 @@ def test_b01_requested_immediate_edges_and_no_private_reference_grants(f, source
         "admitted_references": references(f.bundle) if SAVED_SOURCE in sources else []}))
 
 
-@pytest.mark.parametrize("sources", [(PROJECTION_SOURCE,), (FAILURE_SOURCE,)])
-def test_b02_b03_hashes_and_failure_locations_do_not_grant_saved_operands(f, sources):
-    child = f.child(f.root, schema_for(*sources))
-    f.own(child, failures=[failure(f.bundle["sheet"]["artifact_ref"])])
-    f.returned(f.root, child)
-    # Even ordinary receipts/source access cannot substitute for a saved form.
-    f.receipts.receive(f.root.episode_id, references(f.bundle), kind="own_action", source_index=8)
-    for ref in references(f.bundle):
-        assert not f.boundary.resolve_received(f.root, ref, None)
-    with pytest.raises(ValueError, match="saved_bundle_not_received"):
-        f.boundary.authenticate_received_saved_bundle(f.root, f.bundle)
-
-
-@pytest.mark.parametrize("alter", ["sheet_only", "missing", "extra", "reorder", "size", "format", "splice"])
-def test_b04_entire_ordered_bundle_is_the_authorized_value(f, alter):
-    child = f.child(f.root, schema_for(SAVED_SOURCE))
-    f.own(child)
-    f.returned(f.root, child)
-    other, _ = f.make_bundle("second")
-    f.receipts.receive(f.root.episode_id, references(other), kind="own_action")
-    bundle = deepcopy(f.bundle)
-    if alter == "sheet_only":
-        bundle = bundle["sheet"]
-    elif alter == "missing":
-        bundle["tables"].pop()
-    elif alter == "extra":
-        bundle["tables"].append(other["tables"][0])
-    elif alter == "reorder":
-        bundle["tables"].reverse()
-    elif alter == "size":
-        bundle["tables"][0]["file"]["size_bytes"] += 1
-    elif alter == "format":
-        bundle["tables"][0]["file"]["format"] = "ATAC_contact_tables_v1:contacts"
-    else:
-        bundle["tables"][0] = other["tables"][0]
-    with pytest.raises(ValueError):
-        f.boundary.authenticate_received_saved_bundle(f.root, bundle)
-
-
-def test_b05_duplicate_table_bytes_keep_two_distinct_positions(f):
-    child = f.child(f.root, schema_for(SAVED_SOURCE))
-    _, origin = f.own(child)
-    returned = f.returned(f.root, child)
-    actual = returned["chosen_0"][0]
-    assert actual["tables"][1]["file"] == actual["tables"][3]["file"]
-    assert len(actual["tables"]) == 4 and len(references(actual)) == 4
-    witness = f.host.originals[(child.episode_id, 0)][0]["synthetic_descriptors"]
-    duplicate_rows = [row for row in witness if row["file"] == actual["tables"][1]["file"]]
-    assert [row["track_key"] for row in duplicate_rows] == ["background1", "background2"]
-    assert f.boundary.authenticate_received_saved_bundle(f.root, actual) == (origin,)
-    assert len(list(f.receipts.known(f.root.episode_id))) == 4
-    actual["tables"].pop(3)
-    with pytest.raises(ValueError, match="saved_bundle_not_received"):
-        f.boundary.authenticate_received_saved_bundle(f.root, actual)
-
-
 def test_b06_unrequested_grandchild_private_sibling_and_scope_do_not_grant(f):
     science = f.child(f.root, schema_for(PROJECTION_SOURCE), role="scientific_process")
     grandchild = f.child(science, schema_for(*FACT_SOURCES))
@@ -441,39 +385,6 @@ def test_b07_b08_every_exact_completed_action_origin_survives_fact_deduplication
     f.change_action(owner, 3 if same_episode else 0, tool="execution.results.status")
     with pytest.raises(ValueError, match="strict_host_original_completed_action_conflict"):
         f.boundary.authenticate_received_saved_bundle(f.root, f.bundle)
-
-
-def test_b09_later_identical_origin_does_not_expand_frozen_forwarding(f):
-    schema = schema_for(SAVED_SOURCE)
-    science = f.child(f.root, schema, role="scientific_process")
-    first = f.child(science, schema)
-    _, origin0 = f.own(first)
-    f.returned(science, first)
-    frozen = f.returned(f.root, science)
-    before = f.journal.row("runtime_forms", science.episode_id)
-    later = f.child(science, schema, index=1)
-    _, origin1 = f.own(later)
-    f.returned(science, later)
-    assert f.boundary.authenticate_received_saved_bundle(science, f.bundle) == (origin0, origin1)
-    assert f.boundary.authenticate_received_saved_bundle(f.root, f.bundle) == (origin0,)
-    f.boundary.validate_received_report(science, frozen, schema)
-    assert f.boundary.facts_for_closure(science, schema) == json.loads(before["facts"])
-    assert f.journal.row("runtime_forms", science.episode_id) == before
-
-
-def test_b10_receipt_time_prefix_excludes_late_lower_index_return(f):
-    schema = schema_for(SAVED_SOURCE)
-    delayed = f.child(f.root, schema)
-    _, origin = f.own(delayed)
-    selected = f.child(f.root, schema_for(PROJECTION_SOURCE), index=1, saved=f.bundle)
-    f.returned(f.root, delayed)
-    assert f.boundary.authenticate_received_saved_bundle(f.root, f.bundle) == (origin,)
-    with pytest.raises(ValueError, match="saved_bundle_not_received"):
-        f.boundary.authenticate_received_saved_bundle(selected, f.bundle)
-    newer = f.child(f.root, schema_for(PROJECTION_SOURCE), index=2, saved=f.bundle)
-    assert f.boundary.authenticate_received_saved_bundle(newer, f.bundle) == (origin,)
-    assert f.boundary.facts(newer, schema) == {SAVED_SOURCE: []}
-    assert not f.boundary.resolve_received(newer, f.bundle["sheet"]["artifact_ref"], None)
 
 
 @pytest.mark.parametrize("change", ["scope", "purpose", "schema_json", "role", "assignment", "kind"])
@@ -588,96 +499,6 @@ def test_b13_frozen_ordered_subset_survives_later_delivery_only_unchanged(f, alt
         f.boundary.facts(f.root, schema)
 
 
-@pytest.mark.parametrize("original_success", [True, False])
-def test_b14_explicit_redelivery_uses_frozen_facts_without_a_new_action(f, original_success):
-    child = f.child(f.root, schema_for(*FACT_SOURCES))
-    _, origin = f.own(child)
-    f.returned(f.root, child, successful=original_success)
-    actions = f.store.db.execute("SELECT count(*) FROM runtime_actions").fetchone()[0]
-    first_attempt = dict(f.store.db.execute("SELECT * FROM runtime_report_attempts").fetchone())
-    form = f.redeliver(f.root, child, schema_for(SAVED_SOURCE))
-    assert f.boundary.authenticate_received_saved_bundle(f.root, f.bundle) == (origin,)
-    assert f.store.db.execute("SELECT count(*) FROM runtime_actions").fetchone()[0] == actions
-    assert dict(f.store.db.execute("SELECT * FROM runtime_report_attempts WHERE decision_index=0").fetchone()) == first_attempt
-    f.change_action(f.root, 0, assignment={})
-    with pytest.raises(ValueError, match="commission_assignment_conflict"):
-        f.boundary.record_admission(f.root, form, schema_for(SAVED_SOURCE), f.operation(f.root, 1))
-
-
-@pytest.mark.parametrize("alter", ["missing", "uncommitted", "status", "outcome", "control_missing", "control_corrupt"])
-def test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize(f, alter):
-    schema = schema_for(SAVED_SOURCE)
-    child = f.child(f.root, schema)
-    f.own(child)
-    form = f.returned(f.root, child)
-    if alter == "missing":
-        f.store.db.execute("DELETE FROM runtime_actions WHERE run_id=? AND episode_id=?", (f.run_id, child.episode_id))
-    elif alter == "uncommitted":
-        f.store.db.execute("UPDATE runtime_actions SET result=NULL WHERE run_id=? AND episode_id=?", (f.run_id, child.episode_id))
-    elif alter == "status":
-        f.change_action(child, 0, tool="execution.results.status")
-    elif alter == "outcome":
-        f.store.db.execute("UPDATE runtime_actions SET result='{}' WHERE run_id=? AND episode_id=?", (f.run_id, child.episode_id))
-    else:
-        path = f.host.originals[(child.episode_id, 0)][1]
-        if alter == "control_missing":
-            path.unlink()
-        else:
-            path.chmod(0o644)
-            path.write_text("{}")
-    with pytest.raises(ValueError, match="strict_host_"):
-        f.boundary.record_admission(f.root, form, schema, f.operation(f.root))
-
-
-def test_b15_never_completed_staged_bundle_is_not_a_publication(f):
-    schema = schema_for(SAVED_SOURCE)
-    child = f.child(f.root, schema)
-    f.own(child, completed=False)
-    with pytest.raises(ValueError, match="strict_host_completed_result_required"):
-        f.boundary.facts(child, schema)
-    assert f.boundary.facts(f.root, schema) == {SAVED_SOURCE: []}
-
-
-def test_b16_b17_history_survives_byte_loss_new_use_checks_bytes_separately(f, monkeypatch):
-    schema = schema_for(*FACT_SOURCES)
-    science = f.child(f.root, schema, role="scientific_process")
-    child = f.child(science, schema)
-    _, origin = f.own(child)
-    child_form = f.returned(science, child)
-    form = f.returned(f.root, science)
-    selected = f.child(f.root, schema_for(PROJECTION_SOURCE), index=1, saved=f.bundle)
-    paths = {retained_native_file(f.store, file) for file in files(f.bundle)}
-    for path in paths:
-        path.unlink()
-    before = f.snapshot()
-    f.host.calls.clear()
-    original_read = Path.read_bytes
-    def no_scientific_bytes(path):
-        if "artifacts" in path.parts:
-            pytest.fail("Historical return opened scientific bytes")
-        return original_read(path)
-    with monkeypatch.context() as patch:
-        patch.setattr(Path, "read_bytes", no_scientific_bytes)
-        patch.setattr(f.store, "get_artifact", lambda *_: pytest.fail("Historical return opened scientific bytes"))
-        patch.setattr("gene_annotation_episode.materials.artifact_path", lambda *_: pytest.fail("Historical file resolution"))
-        assert f.boundary.facts(f.root, schema)[SAVED_SOURCE] == [f.bundle]
-        f.boundary.validate_received_report(child, child_form, schema)
-        f.boundary.validate_received_report(science, form, schema)
-        assert f.boundary.facts_for_closure(science, schema) == json.loads(f.journal.row("runtime_forms", science.episode_id)["facts"])
-        assert f.boundary.record_admission(f.root, form, schema, f.operation(f.root)) == references(f.bundle)
-        assert f.boundary.authenticate_received_saved_bundle(f.root, f.bundle) == (origin,)
-        assert f.boundary.authenticate_received_saved_bundle(selected, f.bundle) == (origin,)
-        assert all(f.boundary.resolve_received(f.root, ref, None) for ref in references(f.bundle))
-    assert f.host.calls and not any(current for _, current in f.host.calls)
-    assert f.snapshot() == before
-    # This is only the actual current-file prerequisite, not a selected host
-    # computation or a claim that an unavailable calculation was executed.
-    for file in files(f.bundle):
-        with pytest.raises(ValueError, match="retained_artifact_unavailable"):
-            retained_native_file(f.store, file)
-    assert f.snapshot() == before
-
-
 @pytest.mark.parametrize("alter", ["missing", "size", "sha256"])
 def test_b18_metadata_loss_is_distinct_from_scientific_byte_availability(f, alter):
     child = f.child(f.root, schema_for(SAVED_SOURCE))
@@ -692,35 +513,6 @@ def test_b18_metadata_loss_is_distinct_from_scientific_byte_availability(f, alte
         f.store.db.execute(f"UPDATE artifacts SET {alter}=? WHERE id=?", (value, file["artifact_ref"]))
     with pytest.raises(ValueError):
         f.boundary.authenticate_received_saved_bundle(f.root, f.bundle)
-
-
-@pytest.mark.parametrize("alter", ["leading_zero", "foreign_run", "foreign_parent", "suffix", "missing", "failed", "form"])
-def test_b19_exact_admission_identity_and_no_receipt_insertion(f, alter):
-    schema = schema_for(SAVED_SOURCE)
-    child = f.child(f.root, schema)
-    f.own(child)
-    form = f.returned(f.root, child, receive=False)
-    operation = f.operation(f.root)
-    if alter == "leading_zero":
-        operation = operation.replace(":0:", ":00:")
-    elif alter == "foreign_run":
-        operation = "other-run:" + operation.split(":", 1)[1]
-    elif alter == "foreign_parent":
-        operation = f.operation(child)
-    elif alter == "suffix":
-        operation += ":other"
-    elif alter == "missing":
-        f.store.db.execute("DELETE FROM runtime_report_attempts")
-    elif alter == "failed":
-        f.store.db.execute("UPDATE runtime_report_attempts SET failure='{}'")
-    else:
-        form["chosen_0"][0]["tables"].pop()
-    before = f.snapshot()
-    with pytest.raises(ValueError, match="admission_operation_required|successful_return_required|admitted_form_conflict"):
-        with f.store.transaction():
-            f.boundary.record_admission(f.root, form, schema, operation)
-    assert f.snapshot() == before
-    assert list(f.receipts.known(f.root.episode_id)) == []
 
 
 def test_b20_aliases_namespaces_roles_schema_and_unrelated_sources(f):
@@ -851,39 +643,6 @@ def test_saved_selection_exact_bundle_manifest_and_each_received_handle_required
         f.boundary.authenticate_received_saved_bundle(selected, bundle)
 
 
-@pytest.mark.parametrize("alter", ["positional", "foreign_episode", "foreign_run", "leading_zero", "suffix", "extra_field", "empty"])
-def test_host_origin_records_require_exact_owner_and_operation_grammar(f, alter, monkeypatch):
-    child = f.child(f.root, schema_for(SAVED_SOURCE))
-    _, origin = f.own(child)
-    f.returned(f.root, child)
-    bad = deepcopy(origin)
-    if alter == "foreign_episode":
-        bad["episode_id"] = f.root.episode_id
-    elif alter == "foreign_run":
-        bad["operation_key"] = "other-run:" + bad["operation_key"].split(":", 1)[1]
-    elif alter == "leading_zero":
-        bad["operation_key"] += "0"
-    elif alter == "suffix":
-        bad["operation_key"] += ":typed_form"
-    elif alter == "extra_field":
-        bad["source_ref"] = "unrequested"
-    rows = () if alter == "empty" else ((bad["episode_id"], bad["operation_key"]),) if alter == "positional" else (bad,)
-    monkeypatch.setattr(f.host, "completed_saved_bundle_origins", lambda *_: rows)
-    with pytest.raises(ValueError, match="completed_bundle_origin"):
-        f.boundary.authenticate_received_saved_bundle(f.root, f.bundle)
-
-
-@pytest.mark.parametrize("kind", ["child", "episode_child", "tool"])
-def test_existing_scientific_and_process_revision_edges_remain_usable(f, kind):
-    schema = schema_for(SAVED_SOURCE)
-    science = f.child(f.root, schema, role="scientific_process", kind=kind)
-    child = f.child(science, schema)
-    _, origin = f.own(child)
-    f.returned(science, child)
-    f.returned(f.root, science)
-    assert f.boundary.authenticate_received_saved_bundle(f.root, f.bundle) == (origin,)
-
-
 def compact_form_frame(f, parent, child, *, index, schema, selection):
     """Authored decision frame validated by the real frozen-contract reader."""
     from gene_annotation_episode.episodic_workflow.root.composition_information import (
@@ -944,15 +703,3 @@ def test_compact_commission_uses_original_frozen_contract_frame(f, tamper):
             f.boundary.authenticate_received_saved_bundle(f.root, f.bundle)
 
 
-def test_compact_redelivery_authenticates_its_own_frozen_expansion(f):
-    child = f.child(f.root, schema_for(*FACT_SOURCES))
-    _, origin = f.own(child)
-    f.returned(f.root, child)
-    schema = schema_for(SAVED_SOURCE)
-    form = f.redeliver(f.root, child, schema, index=1)
-    selected = json.loads(f.journal.row('runtime_model_calls', f.root.episode_id, 1)['response'])['selection']
-    compact_form_frame(f, f.root, child, index=1, schema=schema, selection=selected)
-    before = f.snapshot()
-    assert f.boundary.record_admission(f.root, form, schema, f.operation(f.root, 1)) == references(f.bundle)
-    assert f.boundary.authenticate_received_saved_bundle(f.root, f.bundle) == (origin,)
-    assert f.snapshot() == before

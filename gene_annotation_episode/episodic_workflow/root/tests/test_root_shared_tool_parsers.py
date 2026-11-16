@@ -7,7 +7,7 @@ import zipfile
 
 import pytest
 
-from gene_annotation_episode import blast_search as blast
+from gene_annotation_episode.episodic_workflow.root.library import blast_search as blast
 from gene_annotation_episode.chemistry import rhea_equation
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.rfam_discovery import (
@@ -91,7 +91,7 @@ def test_blast_parser_rejects_conflicting_actual_selected_operand(field, value, 
 
 
 def test_actual_provider_consumer_preserves_exact_zip_member_bytes():
-    from gene_annotation_episode.provider_jobs import blast as provider_blast
+    from gene_annotation_episode.episodic_workflow.root.library.provider_jobs import blast as provider_blast
     assert provider_blast is blast
     content = json.dumps(native('selected-subject'), indent=3).encode() + b'\n'
     archive = io.BytesIO()

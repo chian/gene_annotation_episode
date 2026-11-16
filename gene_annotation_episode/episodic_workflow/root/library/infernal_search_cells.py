@@ -11,7 +11,7 @@ import json
 import re
 
 from .infernal_search_contracts import (
-    SHEET_SCHEMA, finite_copy, sheet_digest, validate_infernal_search_sheet)
+    SHEET_SCHEMA, finite_copy, validate_infernal_search_sheet)
 
 def _copy(value):
     try:
@@ -355,27 +355,4 @@ def populate_infernal_search_cells(
     return validate_infernal_search_sheet(result)
 
 
-def upgrade_saved_infernal_search_sheet(sheet: dict) -> dict:
-    """Explicit pure v1-cell conversion; ordinary replay never invokes this.
-
-    Existing cells, intervals, source text and observations are not recomputed.
-    The new lineage identifies the unchanged legacy sheet by its original digest.
-    """
-    saved = finite_copy(sheet)
-    if not isinstance(saved, dict) or saved.get("schema") != "infernal_search_sheet_v1":
-        raise ValueError("saved_infernal_search_sheet_v1_required")
-    result = deepcopy(saved)
-    result.update(schema=SHEET_SCHEMA, sequence_populations=[], source_context={"profile": "infernal_tblout"},
-        lineage={"source_sheet_schema": saved["schema"], "source_sheet_digest": sheet_digest(saved)})
-    for artifact in result["artifacts"]:
-        artifact["source_descriptor"] = _descriptor("infernal_tblout")
-    for hit in result["hits"]:
-        for field in _NATIVE_NULLS:
-            hit.setdefault(field, None)
-        hit.update(source_details={"profile": "infernal_tblout"}, attribution={
-            "sequence": "valid" if hit["sequence"].get("identity") else "unresolved",
-            "model": "valid" if hit["model"].get("name") else "unresolved", "source_locators": [deepcopy(hit["locator"])]})
-    return validate_infernal_search_sheet(result)
-
-
-__all__ = ["populate_infernal_search_cells", "upgrade_saved_infernal_search_sheet"]
+__all__ = ["populate_infernal_search_cells"]

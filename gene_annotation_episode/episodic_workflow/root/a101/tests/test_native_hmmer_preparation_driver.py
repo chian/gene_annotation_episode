@@ -1,4 +1,5 @@
 """Actual producer commands use existing local_jobs with the user's allocation."""
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import json
 from pathlib import Path
@@ -16,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_pr
 from test_native_hmmer_preparation_contracts import BIN, CASES, EVIDENCE, FM_CONTRACT, NATIVE, ROOT, digest, job, operand
 
 
-POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
+POLICY = LocalJobPolicy(ENVIRONMENT_BOUNDS['memory_bytes'], 4 * 1024 ** 3)
 
 
 def make_plan(tmp_path, selected=None):

@@ -8,7 +8,7 @@ def execute(context, selection, operation_key, repository, *, authorize_source_a
     processing = plain(selection.get('evidence_processing'))
     attempted = False
     try:
-        validate_schema(selection, source_location_inputs(action_schema({'type': 'object'}, repository.population_schema()), allow_legacy_quote=True))
+        validate_schema(selection, source_location_inputs(action_schema({'type': 'object'}, repository.population_schema())))
         if any((not isinstance(payload.get(section, []), list) for section in SCIENTIFIC_SECTIONS)):
             raise ContractError('representation_error')
         scientific = [row for section in SCIENTIFIC_SECTIONS for row in payload.get(section, [])]

@@ -24,7 +24,6 @@ from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import 
 from gene_annotation_episode.episodic_workflow.root.a101.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episodic_workflow.root.a101.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION, RESULTS_VERSION
-from gene_annotation_episode.episodic_workflow.root.a101.execution_progress import describe_execution_target
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_contracts import JOB_VERSION_V3, requested_job_from_native_blast_utility
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_utility_local import local_blast_utility_plan
 from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldParameters
@@ -37,7 +36,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegist
 from test_blast_utility_episode_wiring_632 import assignment, context
 from test_blast_vdb_native_context_668 import controlled_job, controlled_dependency_job, _reseal_manifest
 from test_blast_vdb_publication_returns_669 import selector, sequence_selection, report_schema
-from test_native_blast_utility_practical_630 import publish as publish_practical, environment as old_environment
+from test_native_blast_utility_practical_630 import publish as publish_practical
 from test_native_blast_utility_producer_628 import POLICY, job_fixture
 from test_native_blast_utility_publication_631 import inline_workers, selector as old_selector
 from test_practical_yield import completion_context
@@ -407,30 +406,3 @@ def test_vdb_handoff_cannot_change_original_identity(hosts, monkeypatch, fault):
         h.family.job_progress_provider.targets.read_target(reference, h.scope)
     assert len(e.starts) == 1 and e.wrapper_calls == []
 
-
-def test_legacy_execution_descriptor_shape_is_unchanged(tmp_path):
-    job = job_fixture(tmp_path, "extract_sequences")
-    target = {"resource_kind": "local", "assignment": {"requested_job": {"native_blast_utility": job}}}
-    assert describe_execution_target(target) == {"resource_kind": "local", "service_or_program": "blastdbcmd",
-        "operation": "extract_sequences", "mode": "extract_sequences", "molecule": "dna",
-        "selected_outputs": job["outputs"], "output_format": "native_blast_utility_bundle_v1"}
-
-
-def test_legacy_complete_progress_descriptor_has_no_new_fields(tmp_path, monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a101.execution_progress import ExecutionTargetReader
-    e = old_environment(tmp_path, monkeypatch, mode="extract_sequences")
-    started = e.act(0)
-    with Store(tmp_path / "store") as store:
-        scope = {"subject_refs": store.create_problem(raw_sequence="ACGT", molecule="dna")["subject_refs"]}
-        reference = publish_practical(store, e, started, scope=scope)
-        reader = ExecutionTargetReader(store, run_id=e.run, directory=tmp_path / "progress",
-            resources={e.resource: e.configuration}, api_execution=None)
-        target = reader.read_target(reference, scope)
-        value = reader.describe_target(reference, scope, selector=old_selector())
-        assert set(value) == {*describe_execution_target(target), "called_operation", "status_operations",
-            "acquisition_operations", "extractors", "status_meanings"}
-        assert value["extractors"][1] == {"operation": "execution.results.collect",
-            "implementation": "gene_annotation_episode.episodic_workflow.root.a101.native_blast_utility_results.NativeBLASTUtilityResults.execute",
-            "scientific_annotation_score": False}
-        with pytest.raises(ValueError):
-            reader.describe_target(reference, scope, selector=selector())

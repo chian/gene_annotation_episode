@@ -612,25 +612,6 @@ def test_v2_supplied_row_occurrences_and_ambiguous_candidates_are_retained(harne
         and item["path"] == "pair_metadata[3].genome_id" for item in grading["components"]["diagnostics"])
 
 
-def test_v2_requires_frozen_inputs_and_legacy_intents_remain_exact(harness):
-    h = harness
-    _, metadata = explicit_pair_inputs(h, request())
-    selector, inputs = selected_inputs([metadata])
-    launch_intent, snapshot = launch(h, request())
-    legacy = h.service.prepare(RESULT_OPERATION, request(), {}, scope=h.scope,
-        previous_events=[], selector={})
-    assert set(legacy) == {"operation", "request", "rpc_request", "mutates_remote", "cache_original"}
-    assert h.service._prepared(legacy) == legacy
-    assert "selector" not in launch_intent
-    for selected, supplied in [(selector, None), ({}, inputs)]:
-        with pytest.raises(ValueError, match="minhash_publication_inputs_conflict"):
-            h.service.publish(request(), selected, snapshot, h.scope, "missing-inputs",
-                publication_inputs=supplied)
-    with pytest.raises(ValueError, match="minhash_result_selector_invalid"):
-        h.service.prepare(LAUNCH_OPERATIONS["genome"], request(), {}, scope=h.scope,
-            previous_events=[], selector=selector)
-
-
 def test_v2_saved_sheet_recalculation_retains_original_and_uses_same_calculator(harness, monkeypatch):
     h = harness
     h.client.rows = [["511145.12", "0.223144", "0.259259", "2/3"]]

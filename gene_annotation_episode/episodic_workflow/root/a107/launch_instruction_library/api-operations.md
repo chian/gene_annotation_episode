@@ -18,7 +18,6 @@ operation below takes empty arguments and uses the original assignment.
 Read the bound catalog for the current role. No selected action polls, sleeps
 or retries in a private loop. The API episode chooses its next operation in
 `method_loop` using preceding outcomes and its configured yield controller.
-The old `public.hmmer.*` execution/discovery tools have been removed.
 
 The scoped subject, algorithm, database, parameters, page size, submitted FASTA
 digest and parsed sequence digest remain fixed. FASTA bytes and sequence symbols

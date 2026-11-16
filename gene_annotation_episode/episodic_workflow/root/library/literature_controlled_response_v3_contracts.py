@@ -60,8 +60,6 @@ def _schemas():
     ED['Assignment']=cp(D['Assignment'])
     ED['ScopeRelationExtraction']=obj({'selection':cp(D['ScopeRelation']),'witnesses':arr(ref('WitnessRecord')),
         'effective_value':cp(D['ScopeRelation']['properties']['value'])})
-    # Optional only for saved legacy extractions. Live reads retain each local
-    # interpretation's actual witnesses independently of any whole-model request.
     E['properties']['local_pair_extractions']=arr(obj({'pair_key':T,
         'admissibility':obj({'selection':cp(D['LocalPairNomination']['properties']['admissibility']),
             'witnesses':arr(ref('WitnessRecord')),'effective_value':enum('compatible','unknown','conflicting')}),
@@ -91,12 +89,9 @@ def _schemas():
         ('partial_calculation_inputs',null(ref('OwnerInputs'))),
         ('partial_projection_state',enum('not_required','ready','unsupported_origin_projection','unavailable_group_identity')),
         ('component_local_inputs',ref('LocalInputs'))]:E['properties'][name]=shape
-    E['required'] += ['companion_extractions','projection_status','final_projection_basis','reconciliation_decisions','joint_scope_extractions','alternative_inputs',
+    E['required'] += ['local_pair_extractions','companion_extractions','projection_status','final_projection_basis','reconciliation_decisions','joint_scope_extractions','alternative_inputs',
         'partial_calculation_inputs','partial_projection_state','component_local_inputs']
     ED['DependencyRecord']['properties']['reader_contract_version']={'const':'controlled_response_source_extraction_v3'}
-    for name in ['literature_controlled_response_v3_inputs.py','literature_controlled_response_local_calculations.py']:
-        ED['DependencyRecord']['properties']['expected_module_fingerprints']['properties'][name]=cp(v2.SHA)
-        ED['DependencyRecord']['properties']['expected_module_fingerprints']['required'].append(name)
     
     # Standalone component-local PARSED input: never a four-arm OwnerInputs wrapper.
     LD=cp(v2._extraction_schema()['$defs'])

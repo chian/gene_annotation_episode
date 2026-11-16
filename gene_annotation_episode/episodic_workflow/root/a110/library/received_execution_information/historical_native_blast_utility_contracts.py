@@ -48,6 +48,7 @@ NATIVE_BLAST_UTILITY_JOB_V1_SCHEMA = NATIVE_BLAST_UTILITY_JOB_SCHEMA
 NATIVE_BLAST_UTILITY_JOB_V2_SCHEMA = _object({'version': {'const': JOB_VERSION_V2}, 'operation': deepcopy(_HISTORICAL_OPERATION_SCHEMA), 'software': SOFTWARE_SCHEMA, 'environment': _ENV, 'inputs': {'type': 'array', 'items': INPUT_SCHEMA_V2}, 'databases': {'type': 'array', 'items': {'anyOf': [DATABASE_OPERAND_SCHEMA, ADDITIONAL_DATABASE_OPERAND_SCHEMA]}}, 'outputs': {'type': 'array', 'minItems': 2, 'items': OUTPUT_SCHEMA_V2}, 'materializations': MATERIALIZATIONS_SCHEMA})
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_information.historical_native_blast_vdb_utility_context import vdb_utility_context_request_schema
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_information.historical_native_blast_vdb_utility_execution import OFFLINE_ENVIRONMENT_SCHEMA, OFFLINE_EXECUTION_SCHEMA
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 INPUT_SCHEMA_V3 = deepcopy(INPUT_SCHEMA)
 INPUT_SCHEMA_V3['properties']['role'] = {'enum': ['entry_batch', 'database_list']}
 INPUT_SCHEMA_V3['properties']['format'] = {'const': 'text'}
@@ -431,7 +432,7 @@ def validate_native_blast_utility_plan(value: dict) -> dict:
     if job['version'] == JOB_VERSION_V3:
         paths.extend((row['path'] for row in [job['offline_execution']['launcher'], *job['offline_execution']['runtime_files']]))
         paths.extend((row['path'] for row in job['offline_execution']['runtime_aliases']))
-        if policy != {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}:
+        if policy != {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}:
             _error('vdb_selected_local_allocation_conflict')
     if any((_producer_path(path, absolute=True).is_relative_to(root) for path in paths)):
         _error('supplied_material_inside_attempt')

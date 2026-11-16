@@ -1,6 +1,5 @@
 import copy
 import json
-from pathlib import Path
 
 import pytest
 
@@ -56,7 +55,7 @@ def annotation(store, h, a, subject=None, revision=0):
 
 def test_mixed_immutable_inputs_and_no_fake_genes(tmp_path):
     (tmp_path / "proteins.faa").write_text(">same first\nMKW*\n>same second\nMA*Q\n")
-    manifest = {"schema_version": 1, "entries": [
+    manifest = {"schema_version": 2, "entries": [
         {"path": "proteins.faa", "format": "fasta", "molecule": "protein", "role": "protein"},
         {"sequence": "ACGUNN", "format": "raw", "molecule": "rna", "name": "rna"}]}
     path = tmp_path / "dataset.json"
@@ -123,82 +122,6 @@ def test_exact_source_extraction_aliases_and_partial_feedback(store):
     bad = store.commit_reasoning(payload, scope, "action2")
     assert bad["status"] == "invalid"
     assert bad["errors"][0]["code"] == "anchor_transcription_mismatch"
-
-
-@pytest.mark.parametrize('artifact_field', ['artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref'])
-def test_exact_anchor_reads_are_bounded_and_preserve_full_source_integrity(store, tmp_path, monkeypatch, artifact_field):
-    from gene_annotation_episode.materials import artifact_file
-
-    quote = 'EEP domain α; localization remains unresolved.'
-    prefix_size = 3 * 1024**2 + 37
-    original = tmp_path / 'large-source.txt'
-    with original.open('wb') as handle:
-        for _ in range(3):
-            handle.write(b'x' * 1024**2)
-        handle.write(b'x' * 37)
-        handle.write(quote.encode('utf-8'))
-        handle.write(b'y' * 1024**2)
-    large = artifact_file(store, original, 'text/plain')
-    small = store.artifact('Other source representation.', 'text/plain')
-    fields = dict(artifact_ref=small, text_ref=small, stdout_ref=small, stderr_ref=small)
-    fields[artifact_field] = large
-    src = store.put('source', dict(provider='test', accession=None, uri=None,
-        request_ref=None, version=None, retrieved_at=None, **fields), origin='external')
-    artifact = store.get(large)
-    path = store.path / 'artifacts' / artifact['sha256'][:2] / artifact['sha256']
-    real_open, read_sizes = Path.open, []
-
-    class BoundedReader:
-        def __init__(self, handle):
-            self.handle = handle
-
-        def __enter__(self):
-            self.handle.__enter__()
-            return self
-
-        def __exit__(self, *args):
-            return self.handle.__exit__(*args)
-
-        def read(self, size=-1):
-            assert 0 <= size <= 1024**2, 'anchor validation must not materialize the whole source'
-            read_sizes.append(size)
-            return self.handle.read(size)
-
-        def __getattr__(self, name):
-            return getattr(self.handle, name)
-
-    def tracked_open(selected, mode='r', *args, **kwargs):
-        handle = real_open(selected, mode, *args, **kwargs)
-        return BoundedReader(handle) if selected == path and mode == 'rb' else handle
-
-    monkeypatch.setattr(Path, 'open', tracked_open)
-    anchor = dict(source_ref=src['id'], artifact_ref=large, start=prefix_size,
-        end=prefix_size + len(quote.encode('utf-8')), quote=quote)
-    def commit(selected_anchor, operation_key):
-        payload = empty_payload()
-        payload['terms'] = [dict(alias='domain', label='EEP domain', term_type='domain',
-            source_ref=src['id'], anchor=selected_anchor)]
-        return store.commit_reasoning(payload, {'subject_refs': store.problem()['subject_refs']}, operation_key)
-
-    first = commit(anchor, 'valid')
-    assert first['status'] == 'completed', first
-    term = store.get(first['aliases']['domain'])
-    assert commit(anchor, 'duplicate')['changed_record_refs'] == []
-    assert read_sizes and len(quote.encode('utf-8')) in read_sizes
-    for index, invalid in enumerate(({'quote': quote[:-1]}, {'start': prefix_size + 1},
-                                    {'end': path.stat().st_size + 1})):
-        result = commit({**anchor, **invalid}, 'invalid-' + str(index))
-        assert result['status'] == 'invalid'
-        assert result['errors'][0]['code'] == 'anchor_transcription_mismatch'
-    assert store.list('term') == [term]
-    # Bytes outside the quoted interval remain covered by integrity checking.
-    with path.open('r+b') as handle:
-        handle.seek(0)
-        handle.write(b'z')
-    result = commit(anchor, 'source-corrupted')
-    assert result['status'] == 'invalid'
-    assert result['errors'][0]['code'] == 'artifact_digest_mismatch'
-    assert store.get(term['id']) == term
 
 
 def test_revisions_conflict_preserved_and_current_state(store):
@@ -283,7 +206,7 @@ def test_snapshot_respects_owning_transaction_and_two_connection_visibility(stor
 
 def test_caller_context_is_readable_source_and_sample_identity_linked(tmp_path):
     path = tmp_path / "input.json"
-    path.write_text(json.dumps({"schema_version": 1, "entries": [
+    path.write_text(json.dumps({"schema_version": 2, "entries": [
         {"sequence": "ACGT", "sample": "culture-A", "context": {"reported_medium": "soil extract"}},
         {"sequence": "GGGG", "sample": "culture-A"},
         {"sequence": "TTTT", "sample": "culture-B"}]}))

@@ -158,9 +158,7 @@ def _read_context(store, receipt, *, selector, operands, key):
         and start["cwd"] == str(directory) and _same(start["policy"], intent["policy"]), "rna_comparison_start_mismatch")
     command = start["command"]
     _require(type(command) is list and len(command) == 5 and type(command[0]) is str and Path(command[0]).is_absolute()
-        and command[1:] in (["-B", "-m", _WORKER, str(directory / "plan.json")],
-                            ["-B", "-m", "gene_annotation_episode.rna_structure_comparison_worker", str(directory / "plan.json")]), "rna_comparison_start_mismatch")
-    # Preserve the recorded package location across replay in another checkout.
+        and command[1:] == ["-B", "-m", _WORKER, str(directory / "plan.json")], "rna_comparison_start_mismatch")
     env = start["environment"]
     expected_env = _environment(directory)
     _require(type(env) is dict and set(env) == set(expected_env) and type(env["PYTHONPATH"]) is str

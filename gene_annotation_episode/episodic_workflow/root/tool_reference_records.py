@@ -42,11 +42,3 @@ def parent_view(value):
             for row in value]
 
 
-
-def tool_names(value):
-    if (not isinstance(value, list) or any(not isinstance(name, str) or not name.strip()
-            for name in value) or len(value) != len(set(value))):
-        raise ValueError("scientific_selected_tools_invalid")
-    return list(value)
-
-

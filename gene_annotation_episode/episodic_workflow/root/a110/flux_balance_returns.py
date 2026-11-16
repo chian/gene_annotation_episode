@@ -1,4 +1,4 @@
-"""Original requested FBA returns, without source or artifact acquisition.
+"""Requested FBA returns, without source or artifact acquisition.
 
 The result host authenticates completed own actions. This reader follows only
 their actual immediate-child typed returns and frozen operand inheritance.

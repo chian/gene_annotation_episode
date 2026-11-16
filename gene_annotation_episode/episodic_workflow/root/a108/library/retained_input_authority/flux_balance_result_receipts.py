@@ -97,7 +97,7 @@ class FluxBalanceResultReceipts:
             return receipt
         control = read_request_binding(self.store, context.run_id, context.episode_id)
         require(same(control['context'], context.as_record()) and len(control['requests']) == 1, 'fba_result_original_context_conflict')
-        return practical_outcome_view(receipt, assignment=control['requests'][0]['assignment'], control_version=control['version'])
+        return practical_outcome_view(receipt, assignment=control['requests'][0]['assignment'])
     locked_action = _Shared.locked_action
     require_action = _Shared.require_action
     _selected = _Shared._selected

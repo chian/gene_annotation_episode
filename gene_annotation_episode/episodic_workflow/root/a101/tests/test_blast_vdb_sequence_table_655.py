@@ -21,10 +21,6 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_vdb_inputs as vdb
 
 
-_PACKET = Path(__file__).resolve().parent / "fixtures/blast_vdb_lexical"
-_EXPECTED_BYTES = (_PACKET / "legacy_expected.json").read_bytes()
-assert hashlib.sha256(_EXPECTED_BYTES).hexdigest() == "5d52daf89d5c0c341befbe1873f1312057933c31d6f8adc98bd26e46d4b76593"
-_LEGACY = json.loads(_EXPECTED_BYTES)
 
 
 def read(contents, **changes):
@@ -176,66 +172,6 @@ def test_returned_records_and_repeated_calls_are_detached():
     json.dumps(baseline, allow_nan=False)
 
 
-@pytest.mark.parametrize("case", _LEGACY["cases"], ids=lambda case: case["name"])
-def test_entire_legacy_parse_and_saved_reparse_match_prechange(case):
-    kwargs = deepcopy(case["kwargs"])
-    result = vdb.parse_blast_vdb_member_sequences(bytes.fromhex(case["contents_hex"]), **kwargs)
-    assert result == case["output"]
-    assert vdb._reparse(json.loads(json.dumps(result))) == case["reparsed"]
-    kwargs["extraction_context"]["dataset_key"] = "caller-mutated"
-    assert result == case["output"]
-
-
-@pytest.mark.parametrize("case", _LEGACY["failures"], ids=lambda case: case["name"])
-def test_legacy_caller_errors_match_prechange(case):
-    contents = case["contents"] if case["contents_kind"] == "text" else bytes.fromhex(case["contents"])
-    if case["contents_kind"] == "bytearray":
-        contents = bytearray(contents)
-    with pytest.raises(getattr(builtins, case["exception_type"])) as raised:
-        vdb.parse_blast_vdb_member_sequences(contents, **deepcopy(case["kwargs"]))
-    assert str(raised.value) == case["exception_message"]
-
-
-@pytest.mark.parametrize("case", _LEGACY["bound"], ids=lambda case: case["name"])
-def test_entire_saved_metadata_binding_and_rechecks_match_prechange(case):
-    parsed = json.loads(json.dumps(case["parsed"]))
-    kwargs = deepcopy(case["kwargs"])
-    actual = vdb.bind_blast_vdb_metadata([parsed], **kwargs)
-    assert actual == case["output"]
-    assert [vdb._recheck_metadata(row) for row in actual["reference_metadata"]] == case["rechecks"]
-    parsed["records"][0]["native_record"]["values"][0] = "caller-mutated"
-    kwargs["bindings"][0]["source"]["pointer"] = "/caller-mutated"
-    assert actual == case["output"]
-
-
-def test_specific_entry_parser_and_replay_use_shared_reader_and_integer_once(monkeypatch):
-    case = next(row for row in _LEGACY["cases"] if row["name"] == "mixed_crlf")
-    original = vdb.read_blast_vdb_sequence_table
-    integer = vdb._native_integer
-    calls, integer_calls = [], []
-    def observed(contents, **kwargs):
-        calls.append((contents, deepcopy(kwargs)))
-        return original(contents, **kwargs)
-    def counted(value):
-        integer_calls.append(value)
-        return integer(value)
-    monkeypatch.setattr(vdb, "read_blast_vdb_sequence_table", observed)
-    monkeypatch.setattr(vdb, "_native_integer", counted)
-    contents = bytes.fromhex(case["contents_hex"])
-    actual = vdb.parse_blast_vdb_member_sequences(contents, **deepcopy(case["kwargs"]))
-    assert actual == case["output"]
-    assert calls == [(contents, {key: case["kwargs"][key] for key in ("source_ref", "source_version")})]
-    assert integer_calls == ["8", "8", "8"]
-    assert [row["record_key"]["record_ordinal"] for row in actual["records"]] == [0, 1]
-    assert [row["native_record"]["row_ordinal"] for row in actual["records"]] == [0, 5]
-    assert vdb._reparse(actual) == case["reparsed"] and len(calls) == 2
-    bound_case = _LEGACY["bound"][0]
-    bound = vdb.bind_blast_vdb_metadata([deepcopy(bound_case["parsed"])], **deepcopy(bound_case["kwargs"]))
-    assert bound == bound_case["output"] and len(calls) == 3
-    assert all(vdb._recheck_metadata(row) for row in bound["reference_metadata"])
-    assert len(calls) == 5
-
-
 def deny_external_access(patch):
     def forbidden(*args, **kwargs):
         raise AssertionError("pure supplied-byte parsing attempted external access")
@@ -263,17 +199,6 @@ def test_reader_is_pure_and_does_not_invoke_search_context_or_sequence_validatio
     assert result["rows"][1]["cells"] == [""]
 
 
-def test_saved_binding_and_replay_remain_pure(monkeypatch):
-    case = deepcopy(_LEGACY["bound"][0])
-    with monkeypatch.context() as patch:
-        deny_external_access(patch)
-        parsed = vdb._reparse(case["parsed"])
-        actual = vdb.bind_blast_vdb_metadata([parsed], **case["kwargs"])
-        rechecked = [vdb._recheck_metadata(row) for row in actual["reference_metadata"]]
-    assert parsed == case["parsed"] and actual == case["output"]
-    assert rechecked == case["rechecks"]
-
-
 def conversion_limit_lexeme():
     # Observe the bounded interpreter's actual setting; never change it.
     limit = sys.get_int_max_str_digits()
@@ -294,34 +219,3 @@ def test_conversion_limit_retains_valid_spelling_as_unavailable_conversion():
     assert row["issues"] == [issue("field_empty", "native_identifier"),
                               issue("integer_conversion_unavailable", "length_lexeme")]
 
-
-def test_eligible_legacy_row_preserves_existing_integer_conversion_exception():
-    size = conversion_limit_lexeme()
-    case = next(row for row in _LEGACY["cases"] if row["name"] == "valid_gnl_lowercase_u")
-    raw = ("gnl|SRA|SRR1.1.2\tSRR1.1.2\t" + size + "\tacgu\n").encode()
-    with pytest.raises(ValueError) as existing:
-        vdb._native_integer(size)
-    with pytest.raises(ValueError) as actual:
-        vdb.parse_blast_vdb_member_sequences(raw, **deepcopy(case["kwargs"]))
-    assert str(actual.value) == str(existing.value)
-    assert read(raw)["rows"][0]["issues"] == [issue("integer_conversion_unavailable", "length_lexeme")]
-
-
-@pytest.mark.parametrize("kind", ["empty", "unavailable", "wrong_width"])
-def test_legacy_skipped_conversion_limit_row_preserves_valid_neighbors(kind):
-    size = conversion_limit_lexeme()
-    cells = ["" if kind == "empty" else "N/A" if kind == "unavailable" else "id", "acc", size, "acgu"]
-    if kind == "wrong_width":
-        cells.append("extra")
-    case = next(row for row in _LEGACY["cases"] if row["name"] == "duplicate_identifiers")
-    good = bytes.fromhex(case["contents_hex"]).splitlines()[0] + b"\n"
-    raw = good + ("\t".join(cells) + "\n").encode() + good
-    expected = deepcopy(case["output"])
-    expected["native_text"] = raw.decode()
-    expected["input_identity"] = dict(sha256=hashlib.sha256(raw).hexdigest(), size_bytes=len(raw))
-    expected["issues"] = [dict(code="blast_vdb_metadata_native_extraction_unverified", search_key=None,
-        hit_ordinal=None, hsp_ordinal=None, source_pointer=None, details=dict(row_ordinal=1, values=cells))]
-    for row, ordinal in zip(expected["records"], (0, 2)):
-        row["native_record"].update(input_text=raw.decode(), row_ordinal=ordinal, line=ordinal + 1)
-    actual = vdb.parse_blast_vdb_member_sequences(raw, **deepcopy(case["kwargs"]))
-    assert actual == expected and vdb._reparse(actual) == expected

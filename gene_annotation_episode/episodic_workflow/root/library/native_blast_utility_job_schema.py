@@ -1,4 +1,4 @@
-"""Original supplied-record schemas extracted from native_blast_utility_contracts; no execution admission."""
+"""Supplied-record schemas; no execution admission."""
 from __future__ import annotations
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.root.library.blast_utility_contracts import blast_utility_schema_for_version
@@ -39,8 +39,6 @@ OUTPUT_SCHEMA = _object({"role": {"enum": ["stdout", "stderr", "database_family"
     "path_kind": {"enum": ["file", "prefix"]}, "relative_path": _STR,
     "format": {"enum": ["text", "blastdb_family", "blastdbcmd_tabular_v1",
                           "blastdb_info_text", "blastdb_metadata_json", "blastdbcheck_text"]}})
-# Both old native schema objects historically embedded this exact v1+v2 union.
-# Freeze it instead of pointing them at the expanding current registry.
 _HISTORICAL_OPERATION_SCHEMA = {"anyOf": [blast_utility_schema_for_version(version)
     for version in ("blast_utility_operation_v1", "blast_utility_operation_v2")]}
 NATIVE_BLAST_UTILITY_JOB_SCHEMA = _object({"version": {"const": JOB_VERSION},
@@ -48,7 +46,6 @@ NATIVE_BLAST_UTILITY_JOB_SCHEMA = _object({"version": {"const": JOB_VERSION},
     "inputs": {"type": "array", "items": INPUT_SCHEMA},
     "databases": {"type": "array", "maxItems": 1, "items": DATABASE_OPERAND_SCHEMA},
     "outputs": {"type": "array", "minItems": 2, "maxItems": 3, "items": OUTPUT_SCHEMA}})
-# Keep the old object branch byte-for-byte representable; new fields are v2 only.
 from gene_annotation_episode.episodic_workflow.root.library.blast_preparation_contracts import MATERIALIZATION_ENTRY_SCHEMA
 from gene_annotation_episode.episodic_workflow.root.library.native_blast_database_contracts import DATABASE_OPERAND_SCHEMA as ADDITIONAL_DATABASE_OPERAND_SCHEMA
 INPUT_SCHEMA_V2 = deepcopy(INPUT_SCHEMA)

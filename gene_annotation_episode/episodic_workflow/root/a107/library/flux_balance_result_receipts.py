@@ -1,6 +1,4 @@
-"""A107 original flux balance result receipts; substantive retained received-result responsibility.
-Original authority, invalid outcomes and historical source identities remain unchanged.
-"""
+"""A107 flux balance result receipts."""
 
 
 from copy import deepcopy

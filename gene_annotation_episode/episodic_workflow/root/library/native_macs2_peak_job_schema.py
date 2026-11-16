@@ -4,7 +4,6 @@ from gene_annotation_episode.episodic_workflow.root.library import native_atac_d
 
 OPERATION = 'perform_chipseq_peak_calling_with_macs2'
 MODE = 'macs2_2_2_9_1_auto_matched_control_native_model'
-DRIVER_MODULE = 'gene_annotation_episode.native_macs2_peak_execution'
 RUN_PLAN_FILENAME = 'macs2-peak-plan.json'
 ATTEMPT_DIRECTORY_NAME = 'macs2-peak-attempt'
 OWNER_FILENAME = '.native-macs2-peak-owner.json'

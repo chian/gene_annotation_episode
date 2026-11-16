@@ -486,8 +486,8 @@ RFAM_FILE_REQUEST_SCHEMA = _object({"version": {"const": "rfam_batch_request_v2"
     "mode": {"const": "sequence_batch"},
     "subject_refs": {"type": "array", "minItems": 1, "items": _TEXT}})
 RFAM_BATCH_REQUEST_SCHEMA = {"oneOf": [RFAM_SINGLE_REQUEST_SCHEMA, RFAM_FILE_REQUEST_SCHEMA]}
-RFAM_LEGACY_RESULT_SELECTOR_SCHEMA = _object({
-    "version": {"enum": ["rfam_batch_result_selector_v1", "rfam_batch_result_selector_v2"]},
+RFAM_RESULT_SELECTOR_SCHEMA = _object({
+    "version": {"const": "rfam_batch_result_selector_v2"},
     "representation": {"enum": ["json", "tblout", "out"]},
     "model_metadata_ref": {"type": ["string", "null"], "minLength": 1},
     "projection": {"anyOf": [RFAM_PROJECTION_SCHEMA, RFAM_TABLE_PROJECTION_SCHEMA, {"type": "null"}]}})
@@ -498,7 +498,7 @@ RFAM_REPORT_RESULT_SELECTOR_SCHEMA = _object({
     "model_metadata_ref": {"type": "null"},
     "projection": {"anyOf": [RFAM_REPORT_PROJECTION_SCHEMA, {"type": "null"}]}})
 RFAM_BATCH_RESULT_SELECTOR_SCHEMA = {"oneOf": [
-    RFAM_LEGACY_RESULT_SELECTOR_SCHEMA, RFAM_REPORT_RESULT_SELECTOR_SCHEMA]}
+    RFAM_RESULT_SELECTOR_SCHEMA, RFAM_REPORT_RESULT_SELECTOR_SCHEMA]}
 REQUEST_SCHEMA = RFAM_BATCH_REQUEST_SCHEMA
 SELECTOR_SCHEMA = RFAM_BATCH_RESULT_SELECTOR_SCHEMA
 

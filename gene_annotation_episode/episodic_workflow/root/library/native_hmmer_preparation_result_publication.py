@@ -43,15 +43,13 @@ _PREPARED_FIELDS = {"version", "bundle_artifact_ref", "source_grading_artifact_r
 _STABLE_FIELDS = {"schema", "original_plan", "capture", "bundle_sha256", "original_parameters",
     "effective_metadata", "grading_context", "occurrences", *_NUMERICAL, "numerical_artifacts", "failures", "graded"}
 _PUBLICATION_FIELDS = {"record_refs", "rows", "artifacts", "population", "failures", "projection_artifact_ref"}
-_HISTORICAL_WORKER_MODULE = "gene_annotation_episode.native_hmmer_preparation_result_worker"
 _WORKER_MODULE = "gene_annotation_episode.episodic_workflow.root.library.native_hmmer_preparation_result_worker"
-_HISTORICAL_VERIFY_MODULE = "gene_annotation_episode.native_atac_differential_driver"
 _VERIFY_MODULE = "gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_driver"
 _WORKER_SELECTION = PREFIX + "worker_execution_v1"
-_HISTORICAL_WORKER_PROGRAM = (
+_WORKER_PROGRAM = (
     "import json,sys\n"
     "from pathlib import Path\n"
-    "from gene_annotation_episode.native_atac_differential_driver import verify_driver_runtime\n"
+    "from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_driver import verify_driver_runtime\n"
     "with open(sys.argv[1]) as stream:\n"
     "    selected=json.load(stream)\n"
     "with open(selected['runtime_path']) as stream:\n"
@@ -61,7 +59,7 @@ _HISTORICAL_WORKER_PROGRAM = (
     "if sys.prefix != selected['python_home']:\n"
     "    raise ValueError('original_worker_python_home_conflict')\n"
     "verify_driver_runtime(selected['driver_runtime'])\n"
-    "from gene_annotation_episode.native_infernal_contracts import native_infernal_digest\n"
+    "from gene_annotation_episode.episodic_workflow.root.library.native_infernal_contracts import native_infernal_digest\n"
     "root=Path(sys.argv[1]).parent\n"
     "with open(root/'original-handle.json') as stream:\n"
     "    binding=json.load(stream)\n"
@@ -74,17 +72,9 @@ _HISTORICAL_WORKER_PROGRAM = (
     "native_infernal_digest(plan) != selected['plan_sha256'] or "
     "native_infernal_digest(intent) != selected['intent_sha256']):\n"
     "    raise ValueError('original_worker_operands_conflict')\n"
-    "from gene_annotation_episode.native_hmmer_preparation_result_worker import main\n"
+    "from gene_annotation_episode.episodic_workflow.root.library.native_hmmer_preparation_result_worker import main\n"
     "raise SystemExit(main([sys.argv[2]]))\n"
 )
-_LEGACY_ROOT_WORKER_PROGRAM = _HISTORICAL_WORKER_PROGRAM.replace(
-    "from gene_annotation_episode.native_hmmer_preparation_result_worker import main\n",
-    "from gene_annotation_episode.episodic_workflow.root.library.native_hmmer_preparation_result_worker import main\n")
-_WORKER_PROGRAM = _LEGACY_ROOT_WORKER_PROGRAM.replace(
-    "from gene_annotation_episode.native_atac_differential_driver import verify_driver_runtime\n",
-    "from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_driver import verify_driver_runtime\n").replace(
-    "from gene_annotation_episode.native_infernal_contracts import native_infernal_digest\n",
-    "from gene_annotation_episode.episodic_workflow.root.library.native_infernal_contracts import native_infernal_digest\n")
 
 
 class HmmerPreparationWorkerPending(RuntimeError):
@@ -171,10 +161,7 @@ def validate_prepared_grading(store, prepared, *, bundle, verify_files=True):
     if verify_files:
         _validate_rows(store, capture, bundle)
     occurrences, custody_failures = qualified_occurrences(bundle, prepared["bundle_artifact_ref"], capture)
-    # A saved publication keeps its original interpretation. Absence of this
-    # optional field is historical absence, never permission to upgrade it.
-    metadata, metadata_failures = effective_metadata(bundle, occurrences,
-        include_map_context="map_reconstruction_context" in stable["effective_metadata"])
+    metadata, metadata_failures = effective_metadata(bundle, occurrences)
     if (native_infernal_digest(occurrences) != native_infernal_digest(prepared["occurrences"])
             or native_infernal_digest(stable["effective_metadata"]) != native_infernal_digest(metadata)
             or native_infernal_digest(stable["grading_context"]) != native_infernal_digest(grading_context(bundle, occurrences, metadata))
@@ -226,23 +213,14 @@ def _begin(directory, name, intent, receipt, *, failure_receipt=None):
 
 def _worker_program(driver):
     modules = {row["module"] for row in driver["implementation_files"]}
-    selected = modules & {_HISTORICAL_WORKER_MODULE, _WORKER_MODULE}
-    if len(selected) != 1:
+    if _WORKER_MODULE not in modules:
         _error("result_worker_original_source_identity_conflict")
-    if _WORKER_MODULE not in selected:
-        return _HISTORICAL_WORKER_PROGRAM
-    return (_LEGACY_ROOT_WORKER_PROGRAM if _HISTORICAL_VERIFY_MODULE in modules else _WORKER_PROGRAM)
+    return _WORKER_PROGRAM
 
 
 def _runtime_files(driver):
     from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_contracts import validate_driver_runtime
-    rows = driver.get("implementation_files") if type(driver) is dict else None
-    current = (type(rows) is list
-        and any(type(row) is dict and row.get("module") == _VERIFY_MODULE for row in rows)
-        and not any(type(row) is dict and row.get("module") in
-            (_HISTORICAL_VERIFY_MODULE, _HISTORICAL_WORKER_MODULE) for row in rows))
-    driver = validate_driver_runtime(driver, required_modules=(
-        _VERIFY_MODULE if current else _HISTORICAL_VERIFY_MODULE,))
+    driver = validate_driver_runtime(driver, required_modules=(_VERIFY_MODULE,))
     _worker_program(driver)
     sources = [{"path": str(Path(driver["module_root"]) / (row["module"].replace(".", "/") + ".py")),
                 "sha256": row["sha256"]} for row in driver["implementation_files"]]
@@ -321,8 +299,6 @@ def _worker_environment(directory, driver, python_home):
     return {"PYTHONPATH": os.pathsep.join([driver["module_root"], *_dependency_roots(driver)]),
         "PYTHONDONTWRITEBYTECODE": "1", "PYTHONNOUSERSITE": "1", "PYTHONSAFEPATH": "1",
         "PYTHONHOME": python_home,
-        **({"OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1"}
-           if _worker_program(driver) == _HISTORICAL_WORKER_PROGRAM else {}),
         **{key: str(directory / "tmp") for key in ("TMPDIR", "TMP", "TEMP")},
         "XDG_CACHE_HOME": str(directory / "cache")}
 
@@ -390,8 +366,6 @@ def _prepare_worker(directory, plan, policy):
         _error("result_worker_original_selection_missing")
     runtime = _worker_runtime(directory, policy)
     driver = runtime["driver_runtime"]
-    if _worker_program(driver) == _HISTORICAL_WORKER_PROGRAM:
-        _error("result_worker_original_runtime_requires_saved_selection")
     for name in ("tmp", "cache"):
         (directory / name).mkdir(exist_ok=True)
     selected = {"version": _WORKER_SELECTION, "task": plan["task"],
@@ -418,10 +392,6 @@ def _prepare_worker(directory, plan, policy):
 
 def _collect_worker(directory, plan, policy):
     selected, handle = _prepare_worker(directory, plan, policy)
-    if _worker_program(selected["driver_runtime"]) == _HISTORICAL_WORKER_PROGRAM:
-        historical_view = native.status(handle)
-        if not historical_view["terminal"]:
-            _error("result_worker_historical_execution_configuration_unavailable")
     try:
         view = native.status(handle)
         if not view["terminal"]:
@@ -543,7 +513,7 @@ def prepare_native_hmmer_preparation_grading(store, *, target, capture, capture_
     original_plan = _read_record(capture_directory, "capture-plan.json")
     bundle = validate_original_bundle(bundle, original_plan)
     occurrences, problems = qualified_occurrences(bundle, capture["bundle_artifact_ref"], capture)
-    metadata, metadata_failures = effective_metadata(bundle, occurrences, include_map_context=True)
+    metadata, metadata_failures = effective_metadata(bundle, occurrences)
     failures = unique_failures([*problems, *metadata_failures])
     files = [{"occurrence_id": r["occurrence_id"], "path": str(_artifact_path(store, r["artifact_ref"]))}
              for r in eligible_occurrences(occurrences)]

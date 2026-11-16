@@ -7,47 +7,15 @@ from .domain import ContractError, canonical, obj
 from .literature_structure_storage import structure_cells_schema
 
 
-PATH_STATES = ('not_assessed', 'evidence_returned', 'partial', 'unavailable', 'inapplicable')
-LIMITATIONS = ('predicted_model', 'construct_difference', 'missing_coordinates',
-    'ambiguous_mapping', 'partial_match', 'fragment_input', 'unknown_full_length',
-    'subunit_scope', 'no_model', 'no_informative_match', 'missing_local_validation',
-    'validation_revision_mismatch', 'unsupported_validation_method',
-    'assignment_uncertainty', 'coordinate_uncertainty', 'target_transfer_unresolved',
-    'experiment_identity_unresolved', 'shared_measurements', 'conflicting_evidence',
-    'unresolved_assessment_revisions', 'functional_features_unassessed',
-    'alternatives_unassessed')
-
-
-def legacy_report_schema():
-    """Original closed contract for immutable historical model summaries."""
+def report_schema():
     refs = {'type': 'array', 'items': {'type': 'string', 'format': 'reference'}, 'uniqueItems': True}
-    status = {'type': 'string', 'enum': list(PATH_STATES),
-        'description': 'Applicability to the requested question. Retained partial or unavailable '
-            'components keep their own numerical status even when the requested conclusion is unavailable.'}
-    schema = obj({'comparative_status': deepcopy(status),
-        'experimental_status': deepcopy(status),
-        'scope_status': {'type': 'string', 'enum': ['not_assessed', 'unresolved', 'partial', 'represented']},
-        'limitations': {'type': 'array', 'uniqueItems': True,
-            'items': {'type': 'string', 'enum': list(LIMITATIONS)}},
-        'information_need_refs': deepcopy(refs),
-        'correspondence_refs': {**deepcopy(refs),
-            'description': 'Received subject/model correspondence evidence for the parent to assess. '
-                'Listing a reference alone does not qualify target transfer.'},
-        'records': {**deepcopy(refs), 'x-source': 'committed_record_refs',
+    schema = obj({'records': {**deepcopy(refs), 'x-source': 'committed_record_refs',
             'description': 'Actual committed records, including native structural grading grants. '
                 'The parent resolves comparative quantities from these grants.'},
         'experimental_cells': structure_cells_schema(),
         'controller_progress': {'type': 'number', 'x-source': 'credit',
             'description': 'Host-owned progress in the commissioned task units. '
                 'Not a combined A102 scientific score or an experimental measurement.'}})
-    validate_closed_schema(schema)
-    return schema
-
-
-def report_schema():
-    original = legacy_report_schema()['properties']
-    schema = obj({name: deepcopy(original[name]) for name in
-        ('records', 'experimental_cells', 'controller_progress')})
     validate_closed_schema(schema)
     return schema
 
@@ -59,13 +27,10 @@ def initial_report():
 def is_structural_report_schema(schema):
     """Recognize the merged return fields, including caller restrictions."""
     properties = plain(schema).get('properties', {})
-    for candidate in (report_schema(), legacy_report_schema()):
-        expected = candidate['properties']
-        if (set(properties) == set(expected)
-                and all(properties[name].get('x-source') == node.get('x-source')
-                    for name, node in expected.items())):
-            return True
-    return False
+    expected = report_schema()['properties']
+    return (set(properties) == set(expected)
+        and all(properties[name].get('x-source') == node.get('x-source')
+            for name, node in expected.items()))
 
 
 def resolve_report(store, report, *, context, structure_repository):
@@ -88,8 +53,7 @@ def resolve_report(store, report, *, context, structure_repository):
         return (reference in known and bool(store.reference_subset([reference], scope))
             and (namespace is None or store.get(reference)['record_type'] == namespace))
 
-    legacy = 'comparative_status' in report
-    validate_form(report, legacy_report_schema() if legacy else report_schema(), permitted)
+    validate_form(report, report_schema(), permitted)
     if not set(report['records']) <= known:
         raise ContractError('a102_report_records_not_received')
     experimental = experimental_evidence(structure_repository, context, report['experimental_cells'])
@@ -99,14 +63,8 @@ def resolve_report(store, report, *, context, structure_repository):
     projection = A102StructuralCredit().read_details(store, scope,
         known_record_refs=report['records'], details_limit=len(report['records']), details_offset=0)
     functional = projection['functional_sheets']
-    has_comparative = bool(native or projection['tool_attachments']
-        or any(functional[name] for name in ('features', 'contrasts', 'traits', 'interfaces')))
-    for path, present in (('comparative', has_comparative),
-                          ('experimental', bool(experimental['records']))):
-        if legacy and report[f'{path}_status'] in {'evidence_returned', 'partial'} and not present:
-            raise ContractError(f'a102_{path}_status_differs_from_delivered_evidence')
     # A measured zero must survive. Absence of comparative measurements remains
-    # None, even though the legacy controller starts at zero progress.
+    # None, even though the controller starts at zero progress.
     has_correspondence = (any(row['grade']['eligible'] for row in native)
         or any(region['attributed_comparisons']
             for sheet in projection['target_sheets'].values() for region in sheet['regions']))
@@ -132,7 +90,7 @@ def received_reports(store, *, context, structure_repository, axis_reference):
     The runtime's authenticated return reader proves the original child, form,
     contract and frozen facts. Neither a shared Source inventory nor a private
     child sheet can stand in for an admitted return. Repeated delivery retains
-    one numerical identity per original sheet/component, including legacy A111.
+    one numerical identity per original sheet/component.
     """
     from .episode_return_records import EpisodeReturnRecords
     from .a102_experimental_evidence import experimental_evidence, dependency_links

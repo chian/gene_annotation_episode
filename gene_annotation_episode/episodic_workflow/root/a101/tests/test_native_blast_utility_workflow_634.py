@@ -31,6 +31,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_libr
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.episode import ScientificProcessEpisode
 from gene_annotation_episode.state import Store
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_blast_utility_contracts_625 import operation
 from test_blast_utility_result_views_629 import selector as result_selector
@@ -333,7 +334,7 @@ def test_actual_episode_grants_and_terminal_observations_match_selected_work(nat
     for plan in case.provider.plans:
         metadata = native.NativeJobHandle(Path(plan['identity']['execution_id'])).read()['metadata']
         assert metadata['policy'] == POLICY
-        assert metadata['verified_cgroup']['memory_max'] == 20 * 1024**3
+        assert metadata['verified_cgroup']['memory_max'] == ENVIRONMENT_BOUNDS['memory_bytes']
         assert metadata['verified_cgroup']['memory_swap_max'] == 0
         assert 'runtime_max' not in metadata['verified_cgroup']
 

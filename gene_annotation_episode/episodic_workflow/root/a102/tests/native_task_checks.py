@@ -12,7 +12,6 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 import asyncio
-import hashlib
 import json
 import pytest
 PACKAGE='gene_annotation_episode.episodic_workflow.root.a102'
@@ -129,22 +128,6 @@ def observe(home,directory):
    'catalog':f.binding.catalog(f.context),'actions':action_rows,'transport':transport,
    'terminal_estimator':f.binding._delegate(f.context).practical_estimator(f.context).as_record(),
    'execution_keys':f.execution_keys,'received':f.received,'projections':f.projections}
-def run_probe(output):
- from gene_annotation_episode.workflow_budget import active_budget
- output=Path(output).resolve();assert output.is_relative_to(Path(active_budget()['run_directory']).resolve())
- output.mkdir(parents=True,exist_ok=True);axis=Path(module('runtime').__file__).parent;repository=axis.parents[3]
- report={'version':'a102_native_task_actual_probe_v2','owners':{},'diagnostic_completed':False,
-  'fixture_tool_boundary':{'kind':'explicit_inactive_tool_port','production_constructor_exercised':False},
-  'helper_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-  'source_hashes':{str(p.relative_to(repository)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(axis.rglob('*.py')) if 'tests' not in p.relative_to(axis).parts},
-  'scope':'Controlled terminal outcome through actual twelve binding/task/PracticalState/Journal owners; no live native execution.'}
- destination=output/'native-task-probe.json'
- for home in HOMES:
-  try:report['owners'][home]=observe(home,output/'owners'/home)
-  except Exception as error:report['owners'][home]={'diagnostic_error':{'type':type(error).__module__+'.'+type(error).__qualname__,'message':str(error)}}
-  destination.write_text(json.dumps(report,indent=2)+'\n')
- report['diagnostic_completed']=True;destination.write_text(json.dumps(report,indent=2)+'\n');return report
-
 class NativeTaskBehavior:
     @pytest.fixture
     def actual_task(self,tmp_path):

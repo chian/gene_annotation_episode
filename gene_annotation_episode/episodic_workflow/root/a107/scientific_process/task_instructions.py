@@ -1,4 +1,4 @@
-"""Original A107 default instruction composition."""
+"""A107 default instruction composition."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a107.library.scientific_instruction_text import DECISION_EXCHANGE_PROTOCOL, INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT
 

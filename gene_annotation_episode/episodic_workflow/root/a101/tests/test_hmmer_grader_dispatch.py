@@ -10,7 +10,6 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_graders import grade_hmmer_native_artifacts
 
 
-ROOT = Path(__file__).resolve().parents[5] / "verification"
 SEARCH = Path(__file__).resolve().parent / "fixtures/hmmer_search"
 NHMMER = Path(__file__).resolve().parents[5] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/nhmmer"
 CASES = [

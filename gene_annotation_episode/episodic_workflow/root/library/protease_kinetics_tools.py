@@ -283,7 +283,7 @@ def _request(invocation, arguments, input, selected, worker):
     return value
 
 
-def _command(request, directory, python, *, worker_module="gene_annotation_episode.molecular_sequence_driver"):
+def _command(request, directory, python, *, worker_module):
     raw = json.dumps(_copy(request), allow_nan=False).encode("utf-8")
     return [python, "-B", "-m", worker_module, "--request-file",
         str(directory / "worker-request.json"), "--request-sha256", hashlib.sha256(raw).hexdigest(),

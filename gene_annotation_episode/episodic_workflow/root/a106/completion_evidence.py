@@ -318,7 +318,7 @@ class CompletionEvidence:
                 delivered = self._delivery(episode_id, original_decision_index, channel, tables)
                 if delivered is None:
                     # The original admitted form itself records requested C8
-                    # references, including legacy runs without this ledger.
+                    # references.
                     # Its declaration is delivery information, not novelty.
                     if channel == "typed_form" and sample is not None:
                         progress.extend(sample["received_progress_refs"])

@@ -31,7 +31,7 @@ def _source_grading(store, source, bundle):
             continue
         envelope = _read_json(store, reference)
         grading = envelope.get('grading', {})
-        if grading.get('schema') not in {'native_blast_retained_grading_v1', 'native_blast_retained_grading_v2'}:
+        if grading.get('schema') != 'native_blast_retained_grading_v2':
             continue
         _require(set(envelope) == {'schema', 'provider', 'native_artifact_ref', 'grading'} and envelope['schema'] == SCHEMA and (envelope['provider'] == source['provider']) and (envelope['native_artifact_ref'] == source['artifact_ref']), 'grading_source_conflict')
         _require(set(grading) == _STABLE_FIELDS and grading['bundle_sha256'] == native_blast_digest(bundle), 'source_grading_conflict')
@@ -52,13 +52,10 @@ def _selected_native(store, bundle, grading, sheet, scores, row, marker):
     hit, mapping = _one(((hit, mapping) for hit, mapping in zip(normalized['hits'], search['row_map']) if mapping['hit_index'] == marker['hit_ordinal']), 'original_hit_conflict')
     index, native = _one(((index, hsp) for index, (hsp, ordinal) in enumerate(zip(hit['hsps'], mapping['hsp_ordinals'])) if ordinal == marker['hsp_ordinal']), 'original_hsp_conflict')
     component = saved_scores['scores']['components']['hsps'][index]
-    if grading['schema'] == 'native_blast_retained_grading_v2':
-        search_index = scores['searches'].index(saved_scores)
-        pointer = '/searches/' + str(search_index) + '/scores/components'
-        instance = _one((item for item in scores['correspondence']['instances'] if item['legacy_pointer'] == pointer and item['axis_basis'] == 'qualified'), 'common_components_required')
-        expected_values = _hsp_values(component['components'], instance['components']['rows'][index])
-    else:
-        expected_values = _hsp_values(component['components'], archived_values=row['values'])
+    search_index = scores['searches'].index(saved_scores)
+    pointer = '/searches/' + str(search_index) + '/scores/components'
+    instance = _one((item for item in scores['correspondence']['instances'] if item['legacy_pointer'] == pointer and item['axis_basis'] == 'qualified'), 'common_components_required')
+    expected_values = _hsp_values(component['components'], instance['components']['rows'][index])
     _require(component['hsp_index'] == index and _equal(component['native'], native) and _equal(row['values'], expected_values), 'frozen_measurement_conflict')
     artifact_key = marker['search_key']['artifact_key']
     artifact = _one((item for item in grading['captured_artifacts'] if item['kind'] == 'output' and item['relative_path'] == artifact_key and (item['role'] in {'primary_report', 'tabular_report'})), 'captured_report_required')

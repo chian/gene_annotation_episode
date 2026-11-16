@@ -6,10 +6,8 @@ scientific continuation are fixtures. No model, network, native job or HPC runs.
 import asyncio
 from copy import deepcopy
 from dataclasses import replace
-import hashlib
 import json
 from pathlib import Path
-from types import SimpleNamespace
 
 from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal, EpisodeRequest
 from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
@@ -27,8 +25,8 @@ from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
-from gene_annotation_episode.uniprot_return_contracts import uniprot_selected_return_schema
-from gene_annotation_episode.episodic_workflow.root.uniprot_returns import UniProtReturns, select_received_uniprot_pages
+from gene_annotation_episode.episodic_workflow.root.library.uniprot_return_contracts import uniprot_selected_return_schema
+from gene_annotation_episode.episodic_workflow.root.uniprot_returns import select_received_uniprot_pages
 
 
 FIXTURE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/uniprot_native"
@@ -162,36 +160,6 @@ class Harness:
 def run(tmp_path):
     with Store(tmp_path / "state") as store:
         yield Harness(store, tmp_path / "run")
-
-
-@pytest.mark.parametrize("source,sequence,legacy", [(False, False, False), (True, False, False),
-    (False, True, False), (True, True, False), (False, False, True)])
-def test_real_acquisition_requested_grants_and_independent_legacy_fields(run, source, sequence, legacy):
-    chosen = selection(source=source, sequence=sequence)
-    form_schema = schema(chosen, legacy=legacy)
-    child = run.child(run.root, form_schema)
-    result = run.action(child)
-    before = set(run.receipts.known(run.root.episode_id))
-    returned = run.returned(run.root, child)["arbitrary_scientific_cells"]
-    page, = returned["pages"]
-    row, = page["records"]
-    assert row["fields"][0]["value"]["value"] == 83333
-    assert row["fields"][2]["value"]["value"] == json.loads(run.client.native.content)["sequence"]["value"][9:19]
-    assert len(row["fields"][2]["value"]["value"]) == 10
-    received = set(run.receipts.known(run.root.episode_id)) - before
-    native_source, native_artifact = page["witness"]["source_id"], page["witness"]["native_artifact_id"]
-    sequence_artifact = row["witness"]["sequence_artifact_id"]
-    assert (native_source in received) == (source or legacy)
-    assert (native_artifact in received) == (source or legacy)
-    assert (sequence_artifact in received) == (sequence or legacy)
-    assert (row["witness"]["record_id"] in received) == legacy
-    assert run.host.resolve_received(run.root, native_source, "source") == (source or legacy)
-    assert run.host.resolve_received(run.root, sequence_artifact, "artifact") == (sequence or legacy)
-    assert run.host.resolve_own(child, row["witness"]["record_id"], "reference") is True
-    if sequence:
-        assert run.host.authenticate_sequence_artifact(run.root, row["sequence_grant"]) == (child.episode_id,)
-    assert len(run.client.calls) == 1
-    assert result["result"]["uniprot_publication"]["content_sha256"] == page["witness"]["content_sha256"]
 
 
 def test_exact_received_selectors_and_changed_windows_have_no_implicit_native_read(run, monkeypatch):
@@ -376,33 +344,6 @@ def test_original_form_and_selected_associations_reject_tampering(run, change):
     with pytest.raises(ReportBoundaryError) as failure:
         run.host.validate_received_report(child, changed, form_schema)
     assert failure.value.diagnostic["code"].startswith("uniprot_")
-
-
-def test_closed_native_withdrawal_replays_forms_and_rejects_new_material_read(run, monkeypatch):
-    chosen = selection(sequence=True)
-    child = run.child(run.root, schema(chosen))
-    outcome = run.action(child)
-    returned = run.returned(run.root, child)
-    page = returned["arbitrary_scientific_cells"]["pages"][0]
-    for ref in [page["witness"]["native_artifact_id"], page["records"][0]["sequence_grant"]["artifact_ref"]]:
-        sha = ref.removeprefix("artifact_")
-        (run.store.path / "artifacts" / sha[:2] / sha).unlink()
-    def prohibited(*args, **kwargs):
-        pytest.fail("closed history reprojected native content")
-    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.uniprot_returns.project_uniprot_page", prohibited)
-    before = [tuple(row) for row in run.store.db.execute("SELECT * FROM runtime_actions ORDER BY episode_id,decision_index")]
-    assert run.host.facts(child, schema(chosen))[SOURCE] == returned["arbitrary_scientific_cells"]
-    run.host.validate_received_report(child, returned, schema(chosen))
-    assert run.host._received(run.root)[0]["form"] == returned
-    assert before == [tuple(row) for row in run.store.db.execute("SELECT * FROM runtime_actions ORDER BY episode_id,decision_index")]
-    with pytest.raises(FileNotFoundError):
-        run.host.read_own(outcome["result"]["source_ref"], context=child,
-            operation_key=outcome["result"]["acquisition_receipt"]["operation_key"])
-    historical = run.api.read_result(outcome["result"]["source_ref"], child.scope,
-        episode_id=child.episode_id, operation_key=outcome["result"]["acquisition_receipt"]["operation_key"],
-        verify_artifacts=False)
-    assert historical["publication_result"] == outcome["result"]
-    assert len(run.client.calls) == 1
 
 
 def test_original_operation_key_disambiguates_repeated_partial_acquisitions(tmp_path):

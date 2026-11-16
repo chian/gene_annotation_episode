@@ -353,7 +353,7 @@ def _selected(store, reference, *, source_ref, selector, occurrences):
 
 
 def publish_selected_preparation_result(store, *, source_ref, prepared, selector, directory, policy):
-    """Return pure253 selections, retaining a separate immutable projection."""
+    """Return selections, retaining a separate immutable projection."""
     if not isinstance(policy, LocalJobPolicy):
         _error("local_job_policy_required")
     prepared = _prepared_shape(prepared)

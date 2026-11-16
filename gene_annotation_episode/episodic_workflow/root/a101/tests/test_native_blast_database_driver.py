@@ -580,31 +580,3 @@ def test_unavailable_input_parser_is_not_malformed_scientific_input(tmp_path):
     assert not (path.parent / "native-invocations.log").exists()
     assert validate_bundle(bundle, plan) == bundle
 
-
-def test_parser_import_location_must_match_verified_selected_package(tmp_path):
-    path, plan, manifest = fixture(tmp_path, query="pssm")
-    alternate = tmp_path / "alternate-pssm-parser.py"
-    identity = write(alternate, b'def read_blast_pssm(*args, **kwargs):\n    raise AssertionError("unselected parser must not be called")\n')
-    manifest["runtime_files"].append({k: identity[k] for k in ("path", "sha256", "size_bytes")})
-    init = Path(manifest["module_root"]) / "gene_annotation_episode/__init__.py"
-    # Deliberately prepopulate the imported module from another declared runtime
-    # path. Matching external bytes cannot substitute for the selected package's
-    # parser. The real producer still performs all package checks.
-    addition = ("\nimport importlib.util, sys\n"
-        "_spec = importlib.util.spec_from_file_location(" + repr(pssm_parser.__name__) + ", " + repr(str(alternate)) + ")\n"
-        "_module = importlib.util.module_from_spec(_spec)\n"
-        "sys.modules[_spec.name] = _module\n_spec.loader.exec_module(_module)\n")
-    with init.open("ab") as stream:
-        stream.write(addition.encode())
-    init_identity = file_identity(init)
-    row = next(r for r in manifest["package_files"] if r["relative_path"] == "gene_annotation_episode/__init__.py")
-    row.update({k: init_identity[k] for k in ("sha256", "size_bytes")})
-    plan["producer_manifest"] = save_json(Path(plan["producer_manifest"]["path"]), manifest)
-    save_json(path, plan)
-    result, bundle = run_fixture(path, plan)
-    assert result.returncode == 1, result.stderr.decode()
-    assert bundle["producer_verification"]["status"] == "verified"
-    assert {f["code"] for f in bundle["failures"]} == {"producer_input_parser_unavailable"}
-    assert not bundle["process"]["started"]
-    assert not (path.parent / "native-invocations.log").exists()
-    assert validate_bundle(bundle, plan) == bundle

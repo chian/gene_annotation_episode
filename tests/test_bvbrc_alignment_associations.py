@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_asso
 )
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_alignment_provider_contracts as c
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_input_formats import parse_metacats_input_fasta
-from gene_annotation_episode.phylogeny_formats import parse_newick
+from gene_annotation_episode.episodic_workflow.root.library.phylogeny_formats import parse_newick
 
 
 def artifact(data, name):

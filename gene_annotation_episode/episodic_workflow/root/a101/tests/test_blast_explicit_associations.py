@@ -11,9 +11,6 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_grader import build_database_sheet, calculate_database_probabilities
 
 
-EVIDENCE = Path(__file__).resolve().parent / "fixtures/blast_explicit_associations"
-
-
 def synthetic_inputs():
     """Noncompact original indices and real-shaped source IDs are deliberate."""
     report = {"artifact_ref": "synthetic-native-json", "report_index": 7,
@@ -65,16 +62,6 @@ def sequence_binding(hit_index, *, sequence="ACDEFGHIKL", molecule="aa", length=
 
 def codes(sheet):
     return {row["code"] for row in sheet["issues"]}
-
-
-@pytest.mark.parametrize("case", json.loads((EVIDENCE / "legacy_prechange.json").read_text())["cases"],
-                         ids=lambda case: case["name"])
-def test_exact_prechange_legacy_sheets_and_calculations(case):
-    for extra in ({}, {"description_bindings": None, "sequence_identity_bindings": None}):
-        sheet = build_database_sheet(**case["arguments"], **extra)
-        assert sheet == case["sheet"]
-        assert calculate_database_probabilities(sheet) == case["calculations"][0]
-        assert calculate_database_probabilities(sheet, model={"temperature_bits": 2}) == case["calculations"][1]
 
 
 def test_explicit_original_ordinals_join_actual_ids_preserve_provenance_and_numbers():
@@ -375,16 +362,6 @@ def test_nonobject_independent_binding_row_remains_a_local_diagnostic(field):
     assert sheet["coverage"]["matched_metadata_row_count"] == 2
     assert sheet[field][-1] is None
     assert any(issue["code"].endswith("binding_fields_invalid") for issue in sheet["issues"])
-
-
-def test_explicit_path_never_calls_legacy_matching_or_grouping(monkeypatch):
-    def forbidden(*args, **kwargs):
-        raise AssertionError("An explicit path must not fall back to legacy accession/label joins")
-
-    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_grader._attach_metadata', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_grader._sequence_groups', forbidden)
-    sheet = build_database_sheet(**synthetic_inputs())
-    assert sheet["coverage"]["matched_metadata_row_count"] == 2
 
 
 def test_invalid_independent_metadata_fields_preserve_available_function_and_native_scores():

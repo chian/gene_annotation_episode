@@ -84,8 +84,7 @@ class APIServiceAssignments:
             return self.store.get(context.assignment['handoff_ref']).get('provider') == LEGACY_PROVIDER
         return plain(context.assignment).get('version') == 'api_execution_assignment_v1'
 
-    def _context(self, context, *, verify_artifacts=True, _enrichr_history=None,
-                 _completed_appservice_download=False):
+    def _context(self, context, *, verify_artifacts=True, _enrichr_history=None):
         if context.run_id != self.run_id:
             raise ValueError('api_execution_run_conflict')
         if context.role == 'launch_api':
@@ -99,8 +98,7 @@ class APIServiceAssignments:
         if set(raw) != {'version', 'handoff_ref', 'selector'} or raw['version'] != 'execution_results_assignment_v1':
             raise ValueError('invalid_api_results_assignment')
         target = self.read_target(raw['handoff_ref'], context.scope,
-            verify_artifacts=verify_artifacts, _enrichr_history=_enrichr_history,
-            **({'_completed_appservice_download': True} if _completed_appservice_download else {}))
+            verify_artifacts=verify_artifacts, _enrichr_history=_enrichr_history)
         self.validate_result_selector(target, raw['selector'])
         return target['assignment'], self.services[target['resource_id']], target
 

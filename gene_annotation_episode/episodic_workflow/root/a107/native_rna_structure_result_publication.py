@@ -5,6 +5,7 @@ in the pure calculators. No Store observation, annotation score or retry is made
 """
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import hashlib
 import json
@@ -44,7 +45,7 @@ SELECTED_FIELDS = {"schema", "stable", "selector", "parameters", "components_art
 
 
 def _policy(policy):
-    require(isinstance(policy, LocalJobPolicy) and policy.to_dict() == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}, "rna_invalid_input_schema")
+    require(isinstance(policy, LocalJobPolicy) and policy.to_dict() == {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}, "rna_invalid_input_schema")
 
 
 def _artifact_json(store, reference):

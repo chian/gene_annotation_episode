@@ -14,7 +14,7 @@ import re
 from gene_annotation_episode.episodic_workflow.root.a104.communication import ReportBoundaryError, interpretation_schema, plain, validate_closed_schema, validate_form
 from gene_annotation_episode.episodic_workflow.root.a104.domain import ContractError, identity, obj, validate_schema
 from gene_annotation_episode.episodic_workflow.root.a104.episode_bindings import reference_in_context
-from gene_annotation_episode.episodic_workflow.root.a104.scientific_process_records import scientific_digest, scientific_invocation_ref, validate_child_selection, validate_filled_process, validate_option_ref, validate_revision_origin, validate_selection, selection_fields, selector_selection, SELECTION_VERSION, LEGACY_SELECTION_VERSION
+from gene_annotation_episode.episodic_workflow.root.a104.scientific_process_records import scientific_digest, scientific_invocation_ref, validate_child_selection, validate_filled_process, validate_option_ref, validate_revision_origin, validate_selection, selection_fields, selector_selection, SELECTION_VERSION
 from gene_annotation_episode.episodic_workflow.root.a104.scientific_process_reports import build_process_result, merge_process_results, report_sources, validate_process_result
 from gene_annotation_episode.episodic_workflow.root.a104.scientific_support_metadata import SUPPORT_ENTRY_VERSION, support_observation_kinds, validate_support_entry
 from gene_annotation_episode.episodic_workflow.root.a104.evidence_axis_contracts import VERSION as EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry
@@ -48,8 +48,6 @@ _ANNOTATION_REF['properties']['option_id'] = {'const': AXIS}
 _EVIDENCE_AXIS = deepcopy(_ANNOTATION_REF)
 _EVIDENCE_AXIS['properties']['slot'] = {'enum': ['evidence_axis', 'annotation_distinction']}
 _THOUGHT_REF = _ref_schema('thought_pattern', 'P')
-_TOOLS = {'type': 'array', 'items': {'type': 'string', 'minLength': 1}, 'uniqueItems': True}
-_LEGACY_SELECTION = obj({'version': {'const': LEGACY_SELECTION_VERSION}, 'annotation_ref': _ANNOTATION_REF, 'thought_ref': _THOUGHT_REF, 'tools': _TOOLS})
 _TOOL_SELECTOR = obj({'name': {'type': 'string', 'minLength': 1}, 'resources': {'enum': ['api', 'local', 'hpc']}})
 _TOOL_INFO = obj({**_TOOL_SELECTOR['properties'], 'description': {'type': 'string', 'minLength': 1}, 'instructions': {'type': 'string', 'minLength': 1}})
 _SELECTION = obj({'version': {'const': SELECTION_VERSION}, 'evidence_axis': _EVIDENCE_AXIS, 'thought_pattern': _THOUGHT_REF, 'child_tool_info': {'type': 'array', 'items': _TOOL_SELECTOR, 'uniqueItems': True}})
@@ -59,6 +57,5 @@ _REVISION_ORIGIN = obj({'version': {'const': 'scientific_process_revision_origin
 _EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task_v1'}, 'kind': {'const': 'whole_axis_findings'}, 'evidence_axis': {'const': AXIS}, 'credit_unit': {'type': 'number', 'exclusiveMinimum': 0, 'description': 'Use the finding unit in the explicitly configured credit definition for this exact task; do not select or change its cutoff.'}})
 _ASSIGNMENT = obj({'selection': _SELECTION, 'proposed_annotation_ref': {**_REFERENCE, 'description': 'The proposed annotation this task evaluates.'}, 'evidence_refs': {'type': 'array', 'items': _REFERENCE, 'uniqueItems': True}, 'constraints': {'type': 'object'}, 'context': {'type': 'object', 'properties': {'evidence_task': _EVIDENCE_TASK}}, 'revision_origin': _REVISION_ORIGIN}, required=['selection', 'evidence_refs', 'constraints', 'context'])
 _RECORDED_ASSIGNMENT = deepcopy(_ASSIGNMENT)
-_RECORDED_ASSIGNMENT['properties']['selection'] = {'anyOf': [_CANONICAL_SELECTION, _LEGACY_SELECTION]}
+_RECORDED_ASSIGNMENT['properties']['selection'] = _CANONICAL_SELECTION
 _REVISION_ARGUMENTS = obj({'thought_pattern': _THOUGHT_REF, 'child_tool_info': {'type': 'array', 'items': _TOOL_SELECTOR, 'uniqueItems': True}})
-_LEGACY_REVISION_ARGUMENTS = obj({'thought_ref': _THOUGHT_REF, 'tools': _TOOLS})

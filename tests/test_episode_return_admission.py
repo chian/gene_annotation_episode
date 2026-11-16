@@ -5,7 +5,6 @@ claim that an engineered decision container is an executed scientific return.
 """
 from contextlib import contextmanager
 from copy import deepcopy
-import json
 from pathlib import Path
 import sqlite3
 import subprocess
@@ -85,19 +84,6 @@ def _read(value, context, cutoff):
     return value.records.source_admission_before(context, value.source_ref, cutoff)
 
 
-@pytest.mark.parametrize('inherited', [False, True])
-def test_initial_or_frozen_inherited_source_needs_no_own_return_witness(owner, monkeypatch, inherited):
-    owner.receipts.receive(owner.parent.episode_id, [owner.source_ref], kind='initial')
-    context = owner.child(1) if inherited else owner.parent
-    with _metadata_only(owner, monkeypatch):
-        result = _read(owner, context, 0)
-        legacy = owner.protein._source_at(context, owner.source_ref, 0)
-    assert result == legacy == dict(source_ref=owner.source_ref,
-        source_sha256=digest(owner.store.get(owner.source_ref)),
-        receipt_manifest_sha256=digest(owner.receipts.manifest(context.episode_id)),
-        receipt=None, baseline=True, decision_witnesses=[])
-
-
 def test_old_child_prefix_cannot_gain_a_later_parent_source(owner, monkeypatch):
     old = owner.context
     _receive(owner)
@@ -140,27 +126,6 @@ def test_only_original_own_decision_child_reports_can_witness_a_return(owner, mo
         assert owner.records.decision_witnesses(owner.parent, owner.source_ref, 4) == []
         with pytest.raises(ValueError, match='^return_admission_result_not_received$'):
             _read(owner, owner.parent, 4)
-
-
-@pytest.mark.parametrize('kind', ['child_form', 'report_redelivery'])
-def test_received_return_has_exact_original_decision_and_receipt_identity(owner, monkeypatch, kind):
-    _receive(owner, kind)
-    report = dict(form=dict(source_ref=owner.source_ref, values=[1, 1.0, True]))
-    request = _call(owner, 4, [report])
-    receipt = dict(owner.store.db.execute('SELECT receipt_index,receipt_kind,source_index '
-        'FROM runtime_record_receipts WHERE run_id=? AND episode_id=? AND record_ref=?',
-        (owner.parent.run_id, owner.parent.episode_id, owner.source_ref)).fetchone())
-    with _metadata_only(owner, monkeypatch):
-        result = _read(owner, owner.parent, 4)
-        legacy = owner.protein._source_at(owner.parent, owner.source_ref, 4)
-        witnesses = owner.records.decision_witnesses(owner.parent, report, 4)
-        assert owner.protein._decision_witnesses(owner.parent, report, 4) == witnesses
-    assert result == legacy == dict(source_ref=owner.source_ref,
-        source_sha256=digest(owner.store.get(owner.source_ref)),
-        receipt_manifest_sha256=digest(owner.receipts.manifest(owner.parent.episode_id)),
-        receipt=receipt, baseline=False,
-        decision_witnesses=[dict(call_index=4, request_sha256=digest(request))])
-    assert witnesses == [dict(call_index=4, request_sha256=digest(request))]
 
 
 @pytest.mark.parametrize('different', [True, 1.0, '1'])
@@ -324,15 +289,6 @@ def test_initial_and_inherited_file_admission_remain_available_without_form_witn
     with _metadata_only(owner, monkeypatch):
         result = owner.records.file_admission_before(context, owner.artifact_ref, 'artifact', owner.artifact_ref, 0)
     assert result['baseline'] is True and result['delivery'] is result['file_receipt'] is None
-
-
-@pytest.mark.parametrize('redelivery', [False, True])
-def test_legacy_simple_reference_form_reuses_existing_semantic_projection(owner, monkeypatch, redelivery):
-    returned = _returned_file(owner, [owner.source_ref], recorded=False, redelivery=redelivery)
-    with _metadata_only(owner, monkeypatch):
-        result = _file_read(owner, cutoff=returned['cutoff'])
-    assert result['delivery']['root_ref'] == owner.source_ref
-    assert result['file_receipt']['receipt_kind'] == ('report_redelivery' if redelivery else 'child_form')
 
 
 def test_opaque_form_without_recorded_grant_roots_is_controlled_unavailable(owner, monkeypatch):

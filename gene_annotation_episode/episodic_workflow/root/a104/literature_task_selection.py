@@ -35,8 +35,6 @@ def population_task_metadata_specs():
             versions = (module.VERSION_V3,)
         elif family.source == 'literature_rate_grid_cells':
             versions = (module.GRID_RECORD,)
-        elif family.source == 'literature_kinetic_cells':
-            versions = (module.VERSION, module.LEGACY_VERSION)
         else:
             versions = (getattr(module, 'VERSION', repository.record_version),)
         flag = {'literature_assay_grading_cells': 'assay_grading_population', 'literature_a105_aggregation_cells': 'assay_grading_population', 'literature_compiled_assay_cells': 'compiled_assay_population', 'literature_compiled_assay_v2_cells': 'compiled_assay_population', 'literature_compiled_assay_v3_cells': 'compiled_assay_population', 'literature_ratio_source_cells': 'ratio_source_population', 'literature_controlled_response_component_cells': 'controlled_response_population', 'literature_gel_component_cells': 'gel_population', 'literature_completion_time_cells': 'completion_time_population', 'literature_active_site_cells': 'active_site_population', 'literature_product_partition_cells': 'product_partition_population', 'literature_parent_depletion_cells': 'parent_depletion_population', 'literature_stoichiometric_balance_cells': 'stoichiometric_balance_population', 'literature_channel_cells': 'channel_population', 'literature_ion_discrimination_cells': 'ion_discrimination_population'}.get(family.source, 'rate_population')

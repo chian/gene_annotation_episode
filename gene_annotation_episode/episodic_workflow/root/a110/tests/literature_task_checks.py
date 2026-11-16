@@ -20,7 +20,17 @@ from gene_annotation_episode.episodic_workflow.root.a110.episode_bindings import
 from gene_annotation_episode.episodic_workflow.root.a110.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.a110.state import Store
 
-ROWS = json.loads((Path(__file__).parent / 'fixtures/private_literature/original_source_contracts.json').read_text())
+
+def location_inputs(value):
+    """Tool arguments in the current input form: a source location without a supplied quotation."""
+    if isinstance(value, list):
+        return [location_inputs(item) for item in value]
+    if isinstance(value, dict):
+        located = 'quote' in value and {'start', 'end'} <= set(value)
+        return {key: location_inputs(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 SOURCE = identity('source', {'fixture': 'a110 private original source'})
 OTHER = identity('source', {'fixture': 'a110 distinct source'})
 ARTIFACT = identity('artifact', {'fixture': 'a110 source bytes'})
@@ -59,25 +69,6 @@ def service(db):
 def context(role, value=None):
     return BindingContext('source-fixture', 'source-episode', role, ((role,'controlled'),),
         {'subject_refs': []}, assignment(role) if value is None else value, {}, tuple(RECORDS))
-
-
-def test_own_original_schema_and_reader_parent_admission(binding_type):
-    with sqlite3.connect(':memory:') as db:
-        binding=binding_type(service(db)); role=binding.roles[0]
-        baseline=next(row for row in ROWS if row['binding_path']==binding.binding_path)
-        assert binding.assignment_schema(role)==baseline['assignment_schema']
-        own=assignment(role); parent=context('literature_page',deepcopy(PAGE)) if role in {
-            'literature_table','literature_ordered','literature_targeted'} else context('literature')
-        assert binding.prepare_assignment(parent,role,own,{},'original-assignment')==own
-        if role in {'literature_table','literature_ordered','literature_targeted'}:
-            changed=deepcopy(own); changed['page']['source_ref']=OTHER
-            if role=='literature_targeted': changed['selection']['spans'][0]['source_ref']=OTHER
-            else: changed['selection']['source_ref']=OTHER
-            with pytest.raises(ContractError,match='literature_reading_outside_assigned_source'):
-                binding.prepare_assignment(parent,role,changed,{},'different-source')
-        assert binding.credit_view(context(role),{})=={'credit':-0.5,'qualified':True}
-        assert binding.yield_controller(context(role),0,'original-epoch') is None
-        assert binding.continuation_task(context(role)) is None
 
 
 def test_repaired_metadata_is_read_only_and_preserves_failed_attempt(binding_type):
@@ -210,7 +201,7 @@ def test_original_reaction_population_saved_sheet_exact_cells_and_replay(binding
     components=['ratio_mean','claim_mean_squared_error','reaction_comparison']
     selected['requested_reaction_components']=components
     ctx=BindingContext(workflow.run_id,'reaction-private-child',role,((role,'fixture'),),store.validate_scope(),selected,{},(paper['id'],dataset['id']))
-    outcome=asyncio.run(binding.execute(ctx,'literature.reaction.populate',args,'original-population'))
+    outcome=asyncio.run(binding.execute(ctx,'literature.reaction.populate',location_inputs(args),'original-population'))
     assert outcome['status']=='completed',outcome
     sheet_ref=outcome['result']['sheet_ref']
     current=replace(ctx,received_record_refs=tuple(dict.fromkeys([*ctx.received_record_refs,*outcome['record_refs']])))
@@ -235,7 +226,7 @@ def test_original_reaction_population_saved_sheet_exact_cells_and_replay(binding
     from gene_annotation_episode.episodic_workflow.root.a110.literature_sheet_updates import current_sheet_refs
     assert current_sheet_refs(store,current)==[sheet_ref]
     before_replay=store.db.total_changes
-    replay=asyncio.run(binding.execute(ctx,'literature.reaction.populate',args,'original-population'))
+    replay=asyncio.run(binding.execute(ctx,'literature.reaction.populate',location_inputs(args),'original-population'))
     assert store.db.total_changes==before_replay
     assert replay==outcome
     assert store.db.execute('SELECT count(*) FROM literature_reaction_operations').fetchone()[0]==1
@@ -290,7 +281,7 @@ def test_source_selected_recipe_retains_technical_count_and_publication_identity
     selected['requested_reaction_components']=['ratio_mean','claim_mean_squared_error']
     selected['requested_reaction_native_positions']=[0]
     ctx=BindingContext(workflow.run_id,'selected-reaction-child',role,((role,'fixture'),),store.validate_scope(),selected,{},(paper['id'],))
-    result=asyncio.run(binding.execute(ctx,'literature.reaction.source.populate',args,'source-choice'))
+    result=asyncio.run(binding.execute(ctx,'literature.reaction.source.populate',location_inputs(args),'source-choice'))
     assert result['status']=='completed',result
     repo=binding.literature_reaction_repository();sheet=repo.read(result['result']['sheet_ref'])
     assert sheet['sheet']['cells']['ratio_mean']['value']==pytest.approx(.8)
@@ -305,130 +296,8 @@ def test_source_selected_recipe_retains_technical_count_and_publication_identity
     saved=store.db.execute('SELECT adapter,method FROM literature_sheet_dependencies WHERE sheet_ref=?',(result['result']['sheet_ref'],)).fetchone()
     assert saved['adapter']=='gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage:LiteratureReactionRepository'
     assert saved['method']=='populate'
-    replay=asyncio.run(binding.execute(ctx,'literature.reaction.source.populate',args,'source-choice'))
+    replay=asyncio.run(binding.execute(ctx,'literature.reaction.source.populate',location_inputs(args),'source-choice'))
     assert replay==result
     assert store.db.execute('SELECT count(*) FROM literature_reaction_operations').fetchone()[0]==1
     store.close()
 
-
-from types import MethodType
-import traceback
-PACKAGE = 'gene_annotation_episode.episodic_workflow.root.a110'
-
-
-
-def observed(callback):
-    try:
-        value = callback()
-        return {'status': 'returned', 'is_none': value is None, 'type': type(value).__module__ + '.' + type(value).__qualname__}
-    except Exception as error:
-        return {'status': 'raised', 'type': type(error).__module__ + '.' + type(error).__qualname__,
-                'message': str(error), 'traceback': traceback.format_exc()}
-
-
-def original_admission_observation(output, binding_type):
-    output = Path(output)
-    output.mkdir()
-    runtime = importlib.import_module(PACKAGE + '.runtime')
-    state = importlib.import_module(PACKAGE + '.state')
-    bindings_module = importlib.import_module(PACKAGE + '.episode_bindings')
-    services_type = importlib.import_module(PACKAGE + '.episode_services').WorkflowServices
-    journal_type = importlib.import_module(PACKAGE + '.episode_journal').Journal
-    store = state.Store(output / 'state')
-    run_id = 'a110-original-action-admission'
-    journal = journal_type(store, run_id)
-    result = {'version': 'a110_original_source_action_admission_v1', 'source_only_fixture': True,
-              'scope': 'Controlled fresh/recorded wire admission, actual original permission and child-role checks, completed tool replay; no historical unsupported-action claim.',
-              'rows': [], 'application_modified': False}
-    try:
-        store.create_problem(raw_sequence='ATGGCT', molecule='dna')
-        host = SimpleNamespace(store=store, run_id=run_id)
-        services = services_type(host)
-        services.tool_catalog = lambda scope: [{'name': 'source.read', 'input_schema': runtime._object({})}]
-        services.capabilities = lambda: {}
-        services.own_outcomes = lambda *args, **kwargs: []
-        for family in (binding_type.__module__.removeprefix(PACKAGE + '.').split('.published_evidence_assessment')[0] + '.published_evidence_assessment' if '.published_evidence_assessment' in binding_type.__module__.removeprefix(PACKAGE + '.') else 'published_evidence_assessment',):
-            bindings = importlib.import_module(PACKAGE + '.' + family + '.episode').create_binding_tree(services)
-            by_role = {binding.roles[0]: binding for binding in bindings}
-            for binding in (next(item for item in bindings if type(item) is binding_type),):
-                role, = binding.roles
-                source = object.__new__(binding.decision_source_type)
-                source.episode_id, source.path = binding.binding_path, ((role, 'controlled'),)
-                source.scope = store.validate_scope()
-                source._delivery_resolution_ref = None
-                source.interpret_schema = runtime._object({})
-                source.report_values, source.report_basis = {}, []
-                source.request = SimpleNamespace(message=SimpleNamespace(as_record=lambda: {}))
-                source.last_outcome = source.last_outcome_index = source.feedback = None
-                context = bindings_module.BindingContext(run_id, source.episode_id, role, source.path, source.scope, {}, {}, ())
-                effects, acquired = [], []
-                workflow = SimpleNamespace(store=store, journal=journal, run_id=run_id,
-                    specialist=lambda source, binding=binding: binding, binding_context=lambda source, context=context: context,
-                    services=services, job_episodes=None, project_credit=lambda **kwargs: {}, annotation_child_roles=('literature',),
-                    scientific_process_binding=None, execution_binding=None, inprocess_replay=None, decision_exchanges=None,
-                    receipts=None, root_action_boundary=None,
-                    catalog=lambda scope, source, binding=binding, context=context: binding.catalog(context),
-                    available_child_roles=lambda source, binding=binding, role=role: binding.child_roles(role),
-                    declared_child_roles=lambda selected, path, binding=binding: binding.child_roles(selected),
-                    episode_bindings=SimpleNamespace(roles=tuple(by_role), for_child=lambda path, role: by_role[role]),
-                    root_child_return_sources=lambda source, role: (),
-                    _closed_child_commission=lambda *args: None, resolver=lambda *args, **kwargs: (lambda ref: None),
-                    validate_report=lambda *args, **kwargs: None,
-                    receive_native_outcome=lambda *args: None, controller_value=lambda source, index, credit: credit)
-                for method in ('permits_common_action', 'is_job_source', 'validate_child_choice', 'selected', 'action_schema'):
-                    setattr(workflow, method, MethodType(getattr(runtime.Workflow, method), workflow))
-                source.workflow = workflow
-                source.record_effect = lambda index, effect: effects.append((index, effect))
-                source.checkpoint = lambda: None
-                schema = workflow.action_schema(source)
-                kinds = sorted({branch['properties']['kind']['const'] for branch in schema['properties']['selection']['anyOf']})
-                row = {'binding_path': binding.binding_path, 'role': role, 'fresh_schema_kinds': kinds,
-                       'reason_permitted': workflow.permits_common_action(source, 'reason'),
-                       'wait_permitted': workflow.permits_common_action(source, 'wait'), 'cases': []}
-                selections = [
-                    ('reason', {'kind': 'reason', 'commit': {}}),
-                    ('wait', {'kind': 'wait', 'condition': {}}),
-                    ('job_child', {'kind': 'job_child', 'role': 'job_launch'}),
-                    ('reads_map', {'kind': 'tool', 'tool': 'reads.map', 'arguments': {}}),
-                    ('results', {'kind': 'episode_child', 'role': 'results', 'assignment': {'version': 'execution_results_assignment_v1',
-                        'selector': {'version': 'bvbrc_minhash_result_selector_v2'}}}),
-                    ('source_tool', {'kind': 'tool', 'tool': 'source.read', 'arguments': {}})]
-                for index, (name, selection) in enumerate(selections):
-                    source.feedback = None
-                    observation = observed(lambda selection=selection, index=index: source.apply_response(
-                        {'selection': deepcopy(selection), 'report_update': {}}, index, {'visible_record_refs': []}, schema))
-                    selected_row = journal.row('runtime_actions', source.episode_id, index)
-                    row['cases'].append({'case': name, 'admission': observation, 'feedback': deepcopy(source.feedback),
-                        'effects': deepcopy(effects), 'selected_action_created': selected_row is not None})
-                    effects.clear()
-                selection = {'kind': 'tool', 'tool': 'source.read', 'arguments': {}}
-                saved_outcome = {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None,
-                                 'feedback': {'category': 'controlled_original_invalid_return'}}
-                journal.save('runtime_actions', {'episode_id': source.episode_id, 'decision_index': 50,
-                    'action': json.dumps(selection), 'result': json.dumps(saved_outcome), 'credit': -0.5})
-                workflow.execute = lambda *args, **kwargs: acquired.append('unexpected_reexecution')
-                row['completed_invalid_tool_replay'] = observed(lambda: asyncio.run(source.execute(selection, 50)))
-                row['replay_outcome'] = deepcopy(source.last_outcome)
-                row['replay_action_unchanged'] = json.loads(journal.row('runtime_actions', source.episode_id, 50)['action']) == selection
-                row['replay_acquisitions'] = acquired
-                source.feedback = None
-                row['saved_selection_mismatch'] = observed(lambda: source.apply_response(
-                    {'selection': {'kind': 'reason', 'commit': {}}, 'report_update': {}}, 50, {'visible_record_refs': []}, schema))
-                row['saved_selection_mismatch_feedback'] = deepcopy(source.feedback)
-                result['rows'].append(row)
-    finally:
-        store.close()
-    return result
-
-
-def test_original_action_admission_and_completed_replay(binding_type, tmp_path):
-    expected_rows = json.loads((Path(__file__).parent /
-        'fixtures/private_literature/original_action_admission.json').read_text())['rows']
-    result = original_admission_observation(tmp_path / 'admission', binding_type)
-    assert len(result['rows']) == 1
-    # The original probe serialized effects as JSON; compare the same wire value.
-    row = json.loads(json.dumps(result['rows'][0]))
-    expected = next(item for item in expected_rows if item['binding_path'] == row['binding_path'])
-    # Retain every original observed boundary: fresh unsupported choices,
-    # allowed source acquisition, completed invalid replay, and mismatched replay.
-    assert row == expected

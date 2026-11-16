@@ -69,18 +69,8 @@ def _limits(settings):
     return result
 
 
-def _saved_limits(limits):
-    """Validate saved byte quantities; retired counts remain identity metadata."""
-    counts = {'max_running_jobs', 'cpu_threads'}
-    if not isinstance(limits, dict) or set(limits)-counts-{'memory_bytes', 'scratch_bytes'}:
-        raise ValueError('invalid_local_resource_settings')
-    if any(type(limits[key]) is not int or limits[key] <= 0 for key in counts & set(limits)):
-        raise ValueError('invalid_local_resource_limits')
-    return _limits({key: value for key, value in limits.items() if key not in counts})
-
-
 class LocalResources:
-    def __init__(self, directory, settings=None, *, workflow_slice=None, _restoring_definition=None):
+    def __init__(self, directory, settings=None, *, workflow_slice=None):
         if settings is not None and not isinstance(settings, dict):
             raise ValueError('invalid_local_resource_settings')
         self.directory = Path(directory).expanduser().resolve()
@@ -99,34 +89,16 @@ class LocalResources:
                     'directory': str(self.directory), 'limits': _limits(settings or {})}
                 if workflow_slice is not None:
                     definition['workflow_slice'] = workflow_slice
-                # Preserve constructor-before-comparison restoration. Only
-                # an exact new default requests the new default identity.
-                historical = {**definition, 'version': 'shared_local_resources_v1',
-                    'limits': {**definition['limits'], 'max_running_jobs': 1, 'cpu_threads': 1}}
-                if settings is None and _restoring_definition is not None and _restoring_definition != definition:
-                    definition = historical
                 db.execute('INSERT INTO configuration VALUES(1,?)', (json.dumps(definition, sort_keys=True),))
             else:
                 definition = json.loads(saved[0])
-                if (definition.get('version') not in (VERSION, 'shared_local_resources_v1') or definition.get('resource_id') != _resource_id()
+                if (definition.get('version') != VERSION or definition.get('resource_id') != _resource_id()
                         or definition.get('directory') != str(self.directory)
                         or definition.get('workflow_slice') != workflow_slice):
                     raise ValueError('local_resource_binding_conflict')
-                _saved_limits(definition['limits'])
+                active = _limits(definition['limits'])
                 if settings is not None:
-                    active = _saved_limits(definition['limits'])
-                    supplied = dict(settings)
-                    for field in ('max_running_jobs', 'cpu_threads'):
-                        if field in supplied:
-                            if field not in definition['limits']:
-                                raise ValueError('invalid_local_resource_settings')
-                            count = supplied.pop(field)
-                            if type(count) is not int or count <= 0:
-                                raise ValueError('invalid_local_resource_limits')
-                            if count != definition['limits'][field]:
-                                raise ValueError('local_resource_limits_conflict')
-                    requested = {**active, **supplied}
-                    if _limits(requested) != active:
+                    if _limits({**active, **settings}) != active:
                         raise ValueError('local_resource_limits_conflict')
             self.definition = definition
 
@@ -143,8 +115,7 @@ class LocalResources:
 
     @classmethod
     def reopen(cls, definition):
-        value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'),
-                    _restoring_definition=definition)
+        value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'))
         if value.as_record() != definition:
             raise ValueError('local_resource_binding_conflict')
         return value
@@ -229,7 +200,7 @@ class LocalResources:
         return jobs
 
     def _view(self, jobs):
-        limits = _saved_limits(self.definition['limits'])
+        limits = _limits(self.definition['limits'])
         used = {key: sum(job['allocation'][key] for job in jobs)
             for key in ('memory_bytes', 'scratch_bytes')}
         remaining = {key: max(0, limits[key]-used[key]) for key in used}

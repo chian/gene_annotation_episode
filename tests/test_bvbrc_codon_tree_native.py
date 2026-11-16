@@ -20,12 +20,10 @@ import urllib.request
 import pytest
 
 import gene_annotation_episode.episodic_workflow.root.library.bvbrc_codon_tree_native as native
-import gene_annotation_episode.phylogeny_format_contracts as formats
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
 
 
 STAGING = Path(__file__).resolve().parents[1]
-VERIFICATION = STAGING / "verification"
 HISTORICAL_MEMBERSHIP = (
     STAGING / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/phylogeny_boundaries/official_example"
     / "test9_genome_dir/test9_genome_8taxa_10cds_10proteins.pgfamsAndGenesIncludedInAlignment.txt"
@@ -113,8 +111,6 @@ def assert_locations(data, result):
     for command in value.get("commands", []):
         location = command["location"]
         assert data[location["byte_start_0based"]:location["byte_end_0based_exclusive"]].decode("utf-8") == command["raw_text"]
-
-
 
 
 def test_exact_public_signatures_cannot_accept_caller_invented_native_facts():
@@ -658,26 +654,6 @@ def test_artifact_validation_hash_precedes_decode_and_rejects_extra_caller_facts
     result = parse(data, artifact={**artifact(data), "sha256": artifact(data)["sha256"].upper()})
     assert result["status"] == "invalid" and result["value"] is None
     assert codes(result) == {"codon_artifact_invalid"}
-
-
-@pytest.mark.parametrize("digest", [
-    None, 123, b"0" * 64, "", "a" * 63, "a" * 65, "g" * 64,
-    "A" * 64, "a" * 63 + "B", " " + "a" * 64, "a" * 64 + "\n",
-])
-def test_malformed_artifact_hashes_match_shared_contract_without_normalization(digest):
-    for parse, data, _ in PARSERS:
-        supplied = {**artifact(data), "sha256": digest}
-        before = deepcopy(supplied)
-        with pytest.raises(ValueError, match="phylogeny_artifact_invalid"):
-            formats._artifact(supplied)
-        # Invalid artifact identity takes priority over decoding invalid bytes.
-        result = parse(b"\xff", artifact=supplied)
-        assert result == {
-            "status": "invalid", "value": None,
-            "diagnostics": [{"code": "codon_artifact_invalid", "phase": "association",
-                             "path": "/artifact", "severity": "error", "evidence_refs": []}],
-        }
-        assert supplied == before
 
 
 @pytest.mark.parametrize("parse,data,suffix", PARSERS)

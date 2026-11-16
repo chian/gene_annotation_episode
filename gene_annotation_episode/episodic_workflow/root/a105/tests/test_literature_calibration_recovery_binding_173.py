@@ -2,7 +2,6 @@
 import asyncio
 from copy import deepcopy
 from dataclasses import replace
-from functools import partial
 import hashlib
 import json
 from pathlib import Path
@@ -162,32 +161,6 @@ def test_parent_can_forward_only_admitted_subset_and_keeps_own_task(tmp_path):
     finally:
         store.close()
 
-def test_task_is_full_after_delta_lookup_and_cold_transport(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a105.decision_context import state_frame
-    from test_literature_experimental_prompt_delivery import LiteratureWire, complete, snapshot
-    state = snapshot()
-    state['literature_assignment'][REQUESTED] = REQUEST
-    state['goal']['objective'] = 'Evaluate the selected recovery control for the reference assay.'
-    lookup_result = {'status': 'completed', 'text': 'Synthetic source: expected stock uncertainty remains unknown.'}
-    lookup = {'version': 'decision_context_v1', 'kind': 'decision_lookup_result', 'decision_index': 1, 'exchange_index': 1, 'result': lookup_result}
-    restored = state_frame(state)
-    restored.update(restored_pending_decision_index=1, restored_public_exchanges=[{'lookup_result': lookup_result}])
-    wire, cold = (LiteratureWire(tmp_path / 'wire'), LiteratureWire(tmp_path / 'cold'))
-
-    async def exercise():
-        await complete(wire, state_frame(state))
-        await complete(wire, lookup)
-        await complete(cold, restored)
-    asyncio.run(exercise())
-    tasks = []
-    for turn in (*wire.turns_sent(), *cold.turns_sent()):
-        task, steering = turn['input'][0]['text'].split('\n\nSTEERING\n', 1)
-        assert task.count(CALIBRATION_RECOVERY_TASK) == 1 and CALIBRATION_RECOVERY_TASK not in steering
-        tasks.append(task)
-    assert all((task == tasks[0] for task in tasks))
-    unrelated = deepcopy(state)
-    unrelated['literature_assignment'].pop(REQUESTED)
-    assert CALIBRATION_RECOVERY_TASK not in render_literature_experimental_prompt(unrelated, 'Another scoped assay question.').split('\n\nSTEERING\n')[0]
 ORIGINAL = Path(__file__).resolve().parents[5] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/research_reference/a105_calibration_primary_case_167/source/PMC6454709.xml'
 ORIGINAL_SHA256 = '86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698'
 

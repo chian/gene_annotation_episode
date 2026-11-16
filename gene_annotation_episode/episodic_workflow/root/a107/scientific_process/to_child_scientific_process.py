@@ -1,4 +1,4 @@
-"""Original A107 scientific parent request for scientific_process."""
+"""A107 scientific parent request for scientific_process."""
 from __future__ import annotations
 from .. import runtime as _original_runtime
 

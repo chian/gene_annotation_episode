@@ -6,9 +6,7 @@ artifact IO, parsing or numerical recalculation. Local aliases imply no global
 identity or independence.
 """
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a105.literature_implementation_sources import source_file
 from copy import deepcopy
-import hashlib
 import json
 from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a105.communication import plain
@@ -31,9 +29,8 @@ CONDITIONS = ('source_optical_relationship_assignments', 'first_order_covariance
 ORIGINS = ('reported', 'derived', 'synthetic')
 UNIT_CODES = {'mM^-1cm^-1': 'mM_inverse_cm_inverse'}
 _OPERAND_REFS = ('measurement_ref', 'physical_observation_ref', 'semantic_owner_ref', 'local_reuse_ref', 'condition_ref', 'measured_entity_ref', 'interval_ref')
-_PAYLOAD_FIELDS = ('version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'selection', 'extraction', 'calculation', 'cells', 'context_bindings', 'operand_bindings', 'interpretation_bindings', 'covariance_binding_ref', 'requested_components', 'implementation_dependencies')
+_PAYLOAD_FIELDS = ('version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'selection', 'extraction', 'calculation', 'cells', 'context_bindings', 'operand_bindings', 'interpretation_bindings', 'covariance_binding_ref', 'requested_components')
 _REQUEST_FIELDS = ('run_id', 'episode_id', 'operation_key', 'selected_tool', 'scope', 'assignment', 'requested_components', 'arguments')
-_PINNED = {'literature_optical_inputs.py': '226e466ead1289251328e8029b032d2c6f371dbd78108383ef6bf77b828dcc8d', 'literature_optical_calculations.py': '1242c0e58e83a1ef4e4e8f25bbf94737b33dc706e61794c6ff98b87ce3c5740e', 'literature_optical_validation.py': '42d63308ca7cfa459451f5e8c3318f173070466f172bb046702cbaf21e0a8dfe'}
 
 def _fail(code):
     raise ContractError('literature_optical_' + code)
@@ -50,14 +47,6 @@ def _selected(assignment):
 
 def _signature(request):
     return canonical({name: request[name] for name in ('arguments', 'scope', 'run_id', 'episode_id', 'assignment', 'requested_components')})
-
-def _dependencies():
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_optical_validation
-    names = tuple(_PINNED)
-    result = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
-    if any((result[name] != value for name, value in _PINNED.items())):
-        _fail('implementation_dependency_mismatch')
-    return {'sha256': result, 'validation_version': literature_optical_validation.VERSION}
 
 def _validate_inputs(selection, extraction):
     from gene_annotation_episode.episodic_workflow.root.a105.library.literature_optical_validation import validate_optical_extraction, validate_optical_selection
@@ -232,7 +221,7 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
         calculation = calculate_nadh_optical_rate(extraction['calculation_inputs'])
         direct = list(extraction['source_refs'])
         source = self._native_source(context, args['source_ref'])
-        payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': self._parents(context.scope, direct), 'selection': args, 'extraction': extraction, 'calculation': calculation, 'cells': {name: deepcopy(calculation[key]) for name, key in CELL_MAP.items()}, 'requested_components': request['requested_components'], 'implementation_dependencies': _dependencies()}
+        payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': self._parents(context.scope, direct), 'selection': args, 'extraction': extraction, 'calculation': calculation, 'cells': {name: deepcopy(calculation[key]) for name, key in CELL_MAP.items()}, 'requested_components': request['requested_components']}
         with self.store.transaction():
             created, records = ([], [])
 
@@ -272,7 +261,7 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
             _fail('operation_binding_mismatch')
         saved = json.loads(self.store.get_artifact(source['artifact_ref']))
         _keys(saved, _PAYLOAD_FIELDS)
-        if saved['version'] != VERSION or saved['selection'] != request['arguments'] or saved['input_source_ref'] != saved['selection'].get('source_ref') or (saved['requested_components'] != request['requested_components']) or (saved['direct_input_source_refs'] != saved['extraction']['source_refs']) or (source.get('parent_source_refs') != saved['input_source_refs']) or (source.get('text_ref') != source['artifact_ref']) or (self._parents(request['scope'], saved['direct_input_source_refs']) != saved['input_source_refs']) or (saved['implementation_dependencies'] != _dependencies()):
+        if saved['version'] != VERSION or saved['selection'] != request['arguments'] or saved['input_source_ref'] != saved['selection'].get('source_ref') or (saved['requested_components'] != request['requested_components']) or (saved['direct_input_source_refs'] != saved['extraction']['source_refs']) or (source.get('parent_source_refs') != saved['input_source_refs']) or (source.get('text_ref') != source['artifact_ref']) or (self._parents(request['scope'], saved['direct_input_source_refs']) != saved['input_source_refs']):
             _fail('saved_mismatch')
         _validate_inputs(saved['selection'], saved['extraction'])
         _validate_calculation(saved)

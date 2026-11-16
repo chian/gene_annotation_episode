@@ -162,7 +162,7 @@ def rna_structure_results_instructions(assignment: Mapping, *, job: Mapping) -> 
             parts.append("These are the original requested model settings. Actual effective settings and their "
                 "validation come from the retained native records; requested settings alone do not prove compatibility.")
     parts.extend(["", _OPERATIONS, "", _QUALIFICATIONS, "",
-        "Use the assigned local allocation: 20 GiB RAM and 4 GiB scratch, with no wall-time budget. "
+        "Use the assigned local allocation: 5 GiB RAM and 4 GiB scratch, with no wall-time budget. "
         "Keep any selected software and resource instructions in force.", "", _COMPLETION])
     return "\n\n".join(part for part in parts if part)
 

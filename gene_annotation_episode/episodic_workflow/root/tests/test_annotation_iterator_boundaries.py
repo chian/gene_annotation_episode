@@ -81,7 +81,7 @@ def make_case(status, *, responses=None, journal=None):
         return result
     workflow = SimpleNamespace(journal=journal, run_id='original-iterator-fixture',
         execution_binding=None, inprocess_replay=None, decision_exchanges=None,
-        wait_inputs_version=None, completed_action_inputs_version=None,
+        pending_work=lambda source: {'version': 'pending_work_v2', 'captured_at': '2026-11-01T00:00:00+00:00', 'items': []},
         execute=execute, automatic_score_updates=score,
         receive_native_outcome=lambda *args: None,
         receive_outcome=lambda source, selection, result, index: events.append(('receipt', index)),

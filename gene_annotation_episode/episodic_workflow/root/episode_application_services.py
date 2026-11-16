@@ -25,7 +25,7 @@ class EpisodeApplicationServices:
 
 def service_binding(factory, definition, *, inputs=None):
     """Describe explicit setup, without importing or executing its callable."""
-    if inputs is not None and (not isinstance(inputs, str) or inputs not in {'actual_tool_catalog_v1', 'actual_tool_registry_v1'}):
+    if inputs is not None and inputs != 'actual_tool_registry_v1':
         raise ValueError('unsupported_episode_service_inputs')
     if factory is None and definition is None:
         if inputs is not None:

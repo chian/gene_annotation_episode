@@ -16,9 +16,8 @@ from gene_annotation_episode.episodic_workflow.root.a110.library.received_execut
 PREPARATION_VERSION = 'native_blast_standard_database_preparation_v1'
 PUBLICATION_VERSION = 'native_blast_standard_database_publication_v1'
 _ARTIFACT_FIELDS = {'collection': 'collection_artifact_ref', 'sheets': 'sheets_artifact_ref', 'calculations': 'calculations_artifact_ref', 'rows': 'full_rows_artifact_ref', 'row_index': 'row_index_artifact_ref', 'diagnostics': 'diagnostics_artifact_ref'}
-_ROLES_V1 = {'inputs': ('inputs.json', 'native_blast_standard_database_prepared_inputs_v1'), 'collection': ('collection.json', 'blast_report_collection_v1'), 'sheets': ('sheets.json', 'native_blast_standard_database_sheet_set_v1'), 'calculations': ('calculations.json', 'native_blast_standard_database_calculations_v1'), 'rows': ('rows.ndjson', 'native_blast_standard_database_numeric_row_v1'), 'row_index': ('row-index.json', 'native_blast_standard_database_row_index_v1'), 'metric_definitions': ('metric-definitions.json', 'native_blast_standard_database_metric_definitions_v1'), 'diagnostics': ('diagnostics.json', 'native_blast_standard_database_diagnostics_v1')}
-_ROLES_V2 = {**_ROLES_V1, 'calculations': ('calculations.json', 'native_blast_standard_database_calculations_v2')}
-_MANIFEST_ROLES = {'native_blast_standard_database_result_worker_manifest_v1': _ROLES_V1, 'native_blast_standard_database_result_worker_manifest_v2': _ROLES_V2}
+_ROLES = {'inputs': ('inputs.json', 'native_blast_standard_database_prepared_inputs_v1'), 'collection': ('collection.json', 'blast_report_collection_v1'), 'sheets': ('sheets.json', 'native_blast_standard_database_sheet_set_v1'), 'calculations': ('calculations.json', 'native_blast_standard_database_calculations_v2'), 'rows': ('rows.ndjson', 'native_blast_standard_database_numeric_row_v1'), 'row_index': ('row-index.json', 'native_blast_standard_database_row_index_v1'), 'metric_definitions': ('metric-definitions.json', 'native_blast_standard_database_metric_definitions_v1'), 'diagnostics': ('diagnostics.json', 'native_blast_standard_database_diagnostics_v1')}
+_MANIFEST_VERSION = 'native_blast_standard_database_result_worker_manifest_v2'
 
 def _failure(stage, code, detail_code, **fields):
     return dict(stage=stage, code=code, artifact_key=None, input_key=None, search_key=None, record_key=None, pointer='', detail_code=detail_code) | fields
@@ -128,12 +127,12 @@ def _manifest(store, reference, request, artifact_refs):
     validate_schema(request, STANDARD_BLAST_DATABASE_WORKER_REQUEST_SCHEMA)
     validate_schema(value, STANDARD_BLAST_DATABASE_WORKER_MANIFEST_SCHEMA)
     expected = {'version', 'calculation_id', 'request_sha256', 'status', 'input_identity', 'input_interpretation_id', 'input_implementation_sha256', 'implementation_manifest_sha256', 'sequence_model', 'artifacts', 'counts', 'failures'}
-    if type(value) is not dict or set(value) != expected or value['version'] not in _MANIFEST_ROLES or (value['status'] not in {'complete', 'partial', 'failed'}) or (value['calculation_id'] != request['calculation_id']) or (value['request_sha256'] != hashlib.sha256((canonical(request) + '\n').encode('utf-8')).hexdigest()) or (value['input_identity'] != standard_blast_database_input_identity(request)) or (value['implementation_manifest_sha256'] != request['implementation']['manifest_sha256']) or (value['sequence_model'] != request['sequence_model']) or (type(value['counts']) is not dict) or (set(value['counts']) != {'searches', 'native_hsp_slots', 'numerical_rows'}) or any((type(n) is not int or n < 0 for n in value['counts'].values())) or (type(value['artifacts']) is not list):
+    if type(value) is not dict or set(value) != expected or value['version'] != _MANIFEST_VERSION or (value['status'] not in {'complete', 'partial', 'failed'}) or (value['calculation_id'] != request['calculation_id']) or (value['request_sha256'] != hashlib.sha256((canonical(request) + '\n').encode('utf-8')).hexdigest()) or (value['input_identity'] != standard_blast_database_input_identity(request)) or (value['implementation_manifest_sha256'] != request['implementation']['manifest_sha256']) or (value['sequence_model'] != request['sequence_model']) or (type(value['counts']) is not dict) or (set(value['counts']) != {'searches', 'native_hsp_slots', 'numerical_rows'}) or any((type(n) is not int or n < 0 for n in value['counts'].values())) or (type(value['artifacts']) is not list):
         raise ContractError('native_blast_standard_database_worker_manifest_invalid')
     ids = standard_blast_database_calculation_identity(input_identity=value['input_identity'], input_implementation_sha256=value['input_implementation_sha256'], sequence_model=value['sequence_model'], implementation_manifest_sha256=value['implementation_manifest_sha256'])
     if any((value[k] != v for k, v in ids.items())):
         raise ContractError('native_blast_standard_database_worker_manifest_identity_conflict')
-    roles, seen = (_MANIFEST_ROLES[value['version']], set())
+    roles, seen = (_ROLES, set())
     for row in value['artifacts']:
         role = row['role']
         if set(row) != {'role', 'relative_path', 'sha256', 'size_bytes', 'schema'} or role not in roles or role in seen or ((row['relative_path'], row['schema']) != roles[role]) or (role not in artifact_refs):
@@ -142,7 +141,7 @@ def _manifest(store, reference, request, artifact_refs):
         _retained(store, artifact_refs[role], sha256=row['sha256'], size_bytes=row['size_bytes'])
     if seen != set(artifact_refs):
         raise ContractError('native_blast_standard_database_worker_artifact_manifest_conflict')
-    if value['status'] != 'failed' and (not set(_ROLES_V1) <= seen):
+    if value['status'] != 'failed' and (not set(_ROLES) <= seen):
         raise ContractError('native_blast_standard_database_worker_artifact_manifest_incomplete')
     if 'sheets' in artifact_refs:
         sheets = _json(store, artifact_refs['sheets'])
@@ -159,12 +158,11 @@ def _manifest(store, reference, request, artifact_refs):
         calculations = _json(store, artifact_refs['calculations'])
         if calculations.get('schema') != roles['calculations'][1]:
             raise ContractError('native_blast_standard_database_frozen_calculation_schema_conflict')
-        if value['version'] == 'native_blast_standard_database_result_worker_manifest_v2':
-            from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.native_blast_standard_database_calculators import validate_standard_blast_correspondence
-            try:
-                validate_standard_blast_correspondence(calculations)
-            except (ValueError, KeyError, TypeError, IndexError) as error:
-                raise ContractError('native_blast_standard_database_frozen_correspondence_conflict') from error
+        from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.native_blast_standard_database_calculators import validate_standard_blast_correspondence
+        try:
+            validate_standard_blast_correspondence(calculations)
+        except (ValueError, KeyError, TypeError, IndexError) as error:
+            raise ContractError('native_blast_standard_database_frozen_correspondence_conflict') from error
     validate_schema(value['failures'], standard_blast_database_fact_sources()['execution_blast_standard_database_failures']['report_schema'])
     return value
 

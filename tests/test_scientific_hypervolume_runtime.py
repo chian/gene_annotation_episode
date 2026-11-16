@@ -2,8 +2,6 @@
 
 import pytest
 
-from gene_annotation_episode.credit import CreditPolicy
-from gene_annotation_episode.scientific_credit import ScientificEvidenceCredit
 from gene_annotation_episode.state import Store
 
 

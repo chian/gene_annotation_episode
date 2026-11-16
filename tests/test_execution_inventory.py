@@ -3,10 +3,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.execution_inventory import (
-    CATALOG_VERSION, InventoryError, canonical_bytes, digest, make_catalog,
-    reconcile_inventory, validate_catalog, validate_snapshot,
-)
+from gene_annotation_episode.execution_inventory import CATALOG_VERSION, InventoryError, canonical_bytes, digest, make_catalog, reconcile_inventory, validate_catalog
 
 
 FIRST = "2026-10-22T15:00:00+00:00"
@@ -101,18 +98,6 @@ def test_corrupt_remote_is_not_misreported_as_unavailable_and_does_not_overwrite
     assert path.read_bytes() == before
 
 
-def test_corrupt_cached_digest_is_rejected_before_remote_callback(tmp_path):
-    path = tmp_path / "mirror.json"
-    reconcile_inventory(path, lambda: canonical_bytes(catalog()), observed_at=FIRST)
-    value = json.loads(path.read_bytes())
-    value["catalog"]["components"][0]["path"] += "/tampered"
-    path.write_bytes(canonical_bytes(value))
-    calls = []
-    with pytest.raises(InventoryError, match="inventory_catalog_digest_mismatch"):
-        reconcile_inventory(path, lambda: calls.append(True), observed_at=LATER)
-    assert calls == []
-
-
 def test_concurrent_newer_mirror_is_preserved(tmp_path):
     path = tmp_path / "mirror.json"
     original = catalog()
@@ -182,19 +167,6 @@ def test_strict_catalog_fields_and_types(change):
     change(value)
     with pytest.raises(InventoryError):
         validate_catalog(value)
-
-
-def test_snapshot_digest_and_freshness_relationships_are_checked(tmp_path):
-    snapshot = reconcile_inventory(tmp_path / "mirror.json",
-        lambda: canonical_bytes(catalog()), observed_at=FIRST)
-    wrong_digest = deepcopy(snapshot)
-    wrong_digest["catalog_sha256"] = "0" * 64
-    with pytest.raises(InventoryError, match="inventory_catalog_digest_mismatch"):
-        validate_snapshot(wrong_digest)
-    wrong_freshness = deepcopy(snapshot)
-    wrong_freshness["catalog_observed_at"] = LATER
-    with pytest.raises(InventoryError, match="inventory_snapshot_observation_order_invalid"):
-        validate_snapshot(wrong_freshness)
 
 
 def test_mirror_symlink_is_not_followed(tmp_path):

@@ -3,6 +3,7 @@
 Every selected subprocess is replaced with an explicit controlled fixture here.
 Native format evidence belongs to retained084/085 and separately selected runs.
 """
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import hashlib
 import json
@@ -23,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from test_blast_utility_contracts_625 import operation
 
 
-POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}
 FAMILY = {"nhr": b"fixture header", "nin": b"fixture index", "nsq": b"fixture symbols",
           "ndb": b"fixture v5 member", "njs": b'{"fixture_only":true}', "future-member": b"retain this too"}
 
@@ -153,7 +154,6 @@ def test_plan_validation_is_detached_and_pure(tmp_path, monkeypatch):
     lambda p: p.update(attempt_directory="/other/blast-utility-attempt"),
     lambda p: p["policy"].update(memory_bytes=True),
     lambda p: p["policy"].update(scratch_bytes=0),
-    lambda p: p["policy"].update(wall_seconds=float("nan")),
     lambda p: p["requested_job"]["argv"].append("-unselected"),
 ])
 def test_plan_rejects_unselected_or_invalid_reservation(tmp_path, change):

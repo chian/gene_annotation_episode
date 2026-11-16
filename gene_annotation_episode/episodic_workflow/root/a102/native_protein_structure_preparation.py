@@ -7,6 +7,7 @@ outputs, subject to the worker's unchanged scientific state and issues.
 """
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 import asyncio
 from contextlib import ExitStack, contextmanager
 from copy import deepcopy
@@ -78,7 +79,7 @@ class ValidatedProteinWorker(TypedDict):
     result: ProteinResultWorkerResult | None
 
 
-_POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
+_POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}
 _PACKAGE_ROOT = str(Path(__file__).resolve().parents[4])
 _MODULE = "gene_annotation_episode.episodic_workflow.root.a102.protein_structure_result_worker"
 _OUTPUTS = {"native_result_file": "native-result.json", "sheet_file": "sheet.json",

@@ -21,23 +21,19 @@ from gene_annotation_episode.episodic_workflow.root.library.atac_differential_co
     validate_atac_reference, validate_atac_sample,
 )
 
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': 5368709120, 'scratch_bytes': 4294967296}
 RUN_PLAN_FILENAME = "atac-plan.json"
 ATTEMPT_DIRECTORY_NAME = "atac-differential-attempt"
 OWNER_FILENAME = ".native-atac-owner.json"
 STARTED_FILENAME = ".native-atac-started.json"
-DRIVER_MODULE = "gene_annotation_episode.native_atac_differential_driver"
+_LIBRARY = "gene_annotation_episode.episodic_workflow.root.library."
+DRIVER_MODULE = _LIBRARY + "native_atac_differential_driver"
 OPERATION = "analyze_atac_seq_differential_accessibility"
 MODE = "macs2_2_2_9_1_bam_single_end_no_control"
 STEP_KEYS = ("callpeak1", "callpeak2", "bdgdiff")
-REQUIRED_MODULES = {DRIVER_MODULE, "gene_annotation_episode.native_atac_differential_contracts",
-    "gene_annotation_episode.native_atac_differential_reference", "gene_annotation_episode.atac_differential_inputs",
-    "gene_annotation_episode.atac_differential_sheet", "gene_annotation_episode.atac_differential_contracts"}
-LEGACY_DRIVER_MODULE = DRIVER_MODULE
-LEGACY_REQUIRED_MODULES = REQUIRED_MODULES
-DRIVER_MODULE = "gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_driver"
-REQUIRED_MODULES = {name.replace("gene_annotation_episode.", "gene_annotation_episode.episodic_workflow.root.library.", 1)
-    for name in LEGACY_REQUIRED_MODULES}
+REQUIRED_MODULES = {DRIVER_MODULE, _LIBRARY + "native_atac_differential_contracts",
+    _LIBRARY + "native_atac_differential_reference", _LIBRARY + "atac_differential_inputs",
+    _LIBRARY + "atac_differential_sheet", _LIBRARY + "atac_differential_contracts"}
 REQUIRED_DEPENDENCIES = {"jsonschema", "attrs", "referencing", "rpds-py", "jsonschema-specifications"}
 
 
@@ -240,9 +236,7 @@ def validate_driver_runtime(value, *, required_modules=(), required_dependencies
 def validate_atac_software(value):
     value = validate_atac_record("SoftwareBinding", value)
     value["driver_runtime"] = validate_driver_runtime(value["driver_runtime"],
-        required_modules=(LEGACY_REQUIRED_MODULES if LEGACY_DRIVER_MODULE in
-            {row["module"] for row in value["driver_runtime"]["implementation_files"]} else REQUIRED_MODULES),
-        required_dependencies=REQUIRED_DEPENDENCIES)
+        required_modules=REQUIRED_MODULES, required_dependencies=REQUIRED_DEPENDENCIES)
     macs = value["macs2_runtime"]
     path_value(macs["python_executable"], absolute=True)
     path_value(macs["macs2_script"], absolute=True)
@@ -338,9 +332,7 @@ def requested_job_from_atac(job, *, environment):
     _environment(environment)
     driver = job["software"]["driver_runtime"]
     require(environment.get("PYTHONPATH") == os.pathsep.join([driver["module_root"], *_dependency_roots(driver)]), "native_dependency_unavailable")
-    return {"argv": [driver["python_executable"], "-B", "-S", "-m",
-        LEGACY_DRIVER_MODULE if LEGACY_DRIVER_MODULE in {row["module"] for row in driver["implementation_files"]}
-        else DRIVER_MODULE, RUN_PLAN_FILENAME],
+    return {"argv": [driver["python_executable"], "-B", "-S", "-m", DRIVER_MODULE, RUN_PLAN_FILENAME],
         "environment": deepcopy(environment), "native_atac_differential": job}
 
 

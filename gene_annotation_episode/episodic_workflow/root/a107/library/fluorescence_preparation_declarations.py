@@ -1,7 +1,4 @@
-"""A107 original fluorescence preparation declarations; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 fluorescence preparation declarations."""
 from pathlib import PurePosixPath
 import re
 from gene_annotation_episode.episodic_workflow.root.a107.fluorescence_execution_common import require, same

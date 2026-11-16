@@ -178,7 +178,7 @@ class RfamBatchService:
             "cmscan table preserves names joined to the original submitted occurrences. Choosing a table "
             "requires an explicit result assignment. A v3 batch-report selection extracts the report's "
             "native measurements and sequence correspondence, preserving its model name separately from an "
-            "unreported RF accession. Older report selections remain artifact-only. Full model length is "
+            "unreported RF accession. Other report selections remain artifact-only. Full model length is "
             "not inferred from alignment endpoints.")]
 
     def result_catalog(self, request, selector):
@@ -248,8 +248,6 @@ class RfamBatchService:
             except (ValueError, TypeError, KeyError) as error:
                 raise ValueError(code) from error
         actual = snapshot.transport.get("request")
-        if actual is None:
-            return  # Controlled or historical envelopes can lack an HTTP wire capture.
         try:
             raw = base64.b64decode(actual["body_base64"], validate=True)
             headers = {key.lower(): value for key, value in actual["headers"].items()}

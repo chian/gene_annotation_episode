@@ -382,7 +382,7 @@ class AddgeneSequenceReturns(EpisodeReturnRecords):
     def _grant_kind(self, context, reference):
         """Classify the original forward grant; this does not authenticate it.
 
-        Ordinary/legacy references need no Addgene state. A matching rich grant
+        Ordinary references need no Addgene state. A matching rich grant
         still takes the complete commission, prefix and custody path below.
         """
         tables = {row[0] for row in self.db.execute("SELECT name FROM sqlite_master WHERE type='table' "

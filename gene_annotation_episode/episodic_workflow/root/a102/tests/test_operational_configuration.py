@@ -122,74 +122,6 @@ def test_atomic_resource_admission(kind, directory, tmp_path, monkeypatch):
             assert db.execute('SELECT COUNT(*) FROM reservations').fetchone()[0] == 0
 
 
-def historical_resource(directory):
-    resource = lr.LocalResources.configured()
-    record = resource.as_record()
-    record['version'] = 'shared_local_resources_v1'
-    record['limits'] = {'max_running_jobs': 1, 'cpu_threads': 1,
-                        'memory_bytes': 20*1024**3, 'scratch_bytes': 4*1024**3}
-    with resource._transaction() as db:
-        db.execute('UPDATE configuration SET value=? WHERE id=1', (json.dumps(record, sort_keys=True),))
-        db.execute('INSERT INTO reservations VALUES(?,?,?,?,?,?,?,?,?,?)', (
-            'historical.service', 'historical-token', str(directory/'old-handle.json'),
-            1, 20*1024**3, 4*1024**3, 123, 'saved-start', 'saved-boot', 'saved-time'))
-    return record
-
-
-@pytest.mark.parametrize('operation', ['read', 'validate', 'release', 'reserve', 'snapshot', 'constructor'],
-                         ids=['read', 'validate', 'release', 'reserve', 'snapshot', 'constructor'])
-def test_historical_policy_preserves_resource_admission(operation, directory, tmp_path,monkeypatch):
-    definition = historical_resource(directory)
-    resource = lr.LocalResources.reopen(deepcopy(definition))
-    assert resource.as_record() == definition
-    reservation = {'resource': deepcopy(definition), 'reservation_ref': 'historical-token',
-                   'execution_handle': 'historical.service',
-                   'allocation': {'cpu_threads': 1, 'memory_bytes': 20*1024**3, 'scratch_bytes': 4*1024**3}}
-    if operation == 'validate':
-        resource.validate_reservation(reservation)
-    elif operation == 'release':
-        resource.release_reservation(reservation)
-        with pytest.raises(ValueError, match='local_resource_reservation_unavailable'):
-            resource.validate_reservation(reservation)
-    elif operation in ('reserve', 'snapshot'):
-        # Controlled host observations isolate count from actual allocations.
-        jobs=[{'state':'reserved','allocation':{'cpu_threads':0,'memory_bytes':0,'scratch_bytes':0}}]*8
-        monkeypatch.setattr(resource,'_refresh',lambda db:jobs)
-        if operation=='reserve':
-            added=resource.reserve(Handle(tmp_path/'new.json'),cpu_threads=1,
-                policy=local_jobs.LocalJobPolicy(1024,1024))
-            resource.validate_reservation(added);resource.release_reservation(added)
-        view=resource.snapshot()
-        assert view['version']=='shared_local_resources_v1'
-        assert view['limits']=={'cpu_threads':1,'memory_bytes':5368709120,'scratch_bytes':4294967296}
-        assert 'job_slots' not in view['available'] and 'job_slots' not in view['reserved']
-    elif operation=='constructor':
-        assert lr.LocalResources.configured().as_record()==definition
-    with sqlite3.connect(directory/'capacity.sqlite3') as db:
-        assert json.loads(db.execute('SELECT value FROM configuration WHERE id=1').fetchone()[0]) == definition
-
-
-@pytest.mark.parametrize('mutation', ['version', 'host', 'directory', 'limits', 'extra', 'reservation'],
-                         ids=['version', 'host', 'directory', 'limits', 'extra', 'reservation'])
-def test_historical_identity_rejects_conflict(mutation, directory):
-    original = historical_resource(directory)
-    record = deepcopy(original)
-    if mutation == 'version': record['version'] = 'foreign-version'
-    elif mutation == 'host': record['resource_id'] += '-foreign'
-    elif mutation == 'directory': record['directory'] += '-absent'
-    elif mutation == 'limits': record['limits']['max_running_jobs'] = 2
-    elif mutation == 'extra': record['foreign'] = True
-    if mutation == 'reservation':
-        resource = lr.LocalResources.reopen(record)
-        with pytest.raises(ValueError, match='local_resource_reservation_unavailable'):
-            resource.validate_reservation({'resource': record, 'reservation_ref': 'foreign',
-                'execution_handle': 'historical.service', 'allocation': {}})
-    else:
-        with pytest.raises(ValueError): lr.LocalResources.reopen(record)
-    with sqlite3.connect(directory/'capacity.sqlite3') as db:
-        assert json.loads(db.execute('SELECT value FROM configuration WHERE id=1').fetchone()[0]) == original
-
-
 def test_route_recommendation_uses_resources_not_count():
     from gene_annotation_episode.episodic_workflow.root.a102.execution_guidance import compare_routes
     route = {'binding_available': True, 'capacity_state': 'fresh',
@@ -259,22 +191,13 @@ def resume_fixture(directory, tmp_path, monkeypatch):
     return native, resource, native.NativeJobHandle(raw.path), body
 
 
-@pytest.mark.parametrize('mutation', ['historical_record_conflict','metadata_v1','reservation_v1',
-    'malformed_descriptor','malformed_reservation','conflicting','unknown_version',
+@pytest.mark.parametrize('mutation', ['malformed_descriptor','malformed_reservation','conflicting','unknown_version',
     'empty_allocation','allocation_mismatch','active_memory_bound','metadata_malformed','cpu_boolean'],
-    ids=['historical_record_conflict','metadata_v1','reservation_v1','malformed_descriptor','malformed_reservation',
+    ids=['malformed_descriptor','malformed_reservation',
          'conflicting','unknown_version','empty_allocation','allocation_mismatch','active_memory_bound',
          'metadata_malformed','cpu_boolean'])
 def test_direct_resume_rejects_unreleased_authority(mutation, directory, tmp_path, monkeypatch):
     native, resource, handle, body = resume_fixture(directory, tmp_path, monkeypatch)
-    if mutation in {'historical_record_conflict','metadata_v1'}:
-        body['metadata']['local_resources']['version'] = 'shared_local_resources_v1'
-    if mutation in {'historical_record_conflict','reservation_v1'}:
-        body['capacity_reservation']['resource']['version'] = 'shared_local_resources_v1'
-    if mutation=='historical_record_conflict':
-        # Structurally valid saved v1 record, but the actual DB still holds v2.
-        body['metadata']['local_resources']['limits']['max_running_jobs']=1
-        body['capacity_reservation']['resource']['limits']['max_running_jobs']=1
     if mutation == 'malformed_descriptor': body['metadata']['local_resources'] = None
     if mutation == 'malformed_reservation': body['capacity_reservation'] = None
     if mutation == 'conflicting': body['capacity_reservation']['resource']['resource_id'] += '-foreign'
@@ -293,13 +216,11 @@ def test_direct_resume_rejects_unreleased_authority(mutation, directory, tmp_pat
     monkeypatch.setattr(native, '_ensure_event_registration', forbidden)
     monkeypatch.setattr(native, '_properties', forbidden)
     monkeypatch.setattr(native, 'atomic_json', forbidden)
-    expected=ValueError if mutation in {'historical_record_conflict','active_memory_bound'} else AcquisitionError
+    expected=ValueError if mutation=='active_memory_bound' else AcquisitionError
     with pytest.raises(expected) as caught:
         native.resume_start(handle)
     assert type(caught.value) is expected
-    if mutation=='historical_record_conflict':
-        assert str(caught.value)=='local_resource_binding_conflict'
-    elif mutation=='active_memory_bound':
+    if mutation=='active_memory_bound':
         assert str(caught.value)=='native_request_exceeds_environment_bounds'
     else:
         assert caught.value.phase=='local_preflight'
@@ -337,54 +258,6 @@ def test_prepared_resume_keeps_original_delegation(directory, tmp_path, monkeypa
         return marker
     monkeypatch.setattr(native, 'start_prepared', original)
     assert native.resume_start(handle, cancel_event=cancellation) is marker
-
-
-def test_already_released_historical_resume_is_read_only(directory, tmp_path, monkeypatch):
-    native, resource, handle, body = resume_fixture(directory, tmp_path, monkeypatch)
-    body['metadata']['local_resources']['version'] = 'shared_local_resources_v1'
-    body['capacity_reservation']['resource']['version'] = 'shared_local_resources_v1'
-    handle.path.write_text(json.dumps(body));original=handle.path.read_bytes()
-    Path(body['paths']['release']).touch()
-    def forbidden(*args, **kwargs):raise AssertionError('released read must not reauthorize admission')
-    monkeypatch.setattr(native, '_validate_unreleased_resume_capacity', forbidden)
-    assert native.resume_start(handle) is handle and handle.path.read_bytes()==original
-
-
-@pytest.mark.parametrize('operation',['status','collect','cancel','release'],ids=['status','collect','cancel','release'])
-def test_historical_completed_receipt_cleanup(operation, directory, tmp_path, monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a102 import native_lifecycle as native
-    definition = historical_resource(directory)
-    handle = native.NativeJobHandle(tmp_path/'historical-handle.json')
-    files = {name:str(tmp_path/('historical-'+name)) for name in ('release','ready','status','result')}
-    ended = {'ended': {'boot_id':'recorded-old-boot','monotonic_ns':20},'SERVICE_RESULT':'success'}
-    receipt = {'native_returncode':0,'observed_scratch_bytes':0,'resource_failure':None,'execution_failure':None}
-    for name in ('release','ready'):Path(files[name]).touch()
-    Path(files['status']).write_text(json.dumps(ended));Path(files['result']).write_text(json.dumps(receipt))
-    stdout,stderr=tmp_path/'historical-stdout',tmp_path/'historical-stderr';stdout.write_text('original');stderr.write_text('')
-    body={'version':native.VERSION,'unit':'historical.service','stage':'released','paths':files,
-        'stdout':str(stdout),'stderr':str(stderr),'boot_id':'recorded-old-boot','started_monotonic_ns':10,
-        'metadata':{'local_resources':definition,'policy':{'memory_bytes':20*1024**3,'scratch_bytes':4*1024**3}},
-        'capacity_reservation':{'resource':definition,'reservation_ref':'historical-token','execution_handle':'historical.service',
-            'allocation':{'cpu_threads':1,'memory_bytes':20*1024**3,'scratch_bytes':4*1024**3}}}
-    handle.path.write_text(json.dumps(body));original=handle.path.read_bytes()
-    saved={name:Path(path).read_bytes() for name,path in files.items()}
-    calls=[]
-    monkeypatch.setattr(native,'_properties',lambda unit:{'ActiveState':'inactive'})
-    monkeypatch.setattr(native,'_control',lambda argv:calls.append(argv))
-    if operation=='status':
-        result=native.status(handle);assert result['terminal'] and result['native_receipt']==receipt
-        assert result['metadata']['policy']==body['metadata']['policy']
-    elif operation=='collect':
-        result=native.collect(handle);assert result.returncode==0 and result.metadata['policy']==body['metadata']['policy']
-    elif operation=='cancel':native.cancel(handle)
-    else:native.release(handle)
-    if operation!='release':
-        assert handle.path.read_bytes()==original
-        assert {name:Path(path).read_bytes() for name,path in files.items()}==saved
-    else:assert not handle.path.exists() and all(not Path(path).exists() for path in files.values())
-    with sqlite3.connect(directory/'capacity.sqlite3') as db:
-        assert json.loads(db.execute('SELECT value FROM configuration WHERE id=1').fetchone()[0])==definition
-        assert db.execute('SELECT COUNT(*) FROM reservations').fetchone()[0]==0
 
 
 @pytest.mark.parametrize('case', ['borrowed_unit','copied_handle','missing_execution_handle'],
@@ -435,292 +308,38 @@ def test_direct_resume_rejects_borrowed_current_reservation(case, directory, tmp
                  'code':caught.value.code,'phase':caught.value.phase,'operational':caught.value.operational}},indent=2))
 
 
-def authenticated_legacy_capacity(directory,monkeypatch):
-    """Real own SQLite/host/slice identity with explicit retained v1 fixture bytes."""
-    from gene_annotation_episode.workflow_budget import active_budget
-    historical={'max_running_jobs':1,'cpu_threads':1,
-        'memory_bytes':21474836480,'scratch_bytes':4294967296}
-    if lr.VERSION=='shared_local_resources_v1':
-        # Separate retained-policy control: current original A102 defaults lack
-        # this section (the six original constructor failures still run).
-        # This isolates the actual old lifecycle against its original saved
-        # policy; it does not claim the broken current default constructor works.
-        def historical_limits(settings):
-            assert isinstance(settings,dict) and not set(settings)-set(historical)
-            result={**historical,**settings}
-            assert all(type(value) is int and value>0 for value in result.values())
-            return result
-        monkeypatch.setattr(lr,'_limits',historical_limits)
-    resource=lr.LocalResources(directory,workflow_slice=active_budget()['slice'])
-    record=resource.as_record();record['version']='shared_local_resources_v1';record['limits']=historical
-    with resource._transaction() as db:
-        db.execute('UPDATE configuration SET value=? WHERE id=1',(json.dumps(record,sort_keys=True),))
-    original=json.dumps(record,sort_keys=True)
-    resource=lr.LocalResources.reopen(record)
-    monkeypatch.setattr(lr.LocalResources,'configured',classmethod(lambda cls,settings=None:resource))
-    return resource,original
-
-
-@pytest.mark.parametrize('operation',['reserve','snapshot','configured','resume'],ids=['reserve','snapshot','configured','resume'])
-def test_authenticated_saved_v1_continuation(operation,directory,tmp_path,monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a102 import native_lifecycle as native
-    from gene_annotation_episode.workflow_budget import active_budget
-    resource,original=authenticated_legacy_capacity(directory,monkeypatch)
-    monkeypatch.setattr(resource,'_refresh',lambda db:[])
-    handle=Handle(tmp_path/'saved-active.json');policy=local_jobs.LocalJobPolicy(1024,1024)
-    if operation in {'reserve','resume'}:
-        reservation=resource.reserve(handle,cpu_threads=1,policy=policy)
-        resource.validate_reservation(reservation)
-    if operation=='resume':
-        body={'version':native.VERSION,'unit':handle.value['unit'],'stage':'submitting','cwd':str(tmp_path),
-            'paths':{'release':str(tmp_path/'release')},
-            'metadata':{'local_resources':resource.as_record(),'policy':policy.to_dict(),'cpu_threads':1,
-                        'whole_workflow_budget':active_budget()},'capacity_reservation':reservation}
-        handle.path.write_text(json.dumps(body));selected=native.NativeJobHandle(handle.path)
-        marker=RuntimeError('original event-registration boundary');events=[]
-        def stop(actual,saved):
-            assert actual is selected and saved==body
-            events.append('original_event_registration');raise marker
-        monkeypatch.setattr(native,'_ensure_event_registration',stop)
-        with pytest.raises(RuntimeError) as caught:native.resume_start(selected)
-        assert caught.value is marker and events==['original_event_registration']
-        assert selected.read()==body and not Path(body['paths']['release']).exists()
-    elif operation=='snapshot':
-        view=resource.snapshot()
-        if lr.VERSION=='shared_local_resources_v1':assert view['available']['job_slots']==1
-        else:
-            assert 'job_slots' not in view['available']
-            assert view['limits']=={'cpu_threads':1,'memory_bytes':5368709120,'scratch_bytes':4294967296}
-    elif operation=='configured':
-        # Exercise the actual constructor against the existing record, not the
-        # deliberately controlled configured port used by the native fixtures.
-        reopened=lr.LocalResources(directory,workflow_slice=active_budget()['slice'])
-        assert reopened.as_record()==resource.as_record()
-    with resource._transaction() as db:
-        assert db.execute('SELECT value FROM configuration WHERE id=1').fetchone()[0]==original
-    (tmp_path/'raw-saved-v1.json').write_text(json.dumps({'operation':operation,'definition':resource.as_record(),
-        'configuration_bytes':original,'active_resource_version':lr.VERSION,'accepted':True},indent=2))
-
-
-@pytest.mark.parametrize('resource_name',['memory','cpu'],ids=['memory','cpu'])
-def test_saved_v1_actual_machine_bound(resource_name,directory,tmp_path,monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a102 import native_lifecycle as native
-    from gene_annotation_episode.workflow_budget import active_budget
-    resource,original=authenticated_legacy_capacity(directory,monkeypatch)
-    policy=local_jobs.LocalJobPolicy(21474836480 if resource_name=='memory' else 1024,1024)
-    body={'version':native.VERSION,'unit':'gene-local-job-over-bound.service','stage':'prepared','cwd':str(tmp_path),
-        'metadata':{'local_resources':resource.as_record(),'policy':policy.to_dict(),
-            'cpu_threads':2 if resource_name=='cpu' else 1,'whole_workflow_budget':active_budget()}}
-    path=tmp_path/'over-bound.json';path.write_text(json.dumps(body));before=path.read_bytes()
-    if resource_name=='cpu':
-        # Canonical CPU metadata correction is an independently authenticated
-        # prerequisite. Own original count-gated admission is tested separately;
-        # a requested count is no longer a canonical machine-bound rejection.
-        from gene_annotation_episode.workflow_budget import native_budget
-        actual=active_budget()
-        assert native_budget(policy,2,tmp_path)==actual
-        assert actual['environment_bounds']=={'cpu_percent':100,'memory_bytes':5368709120,'swap_bytes':0}
-        assert path.read_bytes()==before
-        (tmp_path/'raw-thread-budget.json').write_text(json.dumps({
-            'requested_cpu_threads':2,'actual_owner':actual,
-            'policy':policy.to_dict(),'accepted':True,'handle_unchanged':True},indent=2))
-        return
-    def forbidden(*args,**kwargs):raise AssertionError('over-bound request reached event/dispatch')
-    monkeypatch.setattr(native,'_ensure_event_registration',forbidden)
-    monkeypatch.setattr(native,'_dispatch_prepared',forbidden)
-    with pytest.raises(ValueError) as caught:native.start_prepared(native.NativeJobHandle(path))
-    assert type(caught.value) is ValueError and str(caught.value)=='native_request_exceeds_environment_bounds'
-    assert path.read_bytes()==before
-    with resource._transaction() as db:
-        assert db.execute('SELECT value FROM configuration WHERE id=1').fetchone()[0]==original
-        assert db.execute('SELECT COUNT(*) FROM reservations').fetchone()[0]==0
-    (tmp_path/'raw-saved-bound.json').write_text(json.dumps({'resource':resource_name,'error_type':'builtins.ValueError',
-        'error':str(caught.value),'definition':resource.as_record(),'handle_before':json.loads(before),'handle_after':json.loads(path.read_bytes())},indent=2))
-
-
-@pytest.mark.parametrize('kind',['descriptorless','descriptor_only','reservation_only'],ids=['descriptorless','descriptor_only','reservation_only'])
-def test_original_optional_reservation_boundary(kind,directory,tmp_path,monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a102 import native_lifecycle as native
-    from gene_annotation_episode.workflow_budget import active_budget
-    resource,_=authenticated_legacy_capacity(directory,monkeypatch)
-    monkeypatch.setattr(resource,'_refresh',lambda db:[])
-    raw=Handle(tmp_path/'optional.json');policy=local_jobs.LocalJobPolicy(1024,1024)
-    body={'version':native.VERSION,'unit':raw.value['unit'],'stage':'submitting','cwd':str(tmp_path),
-        'paths':{'release':str(tmp_path/'released')},'metadata':{'policy':policy.to_dict(),'whole_workflow_budget':active_budget()}}
-    if kind=='descriptor_only':body['metadata'].update(local_resources=resource.as_record(),cpu_threads=1)
-    if kind=='reservation_only':body['capacity_reservation']=resource.reserve(raw,cpu_threads=1,policy=policy)
-    raw.path.write_text(json.dumps(body));handle=native.NativeJobHandle(raw.path);before=raw.path.read_bytes()
-    marker=RuntimeError('original event boundary');events=[]
-    def original(selected,saved):
-        assert selected is handle and saved==body
-        events.append('original');raise marker
-    monkeypatch.setattr(native,'_ensure_event_registration',original)
-    with pytest.raises(RuntimeError) as caught:native.resume_start(handle)
-    assert caught.value is marker and events==['original'] and raw.path.read_bytes()==before
-    assert not Path(body['paths']['release']).exists()
-    (tmp_path/'raw-optional-authority.json').write_text(json.dumps({'kind':kind,'body':body,
-        'reached_original_event_boundary':True,'database_reservation_claimed':kind=='reservation_only'},indent=2))
-
-
-@pytest.mark.parametrize('kind',['descriptorless','prepared_fallback','saved_v1','earlier_cwd'],ids=['descriptorless','prepared_fallback','saved_v1','earlier_cwd'])
-def test_actual_legacy_native_continuation(kind,directory,tmp_path,monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a102 import native_lifecycle as native
-    resource,original=authenticated_legacy_capacity(directory,monkeypatch)
-    work=tmp_path/'legacy-native';work.mkdir()
-    policy=local_jobs.LocalJobPolicy(512*1024**2,1024**2)
-    handle=native.prepare_job(['/bin/true'],cwd=work,policy=policy,handle_path=work/'handle.json',cpu_threads=1)
-    body=handle.read()
-    if kind in {'descriptorless','prepared_fallback','earlier_cwd'}:
-        body['metadata'].pop('local_resources');body['metadata'].pop('cpu_threads')
-        handle.path.write_text(json.dumps(body))
-    earlier=None
-    if kind=='earlier_cwd':
-        import hashlib,os
-        from gene_annotation_episode.workflow_budget import active_budget
-        prepared=Path(os.environ['GENE_OPERATIONAL_LEGACY_PREPARATION']).resolve()
-        earlier=(prepared/'before').resolve()
-        assert earlier.is_dir() and 'runs' in earlier.parts
-        assert not earlier.is_relative_to(Path(active_budget()['run_directory']).resolve())
-        budgets=[p/'workflow-budget.json' for p in prepared.parents if (p/'workflow-budget.json').is_file()]
-        retained=json.loads(budgets[0].read_bytes())
-        assert retained['run_directory']!=active_budget()['run_directory']
-        request=json.loads(Path(body['paths']['request']).read_bytes())
-        request['cwd']=body['cwd']=str(earlier)
-        body['metadata']['whole_workflow_budget']=retained
-        Path(body['paths']['request']).write_text(json.dumps(request))
-        body['request_sha256']=hashlib.sha256(Path(body['paths']['request']).read_bytes()).hexdigest()
-        handle.path.write_text(json.dumps(body))
-        # Constructed legacy shape: original request format, real earlier cwd,
-        # actual retained budget provenance and current actual worker/unit.
-        # No past execution or cross-run restoration success is claimed.
-    try:
-        if kind in {'descriptorless','earlier_cwd'}:
-            # Actual original no-reservation worker branch; the real ready hash,
-            # Slice/BindsTo, memory/swap and worker receipt must all verify.
-            native._dispatch_prepared(handle,body,cancel_event=None)
-        else:native.start_prepared(handle)
-        result=native.wait_job(handle)
-        assert result.returncode==0
-        verified=result.metadata['verified_cgroup']
-        assert verified['memory_max']==512*1024**2 and verified['memory_swap_max']==0
-        assert verified['workflow_slice']==resource.as_record()['workflow_slice']
-        if kind in {'descriptorless','earlier_cwd'}:assert 'cpu_threads' not in verified and 'capacity_reservation' not in handle.read()
-        else:assert verified['cpu_threads']==1 and handle.read()['capacity_reservation']['resource']==resource.as_record()
-        request_raw=Path(body['paths']['request']).read_bytes()
-        import hashlib
-        assert hashlib.sha256(request_raw).hexdigest()==handle.read()['request_sha256']
-        request=json.loads(request_raw)
-        assert request['cwd']==handle.read()['cwd']
-        ready_raw=Path(body['paths']['ready']).read_bytes()
-        assert json.loads(ready_raw)['request_sha256']==handle.read()['request_sha256']
-        if earlier is not None:assert request['cwd']==str(earlier) and result.metadata['whole_workflow_budget']==retained
-        (tmp_path/'raw-legacy-native.json').write_text(json.dumps({'kind':kind,'returncode':result.returncode,
-            'metadata':result.metadata,'handle':handle.read(),'configuration_bytes':original,
-            'request':request,'request_raw':request_raw.decode(),'ready_raw':ready_raw.decode(),
-            'request_sha256':hashlib.sha256(request_raw).hexdigest()},indent=2))
-    finally:
-        if not native.status(handle)['quiescent']:native.cancel(handle)
-        native.release(handle)
-    with resource._transaction() as db:
-        assert db.execute('SELECT value FROM configuration WHERE id=1').fetchone()[0]==original
-        assert db.execute('SELECT COUNT(*) FROM reservations').fetchone()[0]==0
-
-
-@pytest.mark.parametrize('conflict',['token','unit','handle'],ids=['token','unit','handle'])
-def test_saved_v1_reservation_identity_conflict(conflict,directory,tmp_path,monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a102 import native_lifecycle as native
-    from gene_annotation_episode.workflow_budget import active_budget
-    resource,_=authenticated_legacy_capacity(directory,monkeypatch)
-    monkeypatch.setattr(resource,'_refresh',lambda db:[])
-    raw=Handle(tmp_path/'identity.json');policy=local_jobs.LocalJobPolicy(1024,1024)
-    reservation=resource.reserve(raw,cpu_threads=1,policy=policy)
-    body={'version':native.VERSION,'unit':raw.value['unit'],'stage':'submitting','cwd':str(tmp_path),
-        'paths':{'release':str(tmp_path/'release')},'metadata':{'local_resources':resource.as_record(),
-        'policy':policy.to_dict(),'cpu_threads':1,'whole_workflow_budget':active_budget()},'capacity_reservation':reservation}
-    if conflict=='token':reservation['reservation_ref']='not-the-saved-token'
-    elif conflict=='unit':body['unit']='gene-local-job-different.service'
-    else:raw.path=tmp_path/'copied-identity.json'
-    raw.path.write_text(json.dumps(body));handle=native.NativeJobHandle(raw.path);before=raw.path.read_bytes()
-    with resource._transaction() as db:rows=[dict(row) for row in db.execute('SELECT * FROM reservations')]
-    marker=RuntimeError('original event boundary')
-    def event(*args,**kwargs):raise marker
-    monkeypatch.setattr(native,'_ensure_event_registration',event)
-    if lr.VERSION=='shared_local_resources_v1':
-        # Original ordering reaches event registration before reservation checks.
-        with pytest.raises(RuntimeError) as caught:native.resume_start(handle)
-        assert caught.value is marker
-    else:
-        expected=ValueError if conflict=='token' else AcquisitionError
-        with pytest.raises(expected) as caught:native.resume_start(handle)
-        assert type(caught.value) is expected
-        if conflict=='token':assert str(caught.value)=='local_resource_reservation_unavailable'
-        else:assert caught.value.code=='local_job_boundary_unavailable'
-    assert raw.path.read_bytes()==before and not Path(body['paths']['release']).exists()
-    with resource._transaction() as db:assert [dict(row) for row in db.execute('SELECT * FROM reservations')]==rows
-    (tmp_path/'raw-saved-conflict.json').write_text(json.dumps({'conflict':conflict,'active_resource_version':lr.VERSION,
-        'exception_type':type(caught.value).__module__+'.'+type(caught.value).__qualname__,'message':str(caught.value),
-        'handle_unchanged':True,'rows_unchanged':True},indent=2))
-
-
-@pytest.mark.parametrize('kind',['current','saved_v1','historical_child','prepared_fallback','descriptorless'],
-                         ids=['current','saved_v1','historical_child','prepared_fallback','descriptorless'])
-def test_actual_requested_threads_under_authenticated_ancestor(kind,directory,tmp_path,monkeypatch):
+def test_actual_requested_threads_under_authenticated_ancestor(directory,tmp_path,monkeypatch):
     from gene_annotation_episode.episodic_workflow.root.a102 import native_lifecycle as native
     from gene_annotation_episode.workflow_budget import active_budget
     actual=active_budget()
     assert actual['environment_bounds']=={'cpu_percent':100,'memory_bytes':5368709120,'swap_bytes':0}
-    if kind in {'saved_v1','historical_child'}:
-        resource,configuration=authenticated_legacy_capacity(directory,monkeypatch)
-    else:
-        resource=lr.LocalResources(directory,workflow_slice=actual['slice'])
-        with resource._transaction() as db:
-            configuration=db.execute('SELECT value FROM configuration WHERE id=1').fetchone()[0]
-        monkeypatch.setattr(lr.LocalResources,'configured',classmethod(lambda cls,settings=None:resource))
+    resource=lr.LocalResources(directory,workflow_slice=actual['slice'])
+    with resource._transaction() as db:
+        configuration=db.execute('SELECT value FROM configuration WHERE id=1').fetchone()[0]
+    monkeypatch.setattr(lr.LocalResources,'configured',classmethod(lambda cls,settings=None:resource))
     work=tmp_path/'thread-metadata-native';work.mkdir()
     policy=local_jobs.LocalJobPolicy(512*1024**2,1024**2)
     handle=native.prepare_job(['/bin/true'],cwd=work,policy=policy,handle_path=work/'handle.json',cpu_threads=3)
     body=handle.read()
     assert body['metadata']['cpu_threads']==3
-    if kind in {'prepared_fallback','descriptorless'}:
-        body['metadata'].pop('local_resources')
-        handle.path.write_text(json.dumps(body))
-    dispatches=[]
-    original_run=native.subprocess.run
-    def historical_dispatch(argv,*args,**kwargs):
-        if isinstance(argv,list) and argv and argv[0]=='systemd-run':
-            assert kind=='historical_child' and argv.count('CPUQuota=100%')==1
-            argv=list(argv);argv[argv.index('CPUQuota=100%')]='CPUQuota=300%'
-            dispatches.append(argv)
-        return original_run(argv,*args,**kwargs)
-    if kind=='historical_child':
-        # Constructed original child-rate fixture. Actual systemd launches the
-        # ordinary worker with the saved requested-three quota, still inside the
-        # real current100% ancestor. No owner/cgroup/ready observation is mocked.
-        monkeypatch.setattr(native.subprocess,'run',historical_dispatch)
     try:
-        if kind=='descriptorless':native._dispatch_prepared(handle,body,cancel_event=None)
-        else:native.start_prepared(handle)
+        native.start_prepared(handle)
         result=native.wait_job(handle)
         assert result.returncode==0 and handle.read()['metadata']['cpu_threads']==3
         verified=result.metadata['verified_cgroup']
         assert verified['memory_max']==512*1024**2 and verified['memory_swap_max']==0
         assert verified['workflow_slice']==actual['slice'] and verified['workflow_owner']==actual['unit']
         assert active_budget()==actual
-        if kind=='descriptorless':
-            assert 'capacity_reservation' not in handle.read() and 'cpu_max' not in verified
-        else:
-            assert verified['cpu_threads']==3
-            quota,period=map(int,verified['cpu_max'].split())
-            assert quota==(3 if kind=='historical_child' else 1)*period
-            reservation=handle.read()['capacity_reservation']
-            assert reservation['allocation']=={'cpu_threads':3,**policy.to_dict()}
-            assert reservation['execution_handle']==handle.read()['unit']
-        assert len(dispatches)==(1 if kind=='historical_child' else 0)
-        (tmp_path/'raw-thread-native.json').write_text(json.dumps({'kind':kind,
+        assert verified['cpu_threads']==3
+        quota,period=map(int,verified['cpu_max'].split())
+        assert quota==period
+        reservation=handle.read()['capacity_reservation']
+        assert reservation['allocation']=={'cpu_threads':3,**policy.to_dict()}
+        assert reservation['execution_handle']==handle.read()['unit']
+        (tmp_path/'raw-thread-native.json').write_text(json.dumps({
             'requested_cpu_threads':3,'actual_owner':actual,'handle':handle.read(),
             'metadata':result.metadata,'returncode':result.returncode,
-            'configuration_bytes':configuration,'historical_dispatch_argv':dispatches,
-            'constructed_historical_child':kind=='historical_child'},indent=2))
+            'configuration_bytes':configuration},indent=2))
     finally:
         if not native.status(handle)['quiescent']:native.cancel(handle)
         native.release(handle)
@@ -729,12 +348,9 @@ def test_actual_requested_threads_under_authenticated_ancestor(kind,directory,tm
         assert db.execute('SELECT COUNT(*) FROM reservations').fetchone()[0]==0
 
 
-@pytest.mark.parametrize('kind',['current','saved_v1'],ids=['current','saved_v1'])
-def test_requested_thread_metadata_does_not_consume_admission_slots(kind,directory,tmp_path,monkeypatch):
-    if kind=='saved_v1':resource,configuration=authenticated_legacy_capacity(directory,monkeypatch)
-    else:
-        resource=lr.LocalResources(directory,{'cpu_threads':3})
-        with resource._transaction() as db:configuration=db.execute('SELECT value FROM configuration WHERE id=1').fetchone()[0]
+def test_requested_thread_metadata_does_not_consume_admission_slots(directory,tmp_path,monkeypatch):
+    resource=lr.LocalResources(directory,{'cpu_threads':3})
+    with resource._transaction() as db:configuration=db.execute('SELECT value FROM configuration WHERE id=1').fetchone()[0]
     # Explicit capacity-only control: actual SQLite rows, no claimed native jobs.
     # Only service observation is replaced, preserving each recorded allocation.
     def observed(db):
@@ -754,24 +370,20 @@ def test_requested_thread_metadata_does_not_consume_admission_slots(kind,directo
     route={'binding_available':True,'capacity_state':'fresh','available':after['available']}
     recommendation=compare_routes(route,None,requirements={'cpu_threads':128,'memory_bytes':1024,'scratch_bytes':1024})
     assert recommendation['preferred']=='local'
-    (tmp_path/'raw-thread-admission.json').write_text(json.dumps({'kind':kind,
+    (tmp_path/'raw-thread-admission.json').write_text(json.dumps({
         'definition':resource.as_record(),'before':before,'after':after,'reservations':[first,second],
         'recommendation':recommendation,'configuration_bytes':configuration,
         'service_observation_controlled':True},indent=2))
     resource.release_reservation(first);resource.release_reservation(second)
 
 
-@pytest.mark.parametrize('kind',['new','empty_database','saved_current','saved_v1'],
-                         ids=['new','empty_database','saved_current','saved_v1'])
+@pytest.mark.parametrize('kind',['new','empty_database','saved_current'],
+                         ids=['new','empty_database','saved_current'])
 @pytest.mark.parametrize('setting_request',['unknown','memory','boolean'],ids=['unknown','memory','boolean'])
 def test_rejected_custom_initialization_preserves_all_existing_bytes(kind,setting_request,directory,tmp_path,monkeypatch):
-    workflow=None
     if kind=='empty_database':
         directory.mkdir();db=sqlite3.connect(directory/'capacity.sqlite3');db.close()
     elif kind=='saved_current':lr.LocalResources(directory)
-    elif kind=='saved_v1':
-        resource,_=authenticated_legacy_capacity(directory,monkeypatch)
-        workflow=resource.as_record()['workflow_slice']
     settings={'unknown':{'invented_field':1},'memory':{'memory_bytes':21474836481},
               'boolean':{'cpu_threads':True}}[setting_request]
     def snapshot():
@@ -779,10 +391,9 @@ def test_rejected_custom_initialization_preserves_all_existing_bytes(kind,settin
             'directories':sorted(str(p.relative_to(directory)) for p in directory.rglob('*') if p.is_dir()),
             'files':{str(p.relative_to(directory)):p.read_bytes().hex() for p in directory.rglob('*') if p.is_file()}}
     before=snapshot()
-    with pytest.raises(ValueError) as caught:lr.LocalResources(directory,settings,workflow_slice=workflow)
+    with pytest.raises(ValueError) as caught:lr.LocalResources(directory,settings)
     assert type(caught.value) is ValueError and snapshot()==before
-    expected=('local_resource_limits_conflict' if kind=='saved_v1' and setting_request=='memory' else
-        {'unknown':'invalid_local_resource_settings','memory':'local_resource_limits_exceed_environment_bounds',
+    expected=({'unknown':'invalid_local_resource_settings','memory':'local_resource_limits_exceed_environment_bounds',
          'boolean':'invalid_local_resource_limits'}[setting_request])
     assert str(caught.value)==expected
     (tmp_path/'raw-custom-initialization.json').write_text(json.dumps({'kind':kind,'request':setting_request,

@@ -426,23 +426,6 @@ def test_record_namespace_common_library_and_nonempty_binding(frozen):
             "invocation_sha256": "b" * 64, "mechanics_binding": {}})
 
 
-def test_ap_only_source_needs_no_historical_tool_definitions(tmp_path):
-    source = tmp_path / "source"
-    independent_source(source)
-    index = json.loads((source / "index.json").read_text())
-    index["slots"] = [row for row in index["slots"] if row["slot"] != "tools"]
-    index["entries"] = [row for row in index["entries"] if row["slot"] != "tools"]
-    write(source / "index.json", index)
-    table = json.loads((source / "option_sources.json").read_text())
-    table["rows"] = [row for row in table["rows"] if not row["option_id"].startswith("T")]
-    write(source / "option_sources.json", table)
-    (source / "entries/T01.json").unlink()
-    library = ScientificProcessLibrary.freeze(tmp_path / "library", source=source)
-    assert [row["option_ref"]["option_id"] for row in library.headers()] == ["A01", "P01"]
-    with pytest.raises(ValueError):
-        library.reference("T01")
-
-
 def test_old_selected_tool_bundle_is_rejected_instead_of_reinterpreted(frozen):
     library, _, _, _ = frozen
     old = selection(library)
@@ -452,18 +435,3 @@ def test_old_selected_tool_bundle_is_rejected_instead_of_reinterpreted(frozen):
         validate_selection(old)
 
 
-def test_legacy_annotation_body_remains_exactly_readable_without_support_upgrade(tmp_path):
-    source = tmp_path / "legacy-source"
-    independent_source(source)
-    body = {"id": "A01", "slot": "annotation_distinction", "name": "Synthetic engineering support",
-        "description": "Exercise declared support operands without biological claims.",
-        "claim_scope": "Historical fixture relationship.", "distinctions": ["Historical distinction."],
-        "not_established": ["No adopted support body."], "boundary": "Original legacy boundary.",
-        "example_structured_values": {"legacy": ["illustration"]},
-        "evidence": json.loads((source / "entries/A01.json").read_text())["evidence"]}
-    write(source / "entries/A01.json", body)
-    library = ScientificProcessLibrary.freeze(tmp_path / "legacy-snapshot", source=source)
-    assert library.resolve(library.reference("A01")) == body
-    assert "entry_version" not in library.entry("A01")["entry"]
-    shutil.rmtree(source)
-    assert ScientificProcessLibrary(library.directory).entry("A01")["entry"] == body

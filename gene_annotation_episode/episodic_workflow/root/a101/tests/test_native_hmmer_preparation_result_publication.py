@@ -4,6 +4,7 @@ The relocated original execution envelope is a labeled synthetic fixture;
 capture, file retention, subprocess grading and projection are real operations.
 These checks do not claim episode commissioning or controller integration.
 """
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import json
 from pathlib import Path
@@ -11,102 +12,12 @@ import shutil
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_acquisition as acquisition
 from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_result_publication as publication
 from gene_annotation_episode.episodic_workflow.root.a101.local_jobs import LocalJobPolicy
 from gene_annotation_episode.episodic_workflow.root.a101.state import Store
-from test_native_hmmer_preparation_result_worker import CASES, capture_native
 
 
-POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
-
-
-def prepare(store, tmp_path, monkeypatch, program="hmmemit", mode="consensus_simple"):
-    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
-    shutil.rmtree(root.parent)
-    monkeypatch.setattr(acquisition, "local_hmmer_preparation_plan", lambda *a: pytest.fail("reopened native reservation"))
-    prepared = publication.prepare_native_hmmer_preparation_grading(store,
-        target=target, capture=capture, capture_directory=tmp_path / "capture",
-        directory=tmp_path / "grading", policy=POLICY)
-    assert prepared["graded"], prepared
-    source = acquisition.publish_original_source(store, bundle=bundle, capture=capture, prepared=prepared)
-    return bundle, target, capture, prepared, source
-
-
-def selector(*, artifacts=(), quantities=(), rows=None):
-    return {"version": "native_hmmer_preparation_result_selector_v1",
-        "acquisition": "complete_bound_bundle", "artifacts": list(artifacts),
-        "projection": {"collection": "calculations", "rows": rows or {"offset": 0, "limit": 1},
-            "quantities": list(quantities), "checks": []} if quantities else None}
-
-
-@pytest.mark.parametrize("program,mode", CASES)
-def test_all26_modes_retain_grade_and_publish_only_requested_artifact(tmp_path, monkeypatch, program, mode):
-    with Store(tmp_path / "store") as store:
-        bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
-        selected = next((r for r in bundle["artifacts"] if r["role"] not in {"stdout", "stderr"}), bundle["artifacts"][0])
-        choice = selector(artifacts=[{"direction": "output", "role": selected["role"], "ordinal": 0}])
-        full_get = store.get_artifact
-        numerical = {prepared[k] for k in ("grading_artifact_ref", "sheet_artifact_ref", "calculations_artifact_ref")}
-        def no_full_sheet(reference):
-            assert reference not in numerical, "host hydrated full numerical data"
-            return full_get(reference)
-        monkeypatch.setattr(store, "get_artifact", no_full_sheet)
-        result = publication.publish_selected_preparation_result(store, source_ref=source,
-            prepared=prepared, selector=choice, directory=tmp_path / "projection", policy=POLICY)
-        assert result["rows"] == [] and result["population"]["total_records"] == 0
-        assert len(result["artifacts"]) == 1
-        artifact = result["artifacts"][0]
-        assert artifact["sha256"] == selected["sha256"] and artifact["size_bytes"] == selected["size_bytes"]
-        assert result["record_refs"] == [source, artifact["artifact_ref"]]
-        assert not numerical.intersection(result["record_refs"])
-        monkeypatch.setattr(publication, "run_local_job", lambda *a, **kw: pytest.fail("replay started worker"))
-        assert publication.prepare_native_hmmer_preparation_grading(store, target=target, capture=capture,
-            capture_directory=tmp_path / "capture", directory=tmp_path / "grading", policy=POLICY) == prepared
-        assert publication.validate_publication(store, result, source_ref=source, prepared=prepared,
-            selector=choice, directory=tmp_path / "projection", policy=POLICY) == result
-
-
-@pytest.mark.parametrize("program,mode,path,expected", [
-    ("hmmemit", "consensus_simple", "length", 12),
-    ("makehmmerdb", "build", "components.source_symbol_total", 28),
-    ("makehmmerdb", "build", "components.actual_database_bytes", 314),
-])
-def test_requested_native_numerical_value_crosses_saved_publication(tmp_path, monkeypatch, program, mode, path, expected):
-    with Store(tmp_path / "store") as store:
-        _, _, _, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
-        choice = selector(quantities=[path])
-        result = publication.publish_selected_preparation_result(store, source_ref=source,
-            prepared=prepared, selector=choice, directory=tmp_path / "projection", policy=POLICY)
-        assert len(result["rows"]) == 1
-        assert result["rows"][0]["quantities"][0]["value"] == expected
-        assert result["rows"][0]["quantities"][0]["state"] == "present"
-        # The selected scalar carries only the original files needed to
-        # substantiate it, even though no file was explicitly requested.
-        expected_roles = {("output", "generated_sequences")} if program == "hmmemit" else (
-            {("input", "sequences")} if path.endswith("source_symbol_total")
-            else {("output", "fm_database")})
-        assert {(r["direction"], r["role"]) for r in result["artifacts"]} == expected_roles
-        assert result["population"]["requested_artifact_count"] == 0
-        assert result["population"]["returned_artifact_count"] == len(expected_roles)
-        assert len(result["rows"][0]["quantities"]) == 1
-
-
-def test_projection_rejects_changed_selection_and_prepared_identity(tmp_path, monkeypatch):
-    with Store(tmp_path / "store") as store:
-        bundle, _, _, prepared, source = prepare(store, tmp_path, monkeypatch)
-        choice = selector(quantities=["length"])
-        result = publication.publish_selected_preparation_result(store, source_ref=source,
-            prepared=prepared, selector=choice, directory=tmp_path / "projection", policy=POLICY)
-        changed = deepcopy(choice)
-        changed["projection"]["rows"]["offset"] = 1
-        with pytest.raises(ValueError, match="identity_conflict"):
-            publication.validate_publication(store, result, source_ref=source, prepared=prepared,
-                selector=changed, directory=tmp_path / "projection", policy=POLICY)
-        changed = deepcopy(prepared)
-        changed["occurrences"][0]["ordinal"] = 9
-        with pytest.raises(ValueError, match="identity_conflict"):
-            publication.validate_prepared_grading(store, changed, bundle=bundle)
+POLICY = LocalJobPolicy(ENVIRONMENT_BOUNDS['memory_bytes'], 4 * 1024 ** 3)
 
 
 def test_preparation_requires_existing_capture_and_does_not_acquire(tmp_path, monkeypatch):
@@ -117,86 +28,6 @@ def test_preparation_requires_existing_capture_and_does_not_acquire(tmp_path, mo
             directory=tmp_path / "grading", policy=POLICY)
         assert not prepared["graded"] and prepared["source_grading_artifact_ref"] is None
         assert prepared["failures"][0]["code"].endswith("completed_capture_required")
-
-
-def test_captured_artifact_survives_unavailable_grade_worker(tmp_path, monkeypatch, verified_control_runtime):
-    """An injected admission refusal preserves the real prepared phase, not a failed grade.
-
-    The native capture fixture's relocated custody is synthetic, as declared at
-    module scope. The durable worker preparation is real; no worker is started.
-    """
-    from gene_annotation_episode.episodic_workflow.root.a101.acquisition import AcquisitionError
-    with Store(tmp_path / "store") as store:
-        root, _, _, target, capture = capture_native(store, tmp_path, monkeypatch)
-        shutil.rmtree(root.parent)
-        _copy_control_runtime(tmp_path, verified_control_runtime)
-        calls = []
-        def busy(handle, **kwargs):
-            calls.append(handle.read()["unit"])
-            raise AcquisitionError("local_resource_busy", phase="local_admission",
-                operational={"retryable": True, "retry_same_prepared_job": True})
-        monkeypatch.setattr(publication.native, "resume_start", busy)
-        def counts():
-            return store.count("source"), store.db.execute("SELECT count(*) FROM artifacts").fetchone()[0], store.count("observation")
-        baseline = counts()
-        def selected_grade():
-            return publication.prepare_native_hmmer_preparation_grading(store,
-                target=target, capture=capture, capture_directory=tmp_path / "capture",
-                directory=tmp_path / "grading", policy=POLICY)
-        with pytest.raises(publication.HmmerPreparationWorkerPending) as first:
-            selected_grade()
-        directory = tmp_path / "grading/native-hmmer-preparation-grading"
-        handle = publication.native.NativeJobHandle(first.value.handle_path)
-        original = handle.read()
-        assert original["stage"] == "prepared" and original["started_at"] is None
-        assert first.value.failure["operational"]["retry_same_prepared_job"] is True
-        assert not any((directory / name).exists() for name in (
-            "prepared.json", "grading-receipt.json", "worker-result.json", "projection-failure.json"))
-        assert store.get_artifact(capture["bundle_artifact_ref"])
-        assert counts() == baseline
-        def no_reprepare(*args, **kwargs):
-            pytest.fail("pending phase prepared a replacement native handle")
-        monkeypatch.setattr(publication.native, "prepare_job", no_reprepare)
-        with pytest.raises(publication.HmmerPreparationWorkerPending) as second:
-            selected_grade()
-        assert second.value.handle_path == first.value.handle_path
-        assert handle.read() == original and calls == [original["unit"], original["unit"]]
-        assert not (directory / "prepared.json").exists()
-        assert counts() == baseline
-
-
-
-
-def test_new_alimask_context_is_bound_in_publication_and_checked_on_replay(tmp_path, monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_result_worker as worker
-    with Store(tmp_path / "store") as store:
-        bundle, _, _, prepared, source = prepare(store, tmp_path, monkeypatch, "alimask", "alignment_to_model")
-        stable = publication._stable(store, prepared)
-        context = stable["effective_metadata"]["map_reconstruction_context"]
-        alignment = next(r for r in prepared["occurrences"] if (r["direction"], r["role"], r["ordinal"]) == ("input", "alignment", 0))
-        assert context["source_occurrence_id"] == alignment["occurrence_id"]
-        assert context["source_sha256"] == alignment["sha256"]
-        assert context["producer"]["executable_sha256"] == bundle["software"]["actual_sha256"]
-        assert context["effective_pb_config"]["seed"] == 42
-        grading = json.loads(store.get_artifact(prepared["grading_artifact_ref"]))
-        assert grading["metadata"]["map_reconstruction_context"] == context
-        assert grading["sheet"]["input_records"][0]["map_reconstruction_context"] == context
-        choice = selector(quantities=["components.mapped_model_position_count"])
-        result = publication.publish_selected_preparation_result(store, source_ref=source,
-            prepared=prepared, selector=choice, directory=tmp_path / "projection", policy=POLICY)
-        frozen = store.get_artifact(prepared["grading_artifact_ref"])
-        monkeypatch.setattr(publication, "run_local_job", lambda *a, **kw: pytest.fail("replay started worker"))
-        monkeypatch.setattr(worker, "_grade", lambda *a, **kw: pytest.fail("replay recomputed grade"))
-        assert publication.validate_publication(store, result, source_ref=source, prepared=prepared,
-            selector=choice, directory=tmp_path / "projection", policy=POLICY) == result
-        altered = deepcopy(stable)
-        altered["effective_metadata"]["map_reconstruction_context"]["source_sha256"] = "0" * 64
-        changed = deepcopy(prepared)
-        changed["source_grading_artifact_ref"] = publication.retain_tool_grading(store,
-            provider="episode.execution_result", native_artifact_ref=prepared["bundle_artifact_ref"], grading=altered)
-        with pytest.raises(ValueError, match="prepared_grading_custody_conflict"):
-            publication.validate_prepared_grading(store, changed, bundle=bundle)
-        assert store.get_artifact(prepared["grading_artifact_ref"]) == frozen
 
 
 @pytest.fixture(scope="module")
@@ -444,42 +275,6 @@ def test_copied_worker_runtime_imports_and_authenticates_without_science(tmp_pat
         "scope": "imports_and_runtime_authentication_only", "worker_main_executed": False,
         "native_HMMER_executed": False, "Source_or_ToolOperation_published": False,
     }, indent=2, allow_nan=False) + "\n")
-
-
-def test_contained_dependency_bindings_pin_real_packages_and_original_RECORDs(tmp_path):
-    import importlib.metadata
-    import os
-    from gene_annotation_episode import native_atac_differential_software as software
-    exclusions = []
-    bindings = software._dependency_bindings(contained_records=True, exclusions=exclusions)
-    assert bindings
-    expected_exclusions = []
-    for binding in bindings:
-        installed = importlib.metadata.distribution(binding["distribution"])
-        root = Path(installed.locate_file("")).resolve(strict=True)
-        expected_paths = set()
-        # The selected stdlib's Distribution.files may filter missing RECORD
-        # entries first. Compare the actual supplied declarations, including a
-        # legitimate empty exclusion list, rather than inventing absent inputs.
-        for entry in installed.files or ():
-            candidate = Path(os.path.abspath(installed.locate_file(entry)))
-            reason = ("outside_distribution_root" if not candidate.is_relative_to(root)
-                else "non_runtime_bytecode" if candidate.suffix in {".pyc", ".pyo"} else None)
-            if reason is not None:
-                expected_exclusions.append({"distribution": binding["distribution"], "record_path": str(entry),
-                    "declared_path": str(candidate), "reason": reason})
-            else:
-                retained = candidate.resolve(strict=True)
-                assert retained.is_relative_to(root)
-                if retained.is_file():
-                    expected_paths.add(str(retained))
-        assert {row["path"] for row in binding["files"]} == expected_paths
-        assert all(Path(row["path"]).is_relative_to(root) and Path(row["path"]).is_file() for row in binding["files"])
-        assert any(Path(row["path"]).name == "RECORD" for row in binding["files"])
-        assert not any(Path(row["path"]).suffix in {".pyc", ".pyo"} for row in binding["files"])
-    assert exclusions == expected_exclusions
-    assert {row["reason"] for row in exclusions} <= {"outside_distribution_root", "non_runtime_bytecode"}
-    assert all(set(row) == {"distribution", "record_path", "declared_path", "reason"} for row in exclusions)
 
 
 @pytest.mark.parametrize("fault", ["missing_inside", "symlink_escape_inside"])

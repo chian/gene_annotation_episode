@@ -29,10 +29,10 @@ from gene_annotation_episode.episodic_workflow.root.execution_episodes import Ex
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.numerical import (NumericBand, YieldController, YieldEstimate,
     YieldParameters, estimate_score_yield)
-from gene_annotation_episode.practical_yield import PracticalYieldEstimator
+from gene_annotation_episode.episodic_workflow.root.practical_yield import PracticalYieldEstimator
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
@@ -132,12 +132,12 @@ class _SelectedRun:
                     required = 2 if role == "annotation" else 3
                     return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= required else 1),
                         parameters, {"fixture": "engineering_parent_scientific_continuation_only"})
-                value = YieldController(str(path), initial, 0, YieldParameters(100, 50),
+                value = YieldController(str(path), initial, 0, YieldParameters(),
                     estimate_with_context=engineering)
             else:
                 # No resource estimator, cap or forced completion: the real
                 # configured controller sees the actual gains and ordinary waits.
-                value = YieldController(str(path), initial, 5, YieldParameters(2, 1, .5))
+                value = YieldController(str(path), initial, 5, YieldParameters(.5))
             self.controllers[path] = value
             return value
 
@@ -319,7 +319,7 @@ def test_selected_process_retained_addgene_metadata_partial_return_and_closed_re
         caller_controller = run.controllers[result_context.path]
         assert caller_controller.estimator.estimate_with_context is None
         resource_controller = installed_controllers[id(run.workflow), result_context.path]
-        assert resource_controller.cost == 5 and resource_controller.settings == YieldParameters(2, 1, .5)
+        assert resource_controller.cost == 5 and resource_controller.settings == YieldParameters(.5)
         practical = resource_controller.estimator.estimate_with_context
         assert type(practical) is PracticalYieldEstimator
         assert practical.base_estimate is estimate_score_yield

@@ -57,7 +57,7 @@ def sample_bindings_schema():
         "batch": deepcopy(nullable), "sampling_time": deepcopy(nullable)})}
 
 
-def intervention_population_schema(*, legacy=False):
+def intervention_population_schema():
     schema = intervention_grading_input_schema()
     props = schema["properties"]
     del props["version"]

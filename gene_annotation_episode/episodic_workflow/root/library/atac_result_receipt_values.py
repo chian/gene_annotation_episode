@@ -1,8 +1,8 @@
-"""Selected atac action controls and historical completed-action authority.
+"""Selected atac action controls and completed-action authority.
 
 These private records belong to the existing results episode. They contain no
 calculator and grant no access merely because a file or a private receipt exists.
-Historical checks use frozen controls and Store metadata, never scientific bytes.
+Completed-action checks use frozen controls and Store metadata, never scientific bytes.
 """
 from __future__ import annotations
 
@@ -33,7 +33,7 @@ from gene_annotation_episode.episodic_workflow.root.library.atac_differential_re
 from gene_annotation_episode.episodic_workflow.root.library.atac_differential_return_views import FACT_SOURCES, FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE, validate_atac_fact_values
 from gene_annotation_episode.episodic_workflow.root.library.atac_differential_result_worker import validate_atac_result_worker_plan, validate_atac_result_worker_result
 from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_capture import validate_atac_native_capture
-from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_contracts import retained_policy, POLICY, atac_driver_argv, validate_atac_requested_job, validate_atac_run_plan, _dependency_roots
+from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_contracts import POLICY, atac_driver_argv, validate_atac_requested_job, validate_atac_run_plan, _dependency_roots
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import validate_receipt
 from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from gene_annotation_episode.episodic_workflow.root.progress_records import validate_resource_observation
@@ -148,10 +148,6 @@ _READING = ContextVar("atac_differential_receipt_reading", default=())
 _READ_CACHE = ContextVar("atac_differential_receipt_read_cache", default=None)
 _OUTPUTS = ("sheet", "calculations", "projection", "diagnostics")
 _TRACK_ROLES = ("signal1", "background1", "signal2", "background2")
-
-
-def _historical(intent):
-    return (intent['episode_id'], intent['operation_key']) in _READING.get()
 
 
 def _finite_json_copy(value):

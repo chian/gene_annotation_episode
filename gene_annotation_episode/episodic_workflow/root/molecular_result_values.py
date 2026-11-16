@@ -9,7 +9,7 @@ PUBLIC_VERSION = "molecular_sequence_public_result_v1"
 
 PREFIX = "molecular_sequence_received_report_prefix"
 
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': 5368709120, 'scratch_bytes': 4294967296}
 
 def _json(raw):
     from gene_annotation_episode.episodic_workflow.root.library.molecular_sequence_driver import _json as decode

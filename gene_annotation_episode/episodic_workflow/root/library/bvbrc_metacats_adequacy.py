@@ -2,7 +2,6 @@
 
 The operand is the stored augmented expected matrix, including its known zeros.
 Observed sparse cells, native labels and p values do not supply this quantity.
-No original results or historical effects.augmented_adequacy fields are changed.
 """
 from __future__ import annotations
 

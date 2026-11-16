@@ -169,8 +169,7 @@ def _graph_schema():
         'native_bounds': null(ref('ExactBounds')),
         'bound_kind': {'const': 'conditional_digitization_not_confidence_interval'},
         'diagnostics': arr(ref('Diagnostic')),
-        'counter_version': {'const': 'controlled_response_bar_runs_v1'},
-        'counter_module_sha256': {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}})
+        'counter_version': {'const': 'controlled_response_bar_runs_v1'}})
     D['CanonicalDisplay'] = obj({
         'value': null(N),
         'threshold': null(N),
@@ -407,10 +406,7 @@ def _extraction_schema():
     D["RequestedModel"] = obj({k: ref("InterpretationExtraction") for k in ("variance_status", "model_kind")})
     D["EffectiveModel"] = obj({"variance_status": enum("known", "estimated", "unknown"), "model_kind": enum("none", "known_joint_normal_source_means"), "diagnostics": AD})
     D["DependencyRecord"] = obj({"reader_contract_version": {"const": "controlled_response_source_extraction_v2"},
-        "calculator_contract_version": {"const": "controlled_response_owner_inputs_v2"},
-        "expected_module_fingerprints": obj({k: SHA for k in [*shared.DEPENDENCIES,
-            "literature_controlled_response_inputs.py", "literature_controlled_response_v2_inputs.py",
-            "literature_controlled_response_figure_inputs.py", "literature_controlled_response_owner_calculations.py"]})})
+        "calculator_contract_version": {"const": "controlled_response_owner_inputs_v2"}})
     root = obj({"version": {"const": "controlled_response_source_extraction_v2"}, "selection": ref("Selection"),
         "sources": arr(ref("SourceRecord")), "images": arr(ref("ImageRecord")), "arms": obj({r: null(ref("ArmExtraction")) for r in roles}),
         "relationships": ref("RelationshipExtraction"), "covariance": null(ref("CovarianceExtraction")),

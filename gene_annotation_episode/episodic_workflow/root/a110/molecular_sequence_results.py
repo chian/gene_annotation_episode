@@ -5,6 +5,7 @@ not exist in this revision. Ordinary byte/episode custody cannot substitute for
 that missing producer association. Stored results are never regraded here.
 """
 from __future__ import annotations
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import hashlib
 import json
@@ -25,7 +26,7 @@ from .domain import identity as record_identity
 VERSION = 'molecular_sequence_result_receipt_v1'
 PUBLIC_VERSION = 'molecular_sequence_public_result_v1'
 PREFIX = 'molecular_sequence_received_report_prefix'
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 
 def _json(raw):
     from .molecular_sequence_driver import _json as decode

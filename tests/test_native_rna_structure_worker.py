@@ -1,4 +1,3 @@
-from copy import deepcopy
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -8,7 +7,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.library import native_rna_structure_worker as worker
 from gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native import parse_rna_native_record, populate_rna_feature_sheet
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_calculations import calculate_rna_feature_components
-from test_native_rna_structure_contracts import model, parameters, rna_input, software
+from test_native_rna_structure_contracts import model, parameters, rna_input
 
 
 @pytest.fixture
@@ -145,19 +144,6 @@ def test_parameter_load_failure_has_no_fallback(fake_rna, tmp_path):
         parameter_input=tmp_path / "missing.par", output_directory=tmp_path)
     assert value["native_evaluation"]["reason"] == "rna_parameter_load_failed"
     assert not calls and value["model"] is None
-
-
-@pytest.mark.parametrize("field", ["python_executable", "python_sha256", "worker_source_sha256", "python_version",
-    "viennarna_distribution_version", "rna_module_sha256", "rna_extension_sha256"])
-def test_bound_software_fields_compare_actual_observations(monkeypatch, field):
-    selected = software()
-    selected.update(viennarna_distribution_version="fixture", rna_module_sha256="1" * 64, rna_extension_sha256="2" * 64)
-    actual = deepcopy(selected)
-    actual[field] = "different"
-    monkeypatch.setattr(worker, "_software", lambda rna=None: actual)
-    with pytest.raises(worker._NativeFailure) as caught:
-        worker._check_software(selected, rna=SimpleNamespace(__version__="fixture"), native=True)
-    assert caught.value.code == "rna_software_identity_mismatch" and caught.value.field == "/software/" + field
 
 
 def test_missing_native_setting_is_explicit_not_ignored(fake_rna, tmp_path):

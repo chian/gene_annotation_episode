@@ -172,18 +172,6 @@ def test_retained_bam_outputs_use_postfilter_counts_not_totals_and_preserve_unkn
             eligibility=prepared['eligibility'], issues=prepared['issues']), indent=2, allow_nan=False) + '\n')
 
 
-def test_historical_native_sheet_without_actual_bam_dictionary_is_readable_but_not_verified():
-    saved = build_atac_differential_sheet(**native_inputs())
-    saved.pop('bam_references', None)
-    before = deepcopy(saved)
-    prepared = prepare_atac_calculation_inputs(saved, intervals=population())
-    assert set(prepared['eligibility']['tracks'].values()) == {'unavailable'}
-    assert (prepared['depth1'], prepared['depth2']) == (100, 200)
-    assert all(set(r['states'].values()) == {'missing'} for r in components(prepared))
-    assert 'metadata_missing' in codes(prepared)
-    assert saved == before
-
-
 @pytest.mark.parametrize('case', ['length', 'missing_sq', 'duplicate_sq', 'duplicate_sn', 'invalid_ln',
                                    'invalid_m5', 'bare_m5', 'partial', 'wrong_format', 'unverified', 'unlocated'])
 def test_native_bam_dictionary_defect_disables_only_affected_run(case):

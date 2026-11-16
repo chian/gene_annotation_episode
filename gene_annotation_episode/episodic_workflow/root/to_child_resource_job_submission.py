@@ -1,5 +1,4 @@
-"""Actual parent-owned request/return boundary using original live globals."""
-from gene_annotation_episode.episodic_workflow.root import action_execution as _original
+"""Parent-owned request/return boundary; names resolve through action_execution."""
 
 
 def prepare_request(workflow, source, selection, index, scope, role, selected_owner):

@@ -1,83 +1,9 @@
 """Actual Store/runtime boundaries with scripted decisions, not model science."""
-import asyncio
-import json
 
-from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.episodic_workflow.root.reference_selection import _references_in
-from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
-from test_runtime import FixtureController, ScriptedProvider, obj
-
-
-def sources_outside_preview(store, target):
-    sources = []
-    for index in range(40):
-        body = f"SYNTHETIC source body {index:03d}: no biological result asserted.".encode()
-        artifact = store.artifact(body, "text/plain")
-        source = store.put("source", {"provider": "synthetic_basis_fixture", "accession": None,
-            "uri": None, "artifact_ref": artifact, "text_ref": artifact, "request_ref": None,
-            "version": None, "retrieved_at": None}, origin="caller")
-        sources.append((source, body))
-    preview = {row["id"] for row in store.reasoning_view({"subject_refs": [target]}, limit=24)["sources"]}
-    return next((source, body) for source, body in sources if source["id"] not in preview)
-
-
-def action(tool, arguments, report):
-    return {"selection": {"kind": "tool", "tool": tool, "arguments": arguments}, "report_update": report}
-
-
-def test_read_window_and_admitted_child_form_supply_visible_handles_outside_preview(tmp_path):
-    with Store(tmp_path / "store") as store:
-        target = store.create_problem(raw_sequence="MACT", molecule="protein")["subject_refs"][0]
-        source, body = sources_outside_preview(store, target)
-        source_ref, artifact_ref = source["id"], source["artifact_ref"]
-        schema = obj({
-            "interpretation": {"type": "string", "enum": ["unread", "read"]},
-            "citations": {"type": "array", "items": obj({
-                "selected_source": {"type": "string", "format": "reference", "x-reference-namespace": "source"},
-                "selected_bytes": {"type": "string", "format": "reference", "x-reference-namespace": "artifact"}})},
-            "basis": {"type": "array", "items": {"type": "string", "format": "reference"},
-                      "x-source": "interpretation_basis_refs"},
-            "last_refs": {"type": "array", "items": {"type": "string", "format": "reference"},
-                          "x-source": "last_outcome_refs"}})
-        initial = {"interpretation": "unread", "citations": []}
-        interpreted = {"interpretation": "read", "citations": [{"selected_source": source_ref,
-                                                                  "selected_bytes": artifact_ref}]}
-        commission = {"selection": {"kind": "child",
-            "goal": "Iteratively inspect a selected synthetic source and its custody",
-            "scope": {"subject_refs": [target]}, "purpose": "Report the actual selected source handles",
-            "schema_json": json.dumps(schema), "initial_report_json": json.dumps(initial)}, "report_update": {}}
-        provider = ScriptedProvider([commission,
-            action("source.read", {"source_ref": source_ref, "representation": "original"}, initial),
-            action("state.query", {"refs": [target]}, interpreted),
-            action("state.query", {"refs": [target]}, {})])
-        # This explicitly injected fixture controller only bounds the local
-        # regression. Production yield rules and observations are unchanged.
-        controller = lambda path, value: FixtureController(str(path), value, 2)
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
-            run_dir=tmp_path / "run", controller_factory=controller,
-            project_credit=lambda bound, scope: project_credit(bound, scope=scope)))
-        child, parent = provider.contexts[2], provider.contexts[3]
-        assert source_ref not in {row["id"] for row in child["working_state"]["sources"]}
-        assert source_ref not in {row["id"] for row in parent["working_state"]["sources"]}
-        assert source_ref not in provider.contexts[1]["visible_record_refs"]
-        assert child["last_local_outcome"]["result"]["text"].encode() == body
-        assert child["last_local_outcome"]["record_refs"] == []
-        assert source_ref in child["visible_record_refs"] and artifact_ref in child["visible_record_refs"]
-        report = parent["child_reports"][0]
-        assert report["citations"] == interpreted["citations"] and report["interpretation"] == "read"
-        assert source_ref in report["basis"] and artifact_ref in report["basis"]
-        assert parent["last_local_outcome"] is None
-        assert source_ref in parent["visible_record_refs"] and artifact_ref in parent["visible_record_refs"]
-        assert body.decode() not in json.dumps(parent["child_reports"])
-        delivery = store.db.execute("SELECT form,failure FROM runtime_report_attempts").fetchone()
-        assert delivery["failure"] is None and json.loads(delivery["form"]) == report
-        saved = [json.loads(row[0]) for row in store.db.execute("SELECT facts FROM runtime_forms")]
-        assert source_ref in saved[0]["interpretation_basis_refs"]
-        assert len(provider.contexts) == 4
-        assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 4
-        assert summary["credit"] == 0 and not store.list("observation") and not store.current_annotations()
+from test_runtime import obj
 
 
 def test_basis_uses_typed_positions_and_indexed_identity_without_body_or_registry_reads(tmp_path, monkeypatch):

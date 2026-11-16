@@ -74,30 +74,6 @@ def validate_controlled_response_v3_selection(arguments):
     return selected
 
 
-def _dependencies():
-    import hashlib
-    from pathlib import Path
-    names = list(v2._dependencies()) + ['literature_controlled_response_v3_inputs.py',
-        'literature_controlled_response_local_calculations.py']
-    paths = {
-        'literature_assay_inputs.py': 'gene_annotation_episode/episodic_workflow/root/literature_assay_inputs.py',
-        'literature_rate_native_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_rate_native_inputs.py',
-        'literature_partner_source_fields.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_partner_source_fields.py',
-        'literature_partner_defined_units.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_partner_defined_units.py',
-        'literature_kinetic_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_kinetic_inputs.py',
-        'literature_binding_visual_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_binding_visual_inputs.py',
-        'literature_binding_reader.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_binding_reader.py',
-        'literature_controlled_response_calculations.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_calculations.py',
-        'literature_controlled_response_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_inputs.py',
-        'literature_controlled_response_v2_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_v2_inputs.py',
-        'literature_controlled_response_figure_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_figure_inputs.py',
-        'literature_controlled_response_owner_calculations.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_owner_calculations.py',
-        'literature_controlled_response_v3_inputs.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_v3_inputs.py',
-        'literature_controlled_response_local_calculations.py': 'gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_local_calculations.py',
-    }
-    return {name: hashlib.sha256((Path(__file__).parents[4]/paths[name]).read_bytes()).hexdigest() for name in names}
-
-
 def _selector(role, key=None):
     return {'role': role, 'reading_key': key}
 
@@ -353,7 +329,7 @@ def _finish_v3(context, *, arms, companion_arms, covariance_scopes):
         'relationships': relationships, 'covariance': base_covariance, 'requested_model': requested, 'effective_model': effective,
         'calculation_inputs': projection, 'representation_reconciliations': shared._representations(arms), 'diagnostics': [],
         'implementation_dependencies': {'reader_contract_version': 'controlled_response_source_extraction_v3',
-            'calculator_contract_version': 'controlled_response_owner_inputs_v2', 'expected_module_fingerprints': _dependencies()},
+            'calculator_contract_version': 'controlled_response_owner_inputs_v2'},
         'companion_extractions': [{'reading_key': s['reading_key'], 'primary_role': s['role'], 'reading': cp(dict(a))} for s, a in companion_arms],
         'projection_status': 'ready' if projection is not None else 'unresolved_active_reconciliation', 'final_projection_basis': basis,
         'reconciliation_decisions': decisions, 'joint_scope_extractions': joint_rows, 'alternative_inputs': alternatives,

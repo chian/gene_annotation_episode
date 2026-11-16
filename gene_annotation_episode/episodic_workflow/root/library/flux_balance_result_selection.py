@@ -21,10 +21,8 @@ def _schema(mode):
 FBA_RESULT_SELECTOR_SCHEMA = {"oneOf": [_schema(mode) for mode in ("native_result", "saved_sheet_recalculation")]}
 
 
-def validate_flux_balance_result_selector(value: dict, *, job: dict | None = None, historical=False) -> dict:
+def validate_flux_balance_result_selector(value: dict, *, job: dict | None = None) -> dict:
     """Validate explicit parameters and selected fields; grant no source access."""
-    if type(historical) is not bool:
-        raise ValueError('fba_historical_validation_mode_invalid')
     if (type(value) is not dict or set(value) != {"version", "mode", "saved_sheet_file", "calculation_parameters", "projection"}
             or value["version"] != "flux_balance_result_selector_v1"
             or type(value["mode"]) is not str or value["mode"] not in ("native_result", "saved_sheet_recalculation")):
@@ -41,7 +39,7 @@ def validate_flux_balance_result_selector(value: dict, *, job: dict | None = Non
         if value["mode"] != "native_result":
             raise ValueError("fba_result_selector_invalid:/job")
         from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import validate_flux_balance_requested_job
-        validate_flux_balance_requested_job(job, historical=historical)
+        validate_flux_balance_requested_job(job)
     return {"version": value["version"], "mode": value["mode"], "saved_sheet_file": deepcopy(saved),
         "calculation_parameters": parameters, "projection": projection}
 

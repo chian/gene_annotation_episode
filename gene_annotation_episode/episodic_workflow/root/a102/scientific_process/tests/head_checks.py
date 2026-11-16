@@ -7,7 +7,6 @@ import asyncio
 from contextlib import contextmanager,ExitStack
 from copy import deepcopy
 from dataclasses import replace
-import hashlib
 from importlib import import_module
 import json
 from pathlib import Path
@@ -29,11 +28,6 @@ def capture(callback):
     try:
         result=callback();return {'status':'returned','value':plain(result.as_record() if hasattr(result,'as_record') else result)}
     except Exception as error:return {'status':'raised','type':type(error).__module__+'.'+type(error).__qualname__,'message':str(error),'code':getattr(error,'code',None)}
-def source_hashes():
-    axis=Path(__file__).resolve().parents[2];root=axis.parents[3]
-    return {str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(axis.rglob('*.py')) if 'tests' not in p.relative_to(axis).parts}
-
-
 @contextmanager
 def actual(directory,scenario='original_instruction',standalone=False):
     from gene_annotation_episode.workflow_budget import active_budget
@@ -71,7 +65,7 @@ def actual(directory,scenario='original_instruction',standalone=False):
             library=own('scientific_process_library').ScientificProcessLibrary.freeze(directory/'scientific-library',source=instruction_source)
             catalog=[{'name':'fixture.inspect','resources':'local','description':'Return the explicitly controlled engineering outcome.',
                 'instructions':'No external acquisition or biological inference.','input_schema':own('domain').obj({'record':{'type':'string'}})}]
-            tools=own('scientific_tool_library').ScientificToolLibrary.freeze(directory/'tool-library',catalog=catalog,tool_info=True)
+            tools=own('scientific_tool_library').ScientificToolLibrary.freeze(directory/'tool-library',catalog=catalog)
             assignment_context={} if scenario in ('original_instruction','merged_default') else {'a102_task':structural.task_context(scenario)}
             assignment={'selection':{'version':own('scientific_process_records').SELECTION_VERSION,
                 'evidence_axis':library.reference('A102'),'thought_pattern':library.reference('P01'),
@@ -139,38 +133,6 @@ def actual(directory,scenario='original_instruction',standalone=False):
                 runtime=runtime,target=target,proposed=proposed,scenario=scenario,standalone=standalone,projector=projector,
                 declaration=declaration,key=key,assignment=assignment,prepared=prepared,invocation=invocation,form=form,parent=parent,
                 acquired=acquired,outcome=outcome,directory=directory)
-
-
-def identity(v):
-    if hasattr(v,'construction_failure'):
-        record=v.binding.as_record()
-        assert v.prepared['scientific_process']['mechanics_binding']==record
-        return {'scenario':v.scenario,'standalone':v.standalone,'descriptor':record,'prepared':v.prepared,
-            'projector_class':type(v.projector).__module__+'.'+type(v.projector).__qualname__,
-            'projector':v.projector.as_record(),'construction_failure':v.construction_failure}
-    context=v.workflow.binding_context(v.task);selected=v.binding.credit_projector(context)
-    assert type(selected) is type(v.projector) and selected.as_record()==v.projector.as_record()
-    record=v.binding.as_record();source=source_hashes();base=Path('gene_annotation_episode/episodic_workflow/root/a102')
-    implementation=own('scientific_process_records').scientific_digest({str(Path(p).relative_to(base)):h for p,h in source.items()})
-    assert record['implementation_sha256']==implementation
-    assert plain(context.request['message']['scientific_process']['mechanics_binding'])==record
-    assert v.binding.credit_projector(v.parent) is None
-    credit=v.workflow.source_credit_view(v.task);assert credit['credit']==0.
-    assert v.binding.continuation_task(context)==v.key
-    controller=v.binding.yield_controller(context,0.,'original-head-yield');initial=plain(controller.state().as_record())
-    step=plain(controller.observe('original-zero-credit',{'credit':credit['credit']}).as_record())
-    recreated=v.binding.yield_controller(context,0.,'original-head-yield')
-    assert plain(recreated.state().as_record())==initial
-    assert plain(recreated.observe('original-zero-credit',{'credit':credit['credit']}).as_record())==step
-    assert type(v.task) is getattr(v.binding,'decision_source_type',v.runtime.DecisionSource)
-    if hasattr(v.binding,'decision_source_type'):assert not isinstance(v.task,v.runtime.DecisionSource)
-    saved=json.loads(v.journal.row('runtime_episodes',v.task.episode_id)['request'])
-    assert saved==plain(v.task.request.as_record())
-    return {'scenario':v.scenario,'standalone':v.standalone,'task_type':type(v.task).__module__+'.'+type(v.task).__qualname__,
-        'episode_id':v.task.episode_id,'path':plain(v.task.path),'descriptor':record,'request':saved,
-        'assignment':plain(context.assignment),'projector_class':type(selected).__module__+'.'+type(selected).__qualname__,
-        'projector':selected.as_record(),'credit':credit,'yield_task':v.key,'yield_class':type(controller).__module__+'.'+type(controller).__qualname__,
-        'yield_initial':initial,'yield_step':step}
 
 
 def action(v,status,kind='tool',saved='fresh'):

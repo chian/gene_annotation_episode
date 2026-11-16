@@ -1,7 +1,6 @@
 """Root-owned report_redelivery.py"""
 from __future__ import annotations
 from .receiving_context import BindingContext
-from .workflow_values import EPISODE_BRANCH_LIFECYCLE
 from .episode_admission import ReceiverBindingV1
 from .task_values import Record
 from .workflow_values import ReportAcquisitionLeaf
@@ -98,7 +97,7 @@ class ReportRedelivery:
             action = self.journal.row('runtime_actions', source.episode_id, original_index)
             source.last_outcome, source.last_outcome_index = (json.loads(action['result']), original_index)
             source.feedback = None
-        elif pending is not None or self.episode_branch_lifecycle != EPISODE_BRANCH_LIFECYCLE:
+        elif pending is not None:
             self.receive_form(source, admitted.as_record(), schema, index, redelivery=True)
         else:
             from .episode_report_acquisition import acquire_report_evidence

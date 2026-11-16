@@ -78,16 +78,11 @@ def _validate_intent(intent, plan):
         and intent['version'] == 'expression_nmf_worker_intent_v1' and digest(intent['plan']) == digest(plan)
         and intent['policy'] == validate_recorded_genomic_overlap_policy(intent['policy'],
             code='nmf_worker_intent_mismatch'), 'nmf_worker_intent_mismatch')
-    require((intent['policy'] == POLICY and not any(key in intent['environment']
-        for key in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS')))
-        or (intent['policy']['memory_bytes'] == 21474836480 and all(intent['environment'].get(key) == '1'
-            for key in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS'))), 'nmf_worker_intent_mismatch')
+    require(intent['policy'] == POLICY and not any(key in intent['environment']
+        for key in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS')), 'nmf_worker_intent_mismatch')
     root = Path(plan['directory'])
-    # Validate the original frozen command; fresh snapshots still use WORKER_MODULE.
-    require(intent['command'] in (
-        [str(root / 'runtime/python'), '-B', '-S', '-m', WORKER_MODULE, str(root / 'plan.json')],
-        [str(root / 'runtime/python'), '-B', '-S', '-m',
-         'gene_annotation_episode.expression_nmf_result_worker', str(root / 'plan.json')])
+    require(intent['command'] ==
+        [str(root / 'runtime/python'), '-B', '-S', '-m', WORKER_MODULE, str(root / 'plan.json')]
         and intent['interpreter']['path'] == str(root / 'runtime/python') and intent['source_pins']
         and intent['dependencies'] and intent['runtime_files'], 'nmf_worker_runtime_missing')
     pins = [*intent['source_pins'], intent['interpreter'], *intent['runtime_files'],
@@ -223,10 +218,6 @@ def prepare_expression_nmf_result_worker(store, *, plan, policy):
         execution_path = root / 'execution.json'
         handle = native.NativeJobHandle(root / 'worker.handle.json')
         if not execution_path.exists():
-            # Historical controls remain readable but never resume a producer
-            # or worker with the retired allocation or thread ceilings.
-            require(intent['policy'] == POLICY and not any(key in intent['environment']
-                for key in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS')), 'nmf_worker_policy_mismatch')
             _verify_pins(intent)
 
             if not handle.path.exists():

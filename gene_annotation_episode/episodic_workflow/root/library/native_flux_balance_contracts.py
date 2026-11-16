@@ -19,8 +19,6 @@ SOLVE_ENTERED_FILENAME = ".native-flux-balance-solve-entered.json"
 ENVIRONMENT_FILENAME = ".native-flux-balance-environment.json"
 DRIVER_MODULE = "gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver"
 POLICY = {'memory_bytes': 5368709120, 'scratch_bytes': 4294967296}
-# Descriptive original allocation only; current execution uses POLICY.
-HISTORICAL_POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 SOURCE_FUNCTION_SHA256 = "ab47e2640366833d05cf896091e1c3803ce69aae940bfa46ba993abda51983b9"
 STACK = {"cobra": "0.32.1", "optlang": "1.9.1", "swiglpk": "5.0.13", "python-libsbml": "5.21.2"}
 ARTIFACT_FORMATS = {
@@ -43,11 +41,9 @@ def path_value(value, *, absolute):
     return path
 
 
-def _flux_balance_source_paths(value, driver):
-    require(driver in (DRIVER_MODULE, "gene_annotation_episode.native_flux_balance_driver"),
-            "fba_requested_argv_mismatch")
+def _flux_balance_source_paths(value):
     root = PurePosixPath(value["module_root"]) / "gene_annotation_episode"
-    prefix = "episodic_workflow/root/library/" if driver == DRIVER_MODULE else ""
+    prefix = "episodic_workflow/root/library/"
     return {str(root / filename) for filename in ("__init__.py", "execution_contracts.py")} | {
         str(root / (prefix + filename)) for filename in (
             "flux_balance_contracts.py", "native_flux_balance_contracts.py",
@@ -55,12 +51,10 @@ def _flux_balance_source_paths(value, driver):
 
 
 def flux_balance_driver_module(value):
-    """Select only the actual explicitly pinned current or historical owner."""
+    """Return the driver only when its complete source closure is pinned."""
     paths = {pin["path"] for pin in value["implementation_files"]}
-    for driver in (DRIVER_MODULE, "gene_annotation_episode.native_flux_balance_driver"):
-        if _flux_balance_source_paths(value, driver) <= paths:
-            return driver
-    require(False, "fba_implementation_closure_incomplete")
+    require(_flux_balance_source_paths(value) <= paths, "fba_implementation_closure_incomplete")
+    return DRIVER_MODULE
 
 
 def validate_flux_balance_software(value):
@@ -85,8 +79,7 @@ def validate_flux_balance_software(value):
     return value
 
 
-def flux_balance_environment(software, *, attempt_directory, lifecycle_directory, historical=False):
-    require(type(historical) is bool, "fba_historical_validation_mode_invalid")
+def flux_balance_environment(software, *, attempt_directory, lifecycle_directory):
     software = validate_flux_balance_software(software)
     attempt = path_value(attempt_directory, absolute=True)
     lifecycle = path_value(lifecycle_directory, absolute=True)
@@ -94,12 +87,11 @@ def flux_balance_environment(software, *, attempt_directory, lifecycle_directory
     return {"PYTHONPATH": os.pathsep.join([software["module_root"], *software["dependency_roots"]]),
             "PYTHONHOME": software["python_home"], "PYTHONDONTWRITEBYTECODE": "1", "PYTHONNOUSERSITE": "1",
             "PYTHONSAFEPATH": "1",
-            **({"OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1"} if historical else {}),
             "TMPDIR": str(lifecycle), "TMP": str(lifecycle), "TEMP": str(lifecycle),
             "XDG_CACHE_HOME": str(attempt / "cache"), "PIP_CACHE_DIR": str(attempt / "cache/pip")}
 
 
-def validate_flux_balance_requested_job(value, *, historical=False):
+def validate_flux_balance_requested_job(value):
     value = validate_flux_balance_record("FBARequestedJob", value)
     job = value["native_flux_balance"]
     software = validate_flux_balance_software(job["software"])
@@ -111,11 +103,10 @@ def validate_flux_balance_requested_job(value, *, historical=False):
     lifecycle = value["environment"].get("TMPDIR")
     require(type(lifecycle) is str, "fba_runtime_environment_mismatch")
     expected = flux_balance_environment(software, attempt_directory=str(PurePosixPath(lifecycle) / ATTEMPT_DIRECTORY_NAME),
-                                        lifecycle_directory=lifecycle, historical=historical)
+                                        lifecycle_directory=lifecycle)
     require(value["environment"] == expected, "fba_runtime_environment_mismatch")
-    require(any(value["argv"] == [software["python"]["path"], "-B", "-S", "-m", driver, RUN_PLAN_FILENAME]
-                and _flux_balance_source_paths(software, driver) <= {pin["path"] for pin in software["implementation_files"]}
-                for driver in (DRIVER_MODULE, "gene_annotation_episode.native_flux_balance_driver")),
+    require(value["argv"] == [software["python"]["path"], "-B", "-S", "-m", DRIVER_MODULE, RUN_PLAN_FILENAME]
+            and _flux_balance_source_paths(software) <= {pin["path"] for pin in software["implementation_files"]},
             "fba_requested_argv_mismatch")
     flux_balance_output_files(job)
     return value
@@ -136,17 +127,17 @@ def flux_balance_output_files(job):
             for role in names]
 
 
-def bind_flux_balance_environment(requested_job, *, execution_id, attempt_directory, selection, historical=False):
+def bind_flux_balance_environment(requested_job, *, execution_id, attempt_directory, selection):
     """Describe only explicitly selected path realization; grant no authority.
 
     The original requested job remains untouched. The host must authenticate the
     selection against the original commission before executing this binding.
     """
-    request = validate_flux_balance_requested_job(requested_job, historical=historical)
+    request = validate_flux_balance_requested_job(requested_job)
     execution = path_value(execution_id, absolute=True)
     require(execution.name in ("native.json", "intent.json"), "fba_original_attempt_mismatch")
     actual = flux_balance_environment(request["native_flux_balance"]["software"],
-        attempt_directory=attempt_directory, lifecycle_directory=str(execution.parent), historical=historical)
+        attempt_directory=attempt_directory, lifecycle_directory=str(execution.parent))
     selected = request["environment"]
     if selection is None:
         require(selected == actual, "fba_runtime_environment_mismatch")
@@ -163,21 +154,20 @@ def bind_flux_balance_environment(requested_job, *, execution_id, attempt_direct
             {"name": name, "selected": selected[name], "realized": actual[name]} for name in names]}
 
 
-def validate_flux_balance_environment_binding(value, *, requested_job, execution_id, attempt_directory, selection,
-                                              historical=False):
+def validate_flux_balance_environment_binding(value, *, requested_job, execution_id, attempt_directory, selection):
     expected = bind_flux_balance_environment(requested_job, execution_id=execution_id,
-        attempt_directory=attempt_directory, selection=selection, historical=historical)
+        attempt_directory=attempt_directory, selection=selection)
     require(type(value) is dict and canonical(value) == canonical(expected), "fba_environment_binding_mismatch")
     return deepcopy(expected)
 
 
-def validate_flux_balance_run_plan(value, *, historical=False):
+def validate_flux_balance_run_plan(value):
     require(type(value) is dict and value.get("version") in ("flux_balance_run_plan_v1", "flux_balance_run_plan_v2"),
             "fba_invalid_run_plan")
     is_v2 = value["version"] == "flux_balance_run_plan_v2"
     keys = {"version", "identity", "requested_job", "attempt_directory", "policy", "outputs"}
     require(set(value) == keys | ({"environment_binding"} if is_v2 else set()), "fba_invalid_run_plan")
-    request = validate_flux_balance_requested_job(value["requested_job"], historical=historical)
+    request = validate_flux_balance_requested_job(value["requested_job"])
     owner = validate_flux_balance_record("FBAAttemptIdentity", value["identity"])
     execution = path_value(owner["execution_id"], absolute=True)
     attempt = path_value(value["attempt_directory"], absolute=True)
@@ -193,12 +183,12 @@ def validate_flux_balance_run_plan(value, *, historical=False):
         binding = value["environment_binding"]
         require(type(binding) is dict and binding.get("selection") is not None, "fba_environment_selection_invalid")
         validate_flux_balance_environment_binding(binding, requested_job=request, execution_id=str(execution),
-            attempt_directory=str(attempt), selection=binding["selection"], historical=historical)
+            attempt_directory=str(attempt), selection=binding["selection"])
     else:
         require(request["environment"] == flux_balance_environment(request["native_flux_balance"]["software"],
-                attempt_directory=str(attempt), lifecycle_directory=str(execution.parent), historical=historical),
+                attempt_directory=str(attempt), lifecycle_directory=str(execution.parent)),
                 "fba_runtime_environment_mismatch")
-    require(canonical(value["policy"]) == canonical(HISTORICAL_POLICY if historical else POLICY),
+    require(canonical(value["policy"]) == canonical(POLICY),
             "fba_original_allocation_mismatch")
     require(value["outputs"] == flux_balance_output_files(request["native_flux_balance"]), "fba_output_role_mismatch")
     job = request["native_flux_balance"]
@@ -209,6 +199,6 @@ def validate_flux_balance_run_plan(value, *, historical=False):
     return deepcopy(value)
 
 
-def flux_balance_driver_argv(plan, *, historical=False):
-    plan = validate_flux_balance_run_plan(plan, historical=historical)
+def flux_balance_driver_argv(plan):
+    plan = validate_flux_balance_run_plan(plan)
     return [*plan["requested_job"]["argv"][:-1], str(PurePosixPath(plan["identity"]["execution_id"]).parent / RUN_PLAN_FILENAME)]

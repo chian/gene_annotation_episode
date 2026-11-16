@@ -182,7 +182,7 @@ def native_cells(extraction, calculation):
 def validate_saved_binding_interaction(selection, extraction, calculation, cells):
     """Validate saved source associations, not source syntax or scientific math."""
     try:
-        _keys(extraction, ('version', 'source_ref', 'source_kind', 'selection', 'parameter_kind', 'images', 'roles', 'relationships', 'geometry_overlaps', 'calculation_input_status', 'calculation_inputs', 'source_refs', 'source_representations', 'implementation_dependencies', 'interpretation_attribution'), 'extraction')
+        _keys(extraction, ('version', 'source_ref', 'source_kind', 'selection', 'parameter_kind', 'images', 'roles', 'relationships', 'geometry_overlaps', 'calculation_input_status', 'calculation_inputs', 'source_refs', 'source_representations', 'interpretation_attribution'), 'extraction')
         _same(selection, extraction['selection'], 'selection')
         _same(selection['version'], INPUT_VERSION, 'selection.version')
         _same(extraction['version'], OUTPUT_VERSION, 'extraction.version')

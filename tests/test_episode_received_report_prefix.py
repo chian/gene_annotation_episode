@@ -5,7 +5,6 @@ The separate comparison authority and Workflow suites exercise those consumers.
 """
 from copy import deepcopy
 from dataclasses import replace
-import json
 import sqlite3
 
 import pytest
@@ -168,34 +167,6 @@ def test_plain_sqlite_connection_is_supported_without_a_row_factory():
         assert EpisodeReceipts.read_manifest(db, "run", "root") == {"version": RECEIPT_VERSION,
             "parent_episode_id": None, "through_receipt_index": None, "received_report_prefix": _empty()}
         assert db.in_transaction
-
-
-@pytest.mark.parametrize("schema", ["absent", "legacy", "current"])
-def test_constructor_schema_and_receipts_roll_back_with_callers_failed_commission(tmp_path, schema):
-    with Store(tmp_path / "store") as store:
-        journal = Journal(store, "run")
-        if schema == "legacy":
-            store.db.execute("CREATE TABLE runtime_receipt_inheritance (run_id TEXT NOT NULL, "
-                "episode_id TEXT NOT NULL, parent_episode_id TEXT, through_receipt_index INTEGER, "
-                "PRIMARY KEY(run_id,episode_id))")
-            store.db.execute("INSERT INTO runtime_receipt_inheritance VALUES('run','parent',NULL,NULL)")
-        elif schema == "current":
-            EpisodeReceipts(store, "run").bind("parent")
-        before = [tuple(row) for row in store.db.execute("PRAGMA table_info(runtime_receipt_inheritance)")]
-        with pytest.raises(RuntimeError, match="commission_failed"):
-            with store.transaction():
-                _attempt(journal, 0)
-                receipts = EpisodeReceipts(store, "run")
-                receipts.bind("parent")
-                child = receipts.bind("child", "parent")
-                assert child["received_report_prefix"]["attempts"] == [_expected(0)]
-                assert store.db.in_transaction
-                raise RuntimeError("commission_failed")
-        assert [tuple(row) for row in store.db.execute("PRAGMA table_info(runtime_receipt_inheritance)")] == before
-        assert store.db.execute("SELECT count(*) FROM runtime_report_attempts").fetchone()[0] == 0
-        if schema != "absent":
-            assert store.db.execute("SELECT count(*) FROM runtime_receipt_inheritance "
-                "WHERE episode_id='child'").fetchone()[0] == 0
 
 
 @pytest.mark.parametrize("mutation", ["index_bool", "index_negative", "duplicate", "unordered",

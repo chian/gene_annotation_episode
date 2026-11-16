@@ -19,7 +19,6 @@ from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.library.native_event_information import (NativeEventInformation,
     report_sources, validate_target_view)
-from gene_annotation_episode.resource_records import LAUNCH_VERSION, RESULTS_VERSION
 from gene_annotation_episode.state import Store
 
 
@@ -248,17 +247,6 @@ def test_nested_job_mentions_and_other_selected_tools_do_not_grant_visibility(ca
         case.reader.read(root)
 
 
-def test_legacy_supplied_handoff_and_resource_selection_must_agree(case):
-    case.register()
-    assigned = case.assigned(case.job)
-    assigned['handoff'] = {'job_ref': case.other_job, 'registry_ref': case.jobs.config['registry_ref'],
-        'backend': 'single_query_phmmer_jobs_v2', 'status_interface': 'homology.status.v1',
-        'progress_interface': 'homology.progress.v1', 'results_interface': 'homology.results.v1'}
-    with pytest.raises(ValueError, match='assignment_conflict'):
-        case.reader.read(case.context('job_monitor', 'wrong-handoff', parent=case.root,
-            message={'job_assignment': assigned}))
-
-
 def test_present_reservation_cannot_replace_original_binding_or_identity(case, tmp_path):
     target = case.register()
     case.attempt(case.root, [case.source(target)])
@@ -355,34 +343,6 @@ def test_registered_descriptor_must_match_run_resource_registry_and_actual_query
     case.attempt(case.root, [case.source(target)])
     with pytest.raises(ValueError):
         case.reader.read(case.root)
-
-
-def test_resource_launch_results_and_job_monitor_paths_match_original_job_and_selection(case):
-    target = case.register()
-    selection = {'resource_id': 'local-fixture', 'kind': 'local', 'allocation': {
-        'cpu': 1, **case.jobs.config['job_limits']}, 'capability_binding_ref': case.jobs.config['registry_ref']}
-    assignment = {'version': LAUNCH_VERSION, 'adapter_assignment': case.assigned(case.job),
-        'job_request': {'existing_job_ref': case.job}, 'resource_selection': selection, 'constraints': {}}
-    launch = case.context('launch_local', 'local', parent=case.root, assignment=assignment)
-    assert case.reader.read(launch) == [case.source(target)]
-    handoff = {'version': 'execution_handoff_v1', 'execution_handle': case.job,
-        'resource_selection': selection, 'submitted_input_versions': [],
-        'monitoring': {'provider_id': 'local-fixture', 'target_handle': case.job, 'contract_ref': 'homology.status.v1'},
-        'results': {'provider_id': 'local-fixture', 'target_handle': case.job, 'contract_ref': 'homology.results.v1'},
-        'checked_at': '2026-10-21T00:00:00+00:00', 'check_record_refs': [], 'state': 'usable', 'failure': None}
-    results = case.context('results', 'results', parent=case.root, assignment={
-        'version': RESULTS_VERSION, 'handoff': handoff, 'adapter_assignment': case.assigned(case.job)})
-    assert case.reader.read(results) == [case.source(target)]
-    monitor = case.context('monitor', 'monitor', parent=case.root, assignment={
-        'version': 'monitor_assignment_v1', 'target_handle': case.job})
-    assert case.reader.read(monitor) == [case.source(target)]
-    episode_monitor = case.context('monitor', 'episode', parent=case.root, assignment={
-        'version': 'monitor_assignment_v1', 'target_handle': 'episode_handle_fixture'})
-    assert case.reader.read(episode_monitor) == []
-    changed = deepcopy(assignment)
-    changed['job_request']['existing_job_ref'] = case.other_job
-    with pytest.raises(ValueError, match='assignment_conflict'):
-        case.reader.read(case.context('launch_local', 'bad', parent=case.root, assignment=changed))
 
 
 def test_wait_scope_and_native_event_kind_are_explicit_and_arbitrary_cursor_is_allowed(case):

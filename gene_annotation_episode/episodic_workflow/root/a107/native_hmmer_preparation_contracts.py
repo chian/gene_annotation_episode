@@ -527,28 +527,8 @@ def requested_job_from_hmmer_preparation(job):
 
 
 def recorded_operation_matches_compiled(recorded, compiled):
-    """Validate original operations without rewriting old incomplete records.
-
-    The initial v1 producer omitted two false hmmsim defaults. Their absence
-    remains absent in saved bundles and saved grading. Only that exact omission
-    is accepted; a selected true flag, changed quantity, or other missing field
-    cannot pass through this historical-record check. New compilation always
-    records both flags, as the numerical consumer requires.
-    """
-    recorded, compiled = finite_json_copy(recorded), finite_json_copy(compiled)
-    if native_infernal_digest(recorded) == native_infernal_digest(compiled):
-        return True
-    if (type(recorded) is not dict or type(compiled) is not dict
-            or set(recorded) != {"program", "mode", "engine_version", "settings"}
-            or set(compiled) != set(recorded) or recorded["program"] != "hmmsim"
-            or compiled["program"] != "hmmsim" or recorded["engine_version"] != "3.4"
-            or type(recorded["settings"]) is not dict or type(compiled["settings"]) is not dict):
-        return False
-    historical = deepcopy(compiled)
-    for flag in ("--fast", "--tlinear"):
-        if flag not in recorded["settings"] and historical["settings"].get(flag) is False:
-            del historical["settings"][flag]
-    return native_infernal_digest(recorded) == native_infernal_digest(historical)
+    """A recorded operation must equal the compiled operation exactly."""
+    return native_infernal_digest(finite_json_copy(recorded)) == native_infernal_digest(finite_json_copy(compiled))
 
 
 def validate_native_hmmer_preparation_requested_job(value):

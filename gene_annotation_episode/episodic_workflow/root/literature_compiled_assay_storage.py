@@ -7,7 +7,6 @@ unit conversion, scientific arithmetic or additional controller observations.
 from copy import deepcopy
 import hashlib
 import json
-from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, canonical, identity, obj, validate_schema
@@ -291,48 +290,6 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         except (TypeError, ValueError) as error:
             raise ContractError('compiled_assay_saved_json_invalid') from error
 
-    @staticmethod
-    def _common_receipt_files():
-        return ('literature_compiled_assay_inputs.py', 'literature_compiled_assay_calculations.py',
-            'literature_assay_inputs.py', 'literature_experimental_contracts.py',
-            'literature_product_coupling_inputs.py', 'literature_product_coupling_storage.py',
-            'literature_measurement_validation_inputs.py', 'literature_kinetic_inputs.py',
-            'literature_kinetic_storage.py', 'literature_partner_source_fields.py',
-            'literature_compiled_assay_storage.py', 'literature_compiled_assay_prompt.py',
-            'literature_compiled_assay_render.py')
-
-    @staticmethod
-    def _common_root_receipt_files():
-        # Actual Root owners of the original thirteen-file boundary and receipt code.
-        return (
-            'library/literature_compiled_assay_calculations.py',
-            'library/literature_compiled_assay_declarations.py',
-            'library/literature_compiled_assay_prompt.py',
-            'library/literature_compiled_assay_render.py',
-            'library/literature_compiled_assay_return_schema.py',
-            'library/literature_experimental_contracts.py',
-            'library/literature_kinetic_inputs.py',
-            'library/literature_kinetic_return_contracts.py',
-            'library/literature_partner_source_fields.py',
-            'library/literature_product_coupling_inputs.py',
-            'library/literature_product_coupling_metadata.py',
-            'library/literature_product_coupling_projection.py',
-            'library/literature_rate_return_schema.py',
-            'library/literature_rate_unit_witness_schema.py',
-            'literature_assay_inputs.py',
-            'literature_compiled_assay_inputs.py',
-            'literature_compiled_assay_storage.py',
-            'literature_kinetic_storage.py',
-            'literature_measurement_validation_inputs.py',
-            'literature_product_coupling_storage.py',
-            'literature_product_kinetic_relocation.py',
-        )
-
-    def _common_implementation_receipt(self):
-        files = {name: hashlib.sha256((Path(__file__).parent / name).read_bytes()).hexdigest()
-                 for name in self._common_root_receipt_files()}
-        return {'version': 'common_assessment_root_implementation_v2', 'files': files}
-
     def _populate_common(self, context, arguments, operation_key):
         from .literature_compiled_assay_inputs import common_assessment_population_schema, read_common_assessment_inputs
         from .library.literature_compiled_assay_calculations import populate_common_assessment
@@ -408,7 +365,7 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
             'input_source_refs': parents, 'selection': args, 'component_selections': selected,
             'input_snapshots': snapshots, 'public_input_records': public_records,
             'source_metadata': {ref: self.store.get(ref) for ref in parents},
-            'original_implementation': self._common_implementation_receipt(), 'extraction': extraction, 'sheet': sheet}
+            'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
             self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
@@ -441,7 +398,6 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
     def _read_common_bound(self, reference):
         """Authenticate closed records without scientific source IO/arithmetic."""
         from collections import Counter
-        import re
         from .literature_compiled_assay_inputs import (
             common_assessment_population_schema, common_assessment_inputs_schema, COMMON_ROLES)
         from .library.literature_compiled_assay_calculations import (
@@ -468,7 +424,7 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         saved = self._json(source['artifact_ref'])
         keys = {'version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs',
             'selection', 'component_selections', 'input_snapshots', 'public_input_records', 'source_metadata',
-            'original_implementation', 'extraction', 'sheet'}
+            'extraction', 'sheet'}
         if (set(saved) != keys or saved['version'] != VERSION_V3
                 or saved['selection'] != request['arguments'] or saved['input_source_ref'] != request['arguments']['source_ref']
                 or saved['input_source_refs'] != source['parent_source_refs']
@@ -538,17 +494,6 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
                 or sheet['assertion_resolution'] != request['arguments']['assertion']['resolution']
                 or sheet['question'] != request['arguments']['assertion']['question']):
             raise ContractError('common_assessment_saved_sheet_binding_mismatch')
-        receipt = saved['original_implementation']
-        if isinstance(receipt, dict) and receipt.get('version') == 'common_assessment_root_implementation_v2':
-            if (set(receipt) != {'version', 'files'}
-                    or set(receipt['files']) != set(self._common_root_receipt_files())
-                    or any(type(h) is not str or re.fullmatch('[0-9a-f]{64}', h) is None for h in receipt['files'].values())):
-                raise ContractError('common_assessment_saved_original_receipt_mismatch')
-        else:
-            if (set(receipt) != {'version', 'files'} or receipt['version'] != 'common_assessment_original_implementation_v1'
-                    or set(receipt['files']) != set(self._common_receipt_files())
-                    or any(type(h) is not str or re.fullmatch('[0-9a-f]{64}', h) is None for h in receipt['files'].values())):
-                raise ContractError('common_assessment_saved_original_receipt_mismatch')
         for cell in sheet['cells']:
             name = cell['component']; native = name.startswith('estimate_')
             expected_formula = 'selected_native_estimate' if native else _COMMON_FORMULAS[name]
@@ -706,8 +651,8 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         versions = {self.store.get(json.loads(row['outcome'])['result']['sheet_ref']).get('version')
             for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=?',
                 (self.run_id, context.episode_id))}
-        # Preserve historical v1/v2 empty-family behavior. The explicit common
-        # branch cannot substitute its saved work for another requested view.
+        # The explicit common branch cannot substitute its saved work for another
+        # requested view.
         if self.population_version != 3 and VERSION_V3 not in versions:
             return
         if versions and self.record_version not in versions:

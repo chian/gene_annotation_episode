@@ -16,6 +16,7 @@ from pathlib import Path
 from . import native_lifecycle as native
 from .acquisition import AcquisitionError
 from .local_jobs import LocalJobPolicy
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 
 
 def digest(value):
@@ -128,7 +129,7 @@ class LocalPracticalOperations:
             if not assignment.get('resource_id'):
                 raise ValueError('native_blast_utility_resource_identity_required')
             confined(assignment['workspace'], self.configuration['workspace'])
-            if self.policy.memory_bytes > 20 * 1024**3 or self.policy.scratch_bytes > 4 * 1024**3:
+            if self.policy.memory_bytes > ENVIRONMENT_BOUNDS['memory_bytes'] or self.policy.scratch_bytes > 4 * 1024**3:
                 raise ValueError('native_blast_utility_local_policy_conflict')
         if 'native_blast_masking' in assignment['requested_job']:
             from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_masking_contracts import validate_native_blast_masking_requested_job
@@ -145,7 +146,7 @@ class LocalPracticalOperations:
             if not assignment.get('resource_id'):
                 raise ValueError('native_blast_masking_resource_identity_required')
             confined(assignment['workspace'], self.configuration['workspace'])
-            if self.policy.memory_bytes > 20 * 1024**3 or self.policy.scratch_bytes > 4 * 1024**3:
+            if self.policy.memory_bytes > ENVIRONMENT_BOUNDS['memory_bytes'] or self.policy.scratch_bytes > 4 * 1024**3:
                 raise ValueError('native_blast_masking_local_policy_conflict')
         if 'native_blast_standard_database' in assignment['requested_job']:
             raise ValueError('native_blast_standard_database_hpc_resource_required')

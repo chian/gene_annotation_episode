@@ -3,7 +3,7 @@
 Run through the existing one-workflow launcher. No native worker, provider or
 nested workflow is started. The checker uses the actual current owner/cgroup.
 """
-from importlib import import_module,util
+from importlib import import_module
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -13,8 +13,7 @@ from gene_annotation_episode import workflow_budget as canonical
 PACKAGE=__package__.rsplit('.tests',1)[0]
 
 def selected_checker():
-    original=PACKAGE+'.workflow_budget'
-    return import_module(original) if util.find_spec(original) is not None else canonical
+    return canonical
 
 
 def test_actual_live_owner_matches_canonical_machine_bounds():

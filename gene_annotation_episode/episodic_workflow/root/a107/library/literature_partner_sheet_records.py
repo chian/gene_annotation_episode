@@ -146,29 +146,29 @@ def literal_reference_role(record):
             return role
     return None
 
-def _binding_record(literal, kind, entry, *, legacy_reference_types=False):
+def _binding_record(literal, kind, entry):
     witness = entry['witness']
     anchor = {name: witness[name] for name in ('source_ref', 'artifact_ref', 'start', 'end', 'quote')}
     common = {'source_ref': witness['source_ref'], 'anchor': anchor}
     accession = identity('partner_literal', {'field': literal, **anchor})
     label = source_literal_label(entry['value'])
     if kind == 'reference':
-        return {**common, 'reference_type': 'assay' if legacy_reference_types else LITERAL_REFERENCE_TYPES.get(literal, 'literature_result'), 'accession': accession, 'label': label, 'sequence_ref': None, 'molecule': None, 'length': None, 'term_refs': [], 'context_refs': []}
+        return {**common, 'reference_type': LITERAL_REFERENCE_TYPES.get(literal, 'literature_result'), 'accession': accession, 'label': label, 'sequence_ref': None, 'molecule': None, 'length': None, 'term_refs': [], 'context_refs': []}
     if kind == 'term':
         return {**common, 'namespace': 'literature_partner_' + literal, 'accession': accession, 'label': label, 'term_type': 'other'}
-    role = _condition_role(literal, entry, legacy_reference_types=legacy_reference_types)
+    role = _condition_role(literal, entry)
     return {**common, 'context_type': 'assay_condition', 'name': label, 'attributes': [], 'related_refs': [identity('reference', {'origin': 'tool', 'record': role})]}
 
-def _condition_role(literal, entry, *, legacy_reference_types=False):
-    return _binding_record(literal, 'reference', entry, legacy_reference_types=legacy_reference_types)
+def _condition_role(literal, entry):
+    return _binding_record(literal, 'reference', entry)
 
-def _condition_refs(extraction, *, legacy_reference_types=False):
-    return [identity('reference', {'origin': 'tool', 'record': _condition_role(literal, entry, legacy_reference_types=legacy_reference_types)}) for literal, kind in BINDINGS.values() if kind == 'context' and (entry := extraction['literals'][literal]) is not None]
+def _condition_refs(extraction):
+    return [identity('reference', {'origin': 'tool', 'record': _condition_role(literal, entry)}) for literal, kind in BINDINGS.values() if kind == 'context' and (entry := extraction['literals'][literal]) is not None]
 _NATIVE_BINDING_VERSION = 'partner_native_operand_bindings_v1'
 _NATIVE_IDENTITY_FIELDS = ('subject', 'partner', 'endpoint', 'normalization')
 _COMPONENT_ROLES = {'reference_rate': ('reference',), 'omitted_rate': ('omitted',), 'addback_rate': ('addback',), 'partner_loss': ('reference', 'omitted'), 'partner_loss_fraction': ('reference', 'omitted'), 'addback_gain': ('addback', 'omitted'), 'addback_fraction': _ROLES, 'restored_reference_fraction': _ROLES}
 
-def _native_operand_projection(extraction, *, legacy_reference_types=False):
+def _native_operand_projection(extraction):
     """Build scientific bindings from frozen arm operands, without source IO.
 
     Global literals describe the selected scope. They do not relabel measured
@@ -191,7 +191,7 @@ def _native_operand_projection(extraction, *, legacy_reference_types=False):
         if witness is None:
             return None
         kind = 'reference' if field in ('subject', 'partner') else 'term'
-        record = _binding_record(field, kind, entry(witness), legacy_reference_types=legacy_reference_types)
+        record = _binding_record(field, kind, entry(witness))
         if unit:
             record['term_type'] = 'unit'
         return remember(kind, record)

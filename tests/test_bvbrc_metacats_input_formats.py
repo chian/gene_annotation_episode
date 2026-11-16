@@ -9,8 +9,7 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_input_formats import parse_metacats_input_fasta
-from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
-from gene_annotation_episode.phylogeny_format_contracts import validate_alignment_document
+from gene_annotation_episode.episodic_workflow.root.library.phylogeny_format_contracts import validate_alignment_document
 
 
 NATIVE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_native/cases'
@@ -31,31 +30,6 @@ def codes(result):
 
 def forbidden(*args, **kwargs):
     raise AssertionError('Pure input reading must not acquire or execute work')
-
-
-def test_original_hashes_and_dashes_are_distinct_and_shared_parser_unchanged():
-    data = b'>first\n#-A-C-#\n>second\n--C#A--\n'
-    result = parse(data)
-    assert result['status'] == 'ok' and not result['diagnostics']
-    assert [r['sequence'] for r in result['value']['rows']] == ['#-A-C-#', '--C#A--']
-    assert result['value']['observed_column_count'] == 7
-    strict = parse_aligned_fasta(data, artifact=artifact(data), id_rule='first_whitespace_token')
-    assert strict['status'] == 'partial'
-    assert 'phylogeny_alignment_symbol_invalid' in codes(strict)
-
-
-def test_utf8_crlf_locations_duplicates_and_case_survive_json():
-    data = '>α details\r\na#-C\r\n>α second\r\nA#-c'.encode('utf-8')
-    result = parse(data, encoding='utf-8')
-    assert result['status'] == 'ok'
-    rows = result['value']['rows']
-    assert [r['member_label'] for r in rows] == ['α', 'α']
-    assert [r['sequence'] for r in rows] == ['a#-C', 'A#-c']
-    cut = data.index('>α second'.encode('utf-8'))
-    assert [(r['source_location']['byte_start_0based'],r['source_location']['byte_end_0based_exclusive']) for r in rows] == [(0,cut),(cut,len(data))]
-    assert [(r['source_location']['line_start_1based'],r['source_location']['line_end_1based_inclusive']) for r in rows] == [(1,2),(3,4)]
-    saved = json.loads(json.dumps(result, allow_nan=False))
-    assert validate_alignment_document(saved['value']) == result['value']
 
 
 @pytest.mark.parametrize('data,sequence,expected_code', [

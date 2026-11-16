@@ -1,4 +1,4 @@
-"""Original substantive ordinary-tool methods: tool_provider_acquisition."""
+"""Ordinary-tool methods: tool_provider_acquisition."""
 from __future__ import annotations
 import asyncio
 from typing import Any

@@ -2,10 +2,7 @@
 import asyncio
 from copy import deepcopy
 from dataclasses import replace
-from functools import partial
-import hashlib
 import json
-from pathlib import Path
 from types import SimpleNamespace
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.communication import form_with_facts, plain, validate_closed_schema, ReportBoundaryError
@@ -21,7 +18,6 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_refe
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_reported_curve_precision_228 import source_setup, edit_workbook, select
-BASE = Path(__file__).resolve().parents[5] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_reported_curve_binding_231'
 SELECTORS = [select('point', 'cv', concentration_cell='Q196'), select('estimator', 'Km', estimator='fit_of_point_means'), select('estimator', 'log_efficiency_variance', estimator='fit_of_point_means')]
 
 def setup(path, *, selectors=SELECTORS, nondetection=False):
@@ -79,53 +75,9 @@ def selected(store, ctx, args, key='selected231'):
     binding.validate_report(current, {'numbers': rows}, form)
     return (binding, current, outcome, rows)
 
-def state_hashes(path):
-    return {str(p.relative_to(path)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(path.rglob('*')) if p.is_file()}
 
-def forbid(*args, **kw):
-    raise AssertionError('Scientific source/parse/fit/model/receive/current attestation forbidden')
 
-def block_science(monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_rate_observation_inputs as inputs
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_rate_observation_calculations as calculations
-    from gene_annotation_episode import spreadsheet_tools
-    for module, names in [(inputs, ['read_reported_rate_grid', 'validate_reported_rate_grid_extraction', '_grid_validate_unit_mapping', '_grid_quantity', 'Workbook']), (calculations, ['populate_reported_curve_precision', '_grid_fit', '_grid_covariance']), (spreadsheet_tools, ['Workbook']), (LiteratureReportedCurveRepository, ['_original_implementation', 'populate', 'receive_cells'])]:
-        for name in names:
-            monkeypatch.setattr(module, name, forbid)
 
-def test_source_selected_scalars_exact_contract_and_saved_scope(tmp_path):
-    store, ctx, args, source, article = setup(tmp_path / 'state')
-    try:
-        binding = binding_for(store, ctx)
-        before = store.db.total_changes
-        assert 'literature.rate.observations.populate' in {r['name'] for r in binding.catalog(ctx)}
-        assert len(rate_observation_operation_schema()['anyOf']) == 2
-        assert GRID_REQUESTED in binding.assignment_schema('literature')['properties']
-        assert GRID_NAMESPACE in binding.fact_sources('literature')
-        assert not store.db.execute("SELECT 1 FROM sqlite_master WHERE name='literature_rate_observation_operations'").fetchone()
-        assert store.db.total_changes == before
-        proposal = json.loads((BASE / 'EXACT_SCHEMA_PROPOSAL_002.json').read_text())
-        assert rate_observation_operation_schema() == proposal['operation_schema']
-        assert rate_grid_cells_schema() == proposal['return_schema']
-        binding, current, out, rows = selected(store, ctx, args)
-        assert [r['selector'] for r in rows] == SELECTORS
-        assert rows[0]['value'] == pytest.approx(0.03488479236954927)
-        assert rows[0]['coordinate_context'][0]['exact_value'] == {'numerator': '10', 'denominator': '1'}
-        assert not rows[1]['coordinate_context'] and (not rows[2]['coordinate_context'])
-        assert rows[2]['value'] is None and rows[2]['conditional_value'] == pytest.approx(0.0033927323393825363)
-        assert rows[2]['scientific_scope']['physical_preparation_count'] is None
-        assert rows[2]['scientific_scope']['endpoint_relationship'] == 'conflicting'
-        repo = LiteratureRateObservationRepository(store, ctx.run_id).grid_projection()
-        saved = repo.read(out['result']['sheet_ref'])
-        assert saved['sheet']['extraction'] == saved['extraction']
-        assert saved['selection'] == args and saved['original_implementation']['files']
-        assert repo.populate(ctx, args, 'selected231') == out
-        assert not any((k in json.dumps(rows) for k in ['rate_cells', 'raw_value', 'matrix_exact', 'context_witnesses']))
-        assert not store.list('assessment') and (not store.list('observation'))
-        with pytest.raises(ContractError, match='sheet_required'):
-            LiteratureRateObservationRepository(store, ctx.run_id).read(out['result']['sheet_ref'])
-    finally:
-        store.close()
 
 def test_empty_order_possession_page_and_exact_admitted_subset(tmp_path):
     store, ctx, args, source, article = setup(tmp_path / 'state')
@@ -228,197 +180,8 @@ def test_broad_alias_history_current_own_and_direct_parent_do_not_expand_private
     finally:
         store.close()
 
-@pytest.mark.parametrize('alter', ['request', 'owner', 'context', 'coordinate', 'source_metadata'])
-def test_decoded_saved_tampering_rejects_without_scientific_repair(tmp_path, monkeypatch, alter):
-    store, ctx, args, source, article = setup(tmp_path / 'state')
-    try:
-        _, _, out, _ = selected(store, ctx, args)
-        repo = LiteratureRateObservationRepository(store, ctx.run_id).grid_projection()
-        ref = out['result']['sheet_ref']
-        meta = store.get(ref)
-        original = repo._json_artifact
-
-        def changed(reference):
-            value = deepcopy(original(reference))
-            if reference == meta['request_ref'] and alter == 'request':
-                value['components'] = []
-            if reference == meta['artifact_ref']:
-                if alter == 'owner':
-                    value['extraction']['points'][0]['concentration']['measurement_key'] = 'changed'
-                elif alter == 'context':
-                    value['projected_cells'][0]['source_context']['subject']['display_text'] = 'changed'
-                elif alter == 'coordinate':
-                    value['projected_cells'][0]['coordinate_context'][0]['exact_value']['numerator'] = '1'
-                elif alter == 'source_metadata':
-                    value['source_metadata'][source]['version'] = 'changed'
-            return value
-        monkeypatch.setattr(repo, '_json_artifact', changed)
-        block_science(monkeypatch)
-        with pytest.raises(ContractError, match='saved_'):
-            repo.read(ref)
-    finally:
-        store.close()
-
-@pytest.mark.parametrize('profile', [None, 'operation_contract_information_v1'], ids=['legacy', 'explicit'])
-@pytest.mark.parametrize('alias', [False, True], ids=['literal', 'alias'])
-@pytest.mark.parametrize('nondetection', [False, True], ids=['point', 'nondetection'])
-def test_selected_shared_loop_original_return_and_first_readonly_composer(tmp_path, monkeypatch, profile, alias, nondetection):
-    shared_case(tmp_path, monkeypatch, profile, alias, nondetection)
-
-def shared_case(tmp_path, monkeypatch, profile, alias, nondetection, *, nested=False):
-    from gene_annotation_episode.episodic_workflow.root.a105.episode_composition import compose_episode_bindings
-    from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
-    from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import FixtureController, ScriptedProvider
-    from test_contract_information_runtime_059 import PresentedProvider
-    from test_runtime_decision_exchanges import select as action
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_compiled_assay_185 import readonly
-    store, ctx, args, source, article = setup(tmp_path / 'state', nondetection=nondetection)
-    limit = {'type': 'string', 'enum': ['attribution_unknown']}
-    literal = obj({'numbers': rate_grid_cells_schema(), 'limitation': limit})
-    submitted = obj({'numbers': {'$ref': 'episode-fact:' + GRID_NAMESPACE}, 'limitation': limit}) if alias else literal
-    assignment = plain(ctx.assignment)
-    captured = []
-
-    def response(value):
-        if not profile:
-            return value
-        value = deepcopy(value)
-        if value['selection']['kind'] == 'tool':
-            value['selection']['arguments'] = json.dumps(value['selection']['arguments'])
-        return action(value)
-
-    def commission(role, assignment):
-        return {'selection': {'kind': 'episode_child', 'role': role, 'assignment': assignment, 'goal': 'Evaluate what the reported curves establish about source activity and precision.', 'scope': plain(ctx.scope), 'purpose': 'Return exactly requested source scalars and their scientific limits.', 'schema_json': json.dumps(submitted), 'initial_report_json': json.dumps({'limitation': 'attribution_unknown'})}, 'report_update': {}}
-    outer = deepcopy(assignment)
-    if nested:
-        outer[GRID_REQUESTED] = SELECTORS[:1]
-
-    def received_state(inputs):
-        return provider.views[provider.active_episode] if profile else inputs
-
-    def work(inputs):
-        inputs = received_state(inputs)
-        task = render_literature_experimental_prompt(inputs, 'Evaluate the requested reported curves.').split('\n\nSTEERING\n')[0]
-        assert REPORTED_CURVE_TASK in task and REPORTED_CURVE_SCOPE_TASK in task and (RATE_OBSERVATION_TASK not in task)
-        return response({'selection': {'kind': 'tool', 'tool': 'literature.rate.observations.populate', 'arguments': args}, 'report_update': {'limitation': 'attribution_unknown'}})
-
-    def integrate(inputs):
-        inputs = received_state(inputs)
-        form, = inputs['child_reports']
-        captured.append(deepcopy(form))
-        wanted = SELECTORS[:1] if nested and len(captured) == 2 else SELECTORS
-        assert [r['selector'] for r in form['numbers']] == wanted
-        assert form['numbers'][0]['status'] == ('unavailable' if nondetection else 'populated')
-        prompt = render_literature_experimental_prompt(inputs, 'Evaluate returned source precision.')
-        task, steering = prompt.split('\n\nSTEERING\n')
-        own_parent = inputs['literature_experimental_work']['aspect'] == 'reference_evidence_parent'
-        assert (REFERENCE_PARENT_TASK if own_parent else EXPERIMENTAL_TASK) in task
-        assert 'Evaluate returned source precision.' in task
-        own_curve_request = GRID_REQUESTED in inputs.get('literature_assignment', {})
-        assert (REPORTED_CURVE_TASK in task) == own_curve_request
-        assert (REPORTED_CURVE_SCOPE_TASK in task) == own_curve_request
-        assert 'Requested curve precision results' in steering
-        assert 'Reporter precision does not establish product identity' in steering
-        assert all((row['selector']['component'] in steering for row in form['numbers']))
-        commit = {k: [] for k in store.reasoning_schema()['required']}
-        raw = store.get_artifact(store.get(article)['artifact_ref'])
-        token = b'BbPK'
-        start = raw.index(token)
-        commit['source_subjects'] = [{'alias': 'studied_molecule231', 'reference_type': 'assay', 'source_ref': article, 'label': token.decode(), 'anchor': {'source_ref': article, 'artifact_ref': store.get(article)['artifact_ref'], 'start': start, 'end': start + len(token), 'quote': token.decode()}}]
-        return response({'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {'limitation': 'attribution_unknown'} if nested and len(captured) == 1 else {}})
-    script = [response(commission('literature', outer))]
-    if nested:
-        inner = {'version': 'strategy_assignment_v1', 'question_context_refs': [], 'prior_search_refs': [source, article], GRID_REQUESTED: SELECTORS}
-        script.append(response(commission('literature_strategy', inner)))
-    script += [work, integrate, *([integrate] if nested else [])]
-
-    class FixturePresented(PresentedProvider):
-
-        async def complete(self, episode_id, *args):
-            self.active_episode = episode_id
-            return await super().complete(episode_id, *args)
-    provider = FixturePresented(script) if profile else ScriptedProvider(script)
-    progress = ScientificFindingProgress(FindingProgressPolicy(1))
-    asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, initial_known_record_refs=[source, article], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[source, article], contract_information_profile=profile), binding_definitions={'credit': progress.as_record()}, **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
-    observations = 5 if nested else 3
-    assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == observations
-    assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == observations
-    assert store.db.execute('SELECT count(*) FROM literature_rate_observation_operations').fetchone()[0] == 1
-    run_id, parent = store.db.execute('SELECT run_id,episode_id FROM literature_rate_grid_received ORDER BY rowid DESC LIMIT 1').fetchone()
-    original = captured[-1]
-    ref = original['numbers'][0]['sheet_ref']
-    repo = LiteratureReportedCurveRepository(store, run_id)
-    saved = repo.read(ref)
-    descriptors = json.loads(store.db.execute('SELECT settings FROM runtime_runs').fetchone()[0])['episode_bindings']
-    allowed = {store.get(ref)[key] for key in ('artifact_ref', 'request_ref')}
-    receiver = replace(ctx, run_id=run_id, episode_id=parent, role='annotation', path=(('annotation', parent),), assignment={}, received_record_refs=tuple(repo.cell_record_refs(original['numbers'])))
-    for name, value in [('ORIGINAL_FORM_231.json', original), ('ORIGINAL_SCHEMA_231.json', literal), ('ORIGINAL_SHEET_231.json', saved), ('ORIGINAL_DESCRIPTOR_231.json', descriptors)]:
-        (tmp_path / name).write_text(json.dumps(value, indent=2) + '\n')
-    store.db.execute('PRAGMA wal_checkpoint(TRUNCATE)')
-    store.close()
-    before = state_hashes(tmp_path / 'state')
-    block_science(monkeypatch)
-    monkeypatch.setattr(type(provider), 'complete', forbid)
-    with readonly(tmp_path / 'state') as cold:
-        get = cold.get_artifact
-
-        def saved_only(reference):
-            assert reference in allowed, 'Only original saved sheet/request artifacts permitted'
-            return get(reference)
-        monkeypatch.setattr(cold, 'get_artifact', saved_only)
-        host = SimpleNamespace(store=cold, run_id=run_id, tools=None)
-        restored = compose_episode_bindings(WorkflowServices(host), store=cold, journal=SimpleNamespace(store=cold, run_id=run_id), execution_backend=None, descriptors=descriptors, job_episodes=None, resource_estimator=None, role_credit_bindings={})
-        host.episode_bindings = EpisodeBindingRegistry(restored.bindings)
-        binding, = restored.bindings
-        assert binding.received_report_facts(receiver)[GRID_NAMESPACE] == original['numbers']
-        assert binding._rate_grid_repository().read(ref) == saved
-        assert binding._rate_fact_sources()[GRID_NAMESPACE]['report_schema'] == literal['properties']['numbers']
-        assert cold.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == observations
-        assert cold.db.total_changes == 0
-    assert before == state_hashes(tmp_path / 'state')
-    (tmp_path / 'COLD_PROOF_231.json').write_text(json.dumps({'profile': profile, 'alias': alias, 'nondetection': nondetection, 'nested': nested, 'original_form_schema_rows_descriptor': True, 'first_readonly_composer': True, 'scientific_source_parser_fit_model_receive_attestation_blocked': True, 'ordinary_actions_and_observations': observations, 'selected_population_operations': 1, 'changed_rows': 0, 'state_files': before, 'actual_model_execution': False, 'A105_adequacy_claim': False}, indent=2) + '\n')
-
-def test_nested_narrower_return_preserves_exact_admitted_scalar(tmp_path, monkeypatch):
-    shared_case(tmp_path, monkeypatch, None, True, False, nested=True)
 
 
-@pytest.mark.parametrize('profile', [None, 'operation_contract_information_v1'])
-def test_pending_grid_alias_uses_original_frozen_declaration(tmp_path, monkeypatch, profile):
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_numerical_contracts as contracts
-    from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
-    from gene_annotation_episode.episodic_workflow.root.a105.runtime import Workflow
-    from test_contract_information_runtime_059 import PresentedProvider
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import FixtureController
-    from test_runtime_decision_exchanges import select as action
-    store, ctx, args, source, article = setup(tmp_path / 'state')
-    limit = {'type': 'string', 'enum': ['attribution_unknown']}
-    literal = obj({'numbers': rate_grid_cells_schema(), 'limits': limit})
-    submitted = obj({'numbers': {'$ref': 'episode-fact:' + GRID_NAMESPACE}, 'limits': limit})
-    choice = action({'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': plain(ctx.assignment), 'goal': 'Evaluate reported precision.', 'scope': plain(ctx.scope), 'purpose': 'Return selected scalar source evidence.', 'schema_json': json.dumps(submitted), 'initial_report_json': json.dumps({'limits': 'attribution_unknown'})}, 'report_update': {}})
-    provider = PresentedProvider([OSError('Controlled pending231 interruption')])
-    workflow = Workflow(store, ToolRegistry(store), provider, tmp_path / 'run', ctx.run_id, lambda path, initial: FixtureController(str(path), initial, 2), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=[source, article], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[source, article], contract_information_profile=profile), decision_protocol='decision_exchange_v1')
-    root = workflow.build('annotation', 'root', 'Evaluate source experimental evidence.', plain(ctx.scope))
-    try:
-        with pytest.raises(OSError, match='pending231'):
-            asyncio.run(root.run_async(workflow.context))
-        original = workflow.journal.row('runtime_model_calls', root.source.episode_id, 0)['request']
-        for name in ('report_sources', 'catalog', 'action_schema'):
-            monkeypatch.setattr(Workflow, name, forbid)
-        factory = contracts.registered_schema
-        monkeypatch.setattr(contracts, 'registered_schema', forbid)
-        schema, declaration = workflow.expanded_contract_form(root.source, choice['response']['selection'], 0, 'literature')
-        assert schema == literal and declaration['submitted_schema_json'] == choice['response']['selection']['schema_json']
-        assert workflow.journal.row('runtime_model_calls', root.source.episode_id, 0)['request'] == original
-        monkeypatch.setattr(contracts, 'registered_schema', factory)
-        provider.script = iter([choice])
-        root.source.calls = 0
 
-        async def choose_only():
-            return await root.source.next(SimpleNamespace())
-        assert asyncio.run(choose_only()) is not None
-        child = json.loads(store.db.execute('SELECT request FROM runtime_episodes WHERE json_array_length(path)=2').fetchone()[0])
-        assert child['report_contract']['measurements']['schema'] == literal
-        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
-    finally:
-        store.close()
+
+

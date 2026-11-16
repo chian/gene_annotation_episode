@@ -1,4 +1,4 @@
-"""This recipient selects its explicitly declared original A107 result readers."""
+"""This recipient selects its explicitly declared A107 result readers."""
 
 def received_execution_information(context, catalog, *, configuration_only=False):
     return catalog.configured('hpc_work_planning/execution_job_submission/local_job_execution') if configuration_only else catalog.received('hpc_work_planning/execution_job_submission/local_job_execution', context)

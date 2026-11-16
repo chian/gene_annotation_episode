@@ -1,4 +1,4 @@
-"""Original A107 literature directional assembly."""
+"""A107 literature directional assembly."""
 from __future__ import annotations
 from .. import runtime as _original_runtime
 

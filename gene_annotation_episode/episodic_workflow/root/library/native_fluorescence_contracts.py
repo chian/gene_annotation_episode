@@ -23,21 +23,15 @@ OWNER_FILENAME = '.native-fluorescence-owner.json'
 STARTED_FILENAME = '.native-fluorescence-started.json'
 DRIVER_MODULE = 'gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_driver'
 POLICY = {'memory_bytes': 5368709120, 'scratch_bytes': 4294967296}
-HISTORICAL_POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 
 
-def validate_fluorescence_policy(value, *, fresh=False):
-    """Authenticate old receipts; fresh execution must use the current allocation."""
-    require(type(fresh) is bool, 'fluorescence_invalid_policy_mode')
-    require(type(value) is dict and (same(value, POLICY)
-        or not fresh and same(value, HISTORICAL_POLICY)),
+def validate_fluorescence_policy(value):
+    require(type(value) is dict and same(value, POLICY),
         'fluorescence_original_allocation_mismatch')
     return deepcopy(value)
-LEGACY_IMPLEMENTATION_NAMES = ('__init__.py', 'fluorescence_execution_common.py',
-    'fluorescence_event_contracts.py', 'fluorescence_event_readers.py',
-    'native_fluorescence_contracts.py', 'native_fluorescence_storage.py', 'native_fluorescence_driver.py')
-IMPLEMENTATION_NAMES = ('__init__.py', *(
-    'episodic_workflow/root/library/' + name for name in LEGACY_IMPLEMENTATION_NAMES[1:]))
+IMPLEMENTATION_NAMES = ('__init__.py', *('episodic_workflow/root/library/' + name for name in (
+    'fluorescence_execution_common.py', 'fluorescence_event_contracts.py', 'fluorescence_event_readers.py',
+    'native_fluorescence_contracts.py', 'native_fluorescence_storage.py', 'native_fluorescence_driver.py')))
 
 
 def obj(properties):
@@ -196,19 +190,11 @@ def _pin(value):
     require(type(value['size_bytes']) is int and value['size_bytes'] >= 0, 'invalid_fluorescence_pin')
 
 
-def _software_implementation_root(value, *, driver_module=None):
-    """Select an authenticated current or historical source layout, never rewrite it."""
+def _software_implementation_root(value):
     package = PurePosixPath(value['module_root']) / 'gene_annotation_episode'
     implementation = {row['path'] for row in value['implementation_files']}
-    for prefix in ('episodic_workflow/root/library', ''):
-        root = package / prefix
-        module = '.'.join(root.relative_to(value['module_root']).parts) + '.native_fluorescence_driver'
-        if driver_module is not None and module != driver_module:
-            continue
-        required = {str(package / '__init__.py'),
-                    *(str(root / name) for name in LEGACY_IMPLEMENTATION_NAMES[1:])}
-        if required <= implementation:
-            return root
+    if {str(package / name) for name in IMPLEMENTATION_NAMES} <= implementation:
+        return package / 'episodic_workflow/root/library'
     return None
 
 
@@ -253,8 +239,8 @@ def _parser_software(software, parsers):
     distribution = next((r for r in software['distributions'] if re.sub(r'[-_.]+', '-', r['name']).lower() == 'flowio'), None)
     paths = [PurePosixPath(r['path']) for r in software['runtime_files']]
     require(distribution is not None and distribution['version'] == '1.4.0'
-        and str((_software_implementation_root(software)
-                 or PurePosixPath(software['module_root']) / 'gene_annotation_episode') / 'fluorescence_fcs_reader.py')
+        and _software_implementation_root(software) is not None
+        and str(_software_implementation_root(software) / 'fluorescence_fcs_reader.py')
             in {r['path'] for r in software['implementation_files']}
         and any(p.name == 'METADATA' and re.fullmatch(r'flowio-1\.4\.0\.dist-info', p.parent.name, re.IGNORECASE) for p in paths)
         and any(p.name == '__init__.py' and p.parent.name == 'flowio' for p in paths),
@@ -481,11 +467,6 @@ def requested_job_from_fluorescence(job, *, environment):
 def validate_fluorescence_requested_job(value):
     closed(value, 'argv environment native_fluorescence')
     expected = requested_job_from_fluorescence(value['native_fluorescence'], environment=value['environment'])
-    argv = value['argv']
-    if type(argv) is list and len(argv) == 6 and _software_implementation_root(
-            value['native_fluorescence']['software'], driver_module=argv[4]) is not None:
-        # Retain the recorded module only when its entire original closure is present.
-        expected['argv'][4] = argv[4]
     require(same(value, expected), 'fluorescence_requested_job_mismatch')
     return deepcopy(value)
 

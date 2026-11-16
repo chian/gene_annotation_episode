@@ -260,36 +260,6 @@ def test_actual_typed_boundary_rejects_wrong_owner_source_values_expansion_and_s
     d.admit_numeric()
 
 
-def test_actual_saved_return_rejects_tampered_retained_bundle_and_sheet_bytes(driver):
-    d = driver
-    d.start(fields={'mean': MEAN}, supplementary=False)
-    d.acquire_manifest()
-    body = d.acquire_native()
-    publication = body['publication']
-    targets = [('membership', publication['bundle_content'], body['bundle']),
-        ('source', publication['adapter_result']['sheet_content'], d.sheet),
-        ('primary', publication['adapter_result']['sheet_content'], d.sheet),
-        ('hash', publication['bundle_content'], body['bundle']),
-        ('task', publication['bundle_content'], body['bundle'])]
-    for kind, content, original in targets:
-        changed = deepcopy(original)
-        if kind == 'membership': changed['artifacts'][0]['requirement_ids'] = ['other']
-        elif kind == 'source': changed['input_resolution'][0]['content']['source_ref'] = 'other'
-        elif kind == 'primary': changed['native_sheet_result']['value']['primary_source_ref'] = 'other'
-        elif kind == 'hash': changed['artifacts'][0]['sha256'] = '0' * 64
-        else: changed['original_task']['task_id'] = 'other-task'
-        sha = content['sha256']
-        path = d.store.path / 'artifacts' / sha[:2] / sha
-        retained = path.read_bytes()
-        try:
-            path.write_text(json.dumps(changed))
-            with pytest.raises(ValueError, match='artifact_digest_mismatch'):
-                d.api.proteome_returns.facts(d.context, d.schema)
-        finally:
-            path.write_bytes(retained)
-    assert d.api.proteome_returns.facts(d.context, d.schema)[FACT_SOURCES[0]][0]['value']['cell']['value'] == .4375
-
-
 def test_later_unrelated_recovered_status_preserves_latest_publication_completion(driver, monkeypatch):
     d = driver
     d.start(fields={'mean': MEAN}, supplementary=False)

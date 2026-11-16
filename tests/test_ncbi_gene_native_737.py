@@ -3,7 +3,6 @@ from copy import deepcopy
 import builtins
 import hashlib
 import json
-import os
 from pathlib import Path
 import socket
 import urllib.request
@@ -116,16 +115,6 @@ def test_actual_saved_gene2_all_loci_native_paths_and_custody():
                 assert resolve(row['native_record'], location['path']) == location['native']
                 assert location['tag'] == location['native']['tag']
     assert validate_ncbi_gene_native(json.loads(json.dumps(result))) == result
-    if 'HMMER529_ATTEMPT' in os.environ:
-        directory = Path(os.environ['HMMER529_ATTEMPT']) / 'native-gene737'
-        directory.mkdir(exist_ok=False)
-        (directory / 'parsed.json').write_text(json.dumps(result, indent=2) + '\n')
-        (directory / 'facts.json').write_text(json.dumps({'source_sha256': NATIVE_SHA,
-            'source_bytes': len(content), 'source_capture_audit_clean': False,
-            'source_capture_qualification': 'original201 unbound NSS mapping; no retrospective authorization',
-            'record_count': len(result['records']), 'locus_count': len(loci),
-            'locus_commentary_counts': [len(locus['commentaries']) for locus in loci],
-            'new_network_requests': 0, 'episode_binding_verified': False}, indent=2) + '\n')
 
 
 def test_engineering_recursion_native_text_tail_attributes_and_no_coordinate_conversion():

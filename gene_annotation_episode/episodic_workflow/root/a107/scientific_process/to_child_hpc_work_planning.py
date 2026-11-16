@@ -1,4 +1,4 @@
-"""Original A107 parent request envelope for hpc_work_planning.
+"""A107 parent request envelope for hpc_work_planning.
 
 The child retains its own assignment admission and typed response.
 """

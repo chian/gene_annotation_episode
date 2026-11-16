@@ -123,16 +123,6 @@ def test_registered_meaning_schema_is_exact_top_level_only_and_generic_prose_sta
     with pytest.raises(ReportBoundaryError, match='strings need a declared semantic type'):
         validate_closed_schema(obj({'quote': {'type': 'string'}}))
 
-def test_meaning_view_explicitly_rejects_legacy_table_sheet(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_rate_storage import setup_store
-    store, context, args = setup_store(tmp_path)
-    try:
-        repository = LiteratureRateRepository(store, context.run_id)
-        outcome = repository.populate(context, args, 'legacy-selected')
-        with pytest.raises(ContractError, match='projection_version_mismatch'):
-            source_meaning_projection(repository).project_cells([outcome['result']['sheet_ref']], permitted_record_refs=outcome['record_refs'])
-    finally:
-        store.close()
 
 def test_nullable_witness_branches_still_require_actual_reference_resolution(tmp_path):
     store, context, args = setup_native_store(tmp_path, defined=True)

@@ -1,4 +1,4 @@
-"""Original A110 annotation request envelope for published_evidence_assessment."""
+"""A110 annotation request envelope for published_evidence_assessment."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a110 import runtime as _original_runtime
 

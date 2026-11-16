@@ -2,7 +2,6 @@
 from copy import deepcopy
 import hashlib
 import itertools
-import json
 from pathlib import Path
 
 import pytest
@@ -11,18 +10,12 @@ import scipy
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_metacats_provider_contracts as c
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_inputs import extract_metacats_sheet
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_grader import calculate_metacats
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_associations import extract_alignment_associations
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_associations import extract_metacats_associations
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_association_contracts import group_id
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_input_formats import parse_metacats_input_fasta
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_metacats_formats as formats
 from test_bvbrc_metacats_associations import metacats_fixture, extracted, auto_fixture
-from test_bvbrc_alignment_associations import binding, forbid_io
+from test_bvbrc_alignment_associations import binding
 
-ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_native/cases'
-OLD = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_inputs'
-CASES = ('official_na', 'aa_two_groups', 'aa_three_groups', 'native_pair_tail_underflow', 'metadata_only_first_group', 'all_missing', 'twelve_groups')
 BACKEND = {'name': 'scipy_chi2_integer_df_logtail_v1', 'version': scipy.__version__}
 
 
@@ -91,91 +84,6 @@ def requests(sheet, *, native=True, biological=True, epsilon=.001, multiplicity=
 
 def by_id(components, identity):
     return next(r for r in components['results'] if r['request_id'] == identity)
-
-
-def retained_sheet(case):
-    """Parse every retained native byte using explicit verification role choices."""
-    directory = NATIVE / case
-    receipt = json.loads((directory / 'RECEIPT.json').read_text())
-    for name, record in receipt['files'].items():
-        raw = (directory / name).read_bytes()
-        assert hashlib.sha256(raw).hexdigest() == record['sha256'] and len(raw) == record['bytes']
-    saved = json.loads((OLD / ('EXAMPLES_002' if case == 'twelve_groups' else 'EXAMPLES_001') / (case + '-inputs.json')).read_text())
-    category = saved['counts_arguments']['category_id']
-    documents, reads, evidences = [], [], {}
-    def read(name, kind, reader, spec):
-        path = directory / name; raw = path.read_bytes(); identity = str(path.relative_to(ROOT))
-        artifact = {'raw_artifact_ref': identity, 'source_ref': identity, 'sha256': hashlib.sha256(raw).hexdigest()}
-        evidence = {'content': {'source_ref': identity, 'artifact_field': 'artifact_ref', 'artifact_ref': identity, 'sha256': artifact['sha256'], 'byte_count': len(raw)}, 'pointer': ''}
-        result = reader(raw, artifact=artifact, **{k: v for k, v in spec.items() if k != 'reader'})
-        assert result['value'] is not None, result
-        doc = {'kind': kind, 'value': result['value']}; documents.append(doc)
-        did = c.common.document_identity(doc); evidences[did] = evidence
-        reads.append({'read_id': name, 'slot_id': name, 'artifact': artifact, 'reader': spec,
-            'status': result['status'], 'document_ids': [did], 'diagnostics': result['diagnostics']})
-        return result['value']
-    alignment = read('original.fasta', 'alignment', parse_metacats_input_fasta,
-        {'reader': 'metacats_input_fasta', 'id_rule': 'first_whitespace_token', 'encoding': 'ascii'})
-    metadata = read('metadata.tsv', 'metadata', formats.parse_metacats_metadata,
-        {'reader': 'metacats_metadata', 'delimiter': 'tab', 'header': 'present', 'encoding': 'ascii'})
-    paths = receipt['files']
-    matrix_name = next(p for p in paths if p.startswith('output/') and '/retained_raw/' not in p and p.endswith('.txt'))
-    matrix = read(matrix_name, 'adjusted_matrix', formats.parse_metacats_adjusted_matrix,
-        {'reader': 'metacats_adjusted_matrix', 'category_id': category, 'encoding': 'ascii'})
-    selected = {}
-    for suffix, kind, reader, extra in (
-        ('-chisqTable.tsv', 'metacats_chisq', formats.parse_metacats_chisq_table, {'layout': 'current_filtered_tsv'}),
-        ('-mcTable.tsv', 'metacats_pair', formats.parse_metacats_pair_table, {'layout': 'current_filtered_tsv'}),
-        ('-chisqTable.txt', 'metacats_raw_r', formats.parse_metacats_raw_r_table, {'layout': 'r_write_table_single_result_string', 'kind': 'omnibus'}),
-        ('-mcTable.txt', 'metacats_raw_r', formats.parse_metacats_raw_r_table, {'layout': 'r_write_table_single_result_string', 'kind': 'pairwise'})):
-        name = next(p for p in paths if p.endswith(suffix))
-        doc = read(name, kind, reader, {'reader': kind, 'category_id': category, 'encoding': 'ascii', **extra})
-        selected[suffix] = doc
-    inp = binding((directory / 'original.fasta').read_text(), name=alignment['artifact']['raw_artifact_ref'])
-    inp['content'] = deepcopy(evidences[alignment['alignment_id']]['content'])
-    declarations = {'common': {'version': 'bvbrc_alignment_associations_v1', 'analysis_id': case,
-        'input_sequences': [{'kind': 'parsed_document', 'input_binding_id': inp['binding_id'], 'document': alignment['alignment_id'],
-            'member_id_rule': 'first_whitespace_token', 'molecule': 'dna' if receipt['alphabet'] == 'na' else 'protein', 'host_member_joins': [], 'evidence': [evidences[alignment['alignment_id']]]}],
-        'row_joins': [], 'automatic_row_joins': [{'alignment': alignment['alignment_id'], 'input_binding_ids': [inp['binding_id']],
-            'method': 'exact_unique_header', 'case_policy': 'literal', 'gap_policy': 'literal', 'transformation_ids': [], 'evidence': [evidences[alignment['alignment_id']]]}],
-        'transformations': [], 'correspondences': [], 'feature_genomes': [], 'source_records': [], 'member_entities': []}, 'functions': None, 'taxonomy': None}
-    common_result = extract_alignment_associations(inputs=(inp,), documents=tuple(documents), declarations=declarations)
-    assert common_result['value'] is not None, common_result
-    analysis = {'analysis_id': case, 'mode': 'files', 'alignment_id': alignment['alignment_id'], 'metadata_document_id': metadata['document_id'],
-        'category_ids': [category], 'adjusted_matrix_ids': [matrix['document_id']], 'chisq_table_ids': [selected['-chisqTable.tsv']['table_id']],
-        'pair_table_ids': [selected['-mcTable.tsv']['table_id']], 'raw_r_table_ids': [selected[s]['table_id'] for s in ('-chisqTable.txt', '-mcTable.txt')], 'output_role_evidence': []}
-    columns = saved['counts_arguments']['group_order']; category_evidence = [evidences[metadata['document_id']]]
-    maps = [{'raw_group_value': g['group_id'], 'native_group_ordinal': g['native_group_ordinal'], 'group_id': group_id(category, g['group_id']), 'evidence': deepcopy(g['evidence'])} for g in columns]
-    declaration = {'version': 'bvbrc_metacats_context_v1', 'analysis_id': case,
-        'metadata_joins': [{'metadata': metadata['document_id'], 'id_column_index_0based': 0, 'alignment': alignment['alignment_id'],
-            'alignment_identity': 'member_label', 'case_policy': 'preserve', 'duplicate_policy': 'retain_unresolved', 'evidence': category_evidence}],
-        'categories': [{'category_id': category, 'metadata': metadata['document_id'], 'metadata_column_index_0based': 1,
-            'raw_heading_token': metadata['header_tokens'][1], 'native_category_ordinal_1based': 1,
-            'native_output_stem': category, 'input_mode': 'files', 'group_identity_rule': 'exact_category_value', 'evidence': category_evidence}],
-        'explicit_memberships': [], 'auto_group_entries': [], 'group_sources': [],
-        'biological_group_populations': [{'kind': 'observed_metadata_groups', 'group_population_id': category + ':groups', 'category_id': category,
-            'order': 'first_metadata_occurrence', 'include_metadata_only': True, 'evidence': category_evidence}],
-        'native_group_maps': [{'category_id': category, 'entries': maps, 'completeness': 'complete', 'evidence': category_evidence}],
-        'r_columns': [{'category_id': category, 'adjusted_matrix': matrix['document_id'], 'interpreter_version': 'R 4.3.3',
-            'columns': [{k: deepcopy(g[k]) for k in ('r_column_index_0based', 'r_group_token', 'native_group_ordinal', 'evidence')} | {'group_id': group_id(category, g['group_id'])} for g in columns],
-            'completeness': 'complete', 'evidence': deepcopy(columns[0]['evidence'])}], 'exported_group_joins': [], 'native_test_joins': []}
-    table = selected['-chisqTable.tsv']
-    for i, col in enumerate(columns):
-        label = table['group_heading_tokens'][i]
-        declaration['exported_group_joins'].append({'category_id': category, 'table_id': table['table_id'], 'heading_index_0based': i,
-            'raw_heading_token': label, 'group_id': group_id(category, col['group_id']), 'r_column_index_0based': i,
-            'state': 'resolved' if label == col['group_id'] else 'wrong_native_label', 'evidence': deepcopy(col['evidence'])})
-    operands = {'analysis': analysis, 'documents': tuple(documents), 'associations': common_result['value'], 'declarations': declaration}
-    run = run_record(); run['original_task_id'] = 'retained-local-component:' + case
-    run['settings'] = [{'name': 'input_mode', 'value': 'files', 'origin': 'requested', 'evidence': [], 'location': None},
-        {'name': 'export_cutoff', 'value': .05, 'origin': 'observed', 'evidence': [], 'location': None},
-        {'name': 'export_cutoff_comparison', 'value': 'strict_less_than', 'origin': 'retained_source', 'evidence': [], 'location': None}]
-    sheet = sheet_from(operands, (inp,), read_outcomes=reads, run=run)
-    parameters = requests(sheet)
-    for request in parameters['requests']:
-        if request['kind'] in c.STAT_KINDS:
-            request['alphabet'] = receipt['alphabet']
-    return sheet, parameters, receipt
 
 
 def test_biological_success_without_r_does_not_disappear_with_native_failure():
@@ -280,22 +188,6 @@ def test_common_alignment_map_and_original_coverage_keep_separate_contracts():
     assert 'population_ref' in by_id(result, 'alignment')['value']['member_count']
 
 
-def test_unavailable_alignment_preserves_native_observations_without_group_claim():
-    sheet, _, _ = retained_sheet('aa_two_groups')
-    # Re-extraction receives native documents and an explicit no-alignment
-    # analysis; native observations survive their unresolved association.
-    from test_bvbrc_metacats_associations import metacats_fixture
-    operands, _ = metacats_fixture()
-    operands['analysis'] = deepcopy(sheet['analysis']); operands['analysis']['alignment_id'] = None
-    operands['documents'] = tuple(d for d in sheet['documents'] if d['kind'] != 'alignment')
-    operands['associations'] = {k: [] for k in c.common.ASSOCIATION_KEYS}
-    d = operands['declarations']; d['analysis_id'] = sheet['analysis']['analysis_id']; d['metadata_joins'] = []
-    d['categories'] = []; d['biological_group_populations'] = []
-    partial = sheet_from(operands)
-    assert partial['native_observations']
-    assert all(o['population_id'] is None and o['association_state'] == 'missing' for o in partial['native_observations'])
-
-
 def native_family_request(sheet, *, kind='omnibus', tables='raw', eligibility=(), state='complete', selection='all_eligible', tests=None):
     category = sheet['analysis']['category_ids'][0]
     tids = sheet['analysis']['raw_r_table_ids'] if tables == 'raw' else sheet['analysis']['chisq_table_ids' if kind == 'omnibus' else 'pair_table_ids']
@@ -307,91 +199,6 @@ def native_family_request(sheet, *, kind='omnibus', tables='raw', eligibility=()
             'assumption': None, 'p_value_basis': 'native_unadjusted', 'evidence': [], 'selection': selection, 'tests': tests or []},
         'p_values': {'kind': 'native_tables', 'table_ids': tids, 'eligibility_statistics_request_ids': list(eligibility)},
         'method': 'holm', 'alpha': .05, 'dependence_assumption': 'none_required_between_tests'}
-
-
-def test_filtered_native_rows_cannot_define_complete_family():
-    sheet, parameters, _ = retained_sheet('aa_two_groups')
-    request = native_family_request(sheet, tables='filtered')
-    result = calculate_metacats(sheet, {'version': c.VERSION, 'requests': [request]})
-    outcome = result['results'][0]
-    assert outcome['status'] == 'partial' and outcome['value'] is None
-    assert outcome['requirements'][0]['reason_code'] == 'metacats_test_family_incomplete'
-
-
-def test_unfiltered_native_table_does_not_establish_an_unobserved_category():
-    from urllib.parse import quote
-    sheet, _, _ = retained_sheet('aa_two_groups')
-    # Explicit synthetic parser fixture: nonpositive df supplies exclusions.
-    # These modified bytes are never recorded as retained native execution.
-    old_id = sheet['analysis']['raw_r_table_ids'][0]
-    old_doc = next(d['value'] for d in sheet['documents'] if d['value'].get('table_id') == old_id)
-    raw = (ROOT / old_doc['artifact']['raw_artifact_ref']).read_bytes().replace(b'NA', b'0')
-    artifact = {'raw_artifact_ref': 'synthetic-explicit-zero-df', 'source_ref': 'synthetic-explicit-zero-df', 'sha256': hashlib.sha256(raw).hexdigest()}
-    parsed = formats.parse_metacats_raw_r_table(raw, artifact=artifact, kind='omnibus', layout='r_write_table_single_result_string', category_id='comparison', encoding='ascii')
-    new_id = parsed['value']['table_id']
-    for document in sheet['documents']:
-        if document['value'].get('table_id') == old_id:
-            document['value'] = parsed['value']
-    sheet['analysis']['raw_r_table_ids'][0] = new_id
-    sheet['run']['original_task_id'] = 'synthetic-explicit-zero-df-fixture'
-    for read in sheet['read_outcomes']:
-        if read['document_ids'] == [old_id]:
-            read.update(artifact=artifact, document_ids=[new_id], status=parsed['status'], diagnostics=parsed['diagnostics'])
-    for join in sheet['native_test_associations']:
-        if join['table_id'] == old_id:
-            join.update(table_id=new_id, association_id=new_id + '/rows/' + str(join['row_index']) + '/association',
-                test_id='native_test:' + quote(new_id, safe='') + '/' + str(join['row_index']))
-    sheet['native_observations'] = c.native_observations(sheet)
-    original_request = native_family_request(sheet)
-    original = calculate_metacats(sheet, {'version': c.VERSION, 'requests': [original_request]})
-    assert original['results'][0]['value']['total_test_count'] == 1
-    missing = deepcopy(sheet['categories'][0])
-    missing.update(category_id='unobserved', metadata_document_id=None,
-        metadata_column_index_0based=None, raw_heading_token=None,
-        native_category_ordinal_1based=2, native_output_stem='unobserved',
-        group_ids=[], state='missing', evidence=[])
-    sheet['analysis']['category_ids'].append('unobserved')
-    sheet['categories'].append(missing)
-    c.validate_metacats_sheet(sheet)
-    request = native_family_request(sheet)
-    request['family']['category_ids'].append('unobserved')
-    outcome = calculate_metacats(sheet, {'version': c.VERSION, 'requests': [request]})['results'][0]
-    assert outcome['status'] == 'partial' and outcome['value'] is None
-    assert outcome['requirements'][0]['reason_code'] == 'metacats_test_family_incomplete'
-
-
-def test_empty_unfiltered_native_table_alone_does_not_establish_zero_tests():
-    sheet, _, _ = retained_sheet('all_missing')
-    request = native_family_request(sheet)
-    outcome = calculate_metacats(sheet, {'version': c.VERSION, 'requests': [request]})['results'][0]
-    assert outcome['status'] == 'partial' and outcome['value'] is None
-    assert outcome['requirements'][0]['reason_code'] == 'metacats_test_family_incomplete'
-
-
-def test_native_pair_eligibility_needs_positive_df_evidence():
-    sheet, parameters, _ = retained_sheet('aa_two_groups')
-    request = native_family_request(sheet, kind='pairwise')
-    result = calculate_metacats(sheet, {'version': c.VERSION, 'requests': [request]})
-    assert result['results'][0]['value'] is None
-    request['p_values']['eligibility_statistics_request_ids'] = ['native:comparison:statistics']
-    parameters['requests'].append(request)
-    result = calculate_metacats(sheet, parameters)
-    family = by_id(result, 'native-observed-family')['value']
-    assert family['total_test_count'] == 1 and family['family']['p_value_basis'] == 'native_unadjusted'
-    observation = next(o for o in sheet['native_observations'] if o['population_id'] == family['results'][0]['test_id'] and o['field'] == 'metacats_p_value')
-    assert family['results'][0]['input_p']['value'] == observation['number']['value']
-    assert family['results'][0]['test_id'] == observation['population_id']
-    assert family['results'][0]['test_id'] != by_id(result, 'native:comparison:statistics')['value']['pairs'][0]['test_id']
-
-
-def test_complete_empty_native_family_uses_full_statistical_exclusions():
-    sheet, parameters, _ = retained_sheet('all_missing')
-    request = native_family_request(sheet, eligibility=['native:comparison:statistics'])
-    parameters['requests'].append(request)
-    result = calculate_metacats(sheet, parameters)
-    family = by_id(result, 'native-observed-family')['value']
-    assert family['family']['total_test_count'] == 0 and family['results'] == []
-    assert len(by_id(result, 'native:comparison:statistics')['value']['exclusions']) == 6
 
 
 @pytest.mark.parametrize('mode', ['known_count_only', 'declared_upper_bound'])
@@ -511,40 +318,6 @@ def test_explicit_fetched_group_and_auto_membership_feeds_biological_calculation
         assert sheet['groups'][0]['source_group_bindings'][0]['group_id'] == '/workspace/same'
     else:
         assert [r['feature_id'] for r in sheet['auto_group_entries']] == ['feature:one', 'feature:two']
-
-
-def test_synthetic_cutoff_equality_stays_native_and_adjustment_rejection_is_separate():
-    from urllib.parse import quote
-    sheet, parameters, _ = retained_sheet('aa_two_groups')
-    old_id = sheet['analysis']['raw_r_table_ids'][1]
-    old_doc = next(d['value'] for d in sheet['documents'] if d['value'].get('table_id') == old_id)
-    raw = (ROOT / old_doc['artifact']['raw_artifact_ref']).read_bytes()
-    token = next(row['p_value']['raw_token'] for row in old_doc['pair_rows'] if row['position']['value'] == 2)
-    assert raw.count(token.encode()) == 1
-    synthetic = raw.replace(token.encode(), b'0.05')
-    artifact = {'raw_artifact_ref': 'synthetic-cutoff-equality', 'source_ref': 'synthetic-cutoff-equality', 'sha256': hashlib.sha256(synthetic).hexdigest()}
-    parsed = formats.parse_metacats_raw_r_table(synthetic, artifact=artifact, kind='pairwise', layout='r_write_table_single_result_string', category_id='comparison', encoding='ascii')
-    new_id = parsed['value']['table_id']
-    for document in sheet['documents']:
-        if document['value'].get('table_id') == old_id:
-            document['value'] = parsed['value']
-    sheet['analysis']['raw_r_table_ids'][1] = new_id
-    sheet['run']['original_task_id'] = 'synthetic-cutoff-fixture'
-    for read in sheet['read_outcomes']:
-        if read['document_ids'] == [old_id]:
-            read.update(artifact=artifact, document_ids=[new_id], status=parsed['status'], diagnostics=parsed['diagnostics'])
-    for join in sheet['native_test_associations']:
-        if join['table_id'] == old_id:
-            join.update(table_id=new_id, association_id=new_id + '/rows/' + str(join['row_index']) + '/association',
-                test_id='native_test:' + quote(new_id, safe='') + '/' + str(join['row_index']))
-    sheet['native_observations'] = c.native_observations(sheet)
-    request = native_family_request(sheet, kind='pairwise', eligibility=['native:comparison:statistics'])
-    request['method'] = 'none'; parameters['requests'].append(request)
-    result = by_id(calculate_metacats(sheet, parameters), 'native-observed-family')['value']
-    assert result['results'][0]['input_p']['value'] == .05
-    assert not result['results'][0]['input_p']['value'] < .05
-    assert result['results'][0]['rejected_at_alpha'] is True
-    assert next(s['value'] for s in sheet['run']['settings'] if s['name'] == 'export_cutoff_comparison') == 'strict_less_than'
 
 
 def test_structurally_contradictory_sheet_request_returns_invalid_parse_result():

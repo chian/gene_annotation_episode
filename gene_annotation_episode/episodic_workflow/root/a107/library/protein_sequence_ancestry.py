@@ -1,7 +1,4 @@
-"""A107 original protein sequence ancestry; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 protein sequence ancestry."""
 from __future__ import annotations
 import math
 from typing import get_args

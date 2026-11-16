@@ -25,7 +25,7 @@ class ResourceTaskDecision(ResourceDecisionInputs, ResourceDecisionContracts, Re
             schema = saved['schema']
             context = saved['context']
             try:
-                recorded_transport = _live_original_runtime._recorded_assignment_transport(saved)
+                _live_original_runtime._recorded_assignment_transport(saved)
             except ValueError as error:
                 raise _live_original_runtime.WorkflowError(str(error)) from error
             if (profile is None) != ('contract_information' not in saved):
@@ -39,7 +39,6 @@ class ResourceTaskDecision(ResourceDecisionInputs, ResourceDecisionContracts, Re
             if self.workflow.decision_protocol == _live_original_runtime.DECISION_EXCHANGE_PROTOCOL and saved.get('decision_protocol') != _live_original_runtime.DECISION_EXCHANGE_PROTOCOL:
                 raise _live_original_runtime.WorkflowError('pending_decision_requires_original_protocol')
             if row['response'] is not None:
-                self._unproven_direct_response_index = index if self.workflow.decision_protocol is None and (not recorded_transport) else None
                 if self.workflow.decision_protocol == _live_original_runtime.DECISION_EXCHANGE_PROTOCOL:
                     if profile is not None:
                         self.validate_contract_exchange_history(saved, index)

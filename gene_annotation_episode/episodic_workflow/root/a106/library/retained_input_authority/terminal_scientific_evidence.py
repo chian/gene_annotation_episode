@@ -116,7 +116,7 @@ def read_terminal_handoff(store, run_id, target, scope):
     if is_compact_assignment(plain(original.assignment)):
         from gene_annotation_episode.episodic_workflow.root.a106.library.retained_input_authority.flux_balance_request_binding import read_request_binding, match_practical_public_outcome
         control = read_request_binding(store, run_id, body['episode_id'])
-        match_practical_public_outcome(actual_return, receipt, target['handle'], assignment=assignment, control_version=control['version'])
+        match_practical_public_outcome(actual_return, receipt, target['handle'], assignment=assignment)
     else:
         _require(actual_return.get('status') in ('completed', 'partial') and actual_return.get('result') == receipt and (target['handle'] in actual_return.get('record_refs', [])))
     _require(receipt['tool_name'] == 'exec_command' and terminal_local_job_matches(assignment, receipt['outcome']))

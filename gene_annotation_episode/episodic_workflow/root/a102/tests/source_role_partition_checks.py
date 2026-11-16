@@ -6,7 +6,6 @@ The original source family fixtures supply the actual Store/Journal/registration
 from contextlib import contextmanager
 from copy import deepcopy
 from dataclasses import replace
-import hashlib
 from importlib import import_module
 import json
 from pathlib import Path

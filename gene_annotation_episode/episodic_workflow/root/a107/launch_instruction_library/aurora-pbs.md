@@ -10,7 +10,7 @@ scheduler commands, not additional episode-tool names.
 Choose a submission script and native commands that satisfy the assigned
 account, queue and allocation constraints. The charging account comes from
 `configuration.account`, which must be `BioReason-Aurora-Test` for new Aurora
-jobs under the user's updated instruction on 2026-11-04 UTC. Preserve any
+jobs. Preserve any
 assigned account, queue, resources, allocation or allowed account/queue choices.
 Work using Flare requires `filesystems=flare`,
 the chosen `select=...` and explicit `walltime=...` meeting the selected queue's
@@ -20,9 +20,7 @@ from the scientific episode's continuation expectation.
 
 The [Aurora job guide](https://docs.alcf.anl.gov/aurora/running-jobs-aurora/)
 documents `mpiexec` for compute tasks within the PBS allocation and queue limits
-that vary by queue. Inspect current limits when choosing: the manual run's
-one-node `debug` allocation and five-minute request are historical observations,
-not defaults for new jobs. Choose an execution script and launcher arguments
+that vary by queue. Inspect current limits when choosing. Choose an execution script and launcher arguments
 for the actual scientific job and its allocation. Preserve supplied scientific
 inputs, software identities and output requirements when constructing or
 adapting that script. A launcher or environment wrapper must not change the

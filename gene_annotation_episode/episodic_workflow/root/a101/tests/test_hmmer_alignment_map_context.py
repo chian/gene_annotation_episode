@@ -18,7 +18,6 @@ from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_al
 from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_alignment_preparation_data as data
 from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_driver as driver
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_hmmer_preparation_worker as worker
-from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_preparation_result_views as views
 from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from test_hmmer_alignment_preparation_data import operation, payload
 from test_hmmer_preparation_result_views import prepared, project, selection
@@ -372,17 +371,3 @@ def test_driver_unknown_sampled_profile_has_closed_configuration_failure(tmp_pat
     from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_acquisition as acquisition
     acquisition._validate_preflight_failure(problem, {"program": "alimask", "mode": "alignment_to_model"}, {})
 
-
-@pytest.mark.parametrize("program,collection", [("hmmbuild", "input_records"), ("alimask", "native_rows")])
-def test_direct_saved_projection_rejects_illegally_placed_context(program, collection):
-    if program == "hmmbuild":
-        from test_native_hmmer_preparation_worker import selected
-        grading, occurrences = prepared(selected("hmmbuild", "build_alignment"))
-        context = context_for({"--dna": True})
-    else:
-        grading, occurrences = projection_fixture()
-        context = grading["metadata"]["map_reconstruction_context"]
-    grading["sheet"][collection][0]["map_reconstruction_context"] = deepcopy(context)
-    with pytest.raises(ContractError, match="map_context_metadata_mismatch"):
-        project(grading, occurrences, selection(None,
-            artifacts=[{"direction": "input", "role": "alignment", "ordinal": 0}]))

@@ -18,7 +18,6 @@ import hashlib
 from io import BytesIO
 import json
 import math
-from pathlib import Path
 import re
 import warnings
 
@@ -568,7 +567,7 @@ def _pixels(context, selected, literals, scale, unit):
         "recipe": deepcopy(recipe), "terminal_edge": edge, "image_size": None,
         "qualifying_runs": [], "pixel_edge": None, "axis": None, "native_ordinate": None,
         "native_bounds": None, "bound_kind": "conditional_digitization_not_confidence_interval",
-        "counter_version": _COUNTER_VERSION, "counter_module_sha256": _hash(Path(__file__).read_bytes()),
+        "counter_version": _COUNTER_VERSION,
         "diagnostics": diagnostics}
     if spec["error"]:
         missing = any(isinstance(context.cache[(spec[name], "original")], Exception)

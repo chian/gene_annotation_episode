@@ -33,7 +33,6 @@ class LiteratureQuantityRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = "literature_source_quantity_record_v2"
-    readable_record_versions = ("literature_source_quantity_record_v1", record_version)
     operations_table = "literature_quantity_operations"
     received_table = "literature_quantity_received"
     binding_fields = tuple(BINDINGS)

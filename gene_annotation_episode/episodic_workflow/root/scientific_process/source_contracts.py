@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.root.episode_bindings import refe
 from gene_annotation_episode.episodic_workflow.root.scientific_process_records import (scientific_digest, scientific_invocation_ref,
     validate_child_selection, validate_filled_process, validate_option_ref,
     validate_revision_origin, validate_selection, selection_fields, selector_selection,
-    SELECTION_VERSION, LEGACY_SELECTION_VERSION)
+    SELECTION_VERSION)
 from gene_annotation_episode.episodic_workflow.root.scientific_process.report_generation import (build_process_result, merge_process_results,
     report_sources)
 from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import validate_process_result
@@ -120,52 +120,6 @@ _REFERENCE = {"type": "string", "pattern": r"^[a-z][a-z_]*_[a-f0-9]{24,64}$"}
 _SHA256 = {"type": "string", "pattern": "^[a-f0-9]{64}$"}
 _SCIENTIFIC_NAMESPACES = frozenset({"scientific_invocation", "scientific_preparation",
     "scientific_process_library", "scientific_option_digest", "scientific_credit_binding"})
-# Retained original compatibility declaration; the current descriptor reads
-# DEFINITION_FILES from definition_inputs.py. This tuple is not current source
-# membership, and its historical names do not select or restore implementations.
-_IMPLEMENTATION_FILES = ("scientific_process_episodes.py", "scientific_process_setup.py",
-    "episode_work_report.py", "api_error_feedback.py", "a101_work_report.py", "scientific_process_prompt.py",
-    "scientific_process_records.py", "scientific_process_reports.py",
-    "scientific_process_provenance.py", "scientific_tool_library.py",
-    "scientific_support_metadata.py", "scientific_process_library.py",
-    "evidence_axis_instructions.py", "episode_services.py", "resource_tool_information.py",
-    "execution_planning.py", "execution_memory.py", "execution_guidance.py",
-    "scientific_tool_retrieval.py", "tool_schema_validation.py",
-    "alignment_site_action_records.py", "alignment_site_returns.py",
-    "alignment_site_native.py", "episode_return_records.py",
-    "restriction_mapping_action_records.py", "restriction_mapping_references.py",
-    "restriction_mapping_returns.py", "restriction_mapping_bound_contracts.py",
-    "restriction_mapping_publication.py", "restriction_mapping_jobs.py",
-    "restriction_mapping_inputs.py", "restriction_mapping_worker.py",
-    "restriction_mapping_contracts.py", "restriction_mapping_readers.py",
-    "restriction_mapping_registry.py", "restriction_mapping_selection.py",
-    "episode_contract_information.py", "episode_journal.py", "native_file_capture.py",
-    "molecular_measurement_tools.py", "molecular_result_facts.py",
-    "tf_binding_result_contracts.py", "tf_binding_measurements.py", "tf_binding_tools.py",
-    "communication.py", "molecular_reference_privacy.py", "episode_receipts.py",
-    "liftover_contracts.py", "liftover_measurements.py", "liftover_tools.py",
-    "circular_dichroism_contracts.py", "circular_dichroism_measurements.py",
-    "circular_dichroism_tools.py", "protein_structure_action_records.py",
-    "a101_scoring.py", "a101_credit.py", "a101_investigation.py", "a102_investigation.py", "a102_scoring.py",
-    "a102_credit.py", "a102_publication.py", "a102_structures.py", "a102_tools.py",
-    "a102_structural_evidence.py", "a102_structural_catalog.py", "a102_structural_workflow.py",
-    "a102_experimental_evidence.py", "a102_structural_report.py",
-    "a102_native_worker.py", "a102_structural_bridge.py", "a102_hpc.py", "a102_hpc_worker.py",
-    "hpc_result_receipts.py", "shared_information.py", "shared_information_results.py",
-    "a102_resources.py", "protein_structure_sequences.py", "a102_attachments.py", "sequence_attribution.py",
-    "a103_investigation.py", "a103_tools.py", "a103_scoring.py", "a103_publication.py",
-    "a103_attachments.py", "a103_credit.py", "a103_native_worker.py", "a103_channels.py", "a103_detection.py",
-    "a103_hpc.py", "a103_hpc_worker.py", "a103_native_requests.py", "hpc_scientific_commission.py", "homology_query.py",
-    "a104_investigation.py", "a104_tools.py", "a104_scoring.py", "a104_publication.py", "a104_attachments.py",
-    "a104_credit.py", "a104_hpc.py", "a104_hpc_worker.py", "a104_interpretation.py", "a104_characterization.py",
-    "a107_investigation.py", "a107_tools.py", "a107_qualification.py", "a107_expression_components.py", "a107_expression_contracts.py",
-    "a107_genomic_detection_hpc.py", "a107_genomic_detection_native.py",
-    "a110_investigation.py", "a110_tools.py", "a110_chemical_accounting.py", "a110_qualification.py", "a110_chemical_contracts.py",
-    "a110_experimental_qualification.py", "component_axis_cell_receipts.py",
-    "a110_fba_hpc.py", "a110_fba_native.py", "partner_chemical_tools.py", "component_sequence_attribution.py",
-    "component_axis_workflow.py", "component_axis_reports.py", "component_axis_native_contracts.py", "inprocess_replay.py",
-    "component_axis_source_access.py", "component_axis_execution_context.py",
-    "component_axis_native_tools.py", "component_axis_native_hpc.py", "component_axis_native_worker.py")
 _ITC_PARAMETER_SOURCE = "itc_binding_parameters"
 
 
@@ -191,10 +145,6 @@ _ANNOTATION_REF = _ref_schema("annotation_distinction", "A")
 _EVIDENCE_AXIS = deepcopy(_ANNOTATION_REF)
 _EVIDENCE_AXIS['properties']['slot'] = {'enum': ['evidence_axis', 'annotation_distinction']}
 _THOUGHT_REF = _ref_schema("thought_pattern", "P")
-_TOOLS = {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": True}
-_LEGACY_SELECTION = obj({"version": {"const": LEGACY_SELECTION_VERSION},
-    "annotation_ref": _ANNOTATION_REF, "thought_ref": _THOUGHT_REF,
-    "tools": _TOOLS})
 _TOOL_SELECTOR = obj({'name': {'type': 'string', 'minLength': 1},
                      'resources': {'enum': ['api', 'local', 'hpc']}})
 _TOOL_INFO = obj({**_TOOL_SELECTOR['properties'],
@@ -222,9 +172,8 @@ _ASSIGNMENT = obj({"selection": _SELECTION,
     "revision_origin": _REVISION_ORIGIN},
     required=["selection", "evidence_refs", "constraints", "context"])
 _RECORDED_ASSIGNMENT = deepcopy(_ASSIGNMENT)
-_RECORDED_ASSIGNMENT['properties']['selection'] = {'anyOf': [_CANONICAL_SELECTION, _LEGACY_SELECTION]}
+_RECORDED_ASSIGNMENT['properties']['selection'] = _CANONICAL_SELECTION
 _REVISION_ARGUMENTS = obj({'thought_pattern': _THOUGHT_REF,
     'child_tool_info': {'type': 'array', 'items': _TOOL_SELECTOR, 'uniqueItems': True}})
-_LEGACY_REVISION_ARGUMENTS = obj({"thought_ref": _THOUGHT_REF, "tools": _TOOLS})
 
 

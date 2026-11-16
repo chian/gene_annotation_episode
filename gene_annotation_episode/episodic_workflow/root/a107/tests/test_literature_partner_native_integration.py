@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.root.a107.library.literature_part
 from gene_annotation_episode.episodic_workflow.root.a107.runtime import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a107.tools import ToolRegistry
-from gene_annotation_episode.episodic_workflow.root.a107.tests.source_helpers import source, witness
+from gene_annotation_episode.episodic_workflow.root.a107.tests.source_helpers import source, witness, location_inputs, source_artifacts
 from test_runtime import FixtureController, ScriptedProvider
 
 BASE = Path(__file__).parent / 'fixtures/source_records'
@@ -167,7 +167,7 @@ def test_native_selected_and_saved_only_reconstruction_without_prepared_json(tmp
         assert all(not store.get_artifact(store.get(ref)['artifact_ref']).lstrip().startswith(b'{')
                    for ref in context.received_record_refs)
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.partner.source.populate', args, 'native'))
+        outcome = asyncio.run(binding.execute(context, 'literature.partner.source.populate', location_inputs(args), 'native'))
         assert outcome['status']=='completed', outcome.get('feedback')
         current = replace(context, received_record_refs=(*context.received_record_refs,*outcome['record_refs']))
         selected = {'committed_record_refs':[outcome['result']['sheet_ref']]}
@@ -186,11 +186,10 @@ def test_native_selected_and_saved_only_reconstruction_without_prepared_json(tmp
             journal=Journal(store, context.run_id), execution_backend=None, descriptors=[binding.as_record()],
             job_episodes=None, resource_estimator=None, role_credit_bindings={}).bindings
         # Capture complete original operation map before disabling source helpers.
-        # The private owner admits arguments with its legacy-quote catalog; keep both saved maps.
-        catalogs = {flag: restored.catalog(context, _accept_legacy_quotes=flag) for flag in (False, True)}
-        restored.catalog = lambda _, *, _accept_legacy_quotes=False: deepcopy(catalogs[_accept_legacy_quotes])
+        saved_catalog = restored.catalog(context)
+        restored.catalog = lambda _: deepcopy(saved_catalog)
         sheet = store.get(outcome['result']['sheet_ref'])
-        allowed = {sheet['artifact_ref'],sheet['request_ref']}
+        allowed = {sheet['artifact_ref'],sheet['request_ref']} | source_artifacts(store, args)
         read = store.get_artifact
         def saved_only(ref):
             assert ref in allowed
@@ -203,16 +202,13 @@ def test_native_selected_and_saved_only_reconstruction_without_prepared_json(tmp
         import gene_annotation_episode.episodic_workflow.root.a107.library.literature_partner_native_inputs as native
         import gene_annotation_episode.episodic_workflow.root.a107.library.literature_partner_source_fields as fields
         import gene_annotation_episode.episodic_workflow.root.a107.library.literature_partner_calculations as core
-        import gene_annotation_episode.episodic_workflow.root.a107.library.literature_assay_inputs as sources
         monkeypatch.setattr(storage,'read_partner_inputs',forbidden)
         for module in (dispatch,native,fields,core):
             for name,value in list(vars(module).items()):
                 if callable(value) and getattr(value,'__module__',None) in (native.__name__,fields.__name__,core.__name__):
                     monkeypatch.setattr(module,name,forbidden)
-        monkeypatch.setattr(sources._Sources,'source',forbidden)
-        monkeypatch.setattr(sources._Sources,'witness',forbidden)
         store.db.execute('PRAGMA query_only=ON')
-        assert asyncio.run(restored.execute(context,'literature.partner.source.populate',args,'native'))==outcome
+        assert asyncio.run(restored.execute(context,'literature.partner.source.populate',location_inputs(args),'native'))==outcome
         assert form_with_facts({},FORM,restored.facts(current,selected))==form
 
 
@@ -225,7 +221,7 @@ def test_native_ordinary_typed_parent_receives_actual_source_bindings(tmp_path, 
             'goal':'Read experimental partner rates directly from source spans','scope':plain(context.scope),
             'purpose':'Return the requested source partner components','schema_json':json.dumps(FORM),
             'initial_report_json':'{}'},'report_update':{}}
-        action={'selection':{'kind':'tool','tool':'literature.partner.source.populate','arguments':args},'report_update':{}}
+        action={'selection':{'kind':'tool','tool':'literature.partner.source.populate','arguments':location_inputs(args)},'report_update':{}}
         def receive(inputs):
             form,=inputs['child_reports']
             check_rows(form['measurements'],case)

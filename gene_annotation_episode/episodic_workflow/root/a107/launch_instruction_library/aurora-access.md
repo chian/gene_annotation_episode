@@ -49,7 +49,4 @@ are not result data and do not belong in assignments, inventory or receipts.
 [ALCF token instructions](https://docs.alcf.anl.gov/account-project-management/accounts-and-access/logging-in-with-tokens/)
 describe the site's human authentication mechanism. They do not select an
 account, connection route or execution resource for this binding. The specific
-route and socket above are this project's recorded procedure. The original
-2026-10-22 instruction referenced source rows A1–A2 in
-`docs/LAUNCH_INSTRUCTION_SOURCES_2026-10-22_001.md`; that index was unavailable
-during recovery. The original instructions remain recoverable from Git.
+route and socket above are this project's recorded procedure.

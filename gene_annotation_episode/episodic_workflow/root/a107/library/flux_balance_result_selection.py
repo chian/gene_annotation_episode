@@ -1,7 +1,4 @@
-"""A107 original flux balance result selection; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 flux balance result selection."""
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.root.a107.library.received_execution_information.historical_flux_balance_contracts import flux_balance_schema, validate_flux_balance_record
 from gene_annotation_episode.episodic_workflow.root.a107.library.flux_balance_result_contracts import fba_result_schema, validate_fba_projection_selector, validate_fba_saved_sheet_reference

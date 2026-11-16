@@ -1,7 +1,4 @@
-"""A107 original flux balance result contracts; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 flux balance result contracts."""
 from copy import deepcopy
 from decimal import Decimal, InvalidOperation
 import math

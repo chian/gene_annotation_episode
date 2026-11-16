@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.root.composition_information impo
 from gene_annotation_episode.episodic_workflow.root.episode_contract_information import validate_saved_fact_form
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.episodic_workflow.root.scoring import SignedEvidenceRootSupport
 from gene_annotation_episode.state import Store
@@ -236,15 +236,6 @@ def test_metadata_then_real_child_translation_typed_return_and_root_reason(tmp_p
         with pytest.raises(ValueError, match='action_not_available_to_episode'):
             reconstruction.selected(restored_root.source,
                 {'kind': 'tool', 'tool': 'sequence.translate', 'arguments': {}}, 99)
-        legacy = deepcopy(saved)
-        legacy.pop('root_action_boundary')
-        restored_legacy = runtime.assemble_workflow(store, tools, object(), run_dir, saved['run_id'], legacy,
-            controller_factory=controller, project_credit=zero,
-            episode_binding_descriptors=saved['episode_bindings'],
-            annotation_child_roles=('scientific_process',), episode_record_receipts=True,
-            initial_known_record_refs=[])
-        legacy_root = restored_legacy.build('annotation', 'root', saved['goal'], scope)
-        assert 'sequence.translate' in {row['name'] for row in restored_legacy.catalog(scope, source=legacy_root.source)}
 
 
 def test_parent_can_discover_child_return_facts(tmp_path):

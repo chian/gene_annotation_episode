@@ -19,7 +19,8 @@ RUN_PLAN_FILENAME = 'fluorescence-plan.json'
 ATTEMPT_DIRECTORY_NAME = 'fluorescence-attempt'
 STARTED_FILENAME = '.native-fluorescence-started.json'
 DRIVER_MODULE = 'gene_annotation_episode.native_fluorescence_driver'
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 IMPLEMENTATION_NAMES = ('__init__.py', 'fluorescence_execution_common.py', 'fluorescence_event_contracts.py', 'fluorescence_event_readers.py', 'native_fluorescence_contracts.py', 'native_fluorescence_storage.py', 'native_fluorescence_driver.py')
 
 def obj(properties):

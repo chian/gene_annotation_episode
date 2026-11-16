@@ -48,8 +48,7 @@ class LiteraturePartnerRepository:
         """Authenticate runtime admission; other keys are a trusted manual API.
 
         A saved digest is not proof that runtime admitted the subset. Its actual
-        successful form and original child contract supply that proof. Reading
-        an old authentic runtime receipt needs no backfilled binding or history.
+        successful form and original child contract supply that proof.
         """
         if not isinstance(operation_key, str) or not operation_key:
             raise ContractError('operation_key_required')
@@ -208,10 +207,8 @@ class LiteraturePartnerRepository:
             bound = self._delivery_binding(context, operation_key)
             if bound is not None and bound[0] != digest:
                 raise ContractError('literature_delivery_binding_mismatch')
-            if old is not None and bound is None and (original is None):
-                raise ContractError('literature_delivery_binding_unavailable')
             if old is not None and bound is None:
-                return
+                raise ContractError('literature_delivery_binding_unavailable')
             self._install_delivery_bindings()
             self.store.db.execute(f'INSERT OR IGNORE INTO {self.received_table} VALUES(?,?,?,?)', (self.run_id, context.episode_id, operation_key, data))
             self.store.db.execute(f'INSERT OR IGNORE INTO {self._delivery_table} VALUES(?,?,?,?)', (self.run_id, context.episode_id, operation_key, digest))

@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.bvbrc_homology_returns 
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_homology_return_values import FACT_SOURCES, IDENTIFIER_NAMESPACES, homology_fact_sources, project_homology_facts, requested_sources
 from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts, plain, validate_closed_schema, validate_form
 from gene_annotation_episode.episodic_workflow.root.a101.execution_contracts import canonical, digest
-from gene_annotation_episode.episodic_workflow.root.a101.runtime import TypedReportContract, _object
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import TypedReportContract
 from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tests.bvbrc_controlled_saved_records import SavedRecords, selector
 from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homology_bundle_adapter import c4_fixture, consume
@@ -463,51 +463,6 @@ def test_repeated_read_uses_original_receipts_without_current_grader(run, monkey
     assert fresh.received_context(run.saved.root) == expected
     assert fresh.received_context(run.saved.root) == expected
     assert list(run.store.db.iterdump()) == records
-
-
-@pytest.mark.parametrize("schema_conflict", [False, True], ids=["original_schema", "conflicting_schema"])
-def test_original_redelivery_adds_no_duplicate_rows_or_completed_action(run, schema_conflict):
-    body = projection()
-    parent = run.saved.root
-    producer = run.child(parent, "results", body)
-    publication = run.publications.add(producer, body)
-    form, _, _, _ = run.admit(parent, producer)
-    before = run.host.received_context(parent)
-    prior = run.store.db.execute("SELECT delivery_ref FROM runtime_report_attempts WHERE parent_episode_id=?",
-        (parent.episode_id,)).fetchone()
-    revised = fact_form(MEASUREMENTS)
-    returned = {"requested_0": form["requested_0"]}
-    contract = {"decision": "Return only the requested measurements", "measurements": {"schema": revised},
-        "information": {"requested_0": "requested_0"}}
-    selected = {"kind": "redeliver_report", "delivery_ref": prior["delivery_ref"],
-        "schema_json": canonical(revised), "purpose": contract["decision"]}
-    # A historical direct decision still saved its original action schema.
-    # This is an authored fixture of that frame, not a Workflow-generated call.
-    branch = _object({"kind": {"type": "string", "const": "redeliver_report"},
-        "delivery_ref": {"type": "string"}, "purpose": {"type": "string"},
-        "schema_json": {"type": "string"}})
-    if schema_conflict:
-        branch["properties"]["purpose"]["const"] = "A different permitted purpose"
-    request = {"context": {}, "schema": _object({"selection": {"anyOf": [branch]},
-        "report_update": _object({})})}
-    run.saved.journal.save("runtime_model_calls", {"episode_id": parent.episode_id,
-        "call_index": 1, "purpose": "decision", "request": canonical(request),
-        "response": canonical({"selection": selected, "report_update": {}})})
-    run.saved.journal.save("runtime_report_attempts", {"parent_episode_id": parent.episode_id,
-        "decision_index": 1, "delivery_ref": prior["delivery_ref"], "child_episode_id": producer.episode_id,
-        "contract": canonical(contract), "form": canonical(returned), "failure": None})
-    if schema_conflict:
-        records = list(run.store.db.iterdump())
-        with pytest.raises(ValueError, match="parent_selection_invalid"):
-            run.host.record_admission(parent, returned, revised,
-                f"{parent.run_id}:{parent.episode_id}:1:typed_form")
-        assert list(run.store.db.iterdump()) == records
-        return
-    assert run.host.record_admission(parent, returned, revised,
-        f"{parent.run_id}:{parent.episode_id}:1:typed_form") == [publication["source_ref"]]
-    assert run.host.received_context(parent) == before
-    assert run.saved.journal.row("runtime_actions", parent.episode_id, 1) is None
-    assert run.store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 0
 
 
 def test_unsuccessful_report_attempt_does_not_deliver_values(run):

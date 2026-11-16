@@ -1,7 +1,6 @@
 """Root-owned report_validation.py"""
 from __future__ import annotations
 from .receiving_context import BindingContext
-from .workflow_values import EPISODE_BRANCH_LIFECYCLE
 from gene_annotation_episode.episodic_workflow.root.method_loop import Episode
 from .resource_estimation import FORECAST_REFERENCE_FIELDS
 from .task_values import _plain
@@ -39,7 +38,7 @@ class ReportValidation:
         if self.native_event_information is not None:
             from .library.native_event_information import report_sources
             sources.update(report_sources())
-        sources['pending_handles'] = {'type': 'array', 'meaning': 'Original selected child executions awaiting their outcome and parent receipt. Numerical yield suspends new selection while these owned returns remain; normal branch closure follows their settlement and does not establish scientific completion.' if self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE else 'Original selected child executions still pending when this episode closed. These handles survive parent closure; closure does not cancel them or establish scientific completion.', 'report_schema': {'type': 'array', 'uniqueItems': True, 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'execution_handle'}, 'x-source': 'pending_handles'}}
+        sources['pending_handles'] = {'type': 'array', 'meaning': 'Original selected child executions awaiting their outcome and parent receipt. Numerical yield suspends new selection while these owned returns remain; normal branch closure follows their settlement and does not establish scientific completion.', 'report_schema': {'type': 'array', 'uniqueItems': True, 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'execution_handle'}, 'x-source': 'pending_handles'}}
         if grain in self.episode_bindings.roles:
             binding = self.episode_bindings.for_path(path, owner=owner) if path is not None else self.episode_bindings.for_child(parent_path, grain, owner=owner) if parent_path is not None else self.episode_bindings.for_role(grain, owner=owner)
             sources.update(binding.fact_sources(grain))

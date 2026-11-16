@@ -1,6 +1,4 @@
-"""A107 original retained result worker dependency: flux_balance_sheet.
-Scientific bodies, invalid outcomes and original byte qualifications are retained.
-"""
+"""A107 result worker dependency: flux_balance_sheet."""
 
 
 from gene_annotation_episode.episodic_workflow.root.a107.library.received_execution_information.historical_flux_balance_contracts import validate_flux_balance_record

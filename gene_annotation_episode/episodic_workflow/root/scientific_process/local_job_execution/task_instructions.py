@@ -16,8 +16,8 @@ class LocalTaskInstructions:
         if 'launch_instruction_library' in context:
             instructions += LAUNCH_INSTRUCTIONS
         if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
-            old_history_guidance = HISTORY_PROTOCOL
-            instructions = instructions.replace(old_history_guidance,
+            history_guidance = HISTORY_PROTOCOL
+            instructions = instructions.replace(history_guidance,
                 'Use request_context exchanges for your own attempt metadata and selected inputs; '
                 'these create no completed action or observation. Read exact previously received '
                 'outcomes with the ordinary episode.history tool, view=records and selected '

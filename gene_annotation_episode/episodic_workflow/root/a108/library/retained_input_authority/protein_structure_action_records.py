@@ -239,18 +239,10 @@ def _json_artifact(store, reference):
     return decode_protein_structure_json(_artifact(store, reference), canonical_bytes=True)
 
 class ProteinStructureActionRecords(EpisodeReturnRecords):
-    """Ordinary action authority, with optional real legacy Results authority."""
+    """Ordinary action authority."""
 
-    def __init__(self, store, run_id, *, legacy_returns=None):
+    def __init__(self, store, run_id):
         super().__init__(store, run_id, failure_prefix='protein_structure_action_')
-        if legacy_returns is not None:
-            _require(legacy_returns.store is store and legacy_returns.run_id == run_id)
-        self.legacy_returns = legacy_returns
-
-    @property
-    def owner(self):
-        _require(self.legacy_returns is not None)
-        return self.legacy_returns.owner
 
     def _require(self, condition, code=None):
         _require(condition)
@@ -259,8 +251,6 @@ class ProteinStructureActionRecords(EpisodeReturnRecords):
         super().authenticate(context, allow_unsaved=allow_unsaved)
         _require(context.role == context.path[-1][0])
         self.store.validate_scope(plain(context.scope))
-        if self.legacy_returns is not None:
-            self.legacy_returns.authenticate(context, allow_unsaved=allow_unsaved)
         return context
 
     def _known(self, context):
@@ -320,9 +310,9 @@ class ProteinStructureActionRecords(EpisodeReturnRecords):
         _require(type(capsule) is dict and set(capsule) == {'version', 'invocation', 'tool_name', 'arguments', 'scope', 'binding', 'plan', 'execution', 'capture', 'worker', 'qualified_files'} and (capsule['version'] == 'protein_structure_action_publication_v1'))
         invocation = dict(run_id=context.run_id, episode_id=context.episode_id, operation_key=f"{context.run_id}:{context.episode_id}:{producer['decision_index']}", request_sha256=digest(plain(context.request)))
         _require(science.same(capsule['invocation'], invocation) and capsule['tool_name'] == action['tool'] and science.same(capsule['arguments'], action['arguments']) and science.same(capsule['scope'], plain(context.scope)))
-        plan = validate_protein_structure_run_plan(capsule['plan'], retained_read=True)
+        plan = validate_protein_structure_run_plan(capsule['plan'])
         _require(all((plan['identity'][name] == invocation[name] for name in ('run_id', 'episode_id', 'operation_key'))))
-        bundle = validate_protein_structure_bundle(_json_artifact(self.store, source['artifact_ref']), plan=plan, retained_read=True)
+        bundle = validate_protein_structure_bundle(_json_artifact(self.store, source['artifact_ref']), plan=plan)
         job, binding, args = (bundle['requested_job']['native_protein_structure'], capsule['binding'], action['arguments'])
         _require(science.same(job['request'], args['request']) and science.same(job['software'], binding['software']) and (binding['resource_id'] == args['resource_id']) and (plan['identity']['resource_id'] == binding['resource_id']) and (type(args['binding_ordinal_0based']) is int) and (binding['binding_ordinal_0based'] == args['binding_ordinal_0based']) and (binding['operation'] == producer['result']['operation']) and science.same(binding['environment'], job['environment']) and science.same(binding['policy'], plan['policy']))
         capture, worker = (capsule['capture'], capsule['worker'])
@@ -540,22 +530,12 @@ class ProteinStructureActionRecords(EpisodeReturnRecords):
         return merge_protein_structure_action_facts(self.received_facts(context, fact_source=fact_source, before_decision_index=before_decision_index), own, fact_source=fact_source)
 
     def authenticate_received_sequence(self, context, descriptor, *, required_use):
-        if descriptor.get('version') == 'structure_sequence_descriptor_v1':
-            _require(self.legacy_returns is not None, 'sequence_not_received')
-            return self.legacy_returns.authenticate_received_sequence(context, descriptor, required_use=required_use)
         descriptor = science.validate_structure_sequence_descriptor_v2(descriptor)
         _require(required_use in descriptor['allowed_uses'] and any((science.same(descriptor, row) for row in self._available(context, SEQUENCE_SOURCE))), 'sequence_not_received')
         _require({descriptor['reference_ref'], descriptor['custody']['source_ref']} <= self._known(context), 'sequence_not_received')
         return self.read_result_authority(context, descriptor['custody'])
 
     def authenticate_received_saved_sheet(self, context, descriptor, *, required_use, before_decision_index=None):
-        if descriptor.get('version') == 'protein_structure_saved_sheet_v1':
-            _require(self.legacy_returns is not None, 'saved_sheet_not_received')
-            value = self.legacy_returns.authenticate_received_saved_sheet(context, descriptor, required_use=required_use)
-            if before_decision_index is not None:
-                self._source_at(context, descriptor['custody']['source_ref'], before_decision_index)
-                _require(self._typed_value_before(context, descriptor, 'execution_protein_structure_saved_sheets', before_decision_index), 'saved_sheet_not_received')
-            return value
         descriptor = science.validate_saved_sheet_descriptor_v2(descriptor)
         _require(required_use in descriptor['allowed_uses'] and any((science.same(descriptor, row) for row in self._available(context, SAVED_SOURCE, before_decision_index=before_decision_index))), 'saved_sheet_not_received')
         _require(descriptor['custody']['source_ref'] in self._known(context), 'saved_sheet_not_received')
@@ -574,8 +554,6 @@ class ProteinStructureActionRecords(EpisodeReturnRecords):
         return deepcopy(dict(custody=custody, selector=dict(projections=producer['action']['arguments']['projections'], parameters=producer['parameters']) if saved else {**producer['action']['arguments']['selection'], 'parameters': None}, request=producer['original_authority']['request'] if saved else producer['bundle']['requested_job']['native_protein_structure']['request'], software=producer['original_authority']['software'] if saved else capsule['binding']['software'], **files, facts={source: producer['result'][_PAYLOAD_FIELDS[source]] for source in FACT_SOURCES}, scientific=producer['scientific'], native_issues=producer.get('native_issues', []), operation_issues=producer.get('operation_issues', producer.get('native_issues', [])), published={key: deepcopy(producer['outcome'].get(key)) for key in ('status', 'result', 'feedback')}))
 
     def authenticate_received_alignment(self, context, alignment):
-        if self.legacy_returns is not None:
-            return self.legacy_returns.authenticate_received_alignment(context, alignment)
         self.authenticate(context, allow_unsaved=True)
         known = self._known(context)
         _require({alignment['source_ref'], alignment['observation_ref']} <= known, 'alignment_not_received')
@@ -602,13 +580,6 @@ class ProteinStructureActionRecords(EpisodeReturnRecords):
 
     def received_transform_projections(self, context, transform, *, before_decision_index=None):
         received = transform['received_from']
-        if received['saved_sheet'].get('version') == 'protein_structure_saved_sheet_v1':
-            _require(self.legacy_returns is not None, 'invalid_transform')
-            values = self.legacy_returns.received_transform_projections(context, transform)
-            if before_decision_index is not None:
-                self.authenticate_received_saved_sheet(context, received['saved_sheet'], required_use='use_transform', before_decision_index=before_decision_index)
-                values = [row for row in values if self._typed_value_before(context, row, 'execution_protein_structure_projections', before_decision_index)]
-            return values
         self.authenticate_received_saved_sheet(context, received['saved_sheet'], required_use='use_transform', before_decision_index=before_decision_index)
         if before_decision_index is not None:
             self._source_at(context, received['calculation_custody']['source_ref'], before_decision_index)

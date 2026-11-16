@@ -1,7 +1,4 @@
-"""A107 original enrichr received fields; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 enrichr received fields."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a107.communication import ReportBoundaryError, plain
 from gene_annotation_episode.episodic_workflow.root.a107.library.enrichr_received_contracts import TABLE_SOURCE, ROW_SOURCE, enrichr_fact_sources

@@ -224,8 +224,6 @@ class CompletionEvidence:
         with self.store.read_snapshot():
             tables = {row[0] for row in self.store.db.execute(
                 "SELECT name FROM sqlite_master WHERE type='table'")}
-            if "runtime_episodes" not in tables:
-                raise ValueError("completion_evidence_episode_unavailable")
             episode = self.store.db.execute("SELECT path,json_extract(request,'$.message.scope') AS scope "
                 "FROM runtime_episodes WHERE run_id=? AND episode_id=?",
                 (self.journal.run_id, episode_id)).fetchone()
@@ -246,8 +244,7 @@ class CompletionEvidence:
                 "json_extract(result,'$.progress_refs') AS progress, "
                 "json_extract(result,'$.native_execution_refs') AS native_refs FROM runtime_actions "
                 "WHERE run_id=? AND episode_id=? AND decision_index=?",
-                (self.journal.run_id, episode_id, original_decision_index)).fetchone()
-                if "runtime_actions" in tables else None)
+                (self.journal.run_id, episode_id, original_decision_index)).fetchone())
             if action is not None:
                 action = dict(action)
                 action['credit'] = decode_credit(action['credit'])
@@ -317,8 +314,8 @@ class CompletionEvidence:
             for channel in ("own_progress", "typed_form"):
                 delivered = self._delivery(episode_id, original_decision_index, channel, tables)
                 if delivered is None:
-                    # The original admitted form itself records requested C8
-                    # references, including legacy runs without this ledger.
+                    # No delivery row exists for this channel; the admitted form
+                    # itself records the requested C8 references.
                     # Its declaration is delivery information, not novelty.
                     if channel == "typed_form" and sample is not None:
                         progress.extend(sample["received_progress_refs"])
@@ -362,8 +359,6 @@ class CompletionEvidence:
                 episode_id=episode_id, original_decision_index=original_decision_index, unit_ref=unit_ref)
 
     def _slot(self, episode_id, index, unit, body, tables):
-        if "runtime_completion_slots" not in tables:
-            return None
         rows = self.store.db.execute("SELECT sequence,slot FROM runtime_completion_slots "
             "WHERE run_id=? AND episode_id=? AND (original_decision_index=? OR sequence=?)",
             (self.journal.run_id, episode_id, index, unit.unit_index)).fetchall()
@@ -385,8 +380,6 @@ class CompletionEvidence:
         return slot
 
     def _observation(self, episode_id, index, unit, body, slot, tables):
-        if "runtime_observations" not in tables:
-            return
         rows = self.store.db.execute("SELECT unit_index,observation FROM runtime_observations "
             "WHERE run_id=? AND episode_id=? AND (json_extract(observation,'$.decision_index')=? "
             "OR unit_index=?)", (self.journal.run_id, episode_id, index, unit.unit_index)).fetchall()

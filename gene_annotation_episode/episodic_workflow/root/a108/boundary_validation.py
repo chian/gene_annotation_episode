@@ -1,9 +1,4 @@
-"""Strict JSON parsing copied from episodic_workflow's model boundary.
-
-Source: task_executors/evidence_extraction/argo.py, parse_json_object and
-ModelOutputError. The exception inherits ValueError here instead of the source
-repository's HTTP-provider exception. No runtime dependency on that checkout.
-"""
+"""Strict JSON parsing at the model boundary; the exception inherits ValueError."""
 
 import json
 import math

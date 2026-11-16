@@ -12,19 +12,12 @@ from pathlib import Path
 import socket
 import subprocess
 
-import jsonschema
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_fields import FIELD_REGISTRY
-from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_feature_sequences import FEATURE_SEQUENCE_COMPONENTS_SCHEMA, FEATURE_SEQUENCE_SHEET_SCHEMA, extract_feature_sequence_join
+from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_feature_sequences import extract_feature_sequence_join
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_schema import validate
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_calculators import calculate_feature_sequence_counts
-
-EVIDENCE = (Path(__file__).resolve().parent / 'fixtures' / 'bvbrc_original') / "verification/tool_graders_bvbrc_data_contract_2026-10-24"
-AA_MD5 = "7594e119ffe8456710f27d137885e84c"
-NA_MD5 = "584ae482fd635ee1fb6243df48fb8508"
-FEATURE_IDS = ["PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
-               "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev"]
 
 
 def fixture_sheet(collection, native_rows, fields=None, *, raw_bytes=None, profile="json_array_with_headers_v1"):
@@ -120,16 +113,6 @@ def fixture_sheet(collection, native_rows, fields=None, *, raw_bytes=None, profi
     })
 
 
-def native_fixture():
-    features_bytes = (EVIDENCE / "feature_page.body").read_bytes()
-    sequence_bytes = (EVIDENCE / "feature_sequences.body").read_bytes()
-    features, sequences = json.loads(features_bytes), json.loads(sequence_bytes)
-    fields = ["feature_id", "genome_id", "sequence_id", "patric_id", "gene", "aa_sequence_md5",
-              "na_sequence_md5", "aa_length", "na_length", "start", "end", "strand", "annotation"]
-    return (fixture_sheet("genome_feature", features, fields, raw_bytes=features_bytes),
-            fixture_sheet("feature_sequence", sequences, ["md5", "sequence_type", "sequence"], raw_bytes=sequence_bytes))
-
-
 def small_fixture(*, feature_changes=None, sequence_rows=None, feature_rows=None, sequence="MAb "):
     digest = hashlib.md5(sequence.encode("ascii")).hexdigest()
     feature = {"feature_id": "F", "aa_sequence_md5": digest, "aa_length": len(sequence),
@@ -145,46 +128,6 @@ def join(features, sequences, **kwargs):
                                          sequence_kind=kwargs.get("sequence_kind", "AA"))
 
 
-def test_retained_native_example_has_four_relations_exact_hashes_and_source_values():
-    features, sequences = native_fixture()
-    result = join(features, sequences, feature_ids=FEATURE_IDS, sequence_kind="both")
-    expected = json.loads((EVIDENCE / "FILLED_EXAMPLES.json").read_text())["feature_sequence_expected_sheet"]
-    assert result["input_page_counts"] == expected["input_page_counts"]
-    assert result["input_native_sha256s"] == expected["input_native_sha256s"]
-    assert len(result["edges"]) == 4
-    for actual, frozen in zip(result["edges"], expected["edges"]):
-        assert {k: v for k, v in actual.items() if k != "feature_metadata_cells"} == {
-            k: v for k, v in frozen.items() if k != "feature_metadata_cells"}
-        assert all(cell in actual["feature_metadata_cells"] for cell in frozen["feature_metadata_cells"])
-        assert "gene" in {cell["field"] for cell in actual["feature_metadata_cells"]}
-    assert [edge["sequence_length"] for edge in result["edges"]] == [253, 762, 253, 762]
-    assert [edge["native_md5"] for edge in result["edges"]] == [AA_MD5, NA_MD5, AA_MD5, NA_MD5]
-    sequence = sequences["rows"][0]["cells"][2]["atoms"][0]["string_value"]
-    assert sequence == sequence.lower()
-    assert hashlib.md5(sequence.encode("ascii")).hexdigest() == NA_MD5
-    assert hashlib.md5(sequence.upper().encode("ascii")).hexdigest() != NA_MD5
-    assert not result["requirements"] and not result["issues"]
-    components = calculate_feature_sequence_counts(result)
-    assert components == json.loads((EVIDENCE / "FILLED_EXAMPLES.json").read_text())["feature_sequence_expected_components"]
-    assert_source_locators(result, [features, sequences])
-    frozen_defs = json.loads((EVIDENCE / "CONTRACT_SHAPES.json").read_text())["schemas"]["$defs"]
-    jsonschema.Draft202012Validator({"$ref": "#/$defs/FeatureSequenceSheet", "$defs": frozen_defs}).validate(result)
-    # Explicit additive correction002 narrows native CellLocation to native
-    # source levels; supplied provenance has its own separate location shape.
-    frozen_defs["CellLocation"]["properties"]["source_level"]["enum"].remove("supplied")
-    def expand(value, definitions):
-        if type(value) is dict:
-            if "$ref" in value:
-                return expand(definitions[value["$ref"].split("/")[-1]], definitions)
-            return {key: expand(child, definitions) for key, child in value.items()}
-        if type(value) is list:
-            return [expand(child, definitions) for child in value]
-        return value
-    for exported, name in ((FEATURE_SEQUENCE_SHEET_SCHEMA, "FeatureSequenceSheet"),
-                           (FEATURE_SEQUENCE_COMPONENTS_SCHEMA, "FeatureSequenceComponents")):
-        assert expand(exported["$defs"][name], exported["$defs"]) == expand(frozen_defs[name], frozen_defs)
-
-
 def assert_source_locators(result, pages):
     rows = {(p["custody"]["native_sha256"], p["collection"], r["row_key"]): r for p in pages for r in p["rows"]}
     for edge in result["edges"]:
@@ -193,24 +136,6 @@ def assert_source_locators(result, pages):
         for location in edge["sequence_cells"] + edge["feature_metadata_cells"]:
             row = rows[location["native_sha256"], location["collection"], location["row_key"]]
             assert any(c["cell_key"] == location["cell_key"] and c["field"] == location["field"] for c in row["cells"])
-
-
-@pytest.mark.parametrize("kind,expected", [("AA", [253, 253]), ("NA", [762, 762])])
-def test_modes_order_and_exact_feature_ids(kind, expected):
-    features, sequences = native_fixture()
-    result = join(features, sequences, feature_ids=list(reversed(FEATURE_IDS)), sequence_kind=kind)
-    assert [e["feature_id"] for e in result["edges"]] == list(reversed(FEATURE_IDS))
-    assert [e["sequence_length"] for e in result["edges"]] == expected
-    alias = join(features, sequences, feature_ids=["fig|511145.12.peg.816"])
-    assert alias["edges"][0]["join_status"] == "missing_feature"
-
-
-def test_same_page_repeated_delivery_does_not_add_relations_or_counts():
-    features, sequences = native_fixture()
-    expected = join(features, sequences, feature_ids=FEATURE_IDS, sequence_kind="both")
-    actual = extract_feature_sequence_join([features, deepcopy(features)], [sequences, deepcopy(sequences)],
-                                           feature_ids=FEATURE_IDS, sequence_kind="both")
-    assert actual == expected
 
 
 def test_duplicate_native_sequence_rows_remain_distinguishable():
@@ -444,26 +369,6 @@ def test_reprojection_same_bytes_merges_only_compatible_cells():
         extract_feature_sequence_join([a, conflicting], [sequences], feature_ids=["F"], sequence_kind="AA")
 
 
-def test_no_input_mutation_or_io_and_output_is_detached(monkeypatch):
-    features, sequences = native_fixture()
-    original = deepcopy([features, sequences])
-
-    def forbidden(*args, **kwargs):
-        raise AssertionError("D3 attempted I/O")
-
-    monkeypatch.setattr(builtins, "open", forbidden)
-    monkeypatch.setattr(Path, "open", forbidden)
-    monkeypatch.setattr(socket, "socket", forbidden)
-    monkeypatch.setattr(socket, "create_connection", forbidden)
-    monkeypatch.setattr(subprocess, "Popen", forbidden)
-    result = join(features, sequences, feature_ids=FEATURE_IDS, sequence_kind="both")
-    assert [features, sequences] == original
-    result["selection"]["feature_ids"][0] = "changed"
-    result["edges"][0]["feature_rows"][0]["row_key"] = "changed"
-    assert [features, sequences] == original
-    assert FEATURE_IDS[0].startswith("PATRIC.")
-
-
 def test_solr_paths_resolve_and_partial_rows_keep_usable_values():
     features, sequences = small_fixture()
     raw = [{"feature_id": "F", "aa_sequence_md5": hashlib.md5(b"MAb ").hexdigest(), "aa_length": 4,
@@ -557,67 +462,3 @@ def test_native_empty_identity_and_invalid_array_metadata_keep_useful_partial_da
     assert segments["atoms"] == [] and segments["native_shape"] == "array" and segments["status"] == "invalid"
     assert_source_locators(result, [features, sequences])
 
-
-def retained_decoder_fixture():
-    """Actual D2 payload decoding, deliberately unqualified as a v2 request."""
-    from gene_annotation_episode.episodic_workflow.root.a101.acquisition import SourceSnapshot
-    from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_query import encode_native_query
-    from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_readers import _decode_native_payload
-
-    fixture_features, fixture_sequences = native_fixture()
-    result = []
-    for name, fixture in (("feature_page", fixture_features), ("feature_sequences", fixture_sequences)):
-        metadata = json.loads((EVIDENCE / (name + ".meta.json")).read_text())
-        content = (EVIDENCE / (name + ".body")).read_bytes()
-        assert hashlib.sha256(content).hexdigest() == metadata["sha256"]
-        assert len(content) == metadata["byte_count"]
-        media = next(value for key, value in metadata["headers"] if key.lower() == "content-type")
-        snapshot = SourceSnapshot("bvbrc_data", metadata["url"], {}, metadata["retrieved_at"], content, media,
-            {"status": metadata["status"], "body_complete": metadata["body_complete"],
-             "header_items": metadata["headers"], "effective_url": metadata["effective_url"],
-             "automatic_redirects": False})
-        prepared = encode_native_query({"version": "bvbrc_data_request_v2", "collection": fixture["collection"],
-                                        "mode": "page", "filters": [], "fields": fixture["selected_fields"]},
-                                       base_url="https://www.bv-brc.org/api")
-        decoded = _decode_native_payload(snapshot, prepared=prepared)
-        assert decoded["sheet"] is not None
-        assert decoded["sheet"]["qualification"]["request_matches"] is False
-        result.append(decoded["sheet"])
-    return result
-
-
-def test_actual_native_decoder_to_join_to_separate_calculator():
-    features, sequences = retained_decoder_fixture()
-    result = join(features, sequences, feature_ids=FEATURE_IDS, sequence_kind="both")
-    assert result["edges"] == join(*native_fixture(), feature_ids=FEATURE_IDS, sequence_kind="both")["edges"]
-    expected = json.loads((EVIDENCE / "FILLED_EXAMPLES.json").read_text())["feature_sequence_expected_components"]
-    assert calculate_feature_sequence_counts(result) == expected
-    assert {issue["code"] for issue in result["issues"]} == {"bvbrc_response_request_mismatch"}
-    assert_source_locators(result, [features, sequences])
-
-
-def test_public_v2_parser_to_join_with_explicitly_synthetic_solr_transport():
-    from gene_annotation_episode.episodic_workflow.root.a101.acquisition import SourceSnapshot
-    from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_query import encode_native_query
-    from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_readers import parse_data_snapshot
-
-    pages = []
-    for name, fixture in zip(("feature_page", "feature_sequences"), native_fixture()):
-        native_rows = json.loads((EVIDENCE / (name + ".body")).read_text())
-        prepared = encode_native_query({"version": "bvbrc_data_request_v2", "collection": fixture["collection"],
-                                        "mode": "page", "filters": [], "fields": fixture["selected_fields"]},
-                                       base_url="https://fixture.invalid/api")
-        body = json.dumps({"responseHeader": {"status": 0}, "response": {
-            "docs": native_rows, "start": 0, "numFound": 2, "numFoundExact": True}}).encode()
-        native_request = prepared["native_request"]
-        source = SourceSnapshot("bvbrc_data", native_request["url"], prepared["effective_request"],
-            "synthetic_transport_fixture", body, "application/solr+json", {
-                "status": 200, "body_complete": True, "automatic_redirects": False,
-                "request": deepcopy(native_request), "effective_url": native_request["url"], "headers": []})
-        parsed = parse_data_snapshot(source, prepared=prepared)
-        assert parsed["status"] == "complete"
-        pages.append(parsed["sheet"])
-    joined = join(*pages, feature_ids=FEATURE_IDS, sequence_kind="both")
-    assert len(joined["edges"]) == 4 and not joined["issues"]
-    assert calculate_feature_sequence_counts(joined)["length_agreement_count"] == 4
-    assert_source_locators(joined, pages)

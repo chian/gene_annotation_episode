@@ -15,9 +15,7 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.boundary_validation import ModelOutputError, parse_json_object
-from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError, REASONING_SCHEMA, validate_schema
-from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.episodic_workflow.root.task_action_contracts import _action_generation_schema, _decode_action_response
 from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
@@ -131,71 +129,6 @@ def optional_transport_nulls(value):
                 visit(child)
     visit(value)
     return value
-
-
-def test_source_quantities_keep_values_units_uncertainty_operands_and_context_through_existing_consumers(tmp_path):
-    store, data = prepared(tmp_path)
-    with store:
-        # This is the actual optional transport normalizer, not a second quantity parser.
-        transported = optional_transport_nulls(data)
-        decoded = _decode_action_response(transported, store.reasoning_schema())
-        assert decoded == data
-        result = store.commit_reasoning(decoded, store.validate_scope(None), "source-quantity-fixture")
-        assert result["status"] == "completed", result
-        refs = result["aliases"]
-        glycine = store.get(refs["glycine_level"])
-        serine = store.get(refs["serine_level"])
-        assert metric(glycine, "concentration") == {"type": "number", "value": 42.4,
-            "unit_ref": refs["nM"], "uncertainty": {"representation": "plus_minus", "magnitude": 1.2, "statistic": "unspecified"}}
-        assert metric(serine, "concentration")["value"] == 18.5
-        assert metric(serine, "concentration")["uncertainty"]["magnitude"] == 2.4
-        assert glycine["subject_refs"] == [refs["glycine"]]
-        assert serine["subject_refs"] == [refs["serine"]]
-        assert glycine["source_subject_refs"] == [refs["glycine"], refs["medium"]]
-        assert metric(glycine, "sample_ref")["ref"] == refs["medium"]
-        assert glycine["dependencies"] == [refs["prepared_medium"]]
-        for alias, construct, value in (("glcB_Kd", "glcB_RNA", 25), ("gcvT_Kd", "gcvT_RNA", 350)):
-            observation = store.get(refs[alias])
-            assert observation["subject_refs"] == [refs[construct]]
-            assert store.get(refs[construct])["reference_type"] == "construct"
-            assert metric(observation, "dissociation_constant") == {"type": "number", "value": value, "unit_ref": refs["uM"]}
-            assert metric(observation, "relation_ref")["roles"] == [
-                {"role": "source", "ref": refs[construct]}, {"role": "partner", "ref": refs["glycine"]}]
-            assert metric(observation, "condition_ref")["ref"] == refs["probing"]
-            assert observation["dependencies"] == [refs["probing"]]
-        probing = store.get(refs["probing"])
-        assert probing["attributes"] == [
-            {"name": "concentration", "value": {"type": "number", "value": 2, "unit_ref": refs["nM"], "qualifier": "approximate"}},
-            {"name": "time", "value": {"type": "number", "value": 40, "unit_ref": refs["hours"], "qualifier": "approximate"}}]
-        # No absent qualifier/uncertainty default is materialized for a reported addition.
-        assert store.get(refs["glucose_addition"])["attributes"] == [
-            {"name": "concentration", "value": {"type": "number", "value": 10, "unit_ref": refs["uM"]}}]
-        assert store.commit_reasoning(decoded, store.validate_scope(None), "source-quantity-fixture") == result
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        ids = [refs[key] for key in ("glycine_level", "serine_level", "glcB_Kd", "gcvT_Kd")]
-        queried = tools.execute("state.query", {"refs": ids})
-        assert queried["status"] == "completed"
-        assert queried["result"]["records"] == [store.get(ref) for ref in ids]
-        view = store.reasoning_view()
-        assert {row["id"]: row for row in view["observations"]} == {ref: store.get(ref) for ref in ids}
-        output = export_annotation(store, tmp_path / "annotation.json", include_artifacts=True)
-        exported = json.loads(Path(output["json"]["path"]).read_text())
-        records = {row["id"]: row for row in exported["records"]}
-        # Existing export selects scientific inventory and its dependency closure,
-        # not every unattached source context. Do not manufacture an observation
-        # merely to pull the independent glucose recipe into that closure.
-        for alias, reference in refs.items():
-            if alias in {"glucose", "glucose_addition"}:
-                continue
-            assert records[reference] == store.get(reference)
-        addition_query = tools.execute("state.query", {"refs": [refs["glucose_addition"]]})
-        assert addition_query["result"]["records"] == [store.get(refs["glucose_addition"])]
-        # Literal anchors still select the unchanged full article bytes.
-        for reference in ids:
-            anchor = records[reference]["anchor"]
-            raw = store.get_artifact(anchor["artifact_ref"])
-            assert raw[anchor["start"]:anchor["end"]] == anchor["quote"].encode()
-        assert project_credit(store).credit == 0  # no annotation/assessment was manufactured
 
 
 def test_scripted_runtime_preserves_numeric_transport_into_child_form_and_parent_query(tmp_path):

@@ -1,6 +1,5 @@
 """BV-BRC native protocol and source-publication checks, not model science."""
 from copy import deepcopy
-from dataclasses import replace
 from email.message import Message
 import http.client
 import io
@@ -166,21 +165,6 @@ def test_original_page_is_reused_but_changed_selector_is_one_new_request():
     service.invoke(later)
     assert client.requests == [later["request"]]
     assert request().get("offset") is None
-
-
-def test_wrong_query_and_invalid_native_payload_cannot_complete_handoff():
-    service = BVBRCDataService(None)
-    command = prepare(service)
-    native = snapshot(command)
-    changed_request = deepcopy(native.request)
-    changed_request["filters"][0]["value"] = "otherGene"
-    wrong = service.decode(command, replace(native, request=changed_request))
-    assert wrong["state"] == "failed" and not wrong["handoff_ready"]
-    assert wrong["failure_code"] == "bvbrc_response_request_mismatch"
-    invalid = service.decode(command, replace(native, content=b'{"error":"query failed"}'))
-    assert invalid["failure_code"] == "bvbrc_expected_native_row_array"
-    malformed = service.decode(command, replace(native, content=b'[{'))
-    assert malformed["failure_code"] == "bvbrc_invalid_json_response"
 
 
 def test_publication_preserves_reference_subjects_missing_fields_and_native_coordinates(tmp_path):

@@ -1,4 +1,4 @@
-"""Original substantive ordinary-tool methods: tool_documents."""
+"""Ordinary-tool methods: tool_documents."""
 from __future__ import annotations
 import asyncio
 from dataclasses import replace

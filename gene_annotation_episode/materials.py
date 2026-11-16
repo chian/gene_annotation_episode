@@ -639,7 +639,7 @@ def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspe
         try:
             manifest = json.loads(store.get_artifact(manifest_ref))
             if (not isinstance(manifest, dict) or set(manifest) != {"schema_version", "entries"}
-                    or manifest["schema_version"] not in {1, 2} or not isinstance(manifest["entries"], list)):
+                    or manifest["schema_version"] != 2 or not isinstance(manifest["entries"], list)):
                 raise ValueError()
             entries = manifest["entries"]
         except (ValueError, UnicodeError):

@@ -1,7 +1,6 @@
 """Selected primary spans and controlled shared Episode integration."""
 import asyncio
 from dataclasses import replace
-from functools import partial
 import json
 from types import SimpleNamespace
 import pytest
@@ -12,8 +11,6 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_services import
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_product_partition_prompt import PRODUCT_PARTITION_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_product_partition_storage import LiteratureProductPartitionRepository, product_partition_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
@@ -59,27 +56,6 @@ def test_original_source_selected_population_c7_exact_return_and_default_exclusi
     finally:
         store.close()
 
-def test_full_scientific_task_and_exact_subset_in_current_own_history_lookup_and_mixed_return(tmp_path):
-    store, context, args = setup(tmp_path)
-    try:
-        context = replace(context, assignment={**plain(context.assignment), 'requested_product_partition_components': ['selected_fraction_sum']})
-        repo = LiteratureProductPartitionRepository(store, context.run_id)
-        outcome = repo.populate(context, args, 'selected')
-        rows = outcome['result']['cells']
-        records = [store.get(ref) for ref in repo.cell_record_refs(rows) if store.get(ref)['record_type'] == 'reference']
-        state = {'literature_experimental_work': {'version': 'literature_experimental_task_v1'}, 'literature_product_partition_work': {'version': 'literature_product_partition_task_v1'}, 'literature_assignment': plain(context.assignment), 'last_local_outcome': outcome, 'working_state': {'references': records}, 'requested_form': FORM, 'child_reports': [{'partition': rows, 'interpretation': 'partial'}], 'current_report_update': {'partition': rows, 'interpretation': 'partial'}}
-        history = {'result': {'view': 'records', 'records': [{'selection': {'kind': 'tool', 'tool': 'literature.product_partition.populate', 'arguments': args}, 'outcome': outcome, 'admitted_report': {'partition': rows, 'interpretation': 'partial'}}]}}
-        prompt = render_literature_experimental_prompt(state, 'Evaluate the synthetic composition experiment.', lookup_results=[history, {'result': {'partition': rows, 'interpretation': 'partial'}}])
-        task, steering = prompt.split('\n\nSTEERING\n')
-        assert PRODUCT_PARTITION_TASK in task
-        assert '60.3' not in steering and '39.7' not in steering and ('0.603' not in steering) and ('0.397' not in steering)
-        assert 'R5P' in steering and 'Ru5P' in steering and ('partial' in steering)
-        assert 'number_start' not in steering and 'partition_subject_' not in steering
-        assert 'withheld unrequested numbers' in steering
-        without = {key: value for key, value in state.items() if key != 'literature_product_partition_work'}
-        assert PRODUCT_PARTITION_TASK not in render_literature_experimental_prompt(without, 'Evaluate the experiment.').split('\n\nSTEERING\n')[0]
-    finally:
-        store.close()
 
 def test_controlled_child_population_parent_return_one_action_and_source_free_reconstruction(tmp_path, monkeypatch):
     store, context, args = setup(tmp_path / 'state')

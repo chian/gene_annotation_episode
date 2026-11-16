@@ -7,6 +7,7 @@ associations, never observe files, grant source authority or execute work.
 """
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 from datetime import datetime
 from functools import lru_cache
@@ -26,7 +27,7 @@ ATTEMPT_DIRECTORY_NAME = "genomic-overlap-attempt"
 BATCH_FILENAME = "bundle.json"
 OWNER_FILENAME = ".native-genomic-overlap-owner.json"
 STARTED_FILENAME = ".native-genomic-overlap-started.json"
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 DRIVER_MODULE = "gene_annotation_episode.episodic_workflow.root.a103.native_genomic_overlap_driver"
 _REQUIRED_MODULES = {DRIVER_MODULE, "gene_annotation_episode.episodic_workflow.root.a103.native_genomic_overlap_contracts",
                      "gene_annotation_episode.episodic_workflow.root.a103.genomic_overlap_contracts",
@@ -35,7 +36,7 @@ _REQUIRED_MODULES = {DRIVER_MODULE, "gene_annotation_episode.episodic_workflow.r
 # Fixed data schemas, not an executable scoring language. G1 references below
 # resolve to the unchanged, in-code G1 definitions in _definitions().
 _EXECUTION_DEFINITIONS = {'Policy': {'type': 'object',
-            'properties': {'memory_bytes': {'const': 21474836480}, 'scratch_bytes': {'const': 4294967296}},
+            'properties': {'memory_bytes': {'const': ENVIRONMENT_BOUNDS['memory_bytes']}, 'scratch_bytes': {'const': 4294967296}},
             'required': ['memory_bytes', 'scratch_bytes'],
             'additionalProperties': False},
  'ImplementationFile': {'type': 'object',

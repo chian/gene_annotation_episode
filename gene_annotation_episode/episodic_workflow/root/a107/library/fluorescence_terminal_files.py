@@ -1,7 +1,4 @@
-"""A107 original fluorescence terminal files; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 fluorescence terminal files."""
 from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a107.fluorescence_execution_common import require
 from gene_annotation_episode.episodic_workflow.root.a107.native_fluorescence_contracts import validate_fluorescence_run_plan

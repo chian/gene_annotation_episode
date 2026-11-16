@@ -41,9 +41,9 @@ class LegacyAnnotationInstructions:
                 'No event probability, gain or scientific credit follows from registration or '
                 'passing time alone.')
         if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
-            old_history_guidance = INSTRUCTIONS[INSTRUCTIONS.index('On a fresh provider conversation,'):
+            history_guidance = INSTRUCTIONS[INSTRUCTIONS.index('On a fresh provider conversation,'):
                 INSTRUCTIONS.index('Do not execute native provider tools.')]
-            instructions = instructions.replace(old_history_guidance,
+            instructions = instructions.replace(history_guidance,
                 'Use request_context exchanges for your own attempt metadata and selected inputs; '
                 'these create no completed action or observation. Read exact previously received '
                 'outcomes with the ordinary episode.history tool, view=records and selected '

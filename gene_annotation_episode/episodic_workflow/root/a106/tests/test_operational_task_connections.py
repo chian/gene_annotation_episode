@@ -33,8 +33,8 @@ def test_original_operational_action_status_credit_and_saved_replay(home, status
     task = object.__new__(Task)
     task.episode_id, task.path, task.scope = 'operational-test', ((Binding.roles[0], 'child'),), {}
     task.checkpoint = lambda: None
-    task.workflow = SimpleNamespace(run_id='run', execution_binding=None, wait_inputs_version=None,
-        completed_action_inputs_version=None,
+    task.workflow = SimpleNamespace(run_id='run', execution_binding=None, pending_work=lambda source: [],
+        
         journal=SimpleNamespace(row=lambda table, episode, index: saved.get(index),
             save=lambda table, row: saved.__setitem__(row['decision_index'], row), measure=lambda *args: nullcontext()),
         execute=execute, receive_native_outcome=lambda *args: None,

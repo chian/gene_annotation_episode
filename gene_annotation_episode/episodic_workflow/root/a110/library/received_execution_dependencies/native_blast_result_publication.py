@@ -11,7 +11,6 @@ from gene_annotation_episode.episodic_workflow.root.a110.library.received_execut
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.native_hmmer_result_publication import _subject_chunks
 _PREPARED_VERSION = 'native_blast_prepared_grading_v2'
 _SCHEMA_VERSION = 'native_blast_retained_grading_v2'
-_VERSIONS = {'native_blast_prepared_grading_v1': 'native_blast_retained_grading_v1', _PREPARED_VERSION: _SCHEMA_VERSION}
 _ARTIFACT_FIELDS = ('bundle_artifact_ref', 'source_grading_artifact_ref', 'grading_artifact_ref', 'sheet_artifact_ref', 'scores_artifact_ref', 'selected_rows_artifact_ref')
 
 def _failure(stage, code, record_key=None):
@@ -69,7 +68,7 @@ def _binding_snapshots(store, bundle):
     return snapshots
 
 def _qualified_grading(store, source_ref, bundle, prepared, selector):
-    if type(prepared) is not dict or set(prepared) != {'version', *_ARTIFACT_FIELDS, 'failures', 'numerical_complete'} or prepared['version'] not in _VERSIONS:
+    if type(prepared) is not dict or set(prepared) != {'version', *_ARTIFACT_FIELDS, 'failures', 'numerical_complete'} or prepared['version'] != _PREPARED_VERSION:
         raise ContractError('native_blast_prepared_grading_required')
     source = store.get(source_ref)
     if source.get('record_type') != 'source' or source.get('provider') != 'episode.execution_result' or source.get('origin') != 'tool' or (source.get('version') != 'native_blast_bundle_v1') or (source.get('artifact_ref') != prepared['bundle_artifact_ref']) or (prepared['source_grading_artifact_ref'] not in source.get('auxiliary_artifact_refs', [])) or (source.get('accession') != 'native_blast_' + native_blast_digest(bundle['identity'])) or (source.get('retrieved_at') != bundle['finished_at']):
@@ -82,13 +81,13 @@ def _qualified_grading(store, source_ref, bundle, prepared, selector):
         if set(envelope) != {'schema', 'provider', 'native_artifact_ref', 'grading'} or envelope['schema'] != 'tool_grading_artifact_v1' or envelope['provider'] != source['provider'] or (envelope['native_artifact_ref'] != source['artifact_ref']):
             raise ContractError('native_blast_grading_source_custody_mismatch')
     grading, stable = (selected['grading'], original['grading'])
-    expected_schema = _VERSIONS[prepared['version']]
+    expected_schema = _SCHEMA_VERSION
     if grading.get('schema') != expected_schema or stable.get('schema') != expected_schema or grading.get('bundle_sha256') != native_blast_digest(bundle) or (grading.get('selector') != selector) or (grading.get('failures') != prepared['failures']) or (grading.get('numerical_complete') != prepared['numerical_complete']) or any((grading.get(field) != prepared[field] for field in _ARTIFACT_FIELDS if field not in {'bundle_artifact_ref', 'grading_artifact_ref'})) or any((grading.get(field) != value for field, value in stable.items())):
         raise ContractError('native_blast_prepared_grading_identity_mismatch')
     for field in ('sheet_artifact_ref', 'scores_artifact_ref', 'complete_rows_artifact_ref'):
         if stable.get(field) is not None:
             artifact_path(store, stable[field])
-    if prepared['version'] == _PREPARED_VERSION and stable.get('sheet_artifact_ref') is not None and (stable.get('scores_artifact_ref') is not None):
+    if stable.get('sheet_artifact_ref') is not None and (stable.get('scores_artifact_ref') is not None):
         try:
             validate_native_blast_correspondence_collections(_read_json(store, stable['sheet_artifact_ref']), _read_json(store, stable['scores_artifact_ref']))
         except (ValueError, KeyError, TypeError, IndexError) as error:

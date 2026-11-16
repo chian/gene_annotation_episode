@@ -4,7 +4,7 @@ from .source_contracts import ContractError, Mapping, _ACCESS_TOOLS, _ACQUISITIO
 
 class SourceSourceOperations:
 
-    def catalog(self, context, *, _accept_legacy_quotes=False):
+    def catalog(self, context):
         self._role(context.role)
         available = self.services.tool_catalog(context.scope)
         entries = [{'name': name, **entry} for name, entry in available.items()] if isinstance(available, Mapping) else list(available)
@@ -28,7 +28,7 @@ class SourceSourceOperations:
                 from gene_annotation_episode.episodic_workflow.root.a102.composition_information import CONTRACT_ARGUMENT_TRANSPORT
                 populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
             result.extend(populations)
-        return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'], allow_legacy_quote=_accept_legacy_quotes)} for entry in result]
+        return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'])} for entry in result]
 
     async def execute(self, context, tool_name, arguments, operation_key):
         try:
@@ -50,7 +50,7 @@ class SourceSourceOperations:
 
     def _tool_arguments(self, context, tool_name, arguments):
         assignment = self._validate_assignment(context.role, context.assignment, context.scope, context=context)
-        entries = {entry['name']: entry for entry in self.catalog(context, _accept_legacy_quotes=True)}
+        entries = {entry['name']: entry for entry in self.catalog(context)}
         if tool_name not in entries:
             raise ContractError('tool_not_available_to_literature_role')
         arguments = plain(arguments)

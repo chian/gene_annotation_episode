@@ -14,7 +14,7 @@ import re
 
 from . import blast_sequence_database as _sequence
 from . import blast_pssm_calculators as _pssm
-from .blast_pairwise_grader import alignment_components, alignment_component_artifacts, validate_blast_correspondence_instance
+from .blast_pairwise_grader import alignment_component_artifacts, validate_blast_correspondence_instance
 from .alignment_correspondence import ARTIFACT_SCHEMA, validate_correspondence_artifacts, _same
 from .blast_program_context import resolve_blast_program_context
 from .blast_fasta_record_identity import blast_record_identity
@@ -24,8 +24,7 @@ from . import native_blast_standard_database_result_views as views
 from .native_blast_standard_database_contracts import IDENTITY_SCHEMA
 
 
-CALCULATION_SCHEMA = views.PREFIX + "calculations_v1"
-CALCULATION_SCHEMA_V2 = views.PREFIX + "calculations_v2"
+CALCULATION_SCHEMA = views.PREFIX + "calculations_v2"
 _SHEET_FIELDS = {"schema", "collection", "prepared_inputs", "search_bindings", "sequence", "pssm",
                  "metadata_parse_results", "metadata_binding_results", "issues"}
 _CALC_FIELDS = {"schema", "sequence_model", "sequence", "pssm", "search_facts", "native_search_statistics",
@@ -248,30 +247,24 @@ def _qualified_rows(sheet_set, calculations):
     return result
 
 
-def _calculate(sheet_set, *, sequence_model, diagnostics=None, _retain_correspondence=False):
-    if type(_retain_correspondence) is not bool:
-        raise ValueError(views.PREFIX + "private_retention_flag_invalid")
+def _calculate(sheet_set, *, sequence_model, diagnostics=None):
     sheets = _sheet_set(sheet_set)
     model = validate_sequence_model(sequence_model)
     collection, program = sheets["collection"], sheets["collection"]["invocation"]["execution_program"]
     statuses = _source_statuses(sheets)
     if any(row["status"] != "available" for row in statuses):
         raise ValueError(views.PREFIX + "saved_search_source_identity_invalid")
-    out = dict(schema=CALCULATION_SCHEMA_V2 if _retain_correspondence else CALCULATION_SCHEMA, sequence_model=model, sequence=[], pssm=[], search_facts=[],
+    out = dict(schema=CALCULATION_SCHEMA, sequence_model=model, sequence=[], pssm=[], search_facts=[],
         native_search_statistics=[], native_hsp_components=[], qualified_hsp_components=[], issues=[])
-    if _retain_correspondence:
-        out["correspondence"] = {"version": ARTIFACT_SCHEMA, "instances": []}
+    out["correspondence"] = {"version": ARTIFACT_SCHEMA, "instances": []}
     for index, row in enumerate(sheets["sequence"]):
         try:
-            arguments = {"model": model}
-            if _retain_correspondence:
-                arguments["_retain_correspondence"] = True
-            result = _sequence.calculate_blast_sequence_database_components(row["sheet"], **arguments)
-            if _retain_correspondence:
-                companion = result.pop("correspondence")
-                for instance in companion["instances"]:
-                    instance["legacy_pointer"] = f"/sequence/{index}/components" + instance["legacy_pointer"]
-                    out["correspondence"]["instances"].append(instance)
+            result = _sequence.calculate_blast_sequence_database_components(row["sheet"], model=model,
+                _retain_correspondence=True)
+            companion = result.pop("correspondence")
+            for instance in companion["instances"]:
+                instance["legacy_pointer"] = f"/sequence/{index}/components" + instance["legacy_pointer"]
+                out["correspondence"]["instances"].append(instance)
         except (ValueError, TypeError, KeyError, IndexError, ArithmeticError) as error:
             result = None
             out["issues"].append(_failure(key=row["search_key"], pointer=f"/sequence/{index}"))
@@ -309,31 +302,26 @@ def _calculate(sheet_set, *, sequence_model, diagnostics=None, _retain_correspon
         except ValueError:
             geometry = None
         if state != "available": native, geometry = None, None
-        calculator = alignment_component_artifacts if _retain_correspondence else alignment_components
-        component = calculator(native, program=geometry,
+        component, common_sheet, common_components = alignment_component_artifacts(native, program=geometry,
             query_length=search["normalized"]["query"]["length"],
             reference_length=length, coordinate_convention="blast_json2" if search["normalized"]["format"] == "json2" else "directional")
-        if _retain_correspondence:
-            component, common_sheet, common_components = component
-            out["correspondence"]["instances"].append({"legacy_pointer": f"/native_hsp_components/{len(out['native_hsp_components'])}/component",
-                "axis_basis": "reported", "sheet": common_sheet, "components": common_components})
+        out["correspondence"]["instances"].append({"legacy_pointer": f"/native_hsp_components/{len(out['native_hsp_components'])}/component",
+            "axis_basis": "reported", "sheet": common_sheet, "components": common_components})
         out["native_hsp_components"].append(dict(row_key=key, component=component,
             status="unavailable" if native is None and state != "incompatible" else "incompatible" if geometry is None else "available"))
     out["qualified_hsp_components"] = _qualified_rows(sheets, out)
-    if _retain_correspondence:
-        validate_standard_blast_correspondence(out, admission=True)
+    validate_standard_blast_correspondence(out, admission=True)
     return views._copy(out)
 
 
-def calculate_standard_blast_database_sheets(sheet_set: dict, *, sequence_model: dict | None,
-        _retain_correspondence=False) -> dict:
+def calculate_standard_blast_database_sheets(sheet_set: dict, *, sequence_model: dict | None) -> dict:
     """Retain complete direct scientific returns; failed searches have null components."""
-    return _calculate(sheet_set, sequence_model=sequence_model, _retain_correspondence=_retain_correspondence)
+    return _calculate(sheet_set, sequence_model=sequence_model)
 
 
 def validate_standard_blast_correspondence(calculations, *, admission=False):
-    """Compare the required v2 common companion to its unchanged legacy cells."""
-    if set(calculations) != _CALC_FIELDS | {"correspondence"} or calculations["schema"] != CALCULATION_SCHEMA_V2:
+    """Compare the required common companion to the cells it points at."""
+    if set(calculations) != _CALC_FIELDS | {"correspondence"} or calculations["schema"] != CALCULATION_SCHEMA:
         raise ValueError(views.PREFIX + "correspondence_calculations_invalid")
     companion = validate_correspondence_artifacts(calculations["correspondence"], admission=admission)
     expected = {(f"/native_hsp_components/{i}/component", "reported")
@@ -624,12 +612,9 @@ def build_standard_blast_database_rows(*, bundle_identity: dict, calculation_id:
     """Populate numerical rows by copying saved components; never run a calculator."""
     sheets, calculations, attempt = _sheet_set(sheet_set), views._copy(calculations), views._copy(bundle_identity)
     validate_schema(calculation_id, views.SHA); validate_schema(attempt, IDENTITY_SCHEMA)
-    version = calculations.get("schema")
-    if (version not in (CALCULATION_SCHEMA, CALCULATION_SCHEMA_V2)
-            or set(calculations) != (_CALC_FIELDS | {"correspondence"} if version == CALCULATION_SCHEMA_V2 else _CALC_FIELDS)):
+    if calculations.get("schema") != CALCULATION_SCHEMA or set(calculations) != _CALC_FIELDS | {"correspondence"}:
         raise ValueError(views.PREFIX + "calculations_invalid")
-    if version == CALCULATION_SCHEMA_V2:
-        validate_standard_blast_correspondence(calculations)
+    validate_standard_blast_correspondence(calculations)
     keys = [r["search_key"] for r in sheets["sequence"]]
     if any([r["search_key"] for r in calculations[name]] != keys for name in ("sequence", "search_facts", "native_search_statistics")):
         raise ValueError(views.PREFIX + "calculation_search_population_conflict")

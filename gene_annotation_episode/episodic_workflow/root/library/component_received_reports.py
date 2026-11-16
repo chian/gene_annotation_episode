@@ -11,11 +11,9 @@ from gene_annotation_episode.domain import ContractError, canonical, obj
 from ..episode_return_records import EpisodeReturnRecords
 
 
-VERSION = 'component_axis_report_v1'
 GRADING_REPORT_VERSION = 'component_axis_saved_grading_report_v2'
 SCORING_SHEET_VERSION = 'component_axis_scoring_sheet_v1'
 SCORING_FACT = 'component_axis_scoring_sheets'
-PATH_STATES = ('not_assessed', 'evidence_returned', 'partial', 'unavailable', 'inapplicable')
 PATHS = {
     'A107': ('requirement', 'presence', 'expression', 'coexpression', 'interaction'),
     'A110': ('reaction_identity', 'stoichiometry', 'electron_accounting',
@@ -51,23 +49,12 @@ def _refs(namespace=None):
     return {'type': 'array', 'items': item, 'uniqueItems': True}
 
 
-def legacy_report_schema(axis):
-    """Original closed contract for immutable historical path verdicts."""
+def report_schema(axis):
+    """Return exact saved numerical/qualification facts, without path verdicts."""
     if axis not in PATHS:
         raise ContractError('component_axis_not_supported')
-    path = obj({'status': {'type': 'string', 'enum': list(PATH_STATES)}, 'evidence_refs': _refs(),
-        'assessment_refs': _refs('assessment'),
-        'limitations': {**_refs(), 'description':
-            'Actual received records retaining applicable qualifications or missing reasons. '
-            'The scientific text remains in those saved records.'}})
     result = obj({'axis': {'type': 'string', 'const': axis},
-        'report_version': {'type': 'string', 'const': VERSION},
-        'paths': obj({name: deepcopy(path) for name in PATHS[axis]}),
-        'scope_status': {'type': 'string', 'enum': ['not_assessed', 'unresolved', 'partial', 'represented']},
-        'correspondence_refs': {**_refs(), 'description':
-            'Received correspondence evidence for particular subjects, partners, regions or '
-            'features. Listing a reference alone establishes no target transfer.'},
-        'information_need_refs': _refs(),
+        'report_version': {'type': 'string', 'const': GRADING_REPORT_VERSION},
         'records': {**_refs(), 'x-source': 'committed_record_refs'},
         **cell_views(axis),
         'controller_progress': {'type': 'number', 'x-source': 'credit', 'description':
@@ -92,16 +79,6 @@ def legacy_report_schema(axis):
     return result
 
 
-def report_schema(axis):
-    """Return exact saved numerical/qualification facts, without path verdicts."""
-    original = legacy_report_schema(axis)['properties']
-    schema = obj({name: deepcopy(node) for name, node in original.items()
-        if node.get('x-source') is not None or name in ('axis', 'report_version')})
-    schema['properties']['report_version']['const'] = GRADING_REPORT_VERSION
-    validate_closed_schema(schema)
-    return schema
-
-
 def initial_report(axis):
     return {'axis': axis, 'report_version': GRADING_REPORT_VERSION}
 
@@ -110,13 +87,12 @@ def report_axis(schema):
     properties = plain(schema).get('properties', {})
     axis = properties.get('axis', {}).get('const')
     version = properties.get('report_version', {}).get('const')
-    if axis not in PATHS or version not in {VERSION, GRADING_REPORT_VERSION}:
+    if axis not in PATHS or version != GRADING_REPORT_VERSION:
         return None
-    for candidate in (report_schema(axis), legacy_report_schema(axis)):
-        expected = candidate['properties']
-        if (version == expected['report_version']['const'] and set(properties) == set(expected) and all(
-                properties[name].get('x-source') == field.get('x-source') for name, field in expected.items())):
-            return axis
+    expected = report_schema(axis)['properties']
+    if set(properties) == set(expected) and all(
+            properties[name].get('x-source') == field.get('x-source') for name, field in expected.items()):
+        return axis
     return None
 
 

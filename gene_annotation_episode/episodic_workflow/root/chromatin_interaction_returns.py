@@ -327,7 +327,7 @@ class ChromatinInteractionReturns(EpisodeReturnRecords):
             self._commission(parent, current, construction=current is context)
             allowed = manifest["received_report_prefix"]["attempts"]
             current = parent
-        # Read the existing ledger without the constructor's schema migration.
+        # Read the existing ledger without the constructor's table installation.
         receipts = EpisodeReceipts.__new__(EpisodeReceipts)
         receipts.store, receipts.db, receipts.run_id = self.store, self.db, self.run_id
         known = set(receipts.known(context.episode_id, baseline=context.role == "results"))

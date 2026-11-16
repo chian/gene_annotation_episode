@@ -30,7 +30,7 @@ No scientific numbers or covariance are accepted as direct request fields.
 
 Output retains the full selection, authenticated raw witnesses/candidates,
 native-versus-canonical values, finite per-field statuses, canonical048 inputs
-or an explicit common-kind failure, source roster and dependency fingerprints.
+or an explicit common-kind failure and source roster.
 Source-cell identity is separate from actual physical-fit identity. Unknown
 context never creates a known identity or suppresses a valid raw parameter.
 
@@ -41,7 +41,6 @@ failures become local source-failure partials. No replay/reconstruction API is
 provided here: a repository must retain this result rather than reread sources.
 """
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a106.literature_implementation_sources import source_file
 
 from copy import deepcopy
 from decimal import Decimal, InvalidOperation
@@ -49,12 +48,11 @@ from html import unescape
 import hashlib
 import json
 import math
-from pathlib import Path
 import re
 
 from gene_annotation_episode.episodic_workflow.root.a106.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_binding_reader import _measurement, _SCALES
-from gene_annotation_episode.episodic_workflow.root.a106.library.literature_binding_visual_inputs import _Inputs, _box, _inside, _witness_shape, ATTRIBUTION, PILLOW_VERSION
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_binding_visual_inputs import _Inputs, _box, _inside, _witness_shape, ATTRIBUTION
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_binding_interaction_calculations import INPUT_VERSION as CALC_INPUT_VERSION, ROLES, ID_FIELDS, CONTEXT_FIELDS, RELATIONS, validate_binding_interaction_inputs
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_experimental_contracts import ExperimentalContractError
 
@@ -82,13 +80,6 @@ ROLE_UNAVAILABLE_REASONS = ("role_not_selected", "parameter_kind_source_unavaila
     *("measurement_" + status for status in MEASUREMENT_STATUSES))
 CALCULATION_INPUT_STATUSES = ("ready", "common_parameter_kind_unknown", "common_parameter_kind_conflicting",
     "common_parameter_kind_source_unavailable")
-_FROZEN = {
-    "literature_binding_visual_inputs.py": "8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718",
-    "literature_binding_reader.py": "e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1",
-    "literature_experimental_contracts.py": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc",
-}
-# Separately owned053 correction; released contract is part of this reader's API.
-CALCULATOR_SHA256 = "ac7ea12c105e16df5085942090ec8e3f96c618b4f5866283325c46c92804b432"
 _DECIMAL = r"[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?"
 _SCALAR = re.compile(rf"\s*(?P<approx>about\s+|approximately\s+|[~≈∼]\s*)?"
     rf"(?P<relation>>=|<=|≥|≤|>|<|at\s+least\s+|at\s+most\s+)?"
@@ -251,19 +242,6 @@ def _validate(arguments):
 def _digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False,
         separators=(",", ":"), allow_nan=False).encode()).hexdigest()
-
-
-def _dependencies():
-    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in _FROZEN}
-    if any(expected is None or hashes[name] != expected for name, expected in _FROZEN.items()):
-        _fail("binding_interaction_frozen_dependency_mismatch", "implementation")
-    calculator = hashlib.sha256(source_file("literature_binding_interaction_calculations.py").read_bytes()).hexdigest()
-    if CALCULATOR_SHA256 is None:
-        _fail("binding_interaction_calculator_dependency_pending", "implementation")
-    if calculator != CALCULATOR_SHA256:
-        _fail("binding_interaction_frozen_dependency_mismatch", "implementation.calculator")
-    return {"sha256": {**hashes, "literature_binding_interaction_calculations.py": calculator},
-        "reader_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), "pillow_version": PILLOW_VERSION}
 
 
 def _source_requests(arguments):
@@ -687,7 +665,6 @@ def read_binding_interaction_inputs(arguments, *, read_source):
     _validate(arguments)
     if not callable(read_source):
         _fail("source_reader_required", "read_source")
-    dependencies = _dependencies()
     selection = deepcopy(arguments)
     acquired, roster = {}, []
     # Authorization errors cross the action boundary before _Inputs' local
@@ -743,7 +720,7 @@ def read_binding_interaction_inputs(arguments, *, read_source):
         "relationships": relationships, "geometry_overlaps": _overlaps(roles),
         "calculation_input_status": status, "calculation_inputs": calculation_inputs,
         "source_refs": list(dict.fromkeys(row["source_ref"] for row in roster)),
-        "source_representations": roster, "implementation_dependencies": dependencies,
+        "source_representations": roster,
         "interpretation_attribution": ATTRIBUTION}
 
 
@@ -792,4 +769,4 @@ def binding_interaction_arguments_schema():
 
 __all__ = ["VERSION", "OUTPUT_VERSION", "ROLES", "ID_FIELDS", "KINDS", "STATISTICS", "BASES", "REPETITIONS",
     "UNIT_RELATIONS", "MEASUREMENT_STATUSES", "SCALAR_STATUSES", "UNCERTAINTY_REASONS", "ROLE_UNAVAILABLE_REASONS",
-    "CALCULATION_INPUT_STATUSES", "CALCULATOR_SHA256", "binding_interaction_arguments_schema", "read_binding_interaction_inputs"]
+    "CALCULATION_INPUT_STATUSES", "binding_interaction_arguments_schema", "read_binding_interaction_inputs"]

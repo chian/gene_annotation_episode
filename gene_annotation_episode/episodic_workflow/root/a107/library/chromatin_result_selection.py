@@ -1,7 +1,4 @@
-"""A107 original chromatin result selection; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 chromatin result selection."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a107.library.chromatin_interaction_contracts import chromatin_record_schema, validate_chromatin_record
 from gene_annotation_episode.episodic_workflow.root.a107.library.chromatin_received_fact_contracts import SAVED_SOURCE, validate_chromatin_fact_values

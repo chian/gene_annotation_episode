@@ -4,13 +4,13 @@ These tests do not claim a native job or full Workflow invocation. They use
 saved production episode/action/receipt primitives and actual retained bytes.
 The separate native addition case checks scientific model changes and solves.
 """
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 import asyncio
 import base64
 from copy import deepcopy
 from dataclasses import replace
 import hashlib
 import json
-from pathlib import Path
 import sqlite3
 from types import MethodType, SimpleNamespace
 
@@ -30,10 +30,7 @@ from gene_annotation_episode.episodic_workflow.root.episode_receipts import Epis
 from gene_annotation_episode.episodic_workflow.root.episode_contract_information import (
     expand_fact_form, return_contract_information, validate_saved_fact_form,
 )
-from gene_annotation_episode.episodic_workflow.root.local_file_capture_results import (
-    LocalFileSourceResults, SELECTOR_VERSION, SOURCE_REFS_SCHEMA, OUTCOMES_SCHEMA,
-    full_window_key, whole_file_bridge,
-)
+from gene_annotation_episode.episodic_workflow.root.local_file_capture_results import LocalFileSourceResults, SELECTOR_VERSION, SOURCE_REFS_SCHEMA, OUTCOMES_SCHEMA, whole_file_bridge
 from gene_annotation_episode.materials import source_for_artifact
 from gene_annotation_episode.native_file_capture import NativeFileCaptureError, capture_native_file
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
@@ -220,29 +217,6 @@ def test_repeated_source_ids_inherited_baseline_and_actual_changed_content(captu
     current = captured.selection()
     current['initial_known_record_refs'] = baseline['known_record_refs']
     assert captured.backend.acquisition_counts(captured.context, current, captured.results()) == (0, 1)
-
-
-@pytest.mark.parametrize('capture_first', [True, False])
-def test_capture_and_legacy_complete_window_share_one_acquisition(captured, capture_first, monkeypatch):
-    outcome = captured.execute(0)
-    raw = captured.originals[0]
-    window = {'path': str(captured.paths[0]), 'offset': 0, 'returned_bytes': len(raw),
-        'size_bytes': len(raw), 'bytes_base64': base64.b64encode(raw).decode('ascii')}
-    legacy_ref = captured.saved.source(canonical(window).encode())['source_ref']
-    legacy = {'target': captured.target, 'windows': [window]}
-    assert full_window_key(captured.target, window) == captured.backend.source_key(outcome['record_refs'][1], captured.context.scope)
-    refs = [*outcome['record_refs'], legacy_ref] if capture_first else [legacy_ref, *outcome['record_refs']]
-    selection = {'known_record_refs': [captured.handoff, *refs], 'initial_known_record_refs': [captured.handoff]}
-    results = {**captured.results(), legacy_ref: legacy}
-    # Credit reads use frozen bridge metadata, never original/model bytes.
-    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.local_file_capture_results.retained_native_file',
-        lambda *_args, **_kwargs: pytest.fail('credit reopened a full retained file'))
-    assert captured.backend.acquisition_counts(captured.context, selection, results) == (
-        (0, 1) if capture_first else (1, 0))
-    selection['initial_known_record_refs'] = [captured.handoff, refs[0]]
-    if capture_first:
-        selection['initial_known_record_refs'].append(outcome['record_refs'][1])
-    assert captured.backend.acquisition_counts(captured.context, selection, results) == (0, 0)
 
 
 @pytest.mark.parametrize('size', [0, 1, 2, 3, 786431, 786432, 786433])
@@ -481,7 +455,7 @@ def _registered_capture_owner(store, directory):
     workspace.mkdir()
     return ExecutionEpisodes(None, store=store, directory=directory / 'registered-run',
         run_id='controlled-capture-registry', resources={'local': {'kind': 'local',
-            'workspace': str(workspace), 'policy': {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}}},
+            'workspace': str(workspace), 'policy': {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}}},
         initial_information={}, tool_registry=None, handoff_unit=1,
         acquired_record_unit=1, log_window_bytes=128, log_roles=('stdout', 'stderr'))
 
@@ -669,7 +643,7 @@ def _registered_capture_dispatch_case(store, directory, *, saved=None, scientifi
     targets = case.owner.job_progress_provider
     owner = ExecutionEpisodes(None, store=store, directory=case.owner.directory,
         run_id=case.saved.run_id, resources={'local': {'kind': 'local',
-            'workspace': str(case.workspace), 'policy': {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}}},
+            'workspace': str(case.workspace), 'policy': {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}}},
         initial_information={}, tool_registry=None, handoff_unit=1,
         acquired_record_unit=1, log_window_bytes=128, log_roles=('stdout', 'stderr'))
     owner.job_progress_provider = targets

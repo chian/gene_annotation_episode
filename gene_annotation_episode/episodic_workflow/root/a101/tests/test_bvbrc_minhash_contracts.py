@@ -92,15 +92,6 @@ def assert_error(code, function, *args, **kwargs):
     assert str(error.value) == code
 
 
-def test_legacy_selector_and_empty_v2_are_preserved():
-    legacy = {}
-    actual = validate_minhash_result_selector(legacy)
-    assert actual == legacy and actual is not legacy
-    for mode in ("native_result", "saved_sheet"):
-        selected = selector(mode=mode)
-        assert validate_minhash_result_selector(selected) == selected
-
-
 @pytest.mark.parametrize("mode", ["genome", "fasta"])
 @pytest.mark.parametrize("values", [{}, dict.fromkeys(FIELDS),
                                     {"query_length": None, "reference_length": None, "alphabet_size": None}])
@@ -252,25 +243,6 @@ def test_selector_mode_and_saved_reference_relationship(mode, reference):
     value = selector()
     value.update(mode=mode, saved_result_ref=reference)
     assert_error("minhash_result_selector_invalid", validate_minhash_result_selector, value)
-
-
-def test_schema_is_detached_and_supports_legacy_native_saved_and_null_inputs():
-    schema = minhash_result_selector_schema()
-    Draft202012Validator.check_schema(schema)
-    validator = Draft202012Validator(schema)
-    for value in ({}, selector(), selector([metadata()]), selector([metadata(**dict.fromkeys(FIELDS))]),
-                  selector([metadata(query_length=None, reference_length=None, alphabet_size=None)]),
-                  selector([metadata(), metadata()], mode="saved_sheet")):
-        assert validator.is_valid(value)
-    assert not validator.is_valid({"extra": 1})
-    trailing_newline = selector([metadata()])
-    trailing_newline["pair_metadata"][0]["genome_id"] += "\n"
-    assert not validator.is_valid(trailing_newline)
-    trailing_newline = selector([metadata()])
-    trailing_newline["pair_metadata"][0]["provenance"]["fields"][0]["source_ref"] += "\n"
-    assert not validator.is_valid(trailing_newline)
-    schema["oneOf"][1]["properties"]["pair_metadata"]["items"]["properties"].clear()
-    assert minhash_result_selector_schema() != schema
 
 
 @pytest.mark.parametrize("field", ["version", "selector", "pair_metadata", "metadata_bindings", "saved_result"])

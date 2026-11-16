@@ -1,4 +1,4 @@
-"""Construct the actual parent-private legacy Homology implementations."""
+"""Construct the parent-private Homology implementations."""
 
 def legacy_parent_types():
     from gene_annotation_episode.episodic_workflow.root.a103.episode import LegacyAnnotationEpisode

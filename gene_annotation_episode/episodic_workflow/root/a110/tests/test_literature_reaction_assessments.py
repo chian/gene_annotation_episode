@@ -12,6 +12,7 @@ from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_report
 from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_integration import setup_case, binding_for
 from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_native_integration_129 import setup_case as native_case
 from test_literature_perturbation_assessments import identify
+from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_integration import location_inputs
 
 
 @pytest.mark.parametrize("case", ["reaction", "resource", "incomplete", "primary", "native"])
@@ -27,7 +28,7 @@ def test_reaction_assessment_revision_keeps_numbers_and_exact_saved_parent_resul
             limitations=["Measured ratios do not establish unmeasured pathway flux."])
         binding = binding_for(store, context)
         repo = LiteratureReactionRepository(store, context.run_id)
-        first = asyncio.run(binding.execute(context, "literature.reaction.populate", args, "first"))
+        first = asyncio.run(binding.execute(context, "literature.reaction.populate", location_inputs(args), "first"))
         assert first["status"] == "completed", first.get("feedback")
         first_ref = first["result"]["sheet_ref"]
         context = replace(context, received_record_refs=tuple(dict.fromkeys((*context.received_record_refs, *first["record_refs"]))))

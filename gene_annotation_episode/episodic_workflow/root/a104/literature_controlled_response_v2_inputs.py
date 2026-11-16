@@ -5,7 +5,6 @@ owner covariance and actual068 parsed inputs retain source scope. No sheet,
 model, acquisition, runtime action or annotation-credit calculation occurs here.
 """
 from __future__ import annotations
-from .literature_implementation_sources import source_file
 
 from copy import deepcopy as cp
 from fractions import Fraction
@@ -189,8 +188,7 @@ def _graph_schema():
         'native_bounds': null(ref('ExactBounds')),
         'bound_kind': {'const': 'conditional_digitization_not_confidence_interval'},
         'diagnostics': arr(ref('Diagnostic')),
-        'counter_version': {'const': 'controlled_response_bar_runs_v1'},
-        'counter_module_sha256': {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}})
+        'counter_version': {'const': 'controlled_response_bar_runs_v1'}})
     D['CanonicalDisplay'] = obj({
         'value': null(N),
         'threshold': null(N),
@@ -427,10 +425,7 @@ def _extraction_schema():
     D["RequestedModel"] = obj({k: ref("InterpretationExtraction") for k in ("variance_status", "model_kind")})
     D["EffectiveModel"] = obj({"variance_status": enum("known", "estimated", "unknown"), "model_kind": enum("none", "known_joint_normal_source_means"), "diagnostics": AD})
     D["DependencyRecord"] = obj({"reader_contract_version": {"const": "controlled_response_source_extraction_v2"},
-        "calculator_contract_version": {"const": "controlled_response_owner_inputs_v2"},
-        "expected_module_fingerprints": obj({k: SHA for k in [*shared.DEPENDENCIES,
-            "literature_controlled_response_inputs.py", "literature_controlled_response_v2_inputs.py",
-            "literature_controlled_response_figure_inputs.py", "literature_controlled_response_owner_calculations.py"]})})
+        "calculator_contract_version": {"const": "controlled_response_owner_inputs_v2"}})
     root = obj({"version": {"const": "controlled_response_source_extraction_v2"}, "selection": ref("Selection"),
         "sources": arr(ref("SourceRecord")), "images": arr(ref("ImageRecord")), "arms": obj({r: null(ref("ArmExtraction")) for r in roles}),
         "relationships": ref("RelationshipExtraction"), "covariance": null(ref("CovarianceExtraction")),
@@ -450,12 +445,6 @@ def validate_controlled_response_v2_selection(arguments):
 
 def _graph_request(selected, measurement):
     return {"version": "controlled_response_rate_figure_selection_v1", "images": cp(selected["images"]), "measurement": cp(measurement)}
-
-
-def _dependencies():
-    names = [*shared.DEPENDENCIES, "literature_controlled_response_inputs.py", "literature_controlled_response_v2_inputs.py",
-        "literature_controlled_response_figure_inputs.py", "literature_controlled_response_owner_calculations.py"]
-    return {name:hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
 
 
 def _read_graph(context, selected):
@@ -686,7 +675,7 @@ def _validate_graph(selected, result, *, sources, images, request):
     spec = next(i for i in actual_images if i["image_id"] == selected["image_id"])
     if pixels["recipe"] != selected["bar_selection"] or pixels["terminal_edge"] != selected["terminal_edge"] or pixels["image_id"] != selected["image_id"]:
         shared._fail("saved_graph_recipe_mismatch", "pixels")
-    if pixels["counter_module_sha256"] != _dependencies()["literature_controlled_response_figure_inputs.py"] or pixels["image_sha256"] != spec["byte_sha256"] or pixels["original_image_sha256"] != spec["original_byte_sha256"]:
+    if pixels["image_sha256"] != spec["byte_sha256"] or pixels["original_image_sha256"] != spec["original_byte_sha256"]:
         shared._fail("saved_graph_image_identity_mismatch", "pixels")
     recipe,edge = selected["bar_selection"],selected["terminal_edge"]
     roi = recipe["roi"]

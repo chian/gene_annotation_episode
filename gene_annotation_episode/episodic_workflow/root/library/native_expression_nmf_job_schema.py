@@ -1,4 +1,4 @@
-"""Original supplied-record schemas extracted from native_expression_nmf_contracts; no execution admission."""
+"""Supplied-record schemas; no execution admission."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_common import METADATA_SCHEMA, MODE, OPERATION
 

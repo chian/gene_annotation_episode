@@ -11,7 +11,7 @@ from .library.literature_a108_grading import INPUT_VERSION, grading_input_schema
 from .literature_a108_sources import ContextSources, source_selector_schema
 
 
-def grading_population_schema(*, legacy=False):
+def grading_population_schema():
     schema = deepcopy(grading_input_schema())
     props = schema['properties']
     props.pop('version')

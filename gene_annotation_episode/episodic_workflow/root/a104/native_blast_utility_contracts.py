@@ -6,6 +6,7 @@ It does not discover resources, create a database, or choose a follow-up check.
 """
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import json
 from pathlib import PurePosixPath
@@ -577,7 +578,7 @@ def validate_native_blast_utility_plan(value: dict) -> dict:
     if job["version"] == JOB_VERSION_V3:
         paths.extend(row["path"] for row in [job["offline_execution"]["launcher"], *job["offline_execution"]["runtime_files"]])
         paths.extend(row["path"] for row in job["offline_execution"]["runtime_aliases"])
-        if policy != {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}:
+        if policy != {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}:
             _error("vdb_selected_local_allocation_conflict")
     if any(_producer_path(path, absolute=True).is_relative_to(root) for path in paths):
         _error("supplied_material_inside_attempt")

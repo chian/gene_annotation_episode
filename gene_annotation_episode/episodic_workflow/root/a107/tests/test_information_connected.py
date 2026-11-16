@@ -1,9 +1,4 @@
-"""Actual own-axis recipients/readers; no model, native command or network.
-
-The old callback asset is captured before application. Empty scientific readers
-are covered here; nonempty API/RNA custody is a separate required test module.
-"""
-import ast
+"""Actual own-axis recipients/readers; no model, native command or network."""
 import asyncio
 from copy import deepcopy
 from dataclasses import replace
@@ -25,17 +20,6 @@ PARENTS = ('', 'scientific_process', 'hpc_work_planning',
 
 def module(name):
     return importlib.import_module(PREFIX + name.replace('/', '.'))
-
-
-def original_initial(owner, context):
-    """Exact pre-change callback; no old application implementation is imported."""
-    asset = Path(__file__).parent / 'fixtures/initial_information_original/initial_decision_context.py'
-    tree = ast.parse(asset.read_text())
-    node, = [value for value in tree.body if isinstance(value, ast.FunctionDef)]
-    assert node.name == 'initial_decision_context'
-    namespace = {'deepcopy': deepcopy}
-    exec(compile(ast.fix_missing_locations(ast.Module(body=[node], type_ignores=[])), str(asset), 'exec'), namespace)
-    return namespace[node.name](owner, context)
 
 
 class InformationCase:
@@ -164,19 +148,11 @@ def case(tmp_path, request):
         value.close()
 
 
-
-
-
-
 def test_reader_identity_mismatch_is_rejected_without_record_changes(case):
     before = list(case.store.db.iterdump())
     with pytest.raises(ValueError, match='initial_information_receiver_identity_conflict'):
         case.registry._recipient_initial_information(replace(case.root, episode_id='unrelated'))
     assert list(case.store.db.iterdump()) == before
-
-
-
-
 
 
 def test_selected_explicit_factory_must_match_actual_execution_operands(case):
@@ -188,12 +164,6 @@ def test_selected_explicit_factory_must_match_actual_execution_operands(case):
         directory=case.directory / 'workflow', tool_registry=case.tools, services=case.services)
     with pytest.raises(ValueError, match='initial_information_recipient_configuration_conflict'):
         case.registry.configure_initial_information(bad, module('annotation_initial_information').initial_information)
-
-
-
-
-
-
 
 
 def test_multifactory_unknown_custom_recipient_cannot_fall_back(case):

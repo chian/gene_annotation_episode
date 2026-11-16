@@ -4,6 +4,7 @@ Process outcomes are controlled test replacements using retained 636 bytes.
 These tests establish command/custody behavior, not a new native execution or
 scientific measurement. Actual Workflow execution is verified separately.
 """
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import hashlib
 import json
@@ -30,7 +31,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 
 ROOT = Path(__file__).resolve().parents[5]
 RETAINED = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/blast_mask_conversion/outputs"
-POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}
 FORMATS = ("maskinfo_xml", "maskinfo_asn1_text", "maskinfo_asn1_bin", "interval")
 DNA = b">duplicate\nAAaaGG\n>duplicate\nttCCaa\n"
 PROTEIN = b">protein_a\nMKWVtfISLLflFSSaysR\n"

@@ -45,9 +45,7 @@ class WorkflowServices:
 
     def scientific_retriever_catalog(self, binding):
         from .scientific_tool_library import catalog
-        configuration = binding.tool_retrieval
-        return catalog(retrieval_mode=None if configuration is None else configuration['mode'],
-            tool_info=binding.tool_library.supports_tool_info)
+        return catalog()
 
     def create_tool_retriever(self, binding, *, provider):
         from .scientific_tool_retrieval import ScientificToolRetriever

@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.blast_pairwise_
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_profile_calculators import ISSUE_CODES, calculate_blast_profile_components
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_profile_inputs import populate_blast_profile_sheet
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_report_collection import parse_blast_report_collection
-from test_blast_profile_inputs import make_inputs, model_record, provenance, synthetic_hit, synthetic_hsp
+from test_blast_profile_inputs import make_inputs, provenance, synthetic_hit, synthetic_hsp
 
 
 def calculate(inputs):
@@ -547,79 +547,4 @@ def test_genuine_retained_paired_bytes_only_validate_shared_geometry(case):
     if case == "blastx_reverse":
         assert measurements[0]["pairs"][0]["query_start"] == 239
         assert measurements[0]["counts"]["paired_query_positions"] == 240
-
-
-@pytest.fixture(scope="module")
-def original_profile_calculator():
-    """The preserved original source is a parity oracle, not a new producer."""
-    import importlib.util
-    import os
-    import sys
-    selected = os.environ.get("HMMER_NATIVE_ORACLE_PROFILE_BASELINE_FILE")
-    path = (Path(selected) if selected else
-        Path(__file__).parent / "fixtures/blast_profile_calculator_before_shared_authority.py")
-    assert hashlib.sha256(path.read_bytes()).hexdigest() == (
-        "2aa12ed2ac298848454f0ce2f12734083e4fa0115cbf1c12cd64f6dd712f321f")
-    name = calculate_blast_profile_components.__module__.rpartition(".")[0] + "._profile_authority_baseline"
-    specification = importlib.util.spec_from_file_location(name, path)
-    assert specification is not None and specification.loader is not None
-    module = importlib.util.module_from_spec(specification)
-    sys.modules[name] = module
-    specification.loader.exec_module(module)
-    return module
-
-
-def shared_authority_inputs(case):
-    """Supplied profile contexts exercise policy boundaries without a search."""
-    if case == "delta_eligible":
-        return make_inputs("deltablast")
-    if case == "translated_reverse":
-        return make_inputs("rpstblastn", reverse=True)
-    if case == "overlapping_hsps":
-        hit = synthetic_hit(positions=30)
-        second = synthetic_hsp(start=21, positions=30, bits=43.12345678901234)
-        second.update(hit_from=21, hit_to=50)
-        hit["hsps"].append(second)
-        return make_inputs(hits=[hit])
-    if case == "selected_original_axis":
-        return make_inputs(hits=[synthetic_hit(start=21, positions=30)],
-            selected=[20, 60], query_length=40, full_length=100)
-    if case == "selected_bounds_conflict":
-        return make_inputs(selected=[20, 60])
-    if case == "partial_empty_clip":
-        return make_inputs(hits=[synthetic_hit(positions=10)], selected=[20, 60])
-    if case == "missing_geometry":
-        hit = synthetic_hit()
-        hit["hsps"].append(dict(bit_score=45, score=105, align_len=20, identity=10, gaps=0))
-        return make_inputs(hits=[hit])
-    if case in {"native_counts_only", "missing_paired_counts", "zero_paired_columns"}:
-        hit = synthetic_hit(positions=5)
-        hsp = hit["hsps"][0]
-        if case == "zero_paired_columns":
-            hsp.update(qseq="-----", hseq="AAAAA", identity=0, positive=0, gaps=5)
-        else:
-            del hsp["qseq"], hsp["hseq"]
-            if case == "missing_paired_counts":
-                del hsp["identity"], hsp["gaps"]
-        return make_inputs(hits=[hit])
-    inputs = make_inputs("deltablast" if case == "delta_ineligible" else "rpsblast")
-    if case == "model_length_conflict":
-        inputs["profile_records"][0]["num_columns"] = 120
-    elif case == "unbound_query":
-        inputs["query_binding"] = None
-    elif case == "missing_digest":
-        inputs = make_inputs(hits=[synthetic_hit(start=21, positions=30)],
-            selected=[20, 60], query_length=40, full_length=100)
-        inputs["query_binding"]["sequence_sha256"] = None
-    elif case == "delta_ineligible":
-        inputs["search_binding"]["stage"] = None
-    elif case == "zero_threshold":
-        inputs = make_inputs(hits=[synthetic_hit(bits=0)])
-        inputs["profile_records"][0].update(specific_bits_threshold=0, reporting_bits_threshold=0)
-    else:
-        assert case == "rps_eligible"
-    return inputs
-
-
-
 

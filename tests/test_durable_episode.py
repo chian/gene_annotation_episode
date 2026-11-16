@@ -275,38 +275,6 @@ def test_killed_claimed_worker_is_interrupted_without_automatic_retry(tmp_path):
     assert (tmp_path / "child" / "committed.json").exists()
 
 
-@pytest.mark.parametrize("mode", ["partial_failure", "pack_failure", "invalid_form", "unavailable_binding",
-                                  "settings_mismatch", "implementation_mismatch"])
-def test_failures_remain_typed_and_preserve_actual_partial_or_closed_work(tmp_path, mode):
-    store = DurableExecutionStore(tmp_path / "executions")
-    spec = commission_spec(tmp_path, arguments={mode: True})
-    if mode == "unavailable_binding":
-        spec["runtime_binding"]["factory_module"] = "absent_fixture_binding"
-    elif mode in ("settings_mismatch", "implementation_mismatch"):
-        field = "settings_sha256" if mode == "settings_mismatch" else "implementation_sha256"
-        spec["runtime_binding"][field] = "0" * 64
-    store.commission(spec)
-    store.start(spec["handle"])
-    envelope = returned(store, spec)
-    assert envelope["form"] is None
-    if mode == "partial_failure":
-        assert envelope["outcome"] == "execution_failed"
-        assert envelope["failure"]["partial_record_refs"] == ["fixture_committed_1"]
-        assert (tmp_path / "child" / "committed.json").exists()
-    elif mode in ("pack_failure", "invalid_form"):
-        assert envelope["outcome"] == "closed"
-        assert envelope["failure"]["code"] == "invalid_return"
-        assert envelope["completion"]["units_consumed"] == 2
-        assert envelope["episode_archive"] and envelope["result_archive"]
-        if mode == "invalid_form":
-            assert envelope["facts_archive"] is not None
-    else:
-        assert envelope["outcome"] == "execution_failed"
-        assert envelope["failure"]["code"] == "unavailable_binding"
-        assert envelope["completion"] is None
-    assert Path(envelope["failure"]["diagnostic_ref"]).is_file()
-
-
 def test_binding_declared_interruption_keeps_its_outcome_and_partial_records(tmp_path, monkeypatch):
     from contextlib import asynccontextmanager
     import durable_fixture

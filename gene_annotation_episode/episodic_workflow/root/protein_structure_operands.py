@@ -93,7 +93,7 @@ def _checked(function, *args, stage="authority", field="descriptor", code=None,
 
 def _authority(function, *args, code="original_commission_mismatch", field="receipt", **kwargs):
     # Returns owns its original/frozen proof errors. Preserve its typed errors;
-    # deliberately translate a legacy untyped proof error, never its prose.
+    # deliberately translate an untyped proof error, never its prose.
     try:
         return function(*args, **kwargs)
     except ProteinStructureOperandError:

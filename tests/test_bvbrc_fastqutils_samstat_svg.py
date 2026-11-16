@@ -1,7 +1,6 @@
 """Source-executed native2.5.0 bytes; mutation cases are explicitly synthetic."""
 from copy import deepcopy
 import hashlib
-import json
 from pathlib import Path
 import re
 import socket
@@ -11,8 +10,8 @@ import pytest
 
 from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError, validate_native_document
 from gene_annotation_episode.bvbrc_fastqutils_identity import native_ref
-from gene_annotation_episode.bvbrc_fastqutils_native import parse_fastqutils_artifact
-from gene_annotation_episode.bvbrc_fastqutils_samstat_svg import parse_samstat_html_2_5_0, parse_samstat_bvbrc_error_html
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_native import parse_fastqutils_artifact
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_samstat_svg import parse_samstat_html_2_5_0, parse_samstat_bvbrc_error_html
 
 FIXTURES=Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils_samstat_svg'
 

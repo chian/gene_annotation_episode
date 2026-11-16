@@ -2,7 +2,7 @@
 
 Parsers retain source facts; the common calculator alone publishes numerical
 components. Validation checks custody and relationships without parsing source
-text or calling a calculator. Legacy sheets require an explicit pure upgrade.
+text or calling a calculator.
 """
 from __future__ import annotations
 
@@ -166,9 +166,9 @@ def _identity(identity, metadata):
         _require(identity["kind"] == "native_query_list" and _int(identity["artifact_index"]) and _int(identity["list_index"]))
 
 
-def _locator(locator, artifacts, *, legacy=False):
+def _locator(locator, artifacts):
     _require(isinstance(locator, dict))
-    kind = locator.get("kind", "tblout" if legacy else None)
+    kind = locator.get("kind", "tblout")
     _require(kind in ("tblout", "json", "report"))
     field = "json_pointer" if kind == "json" else "line"
     _closed(locator, ("artifact_id", "artifact_index", field), ("kind",))
@@ -293,7 +293,7 @@ def _saved_input_links(sheet):
 
 
 def validate_infernal_search_sheet(sheet: dict) -> dict:
-    """Validate saved v2 relationships; never upgrade, parse or calculate."""
+    """Validate saved v2 relationships; never parse or calculate."""
     finite_copy(sheet)
     if not isinstance(sheet, dict) or sheet.get("schema") != SHEET_SCHEMA:
         raise ValueError("infernal_search_sheet_required")
@@ -311,10 +311,7 @@ def validate_infernal_search_sheet(sheet: dict) -> dict:
     if context is not None:
         _require(isinstance(context, dict) and context.get("profile") in SOURCE_CONTEXT_FIELDS)
         _closed(context, ("profile",), SOURCE_CONTEXT_FIELDS[context["profile"]] - {"profile"})
-    lineage = sheet["lineage"]
-    if lineage is not None:
-        _closed(lineage, ("source_sheet_schema", "source_sheet_digest"))
-        _require(_text(lineage["source_sheet_schema"]) and re.fullmatch(r"[0-9a-f]{64}", lineage["source_sheet_digest"]) is not None)
+    _require(sheet["lineage"] is None)
     artifacts = sheet["artifacts"]
     for artifact in artifacts:
         _require(isinstance(artifact, dict))
@@ -338,7 +335,7 @@ def validate_infernal_search_sheet(sheet: dict) -> dict:
     ids = [hit.get("hit_id") for hit in sheet["hits"] if isinstance(hit, dict)]
     _require(len(ids) == len(sheet["hits"]) and all(_text(i) for i in ids) and len(set(ids)) == len(ids))
     for hit in sheet["hits"]:
-        _locator(hit["locator"], artifacts, legacy=True)
+        _locator(hit["locator"], artifacts)
         details = hit["source_details"]
         _require(isinstance(details, dict) and details.get("profile") in SOURCE_DETAILS_FIELDS)
         _closed(details, ("profile",), SOURCE_DETAILS_FIELDS[details["profile"]] - {"profile"})
@@ -354,7 +351,7 @@ def validate_infernal_search_sheet(sheet: dict) -> dict:
         _closed(attribution, ("sequence", "model", "source_locators"))
         _require(all(attribution[k] in ("valid", "unresolved", "conflict") for k in ("sequence", "model")))
         for locator in attribution["source_locators"]:
-            _locator(locator, artifacts, legacy=True)
+            _locator(locator, artifacts)
         for kind in ("sequence", "model"):
             _require(isinstance(hit[kind], dict) and (hit[kind].get("name") is None or _text(hit[kind]["name"])))
             _length_cell(hit["lengths"][kind])
@@ -396,7 +393,7 @@ def validate_infernal_search_sheet(sheet: dict) -> dict:
         _require(type(population["reported_set_complete"]) is bool and (population["reported_row_count"] is None or _int(population["reported_row_count"])))
         _require(population["membership_basis"] in ("frozen_complete_input", "native_report", "both", "native_query_list"))
         for locator in population["source_locators"]:
-            _locator(locator, artifacts, legacy=True)
+            _locator(locator, artifacts)
     _saved_input_links(sheet)
     return sheet
 

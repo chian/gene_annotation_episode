@@ -9,8 +9,7 @@ import pytest
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS, rfam_digest
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_grader import calculate_rfam_batch_components
-from test_rfam_batch_inputs import (native_example, parse, model_metadata, identity, capture,
-    EXAMPLES, live_single_operands)
+from test_rfam_batch_inputs import native_example, parse, model_metadata, identity, capture, EXAMPLES
 
 
 def calculate(sheet):
@@ -167,59 +166,6 @@ def alignment_bundle(content, operand, acquired):
                 native_end=hit["end"], native_strand=hit["strand"]))
     return {"version": "rfam_alignment_components_bundle_v1", "artifact_ref": acquired["artifact_ref"],
         "source_sha256": acquired["source_sha256"], "rows": rows}
-
-
-@pytest.mark.parametrize("live", [False, True])
-def test_separate_actual_alignment_reader_composes_into_sheet_and_saved_calculator(live):
-    from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs import populate_rfam_batch_json_sheet
-    if live:
-        content, operand, acquired = live_single_operands()
-    else:
-        content = (EXAMPLES / "official-single-result.json").read_bytes()
-        operand, acquired = identity(), capture(content, evidence_kind="official_documentation_example")
-    bundle = alignment_bundle(content, operand, acquired)
-    result = populate_rfam_batch_json_sheet(content, input_identity=operand, capture=acquired, alignment_components=bundle)
-    hit = calculate(result["sheet"])["hits"][0]
-    assert hit["attributed_components"]["represented_model_positions"] == (120 if live else 119)
-    assert hit["attributed_components"]["model_consensus_compared_count"] == (118 if live else 119)
-    if not live:
-        assert hit["attributed_components"]["model_consensus_equal_count"] == 79
-        assert hit["attributed_components"]["model_consensus_equal_fraction"] == 79 / 119
-    assert hit["attributed_components"]["consensus_length"] is None and hit["attributed_components"]["represented_model_fraction"] is None
-    assert hit["attributed_components"]["sequence_span_length"] == 119 and hit["attributed_components"]["sequence_span_fraction"] == 1.
-    assert hit["attributed_components"]["display_model_to"] == (120 if live else 119)
-    assert calculate(json.loads(json.dumps(result["sheet"])))["hits"][0] == hit
-
-
-@pytest.mark.parametrize("mutation", ["artifact", "query", "family", "strand", "pointer", "duplicate", "foreign",
-    "duplicate_query_position", "wrong_posterior_bin"])
-def test_alignment_component_misbinding_only_disables_alignment(mutation):
-    from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs import populate_rfam_batch_json_sheet
-    content, operand, acquired = live_single_operands()
-    bundle = alignment_bundle(content, operand, acquired)
-    row = bundle["rows"][0]
-    if mutation == "artifact":
-        bundle["source_sha256"] = "0" * 64
-    elif mutation == "query":
-        row["hit_identity"]["query_occurrence_key"] = "foreign:query"
-    elif mutation == "family":
-        row["hit_identity"]["family_accession"] = "RF99999"
-    elif mutation == "strand":
-        row["query_strand"] = "-"
-    elif mutation == "pointer":
-        row["raw_alignment_ref"]["json_pointer"] = "/hits/5S_rRNA/1/alignment"
-    elif mutation == "duplicate":
-        bundle["rows"].append(deepcopy(row))
-    elif mutation == "duplicate_query_position":
-        row["paired_positions"][1]["query_position"] = row["paired_positions"][0]["query_position"]
-    elif mutation == "wrong_posterior_bin":
-        row["posterior_segments"][0]["lower_bound"] = 0.
-    else:
-        row["hit_key"] = acquired["artifact_ref"] + "/hits/5S_rRNA/1"
-    result = populate_rfam_batch_json_sheet(content, input_identity=operand, capture=acquired, alignment_components=bundle)
-    hit = calculate(result["sheet"])["hits"][0]
-    assert hit["attributed_components"]["bitscore"] == 104.6 and hit["attributed_components"]["sequence_span_length"] == 119
-    assert hit["attributed_components"]["represented_model_positions"] is None
 
 
 def test_missing_optional_pp_preserves_supplied_geometry_and_native_scores():

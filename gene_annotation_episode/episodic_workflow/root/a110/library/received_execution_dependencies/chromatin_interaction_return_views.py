@@ -36,11 +36,7 @@ def chromatin_fact_schema_alternatives(source: str) -> tuple[dict, ...]:
     if type(source) is not str or source not in FACT_SOURCES:
         raise ValueError('chromatin_return_unknown_source')
     current = _array_schema(source)
-    if source == SAVED_SOURCE:
-        return (current,)
-    from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.chromatin_interaction_legacy_return_schemas import legacy_chromatin_fact_schema
-    legacy = legacy_chromatin_fact_schema(source)
-    return (current,) if current == legacy else (current, legacy)
+    return (current,)
 
 def requested_chromatin_sources(schema: dict) -> tuple[str, ...]:
     if type(schema) is not dict or type(schema.get('properties')) is not dict:

@@ -57,7 +57,8 @@ class ValidatedProteinWorker(TypedDict):
     plan: ProteinResultWorkerPlan
     execution: ProteinWorkerExecution
     result: ProteinResultWorkerResult | None
-_POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+_POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}
 _PACKAGE_ROOT = str(Path(__file__).resolve().parents[1])
 _MODULE = 'gene_annotation_episode.protein_structure_result_worker'
 _OUTPUTS = {'native_result_file': 'native-result.json', 'sheet_file': 'sheet.json', 'components_file': 'components.json'}

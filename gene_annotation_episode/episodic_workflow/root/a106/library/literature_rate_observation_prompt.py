@@ -96,15 +96,6 @@ def grid_task_relevant(state):
     return any(is_grid_row(r) for r in rows_from_values((state.get('child_reports',()),state.get('current_report_update',{}))))
 
 
-def legacy_task_relevant(state):
-    assignment=state.get('literature_assignment',{})
-    if isinstance(assignment,Mapping) and assignment.get('requested_rate_observation_components'):return True
-    if state.get('literature_rate_grid_operation_lookup'):return True
-    result=(state.get('last_local_outcome') or {}).get('result',{})
-    if isinstance(result,Mapping) and result.get('view')=='reported_rate_observation_components':return True
-    return any(not is_grid_row(r) for r in rows_from_values((state.get('child_reports',()),state.get('current_report_update',{}))))
-
-
 def grid_state_view(state,lookup_results=()):
     """Detached presentation marker; original assignments/contracts are untouched."""
     from gene_annotation_episode.episodic_workflow.root.a106.library.literature_numerical_return_presentation import reported_curve_lookup

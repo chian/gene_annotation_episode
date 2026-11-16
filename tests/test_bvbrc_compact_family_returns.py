@@ -10,8 +10,6 @@ from copy import deepcopy
 from dataclasses import replace
 import importlib
 import json
-import os
-from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -309,10 +307,6 @@ def test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_
     assert f.host._attempt(f.saved.root, 1)[1:] == repeated[:2]
     assert f.host._attempt(f.saved.root, 0)[1]['requested'] == rows
     assert list(f.store.db.iterdump()) == before
-    if os.environ.get('BVBRC480_ATTEMPT'):
-        path = Path(os.environ['BVBRC480_ATTEMPT']) / ('numerical_' + name + '.json')
-        path.write_text(json.dumps({'evidence': 'existing constructed numerical fixture; compact contract custody only',
-            'family': name, 'rows': rows}, indent=2, allow_nan=False) + '\n')
 
 
 @pytest.mark.parametrize('compact', [True, False], ids=['compact', 'expanded'])

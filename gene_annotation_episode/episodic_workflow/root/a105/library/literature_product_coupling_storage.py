@@ -4,7 +4,6 @@ Fresh population alone reads scientific source bytes and runs the frozen pure
 reader/calculator. Saved reads check original records and structural bindings;
 they do not parse source statistics or recalculate scientific components.
 """
-from gene_annotation_episode.episodic_workflow.root.a105.literature_implementation_sources import source_file
 from copy import deepcopy
 import hashlib
 import json
@@ -26,7 +25,6 @@ SCOPE = 'source_product_coupling'
 PROJECTION_VERSION = 'product_coupling_projection_v2'
 MODEL_COMPONENTS = frozenset(('productive_fraction', 'calculated_coupling_percent', 'displayed_coupling_difference_pp', 'productive_fraction_variance', 'productive_fraction_standard_uncertainty'))
 UNCERTAINTY_COMPONENTS = frozenset(('product_per_cofactor_variance', 'productive_fraction_variance', 'productive_fraction_standard_uncertainty'))
-_FROZEN = {'literature_product_coupling_inputs.py': 'fcf0115c9d9e98b362fa0ee51086d30a11efc5af5669a985f167100cb462f139', 'literature_product_coupling_calculations.py': 'd7f99c4b12de0254e662250546526a2ef67ceb165e38099d839c7bde819cb25f', 'literature_product_coupling_prompt.py': 'e520365b878325623f86a1874ce0454dc56f8ad35679e21fb5b45d26a36a3c8a'}
 
 def _array(schema):
     return {'type': 'array', 'items': deepcopy(schema)}
@@ -192,12 +190,6 @@ class LiteratureProductCouplingRepository(LiteratureRateRepository):
                     result.append(parent)
         return result
 
-    def _implementation_receipt(self):
-        actual = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in _FROZEN}
-        if actual != _FROZEN:
-            raise ContractError('product_coupling_prospective_dependency_mismatch')
-        return {'version': 'product_coupling_original_implementation_v1', 'files': actual}
-
     def populate(self, context, arguments, operation_key):
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
@@ -216,7 +208,6 @@ class LiteratureProductCouplingRepository(LiteratureRateRepository):
             self.read(outcome['result']['sheet_ref'])
             return outcome
         source = self._native_source(context, args['source_ref'])
-        receipt = self._implementation_receipt()
         read_sizes = {}
 
         def read_source(ref, representation):
@@ -237,7 +228,7 @@ class LiteratureProductCouplingRepository(LiteratureRateRepository):
         cov = extraction['covariance']
         if cov['source_ref'] is not None and read_sizes[cov['source_ref'], 'original'] > 0:
             locations.append({'source_ref': cov['source_ref'], 'artifact_ref': cov['artifact_ref'], 'representation': 'original', 'start': 0, 'end': read_sizes[cov['source_ref'], 'original']})
-        payload = {'version': VERSION, 'projection_version': PROJECTION_VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'selection': args, 'direct_input_source_refs': direct, 'input_source_refs': parents, 'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'numerical_scope_locations': locations, 'original_implementation': receipt, 'extraction': extraction, 'sheet': sheet}
+        payload = {'version': VERSION, 'projection_version': PROJECTION_VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'selection': args, 'direct_input_source_refs': direct, 'input_source_refs': parents, 'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'numerical_scope_locations': locations, 'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
             self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
@@ -391,13 +382,10 @@ class LiteratureProductCouplingRepository(LiteratureRateRepository):
         if operation is None or operation['signature'] != canonical(request):
             raise ContractError('literature_sheet_not_selected_output')
         saved = self._json(source['artifact_ref'])
-        original_keys = {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs', 'input_source_refs', 'source_metadata', 'numerical_scope_locations', 'original_implementation', 'extraction', 'sheet'}
+        original_keys = {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs', 'input_source_refs', 'source_metadata', 'numerical_scope_locations', 'extraction', 'sheet'}
         _projection_policy(saved)
         if set(saved) not in (original_keys, original_keys | {'projection_version'}) or saved['version'] != VERSION or saved['selection'] != request['arguments'] or (saved['input_source_ref'] != request['arguments']['source_ref']) or (source['text_ref'] != source['artifact_ref']) or (saved['input_source_refs'] != source['parent_source_refs']) or (self._ancestors(request['scope'], saved['direct_input_source_refs']) != saved['input_source_refs']) or (set(saved['source_metadata']) != set(saved['input_source_refs'])) or any((canonical(self._native_provenance(request['scope'], ref)) != canonical(row) for ref, row in saved['source_metadata'].items())) or (self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']) or any((ref not in request['received_record_refs'] for ref in saved['direct_input_source_refs'])):
             raise ContractError('product_coupling_saved_source_mismatch')
-        receipt = saved['original_implementation']
-        if receipt != {'version': 'product_coupling_original_implementation_v1', 'files': _FROZEN}:
-            raise ContractError('product_coupling_saved_original_receipt_mismatch')
         self._validate_bindings(saved, request)
         rows = _project_saved(saved, reference, request['components'])
         validate_schema(rows, product_coupling_cells_schema())

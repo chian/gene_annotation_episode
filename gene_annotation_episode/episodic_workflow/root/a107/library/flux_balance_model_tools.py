@@ -1,7 +1,4 @@
-"""A107 original flux balance model tools; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 flux balance model tools."""
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.root.a107.library.received_execution_information.historical_flux_balance_contracts import ISSUE_CODES, flux_balance_schema
 from gene_annotation_episode.episodic_workflow.root.a107.library.flux_balance_result_contracts import _props, _shared, fba_result_schema

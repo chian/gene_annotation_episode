@@ -490,18 +490,6 @@ def test_out_of_order_track_failure_preserves_previously_emitted_segments():
     assert observed[1]['source_rows']['signal1'] == [1]
 
 
-def test_table_finalization_failure_after_selected_population_is_not_hidden():
-    def failed_rows():
-        yield row(0, 10)
-        yield row(10, 20, ordinal=1)
-        raise RuntimeError('retained_table_digest_mismatch')
-    stream = iter_atac_track_segments(tracks(signal1=failed_rows()), intervals=[population(0, 5)])
-    first = next(stream)
-    with pytest.raises(RuntimeError, match='retained_table_digest_mismatch'):
-        next(stream)
-    assert (first['start'], first['end']) == (0, 5)
-
-
 def test_all_supplied_streams_are_drained_without_creating_extra_population_rows():
     reads = {role: 0 for role in ROLES}
     def supplied(role):

@@ -5,7 +5,7 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode.native_blast_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_blast_contracts import (
     PROGRAMS, NATIVE_BLAST_JOB_SCHEMA, NATIVE_BLAST_REQUESTED_JOB_SCHEMA,
     compile_native_blast_job, requested_job_from_native, validate_native_blast_job,
     validate_native_blast_requested_job,

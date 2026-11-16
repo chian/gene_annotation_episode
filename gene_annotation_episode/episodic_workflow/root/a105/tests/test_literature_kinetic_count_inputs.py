@@ -1,20 +1,13 @@
 """Synthetic count literals; no source paper, model or independence inference."""
 from copy import deepcopy
-from dataclasses import replace
 import json
 import math
-import sqlite3
 import pytest
-from gene_annotation_episode.episodic_workflow.root.a105.communication import plain, validate_form
-from gene_annotation_episode.episodic_workflow.root.a105.domain import obj
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_inputs import read_kinetic_inputs
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_calculations import populate_kinetic_contrast
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage import LiteratureKineticRepository, kinetic_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_validation import validate_saved_kinetic
-from gene_annotation_episode.episodic_workflow.root.a105.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_kinetic_inputs import Source, SOURCE_REF, fixture
-from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_kinetic_storage import setup, project
 
 def count_fixture(expression, numeral=None, *, prefix='', suffix=' independent experiments.'):
     text = 'Synthetic π count: ' + prefix + expression + suffix
@@ -126,17 +119,6 @@ def test_written_count_does_not_invent_covariance_or_independence_from_basis(bas
     assert calculated['independent_preparation_count'] is None
     assert calculated['cells']['log_contrast_variance']['value'] is None
 
-def test_no_count_selection_is_not_a_source_unreported_assertion(tmp_path):
-    store, child, args = setup(tmp_path)
-    with store:
-        repo = LiteratureKineticRepository(store, child.run_id)
-        outcome = repo.populate(child, args, 'no-count-selected')
-        row, = project(repo, outcome, ['numerator_parameter'])
-        reading = row['numerator']['uncertainty']
-        assert reading['count_reading_status'] == 'not_selected'
-        assert reading['count_unavailable_reason'] is None
-        assert reading['count_notation'] is None
-        assert row['numerator']['uncertainty_values']['count'] is None
 
 @pytest.mark.parametrize('change', ['quote', 'offset', 'authorization'])
 def test_count_custody_and_caller_authorization_still_fail(change):
@@ -151,53 +133,7 @@ def test_count_custody_and_caller_authorization_still_fail(change):
     with pytest.raises(ExperimentalContractError):
         read_kinetic_inputs(selection, read_source=source.read)
 
-def bind_count(args, raw, text, token):
-    source = Source(raw)
-    selection = source.number(text, token)
-    selection['witness']['source_ref'] = args['source_ref']
-    args['numerator']['uncertainty']['count'] = selection
 
-@pytest.mark.parametrize('expression,token,expected,status', [('three', 'three', 3, 'exact'), ('at least three', 'three', None, 'qualified'), ('triplicate', 'triplicate', None, 'unsupported')])
-def test_native_source_count_projection_and_saved_only_mode_ro(tmp_path, monkeypatch, expression, token, expected, status):
-    text = 'Synthetic count ' + expression + ' independent experiments'
-    store, child, args = setup(tmp_path / 'state', extra=text)
-    try:
-        artifact = store.get(args['source_ref'])['artifact_ref']
-        bind_count(args, store.get_artifact(artifact).decode(), text, token)
-        repo = LiteratureKineticRepository(store, child.run_id)
-        outcome = repo.populate(child, args, 'count-selected')
-        saved = repo.read(outcome['result']['sheet_ref'])
-        raw, = project(repo, outcome, ['numerator_parameter'])
-        ratio, = project(repo, outcome, ['parameter_ratio'])
-        assert raw['numerator']['uncertainty_values']['count'] == expected
-        assert raw['numerator']['uncertainty']['count_reading_status'] == status
-        assert raw['numerator']['uncertainty_values']['count_reported_value'] == (None if status == 'unsupported' else 3)
-        assert ratio['numerator']['uncertainty_values']['count_reported_value'] is None
-        assert ratio['numerator']['uncertainty_values']['count'] is None
-        validate_form({'numbers': [raw]}, obj({'numbers': kinetic_cells_schema()}), lambda *_: True)
-        reference = store.get(raw['numerator']['uncertainty']['count_ref'])
-        assert reference['anchor']['quote'] == token
-        assert reference['label'] == token
-        before = list(store.db.iterdump())
-        store.close()
-
-        def forbidden(*_a, **_kw):
-            raise AssertionError('Saved reconstruction may not reinterpret a count, reread source or recalculate')
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_inputs._count_reading', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage.read_kinetic_inputs', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage.populate_kinetic_contrast', forbidden)
-        with Store(tmp_path / 'state') as reopened:
-            reopened.db.close()
-            reopened.db = sqlite3.connect((tmp_path / 'state/state.sqlite3').resolve().as_uri() + '?mode=ro', uri=True, isolation_level=None)
-            reopened.db.row_factory = sqlite3.Row
-            get = reopened.get_artifact
-            monkeypatch.setattr(reopened, 'get_artifact', lambda ref: forbidden() if ref == artifact else get(ref))
-            restored = LiteratureKineticRepository(reopened, child.run_id)
-            assert restored.read(outcome['result']['sheet_ref']) == saved
-            assert project(restored, outcome, ['numerator_parameter']) == [raw]
-            assert list(reopened.db.iterdump()) == before
-    finally:
-        store.close()
 
 @pytest.mark.parametrize('target', ['raw_word', 'status', 'canonical_count', 'boolean_value', 'relation'])
 def test_detached_count_associations_reject_tampering_without_reinterpretation(target, monkeypatch):

@@ -1,6 +1,4 @@
-"""A107 original retained result worker dependency: flux_balance_result_worker.
-Scientific bodies, invalid outcomes and original byte qualifications are retained.
-"""
+"""A107 result worker dependency: flux_balance_result_worker."""
 
 
 from copy import deepcopy

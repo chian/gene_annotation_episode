@@ -32,20 +32,6 @@ def task_relevant(state):
         or any(node.get('x-source') == NAMESPACE for node in (state.get('requested_form') or {}).get('properties', {}).values()))
 
 
-def legacy_task_relevant(state):
-    if state.get('literature_legacy_figure_contract_work'):
-        return True
-    if not task_relevant(state):
-        return True
-    def walk(value):
-        if isinstance(value, Mapping):
-            if value.get('evaluation_scope') == 'reference_experimental_figure_ordinates':
-                return True
-            return any(walk(child) for child in value.values())
-        return isinstance(value, (list, tuple)) and any(walk(child) for child in value)
-    return bool(state.get('literature_assignment', {}).get('requested_figure_components')) or walk((state.get('last_local_outcome'), state.get('child_reports')))
-
-
 def lookup_relevant(outcome):
     result = outcome.get('result', {}) if isinstance(outcome, Mapping) else {}
     if not isinstance(result, Mapping):
@@ -161,5 +147,5 @@ def sanitize_private(value, bindings):
 
 
 __all__ = ['ENDPOINT_SIGNAL_TASK', 'is_row', 'rows_from_values', 'rows_from_reports', 'task_relevant',
-    'legacy_task_relevant', 'lookup_relevant', 'hidden_records', 'render_received', 'state_view', 'sanitize_private',
+    'lookup_relevant', 'hidden_records', 'render_received', 'state_view', 'sanitize_private',
     'endpoint_history_record']

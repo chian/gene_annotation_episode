@@ -1,10 +1,9 @@
 """Exact A106 numerical declarations, separate from investigation instructions.
 
 This bounded catalog names existing return schemas, not new readers or scores.
-New legacy decisions can freeze their available declarations before selection.
-Saved validation uses only that snapshot; it never substitutes today's factory.
+Decisions can freeze their available declarations before selection.
+Saved validation uses only that snapshot; it never substitutes the live factory.
 
-Private declaration split, 2026-11-11:
 A106 retains its private numerical source-measurement families and its
 perturbation operand, intervention grading and final subscore returns.
 A105 aggregation/assay return declarations and A108 contextual declarations

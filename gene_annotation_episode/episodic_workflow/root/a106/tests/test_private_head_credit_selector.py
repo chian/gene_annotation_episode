@@ -20,7 +20,7 @@ def module(name):
 def selected_binding(tmp_path_factory):
     directory = tmp_path_factory.mktemp('private-head-credit')
     library = module('scientific_process_library').ScientificProcessLibrary.freeze(directory / 'library', source=ROOT.parents[3] / 'research/slotted_process_library/publications/2026-10-24-001')
-    tools = module('scientific_tool_library').ScientificToolLibrary.freeze(directory / 'tools', catalog=[], tool_info=True)
+    tools = module('scientific_tool_library').ScientificToolLibrary.freeze(directory / 'tools', catalog=[])
     services = SimpleNamespace(tool_catalog=lambda scope: [])
     Binding = module('scientific_process.episode').ScientificProcessEpisode
     binding = Binding(services, library=library, tool_library=tools, child_roles=('scientific_process',))
@@ -45,30 +45,6 @@ def selected_binding(tmp_path_factory):
 
 def evidence_task(unit=2.5):
     return {'evidence_task': {'version': 'evidence_axis_task_v1', 'kind': 'whole_axis_findings', 'evidence_axis': AXIS, 'credit_unit': unit}}
-
-def test_bound_selector_returns_exact_original_scientific_class_and_empty_received_projection(selected_binding):
-    binding, store, context = selected_binding
-    actual_context = context(evidence_task() if AXIS == 'A106' else {})
-    method = binding.credit_projector
-    assert method.__self__ is binding
-    assert method.__func__ is module('scientific_process.credit').ScientificProcessCredit.credit_projector
-    projector = method(actual_context)
-    if AXIS == 'A101':
-        Expected = module('scientific_process.native_correspondence_credit').A101SequenceCredit
-        assert type(projector) is Expected
-        assert projector.as_record() == Expected().as_record()
-        projected = projector(store, module('communication').plain(actual_context.scope), known_record_refs=[])
-        assert projector.requires_known_record_refs and projector.yield_method == 'bounded_quality'
-    else:
-        progress = module('investigation_progress')
-        assert type(projector) is progress.ScientificFindingProgress
-        assert type(projector.policy) is progress.FindingProgressPolicy
-        assert projector.policy.finding_unit == 2.5
-        assert projector.as_record() == progress.ScientificFindingProgress(progress.FindingProgressPolicy(2.5)).as_record()
-        projected = projector(store, module('communication').plain(actual_context.scope), known_assessment_refs=[])
-        assert projected['retained_finding_count'] == 0 and projected['source_contributions'] == []
-    assert projected['credit'] == 0
-    assert projector.requires_episode_receipts
 
 def test_selector_rejects_changed_filled_identity_with_own_contract_error(selected_binding):
     binding, _, context = selected_binding

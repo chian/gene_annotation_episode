@@ -300,9 +300,7 @@ def _compile_closed_schema(schema):
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
             if blast_utility_sources is None:
                 from gene_annotation_episode.episodic_workflow.root.a105.library.retained_input_authority.blast_utility_result_views import blast_utility_fact_sources
-                from gene_annotation_episode.episodic_workflow.root.a105.library.retained_input_authority.blast_utility_historical_fact_schemas import blast_utility_historical_fact_schemas
-                historical = blast_utility_historical_fact_schemas()
-                blast_utility_sources = {key: (value['report_schema'], *historical.get(key, ())) for key, value in blast_utility_fact_sources().items()}
+                blast_utility_sources = {key: (value['report_schema'],) for key, value in blast_utility_fact_sources().items()}
             expected = blast_utility_sources.get(source, ())
             if not expected or not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}:
                 raise ReportBoundaryError(f'{path}: BLAST utility fact schema must match its registered source', code='invalid_schema')
@@ -525,9 +523,8 @@ def _compile_closed_schema(schema):
         if source == 'literature_assay_grading_cells':
             if depth != 1:
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
-            from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_grading_storage import assay_grading_cells_schema, legacy_assay_grading_cells_schema
-            expected = (assay_grading_cells_schema(), legacy_assay_grading_cells_schema())
-            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) not in {json.dumps(item, sort_keys=True, allow_nan=False) for item in expected}:
+            from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_grading_storage import assay_grading_cells_schema
+            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(assay_grading_cells_schema(), sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: assay grading fact schema must match its registered source', code='invalid_schema')
             return
         if source in {'literature_a108_grading_cells', 'literature_a108_aggregation_cells'}:

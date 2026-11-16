@@ -19,6 +19,7 @@ from .native_blast_standard_database_result_publication import (prepare_standard
     _failure, _json, _json_artifact, _local_job_failure, _exception_diagnostic)
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_standard_database_result_views import standard_blast_database_fact_sources, validate_standard_blast_database_selector
 from .practical_execution_state import _immutable, _read
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 
 VERSION = 'native_blast_standard_database_result_receipt_v1'
 IDENTIFIER_NAMESPACES = ('native_blast_standard_database_row', 'native_blast_standard_database_artifact_key',
@@ -184,7 +185,7 @@ class StandardBLASTDatabaseResults:
                     try:
                         prepared = prepare_standard_blast_database_grading(self.store, context=context, target=target,
                             capture=capture, selector=selector, directory=directory / 'grading',
-                            policy=LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3))
+                            policy=LocalJobPolicy(ENVIRONMENT_BOUNDS['memory_bytes'], 4 * 1024 ** 3))
                         body['preparation'] = prepared
                         publication = publish_selected_standard_blast_database_rows(self.store, context=context,
                             preparation=prepared, selector=selector, directory=directory / 'publication')

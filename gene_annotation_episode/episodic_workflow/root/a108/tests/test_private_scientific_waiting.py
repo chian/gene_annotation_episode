@@ -19,8 +19,8 @@ def test_scientific_wait_preserves_original_outcome_without_new_credit(unavailab
         calls.append((condition,index))
         if unavailable:raise runtime.EventTargetError('wait_target_unavailable',affected_refs=['original-handle'])
         return {'status':'completed','record_refs':[],'changed_record_refs':[],'result':{'ready':False}}
-    source.workflow=SimpleNamespace(run_id='run',execution_binding=None,wait_inputs_version=None,
-        completed_action_inputs_version=None,binding_context=lambda source:'original-context',
+    source.workflow=SimpleNamespace(run_id='run',execution_binding=None,pending_work=lambda source:{'items':[]},
+        binding_context=lambda source:'original-context',
         scientific_process_binding=SimpleNamespace(validate_execution_context=lambda context:None),
         journal=SimpleNamespace(row=lambda table,episode,index:rows.get(index),
             save=lambda table,row:rows.__setitem__(row['decision_index'],dict(row)),measure=lambda *args:nullcontext()),

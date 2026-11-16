@@ -12,17 +12,12 @@ import shutil
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_database_result_worker as worker
-from gene_annotation_episode.episodic_workflow.root.a101.library import native_blast_database_result_views as views
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_blast_database_convergence as bridge
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_blast_database_metadata as metadata
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_native_iteration_records as extractor
 from gene_annotation_episode.episodic_workflow.root.a101.tests.test_blast_native_iteration_records import make_packet, report, MARKER
 from gene_annotation_episode.episodic_workflow.root.a101.tests.test_native_blast_database_result_worker import implementation, run_request, reuse_request
 import gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_worker_values as _scientific_native_blast_database_result_worker
-
-
-ROOT = Path(__file__).resolve().parents[5]
-PACKET = ROOT / "verification/tool_graders_native_blast_convergence_worker_2026-10-26_329"
 
 
 def forbidden(*args, **kwargs):
@@ -198,10 +193,6 @@ def test_reuse_changed_native_artifact_fails_without_reinterpreting(tmp_path, mo
     failed = run_request(tmp_path, new, "bad-reuse.json")
     assert failed["status"] == "failed"
     assert not (Path(new["output_directory"]) / "sheets.json").exists()
-
-
-
-
 
 
 def test_partial_tail_does_not_create_a_convergence_record(tmp_path):

@@ -3,7 +3,7 @@
 These helpers validate metadata and existing receipt authority, not source
 interpretation or scientific bytes. A frozen receipt must itself arrive through
 the host's authenticated immutable control artifact; self-consistent JSON alone
-does not authenticate a historical Store record. No helper writes or grants it.
+does not authenticate a frozen Store record. No helper writes or grants it.
 """
 from __future__ import annotations
 
@@ -124,10 +124,10 @@ def _file(store, value, pointer):
     return file, str(store.path / 'artifacts' / file['sha256'][:2] / file['sha256'])
 
 
-def _selected_files(store, assignment, *, historical=False):
+def _selected_files(store, assignment):
     _require(type(assignment) is dict and 'requested_job' in assignment, 'invalid_assignment')
     try:
-        requested = validate_flux_balance_requested_job(assignment['requested_job'], historical=historical)
+        requested = validate_flux_balance_requested_job(assignment['requested_job'])
     except (ValueError, KeyError, TypeError) as error:
         raise ValueError('flux_balance_input_invalid_assignment') from error
     job = requested['native_flux_balance']
@@ -177,17 +177,15 @@ def _check_version(store, record, version, pointer):
         _require(actual['sha256'] == version['content_sha256'], 'version_conflict', pointer)
 
 
-def _compose(store, context, assignment, versions, reference_access, *, records=None, historical=False):
-    _require(type(historical) is bool, 'historical_validation_mode_invalid')
-    _require(not historical or records is not None, 'historical_frozen_records_required')
+def _compose(store, context, assignment, versions, reference_access, *, records=None):
     versions = _versions(versions)
     scope, manifest, known = _authority(store, context)
-    model, priors = _selected_files(store, assignment, historical=historical)
+    model, priors = _selected_files(store, assignment)
     selected_records = []
     for index, version in enumerate(versions):
         reference = version['reference']
         # A frozen receipt contains witnesses only. Unrelated selected records
-        # are not rediscovered from today's Store during historical validation.
+        # are not rediscovered from today's Store during frozen-receipt validation.
         if records is not None and reference not in records:
             continue
         pointer = '/input_versions/' + str(index)
@@ -201,7 +199,7 @@ def _compose(store, context, assignment, versions, reference_access, *, records=
         _access(context, reference, record['record_type'], reference_access, pointer)
         if records is not None and record['record_type'] == 'source':
             # Use the existing ownership index and the frozen source record,
-            # never a later mutable source row for historical scope projection.
+            # never a later mutable source row for frozen scope projection.
             roots = {r[0] for r in store.db.execute(
                 'SELECT target_ref FROM record_roots WHERE record_ref=?', (reference,))}
             in_scope = (roots <= set(scope['subject_refs'])
@@ -308,7 +306,7 @@ def freeze_flux_balance_input_binding(store, *, binding):
 
 
 def validate_flux_balance_input_binding_receipt(store, value, *, context, assignment,
-                                               input_versions, reference_access, historical=False):
+                                               input_versions, reference_access):
     """Check a host-authenticated frozen control without rebinding its sources."""
     value = _detached(value, 'invalid_receipt')
     _require(type(value) is dict and set(value) == {'version', 'binding', 'witness_records'}
@@ -331,7 +329,7 @@ def validate_flux_balance_input_binding_receipt(store, value, *, context, assign
         for witness in row['witnesses']:
             _require(digest(records[witness['reference']]) == witness['record_sha256'], 'witness_record_conflict')
     expected = _compose(store, context, plain(assignment), input_versions, reference_access,
-                        records=records, historical=historical)
+                        records=records)
     _require(EpisodeReturnRecords._equal(binding, expected), 'binding_conflict')
     return value
 

@@ -1,8 +1,7 @@
 # Aurora storage and PBS charging account
 
 The user's required target is Aurora, with PBS charging account
-`BioReason-Aurora-Test`. On 2026-11-04 UTC the user changed billing from EpiCalib
-after the live allocation check showed EpiCalib had expired on 2026-11-01.
+`BioReason-Aurora-Test`.
 All workflow software, environments, databases, inputs, temporary files, caches,
 logs and run directories belong under `/lus/flare/projects/BioReason-Aurora-Test`.
 The existing personal workspace is `/lus/flare/projects/BioReason-Aurora-Test/chian`;
@@ -37,6 +36,4 @@ existence, runtime usability, quota or allocation balance. Current filesystem,
 scheduler and account observations retain their own times and native sources;
 they do not rewrite the original job's account or preparation record.
 
-The 2026-10-22 manual run charged `BioReason-Aurora-Test`. Preserve that historical
-receipt and any records from the intervening EpiCalib instruction. New jobs use
-`-A BioReason-Aurora-Test`; current instructions do not relabel earlier allocations.
+New jobs use `-A BioReason-Aurora-Test`.

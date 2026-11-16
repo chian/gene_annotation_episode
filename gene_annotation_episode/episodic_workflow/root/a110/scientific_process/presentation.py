@@ -1,4 +1,4 @@
-"""Original A110 scientific presentation precedence."""
+"""A110 scientific presentation precedence."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a110.providers import DECISION_CONTEXT_VERSION, apply_state_frame, deepcopy, json
 from gene_annotation_episode.episodic_workflow.root.a110.library.scientific_decision_presentation import _ordinary_runtime_receiver_context, is_published_scientific_context, text_instructions

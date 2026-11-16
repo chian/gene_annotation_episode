@@ -43,6 +43,16 @@ def witness(ref, raw, quote, representation='original'):
     return {'source_ref': ref, 'representation': representation, 'start': start,
             'end': start+len(token), 'quote': quote}
 
+def location_inputs(value):
+    """Tool arguments in the current input form: a source location without a supplied quotation."""
+    if isinstance(value, list):
+        return [location_inputs(item) for item in value]
+    if isinstance(value, dict):
+        located = 'quote' in value and {'start', 'end'} <= set(value)
+        return {key: location_inputs(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 
 def setup_case(path, *, primary=False, incomplete=False, target_sequence=None):
     store = Store(path)
@@ -105,66 +115,6 @@ def binding_for(store, context):
     binding = LiteratureEpisode(WorkflowServices(host))
     host.episode_bindings = EpisodeBindingRegistry((binding,))
     return binding
-
-
-@pytest.mark.parametrize('primary,incomplete', [(True, False), (False, False), (False, True)])
-def test_selected_typed_values_and_reconstruction_without_source_bytes(tmp_path, monkeypatch, primary, incomplete):
-    from gene_annotation_episode.episodic_workflow.root.a110.episode_composition import compose_episode_bindings
-    from gene_annotation_episode.episodic_workflow.root.a110.episode_journal import Journal
-    store, context, args = setup_case(tmp_path, primary=primary, incomplete=incomplete)
-    with store:
-        binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'selected'))
-        assert outcome['status'] == 'completed', outcome.get('feedback')
-        current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
-        selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
-        form = form_with_facts({}, FORM, binding.facts(current, selected))
-        binding.validate_report(current, form, FORM)
-        rows = form['measurements']
-        assert [row['component'] for row in rows] == COMPONENTS
-        if primary:
-            assert rows[0]['value'] == 1.
-            assert all(row['value'] is None for row in rows[1:4])
-            assert rows[0]['ratio_mode'] == 'source_summary'
-            assert rows[0]['alternative_predictions'] == []
-            assert rows[0]['independent_n'] is rows[0]['reported_sample_sd'] is None
-            assert rows[0]['ratio_uncertainty'] == 'unreported'
-            assert rows[0]['ratio_origin'] == 'reported'
-        else:
-            assert [row['value'] for row in rows[:3]] == pytest.approx([.8, .05, 1/3])
-            assert rows[3]['value'] == (None if incomplete else .6)
-            assert rows[4]['value'] == pytest.approx(.2)
-            assert rows[0]['independent_n'] == 2
-            assert rows[0]['derived_sample_sd'] == pytest.approx(2**.5/10)
-            assert rows[0]['ratio_uncertainty'] == 'descriptive_sample_sd'
-            assert rows[0]['ratio_origin'] == rows[0]['budget_origin'] == 'synthetic'
-        assert all(row['uncertainty_interpretation'] == 'descriptive_not_confidence_interval' for row in rows)
-        assert all(row['measurement_corrections'] == 'not_applied' for row in rows)
-        repo = LiteratureReactionRepository(store, context.run_id)
-        bad = deepcopy(rows)
-        bad[0]['claim_prediction'] = 7.
-        with pytest.raises(ContractError):
-            repo.validate_returned_values(bad, permitted_record_refs=current.received_record_refs)
-        descriptor = binding.as_record()
-        composition = compose_episode_bindings(binding.services, store=store,
-            journal=Journal(store, context.run_id), execution_backend=None,
-            descriptors=[descriptor], job_episodes=None, resource_estimator=None, role_credit_bindings={})
-        restored, = composition.bindings
-        assert restored.as_record() == descriptor
-        saved = store.get(outcome['result']['sheet_ref'])
-        allowed = {saved['artifact_ref'], saved['request_ref']}
-        get_artifact = store.get_artifact
-        def saved_only(ref):
-            assert ref in allowed, 'saved replay may only read result/request artifacts'
-            return get_artifact(ref)
-        def forbidden(*args, **kwargs):
-            raise AssertionError('saved replay cannot parse/recalculate source')
-        monkeypatch.setattr(store, 'get_artifact', saved_only)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage.read_reaction_inputs', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage.populate_reaction_constraints', forbidden)
-        store.db.execute('pragma query_only=ON')
-        assert asyncio.run(restored.execute(context, 'literature.reaction.populate', args, 'selected')) == outcome
-        assert form_with_facts({}, FORM, restored.facts(current, selected)) == form
 
 
 @pytest.mark.parametrize('primary', [False, True])
@@ -252,7 +202,7 @@ def test_parent_steering_groups_only_admitted_reaction_cells_and_keeps_own_task(
     store, context, args = setup_case(tmp_path)
     with store:
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'selected'))
+        outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', location_inputs(args), 'selected'))
         assert outcome['status'] == 'completed'
         repo = LiteratureReactionRepository(store, context.run_id)
         rows = repo.project_cells([outcome['result']['sheet_ref']],

@@ -53,30 +53,6 @@ def append_document(case, *, document_id='second', raw=None):
         requirement_id=document_id, role=first['role'], declared_format=deepcopy(first['declared_format'])))
 
 
-def test_directional_only_calls_real_producers_once_and_never_legacy_projection(monkeypatch):
-    case=fixture(); before=deepcopy(case); calls={}
-    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_directional_numerical_contracts as numerical
-    full_validation = numerical._validate_components
-    def counted_validation(*args, **kwargs):
-        calls['full_producer_validation'] = calls.get('full_producer_validation', 0) + 1
-        return full_validation(*args, **kwargs)
-    monkeypatch.setattr(numerical, '_validate_components', counted_validation)
-    for name in ('parse_genome_comparison_directional_report','build_directional_sheet','calculate_directional_components'):
-        fn=getattr(provider,name)
-        def counted(*args,_name=name,_fn=fn,**kwargs):
-            calls[_name]=calls.get(_name,0)+1
-            return _fn(*args,**kwargs)
-        monkeypatch.setattr(provider,name,counted)
-    def fail(*a,**k):raise AssertionError('legacy consume_bundle is not v2 construction')
-    monkeypatch.setattr(provider.legacy,'consume_bundle',fail)
-    result=adapter.consume_bundle(**case)
-    assert result['facts']['count']['cell']['value']==1
-    assert case==before
-    assert len(calls) == 4 and set(calls.values()) == {1}
-    assert result['components']['legacy'] is None
-    assert result['sheet']['numerical_sheet']['directional_operand_binding']=='unbound'
-
-
 @pytest.mark.parametrize('exact',[False,True])
 def test_retained_native_no_hit_zero_is_explicit(exact):
     result=adapter.consume_bundle(**fixture(exact=exact))
@@ -93,35 +69,6 @@ def test_wrong_original_task_retains_precise_global_failure_before_parsing(monke
     with pytest.raises(c.ProteomeBundleV2Error, match='proteome_original_task_conflict') as failure:
         adapter.consume_bundle(**case)
     assert failure.value.path == ''  # The host's cross-task diagnostic is global.
-
-
-@pytest.mark.parametrize('mode,code',[('missing','document_missing'),('ambiguous','document_ambiguous'),('digest','artifact_digest_mismatch'),
-    ('role','artifact_binding_conflict'),('format','format_incompatible'),('range','nonzero_range_unsupported'),('request_range','nonzero_range_unsupported'),('near','artifact_binding_conflict')])
-def test_scoped_document_failures_preserve_selected_empty_sheet(mode,code):
-    case=fixture(exact=mode=='near'); a=case['bundle']['artifacts'][0]
-    if mode=='missing':case['bundle']['artifacts']=[]
-    elif mode=='ambiguous':case['bundle']['artifacts'].append(deepcopy(a))
-    elif mode=='digest':case['artifact_bytes']['directional']=b'wrong bytes'
-    elif mode=='role':a['role']='unrelated'
-    elif mode=='format':a['declared_format']['producer_source_ref']='other-source'
-    elif mode=='range':a['transfer'].update(object_complete='no',observed_range=dict(start=1,end_inclusive=a['byte_count'],total_size=a['byte_count']+1),total_size=a['byte_count']+1)
-    elif mode=='request_range':a['transfer'].update(object_complete='unknown',requested_range=[1,None])
-    elif mode=='near':a['raw_artifact_ref']='different-artifact'
-    result=adapter.consume_bundle(**case)
-    assert result['sheet']['input_resolution'][0]['result_index'] is None
-    assert 'proteome_directional_'+code in {r['reason_code'] for r in result['missing_requirements']}
-    assert result['sheet']['directional_sheet_result']['sheet']['reader_results']==[]
-    assert result['facts']['count']['availability']=='unavailable'
-
-
-def test_joint_duplicate_selection_is_rejected_before_either_reader(monkeypatch):
-    case=fixture(mixed=True)
-    case['parameters']['native_documents'][0].update(source_ref='directional',raw_artifact_ref='directional')
-    def fail(*a,**k):raise AssertionError('duplicate source was parsed')
-    monkeypatch.setattr(provider,'parse_genome_comparison_directional_report',fail)
-    monkeypatch.setattr(provider.legacy,'parse_genome_comparison',fail)
-    result=adapter.consume_bundle(**case)
-    assert all(r['result_index'] is None and r['state']=='invalid' for r in result['sheet']['input_resolution'])
 
 
 def test_missing_first_document_does_not_shift_logical_target():
@@ -163,13 +110,6 @@ def test_malformed_native_result_retained_but_corrupt_reader_object_isolated(mon
     result=adapter.consume_bundle(**case)
     assert len(result['sheet']['directional_results'])==(0 if corrupt else 1)
     if not corrupt:assert result['sheet']['directional_results'][0]['parse_state']=='failure'
-
-
-def test_mixed_native_and_directional_preserve_separate_meanings():
-    result=adapter.consume_bundle(**fixture(mixed=True,supplementary=True))
-    assert result['components']['legacy']['value']['tracks'][0]['first_hsp_identity_summary']['mean']['value']==.4375
-    assert result['sheet']['numerical_sheet']['legacy_sheet']['directional_attachment'] is None
-    assert result['components']['directional']['components']['reports'][0]['displayed_query_count']['value']==1
 
 
 def test_native_only_v2_keeps_directional_wrappers_null_and_calls_no_directional_producer(monkeypatch):

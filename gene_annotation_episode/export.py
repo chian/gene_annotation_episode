@@ -586,7 +586,7 @@ def _temporary_output(path):
 
 
 def export_annotation(store, path: str | Path, *, format="json", scope=None,
-                      include_credit=False, credit_policy=None,
+                      include_credit=False,
                       include_artifacts=False, page_size=128) -> dict[str, Any]:
     """Write one current-state snapshot without changing scientific state.
 
@@ -594,7 +594,7 @@ def export_annotation(store, path: str | Path, *, format="json", scope=None,
     Source/sequence bytes are represented by content hashes by default; opt in
     to a portable sibling artifact directory. GFF3 always has an authoritative
     ``<path>.annotation.json`` companion. Unsupported rows remain there with
-    explicit exclusion codes. The old categorical credit projection is retired.
+    explicit exclusion codes.
     A requested score is explicitly unavailable until a numerical component
     scorer is bound; this exporter never substitutes a zero or a new policy.
     """
@@ -604,8 +604,6 @@ def export_annotation(store, path: str | Path, *, format="json", scope=None,
         raise ContractError("invalid_export_page_size")
     if type(include_credit) is not bool or type(include_artifacts) is not bool:
         raise ContractError("invalid_export_option")
-    if credit_policy is not None:
-        raise ContractError("categorical_annotation_policy_retired_supply_explicit_numeric_scorer")
     path = Path(path).resolve()
     authoritative = {store.path / name for name in ("state.sqlite3", "state.sqlite3-wal", "state.sqlite3-shm")}
     if path in authoritative or path.is_relative_to(store.path / "artifacts"):

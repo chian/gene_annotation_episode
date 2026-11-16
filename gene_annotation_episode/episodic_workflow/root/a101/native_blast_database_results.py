@@ -20,6 +20,7 @@ from .native_blast_database_result_publication import (prepare_native_blast_data
     saved_function_input_descriptor)
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_result_views import native_blast_database_fact_sources, validate_native_blast_database_result_selector, FUNCTION_SELECTOR, SAVED_INPUT_SOURCE, saved_function_descriptor, _SAVED_INPUT_SCHEMA
 from .practical_execution_state import _immutable, _read
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 
 VERSION = 'native_blast_database_result_receipt_v1'
 FUNCTION_VERSION = 'native_blast_database_result_receipt_vdb_function_v1'
@@ -220,7 +221,7 @@ class NativeBLASTDatabaseResults:
                         raise ContractError('native_blast_database_return_unauthorized')
                     prepared = prepare_native_blast_database_grading(self.store, context=context, target=target,
                         capture=None, selector=selector, directory=directory / 'grading',
-                        policy=LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3), original_body=original)
+                        policy=LocalJobPolicy(ENVIRONMENT_BOUNDS['memory_bytes'], 4 * 1024 ** 3), original_body=original)
                     body['preparation'] = prepared
                     publication = publish_selected_native_blast_database_rows(self.store, context=context,
                         preparation=prepared, selector=selector, directory=directory / 'publication')
@@ -243,7 +244,7 @@ class NativeBLASTDatabaseResults:
                     try:
                         prepared = prepare_native_blast_database_grading(self.store, context=context, target=target,
                             capture=capture, selector=selector, directory=directory / 'grading',
-                            policy=LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3))
+                            policy=LocalJobPolicy(ENVIRONMENT_BOUNDS['memory_bytes'], 4 * 1024 ** 3))
                         body['preparation'] = prepared
                         publication = publish_selected_native_blast_database_rows(self.store, context=context,
                             preparation=prepared, selector=selector, directory=directory / 'publication')

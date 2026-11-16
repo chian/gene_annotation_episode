@@ -1,9 +1,7 @@
 """Native representation and framing checks, not biological truth fixtures."""
 
-import hashlib
 import io
 import json
-from pathlib import Path
 
 from Bio import SeqIO
 from Bio.Seq import Seq
@@ -30,10 +28,6 @@ from gene_annotation_episode.genbank_intake import (
     native_value,
     records,
 )
-
-
-ACQUISITION = Path(__file__).resolve().parents[1] / "validation" / "acquisition"
-SAVED_SHA256 = "e66323c92131da93a727aac08194f2dbf79c2b593779511387cfdbf064019105"
 
 
 def genbank(*, identifier="NATIVEFIXTURE.1", sequence="ACGTACGTACGT", description=None):
@@ -352,32 +346,3 @@ def test_native_compound_order_and_qualifier_normalization_are_described_as_pars
     assert between["start"]["class"] == between["end"]["class"] == "ExactPosition"
 
 
-def test_saved_acquisition_fixture_matches_original_custody_and_native_annotation_counts():
-    body = (ACQUISITION / "AJ320226.1.genbank").read_bytes()
-    provenance = json.loads((ACQUISITION / "acquisition-provenance.json").read_text())
-    assert len(body) == 4368
-    assert hashlib.sha256(body).hexdigest() == SAVED_SHA256
-    assert provenance["raw_artifact"]["sha256"] == SAVED_SHA256
-    assert provenance["source"]["id"] == "source_1180b2f3afd5b7d32000e699"
-    assert provenance["request"]["request"] == {
-        "db": "nuccore", "id": "AJ320226", "retmode": "text", "rettype": "gbwithparts",
-        "tool": "gene-annotation-episode",
-    }
-    result = events(body)
-    assert errors(result) == []
-    entry = native_entries(result, "record")[0]
-    native = entry["record"]
-    assert native["id"] == "AJ320226.1"
-    assert native["sequence"] == {"length": 1489, "defined": True, "defined_ranges": [[0, 1489]]}
-    assert native["feature_count"] == 4
-    assert len(native["annotations"]["references"]) == 2
-    assert native["annotations"]["references"][0]["attributes"]["pubmed_id"] == "11773048"
-    reference_location = native["annotations"]["references"][1]["attributes"]["location"][0]
-    assert (reference_location["start"]["nominal"], reference_location["end"]["nominal"]) == (0, 1489)
-    features = [row["feature"] for row in native_entries(result, "feature")]
-    assert [feature["type"] for feature in features] == ["source", "gene", "CDS", "sig_peptide"]
-    assert sum("experiment" in feature["qualifiers"] for feature in features) == 2
-    assert all(row["meaning"] == "native_supplied_source_assertions_not_current_target_annotations"
-               for row in [entry, *native_entries(result, "feature")])
-    # These are preserved source claims, not performed experiments or current assignments.
-    assert len([event for event in result if "record" in event]) == 1

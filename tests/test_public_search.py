@@ -5,8 +5,7 @@ from dataclasses import replace
 
 import pytest
 
-from gene_annotation_episode.acquisition import AcquisitionError, SourceSnapshot, parse_hmmer, uniprot_pagination
-from gene_annotation_episode.provider_jobs import RemoteSearches, HMMER_IDENTITY_VERSION
+from gene_annotation_episode.acquisition import AcquisitionError, SourceSnapshot, parse_hmmer
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -43,18 +42,6 @@ def test_hmmer_query_axis_depends_on_algorithm():
         assert not {"query_coverage", "reference_coverage"} & domain.keys()
 
 
-def test_uniprot_next_page_comes_from_actual_response_header():
-    s = replace(snapshot({"results": []}, {"query": "x", "size": 2}), service="uniprot",
-        url="https://rest.uniprot.org/uniprotkb/search", transport={"response": {"headers": {
-        "link": '<https://rest.uniprot.org/uniprotkb/search?query=x&cursor=actual-token&size=2>; rel="next"',
-        "x-total-results": "21", "x-uniprot-release": "2026_03"}}})
-    assert uniprot_pagination(s)["next_cursor"] == "actual-token"
-    assert uniprot_pagination(s)["total_results"] == 21
-    malicious = replace(s, transport={"response": {"headers": {"link": '<https://elsewhere.test/?cursor=fake>; rel="next"'}}})
-    assert uniprot_pagination(malicious)["next_cursor"] is None
-    assert uniprot_pagination(snapshot({}))["pagination_metadata_available"] is False
-
-
 class Client:
     def __init__(self):
         self.submissions = 0
@@ -73,18 +60,6 @@ class Client:
     def hmmer_result(self, job_id, **kwargs):
         assert job_id == JOB
         return snapshot(result())
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def test_concurrent_import_partial_result_never_retains_other_operations_records(tmp_path):

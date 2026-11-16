@@ -35,7 +35,7 @@ def test_actual_bounded_worker_uses_real_stdlib_closure_and_captured_cells(prepa
     assert capture["result"]["analysis_complete"] and capture["failures"] == []
     assert execution["returncode"] == 0 and execution["failure"] is None
     assert execution["intent"]["dependencies"] == []
-    assert execution["metadata"]["verified_cgroup"] == dict(memory_max=21474836480, memory_swap_max=0,
+    assert execution["metadata"]["verified_cgroup"] == dict(memory_max=5368709120, memory_swap_max=0,
         kill_mode="control-group", oom_policy="kill")
     assert [row["declared"]["relative_path"] for row in capture["outputs"]] == [
         "sheet.json", "calculations.json", "projection.json", "context.json", "diagnostics.json"]

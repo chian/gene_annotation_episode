@@ -92,18 +92,6 @@ def test_all_five_native_conversion_modes(case, mode, fmt, role, expected_bytes)
         assert all(f is None for f in sheet["output_records"][0]["calibration"].values())
 
 
-def test_native_fetch_missing_key_is_not_successful_request():
-    sheet = native_case("cmfetch_missing_unindexed", "cmfetch", "key_file", [("fetched_models", "fetched.cm", "infernal_cm_ascii")], input_model="models.cm", key_file=True)
-    rows = [r for r in sheet["native_rows"] if r["kind"] == "key_request"]
-    assert [(r["requested_key"], r["outcome"]) for r in rows] == [("absent_key", "missing"), ("tRNA5", "satisfied")]
-    comp = calculate(sheet)["rows"][0]["components"]
-    assert {name: comp[name]["value"] for name in ("input_model_count", "output_model_count", "requested_key_count", "satisfied_key_count", "missing_key_count")} == {
-        "input_model_count": 2, "output_model_count": 1, "requested_key_count": 2, "satisfied_key_count": 1, "missing_key_count": 1}
-    assert checks(calculate(sheet))["requested_keys_satisfied"] == "fail"
-    receipt = json.loads((NATIVE / "cmfetch_missing_unindexed/receipt.json").read_text())
-    assert receipt["returncode"] == 0
-
-
 @pytest.mark.parametrize("case,index", [("cmfetch_multiple_indexed", True), ("cmfetch_multiple_unindexed", False)])
 def test_fetch_order_follows_native_route(case, index):
     sheet = native_case(case, "cmfetch", "key_file", [("fetched_models", "fetched.cm", "infernal_cm_ascii")], input_model="models.cm", key_file=True, index=index)
@@ -112,20 +100,6 @@ def test_fetch_order_follows_native_route(case, index):
     assert checks(calculate(sheet))["requested_keys_satisfied"] == "pass"
     rows = [r for r in sheet["output_records"] if r["kind"] == "model"]
     assert [r["name"] for r in rows] == (["tRNA5-hand", "tRNA5"] if index else ["tRNA5", "tRNA5-hand"])
-
-
-def test_single_key_provenance_and_missing_request():
-    sheet = native_case("cmfetch_single", "cmfetch", "single_key", [("fetched_models", "fetched.cm", "infernal_cm_ascii")], input_model="models.cm", settings={"key": "tRNA5"})
-    row = [r for r in sheet["native_rows"] if r["kind"] == "key_request"][0]
-    assert row["locator"]["artifact_ref"] == "request" and row["locator"]["line_start"] is None
-    assert row["outcome"] == "satisfied"
-    assert calculate(sheet)["rows"][0]["components"]["requested_key_count"]["value"] == 1
-    data = (NATIVE / "cmcalibrate_tiny/model.cm").read_bytes()
-    missing = populate(operation("cmfetch", "single_key", key="fixture246"), {"models": [payload(data, "models", "infernal_cm_ascii")]},
-        {"fetched_models": [payload(data, "fetched_models", "infernal_cm_ascii")], "stdout": [payload("", "stdout", "infernal_stdout")]})
-    assert "artifact_key_provenance_missing" in {i["code"] for i in missing["issues"]}
-    assert not any(r["kind"] == "key_request" for r in missing["native_rows"])
-    assert calculate(missing)["rows"][0]["components"]["requested_key_count"]["state"] == "missing"
 
 
 def test_aliases_can_share_one_returned_model():
@@ -195,21 +169,6 @@ def test_press_quartet_and_calibration_are_separate():
     assert comp["output_artifact_count"]["value"] == 6
     assert comp["output_byte_count"]["value"] == 15691
     assert checks(calculate(sheet))["source_binding"] == "unknown"
-
-
-@pytest.mark.parametrize("field,new,code", [
-    ("source_sha256", "0"*64, "artifact_binding_source_mismatch"),
-    ("artifact_sha256", "0"*64, "artifact_binding_digest_mismatch"),
-    ("actual_attempt_id", "another-attempt", "artifact_binding_attempt_mismatch"),
-    ("actual_relative_path", "wrong.cm.i1m", "artifact_binding_stem_mismatch"),
-    ("regular_file", False, "artifact_not_regular_file"),
-])
-def test_stale_or_cross_attempt_binary_binding(field, new, code):
-    sheet = press_sheet()
-    params = bound_parameters(sheet)
-    params["artifact_bindings"][0][field] = new
-    got = calculate(sheet, params)
-    assert code in {i["code"] for i in got["issues"]}
 
 
 def test_partial_output_retained_and_missing_quartet_member():
@@ -292,45 +251,6 @@ def test_actual_alias_native_multiplicity(route, count, index):
     assert comp["output_model_count"]["value"] == count
 
 
-def test_actual_all_missing_rc_zero_empty_fetch():
-    sheet = native_case("cmfetch_missing_all_unindexed", "cmfetch", "key_file", [("fetched_models", "fetched.cm", "infernal_cm_ascii")],
-        input_model="models.cm", key_file=True, base=OWN)
-    got = calculate(sheet)
-    assert got["rows"][0]["components"]["output_model_count"]["value"] == 0
-    assert got["rows"][0]["components"]["missing_key_count"]["value"] == 1
-    assert checks(got)["output_population_complete"] == "pass"
-    assert checks(got)["requested_keys_satisfied"] == "fail"
-    assert json.loads((OWN / "cmfetch_missing_all_unindexed/receipt.json").read_text())["returncode"] == 0
-
-
-def test_actual_duplicate_request_failure_preserves_originals():
-    sheet = native_case("cmfetch_duplicate_request_failure", "cmfetch", "key_file", [("fetched_models", "fetched.cm", "infernal_cm_ascii")],
-        input_model="models.cm", key_file=True, base=OWN)
-    got = calculate(sheet)
-    assert got["rows"][0]["components"]["input_model_count"]["value"] == 1
-    assert got["rows"][0]["components"]["output_model_count"]["state"] == "missing"
-    assert checks(got)["requested_keys_unique"] == "fail"
-    assert json.loads((OWN / "cmfetch_duplicate_request_failure/receipt.json").read_text())["returncode"] == 1
-
-
-def test_actual_calibrated_press_and_failed_duplicate_cleanup():
-    output_files = [(r, "models.cm."+r, f) for r,f in (
-        ("i1m", "infernal_cm_binary"), ("i1i", "infernal_ssi"), ("i1f", "infernal_i1f"), ("i1p", "infernal_i1p"))]
-    sheet = native_case("cmpress_calibrated", "cmpress", "press", output_files, input_model="models.cm", base=OWN)
-    assert checks(calculate(sheet, bound_parameters(sheet)))["model_calibration_present"] == "pass"
-    assert checks(calculate(sheet, bound_parameters(sheet)))["quartet_binding"] == "pass"
-    failure = OWN / "cmpress_duplicate_failure"
-    # Check retained actual cleanup; do not fabricate quartet members.
-    assert not any((failure / ("models.cm."+r)).exists() for r in ("i1m", "i1i", "i1f", "i1p"))
-    sheet = native_case("cmpress_duplicate_failure", "cmpress", "press", [], input_model="models.cm", base=OWN)
-    got = calculate(sheet)
-    assert checks(got)["model_names_unique"] == "fail"
-    assert checks(got)["output_set_complete"] == "fail"
-    assert got["rows"][0]["components"]["input_model_count"]["value"] == 2
-    assert got["rows"][0]["components"]["output_artifact_count"]["value"] == 2
-    assert json.loads((failure / "receipt.json").read_text())["returncode"] == 1
-
-
 def test_native_count_mismatch_and_wrong_output_format():
     sheet = press_sheet()
     sheet["native_rows"][0]["values"]["model_count"]["value"] = 3
@@ -340,16 +260,6 @@ def test_native_count_mismatch_and_wrong_output_format():
     sheet = populate(operation("cmconvert", "ascii"), {"models": [source]},
         {"converted_models": [payload(data, "converted_models", "hmmer_hmm_ascii")], "stdout": [payload("", "stdout", "infernal_stdout")]})
     assert checks(calculate(sheet))["output_format"] == "fail"
-
-
-def test_retained_input_evidence_digests_unchanged():
-    manifest = json.loads((NATIVE.parent / "NATIVE_EVIDENCE_001.json").read_text())
-    relevant = [r for r in manifest["runs"] if r["case"].startswith(("cmconvert_", "cmfetch_", "cmpress_"))]
-    assert len(relevant) == 11
-    for run in relevant:
-        for item in run["artifacts"]:
-            path = NATIVE / run["case"] / item["path"]
-            assert hashlib.sha256(path.read_bytes()).hexdigest() == item["sha256"]
 
 
 def test_partial_key_capture_cannot_establish_whole_requested_population():

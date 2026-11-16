@@ -201,18 +201,6 @@ def test_table_identity_includes_declared_encoding():
         parameters={'alphabet': 'dna', 'layout': 'current_without_reference', 'encoding': 'ascii'})
 
 
-@pytest.mark.parametrize('alphabet,expected_positions', [('dna', [1, 2, 3, 4, 5, None, None]),
-                                                       ('protein', [1, 2, 3, None, 4, 5])])
-def test_retained_execution_of_actual_native_reference_branch(alphabet, expected_positions):
-    directory = NATIVE.parents[1] / 'tool_graders_bvbrc_msa_pure_2026-10-25/native_reference' / alphabet
-    data = (directory / 'retained.snp.tsv').read_bytes()
-    result = read(data, alphabet, 'current_with_reference')
-    assert result['status'] == 'ok'
-    assert [r['reference_position']['value'] for r in result['value']['rows']] == expected_positions
-    assert [r['reference_character'] for r in result['value']['rows']] == list(
-        'AACGT--' if alphabet == 'dna' else 'ACD-EF')
-
-
 @pytest.mark.parametrize('data,alphabet', [(dna('1\t0\tA\t3\t0\t0\t0\t0\t2'), 'dna'),
     (protein('1\t0\tGly\tGly=3\t2'), 'protein'), (protein('1\t0\tGly\tGly=1\t2'), 'protein')])
 def test_contradictory_native_totals_are_retained_with_qualification(data, alphabet):

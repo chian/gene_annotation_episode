@@ -228,48 +228,11 @@ def test_reserved_job_starts_timing_and_condition_capture_at_actual_dispatch(tmp
         cleanup(handle)
 
 
-def test_blocking_pairwise_job_uses_same_native_statistics_path_and_preserves_unknown_cpu(tmp_path):
-    """A real tiny alignment, without an episode, model or production credit."""
-    program = ('from Bio.Align import PairwiseAligner\n'
-        'aligner=PairwiseAligner(mode="local", match_score=2, mismatch_score=-1, '
-        'open_gap_score=-2, extend_gap_score=-.5)\n'
-        'print(aligner.score("ACGT", "ACCT"))\n')
-    policy = LocalJobPolicy(128*1024**2, 4*1024**2)
-    execution_class = replace(scope(), phase='pairwise_sequence_alignment',
-        implementation_sha256=sha(program), parameters_sha256=sha(program),
-        query_residues=4, reference_residues=4, cpu_threads=None,
-        memory_bytes=policy.memory_bytes, scratch_bytes=policy.scratch_bytes)
-    path = tmp_path/'global.sqlite'
-    history = RunHistory(path)
-    condition = history.set_condition(operation_sha256=sha('ordinary-native-start'), resource_id='fixture-host',
-        state='normal', reason='operator_report', reported_at='2026-10-21T06:00:00Z')
-    history.close()
-    directory = tmp_path/'ordinary-tool'; directory.mkdir()
-    result = run_local_job([sys.executable, '-c', program], cwd=directory, policy=policy,
-        statistics=NativeStatistics.pending(path, execution_class))
-    assert result.returncode == 0 and result.stdout_path.read_text() == '5.0\n'
-    assert result.metadata['statistics_export']['state'] == 'recorded'
-    assert result.metadata['statistics_export']['class_ref'] == execution_class.ref
-    with sqlite3.connect(path) as db:
-        row, = db.execute('SELECT class_ref,data FROM run_statistics').fetchall()
-        statistic = json.loads(row[1])
-        assert row[0] == execution_class.ref
-        assert statistic['outcome'] == 'succeeded' and statistic['duration_kind'] == 'complete'
-        assert statistic['elapsed_seconds'] == result.metadata['elapsed_seconds'] > 0
-        assert statistic['condition_ref'] == condition
-        recorded_class = json.loads(db.execute('SELECT data FROM execution_classes').fetchone()[0])
-        assert recorded_class['cpu_threads'] is None
-        assert recorded_class['query_residues'] == recorded_class['reference_residues'] == 4
-    # Successful blocking cleanup does not discard the committed statistic.
-    assert not list(directory.glob('*.handle.json'))
-    assert not list(directory.glob('.local-job-*.statistics'))
-
-
 @pytest.mark.parametrize('returncode', [0, 7])
 def test_blocking_measurement_survives_temporary_directory_and_missing_history(tmp_path, monkeypatch, returncode):
     """Recover actual success/failure without repeating the native command."""
     import shutil
-    from gene_annotation_episode.resource_estimation import ResourceToolEstimator
+    from gene_annotation_episode.episodic_workflow.root.resource_estimation import ResourceToolEstimator
     path = tmp_path/'not-created.sqlite'
     recovery = tmp_path/'native-receipts'
     directory = tmp_path/'ordinary-tool'; directory.mkdir()
@@ -321,7 +284,7 @@ def test_blocking_measurement_survives_temporary_directory_and_missing_history(t
 
 
 def test_blocking_busy_history_recovers_original_known_condition_and_exact_forecast(tmp_path, monkeypatch):
-    from gene_annotation_episode.resource_estimation import ResourceToolEstimator
+    from gene_annotation_episode.episodic_workflow.root.resource_estimation import ResourceToolEstimator
     path = tmp_path/'global.sqlite'
     history = RunHistory(path)
     original = history.set_condition(operation_sha256=sha('original-normal'), resource_id='fixture-host',

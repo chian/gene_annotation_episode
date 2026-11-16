@@ -1,4 +1,4 @@
-"""Original A110 shared decision-source protocol: decision_source_state"""
+"""A110 shared decision-source protocol: decision_source_state"""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a110 import runtime as _original_runtime
 

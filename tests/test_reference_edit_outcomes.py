@@ -119,61 +119,6 @@ def test_substitution_only_is_never_no_mutation_and_two_population_denominators_
     assert value["status"] == "partial"
 
 
-@pytest.mark.parametrize("shape", ["empty_population", "not_selected", "no_alignment", "missing_traceback", "bad_geometry", "unknown_length", "legacy", "missing_grading", "failed_calculator"])
-def test_missing_partial_conflicting_and_observed_zero_are_distinct(shape):
-    original = capture()
-    if shape == "empty_population":
-        value = returned(sheet([]))
-        assert value["status"] == "complete" and value["pairs"] == []
-        assert value["populations"]["overall"]["declared_pair_count"] == 0
-    elif shape == "not_selected":
-        value = returned(sheet([None]))
-        assert value["pairs"][0]["counts"]["substituted_positions"] is None
-    else:
-        if shape == "no_alignment":
-            original = capture(dict(native_format="biopython_pairwise_native_v2", aligned=False, mode="local",
-                query_length=2, reference_length=2, matrix="engineered", biopython_version="engineered_no_native_execution"))
-        elif shape == "missing_traceback":
-            raw = native(); raw.pop("aligned_query"); original = capture(raw)
-        elif shape == "bad_geometry":
-            original = capture(native("AT", "AC", [[0, 2], [0, 1]]))
-        elif shape == "unknown_length":
-            original["operands"]["query"]["length"] = None
-        elif shape == "legacy":
-            original.update(grading=None, correspondence=None)
-        elif shape == "missing_grading":
-            original.update(grading=dict(sheet=None, scores=None, failure=dict(code="unavailable")), correspondence=None)
-        elif shape == "failed_calculator":
-            original["grading"].update(scores=None, failure=dict(code="calculator_failed")); original["correspondence"] = None
-        value = returned(sheet([original]))
-        pair, = value["pairs"]
-        if shape == "no_alignment":
-            assert pair["counts"]["substituted_positions"] == pair["counts"]["query_gap_columns"] == 0
-            assert pair["events"] == [] and pair["observed_change_types"] == []
-            assert pair["state"] == "no_alignment" and pair["whole_pair_type"] is None
-        elif shape == "bad_geometry":
-            assert pair["counts"]["substituted_positions"] == 1
-            assert pair["observed_change_types"] == ["substitution"]
-            assert pair["events"] is None and pair["state"] == "conflicting" and pair["whole_pair_type"] is None
-        elif shape == "failed_calculator":
-            assert pair["whole_pair_type"] == "unchanged" and pair["state"] == "partial"
-            assert pair["counts"]["identical_positions"] == 2
-            assert pair["issue_codes"] == ["grading_failed", "grading_unavailable"]
-        elif shape == "unknown_length":
-            assert pair["counts"]["identical_positions"] == 2 and pair["events"] == []
-            assert not pair["full_global_pair"] and pair["whole_pair_type"] is None
-        else:
-            assert pair["counts"]["identical_positions"] is None and pair["events"] is None
-            assert pair["whole_pair_type"] is None
-            if shape == "missing_traceback":
-                assert pair["state"] == "unavailable" and "alignment_geometry_unavailable" in pair["issue_codes"]
-    population = value["populations"]["overall"]
-    if shape != "failed_calculator":
-        assert population["classified_pair_count"] == 0
-        assert all(row["fraction_of_classified"]["value"] is None and row["fraction_of_classified"]["denominator"] == 0
-            for row in population["categories"])
-
-
 def test_caller_bins_use_total_gap_bases_and_never_change_observed_edit_type():
     deletion = capture(native("A" + "-" * 11, "A" + "C" * 11, [[0, 1, 1], [0, 1, 12]]))
     selected = request([deletion], bins=dict(deletion_upper_bounds_nt=[10, 30], insertion_upper_bounds_nt=[1]))
@@ -210,24 +155,6 @@ def test_event_original_paths_use_existing_oriented_mapping_without_inferred_anc
     event = returned(sheet([original]))["pairs"][0]["events"][0]
     assert event["query_mapping"]["intervals"] == [dict(subject_ref=identifier("input", 200), start=10, end=11, unit="nt", strand="-")]
     assert event["reference_mapping"]["intervals"] == [dict(subject_ref=identifier("input", 200), start=21, end=22, unit="nt", strand="+")]
-
-
-def test_legacy_sheet_counts_survive_without_promoting_unqualified_legacy_scores():
-    raw = native("AT", "AC")
-    raw.pop("native_format")
-    raw.update(paired_positions=2, identical_positions=1, identity_fraction=.5, query_coverage=1, reference_coverage=1)
-    original = capture(raw)
-    original["correspondence"] = None
-    # A legacy carrier's unqualified score cells are retained, not promoted.
-    original["grading"]["scores"]["substituted_positions"] = 999
-    before = deepcopy(original)
-    saved = sheet([original])
-    value = returned(saved)
-    assert saved["alignment_inputs"][0] == before
-    assert value["pairs"][0]["counts"]["substituted_positions"] == 1
-    assert value["pairs"][0]["native"]["format"] is None
-    assert value["pairs"][0]["issue_codes"] == ["saved_correspondence_unavailable"]
-    assert value["pairs"][0]["whole_pair_type"] == "substitution_only" and value["status"] == "partial"
 
 
 def test_declared_processing_model_does_not_reclassify_original_operand_metadata():

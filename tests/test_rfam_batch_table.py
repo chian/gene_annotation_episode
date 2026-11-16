@@ -9,12 +9,7 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader import calculate_infernal_search_scores
-from gene_annotation_episode.episodic_workflow.root.library.infernal_search_inputs import populate_infernal_search_sheet
-from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table import (
-    RFAM_BATCH_TABLE_ISSUE_CODES, RfamBatchTableIssue, RfamBatchTableParseResult,
-    parse_rfam_report_membership, populate_rfam_batch_tblout_sheet,
-    validate_rfam_batch_file_input,
-)
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table import RFAM_BATCH_TABLE_ISSUE_CODES, RfamBatchTableIssue, parse_rfam_report_membership, populate_rfam_batch_tblout_sheet, validate_rfam_batch_file_input
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -91,40 +86,6 @@ def native_rows(content):
 
 def codes(result):
     return {issue["code"] for issue in result["issues"]}
-
-
-def test_retained_six_query_native_table_reuses_exact_infernal_sheet():
-    case = native_case()
-    content, submitted, identity, capture = case
-    assert digest(content) == "46b3e1c6554f1f20d7869e447298beb782ad2cf6735196bd11a39be80e5fad25"
-    assert digest(submitted) == "4dc1529db76f089ec36caf8f3d176028d3bb5c828a1d04bfd130e72f92f515f4"
-    assert validate_rfam_batch_file_input(identity, submitted_content=submitted) is None
-    before = deepcopy(case)
-    result = parse(case)
-    assert case == before
-    assert set(result) == {"version", "representation", "status", "format", "sheet", "issues"}
-    assert result["version"] == "rfam_batch_parse_result_v2"
-    assert result["status"] == "partial"  # Original model length is absent.
-    assert result["issues"] == []
-    assert result["sheet"]["source_context"]["supplied_model_metadata"] is None
-    expected = populate_infernal_search_sheet(
-        [{"artifact_id": capture["artifact_ref"], "format": "infernal_tblout", "table_format": 1,
-          "complete": True, "content": content.decode("ascii")}],
-        operation={"program": "cmscan", "native_version": "1.1.5", "settings": {}},
-        sequence_metadata=[{"name": q["native_query_name"], "length": q["submitted_length_nt"],
-            "sequence": q["submitted_sequence"], "artifact_id": capture["artifact_ref"]} for q in identity["queries"]],
-        model_metadata=None)
-    # Source-format normalization adds occurrence declarations, while all
-    # shared native hit measurements remain the same.
-    actual_scores = calculate_infernal_search_scores(result["sheet"])
-    expected_scores = calculate_infernal_search_scores(expected)
-    assert [h["components"] for h in actual_scores["hits"]] == [h["components"] for h in expected_scores["hits"]]
-    assert [h["hit_id"] for h in result["sheet"]["hits"]] == [h["hit_id"] for h in expected["hits"]]
-    assert result["sheet"]["artifacts"][0]["content"].encode("ascii") == content
-    assert all("occurrence" not in row for row in result["sheet"]["sequence_metadata"])
-    assert [row["sequence_metadata_index"] for row in result["sheet"]["source_context"]["occurrence_bindings"]] == list(range(6))
-    assert [row["reported_row_count"] for row in result["sheet"]["source_context"]["query_population"]] == [1] * 6
-    assert all(row["reported_set_complete"] for row in result["sheet"]["source_context"]["query_population"])
 
 
 def test_native_numerical_example_and_strand_separation():

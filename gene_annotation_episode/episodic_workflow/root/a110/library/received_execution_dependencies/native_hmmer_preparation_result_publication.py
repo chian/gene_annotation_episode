@@ -90,7 +90,7 @@ def validate_prepared_grading(store, prepared, *, bundle, verify_files=True):
     if verify_files:
         _validate_rows(store, capture, bundle)
     occurrences, custody_failures = qualified_occurrences(bundle, prepared['bundle_artifact_ref'], capture)
-    metadata, metadata_failures = effective_metadata(bundle, occurrences, include_map_context='map_reconstruction_context' in stable['effective_metadata'])
+    metadata, metadata_failures = effective_metadata(bundle, occurrences)
     if native_infernal_digest(occurrences) != native_infernal_digest(prepared['occurrences']) or native_infernal_digest(stable['effective_metadata']) != native_infernal_digest(metadata) or native_infernal_digest(stable['grading_context']) != native_infernal_digest(grading_context(bundle, occurrences, metadata)) or (native_infernal_digest(stable['original_parameters']) != native_infernal_digest(bundle['requested_job']['native_hmmer_preparation']['grading_parameters'])) or any((r not in prepared['failures'] for r in [*custody_failures, *metadata_failures])):
         _error('prepared_grading_custody_conflict')
     for occurrence in occurrences:

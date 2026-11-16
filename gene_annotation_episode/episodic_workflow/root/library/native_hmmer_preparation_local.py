@@ -95,11 +95,9 @@ def local_hmmer_preparation_plan(assignment, execution_id):
     owner = plan["identity"]
     original = native.NativeJobHandle(handle).read()
     command = original.get("command")
-    historical_command = [sys.executable, "-m", "gene_annotation_episode.native_hmmer_preparation_driver",
-        str(root / PLAN_NAME)]
     if (plan["requested_job"] != request or assignment.get("resource_kind") != "local"
             or owner["execution_id"] != str(handle) or owner["resource_id"] != assignment.get("resource_id")
-            or root != _expected_root(assignment, owner) or command not in (_command(root), historical_command)
+            or root != _expected_root(assignment, owner) or command != _command(root)
             or original.get("cwd") != str(root) or original.get("metadata", {}).get("policy") != plan["policy"]
             or plan["attempt_directory"] != str(root / "hmmer-preparation-attempt")
             or _read(root / "invoke.json") != _invoke(request, Path(plan["attempt_directory"]))):

@@ -1,8 +1,7 @@
 """HIC byte/coordinate witnesses for the existing chromatin numerical sheet.
 
 These are closed data shapes and deterministic consistency checks, not scoring
-rules. Native decoding and acquisition live elsewhere. Older Cooler records do
-not gain fields or different meanings from this format extension.
+rules. Native decoding and acquisition live elsewhere.
 """
 from __future__ import annotations
 

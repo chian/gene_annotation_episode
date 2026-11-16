@@ -1,4 +1,4 @@
-"""Original requested fluorescence returns, without source or artifact acquisition.
+"""Requested fluorescence returns, without source or artifact acquisition.
 
 The result host authenticates completed own actions. This reader follows only
 their actual immediate-child typed returns and frozen operand inheritance.

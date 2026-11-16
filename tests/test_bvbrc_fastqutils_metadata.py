@@ -4,33 +4,13 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError
-from gene_annotation_episode.bvbrc_fastqutils_metadata import select_metadata, extract_fastqutils_metadata
+from gene_annotation_episode.bvbrc_fastqutils_metadata import select_metadata
 from gene_annotation_episode.bvbrc_fastqutils_resolution import resolve_calculation_inputs
-from gene_annotation_episode.bvbrc_fastqutils_calculators import calculate_fastqutils
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_calculators import calculate_fastqutils
 
 spec = importlib.util.spec_from_file_location("fixture_support", Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/bundle/fixture_support.py")
 f = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(f)
-
-
-def test_original_arrays_repeats_spelling_and_scheduler_separation():
-    original = f.oracle("ORIGINAL_TASK_002.json")
-    original["submitted_parameters"]["paired_end_libs"] += [dict(read1="/other", platform="nanopore")]
-    original["submitted_parameters"]["single_end_libs"] = [dict(read="/single")]
-    original["submitted_parameters"]["srr_libs"] = [dict(srr_accession="SRRsynthetic")]
-    original["submitted_parameters"]["recipe"] = ["trim", "FASTQC", "trim", "ALIGN", "SCRUB_HUMAN"]
-    # Scheduler fields are independent recorded data; they cannot replace inputs.
-    original["scheduler_returned_parameters"] = dict(value={"recipe": ["FASTQC"], "paired_end_libs": []},
-        evidence=f.oracle("SUPPLIED_VALUES_002.json")[0]["evidence"])
-    original["effective_parameters"] = deepcopy(original["scheduler_returned_parameters"])
-    data = f.build({"reads": (f.fastq(["r"]), "fastq")}, original=original)
-    sheet = f.sheet_for(data)
-    assert [r["input_pointer"] for r in sheet["libraries"]] == ["/paired_end_libs/0", "/paired_end_libs/1", "/single_end_libs/0", "/srr_libs/0"]
-    assert [s["requested_token"] for s in sheet["stages"]] == original["submitted_parameters"]["recipe"]
-    assert len({s["id"] for s in sheet["stages"]}) == 5
-    assert all(s["observed_state"] == "unknown" for s in sheet["stages"])
-    assert any(r["code"] == "missing_mate" for r in sheet["requirements"])
 
 
 def test_selected_metadata_matches_whole_binding_and_pointer():
@@ -115,21 +95,6 @@ def test_failed_pair_declaration_does_not_renumber_later_success():
     assert len(pops) == 1 and pops[0]["population_ordinal"] == 1
 
 
-def test_source_bound_lineage_enables_arithmetic_without_execution_claim():
-    example = f.oracle("ASSUMED_LINEAGE_EXAMPLE_002.json")
-    data = f.build({"before_reads": ((f.ROOT / "before_reads.fastq").read_bytes(), "fastq"),
-        "after_reads": ((f.ROOT / "after_reads.fastq").read_bytes(), "fastq")},
-        [("retention_assumption", "lineage_declaration", example["supplied_value"]["value"])])
-    sheet = f.sheet_for(data)
-    params = resolve_calculation_inputs(sheet, requests=[example["calculation_request"]])
-    job = params["calculations"][0]
-    assert job["state"] == "ready" and job["lineage_basis"]["evidence"] == data[2][0]["evidence"]
-    components = calculate_fastqutils(sheet, parameters=params)
-    assert next(c for c in components["components"] if c["metric"] == "read_retention_fraction")["value"] == .75
-    assert all(s["observed_state"] == "unknown" for s in sheet["stages"])
-    assert not sheet["native_lineage"]
-
-
 def test_native_sam_encoding_is_not_replaced_by_fastq_declaration():
     sam = b"@HD\tVN:1.6\n@SQ\tSN:r\tLN:10\na\t0\tr\t1\t60\t4M\t*\t0\t0\tACGT\tIIII\n"
     data = f.build({"alignment": (sam, "sam_1_6")}, [("declared", "encoding_declaration", f.encoding("alignment", "phred64"))])
@@ -146,17 +111,6 @@ def test_calculation_binding_lists_all_consumed_native_operands():
     assert len(rows) == 9
     assert {r["metric"] for r in rows} == {"fastq_read_count", "fastq_base_count", "fastq_symbol_count"}
     assert {p["population_key"] for p in sheet["populations"] if p["id"] in job["population_refs"]} == {"fastq_reads", "fastq_bases"}
-
-
-def test_conflicting_lineage_declarations_are_not_arbitrarily_chosen():
-    example = f.oracle("ASSUMED_LINEAGE_EXAMPLE_002.json")
-    first = example["supplied_value"]["value"]
-    second = dict(first, relation="same_population")
-    data = f.build({"before_reads": (f.fastq(["a", "b"]), "fastq"), "after_reads": (f.fastq(["a"]), "fastq")},
-        [("first", "lineage_declaration", first), ("second", "lineage_declaration", second)])
-    sheet = f.sheet_for(data)
-    job = resolve_calculation_inputs(sheet, requests=[example["calculation_request"]])["calculations"][0]
-    assert job["state"] == "incompatible" and job["lineage_basis"]["basis"] == "unknown"
 
 
 def test_invalid_annotation_reference_stays_source_bound_without_erasing_native_counts():

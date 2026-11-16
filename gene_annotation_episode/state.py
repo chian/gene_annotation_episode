@@ -588,7 +588,7 @@ class Store:
         """Map local symbol intervals to a union in immutable original units.
 
         Traversal order/orientation remains in sequence_mapping; footprints used
-        for ownership/credit are normalized unions. Legacy unmapped products can
+        for ownership/credit are normalized unions. Unmapped products can
         only reuse their entire existing attribution, never a fabricated submap.
         """
         subject = self.get(subject_ref)
@@ -665,7 +665,7 @@ class Store:
     def _materialize_anchor(self, anchor, source_ref):
         """Retrieve the caller-selected text without asking an LLM to copy it."""
         if anchor is None or not isinstance(anchor, dict) or "quote" in anchor:
-            # Explicit historical quotes retain their exact validation below.
+            # A supplied quotation is validated by the record schema and _anchor.
             return deepcopy(anchor)
         validate_schema(anchor, source_location_inputs(ANCHOR))
         source = self._require(source_ref, {"source"})
@@ -1895,7 +1895,7 @@ class Store:
                     for index, proposed in enumerate(payload.get(section, [])):
                         try:
                             validate_schema(proposed, source_location_inputs(
-                                REASONING_SCHEMA["properties"][section]["items"], allow_legacy_quote=True))
+                                REASONING_SCHEMA["properties"][section]["items"]))
                             alias = proposed["alias"]
                             if alias in aliases_seen:
                                 raise ContractError("duplicate_alias")

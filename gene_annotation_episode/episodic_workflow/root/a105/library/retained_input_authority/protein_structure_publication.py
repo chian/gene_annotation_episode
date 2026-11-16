@@ -23,7 +23,7 @@ source, rather than pass its later worker output to this function.
     """
     if capture['bundle_validated'] is not True or capture['original_plan'] is None or capture['bundle_file'] is None:
         raise ValueError('capture_incomplete')
-    original = validate_protein_structure_bundle(bundle, plan=capture['original_plan'], retained_read=True)
+    original = validate_protein_structure_bundle(bundle, plan=capture['original_plan'])
     bundle_file = validate_file_identity(capture['bundle_file'])
     if bundle_file['format'] != 'native_protein_structure_bundle_v1' or bundle_file['sha256'] != digest(original) or bundle_file['byte_length'] != len(canonical(original).encode('utf-8')):
         raise ValueError('input_digest_mismatch')

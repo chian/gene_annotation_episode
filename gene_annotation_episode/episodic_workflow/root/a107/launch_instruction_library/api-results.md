@@ -28,8 +28,3 @@ Provider-reported search time, HTTP time, queue wait and total turnaround are
 different quantities. Use only measured intervals and keep unknowns unknown.
 Monitoring records are separate from closed launch receipts and histories.
 Instruction retrieval itself is neither a timing sample nor scientific evidence.
-
-The historical service schema and database observations are documented in
-source rows S2–S6 of the launch instruction source record. They do not establish
-present service availability. Wiring verification uses controlled HTTP responses;
-it does not establish a live configured-model API run.

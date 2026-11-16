@@ -156,14 +156,10 @@ def _compile_closed_schema(schema):
                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
             if blast_utility_sources is None:
                 from .blast_utility_result_views import blast_utility_fact_sources
-                from .blast_utility_historical_fact_schemas import blast_utility_historical_fact_schemas
-                historical = blast_utility_historical_fact_schemas()
                 blast_utility_sources = {
-                    key: (value["report_schema"], *historical.get(key, ()))
+                    key: (value["report_schema"],)
                     for key, value in blast_utility_fact_sources().items()}
             expected = blast_utility_sources.get(source, ())
-            # Saved parents keep their exact registered contract. Older enum
-            # populations are not inferred from a caller's narrower schema.
             if (not expected or not _schema_cacheable(node)
                     or json.dumps(node, sort_keys=True, allow_nan=False)
                     not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}):

@@ -1,6 +1,4 @@
-"""A107 original macs2 peak components; substantive retained received-result responsibility.
-Original authority, invalid outcomes and historical source identities remain unchanged.
-"""
+"""A107 macs2 peak components."""
 
 
 from __future__ import annotations

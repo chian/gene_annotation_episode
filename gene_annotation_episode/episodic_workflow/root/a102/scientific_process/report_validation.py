@@ -40,8 +40,8 @@ def validate_structural_report(binding, context, form, schema):
 
 
 def validate_investigation_report(binding, context, form, schema):
-    from ..a102_investigation import (report_schema, legacy_report_schema, resolve_report)
-    if plain(schema) not in (report_schema(), legacy_report_schema()):
+    from ..a102_investigation import report_schema, resolve_report
+    if plain(schema) != report_schema():
         return
     workflow = getattr(binding.services, 'workflow', None)
     if workflow is None:

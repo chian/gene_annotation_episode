@@ -1,4 +1,4 @@
-"""Original packaged configuration path; no provider process or stopping policy."""
+"""Packaged configuration path; no provider process or stopping policy."""
 from pathlib import Path
 
 def default_config_path():

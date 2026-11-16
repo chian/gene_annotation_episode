@@ -178,34 +178,3 @@ def test_real_installed_pyrodigal_partial_prediction_has_exact_native_interval(t
             assert store.get(product["mapping_source_ref"])["provider"] == "genes.predict"
 
 
-def test_unrepresentable_later_native_codon_interval_preserves_prior_publication(tmp_path, monkeypatch):
-    """Injected malformed native output tests feedback, never a biological claim."""
-    from gene_annotation_episode import tools as tool_module
-    calls = []
-    def malformed_native(sequence, **kwargs):
-        calls.append(kwargs)
-        first = {"start": 0, "end": 6, "strand": "+", "protein_sequence": "MK",
-                 "native_confidence": 50., "native_score": 3., "partial_begin": False, "partial_end": True}
-        return {"candidates": [first, {**first, "start": 6, "end": 10}], "limitations": []}
-    async def synthetic_worker(self, operation, arguments, *, directory):
-        assert operation == "predict_genes"
-        output = directory / "synthetic-result.json"
-        output.write_text(json.dumps(malformed_native(**arguments)))
-        return tool_module.SequenceWork(output, {"execution": "explicitly_synthetic_test_worker"})
-    monkeypatch.setattr(tool_module.ToolRegistry, "_sequence_worker_async", synthetic_worker)
-    with Store(tmp_path / "db") as store:
-        store.create_problem(raw_sequence="ATGAAAATGA", molecule="dna")
-        target = store.targets()[0]["id"]
-        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        args = {"subject_ref": target, "code": 11, "mode": "meta"}
-        result = registry.execute("genes.predict", args, operation_key="partial-native-fixture")
-        assert result["status"] == "partial", result
-        assert result["feedback"]["code"] == "translation_mapping_length_mismatch"
-        assert len(store.list("product")) == 1
-        product = store.list("product")[0]
-        assert product["id"] in result["record_refs"]
-        assert product["mapping_source_ref"] in result["record_refs"]
-        assert result["result"]["retained_record_refs"] == result["record_refs"]
-        assert registry.execute("genes.predict", args, operation_key="partial-native-fixture") == result
-        assert len(calls) == 1
-

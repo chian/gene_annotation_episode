@@ -2,7 +2,6 @@
 import asyncio
 from copy import deepcopy
 from dataclasses import replace
-from functools import partial
 from io import BytesIO
 import json
 from pathlib import Path
@@ -224,34 +223,3 @@ def test_parent_receives_requested_difference_and_experimental_meanings_once(tmp
         assert 'first_ordinate' not in steering and 'second_ordinate' not in steering
         assert 'image_sha256' not in text and 'rgb_min' not in text and ('roi.' not in text)
 
-def test_figure_task_repeats_through_lookup_delta_and_reconstruction(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a105.decision_context import state_frame
-    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_figure_prompt import FIGURE_TASK
-    from test_literature_experimental_prompt_delivery import LiteratureWire, snapshot, complete
-    first = snapshot()
-    first['goal']['objective'] = 'Examine the actual coupled product graph comparison'
-    first['requested_form'] = FORM
-    first['literature_assignment']['requested_figure_components'] = ['ordinate_difference']
-    first['available_report_facts']['literature_figure_cells'] = {'meaning': 'Native plotted comparison'}
-    second = deepcopy(first)
-    second['last_local_outcome'] = {'status': 'completed', 'result': {'cells': {'ordinate_difference': {'value': 24.48, 'lower': 23.84, 'upper': 25.12, 'unit': 'relative_turnover_percentage_points', 'status': 'populated', 'origin': 'derived', 'bound_kind': 'conditional_digitization_not_confidence_interval', 'unavailable_reason': None}}, 'design': {'contrast_kind': 'partner_swap', 'endpoint_scope': 'coupled_final_product'}, 'statistical_uncertainty': 'not_extracted', 'partner_necessity': 'not_evaluated'}}
-    lookup = {'version': 'decision_context_v1', 'kind': 'decision_lookup_result', 'decision_index': 2, 'exchange_index': 1, 'result': {'status': 'completed', 'text': 'Both catalysts coexist in each reaction arm.'}}
-    wire, reopened = (LiteratureWire(tmp_path / 'wire'), LiteratureWire(tmp_path / 'reopened'))
-
-    async def exercise():
-        await complete(wire, state_frame(first))
-        await complete(wire, state_frame(second, first))
-        await complete(wire, lookup)
-        await complete(reopened, state_frame(second))
-    asyncio.run(exercise())
-    tasks = []
-    for transport in (wire, reopened):
-        for turn in transport.turns_sent():
-            task, steering = turn['input'][0]['text'].split('\n\nSTEERING\n', 1)
-            assert FIGURE_TASK in task and first['goal']['objective'] in task
-            tasks.append(task)
-    assert all((task == tasks[0] for task in tasks))
-    for turn in (*wire.turns_sent()[1:], *reopened.turns_sent()):
-        steering = turn['input'][0]['text'].split('\n\nSTEERING\n', 1)[1]
-        for meaning in ('partner_swap', 'coupled_final_product', 'conditional_digitization_not_confidence_interval', 'not_extracted', 'not_evaluated'):
-            assert meaning in steering

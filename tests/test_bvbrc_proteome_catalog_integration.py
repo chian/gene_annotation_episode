@@ -6,12 +6,11 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_adapter as adapter
-from gene_annotation_episode.bvbrc_appservice_adapters import bind_adapters, selected_adapter
 from gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns import FACT_SOURCES
 from gene_annotation_episode.episode_bindings import EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.resource_tool_information import bound_resource_tool_contracts
+from gene_annotation_episode.episodic_workflow.root.resource_tool_information import bound_resource_tool_contracts
 from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from test_api_bvbrc_appservice import CONFIG
 from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homology_tool_info import factory
@@ -29,19 +28,6 @@ def configuration(provider='bvbrc_proteome', pin=None):
 def entry(family):
     return next(row for row in bound_resource_tool_contracts(family)
                 if row['name'] == 'bvbrc.proteome_comparison')
-
-
-def test_actual_registration_uses_exact_pin_and_no_implicit_choice(factory):
-    create, _ = factory
-    family = create({'selected-api': configuration()})
-    service = family.api_execution.services['selected-api']
-    selection = results()['selector']['adapter']
-    assert selected_adapter(service, selection) == (adapter, adapter.implementation_sha256())
-    assert selected_adapter(service, None) is None
-    with pytest.raises(ValueError, match='appservice_adapter_implementation_conflict'):
-        create({'selected-api': configuration(pin='0' * 64)})
-    with pytest.raises(ValueError, match='appservice_adapter_configuration_conflict'):
-        bind_adapters(configuration()['scientific_adapters'] * 2)
 
 
 @pytest.mark.parametrize('provider', [None, 'unknown_provider'])

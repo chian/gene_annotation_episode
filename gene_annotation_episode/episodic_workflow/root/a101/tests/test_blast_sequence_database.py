@@ -164,18 +164,6 @@ def test_malformed_first_hsp_and_description_leave_original_ordinals_and_partial
     assert out["components"]["function_weights"]["unadjusted_probabilities"] == {"F":.8,"G":.2}
 
 
-@pytest.mark.parametrize("key,value", [("artifact_key", "other"), ("member_ordinal", 7),
-    ("report_index", 1), ("search_pointer", "/different/round")])
-def test_every_outer_link_key_is_checked_before_legacy_linking(key, value):
-    arguments = inputs()
-    arguments["description_bindings"][0]["search_key"][key] = value
-    arguments["sequence_identity_bindings"][0]["search_key"][key] = value
-    out = calculate(populate(**arguments))
-    assert "blast_sequence_database_link_search_key_mismatch" in codes(out)
-    assert out["components"]["function_weights"]["unadjusted_probabilities"] == {"G":1.0}
-    assert out["components"]["database_sheet"]["hits"][0]["associations"][0]["functions"] == []
-
-
 def test_same_report_and_hit_in_two_rounds_do_not_crosslink():
     data = collect(document(iterations=[dict(iter_num=7, search=native_search()), dict(iter_num=12, search=native_search())]))
     first, second = (inputs(search) for search in data["searches"])

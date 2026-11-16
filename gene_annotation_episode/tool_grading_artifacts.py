@@ -76,7 +76,7 @@ def source_tool_grading_entries(store, source_ref: str) -> list[dict]:
 
     The caller owns receipt/scope qualification before calling this host helper.
     Neither a source handle nor this function grants a child access to new data.
-    Legacy sources without grading artifacts return an empty list.
+    Sources without grading artifacts return an empty list.
     """
     source = store.get(source_ref)
     if source.get("record_type") != "source":

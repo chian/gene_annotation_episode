@@ -26,6 +26,7 @@ from gene_annotation_episode.episodic_workflow.root.a107.runtime import run_work
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a107.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
+from gene_annotation_episode.episodic_workflow.root.a107.tests.source_helpers import location_inputs
 
 
 BASE = Path(__file__).parent / 'fixtures/source_records'
@@ -182,7 +183,7 @@ def test_primary_defined_units_reach_the_actual_ordinary_parent_form(tmp_path, c
             'scope': plain(context.scope), 'purpose': 'Return requested native components and limitations',
             'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
         action = {'selection': {'kind': 'tool', 'tool': 'literature.partner.source.populate',
-            'arguments': args}, 'report_update': {}}
+            'arguments': location_inputs(args)}, 'report_update': {}}
 
         def receive(inputs):
             form, = inputs['child_reports']

@@ -1134,7 +1134,6 @@ DESCRIPTOR_OPERANDS = {
     "literature_binding_interaction_inputs.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_binding_interaction_inputs.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_binding_interaction_return_contracts.py",
-        "gene_annotation_episode/episodic_workflow/root/literature_binding_interaction_release.py",
     ),
     "literature_binding_interaction_model_inputs.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_binding_interaction_model_inputs.py",
@@ -1158,7 +1157,6 @@ DESCRIPTOR_OPERANDS = {
     "literature_binding_interaction_storage.py": (
         "gene_annotation_episode/episodic_workflow/root/literature_binding_interaction_storage.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_binding_interaction_return_contracts.py",
-        "gene_annotation_episode/episodic_workflow/root/literature_binding_interaction_release.py",
     ),
     "literature_binding_interaction_validation.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_binding_interaction_validation.py",
@@ -1277,7 +1275,6 @@ DESCRIPTOR_OPERANDS = {
         "gene_annotation_episode/episodic_workflow/root/literature_concentration_window_storage.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_concentration_window_metadata.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_concentration_window_contracts.py",
-        "gene_annotation_episode/episodic_workflow/root/literature_concentration_window_release.py",
     ),
     "literature_controlled_response_prompt.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_controlled_response_prompt.py",
@@ -1305,7 +1302,6 @@ DESCRIPTOR_OPERANDS = {
         "gene_annotation_episode/episodic_workflow/root/library/literature_endpoint_signal_metadata.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_endpoint_signal_contracts.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_endpoint_signal_projection.py",
-        "gene_annotation_episode/episodic_workflow/root/library/literature_endpoint_signal_source_receipt.py",
     ),
     "literature_experiment_assessments.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_experiment_assessments.py",
@@ -1379,7 +1375,6 @@ DESCRIPTOR_OPERANDS = {
         "gene_annotation_episode/episodic_workflow/root/literature_ion_discrimination_storage.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_ion_discrimination_return_contracts.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_ion_discrimination_metadata.py",
-        "gene_annotation_episode/episodic_workflow/root/library/literature_ion_discrimination_implementation.py",
     ),
     "literature_kinetic_calculations.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_kinetic_calculations.py",
@@ -1404,7 +1399,6 @@ DESCRIPTOR_OPERANDS = {
     "literature_kinetic_storage.py": (
         "gene_annotation_episode/episodic_workflow/root/literature_kinetic_storage.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_kinetic_return_contracts.py",
-        "gene_annotation_episode/episodic_workflow/root/literature_product_kinetic_relocation.py",
     ),
     "literature_kinetic_summary_precision_calculations.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_kinetic_summary_precision_calculations.py",
@@ -1422,7 +1416,6 @@ DESCRIPTOR_OPERANDS = {
         "gene_annotation_episode/episodic_workflow/root/literature_kinetic_summary_precision_storage.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_kinetic_summary_precision_metadata.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_summary_precision_return_schema.py",
-        "gene_annotation_episode/episodic_workflow/root/library/literature_summary_precision_release.py",
     ),
     "literature_kinetic_validation.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_kinetic_validation.py",
@@ -1443,7 +1436,6 @@ DESCRIPTOR_OPERANDS = {
         "gene_annotation_episode/episodic_workflow/root/literature_measurement_comparison_storage.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_measurement_comparison_metadata.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_measurement_comparison_return_contracts.py",
-        "gene_annotation_episode/episodic_workflow/root/library/literature_measurement_comparison_release.py",
     ),
     "literature_measurement_validation_calculations.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_measurement_validation_calculations.py",
@@ -1460,7 +1452,6 @@ DESCRIPTOR_OPERANDS = {
     "literature_measurement_validation_storage.py": (
         "gene_annotation_episode/episodic_workflow/root/literature_measurement_validation_storage.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_measurement_validation_metadata.py",
-        "gene_annotation_episode/episodic_workflow/root/library/literature_measurement_validation_implementation.py",
     ),
     "literature_native_rate_operand_information.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_native_rate_operand_information.py",
@@ -1481,7 +1472,6 @@ DESCRIPTOR_OPERANDS = {
     "literature_optical_storage.py": (
         "gene_annotation_episode/episodic_workflow/root/literature_optical_storage.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_optical_return_contracts.py",
-        "gene_annotation_episode/episodic_workflow/root/library/literature_optical_dependency_custody.py",
     ),
     "literature_optical_validation.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_optical_validation.py",
@@ -1583,7 +1573,6 @@ DESCRIPTOR_OPERANDS = {
         "gene_annotation_episode/episodic_workflow/root/literature_product_coupling_storage.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_product_coupling_projection.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_product_coupling_metadata.py",
-        "gene_annotation_episode/episodic_workflow/root/literature_product_kinetic_relocation.py",
     ),
     "literature_product_partition_calculations.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_product_partition_calculations.py",

@@ -1,4 +1,4 @@
-"""Original substantive ordinary-tool methods: tool_literature_assets."""
+"""Ordinary-tool methods: tool_literature_assets."""
 from __future__ import annotations
 from dataclasses import replace
 import json

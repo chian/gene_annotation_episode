@@ -91,8 +91,7 @@ NATIVE_BLAST_DATABASE_JOB_SCHEMA = _object({
 NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA = _object({"argv": _array(_STR, minItems=1),
     "environment": _ENV, "native_blast_database": NATIVE_BLAST_DATABASE_JOB_SCHEMA})
 PRODUCER_MANIFEST_SCHEMA = _object({"version": {"const": "native_blast_database_producer_manifest_v1"},
-    "module_root": _ABS, "entry_module": {"enum": ["gene_annotation_episode.episodic_workflow.root.library.native_blast_database_driver",
-                                               "gene_annotation_episode.native_blast_database_driver"]},
+    "module_root": _ABS, "entry_module": {"const": "gene_annotation_episode.episodic_workflow.root.library.native_blast_database_driver"},
     "python": _FILE, "package_files": _array(_object({"relative_path": _STR, "sha256": _SHA, "size_bytes": _INT}), minItems=3),
     "runtime_files": _array(_FILE)})
 IDENTITY_SCHEMA = _object({**{key: _STR for key in ("run_id", "episode_id", "resource_id", "operation_key")},
@@ -606,9 +605,7 @@ def validate_native_blast_database_producer_manifest(manifest, *, module_root, p
     if manifest["module_root"] != module_root or manifest["python"]["path"] != python_executable:
         _fail("producer_manifest_binding_mismatch")
     package = _unique(manifest["package_files"], "relative_path")
-    prefix = ("gene_annotation_episode/episodic_workflow/root/library/" if manifest["entry_module"] ==
-              "gene_annotation_episode.episodic_workflow.root.library.native_blast_database_driver" else
-              "gene_annotation_episode/")
+    prefix = "gene_annotation_episode/episodic_workflow/root/library/"
     required = {"gene_annotation_episode/__init__.py", prefix + "native_blast_database_driver.py",
                 prefix + "native_blast_database_contracts.py"}
     if not required <= package.keys():

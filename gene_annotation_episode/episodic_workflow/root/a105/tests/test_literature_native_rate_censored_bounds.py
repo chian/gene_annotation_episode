@@ -130,12 +130,6 @@ def test_rounding_is_outward_and_overflow_underflow_do_not_become_zero():
     assert huge['cells']['retained_fraction']['bound'] == 'gt'
     assert huge['native_bound_arithmetic']['components']['retained_fraction']['image']['upper'] is not None
 
-def test_legacy_direct_calculator_and_closed_native_contract_are_unchanged():
-    raw, args = operands()
-    original = calculate(read_case(raw, args))
-    assert 'native_bound_arithmetic' not in original
-    assert original['cells']['retained_fraction']['threshold'] is None
-    assert len(rate_source_cells_schema()['items']['properties']) == 24
 
 @pytest.mark.parametrize('test,side,sign', [('> 1e300', 'lower', 1), ('< -1e300', 'upper', -1)])
 def test_overflow_preserves_a_representable_strict_outer_constraint(test, side, sign):

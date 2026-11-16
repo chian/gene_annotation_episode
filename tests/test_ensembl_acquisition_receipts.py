@@ -11,7 +11,7 @@ from gene_annotation_episode import ensembl_acquisition as native
 from gene_annotation_episode import ensembl_acquisition_host as host
 from gene_annotation_episode.acquisition import PublicClients
 from gene_annotation_episode.data_acquisition_receipts import acquisition_receipt_schema
-from gene_annotation_episode.domain import ContractError, canonical
+from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 import test_ensembl_acquisition as captures
@@ -81,53 +81,6 @@ def test_closed_receipts_reject_type_reference_and_confirmation_contradictions(c
     valid = dict(acquired=True, source_ref=captures.RESULT, data_ref="artifact_" + "a" * 64, failure_code=None)
     with pytest.raises(ContractError, match="ensembl_receipt_invalid"):
         native.validate_ensembl_receipt({**valid, **change})
-
-
-@pytest.mark.parametrize("operation", native.OPERATIONS)
-def test_source_free_content_and_supplied_source_wrapper_preserve_literal_legacy_payload(operation):
-    snapshot = capture(operation)
-    private = value(snapshot)
-    legacy = native.ensembl_result(snapshot, arguments=snapshot.request, source_ref=captures.RESULT,
-        artifact_ref=private["raw_artifact_ref"], evidence=captures.evidence())
-    assert private["version"] == native.VALUE_VERSION and "source_ref" not in private
-    assert "source_ref" not in native.ensembl_value_schema()["properties"]
-    assert native.ensembl_result_from_value(private, source_ref=captures.RESULT,
-        evidence=captures.evidence()) == legacy
-    assert legacy == {**{key: child for key, child in private.items() if key != "observed_transfer"},
-        "version": native.VERSION, "source_ref": captures.RESULT}
-    assert native.validate_ensembl_result(legacy, evidence=captures.evidence()) == legacy
-    before = deepcopy(private)
-    legacy["requested"]["max_bytes"] = 1
-    assert private == before
-    assert native.ensembl_receipt(private, source_ref=captures.RESULT) == dict(acquired=True,
-        source_ref=captures.RESULT, data_ref=private["raw_artifact_ref"], failure_code=None)
-
-
-@pytest.mark.parametrize("field,raw,response_key", [("declared_body_bytes", False, "declared_body_bytes"),
-    ("declared_body_bytes", -1, "declared_body_bytes"), ("declared_body_bytes", "0", "declared_body_bytes"),
-    ("body_capture_failure", False, "capture_failure"), ("body_capture_failure", 0, "capture_failure")])
-def test_malformed_optional_transfer_is_private_literal_and_legacy_normalized(field, raw, response_key):
-    snapshot = capture(**{field: raw})
-    private = value(snapshot)
-    expected = captures.result()
-    expected["response"][response_key] = None
-    assert native.ensembl_result(snapshot, arguments=snapshot.request, source_ref=captures.RESULT,
-        artifact_ref=private["raw_artifact_ref"], evidence=captures.evidence()) == expected
-    assert private["observed_transfer"][field] == raw and type(private["observed_transfer"][field]) is type(raw)
-    assert native.ensembl_receipt(private, source_ref=captures.RESULT) == failed("transport_metadata_unavailable")
-
-
-@pytest.mark.parametrize("field,raw", [("declared_body_bytes", float("nan")), ("body_capture_failure", b"bad")])
-def test_python_only_optional_metadata_keeps_old_pure_normalization_without_inventing_source(field, raw):
-    snapshot = capture(**{field: raw})
-    artifact = "artifact_" + hashlib.sha256(snapshot.content).hexdigest()
-    legacy = native.ensembl_result(snapshot, arguments=snapshot.request, source_ref=captures.RESULT,
-        artifact_ref=artifact, evidence=captures.evidence())
-    expected = captures.result()
-    expected["response"]["declared_body_bytes" if field == "declared_body_bytes" else "capture_failure"] = None
-    assert legacy == expected
-    with pytest.raises(ValueError):
-        native.ensembl_value(snapshot, arguments=snapshot.request, artifact_ref=artifact, evidence=captures.evidence())
 
 
 @pytest.mark.parametrize("changes,code", [({"status": None}, "transport_metadata_unavailable"),
@@ -203,18 +156,6 @@ def test_private_value_rejects_crossfield_tampering_without_external_identity_cl
     elif damage == "missing_context": private["dataset_contexts"].pop()
     else: private["observed_transfer"]["declared_body_bytes"] = 0
     with pytest.raises(ValueError): native.validate_ensembl_value(private)
-
-
-def test_retained_value_confirmation_needs_no_original_snapshot_or_invented_discovery_authority(monkeypatch):
-    private = value(capture())
-    expected = native.ensembl_receipt(private, source_ref=captures.RESULT)
-    legacy = native.ensembl_result_from_value(private, source_ref=captures.RESULT)
-    monkeypatch.setattr(native, "validate_ensembl_discovery", forbidden)
-    monkeypatch.setattr(native, "_snapshot_response", forbidden)
-    monkeypatch.setattr(PublicClients, "_http", forbidden)
-    assert native.ensembl_receipt(private, source_ref=captures.RESULT) == expected
-    assert native.ensembl_result_from_value(private, source_ref=captures.RESULT) == legacy
-    assert native.validate_ensembl_value(private) == private
 
 
 def test_optional_supplied_discovery_still_must_match_actual_configuration_evidence():
@@ -298,12 +239,3 @@ def test_failed_captured_representation_retains_data_privately_but_confirms_sour
     assert native.validate_ensembl_value(private) == value(snapshot)
 
 
-def test_result_and_value_schema_copies_are_detached_and_legacy_view_is_unchanged():
-    legacy = captures.result()
-    assert native.ensembl_outcome_view({"result": legacy})["result"]["version"] == native.MODEL_VIEW_VERSION
-    private = value(capture())
-    assert native.ensembl_outcome_view({"result": native.ensembl_receipt(private,
-        source_ref=captures.RESULT)}) is None
-    schema = native.ensembl_value_schema(); Draft202012Validator.check_schema(schema)
-    schema["properties"]["version"] = {}
-    assert native.ensembl_value_schema()["properties"]["version"] == {"const": native.VALUE_VERSION}

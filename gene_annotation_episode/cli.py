@@ -106,7 +106,7 @@ def main(argv=None):
                 from .export import export_annotation
                 _print(export_annotation(store, args.output, format=args.format,
                     scope=parse_json_object(args.scope) if args.scope else None,
-                    include_credit=args.include_credit, credit_policy=(config or {}).get("credit"),
+                    include_credit=args.include_credit,
                     include_artifacts=args.include_artifacts))
                 return 0
             genome = (config or {}).get('genome_investigation')

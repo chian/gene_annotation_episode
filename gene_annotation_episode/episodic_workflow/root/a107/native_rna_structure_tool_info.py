@@ -42,7 +42,7 @@ _COMMON = (
     "changes require new selected execution; changing saved descriptive calculations does not. "
     "Declare exact input digests/sizes, native-result, complete stdout/stderr, and for energy modes model and "
     "effective-parameter outputs. Use the original compiled argv as an argument list, never shell text. Commission "
-    "through launch and its configured local-compute child with 20 GiB RAM, 4 GiB scratch and no wall-time cap. "
+    "through launch and its configured local-compute child with 5 GiB RAM, 4 GiB scratch and no wall-time cap. "
     "Preparation reserves the original job; the child selects practical.job.start to execute it once. Resource "
     "changes, retries and subsequent investigation remain episode choices. Monitoring reads the original attempt; "
     "results acquisition captures its sealed bundle and uses separate deterministic native-output parsers and calculators. "

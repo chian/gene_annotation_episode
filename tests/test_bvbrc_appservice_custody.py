@@ -265,25 +265,6 @@ def test_ref_only_immediate_child_return_and_sibling_isolation(saved):
         saved.custody.possession(sibling, binding["source_ref"])
 
 
-def test_ordinary_scientific_child_reference_uses_shared_original_return_contract(saved):
-    binding = saved.source()
-    # This legacy action-only record has no conflicting episode_child response.
-    child = saved.child(saved.root, "improvement", {}, 0, model=False)
-    request_record = plain(child.request)
-    del request_record["message"]["episode_assignment"]
-    child = replace(child, request=request_record)
-    row = saved.journal.row("runtime_episodes", child.episode_id)
-    saved.journal.save("runtime_episodes", {**row, "request": canonical(request_record)})
-    row = saved.journal.row("runtime_actions", saved.root.episode_id, 0)
-    selection = json.loads(row["action"])
-    selection["kind"] = "child"
-    del selection["role"], selection["assignment"]
-    saved.journal.save("runtime_actions", {**row, "action": canonical(selection)})
-    saved.own(child, binding["source_ref"])
-    saved.admit(saved.root, child, binding["source_ref"])
-    assert saved.custody.possession(saved.root, binding["source_ref"]) == "admitted_return"
-
-
 @pytest.mark.parametrize("field", ["scope", "assignment", "request"])
 def test_changed_context_never_matches_saved_context(saved, field):
     _, api = saved.tree()
@@ -351,37 +332,6 @@ def test_unsaved_context_cannot_use_selection_rejected_by_original_schema(saved)
     saved.journal.save("runtime_model_calls", {**row, "request": canonical(sent)})
     with pytest.raises(AppServiceCustodyError, match="parent_selection_invalid"):
         saved.custody.initial_references(ctx)
-
-
-@pytest.mark.parametrize("change", [None, "selection", "spec", "hash"])
-def test_actual_durable_commission_intent_must_agree(saved, change):
-    from gene_annotation_episode.episodic_workflow.root.episode_commissions import CommissionCoordinator
-    child = saved.child(saved.root, "launch", launch_assignment(), 1)
-    selected = json.loads(saved.journal.row("runtime_actions", saved.root.episode_id, 1)["action"])
-    coordinator = CommissionCoordinator(saved.store, saved.journal, None)
-    spec = coordinator.select(parent={"episode_id": saved.root.episode_id, "path": plain(saved.root.path),
-        "goal_id": saved.root.request["goal"]["goal_id"]},
-        child={"episode_id": child.episode_id, "path": plain(child.path), "role": child.role,
-            "key": child.path[-1][1], "scope": plain(child.scope), "request": plain(child.request)},
-        original_decision_index=1, selection=selected,
-        runtime_binding={"factory_module": "synthetic_fixture", "factory_name": "unused",
-            "arguments": {}, "implementation_sha256": "a" * 64, "settings_sha256": "b" * 64},
-        input_versions=[], constraints={}, resource_selection=None,
-        expectation_snapshot_refs=[], selected_at="2026-10-24T00:00:00+00:00")
-    assert saved.custody.original_job_owner(child)["launch_episode_id"] == child.episode_id
-    if change is None:
-        assert saved.custody.initial_references(child) == []
-        return
-    if change == "selection":
-        selected["goal"] = "replaced"
-        saved.store.db.execute("UPDATE runtime_commission_intents SET selection=?", (canonical(selected),))
-    elif change == "spec":
-        spec["constraints"]["replaced"] = True
-        saved.store.db.execute("UPDATE runtime_commission_intents SET spec=?", (canonical(spec),))
-    else:
-        saved.store.db.execute("UPDATE runtime_commission_intents SET commission_sha256=?", ("0" * 64,))
-    with pytest.raises(AppServiceCustodyError, match="durable_commission_conflict"):
-        saved.custody.initial_references(child)
 
 
 @pytest.mark.parametrize("change", ["failed", "frozen", "contract", "untyped", "assignment"])

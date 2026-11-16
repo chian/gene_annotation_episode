@@ -1,9 +1,10 @@
-"""Closed local protein requests and immutable execution envelopes (380/003).
+"""Closed local protein requests and immutable execution envelopes.
 
 No acquisition, source authorization, alignment or numerical calculation lives
 here. Scientific record definitions and structural validation remain in A.
 """
 from __future__ import annotations
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 from datetime import datetime
 from functools import lru_cache
@@ -97,7 +98,7 @@ class AttemptIdentity(TypedDict):
     requested_job_sha256: str
 
 class ProteinPolicy(TypedDict):
-    memory_bytes: Literal[21474836480]
+    memory_bytes: int
     scratch_bytes: Literal[4294967296]
 
 class NativeProteinRunPlan(TypedDict):
@@ -149,7 +150,7 @@ RUN_PLAN_FILENAME = 'protein-structure-plan.json'
 ATTEMPT_DIRECTORY_NAME = 'protein-structure-attempt'
 BUNDLE_FILENAME = 'bundle.json'
 WORKER_INPUT_FILENAME = 'worker-input.json'
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 NATIVE_FORMATS = {'inspect': 'protein_structure_inventory_native_v1', 'extract_sequence': 'protein_structure_sequence_native_v1', 'compare': 'protein_structure_native_v1'}
 _TEXT = {'type': 'string', 'minLength': 1, 'pattern': '^[^\\u0000]+$'}
 _SHA = {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}

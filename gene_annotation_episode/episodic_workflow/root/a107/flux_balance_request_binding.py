@@ -19,9 +19,8 @@ from .library.received_execution_information.historical_practical_assignment imp
 ASSIGNMENT_VERSION = 'flux_balance_scientific_assignment_v1'
 LAUNCH_VERSION = 'flux_balance_scientific_launch_v1'
 REQUEST_VERSION = 'flux_balance_scientific_request_v1'
-LEGACY_CONTROL_VERSION = 'flux_balance_request_binding_v1'
 CONTROL_VERSION = 'flux_balance_request_binding_v2'
-_PUBLIC_VERSIONS = {LEGACY_CONTROL_VERSION: 'flux_balance_practical_outcome_v1', CONTROL_VERSION: 'flux_balance_practical_outcome_v2'}
+PUBLIC_OUTCOME_VERSION = 'flux_balance_practical_outcome_v2'
 _TEXT = {'type': 'string', 'minLength': 1}
 _SOURCE_FIELDS = ('artifact_ref', 'text_ref', 'request_ref', 'stdout_ref', 'stderr_ref')
 OUTPUT_ROLES = ('original_model', 'selected_request', 'effective_model', 'effective_problem', 'solution', 'flux_csv', 'native_log', 'manifest')
@@ -135,7 +134,7 @@ def read_request_binding(store, run_id, episode_id):
     saved = store.db.execute(f'SELECT file FROM {_TABLE} WHERE run_id=? AND episode_id=?', (run_id, episode_id)).fetchone()
     _require(saved is not None, 'original_control_missing')
     file = validate_flux_balance_record('File', json.loads(saved['file']))
-    _require(file['format'] in _PUBLIC_VERSIONS, 'control_format_conflict')
+    _require(file['format'] == CONTROL_VERSION, 'control_format_conflict')
     raw = retained_native_file(store, file).read_bytes()
     value = json.loads(raw)
     _require(raw == canonical(value).encode('utf-8') and value['version'] == file['format'] and (value['run_id'] == run_id) and (value['episode_id'] == episode_id), 'control_identity_conflict')
@@ -163,17 +162,17 @@ def materialized_assignment(store, context):
     _require(control['context'] == context.as_record() and len(control['requests']) == 1, 'original_context_conflict')
     return deepcopy(control['requests'][0]['assignment'])
 
-def practical_outcome_view(receipt, *, assignment=None, control_version=LEGACY_CONTROL_VERSION):
+def practical_outcome_view(receipt, *, assignment=None, control_version):
     """Project facts under the original control's fixed presentation contract."""
     if receipt is None:
         return None
-    _require(control_version in _PUBLIC_VERSIONS, 'public_outcome_version_conflict')
+    _require(control_version == CONTROL_VERSION, 'public_outcome_version_conflict')
     facts = receipt['outcome'].get('facts', {})
     job = facts.get('requested_job')
     native = receipt['outcome'].get('native_outcome') or {}
     failure = native.get('failure') or {}
     outputs = [{key: row[key] for key in ('role', 'available', 'bytes', 'writer_closed') if key in row} for row in native.get('observed_outputs', [])]
-    if control_version == CONTROL_VERSION and outputs:
+    if outputs:
         from .practical_execution_records import flux_balance_role_paths
         _require(type(assignment) is dict and type(job) is dict and (job.get('requested_job_sha256') == digest(assignment['requested_job'])), 'public_output_request_conflict')
         paths = flux_balance_role_paths(assignment, job, OUTPUT_ROLES)
@@ -184,9 +183,9 @@ def practical_outcome_view(receipt, *, assignment=None, control_version=LEGACY_C
             _require(row.get('role') in roles, 'public_output_role_conflict')
             row['role'] = roles[row['role']]
         _require(len(outputs) == len({row['role'] for row in outputs}), 'public_output_role_ambiguous')
-    return {'version': _PUBLIC_VERSIONS[control_version], 'operation': receipt['tool_name'], 'job': None if job is None else {key: job[key] for key in ('status', 'returncode')}, 'outputs': outputs, 'failure': {key: failure[key] for key in ('code', 'exception_type', 'errno') if key in failure} or None, 'validations': [{'key': row['key'], 'satisfied': row['satisfied']} for row in receipt['validations']]}
+    return {'version': PUBLIC_OUTCOME_VERSION, 'operation': receipt['tool_name'], 'job': None if job is None else {key: job[key] for key in ('status', 'returncode')}, 'outputs': outputs, 'failure': {key: failure[key] for key in ('code', 'exception_type', 'errno') if key in failure} or None, 'validations': [{'key': row['key'], 'satisfied': row['satisfied']} for row in receipt['validations']]}
 
-def match_practical_public_outcome(value, receipt, reference, *, assignment=None, control_version=LEGACY_CONTROL_VERSION):
+def match_practical_public_outcome(value, receipt, reference, *, assignment=None, control_version):
     """Authenticate the exact committed view; pending metadata belongs to runtime."""
     value = deepcopy(plain(value))
     if 'pending_work_after_action' in value:

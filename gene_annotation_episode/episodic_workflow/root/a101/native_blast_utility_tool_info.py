@@ -347,7 +347,7 @@ def native_blast_utility_tool_contracts(bindings: list[dict], *, resource_kind: 
             'execution requires its own actually configured resource binding.')
         if (program,mode) in PREPARATION_MODES:
             instructions += (
-                ' The selected local allocation is at most 20 GiB RAM and 4 GiB scratch, with zero swap and no '
+                ' The selected local allocation is at most 5 GiB RAM and 4 GiB scratch, with zero swap and no '
                 'wall-time cap. Retain closed-writer stdout/stderr and every actual selected output member even '
                 'when native fails; capture completeness does not turn failure into successful preparation. '
                 'The shared preparation/inspection readers populate typed records. Select preparation fields '
@@ -365,7 +365,7 @@ def native_blast_utility_tool_contracts(bindings: list[dict], *, resource_kind: 
                 'bytes are staged unchanged and checked against the selected ordered tokens; no database-list '
                 'rewriting, download or default cache is added. The executable, database/configuration and '
                 'selected runtime files retain their original absolute paths in the isolated offline execution. '
-                'Apply the caller’s local allocation within 20 GiB RAM/4 GiB scratch, zero swap and no wall cap. '
+                'Apply the caller’s local allocation within 5 GiB RAM/4 GiB scratch, zero swap and no wall cap. '
                 'The two managed native outputs are stdout and stderr, with the mode’s fixed output format. '
                 'Results use selector-v2 and the shared extraction/inspection records; artifact roles and '
                 'saved result data require explicit selection. Preserve useful partial outputs and specific '

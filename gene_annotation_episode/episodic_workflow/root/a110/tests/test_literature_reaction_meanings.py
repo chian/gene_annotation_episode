@@ -204,26 +204,6 @@ def test_semantic_readonly_reconstruction_and_exact_subset_receipt(tmp_path, mon
         assert store.db.total_changes == 0
 
 
-def test_portable_old_v2_outcome_schema_payload_and_projection_exact(tmp_path):
-    expected = json.loads((Path(__file__).parent / "fixtures/a110_legacy_v2_125.json").read_text())
-    store, context, args, _ = fixture(tmp_path)
-    with store:
-        repo = LiteratureReactionRepository(store, context.run_id)
-        out = repo.populate(context, args, "selected"); ref = out["result"]["sheet_ref"]
-        assert out == expected["outcome"]
-        assert repo.read(ref) == expected["payload"]
-        assert repo.project_cells([ref], permitted_record_refs=out["record_refs"]) == expected["rows"]
-        # Preserve exact historical payloads and validate their real arguments
-        # and rows under both contracts. Current documentation and general REF
-        # metadata need not equal the historical schema's serialized text.
-        validate_schema(expected["rows"], expected["cells_schema"])
-        validate_schema(expected["rows"], reaction_cells_schema())
-        validate_schema(args, expected["population_schema"])
-        validate_schema(args, reaction_population_schema())
-        with pytest.raises(ContractError): repo.semantic_projection().project_cells([ref], permitted_record_refs=out["record_refs"])
-        with pytest.raises(ContractError, match="projection_version"): repo.semantic_projection().validate_empty_return_family(context)
-
-
 def test_exact_requested_subset_cannot_be_forged_or_expanded_by_later_receiver(tmp_path):
     store, context, args, _, _ = semantic_fixture(tmp_path)
     with store:

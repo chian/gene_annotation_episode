@@ -125,36 +125,12 @@ def _saved_worker_plan(store, arguments, invocation, binding):
     root = Path(binding['workspace']) / '.episode-operations' / digest({'run': invocation['run_id'], 'episode': invocation['episode_id']}) / digest(invocation['operation_key'])
     return {'version': 'protein_structure_result_worker_plan_v1', 'mode': 'saved_sheet_recalculation', 'directory': str(root / 'result-worker'), 'parameters': deepcopy(arguments['parameters']), 'sheet': {'file_identity': deepcopy(descriptor['sheet_file']), 'path': str(retained_protein_structure_file(store, descriptor['sheet_file']))}, 'original_components': {'file_identity': deepcopy(descriptor['original_components_file']), 'path': str(retained_protein_structure_file(store, descriptor['original_components_file']))}}
 
-def _selected_legacy_parameter_reader(authority, transform):
-    if transform is None or transform['origin'] != 'received_fitted' or transform['received_from']['saved_sheet']['version'] != 'protein_structure_saved_sheet_v1':
-        return None
-    from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.retained_protein_owner import RetainedProteinReader as ExecutionEpisodes
-    legacy = getattr(authority, 'legacy_returns', None)
-    owner = getattr(legacy, 'owner', None)
-    _require(type(owner) is ExecutionEpisodes and legacy is owner.native_protein_structure_returns and (legacy.results is owner.native_protein_structure_results) and (owner.store is authority.store) and (owner.run_id == authority.run_id), 'protein_structure_legacy_parameter_authority_required')
-    return dict(version='protein_structure_legacy_parameter_reader_v1', run_id=owner.run_id, directory=str(owner.directory))
-
-def _authenticate_saved_parameters(store, context, parameters, authority, *, index, reader):
+def _authenticate_saved_parameters(store, context, parameters, authority, *, index):
     transform = parameters['declared_transform']
     if transform is None or transform['origin'] != 'received_fitted':
-        _require(reader is None, 'original_commission_mismatch')
         return
     from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.protein_structure_operands import authenticate_received_structure_transform
-    legacy = transform['received_from']['saved_sheet']['version'] == 'protein_structure_saved_sheet_v1'
-    if not legacy:
-        _require(reader is None, 'original_commission_mismatch')
-        authenticate_received_structure_transform(store, context, transform, returns=authority, before_decision_index=index)
-        return
-    from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.retained_protein_owner import RetainedProteinReader as ExecutionEpisodes
-    from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.protein_structure_action_records import ProteinStructureActionRecords
-    _require(type(reader) is dict and set(reader) == {'version', 'run_id', 'directory'} and (reader['version'] == 'protein_structure_legacy_parameter_reader_v1') and (reader['run_id'] == context.run_id), 'original_commission_mismatch')
-    retained = ExecutionEpisodes.retained_protein_structure_reader(store, run_id=reader['run_id'], directory=reader['directory'])
-    records = ProteinStructureActionRecords(store, context.run_id, legacy_returns=retained)
-    value = authenticate_received_structure_transform(store, context, transform, returns=records, before_decision_index=index)
-    if authority.legacy_returns is not None:
-        _require(same(reader, _selected_legacy_parameter_reader(authority, transform)), 'original_commission_mismatch')
-        original = authenticate_received_structure_transform(store, context, transform, returns=authority, before_decision_index=index)
-        _require(same(value, original), 'original_commission_mismatch')
+    authenticate_received_structure_transform(store, context, transform, returns=authority, before_decision_index=index)
 
 def validate_saved_protein_work(store, work, *, context, input_authority, prepared=False):
     """Reconstruct one selected saved action from actual retained authority.
@@ -184,12 +160,10 @@ def validate_saved_protein_work(store, work, *, context, input_authority, prepar
         return fresh
     inputs = input_authority.saved_action_inputs(context, arguments['saved_sheet'], required_use='recalculate' if mode == 'recalculate' else 'select_projection', before_decision_index=index, result_ref=arguments.get('result_ref'))
     expected_admission = deepcopy(inputs['admission'])
-    if mode == 'recalculate' and work['admission'].get('parameter_reader') is not None:
-        expected_admission['parameter_reader'] = deepcopy(work['admission']['parameter_reader'])
     _require(same(work['admission'], expected_admission), 'original_commission_mismatch')
     original, basis = (inputs['original'], inputs['basis'])
     if mode == 'recalculate':
-        _authenticate_saved_parameters(store, context, arguments['parameters'], input_authority, index=index, reader=work['admission'].get('parameter_reader'))
+        _authenticate_saved_parameters(store, context, arguments['parameters'], input_authority, index=index)
     files = {name: deepcopy(original[name]) for name in ('native_file', 'sequence_file', 'residue_map_file', 'sheet_file', 'original_components_file', 'components_file')}
     scientific = None
     issues = deepcopy(original['native_issues'])

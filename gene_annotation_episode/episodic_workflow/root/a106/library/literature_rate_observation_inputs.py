@@ -175,7 +175,7 @@ def read_rate_observations(content, arguments, *, artifact_ref):
         'meanings':meanings,'entries':entries,'grouping':'unknown','physical_conversion':'unknown'}
 
 
-# Explicit grid version; the complete legacy v1 implementation above is retained.
+# Explicit grid version.
 GRID_INPUT_VERSION = 'a105_reported_rate_grid_v1'
 GRID_SOURCE_STATUSES = ('observed', 'missing', 'not_detected', 'censored', 'unsupported_cell')
 GRID_ENTRY_REASONS = (*ENTRY_REASONS, 'source_error_cell')

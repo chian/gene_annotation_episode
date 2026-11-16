@@ -153,6 +153,7 @@ class AppServiceCustody(EpisodeReturnRecords):
             # original schema; today's catalog never rewrites old selections.
             from .task_action_contracts import _decode_recorded_action_response, _recorded_assignment_transport
             try:
+                _recorded_assignment_transport(sent)
                 exchanges = []
                 if selected is None and self._table('runtime_decision_exchanges'):
                     exchanges = [{'request': self._json(row['request']),
@@ -162,8 +163,7 @@ class AppServiceCustody(EpisodeReturnRecords):
                             'ORDER BY exchange_index', (self.run_id, parent.episode_id, index))]
                 model = _decode_recorded_action_response(response, sent["schema"],
                     recorded_selection=selected, exchanges=exchanges,
-                    exchange_schema=sent.get('contract_information', {}).get('exchange_schema'),
-                    unproven_replay=not _recorded_assignment_transport(sent)).get("selection")
+                    exchange_schema=sent.get('contract_information', {}).get('exchange_schema')).get("selection")
                 Draft202012Validator(sent["schema"]["properties"]["selection"]).validate(model)
             except (ValidationError, ValueError, TypeError, KeyError, AttributeError) as error:
                 raise AppServiceCustodyError("parent_selection_conflict" if str(error) ==

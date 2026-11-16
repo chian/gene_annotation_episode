@@ -39,18 +39,7 @@ QUANTITY_FIELDS = ("value", "unit", "status", "bound", "approximate", "qualifica
                    "physical_observation_key", "origin", "unavailable_reason")
 CALCULATION_FIELDS = ("quantities", "comparison_kind", "pair_relationship",
                       "stock_relationship", "covariance", "covariance_origin", "variance_status")
-_RELEASED027_LEXICAL_DEPENDENCY = {"module": "gene_annotation_episode.literature_rate_native_inputs",
-    "sha256_at_release": "264328313d32a8ed0315eb4a80388be775a8c7c2b51ad25041aad071a295dc67",
-    "interface": "_number(selection,sources,role='rate'); _field_contexts"}
-LEXICAL_DEPENDENCY = {"module": "gene_annotation_episode.literature_rate_native_inputs",
-    "sha256_at_release": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
-    "interface": "_number(selection,sources,role='rate'); _field_contexts",
-    "scope_generation": "completed_allocation_addition_v1",
-    "scope_module": "gene_annotation_episode.literature_partner_source_fields",
-    "scope_sha256_at_release": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17"}
 
-# Exact pre-repair emitted metadata retained for saved extraction validation only.
-_INITIAL_PRIVATE_EMITTED_LEXICAL_DEPENDENCY = {'interface': "_number(selection,sources,role='rate'); _field_contexts", 'module': 'gene_annotation_episode.episodic_workflow.root.a106.literature_rate_native_inputs', 'scope_generation': 'completed_allocation_addition_v1', 'scope_module': 'gene_annotation_episode.episodic_workflow.root.a106.literature_partner_source_fields', 'scope_sha256_at_release': '20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17', 'sha256_at_release': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500'}
 UNCERTAINTY_KINDS = ("sd", "sem", "ci", "untyped", "unreported", "unknown", "conflicting")
 INPUT_REASONS = ("source_amount_unit_unreported", "unsupported_source_amount_unit")
 _QUANTITY_RECORD_FIELDS = ("meanings", "number", "unit", "amount_role", "amount_kind",
@@ -58,7 +47,7 @@ _QUANTITY_RECORD_FIELDS = ("meanings", "number", "unit", "amount_role", "amount_
     "physical_observation_key", "owner_key", "value", "status", "bound", "approximate", "origin", "source_origin", "unavailable_reason")
 _EXTRACTION_FIELDS = ("version", "source_ref", "source_kind", "experiment", "intended_change",
     "comparison_kind", "pair_relationship", "stock_relationship", "quantities",
-    "covariance_source", "calculation_inputs", "source_refs", "lexical_dependency")
+    "covariance_source", "calculation_inputs", "source_refs")
 _COVARIANCE_FIELDS = ("version", "quantity_order", "quantity_measurement_keys",
     "quantity_physical_observation_keys", "quantity_owner_keys", "quantity_units",
     "covariance", "origin", "variance_status")
@@ -432,7 +421,7 @@ def read_amount_inputs(arguments, *, read_source):
         "covariance": cov, "covariance_origin": cov_source["data"]["origin"] if cov_source else None,
         "variance_status": cov_source["data"]["variance_status"] if cov_source else "unknown"}
     validate_amount_calculation_inputs(result["calculation_inputs"])
-    result.update(source_refs=list(sources.references), lexical_dependency=deepcopy(LEXICAL_DEPENDENCY))
+    result.update(source_refs=list(sources.references))
     return result
 
 
@@ -457,8 +446,6 @@ def validate_amount_extraction(extraction):
         _fail("amount_extraction_version_or_origin_mismatch", "extraction")
     # Old selections retain their original classifications. Neither supported
     # generation is source-reparsed here; unknown identities are never aliases.
-    if extraction["lexical_dependency"] not in (LEXICAL_DEPENDENCY, _RELEASED027_LEXICAL_DEPENDENCY, _INITIAL_PRIVATE_EMITTED_LEXICAL_DEPENDENCY):
-        _fail("amount_lexical_dependency_mismatch", "lexical_dependency")
     for field in ("experiment", "intended_change"):
         if extraction[field] is not None:
             _saved_witness(extraction[field], field)
@@ -581,5 +568,5 @@ __all__ = ["VERSION", "ROLES", "SOURCE_KINDS", "COMPARISON_KINDS", "AMOUNT_ROLES
     "AMOUNT_KINDS", "QUALIFICATIONS", "RELATIONSHIPS", "STOCK_RELATIONSHIPS", "LITERAL_FIELDS",
     "UNITS", "QUANTITY_FIELDS", "CALCULATION_FIELDS", "amount_arguments_schema",
     "validate_amount_calculation_inputs", "read_amount_inputs", "validate_amount_extraction",
-    "validate_amount_selection", "amount_selection_from_extraction", "LEXICAL_DEPENDENCY", "INPUT_REASONS",
+    "validate_amount_selection", "amount_selection_from_extraction", "INPUT_REASONS",
     "UNCERTAINTY_KINDS"]

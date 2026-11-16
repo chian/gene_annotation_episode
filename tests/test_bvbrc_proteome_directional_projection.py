@@ -196,20 +196,6 @@ def test_missing_first_document_and_out_of_range_native_ordinal_never_shift_targ
     assert facts['out_of_range']['context']['target']['hsp_ordinal'] == 99
 
 
-def test_mixed_form_preserves_legacy_numerical_meaning_and_maps_original_references():
-    case = case_with({'mean': {'kind': 'measurement', 'target': 'summary', 'track_key': 'comp_genome_2',
-        'summary': 'first_hsp_identity_summary', 'metric': 'mean'},
-        'legacy_requirements': {'kind': 'requirements', 'scope': 'all'},
-        'expect': selector('directional_native_decimal', 'hsp', 'expect'),
-        'status': {'kind': 'request_status', 'field': 'expect'}}, mixed=True, supplementary=True)
-    result = adapter.consume_bundle(**case)
-    assert result['facts']['mean']['cell']['value'] == .4375
-    assert decode_reference(result['facts']['mean']['population_ref'])[2].startswith('/components/legacy/')
-    assert result['facts']['expect']['cell']['value'] == dict(sign=0, digits=[2], exponent=-66)
-    assert all(not row['code'].startswith('proteome_directional_') for row in result['facts']['legacy_requirements']['requirements'])
-    assert saved_check(case, result)['facts'] == result['facts']
-
-
 @pytest.mark.parametrize('change', ['decimal', 'denominator', 'state', 'target', 'page', 'requirement'])
 def test_saved_projection_rejects_changes_in_original_requested_values(native_projection, change):
     case, result = deepcopy(native_projection)

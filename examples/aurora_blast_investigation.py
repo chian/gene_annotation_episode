@@ -120,7 +120,7 @@ async def run(args):
         if store.db.execute('SELECT 1 FROM problem').fetchone() is None:
             # This operational commission has no caller-supplied sequences.
             manifest = directory/'caller-inputs.json'
-            manifest.write_text(json.dumps({'schema_version': 1, 'entries': []}))
+            manifest.write_text(json.dumps({'schema_version': 2, 'entries': []}))
             store.create_problem(manifest_path=manifest, caller_context=OBJECTIVE)
         async with ModelConnection(load_config(args.model_config), directory/'provider'/uuid.uuid4().hex, directory) as provider:
             workflow = Workflow(store, ToolRegistry(store), provider, directory/'episode', directory.name,

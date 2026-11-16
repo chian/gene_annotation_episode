@@ -112,7 +112,7 @@ def test_private_task_preserves_invalid_action_and_replays_without_observing_aga
     task.episode_id, task.path, task.scope = 'monitor', context.path, {}
     task.checkpoint = lambda: None
     task.workflow = SimpleNamespace(journal=journal, run_id='run', execution_binding=None,
-        wait_inputs_version=None, completed_action_inputs_version=None, execute=execute,
+        pending_work=lambda source: [], execute=execute,
         receive_native_outcome=lambda *args: None,
         receive_outcome=lambda source, selection, result, index: outcomes.append((index, result['status'])),
         automatic_score_updates=score, source_credit_view=lambda source: {'credit': 0},
@@ -151,22 +151,3 @@ def test_private_child_receipt_preserves_provider_delivery_identity(tmp_path):
         assert provider.received_progress_refs(context.episode_id) == form['progress']
         with pytest.raises(ContractError, match='progress_delivery_identity_conflict'):
             binding.receive_child_progress(context, {'progress': []}, schema, 'delivery', provider)
-
-
-def test_runtime_build_uses_private_monitor_task(monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a107 import runtime
-    from gene_annotation_episode.episodic_workflow.root.a107.episode_bindings import EpisodeBindingRegistry
-    binding, _, _, _ = setup_monitor()
-    monkeypatch.setattr(runtime.Episode, 'identity', lambda *args, **kwargs: SimpleNamespace(episode_id='monitor'))
-    monkeypatch.setattr(runtime, 'FeedbackEpisode', lambda grain, key, source, *args, **kwargs: source)
-    workflow = SimpleNamespace(context=object(), grains={'monitor': object()},
-        inprocess_completion_order=None, receipts=None, scientific_process_binding=None,
-        episode_bindings=EpisodeBindingRegistry((binding,)), contract_information_profile=lambda source: None,
-        specialist=lambda source: binding, journal=SimpleNamespace(row=lambda *args: None, save=lambda *args: None),
-        run_id='run', store=SimpleNamespace(transaction=nullcontext, db=SimpleNamespace(execute=lambda *args: None)),
-        source_credit_view=lambda source: {'credit': 0}, expose_assigned_job=lambda source: None,
-        receive_tool_attributions=lambda *args, **kwargs: None, archive=SimpleNamespace(store=lambda value: value))
-    task = runtime.Workflow.build(workflow, 'monitor', 'monitor', 'Resolve progress', {})
-    assert type(task) is binding.decision_source_type
-    assert type(task).__module__.endswith('execution_progress_assessment.task')
-    assert not isinstance(task, runtime.DecisionSource)

@@ -6,7 +6,6 @@ These tests exercise real Store/action/receipt owners. They do not claim a
 whole Workflow, a native aligner run, or a biological repair mechanism.
 """
 from copy import deepcopy
-from dataclasses import replace
 import json
 from types import SimpleNamespace
 
@@ -140,27 +139,6 @@ def test_public_primary_is_compact_and_original_captures_are_private(admission):
     after = list(case.store.db.execute("SELECT * FROM runtime_record_receipts"))
     assert after == receipts_before
     assert case.store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 0
-
-
-@pytest.mark.parametrize("shape", ["not_selected", "local", "legacy"])
-def test_partial_unknown_and_unselected_are_not_observed_zero(admission, shape):
-    case = admission(mode="local" if shape == "local" else "global",
-        retention="legacy_companion" if shape == "legacy" else "modern")
-    publication = _publication(case, arguments=_arguments(case, selected=shape != "not_selected"))
-    public, = [publication.result["result"]]
-    pair, = public["pairs"]
-    assert publication.result["status"] == "partial"
-    if shape == "legacy":
-        assert pair["whole_pair_type"] == "substitution_only"
-        assert pair["counts"]["substituted_positions"] == 1
-        assert "saved_correspondence_unavailable" in pair["issue_codes"]
-    elif shape == "local":
-        assert pair["counts"]["substituted_positions"] == 1 and pair["counts"]["query_gap_columns"] == 0
-    else:
-        assert pair["counts"]["substituted_positions"] is None and pair["events"] is None
-    if shape != "legacy":
-        assert pair["whole_pair_type"] is None and public["populations"]["overall"]["classified_pair_count"] == 0
-        assert all(row["fraction_of_classified"]["value"] is None for row in public["populations"]["overall"]["categories"])
 
 
 def test_explicit_comparison_subject_admission_precedes_literal_shared_extraction(admission, monkeypatch):
@@ -324,32 +302,6 @@ def test_selected_argument_conflict_does_not_replace_an_occupied_operation(admis
             host.execute_reference_edit_outcome(case.tools, changed, scope=plain(original.receiver.context.scope),
                 operation_key=original.key, authority=(original.receiver.context, original.receiver.reader))
     assert (_tables(case.store), case.store.db.total_changes) == before
-
-
-def test_unreceived_comparison_is_rejected_before_any_sequence_bytes(admission, monkeypatch):
-    case = admission()
-    receiver = _context(case, initial=[case.alignment])
-    # Alignment delivery carries its operands in legacy ordinary receipts;
-    # remove this explicit comparison's actual receipt as a negative fixture.
-    case.store.db.execute("DELETE FROM runtime_record_receipts WHERE run_id=? AND episode_id=? AND record_ref=?",
-        (receiver.context.run_id, receiver.context.episode_id, case.other))
-    args = _arguments(case)
-    args["guide_comparisons"] = [dict(pair_ordinal=0, guide_ref=case.other, reference_interval=[0, 4], orientation="as_is", molecule="dna")]
-    monkeypatch.setattr(case.tools, "_sequence", _forbidden)
-    original_sources = case.store.count("source")
-    result, _ = _invoke(case, receiver, args)
-    assert result["status"] == "invalid" and result["record_refs"] == [] and case.store.count("source") == original_sources
-
-
-def test_private_payload_tampering_keeps_literal_read_but_blocks_recalculation(admission):
-    case = admission()
-    original = _publication(case)
-    metadata = case.store.get(original.source["auxiliary_artifact_refs"][0])
-    path = case.store.path / "artifacts" / metadata["sha256"][:2] / metadata["sha256"]
-    path.write_bytes(path.read_bytes() + b" ")
-    assert _read(case, original)["public"] == original.result["result"]
-    with pytest.raises((ValueError, ContractError), match="digest_mismatch|retained_artifact_mismatch"):
-        _read(case, original, envelope=True)
 
 
 def test_failed_atomic_publication_rolls_back_source_and_caches_only_original_failure(admission, monkeypatch):

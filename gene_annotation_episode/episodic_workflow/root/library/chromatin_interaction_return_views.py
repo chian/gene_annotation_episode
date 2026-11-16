@@ -55,18 +55,6 @@ def chromatin_fact_sources() -> dict:
         "report_schema": _array_schema(source)} for source in FACT_SOURCES}
 
 
-def chromatin_fact_schema_alternatives(source: str) -> tuple[dict, ...]:
-    """Current tree and the single exact supported historical field tree."""
-    if type(source) is not str or source not in FACT_SOURCES:
-        raise ValueError("chromatin_return_unknown_source")
-    current = _array_schema(source)
-    if source == SAVED_SOURCE:
-        return (current,)
-    from gene_annotation_episode.episodic_workflow.root.library.chromatin_interaction_legacy_return_schemas import legacy_chromatin_fact_schema
-    legacy = legacy_chromatin_fact_schema(source)
-    return (current,) if current == legacy else (current, legacy)
-
-
 def requested_chromatin_sources(schema: dict) -> tuple[str, ...]:
     if type(schema) is not dict or type(schema.get("properties")) is not dict:
         raise ValueError("chromatin_return_form_schema_required")
@@ -112,14 +100,11 @@ def select_chromatin_return_facts(groups: dict, *, schema: dict) -> dict:
         source = node.get('x-source')
         if source not in FACT_SOURCES:
             continue
-        accepted = chromatin_fact_schema_alternatives(source)
-        if canonical_chromatin_record(node) not in {canonical_chromatin_record(tree) for tree in accepted}:
+        if canonical_chromatin_record(node) != canonical_chromatin_record(_array_schema(source)):
             raise ValueError('chromatin_return_unregistered_field_schema')
         if source not in groups:
             raise ValueError("chromatin_return_requested_source_unavailable")
         rows = validate_chromatin_fact_values(source, groups[source])
-        # Repeated source fields can have different historical/current trees.
-        # Every requested field keeps its own original restrictions.
         try:
             Draft202012Validator(node).validate(rows)
         except Exception as error:
@@ -130,5 +115,4 @@ def select_chromatin_return_facts(groups: dict, *, schema: dict) -> dict:
 
 __all__ = ["PROJECTION_SOURCE", "SAVED_SOURCE", "FAILURE_SOURCE", "FACT_SOURCES",
     "chromatin_fact_sources", "requested_chromatin_sources",
-    "chromatin_fact_schema_alternatives",
     "validate_chromatin_fact_values", "select_chromatin_return_facts"]

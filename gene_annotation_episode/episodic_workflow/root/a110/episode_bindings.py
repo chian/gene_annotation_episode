@@ -350,7 +350,7 @@ class EpisodeBindingRegistry:
 
 
     def for_role(self, role):
-        """Retain unambiguous legacy lookup; never choose between private parents."""
+        """Return the unique binding of a role; never choose between private parents."""
         try:
             candidates = self._by_role[role]
         except KeyError as error:

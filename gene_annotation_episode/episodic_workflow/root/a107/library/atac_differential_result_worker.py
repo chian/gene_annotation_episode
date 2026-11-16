@@ -1,6 +1,4 @@
-"""A107 original atac differential result worker; substantive retained received-result responsibility.
-Original authority, invalid outcomes and historical source identities remain unchanged.
-"""
+"""A107 atac differential result worker."""
 
 
 from __future__ import annotations

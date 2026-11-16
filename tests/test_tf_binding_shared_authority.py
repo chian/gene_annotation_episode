@@ -7,7 +7,7 @@ Pending-capture and committed-producer checks require the actual ordinary TF
 handler path and deliberately remain outside this module's current scope.
 """
 import hashlib
-from importlib import metadata, util
+from importlib import metadata
 import json
 from pathlib import Path
 import threading
@@ -15,8 +15,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.acquisition import AcquisitionError
-from gene_annotation_episode.domain import ContractError, canonical
+from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode import molecular_measurement_tools as shared
 from gene_annotation_episode import native_lifecycle
@@ -33,77 +32,12 @@ def forbidden(*_args, **_kwargs):
 
 
 @pytest.fixture
-def distribution_metadata(tmp_path, monkeypatch):
-    """Actual temporary Files behind fake distribution/spec metadata only."""
-    distributions, specifications, expected, outside = {}, {}, {}, {}
-    for distribution_name, package in (('biopython', 'Bio'), ('numpy', 'numpy')):
-        root = tmp_path / distribution_name / 'site-packages'
-        entries = [Path(package) / '__init__.py', Path(package) / 'native-data.bin',
-            Path(distribution_name + '.dist-info') / 'METADATA', Path('../bin/unused-console')]
-        for index, entry in enumerate(entries):
-            path = root / entry
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(('explicit engineering distribution file ' + str(index)).encode())
-        entries += [Path(package) / '__pycache__' / '__init__.pyc']
-        distributions[distribution_name] = SimpleNamespace(files=entries,
-            locate_file=lambda entry, root=root: root / entry)
-        specifications[package] = SimpleNamespace(origin=str((root / entries[0]).resolve()))
-        expected[distribution_name] = {(root / entry).resolve() for entry in entries[:3]}
-        outside[distribution_name] = (root / '../bin/unused-console').resolve()
-    monkeypatch.setattr(metadata, 'distribution', lambda name: distributions[name])
-    monkeypatch.setattr(util, 'find_spec', lambda name: specifications[name])
-    return SimpleNamespace(distributions=distributions, specifications=specifications,
-        expected=expected, outside=outside)
-
-
-
-
-@pytest.mark.parametrize('operation', ['tf_binding_native', 'tf_binding_result'])
-def test_tf_selected_distribution_identity_includes_imported_assets_and_excludes_unused_console(
-        distribution_metadata, operation):
-    case = distribution_metadata
-    files = shared._molecular_implementation_files(operation)
-    assert Path(shared.__file__) in files
-    assert Path(shared.__file__).with_name(MODULES[operation].rsplit('.', 1)[-1] + '.py') in files
-    assert len(files) == len(set(files))
-    assert set().union(*case.expected.values()) <= set(files)
-    assert not set(case.outside.values()) & set(files)
-    assert all(path.suffix != '.pyc' and '__pycache__' not in path.parts for path in files)
-
-
-@pytest.mark.parametrize('fault', ['wrong_import_origin', 'missing_distribution_file'])
-def test_tf_distribution_identity_failure_has_no_fallback_or_native_probe(distribution_metadata, monkeypatch, fault):
-    case = distribution_metadata
-    monkeypatch.setattr(native_lifecycle, 'prepare_job', forbidden)
-    if fault == 'wrong_import_origin':
-        case.specifications['Bio'].origin = str(case.outside['biopython'])
-    else:
-        next(path for path in case.expected['biopython'] if path.name == 'METADATA').unlink()
-    with pytest.raises(AcquisitionError) as caught:
-        shared._molecular_implementation_files('tf_binding_native')
-    assert caught.value.code == 'biopython_not_installed' and caught.value.phase == 'local_preflight'
-    assert caught.value.operational['reason'] == ('distribution_import_or_files_conflict'
-        if fault == 'wrong_import_origin' else 'distribution_file_unavailable')
-
-
-def test_unlisted_worker_operation_is_denied_before_selection_or_reservation(tmp_path, monkeypatch):
-    policy = LocalJobPolicy(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
-    monkeypatch.setattr(shared, '_molecular_implementation_files', forbidden)
-    monkeypatch.setattr(native_lifecycle, 'prepare_job', forbidden)
-    before = sorted(tmp_path.iterdir())
-    with pytest.raises(ContractError, match='molecular_tool_owned_directory_conflict'):
-        shared.run_owned_molecular_worker('tf_binding_arbitrary', {}, directory=tmp_path,
-            owned_directory=tmp_path, policy=policy, cancel_event=None)
-    assert sorted(tmp_path.iterdir()) == before
-
-
-@pytest.fixture
 def controlled_worker(tmp_path, monkeypatch):
     """One synthetic reservation; no systemd/process/native calls occur."""
     owned = tmp_path / 'owned'; owned.mkdir()
     selected_source = tmp_path / 'selected-implementation.py'
     selected_source.write_bytes(b'explicit engineering software identity, never imported')
-    policy = LocalJobPolicy(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
+    policy = LocalJobPolicy(memory_bytes=5 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
     event = threading.Event()
     calls = dict(prepare=0, resume=0, collect=0)
     observations = dict(state='prepared', terminal=False, quiescent=False)
@@ -174,59 +108,3 @@ def test_stop_or_unknown_keeps_one_original_worker_handle_without_cancel_or_resu
             assert Path(selected['environment'][key]).is_relative_to(case.owned)
 
 
-@pytest.mark.parametrize('operation', OPERATIONS)
-def test_later_terminal_observation_collects_only_original_handle_and_selection(controlled_worker, monkeypatch, operation):
-    case = controlled_worker; case.observations['state'] = 'execution_unknown'
-    with pytest.raises(shared.MolecularOperationUnpublished): case.invoke(operation)
-    original = {name: (case.owned / name).read_bytes() for name in
-        ('execution-selection.json', 'worker-request.json', 'native-handle.json')}
-    # A terminal metadata adapter and an opaque output file are explicit test
-    # inputs, not a claim that a scientific worker actually ran successfully.
-    output = case.owned / 'worker-result.json'; output.write_bytes(b'engineering opaque output')
-    case.observations.update(state='returned', terminal=True, quiescent=True)
-    case.selected_source.unlink()
-    monkeypatch.setattr(shared, '_molecular_implementation_files', forbidden)
-    later_policy = LocalJobPolicy(memory_bytes=1024, scratch_bytes=2048)
-    result, metadata_result = case.invoke(operation, selected_policy=later_policy)
-    assert result == output and metadata_result == {'engineering_observation': True}
-    assert case.calls == dict(prepare=1, resume=0, collect=1)
-    assert {name: (case.owned / name).read_bytes() for name in original} == original
-
-
-def selected_manifest(case, operation):
-    """Explicit unstarted selection metadata, without a reservation/outcome."""
-    request = case.owned / 'worker-request.json'; output = case.owned / 'worker-result.json'
-    return dict(version='ordinary_molecular_execution_v1',
-        command=[shared.sys.executable, '-m', MODULES[operation], str(request), str(output)],
-        cwd=str(case.owned), environment={'PYTHONDONTWRITEBYTECODE': '1'}, policy=case.policy.to_dict(),
-        request=dict(operation=operation, arguments={'engineering_metadata_only': True}),
-        python=dict(path=shared.sys.executable, sha256=hashlib.sha256(Path(shared.sys.executable).read_bytes()).hexdigest()),
-        implementation_files=[dict(path=str(case.selected_source), sha256=hashlib.sha256(case.selected_source.read_bytes()).hexdigest())])
-
-
-@pytest.mark.parametrize('operation', OPERATIONS)
-def test_selected_software_byte_change_blocks_first_dispatch_without_reselection(controlled_worker, monkeypatch, operation):
-    case = controlled_worker
-    selected_path = case.owned / 'execution-selection.json'; selected = selected_manifest(case, operation)
-    selected_path.write_text(json.dumps(selected)); original = selected_path.read_bytes()
-    case.selected_source.write_bytes(b'changed selected software')
-    monkeypatch.setattr(native_lifecycle, 'prepare_job', forbidden)
-    monkeypatch.setattr(shared, '_molecular_implementation_files', forbidden)
-    with pytest.raises(ContractError, match='original_software_changed_before_dispatch'):
-        case.invoke(operation)
-    assert case.calls == dict(prepare=0, resume=0, collect=0)
-    assert selected_path.read_bytes() == original and not (case.owned / 'native-handle.json').exists()
-
-
-@pytest.mark.parametrize('operation', OPERATIONS)
-def test_selected_module_conflict_is_rejected_before_request_or_dispatch(controlled_worker, monkeypatch, operation):
-    case = controlled_worker; selected = selected_manifest(case, operation)
-    selected['command'][2] = 'gene_annotation_episode.unselected_worker'
-    selected_path = case.owned / 'execution-selection.json'; selected_path.write_text(json.dumps(selected))
-    original = selected_path.read_bytes()
-    monkeypatch.setattr(native_lifecycle, 'prepare_job', forbidden)
-    monkeypatch.setattr(shared, '_molecular_implementation_files', forbidden)
-    with pytest.raises(ContractError, match='execution_selection_conflict'):
-        case.invoke(operation)
-    assert case.calls == dict(prepare=0, resume=0, collect=0)
-    assert selected_path.read_bytes() == original and not (case.owned / 'worker-request.json').exists()

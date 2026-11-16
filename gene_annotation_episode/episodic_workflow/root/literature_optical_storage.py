@@ -46,11 +46,9 @@ from gene_annotation_episode.episodic_workflow.root.library.literature_optical_r
 
 _PAYLOAD_FIELDS = ("version", "input_source_ref", "input_artifact_ref", "direct_input_source_refs",
     "input_source_refs", "selection", "extraction", "calculation", "cells", "context_bindings",
-    "operand_bindings", "interpretation_bindings", "covariance_binding_ref", "requested_components",
-    "implementation_dependencies")
+    "operand_bindings", "interpretation_bindings", "covariance_binding_ref", "requested_components")
 _REQUEST_FIELDS = ("run_id", "episode_id", "operation_key", "selected_tool", "scope", "assignment",
     "requested_components", "arguments")
-# Historical three-file release hashes are retained in the dependency custody owner.
 
 def _fail(code):
     raise ContractError("literature_optical_" + code)
@@ -72,16 +70,6 @@ def _selected(assignment):
 def _signature(request):
     return canonical({name: request[name] for name in (
         "arguments", "scope", "run_id", "episode_id", "assignment", "requested_components")})
-
-
-def _dependencies():
-    from gene_annotation_episode.episodic_workflow.root.library.literature_optical_dependency_custody import current_dependencies
-    return current_dependencies(_fail)
-
-
-def _saved_dependencies_valid(saved):
-    from gene_annotation_episode.episodic_workflow.root.library.literature_optical_dependency_custody import saved_dependencies_valid
-    return saved_dependencies_valid(saved, _fail)
 
 
 def _validate_inputs(selection, extraction):
@@ -317,7 +305,7 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
             "direct_input_source_refs": direct, "input_source_refs": self._parents(context.scope, direct),
             "selection": args, "extraction": extraction, "calculation": calculation,
             "cells": {name: deepcopy(calculation[key]) for name, key in CELL_MAP.items()},
-            "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+            "requested_components": request["requested_components"]}
         with self.store.transaction():
             created, records = [], []
             def publish(kind, value):
@@ -374,8 +362,7 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
                 or saved["direct_input_source_refs"] != saved["extraction"]["source_refs"]
                 or source.get("parent_source_refs") != saved["input_source_refs"]
                 or source.get("text_ref") != source["artifact_ref"]
-                or self._parents(request["scope"], saved["direct_input_source_refs"]) != saved["input_source_refs"]
-                or not _saved_dependencies_valid(saved["implementation_dependencies"])):
+                or self._parents(request["scope"], saved["direct_input_source_refs"]) != saved["input_source_refs"]):
             _fail("saved_mismatch")
         _validate_inputs(saved["selection"], saved["extraction"])
         _validate_calculation(saved)

@@ -28,7 +28,6 @@ from .library.literature_endpoint_signal_contracts import ENDPOINT_SIGNAL_CELLS_
 
 from .library.literature_endpoint_signal_contracts import ENDPOINT_SIGNAL_REQUEST_SCHEMA_V1
 
-_PURE_HASHES = json.loads('{"literature_endpoint_signal_calculations.py":"48dfcd0473ad087e714067c868388bf54210a5069112d04e2d678ed9cda08340","literature_endpoint_signal_inputs.py":"5fcbb6d3393a278500038df3ef934895ef5d5443f2d9878c179dbe89ae9e015d","literature_endpoint_signal_prompt.py":"f4ebb4281b23b3ce334ad3eafdfe47ddfe15a43d00f331ab4d46e4c201b56477"}')
 
 
 from .library.literature_endpoint_signal_contracts import endpoint_signal_cells_schema, endpoint_signal_operation_schema
@@ -68,10 +67,6 @@ class LiteratureEndpointSignalRepository(LiteratureRateRepository):
                     result.append(parent)
         return result
 
-    def _original_implementation(self):
-        from .library.literature_endpoint_signal_source_receipt import current_receipt
-        return current_receipt()
-
     def populate(self, context, arguments, operation_key):
         from .library.literature_endpoint_signal_inputs import (read_endpoint_signal_inputs,
             endpoint_signal_population_schema, endpoint_signal_extraction_schema)
@@ -100,7 +95,6 @@ class LiteratureEndpointSignalRepository(LiteratureRateRepository):
             return outcome
         for reference in _direct(args):
             self._native_source(context, reference)
-        receipt = self._original_implementation()
         read_sizes, authorization_errors = {}, []
         def read_source(reference, representation):
             try:
@@ -130,7 +124,7 @@ class LiteratureEndpointSignalRepository(LiteratureRateRepository):
             'sheet': endpoint_signal_sheet_schema(), 'rows': deepcopy(ENDPOINT_SIGNAL_CELLS_SCHEMA_V1)}
         payload = {'version': VERSION, 'input_source_ref': source['id'], 'input_artifact_ref': source['artifact_ref'],
             'direct_input_source_refs': direct, 'input_source_refs': parents,
-            'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'original_implementation': receipt,
+            'source_metadata': {ref: self.store.get(ref) for ref in parents},
             'original_schemas': snapshots, 'extraction': extraction, 'sheet': sheet, 'row_templates': templates}
         with self.store.transaction():
             self._install()
@@ -182,7 +176,7 @@ class LiteratureEndpointSignalRepository(LiteratureRateRepository):
         require(set(request) == {'run_id', 'episode_id', 'role', 'operation_key', 'scope', 'assignment',
             'received_record_refs', 'arguments', 'components'} and request['run_id'] == self.run_id)
         require(set(saved) == {'version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs',
-            'input_source_refs', 'source_metadata', 'original_implementation', 'original_schemas',
+            'input_source_refs', 'source_metadata', 'original_schemas',
             'extraction', 'sheet', 'row_templates'})
         require(saved['version'] == VERSION and source['text_ref'] == source['artifact_ref'])
         require(self._installed(self.operations_table))
@@ -212,21 +206,6 @@ class LiteratureEndpointSignalRepository(LiteratureRateRepository):
         for ref, metadata in saved['source_metadata'].items():
             require(canonical(self._native_provenance(request['scope'], ref)) == canonical(metadata))
         require(saved['input_artifact_ref'] == saved['source_metadata'][saved['input_source_ref']]['artifact_ref'])
-        receipt = saved['original_implementation']
-        if type(receipt) is dict and receipt.get('version') == 'endpoint_signal_root_implementation_v4':
-            from .library.literature_endpoint_signal_source_receipt import retained_current_receipt
-            require(retained_current_receipt(receipt))
-        elif type(receipt) is dict and receipt.get('version') == 'endpoint_signal_root_implementation_v3':
-            from .library.literature_endpoint_signal_source_receipt import retained_v3_receipt
-            require(retained_v3_receipt(receipt))
-        elif type(receipt) is dict and receipt.get('version') == 'endpoint_signal_root_implementation_v2':
-            from .library.literature_endpoint_signal_source_receipt import retained_v2_receipt
-            require(retained_v2_receipt(receipt))
-        else:
-            require(set(receipt) == {'version', 'files'} and receipt['version'] == 'endpoint_signal_original_implementation_v1'
-                and all(receipt['files'].get(name) == digest for name, digest in _PURE_HASHES.items())
-                and all(type(name) is str and type(digest) is str and len(digest) == 64
-                    and all(c in '0123456789abcdef' for c in digest) for name, digest in receipt['files'].items()))
         templates = saved['row_templates']
         require(len(templates) == len(sheet['cells']))
         cell_fields = schemas['sheet']['properties']['cells']['items']['properties']

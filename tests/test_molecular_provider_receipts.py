@@ -18,9 +18,7 @@ from gene_annotation_episode.data_acquisition_receipts import acquisition_receip
 from gene_annotation_episode.domain import ContractError, canonical
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
-from test_molecular_provider_acquisition import (
-    ARGUMENTS, IDS, KEGG_TEXT, NATIVE, PUBCHEM_IDENTITY_FAILURES, SOURCE, snapshot,
-)
+from test_molecular_provider_acquisition import ARGUMENTS, IDS, NATIVE, PUBCHEM_IDENTITY_FAILURES, SOURCE, snapshot
 
 
 OPERATIONS = tuple(ARGUMENTS)
@@ -101,78 +99,6 @@ def test_receipt_rejects_types_references_and_crossfield_contradictions(change):
         provider.validate_provider_receipt({**value, **change})
 
 
-@pytest.mark.parametrize("operation", OPERATIONS)
-def test_source_free_value_and_actual_source_legacy_wrapper_preserve_complete_native(operation):
-    capture = snapshot(operation)
-    value = _value(capture, operation)
-    saved = deepcopy(value)
-    assert "source_ref" not in value and value["version"] == "molecular_provider_value_v1"
-    assert "source_ref" not in provider.provider_value_schema()["properties"]
-    assert Draft202012Validator(provider.provider_value_schema()).is_valid(value)
-    assert provider.validate_provider_value(value) == value
-    legacy = provider.provider_result_from_value(value, source_ref=SOURCE)
-    assert legacy == provider.provider_result(operation, capture, source_ref=SOURCE,
-        artifact_ref=value["raw_artifact_ref"])
-    public = {key: child for key, child in value.items() if key != "observed_transfer"}
-    assert legacy == {**public, "version": "molecular_provider_result_v1", "source_ref": SOURCE}
-    assert provider.validate_provider_result(legacy) == legacy
-    assert legacy["representation_state"] == "complete" and legacy["issues"] == []
-    assert legacy["population_coverage"] == "selected_response_only"
-    assert legacy["requested"] == ARGUMENTS[operation]
-    assert legacy["response"] == dict(request_url=capture.transport["request"]["url"],
-        media_type=capture.media_type, http_status=200, content_type=capture.media_type,
-        body_complete=True, retained_bytes=len(capture.content),
-        reported_retained_bytes=len(capture.content), observed_body_bytes=len(capture.content),
-        declared_body_bytes=len(capture.content),
-        response_byte_limit=ARGUMENTS[operation]["max_bytes"], capture_failure=None)
-    if operation == KEGG:
-        assert legacy["parse_state"] == "kegg_text" and legacy["native_text"] == KEGG_TEXT
-        assert [block["field"] for block in legacy["native_fields"]] == [
-            "ENTRY", "NAME", "EQUATION", "ORTHOLOGY", "UNKNOWN", "NAME", "///"]
-        assert "".join(line["text"] for block in legacy["native_fields"] for line in block["lines"]) == KEGG_TEXT
-    else:
-        assert legacy["parse_state"] == "json" and legacy["native_json"] == NATIVE[operation]
-    assert provider.provider_receipt(value, source_ref=SOURCE) == dict(acquired=True,
-        source_ref=SOURCE, data_ref=value["raw_artifact_ref"], failure_code=None)
-    legacy["requested"]["max_bytes"] = 1
-    assert value == saved
-
-
-@pytest.mark.parametrize("operation", OPERATIONS)
-@pytest.mark.parametrize("field,raw_value,response_field", [
-    ("declared_body_bytes", float("nan"), "declared_body_bytes"),
-    ("body_capture_failure", b"bad", "capture_failure"),
-])
-def test_legacy_normalizes_nonjson_optional_transport_without_private_value_coercion(
-        operation, field, raw_value, response_field):
-    capture = snapshot(operation)
-    artifact_ref = "artifact_" + hashlib.sha256(capture.content).hexdigest()
-    expected = provider.provider_result(operation, capture, source_ref=SOURCE, artifact_ref=artifact_ref)
-    expected["response"][response_field] = None
-    malformed = _transport(capture, **{field: raw_value})
-    legacy = provider.provider_result(operation, malformed, source_ref=SOURCE, artifact_ref=artifact_ref)
-    assert legacy == expected and legacy["response"][response_field] is None
-    assert legacy["issues"] == [] and legacy["representation_state"] == "complete"
-    assert "observed_transfer" not in legacy
-    assert provider.validate_provider_result(legacy) == legacy
-    assert json.loads(json.dumps(legacy, allow_nan=False)) == legacy
-    with pytest.raises(ValueError, match="molecular_provider_value_invalid"):
-        provider.provider_value(operation, malformed, artifact_ref=artifact_ref)
-
-
-@pytest.mark.parametrize("change", [
-    {"source_ref": SOURCE}, {"version": "molecular_provider_result_v1"},
-    {"raw_artifact_ref": "artifact_" + "a" * 63}, {"service": "kegg"},
-    {"issues": []}, {"representation_state": "complete"},
-])
-def test_value_rejects_source_invention_and_legacy_qualification_tampering(change):
-    native = deepcopy(NATIVE[STRING])
-    native[0]["ncbiTaxonId"] = "9606"
-    value = _value(_native(STRING, native), STRING)
-    with pytest.raises(ValueError):
-        provider.validate_provider_value({**value, **change})
-
-
 @pytest.mark.parametrize("native,code", [
     ({}, "native_id_missing"), ({"stId": None}, "native_id_invalid"),
     ({"stId": False}, "native_id_invalid"), ({"stId": ""}, "native_id_invalid"),
@@ -245,20 +171,6 @@ def test_string_empty_requested_network_is_acquired_and_original_occurrences_rem
     rows.append({"stringId_A": IDS[1], "stringId_B": IDS[0], "ncbiTaxonId": "9606", "score": None})
     value = _value(_native(STRING, rows), STRING)
     assert value["native_json"] == rows and provider.provider_receipt(value, source_ref=SOURCE)["acquired"]
-
-
-def test_string_observed_string_taxon_and_mime_qualifications_remain_literal_on_success():
-    rows = deepcopy(NATIVE[STRING])
-    rows[0]["ncbiTaxonId"] = "9606"
-    capture = _transport(_native(STRING, rows), headers={"content-type": "text/html; charset=utf-8"})
-    value = _value(capture, STRING)
-    assert value["representation_state"] == "partial"
-    assert value["issues"] == [
-        dict(code="content_type_mismatch", pointer="/response/content_type", line_number=None),
-        dict(code="native_taxon_invalid", pointer="/native_json/0/ncbiTaxonId", line_number=None)]
-    legacy = provider.provider_result_from_value(value, source_ref=SOURCE)
-    assert legacy["issues"] == value["issues"] and legacy["representation_state"] == "partial"
-    assert provider.provider_receipt(value, source_ref=SOURCE)["acquired"] is True
 
 
 @pytest.mark.parametrize("raw,code", [

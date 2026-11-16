@@ -1,4 +1,4 @@
-"""Original A107 Launch request envelope for api_job_execution."""
+"""A107 Launch request envelope for api_job_execution."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a107.runtime import ContractInformationError, Episode, EpisodeGoal, EpisodeRequest, Record, _plain, validate_saved_fact_form
 

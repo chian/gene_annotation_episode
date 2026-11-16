@@ -1,4 +1,4 @@
-"""Original A110 hpc directional assembly."""
+"""A110 hpc directional assembly."""
 from __future__ import annotations
 from .. import runtime as _original_runtime
 

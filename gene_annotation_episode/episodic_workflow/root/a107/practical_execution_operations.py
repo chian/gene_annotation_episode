@@ -5,6 +5,7 @@ action reopens its original handle; it never creates a replacement command.
 """
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 import asyncio
 import base64
 from datetime import datetime, timezone
@@ -141,7 +142,7 @@ class LocalPracticalOperations:
             if not assignment.get('resource_id'):
                 raise ValueError('native_blast_utility_resource_identity_required')
             confined(assignment['workspace'], self.configuration['workspace'])
-            if self.policy.memory_bytes > 20 * 1024**3 or self.policy.scratch_bytes > 4 * 1024**3:
+            if self.policy.memory_bytes > ENVIRONMENT_BOUNDS['memory_bytes'] or self.policy.scratch_bytes > 4 * 1024**3:
                 raise ValueError('native_blast_utility_local_policy_conflict')
         if 'native_blast_masking' in assignment['requested_job']:
             from .native_blast_masking_contracts import validate_native_blast_masking_requested_job
@@ -158,7 +159,7 @@ class LocalPracticalOperations:
             if not assignment.get('resource_id'):
                 raise ValueError('native_blast_masking_resource_identity_required')
             confined(assignment['workspace'], self.configuration['workspace'])
-            if self.policy.memory_bytes > 20 * 1024**3 or self.policy.scratch_bytes > 4 * 1024**3:
+            if self.policy.memory_bytes > ENVIRONMENT_BOUNDS['memory_bytes'] or self.policy.scratch_bytes > 4 * 1024**3:
                 raise ValueError('native_blast_masking_local_policy_conflict')
         if 'native_expression_nmf' in assignment['requested_job']:
             from .native_expression_nmf_contracts import POLICY, validate_expression_nmf_requested_job

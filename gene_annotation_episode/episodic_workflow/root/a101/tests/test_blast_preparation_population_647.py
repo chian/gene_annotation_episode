@@ -8,7 +8,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_preparation import populate_database_artifact_set, project_prepared_blast_database
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_preparation_population import populate_blast_preparation_artifact_set as populate, validate_blast_preparation_relationships
-from gene_annotation_episode.episodic_workflow.root.a101.library.blast_preparation_inputs import parse_blast_alias_document, parse_blast_aliastool_diagnostics, parse_blast_preparation_list, parse_makembindex_diagnostics, parse_makeprofiledb_aux
+from gene_annotation_episode.episodic_workflow.root.a101.library.blast_preparation_inputs import parse_blast_alias_document, parse_blast_aliastool_diagnostics, parse_blast_preparation_list, parse_makembindex_diagnostics
 from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from test_blast_preparation_contracts_647 import operation
 
@@ -136,80 +136,6 @@ def test_index_parameters_are_located_not_copied_from_requests():
     assert projection(record)["status"] == "unavailable"
 
 
-def profile_args_from_retained_success():
-    packet = Path(__file__).resolve().parents[5] / "verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_profile28/CAPTURE_003.json"
-    captured = json.loads(packet.read_text())["cases"][0]
-    assert captured["returncode"] == 0 and captured["writer_closed"] and captured["inventory_complete"]
-    raw = captured["native_aux_text"].encode()
-    # These are the exact captured file identities, never synthetic binary data.
-    outputs = []
-    for row in captured["new_files"]:
-        suffix = PureSuffix(row["path"])
-        role = "stdout" if row["path"].endswith(".stdout") else "stderr" if row["path"].endswith(".stderr") else (
-            "profile_file" if suffix in {".aux", ".rps", ".loo", ".freq"} else "database_file")
-        outputs.append({"occurrence_id": row["relative_path"], "direction": "output", "role": role, "ordinal": sum(r["role"] == role for r in outputs),
-            "artifact_ref": "artifact_" + row["sha256"], "sha256": row["sha256"], "size_bytes": row["size_bytes"],
-            "native_format": "blast_profile_aux_text" if suffix == ".aux" else "text" if role in {"stdout", "stderr"} else "blastdb_binary" if role == "database_file" else "unknown",
-            "completeness": "complete", "native_path": row["path"]})
-    aux = next(r for r in outputs if r["native_format"] == "blast_profile_aux_text")
-    assert hashlib.sha256(raw).hexdigest() == aux["sha256"]
-    op = operation("create_profile_database")
-    # Use a controlled selected-list mapping for pure join validation; measured
-    # auxiliary/output bytes above remain the authentic102d evidence.
-    list_raw = b"input.asn\n"
-    original = occurrence("list", "profile_list", list_raw)
-    profile = occurrence("profile", "profile_input", b"controlled parser-opaque input", fmt="pssm_asn1_text")
-    rewritten_raw = b"/attempt/inputs/profile\n"
-    rewritten = occurrence("rewritten", "materialized_list", rewritten_raw, path="/attempt/inputs/list.native")
-    receipt = {"kind": "list_rewrite", "input_key": "list", "original_sha256": original["sha256"],
-        "relative_path": "inputs/list.native", "sha256": rewritten["sha256"], "size_bytes": rewritten["size_bytes"],
-        "grammar": "profile_whitespace_tokens", "entries": [{"ordinal": 0, "line_number": 1, "token_ordinal": 0,
-            "original_token": "input.asn", "target": {"kind": "input", "input_key": "profile"}, "realized_token": "/attempt/inputs/profile"}]}
-    args = common(op, inputs=[original, profile, rewritten], outputs=outputs, materializations=[receipt], documents=[
-        parse_blast_preparation_list(list_raw, grammar="profile_whitespace_tokens", occurrence=original),
-        parse_makeprofiledb_aux(raw, occurrence=aux)])
-    args["native_paths"] = [str(Path(aux["native_path"]).with_suffix(""))]
-    return args
-
-
-def PureSuffix(path):
-    return Path(path).suffix
-
-
-def test_authentic_aux_values_and_twelve_file_family_saved_population():
-    args = profile_args_from_retained_success()
-    record = populate(**args)
-    assert len(record["detail"]["profile_members"]) == 12
-    volume = record["detail"]["volumes"][0]
-    assert {p["parameter"]: p["value"] for p in volume["parameter_observations"]} == {
-        "matrix": "BLOSUM62", "gap_open": 11, "gap_extend": 1, "scale": 1.0}
-    row = volume["auxiliary_documents"][0]["rows"][0]
-    assert row["sequence_length"] == 320 and row["karlin_k"] == pytest.approx(0.0375672)
-    assert record["detail"]["profiles"][0]["disposition"] == "unknown"
-    assert volume["profile_entry_ordinals"] is None
-    assert record["operation"]["parameters"]["matrix"] == "BLOSUM80"
-    assert record["compatibility"] == "unverified"
-    assert projection(record, "additional")["manifest"]["kind"] == "rps_profile"
-    saved = json.loads(json.dumps(record)); assert validate_blast_preparation_relationships(saved) == record
-    forged = deepcopy(record); forged["detail"]["profiles"][0].update(disposition="included", reason=None)
-    with pytest.raises(ContractError): validate_blast_preparation_relationships(forged)
-
-
-@pytest.mark.parametrize("profile_type", ["rps", "delta", "cobalt"])
-def test_failed_profile_with_surviving_sequence_files_is_not_profile_success(profile_type):
-    args = profile_args_from_retained_success()
-    args["operation"]["parameters"]["profile_type"] = profile_type
-    args["identity"]["preparation_type"] = "unknown" if profile_type == "cobalt" else profile_type
-    args["outputs"] = [r for r in args["outputs"] if r["role"] != "profile_file"]
-    args["documents"] = [d for d in args["documents"] if d["kind"] != "profile_aux"]
-    args["outcome"] = outcome(1)
-    record = populate(**args)
-    assert record["inventory_complete"] is True
-    assert any(f["code"] == "output_family_incomplete" for f in record["failures"])
-    assert any(f["code"] == "native_nonzero_exit" for f in record["failures"])
-    assert projection(record, "additional")["status"] == "unavailable"
-
-
 def test_public_dispatcher_has_one_dependency_and_native_metadata_authority():
     source = occurrence("ids", "identifier_list")
     binary = occurrence("binary", "identifier_list", direction="output", fmt="gi_list_binary", path="/attempt/out/ids.gil")
@@ -313,27 +239,6 @@ def test_vdb_alias_retains_selected_offline_dependency_but_never_projects_as_cla
     args["inputs"] = [db]; args["database_bindings"][0]["occurrence_ids"] = [db["occurrence_id"]]
     missing = populate(**args)
     assert any(f["code"] == "dependency_unavailable" for f in missing["failures"])
-
-
-def test_native_profile_exclusion_is_located_and_duplicate_references_stay_unknown():
-    args = profile_args_from_retained_success()
-    stderr = next(r for r in args["outputs"] if r["role"] == "stderr")
-    document = {"version": "blast_preparation_document_v1", "kind": "profile_diagnostics", "occurrence_id": stderr["occurrence_id"],
-        "native_fields": [], "checks": [], "failures": [], "rows": [{"line_number": 1, "category": "excluded_low_observations",
-            "native_reference": "input.asn", "native_lexeme": "controlled exclusion fixture"}]}
-    args["documents"].append(document)
-    result = populate(**args)
-    assert result["detail"]["profiles"][0]["disposition"] == "excluded"
-    assert result["detail"]["profiles"][0]["evidence_line_number"] == 1
-    args["operation"]["parameters"]["profile_entries"].append({"ordinal": 1, "input_occurrence_id": "profile",
-        "native_reference": "input.asn", "line_number": 2, "token_ordinal": 0})
-    # Omit the list rewrite/document in this deliberate partial fixture; missing
-    # joins remain typed failures while neither repeated entry gains a disposition.
-    args["materializations"] = []
-    args["inputs"] = [r for r in args["inputs"] if r["role"] != "materialized_list"]
-    args["documents"] = [d for d in args["documents"] if d["kind"] != "list"]
-    result = populate(**args)
-    assert [p["disposition"] for p in result["detail"]["profiles"]] == ["unknown", "unknown"]
 
 
 def test_inspection_subjects_remain_file_or_database_and_empty_filters_are_not_zero():

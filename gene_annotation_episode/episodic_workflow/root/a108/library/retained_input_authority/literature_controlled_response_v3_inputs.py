@@ -68,9 +68,6 @@ def _schemas():
         E['properties'][name] = shape
     E['required'] += ['companion_extractions', 'projection_status', 'final_projection_basis', 'reconciliation_decisions', 'joint_scope_extractions', 'alternative_inputs', 'partial_calculation_inputs', 'partial_projection_state', 'component_local_inputs']
     ED['DependencyRecord']['properties']['reader_contract_version'] = {'const': 'controlled_response_source_extraction_v3'}
-    for name in ['literature_controlled_response_v3_inputs.py', 'literature_controlled_response_local_calculations.py']:
-        ED['DependencyRecord']['properties']['expected_module_fingerprints']['properties'][name] = cp(v2.SHA)
-        ED['DependencyRecord']['properties']['expected_module_fingerprints']['required'].append(name)
     LD = cp(v2._extraction_schema()['$defs'])
     LD['CovarianceExtraction']['properties']['raw_text'] = null({'type': 'string'})
     LD['ReadingSelector'] = cp(D['ReadingSelector'])

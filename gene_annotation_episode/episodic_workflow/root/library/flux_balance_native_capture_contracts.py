@@ -25,9 +25,9 @@ def _require(condition, code, field=""):
         raise ValueError("fba_capture_" + code + (":" + field if field else ""))
 
 
-def _original_plan(value, *, historical=False):
+def _original_plan(value):
     try:
-        return validate_flux_balance_run_plan(value, historical=historical)
+        return validate_flux_balance_run_plan(value)
     except (ValueError, TypeError) as error:
         raise ValueError("fba_capture_original_plan_invalid") from error
 
@@ -99,9 +99,9 @@ def _issue(code, field, detail_file=None):
         "metabolite_position": None, "variable_position": None, "constraint_position": None})
 
 
-def validate_flux_balance_native_capture(value: dict, *, original_plan: dict, historical=False) -> dict:
+def validate_flux_balance_native_capture(value: dict, *, original_plan: dict) -> dict:
     """Validate selected byte identities and shape without opening any artifact."""
-    plan = _original_plan(original_plan, historical=historical)
+    plan = _original_plan(original_plan)
     try:
         canonical(value)
     except (ValueError, TypeError, OverflowError, RecursionError) as error:

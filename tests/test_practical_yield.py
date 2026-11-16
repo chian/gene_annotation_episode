@@ -9,7 +9,7 @@ from gene_annotation_episode.episodic_workflow.root.method_loop.identities impor
 
 from gene_annotation_episode.episodic_workflow.root.numerical import (NumericBand, STATUS_INSUFFICIENT, STATUS_NORMAL,
     YieldController, YieldEstimate, YieldParameters, estimate_score_yield)
-from gene_annotation_episode.practical_yield import ESTIMATOR_VERSION, PracticalYieldEstimator
+from gene_annotation_episode.episodic_workflow.root.practical_yield import ESTIMATOR_VERSION, PracticalYieldEstimator
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
 
 

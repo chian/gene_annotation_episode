@@ -126,15 +126,15 @@ def catalog(*, retrieval_mode=None, tool_info=False):
 
 class ScientificToolLibrary:
     @classmethod
-    def freeze(cls, directory, *, catalog, tool_info=False, resource_catalogs=None):
-        if type(tool_info) is not bool or resource_catalogs is not None and not isinstance(resource_catalogs, Mapping):
+    def freeze(cls, directory, *, catalog, resource_catalogs=None):
+        if resource_catalogs is not None and not isinstance(resource_catalogs, Mapping):
             raise ValueError('scientific_tool_info_configuration_invalid')
         directory = Path(directory)
         if (directory / "index.json").is_file():
             existing = cls(directory)
             if existing.catalog() != list(_catalog(catalog).values()):
                 raise ValueError("scientific_tool_catalog_changed")
-            if existing.supports_tool_info and resource_catalogs is not None:
+            if resource_catalogs is not None:
                 for kind, values in resource_catalogs.items():
                     for key, entry in _profiles(values, kind).items():
                         if (key not in existing._resource_contracts
@@ -143,10 +143,9 @@ class ScientificToolLibrary:
             return existing
         if directory.exists() and (not directory.is_dir() or any(directory.iterdir())):
             raise ValueError("scientific_tool_snapshot_invalid")
-        content = {"version": VERSION, "tools": list(_catalog(catalog).values())}
-        if tool_info:
-            information, contracts = _tool_information(content['tools'], resource_catalogs)
-            content.update(version=INFO_VERSION, tool_info=information, resource_contracts=contracts)
+        content = {"version": INFO_VERSION, "tools": list(_catalog(catalog).values())}
+        information, contracts = _tool_information(content['tools'], resource_catalogs)
+        content.update(tool_info=information, resource_contracts=contracts)
         value = {**content, "catalog_sha256": content_digest(content)}
         directory.parent.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(prefix=".scientific-tools-", dir=directory.parent) as temporary:
@@ -157,8 +156,7 @@ class ScientificToolLibrary:
             except OSError as error:
                 if error.errno not in (errno.EEXIST, errno.ENOTEMPTY):
                     raise
-                return cls.freeze(directory, catalog=catalog, tool_info=tool_info,
-                                  resource_catalogs=resource_catalogs)
+                return cls.freeze(directory, catalog=catalog, resource_catalogs=resource_catalogs)
         return cls(directory)
 
     def __init__(self, directory):
@@ -166,15 +164,14 @@ class ScientificToolLibrary:
         path = self.directory / "index.json"
         raw = path.read_bytes()
         value = json.loads(raw)
-        fields = ({'version', 'tools', 'tool_info', 'resource_contracts', 'catalog_sha256'}
-                  if value.get('version') == INFO_VERSION else {'version', 'tools', 'catalog_sha256'})
-        if (set(value) != fields or value['version'] not in {VERSION, INFO_VERSION}
+        fields = {'version', 'tools', 'tool_info', 'resource_contracts', 'catalog_sha256'}
+        if (set(value) != fields or value['version'] != INFO_VERSION
                 or value["catalog_sha256"] != content_digest({key: item for key, item in value.items()
                                                             if key != 'catalog_sha256'})
                 or raw != (canonical(value) + "\n").encode("utf-8")):
             raise ValueError("scientific_tool_snapshot_changed")
         self._tools = _catalog(value["tools"])
-        self.supports_tool_info = value['version'] == INFO_VERSION
+        self.supports_tool_info = True
         self._information, self._resource_contracts = {}, {}
         if self.supports_tool_info:
             from .tool_information import tool_info_selection

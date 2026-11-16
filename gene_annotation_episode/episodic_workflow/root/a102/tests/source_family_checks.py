@@ -8,7 +8,6 @@ import asyncio
 from contextlib import contextmanager
 from copy import deepcopy
 from dataclasses import replace
-import hashlib
 from importlib import import_module
 import json
 from pathlib import Path
@@ -20,8 +19,6 @@ CHILDREN = {'literature': (('literature_strategy', 'evidence_search_strategy_imp
 PREFIX = 'gene_annotation_episode.episodic_workflow.root.a102'
 ROLES = {home.rsplit('/',1)[-1]:role for home,role in HOMES}
 ROLES['scientific_process']='scientific_process'
-SCIENCE_FILES=('a102_literature_bindings.py','literature_structure_storage.py',
-    'literature_experimental_prompt.py','literature_reference_parent_prompt.py','literature_sheet_updates.py')
 STATUSES=('completed','partial','invalid','failed','unavailable')
 
 
@@ -34,15 +31,6 @@ def capture(call):
         return {'status':'returned','value':plain(value.as_record() if hasattr(value,'as_record') else value)}
     except Exception as error:return {'status':'raised','type':type(error).__module__+'.'+type(error).__qualname__,
         'message':str(error),'code':getattr(error,'code',None)}
-def source_hashes():
-    axis=Path(__file__).resolve().parents[1];root=axis.parents[3]
-    return {str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest()
-        for p in sorted(axis.rglob('*.py')) if 'tests' not in p.relative_to(axis).parts}
-def fingerprint(home):
-    axis=Path(__file__).resolve().parents[1];directory=axis/home
-    paths=sorted(directory.glob('*.py'))+[axis/name if (axis/name).is_file() else axis/'library'/name for name in SCIENCE_FILES]
-    return {'sha256':hashlib.sha256(b''.join(p.read_bytes() for p in paths)).hexdigest(),
-        'operands':{str(p.relative_to(axis)):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}}
 def request_record(assignment,schema):
     return {'goal':{'objective':'Examine the original source question'},
         'report_contract':{'decision':'Choose further source examination','measurements':{'schema':schema}},
@@ -171,55 +159,6 @@ def credit_view(v):
     assert set(result)=={'credit','scope','proposed_annotation_ref','policy','task_status','unresolved','source_contributions','commission_ref'}
     assert result['policy']['credit_unit']==2.5 and result['policy']['activity_credit'] is False
     return result
-
-
-def identity_trace(v):
-    record=v.binding.as_record();computed=fingerprint(v.home)
-    scientific=v.workflow.scientific_process_binding.as_record()
-    whole={str(Path(path).relative_to('gene_annotation_episode/episodic_workflow/root/a102')):digest for path,digest in source_hashes().items()}
-    assert scientific['implementation_sha256']==own('scientific_process_records').scientific_digest(whole)
-    assert record['implementation_sha256']==computed['sha256']
-    assert record['binding_id']==v.home and record['configuration']=={'outcome_page_size':3,'structure_population':False}
-    assert v.binding.services is v.workflow.services and v.workflow.services.workflow is v.workflow
-    assert v.workflow.episode_bindings.for_child(v.context.path[:-1],v.role) is v.binding
-    assert v.binding._yield_bindings==v.configuration['yield_bindings'] and v.binding.private_yield_binding is True
-    duplicate=capture(lambda:v.workflow.episode_bindings.register(v.binding))
-    assert duplicate['status']=='raised' and duplicate['message']=='duplicate_episode_binding_path:'+v.home
-    foreign=capture(lambda:v.binding.assignment_schema('foreign_source_role'))
-    assert foreign['status']=='raised' and foreign['message']=='unsupported_literature_role:foreign_source_role'
-    unknown=capture(lambda:v.workflow.episode_bindings.for_child(v.context.path,'foreign_source_role'))
-    assert unknown['status']=='raised'
-    original_class=type(v.binding)
-    unsupported_configuration=capture(lambda:original_class(v.workflow.services,rate_population=True))
-    assert unsupported_configuration['status']=='raised' and unsupported_configuration['type']=='builtins.TypeError'
-    assert 'unexpected keyword argument' in unsupported_configuration['message']
-    reference=original_class.reference_evidence(v.workflow.services,source_refs=[v.source['id']])
-    assert type(reference) is original_class and reference.services is v.workflow.services
-    assert reference.structure_population is True and reference.reference_parent_sources==(v.source['id'],)
-    assert reference.contract_information_configuration() is not None
-    reference_configuration=reference.as_record()['configuration']
-    assert reference_configuration=={'outcome_page_size':8,'structure_population':True}
-    invalid_configuration=capture(lambda:original_class(v.workflow.services,structure_population='true'))
-    assert invalid_configuration['status']=='raised' and invalid_configuration['message']=='boolean_structure_population_binding_required'
-    clients=v.workflow.tools.clients
-    assert type(clients) is own('acquisition').PublicClients and clients.ncbi_email is None
-    public_configuration={'type':type(clients).__module__+'.'+type(clients).__qualname__,
-        'ncbi_email':clients.ncbi_email,'skill_root':clients.skill_root,
-        'access_dir':clients.access_dir,'transport_timeout':clients.timeout}
-    return {'fixture_public_clients':public_configuration,
-        'descriptor':record,'fingerprint_operands':computed['operands'],
-        'scientific_parent_descriptor':scientific,
-        'task_class':getattr(v.binding,'decision_source_type',v.runtime.DecisionSource).__module__,
-        'scope':plain(v.context.scope),'assignment':deepcopy(v.assignment),'request':deepcopy(v.request),
-        'subject':v.store.get(v.context.scope['subject_refs'][0]),'source':v.source,
-        'constructor_configuration':deepcopy(v.configuration),'duplicate':duplicate,'foreign':foreign,'unknown':unknown,
-        'reference_constructor':{'serialized_configuration':reference_configuration,
-            'reference_parent_sources':list(reference.reference_parent_sources),
-            'contract_information_profile':reference.contract_information_configuration(),
-            'private_yield_binding':reference.private_yield_binding,'yield_bindings':reference._yield_bindings},
-        'unsupported_configuration':unsupported_configuration,'invalid_configuration':invalid_configuration,
-        'actions':list(v.binding.permitted_common_actions(v.context)),
-        'instructions':v.binding.instructions(v.context),'registry_owner_is_original':True}
 
 
 def action_trace(v,status='completed',kind='tool',saved='fresh'):

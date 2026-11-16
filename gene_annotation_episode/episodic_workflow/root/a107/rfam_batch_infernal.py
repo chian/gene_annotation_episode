@@ -1,8 +1,7 @@
 """Rfam source adapters and aliases for the common Infernal search contract.
 
 This module maps parsed facts, never a synthetic native table. Calculations
-belong exclusively to infernal_search_grader. Legacy conversion is explicit;
-reading a saved result does not call it or change a historical observation.
+belong exclusively to infernal_search_grader.
 """
 from __future__ import annotations
 
@@ -262,34 +261,8 @@ def populate_rfam_table_cells(*, sheet, capture, input_identity, supplied_model_
         issues=[*sheet["issues"], *deepcopy(issues)], statistical_limitations=sheet["statistical_limitations"])
 
 
-def upgrade_saved_rfam_search_sheet(saved: dict, *, representation: str) -> dict:
-    """Explicit pure legacy-cell conversion, retaining lineage without touching input."""
-    saved = finite_json_copy(saved, code="rfam_sheet_invalid")
-    if representation == "json":
-        from .rfam_batch_grader import validate_rfam_sheet
-        old = validate_rfam_sheet(saved.get("sheet", saved))
-        result = populate_rfam_json_cells(capture=old["source"], input_identity=old["input"],
-            job=old["job"], format_metadata=old["format_metadata"], population=old["population"],
-            hits=old["hits"], model_metadata=old["model_metadata"], issues=old["issues"])
-    elif representation == "out":
-        from .rfam_batch_report_contracts import validate_rfam_report_sheet
-        old = validate_rfam_report_sheet(saved.get("sheet", saved))
-        result = populate_rfam_report_cells(**{k: old[k] for k in (
-            "capture", "input_identity", "membership", "hits", "population_complete", "issues")})
-    elif representation == "tblout":
-        from .rfam_batch_table_grader import validate_rfam_table_inputs
-        old = validate_rfam_table_inputs(saved)
-        result = populate_rfam_table_cells(**{k: old[k] for k in (
-            "sheet", "capture", "input_identity", "supplied_model_metadata", "occurrence_bindings", "query_population", "issues")})
-    else:
-        raise ContractError("rfam_sheet_invalid")
-    result["lineage"] = dict(source_sheet_schema=old.get("schema_version", old.get("version")),
-                             source_sheet_digest=rfam_digest(old))
-    return validate_infernal_search_sheet(result)
-
-
 def select_rfam_common_sheet(value, *, representation):
-    """Select a newly populated common sheet; legacy conversion is never implicit."""
+    """Select a newly populated common sheet."""
     if type(value) is dict and value.get("version") == PARSE_VERSION:
         closed_object(value, ("version", "representation", "status", "format", "sheet", "issues"), code="rfam_sheet_invalid")
         if value["representation"] != representation or value["status"] not in {"complete", "partial"}:
@@ -592,4 +565,4 @@ def project_rfam_infernal_result(sheet: dict, calculation: dict, *, projection: 
 
 __all__ = ["PARSE_VERSION", "HIT_ALIASES", "POPULATION_ALIASES", "rfam_parse_envelope",
     "populate_rfam_json_cells", "populate_rfam_report_cells", "populate_rfam_table_cells",
-    "upgrade_saved_rfam_search_sheet", "select_rfam_common_sheet", "project_rfam_infernal_result"]
+    "select_rfam_common_sheet", "project_rfam_infernal_result"]

@@ -13,7 +13,6 @@ from PIL import Image
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_endpoint_signal_inputs import POINT_ORDER, endpoint_signal_population_schema, endpoint_signal_extraction_schema, covariance_source_schema, read_endpoint_signal_inputs, validate_endpoint_signal_extraction
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_endpoint_signal_calculations import COMPONENTS, FORMULAS, MEANINGS, endpoint_signal_sheet_schema, populate_endpoint_signal
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_endpoint_signal_prompt import ENDPOINT_SIGNAL_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError
 ROOT = Path(__file__).resolve().parents[5]
 OWN = ROOT / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/endpoint_signal_components'
@@ -81,14 +80,6 @@ def _attach_covariance(args, blobs, matrix, *, basis='joint_manual_reading_error
     blobs['synthetic_covariance', 'original'] = json.dumps(wire).encode()
     return wire
 
-def test_exact_reviewed_contracts_constants_and_full_task():
-    for name, fn in [('INPUT', endpoint_signal_population_schema), ('EXTRACTION', endpoint_signal_extraction_schema), ('SHEET', endpoint_signal_sheet_schema), ('COVARIANCE', covariance_source_schema)]:
-        assert fn() == _load(name + '_SCHEMA_002.json')
-    constants = _load('CELL_CONSTANTS_002.json')
-    assert FORMULAS == constants['FORMULAS'] and MEANINGS == constants['MEANINGS']
-    assert ENDPOINT_SIGNAL_TASK == (OWN / 'PROMPT_CONSTANT_PLAN_001.txt').read_text().strip()
-    assert len(ENDPOINT_SIGNAL_TASK.split('\n\n')) == 7
-    assert 'supplied sequence, selected contents or snippets' in ENDPOINT_SIGNAL_TASK
 
 def test_original_source_exact_manual_reading_and_shared_enclosure():
     args, blobs = _paper()

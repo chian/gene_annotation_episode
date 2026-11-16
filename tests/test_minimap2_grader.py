@@ -1,7 +1,6 @@
 """Numerical component, overlap and offline recalculation tests for minimap2."""
 from copy import deepcopy
 import json
-from pathlib import Path
 import socket
 import subprocess
 
@@ -200,38 +199,3 @@ def test_query_sweep_uses_compressed_segments_for_large_intervals():
     assert result["alternative_correspondence_positions"] == 0
 
 
-@pytest.mark.parametrize("preset", ["map-ont", "map-pb", "map-hifi", "lr:hq", "map-iclr", "sr"])
-def test_retained_actual_native_output_and_saved_sheet_recalculation(preset, monkeypatch):
-    directory = Path(__file__).resolve().parents[1]/"gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/minimap2"/(
-        "native_"+preset.replace(":", "_"))
-    receipt = json.loads((directory/"receipt.json").read_text())
-    assert receipt["returncode"] == 0
-    assert receipt["metadata"]["policy"] == {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
-    assert receipt["metadata"]["enforcement"]["memory"] == "systemd_cgroup_v2_memory_max"
-    lines = (directory/"mappings.paf").read_bytes().splitlines()
-    grades = [json.loads(line) for line in (directory/"placements.jsonl").read_text().splitlines()]
-    assert len(lines) == len(grades) == 3
-    for raw, graded in zip(lines, grades):
-        row = parse_minimap2_paf_row(raw, native_version="2.31-r1302")
-        assert row == graded["sheet"]["native_result"]
-        assert graded["sheet"]["preset"] == preset
-        expected = graded["scores"]
-        if row["query_name"] in {"forward", "reverse"}:
-            assert row["cigar"] == "1700M1I399M3D298M"
-            fields = ("paired_positions", "inserted_bases", "deleted_bases", "alignment_columns",
-                      "native_block_length", "native_matching_bases", "native_ambiguity_count",
-                      "cs_equal_positions", "cs_substituted_positions", "original_symbol_equal_positions")
-            assert [expected[field] for field in fields] == [2397, 1, 3, 2401, 2399, 2392, 2, 2393, 4, 2392]
-        else:
-            assert expected["alignment_columns"] == 2000
-            assert expected["native_block_length"] == 1999
-            assert expected["native_ambiguity_count"] == 1
-    def forbidden(*args, **kwargs):
-        raise AssertionError("retained sheet verification cannot execute or acquire")
-    monkeypatch.setattr(socket, "create_connection", forbidden)
-    monkeypatch.setattr(subprocess, "run", forbidden)
-    monkeypatch.setattr(subprocess, "Popen", forbidden)
-    for graded in grades:
-        before = deepcopy(graded["sheet"])
-        assert calculate_minimap2_placement_scores(graded["sheet"]) == graded["scores"]
-        assert graded["sheet"] == before

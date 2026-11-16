@@ -8,16 +8,16 @@ the host-boundary fixture; complete Workflow commissioning is tested separately.
 from copy import deepcopy
 from dataclasses import replace
 import json
-from pathlib import Path
 import shutil
 from types import SimpleNamespace
 
 import pytest
 from method_loop.identities import EpisodeRef
 
-from gene_annotation_episode.alignment_site_action_records import AlignmentSiteActionRecords
-from gene_annotation_episode.alignment_site_returns import (
-    alignment_site_fact_sources, requested_site_projections,
+from gene_annotation_episode.episodic_workflow.root.alignment_site_action_records import AlignmentSiteActionRecords
+from gene_annotation_episode.episodic_workflow.root.library.alignment_site_projection_requests import alignment_site_fact_sources
+from gene_annotation_episode.episodic_workflow.root.library.alignment_site_returns import (
+    requested_site_projections,
     project_site_action_return, validate_frozen_site_return,
 )
 from gene_annotation_episode.episodic_workflow.root.communication import plain, ReportBoundaryError
@@ -385,45 +385,6 @@ def test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates(blast_case,
         page(case, context, BLAST)
 
 
-def test_blast_empty_window_and_legacy_grading_stay_distinct(blast_case, monkeypatch):
-    case = blast_case
-    context = saved_context(case, requested(BLAST))
-    case.receipts.receive(context.episode_id, [case.alignment], kind='initial')
-    blast_read(case, context, index=1, offset=8)
-    blast_read(case, context, index=2)
-    # Simulate the original older read shape without the new grading pointer.
-    change_outcome(case, context, 2, lambda outcome: outcome['result'].pop('site_grading_artifact_ref'))
-    def forbidden(*args, **kwargs):
-        pytest.fail('Closing a saved result reran scientific grading')
-    import gene_annotation_episode.alignment_site_native as native
-    monkeypatch.setattr(native, 'blast_grading', forbidden)
-    groups = project(case, context, BLAST)
-    assert groups[0]['rows'] == [] and groups[0]['components']['paired_columns'] == 0
-    assert groups[0]['components']['paired_identity']['value'] is None
-    assert groups[1]['rows'] is None and groups[1]['components'] is None
-    assert groups[1]['data_status'] == 'unavailable'
-    assert 'site_legacy_result_ungraded' in groups[1]['issue_codes']
-
-
-def test_actual_retained_grader_failure_is_partial_and_not_legacy(reference_case, monkeypatch):
-    case = reference_case
-    context = saved_context(case, requested())
-    import gene_annotation_episode.alignment_site_inputs as inputs
-    def reject(*args, **kwargs):
-        raise ValueError('site_native_geometry_conflict')
-    monkeypatch.setattr(inputs, 'extract_biopython_reference_sites', reject)
-    outcome = perform(case, context, 0, 'sequence.sites',
-        {'alignment_ref': case.alignments[0], 'positions': [0]})
-    assert outcome['status'] == 'partial'
-    record, = page(case, context)['records']
-    assert record['availability'] == 'grading_unavailable'
-    assert record['grading']['failure']['code'] == 'site_native_geometry_conflict'
-    group, = project(case, context)
-    assert group['operation_status'] == 'partial' and group['rows'] is None
-    assert group['components'] is None
-    assert 'site_native_geometry_conflict' in group['issue_codes']
-
-
 def test_frozen_facts_distinguish_absent_closure_absent_source_and_actual_empty(reference_case):
     case = reference_case
     context = saved_context(case, requested())
@@ -630,37 +591,3 @@ def test_native_pairwise_source_cannot_be_reassigned_to_same_length_other_operan
     assert result['record_refs'] == []
 
 
-@pytest.mark.parametrize('keep_original_operation', [True, False])
-def test_legacy_pairwise_source_uses_actual_producer_arguments(reference_case, monkeypatch, keep_original_operation):
-    case = reference_case
-    original = case.store.get(case.alignments[0])
-    arguments = {'query_ref': original['subject_refs'][0],
-        'reference_ref': original['source_subject_refs'][0], 'molecule': 'dna', 'mode': 'global'}
-    save_source = case.tools._source
-    def legacy_source(provider, body, **options):
-        # Explicit old-source-shape fixture. Native work, actual operation
-        # arguments, publication and the resulting tool-operation row are real.
-        if provider == 'biopython.alignment':
-            options.pop('operand_refs', None)
-        return save_source(provider, body, **options)
-    with monkeypatch.context() as legacy:
-        legacy.setattr(case.tools, '_source', legacy_source)
-        produced = case.tools.execute('sequence.align', arguments,
-            scope=case.scope, operation_key='legacy-original-288')
-    assert produced['status'] == 'completed', produced
-    alignment = produced['result']['observation_ref']
-    source = case.store.get(produced['result']['source_ref'])
-    assert 'operand_refs' not in source
-    if not keep_original_operation:
-        case.store.db.execute('DELETE FROM tool_operations WHERE operation_key=?', ('legacy-original-288',))
-    context = saved_context(case, requested())
-    if keep_original_operation:
-        perform(case, context, 0, 'sequence.sites', {'alignment_ref': alignment, 'positions': [0, 4]})
-        record, = page(case, context)['records']
-        assert record['grading']['scores']['summary']['paired_positions'] == 2
-        assert record['grading']['scores']['summary']['identical_positions'] == 1
-    else:
-        result = case.tools.execute('sequence.sites', {'alignment_ref': alignment, 'positions': [0, 4]},
-            scope=case.scope, operation_key='orphan-legacy-source')
-        assert result['status'] == 'invalid', result
-        assert result['record_refs'] == []

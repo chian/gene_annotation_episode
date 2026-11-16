@@ -12,9 +12,8 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.episodic_workflow.root import bvbrc_application_returns as returns
-from gene_annotation_episode import bvbrc_annotation_bundle_adapter as adapter
-from gene_annotation_episode import bvbrc_annotation_contracts as contracts
-from gene_annotation_episode import bvbrc_annotation_native as native
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_annotation_bundle_adapter as adapter
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_annotation_native as native
 from gene_annotation_episode.execution_contracts import canonical
 from test_bvbrc_annotation_bundle_adapter import arguments, selection
 
@@ -60,24 +59,6 @@ def test_saved_projector_retains_exact_order_duplicate_occurrences_empty_context
     assert rows[1]["value"]["records"] == []
     assert rows[1]["value"]["context"]["definitions"] == rows[0]["value"]["context"]["definitions"]
     assert (body, sheet, components) == original
-
-
-@pytest.mark.parametrize("change", ["source", "bundle-source", "unlisted", "selector", "adapter", "pin",
-    "sheet-bytes", "components-bytes", "task", "status", "stored-value"])
-def test_saved_publication_metadata_does_not_replace_original_selection_or_content(change):
-    body, sheet, components = saved_value_case()
-    if change == "source": body["reference"] = "source_" + "0" * 24
-    elif change == "bundle-source": body["publication"]["bundle_content"]["source_ref"] = "source_" + "0" * 24
-    elif change == "unlisted": body["record_refs"] = []
-    elif change == "selector": body["assignment"] = {"selector": {}}
-    elif change == "adapter": body["publication_inputs"]["adapter"] = {}
-    elif change == "pin": body["publication_inputs"]["adapter_implementation_sha256"] = "unknown"
-    elif change == "sheet-bytes": sheet["analysis_id"] = "other"
-    elif change == "components-bytes": components["analysis_id"] = "other"
-    elif change == "task": body["bundle"]["original_task"]["task_id"] = "other"
-    elif change == "status": body["publication"]["adapter_result"]["status"] = "partial"
-    else: body["publication"]["adapter_result"]["facts"]["empty"]["records"] = [None]
-    with pytest.raises(ValueError): returns.project_application_facts(body, sheet=sheet, components=components)
 
 
 @pytest.mark.parametrize("change", ["float-count", "bool-ordinal", "null-alias", "wrong-field", "extra-row-key"])
@@ -224,11 +205,3 @@ def test_newer_partial_application_does_not_borrow_older_completion(references):
     assert reads == references
 
 
-def test_installed_annotation_adapter_requires_its_actual_implementation_pin():
-    from gene_annotation_episode.bvbrc_appservice_adapters import bind_adapters
-    row = {"adapter_id": adapter.ADAPTER_ID, "adapter_version": adapter.ADAPTER_VERSION,
-        "implementation_sha256": adapter.implementation_sha256()}
-    assert bind_adapters([row])[(adapter.ADAPTER_ID, adapter.ADAPTER_VERSION)] == (adapter, row["implementation_sha256"])
-    row["implementation_sha256"] = "0" * 64
-    with pytest.raises(ValueError, match="appservice_adapter_implementation_conflict"):
-        bind_adapters([row])

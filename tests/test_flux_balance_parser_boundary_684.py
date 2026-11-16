@@ -5,9 +5,6 @@ review evidence, not a repaired implementation. The 680 helpers transform the
 retained 677 diagnostic records for tests only. No solve or producer is invoked.
 """
 from copy import deepcopy
-import json
-import os
-from pathlib import Path
 
 import pytest
 
@@ -24,13 +21,6 @@ def observed(name, payload, invoke):
     except Exception as error:
         result = {"exception": {"type": type(error).__name__, "message": str(error)}}
     result["input_unchanged"] = supplied == payload
-    attempt = os.environ.get("HMMER529_ATTEMPT")
-    if attempt:
-        Path(attempt, f"fba684_{name}.json").write_text(json.dumps({
-            "fixture_identity": "controlled malformed input in TEST-normalized retained 677 records; no new solve",
-            "input": supplied,
-            "actual": result,
-        }, indent=2, allow_nan=False) + "\n")
     return result
 
 

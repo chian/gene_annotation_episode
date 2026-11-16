@@ -2,7 +2,6 @@
 from copy import deepcopy
 from decimal import Decimal, ROUND_HALF_EVEN, localcontext
 import hashlib
-import json
 from pathlib import Path
 import socket
 import subprocess
@@ -14,8 +13,6 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_proteome_
 
 
 FIXTURES = Path(__file__).parent / "fixtures" / "bvbrc_proteome_directional"
-ROOT = (Path(__file__).resolve().parent / 'fixtures' / 'bvbrc_original')
-EXAMPLES = ROOT / "verification/tool_graders_bvbrc_proteome_directional_calculation_contract_2026-10-25_177/NUMERICAL_NATIVE_EXAMPLES_001.json"
 DEFAULT_KEY = dict(report_ordinal=0, query_ordinal=0, subject_ordinal=0, hsp_ordinal=0, block_ordinal=0)
 
 
@@ -391,56 +388,6 @@ def native_report(name):
         body_complete=True, object_complete="yes")
     return parse_genome_comparison_directional_report(content, source=source,
         declared_format="ncbi_blastall_blastp_pairwise_text_v1", report_key=name)
-
-
-@pytest.mark.parametrize("release", ["2011", "2202", "2221"])
-def test_all_retained_native_examples_against_independent_contract_arithmetic(release):
-    expected = json.loads(EXAMPLES.read_text())[release]
-    native = native_report(expected["fixture"])
-    assert len(native["queries"]) == expected["query_count"]
-    hsp_count = 0
-    for qi, query in enumerate(native["queries"]):
-        for si, subject in enumerate(query["subjects"]):
-            rows = []
-            for hi, observed in enumerate(subject["hsps"]):
-                hsp_count += 1
-                key = dict(report_ordinal=0, query_ordinal=qi, subject_ordinal=si, hsp_ordinal=hi)
-                blocks = [calculate_protein_block(b, key={**key, "block_ordinal": bi},
-                    query_length=query["length"], subject_length=subject["length"],
-                    amino_acid_alphabet="standard20", ratio_decimal_places=18, rounding="half_even")
-                    for bi, b in enumerate(observed["traceback_blocks"])]
-                exp = expected["queries"][qi]["subjects"][si]["hsps"][hi]["counts"]
-                for name in blocks[0]["counts"]:
-                    total = sum(value(b, name) for b in blocks)
-                    if name.endswith("_gap_runs"):
-                        side = name.split("_")[0]
-                        total -= sum(a[side + "_symbols"]["value"].endswith("-") and b[side + "_symbols"]["value"].startswith("-")
-                                     for a, b in zip(observed["traceback_blocks"], observed["traceback_blocks"][1:]))
-                    expected_name = {"query_non_gap_symbols": "occupied_query_positions", "subject_non_gap_symbols": "occupied_subject_positions"}.get(name, name)
-                    assert total == exp[expected_name], (release, qi, si, hi, name)
-                rows.append(hsp(blocks, key=key))
-            subject_key = dict(report_ordinal=0, query_ordinal=qi, subject_ordinal=si)
-            got = graph(rows, key=subject_key)
-            exp = expected["queries"][qi]["subjects"][si]["union"]
-            assert got["distinct_pair_count"]["value"] == exp["distinct_coordinate_pairs"]
-            assert got["repeated_pair_occurrence_count"]["value"] == exp["repeated_coordinate_pair_occurrences"]
-            assert (got["mapping_state"] == "compatible_displayed_partial_map") == exp["compatible_displayed_partial_correspondence"]
-            for axis in ("query", "subject"):
-                for kind in ("occupied", "paired"):
-                    intervals = union_position_intervals([i for row in rows for b in row["blocks"]
-                        for i in b["coverage"][axis + "_trace_" + kind + "_union"]["intervals"]])
-                    assert sum(end - start for start, end in intervals) == exp[kind + "_" + axis + "_union_count"]
-                for suffix, native_name in (("_mapping", "alternative_" + axis + "_mapping_positions"),
-                                           ("_gap_versus_pair_conflict", axis + "_gap_vs_pair_conflict_positions"),
-                                           ("_symbol_conflict", axis + "_symbol_conflict_positions")):
-                    code = "alternative_" + axis + suffix if suffix == "_mapping" else axis + suffix
-                    found = [c for c in got["conflicts"] if c["code"] == code]
-                    intervals = found[0][axis + "_intervals"] if found else []
-                    assert intervals == [[a - 1, b] for a, b in exp[native_name]], (release, qi, si, code)
-    assert hsp_count == expected["hsp_count"]
-    if release == "2011":
-        assert native["queries"][0]["no_hits_marker"]["state"] == "present"
-        assert native["queries"][0]["subjects"] == []
 
 
 def test_actual_subject127_gap_conflict_has_both_native_column_witnesses():

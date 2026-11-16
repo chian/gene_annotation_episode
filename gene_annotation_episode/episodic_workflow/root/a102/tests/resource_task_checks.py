@@ -4,7 +4,6 @@ from contextlib import contextmanager,ExitStack
 from copy import deepcopy
 from dataclasses import replace
 from importlib import import_module
-import hashlib
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -334,17 +333,6 @@ def configuration_observations(v):
         'controller_callback_absent':not hasattr(b,'yield_controller') and not hasattr(b,'practical_estimator')}
 
 
-def descriptor_diagnostic(output):
-    """Untouched actual descriptor evidence: no fixture changes to asset roots."""
-    output=Path(output);output.mkdir(parents=True,exist_ok=True);rows={}
-    for home,_,_ in OWNERS:
-        services=SimpleNamespace(capabilities=lambda:[])
-        binding=own(home.replace('/','.')+'.episode').ResourceEpisode(services)
-        rows[home]={'descriptor':capture(binding.as_record),
-            'registration':capture(lambda:(own('episode_bindings').EpisodeBindingRegistry((binding,)),True)[1])}
-    return rows
-
-
 def connected_build_trace(v):
     runtime=v.runtime
     names=('annotation','scientific_process','launch','launch_api','launch_local','launch_hpc','results')
@@ -421,66 +409,6 @@ def presentation_trace(v,case):
         expected=own('receiver_prompt').render_receiver_prompt(connection.scientific_prompt_states[key],instructions,lookup_results=[])
         assert observed['value']==(expected,own('scientific_process_prompt').text_instructions(instructions))
     return {'observation':observed,'saved_state':connection.scientific_prompt_states.get(key)}
-
-
-def asset_observation(home,profile):
-    import ast
-    module=own(home.replace('/','.')+'.episode')
-    configuration={} if not profile else {'contract_information_profile':own('composition_information').CONTRACT_INFORMATION_PROFILE}
-    binding=module.ResourceEpisode(SimpleNamespace(capabilities=lambda:[]),**configuration)
-    axis=Path(own('__init__').__file__).parent
-    directory=Path(module.__file__).parent
-    root=directory.parents[0] if len(Path(home).parts)==1 else directory.parents[len(Path(home).parts)-1]
-    assert root==axis
-    names=['a102_resources.py','resource_records.py','launch_instructions.py']
-    if profile:names += ['composition_information.py','schema_information_text.py']
-    operands=[*sorted(directory.glob('*.py')),*[axis/name for name in names]]
-    expected=hashlib.sha256(b''.join(p.read_bytes() for p in operands)).hexdigest()
-    contracts=own(home.replace('/','.')+('.resource_contracts' if (directory/'resource_contracts.py').is_file() else '.requests'))
-    expression,=[n.value for n in ast.parse(Path(contracts.__file__).read_bytes()).body if isinstance(n,ast.Assign)
-        and any(isinstance(t,ast.Name) and t.id=='_AXIS_DIRECTORY' for t in n.targets)]
-    assert contracts._AXIS_DIRECTORY==axis
-    descriptor=capture(binding.as_record);registry=capture(lambda:(own('episode_bindings').EpisodeBindingRegistry((binding,)),True)[1])
-    return {'descriptor':descriptor,'registration':registry,'expected_hash':expected,
-        'operands':{str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in operands},
-        'root_expression':ast.unparse(expression),'resolved_root':str(contracts._AXIS_DIRECTORY)}
-
-
-def run_probe(output,stable_workspace,phase):
-    output=Path(output);output.mkdir(parents=True,exist_ok=True)
-    assert phase=='tasks'
-    result={}
-    for home in HOMES:
-        slug=home.replace('/','__');base=output/slug;stable=Path(stable_workspace)/slug
-        with fixture(home,base/'configuration',stable) as v:
-            row=configuration_observations(v)
-            row['asset_observations']={str(p).lower():asset_observation(home,p) for p in (False,True)}
-            row['instruction_services']={case+';exchange='+str(exchange).lower():instruction_observation(v,case,exchange)
-                for case in INSTRUCTION_CASES for exchange in (False,True)}
-            row['presentation']={case:presentation_trace(v,case) for case in ('unrecognized','saved_minimal','empty_bootstrap','receiver','bootstrap','saved_update','missing_base')}
-            row['connected_build']=connected_build_trace(v)
-        row['actions']={};row['native']={}
-        for status in ('completed','partial','invalid','failed','unavailable'):
-            with fixture(home,base/('action-'+status),stable) as v:row['actions'][status]=action_trace(v,status)
-            for retryable in (False,True):
-                with fixture(home,base/('native-'+status+'-'+str(retryable)),stable) as v:
-                    row['native'][status+';retryable='+str(retryable).lower()]=native_trace(v,status,retryable)
-        with fixture(home,base/'wait',stable) as v:row['wait']=action_trace(v,'completed','wait')
-        with fixture(home,base/'parent-exchange',stable) as v:row['parent_exchange']=parent_exchange_trace(v)
-        from .resource_planning_checks import PLANNING_CASES,planning_observation,planning_recipe_observation
-        from .resource_catalog_checks import CATALOG_CASES,catalog_observation
-        row['planning_repair']={};row['planning_recipe_repair']={};row['catalog_repair']={}
-        for scenario in PLANNING_CASES:
-            with fixture(home,base/('planning-'+scenario),stable) as v:
-                row['planning_repair'][scenario]=planning_observation(v,scenario)
-        for scenario in ('original','unknown_tool','invalid_profile','history_exception'):
-            with fixture(home,base/('recipe-'+scenario),stable) as v:
-                row['planning_recipe_repair'][scenario]=planning_recipe_observation(v,scenario)
-        for case in CATALOG_CASES:
-            with fixture(home,base/('catalog-'+case),stable) as v:
-                row['catalog_repair'][case]=catalog_observation(v,case)
-        result[home]=row
-    return result
 
 
 def parent_exchange_trace(v):

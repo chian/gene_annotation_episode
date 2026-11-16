@@ -1,4 +1,5 @@
 from __future__ import annotations
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 from datetime import datetime
 from pathlib import PurePosixPath
@@ -11,7 +12,7 @@ ATTEMPT_DIRECTORY_NAME = 'rna-structure-attempt'
 OWNER_FILENAME = '.native-rna-structure-owner.json'
 STARTED_FILENAME = '.native-rna-structure-started.json'
 WORKER_MODULE = 'gene_annotation_episode.native_rna_structure_worker'
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
+POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 INPUT_NAMES = {'input': 'input.json', 'model_parameter_input': 'model-parameter-input.par'}
 ROLE_FORMATS = {'input': 'rna_input_json_v1', 'model_parameter_input': 'viennarna_parameter_file', 'native_result': 'rna_native_record_json_v1', 'model': 'vienna_model_json_v1', 'effective_parameters': 'viennarna_parameter_file', 'stdout': 'text', 'stderr': 'text'}
 _TEXT = {'type': 'string', 'minLength': 1, 'pattern': '^[^\\u0000]+$'}

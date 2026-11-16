@@ -13,10 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_grader import calculate_rfam_batch_components
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_grader import calculate_rfam_batch_report_components
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table_grader import calculate_rfam_batch_table_components
-from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_infernal import (
-    HIT_ALIASES, POPULATION_ALIASES, project_rfam_infernal_result, upgrade_saved_rfam_search_sheet,
-    select_rfam_common_sheet,
-)
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_infernal import HIT_ALIASES, POPULATION_ALIASES, project_rfam_infernal_result, select_rfam_common_sheet
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs import populate_rfam_batch_json_sheet
 from test_rfam_batch_inputs import EXAMPLES, identity, capture, native_example, parse as parse_json
 from test_rfam_batch_grader import alignment_bundle

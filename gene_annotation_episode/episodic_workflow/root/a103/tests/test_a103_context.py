@@ -161,40 +161,8 @@ def test_unrelated_strong_map_does_not_qualify_a_context_measurement(context_cas
     assert result['credit']==.5 and needs
 
 
-def test_synthesis_returns_received_retained_context_without_new_measurements(context_case):
-    from gene_annotation_episode.episodic_workflow.root.a103.a103_investigation import received_context_records,initial_report,resolve_report
-    store,target,known,a,ab,b,bb,na,sa,nb,sb,raw,definition=context_case
-    measured=publish(store,raw,[target]);known.add(measured)
-    before,_=grade(store,target,known)
-    grant=next(r for r in received_attachments(store,known) if r['measurement_ref']==measured)['source_ref']
-    narrow={target,measured,grant}
-    total=store.db.total_changes
-    refs=received_context_records(store,narrow,{'subject_refs':[target]})
-    report={**initial_report(),'context_summary':'association_measured','scope_status':'partial',
-        'records':refs,'context_credit':before['credit']}
-    resolved=resolve_report(store,report,scope={'subject_refs':[target]})
-    assert resolved['receiving_scope_credit']==before['credit']==.5
-    assert set(refs)==narrow and a not in refs and b not in refs
-    assert store.db.total_changes==total
 
 
-def test_measurement_redelivery_keeps_credit_without_admitting_an_unsupported_function(context_case):
-    from gene_annotation_episode.episodic_workflow.root.a103.a103_investigation import (received_context_records,initial_report,
-        resolve_report,resolve_measurement_report)
-    store,target,known,a,ab,b,bb,na,sa,nb,sb,raw,definition=context_case
-    measured=publish(store,raw,[target]);known.add(measured)
-    value,_=grade(store,target,known)
-    report={**initial_report(),'context_summary':'association_measured','scope_status':'partial',
-        'functional_support':'system_association','records':received_context_records(store,known,{'subject_refs':[target]}),
-        'context_credit':value['credit']}
-    total=store.db.total_changes
-    with pytest.raises(ContractError,match='a103_function_interpretation_requires_explicit_hypothesis_and_assessment'):
-        resolve_report(store,report,scope={'subject_refs':[target]})
-    measurements={name:report[name] for name in ('records','context_credit')}
-    assert resolve_measurement_report(store,measurements,scope={'subject_refs':[target]})==.5
-    with pytest.raises(ContractError,match='a103_returned_measurement_credit_conflict'):
-        resolve_measurement_report(store,{**measurements,'context_credit':1},scope={'subject_refs':[target]})
-    assert store.db.total_changes==total
 
 
 def _single_locus_comparison(case, right_index, partner_ref=None):

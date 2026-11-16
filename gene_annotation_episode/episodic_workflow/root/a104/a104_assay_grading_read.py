@@ -50,7 +50,6 @@ def _rows(saved, sheet_ref, components):
 class A104AssayGradingReader:
     provider = 'literature.a105.assay_grading'
     record_version = 'literature_assay_grading_record_v2'
-    legacy_version = 'literature_assay_grading_record_v1'
     operations_table = 'literature_assay_grading_operations'
     rows = staticmethod(_rows)
 
@@ -85,7 +84,7 @@ class A104AssayGradingReader:
     def read(self, sheet_ref):
         source = self.store.get(sheet_ref)
         if (source.get('record_type') != 'source' or source.get('origin') != 'tool'
-                or source.get('provider') != self.provider or source.get('version') not in (self.record_version, self.legacy_version)):
+                or source.get('provider') != self.provider or source.get('version') != self.record_version):
             raise ContractError('assay_grading_sheet_required')
         record = {key: value for key, value in source.items() if key not in ('id', 'record_type', 'origin')}
         if identity('source', {'origin': 'tool', 'record': record}) != sheet_ref:
@@ -114,9 +113,8 @@ class A104AssayGradingReader:
                     'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
             raise ContractError('assay_grading_saved_selection_mismatch')
         contracts = _contracts()
-        validate_schema(saved['selection'], contracts['legacy_population_schema']
-            if source['version'] != self.record_version else contracts['population_schema'])
-        if source['version'] == self.record_version and 'experiment_ref' not in saved['selection']:
+        validate_schema(saved['selection'], contracts['population_schema'])
+        if 'experiment_ref' not in saved['selection']:
             raise ContractError('assay_grading_saved_experiment_missing')
         validate_schema(saved['extraction'], contracts['input_schema'])
         validate_schema(saved['sheet'], contracts['sheet_schema'])

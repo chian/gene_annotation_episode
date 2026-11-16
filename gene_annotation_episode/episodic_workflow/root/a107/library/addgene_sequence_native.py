@@ -1,7 +1,4 @@
-"""A107 original addgene sequence native; selected retained metadata/operand declarations.
-
-Original source qualifications and identity checks remain intact; no acquisition or dispatch is added.
-"""
+"""A107 addgene sequence native."""
 from __future__ import annotations
 _ISSUES = ('authentication_required', 'response_incomplete', 'representation_unavailable', 'invalid_encoding', 'invalid_html', 'empty_literal', 'invalid_literal', 'incomplete_literal', 'ambiguous_sequence_identity', 'conflicting_sequence_literals', 'download_required')
 

@@ -1,4 +1,4 @@
-"""Original ordinary tool values and exact native work carrier."""
+"""Ordinary tool values and exact native work carrier."""
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path

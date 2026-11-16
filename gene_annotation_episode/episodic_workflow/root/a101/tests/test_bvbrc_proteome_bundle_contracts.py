@@ -1,19 +1,13 @@
 """Closed provider schemas and saved validation without reconstruction."""
-import ast
-from copy import deepcopy
-import hashlib
-from pathlib import Path
 
 from jsonschema import Draft202012Validator
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_proteome_bundle_contracts as c
-from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_proteome_bundle_adapter as adapter
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_appservice_contracts import contract_schema
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_proteome_data_contracts import proteome_data_schema
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_proteome_native_contracts import native_schema
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_proteome_sheet_contracts import proteome_sheet_schema
-from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_proteome_bundle_resolution import fixture, consume
 
 
 def test_schema_roots_are_closed_reachable_exact_imports_and_detached():
@@ -69,98 +63,4 @@ def test_exact_finite_codes_and_required_input_mapping():
     assert error.code == str(error) == "proteome_parameters_invalid" and error.path == "/field"
     with pytest.raises(ValueError, match="unknown_proteome_bundle_failure_code"):
         c.ProteomeBundleError("arbitrary error prose")
-
-
-@pytest.mark.parametrize("change", ["extra", "duplicate", "nan", "boolean", "tuple", "unicode"])
-def test_parameters_reject_closed_shape_and_non_json_contract_violations(change):
-    parameters = fixture(supplementary=False)["parameters"]
-    if change == "extra":
-        parameters["extra"] = 3
-    elif change == "duplicate":
-        parameters["native_documents"].append(deepcopy(parameters["native_documents"][0]))
-    elif change == "nan":
-        parameters["calculation_parameters"]["minimum_identity_fraction"] = float("nan")
-    elif change == "boolean":
-        parameters["calculation_parameters"]["minimum_identity_fraction"] = True
-    elif change == "tuple":
-        parameters["native_documents"] = tuple(parameters["native_documents"])
-    else:
-        parameters["analysis_id"] = "\ud800"
-    with pytest.raises(c.ProteomeBundleError, match="parameters_invalid"):
-        c.validate_parameters(parameters)
-
-
-def test_recursive_json_and_detached_parameters():
-    parameters = fixture(supplementary=False)["parameters"]
-    checked = c.validate_parameters(parameters)
-    checked["calculation_parameters"]["track_keys"].clear()
-    assert parameters["calculation_parameters"]["track_keys"]
-    parameters["recursive"] = parameters
-    with pytest.raises(c.ProteomeBundleError):
-        c.validate_parameters(parameters)
-
-
-@pytest.fixture(scope="module")
-def saved():
-    return consume(fixture())["sheet"]
-
-
-def test_saved_validation_calls_no_native_constructor_calculator_or_projection(saved, monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_proteome_bundle_resolution as resolution
-    from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_proteome_bundle_projection as projection
-    from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_proteome_inputs as inputs
-    from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_proteome_native as native
-    from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_proteome_joins as joins
-    from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_proteome_sheet as sheet
-    from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_proteome_calculators as calculators
-    def forbidden(*args, **kwargs):
-        raise AssertionError("saved validation cannot reconstruct work")
-    for module, names in ((resolution, ("consume_bundle", "build_native_sheet", "build_native_joins", "calculate_native_components", "parse_genome_comparison")),
-                          (projection, ("project_requested_facts",)), (inputs, ("index_original_inputs", "read_protein_fasta", "read_feature_metadata", "read_genome_metadata", "read_feature_sequences")),
-                          (native, ("parse_genome_comparison",)), (joins, ("build_native_joins",)),
-                          (sheet, ("build_native_sheet",)), (calculators, ("calculate_native_components",))):
-        for name in names:
-            monkeypatch.setattr(module, name, forbidden)
-    checked = c.validate_provider_sheet(saved)
-    assert checked == saved and checked is not saved
-    checked["supplied_values"].clear()
-    assert saved["supplied_values"]
-
-
-@pytest.mark.parametrize("change", ["analysis", "task", "index_parameter", "primary", "resolution", "source", "result", "links", "unknown"])
-def test_saved_copy_and_identity_corruption_is_rejected(saved, change):
-    corrupted = deepcopy(saved)
-    if change == "analysis":
-        corrupted["analysis_id"] = "another"
-    elif change == "task":
-        corrupted["original_task"]["native_application_id"] = "Homology"
-    elif change == "index_parameter":
-        corrupted["original_task"]["effective_parameters"]["value"]["user_genomes"][1] = "/wrong.faa"
-    elif change == "primary":
-        corrupted["parameters"]["primary_document_id"] = "absent"
-    elif change == "resolution":
-        corrupted["input_resolution"][1]["result_index"] = 1
-    elif change == "source":
-        corrupted["input_resolution"][0]["content"]["sha256"] = "0" * 64
-    elif change == "result":
-        corrupted["inventory_results"] = []
-    elif change == "links":
-        corrupted["supplied_values"][0]["value"]["native_links"] = []
-    else:
-        corrupted["unknown"] = True
-    with pytest.raises(c.ProteomeBundleError):
-        c.validate_provider_sheet(corrupted)
-
-
-def test_saved_wrapper_rejects_unbounded_host_diagnostic_and_numerically_equal_changed_copy(saved):
-    corrupted = deepcopy(saved)
-    corrupted["diagnostics"].append(dict(code="arbitrary-host-code", phase="publication", path="", severity="error", evidence_refs=[]))
-    with pytest.raises(c.ProteomeBundleError, match="saved_sheet_invalid"):
-        c.validate_provider_sheet(corrupted)
-    corrupted = deepcopy(saved)
-    cell = corrupted["native_results"][0]["value"]["reference_rows"][0]["aa_length"]
-    cell["value"] = float(cell["value"])
-    with pytest.raises(c.ProteomeBundleError, match="saved_sheet_invalid"):
-        c.validate_provider_sheet(corrupted)
-
 

@@ -6,25 +6,12 @@ the original native239 v1 artifact remains a separate immutable observation.
 """
 from copy import deepcopy
 from fractions import Fraction
-import builtins
-import hashlib
-import importlib.util
-import json
 import math
-import os
-from pathlib import Path
-import sys
 
 import pytest
 
 from gene_annotation_episode import bivariate_covariance as kernel
 from gene_annotation_episode import protease_kinetics_measurements as protease
-from test_protease_kinetics_measurements import supplied_fixture
-
-
-_BASELINE_SHA = "e5fa57e6aa06a2b3a27da9866455bd9626b52deee33f0043074d0ac7b321df78"
-_SHEET_SHA = "5ce86df48853601e7d05472f30fcfef148116ad9031f5c4035d5f10f114a5765"
-_ORIGINAL_COMPONENTS_SHA = "5bdacd46a9105c07e9d855ce993332e4a8eef2838dbd7f2526036db916f589c4"
 
 
 @pytest.mark.parametrize("matrix,symmetry,positive", [
@@ -102,36 +89,5 @@ def test_variance_range_failures_do_not_become_zero(gradient, matrix, status):
 def test_programming_shape_and_type_errors_are_not_hidden(gradient, matrix, error):
     with pytest.raises(error):
         kernel.propagate_bivariate_variance(gradient, matrix)
-
-
-@pytest.fixture(scope="module")
-def frozen_protease():
-    filename = os.environ.get("HMMER_NATIVE_ORACLE_BIVARIATE_PROTEASE_BASELINE")
-    if filename is None:
-        pytest.skip("engineering parity requires the explicitly selected frozen pre-extraction source")
-    path = Path(filename)
-    raw = path.read_bytes()
-    assert len(raw) == 38101 and hashlib.sha256(raw).hexdigest() == _BASELINE_SHA
-    name = "protease_pre_bivariate_extraction_engineering"
-    spec = importlib.util.spec_from_file_location(name, path)
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[name] = module
-    spec.loader.exec_module(module)
-    yield module
-    assert path.read_bytes() == raw
-
-
-def matrix_case(kind):
-    return deepcopy({"symmetric": [[4., 1.], [1., 1.]], "asymmetric": [[4., 7.], [-5., 1.]],
-        "singular": [[1., 1.], [1., 1.]], "zero": [[0., 0.], [0., 0.]],
-        "indefinite": [[1., 2.], [2., 1.]],
-        "nonfinite": [[{"type": "nonfinite", "token": "inf"}, 0], [0, 1]],
-        "bool": [[True, 0], [0, 1]], "unrepresentable": [[2**53+1, 0], [0, 1]],
-        "shape": [[1]], "underflow": [[5e-324, 0.], [0., 0.]]}[kind])
-
-
-
-
 
 

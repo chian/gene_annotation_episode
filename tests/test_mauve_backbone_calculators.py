@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_contr
     validate_mauve_backbone_components, validate_mauve_backbone_selection,
 )
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_inputs
-from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
+from gene_annotation_episode.episodic_workflow.root.library.phylogeny_formats import parse_aligned_fasta
 from test_bvbrc_genome_alignment_input_contracts import input_fixture, original_task, content, evidence
 from test_mauve_backbone_formats import backbone, selection, members, NATIVE, HEADER
 
@@ -256,7 +256,7 @@ def forbid_io(monkeypatch):
         monkeypatch.setattr(owner, field, forbidden)
     monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats.parse_mauve_backbone', forbidden)
     monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats.parse_mauve_bbcols', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.phylogeny_formats.parse_aligned_fasta', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.phylogeny_formats.parse_aligned_fasta', forbidden)
     return forbidden
 
 

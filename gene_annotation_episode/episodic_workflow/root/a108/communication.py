@@ -1,8 +1,6 @@
-"""Closed typed parent forms, adapted from the supplied method_loop boundary.
+"""Closed typed parent forms.
 
-Sources: episodic_workflow/method_loop/communication.py and the restricted
-schema guard in orbital_workflow/orbital_workflow/communication.py. This module
-adapts domain string types and reference validation; it never assesses science.
+This module adapts domain string types and reference validation; it never assesses science.
 Recorded fields bind to facts instead of asking a second model to compose them.
 """
 from __future__ import annotations
@@ -301,11 +299,9 @@ def _compile_closed_schema(schema):
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
             if blast_utility_sources is None:
                 from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.blast_utility_result_views import blast_utility_fact_sources
-                from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.blast_utility_historical_fact_schemas import blast_utility_historical_fact_schemas
-                historical = blast_utility_historical_fact_schemas()
-                blast_utility_sources = {key: (value['report_schema'], *historical.get(key, ())) for key, value in blast_utility_fact_sources().items()}
-            expected = blast_utility_sources.get(source, ())
-            if not expected or not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}:
+                blast_utility_sources = blast_utility_fact_sources()
+            expected = blast_utility_sources.get(source, {}).get('report_schema')
+            if expected is None or not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(expected, sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: BLAST utility fact schema must match its registered source', code='invalid_schema')
             return
         if isinstance(source, str) and source.startswith('execution.masking_'):
@@ -384,10 +380,10 @@ def _compile_closed_schema(schema):
             if depth != 1:
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
             if chromatin_sources is None:
-                from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.chromatin_interaction_return_views import FACT_SOURCES, chromatin_fact_schema_alternatives
-                chromatin_sources = {key: chromatin_fact_schema_alternatives(key) for key in FACT_SOURCES}
-            expected = chromatin_sources.get(source, ())
-            if not expected or not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}:
+                from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.chromatin_interaction_return_views import FACT_SOURCES, chromatin_fact_schema
+                chromatin_sources = {key: chromatin_fact_schema(key) for key in FACT_SOURCES}
+            expected = chromatin_sources.get(source)
+            if expected is None or not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(expected, sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: chromatin fact schema must match its registered source', code='invalid_schema')
             return
         if source == 'literature_concentration_window_cells':
@@ -526,9 +522,9 @@ def _compile_closed_schema(schema):
         if source == 'literature_assay_grading_cells':
             if depth != 1:
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
-            from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.literature_assay_grading_storage import assay_grading_cells_schema, legacy_assay_grading_cells_schema
-            expected = (assay_grading_cells_schema(), legacy_assay_grading_cells_schema())
-            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) not in {json.dumps(item, sort_keys=True, allow_nan=False) for item in expected}:
+            from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.literature_assay_grading_storage import assay_grading_cells_schema
+            expected = assay_grading_cells_schema()
+            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(expected, sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: assay grading fact schema must match its registered source', code='invalid_schema')
             return
         if source in {'literature_a108_grading_cells', 'literature_a108_aggregation_cells'}:
@@ -592,8 +588,7 @@ def _compile_closed_schema(schema):
             if depth != 1:
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
             from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.literature_perturbation_summary_storage import perturbation_summary_cells_schema
-            expected = (perturbation_summary_cells_schema(), perturbation_summary_cells_schema(include_covariance_interpretations=False), perturbation_summary_cells_schema(include_interpretation_basis=False))
-            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) not in {json.dumps(item, sort_keys=True, allow_nan=False) for item in expected}:
+            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(perturbation_summary_cells_schema(), sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: perturbation summary fact schema must match its registered source', code='invalid_schema')
             return
         if source == 'literature_controlled_response_component_cells':

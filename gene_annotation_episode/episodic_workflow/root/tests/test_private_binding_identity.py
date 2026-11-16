@@ -117,21 +117,6 @@ def test_missing_counterpart_never_uses_other_parent(registry_type):
         registry.for_child((('annotation', 'root'), ('allocate', 'a')), 'monitor')
 
 
-def test_duplicate_identity_and_legacy_roles_remain_rejected(registry_type):
-    registry, first, _ = graph(registry_type)
-    with pytest.raises(ValueError, match='duplicate_episode_binding_path'):
-        registry.register(first)
-    legacy = Binding('monitor')
-    registry = registry_type((legacy,))
-    assert registry.for_role('monitor') is legacy
-    assert registry.for_path((('annotation', 'root'), ('monitor', 'child'))) is legacy
-    old_parent = (('annotation', 'root'), ('improvement', 'legacy'))
-    assert registry.for_child(old_parent, 'monitor') is legacy
-    assert registry.for_path((*old_parent, ('monitor', 'child'))) is legacy
-    with pytest.raises(ValueError, match='duplicate_episode_role'):
-        registry.register(Binding('monitor'))
-
-
 def test_real_literature_branches_retain_private_identity(registry_type):
     package = registry_type.__module__.rsplit('.', 1)[0]
     standalone = import_module(package + '.published_evidence_assessment.episode').LiteratureEpisode(object())

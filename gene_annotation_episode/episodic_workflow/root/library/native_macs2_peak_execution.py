@@ -31,7 +31,6 @@ from gene_annotation_episode.episodic_workflow.root.library.native_atac_differen
 
 OPERATION = 'perform_chipseq_peak_calling_with_macs2'
 MODE = 'macs2_2_2_9_1_auto_matched_control_native_model'
-LEGACY_DRIVER_MODULE = 'gene_annotation_episode.native_macs2_peak_execution'
 DRIVER_MODULE = 'gene_annotation_episode.episodic_workflow.root.library.native_macs2_peak_execution'
 RUN_PLAN_FILENAME = 'macs2-peak-plan.json'
 ATTEMPT_DIRECTORY_NAME = 'macs2-peak-attempt'
@@ -108,7 +107,7 @@ def _record(kind, value):
 
 def _software(value):
     result = shared.validate_atac_software(value)
-    require({LEGACY_DRIVER_MODULE, DRIVER_MODULE} & {row['module'] for row in result['driver_runtime']['implementation_files']},
+    require(DRIVER_MODULE in {row['module'] for row in result['driver_runtime']['implementation_files']},
         'native_dependency_unavailable')
     return result
 
@@ -179,8 +178,7 @@ def requested_job_from_macs2_peak(job, *, environment):
     require(environment.get('PYTHONPATH') == os.pathsep.join([driver['module_root'], *shared._dependency_roots(driver)]),
         'native_dependency_unavailable')
     return dict(argv=[driver['python_executable'], '-B', '-S', '-m',
-        LEGACY_DRIVER_MODULE if LEGACY_DRIVER_MODULE in {row['module'] for row in driver['implementation_files']}
-        else DRIVER_MODULE, RUN_PLAN_FILENAME],
+        DRIVER_MODULE, RUN_PLAN_FILENAME],
         environment=deepcopy(environment), native_macs2_peak=job)
 
 

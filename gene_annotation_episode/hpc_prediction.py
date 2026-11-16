@@ -148,7 +148,7 @@ def fit(specification, observations):
                 raise ValueError('unknown_time_metric')
             value = measured_value(name, item)
             if name not in model['metrics']:
-                continue  # Older timing-only models make no resource forecast.
+                continue  # Timing-only models make no resource forecast.
             y = math.log1p(value)
             state = model['metrics'][name]
             mean, variance, cx = _moments(state, x)

@@ -2,7 +2,6 @@
 from __future__ import annotations
 from .episode_contract_information import ContractInformationError
 from .task import AnnotationTask as DecisionSource
-from .workflow_values import EPISODE_BRANCH_LIFECYCLE
 from gene_annotation_episode.episodic_workflow.root.method_loop import Episode
 from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeGoal
 from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeRequest
@@ -145,7 +144,7 @@ class EpisodeConstruction:
                 if json.loads(old['completion']) != {'ended_by': record.ended_by, 'actions': record.units_consumed} or json.loads(old['archive']) != self.archive.store(record).descriptor():
                     raise WorkflowError('inprocess_closed_history_replay_differs')
                 return
-            if self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE and old['state'] == 'active':
+            if old['state'] == 'active':
                 pending = self.store.db.execute("SELECT 1 FROM runtime_actions WHERE run_id=? AND episode_id=? AND json_extract(action,'$.kind') IN ('child','job_child','episode_child') AND (result IS NULL OR json_extract(result,'$.status')='pending') LIMIT 1", (self.run_id, identity.episode_id)).fetchone()
                 unobserved = self.store.db.execute('SELECT 1 FROM runtime_completion_slots s LEFT JOIN runtime_observations o ON o.run_id=s.run_id AND o.episode_id=s.episode_id AND o.unit_index=s.sequence WHERE s.run_id=? AND s.episode_id=? AND o.unit_index IS NULL LIMIT 1', (self.run_id, identity.episode_id)).fetchone()
                 unobserved_action = self.store.db.execute("SELECT 1 FROM runtime_actions a WHERE a.run_id=? AND a.episode_id=? AND a.credit IS NOT NULL AND NOT EXISTS (SELECT 1 FROM runtime_observations o WHERE o.run_id=a.run_id AND o.episode_id=a.episode_id AND json_extract(o.observation,'$.decision_index')=a.decision_index) LIMIT 1", (self.run_id, identity.episode_id)).fetchone()

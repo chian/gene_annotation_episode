@@ -177,7 +177,7 @@ def start_prepared(handle, *, cancel_event=None):
     """
     body = handle.read()
     from gene_annotation_episode.workflow_budget import native_budget
-    workflow=native_budget(LocalJobPolicy(**body['metadata']['policy']),body['metadata'].get('cpu_threads',1),body['cwd'])
+    workflow=native_budget(LocalJobPolicy(**body['metadata']['policy']),body['metadata']['cpu_threads'],body['cwd'])
     if body['metadata'].get('whole_workflow_budget')!=workflow:
         raise AcquisitionError('whole_workflow_budget_identity_conflict',phase='local_preflight')
     if body['stage'] != 'prepared':
@@ -187,18 +187,10 @@ def start_prepared(handle, *, cancel_event=None):
     if hashlib.sha256(Path(paths['request']).read_bytes()).hexdigest() != body['request_sha256']:
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
             operational={**metadata, 'reason': 'native_request_identity_mismatch'})
-    # A legacy never-dispatched handle also enters the shared host gate. Its
-    # original command/request bytes remain unchanged.
-    if 'local_resources' not in metadata:
-        metadata['local_resources'] = LocalResources.configured().as_record()
-        metadata.setdefault('cpu_threads', 1)
-        metadata['enforcement']['cpu'] = 'systemd_cgroup_v2_cpu_max'
-    if 'local_resources' in metadata:
-        resources = LocalResources.reopen(metadata['local_resources'])
+    resources = LocalResources.reopen(metadata['local_resources'])
     _ensure_event_registration(handle, body)
-    if 'local_resources' in metadata:
-        body['capacity_reservation'] = resources.reserve(handle,
-            cpu_threads=metadata['cpu_threads'], policy=policy)
+    body['capacity_reservation'] = resources.reserve(handle,
+        cpu_threads=metadata['cpu_threads'], policy=policy)
     try:
         return _dispatch_prepared(handle, body, cancel_event=cancel_event)
     except BaseException:
@@ -230,8 +222,7 @@ def _dispatch_prepared(handle, body, *, cancel_event=None):
         'StandardError=file:'+str(stderr).replace('%', '%%'),
         'ExecStopPost='+' '.join(_word(str(v)) for v in (sys.executable, worker, 'report', paths['status'],
             *([handle_path] if 'statistics' in body or 'native_events' in body else [])))]
-    if 'local_resources' in body['metadata']:
-        properties.append(f"CPUQuota={body['metadata']['cpu_quota_percent']}%")
+    properties.append(f"CPUQuota={body['metadata']['cpu_quota_percent']}%")
     from gene_annotation_episode.workflow_budget import SLICE as WORKFLOW_SLICE,UNIT as WORKFLOW_UNIT
     properties.extend(['BindsTo='+WORKFLOW_UNIT,'After='+WORKFLOW_UNIT])
     argv = ['systemd-run', '--user', '--quiet', '--no-block', '--service-type=exec', '--unit='+body['unit'],
@@ -269,11 +260,10 @@ def resume_start(handle, *, cancel_event=None):
     """Finish a reservation or its existing handshake; never repeat an attempt."""
     body = handle.read()
     from gene_annotation_episode.workflow_budget import native_budget
-    workflow = native_budget(LocalJobPolicy(**body['metadata']['policy']), body['metadata'].get('cpu_threads', 1), body['cwd'])
+    workflow = native_budget(LocalJobPolicy(**body['metadata']['policy']), body['metadata']['cpu_threads'], body['cwd'])
     if body['metadata'].get('whole_workflow_budget') != workflow:
         raise AcquisitionError('whole_workflow_budget_identity_conflict', phase='local_preflight')
-    if 'local_resources' in body['metadata']:
-        LocalResources.reopen(body['metadata']['local_resources'])
+    LocalResources.reopen(body['metadata']['local_resources'])
     if body['stage'] == 'prepared':
         return start_prepared(handle, cancel_event=cancel_event)
     _ensure_event_registration(handle, body)
@@ -301,19 +291,15 @@ def resume_start(handle, *, cancel_event=None):
         group_path = Path('/sys/fs/cgroup')/group.lstrip('/')
         memory = int((group_path/'memory.max').read_text())
         swap = int((group_path/'memory.swap.max').read_text())
-        cpu = (group_path/'cpu.max').read_text().strip() if 'local_resources' in body['metadata'] else None
+        cpu = (group_path/'cpu.max').read_text().strip()
     except (OSError, ValueError):
         memory = swap = cpu = None
-    cpu_verified = True
-    if 'local_resources' in body['metadata']:
-        values = cpu.split() if cpu else []
-        quota_percent = body['metadata'].get('cpu_quota_percent', body['metadata']['cpu_threads']*100)
-        cpu_verified = (len(values) == 2 and values[0].isdigit() and values[1].isdigit()
-            and int(values[1]) > 0 and int(values[0])*100 == quota_percent*int(values[1]))
-    if 'cpu_quota_percent' in body['metadata']:
-        from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
-        cpu_verified = (cpu_verified and type(body['metadata']['cpu_quota_percent']) is int
-            and body['metadata']['cpu_quota_percent'] == ENVIRONMENT_BOUNDS['cpu_percent'])
+    from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+    values = cpu.split() if cpu else []
+    quota_percent = body['metadata']['cpu_quota_percent']
+    cpu_verified = (len(values) == 2 and values[0].isdigit() and values[1].isdigit()
+        and int(values[1]) > 0 and int(values[0])*100 == quota_percent*int(values[1])
+        and type(quota_percent) is int and quota_percent == ENVIRONMENT_BOUNDS['cpu_percent'])
     from gene_annotation_episode.workflow_budget import SLICE as WORKFLOW_SLICE,UNIT as WORKFLOW_UNIT
     if (actual.get('Slice')!=WORKFLOW_SLICE or WORKFLOW_UNIT not in actual.get('BindsTo','').split()
             or not group or memory != policy.memory_bytes or swap != 0 or not cpu_verified or
@@ -324,11 +310,8 @@ def resume_start(handle, *, cancel_event=None):
     body['metadata']['verified_cgroup'] = {'memory_max': memory, 'memory_swap_max': swap,
         'kill_mode': actual['KillMode'], 'oom_policy': actual['OOMPolicy'],
         'workflow_slice':actual['Slice'],'workflow_owner':WORKFLOW_UNIT}
-    if cpu is not None:
-        body['metadata']['verified_cgroup'].update(cpu_max=cpu,
-            cpu_threads=body['metadata']['cpu_threads'])
-        if 'cpu_quota_percent' in body['metadata']:
-            body['metadata']['verified_cgroup']['cpu_quota_percent'] = body['metadata']['cpu_quota_percent']
+    body['metadata']['verified_cgroup'].update(cpu_max=cpu,
+        cpu_threads=body['metadata']['cpu_threads'], cpu_quota_percent=quota_percent)
     body['stage'] = 'released'
     atomic_json(handle.path, body)
     Path(body['paths']['release']).touch()
@@ -400,9 +383,7 @@ def collect(handle):
                                operational={'state': view['state'], **meta})
     exit_info = meta['service_exit']
     reason = exit_info.get('SERVICE_RESULT')
-    # A completed historical receipt may contain retired settings. Reading its
-    # memory/scratch evidence cannot restore an elapsed-time control.
-    policy = LocalJobPolicy(meta['policy']['memory_bytes'], meta['policy']['scratch_bytes'])
+    policy = LocalJobPolicy(**meta['policy'])
     failure = None
     if reason == 'oom-kill':
         failure = {'resource': 'memory_bytes', 'limit': policy.memory_bytes,

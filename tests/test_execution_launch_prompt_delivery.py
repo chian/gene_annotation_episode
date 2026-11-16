@@ -5,16 +5,11 @@ performed. Engineered updates exercise display mechanics, not original work.
 """
 import asyncio
 from copy import deepcopy
-import hashlib
 import json
-import os
-from pathlib import Path
-import sqlite3
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.decision_context import INSTRUCTIONS, state_frame
-from gene_annotation_episode.episodic_workflow.root.execution_prompt import is_api_launch_context
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection, load_config
 
 
@@ -127,27 +122,6 @@ def assert_private_absent(text):
         assert key not in text
 
 
-def retained_launch():
-    selected = os.environ.get("HMMER_NATIVE_ORACLE_EXECUTION_LAUNCH_SQLITE")
-    if selected is None:
-        pytest.skip("the original276 retained launch SQLite was not selected")
-    path = Path(selected)
-    assert hashlib.sha256(path.read_bytes()).hexdigest() == "d943fda9203fa869524f4714227a7455abe91cc1004b94c7c85cad3610f99fd1"
-    connection = sqlite3.connect(path.resolve().as_uri() + "?mode=ro&immutable=1", uri=True)
-    try:
-        row = connection.execute("SELECT request,response FROM runtime_model_calls WHERE run_id=? AND episode_id=? "
-            "AND call_index=? AND purpose=?", ("bvbrc-selected-process-fixture",
-                "episode_7ad49f8fc11f280fe03f0dfe1d5ef95985cafb35046adbf0c619da6847cfddb7", 0, "decision")).fetchone()
-    finally:
-        connection.close()
-    assert hashlib.sha256(row[0].encode()).hexdigest() == "be02b5dae87a57b7bbcaeea0c0e0c79622bd6b0675e65c32c85023502b709ee3"
-    assert hashlib.sha256(row[1].encode()).hexdigest() == "6ba56912ace718480a1de6298538c86f753722d3473307f36a0b94629089b058"
-    request = json.loads(row[0])
-    return request["context"], request["schema"], json.loads(row[1])
-
-
-
-
 def test_task_repeats_across_bootstrap_delta_and_same_decision_lookup_without_state_changes(tmp_path):
     first = snapshot(); second = deepcopy(first)
     second["current_credit"] = 0
@@ -226,25 +200,6 @@ def test_bad_delta_and_foreign_episode_state_fail_before_turn_dispatch(tmp_path)
     asyncio.run(exercise())
     assert len(wire.inputs()) == 1
     assert wire.scientific_prompt_states[("launch", "REASONING")]["current_credit"] == 1
-
-
-@pytest.mark.parametrize("kind", ["results", "local", "hpc", "legacy_hmmer", "scientific", "wrong_service", "plain"])
-def test_unapproved_roles_and_legacy_assignments_preserve_existing_json_presentation(tmp_path, kind):
-    context = snapshot()
-    if kind == "results": context["execution_assignment"] = {"version": "execution_results_assignment_v1", "selector": {}}
-    elif kind in {"local", "hpc"}: context["execution_assignment"] = {"version": "practical_assignment_v1", "resource_kind": kind}
-    elif kind == "legacy_hmmer": context["execution_assignment"]["version"] = "api_execution_assignment_v1"
-    elif kind == "scientific":
-        context.pop("execution_assignment"); context["scientific_process"] = {"evidence_axis": {
-            "instruction_status": "limited_existing_measurement_guidance"}}
-    elif kind == "wrong_service": context["api_service"] = "unselected_service"
-    else: context = {"goal": {"objective": "plain input"}}
-    assert not is_api_launch_context(context)
-    frame = state_frame(context); original = deepcopy(frame)
-    wire = LaunchWire(tmp_path / "wire")
-    asyncio.run(complete(wire, frame))
-    assert json.loads(wire.inputs()[0]["input"][0]["text"]) == frame == original
-    assert not wire.scientific_prompt_states
 
 
 def test_task_uses_only_bound_callables_selected_manuals_and_exact_native_operands(tmp_path):

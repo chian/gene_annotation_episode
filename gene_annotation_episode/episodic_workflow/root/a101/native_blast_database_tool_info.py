@@ -96,7 +96,7 @@ def native_blast_database_tool_contracts(bindings, *, resource_kind, resource_id
                 "parent's requested execution_blast_database_vdb_function_saved_inputs field. It authenticates the original "
                 "receipt and saved sheet, then applies the selected model without observing the native job, acquiring data, "
                 "parsing reports, populating inputs or recalculating base measurements. New records require a new explicit "
-                "captured input interpretation. Both modes run the bounded numerical worker with 20 GiB RAM, 4 GiB scratch "
+                "captured input interpretation. Both modes run the bounded numerical worker with 5 GiB RAM, 4 GiB scratch "
                 "and no wall-time cap, and return only the requested typed numerical cells and saved-input descriptors. "
                 "Local database searches remain outside this result calculation operation. ")
         instructions += ("Request only the typed facts needed by the receiving episode. Full native artifacts "

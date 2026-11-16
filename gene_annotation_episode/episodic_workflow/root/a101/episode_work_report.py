@@ -207,18 +207,6 @@ def _adapter_results(selection, outcome, records):
     return [] if facts is None else [facts]
 
 
-def _grading_report_values(form):
-    """Project only A101's original registered legacy form."""
-    if not isinstance(form, Mapping):
-        return form
-    from .a101_investigation import legacy_report_schema, report_schema
-    options = {'include_sequence_credit': 'sequence_credit' in form}
-    if frozenset(form) == frozenset(legacy_report_schema(**options)['properties']):
-        current = report_schema(**options)['properties']
-        return {name: value for name, value in form.items() if name in current}
-    return form
-
-
 def requested_action_history(workflow, source, *, before):
     """Retain outcomes this actor explicitly read through its own history tool.
 
@@ -354,7 +342,7 @@ def completed_action_reports(workflow, source, state, *, before, received_axis_r
             # them is labeled separately from this row's original parent gain.
             facts['admitted_child_values'] = {
                 'value_source': 'Returned child; separate from this original parent action’s earned credit',
-                'values': deepcopy(_grading_report_values(outcome['admitted_child_return']))}
+                'values': deepcopy(outcome['admitted_child_return'])}
         for key in ('feedback', 'report_delivery_failure', 'child_completion',
                 'error_code', 'errors', 'conflicts', 'notices'):
             if outcome.get(key) is not None:

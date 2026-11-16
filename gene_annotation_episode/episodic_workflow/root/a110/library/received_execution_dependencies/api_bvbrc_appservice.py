@@ -29,7 +29,7 @@ class BVBRCAppServiceService:
         self.client = configured if client is None else client
         self.publication_callback = publication_callback
         from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_appservice_adapters import bind_adapters
-        self.scientific_adapters = bind_adapters(config['scientific_adapters'], retained_reader=_received_configuration)
+        self.scientific_adapters = bind_adapters(config['scientific_adapters'])
 
     def validate_request(self, request, scope):
         value = validate_request(request)

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from .source_contracts import (Mapping, deepcopy, hashlib, inspect, json, Path, re, ReportBoundaryError, interpretation_schema, plain, validate_closed_schema, validate_form, ContractError, identity, obj, validate_schema, reference_in_context, scientific_digest, scientific_invocation_ref, validate_child_selection, validate_filled_process, validate_option_ref, validate_revision_origin, validate_selection, selection_fields, selector_selection, SELECTION_VERSION, LEGACY_SELECTION_VERSION, build_process_result, merge_process_results, report_sources, validate_process_result, SUPPORT_ENTRY_VERSION, support_observation_kinds, validate_support_entry, EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry, INSTRUCTION_VERSION, instruction_view, validate_instruction_entry, evidence_axis_instruction_view, alignment_site_fact_sources, requested_site_projections, project_site_action_return, validate_frozen_site_return, restriction_mapping_fact_sources, requested_restriction_projections, project_restriction_action_return, validate_frozen_restriction_return, molecular_fact_sources, merge_molecular_facts, requested_molecular_fact_sources, requested_molecular_fact_fields, validate_frozen_molecular_return, PROTEIN_ACTION_FACT_SOURCES, protein_structure_action_fact_sources, merge_protein_structure_action_facts, requested_protein_structure_action_fields, validate_frozen_protein_structure_action_return, VERSION, ROLE, ROLES, _COMMON_TOOLS, _REFERENCE, _SHA256, _SCIENTIFIC_NAMESPACES, _IMPLEMENTATION_FILES, _ITC_PARAMETER_SOURCE, _ANNOTATION_REF, _EVIDENCE_AXIS, _THOUGHT_REF, _TOOLS, _LEGACY_SELECTION, _TOOL_SELECTOR, _TOOL_INFO, _SELECTION, _CANONICAL_SELECTION, _REVISION_ORIGIN, _EVIDENCE_TASK, _ASSIGNMENT, _RECORDED_ASSIGNMENT, _REVISION_ARGUMENTS, _LEGACY_REVISION_ARGUMENTS, original_axis_task_projector, _object, _ref_schema)
+from .source_contracts import (Mapping, deepcopy, hashlib, inspect, json, Path, re, ReportBoundaryError, interpretation_schema, plain, validate_closed_schema, validate_form, ContractError, identity, obj, validate_schema, reference_in_context, scientific_digest, scientific_invocation_ref, validate_child_selection, validate_filled_process, validate_option_ref, validate_revision_origin, validate_selection, selection_fields, selector_selection, SELECTION_VERSION, build_process_result, merge_process_results, report_sources, validate_process_result, SUPPORT_ENTRY_VERSION, support_observation_kinds, validate_support_entry, EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry, INSTRUCTION_VERSION, instruction_view, validate_instruction_entry, evidence_axis_instruction_view, alignment_site_fact_sources, requested_site_projections, project_site_action_return, validate_frozen_site_return, restriction_mapping_fact_sources, requested_restriction_projections, project_restriction_action_return, validate_frozen_restriction_return, molecular_fact_sources, merge_molecular_facts, requested_molecular_fact_sources, requested_molecular_fact_fields, validate_frozen_molecular_return, PROTEIN_ACTION_FACT_SOURCES, protein_structure_action_fact_sources, merge_protein_structure_action_facts, requested_protein_structure_action_fields, validate_frozen_protein_structure_action_return, VERSION, ROLE, ROLES, _COMMON_TOOLS, _REFERENCE, _SHA256, _SCIENTIFIC_NAMESPACES, _ITC_PARAMETER_SOURCE, _ANNOTATION_REF, _EVIDENCE_AXIS, _THOUGHT_REF, _TOOL_SELECTOR, _TOOL_INFO, _SELECTION, _CANONICAL_SELECTION, _REVISION_ORIGIN, _EVIDENCE_TASK, _ASSIGNMENT, _RECORDED_ASSIGNMENT, _REVISION_ARGUMENTS, original_axis_task_projector, _object, _ref_schema)
 
 class ScientificTools:
     def _information_catalog(self, scope):
@@ -15,9 +15,7 @@ class ScientificTools:
             return None
         if scientific_digest(selection) != scientific_digest(original['selection']):
             raise ContractError('scientific_filled_identity_mismatch')
-        return (self.tool_library.resolve(selection['tools'])
-            if selection['version'] == LEGACY_SELECTION_VERSION else
-            self.tool_library.resolve_invocations(selection['child_tool_info']))
+        return self.tool_library.resolve_invocations(selection['child_tool_info'])
 
     def _tool_resolution_for(self, selection, scope, *, context=None):
         if context is not None:
@@ -26,9 +24,7 @@ class ScientificTools:
             closed = self._closed_tool_resolution(context, selection)
             if closed is not None:
                 return closed
-        return (self.tool_library.resolve(selection['tools'], self.services.tool_catalog(scope))
-            if selection['version'] == LEGACY_SELECTION_VERSION else
-            self.tool_library.resolve_invocations(selection['child_tool_info'], self._information_catalog(scope)))
+        return self.tool_library.resolve_invocations(selection['child_tool_info'], self._information_catalog(scope))
 
     def _tool_resolution(self, context, selection):
         entries = self._tool_resolution_for(selection, context.scope, context=context)
@@ -36,12 +32,8 @@ class ScientificTools:
             raise ContractError("scientific_primitive_uses_common_tool_name")
         return entries
 
-    def _proposed_selection(self, initial, arguments, version, scope):
+    def _proposed_selection(self, initial, arguments, scope):
         axis_field = selection_fields(initial)[0]
-        if version == LEGACY_SELECTION_VERSION:
-            validate_schema(arguments, _LEGACY_REVISION_ARGUMENTS)
-            return self._selection({'version': version, 'annotation_ref': initial[axis_field],
-                'thought_ref': arguments['thought_ref'], 'tools': arguments['tools']})
         validate_schema(arguments, _REVISION_ARGUMENTS)
         return self._selection({'version': SELECTION_VERSION, 'evidence_axis': initial[axis_field],
             'thought_pattern': arguments['thought_pattern'], 'child_tool_info':
@@ -50,15 +42,14 @@ class ScientificTools:
     def catalog(self, context):
         selection = self._original_selection(context)
         resolved = self._tool_resolution(context, selection)
-        if selection['version'] != LEGACY_SELECTION_VERSION:
-            direct = [row for row in resolved
-                      if row.get('invocation_route', {'kind': 'direct'})['kind'] == 'direct']
-            if self._closed_tool_resolution(context, selection) is not None:
-                resolved = direct
-            else:
-                resolved = self.tool_library.resolve_invocations(
-                    [{'name': row['name'], 'resources': row['resources']} for row in direct],
-                    self.services.tool_catalog(context.scope))
+        direct = [row for row in resolved
+                  if row.get('invocation_route', {'kind': 'direct'})['kind'] == 'direct']
+        if self._closed_tool_resolution(context, selection) is not None:
+            resolved = direct
+        else:
+            resolved = self.tool_library.resolve_invocations(
+                [{'name': row['name'], 'resources': row['resources']} for row in direct],
+                self.services.tool_catalog(context.scope))
         entries = [{key: deepcopy(value) for key, value in row.items()
                     if key not in {'instructions', 'invocation_route'}} for row in plain(resolved)]
         description = (
@@ -79,8 +70,7 @@ class ScientificTools:
                 "current process, starts no child and records no biological observation. Select the "
                 "actual tool/resource choices returned by process.tools for the desired investigation.")
         entries.append({"name": "process.revise", "description": description,
-            "input_schema": deepcopy(_LEGACY_REVISION_ARGUMENTS
-                if selection['version'] == LEGACY_SELECTION_VERSION else _REVISION_ARGUMENTS)})
+            "input_schema": deepcopy(_REVISION_ARGUMENTS)})
         if getattr(self.services, 'workflow', None) is not None and self.tool_library.supports_tool_info:
             from gene_annotation_episode.episodic_workflow.root.execution_planning import catalog
             entries.extend(catalog())
@@ -147,7 +137,7 @@ class ScientificTools:
                              'source.read', 'source.locate'}:
                 self.services.authenticate_source_byte_operands(context, tool_name, arguments)
             if tool_name == "process.revise":
-                proposed = self._proposed_selection(selection, arguments, selection['version'], context.scope)
+                proposed = self._proposed_selection(selection, arguments, context.scope)
                 self._tool_resolution(context, proposed)
                 child_selection = validate_child_selection({
                     "version": "scientific_process_child_selection_v1",

@@ -1,4 +1,4 @@
-"""Original private A110 annotation child_requests responsibility."""
+"""Private A110 annotation child_requests responsibility."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a110 import runtime as _original_runtime
 

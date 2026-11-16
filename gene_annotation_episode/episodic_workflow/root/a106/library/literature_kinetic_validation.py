@@ -12,7 +12,7 @@ import math
 from gene_annotation_episode.episodic_workflow.root.a106.domain import canonical, identity
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_kinetic_calculations import VERSION as CALC_VERSION, INPUT_VERSION, COMPONENTS, FORMULAS, PARAMETER_UNITS, REASONS, INPUT_UNAVAILABLE_REASONS, CONDITIONAL_CODES
-from gene_annotation_episode.episodic_workflow.root.a106.library.literature_kinetic_inputs import VERSION as EXTRACTION_VERSION, SELECTION_VERSION, SUBJECT_FIELDS, CONTEXT_FIELDS, COMPARISON_VALUES, QUALIFICATIONS, DEPENDENCY_RELEASES, SOURCE_KINDS, COUNT_STATUSES, COUNT_REASONS, COUNT_NOTATIONS, COUNT_RELATIONS
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_kinetic_inputs import VERSION as EXTRACTION_VERSION, SELECTION_VERSION, SUBJECT_FIELDS, CONTEXT_FIELDS, COMPARISON_VALUES, QUALIFICATIONS, SOURCE_KINDS, COUNT_STATUSES, COUNT_REASONS, COUNT_NOTATIONS, COUNT_RELATIONS
 
 VERSION = "a105_kinetic_saved_validation_v3"
 WITNESS = ("source_ref", "representation", "start", "end", "quote")
@@ -286,12 +286,11 @@ def _validate_saved_kinetic(selection, extraction, calculation):
     _enum(selection["source_kind"], SOURCE_KINDS, "selection.source_kind")
     _keys(selection["comparison"], COMPARISON_VALUES, "selection.comparison")
     _keys(extraction, ("version", "source_ref", "source_kind", "operands", "comparison",
-        "calculation_inputs", "input_unavailable_reasons", "source_refs", "implementation_dependencies"), "extraction")
-    if extraction["version"] not in DEPENDENCY_RELEASES:
+        "calculation_inputs", "input_unavailable_reasons", "source_refs"), "extraction")
+    if extraction["version"] != EXTRACTION_VERSION:
         _fail("extraction.version")
     for k in ("source_ref", "source_kind"):
         _equal(selection[k], extraction[k], k)
-    _equal(extraction["implementation_dependencies"], DEPENDENCY_RELEASES[extraction["version"]], "dependencies")
     _keys(extraction["comparison"], COMPARISON_VALUES, "comparison")
     inputs = extraction["calculation_inputs"]
     _keys(inputs, ("version", "numerator", "denominator", *COMPARISON_VALUES), "inputs")

@@ -1,7 +1,4 @@
-"""A107 original primer placement result contracts declarations.
-
-Selected from the authenticated pre-organization defining owner; scientific formulas and qualifications are unchanged.
-"""
+"""A107 primer placement result contracts declarations."""
 from copy import deepcopy
 import hashlib
 from jsonschema import Draft202012Validator, validators

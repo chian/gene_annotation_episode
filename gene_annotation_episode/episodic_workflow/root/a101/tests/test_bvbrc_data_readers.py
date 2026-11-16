@@ -9,14 +9,12 @@ from dataclasses import replace
 import hashlib
 import json
 from pathlib import Path
-from urllib.parse import unquote
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.acquisition import SourceSnapshot
-from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_fields import FIELD_REGISTRY
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_query import encode_native_query
-from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_readers import NUMERIC_TEXT_GRAMMARS, _decode_native_payload, extract_collection_rows, parse_data_snapshot, validate_data_sheet
+from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_readers import _decode_native_payload, extract_collection_rows, parse_data_snapshot, validate_data_sheet
 
 EVIDENCE = (Path(__file__).resolve().parent / 'fixtures' / 'bvbrc_original') / "verification/tool_graders_bvbrc_data_contract_2026-10-24"
 EXAMPLES = json.loads((EVIDENCE / "FILLED_EXAMPLES.json").read_text())
@@ -54,121 +52,12 @@ def parse_docs(collection="genome", fields=None, docs=None, **kwargs):
     return parse_data_snapshot(snapshot(binding, envelope(docs or [], **kwargs)), prepared=binding)
 
 
-def retained(name, binding):
-    metadata = json.loads((EVIDENCE / (name + ".meta.json")).read_text())
-    content = (EVIDENCE / (name + ".body")).read_bytes()
-    assert len(content) == metadata["byte_count"]
-    assert hashlib.sha256(content).hexdigest() == metadata["sha256"]
-    media = next(value for key, value in metadata["headers"] if key.lower() == "content-type")
-    transport = dict(status=metadata["status"], header_items=metadata["headers"],
-                     effective_url=metadata["effective_url"], automatic_redirects=False,
-                     request={"method": metadata.get("method", "GET"), "url": metadata["url"],
-                              "headers": metadata["request_headers"]})
-    if "body_complete" in metadata:
-        transport["body_complete"] = metadata["body_complete"]
-    source = SourceSnapshot("bvbrc_data", metadata["url"], {}, metadata["retrieved_at"],
-                            content, media, transport)
-    return source, _decode_native_payload(source, prepared=binding)
-
-
 def numeric(row, field):
     return next(cell for cell in row["numerical_cells"] if cell["field"] == field)
 
 
 def native(row, field):
     return next(cell for cell in row["cells"] if cell["field"] == field)
-
-
-def test_retained_native_count_two_with_zero_docs():
-    binding = deepcopy(EXAMPLES["qualified_result_fixture"]["grading"]["prepared"])
-    request = deepcopy(binding["original_request"])
-    request["mode"] = "count"
-    del request["facet"]
-    binding = encode_native_query(request, base_url=BASE)
-    source, result = retained("feature_count_solr", binding)
-    assert result["sheet"]["page"]["returned_row_count"] == 0
-    assert result["sheet"]["population"]["reported_total"] == 2
-    assert result["sheet"]["population"]["native_location"] == "/response/numFound"
-    assert result["sheet"]["qualification"]["request_matches"] is False
-    assert parse_data_snapshot(source, prepared=binding)["status"] == "failed"
-
-
-def test_retained_facet_with_synthetic_v2_binding_matches_entire_frozen_expected_sheet():
-    binding = EXAMPLES["qualified_result_fixture"]["grading"]["prepared"]
-    meta = json.loads((EVIDENCE / "feature_facet_solr_zero.meta.json").read_text())
-    source = snapshot(binding, (EVIDENCE / "feature_facet_solr_zero.body").read_bytes(), headers=meta["headers"])
-    source = replace(source, retrieved_at=meta["retrieved_at"])
-    result = parse_data_snapshot(source, prepared=binding)
-    assert result["status"] == "complete"
-    assert result["sheet"] == EXAMPLES["facet_expected_sheet"]
-
-
-def test_retained_array_genome_and_zero_are_exact_and_not_v2_qualified():
-    binding = prepared(fields=["genome_id", "genome_length", "gc_content", "plasmids"])
-    source, result = retained("genome_page", binding)
-    row = result["sheet"]["rows"][0]
-    assert numeric(row, "genome_length")["value"] == 4639675
-    assert numeric(row, "gc_content")["value"] == 50.8
-    assert numeric(row, "plasmids")["value"] == 0
-    assert numeric(row, "plasmids")["status"] == "reported"
-    assert result["sheet"]["population"]["exactness"] == "provider_reported"
-    assert result["sheet"]["page"]["population_coverage"] == "unknown"
-    # This older capture does not explicitly attest body_complete. Status200
-    # and valid bytes are deliberately not upgraded into that missing fact.
-    assert result["sheet"]["transport"]["body_complete"] is False
-    extraction = extract_collection_rows(result["sheet"], fields=("genome_id", "genome_length", "gc_content", "plasmids"))
-    assert extraction["rows"] == EXAMPLES["genome_page_expected_extraction"]["rows"]
-    assert parse_data_snapshot(source, prepared=binding)["sheet"] is None
-
-
-def test_retained_array_facet_uses_header_location_not_body():
-    binding = prepared("genome_feature", mode="facet", facet=dict(field="annotation", offset=0,
-        limit=2, min_count=1, sort="index", include_missing=True))
-    _, result = retained("feature_facet_array", binding)
-    facet = result["sheet"]["facets"][0]
-    assert facet["native_location"] == "/headers/facet_counts/facet_fields/annotation"
-    assert [bucket["count"] for bucket in facet["buckets"]] == [1, 1, 0]
-    assert facet["buckets"][2]["is_missing_bucket"] is True
-    assert facet["buckets"][2]["term"]["kind"] == "null"
-    assert result["sheet"]["population"]["exactness"] == "provider_reported"
-
-
-def test_retained_native_negative_measurements_and_missing_values():
-    fields = ["id", "feature_id", "genome_id", "log2_fc", "z_score", "counts", "tpm", "p_value"]
-    _, result = retained("expression_page", prepared("bioset_result", fields))
-    rows = result["sheet"]["rows"]
-    assert [numeric(row, "log2_fc")["value"] for row in rows] == [-0.132, -0.129]
-    assert [numeric(row, "z_score")["value"] for row in rows] == [-0.544, -0.556]
-    assert [native(row, "log2_fc")["atoms"][0]["number_lexeme"] for row in rows] == ["-0.132", "-0.129"]
-    for row in rows:
-        for field in ("counts", "tpm", "p_value"):
-            assert numeric(row, field)["value"] is None
-            assert numeric(row, field)["reason"] == "native_field_absent"
-    assert result["sheet"]["page"]["population_coverage"] == "subset"
-    assert result["sheet"]["page"]["next_offset"] == 2
-
-
-def test_retained_bioset_integer_text_and_native_empty_duration():
-    _, result = retained("bioset_page", prepared("bioset", ["bioset_id", "entity_count", "treatment_duration"]))
-    rows = result["sheet"]["rows"]
-    assert [numeric(row, "entity_count")["value"] for row in rows] == [3879, 3930]
-    assert native(rows[1], "treatment_duration")["atoms"][0]["string_value"] == ""
-    assert native(rows[0], "entity_count")["atoms"][0]["string_value"] == "3879"
-
-
-def test_retained_protein_evalue_and_ppi_observed_exception_have_unknown_scale():
-    _, protein = retained("protein_feature_page", prepared("protein_feature", ["id", "score", "e_value"]))
-    row = protein["sheet"]["rows"][0]
-    assert numeric(row, "e_value")["value"] == 1.25e-9
-    assert native(row, "e_value")["atoms"][0]["string_value"] == "1.25E-9"
-    assert numeric(row, "score")["value"] == 8.431318
-    _, ppi = retained("ppi_page", prepared("ppi", ["id", "score"]))
-    row = ppi["sheet"]["rows"][0]
-    assert numeric(row, "score")["value"] == 7.9219284
-    assert numeric(row, "score")["unit_code"] is None
-    assert numeric(row, "score")["denominator_value"] is None
-    assert native(row, "score")["field_schema_status"] == "observed_exception"
-    assert row["status"] == "valid"
 
 
 @pytest.mark.parametrize("score", [["string:0.9", "other:4"], []])

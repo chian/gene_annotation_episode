@@ -2,8 +2,6 @@
 
 from collections import UserDict
 from copy import deepcopy
-import json
-from pathlib import Path
 from types import MappingProxyType
 
 import pytest
@@ -12,9 +10,6 @@ from gene_annotation_episode.episodic_workflow.root.infernal_result_presentation
 
 
 NATIVE_VERSION = "native_infernal_observation_v1"
-SAVED_CONTEXT = (
-    Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/native_infernal_episode/scientific-decision-6.json"
-)
 
 
 def native_observation(program="cmsearch"):
@@ -160,32 +155,3 @@ def test_rejects_non_mapping_context(context):
         infernal_receiver_context(context)
 
 
-def test_saved_actual_context_preserves_only_the_requested_measurements():
-    saved = json.loads(SAVED_CONTEXT.read_text())
-    original = saved["context"]
-    if isinstance(original, str):
-        original = json.loads(original)
-    before = deepcopy(original)
-    observations = original["working_state"]["observations"]
-    assert len(observations) == 1
-    assert observations[0]["native_infernal"]["version"] == NATIVE_VERSION
-    assert len(observations[0]["measurements"]) == 10
-    requested_row = original["child_reports"][1]["rows"][0]
-    assert requested_row["measurements"] == [{"name": "bitscore", "value": 71.4}]
-    assert requested_row["observation_ref"] == observations[0]["id"]
-
-    expected = deepcopy(original)
-    expected["working_state"]["observations"] = []
-    projected = infernal_receiver_context(original)
-    repeated = infernal_receiver_context(projected)
-
-    assert projected == expected
-    assert repeated == projected
-    assert repeated is not projected
-    assert repeated["working_state"] is not projected["working_state"]
-    assert repeated["child_reports"] is not projected["child_reports"]
-    assert projected["child_reports"] == original["child_reports"]
-    assert original == before
-    repeated["child_reports"][1]["rows"][0]["measurements"][0]["value"] = 0.0
-    assert projected == expected
-    assert original == before

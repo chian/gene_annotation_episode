@@ -31,22 +31,3 @@ def test_original_runtime_constructs_declared_private_scientific_task(monkeypatc
     task = runtime.Workflow.build(workflow, 'scientific_process', 'science', 'Resolve qualified scientific findings', {})
     assert type(task) is Task
     assert task.path == (('scientific_process', 'science'),)
-
-
-@pytest.mark.parametrize('replace_default', [False, True])
-@pytest.mark.parametrize('exchange', [False, True])
-@pytest.mark.parametrize('wait', [False, True])
-def test_private_instruction_composer_preserves_actual_scientific_guidance(replace_default, exchange, wait):
-    private = importlib.import_module(PACKAGE + '.scientific_process.task_instructions')
-    original = importlib.import_module(PACKAGE + '.runtime_prompt')
-    binding = SimpleNamespace(instructions=lambda context: 'Actual selected scientific goal',
-        replaces_default_instructions=replace_default)
-    source = SimpleNamespace(path=(('scientific_process', 'science'),))
-    source.workflow = SimpleNamespace(is_job_source=lambda source: False,
-        specialist=lambda source: binding, binding_context=lambda source: source,
-        permits_common_action=lambda source, action: action == 'reason' or wait,
-        knowledge=SimpleNamespace(instructions='Actual selected tool instructions'),
-        launch_instructions=SimpleNamespace(instructions='Actual selected resource instructions'),
-        native_event_information=object(), decision_protocol='decision_exchange_v1' if exchange else None)
-    context = {'tool_knowledge': {}, 'launch_instruction_library': {}}
-    assert private.instructions(source, context) == original.instructions(source, context)

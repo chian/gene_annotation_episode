@@ -1,7 +1,6 @@
 """Bound operation declarations do not acquire data or grant direct execution."""
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
-import json
-from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -33,7 +32,7 @@ def test_configured_catalog_has_exact_owners_without_query_or_execution(tmp_path
         'uniprot': {'kind': 'api', 'service': 'uniprot'},
         'bvbrc': {'kind': 'api', 'service': 'bvbrc_data'},
         'local': {'kind': 'local', 'workspace': str(tmp_path/'work'),
-            'policy': {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}}
+            'policy': {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}}}
     with Store(tmp_path/'store') as store:
         owner = binding(store, resources)
         for service in owner.api_execution.services.values():
@@ -119,52 +118,3 @@ def test_hmmer_declaration_is_an_independent_copy():
         hmmer_operation_catalog('annotation')
 
 
-def _native_request(label):
-    root = Path(__file__).resolve().parents[4]
-    return json.loads((Path(__file__).parent / 'fixtures/native_hmmer_producer/runs'/
-        label/'plan.json').read_text())['requested_job']
-
-
-def _native_resource(workspace, request):
-    return {'kind': 'local', 'workspace': str(workspace), 'policy': {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3},
-        'native_hmmer': [{key: deepcopy(request['native_hmmer'][key])
-            for key in ('program', 'mode', 'software')}]}
-
-
-def test_distinct_bound_native_modes_preserve_resource_specific_instructions(tmp_path):
-    from jsonschema import Draft202012Validator
-    requests = {name: _native_request('nhmmer_'+name+'_ordinary') for name in ('sequence', 'profile')}
-    resources = {name: _native_resource(tmp_path/name, request) for name, request in requests.items()}
-    with Store(tmp_path/'store') as store:
-        owner = binding(store, resources)
-        row, = [row for row in owner.resource_tool_contracts() if row['name'] == 'native.nhmmer']
-        assert row['resources'] == 'local'
-        assert len(row['invocation_route']['routes']) == 2
-        assert 'Resource sequence:\nMode sequence:' in row['instructions']
-        assert 'Resource profile:\nMode profile:' in row['instructions']
-        assert all(Draft202012Validator(row['input_schema']).is_valid(request) for request in requests.values())
-        for name, request in requests.items():
-            schema = owner._request_schema(name, selected=True)['properties']['requested_job']
-            assert Draft202012Validator(schema).is_valid(request)
-            other = requests['profile' if name == 'sequence' else 'sequence']
-            assert not Draft202012Validator(schema).is_valid(other)
-
-
-def test_native_launch_map_supplies_resource_identity_without_rewriting_request(tmp_path):
-    request = _native_request('hmmscan_search_ordinary')
-    workspace = tmp_path/'project'
-    workspace.mkdir()
-    assignment = {'version': 'practical_assignment_v1', 'assignment_id': 'omitted-resource-in-map',
-        'resource_kind': 'local', 'workspace': str(workspace), 'endpoint': 'usable_handoff',
-        'requested_job': request, 'progress_requirements': [{'key': 'handoff', 'credit': 1,
-            'predicate': {'kind': 'requested_job_handoff'}}], 'completion_keys': ['handoff'],
-        'initial_context': {'revision': 0, 'cwd': str(workspace), 'environment': {}},
-        'inventory_snapshot': {}, 'constraints': {}}
-    with Store(tmp_path/'store') as store:
-        owner = binding(store, {'here': _native_resource(workspace, request)})
-        launch = {'version': 'execution_launch_assignment_v1', 'requests': {'here': assignment},
-            'immutable_input_versions': [], 'constraints': {}}
-        assert owner._launch(launch) == launch
-        assert 'resource_id' not in assignment
-        assert owner._validate_request({**assignment, 'resource_id': 'here'})['resource_id'] == 'here'
-        assert not list(workspace.rglob('native.json'))
