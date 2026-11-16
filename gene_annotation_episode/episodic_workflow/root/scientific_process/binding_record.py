@@ -3,20 +3,7 @@ from .source_contracts import (Mapping, deepcopy, hashlib, inspect, json, Path, 
 
 class ScientificBindingRecord:
     def as_record(self):
-        from .definition_inputs import (DEFINITION_FILES, OPTIONAL_WORK_REPORT_FILES,
-            INFORMATION_PROFILE_FILES)
-        root = Path(__file__).parents[4]
-        files = DEFINITION_FILES
-        # Preserve the original optional report and information-profile branches.
-        files = (*files, *(name for name in OPTIONAL_WORK_REPORT_FILES
-            if (root / name).is_file()))
-        if self._contract_information_profile is not None:
-            files = (*files, *INFORMATION_PROFILE_FILES)
-        implementation = scientific_digest({name: hashlib.sha256(
-            (root / name).read_bytes()).hexdigest()
-            for name in files})
-        return {"version": VERSION, "binding_id": ROLE,
-            "implementation_sha256": implementation, "configuration": {
+        return {"version": VERSION, "binding_id": ROLE, "configuration": {
                 "library": deepcopy(self._library_record),
                 "tool_library": deepcopy(self._tools_record),
                 "child_roles": list(self._child_roles),

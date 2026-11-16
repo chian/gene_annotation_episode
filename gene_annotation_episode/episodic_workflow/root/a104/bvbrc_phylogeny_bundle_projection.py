@@ -8,9 +8,7 @@ separate contracts module and do not invoke this calculation path.
 from __future__ import annotations
 
 from copy import deepcopy
-import hashlib
 import json
-from pathlib import Path
 
 from . import bvbrc_phylogeny_bundle_contracts as c
 from . import bvbrc_phylogeny_bundle_resolution as r
@@ -28,24 +26,6 @@ DIAGNOSTIC_CODES = frozenset({
     "phylogeny_provider_extraction_invalid", "phylogeny_provider_calculation_invalid",
     "phylogeny_adapter_operands_invalid", "phylogeny_unregistered_diagnostic",
 })
-_DEPENDENCIES = (
-    "bvbrc_phylogeny_bundle_contracts.py", "bvbrc_phylogeny_bundle_resolution.py", "bvbrc_phylogeny_bundle_projection.py",
-    "bvbrc_gene_tree_bundle_adapter.py", "bvbrc_codon_tree_bundle_adapter.py",
-    "bvbrc_phylogeny_common_inputs.py", "bvbrc_phylogeny_common_contracts.py", "bvbrc_phylogeny_common_grader.py",
-    "bvbrc_gene_tree_inputs.py", "bvbrc_gene_tree_grader.py", "bvbrc_codon_tree_inputs.py", "bvbrc_codon_tree_grader.py",
-    "phylogeny_formats.py", "phylogeny_format_contracts.py", "phylogeny_raxml_inputs.py",
-    "phylogeny_calculation_contracts.py", "phylogeny_calculators.py", "bvbrc_codon_tree_native.py",
-    "bvbrc_codon_tree_calculators.py", "bvbrc_appservice_contracts.py", "bvbrc_appservice_schemas.json",
-)
-
-
-def implementation_sha256():
-    """Configuration-only hash of actual code/assets with length framing."""
-    result = hashlib.sha256()
-    for name in sorted(_DEPENDENCIES):
-        content = Path(__file__).with_name(name).read_bytes()
-        result.update(name.encode() + b"\0" + str(len(content)).encode() + b"\0" + content)
-    return result.hexdigest()
 
 
 def _one(rows, **keys):
@@ -457,4 +437,4 @@ def consume_bundle(bundle, *, artifact_bytes, supplied_values, requested_form, p
     return output
 
 
-__all__ = ["consume_bundle", "implementation_sha256"]
+__all__ = ["consume_bundle"]

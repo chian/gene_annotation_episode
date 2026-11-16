@@ -1,13 +1,11 @@
 """Private A104 binding record."""
 from __future__ import annotations
-from .contracts import VERSION, _AXIS_DIRECTORY, _binding_source_bytes, deepcopy, hashlib, json
+from .contracts import VERSION, deepcopy
 
 class LiteratureBindingRecord:
 
     def as_record(self):
         """Record only A104's own literature binding and retained local files."""
-        from gene_annotation_episode.episodic_workflow.root.a104.library.source_descriptor_inputs import implementation_bytes
-        implementation = implementation_bytes(self.binding_path)
         configuration = {'outcome_page_size': self.outcome_page_size}
         for name in ('rate_population', 'compiled_assay_population', 'assay_grading_population'):
             if getattr(self, name):
@@ -37,8 +35,6 @@ class LiteratureBindingRecord:
             configuration.update(ratio_source_population=True, ratio_source_evidence_origin=self.ratio_source_evidence_origin)
         if self.controlled_response_population:
             configuration.update(controlled_response_population=True, controlled_response_descriptor=deepcopy(self._controlled_response_descriptor), controlled_response_evidence_origin=self.controlled_response_evidence_origin)
-            implementation += json.dumps(self._controlled_response_descriptor, sort_keys=True, separators=(',', ':'), allow_nan=False).encode('utf8')
         if self.gel_population:
             configuration.update(gel_population=True, gel_descriptor=deepcopy(self._gel_descriptor), gel_evidence_origin=self.gel_evidence_origin)
-            implementation += json.dumps(self._gel_descriptor, sort_keys=True, separators=(',', ':'), allow_nan=False).encode('utf8')
-        return {'version': VERSION, 'binding_id': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'implementation_sha256': hashlib.sha256(implementation).hexdigest(), 'configuration': configuration}
+        return {'version': VERSION, 'binding_id': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'configuration': configuration}

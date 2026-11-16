@@ -1,11 +1,5 @@
-"""Identity of all actual private homology responsibilities and task files."""
-import hashlib
-from pathlib import Path
-from gene_annotation_episode.execution_contracts import canonical
+"""Record of the actual private homology binding and its configuration."""
 from gene_annotation_episode.episodic_workflow.root.library.homology_episode_contracts import _binding
 
 def as_record(self):
-    root = Path(__file__).resolve().parents[1]
-    paths = ('homology_result_acquisition/configuration.py', 'homology_result_acquisition/credit.py', 'homology_result_acquisition/from_parent.py', 'homology_result_acquisition/goal.py', 'homology_result_acquisition/homology_operations.py', 'homology_result_acquisition/to_parent.py', 'homology_result_acquisition/episode.py', 'homology_result_acquisition/binding_identity.py', 'homology_result_acquisition/task.py', 'homology_result_acquisition/task_state.py', 'homology_result_acquisition/task_protocol.py', 'homology_result_acquisition/task_decision.py', 'homology_result_acquisition/task_instructions.py', 'homology_result_acquisition/task_actions.py', 'homology_result_acquisition/task_report.py', 'library/homology_episode_contracts.py', 'library/homology_custody.py', 'library/homology_custody_configuration.py', 'library/homology_received_records.py', 'library/homology_native_events.py', 'library/homology_episode_family.py', 'library/monitoring_credit.py', 'homology_result_acquisition/internal_summary.py', 'homology_result_acquisition/yield_estimator.py', 'homology_result_acquisition/waiting.py', '../../execution_contracts.py', 'execution_recording.py', 'native_measurement.py', 'native_events.py')
-    hashes = {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in paths}
-    return {'version': 'root_private_homology_v1', 'binding_id': 'job_results', 'implementation_sha256': hashlib.sha256(canonical(hashes).encode()).hexdigest(), 'registry_directory': str(self.jobs.directory), 'registry_configuration': self.jobs.config, 'parser_policy': self.parser_policy.to_dict(), 'credit_binding': self.binding_for('job_results'), 'credit_calculator': _binding(self.monitoring_projector if 'job_results' == 'job_monitor' else self._job_credit_calculator), 'statistics': None if self.statistics is None else self.statistics.as_record()}
+    return {'version': 'root_private_homology_v1', 'binding_id': 'job_results', 'registry_directory': str(self.jobs.directory), 'registry_configuration': self.jobs.config, 'parser_policy': self.parser_policy.to_dict(), 'credit_binding': self.binding_for('job_results'), 'credit_calculator': _binding(self.monitoring_projector if 'job_results' == 'job_monitor' else self._job_credit_calculator), 'statistics': None if self.statistics is None else self.statistics.as_record()}

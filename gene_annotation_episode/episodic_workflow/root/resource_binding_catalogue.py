@@ -226,13 +226,8 @@ def saved_family(descriptors):
             {'resource_adapters', 'contract_information_profile'}
             or not isinstance(configuration['resource_adapters'], list)):
         raise ValueError('resource_saved_configuration_required')
-    fingerprint = selected[0].get('implementation_sha256')
-    if (not isinstance(fingerprint, str) or len(fingerprint) != 64
-            or any(character not in '0123456789abcdef' for character in fingerprint)):
-        raise ResourceDescriptorMismatch('resource_saved_implementation_required', entries[0][2])
     for record, (_, _, identifier) in zip(selected, entries):
-        expected = {'binding_id': identifier, 'version': identifier + '_v1',
-                    'implementation_sha256': fingerprint, 'configuration': configuration}
+        expected = {'binding_id': identifier, 'version': identifier + '_v1', 'configuration': configuration}
         if canonical(record) != canonical(expected):
             raise ResourceDescriptorMismatch('resource_saved_family_conflict', identifier)
     return tuple(selected)

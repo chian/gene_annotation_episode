@@ -37,6 +37,7 @@ class LaunchTaskChecks:
             problem = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')
             scope = {'subject_refs': problem['subject_refs']}
             journal = self.module('episode_journal').Journal(store, run_id)
+            self.module('episode_completion').CompletionLedger(store, journal)
             options = dict(store=store, run_id=run_id, directory=tmp_path,
                 resources=r, commissions={'commission': c})
             owner_binding = self.module(owner_home+'/episode').HPCEpisode(services, **options)

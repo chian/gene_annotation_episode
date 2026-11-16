@@ -23,7 +23,6 @@ from .rna_structure_comparison_contracts import (
 
 # Accepted 362/addendum001 generation proof, not a native array observation.
 _RECOGNIZED_SOFTWARE = {
-    "worker_source_sha256": "d1c2e045856aa235e14ef5e7807139243e4e184d26d5978ce046726269f9d0c7",
     "rna_module_sha256": "3d136533fd55f2ca6bb4cbb7428004b5da2e79c8cee53aef76c6662624d91946",
     "rna_extension_sha256": "451e5ac69fba96b9d9a0640d1311b844962a1f97143d050446ebd459dfd0494d",
     "viennarna_distribution_version": "2.7.0",

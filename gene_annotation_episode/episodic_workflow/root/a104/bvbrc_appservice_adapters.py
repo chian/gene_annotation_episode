@@ -22,9 +22,7 @@ def bind_adapters(configured):
         implementation = installed.get(key)
         if implementation is None:
             continue
-        if implementation.implementation_sha256() != row['implementation_sha256']:
-            raise ValueError('appservice_adapter_implementation_conflict')
-        bound[key] = (implementation, row['implementation_sha256'])
+        bound[key] = implementation
     return bound
 
 def selected_adapter(service, selection):

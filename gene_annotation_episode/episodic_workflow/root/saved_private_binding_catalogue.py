@@ -6,7 +6,6 @@ choose an axis, authorize a commission, or replace private scientific validators
 from __future__ import annotations
 
 from copy import deepcopy
-import hashlib
 import json
 from pathlib import Path
 
@@ -40,30 +39,10 @@ def _same(left, right):
 
 
 def catalogue_source_record():
-    """A broad real source operand, not a claim of executed dependency closure."""
-    root = Path(__file__).resolve().parents[3]
-    application = root / 'gene_annotation_episode'
-    files = sorted(path for package in ('gene_annotation_episode', 'method_loop')
-                   for path in (root / package).rglob('*.py'))
-    required = {Path(__file__).resolve(),
-        application / 'episodic_workflow/root/method_loop/__init__.py',
-        application / 'episodic_workflow/root/commissioned_reopening.py',
-        application / 'episodic_workflow/root/private_episode_selection.py'}
-    required.update(application / 'episodic_workflow/root/a105' / (path + '/episode.py') for path in PATHS)
-    if not application.is_dir() or not files or not required.issubset(set(files)):
-        raise _failure('unavailable_binding', 'root_saved_private_catalogue_sources')
-    sources, stream = {}, hashlib.sha256()
-    for path in files:
-        relative = str(path.relative_to(root))
-        sha = hashlib.sha256(path.read_bytes()).digest()
-        sources[relative] = sha.hex()
-        stream.update(relative.encode('utf-8') + b'\0')
-        stream.update(sha)
+    """The literal constructors of the saved tree."""
     return {'version': VERSION, 'owner': OWNER, 'binding_paths': list(PATHS),
         'head_constructor': HEAD_CONSTRUCTOR, 'tree_constructor': TREE_CONSTRUCTOR,
-        'library_constructor': LIBRARY_CONSTRUCTOR, 'tool_library_constructor': TOOLS_CONSTRUCTOR,
-        'source_identity_kind': 'original_package_python_source_stream_including_tests',
-        'sources': sources, 'implementation_sha256': stream.hexdigest()}
+        'library_constructor': LIBRARY_CONSTRUCTOR, 'tool_library_constructor': TOOLS_CONSTRUCTOR}
 
 
 def _rows(descriptors, records):
@@ -77,7 +56,7 @@ def _rows(descriptors, records):
         raise _failure('identity_conflict', 'episode_binding_owners')
     for path, descriptor in zip(PATHS, descriptors):
         if (type(descriptor) is not dict or set(descriptor) !=
-                {'version', 'binding_id', 'implementation_sha256', 'configuration'}
+                {'version', 'binding_id', 'configuration'}
                 or descriptor['binding_id'] != path
                 or type(descriptor['configuration']) is not dict):
             raise _failure('identity_conflict', path)
@@ -143,7 +122,7 @@ def validate_saved_catalogue(settings):
         raise _failure('identity_conflict', 'episode_binding_catalogue')
     descriptors, records = _rows(settings.get('episode_bindings'), records)
     if not _same(catalogue['source'], catalogue_source_record()):
-        raise _failure('identity_conflict', 'root_saved_private_catalogue_sources')
+        raise _failure('identity_conflict', 'root_saved_private_catalogue_constructors')
     assets = _copy(catalogue['assets'])
     if type(assets) is not dict or set(assets) != {'library_directory', 'tool_library_directory'}:
         raise _failure('identity_conflict', 'original_private_library_locations')

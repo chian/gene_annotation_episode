@@ -49,7 +49,7 @@ class DirectionalDriver(ProteomeDriver):
         self.saved, self.store = SavedRecords(store), store
         self.config = deepcopy(CONFIG)
         self.config['scientific_adapters'] = [{'adapter_id': adapter.ADAPTER_ID,
-            'adapter_version': adapter.ADAPTER_VERSION, 'implementation_sha256': adapter.implementation_sha256()}]
+            'adapter_version': adapter.ADAPTER_VERSION}]
         self.family = ExecutionEpisodes(None, store=store, directory=directory, run_id=self.saved.run_id,
             resources={'selected-api': self.config}, initial_information={},
             tool_registry=SimpleNamespace(store=store, clients={}), handoff_unit=2, acquired_record_unit=3,
@@ -141,7 +141,7 @@ def test_all_fourteen_actual_sources_reach_own_frozen_admitted_and_forwarded_ret
     d.acquire_manifest()
     body = d.acquire_native()
     assert d.frozen_assignment == plain(d.context.assignment)
-    assert d.service.scientific_adapters[('bvbrc_proteome', '2')][0] is adapter
+    assert d.service.scientific_adapters[('bvbrc_proteome', '2')] is adapter
     assert d.store.get_artifact(d.native['value']['artifact']['raw_artifact_ref']) == native('2221')
     host = d.api.appservice.facts(d.context)
     own = d.family.facts(d.context, {})
@@ -201,7 +201,7 @@ def test_saved_parent_return_replay_performs_no_scientific_construction(driver, 
     assert [dict(row) for row in d.store.db.execute('SELECT * FROM runtime_actions ORDER BY episode_id,decision_index')] == before
 
 
-def test_owner_version_and_original_pin_remain_required(driver):
+def test_owner_version_remains_required(driver):
     d = driver
     d.start(fields={'decimal': selected_fields()['decimal']})
     d.acquire_manifest(); d.acquire_native()
@@ -211,6 +211,6 @@ def test_owner_version_and_original_pin_remain_required(driver):
     original = deepcopy(configuration)
     try:
         configuration[0]['adapter_version'] = '1'
-        with pytest.raises(ValueError, match='appservice_publication_adapter_configuration_conflict'): d.api.proteome_returns.facts(d.context, d.schema)
+        with pytest.raises(ValueError, match='original_adapter_pin_conflict'): d.api.proteome_returns.facts(d.context, d.schema)
     finally:
         configuration[:] = original

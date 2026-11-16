@@ -18,30 +18,6 @@ VERSION = 'episode_runtime_binding_v1'
 FACTORY_MODULE = 'gene_annotation_episode.episodic_workflow.root.commissioned_reopening'
 FACTORY_NAME = 'open_commission'
 
-def implementation_sha256():
-    """Identity of the implementation imported by this executable binding.
-
-    Relative names participate so moving an unchanged pinned checkout is safe.
-    All Python source under the actual original package roots participates,
-    including tests. This broad source identity is not an executed-closure proof.
-    """
-    root = Path(__file__).resolve().parents[3]
-    application = root / 'gene_annotation_episode'
-    if not application.is_dir():
-        raise _failure('unavailable_binding', str(application))
-    files = sorted(path for package in ('gene_annotation_episode', 'method_loop')
-                   for path in (root/package).rglob('*.py'))
-    required = {Path(__file__).resolve(),
-        application / 'episodic_workflow' / 'root' / 'method_loop' / '__init__.py'}
-    if not files or not required.issubset(set(files)):
-        raise _failure('unavailable_binding', 'original_application_source_membership')
-    digest = hashlib.sha256()
-    for path in files:
-        digest.update(str(path.relative_to(root)).encode('utf-8') + b'\0')
-        digest.update(hashlib.sha256(path.read_bytes()).digest())
-    return digest.hexdigest()
-
-
 def make_runtime_binding(workspace, run_dir, *, kind='standard_default', tool_configuration=None):
     """Pin a supported caller reconstruction, without starting any Episode.
 
@@ -85,7 +61,7 @@ def make_runtime_binding(workspace, run_dir, *, kind='standard_default', tool_co
     # Finite JSON is the only persisted argument representation.
     arguments = json.loads(canonical(arguments))
     return {'factory_module': FACTORY_MODULE, 'factory_name': FACTORY_NAME, 'arguments': arguments,
-        'implementation_sha256': implementation_sha256(), 'settings_sha256': content_digest(settings)}
+        'settings_sha256': content_digest(settings)}
 
 
 def _check_assignment(store, spec):
@@ -158,8 +134,6 @@ async def open_commission(spec):
                              'tool_configuration', 'caller_binding_pins'}
             or args['version'] != VERSION or args['kind'] not in {'fixed_case', 'standard_default'}):
         raise _failure('unavailable_binding', handle)
-    if binding['implementation_sha256'] != implementation_sha256():
-        raise _failure('identity_conflict', handle)
     workspace, directory = (Path(args[name]).expanduser().resolve() for name in ('workspace', 'run_directory'))
     if not (workspace/'state.sqlite3').is_file():
         raise _failure('unavailable_binding', str(workspace))
@@ -334,4 +308,4 @@ def receiver_snapshot(spec):
 
 open_commission.receiver_snapshot = receiver_snapshot
 
-__all__ = ['make_runtime_binding', 'open_commission', 'implementation_sha256', 'VERSION']
+__all__ = ['make_runtime_binding', 'open_commission', 'VERSION']

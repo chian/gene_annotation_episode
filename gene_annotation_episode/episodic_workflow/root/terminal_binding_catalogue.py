@@ -196,34 +196,7 @@ def factory_configuration(factory, recorded):
 
 
 def source_record():
-    """Real broad package stream including tests; not executed-closure proof."""
-    import hashlib
-    from pathlib import Path
-    root = Path(__file__).resolve().parents[3]
-    application = root / 'gene_annotation_episode'
-    files = sorted(path for package in ('gene_annotation_episode', 'method_loop')
-                   for path in (root / package).rglob('*.py'))
-    owner = application / 'episodic_workflow/root'
-    required = {Path(__file__).resolve(), owner / 'method_loop/__init__.py',
-        owner / 'root_operational_selection.py', owner / 'root_binding_selection.py',
-        owner / 'workflow_setup.py', owner / 'episode_bindings.py',
-        owner / 'episode_composition.py', owner / 'run_execution.py',
-        owner / 'saved_private_binding_catalogue.py', owner / 'saved_binding_reconstruction.py',
-        owner / 'commissioned_reopening.py', application / 'practical_service_setup.py'}
-    for home in (entry[3] for entry in PARENT_ENTRIES):
-        required.update(owner / home / (name + '.py') for name in (
-            'credit', 'decision_guidance', 'episode', 'execution_persistence', 'execution_state', 'from_parent', 'goal', 'instructions', 'internal_summary', 'operations', 'report_fields', 'report_references', 'task', 'task_action_outcomes', 'task_decision', 'task_instructions', 'task_protocol', 'task_state', 'to_parent', 'waiting', 'yield'))
-    required.add(owner / 'library/terminal_command_contract.py')
-    required.add(owner / 'predefined_parent_routes.py')
-    if not application.is_dir() or not files or not required.issubset(set(files)):
-        raise ValueError('root_terminal_catalogue_source_required')
-    sources, stream = {}, hashlib.sha256()
-    for path in files:
-        relative = str(path.relative_to(root))
-        digest = hashlib.sha256(path.read_bytes()).digest()
-        sources[relative] = digest.hex()
-        stream.update(relative.encode('utf-8') + b'\0')
-        stream.update(digest)
+    """The literal constructors of the fixed terminal group."""
     return {'version': CATALOGUE_VERSION, 'owner': OWNER,
         'constructors': [
             'gene_annotation_episode.episodic_workflow.root.local_job_execution.episode.LocalEpisodeBinding',
@@ -231,9 +204,7 @@ def source_record():
             'gene_annotation_episode.episodic_workflow.root.legacy_annotation.local_job_execution.episode.LocalEpisodeBinding',
             'gene_annotation_episode.episodic_workflow.root.legacy_annotation.hpc_job_execution.episode.HPCEpisodeBinding',
             'gene_annotation_episode.episodic_workflow.root.scientific_process.local_job_execution.episode.LocalEpisodeBinding',
-            'gene_annotation_episode.episodic_workflow.root.scientific_process.hpc_job_execution.episode.HPCEpisodeBinding'],
-        'source_identity_kind': 'original_package_python_source_stream_including_tests',
-        'sources': sources, 'implementation_sha256': stream.hexdigest()}
+            'gene_annotation_episode.episodic_workflow.root.scientific_process.hpc_job_execution.episode.HPCEpisodeBinding']}
 
 
 def catalogue_for_fixed_registry(registry):

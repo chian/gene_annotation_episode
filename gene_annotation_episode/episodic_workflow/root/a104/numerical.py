@@ -1,6 +1,6 @@
 """Template-derived yield estimation and a plain continuation controller.
 
-The exact nano-graphrag source is vendored with its MIT license and SHA-256.
+The exact nano-graphrag source is vendored with its MIT license.
 The completed real-score quasi-likelihood adapter comes from the supplied
 orbital template. Raw credit marks are fitted against measured progress-receipt
 times. Signed corrections use paired gain/loss marks at the SAME real times:
@@ -36,7 +36,6 @@ STATUS_NORMAL = template.STATUS_NORMAL
 STATUS_INSUFFICIENT = template.STATUS_INSUFFICIENT
 STATUS_UNIDENTIFIABLE = template.STATUS_UNIDENTIFIABLE
 
-SOURCE_SHA256 = "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35"
 SOURCE_REVISION = "60a167f9eeda0c9ea2ca294724174948947baf3f"
 ESTIMATOR_VERSION = "real_time_signed_credit_mark_yield_v2"
 
@@ -82,7 +81,6 @@ def provenance():
         "source_repository": "nano-graphrag",
         "source_path": "question_pipeline/utilities/rarefaction.py",
         "source_revision": SOURCE_REVISION,
-        "source_sha256": SOURCE_SHA256,
         "source_license": "MIT; gene_annotation_episode/episodic_workflow/root/a104/vendor/LICENSE.nano-graphrag",
         "vendored_source": "gene_annotation_episode/episodic_workflow/root/a104/vendor/nano_rarefaction.py",
         "template_estimator": template.INCIDENCE_ESTIMATOR_VERSION,

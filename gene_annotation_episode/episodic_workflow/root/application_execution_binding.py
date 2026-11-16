@@ -48,8 +48,7 @@ def _same(left, right):
 def _runtime_binding(value):
     """The exact C1 runtime_binding shape, without importing its executable."""
     value = _object(value)
-    if set(value) != {'factory_module', 'factory_name', 'arguments',
-                      'implementation_sha256', 'settings_sha256'}:
+    if set(value) != {'factory_module', 'factory_name', 'arguments', 'settings_sha256'}:
         raise ValueError('runtime binding fields must be exact')
     for field in ('factory_module', 'factory_name'):
         name = value[field]
@@ -58,11 +57,10 @@ def _runtime_binding(value):
             raise ValueError('factory references must be module/attribute names')
     if not isinstance(value['arguments'], dict):
         raise ValueError('binding arguments must be a JSON object')
-    for field in ('implementation_sha256', 'settings_sha256'):
-        digest = value[field]
-        if (not isinstance(digest, str) or len(digest) != 64
-                or any(character not in '0123456789abcdef' for character in digest)):
-            raise ValueError('runtime binding digests must be sha256 values')
+    digest = value['settings_sha256']
+    if (not isinstance(digest, str) or len(digest) != 64
+            or any(character not in '0123456789abcdef' for character in digest)):
+        raise ValueError('runtime binding digests must be sha256 values')
     return value
 
 
@@ -140,13 +138,10 @@ def _known_selection(directory, settings, configuration):
             raise _failure('unavailable_binding', 'default_entrypoint')
         kind = 'standard_default'
     return {'mode': 'known', 'kind': kind, 'tool_configuration': configuration,
-        'implementation_sha256': reconstruction.implementation_sha256(),
         'caller_binding_pins': pins}
 
 
 def _check_known_selection(directory, selection):
-    if selection['implementation_sha256'] != reconstruction.implementation_sha256():
-        raise _failure('identity_conflict', 'implementation_sha256')
     for name, expected in selection['caller_binding_pins'].items():
         path = directory/name
         if not path.is_file() or content_digest(_read(path)) != expected:
@@ -161,7 +156,6 @@ def _make_binding(store, directory, selection):
         kind=selection['kind'], tool_configuration=selection['tool_configuration']))
     if (binding['factory_module'] != reconstruction.FACTORY_MODULE
             or binding['factory_name'] != reconstruction.FACTORY_NAME
-            or binding['implementation_sha256'] != selection['implementation_sha256']
             or binding['arguments'].get('kind') != selection['kind']
             or not _same(binding['arguments'].get('tool_configuration'), selection['tool_configuration'])
             or binding['arguments'].get('caller_binding_pins') != selection['caller_binding_pins']):

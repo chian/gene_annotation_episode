@@ -53,8 +53,7 @@ class AppServicePublications:
     @staticmethod
     def _bundle_content_kind(inputs):
         selected = inputs['adapter']
-        if (selected is not None and inputs['adapter_implementation_sha256'] is not None
-                and (selected['adapter_id'], selected['adapter_version']) in {
+        if (selected is not None and (selected['adapter_id'], selected['adapter_version']) in {
                     ('bvbrc_annotation', '1'), ('bvbrc_assembly', '1'), ('bvbrc_variation', '1'),
                     ('bvbrc_influenza_ha', '1'), ('bvbrc_subspecies', '1'), ('bvbrc_tnseq', '1'), ('bvbrc_rnaseq', '1')}):
             return 'application_artifact_bundle'
@@ -140,7 +139,6 @@ class AppServicePublications:
             key=lambda row: int(_origin(row)['operation_key'].rsplit(':', 1)[1]))
         selector = prepared['native_operands']['selector']
         support, evidence = self._dependency_inputs(context, prepared, priors, before)
-        adapter = self._adapter(context, selector['adapter'])
         value = validate_contract('PublicationInputs', {
             'version': 'bvbrc_appservice_publication_inputs_v1',
             'request': prepared['native_operands']['request'], 'selector': selector,
@@ -148,8 +146,7 @@ class AppServicePublications:
             'current_operation': {'name': prepared['operation'], 'arguments': prepared['native_operands']['arguments']},
             'current_snapshot': binding, 'prior_acquisition_receipt_refs': [row['source_ref'] for row in priors],
             'support_receipt_refs': support, 'supplied_evidence': evidence,
-            'adapter': selector['adapter'],
-            'adapter_implementation_sha256': None if adapter is None else adapter[1]})
+            'adapter': selector['adapter']})
         self._validate_inputs(context, prepared, binding, value, key)
         _immutable(path, value)
         return value
@@ -189,13 +186,6 @@ class AppServicePublications:
         selected = value['adapter']
         _require(canonical(selected) == canonical(value['selector']['adapter']),
             'appservice_publication_adapter_conflict')
-        if value['adapter_implementation_sha256'] is not None:
-            target = self.host.read_target(value['original_handoff_ref'], context.scope)
-            configured = self.api.configuration[target['resource_id']]['scientific_adapters']
-            _require(any(row == {'adapter_id': selected['adapter_id'],
-                'adapter_version': selected['adapter_version'],
-                'implementation_sha256': value['adapter_implementation_sha256']} for row in configured),
-                'appservice_publication_adapter_configuration_conflict')
         return value
 
     def _bundle(self, inputs, current):
@@ -213,12 +203,9 @@ class AppServicePublications:
 
     def _grade(self, context, inputs, bundle, origin, stamp, *, current_acquisition):
         """Publish the selected pure calculation within the download action."""
-        if inputs['adapter_implementation_sha256'] is None:
+        implementation = self._adapter(context, inputs['adapter'])
+        if implementation is None:
             return None
-        binding = self._adapter(context, inputs['adapter'])
-        _require(binding is not None and binding[1] == inputs['adapter_implementation_sha256'],
-            'appservice_adapter_implementation_conflict')
-        implementation, _ = binding
         if (inputs['adapter']['adapter_id'], inputs['adapter']['adapter_version']) == ('bvbrc_proteome', '2'):
             implementation.validate_result_selector(inputs['selector'])
         before = int(origin['operation_key'].rsplit(':', 1)[1])
@@ -431,7 +418,7 @@ class AppServicePublications:
                 _require(canonical(_read(retained_adapter)) == canonical({'adapter_result': adapter}),
                     'appservice_adapter_publication_conflict')
             if adapter is not None:
-                _require(inputs['adapter_implementation_sha256'] is not None
+                _require(inputs['adapter'] is not None
                     and (adapter['adapter_id'], adapter['adapter_version']) ==
                         (inputs['adapter']['adapter_id'], inputs['adapter']['adapter_version']),
                     'appservice_adapter_result_identity_conflict')
@@ -556,8 +543,7 @@ class AppServicePublications:
             for row in bundle['artifacts']])
         return digest({'resource_id': task['resource_id'], 'task_id': task['task_id'],
             'representations': sorted(representations, key=canonical),
-            'selector': inputs['selector'], 'adapter': inputs['adapter'],
-            'implementation_sha256': inputs['adapter_implementation_sha256']})
+            'selector': inputs['selector'], 'adapter': inputs['adapter']})
 
 
 __all__ = ['AppServicePublications', 'DATA_PROVIDER', 'RESULT_VERSION']

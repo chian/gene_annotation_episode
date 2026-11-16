@@ -48,7 +48,7 @@ class ProteomeDriver(ProductionDriver):
     def __init__(self, store, directory, *, owners):
         self.saved, self.store = (SavedRecords(store), store)
         self.config = deepcopy(CONFIG)
-        self.config['scientific_adapters'] = [{'adapter_id': adapter.ADAPTER_ID, 'adapter_version': adapter.ADAPTER_VERSION, 'implementation_sha256': adapter.implementation_sha256()}]
+        self.config['scientific_adapters'] = [{'adapter_id': adapter.ADAPTER_ID, 'adapter_version': adapter.ADAPTER_VERSION}]
         self.family = owners[0](None, store=store, directory=directory, run_id=self.saved.run_id, resources={'selected-api': self.config}, initial_information={}, tool_registry=SimpleNamespace(store=store, clients={}), handoff_unit=2, acquired_record_unit=3, log_window_bytes=1024, log_roles=('stdout', 'stderr'))
         self.launch_family = owners[1](None, store=store, directory=directory, run_id=self.saved.run_id, resources={'selected-api': self.config}, initial_information={}, tool_registry=SimpleNamespace(store=store, clients={}), handoff_unit=2, acquired_record_unit=3, log_window_bytes=1024, log_roles=('stdout', 'stderr'))
         self.parent_family = owners[2](None, store=store, directory=directory, run_id=self.saved.run_id, resources={'selected-api': self.config}, initial_information={}, tool_registry=SimpleNamespace(store=store, clients={}), handoff_unit=2, acquired_record_unit=3, log_window_bytes=1024, log_roles=('stdout', 'stderr'))

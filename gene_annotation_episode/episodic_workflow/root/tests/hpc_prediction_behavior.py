@@ -174,6 +174,5 @@ class PredictionBehavior:
         record = child.as_record()
         assert record['binding_id'] == self.binding_path
         assert record['configuration'] == {'resources': resources(), 'commissions': {'commission': c}}
-        assert len(record['implementation_sha256']) == 64
         assert 'fixed reference and validation set cannot change' in child.instructions(context)
         assert 'Unknown inputs stay unknown' in child.instructions(context)

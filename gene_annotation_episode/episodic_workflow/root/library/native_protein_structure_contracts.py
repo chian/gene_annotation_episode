@@ -58,12 +58,10 @@ ScientificRequest: TypeAlias = InspectRequest | ExtractRequest | CompareRequest
 
 class ImplementationFile(TypedDict):
     module: str
-    sha256: str
 
 
 class Software(TypedDict):
     python_executable: str
-    python_sha256: str
     python_version: str
     driver_module: Literal["gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver"]
     worker_module: Literal["gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker"]

@@ -6,7 +6,6 @@ original observations and shared components without parsing or calculation.
 """
 from copy import deepcopy
 import hashlib
-from pathlib import Path
 import re
 
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_annotation_bundle_adapter import _resolve, _record, _diagnostic, _missing
@@ -28,13 +27,6 @@ ADAPTER_VERSION = "1"
 SHEET_VERSION = "bvbrc_influenza_ha_observations_v1"
 COMPONENTS_VERSION = "bvbrc_influenza_ha_retained_components_v1"
 _FORMATS = {"sequence_annotation_tsv": {"tsv"}, "result_alignment_fasta": {"aligned_fasta", "fasta"}}
-_DEPENDENCIES = ("__init__.py", "acquisition.py", "domain.py", "public_configuration.py",
-    "bvbrc_influenza_ha_native.py", "bvbrc_influenza_ha_contracts.py", "bvbrc_influenza_ha_bundle_adapter.py",
-    "bvbrc_annotation_native.py", "bvbrc_annotation_contracts.py", "bvbrc_annotation_bundle_adapter.py",
-    "phylogeny_formats.py", "phylogeny_format_contracts.py", "phylogeny_calculators.py",
-    "phylogeny_calculation_contracts.py", "bvbrc_appservice_contracts.py", "bvbrc_appservice_schemas.json",
-    "alignment_correspondence.py", "sequence_composition_grader.py", "sequence_composition_counts.py",
-    "ucsc_acquisition.py", "data_acquisition_receipts.py")
 _NATIVE_FIELDS = {"version", "document_sha256", "representation", "status", "native_scores",
     "alignment_selection", "alignment_population", "alignment_components", "ungapped_coordinates",
     "query_reference_correspondence", "definitions", "issues"}
@@ -43,23 +35,6 @@ _NATIVE_FIELDS = {"version", "document_sha256", "representation", "status", "nat
 def _require(condition, code="bvbrc_influenza_ha_bundle_invalid"):
     if not condition:
         raise ValueError(code)
-
-
-_ROOT_DEPENDENCIES = frozenset(("alignment_correspondence.py", "bvbrc_annotation_bundle_adapter.py", "bvbrc_annotation_contracts.py", "bvbrc_annotation_native.py", "bvbrc_influenza_ha_bundle_adapter.py", "bvbrc_influenza_ha_contracts.py", "bvbrc_influenza_ha_native.py", "phylogeny_calculation_contracts.py", "phylogeny_calculators.py", "phylogeny_format_contracts.py", "phylogeny_formats.py", "sequence_composition_counts.py", "sequence_composition_grader.py",))
-
-
-def _implementation_path(name):
-    if name in _ROOT_DEPENDENCIES:
-        return Path(__file__).with_name(name)
-    return Path(__file__).resolve().parents[3] / name
-
-
-def implementation_sha256():
-    digest = hashlib.sha256()
-    for name in sorted(_DEPENDENCIES):
-        raw = _implementation_path(name).read_bytes()
-        digest.update(name.encode() + b"\0" + str(len(raw)).encode() + b"\0" + raw)
-    return digest.hexdigest()
 
 
 def _original_task(task):
@@ -307,6 +282,6 @@ def consume_bundle(bundle, *, artifact_bytes, supplied_values, requested_form, p
 
 
 __all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "SHEET_VERSION", "COMPONENTS_VERSION", "VALUE_VERSION",
-    "implementation_sha256", "parameters_schema", "requested_form_schema", "validate_parameters", "validate_requested_form",
+    "parameters_schema", "requested_form_schema", "validate_parameters", "validate_requested_form",
     "selected_field_schema", "validate_selected_field", "consume_bundle", "project_influenza_ha_facts",
     "validate_saved_influenza_ha_facts", "influenza_ha_projection_status"]

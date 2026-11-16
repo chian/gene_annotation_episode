@@ -5,7 +5,7 @@ from collections.abc import Mapping
 _TRACKING = frozenset({
     "run_id", "episode_id", "goal_id", "parent_goal_id", "problem_ref", "record_type",
     "sha256", "digest", "content_sha256", "entry_sha256", "section_sha256",
-    "initial_selection_sha256", "implementation_sha256", "operation_ref", "operation_key",
+    "initial_selection_sha256", "operation_ref", "operation_key",
     "base_revision", "revision", "removed_fields", "created_at", "updated_at",
     "recorded_at", "parser_version", "parse_key", "controller_binding", "credit_binding",
     "parent_history", "parent_yields", "private_history", "history", "private_reasoning",

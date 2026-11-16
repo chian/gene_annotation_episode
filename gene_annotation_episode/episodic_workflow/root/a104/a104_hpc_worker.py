@@ -335,7 +335,7 @@ def main(argv=None):
     request = validate_request(json.loads(raw))
     directory = Path.cwd().resolve()
     result = {'version': VERSION, 'program': 'a104_phylogeny_native', 'completed': False, 'returncode': 1,
-        'case_id': request['case_id'], 'request_sha256': sha(raw), 'worker_sha256': sha(Path(__file__).read_bytes()),
+        'case_id': request['case_id'], 'request_sha256': sha(raw),
         'pbs_job_id': os.environ.get('PBS_JOBID'), 'compute_hostname': socket.gethostname(),
         'platform': platform.platform(), 'analyses': [], 'failure': None}
     started = time.monotonic()

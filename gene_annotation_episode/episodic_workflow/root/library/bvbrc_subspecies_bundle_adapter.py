@@ -1,7 +1,6 @@
 """Selected SubspeciesClassification tables on existing AppService custody."""
 from copy import deepcopy
 import hashlib
-from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_annotation_bundle_adapter import _resolve, _record
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_annotation_native import _canonical, _finite_json
@@ -22,35 +21,9 @@ ADAPTER_VERSION = "1"
 SHEET_VERSION = "bvbrc_subspecies_observations_v1"
 COMPONENTS_VERSION = "bvbrc_subspecies_retained_components_v1"
 _FORMATS = {name: {"tsv"} for name in REPRESENTATIONS}
-_DEPENDENCIES = ("__init__.py", "acquisition.py", "domain.py", "public_configuration.py",
-    "bvbrc_subspecies_native.py", "bvbrc_subspecies_contracts.py", "bvbrc_subspecies_bundle_adapter.py",
-    "bvbrc_assembly_bundle_adapter.py", "bvbrc_assembly_contracts.py", "bvbrc_assembly_native.py",
-    "bvbrc_annotation_bundle_adapter.py", "bvbrc_annotation_native.py", "bvbrc_annotation_contracts.py",
-    "alignment_correspondence.py", "sequence_composition_grader.py", "sequence_composition_counts.py",
-    "ucsc_acquisition.py", "data_acquisition_receipts.py", "bvbrc_appservice_contracts.py",
-    "bvbrc_appservice_schemas.json", "phylogeny_formats.py", "phylogeny_format_contracts.py")
-
-
 def _require(condition, code="bvbrc_subspecies_bundle_invalid"):
     if not condition:
         raise ValueError(code)
-
-
-_ROOT_DEPENDENCIES = frozenset(("alignment_correspondence.py", "bvbrc_annotation_bundle_adapter.py", "bvbrc_annotation_contracts.py", "bvbrc_annotation_native.py", "bvbrc_assembly_bundle_adapter.py", "bvbrc_assembly_contracts.py", "bvbrc_assembly_native.py", "bvbrc_subspecies_bundle_adapter.py", "bvbrc_subspecies_contracts.py", "bvbrc_subspecies_native.py", "phylogeny_format_contracts.py", "phylogeny_formats.py", "sequence_composition_counts.py", "sequence_composition_grader.py",))
-
-
-def _implementation_path(name):
-    if name in _ROOT_DEPENDENCIES:
-        return Path(__file__).with_name(name)
-    return Path(__file__).resolve().parents[3] / name
-
-
-def implementation_sha256():
-    digest = hashlib.sha256()
-    for name in sorted(_DEPENDENCIES):
-        raw = _implementation_path(name).read_bytes()
-        digest.update(name.encode() + b"\0" + str(len(raw)).encode() + b"\0" + raw)
-    return digest.hexdigest()
 
 
 def _saved(sheet, components, parameters):
@@ -217,6 +190,5 @@ def consume_bundle(bundle, *, artifact_bytes, supplied_values, requested_form, p
         missing_requirements=missing, diagnostics=diagnostics)
 
 
-__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "SHEET_VERSION", "COMPONENTS_VERSION", "implementation_sha256",
-    "parameters_schema", "requested_form_schema", "consume_bundle", "project_subspecies_facts",
+__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "SHEET_VERSION", "COMPONENTS_VERSION", "parameters_schema", "requested_form_schema", "consume_bundle", "project_subspecies_facts",
     "validate_saved_subspecies_facts", "subspecies_projection_status"]

@@ -102,24 +102,19 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
         package_root = str(Path(__file__).resolve().parents[4])
         environment["PYTHONPATH"] = package_root + os.pathsep + environment.get("PYTHONPATH", "")
         implementation_files = _molecular_implementation_files(operation)
-        python = dict(path=sys.executable, sha256=hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest())
+        python = dict(path=sys.executable)
         selected = dict(version="ordinary_molecular_execution_v1",
             command=command(python["path"]),
             cwd=str(owned), environment=environment, policy=policy.to_dict(), request=payload,
             python=python,
-            implementation_files=[dict(path=str(p.resolve()), sha256=hashlib.sha256(p.read_bytes()).hexdigest())
-                for p in implementation_files])
+            implementation_files=[dict(path=str(p.resolve())) for p in implementation_files])
         selected_policy = policy
         atomic_json(selection_path, selected)
 
     def verify_unstarted_software():
         for file in [selected["python"], *selected["implementation_files"]]:
-            try:
-                matches = hashlib.sha256(Path(file["path"]).read_bytes()).hexdigest() == file["sha256"]
-            except OSError:
-                matches = False
-            if not matches:
-                raise ContractError("molecular_tool_original_software_changed_before_dispatch")
+            if not Path(file["path"]).is_file():
+                raise ContractError("molecular_tool_original_software_unavailable_before_dispatch")
 
     try:
         if request.exists():

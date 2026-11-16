@@ -852,7 +852,7 @@ def _manifest(payloads, files, expected, selected, issues, application_issues):
         if selected is not None:
             job = selected['requested_job']['native_flux_balance']
             model = job['model_input']
-            if value['software_sha256'] != digest(job['software']) or value['source_function_sha256'] != job['source_function_sha256']:
+            if value['software_sha256'] != digest(job['software']):
                 raise ValueError('artifact_identity_conflict:/software_sha256')
             if value['model_identity'] != {key: model['file'][key] for key in ('sha256', 'size_bytes')}:
                 raise ValueError('model_identity_conflict:/model_identity')

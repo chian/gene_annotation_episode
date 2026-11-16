@@ -1,21 +1,4 @@
-"""Current private-source fingerprints and the original saved aggregate shape."""
-from pathlib import Path
-
-_REPOSITORY = Path(__file__).resolve().parents[4]
-
-
-def aggregate_definition_bytes():
-    from .definition_inputs import DEFINITION_FILES
-    return b''.join((_REPOSITORY / name).read_bytes() for name in DEFINITION_FILES)
-
-
-def descriptor_operand_bytes(original_name):
-    from .definition_inputs import DESCRIPTOR_OPERANDS
-    paths = DESCRIPTOR_OPERANDS[original_name]
-    if type(paths) is not tuple or not paths:
-        raise ValueError('literal_root_literature_descriptor_operands_required')
-    return b''.join((_REPOSITORY / name).read_bytes() for name in paths)
-
+"""The private literature binding records and the aggregate record of a family."""
 
 def private_record(binding, home):
     from .family import HOMES, classes

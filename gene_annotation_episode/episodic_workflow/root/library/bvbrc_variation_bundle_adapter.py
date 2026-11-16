@@ -8,7 +8,6 @@ is never substituted for original alleles, samples or native VCF headers.
 """
 from copy import deepcopy
 import hashlib
-from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
@@ -28,14 +27,6 @@ DOCUMENT_VERSION = "bvbrc_variation_native_document_v1"
 SHEET_VERSION = "bvbrc_variation_observations_v1"
 COMPONENTS_VERSION = "bvbrc_variation_retained_components_v1"
 _FORMATS = {"vcf": {"vcf"}}
-_DEPENDENCIES = ("__init__.py", "acquisition.py", "domain.py", "public_configuration.py",
-    "bvbrc_variation_bundle_adapter.py", "bvbrc_annotation_bundle_adapter.py",
-    "bvbrc_annotation_contracts.py", "bvbrc_annotation_native.py", "vcf_result_measurements.py",
-    "alignment_correspondence.py", "sequence_composition_grader.py", "sequence_composition_counts.py",
-    "ucsc_acquisition.py", "data_acquisition_receipts.py", "bvbrc_appservice_contracts.py",
-    "bvbrc_appservice_schemas.json")
-
-
 def _require(condition, code="bvbrc_variation_bundle_invalid"):
     if not condition:
         raise ValueError(code)
@@ -56,23 +47,6 @@ def _validate(value, schema, code):
     except Exception as error:
         raise ValueError(code) from error
     return deepcopy(value)
-
-
-_ROOT_DEPENDENCIES = frozenset(("alignment_correspondence.py", "bvbrc_annotation_bundle_adapter.py", "bvbrc_annotation_contracts.py", "bvbrc_annotation_native.py", "bvbrc_variation_bundle_adapter.py", "sequence_composition_counts.py", "sequence_composition_grader.py", "vcf_result_measurements.py",))
-
-
-def _implementation_path(name):
-    if name in _ROOT_DEPENDENCIES:
-        return Path(__file__).with_name(name)
-    return Path(__file__).resolve().parents[3] / name
-
-
-def implementation_sha256():
-    digest = hashlib.sha256()
-    for name in sorted(_DEPENDENCIES):
-        raw = _implementation_path(name).read_bytes()
-        digest.update(name.encode() + b"\0" + str(len(raw)).encode() + b"\0" + raw)
-    return digest.hexdigest()
 
 
 def parameters_schema():
@@ -317,7 +291,7 @@ def consume_bundle(bundle, *, artifact_bytes, supplied_values, requested_form, p
         missing_requirements=missing, diagnostics=diagnostics)
 
 
-__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "VALUE_VERSION", "implementation_sha256", "parameters_schema",
+__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "VALUE_VERSION", "parameters_schema",
     "validate_parameters", "requested_form_schema", "validate_requested_form", "selected_field_schema",
     "validate_selected_field", "consume_bundle", "project_variation_facts", "validate_saved_variation_facts",
     "variation_projection_status"]

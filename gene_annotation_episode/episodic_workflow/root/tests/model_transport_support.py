@@ -87,9 +87,8 @@ def declared_publication_test_factory(*args, **kwargs):
 
 
 def requested_descriptor(settings):
-    """A real declared callable and source identity, without executing that callable."""
+    """A real declared callable, without executing that callable."""
     from gene_annotation_episode.episodic_workflow.root.method_loop.durable import content_digest
     return {'factory_module': __name__, 'factory_name': 'declared_publication_test_factory',
             'arguments': {'purpose': 'publication identity fixture only'},
-            'implementation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'settings_sha256': content_digest(settings)}

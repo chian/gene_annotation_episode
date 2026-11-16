@@ -1,7 +1,7 @@
 """Pure C4 entry point for individual and concatenated GeneTree analyses."""
 from .bvbrc_phylogeny_bundle_contracts import requested_form_schema, validate_requested_form
 from .bvbrc_phylogeny_bundle_contracts import validate_parameters as _parameters
-from .bvbrc_phylogeny_bundle_projection import consume_bundle as _consume, implementation_sha256
+from .bvbrc_phylogeny_bundle_projection import consume_bundle as _consume
 
 ADAPTER_ID = "bvbrc_gene_tree"
 ADAPTER_VERSION = "1"
@@ -17,5 +17,5 @@ def consume_bundle(bundle: dict, *, artifact_bytes: dict[str, bytes], supplied_v
                     requested_form=requested_form, parameters=parameters, provider="gene_tree")
 
 
-__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "implementation_sha256", "validate_parameters",
+__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "validate_parameters",
            "requested_form_schema", "validate_requested_form", "consume_bundle"]

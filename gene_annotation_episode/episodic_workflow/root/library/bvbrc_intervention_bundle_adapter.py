@@ -1,7 +1,5 @@
 """Shared TnSeq/RNASeq acquisition-to-native-sheet and saved return plumbing."""
 from copy import deepcopy
-import hashlib
-from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_annotation_bundle_adapter import _resolve, _record
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_annotation_native import _canonical, _finite_json
@@ -21,49 +19,9 @@ SHEET_VERSION = "bvbrc_intervention_observations_v1"
 COMPONENTS_VERSION = "bvbrc_intervention_retained_components_v1"
 APPLICATION_ADAPTERS = {"TnSeq": "bvbrc_tnseq", "RNASeq": "bvbrc_rnaseq"}
 _FORMATS = {name: {"tsv", "txt", "text"} for name in REPRESENTATIONS}
-_DEPENDENCIES = (
-    "episodic_workflow/root/library/bvbrc_intervention_bundle_adapter.py",
-    "episodic_workflow/root/library/bvbrc_intervention_contracts.py",
-    "episodic_workflow/root/library/intervention_analysis_native.py",
-    "episodic_workflow/root/library/bvbrc_tnseq_bundle_adapter.py",
-    "episodic_workflow/root/library/bvbrc_rnaseq_bundle_adapter.py",
-    "episodic_workflow/root/library/bvbrc_assembly_bundle_adapter.py",
-    "episodic_workflow/root/library/bvbrc_assembly_contracts.py",
-    "episodic_workflow/root/library/bvbrc_assembly_native.py",
-    "episodic_workflow/root/library/bvbrc_annotation_bundle_adapter.py",
-    "episodic_workflow/root/library/bvbrc_annotation_contracts.py",
-    "episodic_workflow/root/library/bvbrc_annotation_native.py",
-    "bvbrc_appservice_contracts.py",
-    "bvbrc_appservice_schemas.json",
-    "domain.py",
-    "episodic_workflow/root/library/alignment_correspondence.py",
-    "episodic_workflow/root/library/sequence_composition_grader.py",
-    "episodic_workflow/root/library/sequence_composition_counts.py",
-    "ucsc_acquisition.py",
-    "data_acquisition_receipts.py",
-    "acquisition.py",
-    "public_configuration.py",
-    "episodic_workflow/root/library/phylogeny_formats.py",
-    "episodic_workflow/root/library/phylogeny_format_contracts.py",
-    "__init__.py",
-    "episodic_workflow/__init__.py",
-    "episodic_workflow/root/__init__.py",
-    "episodic_workflow/root/library/__init__.py",
-    "bvbrc_application_value_identity.py",
-)
-
-
 def _require(condition, code="bvbrc_intervention_bundle_invalid"):
     if not condition:
         raise ValueError(code)
-
-
-def implementation_sha256():
-    digest = hashlib.sha256()
-    for name in sorted(_DEPENDENCIES):
-        raw = (Path(__file__).resolve().parents[3] / name).read_bytes()
-        digest.update(name.encode() + b"\0" + str(len(raw)).encode() + b"\0" + raw)
-    return digest.hexdigest()
 
 
 def _saved(sheet, components, parameters):

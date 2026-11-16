@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from copy import deepcopy
 import hashlib
-from pathlib import Path
 
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_annotation_contracts import (
@@ -27,37 +26,6 @@ ADAPTER_VERSION = "1"
 SHEET_VERSION = "bvbrc_annotation_observations_v1"
 COMPONENTS_VERSION = "bvbrc_annotation_retained_components_v1"
 _FORMATS = {"gto": {"gto", "genome"}, "quality_json": {"quality_json", "json"}}
-_DEPENDENCIES = ("__init__.py", "acquisition.py", "domain.py", "public_configuration.py",
-    "bvbrc_annotation_native.py", "bvbrc_annotation_contracts.py",
-    "bvbrc_annotation_bundle_adapter.py", "alignment_correspondence.py",
-    "sequence_composition_grader.py", "sequence_composition_counts.py",
-    "ucsc_acquisition.py", "data_acquisition_receipts.py", "bvbrc_appservice_contracts.py",
-    "bvbrc_appservice_schemas.json")
-
-
-_ROOT_DEPENDENCIES = frozenset(("alignment_correspondence.py", "bvbrc_annotation_bundle_adapter.py", "bvbrc_annotation_contracts.py", "bvbrc_annotation_native.py", "sequence_composition_counts.py", "sequence_composition_grader.py",))
-
-
-def _implementation_path(name):
-    if name in _ROOT_DEPENDENCIES:
-        return Path(__file__).with_name(name)
-    return Path(__file__).resolve().parents[3] / name
-
-
-def implementation_sha256():
-    """Pin the selected pure call path and its import-time source dependencies.
-
-    Uncalled HTTP/publication functions in the shared reversible-JSON owner are
-    not adapter operations. The execution runner separately pins its selected
-    whole application closure. This pin is not native provenance.
-    """
-    digest = hashlib.sha256()
-    for name in sorted(_DEPENDENCIES):
-        data = _implementation_path(name).read_bytes()
-        digest.update(name.encode() + b"\0" + str(len(data)).encode() + b"\0" + data)
-    return digest.hexdigest()
-
-
 def _require(condition, code="bvbrc_annotation_bundle_invalid"):
     if not condition:
         raise ValueError(code)
@@ -322,6 +290,5 @@ def consume_bundle(bundle, *, artifact_bytes, supplied_values, requested_form, p
         "missing_requirements": missing, "diagnostics": diagnostics}
 
 
-__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "SHEET_VERSION", "COMPONENTS_VERSION", "implementation_sha256",
-    "parameters_schema", "requested_form_schema", "consume_bundle", "project_annotation_facts",
+__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "SHEET_VERSION", "COMPONENTS_VERSION", "parameters_schema", "requested_form_schema", "consume_bundle", "project_annotation_facts",
     "validate_saved_annotation_facts", "annotation_projection_status"]

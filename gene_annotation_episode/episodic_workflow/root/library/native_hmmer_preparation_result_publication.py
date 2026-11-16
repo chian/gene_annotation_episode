@@ -222,18 +222,10 @@ def _runtime_files(driver):
     from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_contracts import validate_driver_runtime
     driver = validate_driver_runtime(driver, required_modules=(_VERIFY_MODULE,))
     _worker_program(driver)
-    sources = [{"path": str(Path(driver["module_root"]) / (row["module"].replace(".", "/") + ".py")),
-                "sha256": row["sha256"]} for row in driver["implementation_files"]]
-    if {row["path"] for row in sources} != {
-            str(path) for path in Path(driver["module_root"]).rglob("*") if path.is_file()}:
+    sources = {str(Path(driver["module_root"]) / (row["module"].replace(".", "/") + ".py"))
+               for row in driver["implementation_files"]}
+    if sources != {str(path) for path in Path(driver["module_root"]).rglob("*") if path.is_file()}:
         _error("result_worker_original_source_inventory_conflict")
-    files = [{"path": driver["python_executable"], "sha256": driver["python_sha256"]}, *sources]
-    files.extend(file for dependency in driver["dependencies"] for file in dependency["files"])
-    for file in files:
-        path = Path(file["path"])
-        if (not path.is_absolute() or hashlib.sha256(path.read_bytes()).hexdigest() != file["sha256"]
-                or "size_bytes" in file and path.stat().st_size != file["size_bytes"]):
-            _error("result_worker_original_software_changed")
     return driver
 
 
@@ -241,7 +233,7 @@ def _worker_runtime(directory, policy):
     """Reuse one exact driver closure for the two phases of this result action.
 
     Only application source is copied. The selected interpreter and dependency
-    files remain pinned at their actual original paths; no environment is cloned.
+    files remain at their actual original paths; no environment is cloned.
     This operational driver identity never replaces the native HMMER producer.
     """
     from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_software import freeze_driver_runtime, _source_closure
@@ -265,17 +257,14 @@ def _worker_runtime(directory, policy):
                     or not Path(row["declared_path"]).is_absolute()
                     or row["reason"] not in {"outside_distribution_root", "non_runtime_bytecode"}):
                 _error("result_worker_runtime_invalid")
-        driver = _runtime_files(retained["driver_runtime"])
-        if retained["source_copy_size_bytes"] != sum(
-                path.stat().st_size for path in Path(driver["module_root"]).rglob("*") if path.is_file()):
-            _error("result_worker_original_source_size_conflict")
+        _runtime_files(retained["driver_runtime"])
         return retained
     if shared.exists():
         _error("result_worker_runtime_original_work_incomplete")
     modules = (_WORKER_MODULE, _VERIFY_MODULE)
     closure = _source_closure(Path(__file__).resolve().parents[4], modules)
     # Check the complete known copy footprint before the first source copy.
-    # Dependencies and the Python runtime are authenticated in place.
+    # Dependencies and the Python runtime are used in place.
     copy_bytes = sum(path.stat().st_size for path in closure.values())
     check_scratch_budget(directory.parent.parent, policy, additional_bytes=copy_bytes)
     shared.mkdir()
@@ -284,7 +273,7 @@ def _worker_runtime(directory, policy):
         snapshot_directory=str(shared / "source"), driver_modules=list(modules), policy=policy,
         contained_dependency_records=True, dependency_exclusions=exclusions)
     # Fixed grade/project/verify imports use embedded application schemas.
-    # jsonschema's actual JSON resources are included in its distribution pins;
+    # jsonschema's actual JSON resources are included in its distribution files;
     # no application package-data file is selected by these entry points.
     retained = {"version": PREFIX + "worker_runtime_v1", "driver_runtime": driver,
         "python_home": sys.prefix, "source_copy_size_bytes": copy_bytes, "data_files": [],
@@ -405,9 +394,6 @@ def _collect_worker(directory, plan, policy):
                 if view["state"] == "execution_unknown":
                     raise HmmerPreparationWorkerPending(directory, observation=view)
                 time.sleep(.05)
-        # Recheck the original selected files; a terminal worker cannot promote
-        # changed software to the recorded selected implementation.
-        _runtime_files(selected["driver_runtime"])
         return native.collect(handle)
     except (AcquisitionError, OSError, ValueError) as error:
         view = native.status(handle)

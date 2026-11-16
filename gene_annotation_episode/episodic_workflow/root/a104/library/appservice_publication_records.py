@@ -89,10 +89,6 @@ class AppServicePublicationRecords:
             self.host.custody.content(context, binding, before=before)
         selected = value['adapter']
         _require(canonical(selected) == canonical(value['selector']['adapter']), 'appservice_publication_adapter_conflict')
-        if value['adapter_implementation_sha256'] is not None:
-            target = self.host.read_target(value['original_handoff_ref'], context.scope)
-            configured = self.api.configuration[target['resource_id']]['scientific_adapters']
-            _require(any((row == {'adapter_id': selected['adapter_id'], 'adapter_version': selected['adapter_version'], 'implementation_sha256': value['adapter_implementation_sha256']} for row in configured)), 'appservice_publication_adapter_configuration_conflict')
         return value
 
     def _bundle(self, inputs, current):
@@ -178,7 +174,7 @@ class AppServicePublicationRecords:
             if retained_adapter.exists():
                 _require(canonical(_read(retained_adapter)) == canonical({'adapter_result': adapter}), 'appservice_adapter_publication_conflict')
             if adapter is not None:
-                _require(inputs['adapter_implementation_sha256'] is not None and (adapter['adapter_id'], adapter['adapter_version']) == (inputs['adapter']['adapter_id'], inputs['adapter']['adapter_version']), 'appservice_adapter_result_identity_conflict')
+                _require(inputs['adapter'] is not None and (adapter['adapter_id'], adapter['adapter_version']) == (inputs['adapter']['adapter_id'], inputs['adapter']['adapter_version']), 'appservice_adapter_result_identity_conflict')
                 contents = {}
                 for name in ('sheet', 'components'):
                     content = adapter[name + '_content']
@@ -231,4 +227,4 @@ class AppServicePublicationRecords:
         bundle, inputs = (body['bundle'], body['publication_inputs'])
         task = bundle['original_task']
         representations = _unique([{'object': {key: row['workspace_object'][key] for key in ('path', 'uuid', 'type')}, 'sha256': row['sha256'], 'byte_count': row['byte_count'], 'range': row['transfer']['observed_range'], 'role': row['role'], 'format': {key: row['declared_format'][key] for key in ('format', 'version', 'mode')}} for row in bundle['artifacts']])
-        return digest({'resource_id': task['resource_id'], 'task_id': task['task_id'], 'representations': sorted(representations, key=canonical), 'selector': inputs['selector'], 'adapter': inputs['adapter'], 'implementation_sha256': inputs['adapter_implementation_sha256']})
+        return digest({'resource_id': task['resource_id'], 'task_id': task['task_id'], 'representations': sorted(representations, key=canonical), 'selector': inputs['selector'], 'adapter': inputs['adapter']})

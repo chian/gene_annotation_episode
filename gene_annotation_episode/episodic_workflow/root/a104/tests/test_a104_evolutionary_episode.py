@@ -77,7 +77,7 @@ def test_exact_request_has_one_real_target_and_no_local_scientific_execution(tmp
         assert candidate['features']['input_residue_count'] == sum(len(row['sequence'])
             for row in body['native_request']['analyses'][0]['entries'])
         assert work['execution_profile']['tool'] == 'a104.phylogeny'
-        assert work['execution_profile']['implementation'] == body['worker_sha256']
+        assert work['execution_profile']['implementation'] == body['native_request']['version']
         assert 'memory_bytes' not in candidate.get('resource_capacity', {})
         assert set(work['model']['resource_priors']) == {'cpu_seconds', 'memory_bytes'}
         assert {slot['metric'] for slot in work['credit']['validation_slots']} == {

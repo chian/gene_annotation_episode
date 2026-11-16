@@ -224,7 +224,7 @@ def prepare_request(store, *, target_ref, analyses, scope, known_record_refs, ca
     worker = Path(__file__).with_name('a104_hpc_worker.py').read_text()
     body = {'version': VERSION, 'target_ref': target_ref, 'scope': scope, 'case_id': case_id,
         'native_request': request, 'native_request_json': raw.decode(), 'native_request_sha256': sha(raw),
-        'worker_text': worker, 'worker_sha256': sha(worker.encode()), 'bindings': bindings,
+        'worker_text': worker, 'bindings': bindings,
         'caller_target_origin_reference_ref': target_origin_reference_ref,
         'interpretation': 'exact_scientific_operands; no_tree_measurement_or_function_claim'}
     with store.transaction():
@@ -251,7 +251,7 @@ def commission(store, request_ref, resource, *, queue='debug', scheduler_wall_se
     from .execution_guidance import resource_identity
     identity = resource_identity('aurora', resource)
     profile = {'resource_id': identity, 'backend': 'hpc', 'tool': 'a104.phylogeny',
-        'implementation': body['worker_sha256'],
+        'implementation': NATIVE_VERSION,
         'parameters': sha(canonical({'native_protocol': NATIVE_VERSION, 'bootstrap_replicates': 1000,
             'model_options': sorted({row.get('model', request['model']) for row in request['analyses']}),
             'programs': ['MUSCLE-5.3', 'IQ-TREE-2.4.0'], 'serial_analyses': True}).encode()),
@@ -270,8 +270,7 @@ def commission(store, request_ref, resource, *, queue='debug', scheduler_wall_se
             'version probes, alignment and tree inference execute on allocated compute nodes.'}
     predicates = [{'field': [name], 'operator': 'eq', 'value': value} for name, value in (
         ('program', 'a104_phylogeny_native'), ('completed', True), ('returncode', 0),
-        ('case_id', body['case_id']), ('request_sha256', body['native_request_sha256']),
-        ('worker_sha256', body['worker_sha256']))]
+        ('case_id', body['case_id']), ('request_sha256', body['native_request_sha256']))]
     return {'objective': 'Execute this exact A104 phylogenetic analysis on Aurora and return its original native '
             'alignments, trees, branch support and provenance. A biological contradiction remains useful evidence. '
             'Preserve the original PBS execution and do not substitute a local algorithm or another input panel.',
@@ -359,7 +358,7 @@ def import_result(store, *, request_ref, hpc_result_ref, known_record_refs, scop
     plans = [plan for plan in plans if plan['plan_id'] == receipt['plan_id']]
     require(len(plans) == 1, 'a104_original_hpc_plan_required')
     files = {Path(item['path']).name: item for item in planned_input_files(plans[0])}
-    require(files['a104-worker.py']['sha256'] == expected['worker_sha256']
+    require(files['a104-worker.py']['sha256'] == sha(expected['worker_text'].encode())
             and files['a104-request.json']['sha256'] == expected['native_request_sha256'],
             'a104_original_hpc_staged_scientific_files_conflict')
     units = [unit for unit in plans[0]['manifest']['units'] if unit['unit_id'] == receipt['unit']['unit_id']]
@@ -375,8 +374,7 @@ def import_result(store, *, request_ref, hpc_result_ref, known_record_refs, scop
             and (result.get('completed') is True and result.get('returncode') == 0
                  or result.get('completed') is False and result.get('returncode') != 0 and result.get('failure')),
             'a104_hpc_native_execution_outcome_conflict')
-    require(result['request_sha256'] == expected['native_request_sha256']
-            and result['worker_sha256'] == expected['worker_sha256'] and result['case_id'] == expected['case_id'],
+    require(result['request_sha256'] == expected['native_request_sha256'] and result['case_id'] == expected['case_id'],
             'a104_hpc_scientific_request_or_worker_conflict')
     require(result['pbs_job_id'] == receipt['job_id'] and result['compute_hostname']
             and not result['compute_hostname'].startswith(('aurora-uan', 'login')), 'a104_hpc_original_compute_identity_conflict')

@@ -134,6 +134,7 @@ class PredictionPromptChecks:
         runtime = self.module('runtime')
         database = PredictionReceiptDatabase(tmp_path/'prompt-journal.sqlite')
         journal = self.module('episode_journal').Journal(database, 'run')
+        self.module('episode_completion').CompletionLedger(database, journal)
         exchanges = self.module('decision_exchanges').DecisionExchanges(journal)
         task.calls = 0
         task._model_snapshot = task._presented_conversation_key = None

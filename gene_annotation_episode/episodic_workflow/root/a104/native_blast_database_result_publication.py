@@ -27,7 +27,7 @@ from .native_blast_database_result_views import (native_blast_database_fact_sour
     project_native_blast_database_rows, validate_native_blast_database_result_selector,
     FUNCTION_SELECTOR, saved_function_descriptor)
 from .native_blast_database_result_worker import (native_blast_database_calculation_identity,
-    native_blast_database_implementation_identity, native_blast_database_input_identity,
+    native_blast_database_input_identity,
     _FUNCTION_REQUEST, _FUNCTION_MANIFEST, _FUNCTION_SHEETS, _FUNCTION_CALCULATIONS)
 from .practical_execution_state import _immutable, _read
 from .tool_grading_artifacts import retain_tool_grading
@@ -52,13 +52,6 @@ _MANIFEST_ROLES = {'native_blast_database_result_worker_manifest_v1': _ROLES_V1,
     _FUNCTION_MANIFEST: {**_ROLES_V1, 'sheets': ('sheets.json', _FUNCTION_SHEETS),
         'calculations': ('calculations.json', _FUNCTION_CALCULATIONS),
         'rows': ('rows.ndjson', 'native_blast_vdb_function_numeric_row_v1')}}
-_SCIENTIFIC_MODULES = ('native_blast_database_result_worker', 'native_blast_database_result_views',
-    'native_blast_database_metadata', 'native_blast_database_contracts', 'blast_report_collection',
-    'native_blast_database_population_metadata', 'blast_database_population_associations',
-    'blast_grading_inputs', 'blast_program_context', 'blast_fasta_record_identity', 'blast_sequence_database', 'blast_database_grader',
-    'blast_pairwise_grader', 'blast_profile_inputs', 'blast_profile_calculators', 'blast_pssm_inputs',
-    'blast_pssm_calculators', 'blast_pssm_master_inputs', 'blast_iteration_inputs',
-    'blast_iteration_calculators', 'blast_vdb_inputs', 'blast_vdb_calculators', 'blast_search', 'domain')
 
 
 def _failure(stage, code, detail_code, **fields):
@@ -219,46 +212,6 @@ def _environment(directory):
         'XDG_CACHE_HOME': str(directory / 'cache')}
 
 
-def _implementation(directory, policy, *, execution_program, vdb_function=False):
-    """Inventory a fresh import closure, excluding unrelated parent imports."""
-    output = directory / 'implementation.json'
-    if not output.exists():
-        script = '''import hashlib, importlib, json, pathlib, sys
-names = ['gene_annotation_episode.episodic_workflow.root.a104.' + n for n in json.loads(sys.argv[1])]
-for name in names: importlib.import_module(name)
-roots = {'Bio','numpy','jsonschema','jsonschema_specifications','referencing','rpds','attr','attrs'}
-names += [n for n,m in tuple(sys.modules.items()) if n.split('.')[0] in roots and getattr(m,'__file__',None)]
-names += ['gene_annotation_episode']
-files = []
-for name in sorted(set(names)):
-    path = pathlib.Path(sys.modules[name].__file__).resolve()
-    files.append({'module':name,'path':str(path),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
-from gene_annotation_episode.episodic_workflow.root.a104.native_blast_database_result_worker import native_blast_database_implementation_identity
-with open(sys.argv[2], 'x') as out: out.write(json.dumps({'files':files,'manifest_sha256':native_blast_database_implementation_identity(files)},sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False)+chr(10))
-'''
-        modules = _SCIENTIFIC_MODULES + (('native_blast_database_convergence', 'blast_native_iteration_records')
-            if execution_program in {'psiblast', 'deltablast'} else ())
-        if vdb_function:
-            modules += ('blast_vdb_function_inputs', 'blast_vdb_function_calculators', 'native_blast_vdb_function_metadata')
-        try:
-            result = run_local_job([sys.executable, '-B', '-c', script, json.dumps(modules), str(output)],
-                cwd=directory, policy=policy, stdout_path=directory / 'implementation.stdout',
-                stderr_path=directory / 'implementation.stderr', env=_environment(directory))
-        except AcquisitionError as error:
-            _immutable(directory / 'implementation-receipt.json', _local_job_exception_receipt(error))
-            raise
-        _immutable(directory / 'implementation-receipt.json', result.metadata)
-        if result.returncode != 0:
-            raise ContractError('native_blast_database_implementation_inventory_failed')
-    value = _read(output)
-    if value['manifest_sha256'] != native_blast_database_implementation_identity(value['files']):
-        raise ContractError('native_blast_database_implementation_identity_conflict')
-    for row in value['files']:
-        if hashlib.sha256(Path(row['path']).read_bytes()).hexdigest() != row['sha256']:
-            raise ContractError('native_blast_database_implementation_changed')
-    return value
-
-
 def _snapshots(store, context, directory):
     from .native_hmmer_result_publication import _subject_chunks
     known, snapshots = _known(store, context), []
@@ -318,7 +271,7 @@ def _retained_catalog(store, selector, artifacts, snapshots):
     return retained
 
 
-def _request(store, context, target, capture, selector, directory, implementation):
+def _request(store, context, target, capture, selector, directory):
     _original_commission(store, context)
     validate_selected_inputs(store, context, selector)
     capture_directory = directory.parent / 'capture'
@@ -341,15 +294,14 @@ def _request(store, context, target, capture, selector, directory, implementatio
         bundle_artifact_ref=capture['bundle_artifact_ref'], bundle_capture=dict(path=str(_retained(store, capture['bundle_artifact_ref'])),
             sha256=bundle_record['sha256'], size_bytes=bundle_record['size']), authenticated_attempt=attempt,
         artifacts=artifacts, metadata_descriptors=descriptors, retained_sources=retained, subject_snapshots=snapshots,
-        implementation=implementation, sequence_model=job['grading_parameters']['sequence_database_model'], reuse=None)
+        sequence_model=job['grading_parameters']['sequence_database_model'], reuse=None)
     if selector['version'] == FUNCTION_SELECTOR:
         request.update(version=_FUNCTION_REQUEST, vdb_function_model=deepcopy(selector['vdb_function_model']))
     # Save the real invalid request before propagating a contract error; never
     # invent a valid calculation generation or replace a selected model.
     try:
         ids = native_blast_database_calculation_identity(input_identity=native_blast_database_input_identity(request),
-            input_implementation_sha256=implementation['manifest_sha256'], sequence_model=request['sequence_model'],
-            implementation_manifest_sha256=implementation['manifest_sha256'], vdb_function_model=request.get('vdb_function_model'))
+            sequence_model=request['sequence_model'], vdb_function_model=request.get('vdb_function_model'))
     except (ValueError, TypeError, KeyError) as error:
         _immutable(directory / 'invalid-request.json', request)
         failure = _failure('calculation', 'native_blast_database_calculation_failed', 'calculator_contract_invalid')
@@ -364,7 +316,7 @@ def _request(store, context, target, capture, selector, directory, implementatio
 def _manifest(store, reference, request, artifact_refs):
     value = _json(store, reference)
     expected = {'version', 'calculation_id', 'request_sha256', 'status', 'input_identity', 'input_interpretation_id',
-        'input_implementation_sha256', 'implementation_manifest_sha256', 'sequence_model', 'artifacts', 'counts', 'failures'}
+        'sequence_model', 'artifacts', 'counts', 'failures'}
     function_mode = request['version'] == _FUNCTION_REQUEST
     if function_mode:
         expected.add('vdb_function_model')
@@ -375,15 +327,13 @@ def _manifest(store, reference, request, artifact_refs):
             or value['status'] not in {'complete', 'partial', 'failed'} or value['calculation_id'] != request['calculation_id']
             or value['request_sha256'] != hashlib.sha256((canonical(request) + '\n').encode('utf-8')).hexdigest()
             or value['input_identity'] != native_blast_database_input_identity(request)
-            or value['implementation_manifest_sha256'] != request['implementation']['manifest_sha256']
             or value['sequence_model'] != request['sequence_model']
             or type(value['counts']) is not dict or set(value['counts']) != {'searches', 'native_hsp_slots', 'numerical_rows'}
             or any(type(n) is not int or n < 0 for n in value['counts'].values())
             or type(value['artifacts']) is not list):
         raise ContractError('native_blast_database_worker_manifest_invalid')
     ids = native_blast_database_calculation_identity(input_identity=value['input_identity'],
-        input_implementation_sha256=value['input_implementation_sha256'], sequence_model=value['sequence_model'],
-        implementation_manifest_sha256=value['implementation_manifest_sha256'], vdb_function_model=value.get('vdb_function_model'))
+        sequence_model=value['sequence_model'], vdb_function_model=value.get('vdb_function_model'))
     if any(value[k] != v for k, v in ids.items()):
         raise ContractError('native_blast_database_worker_manifest_identity_conflict')
     roles, seen = _MANIFEST_ROLES[value['version']], set()
@@ -507,7 +457,7 @@ def _saved_original(store, context, target, selector, body, *, seen=()):
     return frozen
 
 
-def _saved_request(store, context, target, selector, directory, implementation, original_body):
+def _saved_request(store, context, target, selector, directory, original_body):
     _original_commission(store, context)
     validate_selected_inputs(store, context, selector)
     frozen = _saved_original(store, context, target, selector, original_body)
@@ -531,14 +481,13 @@ def _saved_request(store, context, target, selector, directory, implementation, 
         else:
             with path.open('xb') as stream:
                 stream.write(raw)
-    request.update(version=_FUNCTION_REQUEST, implementation=implementation,
+    request.update(version=_FUNCTION_REQUEST,
         vdb_function_model=deepcopy(selector['vdb_function_model']), reuse=dict(
             manifest_path=str(saved / 'worker-manifest.json'), manifest_sha256=descriptor['manifest_sha256'],
             manifest_size_bytes=store.get(descriptor['manifest_artifact_ref'])['size'],
             collection_path=str(saved / 'collection.json'), sheets_path=str(saved / 'sheets.json')))
     ids = native_blast_database_calculation_identity(input_identity=native_blast_database_input_identity(request),
-        input_implementation_sha256=frozen['manifest']['input_implementation_sha256'], sequence_model=request['sequence_model'],
-        implementation_manifest_sha256=implementation['manifest_sha256'], vdb_function_model=request['vdb_function_model'])
+        sequence_model=request['sequence_model'], vdb_function_model=request['vdb_function_model'])
     if ids['input_interpretation_id'] != descriptor['input_interpretation_id']:
         raise ContractError('native_blast_database_return_unauthorized')
     request['calculation_id'] = ids['calculation_id']
@@ -562,13 +511,11 @@ def prepare_native_blast_database_grading(store, *, context, target, capture, se
         prepared = _read(directory / 'preparation.json')
         _validate_preparation(store, context, prepared)
         return prepared
-    implementation = _implementation(directory, policy,
-        execution_program=target['assignment']['requested_job']['native_blast_database']['program'], vdb_function=function_mode)
     if saved_mode:
-        request, witness, original_frozen = _saved_request(store, context, target, selector, directory, implementation, original_body)
+        request, witness, original_frozen = _saved_request(store, context, target, selector, directory, original_body)
         capture = original_frozen['capture']
     else:
-        request, witness = _request(store, context, target, capture, selector, directory, implementation)
+        request, witness = _request(store, context, target, capture, selector, directory)
     generation = store.path.resolve() / 'native-blast-database-generations' / request['calculation_id']
     if saved_mode:
         # The scientific calculation identity excludes the transport receipt.

@@ -47,11 +47,11 @@ def pin(path):
 def declared_macs_plan():
     """Typed metadata operands only. No files or actual execution are asserted."""
     dependencies = [{'distribution': name, 'version': 'declared',
-        'package_root': '/declared/deps/' + name, 'files': [pin('/declared/deps/' + name + '/module.py')]}
+        'package_root': '/declared/deps/' + name, 'files': [{'path': '/declared/deps/' + name + '/module.py'}]}
         for name in sorted(atac.REQUIRED_DEPENDENCIES)]
-    driver = {'python_executable': '/declared/python/bin/python', 'python_sha256': '0' * 64,
+    driver = {'python_executable': '/declared/python/bin/python',
         'python_version': '3.13', 'module_root': '/declared/modules',
-        'implementation_files': [{'module': name, 'sha256': '0' * 64}
+        'implementation_files': [{'module': name}
             for name in sorted(atac.REQUIRED_MODULES | {macs.DRIVER_MODULE})],
         'dependencies': dependencies}
     runtime = {'python_executable': '/declared/macs/bin/python', 'python_sha256': '0' * 64,

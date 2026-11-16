@@ -3,7 +3,6 @@ from . import bvbrc_intervention_bundle_adapter as shared
 
 ADAPTER_ID = "bvbrc_rnaseq"
 ADAPTER_VERSION = "1"
-implementation_sha256 = shared.implementation_sha256
 parameters_schema = shared.parameters_schema
 requested_form_schema = shared.requested_form_schema
 validate_requested_form = shared.validate_requested_form

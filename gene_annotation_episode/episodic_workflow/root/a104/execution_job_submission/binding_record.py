@@ -4,9 +4,6 @@ from pathlib import Path
 from .binding_roles import VERSION
 from copy import deepcopy
 
-def _binding_source_bytes():
-    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
-
 class LaunchBindingRecord:
 
     def as_record(self):

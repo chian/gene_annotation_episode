@@ -19,19 +19,16 @@ class AppServicePublication(AppServicePublicationRecords):
         priors = sorted((row for row in self.host._own_receipts(context) if row['contract'] == 'AcquisitionReceipt' and int(_origin(row)['operation_key'].rsplit(':', 1)[1]) < before), key=lambda row: int(_origin(row)['operation_key'].rsplit(':', 1)[1]))
         selector = prepared['native_operands']['selector']
         support, evidence = self._dependency_inputs(context, prepared, priors, before)
-        adapter = self._adapter(context, selector['adapter'])
-        value = validate_contract('PublicationInputs', {'version': 'bvbrc_appservice_publication_inputs_v1', 'request': prepared['native_operands']['request'], 'selector': selector, 'original_handoff_ref': context.assignment['handoff_ref'], 'current_operation': {'name': prepared['operation'], 'arguments': prepared['native_operands']['arguments']}, 'current_snapshot': binding, 'prior_acquisition_receipt_refs': [row['source_ref'] for row in priors], 'support_receipt_refs': support, 'supplied_evidence': evidence, 'adapter': selector['adapter'], 'adapter_implementation_sha256': None if adapter is None else adapter[1]})
+        value = validate_contract('PublicationInputs', {'version': 'bvbrc_appservice_publication_inputs_v1', 'request': prepared['native_operands']['request'], 'selector': selector, 'original_handoff_ref': context.assignment['handoff_ref'], 'current_operation': {'name': prepared['operation'], 'arguments': prepared['native_operands']['arguments']}, 'current_snapshot': binding, 'prior_acquisition_receipt_refs': [row['source_ref'] for row in priors], 'support_receipt_refs': support, 'supplied_evidence': evidence, 'adapter': selector['adapter']})
         self._validate_inputs(context, prepared, binding, value, key)
         _immutable(path, value)
         return value
 
     def _grade(self, context, inputs, bundle, origin, stamp, *, current_acquisition):
         """Publish the selected pure calculation within the download action."""
-        if inputs['adapter_implementation_sha256'] is None:
+        implementation = self._adapter(context, inputs['adapter'])
+        if implementation is None:
             return None
-        binding = self._adapter(context, inputs['adapter'])
-        _require(binding is not None and binding[1] == inputs['adapter_implementation_sha256'], 'appservice_adapter_implementation_conflict')
-        implementation, _ = binding
         if (inputs['adapter']['adapter_id'], inputs['adapter']['adapter_version']) == ('bvbrc_proteome', '2'):
             implementation.validate_result_selector(inputs['selector'])
         before = int(origin['operation_key'].rsplit(':', 1)[1])

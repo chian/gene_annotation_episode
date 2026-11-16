@@ -11,7 +11,6 @@ from copy import deepcopy
 import hashlib
 import json
 import math
-from pathlib import Path
 
 from .bvbrc_appservice_contracts import (
     ContractValidationError, _finite_json, _same, _Validator, contract_schema,
@@ -33,30 +32,9 @@ PARAMETERS_VERSION = "bvbrc_homology_bundle_parameters_v1"
 SCIENTIFIC_INPUTS_VERSION = "bvbrc_homology_scientific_inputs_v1"
 _PRIMARY = {"raw": "blast_json15_raw", "processed": "homology_processed_json", "tabular": "blast_tabular"}
 _ROLES = tuple(FORMATS)
-_DEPENDENCIES = (
-    "bvbrc_homology_bundle_adapter.py", "bvbrc_homology_inputs.py",
-    "bvbrc_homology_metadata.py", "bvbrc_homology_grader.py", "bvbrc_homology_subject_binding.py",
-    "blast_grading_inputs.py", "blast_database_grader.py", "blast_pairwise_grader.py", "alignment_correspondence.py",
-    "blast_search.py", "bvbrc_appservice_contracts.py", "bvbrc_appservice_schemas.json",
-)
 _QUERY_FIELDS = {"input_source_ref", "member_ref", "subject_ref", "molecule", "supplied_id",
     "supplied_length", "supplied_sequence_sha256", "staged_id", "staged_length", "staged_sequence_sha256",
     "sequence_transform", "native_query", "id_mapping_evidence"}
-
-
-def implementation_sha256() -> str:
-    """Configuration identity only; scientific computation never calls this.
-
-    Hash the actual adapter and repository parser/calculator/contract dependency
-    bytes with unambiguous filename/length framing. No input or reference data
-    are read. A later dependency edit changes the installed implementation pin.
-    """
-    result = hashlib.sha256()
-    for name in sorted(_DEPENDENCIES):
-        local = Path(__file__).with_name(name)
-        content = local.read_bytes()
-        result.update(name.encode() + b"\0" + str(len(content)).encode() + b"\0" + content)
-    return result.hexdigest()
 
 
 def _object(properties):
@@ -741,4 +719,4 @@ def consume_bundle(bundle: dict, *, artifact_bytes: dict[str, bytes], supplied_v
 
 
 __all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "PARAMETERS_SCHEMA", "validate_parameters",
-           "requested_form_schema", "validate_requested_form", "implementation_sha256", "consume_bundle"]
+           "requested_form_schema", "validate_requested_form", "consume_bundle"]

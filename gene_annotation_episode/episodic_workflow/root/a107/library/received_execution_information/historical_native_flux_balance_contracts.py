@@ -13,7 +13,6 @@ RUN_PLAN_FILENAME = 'flux-balance-plan.json'
 ATTEMPT_DIRECTORY_NAME = 'flux-balance-attempt'
 DRIVER_MODULE = 'gene_annotation_episode.native_flux_balance_driver'
 POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
-SOURCE_FUNCTION_SHA256 = 'ab47e2640366833d05cf896091e1c3803ce69aae940bfa46ba993abda51983b9'
 STACK = {'cobra': '0.32.1', 'optlang': '1.9.1', 'swiglpk': '5.0.13', 'python-libsbml': '5.21.2'}
 ARTIFACT_FORMATS = {'selected_request': 'flux_balance_selected_request_v1', 'effective_model': 'cobra_model_capture_v1', 'effective_problem': 'cobra_glpk_problem_capture_v1', 'solution': 'cobra_glpk_solution_capture_v1', 'flux_csv': 'biomni_fba_csv_v1', 'native_log': 'utf8_text', 'manifest': 'flux_balance_native_manifest_v1'}
 
@@ -47,7 +46,6 @@ def validate_flux_balance_requested_job(value):
     value = validate_flux_balance_record('FBARequestedJob', value)
     job = value['native_flux_balance']
     software = validate_flux_balance_software(job['software'])
-    require(job['source_function_sha256'] == SOURCE_FUNCTION_SHA256, 'fba_source_function_mismatch')
     path_value(job['model_input']['file']['path'], absolute=True)
     prefix = path_value(job['output_prefix'], absolute=False)
     path_value(job['flux_output_name'], absolute=False)

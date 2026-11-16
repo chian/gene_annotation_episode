@@ -59,7 +59,7 @@ class ProteomeDriver(ProductionDriver):
         self.saved, self.store = SavedRecords(store), store
         self.config = deepcopy(CONFIG)
         self.config['scientific_adapters'] = [{'adapter_id': adapter.ADAPTER_ID,
-            'adapter_version': adapter.ADAPTER_VERSION, 'implementation_sha256': adapter.implementation_sha256()}]
+            'adapter_version': adapter.ADAPTER_VERSION}]
         self.family = ExecutionEpisodes(None, store=store, directory=directory, run_id=self.saved.run_id,
             resources={'selected-api': self.config}, initial_information={},
             tool_registry=SimpleNamespace(store=store, clients={}), handoff_unit=2, acquired_record_unit=3,

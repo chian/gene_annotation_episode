@@ -229,10 +229,9 @@ def _verify_lumpy_driver_runtime(driver):
         require(Path(__file__).resolve(strict=True) == selected.resolve(strict=True),
                 'native_dependency_unavailable')
         required = _current_module_sources(driver['module_root'])
-        supplied = {row['module']: row['sha256'] for row in driver['implementation_files']}
+        supplied = {row['module'] for row in driver['implementation_files']}
         require(set(required) <= set(supplied), 'native_dependency_unavailable')
-        # The original verifier above checked every supplied file's bytes. This
-        # checks that no actual current source/package operand was omitted.
+        # This checks that no actual current source/package operand was omitted.
 
 
 def _software(value):

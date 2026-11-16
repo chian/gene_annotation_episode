@@ -47,9 +47,9 @@ def _diagnostic(value):
 
 
 def _software(rna=None):
-    observed = {"python_executable": sys.executable, "python_sha256": _checksum(sys.executable),
+    observed = {"python_executable": sys.executable,
         "python_version": platform.python_version(), "worker_module": WORKER_MODULE,
-        "worker_source_sha256": _checksum(__file__), "viennarna_distribution_version": None,
+        "viennarna_distribution_version": None,
         "rna_module_sha256": None, "rna_extension_sha256": None}
     if rna is not None:
         observed["rna_module_sha256"] = _checksum(rna.__file__)
@@ -70,7 +70,7 @@ def _check_software(selected, *, rna=None, native=False):
         "engine_version": getattr(rna, "__version__", None) if rna is not None else None})
     if selected is not None:
         selected = validate_rna_structure_software(selected)
-        names = tuple(observed) if native else tuple(observed)[:5]
+        names = tuple(observed) if native else tuple(observed)[:3]
         for name in names:
             if selected[name] is not None and selected[name] != observed[name]:
                 raise _NativeFailure("rna_software_identity_mismatch", "/software/" + name)

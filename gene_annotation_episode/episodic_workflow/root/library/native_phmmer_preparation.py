@@ -40,9 +40,6 @@ class NativePhmmerPreparation:
         with artifact_path(self.store, query['sequence_ref']).open('rb') as stream:
             for chunk in iter(lambda: stream.read(1024*1024), b''):
                 query_hash.update(chunk.upper())
-        worker_fingerprint = hashlib.sha256(b''.join(Path(__file__).with_name(name).read_bytes()
-            for name in ('phmmer_format.py', 'phmmer_result_worker.py', 'phmmer_grading_worker.py',
-                         'hmmer_search_inputs.py', 'hmmer_search_grader.py', 'hmmer_graders.py'))).hexdigest()
         supplied = inputs.provenance or {}
         native_parameters = supplied.get('native_parameters')
         if native_parameters is None:
@@ -55,8 +52,7 @@ class NativePhmmerPreparation:
             'query_sequence_artifact': query['sequence_ref'], 'query_sequence_sha256': query_hash.hexdigest(),
             'executable_sha256': inputs.executable_sha256, 'parser_version': GRADING_VERSION,
             'native_parameters': native_parameters,
-            'biopython_version': version('biopython'),
-            'parser_implementation_sha256': worker_fingerprint}
+            'biopython_version': version('biopython')}
         # Supplied command metadata describes this capture. The pure numerical
         # readers/calculators consume native bytes and explicit operands, which
         # remain in this key; they do not consume native_parameters. A new

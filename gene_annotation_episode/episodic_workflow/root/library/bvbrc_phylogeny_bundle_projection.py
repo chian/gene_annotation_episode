@@ -8,9 +8,7 @@ separate contracts module and do not invoke this calculation path.
 from __future__ import annotations
 
 from copy import deepcopy
-import hashlib
 import json
-from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_bundle_contracts as c
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_bundle_resolution as r
@@ -28,44 +26,6 @@ DIAGNOSTIC_CODES = frozenset({
     "phylogeny_provider_extraction_invalid", "phylogeny_provider_calculation_invalid",
     "phylogeny_adapter_operands_invalid", "phylogeny_unregistered_diagnostic",
 })
-_DEPENDENCIES = (
-    '__init__.py',
-    'bvbrc_appservice_contracts.py',
-    'bvbrc_appservice_schemas.json',
-    'episodic_workflow/root/library/bvbrc_phylogeny_bundle_contracts.py',
-    'episodic_workflow/__init__.py',
-    'episodic_workflow/root/__init__.py',
-    'episodic_workflow/root/library/__init__.py',
-    'episodic_workflow/root/library/bvbrc_codon_tree_bundle_adapter.py',
-    'episodic_workflow/root/library/bvbrc_codon_tree_calculators.py',
-    'episodic_workflow/root/library/bvbrc_codon_tree_grader.py',
-    'episodic_workflow/root/library/bvbrc_codon_tree_inputs.py',
-    'episodic_workflow/root/library/bvbrc_codon_tree_native.py',
-    'episodic_workflow/root/library/bvbrc_gene_tree_bundle_adapter.py',
-    'episodic_workflow/root/library/bvbrc_gene_tree_grader.py',
-    'episodic_workflow/root/library/bvbrc_gene_tree_inputs.py',
-    'episodic_workflow/root/library/bvbrc_phylogeny_bundle_projection.py',
-    'episodic_workflow/root/library/bvbrc_phylogeny_bundle_resolution.py',
-    'episodic_workflow/root/library/bvbrc_phylogeny_common_contracts.py',
-    'episodic_workflow/root/library/bvbrc_phylogeny_common_grader.py',
-    'episodic_workflow/root/library/bvbrc_phylogeny_common_inputs.py',
-    'episodic_workflow/root/library/phylogeny_raxml_inputs.py',
-    'episodic_workflow/root/library/phylogeny_calculation_contracts.py',
-    'episodic_workflow/root/library/phylogeny_calculators.py',
-    'episodic_workflow/root/library/phylogeny_format_contracts.py',
-    'episodic_workflow/root/library/phylogeny_formats.py',
-)
-
-
-def implementation_sha256():
-    """Configuration-only hash of actual code/assets with length framing."""
-    result = hashlib.sha256()
-    for name in sorted(_DEPENDENCIES):
-        content = (Path(__file__).resolve().parents[3] / name).read_bytes()
-        result.update(name.encode() + b"\0" + str(len(content)).encode() + b"\0" + content)
-    return result.hexdigest()
-
-
 def _one(rows, **keys):
     found = [row for row in rows if all(_same(row.get(k), v) for k, v in keys.items())]
     c.require(len(found) <= 1, "phylogeny_component_identity_ambiguous")
@@ -475,4 +435,4 @@ def consume_bundle(bundle, *, artifact_bytes, supplied_values, requested_form, p
     return output
 
 
-__all__ = ["consume_bundle", "implementation_sha256"]
+__all__ = ["consume_bundle"]

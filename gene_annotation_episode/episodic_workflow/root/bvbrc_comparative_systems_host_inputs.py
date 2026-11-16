@@ -119,7 +119,7 @@ def collect_comparative_systems_inputs(publications, context, inputs, bundle, *,
              ('bvbrc_comparative_systems', '1'), 'adapter_required')
     parameters = validate_parameters(selected['parameters'])
     binding = publications._adapter(context, selected)
-    _require(binding is not None and binding[1] == inputs['adapter_implementation_sha256'], 'adapter_pin_conflict')
+    _require(binding is not None, 'adapter_unbound')
     current = host.records.read(current_acquisition['source_ref'], require_completed=False)
     _require(current['contract'] == 'AcquisitionReceipt' and canonical(current) == canonical(current_acquisition),
              'current_acquisition_conflict')

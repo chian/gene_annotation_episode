@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_alignment_bundle_contracts as contracts
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_alignment_bundle_resolution as resolution
-from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_bundle_adapter import implementation_sha256
 
 ADAPTER_ID = 'bvbrc_metacats'
 ADAPTER_VERSION = '1'
@@ -31,4 +30,4 @@ def consume_bundle(bundle: dict, *, artifact_bytes: dict[str, bytes], supplied_v
 
 
 __all__ = ['ADAPTER_ID', 'ADAPTER_VERSION', 'validate_parameters', 'parameters_schema',
-    'requested_form_schema', 'validate_requested_form', 'consume_bundle', 'implementation_sha256']
+    'requested_form_schema', 'validate_requested_form', 'consume_bundle']

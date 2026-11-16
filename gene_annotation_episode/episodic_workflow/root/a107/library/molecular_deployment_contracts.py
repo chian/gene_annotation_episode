@@ -3,10 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 import re
 DEPLOYMENT_VERSION = 'molecular_sequence_deployment_v1'
-SOURCE_SHA256 = 'de47e1dc0013cd6e8d2941d8945835d585f938e486a69bb2ba3333403a3efba4'
-GLYCO_SOURCE_SHA256 = 'ed3726d318f239e98183a359f18bcd341f4159ef2e400322c6141f77dcd2aff2'
 _LIBRARIES = (('pandas', 'pandas'), ('requests', 'requests'), ('Bio', 'biopython'), ('bs4', 'beautifulsoup4'), ('soupsieve', 'soupsieve'), ('typing_extensions', 'typing_extensions'))
-_SOURCE_PROFILES = {'molecular': {'sha256': SOURCE_SHA256, 'libraries': _LIBRARIES}, 'glyco': {'sha256': GLYCO_SOURCE_SHA256, 'libraries': ()}}
+_SOURCE_PROFILES = {'molecular': {'libraries': _LIBRARIES}, 'glyco': {'libraries': ()}}
 
 class _BoundaryError(ValueError):
 
@@ -32,7 +30,7 @@ def _pin_schema(value, path):
     if type(value['sha256']) is not str or re.fullmatch('[0-9a-f]{64}', value['sha256']) is None or type(value['size_bytes']) is not int or (value['size_bytes'] < 0):
         _fail('file_pin_required', path)
 
-def _deployment(value, *, version=DEPLOYMENT_VERSION, source_sha256=SOURCE_SHA256):
+def _deployment(value, *, version=DEPLOYMENT_VERSION):
     _closed(value, ('version', 'runtime', 'module', 'import_roots', 'software_files_ref', 'software_files_file'), '/deployment')
     if value['version'] != version:
         _fail('deployment_version_required', '/deployment/version')
@@ -51,5 +49,3 @@ def _deployment(value, *, version=DEPLOYMENT_VERSION, source_sha256=SOURCE_SHA25
         _path(root, '/deployment/import_roots/' + str(i))
     if len(roots) != len(set(roots)):
         _fail('ordered_import_roots_required', '/deployment/import_roots')
-    if value['module']['sha256'] != source_sha256:
-        _fail('original_source_pin_required', '/deployment/module/sha256')

@@ -103,7 +103,7 @@ COMPATIBILITY_FIELDS = (
     "parameter_save_return", "other_observed_settings.name_set",
     *("effective_settings." + name for name in MODEL_SETTING_NAMES),
     *("other_observed_settings." + name for name in (*OTHER_SCALAR_SETTING_NAMES, *ARRAY_SETTING_NAMES)),
-    *("software." + name for name in ("worker_source_sha256", "rna_module_sha256",
+    *("software." + name for name in ("rna_module_sha256",
         "rna_extension_sha256", "viennarna_distribution_version")),
 )
 
@@ -212,9 +212,9 @@ RNA_FAILURE_ROW_SCHEMA = obj({"family": {"const": "failure"}, "record_key": _OLD
     "operation": enum(OPERATIONS.values()), "mode": enum(OPERATIONS),
     "result_receipt_key": _old_identifier("native_rna_structure_result_receipt"),
     "issue_ordinal": COUNT, "issue": _OLD_ISSUE})
-SOFTWARE_SCHEMA = obj({"python_executable": _OLD_ID, "python_sha256": SHA256,
+SOFTWARE_SCHEMA = obj({"python_executable": _OLD_ID,
     "python_version": nullable(_OLD_ID), "worker_module": {"const": "gene_annotation_episode.episodic_workflow.root.a107.native_rna_structure_worker"},
-    "worker_source_sha256": SHA256, "viennarna_distribution_version": nullable(_OLD_ID),
+    "viennarna_distribution_version": nullable(_OLD_ID),
     "rna_module_sha256": nullable(SHA256), "rna_extension_sha256": nullable(SHA256)})
 MEMBER_SCHEMA = {"oneOf": [
     obj({"member_id": ID, "kind": {"const": "saved_sheet"}, "saved_input": SAVED_INPUT_SCHEMA}),

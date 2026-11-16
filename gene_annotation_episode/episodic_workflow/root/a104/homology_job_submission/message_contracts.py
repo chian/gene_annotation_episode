@@ -37,7 +37,3 @@ def _binding(callback):
     implementation = callback if hasattr(callback, '__qualname__') else type(callback)
     return implementation.__module__ + '.' + implementation.__qualname__
 from pathlib import Path
-_AXIS_DIRECTORY = Path(__file__).resolve().parents[1]
-
-def _binding_source_bytes():
-    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))

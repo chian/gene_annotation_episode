@@ -42,9 +42,9 @@ MODEL_SPEC_SCHEMA = obj({"schema": {"const": "vienna_rna_model_spec_v1"}, **_SET
     "hard_constraints": _NULL, "soft_constraints": _NULL,
     "parameters": {"oneOf": [obj({"kind": {"const": "turner2004"}, "operand_role": _NULL}),
         obj({"kind": {"const": "supplied_parameter_file"}, "operand_role": {"const": "model_parameter_input"}})]}})
-SOFTWARE_SCHEMA = obj({"python_executable": _TEXT, "python_sha256": _SHA,
+SOFTWARE_SCHEMA = obj({"python_executable": _TEXT,
     "python_version": {"anyOf": [_TEXT, _NULL]}, "worker_module": {"const": WORKER_MODULE},
-    "worker_source_sha256": _SHA, "viennarna_distribution_version": {"anyOf": [_TEXT, _NULL]},
+    "viennarna_distribution_version": {"anyOf": [_TEXT, _NULL]},
     "rna_module_sha256": {"anyOf": [_SHA, _NULL]}, "rna_extension_sha256": {"anyOf": [_SHA, _NULL]}})
 PARAMETERS_SCHEMA = obj({"schema": {"const": "rna_calculation_parameters_v1"},
     "topology": obj({"long_stem_min_pairs": {"type": "integer", "minimum": 1},

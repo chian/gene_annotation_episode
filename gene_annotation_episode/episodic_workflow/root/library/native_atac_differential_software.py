@@ -41,6 +41,13 @@ def _copy_exact(source, destination):
     return {"path": str(destination), **identity}
 
 
+def _copy_source(source, destination):
+    require(not destination.exists(), "native_dependency_unavailable")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with _regular(source) as original, _writing(destination) as target:
+        shutil.copyfileobj(original, target, length=1024 * 1024)
+
+
 def _dependency_bindings(*, contained_records=False, exclusions=None):
     selected, result = dict(_PACKAGES), []
     for module in selected.values():
@@ -74,7 +81,7 @@ def _dependency_bindings(*, contained_records=False, exclusions=None):
                 path = Path(installed.locate_file(entry)).resolve(strict=True)
             if path.suffix in (".pyc", ".pyo") or not path.is_file():
                 continue
-            files.append({"path": str(path), **file_identity(path)})
+            files.append({"path": str(path)})
         require(bool(files), "native_dependency_unavailable")
         result.append({"distribution": distribution, "version": installed.version,
             "package_root": str(Path(module.__file__).resolve(strict=True).parent),
@@ -101,10 +108,9 @@ def freeze_driver_runtime(*, module_root, snapshot_directory, driver_modules, po
     implementation = []
     for name, source in sorted(modules.items()):
         check_scratch_budget(target, policy, additional_bytes=source.stat().st_size)
-        pin = _copy_exact(source, target / (name.replace(".", "/") + ".py"))
-        implementation.append({"module": name, "sha256": pin["sha256"]})
+        _copy_source(source, target / (name.replace(".", "/") + ".py"))
+        implementation.append({"module": name})
     return validate_driver_runtime(dict(python_executable=sys.executable,
-        python_sha256=file_identity(Path(sys.executable).resolve(strict=True))["sha256"],
         python_version=platform.python_version(), module_root=str(target), implementation_files=implementation,
         dependencies=(_dependency_bindings(contained_records=True, exclusions=dependency_exclusions)
             if contained_dependency_records else _dependency_bindings())))

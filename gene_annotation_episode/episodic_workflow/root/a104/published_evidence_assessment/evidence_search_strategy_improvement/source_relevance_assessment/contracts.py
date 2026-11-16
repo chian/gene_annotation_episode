@@ -42,8 +42,3 @@ def _population_catalog(*, assay_grading_population=False, ratio_source_populati
     """Publish A104's retained local assay and source operations."""
     from gene_annotation_episode.episodic_workflow.root.a104.literature_population_catalog import population_catalog
     return population_catalog(assay_grading_population=assay_grading_population, ratio_source_population=ratio_source_population, controlled_response_population=controlled_response_population, gel_population=gel_population, completion_time_population=completion_time_population, product_partition_population=product_partition_population, active_site_population=active_site_population, parent_depletion_population=parent_depletion_population, stoichiometric_balance_population=stoichiometric_balance_population, compiled_assay_population=compiled_assay_population, channel_population=channel_population, ion_discrimination_population=ion_discrimination_population)
-from gene_annotation_episode.episodic_workflow.root.a104 import literature_implementation_sources as _literature_source_owner
-_AXIS_DIRECTORY = Path(_literature_source_owner.__file__).resolve().parent
-
-def _binding_source_bytes():
-    return b''.join((path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py'))))

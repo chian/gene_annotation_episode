@@ -146,12 +146,9 @@ def lookup_schema() -> dict:
     detail = {'title': 'OwnAttemptDetailQuery', 'type': 'object', 'additionalProperties': False, 'required': ['view', 'decision_index', 'pointer', 'offset', 'limit'], 'properties': {'view': {'type': 'string', 'const': 'own_attempt_detail'}, 'decision_index': {'type': 'integer', 'minimum': 0}, 'pointer': {'type': 'string', 'pattern': '^(?:$|/(?:[^~]|~[01])*)$', 'description': "JSON pointer into this own attempt's recorded selected inputs only."}, 'offset': {'type': 'integer', 'minimum': 0}, 'limit': {'type': 'integer', 'minimum': 1}}}
     return {'title': 'OwnAttemptLookupQuery', 'anyOf': [attempts, detail]}
 
-def _tables(journal):
-    return {row[0] for row in journal.db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-
-def _attempt_rows(journal, episode_id, before, tables):
-    effects = 'LEFT JOIN runtime_decision_effects e ON e.run_id=i.run_id AND e.episode_id=i.episode_id AND e.decision_index=i.decision_index' if 'runtime_decision_effects' in tables else ''
-    effect = "json_extract(e.effect,'$.state')" if effects else 'NULL'
+def _attempt_rows(journal, episode_id, before):
+    effects = 'LEFT JOIN runtime_decision_effects e ON e.run_id=i.run_id AND e.episode_id=i.episode_id AND e.decision_index=i.decision_index'
+    effect = "json_extract(e.effect,'$.state')"
     query = "WITH identities AS (\n        SELECT run_id,episode_id,call_index AS decision_index FROM runtime_model_calls\n          WHERE run_id=? AND episode_id=? AND call_index<? AND purpose='decision' AND response IS NOT NULL\n        UNION\n        SELECT run_id,episode_id,decision_index FROM runtime_actions\n          WHERE run_id=? AND episode_id=? AND decision_index<?),\n      attempts AS (\n        SELECT i.*,a.decision_index AS action_index,a.credit,a.result IS NOT NULL AS result_recorded,\n          json_extract(a.result,'$.status') AS outcome_status,\n          CASE WHEN a.action IS NOT NULL THEN a.action\n            WHEN json_type(c.response,'$.selection')='object' THEN c.response->'$.selection'\n            ELSE NULL END AS selected,\n          p.decision_index AS report_index,p.form IS NOT NULL AS report_admitted,\n          p.failure IS NOT NULL AS report_failed," + effect + " AS effect_state\n        FROM identities i LEFT JOIN runtime_actions a ON a.run_id=i.run_id\n          AND a.episode_id=i.episode_id AND a.decision_index=i.decision_index\n        LEFT JOIN runtime_model_calls c ON c.run_id=i.run_id\n          AND c.episode_id=i.episode_id AND c.call_index=i.decision_index AND c.purpose='decision'\n        LEFT JOIN runtime_report_attempts p ON p.run_id=i.run_id\n          AND p.parent_episode_id=i.episode_id AND p.decision_index=i.decision_index " + effects + ")\n      SELECT decision_index,action_index,credit,result_recorded,outcome_status,\n        json_extract(selected,'$.kind') AS kind,json_extract(selected,'$.tool') AS tool,\n        json_extract(selected,'$.role') AS role,report_index,report_admitted,report_failed,effect_state\n      FROM attempts ORDER BY decision_index"
     parameters = (journal.run_id, episode_id, before) * 2
     result = []
@@ -179,14 +176,13 @@ def _attempt_rows(journal, episode_id, before, tables):
         result.append(row)
     return result
 
-def _observations(journal, episode_id, before, rows, tables):
+def _observations(journal, episode_id, before, rows):
     """Join original decision identity; never equate decision/completion order."""
     by_decision = {row['decision_index']: row for row in rows}
-    has_slots = 'runtime_completion_slots' in tables
-    join = 'LEFT JOIN runtime_completion_slots s ON s.run_id=o.run_id AND s.episode_id=o.episode_id AND s.sequence=o.unit_index' if has_slots else ''
-    slot_columns = "s.sequence,s.original_decision_index AS slot_decision,json_extract(s.slot,'$.episode_id') AS slot_episode,json_extract(s.slot,'$.sequence') AS slot_sequence,json_extract(s.slot,'$.original_decision_index') AS slot_original,json_extract(s.slot,'$.kind') AS completion_kind,json_extract(s.slot,'$.child_return') AS child_return" if has_slots else 'NULL AS sequence,NULL AS slot_decision,NULL AS slot_episode,NULL AS slot_sequence,NULL AS slot_original,NULL AS completion_kind,NULL AS child_return'
-    original = "COALESCE(json_extract(o.observation,'$.decision_index'),s.original_decision_index)" if has_slots else "json_extract(o.observation,'$.decision_index')"
-    timing_column = "(SELECT json_extract(t.data,'$.progress_time') FROM runtime_estimation_contexts t WHERE t.run_id=o.run_id AND t.episode_id=o.episode_id AND t.decision_index=" + original + ')' if 'runtime_estimation_contexts' in tables else 'NULL'
+    join = 'LEFT JOIN runtime_completion_slots s ON s.run_id=o.run_id AND s.episode_id=o.episode_id AND s.sequence=o.unit_index'
+    slot_columns = "s.sequence,s.original_decision_index AS slot_decision,json_extract(s.slot,'$.episode_id') AS slot_episode,json_extract(s.slot,'$.sequence') AS slot_sequence,json_extract(s.slot,'$.original_decision_index') AS slot_original,json_extract(s.slot,'$.kind') AS completion_kind,json_extract(s.slot,'$.child_return') AS child_return"
+    original = "COALESCE(json_extract(o.observation,'$.decision_index'),s.original_decision_index)"
+    timing_column = "(SELECT json_extract(t.data,'$.progress_time') FROM runtime_estimation_contexts t WHERE t.run_id=o.run_id AND t.episode_id=o.episode_id AND t.decision_index=" + original + ')'
     query = "SELECT o.unit_index,\n        json_extract(o.observation,'$.decision_index') AS original_decision,\n        json_extract(o.observation,'$.unit_ref') AS unit_ref,\n        json_extract(o.observation,'$.step.marginal_credit') AS gain,\n        json_type(o.observation,'$.step.marginal_credit') AS gain_type," + timing_column + ' AS progress_time,' + slot_columns + '\n        FROM runtime_observations o ' + join + '\n        WHERE o.run_id=? AND o.episode_id=? ORDER BY o.unit_index'
     observations, reasons, unassigned = ({}, [], 0)
     for row in journal.db.execute(query, (journal.run_id, episode_id)):
@@ -245,9 +241,8 @@ def yield_table(journal, episode_id, *, before, parameters=None) -> dict:
     _scope(journal, episode_id, before)
     parameters = None if parameters is None else _parameters(parameters)
     with journal.store.read_snapshot():
-        tables = _tables(journal)
-        attempts = _attempt_rows(journal, episode_id, before, tables)
-        observations, reasons, unassigned = _observations(journal, episode_id, before, attempts, tables)
+        attempts = _attempt_rows(journal, episode_id, before)
+        observations, reasons, unassigned = _observations(journal, episode_id, before, attempts)
         evaluation_time = capture_progress_time(journal, episode_id)
     groups = {}
     for attempt in attempts:
@@ -319,7 +314,7 @@ def _saved_selection(journal, episode_id, index):
 def _lookup_detail(journal, episode_id, before, query) -> OwnAttemptDetail:
     index = _index(query['decision_index'], 'decision_index')
     with journal.store.read_snapshot():
-        present = {row['decision_index'] for row in _attempt_rows(journal, episode_id, before, _tables(journal))}
+        present = {row['decision_index'] for row in _attempt_rows(journal, episode_id, before)}
         if index not in present:
             raise ValueError('own_attempt_decision_unavailable')
         encoded = _saved_selection(journal, episode_id, index)
@@ -419,9 +414,8 @@ def lookup_attempts(journal, episode_id, *, before, query) -> OwnAttempts | OwnA
         for index in indices:
             _index(index, 'decision_index')
     with journal.store.read_snapshot():
-        tables = _tables(journal)
-        attempts = _attempt_rows(journal, episode_id, before, tables)
-        observations, reasons, _ = _observations(journal, episode_id, before, attempts, tables)
+        attempts = _attempt_rows(journal, episode_id, before)
+        observations, reasons, _ = _observations(journal, episode_id, before, attempts)
         if indices is not None and (not set(indices) <= {row['decision_index'] for row in attempts}):
             raise ValueError('own_attempt_decision_unavailable')
         matching = [row for row in attempts if (query['category'] is None or row['category'] == query['category']) and (indices is None or row['decision_index'] in indices)]

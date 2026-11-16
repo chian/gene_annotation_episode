@@ -1,8 +1,6 @@
 """FastqUtils provider: supplied bytes → retained sheet → selected typed facts."""
 from __future__ import annotations
 
-import hashlib
-from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_contracts import canonical_json, validate_contract, validate_parameters, validate_requested_form
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_metadata import extract_fastqutils_metadata, _check, _unique
@@ -18,41 +16,6 @@ ADAPTER_VERSION = "2"
 
 # Exact scientific source/asset closure. This is read only at configuration;
 # parsing and saved-sheet calculation perform no filesystem access.
-_DEPENDENCIES = (
-    "bvbrc_fastqutils_contracts.py", "bvbrc_fastqutils_identity.py", "bvbrc_fastqutils_metric_specs.py",
-    "bvbrc_fastqutils_cutadapt_specs.py", "bvbrc_fastqutils_cutadapt_reader.py",
-    "bvbrc_fastqutils_samstat_specs.py", "bvbrc_fastqutils_samstat_native.py",
-    "bvbrc_fastqutils_samstat_svg.py", "bvbrc_fastqutils_samstat_legacy.py",
-    "bvbrc_fastqutils_samstat_mapping.py",
-    "bvbrc_fastqutils_sra_native.py", "bvbrc_fastqutils_sra_specs.py", "bvbrc_fastqutils_json_tokens.py",
-    "bvbrc_fastqutils_schemas.json", "bvbrc_fastqutils_fastq_reader.py", "bvbrc_fastqutils_sam_reader.py",
-    "bvbrc_fastqutils_bam_reader.py", "bvbrc_fastqutils_fastqc_reader.py", "bvbrc_fastqutils_trim_reader.py",
-    "bvbrc_fastqutils_pair_report_reader.py", "bvbrc_fastqutils_hostile_reader.py", "bvbrc_fastqutils_composition.py",
-    "bvbrc_fastqutils_quality.py", "bvbrc_fastqutils_mapping.py", "bvbrc_fastqutils_retention.py",
-    "bvbrc_fastqutils_consistency.py", "bvbrc_fastqutils_native.py", "bvbrc_fastqutils_metadata.py",
-    "sequence_composition_counts.py",
-    "bvbrc_fastqutils_resolution.py", "bvbrc_fastqutils_sheet.py", "bvbrc_fastqutils_calculators.py",
-    "bvbrc_fastqutils_projection.py", "bvbrc_fastqutils_saved_codec.py", "bvbrc_fastqutils_bundle_adapter.py",
-)
-
-
-_ROOT_DEPENDENCIES = frozenset(("bvbrc_fastqutils_bam_reader.py", "bvbrc_fastqutils_bundle_adapter.py", "bvbrc_fastqutils_calculators.py", "bvbrc_fastqutils_composition.py", "bvbrc_fastqutils_consistency.py", "bvbrc_fastqutils_contracts.py", "bvbrc_fastqutils_cutadapt_reader.py", "bvbrc_fastqutils_cutadapt_specs.py", "bvbrc_fastqutils_fastq_reader.py", "bvbrc_fastqutils_fastqc_reader.py", "bvbrc_fastqutils_hostile_reader.py", "bvbrc_fastqutils_identity.py", "bvbrc_fastqutils_json_tokens.py", "bvbrc_fastqutils_mapping.py", "bvbrc_fastqutils_metadata.py", "bvbrc_fastqutils_metric_specs.py", "bvbrc_fastqutils_native.py", "bvbrc_fastqutils_pair_report_reader.py", "bvbrc_fastqutils_projection.py", "bvbrc_fastqutils_quality.py", "bvbrc_fastqutils_resolution.py", "bvbrc_fastqutils_retention.py", "bvbrc_fastqutils_sam_reader.py", "bvbrc_fastqutils_samstat_legacy.py", "bvbrc_fastqutils_samstat_mapping.py", "bvbrc_fastqutils_samstat_native.py", "bvbrc_fastqutils_samstat_specs.py", "bvbrc_fastqutils_samstat_svg.py", "bvbrc_fastqutils_saved_codec.py", "bvbrc_fastqutils_schemas.json", "bvbrc_fastqutils_sheet.py", "bvbrc_fastqutils_sra_native.py", "bvbrc_fastqutils_sra_specs.py", "bvbrc_fastqutils_trim_reader.py", "sequence_composition_counts.py",))
-
-
-def _implementation_path(name):
-    if name in _ROOT_DEPENDENCIES:
-        return Path(__file__).with_name(name)
-    return Path(__file__).resolve().parents[3] / name
-
-
-def implementation_sha256() -> str:
-    digest = hashlib.sha256()
-    for name in sorted(_DEPENDENCIES):
-        raw = _implementation_path(name).read_bytes()
-        digest.update(name.encode("utf-8") + b"\0" + str(len(raw)).encode("ascii") + b"\0" + raw)
-    return digest.hexdigest()
-
-
 class FastqUtilsBundleAdapter:
     adapter_id = ADAPTER_ID
     adapter_version = ADAPTER_VERSION
@@ -92,4 +55,4 @@ def consume_bundle(bundle: dict, *, artifact_bytes: dict[str, bytes], supplied_v
         supplied_values=supplied_values, requested_form=requested_form, parameters=parameters)
 
 
-__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "FastqUtilsBundleAdapter", "consume_bundle", "implementation_sha256"]
+__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "FastqUtilsBundleAdapter", "consume_bundle"]

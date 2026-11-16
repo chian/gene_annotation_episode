@@ -3,7 +3,7 @@ from .source_contracts import (Mapping, deepcopy, hashlib, inspect, json, Path, 
 
 class ScientificSavedIdentity:
     def restore_closed_process(self, context) -> dict | None:
-        """Restore only the original mechanics identity of an exact closed request."""
+        """Return the recorded scientific process of an exact closed request."""
         self._role(context.role)
         read_closed = getattr(self.services, 'scientific_closed_request', None)
         if not callable(read_closed):
@@ -16,20 +16,11 @@ class ScientificSavedIdentity:
         try:
             saved = validate_filled_process(original['message']['scientific_process'])
             filled = validate_filled_process(candidate['message']['scientific_process'])
-            saved_binding = saved['mechanics_binding']
-            saved_hash = saved_binding['implementation_sha256']
         except (KeyError, TypeError) as error:
             raise ContractError('scientific_closed_request_invalid') from error
-        if not isinstance(saved_hash, str) or re.fullmatch(_SHA256['pattern'], saved_hash) is None:
-            raise ContractError('scientific_closed_implementation_identity_invalid')
         current = self.as_record()
-        # No other mechanics field, assignment operand or requested meaning is
-        # relaxed. The candidate must carry today's binding or this exact saved
-        # binding; an unrelated caller-supplied hash is not a replay identity.
-        if ({**saved_binding, 'implementation_sha256': current['implementation_sha256']} != current
-                or filled['mechanics_binding'] not in (current, saved_binding)):
+        if saved['mechanics_binding'] != current or filled['mechanics_binding'] != current:
             raise ContractError('scientific_filled_identity_mismatch')
-        candidate['message']['scientific_process']['mechanics_binding']['implementation_sha256'] = saved_hash
         if (candidate != original
                 or plain(context.scope) != original['message'].get('scope')
                 or plain(context.assignment) != original['message'].get('episode_assignment')):
