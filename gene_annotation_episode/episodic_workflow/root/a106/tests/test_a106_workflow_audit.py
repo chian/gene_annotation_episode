@@ -14,7 +14,6 @@ def test_rejected_request_and_partial_acquisition_failure_are_both_visible(tmp_p
     (tmp_path / "input.txt").write_text("ACDE\n")
     (tmp_path / "launch.json").write_text(json.dumps({
         "sequence_sha256": hashlib.sha256(b"ACDE").hexdigest()}))
-    (tmp_path / "source-pins.json").write_text("{}")
     feedback = {"category": "action_contract", "status": "invalid", "detail": {
         "code": "schema_validation", "issues": [{"expected": "object", "rule": "type",
             "path": ["arguments", "representations", 1, "selection", "candidates", 0, "numerator"]}],

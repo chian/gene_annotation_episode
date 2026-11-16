@@ -42,10 +42,15 @@ def _copy_exact(source, destination):
 
 
 def _copy_source(source, destination):
-    require(not destination.exists(), "native_dependency_unavailable")
     destination.parent.mkdir(parents=True, exist_ok=True)
-    with _regular(source) as original, _writing(destination) as target:
-        shutil.copyfileobj(original, target, length=1024 * 1024)
+    if destination.exists():
+        # A resumed preparation finds its earlier copy: accept equal bytes only.
+        with _regular(source) as original, _regular(destination) as staged:
+            require(staged.read() == original.read() and not destination.stat().st_mode & 0o222,
+                "native_dependency_unavailable")
+    else:
+        with _regular(source) as original, _writing(destination) as target:
+            shutil.copyfileobj(original, target, length=1024 * 1024)
 
 
 def _dependency_bindings(*, contained_records=False, exclusions=None):

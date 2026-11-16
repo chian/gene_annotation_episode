@@ -93,9 +93,6 @@ def progress_sources(store):
 
 def assigned_spec(tmp_path, provider, job, query, *, resource=False, key='selected-owner'):
     spec = commission_spec(tmp_path, key=key)
-    # The shared fixture serves the top-level loop; this arm's runtime binding has exactly these fields.
-    spec['runtime_binding'] = {name: spec['runtime_binding'][name]
-        for name in ('factory_module', 'factory_name', 'arguments', 'settings_sha256')}
     spec['child']['scope'] = provider.scope(job)
     assignment = {'job_ref': job, 'query_ref': query, 'cpu': 1, 'search_mode': 'native_defaults'}
     spec['child']['request']['message'] = ({'episode_assignment': {'adapter_assignment': assignment}}
