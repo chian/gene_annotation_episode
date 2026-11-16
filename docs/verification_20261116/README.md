@@ -13,6 +13,20 @@ Tree verified: commit `ce30170dd` (branch `first-full-draft-2026-11-10`).
 - Failures: every failing file (205) is named in a triage report (`docs/test_failure_triage_20261114/`) or a purge
   report (`docs/purge_20261115/`) that records its cause: `failing_files_and_cause_reports.tsv`. Compared per file with the
   latest measured result of each file during the purge, no file has fewer passes or more failures; 32 have more passes.
+- Per-test causes: `failing_test_causes.tsv` gives one row for each of the 1,541 failing tests (1,121 failures + 420
+  errors): cause code, one-sentence cause, deciding code location and the report that already covered it (`new` if
+  none). Each was established from that test's JUnit traceback and the current code at the deciding frame (six
+  read-only shards A-F; per-code explanations, whether a fix would change scientific behaviour and the fix site are in
+  `cause_codes/shard_*.md`). The last five (`test_wait_target_failures` durable cases, two `test_reference_edit_outcome_tools`
+  read_stored cases) were settled by probe runs `runs/claude_cnf3`, `runs/claude_cnf4`. 0 rows are `cause_not_found`.
+- Purge regression found and fixed: removing `implementation_sha256` from the nine
+  `*/execution_monitoring/binding_identity.py` records made all nine monitor records equal, so
+  `root/monitor_binding_catalogue.py` matched each saved descriptor to several parents (`identity_conflict`). Each
+  record now carries its class's `commissioning_parent`. The 43 affected tests now pass that check and stop at the
+  next, already recorded cause (mainly the role-only binding lookup); per-file counts of the five affected files and of
+  the 23 files that build monitors are unchanged when each is run alone (`runs/claude_monitor_fix1`, `..._fix3_*`).
+- Found for the owner: `task_selection_improvement_legacy_fallback` (silent fallback to the legacy annotation task when
+  `improvement` is unbound) contradicts the no-fallback rule; it changes which task is selected, so it is left for the owner.
 - Retired: `retired.tsv` = the 102 baseline retirements plus every test deleted during the purge (deleted whole files
   expanded into their test functions from the last commit that had them; parametrized cases count once).
 - Dangling names: `dangling_names.tsv` (static scan); compared with the pre-reconciliation list, none were introduced;
