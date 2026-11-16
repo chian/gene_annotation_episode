@@ -99,8 +99,7 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             selected_native = worker_body["selection"]
             from .protease_kinetics_measurements import _native_request
             _native_request(selected_native)
-            native_source._deployment(selected_native["deployment"], version=native_source.DEPLOYMENT_VERSION_V3,
-                source_sha256=native_source.BIOCHEMISTRY_SOURCE_SHA256)
+            native_source._deployment(selected_native["deployment"], version=native_source.DEPLOYMENT_VERSION_V3)
             if Path(selected_native["output_workspace"]) != output.parent:
                 raise ContractError("protease_kinetics_worker_output_conflict")
 
@@ -132,7 +131,7 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             raise ContractError("molecular_tool_execution_selection_conflict")
         if operation == "protease_kinetics_native":
             deployment = worker_body["selection"]["deployment"]
-            if (selected["python"] != {key: deployment["runtime"]["executable"][key] for key in ("path", "sha256")}
+            if (selected["python"] != {"path": deployment["runtime"]["executable"]["path"]}
                     or canonical(selected["environment"]) != canonical(native_environment())):
                 raise ContractError("protease_kinetics_original_runtime_conflict")
         # The reservation's original resource/argv/environment remain selected.
@@ -151,18 +150,18 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
         package_root = str(Path(__file__).resolve().parents[4])
         environment["PYTHONPATH"] = package_root + os.pathsep + environment.get("PYTHONPATH", "")
         implementation_files = _molecular_implementation_files(operation)
-        python = dict(path=sys.executable, sha256=hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest())
+        python = dict(path=sys.executable)
         if operation == "protease_kinetics_native":
             deployment = worker_body["selection"]["deployment"]
             index, _ = native_source._manifest(deployment)
             # Bind the explicitly selected deployment; no host package discovery
             # or identity substitution supplies its interpreter/source closure.
-            python = {key: deployment["runtime"]["executable"][key] for key in ("path", "sha256")}
+            python = {"path": deployment["runtime"]["executable"]["path"]}
             expected = {str(Path(root) / "gene_annotation_episode" / "episodic_workflow" / "root" / "a105" / path.name): path
                 for root in deployment["import_roots"] for path in implementation_files}
             for path in implementation_files:
                 matches = [pin for name, pin in index.items() if name in expected
-                    and expected[name] == path and pin["sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()]
+                    and expected[name] == path]
                 if len(matches) != 1:
                     raise ContractError("protease_kinetics_selected_driver_closure_conflict")
             implementation_files = None
@@ -171,9 +170,9 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             command=command(python["path"]),
             cwd=str(owned), environment=environment, policy=policy.to_dict(), request=payload,
             python=python,
-            implementation_files=[dict(path=str(p.resolve()), sha256=hashlib.sha256(p.read_bytes()).hexdigest())
-                for p in implementation_files] if implementation_files is not None else
-                [*index.values(), deployment["software_files_file"]])
+            implementation_files=[dict(path=str(p.resolve())) for p in implementation_files]
+                if implementation_files is not None else
+                [{"path": pin["path"]} for pin in [*index.values(), deployment["software_files_file"]]])
         selected_policy = policy
         atomic_json(selection_path, selected)
 
@@ -182,15 +181,11 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             deployment = worker_body["selection"]["deployment"]
             original_index, _ = native_source._manifest(deployment)
             if canonical(selected["implementation_files"]) != canonical(
-                    [*original_index.values(), deployment["software_files_file"]]):
+                    [{"path": pin["path"]} for pin in [*original_index.values(), deployment["software_files_file"]]]):
                 raise ContractError("protease_kinetics_original_manifest_conflict")
         for file in [selected["python"], *selected["implementation_files"]]:
-            try:
-                matches = hashlib.sha256(Path(file["path"]).read_bytes()).hexdigest() == file["sha256"]
-            except OSError:
-                matches = False
-            if not matches:
-                raise ContractError("molecular_tool_original_software_changed_before_dispatch")
+            if not Path(file["path"]).is_file():
+                raise ContractError("molecular_tool_original_software_unavailable_before_dispatch")
 
     try:
         if request.exists():

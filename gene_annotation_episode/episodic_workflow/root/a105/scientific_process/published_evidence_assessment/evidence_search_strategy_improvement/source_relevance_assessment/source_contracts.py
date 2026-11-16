@@ -3,10 +3,8 @@ from __future__ import annotations
 from collections.abc import Mapping
 from copy import deepcopy
 from dataclasses import replace
-import hashlib
 import inspect
 import json
-from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a105.communication import plain, validate_form
 from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
 from gene_annotation_episode.episodic_workflow.root.a105.composition_information import CONTRACT_INFORMATION_PROFILE
@@ -28,15 +26,6 @@ from gene_annotation_episode.episodic_workflow.root.a105.experimental_database_a
 _ACCESS_TOOLS = ('state.query', 'source.read', 'source.locate', 'source.sequence.scan', 'source.sequence.references', 'source.experimental.records', 'image.view', 'source.archive.members', 'source.archive.extract', 'source.xlsx.sheets', 'source.xlsx.rows', 'source.pdf.info', 'source.pdf.text', 'source.pdf.page', 'execution.estimate')
 _ACQUISITION_TOOLS = ('public.literature.search', 'public.literature.read', 'public.literature.sequence_identity', 'public.ncbi.search', 'public.pmc.versions', 'public.pmc.files', 'public.pmc.asset', *EXPERIMENT_DATABASE_TOOLS)
 
-def _implementation_path(name):
-    """Resolve this episode's retained implementation file."""
-    path = _AXIS_DIRECTORY / name
-    if not path.is_file():
-        path = _AXIS_DIRECTORY / 'library' / name
-        if not path.is_file():
-            raise FileNotFoundError(path)
-    return path
-
 def _required_grading_logic(repository):
     from gene_annotation_episode.episodic_workflow.root.a105.library import literature_required_grading
     return literature_required_grading
@@ -51,12 +40,3 @@ def _population_catalog(*, assay_grading_population=False, ratio_source_populati
     positions = {name: index for index, name in enumerate(_CATALOG_ORDER)}
     result.sort(key=lambda entry: positions[entry['name']])
     return result
-_AXIS_DIRECTORY = Path(__file__).resolve().parents[4]
-
-def _binding_source_bytes():
-    home = Path(__file__).parent
-    paths = list(home.glob('*.py'))
-    for name in ('prompts', 'tools', 'grading', 'scoring'):
-        paths.extend((home / name).glob('*.py'))
-    private = b''.join((path.read_bytes() for path in sorted(paths)))
-    return private + (_AXIS_DIRECTORY / 'library' / 'literature_investigation_prompt.py').read_bytes()

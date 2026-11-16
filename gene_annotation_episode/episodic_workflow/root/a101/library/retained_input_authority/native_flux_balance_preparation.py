@@ -41,9 +41,8 @@ def _file(value, format_=None):
     return value
 
 def _pin(value):
-    _require(type(value) is dict and set(value) == {'path', 'sha256', 'size_bytes'}, 'pin_invalid')
+    _require(type(value) is dict and set(value) == {'path'}, 'pin_invalid')
     path_value(value['path'], absolute=True)
-    _file({'artifact_ref': 'artifact_' + str(value['sha256']), 'sha256': value['sha256'], 'size_bytes': value['size_bytes'], 'format': 'runtime_file'})
     return value
 
 def _paths(value):

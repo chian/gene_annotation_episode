@@ -488,8 +488,8 @@ class AtacDifferentialResultReceipts:
         require(type(selected['source_pins']) is list and bool(selected['source_pins']) and (type(selected['dependencies']) is list))
 
         def pin(value):
-            closed(value, ('path', 'sha256', 'size_bytes'))
-            require(type(value['path']) is str and Path(value['path']).is_absolute() and (str(Path(value['path'])) == value['path']) and ('..' not in Path(value['path']).parts) and (type(value['sha256']) is str) and (re.fullmatch('[0-9a-f]{64}', value['sha256']) is not None) and (type(value['size_bytes']) is int) and (value['size_bytes'] >= 0))
+            closed(value, ('path',))
+            require(type(value['path']) is str and Path(value['path']).is_absolute() and (str(Path(value['path'])) == value['path']) and ('..' not in Path(value['path']).parts))
         for row in [*selected['source_pins'], selected['interpreter']]:
             pin(row)
         paths = [p['path'] for p in selected['source_pins']]

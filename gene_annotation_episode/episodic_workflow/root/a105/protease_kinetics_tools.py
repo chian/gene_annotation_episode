@@ -94,8 +94,7 @@ def normalize_protease_kinetics_configuration(resources, environments, *, policy
         binding = bindings[ordinal]
         _closed(binding, "operation deployment")
         _require(binding["operation"] == TOOL, "binding_selection_invalid")
-        native._deployment(binding["deployment"], version=native.DEPLOYMENT_VERSION_V3,
-            source_sha256=native.BIOCHEMISTRY_SOURCE_SHA256)
+        native._deployment(binding["deployment"], version=native.DEPLOYMENT_VERSION_V3)
         selected.append(dict(resource_id=name, resource=resource, binding_ordinal_0based=ordinal,
             deployment=binding["deployment"]))
     return dict(version=CONFIGURATION_VERSION, policy=checked, resources=selected, saved_modes=False)

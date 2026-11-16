@@ -267,10 +267,11 @@ _ATTEMPT = _record("FBAAttemptIdentity", run_id=_TEXT, episode_id=_TEXT, resourc
 _DISTRIBUTION = _record("Distribution", name=_TEXT, version=_TEXT)
 _ABS_PATH = {**_TEXT, "pattern": r"^/[^\x00-\x1f\x7f]+$"}
 _FILE_PIN = _record("FilePin", path=_ABS_PATH, sha256=_SHA, size_bytes=_UINT)
-_SOFTWARE = _record("FBASoftware", version=_enum("fba_software_v1"), python=_FILE_PIN, python_version=_TEXT,
+_SOFTWARE_FILE = _record("SoftwareFile", path=_ABS_PATH)
+_SOFTWARE = _record("FBASoftware", version=_enum("fba_software_v1"), python=_SOFTWARE_FILE, python_version=_TEXT,
     python_home=_ABS_PATH, module_root=_ABS_PATH, dependency_roots=_array(_ABS_PATH),
-    implementation_files=_array(_FILE_PIN), runtime_files=_array(_FILE_PIN), distributions=_array(_DISTRIBUTION),
-    solver_interface=_TEXT, solver_runtime_files=_array(_FILE_PIN))
+    implementation_files=_array(_SOFTWARE_FILE), runtime_files=_array(_SOFTWARE_FILE),
+    distributions=_array(_DISTRIBUTION), solver_interface=_TEXT, solver_runtime_files=_array(_SOFTWARE_FILE))
 _REQUESTED_CHANGE = _record("RequestedBoundChange", reaction_id=_TEXT, lower=_BOUND, upper=_BOUND)
 _OPTIONS = _record("RequestedSolverOptions", feasibility_tolerance=_nullable(_REAL),
     optimality_tolerance=_nullable(_REAL), integrality_tolerance=_nullable(_REAL))

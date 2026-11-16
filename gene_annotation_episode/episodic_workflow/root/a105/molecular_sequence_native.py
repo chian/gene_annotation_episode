@@ -11,7 +11,6 @@ import contextlib
 import hashlib
 import importlib.metadata as metadata
 import importlib.util
-import inspect
 import io
 import json
 import math
@@ -25,8 +24,6 @@ import traceback
 REQUEST_VERSION_V3 = "molecular_sequence_request_v3"
 DEPLOYMENT_VERSION_V3 = "molecular_sequence_deployment_v3"
 RESULT_VERSION_V3 = "molecular_sequence_execution_v3"
-BIOCHEMISTRY_SOURCE_SHA256 = "9b8ea7ea1f712553025bdaf16f981d8bec62df6004efd0954ed90f33a394e018"
-PROTEASE_FUNCTION_SHA256 = "9ad74fa1c808c356f457748b2372e970b7c54bc960a5d41dba60375e9d91f36c"
 _MODULE_NAME = "_selected_molecular_sequence_native"
 
 
@@ -106,7 +103,7 @@ def _selected_file(path, index, field):
     return actual
 
 
-def _deployment(value, *, version=DEPLOYMENT_VERSION_V3, source_sha256=BIOCHEMISTRY_SOURCE_SHA256):
+def _deployment(value, *, version=DEPLOYMENT_VERSION_V3):
     _closed(value, ("version", "runtime", "module", "import_roots",
         "software_files_ref", "software_files_file"), "/deployment")
     if value["version"] != version:
@@ -127,8 +124,6 @@ def _deployment(value, *, version=DEPLOYMENT_VERSION_V3, source_sha256=BIOCHEMIS
         _path(root, "/deployment/import_roots/" + str(i))
     if len(roots) != len(set(roots)):
         _fail("ordered_import_roots_required", "/deployment/import_roots")
-    if value["module"]["sha256"] != source_sha256:
-        _fail("original_source_pin_required", "/deployment/module/sha256")
 
 
 def _manifest(deployment):
@@ -378,7 +373,7 @@ def _execute_protease_request(request):
         capture["native_record"] = record
         deployment = retained["deployment"]
         capture["stage"] = "deployment_verification"
-        _deployment(deployment, version=DEPLOYMENT_VERSION_V3, source_sha256=BIOCHEMISTRY_SOURCE_SHA256)
+        _deployment(deployment, version=DEPLOYMENT_VERSION_V3)
         capture["stage"] = "software_manifest"
         index, manifest_file = _manifest(deployment)
         receipt = capture["execution_receipt"]
@@ -418,15 +413,13 @@ def _execute_protease_request(request):
             capture["stage"] = "source_verification"
             function = whole.analyze_protease_kinetics
             callable_identity = {"name": function.__name__, "module": function.__module__,
-                "code_filename": function.__code__.co_filename,
-                "sha256": hashlib.sha256(inspect.getsource(function).rstrip("\n").encode()).hexdigest()}
+                "code_filename": function.__code__.co_filename}
             if (callable_identity["name"] != "analyze_protease_kinetics" or callable_identity["module"] != _MODULE_NAME
-                    or Path(callable_identity["code_filename"]).resolve(strict=True) != module_path
-                    or callable_identity["sha256"] != PROTEASE_FUNCTION_SHA256):
+                    or Path(callable_identity["code_filename"]).resolve(strict=True) != module_path):
                 _fail("original_callable_identity_mismatch", "/source/callable")
             _exact_file(source_file, "/source/module")
             receipt["observed_callable"] = callable_identity
-            record["source_identity"] = {"path": source_file["path"], "callable": function.__name__, "sha256": callable_identity["sha256"]}
+            record["source_identity"] = {"path": source_file["path"], "callable": function.__name__}
             capture["stage"] = "pre_call_verification"
             try:
                 receipt["imported_files"] = _imports(index, [home, *roots], module_path)

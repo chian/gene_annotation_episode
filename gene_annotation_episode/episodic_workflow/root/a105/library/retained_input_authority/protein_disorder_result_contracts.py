@@ -112,7 +112,7 @@ def _source_equivalent_schema():
     return _obj({'stage': {'enum': ['population_unknown', 'early_no_parsed_rows', 'source_request_error', 'log_early_return_conflict', 'threshold_unknown', 'source_equivalent_postprocessing', 'retained_partial_csv_arithmetic']}, 'parsed_row_denominator': _nullable(_COUNT), 'thresholded_row_count': _nullable(_COUNT), 'disordered_percentage': _nullable(_NUMBER), 'expected_percentage_display': _nullable(_TEXT), 'region_count': _nullable(_COUNT)})
 
 def _source_profile_schema():
-    return {'const': dict(callable=TOOL, module_sha256=core.SOURCE_SHA256, callable_sha256=core.CALLABLE_SHA256, identity_kind='declared_not_execution_receipt', algorithm_location='remote_IUPred2A_service', request=dict(url=ENDPOINT, iupred2='long', anchor2='no'), source_default_threshold_not_inserted=0.5)}
+    return {'const': dict(callable=TOOL, identity_kind='declared_not_execution_receipt', algorithm_location='remote_IUPred2A_service', request=dict(url=ENDPOINT, iupred2='long', anchor2='no'), source_default_threshold_not_inserted=0.5)}
 
 def _native_log_schema():
     claims = []

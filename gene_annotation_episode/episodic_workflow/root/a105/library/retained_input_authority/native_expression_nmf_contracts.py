@@ -23,7 +23,7 @@ TEXT = {'type': 'string', 'minLength': 1, 'pattern': '^[^\\u0000]+$'}
 SHA = {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}
 NULL = {'type': 'null'}
 COUNT = {'type': 'integer', 'minimum': 0}
-FILE_SCHEMA = obj({'path': TEXT, 'sha256': SHA, 'size_bytes': COUNT})
+FILE_SCHEMA = obj({'path': TEXT})
 PARAMETERS_SCHEMA = obj({'rank': {'type': 'integer', 'minimum': 1}, 'random_state': {'type': 'integer', 'minimum': 0, 'maximum': 2 ** 32 - 1}, 'normalization': {'enum': ['none', 'column_sum_1000']}, 'tol': {'type': 'number', 'minimum': 0}, 'max_iter': {'type': 'integer', 'minimum': 1}})
 SOFTWARE_SCHEMA = obj({'version': {'const': 'expression_nmf_software_v1'}, 'python': FILE_SCHEMA, 'python_version': TEXT, 'python_home': TEXT, 'module_root': TEXT, 'implementation_files': {'type': 'array', 'minItems': 1, 'items': FILE_SCHEMA}, 'dependency_roots': {'type': 'array', 'minItems': 1, 'items': TEXT, 'uniqueItems': True}, 'distributions': {'type': 'array', 'minItems': 1, 'items': obj({'name': TEXT, 'version': TEXT, 'requires': {'type': 'array', 'items': TEXT}})}, 'runtime_files': {'type': 'array', 'minItems': 1, 'items': FILE_SCHEMA}})
 INPUT_SPEC_SCHEMA = obj({'path': TEXT, 'sha256': SHA, 'size_bytes': COUNT, 'artifact_ref': {'anyOf': [TEXT, NULL]}, 'delimiter': {'enum': [',', '\t']}, 'metadata': METADATA_SCHEMA})
@@ -50,8 +50,7 @@ def validate_expression_nmf_software(value):
     pins = [value['python'], *value['implementation_files'], *value['runtime_files']]
     for row in pins:
         path_value(row['path'], absolute=True)
-        require(type(row['size_bytes']) is int, 'invalid_nmf_file_identity')
-    paths = [row['path'] for row in pins]
+['path'] for row in pins]
     require(len(paths) == len(set(paths)), 'duplicate_nmf_runtime_file')
     modules = {str(PurePosixPath(value['module_root']) / 'gene_annotation_episode' / name) for name in ('__init__.py', 'expression_nmf_common.py', 'expression_nmf_inputs.py', 'native_expression_nmf_contracts.py', 'native_expression_nmf_storage.py', 'native_expression_nmf_driver.py')}
     require(modules <= {r['path'] for r in value['implementation_files']}, 'nmf_implementation_closure_incomplete')

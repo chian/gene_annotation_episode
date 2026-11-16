@@ -25,7 +25,7 @@ from .native_lifecycle import NativeJobHandle, resume_start, start_job, wait_job
 from gene_annotation_episode.episodic_workflow.root.a101.library.phmmer_format import VERSION
 from gene_annotation_episode.episodic_workflow.root.a101.library.phmmer_grading_values import VERSION as GRADING_VERSION
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_graders import HMMER_DOMAIN_METRICS
-from .tool_grading_artifacts import retain_tool_grading, source_tool_gradings
+from .tool_grading_artifacts import retain_tool_grading
 
 
 @dataclass(frozen=True)
@@ -166,12 +166,12 @@ def _snapshot(store, snapshot_ref, *, query_ref, scope, execution_context):
 
 
 def _native_complete(snapshot):
-    inventory = snapshot.get('parse_inventory', {})
-    errors = inventory.get('native_error_count')
-    terminated = snapshot.get('native_termination_seen')
+    inventory = snapshot['parse_inventory']
+    errors = inventory['native_error_count']
+    terminated = snapshot['native_termination_seen']
     if snapshot['parse_execution']['failure'] or errors or terminated is False:
         return False
-    if inventory.get('parser_finished') is True and terminated is True and errors == 0:
+    if inventory['parser_finished'] is True and terminated is True and errors == 0:
         return True
     return None
 
@@ -181,31 +181,29 @@ def recorded_coverage(store, snapshot_ref, *, query_ref, scope, execution_contex
 
     Native ordinals start at one; intervals are [start, end). Acquiring all
     parsed rows can include only a valid prefix of an incomplete native set.
-    Historical snapshots without captured inventory keep unknowns as null.
+    An unreadable parse inventory keeps its unknowns as null.
     """
     _, snapshot, actual_context = _snapshot(store, snapshot_ref, query_ref=query_ref, scope=scope,
         execution_context=execution_context)
-    intervals, acquired = None, None
-    if snapshot.get('publication_witness_version') == 'native_row_publication_v1':
-        intervals, acquired = [], 0
-        for (ordinal,) in store.db.execute(
-                'SELECT ordinal FROM homology_result_witnesses WHERE snapshot_ref=? ORDER BY ordinal', (snapshot_ref,)):
-            acquired += 1
-            if intervals and intervals[-1][1] == ordinal:
-                intervals[-1][1] += 1
-            else:
-                intervals.append([ordinal, ordinal+1])
-    inventory = snapshot.get('parse_inventory', {})
-    parsed = inventory.get('parsed_row_count')
-    errors = inventory.get('native_error_count')
-    finished = inventory.get('parser_finished')
-    terminated = snapshot.get('native_termination_seen')
+    intervals, acquired = [], 0
+    for (ordinal,) in store.db.execute(
+            'SELECT ordinal FROM homology_result_witnesses WHERE snapshot_ref=? ORDER BY ordinal', (snapshot_ref,)):
+        acquired += 1
+        if intervals and intervals[-1][1] == ordinal:
+            intervals[-1][1] += 1
+        else:
+            intervals.append([ordinal, ordinal+1])
+    inventory = snapshot['parse_inventory']
+    parsed = inventory['parsed_row_count']
+    errors = inventory['native_error_count']
+    finished = inventory['parser_finished']
+    terminated = snapshot['native_termination_seen']
     failure = snapshot['parse_execution']['failure']
     return {'snapshot_ref': snapshot_ref, 'query_ref': query_ref,
         'execution_source_ref': snapshot['execution_source_ref'], 'native_source_ref': snapshot['native_source_ref'],
         'execution_context': actual_context, 'status': 'available' if parsed is not None else 'unavailable',
         'parsed_row_count': parsed, 'acquired_row_count': acquired, 'acquired_ordinal_intervals': intervals,
-        'all_parsed_rows_acquired': acquired == parsed if parsed is not None and acquired is not None else None,
+        'all_parsed_rows_acquired': acquired == parsed if parsed is not None else None,
         'parser_finished': finished, 'native_error_count': errors, 'parse_execution_failure': failure,
         'native_termination_seen': terminated, 'native_result_complete': _native_complete(snapshot)}
 
@@ -375,9 +373,7 @@ class HomologyResults:
     def _grading(self, row, reference, directory, snapshot):
         """Read one saved sheet and qualify its association before projection."""
         if 'grading_file' not in row:
-            if row.get('grading_failure'):
-                return {'sheet': None, 'scores': None, 'failure': row['grading_failure']}
-            return None  # Historical worker semantics, not an unperformed grade.
+            return {'sheet': None, 'scores': None, 'failure': row['grading_failure']}
         try:
             path = directory/row['grading_file']
             if path.parent != directory or path.name != row['grading_file']:
@@ -457,7 +453,7 @@ class HomologyResults:
                         grading = self._grading(row, reference, directory, snapshot)
                         semantic = {k:v for k,v in row.items() if k not in {
                             'source_byte_span', 'kind', 'grading_file', 'grading_sha256'}}
-                        if grading and grading.get('failure'):
+                        if grading.get('failure'):
                             semantic['grading_publication_failure'] = grading['failure']['code']
                             errors.append({'ordinal': ordinal, 'code': 'phmmer_grading_unavailable',
                                            'grading_failure': grading['failure']})
@@ -467,26 +463,13 @@ class HomologyResults:
                         old = self.store.db.execute('SELECT observation_ref FROM homology_measurements WHERE measurement_key=?', (key,)).fetchone()
                         if old:
                             observation_ref = old[0]
-                            source = self.store.get(self.store.get(observation_ref)['source_ref'])
-                            retained = json.loads(self.store.get_artifact(source['artifact_ref']))
-                            if retained.get('numerical_projection_version') == 'hmmer_shared_paired_aliases_v1':
-                                for saved_grading in source_tool_gradings(self.store, source['id']):
-                                    failure = saved_grading.get('failure')
-                                    if failure and failure.get('code') == 'phmmer_shared_grading_unavailable':
-                                        errors.append({'ordinal': ordinal, 'code': 'phmmer_grading_unavailable',
-                                                       'grading_failure': failure})
                         else:
-                            if grading is None:
-                                grading = {'sheet': None, 'scores': None, 'failure': {
-                                    'code': 'phmmer_shared_grading_unavailable', 'category': 'grading_input'}}
-                                errors.append({'ordinal': ordinal, 'code': 'phmmer_grading_unavailable',
-                                               'grading_failure': grading['failure']})
                             source = self._source('native.phmmer.alignment', {**semantic, 'measurement_key': key,
                                 'numerical_projection_version': 'hmmer_shared_paired_aliases_v1'},
                                 parents=[snapshot_ref], operands=[inputs.query_ref, reference['id']],
                                 tool_grading=grading, parser_version=snapshot['parser_version'])
                             values = {'evalue': row['independent_domain_evalue'], 'bitscore': row['domain_bitscore']}
-                            if grading and not grading.get('failure'):
+                            if not grading.get('failure'):
                                 graded = grading['scores']['domains'][0]
                                 values.update({name: graded[name] for name in HMMER_DOMAIN_METRICS
                                     if graded.get(name) is not None})

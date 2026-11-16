@@ -265,11 +265,18 @@ def _source_closure():
 def _stage(source, target, policy, directory, *, executable=False):
     """Stage one source or interpreter file into a private read-only inode.
 
-    This is execution staging, not artifact acquisition or registration.
+    This is execution staging, not artifact acquisition or registration. A file
+    already staged by an interrupted preparation is accepted only when it is
+    read-only and its bytes equal the bytes to be staged; different bytes are refused.
     """
-    _require(not os.path.lexists(target), "genomic_overlap_preparation_snapshot_conflict")
-    check_scratch_budget(Path(directory), policy, additional_bytes=source.stat().st_size)
     with _directory(str(target.parent), create=True) as parent:
+        staged = _read(parent, target.name)
+        if staged is not None:
+            _require(staged == source.read_bytes(), "genomic_overlap_preparation_snapshot_conflict")
+            _require(os.stat(target.name, dir_fd=parent, follow_symlinks=False).st_mode & 0o222 == 0,
+                     "genomic_overlap_preparation_snapshot_mutable")
+            return
+        check_scratch_budget(Path(directory), policy, additional_bytes=source.stat().st_size)
         temporary = "." + target.name + "." + secrets.token_hex(16) + ".writing"
         try:
             with _regular(parent, temporary, flags=os.O_WRONLY | os.O_CREAT | os.O_EXCL) as item:

@@ -1,6 +1,6 @@
 """invocation state for this private A105 episode."""
 from __future__ import annotations
-from .scientific_contracts import _SHA256, _object, deepcopy, plain, re, scientific_digest, validate_filled_process
+from .scientific_contracts import _object, deepcopy, plain, scientific_digest, validate_filled_process
 from gene_annotation_episode.domain import ContractError
 
 import json
@@ -53,15 +53,11 @@ class ScientificInvocationState:
             saved = validate_filled_process(original['message']['scientific_process'])
             filled = validate_filled_process(candidate['message']['scientific_process'])
             saved_binding = saved['mechanics_binding']
-            saved_hash = saved_binding['implementation_sha256']
         except (KeyError, TypeError) as error:
             raise ContractError('scientific_closed_request_invalid') from error
-        if not isinstance(saved_hash, str) or re.fullmatch(_SHA256['pattern'], saved_hash) is None:
-            raise ContractError('scientific_closed_implementation_identity_invalid')
         current = self.as_record()
-        if {**saved_binding, 'implementation_sha256': current['implementation_sha256']} != current or filled['mechanics_binding'] not in (current, saved_binding):
+        if saved_binding != current or filled['mechanics_binding'] != current:
             raise ContractError('scientific_filled_identity_mismatch')
-        candidate['message']['scientific_process']['mechanics_binding']['implementation_sha256'] = saved_hash
         if candidate != original or plain(context.scope) != original['message'].get('scope') or plain(context.assignment) != original['message'].get('episode_assignment'):
             raise ContractError('scientific_filled_identity_mismatch')
         return saved

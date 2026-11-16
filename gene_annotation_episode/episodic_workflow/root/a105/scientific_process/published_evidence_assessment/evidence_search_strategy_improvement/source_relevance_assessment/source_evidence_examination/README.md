@@ -28,7 +28,7 @@ scientific functions live in their responsibility files.
 | `prompts/`, `tools/` | Private scientific prompts, source readers, operand validation and operation catalogues. |
 | `scientific_records.py`, `source_references.py`, `received_evidence.py` | Access and validate this episode's scientific records and received evidence. |
 | `configuration.py`, `source_contracts.py`, `waiting.py` | Fixed configuration, schemas and existing wait declarations. |
-| `binding_record.py`, `implementation_sources.py` | Identify the exact configured implementation and locate its source/contract assets. |
+| `binding_record.py` | Record the configured binding of this episode. |
 
 These are responsibilities in the iterative process, not a one-pass pipeline.
 Planning and summary inform each next action. An accepted interpretation must

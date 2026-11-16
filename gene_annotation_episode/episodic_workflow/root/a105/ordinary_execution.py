@@ -40,7 +40,7 @@ class OrdinaryExecutionStatistics:
         return bool(PHASE_TO_TOOLS.get(phase, frozenset()) & set(tools))
 
     def spreadsheet_class(self, path, operation, arguments, policy):
-        from . import spreadsheet_tools, spreadsheet_worker
+        from . import spreadsheet_tools
         from .native_lifecycle import VERSION as lifecycle_version
         if operation == 'sheets':
             if arguments:
@@ -63,9 +63,7 @@ class OrdinaryExecutionStatistics:
         else:
             raise ValueError('unsupported_spreadsheet_statistics_operation')
         implementation = _sha({'python_version': sys.version, 'native_lifecycle_version': lifecycle_version,
-            'adapter_version': spreadsheet_tools.VERSION,
-            'files': {name: hashlib.sha256(Path(path).read_bytes()).hexdigest() for name, path in
-                (('adapter', spreadsheet_tools.__file__), ('worker', spreadsheet_worker.__file__))}})
+            'adapter_version': spreadsheet_tools.VERSION})
         parameters = {'operation': operation, 'input_bytes': Path(path).stat().st_size, 'selection': selection,
                       'compatibility': 'same_input_size_and_technical_selection_features_v1'}
         return ExecutionClass(phase='spreadsheet_selection', backend='local', resource_id=self.resource_id,

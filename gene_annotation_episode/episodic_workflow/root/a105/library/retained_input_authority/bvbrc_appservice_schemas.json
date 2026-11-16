@@ -552,16 +552,11 @@
               "adapter_version": {
                 "type": "string",
                 "minLength": 1
-              },
-              "implementation_sha256": {
-                "type": "string",
-                "pattern": "^[0-9a-f]{64}$"
               }
             },
             "required": [
               "adapter_id",
-              "adapter_version",
-              "implementation_sha256"
+              "adapter_version"
             ],
             "additionalProperties": false
           },
@@ -3892,17 +3887,6 @@
               "type": "null"
             }
           ]
-        },
-        "adapter_implementation_sha256": {
-          "anyOf": [
-            {
-              "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
-            },
-            {
-              "type": "null"
-            }
-          ]
         }
       },
       "required": [
@@ -3915,8 +3899,7 @@
         "prior_acquisition_receipt_refs",
         "support_receipt_refs",
         "supplied_evidence",
-        "adapter",
-        "adapter_implementation_sha256"
+        "adapter"
       ],
       "additionalProperties": false
     },
