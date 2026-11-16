@@ -175,7 +175,7 @@ def _standard_bindings(store, directory, settings):
 
 def _check_bindings(options, settings):
     from .runtime import _binding_name, _annotation_child_roles, _recorded_annotation_child_roles
-    from .numerical import ESTIMATOR_VERSION, SOURCE_SHA256
+    from .numerical import ESTIMATOR_VERSION
     from .episode_application_services import service_binding
     from .episode_bindings import native_job_event_configuration
     try:
@@ -215,7 +215,7 @@ def _check_bindings(options, settings):
         raise _failure('unavailable_binding', *settings['bindings'].values())
     expected_versions = {name: {'requirement': 'same_caller_injected_executable'} for name in actual}
     if settings['controller'] is not None:
-        expected_versions['controller'] = {'estimator_version': ESTIMATOR_VERSION, 'template_sha256': SOURCE_SHA256}
+        expected_versions['controller'] = {'estimator_version': ESTIMATOR_VERSION}
     if settings['binding_versions'] != expected_versions:
         raise _failure('identity_conflict', 'binding_versions')
     for setting, option in (('job_episodes', 'job_episodes'), ('execution_expectations', 'execution_expectations'),

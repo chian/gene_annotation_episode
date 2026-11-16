@@ -13,11 +13,9 @@ from __future__ import annotations
 from collections.abc import Mapping
 from copy import deepcopy
 from datetime import datetime, timezone
-import hashlib
 import inspect
 import json
 import os
-from pathlib import Path
 import sqlite3
 import subprocess
 from types import SimpleNamespace
@@ -36,8 +34,3 @@ def _outcome(value=None, failure=None, record_refs=()):
 
 def _availability_failure(capability):
     return {'unavailable': 'resource_unavailable', 'authentication_required': 'resource_authentication_required', 'unknown': 'resource_availability_unknown'}.get(capability['availability'])
-from pathlib import Path
-_AXIS_DIRECTORY = Path(__file__).resolve().parents[2]
-
-def _binding_source_bytes():
-    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))

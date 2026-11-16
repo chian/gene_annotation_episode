@@ -62,7 +62,6 @@ class HomologyProgressProvider:
 
     def as_record(self):
         return {'version': VERSION,
-            'implementation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'registry_ref': self._configuration['registry_ref'],
             'registry_configuration_sha256': self._configuration_sha256,
             'configuration': {'log_window_bytes': self.log_window_bytes,

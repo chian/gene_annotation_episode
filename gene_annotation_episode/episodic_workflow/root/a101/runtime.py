@@ -3690,7 +3690,7 @@ async def _run_bound_workflow(store, tools, *, provider=None, provider_config=No
         raise ValueError('episode_service_factory_and_direct_services_are_exclusive')
     if episode_binding_descriptors is not None and episode_binding_factories is not None:
         raise ValueError('episode_descriptors_and_factories_are_exclusive')
-    from .numerical import YieldController, ESTIMATOR_VERSION, SOURCE_SHA256
+    from .numerical import YieldController, ESTIMATOR_VERSION
     from .providers import ModelConnection
     directory, run_id = _run_location(store, run_dir, resume)
     journal = Journal(store, run_id)
@@ -3748,7 +3748,7 @@ async def _run_bound_workflow(store, tools, *, provider=None, provider_config=No
     problem = _plain(store.problem())
     tool_resources = _plain(tools.resource_binding()) if callable(getattr(tools, 'resource_binding', None)) else {}
     bindings = {'controller': _binding_name(controller_factory, 'gene_annotation_episode.episodic_workflow.root.a101.numerical.YieldController'), 'credit': _binding_name(project_credit, 'caller_injected')}
-    versions = {'controller': {'estimator_version': ESTIMATOR_VERSION, 'template_sha256': SOURCE_SHA256} if controller_factory is None else {'requirement': 'same_caller_injected_executable'}, 'credit': {'requirement': 'same_caller_injected_executable'}}
+    versions = {'controller': {'estimator_version': ESTIMATOR_VERSION} if controller_factory is None else {'requirement': 'same_caller_injected_executable'}, 'credit': {'requirement': 'same_caller_injected_executable'}}
     if project_child_credit is not None:
         bindings['scientific_child_credit'] = _binding_name(project_child_credit, 'caller_injected')
         versions['scientific_child_credit'] = {'requirement': 'same_caller_injected_executable'}

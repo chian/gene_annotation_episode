@@ -1077,7 +1077,6 @@ class ExecutionProgressProvider:
 
     def as_record(self):
         return {'version': VERSION,
-            'implementation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'configuration': {'resources': deepcopy(self.resources),
                 'log_window_bytes': self.log_window_bytes, 'log_roles': list(self.log_roles)}}
 
