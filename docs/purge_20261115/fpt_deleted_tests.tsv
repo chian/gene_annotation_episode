@@ -1,0 +1,10 @@
+file	test or (whole file)	reason
+tests/test_native_driver_runtime.py	test_verify_driver_rejects_changed_runtime_closure[interpreter_hash]	driver_runtime record no longer carries python_sha256 (recipe 13a); the case tested the interpreter pin
+tests/test_native_driver_runtime.py	test_verify_driver_rejects_changed_runtime_closure[source_bytes]	per-module sha256 removed; replaced by case [missing_source] (a listed module file that does not exist is refused)
+tests/test_native_driver_runtime.py	test_verify_driver_rejects_changed_runtime_closure[dependency_bytes]	per-dependency-file sha256/size_bytes removed (recipe 13a)
+tests/test_native_driver_runtime.py	test_verify_driver_rejects_changed_runtime_closure[unpinned_import]	renamed to [unlisted_import] (same behaviour: a loaded site-packages module that is not listed is refused)
+tests/test_native_driver_runtime.py	test_verify_driver_uses_actual_pins_without_native_software	renamed to test_verify_driver_uses_actual_runtime_without_native_software (record is path-only)
+tests/test_molecular_sequence_native.py	test_fixed_private_versions_and_source_profiles_fail_before_file_reads (3 cases with original_source_pin_required)	the deployment module pin is no longer compared with hard-coded tool-source constants (SOURCE_SHA256/GLYCO_SOURCE_SHA256 removed)
+tests/test_flux_balance_readers_680.py	test_manifest_identity_conflicts_preserve_independent_csv[source]	FBA source_function_sha256 removed from job and manifest (recipe 11)
+tests/test_native_rna_structure_driver.py	test_actual_cli_software_mismatch_prevents_energy_and_keeps_topology[worker_source_sha256-...]	RNA worker_source_sha256 removed from the software record (recipe 11); the python_sha256 case stays (observed interpreter, still checked by the shared root)
+tests/test_application_execution_binding.py	test_known_default_publishes_actual_configuration_before_factory_and_does_not_rehash_self	renamed to test_known_default_publishes_actual_configuration_before_factory (runtime binding has no implementation digest; body unchanged except the digest key)
