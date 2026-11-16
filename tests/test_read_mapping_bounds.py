@@ -140,7 +140,7 @@ def test_invalid_native_integer_feedback_creates_no_completed_action_observation
             assert store.db.execute("SELECT count(*) FROM runtime_actions").fetchone()[0] == 0
             return {"selection":{"kind":"tool","tool":"state.query","arguments":{"refs":[]}},"report_update":{}}
         provider=ScriptedProvider([{"selection":{"kind":"tool","tool":"reads.map", "arguments":{**args,"parameters":parameters}},"report_update":{}},corrected_choice])
-        summary=asyncio.run(run_workflow(store,tools,provider=provider,run_dir=tmp_path/"scripted-preflight",
+        summary=asyncio.run(run_workflow(store, tools, project_credit=lambda *_a, **_k: 0, provider=provider,run_dir=tmp_path/"scripted-preflight",
             controller_factory=lambda path,initial:FixtureController(str(path),initial,1)))
         assert summary["completed_actions"] == 1 and summary["credit"] == 0
         assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 1

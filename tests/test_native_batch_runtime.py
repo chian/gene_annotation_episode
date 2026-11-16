@@ -116,7 +116,7 @@ def test_gene_batch_context_publication_page_exact_record_and_complete_child_for
             "scope":scope,"purpose":"Return complete recorded publication identities for a later exact inspection",
             "schema_json":json.dumps(form),"initial_report_json":"{}"}),response(genes(subject)),
             read_omitted,inspect_exact,second_model,parent_uses_facts])
-        summary=asyncio.run(run_workflow(store,tools,provider=provider,run_dir=tmp_path/"run",
+        summary=asyncio.run(run_workflow(store, tools, project_credit=lambda *_a, **_k: 0, provider=provider,run_dir=tmp_path/"run",
             restoration_settings={"preview_size":preview_size},
             controller_factory=lambda path,initial:FixtureController(str(path),initial,2 if len(path)==1 else 4)))
         assert calls == [(11,"meta"),(4,"meta")]
@@ -143,7 +143,7 @@ def test_partial_gene_batch_retains_complete_survivors_but_only_presents_request
             return response({"kind":"tool","tool":"episode.history","arguments":{
                 "view":"publications","decision_index":0,"offset":55,"limit":1}})
         provider=ScriptedProvider([response(genes(subject)),read_retained])
-        summary=asyncio.run(run_workflow(store,tools,provider=provider,run_dir=tmp_path/"partial",
+        summary=asyncio.run(run_workflow(store, tools, project_credit=lambda *_a, **_k: 0, provider=provider,run_dir=tmp_path/"partial",
             restoration_settings={"preview_size":2},
             controller_factory=lambda path,initial:FixtureController(str(path),initial,2)))
         last=json.loads(store.db.execute("SELECT result FROM runtime_actions WHERE decision_index=1").fetchone()[0])
@@ -158,7 +158,7 @@ def test_resume_preserves_complete_saved_batch_and_pages_it_without_predictor_re
     with store:
         directory=tmp_path/"resume";factory=lambda path,initial:FixtureController(str(path),initial,2)
         with pytest.raises(KeyboardInterrupt):
-            asyncio.run(run_workflow(store,tools,provider=ScriptedProvider([response(genes(subject)),KeyboardInterrupt()]),
+            asyncio.run(run_workflow(store, tools, project_credit=lambda *_a, **_k: 0, provider=ScriptedProvider([response(genes(subject)),KeyboardInterrupt()]),
                 run_dir=directory,controller_factory=factory,restoration_settings={"preview_size":2}))
         saved=store.db.execute("SELECT result FROM runtime_actions WHERE decision_index=0").fetchone()[0]
         count=store.db.execute("SELECT count(*) FROM records").fetchone()[0]
@@ -168,7 +168,7 @@ def test_resume_preserves_complete_saved_batch_and_pages_it_without_predictor_re
             assert context["controller"]["scores"] == [0]
             return response({"kind":"tool","tool":"episode.history","arguments":{
                 "view":"publications","decision_index":0,"offset":97,"limit":1}})
-        summary=asyncio.run(run_workflow(store,tools,provider=ScriptedProvider([restored]),resume=True,
+        summary=asyncio.run(run_workflow(store, tools, project_credit=lambda *_a, **_k: 0, provider=ScriptedProvider([restored]),resume=True,
             controller_factory=factory))
         assert len(calls) == 1 and store.db.execute("SELECT count(*) FROM records").fetchone()[0] == count
         assert store.db.execute("SELECT result FROM runtime_actions WHERE decision_index=0").fetchone()[0] == saved

@@ -318,9 +318,9 @@ def test_native_unsupported_event_rejected_even_if_another_selection_can_wake(tm
         asyncio.run(store.wait_events(selected))
 
 
-def test_unknown_wait_target_remains_key_error(tmp_path):
+def test_unknown_wait_target_is_refused(tmp_path):
     store = DurableExecutionStore(tmp_path / "executions")
-    with pytest.raises(KeyError):
+    with pytest.raises(durable.EventTargetError, match="unknown_wait_target"):
         asyncio.run(store.wait_events(condition(registration())))
 
 

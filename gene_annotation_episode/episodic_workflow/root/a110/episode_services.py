@@ -39,13 +39,7 @@ class WorkflowServices:
         return ScientificToolRetriever(self.workflow.store, run_id=self.workflow.run_id, provider=provider, library=binding.tool_library, configuration=binding.tool_retrieval)
 
     def execute_scientific_library(self, context, name, arguments):
-        from .scientific_support_metadata import SUPPORT_ENTRY_VERSION, support_observation_kinds
-        outcome = self.workflow.scientific_process_binding.library.execute(name, arguments)
-        if name == 'process.entry' and outcome['status'] == 'completed':
-            result = outcome['result']
-            if result['entry'].get('entry_version') == SUPPORT_ENTRY_VERSION:
-                outcome = {**outcome, 'result': {**result, 'annotation_support_routes': self.scientific_support_routes(context, observation_kinds=support_observation_kinds(result['entry']))}}
-        return outcome
+        return self.workflow.scientific_process_binding.library.execute(name, arguments)
 
     def create_receipts(self, run_id):
         from .episode_receipts import EpisodeReceipts

@@ -22,7 +22,7 @@ def constructed(tmp_path_factory):
         host = SimpleNamespace(store=store, tools=tools, run_id='construction-original', journal=journal, directory=tmp_path)
         services = module('episode_services').WorkflowServices(host)
         library = module('scientific_process_library').ScientificProcessLibrary.freeze(
-            tmp_path / 'scientific-process-library', source=ROOT.parents[3] / 'research/slotted_process_library')
+            tmp_path / 'scientific-process-library', source=ROOT.parents[3] / 'research/slotted_process_library/publications/2026-10-24-001')
         tool_library = module('scientific_tool_library').ScientificToolLibrary.freeze(
             tmp_path / 'scientific-tool-library', catalog=tools.catalog())
         scientific = module('scientific_process.episode')

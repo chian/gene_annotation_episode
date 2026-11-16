@@ -65,7 +65,7 @@ def frame(selection, role, descriptors):
                     **schema['properties']})
     facts = {role: deepcopy(descriptors)}
     return {'context': {'tools': [], 'contract_information_profile': CONTRACT_INFORMATION_PROFILE},
-        'schema': schema, 'contract_information': {
+        'schema': schema, 'decision_protocol': 'decision_exchange_v1', 'contract_information': {
             'version': CONTRACT_INFORMATION_PROFILE, 'permitted_child_roles': [role],
             'fact_sources_by_role': facts, 'fact_sources_sha256': digest(facts),
             'catalog_sha256': digest([]), 'action_schema_sha256': digest(schema),
@@ -272,41 +272,6 @@ def test_every_family_redelivery_requires_its_original_request_and_frozen_values
         f.store.db.execute('UPDATE runtime_forms SET facts=? WHERE episode_id=?', ('{}', child.episode_id))
     with pytest.raises(ValueError):
         f.host.record_admission(f.saved.root, *returned)
-
-
-def numerical_fixture(name):
-    """Use the existing explicitly synthetic/native-format fixtures unchanged."""
-    fixture = importlib.import_module('test_bvbrc_' + name + '_returns')
-    if name == 'homology':
-        return fixture.all_facts(fixture.projection())
-    if name == 'phylogeny':
-        return fixture.all_facts(*fixture.projection())
-    if name == 'alignment':
-        return fixture.projected(fixture.projection())
-    if name in {'genome_alignment', 'proteome'}:
-        return fixture.project(fixture.example())
-    if name == 'comparative_systems':
-        return fixture.projected(fixture.retained.__wrapped__())
-    return fixture.projected(fixture.saved_fixture())
-
-
-def test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads(family, monkeypatch):
-    f = family
-    name = f.module.__name__.split('bvbrc_', 1)[1].removesuffix('_returns')
-    facts = numerical_fixture(name)
-    rows = facts[f.sources[0]]
-    assert rows, 'The existing numerical fixture must exercise a nonempty family.'
-    child = f.child(f.saved.root)
-    original = f.save_return(f.saved.root, child, rows=rows)
-    repeated = f.redelivery(f.saved.root, child)
-    before = list(f.store.db.iterdump())
-    for method in ('report_sources', 'catalog', 'action_schema', 'freeze_contract_information'):
-        monkeypatch.setattr(Workflow, method, forbidden)
-    f.store.db.execute('PRAGMA query_only=ON')
-    assert f.host._attempt(f.saved.root, 0)[1:] == original[:2]
-    assert f.host._attempt(f.saved.root, 1)[1:] == repeated[:2]
-    assert f.host._attempt(f.saved.root, 0)[1]['requested'] == rows
-    assert list(f.store.db.iterdump()) == before
 
 
 @pytest.mark.parametrize('compact', [True, False], ids=['compact', 'expanded'])

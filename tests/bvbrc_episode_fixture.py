@@ -162,7 +162,7 @@ class EpisodeRun:
                 return YieldEstimate(len(history), NumericBand.exact(
                     0 if len(history) >= count else 1), parameters,
                     {'fixture': 'engineering_root_continuation_only'})
-            return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+            return YieldController(str(path), initial, 0, YieldParameters(),
                 estimate_with_context=root_estimate if path[-1][0] == 'annotation' else None)
 
         self.workflow = Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), self, directory, 'bvbrc-episode-fixture',

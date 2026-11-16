@@ -40,19 +40,18 @@ def saved_context(store, journal, *, key="root", save=True, scope=None):
 
 
 def literal_result(context):
-    # A literal compatibility fixture, not a claimed historical run. This port
-    # preserves the stored representation; the report parser checks its schema.
+    # A literal stored value; the report parser, not this port, checks its schema.
     option = {"version": "scientific_process_option_ref_v1",
-        "library_id": "a" * 64, "slot": "annotation_distinction",
+        "library_id": "a" * 64, "slot": "evidence_axis",
         "option_id": "A01", "entry_sha256": "b" * 64}
     return {"version": "scientific_process_result_v1",
         "invocation_ref": scientific_invocation_ref(context.run_id, context.path),
         "parent_invocation_ref": None, "origin_kind": "ordinary_child",
         "preparation_operation_ref": None,
-        "selection": {"version": "scientific_process_selection_v2",
-            "annotation_ref": option,
-            "thought_ref": {**option, "slot": "thought_pattern", "option_id": "P01",
-                            "entry_sha256": "c" * 64}, "tools": []},
+        "selection": {"version": "scientific_process_selection_report_v1",
+            "source_version": "scientific_process_selection_v3", "evidence_axis": option,
+            "thought_pattern": {**option, "slot": "thought_pattern", "option_id": "P01",
+                                "entry_sha256": "c" * 64}, "child_tool_info": []},
         "initial_credit": 15.25, "credit": 14.5, "credit_kind": None,
         "credit_binding_ref": None, "completed_actions": 2, "episode_yield": None}
 
@@ -79,7 +78,7 @@ def test_missing_source_empty_source_and_literal_saved_values_are_distinct(tmp_p
         returned = provenance.frozen_results(context)
         assert returned == original
         returned[0]["credit"] = 42
-        returned[0]["selection"]["annotation_ref"]["slot"] = "evidence_axis"
+        returned[0]["selection"]["evidence_axis"]["option_id"] = "A02"
         assert provenance.frozen_results(context) == original
 
 

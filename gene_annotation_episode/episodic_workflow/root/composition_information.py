@@ -40,7 +40,7 @@ def requested_contract_information(public_exchanges):
     return list(selected.values())
 
 def restricted_root(workflow, source):
-    return getattr(workflow, 'root_action_boundary', None) == ROOT_BOUNDARY_VERSION and source is not None and (len(source.path) == 1) and (source.path[0][0] == 'annotation')
+    return workflow.root_action_boundary == ROOT_BOUNDARY_VERSION and source is not None and (len(source.path) == 1) and (source.path[0][0] == 'annotation')
 
 def metadata_catalog(workflow, source):
     """Only actual instruction/process libraries; never the ordinary registry."""
@@ -51,7 +51,7 @@ def metadata_catalog(workflow, source):
             from .scientific_process_library import catalog
         entries.extend(catalog())
         entries.extend(workflow.scientific_retriever_catalog())
-    if getattr(workflow, 'contract_information_profile', lambda _: None)(source) == CONTRACT_INFORMATION_PROFILE:
+    if workflow.contract_information_profile(source) == CONTRACT_INFORMATION_PROFILE:
         entries.extend(contract_metadata_catalog())
     return deepcopy(entries)
 
@@ -113,7 +113,7 @@ def child_options(workflow, source, role=None):
             assignment = {'type': 'object'}
         else:
             assignment = {'type': 'object'}
-        facts = getattr(workflow, 'return_contract_sources', workflow.report_sources)(name)
+        facts = workflow.return_contract_sources(name)
         required_sources = getattr(binding, 'required_return_sources', lambda _parent, _role: ())(source, name) if name in workflow.episode_bindings.roles else ()
         if required_sources:
             statement = name + ': ' + ', '.join(required_sources)
@@ -124,7 +124,7 @@ def child_options(workflow, source, role=None):
         status = 'available'
         if name == 'scientific_process':
             library = workflow.scientific_process_binding.library
-            if not any((row['option_ref']['slot'] in {'evidence_axis', 'annotation_distinction'} for row in library.headers())):
+            if not any((row['option_ref']['slot'] == 'evidence_axis' for row in library.headers())):
                 status = 'missing scientific-support option'
         fields = ', '.join(assignment.get('required', ())) or 'see declared child contract'
         rows.append((name, status, fields, ', '.join(facts)))

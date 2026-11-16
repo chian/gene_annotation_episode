@@ -84,15 +84,7 @@ class SharedInformation:
         return parent
 
     def _recipient(self, row, body):
-        if body.get('recipient_participant_ref') is not None:
-            return body['recipient_participant_ref']
-        if row['kind'] == 'disposition':
-            return body.get('requester_participant_ref')
-        # Earlier records did not name a recipient. Their actual immediate
-        # parent is recoverable; arbitrary ancestors are not recipients.
-        owner = self.records.context(row['episode_id'])
-        parent = self.parent(owner)
-        return None if parent is None else self._participant(parent.episode_id)
+        return body['recipient_participant_ref']
 
     def _visible(self, context, row, body):
         return (row['episode_id'] == context.episode_id
@@ -292,9 +284,7 @@ class SharedInformation:
             else:
                 value['available_record_count']=len(body.get('available_record_refs',[]))
                 value['requester_state']=self._episode_state(row['episode_id'])
-                value['response_route']=('parent_recipient_unavailable'
-                    if value['recipient_participant_ref'] is None else
-                    'existing_requester' if value['requester_state']=='active'
+                value['response_route']=('existing_requester' if value['requester_state']=='active'
                     else 'retained_limitation_for_parent_next_commission')
             if row['kind']=='need':needs.append(value)
             elif row['kind']=='information':information.append(value)
@@ -302,8 +292,7 @@ class SharedInformation:
         latest={row['need_ref']:row for row in dispositions}
         for need in needs:
             resolved=latest.get(need['publication_ref'])
-            need['status']=('recipient_unavailable' if need['recipient_participant_ref'] is None
-                else 'open') if resolved is None else resolved['status']
+            need['status']='open' if resolved is None else resolved['status']
             need['disposition_ref']=None if resolved is None else resolved['publication_ref']
             need['response_work']='no_response_work_commissioned_by_this_publication'
             if resolved is not None and 'reason' in resolved:

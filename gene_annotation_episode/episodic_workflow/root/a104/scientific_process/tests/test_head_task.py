@@ -90,53 +90,30 @@ class TestA104ScientificTask:
             'replaces_default_instructions': value.binding.replaces_default_instructions,
             'specialist_reads': seen})
 
-    @pytest.mark.parametrize('publication', ('instruction_only', 'legacy', 'mixed'))
+    @pytest.mark.parametrize('publication', ('instruction_only', 'mixed'))
     def test_actual_publication_controls_default_instruction_replacement(self, scientific, tmp_path, publication, record_property):
         from gene_annotation_episode.episodic_workflow.root.tests.scientific_head_boundaries import write_instruction_source
         source = tmp_path / 'publication-source'; write_instruction_source(source, 'a104')
-        if publication != 'instruction_only':
-            metadata = own('scientific_support_metadata')
+        if publication == 'mixed':
             original = json.loads((source / 'entries/A104.json').read_bytes())
-            identifier = 'A999' if publication == 'mixed' else 'A104'
-            assessment = metadata._ASSESSMENT
-            legacy = {'entry_version': metadata.SUPPORT_ENTRY_VERSION, 'id': identifier,
-                'slot': 'annotation_distinction', 'name': 'Original legacy engineering instructions',
+            identifier = 'A999'
+            plain = {'id': identifier, 'slot': 'evidence_axis', 'name': 'Original legacy engineering instructions',
                 'description': 'Instruction metadata only; no scientific evidence.',
-                'support': {'proposition': 'Controlled unresolved engineering proposition',
-                    'operands': [{'operand_id': 'original_fixture',
-                        'observation_kinds': [metadata.OBSERVATION_KINDS[0]],
-                        'hypothesis_predicates': [metadata.PREDICATES[0]],
-                        'assessment_relations': [assessment['relation']['enum'][0]],
-                        'applicabilities': [assessment['applicability']['enum'][0]],
-                        'extent_bases': [assessment['extent_basis']['enum'][0]],
-                        'finding_qualifications': [metadata.FINDING_QUALIFICATIONS[0]],
-                        'instruction': 'Keep the source question unresolved.'}],
-                    'qualifications': ['Engineering instruction metadata only.'],
-                    'boundary': 'No evidence, acquired action or credit is asserted.'},
-                'evidence': deepcopy(original['evidence'])}
-            metadata.validate_support_entry(legacy)
-            if publication == 'mixed':
-                legacy = {key: deepcopy(legacy[key]) for key in ('id', 'name', 'description', 'evidence')}
-                legacy.update(slot='evidence_axis',
-                    claim_scope='Historical engineering instruction metadata only.',
-                    distinctions=['Retain the original unresolved engineering distinction.'],
-                    not_established=['No biological result or target support is established.'],
-                    boundary='Original legacy instruction metadata supplies no scientific evidence or credit.')
-            (source / 'entries' / (identifier + '.json')).write_text(json.dumps(legacy) + '\n')
+                'evidence': deepcopy(original['evidence']),
+                'claim_scope': 'Historical engineering instruction metadata only.',
+                'distinctions': ['Retain the original unresolved engineering distinction.'],
+                'not_established': ['No biological result or target support is established.'],
+                'boundary': 'Original legacy instruction metadata supplies no scientific evidence or credit.'}
+            (source / 'entries' / (identifier + '.json')).write_text(json.dumps(plain) + '\n')
             index = json.loads((source / 'index.json').read_bytes())
-            row = {'id': identifier, 'slot': legacy['slot'], 'name': legacy['name'], 'description': legacy['description'],
-                'detail_path': 'entries/' + identifier + '.json', 'source_evidence_ids': ['E-' + identifier + '-01']}
-            if publication == 'legacy':
-                index['entries'] = [row if entry['id'] == 'A104' else entry for entry in index['entries']]
-                index['slots'][0]['slot'] = 'annotation_distinction'
-            else:
-                index['entries'].append(row)
-                axis_slots = [slot for slot in index['slots'] if slot['slot'] == 'evidence_axis']
-                assert len(axis_slots) == 1 and axis_slots[0]['count'] == 1
-                axis_slots[0]['count'] = 2
-                sources = json.loads((source / 'option_sources.json').read_bytes())
-                sources['rows'].append({'evidence_id': 'E-' + identifier + '-01', 'option_id': identifier, **legacy['evidence'][0]})
-                (source / 'option_sources.json').write_text(json.dumps(sources) + '\n')
+            index['entries'].append({'id': identifier, 'slot': plain['slot'], 'name': plain['name'], 'description': plain['description'],
+                'detail_path': 'entries/' + identifier + '.json', 'source_evidence_ids': ['E-' + identifier + '-01']})
+            axis_slots = [slot for slot in index['slots'] if slot['slot'] == 'evidence_axis']
+            assert len(axis_slots) == 1 and axis_slots[0]['count'] == 1
+            axis_slots[0]['count'] = 2
+            sources = json.loads((source / 'option_sources.json').read_bytes())
+            sources['rows'].append({'evidence_id': 'E-' + identifier + '-01', 'option_id': identifier, **plain['evidence'][0]})
+            (source / 'option_sources.json').write_text(json.dumps(sources) + '\n')
             (source / 'index.json').write_text(json.dumps(index) + '\n')
         library = own('scientific_process_library').ScientificProcessLibrary.freeze(tmp_path / 'publication-library', source=source)
         binding = own('scientific_process.episode').ScientificProcessEpisode(scientific.services,

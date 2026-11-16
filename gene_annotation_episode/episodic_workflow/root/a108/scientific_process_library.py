@@ -13,8 +13,7 @@ import re
 import tempfile
 from jsonschema import Draft202012Validator
 from gene_annotation_episode.episodic_workflow.root.method_loop.durable import canonical
-from gene_annotation_episode.episodic_workflow.root.a108.scientific_process_records import OPTION_REF_VERSION, SLOTS, ALL_SLOTS, LEGACY_EVIDENCE_SLOT, canonical_slot, _exact, _option_id, _plain, _sha256, _text, scientific_digest, validate_option_ref
-from gene_annotation_episode.episodic_workflow.root.a108.library.scientific_support_metadata import validate_support_entry
+from gene_annotation_episode.episodic_workflow.root.a108.scientific_process_records import OPTION_REF_VERSION, SLOTS, _exact, _option_id, _plain, _sha256, _text, scientific_digest, validate_option_ref
 from gene_annotation_episode.episodic_workflow.root.a108.library.evidence_axis_contracts import VERSION as EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry
 from gene_annotation_episode.episodic_workflow.root.a108.library.evidence_axis_instructions import VERSION as INSTRUCTION_VERSION, instruction_view, validate_instruction_entry
 SOURCE_FORMAT = 'research_three_slot_options_v1'
@@ -110,14 +109,13 @@ def _validate_source_index(value):
     for slot in value['slots']:
         _exact(slot, 'slot catalog count', code)
         name = slot['slot']
-        if not isinstance(name, str) or name not in (*ALL_SLOTS, 'tools') or name in slots:
+        if not isinstance(name, str) or name not in (*SLOTS, 'tools') or name in slots:
             raise ValueError(code)
         _relative(slot['catalog'], code)
         if type(slot['count']) is not int or slot['count'] < 0:
             raise ValueError(code)
         slots[name] = slot['count']
-    declared = [canonical_slot(name) for name in slots]
-    if not set(SLOTS) <= set(declared) or len(set(declared)) != len(declared) or set(slots) - {*ALL_SLOTS, 'tools'}:
+    if not set(SLOTS) <= set(slots):
         raise ValueError(code)
     ids, paths, evidence_ids, counts = (set(), set(), set(), dict.fromkeys(slots, 0))
     for entry in value['entries']:
@@ -153,7 +151,7 @@ def _validate_entry(value):
             return validate_instruction_entry(value)
         if value['entry_version'] == EVIDENCE_AXIS_VERSION:
             return validate_evidence_axis_entry(value)
-        return validate_support_entry(value)
+        raise ValueError(code)
     if not {'id', 'slot', 'name', 'description', 'evidence'} <= value.keys():
         raise ValueError(code)
     _option_id(value['id'], value['slot'], code)
@@ -165,7 +163,7 @@ def _validate_entry(value):
         _exact(evidence, _SOURCE_FIELDS, code)
         for field in evidence.values():
             _text(field, code)
-    if canonical_slot(value['slot']) == 'evidence_axis':
+    if value['slot'] == 'evidence_axis':
         for key in ('claim_scope', 'boundary'):
             _text(value.get(key), code)
         for key in ('distinctions', 'not_established'):
@@ -206,7 +204,7 @@ def catalog():
     digest = {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}
     offset = {'type': 'integer', 'minimum': 0}
     limit = {'type': 'integer', 'minimum': 1}
-    reference = _object({'version': {'const': OPTION_REF_VERSION}, 'library_id': digest, 'slot': {'enum': list(ALL_SLOTS)}, 'option_id': {'type': 'string', 'pattern': '^[AP][0-9]+$'}, 'entry_sha256': digest})
+    reference = _object({'version': {'const': OPTION_REF_VERSION}, 'library_id': digest, 'slot': {'enum': list(SLOTS)}, 'option_id': {'type': 'string', 'pattern': '^[AP][0-9]+$'}, 'entry_sha256': digest})
     return [{'name': 'process.search', 'description': 'Search/page frozen evidence-axis and thought-pattern options using case-insensitive literal substrings. Every whitespace-separated query term must match an option ID, name or description; long natural-language queries can therefore return nothing. Search a known A/P ID alone, use process.entry for that ID, or use an empty query to page all options. process.entry supplies investigation guidance about the evidence and measurements to examine. Discovery selects no work and grants no capabilities.', 'input_schema': _object({'slot': {'enum': [*SLOTS, None]}, 'query': {'type': 'string'}, 'offset': offset, 'limit': limit})}, {'name': 'process.entry', 'description': 'Read investigation guidance for an evidence axis or the selected thought-pattern instructions by A/P option ID. Evidence-axis lookups describe measurements and their limits; scoring sheets, grading recipes and reader bindings are separate. The parent retains its return form.', 'input_schema': _object({'option_id': text})}, {'name': 'process.sources', 'description': 'Page the instruction provenance supporting a fully pinned option. Case evidence and E identifiers are library provenance, not new scientific observations.', 'input_schema': _object({'option_ref': reference, 'offset': offset, 'limit': limit})}]
 
 def _paging(offset, limit):
@@ -248,7 +246,7 @@ class ScientificProcessLibrary:
             (staging / 'research_index.json').write_bytes(index_bytes)
             entries = []
             for header in sorted(specification['entries'], key=lambda item: item['id']):
-                if header['slot'] not in ALL_SLOTS:
+                if header['slot'] not in SLOTS:
                     continue
                 original = _within(source, header['detail_path'], 'scientific_process_entry_missing')
                 body, body_bytes = _load(original, 'scientific_process_entry_invalid')
@@ -299,7 +297,7 @@ class ScientificProcessLibrary:
         if scientific_digest(specification) != source_index['sha256'] or _bytes_digest(source_bytes) != source_index['file_sha256']:
             raise ValueError('scientific_process_snapshot_changed')
         _validate_source_index(specification)
-        original = {entry['id']: entry for entry in specification['entries'] if entry['slot'] in ALL_SLOTS}
+        original = {entry['id']: entry for entry in specification['entries'] if entry['slot'] in SLOTS}
         if not isinstance(manifest['entries'], list):
             raise ValueError(code)
         entries, paths = ({}, {source_index['path'], 'index.json'})
@@ -391,10 +389,10 @@ class ScientificProcessLibrary:
 
     def search(self, *, slot, query, offset, limit):
         _paging(offset, limit)
-        if slot is not None and (not isinstance(slot, str) or slot not in ALL_SLOTS) or not isinstance(query, str):
+        if slot is not None and (not isinstance(slot, str) or slot not in SLOTS) or not isinstance(query, str):
             raise ValueError('scientific_process_arguments_invalid')
         terms = query.casefold().split()
-        matches = [header for header in self.headers() if (slot is None or canonical_slot(header['option_ref']['slot']) == canonical_slot(slot)) and all((term in canonical({'option_id': header['option_ref']['option_id'], 'slot': header['option_ref']['slot'], 'name': header['name'], 'description': header['description']}).casefold() for term in terms))]
+        matches = [header for header in self.headers() if (slot is None or header['option_ref']['slot'] == slot) and all((term in canonical({'option_id': header['option_ref']['option_id'], 'slot': header['option_ref']['slot'], 'name': header['name'], 'description': header['description']}).casefold() for term in terms))]
         end = offset + limit
         return {'library': self.as_record(), 'entries': matches[offset:end], 'offset': offset, 'limit': limit, 'next_offset': end if end < len(matches) else None, 'query': query, 'match_count': len(matches), 'search_semantics': 'all_whitespace_separated_terms_are_literal_case_insensitive_substrings_of_option_metadata', 'empty_result_guidance': None if matches else 'Use fewer literal terms, search a known option ID alone, use process.entry with its option_id, or page all options with an empty query. This search performs no semantic expansion.'}
 
@@ -419,10 +417,7 @@ class ScientificProcessLibrary:
             if specification is None:
                 raise ValueError('scientific_process_tool_unknown')
             arguments = _plain(arguments)
-            validation_arguments = arguments
-            if name == 'process.search' and arguments.get('slot') == LEGACY_EVIDENCE_SLOT:
-                validation_arguments = {**arguments, 'slot': 'evidence_axis'}
-            if not Draft202012Validator(specification['input_schema']).is_valid(validation_arguments):
+            if not Draft202012Validator(specification['input_schema']).is_valid(arguments):
                 raise ValueError('scientific_process_arguments_invalid')
             operation = {'process.search': self.search, 'process.entry': self.entry, 'process.sources': self.sources}[name]
             result = operation(**arguments)

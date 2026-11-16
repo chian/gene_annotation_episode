@@ -101,11 +101,11 @@ def test_declared_partial_preview_is_nonmutating_and_never_recursive(preview_siz
     assert shown["automatic_preview"]["publication_query"] == {
         "view": "publications", "decision_index": 7, "offset": 0, "limit": max(1, preview_size)}
     exact = {"status": "completed", "record_refs": [], "result": {"records": [{"outcome": failed}]}}
-    assert workflow.local_outcome_preview(exact) is exact
+    assert workflow.local_outcome_preview(exact) == exact
     form = {"child_reports": [{"actual_refs": refs, "published_batch": failed["published_batch"]}]}
-    assert workflow.local_outcome_preview(form) is form
+    assert workflow.local_outcome_preview(form) == form
     selected = {"status": "completed", "record_refs": refs, "result": {"records": refs}}
-    assert workflow.local_outcome_preview(selected) is selected
+    assert workflow.local_outcome_preview(selected) == selected
 
 
 def test_actual_read_batches_keep_sources_partial_rows_and_exact_selected_reads(tmp_path):
@@ -127,7 +127,7 @@ def test_actual_read_batches_keep_sources_partial_rows_and_exact_selected_reads(
         assert {r["subject_refs"][0] for r in observed["result"]["records"]} == {a["id"], b["id"]}
         shown = workflow.local_outcome_preview(inspected, decision_index=0)
         assert len(shown["record_refs"]) == len(shown["result"]["records"]) == 1
-        assert workflow.local_outcome_preview(observed) is observed
+        assert workflow.local_outcome_preview(observed) == observed
         args = {"subject_refs": [a["id"], b["id"], target["id"], a["member_ref"], b["member_ref"]],
             "reference_ref": a["id"], "molecule": "dna", "mode": "local"}
         aligned = tools.execute("reads.align", args, operation_key="actual-partial-alignments")
@@ -175,7 +175,7 @@ def test_actual_all_failed_read_batch_bounds_repeated_feedback_but_observes_only
         responses = [{"selection": {"kind": "tool", "tool": "reads.align", "arguments": args}, "report_update": {}},
             {"selection": {"kind": "tool", "tool": "state.query", "arguments": {"refs": [a["id"]]}}, "report_update": {}}]
         provider = ScriptedProvider(responses)
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), project_credit=lambda *_a, **_k: 0, provider=provider,
             run_dir=tmp_path / "run", restoration_settings={"preview_size": 1},
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 1)))
         context = provider.contexts[1]

@@ -24,8 +24,7 @@ from gene_annotation_episode.episodic_workflow.root.scientific_process_records i
 from gene_annotation_episode.episodic_workflow.root.scientific_process.report_generation import (build_process_result, merge_process_results,
     report_sources)
 from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import validate_process_result
-from gene_annotation_episode.episodic_workflow.root.scientific_support_metadata import (SUPPORT_ENTRY_VERSION,
-    support_observation_kinds, validate_support_entry)
+from gene_annotation_episode.episodic_workflow.root.scientific_support_metadata import support_observation_kinds
 from gene_annotation_episode.episodic_workflow.root.evidence_axis_contracts import (VERSION as EVIDENCE_AXIS_VERSION,
     validate_evidence_axis_entry)
 from gene_annotation_episode.episodic_workflow.root.evidence_axis_instructions import (VERSION as INSTRUCTION_VERSION,
@@ -141,9 +140,7 @@ def _ref_schema(slot, prefix):
         "entry_sha256": _SHA256})
 
 
-_ANNOTATION_REF = _ref_schema("annotation_distinction", "A")
-_EVIDENCE_AXIS = deepcopy(_ANNOTATION_REF)
-_EVIDENCE_AXIS['properties']['slot'] = {'enum': ['evidence_axis', 'annotation_distinction']}
+_EVIDENCE_AXIS = _ref_schema("evidence_axis", "A")
 _THOUGHT_REF = _ref_schema("thought_pattern", "P")
 _TOOL_SELECTOR = obj({'name': {'type': 'string', 'minLength': 1},
                      'resources': {'enum': ['api', 'local', 'hpc']}})

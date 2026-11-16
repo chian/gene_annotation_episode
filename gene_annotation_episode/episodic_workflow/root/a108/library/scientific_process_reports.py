@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.method_loop.episode import E
 from gene_annotation_episode.episodic_workflow.root.a108.communication import CODE
 from gene_annotation_episode.episodic_workflow.root.a108.domain import identity
 from gene_annotation_episode.episodic_workflow.root.a108.episode_reports import report_sources as episode_report_sources
-from gene_annotation_episode.episodic_workflow.root.a108.scientific_process_records import OPTION_REF_VERSION, SELECTION_VERSION, SLOTS, canonical_slot, _exact, _plain, scientific_invocation_ref, validate_invocation_ref, validate_option_ref, validate_revision_origin, validate_selection, selection_fields
+from gene_annotation_episode.episodic_workflow.root.a108.scientific_process_records import OPTION_REF_VERSION, SELECTION_VERSION, SLOTS, _exact, _plain, scientific_invocation_ref, validate_invocation_ref, validate_option_ref, validate_revision_origin, validate_selection, selection_fields
 from gene_annotation_episode.episodic_workflow.root.a108.tool_information import RESOURCE_KINDS
 VERSION = 'scientific_process_result_v1'
 RETURN_VERSION = 'scientific_process_result_v3'
@@ -39,7 +39,7 @@ def _selection_schema(library, tool_library):
     by_slot = {slot: [] for slot in SLOTS}
     for header in library.headers():
         ref = validate_option_ref(header['option_ref'])
-        by_slot[canonical_slot(ref['slot'])].append(ref)
+        by_slot[ref['slot']].append(ref)
     if any((not refs or len(refs) != len({ref['option_id'] for ref in refs}) for refs in by_slot.values())):
         raise ValueError('scientific_process_result_library_invalid')
     fields = {'version': {'type': 'string', 'const': SELECTION_REPORT_VERSION}, 'source_version': {'type': 'string', 'const': SELECTION_VERSION}}
@@ -69,7 +69,7 @@ def _validate_report_selection(value, *, library=None, tool_library=None):
     if value['version'] != SELECTION_REPORT_VERSION or value['source_version'] != SELECTION_VERSION:
         raise ValueError(code)
     refs = [validate_option_ref(value[name]) for name in SLOTS]
-    if tuple((canonical_slot(ref['slot']) for ref in refs)) != SLOTS or len({ref['library_id'] for ref in refs}) != 1:
+    if tuple((ref['slot'] for ref in refs)) != SLOTS or len({ref['library_id'] for ref in refs}) != 1:
         raise ValueError(code)
     if library is not None:
         for ref in refs:

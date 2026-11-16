@@ -366,7 +366,6 @@ class LaunchConnectedChecks:
         w.receive_native_outcome = lambda *args: None
         w.receive_outcome = lambda source, selection, result, index: observations.append((index, deepcopy(result)))
         w.controller_value = lambda source, index, credit: {"index": index, "credit": credit}
-        w.wait_inputs_version = w.completed_action_inputs_version = None
         w.pending_work = lambda source: []
         return SimpleNamespace(task=task, workflow=w, executions=executions,
             observations=observations, projections=projections)

@@ -87,7 +87,7 @@ def saved_action(case, context, *, mode="read_stored", index=0, result_ref=None)
     row = store.db.execute("SELECT result FROM tool_operations WHERE operation_key=?", (key,)).fetchone()
     outcome = json.loads(row[0]); outcome["result"] = projection
     store.db.execute("UPDATE tool_operations SET result=? WHERE operation_key=?", (canonical(outcome), key))
-    recorded = {**outcome, "pending_work_after_action": dict(version="pending_work_v1", items=[],
+    recorded = {**outcome, "pending_work_after_action": dict(version="pending_work_v2", items=[],
         captured_at="2026-10-30T00:00:00+00:00")}
     store.db.execute("UPDATE runtime_actions SET result=? WHERE run_id=? AND episode_id=? AND decision_index=?",
         (canonical(recorded), context.run_id, context.episode_id, index))

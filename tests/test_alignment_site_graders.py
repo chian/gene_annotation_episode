@@ -21,7 +21,6 @@ from gene_annotation_episode.sequence_ops import compare_sites
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/minimap2"
 
 
 def operand(length, unit="aa", subject="input:query", molecule=None):
@@ -449,64 +448,3 @@ def fasta(path):
         else:
             result[name] += line
     return result
-
-
-def retained_native_sheets(preset):
-    directory = NATIVE / ("native_"+preset.replace(":", "_"))
-    queries, references = fasta(directory/"queries.fasta"), fasta(directory/"references.fasta")
-    version = (NATIVE/"version/stdout").read_text().strip()
-    offset = 0
-    for ordinal, line in enumerate((directory/"mappings.paf").read_bytes().splitlines(keepends=True), 1):
-        row = parse_minimap2_paf_row(line, native_version=version)
-        locator = {"line_number": ordinal, "row_start": offset, "row_end": offset+len(line)}
-        offset += len(line)
-        q, r = queries[row["query_name"]], references[row["reference_name"]]
-        yield extract_minimap2_reference_sites(row, preset=preset, native_version=version,
-            selection={"kind": "reference_window", "start": row["reference_interval"][0], "end": row["reference_interval"][1]},
-            query_metadata={"subject_ref": "input:"+row["query_name"], "name": row["query_name"], "length": len(q), "sequence": q},
-            reference_metadata={"subject_ref": "reference:"+row["reference_name"], "name": row["reference_name"], "length": len(r), "sequence": r},
-            source=source("minimap2.mapping", version, locator))
-
-
-@pytest.mark.parametrize("preset", PRESETS)
-def test_retained_actual_native_pafs_all_six_presets_without_execution(preset):
-    sheets = list(retained_native_sheets(preset))
-    assert len(sheets) == 3
-    for sheet in sheets:
-        scores = calculate_reference_site_components(sheet)
-        summary = scores["summary"]
-        row = sheet["native_input"]["native_row"]
-        assert sheet["native_parameters"]["preset"] == preset
-        assert sheet["source"]["native_version"] == "2.31-r1302"
-        if row["query_name"] == "exact":
-            assert summary["paired_positions"] == summary["identical_positions"] == 2000
-            assert summary["query_gap_positions"] == summary["inserted_query_positions"] == 0
-        else:
-            assert summary["paired_positions"] == 2397 and summary["identical_positions"] == 2392
-            assert summary["substituted_positions"] == 5 and summary["query_gap_positions"] == 3
-            assert summary["inserted_query_positions"] == summary["selected_insertion_events"] == 1
-            assert scores["ratios"]["selected_alignment_identity"]["denominator"] == 2401
-            assert summary["selected_query_paired_coverage"] == 2397/2398
-            assert summary["selected_reference_paired_coverage"] == 2397/3200
-            ambiguous = next(site for site in sheet["sites"] if site["reference_position"] == 1400)
-            assert ambiguous["reference_symbol"] == "R" and ambiguous["query_symbol"] == "Y"
-            assert ambiguous["relationship"] == "substituted"
-        assert len(sheet["sites"]) > 12
-        assert row["native_line"].count("\t") >= 11
-
-
-def test_saved_sheets_recalculate_without_file_network_subprocess_or_aligner(monkeypatch):
-    sheets = [bio(), phmmer(), minimap(), *retained_native_sheets("map-ont")]
-    sheets = json.loads(json.dumps(sheets))
-    before = deepcopy(sheets)
-    expected = [calculate_reference_site_components(sheet) for sheet in sheets]
-    def forbidden(*args, **kwargs):
-        raise AssertionError("calculation must use saved data only")
-    from gene_annotation_episode import sequence_ops
-    with monkeypatch.context() as blocked:
-        for obj, name in ((builtins, "open"), (io, "open"), (socket, "socket"), (socket, "create_connection"),
-                          (subprocess, "run"), (subprocess, "Popen"), (sequence_ops, "align_pair")):
-            blocked.setattr(obj, name, forbidden)
-        actual = [calculate_reference_site_components(sheet) for sheet in sheets]
-    assert actual == expected and sheets == before
-

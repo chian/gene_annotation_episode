@@ -379,7 +379,7 @@ def test_runtime_pending_wrapper_is_validated_before_exact_outcome_comparison(ca
     child = case.child(case.root)
     outcome = case.action(child)
     wrapped = deepcopy(outcome)
-    wrapped["pending_work_after_action"] = {"version": "pending_work_v1",
+    wrapped["pending_work_after_action"] = {"version": "pending_work_v2",
         "captured_at": "2026-10-30T00:00:00+00:00", "items": []}
     case.store.db.execute("UPDATE runtime_actions SET result=? WHERE run_id=? AND episode_id=? AND decision_index=0",
         (canonical(wrapped), case.run_id, child.episode_id))

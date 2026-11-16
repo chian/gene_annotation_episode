@@ -13,13 +13,7 @@ class ScientificLibraryServices:
         return catalog(retrieval_mode=None if configuration is None else configuration['mode'], tool_info=self.tool_library.supports_tool_info)
 
     def execute_scientific_library(self, context, name, arguments):
-        from ..library.scientific_support_metadata import SUPPORT_ENTRY_VERSION, support_observation_kinds
-        outcome = self.library.execute(name, arguments)
-        if name == 'process.entry' and outcome['status'] == 'completed':
-            result = outcome['result']
-            if result['entry'].get('entry_version') == SUPPORT_ENTRY_VERSION:
-                outcome = {**outcome, 'result': {**result, 'annotation_support_routes': self.services.scientific_support_routes(context, observation_kinds=support_observation_kinds(result['entry']))}}
-        return outcome
+        return self.library.execute(name, arguments)
 
     def scientific_support_routes(self, projector, score_binding, *, observation_kinds):
         from ..library.scientific_support_metadata import annotation_policy_routes

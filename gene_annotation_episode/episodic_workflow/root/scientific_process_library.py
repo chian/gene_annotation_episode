@@ -16,10 +16,8 @@ import tempfile
 from jsonschema import Draft202012Validator
 from .method_loop.durable import canonical
 
-from .scientific_process_records import (OPTION_REF_VERSION, SLOTS, ALL_SLOTS,
-    LEGACY_EVIDENCE_SLOT, canonical_slot, _exact,
+from .scientific_process_records import (OPTION_REF_VERSION, SLOTS, _exact,
     _option_id, _plain, _sha256, _text, scientific_digest, validate_option_ref)
-from .scientific_support_metadata import validate_support_entry
 from .evidence_axis_contracts import VERSION as EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry
 from .evidence_axis_instructions import (VERSION as INSTRUCTION_VERSION,
     instruction_view, validate_instruction_entry)
@@ -152,15 +150,13 @@ def _validate_source_index(value):
     for slot in value["slots"]:
         _exact(slot, "slot catalog count", code)
         name = slot["slot"]
-        if not isinstance(name, str) or name not in (*ALL_SLOTS, "tools") or name in slots:
+        if not isinstance(name, str) or name not in (*SLOTS, "tools") or name in slots:
             raise ValueError(code)
         _relative(slot["catalog"], code)
         if type(slot["count"]) is not int or slot["count"] < 0:
             raise ValueError(code)
         slots[name] = slot["count"]
-    declared = [canonical_slot(name) for name in slots]
-    if (not set(SLOTS) <= set(declared) or len(set(declared)) != len(declared)
-            or set(slots) - {*ALL_SLOTS, "tools"}):
+    if not set(SLOTS) <= set(slots):
         raise ValueError(code)
     ids, paths, evidence_ids, counts = set(), set(), set(), dict.fromkeys(slots, 0)
     for entry in value["entries"]:
@@ -198,7 +194,7 @@ def _validate_entry(value):
             return validate_instruction_entry(value)
         if value['entry_version'] == EVIDENCE_AXIS_VERSION:
             return validate_evidence_axis_entry(value)
-        return validate_support_entry(value)
+        raise ValueError(code)
     if not {"id", "slot", "name", "description", "evidence"} <= value.keys():
         raise ValueError(code)
     _option_id(value["id"], value["slot"], code)
@@ -210,22 +206,18 @@ def _validate_entry(value):
         _exact(evidence, _SOURCE_FIELDS, code)
         for field in evidence.values():
             _text(field, code)
-    if canonical_slot(value["slot"]) == "evidence_axis":
-        for key in ("claim_scope", "boundary"):
-            _text(value.get(key), code)
-        for key in ("distinctions", "not_established"):
-            _texts(value.get(key), code)
-    elif value["slot"] == "thought_pattern":
-        for key in ("use_when", "boundary"):
-            _text(value.get(key), code)
-        for key in ("live_alternatives", "decision_guidance"):
-            _texts(value.get(key), code)
-        if not isinstance(value.get("outcome_contingencies"), list):
-            raise ValueError(code)
-        for contingency in value["outcome_contingencies"]:
-            _exact(contingency, "if_observed then_consider", code)
-            for field in contingency.values():
-                _text(field, code)
+    if value["slot"] != "thought_pattern":
+        raise ValueError(code)
+    for key in ("use_when", "boundary"):
+        _text(value.get(key), code)
+    for key in ("live_alternatives", "decision_guidance"):
+        _texts(value.get(key), code)
+    if not isinstance(value.get("outcome_contingencies"), list):
+        raise ValueError(code)
+    for contingency in value["outcome_contingencies"]:
+        _exact(contingency, "if_observed then_consider", code)
+        for field in contingency.values():
+            _text(field, code)
     return value
 
 
@@ -256,7 +248,7 @@ def catalog():
     offset = {"type": "integer", "minimum": 0}
     limit = {"type": "integer", "minimum": 1}
     reference = _object({"version": {"const": OPTION_REF_VERSION},
-        "library_id": digest, "slot": {"enum": list(ALL_SLOTS)},
+        "library_id": digest, "slot": {"enum": list(SLOTS)},
         "option_id": {"type": "string", "pattern": "^[AP][0-9]+$"},
         "entry_sha256": digest})
     return [
@@ -316,7 +308,7 @@ class ScientificProcessLibrary:
             (staging / "research_index.json").write_bytes(index_bytes)
             entries = []
             for header in sorted(specification["entries"], key=lambda item: item["id"]):
-                if header["slot"] not in ALL_SLOTS:
+                if header["slot"] not in SLOTS:
                     continue
                 original = _within(source, header["detail_path"], "scientific_process_entry_missing")
                 body, body_bytes = _load(original, "scientific_process_entry_invalid")
@@ -382,7 +374,7 @@ class ScientificProcessLibrary:
                 _bytes_digest(source_bytes) != source_index["file_sha256"]):
             raise ValueError("scientific_process_snapshot_changed")
         _validate_source_index(specification)
-        original = {entry["id"]: entry for entry in specification["entries"] if entry["slot"] in ALL_SLOTS}
+        original = {entry["id"]: entry for entry in specification["entries"] if entry["slot"] in SLOTS}
         if not isinstance(manifest["entries"], list):
             raise ValueError(code)
         entries, paths = {}, {source_index["path"], "index.json"}
@@ -484,11 +476,11 @@ class ScientificProcessLibrary:
 
     def search(self, *, slot, query, offset, limit):
         _paging(offset, limit)
-        if (slot is not None and (not isinstance(slot, str) or slot not in ALL_SLOTS)) or not isinstance(query, str):
+        if (slot is not None and (not isinstance(slot, str) or slot not in SLOTS)) or not isinstance(query, str):
             raise ValueError("scientific_process_arguments_invalid")
         terms = query.casefold().split()
         matches = [header for header in self.headers()
-            if (slot is None or canonical_slot(header["option_ref"]["slot"]) == canonical_slot(slot)) and
+            if (slot is None or header["option_ref"]["slot"] == slot) and
             all(term in canonical({"option_id": header["option_ref"]["option_id"],
                 "slot": header["option_ref"]["slot"], "name": header["name"],
                 "description": header["description"]}).casefold() for term in terms)]
@@ -523,10 +515,7 @@ class ScientificProcessLibrary:
             if specification is None:
                 raise ValueError("scientific_process_tool_unknown")
             arguments = _plain(arguments)
-            validation_arguments = arguments
-            if name == 'process.search' and arguments.get('slot') == LEGACY_EVIDENCE_SLOT:
-                validation_arguments = {**arguments, 'slot': 'evidence_axis'}
-            if not Draft202012Validator(specification["input_schema"]).is_valid(validation_arguments):
+            if not Draft202012Validator(specification["input_schema"]).is_valid(arguments):
                 raise ValueError("scientific_process_arguments_invalid")
             operation = {"process.search": self.search, "process.entry": self.entry,
                          "process.sources": self.sources}[name]

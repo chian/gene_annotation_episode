@@ -22,8 +22,8 @@ from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.native_chromatin_interaction_contracts import (
-    REQUIRED_DEPENDENCIES, REQUIRED_MODULES, requested_job_from_chromatin,
+from gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_contracts import (
+    DRIVER_MODULE, REQUIRED_DEPENDENCIES, REQUIRED_MODULES, requested_job_from_chromatin,
 )
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
@@ -106,7 +106,7 @@ def make_assignment(f, request=None):
         for name in sorted(REQUIRED_DEPENDENCIES)]
     software = {"python_executable": "/fixture/python", "python_sha256": "1" * 64,
         "python_version": "fixture", "module_root": "/fixture/source",
-        "driver_module": "gene_annotation_episode.native_chromatin_interaction_driver",
+        "driver_module": DRIVER_MODULE,
         "implementation_files": [{"module": name, "sha256": "2" * 64} for name in sorted(REQUIRED_MODULES)],
         "dependencies": dependencies}
     specs = [request["contact"]] + ([request["elements"]] if request["elements"] is not None else [])
@@ -531,7 +531,7 @@ def test_metadata_only_boundary_never_reads_bytes_executes_or_writes_authority(f
     import subprocess
     from gene_annotation_episode import materials, native_file_capture, native_lifecycle, local_jobs
     from gene_annotation_episode import chromatin_interaction_inputs, chromatin_cooler_inputs
-    from gene_annotation_episode import native_chromatin_interaction_driver
+    from gene_annotation_episode.episodic_workflow.root.library import native_chromatin_interaction_driver
     selected = make_assignment(f)
     expected = selected_references(f.request)
     for binding in selected["requested_job"]["native_chromatin_interactions"]["input_bindings"]:

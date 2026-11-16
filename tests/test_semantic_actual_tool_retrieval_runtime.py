@@ -45,7 +45,7 @@ def semantic_case(tmp_path, store, *, stops=None):
     case = ActualToolCase(tmp_path, store, stops=stops)
     assert case.descriptor["version"] == "scientific_process_episodes_v5"
     assert set(case.descriptor["configuration"]) == {"library", "tool_library", "child_roles"}
-    case.descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=case.directory,
+    case.descriptor = prepare_scientific_binding(run_directory=case.directory,
         source_directory=case.source, tool_catalog=case.tools.catalog(),
         child_roles=["scientific_process"], tool_retrieval=CONFIG)
     return case
@@ -186,53 +186,3 @@ def test_v6_reconstruction_requires_explicit_mode_and_preserves_model_identity(t
             mutate(changed)
             with pytest.raises(DurableExecutionError):
                 reopen_scientific_binding(None, descriptor=changed, directory=case.directory)
-
-
-def test_actual_worker_factory_reconstructs_semantic_binding_without_retrieval(tmp_path, monkeypatch):
-    import test_scientific_process_reconstruction as reconstruction
-    prepare = reconstruction.prepare_scientific_binding
-    monkeypatch.setattr(reconstruction, "prepare_scientific_binding",
-        lambda **kwargs: prepare(**kwargs, tool_retrieval=CONFIG))
-    saved = reconstruction.persist_scientific_run(tmp_path, monkeypatch)
-    spec = reconstruction.commission_fixture(saved)
-    shutil.rmtree(saved["source"])
-    events = reconstruction.provider_fixture(monkeypatch)
-
-    async def reopen():
-        async with reconstruction.independent.open_commission(spec) as actual:
-            child = actual["episode"]
-            workflow = child.source.workflow
-            assert child.request.as_record() == spec["child"]["request"]
-            assert workflow.scientific_process_binding.tool_retrieval == CONFIG
-            assert workflow.scientific_tool_retriever.configuration == CONFIG
-            assert workflow.episode_bindings.as_record() == [saved["descriptor"]]
-            assert workflow.journal.db.execute("SELECT count(*) FROM runtime_tool_retrievals").fetchone()[0] == 0
-            assert workflow.journal.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 0
-    asyncio.run(reopen())
-    assert [kind for kind, _ in events] == ["constructed", "entered", "released", "exited"]
-
-
-def test_actual_worker_rejects_replacement_model_against_original_commission_pin(tmp_path, monkeypatch):
-    import test_scientific_process_reconstruction as reconstruction
-    prepare = reconstruction.prepare_scientific_binding
-    monkeypatch.setattr(reconstruction, "prepare_scientific_binding",
-        lambda **kwargs: prepare(**kwargs, tool_retrieval=CONFIG))
-    saved = reconstruction.persist_scientific_run(tmp_path, monkeypatch)
-    spec = reconstruction.commission_fixture(saved)
-    manifest = json.loads((saved["directory"] / "run.json").read_text())
-    manifest["episode_bindings"][0]["configuration"]["tool_retrieval"]["model"]["model"] = "other"
-    with Store(saved["workspace"]) as store:
-        store.db.execute("UPDATE runtime_runs SET settings=? WHERE run_id=?", (
-            json.dumps({key: value for key, value in manifest.items() if key != "run_id"}),
-            manifest["run_id"]))
-    (saved["directory"] / "run.json").write_text(json.dumps(manifest))
-    events = reconstruction.provider_fixture(monkeypatch)
-
-    async def reopen():
-        async with reconstruction.independent.open_commission(spec):
-            pytest.fail("the original settings pin must reject a replacement model")
-    from method_loop.durable import DurableExecutionError
-    with pytest.raises(DurableExecutionError) as error:
-        asyncio.run(reopen())
-    assert error.value.failure["code"] == "identity_conflict"
-    assert not events

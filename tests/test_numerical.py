@@ -157,7 +157,7 @@ def test_time_scale_is_measured_and_does_not_convert_credit_to_a_rate():
 
 
 def test_signed_correction_has_one_history_entry_and_two_time_aligned_marks():
-    estimator = ScalarScoreYieldEstimator(YieldParameters(4, 2))
+    estimator = ScalarScoreYieldEstimator(YieldParameters())
     history = [.8, .1, -.4, .2]
     for value, context in zip(history, contexts_at((10, 15, 80, 120))):
         result = estimator.observe(value, context=context)
@@ -173,7 +173,7 @@ def test_signed_correction_has_one_history_entry_and_two_time_aligned_marks():
 
 def test_cumulative_baseline_and_signed_delta_are_passed_unchanged():
     controller = YieldController("epoch-a", initial_credit=10, cost=.04,
-                                 settings=YieldParameters(4, 2))
+                                 settings=YieldParameters())
     for n, credit in enumerate((10.5, 10.5, 10.1, 10.3)):
         step = controller.observe(str(n), {"credit": credit}, is_root=True)
     assert controller.estimator.scores == pytest.approx((.5, 0, -.4, .2))
@@ -207,7 +207,7 @@ def test_full_history_is_not_window_truncated_or_smoothed():
     assert left.diagnostics["history_used"] == 12
     assert right.diagnostics["history_used"] == 12
     assert left.expected_next_gain.value != right.expected_next_gain.value
-    same = estimate_score_yield([.125]*4+[0]*8, YieldParameters(1000, 500), contexts=contexts)
+    same = estimate_score_yield([.125]*4+[0]*8, YieldParameters(), contexts=contexts)
     assert same.expected_next_gain == left.expected_next_gain
 
 
@@ -215,7 +215,7 @@ def test_no_minimum_window_and_prior_only_is_distinct_from_missing_time():
     prior = estimate_score_yield(())
     assert prior.ready and prior.diagnostics["fitting_scope"] == "prior_only"
     assert prior.expected_next_gain.upper > prior.expected_next_gain.value > 0
-    one = estimate_score_yield((1.,), YieldParameters(1000, 500), contexts=contexts_at((10,)))
+    one = estimate_score_yield((1.,), YieldParameters(), contexts=contexts_at((10,)))
     assert one.ready and one.turns == 1
     missing = estimate_score_yield((1.,))
     assert not missing.ready and missing.diagnostics["unavailable_reason"] == "progress_time_unavailable"
@@ -242,7 +242,7 @@ def test_controller_rule_is_exact_for_root_and_child_and_signed_band():
     zero = NumericBand.exact(0)
     assert predicted_gain_upper_bound(zero,0).stop
     for is_root in (False,True):
-        c = YieldController("epoch",0,.03,YieldParameters(2,1))
+        c = YieldController("epoch",0,.03,YieldParameters())
         with patch.object(c.estimator, "observe") as observe:
             from gene_annotation_episode.episodic_workflow.root.numerical import YieldEstimate
             observe.return_value=YieldEstimate(2,band,c.settings,{})
@@ -252,8 +252,8 @@ def test_controller_rule_is_exact_for_root_and_child_and_signed_band():
 
 
 def test_default_context_is_not_an_implicit_new_time_formula():
-    plain = YieldController("plain", 0, .04, YieldParameters(2, 1))
-    supplied = YieldController("supplied", 0, .04, YieldParameters(2, 1))
+    plain = YieldController("plain", 0, .04, YieldParameters())
+    supplied = YieldController("supplied", 0, .04, YieldParameters())
     for score in (1, 1.5):
         left = plain.observe("work", {"credit": score})
         right = supplied.observe("work", {"credit": score, "estimation_context": {"fixture_seconds": 100000}})

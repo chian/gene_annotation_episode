@@ -3,7 +3,6 @@ from copy import deepcopy
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
-from pathlib import Path
 import shutil
 
 import pytest
@@ -16,31 +15,17 @@ from gene_annotation_episode.episodic_workflow.root.scientific_process_library i
     ScientificProcessLibrary, catalog)
 
 
-RESEARCH = (Path(__file__).resolve().parents[1] / "research/slotted_process_library"
-            / "publications/2026-10-21-001")
-
-
 def write(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def synthetic_support_entry(evidence, *, option_id="A01"):
-    """Explicit synthetic metadata; never an adopted scientific-support option."""
-    return {"entry_version": "scientific_support_entry_v1", "id": option_id,
-        "slot": "annotation_distinction", "name": "Synthetic engineering support",
-        "description": "Exercise declared support operands without biological claims.",
-        "support": {"proposition": "A synthetic recorded contrast bears on a bounded fixture property.",
-            "operands": [{"operand_id": "synthetic_correspondence",
-                "observation_kinds": ["alignment", "assay_report"],
-                "hypothesis_predicates": ["functional_family"],
-                "assessment_relations": ["strengthens", "weakens", "does_not_discriminate"],
-                "applicabilities": ["transfer", "scope_limited"],
-                "extent_bases": ["inferred_extent"],
-                "finding_qualifications": ["none", "measurement_does_not_establish_claim"],
-                "instruction": "Keep actual source subjects, measured facts and bounded target attribution."}],
-            "qualifications": ["Fixture instructions supply no target observation or score."],
-            "boundary": "Synthetic contract exercise only; the caller owns numerical policy and form."},
+def synthetic_axis_entry(evidence, *, option_id="A01"):
+    """Explicit synthetic instruction; never an adopted evidence-axis option."""
+    return {"entry_version": "evidence_axis_instruction_v1", "id": option_id,
+        "slot": "evidence_axis", "name": "Synthetic engineering axis",
+        "description": "Exercise an instruction entry without biological claims.",
+        "investigation_instructions": "Keep actual source subjects, measured facts and bounded target attribution.",
         "evidence": deepcopy(evidence)}
 
 
@@ -53,7 +38,7 @@ def independent_source(path, *, extra=False):
     common = {"name": "Fixture option", "description": "Compare the declared alternatives.",
               "evidence": [evidence]}
     bodies = [
-        synthetic_support_entry([evidence]),
+        synthetic_axis_entry([evidence]),
         {**deepcopy(common), "id": "P01", "slot": "thought_pattern",
          "name": "Find a discriminating CONTRAST", "use_when": "Two explanations remain.",
          "live_alternatives": ["Explanation one", "Explanation two"],
@@ -83,7 +68,7 @@ def independent_source(path, *, extra=False):
     index = {"format": "research_three_slot_options_v1", "status": "Fixture content",
         "slots": [{"slot": slot, "catalog": filename,
                    "count": sum(body["slot"] == slot for body in bodies)}
-            for slot, filename in (("annotation_distinction", "annotations.json"),
+            for slot, filename in (("evidence_axis", "evidence_axes.json"),
                 ("thought_pattern", "thoughts.json"), ("tools", "tools.json"))],
         "entries": entries}
     write(path / "index.json", index)
@@ -103,58 +88,10 @@ def frozen(tmp_path):
 
 
 def selection(library):
-    return {"version": "scientific_process_selection_v2",
-        "annotation_ref": library.reference("A01"), "thought_ref": library.reference("P01"),
-        "tools": ["fixture.inspect"]}
-
-
-def test_curated_p_entries_are_frozen_with_their_original_source_links(tmp_path):
-    directory = tmp_path / "run/scientific-process-library"
-    library = ScientificProcessLibrary.freeze(directory, source=RESEARCH)
-    source_index = json.loads((RESEARCH / "index.json").read_text())
-    source_table = json.loads((RESEARCH / "option_sources.json").read_text())["rows"]
-    expected_ids = [f"P{number:02d}" for number in range(1, 20)]
-    assert [row["id"] for row in source_index["entries"]] == expected_ids
-    assert [row["option_ref"]["option_id"] for row in library.headers()] == expected_ids
-    assert [(row["slot"], row["count"]) for row in source_index["slots"]] == [
-        ("annotation_distinction", 0), ("thought_pattern", 19)]
-    assert len(source_table) == 76
-    assert library.search(slot="annotation_distinction", query="", offset=0,
-                          limit=99)["entries"] == []
-    for unavailable in ("A01", "A10", "T01", "T13"):
-        with pytest.raises(ValueError):
-            library.reference(unavailable)
-    observed_rows = []
-    for header in source_index["entries"]:
-        body = json.loads((RESEARCH / header["detail_path"]).read_text())
-        ref = library.reference(header["id"])
-        assert ref["entry_sha256"] == content_digest(body)
-        assert library.resolve(ref) == body
-        record = library.entry(header["id"])
-        assert record == {"option_ref": ref, "entry": body,
-                          "source_count": len(header["source_evidence_ids"])}
-        offset = 0
-        while True:
-            page = library.sources(option_ref=ref, offset=offset, limit=2)
-            observed_rows.extend(page["rows"])
-            if page["next_offset"] is None:
-                break
-            offset = page["next_offset"]
-    assert observed_rows == source_table
-    reopened = ScientificProcessLibrary(directory)
-    assert reopened.as_record() == library.as_record()
-    assert reopened.headers() == library.headers()
-    assert [row for option_id in expected_ids for row in reopened.sources(
-        option_ref=reopened.reference(option_id), offset=0, limit=99)["rows"]] == source_table
-    assert {path.name for path in directory.iterdir()} == {
-        "index.json", "research_index.json", "entries", "sources"}
-    # No raw papers, all-case archives or aggregate catalog bodies were copied.
-    assert len(list(directory.rglob("*.json"))) == 40
-    manifest = json.loads((directory / "index.json").read_text())
-    assert library.as_record()["manifest_sha256"] == content_digest(manifest)
-    assert manifest["library_id"] == content_digest({k: v for k, v in manifest.items() if k != "library_id"})
-    for metadata in library._entries.values():
-        assert not ({"evidence", "decision_guidance", "capability_operations", "claim_scope"} & metadata.keys())
+    return {"version": "scientific_process_selection_v3",
+        "evidence_axis": library.reference("A01"), "thought_pattern": library.reference("P01"),
+        "child_tool_info": [{"name": "fixture.inspect", "resources": "local",
+            "description": "Inspect a fixture value.", "instructions": "Read one selected row."}]}
 
 
 def test_metadata_search_is_literal_paged_and_does_not_read_bodies(frozen, monkeypatch):
@@ -408,11 +345,11 @@ def test_records_reject_nonfinite_or_unsupported_json(frozen, bad):
 def test_record_namespace_common_library_and_nonempty_binding(frozen):
     library, _, _, _ = frozen
     selected = selection(library)
-    selected["thought_ref"]["library_id"] = "0" * 64
+    selected["thought_pattern"]["library_id"] = "0" * 64
     with pytest.raises(ValueError):
         validate_selection(selected)
     selected = selection(library)
-    selected["annotation_ref"], selected["thought_ref"] = selected["thought_ref"], selected["annotation_ref"]
+    selected["evidence_axis"], selected["thought_pattern"] = selected["thought_pattern"], selected["evidence_axis"]
     with pytest.raises(ValueError):
         validate_selection(selected)
     for digest in ("0" * 63, "g" * 64, "A" * 64, 1, None):
@@ -424,14 +361,3 @@ def test_record_namespace_common_library_and_nonempty_binding(frozen):
         validate_filled_process({"version": "filled_scientific_process_v1",
             "selection": selection(library), "assignment_sha256": "a" * 64,
             "invocation_sha256": "b" * 64, "mechanics_binding": {}})
-
-
-def test_old_selected_tool_bundle_is_rejected_instead_of_reinterpreted(frozen):
-    library, _, _, _ = frozen
-    old = selection(library)
-    old["version"] = "scientific_process_selection_v1"
-    old["tool_ref"] = old.pop("tools")
-    with pytest.raises(ValueError, match="selection_invalid"):
-        validate_selection(old)
-
-

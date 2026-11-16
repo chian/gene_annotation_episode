@@ -22,9 +22,7 @@ REVISION_VERSION = "scientific_process_revision_v1"
 CHILD_SELECTION_VERSION = "scientific_process_child_selection_v1"
 REVISION_ORIGIN_VERSION = "scientific_process_revision_origin_v1"
 SLOTS = ("evidence_axis", "thought_pattern")
-LEGACY_EVIDENCE_SLOT = "annotation_distinction"
-ALL_SLOTS = (*SLOTS, LEGACY_EVIDENCE_SLOT)
-_PREFIXES = {"evidence_axis": "A", LEGACY_EVIDENCE_SLOT: "A", "thought_pattern": "P"}
+_PREFIXES = {"evidence_axis": "A", "thought_pattern": "P"}
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _INVOCATION_REF = re.compile(r"scientific_invocation_[0-9a-f]{24}\Z")
 _PREPARATION_REF = re.compile(r"operation_[0-9a-f]{24}\Z")
@@ -33,11 +31,6 @@ _PREPARATION_REF = re.compile(r"operation_[0-9a-f]{24}\Z")
 def scientific_digest(value) -> str:
     """SHA-256 of the existing durable finite-JSON canonical representation."""
     return content_digest(value)
-
-
-def canonical_slot(value):
-    """Compare slot meanings without rewriting an old pinned option record."""
-    return 'evidence_axis' if value == LEGACY_EVIDENCE_SLOT else value
 
 
 def scientific_invocation_ref(run_id, path) -> str:
@@ -111,7 +104,7 @@ def validate_selection(value) -> dict:
     refs = []
     for name, slot in zip(fields[:2], SLOTS):
         ref = validate_option_ref(value[name])
-        if canonical_slot(ref["slot"]) != slot:
+        if ref["slot"] != slot:
             raise ValueError(code)
         value[name] = ref
         refs.append(ref)
@@ -152,7 +145,7 @@ def validate_parent_selection_view(value):
     if value['version'] != SELECTION_VIEW_VERSION:
         raise ValueError(code)
     refs = [validate_option_ref(value[key]) for key in ('evidence_axis', 'thought_pattern')]
-    if (tuple(canonical_slot(ref['slot']) for ref in refs) != SLOTS
+    if (tuple(ref['slot'] for ref in refs) != SLOTS
             or len({ref['library_id'] for ref in refs}) != 1):
         raise ValueError(code)
     from .tool_information import RESOURCE_KINDS
@@ -226,5 +219,4 @@ def validate_revision_origin(value) -> dict:
 __all__ = ["scientific_digest", "validate_option_ref", "validate_selection",
            "validate_filled_process", "validate_revision", "validate_child_selection",
            "scientific_invocation_ref", "validate_invocation_ref", "validate_revision_origin",
-           "selection_fields", "selector_selection", "parent_selection_view", "validate_parent_selection_view",
-           "canonical_slot", "SELECTION_VERSION", "SELECTION_VIEW_VERSION"]
+           "selection_fields", "selector_selection", "parent_selection_view", "validate_parent_selection_view", "SELECTION_VERSION", "SELECTION_VIEW_VERSION"]

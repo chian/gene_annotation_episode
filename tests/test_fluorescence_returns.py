@@ -326,6 +326,7 @@ def frame(f, parent, child, *, index, schema, selection):
         *[{'properties': {'operation': {'const': name}}} for name in CONTRACT_INFORMATION_OPERATIONS]]
     select = obj({'response_type': {'type': 'string', 'const': 'select_action'}, **action_schema['properties']})
     saved = {'context': {'tools': [], 'contract_information_profile': CONTRACT_INFORMATION_PROFILE}, 'schema': action_schema,
+        'decision_protocol': 'decision_exchange_v1',
         'contract_information': {'version': CONTRACT_INFORMATION_PROFILE, 'permitted_child_roles': [child.role],
             'fact_sources_by_role': facts, 'fact_sources_sha256': digest(facts), 'catalog_sha256': digest([]),
             'action_schema_sha256': digest(action_schema), 'instructions': 'Explicit boundary test frame.',

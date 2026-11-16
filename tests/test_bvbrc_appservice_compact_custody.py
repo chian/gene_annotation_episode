@@ -64,7 +64,7 @@ def build_run(directory, *, compact=True, durable=False):
     provider = Provider()
     workflow = Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider, directory / "run", "custody479",
         controller_factory=lambda path, initial: YieldController(str(path), initial, 0,
-            YieldParameters(100, 50), estimate_with_context=lambda history, parameters, _: fixture_estimate(history, parameters)),
+            YieldParameters(), estimate_with_context=lambda history, parameters, _: fixture_estimate(history, parameters)),
         project_credit=lambda *_: 0, episode_service_factory=factory,
         episode_service_binding=factory.as_record(), episode_service_inputs="actual_tool_registry_v1",
         annotation_child_roles=("launch", "results"), episode_record_receipts=True,

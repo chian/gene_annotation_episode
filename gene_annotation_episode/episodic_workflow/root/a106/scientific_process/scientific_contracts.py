@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a106.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a106.episode_bindings import reference_in_context
 from gene_annotation_episode.episodic_workflow.root.a106.scientific_process_records import scientific_digest, scientific_invocation_ref, validate_child_selection, validate_filled_process, validate_option_ref, validate_revision_origin, validate_selection, selection_fields, selector_selection, SELECTION_VERSION
 from gene_annotation_episode.episodic_workflow.root.a106.scientific_process_reports import report_sources, validate_process_result
-from gene_annotation_episode.episodic_workflow.root.a106.scientific_support_metadata import SUPPORT_ENTRY_VERSION, support_observation_kinds, validate_support_entry
+from gene_annotation_episode.episodic_workflow.root.a106.scientific_support_metadata import support_observation_kinds
 from gene_annotation_episode.episodic_workflow.root.a106.evidence_axis_contracts import VERSION as EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry
 from gene_annotation_episode.episodic_workflow.root.a106.evidence_axis_instructions import VERSION as INSTRUCTION_VERSION, instruction_view, validate_instruction_entry
 from gene_annotation_episode.episodic_workflow.root.a106.scientific_process_library import evidence_axis_instruction_view
@@ -41,10 +41,8 @@ def _object(value, code):
 
 def _ref_schema(slot, prefix):
     return obj({'version': {'const': 'scientific_process_option_ref_v1'}, 'library_id': _SHA256, 'slot': {'const': slot}, 'option_id': {'type': 'string', 'pattern': '^' + prefix + '[0-9]+$'}, 'entry_sha256': _SHA256})
-_ANNOTATION_REF = _ref_schema('annotation_distinction', 'A')
-_ANNOTATION_REF['properties']['option_id'] = {'const': AXIS}
-_EVIDENCE_AXIS = deepcopy(_ANNOTATION_REF)
-_EVIDENCE_AXIS['properties']['slot'] = {'enum': ['evidence_axis', 'annotation_distinction']}
+_EVIDENCE_AXIS = _ref_schema('evidence_axis', 'A')
+_EVIDENCE_AXIS['properties']['option_id'] = {'const': AXIS}
 _THOUGHT_REF = _ref_schema('thought_pattern', 'P')
 _TOOL_SELECTOR = obj({'name': {'type': 'string', 'minLength': 1}, 'resources': {'enum': ['api', 'local', 'hpc']}})
 _TOOL_INFO = obj({**_TOOL_SELECTOR['properties'], 'description': {'type': 'string', 'minLength': 1}, 'instructions': {'type': 'string', 'minLength': 1}})

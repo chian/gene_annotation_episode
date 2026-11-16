@@ -521,8 +521,7 @@ def test_ordinary_metadata_failures_return_only_controlled_receipt_without_extra
     monkeypatch.setattr(host.tools, "_sequence_worker_async", forbidden)
     monkeypatch.setattr(host.store, "commit_reasoning", forbidden)
     action = {"kind": "tool", "tool": encode.TOOL, "arguments": arguments}
-    with pytest.raises(ActionFailure):
-        asyncio.run(caller.source.execute(action, 0))
+    asyncio.run(caller.source.execute(action, 0))
     outcome = deepcopy(caller.source.last_outcome)
     expected = {"acquired": False, "source_ref": None, "data_ref": None, "failure_code": expected_code}
     assert encode.validate_encode_receipt(outcome["result"]) == expected

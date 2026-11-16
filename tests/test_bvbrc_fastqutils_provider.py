@@ -122,7 +122,7 @@ def test_saved_validation_with_all_parsers_calculators_and_sheet_builders_disabl
     names = ("fastq_reader", "sam_reader", "bam_reader", "fastqc_reader", "trim_reader", "pair_report_reader", "hostile_reader",
              "composition", "quality", "mapping", "retention", "consistency", "calculators", "native", "sheet", "metadata", "bundle_adapter")
     for suffix in names:
-        module = importlib.import_module("gene_annotation_episode.bvbrc_fastqutils_" + suffix)
+        module = importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_" + suffix)
         for name in list(vars(module)):
             if name.startswith(("parse_", "calculate_", "populate_", "extract_")) or name == "consume_bundle":
                 monkeypatch.setattr(module, name, forbidden)

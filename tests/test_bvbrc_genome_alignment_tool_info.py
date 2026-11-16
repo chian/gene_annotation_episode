@@ -58,7 +58,7 @@ def test_only_bound_provider_is_listed_and_multiple_resources_remain_explicit(fa
     validator = Draft202012Validator(row['input_schema'])
     assert all(validator.is_valid(launch(resource=r)) for r in ('first-api', 'second-api'))
     available = family.resource_tool_contracts()
-    library = ScientificToolLibrary.freeze(tmp_path / 'library', catalog=[], tool_info=True,
+    library = ScientificToolLibrary.freeze(tmp_path / 'library', catalog=[],
         resource_catalogs={'api': available})
     selected = [{'name': row['name'], 'resources': 'api'}]
     info = library.resolve_tool_info(selected, available)

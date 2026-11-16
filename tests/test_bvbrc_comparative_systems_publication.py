@@ -99,23 +99,6 @@ def test_sheet_without_calculations_retains_exact_original_failure_context():
     save_validate(recovered,args,context)
 
 
-def test_original_failure_records_equal_to_generated_records_survive_round_trip(monkeypatch):
-    args=arguments('families')
-    generated=assemble_projection(None,None,requested_form=args['requested_form'],failure_context=EMPTY_CONTEXT)
-    original_context={'retained_requirements':deepcopy(generated['missing_requirements']),
-        'retained_diagnostics':deepcopy(generated['diagnostics']),'failure_status':'partial'}
-    result=assemble_projection(None,None,requested_form=args['requested_form'],failure_context=original_context)
-    saved,sheet,components=stored(result,failure_context=original_context)
-    from test_bvbrc_comparative_systems_episode_flow import forbid_science
-    forbid_science(monkeypatch)
-    recovered,context=decode_comparative_publication_result(saved,sheet=sheet,components=components)
-    assert recovered==result and context==original_context
-    assert context['retained_requirements']
-    save_validate(recovered,args,context)
-    context['failure_status']='invalid'
-    with pytest.raises(ValueError): save_validate(recovered,args,context)
-
-
 @pytest.mark.parametrize('change',['absent','unknown_key','bad_status','bad_requirement','old_version'])
 def test_original_failure_context_and_explicit_wrapper_version_required(change):
     args=arguments('families')

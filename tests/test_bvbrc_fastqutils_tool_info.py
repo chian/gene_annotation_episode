@@ -48,7 +48,7 @@ def test_bound_library_supplies_parent_information_and_child_instructions(factor
     catalogs = {'api': [item for item in family.resource_tool_contracts() if item['resources'] == 'api']}
     assert row in catalogs['api'] and row['name'] not in registry.catalog()
     assert row['name'] not in {item['name'] for item in create({'selected-api': deepcopy(CONFIG)}).resource_tool_contracts()}
-    library = ScientificToolLibrary.freeze(tmp_path / 'library', catalog=[], tool_info=True, resource_catalogs=catalogs)
+    library = ScientificToolLibrary.freeze(tmp_path / 'library', catalog=[], resource_catalogs=catalogs)
     selected = [{'name': row['name'], 'resources': 'api'}]
     assert library.resolve_tool_info(selected, catalogs['api']) == [
         {key: row[key] for key in ('name', 'description', 'resources', 'instructions')}]

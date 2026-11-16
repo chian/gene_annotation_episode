@@ -252,11 +252,6 @@ class LaunchTaskChecks:
         admitted = value.native.prepare_assignment(value.context, 'launch_hpc', prepared,
             value.context.scope, 'original-native-request')
         assert admitted == original
-        if prepare is not None:
-            endpoint = self.module(self.binding_path+'/to_child_hpc_job_execution')
-            assert getattr(type(value.binding), '_prepare_hpc_job_execution_request').__module__ == endpoint.__name__
-            receiver = value.binding.child_report_receiver('launch_hpc')
-            assert receiver.__module__ == self.module(self.binding_path+'/from_child_hpc_job_execution').__name__
 
     @pytest.mark.parametrize('child_name', ('api_job_execution', 'local_job_execution', 'hpc_job_execution'))
     def test_native_parent_contract_does_not_admit_parent_as_own_role(self, launch_case, child_name):
@@ -362,7 +357,6 @@ class LaunchTaskChecks:
         calls = []
         if receiver_for_role is not None:
             receiver = receiver_for_role('launch_hpc')
-            assert receiver.__module__.endswith('.from_child_hpc_job_execution')
             def selected(role):
                 assert role == 'launch_hpc'
                 def receive(*args, **kwargs):

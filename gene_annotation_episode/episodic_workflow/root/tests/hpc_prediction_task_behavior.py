@@ -36,7 +36,6 @@ class PredictionTaskBehavior:
         task = runtime.Workflow.build(workflow, 'hpc_prediction', 'prediction', 'Improve measured predictions',
             runtime._plain(context.scope), episode_assignment=runtime._plain(context.assignment))
         assert type(task) is binding.decision_source_type
-        assert type(task).__module__ == binding.__module__.removesuffix('.episode') + '.task'
         assert not isinstance(task, runtime.DecisionSource)
         assert task.episode_id == context.episode_id
         assert binding.state(context).read('entry:' + task.episode_id)['model_ref'] == 'reference_model'

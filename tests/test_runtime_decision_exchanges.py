@@ -39,7 +39,7 @@ def test_category_yield_parameters_default_controller():
 @pytest.mark.parametrize('wrapped', [False, True])
 def test_category_yield_parameters_declared_caller_layout(version, wrapped):
     from gene_annotation_episode.episodic_workflow.root.numerical import YieldParameters
-    parameters = YieldParameters(window_size=11, subsample_size=5, uncertainty_alpha=.07)
+    parameters = YieldParameters(uncertainty_alpha=.07)
     definition = {'version': version, 'cost': .003, 'parameters': parameters.as_record(),
         'continuation': 'available_next_gain_upper_bound_lte_cost',
         'time_resource_estimation': 'separate_information_for_episode_decisions'}

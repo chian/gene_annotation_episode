@@ -74,7 +74,7 @@ def test_multiple_explicit_resources_survive_real_library_and_service_catalog(fa
     resource_catalogs = {}
     for item in catalog:
         resource_catalogs.setdefault(item['resources'], []).append(item)
-    library = ScientificToolLibrary.freeze(tmp_path / 'frozen', catalog=[], tool_info=True,
+    library = ScientificToolLibrary.freeze(tmp_path / 'frozen', catalog=[],
         resource_catalogs=resource_catalogs)
     selection = [{'name': row['name'], 'resources': 'api'}]
     assert library.parent_tool_info([row]) == [{key: row[key] for key in ('name', 'description', 'resources')}]

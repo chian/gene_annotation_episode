@@ -328,11 +328,7 @@ def test_actual_ordinary_step_receipt_authority_and_keyless_cache_without_new_wo
     action = {"kind": "tool", "tool": screen.TOOL, "arguments": deepcopy(ACCESSIONS)}
     monkeypatch.setattr(host.tools, "_sequence_worker_async", forbidden)
     monkeypatch.setattr(host.store, "commit_reasoning", forbidden)
-    if mode in {"no_response", "missing_key"}:
-        with pytest.raises(ActionFailure):
-            asyncio.run(caller.source.execute(action, 0))
-    else:
-        asyncio.run(caller.source.execute(action, 0))
+    asyncio.run(caller.source.execute(action, 0))
     outcome = deepcopy(caller.source.last_outcome)
     receipt = screen.validate_screen_receipt(outcome["result"])
     expected_code = {"success": None, "graphql_error": "screen_graphql_errors",

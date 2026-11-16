@@ -15,7 +15,8 @@ def fixture():
     service = SimpleNamespace(service="bvbrc_appservice", scientific_adapters=bind_adapters([
         dict(adapter_id="bvbrc_rnaseq", adapter_version="1", implementation_sha256=rnaseq.implementation_sha256())]))
     binding = SimpleNamespace(api_execution=SimpleNamespace(services={"analysis":service}))
-    registry = SimpleNamespace(roles=("launch", "results"), for_role=lambda _: binding)
+    registry = SimpleNamespace(roles=("launch", "results"),
+        for_context_role=lambda role, *, path=None, owner=None: binding)
     services = SimpleNamespace(workflow=SimpleNamespace(episode_bindings=registry))
     native = arguments("RNASeq")
     args = dict(resource_id="analysis", parameters=native["parameters"], fields=[dict(field=name,

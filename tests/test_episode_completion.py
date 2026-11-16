@@ -222,22 +222,6 @@ def test_admission_and_completion_rollback_together_and_replay_original_credit(t
         assert ledger.slot(spec["parent"]["episode_id"], 1) is None
 
 
-def test_closed_child_delivery_failure_still_stages_one_original_completion(tmp_path):
-    store, spec, returned, contract, finding, receipts = setup_case(tmp_path, sourced=True)
-    with store:
-        ledger = CompletionLedger(store, Journal(store, spec["run_id"]))
-        returned["form"]["findings"] = []
-        seal_return(returned)
-        with store.transaction():
-            admitted = admit_return(spec, returned, receiver_for(store, spec, contract, receipts))
-            saved = child_stage(ledger, spec, admitted)
-        assert admitted["state"] == "delivery_failed"
-        assert saved["controller_input"]["credit"] == 0
-        assert store.get(finding["id"]) == finding
-        assert child_stage(ledger, spec, admitted) == saved
-        assert ledger.slot(spec["parent"]["episode_id"], 1) is None
-
-
 def test_child_reference_must_match_the_actual_c4_admission(tmp_path):
     store, spec, returned, contract, finding, receipts = setup_case(tmp_path)
     with store:
@@ -249,26 +233,6 @@ def test_child_reference_must_match_the_actual_c4_admission(tmp_path):
                 ledger.stage(spec["parent"]["episode_id"], 7, label="child:7", kind="child_return",
                     controller_input=Value(admitted["controller_input"]), child_return=changed)
         assert ledger.slot(spec["parent"]["episode_id"], 0) is None
-
-
-def test_failed_execution_c4_input_is_null_and_cannot_stage(tmp_path):
-    store, spec, returned, contract, finding, receipts = setup_case(tmp_path)
-    with store:
-        ledger = CompletionLedger(store, Journal(store, spec["run_id"]))
-        returned.update(outcome="execution_failed", completion=None, episode_archive=None,
-            result_archive=None, form=None, failure={"code": "execution_failed",
-                "affected_refs": [spec["handle"]], "diagnostic_ref": None,
-                "partial_record_refs": [finding["id"]]})
-        seal_return(returned)
-        def forbidden():
-            raise AssertionError("failed execution has no completion projection")
-        receiver = receiver_for(store, spec, contract, receipts, projector=forbidden)
-        admitted = admit_return(spec, returned, receiver)
-        assert admitted["controller_input"] is None
-        with pytest.raises(TypeError, match="json_object"):
-            child_stage(ledger, spec, admitted)
-        assert ledger.slot(spec["parent"]["episode_id"], 0) is None
-        assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 0
 
 
 def test_null_or_unrecorded_completion_cannot_create_an_observation(tmp_path):

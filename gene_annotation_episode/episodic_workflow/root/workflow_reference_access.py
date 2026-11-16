@@ -15,10 +15,10 @@ class WorkflowReferenceAccess:
         if restriction is not None:
             return restriction
         if namespace in {'execution_handle', 'execution'}:
-            provider = getattr(self.workflow, 'progress_provider', None)
+            provider = self.workflow.progress_provider
             return bool(provider is not None and provider.resolve(reference, plain(scope), namespace))
         if not store.reference_subset([reference], plain(scope)):
-            provider = getattr(self.workflow, 'progress_provider', None)
+            provider = self.workflow.progress_provider
             return bool(provider is not None and provider.resolve(reference, plain(scope), namespace))
         kind = store.get(reference)['record_type']
         return not namespace or namespace == kind or (namespace == 'subject' and kind in {'input', 'feature', 'product', 'read_subject'})
@@ -35,7 +35,7 @@ class WorkflowReferenceAccess:
         received = self.workflow.episode_bindings.resolve_received_reference(context, reference, namespace)
         if received is not None:
             return received
-        native = getattr(self.workflow, 'native_event_information', None)
+        native = self.workflow.native_event_information
         if native is not None and native.resolve(context, reference, namespace):
             return True
         if namespace == 'native_event_target':

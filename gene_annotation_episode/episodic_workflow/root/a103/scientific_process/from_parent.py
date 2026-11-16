@@ -1,6 +1,6 @@
 """Private A103 scientific from parent."""
 from __future__ import annotations
-from .contracts import ContractError, EVIDENCE_AXIS_VERSION, INSTRUCTION_VERSION, ROLE, SELECTION_VERSION, SUPPORT_ENTRY_VERSION, _ASSIGNMENT, _RECORDED_ASSIGNMENT, _REFERENCE, _REVISION_ARGUMENTS, _SHA256, _object, deepcopy, interpretation_schema, json, plain, re, scientific_digest, scientific_invocation_ref, selection_fields, selector_selection, validate_child_selection, validate_closed_schema, validate_evidence_axis_entry, validate_filled_process, validate_instruction_entry, validate_revision_origin, validate_schema, validate_selection, validate_support_entry
+from .contracts import ContractError, EVIDENCE_AXIS_VERSION, INSTRUCTION_VERSION, ROLE, SELECTION_VERSION, _ASSIGNMENT, _RECORDED_ASSIGNMENT, _REFERENCE, _REVISION_ARGUMENTS, _SHA256, _object, deepcopy, interpretation_schema, json, plain, re, scientific_digest, scientific_invocation_ref, selection_fields, selector_selection, validate_child_selection, validate_closed_schema, validate_evidence_axis_entry, validate_filled_process, validate_instruction_entry, validate_revision_origin, validate_schema, validate_selection
 
 class ScientificAssignment:
 
@@ -28,10 +28,8 @@ class ScientificAssignment:
                     validate_instruction_entry(entry)
                 elif entry.get('entry_version') == EVIDENCE_AXIS_VERSION:
                     validate_evidence_axis_entry(entry)
-                elif entry.get('entry_version') != SUPPORT_ENTRY_VERSION:
-                    raise ContractError('scientific_support_metadata_required')
                 else:
-                    validate_support_entry(entry)
+                    raise ContractError('scientific_support_metadata_required')
         self.tool_library.resolve_tool_info(selection['child_tool_info'])
         return selection
 

@@ -11,7 +11,10 @@ from gene_annotation_episode.episodic_workflow.root.a107 import component_axis_r
 from gene_annotation_episode.episodic_workflow.root.a110 import component_axis_reports as reports_a110
 from gene_annotation_episode.episodic_workflow.root.a107 import component_axis_workflow as workflow_a107
 from gene_annotation_episode.episodic_workflow.root.a110 import component_axis_workflow as workflow_a110
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a107.domain import ContractError as ContractErrorA107
+from gene_annotation_episode.episodic_workflow.root.a110.domain import ContractError as ContractErrorA110
+
+ContractError = (ContractErrorA107, ContractErrorA110)
 
 
 FIXTURE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/communication/a11039-native-return-contract.json'

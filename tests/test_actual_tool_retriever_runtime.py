@@ -51,7 +51,7 @@ class ActualToolCase:
         self.directory.mkdir()
         independent_source(self.source, extra=True)
         self.tools = build_tools(store, run_directory=self.directory)
-        self.descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=self.directory,
+        self.descriptor = prepare_scientific_binding(run_directory=self.directory,
             source_directory=self.source, tool_catalog=self.tools.catalog(),
             child_roles=["scientific_process"])
         self.library = ScientificProcessLibrary(self.directory / "scientific-process-library")

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from .source_contracts import (Mapping, deepcopy, hashlib, inspect, json, Path, re, ReportBoundaryError, interpretation_schema, plain, validate_closed_schema, validate_form, ContractError, identity, obj, validate_schema, reference_in_context, scientific_digest, scientific_invocation_ref, validate_child_selection, validate_filled_process, validate_option_ref, validate_revision_origin, validate_selection, selection_fields, selector_selection, SELECTION_VERSION, build_process_result, merge_process_results, report_sources, validate_process_result, SUPPORT_ENTRY_VERSION, support_observation_kinds, validate_support_entry, EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry, INSTRUCTION_VERSION, instruction_view, validate_instruction_entry, evidence_axis_instruction_view, alignment_site_fact_sources, requested_site_projections, project_site_action_return, validate_frozen_site_return, restriction_mapping_fact_sources, requested_restriction_projections, project_restriction_action_return, validate_frozen_restriction_return, molecular_fact_sources, merge_molecular_facts, requested_molecular_fact_sources, requested_molecular_fact_fields, validate_frozen_molecular_return, PROTEIN_ACTION_FACT_SOURCES, protein_structure_action_fact_sources, merge_protein_structure_action_facts, requested_protein_structure_action_fields, validate_frozen_protein_structure_action_return, VERSION, ROLE, ROLES, _COMMON_TOOLS, _REFERENCE, _SHA256, _SCIENTIFIC_NAMESPACES, _ITC_PARAMETER_SOURCE, _ANNOTATION_REF, _EVIDENCE_AXIS, _THOUGHT_REF, _TOOL_SELECTOR, _TOOL_INFO, _SELECTION, _CANONICAL_SELECTION, _REVISION_ORIGIN, _EVIDENCE_TASK, _ASSIGNMENT, _RECORDED_ASSIGNMENT, _REVISION_ARGUMENTS, original_axis_task_projector, _object, _ref_schema)
+from .source_contracts import (Mapping, deepcopy, hashlib, inspect, json, Path, re, ReportBoundaryError, interpretation_schema, plain, validate_closed_schema, validate_form, ContractError, identity, obj, validate_schema, reference_in_context, scientific_digest, scientific_invocation_ref, validate_child_selection, validate_filled_process, validate_option_ref, validate_revision_origin, validate_selection, selection_fields, selector_selection, SELECTION_VERSION, build_process_result, merge_process_results, report_sources, validate_process_result, support_observation_kinds, EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry, INSTRUCTION_VERSION, instruction_view, validate_instruction_entry, evidence_axis_instruction_view, alignment_site_fact_sources, requested_site_projections, project_site_action_return, validate_frozen_site_return, restriction_mapping_fact_sources, requested_restriction_projections, project_restriction_action_return, validate_frozen_restriction_return, molecular_fact_sources, merge_molecular_facts, requested_molecular_fact_sources, requested_molecular_fact_fields, validate_frozen_molecular_return, PROTEIN_ACTION_FACT_SOURCES, protein_structure_action_fact_sources, merge_protein_structure_action_facts, requested_protein_structure_action_fields, validate_frozen_protein_structure_action_return, VERSION, ROLE, ROLES, _COMMON_TOOLS, _REFERENCE, _SHA256, _SCIENTIFIC_NAMESPACES, _ITC_PARAMETER_SOURCE, _EVIDENCE_AXIS, _THOUGHT_REF, _TOOL_SELECTOR, _TOOL_INFO, _SELECTION, _CANONICAL_SELECTION, _REVISION_ORIGIN, _EVIDENCE_TASK, _ASSIGNMENT, _RECORDED_ASSIGNMENT, _REVISION_ARGUMENTS, original_axis_task_projector, _object, _ref_schema)
 
 class ScientificTools:
     def _information_catalog(self, scope):
@@ -84,29 +84,26 @@ class ScientificTools:
     def decision_context(self, context, current_view):
         selection = self._original_selection(context)
         annotation, thought = (self.library.resolve(selection[key]) for key in selection_fields(selection)[:2])
-        resolved = self._tool_resolution(context, selection)
+        self._tool_resolution(context, selection)
         def selected_fields(entry, names):
             return {name: deepcopy(entry[name]) for name in names if name in entry}
         fields = selection_fields(selection)
-        current = selection['version'] == SELECTION_VERSION
-        assignment = plain(context.assignment)
-        if current:
-            assignment = {**assignment, 'selection': selector_selection(selection)}
+        assignment = {**plain(context.assignment), 'selection': selector_selection(selection)}
         published = annotation.get('entry_version') == INSTRUCTION_VERSION
         if published:
             axis_view = instruction_view(annotation)
         elif annotation.get('entry_version') == EVIDENCE_AXIS_VERSION:
             axis_view = evidence_axis_instruction_view(annotation)
         else:
-            axis_view = selected_fields(annotation, ("id", "name", "description", "support"))
+            raise ContractError("scientific_support_metadata_required")
         return {"scientific_process": {"selection": selector_selection(selection),
             "initial_selection_sha256": scientific_digest(plain(context.assignment["selection"])),
-            ('evidence_axis' if current else 'annotation'): axis_view,
+            'evidence_axis': axis_view,
             **({} if published else {"annotation_support_routes": self.services.scientific_support_routes(context,
                 observation_kinds=support_observation_kinds(annotation))}),
-            ('thought_pattern' if current else 'thought'): selected_fields(thought, ("id", "name", "description", "use_when",
+            'thought_pattern': selected_fields(thought, ("id", "name", "description", "use_when",
                 "live_alternatives", "decision_guidance", "outcome_contingencies", "boundary")),
-            **({'child_tool_info': deepcopy(selection[fields[2]])} if current else {'tools': deepcopy(resolved)}),
+            'child_tool_info': deepcopy(selection[fields[2]]),
             "assignment": assignment, "permitted_children": list(self.allowed_children(context,None))}}
 
     async def execute(self, context, tool_name, arguments, operation_key):

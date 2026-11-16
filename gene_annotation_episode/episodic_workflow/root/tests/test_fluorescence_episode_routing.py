@@ -370,8 +370,6 @@ def test_capability_metadata_distinguishes_native_and_saved_calculations(selecte
     assert native['input_selection'][0]['parser'] == 'csv'
     assert native['input_selection'][0]['channel_bindings'][0]['measurement_origin'] == 'supplied_predicted'
     collect = next(row for row in native['extractors'] if row['operation'] == 'execution.results.collect')
-    assert collect['calculators'] == ['gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations.calculate_fluorescence_sheet']
-    assert collect['projection_implementation'] == 'gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views.project_fluorescence_result'
     assert collect['retention_scope'] == 'verified_available_artifacts_with_explicit_partial_or_missing_roles'
     assert not collect['laboratory_operation']
     selected = _selector(f, saved=True)

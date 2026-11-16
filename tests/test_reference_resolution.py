@@ -13,7 +13,9 @@ from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolReg
 
 
 def resolver(store, scope):
-    return Workflow.resolver(SimpleNamespace(store=store), scope)
+    return Workflow.resolver(SimpleNamespace(store=store, tools=None, native_event_information=None,
+        scientific_provenance=None, progress_provider=None, execution_expectations=None,
+        job_episodes=None), scope)
 
 
 def hypothesis(store, subject, context_refs=()):

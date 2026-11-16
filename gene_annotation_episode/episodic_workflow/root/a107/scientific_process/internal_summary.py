@@ -32,7 +32,7 @@ class ScientificInternalSummary:
         elif annotation.get('entry_version') == EVIDENCE_AXIS_VERSION:
             axis_view = evidence_axis_instruction_view(annotation)
         else:
-            axis_view = selected_fields(annotation, ('id', 'name', 'description', 'support'))
+            raise ValueError('scientific_support_entry_invalid')
         result = {'scientific_process': {'selection': selector_selection(selection), 'initial_selection_sha256': scientific_digest(plain(context.assignment['selection'])), 'evidence_axis' if current else 'annotation': axis_view, **({} if published else {'annotation_support_routes': self.services.scientific_support_routes(context, observation_kinds=support_observation_kinds(annotation))}), 'thought_pattern' if current else 'thought': selected_fields(thought, ('id', 'name', 'description', 'use_when', 'live_alternatives', 'decision_guidance', 'outcome_contingencies', 'boundary')), **({'child_tool_info': deepcopy(selection[fields[2]])} if current else {'tools': deepcopy(resolved)}), 'assignment': assignment, 'permitted_children': list(self.allowed_children(context, None))}}
         from gene_annotation_episode.episodic_workflow.root.a107.component_axis_source_access import decision_context as source_access_context
         access = source_access_context(self.services.workflow, context)

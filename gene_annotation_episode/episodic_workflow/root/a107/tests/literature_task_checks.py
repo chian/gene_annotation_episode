@@ -124,7 +124,6 @@ def test_original_task_observes_returned_action_and_replays_without_reexecution(
     async def score(source, index, result): events.append('score'); return result
     def execute(*args, **kwargs): calls.append((args, kwargs)); return outcome
     workflow = SimpleNamespace(run_id='run', journal=journal, execution_binding=None, inprocess_replay=None,
-        wait_inputs_version=None, completed_action_inputs_version=None,
         pending_work=lambda source: [],
         execute=execute, receive_native_outcome=lambda *args: events.append('native'),
         receive_outcome=lambda *args: events.append('receive'), automatic_score_updates=score,

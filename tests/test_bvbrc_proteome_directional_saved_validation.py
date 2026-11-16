@@ -35,7 +35,7 @@ def forbid_producers(monkeypatch, *, calculator=True):
         'bvbrc_proteome_bundle_v2_resolution':['parse_genome_comparison_directional_report','build_directional_sheet','calculate_directional_components']}
     if calculator:names['bvbrc_proteome_directional_calculators']=['calculate_directional_components']
     for module,functions in names.items():
-        for fn in functions:monkeypatch.setattr(importlib.import_module('gene_annotation_episode.'+module),fn,forbidden)
+        for fn in functions:monkeypatch.setattr(importlib.import_module('gene_annotation_episode.episodic_workflow.root.library.'+module),fn,forbidden)
     monkeypatch.setattr('socket.socket',forbidden)
     monkeypatch.setattr('subprocess.run',forbidden)
 

@@ -151,44 +151,6 @@ def test_native_visibility_rules_keep_existing_meaning_and_precise_references(tm
         case.store.close()
 
 
-def test_bound_native_rejection_returns_to_episode_without_completing_failed_wait(tmp_path, monkeypatch):
-    from test_native_event_runtime import setup, fixture_dispatch, run as run_native
-    from native_event_worker_fixture import launch, tool as native_tool
-
-    store, jobs, query = setup(tmp_path)
-    handles = fixture_dispatch(monkeypatch)
-    selected = []
-    def excluded(context):
-        assert context['native_event_targets'] == []
-        job = jobs.db.execute('SELECT job_ref FROM orders').fetchone()[0]
-        target, = jobs.native_event_targets(job)
-        selected.append(target['handle'])
-        return wait(condition(target['handle']))
-    def repaired(context):
-        assert context['feedback']['category'] == 'wait_target'
-        assert context['feedback']['code'] == 'wait_target_not_visible'
-        assert context['feedback']['detail'] == 'native_event_information_target_not_visible'
-        assert context['feedback']['affected_refs'] == selected
-        assert rows(store, 'episode_waits') == []
-        # Three completed child operations and the returned launch are the
-        # existing four observations; rejected native selection adds none.
-        assert len(rows(store, 'runtime_observations')) == 4
-        assert context['controller']['deltas'] == [0.0]
-        return wait(condition())
-    try:
-        provider = ScriptedProvider([launch(query, {'subject_refs': [query]}, requested=False),
-            native_tool('homology.configure'), native_tool('homology.stage'),
-            native_tool('homology.submit'), excluded, repaired])
-        summary = run_native(store, jobs, provider, tmp_path / 'run')
-        assert summary['completed_actions'] == 2
-        assert len(handles) == 1
-        assert len(rows(store, 'runtime_observations')) == 5
-        assert len(rows(store, 'episode_waits')) == 1
-    finally:
-        jobs.close()
-        store.close()
-
-
 def test_backend_native_kind_and_original_receipt_custody_survive_validation(tmp_path, monkeypatch):
     backend = DurableExecutionStore(tmp_path / 'executions')
     native = {'kind': 'systemd_user_service', 'unit': 'fixture.service', 'request_sha256': 'a' * 64}

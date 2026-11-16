@@ -57,8 +57,6 @@ def _guidance(parts, process):
         body = '\n\n'.join((_text(axis[name]) for name in ('description', 'investigation_instructions') if axis.get(name) is not None))
         if body:
             _section(parts, title, body)
-        if axis.get('support') is not None:
-            _section(parts, 'Assigned scientific support and its operands', _values(axis['support']))
     thought = process.get('thought_pattern', process.get('thought'))
     if isinstance(thought, Mapping):
         title = 'Supplied reasoning guidance'

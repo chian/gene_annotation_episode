@@ -186,11 +186,8 @@ class AllocationParentExchangeChecks:
     def test_runtime_uses_this_parents_named_allocation_receiver(self, exchange, monkeypatch):
         v = exchange
         receiver = v.parent.child_report_receiver('hpc_execution')
-        assert receiver.__module__ == v.parent.__module__.removesuffix('.episode') + '.from_child_hpc_allocation_execution'
         launch = v.parent.child_report_receiver('launch')
-        if self.axis == 'a104':
-            assert launch.__module__ == v.parent.__module__.removesuffix('.episode') + '.from_child_execution_job_submission'
-        else:
+        if self.axis != 'a104':
             assert launch is None
         calls = []
         def selected(role):

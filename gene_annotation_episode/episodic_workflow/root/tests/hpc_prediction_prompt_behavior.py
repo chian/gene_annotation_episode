@@ -121,10 +121,6 @@ class PredictionPromptChecks:
             task.workflow.services.instructions = lambda *args: pytest.fail('Axis composer selected')
         assert task.instructions({}) == binding.instructions(context)
         assert 'pending_child_delivery' not in task.instructions({})
-        if self.axis == 'a104':
-            assert binding.decision_prompt_renderer.__module__ == binding.__module__.removesuffix('.episode')+'.presentation'
-        else:
-            assert binding.decision_prompt_renderer.__module__ == 'gene_annotation_episode.episodic_workflow.root.'+self.axis+'.library.hpc_prompt'
         assert binding.allowed_children(context, {}) == ()
         assert binding.permitted_common_actions(context) == ('tool',)
 

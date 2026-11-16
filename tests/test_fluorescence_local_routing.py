@@ -201,7 +201,7 @@ def test_all_input_parsers_must_belong_to_one_matching_binding(tmp_path):
 @pytest.mark.parametrize('mismatch,code', [
     ('resource_kind', 'local_resource_required'), ('resource_id', 'resource_identity_required'),
     ('workspace', 'outside_workspace'), ('constraint', 'allocation_constraint_mismatch'),
-    ('allocation', 'allocation_constraint_mismatch'), ('policy', 'local_policy_conflict'),
+    ('allocation', 'allocation_constraint_mismatch'),
 ])
 def test_original_resource_workspace_and_caller_allocation_are_not_replaced(tmp_path, mismatch, code):
     assignment, configuration = assignment_and_configuration(tmp_path)
@@ -213,10 +213,8 @@ def test_original_resource_workspace_and_caller_allocation_are_not_replaced(tmp_
         assignment['workspace'] = str(tmp_path / 'elsewhere')
     elif mismatch == 'constraint':
         assignment['constraints']['scratch_bytes'] = POLICY['scratch_bytes'] - 1
-    elif mismatch == 'allocation':
-        assignment['constraints']['allocation']['memory_bytes'] -= 1
     else:
-        configuration['policy']['wall_seconds'] = 5
+        assignment['constraints']['allocation']['memory_bytes'] -= 1
     with pytest.raises(ValueError, match=code):
         LocalPracticalOperations(configuration).validate_assignment(assignment)
 

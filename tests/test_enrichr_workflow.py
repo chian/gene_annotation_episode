@@ -171,7 +171,7 @@ class EnrichrWorkflowRun:
         factory = ExecutionServiceFactory(RESOURCES, {}, 3, 2, .5)
         application = factory(store, run_id=self.run_id, directory=self.directory,
             tool_registry=tools, tool_catalog=tools.catalog())
-        self.descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=self.directory,
+        self.descriptor = prepare_scientific_binding(run_directory=self.directory,
             source_directory=PUBLICATION, tool_catalog=tools.catalog(),
             child_roles=("scientific_process", "launch", "results"),
             resource_catalogs=application.resource_tool_catalogs)
@@ -182,7 +182,7 @@ class EnrichrWorkflowRun:
                 count = 2 if path[-1][0] == "annotation" else 4
                 return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= count else 1),
                     parameters, {"fixture": "scripted_scientific_continuation_only"})
-            return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+            return YieldController(str(path), initial, 0, YieldParameters(),
                 estimate_with_context=engineering_continuation
                 if path[-1][0] in {"annotation", "scientific_process"} else None)
 
@@ -306,7 +306,7 @@ def _no_api_root(store, directory, run_id, scope, initial_refs):
         async def complete(self, *args, **kwargs):
             _forbidden()
     workflow = Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), NoProvider(), directory, run_id,
-        controller_factory=lambda path, initial: YieldController(str(path), initial, 0, YieldParameters(100, 50)),
+        controller_factory=lambda path, initial: YieldController(str(path), initial, 0, YieldParameters()),
         project_credit=lambda *_: 0, episode_record_receipts=True, initial_known_record_refs=initial_refs)
     assert "results" not in workflow.episode_bindings.roles
     episode = workflow.build("annotation", "root", "Read only explicitly supplied retained evidence", scope)
@@ -426,7 +426,7 @@ def test_partial_source_only_result_is_admitted_by_actual_workflow_components_wi
         factory = ExecutionServiceFactory(deepcopy(case.api.configuration), {},
             case.api.handoff_unit, case.api.acquired_record_unit, .5)
         workflow = Workflow(store, tools, object(), tmp_path / "run", case.run_id,
-            controller_factory=lambda path, initial: YieldController(str(path), initial, 0, YieldParameters(100, 50)),
+            controller_factory=lambda path, initial: YieldController(str(path), initial, 0, YieldParameters()),
             project_credit=lambda *_: 0, episode_service_factory=factory,
             episode_service_binding=factory.as_record(), episode_service_inputs="actual_tool_registry_v1",
             episode_record_receipts=True, initial_known_record_refs=[])

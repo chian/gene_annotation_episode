@@ -16,7 +16,7 @@ CODE = re.compile(r"^[A-Za-z_][A-Za-z0-9_.:+/\-]{0,127}$")
 from .library.record_values import identity
 from .received_episode_yield import report_sources as episode_report_sources
 from .scientific_process_records import (OPTION_REF_VERSION, SELECTION_VERSION,
-    SLOTS, canonical_slot, _exact, _plain, scientific_invocation_ref, validate_invocation_ref,
+    SLOTS, _exact, _plain, scientific_invocation_ref, validate_invocation_ref,
     validate_option_ref, validate_revision_origin, validate_selection, selection_fields)
 from .tool_reference_records import RESOURCE_KINDS
 
@@ -65,7 +65,7 @@ def _validate_report_selection(value, *, library=None, tool_library=None):
             or value["source_version"] != SELECTION_VERSION):
         raise ValueError(code)
     refs = [validate_option_ref(value[name]) for name in SLOTS]
-    if (tuple(canonical_slot(ref["slot"]) for ref in refs) != SLOTS
+    if (tuple(ref["slot"] for ref in refs) != SLOTS
             or len({ref["library_id"] for ref in refs}) != 1):
         raise ValueError(code)
     if library is not None:

@@ -159,7 +159,7 @@ def child_options(workflow, source, role=None):
         status = 'available'
         if name == 'scientific_process':
             library = workflow.scientific_process_binding.library
-            if not any(row['option_ref']['slot'] in {'evidence_axis', 'annotation_distinction'}
+            if not any(row['option_ref']['slot'] == 'evidence_axis'
                     for row in library.headers()):
                 status = 'missing scientific-support option'
         fields = ', '.join(assignment.get('required', ())) or 'see declared child contract'

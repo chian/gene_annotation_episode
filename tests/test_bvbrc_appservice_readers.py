@@ -62,14 +62,25 @@ def object_binding(size=None):
         "creation_time": row[3], "size": size, "error": None}}
 
 
+def declared_length(headers):
+    lowered = {key.lower(): value for key, value in headers.items()}
+    text = lowered.get("content-length")
+    if isinstance(text, str) and text.isdigit() and lowered.get("transfer-encoding") is None:
+        return int(text)
+    return None
+
+
 def snapshot(content=b"ACGT", status=200, headers=None, selected_range=None, complete=True):
     headers = {"content-length": str(len(content))} if headers is None else headers
     return SourceSnapshot("bvbrc_analysis", URL,
-        {"kind": "download", "url": URL, "requested_byte_range": selected_range},
+        {"kind": "download", "url": URL, "requested_byte_range": selected_range, "max_bytes": 1048576},
         "2026-10-24T12:10:00+00:00", content, "application/octet-stream",
         {"status": status, "headers": deepcopy(headers), "header_items": [[k, v] for k, v in headers.items()],
          "effective_url": URL, "automatic_redirects": False, "body_complete": complete,
-         "received_body_bytes": len(content), "request": {"method": "GET", "url": URL}})
+         "received_body_bytes": len(content), "response_byte_limit": 1048576,
+         "retained_body_bytes": len(content), "observed_body_bytes": len(content),
+         "declared_body_bytes": declared_length(headers), "body_capture_failure": None,
+         "request": {"method": "GET", "url": URL}})
 
 
 def codes(result):

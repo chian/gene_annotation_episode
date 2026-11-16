@@ -59,20 +59,13 @@ def _tables(store):
 def _libraries(directory, tools):
     source = directory / "engineering-instructions"
     independent_source(source)
-    old = json.loads((source / "entries/A01.json").read_bytes())
-    instruction = {key: old[key] for key in ("id", "name", "description", "evidence")}
-    instruction.update(entry_version="evidence_axis_instruction_v1", slot="evidence_axis",
+    instruction = json.loads((source / "entries/A01.json").read_bytes())
+    instruction.update(
         investigation_instructions=("Engineering integration fixture. Inspect the supplied coordinate and chain "
             "without inferring assembly labels or a target annotation. Each scripted choice and stopping rule "
             "tests ordinary-tool integration; no biological investigation accuracy is claimed."))
     write(source / "entries/A01.json", instruction)
-    index = json.loads((source / "index.json").read_bytes())
-    for row in index["slots"]:
-        if row["slot"] == "annotation_distinction": row["slot"] = "evidence_axis"
-    for row in index["entries"]:
-        if row["id"] == "A01": row["slot"] = "evidence_axis"
-    write(source / "index.json", index)
-    descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory, source_directory=source,
+    descriptor = prepare_scientific_binding(run_directory=directory, source_directory=source,
         tool_catalog=tools.catalog(), child_roles=["scientific_process"])
     library = ScientificProcessLibrary(directory / "scientific-process-library")
     selected = dict(version="scientific_process_selection_v3", evidence_axis=library.reference("A01"),

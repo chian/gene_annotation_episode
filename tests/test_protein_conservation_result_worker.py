@@ -211,7 +211,7 @@ def test_saved_calculation_reads_only_pinned_alignment_and_context_and_reuses_or
     saved["selection"]["native_rows"] = {"row_indices": [1, 0], "offset": 1, "limit": 1}
     saved["selection"]["sites"] = {"columns_0based": [0, 2], "offset": 0, "limit": 1}
     allowed = {saved["saved"][key]["path"] for key in ("alignment", "context")}
-    original_read, calculator, reads, calls = worker.storage.read_bytes, worker.literal_site_conservation, [], []
+    original_read, calculator, reads, calls = worker._storage_read_bytes, worker.literal_site_conservation, [], []
     def read(path):
         assert str(path) in allowed
         reads.append(str(path))
@@ -219,7 +219,7 @@ def test_saved_calculation_reads_only_pinned_alignment_and_context_and_reuses_or
     def calculate(alignment, **kwargs):
         calls.append(deepcopy(kwargs["population"]))
         return calculator(alignment, **kwargs)
-    monkeypatch.setattr(worker.storage, "read_bytes", read)
+    monkeypatch.setattr(worker, "_storage_read_bytes", read)
     monkeypatch.setattr(worker, "parse_aligned_fasta", _forbidden)
     monkeypatch.setattr(worker, "_input_record", _forbidden)
     monkeypatch.setattr(worker, "literal_site_conservation", calculate)
@@ -342,7 +342,7 @@ def test_invalid_request_rejects_before_any_data_parser_or_calculator(tmp_path, 
     elif change == "missing_capture_conflict": request["alignment_file"] = None
     elif change == "preparsed": request["native_execution"]["parser_status"] = "ok"
     else: request["native_issues"] = [{"unexpected_control": True}]
-    monkeypatch.setattr(worker.storage, "read_bytes", _forbidden)
+    monkeypatch.setattr(worker, "_storage_read_bytes", _forbidden)
     monkeypatch.setattr(worker, "parse_aligned_fasta", _forbidden)
     monkeypatch.setattr(worker, "literal_site_conservation", _forbidden)
     directory = _out(tmp_path, "result")
@@ -448,7 +448,7 @@ def test_existing_outputs_deny_reentry_without_data_reads_or_recalculation(tmp_p
     directory = _out(tmp_path, "result")
     worker.run_protein_conservation_result(request, output_directory=directory)
     before = {p.name: p.read_bytes() for p in directory.iterdir()}
-    monkeypatch.setattr(worker.storage, "read_bytes", _forbidden)
+    monkeypatch.setattr(worker, "_storage_read_bytes", _forbidden)
     monkeypatch.setattr(worker, "parse_aligned_fasta", _forbidden)
     monkeypatch.setattr(worker, "literal_site_conservation", _forbidden)
     with pytest.raises(ValueError, match="protein_conservation_result_output_already_exists"):

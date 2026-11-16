@@ -78,7 +78,7 @@ def _validate_custom_initialization(directory, settings, workflow_slice):
         return
     if not isinstance(settings, dict):
         raise ValueError('invalid_local_resource_settings')
-    if set(settings)-{'max_running_jobs', 'cpu_threads', 'memory_bytes', 'scratch_bytes'}:
+    if set(settings)-{'cpu_threads', 'memory_bytes', 'scratch_bytes'}:
         raise ValueError('invalid_local_resource_settings')
     if any(type(value) is not int or value <= 0 for value in settings.values()):
         raise ValueError('invalid_local_resource_limits')
@@ -214,7 +214,7 @@ class LocalResources:
                 else 'execution_unknown')
             jobs.append({'reservation_ref': row['token'], 'execution_handle': row['unit'], 'state': state,
                 'allocation': {key: row[key] for key in ('cpu_threads', 'memory_bytes', 'scratch_bytes')}})
-        # Older or independently configured registries can already have native
+        # Independently configured registries can already have native
         # services on this host. Unknown allocations conservatively occupy the
         # entire budget rather than advertising those resources as free.
         try:

@@ -56,7 +56,7 @@ class WorkflowCreditServices:
         return annotation_policy_routes(self.workflow.project_annotation_score, self.workflow.annotation_score_binding, observation_kinds=observation_kinds)
 
     def bound_role_credit(self, context, receiver_selection):
-        bindings = getattr(self.workflow, 'role_credit_projectors', {})
+        bindings = self.workflow.role_credit_projectors
         if context.role not in bindings:
             raise ValueError('explicit_role_credit_binding_required:' + context.role)
         return bindings[context.role](context, receiver_selection)

@@ -54,13 +54,7 @@ class WorkflowServices:
         callback = getattr(binding, 'execute_scientific_library', None)
         if callable(callback):
             return callback(context, name, arguments)
-        from .scientific_support_metadata import SUPPORT_ENTRY_VERSION, support_observation_kinds
-        outcome = self.workflow.scientific_process_binding.library.execute(name, arguments)
-        if name == 'process.entry' and outcome['status'] == 'completed':
-            result = outcome['result']
-            if result['entry'].get('entry_version') == SUPPORT_ENTRY_VERSION:
-                outcome = {**outcome, 'result': {**result, 'annotation_support_routes': self.scientific_support_routes(context, observation_kinds=support_observation_kinds(result['entry']))}}
-        return outcome
+        return self.workflow.scientific_process_binding.library.execute(name, arguments)
 
     def create_receipts(self, run_id):
         from .episode_receipts import EpisodeReceipts

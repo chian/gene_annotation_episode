@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.root.episode_journal import Journ
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.atac_differential_operands import validate_atac_job_inputs
-from gene_annotation_episode.native_atac_differential_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_atac_differential_contracts import (
     REQUIRED_DEPENDENCIES, REQUIRED_MODULES, OPERATION, MODE, requested_job_from_atac)
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract

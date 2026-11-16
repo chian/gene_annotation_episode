@@ -16,11 +16,11 @@ DEADLINE = "2026-10-21T13:00:00+00:00"
 
 
 def pending(*handles, expectation_refs=(), resource=None):
-    return {"version": "pending_work_v1", "captured_at": STAMP, "items": [
+    return {"version": "pending_work_v2", "captured_at": STAMP, "items": [
         {"handle": handle, "role": "improvement", "lifecycle_state": "executing",
          "selected_at": STAMP, "observed_at": STAMP, "resource_selection": resource,
          "expectation_snapshot_refs": list(expectation_refs), "latest_progress_ref": None,
-         "return_available": False} for handle in handles]}
+         "return_available": False, "suspension": None, "event_target": True} for handle in handles]}
 
 
 def condition(*handles, after_cursor=0, reconsider_at=None, event="returned"):

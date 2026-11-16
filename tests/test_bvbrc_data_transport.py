@@ -8,7 +8,7 @@ from urllib.error import HTTPError
 
 import pytest
 
-from gene_annotation_episode.acquisition import AcquisitionError
+from gene_annotation_episode.episodic_workflow.root.a102.acquisition import AcquisitionError
 from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import BVBRCDataClient, DEFAULT_BASE_URL
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
 

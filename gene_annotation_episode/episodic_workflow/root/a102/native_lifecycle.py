@@ -268,7 +268,7 @@ def _validate_unreleased_resume_capacity(handle, body):
     active_budget()
     if policy.memory_bytes > ENVIRONMENT_BOUNDS['memory_bytes']:
         raise ValueError('native_request_exceeds_environment_bounds')
-    reservation = body.get('capacity_reservation')
+    reservation = body['capacity_reservation']
     definition = reservation.get('resource') if isinstance(reservation, dict) else None
     if (not isinstance(definition, dict)
             or definition.get('version') != LOCAL_RESOURCE_VERSION

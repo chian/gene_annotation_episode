@@ -124,7 +124,7 @@ class PublishedCase:
         self.tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         self.target, = store.create_problem(raw_sequence=PROTEIN, molecule='protein')['subject_refs']
         self.scope = store.validate_scope({'subject_refs': [self.target]})
-        self.descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=self.directory,
+        self.descriptor = prepare_scientific_binding(run_directory=self.directory,
             source_directory=self.source, tool_catalog=self.tools.catalog(),
             child_roles=('scientific_process',))
         self.library = ScientificProcessLibrary(self.directory / 'scientific-process-library')

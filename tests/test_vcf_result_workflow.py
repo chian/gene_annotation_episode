@@ -189,7 +189,7 @@ def test_supplied_native_vcf_saved_modes_typed_parent_return_and_closed_replay(t
                 policy=deepcopy(POLICY))}, {}, 2, .25, .5)
             tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY))
             factory.configure_tool_registry(tools)
-            scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=tmp_path / "run", source_directory=PUBLICATION,
+            scientific = prepare_scientific_binding(run_directory=tmp_path / "run", source_directory=PUBLICATION,
                 tool_catalog=tools.catalog(), child_roles=["scientific_process"])
             library = ScientificProcessLibrary(tmp_path / "run/scientific-process-library")
             provider = VcfProvider(store, library, scope, input_ref)

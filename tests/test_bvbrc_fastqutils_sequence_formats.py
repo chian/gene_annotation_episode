@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_contracts import FastqUtilsContractError
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_fastq_reader import parse_fastq
 
 

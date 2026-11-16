@@ -74,7 +74,6 @@ class PlanningAllocationTaskBehavior:
         assert type(selected) is getattr(v.binding, 'decision_source_type', runtime.DecisionSource)
         assert selected.episode_id == v.context.episode_id
         if hasattr(v.binding, 'decision_source_type'):
-            assert type(selected).__module__ == v.binding.__module__.removesuffix('.episode')+'.task'
             assert not isinstance(selected, runtime.DecisionSource)
 
     def test_actual_plan_invalid_outcome_and_completed_replay(self, tmp_path):

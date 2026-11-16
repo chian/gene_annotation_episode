@@ -233,7 +233,8 @@ def test_actual_dispatch_denies_unreceived_sequence_before_bytes_or_job_preparat
             operation_key=operation_key, permitted_record_refs=[]))
         assert outcome["status"] == "invalid" and outcome["result"] is None
         assert outcome["record_refs"] == [] and outcome.get("changed_record_refs", []) == []
-        assert outcome["feedback"] == dict(category="arguments_or_reference", code="restriction_operand_not_received")
+        assert (outcome["feedback"]["category"], outcome["feedback"]["code"]) == (
+            "arguments_or_reference", "restriction_operand_not_received")
         assert calls == []
         assert list(store.db.execute("SELECT id FROM records ORDER BY id")) == record_ids
         assert list(store.db.execute("SELECT id FROM artifacts ORDER BY id")) == artifact_ids

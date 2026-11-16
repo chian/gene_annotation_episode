@@ -78,8 +78,8 @@ class WorkflowMolecularOperands:
             return False
 
     def _molecular_reference_access(self, context, reference, namespace):
-        owner = getattr(getattr(self.workflow, 'tools', None), 'retained_molecular_reference_access', None)
-        return owner(context, reference, namespace, initial_record_refs=getattr(self.workflow, 'initial_known_record_refs', None) or ()) if callable(owner) else None
+        owner = getattr(self.workflow.tools, 'retained_molecular_reference_access', None)
+        return owner(context, reference, namespace, initial_record_refs=self.workflow.initial_known_record_refs or ()) if callable(owner) else None
 
     def authenticate_source_byte_operands(self, context: BindingContext, tool_name: str, arguments: dict) -> None:
         """Preserve utility artifact grants at the selected source/material read."""

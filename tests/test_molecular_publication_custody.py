@@ -71,7 +71,7 @@ def save_operation(case, *, index, arguments, source_ref, name=TOOL):
         registry._save(key, name, arguments, plain(context.scope), outcome)
         # Runtime adds pending-work context after the committed ToolOp. It is
         # not another producer or a scientific result change.
-        recorded = {**outcome, "pending_work_after_action": dict(version="pending_work_v1", items=[],
+        recorded = {**outcome, "pending_work_after_action": dict(version="pending_work_v2", items=[],
             captured_at="2026-10-30T00:00:00+00:00")}
         store.db.execute("INSERT INTO runtime_actions VALUES(?,?,?,?,?)", (context.run_id, context.episode_id,
             index, canonical(dict(kind="tool", tool=name, arguments=arguments)), canonical(recorded)))

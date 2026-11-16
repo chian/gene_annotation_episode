@@ -128,26 +128,6 @@ def test_bind_and_read_participate_in_outer_commission_rollback(tmp_path):
         assert store.db.execute("SELECT count(*) FROM runtime_report_attempts").fetchone()[0] == 0
 
 
-def test_old_rows_and_old_schema_remain_exactly_old_without_retrospective_proof(tmp_path):
-    with Store(tmp_path / "store") as store:
-        store.db.execute("CREATE TABLE runtime_receipt_inheritance (run_id TEXT NOT NULL, "
-            "episode_id TEXT NOT NULL, parent_episode_id TEXT, through_receipt_index INTEGER, "
-            "PRIMARY KEY(run_id,episode_id))")
-        store.db.execute("INSERT INTO runtime_receipt_inheritance VALUES('run','parent',NULL,NULL)")
-        store.db.execute("INSERT INTO runtime_receipt_inheritance VALUES('run','old-child','parent',0)")
-        expected = {"version": RECEIPT_VERSION, "parent_episode_id": "parent", "through_receipt_index": 0}
-        assert EpisodeReceipts.read_manifest(store.db, "run", "old-child") == expected
-        journal = Journal(store, "run")
-        _attempt(journal, 0)
-        receipts = EpisodeReceipts(store, "run")
-        assert receipts.bind("old-child", "parent") == expected
-        assert store.db.execute("SELECT received_report_prefix FROM runtime_receipt_inheritance "
-            "WHERE episode_id='old-child'").fetchone()[0] is None
-        assert receipts.bind("new-child", "parent")["received_report_prefix"]["attempts"] == [_expected(0)]
-    with Store(tmp_path / "store") as store:
-        assert EpisodeReceipts(store, "run").manifest("old-child") == expected
-
-
 def test_read_accessor_never_creates_a_missing_table_or_commits(tmp_path):
     with Store(tmp_path / "store") as store:
         with store.transaction():

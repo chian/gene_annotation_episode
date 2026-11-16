@@ -88,7 +88,8 @@ def test_native_reference_prediction_keeps_external_ancestry_and_source_only_acc
         assert records[product["id"]]["mapping"] == product["mapping"]
         assert records[dna["id"]]["source_ref"] == dna["source_ref"]
         assert account["id"] in document["membership"]["source_only_record_refs"]
-        assert document["credit_projection"]["credit"] == 0
+        assert document["credit_projection"] == {"status": "unavailable", "annotation_score": None,
+            "reason": "numerical_evidence_component_scorer_not_bound"}
         assert store.problem() == initial
         assert exported["status"] == "completed"
 

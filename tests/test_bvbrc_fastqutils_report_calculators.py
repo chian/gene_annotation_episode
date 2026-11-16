@@ -5,7 +5,8 @@ from pathlib import Path
 import socket
 import subprocess
 import pytest
-from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError, json_sha256, validate_contract
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_contracts import FastqUtilsContractError
+from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError as PackageContractError, json_sha256, validate_contract
 from gene_annotation_episode.bvbrc_fastqutils_identity import join_ref, metadata_ref
 from gene_annotation_episode.bvbrc_fastqutils_retention import calculate_retention
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_consistency import calculate_report_consistency
@@ -165,9 +166,9 @@ def test_saved_recalculation_without_io_and_parameter_identity(monkeypatch):
 
 def test_bad_arguments_contract_failure():
     sheet, job, _ = saved()
-    with pytest.raises(FastqUtilsContractError): calculate_retention(sheet, job=job, parameters_sha256='bad')
+    with pytest.raises(PackageContractError): calculate_retention(sheet, job=job, parameters_sha256='bad')
     wrong = deepcopy(job); wrong['comparison_kind'] = None
-    with pytest.raises(FastqUtilsContractError): run(sheet, wrong)
+    with pytest.raises((PackageContractError, FastqUtilsContractError)): run(sheet, wrong)
     with pytest.raises(FastqUtilsContractError): calculate_report_consistency(sheet, job=job, parameters_sha256='0' * 64)
 
 

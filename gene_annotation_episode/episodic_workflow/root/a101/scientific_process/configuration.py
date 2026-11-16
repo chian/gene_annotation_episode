@@ -11,7 +11,7 @@ class ScientificConfiguration:
         self._child_roles = tuple(child_roles)
         self._library_record = _object(library.as_record(), 'scientific_library_invalid')
         self._tools_record = _object(tool_library.as_record(), 'scientific_tool_library_invalid')
-        axes = [header['option_ref'] for header in library.headers() if header['option_ref']['slot'] in ('evidence_axis', 'annotation_distinction')]
+        axes = [header['option_ref'] for header in library.headers() if header['option_ref']['slot'] == 'evidence_axis']
         self.replaces_default_instructions = bool(axes) and all((library.resolve(reference).get('entry_version') == INSTRUCTION_VERSION for reference in axes))
         from gene_annotation_episode.episodic_workflow.root.a101.scientific_tool_retrieval import configuration
         self.tool_retrieval = configuration(tool_retrieval)

@@ -11,7 +11,7 @@ from ..method_loop.durable import canonical
 from ..method_loop.episode import EpisodeCompletion
 from ..scientific_process_records import (
     OPTION_REF_VERSION, SELECTION_VERSION, SLOTS,
-    canonical_slot, _exact, _plain, scientific_invocation_ref,
+    _exact, _plain, scientific_invocation_ref,
     validate_invocation_ref, validate_option_ref, validate_revision_origin,
     selection_fields,
 )
@@ -26,7 +26,7 @@ def _selection_schema(library, tool_library):
     by_slot = {slot: [] for slot in SLOTS}
     for header in library.headers():
         ref = validate_option_ref(header["option_ref"])
-        by_slot[canonical_slot(ref["slot"])].append(ref)
+        by_slot[ref["slot"]].append(ref)
     if any(not refs or len(refs) != len({ref["option_id"] for ref in refs})
             for refs in by_slot.values()):
         raise ValueError("scientific_process_result_library_invalid")

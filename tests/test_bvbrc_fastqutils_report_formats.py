@@ -6,7 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError, validate_native_document
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_contracts import FastqUtilsContractError
+from gene_annotation_episode.bvbrc_fastqutils_contracts import validate_native_document
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_fastqc_reader import parse_fastqc_data
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_hostile_reader import parse_hostile_json
 

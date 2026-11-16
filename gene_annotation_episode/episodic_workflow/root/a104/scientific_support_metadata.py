@@ -6,56 +6,13 @@ mapping is inferred from an arbitrary numeric scorer or tool-output category.
 """
 from __future__ import annotations
 
-import json
-import re
 from typing import Literal, TypedDict
 
 from jsonschema import Draft202012Validator
-from gene_annotation_episode.episodic_workflow.root.a104.method_loop.durable import canonical
-
-from .domain import (FINDING_QUALIFICATIONS, IDENTIFIER, OBSERVATION_KINDS,
-                     PREDICATES, RECORD_SCHEMAS)
+from .domain import OBSERVATION_KINDS
 
 
-SUPPORT_ENTRY_VERSION = "scientific_support_entry_v1"
 ROUTES_VERSION = "scientific_support_routes_v1"
-
-
-class InstructionSourceRow(TypedDict):
-    case_group: str
-    case_id: str
-    source_url: str
-    source_locator: str
-    observation: str
-    limit: str
-
-
-class SupportOperandV1(TypedDict):
-    operand_id: str
-    observation_kinds: list[str]
-    hypothesis_predicates: list[str]
-    assessment_relations: list[str]
-    applicabilities: list[str]
-    extent_bases: list[str]
-    finding_qualifications: list[str]
-    instruction: str
-
-
-class SupportMetadataV1(TypedDict):
-    proposition: str
-    operands: list[SupportOperandV1]
-    qualifications: list[str]
-    boundary: str
-
-
-class SupportEntryV1(TypedDict):
-    entry_version: Literal["scientific_support_entry_v1"]
-    id: str
-    slot: Literal["annotation_distinction"]
-    name: str
-    description: str
-    support: SupportMetadataV1
-    evidence: list[InstructionSourceRow]
 
 
 class AnnotationSupportRouteV1(TypedDict):
@@ -77,74 +34,16 @@ class AnnotationSupportRoutesV1(TypedDict):
     routes: list[AnnotationSupportRouteV1]
 
 
-def _object(properties):
-    return {"type": "object", "properties": properties,
-            "required": list(properties), "additionalProperties": False}
-
-
-def _list(items):
-    return {"type": "array", "items": items, "minItems": 1, "uniqueItems": True}
-
-
-_TEXT = {"type": "string", "pattern": r"\S"}
-_ASSESSMENT = RECORD_SCHEMAS["assessment"]["properties"]
-_OPERAND_SCHEMA = _object({
-    "operand_id": IDENTIFIER,
-    "observation_kinds": _list({"enum": OBSERVATION_KINDS}),
-    "hypothesis_predicates": _list({"enum": PREDICATES}),
-    "assessment_relations": _list(_ASSESSMENT["relation"]),
-    "applicabilities": _list(_ASSESSMENT["applicability"]),
-    "extent_bases": _list({"enum": _ASSESSMENT["extent_basis"]["enum"]}),
-    "finding_qualifications": _list({"enum": FINDING_QUALIFICATIONS}),
-    "instruction": _TEXT,
-})
-_ENTRY_SCHEMA = _object({
-    "entry_version": {"const": SUPPORT_ENTRY_VERSION},
-    "id": {"type": "string", "pattern": r"^A[0-9]+$"},
-    "slot": {"const": "annotation_distinction"},
-    "name": _TEXT,
-    "description": _TEXT,
-    "support": _object({
-        "proposition": _TEXT,
-        "operands": _list(_OPERAND_SCHEMA),
-        "qualifications": _list(_TEXT),
-        "boundary": _TEXT,
-    }),
-    "evidence": _list(_object({key: _TEXT for key in
-        "case_group case_id source_url source_locator observation limit".split()})),
-})
-_ENTRY_VALIDATOR = Draft202012Validator(_ENTRY_SCHEMA)
 _KINDS_VALIDATOR = Draft202012Validator({"type": "array", "uniqueItems": True,
     "items": {"enum": OBSERVATION_KINDS}})
-
-
-def validate_support_entry(value) -> SupportEntryV1:
-    """Validate a closed, reference-free instruction body and detach its JSON."""
-    code = "scientific_support_entry_invalid"
-    try:
-        if not _ENTRY_VALIDATOR.is_valid(value):
-            raise ValueError(code)
-        if re.fullmatch(r"A[0-9]+", value["id"]) is None:
-            raise ValueError(code)
-        operands = value["support"]["operands"]
-        if len({operand["operand_id"] for operand in operands}) != len(operands):
-            raise ValueError(code)
-        if any(re.fullmatch(IDENTIFIER["pattern"], operand["operand_id"]) is None
-               for operand in operands):
-            raise ValueError(code)
-        return json.loads(canonical(value))
-    except (ValueError, TypeError, OverflowError, RecursionError) as error:
-        raise ValueError(code) from error
 
 
 def support_observation_kinds(entry) -> list[str]:
     """Return precisely the selected body's declared existing observation kinds."""
     from .evidence_axis_contracts import VERSION, observation_kinds
-    if entry.get('entry_version') == VERSION:
-        return observation_kinds(entry)
-    body = validate_support_entry(entry)
-    return sorted({kind for operand in body["support"]["operands"]
-                   for kind in operand["observation_kinds"]})
+    if entry.get('entry_version') != VERSION:
+        raise ValueError('scientific_support_entry_invalid')
+    return observation_kinds(entry)
 
 
 def _unavailable(reason, kinds) -> AnnotationSupportRoutesV1:
@@ -174,6 +73,4 @@ def annotation_policy_routes(projector, annotation_score_binding, *,
                         else "unsupported_projector", sorted(observation_kinds))
 
 
-__all__ = ["SupportEntryV1", "SupportMetadataV1", "SupportOperandV1",
-    "AnnotationSupportRoutesV1", "SUPPORT_ENTRY_VERSION", "ROUTES_VERSION",
-    "validate_support_entry", "support_observation_kinds", "annotation_policy_routes"]
+__all__ = ["AnnotationSupportRoutesV1", "ROUTES_VERSION", "support_observation_kinds", "annotation_policy_routes"]

@@ -21,7 +21,7 @@ _INSTRUCTIONS = (
     "Commission launch and the configured launch_local child. The local episode owns preparation, "
     "practical.job.start, monitoring and any later repair choice through the ordinary episode loop. "
     "Select a prepared, pinned native installation and exact input bindings; the compiler supplies "
-    "commands and output paths. Execution uses 20 GiB RAM, 4 GiB scratch, zero swap and no wall-time "
+    "commands and output paths. Execution uses 5 GiB RAM, 4 GiB scratch, zero swap and no wall-time "
     "budget. The finite producer runs callpeak for each condition and bdgdiff with those actual output "
     "paths and observed post-filter tag depths. It never substitutes equal depth factors or treats the "
     "second condition as callpeak's control input. Native logs, XLS, narrowPeak, summits, pileup and "

@@ -67,7 +67,7 @@ def test_one_selected_parse_records_partial_work_once_without_scientific_credit(
         tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         provider = ScriptedProvider([{"selection": {"kind": "tool", "tool": "material.parse",
             "arguments": {"material_ref": material["id"]}}, "report_update": {}}])
-        summary = asyncio.run(run_workflow(store, tools, provider=provider, run_dir=tmp_path / "run",
+        summary = asyncio.run(run_workflow(store, tools, project_credit=lambda *_a, **_k: 0, provider=provider, run_dir=tmp_path / "run",
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 1)))
         assert summary["completed_actions"] == 1 and summary["credit"] == 0
         action = store.db.execute("SELECT result,credit FROM runtime_actions").fetchone()

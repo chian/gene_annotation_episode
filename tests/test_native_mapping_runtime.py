@@ -39,7 +39,7 @@ def test_native_preview_complete_child_facts_and_selected_parent_reuse_share_one
             response({"kind":"tool","tool":"reads.map","arguments":{**args,"preset":"map-pb"}},{"meaning":"uninterpreted"}),
             parent_reuses])
         factory=lambda path,initial:FixtureController(str(path),initial,2)
-        summary=asyncio.run(run_workflow(store,tools,provider=provider,run_dir=tmp_path/"run",
+        summary=asyncio.run(run_workflow(store, tools, project_credit=lambda *_a, **_k: 0, provider=provider,run_dir=tmp_path/"run",
             controller_factory=factory,restoration_settings={"preview_size":2},
             goal="Synthetic form/accounting fixture, not biological annotation"))
         context=provider.contexts[2]
@@ -94,7 +94,7 @@ def test_native_failure_feedback_keeps_failed_attempt_out_of_controller_observat
             source=context["last_local_outcome"]["result"]["source_ref"]
             return response({"kind":"tool","tool":"state.query","arguments":{"refs":[source]}})
         provider=ScriptedProvider([response({"kind":"tool","tool":"reads.map","arguments":args}),follow_failure])
-        summary=asyncio.run(run_workflow(store,tools,provider=provider,run_dir=tmp_path/"failed-run",
+        summary=asyncio.run(run_workflow(store, tools, project_credit=lambda *_a, **_k: 0, provider=provider,run_dir=tmp_path/"failed-run",
             controller_factory=lambda path,initial:FixtureController(str(path),initial,1),
             goal="Synthetic native failure accounting fixture"))
         actions=store.db.execute("SELECT result,credit FROM runtime_actions ORDER BY decision_index").fetchall()
@@ -118,7 +118,7 @@ def test_restored_native_child_form_facts_retain_complete_saved_references(tmp_p
         provider=ScriptedProvider([child,native,KeyboardInterrupt()])
         factory=lambda path,initial:FixtureController(str(path),initial,2)
         with pytest.raises(KeyboardInterrupt):
-            asyncio.run(run_workflow(store,tools,provider=provider,run_dir=tmp_path/"restore-run",
+            asyncio.run(run_workflow(store, tools, project_credit=lambda *_a, **_k: 0, provider=provider,run_dir=tmp_path/"restore-run",
                 controller_factory=factory,restoration_settings={"preview_size":1}))
         first=store.db.execute("SELECT result FROM runtime_actions WHERE result IS NOT NULL AND json_extract(action,'$.tool')='reads.map'").fetchone()[0]
         first=json.loads(first)
@@ -135,7 +135,7 @@ def test_restored_native_child_form_facts_retain_complete_saved_references(tmp_p
             return response({"kind":"tool","tool":"state.query","arguments":{"refs":[form["last"][2]]}})
         resumed=ScriptedProvider([response({"kind":"tool","tool":"reads.map","arguments":{**args,"preset":"map-pb"}},
             {"meaning":"uninterpreted"}),parent])
-        summary=asyncio.run(run_workflow(store,tools,provider=resumed,resume=True,controller_factory=factory))
+        summary=asyncio.run(run_workflow(store, tools, project_credit=lambda *_a, **_k: 0, provider=resumed,resume=True,controller_factory=factory))
         preview=resumed.contexts[0]["last_local_outcome"]
         assert preview["automatic_preview"]["record_refs"] == {"total":6,"included":1,"truncated":True}
         assert calls == [1]  # Only the newly selected native operation executes.

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_contracts import FastqUtilsContractError
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_native import parse_fastqutils_artifact
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_fastqutils_sra_native import parse_sra_metadata
 from gene_annotation_episode.bvbrc_fastqutils_sra_specs import SRA_FIELDS

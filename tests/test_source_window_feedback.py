@@ -59,8 +59,8 @@ def test_invalid_utf8_has_no_fabricated_character_boundary(tmp_path, raw, offset
         outcome = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("source.read", {"source_ref": row["id"],
             "representation": "original", "offset": offset, "limit": 2})
         assert outcome["status"] == "invalid" and outcome["result"] is None
-        assert outcome["feedback"] == {"category": "arguments_or_reference",
-            "code": "source_offset_not_utf8_boundary"}
+        assert (outcome["feedback"]["category"], outcome["feedback"]["code"]) == (
+            "arguments_or_reference", "source_offset_not_utf8_boundary")
 
 
 def test_missing_text_derivative_identifies_original_binary_without_retry(tmp_path):

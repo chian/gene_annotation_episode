@@ -65,11 +65,11 @@ def test_native_feature_pages_are_bounded_and_exact_full_qualifiers_remain_reada
         expected = SeqIO.read(io.StringIO(content.decode()), "genbank").features[0].qualifiers
         assert parsed["feature"]["qualifiers"] == expected
         assert explicit["start"] == entry["start"] and explicit["end"] == entry["end"]
-        store._anchor({"source_ref": explicit["source_ref"], "artifact_ref": explicit["artifact_ref"],
+        store._materialize_anchor({"source_ref": explicit["source_ref"], "artifact_ref": explicit["artifact_ref"],
             "start": tiny["start"], "end": tiny["end"]}, explicit["source_ref"])
         original = store.get(material["source_ref"])
         with pytest.raises(ContractError, match="anchor_source_mismatch"):
-            store._anchor({"source_ref": original["id"], "artifact_ref": explicit["artifact_ref"],
+            store._materialize_anchor({"source_ref": original["id"], "artifact_ref": explicit["artifact_ref"],
                 "start": tiny["start"], "end": tiny["end"]}, original["id"])
 
 

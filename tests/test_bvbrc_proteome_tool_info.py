@@ -105,7 +105,7 @@ def test_library_passes_exact_instructions_only_to_selected_child(factory, tmp_p
     create, _ = factory
     family = create({'selected-api': deepcopy(CONFIG)})
     row = entry(family)
-    library = ScientificToolLibrary.freeze(tmp_path / 'library', catalog=[], tool_info=True,
+    library = ScientificToolLibrary.freeze(tmp_path / 'library', catalog=[],
         resource_catalogs={'api': [row]})
     selected = [{'name': row['name'], 'resources': 'api'}]
     parent = library.parent_tool_info([row])

@@ -29,7 +29,7 @@ _INSTRUCTIONS = (
     "element class or gene associations. No candidate annotation or public gene name is required. Bind exact "
     "input keys/identities/paths, selected Python interpreter and dependency/source byte pins. The binding compiler "
     "supplies the driver command and exact output paths under output_prefix. Commission launch and its configured "
-    "launch_local child with 20 GiB RAM, 4 GiB scratch, zero swap, and no wall-time budget. The local child owns "
+    "launch_local child with 5 GiB RAM, 4 GiB scratch, zero swap, and no wall-time budget. The local child owns "
     "preparation, practical.job.start, observation and any later repair choices through the ordinary episode. "
     "The finite producer validates immutable supplied bytes and uses the selected format's parser for each population, "
     "closes its exact canonical tables and population seal, then advances in selected order. It retains the full "

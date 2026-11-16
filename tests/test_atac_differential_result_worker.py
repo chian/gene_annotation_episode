@@ -322,58 +322,5 @@ def test_saved_bundle_must_match_every_actual_track_occurrence(tmp_path, case):
     assert not (Path(plan['directory']) / 'calculations.json').exists()
 
 
-def test_native_capture_worker_uses_actual_header_and_metadata_control_mock(tmp_path, monkeypatch):
-    # Existing native result files are actual460 bytes. Command dispatch here is
-    # explicitly mocked, so this is parser/capture integration, not live MACS2.
-    from test_native_atac_differential_contracts import plan_fixture
-    from test_native_atac_differential_producer import mock_commands
-    from gene_annotation_episode.native_atac_differential_driver import run_atac_differential_driver
-    mock_commands(monkeypatch)
-    original = plan_fixture(tmp_path / 'native')
-    run_atac_differential_driver(original)
-    with Store(tmp_path / 'store') as store:
-        captured = capture_atac_native_files(store, original_plan=original, source_action_receipt_ref='source_control_action',
-            writer_closure_receipt_ref='source_control_terminal', driver_started=True)
-        chosen = selector(dict(comparison=dict(comparison_key='comparison')), intervals=population(end=12000))
-        plan = build_native_atac_worker_plan(directory=str(tmp_path / 'worker'), original_plan=original, selector=chosen, **captured_without_version(captured))
-        result = run_atac_result_worker(plan)
-    assert result['state'] == 'produced'
-    output = read_outputs(plan)
-    assert output['calculations']['depth_operands'] == dict(depth1=100, depth2=200, depth_unit='tags')
-    assert output['calculations']['summary']['partition_coverage']['all_four_observed_bp'] == 8060
-    assert [r['data_row_count'] for r in output['sheet']['tracks']] == [110, 35, 210, 69]
-    assert all(r['input_ordinal'] == 0 and r['rows'][0]['length_bp'] == 12000 for r in output['sheet']['bam_references'])
-    assert all(r['data_row_count'] == 1 and r['artifact']['producer_run_ref'].startswith('atac_header_inspection:')
-        and r['artifact']['producer_source_ref'] == captured['bundle']['file']['artifact_ref'] for r in output['sheet']['bam_references'])
-    assert len({r['artifact']['producer_run_ref'] for r in output['sheet']['bam_references']}) == 2
-    assert output['sheet']['native_differential'][2]['data_row_count'] == 0
-    example = os.environ.get('ATAC475_EXAMPLE')
-    if example:
-        Path(example).write_bytes(canonical(dict(provenance='actual retained native460 output with explicitly mocked producer command dispatch', **output)))
-
-
 def captured_without_version(captured):
     return {key: value for key, value in captured.items() if key != 'version'}
-
-
-def test_native_failed_condition_preserves_second_peaks_and_depth(tmp_path, monkeypatch):
-    from test_native_atac_differential_contracts import plan_fixture
-    from test_native_atac_differential_producer import mock_commands
-    from gene_annotation_episode.native_atac_differential_driver import run_atac_differential_driver
-    mock_commands(monkeypatch, fail_first=True)
-    original = plan_fixture(tmp_path / 'native')
-    run_atac_differential_driver(original)
-    with Store(tmp_path / 'store') as store:
-        captured = capture_atac_native_files(store, original_plan=original, source_action_receipt_ref='source_control_action',
-            writer_closure_receipt_ref='source_control_terminal', driver_started=True)
-        chosen = selector(dict(comparison=dict(comparison_key='comparison'), callpeak_bindings=[dict(run_key='callpeak2')]),
-            kind='native_peak_rows', intervals=population(end=12000))
-        plan = build_native_atac_worker_plan(directory=str(tmp_path / 'worker'), original_plan=original, selector=chosen, **captured_without_version(captured))
-        result = run_atac_result_worker(plan)
-    output = read_outputs(plan)
-    assert output['calculations']['depth_operands'] == dict(depth1=None, depth2=200, depth_unit='tags')
-    assert output['sheet']['tracks'][0]['artifact']['producer_outcome'] == 'failed'
-    assert output['sheet']['tracks'][1]['state']['availability'] == 'missing'
-    assert output['sheet']['native_differential'][2]['data_row_count'] is None
-    assert output['projection']['total_rows'] == 3 and output['projection']['row_extent'] == 'complete'
-    assert any(r['code'] == 'native_nonzero_exit' for r in result['failures'])

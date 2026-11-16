@@ -21,7 +21,7 @@ def full_workflow(tmp_path_factory):
         store.create_problem(raw_sequence='ATGGCT', molecule='dna')
         tools = module('tools').ToolRegistry(store)
         library = module('scientific_process_library').ScientificProcessLibrary.freeze(
-            directory / 'scientific-process-library', source=ROOT.parents[3] / 'research/slotted_process_library')
+            directory / 'scientific-process-library', source=ROOT.parents[3] / 'research/slotted_process_library/publications/2026-10-24-001')
         tool_library = module('scientific_tool_library').ScientificToolLibrary.freeze(
             directory / 'scientific-tool-library', catalog=tools.catalog())
         factories = [partial(module('scientific_process.episode').ScientificProcessEpisode,

@@ -25,7 +25,7 @@ from gene_annotation_episode.atac_differential_inputs import (
 )
 from gene_annotation_episode.macs2_peak_components import build_macs2_peak_components
 from gene_annotation_episode.macs2_peak_result_contracts import project_macs2_peak_values
-from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState
+from gene_annotation_episode.episodic_workflow.root.local_job_execution.execution_persistence import PracticalState
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords

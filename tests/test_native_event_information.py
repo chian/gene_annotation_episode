@@ -50,6 +50,9 @@ class Jobs:
     def resolve(self, value, namespace):
         return namespace == 'homology_job' and value in self.rows
 
+    def _has_intent(self, row):
+        return bool(row['submission_requested'])
+
     def native_event_targets(self, job_ref):
         target = self.targets.get(job_ref)
         return ([deepcopy(target)] if target is not None
@@ -91,7 +94,8 @@ class Case:
     def add_job(self, name, query, sequence):
         job = 'homology_job_' + name
         self.jobs.rows[job] = {'job_ref': job, 'query_ref': query, 'cpu': 1,
-            'search_mode': 'native_defaults', 'query_fasta': '>query\n' + sequence + '\n'}
+            'search_mode': 'native_defaults', 'query_fasta': '>query\n' + sequence + '\n',
+            'submission_requested': 1}
         return job
 
     def assigned(self, job):

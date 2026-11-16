@@ -117,7 +117,7 @@ def test_wrong_account_stops_owned_provider_through_existing_source_failure_type
     executable.chmod(0o700)
     requests = tmp_path/'request-methods.txt'
     monkeypatch.setenv('AUTH_FIXTURE_REQUEST_LOG', str(requests))
-    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.providers._seed_codex_index', lambda _: [])
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.model_session._seed_codex_index', lambda _: [])
     config = load_config()
     config['connection'] = {'command': [str(executable), 'app-server'], 'authentication': POLICY}
     provider = _SessionConnection(config, tmp_path/'provider', tmp_path)

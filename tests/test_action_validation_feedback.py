@@ -58,7 +58,7 @@ def test_actual_runtime_repairs_malformed_pmc_without_external_call_or_observati
                                  'arguments': {'subject_ref': target}}, 'report_update': {}}
 
         provider = ScriptedProvider([invalid, repair])
-        result = asyncio.run(run_workflow(store, tools, provider=provider, run_dir=tmp_path/'run',
+        result = asyncio.run(run_workflow(store, tools, project_credit=lambda *_a, **_k: 0, provider=provider, run_dir=tmp_path/'run',
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 1)))
         assert result['completed_actions'] == 1 and result['credit'] == 0
         calls = list(store.db.execute('SELECT request,response FROM runtime_model_calls ORDER BY call_index'))

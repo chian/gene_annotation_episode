@@ -88,13 +88,7 @@ class ActionExecution:
                 execute_library = getattr(self.scientific_process_binding, 'execute_scientific_library', None)
                 if execute_library is not None:
                     return execute_library(self.binding_context(source), name, arguments)
-                outcome = self.scientific_process_binding.library.execute(name, arguments)
-                if name == 'process.entry' and outcome['status'] == 'completed':
-                    from .scientific_support_metadata import SUPPORT_ENTRY_VERSION, support_observation_kinds
-                    result = outcome['result']
-                    if result['entry'].get('entry_version') == SUPPORT_ENTRY_VERSION:
-                        outcome = {**outcome, 'result': {**result, 'annotation_support_routes': self.services.scientific_support_routes(self.binding_context(source), observation_kinds=support_observation_kinds(result['entry']))}}
-                return outcome
+                return self.scientific_process_binding.library.execute(name, arguments)
         if name == 'episode.estimate_wait':
             if not self.permits_common_action(source, 'wait'):
                 return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': 'tool_not_available_to_episode'}}
@@ -262,8 +256,7 @@ class ActionExecution:
                         if self.journal.row('runtime_episodes', child_id) is not None:
                             records = EpisodeReturnRecords(self.store, self.run_id, failure_prefix='scientific_closed_')
                             candidate = records.context(child_id)
-                            read_closed = getattr(self.services, 'scientific_closed_request', None)
-                            if callable(read_closed) and read_closed(candidate) is not None:
+                            if self.services.scientific_closed_request(candidate) is not None:
                                 closed['closed_context'] = candidate
                     prepared = binding.prepare_invocation(self.binding_context(source), role, selection['assignment'], scope, f'{self.run_id}:{source.episode_id}:{index}', invocation={'objective': selection['goal'], 'purpose': selection['purpose'], 'report_schema': schema, 'initial_report': initial}, **closed)
                     episode_assignment = prepared['assignment']

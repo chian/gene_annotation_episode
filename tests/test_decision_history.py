@@ -134,7 +134,7 @@ def test_category_fit_uses_signed_completion_order_and_only_explicit_binding(sav
     monkeypatch.setattr(history, "estimate_score_yield", capture)
     unbound = history.yield_table(journal, "owner", before=9)
     assert calls == [] and unbound["rows"][0]["total_yield"] == 1
-    parameters = YieldParameters(2, 1)
+    parameters = YieldParameters()
     bound = history.yield_table(journal, "owner", before=9, parameters=parameters)
     assert calls == [(4, -3, 0)]
     row = bound["rows"][0]
@@ -236,7 +236,8 @@ def test_large_publications_and_outcome_prose_have_counts_hashes_and_explicit_de
         "view": "own_attempt_detail", "decision_index": 0, "pointer": "", "offset": 0,
         "limit": history.DETAIL_CONTAINER_PAGE}
     assert record["outcome_summary"]["detail_reference"]["field"] == "result"
-    assert "episode.history" not in json.dumps(record)
+    assert record["outcome_summary"]["read_with"] == {"tool": "episode.history",
+        "arguments": {"view": "records", "decision_indices": [0]}}
     assert len(json.dumps(record)) < 8000
     assert store.db.total_changes == before and journal.row("runtime_actions", "owner", 0) == raw_action
 

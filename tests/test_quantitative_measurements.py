@@ -154,7 +154,7 @@ def test_scripted_runtime_preserves_numeric_transport_into_child_form_and_parent
         provider = ScriptedProvider([commission,
             {"selection": {"kind": "reason", "commit": optional_transport_nulls(data)}, "report_update": {"measurement_refs": []}},
             child_read, parent_read])
-        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), project_credit=lambda *_a, **_k: 0, provider=provider,
             run_dir=tmp_path / "scripted-runtime",
             controller_factory=lambda path, baseline: FixtureController(str(path), baseline, 2)))
         assert result["completed_actions"] == 2 and result["episode_count"] == 2
@@ -235,7 +235,7 @@ def test_scripted_runtime_returns_partial_quantity_feedback_and_reuses_successes
         provider = ScriptedProvider([
             {"selection": {"kind": "reason", "commit": optional_transport_nulls(data)}, "report_update": {}},
             correct_affected_quantity])
-        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), project_credit=lambda *_a, **_k: 0, provider=provider,
             run_dir=tmp_path / "scripted-partial-runtime",
             controller_factory=lambda path, baseline: FixtureController(str(path), baseline, 2)))
         assert result["completed_actions"] == 2 and result["episode_count"] == 1

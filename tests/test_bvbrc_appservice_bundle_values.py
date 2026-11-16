@@ -37,6 +37,14 @@ def selector(two=False):
     return result
 
 
+def declared_length(headers):
+    lowered = {key.lower(): value for key, value in headers.items()}
+    text = lowered.get("content-length")
+    if isinstance(text, str) and text.isdigit() and lowered.get("transfer-encoding") is None:
+        return int(text)
+    return None
+
+
 def fixture(h, *, number=1, selected=None, requirement_ids=None, role="native_output",
             content=b"abcdef", byte_range=None, status=200, headers=None,
             complete=True, metadata_size=6, prior=(), request=None,
@@ -66,7 +74,7 @@ def fixture(h, *, number=1, selected=None, requirement_ids=None, role="native_ou
         "task_association": assoc, "url": url, "issued_observed_at": "2026-10-24T12:00:00+00:00",
         "expires_at": None, "expiry_evidence": None}
     declared = selected["requirements"][0]["declared_format"]
-    args = {"capability": capability, "object": selected_object, "byte_range": byte_range,
+    args = {"capability": capability, "object": selected_object, "byte_range": byte_range, "max_bytes": 1048576,
             "requirement_ids": requirement_ids, "role": role, "declared_format": deepcopy(declared)}
     bindings = bound(request, "download", args, original_task=original_task(request), object=obj,
                      capability={"selection": capability, "entry": entry})
@@ -75,9 +83,12 @@ def fixture(h, *, number=1, selected=None, requirement_ids=None, role="native_ou
     if headers is None:
         headers = {"Content-Length": str(len(content))}
     snapshot = SourceSnapshot("bvbrc_analysis", url,
-        {"kind": "download", "url": url, "requested_byte_range": deepcopy(byte_range)},
+        {"kind": "download", "url": url, "requested_byte_range": deepcopy(byte_range), "max_bytes": 1048576},
         f"2026-10-24T12:00:{number:02d}+00:00", content, "application/octet-stream",
         {"status": status, "body_complete": complete, "received_body_bytes": len(content),
+         "response_byte_limit": 1048576, "retained_body_bytes": len(content),
+         "observed_body_bytes": len(content), "declared_body_bytes": declared_length(headers),
+         "body_capture_failure": None,
          "effective_url": url, "automatic_redirects": False, "headers": deepcopy(headers),
          "request": {"method": "GET", "url": url}})
     event = h.service.decode(operation, snapshot)

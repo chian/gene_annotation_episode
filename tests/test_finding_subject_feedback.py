@@ -101,44 +101,6 @@ def test_either_existing_observation_subject_role_remains_permitted():
             'investigation_finding': finding(subject)}, observed)
 
 
-@pytest.mark.parametrize('through_history', [False, True])
-def test_recorded_subject_operands_reach_actual_literature_wire(tmp_path, through_history):
-    from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
-    from test_component_axis_inspection_prompt import state
-    from test_literature_experimental_prompt_delivery import LiteratureWire, complete
-
-    first = state()
-    first['last_local_outcome'] = {'status': 'invalid', 'record_refs': [],
-        'errors': [{'code': 'finding_source_subject_not_in_observation',
-            'reference': 'reference_wrong_number', 'observation_ref': 'observation_sample',
-            'observation_subject_refs': ['reference_membrane_sample'],
-            'observation_source_subject_refs': ['reference_membrane_sample'],
-            'repair': 'Use this observation\'s actual subject; preserve unknown target correspondence.'}]}
-    if through_history:
-        first['last_local_outcome'] = {'status': 'completed', 'result': {
-            'view': 'records', 'total_prior_decisions': 1,
-            'records': [{'decision_index': 0, 'outcome': first['last_local_outcome']}]}}
-    second = deepcopy(first)
-    second['current_credit'] = 0
-    original = deepcopy((first, second))
-    wire, cold = LiteratureWire(tmp_path / 'wire'), LiteratureWire(tmp_path / 'cold')
-
-    async def exercise():
-        await complete(wire, state_frame(first))
-        await complete(wire, state_frame(second, first))
-        await complete(cold, state_frame(second))
-
-    asyncio.run(exercise())
-    for turn in (*wire.turns_sent(), *cold.turns_sent()):
-        text = turn['input'][0]['text']
-        assert 'finding_source_subject_not_in_observation' in text
-        assert 'Recorded observation subjects for the rejected finding' in text
-        assert 'observation_subject_refs' in text and 'observation_source_subject_refs' in text
-        assert 'reference_membrane_sample' in text and 'reference_wrong_number' in text
-        assert 'preserve unknown target correspondence' in text
-    assert (first, second) == original
-
-
 def test_source_provider_fields_are_not_promoted_to_host_rejection_feedback():
     from gene_annotation_episode.episodic_workflow.root.presentation_fact_contract import _finding_subject_rejections
 
