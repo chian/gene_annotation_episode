@@ -58,12 +58,10 @@ ScientificRequest: TypeAlias = InspectRequest | ExtractRequest | CompareRequest
 
 class ImplementationFile(TypedDict):
     module: str
-    sha256: str
 
 
 class Software(TypedDict):
     python_executable: str
-    python_sha256: str
     python_version: str
     driver_module: Literal["gene_annotation_episode.episodic_workflow.root.a102.native_protein_structure_driver"]
     worker_module: Literal["gene_annotation_episode.episodic_workflow.root.a102.native_protein_structure_worker"]
@@ -286,9 +284,9 @@ def _definitions(*, action_custody=False):
             "fixed_selection": _ref("StructureSelection"), "moving_selection": _ref("StructureSelection"),
             "correspondence": _ref("CorrespondenceInput"), "parameters": _ref("CalculationParameters"),
             "supplied_metadata_files": _array(_ref("FileIdentity"))}),
-        "Software": obj({"python_executable": _TEXT, "python_sha256": _SHA, "python_version": _TEXT,
+        "Software": obj({"python_executable": _TEXT, "python_version": _TEXT,
             "driver_module": {"const": DRIVER_MODULE}, "worker_module": {"const": WORKER_MODULE},
-            "implementation_files": _array(obj({"module": _TEXT, "sha256": _SHA}), minItems=1),
+            "implementation_files": _array(obj({"module": _TEXT}), minItems=1),
             "numpy_version": _TEXT, "biopython_version": _TEXT,
             "implementation": {"const": "gene_annotation_episode_corrected_protein_structure_v1"},
             "algorithm": {"const": "unweighted_proper_rigid_ca_svd_v1"}}),

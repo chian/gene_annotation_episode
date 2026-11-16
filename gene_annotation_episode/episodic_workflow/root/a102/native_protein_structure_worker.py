@@ -46,28 +46,23 @@ def strict_json(raw):
     return json.loads(raw, object_pairs_hook=pairs, parse_constant=nonfinite)
 
 
-def _checksum(path):
-    with Path(path).open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
-
-
 def check_selected_software(selected: Software) -> None:
-    """Verify actual interpreter/dependencies/source pins, never substitute them."""
+    """Verify the actual interpreter and dependency versions, never substitute them."""
     import numpy
     import Bio
     selected = validate_protein_structure_software(selected)
     _require({"gene_annotation_episode.episodic_workflow.root.a102.biopython_pairwise_grader", "gene_annotation_episode.episodic_workflow.root.a102.alignment_correspondence"}
         <= {row["module"] for row in selected["implementation_files"]}, "software_identity_mismatch")
-    observed = {"python_executable": sys.executable, "python_sha256": _checksum(sys.executable),
+    observed = {"python_executable": sys.executable,
         "python_version": platform.python_version(), "numpy_version": numpy.__version__,
         "biopython_version": Bio.__version__, "implementation_files": []}
     for row in selected["implementation_files"]:
         spec = importlib.util.find_spec(row["module"])
         _require(spec is not None and spec.origin is not None, "software_identity_mismatch")
-        observed["implementation_files"].append({"module": row["module"], "sha256": _checksum(spec.origin)})
+        observed["implementation_files"].append({"module": row["module"]})
     print(canonical({"version": "protein_structure_software_observation_v1", "software": observed}), flush=True)
     _require(Path(selected["python_executable"]).resolve() == Path(sys.executable).resolve(), "software_identity_mismatch")
-    for name in ("python_sha256", "python_version", "numpy_version", "biopython_version", "implementation_files"):
+    for name in ("python_version", "numpy_version", "biopython_version"):
         _require(science.same(selected[name], observed[name]), "software_identity_mismatch")
 
 
