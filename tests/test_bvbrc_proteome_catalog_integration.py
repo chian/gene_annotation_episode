@@ -17,11 +17,10 @@ from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homolo
 from test_bvbrc_proteome_tool_info import launch, results
 
 
-def configuration(provider='bvbrc_proteome', pin=None):
+def configuration(provider='bvbrc_proteome'):
     value = deepcopy(CONFIG)
     value['scientific_adapters'] = ([] if provider is None else [{
-        'adapter_id': provider, 'adapter_version': '1',
-        'implementation_sha256': adapter.implementation_sha256() if pin is None else pin}])
+        'adapter_id': provider, 'adapter_version': '1'}])
     return value
 
 

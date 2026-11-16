@@ -24,7 +24,6 @@ def scientific_commission():
     return commission(resource_id='fixture', resource={'kind': 'fixture',
         'python_executable': '/fixture/environment/bin/python'},
         tool='chemistry.request_accounting_hpc', request_sha256='1' * 64,
-        worker_sha256='2' * 64, implementation_sha256='3' * 64,
         parameters={}, files={}, worker_name='worker.py', request_name='request.json',
         program='fixture_environment_probe', version='fixture_v1',
         features={'input_bytes': 2}, preparation='Inspect the supplied environment.',

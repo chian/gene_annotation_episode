@@ -70,7 +70,7 @@ def build_run(directory, *, compact=True, durable=False):
         annotation_child_roles=("launch", "results"), episode_record_receipts=True,
         initial_known_record_refs=[], decision_protocol="decision_exchange_v1",
         execution_binding=None if not durable else {"factory_module": "synthetic_fixture",
-            "factory_name": "unused", "arguments": {}, "implementation_sha256": "a" * 64,
+            "factory_name": "unused", "arguments": {},
             "settings_sha256": "b" * 64})
     scope = {"subject_refs": store.create_problem(raw_sequence="ACGT", molecule="dna")["subject_refs"]}
     api = api_assignment()

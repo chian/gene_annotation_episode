@@ -66,8 +66,7 @@ def setup_case(tmp_path, *, pending=True, sourced=False):
         "child": {"episode_id": child_id, "role": "improvement", "key": "child_7",
                   "path": child_path, "request": child_request, "scope": scope},
         "input_versions": [], "runtime_binding": {"factory_module": "fixture",
-            "factory_name": "open_commission", "arguments": {},
-            "implementation_sha256": "a" * 64, "settings_sha256": "b" * 64},
+            "factory_name": "open_commission", "arguments": {}, "settings_sha256": "b" * 64},
         "constraints": {}, "resource_selection": None,
         "expectation_snapshot_refs": ["original-duration-expectation"]}
     journal = Journal(store, run_id)

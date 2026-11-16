@@ -2,7 +2,6 @@
 import asyncio
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-import hashlib
 import os
 from pathlib import Path
 from types import SimpleNamespace
@@ -42,8 +41,7 @@ class Controller:
 @asynccontextmanager
 async def open_commission(spec):
     arguments = spec["runtime_binding"]["arguments"]
-    if (spec["runtime_binding"]["implementation_sha256"] != hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
-            or spec["runtime_binding"]["settings_sha256"] != content_digest(arguments)):
+    if spec["runtime_binding"]["settings_sha256"] != content_digest(arguments):
         raise DurableExecutionError("unavailable_binding", affected_refs=[spec["handle"]])
     root = Path(arguments["fixture_directory"])
     archive = JsonArchive(root / "archive")

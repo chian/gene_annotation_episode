@@ -39,8 +39,7 @@ def saved_value_case(data=None):
     bundle_content = content(args["bundle"], "f")
     body = {"version": returns.RESULT_VERSION, "source_ref": source, "reference": source,
         "publication": {"bundle_content": bundle_content, "result_record_refs": [source], "adapter_result": stored},
-        "publication_inputs": {"selector": selector, "adapter": selector["adapter"],
-            "adapter_implementation_sha256": "a" * 64},
+        "publication_inputs": {"selector": selector, "adapter": selector["adapter"]},
         "assignment": {"selector": selector}, "record_refs": [source], "bundle": args["bundle"]}
     return body, result["sheet"], result["components"]
 

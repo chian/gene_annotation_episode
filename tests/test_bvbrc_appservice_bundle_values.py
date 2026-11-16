@@ -106,8 +106,7 @@ def fixture(h, *, number=1, selected=None, requirement_ids=None, role="native_ou
         "current_operation": {"name": PREFIX + "download", "arguments": deepcopy(args)},
         "current_snapshot": deepcopy(binding), "prior_acquisition_receipt_refs": list(prior),
         "support_receipt_refs": list(support_refs), "supplied_evidence": deepcopy(list(supplied_evidence)),
-        "adapter": deepcopy(selected["adapter"]),
-        "adapter_implementation_sha256": None if selected["adapter"] is None else "a" * 64}
+        "adapter": deepcopy(selected["adapter"])}
     validate_contract("PublicationInputs", publication)
     return {"prepared": operation, "event": event, "snapshot": snapshot, "common_receipt": common,
             "publication_inputs": publication, "acquisition_receipt_ref": f"acquisition_{number}"}

@@ -39,9 +39,8 @@ class AppServicePreparation:
         self.validate_request(request, None)
         validate_contract("ResultSelector", selector)
         from .bvbrc_appservice_adapters import selected_adapter
-        binding = selected_adapter(self, selector['adapter'])
-        if binding is not None:
-            implementation, _ = binding
+        implementation = selected_adapter(self, selector['adapter'])
+        if implementation is not None:
             implementation.validate_parameters(selector['adapter']['parameters'])
             implementation.validate_requested_form(selector['requested_schema'])
             if (selector['adapter']['adapter_id'], selector['adapter']['adapter_version']) == ('bvbrc_proteome', '2'):

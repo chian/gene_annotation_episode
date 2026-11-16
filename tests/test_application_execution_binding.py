@@ -40,13 +40,12 @@ def saved_settings(store):
 def custom_binding(**changes):
     return {'factory_module': 'fixture_owned_factory', 'factory_name': 'open_commission',
         'arguments': {'owned_configuration': {'value': 7}},
-        'implementation_sha256': 'a'*64, 'settings_sha256': 'b'*64, **changes}
+        'settings_sha256': 'b'*64, **changes}
 
 
 @pytest.fixture
 def known_factory(monkeypatch):
     calls = []
-    monkeypatch.setattr(application.reconstruction, 'implementation_sha256', lambda: 'c'*64)
 
     def make(store, directory, *, kind, tool_configuration):
         # The real factory opens a separate Store connection. Establish that
@@ -64,13 +63,13 @@ def known_factory(monkeypatch):
             'factory_name': application.reconstruction.FACTORY_NAME,
             'arguments': {'kind': kind, 'tool_configuration': tool_configuration,
                           'caller_binding_pins': pins},
-            'implementation_sha256': 'c'*64, 'settings_sha256': content_digest(settings)}
+            'settings_sha256': content_digest(settings)}
 
     monkeypatch.setattr(application.reconstruction, 'make_runtime_binding', make)
     return calls
 
 
-def test_known_default_publishes_actual_configuration_before_factory_and_does_not_rehash_self(run, known_factory):
+def test_known_default_publishes_actual_configuration_before_factory(run, known_factory):
     store, directory, settings = run
     configuration = {'public': {'transport_timeout_seconds': 73}, 'local_tools': {'cmsearch_cpu': 2}}
     result = application.bind_episode_execution(store, directory, settings=settings,

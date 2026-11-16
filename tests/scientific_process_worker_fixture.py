@@ -7,7 +7,6 @@ this module starts no configured model or native scientific investigation.
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-import hashlib
 import json
 import os
 from pathlib import Path
@@ -59,14 +58,6 @@ def child_credit(store, scope, *, assignment, episode_id, run_id,
 child_credit.requires_episode_receipts = True
 
 
-def implementation_sha256():
-    digest = hashlib.sha256()
-    for path in (Path(__file__), Path(base.__file__)):
-        digest.update(path.name.encode() + b'\0')
-        digest.update(hashlib.sha256(path.read_bytes()).digest())
-    return digest.hexdigest()
-
-
 def make_binding(workspace, directory, descriptors):
     workspace, directory = Path(workspace).resolve(), Path(directory).resolve()
     library = ScientificProcessLibrary(directory / 'scientific-process-library')
@@ -79,7 +70,6 @@ def make_binding(workspace, directory, descriptors):
     path.write_text(canonical(configuration) + '\n')
     return {'factory_module': FACTORY_MODULE, 'factory_name': 'open_commission',
         'arguments': {'version': VERSION, 'configuration_file': str(path)},
-        'implementation_sha256': implementation_sha256(),
         'settings_sha256': content_digest(configuration)}
 
 
@@ -195,8 +185,7 @@ async def open_commission(spec):
     spec = validate_commission(spec)
     binding, args = spec['runtime_binding'], spec['runtime_binding']['arguments']
     if (binding['factory_module'] != FACTORY_MODULE or binding['factory_name'] != 'open_commission'
-            or set(args) != {'version', 'configuration_file'} or args['version'] != VERSION
-            or binding['implementation_sha256'] != implementation_sha256()):
+            or set(args) != {'version', 'configuration_file'} or args['version'] != VERSION):
         raise DurableExecutionError('identity_conflict', affected_refs=[spec['handle']])
     configuration = json.loads(Path(args['configuration_file']).read_text())
     if (set(configuration) != {'version', 'workspace', 'run_directory', 'child_completed_actions',

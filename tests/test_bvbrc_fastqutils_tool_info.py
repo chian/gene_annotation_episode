@@ -22,8 +22,7 @@ from test_bvbrc_fastqutils_returns import f
 
 def configured():
     value = deepcopy(CONFIG)
-    value['scientific_adapters'] = [{'adapter_id': adapter.ADAPTER_ID, 'adapter_version': adapter.ADAPTER_VERSION,
-        'implementation_sha256': adapter.implementation_sha256()}]
+    value['scientific_adapters'] = [{'adapter_id': adapter.ADAPTER_ID, 'adapter_version': adapter.ADAPTER_VERSION}]
     return value
 
 

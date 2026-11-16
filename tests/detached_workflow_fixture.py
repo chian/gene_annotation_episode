@@ -9,7 +9,6 @@ from __future__ import annotations
 import asyncio
 from contextlib import asynccontextmanager
 from copy import deepcopy
-import hashlib
 import inspect
 import json
 import os
@@ -34,10 +33,6 @@ def obj(properties):
             'required': list(properties), 'additionalProperties': False}
 
 
-def implementation_sha256():
-    return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
-
-
 def make_binding(workspace, directory):
     """Pin this caller's fixture operands without needing future run settings."""
     workspace, directory = Path(workspace).resolve(), Path(directory).resolve()
@@ -49,7 +44,6 @@ def make_binding(workspace, directory):
     path.write_text(canonical(configuration) + '\n')
     return {'factory_module': FACTORY_MODULE, 'factory_name': 'open_commission',
         'arguments': {'version': VERSION, 'configuration_file': str(path)},
-        'implementation_sha256': implementation_sha256(),
         'settings_sha256': content_digest(configuration)}
 
 
@@ -264,8 +258,7 @@ async def open_commission(spec):
     binding = spec['runtime_binding']
     args = binding['arguments']
     if (binding['factory_module'] != FACTORY_MODULE or binding['factory_name'] != 'open_commission'
-            or set(args) != {'version', 'configuration_file'} or args['version'] != VERSION
-            or binding['implementation_sha256'] != implementation_sha256()):
+            or set(args) != {'version', 'configuration_file'} or args['version'] != VERSION):
         raise DurableExecutionError('identity_conflict', affected_refs=[spec['handle']])
     configuration = json.loads(Path(args['configuration_file']).read_text())
     if (set(configuration) != {'version', 'workspace', 'run_directory',

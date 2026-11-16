@@ -7,7 +7,6 @@ All deadlines below bound tests, never production episode work.
 import asyncio
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
-import hashlib
 import json
 import os
 from pathlib import Path
@@ -52,7 +51,6 @@ def commission_spec(tmp_path, *, key="child", arguments=None, parent=None):
         "input_versions": [],
         "runtime_binding": {"factory_module": "durable_fixture", "factory_name": "open_commission",
                             "arguments": args,
-                            "implementation_sha256": hashlib.sha256((Path(__file__).with_name("durable_fixture.py")).read_bytes()).hexdigest(),
                             "settings_sha256": content_digest(args)},
         "constraints": {"fixture_only": True}, "resource_selection": None,
         "expectation_snapshot_refs": []}

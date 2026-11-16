@@ -16,8 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homolo
 def configuration(bound=True):
     value = deepcopy(CONFIG)
     value['scientific_adapters'] = ([{'adapter_id': adapter.ADAPTER_ID,
-        'adapter_version': adapter.ADAPTER_VERSION,
-        'implementation_sha256': adapter.implementation_sha256()}] if bound else [])
+        'adapter_version': adapter.ADAPTER_VERSION}] if bound else [])
     return value
 
 

@@ -1,7 +1,7 @@
 """Explicit installed scientific implementations for AppService publications.
 
 This registry performs no scientific I/O and never chooses an implementation.
-The caller pins an implementation; the results assignment selects it and its
+The caller configures an implementation; the results assignment selects it and its
 parameters. Unknown implementations remain unavailable without losing bytes.
 """
 from __future__ import annotations
@@ -37,9 +37,7 @@ def bind_adapters(configured):
         implementation = installed.get(key)
         if implementation is None:
             continue
-        if implementation.implementation_sha256() != row['implementation_sha256']:
-            raise ValueError('appservice_adapter_implementation_conflict')
-        bound[key] = (implementation, row['implementation_sha256'])
+        bound[key] = implementation
     return bound
 
 

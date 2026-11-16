@@ -55,7 +55,7 @@ def saved_fixture(data=None, fields=None):
     source = 'source_' + digest(bundle)[:24]
     body = {'version': RESULT_VERSION, 'source_ref': source, 'reference': source, 'record_refs': [source],
         'assignment': {'selector': selected}, 'publication_inputs': {'selector': selected,
-            'adapter': selected['adapter'], 'adapter_implementation_sha256': adapter.implementation_sha256()},
+            'adapter': selected['adapter']},
         'bundle': bundle, 'publication': {'bundle_content': content(bundle, source),
             'result_record_refs': [source], 'adapter_result': saved}}
     return body, sheet, components

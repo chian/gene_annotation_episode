@@ -68,7 +68,7 @@ def acquisition(tmp_path, request):
             'current_operation': {'name': PREFIX + 'download', 'arguments': args},
             'current_snapshot': call.binding, 'prior_acquisition_receipt_refs': [],
             'support_receipt_refs': call.prepared['bound_inputs']['support_receipt_refs'],
-            'supplied_evidence': [], 'adapter': None, 'adapter_implementation_sha256': None})
+            'supplied_evidence': [], 'adapter': None})
         _immutable(call.directory / 'publication_inputs.json', inputs)
         result = build_acquisition_value(call.prepared, call.event, call.snapshot,
             common_receipt=call.common, publication_inputs=inputs,

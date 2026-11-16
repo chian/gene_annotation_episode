@@ -609,7 +609,7 @@ def publication_inputs(operation, snapshot):
             "transport": deepcopy(snapshot.transport), "selected_operands": {
                 key: deepcopy(operation[key]) for key in ("operation", "request_sha256", "arguments_sha256", "native_operands")}},
         "prior_acquisition_receipt_refs": [], "support_receipt_refs": ["capability"],
-        "supplied_evidence": [], "adapter": None, "adapter_implementation_sha256": None}
+        "supplied_evidence": [], "adapter": None}
 
 
 def test_publication_requires_frozen_dependencies_and_delegates_only_exact_snapshot(harness):

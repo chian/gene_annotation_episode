@@ -93,10 +93,9 @@ def test_omitted_and_empty_are_preserved_and_conflicting_bindings_rejected(saved
 def acquire_with_contents(d, contents, *, probe=None):
     selected = {**selector(), "supplied_contents": deepcopy(contents)}
     if probe is not None:
-        pin = {"adapter_id": "test_supplied_bytes_probe", "adapter_version": "1",
-               "implementation_sha256": "1" * 64}
+        pin = {"adapter_id": "test_supplied_bytes_probe", "adapter_version": "1"}
         d.api.configuration["selected-api"]["scientific_adapters"] = [pin]
-        d.service.scientific_adapters = {(pin["adapter_id"], "1"): (probe, pin["implementation_sha256"])}
+        d.service.scientific_adapters = {(pin["adapter_id"], "1"): probe}
         selected["endpoint"] = "requested_projection"
         selected["adapter"] = {"adapter_id": pin["adapter_id"], "adapter_version": "1", "parameters": {}}
         selected["requested_schema"] = {"type": "object", "properties": {"byte_count": {"type": "integer"}},

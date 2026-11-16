@@ -103,7 +103,7 @@ def setup_case(tmp_path, *, run_id="commission-fixture", parent_key="root"):
         "original_decision_index": 7, "selection": selection,
         "runtime_binding": {"factory_module": "fixture", "factory_name": "open_commission",
             "arguments": {"original_settings_file": "saved-caller-settings.json"},
-            "implementation_sha256": "a" * 64, "settings_sha256": "b" * 64},
+            "settings_sha256": "b" * 64},
         "input_versions": [{"reference": source["id"], "version": "original-v1",
                             "content_sha256": content_digest(source)},
                            {"reference": artifact, "version": None,
