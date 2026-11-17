@@ -74,7 +74,7 @@ def _field_contexts(sources, witness, start, end):
         suffix = suffix[:boundary.start()]
     return tuple((html.unescape(_ALL_TAGS.sub('', value)) for value in (prefix, suffix)))
 
-def _number(selection, sources, role, *, count_unit_guard=True):
+def _number(selection, sources, role, *, count_unit_guard=True, approximate_point=False):
     """Keep lower limits and approximations without accepting clipped numbers."""
     _keys(selection, ('witness', 'number_start', 'number_end'), 'number_selector')
     if role not in ('rate', 'spread', 'condition'):
@@ -114,7 +114,8 @@ def _number(selection, sources, role, *, count_unit_guard=True):
         _fail('source_number_unit_role_mismatch', 'number_selector')
     if re.match('\\s*(?:roughly|around|about)\\b', suffix, re.I):
         _fail('postfix_source_approximation_unsupported', 'number_selector')
-    if remaining != prefix and role != 'rate':
+    # approximate_point=True (figure axis ticks only): a prefix approximation alone keeps the point.
+    if remaining != prefix and role != 'rate' and not (approximate_point is True and approximate and not relations):
         _fail('plain_source_point_required', 'number_selector')
     if len(set(relations)) > 1:
         _fail('composite_source_comparator_unsupported', 'number_selector')

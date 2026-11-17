@@ -141,9 +141,8 @@ def tick(arguments, witness, name='second'):
 
 @pytest.mark.parametrize('cell,quote,code', [
     ('four', 'four', 'graph_tick_literal_unsupported'),
-    ('about 9', '9', 'graph_tick_literal_unsupported'),
     ('1e309', '1e309', 'graph_tick_literal_numeric_range'),
-], ids=['word', 'approximate_context', 'overflow'])
+], ids=['word', 'overflow'])
 def test_unusable_text_tick_leaves_the_axis_uncalibrated(cell, quote, code):
     arguments, sources = fixture()
     tick(arguments, label(sources, cell, quote))
@@ -153,10 +152,19 @@ def test_unusable_text_tick_leaves_the_axis_uncalibrated(cell, quote, code):
     assert result['measurement']['reading_status'] == 'unsupported' and result['measurement']['pixel_result']['axis'] is None
 
 
-@pytest.mark.xfail(strict=True, reason='defect: "ca. 9" is read as an exact tick 9, while "about 9", "approx. 9" and "~9" are refused as approximate (graph_tick_literal_unsupported); the circa marker is not recognised by the shared number reader')
-def test_circa_tick_is_approximate_like_about():
+@pytest.mark.parametrize('cell', ['about 9', 'approx. 9', '~9', 'ca. 9'])
+def test_approximate_tick_is_read_at_its_exact_value(cell):
+    # Owner decision 2026-11-16: an approximate axis tick calibrates the axis at its printed value.
     arguments, sources = fixture()
-    tick(arguments, label(sources, 'ca. 9', '9'))
+    tick(arguments, label(sources, cell, '9'))
+    literal = read(arguments, sources)['axis_literals']['second']
+    assert literal['status'] == 'parsed' and reader._fraction(literal['exact_value']) == 9
+    assert 'graph_tick_literal_unsupported' not in codes(literal)
+
+
+def test_bounded_tick_still_leaves_the_axis_uncalibrated():
+    arguments, sources = fixture()
+    tick(arguments, label(sources, '< 9', '9'))
     literal = read(arguments, sources)['axis_literals']['second']
     assert literal['status'] == 'unsupported' and 'graph_tick_literal_unsupported' in codes(literal)
 

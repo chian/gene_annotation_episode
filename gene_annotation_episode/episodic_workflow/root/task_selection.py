@@ -9,9 +9,6 @@ class RootTaskSelection:
         if len(path) == 1 and path[0][0] == 'annotation':
             from .episode import SignedRootEpisodeBinding
             binding = SignedRootEpisodeBinding
-        elif path[-1][0] == 'improvement' and 'improvement' not in self.episode_bindings.roles:
-            from .legacy_annotation.episode import LegacyAnnotationEpisodeBinding
-            binding = LegacyAnnotationEpisodeBinding
         else:
             from .library.homology_episode_family import HomologyEpisodes
             if type(self.job_episodes) is HomologyEpisodes and path[-1][0] in self.job_episodes.roles:

@@ -10,9 +10,6 @@ import math
 class CreditProjection:
 
     def source_credit_view(self, source, *, binding_snapshot=None):
-        if source.path[-1][0] == 'improvement' and 'improvement' not in self.episode_bindings.roles:
-            from .legacy_annotation.credit import source_credit_view
-            return source_credit_view(self, source, binding_snapshot=binding_snapshot)
         if binding_snapshot is not None and type(binding_snapshot) is not dict:
             raise TypeError('credit_binding_snapshot_must_be_dict')
         if self.is_job_source(source):
@@ -41,9 +38,6 @@ class CreditProjection:
         return result
 
     def source_credit_binding(self, source):
-        if source.path[-1][0] == 'improvement' and 'improvement' not in self.episode_bindings.roles:
-            from .legacy_annotation.credit import source_credit_binding
-            return source_credit_binding(self, source)
         specialist = self.specialist(source)
         if specialist is not None and specialist.credit_kind(source.path[-1][0]) != 'scientific':
             return _plain(self.role_credit_definitions.get(source.path[-1][0]))

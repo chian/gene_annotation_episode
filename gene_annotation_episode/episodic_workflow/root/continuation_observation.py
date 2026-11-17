@@ -14,9 +14,6 @@ import json
 class ContinuationObservation:
 
     def controller(self, path):
-        if path[-1][0] == 'improvement' and 'improvement' not in self.episode_bindings.roles:
-            from .legacy_annotation.episode import LegacyAnnotationEpisodeBinding
-            return LegacyAnnotationEpisodeBinding.controller(self, path)
         identity = Episode.identity(self.context, self.grains[path[-1][0]], path[-1][1], parent_path=path[:-1])
         row = self.journal.row('runtime_episodes', identity.episode_id)
         role = path[-1][0]

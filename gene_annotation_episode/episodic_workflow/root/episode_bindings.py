@@ -545,9 +545,6 @@ class EpisodeBindingRegistry:
         for index, (role, _) in enumerate(path):
             if index == 0 and role == 'annotation' and (role not in self._by_role):
                 continue
-            if role == 'improvement' and role not in self._by_role:
-                parent = 'legacy_annotation'
-                continue
             if index == 0 and len(self._by_role.get(role, ())) > 1:
                 entries = [candidate for candidate in self._by_role[role] if role in candidate.entry_roles]
                 if len(entries) != 1:

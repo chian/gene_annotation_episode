@@ -378,13 +378,13 @@ def _literal(context, selected, field, *, unit=False):
     if w['kind'] == 'text':
         start = len(w['quote']) - len(w['quote'].lstrip())
         try:
-            parsed = _number({'witness': _native_witness(w), 'number_start': start, 'number_end': start + len(token)}, context.sources, 'condition')
+            parsed = _number({'witness': _native_witness(w), 'number_start': start, 'number_end': start + len(token)}, context.sources, 'condition', approximate_point=True)
         except ExperimentalContractError as error:
             if error.code not in _NUMBER_PARTIALS:
                 raise
             diagnostics.append(_diagnostic('graph_tick_literal_numeric_range' if error.code == 'numerical_model_range' else 'graph_tick_literal_unsupported', field))
             return result
-        if parsed['relation'] != 'point' or parsed['approximate']:
+        if parsed['relation'] != 'point':  # an approximate tick ("about 9") is used at its exact value
             diagnostics.append(_diagnostic('graph_tick_literal_unsupported', field))
             return result
     exact = Fraction(token.replace('−', '-'))
