@@ -18,7 +18,7 @@ from .progress_observations import _SNAPSHOT
 from .local_return_history import LocalReturnHistory
 from .progress_records import RESOURCE_STATUS_VERSION, validate_job_status, validate_resource_status
 VERSION = 'completed_action_evidence_v1'
-_CHILD_KINDS = {'child', 'job_child', 'episode_child'}
+_CHILD_KINDS = {'job_child', 'episode_child'}
 _KINDS = {'tool', 'reason', 'wait', 'redeliver_report', *_CHILD_KINDS}
 _FIELDS = {'version', 'run_id', 'episode_id', 'unit_ref', 'original_decision_index', 'action_kind', 'received_record_refs', 'received_progress_refs', 'progress_records', 'child_return', 'unavailable_reasons'}
 _RETURN_FIELDS = {'child_handle', 'return_id', 'admission_id', 'admission_state', 'commission_sha256', 'report_contract_sha256', 'selected_at', 'returned_at', 'selection_to_return'}

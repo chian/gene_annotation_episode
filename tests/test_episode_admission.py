@@ -75,7 +75,7 @@ def setup_case(tmp_path, *, pending=True, sourced=False):
         journal.save("runtime_episodes", {"episode_id": eid, "path": canonical(path),
             "request": canonical(request), "initial_credit": 0, "state": state,
             "completion": None, "archive": None})
-    action = {"kind": "child", "goal": "Investigate selected evidence", "scope": scope}
+    action = {"kind": "episode_child", "role": "improvement", "goal": "Investigate selected evidence", "scope": scope}
     journal.save("runtime_actions", {"episode_id": parent_id, "decision_index": 7,
         "action": canonical(action), "result": canonical({"status": "pending",
             "pending_handle": spec["handle"]}) if pending else None,

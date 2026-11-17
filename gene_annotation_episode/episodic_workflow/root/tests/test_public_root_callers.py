@@ -135,8 +135,9 @@ def assert_actual_bindings(options):
         assert type(actual) is cls and actual.jobs is family.jobs
         assert actual._custody is family._custody
         assert family.implementation_for_path((('annotation', 'root'), (role, 'child'))) is actual
-        nested = family.implementation_for_path((('annotation', 'root'), ('improvement', 'again'), (role, 'child')))
-        assert type(nested) is not cls and nested._custody is family._custody
+        # An unbound improvement parent has no homology implementation (legacy standalone family removed).
+        with pytest.raises(ValueError, match='^fixed_homology_parent_path_required$'):
+            family.implementation_for_path((('annotation', 'root'), ('improvement', 'again'), (role, 'child')))
     assert type(options['execution_expectations']) is ExecutionExpectations
     assert type(options['native_timing_information']) is NativeTimingInformation
     assert type(options['resource_estimator']) is ResourceToolEstimator

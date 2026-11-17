@@ -77,11 +77,8 @@ def declared_roles(registry):
 
 def implicit_parent(source, path):
     from ..task import AnnotationTask
-    from ..legacy_annotation.task import LegacyAnnotationTask
     if type(source) is AnnotationTask and len(path) == 1 and path[0][0] == 'annotation':
         return 'annotation'
-    if type(source) is LegacyAnnotationTask and path[-1][0] == 'improvement':
-        return 'legacy_annotation'
     return None
 
 
@@ -160,7 +157,7 @@ def homology_child_path(workflow, source, role):
     path = _plain_path(source)
     if path is None or implicit_parent(source, path) is None:
         return None
-    if path[0][0] not in ('annotation', 'improvement') or any(part[0] != 'improvement' for part in path[1:]):
+    if len(path) != 1 or path[0][0] != 'annotation':
         return None
     homes = {'job_launch': 'homology_job_submission',
              'job_monitor': 'homology_job_monitoring',
@@ -168,4 +165,4 @@ def homology_child_path(workflow, source, role):
     home = homes.get(role)
     if home is None:
         return None
-    return ('legacy_annotation/' if path[-1][0] == 'improvement' else '') + home
+    return home

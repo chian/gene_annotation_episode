@@ -65,7 +65,7 @@ class GenomicOverlapReturns(EpisodeReturnRecords):
             self._require(selected.get("tool") == "process.revise"
                 and child.role == "scientific_process", "original_commission_conflict")
             return
-        self._require(selected.get("kind") in {"child", "episode_child", "job_child"},
+        self._require(selected.get("kind") in {"episode_child", "job_child"},
             "original_commission_conflict")
         self._require(self._equal(selected.get("scope"), child.scope)
             and self._equal(json.loads(selected["schema_json"]), original["measurements"]["schema"])

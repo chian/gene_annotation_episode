@@ -169,7 +169,7 @@ class EpisodeReturnRecords:
         else:
             self._require(self._equal(child.request.get('report_contract'), contract), 'return_child_contract_conflict')
             self._require(child.path[-1][1] == 'child_' + str(index)
-                and selected.get('kind') in {'child', 'episode_child', 'job_child', 'tool'}, 'commission_child_conflict')
+                and selected.get('kind') in {'episode_child', 'job_child', 'tool'}, 'commission_child_conflict')
             self._require(selected.get('kind') != 'tool' or selected.get('tool') == 'process.revise', 'commission_child_conflict')
             if selected.get('kind') in {'episode_child', 'job_child'}:
                 self._require(selected.get('role') == child.role, 'commission_role_conflict')

@@ -6,31 +6,6 @@ Custom bindings and unrelated evidence-axis implementations retain fallback.
 """
 
 
-def exchange_for_improvement(workflow, source, role):
-    """Select only the original implicit task hosts, without admission callbacks."""
-    _nominal = _selector_context(workflow, source, role, None)
-    if _nominal is None:
-        return None
-    registry, path = _nominal
-    if role != 'improvement':
-        return None
-    from .episode_bindings import EpisodeBindingRegistry
-    registry = registry
-    if type(registry) is not EpisodeBindingRegistry or 'improvement' in _static(registry, '_by_role'):
-        return None
-    from .task import AnnotationTask
-    from .legacy_annotation.task import LegacyAnnotationTask
-    if type(source) is AnnotationTask and len(path) == 1 and (path[0][0] == 'annotation'):
-        from .to_child_legacy_annotation import prepare_request
-        from .from_child_legacy_annotation import admit_return
-        return (prepare_request, admit_return)
-    if type(source) is LegacyAnnotationTask and _implicit_parent(source, path) == 'legacy_annotation':
-        from .legacy_annotation.to_child_legacy_annotation import prepare_request
-        from .legacy_annotation.from_child_legacy_annotation import admit_return
-        return (prepare_request, admit_return)
-    return None
-
-
 def exchange_for_scientific_child(workflow, source, role, *, owner=None):
     """Use supplied nominal definitions; original request performs all lookups.
 
@@ -88,8 +63,6 @@ def exchange_for_child(workflow, source, role, *, owner=None):
         parent_source = None
         if _implicit_parent(source, path) == 'annotation':
             parent_source = 'annotation'
-        elif _implicit_parent(source, path) == 'legacy_annotation' and 'improvement' not in _declared_roles(registry):
-            parent_source = 'legacy_annotation'
         elif path[-1][0] == 'scientific_process':
             from .scientific_process.episode import ScientificProcessEpisodes
             if type(_cached_parent(registry, source, path)) is ScientificProcessEpisodes:
@@ -107,15 +80,6 @@ def exchange_for_child(workflow, source, role, *, owner=None):
                 else:
                     from .to_child_hpc_job_execution import prepare_request
                     from .from_child_hpc_job_execution import admit_return
-            elif parent == 'legacy_annotation':
-                if path[-1][0] != 'improvement' or 'improvement' in _declared_roles(registry):
-                    raise ValueError('private_terminal_parent_identity_required')
-                if role == 'launch_local':
-                    from .legacy_annotation.to_child_local_job_execution import prepare_request
-                    from .legacy_annotation.from_child_local_job_execution import admit_return
-                else:
-                    from .legacy_annotation.to_child_hpc_job_execution import prepare_request
-                    from .legacy_annotation.from_child_hpc_job_execution import admit_return
             elif parent == 'scientific_process':
                 from .scientific_process.episode import ScientificProcessEpisodes
                 if path[-1][0] != 'scientific_process' or type(_cached_parent(registry, source, path)) is not ScientificProcessEpisodes:
@@ -152,21 +116,16 @@ def exchange_for_monitor_child(workflow, source, role, *, owner=None):
     from .execution_monitoring.episode import MonitorEpisodes as Monitor_execution_monitoring
     from .hpc_coordination.execution_monitoring.episode import MonitorEpisodes as Monitor_hpc_coordination_execution_monitoring
     from .hpc_coordination.hpc_allocation_execution.execution_monitoring.episode import MonitorEpisodes as Monitor_hpc_coordination_hpc_allocation_execution_execution_monitoring
-    from .legacy_annotation.execution_monitoring.episode import MonitorEpisodes as Monitor_legacy_annotation_execution_monitoring
-    from .legacy_annotation.hpc_coordination.execution_monitoring.episode import MonitorEpisodes as Monitor_legacy_annotation_hpc_coordination_execution_monitoring
-    from .legacy_annotation.hpc_coordination.hpc_allocation_execution.execution_monitoring.episode import MonitorEpisodes as Monitor_legacy_annotation_hpc_coordination_hpc_allocation_execution_execution_monitoring
     from .scientific_process.execution_monitoring.episode import MonitorEpisodes as Monitor_scientific_process_execution_monitoring
     from .scientific_process.hpc_coordination.execution_monitoring.episode import MonitorEpisodes as Monitor_scientific_process_hpc_coordination_execution_monitoring
     from .scientific_process.hpc_coordination.hpc_allocation_execution.execution_monitoring.episode import MonitorEpisodes as Monitor_scientific_process_hpc_coordination_hpc_allocation_execution_execution_monitoring
-    if any((type(parent) is _expected_type for _expected_type in (Monitor_execution_monitoring, Monitor_hpc_coordination_execution_monitoring, Monitor_hpc_coordination_hpc_allocation_execution_execution_monitoring, Monitor_legacy_annotation_execution_monitoring, Monitor_legacy_annotation_hpc_coordination_execution_monitoring, Monitor_legacy_annotation_hpc_coordination_hpc_allocation_execution_execution_monitoring, Monitor_scientific_process_execution_monitoring, Monitor_scientific_process_hpc_coordination_execution_monitoring, Monitor_scientific_process_hpc_coordination_hpc_allocation_execution_execution_monitoring))):
+    if any((type(parent) is _expected_type for _expected_type in (Monitor_execution_monitoring, Monitor_hpc_coordination_execution_monitoring, Monitor_hpc_coordination_hpc_allocation_execution_execution_monitoring, Monitor_scientific_process_execution_monitoring, Monitor_scientific_process_hpc_coordination_execution_monitoring, Monitor_scientific_process_hpc_coordination_hpc_allocation_execution_execution_monitoring))):
         return _declared_exchange(parent, role)
     from .hpc_coordination.episode import HPCCoordinationEpisodes as Parent_hpc_coordination
     from .hpc_coordination.hpc_allocation_execution.episode import HPCAllocationExecutionEpisodes as Parent_hpc_coordination_hpc_allocation_execution
-    from .legacy_annotation.hpc_coordination.episode import HPCCoordinationEpisodes as Parent_legacy_annotation_hpc_coordination
-    from .legacy_annotation.hpc_coordination.hpc_allocation_execution.episode import HPCAllocationExecutionEpisodes as Parent_legacy_annotation_hpc_coordination_hpc_allocation_execution
     from .scientific_process.hpc_coordination.episode import HPCCoordinationEpisodes as Parent_scientific_process_hpc_coordination
     from .scientific_process.hpc_coordination.hpc_allocation_execution.episode import HPCAllocationExecutionEpisodes as Parent_scientific_process_hpc_coordination_hpc_allocation_execution
-    if any((type(parent) is _expected_type for _expected_type in (Parent_hpc_coordination, Parent_hpc_coordination_hpc_allocation_execution, Parent_legacy_annotation_hpc_coordination, Parent_legacy_annotation_hpc_coordination_hpc_allocation_execution, Parent_scientific_process_hpc_coordination, Parent_scientific_process_hpc_coordination_hpc_allocation_execution))):
+    if any((type(parent) is _expected_type for _expected_type in (Parent_hpc_coordination, Parent_hpc_coordination_hpc_allocation_execution, Parent_scientific_process_hpc_coordination, Parent_scientific_process_hpc_coordination_hpc_allocation_execution))):
         child = _registered_child(registry, _plain_field(parent, 'binding_path'), role, owner)
         return _declared_exchange(parent, role, child_binding=child)
     if _implicit_parent(source, path) == 'annotation':
@@ -174,13 +133,6 @@ def exchange_for_monitor_child(workflow, source, role, *, owner=None):
         if type(child) is Monitor_execution_monitoring:
             from .to_child_execution_monitoring import prepare_request
             from .from_child_execution_monitoring import admit_return
-            return (prepare_request, admit_return)
-        return None
-    if _implicit_parent(source, path) == 'legacy_annotation' and 'improvement' not in _declared_roles(registry):
-        child = _registered_child(registry, 'legacy_annotation', role, owner)
-        if type(child) is Monitor_legacy_annotation_execution_monitoring:
-            from .legacy_annotation.to_child_execution_monitoring import prepare_request
-            from .legacy_annotation.from_child_execution_monitoring import admit_return
             return (prepare_request, admit_return)
         return None
     if path[-1][0] == 'scientific_process':
@@ -211,18 +163,6 @@ def exchange_for_job_child(workflow, source, role):
     if _child_path == 'homology_result_acquisition':
         from .to_child_homology_result_acquisition import prepare_request
         from .from_child_homology_result_acquisition import admit_return
-        return (prepare_request, admit_return)
-    if _child_path == 'legacy_annotation/homology_job_monitoring':
-        from .legacy_annotation.to_child_homology_job_monitoring import prepare_request
-        from .legacy_annotation.from_child_homology_job_monitoring import admit_return
-        return (prepare_request, admit_return)
-    if _child_path == 'legacy_annotation/homology_job_submission':
-        from .legacy_annotation.to_child_homology_job_submission import prepare_request
-        from .legacy_annotation.from_child_homology_job_submission import admit_return
-        return (prepare_request, admit_return)
-    if _child_path == 'legacy_annotation/homology_result_acquisition':
-        from .legacy_annotation.to_child_homology_result_acquisition import prepare_request
-        from .legacy_annotation.from_child_homology_result_acquisition import admit_return
         return (prepare_request, admit_return)
     raise ValueError('private_homology_message_owner_required')
 

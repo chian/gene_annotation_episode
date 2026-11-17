@@ -41,8 +41,8 @@ def validate_child_choice(self, source, role, *, selection=None, original=False)
         raise ValueError('child_role_not_available_to_parent')
     if selection is not None:
         kind = selection.get('kind')
-        selected_role = selection.get('role', 'improvement')
-        if selected_role != role or (kind == 'child' and role != 'improvement'):
+        selected_role = selection['role']
+        if selected_role != role:
             raise ValueError('child_role_selection_mismatch')
         if kind == 'job_child' and (self.job_episodes is None or role not in self.job_episodes.roles or self.specialist(source) is not None) or (kind == 'episode_child' and role not in self.episode_bindings.roles):
             raise ValueError('child_kind_not_available_to_parent')

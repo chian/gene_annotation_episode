@@ -28,7 +28,7 @@ def decision_snapshot(self, view):
             controller_state = {key: controller_state[key] for key in ('arms', 'annotation_credits', 'root_score', 'decision')}
             if presented_outcome is not None and self.last_outcome_index is not None:
                 prior = self.workflow.journal.row('runtime_actions', self.episode_id, self.last_outcome_index)
-                if prior is not None and json.loads(prior['action']).get('kind') in {'child', 'episode_child', 'job_child'}:
+                if prior is not None and json.loads(prior['action']).get('kind') in {'episode_child', 'job_child'}:
                     presented_outcome = {'status': presented_outcome.get('status'), 'record_ref_count': len(presented_outcome.get('record_refs') or ()), 'changed_record_ref_count': len(presented_outcome.get('changed_record_refs') or ())}
                     presented_feedback = None
         basis = _references_in({'working_state': state, 'last_local_outcome': presented_outcome, 'visual_evidence': visual_evidence}, self.workflow.store.get, forms=forms, reference_subset=(lambda refs: subset(refs, self.scope)) if subset is not None else None)

@@ -159,8 +159,8 @@ def _selection(selection, aliases):
     if kind == 'tool':
         work = selection.get('tool', 'Selected tool')
         inputs = _compact(selection.get('arguments', {}))
-    elif kind in {'child', 'episode_child', 'job_child'}:
-        work = 'Receive child investigation: ' + str(selection.get('role', 'improvement'))
+    elif kind in {'episode_child', 'job_child'}:
+        work = 'Receive child investigation: ' + str(selection['role'])
         inputs = _compact({key: value for key, value in selection.items()
             if key not in {'kind', 'report_schema', 'return_schema', 'initial_report_json'}})
     elif kind == 'reason':

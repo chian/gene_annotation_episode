@@ -96,7 +96,7 @@ class NativeProteinStructureReturns(ProteinStructureReturnAncestry, ProteinStruc
                 and self._equal(json.loads(earlier["contract"]), original_contract))
         else:
             self._require(child.path[-1][1] == "child_" + str(index)
-                and selected.get("kind") in {"child", "episode_child", "job_child"}
+                and selected.get("kind") in {"episode_child", "job_child"}
                 and self._equal(contract, original_contract))
         frozen = self.db.execute("SELECT form,facts FROM runtime_forms WHERE run_id=? AND episode_id=?",
             (self.run_id, child.episode_id)).fetchone()

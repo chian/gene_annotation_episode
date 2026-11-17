@@ -74,8 +74,8 @@ class MolecularSequenceResults(MolecularResultCustody, MolecularResultPublicatio
         index = int(slot[6:])
         require(str(index) == slot[6:])
         selected, sent = self._selection(parent, index, unsaved=construction)
-        require(selected.get("kind") in ("episode_child", "job_child", "child"), "molecular_sequence_original_commission_required")
-        require(selected.get("kind") == "child" or selected.get("role") == child.role, "molecular_sequence_commission_role_conflict")
+        require(selected.get("kind") in ("episode_child", "job_child"), "molecular_sequence_original_commission_required")
+        require(selected.get("role") == child.role, "molecular_sequence_commission_role_conflict")
         require(same(selected.get("scope"), plain(child.scope)), "molecular_sequence_commission_scope_conflict")
         if child.role in ("results", "launch", "launch_local"):
             require(same(selected.get("assignment"), plain(child.assignment)), "molecular_sequence_commission_assignment_conflict")

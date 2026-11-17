@@ -50,7 +50,7 @@ class LiteratureDecisionContext:
                     prior = self.workflow.journal.row('runtime_actions', self.episode_id,
                         self.last_outcome_index)
                     if prior is not None and json.loads(prior['action']).get('kind') in {
-                            'child', 'episode_child', 'job_child'}:
+                            'episode_child', 'job_child'}:
                         presented_outcome = {
                             'status': presented_outcome.get('status'),
                             'record_ref_count': len(presented_outcome.get('record_refs') or ()),

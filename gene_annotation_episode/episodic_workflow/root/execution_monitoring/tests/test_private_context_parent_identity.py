@@ -8,7 +8,7 @@ import importlib
 from types import SimpleNamespace
 import pytest
 ROOT='gene_annotation_episode.episodic_workflow.root'
-MONITORS=tuple(prefix+home for prefix in ('','legacy_annotation/','scientific_process/')
+MONITORS=tuple(prefix+home for prefix in ('','scientific_process/')
     for home in ('execution_monitoring','hpc_coordination/execution_monitoring',
                  'hpc_coordination/hpc_allocation_execution/execution_monitoring'))
 HOMOLOGY=(('homology_job_submission','HomologySubmission','job_launch'),
@@ -34,10 +34,10 @@ def expected_identity(wf,path):
 
 def monitor_path(home,recursive):
     names=home.split('/')
-    roles={'legacy_annotation':'improvement','scientific_process':'scientific_process',
+    roles={'scientific_process':'scientific_process',
            'hpc_coordination':'hpc','hpc_allocation_execution':'hpc_execution',
            'execution_monitoring':'monitor'}
-    parts=[] if names[0]=='legacy_annotation' else [('annotation','root')]
+    parts=[('annotation','root')]
     parts.extend((roles[name],'owner_'+str(index)) for index,name in enumerate(names))
     if recursive:parts.append(('monitor','recursive'))
     return tuple(parts)
@@ -71,19 +71,13 @@ def family():
 
 
 @pytest.mark.parametrize('home,stem,role',HOMOLOGY)
-@pytest.mark.parametrize('parents',(('annotation',),('improvement',),('annotation','improvement'),
-    ('improvement','improvement'),('annotation','improvement','improvement')))
-def test_homology_private_task_preserves_full_improvement_lineage_identity(home,stem,role,parents):
-    prefix='legacy_annotation/' if 'improvement' in parents else ''
-    module=ROOT+'.'+(prefix+home).replace('/','.')
-    cls=getattr(importlib.import_module(module+'.task'),('Legacy' if prefix else '')+stem+'Task')
+@pytest.mark.parametrize('parents',(('annotation',),))
+def test_homology_private_task_preserves_annotation_lineage_identity(home,stem,role,parents):
+    module=ROOT+'.'+home.replace('/','.')
+    cls=getattr(importlib.import_module(module+'.task'),stem+'Task')
     path=tuple((name,'parent_'+str(index)) for index,name in enumerate(parents))+((role,'original_child'),)
     wf=workflow(role,path,None);wf.job_episodes=family()
     source=cls(wf,path,request(),{'subject_refs':[]})
     assert source.path==path and source.episode_id==expected_identity(wf,path)
     assert source.report_values=={'qualified':False}
     assert wf.job_episodes.implementation_for_path(source.path).decision_source_type is cls
-    if prefix:
-        wf.episode_bindings=SimpleNamespace(roles=('improvement',))
-        with pytest.raises(ValueError,match='fixed_homology_task_identity_required'):
-            cls(wf,path,request(),{'subject_refs':[]})

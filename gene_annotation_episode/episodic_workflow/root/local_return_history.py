@@ -19,7 +19,7 @@ from .wait_events import validate_condition
 from .episode_admission import load_return_admission
 VERSION = 'local_parent_return_history_v1'
 _STATES = {'admitted', 'delivery_pending', 'delivery_failed', 'execution_failed', 'receiver_closed'}
-_CHILD_KINDS = {'child', 'job_child', 'episode_child'}
+_CHILD_KINDS = {'job_child', 'episode_child'}
 
 class SelectionToReturnV1(TypedDict):
     seconds: float | None

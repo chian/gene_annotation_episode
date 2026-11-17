@@ -229,7 +229,7 @@ class BVBRCHomologyReturns(EpisodeReturnRecords):
         self._require(row is not None, "original_commission_required")
         selected = json.loads(row["action"])
         original = plain(child.request)["report_contract"]
-        if selected.get("kind") in {"episode_child", "child", "job_child"}:
+        if selected.get("kind") in {"episode_child", "job_child"}:
             self._require(self._equal(selected.get("scope"), child.scope)
                 and selected.get("purpose") == original["decision"], "original_commission_conflict")
         if self._equal(schema, original["measurements"]["schema"]):

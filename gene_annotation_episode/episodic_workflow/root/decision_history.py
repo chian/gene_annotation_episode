@@ -28,7 +28,7 @@ DETAIL_STRING_PAGE = 4096
 DETAIL_CONTAINER_PAGE = 32
 DISCRIMINATOR_BYTES = 1024
 OWN_ATTEMPTS_REPLY_BYTES = 128 * 1024
-_CHILD_KINDS = {'child', 'job_child', 'episode_child'}
+_CHILD_KINDS = {'job_child', 'episode_child'}
 _OUTCOME_STATUSES = {'completed', 'partial', 'pending', 'failed', 'interrupted', 'invalid', 'unavailable', 'delivery_only'}
 
 class OwnAttemptQuery(TypedDict):
@@ -134,7 +134,7 @@ def category_for(selection) -> str:
             raise ValueError('selection_tool_required')
         return 'tool/' + selection['tool']
     if kind in _CHILD_KINDS:
-        role = selection.get('role', 'improvement' if kind == 'child' else None)
+        role = selection.get('role')
         if not _text(role):
             raise ValueError('selection_child_role_required')
         return kind + '/' + role

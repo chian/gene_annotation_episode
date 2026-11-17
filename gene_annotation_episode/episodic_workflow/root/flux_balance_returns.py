@@ -95,7 +95,7 @@ class FluxBalanceReturns(EpisodeReturnRecords):
             (self.run_id, child.episode_id)).fetchone()
         unsaved = construction and saved is None
         selected, sent = self._selection(parent, int(slot[6:]), unsaved=unsaved)
-        self._require(selected.get("kind") in {"child", "episode_child", "job_child"}, "original_commission_conflict")
+        self._require(selected.get("kind") in {"episode_child", "job_child"}, "original_commission_conflict")
         self._require(self._equal(selected.get("scope"), child.scope), "commission_scope_conflict")
         if selected["kind"] in {"episode_child", "job_child"}:
             self._require(selected.get("role") == child.role, "commission_role_conflict")

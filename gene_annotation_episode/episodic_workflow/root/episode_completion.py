@@ -17,7 +17,7 @@ SLOT_VERSION = 'episode_completion_slot_v1'
 EFFECT_VERSION = 'episode_decision_effect_v1'
 SOURCE_RESTORE_VERSION = 'episode_source_restore_v1'
 SOURCE_STATE_VERSION = 'episode_source_state_v1'
-_CHILD_KINDS = frozenset({'child', 'job_child', 'episode_child'})
+_CHILD_KINDS = frozenset({'job_child', 'episode_child'})
 
 def observes_action_outcome(kind, status):
     """Executed own attempts enter their iterator even when acquisition fails.

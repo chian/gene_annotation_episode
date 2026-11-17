@@ -154,15 +154,15 @@ class ActionExecution:
         return result
 
     def selected(self, source, selection, index):
-        if selection['kind'] in {'child', 'job_child', 'episode_child'}:
+        if selection['kind'] in {'job_child', 'episode_child'}:
             if source.path[-1][0] == 'scientific_process':
                 saved = self.journal.row('runtime_actions', source.episode_id, index)
                 if saved is None or saved['result'] is None:
                     self.scientific_binding(source).validate_execution_context(self.binding_context(source))
             old = self.journal.row('runtime_actions', source.episode_id, index) if self.annotation_child_roles is not None else None
             original = old is not None and json.loads(old['action']) == selection
-            self.validate_child_choice(source, selection.get('role', 'improvement'), selection=selection, original=original)
-        common_action = 'child' if selection['kind'] in {'child', 'job_child', 'episode_child'} else selection['kind']
+            self.validate_child_choice(source, selection['role'], selection=selection, original=original)
+        common_action = 'child' if selection['kind'] in {'job_child', 'episode_child'} else selection['kind']
         resolving = selection['kind'] == 'redeliver_report' and selection.get('delivery_ref') == source._delivery_resolution_ref and (self.pending_delivery(source, selection.get('delivery_ref')) is not None)
         if not resolving and (not self.permits_common_action(source, common_action)):
             raise ValueError('action_not_available_to_episode')
@@ -172,7 +172,7 @@ class ActionExecution:
         closed = self._closed_child_commission(source, selection, index)
         if closed is not None:
             return closed
-        if self.execution_binding is None and selection['kind'] in {'child', 'job_child', 'episode_child'}:
+        if self.execution_binding is None and selection['kind'] in {'job_child', 'episode_child'}:
             original = self.journal.row('runtime_actions', source.episode_id, index)
             if original is not None and original['result'] is not None:
                 outcome = json.loads(original['result'])
@@ -190,11 +190,9 @@ class ActionExecution:
             recorded = original is not None and json.loads(original['action']) == selection
             if not recorded:
                 self.validate_wait_selection(source, selection['condition'])
-        if selection['kind'] == 'child' and self.has_scientific_binding:
-            raise ValueError('scientific_child_requires_filled_process')
         if selection['kind'] == 'redeliver_report':
             return self.redeliver(source, selection, index)
-        if selection['kind'] not in {'child', 'job_child', 'episode_child'}:
+        if selection['kind'] not in {'job_child', 'episode_child'}:
             if self.execution_binding is not None or self.inprocess_replay is not None:
                 old = self.journal.row('runtime_actions', source.episode_id, index)
                 if old is not None and json.loads(old['action']) != selection:
@@ -215,13 +213,13 @@ class ActionExecution:
                         raise WorkflowError('pending_commission_intent_unavailable')
                     return self.deferred_unit(source, index, original)
         scope = self.store.validate_scope(selection['scope'], parent_scope=source.scope)
-        role = selection.get('role', 'improvement')
+        role = selection['role']
         episode_assignment = None
         scientific_process = None
         root_binding_selection = self.binding_selection_for_child(source, role, selection, index) if selection['kind'] == 'episode_child' else None
         selected_owner = None if root_binding_selection is None else root_binding_selection['binding']['owner']
-        from .predefined_child_message_owners import exchange_for_child, exchange_for_job_child, exchange_for_improvement
-        private_message_exchange = exchange_for_child(self, source, role, owner=selected_owner) if selection['kind'] == 'episode_child' else exchange_for_job_child(self, source, role) if selection['kind'] == 'job_child' else exchange_for_improvement(self, source, role)
+        from .predefined_child_message_owners import exchange_for_child, exchange_for_job_child
+        private_message_exchange = exchange_for_child(self, source, role, owner=selected_owner) if selection['kind'] == 'episode_child' else exchange_for_job_child(self, source, role)
         if private_message_exchange is None:
             schema, report_declaration = self.expanded_contract_form(source, selection, index, role, owner=selected_owner)
             if selection['kind'] == 'episode_child':

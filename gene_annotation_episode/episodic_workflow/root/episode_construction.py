@@ -123,7 +123,7 @@ class EpisodeConstruction:
                 else:
                     action = self.journal.row('runtime_actions', identity.episode_id, item.decision_index)
                     outcome = json.loads(action['result'])
-                    if json.loads(action['action']).get('kind') in {'child', 'job_child', 'episode_child'} and outcome.get('status') == 'failed' and outcome.get('execution_handle'):
+                    if json.loads(action['action']).get('kind') in {'job_child', 'episode_child'} and outcome.get('status') == 'failed' and outcome.get('execution_handle'):
                         spec = self.execution_backend.load_commission(outcome['execution_handle'])
                         self.execution_backend.acknowledge_failed_dispatch(outcome['execution_handle'], parent_episode_id=identity.episode_id, operation_key=spec['operation_key'], observation=data)
                 self.publish_outcome(source, item.decision_index)
@@ -145,7 +145,7 @@ class EpisodeConstruction:
                     raise WorkflowError('inprocess_closed_history_replay_differs')
                 return
             if old['state'] == 'active':
-                pending = self.store.db.execute("SELECT 1 FROM runtime_actions WHERE run_id=? AND episode_id=? AND json_extract(action,'$.kind') IN ('child','job_child','episode_child') AND (result IS NULL OR json_extract(result,'$.status')='pending') LIMIT 1", (self.run_id, identity.episode_id)).fetchone()
+                pending = self.store.db.execute("SELECT 1 FROM runtime_actions WHERE run_id=? AND episode_id=? AND json_extract(action,'$.kind') IN ('job_child','episode_child') AND (result IS NULL OR json_extract(result,'$.status')='pending') LIMIT 1", (self.run_id, identity.episode_id)).fetchone()
                 unobserved = self.store.db.execute('SELECT 1 FROM runtime_completion_slots s LEFT JOIN runtime_observations o ON o.run_id=s.run_id AND o.episode_id=s.episode_id AND o.unit_index=s.sequence WHERE s.run_id=? AND s.episode_id=? AND o.unit_index IS NULL LIMIT 1', (self.run_id, identity.episode_id)).fetchone()
                 unobserved_action = self.store.db.execute("SELECT 1 FROM runtime_actions a WHERE a.run_id=? AND a.episode_id=? AND a.credit IS NOT NULL AND NOT EXISTS (SELECT 1 FROM runtime_observations o WHERE o.run_id=a.run_id AND o.episode_id=a.episode_id AND json_extract(o.observation,'$.decision_index')=a.decision_index) LIMIT 1", (self.run_id, identity.episode_id)).fetchone()
                 if pending is not None or unobserved is not None or unobserved_action is not None:

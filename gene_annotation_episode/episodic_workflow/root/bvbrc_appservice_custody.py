@@ -293,7 +293,7 @@ class AppServiceCustody(EpisodeReturnRecords):
         self._require(match is not None, "commission_child_conflict")
         original_index = int(match[1])
         original, original_sent = self._selection(context, original_index)
-        self._require(original.get("kind") in {"child", "episode_child", "job_child", "tool"},
+        self._require(original.get("kind") in {"episode_child", "job_child", "tool"},
                       "commission_child_conflict")
         self._require(original.get("kind") != "tool" or original.get("tool") == "process.revise",
                       "commission_child_conflict")

@@ -80,8 +80,6 @@ def query(**values):
 @pytest.mark.parametrize("selection,category", [
     ({"kind": "tool", "tool": "sequence.align"}, "tool/sequence.align"),
     ({"kind": "tool", "tool": "sequence.inspect"}, "tool/sequence.inspect"),
-    ({"kind": "child"}, "child/improvement"),
-    ({"kind": "child", "role": "improvement"}, "child/improvement"),
     ({"kind": "job_child", "role": "job_launch"}, "job_child/job_launch"),
     ({"kind": "episode_child", "role": "local_compute"}, "episode_child/local_compute"),
     ({"kind": "reason"}, "reason"), ({"kind": "wait"}, "wait"),

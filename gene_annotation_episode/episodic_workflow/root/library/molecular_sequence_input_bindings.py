@@ -88,8 +88,8 @@ class MolecularSequenceInputBindings:
                     compare = getattr(self.owner, "commission_assignment_matches", None)
                     same_assignment = (callable(compare) and compare(parent, current, selected,
                         decision_index=int(slot[1])) is True)
-                _require(selected.get("kind") in ("child", "episode_child", "job_child")
-                    and (selected.get("kind") == "child" or selected.get("role") == current.role)
+                _require(selected.get("kind") in ("episode_child", "job_child")
+                    and selected.get("role") == current.role
                     and self.records._equal(selected.get("scope"), current.scope)
                     and same_assignment, "invalid_commission")
                 self.frames._child_contract(current, selected, sent)

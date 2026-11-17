@@ -107,10 +107,10 @@ class NativeInfernalReturns(EpisodeReturnRecords):
             'AND decision_index=?', (self.run_id, context.episode_id, original_index)).fetchone()
         self._require(row is not None, 'original_commission_required')
         selected = json.loads(row['action'])
-        self._require(selected.get('kind') in {'episode_child', 'child', 'job_child'}
+        self._require(selected.get('kind') in {'episode_child', 'job_child'}
             or selected.get('kind') == 'tool' and selected.get('tool') == 'process.revise',
             'original_commission_conflict')
-        if selected.get('kind') in {'episode_child', 'child', 'job_child'}:
+        if selected.get('kind') in {'episode_child', 'job_child'}:
             self._require(self._equal(selected.get('scope'), child.scope)
                 and self._equal(json.loads(selected['schema_json']), original['measurements']['schema'])
                 and selected.get('purpose') == original['decision'], 'original_commission_conflict')

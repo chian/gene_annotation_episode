@@ -69,7 +69,8 @@ def test_root_rejects_tools_at_schema_dispatch_and_metadata_surface(tmp_path):
         assert workflow.catalog(root.source.scope, source=root.source) == []
         kinds = {choice['properties']['kind']['const'] for choice in
             workflow.action_schema(root.source)['properties']['selection']['anyOf']}
-        assert 'tool' not in kinds and {'reason', 'child', 'wait', 'redeliver_report'} <= kinds
+        # No child role is bound, so no child commission is offered (2026-11-17: no implicit improvement child).
+        assert 'tool' not in kinds and 'child' not in kinds and {'reason', 'wait', 'redeliver_report'} <= kinds
         action = {'kind': 'tool', 'tool': 'sequence.translate', 'arguments': {
             'subject_ref': target, 'code': 11, 'start': 0, 'end': 9,
             'strand': '+', 'frame': 0, 'cds': True}}

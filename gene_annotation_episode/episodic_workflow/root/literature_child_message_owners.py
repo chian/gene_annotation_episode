@@ -1,7 +1,7 @@
 """Select only authentic Root Literature parent/child message owners.
 
-Unrelated axes, providers and legacy/custom bindings retain the original host
-fallback. This selector declares no new available role or commissioning edge.
+Unrelated axes, providers and custom bindings return None here and use the
+shared host exchange. This selector declares no new available role or commissioning edge.
 """
 def exchange_for_child(workflow, source, role, *, owner=None):
     _nominal = _selector_context(workflow, source, role, owner)
@@ -28,14 +28,6 @@ def exchange_for_child(workflow, source, role, *, owner=None):
             from .to_child_published_evidence_assessment import prepare_request
             from .from_child_published_evidence_assessment import admit_return
             return (prepare_request, admit_return)
-    if _implicit_parent(source, path) == 'legacy_annotation' and role == 'literature' and ('improvement' not in _declared_roles(registry)):
-        from .legacy_annotation.published_evidence_assessment.family import classes as improvement_classes
-        from .operational_child_message_owners import _registered_child
-        child = _registered_child(registry, 'legacy_annotation', role, owner)
-        if type(child) is improvement_classes()[0]:
-            from .legacy_annotation.to_child_published_evidence_assessment import prepare_request
-            from .legacy_annotation.from_child_published_evidence_assessment import admit_return
-            return (prepare_request, admit_return)
     return None
 
 
@@ -48,11 +40,9 @@ def execution_exchange_for_child(workflow, source, role, *, owner=None):
     parent = _cached_parent(registry, source, path)
     from .published_evidence_assessment.episode import LiteratureEpisode as Parent_published_evidence_assessment
     from .published_evidence_assessment.execution_job_submission.episode import ExecutionSubmissionBinding as Launch_published_evidence_assessment
-    from .legacy_annotation.published_evidence_assessment.episode import LiteratureEpisode as Parent_legacy_annotation_published_evidence_assessment
-    from .legacy_annotation.published_evidence_assessment.execution_job_submission.episode import ExecutionSubmissionBinding as Launch_legacy_annotation_published_evidence_assessment
     from .scientific_process.published_evidence_assessment.episode import LiteratureEpisode as Parent_scientific_process_published_evidence_assessment
     from .scientific_process.published_evidence_assessment.execution_job_submission.episode import ExecutionSubmissionBinding as Launch_scientific_process_published_evidence_assessment
-    if any((type(parent) is _expected_type for _expected_type in (Parent_published_evidence_assessment, Launch_published_evidence_assessment, Parent_legacy_annotation_published_evidence_assessment, Launch_legacy_annotation_published_evidence_assessment, Parent_scientific_process_published_evidence_assessment, Launch_scientific_process_published_evidence_assessment))):
+    if any((type(parent) is _expected_type for _expected_type in (Parent_published_evidence_assessment, Launch_published_evidence_assessment, Parent_scientific_process_published_evidence_assessment, Launch_scientific_process_published_evidence_assessment))):
         child = _registered_child(registry, _plain_field(parent, 'binding_path'), role, owner)
         return _declared_exchange(parent, role, child_binding=child)
     return None

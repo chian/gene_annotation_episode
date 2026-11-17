@@ -30,7 +30,7 @@ class ProteinStructureReturnAncestry:
         self._require(row is not None)
         action, request = json.loads(row["action"]), plain(child.request)
         contract = request.get("report_contract")
-        self._require(isinstance(contract, dict) and action.get("kind") in {"child", "episode_child", "job_child"})
+        self._require(isinstance(contract, dict) and action.get("kind") in {"episode_child", "job_child"})
         self._require(self._equal(action.get("scope"), child.scope)
             and action.get("purpose") == contract["decision"]
             and action.get("goal") == request["goal"]["objective"]

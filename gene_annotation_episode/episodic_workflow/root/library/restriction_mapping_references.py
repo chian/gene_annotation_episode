@@ -119,7 +119,7 @@ class RestrictionMappingReferences(EpisodeReturnRecords):
             self._require(selected.get("tool") == "process.revise" and child.role == "scientific_process",
                 "original_commission_conflict")
             return selected
-        self._require(selected.get("kind") in {"child", "episode_child", "job_child"},
+        self._require(selected.get("kind") in {"episode_child", "job_child"},
             "original_commission_conflict")
         schema = self._json(selected.get("schema_json"), "original_commission_invalid")
         declaration = plain(child.request).get("message", {}).get("report_contract_declaration")
