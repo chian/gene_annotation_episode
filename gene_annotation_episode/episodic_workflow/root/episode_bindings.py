@@ -517,7 +517,7 @@ class EpisodeBindingRegistry:
             if not matches:
                 matches = [binding for binding in candidates if getattr(binding, 'binding_path', None) is None]
         elif parent is None:
-            matches = [binding for binding in candidates if role in binding.entry_roles and getattr(binding, 'commissioning_parent', 'legacy_annotation') in {'legacy_annotation', 'annotation'}]
+            matches = [binding for binding in candidates if role in binding.entry_roles and getattr(binding, 'commissioning_parent', None) == 'annotation']
         else:
             matches = [binding for binding in candidates if getattr(binding, 'binding_path', None) is None]
         if len(matches) != 1:

@@ -16,12 +16,10 @@ ENTRIES = (
 )
 
 
-PARENTS = ('annotation', 'legacy_annotation', 'scientific_process')
+PARENTS = ('annotation', 'scientific_process')
 PARENT_ENTRIES = (
     ('annotation', 'local', 'launch_local', 'local_job_execution', 'root_local_terminal_execution'),
     ('annotation', 'hpc', 'launch_hpc', 'hpc_job_execution', 'root_hpc_terminal_execution'),
-    ('legacy_annotation', 'local', 'launch_local', 'legacy_annotation/local_job_execution', 'root_legacy_annotation_local_terminal_execution'),
-    ('legacy_annotation', 'hpc', 'launch_hpc', 'legacy_annotation/hpc_job_execution', 'root_legacy_annotation_hpc_terminal_execution'),
     ('scientific_process', 'local', 'launch_local', 'scientific_process/local_job_execution', 'root_scientific_process_local_terminal_execution'),
     ('scientific_process', 'hpc', 'launch_hpc', 'scientific_process/hpc_job_execution', 'root_scientific_process_hpc_terminal_execution'),
 )
@@ -43,12 +41,6 @@ def binding_class(binding_path):
         return LocalEpisodeBinding
     elif binding_path == 'hpc_job_execution':
         from .hpc_job_execution.episode import HPCEpisodeBinding
-        return HPCEpisodeBinding
-    elif binding_path == 'legacy_annotation/local_job_execution':
-        from .legacy_annotation.local_job_execution.episode import LocalEpisodeBinding
-        return LocalEpisodeBinding
-    elif binding_path == 'legacy_annotation/hpc_job_execution':
-        from .legacy_annotation.hpc_job_execution.episode import HPCEpisodeBinding
         return HPCEpisodeBinding
     elif binding_path == 'scientific_process/local_job_execution':
         from .scientific_process.local_job_execution.episode import LocalEpisodeBinding
@@ -201,8 +193,6 @@ def source_record():
         'constructors': [
             'gene_annotation_episode.episodic_workflow.root.local_job_execution.episode.LocalEpisodeBinding',
             'gene_annotation_episode.episodic_workflow.root.hpc_job_execution.episode.HPCEpisodeBinding',
-            'gene_annotation_episode.episodic_workflow.root.legacy_annotation.local_job_execution.episode.LocalEpisodeBinding',
-            'gene_annotation_episode.episodic_workflow.root.legacy_annotation.hpc_job_execution.episode.HPCEpisodeBinding',
             'gene_annotation_episode.episodic_workflow.root.scientific_process.local_job_execution.episode.LocalEpisodeBinding',
             'gene_annotation_episode.episodic_workflow.root.scientific_process.hpc_job_execution.episode.HPCEpisodeBinding']}
 

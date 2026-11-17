@@ -9,16 +9,12 @@ from gene_annotation_episode.episodic_workflow.root.communication import plain
 FACTORY = 'gene_annotation_episode.episodic_workflow.root.execution_service_setup.ExecutionServiceFactory'
 PARENTS = (
     'annotation',
-    'legacy_annotation',
     'scientific_process',
     'hpc_coordination',
     'hpc_coordination/hpc_allocation_execution',
-    'legacy_annotation/hpc_coordination',
-    'legacy_annotation/hpc_coordination/hpc_allocation_execution',
     'scientific_process/hpc_coordination',
     'scientific_process/hpc_coordination/hpc_allocation_execution',
     'published_evidence_assessment',
-    'legacy_annotation/published_evidence_assessment',
     'scientific_process/published_evidence_assessment',
 )
 FAMILIES = {
@@ -28,13 +24,6 @@ FAMILIES = {
         ('launch_local', 'execution_job_submission/local_job_execution', 'root_execution_job_submission_local_job_execution'),
         ('launch_hpc', 'execution_job_submission/hpc_job_execution', 'root_execution_job_submission_hpc_job_execution'),
         ('results', 'execution_result_acquisition', 'root_execution_result_acquisition'),
-    ),
-    'legacy_annotation': (
-        ('launch', 'legacy_annotation/execution_job_submission', 'root_legacy_annotation_execution_job_submission'),
-        ('launch_api', 'legacy_annotation/execution_job_submission/api_job_execution', 'root_legacy_annotation_execution_job_submission_api_job_execution'),
-        ('launch_local', 'legacy_annotation/execution_job_submission/local_job_execution', 'root_legacy_annotation_execution_job_submission_local_job_execution'),
-        ('launch_hpc', 'legacy_annotation/execution_job_submission/hpc_job_execution', 'root_legacy_annotation_execution_job_submission_hpc_job_execution'),
-        ('results', 'legacy_annotation/execution_result_acquisition', 'root_legacy_annotation_execution_result_acquisition'),
     ),
     'scientific_process': (
         ('launch', 'scientific_process/execution_job_submission', 'root_scientific_process_execution_job_submission'),
@@ -57,20 +46,6 @@ FAMILIES = {
         ('launch_hpc', 'hpc_coordination/hpc_allocation_execution/execution_job_submission/hpc_job_execution', 'root_hpc_coordination_hpc_allocation_execution_execution_job_submission_hpc_job_execution'),
         ('results', 'hpc_coordination/hpc_allocation_execution/execution_result_acquisition', 'root_hpc_coordination_hpc_allocation_execution_execution_result_acquisition'),
     ),
-    'legacy_annotation/hpc_coordination': (
-        ('launch', 'legacy_annotation/hpc_coordination/execution_job_submission', 'root_legacy_annotation_hpc_coordination_execution_job_submission'),
-        ('launch_api', 'legacy_annotation/hpc_coordination/execution_job_submission/api_job_execution', 'root_legacy_annotation_hpc_coordination_execution_job_submission_api_job_execution'),
-        ('launch_local', 'legacy_annotation/hpc_coordination/execution_job_submission/local_job_execution', 'root_legacy_annotation_hpc_coordination_execution_job_submission_local_job_execution'),
-        ('launch_hpc', 'legacy_annotation/hpc_coordination/execution_job_submission/hpc_job_execution', 'root_legacy_annotation_hpc_coordination_execution_job_submission_hpc_job_execution'),
-        ('results', 'legacy_annotation/hpc_coordination/execution_result_acquisition', 'root_legacy_annotation_hpc_coordination_execution_result_acquisition'),
-    ),
-    'legacy_annotation/hpc_coordination/hpc_allocation_execution': (
-        ('launch', 'legacy_annotation/hpc_coordination/hpc_allocation_execution/execution_job_submission', 'root_legacy_annotation_hpc_coordination_hpc_allocation_execution_execution_job_submission'),
-        ('launch_api', 'legacy_annotation/hpc_coordination/hpc_allocation_execution/execution_job_submission/api_job_execution', 'root_legacy_annotation_hpc_coordination_hpc_allocation_execution_execution_job_submission_api_job_execution'),
-        ('launch_local', 'legacy_annotation/hpc_coordination/hpc_allocation_execution/execution_job_submission/local_job_execution', 'root_legacy_annotation_hpc_coordination_hpc_allocation_execution_execution_job_submission_local_job_execution'),
-        ('launch_hpc', 'legacy_annotation/hpc_coordination/hpc_allocation_execution/execution_job_submission/hpc_job_execution', 'root_legacy_annotation_hpc_coordination_hpc_allocation_execution_execution_job_submission_hpc_job_execution'),
-        ('results', 'legacy_annotation/hpc_coordination/hpc_allocation_execution/execution_result_acquisition', 'root_legacy_annotation_hpc_coordination_hpc_allocation_execution_execution_result_acquisition'),
-    ),
     'scientific_process/hpc_coordination': (
         ('launch', 'scientific_process/hpc_coordination/execution_job_submission', 'root_scientific_process_hpc_coordination_execution_job_submission'),
         ('launch_api', 'scientific_process/hpc_coordination/execution_job_submission/api_job_execution', 'root_scientific_process_hpc_coordination_execution_job_submission_api_job_execution'),
@@ -92,13 +67,6 @@ FAMILIES = {
         ('launch_hpc', 'published_evidence_assessment/execution_job_submission/hpc_job_execution', 'root_published_evidence_assessment_execution_job_submission_hpc_job_execution'),
         ('results', 'published_evidence_assessment/execution_result_acquisition', 'root_published_evidence_assessment_execution_result_acquisition'),
     ),
-    'legacy_annotation/published_evidence_assessment': (
-        ('launch', 'legacy_annotation/published_evidence_assessment/execution_job_submission', 'root_legacy_annotation_published_evidence_assessment_execution_job_submission'),
-        ('launch_api', 'legacy_annotation/published_evidence_assessment/execution_job_submission/api_job_execution', 'root_legacy_annotation_published_evidence_assessment_execution_job_submission_api_job_execution'),
-        ('launch_local', 'legacy_annotation/published_evidence_assessment/execution_job_submission/local_job_execution', 'root_legacy_annotation_published_evidence_assessment_execution_job_submission_local_job_execution'),
-        ('launch_hpc', 'legacy_annotation/published_evidence_assessment/execution_job_submission/hpc_job_execution', 'root_legacy_annotation_published_evidence_assessment_execution_job_submission_hpc_job_execution'),
-        ('results', 'legacy_annotation/published_evidence_assessment/execution_result_acquisition', 'root_legacy_annotation_published_evidence_assessment_execution_result_acquisition'),
-    ),
     'scientific_process/published_evidence_assessment': (
         ('launch', 'scientific_process/published_evidence_assessment/execution_job_submission', 'root_scientific_process_published_evidence_assessment_execution_job_submission'),
         ('launch_api', 'scientific_process/published_evidence_assessment/execution_job_submission/api_job_execution', 'root_scientific_process_published_evidence_assessment_execution_job_submission_api_job_execution'),
@@ -118,13 +86,6 @@ def binding_types(parent='annotation'):
         from .execution_job_submission.local_job_execution.episode import LocalExecutionBinding
         from .execution_job_submission.hpc_job_execution.episode import HPCExecutionBinding
         from .execution_result_acquisition.episode import ResultAcquisitionBinding
-        return (ExecutionSubmissionBinding, APIExecutionBinding, LocalExecutionBinding, HPCExecutionBinding, ResultAcquisitionBinding)
-    if parent == 'legacy_annotation':
-        from .legacy_annotation.execution_job_submission.episode import ExecutionSubmissionBinding
-        from .legacy_annotation.execution_job_submission.api_job_execution.episode import APIExecutionBinding
-        from .legacy_annotation.execution_job_submission.local_job_execution.episode import LocalExecutionBinding
-        from .legacy_annotation.execution_job_submission.hpc_job_execution.episode import HPCExecutionBinding
-        from .legacy_annotation.execution_result_acquisition.episode import ResultAcquisitionBinding
         return (ExecutionSubmissionBinding, APIExecutionBinding, LocalExecutionBinding, HPCExecutionBinding, ResultAcquisitionBinding)
     if parent == 'scientific_process':
         from .scientific_process.execution_job_submission.episode import ExecutionSubmissionBinding
@@ -147,20 +108,6 @@ def binding_types(parent='annotation'):
         from .hpc_coordination.hpc_allocation_execution.execution_job_submission.hpc_job_execution.episode import HPCExecutionBinding
         from .hpc_coordination.hpc_allocation_execution.execution_result_acquisition.episode import ResultAcquisitionBinding
         return (ExecutionSubmissionBinding, APIExecutionBinding, LocalExecutionBinding, HPCExecutionBinding, ResultAcquisitionBinding)
-    if parent == 'legacy_annotation/hpc_coordination':
-        from .legacy_annotation.hpc_coordination.execution_job_submission.episode import ExecutionSubmissionBinding
-        from .legacy_annotation.hpc_coordination.execution_job_submission.api_job_execution.episode import APIExecutionBinding
-        from .legacy_annotation.hpc_coordination.execution_job_submission.local_job_execution.episode import LocalExecutionBinding
-        from .legacy_annotation.hpc_coordination.execution_job_submission.hpc_job_execution.episode import HPCExecutionBinding
-        from .legacy_annotation.hpc_coordination.execution_result_acquisition.episode import ResultAcquisitionBinding
-        return (ExecutionSubmissionBinding, APIExecutionBinding, LocalExecutionBinding, HPCExecutionBinding, ResultAcquisitionBinding)
-    if parent == 'legacy_annotation/hpc_coordination/hpc_allocation_execution':
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.execution_job_submission.episode import ExecutionSubmissionBinding
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.execution_job_submission.api_job_execution.episode import APIExecutionBinding
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.execution_job_submission.local_job_execution.episode import LocalExecutionBinding
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.execution_job_submission.hpc_job_execution.episode import HPCExecutionBinding
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.execution_result_acquisition.episode import ResultAcquisitionBinding
-        return (ExecutionSubmissionBinding, APIExecutionBinding, LocalExecutionBinding, HPCExecutionBinding, ResultAcquisitionBinding)
     if parent == 'scientific_process/hpc_coordination':
         from .scientific_process.hpc_coordination.execution_job_submission.episode import ExecutionSubmissionBinding
         from .scientific_process.hpc_coordination.execution_job_submission.api_job_execution.episode import APIExecutionBinding
@@ -181,13 +128,6 @@ def binding_types(parent='annotation'):
         from .published_evidence_assessment.execution_job_submission.local_job_execution.episode import LocalExecutionBinding
         from .published_evidence_assessment.execution_job_submission.hpc_job_execution.episode import HPCExecutionBinding
         from .published_evidence_assessment.execution_result_acquisition.episode import ResultAcquisitionBinding
-        return (ExecutionSubmissionBinding, APIExecutionBinding, LocalExecutionBinding, HPCExecutionBinding, ResultAcquisitionBinding)
-    if parent == 'legacy_annotation/published_evidence_assessment':
-        from .legacy_annotation.published_evidence_assessment.execution_job_submission.episode import ExecutionSubmissionBinding
-        from .legacy_annotation.published_evidence_assessment.execution_job_submission.api_job_execution.episode import APIExecutionBinding
-        from .legacy_annotation.published_evidence_assessment.execution_job_submission.local_job_execution.episode import LocalExecutionBinding
-        from .legacy_annotation.published_evidence_assessment.execution_job_submission.hpc_job_execution.episode import HPCExecutionBinding
-        from .legacy_annotation.published_evidence_assessment.execution_result_acquisition.episode import ResultAcquisitionBinding
         return (ExecutionSubmissionBinding, APIExecutionBinding, LocalExecutionBinding, HPCExecutionBinding, ResultAcquisitionBinding)
     if parent == 'scientific_process/published_evidence_assessment':
         from .scientific_process.published_evidence_assessment.execution_job_submission.episode import ExecutionSubmissionBinding

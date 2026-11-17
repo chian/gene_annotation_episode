@@ -9,9 +9,8 @@ record, source, grading and configuration identities.
 
 def parent_families():
     from .published_evidence_assessment import family as annotation
-    from .legacy_annotation.published_evidence_assessment import family as improvement
     from .scientific_process.published_evidence_assessment import family as scientific
-    return annotation, improvement, scientific
+    return annotation, scientific
 
 
 def _attach_parent_families(annotation_members):
@@ -52,7 +51,7 @@ def _factories(constructor, configuration):
             return current[index]
         return factory
 
-    return (head, *(child(index) for index in range(1, 21)))
+    return (head, *(child(index) for index in range(1, 14)))
 
 
 def factories(**configuration):
@@ -65,7 +64,7 @@ def reference_factories(**configuration):
 
 def validate_members(members):
     families = parent_families()
-    if type(members) is not tuple or len(members) not in (7, 21):
+    if type(members) is not tuple or len(members) not in (7, 14):
         raise ValueError('complete_root_literature_family_required')
     if len(members) == 7:
         for family in families:

@@ -7,15 +7,13 @@ binding's role/path. Callers authenticate their finite concrete binding families
 from .method_loop.identities import normalize_structural_path
 
 
-HOST_PARENTS = ('annotation', 'legacy_annotation', 'scientific_process')
+HOST_PARENTS = ('annotation', 'scientific_process')
 LITERATURE_HEAD = {
     'annotation': 'published_evidence_assessment',
-    'legacy_annotation': 'legacy_annotation/published_evidence_assessment',
     'scientific_process': 'scientific_process/published_evidence_assessment',
 }
 HPC_COORDINATION = {
     'annotation': 'hpc_coordination',
-    'legacy_annotation': 'legacy_annotation/hpc_coordination',
     'scientific_process': 'scientific_process/hpc_coordination',
 }
 HPC_ALLOCATION = {
@@ -31,9 +29,9 @@ HPC_PREDICTION = {
 def _resolved_parent_path(bindings, path):
     """Return the actual supplied member and its resolved parent-source identity.
 
-    Annotation is the original implicit first host. Unregistered improvement
-    uses its actual legacy_annotation source identity; recursive scientific
-    invocations reuse scientific_process. The three original Literature heads
+    Annotation is the original implicit first host. An unregistered improvement
+    role has no host and resolves to nothing; recursive scientific
+    invocations reuse scientific_process. The two original Literature heads
     retain their authentic source identity for configured analysis children.
     HPC source identities follow their
     own original coordination/allocation/prediction edges. A known host marker
@@ -58,9 +56,7 @@ def _resolved_parent_path(bindings, path):
             parent = selected.binding_path
             continue
         selected = None
-        if role == 'improvement':
-            parent = 'legacy_annotation'
-        elif role == 'scientific_process':
+        if role == 'scientific_process':
             parent = 'scientific_process'
         elif role == 'literature' and parent in LITERATURE_HEAD:
             parent = LITERATURE_HEAD[parent]

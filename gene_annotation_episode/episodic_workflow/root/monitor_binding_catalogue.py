@@ -3,23 +3,17 @@ from gene_annotation_episode.execution_contracts import canonical
 
 PARENTS = (
     'annotation',
-    'legacy_annotation',
     'scientific_process',
     'hpc_coordination',
     'hpc_coordination/hpc_allocation_execution',
-    'legacy_annotation/hpc_coordination',
-    'legacy_annotation/hpc_coordination/hpc_allocation_execution',
     'scientific_process/hpc_coordination',
     'scientific_process/hpc_coordination/hpc_allocation_execution',
 )
 ENTRIES = (
     ('annotation', 'execution_monitoring'),
-    ('legacy_annotation', 'legacy_annotation/execution_monitoring'),
     ('scientific_process', 'scientific_process/execution_monitoring'),
     ('hpc_coordination', 'hpc_coordination/execution_monitoring'),
     ('hpc_coordination/hpc_allocation_execution', 'hpc_coordination/hpc_allocation_execution/execution_monitoring'),
-    ('legacy_annotation/hpc_coordination', 'legacy_annotation/hpc_coordination/execution_monitoring'),
-    ('legacy_annotation/hpc_coordination/hpc_allocation_execution', 'legacy_annotation/hpc_coordination/hpc_allocation_execution/execution_monitoring'),
     ('scientific_process/hpc_coordination', 'scientific_process/hpc_coordination/execution_monitoring'),
     ('scientific_process/hpc_coordination/hpc_allocation_execution', 'scientific_process/hpc_coordination/hpc_allocation_execution/execution_monitoring'),
 )
@@ -29,9 +23,6 @@ def binding_class(parent):
     if parent == 'annotation':
         from .execution_monitoring.episode import MonitorEpisodes
         return MonitorEpisodes
-    if parent == 'legacy_annotation':
-        from .legacy_annotation.execution_monitoring.episode import MonitorEpisodes
-        return MonitorEpisodes
     if parent == 'scientific_process':
         from .scientific_process.execution_monitoring.episode import MonitorEpisodes
         return MonitorEpisodes
@@ -40,12 +31,6 @@ def binding_class(parent):
         return MonitorEpisodes
     if parent == 'hpc_coordination/hpc_allocation_execution':
         from .hpc_coordination.hpc_allocation_execution.execution_monitoring.episode import MonitorEpisodes
-        return MonitorEpisodes
-    if parent == 'legacy_annotation/hpc_coordination':
-        from .legacy_annotation.hpc_coordination.execution_monitoring.episode import MonitorEpisodes
-        return MonitorEpisodes
-    if parent == 'legacy_annotation/hpc_coordination/hpc_allocation_execution':
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.execution_monitoring.episode import MonitorEpisodes
         return MonitorEpisodes
     if parent == 'scientific_process/hpc_coordination':
         from .scientific_process.hpc_coordination.execution_monitoring.episode import MonitorEpisodes

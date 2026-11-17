@@ -1,18 +1,13 @@
 """Authenticate concrete HPC families beneath each original Root parent."""
 from gene_annotation_episode.execution_contracts import canonical
 
-PARENTS = ('annotation', 'legacy_annotation', 'scientific_process')
+PARENTS = ('annotation', 'scientific_process')
 VERSION = 'root_hpc_private_v1'
 FAMILIES = {
     'annotation': (
         ('hpc', 'hpc_coordination', 'hpc'),
         ('hpc_prediction', 'hpc_coordination/hpc_resource_prediction', 'hpc_prediction'),
         ('hpc_execution', 'hpc_coordination/hpc_allocation_execution', 'hpc_execution'),
-    ),
-    'legacy_annotation': (
-        ('hpc', 'legacy_annotation/hpc_coordination', 'root_legacy_annotation_hpc_coordination'),
-        ('hpc_prediction', 'legacy_annotation/hpc_coordination/hpc_resource_prediction', 'root_legacy_annotation_hpc_coordination_hpc_resource_prediction'),
-        ('hpc_execution', 'legacy_annotation/hpc_coordination/hpc_allocation_execution', 'root_legacy_annotation_hpc_coordination_hpc_allocation_execution'),
     ),
     'scientific_process': (
         ('hpc', 'scientific_process/hpc_coordination', 'root_scientific_process_hpc_coordination'),
@@ -29,11 +24,6 @@ def binding_types(parent='annotation'):
         from .hpc_coordination.episode import HPCCoordinationEpisodes
         from .hpc_coordination.hpc_resource_prediction.episode import HPCResourcePredictionEpisodes
         from .hpc_coordination.hpc_allocation_execution.episode import HPCAllocationExecutionEpisodes
-        return (HPCCoordinationEpisodes, HPCResourcePredictionEpisodes, HPCAllocationExecutionEpisodes)
-    if parent == 'legacy_annotation':
-        from .legacy_annotation.hpc_coordination.episode import HPCCoordinationEpisodes
-        from .legacy_annotation.hpc_coordination.hpc_resource_prediction.episode import HPCResourcePredictionEpisodes
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.episode import HPCAllocationExecutionEpisodes
         return (HPCCoordinationEpisodes, HPCResourcePredictionEpisodes, HPCAllocationExecutionEpisodes)
     if parent == 'scientific_process':
         from .scientific_process.hpc_coordination.episode import HPCCoordinationEpisodes

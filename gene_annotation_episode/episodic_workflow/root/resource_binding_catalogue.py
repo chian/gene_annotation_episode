@@ -3,12 +3,9 @@ from gene_annotation_episode.execution_contracts import canonical
 
 PARENTS = (
     'annotation',
-    'legacy_annotation',
     'scientific_process',
     'hpc_coordination',
     'hpc_coordination/hpc_allocation_execution',
-    'legacy_annotation/hpc_coordination',
-    'legacy_annotation/hpc_coordination/hpc_allocation_execution',
     'scientific_process/hpc_coordination',
     'scientific_process/hpc_coordination/hpc_allocation_execution',
 )
@@ -19,13 +16,6 @@ FAMILIES = {
         ('launch_local', 'resource_job_submission/local_resource_execution', 'root_resource_job_submission_local_resource_execution'),
         ('launch_hpc', 'resource_job_submission/hpc_resource_execution', 'root_resource_job_submission_hpc_resource_execution'),
         ('results', 'resource_result_acquisition', 'root_resource_result_acquisition'),
-    ),
-    'legacy_annotation': (
-        ('launch', 'legacy_annotation/resource_job_submission', 'root_legacy_annotation_resource_job_submission'),
-        ('launch_api', 'legacy_annotation/resource_job_submission/api_resource_execution', 'root_legacy_annotation_resource_job_submission_api_resource_execution'),
-        ('launch_local', 'legacy_annotation/resource_job_submission/local_resource_execution', 'root_legacy_annotation_resource_job_submission_local_resource_execution'),
-        ('launch_hpc', 'legacy_annotation/resource_job_submission/hpc_resource_execution', 'root_legacy_annotation_resource_job_submission_hpc_resource_execution'),
-        ('results', 'legacy_annotation/resource_result_acquisition', 'root_legacy_annotation_resource_result_acquisition'),
     ),
     'scientific_process': (
         ('launch', 'scientific_process/resource_job_submission', 'root_scientific_process_resource_job_submission'),
@@ -47,20 +37,6 @@ FAMILIES = {
         ('launch_local', 'hpc_coordination/hpc_allocation_execution/resource_job_submission/local_resource_execution', 'root_hpc_coordination_hpc_allocation_execution_resource_job_submission_local_resource_execution'),
         ('launch_hpc', 'hpc_coordination/hpc_allocation_execution/resource_job_submission/hpc_resource_execution', 'root_hpc_coordination_hpc_allocation_execution_resource_job_submission_hpc_resource_execution'),
         ('results', 'hpc_coordination/hpc_allocation_execution/resource_result_acquisition', 'root_hpc_coordination_hpc_allocation_execution_resource_result_acquisition'),
-    ),
-    'legacy_annotation/hpc_coordination': (
-        ('launch', 'legacy_annotation/hpc_coordination/resource_job_submission', 'root_legacy_annotation_hpc_coordination_resource_job_submission'),
-        ('launch_api', 'legacy_annotation/hpc_coordination/resource_job_submission/api_resource_execution', 'root_legacy_annotation_hpc_coordination_resource_job_submission_api_resource_execution'),
-        ('launch_local', 'legacy_annotation/hpc_coordination/resource_job_submission/local_resource_execution', 'root_legacy_annotation_hpc_coordination_resource_job_submission_local_resource_execution'),
-        ('launch_hpc', 'legacy_annotation/hpc_coordination/resource_job_submission/hpc_resource_execution', 'root_legacy_annotation_hpc_coordination_resource_job_submission_hpc_resource_execution'),
-        ('results', 'legacy_annotation/hpc_coordination/resource_result_acquisition', 'root_legacy_annotation_hpc_coordination_resource_result_acquisition'),
-    ),
-    'legacy_annotation/hpc_coordination/hpc_allocation_execution': (
-        ('launch', 'legacy_annotation/hpc_coordination/hpc_allocation_execution/resource_job_submission', 'root_legacy_annotation_hpc_coordination_hpc_allocation_execution_resource_job_submission'),
-        ('launch_api', 'legacy_annotation/hpc_coordination/hpc_allocation_execution/resource_job_submission/api_resource_execution', 'root_legacy_annotation_hpc_coordination_hpc_allocation_execution_resource_job_submission_api_resource_execution'),
-        ('launch_local', 'legacy_annotation/hpc_coordination/hpc_allocation_execution/resource_job_submission/local_resource_execution', 'root_legacy_annotation_hpc_coordination_hpc_allocation_execution_resource_job_submission_local_resource_execution'),
-        ('launch_hpc', 'legacy_annotation/hpc_coordination/hpc_allocation_execution/resource_job_submission/hpc_resource_execution', 'root_legacy_annotation_hpc_coordination_hpc_allocation_execution_resource_job_submission_hpc_resource_execution'),
-        ('results', 'legacy_annotation/hpc_coordination/hpc_allocation_execution/resource_result_acquisition', 'root_legacy_annotation_hpc_coordination_hpc_allocation_execution_resource_result_acquisition'),
     ),
     'scientific_process/hpc_coordination': (
         ('launch', 'scientific_process/hpc_coordination/resource_job_submission', 'root_scientific_process_hpc_coordination_resource_job_submission'),
@@ -89,13 +65,6 @@ def binding_types(parent='annotation'):
         from .resource_job_submission.hpc_resource_execution.episode import HPCResourceBinding
         from .resource_result_acquisition.episode import ResourceAcquisitionBinding
         return (ResourceSubmissionBinding, APIResourceBinding, LocalResourceBinding, HPCResourceBinding, ResourceAcquisitionBinding)
-    if parent == 'legacy_annotation':
-        from .legacy_annotation.resource_job_submission.episode import ResourceSubmissionBinding
-        from .legacy_annotation.resource_job_submission.api_resource_execution.episode import APIResourceBinding
-        from .legacy_annotation.resource_job_submission.local_resource_execution.episode import LocalResourceBinding
-        from .legacy_annotation.resource_job_submission.hpc_resource_execution.episode import HPCResourceBinding
-        from .legacy_annotation.resource_result_acquisition.episode import ResourceAcquisitionBinding
-        return (ResourceSubmissionBinding, APIResourceBinding, LocalResourceBinding, HPCResourceBinding, ResourceAcquisitionBinding)
     if parent == 'scientific_process':
         from .scientific_process.resource_job_submission.episode import ResourceSubmissionBinding
         from .scientific_process.resource_job_submission.api_resource_execution.episode import APIResourceBinding
@@ -116,20 +85,6 @@ def binding_types(parent='annotation'):
         from .hpc_coordination.hpc_allocation_execution.resource_job_submission.local_resource_execution.episode import LocalResourceBinding
         from .hpc_coordination.hpc_allocation_execution.resource_job_submission.hpc_resource_execution.episode import HPCResourceBinding
         from .hpc_coordination.hpc_allocation_execution.resource_result_acquisition.episode import ResourceAcquisitionBinding
-        return (ResourceSubmissionBinding, APIResourceBinding, LocalResourceBinding, HPCResourceBinding, ResourceAcquisitionBinding)
-    if parent == 'legacy_annotation/hpc_coordination':
-        from .legacy_annotation.hpc_coordination.resource_job_submission.episode import ResourceSubmissionBinding
-        from .legacy_annotation.hpc_coordination.resource_job_submission.api_resource_execution.episode import APIResourceBinding
-        from .legacy_annotation.hpc_coordination.resource_job_submission.local_resource_execution.episode import LocalResourceBinding
-        from .legacy_annotation.hpc_coordination.resource_job_submission.hpc_resource_execution.episode import HPCResourceBinding
-        from .legacy_annotation.hpc_coordination.resource_result_acquisition.episode import ResourceAcquisitionBinding
-        return (ResourceSubmissionBinding, APIResourceBinding, LocalResourceBinding, HPCResourceBinding, ResourceAcquisitionBinding)
-    if parent == 'legacy_annotation/hpc_coordination/hpc_allocation_execution':
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.resource_job_submission.episode import ResourceSubmissionBinding
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.resource_job_submission.api_resource_execution.episode import APIResourceBinding
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.resource_job_submission.local_resource_execution.episode import LocalResourceBinding
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.resource_job_submission.hpc_resource_execution.episode import HPCResourceBinding
-        from .legacy_annotation.hpc_coordination.hpc_allocation_execution.resource_result_acquisition.episode import ResourceAcquisitionBinding
         return (ResourceSubmissionBinding, APIResourceBinding, LocalResourceBinding, HPCResourceBinding, ResourceAcquisitionBinding)
     if parent == 'scientific_process/hpc_coordination':
         from .scientific_process.hpc_coordination.resource_job_submission.episode import ResourceSubmissionBinding
