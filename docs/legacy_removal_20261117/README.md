@@ -16,7 +16,7 @@ the static dangling-name scan (`runs/claude_inputs/la/dangling.py`, copied from 
   `predefined_parent_routes` no longer routes an unbound `improvement` role; the registry's entry lookup requires an
   explicit `'annotation'` parent instead of defaulting a missing one to `legacy_annotation`. Whole-tree run
   `runs/claude_la_a1_s0..3`: identical per file to the baseline. Collection 50,585, 0 errors. Dangling scan unchanged.
-- A2: the implicit improvement child is removed from the shared runtime.
+- A2 (`1608d1067`): the implicit improvement child is removed from the shared runtime.
   - Selection kind `child` (commission the implicit `improvement` child) is no longer offered by
     `library/action_contracts.py`, executed by `action_execution.py`, or accepted in the child-kind sets, SQL filters and
     commission checks; role defaults `selection.get('role', 'improvement')` now require the role. Model-visible
@@ -37,3 +37,12 @@ the static dangling-name scan (`runs/claude_inputs/la/dangling.py`, copied from 
     `test_live_a106_binding` failed only in the concurrent shard run (`local_resource_busy`) and passes alone (8/8).
     Each changed file re-run alone: baseline counts minus retired cases. Collection 50,565 (= 50,585 − 20), 0 errors.
     Dangling scan unchanged.
+- A3: the shared-root `legacy_annotation/` home is deleted (1,598 files; it had no tests and, after A1/A2, no importer).
+  Shared-root and top-level run `runs/claude_la_a3_s0..3` (596 files): identical per file to the baseline except the
+  retired cases and `test_live_a106_binding` (4 `local_resource_busy`). That test reserves memory/scratch against the
+  machine's actual free capacity (`a106/local_resources.py`, `reserve`), which four concurrent shards can exhaust; run
+  alone it passes 8/8 (`runs/claude_la_a3_a106`). Collection 50,565, 0 errors. Dangling scan unchanged.
+- Remaining after Phase A: the string `'legacy_annotation'` in the arms (a101–a110), where it names the entry parent of
+  each arm's implicit, unbound `improvement` episode (served by the arm's `annotation_improvement` home through
+  `selects_improvement_parent` / `is_improvement_parent`), and `root/tests/test_private_binding_identity.py`, which
+  exercises the arms' registries with that label. That is Phase B.

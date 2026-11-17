@@ -1,1 +1,0 @@
-"""Private results execution responsibility."""

@@ -1,1 +1,0 @@
-"""Private launch execution responsibility."""
