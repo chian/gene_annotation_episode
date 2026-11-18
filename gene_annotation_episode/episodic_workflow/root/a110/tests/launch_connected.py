@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.root.tests.hpc_prediction_inputs 
 
 
 AXIS = "a110"
-HPC_PARENTS = ("hpc_work_planning", "scientific_process/hpc_work_planning")
+HPC_PARENTS = ("hpc_work_planning", "biochemical_feasibility_evidence/hpc_work_planning")
 EXECUTION_CHILDREN = ("local_job_execution", "hpc_job_execution")
 
 
@@ -48,9 +48,9 @@ class LaunchConnectedChecks:
             journal = self.module("episode_journal").Journal(store, run_id)
             services = SimpleNamespace(annotation_task_required=lambda: False)
             libraries = SimpleNamespace(as_record=lambda: {}, headers=lambda: [])
-            science = self.module("scientific_process/episode").ScientificProcessEpisode(
+            science = self.module("biochemical_feasibility_evidence/episode").BiochemicalFeasibilityEvidenceEpisode(
                 services, library=libraries, tool_library=libraries,
-                child_roles=("scientific_process", "hpc"))
+                child_roles=("biochemical_feasibility_evidence", "hpc"))
             hpc_options = dict(store=store, run_id=run_id, directory=tmp_path / "workflow",
                 resources=resources(), commissions={"commission": commission()})
             execution_options = dict(store=store, run_id=run_id, directory=tmp_path / "workflow",
@@ -79,8 +79,8 @@ class LaunchConnectedChecks:
             registry = bindings.EpisodeBindingRegistry(constructors)
             parent_home = self.binding_path.rsplit("/", 1)[0]
             root_home = parent_home.removesuffix("/hpc_allocation_execution")
-            path = ((("scientific_process", "science"), ("hpc", "original"))
-                if root_home.startswith("scientific_process/") else
+            path = ((("biochemical_feasibility_evidence", "science"), ("hpc", "original"))
+                if root_home.startswith("biochemical_feasibility_evidence/") else
                 (("annotation", "root"), ("hpc", "original")))
             scope = {"subject_refs": list(subject_refs)}
 
@@ -164,7 +164,7 @@ class LaunchConnectedChecks:
         workflow = SimpleNamespace(store=v.store, journal=v.journal, run_id=v.run_id,
             episode_bindings=v.registry, binding_context=context,
             specialist=lambda source: v.registry.for_path(source.path),
-            job_episodes=None, scientific_process_binding=None,
+            job_episodes=None, biochemical_feasibility_evidence_binding=None,
             annotation_child_roles=None, project_credit=lambda *args: 0,
             execution_binding=None, inprocess_replay=None,
             receipts=None, progress_provider=None, native_timing_information=None,

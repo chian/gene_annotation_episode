@@ -41,7 +41,7 @@ def _delegate(self, context):
     return self._practical[assignment['resource_id']]
 
 def _flux_balance_reference_access(self, context, reference, namespace):
-    if self.native_flux_balance_returns is not None and self.native_flux_balance_returns.ordinary_backend is not None and (context.role in {'annotation', 'scientific_process'}) and (namespace in {None, 'artifact'}) and self.native_flux_balance_returns.resolve_received(context, reference, namespace):
+    if self.native_flux_balance_returns is not None and self.native_flux_balance_returns.ordinary_backend is not None and (context.role in {'annotation', 'biochemical_feasibility_evidence'}) and (namespace in {None, 'artifact'}) and self.native_flux_balance_returns.resolve_received(context, reference, namespace):
         return True
     host = self.native_flux_balance_results
     if host is None or not host.owns_reference(reference):
@@ -275,7 +275,7 @@ def received_execution_form_references(self, context, form, schema, operation_ke
     return list(dict.fromkeys(references))
 
 def received_execution_closure_facts(self, context):
-    if context.role not in {'annotation', 'scientific_process'}:
+    if context.role not in {'annotation', 'biochemical_feasibility_evidence'}:
         return {}
     schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
     if self.native_flux_balance_returns is not None and schema.get('properties') is not None:
@@ -285,7 +285,7 @@ def received_execution_closure_facts(self, context):
 def received_execution_facts(self, context):
     schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
     result = {}
-    if context.role in {'annotation', 'scientific_process'}:
+    if context.role in {'annotation', 'biochemical_feasibility_evidence'}:
         requested = {node.get('x-source') for node in schema.get('properties', {}).values()}
         if 'execution_file_source_refs' in requested:
             result['execution_file_source_refs'] = self.local_file_sources.received_sources(context)
@@ -297,7 +297,7 @@ def received_execution_facts(self, context):
 
 def received_execution_sources(self, role):
     result = {}
-    if role in {'annotation', 'scientific_process'}:
+    if role in {'annotation', 'biochemical_feasibility_evidence'}:
         for source in ('execution_file_source_refs', 'execution_file_capture_outcomes'):
             definition = self.fact_sources('results').get(source)
             if definition is not None:

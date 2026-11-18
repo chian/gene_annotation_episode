@@ -251,7 +251,7 @@ class NativeBLASTMaskingResults:
             return None
         if not owns:
             return None
-        if context.role in {'annotation', 'scientific_process'}:
+        if context.role in {'annotation', 'biochemical_feasibility_evidence'}:
             received = self.owner.native_blast_masking_returns.resolve_received_reference_metadata(context, reference, namespace)
             if received is not None:
                 return received

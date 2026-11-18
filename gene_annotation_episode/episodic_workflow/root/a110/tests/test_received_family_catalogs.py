@@ -59,7 +59,7 @@ def test_all_native_and_api_fact_catalogs_keep_original_reference_qualifications
     assert actual['bvbrc_appservice_support_refs']['report_schema']['items']['x-reference-namespace'] == 'bvbrc_appservice_support'
 
 
-@pytest.mark.parametrize('role', ['annotation', 'scientific_process'])
+@pytest.mark.parametrize('role', ['annotation', 'biochemical_feasibility_evidence'])
 def test_actual_received_catalog_composes_real_families_for_each_receiving_role(all_family_catalog_owner, role):
     owner = all_family_catalog_owner
     actual = owner.received_report_sources(role)

@@ -550,7 +550,7 @@ class MolecularSequenceResults(EpisodeReturnRecords):
 
     def _received(self, context, sources, *, allowed=None):
         self.authenticate(context)
-        require(context.role in ('annotation', 'scientific_process'))
+        require(context.role in ('annotation', 'biochemical_feasibility_evidence'))
         groups = {source: [] for source in sources}
         witnesses = []
         attempts = self.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND form IS NOT NULL AND failure IS NULL ORDER BY decision_index', (self.run_id, context.episode_id)).fetchall()
@@ -621,7 +621,7 @@ class MolecularSequenceResults(EpisodeReturnRecords):
         return namespace in (None, 'artifact') and self.applies(context) and any((row['artifact_ref'] == reference for row in self.own_fact_groups(context, verify_artifacts=False)[SAVED_SOURCE]))
 
     def resolve_received(self, context, reference, namespace):
-        return namespace in (None, 'artifact') and context.role in ('annotation', 'scientific_process') and any((row['artifact_ref'] == reference for row in self._received(context, (SAVED_SOURCE,))[0][SAVED_SOURCE]))
+        return namespace in (None, 'artifact') and context.role in ('annotation', 'biochemical_feasibility_evidence') and any((row['artifact_ref'] == reference for row in self._received(context, (SAVED_SOURCE,))[0][SAVED_SOURCE]))
 
     def owns_reference(self, reference):
         if type(reference) is not str or not reference.startswith('artifact_'):

@@ -12,13 +12,13 @@ from .private_reconstruction_protocol import (
 
 
 CATALOG = {
-    'scientific_process': {
-        'version': 'scientific_process_episode_v10',
+    'biochemical_feasibility_evidence': {
+        'version': 'biochemical_feasibility_evidence_episode_v10',
         'required': ('library', 'tool_library', 'child_roles'),
         'optional': ('tool_retrieval', 'contract_information_profile', 'yield_bindings'),
         'parent': 'legacy_annotation',
-        'roles': ('scientific_process',), 'entry_roles': ('scientific_process',),
-        'owner_class': 'ScientificProcessEpisode',
+        'roles': ('biochemical_feasibility_evidence',), 'entry_roles': ('biochemical_feasibility_evidence',),
+        'owner_class': 'BiochemicalFeasibilityEvidenceEpisode',
     },
     'published_evidence_assessment': {
         'version': 'literature_episode_binding_v1',
@@ -76,59 +76,59 @@ CATALOG = {
         'roles': ('literature_targeted',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
-    'scientific_process/published_evidence_assessment': {
+    'biochemical_feasibility_evidence/published_evidence_assessment': {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'parent': 'scientific_process',
+        'parent': 'biochemical_feasibility_evidence',
         'roles': ('literature',), 'entry_roles': ('literature',),
         'owner_class': 'LiteratureEpisode',
     },
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement': {
+    'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement': {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'parent': 'scientific_process/published_evidence_assessment',
+        'parent': 'biochemical_feasibility_evidence/published_evidence_assessment',
         'roles': ('literature_strategy',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment': {
+    'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment': {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement',
+        'parent': 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement',
         'roles': ('literature_search',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination': {
+    'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination': {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment',
+        'parent': 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment',
         'roles': ('literature_page',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction': {
+    'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction': {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
+        'parent': 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
         'roles': ('literature_table',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement': {
+    'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement': {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
+        'parent': 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
         'roles': ('literature_ordered',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction': {
+    'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction': {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
+        'parent': 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
         'roles': ('literature_targeted',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -159,17 +159,17 @@ def reconstruct(services, descriptor, *, store, journal, directory, tool_registr
             or configuration.keys() - required - optional):
         raise _failure('unavailable_binding', reference)
     try:
-        if name == 'scientific_process':
+        if name == 'biochemical_feasibility_evidence':
             if directory is None:
                 raise _failure('unavailable_binding', reference)
-            from .scientific_process_library import ScientificProcessLibrary
+            from .biochemical_feasibility_evidence_library import BiochemicalFeasibilityEvidenceLibrary
             from .scientific_tool_library import ScientificToolLibrary
-            from .scientific_process.episode import ScientificProcessEpisode
-            library = ScientificProcessLibrary(Path(directory) / 'scientific-process-library')
+            from .biochemical_feasibility_evidence.episode import BiochemicalFeasibilityEvidenceEpisode
+            library = BiochemicalFeasibilityEvidenceLibrary(Path(directory) / 'scientific-process-library')
             _same_record(library.as_record(), configuration['library'], reference)
             tools = ScientificToolLibrary(Path(directory) / 'scientific-tool-library')
             _same_record(tools.as_record(), configuration['tool_library'], reference)
-            binding = ScientificProcessEpisode(services, library=library, tool_library=tools,
+            binding = BiochemicalFeasibilityEvidenceEpisode(services, library=library, tool_library=tools,
                 child_roles=configuration['child_roles'],
                 tool_retrieval=configuration.get('tool_retrieval'),
                 contract_information_profile=configuration.get('contract_information_profile'),
@@ -216,44 +216,44 @@ def reconstruct(services, descriptor, *, store, journal, directory, tool_registr
                 outcome_page_size=configuration['outcome_page_size'],
                 reference_parent_sources=configuration.get('reference_parent_sources'),
                 contract_information_profile=configuration.get('contract_information_profile'))
-        elif name == 'scientific_process/published_evidence_assessment':
-            from .scientific_process.published_evidence_assessment.episode import LiteratureEpisode
+        elif name == 'biochemical_feasibility_evidence/published_evidence_assessment':
+            from .biochemical_feasibility_evidence.published_evidence_assessment.episode import LiteratureEpisode
             binding = LiteratureEpisode(services,
                 outcome_page_size=configuration['outcome_page_size'],
                 reference_parent_sources=configuration.get('reference_parent_sources'),
                 contract_information_profile=configuration.get('contract_information_profile'))
-        elif name == 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement':
-            from .scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.episode import LiteratureEpisode
+        elif name == 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement':
+            from .biochemical_feasibility_evidence.published_evidence_assessment.evidence_search_strategy_improvement.episode import LiteratureEpisode
             binding = LiteratureEpisode(services,
                 outcome_page_size=configuration['outcome_page_size'],
                 reference_parent_sources=configuration.get('reference_parent_sources'),
                 contract_information_profile=configuration.get('contract_information_profile'))
-        elif name == 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment':
-            from .scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.episode import LiteratureEpisode
+        elif name == 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment':
+            from .biochemical_feasibility_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.episode import LiteratureEpisode
             binding = LiteratureEpisode(services,
                 outcome_page_size=configuration['outcome_page_size'],
                 reference_parent_sources=configuration.get('reference_parent_sources'),
                 contract_information_profile=configuration.get('contract_information_profile'))
-        elif name == 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination':
-            from .scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode import LiteratureEpisode
+        elif name == 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination':
+            from .biochemical_feasibility_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode import LiteratureEpisode
             binding = LiteratureEpisode(services,
                 outcome_page_size=configuration['outcome_page_size'],
                 reference_parent_sources=configuration.get('reference_parent_sources'),
                 contract_information_profile=configuration.get('contract_information_profile'))
-        elif name == 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction':
-            from .scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.episode import LiteratureEpisode
+        elif name == 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction':
+            from .biochemical_feasibility_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.episode import LiteratureEpisode
             binding = LiteratureEpisode(services,
                 outcome_page_size=configuration['outcome_page_size'],
                 reference_parent_sources=configuration.get('reference_parent_sources'),
                 contract_information_profile=configuration.get('contract_information_profile'))
-        elif name == 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement':
-            from .scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.episode import LiteratureEpisode
+        elif name == 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement':
+            from .biochemical_feasibility_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.episode import LiteratureEpisode
             binding = LiteratureEpisode(services,
                 outcome_page_size=configuration['outcome_page_size'],
                 reference_parent_sources=configuration.get('reference_parent_sources'),
                 contract_information_profile=configuration.get('contract_information_profile'))
-        elif name == 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction':
-            from .scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.episode import LiteratureEpisode
+        elif name == 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction':
+            from .biochemical_feasibility_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.episode import LiteratureEpisode
             binding = LiteratureEpisode(services,
                 outcome_page_size=configuration['outcome_page_size'],
                 reference_parent_sources=configuration.get('reference_parent_sources'),

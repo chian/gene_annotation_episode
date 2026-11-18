@@ -15,8 +15,8 @@ def child_request_assembler(role):
     if role == 'hpc':
         from .to_child_hpc_work_planning import assemble_request
         return assemble_request
-    if role == 'scientific_process':
-        from .to_child_scientific_process import assemble_request
+    if role == 'biochemical_feasibility_evidence':
+        from .to_child_biochemical_feasibility_evidence import assemble_request
         return assemble_request
     if role == 'literature':
         from .to_child_published_evidence_assessment import assemble_request
@@ -38,8 +38,8 @@ def child_report_receiver(role):
     if role == 'hpc':
         from .from_child_hpc_work_planning import receive_report
         return receive_report
-    if role == 'scientific_process':
-        from .from_child_scientific_process import receive_report
+    if role == 'biochemical_feasibility_evidence':
+        from .from_child_biochemical_feasibility_evidence import receive_report
         return receive_report
     if role == 'literature':
         from .from_child_published_evidence_assessment import receive_report

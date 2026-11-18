@@ -62,8 +62,8 @@ def facts(self, source, *, completion_record=None, saved):
             if credit_snapshot is not None:
                 snapshot['operational_credit_snapshot'] = credit_snapshot
             context = self.binding_context(source)
-            if specialist is self.scientific_process_binding:
-                from gene_annotation_episode.episodic_workflow.root.a110.scientific_process.report_snapshot import complete_scientific_snapshot
+            if specialist is self.biochemical_feasibility_evidence_binding:
+                from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.report_snapshot import complete_scientific_snapshot
                 complete_scientific_snapshot(self, source, context, snapshot, facts)
             facts.update(specialist.facts(context, snapshot))
         received_facts = self.episode_bindings.received_report_facts(self.binding_context(source), completion_snapshot=snapshot)

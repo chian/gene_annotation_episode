@@ -49,7 +49,7 @@ class HPCAssignment:
     def _tool_request(self, request, scope):
         """Resolve the parent's request from its real frozen tool library."""
         workflow = getattr(self.services, 'workflow', None)
-        binding = getattr(workflow, 'scientific_process_binding', None)
+        binding = getattr(workflow, 'biochemical_feasibility_evidence_binding', None)
         if binding is None:
             raise ValueError('scientific_tool_library_required_for_hpc_tool_request')
         contract = binding.tool_library.resolve_invocations([

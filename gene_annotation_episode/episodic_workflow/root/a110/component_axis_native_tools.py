@@ -208,7 +208,7 @@ class ComponentNativeHPCMixin:
         parent = getattr(super(), 'received_attributions', None)
         generated, needs = parent(context, known) if callable(parent) else ([], [])
         if context.role not in {
-                'annotation', 'scientific_process', 'improvement'}:
+                'annotation', 'biochemical_feasibility_evidence', 'improvement'}:
             return generated, needs
         from .a110_qualification import refresh
         more, pending = refresh(self.store, context, set(known) | set(generated))

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a110.runtime import ContractInformationError, Episode, EpisodeGoal, EpisodeRequest, Record, _plain, validate_saved_fact_form
 
-def assemble_request(workflow, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, scientific_process=None, report_contract_declaration=None):
+def assemble_request(workflow, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, biochemical_feasibility_evidence=None, report_contract_declaration=None):
     path = (*parent_path, (name, key))
     goal = _live_original_runtime.EpisodeGoal.root(objective=goal_text, result_contract={'role': name}) if parent is None else _live_original_runtime.EpisodeGoal.child(parent, objective=goal_text, result_contract=contract.schema)
     message = {'scope': scope, 'initial_report': initial or {}}
@@ -17,8 +17,8 @@ def assemble_request(workflow, name, key, goal_text, scope, *, parent=None, pare
     if episode_assignment is not None:
         workflow.launch_instructions.materialize(episode_assignment.get('launch_instructions'))
         message['episode_assignment'] = _live_original_runtime._plain(episode_assignment)
-    if scientific_process is not None:
-        message['scientific_process'] = _live_original_runtime._plain(scientific_process)
+    if biochemical_feasibility_evidence is not None:
+        message['biochemical_feasibility_evidence'] = _live_original_runtime._plain(biochemical_feasibility_evidence)
     identity = _live_original_runtime.Episode.identity(workflow.context, workflow.grains[name], key, parent_path=parent_path)
     if workflow.receipts is not None:
         parent_id = _live_original_runtime.Episode.identity(workflow.context, workflow.grains[parent_path[-1][0]], parent_path[-1][1], parent_path=parent_path[:-1]).episode_id if parent_path else None

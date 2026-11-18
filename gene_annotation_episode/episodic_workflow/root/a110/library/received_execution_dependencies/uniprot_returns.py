@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a110.library.received_execut
 SOURCE = 'uniprot_selected_returns'
 VERSION = 'uniprot_selected_returns_v1'
 _CLOSURE_PREFIX = 'uniprot_received_report_prefix_v1'
-_RECEIVERS = {'annotation', 'scientific_process'}
+_RECEIVERS = {'annotation', 'biochemical_feasibility_evidence'}
 
 def _failure(code, pi, ri=None, fi=None, pointer=None):
     return {'code': code, 'page_selection_index': pi, 'record_selection_index': ri, 'field_selection_index': fi, 'native_pointer': pointer}
@@ -205,7 +205,7 @@ class UniProtReturns(EpisodeReturnRecords):
         original = plain(child.request).get('report_contract')
         self._require(isinstance(original, dict), 'original_schema_conflict')
         if selected.get('kind') == 'tool':
-            self._require(selected.get('tool') == 'process.revise' and child.role == 'scientific_process', 'original_context_conflict')
+            self._require(selected.get('tool') == 'process.revise' and child.role == 'biochemical_feasibility_evidence', 'original_context_conflict')
             return
         self._require(selected.get('kind') in {'child', 'episode_child', 'job_child'} and _same(selected.get('scope'), child.scope) and _same(json.loads(selected['schema_json']), original['measurements']['schema']) and (selected.get('purpose') == original['decision']), 'original_schema_conflict')
         if selected['kind'] in {'episode_child', 'job_child'}:

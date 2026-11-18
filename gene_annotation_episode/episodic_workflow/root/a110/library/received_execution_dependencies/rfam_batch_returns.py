@@ -284,7 +284,7 @@ class RfamBatchReturns(EpisodeReturnRecords):
         values = self._values(form, schema)
         if context.role == 'results':
             expected = self.facts(context, schema)
-        elif context.role in {'annotation', 'scientific_process'}:
+        elif context.role in {'annotation', 'biochemical_feasibility_evidence'}:
             expected = self.received_facts(context, schema)
         else:
             raise ValueError(_PREFIX + 'unsupported_return_owner')
@@ -317,7 +317,7 @@ class RfamBatchReturns(EpisodeReturnRecords):
 
     def _received(self, context):
         self.authenticate(context, allow_unsaved=True)
-        self._require(context.role in {'annotation', 'scientific_process'}, 'unsupported_return_owner')
+        self._require(context.role in {'annotation', 'biochemical_feasibility_evidence'}, 'unsupported_return_owner')
         grouped, seen = ({name: [] for name in FACT_SOURCES}, {name: set() for name in FACT_SOURCES})
         attempts = self.db.execute('SELECT decision_index,contract FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND form IS NOT NULL AND failure IS NULL ORDER BY decision_index', (self.run_id, context.episode_id)).fetchall()
         for attempt in attempts:
@@ -349,7 +349,7 @@ class RfamBatchReturns(EpisodeReturnRecords):
     def record_admission(self, context, form, schema, operation_key):
         if not requested_sources(schema):
             return []
-        self._require(context.role in {'annotation', 'scientific_process'}, 'unsupported_return_owner')
+        self._require(context.role in {'annotation', 'biochemical_feasibility_evidence'}, 'unsupported_return_owner')
         child, saved, declared = self._attempt(context, self._admission_index(context, operation_key))
         self._require(self._equal(form, saved) and self._equal(schema, declared), 'admitted_form_conflict')
         values = self._validate_values(child, saved, declared)
@@ -376,6 +376,6 @@ class RfamBatchReturns(EpisodeReturnRecords):
     def resolve_received(self, context, reference, namespace):
         if namespace not in (*IDENTIFIER_NAMESPACES, 'source', 'execution_result', None):
             return None
-        if context.role not in {'annotation', 'scientific_process'}:
+        if context.role not in {'annotation', 'biochemical_feasibility_evidence'}:
             return False if namespace in IDENTIFIER_NAMESPACES else None
         return self._resolve(self._received_values(context), reference, namespace)

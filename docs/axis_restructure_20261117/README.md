@@ -89,3 +89,10 @@ collection, dangling-name scan (`runs/claude_inputs/la/dangling.py`), commit.
 - P1-A107: `a107/scientific_process` → `a107/partner_presence_evidence` and every token inside `a107/` (10 paths,
   426 files); root lookup tables; role table. Affected tests (`runs/claude_ax_a107_s0..3`, 206 files): identical to the
   baseline. Collection 50,565, 0 errors; dangling scan unchanged.
+- P1-A110: `a110/scientific_process` → `a110/biochemical_feasibility_evidence` and every token in A110's tracked files
+  (10 paths, 364 files); root lookup tables; role table. The rename script now touches only git-tracked files: the
+  untracked `a110/tests/fixtures/genuine_fba360/provenance.json` (contains the old name 76 times) is unchanged
+  (checksum verified) and stays untracked. Affected tests (`runs/claude_ax_a110_s0..3`, 195 files): identical to the
+  baseline. Collection 50,565, 0 errors; dangling scan unchanged.
+- Phase 1 complete: every arm's head carries its axis role. Remaining `scientific_process` outside docs/: the shared
+  root's generic role and home, and their references.

@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a110.tool_grading_artifacts 
 SOURCES = (TABLE_SOURCE, ROW_SOURCE)
 OWN_WITNESSES = 'enrichr_original_publication_witnesses_v1'
 CLOSURE_PREFIX = 'enrichr_received_report_prefix_v1'
-_RECEIVERS = {'annotation', 'scientific_process'}
+_RECEIVERS = {'annotation', 'biochemical_feasibility_evidence'}
 _WITNESS_FIELDS = {'source_ref', 'operation_key', 'source_record_sha256', 'native_artifact_ref', 'snapshot_sha256', 'snapshot_metadata_sha256', 'request_artifact_ref', 'grading_artifact_ref', 'tool_operation_sha256', 'selector_sha256', 'projected_sha256', 'native_artifact_metadata_sha256', 'request_artifact_metadata_sha256', 'grading_artifact_metadata_sha256', 'protocol_artifacts'}
 
 def _boundary(code, field=None):
@@ -125,7 +125,7 @@ class EnrichrReturns(EpisodeReturnRecords):
         contract = plain(child.request).get('report_contract')
         self._require(isinstance(contract, dict), 'original_schema_conflict')
         if action.get('kind') == 'tool':
-            self._require(action.get('tool') == 'process.revise' and child.role == 'scientific_process', 'original_context_conflict')
+            self._require(action.get('tool') == 'process.revise' and child.role == 'biochemical_feasibility_evidence', 'original_context_conflict')
             return
         self._require(action.get('kind') in {'child', 'episode_child', 'job_child'} and _same(action.get('scope'), child.scope) and _same(json.loads(action['schema_json']), contract['measurements']['schema']) and (action.get('purpose') == contract['decision']), 'original_schema_conflict')
         if action['kind'] in {'episode_child', 'job_child'}:

@@ -9,7 +9,7 @@ from gene_annotation_episode.episodic_workflow.root.a110.schema_information_text
 INSTRUCTION_STATUS = 'published_investigation_instructions'
 
 def is_published_scientific_context(context):
-    process = context.get('scientific_process') if isinstance(context, Mapping) else None
+    process = context.get('biochemical_feasibility_evidence') if isinstance(context, Mapping) else None
     axis = process.get('evidence_axis') if isinstance(process, Mapping) else None
     return isinstance(axis, Mapping) and axis.get('instruction_status') == INSTRUCTION_STATUS
 
@@ -178,7 +178,7 @@ def _received_records(state):
     records = {row['id']: row for field in fields for row in working.get(field, ()) if isinstance(row, Mapping) and isinstance(row.get('id'), str)}
     revision_status = {row['record_ref']: row['is_current_revision'] for row in working.get('received_revision_status', ())}
     current = [row['id'] for field in ('annotations', 'interpretation_accounts') for row in working.get(field, ()) if revision_status.get(row['id'], True)]
-    selected = list(dict.fromkeys([*current, *state.get('scientific_process', {}).get('assignment', {}).get('evidence_refs', ()), *state.get('current_report_basis_refs', ()), *_references(state.get('current_report_update', {})), *_references(state.get('last_local_outcome', {})), *_references(state.get('child_reports', []))]))
+    selected = list(dict.fromkeys([*current, *state.get('biochemical_feasibility_evidence', {}).get('assignment', {}).get('evidence_refs', ()), *state.get('current_report_basis_refs', ()), *_references(state.get('current_report_update', {})), *_references(state.get('last_local_outcome', {})), *_references(state.get('child_reports', []))]))
     found = {}
     for reference in selected:
         if reference in found or reference not in records:
@@ -201,8 +201,8 @@ def _outcome(value):
     if 'feedback' in shown:
         shown['feedback'] = _feedback(shown['feedback'])
     proposal = shown.get('result')
-    if isinstance(proposal, Mapping) and proposal.get('version') == 'scientific_process_child_selection_v1':
-        from gene_annotation_episode.episodic_workflow.root.a110.scientific_process_records import SELECTION_VERSION, selector_selection, validate_child_selection, validate_revision_origin
+    if isinstance(proposal, Mapping) and proposal.get('version') == 'biochemical_feasibility_evidence_child_selection_v1':
+        from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence_records import SELECTION_VERSION, selector_selection, validate_child_selection, validate_revision_origin
         from gene_annotation_episode.episodic_workflow.root.a110.tool_information import parent_view
         try:
             prepared = validate_child_selection(proposal)
@@ -213,7 +213,7 @@ def _outcome(value):
         if selected['version'] == SELECTION_VERSION:
             shown['result'] = {**prepared, 'selection': selector_selection(selected)}
             shown['prepared_child_tools'] = parent_view(selected['child_tool_info'])
-            shown['preparation_use'] = 'Commission a separate scientific_process child with result.selection and revision_origin. The host restores the complete pinned tool descriptions and instructions and authenticates them against the original preparation. This preparation does not change the current episode.'
+            shown['preparation_use'] = 'Commission a separate biochemical_feasibility_evidence child with result.selection and revision_origin. The host restores the complete pinned tool descriptions and instructions and authenticates them against the original preparation. This preparation does not change the current episode.'
     return shown
 
 def _lookup(result):

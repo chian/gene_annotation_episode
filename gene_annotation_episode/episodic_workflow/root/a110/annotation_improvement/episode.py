@@ -15,7 +15,7 @@ def plain_improvement_path(workflow, path):
     if not safe_cached_annotation_registry(workflow) or not plain_path(path) or not path:
         return False
     registry = workflow.episode_bindings
-    if workflow.scientific_process_binding is not None or 'improvement' in registry._by_role:
+    if workflow.biochemical_feasibility_evidence_binding is not None or 'improvement' in registry._by_role:
         return False
     if path[0][0] == 'annotation':
         return ('annotation' not in registry._by_role and len(path) > 1
@@ -42,7 +42,7 @@ def improvement_receiving_owner(workflow, source, role):
     if type(role) is not str or role != 'improvement':
         return None
     if is_annotation_parent(workflow, source):
-        return '' if workflow.scientific_process_binding is None else None
+        return '' if workflow.biochemical_feasibility_evidence_binding is None else None
     if is_improvement_parent(workflow, source):
         return '.annotation_improvement'
     return None

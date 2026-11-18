@@ -142,8 +142,8 @@ class ExecutionServiceFactory:
                  resource_estimator=None, tool_registry=None, tool_catalog=None):
         from .library.execution_initial_information.information_configuration import InitialInformationConfiguration
         from .library.received_execution_information.received_configuration import ReceivedExecutionConfiguration
-        from gene_annotation_episode.episodic_workflow.root.a110.scientific_process.execution_progress_assessment.episode import MonitorEpisode
-        from gene_annotation_episode.episodic_workflow.root.a110.scientific_process.hpc_work_planning.episode import HPCEpisode
+        from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.execution_progress_assessment.episode import MonitorEpisode
+        from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.hpc_work_planning.episode import HPCEpisode
         self.configure_tool_registry(tool_registry)
         bindings = create_execution_bindings(None, store=store, run_id=run_id, directory=directory,
             resources=plain(self.resources), initial_information=plain(self.initial_information),
@@ -184,4 +184,4 @@ class ExecutionServiceFactory:
 
 __all__ = ['ExecutionServiceFactory']
 
-from .scientific_process.episode import create_execution_bindings, create_hpc_bindings
+from .biochemical_feasibility_evidence.episode import create_execution_bindings, create_hpc_bindings

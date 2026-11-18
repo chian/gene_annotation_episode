@@ -367,7 +367,7 @@ class FluxBalanceResultReceipts:
         self.store.validate_scope(plain(context.scope))
         require(len(context.path) > 1, 'fba_parent_commission_required')
         parent = self.returns.context(EpisodeRef(context.run_id, context.path[:-1]).episode_id)
-        require(parent.role in ('annotation', 'scientific_process'), 'fba_scientific_parent_required')
+        require(parent.role in ('annotation', 'biochemical_feasibility_evidence'), 'fba_scientific_parent_required')
         self.returns._commission(parent, context, construction=allow_unsaved)
         if assignment['selector']['mode'] == 'native_result':
             self.returns.declarations.possession(parent, assignment['handoff_ref'],
@@ -927,7 +927,7 @@ class FluxBalanceResultReceipts:
             require('received_report_prefix' in manifest, 'fba_receipt_inheritance_mismatch')
             parent = self.returns.context(parent_id)
             self.returns._commission(parent, current, construction=current is context)
-            if parent.role in ('annotation', 'scientific_process'):
+            if parent.role in ('annotation', 'biochemical_feasibility_evidence'):
                 # Receipt inheritance freezes actual returned information, not
                 # only artifact references. A projection already communicates
                 # the original fit even if no sheet was requested or granted.

@@ -9,16 +9,16 @@ AXIS = 'a110'
 HOMES = (
     'execution_job_submission.local_job_execution',
     'execution_job_submission.hpc_job_execution',
-    'scientific_process.execution_job_submission.local_job_execution',
-    'scientific_process.execution_job_submission.hpc_job_execution',
+    'biochemical_feasibility_evidence.execution_job_submission.local_job_execution',
+    'biochemical_feasibility_evidence.execution_job_submission.hpc_job_execution',
     'hpc_work_planning.execution_job_submission.local_job_execution',
     'hpc_work_planning.execution_job_submission.hpc_job_execution',
     'hpc_work_planning.hpc_allocation_execution.execution_job_submission.local_job_execution',
     'hpc_work_planning.hpc_allocation_execution.execution_job_submission.hpc_job_execution',
-    'scientific_process.hpc_work_planning.execution_job_submission.local_job_execution',
-    'scientific_process.hpc_work_planning.execution_job_submission.hpc_job_execution',
-    'scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.local_job_execution',
-    'scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.hpc_job_execution',
+    'biochemical_feasibility_evidence.hpc_work_planning.execution_job_submission.local_job_execution',
+    'biochemical_feasibility_evidence.hpc_work_planning.execution_job_submission.hpc_job_execution',
+    'biochemical_feasibility_evidence.hpc_work_planning.hpc_allocation_execution.execution_job_submission.local_job_execution',
+    'biochemical_feasibility_evidence.hpc_work_planning.hpc_allocation_execution.execution_job_submission.hpc_job_execution',
 )
 
 

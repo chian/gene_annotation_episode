@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.root.a110.form_reference_validati
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.sequence_support_publication import read_sequence_support_publication
 OWN_BINDINGS = '_addgene_sequence_acquisition_bindings_v1'
 CLOSURE_PREFIX = '_addgene_sequence_return_prefix_v1'
-_RECEIVERS = frozenset(('annotation', 'scientific_process'))
+_RECEIVERS = frozenset(('annotation', 'biochemical_feasibility_evidence'))
 _BINDING_FIELDS = frozenset(('decision_index', 'outcome_sha256', 'source_sha256', 'fact_sha256'))
 
 def _boundary(code, field=None):
@@ -111,7 +111,7 @@ class AddgeneSequenceReturns(EpisodeReturnRecords):
         action, contract = (json.loads(row['action']), plain(child.request).get('report_contract'))
         self._require(isinstance(contract, dict), 'original_schema_conflict')
         if action.get('kind') == 'tool':
-            self._require(action.get('tool') == 'process.revise' and child.role == 'scientific_process', 'original_context_conflict')
+            self._require(action.get('tool') == 'process.revise' and child.role == 'biochemical_feasibility_evidence', 'original_context_conflict')
             return
         self._require(action.get('kind') in {'child', 'episode_child', 'job_child'} and _same(action.get('scope'), child.scope) and (action.get('purpose') == contract['decision']), 'original_schema_conflict')
         selected_schema = json.loads(action['schema_json'])

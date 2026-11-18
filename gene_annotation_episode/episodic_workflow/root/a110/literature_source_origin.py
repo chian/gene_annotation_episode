@@ -11,7 +11,7 @@ def component_axis_source_origin(services, context):
             "AND name='runtime_episodes'").fetchone() is None:
         return None
     for index in range(len(context.path)-2, -1, -1):
-        if context.path[index][0] != 'scientific_process':
+        if context.path[index][0] != 'biochemical_feasibility_evidence':
             continue
         row = store.db.execute("SELECT episode_id "
             "FROM runtime_episodes WHERE run_id=? AND json(path)=json(?)",

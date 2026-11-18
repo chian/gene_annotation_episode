@@ -65,8 +65,8 @@ def acquire(store, inputs, *, compounds=('CHEBI:59776', 'CHEBI:57642'), prefix='
 
 
 def context(store, known):
-    return BindingContext('reference-accounting-check', 'scientific-owner', 'scientific_process',
-        (('annotation', 'root'), ('scientific_process', 'chemical-reference')),
+    return BindingContext('reference-accounting-check', 'scientific-owner', 'biochemical_feasibility_evidence',
+        (('annotation', 'root'), ('biochemical_feasibility_evidence', 'chemical-reference')),
         store.validate_scope(), {'selection': {'evidence_axis': {'option_id': 'A110'}}},
         {}, tuple(sorted(known)))
 

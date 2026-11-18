@@ -27,7 +27,7 @@ class WorkflowServices:
         return LaunchInstructions.freeze(directory, source=getattr(self.workflow.tools, 'launch_instruction_library_directory', None))
 
     def scientific_library_catalog(self):
-        from .scientific_process_library import catalog
+        from .biochemical_feasibility_evidence_library import catalog
         return catalog()
 
     def scientific_retriever_catalog(self, binding):
@@ -39,7 +39,7 @@ class WorkflowServices:
         return ScientificToolRetriever(self.workflow.store, run_id=self.workflow.run_id, provider=provider, library=binding.tool_library, configuration=binding.tool_retrieval)
 
     def execute_scientific_library(self, context, name, arguments):
-        return self.workflow.scientific_process_binding.library.execute(name, arguments)
+        return self.workflow.biochemical_feasibility_evidence_binding.library.execute(name, arguments)
 
     def create_receipts(self, run_id):
         from .episode_receipts import EpisodeReceipts
@@ -72,8 +72,8 @@ class WorkflowServices:
         """
         from .resource_tool_information import bound_resource_tool_contracts, tool_information_contracts
         registry = self.workflow.episode_bindings
-        scientific = self.workflow.scientific_process_binding
-        child_roles = () if scientific is None else scientific.child_roles('scientific_process')
+        scientific = self.workflow.biochemical_feasibility_evidence_binding
+        child_roles = () if scientific is None else scientific.child_roles('biochemical_feasibility_evidence')
         resources, seen = ([], set())
         for role in registry.roles:
             binding = registry.for_role(role)
@@ -131,9 +131,9 @@ class WorkflowServices:
         """
         from copy import deepcopy
         from .episode_return_records import EpisodeReturnRecords
-        from .scientific_process_records import SELECTION_VERSION, scientific_digest, validate_filled_process, validate_selection
+        from .biochemical_feasibility_evidence_records import SELECTION_VERSION, scientific_digest, validate_filled_process, validate_selection
         try:
-            if type(decision_index) is not int or decision_index < 0 or parent.run_id != self.workflow.run_id or (child.run_id != parent.run_id) or (child.role != 'scientific_process') or (child.path != (*parent.path, ('scientific_process', f'child_{decision_index}'))) or (selected_action.get('kind') != 'episode_child') or (selected_action.get('role') != child.role):
+            if type(decision_index) is not int or decision_index < 0 or parent.run_id != self.workflow.run_id or (child.run_id != parent.run_id) or (child.role != 'biochemical_feasibility_evidence') or (child.path != (*parent.path, ('biochemical_feasibility_evidence', f'child_{decision_index}'))) or (selected_action.get('kind') != 'episode_child') or (selected_action.get('role') != child.role):
                 return False
             records = EpisodeReturnRecords(self.workflow.store, self.workflow.run_id, failure_prefix='molecular_commission_')
             records.authenticate(parent)
@@ -144,10 +144,10 @@ class WorkflowServices:
             request = plain(child.request)
             if not records._equal(selected_action.get('scope'), child.scope) or selected_action.get('goal') != request['goal']['objective']:
                 return False
-            binding = self.workflow.scientific_process_binding
+            binding = self.workflow.biochemical_feasibility_evidence_binding
             if binding is None:
                 return False
-            filled = validate_filled_process(request['message']['scientific_process'])
+            filled = validate_filled_process(request['message']['biochemical_feasibility_evidence'])
             mechanics = filled['mechanics_binding']
             configuration = mechanics['configuration']
             if mechanics.get('binding_id') != child.role or not records._equal(configuration['library'], binding._library_record) or (not records._equal(configuration['tool_library'], binding._tools_record)):
@@ -337,12 +337,12 @@ class WorkflowServices:
             raise ValueError('scientific_provenance_receiver_identity_mismatch')
         provenance = self.workflow.scientific_provenance
         if provenance is None:
-            raise ValueError('scientific_process_provenance_unavailable')
+            raise ValueError('biochemical_feasibility_evidence_provenance_unavailable')
         return provenance
 
     def create_scientific_provenance(self, binding):
-        from .scientific_process_provenance import ScientificProcessProvenance
-        return ScientificProcessProvenance(self.workflow.store, self.workflow.journal, library=binding.library, tool_library=binding.tool_library)
+        from .biochemical_feasibility_evidence_provenance import BiochemicalFeasibilityEvidenceProvenance
+        return BiochemicalFeasibilityEvidenceProvenance(self.workflow.store, self.workflow.journal, library=binding.library, tool_library=binding.tool_library)
 
     def scientific_preparation(self, context, preparation_ref):
         return self._scientific_provenance(context).preparation(context, preparation_ref)
@@ -370,7 +370,7 @@ class WorkflowServices:
             raise ValueError('scientific_saved_request_active_flag_invalid')
         workflow = self.workflow
         journal = workflow.journal
-        if context.run_id != workflow.run_id or journal.run_id != workflow.run_id or context.role != 'scientific_process' or (EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
+        if context.run_id != workflow.run_id or journal.run_id != workflow.run_id or context.role != 'biochemical_feasibility_evidence' or (EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
             raise ValueError('scientific_saved_request_identity_mismatch')
         row = journal.row('runtime_episodes', context.episode_id)
         if row is None:
@@ -397,7 +397,7 @@ class WorkflowServices:
         """Read one completed invocation, without creating work or loading its tree."""
         workflow = self.workflow
         journal = workflow.journal
-        if context.run_id != workflow.run_id or journal.run_id != workflow.run_id or context.role != 'scientific_process' or (EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
+        if context.run_id != workflow.run_id or journal.run_id != workflow.run_id or context.role != 'biochemical_feasibility_evidence' or (EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
             raise ValueError('scientific_closed_request_identity_mismatch')
         row = journal.row('runtime_episodes', context.episode_id)
         if row is None:

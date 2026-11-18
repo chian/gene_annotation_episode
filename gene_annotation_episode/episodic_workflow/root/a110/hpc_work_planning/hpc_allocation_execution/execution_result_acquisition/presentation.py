@@ -4,7 +4,7 @@ from copy import deepcopy
 import json
 from gene_annotation_episode.episodic_workflow.root.a110.decision_context import VERSION as DECISION_CONTEXT_VERSION, apply_state_frame
 from gene_annotation_episode.episodic_workflow.root.a110.library.scientific_decision_presentation import _ordinary_runtime_receiver_context, is_published_scientific_context, text_instructions
-from gene_annotation_episode.episodic_workflow.root.a110.scientific_process.task_decision import render_scientific_process_prompt
+from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.task_decision import render_biochemical_feasibility_evidence_prompt
 
 def present_results_context(provider, episode_id, role, instructions, context):
     """Render declared TASKs from reconstructed state; preserve other inputs."""
@@ -44,7 +44,7 @@ def present_results_context(provider, episode_id, role, instructions, context):
         if is_hpc_context(state):
             renderer = render_hpc_prompt
         elif is_published_scientific_context(state):
-            renderer = render_scientific_process_prompt
+            renderer = render_biochemical_feasibility_evidence_prompt
         elif is_selected_execution_context(state):
             renderer = render_selected_execution_prompt
         elif is_monitor_context(state):

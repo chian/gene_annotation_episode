@@ -31,7 +31,7 @@ from .decision_context import VERSION as DECISION_CONTEXT_VERSION, apply_state_f
 from .library.scientific_decision_presentation import (
     _ordinary_runtime_receiver_context,
     is_published_scientific_context, text_instructions)
-from .scientific_process.task_decision import render_scientific_process_prompt
+from .biochemical_feasibility_evidence.task_decision import render_biochemical_feasibility_evidence_prompt
 
 
 class ModelCallError(RuntimeError):
@@ -716,7 +716,7 @@ class _SessionConnection:
             if is_hpc_context(state):
                 renderer = render_hpc_prompt
             elif is_published_scientific_context(state):
-                renderer = render_scientific_process_prompt
+                renderer = render_biochemical_feasibility_evidence_prompt
             elif is_selected_execution_context(state):
                 renderer = render_selected_execution_prompt
             elif is_monitor_context(state):

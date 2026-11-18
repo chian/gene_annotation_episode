@@ -37,7 +37,7 @@ _LEGACY_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE, "flux_balance_failures")
 _FILE_SOURCES = (SAVED_SOURCE, EDITED_SOURCE)
 
 
-_RECEIVING_ROLES = {"annotation", "scientific_process"}
+_RECEIVING_ROLES = {"annotation", "biochemical_feasibility_evidence"}
 _CLOSURE_PREFIX = "flux_balance_received_report_prefix"
 _CONTRIBUTION_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE, MODEL_SOURCE, EDITED_SOURCE)
 
@@ -109,14 +109,14 @@ class FluxBalanceReturns(EpisodeReturnRecords):
         self._require(self._equal(request["goal"], goal.as_record())
             and self._equal(request["message"].get("initial_report"), initial), "commission_goal_conflict")
         original_assignment = selected.get("assignment", {})
-        if child.role == "scientific_process" and "selection" in assignment:
-            from .scientific_process_records import (
+        if child.role == "biochemical_feasibility_evidence" and "selection" in assignment:
+            from .biochemical_feasibility_evidence_records import (
                 scientific_digest, scientific_invocation_ref, selector_selection, validate_filled_process,
             )
             selected_assignment = {**assignment, "selection": selector_selection(assignment["selection"])}
             self._require(self._equal(original_assignment, assignment)
                 or self._equal(original_assignment, selected_assignment), "commission_assignment_conflict")
-            filled = validate_filled_process(request["message"].get("scientific_process"))
+            filled = validate_filled_process(request["message"].get("biochemical_feasibility_evidence"))
             invocation = {"objective": request["goal"]["objective"], "scope": plain(child.scope),
                 "purpose": request["report_contract"]["decision"], "report_schema": schema,
                 "initial_report": initial}

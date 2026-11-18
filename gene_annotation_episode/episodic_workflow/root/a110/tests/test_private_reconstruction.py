@@ -33,7 +33,7 @@ def no_external_work(monkeypatch):
 def current(tmp_path_factory):
     directory = tmp_path_factory.mktemp('private-reconstruction')
     write_instruction_source(directory / 'instruction-source', AXIS)
-    library = module('scientific_process_library').ScientificProcessLibrary
+    library = module('biochemical_feasibility_evidence_library').BiochemicalFeasibilityEvidenceLibrary
     tools = module('scientific_tool_library').ScientificToolLibrary
     library.freeze(directory / 'scientific-process-library', source=directory / 'instruction-source')
     tools.freeze(directory / 'scientific-tool-library', catalog=[])
@@ -49,10 +49,10 @@ def current(tmp_path_factory):
         for name, declaration in catalog.items():
             owner_type = getattr(module(name.replace('/', '.') + '.episode'), declaration['owner_class'])
             kind = declaration['owner_class']
-            if kind == 'ScientificProcessEpisode':
+            if kind == 'BiochemicalFeasibilityEvidenceEpisode':
                 owner = owner_type(services, library=library(directory / 'scientific-process-library'),
                     tool_library=tools(directory / 'scientific-tool-library'),
-                    child_roles=('scientific_process', 'launch', 'results', 'hpc', 'monitor', 'literature'))
+                    child_roles=('biochemical_feasibility_evidence', 'launch', 'results', 'hpc', 'monitor', 'literature'))
             elif kind == 'ExecutionEpisode':
                 owner = owner_type(services, store=store, directory=directory, run_id=journal.run_id,
                     resources=resources(), initial_information={}, tool_registry=registry,
@@ -120,11 +120,11 @@ def test_malformed_saved_set_rejected_before_construction_or_progress(current, m
     if mutation == 'unknown':
         direct['binding_id'] = 'execution_episode'
     elif mutation == 'historical_version':
-        next(row for row in records if row['binding_id'] == 'scientific_process')['version'] = 'scientific_process_episodes_v8'
+        next(row for row in records if row['binding_id'] == 'biochemical_feasibility_evidence')['version'] = 'biochemical_feasibility_evidence_episodes_v8'
     elif mutation == 'duplicate':
         records.append(deepcopy(direct))
     elif mutation == 'missing_parent':
-        records = [row for row in records if row['binding_id'] != 'scientific_process']
+        records = [row for row in records if row['binding_id'] != 'biochemical_feasibility_evidence']
     elif mutation == 'extra_field':
         direct['owner_class'] = 'ExecutionEpisode'
     elif mutation == 'missing_configuration':
@@ -145,7 +145,7 @@ def test_malformed_saved_set_rejected_before_construction_or_progress(current, m
 
 
 def test_current_scientific_reopen_and_changed_frozen_library_rejection(current):
-    record = deepcopy(next(row for row in current.records if row['binding_id'] == 'scientific_process'))
+    record = deepcopy(next(row for row in current.records if row['binding_id'] == 'biochemical_feasibility_evidence'))
     reopen = module('episode_composition').reopen_scientific_binding
     owner = reopen(current.services, descriptor=record, directory=current.directory)
     assert owner.as_record() == record and owner.services is current.services
@@ -158,7 +158,7 @@ def test_current_scientific_reopen_and_changed_frozen_library_rejection(current)
 def test_actual_owner_parent_identity_is_checked(current, monkeypatch):
     record = next(row for row in current.records if row['binding_id'] == 'execution_job_submission')
     owner_type = type(current.owners[record['binding_id']])
-    monkeypatch.setattr(owner_type, 'commissioning_parent', 'scientific_process')
+    monkeypatch.setattr(owner_type, 'commissioning_parent', 'biochemical_feasibility_evidence')
     with pytest.raises(module('method_loop.durable').DurableExecutionError) as observed:
         compose(current, [record], execution_backend=None, role_credit_bindings={})
     assert observed.value.failure['code'] == 'identity_conflict'

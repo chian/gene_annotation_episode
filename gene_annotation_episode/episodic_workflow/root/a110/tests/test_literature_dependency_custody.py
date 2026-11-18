@@ -4,7 +4,7 @@ import json
 
 from .. import literature_sheet_updates as updates
 from ..literature_reaction_storage import LiteratureReactionRepository
-from ..scientific_process.tests.original_applicability_fixture import setup_case
+from ..biochemical_feasibility_evidence.tests.original_applicability_fixture import setup_case
 
 
 def test_dependency_receipts_distinguish_original_owner_and_admitted_subset(tmp_path):

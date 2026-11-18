@@ -8,9 +8,9 @@ def controller_value(workflow, source, index, credit):
         value.update(workflow.episode_bindings.annotation_axis_yield_context(workflow.binding_context(source), credit))
         action = workflow.journal.row('runtime_actions', source.episode_id, index)
         selected = _original_runtime.json.loads(action['action'])
-        if selected.get('kind') == 'episode_child' and selected.get('role') == 'scientific_process':
+        if selected.get('kind') == 'episode_child' and selected.get('role') == 'biochemical_feasibility_evidence':
             assignment = selected['assignment']
-            from .scientific_process_records import selection_fields
+            from .biochemical_feasibility_evidence_records import selection_fields
             process = assignment['selection']
             axis = process[selection_fields(process)[0]]['option_id']
             ref = assignment.get('proposed_annotation_ref')

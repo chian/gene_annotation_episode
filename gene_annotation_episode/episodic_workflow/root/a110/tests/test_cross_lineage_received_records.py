@@ -12,8 +12,8 @@ import pytest
 
 AXIS = 'gene_annotation_episode.episodic_workflow.root.a110'
 PREFIXES = ('', 'hpc_work_planning', 'hpc_work_planning/hpc_allocation_execution',
-    'scientific_process', 'scientific_process/hpc_work_planning',
-    'scientific_process/hpc_work_planning/hpc_allocation_execution')
+    'biochemical_feasibility_evidence', 'biochemical_feasibility_evidence/hpc_work_planning',
+    'biochemical_feasibility_evidence/hpc_work_planning/hpc_allocation_execution')
 HOMES = ['/'.join(filter(None, (prefix, 'execution_job_submission', native)))
     for prefix in PREFIXES for native in ('local_job_execution', 'hpc_job_execution')]
 

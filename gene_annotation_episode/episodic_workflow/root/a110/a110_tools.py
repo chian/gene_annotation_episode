@@ -28,7 +28,7 @@ class A110ToolRegistry(ComponentNativeHPCMixin, ToolRegistry):
     def received_attributions(self, context, known):
         inherited = getattr(super(), 'received_attributions', None)
         generated, needs = inherited(context, known) if callable(inherited) else ([], [])
-        if context.role not in {'annotation', 'scientific_process', 'improvement'}:
+        if context.role not in {'annotation', 'biochemical_feasibility_evidence', 'improvement'}:
             return generated, needs
         from .a110_reference_accounting import refresh
         more, pending = refresh(self.store, context, set(known) | set(generated))

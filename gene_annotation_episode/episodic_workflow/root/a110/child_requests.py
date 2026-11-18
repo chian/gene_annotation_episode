@@ -4,7 +4,7 @@ from gene_annotation_episode.episodic_workflow.root.a110 import runtime as _orig
 
 def prepare_child_request(workflow, source, selection, index, scope, role):
     episode_assignment = None
-    scientific_process = None
+    biochemical_feasibility_evidence = None
     schema, report_declaration = workflow.expanded_contract_form(source, selection, index, role)
     if selection['kind'] == 'episode_child':
         binding = workflow.episode_bindings.for_child(source.path, role)
@@ -26,7 +26,7 @@ def prepare_child_request(workflow, source, selection, index, scope, role):
             raise ValueError('child_role_not_available_to_parent')
         binding = workflow.episode_bindings.for_child(source.path, role)
         workflow.launch_instructions.materialize(selection['assignment'].get('launch_instructions'))
-        if binding is workflow.scientific_process_binding:
+        if binding is workflow.biochemical_feasibility_evidence_binding:
             closed = {}
             recorded = workflow.journal.row('runtime_actions', source.episode_id, index)
             if recorded is not None and recorded['result'] is not None and (_original_runtime._json(_original_runtime.json.loads(recorded['action'])) == _original_runtime._json(selection)) and (_original_runtime.json.loads(recorded['result']).get('status') == 'completed'):
@@ -40,7 +40,7 @@ def prepare_child_request(workflow, source, selection, index, scope, role):
                         closed['closed_context'] = candidate
             prepared = binding.prepare_invocation(workflow.binding_context(source), role, selection['assignment'], scope, f'{workflow.run_id}:{source.episode_id}:{index}', invocation={'objective': selection['goal'], 'purpose': selection['purpose'], 'report_schema': schema, 'initial_report': initial}, **closed)
             episode_assignment = prepared['assignment']
-            scientific_process = prepared['scientific_process']
+            biochemical_feasibility_evidence = prepared['biochemical_feasibility_evidence']
         else:
             child_assignment = selection['assignment']
             send_request = getattr(specialist, 'prepare_child_request', None)
@@ -55,4 +55,4 @@ def prepare_child_request(workflow, source, selection, index, scope, role):
                     child_assignment = prepare_request(source, child_assignment)
             episode_assignment = binding.prepare_assignment(workflow.binding_context(source), role, child_assignment, scope, f'{workflow.run_id}:{source.episode_id}:{index}')
     assignment = None if selection['kind'] == 'job_child' else None
-    return (schema, report_declaration, initial, episode_assignment, scientific_process, assignment)
+    return (schema, report_declaration, initial, episode_assignment, biochemical_feasibility_evidence, assignment)

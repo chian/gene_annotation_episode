@@ -571,7 +571,7 @@ class OrdinaryFluxBalanceTools:
             "operation_ref": operation["id"], "result_sha256": digest(outcome), "source_ref": source["id"]}, "facts": groups}
 
     def own_fact_records(self, context, *, sources, verify_artifacts=True):
-        if context.role != "scientific_process":
+        if context.role != "biochemical_feasibility_evidence":
             return []
         keys = [row[0] for row in self.store.db.execute("""SELECT operation.operation_key
             FROM tool_operations operation JOIN runtime_actions action ON operation.operation_key =
