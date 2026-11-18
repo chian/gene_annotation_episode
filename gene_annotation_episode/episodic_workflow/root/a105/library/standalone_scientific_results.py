@@ -1,5 +1,5 @@
 """Original standalone authenticated result readers."""
-from ..scientific_process_provenance import _detached, _load
+from ..experimental_activity_evidence_provenance import _detached, _load
 
 def received_results(provenance, context):
         with provenance.store.read_snapshot():
@@ -16,8 +16,8 @@ def frozen_results(provenance, context):
         with provenance.store.read_snapshot():
             provenance._authenticate(context, require_saved=True)
             row = provenance.store.db.execute("""SELECT
-                json_type(facts, '$.scientific_process_results') AS source_type,
-                json_extract(facts, '$.scientific_process_results') AS results
+                json_type(facts, '$.experimental_activity_evidence_results') AS source_type,
+                json_extract(facts, '$.experimental_activity_evidence_results') AS results
                 FROM runtime_forms WHERE run_id=? AND episode_id=?""",
                 (provenance.journal.run_id, context.episode_id)).fetchone()
             if row is None or row["source_type"] is None:

@@ -4,7 +4,7 @@ from importlib import import_module
 import pytest
 
 AXIS = 'gene_annotation_episode.episodic_workflow.root.a105'
-PILOT = AXIS + '.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination'
+PILOT = AXIS + '.experimental_activity_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination'
 
 
 

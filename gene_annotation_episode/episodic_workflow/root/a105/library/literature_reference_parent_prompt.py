@@ -7,7 +7,7 @@ child source interpretation instructions are not substituted for that job.
 from __future__ import annotations
 from collections.abc import Mapping
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import SAVED_NUMERICAL_RETURN_TASK, _pick, _safe, _schema, _section, _steering, _table, _values, CONTRACT_INFORMATION_TASK, _requested_contract_task
-from gene_annotation_episode.episodic_workflow.root.a105.scientific_process_prompt import text_instructions
+from gene_annotation_episode.episodic_workflow.root.a105.experimental_activity_evidence_prompt import text_instructions
 from gene_annotation_episode.episodic_workflow.root.a105.composition_information import CONTRACT_INFORMATION_PROFILE, is_contract_information
 from gene_annotation_episode.episodic_workflow.root.a105.schema_information_text import render_schema_information
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_numerical_return_presentation import state_view

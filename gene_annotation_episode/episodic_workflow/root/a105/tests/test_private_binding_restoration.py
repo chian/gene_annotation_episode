@@ -10,7 +10,7 @@ from .test_private_literature_bindings import AXIS, HOMES
 
 
 def frozen_scientific_binding(tmp_path):
-    module = import_module(AXIS + '.scientific_process_library')
+    module = import_module(AXIS + '.experimental_activity_evidence_library')
     tool_module = import_module(AXIS + '.scientific_tool_library')
     source = tmp_path / 'fixture-instruction-source'
     source.mkdir()
@@ -21,11 +21,11 @@ def frozen_scientific_binding(tmp_path):
     (source / 'option_sources.json').write_text(json.dumps({
         'meaning': 'Engineering restoration fixture only.', 'rows': []}))
     run = tmp_path / 'saved-run'
-    library = module.ScientificProcessLibrary.freeze(run / 'scientific-process-library', source=source)
+    library = module.ExperimentalActivityEvidenceLibrary.freeze(run / 'scientific-process-library', source=source)
     tools = tool_module.ScientificToolLibrary.freeze(run / 'scientific-tool-library', catalog=[])
-    cls = import_module(AXIS + '.scientific_process.episode').ScientificProcessEpisode
+    cls = import_module(AXIS + '.experimental_activity_evidence.episode').ExperimentalActivityEvidenceEpisode
     return cls(SimpleNamespace(), library=library, tool_library=tools,
-               child_roles=('scientific_process', 'literature')), run
+               child_roles=('experimental_activity_evidence', 'literature')), run
 
 
 def test_reopen_scientific_uses_actual_frozen_library_identity(tmp_path):
@@ -35,7 +35,7 @@ def test_reopen_scientific_uses_actual_frozen_library_identity(tmp_path):
     restored = composition.reopen_scientific_binding(SimpleNamespace(), descriptor=saved, directory=directory)
     assert type(restored) is type(binding)
     assert restored.as_record() == saved
-    assert restored.binding_path == 'scientific_process'
+    assert restored.binding_path == 'experimental_activity_evidence'
 
 
 def test_reopen_rejects_changed_frozen_library(tmp_path):

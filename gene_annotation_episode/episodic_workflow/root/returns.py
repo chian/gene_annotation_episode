@@ -58,7 +58,7 @@ def received_axis_task_credit(store, context):
             'A102': '.a102.scientific_process.task_projector',
             'A103': '.a103.scientific_process.task_projector',
             'A104': '.a104.scientific_process.task_projector',
-            'A105': '.a105.scientific_process.credit',
+            'A105': '.a105.experimental_activity_evidence.credit',
             'A106': '.a106.scientific_process.credit',
             'A107': '.a107.scientific_process.task_projector',
             'A108': '.a108.sample_context_evidence.credit',

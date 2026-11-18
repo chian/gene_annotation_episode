@@ -6,7 +6,7 @@ import pytest
 
 AXIS = __package__.rsplit('.tests', 1)[0]
 OWNERS = [AXIS + '.library.literature_experimental_prompt',
-    AXIS + '.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.prompts.literature_experimental_prompt']
+    AXIS + '.experimental_activity_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.prompts.literature_experimental_prompt']
 
 
 @pytest.mark.parametrize('owner', OWNERS)

@@ -6,12 +6,12 @@ import pytest
 
 from .test_private_literature_bindings import AXIS, HOMES
 
-ALL_HOMES = [*HOMES, 'scientific_process']
+ALL_HOMES = [*HOMES, 'experimental_activity_evidence']
 
 
 def task_type(home):
     module = import_module(AXIS + '.' + home + '.episode')
-    binding = module.ScientificProcessEpisode if home == 'scientific_process' else module.LiteratureEpisode
+    binding = module.ExperimentalActivityEvidenceEpisode if home == 'experimental_activity_evidence' else module.LiteratureEpisode
     return binding.decision_source_type
 
 
@@ -82,7 +82,7 @@ def test_default_service_selects_full_private_composer_once(home, monkeypatch):
         return specialist
     source.workflow = SimpleNamespace(specialist=select, binding_context=lambda value: 'original-context',
         is_job_source=lambda value: False,
-        permits_common_action=lambda value, action: action == 'reason' or action == 'wait' and home == 'scientific_process',
+        permits_common_action=lambda value, action: action == 'reason' or action == 'wait' and home == 'experimental_activity_evidence',
         knowledge=SimpleNamespace(instructions='Original supplied knowledge.'),
         launch_instructions=SimpleNamespace(instructions='Original launch instructions.'),
         native_event_information=object(), decision_protocol='decision_exchange_v1')

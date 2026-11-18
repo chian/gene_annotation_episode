@@ -11,7 +11,7 @@ def scientific_saved_request(services, context: BindingContext, *, active_only=T
             raise ValueError('scientific_saved_request_active_flag_invalid')
         workflow = services.workflow
         journal = workflow.journal
-        if context.run_id != workflow.run_id or journal.run_id != workflow.run_id or context.role != 'scientific_process' or (EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
+        if context.run_id != workflow.run_id or journal.run_id != workflow.run_id or context.role != 'experimental_activity_evidence' or (EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
             raise ValueError('scientific_saved_request_identity_mismatch')
         row = journal.row('runtime_episodes', context.episode_id)
         if row is None:

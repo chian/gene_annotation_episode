@@ -48,3 +48,8 @@ collection, dangling-name scan (`runs/claude_inputs/la/dangling.py`), commit.
   A108's 36 test files run one at a time: 526 passed, 3 failed, as in the baseline (the same three
   `test_original_molecular_material_port` cases). `test_private_binding_identity`: 70 passed, the 2 baseline a103
   failures. `test_signed_evidence_root`: 24/4 as in the baseline. Collection 50,565, 0 errors; dangling scan unchanged.
+- P1-A105: `a105/scientific_process` → `a105/experimental_activity_evidence` and every token inside `a105/` (11 paths,
+  379 files); the A105 entries of the root lookup tables; `saved_private_binding_catalogue.py` (A105-only) renamed
+  throughout. A105's 184 test files plus the 27 shared files that exercise the saved catalogue, its users and the lookup
+  tables (`runs/claude_ax_a105_s0..3`, 211 files): identical per file to the baseline. Binding identity test: baseline.
+  Collection 50,565, 0 errors; dangling scan unchanged.

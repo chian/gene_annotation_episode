@@ -26,7 +26,7 @@ ORDINARY_PREFIX = 'flux_balance_ordinary_action_prefix'
 ORDINARY_PREFIX_VERSION = 'ordinary_flux_balance_action_prefix_v1'
 _LEGACY_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE, 'flux_balance_failures')
 _FILE_SOURCES = (SAVED_SOURCE, EDITED_SOURCE)
-_RECEIVING_ROLES = {'annotation', 'scientific_process'}
+_RECEIVING_ROLES = {'annotation', 'experimental_activity_evidence'}
 _CLOSURE_PREFIX = 'flux_balance_received_report_prefix'
 _CONTRIBUTION_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE, MODEL_SOURCE, EDITED_SOURCE)
 
@@ -84,11 +84,11 @@ class FluxBalanceReturns(EpisodeReturnRecords):
         goal = EpisodeGoal.child(EpisodeGoal.from_record(plain(parent.request)['goal']), objective=selected.get('goal'), result_contract=schema)
         self._require(self._equal(request['goal'], goal.as_record()) and self._equal(request['message'].get('initial_report'), initial), 'commission_goal_conflict')
         original_assignment = selected.get('assignment', {})
-        if child.role == 'scientific_process' and 'selection' in assignment:
-            from gene_annotation_episode.episodic_workflow.root.a105.scientific_process_records import scientific_digest, scientific_invocation_ref, selector_selection, validate_filled_process
+        if child.role == 'experimental_activity_evidence' and 'selection' in assignment:
+            from gene_annotation_episode.episodic_workflow.root.a105.experimental_activity_evidence_records import scientific_digest, scientific_invocation_ref, selector_selection, validate_filled_process
             selected_assignment = {**assignment, 'selection': selector_selection(assignment['selection'])}
             self._require(self._equal(original_assignment, assignment) or self._equal(original_assignment, selected_assignment), 'commission_assignment_conflict')
-            filled = validate_filled_process(request['message'].get('scientific_process'))
+            filled = validate_filled_process(request['message'].get('experimental_activity_evidence'))
             invocation = {'objective': request['goal']['objective'], 'scope': plain(child.scope), 'purpose': request['report_contract']['decision'], 'report_schema': schema, 'initial_report': initial}
             self._require(self._equal(filled['selection'], assignment['selection']) and filled['assignment_sha256'] == scientific_digest(assignment) and (filled['invocation_sha256'] == scientific_digest(invocation)) and (request['message'].get('scientific_invocation_ref') == scientific_invocation_ref(self.run_id, child.path)), 'commission_assignment_conflict')
         else:

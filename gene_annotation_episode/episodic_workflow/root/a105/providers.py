@@ -28,8 +28,8 @@ from .provider_authentication import (
     ProviderAuthenticationError, authentication_policy,
     authentication_transport, verify_authentication)
 from .decision_context import VERSION as DECISION_CONTEXT_VERSION, apply_state_frame
-from .scientific_process_prompt import (is_published_scientific_context,
-    render_scientific_process_prompt, text_instructions)
+from .experimental_activity_evidence_prompt import (is_published_scientific_context,
+    render_experimental_activity_evidence_prompt, text_instructions)
 
 
 from gene_annotation_episode.episodic_workflow.root.provider_errors import ModelCallError
@@ -719,7 +719,7 @@ class _SessionConnection:
             # supplies the full state; its response schema is intact.
             state = deepcopy(context)
         if state is not None and has_text_task(state):
-            renderer = (render_scientific_process_prompt
+            renderer = (render_experimental_activity_evidence_prompt
                 if is_published_scientific_context(state) else render_receiver_prompt)
             rendered = renderer(state, instructions, lookup_results=lookups)
             self.scientific_prompt_states[key] = state

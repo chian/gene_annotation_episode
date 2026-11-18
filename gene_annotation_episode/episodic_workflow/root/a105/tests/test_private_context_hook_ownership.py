@@ -7,7 +7,7 @@ from .test_private_literature_bindings import AXIS, HOMES
 @pytest.fixture(params=['standalone', 'scientific'])
 def family_registry(request):
     services = SimpleNamespace(workflow=SimpleNamespace(store=object()))
-    bindings = [import_module(AXIS + '.' + home + '.episode').LiteratureEpisode(services, rate_population=True, assay_grading_population=True) for home in HOMES if home.startswith('scientific_process.') == (request.param == 'scientific')]
+    bindings = [import_module(AXIS + '.' + home + '.episode').LiteratureEpisode(services, rate_population=True, assay_grading_population=True) for home in HOMES if home.startswith('experimental_activity_evidence.') == (request.param == 'scientific')]
     return (import_module(AXIS + '.episode_bindings').EpisodeBindingRegistry(bindings), bindings)
 
 def test_current_report_has_one_private_owner(family_registry, monkeypatch):
@@ -16,7 +16,7 @@ def test_current_report_has_one_private_owner(family_registry, monkeypatch):
     work = import_module(AXIS + '.library.literature_work_report')
     monkeypatch.setattr(sheets, 'current_scoring_sheets', lambda *args: [])
     monkeypatch.setattr(work, 'completed_work', lambda store, context: {'episode_id': context.episode_id})
-    pilot = AXIS + '.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination'
+    pilot = AXIS + '.experimental_activity_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination'
     monkeypatch.setattr(import_module(pilot + '.scoring.literature_sheet_updates'), 'current_scoring_sheets', lambda *args: [])
     monkeypatch.setattr(import_module(pilot + '.prompts.literature_work_report'), 'completed_work', lambda store, context: {'episode_id': context.episode_id})
     for binding in bindings:

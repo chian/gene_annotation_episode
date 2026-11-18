@@ -4,7 +4,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from urllib.parse import urlsplit
 
-from .scientific_process_prompt import (
+from .experimental_activity_evidence_prompt import (
     _pick, _record, _scalar, _schema, _section, _table, _values,
     render_episode_steering, text_instructions,
 )
@@ -144,7 +144,7 @@ def _task(state, instructions):
     if constraints:
         _section(parts, "Caller constraints", _values(constraints))
 
-    process = state.get("scientific_process", {})
+    process = state.get("experimental_activity_evidence", {})
     assignment = process.get("assignment", {})
     if "constraints" in assignment:
         _section(parts, "Parent constraints", _values(assignment["constraints"]))

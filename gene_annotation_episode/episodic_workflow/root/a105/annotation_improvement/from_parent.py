@@ -3,7 +3,7 @@ from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a105 import runtime as _original_runtime
 from gene_annotation_episode.episodic_workflow.root.a105.annotation_improvement.goal import improvement_goal
 
-def assemble_request(workflow, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, scientific_process=None, report_contract_declaration=None):
+def assemble_request(workflow, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, experimental_activity_evidence=None, report_contract_declaration=None):
     path = (*parent_path, (name, key))
     goal = improvement_goal(parent, goal_text, name, contract)
     message = {'scope': scope, 'initial_report': initial or {}}
@@ -19,11 +19,11 @@ def assemble_request(workflow, name, key, goal_text, scope, *, parent=None, pare
     if episode_assignment is not None:
         workflow.launch_instructions.materialize(episode_assignment.get('launch_instructions'))
         message['episode_assignment'] = _original_runtime._plain(episode_assignment)
-    if scientific_process is not None:
-        message['scientific_process'] = _original_runtime._plain(scientific_process)
+    if experimental_activity_evidence is not None:
+        message['experimental_activity_evidence'] = _original_runtime._plain(experimental_activity_evidence)
     identity = _original_runtime.Episode.identity(workflow.context, workflow.grains[name], key, parent_path=parent_path)
-    if workflow.scientific_process_binding is not None and name in {'annotation', 'scientific_process'}:
-        from gene_annotation_episode.episodic_workflow.root.a105.scientific_process_records import scientific_invocation_ref
+    if workflow.experimental_activity_evidence_binding is not None and name in {'annotation', 'experimental_activity_evidence'}:
+        from gene_annotation_episode.episodic_workflow.root.a105.experimental_activity_evidence_records import scientific_invocation_ref
         message['scientific_invocation_ref'] = scientific_invocation_ref(workflow.run_id, path)
     if workflow.receipts is not None:
         parent_id = _original_runtime.Episode.identity(workflow.context, workflow.grains[parent_path[-1][0]], parent_path[-1][1], parent_path=parent_path[:-1]).episode_id if parent_path else None

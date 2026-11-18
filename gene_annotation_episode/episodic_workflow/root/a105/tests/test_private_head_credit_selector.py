@@ -23,13 +23,13 @@ def module(name):
 @pytest.fixture(scope='module')
 def selected_binding(tmp_path_factory):
     directory = tmp_path_factory.mktemp('private-head-credit')
-    library = module('scientific_process_library').ScientificProcessLibrary.freeze(
+    library = module('experimental_activity_evidence_library').ExperimentalActivityEvidenceLibrary.freeze(
         directory / 'library', source=ROOT.parents[3] / 'research/slotted_process_library/publications/2026-10-24-001')
     tools = module('scientific_tool_library').ScientificToolLibrary.freeze(
         directory / 'tools', catalog=[])
     services = SimpleNamespace(tool_catalog=lambda scope: [])
-    Binding = module('scientific_process.episode').ScientificProcessEpisode
-    binding = Binding(services, library=library, tool_library=tools, child_roles=('scientific_process',))
+    Binding = module('experimental_activity_evidence.episode').ExperimentalActivityEvidenceEpisode
+    binding = Binding(services, library=library, tool_library=tools, child_roles=('experimental_activity_evidence',))
     with module('state').Store(directory / 'state') as store:
         store.create_problem(raw_sequence='MAAA', molecule='protein')
         scope = store.validate_scope()
@@ -43,20 +43,20 @@ def selected_binding(tmp_path_factory):
             'initial_report': {'constructor_input_supplied': True}}
 
         def context(task_context=None):
-            assignment = {'selection': {'version': 'scientific_process_selection_v3',
+            assignment = {'selection': {'version': 'experimental_activity_evidence_selection_v3',
                 'evidence_axis': library.reference(AXIS), 'thought_pattern': library.reference('P01'),
                 'child_tool_info': []}, 'evidence_refs': [], 'constraints': {},
                 'context': deepcopy(task_context or {})}
-            prepared = binding.prepare_invocation(parent, 'scientific_process', assignment, scope,
+            prepared = binding.prepare_invocation(parent, 'experimental_activity_evidence', assignment, scope,
                 'selector:prepare', invocation=invocation)
-            path = parent.path + (('scientific_process', 'child'),)
-            contracts = module('scientific_process.scientific_contracts')
+            path = parent.path + (('experimental_activity_evidence', 'child'),)
+            contracts = module('experimental_activity_evidence.scientific_contracts')
             request = {'goal': {'objective': invocation['objective']},
                 'report_contract': {'decision': invocation['purpose'], 'measurements': {'schema': schema}},
                 'message': {'scope': scope, 'episode_assignment': prepared['assignment'],
-                    'initial_report': invocation['initial_report'], 'scientific_process': prepared['scientific_process'],
+                    'initial_report': invocation['initial_report'], 'experimental_activity_evidence': prepared['experimental_activity_evidence'],
                     'scientific_invocation_ref': contracts.scientific_invocation_ref(parent.run_id, path)}}
-            result = Context(parent.run_id, 'child', 'scientific_process', path, scope, prepared['assignment'], request)
+            result = Context(parent.run_id, 'child', 'experimental_activity_evidence', path, scope, prepared['assignment'], request)
             binding.validate_context(result)
             return result
         yield binding, store, context
@@ -72,7 +72,7 @@ def test_bound_selector_returns_exact_original_scientific_class_and_empty_receiv
     actual_context = context(evidence_task())
     method = binding.credit_projector
     assert method.__self__ is binding
-    assert method.__func__ is module('scientific_process.credit').ScientificProcessCredit.credit_projector
+    assert method.__func__ is module('experimental_activity_evidence.credit').ExperimentalActivityEvidenceCredit.credit_projector
     projector = method(actual_context)
     progress = module('investigation_progress')
     assert type(projector) is progress.ScientificFindingProgress
@@ -89,7 +89,7 @@ def test_selector_rejects_changed_filled_identity_with_own_contract_error(select
     binding, _, context = selected_binding
     valid = context(evidence_task())
     request = module('communication').plain(valid.request)
-    request['message']['scientific_process']['assignment_sha256'] = '0' * 64
+    request['message']['experimental_activity_evidence']['assignment_sha256'] = '0' * 64
     with pytest.raises(module('domain').ContractError, match='scientific_filled_identity_mismatch') as caught:
         binding.credit_projector(replace(valid, request=request))
     assert type(caught.value) is module('domain').ContractError

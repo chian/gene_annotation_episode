@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeView
-from gene_annotation_episode.episodic_workflow.root.a105.scientific_process.task import ScientificTask
+from gene_annotation_episode.episodic_workflow.root.a105.experimental_activity_evidence.task import ScientificTask
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
 
 
@@ -21,7 +21,7 @@ class CapturedPresentation(Exception):
 
 def harness(store, mode, kind, native, *, saved=None):
     source = ScientificTask.__new__(ScientificTask)
-    source.path = (('scientific_process', 'head'),) if mode.startswith('standalone') else (('scientific_process', 'parent'), ('scientific_process', 'head'))
+    source.path = (('experimental_activity_evidence', 'head'),) if mode.startswith('standalone') else (('experimental_activity_evidence', 'parent'), ('experimental_activity_evidence', 'head'))
     source.episode_id = 'presentation-head'
     source.calls = 0
     source._execution_context = None

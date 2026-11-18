@@ -6,20 +6,20 @@ import pytest
 from .test_private_literature_owned_messages import (
     test_receipt_dispatch_uses_saved_original_child_counterpart as _check_receipt,
 )
-from .test_private_scientific_process import scientific_binding
+from .test_private_experimental_activity_evidence import scientific_binding
 
 
-@pytest.fixture(params=[('scientific_process', 'scientific_process'),
+@pytest.fixture(params=[('experimental_activity_evidence', 'experimental_activity_evidence'),
                         ('literature', 'published_evidence_assessment')])
 def scientific_edge(request):
     role, name = request.param
-    return 'scientific_process', role, name, scientific_binding()
+    return 'experimental_activity_evidence', role, name, scientific_binding()
 
 
 def request_fixture(edge):
     _, role, _, binding = edge
-    parent = SimpleNamespace(role='scientific_process', scope={'subject_refs': ['target']})
-    source = SimpleNamespace(path=(('scientific_process', 'original-parent'),),
+    parent = SimpleNamespace(role='experimental_activity_evidence', scope={'subject_refs': ['target']})
+    source = SimpleNamespace(path=(('experimental_activity_evidence', 'original-parent'),),
                              scope=parent.scope, episode_id='parent')
     selection = {'kind': 'episode_child', 'role': role, 'scope': parent.scope,
                  'goal': 'Examine original evidence', 'purpose': 'Return qualified findings',
@@ -28,17 +28,17 @@ def request_fixture(edge):
     child = SimpleNamespace(required_return_sources=lambda *args: ())
     child.prepare_assignment = lambda *args: calls.append(('assignment', args)) or {'admitted': 'literature'}
     child.prepare_invocation = lambda *args, **kwargs: calls.append(('invocation', args, kwargs)) or {
-        'assignment': {'admitted': 'scientific'}, 'scientific_process': {'original': 'invocation'}}
+        'assignment': {'admitted': 'scientific'}, 'experimental_activity_evidence': {'original': 'invocation'}}
     schema = {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}
     workflow = SimpleNamespace(run_id='original-run',
         store=SimpleNamespace(validate_scope=lambda scope, **kwargs: scope),
         expanded_contract_form=lambda *args: (schema, {'original': 'typed-contract'}),
         episode_bindings=SimpleNamespace(for_child=lambda *args: child),
         binding_context=lambda source: parent, child_initial_report_input=lambda *args: '{}',
-        specialist=lambda source: binding, annotation_child_roles=('scientific_process', 'literature'),
-        available_child_roles=lambda source: ('scientific_process', 'literature'),
+        specialist=lambda source: binding, annotation_child_roles=('experimental_activity_evidence', 'literature'),
+        available_child_roles=lambda source: ('experimental_activity_evidence', 'literature'),
         launch_instructions=SimpleNamespace(materialize=lambda value: None),
-        scientific_process_binding=child if role == 'scientific_process' else object(),
+        experimental_activity_evidence_binding=child if role == 'experimental_activity_evidence' else object(),
         journal=SimpleNamespace(row=lambda *args: None))
     return workflow, source, selection, parent, child, calls, schema
 
@@ -47,19 +47,19 @@ def test_original_scientific_request_preparation(scientific_edge):
     _, role, name, binding = scientific_edge
     workflow, source, selection, parent, child, calls, schema = request_fixture(scientific_edge)
     handler = binding.child_request_preparer(role)
-    assert handler.__module__.endswith('.scientific_process.to_child_' + name)
+    assert handler.__module__.endswith('.experimental_activity_evidence.to_child_' + name)
     result = handler(workflow, source, selection, 4)
     assert result['scope'] == selection['scope'] and result['schema'] is schema
     assert result['initial'] == {} and result['role'] == role
     args = (parent, role, selection['assignment'], selection['scope'], 'original-run:parent:4')
-    if role == 'scientific_process':
+    if role == 'experimental_activity_evidence':
         assert calls == [('invocation', args, {'invocation': {
             'objective': selection['goal'], 'purpose': selection['purpose'],
             'report_schema': schema, 'initial_report': {}}})]
-        assert result['scientific_process'] == {'original': 'invocation'}
+        assert result['experimental_activity_evidence'] == {'original': 'invocation'}
     else:
         assert calls == [('assignment', args)]
-        assert result['scientific_process'] is None
+        assert result['experimental_activity_evidence'] is None
 
 
 def test_scientific_typed_result_required_before_child(scientific_edge):

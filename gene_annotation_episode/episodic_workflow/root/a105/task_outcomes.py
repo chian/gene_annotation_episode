@@ -12,7 +12,7 @@ class AnnotationAction:
         if old and old['result'] is not None:
             result, credit = (_original_runtime.json.loads(old['result']), old['credit'])
         else:
-            if self.path[-1][0] == 'scientific_process':
+            if self.path[-1][0] == 'experimental_activity_evidence':
                 pass
             journal.save('runtime_actions', {'episode_id': self.episode_id, 'decision_index': index, 'action': _original_runtime._json(selection), 'result': None, 'credit': None})
             key = f'{self.workflow.run_id}:{self.episode_id}:{index}'

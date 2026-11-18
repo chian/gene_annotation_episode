@@ -8,7 +8,7 @@ from __future__ import annotations
 async def retrieve_tools(workflow, source, arguments, operation_key, retriever_catalog, *, validator_type, validation_error):
     try:
         validator_type(retriever_catalog[0]['input_schema']).validate(arguments)
-        tools = workflow.scientific_process_binding.tool_library
+        tools = workflow.experimental_activity_evidence_binding.tool_library
         available = workflow.services.tool_information_catalog(source.scope)
         if workflow.scientific_tool_retriever is not None:
             return await workflow.scientific_tool_retriever.retrieve(arguments['investigation'], episode_id=source.episode_id, operation_key=operation_key, available_catalog=available)

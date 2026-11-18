@@ -17,7 +17,7 @@ def child_initial_report_input(self, source, selection, role):
     return '{}'
 
 def _default_scientific_child_roles(self):
-    return (*(() if self.scientific_process_binding is not None else ('improvement',)), *(() if self.job_episodes is None else self.job_episodes.roles), *self.episode_bindings.entry_roles)
+    return (*(() if self.experimental_activity_evidence_binding is not None else ('improvement',)), *(() if self.job_episodes is None else self.job_episodes.roles), *self.episode_bindings.entry_roles)
 
 def declared_child_roles(self, role, *, path=None):
     """Literal type edges; availability never creates additional roles."""

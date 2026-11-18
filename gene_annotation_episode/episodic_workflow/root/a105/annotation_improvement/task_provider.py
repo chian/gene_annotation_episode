@@ -7,8 +7,8 @@ class ImprovementProvider:
         index, self.calls = (self.calls, self.calls + 1)
         journal = self.workflow.journal
         row = journal.row('runtime_model_calls', self.episode_id, index)
-        if (row is None or row['response'] is None) and self.path[-1][0] == 'scientific_process':
-            self.workflow.scientific_process_binding.validate_execution_context(self.workflow.binding_context(self))
+        if (row is None or row['response'] is None) and self.path[-1][0] == 'experimental_activity_evidence':
+            self.workflow.experimental_activity_evidence_binding.validate_execution_context(self.workflow.binding_context(self))
         profile = self.workflow.contract_information_profile(self)
         if row:
             saved = _original_runtime.json.loads(row['request'])

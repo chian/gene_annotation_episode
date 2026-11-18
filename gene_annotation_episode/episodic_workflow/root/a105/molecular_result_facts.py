@@ -114,7 +114,7 @@ def own_molecular_facts(registry, context, *, read_received, fact_source):
     from .molecular_measurement_tools import read_retained_molecular_publication
     tool_name, prefix = _profile(fact_source)
     EpisodeReturnRecords(registry.store, context.run_id, failure_prefix=prefix).authenticate(context)
-    if context.role != "scientific_process":
+    if context.role != "experimental_activity_evidence":
         raise ContractError(prefix + "scientific_invocation_required")
     result = []
     rows = registry.store.db.execute("SELECT decision_index,action,result FROM runtime_actions WHERE run_id=? "

@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_expe
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import EXPERIMENTAL_TASK, render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_native_rate_operand_information import rate_source_population_schema_with_information
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_native_inputs import rate_source_population_schema, read_rate_source_inputs
-from gene_annotation_episode.episodic_workflow.root.a105.scientific_process_prompt import _schema
+from gene_annotation_episode.episodic_workflow.root.a105.experimental_activity_evidence_prompt import _schema
 SOURCE_REF = 'source_' + '1' * 24
 
 def strip_descriptions(value):

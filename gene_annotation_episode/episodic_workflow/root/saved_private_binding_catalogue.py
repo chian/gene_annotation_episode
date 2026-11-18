@@ -14,7 +14,7 @@ from .saved_run_records import _failure
 
 VERSION = 'root_saved_private_binding_catalogue_v1'
 OWNER = 'A105'
-HEAD = 'scientific_process'
+HEAD = 'experimental_activity_evidence'
 LITERATURE = HEAD + '/published_evidence_assessment'
 STRATEGY = LITERATURE + '/evidence_search_strategy_improvement'
 SEARCH = STRATEGY + '/source_relevance_assessment'
@@ -25,8 +25,8 @@ PATHS = (HEAD, LITERATURE, STRATEGY, SEARCH, EXAMINATION,
     EXAMINATION + '/passage_evidence_extraction')
 PRIVATE_PREFIX = 'gene_annotation_episode.episodic_workflow.root.a105.'
 TREE_CONSTRUCTOR = PRIVATE_PREFIX + LITERATURE.replace('/', '.') + '.episode.create_binding_tree'
-HEAD_CONSTRUCTOR = PRIVATE_PREFIX + 'scientific_process.episode.ScientificProcessEpisode'
-LIBRARY_CONSTRUCTOR = PRIVATE_PREFIX + 'scientific_process_library.ScientificProcessLibrary'
+HEAD_CONSTRUCTOR = PRIVATE_PREFIX + 'experimental_activity_evidence.episode.ExperimentalActivityEvidenceEpisode'
+LIBRARY_CONSTRUCTOR = PRIVATE_PREFIX + 'experimental_activity_evidence_library.ExperimentalActivityEvidenceLibrary'
 TOOLS_CONSTRUCTOR = PRIVATE_PREFIX + 'scientific_tool_library.ScientificToolLibrary'
 
 
@@ -67,15 +67,15 @@ def _rows(descriptors, records):
 
 def _constructors():
     """Literal current classes; no saved string is imported or evaluated."""
-    from .a105.scientific_process.episode import ScientificProcessEpisode
-    from .a105.scientific_process.published_evidence_assessment.episode import LiteratureEpisode
-    from .a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.episode import LiteratureEpisode as Strategy
-    from .a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.episode import LiteratureEpisode as Search
-    from .a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode import LiteratureEpisode as Examination
-    from .a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.episode import LiteratureEpisode as Table
-    from .a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.episode import LiteratureEpisode as Coverage
-    from .a105.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.episode import LiteratureEpisode as Passage
-    return (ScientificProcessEpisode, LiteratureEpisode, Strategy, Search, Examination, Table, Coverage, Passage)
+    from .a105.experimental_activity_evidence.episode import ExperimentalActivityEvidenceEpisode
+    from .a105.experimental_activity_evidence.published_evidence_assessment.episode import LiteratureEpisode
+    from .a105.experimental_activity_evidence.published_evidence_assessment.evidence_search_strategy_improvement.episode import LiteratureEpisode as Strategy
+    from .a105.experimental_activity_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.episode import LiteratureEpisode as Search
+    from .a105.experimental_activity_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode import LiteratureEpisode as Examination
+    from .a105.experimental_activity_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.episode import LiteratureEpisode as Table
+    from .a105.experimental_activity_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.episode import LiteratureEpisode as Coverage
+    from .a105.experimental_activity_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.episode import LiteratureEpisode as Passage
+    return (ExperimentalActivityEvidenceEpisode, LiteratureEpisode, Strategy, Search, Examination, Table, Coverage, Passage)
 
 
 def _check_objects(bindings, descriptors, records):
@@ -99,10 +99,10 @@ def catalogue_for_registry(registry):
     descriptors, records = _rows(registry.as_record(), records)
     bindings = tuple(registry.for_binding_path(path, owner=OWNER) for path in PATHS)
     _check_objects(bindings, descriptors, records)
-    from .a105.scientific_process_library import ScientificProcessLibrary
+    from .a105.experimental_activity_evidence_library import ExperimentalActivityEvidenceLibrary
     from .a105.scientific_tool_library import ScientificToolLibrary
     head = bindings[0]
-    if type(head.library) is not ScientificProcessLibrary or type(head.tool_library) is not ScientificToolLibrary:
+    if type(head.library) is not ExperimentalActivityEvidenceLibrary or type(head.tool_library) is not ScientificToolLibrary:
         raise _failure('identity_conflict', 'original_private_library_types')
     assets = {'library_directory': str(head.library.directory.resolve()),
         'tool_library_directory': str(head.tool_library.directory.resolve())}
@@ -134,12 +134,12 @@ def validate_saved_catalogue(settings):
 
 def _reopen_head(services, *, descriptor, assets):
     """Original private head reconstruction with exact current descriptor equality."""
-    from .a105.scientific_process.episode import ScientificProcessEpisode
-    from .a105.scientific_process_library import ScientificProcessLibrary
+    from .a105.experimental_activity_evidence.episode import ExperimentalActivityEvidenceEpisode
+    from .a105.experimental_activity_evidence_library import ExperimentalActivityEvidenceLibrary
     from .a105.scientific_tool_library import ScientificToolLibrary
-    reference = 'scientific_process'
+    reference = 'experimental_activity_evidence'
     try:
-        if descriptor.get('version') not in {'scientific_process_episodes_v10', 'scientific_process_episode_v10'}:
+        if descriptor.get('version') not in {'experimental_activity_evidence_episodes_v10', 'experimental_activity_evidence_episode_v10'}:
             raise _failure('unavailable_binding', reference)
         configuration = descriptor['configuration']
         expected = {'library', 'tool_library', 'child_roles'}
@@ -151,13 +151,13 @@ def _reopen_head(services, *, descriptor, assets):
             expected.add('yield_bindings')
         if set(configuration) != expected:
             raise _failure('unavailable_binding', reference)
-        library = ScientificProcessLibrary(Path(assets['library_directory']))
+        library = ExperimentalActivityEvidenceLibrary(Path(assets['library_directory']))
         if not _same(library.as_record(), configuration['library']):
             raise _failure('identity_conflict', reference)
         tools = ScientificToolLibrary(Path(assets['tool_library_directory']))
         if not _same(tools.as_record(), configuration['tool_library']):
             raise _failure('identity_conflict', reference)
-        binding = ScientificProcessEpisode(services, library=library, tool_library=tools, child_roles=configuration['child_roles'], tool_retrieval=configuration.get('tool_retrieval'), contract_information_profile=configuration.get('contract_information_profile'), yield_bindings=configuration.get('yield_bindings'))
+        binding = ExperimentalActivityEvidenceEpisode(services, library=library, tool_library=tools, child_roles=configuration['child_roles'], tool_retrieval=configuration.get('tool_retrieval'), contract_information_profile=configuration.get('contract_information_profile'), yield_bindings=configuration.get('yield_bindings'))
         if not _same(binding.as_record(), descriptor):
             raise _failure('identity_conflict', reference)
         return binding
@@ -178,7 +178,7 @@ def saved_private_factories(settings):
     def head_factory(services):
         if captured:
             raise _failure('identity_conflict', 'private_factories_already_constructed')
-        from .a105.scientific_process.published_evidence_assessment.episode import create_binding_tree
+        from .a105.experimental_activity_evidence.published_evidence_assessment.episode import create_binding_tree
         head = _reopen_head(services, descriptor=descriptors[0], assets=assets)
         children = tuple(create_binding_tree(services, **deepcopy(descriptors[1]['configuration'])))
         bindings = (head, *children)
