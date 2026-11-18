@@ -8,6 +8,7 @@ from types import SimpleNamespace
 import pytest
 from .hpc_planning_allocation_behavior import PlanningAllocationBehavior
 from .hpc_prediction_inputs import recorded_queue
+from .axis_roles import HEAD, CLASS, axis_of
 
 
 class PlanningAllocationTaskBehavior:
@@ -57,7 +58,7 @@ class PlanningAllocationTaskBehavior:
         monkeypatch.setattr(runtime.Episode, 'identity', lambda *a, **k: SimpleNamespace(episode_id=v.context.episode_id))
         monkeypatch.setattr(runtime, 'FeedbackEpisode', lambda grain, key, source, *a, **k: source)
         workflow = SimpleNamespace(context=object(), grains={self.role: object()},
-            inprocess_completion_order=None, receipts=None, scientific_process_binding=None,
+            inprocess_completion_order=None, receipts=None, **{HEAD[axis_of(runtime)] + '_binding': None},
             episode_bindings=registry, contract_information_profile=lambda source: None,
             specialist=lambda source: v.binding, binding_context=lambda source: v.context,
             journal=SimpleNamespace(row=lambda *a: None, save=lambda *a: None), run_id='test-run',

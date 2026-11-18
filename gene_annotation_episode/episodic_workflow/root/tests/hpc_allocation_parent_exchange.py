@@ -13,6 +13,7 @@ from .hpc_prediction_inputs import commission, resources
 
 
 from .hpc_prediction_parent_exchange import PredictionReceiptDatabase
+from .axis_roles import HEAD, CLASS, axis_of
 
 
 class AllocationParentExchangeChecks:
@@ -31,7 +32,8 @@ class AllocationParentExchangeChecks:
         options = dict(store=database, run_id='run', directory=tmp_path,
                        resources=resources(), commissions={'commission': commission()})
         parent, child = parent_type(None, **options), child_type(None, **options)
-        parent_path = ((('scientific_process', 'original'),) if self.parent_path.startswith('scientific_process/') else ()) + (('hpc', 'parent'),)
+        head = HEAD[self.axis]
+        parent_path = (((head, 'original'),) if self.parent_path.startswith(head + '/') else ()) + (('hpc', 'parent'),)
         child_path = parent_path+(('hpc_execution', 'child_3'),)
         scope = {'subject_refs': []}
         owner_id, child_id = [EpisodeRef('run', path).episode_id for path in (parent_path, child_path)]
@@ -63,15 +65,15 @@ class AllocationParentExchangeChecks:
         source = SimpleNamespace(episode_id=owner_id, path=parent_path, scope=scope,
                                  _delivery_resolution_ref=None, request=SimpleNamespace(goal=runtime.EpisodeGoal.root(objective='Execute original allocation', result_contract={})))
         ancestors = []
-        if self.parent_path.startswith('scientific_process/'):
+        if self.parent_path.startswith(HEAD[self.axis] + '/'):
             # Keep the actual declared lineage in this boundary fixture. The
             # scientific instruction libraries are controlled configuration;
             # this test does not execute a scientific interpretation.
-            scientific = self.module('scientific_process.episode').ScientificProcessEpisode(
+            scientific = getattr(self.module(HEAD[self.axis] + '.episode'), CLASS[self.axis] + 'Episode')(
                 SimpleNamespace(protein_structure_reference_access=lambda *args: None),
                 library=SimpleNamespace(as_record=lambda: {}, headers=lambda: []),
                 tool_library=SimpleNamespace(as_record=lambda: {}),
-                child_roles=('scientific_process', 'hpc'))
+                child_roles=(HEAD[self.axis], 'hpc'))
             ancestors.append(scientific)
         registry = self.module('episode_bindings').EpisodeBindingRegistry((*ancestors, parent, child))
         workflow = SimpleNamespace(store=database, journal=journal, run_id='run',
@@ -240,7 +242,8 @@ class AllocationParentExchangeChecks:
             built.append((args, kwargs))
             return child
         w = v.workflow
-        w.annotation_child_roles = w.execution_binding = w.inprocess_replay = w.scientific_process_binding = None
+        w.annotation_child_roles = w.execution_binding = w.inprocess_replay = None
+        setattr(w, HEAD[self.axis] + '_binding', None)
         w.validate_child_choice = lambda *args, **kwargs: None
         w.permits_common_action = lambda source, action: source is v.source and action == 'child'
         w._closed_child_commission = lambda *args: None

@@ -16,6 +16,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.tests.hpc_prediction_inputs import commission, resources, recorded_queue
 from gene_annotation_episode.episodic_workflow.root.tests.hpc_planning_allocation_task_behavior import PlanningAllocationTaskBehavior
+from .axis_roles import HEAD, CLASS, axis_of
 
 
 class LaunchTaskChecks:
@@ -41,7 +42,7 @@ class LaunchTaskChecks:
             options = dict(store=store, run_id=run_id, directory=tmp_path,
                 resources=r, commissions={'commission': c})
             owner_binding = self.module(owner_home+'/episode').HPCEpisode(services, **options)
-            path = ((('scientific_process', 'science'),) if owner_home.startswith('scientific_process/')
+            path = (((HEAD[self.axis], 'science'),) if owner_home.startswith(HEAD[self.axis] + '/')
                     else (('annotation', 'root'),))+(('hpc', 'parent'),)
             owner = Context(run_id, EpisodeRef(run_id, path).episode_id, 'hpc', path,
                 scope, {'commission_id': 'commission'}, {})
@@ -95,12 +96,12 @@ class LaunchTaskChecks:
         bindings = [value.owner_binding]
         if value.parent is not value.owner_binding:
             bindings.append(value.parent)
-        if self.binding_path.startswith('scientific_process/'):
-            bindings.insert(0, self.module('scientific_process.episode').ScientificProcessEpisode(
+        if self.binding_path.startswith(HEAD[self.axis] + '/'):
+            bindings.insert(0, getattr(self.module(HEAD[self.axis] + '.episode'), CLASS[self.axis] + 'Episode')(
                 SimpleNamespace(protein_structure_reference_access=lambda *args: None),
                 library=SimpleNamespace(as_record=lambda: {}, headers=lambda: []),
                 tool_library=SimpleNamespace(as_record=lambda: {}),
-                child_roles=('scientific_process', 'hpc')))
+                child_roles=(HEAD[self.axis], 'hpc')))
         bindings.extend((value.binding, value.native))
         return self.module('episode_bindings').EpisodeBindingRegistry(bindings)
 
@@ -316,7 +317,7 @@ class LaunchTaskChecks:
             episode_bindings=registry, specialist=lambda current: value.binding,
             binding_context=binding_context,
             annotation_child_roles=None, execution_binding=None, inprocess_replay=None,
-            scientific_process_binding=None,
+            **{HEAD[self.axis] + '_binding': None},
             validate_child_choice=lambda *args, **kwargs: None,
             permits_common_action=permits,
             _closed_child_commission=lambda *args: None,

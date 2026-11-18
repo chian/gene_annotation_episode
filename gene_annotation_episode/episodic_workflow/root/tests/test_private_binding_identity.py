@@ -5,12 +5,10 @@ from types import SimpleNamespace
 
 import pytest
 
+from .axis_roles import HEAD as AXIS_ROLE
+
 
 AXES = ('a101', 'a102', 'a103', 'a104', 'a105', 'a106', 'a107', 'a108', 'a110')
-# Each arm's own evidence-axis role (its recursive head). Arms are renamed one at a time.
-AXIS_ROLE = {'a101': 'scientific_process', 'a102': 'scientific_process', 'a103': 'scientific_process',
-             'a104': 'scientific_process', 'a105': 'experimental_activity_evidence', 'a106': 'scientific_process',
-             'a107': 'scientific_process', 'a108': 'sample_context_evidence', 'a110': 'scientific_process'}
 
 
 @pytest.fixture(params=AXES)

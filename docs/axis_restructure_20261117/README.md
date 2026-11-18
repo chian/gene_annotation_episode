@@ -53,3 +53,7 @@ collection, dangling-name scan (`runs/claude_inputs/la/dangling.py`), commit.
   throughout. A105's 184 test files plus the 27 shared files that exercise the saved catalogue, its users and the lookup
   tables (`runs/claude_ax_a105_s0..3`, 211 files): identical per file to the baseline. Binding identity test: baseline.
   Collection 50,565, 0 errors; dangling scan unchanged.
+- Test infrastructure: `root/tests/axis_roles.py` is the single table of each arm's head role and class prefix; the
+  seven shared arm test helpers (`hpc_*`, `scientific_head_boundaries`) and the binding identity test read the head
+  from it instead of hard-coding the generic name. 96 test files that use them: identical per file to the baseline.
+  Collection 50,565, 0 errors; dangling scan unchanged.

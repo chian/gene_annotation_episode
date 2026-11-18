@@ -8,6 +8,7 @@ from types import SimpleNamespace
 import pytest
 
 from .hpc_prediction_behavior import PredictionBehavior
+from .axis_roles import HEAD, CLASS, axis_of
 
 
 class PredictionTaskBehavior:
@@ -21,7 +22,7 @@ class PredictionTaskBehavior:
         monkeypatch.setattr(runtime.Episode, 'identity', lambda *args, **kwargs: SimpleNamespace(episode_id=context.episode_id))
         monkeypatch.setattr(runtime, 'FeedbackEpisode', lambda grain, key, source, *args, **kwargs: source)
         workflow = SimpleNamespace(context=object(), grains={'hpc_prediction': object()},
-            inprocess_completion_order=None, receipts=None, scientific_process_binding=None,
+            inprocess_completion_order=None, receipts=None, **{HEAD[axis_of(runtime)] + '_binding': None},
             episode_bindings=registry, contract_information_profile=lambda source: None,
             specialist=lambda source: binding, binding_context=lambda source: context,
             journal=SimpleNamespace(row=lambda *args: None, save=lambda *args: None),

@@ -12,6 +12,7 @@ import json
 from types import SimpleNamespace
 
 import pytest
+from .axis_roles import HEAD, CLASS, axis_of
 
 
 def write_instruction_source(directory, axis):
@@ -74,7 +75,7 @@ class ScientificHeadBoundaryChecks:
     def scientific(self, tmp_path):
         source = tmp_path/'source'
         write_instruction_source(source, self.axis)
-        library = self.module('scientific_process_library').ScientificProcessLibrary.freeze(
+        library = getattr(self.module(HEAD[self.axis] + '_library'), CLASS[self.axis] + 'Library').freeze(
             tmp_path/'scientific-process-library', source=source)
         obj = self.module('domain').obj
         catalog = [{
@@ -108,15 +109,15 @@ class ScientificHeadBoundaryChecks:
                 scientific_frozen_results=lambda context: [],
                 scientific_reference=lambda *args: False,
             )
-            binding = self.module('scientific_process.episode').ScientificProcessEpisode(
+            binding = getattr(self.module(HEAD[self.axis] + '.episode'), CLASS[self.axis] + 'Episode')(
                 services, library=library, tool_library=tool_library,
-                child_roles=('scientific_process', 'hpc'))
+                child_roles=(HEAD[self.axis], 'hpc'))
             Context = self.module('episode_bindings').BindingContext
             EpisodeRef = self.module('method_loop.identities').EpisodeRef
             parent_path = (('annotation', 'original_parent'),)
             parent = Context('scientific-head-fixture', EpisodeRef('scientific-head-fixture', parent_path).episode_id,
                 'annotation', parent_path, scope, {}, {}, (target,))
-            selected = {'version': self.module('scientific_process_records').SELECTION_VERSION,
+            selected = {'version': self.module(HEAD[self.axis] + '_records').SELECTION_VERSION,
                 'evidence_axis': library.reference(self.axis.upper()),
                 'thought_pattern': library.reference('P01'),
                 'child_tool_info': [{'name': 'fixture.inspect', 'resources': 'local'}]}
@@ -126,18 +127,18 @@ class ScientificHeadBoundaryChecks:
             invocation = {'objective': 'Preserve an explicitly unresolved fixture question',
                           'purpose': 'Return the original unresolved fixture status',
                           'report_schema': form, 'initial_report': {'status': 'unresolved'}}
-            prepared = binding.prepare_invocation(parent, 'scientific_process', assignment,
+            prepared = binding.prepare_invocation(parent, HEAD[self.axis], assignment,
                 scope, 'original-scientific-commission', invocation=invocation)
-            path = parent_path+(('scientific_process', 'child_0'),)
-            records = self.module('scientific_process_records')
+            path = parent_path+((HEAD[self.axis], 'child_0'),)
+            records = self.module(HEAD[self.axis] + '_records')
             request = {'goal': {'objective': invocation['objective']},
                 'report_contract': {'decision': invocation['purpose'], 'measurements': {'schema': form}},
                 'message': {'scope': scope, 'episode_assignment': prepared['assignment'],
-                    'scientific_process': prepared['scientific_process'],
+                    HEAD[self.axis]: prepared[HEAD[self.axis]],
                     'scientific_invocation_ref': records.scientific_invocation_ref(parent.run_id, path),
                     'initial_report': invocation['initial_report']}}
             context = Context(parent.run_id, EpisodeRef(parent.run_id, path).episode_id,
-                'scientific_process', path, scope, prepared['assignment'], request, (target,))
+                HEAD[self.axis], path, scope, prepared['assignment'], request, (target,))
             yield SimpleNamespace(binding=binding, context=context, parent=parent, store=store, directory=tmp_path,
                 target=target, library=library, tool_library=tool_library, catalog=catalog,
                 selected=selected, assignment=assignment, request=request, prepared=prepared,
@@ -184,7 +185,7 @@ class ScientificHeadBoundaryChecks:
             request['report_contract']['decision'] = 'A different requested meaning'
             changed = replace(v.context, request=request)
         else:
-            changed = replace(v.context, path=v.context.path[:-1]+(('scientific_process', 'different_child'),))
+            changed = replace(v.context, path=v.context.path[:-1]+((HEAD[self.axis], 'different_child'),))
         with pytest.raises(self.module('domain').ContractError, match='scientific_filled_identity_mismatch'):
             v.binding.validate_context(changed)
         assert v.calls == []
@@ -197,7 +198,7 @@ class ScientificHeadBoundaryChecks:
         result = asyncio.run(v.binding.execute(v.context, 'process.revise', arguments, 'revision-operation'))
         assert result['status'] == 'completed'
         proposal = result['result']
-        records = self.module('scientific_process_records')
+        records = self.module(HEAD[self.axis] + '_records')
         assert proposal['parent_selection_sha256'] == records.scientific_digest(before['assignment']['selection'])
         assert proposal['selection']['evidence_axis'] == before['assignment']['selection']['evidence_axis']
         assert proposal['selection']['thought_pattern'] == arguments['thought_pattern']

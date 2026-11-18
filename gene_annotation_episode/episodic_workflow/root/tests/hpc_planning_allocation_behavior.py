@@ -10,6 +10,7 @@ from types import SimpleNamespace
 
 import pytest
 from .hpc_prediction_inputs import commission, resources, recorded_queue
+from .axis_roles import HEAD, CLASS, axis_of
 
 
 class PlanningAllocationBehavior:
@@ -29,7 +30,8 @@ class PlanningAllocationBehavior:
         selected = parent if self.role == 'hpc' else selected_type(None, **options)
         Context = self.module('episode_bindings').BindingContext
         EpisodeRef = self.module('method_loop.identities').EpisodeRef
-        path = (('scientific_process', 'science'), ('hpc', 'parent')) if parent_path.startswith('scientific_process/') else (('annotation', 'root'), ('hpc', 'parent'))
+        head = HEAD[self.axis]
+        path = ((head, 'science'), ('hpc', 'parent')) if parent_path.startswith(head + '/') else (('annotation', 'root'), ('hpc', 'parent'))
         owner = Context('test-run', EpisodeRef('test-run', path).episode_id, 'hpc', path,
             {'subject_refs': []}, {'commission_id': 'commission'}, {})
         child_path = path+(('hpc_execution', 'allocation'),)
