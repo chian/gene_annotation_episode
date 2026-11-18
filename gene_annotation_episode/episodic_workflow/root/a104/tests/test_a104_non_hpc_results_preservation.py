@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.root.a104.runtime import Record, 
 from gene_annotation_episode.episodic_workflow.root.a104.state import Store
 import importlib
 from gene_annotation_episode.episodic_workflow.root.tests.hpc_prediction_inputs import resources
-HOMES = ('execution_result_acquisition', 'scientific_process/execution_result_acquisition')
+HOMES = ('execution_result_acquisition', 'evolutionary_history_evidence/execution_result_acquisition')
 
 def own_module(name):
     return importlib.import_module('gene_annotation_episode.episodic_workflow.root.a104.' + name.replace('/', '.'))
@@ -28,8 +28,8 @@ def own_module(name):
 def parent_path(binding_home):
     assert binding_home in HOMES
     path = (('annotation', 'root'),)
-    if binding_home.startswith('scientific_process/'):
-        path += (('scientific_process', 'original-A104'),)
+    if binding_home.startswith('evolutionary_history_evidence/'):
+        path += (('evolutionary_history_evidence', 'original-A104'),)
     return path
 
 @pytest.fixture(params=HOMES)

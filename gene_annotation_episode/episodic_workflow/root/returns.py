@@ -57,7 +57,7 @@ def received_axis_task_credit(store, context):
             'A101': '.a101.sequence_homology_evidence.credit',
             'A102': '.a102.structural_homology_evidence.task_projector',
             'A103': '.a103.gene_context_evidence.task_projector',
-            'A104': '.a104.scientific_process.task_projector',
+            'A104': '.a104.evolutionary_history_evidence.task_projector',
             'A105': '.a105.experimental_activity_evidence.credit',
             'A106': '.a106.perturbation_evidence.credit',
             'A107': '.a107.scientific_process.task_projector',

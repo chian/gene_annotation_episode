@@ -59,7 +59,7 @@ from .literature_task_selection import A105_ASSAY_SELECTION_TASK, selected_liter
 from .literature_a105_worksheet import VERSION as _WORKSHEET_VERSION, VERSION_V2 as _WORKSHEET_VERSION_V2
 from .literature_a105_worksheet_render import render_a105_worksheet
 
-from .scientific_process_prompt import _band, _schema, text_instructions
+from .evolutionary_history_evidence_prompt import _band, _schema, text_instructions
 from .literature_assay_prompt import ASSAY_TASK
 from .literature_experimental_task import EXPERIMENTAL_TASK
 from .literature_binding_prompt import BINDING_TASK, BINDING_MODEL_TASK
@@ -98,7 +98,7 @@ _TRACKING = frozenset({
     "parent_history", "parent_yields", "private_history", "history", "private_reasoning",
     "own_completed_action_history", "local_return_history", "restored_episode_history",
     "restored_public_exchanges", "restored_pending_decision_index", "diagnostics",
-    "scientific_child_credit_binding", "scientific_process", "scoring_rubric",
+    "scientific_child_credit_binding", "evolutionary_history_evidence", "scoring_rubric",
     "axis_judgment_contract", "calculation_implementation",
     "curve_keys", "measurement_keys", "primitive_measurement_keys",
     "report_contract_declaration", "contract_information_profile",

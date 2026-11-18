@@ -73,7 +73,7 @@ def _nominal_episode_child(workflow, role, home, class_name, parent):
             return False
         if parent is None and commissioner in ('legacy_annotation', 'annotation') and (role in entries) or (parent is not None and commissioner == parent):
             matches.append(candidate)
-    if parent == 'scientific_process' and role == 'scientific_process' and (not matches):
+    if parent == 'evolutionary_history_evidence' and role == 'evolutionary_history_evidence' and (not matches):
         state = _state(selected)
         if state is None:
             return False
@@ -114,7 +114,7 @@ def _scientific_parent(workflow, source):
     runtime = sys.modules.get(__package__ + '.runtime')
     if type(runtime) is not ModuleType or type(workflow) is not vars(runtime).get('_annotation_original_workflow'):
         return False
-    nominal = _current_class('scientific_process.task', 'ScientificTask')
+    nominal = _current_class('evolutionary_history_evidence.task', 'ScientificTask')
     if nominal is None or type(source) is not nominal:
         return False
     state = _state(source)
@@ -132,13 +132,13 @@ def _scientific_parent(workflow, source):
         if 'annotation' in by_role:
             return False
         roles = roles[1:]
-    if not roles or any((role != 'scientific_process' for role in roles)):
+    if not roles or any((role != 'evolutionary_history_evidence' for role in roles)):
         return False
-    scientific = by_path.get('scientific_process')
-    nominal = _current_class('scientific_process.episode', 'ScientificProcessEpisode')
+    scientific = by_path.get('evolutionary_history_evidence')
+    nominal = _current_class('evolutionary_history_evidence.episode', 'EvolutionaryHistoryEvidenceEpisode')
     if nominal is None or type(scientific) is not nominal:
         return False
-    candidates = by_role.get('scientific_process')
+    candidates = by_role.get('evolutionary_history_evidence')
     if type(candidates) not in (tuple, list) or len(candidates) != 1 or candidates[0] is not scientific:
         return False
     state = _state(scientific)
@@ -146,9 +146,9 @@ def _scientific_parent(workflow, source):
         return False
     if len(roles) > 1:
         children = state.get('_child_roles')
-        if type(children) is not tuple or not all((type(role) is str for role in children)) or 'scientific_process' not in children:
+        if type(children) is not tuple or not all((type(role) is str for role in children)) or 'evolutionary_history_evidence' not in children:
             return False
-    return _identity(scientific) == ('scientific_process', 'legacy_annotation', ('scientific_process',), ('scientific_process',))
+    return _identity(scientific) == ('evolutionary_history_evidence', 'legacy_annotation', ('evolutionary_history_evidence',), ('evolutionary_history_evidence',))
 
 def parent_exchange(workflow, source, selection, role):
     if type(selection) is not dict or not all((type(key) is str for key in selection)) or type(role) is not str:
@@ -195,11 +195,11 @@ def parent_exchange(workflow, source, selection, role):
             from .to_child_hpc_work_planning import prepare_parent_request, assemble_parent_request
             from .from_child_hpc_work_planning import admit_parent_return, receive_parent_child_failure
             return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
-        if kind == 'episode_child' and role == 'scientific_process':
-            if not _nominal_episode_child(workflow, role, 'scientific_process', 'ScientificProcessEpisode', None):
+        if kind == 'episode_child' and role == 'evolutionary_history_evidence':
+            if not _nominal_episode_child(workflow, role, 'evolutionary_history_evidence', 'EvolutionaryHistoryEvidenceEpisode', None):
                 return None
-            from .to_child_scientific_process import prepare_parent_request, assemble_parent_request
-            from .from_child_scientific_process import admit_parent_return, receive_parent_child_failure
+            from .to_child_evolutionary_history_evidence import prepare_parent_request, assemble_parent_request
+            from .from_child_evolutionary_history_evidence import admit_parent_return, receive_parent_child_failure
             return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'job_child' and role == 'job_launch':
             if not _nominal_job_child(workflow, role, 'homology_job_submission'):
@@ -247,16 +247,16 @@ def parent_exchange(workflow, source, selection, role):
         return None
     if kind != 'episode_child' or not _scientific_parent(workflow, source):
         return None
-    if role == 'scientific_process':
-        if not _nominal_episode_child(workflow, role, 'scientific_process', 'ScientificProcessEpisode', 'scientific_process'):
+    if role == 'evolutionary_history_evidence':
+        if not _nominal_episode_child(workflow, role, 'evolutionary_history_evidence', 'EvolutionaryHistoryEvidenceEpisode', 'evolutionary_history_evidence'):
             return None
-        from .scientific_process.to_child_scientific_process import prepare_parent_request
-        from .scientific_process.from_child_scientific_process import admit_parent_return, receive_parent_child_failure
+        from .evolutionary_history_evidence.to_child_evolutionary_history_evidence import prepare_parent_request
+        from .evolutionary_history_evidence.from_child_evolutionary_history_evidence import admit_parent_return, receive_parent_child_failure
         return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, None)
     if role == 'hpc':
-        if not _nominal_episode_child(workflow, role, 'scientific_process/hpc_work_planning', 'HPCEpisode', 'scientific_process'):
+        if not _nominal_episode_child(workflow, role, 'evolutionary_history_evidence/hpc_work_planning', 'HPCEpisode', 'evolutionary_history_evidence'):
             return None
-        from .scientific_process.to_child_hpc_work_planning import prepare_parent_request
-        from .scientific_process.from_child_hpc_work_planning import admit_parent_return, receive_parent_child_failure
+        from .evolutionary_history_evidence.to_child_hpc_work_planning import prepare_parent_request
+        from .evolutionary_history_evidence.from_child_hpc_work_planning import admit_parent_return, receive_parent_child_failure
         return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, None)
     return None

@@ -21,7 +21,7 @@ def own_module(name):
     return importlib.import_module('gene_annotation_episode.episodic_workflow.root.a104.' + name.replace('/', '.'))
 
 
-@pytest.fixture(params=('execution_job_submission', 'scientific_process/execution_job_submission'))
+@pytest.fixture(params=('execution_job_submission', 'evolutionary_history_evidence/execution_job_submission'))
 def launch_home(request):
     return request.param
 
@@ -53,8 +53,8 @@ def launch_frame(tmp_path, launch_home):
             log_roles=('stdout', 'stderr'))
         binding = own_module(launch_home + '/episode').ExecutionEpisode(services, **options)
         path = (('annotation', 'root'),)
-        if launch_home.startswith('scientific_process/'):
-            path += (('scientific_process', 'original-A104'),)
+        if launch_home.startswith('evolutionary_history_evidence/'):
+            path += (('evolutionary_history_evidence', 'original-A104'),)
         parent = Context(run_id, EpisodeRef(run_id, path).episode_id, path[-1][0], path, scope, {}, {})
         selected = binding.prepare_assignment(parent, 'launch', deepcopy(assignment), scope,
             f'{run_id}:{parent.episode_id}:1')

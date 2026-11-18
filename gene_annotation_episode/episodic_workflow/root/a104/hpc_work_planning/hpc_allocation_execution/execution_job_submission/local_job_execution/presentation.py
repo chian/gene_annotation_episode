@@ -1,6 +1,6 @@
 """Original complete A104 LocalExecution context presentation."""
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a104.providers import DECISION_CONTEXT_VERSION, _ordinary_runtime_receiver_context, apply_state_frame, deepcopy, is_api_launch_context, is_published_scientific_context, json, render_api_launch_prompt, render_scientific_process_prompt, text_instructions
+from gene_annotation_episode.episodic_workflow.root.a104.providers import DECISION_CONTEXT_VERSION, _ordinary_runtime_receiver_context, apply_state_frame, deepcopy, is_api_launch_context, is_published_scientific_context, json, render_api_launch_prompt, render_evolutionary_history_evidence_prompt, text_instructions
 
 def present_execution_context(provider, episode_id, role, instructions, context):
     """Render declared TASKs from reconstructed state; preserve other inputs."""
@@ -8,8 +8,8 @@ def present_execution_context(provider, episode_id, role, instructions, context)
     from gene_annotation_episode.episodic_workflow.root.a104.library.monitor_prompt import is_monitor_context, render_monitor_prompt
     from gene_annotation_episode.episodic_workflow.root.a104.receiver_prompt import render_receiver_prompt
     from gene_annotation_episode.episodic_workflow.root.a104.native_profile_presentation import has_native_profile_receiver_context
-    from gene_annotation_episode.episodic_workflow.root.a104.scientific_process_prompt import has_evolutionary_receiver_context
-    from gene_annotation_episode.episodic_workflow.root.a104.scientific_process_prompt import is_selected_execution_context, render_selected_execution_prompt
+    from gene_annotation_episode.episodic_workflow.root.a104.evolutionary_history_evidence_prompt import has_evolutionary_receiver_context
+    from gene_annotation_episode.episodic_workflow.root.a104.evolutionary_history_evidence_prompt import is_selected_execution_context, render_selected_execution_prompt
 
     def has_text_task(value):
         return is_hpc_context(value) or is_published_scientific_context(value) or is_monitor_context(value) or is_api_launch_context(value) or is_selected_execution_context(value) or has_native_profile_receiver_context(value) or has_evolutionary_receiver_context(value) or _ordinary_runtime_receiver_context(value)
@@ -42,7 +42,7 @@ def present_execution_context(provider, episode_id, role, instructions, context)
         if is_hpc_context(state):
             renderer = render_hpc_prompt
         elif is_published_scientific_context(state):
-            renderer = render_scientific_process_prompt
+            renderer = render_evolutionary_history_evidence_prompt
         elif is_api_launch_context(state):
             renderer = render_api_launch_prompt
         elif is_selected_execution_context(state):

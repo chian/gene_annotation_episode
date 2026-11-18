@@ -87,8 +87,8 @@ class ProteomeDriver(ProductionDriver):
     def start(self, fmt='genome_comparison_json_v1', *, fields=None, supplementary=True):
         self.fmt, self.schema = (fmt, self.form_schema())
         self.outer_root = self.saved.root
-        self.grandparent = self.saved.child(self.outer_root, 'scientific_process', {}, 0, schema=self.schema)
-        self.parent = self.saved.child(self.grandparent, 'scientific_process', {}, 0, schema=self.schema)
+        self.grandparent = self.saved.child(self.outer_root, 'evolutionary_history_evidence', {}, 0, schema=self.schema)
+        self.parent = self.saved.child(self.grandparent, 'evolutionary_history_evidence', {}, 0, schema=self.schema)
         self.saved.root = self.parent
         self.query = {'version': 'bvbrc_appservice_request_v1', 'effect_contract': 'selected_api_effects_v1', 'required_application_id': 'GenomeComparison', 'parameters': {'genome_ids': [], 'user_genomes': ['/unused.faa', '/ref.faa', '/subject.faa'], 'user_feature_groups': [], 'reference_genome_index': 2, 'output_path': '/controlled/proteome', 'output_file': 'selected'}, 'start_parameters': {}, 'definition_inputs': [], 'input_bindings': [], 'workspace_targets': []}
         launch_assignment = {'version': 'execution_launch_assignment_v1', 'requests': {'selected-api': api_assignment(self.query)}, 'immutable_input_versions': [], 'constraints': {'allowed_kinds': ['api']}}

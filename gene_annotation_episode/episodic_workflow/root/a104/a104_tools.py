@@ -106,7 +106,7 @@ class A104ToolRegistry(ToolRegistry):
                 for name, value in sources.items()}
 
     def received_attributions(self, context, known):
-        if context.role not in {'annotation', 'scientific_process', 'improvement'}:
+        if context.role not in {'annotation', 'evolutionary_history_evidence', 'improvement'}:
             return [], []
         # A typed HPC result delivered to this investigation is admitted by
         # its exact registered reader before the next credit projection. This

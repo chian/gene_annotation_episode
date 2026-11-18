@@ -15,7 +15,7 @@ TOP = 'published_evidence_assessment'
 STRATEGY = TOP + '/evidence_search_strategy_improvement'
 SEARCH = STRATEGY + '/source_relevance_assessment'
 PAGE = SEARCH + '/source_evidence_examination'
-HOMES = tuple(prefix + home for prefix in ('', 'scientific_process/') for home in (
+HOMES = tuple(prefix + home for prefix in ('', 'evolutionary_history_evidence/') for home in (
     TOP, STRATEGY, SEARCH, PAGE, PAGE + '/passage_evidence_extraction',
     PAGE + '/source_coverage_improvement', PAGE + '/table_evidence_extraction'))
 POPULATIONS = ('rate_population', 'assay_grading_population', 'compiled_assay_population',

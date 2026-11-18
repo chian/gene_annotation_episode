@@ -15,9 +15,9 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.tests.hpc_prediction_inputs import resources
 from gene_annotation_episode.episodic_workflow.root.tests.hpc_planning_allocation_task_behavior import PlanningAllocationTaskBehavior
 
-PARENTS = ('', 'scientific_process', 'hpc_work_planning',
-    'hpc_work_planning/hpc_allocation_execution', 'scientific_process/hpc_work_planning',
-    'scientific_process/hpc_work_planning/hpc_allocation_execution')
+PARENTS = ('', 'evolutionary_history_evidence', 'hpc_work_planning',
+    'hpc_work_planning/hpc_allocation_execution', 'evolutionary_history_evidence/hpc_work_planning',
+    'evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution')
 HOMES = tuple('/'.join(part for part in (parent, 'execution_job_submission', native) if part)
     for parent in PARENTS for native in ('local_job_execution', 'hpc_job_execution'))
 
@@ -28,8 +28,8 @@ def own_module(name):
 
 def ancestry(home):
     path = (('annotation', 'root'),)
-    if home.startswith('scientific_process/'):
-        path += (('scientific_process', 'original-science'),)
+    if home.startswith('evolutionary_history_evidence/'):
+        path += (('evolutionary_history_evidence', 'original-science'),)
     if '/hpc_work_planning/' in '/' + home:
         path += (('hpc', 'original-plan-owner'),)
     if '/hpc_allocation_execution/' in home:

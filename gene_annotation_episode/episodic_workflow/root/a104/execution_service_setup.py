@@ -9,7 +9,7 @@ from types import MappingProxyType
 
 from .communication import plain
 from .episode_application_services import EpisodeApplicationServices
-from gene_annotation_episode.episodic_workflow.root.a104.scientific_process.execution_progress_assessment.episode import MonitorEpisode
+from gene_annotation_episode.episodic_workflow.root.a104.evolutionary_history_evidence.execution_progress_assessment.episode import MonitorEpisode
 from .episode_monitoring import read_progress
 
 
@@ -194,7 +194,7 @@ class ExecutionServiceFactory:
         descriptors = [*(item.as_record() for item in bindings), monitor.as_record()]
         hpc_credit = {}
         if self.hpc_commissions is not None:
-            from gene_annotation_episode.episodic_workflow.root.a104.scientific_process.hpc_work_planning.episode import HPCEpisode
+            from gene_annotation_episode.episodic_workflow.root.a104.evolutionary_history_evidence.hpc_work_planning.episode import HPCEpisode
             hpc_bindings = create_hpc_bindings(None, store=store, run_id=run_id, directory=directory,
                 resources=plain(self.resources), commissions=plain(self.hpc_commissions),
                 shared_execution_memory=plain(self.shared_execution_memory),
@@ -212,4 +212,4 @@ class ExecutionServiceFactory:
 
 __all__ = ['ExecutionServiceFactory']
 
-from .scientific_process.episode import create_execution_bindings, create_hpc_bindings
+from .evolutionary_history_evidence.episode import create_execution_bindings, create_hpc_bindings

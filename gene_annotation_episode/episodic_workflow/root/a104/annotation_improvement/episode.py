@@ -22,7 +22,7 @@ def unbound_improvement_domain(workflow):
     if type(workflow) is not Workflow or not _original_hooks(workflow):
         return False
     state = _state(workflow)
-    if state is None or state.get('scientific_process_binding') is not None:
+    if state is None or state.get('evolutionary_history_evidence_binding') is not None:
         return False
     from ..episode_bindings import EpisodeBindingRegistry
     registry = state.get('episode_bindings')
@@ -33,7 +33,7 @@ def unbound_improvement_domain(workflow):
         return False
     by_role = registry_state.get('_by_role')
     if (type(by_role) is not dict or not all(type(role) is str for role in by_role)
-            or 'improvement' in by_role or 'scientific_process' in by_role):
+            or 'improvement' in by_role or 'evolutionary_history_evidence' in by_role):
         return False
     # Existing real configured job types expose literal roles. An override or
     # custom getter/membership object retains the original public fallback.

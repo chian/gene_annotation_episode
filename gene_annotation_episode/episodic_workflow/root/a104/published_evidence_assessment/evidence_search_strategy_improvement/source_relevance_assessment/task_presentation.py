@@ -1,6 +1,6 @@
 """Complete original own-A104 source presentation state machine."""
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a104.providers import DECISION_CONTEXT_VERSION, _ordinary_runtime_receiver_context, apply_state_frame, deepcopy, is_api_launch_context, is_published_scientific_context, json, render_api_launch_prompt, render_scientific_process_prompt, text_instructions
+from gene_annotation_episode.episodic_workflow.root.a104.providers import DECISION_CONTEXT_VERSION, _ordinary_runtime_receiver_context, apply_state_frame, deepcopy, is_api_launch_context, is_published_scientific_context, json, render_api_launch_prompt, render_evolutionary_history_evidence_prompt, text_instructions
 
 def present_source_context(self, episode_id, role, instructions, context):
     """Render declared TASKs from reconstructed state; preserve other inputs."""

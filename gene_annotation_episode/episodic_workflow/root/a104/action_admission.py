@@ -11,7 +11,7 @@ def parent_common_action_permission(self, source, action):
 
 def filter_parent_task_credit_roles(self, source, roles):
     if len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False):
-        roles = tuple((role for role in roles if role == 'scientific_process'))
+        roles = tuple((role for role in roles if role == 'evolutionary_history_evidence'))
     return roles
 
 def filter_parent_common_actions(self, source, common_actions):
@@ -22,10 +22,10 @@ def filter_parent_common_actions(self, source, common_actions):
 
 def validate_parent_axis_choice(self, source, role, *, selection=None, original=False):
     annotation_axes = len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False)
-    if annotation_axes and role != 'scientific_process':
+    if annotation_axes and role != 'evolutionary_history_evidence':
         raise ValueError('annotation_root_commissions_evidence_axes')
     if annotation_axes and selection is not None and (not original):
-        from .scientific_process_records import selection_fields
+        from .evolutionary_history_evidence_records import selection_fields
         assignment = selection.get('assignment', {})
         process = assignment.get('selection', {})
         axis = process[selection_fields(process)[0]]['option_id']

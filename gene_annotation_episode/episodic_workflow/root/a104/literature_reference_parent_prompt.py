@@ -12,7 +12,7 @@ from .literature_experimental_prompt import (
     SAVED_NUMERICAL_RETURN_TASK, _pick, _safe, _schema, _section, _steering, _table, _values,
     CONTRACT_INFORMATION_TASK, _requested_contract_task,
 )
-from .scientific_process_prompt import text_instructions
+from .evolutionary_history_evidence_prompt import text_instructions
 from .composition_information import CONTRACT_INFORMATION_PROFILE, is_contract_information
 from .schema_information_text import render_schema_information
 from .literature_numerical_return_presentation import state_view

@@ -41,8 +41,8 @@ RELATIVE = (
     (PAGE + '/table_evidence_extraction', 'literature_table'),
     (PAGE + '/source_coverage_improvement', 'literature_ordered'),
     (PAGE + '/passage_evidence_extraction', 'literature_targeted'))
-HOMES = tuple((prefix + path, role) for prefix in ('', 'scientific_process/') for path, role in RELATIVE)
-EDGES = tuple((prefix + parent, prefix + child, role) for prefix in ('', 'scientific_process/')
+HOMES = tuple((prefix + path, role) for prefix in ('', 'evolutionary_history_evidence/') for path, role in RELATIVE)
+EDGES = tuple((prefix + parent, prefix + child, role) for prefix in ('', 'evolutionary_history_evidence/')
     for parent, child, role in ((TOP, STRATEGY, 'literature_strategy'),
         (STRATEGY, SEARCH, 'literature_search'), (SEARCH, PAGE, 'literature_page'),
         (PAGE, PAGE + '/table_evidence_extraction', 'literature_table'),
@@ -57,9 +57,9 @@ def binding_type(home):
 def path_for(home):
     prefix = (('annotation', 'root'),)
     own = home
-    if home.startswith('scientific_process/'):
-        prefix += (('scientific_process', 'original-process'),)
-        own = home.removeprefix('scientific_process/')
+    if home.startswith('evolutionary_history_evidence/'):
+        prefix += (('evolutionary_history_evidence', 'original-process'),)
+        own = home.removeprefix('evolutionary_history_evidence/')
     return prefix + tuple((role, 'child_0') for path, role in RELATIVE
         if own == path or own.startswith(path + '/'))
 
@@ -131,11 +131,11 @@ def family(tmp_path_factory):
         bindings = {home: binding_type(home)(services) for home, _ in HOMES}
         # Actual commissioning binding, explicit empty metadata-only libraries.
         # These operands do not select a scientific instruction or credit owner.
-        science_type = importlib.import_module(PREFIX + 'scientific_process.episode').ScientificProcessEpisode
+        science_type = importlib.import_module(PREFIX + 'evolutionary_history_evidence.episode').EvolutionaryHistoryEvidenceEpisode
         science = science_type(services,
             library=SimpleNamespace(as_record=lambda: {}, headers=lambda: []),
             tool_library=SimpleNamespace(as_record=lambda: {}),
-            child_roles=('scientific_process', 'hpc'))
+            child_roles=('evolutionary_history_evidence', 'hpc'))
         yield SimpleNamespace(root=root, store=store, tools=tools, raw=raw, source=source,
             services=services, bindings=bindings,
             registry=EpisodeBindingRegistry((science, *bindings.values())))
@@ -363,7 +363,7 @@ def test_actual_runtime_build_selects_and_constructs_its_private_source(family, 
     workflow = SimpleNamespace(run_id=context.run_id, episode_bindings=family.registry,
         context=SimpleNamespace(require_run_id=lambda: context.run_id),
         grains={role: SimpleNamespace(name=role)}, inprocess_completion_order=None,
-        scientific_process_binding=None, receipts=None,
+        evolutionary_history_evidence_binding=None, receipts=None,
         launch_instructions=SimpleNamespace(materialize=lambda value: None))
     with pytest.raises(ConstructionObserved):
         runtime.Workflow.build(workflow, role, context.path[-1][1], 'Read this actual source',

@@ -87,7 +87,7 @@ class NativeBLASTDatabaseReturns(EpisodeReturnRecords):
         self._frozen(context, values)
         if context.role == 'results':
             self._require(self._equal(values, self._own_facts(context, values)), 'returned_facts_conflict')
-        elif context.role in {'annotation', 'scientific_process'}:
+        elif context.role in {'annotation', 'evolutionary_history_evidence'}:
             expected = self.received_facts(context, schema)
             for source, value in values.items():
                 if source in _ROW_SOURCES:
@@ -148,7 +148,7 @@ class NativeBLASTDatabaseReturns(EpisodeReturnRecords):
 
     def _received(self, context, *, before_index=None):
         self.authenticate(context, allow_unsaved=True)
-        if context.role not in {'annotation', 'scientific_process'}:
+        if context.role not in {'annotation', 'evolutionary_history_evidence'}:
             return {'groups': {}, 'references': []}
         groups, seen, row_groups, references, authorized = ({}, {}, {}, [], set())
         descriptors = native_blast_database_fact_sources()
@@ -278,7 +278,7 @@ class NativeBLASTDatabaseReturns(EpisodeReturnRecords):
         if context.role == 'results':
             _original_commission(self.store, context)
         while True:
-            if current.role in {'annotation', 'scientific_process'}:
+            if current.role in {'annotation', 'evolutionary_history_evidence'}:
                 values = self._received(current, before_index=before_index)['groups'].get(SAVED_INPUT_SOURCE, [])
                 if any((self._equal(descriptor, value) for value in values)):
                     body = self.results.read_saved_function_input(descriptor, plain(context.scope))

@@ -82,3 +82,7 @@ collection, dangling-name scan (`runs/claude_inputs/la/dangling.py`), commit.
   all at their baseline. A103's test files, helper and lookup-table users and shared tests naming `a103`
   (`runs/claude_ax_a103b_s0..3`, 189 files): identical to the baseline. Collection 50,565, 0 errors; dangling scan
   unchanged. Each further step also runs tests in other arms that mention the axis id.
+- P1-A104: `a104/scientific_process` → `a104/evolutionary_history_evidence` and every token inside `a104/` (11 paths,
+  838 files); root lookup tables; role table. A104's test files, helper and lookup-table users and tests naming `a104`
+  (`runs/claude_ax_a104_s0..3`, 177 files): identical to the baseline. Collection 50,565, 0 errors; dangling scan
+  unchanged.

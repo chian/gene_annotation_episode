@@ -124,8 +124,8 @@ class TestA104AllocationNativeContracts(NativeContractChecks):
 
 
 class TestA104ScientificHPCNativeContracts(NativeContractChecks):
-    binding_path = 'scientific_process/hpc_work_planning/execution_job_submission'
+    binding_path = 'evolutionary_history_evidence/hpc_work_planning/execution_job_submission'
 
 
 class TestA104ScientificAllocationNativeContracts(NativeContractChecks):
-    binding_path = 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission'
+    binding_path = 'evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission'

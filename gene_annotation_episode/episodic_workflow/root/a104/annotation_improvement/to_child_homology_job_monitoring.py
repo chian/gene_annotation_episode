@@ -5,7 +5,7 @@ from ..library.live_runtime_functions import bind_functions as _bind_functions
 def prepare_parent_request(self, source, selection, index, scope, role):
     _parent_specialist_assigned = False
     episode_assignment = None
-    scientific_process = None
+    evolutionary_history_evidence = None
     schema, report_declaration = self.expanded_contract_form(source, selection, index, role)
     if selection['kind'] == 'episode_child':
         binding = self.episode_bindings.for_child(source.path, role)
@@ -31,7 +31,7 @@ def prepare_parent_request(self, source, selection, index, scope, role):
             raise ValueError('child_role_not_available_to_parent')
         binding = self.episode_bindings.for_child(source.path, role)
         self.launch_instructions.materialize(selection['assignment'].get('launch_instructions'))
-        if binding is self.scientific_process_binding:
+        if binding is self.evolutionary_history_evidence_binding:
             closed = {}
             recorded = self.journal.row('runtime_actions', source.episode_id, index)
             if recorded is not None and recorded['result'] is not None and (_json(json.loads(recorded['action'])) == _json(selection)) and (json.loads(recorded['result']).get('status') == 'completed'):
@@ -45,7 +45,7 @@ def prepare_parent_request(self, source, selection, index, scope, role):
                         closed['closed_context'] = candidate
             prepared = binding.prepare_invocation(self.binding_context(source), role, selection['assignment'], scope, f'{self.run_id}:{source.episode_id}:{index}', invocation={'objective': selection['goal'], 'purpose': selection['purpose'], 'report_schema': schema, 'initial_report': initial}, **closed)
             episode_assignment = prepared['assignment']
-            scientific_process = prepared['scientific_process']
+            evolutionary_history_evidence = prepared['evolutionary_history_evidence']
         else:
             child_assignment = selection['assignment']
             send_request = getattr(specialist, 'prepare_child_request', None)
@@ -53,9 +53,9 @@ def prepare_parent_request(self, source, selection, index, scope, role):
                 child_assignment = send_request(self.binding_context(source), role, child_assignment)
             episode_assignment = binding.prepare_assignment(self.binding_context(source), role, child_assignment, scope, f'{self.run_id}:{source.episode_id}:{index}')
     assignment = self.job_episodes.assign(self.store, role, selection, scope, operation_key=f'{self.run_id}:{source.episode_id}:{index}') if selection['kind'] == 'job_child' else None
-    return {'schema': schema, 'report_declaration': report_declaration, 'initial': initial, 'episode_assignment': episode_assignment, 'scientific_process': scientific_process, 'assignment': assignment, **({'specialist': specialist} if _parent_specialist_assigned else {})}
+    return {'schema': schema, 'report_declaration': report_declaration, 'initial': initial, 'episode_assignment': episode_assignment, 'evolutionary_history_evidence': evolutionary_history_evidence, 'assignment': assignment, **({'specialist': specialist} if _parent_specialist_assigned else {})}
 
-def assemble_parent_request(self, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, scientific_process=None, report_contract_declaration=None, request_assembler=None):
+def assemble_parent_request(self, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, evolutionary_history_evidence=None, report_contract_declaration=None, request_assembler=None):
     path = (*parent_path, (name, key))
     goal = EpisodeGoal.root(objective=goal_text, result_contract={'role': name}) if parent is None else EpisodeGoal.child(parent, objective=goal_text, result_contract=contract.schema)
     message = {'scope': scope, 'initial_report': initial or {}}
@@ -71,11 +71,11 @@ def assemble_parent_request(self, name, key, goal_text, scope, *, parent=None, p
     if episode_assignment is not None:
         self.launch_instructions.materialize(episode_assignment.get('launch_instructions'))
         message['episode_assignment'] = _plain(episode_assignment)
-    if scientific_process is not None:
-        message['scientific_process'] = _plain(scientific_process)
+    if evolutionary_history_evidence is not None:
+        message['evolutionary_history_evidence'] = _plain(evolutionary_history_evidence)
     identity = Episode.identity(self.context, self.grains[name], key, parent_path=parent_path)
-    if self.scientific_process_binding is not None and name in {'annotation', 'scientific_process'}:
-        from .scientific_process_records import scientific_invocation_ref
+    if self.evolutionary_history_evidence_binding is not None and name in {'annotation', 'evolutionary_history_evidence'}:
+        from .evolutionary_history_evidence_records import scientific_invocation_ref
         message['scientific_invocation_ref'] = scientific_invocation_ref(self.run_id, path)
     if self.receipts is not None:
         parent_id = Episode.identity(self.context, self.grains[parent_path[-1][0]], parent_path[-1][1], parent_path=parent_path[:-1]).episode_id if parent_path else None

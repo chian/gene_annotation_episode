@@ -190,7 +190,7 @@ class NativeHmmerPreparationResultRecords:
         delivered references retain their normal resolver; old source-expanded
         receipt membership alone is deliberately insufficient.
         """
-        if context.role not in {'results', 'annotation', 'scientific_process'} or namespace not in {None, 'source', 'artifact', 'execution_result'}:
+        if context.role not in {'results', 'annotation', 'evolutionary_history_evidence'} or namespace not in {None, 'source', 'artifact', 'execution_result'}:
             return None
         try:
             record = self.store.get(reference)
@@ -205,7 +205,7 @@ class NativeHmmerPreparationResultRecords:
             return None
         if not owns:
             return None
-        if context.role in {'annotation', 'scientific_process'}:
+        if context.role in {'annotation', 'evolutionary_history_evidence'}:
             received = self.owner.native_hmmer_preparation_returns.resolve_received_reference_metadata(context, reference, namespace)
             if received is not None:
                 return received

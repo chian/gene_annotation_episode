@@ -6,7 +6,7 @@ separate contracts.
 """
 from __future__ import annotations
 
-from .scientific_process_records import _exact, _option_id, _plain, _text
+from .evolutionary_history_evidence_records import _exact, _option_id, _plain, _text
 
 
 VERSION = 'evidence_axis_instruction_v1'

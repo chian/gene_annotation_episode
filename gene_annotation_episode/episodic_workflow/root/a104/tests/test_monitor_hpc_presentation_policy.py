@@ -9,7 +9,7 @@ from ..decision_context import VERSION, INSTRUCTIONS, state_frame
 from ..library.hpc_prompt import render_hpc_prompt
 from ..library.monitor_prompt import render_monitor_prompt
 from ..execution_prompt import render_api_launch_prompt
-from ..scientific_process_prompt import render_scientific_process_prompt, render_selected_execution_prompt, text_instructions
+from ..evolutionary_history_evidence_prompt import render_evolutionary_history_evidence_prompt, render_selected_execution_prompt, text_instructions
 from ..receiver_prompt import render_receiver_prompt
 
 BASE = 'gene_annotation_episode.episodic_workflow.root.a104.'
@@ -20,12 +20,12 @@ HOMES = (
     ('hpc_work_planning/hpc_allocation_execution', 'HPCEpisode'),
     ('hpc_work_planning/hpc_allocation_execution/execution_progress_assessment', 'MonitorEpisode'),
     ('hpc_work_planning/hpc_resource_prediction', 'HPCEpisode'),
-    ('scientific_process/execution_progress_assessment', 'MonitorEpisode'),
-    ('scientific_process/hpc_work_planning', 'HPCEpisode'),
-    ('scientific_process/hpc_work_planning/execution_progress_assessment', 'MonitorEpisode'),
-    ('scientific_process/hpc_work_planning/hpc_allocation_execution', 'HPCEpisode'),
-    ('scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment', 'MonitorEpisode'),
-    ('scientific_process/hpc_work_planning/hpc_resource_prediction', 'HPCEpisode'))
+    ('evolutionary_history_evidence/execution_progress_assessment', 'MonitorEpisode'),
+    ('evolutionary_history_evidence/hpc_work_planning', 'HPCEpisode'),
+    ('evolutionary_history_evidence/hpc_work_planning/execution_progress_assessment', 'MonitorEpisode'),
+    ('evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution', 'HPCEpisode'),
+    ('evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment', 'MonitorEpisode'),
+    ('evolutionary_history_evidence/hpc_work_planning/hpc_resource_prediction', 'HPCEpisode'))
 REPRESENTATIVES = HOMES[:2]
 SCENARIOS = ('minimal', 'minimal_prior', 'monitor', 'hpc', 'ordinary', 'bootstrap', 'update',
     'unrecognized_bootstrap', 'missing_unrecognized_delta', 'missing_recognized_delta',
@@ -54,7 +54,7 @@ def operands(scenario):
         'selected_tool_info': [], 'requests': [{'resource_id': 'controlled', 'resource': {}, 'job': {}}]}
     api = {'execution_assignment': {'version': 'api_service_assignment_v1', 'service': 'controlled', 'request': {}},
         'api_service': 'controlled', 'api_request': {}}
-    science = {'scientific_process': {'evidence_axis': {'instruction_status': 'published_investigation_instructions',
+    science = {'evolutionary_history_evidence': {'evidence_axis': {'instruction_status': 'published_investigation_instructions',
         'investigation_instructions': 'Inspect supplied control fields; do not infer scientific results.'}}}
     lookup = {'version': VERSION, 'kind': 'decision_lookup_result', 'result': {'original': 'lookup'}}
     contract = {**monitor, 'contract_information_profile': 'operation_contract_information_v1'}
@@ -128,7 +128,7 @@ def test_original_default_policy_and_private_context_cache_are_identical(home, c
         else:
             assert KEY in final['cache'] and final['returned'][1] == text_instructions(GUIDANCE)
     renderers = {'monitor': render_monitor_prompt, 'hpc': render_hpc_prompt, 'ordinary': render_receiver_prompt,
-        'hpc_over_monitor': render_hpc_prompt, 'scientific_over_monitor': render_scientific_process_prompt,
+        'hpc_over_monitor': render_hpc_prompt, 'scientific_over_monitor': render_evolutionary_history_evidence_prompt,
         'api_over_monitor': render_api_launch_prompt, 'selected_over_monitor': render_selected_execution_prompt}
     if scenario in renderers:
         assert final['returned'] == (renderers[scenario](values[-1], GUIDANCE, lookup_results=[]), text_instructions(GUIDANCE))

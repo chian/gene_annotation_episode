@@ -19,13 +19,13 @@ from gene_annotation_episode.episodic_workflow.root.a104.method_loop.identities 
 from gene_annotation_episode.episodic_workflow.root.a104.state import Store
 
 
-PARENTS = ('', 'scientific_process', 'hpc_work_planning',
-    'hpc_work_planning/hpc_allocation_execution', 'scientific_process/hpc_work_planning',
-    'scientific_process/hpc_work_planning/hpc_allocation_execution')
+PARENTS = ('', 'evolutionary_history_evidence', 'hpc_work_planning',
+    'hpc_work_planning/hpc_allocation_execution', 'evolutionary_history_evidence/hpc_work_planning',
+    'evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution')
 CHILDREN = ('execution_job_submission', 'execution_job_submission/api_job_execution',
     'execution_job_submission/local_job_execution', 'execution_job_submission/hpc_job_execution',
     'execution_result_acquisition')
-ROLES = {'scientific_process': 'scientific_process', 'hpc_work_planning': 'hpc',
+ROLES = {'evolutionary_history_evidence': 'evolutionary_history_evidence', 'hpc_work_planning': 'hpc',
     'hpc_allocation_execution': 'hpc_execution', 'execution_job_submission': 'launch',
     'api_job_execution': 'launch_api', 'local_job_execution': 'launch_local',
     'hpc_job_execution': 'launch_hpc', 'execution_result_acquisition': 'results'}
@@ -78,7 +78,7 @@ def main():
                     tool_registry=None, handoff_unit=1., acquired_record_unit=1.,
                     log_window_bytes=1024, log_roles=('stdout', 'stderr'))
                 path = tuple((ROLES[part], 'original-' + part) for part in home.split('/'))
-                if not home.startswith('scientific_process/'):
+                if not home.startswith('evolutionary_history_evidence/'):
                     path = (('annotation', 'root'),) + path
                 role = path[-1][0]
                 assert binding.binding_path == home and binding.roles == (role,)

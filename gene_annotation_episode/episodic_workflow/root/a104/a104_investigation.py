@@ -10,8 +10,8 @@ from pathlib import Path
 from .communication import plain, validate_closed_schema, validate_form, interpretation_schema
 from .domain import obj, ContractError
 from .a104_hpc import require
-from .scientific_process_library import ScientificProcessLibrary
-from .scientific_process_records import SELECTION_VERSION, selector_selection, validate_selection
+from .evolutionary_history_evidence_library import EvolutionaryHistoryEvidenceLibrary
+from .evolutionary_history_evidence_records import SELECTION_VERSION, selector_selection, validate_selection
 from .scientific_tool_library import ScientificToolLibrary
 from .evidence_axis_instructions import validate_instruction_entry
 
@@ -96,7 +96,7 @@ def resolve_report(store, report, *, scope):
 class A104Subtree:
     def __init__(self, directory):
         directory = Path(directory)
-        self.library = ScientificProcessLibrary(directory/'scientific-process-library')
+        self.library = EvolutionaryHistoryEvidenceLibrary(directory/'scientific-process-library')
         self.tools = ScientificToolLibrary(directory/'scientific-tool-library')
         self.axis = self.library.reference('A104')
         entry = validate_instruction_entry(self.library.resolve(self.axis))
@@ -150,7 +150,7 @@ class A104Subtree:
         tools = self.tools.resolve_tool_info(child_tool_info)
         selection = selector_selection(validate_selection({'version': SELECTION_VERSION, 'evidence_axis': deepcopy(self.axis),
             'thought_pattern': self.library.reference(thought_id), 'child_tool_info': tools}))
-        return {'kind': 'episode_child', 'role': 'scientific_process', 'goal': question, 'scope': scope,
+        return {'kind': 'episode_child', 'role': 'evolutionary_history_evidence', 'goal': question, 'scope': scope,
             'purpose': 'Return saved evolutionary measurements and their purpose-specific per-use grading, with exact recorded qualifications and missing inputs; no second history or function verdict.',
             'schema_json': json.dumps(selected_schema, allow_nan=False), 'initial_report_json': json.dumps(selected_initial, allow_nan=False),
             'assignment': {'selection': selection, 'evidence_refs': references, 'constraints': deepcopy(constraints or {}), 'context': supplied}}
@@ -171,9 +171,9 @@ class A104ServiceFactory:
 
     def __call__(self, store, *, run_id, directory, tool_catalog, tool_registry=None, **kwargs):
         from .episode_application_services import EpisodeApplicationServices
-        from .scientific_process_setup import prepare_scientific_binding
-        from .scientific_process.episode import ScientificProcessEpisode
-        from .scientific_process.published_evidence_assessment.episode import create_binding_tree
+        from .evolutionary_history_evidence_setup import prepare_scientific_binding
+        from .evolutionary_history_evidence.episode import EvolutionaryHistoryEvidenceEpisode
+        from .evolutionary_history_evidence.published_evidence_assessment.episode import create_binding_tree
         from .execution_service_setup import ExecutionServiceFactory
         from .execution_memory import ExecutionMemory
         from .composition_information import CONTRACT_INFORMATION_PROFILE
@@ -182,8 +182,8 @@ class A104ServiceFactory:
             shared_execution_memory=self.shared_execution_memory or ExecutionMemory.configured().as_record())
         execution = execution_factory(store, run_id=run_id, directory=directory,
             tool_catalog=tool_catalog, tool_registry=tool_registry)
-        science = prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=directory, source_directory=self.source_directory,
-            tool_catalog=tool_catalog, child_roles=('scientific_process', 'literature', 'hpc'),
+        science = prepare_scientific_binding(episode_type=EvolutionaryHistoryEvidenceEpisode, run_directory=directory, source_directory=self.source_directory,
+            tool_catalog=tool_catalog, child_roles=('evolutionary_history_evidence', 'literature', 'hpc'),
             tool_retrieval=self.tool_retrieval, resource_catalogs=execution.resource_tool_catalogs,
             contract_information_profile=CONTRACT_INFORMATION_PROFILE)
         literature = tuple(binding.as_record() for binding in create_binding_tree(None, rate_population=True, compiled_assay_population=True,

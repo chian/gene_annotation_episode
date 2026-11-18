@@ -66,18 +66,18 @@ def scientific_binding_compatible(actual, recorded):
     if (type(actual) is not dict or type(recorded) is not dict
             or set(actual) != fields or set(recorded) != fields
             or any(type(value['version']) is not str
-                or value['version'] not in {'scientific_process_episodes_v5',
-                'scientific_process_episodes_v6', 'scientific_process_episodes_v7',
-                'scientific_process_episodes_v8', 'scientific_process_episodes_v9',
-                'scientific_process_episodes_v10', 'scientific_process_episode_v10'}
-                or value['binding_id'] != 'scientific_process'
+                or value['version'] not in {'evolutionary_history_evidence_episodes_v5',
+                'evolutionary_history_evidence_episodes_v6', 'evolutionary_history_evidence_episodes_v7',
+                'evolutionary_history_evidence_episodes_v8', 'evolutionary_history_evidence_episodes_v9',
+                'evolutionary_history_evidence_episodes_v10', 'evolutionary_history_evidence_episode_v10'}
+                or value['binding_id'] != 'evolutionary_history_evidence'
                 or type(value['configuration']) is not dict
                 for value in (actual, recorded))):
         return False
     return actual_text == recorded_text
 
 
-from .scientific_process.restore_binding import restore_scientific_binding as reopen_scientific_binding
+from .evolutionary_history_evidence.restore_binding import restore_scientific_binding as reopen_scientific_binding
 
 
 @dataclass(frozen=True)
@@ -163,7 +163,7 @@ def compose_episode_bindings(services, *, store, journal, execution_backend,
                 raise _failure('unavailable_binding', reference)
         except (TypeError, ValueError, KeyError, AttributeError) as error:
             raise _failure('unavailable_binding', reference) from error
-        if name == 'scientific_process':
+        if name == 'evolutionary_history_evidence':
             if not scientific_binding_compatible(binding.as_record(), descriptor):
                 raise _failure('identity_conflict', reference)
         else:

@@ -92,7 +92,7 @@ def _saved_episode_factories(settings, directory=None):
     for descriptor in settings.get('episode_bindings', []):
         if descriptor.get('binding_id') == 'literature':
             raise _failure('unavailable_binding', 'private_literature_reopen_binding')
-        elif descriptor.get('binding_id') == 'scientific_process':
+        elif descriptor.get('binding_id') == 'evolutionary_history_evidence':
             from .episode_composition import reopen_scientific_binding
             factories.append(partial(reopen_scientific_binding,
                 descriptor=descriptor, directory=directory))
@@ -329,7 +329,7 @@ async def open_commission(spec):
             parent=parent_goal, parent_path=tuple(tuple(part) for part in spec['parent']['path']),
             contract=contract, initial=message['initial_report'], job_assignment=assignment,
             episode_assignment=message.get('episode_assignment'),
-            scientific_process=message.get('scientific_process'),
+            evolutionary_history_evidence=message.get('evolutionary_history_evidence'),
             **({'report_contract_declaration': message['report_contract_declaration']}
                if 'report_contract_declaration' in message else {}))
         if episode.request.as_record() != spec['child']['request']:

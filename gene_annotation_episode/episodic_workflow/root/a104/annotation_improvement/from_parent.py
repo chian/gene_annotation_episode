@@ -2,7 +2,7 @@
 from __future__ import annotations
 from ..library.live_runtime_functions import bind_functions as _bind_functions
 
-def assemble_parent_request(self, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, scientific_process=None, report_contract_declaration=None, request_assembler=None):
+def assemble_parent_request(self, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, evolutionary_history_evidence=None, report_contract_declaration=None, request_assembler=None):
     path = (*parent_path, (name, key))
     from .annotation_improvement.goal import prepare_goal
     goal = prepare_goal(name, goal_text, parent, contract)
@@ -19,11 +19,11 @@ def assemble_parent_request(self, name, key, goal_text, scope, *, parent=None, p
     if episode_assignment is not None:
         self.launch_instructions.materialize(episode_assignment.get('launch_instructions'))
         message['episode_assignment'] = _plain(episode_assignment)
-    if scientific_process is not None:
-        message['scientific_process'] = _plain(scientific_process)
+    if evolutionary_history_evidence is not None:
+        message['evolutionary_history_evidence'] = _plain(evolutionary_history_evidence)
     identity = Episode.identity(self.context, self.grains[name], key, parent_path=parent_path)
-    if self.scientific_process_binding is not None and name in {'annotation', 'scientific_process'}:
-        from .scientific_process_records import scientific_invocation_ref
+    if self.evolutionary_history_evidence_binding is not None and name in {'annotation', 'evolutionary_history_evidence'}:
+        from .evolutionary_history_evidence_records import scientific_invocation_ref
         message['scientific_invocation_ref'] = scientific_invocation_ref(self.run_id, path)
     if self.receipts is not None:
         parent_id = Episode.identity(self.context, self.grains[parent_path[-1][0]], parent_path[-1][1], parent_path=parent_path[:-1]).episode_id if parent_path else None

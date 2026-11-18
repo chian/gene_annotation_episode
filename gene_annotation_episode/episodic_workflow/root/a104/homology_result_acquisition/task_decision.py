@@ -16,7 +16,7 @@ class HomologyAcquisitionTaskDecision(HomologyAcquisitionTaskDecisionProvider, H
         index, self.calls = (self.calls, self.calls + 1)
         journal = self.workflow.journal
         row = journal.row('runtime_model_calls', self.episode_id, index)
-        (row is None or row['response'] is None) and self.path[-1][0] == 'scientific_process'
+        (row is None or row['response'] is None) and self.path[-1][0] == 'evolutionary_history_evidence'
         profile = self.workflow.contract_information_profile(self)
         if row:
             saved = json.loads(row['request'])

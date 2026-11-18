@@ -82,7 +82,7 @@ class ReceivedInputBindings:
                 _require(slot is not None and parent.path == current.path[:-1], "invalid_commission")
                 selected, sent = self.frames._selection(parent, int(slot[1]))
                 same_assignment = self.records._equal(selected.get("assignment", {}), current.assignment)
-                if not same_assignment and current.role == "scientific_process":
+                if not same_assignment and current.role == "evolutionary_history_evidence":
                     compare = getattr(self.binding, "commission_assignment_matches", None)
                     same_assignment = (callable(compare) and compare(parent, current, selected,
                         decision_index=int(slot[1])) is True)

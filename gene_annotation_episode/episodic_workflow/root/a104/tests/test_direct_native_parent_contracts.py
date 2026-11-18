@@ -9,7 +9,7 @@ from gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_native_
 from gene_annotation_episode.episodic_workflow.root.tests.hpc_planning_allocation_task_behavior import PlanningAllocationTaskBehavior
 
 HOMES = tuple(parent + '/' + child
-    for parent in ('execution_job_submission', 'scientific_process/execution_job_submission')
+    for parent in ('execution_job_submission', 'evolutionary_history_evidence/execution_job_submission')
     for child in ('local_job_execution', 'hpc_job_execution'))
 
 @pytest.fixture(params=HOMES, ids=HOMES)
@@ -33,8 +33,8 @@ def test_parent_contract_keeps_actual_parent_schema(native_frame):
 
 def test_literal_registry_parent_and_sibling_identity(native_frame):
     frame = native_frame
-    sibling_parent = ('execution_job_submission' if frame.home.startswith('scientific_process/')
-        else 'scientific_process/execution_job_submission')
+    sibling_parent = ('execution_job_submission' if frame.home.startswith('evolutionary_history_evidence/')
+        else 'evolutionary_history_evidence/execution_job_submission')
     sibling = own_module(sibling_parent + '/' + frame.home.rsplit('/', 1)[1] + '/episode').ExecutionEpisode(
         frame.parent_binding.services, **frame.options)
     other_parent = own_module(sibling_parent + '/episode').ExecutionEpisode(frame.parent_binding.services, **frame.options)

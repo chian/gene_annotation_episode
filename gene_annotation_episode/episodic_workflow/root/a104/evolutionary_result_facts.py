@@ -113,7 +113,7 @@ def own_molecular_facts(registry, context, *, read_received, fact_source):
     from .episode_return_records import EpisodeReturnRecords
     tool_name, prefix = _profile(fact_source)
     EpisodeReturnRecords(registry.store, context.run_id, failure_prefix=prefix).authenticate(context)
-    if context.role != "scientific_process":
+    if context.role != "evolutionary_history_evidence":
         raise ContractError(prefix + "scientific_context_required")
     result = []
     rows = registry.store.db.execute("SELECT decision_index,action,result FROM runtime_actions WHERE run_id=? "

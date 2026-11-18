@@ -16,7 +16,7 @@ REPRESENTATIVES = {
     'execution_progress_assessment': 'monitor',
     'hpc_work_planning': 'hpc',
     'published_evidence_assessment': 'literature',
-    'scientific_process': 'scientific',
+    'evolutionary_history_evidence': 'scientific',
 }
 COMMON = ('changed_version', 'foreign_binding_id', 'extra_configuration',
           'duplicate_path', 'wrong_journal_store', 'empty_run_id')

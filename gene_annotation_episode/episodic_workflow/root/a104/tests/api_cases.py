@@ -16,11 +16,11 @@ from types import SimpleNamespace
 
 HOMES = (
     'execution_job_submission/api_job_execution',
-    'scientific_process/execution_job_submission/api_job_execution',
+    'evolutionary_history_evidence/execution_job_submission/api_job_execution',
     'hpc_work_planning/execution_job_submission/api_job_execution',
     'hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution',
-    'scientific_process/hpc_work_planning/execution_job_submission/api_job_execution',
-    'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution')
+    'evolutionary_history_evidence/hpc_work_planning/execution_job_submission/api_job_execution',
+    'evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution')
 PREFIX = 'gene_annotation_episode.episodic_workflow.root.a104.'
 JOB = '81bddc6e-f6ef-4f16-a8c1-32d262016ccb'
 

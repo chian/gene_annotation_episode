@@ -2,9 +2,9 @@
 from importlib import import_module
 
 PREFIX = 'gene_annotation_episode.episodic_workflow.root.a104.'
-PLACEMENTS = ('', 'scientific_process/', 'hpc_work_planning/',
-    'hpc_work_planning/hpc_allocation_execution/', 'scientific_process/hpc_work_planning/',
-    'scientific_process/hpc_work_planning/hpc_allocation_execution/')
+PLACEMENTS = ('', 'evolutionary_history_evidence/', 'hpc_work_planning/',
+    'hpc_work_planning/hpc_allocation_execution/', 'evolutionary_history_evidence/hpc_work_planning/',
+    'evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution/')
 
 
 def binding_types(placement):

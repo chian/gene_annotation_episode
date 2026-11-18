@@ -38,35 +38,35 @@ BINDINGS = (
     ("published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction", "literature", "LiteratureEpisode"),
     ("published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement", "literature", "LiteratureEpisode"),
     ("published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction", "literature", "LiteratureEpisode"),
-    ("scientific_process", "scientific", "ScientificProcessEpisode"),
-    ("scientific_process/execution_job_submission/api_job_execution", "execution", "ExecutionEpisode"),
-    ("scientific_process/execution_job_submission", "execution", "ExecutionEpisode"),
-    ("scientific_process/execution_job_submission/hpc_job_execution", "execution", "ExecutionEpisode"),
-    ("scientific_process/execution_job_submission/local_job_execution", "execution", "ExecutionEpisode"),
-    ("scientific_process/execution_progress_assessment", "monitor", "MonitorEpisode"),
-    ("scientific_process/execution_result_acquisition", "execution", "ExecutionEpisode"),
-    ("scientific_process/hpc_work_planning", "hpc", "HPCEpisode"),
-    ("scientific_process/hpc_work_planning/execution_job_submission/api_job_execution", "execution", "ExecutionEpisode"),
-    ("scientific_process/hpc_work_planning/execution_job_submission", "execution", "ExecutionEpisode"),
-    ("scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution", "execution", "ExecutionEpisode"),
-    ("scientific_process/hpc_work_planning/execution_job_submission/local_job_execution", "execution", "ExecutionEpisode"),
-    ("scientific_process/hpc_work_planning/execution_progress_assessment", "monitor", "MonitorEpisode"),
-    ("scientific_process/hpc_work_planning/execution_result_acquisition", "execution", "ExecutionEpisode"),
-    ("scientific_process/hpc_work_planning/hpc_allocation_execution", "hpc", "HPCEpisode"),
-    ("scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution", "execution", "ExecutionEpisode"),
-    ("scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission", "execution", "ExecutionEpisode"),
-    ("scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution", "execution", "ExecutionEpisode"),
-    ("scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution", "execution", "ExecutionEpisode"),
-    ("scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment", "monitor", "MonitorEpisode"),
-    ("scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition", "execution", "ExecutionEpisode"),
-    ("scientific_process/hpc_work_planning/hpc_resource_prediction", "hpc", "HPCEpisode"),
-    ("scientific_process/published_evidence_assessment", "literature", "LiteratureEpisode"),
-    ("scientific_process/published_evidence_assessment/evidence_search_strategy_improvement", "literature", "LiteratureEpisode"),
-    ("scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment", "literature", "LiteratureEpisode"),
-    ("scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination", "literature", "LiteratureEpisode"),
-    ("scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction", "literature", "LiteratureEpisode"),
-    ("scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement", "literature", "LiteratureEpisode"),
-    ("scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction", "literature", "LiteratureEpisode"),
+    ("evolutionary_history_evidence", "scientific", "EvolutionaryHistoryEvidenceEpisode"),
+    ("evolutionary_history_evidence/execution_job_submission/api_job_execution", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/execution_job_submission", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/execution_job_submission/hpc_job_execution", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/execution_job_submission/local_job_execution", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/execution_progress_assessment", "monitor", "MonitorEpisode"),
+    ("evolutionary_history_evidence/execution_result_acquisition", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning", "hpc", "HPCEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/execution_job_submission/api_job_execution", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/execution_job_submission", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/execution_job_submission/hpc_job_execution", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/execution_job_submission/local_job_execution", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/execution_progress_assessment", "monitor", "MonitorEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/execution_result_acquisition", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution", "hpc", "HPCEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment", "monitor", "MonitorEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition", "execution", "ExecutionEpisode"),
+    ("evolutionary_history_evidence/hpc_work_planning/hpc_resource_prediction", "hpc", "HPCEpisode"),
+    ("evolutionary_history_evidence/published_evidence_assessment", "literature", "LiteratureEpisode"),
+    ("evolutionary_history_evidence/published_evidence_assessment/evidence_search_strategy_improvement", "literature", "LiteratureEpisode"),
+    ("evolutionary_history_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment", "literature", "LiteratureEpisode"),
+    ("evolutionary_history_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination", "literature", "LiteratureEpisode"),
+    ("evolutionary_history_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction", "literature", "LiteratureEpisode"),
+    ("evolutionary_history_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement", "literature", "LiteratureEpisode"),
+    ("evolutionary_history_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction", "literature", "LiteratureEpisode"),
 )
 
 PREFIX = 'gene_annotation_episode.episodic_workflow.root.a104.'
@@ -81,7 +81,7 @@ def diagnose(directory, retain, *, inspect_constructed=None):
     assert not directory.exists()
     directory.mkdir(parents=True)
     write_instruction_source(directory / 'instruction-source', 'a104')
-    library = module('scientific_process_library').ScientificProcessLibrary.freeze(
+    library = module('evolutionary_history_evidence_library').EvolutionaryHistoryEvidenceLibrary.freeze(
         directory / 'scientific-process-library', source=directory / 'instruction-source')
     catalog = [{'name': 'fixture.inspect', 'resources': 'local',
         'description': 'Engineering restoration operand; no scientific evidence.',
@@ -109,7 +109,7 @@ def diagnose(directory, retain, *, inspect_constructed=None):
                 cls = getattr(module(home + '/episode'), class_name)
                 if kind == 'scientific':
                     before = cls(services, library=library, tool_library=tools_library,
-                        child_roles=('scientific_process',))
+                        child_roles=('evolutionary_history_evidence',))
                 elif kind in {'literature', 'monitor'}:
                     before = cls(services)
                 elif kind == 'hpc':
