@@ -14,11 +14,11 @@ OWNERS=(('resource_work_submission','legacy_annotation','launch'),
  ('resource_work_submission/local_resource_work_execution','resource_work_submission','launch_local'),
  ('resource_work_submission/hpc_resource_work_execution','resource_work_submission','launch_hpc'),
  ('resource_result_acquisition','legacy_annotation','results'),
- ('scientific_process/resource_work_submission','scientific_process','launch'),
- ('scientific_process/resource_work_submission/api_resource_work_execution','scientific_process/resource_work_submission','launch_api'),
- ('scientific_process/resource_work_submission/local_resource_work_execution','scientific_process/resource_work_submission','launch_local'),
- ('scientific_process/resource_work_submission/hpc_resource_work_execution','scientific_process/resource_work_submission','launch_hpc'),
- ('scientific_process/resource_result_acquisition','scientific_process','results'))
+ ('structural_homology_evidence/resource_work_submission','structural_homology_evidence','launch'),
+ ('structural_homology_evidence/resource_work_submission/api_resource_work_execution','structural_homology_evidence/resource_work_submission','launch_api'),
+ ('structural_homology_evidence/resource_work_submission/local_resource_work_execution','structural_homology_evidence/resource_work_submission','launch_local'),
+ ('structural_homology_evidence/resource_work_submission/hpc_resource_work_execution','structural_homology_evidence/resource_work_submission','launch_hpc'),
+ ('structural_homology_evidence/resource_result_acquisition','structural_homology_evidence','results'))
 HOMES=tuple(x[0] for x in OWNERS)
 def own(name):return import_module(PACKAGE+'.'+name)
 def forbidden(*args,**kwargs):raise AssertionError('unexpected external acquisition or replay')
@@ -28,7 +28,7 @@ def capture(call):
 def path_for(home):
     role=dict((h,r) for h,_,r in OWNERS)[home]
     prefix=(('annotation','root'),)
-    if home.startswith('scientific_process/'):prefix+=(('scientific_process','science'),)
+    if home.startswith('structural_homology_evidence/'):prefix+=(('structural_homology_evidence','science'),)
     if role not in ('launch','results'):prefix+=(('launch','child_0'),)
     return prefix+((role,'child_0'),)
 def handoff(selection,handle='original-controlled-job'):
@@ -82,12 +82,12 @@ def fixture(home,output,stable_workspace=None):
         bindings={h:own(h.replace('/','.')+'.episode').ResourceEpisode(services,resource_adapters=tuple(adapters.values())) for h,_,_ in OWNERS}
         from gene_annotation_episode.episodic_workflow.root.tests.scientific_head_boundaries import write_instruction_source
         library_source=output/'instruction-source';write_instruction_source(library_source,'a102')
-        library=own('scientific_process_library').ScientificProcessLibrary.freeze(output/'scientific-library',source=library_source)
+        library=own('structural_homology_evidence_library').StructuralHomologyEvidenceLibrary.freeze(output/'scientific-library',source=library_source)
         tool_library=own('scientific_tool_library').ScientificToolLibrary.freeze(output/'tool-library',catalog=[{
             'name':'fixture.inspect','resources':'local','description':'Controlled protocol port','instructions':'No acquisition.',
             'input_schema':own('domain').obj({})}])
-        scientific=own('scientific_process.episode').ScientificProcessEpisode(services,library=library,tool_library=tool_library,
-            child_roles=('scientific_process','launch','results'))
+        scientific=own('structural_homology_evidence.episode').StructuralHomologyEvidenceEpisode(services,library=library,tool_library=tool_library,
+            child_roles=('structural_homology_evidence','launch','results'))
         registry=own('episode_bindings').EpisodeBindingRegistry((scientific,*bindings.values()))
         for h,b in bindings.items():
             assert registry.for_path(path_for(h)) is b
@@ -151,7 +151,7 @@ def action_trace(v, status='completed', kind='tool'):
     task.workflow=SimpleNamespace(run_id=v.journal.run_id,execution_binding=None,pending_work=lambda source:[],
         root_action_boundary=v.runtime.ROOT_BOUNDARY_VERSION,
         journal=v.journal,execute=execute,perform_selected_wait=wait,
-        inprocess_replay=None,scientific_process_binding=None,
+        inprocess_replay=None,structural_homology_evidence_binding=None,
         permits_common_action=lambda source,kind:kind in v.binding.permitted_common_actions(v.context),
         _closed_child_commission=lambda *args:None,validate_wait_selection=lambda *args:None,
         receive_native_outcome=lambda *args:None,receive_outcome=lambda source,selection,result,index:receipts.append((index,result['status'])),
@@ -248,7 +248,7 @@ def instruction_observation(v,case,exchange=False):
 def native_trace(v,status='completed',retryable=False):
     """Saved original adapter job; only the external native execution port is controlled."""
     adapter=v.native;plain=v.runtime._plain;events=[]
-    local_home=('scientific_process/' if v.home.startswith('scientific_process/') else '')+'resource_work_submission/local_resource_work_execution'
+    local_home=('structural_homology_evidence/' if v.home.startswith('structural_homology_evidence/') else '')+'resource_work_submission/local_resource_work_execution'
     local_binding=own(local_home.replace('/','.')+'.episode').ResourceEpisode(v.services,resource_adapters=(adapter,))
     local_path=path_for(local_home);job={'operation':'structure.align','arguments':{'original_fixture_operands':True}}
     assignment={'version':'resource_launch_assignment_v1','job_request':job,'immutable_input_versions':[],
@@ -286,7 +286,7 @@ def native_trace(v,status='completed',retryable=False):
         handoff_value=result['result']['handoff']
         refs=adapter.received_form_references(parent,handoff_value,{},'original-delivery')
         assert adapter.check_handoff(parent,handoff_value,'original-check')['record_refs']==refs
-        result_home=('scientific_process/' if v.home.startswith('scientific_process/') else '')+'resource_result_acquisition'
+        result_home=('structural_homology_evidence/' if v.home.startswith('structural_homology_evidence/') else '')+'resource_result_acquisition'
         result_binding=own(result_home.replace('/','.')+'.episode').ResourceEpisode(v.services,resource_adapters=(adapter,))
         outer_path=local_path[:-2];outer_id=v.runtime.EpisodeRef(v.journal.run_id,outer_path).episode_id
         outer=replace(parent,episode_id=outer_id,role=outer_path[-1][0],path=outer_path)
@@ -336,13 +336,13 @@ def configuration_observations(v):
 
 def connected_build_trace(v):
     runtime=v.runtime
-    names=('annotation','scientific_process','launch','launch_api','launch_local','launch_hpc','results')
+    names=('annotation','structural_homology_evidence','launch','launch_api','launch_local','launch_hpc','results')
     grains={name:runtime.Grain(name,'Original fixture boundary','Original resource result',forbidden) for name in names}
-    edges={'annotation':('scientific_process','launch','results'),'scientific_process':('scientific_process','launch','results'),
+    edges={'annotation':('structural_homology_evidence','launch','results'),'structural_homology_evidence':('structural_homology_evidence','launch','results'),
         'launch':('launch_api','launch_local','launch_hpc'),'launch_api':(),'launch_local':(),'launch_hpc':(),'results':()}
-    tree=runtime.EpisodeTree(grains['annotation'],{grains[n]:tuple(grains[c] for c in edges[n]) for n in names},self_nesting=('scientific_process',))
+    tree=runtime.EpisodeTree(grains['annotation'],{grains[n]:tuple(grains[c] for c in edges[n]) for n in names},self_nesting=('structural_homology_evidence',))
     host=SimpleNamespace(context=runtime.ReleasingContext(tree=tree,run_id=v.journal.run_id),grains=grains,
-        inprocess_completion_order=None,receipts=None,scientific_process_binding=None,episode_bindings=v.registry,
+        inprocess_completion_order=None,receipts=None,structural_homology_evidence_binding=None,episode_bindings=v.registry,
         contract_information_profile=lambda source:None,journal=v.journal,run_id=v.journal.run_id,store=v.store,
         expose_assigned_job=lambda source:None,receive_tool_attributions=lambda *args,**kwargs:None,
         archive=SimpleNamespace(store=forbidden),launch_instructions=SimpleNamespace(materialize=lambda value:None))
@@ -363,7 +363,7 @@ def connected_build_trace(v):
 def presentation_trace(v,case):
     if case in ('receiver','bootstrap','saved_update'):
         # The original handoff schema deliberately contains generic references.
-        records=own('resource_records');prompt=own('scientific_process_prompt')
+        records=own('resource_records');prompt=own('structural_homology_evidence_prompt')
         schema=deepcopy(records.HANDOFF_SCHEMA)
         rows=list(prompt._schema_rows(schema,'handoff'))
         for path,presence,kind in (
@@ -408,7 +408,7 @@ def presentation_trace(v,case):
         assert observed=={'status':'returned','value':(json.dumps(context,allow_nan=False),instructions)}
     else:
         expected=own('receiver_prompt').render_receiver_prompt(connection.scientific_prompt_states[key],instructions,lookup_results=[])
-        assert observed['value']==(expected,own('scientific_process_prompt').text_instructions(instructions))
+        assert observed['value']==(expected,own('structural_homology_evidence_prompt').text_instructions(instructions))
     return {'observation':observed,'saved_state':connection.scientific_prompt_states.get(key)}
 
 

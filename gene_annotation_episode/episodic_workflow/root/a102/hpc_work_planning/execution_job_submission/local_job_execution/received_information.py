@@ -9,7 +9,7 @@ from .received_reference_custody import NativeReceivedReferenceCustody
 class ReceivedExecutionInformation(NativeReceivedReferenceCustody, NativeReceivedRecordSelection):
 
     def received_report_sources(self, role):
-        if role not in {'annotation', 'scientific_process'}:
+        if role not in {'annotation', 'structural_homology_evidence'}:
             return {}
         from gene_annotation_episode.episodic_workflow.root.a102.protein_structure_result_views import protein_structure_fact_sources
         result = protein_structure_fact_sources()
@@ -20,7 +20,7 @@ class ReceivedExecutionInformation(NativeReceivedReferenceCustody, NativeReceive
         return result
 
     def received_report_facts(self, context):
-        if context.role not in {'annotation', 'scientific_process'}:
+        if context.role not in {'annotation', 'structural_homology_evidence'}:
             return {}
         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
         requested = {node.get('x-source') for node in schema.get('properties', {}).values()}

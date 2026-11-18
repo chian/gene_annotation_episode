@@ -7,7 +7,7 @@ Native preparation and numerical result contracts retain their existing owners.
 from copy import deepcopy
 
 from .bvbrc_appservice_contracts import contract_schema
-from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.execution_result_acquisition.execution_contracts import RESULTS_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_result_acquisition.execution_contracts import RESULTS_SCHEMA
 
 
 _PROVIDERS = {

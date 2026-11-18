@@ -7,8 +7,8 @@ from pathlib import Path
 from .communication import interpretation_schema, plain, validate_closed_schema, validate_form
 from .domain import ContractError, obj
 from .evidence_axis_instructions import validate_instruction_entry
-from .scientific_process_library import ScientificProcessLibrary
-from .scientific_process_records import SELECTION_VERSION, selector_selection, validate_selection
+from .structural_homology_evidence_library import StructuralHomologyEvidenceLibrary
+from .structural_homology_evidence_records import SELECTION_VERSION, selector_selection, validate_selection
 from .scientific_tool_library import ScientificToolLibrary
 VERSION = 'a102_investigation_v1'
 TASKS = ('model_inventory', 'target_model_correspondence', 'structural_discovery', 'native_comparison', 'functional_feature_geometry', 'functional_contrast', 'reference_attribution', 'local_trait_attribution', 'interface_constraints', 'synthesis')
@@ -26,7 +26,7 @@ class A102Subtree:
 
     def __init__(self, run_directory):
         directory = Path(run_directory)
-        self.library = ScientificProcessLibrary(directory / 'scientific-process-library')
+        self.library = StructuralHomologyEvidenceLibrary(directory / 'scientific-process-library')
         self.tools = ScientificToolLibrary(directory / 'scientific-tool-library')
         self.axis = self.library.reference('A102')
         entry = validate_instruction_entry(self.library.resolve(self.axis))
@@ -60,7 +60,7 @@ class A102Subtree:
         validate_closed_schema(schema)
         initial = initial_report() if initial is None else deepcopy(initial)
         validate_form(initial, interpretation_schema(schema), lambda ref, namespace: ref in store.reference_subset([ref], scope) and (namespace is None or store.get(ref)['record_type'] == namespace))
-        return {'kind': 'episode_child', 'role': 'scientific_process', 'goal': question, 'scope': scope, 'purpose': 'Return structural correspondence and its actual maps and native grades, qualified functional comparisons, and unresolved shared information needs.', 'schema_json': json.dumps(schema, allow_nan=False), 'initial_report_json': json.dumps(initial, allow_nan=False), 'assignment': {'selection': self.selection(child_tool_info=child_tool_info, thought_id=thought_id), 'evidence_refs': references, 'constraints': deepcopy(constraints or {}), 'context': supplied}}
+        return {'kind': 'episode_child', 'role': 'structural_homology_evidence', 'goal': question, 'scope': scope, 'purpose': 'Return structural correspondence and its actual maps and native grades, qualified functional comparisons, and unresolved shared information needs.', 'schema_json': json.dumps(schema, allow_nan=False), 'initial_report_json': json.dumps(initial, allow_nan=False), 'assignment': {'selection': self.selection(child_tool_info=child_tool_info, thought_id=thought_id), 'evidence_refs': references, 'constraints': deepcopy(constraints or {}), 'context': supplied}}
 
 def create_a102_workflow(store, tools, provider, directory, run_id, controller_factory, *, initial_known_record_refs, **options):
     from .a102_credit import A102StructuralCredit
@@ -95,10 +95,10 @@ class A102ServiceFactory:
 
     def __call__(self, store, *, run_id, directory, tool_catalog, job_episodes=None, resource_estimator=None, tool_registry=None):
         from .episode_application_services import EpisodeApplicationServices
-        from .scientific_process.published_evidence_assessment.episode import create_binding_tree
-        from .scientific_process_setup import prepare_scientific_binding
-        from .scientific_process.episode import ScientificProcessEpisode
-        child_roles = ('scientific_process', 'literature')
+        from .structural_homology_evidence.published_evidence_assessment.episode import create_binding_tree
+        from .structural_homology_evidence_setup import prepare_scientific_binding
+        from .structural_homology_evidence.episode import StructuralHomologyEvidenceEpisode
+        child_roles = ('structural_homology_evidence', 'literature')
         descriptors = list(self.additional_descriptors)
         role_bindings = dict(self.additional_role_credit_bindings or {})
         progress = self.job_progress_provider
@@ -106,8 +106,8 @@ class A102ServiceFactory:
         if tool_registry is not None:
             from types import SimpleNamespace
             from .a102_resources import A102ResourceAdapter, A102ResourceCredit, A102ProgressProvider
-            from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.resource_work_submission.episode import ResourceEpisode
-            from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.execution_progress_assessment.episode import MonitorEpisode
+            from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.resource_work_submission.episode import ResourceEpisode
+            from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_progress_assessment.episode import MonitorEpisode
             from .a102_progress_reader import SavedProgressReader
             adapter = A102ResourceAdapter(tool_registry, store, run_id)
             resources = create_resource_bindings(None, resource_adapters=(adapter,))
@@ -123,6 +123,6 @@ class A102ServiceFactory:
             resource_catalogs = {**(resource_catalogs or {}), 'local': list(contracts.values())}
         for descriptor in self.additional_descriptors:
             child_roles += tuple((r for r in descriptor.get('roles', ()) if r not in child_roles))
-        scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=directory, source_directory=self.source_directory, tool_catalog=tool_catalog, child_roles=child_roles, tool_retrieval=self.tool_retrieval, resource_catalogs=resource_catalogs)
+        scientific = prepare_scientific_binding(episode_type=StructuralHomologyEvidenceEpisode, run_directory=directory, source_directory=self.source_directory, tool_catalog=tool_catalog, child_roles=child_roles, tool_retrieval=self.tool_retrieval, resource_catalogs=resource_catalogs)
         return EpisodeApplicationServices((scientific, *tuple((binding.as_record() for binding in create_binding_tree(None))), *descriptors), role_bindings, progress, resource_tool_catalogs=resource_catalogs)
 from .resource_binding_tree import create_resource_bindings

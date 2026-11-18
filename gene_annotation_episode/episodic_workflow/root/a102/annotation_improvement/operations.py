@@ -165,8 +165,8 @@ class ImprovementOperations:
         if old and old["result"] is not None:
             result, credit = _runtime.json.loads(old["result"]), old["credit"]
         else:
-            if self.path[-1][0] == 'scientific_process':
-                self.workflow.scientific_process_binding.validate_execution_context(
+            if self.path[-1][0] == 'structural_homology_evidence':
+                self.workflow.structural_homology_evidence_binding.validate_execution_context(
                     self.workflow.binding_context(self))
             journal.save("runtime_actions", {"episode_id": self.episode_id, "decision_index": index,
                 "action": _runtime._json(selection), "result": None, "credit": None})

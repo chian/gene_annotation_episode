@@ -67,3 +67,10 @@ collection, dangling-name scan (`runs/claude_inputs/la/dangling.py`), commit.
   `tests/test_signed_evidence_root.py`); role table. A101's test files plus every shared-root and top-level file
   (`runs/claude_ax_a101_s0..3`, 863 files): identical per file to the baseline apart from the cases already retired.
   Collection 50,565, 0 errors; dangling scan unchanged.
+- P1-A102: `a102/scientific_process` → `a102/structural_homology_evidence` and every token inside `a102/` (11 paths,
+  520 files); root lookup tables; role table. Found by this step's run: `root/tests/test_monitor_credit_factory.py`
+  built arm module paths with the generic name, so its A106 case had failed since P1-A106 (that file was not in the
+  A106 test set, which was chosen by literal `a106.scientific_process` references). It now reads `axis_roles.HEAD`;
+  back to its baseline 7/1. A102's test files, the shared helper users and lookup-table users (176 files), plus the 29
+  shared files that mention `a102`, one at a time: identical to the baseline. Collection 50,565, 0 errors; dangling scan
+  unchanged. From here each step also runs every shared test file that mentions the arm id.

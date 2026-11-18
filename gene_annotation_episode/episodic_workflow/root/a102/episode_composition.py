@@ -43,14 +43,14 @@ def _same_record(actual, saved, reference):
 
 def reopen_scientific_binding(services, *, descriptor, directory):
     """Reopen this exact private scientific implementation from its saved libraries."""
-    from .scientific_process.episode import ScientificProcessEpisode
-    from .scientific_process_library import ScientificProcessLibrary
+    from .structural_homology_evidence.episode import StructuralHomologyEvidenceEpisode
+    from .structural_homology_evidence_library import StructuralHomologyEvidenceLibrary
     from .scientific_tool_library import ScientificToolLibrary
-    reference = 'scientific_process'
+    reference = 'structural_homology_evidence'
     if directory is None:
         raise _failure('unavailable_binding', reference)
     descriptor = _json_object(descriptor, reference)
-    if set(descriptor) != {'version', 'binding_id', 'configuration'} or descriptor.get('version') != 'scientific_process_episode_v10' or descriptor.get('binding_id') != reference:
+    if set(descriptor) != {'version', 'binding_id', 'configuration'} or descriptor.get('version') != 'structural_homology_evidence_episode_v10' or descriptor.get('binding_id') != reference:
         raise _failure('unavailable_binding', reference)
     configuration = descriptor['configuration']
     required = {'library', 'tool_library', 'child_roles'}
@@ -58,11 +58,11 @@ def reopen_scientific_binding(services, *, descriptor, directory):
     if not isinstance(configuration, dict) or not required <= set(configuration) or set(configuration) - required - optional:
         raise _failure('unavailable_binding', reference)
     try:
-        library = ScientificProcessLibrary(Path(directory) / 'scientific-process-library')
+        library = StructuralHomologyEvidenceLibrary(Path(directory) / 'scientific-process-library')
         _same_record(library.as_record(), configuration['library'], reference)
         tools = ScientificToolLibrary(Path(directory) / 'scientific-tool-library')
         _same_record(tools.as_record(), configuration['tool_library'], reference)
-        binding = ScientificProcessEpisode(services, library=library, tool_library=tools, child_roles=configuration['child_roles'], tool_retrieval=configuration.get('tool_retrieval'), contract_information_profile=configuration.get('contract_information_profile'), yield_bindings=configuration.get('yield_bindings'))
+        binding = StructuralHomologyEvidenceEpisode(services, library=library, tool_library=tools, child_roles=configuration['child_roles'], tool_retrieval=configuration.get('tool_retrieval'), contract_information_profile=configuration.get('contract_information_profile'), yield_bindings=configuration.get('yield_bindings'))
     except (OSError, TypeError, ValueError, KeyError, AttributeError) as error:
         raise _failure('unavailable_binding', reference) from error
     _same_record(binding.as_record(), descriptor, reference)
@@ -75,7 +75,7 @@ class EpisodeComposition:
     resource_capabilities: tuple[Mapping[str, Any], ...]
     role_credit_projectors: Mapping[str, Callable]
     role_credit_definitions: Mapping[str, Mapping[str, Any]]
-_PRIVATE_RECONSTRUCTION = {'scientific_process': ('scientific_process_episode_v10', ('library', 'tool_library', 'child_roles'), ('tool_retrieval', 'contract_information_profile', 'yield_bindings')), 'execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/hpc_allocation_execution/execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/hpc_allocation_execution/execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/hpc_work_planning/execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/hpc_work_planning/execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/hpc_work_planning/execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/hpc_work_planning/execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'scientific_process/execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'hpc_work_planning/execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'hpc_work_planning/hpc_allocation_execution/execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'scientific_process/hpc_work_planning/execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'hpc_work_planning': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'hpc_work_planning/hpc_allocation_execution': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'hpc_work_planning/hpc_resource_prediction': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'scientific_process/hpc_work_planning': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'scientific_process/hpc_work_planning/hpc_allocation_execution': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'scientific_process/hpc_work_planning/hpc_resource_prediction': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'resource_work_submission': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'resource_work_submission/api_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'resource_work_submission/local_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'resource_work_submission/hpc_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'resource_result_acquisition': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'scientific_process/resource_work_submission': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'scientific_process/resource_work_submission/api_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'scientific_process/resource_work_submission/local_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'scientific_process/resource_work_submission/hpc_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'scientific_process/resource_result_acquisition': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',))}
+_PRIVATE_RECONSTRUCTION = {'structural_homology_evidence': ('structural_homology_evidence_episode_v10', ('library', 'tool_library', 'child_roles'), ('tool_retrieval', 'contract_information_profile', 'yield_bindings')), 'execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/hpc_allocation_execution/execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'hpc_work_planning/hpc_allocation_execution/execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/hpc_work_planning/execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/hpc_work_planning/execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/hpc_work_planning/execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/hpc_work_planning/execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/hpc_work_planning/execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition': ('execution_episode_v1', ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'), ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles')), 'execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'structural_homology_evidence/execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'hpc_work_planning/execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'hpc_work_planning/hpc_allocation_execution/execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'structural_homology_evidence/hpc_work_planning/execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment': ('monitor_episode_binding_v1', ('outcome_page_size',), ('information_unit', 'yield_settings')), 'hpc_work_planning': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'hpc_work_planning/hpc_allocation_execution': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'hpc_work_planning/hpc_resource_prediction': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'structural_homology_evidence/hpc_work_planning': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'structural_homology_evidence/hpc_work_planning/hpc_resource_prediction': ('hpc_episode_v1', ('resources', 'commissions'), ('shared_execution_memory', 'require_commission_yield')), 'resource_work_submission': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'resource_work_submission/api_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'resource_work_submission/local_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'resource_work_submission/hpc_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'resource_result_acquisition': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'structural_homology_evidence/resource_work_submission': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'structural_homology_evidence/resource_work_submission/api_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'structural_homology_evidence/resource_work_submission/local_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'structural_homology_evidence/resource_work_submission/hpc_resource_work_execution': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',)), 'structural_homology_evidence/resource_result_acquisition': ('resource_episode_binding_v1', ('resource_adapters',), ('contract_information_profile',))}
 
 def _reopen_a102_resource_adapters(configuration, *, tool_registry, store, journal, resource_pool, adapters, reference):
     if not isinstance(configuration['resource_adapters'], list):
@@ -150,7 +150,7 @@ def compose_episode_bindings(services, *, store, journal, execution_backend, des
     resource_pool = {}
     for name, descriptor, configuration in admitted:
         try:
-            if name == 'scientific_process':
+            if name == 'structural_homology_evidence':
                 binding = reopen_scientific_binding(services, descriptor=descriptor, directory=directory)
             elif name == 'execution_job_submission':
                 from .execution_job_submission.episode import ExecutionEpisode as PrivateBinding
@@ -177,28 +177,28 @@ def compose_episode_bindings(services, *, store, journal, execution_backend, des
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/execution_job_submission':
-                from .scientific_process.execution_job_submission.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/execution_job_submission':
+                from .structural_homology_evidence.execution_job_submission.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/execution_job_submission/api_job_execution':
-                from .scientific_process.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/execution_job_submission/api_job_execution':
+                from .structural_homology_evidence.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/execution_job_submission/local_job_execution':
-                from .scientific_process.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/execution_job_submission/local_job_execution':
+                from .structural_homology_evidence.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/execution_job_submission/hpc_job_execution':
-                from .scientific_process.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/execution_job_submission/hpc_job_execution':
+                from .structural_homology_evidence.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/execution_result_acquisition':
-                from .scientific_process.execution_result_acquisition.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/execution_result_acquisition':
+                from .structural_homology_evidence.execution_result_acquisition.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
@@ -252,53 +252,53 @@ def compose_episode_bindings(services, *, store, journal, execution_backend, des
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/execution_job_submission':
-                from .scientific_process.hpc_work_planning.execution_job_submission.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/execution_job_submission':
+                from .structural_homology_evidence.hpc_work_planning.execution_job_submission.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/execution_job_submission/api_job_execution':
-                from .scientific_process.hpc_work_planning.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/execution_job_submission/api_job_execution':
+                from .structural_homology_evidence.hpc_work_planning.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/execution_job_submission/local_job_execution':
-                from .scientific_process.hpc_work_planning.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/execution_job_submission/local_job_execution':
+                from .structural_homology_evidence.hpc_work_planning.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution':
-                from .scientific_process.hpc_work_planning.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/execution_job_submission/hpc_job_execution':
+                from .structural_homology_evidence.hpc_work_planning.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/execution_result_acquisition':
-                from .scientific_process.hpc_work_planning.execution_result_acquisition.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/execution_result_acquisition':
+                from .structural_homology_evidence.hpc_work_planning.execution_result_acquisition.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission':
-                from .scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission':
+                from .structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.execution_job_submission.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution':
-                from .scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution':
+                from .structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution':
-                from .scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution':
+                from .structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution':
-                from .scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution':
+                from .structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition':
-                from .scientific_process.hpc_work_planning.hpc_allocation_execution.execution_result_acquisition.episode import ExecutionEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition':
+                from .structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.execution_result_acquisition.episode import ExecutionEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, tool_registry=tool_registry, **configuration)
@@ -307,8 +307,8 @@ def compose_episode_bindings(services, *, store, journal, execution_backend, des
                 if execution_backend is None:
                     raise _failure('unavailable_binding', 'execution_backend')
                 binding = PrivateBinding(services, **configuration)
-            elif name == 'scientific_process/execution_progress_assessment':
-                from .scientific_process.execution_progress_assessment.episode import MonitorEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/execution_progress_assessment':
+                from .structural_homology_evidence.execution_progress_assessment.episode import MonitorEpisode as PrivateBinding
                 if execution_backend is None:
                     raise _failure('unavailable_binding', 'execution_backend')
                 binding = PrivateBinding(services, **configuration)
@@ -322,13 +322,13 @@ def compose_episode_bindings(services, *, store, journal, execution_backend, des
                 if execution_backend is None:
                     raise _failure('unavailable_binding', 'execution_backend')
                 binding = PrivateBinding(services, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/execution_progress_assessment':
-                from .scientific_process.hpc_work_planning.execution_progress_assessment.episode import MonitorEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/execution_progress_assessment':
+                from .structural_homology_evidence.hpc_work_planning.execution_progress_assessment.episode import MonitorEpisode as PrivateBinding
                 if execution_backend is None:
                     raise _failure('unavailable_binding', 'execution_backend')
                 binding = PrivateBinding(services, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment':
-                from .scientific_process.hpc_work_planning.hpc_allocation_execution.execution_progress_assessment.episode import MonitorEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment':
+                from .structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.execution_progress_assessment.episode import MonitorEpisode as PrivateBinding
                 if execution_backend is None:
                     raise _failure('unavailable_binding', 'execution_backend')
                 binding = PrivateBinding(services, **configuration)
@@ -347,18 +347,18 @@ def compose_episode_bindings(services, *, store, journal, execution_backend, des
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, **configuration)
-            elif name == 'scientific_process/hpc_work_planning':
-                from .scientific_process.hpc_work_planning.episode import HPCEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning':
+                from .structural_homology_evidence.hpc_work_planning.episode import HPCEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/hpc_allocation_execution':
-                from .scientific_process.hpc_work_planning.hpc_allocation_execution.episode import HPCEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution':
+                from .structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.episode import HPCEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, **configuration)
-            elif name == 'scientific_process/hpc_work_planning/hpc_resource_prediction':
-                from .scientific_process.hpc_work_planning.hpc_resource_prediction.episode import HPCEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/hpc_work_planning/hpc_resource_prediction':
+                from .structural_homology_evidence.hpc_work_planning.hpc_resource_prediction.episode import HPCEpisode as PrivateBinding
                 if directory is None:
                     raise _failure('unavailable_binding', name)
                 binding = PrivateBinding(services, store=store, directory=directory, run_id=journal.run_id, **configuration)
@@ -382,24 +382,24 @@ def compose_episode_bindings(services, *, store, journal, execution_backend, des
                 from .resource_result_acquisition.episode import ResourceEpisode as PrivateBinding
                 resource_adapters = _reopen_a102_resource_adapters(configuration, tool_registry=tool_registry, store=store, journal=journal, resource_pool=resource_pool, adapters=adapters, reference=name)
                 binding = PrivateBinding(services, resource_adapters=resource_adapters, contract_information_profile=configuration.get('contract_information_profile'))
-            elif name == 'scientific_process/resource_work_submission':
-                from .scientific_process.resource_work_submission.episode import ResourceEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/resource_work_submission':
+                from .structural_homology_evidence.resource_work_submission.episode import ResourceEpisode as PrivateBinding
                 resource_adapters = _reopen_a102_resource_adapters(configuration, tool_registry=tool_registry, store=store, journal=journal, resource_pool=resource_pool, adapters=adapters, reference=name)
                 binding = PrivateBinding(services, resource_adapters=resource_adapters, contract_information_profile=configuration.get('contract_information_profile'))
-            elif name == 'scientific_process/resource_work_submission/api_resource_work_execution':
-                from .scientific_process.resource_work_submission.api_resource_work_execution.episode import ResourceEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/resource_work_submission/api_resource_work_execution':
+                from .structural_homology_evidence.resource_work_submission.api_resource_work_execution.episode import ResourceEpisode as PrivateBinding
                 resource_adapters = _reopen_a102_resource_adapters(configuration, tool_registry=tool_registry, store=store, journal=journal, resource_pool=resource_pool, adapters=adapters, reference=name)
                 binding = PrivateBinding(services, resource_adapters=resource_adapters, contract_information_profile=configuration.get('contract_information_profile'))
-            elif name == 'scientific_process/resource_work_submission/local_resource_work_execution':
-                from .scientific_process.resource_work_submission.local_resource_work_execution.episode import ResourceEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/resource_work_submission/local_resource_work_execution':
+                from .structural_homology_evidence.resource_work_submission.local_resource_work_execution.episode import ResourceEpisode as PrivateBinding
                 resource_adapters = _reopen_a102_resource_adapters(configuration, tool_registry=tool_registry, store=store, journal=journal, resource_pool=resource_pool, adapters=adapters, reference=name)
                 binding = PrivateBinding(services, resource_adapters=resource_adapters, contract_information_profile=configuration.get('contract_information_profile'))
-            elif name == 'scientific_process/resource_work_submission/hpc_resource_work_execution':
-                from .scientific_process.resource_work_submission.hpc_resource_work_execution.episode import ResourceEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/resource_work_submission/hpc_resource_work_execution':
+                from .structural_homology_evidence.resource_work_submission.hpc_resource_work_execution.episode import ResourceEpisode as PrivateBinding
                 resource_adapters = _reopen_a102_resource_adapters(configuration, tool_registry=tool_registry, store=store, journal=journal, resource_pool=resource_pool, adapters=adapters, reference=name)
                 binding = PrivateBinding(services, resource_adapters=resource_adapters, contract_information_profile=configuration.get('contract_information_profile'))
-            elif name == 'scientific_process/resource_result_acquisition':
-                from .scientific_process.resource_result_acquisition.episode import ResourceEpisode as PrivateBinding
+            elif name == 'structural_homology_evidence/resource_result_acquisition':
+                from .structural_homology_evidence.resource_result_acquisition.episode import ResourceEpisode as PrivateBinding
                 resource_adapters = _reopen_a102_resource_adapters(configuration, tool_registry=tool_registry, store=store, journal=journal, resource_pool=resource_pool, adapters=adapters, reference=name)
                 binding = PrivateBinding(services, resource_adapters=resource_adapters, contract_information_profile=configuration.get('contract_information_profile'))
         except (TypeError, ValueError, KeyError, AttributeError) as error:
@@ -411,7 +411,7 @@ def compose_episode_bindings(services, *, store, journal, execution_backend, des
         bindings.append(binding)
     try:
         paths = {getattr(binding, 'binding_path', None) for binding in bindings}
-        conflicts = {role for resource, execution, role in (('resource_work_submission', 'execution_job_submission', 'launch'), ('resource_result_acquisition', 'execution_result_acquisition', 'results'), ('scientific_process/resource_work_submission', 'scientific_process/execution_job_submission', 'launch'), ('scientific_process/resource_result_acquisition', 'scientific_process/execution_result_acquisition', 'results')) if resource in paths and execution in paths}
+        conflicts = {role for resource, execution, role in (('resource_work_submission', 'execution_job_submission', 'launch'), ('resource_result_acquisition', 'execution_result_acquisition', 'results'), ('structural_homology_evidence/resource_work_submission', 'structural_homology_evidence/execution_job_submission', 'launch'), ('structural_homology_evidence/resource_result_acquisition', 'structural_homology_evidence/execution_result_acquisition', 'results')) if resource in paths and execution in paths}
         if conflicts:
             raise ValueError('duplicate_episode_role:' + ','.join(sorted(conflicts)))
         EpisodeBindingRegistry(bindings)

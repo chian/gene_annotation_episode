@@ -13,9 +13,9 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-HOMES = ('execution_job_submission/api_job_execution', 'scientific_process/execution_job_submission/api_job_execution', 'hpc_work_planning/execution_job_submission/api_job_execution', 'hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution', 'scientific_process/hpc_work_planning/execution_job_submission/api_job_execution', 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution')
+HOMES = ('execution_job_submission/api_job_execution', 'structural_homology_evidence/execution_job_submission/api_job_execution', 'hpc_work_planning/execution_job_submission/api_job_execution', 'hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution', 'structural_homology_evidence/hpc_work_planning/execution_job_submission/api_job_execution', 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution')
 PREFIX = 'gene_annotation_episode.episodic_workflow.root.a102'
-ROLES = {'scientific_process':'scientific_process','hpc_work_planning':'hpc',
+ROLES = {'structural_homology_evidence':'structural_homology_evidence','hpc_work_planning':'hpc',
     'hpc_allocation_execution':'hpc_execution','execution_job_submission':'launch','api_job_execution':'launch_api'}
 
 

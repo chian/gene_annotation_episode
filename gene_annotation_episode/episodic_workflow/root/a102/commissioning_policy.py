@@ -19,15 +19,15 @@ def annotation_declared_child_roles(self, role):
 
 def annotation_available_child_roles(self, source, roles):
     if len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False):
-        roles = tuple(role for role in roles if role == 'scientific_process')
+        roles = tuple(role for role in roles if role == 'structural_homology_evidence')
     return roles
 
 def validate_annotation_child(self, source, role, *, selection=None, original=False):
     annotation_axes = len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False)
-    if annotation_axes and role != 'scientific_process':
+    if annotation_axes and role != 'structural_homology_evidence':
         raise ValueError('annotation_root_commissions_evidence_axes')
     if annotation_axes and selection is not None and not original:
-        from .scientific_process_records import selection_fields
+        from .structural_homology_evidence_records import selection_fields
         assignment = selection.get('assignment', {})
         process = assignment.get('selection', {})
         axis = process[selection_fields(process)[0]]['option_id']

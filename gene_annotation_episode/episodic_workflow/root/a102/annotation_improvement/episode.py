@@ -8,7 +8,7 @@ def plain_improvement_path(workflow, path):
     if not safe_cached_registry(workflow) or not plain_path(path) or not path:
         return False
     registry = workflow.episode_bindings
-    if workflow.scientific_process_binding is not None or 'improvement' in registry._by_role:
+    if workflow.structural_homology_evidence_binding is not None or 'improvement' in registry._by_role:
         return False
     if path[0][0] == 'annotation':
         return ('annotation' not in registry._by_role and len(path) > 1

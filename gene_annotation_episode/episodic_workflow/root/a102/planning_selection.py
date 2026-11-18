@@ -9,19 +9,19 @@ from importlib import import_module
 PACKAGE = 'gene_annotation_episode.episodic_workflow.root.a102'
 # (literal private home, literal commissioning parent, role, class, portfolio)
 CALLERS = {
-    'scientific_process': ('legacy_annotation', 'scientific_process', 'ScientificProcessEpisode', 'scientific_process/resource_work_submission'),
+    'structural_homology_evidence': ('legacy_annotation', 'structural_homology_evidence', 'StructuralHomologyEvidenceEpisode', 'structural_homology_evidence/resource_work_submission'),
     'execution_progress_assessment': ('legacy_annotation', 'monitor', 'MonitorEpisode', 'resource_work_submission'),
-    'scientific_process/execution_progress_assessment': ('scientific_process', 'monitor', 'MonitorEpisode', 'scientific_process/resource_work_submission'),
+    'structural_homology_evidence/execution_progress_assessment': ('structural_homology_evidence', 'monitor', 'MonitorEpisode', 'structural_homology_evidence/resource_work_submission'),
     'resource_work_submission': ('legacy_annotation', 'launch', 'ResourceEpisode', 'resource_work_submission'),
     'resource_work_submission/api_resource_work_execution': ('resource_work_submission', 'launch_api', 'ResourceEpisode', 'resource_work_submission'),
     'resource_work_submission/local_resource_work_execution': ('resource_work_submission', 'launch_local', 'ResourceEpisode', 'resource_work_submission'),
     'resource_work_submission/hpc_resource_work_execution': ('resource_work_submission', 'launch_hpc', 'ResourceEpisode', 'resource_work_submission'),
     'resource_result_acquisition': ('legacy_annotation', 'results', 'ResourceEpisode', 'resource_work_submission'),
-    'scientific_process/resource_work_submission': ('scientific_process', 'launch', 'ResourceEpisode', 'scientific_process/resource_work_submission'),
-    'scientific_process/resource_work_submission/api_resource_work_execution': ('scientific_process/resource_work_submission', 'launch_api', 'ResourceEpisode', 'scientific_process/resource_work_submission'),
-    'scientific_process/resource_work_submission/local_resource_work_execution': ('scientific_process/resource_work_submission', 'launch_local', 'ResourceEpisode', 'scientific_process/resource_work_submission'),
-    'scientific_process/resource_work_submission/hpc_resource_work_execution': ('scientific_process/resource_work_submission', 'launch_hpc', 'ResourceEpisode', 'scientific_process/resource_work_submission'),
-    'scientific_process/resource_result_acquisition': ('scientific_process', 'results', 'ResourceEpisode', 'scientific_process/resource_work_submission'),
+    'structural_homology_evidence/resource_work_submission': ('structural_homology_evidence', 'launch', 'ResourceEpisode', 'structural_homology_evidence/resource_work_submission'),
+    'structural_homology_evidence/resource_work_submission/api_resource_work_execution': ('structural_homology_evidence/resource_work_submission', 'launch_api', 'ResourceEpisode', 'structural_homology_evidence/resource_work_submission'),
+    'structural_homology_evidence/resource_work_submission/local_resource_work_execution': ('structural_homology_evidence/resource_work_submission', 'launch_local', 'ResourceEpisode', 'structural_homology_evidence/resource_work_submission'),
+    'structural_homology_evidence/resource_work_submission/hpc_resource_work_execution': ('structural_homology_evidence/resource_work_submission', 'launch_hpc', 'ResourceEpisode', 'structural_homology_evidence/resource_work_submission'),
+    'structural_homology_evidence/resource_result_acquisition': ('structural_homology_evidence', 'results', 'ResourceEpisode', 'structural_homology_evidence/resource_work_submission'),
     'published_evidence_assessment': ('legacy_annotation', 'literature', 'LiteratureEpisode', 'resource_work_submission'),
     'published_evidence_assessment/evidence_search_strategy_improvement': ('published_evidence_assessment', 'literature_strategy', 'LiteratureEpisode', 'resource_work_submission'),
     'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment': ('published_evidence_assessment/evidence_search_strategy_improvement', 'literature_search', 'LiteratureEpisode', 'resource_work_submission'),
@@ -29,13 +29,13 @@ CALLERS = {
     'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction': ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_table', 'LiteratureEpisode', 'resource_work_submission'),
     'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement': ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_ordered', 'LiteratureEpisode', 'resource_work_submission'),
     'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction': ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_targeted', 'LiteratureEpisode', 'resource_work_submission'),
-    'scientific_process/published_evidence_assessment': ('scientific_process', 'literature', 'LiteratureEpisode', 'scientific_process/resource_work_submission'),
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement': ('scientific_process/published_evidence_assessment', 'literature_strategy', 'LiteratureEpisode', 'scientific_process/resource_work_submission'),
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment': ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement', 'literature_search', 'LiteratureEpisode', 'scientific_process/resource_work_submission'),
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination': ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment', 'literature_page', 'LiteratureEpisode', 'scientific_process/resource_work_submission'),
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction': ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_table', 'LiteratureEpisode', 'scientific_process/resource_work_submission'),
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement': ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_ordered', 'LiteratureEpisode', 'scientific_process/resource_work_submission'),
-    'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction': ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_targeted', 'LiteratureEpisode', 'scientific_process/resource_work_submission'),
+    'structural_homology_evidence/published_evidence_assessment': ('structural_homology_evidence', 'literature', 'LiteratureEpisode', 'structural_homology_evidence/resource_work_submission'),
+    'structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement': ('structural_homology_evidence/published_evidence_assessment', 'literature_strategy', 'LiteratureEpisode', 'structural_homology_evidence/resource_work_submission'),
+    'structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment': ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement', 'literature_search', 'LiteratureEpisode', 'structural_homology_evidence/resource_work_submission'),
+    'structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination': ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment', 'literature_page', 'LiteratureEpisode', 'structural_homology_evidence/resource_work_submission'),
+    'structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction': ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_table', 'LiteratureEpisode', 'structural_homology_evidence/resource_work_submission'),
+    'structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement': ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_ordered', 'LiteratureEpisode', 'structural_homology_evidence/resource_work_submission'),
+    'structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction': ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_targeted', 'LiteratureEpisode', 'structural_homology_evidence/resource_work_submission'),
 }
 RESOURCE_HOMES = tuple(home for home,row in CALLERS.items() if row[2] == 'ResourceEpisode')
 
@@ -170,7 +170,7 @@ def planning_binding(workflow, source):
             parent = selected = _require(registry, actual, actual_home)
             home = actual_home
             resource_frame = home in RESOURCE_HOMES
-            if home == 'scientific_process':
+            if home == 'structural_homology_evidence':
                 science_frames.append(prefix)
             continue
         matches = [candidate for candidate,row in CALLERS.items() if row[0]==home and row[1]==role]
@@ -196,7 +196,7 @@ def planning_binding(workflow, source):
             raise ValueError('a102_resource_planning_child_not_declared:'+expected)
         parent, home, selected = actual, expected, actual
         resource_frame = resource_frame or home in RESOURCE_HOMES
-        if home == 'scientific_process':
+        if home == 'structural_homology_evidence':
             science_frames.append(prefix)
     if selected is not None and registry.for_path(path) is not selected:
         raise ValueError('a102_resource_planning_saved_owner_mismatch')
@@ -205,12 +205,12 @@ def planning_binding(workflow, source):
     # path is needed. A standalone native child/Results/source has no such grant.
     if home == portfolio:
         return _require(registry, selected, portfolio)
-    if portfolio == 'scientific_process/resource_work_submission':
+    if portfolio == 'structural_homology_evidence/resource_work_submission':
         if not science_frames:
             raise ValueError('a102_resource_planning_scientific_parent_required')
         parent_path = science_frames[-1]
-        owner = _require(registry, registry.for_path(parent_path), 'scientific_process')
-        declared = owner.child_roles('scientific_process')
+        owner = _require(registry, registry.for_path(parent_path), 'structural_homology_evidence')
+        declared = owner.child_roles('structural_homology_evidence')
     else:
         if path[0][0] != 'annotation' or 'annotation' in registry.roles:
             raise ValueError('a102_resource_planning_annotation_parent_required')

@@ -6,7 +6,7 @@ import json
 
 from .composition_information import CONTRACT_INFORMATION_PROFILE
 from .schema_information_text import render_schema_information
-from .scientific_process_prompt import text_instructions
+from .structural_homology_evidence_prompt import text_instructions
 from .literature_structure_prompt import STRUCTURE_TASK
 
 

@@ -16,9 +16,9 @@ import json
 import pytest
 PACKAGE='gene_annotation_episode.episodic_workflow.root.a102'
 PARENTS=('execution_job_submission','hpc_work_planning/execution_job_submission',
-'hpc_work_planning/hpc_allocation_execution/execution_job_submission','scientific_process/execution_job_submission',
-'scientific_process/hpc_work_planning/execution_job_submission',
-'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission')
+'hpc_work_planning/hpc_allocation_execution/execution_job_submission','structural_homology_evidence/execution_job_submission',
+'structural_homology_evidence/hpc_work_planning/execution_job_submission',
+'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission')
 HOMES=tuple(parent+'/'+child for parent in PARENTS for child in ('local_job_execution','hpc_job_execution'))
 TIME='2026-11-12T00:00:00+00:00'
 def module(name):return import_module(PACKAGE+'.'+name)
@@ -80,7 +80,7 @@ def actual(home,directory):
     execution_keys.append(kw['operation_key']);return await binding.execute(context,name,arguments,kw['operation_key'])
    async def unchanged_score(source,index,result):return result
    workflow=SimpleNamespace(context=object(),grains={role:object()},inprocess_completion_order=None,
-    receipts=None,scientific_process_binding=None,episode_bindings=registry,contract_information_profile=lambda s:None,
+    receipts=None,structural_homology_evidence_binding=None,episode_bindings=registry,contract_information_profile=lambda s:None,
     specialist=lambda s:binding,binding_context=lambda s:replace(context,request=plain(s.request.as_record())),journal=journal,run_id=run_id,store=store,
     source_credit_view=credit,expose_assigned_job=lambda s:None,receive_tool_attributions=lambda *a,**kw:None,
     archive=SimpleNamespace(store=lambda value:value),launch_instructions=SimpleNamespace(materialize=lambda value:None),
@@ -97,7 +97,7 @@ def actual(home,directory):
     execution_keys=execution_keys,received=received,projections=projections,directory=directory)
 def parent_admission(f):
  parent_home=f.home.rsplit('/',1)[0]
- roles={'scientific_process':'scientific_process','hpc_work_planning':'hpc','hpc_allocation_execution':'hpc_execution','execution_job_submission':'launch'}
+ roles={'structural_homology_evidence':'structural_homology_evidence','hpc_work_planning':'hpc','hpc_allocation_execution':'hpc_execution','execution_job_submission':'launch'}
  path=(('annotation','root'),*((roles[p],'selected-'+p) for p in parent_home.split('/')))
  parent_id=module('method_loop.identities').EpisodeRef(f.context.run_id,path).episode_id
  assignment={'version':'execution_launch_assignment_v1','requests':{'selected-native':deepcopy(f.assignment)},'immutable_input_versions':[],'constraints':{}}
@@ -207,7 +207,7 @@ class NativeTaskBehavior:
             context=({'version':frames.VERSION,'kind':'decision_lookup_result','result':{'original':'lookup'}}
                 if scenario=='selected-lookup' else frames.state_frame({'unrecognized':'original'},state))
         elif scenario=='science-override':
-            context={**state,'scientific_process':{'evidence_axis':{'instruction_status':'published_investigation_instructions',
+            context={**state,'structural_homology_evidence':{'evidence_axis':{'instruction_status':'published_investigation_instructions',
                 'investigation_instructions':'Original supplied protein-structure investigation instruction.'}}}
         elif scenario=='missing-base-update':
             context=frames.state_frame(state,{})
@@ -235,7 +235,7 @@ class NativeTaskBehavior:
             assert observed==expected
             if scenario in {'minimal','unrecognized-bootstrap'}: assert observed==(json.dumps(context,allow_nan=False),instructions)
             if scenario=='hpc-override': assert observed[0]==module('library.hpc_prompt').render_hpc_prompt(context,instructions)
-            if scenario=='selected-full': assert observed[0]==module('scientific_process_prompt').render_selected_execution_prompt(context,instructions)
+            if scenario=='selected-full': assert observed[0]==module('structural_homology_evidence_prompt').render_selected_execution_prompt(context,instructions)
         assert b.scientific_prompt_states==a.scientific_prompt_states
         selected_private=scenario=='selected-full' and hasattr(f.binding,'decision_source_type')
         assert calls==([{'prompt_renderer':f.binding.decision_prompt_renderer}] if selected_private else [{}])

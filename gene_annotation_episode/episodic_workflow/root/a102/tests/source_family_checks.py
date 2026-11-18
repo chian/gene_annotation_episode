@@ -14,11 +14,11 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-HOMES = (('published_evidence_assessment', 'literature'), ('published_evidence_assessment/evidence_search_strategy_improvement', 'literature_strategy'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment', 'literature_search'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_page'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'literature_table'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement', 'literature_ordered'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction', 'literature_targeted'), ('scientific_process/published_evidence_assessment', 'literature'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement', 'literature_strategy'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment', 'literature_search'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_page'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'literature_table'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement', 'literature_ordered'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction', 'literature_targeted'))
+HOMES = (('published_evidence_assessment', 'literature'), ('published_evidence_assessment/evidence_search_strategy_improvement', 'literature_strategy'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment', 'literature_search'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_page'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'literature_table'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement', 'literature_ordered'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction', 'literature_targeted'), ('structural_homology_evidence/published_evidence_assessment', 'literature'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement', 'literature_strategy'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment', 'literature_search'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_page'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'literature_table'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement', 'literature_ordered'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction', 'literature_targeted'))
 CHILDREN = {'literature': (('literature_strategy', 'evidence_search_strategy_improvement'),), 'literature_strategy': (('literature_search', 'source_relevance_assessment'),), 'literature_search': (('literature_page', 'source_evidence_examination'),), 'literature_page': (('literature_table', 'table_evidence_extraction'), ('literature_ordered', 'source_coverage_improvement'), ('literature_targeted', 'passage_evidence_extraction'))}
 PREFIX = 'gene_annotation_episode.episodic_workflow.root.a102'
 ROLES = {home.rsplit('/',1)[-1]:role for home,role in HOMES}
-ROLES['scientific_process']='scientific_process'
+ROLES['structural_homology_evidence']='structural_homology_evidence'
 STATUSES=('completed','partial','invalid','failed','unavailable')
 
 
@@ -81,20 +81,20 @@ def fixture(home,output,task_kind='verified_source_leads'):
             configuration={'outcome_page_size':3,'structure_population':False,'private_yield_binding':True,'yield_bindings':declarations}
             bindings={h:own(h.replace('/','.')+'.episode').LiteratureEpisode(host.services,**deepcopy(configuration)) for h,_ in HOMES}
             library_source=output/'instruction-source';write_instruction_source(library_source,'a102')
-            library=own('scientific_process_library').ScientificProcessLibrary.freeze(output/'scientific-library',source=library_source)
+            library=own('structural_homology_evidence_library').StructuralHomologyEvidenceLibrary.freeze(output/'scientific-library',source=library_source)
             tools=own('scientific_tool_library').ScientificToolLibrary.freeze(output/'tool-library',catalog=[{
                 'name':'fixture.inspect','resources':'local','description':'Engineering fixture only.',
                 'instructions':'No external work or scientific inference.','input_schema':own('domain').obj({})}])
-            scientific=own('scientific_process.episode').ScientificProcessEpisode(host.services,library=library,tool_library=tools,
-                child_roles=('scientific_process','literature'))
-            host.scientific_process_binding=scientific
+            scientific=own('structural_homology_evidence.episode').StructuralHomologyEvidenceEpisode(host.services,library=library,tool_library=tools,
+                child_roles=('structural_homology_evidence','literature'))
+            host.structural_homology_evidence_binding=scientific
             host.episode_bindings=own('episode_bindings').EpisodeBindingRegistry((scientific,*bindings.values()))
-            names=('annotation','scientific_process',*dict.fromkeys(role for _,role in HOMES))
+            names=('annotation','structural_homology_evidence',*dict.fromkeys(role for _,role in HOMES))
             host.grains={name:runtime.Grain(name,'One original fixture action','Original typed fixture result',forbidden) for name in names}
             graph={host.grains[name]:tuple(host.grains[child] for child in
-                (('scientific_process','literature') if name in {'annotation','scientific_process'} else
+                (('structural_homology_evidence','literature') if name in {'annotation','structural_homology_evidence'} else
                     tuple(child for child,_ in CHILDREN.get(name,())))) for name in names}
-            host.tree=runtime.EpisodeTree(host.grains['annotation'],graph,self_nesting=('scientific_process',))
+            host.tree=runtime.EpisodeTree(host.grains['annotation'],graph,self_nesting=('structural_homology_evidence',))
             host.context=runtime.ReleasingContext(tree=host.tree,run_id=host.run_id)
             binding=bindings[home];role=dict(HOMES)[home];path=path_for(home)
             assert host.episode_bindings.for_path(path) is binding

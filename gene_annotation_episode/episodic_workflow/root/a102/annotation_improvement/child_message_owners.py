@@ -8,7 +8,7 @@ def exchange_for_child(workflow, source, role):
     if type(role) is not str or role != 'improvement':
         return None
     if is_annotation_parent(workflow, source):
-        if workflow.scientific_process_binding is not None:
+        if workflow.structural_homology_evidence_binding is not None:
             return None
         from ..to_child_annotation_improvement import prepare_request
         from ..from_child_annotation_improvement import admit_return

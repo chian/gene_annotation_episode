@@ -23,7 +23,7 @@ from .completion import LaunchCompletion
 from importlib import import_module as _import_module
 from .yield_estimator import ExecutionEpisodeYield
 from .task import LaunchTask
-from gene_annotation_episode.episodic_workflow.root.a102.scientific_process_prompt import render_selected_execution_prompt
+from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence_prompt import render_selected_execution_prompt
 
 from .action_policy import LaunchActionPolicy
 

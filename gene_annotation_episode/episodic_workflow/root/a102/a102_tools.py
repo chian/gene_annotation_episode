@@ -165,7 +165,7 @@ class A102ToolRegistry(ToolRegistry):
 
     def received_attributions(self,context,known):
         from .a102_attachments import refresh
-        if context.role not in {'annotation','scientific_process','improvement'}:return [],[]
+        if context.role not in {'annotation','structural_homology_evidence','improvement'}:return [],[]
         return refresh(self.store,known,plain(context.scope))
 
     def received_structural_attributions(self,context,known,*,input_authority,hpc_result_reader):

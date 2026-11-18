@@ -31,7 +31,7 @@ from .protein_structure_result_views import (
     protein_structure_fact_sources, validate_protein_structure_failure_return,
     validate_protein_structure_projection_result,
 )
-from .scientific_process_records import (
+from .structural_homology_evidence_records import (
     scientific_digest, scientific_invocation_ref, selector_selection, validate_filled_process,
 )
 
@@ -164,13 +164,13 @@ class NativeProteinStructureReturns(EpisodeReturnRecords):
         if action["kind"] in {"episode_child", "job_child"}:
             self._require(action.get("role") == child.role)
             assignment = plain(child.assignment)
-            if child.role == "scientific_process" and "selection" in assignment:
+            if child.role == "structural_homology_evidence" and "selection" in assignment:
                 # Only the existing instruction selectors are materialized.
                 # Every other selected assignment field stays exact.
                 selected = {**assignment, "selection": selector_selection(assignment["selection"])}
                 self._require(self._equal(action.get("assignment", {}), assignment)
                     or self._equal(action.get("assignment", {}), selected))
-                filled = validate_filled_process(request["message"]["scientific_process"])
+                filled = validate_filled_process(request["message"]["structural_homology_evidence"])
                 invocation = {"objective": request["goal"]["objective"], "scope": plain(child.scope),
                     "purpose": contract["decision"], "report_schema": contract["measurements"]["schema"],
                     "initial_report": request["message"]["initial_report"]}

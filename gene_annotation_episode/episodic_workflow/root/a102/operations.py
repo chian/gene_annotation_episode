@@ -165,7 +165,7 @@ class AnnotationOperations:
         if old and old["result"] is not None:
             result, credit = _runtime.json.loads(old["result"]), old["credit"]
         else:
-            if self.path[-1][0] == 'scientific_process':
+            if self.path[-1][0] == 'structural_homology_evidence':
                 pass
             journal.save("runtime_actions", {"episode_id": self.episode_id, "decision_index": index,
                 "action": _runtime._json(selection), "result": None, "credit": None})

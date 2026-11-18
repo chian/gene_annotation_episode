@@ -37,8 +37,8 @@ def exchange_for_child(workflow, source, role):
         candidate = registry._by_path.get('hpc_work_planning')
         if candidate is not None and any(item is candidate for item in registry._by_role.get(role, ())):
             candidates.append(candidate)
-    if role == 'scientific_process':
-        candidate = registry._by_path.get('scientific_process')
+    if role == 'structural_homology_evidence':
+        candidate = registry._by_path.get('structural_homology_evidence')
         if candidate is not None and any(item is candidate for item in registry._by_role.get(role, ())):
             candidates.append(candidate)
     if role == 'literature':
@@ -84,12 +84,12 @@ def exchange_for_child(workflow, source, role):
             return None
         from .to_child_hpc_work_planning import prepare_request
         from .from_child_hpc_work_planning import admit_return
-    elif role == 'scientific_process' and registry._by_path.get('scientific_process') is child:
-        from .scientific_process.episode import ScientificProcessEpisode
-        if type(child) is not ScientificProcessEpisode:
+    elif role == 'structural_homology_evidence' and registry._by_path.get('structural_homology_evidence') is child:
+        from .structural_homology_evidence.episode import StructuralHomologyEvidenceEpisode
+        if type(child) is not StructuralHomologyEvidenceEpisode:
             return None
-        from .to_child_scientific_process import prepare_request
-        from .from_child_scientific_process import admit_return
+        from .to_child_structural_homology_evidence import prepare_request
+        from .from_child_structural_homology_evidence import admit_return
     elif role == 'literature' and registry._by_path.get('published_evidence_assessment') is child:
         from .published_evidence_assessment.episode import LiteratureEpisode
         if type(child) is not LiteratureEpisode:

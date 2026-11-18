@@ -1,6 +1,6 @@
 """Original annotation closure facts, saved-form reuse and factual credit."""
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.report_snapshot import complete_scientific_snapshot
+from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.report_snapshot import complete_scientific_snapshot
 from . import runtime as _runtime
 
 def facts(self, source, *, completion_record=None):
@@ -73,7 +73,7 @@ def facts(self, source, *, completion_record=None):
             if credit_snapshot is not None:
                 snapshot['operational_credit_snapshot'] = credit_snapshot
             context = self.binding_context(source)
-            if specialist is self.scientific_process_binding:
+            if specialist is self.structural_homology_evidence_binding:
                 complete_scientific_snapshot(self, source, context, snapshot, facts)
             facts.update(specialist.facts(context, snapshot))
         received_facts = self.episode_bindings.received_report_facts(self.binding_context(source),

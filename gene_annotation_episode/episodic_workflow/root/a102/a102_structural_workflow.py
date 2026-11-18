@@ -13,7 +13,7 @@ from .a102_structural_evidence import VERSION, is_merged_entry, task_context, fi
 from .a102_structural_report import report_schema, initial_report
 from .communication import interpretation_schema, plain, validate_closed_schema, validate_form
 from .domain import ContractError
-from .scientific_process_library import ScientificProcessLibrary
+from .structural_homology_evidence_library import StructuralHomologyEvidenceLibrary
 from .scientific_tool_library import ScientificToolLibrary
 
 
@@ -28,7 +28,7 @@ class A102StructuralEvidenceSubtree(A102Subtree):
 
     def __init__(self, run_directory):
         directory = Path(run_directory)
-        self.library = ScientificProcessLibrary(directory / 'scientific-process-library')
+        self.library = StructuralHomologyEvidenceLibrary(directory / 'scientific-process-library')
         self.tools = ScientificToolLibrary(directory / 'scientific-tool-library')
         _require_merged_library(self.library)
         self.axis = self.library.reference('A102')
@@ -63,7 +63,7 @@ class A102StructuralEvidenceSubtree(A102Subtree):
         validate_form(initial, interpretation_schema(schema), lambda ref, namespace:
             ref in store.reference_subset([ref], scope)
             and (namespace is None or store.get(ref)['record_type'] == namespace))
-        return {'kind': 'episode_child', 'role': 'scientific_process', 'goal': question,
+        return {'kind': 'episode_child', 'role': 'structural_homology_evidence', 'goal': question,
             'scope': scope, 'purpose': 'Return structural findings, applicable comparative records '
                 'and experimental numerical cells with their original meanings, scope and dependencies.',
             'schema_json': json.dumps(schema, allow_nan=False),
@@ -87,11 +87,11 @@ class A102StructuralEvidenceServiceFactory(A102ServiceFactory):
                             job_episodes, resource_estimator, tool_registry):
         from .episode_application_services import EpisodeApplicationServices
         from .execution_service_setup import ExecutionServiceFactory
-        from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.execution_job_submission.episode import ExecutionEpisode
-        from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.execution_progress_assessment.episode import MonitorEpisode
-        from .scientific_process.published_evidence_assessment.episode import create_binding_tree
-        from .scientific_process_setup import prepare_scientific_binding
-        from .scientific_process.episode import ScientificProcessEpisode
+        from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_job_submission.episode import ExecutionEpisode
+        from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_progress_assessment.episode import MonitorEpisode
+        from .structural_homology_evidence.published_evidence_assessment.episode import create_binding_tree
+        from .structural_homology_evidence_setup import prepare_scientific_binding
+        from .structural_homology_evidence.episode import StructuralHomologyEvidenceEpisode
         factory = self.execution_service_factory
         if not isinstance(factory, ExecutionServiceFactory):
             raise TypeError('a102_explicit_execution_service_factory_required')
@@ -107,7 +107,7 @@ class A102StructuralEvidenceServiceFactory(A102ServiceFactory):
             configure_hpc(factory.resources)
         descriptors = (*execution.episode_binding_descriptors, *self.additional_descriptors)
         ids = [descriptor['binding_id'] for descriptor in descriptors]
-        if len(ids) != len(set(ids)) or {'scientific_process', 'literature'}.intersection(ids):
+        if len(ids) != len(set(ids)) or {'structural_homology_evidence', 'literature'}.intersection(ids):
             raise ContractError('a102_execution_binding_conflict')
         bindings = dict(self.additional_role_credit_bindings or {})
         if set(bindings).intersection(execution.role_credit_bindings):
@@ -120,14 +120,14 @@ class A102StructuralEvidenceServiceFactory(A102ServiceFactory):
             if resource in catalogs and catalogs[resource] != rows:
                 raise ContractError('a102_execution_resource_catalog_conflict')
             catalogs[resource] = deepcopy(rows)
-        roles = ['scientific_process', 'literature',
+        roles = ['structural_homology_evidence', 'literature',
             *ExecutionEpisode.entry_roles, *ExecutionResultsEpisode.entry_roles, *MonitorEpisode.entry_roles]
         if factory.hpc_commissions is not None:
-            from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.episode import HPCEpisode
+            from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.episode import HPCEpisode
             roles.extend(HPCEpisode.entry_roles)
         for descriptor in self.additional_descriptors:
             roles.extend(descriptor.get('roles', ()))
-        scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=directory,
+        scientific = prepare_scientific_binding(episode_type=StructuralHomologyEvidenceEpisode, run_directory=directory,
             source_directory=self.source_directory,
             tool_catalog=tool_registry.catalog() if tool_registry is not None else tool_catalog,
             child_roles=tuple(dict.fromkeys(roles)), tool_retrieval=self.tool_retrieval,
@@ -138,13 +138,13 @@ class A102StructuralEvidenceServiceFactory(A102ServiceFactory):
     def __call__(self, store, *, run_id, directory, tool_catalog,
                  job_episodes=None, resource_estimator=None, tool_registry=None):
         from .a102_structural_catalog import prepare_catalog
-        from .scientific_process.published_evidence_assessment.episode import create_binding_tree
+        from .structural_homology_evidence.published_evidence_assessment.episode import create_binding_tree
         directory = Path(directory)
         frozen = directory / 'scientific-process-library'
         if (frozen / 'index.json').is_file():
             # Reconstruction uses the authoritative run snapshot; original
             # publication files need not still exist or have remained current.
-            _require_merged_library(ScientificProcessLibrary(frozen))
+            _require_merged_library(StructuralHomologyEvidenceLibrary(frozen))
             configured = self
         else:
             source = prepare_catalog(self.source_directory, directory / 'structural-evidence-catalog')
@@ -188,4 +188,4 @@ def create_a102_structural_evidence_workflow(store, tools, provider, directory, 
         credit_binding=progress.as_record(), initial_known_record_refs=initial_known_record_refs,
         **options)
 
-from .scientific_process.execution_result_acquisition.episode import ExecutionEpisode as ExecutionResultsEpisode
+from .structural_homology_evidence.execution_result_acquisition.episode import ExecutionEpisode as ExecutionResultsEpisode

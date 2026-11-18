@@ -26,7 +26,7 @@ class AlignmentSiteActionRecords(EpisodeReturnRecords):
 
     def _context(self, context):
         self.authenticate(context)
-        self._require(context.role == 'scientific_process', 'scientific_owner_required')
+        self._require(context.role == 'structural_homology_evidence', 'scientific_owner_required')
 
     def _requested(self, context):
         from .alignment_site_returns import requested_site_projections

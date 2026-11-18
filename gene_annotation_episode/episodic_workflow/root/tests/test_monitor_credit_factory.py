@@ -2,12 +2,13 @@
 import importlib
 from types import SimpleNamespace
 import pytest
+from .axis_roles import HEAD
 
 @pytest.mark.parametrize('axis_name',['a102','a103','a104','a106','a107','a110'])
 def test_execution_factory_uses_the_private_monitor_credit_selection(axis_name,monkeypatch,tmp_path):
     axis='gene_annotation_episode.episodic_workflow.root.'+axis_name
     module=importlib.import_module(axis+'.execution_service_setup')
-    monitor_module=importlib.import_module(axis+'.scientific_process.execution_progress_assessment.episode')
+    monitor_module=importlib.import_module(axis+'.'+HEAD[axis_name]+'.execution_progress_assessment.episode')
     calls=[]
     class Monitor(monitor_module.MonitorEpisode):
         def information_credit(self,reader,*,information_unit):
@@ -36,15 +37,15 @@ def test_execution_factory_uses_the_private_monitor_credit_selection(axis_name,m
 @pytest.mark.parametrize('axis_name',['a102','a103'])
 def test_other_service_setup_paths_select_monitor_credit(axis_name,monkeypatch,tmp_path):
     axis='gene_annotation_episode.episodic_workflow.root.'+axis_name
-    monitor_module=importlib.import_module(axis+'.scientific_process.execution_progress_assessment.episode')
+    monitor_module=importlib.import_module(axis+'.'+HEAD[axis_name]+'.execution_progress_assessment.episode')
     calls=[]
     class Monitor(monitor_module.MonitorEpisode):
         def information_credit(self,reader,*,information_unit):
             calls.append((reader,information_unit))
             return super().information_credit(reader,information_unit=information_unit)
     monkeypatch.setattr(monitor_module,'MonitorEpisode',Monitor)
-    scientific=importlib.import_module(axis+'.scientific_process_setup')
-    literature=importlib.import_module(axis+'.scientific_process.published_evidence_assessment.episode')
+    scientific=importlib.import_module(axis+'.'+HEAD[axis_name]+'_setup')
+    literature=importlib.import_module(axis+'.'+HEAD[axis_name]+'.published_evidence_assessment.episode')
     monkeypatch.setattr(scientific,'prepare_scientific_binding',lambda **kwargs:{'binding_id':'controlled_science'})
     monkeypatch.setattr(literature,'create_binding_tree',lambda *args,**kwargs:())
     if axis_name=='a103':

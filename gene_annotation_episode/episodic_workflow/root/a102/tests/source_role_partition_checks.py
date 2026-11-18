@@ -13,7 +13,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 from . import source_family_checks as original
 
-HOMES=(('published_evidence_assessment', 'literature'), ('published_evidence_assessment/evidence_search_strategy_improvement', 'literature_strategy'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment', 'literature_search'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_page'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'literature_table'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement', 'literature_ordered'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction', 'literature_targeted'), ('scientific_process/published_evidence_assessment', 'literature'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement', 'literature_strategy'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment', 'literature_search'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_page'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'literature_table'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement', 'literature_ordered'), ('scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction', 'literature_targeted'))
+HOMES=(('published_evidence_assessment', 'literature'), ('published_evidence_assessment/evidence_search_strategy_improvement', 'literature_strategy'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment', 'literature_search'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_page'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'literature_table'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement', 'literature_ordered'), ('published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction', 'literature_targeted'), ('structural_homology_evidence/published_evidence_assessment', 'literature'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement', 'literature_strategy'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment', 'literature_search'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination', 'literature_page'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'literature_table'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement', 'literature_ordered'), ('structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction', 'literature_targeted'))
 PREFIX='gene_annotation_episode.episodic_workflow.root.a102'
 def own(name):return import_module(PREFIX+'.'+name)
 def plain(value):return own('communication').plain(value)
@@ -79,7 +79,7 @@ def page_parent(value,child_private,parent_private,fields):
     parent_home=value.home.rsplit('/',1)[0]
     child=configured(value.home,child_private);parent=configured(parent_home,parent_private)
     bindings=[parent if h==parent_home else child if h==value.home else b for h,b in value.bindings.items()]
-    registry=own('episode_bindings').EpisodeBindingRegistry((value.workflow.scientific_process_binding,*bindings))
+    registry=own('episode_bindings').EpisodeBindingRegistry((value.workflow.structural_homology_evidence_binding,*bindings))
     parent_path=value.context.path[:-1]
     assert registry.for_path(parent_path) is parent and registry.for_child(parent_path,value.role) is child
     page=deepcopy(value.assignment['page'])
@@ -114,15 +114,15 @@ def topology(value,mode,context_kind,configuration):
     elif configuration=='profile':config['contract_information_profile']=own('composition_information').CONTRACT_INFORMATION_PROFILE
     else:assert configuration in {'ordinary','population'}
     legacy=own('published_evidence_assessment.episode').create_binding_tree(value.workflow.services,**deepcopy(config))
-    scientific=own('scientific_process.published_evidence_assessment.episode').create_binding_tree(value.workflow.services,**deepcopy(config))
+    scientific=own('structural_homology_evidence.published_evidence_assessment.episode').create_binding_tree(value.workflow.services,**deepcopy(config))
     trees={'legacy7':legacy,'scientific7':scientific,'both14':(*legacy,*scientific),'both14_reversed':(*scientific,*legacy)}
     selected=trees[mode]
-    registry=own('episode_bindings').EpisodeBindingRegistry((value.workflow.scientific_process_binding,*selected))
+    registry=own('episode_bindings').EpisodeBindingRegistry((value.workflow.structural_homology_evidence_binding,*selected))
     if context_kind=='annotation':path=(('annotation','original-root'),)
-    elif context_kind=='scientific_process':path=(('annotation','original-root'),('scientific_process','original-0'))
+    elif context_kind=='structural_homology_evidence':path=(('annotation','original-root'),('structural_homology_evidence','original-0'))
     elif context_kind=='unbound_launch':path=(('launch','explicit-unbound-reader-context'),)
     else:
-        home=next(h for h,r in HOMES if r==context_kind and h.startswith('scientific_process/')==(mode=='scientific7'))
+        home=next(h for h,r in HOMES if r==context_kind and h.startswith('structural_homology_evidence/')==(mode=='scientific7'))
         path=original.path_for(home)
     episode_id=own('method_loop.identities').EpisodeRef(value.workflow.run_id,path).episode_id
     context=replace(value.context,episode_id=episode_id,role=path[-1][0],path=path,assignment={},
@@ -217,15 +217,15 @@ def nonempty_receiving(value,mode,context_kind,configuration):
     elif configuration=='profile':config['contract_information_profile']=own('composition_information').CONTRACT_INFORMATION_PROFILE
     else:assert configuration=='population'
     legacy=own('published_evidence_assessment.episode').create_binding_tree(value.workflow.services,**deepcopy(config))
-    scientific=own('scientific_process.published_evidence_assessment.episode').create_binding_tree(value.workflow.services,**deepcopy(config))
+    scientific=own('structural_homology_evidence.published_evidence_assessment.episode').create_binding_tree(value.workflow.services,**deepcopy(config))
     selected={'legacy7':legacy,'scientific7':scientific,'both14':(*legacy,*scientific),
         'both14_reversed':(*scientific,*legacy)}[mode]
-    registry=own('episode_bindings').EpisodeBindingRegistry((value.workflow.scientific_process_binding,*selected))
+    registry=own('episode_bindings').EpisodeBindingRegistry((value.workflow.structural_homology_evidence_binding,*selected))
     if context_kind=='annotation':path=(('annotation','original-root'),)
-    elif context_kind=='scientific_process':path=(('annotation','original-root'),('scientific_process','original-0'))
+    elif context_kind=='structural_homology_evidence':path=(('annotation','original-root'),('structural_homology_evidence','original-0'))
     elif context_kind=='unbound_launch':path=(('launch','explicit-unbound-reader-context'),)
     else:
-        home=next(h for h,r in HOMES if r==context_kind and h.startswith('scientific_process/')==(mode=='scientific7'))
+        home=next(h for h,r in HOMES if r==context_kind and h.startswith('structural_homology_evidence/')==(mode=='scientific7'))
         path=original.path_for(home)
     episode_id=own('method_loop.identities').EpisodeRef(value.workflow.run_id,path).episode_id
     context=replace(value.context,episode_id=episode_id,role=path[-1][0],path=path,assignment={},request={})

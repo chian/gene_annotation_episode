@@ -1,5 +1,5 @@
 """Private original A102 selected native execution presentation."""
-from gene_annotation_episode.episodic_workflow.root.a102.scientific_process_prompt import Mapping, _execution_presentation_values, _pick, _section, _selected_execution_task, _steering, _values, is_selected_execution_context
+from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence_prompt import Mapping, _execution_presentation_values, _pick, _section, _selected_execution_task, _steering, _values, is_selected_execution_context
 
 def present_native_task(state, instructions, *, lookup_results=()):
     """Present the detached original execution TASK with current own STEERING."""

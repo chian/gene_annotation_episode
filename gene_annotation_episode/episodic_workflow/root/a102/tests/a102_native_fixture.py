@@ -61,7 +61,7 @@ class NativeCase:
         self.flow=create_a102_workflow(store,self.tools,self,path/'workflow',workflow_run_id,self.controller,
             decision_protocol=decision_protocol,
             episode_service_factory=setup,episode_service_binding={'fixture':'a102_real_native_v1'},
-            episode_service_inputs='actual_tool_registry_v1',annotation_child_roles=('scientific_process','literature','launch','monitor','results'),
+            episode_service_inputs='actual_tool_registry_v1',annotation_child_roles=('structural_homology_evidence','literature','launch','monitor','results'),
             initial_known_record_refs=list(dict.fromkeys([self.target,self.material_ref,*self.file_refs])))
         self.subtree=A102Subtree(path/'workflow')
 

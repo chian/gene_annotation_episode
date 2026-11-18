@@ -33,7 +33,7 @@ def test_native_comparisons_automatically_credit_owner_and_parent(tmp_path,case_
         assert grade['eligible']
         assert case.credit_before_inspection==pytest.approx(base)
         assert record.controller_state.current_credit==pytest.approx(base)
-        owner=store.db.execute("SELECT episode_id FROM runtime_episodes WHERE json_extract(path,'$[#-1][0]')='scientific_process'").fetchone()[0]
+        owner=store.db.execute("SELECT episode_id FROM runtime_episodes WHERE json_extract(path,'$[#-1][0]')='structural_homology_evidence'").fetchone()[0]
         root=store.db.execute("SELECT episode_id FROM runtime_episodes WHERE json_extract(path,'$[#-1][0]')='annotation'").fetchone()[0]
         assert rows[0][0] in case.flow.receipts.known(owner)
         assert rows[0][0] in case.flow.receipts.known(root)

@@ -70,9 +70,9 @@ def controller_value(self, source, index, credit):
             self.binding_context(source), credit))
         action = self.journal.row('runtime_actions', source.episode_id, index)
         selected = _runtime.json.loads(action['action'])
-        if selected.get('kind') == 'episode_child' and selected.get('role') == 'scientific_process':
+        if selected.get('kind') == 'episode_child' and selected.get('role') == 'structural_homology_evidence':
             assignment = selected['assignment']
-            from ..scientific_process_records import selection_fields
+            from ..structural_homology_evidence_records import selection_fields
             process = assignment['selection']
             axis = process[selection_fields(process)[0]]['option_id']
             ref = assignment.get('proposed_annotation_ref')

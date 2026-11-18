@@ -30,7 +30,7 @@ from .uniprot_return_projection import project_uniprot_page
 SOURCE = "uniprot_selected_returns"
 VERSION = "uniprot_selected_returns_v1"
 _CLOSURE_PREFIX = "uniprot_received_report_prefix_v1"
-_RECEIVERS = {"annotation", "scientific_process"}
+_RECEIVERS = {"annotation", "structural_homology_evidence"}
 
 
 def _failure(code, pi, ri=None, fi=None, pointer=None):
@@ -257,7 +257,7 @@ class UniProtReturns(EpisodeReturnRecords):
         original = plain(child.request).get("report_contract")
         self._require(isinstance(original, dict), "original_schema_conflict")
         if selected.get("kind") == "tool":
-            self._require(selected.get("tool") == "process.revise" and child.role == "scientific_process",
+            self._require(selected.get("tool") == "process.revise" and child.role == "structural_homology_evidence",
                           "original_context_conflict")
             return
         self._require(selected.get("kind") in {"child", "episode_child", "job_child"}

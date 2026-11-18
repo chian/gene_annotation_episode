@@ -13,7 +13,7 @@ class ResultsReceivedReferenceCustody:
         access = self._protein_reference_access(context, reference, namespace)
         if access is not None:
             return access
-        if context.role in {'annotation', 'scientific_process'}:
+        if context.role in {'annotation', 'structural_homology_evidence'}:
             return self.native_protein_structure_returns.resolve_received(context, reference, namespace)
         return None
 

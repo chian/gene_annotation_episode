@@ -6,7 +6,7 @@ import tempfile
 
 from .a102_structural_evidence import VERSION, merged_entry
 from .domain import canonical
-from .scientific_process_library import (_load, _within, _validate_entry,
+from .structural_homology_evidence_library import (_load, _within, _validate_entry,
     _validate_rows, _validate_source_index)
 
 

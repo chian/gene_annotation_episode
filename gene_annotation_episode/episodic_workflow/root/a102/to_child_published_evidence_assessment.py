@@ -2,7 +2,7 @@
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.root.a102.runtime import ContractInformationError, Episode, EpisodeGoal, EpisodeRequest, Record, _plain, validate_saved_fact_form
 
-def assemble_request(workflow, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, scientific_process=None, report_contract_declaration=None):
+def assemble_request(workflow, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, structural_homology_evidence=None, report_contract_declaration=None):
     path = (*parent_path, (name, key))
     goal = _live_original_runtime.EpisodeGoal.root(objective=goal_text, result_contract={'role': name}) if parent is None else _live_original_runtime.EpisodeGoal.child(parent, objective=goal_text, result_contract=contract.schema)
     message = {'scope': scope, 'initial_report': initial or {}}
@@ -18,11 +18,11 @@ def assemble_request(workflow, name, key, goal_text, scope, *, parent=None, pare
     if episode_assignment is not None:
         workflow.launch_instructions.materialize(episode_assignment.get('launch_instructions'))
         message['episode_assignment'] = _live_original_runtime._plain(episode_assignment)
-    if scientific_process is not None:
-        message['scientific_process'] = _live_original_runtime._plain(scientific_process)
+    if structural_homology_evidence is not None:
+        message['structural_homology_evidence'] = _live_original_runtime._plain(structural_homology_evidence)
     identity = _live_original_runtime.Episode.identity(workflow.context, workflow.grains[name], key, parent_path=parent_path)
-    if workflow.scientific_process_binding is not None and name in {'annotation', 'scientific_process'}:
-        from gene_annotation_episode.episodic_workflow.root.a102.scientific_process_records import scientific_invocation_ref
+    if workflow.structural_homology_evidence_binding is not None and name in {'annotation', 'structural_homology_evidence'}:
+        from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence_records import scientific_invocation_ref
         message['scientific_invocation_ref'] = scientific_invocation_ref(workflow.run_id, path)
     if workflow.receipts is not None:
         parent_id = _live_original_runtime.Episode.identity(workflow.context, workflow.grains[parent_path[-1][0]], parent_path[-1][1], parent_path=parent_path[:-1]).episode_id if parent_path else None
@@ -34,7 +34,7 @@ from . import runtime as _runtime
 
 def prepare_request(self, source, selection, index, scope, role):
     episode_assignment = None
-    scientific_process = None
+    structural_homology_evidence = None
     schema, report_declaration = self.expanded_contract_form(source, selection, index, role)
     binding = self.episode_bindings.for_child(source.path, role)
     required = getattr(binding, 'required_return_sources', lambda _parent, _role: ())(self.binding_context(source), role)
@@ -53,7 +53,7 @@ def prepare_request(self, source, selection, index, scope, role):
         raise ValueError('child_role_not_available_to_parent')
     binding = self.episode_bindings.for_child(source.path, role)
     self.launch_instructions.materialize(selection['assignment'].get('launch_instructions'))
-    if binding is self.scientific_process_binding:
+    if binding is self.structural_homology_evidence_binding:
         closed = {}
         recorded = self.journal.row('runtime_actions', source.episode_id, index)
         if recorded is not None and recorded['result'] is not None and (_runtime._json(_runtime.json.loads(recorded['action'])) == _runtime._json(selection)) and (_runtime.json.loads(recorded['result']).get('status') == 'completed'):
@@ -67,7 +67,7 @@ def prepare_request(self, source, selection, index, scope, role):
                     closed['closed_context'] = candidate
         prepared = binding.prepare_invocation(self.binding_context(source), role, selection['assignment'], scope, f'{self.run_id}:{source.episode_id}:{index}', invocation={'objective': selection['goal'], 'purpose': selection['purpose'], 'report_schema': schema, 'initial_report': initial}, **closed)
         episode_assignment = prepared['assignment']
-        scientific_process = prepared['scientific_process']
+        structural_homology_evidence = prepared['structural_homology_evidence']
     else:
         child_assignment = selection['assignment']
         send_request = getattr(specialist, 'prepare_child_request', None)
@@ -75,5 +75,5 @@ def prepare_request(self, source, selection, index, scope, role):
             child_assignment = send_request(self.binding_context(source), role, child_assignment)
         episode_assignment = binding.prepare_assignment(self.binding_context(source), role, child_assignment, scope, f'{self.run_id}:{source.episode_id}:{index}')
     assignment = None
-    return schema, report_declaration, initial, episode_assignment, scientific_process, assignment, specialist, binding
+    return schema, report_declaration, initial, episode_assignment, structural_homology_evidence, assignment, specialist, binding
 from gene_annotation_episode.episodic_workflow.root.a102 import runtime as _live_original_runtime

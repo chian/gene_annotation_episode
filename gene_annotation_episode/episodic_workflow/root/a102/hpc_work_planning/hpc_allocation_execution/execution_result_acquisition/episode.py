@@ -25,7 +25,7 @@ from .completion import ResultsCompletion
 from importlib import import_module as _import_module
 from .yield_estimator import ExecutionEpisodeYield
 from .task import ResultsTask
-from gene_annotation_episode.episodic_workflow.root.a102.scientific_process_prompt import render_selected_execution_prompt
+from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence_prompt import render_selected_execution_prompt
 
 class ExecutionEpisode(ResultsConfiguration, ResultsActionPolicy, ResultsBindingRecord, ResultsChildCommissioning, ResultsFromParent, ResultsGoal, ResultsInternalSummary, ResultsResourceInformation, ResultsParentInputCustody, ResultsRetainedProteinReader, ResultsSavedResultCommission, ResultsExecutionState, ResultsAcquisitionOperations, ResultsResultSelection, ResultsRetainedResultAcquisition, ResultsRetainedResultPublication, ResultsReceivedRecords, ResultsToParent, ResultsCredit, ResultsClosedCredit, ResultsCompletion, ExecutionEpisodeYield):
     decision_source_type = ResultsTask

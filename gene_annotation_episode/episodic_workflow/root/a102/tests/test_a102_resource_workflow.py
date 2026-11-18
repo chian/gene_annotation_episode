@@ -24,7 +24,7 @@ class ResourceCase(NativeCase):
     def controller(self,path,initial):
         from method_loop.identities import EpisodeRef
         episode_id=EpisodeRef('a102-real-native',path).episode_id
-        horizon={'annotation':1,'scientific_process':5,'launch':1,'launch_local':2,'results':1}[path[-1][0]]
+        horizon={'annotation':1,'structural_homology_evidence':5,'launch':1,'launch_local':2,'results':1}[path[-1][0]]
         def estimate(history,parameters,contexts):
             return YieldEstimate(len(history),NumericBand.exact(0 if len(history)>=horizon+self.capacity_retries[episode_id] else 1),parameters,
                 {'fixture':'explicit_resource_horizon'})
@@ -39,12 +39,12 @@ class ResourceCase(NativeCase):
         if retry is not None:return retry
         path=json.loads(self.store.db.execute('SELECT path FROM runtime_episodes WHERE episode_id=?',(episode_id,)).fetchone()[0])
         kind=path[-1][0];stage=self.stages[episode_id]
-        if kind=='annotation' or kind=='scientific_process' and stage<2:
+        if kind=='annotation' or kind=='structural_homology_evidence' and stage<2:
             return await super().complete(episode_id,role,instructions,state,output_schema)
         assert not state.get('feedback'),state.get('feedback')
         self.states[episode_id]=deepcopy(state);self.stages[episode_id]+=1
         resource=self.flow.episode_bindings.for_role('launch');adapter=next(iter(resource.adapters.values()))
-        if kind=='scientific_process':
+        if kind=='structural_homology_evidence':
             if stage==2:
                 q,t=[self._binding_ref(ref) for ref in self.file_refs]
                 assignment={'version':'resource_launch_assignment_v1','job_request':{
@@ -86,7 +86,7 @@ def test_resource_children_deliver_metadata_before_scientific_results(tmp_path):
         assert case.credit_before_inspection>0
         assert result.controller_state.current_credit==pytest.approx(case.credit_before_inspection)
         roles={json.loads(row[0])[-1][0] for row in store.db.execute('SELECT path FROM runtime_episodes')}
-        assert {'annotation','scientific_process','launch','launch_local','results'}<=roles
+        assert {'annotation','structural_homology_evidence','launch','launch_local','results'}<=roles
         assert store.db.execute('SELECT count(*) FROM a102_resource_jobs WHERE state="completed"').fetchone()[0]==1
         native=store.db.execute('SELECT source_ref FROM a102_native_publications').fetchone()[0]
         for row in store.db.execute('SELECT episode_id,path FROM runtime_episodes'):

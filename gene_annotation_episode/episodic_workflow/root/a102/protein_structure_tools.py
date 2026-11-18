@@ -894,24 +894,24 @@ def _selected_legacy_parameter_reader(authority, transform):
     if (transform is None or transform["origin"] != "received_fitted"
             or transform["received_from"]["saved_sheet"]["version"] != "protein_structure_saved_sheet_v1"):
         return None
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.execution_result_acquisition.episode import ExecutionEpisode
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_result_acquisition.episode import ExecutionEpisode
     legacy = getattr(authority, "legacy_returns", None)
     owner = getattr(legacy, "owner", None)
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.execution_job_submission.episode import ExecutionEpisode as PrivateAuthority0
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateAuthority1
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateAuthority2
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateAuthority3
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.execution_result_acquisition.episode import ExecutionEpisode as PrivateAuthority4
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.execution_job_submission.episode import ExecutionEpisode as PrivateAuthority5
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateAuthority6
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateAuthority7
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateAuthority8
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.execution_result_acquisition.episode import ExecutionEpisode as PrivateAuthority9
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.episode import ExecutionEpisode as PrivateAuthority10
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateAuthority11
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateAuthority12
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateAuthority13
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.hpc_allocation_execution.execution_result_acquisition.episode import ExecutionEpisode as PrivateAuthority14
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_job_submission.episode import ExecutionEpisode as PrivateAuthority0
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateAuthority1
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateAuthority2
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateAuthority3
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_result_acquisition.episode import ExecutionEpisode as PrivateAuthority4
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.execution_job_submission.episode import ExecutionEpisode as PrivateAuthority5
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateAuthority6
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateAuthority7
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateAuthority8
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.execution_result_acquisition.episode import ExecutionEpisode as PrivateAuthority9
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.execution_job_submission.episode import ExecutionEpisode as PrivateAuthority10
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.execution_job_submission.api_job_execution.episode import ExecutionEpisode as PrivateAuthority11
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.execution_job_submission.local_job_execution.episode import ExecutionEpisode as PrivateAuthority12
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as PrivateAuthority13
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.execution_result_acquisition.episode import ExecutionEpisode as PrivateAuthority14
     _require(type(owner) in (PrivateAuthority0, PrivateAuthority1, PrivateAuthority2, PrivateAuthority3, PrivateAuthority4, PrivateAuthority5, PrivateAuthority6, PrivateAuthority7, PrivateAuthority8, PrivateAuthority9, PrivateAuthority10, PrivateAuthority11, PrivateAuthority12, PrivateAuthority13, PrivateAuthority14) and legacy is owner.native_protein_structure_returns
         and legacy.results is owner.native_protein_structure_results
         and owner.store is authority.store and owner.run_id == authority.run_id,
@@ -932,7 +932,7 @@ def _authenticate_saved_parameters(store, context, parameters, authority, *, ind
         authenticate_received_structure_transform(store, context, transform, returns=authority,
             before_decision_index=index)
         return
-    from gene_annotation_episode.episodic_workflow.root.a102.scientific_process.execution_result_acquisition.episode import ExecutionEpisode
+    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_result_acquisition.episode import ExecutionEpisode
     from .protein_structure_action_records import ProteinStructureActionRecords
     _require(type(reader) is dict and set(reader) == {"version", "run_id", "directory"}
         and reader["version"] == "protein_structure_legacy_parameter_reader_v1"

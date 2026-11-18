@@ -26,14 +26,14 @@ class CoordinationCase(NativeCase):
         path=json.loads(self.store.db.execute('SELECT path FROM runtime_episodes WHERE episode_id=?',(episode_id,)).fetchone()[0])
         stage=self.stages[episode_id];self.stages[episode_id]+=1
         context=EpisodeReturnRecords(self.store,self.flow.run_id,failure_prefix='test_').context(episode_id)
-        binding=self.flow.scientific_process_binding
+        binding=self.flow.structural_homology_evidence_binding
         if path[-1][0]=='annotation':
             if stage==0:
                 selected=self.subtree.commission(self.store,target_ref=self.target,scope=self.scope,completeness='unknown',
                     child_tool_info=[{'name':'structure.model_request','resources':'local'}],question='Request missing structural information.')
                 sibling=deepcopy(selected['assignment'])
                 sibling['selection']['evidence_axis']=self.subtree.library.reference('A101')
-                assert binding.prepare_assignment(context,'scientific_process',sibling,self.scope,'sibling-preparation')
+                assert binding.prepare_assignment(context,'structural_homology_evidence',sibling,self.scope,'sibling-preparation')
             elif stage==1:
                 needs=state['shared_information_context']['needs'];assert len(needs)==1
                 self.need=needs[0]['publication_ref']
@@ -44,12 +44,12 @@ class CoordinationCase(NativeCase):
                 assert state['shared_information_context']['needs'][0]['status']=='unavailable'
                 selected={'kind':'tool','tool':'shared.list_information','arguments':{'kind':'all','offset':0,'limit':24}}
             return {'selection':selected,'report_update':{}}
-        assignment=deepcopy(state['scientific_process']['assignment'])
-        same=binding.prepare_assignment(context,'scientific_process',assignment,self.scope,'same-axis-preparation')
+        assignment=deepcopy(state['structural_homology_evidence']['assignment'])
+        same=binding.prepare_assignment(context,'structural_homology_evidence',assignment,self.scope,'same-axis-preparation')
         assert same['selection']['evidence_axis']['option_id']=='A102'
         assignment['selection']['evidence_axis']=self.subtree.library.reference('A101')
         with pytest.raises(ContractError,match='cross_axis_descendant_requires_shared_parent'):
-            binding.prepare_assignment(context,'scientific_process',assignment,self.scope,'cross-axis-attempt')
+            binding.prepare_assignment(context,'structural_homology_evidence',assignment,self.scope,'cross-axis-attempt')
         return {'selection':{'kind':'tool','tool':'structure.model_request','arguments':{
             'target_ref':self.target,'reason':'Need a target model with origin and mapped coordinates.',
             'available_record_refs':[self.target]}},'report_update':initial_report()}

@@ -6,7 +6,7 @@ class APIFromParent:
 
     def required_return_sources(self, parent, role):
         """Preserve the original job identity across its scientific return."""
-        if parent is not None and parent.path[-1][0] == 'scientific_process' and getattr(self.services, 'annotation_task_required', lambda: False)():
+        if parent is not None and parent.path[-1][0] == 'structural_homology_evidence' and getattr(self.services, 'annotation_task_required', lambda: False)():
             return ()
         return ()
 

@@ -16,9 +16,9 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-HOMES=('execution_result_acquisition', 'scientific_process/execution_result_acquisition', 'hpc_work_planning/execution_result_acquisition', 'hpc_work_planning/hpc_allocation_execution/execution_result_acquisition', 'scientific_process/hpc_work_planning/execution_result_acquisition', 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition')
+HOMES=('execution_result_acquisition', 'structural_homology_evidence/execution_result_acquisition', 'hpc_work_planning/execution_result_acquisition', 'hpc_work_planning/hpc_allocation_execution/execution_result_acquisition', 'structural_homology_evidence/hpc_work_planning/execution_result_acquisition', 'structural_homology_evidence/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition')
 PREFIX='gene_annotation_episode.episodic_workflow.root.a102'
-ROLES={'scientific_process':'scientific_process','hpc_work_planning':'hpc',
+ROLES={'structural_homology_evidence':'structural_homology_evidence','hpc_work_planning':'hpc',
     'hpc_allocation_execution':'hpc_execution','execution_result_acquisition':'results'}
 def own(name):return import_module(PREFIX+'.'+name)
 def forbidden(*args,**kwargs):raise AssertionError('external acquisition forbidden in Results fixture')
@@ -65,15 +65,15 @@ def fixture(home,output,workspace=None):
                 directory=output/'workflow',run_id=journal.run_id,tool_registry=tools,**deepcopy(configuration)) for h in HOMES}
             from gene_annotation_episode.episodic_workflow.root.tests.scientific_head_boundaries import write_instruction_source
             library_source=output/'instruction-source';write_instruction_source(library_source,'a102')
-            library=own('scientific_process_library').ScientificProcessLibrary.freeze(output/'scientific-library',source=library_source)
+            library=own('structural_homology_evidence_library').StructuralHomologyEvidenceLibrary.freeze(output/'scientific-library',source=library_source)
             tool_library=own('scientific_tool_library').ScientificToolLibrary.freeze(output/'tool-library',catalog=[{
                 'name':'fixture.inspect','resources':'local','description':'Controlled engineering boundary.',
                 'instructions':'No acquisition.','input_schema':own('domain').obj({})}])
-            scientific=own('scientific_process.episode').ScientificProcessEpisode(services,library=library,
-                tool_library=tool_library,child_roles=('scientific_process','hpc','results'))
+            scientific=own('structural_homology_evidence.episode').StructuralHomologyEvidenceEpisode(services,library=library,
+                tool_library=tool_library,child_roles=('structural_homology_evidence','hpc','results'))
             ancestors=[scientific]
             for h in ('hpc_work_planning','hpc_work_planning/hpc_allocation_execution',
-                    'scientific_process/hpc_work_planning','scientific_process/hpc_work_planning/hpc_allocation_execution'):
+                    'structural_homology_evidence/hpc_work_planning','structural_homology_evidence/hpc_work_planning/hpc_allocation_execution'):
                 ancestors.append(own(h.replace('/','.')+'.episode').HPCEpisode(services,store=store,
                     run_id=journal.run_id,directory=output/'workflow',resources={'aurora':{'kind':'pbs_ssh'}},commissions={}))
             registry=own('episode_bindings').EpisodeBindingRegistry((*ancestors,*bindings.values()))
@@ -371,14 +371,14 @@ def configuration_observations(v):
 
 def connected_build_trace(v):
     runtime=v.runtime
-    names=('annotation','scientific_process','hpc','hpc_execution','results')
+    names=('annotation','structural_homology_evidence','hpc','hpc_execution','results')
     grains={name:runtime.Grain(name,'Original fixture boundary','Original result',forbidden) for name in names}
-    edges={'annotation':('scientific_process','hpc','results'),'scientific_process':('scientific_process','hpc','results'),
+    edges={'annotation':('structural_homology_evidence','hpc','results'),'structural_homology_evidence':('structural_homology_evidence','hpc','results'),
         'hpc':('hpc_execution','results'),'hpc_execution':('results',),'results':()}
     tree=runtime.EpisodeTree(grains['annotation'],{grains[n]:tuple(grains[c] for c in edges[n]) for n in names},
-        self_nesting=('scientific_process',))
+        self_nesting=('structural_homology_evidence',))
     host=SimpleNamespace(context=runtime.ReleasingContext(tree=tree,run_id=v.journal.run_id),grains=grains,
-        inprocess_completion_order=None,receipts=None,scientific_process_binding=None,episode_bindings=v.registry,
+        inprocess_completion_order=None,receipts=None,structural_homology_evidence_binding=None,episode_bindings=v.registry,
         contract_information_profile=lambda source:None,journal=v.journal,run_id=v.journal.run_id,store=v.store,
         expose_assigned_job=lambda source:None,receive_tool_attributions=lambda *args,**kwargs:None,
         archive=SimpleNamespace(store=forbidden),launch_instructions=SimpleNamespace(materialize=lambda value:None))

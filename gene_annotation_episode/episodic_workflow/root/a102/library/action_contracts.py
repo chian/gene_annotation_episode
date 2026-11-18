@@ -37,7 +37,7 @@ def action_schema(self, source):
         explicit_roles = (None if self.annotation_child_roles is None
             and not (len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False)) else
             self.available_child_roles(source))
-        if (specialist is None and self.scientific_process_binding is None and 'child' in common_actions
+        if (specialist is None and self.structural_homology_evidence_binding is None and 'child' in common_actions
                 and (explicit_roles is None or 'improvement' in explicit_roles)):
             options.append(scientific_child)
         if self.job_episodes is not None and specialist is None:

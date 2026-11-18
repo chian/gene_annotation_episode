@@ -55,7 +55,7 @@ def received_axis_task_credit(store, context):
             raise ValueError('root_axis_local_credit_definition_or_assignment_conflict')
         binding_module = {
             'A101': '.a101.sequence_homology_evidence.credit',
-            'A102': '.a102.scientific_process.task_projector',
+            'A102': '.a102.structural_homology_evidence.task_projector',
             'A103': '.a103.scientific_process.task_projector',
             'A104': '.a104.scientific_process.task_projector',
             'A105': '.a105.experimental_activity_evidence.credit',
