@@ -38,51 +38,51 @@ def planning_observation(v, scenario='selected'):
             values.append(adapter)
         portfolios[prefix]={a.resource_id:a for a in values}
     for home,binding in v.bindings.items():
-        binding.adapters=portfolios['scientific' if home.startswith('scientific_process/') else 'root']
+        binding.adapters=portfolios['scientific' if home.startswith('gene_context_evidence/') else 'root']
     path=v.context.path
     if scenario=='parent':path=v.parent.path
     elif scenario=='root':path=(('annotation','root'),)
-    elif scenario=='scientific':path=(('annotation','root'),('scientific_process','science'))
-    elif scenario=='recursive_scientific':path=(('annotation','root'),('scientific_process','science'),('scientific_process','revised'))
+    elif scenario=='scientific':path=(('annotation','root'),('gene_context_evidence','science'))
+    elif scenario=='recursive_scientific':path=(('annotation','root'),('gene_context_evidence','science'),('gene_context_evidence','revised'))
     elif scenario=='standalone_duplicate':path=(('launch','unowned-standalone'),)
     elif scenario=='invalid_private_parent':path=(('annotation','root'),('launch_local','without-launch'))
     elif scenario in CALLER_CASES:
         prefix,role=scenario.split('_',1)
         roles,=[roles for roles in SOURCE_ROLES if roles[-1]==role]
         path=(('annotation','root'),)
-        if prefix=='scientific':path+=(('scientific_process','science'),)
+        if prefix=='scientific':path+=(('gene_context_evidence','science'),)
         path+=tuple((role,'original-'+role) for role in roles)
     elif scenario in ('root_missing_launch','scientific_missing_launch'):
         path=(('annotation','root'),)
-        if scenario.startswith('scientific'):path+=(('scientific_process','science'),)
+        if scenario.startswith('scientific'):path+=(('gene_context_evidence','science'),)
     elif scenario=='wrong_resource_child':path=(('annotation','root'),('launch','parent'),('launch_local','child'))
     elif scenario=='nonparticipant':path=(('unrecognized_original_caller','original'),)
-    elif scenario=='generic_default':path=(('annotation','root'),('scientific_process','science'))
+    elif scenario=='generic_default':path=(('annotation','root'),('gene_context_evidence','science'))
     elif scenario=='malformed_nonparticipant':path=(('unrecognized_original_caller',''),)
     elif scenario=='malformed_private':path=(('annotation','root'),('launch',''))
     elif scenario in ('standalone_literature_unknown_suffix','standalone_monitor_unknown_suffix'):
         path=((scenario.split('_')[1],'original-source'),('unrecognized_original_caller',''))
-    elif scenario=='annotation_science_undeclared':path=(('annotation','root'),('scientific_process','science'))
+    elif scenario=='annotation_science_undeclared':path=(('annotation','root'),('gene_context_evidence','science'))
     elif scenario=='broken_resource_malformed_edge':path=(('annotation','root'),('launch','parent'),('unknown_child',''))
     elif scenario in ('standalone_root_launch','standalone_scientific_launch'):path=(('launch','original-source'),)
     elif scenario in ('annotation_source_undeclared','scientific_source_undeclared',
                       'root_source_missing_launch','scientific_source_missing_launch','malformed_unknown_descendant','wrong_source_class'):
         path=(('annotation','root'),)
-        if scenario.startswith('scientific'):path+=(('scientific_process','science'),)
+        if scenario.startswith('scientific'):path+=(('gene_context_evidence','science'),)
         path+=(('literature','original-source'),)
         if scenario=='malformed_unknown_descendant':path+=(('unrecognized_original_caller',''),)
     members=list(v.bindings.values())
-    scientific=v.registry.for_binding_path('scientific_process')
+    scientific=v.registry.for_binding_path('gene_context_evidence')
     additional=[]
     source_cases=('annotation_source_undeclared','scientific_source_undeclared',
                   'root_source_missing_launch','scientific_source_missing_launch','malformed_unknown_descendant','wrong_source_class',
                   'standalone_literature_unknown_suffix','standalone_monitor_unknown_suffix')
     if scenario in CALLER_CASES or scenario in source_cases:
-        scientific=own('scientific_process.episode').ScientificProcessEpisode(v.services,
+        scientific=own('gene_context_evidence.episode').GeneContextEvidenceEpisode(v.services,
             library=scientific.library,tool_library=scientific.tool_library,
-            child_roles=(('scientific_process','launch','results','monitor') if scenario=='scientific_source_undeclared'
-                         else ('scientific_process','launch','results','literature','monitor')))
-        for prefix in ('','scientific_process.'):
+            child_roles=(('gene_context_evidence','launch','results','monitor') if scenario=='scientific_source_undeclared'
+                         else ('gene_context_evidence','launch','results','literature','monitor')))
+        for prefix in ('','gene_context_evidence.'):
             additional.extend(own(prefix+'published_evidence_assessment.episode').create_binding_tree(v.services))
             additional.append(own(prefix+'execution_progress_assessment.episode').MonitorEpisode(v.services))
         if scenario=='wrong_source_class':
@@ -91,11 +91,11 @@ def planning_observation(v, scenario='selected'):
             selected.__class__=ForeignSourceSubclass
     missing_cases=('root_missing_launch','scientific_missing_launch','root_source_missing_launch','scientific_source_missing_launch')
     if scenario in missing_cases:
-        missing=('scientific_process/' if scenario.startswith('scientific') else '')+'resource_work_submission'
+        missing=('gene_context_evidence/' if scenario.startswith('scientific') else '')+'resource_work_submission'
         members=[binding for binding in members if binding.binding_path!=missing]
     elif scenario in ('standalone_root_launch','standalone_scientific_launch'):
         wanted=scenario=='standalone_scientific_launch'
-        members=[binding for binding in members if binding.binding_path.startswith('scientific_process/')==wanted]
+        members=[binding for binding in members if binding.binding_path.startswith('gene_context_evidence/')==wanted]
     elif scenario=='wrong_registered_class':
         original=v.bindings['resource_work_submission']
         class UnrecognizedResourceSubclass(type(original)):pass
@@ -104,11 +104,11 @@ def planning_observation(v, scenario='selected'):
     elif scenario=='generic_default':
         from .resource_task_checks import forbidden
         tools=own('tools').ToolRegistry(v.store,clients=SimpleNamespace(blast=forbidden))
-        members=list(own('scientific_process.episode').create_execution_bindings(v.services,
+        members=list(own('gene_context_evidence.episode').create_execution_bindings(v.services,
             store=v.store,run_id=v.journal.run_id,directory=v.output/'planning-generic',
             resources={'selected-api':{'kind':'api','service':'ncbi_blast'}},initial_information={},
             tool_registry=tools,handoff_unit=2,acquired_record_unit=3,log_window_bytes=32,log_roles=[]))
-        assert len(members)==5 and all(b.binding_path.startswith('scientific_process/execution_') for b in members)
+        assert len(members)==5 and all(b.binding_path.startswith('gene_context_evidence/execution_') for b in members)
     registry=own('episode_bindings').EpisodeBindingRegistry((scientific,*members,*additional))
     # Malformed runtime paths must reach planning's own error-order boundary;
     # BindingContext is a separately validated immutable binding view.
@@ -122,8 +122,8 @@ def planning_observation(v, scenario='selected'):
     memory=own('execution_memory').ExecutionMemory(v.output/'planning-memory.sqlite3')
     events=[]
     def snapshot():events.append('local_snapshot');return {'jobs':[],'original_local_observation':True}
-    workflow.episode_bindings=registry;workflow.annotation_child_roles=('scientific_process','launch','results','literature','monitor')
-    if scenario=='annotation_source_undeclared':workflow.annotation_child_roles=('scientific_process','launch','results','monitor')
+    workflow.episode_bindings=registry;workflow.annotation_child_roles=('gene_context_evidence','launch','results','literature','monitor')
+    if scenario=='annotation_source_undeclared':workflow.annotation_child_roles=('gene_context_evidence','launch','results','monitor')
     elif scenario=='annotation_science_undeclared':workflow.annotation_child_roles=('launch','results','literature','monitor')
     workflow.grain_names=('annotation','improvement')
     workflow.tools=SimpleNamespace(local_resources=SimpleNamespace(snapshot=snapshot),execution_memory=memory,
@@ -150,22 +150,22 @@ def planning_observation(v, scenario='selected'):
             original_child=registry._child_binding
             def wrong_child(parent,role):
                 if getattr(parent,'binding_path',None)=='resource_work_submission' and role=='launch_local':
-                    return registry.for_binding_path('scientific_process/resource_work_submission/local_resource_work_execution')
+                    return registry.for_binding_path('gene_context_evidence/resource_work_submission/local_resource_work_execution')
                 return original_child(parent,role)
             stack.enter_context(patch.object(registry,'_child_binding',wrong_child))
         result=capture(lambda:v.runtime.Workflow.resource_context(workflow,context))
     expected_failure=None
     if connected and scenario in missing_cases:
         # a103 label is legacy_annotation: the annotation root resolves to a real parent (a103/episode_bindings.py:450-453, message at :433).
-        parent='scientific_process' if scenario.startswith('scientific') else 'legacy_annotation'
+        parent='gene_context_evidence' if scenario.startswith('scientific') else 'legacy_annotation'
         expected_failure=('LookupError','episode_child_not_bound:'+parent+':launch')
     elif connected and scenario=='wrong_registered_class':expected_failure=('ValueError','resource_planning_registered_identity_mismatch')
     elif connected and scenario=='wrong_resource_child':expected_failure=('ValueError','resource_planning_private_edge_mismatch')
     elif connected and scenario=='wrong_source_class':expected_failure=('ValueError','resource_planning_private_edge_mismatch')
     elif connected and scenario in ('malformed_private','broken_resource_malformed_edge'):expected_failure=('ValueError','episode_binding_runtime_path_required')
     elif connected and scenario in ('annotation_source_undeclared','scientific_source_undeclared','annotation_science_undeclared'):
-        home=('scientific_process' if scenario=='annotation_science_undeclared' else
-              ('scientific_process/' if scenario=='scientific_source_undeclared' else '')+'published_evidence_assessment')
+        home=('gene_context_evidence' if scenario=='annotation_science_undeclared' else
+              ('gene_context_evidence/' if scenario=='scientific_source_undeclared' else '')+'published_evidence_assessment')
         expected_failure=('ValueError','resource_planning_child_not_declared:'+home)
     if expected_failure:
         kind,message=expected_failure
@@ -187,10 +187,10 @@ def planning_observation(v, scenario='selected'):
         # the two missing-parent cases. Record that baseline, never authenticate
         # its numerical/resource identity as the private parent's counterpart.
         prefix=('scientific' if scenario.startswith('root_') else 'root') if not connected and scenario in missing_cases else (
-            'scientific' if any(role=='scientific_process' for role,_ in path) else 'root')
+            'scientific' if any(role=='gene_context_evidence' for role,_ in path) else 'root')
         if scenario=='standalone_scientific_launch':prefix='scientific'
-        selected=('scientific_process/' if prefix=='scientific' else '')+'resource_work_submission'
-        if scenario=='generic_default':selected='scientific_process/execution_job_submission'
+        selected=('gene_context_evidence/' if prefix=='scientific' else '')+'resource_work_submission'
+        if scenario=='generic_default':selected='gene_context_evidence/execution_job_submission'
         assert result['status']=='returned'
         value=result['value'];assert {row['resource_id'] for row in value['execution_capabilities']}==(
             {'selected-api'} if scenario=='generic_default' else set(portfolios[prefix]))
@@ -216,26 +216,26 @@ def planning_recipe_observation(v, scenario='original'):
     # The actual runtime's original absent-capacity branch returns None. The
     # full capacity path is exercised separately by planning_observation.
     workflow.tools=SimpleNamespace(execution_memory=memory,local_resources=None)
-    workflow.annotation_child_roles=('scientific_process','hpc')
+    workflow.annotation_child_roles=('gene_context_evidence','hpc')
     workflow.grain_names=('annotation','improvement')
-    previous_science=v.registry.for_path((('annotation','root'),('scientific_process','science')))
+    previous_science=v.registry.for_path((('annotation','root'),('gene_context_evidence','science')))
     catalog=previous_science.tool_library.catalog()
     tool_library=own('scientific_tool_library').ScientificToolLibrary.freeze(
         v.output/'recipe-tool-library',catalog=catalog)
     def available(scope):events.append('tool_catalog');return deepcopy(catalog)
     services=SimpleNamespace(workflow=workflow,tool_catalog=available)
-    scientific=own('scientific_process.episode').ScientificProcessEpisode(services,
+    scientific=own('gene_context_evidence.episode').GeneContextEvidenceEpisode(services,
         library=previous_science.library,tool_library=tool_library,
-        child_roles=('scientific_process','launch','results','hpc'))
+        child_roles=('gene_context_evidence','launch','results','hpc'))
     resources={'original-aurora':{'kind':'pbs_ssh','account':'BioReason-Aurora-Test',
         'workspace':'/lus/flare/projects/BioReason-Aurora-Test/chian/runs/planning-only-fixture'}}
     hpc={home:own(home.replace('/','.')+'.episode').HPCEpisode(services,store=v.store,
         run_id=v.journal.run_id,directory=v.output/home,resources=resources,commissions={})
-        for home in ('hpc_work_planning','scientific_process/hpc_work_planning')}
+        for home in ('hpc_work_planning','gene_context_evidence/hpc_work_planning')}
     registry=own('episode_bindings').EpisodeBindingRegistry((scientific,*v.bindings.values(),*hpc.values()))
     workflow.episode_bindings=registry
-    path=(('annotation','root'),('scientific_process','science'))
-    context=replace(v.context,path=path,role='scientific_process')
+    path=(('annotation','root'),('gene_context_evidence','science'))
+    context=replace(v.context,path=path,role='gene_context_evidence')
     planning=own('execution_planning');connected=hasattr(planning,'planning_binding')
     arguments={'name':'fixture.inspect','resources':'local','profiles':[{'resource_id':'original-local',
         'backend':'local','tool':'fixture.inspect','implementation':'original','parameters':'original','hardware':'original'}]}

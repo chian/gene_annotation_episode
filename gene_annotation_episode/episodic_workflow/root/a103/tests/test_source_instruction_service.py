@@ -13,7 +13,7 @@ TOP = 'published_evidence_assessment'
 STRATEGY = TOP + '/evidence_search_strategy_improvement'
 SEARCH = STRATEGY + '/source_relevance_assessment'
 PAGE = SEARCH + '/source_evidence_examination'
-HOMES = tuple(prefix + home for prefix in ('', 'scientific_process/') for home in (
+HOMES = tuple(prefix + home for prefix in ('', 'gene_context_evidence/') for home in (
     TOP, STRATEGY, SEARCH, PAGE, PAGE + '/table_evidence_extraction',
     PAGE + '/source_coverage_improvement', PAGE + '/passage_evidence_extraction'))
 def own(name): return importlib.import_module(PREFIX + '.' + name)

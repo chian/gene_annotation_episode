@@ -51,9 +51,9 @@ def native_trace(v, mode='returned'):
     assert mode in NATIVE_MODES
     adapter = v.native
     query = v.scope['subject_refs'][0]
-    prefix = 'scientific_process/' if v.home.startswith('scientific_process/') else ''
+    prefix = 'gene_context_evidence/' if v.home.startswith('gene_context_evidence/') else ''
     home = prefix + 'resource_work_submission/local_resource_work_execution'
-    path = (('annotation', 'root'),) + ((('scientific_process', 'science'),) if prefix else ()) + (('launch', 'child_0'), ('launch_local', 'child_0'))
+    path = (('annotation', 'root'),) + ((('gene_context_evidence', 'science'),) if prefix else ()) + (('launch', 'child_0'), ('launch_local', 'child_0'))
     identity = v.runtime.EpisodeRef(v.journal.run_id, path).episode_id
     original = {'version': 'resource_launch_assignment_v1', 'job_request': {'query_ref': query, 'cpu': 1}, 'immutable_input_versions': [], 'constraints': {}, 'resource_selection': adapter._selection(1), 'software_knowledge_refs': [], 'resource_knowledge_refs': []}
     services = SimpleNamespace(record_selection=lambda context: {'run_id': context.run_id, 'episode_id': context.episode_id, 'known_record_refs': [query], 'initial_known_record_refs': [query]})

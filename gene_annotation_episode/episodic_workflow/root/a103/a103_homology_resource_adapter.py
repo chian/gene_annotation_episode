@@ -15,7 +15,7 @@ from types import SimpleNamespace
 
 from .communication import ReportBoundaryError, plain
 from .episode_bindings import reference_in_context
-from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.resource_work_submission.episode import ResourceEpisode
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.resource_work_submission.episode import ResourceEpisode
 from .homology_results import recorded_coverage
 from .resource_estimation import recorded_forecasts
 

@@ -14,7 +14,7 @@ CATALOG_CASES = ('resource_no_declarations', 'scientific_only', 'generic_scienti
 
 def catalog_observation(v, case):
     assert case in CATALOG_CASES
-    path = (('annotation','root'),('scientific_process','science'))
+    path = (('annotation','root'),('gene_context_evidence','science'))
     original_scientific = v.registry.for_path(path)
     connected = hasattr(type(original_scientific), 'resource_information_catalog')
     events = []
@@ -32,9 +32,9 @@ def catalog_observation(v, case):
         services = SimpleNamespace(tool_catalog=callback)
         if case.startswith('custom'):
             services.tool_information_catalog = callback
-        scientific = own('scientific_process.episode').ScientificProcessEpisode(services,
+        scientific = own('gene_context_evidence.episode').GeneContextEvidenceEpisode(services,
             library=original_scientific.library, tool_library=original_scientific.tool_library,
-            child_roles=('scientific_process','launch','results'))
+            child_roles=('gene_context_evidence','launch','results'))
         try:
             result = scientific._information_catalog(original_scope)
         except ValueError as error:
@@ -48,7 +48,7 @@ def catalog_observation(v, case):
         return {'case':case,'connected':connected,'result':observed,'events':events}
     workflow = SimpleNamespace(tools=SimpleNamespace(catalog=lambda **kw:deepcopy(direct)))
     services = own('episode_services').WorkflowServices(workflow)
-    scientific_type=own('scientific_process.episode').ScientificProcessEpisode
+    scientific_type=own('gene_context_evidence.episode').GeneContextEvidenceEpisode
     if case=='subclass_nonparticipant':
         class Nonparticipant(scientific_type):
             @property
@@ -57,7 +57,7 @@ def catalog_observation(v, case):
         scientific_type=Nonparticipant
     scientific = scientific_type(services,
         library=original_scientific.library, tool_library=original_scientific.tool_library,
-        child_roles=('scientific_process','launch','results'))
+        child_roles=('gene_context_evidence','launch','results'))
     if case == 'scientific_only':
         bindings = []
     elif case == 'resource_no_declarations':
@@ -67,17 +67,17 @@ def catalog_observation(v, case):
         tools = own('tools').ToolRegistry(v.store,clients=SimpleNamespace(blast=forbidden))
         # This is the actual factory's five original constructors, not an
         # invented complete tree. No root/HPC counterparts are supplied here.
-        bindings = list(own('scientific_process.episode').create_execution_bindings(
+        bindings = list(own('gene_context_evidence.episode').create_execution_bindings(
             services,store=v.store,run_id=v.journal.run_id,directory=v.output/'catalog-generic',
             resources={'selected-api':{'kind':'api','service':'ncbi_blast'}},
             initial_information={},tool_registry=tools,handoff_unit=2,acquired_record_unit=3,
             log_window_bytes=32,log_roles=[]))
         assert [binding.binding_path for binding in bindings] == [
-            'scientific_process/execution_job_submission',
-            'scientific_process/execution_job_submission/api_job_execution',
-            'scientific_process/execution_job_submission/local_job_execution',
-            'scientific_process/execution_job_submission/hpc_job_execution',
-            'scientific_process/execution_result_acquisition']
+            'gene_context_evidence/execution_job_submission',
+            'gene_context_evidence/execution_job_submission/api_job_execution',
+            'gene_context_evidence/execution_job_submission/local_job_execution',
+            'gene_context_evidence/execution_job_submission/hpc_job_execution',
+            'gene_context_evidence/execution_result_acquisition']
         if case == 'generic_child_configuration_conflict':
             bindings[1].resources['selected-api']['description']='different original configuration'
         elif case == 'generic_missing_native_child':
@@ -112,7 +112,7 @@ def catalog_observation(v, case):
                 return rows
             entry.resource_tool_contracts=malformed_contracts
     registry = own('episode_bindings').EpisodeBindingRegistry((scientific,*bindings))
-    workflow.episode_bindings=registry;workflow.scientific_process_binding=scientific
+    workflow.episode_bindings=registry;workflow.gene_context_evidence_binding=scientific
     observed = capture(lambda:services.tool_information_catalog(original_scope))
     if case=='generic_malformed_route':
         assert observed=={'status':'raised','type':'builtins.ValueError','message':'resource_tool_information_commission_route_required'}

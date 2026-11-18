@@ -91,7 +91,7 @@ def instructional_model_context(value):
     """
     from .evidence_axis_contracts import VERSION as EVIDENCE_AXIS_VERSION
     from .evidence_axis_instructions import VERSION as INSTRUCTION_VERSION, instruction_view
-    from .scientific_process_library import evidence_axis_instruction_view
+    from .gene_context_evidence_library import evidence_axis_instruction_view
 
     def project(node):
         if isinstance(node, dict):
@@ -102,7 +102,7 @@ def instructional_model_context(value):
                         'name', 'id'} <= node.keys()):
                 return evidence_axis_instruction_view(node)
             result = {key: project(item) for key, item in node.items()}
-            process = result.get('scientific_process')
+            process = result.get('gene_context_evidence')
             if isinstance(process, dict):
                 # This was a detached draft-sheet descriptor, never the
                 # parent's actual typed return or response contract.

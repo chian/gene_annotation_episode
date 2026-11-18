@@ -28,7 +28,7 @@ _GENERIC_REFERENCE_SOURCE = 'execution_result_refs'
 _REFERENCE_SOURCES = (_GENERIC_REFERENCE_SOURCE,)
 _REFERENCE_SCHEMA = {'type': 'array', 'uniqueItems': True, 'items': {
     'type': 'string', 'format': 'reference', 'x-reference-namespace': 'execution_result'}}
-_RECEIVING_ROLES = {'annotation', 'scientific_process'}
+_RECEIVING_ROLES = {'annotation', 'gene_context_evidence'}
 
 
 def requested_sources(schema):

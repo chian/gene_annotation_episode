@@ -12,9 +12,9 @@ from pathlib import Path
 from . import episode_monitoring
 from .episode_application_services import EpisodeApplicationServices
 from .resource_estimation import ResourceToolEstimator
-from .scientific_process_setup import prepare_scientific_binding
+from .gene_context_evidence_setup import prepare_scientific_binding
 from .state import Store
-from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.execution_job_submission.episode import ExecutionEpisode
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.execution_job_submission.episode import ExecutionEpisode
 from gene_annotation_episode.episodic_workflow.root.a103.homology_job_submission.episode import HomologyEpisode as AnnotationSubmission
 from gene_annotation_episode.episodic_workflow.root.a103.homology_job_monitoring.episode import HomologyEpisode as AnnotationMonitoring
 from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.episode import HomologyEpisode as AnnotationAcquisition
@@ -22,11 +22,11 @@ from .legacy_improvement.homology_job_submission.episode import HomologyEpisode 
 from .legacy_improvement.homology_job_monitoring.episode import HomologyEpisode as ImprovementMonitoring
 from .legacy_improvement.homology_result_acquisition.episode import HomologyEpisode as ImprovementAcquisition
 from .homology_progress import HomologyProgressProvider
-from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.hpc_work_planning.episode import HPCEpisode
-from .scientific_process.published_evidence_assessment.episode import create_binding_tree
-from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.execution_progress_assessment.episode import MonitorEpisode
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.hpc_work_planning.episode import HPCEpisode
+from .gene_context_evidence.published_evidence_assessment.episode import create_binding_tree
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.execution_progress_assessment.episode import MonitorEpisode
 from .resource_service_setup import bind_resource_services
-from .scientific_process.episode import ScientificProcessEpisode
+from .gene_context_evidence.episode import GeneContextEvidenceEpisode
 
 
 @dataclass(frozen=True)
@@ -85,7 +85,7 @@ def bind_assembled_services(
             hpc_factory=create_hpc_bindings,
             job_episodes=job_episodes, resource_estimator=resource_estimator,
             tool_registry=tool_registry, tool_catalog=tool_catalog)
-        scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisode,
+        scientific = prepare_scientific_binding(episode_type=GeneContextEvidenceEpisode,
             run_directory=directory,
             source_directory=source_directory, tool_catalog=tool_catalog,
             child_roles=scientific_child_roles, tool_retrieval=tool_retrieval,
@@ -98,7 +98,7 @@ def bind_assembled_services(
             resource_tool_catalogs=execution.resource_tool_catalogs)
     if hpc_commissions is not None:
         raise ValueError('hpc_commissions_require_execution_resources')
-    scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisode,
+    scientific = prepare_scientific_binding(episode_type=GeneContextEvidenceEpisode,
         run_directory=directory,
         source_directory=source_directory, tool_catalog=tool_catalog,
         child_roles=scientific_child_roles, tool_retrieval=tool_retrieval,
@@ -124,4 +124,4 @@ def bind_assembled_services(
 
 __all__ = ['bind_assembled_services']
 
-from .scientific_process.episode import create_execution_bindings, create_hpc_bindings
+from .gene_context_evidence.episode import create_execution_bindings, create_hpc_bindings

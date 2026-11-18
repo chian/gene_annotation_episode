@@ -7,7 +7,7 @@ from copy import deepcopy
 
 from .bvbrc_appservice_contracts import contract_schema
 from .bvbrc_homology_bundle_adapter import ADAPTER_ID, ADAPTER_VERSION, PARAMETERS_SCHEMA
-from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.execution_result_acquisition.execution_contracts import RESULTS_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.execution_result_acquisition.execution_contracts import RESULTS_SCHEMA
 
 
 _DESCRIPTIONS = {

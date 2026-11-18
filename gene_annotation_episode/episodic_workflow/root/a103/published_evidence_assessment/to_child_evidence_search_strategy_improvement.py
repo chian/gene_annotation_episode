@@ -5,7 +5,7 @@ from gene_annotation_episode.episodic_workflow.root.a103.episode_contract_inform
 class EvidenceSearchStrategyImprovementRequest:
 
 
-    def _assemble_evidence_search_strategy_improvement_request(self, workflow, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, scientific_process=None, report_contract_declaration=None):
+    def _assemble_evidence_search_strategy_improvement_request(self, workflow, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, gene_context_evidence=None, report_contract_declaration=None):
         path = (*parent_path, (name, key))
         goal = _live_original_runtime.EpisodeGoal.root(objective=goal_text, result_contract={'role': name}) if parent is None else _live_original_runtime.EpisodeGoal.child(parent, objective=goal_text, result_contract=contract.schema)
         message = {'scope': scope, 'initial_report': initial or {}}
@@ -21,8 +21,8 @@ class EvidenceSearchStrategyImprovementRequest:
         if episode_assignment is not None:
             workflow.launch_instructions.materialize(episode_assignment.get('launch_instructions'))
             message['episode_assignment'] = _live_original_runtime._plain(episode_assignment)
-        if scientific_process is not None:
-            message['scientific_process'] = _live_original_runtime._plain(scientific_process)
+        if gene_context_evidence is not None:
+            message['gene_context_evidence'] = _live_original_runtime._plain(gene_context_evidence)
         identity = _live_original_runtime.Episode.identity(workflow.context, workflow.grains[name], key, parent_path=parent_path)
         if workflow.receipts is not None:
             parent_id = _live_original_runtime.Episode.identity(workflow.context, workflow.grains[parent_path[-1][0]], parent_path[-1][1], parent_path=parent_path[:-1]).episode_id if parent_path else None

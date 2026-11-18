@@ -16,9 +16,9 @@ import json
 import pytest
 PACKAGE='gene_annotation_episode.episodic_workflow.root.a103'
 HOMES=('execution_job_submission','hpc_work_planning/execution_job_submission',
-    'hpc_work_planning/hpc_allocation_execution/execution_job_submission','scientific_process/execution_job_submission',
-    'scientific_process/hpc_work_planning/execution_job_submission',
-    'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission')
+    'hpc_work_planning/hpc_allocation_execution/execution_job_submission','gene_context_evidence/execution_job_submission',
+    'gene_context_evidence/hpc_work_planning/execution_job_submission',
+    'gene_context_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission')
 CHILDREN={'launch_api':'api_job_execution','launch_local':'local_job_execution','launch_hpc':'hpc_job_execution'}
 def module(name): return import_module(PACKAGE+'.'+name)
 def forbidden(*args,**kwargs): raise AssertionError('Launch task check cannot execute provider/native work')
@@ -58,7 +58,7 @@ def actual(home,directory):
                 execution_keys.append(kw['operation_key']); return await binding.execute(context,name,arguments,kw['operation_key'])
             async def unchanged_score(source,index,result): return result
             workflow=SimpleNamespace(context=object(),grains={'launch':object()},inprocess_completion_order=None,
-                receipts=None,scientific_process_binding=None,episode_bindings=registry,contract_information_profile=lambda s:None,
+                receipts=None,gene_context_evidence_binding=None,episode_bindings=registry,contract_information_profile=lambda s:None,
                 specialist=lambda s:binding,binding_context=lambda s:context,journal=journal,run_id=run_id,store=store,
                 source_credit_view=credit,expose_assigned_job=lambda s:None,receive_tool_attributions=lambda *a,**kw:None,
                 archive=SimpleNamespace(store=lambda value:value),launch_instructions=SimpleNamespace(materialize=lambda value:None),
@@ -75,7 +75,7 @@ def actual(home,directory):
                 execution_keys=execution_keys,received=received,projections=projections,directory=directory)
 
 def child_admission(f):
-    roles={'scientific_process':'scientific_process','hpc_work_planning':'hpc',
+    roles={'gene_context_evidence':'gene_context_evidence','hpc_work_planning':'hpc',
         'hpc_allocation_execution':'hpc_execution','execution_job_submission':'launch'}
     path=(('annotation','root'),*((roles[part],'selected-'+part) for part in f.binding.binding_path.split('/')))
     parent_id=module('method_loop.identities').EpisodeRef(f.context.run_id,path).episode_id
@@ -178,7 +178,7 @@ class LaunchTaskBehavior:
 
     def test_actual_api_child_admission_retains_inherited_contract(self,actual_task):
         f=actual_task; original=deepcopy(f.api); observation=child_admission(f); outcome=observation['result']
-        expected_roles=['annotation',*({'scientific_process':'scientific_process','hpc_work_planning':'hpc',
+        expected_roles=['annotation',*({'gene_context_evidence':'gene_context_evidence','hpc_work_planning':'hpc',
             'hpc_allocation_execution':'hpc_execution','execution_job_submission':'launch'}[part] for part in self.home.split('/'))]
         assert [role for role,key in observation['parent_path']]==expected_roles
         assert observation['parent_id']==module('method_loop.identities').EpisodeRef(f.context.run_id,observation['parent_path']).episode_id
@@ -260,7 +260,7 @@ class LaunchTaskBehavior:
         assert observed==expected and b.scientific_prompt_states==a.scientific_prompt_states
         if scenario in {'minimal','unrecognized-bootstrap'}: assert observed==(json.dumps(context,allow_nan=False),instructions)
         if scenario=='hpc-override': assert observed[0]==module('library.hpc_prompt').render_hpc_prompt(context,instructions)
-        if scenario=='selected-full': assert observed[0]==module('scientific_process_prompt').render_selected_execution_prompt(context,instructions)
+        if scenario=='selected-full': assert observed[0]==module('gene_context_evidence_prompt').render_selected_execution_prompt(context,instructions)
 
     @pytest.mark.parametrize('mode',['returned','raised'])
     def test_original_instruction_service_callback(self,actual_task,mode):

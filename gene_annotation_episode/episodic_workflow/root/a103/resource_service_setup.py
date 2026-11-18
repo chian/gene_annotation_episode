@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from .episode_application_services import EpisodeApplicationServices
 from .episode_journal import Journal
-from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.resource_work_submission.episode import ResourceEpisode
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.resource_work_submission.episode import ResourceEpisode
 from .a103_homology_resource_adapter import HomologyResourceAdapter
 from .resource_operational_credit import ResourceOperationalCredit
 

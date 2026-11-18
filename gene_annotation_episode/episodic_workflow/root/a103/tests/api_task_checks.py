@@ -19,8 +19,8 @@ PACKAGE='gene_annotation_episode.episodic_workflow.root.a103'
 HOMES=tuple(parent+'/api_job_execution' for parent in (
     'execution_job_submission','hpc_work_planning/execution_job_submission',
     'hpc_work_planning/hpc_allocation_execution/execution_job_submission',
-    'scientific_process/execution_job_submission','scientific_process/hpc_work_planning/execution_job_submission',
-    'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission'))
+    'gene_context_evidence/execution_job_submission','gene_context_evidence/hpc_work_planning/execution_job_submission',
+    'gene_context_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission'))
 def module(name): return import_module(PACKAGE+'.'+name)
 def forbidden(*args,**kwargs): raise AssertionError('API task check cannot contact a provider or start a subprocess')
 def caught(call):
@@ -60,7 +60,7 @@ def actual(home,directory):
             async def score(source,index,result):
                 assert not hasattr(binding,'automatic_score_judgments'); return result
             workflow=SimpleNamespace(context=object(),grains={'launch_api':object()},
-                inprocess_completion_order=None,receipts=None,scientific_process_binding=None,
+                inprocess_completion_order=None,receipts=None,gene_context_evidence_binding=None,
                 episode_bindings=registry,contract_information_profile=lambda source:None,
                 specialist=lambda source:binding,binding_context=lambda source:context,
                 journal=journal,run_id=run_id,store=store,source_credit_view=credit,
@@ -88,7 +88,7 @@ def actual(home,directory):
 def parent_admission(f):
     launch={'version':'execution_launch_assignment_v1','requests':{'selected-api':deepcopy(f.assignment)},
         'immutable_input_versions':[],'constraints':{}}
-    roles={'scientific_process':'scientific_process','hpc_work_planning':'hpc',
+    roles={'gene_context_evidence':'gene_context_evidence','hpc_work_planning':'hpc',
         'hpc_allocation_execution':'hpc_execution','execution_job_submission':'launch'}
     home=f.binding.binding_path.rsplit('/',1)[0]
     path=(('annotation','root'),*( (roles[part],'selected-'+part) for part in home.split('/') ))
@@ -257,7 +257,7 @@ class APIJobTaskBehavior:
             context={'version':frames.VERSION,'kind':'decision_lookup_result','result':{'original':'lookup'}}
         elif scenario=='higher-priority-science':
             context={**state,'goal':{'objective':'Preserve actual scientific question'},'scope':{},
-                'scientific_process':{'assignment':{},'evidence_axis':{
+                'gene_context_evidence':{'assignment':{},'evidence_axis':{
                     'instruction_status':'published_investigation_instructions','name':'Homology evidence',
                     'investigation_instructions':'Preserve source subjects and qualification.'},
                     'thought_pattern':{'name':'Compare alternatives','description':'Interpret actual source support.'},
@@ -280,7 +280,7 @@ class APIJobTaskBehavior:
             assert observed['status']=='returned'
         if scenario in {'higher-priority-science','higher-priority-hpc'}:
             assert observed['status']=='returned'
-            reference=(module('scientific_process_prompt').render_scientific_process_prompt
+            reference=(module('gene_context_evidence_prompt').render_gene_context_evidence_prompt
                 if scenario=='higher-priority-science' else module('library.hpc_prompt').render_hpc_prompt)
             assert observed['value'][0]==reference(context,instructions)
 

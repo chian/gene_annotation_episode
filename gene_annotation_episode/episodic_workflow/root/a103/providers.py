@@ -25,7 +25,7 @@ from .boundary_validation import parse_json_object, parse_json_value
 from .provider_authentication import ProviderAuthenticationError, authentication_policy, authentication_transport, verify_authentication
 from .decision_context import VERSION as DECISION_CONTEXT_VERSION, apply_state_frame
 from .execution_prompt import is_api_launch_context, render_api_launch_prompt
-from .scientific_process_prompt import is_published_scientific_context, render_scientific_process_prompt, text_instructions
+from .gene_context_evidence_prompt import is_published_scientific_context, render_gene_context_evidence_prompt, text_instructions
 
 class ModelCallError(RuntimeError):
 
@@ -541,7 +541,7 @@ class _SessionConnection:
         from .library.monitor_prompt import is_monitor_context, render_monitor_prompt
         from .receiver_prompt import render_receiver_prompt
         from .native_profile_presentation import has_native_profile_receiver_context
-        from .scientific_process_prompt import is_selected_execution_context, render_selected_execution_prompt
+        from .gene_context_evidence_prompt import is_selected_execution_context, render_selected_execution_prompt
 
         def has_text_task(value):
             return is_hpc_context(value) or is_published_scientific_context(value) or is_monitor_context(value) or is_api_launch_context(value) or is_selected_execution_context(value) or has_native_profile_receiver_context(value) or _ordinary_runtime_receiver_context(value)
@@ -574,7 +574,7 @@ class _SessionConnection:
             if is_hpc_context(state):
                 renderer = render_hpc_prompt
             elif is_published_scientific_context(state):
-                renderer = render_scientific_process_prompt
+                renderer = render_gene_context_evidence_prompt
             elif is_api_launch_context(state):
                 renderer = render_api_launch_prompt
             elif is_selected_execution_context(state):

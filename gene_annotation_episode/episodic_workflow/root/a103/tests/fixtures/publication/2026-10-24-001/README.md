@@ -13,7 +13,7 @@ frequent-horizontal-transfer, very-local-tree and outlier requirements.
 ## Selecting this publication
 
 Pass this directory explicitly as `source_directory` to
-`gene_annotation_episode.scientific_process_setup.prepare_scientific_binding`:
+`gene_annotation_episode.gene_context_evidence_setup.prepare_scientific_binding`:
 
 ```
 research/slotted_process_library/publications/2026-10-24-001
@@ -69,7 +69,7 @@ The existing child-assignment API still requires exact option references and
 selection hashes as callable operands; those remain in a separately labelled
 operand section. Removing those requirements from the API has not been done.
 
-The current-version `scientific_process_results` source has a separate W07
+The current-version `gene_context_evidence_results` source has a separate W07
 schema defect and is not verified or recommended by these new instructions.
 This batch verifies ordinary parent-defined closed return forms and the
 current `process.revise` preparation/new-child reconstruction path. It does not

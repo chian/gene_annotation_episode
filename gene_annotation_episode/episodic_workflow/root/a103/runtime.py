@@ -729,8 +729,8 @@ class DecisionSource:
         index, self.calls = (self.calls, self.calls + 1)
         journal = self.workflow.journal
         row = journal.row('runtime_model_calls', self.episode_id, index)
-        if (row is None or row['response'] is None) and self.path[-1][0] == 'scientific_process':
-            self.workflow.scientific_process_binding.validate_execution_context(self.workflow.binding_context(self))
+        if (row is None or row['response'] is None) and self.path[-1][0] == 'gene_context_evidence':
+            self.workflow.gene_context_evidence_binding.validate_execution_context(self.workflow.binding_context(self))
         profile = self.workflow.contract_information_profile(self)
         if row:
             saved = json.loads(row['request'])
@@ -1314,8 +1314,8 @@ class DecisionSource:
         if old and old['result'] is not None:
             result, credit = (json.loads(old['result']), old['credit'])
         else:
-            if self.path[-1][0] == 'scientific_process':
-                self.workflow.scientific_process_binding.validate_execution_context(self.workflow.binding_context(self))
+            if self.path[-1][0] == 'gene_context_evidence':
+                self.workflow.gene_context_evidence_binding.validate_execution_context(self.workflow.binding_context(self))
             journal.save('runtime_actions', {'episode_id': self.episode_id, 'decision_index': index, 'action': _json(selection), 'result': None, 'credit': None})
             key = f'{self.workflow.run_id}:{self.episode_id}:{index}'
             with journal.measure('runtime_actions', self.episode_id, index):
@@ -1392,7 +1392,7 @@ class Workflow:
 
     @classmethod
     def validate_expectations(cls, binding, job_episodes=None, *, episode_roles=()):
-        scientific = ('annotation',) if 'scientific_process' in episode_roles else cls.grain_names
+        scientific = ('annotation',) if 'gene_context_evidence' in episode_roles else cls.grain_names
         names = (*scientific, *(() if job_episodes is None else job_episodes.roles), *episode_roles)
         if binding is not None and set(binding.episode_types) - set(names):
             raise ValueError('execution_expectations_name_unavailable_episode_type')
@@ -1522,14 +1522,14 @@ class Workflow:
         for profile in self.episode_bindings.contract_information_configurations():
             self.validate_contract_information_configuration(profile)
         self.validate_expectations(execution_expectations, job_episodes, episode_roles=self.episode_bindings.roles)
-        self.scientific_process_binding = self.episode_bindings.for_role('scientific_process') if 'scientific_process' in self.episode_bindings.roles else None
+        self.gene_context_evidence_binding = self.episode_bindings.for_role('gene_context_evidence') if 'gene_context_evidence' in self.episode_bindings.roles else None
         self.scientific_provenance = None
         self.scientific_tool_retriever = None
-        if self.scientific_process_binding is not None:
-            self.scientific_provenance = self.services.create_scientific_provenance(self.scientific_process_binding)
-            retrieval = self.scientific_process_binding.tool_retrieval
+        if self.gene_context_evidence_binding is not None:
+            self.scientific_provenance = self.services.create_scientific_provenance(self.gene_context_evidence_binding)
+            retrieval = self.gene_context_evidence_binding.tool_retrieval
             if retrieval is not None and retrieval['mode'] == 'semantic_fast_v1':
-                self.scientific_tool_retriever = self.services.create_tool_retriever(self.scientific_process_binding, provider=provider)
+                self.scientific_tool_retriever = self.services.create_tool_retriever(self.gene_context_evidence_binding, provider=provider)
         if self.receipts is None and any((getattr(projector, 'requires_episode_receipts', False) for projector in self.role_credit_projectors.values())):
             raise ValueError('role_credit_requires_episode_record_receipts')
         self.wait_inputs = WaitInputs(store, self.journal, self.progress_provider)
@@ -1543,7 +1543,7 @@ class Workflow:
         children = {self.grains['annotation']: tuple((self.grains[name] for name in self.declared_child_roles('annotation')))}
         for role in () if job_episodes is None else job_episodes.roles:
             children[self.grains[role]] = ()
-        if self.scientific_process_binding is None:
+        if self.gene_context_evidence_binding is None:
             children[self.grains['improvement']] = tuple((self.grains[name] for name in self.declared_child_roles('improvement')))
         for role in self.episode_bindings.roles:
             children[self.grains[role]] = tuple((self.grains[name] for name in self.declared_child_roles(role)))
@@ -1962,9 +1962,9 @@ class Workflow:
             child, form, schema = records._attempt(context, index)
             require(child.episode_id == identity.episode_id and child.role == role and same(child.scope, scope), 'child_identity_conflict')
             assignment = _plain(child.assignment)
-            if role == 'scientific_process':
-                from .scientific_process_records import selector_selection
-                binding = self.scientific_process_binding
+            if role == 'gene_context_evidence':
+                from .gene_context_evidence_records import selector_selection
+                binding = self.gene_context_evidence_binding
                 require(binding is not None and binding.restore_closed_process(child) is not None, 'scientific_request_conflict')
                 binding.validate_context(child)
                 selected_assignment = {**assignment, 'selection': selector_selection(assignment['selection'])}
@@ -2630,7 +2630,7 @@ class Workflow:
         The receiver's host derivations are recorded in its action outcome.
         """
         callback = getattr(self.tools, 'received_attributions', None)
-        if callback is None or self.receipts is None or source.path[-1][0] not in {'annotation', 'scientific_process', 'improvement'}:
+        if callback is None or self.receipts is None or source.path[-1][0] not in {'annotation', 'gene_context_evidence', 'improvement'}:
             return []
         context = self.binding_context(source)
         known = set(self.receipts.known(source.episode_id))
@@ -2645,7 +2645,7 @@ class Workflow:
         needs.extend(attribution_needs)
         generated = [ref for ref in generated if ref not in known]
         repository = self.shared_information_repository()
-        if context.role == 'scientific_process' and repository is not None and (repository.parent(context, require_active=True) is not None):
+        if context.role == 'gene_context_evidence' and repository is not None and (repository.parent(context, require_active=True) is not None):
             for request_ref, need in needs:
                 args = {'target_ref': need['target_ref'], 'question': 'Supply the specific attribution inputs for this measurement or local trait.', 'required_information': canonical({'measurement_or_request_ref': request_ref, 'policy': need['policy'], 'physical_feature_key': need.get('physical_feature_key'), 'missing': need['missing'], **({'required_operands': need['required_operands']} if need.get('required_operands') else {})}), 'reason': 'Only this measurement/use is unresolved; native evidence and other traits retain their own scores.', 'blocking': False, 'available_record_refs': [request_ref]}
                 published = repository.execute(context, 'shared.request_information', args, known_record_refs=known, operation_key=f'{self.run_id}:{source.episode_id}:tool_attribution_need:{_digest(args)}')
@@ -3064,9 +3064,9 @@ class Workflow:
             value.update(self.episode_bindings.annotation_axis_yield_context(self.binding_context(source), credit))
             action = self.journal.row('runtime_actions', source.episode_id, index)
             selected = json.loads(action['action'])
-            if selected.get('kind') == 'episode_child' and selected.get('role') == 'scientific_process':
+            if selected.get('kind') == 'episode_child' and selected.get('role') == 'gene_context_evidence':
                 assignment = selected['assignment']
-                from .scientific_process_records import selection_fields
+                from .gene_context_evidence_records import selection_fields
                 process = assignment['selection']
                 axis = process[selection_fields(process)[0]]['option_id']
                 ref = assignment.get('proposed_annotation_ref')
@@ -3122,7 +3122,7 @@ class Workflow:
                 return bool(self.native_event_information is not None and context is not None and self.native_event_information.resolve(context, reference, namespace))
             if self.native_event_information is not None and context is not None and self.native_event_information.resolve(context, reference, namespace):
                 return True
-            if self.scientific_provenance is not None and context is not None and (namespace in {'scientific_invocation', 'scientific_preparation', 'scientific_process_library', 'scientific_option_digest', 'scientific_credit_binding'}):
+            if self.scientific_provenance is not None and context is not None and (namespace in {'scientific_invocation', 'scientific_preparation', 'gene_context_evidence_library', 'scientific_option_digest', 'scientific_credit_binding'}):
                 return self.services.scientific_reference(context, reference, namespace)
             if context is not None:
                 received = self.episode_bindings.resolve_received_reference(context, reference, namespace)
@@ -3160,17 +3160,17 @@ class Workflow:
         return resolve
 
     def scientific_library_available(self, source):
-        if self.scientific_process_binding is None:
+        if self.gene_context_evidence_binding is None:
             return False
         if source is None:
             return True
         if self.is_job_source(source):
             return False
         binding = self.specialist(source)
-        return binding is None or 'scientific_process' in binding.allowed_children(self.binding_context(source), self.services.capabilities())
+        return binding is None or 'gene_context_evidence' in binding.allowed_children(self.binding_context(source), self.services.capabilities())
 
     def scientific_retriever_catalog(self):
-        return self.services.scientific_retriever_catalog(self.scientific_process_binding)
+        return self.services.scientific_retriever_catalog(self.gene_context_evidence_binding)
 
     def catalog(self, scope, source=None):
         if restricted_root(self, source):
@@ -3182,7 +3182,7 @@ class Workflow:
         from .shared_information import catalog as shared_catalog
         shared_tools = self.shared_information_catalog(source)
         process_tools = []
-        if self.scientific_process_binding is not None:
+        if self.gene_context_evidence_binding is not None:
             process_tools = self.services.scientific_library_catalog() + self.scientific_retriever_catalog()
         reserved = {'episode.history', 'episode.credit', 'episode.annotation_score', 'episode.estimate_wait', 'episode.monitoring_information', *(item['name'] for item in knowledge_tools), *(item['name'] for item in launch_tools), *(item['name'] for item in shared_catalog()), *(item['name'] for item in process_tools)}
         if any((item['name'] in reserved for item in entries)):
@@ -3399,8 +3399,8 @@ class Workflow:
         root_outcome = _annotation_policy.annotation_tool_outcome(self, source, name, _composition_lookup=_composition_lookup)
         if root_outcome is not None:
             return root_outcome
-        if source.path[-1][0] == 'scientific_process':
-            self.scientific_process_binding.validate_execution_context(self.binding_context(source))
+        if source.path[-1][0] == 'gene_context_evidence':
+            self.gene_context_evidence_binding.validate_execution_context(self.binding_context(source))
         if _composition_lookup and name in CONTRACT_INFORMATION_OPERATIONS:
             saved, record = self.pending_contract_information(source, decision_index)
             lookup = record['exchange_schema']['properties']['response']['anyOf'][0]['properties']['lookup']
@@ -3431,7 +3431,7 @@ class Workflow:
                 Draft202012Validator(entry['input_schema']).validate(arguments)
             except (ValueError, ValidationError) as error:
                 return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': 'tool_arguments_invalid' if isinstance(error, ValidationError) else str(error)}}
-        if self.scientific_process_binding is not None:
+        if self.gene_context_evidence_binding is not None:
             retriever_catalog = self.scientific_retriever_catalog()
             if name in {item['name'] for item in self.services.scientific_library_catalog() + retriever_catalog}:
                 if not self.scientific_library_available(source):
@@ -3439,7 +3439,7 @@ class Workflow:
                 if name == 'process.tools':
                     try:
                         Draft202012Validator(retriever_catalog[0]['input_schema']).validate(arguments)
-                        tools = self.scientific_process_binding.tool_library
+                        tools = self.gene_context_evidence_binding.tool_library
                         available = self.services.tool_information_catalog(source.scope)
                         if self.scientific_tool_retriever is not None:
                             return await self.scientific_tool_retriever.retrieve(arguments['investigation'], episode_id=source.episode_id, operation_key=operation_key, available_catalog=available)
@@ -3521,10 +3521,10 @@ class Workflow:
 
     def selected(self, source, selection, index):
         if selection['kind'] in {'child', 'job_child', 'episode_child'}:
-            if source.path[-1][0] == 'scientific_process':
+            if source.path[-1][0] == 'gene_context_evidence':
                 saved = self.journal.row('runtime_actions', source.episode_id, index)
                 if saved is None or saved['result'] is None:
-                    self.scientific_process_binding.validate_execution_context(self.binding_context(source))
+                    self.gene_context_evidence_binding.validate_execution_context(self.binding_context(source))
             old = self.journal.row('runtime_actions', source.episode_id, index) if self.annotation_child_roles is not None else None
             original = old is not None and json.loads(old['action']) == selection
             self.validate_child_choice(source, selection.get('role', 'improvement'), selection=selection, original=original)
@@ -3554,7 +3554,7 @@ class Workflow:
             recorded = original is not None and json.loads(original['action']) == selection
             if not recorded:
                 self.validate_wait_selection(source, selection['condition'])
-        if selection['kind'] == 'child' and self.scientific_process_binding is not None:
+        if selection['kind'] == 'child' and self.gene_context_evidence_binding is not None:
             raise ValueError('scientific_child_requires_filled_process')
         if selection['kind'] == 'redeliver_report':
             return self.redeliver(source, selection, index)
@@ -3582,7 +3582,7 @@ class Workflow:
         role = selection.get('role', 'improvement')
         child_exchange = None
         if selection['kind'] == 'episode_child':
-            from .scientific_process.child_message_owners import exchange_for_child
+            from .gene_context_evidence.child_message_owners import exchange_for_child
             child_exchange = exchange_for_child(self, source, role)
             if child_exchange is None:
                 from gene_annotation_episode.episodic_workflow.root.a103.child_message_owners import exchange_for_child
@@ -3592,16 +3592,16 @@ class Workflow:
             child_exchange = exchange_for_improvement(self, source, selection, role)
         if child_exchange is not None:
             if len(child_exchange) == 3:
-                schema, report_declaration, initial, episode_assignment, scientific_process, assignment, bound = child_exchange[0](self, source, selection, index, scope, role)
+                schema, report_declaration, initial, episode_assignment, gene_context_evidence, assignment, bound = child_exchange[0](self, source, selection, index, scope, role)
                 if 'specialist' in bound:
                     specialist = bound['specialist']
                 if 'binding' in bound:
                     binding = bound['binding']
             else:
-                schema, report_declaration, initial, episode_assignment, scientific_process, assignment, specialist = child_exchange[0](self, source, selection, index, scope, role)
+                schema, report_declaration, initial, episode_assignment, gene_context_evidence, assignment, specialist = child_exchange[0](self, source, selection, index, scope, role)
         else:
             episode_assignment = None
-            scientific_process = None
+            gene_context_evidence = None
             schema, report_declaration = self.expanded_contract_form(source, selection, index, role)
             if selection['kind'] == 'episode_child':
                 binding = self.episode_bindings.for_child(source.path, role)
@@ -3631,7 +3631,7 @@ class Workflow:
                     raise ValueError('child_role_not_available_to_parent')
                 binding = self.episode_bindings.for_child(source.path, role)
                 self.launch_instructions.materialize(selection['assignment'].get('launch_instructions'))
-                if binding is self.scientific_process_binding:
+                if binding is self.gene_context_evidence_binding:
                     closed = {}
                     recorded = self.journal.row('runtime_actions', source.episode_id, index)
                     if recorded is not None and recorded['result'] is not None and (_json(json.loads(recorded['action'])) == _json(selection)) and (json.loads(recorded['result']).get('status') == 'completed'):
@@ -3645,7 +3645,7 @@ class Workflow:
                                 closed['closed_context'] = candidate
                     prepared = binding.prepare_invocation(self.binding_context(source), role, selection['assignment'], scope, f'{self.run_id}:{source.episode_id}:{index}', invocation={'objective': selection['goal'], 'purpose': selection['purpose'], 'report_schema': schema, 'initial_report': initial}, **closed)
                     episode_assignment = prepared['assignment']
-                    scientific_process = prepared['scientific_process']
+                    gene_context_evidence = prepared['gene_context_evidence']
                 else:
                     child_assignment = selection['assignment']
                     send_request = getattr(specialist, 'prepare_child_request', None)
@@ -3678,7 +3678,7 @@ class Workflow:
                 self.job_episode_for_child(source.path, role)
                 parent = self.legacy_parent_for_path(source.path)
                 legacy_request_assembler = parent.child_request_assembler(role)
-            child = self.build(role, f'child_{index}', selection['goal'], scope, parent=source.request.goal, parent_path=source.path, contract=contract, initial=initial, job_assignment=assignment, episode_assignment=episode_assignment, scientific_process=scientific_process, **{'report_contract_declaration': report_declaration} if report_declaration is not None else {}, **{'request_assembler': legacy_request_assembler} if legacy_request_assembler is not None else {'request_assembler': request_assembler} if selection['kind'] == 'episode_child' and callable(getattr(specialist, 'child_request_assembler', None)) and ((request_assembler := specialist.child_request_assembler(role)) is not None) else {})
+            child = self.build(role, f'child_{index}', selection['goal'], scope, parent=source.request.goal, parent_path=source.path, contract=contract, initial=initial, job_assignment=assignment, episode_assignment=episode_assignment, gene_context_evidence=gene_context_evidence, **{'report_contract_declaration': report_declaration} if report_declaration is not None else {}, **{'request_assembler': legacy_request_assembler} if legacy_request_assembler is not None else {'request_assembler': request_assembler} if selection['kind'] == 'episode_child' and callable(getattr(specialist, 'child_request_assembler', None)) and ((request_assembler := specialist.child_request_assembler(role)) is not None) else {})
             contract_binding['context'] = self.binding_context(child.source)
             contract_binding['resolver'] = self.resolver(scope, assignment=assignment, grain=role, context=contract_binding['context'])
             allow_suspension = self.permits_common_action(child.source, 'wait')
@@ -3864,11 +3864,11 @@ class Workflow:
         return ReportRedelivery(child_id, report=admitted)
     from .library.report_fact_assembly import facts
 
-    def build(self, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, scientific_process=None, report_contract_declaration=None, request_assembler=None):
+    def build(self, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, gene_context_evidence=None, report_contract_declaration=None, request_assembler=None):
         if request_assembler is None:
             parent_owner = self.legacy_parent_for_path((*parent_path, (name, key)))
             if parent_owner is not None:
-                path, goal, message, identity, request = parent_owner.assemble_request(self, name, key, goal_text, scope, parent=parent, parent_path=parent_path, contract=contract, initial=initial, job_assignment=job_assignment, episode_assignment=episode_assignment, scientific_process=scientific_process, report_contract_declaration=report_contract_declaration)
+                path, goal, message, identity, request = parent_owner.assemble_request(self, name, key, goal_text, scope, parent=parent, parent_path=parent_path, contract=contract, initial=initial, job_assignment=job_assignment, episode_assignment=episode_assignment, gene_context_evidence=gene_context_evidence, report_contract_declaration=report_contract_declaration)
             else:
                 path = (*parent_path, (name, key))
                 goal = EpisodeGoal.root(objective=goal_text, result_contract={'role': name}) if parent is None else EpisodeGoal.child(parent, objective=goal_text, result_contract=contract.schema)
@@ -3885,18 +3885,18 @@ class Workflow:
                 if episode_assignment is not None:
                     self.launch_instructions.materialize(episode_assignment.get('launch_instructions'))
                     message['episode_assignment'] = _plain(episode_assignment)
-                if scientific_process is not None:
-                    message['scientific_process'] = _plain(scientific_process)
+                if gene_context_evidence is not None:
+                    message['gene_context_evidence'] = _plain(gene_context_evidence)
                 identity = Episode.identity(self.context, self.grains[name], key, parent_path=parent_path)
-                if self.scientific_process_binding is not None and name in {'annotation', 'scientific_process'}:
-                    from .scientific_process_records import scientific_invocation_ref
+                if self.gene_context_evidence_binding is not None and name in {'annotation', 'gene_context_evidence'}:
+                    from .gene_context_evidence_records import scientific_invocation_ref
                     message['scientific_invocation_ref'] = scientific_invocation_ref(self.run_id, path)
                 if self.receipts is not None:
                     parent_id = Episode.identity(self.context, self.grains[parent_path[-1][0]], parent_path[-1][1], parent_path=parent_path[:-1]).episode_id if parent_path else None
                     message['knowledge_inheritance'] = self.receipts.bind(identity.episode_id, parent_id)
                 request = EpisodeRequest(goal, Record(message), contract)
         else:
-            path, goal, message, identity, request = request_assembler(self, name, key, goal_text, scope, parent=parent, parent_path=parent_path, contract=contract, initial=initial, job_assignment=job_assignment, episode_assignment=episode_assignment, scientific_process=scientific_process, report_contract_declaration=report_contract_declaration)
+            path, goal, message, identity, request = request_assembler(self, name, key, goal_text, scope, parent=parent, parent_path=parent_path, contract=contract, initial=initial, job_assignment=job_assignment, episode_assignment=episode_assignment, gene_context_evidence=gene_context_evidence, report_contract_declaration=report_contract_declaration)
         binding = self.episode_bindings.for_path(path) if name in self.episode_bindings.roles else None
         if binding is None:
             binding = self.legacy_parent_for_path(path)
@@ -3905,19 +3905,19 @@ class Workflow:
         source_type = getattr(binding, 'decision_source_type', DecisionSource)
         source = source_type(self, path, request, scope)
         self.contract_information_profile(source)
-        if name == 'scientific_process':
-            restored = self.scientific_process_binding.restore_closed_process(self.binding_context(source))
+        if name == 'gene_context_evidence':
+            restored = self.gene_context_evidence_binding.restore_closed_process(self.binding_context(source))
             if restored is not None:
-                message['scientific_process'] = restored
+                message['gene_context_evidence'] = restored
                 request = EpisodeRequest(goal, Record(message), contract)
                 source = source_type(self, path, request, scope)
         row = self.journal.row('runtime_episodes', identity.episode_id)
         if row is not None and json.loads(row['request']) != _plain(request.as_record()):
             raise WorkflowError('reconstructed immutable assignment differs')
-        if name == 'scientific_process':
-            self.scientific_process_binding.validate_context(self.binding_context(source))
-        elif scientific_process is not None:
-            raise ValueError('scientific_process_role_mismatch')
+        if name == 'gene_context_evidence':
+            self.gene_context_evidence_binding.validate_context(self.binding_context(source))
+        elif gene_context_evidence is not None:
+            raise ValueError('gene_context_evidence_role_mismatch')
         specialist = self.specialist(source)
         initialize = getattr(specialist, 'initialize', None)
         if initialize is not None:

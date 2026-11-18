@@ -2,7 +2,7 @@
 from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from urllib.parse import urlsplit
-from gene_annotation_episode.episodic_workflow.root.a103.scientific_process_prompt import _pick, _record, _scalar, _schema, _section, _table, _values, render_episode_steering, text_instructions
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence_prompt import _pick, _record, _scalar, _schema, _section, _table, _values, render_episode_steering, text_instructions
 
 def _text(value):
     return _values(value) if isinstance(value, (Mapping, list, tuple)) else _scalar(value)
@@ -117,7 +117,7 @@ def _task(state, instructions):
     constraints = _pick(state, ('constraints', 'selected_constraints'))
     if constraints:
         _section(parts, 'Caller constraints', _values(constraints))
-    process = state.get('scientific_process', {})
+    process = state.get('gene_context_evidence', {})
     assignment = process.get('assignment', {})
     if 'constraints' in assignment:
         _section(parts, 'Parent constraints', _values(assignment['constraints']))

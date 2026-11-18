@@ -394,7 +394,7 @@ class BVBRCComparativeSystemsReturns(EpisodeReturnRecords):
                 for source, rows in self._original_publication(context, reference, tuple(values)).items():
                     expected[source].extend(rows)
             self._require(self._equal(values, expected), 'returned_facts_conflict')
-        elif context.role in {'annotation', 'scientific_process'}:
+        elif context.role in {'annotation', 'gene_context_evidence'}:
             received = self.received_facts(context, schema)
             self._require(all(all(any(self._equal(row, original) for original in received[source])
                 for row in rows) for source, rows in values.items()), 'returned_facts_conflict')
@@ -434,7 +434,7 @@ class BVBRCComparativeSystemsReturns(EpisodeReturnRecords):
         values = self._values(plain(form), plain(schema))
         if context.role == 'results':
             expected = self.facts(context, schema)
-        elif context.role in {'annotation', 'scientific_process'}:
+        elif context.role in {'annotation', 'gene_context_evidence'}:
             expected = self.received_facts(context, schema)
         else:
             raise ComparativeSystemsReturnError('unsupported_return_owner')

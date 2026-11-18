@@ -5,12 +5,12 @@ an arm's head from (docs/axis_restructure_20261117/README.md).
 """
 
 HEAD = {
-    'a101': 'sequence_homology_evidence', 'a102': 'structural_homology_evidence', 'a103': 'scientific_process',
+    'a101': 'sequence_homology_evidence', 'a102': 'structural_homology_evidence', 'a103': 'gene_context_evidence',
     'a104': 'scientific_process', 'a105': 'experimental_activity_evidence', 'a106': 'perturbation_evidence',
     'a107': 'scientific_process', 'a108': 'sample_context_evidence', 'a110': 'scientific_process',
 }
 CLASS = {
-    'a101': 'SequenceHomologyEvidence', 'a102': 'StructuralHomologyEvidence', 'a103': 'ScientificProcess',
+    'a101': 'SequenceHomologyEvidence', 'a102': 'StructuralHomologyEvidence', 'a103': 'GeneContextEvidence',
     'a104': 'ScientificProcess', 'a105': 'ExperimentalActivityEvidence', 'a106': 'PerturbationEvidence',
     'a107': 'ScientificProcess', 'a108': 'SampleContextEvidence', 'a110': 'ScientificProcess',
 }

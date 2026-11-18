@@ -36,7 +36,7 @@ ROOT = Path(__file__).resolve().parents[5]
 REAL = Path(__file__).with_name('fixtures')/'a103'/'real'
 PUBLICATION = Path(__file__).with_name('fixtures')/'publication/2026-10-24-001'
 PROGRAM = ROOT/'resources/software/infernal-1.1.5/hmmer/src/phmmer'
-ROLES = ('scientific_process','literature','launch','monitor','results')
+ROLES = ('gene_context_evidence','literature','launch','monitor','results')
 CASES = {
     'poxa':{'target':'P39280','files':['ecoli-window.gb','salmonella-window.gb','porphyromonas-kama.gb'],
         'selectors':[{'locus_tag':'b4146'},{'locus_tag':'STM4333'},{'protein_id':'AAQ66184.1'}],
@@ -172,14 +172,14 @@ class A103NativeCase:
     def controller(self,path,initial):
         role = path[-1][0]
         budget = ((1 if self.smoke and not self.wiring_smoke else 40) if role=='annotation' else
-            (6 if self.wiring_smoke and self.next_science_budget!=2 else 3 if self.smoke and not self.wiring_smoke else self.next_science_budget) if role=='scientific_process' else
+            (6 if self.wiring_smoke and self.next_science_budget!=2 else 3 if self.smoke and not self.wiring_smoke else self.next_science_budget) if role=='gene_context_evidence' else
             {'launch':12,'launch_local':12,'results':12,'monitor':3}.get(role,4))
         def estimate(history,parameters,contexts):
             episode=self.episode_for_path.get(tuple(map(tuple,path)))
             phase_done=role in {'launch','launch_local','results'} and episode is not None and self.stages[episode]>={
                 'launch':1,'launch_local':4,'results':2}[role]
-            scientific = self.states.get(episode,{}).get('scientific_process',{}).get('assignment',{})
-            if role=='scientific_process' and scientific.get('selection',{}).get('evidence_axis',{}).get('option_id')=='A103':
+            scientific = self.states.get(episode,{}).get('gene_context_evidence',{}).get('assignment',{})
+            if role=='gene_context_evidence' and scientific.get('selection',{}).get('evidence_axis',{}).get('option_id')=='A103':
                 latest=self.store.db.execute("SELECT action FROM runtime_actions WHERE run_id=? AND episode_id=? "
                     "AND result IS NOT NULL ORDER BY rowid DESC LIMIT 1",(self.run_id,episode)).fetchone()
                 last_action=json.loads(latest[0]) if latest else {}
@@ -384,9 +384,9 @@ class A103NativeCase:
         if frame.get('kind') in {'decision_bootstrap','decision_update'}:
             self.states[episode_id] = apply_state_frame(self.states.get(episode_id),frame)
         state = self.states.get(episode_id,{})
-        axis = state.get('scientific_process',{}).get('assignment',{}).get('selection',{}).get('evidence_axis',{}).get('option_id')
+        axis = state.get('gene_context_evidence',{}).get('assignment',{}).get('selection',{}).get('evidence_axis',{}).get('option_id')
         helper = axis=='A101'
-        if path[-1][0]=='scientific_process' and not self.smoke and not helper:
+        if path[-1][0]=='gene_context_evidence' and not self.smoke and not helper:
             return await self.connection.complete(episode_id,role,instructions,frame,output_schema)
         if (state.get('feedback') or {}).get('code')=='local_resource_busy':
             requested = self.tools.a103_policy.to_dict()
@@ -405,7 +405,7 @@ class A103NativeCase:
                 'delivery_ref':feedback['delivery_ref'],
                 'purpose':'Receive the existing native context records and frozen credit. The unsupported interpretation remains rejected.',
                 'schema_json':json.dumps(measurement_report_schema())},'report_update':{}}}
-        if (self.smoke or helper or path[-1][0]!='scientific_process') and state.get('feedback'):
+        if (self.smoke or helper or path[-1][0]!='gene_context_evidence') and state.get('feedback'):
             raise AssertionError(state['feedback'])
         self.resource_views.append({'path':path,'resource_context':state.get('resource_context')})
         stage = self.stages[episode_id]
@@ -426,7 +426,7 @@ class A103NativeCase:
         if helper or path[-1][0] in {'launch','launch_local','results'}:
             report = sequence_report() if helper else {}
             if helper and stage==0:
-                requested = state['scientific_process']['assignment']['context']['requested_evidence_subjects']
+                requested = state['gene_context_evidence']['assignment']['context']['requested_evidence_subjects']
                 assignment = {'version':'resource_launch_assignment_v1','job_request':{'query_ref':requested['query_ref'],'cpu':1},
                     'immutable_input_versions':[],'constraints':{'cpu':1},'resource_selection':None,
                     'software_knowledge_refs':[],'resource_knowledge_refs':[]}

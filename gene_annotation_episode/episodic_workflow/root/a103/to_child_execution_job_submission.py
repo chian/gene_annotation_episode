@@ -3,7 +3,7 @@ from __future__ import annotations
 
 def prepare_request(self, source, selection, index, scope, role):
     episode_assignment = None
-    scientific_process = None
+    gene_context_evidence = None
     schema, report_declaration = self.expanded_contract_form(source, selection, index, role)
     if selection['kind'] == 'episode_child':
         binding = self.episode_bindings.for_child(source.path, role)
@@ -27,7 +27,7 @@ def prepare_request(self, source, selection, index, scope, role):
             raise _get_ValueError()('child_role_not_available_to_parent')
         binding = self.episode_bindings.for_child(source.path, role)
         self.launch_instructions.materialize(selection['assignment'].get('launch_instructions'))
-        if binding is self.scientific_process_binding:
+        if binding is self.gene_context_evidence_binding:
             closed = {}
             recorded = self.journal.row('runtime_actions', source.episode_id, index)
             if recorded is not None and recorded['result'] is not None and (_get__json()(_get_json().loads(recorded['action'])) == _get__json()(selection)) and (_get_json().loads(recorded['result']).get('status') == 'completed'):
@@ -41,7 +41,7 @@ def prepare_request(self, source, selection, index, scope, role):
                         closed['closed_context'] = candidate
             prepared = binding.prepare_invocation(self.binding_context(source), role, selection['assignment'], scope, f'{self.run_id}:{source.episode_id}:{index}', invocation={'objective': selection['goal'], 'purpose': selection['purpose'], 'report_schema': schema, 'initial_report': initial}, **closed)
             episode_assignment = prepared['assignment']
-            scientific_process = prepared['scientific_process']
+            gene_context_evidence = prepared['gene_context_evidence']
         else:
             child_assignment = selection['assignment']
             send_request = _get_getattr()(specialist, 'prepare_child_request', None)
@@ -51,5 +51,5 @@ def prepare_request(self, source, selection, index, scope, role):
     assignment = self.job_episode_for_child(source.path, role).assign(self.store, role, selection, scope, operation_key=f'{self.run_id}:{source.episode_id}:{index}') if selection['kind'] == 'job_child' else None
     request_locals = locals()
     bound = {name: request_locals[name] for name in ('specialist', 'binding') if name in request_locals}
-    return (schema, report_declaration, initial, episode_assignment, scientific_process, assignment, bound)
+    return (schema, report_declaration, initial, episode_assignment, gene_context_evidence, assignment, bound)
 from gene_annotation_episode.episodic_workflow.root.a103.runtime import _parent_name_ContractError as _get_ContractError, _parent_name_Episode as _get_Episode, _parent_name_ValueError as _get_ValueError, _parent_name__json as _get__json, _parent_name_any as _get_any, _parent_name_callable as _get_callable, _parent_name_getattr as _get_getattr, _parent_name_interpretation_schema as _get_interpretation_schema, _parent_name_json as _get_json, _parent_name_parse_json_object as _get_parse_json_object, _parent_name_validate_form as _get_validate_form

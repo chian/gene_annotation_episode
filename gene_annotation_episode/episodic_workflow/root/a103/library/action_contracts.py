@@ -27,7 +27,7 @@ def action_schema(self, source):
     scientific_child = scientific_child_contract(form_example, interpretive_example, scope_schema)
     if not self.is_job_source(source):
         explicit_roles = None if self.annotation_child_roles is None and (not (len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False))) else self.available_child_roles(source)
-        if specialist is None and self.scientific_process_binding is None and ('child' in common_actions) and (explicit_roles is None or 'improvement' in explicit_roles):
+        if specialist is None and self.gene_context_evidence_binding is None and ('child' in common_actions) and (explicit_roles is None or 'improvement' in explicit_roles):
             options.append(scientific_child)
         if self.job_episodes is not None and specialist is None:
             for role in self.job_episodes.roles:

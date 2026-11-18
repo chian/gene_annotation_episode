@@ -10,8 +10,8 @@ from pathlib import Path
 from .communication import interpretation_schema, plain, validate_closed_schema, validate_form
 from .domain import ContractError, obj
 from .evidence_axis_instructions import validate_instruction_entry
-from .scientific_process_library import ScientificProcessLibrary
-from .scientific_process_records import SELECTION_VERSION, selector_selection, validate_selection
+from .gene_context_evidence_library import GeneContextEvidenceLibrary
+from .gene_context_evidence_records import SELECTION_VERSION, selector_selection, validate_selection
 from .scientific_tool_library import ScientificToolLibrary
 
 
@@ -84,7 +84,7 @@ def received_context_records(store,known,scope,*,committed=()):
 class A103Subtree:
     def __init__(self,run_directory):
         directory = Path(run_directory)
-        self.library = ScientificProcessLibrary(directory/'scientific-process-library')
+        self.library = GeneContextEvidenceLibrary(directory/'scientific-process-library')
         self.tools = ScientificToolLibrary(directory/'scientific-tool-library')
         self.axis = self.library.reference('A103')
         entry = validate_instruction_entry(self.library.resolve(self.axis))
@@ -136,7 +136,7 @@ class A103Subtree:
         tools = self.tools.resolve_tool_info(child_tool_info)
         selection = selector_selection(validate_selection({'version':SELECTION_VERSION,
             'evidence_axis':deepcopy(self.axis),'thought_pattern':self.library.reference(thought_id),'child_tool_info':tools}))
-        return {'kind':'episode_child','role':'scientific_process','goal':question,'scope':scope,
+        return {'kind':'episode_child','role':'gene_context_evidence','goal':question,'scope':scope,
             'purpose':'Return saved gene-context measurements and their purpose-specific target/component/region grading, with its exact recorded qualifications and missing inputs; no second report verdict.',
             'schema_json':json.dumps(schema,allow_nan=False),'initial_report_json':json.dumps(initial,allow_nan=False),
             'assignment':{'selection':selection,'evidence_refs':references,'constraints':deepcopy(constraints or {}),'context':supplied}}
@@ -175,33 +175,33 @@ class A103ServiceFactory:
     def __call__(self,store,*,run_id,directory,tool_catalog,job_episodes=None,resource_estimator=None,
                  tool_registry=None,**kwargs):
         from .episode_application_services import EpisodeApplicationServices
-        from .scientific_process.published_evidence_assessment.episode import create_binding_tree
-        from .scientific_process_setup import prepare_scientific_binding
-        from .scientific_process.episode import ScientificProcessEpisode
+        from .gene_context_evidence.published_evidence_assessment.episode import create_binding_tree
+        from .gene_context_evidence_setup import prepare_scientific_binding
+        from .gene_context_evidence.episode import GeneContextEvidenceEpisode
         if self.execution_service_factory is not None:
             from .execution_service_setup import ExecutionServiceFactory
-            from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.execution_job_submission.episode import ExecutionEpisode
-            from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.execution_progress_assessment.episode import MonitorEpisode
-            from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.hpc_work_planning.episode import HPCEpisode
+            from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.execution_job_submission.episode import ExecutionEpisode
+            from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.execution_progress_assessment.episode import MonitorEpisode
+            from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.hpc_work_planning.episode import HPCEpisode
             factory=self.execution_service_factory
             if not isinstance(factory,ExecutionServiceFactory):
                 raise TypeError('a103_explicit_execution_service_factory_required')
             execution=factory(store,run_id=run_id,directory=directory,execution_factory=create_execution_bindings,monitor_type=MonitorEpisode,
                 hpc_factory=create_hpc_bindings,tool_catalog=tool_catalog,
                 tool_registry=tool_registry,job_episodes=job_episodes,resource_estimator=resource_estimator)
-            roles=['scientific_process','literature',*ExecutionEpisode.entry_roles, *ExecutionResultsEpisode.entry_roles,*MonitorEpisode.entry_roles]
+            roles=['gene_context_evidence','literature',*ExecutionEpisode.entry_roles, *ExecutionResultsEpisode.entry_roles,*MonitorEpisode.entry_roles]
             if factory.hpc_commissions is not None:
-                from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.hpc_work_planning.episode import HPCEpisode
+                from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.hpc_work_planning.episode import HPCEpisode
                 configure=getattr(tool_registry,'configure_a103_hpc',None)
                 if not callable(configure):raise ContractError('a103_hpc_requires_actual_context_tool_registry')
                 configure(factory.resources)
                 roles.extend(HPCEpisode.entry_roles)
             descriptors=(*execution.episode_binding_descriptors,*self.additional_descriptors)
             ids=[descriptor['binding_id'] for descriptor in descriptors]
-            if len(ids)!=len(set(ids)) or {'scientific_process','literature'}.intersection(ids):
+            if len(ids)!=len(set(ids)) or {'gene_context_evidence','literature'}.intersection(ids):
                 raise ContractError('a103_execution_binding_conflict')
             for descriptor in self.additional_descriptors:roles.extend(descriptor.get('roles',()))
-            scientific=prepare_scientific_binding(episode_type=ScientificProcessEpisode,run_directory=directory,source_directory=self.source_directory,
+            scientific=prepare_scientific_binding(episode_type=GeneContextEvidenceEpisode,run_directory=directory,source_directory=self.source_directory,
                 tool_catalog=tool_registry.catalog() if tool_registry is not None else tool_catalog,
                 child_roles=tuple(dict.fromkeys(roles)),tool_retrieval=self.tool_retrieval,
                 resource_catalogs=execution.resource_tool_catalogs)
@@ -214,14 +214,14 @@ class A103ServiceFactory:
             return bind_assembled_services(store,run_id=run_id,directory=directory,
                 job_episodes=job_episodes,resource_estimator=resource_estimator,
                 source_directory=self.source_directory,tool_catalog=tool_catalog,tool_registry=tool_registry,
-                tool_retrieval=self.tool_retrieval,scientific_child_roles=('scientific_process','literature','launch','monitor','results'),
+                tool_retrieval=self.tool_retrieval,scientific_child_roles=('gene_context_evidence','literature','launch','monitor','results'),
                 handoff_unit=1,acquired_record_unit=1,monitoring_information_unit=1,
                 literature_outcome_page_size=8,monitor_outcome_page_size=8,log_window_bytes=128,
                 log_roles=('native_text',),scientific_contract_information_profile=CONTRACT_INFORMATION_PROFILE)
-        scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisode,run_directory=directory,source_directory=self.source_directory,
-            tool_catalog=tool_catalog,child_roles=('scientific_process','literature'),tool_retrieval=self.tool_retrieval)
+        scientific = prepare_scientific_binding(episode_type=GeneContextEvidenceEpisode,run_directory=directory,source_directory=self.source_directory,
+            tool_catalog=tool_catalog,child_roles=('gene_context_evidence','literature'),tool_retrieval=self.tool_retrieval)
         return EpisodeApplicationServices((scientific,*tuple(binding.as_record() for binding in create_binding_tree(None)),*self.additional_descriptors),{})
 
-from .scientific_process.episode import create_execution_bindings, create_hpc_bindings
+from .gene_context_evidence.episode import create_execution_bindings, create_hpc_bindings
 
-from .scientific_process.execution_result_acquisition.episode import ExecutionEpisode as ExecutionResultsEpisode
+from .gene_context_evidence.execution_result_acquisition.episode import ExecutionEpisode as ExecutionResultsEpisode

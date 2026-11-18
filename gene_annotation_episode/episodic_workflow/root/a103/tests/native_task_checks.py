@@ -17,9 +17,9 @@ import json
 import pytest
 PACKAGE='gene_annotation_episode.episodic_workflow.root.a103'
 PARENTS=('execution_job_submission','hpc_work_planning/execution_job_submission',
-'hpc_work_planning/hpc_allocation_execution/execution_job_submission','scientific_process/execution_job_submission',
-'scientific_process/hpc_work_planning/execution_job_submission',
-'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission')
+'hpc_work_planning/hpc_allocation_execution/execution_job_submission','gene_context_evidence/execution_job_submission',
+'gene_context_evidence/hpc_work_planning/execution_job_submission',
+'gene_context_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission')
 HOMES=tuple(parent+'/'+child for parent in PARENTS for child in ('local_job_execution','hpc_job_execution'))
 TIME='2026-11-12T00:00:00+00:00'
 def module(name):return import_module(PACKAGE+'.'+name)
@@ -69,7 +69,7 @@ def actual(home,directory):
     execution_keys.append(kw['operation_key']);return await binding.execute(context,name,arguments,kw['operation_key'])
    async def unchanged_score(source,index,result):return result
    workflow=SimpleNamespace(context=object(),grains={role:object()},inprocess_completion_order=None,
-    receipts=None,scientific_process_binding=None,episode_bindings=registry,contract_information_profile=lambda s:None,
+    receipts=None,gene_context_evidence_binding=None,episode_bindings=registry,contract_information_profile=lambda s:None,
     specialist=lambda s:binding,binding_context=lambda s:replace(context,request=plain(s.request.as_record())),journal=journal,run_id=run_id,store=store,
     source_credit_view=credit,expose_assigned_job=lambda s:None,receive_tool_attributions=lambda *a,**kw:None,
     archive=SimpleNamespace(store=lambda value:value),launch_instructions=SimpleNamespace(materialize=lambda value:None),
@@ -87,7 +87,7 @@ def actual(home,directory):
     execution_keys=execution_keys,received=received,projections=projections,directory=directory)
 def parent_admission(f):
  parent_home=f.home.rsplit('/',1)[0]
- roles={'scientific_process':'scientific_process','hpc_work_planning':'hpc','hpc_allocation_execution':'hpc_execution','execution_job_submission':'launch'}
+ roles={'gene_context_evidence':'gene_context_evidence','hpc_work_planning':'hpc','hpc_allocation_execution':'hpc_execution','execution_job_submission':'launch'}
  path=(('annotation','root'),*((roles[p],'selected-'+p) for p in parent_home.split('/')))
  parent_id=module('method_loop.identities').EpisodeRef(f.context.run_id,path).episode_id
  assignment={'version':'execution_launch_assignment_v1','requests':{'selected-native':deepcopy(f.assignment)},'immutable_input_versions':[],'constraints':{}}
@@ -208,7 +208,7 @@ class NativeTaskBehavior:
         assert observed==expected and b.scientific_prompt_states==a.scientific_prompt_states
         if scenario in {'minimal','unrecognized-bootstrap'}: assert observed==(json.dumps(context,allow_nan=False),instructions)
         if scenario=='hpc-override': assert observed[0]==module('library.hpc_prompt').render_hpc_prompt(context,instructions)
-        if scenario=='selected-full': assert observed[0]==module('scientific_process_prompt').render_selected_execution_prompt(context,instructions)
+        if scenario=='selected-full': assert observed[0]==module('gene_context_evidence_prompt').render_selected_execution_prompt(context,instructions)
 
     @pytest.mark.parametrize('mode',['returned','raised'])
     def test_original_instruction_service_callback(self,actual_task,mode):

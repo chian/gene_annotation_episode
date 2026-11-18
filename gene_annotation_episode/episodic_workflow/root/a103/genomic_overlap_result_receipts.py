@@ -1107,7 +1107,7 @@ class GenomicOverlapResultReceipts:
             require("received_report_prefix" in manifest)
             parent = self.returns.context(parent_id)
             self.returns._commission(parent, current, construction=current is context)
-            if parent.role in {"annotation", "scientific_process"}:
+            if parent.role in {"annotation", "gene_context_evidence"}:
                 groups, origins, _ = self.returns._received(parent, (SAVED_SOURCE,),
                     allowed=manifest["received_report_prefix"]["attempts"])
                 for file in groups[SAVED_SOURCE]:

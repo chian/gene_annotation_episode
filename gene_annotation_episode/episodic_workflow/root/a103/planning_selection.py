@@ -22,8 +22,8 @@ RESOURCE_CALLERS = (('resource_work_submission', '', 'launch'),
     ('resource_work_submission/local_resource_work_execution', 'resource_work_submission', 'launch_local'),
     ('resource_work_submission/hpc_resource_work_execution', 'resource_work_submission', 'launch_hpc'),
     ('resource_result_acquisition', '', 'results'))
-CALLERS = {'scientific_process': ('', 'scientific_process', 'ScientificProcessEpisode', 'scientific_process/resource_work_submission')}
-for _prefix in ('', 'scientific_process/'):
+CALLERS = {'gene_context_evidence': ('', 'gene_context_evidence', 'GeneContextEvidenceEpisode', 'gene_context_evidence/resource_work_submission')}
+for _prefix in ('', 'gene_context_evidence/'):
     _parent = _prefix.rstrip('/')
     _portfolio = _prefix+'resource_work_submission'
     for _home, _ancestor, _role in SOURCE_CALLERS:
@@ -146,8 +146,8 @@ def planning_binding(workflow, source, role):
             continue
         matches = [candidate for candidate, row in CALLERS.items()
                    if row[0]==home and row[1]==selected_role]
-        if home=='scientific_process' and selected_role=='scientific_process':
-            matches = ['scientific_process']
+        if home=='gene_context_evidence' and selected_role=='gene_context_evidence':
+            matches = ['gene_context_evidence']
         if home and CALLERS[home][2]=='MonitorEpisode' and selected_role=='monitor':
             matches = [home]
         if not matches:
@@ -186,14 +186,14 @@ def planning_binding(workflow, source, role):
         # A standalone actual Launch is its own source, not a sibling selected
         # from a unique role. The full registered identity was checked above.
         return parent
-    if portfolio.startswith('scientific_process/'):
-        positions = [index for index,(selected_role,_) in enumerate(path) if selected_role=='scientific_process']
+    if portfolio.startswith('gene_context_evidence/'):
+        positions = [index for index,(selected_role,_) in enumerate(path) if selected_role=='gene_context_evidence']
         if not positions:
             raise ValueError('resource_planning_scientific_parent_required')
         parent_path=path[:positions[-1]+1]
         owner=registry.for_path(parent_path)
-        assert _authentic(owner,'scientific_process',registry)
-        declared=owner.child_roles('scientific_process')
+        assert _authentic(owner,'gene_context_evidence',registry)
+        declared=owner.child_roles('gene_context_evidence')
     else:
         if path[0][0]!='annotation':
             raise ValueError('resource_planning_annotation_parent_required')

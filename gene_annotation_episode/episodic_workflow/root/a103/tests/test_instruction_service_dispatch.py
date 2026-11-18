@@ -11,8 +11,8 @@ PREFIX='gene_annotation_episode.episodic_workflow.root.a103'
 HOMES=tuple(h+'/api_job_execution' for h in (
  'execution_job_submission','hpc_work_planning/execution_job_submission',
  'hpc_work_planning/hpc_allocation_execution/execution_job_submission',
- 'scientific_process/execution_job_submission','scientific_process/hpc_work_planning/execution_job_submission',
- 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission'))
+ 'gene_context_evidence/execution_job_submission','gene_context_evidence/hpc_work_planning/execution_job_submission',
+ 'gene_context_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission'))
 def own(name):return import_module(PREFIX+'.'+name)
 class OriginalInstructionFailure(Exception):pass
 class ExplicitNoneSource(own('runtime').DecisionSource):

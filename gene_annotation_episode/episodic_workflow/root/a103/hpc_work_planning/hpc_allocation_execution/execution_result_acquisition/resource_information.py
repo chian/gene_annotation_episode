@@ -30,7 +30,7 @@ class ResultsResourceInformation:
             target = self._target(context)
             return {'execution_resource_capabilities': [{'resource_id': target['resource_id'], 'resource_kind': 'local'}], 'execution_initial_information': {}}
         value = {'execution_resource_capabilities': [self._resource_information(key) for key in self.resources], 'execution_initial_information': deepcopy(self.initial_information), 'received_bvbrc_values': [] if self.api_execution is None else self.api_execution.received_bvbrc_context(context)}
-        if context.role in {'annotation', 'scientific_process'} and self.api_execution is not None and any((service.service == 'ncbi_blast' for service in self.api_execution.services.values())):
+        if context.role in {'annotation', 'gene_context_evidence'} and self.api_execution is not None and any((service.service == 'ncbi_blast' for service in self.api_execution.services.values())):
             jobs = self.api_execution.received_blast_jobs(context, self.job_progress_provider)
             for job in jobs:
                 job.update(self._blast_scientific_owner(job['origin_episode_id']))

@@ -171,7 +171,7 @@ class A103HomologyExecution:
             raise ValueError('blast_original_launch_episode_unavailable')
         path = json.loads(row['path'])
         for length in range(len(path), 0, -1):
-            if path[length - 1][0] != 'scientific_process':
+            if path[length - 1][0] != 'gene_context_evidence':
                 continue
             owner = self.store.db.execute('SELECT request FROM runtime_episodes '
                 'WHERE run_id=? AND json(path)=json(?)',

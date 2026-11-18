@@ -4,7 +4,7 @@ from copy import deepcopy
 import json
 from gene_annotation_episode.episodic_workflow.root.a103.decision_context import VERSION as DECISION_CONTEXT_VERSION, apply_state_frame
 from gene_annotation_episode.episodic_workflow.root.a103.execution_prompt import is_api_launch_context, render_api_launch_prompt
-from gene_annotation_episode.episodic_workflow.root.a103.scientific_process_prompt import is_published_scientific_context, render_scientific_process_prompt, text_instructions
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence_prompt import is_published_scientific_context, render_gene_context_evidence_prompt, text_instructions
 
 def _ordinary_runtime_receiver_context(value):
     """Recognize the existing ordinary decision view, not a protocol frame."""
@@ -19,7 +19,7 @@ def present_source_task(self, episode_id, role, instructions, context):
     from gene_annotation_episode.episodic_workflow.root.a103.library.monitor_prompt import is_monitor_context, render_monitor_prompt
     from .task_presentation import render_receiver_prompt
     from gene_annotation_episode.episodic_workflow.root.a103.native_profile_presentation import has_native_profile_receiver_context
-    from gene_annotation_episode.episodic_workflow.root.a103.scientific_process_prompt import is_selected_execution_context, render_selected_execution_prompt
+    from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence_prompt import is_selected_execution_context, render_selected_execution_prompt
 
     def has_text_task(value):
         return is_hpc_context(value) or is_published_scientific_context(value) or is_monitor_context(value) or is_api_launch_context(value) or is_selected_execution_context(value) or has_native_profile_receiver_context(value) or _ordinary_runtime_receiver_context(value)
@@ -52,7 +52,7 @@ def present_source_task(self, episode_id, role, instructions, context):
         if is_hpc_context(state):
             renderer = render_hpc_prompt
         elif is_published_scientific_context(state):
-            renderer = render_scientific_process_prompt
+            renderer = render_gene_context_evidence_prompt
         elif is_api_launch_context(state):
             renderer = render_api_launch_prompt
         elif is_selected_execution_context(state):

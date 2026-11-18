@@ -32,7 +32,7 @@ def received_axis_task_credit(store, context):
         axis = selection[selection_fields(selection)[0]]['option_id']
         if result['selection']['evidence_axis']['option_id'] != axis or result['proposed_annotation_ref'] != child.assignment.get('proposed_annotation_ref') or result['credit_kind'] != 'scientific' or (result['credit_binding_ref'] is None):
             raise ValueError('root_axis_local_credit_definition_or_assignment_conflict')
-        binding_module = {'A101': '.a101.sequence_homology_evidence.credit', 'A102': '.a102.structural_homology_evidence.task_projector', 'A103': '.a103.scientific_process.task_projector', 'A104': '.a104.scientific_process.task_projector', 'A105': '.a105.experimental_activity_evidence.credit', 'A106': '.a106.perturbation_evidence.credit', 'A107': '.a107.scientific_process.task_projector', 'A108': '.a108.sample_context_evidence.credit', 'A110': '.a110.scientific_process.task_projector'}[axis]
+        binding_module = {'A101': '.a101.sequence_homology_evidence.credit', 'A102': '.a102.structural_homology_evidence.task_projector', 'A103': '.a103.gene_context_evidence.task_projector', 'A104': '.a104.scientific_process.task_projector', 'A105': '.a105.experimental_activity_evidence.credit', 'A106': '.a106.perturbation_evidence.credit', 'A107': '.a107.scientific_process.task_projector', 'A108': '.a108.sample_context_evidence.credit', 'A110': '.a110.scientific_process.task_projector'}[axis]
         project = import_module(binding_module, __package__).original_task_projector
         projector = project(child.assignment, merged_a102=True) if axis == 'A102' else project(child.assignment)
         definition = {**plain(projector.as_record()), 'proposed_annotation_ref': result['proposed_annotation_ref']}

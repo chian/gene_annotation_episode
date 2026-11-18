@@ -12,11 +12,11 @@ RESOURCE_BINDINGS = (
     'resource_work_submission/local_resource_work_execution',
     'resource_work_submission/hpc_resource_work_execution',
     'resource_result_acquisition',
-    'scientific_process/resource_work_submission',
-    'scientific_process/resource_work_submission/api_resource_work_execution',
-    'scientific_process/resource_work_submission/local_resource_work_execution',
-    'scientific_process/resource_work_submission/hpc_resource_work_execution',
-    'scientific_process/resource_result_acquisition',
+    'gene_context_evidence/resource_work_submission',
+    'gene_context_evidence/resource_work_submission/api_resource_work_execution',
+    'gene_context_evidence/resource_work_submission/local_resource_work_execution',
+    'gene_context_evidence/resource_work_submission/hpc_resource_work_execution',
+    'gene_context_evidence/resource_result_acquisition',
 )
 RESOURCE_RECONSTRUCTION = {
     name: ('resource_episode_binding_v1', ('resource_adapters',),
@@ -28,7 +28,7 @@ RESOURCE_RECONSTRUCTION = {
 def validate_resource_portfolio(names, failure):
     # These are alternative service-factory branches for the same parent/role.
     # Distinct source paths must not make an ambiguous mixed portfolio admissible.
-    for prefix in ('', 'scientific_process/'):
+    for prefix in ('', 'gene_context_evidence/'):
         for resource, execution in (('resource_work_submission','execution_job_submission'),
                                      ('resource_result_acquisition','execution_result_acquisition')):
             if prefix+resource in names and prefix+execution in names:
@@ -50,16 +50,16 @@ def reopen_resource_binding(name, configuration, *, services, store, journal,
         from .resource_work_submission.hpc_resource_work_execution.episode import ResourceEpisode as Binding
     elif name == 'resource_result_acquisition':
         from .resource_result_acquisition.episode import ResourceEpisode as Binding
-    elif name == 'scientific_process/resource_work_submission':
-        from .scientific_process.resource_work_submission.episode import ResourceEpisode as Binding
-    elif name == 'scientific_process/resource_work_submission/api_resource_work_execution':
-        from .scientific_process.resource_work_submission.api_resource_work_execution.episode import ResourceEpisode as Binding
-    elif name == 'scientific_process/resource_work_submission/local_resource_work_execution':
-        from .scientific_process.resource_work_submission.local_resource_work_execution.episode import ResourceEpisode as Binding
-    elif name == 'scientific_process/resource_work_submission/hpc_resource_work_execution':
-        from .scientific_process.resource_work_submission.hpc_resource_work_execution.episode import ResourceEpisode as Binding
-    elif name == 'scientific_process/resource_result_acquisition':
-        from .scientific_process.resource_result_acquisition.episode import ResourceEpisode as Binding
+    elif name == 'gene_context_evidence/resource_work_submission':
+        from .gene_context_evidence.resource_work_submission.episode import ResourceEpisode as Binding
+    elif name == 'gene_context_evidence/resource_work_submission/api_resource_work_execution':
+        from .gene_context_evidence.resource_work_submission.api_resource_work_execution.episode import ResourceEpisode as Binding
+    elif name == 'gene_context_evidence/resource_work_submission/local_resource_work_execution':
+        from .gene_context_evidence.resource_work_submission.local_resource_work_execution.episode import ResourceEpisode as Binding
+    elif name == 'gene_context_evidence/resource_work_submission/hpc_resource_work_execution':
+        from .gene_context_evidence.resource_work_submission.hpc_resource_work_execution.episode import ResourceEpisode as Binding
+    elif name == 'gene_context_evidence/resource_result_acquisition':
+        from .gene_context_evidence.resource_result_acquisition.episode import ResourceEpisode as Binding
     else:
         raise failure('unavailable_binding', name)
     declared = configuration['resource_adapters']

@@ -229,7 +229,7 @@ def test_runtime_parent_receives_exact_component_operands_from_automatic_grading
             ('runtime-a103-needs',episode,canonical(path),canonical(request)))
         return BindingContext('runtime-a103-needs',episode,path[-1][0],path,scope,{},request)
     parent = context([['annotation','root']])
-    child = context([['annotation','root'],['scientific_process','a103']])
+    child = context([['annotation','root'],['gene_context_evidence','a103']])
     class Receipts:
         def known(self,episode):return list(known)
         def receive(self,episode,references,**kwargs):known.update(references)

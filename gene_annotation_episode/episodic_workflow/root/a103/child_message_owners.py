@@ -68,13 +68,13 @@ def exchange_for_child(workflow, source, role):
             return None
         from gene_annotation_episode.episodic_workflow.root.a103.to_child_published_evidence_assessment import prepare_request
         from gene_annotation_episode.episodic_workflow.root.a103.from_child_published_evidence_assessment import admit_return
-    elif role == 'scientific_process':
-        from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.episode import ScientificProcessEpisode
-        child = registry._by_path.get('scientific_process')
-        if type(child) is not ScientificProcessEpisode:
+    elif role == 'gene_context_evidence':
+        from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.episode import GeneContextEvidenceEpisode
+        child = registry._by_path.get('gene_context_evidence')
+        if type(child) is not GeneContextEvidenceEpisode:
             return None
-        from gene_annotation_episode.episodic_workflow.root.a103.to_child_scientific_process import prepare_request
-        from gene_annotation_episode.episodic_workflow.root.a103.from_child_scientific_process import admit_return
+        from gene_annotation_episode.episodic_workflow.root.a103.to_child_gene_context_evidence import prepare_request
+        from gene_annotation_episode.episodic_workflow.root.a103.from_child_gene_context_evidence import admit_return
     elif role == 'hpc':
         from gene_annotation_episode.episodic_workflow.root.a103.hpc_work_planning.episode import HPCEpisode
         child = registry._by_path.get('hpc_work_planning')
@@ -107,7 +107,7 @@ def exchange_for_improvement(workflow, source, selection, role):
     from gene_annotation_episode.episodic_workflow.root.a103 import runtime
     from gene_annotation_episode.episodic_workflow.root.a103.task import LegacyAnnotationTask
     from gene_annotation_episode.episodic_workflow.root.a103.legacy_improvement.task import LegacyImprovementTask
-    if type(workflow) is not runtime.Workflow or workflow.scientific_process_binding is not None:
+    if type(workflow) is not runtime.Workflow or workflow.gene_context_evidence_binding is not None:
         return None
     if type(selection) is not dict or any(type(key) is not str for key in selection):
         return None

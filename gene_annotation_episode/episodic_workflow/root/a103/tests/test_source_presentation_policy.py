@@ -17,7 +17,7 @@ from ..decision_context import INSTRUCTIONS, VERSION, state_frame
 from ..episode_journal import Journal
 from ..library.hpc_prompt import render_hpc_prompt
 from ..receiver_prompt import render_receiver_prompt
-from ..scientific_process_prompt import text_instructions
+from ..gene_context_evidence_prompt import text_instructions
 from .test_source_investigation_family import HOMES, PREFIX, case, family
 
 
@@ -95,7 +95,7 @@ def frames(name):
     if name == 'task_disappears': return [state_frame(state), state_frame(minimal, state)]
     if name == 'hpc_precedence':
         return [{**state, 'hpc_commission': {'objective': 'original higher-priority HPC task'},
-            'scientific_process': {'evidence_axis': {
+            'gene_context_evidence': {'evidence_axis': {
                 'instruction_status': 'published_investigation_instructions'}}}]
     if name == 'invalid_revision': return [{**state_frame(state), 'revision': 'wrong-saved-identity'}]
     raise AssertionError(name)

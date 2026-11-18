@@ -48,7 +48,7 @@ def facts(self, source, *, completion_record=None):
             if credit_snapshot is not None:
                 snapshot['operational_credit_snapshot'] = credit_snapshot
             context = self.binding_context(source)
-            if specialist is self.scientific_process_binding:
+            if specialist is self.gene_context_evidence_binding:
                 complete_scientific_snapshot(self, source, context, snapshot, facts)
             facts.update(specialist.facts(context, snapshot))
         received_facts = self.episode_bindings.received_report_facts(self.binding_context(source), completion_snapshot=snapshot)
@@ -60,4 +60,4 @@ def facts(self, source, *, completion_record=None):
 # Bind original module providers after definitions to admit either import order.
 from .. import runtime as _runtime
 from .annotation_report_projection import project_annotation_facts
-from ..scientific_process.report_snapshot import complete_scientific_snapshot
+from ..gene_context_evidence.report_snapshot import complete_scientific_snapshot

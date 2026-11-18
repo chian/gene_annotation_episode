@@ -4,9 +4,9 @@ from types import SimpleNamespace
 from unittest.mock import patch
 import pytest
 AXES=('a102','a103')
-MONITORS=tuple(p+'execution_progress_assessment' for p in ('','scientific_process/','hpc_work_planning/','hpc_work_planning/hpc_allocation_execution/','scientific_process/hpc_work_planning/','scientific_process/hpc_work_planning/hpc_allocation_execution/'))
-WORK=('hpc_work_planning','scientific_process/hpc_work_planning','hpc_work_planning/hpc_allocation_execution','scientific_process/hpc_work_planning/hpc_allocation_execution')
-PREDICTIONS=('hpc_work_planning/hpc_resource_prediction','scientific_process/hpc_work_planning/hpc_resource_prediction')
+MONITORS=tuple(p+'execution_progress_assessment' for p in ('','gene_context_evidence/','hpc_work_planning/','hpc_work_planning/hpc_allocation_execution/','gene_context_evidence/hpc_work_planning/','gene_context_evidence/hpc_work_planning/hpc_allocation_execution/'))
+WORK=('hpc_work_planning','gene_context_evidence/hpc_work_planning','hpc_work_planning/hpc_allocation_execution','gene_context_evidence/hpc_work_planning/hpc_allocation_execution')
+PREDICTIONS=('hpc_work_planning/hpc_resource_prediction','gene_context_evidence/hpc_work_planning/hpc_resource_prediction')
 HOMES=MONITORS+WORK+PREDICTIONS
 MODES=('ordinary','exchange')
 BOUNDARIES=('custom_return','custom_exception','subclass_return','subclass_exception','default_composition','private_composer','instance_shadow','delegation')

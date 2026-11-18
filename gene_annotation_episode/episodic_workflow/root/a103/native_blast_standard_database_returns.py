@@ -98,7 +98,7 @@ class StandardBLASTDatabaseReturns(EpisodeReturnRecords):
         self._frozen(context, values)
         if context.role == 'results':
             self._require(self._equal(values, self._own_facts(context, values)), 'returned_facts_conflict')
-        elif context.role in {'annotation', 'scientific_process'}:
+        elif context.role in {'annotation', 'gene_context_evidence'}:
             expected = self.received_facts(context, schema)
             for source, value in values.items():
                 if source in _ROW_SOURCES:
@@ -146,7 +146,7 @@ class StandardBLASTDatabaseReturns(EpisodeReturnRecords):
 
     def _received(self, context):
         self.authenticate(context, allow_unsaved=True)
-        if context.role not in {'annotation', 'scientific_process'}:
+        if context.role not in {'annotation', 'gene_context_evidence'}:
             return {'groups': {}, 'references': []}
         groups, seen, row_groups, references, authorized = {}, {}, {}, [], set()
         descriptors = standard_blast_database_fact_sources()

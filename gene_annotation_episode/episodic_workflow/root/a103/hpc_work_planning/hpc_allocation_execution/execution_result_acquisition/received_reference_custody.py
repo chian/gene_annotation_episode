@@ -18,19 +18,19 @@ class ResultsReceivedReferenceCustody:
             resolved = self.api_execution.uniprot_returns.resolve_own(context, reference, namespace) if context.role == 'results' else self.api_execution.uniprot_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved
-        if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'gene_context_evidence'}:
             resolved = self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved
-        if self.native_blast_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_blast_database_returns is not None and context.role in {'annotation', 'gene_context_evidence'}:
             resolved = self.native_blast_database_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved
-        if self.native_hmmer_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_hmmer_preparation_returns is not None and context.role in {'annotation', 'gene_context_evidence'}:
             resolved = self.native_hmmer_preparation_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved
-        if self.native_blast_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_blast_returns is not None and context.role in {'annotation', 'gene_context_evidence'}:
             resolved = self.native_blast_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved

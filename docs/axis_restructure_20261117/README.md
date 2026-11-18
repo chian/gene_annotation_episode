@@ -74,3 +74,11 @@ collection, dangling-name scan (`runs/claude_inputs/la/dangling.py`), commit.
   back to its baseline 7/1. A102's test files, the shared helper users and lookup-table users (176 files), plus the 29
   shared files that mention `a102`, one at a time: identical to the baseline. Collection 50,565, 0 errors; dangling scan
   unchanged. From here each step also runs every shared test file that mentions the arm id.
+- P1-A103: `a103/scientific_process` → `a103/gene_context_evidence` and every token inside `a103/` (11 paths, 526
+  files); root lookup tables; role table. The in-axis rename also renamed the home prefix of
+  `a103/tests/test_existing_task_instruction_callbacks.py`, which runs the same homes against A102 (96 new failures,
+  `ModuleNotFoundError ...a102.gene_context_evidence`); its home lists now take each arm's head from
+  `root/tests/axis_roles.HEAD` (392/392 again). Twelve arm tests that exercise other arms were re-run one at a time:
+  all at their baseline. A103's test files, helper and lookup-table users and shared tests naming `a103`
+  (`runs/claude_ax_a103b_s0..3`, 189 files): identical to the baseline. Collection 50,565, 0 errors; dangling scan
+  unchanged. Each further step also runs tests in other arms that mention the axis id.

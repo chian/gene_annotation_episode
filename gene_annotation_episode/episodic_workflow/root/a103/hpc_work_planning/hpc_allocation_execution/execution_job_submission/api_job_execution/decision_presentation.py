@@ -10,7 +10,7 @@ import json
 import math
 import re
 from gene_annotation_episode.episodic_workflow.root.a103.api_error_feedback import is_api_error_return
-from gene_annotation_episode.episodic_workflow.root.a103.scientific_process_prompt import _bounded_inputs, _scalar, _schema, _section, _table, _values, is_selected_execution_context, text_instructions
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence_prompt import _bounded_inputs, _scalar, _schema, _section, _table, _values, is_selected_execution_context, text_instructions
 
 def select_profile_api_execution_values(value):
     """Preserve validated scientific API operands before generic tracking masking.
@@ -336,14 +336,14 @@ __all__ = ['is_api_launch_context', 'render_api_launch_prompt']
 
 def render_api_job_prompt(state, instructions, *, lookup_results=()):
     from gene_annotation_episode.episodic_workflow.root.a103.library.hpc_prompt import is_hpc_context, render_hpc_prompt
-    from gene_annotation_episode.episodic_workflow.root.a103.scientific_process_prompt import is_published_scientific_context, render_scientific_process_prompt, is_selected_execution_context, render_selected_execution_prompt
+    from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence_prompt import is_published_scientific_context, render_gene_context_evidence_prompt, is_selected_execution_context, render_selected_execution_prompt
     from gene_annotation_episode.episodic_workflow.root.a103.library.monitor_prompt import is_monitor_context, render_monitor_prompt
     from gene_annotation_episode.episodic_workflow.root.a103.native_profile_presentation import has_native_profile_receiver_context
     from gene_annotation_episode.episodic_workflow.root.a103.receiver_prompt import render_receiver_prompt
     if is_hpc_context(state):
         renderer = render_hpc_prompt
     elif is_published_scientific_context(state):
-        renderer = render_scientific_process_prompt
+        renderer = render_gene_context_evidence_prompt
     elif is_api_launch_context(state):
         renderer = render_api_launch_prompt
     elif is_selected_execution_context(state):
@@ -353,7 +353,7 @@ def render_api_job_prompt(state, instructions, *, lookup_results=()):
     else:
         renderer = render_receiver_prompt
     return renderer(state, instructions, lookup_results=lookup_results)
-from gene_annotation_episode.episodic_workflow.root.a103.providers import DECISION_CONTEXT_VERSION, _ordinary_runtime_receiver_context, apply_state_frame, deepcopy, is_published_scientific_context, render_scientific_process_prompt
+from gene_annotation_episode.episodic_workflow.root.a103.providers import DECISION_CONTEXT_VERSION, _ordinary_runtime_receiver_context, apply_state_frame, deepcopy, is_published_scientific_context, render_gene_context_evidence_prompt
 
 def present_api_job_task(self, episode_id, role, instructions, context):
     """Render declared TASKs from reconstructed state; preserve other inputs."""
@@ -361,7 +361,7 @@ def present_api_job_task(self, episode_id, role, instructions, context):
     from gene_annotation_episode.episodic_workflow.root.a103.library.monitor_prompt import is_monitor_context, render_monitor_prompt
     from gene_annotation_episode.episodic_workflow.root.a103.receiver_prompt import render_receiver_prompt
     from gene_annotation_episode.episodic_workflow.root.a103.native_profile_presentation import has_native_profile_receiver_context
-    from gene_annotation_episode.episodic_workflow.root.a103.scientific_process_prompt import is_selected_execution_context, render_selected_execution_prompt
+    from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence_prompt import is_selected_execution_context, render_selected_execution_prompt
 
     def has_text_task(value):
         return is_hpc_context(value) or _live_original_providers.is_published_scientific_context(value) or is_monitor_context(value) or is_api_launch_context(value) or is_selected_execution_context(value) or has_native_profile_receiver_context(value) or _live_original_providers._ordinary_runtime_receiver_context(value)
@@ -394,7 +394,7 @@ def present_api_job_task(self, episode_id, role, instructions, context):
         if is_hpc_context(state):
             renderer = render_hpc_prompt
         elif _live_original_providers.is_published_scientific_context(state):
-            renderer = _live_original_providers.render_scientific_process_prompt
+            renderer = _live_original_providers.render_gene_context_evidence_prompt
         elif is_api_launch_context(state):
             renderer = render_api_launch_prompt
         elif is_selected_execution_context(state):

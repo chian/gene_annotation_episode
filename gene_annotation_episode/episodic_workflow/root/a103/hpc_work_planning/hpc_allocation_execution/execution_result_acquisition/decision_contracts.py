@@ -4,7 +4,7 @@ from gene_annotation_episode.episodic_workflow.root.a103.runtime import CONTRACT
 from gene_annotation_episode.episodic_workflow.root.a103.execution_prompt import is_api_launch_context
 from gene_annotation_episode.episodic_workflow.root.a103.decision_context import VERSION as DECISION_CONTEXT_VERSION
 from gene_annotation_episode.episodic_workflow.root.a103.library.hpc_prompt import is_hpc_context
-from gene_annotation_episode.episodic_workflow.root.a103.scientific_process_prompt import is_published_scientific_context, is_selected_execution_context
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence_prompt import is_published_scientific_context, is_selected_execution_context
 
 class ResultsDecisionContracts:
 

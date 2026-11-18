@@ -12,7 +12,7 @@ import math
 import re
 
 from .api_error_feedback import is_api_error_return
-from .scientific_process_prompt import (_bounded_inputs, _scalar, _schema, _section, _table, _values,
+from .gene_context_evidence_prompt import (_bounded_inputs, _scalar, _schema, _section, _table, _values,
     is_selected_execution_context, text_instructions)
 
 

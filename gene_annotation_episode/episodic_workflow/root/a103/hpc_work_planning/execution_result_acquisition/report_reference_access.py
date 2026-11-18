@@ -22,7 +22,7 @@ class ResultsReportReferenceAccess:
                     return self.native_blast_standard_database_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
                 if self.native_blast_standard_database_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'gene_context_evidence'}:
                     resolved = self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -32,7 +32,7 @@ class ResultsReportReferenceAccess:
                     return self.native_blast_database_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_blast_database_returns.resolve_received(context, reference, namespace)
                 if self.native_blast_database_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'gene_context_evidence'}:
                     resolved = self.native_blast_database_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -42,7 +42,7 @@ class ResultsReportReferenceAccess:
                     return self.native_hmmer_preparation_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_hmmer_preparation_returns.resolve_received(context, reference, namespace)
                 if self.native_hmmer_preparation_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'gene_context_evidence'}:
                     resolved = self.native_hmmer_preparation_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -51,7 +51,7 @@ class ResultsReportReferenceAccess:
                     return self.native_blast_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_blast_returns.resolve_received(context, reference, namespace)
                 if self.native_blast_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'gene_context_evidence'}:
                     resolved = self.native_blast_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved

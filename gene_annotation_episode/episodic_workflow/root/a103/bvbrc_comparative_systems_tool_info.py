@@ -3,7 +3,7 @@ from copy import deepcopy
 
 from .bvbrc_appservice_contracts import contract_schema
 from .bvbrc_comparative_systems_bundle_contracts import parameters_schema
-from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.execution_result_acquisition.execution_contracts import RESULTS_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.execution_result_acquisition.execution_contracts import RESULTS_SCHEMA
 
 _INSTRUCTIONS = '''Compare the stored pathway, subsystem and PLFam/PGFam assignments of the selected BV-BRC genomes. Supply genome_ids and genome_groups as two explicit arrays, including [] for an unused array, with at least one selected input. Preserve their original order and repetitions and supply output_path and output_file explicitly. The service deduplicates its executed genome union; a group path or basename does not establish its original expanded membership. This operation accepts selected genomes without requiring a candidate function or publicly searchable gene name. A sequence investigation may motivate separate genome acquisition or annotation; this tool does not submit that additional work. ComparativeSystems computes all three native views. Select the result views needed for the question without inventing a native mode or recipe switch.
 

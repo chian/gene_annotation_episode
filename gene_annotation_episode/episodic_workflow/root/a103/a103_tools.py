@@ -130,7 +130,7 @@ class A103ToolRegistry(ToolRegistry):
     def received_attributions(self,context,known):
         parent = getattr(super(),'received_attributions',None)
         generated,needs = parent(context,known) if parent else ([],[])
-        if context.role not in {'annotation','scientific_process','improvement'}:
+        if context.role not in {'annotation','gene_context_evidence','improvement'}:
             return generated,needs
         from .a103_attachments import refresh
         more,pending = refresh(self.store,set(known)|set(generated),plain(context.scope))

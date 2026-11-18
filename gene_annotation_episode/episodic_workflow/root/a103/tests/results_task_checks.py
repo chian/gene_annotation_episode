@@ -16,9 +16,9 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-HOMES=('execution_result_acquisition', 'scientific_process/execution_result_acquisition', 'hpc_work_planning/execution_result_acquisition', 'hpc_work_planning/hpc_allocation_execution/execution_result_acquisition', 'scientific_process/hpc_work_planning/execution_result_acquisition', 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition')
+HOMES=('execution_result_acquisition', 'gene_context_evidence/execution_result_acquisition', 'hpc_work_planning/execution_result_acquisition', 'hpc_work_planning/hpc_allocation_execution/execution_result_acquisition', 'gene_context_evidence/hpc_work_planning/execution_result_acquisition', 'gene_context_evidence/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition')
 PREFIX='gene_annotation_episode.episodic_workflow.root.a103'
-ROLES={'scientific_process':'scientific_process','hpc_work_planning':'hpc',
+ROLES={'gene_context_evidence':'gene_context_evidence','hpc_work_planning':'hpc',
     'hpc_allocation_execution':'hpc_execution','execution_result_acquisition':'results'}
 def own(name):return import_module(PREFIX+'.'+name)
 def forbidden(*args,**kwargs):raise AssertionError('external acquisition forbidden in Results fixture')
@@ -90,8 +90,8 @@ def inherited_observations(v):
     with patch.object(b,'api_execution',services):
         assert b._has_appservice() is b._has_uniprot() is True
         flags={role:[b._forwards_bvbrc_reports(role),b._forwards_minhash_reports(role)]
-            for role in ('annotation','scientific_process','results','launch','unknown')}
-        assert flags=={'annotation':[True,True],'scientific_process':[True,True],
+            for role in ('annotation','gene_context_evidence','results','launch','unknown')}
+        assert flags=={'annotation':[True,True],'gene_context_evidence':[True,True],
             'results':[False,False],'launch':[False,False],'unknown':[False,False]}
     selectors={version:[b._masking_selector({'selector':{'version':version}}),b._utility_selector({'selector':{'version':version}})]
         for version in ('native_blast_masking_result_selector_v1','native_blast_utility_result_selector_v1','native_blast_utility_result_selector_v2','unknown')}
@@ -99,7 +99,7 @@ def inherited_observations(v):
         'native_blast_utility_result_selector_v1':[False,True],'native_blast_utility_result_selector_v2':[False,True],'unknown':[False,False]}
     assert b._retained_masking_target(v.context,{},v.context.scope) is None
     assert b._retained_utility_target(v.context,{},v.context.scope) is None
-    contracts=own('scientific_process.execution_result_acquisition.'+
+    contracts=own('gene_context_evidence.execution_result_acquisition.'+
         ('execution_contracts' if hasattr(b,'decision_source_type') else 'requests'))
     consumers={}
     for name in ('bvbrc_genome_alignment_tool_info','bvbrc_comparative_systems_tool_info',
@@ -171,15 +171,15 @@ def fixture(home,output,workspace=None):
                 directory=output/'workflow',run_id=journal.run_id,tool_registry=tools,**deepcopy(configuration)) for h in HOMES}
             from gene_annotation_episode.episodic_workflow.root.tests.scientific_head_boundaries import write_instruction_source
             library_source=output/'instruction-source';write_instruction_source(library_source,'a103')
-            library=own('scientific_process_library').ScientificProcessLibrary.freeze(output/'scientific-library',source=library_source)
+            library=own('gene_context_evidence_library').GeneContextEvidenceLibrary.freeze(output/'scientific-library',source=library_source)
             tool_library=own('scientific_tool_library').ScientificToolLibrary.freeze(output/'tool-library',catalog=[{
                 'name':'fixture.inspect','resources':'local','description':'Controlled engineering boundary.',
                 'instructions':'No acquisition.','input_schema':own('domain').obj({})}])
-            scientific=own('scientific_process.episode').ScientificProcessEpisode(services,library=library,
-                tool_library=tool_library,child_roles=('scientific_process','hpc','results'))
+            scientific=own('gene_context_evidence.episode').GeneContextEvidenceEpisode(services,library=library,
+                tool_library=tool_library,child_roles=('gene_context_evidence','hpc','results'))
             ancestors=[scientific]
             for h in ('hpc_work_planning','hpc_work_planning/hpc_allocation_execution',
-                    'scientific_process/hpc_work_planning','scientific_process/hpc_work_planning/hpc_allocation_execution'):
+                    'gene_context_evidence/hpc_work_planning','gene_context_evidence/hpc_work_planning/hpc_allocation_execution'):
                 ancestors.append(own(h.replace('/','.')+'.episode').HPCEpisode(services,store=store,
                     run_id=journal.run_id,directory=output/'workflow',resources={'aurora':{'kind':'pbs_ssh'}},commissions={}))
             registry=own('episode_bindings').EpisodeBindingRegistry((*ancestors,*bindings.values()))
@@ -482,14 +482,14 @@ def configuration_observations(v):
 
 def connected_build_trace(v):
     runtime=v.runtime
-    names=('annotation','scientific_process','hpc','hpc_execution','results')
+    names=('annotation','gene_context_evidence','hpc','hpc_execution','results')
     grains={name:runtime.Grain(name,'Original fixture boundary','Original result',forbidden) for name in names}
-    edges={'annotation':('scientific_process','hpc','results'),'scientific_process':('scientific_process','hpc','results'),
+    edges={'annotation':('gene_context_evidence','hpc','results'),'gene_context_evidence':('gene_context_evidence','hpc','results'),
         'hpc':('hpc_execution','results'),'hpc_execution':('results',),'results':()}
     tree=runtime.EpisodeTree(grains['annotation'],{grains[n]:tuple(grains[c] for c in edges[n]) for n in names},
-        self_nesting=('scientific_process',))
+        self_nesting=('gene_context_evidence',))
     host=SimpleNamespace(context=runtime.ReleasingContext(tree=tree,run_id=v.journal.run_id),grains=grains,
-        inprocess_completion_order=None,receipts=None,scientific_process_binding=None,episode_bindings=v.registry,
+        inprocess_completion_order=None,receipts=None,gene_context_evidence_binding=None,episode_bindings=v.registry,
         contract_information_profile=lambda source:None,journal=v.journal,run_id=v.journal.run_id,store=v.store,
         expose_assigned_job=lambda source:None,receive_tool_attributions=lambda *args,**kwargs:None,
         archive=SimpleNamespace(store=forbidden),launch_instructions=SimpleNamespace(materialize=lambda value:None))

@@ -3,7 +3,7 @@ from gene_annotation_episode.episodic_workflow.root.a103.method_loop.episode imp
 from gene_annotation_episode.episodic_workflow.root.a103.runtime import Record, _plain
 from gene_annotation_episode.episodic_workflow.root.a103.episode_contract_information import ContractInformationError, validate_saved_fact_form
 
-def assemble_annotation_homology_job_submission_request(self, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, scientific_process=None, report_contract_declaration=None):
+def assemble_annotation_homology_job_submission_request(self, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None, job_assignment=None, episode_assignment=None, gene_context_evidence=None, report_contract_declaration=None):
     validate_path(parent_path)
     path = (*parent_path, (name, key))
     goal = _live_original_runtime.EpisodeGoal.root(objective=goal_text, result_contract={'role': name}) if parent is None else _live_original_runtime.EpisodeGoal.child(parent, objective=goal_text, result_contract=contract.schema)
@@ -20,11 +20,11 @@ def assemble_annotation_homology_job_submission_request(self, name, key, goal_te
     if episode_assignment is not None:
         self.launch_instructions.materialize(episode_assignment.get('launch_instructions'))
         message['episode_assignment'] = _live_original_runtime._plain(episode_assignment)
-    if scientific_process is not None:
-        message['scientific_process'] = _live_original_runtime._plain(scientific_process)
+    if gene_context_evidence is not None:
+        message['gene_context_evidence'] = _live_original_runtime._plain(gene_context_evidence)
     identity = _live_original_runtime.Episode.identity(self.context, self.grains[name], key, parent_path=parent_path)
-    if self.scientific_process_binding is not None and name in {'annotation', 'scientific_process'}:
-        from gene_annotation_episode.episodic_workflow.root.a103.scientific_process_records import scientific_invocation_ref
+    if self.gene_context_evidence_binding is not None and name in {'annotation', 'gene_context_evidence'}:
+        from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence_records import scientific_invocation_ref
         message['scientific_invocation_ref'] = scientific_invocation_ref(self.run_id, path)
     if self.receipts is not None:
         parent_id = _live_original_runtime.Episode.identity(self.context, self.grains[parent_path[-1][0]], parent_path[-1][1], parent_path=parent_path[:-1]).episode_id if parent_path else None

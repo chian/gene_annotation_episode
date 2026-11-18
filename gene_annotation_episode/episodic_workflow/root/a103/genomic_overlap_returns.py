@@ -22,7 +22,7 @@ from .genomic_overlap_return_views import (
 )
 
 
-_RECEIVING_ROLES = {"annotation", "scientific_process"}
+_RECEIVING_ROLES = {"annotation", "gene_context_evidence"}
 _CLOSURE_PREFIX = "genomic_overlap_received_report_prefix"
 
 
@@ -63,7 +63,7 @@ class GenomicOverlapReturns(EpisodeReturnRecords):
             # process.revise keeps the existing scientific-child relationship;
             # its construction provenance has a separate existing execution_binding.
             self._require(selected.get("tool") == "process.revise"
-                and child.role == "scientific_process", "original_commission_conflict")
+                and child.role == "gene_context_evidence", "original_commission_conflict")
             return
         self._require(selected.get("kind") in {"child", "episode_child", "job_child"},
             "original_commission_conflict")

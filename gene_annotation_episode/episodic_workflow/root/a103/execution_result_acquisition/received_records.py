@@ -45,8 +45,8 @@ class ResultsReceivedRecords:
             return (selection, handoffs, results)
 
     def _forwards_bvbrc_reports(self, role):
-        return role in {'annotation', 'scientific_process'} and self.api_execution is not None and any((service.service == 'bvbrc_data' for service in self.api_execution.services.values()))
+        return role in {'annotation', 'gene_context_evidence'} and self.api_execution is not None and any((service.service == 'bvbrc_data' for service in self.api_execution.services.values()))
 
     def _forwards_minhash_reports(self, role):
-        return role in {'annotation', 'scientific_process'} and self.api_execution is not None and any((service.service == 'bvbrc_minhash' for service in self.api_execution.services.values()))
+        return role in {'annotation', 'gene_context_evidence'} and self.api_execution is not None and any((service.service == 'bvbrc_minhash' for service in self.api_execution.services.values()))
 
