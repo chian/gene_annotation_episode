@@ -23,7 +23,7 @@ from .expression_nmf_return_views import (
 )
 
 
-_RECEIVING_ROLES = {"annotation", "scientific_process"}
+_RECEIVING_ROLES = {"annotation", "partner_presence_evidence"}
 _CLOSURE_PREFIX = "expression_nmf_received_report_prefix"
 _CONTRIBUTION_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE)
 
@@ -73,7 +73,7 @@ class ExpressionNMFReturns(EpisodeReturnRecords):
         unsaved = construction and saved is None
         selected, sent = self._selection(parent, int(slot[6:]), unsaved=unsaved)
         if selected.get("kind") == "tool":
-            self._require(selected.get("tool") == "process.revise" and child.role == "scientific_process",
+            self._require(selected.get("tool") == "process.revise" and child.role == "partner_presence_evidence",
                 "original_commission_conflict")
             return
         self._require(selected.get("kind") in {"child", "episode_child", "job_child"}, "original_commission_conflict")

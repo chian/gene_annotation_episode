@@ -80,7 +80,7 @@ class A107GenomicToolRegistry(ToolRegistry):
         self.a107_genomic_execution_resources = selected
 
     def received_hpc_attributions(self, context, known, *, hpc_result_reader):
-        if context.role != 'scientific_process':
+        if context.role != 'partner_presence_evidence':
             return [], []
         from .a103_hpc import receive
         return receive(self, context, known, reader=hpc_result_reader)

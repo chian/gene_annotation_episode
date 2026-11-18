@@ -9,7 +9,7 @@ def root_common_action(self, source, action):
 
 def filter_root_child_roles(self, source, roles):
     if len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False):
-        roles = tuple((role for role in roles if role == 'scientific_process'))
+        roles = tuple((role for role in roles if role == 'partner_presence_evidence'))
     return roles
 
 def validate_root_child_choice(self, source, role, *, selection=None, original=False):
@@ -19,10 +19,10 @@ def validate_root_child_choice(self, source, role, *, selection=None, original=F
         These are role and ownership checks, not scientific suitability checks.
         """
     annotation_axes = len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False)
-    if annotation_axes and role != 'scientific_process':
+    if annotation_axes and role != 'partner_presence_evidence':
         raise ValueError('annotation_root_commissions_evidence_axes')
     if annotation_axes and selection is not None and (not original):
-        from .scientific_process_records import selection_fields
+        from .partner_presence_evidence_records import selection_fields
         assignment = selection.get('assignment', {})
         process = assignment.get('selection', {})
         axis = process[selection_fields(process)[0]]['option_id']

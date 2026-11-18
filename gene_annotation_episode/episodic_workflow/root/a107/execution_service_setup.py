@@ -173,4 +173,4 @@ class ExecutionServiceFactory:
 
 __all__ = ['ExecutionServiceFactory']
 
-from .scientific_process.episode import create_execution_bindings
+from .partner_presence_evidence.episode import create_execution_bindings

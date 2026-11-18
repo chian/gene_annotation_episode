@@ -21,7 +21,7 @@ from .execution_contracts import canonical, digest
 from .protein_structure_authority import ProteinFactGroups, ProteinResultAuthorityRecord, ProteinStructureOperandError
 from .protein_structure_contracts import issue, validate_alignment_descriptor, validate_declared_transform_record, validate_saved_sheet_descriptor, validate_structure_sequence_descriptor
 from .protein_structure_result_views import protein_structure_fact_sources, validate_protein_structure_failure_return, validate_protein_structure_projection_result
-from .scientific_process_records import scientific_digest, scientific_invocation_ref, selector_selection, validate_filled_process
+from .partner_presence_evidence_records import scientific_digest, scientific_invocation_ref, selector_selection, validate_filled_process
 PROJECTION_SOURCE = 'execution_protein_structure_projections'
 SAVED_SOURCE = 'execution_protein_structure_saved_sheets'
 SEQUENCE_SOURCE = 'execution_protein_structure_sequences'
@@ -124,10 +124,10 @@ class NativeProteinStructureReturns(EpisodeReturnRecords):
         if action['kind'] in {'episode_child', 'job_child'}:
             self._require(action.get('role') == child.role)
             assignment = plain(child.assignment)
-            if child.role == 'scientific_process' and 'selection' in assignment:
+            if child.role == 'partner_presence_evidence' and 'selection' in assignment:
                 selected = {**assignment, 'selection': selector_selection(assignment['selection'])}
                 self._require(self._equal(action.get('assignment', {}), assignment) or self._equal(action.get('assignment', {}), selected))
-                filled = validate_filled_process(request['message']['scientific_process'])
+                filled = validate_filled_process(request['message']['partner_presence_evidence'])
                 invocation = {'objective': request['goal']['objective'], 'scope': plain(child.scope), 'purpose': contract['decision'], 'report_schema': contract['measurements']['schema'], 'initial_report': request['message']['initial_report']}
                 self._require(self._equal(filled['selection'], assignment['selection']) and filled['assignment_sha256'] == scientific_digest(assignment) and (filled['invocation_sha256'] == scientific_digest(invocation)) and (request['message'].get('scientific_invocation_ref') == scientific_invocation_ref(self.run_id, child.path)))
             else:

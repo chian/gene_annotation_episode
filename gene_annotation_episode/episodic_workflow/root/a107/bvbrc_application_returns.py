@@ -202,7 +202,7 @@ class BVBRCApplicationReturns(EpisodeReturnRecords):
             for reference in dict.fromkeys((row['source_ref'] for row in values[FACT_SOURCE])):
                 expected.extend(self._original_publication(context, reference)[FACT_SOURCE])
             self._require(self._equal(values[FACT_SOURCE], expected), 'returned_facts_conflict')
-        elif context.role in {'annotation', 'scientific_process'}:
+        elif context.role in {'annotation', 'partner_presence_evidence'}:
             received = self.received_facts(context, schema)
             self._require(all((any((self._equal(row, original) for original in received[FACT_SOURCE])) for row in values[FACT_SOURCE])), 'returned_facts_conflict')
         else:
@@ -234,7 +234,7 @@ class BVBRCApplicationReturns(EpisodeReturnRecords):
         self._authenticate(context)
         values = self._values(plain(form), plain(schema))
         expected = self.facts(context, schema) if context.role == 'results' else self.received_facts(context, schema)
-        self._require(context.role in {'results', 'scientific_process', 'annotation'} and self._equal(values, expected), 'returned_facts_conflict')
+        self._require(context.role in {'results', 'partner_presence_evidence', 'annotation'} and self._equal(values, expected), 'returned_facts_conflict')
         self._frozen(context, values)
 
     def record_admission(self, context, form, schema, operation_key):

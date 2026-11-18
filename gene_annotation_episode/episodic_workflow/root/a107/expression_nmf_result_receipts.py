@@ -776,7 +776,7 @@ class ExpressionNMFResultReceipts:
             require('received_report_prefix' in manifest, 'nmf_receipt_inheritance_mismatch')
             parent = self.returns.context(parent_id)
             self.returns._commission(parent, current, construction=current is context)
-            if parent.role in ('annotation', 'scientific_process'):
+            if parent.role in ('annotation', 'partner_presence_evidence'):
                 # Receipt inheritance freezes actual returned information, not
                 # only artifact references. A projection already communicates
                 # the original fit even if no sheet was requested or granted.

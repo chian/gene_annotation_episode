@@ -60,7 +60,7 @@ def received_axis_task_credit(store, context):
             'A104': '.a104.evolutionary_history_evidence.task_projector',
             'A105': '.a105.experimental_activity_evidence.credit',
             'A106': '.a106.perturbation_evidence.credit',
-            'A107': '.a107.scientific_process.task_projector',
+            'A107': '.a107.partner_presence_evidence.task_projector',
             'A108': '.a108.sample_context_evidence.credit',
             'A110': '.a110.scientific_process.task_projector',
         }[axis]

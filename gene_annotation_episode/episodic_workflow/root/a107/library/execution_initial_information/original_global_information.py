@@ -18,7 +18,7 @@ def initial_information(context, readers):
     if context.role == 'annotation':
         value.update(annotation_blast_information(context, readers))
         value.update(received_rna_information(context, readers))
-    elif context.role == 'scientific_process':
+    elif context.role == 'partner_presence_evidence':
         value.update(scientific_blast_information(context, readers))
         value.update(received_rna_information(context, readers))
     return value

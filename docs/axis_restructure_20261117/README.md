@@ -86,3 +86,6 @@ collection, dangling-name scan (`runs/claude_inputs/la/dangling.py`), commit.
   838 files); root lookup tables; role table. A104's test files, helper and lookup-table users and tests naming `a104`
   (`runs/claude_ax_a104_s0..3`, 177 files): identical to the baseline. Collection 50,565, 0 errors; dangling scan
   unchanged.
+- P1-A107: `a107/scientific_process` → `a107/partner_presence_evidence` and every token inside `a107/` (10 paths,
+  426 files); root lookup tables; role table. Affected tests (`runs/claude_ax_a107_s0..3`, 206 files): identical to the
+  baseline. Collection 50,565, 0 errors; dangling scan unchanged.

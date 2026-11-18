@@ -1037,7 +1037,7 @@ class ChromatinInteractionResultReceipts:
             require('received_report_prefix' in manifest)
             parent = self.returns.context(parent_id)
             self.returns._commission(parent, current, construction=current is context)
-            if parent.role in {'annotation', 'scientific_process'}:
+            if parent.role in {'annotation', 'partner_presence_evidence'}:
                 groups, origins, _ = self.returns._received(parent, (SAVED_SOURCE,), allowed=manifest['received_report_prefix']['attempts'])
                 for bundle in groups[SAVED_SOURCE]:
                     if not {f['artifact_ref'] for f in (bundle['sheet'], *bundle['tables'])} <= baseline:

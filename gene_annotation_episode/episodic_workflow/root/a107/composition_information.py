@@ -64,7 +64,7 @@ def metadata_catalog(workflow, source):
     """Only actual instruction/process libraries; never the ordinary registry."""
     entries = [*knowledge_catalog(), *launch_catalog()]
     if workflow.scientific_library_available(source):
-        from .scientific_process_library import catalog
+        from .partner_presence_evidence_library import catalog
         entries.extend(catalog())
         entries.extend(workflow.scientific_retriever_catalog())
     if getattr(workflow, 'contract_information_profile', lambda _: None)(source) == CONTRACT_INFORMATION_PROFILE:
@@ -157,8 +157,8 @@ def child_options(workflow, source, role=None):
             else:
                 requirements.append(statement)
         status = 'available'
-        if name == 'scientific_process':
-            library = workflow.scientific_process_binding.library
+        if name == 'partner_presence_evidence':
+            library = workflow.partner_presence_evidence_binding.library
             if not any(row['option_ref']['slot'] == 'evidence_axis'
                     for row in library.headers()):
                 status = 'missing scientific-support option'

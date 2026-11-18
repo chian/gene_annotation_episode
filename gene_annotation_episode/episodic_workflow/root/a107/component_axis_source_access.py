@@ -52,7 +52,7 @@ def rejection_detail(workflow, context, root, blocked):
 
 def decision_context(workflow, context):
     if (workflow.receipts is None or not hasattr(workflow.store, "db")
-            or not (context.role.startswith("literature") or context.role == 'scientific_process')):
+            or not (context.role.startswith("literature") or context.role == 'partner_presence_evidence')):
         return None
     EpisodeReturnRecords(workflow.store, workflow.run_id,
         failure_prefix="component_source_access_").authenticate(context)

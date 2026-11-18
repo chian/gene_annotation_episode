@@ -639,7 +639,7 @@ class HistoricalReceivedExecutionOwner:
         return self.native_expression_nmf_returns.resolve_received(context, reference, namespace)
 
     def _flux_balance_reference_access(self, context, reference, namespace):
-        if self.native_flux_balance_returns is not None and self.native_flux_balance_returns.ordinary_backend is not None and (context.role in {'annotation', 'scientific_process'}) and (namespace in {None, 'artifact'}) and self.native_flux_balance_returns.resolve_received(context, reference, namespace):
+        if self.native_flux_balance_returns is not None and self.native_flux_balance_returns.ordinary_backend is not None and (context.role in {'annotation', 'partner_presence_evidence'}) and (namespace in {None, 'artifact'}) and self.native_flux_balance_returns.resolve_received(context, reference, namespace):
             return True
         host = self.native_flux_balance_results
         if host is None or not host.owns_reference(reference):
@@ -1009,7 +1009,7 @@ class HistoricalReceivedExecutionOwner:
             raise ValueError('blast_original_launch_episode_unavailable')
         path = json.loads(row['path'])
         for length in range(len(path), 0, -1):
-            if path[length - 1][0] != 'scientific_process':
+            if path[length - 1][0] != 'partner_presence_evidence':
                 continue
             owner = self.store.db.execute('SELECT request FROM runtime_episodes WHERE run_id=? AND json(path)=json(?)', (self.run_id, json.dumps(path[:length]))).fetchone()
             if owner is None:
@@ -1421,75 +1421,75 @@ class HistoricalReceivedExecutionOwner:
 
     def received_report_sources(self, role, *, _include_separate_api=True):
         result = {}
-        if role in {'annotation', 'scientific_process'}:
+        if role in {'annotation', 'partner_presence_evidence'}:
             for source in ('execution_file_source_refs', 'execution_file_capture_outcomes'):
                 definition = self.fact_sources('results').get(source)
                 if definition is not None:
                     result[source] = deepcopy(definition)
-        if self.native_flux_balance_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.native_flux_balance_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.library.flux_balance_received_fact_contracts import fba_fact_sources
             sources = fba_fact_sources()
             if self.native_flux_balance_returns.ordinary_backend is None:
                 sources = {name: sources[name] for name in ('flux_balance_measurements', 'flux_balance_saved_sheets', 'flux_balance_failures')}
             result.update(sources)
-        if role in {'annotation', 'scientific_process'}:
+        if role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.sequence_masking_result_views import masking_fact_sources
             result.update(masking_fact_sources())
             from gene_annotation_episode.episodic_workflow.root.a107.blast_utility_result_views import blast_utility_fact_sources
             result.update(blast_utility_fact_sources())
-        if self._has_uniprot() and role in {'annotation', 'scientific_process'}:
+        if self._has_uniprot() and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.uniprot_return_contracts import uniprot_fact_sources
             result.update(uniprot_fact_sources())
-        if self._has_enrichr() and role in {'annotation', 'scientific_process'}:
+        if self._has_enrichr() and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.library.enrichr_received_contracts import enrichr_fact_sources
             result.update(enrichr_fact_sources())
-        if self._has_addgene() and role in {'annotation', 'scientific_process'}:
+        if self._has_addgene() and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.library.addgene_received_fields import addgene_sequence_fact_sources
             result.update(addgene_sequence_fact_sources())
-        if role in {'annotation', 'scientific_process'}:
+        if role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.fluorescence_return_views import fluorescence_fact_sources
             result.update(fluorescence_fact_sources())
-        if self.native_expression_nmf_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.native_expression_nmf_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.expression_nmf_return_views import expression_nmf_fact_sources
             result.update(expression_nmf_fact_sources())
-        if self.atac_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.atac_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.library.atac_received_fact_contracts import atac_fact_sources
             result.update(atac_fact_sources())
-        if self.native_chromatin_interaction_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.native_chromatin_interaction_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.library.chromatin_received_fact_contracts import chromatin_fact_sources
             result.update(chromatin_fact_sources())
-        if self.native_genomic_overlap_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.native_genomic_overlap_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.library.genomic_overlap_received_fact_contracts import genomic_overlap_fact_sources
             result.update(genomic_overlap_fact_sources())
-        if role in {'annotation', 'scientific_process'}:
+        if role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.protein_structure_result_views import protein_structure_fact_sources
             result.update(protein_structure_fact_sources())
-        if self.rna_structure_comparison_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.rna_structure_comparison_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.rna_structure_comparison_views import rna_comparison_fact_sources
             result.update(rna_comparison_fact_sources())
-        if self.native_rna_structure_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.native_rna_structure_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.rna_structure_result_views import rna_structure_fact_sources
             result.update(rna_structure_fact_sources())
-        if self.native_blast_standard_database_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.native_blast_standard_database_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.native_blast_standard_database_result_views import standard_blast_database_fact_sources
             result.update(standard_blast_database_fact_sources())
-        if self.native_blast_database_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.native_blast_database_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.native_blast_database_result_views import native_blast_database_fact_sources
             result.update(native_blast_database_fact_sources())
-        if self.native_hmmer_preparation_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.native_hmmer_preparation_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.hmmer_preparation_result_views import preparation_fact_sources
             result.update(preparation_fact_sources())
-        if self.native_infernal_preparation_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.native_infernal_preparation_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.infernal_preparation_result_views import preparation_fact_sources
             result.update(preparation_fact_sources())
-        if self._has_rfam() and role in {'annotation', 'scientific_process'}:
+        if self._has_rfam() and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.rfam_batch_returns import rfam_fact_sources
             result.update(rfam_fact_sources())
-        if self.native_blast_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.native_blast_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.blast_pairwise_result_views import native_blast_fact_sources
             result.update(native_blast_fact_sources())
             result['execution_blast_pairwise_result_refs'] = self._blast_reference_source()
-        if self.native_infernal_returns is not None and role in {'annotation', 'scientific_process'}:
+        if self.native_infernal_returns is not None and role in {'annotation', 'partner_presence_evidence'}:
             from gene_annotation_episode.episodic_workflow.root.a107.infernal_native_result_views import native_infernal_fact_sources
             result.update(native_infernal_fact_sources())
             result['execution_infernal_result_refs'] = self._infernal_reference_source()
@@ -1497,65 +1497,65 @@ class HistoricalReceivedExecutionOwner:
             received_report_sources_branch_0(self, role, result)
         if _include_separate_api:
             received_report_sources_branch_1(self, role, result)
-        if self._has_appservice() and role in {'annotation', 'scientific_process'}:
+        if self._has_appservice() and role in {'annotation', 'partner_presence_evidence'}:
             result.update(self._appservice_sources())
         return result
 
     def received_report_facts(self, context, *, _include_separate_api=True):
         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
         result = {}
-        if context.role in {'annotation', 'scientific_process'}:
+        if context.role in {'annotation', 'partner_presence_evidence'}:
             requested = {node.get('x-source') for node in schema.get('properties', {}).values()}
             if 'execution_file_source_refs' in requested:
                 result['execution_file_source_refs'] = self.local_file_sources.received_sources(context)
             if 'execution_file_capture_outcomes' in requested:
                 result['execution_file_capture_outcomes'] = self.local_file_sources.received_outcomes(context)
-        if self.native_flux_balance_returns is not None and context.role in {'annotation', 'scientific_process'} and (schema.get('properties') is not None):
+        if self.native_flux_balance_returns is not None and context.role in {'annotation', 'partner_presence_evidence'} and (schema.get('properties') is not None):
             result.update(self.native_flux_balance_returns.facts_for_closure(context, schema))
-        if context.role in {'annotation', 'scientific_process'}:
+        if context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.native_blast_masking_returns.received_facts(context, schema))
             result.update(self.native_blast_utility_returns.received_facts(context, schema))
-        if self._has_uniprot() and context.role in {'annotation', 'scientific_process'}:
+        if self._has_uniprot() and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.api_execution.uniprot_returns.facts_for_closure(context, schema))
-        if self._has_enrichr() and context.role in {'annotation', 'scientific_process'}:
+        if self._has_enrichr() and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.api_execution.enrichr_returns.facts_for_closure(context, schema))
-        if self._has_addgene() and context.role in {'annotation', 'scientific_process'}:
+        if self._has_addgene() and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.api_execution.addgene_returns.received_facts(context, schema))
-        if context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None:
+        if context.role in {'annotation', 'partner_presence_evidence'} and schema.get('properties') is not None:
             result.update(self.native_fluorescence_returns.facts_for_closure(context, schema))
-        if self.native_expression_nmf_returns is not None and context.role in {'annotation', 'scientific_process'} and (schema.get('properties') is not None):
+        if self.native_expression_nmf_returns is not None and context.role in {'annotation', 'partner_presence_evidence'} and (schema.get('properties') is not None):
             result.update(self.native_expression_nmf_returns.facts_for_closure(context, schema))
-        if self.atac_returns is not None and context.role in {'annotation', 'scientific_process'} and (schema.get('properties') is not None):
+        if self.atac_returns is not None and context.role in {'annotation', 'partner_presence_evidence'} and (schema.get('properties') is not None):
             result.update(self.atac_returns.facts_for_closure(context, schema))
-        if self.native_chromatin_interaction_returns is not None and context.role in {'annotation', 'scientific_process'} and (schema.get('properties') is not None):
+        if self.native_chromatin_interaction_returns is not None and context.role in {'annotation', 'partner_presence_evidence'} and (schema.get('properties') is not None):
             result.update(self.native_chromatin_interaction_returns.facts_for_closure(context, schema))
-        if self.native_genomic_overlap_returns is not None and context.role in {'annotation', 'scientific_process'} and (schema.get('properties') is not None):
+        if self.native_genomic_overlap_returns is not None and context.role in {'annotation', 'partner_presence_evidence'} and (schema.get('properties') is not None):
             result.update(self.native_genomic_overlap_returns.facts_for_closure(context, schema))
-        if context.role in {'annotation', 'scientific_process'}:
+        if context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.native_protein_structure_returns.received_facts(context, schema))
-        if self.rna_structure_comparison_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.rna_structure_comparison_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.rna_structure_comparison_returns.received_facts(context, schema))
-        if self.native_rna_structure_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_rna_structure_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.native_rna_structure_returns.received_facts(context, schema))
-        if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.native_blast_standard_database_returns.received_facts(context, schema))
-        if self.native_blast_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_blast_database_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.native_blast_database_returns.received_facts(context, schema))
-        if self.native_hmmer_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_hmmer_preparation_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.native_hmmer_preparation_returns.received_facts(context, schema))
-        if self.native_infernal_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_infernal_preparation_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.native_infernal_preparation_returns.received_facts(context, schema))
-        if self._has_rfam() and context.role in {'annotation', 'scientific_process'}:
+        if self._has_rfam() and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.api_execution.rfam_returns.received_facts(context, schema))
-        if self.native_blast_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_blast_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.native_blast_returns.received_facts(context, schema))
-        if self.native_infernal_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_infernal_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             result.update(self.native_infernal_returns.received_facts(context, schema))
         if _include_separate_api:
             received_report_facts_branch_0(self, context, schema, result)
         if _include_separate_api:
             received_report_facts_branch_1(self, context, schema, result)
-        if self._has_appservice() and context.role in {'annotation', 'scientific_process'}:
+        if self._has_appservice() and context.role in {'annotation', 'partner_presence_evidence'}:
             if any((node.get('x-source') == 'bvbrc_appservice_support_refs' for node in schema.get('properties', {}).values())):
                 result['bvbrc_appservice_support_refs'] = self.api_execution.appservice.received_support_refs(context)
             result.update(self.api_execution.homology_returns.received_facts(context, schema))
@@ -1582,7 +1582,7 @@ class HistoricalReceivedExecutionOwner:
 
     def received_report_closure_facts(self, context):
         """Private return bindings, called only by the registry at episode closure."""
-        if context.role not in {'annotation', 'scientific_process'}:
+        if context.role not in {'annotation', 'partner_presence_evidence'}:
             return {}
         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
         result = {}
@@ -1649,35 +1649,35 @@ class HistoricalReceivedExecutionOwner:
             access = self.native_rna_structure_results.retained_reference_access(context, reference, namespace)
             if access is not None:
                 return access
-            if context.role in {'annotation', 'scientific_process'}:
+            if context.role in {'annotation', 'partner_presence_evidence'}:
                 resolved = self.native_rna_structure_returns.resolve_received(context, reference, namespace)
                 if resolved is not None:
                     return resolved
-        if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             resolved = self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved
-        if self.native_blast_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_blast_database_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             resolved = self.native_blast_database_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved
-        if self.native_hmmer_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_hmmer_preparation_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             resolved = self.native_hmmer_preparation_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved
-        if self.native_infernal_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_infernal_preparation_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             resolved = self.native_infernal_preparation_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved
-        if self._has_rfam() and context.role in {'annotation', 'scientific_process'}:
+        if self._has_rfam() and context.role in {'annotation', 'partner_presence_evidence'}:
             resolved = self.api_execution.rfam_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved
-        if self.native_blast_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_blast_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             resolved = self.native_blast_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved
-        if self.native_infernal_returns is not None and context.role in {'annotation', 'scientific_process'}:
+        if self.native_infernal_returns is not None and context.role in {'annotation', 'partner_presence_evidence'}:
             resolved = self.native_infernal_returns.resolve_received(context, reference, namespace)
             if resolved is not None:
                 return resolved
@@ -2288,7 +2288,7 @@ class HistoricalReceivedExecutionOwner:
                     return self.native_rna_structure_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_rna_structure_returns.resolve_received(context, reference, namespace)
                 if self.native_rna_structure_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'partner_presence_evidence'}:
                     resolved = self.native_rna_structure_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -2298,7 +2298,7 @@ class HistoricalReceivedExecutionOwner:
                     return self.native_blast_standard_database_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
                 if self.native_blast_standard_database_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'partner_presence_evidence'}:
                     resolved = self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -2308,7 +2308,7 @@ class HistoricalReceivedExecutionOwner:
                     return self.native_blast_database_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_blast_database_returns.resolve_received(context, reference, namespace)
                 if self.native_blast_database_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'partner_presence_evidence'}:
                     resolved = self.native_blast_database_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -2318,7 +2318,7 @@ class HistoricalReceivedExecutionOwner:
                     return self.native_hmmer_preparation_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_hmmer_preparation_returns.resolve_received(context, reference, namespace)
                 if self.native_hmmer_preparation_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'partner_presence_evidence'}:
                     resolved = self.native_hmmer_preparation_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -2328,7 +2328,7 @@ class HistoricalReceivedExecutionOwner:
                     return self.native_infernal_preparation_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_infernal_preparation_returns.resolve_received(context, reference, namespace)
                 if self.native_infernal_preparation_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'partner_presence_evidence'}:
                     resolved = self.native_infernal_preparation_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -2341,7 +2341,7 @@ class HistoricalReceivedExecutionOwner:
                     return self.native_blast_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_blast_returns.resolve_received(context, reference, namespace)
                 if self.native_blast_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'partner_presence_evidence'}:
                     resolved = self.native_blast_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -2351,7 +2351,7 @@ class HistoricalReceivedExecutionOwner:
                     return self.native_infernal_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_infernal_returns.resolve_received(context, reference, namespace)
                 if self.native_infernal_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'partner_presence_evidence'}:
                     resolved = self.native_infernal_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved

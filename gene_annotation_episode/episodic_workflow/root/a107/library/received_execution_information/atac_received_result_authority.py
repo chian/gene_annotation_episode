@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.root.a107.episode_return_records 
 from gene_annotation_episode.episodic_workflow.root.a107.episode_contract_information import expand_fact_form, validate_saved_fact_form
 from gene_annotation_episode.episodic_workflow.root.a107.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.a107.library.atac_received_fact_contracts import FACT_SOURCES, SAVED_SOURCE, requested_atac_sources, select_atac_return_facts, validate_atac_fact_values
-_RECEIVING_ROLES = {'annotation', 'scientific_process'}
+_RECEIVING_ROLES = {'annotation', 'partner_presence_evidence'}
 _CLOSURE_PREFIX = 'atac_received_report_prefix'
 
 def _bundle_references(bundle):
@@ -52,7 +52,7 @@ class AtacDifferentialReturns(EpisodeReturnRecords):
         self._require(row is not None, 'original_commission_required')
         selected = json.loads(row['action'])
         if selected.get('kind') == 'tool':
-            self._require(selected.get('tool') == 'process.revise' and child.role == 'scientific_process', 'original_commission_conflict')
+            self._require(selected.get('tool') == 'process.revise' and child.role == 'partner_presence_evidence', 'original_commission_conflict')
             return
         self._require(selected.get('kind') in {'child', 'episode_child', 'job_child'}, 'original_commission_conflict')
         self._require(self._equal(selected.get('scope'), child.scope) and selected.get('purpose') == original['decision'], 'original_commission_conflict')

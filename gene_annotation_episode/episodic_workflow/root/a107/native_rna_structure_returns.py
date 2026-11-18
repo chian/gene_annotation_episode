@@ -109,7 +109,7 @@ class NativeRNAStructureReturns(EpisodeReturnRecords):
         self._frozen(context, values)
         if context.role == "results":
             self._require(self._equal(values, self._own_facts(context, values, verify_artifacts=verify_artifacts)), "returned_facts_conflict")
-        elif context.role in {"annotation", "scientific_process"}:
+        elif context.role in {"annotation", "partner_presence_evidence"}:
             grouped = self._received(context, verify_artifacts=verify_artifacts)["groups"]
             received = {source: grouped.get(source, []) for source in requested_sources(schema)}
             self._require(all(all(any(self._equal(value, saved) for saved in received[source]) for value in rows)

@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.root.a107.episode_receipts import
 from gene_annotation_episode.episodic_workflow.root.a107.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.episodic_workflow.root.a107.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.a107.library.genomic_overlap_received_fact_contracts import FACT_SOURCES, SAVED_SOURCE, requested_genomic_overlap_sources, select_genomic_overlap_return_facts, validate_genomic_overlap_fact_values
-_RECEIVING_ROLES = {'annotation', 'scientific_process'}
+_RECEIVING_ROLES = {'annotation', 'partner_presence_evidence'}
 _CLOSURE_PREFIX = 'genomic_overlap_received_report_prefix'
 
 class GenomicOverlapReturns(EpisodeReturnRecords):
@@ -43,7 +43,7 @@ class GenomicOverlapReturns(EpisodeReturnRecords):
         original = plain(child.request).get('report_contract')
         self._require(isinstance(original, dict), 'original_return_schema_required')
         if selected.get('kind') == 'tool':
-            self._require(selected.get('tool') == 'process.revise' and child.role == 'scientific_process', 'original_commission_conflict')
+            self._require(selected.get('tool') == 'process.revise' and child.role == 'partner_presence_evidence', 'original_commission_conflict')
             return
         self._require(selected.get('kind') in {'child', 'episode_child', 'job_child'}, 'original_commission_conflict')
         self._require(self._equal(selected.get('scope'), child.scope) and self._equal(json.loads(selected['schema_json']), original['measurements']['schema']) and (selected.get('purpose') == original['decision']), 'original_commission_conflict')

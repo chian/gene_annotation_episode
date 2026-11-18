@@ -52,9 +52,9 @@ def validate_native_return_channels(selection, schema):
     if missing:
         raise ContractError('component_native_return_channels_required', detail={
             'field': 'report_schema', 'missing_fact_sources': missing,
-            'repair': 'Use episode.return_contract for scientific_process and include both '
+            'repair': 'Use episode.return_contract for partner_presence_evidence and include both '
                 + FACT_SOURCE + ' and ' + EXECUTION_SOURCE + ' as saved-fact return fields. '
-                'scientific_process_results contains process metadata, not these numerical results.'})
+                'partner_presence_evidence_results contains process metadata, not these numerical results.'})
 
 
 def _refs(namespace=None):
@@ -311,7 +311,7 @@ def current_scoring_sheets(store, *, context, services):
     view reuses the original saved calculations and grader-validated native
     publications; it neither recalculates them nor invents an axis scalar.
     """
-    if context.role not in {'annotation', 'scientific_process'}:
+    if context.role not in {'annotation', 'partner_presence_evidence'}:
         return {}
     EpisodeReturnRecords(store, context.run_id, failure_prefix='component_axis_scoring_').authenticate(context)
     from .component_axis_native_hpc import received_components, execution_findings

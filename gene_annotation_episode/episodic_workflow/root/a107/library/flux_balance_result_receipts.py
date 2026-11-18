@@ -145,7 +145,7 @@ class FluxBalanceResultReceipts:
         self.store.validate_scope(plain(context.scope))
         require(len(context.path) > 1, 'fba_parent_commission_required')
         parent = self.returns.context(EpisodeRef(context.run_id, context.path[:-1]).episode_id)
-        require(parent.role in ('annotation', 'scientific_process'), 'fba_scientific_parent_required')
+        require(parent.role in ('annotation', 'partner_presence_evidence'), 'fba_scientific_parent_required')
         self.returns._commission(parent, context, construction=allow_unsaved)
         if assignment['selector']['mode'] == 'native_result':
             self.returns.declarations.possession(parent, assignment['handoff_ref'], before=int(context.path[-1][1][6:]))
@@ -597,7 +597,7 @@ class FluxBalanceResultReceipts:
             require('received_report_prefix' in manifest, 'fba_receipt_inheritance_mismatch')
             parent = self.returns.context(parent_id)
             self.returns._commission(parent, current, construction=current is context)
-            if parent.role in ('annotation', 'scientific_process'):
+            if parent.role in ('annotation', 'partner_presence_evidence'):
                 sources = (PROJECTION_SOURCE, SAVED_SOURCE)
                 groups, origins, _ = self.returns._received(parent, sources, allowed=manifest['received_report_prefix']['attempts'])
                 for source in sources:

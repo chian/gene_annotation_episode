@@ -181,171 +181,171 @@ CATALOG = {
         'roles': ('hpc_prediction',), 'entry_roles': (),
         'owner_class': 'HPCEpisode',
     },
-    'scientific_process/execution_job_submission/api_job_execution': {
+    'partner_presence_evidence/execution_job_submission/api_job_execution': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/execution_job_submission',
+        'parent': 'partner_presence_evidence/execution_job_submission',
         'roles': ('launch_api',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/execution_job_submission': {
+    'partner_presence_evidence/execution_job_submission': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process',
+        'parent': 'partner_presence_evidence',
         'roles': ('launch',), 'entry_roles': ('launch',),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/execution_job_submission/hpc_job_execution': {
+    'partner_presence_evidence/execution_job_submission/hpc_job_execution': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/execution_job_submission',
+        'parent': 'partner_presence_evidence/execution_job_submission',
         'roles': ('launch_hpc',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/execution_job_submission/local_job_execution': {
+    'partner_presence_evidence/execution_job_submission/local_job_execution': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/execution_job_submission',
+        'parent': 'partner_presence_evidence/execution_job_submission',
         'roles': ('launch_local',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/execution_progress_assessment': {
+    'partner_presence_evidence/execution_progress_assessment': {
         'version': 'monitor_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('information_unit', 'yield_settings'),
-        'parent': 'scientific_process',
+        'parent': 'partner_presence_evidence',
         'roles': ('monitor',), 'entry_roles': ('monitor',),
         'owner_class': 'MonitorEpisode',
     },
-    'scientific_process/execution_result_acquisition': {
+    'partner_presence_evidence/execution_result_acquisition': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process',
+        'parent': 'partner_presence_evidence',
         'roles': ('results',), 'entry_roles': ('results',),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/hpc_work_planning': {
+    'partner_presence_evidence/hpc_work_planning': {
         'version': 'hpc_episode_v1',
         'required': ('resources', 'commissions'),
         'optional': ('shared_execution_memory', 'require_commission_yield'),
-        'parent': 'scientific_process',
+        'parent': 'partner_presence_evidence',
         'roles': ('hpc',), 'entry_roles': ('hpc',),
         'owner_class': 'HPCEpisode',
     },
-    'scientific_process/hpc_work_planning/execution_job_submission/api_job_execution': {
+    'partner_presence_evidence/hpc_work_planning/execution_job_submission/api_job_execution': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/hpc_work_planning/execution_job_submission',
+        'parent': 'partner_presence_evidence/hpc_work_planning/execution_job_submission',
         'roles': ('launch_api',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/hpc_work_planning/execution_job_submission': {
+    'partner_presence_evidence/hpc_work_planning/execution_job_submission': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/hpc_work_planning',
+        'parent': 'partner_presence_evidence/hpc_work_planning',
         'roles': ('launch',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution': {
+    'partner_presence_evidence/hpc_work_planning/execution_job_submission/hpc_job_execution': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/hpc_work_planning/execution_job_submission',
+        'parent': 'partner_presence_evidence/hpc_work_planning/execution_job_submission',
         'roles': ('launch_hpc',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/hpc_work_planning/execution_job_submission/local_job_execution': {
+    'partner_presence_evidence/hpc_work_planning/execution_job_submission/local_job_execution': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/hpc_work_planning/execution_job_submission',
+        'parent': 'partner_presence_evidence/hpc_work_planning/execution_job_submission',
         'roles': ('launch_local',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/hpc_work_planning/execution_progress_assessment': {
+    'partner_presence_evidence/hpc_work_planning/execution_progress_assessment': {
         'version': 'monitor_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('information_unit', 'yield_settings'),
-        'parent': 'scientific_process/hpc_work_planning',
+        'parent': 'partner_presence_evidence/hpc_work_planning',
         'roles': ('monitor',), 'entry_roles': ('monitor',),
         'owner_class': 'MonitorEpisode',
     },
-    'scientific_process/hpc_work_planning/execution_result_acquisition': {
+    'partner_presence_evidence/hpc_work_planning/execution_result_acquisition': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/hpc_work_planning',
+        'parent': 'partner_presence_evidence/hpc_work_planning',
         'roles': ('results',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/hpc_work_planning/hpc_allocation_execution': {
+    'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution': {
         'version': 'hpc_episode_v1',
         'required': ('resources', 'commissions'),
         'optional': ('shared_execution_memory', 'require_commission_yield'),
-        'parent': 'scientific_process/hpc_work_planning',
+        'parent': 'partner_presence_evidence/hpc_work_planning',
         'roles': ('hpc_execution',), 'entry_roles': (),
         'owner_class': 'HPCEpisode',
     },
-    'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution': {
+    'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission',
+        'parent': 'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission',
         'roles': ('launch_api',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission': {
+    'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/hpc_work_planning/hpc_allocation_execution',
+        'parent': 'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution',
         'roles': ('launch',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution': {
+    'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission',
+        'parent': 'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission',
         'roles': ('launch_hpc',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution': {
+    'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission',
+        'parent': 'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission',
         'roles': ('launch_local',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment': {
+    'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment': {
         'version': 'monitor_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('information_unit', 'yield_settings'),
-        'parent': 'scientific_process/hpc_work_planning/hpc_allocation_execution',
+        'parent': 'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution',
         'roles': ('monitor',), 'entry_roles': ('monitor',),
         'owner_class': 'MonitorEpisode',
     },
-    'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition': {
+    'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition': {
         'version': 'execution_episode_v1',
         'required': ('resources', 'initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles'),
         'optional': ('require_private_yield', 'results_yield_profiles', 'task_yield_profiles'),
-        'parent': 'scientific_process/hpc_work_planning/hpc_allocation_execution',
+        'parent': 'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution',
         'roles': ('results',), 'entry_roles': (),
         'owner_class': 'ExecutionEpisode',
     },
-    'scientific_process/hpc_work_planning/hpc_resource_prediction': {
+    'partner_presence_evidence/hpc_work_planning/hpc_resource_prediction': {
         'version': 'hpc_episode_v1',
         'required': ('resources', 'commissions'),
         'optional': ('shared_execution_memory', 'require_commission_yield'),
-        'parent': 'scientific_process/hpc_work_planning',
+        'parent': 'partner_presence_evidence/hpc_work_planning',
         'roles': ('hpc_prediction',), 'entry_roles': (),
         'owner_class': 'HPCEpisode',
     },

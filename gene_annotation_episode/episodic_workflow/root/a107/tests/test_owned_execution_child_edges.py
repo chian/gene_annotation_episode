@@ -6,8 +6,8 @@ import pytest
 
 AXIS = 'gene_annotation_episode.episodic_workflow.root.a107'
 PREFIXES = ('', 'hpc_work_planning', 'hpc_work_planning/hpc_allocation_execution',
-    'scientific_process', 'scientific_process/hpc_work_planning',
-    'scientific_process/hpc_work_planning/hpc_allocation_execution')
+    'partner_presence_evidence', 'partner_presence_evidence/hpc_work_planning',
+    'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution')
 HOMES = [('/'.join(filter(None, (prefix, suffix))), role) for prefix in PREFIXES
     for suffix, role in (('execution_job_submission', 'launch'),
         ('execution_job_submission/api_job_execution', 'launch_api'),
@@ -65,8 +65,8 @@ def test_actual_selected_child_contract_keeps_parent_context_and_failures(home, 
         calls.append('annotation_required')
         return True
     owner.services = SimpleNamespace(annotation_task_required=annotation_required)
-    parent = BindingContext(run_id='controlled-contract', episode_id='scientific-parent', role='scientific_process',
-        path=(('scientific_process', 'controlled'),), scope={'subject_refs': []}, assignment={}, request={})
+    parent = BindingContext(run_id='controlled-contract', episode_id='scientific-parent', role='partner_presence_evidence',
+        path=(('partner_presence_evidence', 'controlled'),), scope={'subject_refs': []}, assignment={}, request={})
     expected = ('execution_handoff_refs',) if role == 'launch' else ('execution_result_refs',) if role == 'results' else ()
     assert owner.required_return_sources(parent, role) == expected
     assert calls == ['annotation_required']

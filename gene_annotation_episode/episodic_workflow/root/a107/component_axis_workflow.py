@@ -8,8 +8,8 @@ from .communication import interpretation_schema, plain, validate_closed_schema,
 from .component_axis_reports import initial_report, report_schema
 from .domain import ContractError
 from .evidence_axis_instructions import validate_instruction_entry
-from .scientific_process_library import ScientificProcessLibrary
-from .scientific_process_records import SELECTION_VERSION, selector_selection, validate_selection
+from .partner_presence_evidence_library import PartnerPresenceEvidenceLibrary
+from .partner_presence_evidence_records import SELECTION_VERSION, selector_selection, validate_selection
 from .scientific_tool_library import ScientificToolLibrary
 
 
@@ -94,13 +94,13 @@ _AXIS_INSTRUCTIONS = {
 }
 
 _NATIVE_RETURN_GUIDANCE = (
-    'When commissioning a scientific_process child whose child_tool_info includes '
+    'When commissioning a partner_presence_evidence child whose child_tool_info includes '
     'partner.request_expression_hpc or partner.request_detection_hpc, '
     'its closed return schema must include both component_axis_native_component_records '
     'and component_axis_native_execution_records as saved-fact return fields. '
     'Use episode.return_contract for their exact types or select each with a top-level '
     'episode-fact reference; choose the field names and leave host-filled fields out '
-    'of initial_report_json. scientific_process_results carries process metadata. '
+    'of initial_report_json. partner_presence_evidence_results carries process metadata. '
     'Preparation or unavailable work can return empty component arrays and its saved '
     'execution findings. This custody requirement does not require a job to succeed.'
 )
@@ -157,7 +157,7 @@ class ComponentAxisSubtree:
 
     def __init__(self, run_directory):
         directory = Path(run_directory)
-        self.library = ScientificProcessLibrary(directory/'scientific-process-library')
+        self.library = PartnerPresenceEvidenceLibrary(directory/'scientific-process-library')
         self.tools = ScientificToolLibrary(directory/'scientific-tool-library')
         self.axis = self.library.reference(self.AXIS)
         entry = validate_instruction_entry(self.library.resolve(self.axis))
@@ -197,7 +197,7 @@ class ComponentAxisSubtree:
         selection = selector_selection(validate_selection({'version': SELECTION_VERSION,
             'evidence_axis': deepcopy(self.axis), 'thought_pattern': self.library.reference(thought_id),
             'child_tool_info': self.tools.resolve_tool_info(child_tool_info)}))
-        return {'kind': 'episode_child', 'role': 'scientific_process', 'goal': question, 'scope': scope,
+        return {'kind': 'episode_child', 'role': 'partner_presence_evidence', 'goal': question, 'scope': scope,
             'purpose': 'Return the particular scientific findings, native numerical components, '
                 'target/partner/feature correspondence and unresolved parent information needs.',
             'schema_json': json.dumps(schema, allow_nan=False),
@@ -226,9 +226,9 @@ class ComponentAxisServiceFactory:
     def __call__(self, store, *, run_id, directory, tool_catalog, tool_registry=None,
                  job_episodes=None, resource_estimator=None, **kwargs):
         from .episode_application_services import EpisodeApplicationServices
-        from .scientific_process.published_evidence_assessment.episode import create_binding_tree
-        from .scientific_process_setup import prepare_scientific_binding
-        from .scientific_process.episode import ScientificProcessEpisode
+        from .partner_presence_evidence.published_evidence_assessment.episode import create_binding_tree
+        from .partner_presence_evidence_setup import prepare_scientific_binding
+        from .partner_presence_evidence.episode import PartnerPresenceEvidenceEpisode
         from .composition_information import CONTRACT_INFORMATION_PROFILE
         configuration = plain(self.literature_configuration or {})
         configuration.setdefault('contract_information_profile', CONTRACT_INFORMATION_PROFILE)
@@ -236,13 +236,13 @@ class ComponentAxisServiceFactory:
         directory = Path(directory)
         source = Path(self.source_directory)
         descriptors = tuple(self.additional_descriptors)
-        roles = ['scientific_process', 'literature']
+        roles = ['partner_presence_evidence', 'literature']
         credit, progress_provider, catalogs = {}, None, None
         if self.execution_service_factory is not None:
             from .execution_service_setup import ExecutionServiceFactory
-            from gene_annotation_episode.episodic_workflow.root.a107.scientific_process.execution_job_submission.episode import ExecutionEpisode
-            from gene_annotation_episode.episodic_workflow.root.a107.scientific_process.execution_progress_assessment.episode import MonitorEpisode
-            from gene_annotation_episode.episodic_workflow.root.a107.scientific_process.hpc_work_planning.episode import HPCEpisode
+            from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.execution_job_submission.episode import ExecutionEpisode
+            from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.execution_progress_assessment.episode import MonitorEpisode
+            from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.hpc_work_planning.episode import HPCEpisode
             factory = self.execution_service_factory
             if not isinstance(factory, ExecutionServiceFactory):
                 raise TypeError('component_axis_explicit_execution_service_factory_required')
@@ -255,19 +255,19 @@ class ComponentAxisServiceFactory:
             catalogs = execution.resource_tool_catalogs
             roles.extend((*ExecutionEpisode.entry_roles, *ExecutionResultsEpisode.entry_roles, *MonitorEpisode.entry_roles))
             if factory.hpc_commissions is not None:
-                from gene_annotation_episode.episodic_workflow.root.a107.scientific_process.hpc_work_planning.episode import HPCEpisode
+                from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.hpc_work_planning.episode import HPCEpisode
                 roles.extend(HPCEpisode.entry_roles)
         elif job_episodes is not None:
             raise ContractError('component_axis_jobs_require_explicit_execution_service_factory')
         ids = [row['binding_id'] for row in descriptors]
-        if len(ids) != len(set(ids)) or {'scientific_process', 'literature'}.intersection(ids):
+        if len(ids) != len(set(ids)) or {'partner_presence_evidence', 'literature'}.intersection(ids):
             raise ContractError('component_axis_service_binding_conflict')
         for descriptor in self.additional_descriptors:
             roles.extend(descriptor.get('roles', ()))
         restrict = getattr(tool_registry, 'restrict_resource_tool_catalogs', None)
         if callable(restrict):
             catalogs = restrict(catalogs)
-        scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=directory, source_directory=source,
+        scientific = prepare_scientific_binding(episode_type=PartnerPresenceEvidenceEpisode, run_directory=directory, source_directory=source,
             tool_catalog=tool_registry.catalog() if tool_registry is not None else tool_catalog,
             child_roles=tuple(dict.fromkeys(roles)), tool_retrieval=self.tool_retrieval,
             resource_catalogs=catalogs, contract_information_profile=CONTRACT_INFORMATION_PROFILE)
@@ -297,6 +297,6 @@ def create_workflow(store, tools, provider, directory, run_id, controller_factor
         progress, credit_binding=progress.as_record(),
         initial_known_record_refs=initial_known_record_refs, **options)
 
-from .scientific_process.episode import create_execution_bindings, create_hpc_bindings
+from .partner_presence_evidence.episode import create_execution_bindings, create_hpc_bindings
 
-from .scientific_process.execution_result_acquisition.episode import ExecutionEpisode as ExecutionResultsEpisode
+from .partner_presence_evidence.execution_result_acquisition.episode import ExecutionEpisode as ExecutionResultsEpisode

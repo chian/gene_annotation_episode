@@ -127,7 +127,7 @@ def _task(state, instructions):
     if constraints:
         _section(parts, "Caller constraints", _values(constraints))
 
-    process = state.get("scientific_process", {})
+    process = state.get("partner_presence_evidence", {})
     assignment = process.get("assignment", {})
     if "constraints" in assignment:
         _section(parts, "Parent constraints", _values(assignment["constraints"]))

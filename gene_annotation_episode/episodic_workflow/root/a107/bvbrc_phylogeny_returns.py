@@ -417,7 +417,7 @@ class BVBRCPhylogenyReturns(EpisodeReturnRecords):
         validate_form(form, schema, lambda *_: True)
         if context.role == 'results':
             expected = self.facts(context, schema)
-        elif context.role in {'annotation', 'scientific_process'}:
+        elif context.role in {'annotation', 'partner_presence_evidence'}:
             expected = self.received_facts(context, schema)
         else:
             raise ValueError(_PREFIX + 'unsupported_return_owner')

@@ -46,8 +46,8 @@ class ReceivedAPIFixture:
         configured['received-service'] = (deepcopy(MINHASH_RESOURCE) if service == 'bvbrc_minhash'
             else {'kind': 'api', 'service': 'bvbrc_data'})
         self.case = InformationCase(directory, received_resources=configured, connect=connect)
-        self.api = self.case.execution['scientific_process']['launch_api'].api_execution
-        self.owner = self.case.execution['scientific_process']['results']
+        self.api = self.case.execution['partner_presence_evidence']['launch_api'].api_execution
+        self.owner = self.case.execution['partner_presence_evidence']['results']
         self.calls = []
         self.canonical = module('execution_contracts').canonical
         self.plain = module('communication').plain
@@ -88,8 +88,8 @@ class ReceivedAPIFixture:
         self.schema = {'type': 'object', 'properties': properties, 'required': list(properties), 'additionalProperties': False}
         self.contract = module('runtime').TypedReportContract('Return original API numerical values', self.schema, lambda *_: True)
         self.case.root = self.bind_context(self.case.root, self.contract)
-        parent_assignment = self.plain(self.case.parents['scientific_process'].assignment)
-        self.parent = self.with_contract(self.case.root.path + (('scientific_process', 'child_2'),),
+        parent_assignment = self.plain(self.case.parents['partner_presence_evidence'].assignment)
+        self.parent = self.with_contract(self.case.root.path + (('partner_presence_evidence', 'child_2'),),
             parent_assignment, self.contract)
         assignment = {'version': 'api_service_assignment_v1', 'resource_id': 'received-service',
             'service': service, 'request': request, 'endpoint': 'usable_handoff', 'constraints': {}}

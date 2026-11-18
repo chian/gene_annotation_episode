@@ -13,9 +13,9 @@ from gene_annotation_episode.episodic_workflow.root.tests.hpc_prediction_inputs 
 
 AXIS = 'a107'
 PREFIX = 'gene_annotation_episode.episodic_workflow.root.' + AXIS + '.'
-PARENTS = ('', 'scientific_process', 'hpc_work_planning',
-    'hpc_work_planning/hpc_allocation_execution', 'scientific_process/hpc_work_planning',
-    'scientific_process/hpc_work_planning/hpc_allocation_execution')
+PARENTS = ('', 'partner_presence_evidence', 'hpc_work_planning',
+    'hpc_work_planning/hpc_allocation_execution', 'partner_presence_evidence/hpc_work_planning',
+    'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution')
 
 
 def module(name):
@@ -39,18 +39,18 @@ class InformationCase:
             self.resources, initial, 3., 2., 1., log_window_bytes=1024, log_roles=('stdout', 'stderr'))
         self.definition = module('communication').plain(self.factory.as_record())
         library = SimpleNamespace(as_record=lambda: {}, headers=lambda: [])
-        science = module('scientific_process/episode').ScientificProcessEpisode(self.services,
+        science = module('partner_presence_evidence/episode').PartnerPresenceEvidenceEpisode(self.services,
             library=library, tool_library=library,
-            child_roles=('scientific_process', 'hpc', 'launch', 'results', 'monitor', 'literature'))
+            child_roles=('partner_presence_evidence', 'hpc', 'launch', 'results', 'monitor', 'literature'))
         self.bindings, self.execution, self.parents, self.contexts = [science], {}, {}, []
         self.hpc_plans, self.hpc_initialization = {}, []
         self.root = self.context((('annotation', 'root'),), {})
-        scientific = self.context(self.root.path + (('scientific_process', 'science'),),
+        scientific = self.context(self.root.path + (('partner_presence_evidence', 'science'),),
             {'proposed_annotation_ref': 'hypothesis_fixture',
                 'selection': {'evidence_axis': {'option_id': AXIS.upper()}}})
-        self.parents.update({'': self.root, 'scientific_process': scientific})
-        for home in ('hpc_work_planning', 'scientific_process/hpc_work_planning'):
-            parent = scientific if home.startswith('scientific_process/') else self.root
+        self.parents.update({'': self.root, 'partner_presence_evidence': scientific})
+        for home in ('hpc_work_planning', 'partner_presence_evidence/hpc_work_planning'):
+            parent = scientific if home.startswith('partner_presence_evidence/') else self.root
             planner = self.context(parent.path + (('hpc', 'planner'),), {'commission_id': 'commission'})
             allocation = self.context(planner.path + (('hpc_execution', 'allocation'),),
                 {'commission_id': 'commission', 'owner_episode_id': planner.episode_id})

@@ -61,8 +61,8 @@ def scientific_binding_compatible(actual, recorded):
     if (type(actual) is not dict or type(recorded) is not dict
             or set(actual) != fields or set(recorded) != fields
             or any(type(value['version']) is not str
-                or value['version'] != 'scientific_process_episode_v10'
-                or value['binding_id'] != 'scientific_process'
+                or value['version'] != 'partner_presence_evidence_episode_v10'
+                or value['binding_id'] != 'partner_presence_evidence'
                 or type(value['configuration']) is not dict
                 for value in (actual, recorded))):
         return False
@@ -72,13 +72,13 @@ def scientific_binding_compatible(actual, recorded):
 def reopen_scientific_binding(services, *, descriptor, directory):
     from .private_scientific_literature_reconstruction import CATALOG, reconstruct
     from .private_reconstruction_protocol import admit_descriptors, verify_owner
-    record = _json_object(descriptor, 'scientific_process')
-    if record.get('binding_id') != 'scientific_process':
-        raise _failure('unavailable_binding', 'scientific_process')
+    record = _json_object(descriptor, 'partner_presence_evidence')
+    if record.get('binding_id') != 'partner_presence_evidence':
+        raise _failure('unavailable_binding', 'partner_presence_evidence')
     record, = admit_descriptors([record], CATALOG)
     binding = reconstruct(services, record, store=None, journal=None,
         directory=directory, tool_registry=None)
-    verify_owner(binding, record, CATALOG['scientific_process'], axis_package=__package__)
+    verify_owner(binding, record, CATALOG['partner_presence_evidence'], axis_package=__package__)
     return binding
 
 

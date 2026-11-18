@@ -6,7 +6,7 @@ from gene_annotation_episode.episodic_workflow.root.a107.decision_context import
 from gene_annotation_episode.episodic_workflow.root.a107.infernal_result_presentation import infernal_receiver_context
 from gene_annotation_episode.episodic_workflow.root.a107.execution_prompt import is_api_launch_context, render_api_launch_prompt
 from gene_annotation_episode.episodic_workflow.root.a107.library.scientific_decision_presentation import _ordinary_runtime_receiver_context, _rna_comparison_receiver_context, is_published_scientific_context, text_instructions
-from gene_annotation_episode.episodic_workflow.root.a107.scientific_process.task_decision import render_scientific_process_prompt
+from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.task_decision import render_partner_presence_evidence_prompt
 
 def present_results_context(provider, episode_id, role, instructions, context):
     """Render declared TASKs from reconstructed state; preserve other inputs."""
@@ -47,7 +47,7 @@ def present_results_context(provider, episode_id, role, instructions, context):
         if is_hpc_context(state):
             renderer = render_hpc_prompt
         elif is_published_scientific_context(state):
-            renderer = render_scientific_process_prompt
+            renderer = render_partner_presence_evidence_prompt
         elif is_api_launch_context(state):
             renderer = render_api_launch_prompt
         elif is_rna_comparison_results_context(state):

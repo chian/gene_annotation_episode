@@ -3,10 +3,10 @@ from copy import deepcopy
 from ...communication import plain
 
 def _forwards_bvbrc_reports(self, role):
-    return role in {'annotation', 'scientific_process'} and self.api_execution is not None and any((service.service == 'bvbrc_data' for service in self.api_execution.services.values()))
+    return role in {'annotation', 'partner_presence_evidence'} and self.api_execution is not None and any((service.service == 'bvbrc_data' for service in self.api_execution.services.values()))
 
 def _forwards_minhash_reports(self, role):
-    return role in {'annotation', 'scientific_process'} and self.api_execution is not None and any((service.service == 'bvbrc_minhash' for service in self.api_execution.services.values()))
+    return role in {'annotation', 'partner_presence_evidence'} and self.api_execution is not None and any((service.service == 'bvbrc_minhash' for service in self.api_execution.services.values()))
 
 def received_report_sources_branch_0(self, role, result):
     if _forwards_bvbrc_reports(self, role):

@@ -1,6 +1,6 @@
 """Standalone axis action-form assembly and recorded report projection for registered/custom providers. This is policy, not transport."""
 from gene_annotation_episode.episodic_workflow.root.a107 import runtime as _original_runtime
-from ..scientific_process.report_snapshot import complete_scientific_snapshot as _complete_scientific_snapshot
+from ..partner_presence_evidence.report_snapshot import complete_scientific_snapshot as _complete_scientific_snapshot
 
 def action_schema(self, source):
     form_example = _original_runtime._object({'changed_annotation_refs': {'type': 'array', 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'annotation'}, 'x-source': 'changed_annotation_refs', 'description': 'Actual annotation revisions changed during this investigation; these references are not a claim that every revision is still current.'}, 'changed_assessment_refs': {'type': 'array', 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'assessment'}, 'x-source': 'changed_assessment_refs', 'description': 'Actual changed source-linked assessment revisions, retaining their hypotheses, observations, relations and applicability.'}, 'changed_interpretation_account_refs': {'type': 'array', 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'interpretation_account'}, 'x-source': 'changed_interpretation_account_refs', 'description': _original_runtime.FACT_MEANINGS['changed_interpretation_account_refs']}, 'scoped_credit': {'type': 'number', 'x-source': 'credit', 'description': 'Credit projected for the fixed child scope at completion, not an accuracy verdict or a stopping instruction.'}})
@@ -25,7 +25,7 @@ def action_schema(self, source):
     scientific_child = _original_runtime._object({'kind': {'type': 'string', 'const': 'child'}, 'goal': {'type': 'string', 'description': "A substantive improvement the child can pursue iteratively and revise from outcomes. A fully specified one-off lookup/calculation belongs to an ordinary tool. Numerical yield controls the child's continuation."}, 'scope': scope_schema, 'purpose': {'type': 'string', 'description': 'Explain what information you need for your later scientific decision and what your selected form fields mean.'}, 'schema_json': {'type': 'string', 'description': 'JSON encoding of your parent-defined closed return form: explicit required fields, additionalProperties false, typed arrays, and strings restricted to enum codes or declared semantic formats. A reference can declare format reference and x-reference-namespace. Optional top-level x-source selectors bind recorded facts named in available_report_facts; do not ask a model to invent those facts. These examples are optional API guidance; choose fields and meanings for your actual later decision. Fact-only example: ' + _original_runtime._json(form_example) + ' Interpretive example, selecting actual assessment records rather than a findings paragraph: ' + _original_runtime._json(interpretive_example)}, 'initial_report_json': {'type': 'string', 'description': 'JSON containing exactly the interpretation fields you chose (those without x-source), with parent-supplied initial values. Use {} for the fact-only example; for the interpretive example use {"interpreted_assessment_refs":[],"unresolved_hypothesis_refs":[]}. Those initial arrays are not new child judgments. If you request other interpreted fields, define their allowed meanings and initialize them explicitly. The runtime does not choose fields or unknown values for you.'}})
     if not self.is_job_source(source):
         explicit_roles = None if self.annotation_child_roles is None and (not (len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False))) else self.available_child_roles(source)
-        if specialist is None and self.scientific_process_binding is None and ('child' in common_actions) and (explicit_roles is None or 'improvement' in explicit_roles):
+        if specialist is None and self.partner_presence_evidence_binding is None and ('child' in common_actions) and (explicit_roles is None or 'improvement' in explicit_roles):
             options.append(scientific_child)
         if self.job_episodes is not None and specialist is None:
             options.extend((option for option in self.job_episodes.commission_schemas(scientific_child) if explicit_roles is None or option['properties']['role']['const'] in explicit_roles))
@@ -90,7 +90,7 @@ def facts(self, source, *, completion_record=None, saved):
             if credit_snapshot is not None:
                 snapshot['operational_credit_snapshot'] = credit_snapshot
             context = self.binding_context(source)
-            if specialist is self.scientific_process_binding:
+            if specialist is self.partner_presence_evidence_binding:
                 _complete_scientific_snapshot(self, source, context, snapshot, facts)
             facts.update(specialist.facts(context, snapshot))
         received_facts = self.episode_bindings.received_report_facts(self.binding_context(source), completion_snapshot=snapshot)

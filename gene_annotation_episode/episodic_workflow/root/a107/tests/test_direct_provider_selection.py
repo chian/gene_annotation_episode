@@ -8,8 +8,8 @@ import pytest
 AXIS = 'a107'
 HOMES = (
     'execution_job_submission', 'execution_result_acquisition',
-    'scientific_process.execution_job_submission',
-    'scientific_process.execution_result_acquisition',
+    'partner_presence_evidence.execution_job_submission',
+    'partner_presence_evidence.execution_result_acquisition',
 )
 
 

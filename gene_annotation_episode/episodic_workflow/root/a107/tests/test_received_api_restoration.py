@@ -51,7 +51,7 @@ def test_original_nonempty_saved_admission_and_payload_are_preserved(received):
     expected = h.host.received_facts(h.parent, h.schema)
     assert any(expected.values())
     assert owner(h).received_report_facts(h.parent) == expected
-    assert owner(h).received_report_sources('scientific_process')
+    assert owner(h).received_report_sources('partner_presence_evidence')
     before = h.state()
     assert owner(h).received_form_references(h.parent, h.form, h.schema, h.operation_key) == references
     assert h.state() == before and h.action_state() == before_actions and len(h.calls) == 1
@@ -83,7 +83,7 @@ def test_original_root_forward_retains_same_received_values_and_no_scope_grant(r
     root_owner.validate_received_report(h.case.root, form, h.schema)
     assert root_owner.received_form_references(h.case.root, form, h.schema, key)
     assert h.state() == before
-    other = h.with_contract(h.case.root.path + (('scientific_process', 'child_9'),),
+    other = h.with_contract(h.case.root.path + (('partner_presence_evidence', 'child_9'),),
         h.plain(h.parent.assignment), h.contract)
     assert not any(owner(h, other).received_report_facts(other).values())
     if h.service == 'bvbrc_minhash':
@@ -124,7 +124,7 @@ def test_reader_reconstruction_and_original_action_replay_do_not_acquire_again(r
     reopened = authority.ReceivedAPIConfiguration.from_record(h.configuration.as_record())
     catalog = reopened.construct(store=h.case.store, run_id=h.case.run_id,
         directory=h.case.directory / 'workflow', tool_registry=h.case.tools, services=h.case.services)
-    dependency = catalog.received('scientific_process', h.parent)
+    dependency = catalog.received('partner_presence_evidence', h.parent)
     assert dependency.received_report_facts(h.parent) == h.host.received_facts(h.parent, h.schema)
     assert h.host.received_context(h.parent) == original
     def denied(*args, **kwargs):
@@ -143,9 +143,9 @@ def test_full_and_partial_registry_outcomes_remain_explicit(received, tmp_path):
     h.record_original_admission()
     h.forward_to_root()
     partial = module('episode_bindings').EpisodeBindingRegistry([binding for binding in h.case.bindings
-        if binding.binding_path == 'scientific_process'
+        if binding.binding_path == 'partner_presence_evidence'
         or binding.binding_path.startswith('hpc_work_planning')
-        or binding.binding_path.startswith('scientific_process/hpc_work_planning')])
+        or binding.binding_path.startswith('partner_presence_evidence/hpc_work_planning')])
     partial.configure_initial_information(h.case.catalog, module('annotation_initial_information').initial_information)
     partial.configure_received_api_information(h.catalog, module('annotation_received_api_information').received_api_reports)
     partial.configure_received_execution_information(h.execution_catalog,

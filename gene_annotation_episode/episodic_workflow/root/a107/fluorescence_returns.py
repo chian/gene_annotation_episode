@@ -14,7 +14,7 @@ from .episode_return_records import EpisodeReturnRecords
 from .bvbrc_appservice_custody import AppServiceCustody
 from .execution_contracts import canonical, digest
 from .fluorescence_return_views import FACT_SOURCES, PROJECTION_SOURCE, CONTEXT_SOURCE, SAVED_SOURCE, requested_fluorescence_sources, select_fluorescence_return_facts, validate_fluorescence_fact_values
-_RECEIVING_ROLES = {'annotation', 'scientific_process'}
+_RECEIVING_ROLES = {'annotation', 'partner_presence_evidence'}
 _CLOSURE_PREFIX = 'fluorescence_received_report_prefix'
 _CONTRIBUTION_SOURCES = (PROJECTION_SOURCE, CONTEXT_SOURCE, SAVED_SOURCE)
 
@@ -53,7 +53,7 @@ class FluorescenceReturns(EpisodeReturnRecords):
         unsaved = construction and saved is None
         selected, sent = self._selection(parent, int(slot[6:]), unsaved=unsaved)
         if selected.get('kind') == 'tool':
-            self._require(selected.get('tool') == 'process.revise' and child.role == 'scientific_process', 'original_commission_conflict')
+            self._require(selected.get('tool') == 'process.revise' and child.role == 'partner_presence_evidence', 'original_commission_conflict')
             return
         self._require(selected.get('kind') in {'child', 'episode_child', 'job_child'}, 'original_commission_conflict')
         self._require(self._equal(selected.get('scope'), child.scope), 'commission_scope_conflict')

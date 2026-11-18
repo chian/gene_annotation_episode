@@ -106,7 +106,7 @@ class A107ToolRegistry(ComponentNativeHPCMixin, A107GenomicToolRegistry):
     def received_attributions(self, context, known):
         parent = getattr(super(), 'received_attributions', None)
         generated, needs = parent(context, known) if callable(parent) else ([], [])
-        if context.role not in {'annotation', 'scientific_process', 'improvement'}:
+        if context.role not in {'annotation', 'partner_presence_evidence', 'improvement'}:
             return generated, needs
         more, pending = refresh(self.store, context, set(known) | set(generated))
         return [*generated, *more], [*needs, *pending]

@@ -572,7 +572,7 @@ class LocalFileSourceResults:
 
     def outcomes_for_context(self, context):
         if not self.applies(context):
-            return self.received_outcomes(context) if context.role in {'annotation', 'scientific_process'} else []
+            return self.received_outcomes(context) if context.role in {'annotation', 'partner_presence_evidence'} else []
         self.records.authenticate(context)
         values = {}
         for row in self.store.db.execute('SELECT decision_index,action,result FROM runtime_actions '
@@ -642,12 +642,12 @@ class LocalFileSourceResults:
 
     def validate_received_report(self, context, form, schema):
         fields = self._source_fields(schema)
-        if fields and context.role in {'annotation', 'scientific_process'}:
+        if fields and context.role in {'annotation', 'partner_presence_evidence'}:
             expected = self.received_sources(context)
             _require(all(self.records._equal(form[name], expected) for name in fields),
                 'received_source_facts_conflict')
         outcomes = self._source_fields(schema, 'execution_file_capture_outcomes')
-        if outcomes and context.role in {'annotation', 'scientific_process'}:
+        if outcomes and context.role in {'annotation', 'partner_presence_evidence'}:
             expected = self.received_outcomes(context)
             _require(all(self.records._equal(form[name], expected) for name in outcomes),
                 'received_outcome_facts_conflict')
