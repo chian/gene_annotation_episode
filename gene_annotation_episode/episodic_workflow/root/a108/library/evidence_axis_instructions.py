@@ -5,7 +5,7 @@ instruction provenance; scoring sheets and the readers that populate them have
 separate contracts.
 """
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a108.scientific_process_records import _exact, _option_id, _plain, _text
+from gene_annotation_episode.episodic_workflow.root.a108.sample_context_evidence_records import _exact, _option_id, _plain, _text
 VERSION = 'evidence_axis_instruction_v1'
 _FIELDS = 'entry_version id slot name description investigation_instructions evidence'
 _SOURCE_FIELDS = 'case_group case_id source_url source_locator observation limit'

@@ -61,7 +61,7 @@ def received_axis_task_credit(store, context):
             'A105': '.a105.scientific_process.credit',
             'A106': '.a106.scientific_process.credit',
             'A107': '.a107.scientific_process.task_projector',
-            'A108': '.a108.scientific_process.credit',
+            'A108': '.a108.sample_context_evidence.credit',
             'A110': '.a110.scientific_process.task_projector',
         }[axis]
         project = import_module(binding_module, __package__).original_task_projector

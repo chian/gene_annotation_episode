@@ -11,32 +11,32 @@ def exchange_for_parent(workflow, source, role):
     from .episode import is_annotation_parent, safe_cached_registry
     if type(role) is not str or not safe_cached_registry(workflow):
         return None
-    if role not in ('scientific_process', 'literature'):
+    if role not in ('sample_context_evidence', 'literature'):
         return None
-    from .scientific_process.task import ScientificTask
-    from .scientific_process.episode import ScientificProcessEpisode
+    from .sample_context_evidence.task import ScientificTask
+    from .sample_context_evidence.episode import SampleContextEvidenceEpisode
     registry = workflow.episode_bindings
     annotation = is_annotation_parent(workflow, source)
     if not annotation:
-        parent = workflow.scientific_process_binding
-        if (type(source) is not ScientificTask or type(parent) is not ScientificProcessEpisode
-                or registry._by_path.get('scientific_process') is not parent):
+        parent = workflow.sample_context_evidence_binding
+        if (type(source) is not ScientificTask or type(parent) is not SampleContextEvidenceEpisode
+                or registry._by_path.get('sample_context_evidence') is not parent):
             return None
-    if role == 'scientific_process':
-        parent = workflow.scientific_process_binding
+    if role == 'sample_context_evidence':
+        parent = workflow.sample_context_evidence_binding
         candidates = registry._by_role.get(role, ())
-        if type(parent) is not ScientificProcessEpisode or len(candidates) != 1 or candidates[0] is not parent:
+        if type(parent) is not SampleContextEvidenceEpisode or len(candidates) != 1 or candidates[0] is not parent:
             return None
         if annotation:
-            from .to_child_scientific_process import prepare_request
-            from .from_child_scientific_process import admit_return
+            from .to_child_sample_context_evidence import prepare_request
+            from .from_child_sample_context_evidence import admit_return
         else:
             prepare_request = None
-            from .scientific_process.from_child_scientific_process import admit_return
+            from .sample_context_evidence.from_child_sample_context_evidence import admit_return
     else:
         from .published_evidence_assessment.episode import LiteratureEpisode as EntryLiterature
-        from .scientific_process.published_evidence_assessment.episode import LiteratureEpisode as NestedLiterature
-        child = registry._by_path.get('published_evidence_assessment' if annotation else 'scientific_process/published_evidence_assessment')
+        from .sample_context_evidence.published_evidence_assessment.episode import LiteratureEpisode as NestedLiterature
+        child = registry._by_path.get('published_evidence_assessment' if annotation else 'sample_context_evidence/published_evidence_assessment')
         if (type(child) is not (EntryLiterature if annotation else NestedLiterature)
                 or not any(candidate is child for candidate in registry._by_role.get(role, ()))
                 or any(type(candidate) is not EntryLiterature and type(candidate) is not NestedLiterature for candidate in registry._by_role.get(role, ()))):
@@ -46,7 +46,7 @@ def exchange_for_parent(workflow, source, role):
             from .from_child_published_evidence_assessment import admit_return
         else:
             prepare_request = None
-            from .scientific_process.from_child_published_evidence_assessment import admit_return
+            from .sample_context_evidence.from_child_published_evidence_assessment import admit_return
     return prepare_request, admit_return
 
 
@@ -58,7 +58,7 @@ def exchange_for_improvement(workflow, source, selection, role):
             or not safe_cached_registry(workflow)):
         return None
     kind = selection.get('kind')
-    if type(kind) is not str or kind != 'child' or workflow.scientific_process_binding is not None:
+    if type(kind) is not str or kind != 'child' or workflow.sample_context_evidence_binding is not None:
         return None
     if 'improvement' in workflow.episode_bindings._by_role:
         return None

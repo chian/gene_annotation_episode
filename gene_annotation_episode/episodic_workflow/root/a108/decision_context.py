@@ -38,7 +38,7 @@ def instructional_model_context(value):
     """
     from gene_annotation_episode.episodic_workflow.root.a108.library.evidence_axis_contracts import VERSION as EVIDENCE_AXIS_VERSION
     from gene_annotation_episode.episodic_workflow.root.a108.library.evidence_axis_instructions import VERSION as INSTRUCTION_VERSION, instruction_view
-    from gene_annotation_episode.episodic_workflow.root.a108.scientific_process_library import evidence_axis_instruction_view
+    from gene_annotation_episode.episodic_workflow.root.a108.sample_context_evidence_library import evidence_axis_instruction_view
 
     def project(node):
         if isinstance(node, dict):
@@ -47,7 +47,7 @@ def instructional_model_context(value):
             if node.get('entry_version') == EVIDENCE_AXIS_VERSION or {'native_measurements', 'judgment_criteria', 'qualitative_grading', 'name', 'id'} <= node.keys():
                 return evidence_axis_instruction_view(node)
             result = {key: project(item) for key, item in node.items()}
-            process = result.get('scientific_process')
+            process = result.get('sample_context_evidence')
             if isinstance(process, dict):
                 process.pop('axis_judgment_contract', None)
             return result

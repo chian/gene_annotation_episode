@@ -8,7 +8,7 @@ from .test_private_literature_boundaries import AXIS,HOMES
 def family_registry(request):
     services=SimpleNamespace(workflow=SimpleNamespace(store=object()))
     bindings=[import_module(AXIS+'.'+home+'.episode').LiteratureEpisode(services) for home in HOMES
-        if home.startswith('scientific_process.')==(request.param=='scientific')]
+        if home.startswith('sample_context_evidence.')==(request.param=='scientific')]
     return import_module(AXIS+'.episode_bindings').EpisodeBindingRegistry(bindings),bindings
 
 

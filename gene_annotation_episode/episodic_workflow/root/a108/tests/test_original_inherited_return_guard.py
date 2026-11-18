@@ -34,7 +34,7 @@ def test_original_result_assignment_checked_before_frozen_form_acceptance(tmp_pa
             store.db.execute('INSERT INTO runtime_episodes VALUES(?,?,?,?)',
                 (run,result.episode_id,canonical(path),canonical(request)))
             return result
-        parent=context((('scientific_process','parent'),),{})
+        parent=context((('sample_context_evidence','parent'),),{})
         child=context((*parent.path,('results','child_0')),actual)
         action={'kind':'episode_child','role':'results','assignment':selected}
         store.db.execute('INSERT INTO runtime_actions VALUES(?,?,?,?,?)',

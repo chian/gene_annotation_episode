@@ -7,7 +7,7 @@ from .test_private_literature_boundaries import AXIS,HOMES
 @pytest.mark.parametrize('family',['standalone','scientific'])
 def test_sibling_literature_bindings_do_not_advertise_duplicate_received_fact_arrays(family):
     bindings=[import_module(AXIS+'.'+home+'.episode').LiteratureEpisode(SimpleNamespace()) for home in HOMES
-        if home.startswith('scientific_process.')==(family=='scientific')]
+        if home.startswith('sample_context_evidence.')==(family=='scientific')]
     Registry=import_module(AXIS+'.episode_bindings').EpisodeBindingRegistry
     registry=Registry(bindings)
     for binding in bindings:

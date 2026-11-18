@@ -24,7 +24,7 @@ import tomllib
 from gene_annotation_episode.episodic_workflow.root.a108.boundary_validation import parse_json_object, parse_json_value
 from gene_annotation_episode.episodic_workflow.root.a108.provider_authentication import ProviderAuthenticationError, authentication_policy, authentication_transport, verify_authentication
 from gene_annotation_episode.episodic_workflow.root.a108.decision_context import VERSION as DECISION_CONTEXT_VERSION, apply_state_frame
-from gene_annotation_episode.episodic_workflow.root.a108.library.scientific_process_prompt import is_published_scientific_context, render_scientific_process_prompt, text_instructions
+from gene_annotation_episode.episodic_workflow.root.a108.library.sample_context_evidence_prompt import is_published_scientific_context, render_sample_context_evidence_prompt, text_instructions
 
 from gene_annotation_episode.episodic_workflow.root.provider_errors import ModelCallError
 
@@ -562,7 +562,7 @@ class _SessionConnection:
         elif has_text_task(context):
             state = deepcopy(context)
         if state is not None and has_text_task(state):
-            renderer = render_scientific_process_prompt if is_published_scientific_context(state) else render_receiver_prompt
+            renderer = render_sample_context_evidence_prompt if is_published_scientific_context(state) else render_receiver_prompt
             rendered = renderer(state, instructions, lookup_results=lookups)
             self.scientific_prompt_states[key] = state
             return (rendered, text_instructions(instructions))

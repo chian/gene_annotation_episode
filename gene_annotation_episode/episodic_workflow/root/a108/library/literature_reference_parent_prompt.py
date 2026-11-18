@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from gene_annotation_episode.episodic_workflow.root.a108.composition_information import CONTRACT_INFORMATION_PROFILE, is_contract_information
 from gene_annotation_episode.episodic_workflow.root.a108.schema_information_text import render_schema_information
-from gene_annotation_episode.episodic_workflow.root.a108.library.scientific_process_prompt import text_instructions
+from gene_annotation_episode.episodic_workflow.root.a108.library.sample_context_evidence_prompt import text_instructions
 from gene_annotation_episode.episodic_workflow.root.a108.library.literature_a108_prompt import A108_CONTEXT_TASK, A108_PARENT_TASK
 from gene_annotation_episode.episodic_workflow.root.a108.library.literature_parent_prompt import SOURCE_DISCOVERY
 from gene_annotation_episode.episodic_workflow.root.a108.library.literature_experimental_prompt import CONTRACT_INFORMATION_TASK, SAVED_NUMERICAL_RETURN_TASK, _pick, _requested_contract_task, _section, _selected_sections, _steering, _values

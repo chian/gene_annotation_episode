@@ -28,11 +28,11 @@ class WorkflowServices:
         return LaunchInstructions.freeze(directory, source=getattr(self.workflow.tools, 'launch_instruction_library_directory', None))
 
     def scientific_library_catalog(self):
-        binding = getattr(self.workflow, 'scientific_process_binding', None)
+        binding = getattr(self.workflow, 'sample_context_evidence_binding', None)
         callback = getattr(binding, 'scientific_library_catalog', None)
         if callable(callback):
             return callback()
-        from gene_annotation_episode.episodic_workflow.root.a108.scientific_process_library import catalog
+        from gene_annotation_episode.episodic_workflow.root.a108.sample_context_evidence_library import catalog
         return catalog()
 
     def scientific_retriever_catalog(self, binding):
@@ -51,11 +51,11 @@ class WorkflowServices:
         return ScientificToolRetriever(self.workflow.store, run_id=self.workflow.run_id, provider=provider, library=binding.tool_library, configuration=binding.tool_retrieval)
 
     def execute_scientific_library(self, context, name, arguments):
-        binding = self.workflow.scientific_process_binding
+        binding = self.workflow.sample_context_evidence_binding
         callback = getattr(binding, 'execute_scientific_library', None)
         if callable(callback):
             return callback(context, name, arguments)
-        return self.workflow.scientific_process_binding.library.execute(name, arguments)
+        return self.workflow.sample_context_evidence_binding.library.execute(name, arguments)
 
     def create_receipts(self, run_id):
         from gene_annotation_episode.episodic_workflow.root.a108.episode_receipts import EpisodeReceipts
@@ -92,8 +92,8 @@ class WorkflowServices:
         """
         from gene_annotation_episode.episodic_workflow.root.a108.resource_tool_information import bound_resource_tool_contracts, tool_information_contracts
         registry = self.workflow.episode_bindings
-        scientific = self.workflow.scientific_process_binding
-        child_roles = () if scientific is None else scientific.child_roles('scientific_process')
+        scientific = self.workflow.sample_context_evidence_binding
+        child_roles = () if scientific is None else scientific.child_roles('sample_context_evidence')
         resources, seen = ([], set())
         for role in registry.roles:
             binding = registry.for_role(role)
@@ -203,7 +203,7 @@ class WorkflowServices:
         """Describe the actual separate annotation binding without projecting it."""
         if context.run_id != self.workflow.run_id:
             raise ValueError('scientific_support_routes_receiver_identity_mismatch')
-        binding = getattr(self.workflow, 'scientific_process_binding', None)
+        binding = getattr(self.workflow, 'sample_context_evidence_binding', None)
         callback = getattr(binding, 'scientific_support_routes', None)
         if callable(callback):
             return callback(self.workflow.project_annotation_score, self.workflow.annotation_score_binding, observation_kinds=observation_kinds)
@@ -260,19 +260,19 @@ class WorkflowServices:
             raise ValueError('scientific_provenance_receiver_identity_mismatch')
         provenance = self.workflow.scientific_provenance
         if provenance is None:
-            raise ValueError('scientific_process_provenance_unavailable')
+            raise ValueError('sample_context_evidence_provenance_unavailable')
         return provenance
 
     def create_scientific_provenance(self, binding):
         callback = getattr(binding, 'create_scientific_provenance', None)
         if callable(callback):
             return callback(store=self.workflow.store, journal=self.workflow.journal)
-        from gene_annotation_episode.episodic_workflow.root.a108.scientific_process_provenance import ScientificProcessProvenance
-        return ScientificProcessProvenance(self.workflow.store, self.workflow.journal, library=binding.library, tool_library=binding.tool_library)
+        from gene_annotation_episode.episodic_workflow.root.a108.sample_context_evidence_provenance import SampleContextEvidenceProvenance
+        return SampleContextEvidenceProvenance(self.workflow.store, self.workflow.journal, library=binding.library, tool_library=binding.tool_library)
 
     def scientific_preparation(self, context, preparation_ref):
         provenance = self._scientific_provenance(context)
-        binding = getattr(self.workflow, 'scientific_process_binding', None)
+        binding = getattr(self.workflow, 'sample_context_evidence_binding', None)
         callback = getattr(binding, 'read_scientific_preparation', None)
         if callable(callback):
             return callback(provenance, context, preparation_ref, owner='self')
@@ -280,7 +280,7 @@ class WorkflowServices:
 
     def scientific_parent_preparation(self, context, preparation_ref):
         provenance = self._scientific_provenance(context)
-        binding = getattr(self.workflow, 'scientific_process_binding', None)
+        binding = getattr(self.workflow, 'sample_context_evidence_binding', None)
         callback = getattr(binding, 'read_scientific_preparation', None)
         if callable(callback):
             return callback(provenance, context, preparation_ref, owner='parent')
@@ -298,7 +298,7 @@ class WorkflowServices:
             return current(context)
         provenance = self._scientific_provenance(context)
         current_read = provenance.received_results
-        from .scientific_process_provenance import _DEFAULT_RECEIVED_RESULTS
+        from .sample_context_evidence_provenance import _DEFAULT_RECEIVED_RESULTS
         if getattr(current_read, '__func__', None) is not _DEFAULT_RECEIVED_RESULTS:
             return current_read(context)
         return invocation(provenance, context)
@@ -309,7 +309,7 @@ class WorkflowServices:
             return current(context)
         provenance = self._scientific_provenance(context)
         current_read = provenance.frozen_results
-        from .scientific_process_provenance import _DEFAULT_FROZEN_RESULTS
+        from .sample_context_evidence_provenance import _DEFAULT_FROZEN_RESULTS
         if getattr(current_read, '__func__', None) is not _DEFAULT_FROZEN_RESULTS:
             return current_read(context)
         return invocation(provenance, context)
@@ -328,7 +328,7 @@ class WorkflowServices:
         """Read one completed invocation, without creating work or loading its tree."""
         workflow = self.workflow
         journal = workflow.journal
-        if context.run_id != workflow.run_id or journal.run_id != workflow.run_id or context.role != 'scientific_process' or (EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
+        if context.run_id != workflow.run_id or journal.run_id != workflow.run_id or context.role != 'sample_context_evidence' or (EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
             raise ValueError('scientific_closed_request_identity_mismatch')
         row = journal.row('runtime_episodes', context.episode_id)
         if row is None:

@@ -40,9 +40,9 @@ def submitted(chosen=None,*,field='selected'):
         field:{'$ref':'episode-fact:'+SOURCE,PARAMETER:selection() if chosen is None else chosen}})
 
 
-def expanded(schema,*,facts=None,permitted=('scientific_process',)):
-    return expand_fact_form(json.dumps(schema),child_role='scientific_process',
-        facts_by_role={'scientific_process':restriction_mapping_fact_sources() if facts is None else facts},
+def expanded(schema,*,facts=None,permitted=('sample_context_evidence',)):
+    return expand_fact_form(json.dumps(schema),child_role='sample_context_evidence',
+        facts_by_role={'sample_context_evidence':restriction_mapping_fact_sources() if facts is None else facts},
         permitted_child_roles=permitted)
 
 
@@ -56,7 +56,7 @@ def test_actual_compact_selection_expands_into_existing_explicit_723_contract():
     assert set(view['items']['properties'])==set(BASE_FIELDS)|{'enzyme_rows'}
     assert PARAMETER not in view
     assert schema==original
-    assert validate_saved_fact_form(child_role='scientific_process',submitted_schema_json=json.dumps(schema),
+    assert validate_saved_fact_form(child_role='sample_context_evidence',submitted_schema_json=json.dumps(schema),
         expanded_schema=result['expanded_schema'],declaration=result['declaration'])==result['expanded_schema']
 
 
@@ -68,7 +68,7 @@ def test_compact_grammar_never_supplies_selection_defaults(fault):
     elif fault=='missing_policy':del node[PARAMETER]['policy']
     elif fault=='missing_sequence':del node[PARAMETER]['sequence_ref']
     elif fault=='extra':node['additionalProperties']=False
-    elif fault=='wrong_source':node['$ref']='episode-fact:scientific_process_results'
+    elif fault=='wrong_source':node['$ref']='episode-fact:sample_context_evidence_results'
     else:schema['properties']['selected']={'type':'array','items':node}
     with pytest.raises(ContractInformationError):expanded(schema)
 
@@ -76,7 +76,7 @@ def test_compact_grammar_never_supplies_selection_defaults(fault):
 @pytest.mark.parametrize('fault',['source','role','base'])
 def test_original_frozen_advertisement_remains_required(fault):
     facts=restriction_mapping_fact_sources()
-    permitted=('scientific_process',)
+    permitted=('sample_context_evidence',)
     if fault=='source':facts.clear()
     elif fault=='role':permitted=()
     else:facts[SOURCE]['report_schema']['description']='changed original schema'
@@ -101,5 +101,5 @@ def test_saved_declaration_checks_original_relationships(fault):
         # original schema hashes cannot approve a different selected tree.
         declaration['submitted_schema_json']=json.dumps(schema)
     with pytest.raises(ContractInformationError):
-        validate_saved_fact_form(child_role='scientific_process',submitted_schema_json=json.dumps(schema),
+        validate_saved_fact_form(child_role='sample_context_evidence',submitted_schema_json=json.dumps(schema),
             expanded_schema=result['expanded_schema'],declaration=declaration)

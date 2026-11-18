@@ -3,7 +3,7 @@ from types import SimpleNamespace
 
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a108 import runtime,runtime_prompt
-from .test_private_scientific_process import scientific_binding
+from .test_private_sample_context_evidence import scientific_binding
 
 
 @pytest.mark.parametrize('protocol',[None,'decision_exchange_v1'])
@@ -13,8 +13,8 @@ def test_scientific_composer_preserves_wait_and_reason(protocol,native_events):
     binding.instructions=lambda context:'Original controlled scientific assignment instructions'
     binding.validate_context=lambda context:None
     source=object.__new__(getattr(binding,'decision_source_type',runtime.DecisionSource))
-    source.path=(('scientific_process','original'),)
-    context=SimpleNamespace(role='scientific_process')
+    source.path=(('sample_context_evidence','original'),)
+    context=SimpleNamespace(role='sample_context_evidence')
     source.workflow=SimpleNamespace(is_job_source=lambda source:False,specialist=lambda source:binding,
         binding_context=lambda source:context,
         permits_common_action=lambda source,action:action in binding.permitted_common_actions(context),

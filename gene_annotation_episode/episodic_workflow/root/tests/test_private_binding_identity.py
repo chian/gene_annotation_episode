@@ -7,6 +7,10 @@ import pytest
 
 
 AXES = ('a101', 'a102', 'a103', 'a104', 'a105', 'a106', 'a107', 'a108', 'a110')
+# Each arm's own evidence-axis role (its recursive head). Arms are renamed one at a time.
+AXIS_ROLE = {'a101': 'scientific_process', 'a102': 'scientific_process', 'a103': 'scientific_process',
+             'a104': 'scientific_process', 'a105': 'scientific_process', 'a106': 'scientific_process',
+             'a107': 'scientific_process', 'a108': 'sample_context_evidence', 'a110': 'scientific_process'}
 
 
 @pytest.fixture(params=AXES)
@@ -119,16 +123,17 @@ def test_missing_counterpart_never_uses_other_parent(registry_type):
 
 def test_real_literature_branches_retain_private_identity(registry_type):
     package = registry_type.__module__.rsplit('.', 1)[0]
+    head = AXIS_ROLE[package.rsplit('.', 1)[1]]
     standalone = import_module(package + '.published_evidence_assessment.episode').LiteratureEpisode(object())
-    nested = import_module(package + '.scientific_process.published_evidence_assessment.episode').LiteratureEpisode(object())
-    parent = Binding('scientific_process', 'scientific_process', 'legacy_annotation', ('literature',))
+    nested = import_module(package + '.' + head + '.published_evidence_assessment.episode').LiteratureEpisode(object())
+    parent = Binding(head, head, 'legacy_annotation', ('literature',))
     registry = registry_type((parent, standalone, nested))
     root = (('annotation', 'root'),)
     assert registry.for_child(root, 'literature') is standalone
-    assert registry.for_child((*root, ('scientific_process', 'child')), 'literature') is nested
+    assert registry.for_child((*root, (head, 'child')), 'literature') is nested
     records = registry.as_record()
     assert {item['binding_id'] for item in records} == {
-        'scientific_process', standalone.binding_path, nested.binding_path}
+        head, standalone.binding_path, nested.binding_path}
 
 
 def test_context_hooks_do_not_read_other_parents_state(registry_type):
@@ -184,13 +189,14 @@ def test_build_connects_correct_private_task_and_preserves_default(registry_type
     monkeypatch.setattr(runtime, 'FeedbackEpisode', lambda grain, key, source, *args, **kwargs: source)
     workflow = SimpleNamespace(
         context=object(), grains={'monitor': object()}, inprocess_completion_order=None,
-        receipts=None, scientific_process_binding=None, episode_bindings=registry,
+        receipts=None, episode_bindings=registry,
         contract_information_profile=lambda source: None,
         journal=SimpleNamespace(row=lambda *args: None, save=lambda *args: None), run_id='routing',
         store=SimpleNamespace(transaction=nullcontext, db=SimpleNamespace(execute=lambda *args: None)),
         source_credit_view=lambda source: {'credit': 0}, expose_assigned_job=lambda source: None,
         receive_tool_attributions=lambda *args, **kwargs: None,
         archive=SimpleNamespace(store=lambda value: value))
+    setattr(workflow, AXIS_ROLE[runtime.__name__.split('.')[-2]] + '_binding', None)
     workflow.specialist = lambda source: runtime.Workflow.specialist(workflow, source)
     parent_path = (('annotation', 'root'), ('allocate', 'saved_parent'))
     source = runtime.Workflow.build(workflow, 'monitor', 'saved_child', 'Observe', {}, parent_path=parent_path)

@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.root.a108.episode_return_records 
 from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.bvbrc_appservice_custody import AppServiceCustody
 from gene_annotation_episode.episodic_workflow.root.a108.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.expression_nmf_return_views import FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE, requested_expression_nmf_sources, validate_expression_nmf_fact_values
-_RECEIVING_ROLES = {'annotation', 'scientific_process'}
+_RECEIVING_ROLES = {'annotation', 'sample_context_evidence'}
 _CLOSURE_PREFIX = 'expression_nmf_received_report_prefix'
 _CONTRIBUTION_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE)
 
@@ -53,7 +53,7 @@ class ExpressionNMFReturns(EpisodeReturnRecords):
         unsaved = construction and saved is None
         selected, sent = self._selection(parent, int(slot[6:]), unsaved=unsaved)
         if selected.get('kind') == 'tool':
-            self._require(selected.get('tool') == 'process.revise' and child.role == 'scientific_process', 'original_commission_conflict')
+            self._require(selected.get('tool') == 'process.revise' and child.role == 'sample_context_evidence', 'original_commission_conflict')
             return
         self._require(selected.get('kind') in {'child', 'episode_child', 'job_child'}, 'original_commission_conflict')
         self._require(self._equal(selected.get('scope'), child.scope), 'commission_scope_conflict')

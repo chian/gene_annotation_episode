@@ -22,15 +22,15 @@ def declared_annotation_roles(self, role):
 
 def filter_annotation_roles(self, source, roles):
     if len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False):
-        roles = tuple((role for role in roles if role == 'scientific_process'))
+        roles = tuple((role for role in roles if role == 'sample_context_evidence'))
     return roles
 
 def validate_annotation_commission(self, source, role, *, selection=None, original=False):
     annotation_axes = len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False)
-    if annotation_axes and role != 'scientific_process':
+    if annotation_axes and role != 'sample_context_evidence':
         raise ValueError('annotation_root_commissions_evidence_axes')
     if annotation_axes and selection is not None and (not original):
-        from gene_annotation_episode.episodic_workflow.root.a108.scientific_process_records import selection_fields
+        from gene_annotation_episode.episodic_workflow.root.a108.sample_context_evidence_records import selection_fields
         assignment = selection.get('assignment', {})
         process = assignment.get('selection', {})
         axis = process[selection_fields(process)[0]]['option_id']

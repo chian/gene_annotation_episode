@@ -8,7 +8,7 @@ from __future__ import annotations
 async def retrieve_tools(workflow, source, arguments, operation_key, retriever_catalog, *, validator_type, validation_error):
     try:
         validator_type(retriever_catalog[0]['input_schema']).validate(arguments)
-        tools = workflow.scientific_process_binding.tool_library
+        tools = workflow.sample_context_evidence_binding.tool_library
         available = workflow.services.tool_information_catalog(source.scope) if tools.supports_tool_info else workflow.services.tool_catalog(source.scope)
         if not tools.supports_tool_info:
             tools.resolve([entry['name'] for entry in tools.catalog()], available)

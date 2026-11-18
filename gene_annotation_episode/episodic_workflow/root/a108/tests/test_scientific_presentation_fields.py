@@ -11,7 +11,7 @@ import pytest
 
 @pytest.mark.parametrize('standalone,root_shape', [(False, False), (True, False), (True, True), (False, True)])
 def test_private_frame_preserves_original_inputs_and_explicit_standalone_shape(standalone, root_shape):
-    from gene_annotation_episode.episodic_workflow.root.a108.scientific_process.presentation_fields import frame_for, annotation_context, attach_native_timing
+    from gene_annotation_episode.episodic_workflow.root.a108.sample_context_evidence.presentation_fields import frame_for, annotation_context, attach_native_timing
     controller = {'arms': [], 'annotation_credits': [], 'root_score': 0., 'decision': {'stop': False}, 'scalar_detail': 'retained'}
     report = SimpleNamespace(as_record=lambda: {'original': 'child'},
         contract=SimpleNamespace(measurements={'schema': {'type': 'object'}}))
@@ -27,8 +27,8 @@ def test_private_frame_preserves_original_inputs_and_explicit_standalone_shape(s
     def row(*args):
         journal_calls.append(args)
         return {'action': json.dumps({'kind': 'episode_child'})}
-    source = SimpleNamespace(path=(('scientific_process', 'standalone'),) if standalone else
-        (('annotation', 'root'), ('scientific_process', 'commissioned')),
+    source = SimpleNamespace(path=(('sample_context_evidence', 'standalone'),) if standalone else
+        (('annotation', 'root'), ('sample_context_evidence', 'commissioned')),
         scope={'original': 'scope'}, report_values={'original': 'interpretation'},
         interpret_schema={'type': 'object'}, last_outcome_index=4, episode_id='scientific',
         workflow=SimpleNamespace(journal=SimpleNamespace(row=row),
@@ -61,7 +61,7 @@ def test_private_frame_preserves_original_inputs_and_explicit_standalone_shape(s
 
 @pytest.mark.parametrize('root_shape', [False, True])
 def test_recorded_context_preserves_original_yield_table_selection(monkeypatch, root_shape):
-    from gene_annotation_episode.episodic_workflow.root.a108.scientific_process import standalone_presentation as owner
+    from gene_annotation_episode.episodic_workflow.root.a108.sample_context_evidence import standalone_presentation as owner
     calls = []
     journal = object()
     source = SimpleNamespace(workflow=SimpleNamespace(journal=journal), episode_id='original')

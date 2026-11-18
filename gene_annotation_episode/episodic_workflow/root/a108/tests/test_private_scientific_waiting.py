@@ -6,13 +6,13 @@ from types import SimpleNamespace
 
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a108 import runtime
-from .test_private_scientific_process import scientific_binding
+from .test_private_sample_context_evidence import scientific_binding
 
 
 @pytest.mark.parametrize('unavailable',[False,True])
 def test_scientific_wait_preserves_original_outcome_without_new_credit(unavailable):
     binding=scientific_binding();source=object.__new__(getattr(binding,'decision_source_type',runtime.DecisionSource))
-    source.path=(('scientific_process','original'),);source.episode_id='scientific';source.scope={}
+    source.path=(('sample_context_evidence','original'),);source.episode_id='scientific';source.scope={}
     source.last_outcome=source.last_outcome_index=source.feedback=None;source.checkpoint=lambda:None
     rows={};calls=[];received=[]
     async def wait(source,condition,index):
@@ -21,7 +21,7 @@ def test_scientific_wait_preserves_original_outcome_without_new_credit(unavailab
         return {'status':'completed','record_refs':[],'changed_record_refs':[],'result':{'ready':False}}
     source.workflow=SimpleNamespace(run_id='run',execution_binding=None,pending_work=lambda source:{'items':[]},
         binding_context=lambda source:'original-context',
-        scientific_process_binding=SimpleNamespace(validate_execution_context=lambda context:None),
+        sample_context_evidence_binding=SimpleNamespace(validate_execution_context=lambda context:None),
         journal=SimpleNamespace(row=lambda table,episode,index:rows.get(index),
             save=lambda table,row:rows.__setitem__(row['decision_index'],dict(row)),measure=lambda *args:nullcontext()),
         perform_selected_wait=wait,receive_native_outcome=lambda *args:None,

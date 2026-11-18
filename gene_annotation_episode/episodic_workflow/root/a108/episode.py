@@ -41,8 +41,8 @@ def child_request_assembler(role):
     if role == 'improvement':
         from .to_child_annotation_improvement import assemble_request
         return assemble_request
-    if role == 'scientific_process':
-        from .to_child_scientific_process import assemble_request
+    if role == 'sample_context_evidence':
+        from .to_child_sample_context_evidence import assemble_request
         return assemble_request
     if role == 'literature':
         from .to_child_published_evidence_assessment import assemble_request
@@ -55,8 +55,8 @@ def child_report_receiver(role):
     if role == 'improvement':
         from .from_child_annotation_improvement import receive_report
         return receive_report
-    if role == 'scientific_process':
-        from .from_child_scientific_process import receive_report
+    if role == 'sample_context_evidence':
+        from .from_child_sample_context_evidence import receive_report
         return receive_report
     if role == 'literature':
         from .from_child_published_evidence_assessment import receive_report

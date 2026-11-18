@@ -21,5 +21,5 @@ def prepare_request(workflow, source, selection, index):
     binding = workflow.episode_bindings.for_child(source.path, role)
     workflow.launch_instructions.materialize(selection['assignment'].get('launch_instructions'))
     episode_assignment = binding.prepare_assignment(workflow.binding_context(source), role, selection['assignment'], scope, f'{workflow.run_id}:{source.episode_id}:{index}')
-    return {'scope': scope, 'role': role, 'schema': schema, 'report_declaration': report_declaration, 'initial': initial, 'episode_assignment': episode_assignment, 'scientific_process': None, 'assignment': None}
+    return {'scope': scope, 'role': role, 'schema': schema, 'report_declaration': report_declaration, 'initial': initial, 'episode_assignment': episode_assignment, 'sample_context_evidence': None, 'assignment': None}
 from gene_annotation_episode.episodic_workflow.root.a108 import runtime as _original_runtime

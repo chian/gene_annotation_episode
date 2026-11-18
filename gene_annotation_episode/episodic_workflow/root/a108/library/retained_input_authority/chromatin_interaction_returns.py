@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.a108.episode_receipts import
 from gene_annotation_episode.episodic_workflow.root.a108.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.episodic_workflow.root.a108.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.chromatin_interaction_return_views import FACT_SOURCES, SAVED_SOURCE, requested_chromatin_sources, validate_chromatin_fact_values
-_RECEIVING_ROLES = {'annotation', 'scientific_process'}
+_RECEIVING_ROLES = {'annotation', 'sample_context_evidence'}
 _CLOSURE_PREFIX = 'chromatin_received_report_prefix'
 
 def _bundle_references(bundle):
@@ -54,7 +54,7 @@ class ChromatinInteractionReturns(EpisodeReturnRecords):
         self._require(row is not None, 'original_commission_required')
         selected = json.loads(row['action'])
         if selected.get('kind') == 'tool':
-            self._require(selected.get('tool') == 'process.revise' and child.role == 'scientific_process', 'original_commission_conflict')
+            self._require(selected.get('tool') == 'process.revise' and child.role == 'sample_context_evidence', 'original_commission_conflict')
             return
         self._require(selected.get('kind') in {'child', 'episode_child', 'job_child'}, 'original_commission_conflict')
         self._require(self._equal(selected.get('scope'), child.scope) and self._equal(json.loads(selected['schema_json']), original['measurements']['schema']) and (selected.get('purpose') == original['decision']), 'original_commission_conflict')
