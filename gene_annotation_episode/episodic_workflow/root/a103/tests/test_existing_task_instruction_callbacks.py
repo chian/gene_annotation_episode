@@ -3,14 +3,15 @@ from importlib import import_module
 from types import SimpleNamespace
 from unittest.mock import patch
 import pytest
+from gene_annotation_episode.episodic_workflow.root.tests.axis_roles import HEAD
 AXES=('a102','a103')
-MONITORS=tuple(p+'execution_progress_assessment' for p in ('','gene_context_evidence/','hpc_work_planning/','hpc_work_planning/hpc_allocation_execution/','gene_context_evidence/hpc_work_planning/','gene_context_evidence/hpc_work_planning/hpc_allocation_execution/'))
-WORK=('hpc_work_planning','gene_context_evidence/hpc_work_planning','hpc_work_planning/hpc_allocation_execution','gene_context_evidence/hpc_work_planning/hpc_allocation_execution')
-PREDICTIONS=('hpc_work_planning/hpc_resource_prediction','gene_context_evidence/hpc_work_planning/hpc_resource_prediction')
+MONITORS=tuple(p+'execution_progress_assessment' for p in ('','axis_head/','hpc_work_planning/','hpc_work_planning/hpc_allocation_execution/','axis_head/hpc_work_planning/','axis_head/hpc_work_planning/hpc_allocation_execution/'))
+WORK=('hpc_work_planning','axis_head/hpc_work_planning','hpc_work_planning/hpc_allocation_execution','axis_head/hpc_work_planning/hpc_allocation_execution')
+PREDICTIONS=('hpc_work_planning/hpc_resource_prediction','axis_head/hpc_work_planning/hpc_resource_prediction')
 HOMES=MONITORS+WORK+PREDICTIONS
 MODES=('ordinary','exchange')
 BOUNDARIES=('custom_return','custom_exception','subclass_return','subclass_exception','default_composition','private_composer','instance_shadow','delegation')
-def own(axis,name):return import_module('gene_annotation_episode.episodic_workflow.root.'+axis+'.'+name)
+def own(axis,name):return import_module('gene_annotation_episode.episodic_workflow.root.'+axis+'.'+name.replace('axis_head',HEAD[axis]))
 class CallbackFailure(Exception):pass
 
 def source_for(axis,cls,mode):
