@@ -21,7 +21,7 @@ def runtime_path(registry,home):
 @pytest.mark.parametrize('role',['launch_api','results'])
 def test_actual_same_role_registry_identity_is_stricter_than_host_context_kind(analysis_workflow,family,role):
     store,workflow,_=analysis_workflow;registry=workflow.episode_bindings
-    prefix='' if family=='root' else 'scientific_process/'
+    prefix='' if family=='root' else 'perturbation_evidence/'
     suffix='execution_job_submission/api_job_execution' if role=='launch_api' else 'execution_result_acquisition'
     left=registry.for_binding_path(prefix+suffix)
     right=registry.for_binding_path(prefix+'published_evidence_assessment/'+suffix)

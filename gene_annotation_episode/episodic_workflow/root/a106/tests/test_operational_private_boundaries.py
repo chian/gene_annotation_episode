@@ -43,7 +43,7 @@ def test_declared_role_preserves_goal_and_action_interfaces(binding):
 def test_actual_outgoing_reference_contract_preserves_scientific_parent(binding):
     if type(binding).__name__!='ExecutionEpisode':
         pytest.skip('Not applicable to this predefined role')
-    parent=SimpleNamespace(path=(('scientific_process','parent'),))
+    parent=SimpleNamespace(path=(('perturbation_evidence','parent'),))
     role,=binding.roles
     expected=('execution_handoff_refs',) if role=='launch' else ('execution_result_refs',) if role=='results' else ()
     assert binding.required_return_sources(parent,role)==expected

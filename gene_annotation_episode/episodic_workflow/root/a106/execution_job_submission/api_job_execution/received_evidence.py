@@ -64,7 +64,7 @@ class ReceivedOperationalEvidence:
         returns.records._authenticate(context)
         values = returns.records._values(plain(form), plain(schema))
         expected = returns.facts(context, schema) if context.role == "results" else returns.received_facts(context, schema)
-        returns.records._require(context.role in {"results", "scientific_process", "annotation"}
+        returns.records._require(context.role in {"results", "perturbation_evidence", "annotation"}
             and returns.records._equal(values, expected), "returned_facts_conflict")
         returns.records._frozen(context, values)
 
@@ -103,12 +103,12 @@ class ReceivedOperationalEvidence:
             return (selection, handoffs, {})
 
     def received_report_sources(self, role):
-        return self._appservice_sources() if role in {'annotation', 'scientific_process'} else {}
+        return self._appservice_sources() if role in {'annotation', 'perturbation_evidence'} else {}
 
     def received_report_facts(self, context):
         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
         result = {}
-        if context.role in {'annotation', 'scientific_process'}:
+        if context.role in {'annotation', 'perturbation_evidence'}:
             if any((node.get('x-source') == 'bvbrc_appservice_support_refs' for node in schema.get('properties', {}).values())):
                 result['bvbrc_appservice_support_refs'] = self.api_execution.appservice.received_support_refs(context)
             application = self.api_execution.application_returns.received_facts(context, schema)

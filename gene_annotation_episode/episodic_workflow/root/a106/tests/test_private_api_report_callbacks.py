@@ -14,7 +14,7 @@ from ..domain import identity
 from ..episode_bindings import BindingContext
 from .private_analysis_exchange_fixtures import analysis_workflow
 from .test_private_api_report_boundaries import runtime_path,publications
-PARENTS=('','published_evidence_assessment/','scientific_process/','scientific_process/published_evidence_assessment/')
+PARENTS=('','published_evidence_assessment/','perturbation_evidence/','perturbation_evidence/published_evidence_assessment/')
 APIS=tuple(p+'execution_job_submission/api_job_execution' for p in PARENTS)
 RESULTS=tuple(p+'execution_result_acquisition' for p in PARENTS)
 HOMES=tuple(h for pair in zip(APIS,RESULTS) for h in pair)

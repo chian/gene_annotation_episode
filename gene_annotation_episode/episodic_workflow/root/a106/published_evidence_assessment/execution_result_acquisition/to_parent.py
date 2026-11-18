@@ -52,7 +52,7 @@ class OperationalReport:
     def required_return_sources(self, parent, role):
         """Preserve the original job identity across a scientific return."""
         self.credit_kind(role)
-        if parent is not None and parent.path[-1][0] == 'scientific_process' and getattr(self.services, 'annotation_task_required', lambda: False)():
+        if parent is not None and parent.path[-1][0] == 'perturbation_evidence' and getattr(self.services, 'annotation_task_required', lambda: False)():
             return ('execution_result_refs',)
         return ()
 

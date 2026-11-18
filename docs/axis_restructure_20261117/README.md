@@ -57,3 +57,7 @@ collection, dangling-name scan (`runs/claude_inputs/la/dangling.py`), commit.
   seven shared arm test helpers (`hpc_*`, `scientific_head_boundaries`) and the binding identity test read the head
   from it instead of hard-coding the generic name. 96 test files that use them: identical per file to the baseline.
   Collection 50,565, 0 errors; dangling scan unchanged.
+- P1-A106: `a106/scientific_process` → `a106/perturbation_evidence` and every token inside `a106/`; root lookup
+  tables; the A106 branch of `root/tests/monitor_parent_exchange.py` (module path and child binding paths); role table.
+  A106's test files plus users of the monitor helper and role table (112 files): identical per file to the baseline.
+  Collection 50,565, 0 errors; dangling scan unchanged.

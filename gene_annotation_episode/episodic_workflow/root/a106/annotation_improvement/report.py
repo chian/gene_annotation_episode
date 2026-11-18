@@ -41,8 +41,8 @@ def facts(self, source, *, completion_record=None):
             if credit_snapshot is not None:
                 snapshot['operational_credit_snapshot'] = credit_snapshot
             context = self.binding_context(source)
-            if specialist is self.scientific_process_binding:
-                from .scientific_process.completion_snapshot import completion_snapshot as _scientific_completion_snapshot
+            if specialist is self.perturbation_evidence_binding:
+                from .perturbation_evidence.completion_snapshot import completion_snapshot as _scientific_completion_snapshot
                 _scientific_completion_snapshot(self, source, context, snapshot, facts)
             facts.update(specialist.facts(context, snapshot))
         received_facts = self.episode_bindings.received_report_facts(self.binding_context(source), completion_snapshot=snapshot)

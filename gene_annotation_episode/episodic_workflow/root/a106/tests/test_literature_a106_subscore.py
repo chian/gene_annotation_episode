@@ -39,7 +39,7 @@ def commissioned(store, context, proposal, *, axis='A106'):
     from gene_annotation_episode.episodic_workflow.root.a106.communication import plain
     from gene_annotation_episode.episodic_workflow.root.a106.episode_journal import Journal
     from gene_annotation_episode.episodic_workflow.root.a106.method_loop.identities import EpisodeRef
-    path = (('scientific_process', axis + '-original-commission'),)
+    path = (('perturbation_evidence', axis + '-original-commission'),)
     identity = EpisodeRef(context.run_id, path).episode_id
     assignment = {'selection': {'evidence_axis': {'option_id': axis}}, 'proposed_annotation_ref': proposal}
     Journal(store, context.run_id).save('runtime_episodes', {'episode_id': identity,

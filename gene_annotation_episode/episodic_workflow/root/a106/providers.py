@@ -30,8 +30,8 @@ from .provider_authentication import (
 from .decision_context import VERSION as DECISION_CONTEXT_VERSION, apply_state_frame
 from .execution_prompt import is_api_launch_context, render_api_launch_prompt
 from .library.monitor_prompt import is_monitor_context, render_monitor_prompt
-from .scientific_process_prompt import (is_published_scientific_context,
-    render_scientific_process_prompt, text_instructions)
+from .perturbation_evidence_prompt import (is_published_scientific_context,
+    render_perturbation_evidence_prompt, text_instructions)
 
 
 class ModelCallError(RuntimeError):
@@ -724,7 +724,7 @@ class _SessionConnection:
             # It already supplies the full state; its response schema is intact.
             state = deepcopy(context)
         if state is not None and has_text_task(state):
-            renderer = (render_scientific_process_prompt if is_published_scientific_context(state)
+            renderer = (render_perturbation_evidence_prompt if is_published_scientific_context(state)
                 else render_api_launch_prompt if is_api_launch_context(state)
                 else render_monitor_prompt if is_monitor_context(state) else render_receiver_prompt)
             rendered = renderer(state, instructions, lookup_results=lookups)

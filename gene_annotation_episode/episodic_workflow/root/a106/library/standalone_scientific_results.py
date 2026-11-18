@@ -1,5 +1,5 @@
 """Original raw authenticated received/frozen result-read protocols."""
-from ..scientific_process_provenance import _detached, _load
+from ..perturbation_evidence_provenance import _detached, _load
 
 def received_results(provenance, context):
     with provenance.store.read_snapshot():
@@ -15,7 +15,7 @@ def frozen_results(provenance, context):
         """
     with provenance.store.read_snapshot():
         provenance._authenticate(context, require_saved=True)
-        row = provenance.store.db.execute("SELECT\n                json_type(facts, '$.scientific_process_results') AS source_type,\n                json_extract(facts, '$.scientific_process_results') AS results\n                FROM runtime_forms WHERE run_id=? AND episode_id=?", (provenance.journal.run_id, context.episode_id)).fetchone()
+        row = provenance.store.db.execute("SELECT\n                json_type(facts, '$.perturbation_evidence_results') AS source_type,\n                json_extract(facts, '$.perturbation_evidence_results') AS results\n                FROM runtime_forms WHERE run_id=? AND episode_id=?", (provenance.journal.run_id, context.episode_id)).fetchone()
         if row is None or row['source_type'] is None:
             return None
         if row['source_type'] != 'array':

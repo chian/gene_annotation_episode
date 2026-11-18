@@ -11,7 +11,7 @@ def module(name):
     return import_module(AXIS+'.'+name)
 
 
-@pytest.fixture(params=['published_evidence_assessment', 'scientific_process.published_evidence_assessment'])
+@pytest.fixture(params=['published_evidence_assessment', 'perturbation_evidence.published_evidence_assessment'])
 def family(request,tmp_path):
     with module('state').Store(tmp_path/'state') as store:
         journal=module('episode_journal').Journal(store,'family-original')

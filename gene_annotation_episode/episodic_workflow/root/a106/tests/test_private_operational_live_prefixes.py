@@ -10,8 +10,8 @@ from types import SimpleNamespace
 import pytest
 
 PACKAGE='gene_annotation_episode.episodic_workflow.root.a106'
-PARENTS=('', 'published_evidence_assessment/', 'scientific_process/',
-         'scientific_process/published_evidence_assessment/')
+PARENTS=('', 'published_evidence_assessment/', 'perturbation_evidence/',
+         'perturbation_evidence/published_evidence_assessment/')
 NATIVE=[('execution_job_submission/api_job_execution','launch_api'),('execution_result_acquisition','results')]
 
 

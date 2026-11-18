@@ -29,7 +29,7 @@ def prepare_commission(workflow, source, selection, index):
     if send_request is not None:
         child_assignment = send_request(workflow.binding_context(source), role, child_assignment)
     episode_assignment = binding.prepare_assignment(workflow.binding_context(source), role, child_assignment, scope, f'{workflow.run_id}:{source.episode_id}:{index}')
-    return {'scope': scope, 'role': role, 'schema': schema, 'report_declaration': report_declaration, 'initial': initial, 'episode_assignment': episode_assignment, 'scientific_process': None, 'assignment': None}
+    return {'scope': scope, 'role': role, 'schema': schema, 'report_declaration': report_declaration, 'initial': initial, 'episode_assignment': episode_assignment, 'perturbation_evidence': None, 'assignment': None}
 
 
 from gene_annotation_episode.episodic_workflow.root.a106.library.intervention_execution_lookup import _execution

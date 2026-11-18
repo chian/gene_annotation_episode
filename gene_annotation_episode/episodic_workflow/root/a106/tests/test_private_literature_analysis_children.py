@@ -13,7 +13,7 @@ def test_original_literature_analysis_child_has_exact_commissioning_owner(
     _, workflow = full_workflow
     parent_path = (('annotation', 'root'),)
     if scientific:
-        parent_path += (('scientific_process', 'science'),)
+        parent_path += (('perturbation_evidence', 'science'),)
     registry = workflow.episode_bindings
     literature = registry.for_child(parent_path, 'literature')
     path = parent_path + (('literature', 'original-literature'),)

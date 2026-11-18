@@ -56,7 +56,7 @@ def test_actual_private_invocation_uses_both_original_validators(source):
     schema,_=selected(source,'all_own_completed_results')
     invocation={'objective':'Validate an explicitly requested saved-result form',
         'purpose':'Return the selected original fields','report_schema':schema,'initial_report':{}}
-    owner=module('scientific_process.from_parent').ScientificAssignment
+    owner=module('perturbation_evidence.from_parent').ScientificAssignment
     actual=owner._invocation(invocation,{})
     assert actual['report_schema']==schema and actual['initial_report']=={}
     invalid=deepcopy(invocation)

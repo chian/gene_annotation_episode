@@ -8,8 +8,8 @@ import pytest
 from ..api_service_execution import APIServiceExecution
 
 PREFIX='gene_annotation_episode.episodic_workflow.root.a106.'
-PARENTS=('', 'published_evidence_assessment.', 'scientific_process.',
-    'scientific_process.published_evidence_assessment.')
+PARENTS=('', 'published_evidence_assessment.', 'perturbation_evidence.',
+    'perturbation_evidence.published_evidence_assessment.')
 HOMES=tuple(parent+suffix for parent in PARENTS for suffix in (
     'execution_job_submission.api_job_execution','execution_result_acquisition'))
 

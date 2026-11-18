@@ -41,7 +41,7 @@ def test_named_endpoint_rejects_other_literature_parents_same_role(analysis_work
     store,host,_=analysis_workflow
     def parent_path(scientific):
         path=(('annotation','root'),)
-        if scientific:path+=(('scientific_process','science'),)
+        if scientific:path+=(('perturbation_evidence','science'),)
         path+=(('literature','literature'),)
         return path+((('launch','launch'),) if role=='launch_api' else ())
     expected_path=parent_path(scientific);foreign_path=parent_path(not scientific)
@@ -66,15 +66,15 @@ def test_original_service_factory_includes_scientific_literature_children_withou
     service=factory(store,run_id=host.run_id,directory=host.directory,tool_registry=host.tools)
     assert factory.as_record()==declaration
     descriptors={row['binding_id']:row for row in service.episode_binding_descriptors}
-    prefix='scientific_process/published_evidence_assessment/'
+    prefix='perturbation_evidence/published_evidence_assessment/'
     expected={prefix+home for home in ('execution_job_submission',
         'execution_job_submission/api_job_execution','execution_result_acquisition')}
     assert expected<=set(descriptors)
     for name in expected:
-        original='scientific_process/'+name.removeprefix(prefix)
+        original='perturbation_evidence/'+name.removeprefix(prefix)
         assert descriptors[name]['configuration']==descriptors[original]['configuration']
     for role in ('launch','launch_api','results'):
         project=service.role_credit_bindings[role]['project']
-        assert project.__self__.binding_path.startswith('scientific_process/execution_')
+        assert project.__self__.binding_path.startswith('perturbation_evidence/execution_')
         assert service.role_credit_bindings[role]['definition']['handoff_unit']==2
         assert service.role_credit_bindings[role]['definition']['acquired_record_unit']==3

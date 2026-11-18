@@ -40,12 +40,12 @@ class LiteratureA106SubscoreRepository(LiteratureAssayGradingRepository):
         if self.store.db.in_transaction:
             raise ContractError('a106_judgment_requires_committed_inputs')
         assignment = plain(context.assignment)
-        commission = assignment if context.role == 'scientific_process' else None
+        commission = assignment if context.role == 'perturbation_evidence' else None
         if commission is None:
             from gene_annotation_episode.episodic_workflow.root.a106.method_loop.identities import EpisodeRef
             for length in range(len(context.path) - 1, 0, -1):
                 path = context.path[:length]
-                if path[-1][0] != 'scientific_process':
+                if path[-1][0] != 'perturbation_evidence':
                     continue
                 owner = EpisodeRef(context.run_id, path).episode_id
                 saved = self.store.db.execute('SELECT request FROM runtime_episodes '

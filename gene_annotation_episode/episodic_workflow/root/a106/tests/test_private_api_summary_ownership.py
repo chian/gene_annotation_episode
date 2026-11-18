@@ -5,7 +5,7 @@ import pytest
 from ..api_service_execution import APIServiceExecution
 from .test_actual_private_registry import constructed
 PREFIX='gene_annotation_episode.episodic_workflow.root.a106.'
-HOMES=tuple(p+'execution_job_submission.api_job_execution' for p in ('','published_evidence_assessment.','scientific_process.','scientific_process.published_evidence_assessment.'))
+HOMES=tuple(p+'execution_job_submission.api_job_execution' for p in ('','published_evidence_assessment.','perturbation_evidence.','perturbation_evidence.published_evidence_assessment.'))
 
 
 def ports(completed):

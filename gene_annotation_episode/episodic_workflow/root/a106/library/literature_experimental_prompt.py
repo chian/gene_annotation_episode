@@ -10,7 +10,7 @@ import json
 
 from gene_annotation_episode.episodic_workflow.root.a106.composition_information import CONTRACT_INFORMATION_PROFILE
 from gene_annotation_episode.episodic_workflow.root.a106.schema_information_text import render_schema_information
-from gene_annotation_episode.episodic_workflow.root.a106.scientific_process_prompt import text_instructions
+from gene_annotation_episode.episodic_workflow.root.a106.perturbation_evidence_prompt import text_instructions
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_parent_prompt import parent_tasks
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_prompt import PERTURBATION_TASK
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_task_families import selected_literature_task_sections
@@ -38,7 +38,7 @@ _ORIGINAL_TRACKING = frozenset({
     "parent_history", "parent_yields", "private_history", "history", "private_reasoning",
     "own_completed_action_history", "local_return_history", "restored_episode_history",
     "restored_public_exchanges", "restored_pending_decision_index", "diagnostics",
-    "scientific_child_credit_binding", "scientific_process", "scoring_rubric",
+    "scientific_child_credit_binding", "perturbation_evidence", "scoring_rubric",
     "axis_judgment_contract", "calculation_implementation",
     "curve_keys", "measurement_keys", "primitive_measurement_keys",
     "report_contract_declaration", "contract_information_profile",

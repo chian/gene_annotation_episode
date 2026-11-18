@@ -11,9 +11,9 @@ HOMES={}
 for path in ROOT.rglob('episode.py'):
     if 'tests' in path.parts:continue
     text=path.read_text()
-    if not any('class '+name+'(' in text for name in ('ScientificProcessEpisode','ExecutionEpisode','ResourceEpisode','MonitorEpisode')):continue
+    if not any('class '+name+'(' in text for name in ('PerturbationEvidenceEpisode','ExecutionEpisode','ResourceEpisode','MonitorEpisode')):continue
     module=import_module(AXIS+'.'+str(path.parent.relative_to(ROOT)).replace('/','.')+'.episode')
-    cls=next(getattr(module,name) for name in ('ScientificProcessEpisode','ExecutionEpisode','ResourceEpisode','MonitorEpisode') if hasattr(module,name))
+    cls=next(getattr(module,name) for name in ('PerturbationEvidenceEpisode','ExecutionEpisode','ResourceEpisode','MonitorEpisode') if hasattr(module,name))
     HOMES[path.parent]=cls
 CASES=[(str(parent.relative_to(ROOT)),str(child.relative_to(ROOT)),child_cls.roles[0])
     for parent in HOMES for child,child_cls in HOMES.items() if child.parent==parent]

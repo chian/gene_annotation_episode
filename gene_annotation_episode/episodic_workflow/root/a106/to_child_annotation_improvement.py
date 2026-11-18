@@ -4,7 +4,7 @@ from .library.live_runtime_functions import bind_functions as _bind_functions
 
 def prepare_request(self, source, selection, index, scope, role):
     episode_assignment = None
-    scientific_process = None
+    perturbation_evidence = None
     schema, report_declaration = self.expanded_contract_form(source, selection, index, role)
     if selection['kind'] == 'episode_child':
         binding = self.episode_bindings.for_child(source.path, role)
@@ -29,7 +29,7 @@ def prepare_request(self, source, selection, index, scope, role):
             raise ValueError('child_role_not_available_to_parent')
         binding = self.episode_bindings.for_child(source.path, role)
         self.launch_instructions.materialize(selection['assignment'].get('launch_instructions'))
-        if binding is self.scientific_process_binding:
+        if binding is self.perturbation_evidence_binding:
             closed = {}
             recorded = self.journal.row('runtime_actions', source.episode_id, index)
             if recorded is not None and recorded['result'] is not None and (_json(json.loads(recorded['action'])) == _json(selection)) and (json.loads(recorded['result']).get('status') == 'completed'):
@@ -43,7 +43,7 @@ def prepare_request(self, source, selection, index, scope, role):
                         closed['closed_context'] = candidate
             prepared = binding.prepare_invocation(self.binding_context(source), role, selection['assignment'], scope, f'{self.run_id}:{source.episode_id}:{index}', invocation={'objective': selection['goal'], 'purpose': selection['purpose'], 'report_schema': schema, 'initial_report': initial}, **closed)
             episode_assignment = prepared['assignment']
-            scientific_process = prepared['scientific_process']
+            perturbation_evidence = prepared['perturbation_evidence']
         else:
             child_assignment = selection['assignment']
             send_request = getattr(specialist, 'prepare_child_request', None)
@@ -51,7 +51,7 @@ def prepare_request(self, source, selection, index, scope, role):
                 child_assignment = send_request(self.binding_context(source), role, child_assignment)
             episode_assignment = binding.prepare_assignment(self.binding_context(source), role, child_assignment, scope, f'{self.run_id}:{source.episode_id}:{index}')
     assignment = self.job_episodes.assign(self.store, role, selection, scope, operation_key=f'{self.run_id}:{source.episode_id}:{index}') if selection['kind'] == 'job_child' else None
-    return (schema, report_declaration, initial, episode_assignment, scientific_process, assignment)
+    return (schema, report_declaration, initial, episode_assignment, perturbation_evidence, assignment)
 
 def _bind_original_runtime(namespace):
     names = {'prepare_request': 'prepare_request'}

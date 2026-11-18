@@ -29,5 +29,5 @@ def prepare_request(workflow, source, selection, index):
     episode_assignment = binding.prepare_assignment(workflow.binding_context(source), role,
         child_assignment, scope, f'{workflow.run_id}:{source.episode_id}:{index}')
     return {'scope': scope, 'role': role, 'schema': schema, 'report_declaration': report_declaration,
-        'initial': initial, 'episode_assignment': episode_assignment, 'scientific_process': None,
+        'initial': initial, 'episode_assignment': episode_assignment, 'perturbation_evidence': None,
         'assignment': None}

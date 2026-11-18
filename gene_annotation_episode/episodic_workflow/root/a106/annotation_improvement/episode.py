@@ -23,7 +23,7 @@ def unbound_improvement_domain(workflow):
     if not _original_source_members_intact(('__init__', 'next', 'call', 'execute', 'finish')):
         return False
     state = _state(workflow)
-    if state is None or state.get('scientific_process_binding') is not None:
+    if state is None or state.get('perturbation_evidence_binding') is not None:
         return False
     registry = state.get('episode_bindings')
     if type(registry) is not EpisodeBindingRegistry:
@@ -34,7 +34,7 @@ def unbound_improvement_domain(workflow):
     roles = registered.get('_by_role')
     if type(roles) is not dict or not all(type(role) is str for role in roles):
         return False
-    if 'improvement' in roles or 'scientific_process' in roles:
+    if 'improvement' in roles or 'perturbation_evidence' in roles:
         return False
     jobs = state.get('job_episodes')
     if jobs is not None:

@@ -23,7 +23,7 @@ def test_original_structural_preparation_requires_exact_recorded_parent_custody(
         store.db.execute('CREATE TABLE a102_resource_jobs(run_id TEXT,job_ref TEXT,handoff TEXT,handoff_source_ref TEXT,request TEXT,scope TEXT)')
         store.db.execute('CREATE TABLE a102_handoff_deliveries(run_id TEXT,episode_id TEXT,job_ref TEXT)')
         run='synthetic-prepared-custody'
-        parent_path=(('scientific_process','original-parent'),)
+        parent_path=(('perturbation_evidence','original-parent'),)
         child_path=(*parent_path,('results','child_0'))
         parent_id=EpisodeRef(run,parent_path).episode_id
         selection={'resource_id':'synthetic-resource','kind':'local',

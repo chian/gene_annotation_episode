@@ -1,0 +1,248 @@
+"""Closed process-result facts copied from an episode's existing closure.
+
+These helpers have no host, evidence store or numerical policy. They preserve
+the original assignment and already projected local quantities; formatting and
+forwarding a result supplies neither new credit nor an observation.
+"""
+from __future__ import annotations
+
+from collections.abc import Mapping
+import re
+
+from jsonschema import Draft202012Validator
+from gene_annotation_episode.episodic_workflow.root.a106.method_loop.durable import canonical
+from gene_annotation_episode.episodic_workflow.root.a106.method_loop.episode import EpisodeCompletion
+
+from .communication import CODE
+from .domain import identity
+from .episode_reports import report_sources as episode_report_sources
+from .perturbation_evidence_records import (OPTION_REF_VERSION, SELECTION_VERSION,
+    SLOTS, _exact, _plain, scientific_invocation_ref, validate_invocation_ref,
+    validate_option_ref, validate_revision_origin, validate_selection, selection_fields)
+from .tool_information import RESOURCE_KINDS
+
+
+VERSION = "perturbation_evidence_result_v1"
+RETURN_VERSION = "perturbation_evidence_result_v3"
+SELECTION_REPORT_VERSION = "perturbation_evidence_selection_report_v1"
+SOURCE = "perturbation_evidence_results"
+_CREDIT_KINDS = ("scientific", "monitoring", "operational")
+_REFERENCE = re.compile(r"scientific_credit_binding_[0-9a-f]{24}\Z")
+_PREPARATION = re.compile(r"operation_[0-9a-f]{24}\Z")
+_FIELDS = ("version invocation_ref parent_invocation_ref origin_kind "
+    "preparation_operation_ref selection initial_credit credit credit_kind "
+    "credit_binding_ref completed_actions episode_yield")
+
+
+def _object(fields):
+    return {"type": "object", "properties": fields, "required": list(fields),
+        "additionalProperties": False}
+
+
+def _reference(namespace, *, nullable=False, identifier=False):
+    return {"type": ["string", "null"] if nullable else "string",
+        "format": "identifier" if identifier else "reference",
+        "x-reference-namespace": namespace}
+
+
+def _yield_schema():
+    # x-source binds only whole top-level fields. The numerical schema itself
+    # stays identical to the existing episode_yield source.
+    schema = episode_report_sources()["episode_yield"]["report_schema"]
+    schema.pop("x-source")
+    return schema
+
+
+def _selection_schema(library, tool_library):
+    by_slot = {slot: [] for slot in SLOTS}
+    for header in library.headers():
+        ref = validate_option_ref(header["option_ref"])
+        by_slot[ref["slot"]].append(ref)
+    if any(not refs or len(refs) != len({ref["option_id"] for ref in refs})
+            for refs in by_slot.values()):
+        raise ValueError("perturbation_evidence_result_library_invalid")
+    fields = {
+        "version": {"type": "string", "const": SELECTION_REPORT_VERSION},
+        "source_version": {"type": "string", "const": SELECTION_VERSION},
+    }
+    for slot, refs in by_slot.items():
+        fields[slot] = _object({
+            "version": {"type": "string", "const": OPTION_REF_VERSION},
+            "library_id": _reference("perturbation_evidence_library", identifier=True),
+            "slot": {"type": "string", "enum": sorted({ref["slot"] for ref in refs})},
+            "option_id": {"type": "string", "enum": sorted(ref["option_id"] for ref in refs)},
+            "entry_sha256": _reference("scientific_option_digest", identifier=True),
+        })
+    information = tool_library.parent_tool_info()
+    names = sorted({entry["name"] for entry in [*tool_library.catalog(), *information]})
+    resources = sorted({entry["resources"] for entry in information})
+    fields["child_tool_info"] = {"type": "array", "items": _object({
+        "name": {"type": "string", "enum": names},
+        "resources": {"type": ["string", "null"], "enum": [*resources, None]},
+    }), "uniqueItems": True} if names else {"type": "array", "maxItems": 0,
+        "items": {"type": "null"}}
+    return _object(fields)
+
+
+def report_sources(library, tool_library):
+    """Supply a closed array schema using this pinned library's option IDs."""
+    schema = {"type": "array", "items": _object({
+        "version": {"type": "string", "const": RETURN_VERSION},
+        "invocation_ref": _reference("scientific_invocation"),
+        "parent_invocation_ref": _reference("scientific_invocation", nullable=True),
+        "origin_kind": {"type": "string", "enum": ["ordinary_child", "approach_revision"]},
+        "preparation_operation_ref": _reference("scientific_preparation", nullable=True),
+        "selection": _selection_schema(library, tool_library),
+        "initial_credit": {"type": "number"},
+        "credit": {"type": "number"},
+        "credit_kind": {"type": ["string", "null"], "enum": [*_CREDIT_KINDS, None]},
+        "credit_binding_ref": _reference("scientific_credit_binding", nullable=True),
+        "completed_actions": {"type": "integer", "minimum": 0},
+        "episode_yield": _yield_schema(),
+    }), "x-source": SOURCE}
+    schema['items']['properties']['proposed_annotation_ref'] = _reference('hypothesis', nullable=True)
+    schema['items']['required'].append('proposed_annotation_ref')
+    return {SOURCE: {"type": "array", "meaning": (
+        "Recorded original process selection, explicit revision origin and existing closing "
+        "local credit/yield for each invocation actually returned through requested forms. "
+        "Initial and closing credit retain that episode's own units and binding; forwarding "
+        "these facts creates no new score, credit or completed action."),
+        "report_schema": schema}}
+
+
+def _semantic_ref(value, pattern, code):
+    if not isinstance(value, str) or pattern.fullmatch(value) is None:
+        raise ValueError(code)
+
+
+def _validate_report_selection(value, *, library=None, tool_library=None):
+    """Read the compact return, which is never a child construction selection."""
+    code = "perturbation_evidence_selection_report_invalid"
+    _exact(value, "version source_version evidence_axis thought_pattern child_tool_info", code)
+    if (value["version"] != SELECTION_REPORT_VERSION
+            or value["source_version"] != SELECTION_VERSION):
+        raise ValueError(code)
+    refs = [validate_option_ref(value[name]) for name in SLOTS]
+    if (tuple(ref["slot"] for ref in refs) != SLOTS
+            or len({ref["library_id"] for ref in refs}) != 1):
+        raise ValueError(code)
+    if library is not None:
+        for ref in refs:
+            library.resolve(ref)
+    choices = value["child_tool_info"]
+    if not isinstance(choices, list):
+        raise ValueError(code)
+    seen = set()
+    for choice in choices:
+        _exact(choice, "name resources", code)
+        name, resource = choice["name"], choice["resources"]
+        if (not isinstance(name, str) or CODE.fullmatch(name) is None
+                or resource not in RESOURCE_KINDS):
+            raise ValueError(code)
+        key = name, resource
+        if key in seen:
+            raise ValueError(code)
+        seen.add(key)
+    if tool_library is not None:
+        tool_library.resolve_tool_info(choices)
+    return value
+
+
+def validate_process_result(value, *, library=None, tool_library=None):
+    """Detach and validate one result, optionally resolving its pinned bodies."""
+    value = _plain(value)
+    code = "perturbation_evidence_result_invalid"
+    _exact(value, _FIELDS + (' proposed_annotation_ref' if 'proposed_annotation_ref' in value
+        or value.get('version') == RETURN_VERSION else ''), code)
+    if value.get('proposed_annotation_ref') is not None:
+        _semantic_ref(value['proposed_annotation_ref'], re.compile(r'hypothesis_[0-9a-f]{24,64}\Z'),
+            'perturbation_evidence_result_proposed_annotation_invalid')
+    if value["version"] not in (VERSION, RETURN_VERSION):
+        raise ValueError("perturbation_evidence_result_version_invalid")
+    validate_invocation_ref(value["invocation_ref"])
+    parent = value["parent_invocation_ref"]
+    if parent is not None:
+        validate_invocation_ref(parent)
+        if parent == value["invocation_ref"]:
+            raise ValueError("perturbation_evidence_result_parent_invalid")
+    origin, preparation = value["origin_kind"], value["preparation_operation_ref"]
+    if origin == "ordinary_child":
+        if preparation is not None:
+            raise ValueError("perturbation_evidence_result_origin_invalid")
+    elif origin == "approach_revision":
+        if parent is None:
+            raise ValueError("perturbation_evidence_result_origin_invalid")
+        _semantic_ref(preparation, _PREPARATION, "perturbation_evidence_result_origin_invalid")
+    else:
+        raise ValueError("perturbation_evidence_result_origin_invalid")
+    if value["version"] == VERSION:
+        selection = validate_selection(value["selection"])
+        axis_field, thought_field, tools_field = selection_fields(selection)
+        if library is not None:
+            for name in (axis_field, thought_field):
+                library.resolve(selection[name])
+        if tool_library is not None:
+            tool_library.resolve_tool_info(selection[tools_field])
+        value["selection"] = selection
+    else:
+        value["selection"] = _validate_report_selection(value["selection"],
+            library=library, tool_library=tool_library)
+    for name in ("initial_credit", "credit"):
+        if type(value[name]) not in (int, float):
+            raise ValueError(code)
+    kind, binding = value["credit_kind"], value["credit_binding_ref"]
+    if kind is None:
+        if binding is not None:
+            raise ValueError("perturbation_evidence_result_binding_invalid")
+    else:
+        if kind not in _CREDIT_KINDS:
+            raise ValueError("perturbation_evidence_result_binding_invalid")
+        _semantic_ref(binding, _REFERENCE, "perturbation_evidence_result_binding_invalid")
+    count = value["completed_actions"]
+    if type(count) is not int or count < 0:
+        raise ValueError(code)
+    episode_yield = value["episode_yield"]
+    errors = list(Draft202012Validator(_yield_schema()).iter_errors(episode_yield))
+    if errors:
+        raise ValueError("perturbation_evidence_result_yield_invalid") from errors[0]
+    if episode_yield is not None and (type(episode_yield["completed_actions"]) is not int
+            or episode_yield["completed_actions"] != count):
+        raise ValueError("perturbation_evidence_result_yield_count_mismatch")
+    return value
+
+
+def project_process_result(value, *, library, tool_library):
+    """Make a new compact view of supplied, library-qualified closing facts."""
+    if library is None or tool_library is None:
+        raise ValueError("perturbation_evidence_result_library_invalid")
+    value = validate_process_result(value, library=library, tool_library=tool_library)
+    if value["version"] == RETURN_VERSION:
+        return value
+    selection = value["selection"]
+    axis_field, thought_field, tools_field = selection_fields(selection)
+    choices = [{"name": choice["name"], "resources": choice["resources"]}
+        for choice in selection[tools_field]]
+    reported_selection = _validate_report_selection({
+        "version": SELECTION_REPORT_VERSION, "source_version": selection["version"],
+        "evidence_axis": selection[axis_field], "thought_pattern": selection[thought_field],
+        "child_tool_info": choices})
+    return {**value, "version": RETURN_VERSION, "selection": reported_selection,
+        'proposed_annotation_ref': value.get('proposed_annotation_ref')}
+
+
+def credit_binding_ref(metadata):
+    """Identify the actual finite metadata without exposing its definition."""
+    if metadata is None:
+        return None
+    value = _plain(metadata)
+    if not isinstance(value, dict) or not value:
+        raise ValueError("perturbation_evidence_credit_metadata_invalid")
+    return identity("scientific_credit_binding", value)
+
+
+
+
+
+
+__all__ = ["report_sources", "validate_process_result", "project_process_result",
+    "credit_binding_ref", "VERSION", "RETURN_VERSION", "SELECTION_REPORT_VERSION"]

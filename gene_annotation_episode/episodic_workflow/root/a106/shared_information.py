@@ -16,7 +16,7 @@ from .shared_information_results import publication_view
 
 
 VERSION = 'shared_investigation_information_v4'
-PARTICIPANT_ROLES = frozenset({'annotation', 'scientific_process', 'improvement'})
+PARTICIPANT_ROLES = frozenset({'annotation', 'perturbation_evidence', 'improvement'})
 DISPOSITIONS = ('partially_fulfilled', 'fulfilled', 'unavailable', 'superseded')
 TOOLS = ('shared.request_information','shared.publish_information',
     'shared.resolve_information_need','shared.read_information','shared.list_information')

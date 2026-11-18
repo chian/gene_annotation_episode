@@ -36,7 +36,7 @@ class WorkflowServices:
             source=getattr(self.workflow.tools, 'launch_instruction_library_directory', None))
 
     def scientific_library_catalog(self):
-        from .scientific_process_library import catalog
+        from .perturbation_evidence_library import catalog
         return catalog()
 
     def scientific_retriever_catalog(self, binding):
@@ -50,7 +50,7 @@ class WorkflowServices:
             configuration=binding.tool_retrieval)
 
     def execute_scientific_library(self, context, name, arguments):
-        return self.workflow.scientific_process_binding.library.execute(name, arguments)
+        return self.workflow.perturbation_evidence_binding.library.execute(name, arguments)
 
     def create_receipts(self, run_id):
         from .episode_receipts import EpisodeReceipts
@@ -82,7 +82,7 @@ class WorkflowServices:
 
     def tool_information_catalog(self, scope) -> list[dict]:
         """Describe direct tools and the configured scientific owner's resources."""
-        scientific = self.workflow.scientific_process_binding
+        scientific = self.workflow.perturbation_evidence_binding
         if scientific is None:
             from .resource_tool_information import tool_information_contracts
             return tool_information_contracts(self.tool_catalog(scope))
@@ -146,13 +146,13 @@ class WorkflowServices:
         """
         from copy import deepcopy
         from .episode_return_records import EpisodeReturnRecords
-        from .scientific_process_records import (SELECTION_VERSION, scientific_digest,
+        from .perturbation_evidence_records import (SELECTION_VERSION, scientific_digest,
             validate_filled_process, validate_selection)
         try:
             if (type(decision_index) is not int or decision_index < 0
                     or parent.run_id != self.workflow.run_id or child.run_id != parent.run_id
-                    or child.role != 'scientific_process'
-                    or child.path != (*parent.path, ('scientific_process', f'child_{decision_index}'))
+                    or child.role != 'perturbation_evidence'
+                    or child.path != (*parent.path, ('perturbation_evidence', f'child_{decision_index}'))
                     or selected_action.get('kind') != 'episode_child'
                     or selected_action.get('role') != child.role):
                 return False
@@ -167,10 +167,10 @@ class WorkflowServices:
             if (not records._equal(selected_action.get('scope'), child.scope)
                     or selected_action.get('goal') != request['goal']['objective']):
                 return False
-            binding = self.workflow.scientific_process_binding
+            binding = self.workflow.perturbation_evidence_binding
             if binding is None:
                 return False
-            filled = validate_filled_process(request['message']['scientific_process'])
+            filled = validate_filled_process(request['message']['perturbation_evidence'])
             mechanics = filled['mechanics_binding']
             configuration = mechanics['configuration']
             if (mechanics.get('binding_id') != child.role
@@ -354,12 +354,12 @@ class WorkflowServices:
             raise ValueError('scientific_provenance_receiver_identity_mismatch')
         provenance = self.workflow.scientific_provenance
         if provenance is None:
-            raise ValueError('scientific_process_provenance_unavailable')
+            raise ValueError('perturbation_evidence_provenance_unavailable')
         return provenance
 
     def create_scientific_provenance(self, binding):
-        from .scientific_process_provenance import ScientificProcessProvenance
-        return ScientificProcessProvenance(self.workflow.store, self.workflow.journal,
+        from .perturbation_evidence_provenance import PerturbationEvidenceProvenance
+        return PerturbationEvidenceProvenance(self.workflow.store, self.workflow.journal,
             library=binding.library, tool_library=binding.tool_library)
 
     def scientific_preparation(self, context, preparation_ref):
@@ -380,7 +380,7 @@ class WorkflowServices:
             return current(context)
         provenance = self._scientific_provenance(context)
         current_read = provenance.received_results
-        from .scientific_process_provenance import _DEFAULT_RECEIVED_RESULTS
+        from .perturbation_evidence_provenance import _DEFAULT_RECEIVED_RESULTS
         if getattr(current_read, '__func__', None) is not _DEFAULT_RECEIVED_RESULTS:
             return current_read(context)
         return invocation(provenance, context)
@@ -391,7 +391,7 @@ class WorkflowServices:
             return current(context)
         provenance = self._scientific_provenance(context)
         current_read = provenance.frozen_results
-        from .scientific_process_provenance import _DEFAULT_FROZEN_RESULTS
+        from .perturbation_evidence_provenance import _DEFAULT_FROZEN_RESULTS
         if getattr(current_read, '__func__', None) is not _DEFAULT_FROZEN_RESULTS:
             return current_read(context)
         return invocation(provenance, context)
@@ -403,7 +403,7 @@ class WorkflowServices:
         workflow = self.workflow
         journal = workflow.journal
         if (context.run_id != workflow.run_id or journal.run_id != workflow.run_id
-                or context.role != 'scientific_process'
+                or context.role != 'perturbation_evidence'
                 or EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
             raise ValueError('scientific_saved_request_identity_mismatch')
         row = journal.row('runtime_episodes', context.episode_id)
@@ -434,7 +434,7 @@ class WorkflowServices:
         workflow = self.workflow
         journal = workflow.journal
         if (context.run_id != workflow.run_id or journal.run_id != workflow.run_id
-                or context.role != 'scientific_process'
+                or context.role != 'perturbation_evidence'
                 or EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
             raise ValueError('scientific_closed_request_identity_mismatch')
         row = journal.row('runtime_episodes', context.episode_id)

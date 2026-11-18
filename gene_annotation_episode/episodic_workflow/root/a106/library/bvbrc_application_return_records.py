@@ -86,7 +86,7 @@ class BVBRCApplicationReturnRecords(EpisodeReturnRecords):
             for reference in dict.fromkeys(row["source_ref"] for row in values[FACT_SOURCE]):
                 expected.extend(self._original_publication(context, reference)[FACT_SOURCE])
             self._require(self._equal(values[FACT_SOURCE], expected), "returned_facts_conflict")
-        elif context.role in {"annotation", "scientific_process"}:
+        elif context.role in {"annotation", "perturbation_evidence"}:
             received = received_facts(context, schema)
             self._require(all(any(self._equal(row, original) for original in received[FACT_SOURCE])
                 for row in values[FACT_SOURCE]), "returned_facts_conflict")

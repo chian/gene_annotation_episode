@@ -118,7 +118,7 @@ class NativeInputCustody:
     def _flux_balance_reference_access(self, context, reference, namespace):
         if (self.native_flux_balance_returns is not None
                 and self.native_flux_balance_returns.ordinary_backend is not None
-                and context.role in {'annotation', 'scientific_process'}
+                and context.role in {'annotation', 'perturbation_evidence'}
                 and namespace in {None, 'artifact'}
                 and self.native_flux_balance_returns.resolve_received(context, reference, namespace)):
             return True

@@ -50,7 +50,7 @@ class StandaloneApplicationReturns:
         returns.records._authenticate(context)
         values = returns.records._values(plain(form), plain(schema))
         expected = returns.facts(context, schema) if context.role == "results" else returns.received_facts(context, schema)
-        returns.records._require(context.role in {"results", "scientific_process", "annotation"}
+        returns.records._require(context.role in {"results", "perturbation_evidence", "annotation"}
             and returns.records._equal(values, expected), "returned_facts_conflict")
         returns.records._frozen(context, values)
 

@@ -92,7 +92,7 @@ class ExecutionServiceFactory:
 
     def __call__(self, store, *, run_id, directory, job_episodes=None,
                  resource_estimator=None, tool_registry=None, tool_catalog=None):
-        from gene_annotation_episode.episodic_workflow.root.a106.scientific_process.execution_progress_assessment.episode import MonitorEpisode
+        from gene_annotation_episode.episodic_workflow.root.a106.perturbation_evidence.execution_progress_assessment.episode import MonitorEpisode
         bindings = create_execution_bindings(None, store=store, run_id=run_id, directory=directory,
             resources=plain(self.resources), initial_information=plain(self.initial_information),
             tool_registry=tool_registry, handoff_unit=self.handoff_unit,
@@ -101,7 +101,7 @@ class ExecutionServiceFactory:
             require_private_yield=self.require_private_execution_yield,
             task_yield_profiles=(plain(self.task_yield_profiles)
                 if self.task_yield_profiles is not None else None))
-        from .scientific_process.published_evidence_assessment.episode import create_execution_bindings as create_analysis_bindings
+        from .perturbation_evidence.published_evidence_assessment.episode import create_execution_bindings as create_analysis_bindings
         analysis_bindings = create_analysis_bindings(None, store=store, run_id=run_id, directory=directory,
             tool_registry=tool_registry, **bindings[0].as_record()['configuration'])
         binding = bindings[0]
@@ -131,4 +131,4 @@ class ExecutionServiceFactory:
 
 __all__ = ['ExecutionServiceFactory']
 
-from .scientific_process.episode import create_execution_bindings
+from .perturbation_evidence.episode import create_execution_bindings

@@ -39,7 +39,7 @@ def _nominal_child(workflow, role):
             matches.append(candidate)
     return len(matches) == 1 and matches[0] is selected
 
-_DECLARED_CHILDREN = {'launch': ('execution_job_submission', 'ExecutionEpisode'), 'monitor': ('execution_progress_assessment', 'MonitorEpisode'), 'results': ('execution_result_acquisition', 'ExecutionEpisode'), 'literature': ('published_evidence_assessment', 'LiteratureEpisode'), 'scientific_process': ('scientific_process', 'ScientificProcessEpisode')}
+_DECLARED_CHILDREN = {'launch': ('execution_job_submission', 'ExecutionEpisode'), 'monitor': ('execution_progress_assessment', 'MonitorEpisode'), 'results': ('execution_result_acquisition', 'ExecutionEpisode'), 'literature': ('published_evidence_assessment', 'LiteratureEpisode'), 'perturbation_evidence': ('perturbation_evidence', 'PerturbationEvidenceEpisode')}
 
 def exchange_for_child(workflow, source, role):
     if type(role) is not str or not _nominal_child(workflow, role):
@@ -60,8 +60,8 @@ def exchange_for_child(workflow, source, role):
         from .to_child_published_evidence_assessment import prepare_request
         from .from_child_published_evidence_assessment import admit_return
         return (prepare_request, admit_return)
-    if role == 'scientific_process':
-        from .to_child_scientific_process import prepare_request
-        from .from_child_scientific_process import admit_return
+    if role == 'perturbation_evidence':
+        from .to_child_perturbation_evidence import prepare_request
+        from .from_child_perturbation_evidence import admit_return
         return (prepare_request, admit_return)
     return None

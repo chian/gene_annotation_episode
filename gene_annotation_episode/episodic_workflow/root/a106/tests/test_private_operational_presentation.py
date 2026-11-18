@@ -12,7 +12,7 @@ import json
 from types import SimpleNamespace
 import pytest
 PACKAGE = __package__.rsplit(".tests", 1)[0]
-HOMES = tuple(sorted([parent+suffix for parent in ("", "scientific_process/", "published_evidence_assessment/", "scientific_process/published_evidence_assessment/") for suffix in ("execution_job_submission", "execution_job_submission/api_job_execution", "execution_result_acquisition")] + ["execution_progress_assessment", "scientific_process/execution_progress_assessment"]))
+HOMES = tuple(sorted([parent+suffix for parent in ("", "perturbation_evidence/", "published_evidence_assessment/", "perturbation_evidence/published_evidence_assessment/") for suffix in ("execution_job_submission", "execution_job_submission/api_job_execution", "execution_result_acquisition")] + ["execution_progress_assessment", "perturbation_evidence/execution_progress_assessment"]))
 
 def owner(home):
     imported = import_module(PACKAGE+"."+home.replace("/", ".")+".episode")
@@ -177,7 +177,7 @@ def test_actual_state_retains_scalar_or_saved_root_presentation(records,request,
     task=c.task;del task.decision_state
     Binding=owner(home);role,=Binding.roles
     # The selector is the recorded credit mode, even under a nested saved path.
-    role_by_home={'scientific_process':'scientific_process','published_evidence_assessment':'literature',
+    role_by_home={'perturbation_evidence':'perturbation_evidence','published_evidence_assessment':'literature',
         'execution_job_submission':'launch','api_job_execution':'launch_api',
         'execution_result_acquisition':'results','execution_progress_assessment':'monitor'}
     task.path=tuple((role_by_home[part],('saved-parent-'+str(i)) if i+1<len(home.split('/')) else task.episode_id)
