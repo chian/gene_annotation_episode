@@ -35,7 +35,7 @@ class WorkflowServices:
             source=getattr(self.workflow.tools, 'launch_instruction_library_directory', None))
 
     def scientific_library_catalog(self):
-        from .scientific_process_library import catalog
+        from .sequence_homology_evidence_library import catalog
         return catalog()
 
     def scientific_retriever_catalog(self, binding):
@@ -49,7 +49,7 @@ class WorkflowServices:
             configuration=binding.tool_retrieval)
 
     def execute_scientific_library(self, context, name, arguments):
-        return self.workflow.scientific_process_binding.library.execute(name, arguments)
+        return self.workflow.sequence_homology_evidence_binding.library.execute(name, arguments)
 
     def create_receipts(self, run_id):
         from .episode_receipts import EpisodeReceipts
@@ -84,9 +84,9 @@ class WorkflowServices:
         from .resource_tool_information import (bound_resource_tool_contracts,
                                                 tool_information_contracts)
         registry = self.workflow.episode_bindings
-        scientific = self.workflow.scientific_process_binding
+        scientific = self.workflow.sequence_homology_evidence_binding
         child_roles = (() if scientific is None else
-                       scientific.child_roles('scientific_process'))
+                       scientific.child_roles('sequence_homology_evidence'))
         resources, seen = [], set()
         for role in registry.roles:
             binding = registry.for_role(role)
@@ -156,13 +156,13 @@ class WorkflowServices:
         """
         from copy import deepcopy
         from .episode_return_records import EpisodeReturnRecords
-        from .scientific_process_records import (SELECTION_VERSION, scientific_digest,
+        from .sequence_homology_evidence_records import (SELECTION_VERSION, scientific_digest,
             validate_filled_process, validate_selection)
         try:
             if (type(decision_index) is not int or decision_index < 0
                     or parent.run_id != self.workflow.run_id or child.run_id != parent.run_id
-                    or child.role != 'scientific_process'
-                    or child.path != (*parent.path, ('scientific_process', f'child_{decision_index}'))
+                    or child.role != 'sequence_homology_evidence'
+                    or child.path != (*parent.path, ('sequence_homology_evidence', f'child_{decision_index}'))
                     or selected_action.get('kind') != 'episode_child'
                     or selected_action.get('role') != child.role):
                 return False
@@ -177,10 +177,10 @@ class WorkflowServices:
             if (not records._equal(selected_action.get('scope'), child.scope)
                     or selected_action.get('goal') != request['goal']['objective']):
                 return False
-            binding = self.workflow.scientific_process_binding
+            binding = self.workflow.sequence_homology_evidence_binding
             if binding is None:
                 return False
-            filled = validate_filled_process(request['message']['scientific_process'])
+            filled = validate_filled_process(request['message']['sequence_homology_evidence'])
             mechanics = filled['mechanics_binding']
             configuration = mechanics['configuration']
             if (mechanics.get('binding_id') != child.role
@@ -403,12 +403,12 @@ class WorkflowServices:
             raise ValueError('scientific_provenance_receiver_identity_mismatch')
         provenance = self.workflow.scientific_provenance
         if provenance is None:
-            raise ValueError('scientific_process_provenance_unavailable')
+            raise ValueError('sequence_homology_evidence_provenance_unavailable')
         return provenance
 
     def create_scientific_provenance(self, binding):
-        from .scientific_process_provenance import ScientificProcessProvenance
-        return ScientificProcessProvenance(self.workflow.store, self.workflow.journal,
+        from .sequence_homology_evidence_provenance import SequenceHomologyEvidenceProvenance
+        return SequenceHomologyEvidenceProvenance(self.workflow.store, self.workflow.journal,
             library=binding.library, tool_library=binding.tool_library)
 
     def scientific_preparation(self, context, preparation_ref):
@@ -438,7 +438,7 @@ class WorkflowServices:
         workflow = self.workflow
         journal = workflow.journal
         if (context.run_id != workflow.run_id or journal.run_id != workflow.run_id
-                or context.role != 'scientific_process'
+                or context.role != 'sequence_homology_evidence'
                 or EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
             raise ValueError('scientific_saved_request_identity_mismatch')
         row = journal.row('runtime_episodes', context.episode_id)
@@ -469,7 +469,7 @@ class WorkflowServices:
         workflow = self.workflow
         journal = workflow.journal
         if (context.run_id != workflow.run_id or journal.run_id != workflow.run_id
-                or context.role != 'scientific_process'
+                or context.role != 'sequence_homology_evidence'
                 or EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
             raise ValueError('scientific_closed_request_identity_mismatch')
         row = journal.row('runtime_episodes', context.episode_id)

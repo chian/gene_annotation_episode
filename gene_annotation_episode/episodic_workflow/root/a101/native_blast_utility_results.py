@@ -546,7 +546,7 @@ class NativeBLASTUtilityResults:
             return None
         if not owns:
             return None
-        if context.role in {'annotation', 'scientific_process'}:
+        if context.role in {'annotation', 'sequence_homology_evidence'}:
             received = self.owner.native_blast_utility_returns.resolve_received_reference_metadata(
                 context, reference, namespace)
             if received is not None:

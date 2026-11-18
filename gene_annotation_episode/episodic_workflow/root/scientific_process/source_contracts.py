@@ -48,7 +48,7 @@ def original_axis_task_projector(axis, assignment, *, merged_a102=False):
     assigned = plain(assignment)
     context = assigned.get('context', {})
     if axis == 'A101':
-        from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+        from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
         return A101SequenceCredit()
     if axis == 'A102':
         from gene_annotation_episode.episodic_workflow.root.a102.a102_credit import (A102StructuralCredit, A102FeatureGeometryCredit,

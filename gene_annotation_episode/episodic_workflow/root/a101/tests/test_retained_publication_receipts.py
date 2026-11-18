@@ -44,7 +44,7 @@ def test_incoming_publication_uses_original_receipts_even_without_a_producer(
             (key,op,operation,'{}',canonical(scope),canonical(result)))
         run='original-receiving-run'
         receipts=module('episode_receipts').EpisodeReceipts(store,run)
-        parent_path=(('scientific_process','parent'),)
+        parent_path=(('sequence_homology_evidence','parent'),)
         parent_id=EpisodeRef(run,parent_path).episode_id
         def context(path,parent=None):
             episode=EpisodeRef(run,path).episode_id

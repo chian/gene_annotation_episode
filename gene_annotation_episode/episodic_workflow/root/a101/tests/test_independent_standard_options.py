@@ -72,8 +72,8 @@ def reconstruction(tmp_path, monkeypatch):
     child = EpisodeGoal.child(parent, objective='Check saved reconstruction operands', result_contract=schema)
     contract = ReportContract('Report the engineering connection state', {'schema': schema},
                               {'connected': 'Whether the selected reconstruction connection was reached'})
-    parent_path = [['scientific_process', 'parent']]
-    child_path = parent_path + [['scientific_process', 'child_0']]
+    parent_path = [['sequence_homology_evidence', 'parent']]
+    child_path = parent_path + [['sequence_homology_evidence', 'child_0']]
     binding = {'factory_module': subject.FACTORY_MODULE, 'factory_name': subject.FACTORY_NAME,
                'arguments': {'version': subject.VERSION, 'workspace': str(workspace),
                              'run_directory': str(directory), 'kind': 'standard_default',
@@ -84,7 +84,7 @@ def reconstruction(tmp_path, monkeypatch):
             'parent': {'episode_id': EpisodeRef(run_id, parent_path).episode_id,
                        'goal_id': parent.goal_id, 'path': parent_path},
             'child': {'episode_id': EpisodeRef(run_id, child_path).episode_id,
-                      'role': 'scientific_process', 'key': 'child_0', 'path': child_path,
+                      'role': 'sequence_homology_evidence', 'key': 'child_0', 'path': child_path,
                       'request': {'goal': child.as_record(), 'message': {}, 'report_contract': contract.as_record()},
                       'scope': {'engineering_fixture': True}},
             'input_versions': [], 'runtime_binding': binding, 'constraints': {},

@@ -27,9 +27,9 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_ut
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_utility_local import local_blast_utility_plan
 from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
-from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_setup import prepare_scientific_binding
-from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.episode import ScientificProcessEpisode
+from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence_library import SequenceHomologyEvidenceLibrary
+from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.episode import SequenceHomologyEvidenceEpisode
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
@@ -146,11 +146,11 @@ def run_case(directory):
     tools = ToolRegistry(store)
     application = ExecutionServiceFactory(resources, {}, 3, 2, 1, log_window_bytes=128)(
         store, run_id=RUN_ID, directory=directory / 'run', tool_registry=tools)
-    descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=directory / 'run', source_directory=PUBLICATION,
-        tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
+    descriptor = prepare_scientific_binding(episode_type=SequenceHomologyEvidenceEpisode, run_directory=directory / 'run', source_directory=PUBLICATION,
+        tool_catalog=tools.catalog(), child_roles=('sequence_homology_evidence', 'launch', 'results'),
         resource_catalogs=application.resource_tool_catalogs)
-    library = ScientificProcessLibrary(directory / 'run/scientific-process-library')
-    science_assignment = {'selection': {'version': 'scientific_process_selection_v3',
+    library = SequenceHomologyEvidenceLibrary(directory / 'run/scientific-process-library')
+    science_assignment = {'selection': {'version': 'sequence_homology_evidence_selection_v3',
         'evidence_axis': library.reference('A101'), 'thought_pattern': library.reference('P01'),
         'child_tool_info': [{'name': 'native.' + row['program'] + '.' + row['mode'], 'resources': 'local'} for row in bindings]},
         'evidence_refs': scope['subject_refs'], 'constraints': {'no_external_acquisition': True, 'allocation': POLICY},
@@ -165,7 +165,7 @@ def run_case(directory):
             return YieldEstimate(len(raw), NumericBand.exact(0 if len(raw) >= horizon else 1), parameters,
                 {'fixture': 'explicit_scientific_test_horizon_not_production_stopping'})
         return YieldController(str(path), initial, 0, YieldParameters(),
-            estimate_with_context=estimate if path[-1][0] in {'annotation', 'scientific_process'} else None)
+            estimate_with_context=estimate if path[-1][0] in {'annotation', 'sequence_homology_evidence'} else None)
 
     class Choices:
         def __init__(self):
@@ -189,8 +189,8 @@ def run_case(directory):
                 assert episode_id not in self.result_calls, 'requested result did not complete on its original selected action'
                 self.result_calls.add(episode_id)
                 answer = selected('execution.results.collect')
-            elif 'scientific_process' not in current:
-                answer = child('scientific_process', science_assignment, scope, science_form)
+            elif 'sequence_homology_evidence' not in current:
+                answer = child('sequence_homology_evidence', science_assignment, scope, science_form)
             else:
                 self.science_calls += 1
                 index = (self.science_calls - 1) // 2
@@ -233,7 +233,7 @@ def run_case(directory):
 
     provider = Choices()
     flow = Workflow(store, tools, provider, directory / 'run', RUN_ID, controller_factory=controller,
-        project_credit=lambda *args, **kwargs: 0, annotation_child_roles=('scientific_process',),
+        project_credit=lambda *args, **kwargs: 0, annotation_child_roles=('sequence_homology_evidence',),
         episode_record_receipts=True, initial_known_record_refs=[],
         episode_binding_descriptors=(descriptor, *application.episode_binding_descriptors),
         role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider)
@@ -253,7 +253,7 @@ def run_case(directory):
             returned = json.loads(flow.journal.row('runtime_forms', context.episode_id)['form'])
             results.append({'context': context, 'record': row, 'outcome': outcome, 'returned': returned})
     results.sort(key=lambda item: MODES.index(item['outcome']['result']['prepared']['operation']['mode']))
-    science_context, = [context for context in contexts.values() if context.role == 'scientific_process']
+    science_context, = [context for context in contexts.values() if context.role == 'sequence_homology_evidence']
     forwarded = json.loads(flow.journal.row('runtime_forms', science_context.episode_id)['form'])
     case = SimpleNamespace(store=store, flow=flow, owner=owner, provider=provider, root=root, record=record,
         records=records, contexts=contexts, root_context=contexts[record.episode_id], science_context=science_context,

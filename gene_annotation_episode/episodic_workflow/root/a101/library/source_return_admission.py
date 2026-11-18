@@ -20,7 +20,7 @@ def _receive_form(self, source, admitted, schema, index, *, redelivery=False):
         if receiver is not None:
             return receiver(self, source, admitted, schema, index, redelivery=redelivery)
     if binding_receiver_selector is not None:
-        from .scientific_process.child_message_owners import exchange_for_child
+        from .sequence_homology_evidence.child_message_owners import exchange_for_child
         child_exchange = exchange_for_child(self, source, original_role)
         if child_exchange is not None:
             return child_exchange[2](self, source, admitted, schema, index, redelivery=redelivery)

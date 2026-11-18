@@ -20,13 +20,13 @@ def full_workflow(tmp_path_factory):
     with module('state').Store(directory / 'state') as store:
         store.create_problem(raw_sequence='ATGGCT', molecule='dna')
         tools = module('tools').ToolRegistry(store)
-        library = module('scientific_process_library').ScientificProcessLibrary.freeze(
+        library = module('sequence_homology_evidence_library').SequenceHomologyEvidenceLibrary.freeze(
             directory / 'scientific-process-library', source=ROOT.parents[3] / 'research/slotted_process_library/publications/2026-10-24-001')
         tool_library = module('scientific_tool_library').ScientificToolLibrary.freeze(
             directory / 'scientific-tool-library', catalog=tools.catalog())
-        factories = [partial(module('scientific_process.episode').ScientificProcessEpisode,
+        factories = [partial(module('sequence_homology_evidence.episode').SequenceHomologyEvidenceEpisode,
             library=library, tool_library=tool_library,
-            child_roles=('scientific_process', 'literature', 'launch', 'monitor', 'results'))]
+            child_roles=('sequence_homology_evidence', 'literature', 'launch', 'monitor', 'results'))]
         execution_homes = ['execution_job_submission',
             'execution_job_submission.api_job_execution', 'execution_result_acquisition']
         if AXIS.endswith('a101'):
@@ -39,7 +39,7 @@ def full_workflow(tmp_path_factory):
         literature_homes = [literature, strategy, search, page,
             page + '.table_evidence_extraction', page + '.source_coverage_improvement',
             page + '.passage_evidence_extraction']
-        for parent in ('', 'scientific_process.'):
+        for parent in ('', 'sequence_homology_evidence.'):
             for home in execution_homes:
                 factories.append(partial(module(parent + home + '.episode').ExecutionEpisode,
                     store=store, directory=directory, run_id='actual-two-parent-families',
@@ -58,7 +58,7 @@ def full_workflow(tmp_path_factory):
         workflow = module('runtime').Workflow(store, tools, SimpleNamespace(complete=unselected),
             directory, 'actual-two-parent-families', unselected, unselected,
             episode_binding_factories=tuple(factories),
-            annotation_child_roles=('scientific_process', 'literature', 'launch', 'monitor', 'results'))
+            annotation_child_roles=('sequence_homology_evidence', 'literature', 'launch', 'monitor', 'results'))
         yield store, workflow
         assert store.db.execute('SELECT COUNT(*) FROM tool_operations').fetchone()[0] == 0
         assert store.db.execute('SELECT COUNT(*) FROM runtime_actions').fetchone()[0] == 0
@@ -69,12 +69,12 @@ def test_actual_constructor_keeps_both_parent_families(full_workflow):
     _, workflow = full_workflow
     registry = workflow.episode_bindings
     root = (('annotation', 'original-root'),)
-    science = root + (('scientific_process', 'original-science'),)
+    science = root + (('sequence_homology_evidence', 'original-science'),)
     for role in ('literature', 'launch', 'monitor', 'results'):
         root_child = registry.for_child(root, role)
         scientific_child = registry.for_child(science, role)
         assert root_child is not scientific_child
-        assert scientific_child.binding_path == 'scientific_process/' + root_child.binding_path
+        assert scientific_child.binding_path == 'sequence_homology_evidence/' + root_child.binding_path
         with pytest.raises(LookupError, match='episode_role_requires_parent'):
             registry.for_role(role)
         with pytest.raises(LookupError, match='episode_role_requires_parent'):
@@ -85,17 +85,17 @@ def test_actual_constructor_keeps_both_parent_families(full_workflow):
 
 @pytest.mark.parametrize('path', [
     (('annotation', 'root'),),
-    (('annotation', 'root'), ('scientific_process', 'science')),
+    (('annotation', 'root'), ('sequence_homology_evidence', 'science')),
     (('annotation', 'root'), ('launch', 'launch'), ('launch_api', 'native')),
-    (('annotation', 'root'), ('scientific_process', 'science'), ('launch', 'launch'), ('launch_api', 'native')),
-    (('annotation', 'root'), ('scientific_process', 'science'), ('results', 'results')),
-    (('annotation', 'root'), ('scientific_process', 'science'), ('monitor', 'monitor')),
-    (('annotation', 'root'), ('scientific_process', 'science'), ('literature', 'literature')),
+    (('annotation', 'root'), ('sequence_homology_evidence', 'science'), ('launch', 'launch'), ('launch_api', 'native')),
+    (('annotation', 'root'), ('sequence_homology_evidence', 'science'), ('results', 'results')),
+    (('annotation', 'root'), ('sequence_homology_evidence', 'science'), ('monitor', 'monitor')),
+    (('annotation', 'root'), ('sequence_homology_evidence', 'science'), ('literature', 'literature')),
 ])
 def test_actual_two_parent_resource_context_uses_saved_lineage(full_workflow, path):
     store, workflow = full_workflow
     source = SimpleNamespace(path=path, scope=store.validate_scope())
-    parent = path[:2] if len(path) > 1 and path[1][0] == 'scientific_process' else path[:1]
+    parent = path[:2] if len(path) > 1 and path[1][0] == 'sequence_homology_evidence' else path[:1]
     registry = workflow.episode_bindings
     assert registry.for_context_role('launch', path=path) is registry.for_child(parent, 'launch')
     context = workflow.resource_context(source)
@@ -108,11 +108,11 @@ def test_ambiguous_direct_provider_cannot_fall_back_to_root(full_workflow):
     _, workflow = full_workflow
     original = workflow.episode_bindings
     root = (('annotation', 'root'),)
-    science = root + (('scientific_process', 'science'),)
+    science = root + (('sequence_homology_evidence', 'science'),)
     duplicate = copy(original.for_child(science, 'launch'))
     duplicate.binding_path += '_ambiguous_second_provider'
     registry = module('episode_bindings').EpisodeBindingRegistry(
         (*original._bindings, duplicate))
     assert registry.for_child(root, 'launch') is original.for_child(root, 'launch')
-    with pytest.raises(LookupError, match='episode_child_not_bound:scientific_process:launch'):
+    with pytest.raises(LookupError, match='episode_child_not_bound:sequence_homology_evidence:launch'):
         registry.for_context_role('launch', path=science)

@@ -466,7 +466,7 @@ class BVBRCDataHost(EpisodeReturnRecords):
         if child.role == 'results':
             recorded = self.facts(child, schema)
             validate_bvbrc_data_return(plain(form), original_schema=plain(schema), recorded_facts=recorded)
-        elif child.role in {'annotation', 'scientific_process'}:
+        elif child.role in {'annotation', 'sequence_homology_evidence'}:
             self.validate_received_report(child, form, schema)
         sources = list(dict.fromkeys(row['source_ref'] for name, node in plain(schema)['properties'].items()
             if node.get('x-source') in FACT_SOURCES for row in form[name]))

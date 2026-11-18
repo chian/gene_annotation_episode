@@ -7,15 +7,15 @@ class OperationalReport:
     def required_return_sources(self, parent, role):
         """Preserve the original job identity across a scientific owner return."""
         self.credit_kind(role)
-        if parent is not None and parent.path[-1][0] == 'scientific_process' and getattr(self.services, 'annotation_task_required', lambda: False)():
+        if parent is not None and parent.path[-1][0] == 'sequence_homology_evidence' and getattr(self.services, 'annotation_task_required', lambda: False)():
             pass
         return ()
 
     def _forwards_bvbrc_reports(self, role):
-        return role in {'annotation', 'scientific_process'} and self.api_execution is not None and any((service.service == 'bvbrc_data' for service in self.api_execution.services.values()))
+        return role in {'annotation', 'sequence_homology_evidence'} and self.api_execution is not None and any((service.service == 'bvbrc_data' for service in self.api_execution.services.values()))
 
     def _forwards_minhash_reports(self, role):
-        return role in {'annotation', 'scientific_process'} and self.api_execution is not None and any((service.service == 'bvbrc_minhash' for service in self.api_execution.services.values()))
+        return role in {'annotation', 'sequence_homology_evidence'} and self.api_execution is not None and any((service.service == 'bvbrc_minhash' for service in self.api_execution.services.values()))
 
     def fact_sources(self, role):
         from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_native_result_views import native_hmmer_fact_sources
@@ -165,7 +165,7 @@ class OperationalReport:
                     return self.native_blast_standard_database_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
                 if self.native_blast_standard_database_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'sequence_homology_evidence'}:
                     resolved = self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -175,7 +175,7 @@ class OperationalReport:
                     return self.native_blast_database_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_blast_database_returns.resolve_received(context, reference, namespace)
                 if self.native_blast_database_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'sequence_homology_evidence'}:
                     resolved = self.native_blast_database_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -185,7 +185,7 @@ class OperationalReport:
                     return self.native_hmmer_preparation_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_hmmer_preparation_returns.resolve_received(context, reference, namespace)
                 if self.native_hmmer_preparation_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'sequence_homology_evidence'}:
                     resolved = self.native_hmmer_preparation_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved
@@ -194,7 +194,7 @@ class OperationalReport:
                     return self.native_blast_results.resolve(context, reference, namespace) if context.role == 'results' else self.native_blast_returns.resolve_received(context, reference, namespace)
                 if self.native_blast_results.resolve(context, reference, namespace):
                     return True
-                if context.role in {'annotation', 'scientific_process'}:
+                if context.role in {'annotation', 'sequence_homology_evidence'}:
                     resolved = self.native_blast_returns.resolve_received(context, reference, namespace)
                     if resolved is not None:
                         return resolved

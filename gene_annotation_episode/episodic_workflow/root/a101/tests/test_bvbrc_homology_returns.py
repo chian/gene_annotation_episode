@@ -283,8 +283,8 @@ def run(tmp_path):
 def test_real_typed_admission_and_recursive_forwarding_preserve_exact_values(run):
     body = projection()
     root = run.saved.root
-    first = run.child(root, "scientific_process", body)
-    second = run.child(first, "scientific_process", body)
+    first = run.child(root, "sequence_homology_evidence", body)
+    second = run.child(first, "sequence_homology_evidence", body)
     producer = run.child(second, "results", body)
     published = run.publications.add(producer, body)
     schema = fact_form(*FACT_SOURCES)
@@ -369,7 +369,7 @@ def test_original_form_schema_and_frozen_return_cannot_be_substituted(run):
 
 def test_unrequested_groups_and_opaque_reference_do_not_deliver_saved_numbers(run):
     body = projection()
-    parent = run.child(run.saved.root, "scientific_process", body)
+    parent = run.child(run.saved.root, "sequence_homology_evidence", body)
     producer = run.child(parent, "results", body, sources=(MEASUREMENTS,))
     run.publications.add(producer, body)
     run.admit(parent, producer)
@@ -389,7 +389,7 @@ def test_unrequested_groups_and_opaque_reference_do_not_deliver_saved_numbers(ru
 
 def test_original_child_dependencies_remain_required_after_parent_forwarding(run):
     body = projection()
-    parent = run.child(run.saved.root, "scientific_process", body)
+    parent = run.child(run.saved.root, "sequence_homology_evidence", body)
     producer = run.child(parent, "results", body)
     run.publications.add(producer, body)
     run.admit(parent, producer)

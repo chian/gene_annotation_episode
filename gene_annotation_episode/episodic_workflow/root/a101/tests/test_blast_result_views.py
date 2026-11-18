@@ -119,7 +119,7 @@ def test_recorded_hsp_facts_fill_closed_parent_form_and_service_port_preserves_h
         returned = form_with_facts({}, form, {'execution_blast_hsps': facts})
         validate_form(returned, form, lambda ref, ns: ref in acquired['record_refs'] and ns == 'execution_result')
         source_refs = [observation]
-        context = BindingContext('run', 'child', 'scientific_process', (('scientific_process', 'child'),),
+        context = BindingContext('run', 'child', 'sequence_homology_evidence', (('sequence_homology_evidence', 'child'),),
             {'subject_refs': [target]}, {}, {}, source_refs)
         source_refs.clear()
         assert context.received_record_refs == (observation,)

@@ -20,7 +20,7 @@ def module(name):
 @pytest.mark.parametrize('credit',[2.5,{'mode':'annotation_axis_credit','arms':[]}])
 @pytest.mark.parametrize('timing',[False,True])
 def test_actual_standalone_scientific_constructor_preserves_caller_credit_and_timing(tmp_path,credit,timing):
-    library=module('scientific_process_library').ScientificProcessLibrary.freeze(
+    library=module('sequence_homology_evidence_library').SequenceHomologyEvidenceLibrary.freeze(
         tmp_path/'scientific-process-library',source=ROOT.parents[3]/'research/slotted_process_library/publications/2026-10-24-001')
     tools_library=module('scientific_tool_library').ScientificToolLibrary.freeze(tmp_path/'tool-library',catalog=[])
     calls=[]
@@ -40,36 +40,36 @@ def test_actual_standalone_scientific_constructor_preserves_caller_credit_and_ti
         store.create_problem(raw_sequence='MAAA',molecule='protein')
         scope=store.validate_scope()
         timing_binding=module('native_timing_information').NativeTimingInformation(1) if timing else None
-        Binding=module('scientific_process.episode').ScientificProcessEpisode
+        Binding=module('sequence_homology_evidence.episode').SequenceHomologyEvidenceEpisode
         Workflow=module('runtime').Workflow
         workflow=Workflow(store,module('tools').ToolRegistry(store,clients=SimpleNamespace()),
             SimpleNamespace(complete=unused),tmp_path/'workflow','actual-scientific-entry',unused,projector,
-            root_role='scientific_process',native_timing_information=timing_binding,
+            root_role='sequence_homology_evidence',native_timing_information=timing_binding,
             initial_known_record_refs=[],
             episode_binding_factories=(lambda services:Binding(services,library=library,
-                tool_library=tools_library,child_roles=('scientific_process',)),))
-        binding=workflow.scientific_process_binding
+                tool_library=tools_library,child_roles=('sequence_homology_evidence',)),))
+        binding=workflow.sequence_homology_evidence_binding
         schema={'type':'object','properties':{'constructor_input_supplied':{'type':'boolean','description':'Whether the caller supplied this engineering-only report form.'}},'required':['constructor_input_supplied'],'additionalProperties':False}
         contract=module('runtime').TypedReportContract('Return engineering fixture metadata',schema,lambda *_:True)
-        assignment={'selection':{'version':'scientific_process_selection_v3',
+        assignment={'selection':{'version':'sequence_homology_evidence_selection_v3',
             'evidence_axis':library.reference(AXIS),'thought_pattern':library.reference('P01'),'child_tool_info':[]},
             'evidence_refs':[],'constraints':{},'context':{}}
         if AXIS=='A106':
             assignment['context']['evidence_task']={'version':'evidence_axis_task_v1',
                 'kind':'whole_axis_findings','evidence_axis':AXIS,'credit_unit':1}
         with pytest.raises(module('domain').ContractError,match='scientific_parent_invocation_required'):
-            binding.prepare_assignment(None,'scientific_process',assignment,scope,'no-parent')
+            binding.prepare_assignment(None,'sequence_homology_evidence',assignment,scope,'no-parent')
         # Explicit preparation input is not claimed to be a journal commission.
         parent=module('episode_bindings').BindingContext(workflow.run_id,'preparation','annotation',
             (('annotation','preparation'),),scope,{}, {'message':{'scope':scope,'episode_assignment':{}}})
-        prepared=binding.prepare_invocation(parent,'scientific_process',assignment,scope,'explicit:prepare',
+        prepared=binding.prepare_invocation(parent,'sequence_homology_evidence',assignment,scope,'explicit:prepare',
             invocation={'objective':'Characterize actual standalone credit input','purpose':contract.decision,
                 'report_schema':schema,'initial_report':{'constructor_input_supplied':True}})
-        episode=workflow.build('scientific_process','standalone','Characterize actual standalone credit input',
-            scope,contract=contract,initial={'constructor_input_supplied':True},episode_assignment=prepared['assignment'],scientific_process=prepared['scientific_process'])
+        episode=workflow.build('sequence_homology_evidence','standalone','Characterize actual standalone credit input',
+            scope,contract=contract,initial={'constructor_input_supplied':True},episode_assignment=prepared['assignment'],sequence_homology_evidence=prepared['sequence_homology_evidence'])
         source=episode.source
         assert type(source) is Binding.decision_source_type
-        assert source.path==(('scientific_process','standalone'),)
+        assert source.path==(('sequence_homology_evidence','standalone'),)
         context=workflow.binding_context(source)
         binding.validate_context(context)
         assert workflow.scientific_projector_for_context(context) is projector

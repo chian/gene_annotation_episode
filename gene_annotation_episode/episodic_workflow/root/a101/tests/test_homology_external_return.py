@@ -7,7 +7,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import Ho
 from gene_annotation_episode.episodic_workflow.root.a101.local_jobs import LocalJobPolicy
 from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from gene_annotation_episode.episodic_workflow.root.a103.tests.a103_test_support import source, protein, native_pair
-from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
 
 def test_result_query_reference_resolves_only_as_the_bound_operand_without_target_credit(tmp_path):
     executable = tmp_path / 'not-executed'

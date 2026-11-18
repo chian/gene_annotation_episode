@@ -3,7 +3,7 @@ from copy import deepcopy
 
 from .library.bvbrc_appservice_contracts import contract_schema
 from .library.bvbrc_proteome_bundle_contracts import parameters_schema
-from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.execution_result_acquisition.execution_contracts import RESULTS_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.execution_result_acquisition.execution_contracts import RESULTS_SCHEMA
 
 
 _INSTRUCTIONS = (

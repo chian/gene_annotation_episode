@@ -55,20 +55,20 @@ def scientific_binding_compatible(actual, recorded):
     except (TypeError, ValueError, OverflowError):
         return False
     fields = {'version', 'binding_id', 'configuration'}
-    if type(actual) is not dict or type(recorded) is not dict or set(actual) != fields or (set(recorded) != fields) or any((type(value['version']) is not str or value['version'] != 'scientific_process_episode_v10' or value['binding_id'] != 'scientific_process' or (type(value['configuration']) is not dict) for value in (actual, recorded))):
+    if type(actual) is not dict or type(recorded) is not dict or set(actual) != fields or (set(recorded) != fields) or any((type(value['version']) is not str or value['version'] != 'sequence_homology_evidence_episode_v10' or value['binding_id'] != 'sequence_homology_evidence' or (type(value['configuration']) is not dict) for value in (actual, recorded))):
         return False
     return actual_text == recorded_text
 
 def reopen_scientific_binding(services, *, descriptor, directory):
     """Restore the caller's pinned three-slot construction from this run only."""
-    from .scientific_process.episode import ScientificProcessEpisode as ScientificProcessEpisodes
-    from .scientific_process_library import ScientificProcessLibrary
+    from .sequence_homology_evidence.episode import SequenceHomologyEvidenceEpisode as SequenceHomologyEvidenceEpisodes
+    from .sequence_homology_evidence_library import SequenceHomologyEvidenceLibrary
     from .scientific_tool_library import ScientificToolLibrary
-    reference = 'scientific_process'
+    reference = 'sequence_homology_evidence'
     if directory is None:
         raise _failure('unavailable_binding', reference)
     try:
-        if descriptor.get('version') != 'scientific_process_episode_v10':
+        if descriptor.get('version') != 'sequence_homology_evidence_episode_v10':
             raise _failure('unavailable_binding', reference)
         configuration = descriptor['configuration']
         expected = {'library', 'tool_library', 'child_roles'}
@@ -80,11 +80,11 @@ def reopen_scientific_binding(services, *, descriptor, directory):
             expected.add('yield_bindings')
         if set(configuration) != expected:
             raise _failure('unavailable_binding', reference)
-        library = ScientificProcessLibrary(Path(directory) / 'scientific-process-library')
+        library = SequenceHomologyEvidenceLibrary(Path(directory) / 'scientific-process-library')
         _same_record(library.as_record(), configuration['library'], reference)
         tools = ScientificToolLibrary(Path(directory) / 'scientific-tool-library')
         _same_record(tools.as_record(), configuration['tool_library'], reference)
-        binding = ScientificProcessEpisodes(services, library=library, tool_library=tools, child_roles=configuration['child_roles'], tool_retrieval=configuration.get('tool_retrieval'), contract_information_profile=configuration.get('contract_information_profile'), yield_bindings=configuration.get('yield_bindings'))
+        binding = SequenceHomologyEvidenceEpisodes(services, library=library, tool_library=tools, child_roles=configuration['child_roles'], tool_retrieval=configuration.get('tool_retrieval'), contract_information_profile=configuration.get('contract_information_profile'), yield_bindings=configuration.get('yield_bindings'))
         if not scientific_binding_compatible(binding.as_record(), descriptor):
             raise _failure('identity_conflict', reference)
         return binding

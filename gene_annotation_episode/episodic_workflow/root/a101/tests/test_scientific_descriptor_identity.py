@@ -8,15 +8,15 @@ AXIS=__package__.rsplit('.tests',1)[0]
 
 
 def descriptor():
-    Binding=import_module(AXIS+'.scientific_process.episode').ScientificProcessEpisode
+    Binding=import_module(AXIS+'.sequence_homology_evidence.episode').SequenceHomologyEvidenceEpisode
     library=SimpleNamespace(as_record=lambda:{'version':'original-library'},headers=lambda:[])
     tools=SimpleNamespace(as_record=lambda:{'version':'original-tools'})
     return Binding(SimpleNamespace(),library=library,tool_library=tools,
-                   child_roles=('scientific_process',)).as_record()
+                   child_roles=('sequence_homology_evidence',)).as_record()
 
 
 def test_actual_fresh_scientific_descriptor_is_compatible_with_itself():
     actual=descriptor()
-    assert actual['version']=='scientific_process_episode_v10'
+    assert actual['version']=='sequence_homology_evidence_episode_v10'
     assert import_module(AXIS+'.episode_composition').scientific_binding_compatible(actual,deepcopy(actual))
 

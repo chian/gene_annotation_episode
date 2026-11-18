@@ -85,7 +85,7 @@ def test_existing_blast_grader_output_populates_the_sheet_without_a_model():
     assert 0 < result['value'] <= 1
 
 def test_received_native_observation_without_a_grader_fails_explicitly(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
     from gene_annotation_episode.episodic_workflow.root.a101.state import Store
     with Store(tmp_path / 'state') as store:
         target, = store.create_problem(raw_sequence='MACDEFGHIK', molecule='protein')['subject_refs']
@@ -99,7 +99,7 @@ def test_received_native_observation_without_a_grader_fails_explicitly(tmp_path)
 
 def test_database_blast_native_grader_is_routed_through_received_hsp_address(tmp_path):
     import json
-    from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
     from gene_annotation_episode.episodic_workflow.root.a101.library.blast_search import native_hsp_metadata, HSP_PROJECTION_VERSION
     from gene_annotation_episode.episodic_workflow.root.a101.state import Store
     from gene_annotation_episode.episodic_workflow.root.a101.tool_grading_artifacts import retain_tool_grading

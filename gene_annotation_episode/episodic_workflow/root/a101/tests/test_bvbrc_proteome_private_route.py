@@ -24,11 +24,11 @@ HOMES = (
     'execution_job_submission/local_job_execution',
     'execution_job_submission/hpc_job_execution',
     'execution_result_acquisition',
-    'scientific_process/execution_job_submission',
-    'scientific_process/execution_job_submission/api_job_execution',
-    'scientific_process/execution_job_submission/local_job_execution',
-    'scientific_process/execution_job_submission/hpc_job_execution',
-    'scientific_process/execution_result_acquisition',
+    'sequence_homology_evidence/execution_job_submission',
+    'sequence_homology_evidence/execution_job_submission/api_job_execution',
+    'sequence_homology_evidence/execution_job_submission/local_job_execution',
+    'sequence_homology_evidence/execution_job_submission/hpc_job_execution',
+    'sequence_homology_evidence/execution_result_acquisition',
 )
 
 

@@ -17,7 +17,7 @@ _ROUTES = (
     ('episode_child', 'literature', 'published_evidence_assessment', 'LiteratureEpisode'),
     ('episode_child', 'launch', 'resource_work_submission', 'ResourceEpisode'),
     ('episode_child', 'results', 'resource_result_acquisition', 'ResourceEpisode'),
-    ('episode_child', 'scientific_process', 'scientific_process', 'ScientificProcessEpisode'),
+    ('episode_child', 'sequence_homology_evidence', 'sequence_homology_evidence', 'SequenceHomologyEvidenceEpisode'),
 )
 
 

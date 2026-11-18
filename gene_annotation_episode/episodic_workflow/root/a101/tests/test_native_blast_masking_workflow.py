@@ -28,9 +28,9 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_ma
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_masking_local import local_blast_masking_plan
 from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
-from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_setup import prepare_scientific_binding
-from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.episode import ScientificProcessEpisode
+from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence_library import SequenceHomologyEvidenceLibrary
+from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.episode import SequenceHomologyEvidenceEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_result_views import masking_fact_sources
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
@@ -116,11 +116,11 @@ def nested_case(tmp_path, program, mode, *, supplied_job=None, result_selector=N
     tools = ToolRegistry(store)
     application = ExecutionServiceFactory(resources, {}, 3, 2, 1, log_window_bytes=128)(
         store, run_id=RUN_ID, directory=tmp_path / 'run', tool_registry=tools)
-    descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=tmp_path / 'run', source_directory=PUBLICATION,
-        tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
+    descriptor = prepare_scientific_binding(episode_type=SequenceHomologyEvidenceEpisode, run_directory=tmp_path / 'run', source_directory=PUBLICATION,
+        tool_catalog=tools.catalog(), child_roles=('sequence_homology_evidence', 'launch', 'results'),
         resource_catalogs=application.resource_tool_catalogs)
-    library = ScientificProcessLibrary(tmp_path / 'run/scientific-process-library')
-    science_assignment = {'selection': {'version': 'scientific_process_selection_v3',
+    library = SequenceHomologyEvidenceLibrary(tmp_path / 'run/scientific-process-library')
+    science_assignment = {'selection': {'version': 'sequence_homology_evidence_selection_v3',
         'evidence_axis': library.reference('A101'), 'thought_pattern': library.reference('P01'),
         'child_tool_info': [{'name': 'native.' + program + '.' + mode, 'resources': 'local'}]},
         'evidence_refs': scope['subject_refs'], 'constraints': {'no_external_acquisition': True, 'allocation': POLICY},
@@ -135,7 +135,7 @@ def nested_case(tmp_path, program, mode, *, supplied_job=None, result_selector=N
             return YieldEstimate(len(raw), NumericBand.exact(0 if len(raw) >= horizon else 1), parameters,
                 {'fixture': 'explicit_scientific_boundary_horizon_not_production_stop_rule'})
         return YieldController(str(path), initial, 0, YieldParameters(),
-            estimate_with_context=estimate if path[-1][0] in {'annotation', 'scientific_process'} else None)
+            estimate_with_context=estimate if path[-1][0] in {'annotation', 'sequence_homology_evidence'} else None)
 
     class Choices:
         def __init__(self):
@@ -153,8 +153,8 @@ def nested_case(tmp_path, program, mode, *, supplied_job=None, result_selector=N
                 answer = child('launch_local', assignment, scope, handoff_form)
             elif current.get('execution_assignment', {}).get('version') == RESULTS_VERSION:
                 answer = selected('execution.results.collect')
-            elif 'scientific_process' not in current:
-                answer = child('scientific_process', science_assignment, scope, science_form)
+            elif 'sequence_homology_evidence' not in current:
+                answer = child('sequence_homology_evidence', science_assignment, scope, science_form)
             else:
                 self.science_calls += 1
                 if self.science_calls == 1:
@@ -184,7 +184,7 @@ def nested_case(tmp_path, program, mode, *, supplied_job=None, result_selector=N
 
     provider = Choices()
     flow = Workflow(store, tools, provider, tmp_path / 'run', RUN_ID, controller_factory=controller,
-        project_credit=lambda *args, **kwargs: 0, annotation_child_roles=('scientific_process',),
+        project_credit=lambda *args, **kwargs: 0, annotation_child_roles=('sequence_homology_evidence',),
         episode_record_receipts=True, initial_known_record_refs=[],
         episode_binding_descriptors=(descriptor, *application.episode_binding_descriptors),
         role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider)
@@ -197,7 +197,7 @@ def nested_case(tmp_path, program, mode, *, supplied_job=None, result_selector=N
     records = list(walk(json.loads(''.join(iter_json(record.as_record())))))
     contexts = {r['episode_id']: owner.native_blast_masking_returns.context(r['episode_id']) for r in records}
     by_role = {contexts[r['episode_id']].role: r for r in records}
-    science_context = contexts[by_role['scientific_process']['episode_id']]
+    science_context = contexts[by_role['sequence_homology_evidence']['episode_id']]
     results_context = contexts[by_role['results']['episode_id']]
     returned = json.loads(flow.journal.row('runtime_forms', results_context.episode_id)['form'])
     forwarded = json.loads(flow.journal.row('runtime_forms', science_context.episode_id)['form'])
@@ -262,13 +262,13 @@ def test_selected_contracts_grants_and_practical_accounting(native_case):
     Draft202012Validator(entry['input_schema']).validate(case.request)
     assert entry['invocation_route']['routes'] == [{'entry_role': 'launch', 'resource_id': 'here', 'resource_role': 'launch_local'}]
     for call in case.provider.calls:
-        if 'scientific_process' in call['context']:
-            info, = call['context']['scientific_process']['child_tool_info']
+        if 'sequence_homology_evidence' in call['context']:
+            info, = call['context']['sequence_homology_evidence']['child_tool_info']
             assert info == {key: entry[key] for key in ('name', 'description', 'resources', 'instructions')}
-            assert set(call['context']['scientific_process']['selection']) == {'version', 'evidence_axis', 'thought_pattern', 'child_tool_info'}
+            assert set(call['context']['sequence_homology_evidence']['selection']) == {'version', 'evidence_axis', 'thought_pattern', 'child_tool_info'}
     assert case.flow.catalog(case.scope, source=case.root.source) == []
     assert len(case.provider.calls) == 6
-    assert history(case.by_role['annotation']) == [0] and history(case.by_role['scientific_process']) == [0, 0]
+    assert history(case.by_role['annotation']) == [0] and history(case.by_role['sequence_homology_evidence']) == [0, 0]
     assert history(case.by_role['launch_local']) == [7]
     assert history(case.by_role['launch']) == [3] and history(case.by_role['results']) == [2]
     for role, row in case.by_role.items():

@@ -9,7 +9,7 @@ class OperationalSummary:
             target = self._target(context)
             return {'execution_resource_capabilities': [{'resource_id': target['resource_id'], 'resource_kind': 'local'}], 'execution_initial_information': {}}
         value = {'execution_resource_capabilities': [self._resource_information(key) for key in self.resources], 'execution_initial_information': deepcopy(self.initial_information), 'received_bvbrc_values': [] if self.api_execution is None else self.api_execution.received_bvbrc_context(context)}
-        if context.role in {'annotation', 'scientific_process'} and self.api_execution is not None and any((service.service == 'ncbi_blast' for service in self.api_execution.services.values())):
+        if context.role in {'annotation', 'sequence_homology_evidence'} and self.api_execution is not None and any((service.service == 'ncbi_blast' for service in self.api_execution.services.values())):
             pass
         if self._forwards_minhash_reports(context.role):
             value['received_minhash_values'] = self.api_execution.minhash.received_context(context)

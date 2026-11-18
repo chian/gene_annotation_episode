@@ -13,8 +13,8 @@ from pathlib import Path
 from .communication import interpretation_schema, plain, validate_closed_schema, validate_form
 from .domain import ContractError, obj
 from .evidence_axis_instructions import validate_instruction_entry
-from .scientific_process_library import ScientificProcessLibrary
-from .scientific_process_records import SELECTION_VERSION, selector_selection, validate_child_selection, validate_revision_origin, validate_selection
+from .sequence_homology_evidence_library import SequenceHomologyEvidenceLibrary
+from .sequence_homology_evidence_records import SELECTION_VERSION, selector_selection, validate_child_selection, validate_revision_origin, validate_selection
 from .scientific_tool_library import ScientificToolLibrary
 VERSION = 'a101_investigation_v1'
 
@@ -43,7 +43,7 @@ def initial_report():
     return {}
 
 def _graded_report(store, report, scope):
-    from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
     view = A101SequenceCredit().read_details(store, scope, known_record_refs=report['records'], details_limit=len(report['records']), details_offset=0)
     count = view['detail_pages']['source_contributions_total']
     if len(view['source_contributions']) < count:
@@ -55,7 +55,7 @@ class A101Subtree:
 
     def __init__(self, run_directory):
         directory = Path(run_directory)
-        self.library = ScientificProcessLibrary(directory / 'scientific-process-library')
+        self.library = SequenceHomologyEvidenceLibrary(directory / 'scientific-process-library')
         self.tools = ScientificToolLibrary(directory / 'scientific-tool-library')
         self.axis = self.library.reference('A101')
         entry = validate_instruction_entry(self.library.resolve(self.axis))
@@ -109,7 +109,7 @@ class A101Subtree:
             if selector_selection(prepared['selection']) != assignment['selection']:
                 raise ContractError('a101_revision_selection_mismatch')
             assignment['revision_origin'] = origin
-        return {'kind': 'episode_child', 'role': 'scientific_process', 'goal': question, 'scope': scope, 'purpose': 'Return the saved sequence-comparison grading and its actual target/source scope, quantities and qualifications. The host projects the recorded evidence and credit; do not supply a second family, activity, specificity or physiological-role verdict.', 'schema_json': json.dumps(schema, allow_nan=False), 'initial_report_json': json.dumps(initial, allow_nan=False), 'assignment': assignment}
+        return {'kind': 'episode_child', 'role': 'sequence_homology_evidence', 'goal': question, 'scope': scope, 'purpose': 'Return the saved sequence-comparison grading and its actual target/source scope, quantities and qualifications. The host projects the recorded evidence and credit; do not supply a second family, activity, specificity or physiological-role verdict.', 'schema_json': json.dumps(schema, allow_nan=False), 'initial_report_json': json.dumps(initial, allow_nan=False), 'assignment': assignment}
 
 def create_a101_workflow(store, tools, provider, directory, run_id, controller_factory, *, initial_known_record_refs, **options):
     """Construct the ordinary Workflow with A101 numerical credit installed.
@@ -118,7 +118,7 @@ def create_a101_workflow(store, tools, provider, directory, run_id, controller_f
     remain caller-owned. Scientific children select credit in their own task
     binding; this factory does not assign the root calculation to every child.
     """
-    from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
     from .runtime import Workflow
     if 'project_credit' in options or 'credit_binding' in options:
         raise ValueError('a101_root_numeric_credit_binding_is_host_owned')

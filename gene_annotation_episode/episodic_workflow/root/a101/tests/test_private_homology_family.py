@@ -40,7 +40,7 @@ def test_complete_family_keeps_original_three_descriptors_and_credit(bindings):
     family=normalized(bindings)
     assert family.roles==ROLES
     assert family.as_record()['bindings']=={role:bindings[role].as_record() for role in ROLES}
-    assert family.fact_sources('scientific_process')=={}
+    assert family.fact_sources('sequence_homology_evidence')=={}
     for role in ROLES:
         assert family.for_role(role) is bindings[role]
         assert family.binding_for(role)==bindings[role].binding_for(role)
@@ -75,7 +75,7 @@ def test_original_runtime_build_selects_each_family_private_task(bindings,role,m
     monkeypatch.setattr(runtime.Episode,'identity',lambda *args,**kwargs:SimpleNamespace(episode_id='original-owner'))
     monkeypatch.setattr(runtime,'FeedbackEpisode',lambda grain,key,source,*args,**kwargs:source)
     workflow=SimpleNamespace(context=object(),grains={role:object()},inprocess_completion_order=None,
-        receipts=None,scientific_process_binding=None,episode_bindings=Registry(()),job_episodes=family,
+        receipts=None,sequence_homology_evidence_binding=None,episode_bindings=Registry(()),job_episodes=family,
         contract_information_profile=lambda source:None,binding_context=lambda source:source,specialist=lambda source:None,
         journal=SimpleNamespace(row=lambda *args:None,save=lambda *args:None),run_id='original-run',
         store=SimpleNamespace(transaction=nullcontext,db=SimpleNamespace(execute=lambda *args:None)),

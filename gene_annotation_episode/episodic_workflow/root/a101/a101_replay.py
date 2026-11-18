@@ -9,7 +9,7 @@ import argparse
 import json
 from pathlib import Path
 import sqlite3
-from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
 from .state import Store
 
 def rescore_saved_run(source_run, *, work_directory):
@@ -40,10 +40,10 @@ def rescore_saved_run(source_run, *, work_directory):
     with Store(state) as store:
         for row in store.db.execute('SELECT episode_id,path,request,archive FROM runtime_episodes'):
             path = json.loads(row['path'])
-            if path[-1][0] not in ('annotation', 'scientific_process'):
+            if path[-1][0] not in ('annotation', 'sequence_homology_evidence'):
                 continue
             request = json.loads(row['request'])
-            if path[-1][0] == 'scientific_process':
+            if path[-1][0] == 'sequence_homology_evidence':
                 assignment = request['message'].get('episode_assignment', {})
                 selection = assignment.get('selection', {})
                 axis = selection.get('evidence_axis', selection.get('annotation_ref', {}))

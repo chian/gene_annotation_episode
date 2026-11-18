@@ -4,8 +4,8 @@ async def call(self, context, schema):
     index, self.calls = (self.calls, self.calls + 1)
     journal = self.workflow.journal
     row = journal.row('runtime_model_calls', self.episode_id, index)
-    if (row is None or row['response'] is None) and self.path[-1][0] == 'scientific_process':
-        self.workflow.scientific_process_binding.validate_execution_context(self.workflow.binding_context(self))
+    if (row is None or row['response'] is None) and self.path[-1][0] == 'sequence_homology_evidence':
+        self.workflow.sequence_homology_evidence_binding.validate_execution_context(self.workflow.binding_context(self))
     profile = self.workflow.contract_information_profile(self)
     if row:
         saved = json.loads(row['request'])

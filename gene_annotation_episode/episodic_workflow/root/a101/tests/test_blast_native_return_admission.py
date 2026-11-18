@@ -236,7 +236,7 @@ def test_reference_only_receives_exact_refs_without_numerical_access(saved):
 @pytest.mark.parametrize('forward_source', [REFERENCE_SOURCE, COMPLETE])
 def test_scientific_boundary_forwards_only_its_requested_received_information(saved, forward_source):
     schema = schema_for(forward_source)
-    science = saved.child(saved.root, schema, role='scientific_process')
+    science = saved.child(saved.root, schema, role='sequence_homology_evidence')
     leaf_schema = schema_for(GENERIC_REFS)
     leaf = saved.child(science, leaf_schema)
     row = saved.publication(leaf)
@@ -323,7 +323,7 @@ def test_forged_rows_fail_even_when_frozen_forms_and_attempts_agree(saved, field
 
 def test_sibling_records_cannot_be_forwarded_by_source_possession(saved):
     forward = schema_for(REFERENCE_SOURCE)
-    science = saved.child(saved.root, forward, role='scientific_process')
+    science = saved.child(saved.root, forward, role='sequence_homology_evidence')
     sibling = saved.child(saved.root, schema_for(GENERIC_REFS), index=1)
     row = saved.publication(sibling)
     saved.returned(saved.root, sibling)
@@ -379,7 +379,7 @@ def test_saved_ownership_and_closure_changes_are_rejected(saved, kind):
             saved.boundary.validate_received_report(forged, form, schema)
         return
     elif kind == 'child':
-        sibling_parent = saved.child(saved.root, schema_for(COMPLETE), index=1, role='scientific_process')
+        sibling_parent = saved.child(saved.root, schema_for(COMPLETE), index=1, role='sequence_homology_evidence')
         sibling = saved.child(sibling_parent, schema)
         saved.publication(sibling)
         saved.returned(sibling_parent, sibling)
@@ -447,7 +447,7 @@ def test_changed_live_context_role_and_conflicting_reference_fields_reject(saved
     saved.publication(child)
     form = saved.returned(saved.root, child)
     with pytest.raises(ValueError, match='binding_context_path_must_match_role'):
-        replace(child, role='scientific_process')
+        replace(child, role='sequence_homology_evidence')
     form['requested_1'] = []
     with pytest.raises(ValueError, match='native_blast_return_conflicting_fields'):
         saved.boundary.validate_received_report(child, form, schema)

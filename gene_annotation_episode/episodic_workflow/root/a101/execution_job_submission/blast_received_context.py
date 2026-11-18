@@ -19,7 +19,7 @@ class BlastReceivedContext:
             raise ValueError('blast_original_launch_episode_unavailable')
         path = json.loads(row['path'])
         for length in range(len(path), 0, -1):
-            if path[length - 1][0] != 'scientific_process':
+            if path[length - 1][0] != 'sequence_homology_evidence':
                 continue
             owner = self.store.db.execute('SELECT request FROM runtime_episodes '
                 'WHERE run_id=? AND json(path)=json(?)',

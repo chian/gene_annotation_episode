@@ -135,7 +135,7 @@ class NativeBLASTReturns(EpisodeReturnRecords):
         if context.role == 'results':
             expected = self._own_facts(context, values)
             self._require(self._equal(values, expected), 'returned_facts_conflict')
-        elif context.role in {'annotation', 'scientific_process'}:
+        elif context.role in {'annotation', 'sequence_homology_evidence'}:
             expected = self.received_facts(context, schema)
             self._require(all(all(any(self._equal(row, saved) for saved in expected[source])
                 for row in rows) for source, rows in values.items()), 'returned_facts_conflict')
@@ -156,7 +156,7 @@ class NativeBLASTReturns(EpisodeReturnRecords):
         return list(dict.fromkeys(references))
 
     def _received(self, context):
-        if context.role not in {'annotation', 'scientific_process'}:
+        if context.role not in {'annotation', 'sequence_homology_evidence'}:
             return {'groups': {}, 'references': []}
         grouped, seen, references = {}, {}, []
         for attempt in self._attempts(context):

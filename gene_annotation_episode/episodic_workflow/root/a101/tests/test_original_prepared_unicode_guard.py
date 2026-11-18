@@ -32,7 +32,7 @@ def test_prepared_wrapper_preserves_original_unicode_hash_and_parent_delivery(tm
         store.create_problem(raw_sequence='MAAA',molecule='protein')
         scope=store.validate_scope()
         run='synthetic-unicode-preparation'
-        parent_path=(('scientific_process','original-parent'),)
+        parent_path=(('sequence_homology_evidence','original-parent'),)
         path=(*parent_path,('results','child_0'))
         parent_id=EpisodeRef(run,parent_path).episode_id
         handoff={'original':'controlled handoff retained verbatim'}

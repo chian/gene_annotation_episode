@@ -21,11 +21,11 @@ def constructed(tmp_path_factory):
         tools = module('tools').ToolRegistry(store)
         host = SimpleNamespace(store=store, tools=tools, run_id='construction-original', journal=journal, directory=tmp_path)
         services = module('episode_services').WorkflowServices(host)
-        library = module('scientific_process_library').ScientificProcessLibrary.freeze(
+        library = module('sequence_homology_evidence_library').SequenceHomologyEvidenceLibrary.freeze(
             tmp_path / 'scientific-process-library', source=ROOT.parents[3] / 'research/slotted_process_library/publications/2026-10-24-001')
         tool_library = module('scientific_tool_library').ScientificToolLibrary.freeze(
             tmp_path / 'scientific-tool-library', catalog=tools.catalog())
-        scientific = module('scientific_process.episode')
+        scientific = module('sequence_homology_evidence.episode')
         execution = scientific.create_execution_bindings(services, store=store,
             directory=tmp_path, run_id=host.run_id,
             resources={'original-api': {'kind': 'api', 'service': 'bvbrc_appservice',
@@ -35,14 +35,14 @@ def constructed(tmp_path_factory):
                 'scientific_adapters': []}},
             initial_information={'original-api': {'recorded_inventory': 'original-caller-snapshot'}}, tool_registry=tools, handoff_unit=1,
             acquired_record_unit=1, log_window_bytes=128, log_roles=('stdout', 'stderr'))
-        monitor = module('scientific_process.execution_progress_assessment.episode').MonitorEpisode(services)
-        literature = module('scientific_process.published_evidence_assessment.episode').create_binding_tree(services)
-        head = scientific.ScientificProcessEpisode(services, library=library, tool_library=tool_library,
-            child_roles=('scientific_process', 'literature', 'launch', 'monitor', 'results'))
+        monitor = module('sequence_homology_evidence.execution_progress_assessment.episode').MonitorEpisode(services)
+        literature = module('sequence_homology_evidence.published_evidence_assessment.episode').create_binding_tree(services)
+        head = scientific.SequenceHomologyEvidenceEpisode(services, library=library, tool_library=tool_library,
+            child_roles=('sequence_homology_evidence', 'literature', 'launch', 'monitor', 'results'))
         bindings = (head, *execution, monitor, *literature)
         registry = module('episode_bindings').EpisodeBindingRegistry(bindings)
         host.episode_bindings = registry
-        host.scientific_process_binding = head
+        host.sequence_homology_evidence_binding = head
         yield store, host, registry, bindings, literature
 
 
@@ -56,7 +56,7 @@ def test_actual_services_and_all_scientific_family_constructors(constructed):
     store, host, registry, bindings, literature = constructed
     assert len(bindings) == (14 if AXIS.endswith('a101') else 12)
     assert len(registry.as_record()) == len(bindings)
-    assert registry.for_path((('scientific_process', 'original'),)) is bindings[0]
+    assert registry.for_path((('sequence_homology_evidence', 'original'),)) is bindings[0]
     for binding in literature:
         assert binding.services is bindings[0].services
         assert binding.assignment_schema(binding.roles[0])['type'] == 'object'
@@ -66,15 +66,15 @@ def test_actual_services_and_all_scientific_family_constructors(constructed):
 
 def test_whole_registry_preserves_typed_external_source_schema_ownership(constructed):
     _, _, registry, _, literature = constructed
-    path = (('scientific_process', 'original'),)
-    actual = registry.received_report_sources('scientific_process', path=path)
-    expected = {} if AXIS.endswith('a101') else literature[0].received_report_sources('scientific_process')
+    path = (('sequence_homology_evidence', 'original'),)
+    actual = registry.received_report_sources('sequence_homology_evidence', path=path)
+    expected = {} if AXIS.endswith('a101') else literature[0].received_report_sources('sequence_homology_evidence')
     assert all(actual[key] == value for key, value in expected.items())
 
 
 def test_whole_registry_current_literature_report_uses_original_owner(constructed):
     store, _, registry, _, literature = constructed
-    path = (('scientific_process', 'original'), ('literature', 'original-literature'))
+    path = (('sequence_homology_evidence', 'original'), ('literature', 'original-literature'))
     owner = context('literature', path)
     actual = registry.current_report_facts(owner)
     expected = literature[0].current_report_facts(owner)
@@ -94,7 +94,7 @@ def test_native_child_checks_parent_launch_form_without_claiming_launch_role(con
 
 
 @pytest.mark.parametrize('role', (
-    'annotation', 'scientific_process', 'launch', 'launch_api', 'results',
+    'annotation', 'sequence_homology_evidence', 'launch', 'launch_api', 'results',
     'monitor', 'literature', 'literature_strategy', 'literature_search', 'literature_page',
     'literature_targeted', 'literature_table', 'literature_ordered',
 ))
@@ -102,7 +102,7 @@ def test_nonempty_initial_context_keeps_original_execution_provider(constructed,
     """Actual constructors, sibling consumers, and original nonempty caller data."""
     store, _, registry, bindings, _ = constructed
     provider = next(binding for binding in bindings
-                    if binding.binding_path == 'scientific_process/execution_job_submission')
+                    if binding.binding_path == 'sequence_homology_evidence/execution_job_submission')
     if role == 'annotation':
         path = (('annotation', 'original-parent'),)
     else:

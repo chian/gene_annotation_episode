@@ -24,7 +24,7 @@ def test_original_build_selects_actual_operational_task(home,name,monkeypatch):
     monkeypatch.setattr(runtime.Episode,'identity',lambda *args,**kwargs:SimpleNamespace(episode_id='operational-test'))
     monkeypatch.setattr(runtime,'FeedbackEpisode',lambda grain,key,source,*args,**kwargs:source)
     workflow=SimpleNamespace(context=object(),grains={role:object()},inprocess_completion_order=None,
-        receipts=None,scientific_process_binding=None,episode_bindings=registry,
+        receipts=None,sequence_homology_evidence_binding=None,episode_bindings=registry,
         job_episodes=binding if legacy else None,
         contract_information_profile=lambda source:None,binding_context=lambda source:source,
         specialist=lambda source:None if legacy else binding,

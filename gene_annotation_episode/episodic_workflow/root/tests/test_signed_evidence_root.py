@@ -510,7 +510,7 @@ def test_blast_shared_source_only_counts_the_assessed_native_hit(tmp_path):
         assert rows[proposals[1]]['score'] == pytest.approx((1 - math.exp(-.025 * 9)) * .25)
         assert rows[proposals[2]]['score'] is None
         assert len(result['source_contributions']) == 2
-        from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+        from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
         for proposal in proposals:
             local = A101SequenceCredit()(store, {'subject_refs': [target]}, known_record_refs=known,
                 assignment={'scope': {'subject_refs': [target]}, 'proposed_annotation_ref': proposal})

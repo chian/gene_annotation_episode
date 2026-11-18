@@ -21,7 +21,7 @@ def canonical_type():
 
 
 def operands(scope=None):
-    role = 'scientific_process'
+    role = 'sequence_homology_evidence'
     path = ((role, 'context-control'),)
     run_id = 'controlled-receiving-context'
     scope = {} if scope is None else scope

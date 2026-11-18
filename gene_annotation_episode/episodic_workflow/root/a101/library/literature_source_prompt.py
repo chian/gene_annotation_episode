@@ -3,7 +3,7 @@
 Review draft only: no source claim, target applicability or grading is inferred.
 """
 from ..receiver_prompt import _task
-from ..scientific_process_prompt import _section, _values, render_episode_steering
+from ..sequence_homology_evidence_prompt import _section, _values, render_episode_steering
 
 
 def render_literature_source_prompt(state, instructions, *, lookup_results=()):

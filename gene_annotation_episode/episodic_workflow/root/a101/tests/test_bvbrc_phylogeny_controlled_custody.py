@@ -19,7 +19,7 @@ def run(tmp_path):
 def test_real_typed_admission_and_recursive_forwarding_keep_all_eight_families(run):
     body, sheet = projection()
     root = run.saved.root
-    parent = run.child(root, "scientific_process", body)
+    parent = run.child(root, "sequence_homology_evidence", body)
     producer = run.child(parent, "results", body)
     publication = run.publications.add(producer, body, sheet)
     schema = fact_form(*FACT_SOURCES)

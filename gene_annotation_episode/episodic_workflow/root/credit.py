@@ -79,7 +79,7 @@ def axis_progress_from_received(store, context, returned):
                     raise ValueError('root_axis_private_finding_projector_required')
                 value = projector.received_axis_credit(result)
             else:
-                from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+                from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
                 from .a103.a103_credit import A103ContextCredit
                 projector_type = {'A101': A101SequenceCredit, 'A103': A103ContextCredit}.get(axis)
                 if projector_type is None or not isinstance(projector, projector_type):

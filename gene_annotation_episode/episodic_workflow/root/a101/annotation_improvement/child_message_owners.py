@@ -23,7 +23,7 @@ def exchange_for_child(workflow, source, selection, role):
     if type(kind) is not str or kind not in ('child', 'job_child'):
         return None
     state = _state(workflow)
-    if state is None or state.get('scientific_process_binding') is not None:
+    if state is None or state.get('sequence_homology_evidence_binding') is not None:
         return None
     improvement = is_improvement_source(workflow, source)
     if kind == 'child':

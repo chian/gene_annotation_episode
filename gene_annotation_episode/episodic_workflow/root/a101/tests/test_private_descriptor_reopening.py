@@ -79,7 +79,7 @@ def test_current_private_homology_resource_descriptor_reopens_exact_role_family(
             monitoring_binding={'version':'original-test-monitoring-credit'})
         adapter=module('a101_homology_resource_adapter').HomologyResourceAdapter(
             family,store,host.journal)
-        original=module('scientific_process.resource_work_submission.episode').ResourceEpisode(
+        original=module('sequence_homology_evidence.resource_work_submission.episode').ResourceEpisode(
             bindings[0].services,resource_adapters=[adapter])
         descriptor=original.as_record()
         assert descriptor['configuration']['resource_adapters'][0]['version']=='homology_resource_adapter_v2'

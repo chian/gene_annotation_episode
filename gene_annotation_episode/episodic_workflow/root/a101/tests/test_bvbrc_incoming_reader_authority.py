@@ -69,10 +69,10 @@ def test_requested_original_reader_rejects_conflicting_run_before_support(tmp_pa
     module=reader_module(family)
     with own('state').Store(tmp_path/'state') as store:
         store.create_problem(raw_sequence='MAAA',molecule='protein');scope=store.validate_scope()
-        path=(('scientific_process','controlled-parent'),)
+        path=(('sequence_homology_evidence','controlled-parent'),)
         context_run='altered-run';ref=own('method_loop.identities').EpisodeRef(context_run,path)
         request={'message':{'scope':scope,'episode_assignment':{}}}
-        context=own('episode_bindings').BindingContext(context_run,ref.episode_id,'scientific_process',path,scope,{},request)
+        context=own('episode_bindings').BindingContext(context_run,ref.episode_id,'sequence_homology_evidence',path,scope,{},request)
         execution=SimpleNamespace(store=store,run_id='authentic-run')
         reader=getattr(module,class_name)(execution)
         descriptors=getattr(module,schema_name)();source=next(iter(descriptors))

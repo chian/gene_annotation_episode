@@ -11,9 +11,9 @@ HOMES={}
 for path in ROOT.rglob('episode.py'):
     if 'tests' in path.parts:continue
     text=path.read_text()
-    if not any('class '+name+'(' in text for name in ('ScientificProcessEpisode','ExecutionEpisode','ResourceEpisode','MonitorEpisode')):continue
+    if not any('class '+name+'(' in text for name in ('SequenceHomologyEvidenceEpisode','ExecutionEpisode','ResourceEpisode','MonitorEpisode')):continue
     module=import_module(AXIS+'.'+str(path.parent.relative_to(ROOT)).replace('/','.')+'.episode')
-    cls=next(getattr(module,name) for name in ('ScientificProcessEpisode','ExecutionEpisode','ResourceEpisode','MonitorEpisode') if hasattr(module,name))
+    cls=next(getattr(module,name) for name in ('SequenceHomologyEvidenceEpisode','ExecutionEpisode','ResourceEpisode','MonitorEpisode') if hasattr(module,name))
     HOMES[path.parent]=cls
 CASES=[(str(parent.relative_to(ROOT)),str(child.relative_to(ROOT)),child_cls.roles[0])
     for parent in HOMES for child,child_cls in HOMES.items() if child.parent==parent]
@@ -58,7 +58,7 @@ def test_named_parent_request_uses_actual_child_binding_path_and_original_admiss
     result=callback(workflow,source,selection,7)
     assert result=={'scope':selection['scope'],'role':role,'schema':schema,
         'report_declaration':{'original':'declaration'},'initial':{},
-        'episode_assignment':{'admitted':'original'},'scientific_process':None,'assignment':None}
+        'episode_assignment':{'admitted':'original'},'sequence_homology_evidence':None,'assignment':None}
     assert calls==[(context,role,selection['assignment'],selection['scope'],'original-run:original-parent:7')]
 
 

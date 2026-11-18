@@ -32,7 +32,7 @@ def test_actual_root_projection_uses_supplied_original_calculator(progress_case)
 def test_actual_child_projection_rejects_missing_original_task(progress_case):
     binding,context=progress_case
     runtime=import_module(PACKAGE+'.runtime')
-    context.path=(('scientific_process','parent'),*context.path)
+    context.path=(('sequence_homology_evidence','parent'),*context.path)
     workflow=SimpleNamespace(episode_bindings=SimpleNamespace(roles=binding.roles,for_path=lambda path:binding))
     with pytest.raises(ValueError,match='scientific_task_credit_not_declared:'+context.role):
         runtime.Workflow.scientific_projector_for_context(workflow,context)

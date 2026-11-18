@@ -513,7 +513,7 @@ class BVBRCMinhashHost(EpisodeReturnRecords):
     def _validate_values(self, context, form, schema):
         if context.role == 'results':
             expected = self.facts(context, schema)
-        elif context.role in {'annotation', 'scientific_process'}:
+        elif context.role in {'annotation', 'sequence_homology_evidence'}:
             expected = self.received_facts(context, schema)
         else:
             raise ValueError(self.failure_prefix + 'unsupported_return_owner')
@@ -643,7 +643,7 @@ class BVBRCMinhashHost(EpisodeReturnRecords):
             if child.role == 'results':
                 self.read_own(reference, context=child)
                 return True
-            if child.role in {'annotation', 'scientific_process'}:
+            if child.role in {'annotation', 'sequence_homology_evidence'}:
                 if self.resolve_received(child, reference, 'execution_result'):
                     return True
         return False

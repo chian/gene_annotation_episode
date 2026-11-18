@@ -62,7 +62,7 @@ def selects_improvement_parent(workflow, name, parent_path, binding):
     if any(role != 'improvement' for role in tail):
         return False
     state = _state(workflow)
-    if state is None or state.get('scientific_process_binding') is not None:
+    if state is None or state.get('sequence_homology_evidence_binding') is not None:
         return False
     EpisodeBindingRegistry = _current_class('episode_bindings', 'EpisodeBindingRegistry')
     registry = state.get('episode_bindings')

@@ -61,3 +61,9 @@ collection, dangling-name scan (`runs/claude_inputs/la/dangling.py`), commit.
   tables; the A106 branch of `root/tests/monitor_parent_exchange.py` (module path and child binding paths); role table.
   A106's test files plus users of the monitor helper and role table (112 files): identical per file to the baseline.
   Collection 50,565, 0 errors; dangling scan unchanged.
+- P1-A101: `a101/scientific_process` → `a101/sequence_homology_evidence` and every token inside `a101/` (12 paths,
+  400 files); A101 module paths in seven shared files (`axis_contribution_readers.py`, `axis_return_admission.py`,
+  `credit.py`, `evidence_root.py`, `returns.py`, `scientific_process/source_contracts.py`,
+  `tests/test_signed_evidence_root.py`); role table. A101's test files plus every shared-root and top-level file
+  (`runs/claude_ax_a101_s0..3`, 863 files): identical per file to the baseline apart from the cases already retired.
+  Collection 50,565, 0 errors; dangling scan unchanged.

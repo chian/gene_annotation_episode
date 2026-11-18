@@ -17,7 +17,7 @@ from .communication import ReportBoundaryError, plain
 from .episode_bindings import reference_in_context
 from gene_annotation_episode.episodic_workflow.root.a101.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.homology_job_submission.execution_contracts import obj, _result_progress
-from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.resource_work_submission.episode import ResourceEpisode
+from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.resource_work_submission.episode import ResourceEpisode
 from .homology_results import recorded_coverage
 from .resource_estimation import recorded_forecasts
 

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 def axis_contribution_readers(store, run_id):
-    from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
     from .a102.a102_credit import A102StructuralCredit
     from .a103.a103_credit import A103ContextCredit
     from .a104.a104_credit import A104EvolutionaryCredit

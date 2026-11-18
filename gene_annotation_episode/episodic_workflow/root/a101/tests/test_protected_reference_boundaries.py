@@ -15,7 +15,7 @@ def module(name):
 def test_original_protected_verdict_precedes_generic_scope_resolution(monkeypatch,family,verdict):
     runtime=module('runtime')
     context=module('episode_bindings').BindingContext(run_id='original-run',episode_id='original-owner',
-        role='scientific_process',path=(('scientific_process','original'),),scope={},assignment={},
+        role='sequence_homology_evidence',path=(('sequence_homology_evidence','original'),),scope={},assignment={},
         request={'message':{'scope':{},'episode_assignment':{}}})
     monkeypatch.setattr(runtime.Episode,'identity',lambda *args,**kwargs:SimpleNamespace(episode_id=context.episode_id))
     calls=[]

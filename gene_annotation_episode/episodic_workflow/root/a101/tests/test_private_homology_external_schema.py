@@ -4,7 +4,7 @@ import pytest
 
 
 @pytest.mark.parametrize('home',['homology_job_submission','homology_job_monitoring','homology_result_acquisition'])
-@pytest.mark.parametrize('role',['annotation','scientific_process'])
+@pytest.mark.parametrize('role',['annotation','sequence_homology_evidence'])
 def test_original_external_report_schema_query_remains_empty(home,role):
     cls=import_module('gene_annotation_episode.episodic_workflow.root.a101.'+home+'.episode').HomologyEpisode
     binding=object.__new__(cls)

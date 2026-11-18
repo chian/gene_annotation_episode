@@ -79,7 +79,7 @@ def signed_offset_volume(evidence):
 
 def _projector(axis):
     if axis == 'A101':
-        from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+        from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
         return A101SequenceCredit()
     if axis == 'A102':
         from .a102.a102_credit import A102StructuralCredit

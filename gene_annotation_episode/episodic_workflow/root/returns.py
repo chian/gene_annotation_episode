@@ -54,7 +54,7 @@ def received_axis_task_credit(store, context):
                 or result['credit_binding_ref'] is None):
             raise ValueError('root_axis_local_credit_definition_or_assignment_conflict')
         binding_module = {
-            'A101': '.a101.scientific_process.credit',
+            'A101': '.a101.sequence_homology_evidence.credit',
             'A102': '.a102.scientific_process.task_projector',
             'A103': '.a103.scientific_process.task_projector',
             'A104': '.a104.scientific_process.task_projector',
@@ -126,7 +126,7 @@ def received_axis_task_credit(store, context):
 
 
 def axis_contribution_readers(store, run_id):
-    from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
+    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
     from .a102.a102_credit import A102StructuralCredit
     from .a103.a103_credit import A103ContextCredit
     from .a104.a104_credit import A104EvolutionaryCredit
