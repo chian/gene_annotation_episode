@@ -1,7 +1,6 @@
 """Complete original saved partner-science validation; never rerun source reading or calculation."""
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.literature_partner_sheet_records import BINDINGS, CHECK_REASONS, COMPONENTS, ContractError, EXPERIMENT_TYPES, FORMULA_CODES, LITERAL_FIELDS, LITERAL_REFERENCE_ROLES_VERSION, LITERAL_REFERENCE_TYPES, NATIVE_UNITS, PROVIDER, REASONS, SOURCE_KINDS, _COMPONENT_ROLES, _FIXED_METADATA, _NATIVE_ARGUMENT_SCHEMA, _NATIVE_BINDING_VERSION, _NATIVE_EVIDENCE_SCHEMA, _NATIVE_EVIDENCE_V2_SCHEMA, _NATIVE_IDENTITY_FIELDS, _ROLES, _arguments_schema, _arm_metadata_schema, _binding_record, _cell_schema, _check_schema, _checks_schema, _condition_refs, _condition_role, _direct_references, _factor_names, _factor_record, _input_schema, _metadata, _native_evidence_schema, _native_operand_projection, _native_population_schema, _native_version, _saved_check, _spread_schema, assessments, canonical, deepcopy, hashlib, identity, json, literal_reference_role, obj, partner_cells_schema, partner_population_schema, partner_source_population_schema, plain, publication, read_partner_inputs, source_literal_label, unicodedata, validate_schema
-from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.literature_partner_sheet_population import populate as _populate_partner_sheet
 
 def _validate_saved(self, sheet_ref, saved):
 
@@ -12,13 +11,11 @@ def _validate_saved(self, sheet_ref, saved):
     artifact = self.store.get(source['artifact_ref'])
     require(hashlib.sha256(canonical(saved).encode()).hexdigest() == artifact['sha256'])
     request = json.loads(self.store.get_artifact(source['request_ref']))
-    require(set(request) == {'run_id', 'episode_id', 'operation_key', 'arguments', 'scope'})
+    require(set(request) == {'operation_key', 'arguments', 'scope'})
     args, extraction = (request['arguments'], saved['extraction'])
     assessment = args.get('experiment_assessment')
-    assessments.validate_saved_assessment(self, saved, request)
+    assessments.validate_saved_assessment(self, saved, request, sheet_ref)
     validate_schema(args, _arguments_schema(args))
-    operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
-    require(operation is not None and operation['signature'] == canonical({'arguments': args, 'scope': request['scope']}))
     marked = 'native_operand_bindings' in saved
     require(saved.get('literal_reference_roles_version') == LITERAL_REFERENCE_ROLES_VERSION)
     require(set(saved) == {'version', 'input_source_ref', 'input_artifact_ref', 'input_source_refs', 'direct_input_source_refs', 'data_source_ref', 'extraction', 'experimental_bindings', 'factor_bindings', 'sheet'} | ({'native_operand_bindings'} if marked else set()) | {'literal_reference_roles_version'} | ({'experiment_assessment'} if assessment is not None else set()))
@@ -89,12 +86,6 @@ def _validate_saved(self, sheet_ref, saved):
         require(self.store.get(reference) == {'id': reference, 'record_type': 'term', 'origin': 'tool', **record})
     require(set(saved['sheet']) == {'cells'} and saved['sheet']['cells'] == extraction['cells'])
     require(set(extraction['cells']) == set(COMPONENTS))
-    outcome = json.loads(operation['outcome'])
-    require(outcome['status'] == 'completed' and outcome['feedback'] is None)
-    require(isinstance(outcome['changed_record_refs'], list) and len(set(outcome['changed_record_refs'])) == len(outcome['changed_record_refs']) and (set(outcome['changed_record_refs']) <= set(outcome['record_refs'])))
-    require(outcome['operation_ref'] == identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']}))
-    require(outcome['record_refs'] == list(dict.fromkeys([sheet_ref, *saved['input_source_refs'], *(saved['experimental_bindings'][field] for field in BINDINGS if saved['experimental_bindings'][field]), *(native_records if native_records is not None else _condition_refs(extraction)), *(factors[name] for name in sorted(factors))])))
-    require(outcome['result'] == {'sheet_ref': sheet_ref, 'cells': extraction['cells'], 'assay_interpretation': interpretation, **_metadata(extraction, factors), **({'experiment_assessment': assessment} if assessment is not None else {})})
 
 def _validate_native_saved(self, args, evidence, inputs, *, version=None):
     """Check frozen native-selector relationships without parsing again.

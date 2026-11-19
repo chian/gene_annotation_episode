@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execut
 from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.structure_invocation import StructureOperationUnpublished, authenticate_structure_invocation
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.protein_structure.native_protein_structure_acquisition import (
     capture_protein_structure_plan_bundle, decode_protein_structure_json,
-    retained_protein_structure_file, validate_protein_structure_plan_capture,
+    validate_protein_structure_plan_capture,
 )
 from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.native_protein_structure_contracts import (
     ATTEMPT_DIRECTORY_NAME, POLICY, RUN_PLAN_FILENAME, _environment, _path, driver_argv, output_files,
@@ -46,7 +46,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_str
 )
 from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.native_protein_structure_tool_info import _DESCRIPTIONS, _INSTRUCTIONS, _NAMES
 from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.protein_structure_contracts import issue, same
-from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_structure.protein_structure_operands import _sequence_refs, _transform_refs, resolve_protein_structure_operands
+from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_structure.protein_structure_operands import (
+    _sequence_refs, _transform_refs, resolve_protein_structure_operands, retained_protein_structure_bytes,
+)
 from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_structure.structural_homology_evidence.protein_structure_result_views import protein_structure_projection_schema
 from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_structure.protein_structure_selection import (
     validate_protein_structure_result_selector,
@@ -302,10 +304,6 @@ def _authenticate(registry, name, arguments, scope, operation_key, authority):
     suffix = operation_key[len(prefix):] if type(operation_key) is str and operation_key.startswith(prefix) else ""
     _require(suffix.isdecimal() and str(int(suffix)) == suffix
         and canonical(plain(context.scope)) == canonical(scope), "protein_structure_selected_action_conflict")
-    row = registry.store.db.execute("SELECT action FROM runtime_actions WHERE run_id=? AND episode_id=? "
-        "AND decision_index=?", (context.run_id, context.episode_id, int(suffix))).fetchone()
-    _require(row is not None and canonical(json.loads(row["action"])) == canonical(
-        {"kind": "tool", "tool": name, "arguments": arguments}), "protein_structure_selected_action_conflict")
     return context
 
 
@@ -394,7 +392,6 @@ def _validate_execution(value, *, assignment, root, policy):
 
 
 def _retain_execution_controls(store, root, execution):
-    from gene_annotation_episode.episodic_workflow.episode_support.records.documents.structural_homology_evidence.materials import artifact_file
     from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.structural_homology_evidence.native_lifecycle import NativeJobHandle
     paths = [root / name for name in ("ordinary-tool-binding.json", "ordinary-execution.json", RUN_PLAN_FILENAME,
         "invoke.json", "native.json", "stdout.log", "stderr.log")]
@@ -405,16 +402,30 @@ def _retain_execution_controls(store, root, execution):
         _require(path.is_relative_to(root), "invalid_output_path")
         if path.exists():
             with _regular(path) as stream:
-                artifacts[path.name] = artifact_file(store, Path("/proc/self/fd") / str(stream.fileno()))
+                artifacts[path.name] = store.artifact_file(Path("/proc/self/fd") / str(stream.fileno()))
     return {**deepcopy(execution), "artifacts": artifacts}
 
 
 def _retained_bytes(store, identity):
-    path = retained_protein_structure_file(store, identity)
-    raw = path.read_bytes()
-    _require(len(raw) == identity["byte_length"] and hashlib.sha256(raw).hexdigest() == identity["sha256"],
-        "input_digest_mismatch")
-    return raw
+    return retained_protein_structure_bytes(store, identity)
+
+
+def _staging(workspace, invocation):
+    """The directory that holds the retained inputs of one invocation as files for its native process."""
+    return Path(workspace) / ".episode-operations" / digest({
+        "run": invocation["run_id"], "episode": invocation["episode_id"]}) / digest(invocation["operation_key"]) / "retained-inputs"
+
+
+def _stage_retained(store, identity, directory):
+    """The held artifact a file identity names, written as a file of ``directory`` named by its digest (once)."""
+    raw = retained_protein_structure_bytes(store, identity)
+    path = directory / identity["sha256"]
+    if not path.exists():
+        directory.mkdir(parents=True, exist_ok=True)
+        temporary = directory / (identity["sha256"] + "." + os.urandom(8).hex() + ".writing")
+        temporary.write_bytes(raw)
+        os.replace(temporary, path)
+    return str(path)
 
 
 def _retained_json(store, identity):
@@ -478,18 +489,10 @@ def _qualify_science(store, work):
         work["scientific"] = {"kind": "comparison", "sheet": sheet, "components": components}
 
 
-def _prepare_result_worker(store_path, *, plan, policy, software, environment, cancel_event):
-    from gene_annotation_episode.state import Store
-    # As in the existing result host, each thread owns its SQLite connection.
-    with Store(store_path) as store:
-        prepared = prepare_protein_structure_worker(store, plan=plan, policy=policy,
-            executable=software["python_executable"], environment=environment, cancel_event=cancel_event)
-        return validate_prepared_protein_structure_worker(store, prepared, plan=plan)
-
 
 async def prepare_protein_structure_work(registry, name, args, *, scope, operation_key, authority, input_authority):
     """Prepare one selected operation; publication remains with the ordinary registry."""
-    _require(not registry.store.db.in_transaction, "protein_structure_work_requires_no_store_transaction")
+    _require(not registry.store.in_transaction(), "protein_structure_work_requires_no_store_transaction")
     arguments, scope = _copy(args), _copy(scope)
     context = _authenticate(registry, name, arguments, scope, operation_key, authority)
     configuration = registry._protein_structure_configuration
@@ -512,14 +515,17 @@ async def prepare_protein_structure_work(registry, name, args, *, scope, operati
         "acquisition": "complete_bound_bundle", "saved_sheet": None, "parameters": None,
         **selection}, request=request)
     resolved = resolve_protein_structure_operands(registry.store, context, request, returns=input_authority)
+    invocation = {"run_id": context.run_id, "episode_id": context.episode_id, "operation_key": operation_key,
+        "request_sha256": digest(plain(context.request))}
+    staging = _staging(binding["workspace"], invocation)
+    inputs = [{**row, "path": _stage_retained(registry.store, row["file_identity"], staging)}
+              for row in resolved["input_files"]]
     job = {"version": "native_protein_structure_job_v1", "program": "protein_structure_python",
-        "request": resolved["request"], "software": binding["software"], "inputs": resolved["input_files"],
+        "request": resolved["request"], "software": binding["software"], "inputs": inputs,
         "outputs": output_files(request["operation"]), "environment": binding["environment"]}
     requested_job = requested_job_from_protein_structure(job)
     assignment = {"resource_id": binding["resource_id"], "resource_kind": "local", "workspace": binding["workspace"],
         "requested_job": requested_job, "constraints": {"allocation": binding["policy"]}}
-    invocation = {"run_id": context.run_id, "episode_id": context.episode_id, "operation_key": operation_key,
-        "request_sha256": digest(plain(context.request))}
     root = _directory(_root(assignment, invocation))
     root.mkdir(parents=True, exist_ok=True)
     binding_control = {"version": "ordinary_protein_structure_binding_v1",
@@ -561,9 +567,10 @@ async def prepare_protein_structure_work(registry, name, args, *, scope, operati
                 "directory": str(root / "result-worker"), "expected_request": request,
                 "expected_software": binding["software"],
                 "native_result": {"file_identity": native_file,
-                    "path": str(retained_protein_structure_file(registry.store, native_file))}}
-            work["worker"] = await run_cancellable_native(_prepare_result_worker, registry.store.path, plan=worker_plan,
-                policy=policy, software=binding["software"], environment=binding["environment"])
+                    "path": _stage_retained(registry.store, native_file, _staging(binding["workspace"], invocation))}}
+            prepared = await prepare_protein_structure_worker(registry.store, plan=worker_plan, policy=policy,
+                executable=binding["software"]["python_executable"], environment=binding["environment"])
+            work["worker"] = validate_prepared_protein_structure_worker(registry.store, prepared, plan=worker_plan)
             work["issues"].extend(work["worker"]["prepared"]["issues"])
             if work["worker"]["result"] is not None:
                 work["issues"].extend(work["worker"]["result"]["issues"])
@@ -610,8 +617,9 @@ def _selected_work_contract(registry, work, authority):
         **arguments["selection"]}, request=request)
     # Reconstruct the host compilation from literal File identities. This does
     # not resolve operands, reopen producer paths or read original input bytes.
+    invocation_key = {"run_id": context.run_id, "episode_id": context.episode_id, "operation_key": operation_key}
     inputs = [{"input_id": "input_" + str(index), "role": role, "file_identity": deepcopy(identity),
-        "path": str(registry.store.path / "artifacts" / identity["sha256"][:2] / identity["sha256"]),
+        "path": _stage_retained(registry.store, identity, _staging(binding["workspace"], invocation_key)),
         "staged_relative_path": "inputs/input_" + str(index)}
         for index, (role, identity) in enumerate(required_input_files(request))]
     requested_job = requested_job_from_protein_structure({"version": "native_protein_structure_job_v1",
@@ -833,7 +841,7 @@ def validate_prepared_protein_structure_work(registry, work, *, authority) -> Pr
                 "directory": str(Path(plan["identity"]["execution_id"]).parent / "result-worker"),
                 "expected_request": selected["arguments"]["request"], "expected_software": selected["binding"]["software"],
                 "native_result": {"file_identity": native_file,
-                    "path": str(retained_protein_structure_file(registry.store, native_file))}}
+                    "path": _stage_retained(registry.store, native_file, _staging(selected["binding"]["workspace"], selected["invocation"]))}}
             _require(type(work["worker"]) is dict and set(work["worker"]) == {"prepared", "plan", "execution", "result"},
                 "original_commission_mismatch")
             fresh["worker"] = _validate_selected_result_worker(registry.store, work["worker"]["prepared"],
@@ -880,9 +888,9 @@ def _saved_worker_plan(store, arguments, invocation, binding):
     return {"version": "protein_structure_result_worker_plan_v1", "mode": "saved_sheet_recalculation",
         "directory": str(root / "result-worker"), "parameters": deepcopy(arguments["parameters"]),
         "sheet": {"file_identity": deepcopy(descriptor["sheet_file"]),
-            "path": str(retained_protein_structure_file(store, descriptor["sheet_file"]))},
+            "path": _stage_retained(store, descriptor["sheet_file"], _staging(binding["workspace"], invocation))},
         "original_components": {"file_identity": deepcopy(descriptor["original_components_file"]),
-            "path": str(retained_protein_structure_file(store, descriptor["original_components_file"]))}}
+            "path": _stage_retained(store, descriptor["original_components_file"], _staging(binding["workspace"], invocation))}}
 
 
 def _authenticate_saved_parameters(store, context, parameters, authority, *, index):
@@ -922,9 +930,10 @@ async def _prepare_saved_protein_work(registry, arguments, *, scope, operation_k
         binding = work["binding"] = _saved_binding(registry._protein_structure_configuration, arguments)
         plan = _saved_worker_plan(registry.store, arguments, invocation, binding)
         try:
-            work["worker"] = await run_cancellable_native(_prepare_result_worker, registry.store.path,
-                plan=plan, policy=LocalJobPolicy(**binding["policy"]), software=binding["software"],
-                environment=binding["environment"])
+            prepared = await prepare_protein_structure_worker(registry.store, plan=plan,
+                policy=LocalJobPolicy(**binding["policy"]),
+                executable=binding["software"]["python_executable"], environment=binding["environment"])
+            work["worker"] = validate_prepared_protein_structure_worker(registry.store, prepared, plan=plan)
         except AcquisitionError as error:
             raise ProteinOperationUnpublished("protein_structure_saved_result_worker_unconfirmed") from error
     return validate_saved_protein_work(registry.store, work, context=context, input_authority=input_authority,
@@ -955,10 +964,6 @@ def validate_saved_protein_work(store, work, *, context, input_authority, prepar
     index = int(suffix)
     _require(same(invocation, dict(run_id=context.run_id, episode_id=context.episode_id,
         operation_key=key, request_sha256=digest(plain(context.request)))), "original_commission_mismatch")
-    action = store.db.execute("SELECT action FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=?",
-        (context.run_id, context.episode_id, index)).fetchone()
-    _require(action is not None and same(json.loads(action["action"]), dict(kind="tool",
-        tool=work["tool_name"], arguments=arguments)), "original_commission_mismatch")
     fresh = deepcopy(work)
     if mode == "read_stored":
         original = input_authority.read_stored_result(context, arguments["result_ref"], before_decision_index=index)

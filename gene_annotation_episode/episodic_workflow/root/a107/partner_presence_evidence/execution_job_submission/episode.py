@@ -1,15 +1,28 @@
-"""A107 binding ``partner_presence_evidence/execution_job_submission``: its submission source and completion continuation are ``execution_job_submission.submission_source``."""
-from __future__ import annotations
+"""The A107 execution job submission (launch) episode."""
+from episode_runtime import EpisodeBinding
 
-from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.execution_job_submission.submission_source import (
-    JobSubmissionBinding)
-from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.runtime_binding import DescendantBinding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class ExecutionEpisode(JobSubmissionBinding, DescendantBinding):
-    binding_path = 'partner_presence_evidence/execution_job_submission'
-    goal = 'Improve delivery of the assigned computation as submitted jobs with original inputs and handoff receipts'
-    unit = 'One API, local or HPC route child commissioned for one requested job'
-    result = 'Execution handoffs and their receipts'
-    child_slots = {'launch_api': 'partner_presence_evidence/execution_job_submission/api_job_execution', 'launch_hpc': 'partner_presence_evidence/execution_job_submission/hpc_job_execution', 'launch_local': 'partner_presence_evidence/execution_job_submission/local_job_execution'}
-    commissioning_parent = 'partner_presence_evidence'
+class ExecutionJobSubmission(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

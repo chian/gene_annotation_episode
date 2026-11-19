@@ -3,6 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 import hashlib
 import json
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, obj, validate_schema
 from gene_annotation_episode.domain import ContractError
@@ -67,23 +68,15 @@ def rate_observation_cells_schema():
     row = obj({'sheet_ref': deepcopy(ref), 'evidence_source_ref': deepcopy(ref), 'evaluation_scope': {'const': 'source_reported_rate_observations'}, 'component': {'enum': list(COMPONENTS)}, **_cell()['properties'], **{name: deepcopy(TEXT) for name in ('subject', 'panel', 'source_native_unit')}, 'source_kind': {'enum': list(SOURCE_KINDS)}, 'groups': obj({role: deepcopy(group) for role in ('reference', 'test')}), 'grouping': {'const': 'unknown'}, 'physical_conversion': {'const': 'unknown'}, 'qualifications': {'const': list(QUALIFICATIONS)}, 'input_origins': _array({'enum': ['reported', 'synthetic']}, True)})
     return {**_array(row), 'x-source': NAMESPACE}
 
+OPERATIONS = operations_ledger('literature_rate_observation_operations')
+RECEIVED = received_ledger('literature_rate_observation_received')
+
 class LiteratureRateObservationRepository(LiteratureRateRepository):
     """Reuse existing authenticated admission; original XLSX never reread at return."""
     provider, components, record_version = (PROVIDER, COMPONENTS, VERSION)
-    operations_table = 'literature_rate_observation_operations'
-    received_table = 'literature_rate_observation_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ()
-
-    def __init__(self, store, run_id):
-        if not isinstance(run_id, str) or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id = (store, run_id)
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     @staticmethod
     def _components(components):
@@ -112,7 +105,7 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
         requested = self._components(plain(context.assignment.get(REQUESTED, [])))
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope), 'components': requested}
         signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
+        old = self._operation(context.episode_id, operation_key)
         if old is not None:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -126,15 +119,14 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
         ancestors = self._ancestors(context.scope, args['source_ref'])
         payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': artifact, 'input_source_refs': ancestors, 'selection': args, 'sheet': sheet}
         with self.store.transaction():
-            self._install()
             sheet_artifact = self.store.artifact(canonical(payload), 'application/json')
             request_ref = self.store.artifact(canonical(request), 'application/json')
             value = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': sheet_artifact, 'text_ref': sheet_artifact, 'request_ref': request_ref, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': ancestors}
             reference = identity('source', {'origin': 'tool', 'record': value})
-            existed = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (reference,)).fetchone()
+            existed = self.store.holds(reference)
             self.store.put('source', value, origin='tool', scope=plain(context.scope))
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [reference], 'changed_record_refs': [] if existed else [reference], 'result': {'sheet_ref': reference, 'view': VIEW, 'cells': _project_saved(payload, reference, requested)}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def _json_artifact(self, reference):
@@ -157,7 +149,7 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
             raise ContractError('rate_observation_saved_request_mismatch')
         validate_schema(request['arguments'], rate_observation_population_schema())
         self._components(request['components'])
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
+        operation = self._operation(request['episode_id'], request['operation_key'])
         if operation is None or operation['signature'] != canonical(request):
             raise ContractError('literature_sheet_not_selected_output')
         saved = self._json_artifact(source['artifact_ref'])
@@ -218,10 +210,8 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
         """Original selected outputs of this reporting episode, never new work."""
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
-        if not self._installed(self.operations_table):
-            return []
         references = []
-        for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id)):
+        for row in self._operations(context.episode_id):
             outcome = json.loads(row['outcome'])
             if outcome.get('status') == 'completed' and self.store.get(outcome['result']['sheet_ref']).get('version') == self.record_version and (outcome['result']['sheet_ref'] in context.received_record_refs):
                 references.append(outcome['result']['sheet_ref'])
@@ -248,16 +238,6 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
             raise ContractError('literature_source_outside_scope')
         return super().fact_cells(context, refs, components=components)
 
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self._install()
-            return super().receive_cells(context, cells, operation_key)
-
     @staticmethod
     def cell_record_refs(cells):
         return list(dict.fromkeys((ref for row in cells for ref in (row['sheet_ref'], row['evidence_source_ref']))))
@@ -269,9 +249,7 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
         return self._grid_projection
 
     def validate_empty_return_family(self, context):
-        if not self._installed(self.operations_table):
-            return
-        versions = {self.store.get(json.loads(row['outcome'])['result']['sheet_ref']).get('version') for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=?', (self.run_id, context.episode_id))}
+        versions = {self.store.get(json.loads(row['outcome'])['result']['sheet_ref']).get('version') for row in self._operations(context.episode_id)}
         if self.record_version == VERSION and GRID_RECORD not in versions:
             return
         if versions and self.record_version not in versions:
@@ -384,10 +362,12 @@ def _project_grid_saved(saved, reference, components):
         raise ContractError('literature_rate_grid_component_not_selected')
     return [{**deepcopy(rows[key]), 'sheet_ref': reference, 'evidence_source_ref': saved['input_source_ref']} for key in selected]
 
+GRID_RECEIVED = received_ledger('literature_rate_grid_received')
+
 class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
     """Versioned selected scalar view; same operation and ordinary typed receipts."""
     record_version = GRID_RECORD
-    received_table = 'literature_rate_grid_received'
+    received = GRID_RECEIVED
 
     @staticmethod
     def _components(components):
@@ -411,7 +391,7 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
             raise ContractError('literature_rate_grid_requested_subset_mismatch')
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope), 'components': requested, 'role': context.role, 'assignment': plain(context.assignment), 'received_record_refs': list(context.received_record_refs)}
         signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
+        old = self._operation(context.episode_id, operation_key)
         if old is not None:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -439,16 +419,15 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
         ancestors = self._all_ancestors(context.scope, direct)
         payload = {'version': GRID_RECORD, 'input_source_ref': args['grid']['source_ref'], 'input_artifact_ref': artifact, 'direct_input_source_refs': direct, 'input_source_refs': ancestors, 'context_artifacts': context_artifacts, 'source_metadata': {r: plain(self._native_provenance(context.scope, r)) for r in ancestors}, 'selection': args, 'extraction': extraction, 'sheet': sheet, 'projected_cells': rows}
         with self.store.transaction():
-            self._install()
             sheet_artifact = self.store.artifact(canonical(payload), 'application/json')
             request_ref = self.store.artifact(canonical(request), 'application/json')
             value = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': sheet_artifact, 'text_ref': sheet_artifact, 'request_ref': request_ref, 'version': GRID_RECORD, 'retrieved_at': None, 'parent_source_refs': ancestors}
             reference = identity('source', {'origin': 'tool', 'record': value})
-            existed = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (reference,)).fetchone()
+            existed = self.store.holds(reference)
             self.store.put('source', value, origin='tool', scope=plain(context.scope))
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [reference], 'changed_record_refs': [] if existed else [reference], 'result': {'sheet_ref': reference, 'view': GRID_VIEW, 'record_version': GRID_RECORD, 'cells': _project_grid_saved(payload, reference, requested)}, 'feedback': None}
             validate_schema(outcome['result']['cells'], rate_grid_cells_schema())
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def read(self, sheet_ref):
@@ -465,7 +444,7 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
             raise ContractError('rate_grid_saved_request_mismatch')
         validate_schema(request['arguments'], rate_observation_operation_schema()['anyOf'][1])
         keys = self._components(request['components'])
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
+        operation = self._operation(request['episode_id'], request['operation_key'])
         if operation is None or operation['signature'] != canonical(request):
             raise ContractError('literature_sheet_not_selected_output')
         saved = self._json_artifact(source['artifact_ref'])

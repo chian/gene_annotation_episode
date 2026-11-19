@@ -132,7 +132,6 @@ class LiteratureFigureRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = "literature_figure_record_v1"
-    operations_table = "literature_figure_operations"
     received_table = "literature_figure_received"
     binding_fields = tuple(BINDINGS)
 
@@ -177,17 +176,6 @@ class LiteratureFigureRepository(LiteratureRateRepository):
                     parents.append(reference)
         return parents
 
-    def _replay(self, context, old, signature):
-        if old["signature"] != signature:
-            raise ContractError("operation_key_reused_for_different_work")
-        outcome = json.loads(old["outcome"])
-        saved = self.read(outcome["result"]["sheet_ref"])
-        for reference in saved["direct_input_source_refs"]:
-            self._source(context, reference)
-        for reference in saved["input_source_refs"]:
-            self._provenance(context.scope, reference)
-        return outcome
-
     def populate(self, context, arguments, operation_key):
         if context.run_id != self.run_id:
             raise ContractError("literature_run_mismatch")
@@ -195,17 +183,7 @@ class LiteratureFigureRepository(LiteratureRateRepository):
             raise ContractError("operation_key_required")
         args = plain(arguments)
         validate_schema(args, figure_population_schema())
-        signature = canonical({"arguments": args, "scope": plain(context.scope)})
-        parameters = (self.run_id, context.episode_id, operation_key)
-        query = (f"SELECT signature,outcome FROM {self.operations_table} "
-            "WHERE run_id=? AND episode_id=? AND operation_key=?")
-        old = self.store.db.execute(query, parameters).fetchone()
-        if old is not None:
-            return self._replay(context, old, signature)
         with self.store.transaction():
-            old = self.store.db.execute(query, parameters).fetchone()
-            if old is not None:
-                return self._replay(context, old, signature)
 
             def read_source(reference, representation):
                 source = self._source(context, reference)
@@ -233,9 +211,9 @@ class LiteratureFigureRepository(LiteratureRateRepository):
 
             def publish(kind, record):
                 candidate = identity(kind, {"origin": "tool", "record": record})
-                exists = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (candidate,)).fetchone()
+                exists = self.store.holds(candidate)
                 row = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
-                if exists is None:
+                if not exists:
                     created.append(row["id"])
                 return row["id"]
 
@@ -261,8 +239,6 @@ class LiteratureFigureRepository(LiteratureRateRepository):
                 "result": {"sheet_ref": sheet_ref, "cells": deepcopy(extraction["cells"]),
                     "assay_interpretation": deepcopy(extraction["literals"]), **_metadata(extraction)},
                 "feedback": None}
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (*parameters, signature, canonical(outcome)))
         return outcome
 
     def read(self, sheet_ref):
@@ -286,11 +262,6 @@ class LiteratureFigureRepository(LiteratureRateRepository):
         require(set(request) == {"run_id", "episode_id", "operation_key", "arguments", "scope"})
         args, extraction = request["arguments"], saved["extraction"]
         validate_schema(args, figure_population_schema())
-        operation = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
-            "WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
-        require(operation is not None and operation["signature"] == canonical({
-            "arguments": args, "scope": request["scope"]}))
         require(set(saved) == {"version", "input_source_ref", "input_artifact_ref", "input_source_refs",
             "direct_input_source_refs", "data_source_ref", "extraction", "experimental_bindings", "sheet"})
         require(source["version"] == self.record_version and source["text_ref"] == source["artifact_ref"])
@@ -387,18 +358,6 @@ class LiteratureFigureRepository(LiteratureRateRepository):
                 require(difference["status"] == "unavailable" and difference["unavailable_reason"] == "missing_ordinate")
             else:
                 require(difference["status"] == "populated" or difference["unavailable_reason"] == "numerical_model_range")
-        outcome = json.loads(operation["outcome"])
-        require(outcome["status"] == "completed" and outcome["feedback"] is None)
-        require(isinstance(outcome["changed_record_refs"], list)
-            and len(set(outcome["changed_record_refs"])) == len(outcome["changed_record_refs"])
-            and set(outcome["changed_record_refs"]) <= set(outcome["record_refs"]))
-        require(outcome["operation_ref"] == identity("operation", {"run_id": self.run_id,
-            "episode_id": request["episode_id"], "key": request["operation_key"]}))
-        require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
-            *(saved["experimental_bindings"][field] for field in BINDINGS
-                if saved["experimental_bindings"][field]), *_condition_refs(extraction)])))
-        require(outcome["result"] == {"sheet_ref": sheet_ref, "cells": extraction["cells"],
-            "assay_interpretation": extraction["literals"], **_metadata(extraction)})
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
         components = self.components if components is None else components

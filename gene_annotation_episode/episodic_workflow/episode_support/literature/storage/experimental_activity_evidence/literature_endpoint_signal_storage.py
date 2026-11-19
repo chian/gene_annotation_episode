@@ -8,6 +8,7 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, validate_schema
 from gene_annotation_episode.domain import ContractError
@@ -108,22 +109,14 @@ def _project_once(args, extraction, sheet, source_refs, read_sizes):
     common = {'row_version': 'endpoint_signal_return_v1', 'evidence_source_ref': extraction['source_ref'], 'image_source_ref': image['source_ref'] if image else None, 'evaluation_scope': SCOPE, 'source_kind': extraction['source_kind'], 'source_context': context, 'relationships': {name: {'value': item['interpretation']['value'] if item['interpretation'] else 'unknown', 'status': 'authenticated_interpretation' if item['interpretation'] else 'source_unavailable'} for name, item in extraction['relationships'].items()}, 'sampling_window': extraction['context']['sampling_window']['value'] if extraction['context']['sampling_window'] else None, 'uncertainty': uncertainty, 'physical_preparation_count': None, 'physical_preparation_count_status': 'not_extracted', 'molecular_attribution': 'not_established_by_signal_decomposition', 'functional_relevance': 'not_scored_by_endpoint_section', 'dependency_meanings': deepcopy(ENDPOINT_SIGNAL_CELLS_SCHEMA_V1['items']['properties']['dependency_meanings']['const']), 'source_scope': list(source_refs), 'withheld_locations': locations, 'withheld_image_source_refs': [image['source_ref']] if image else []}
     return [{**deepcopy(common), **deepcopy(cell)} for cell in sheet['cells']]
 
+OPERATIONS = operations_ledger('literature_endpoint_signal_operations')
+RECEIVED = received_ledger('literature_endpoint_signal_received')
+
 class LiteratureEndpointSignalRepository(LiteratureRateRepository):
     provider, record_version, components = (PROVIDER, VERSION, COMPONENTS)
-    operations_table = 'literature_endpoint_signal_operations'
-    received_table = 'literature_endpoint_signal_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ()
-
-    def __init__(self, store, run_id):
-        if type(run_id) is not str or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id = (store, run_id)
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     @staticmethod
     def _components(values):
@@ -153,7 +146,7 @@ class LiteratureEndpointSignalRepository(LiteratureRateRepository):
             raise ContractError('endpoint_assignment_request_roster_mismatch')
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'role': context.role, 'operation_key': operation_key, 'scope': plain(context.scope), 'assignment': plain(context.assignment), 'received_record_refs': list(context.received_record_refs), 'arguments': args, 'components': components}
         signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
+        old = self._operation(context.episode_id, operation_key)
         if old:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -193,17 +186,16 @@ class LiteratureEndpointSignalRepository(LiteratureRateRepository):
         snapshots = {'request': deepcopy(ENDPOINT_SIGNAL_REQUEST_SCHEMA_V1), 'selection': endpoint_signal_population_schema(), 'extraction': endpoint_signal_extraction_schema(), 'sheet': endpoint_signal_sheet_schema(), 'rows': deepcopy(ENDPOINT_SIGNAL_CELLS_SCHEMA_V1)}
         payload = {'version': VERSION, 'input_source_ref': source['id'], 'input_artifact_ref': source['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': parents, 'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'original_schemas': snapshots, 'extraction': extraction, 'sheet': sheet, 'row_templates': templates}
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
             req_ref = self.store.artifact(canonical(request), 'application/json')
             record = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': req_ref, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': parents}
             ref = identity('source', {'origin': 'tool', 'record': record})
-            exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (ref,)).fetchone()
+            exists = self.store.holds(ref)
             self.store.put('source', record, origin='tool', scope=plain(context.scope))
             rows = [{'sheet_ref': ref, **deepcopy(row)} for row in templates]
             validate_schema(rows, snapshots['rows'])
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [ref], 'changed_record_refs': [] if exists else [ref], 'result': {'sheet_ref': ref, 'view': VIEW, 'record_version': VERSION, 'cells': rows}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def _json(self, reference):
@@ -235,8 +227,7 @@ class LiteratureEndpointSignalRepository(LiteratureRateRepository):
         require(set(request) == {'run_id', 'episode_id', 'role', 'operation_key', 'scope', 'assignment', 'received_record_refs', 'arguments', 'components'} and request['run_id'] == self.run_id)
         require(set(saved) == {'version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'source_metadata', 'original_schemas', 'extraction', 'sheet', 'row_templates'})
         require(saved['version'] == VERSION and source['text_ref'] == source['artifact_ref'])
-        require(self._installed(self.operations_table))
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
+        operation = self._operation(request['episode_id'], request['operation_key'])
         require(operation is not None and operation['signature'] == canonical(request))
         schemas = saved['original_schemas']
         require(set(schemas) == {'request', 'selection', 'extraction', 'sheet', 'rows'})
@@ -325,23 +316,15 @@ class LiteratureEndpointSignalRepository(LiteratureRateRepository):
                 result.extend((deepcopy(received[ref, name]) for name in selected if (ref, name) in received))
         return result
 
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
     def receive_cells(self, context, cells, operation_key):
         if cells:
             with self.store.transaction():
-                self._install()
                 return super().receive_cells(context, cells, operation_key)
 
     def selected_sheet_refs(self, context):
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
-        if not self._installed(self.operations_table):
-            return []
-        refs = list(dict.fromkeys((json.loads(row['outcome'])['result']['sheet_ref'] for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id)))))
+        refs = list(dict.fromkeys((json.loads(row['outcome'])['result']['sheet_ref'] for row in self._operations(context.episode_id))))
         for ref in refs:
             self.read(ref)
         return refs
@@ -377,9 +360,7 @@ class LiteratureEndpointSignalRepository(LiteratureRateRepository):
     def receipt_bindings(self):
         """Host-only selected identity/artifact ownership; never installs state."""
         result = {}
-        if not self._installed(self.operations_table):
-            return result
-        for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=?', (self.run_id,)):
+        for row in self._operations():
             ref = json.loads(row['outcome'])['result']['sheet_ref']
             source = self.store.get(ref)
             owner = self._sheet_owner(ref)

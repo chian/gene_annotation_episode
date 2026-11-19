@@ -171,3 +171,173 @@ Counts per file are in `runs/carry_over/calls/a102_03.tsv`. In the table, `suppo
 - **support**: `support:self.api_execution`, `support:self.job_progress_provider`, `support:self.local_file_sources`, `support:self.native_protein_structure_results`, `support:self.native_protein_structure_returns`, `support:self._practical`, `support:self.tool_registry`
 - **table**: `table:runtime_actions`, `table:runtime_episodes`, `table:runtime_forms`, `table:runtime_model_calls`, `table:runtime_observations`, `table:runtime_receipt_inheritance`, `table:runtime_record_receipts`
 - **yield**: `yield:ESTIMATOR_VERSION`, `yield:NumericBand`, `yield:PracticalYieldEstimator`, `yield:YieldController`, `yield:YieldParameters`
+
+## Carried over
+
+Old source read with `git show 97308b94c:<path>` (git dir of the disk checkout); one row per row of `runs/carry_over/functions/a102__structural_homology_evidence__hpc_work_planning__execution_job_submission__api_job_execution.tsv`. Rows marked UNPLACED are listed in `carry_over_blocked/`. Private copy of the file shapes of the sibling A102 `api_job_execution` (same old source); nothing imported from it. BLOCKED-ON-JOB-SERVICE: the API service executor (catalog, execute, credit view, facts, wait) and the job record kind.
+
+| old file | name | kind (machinery or episode function) | new place or machinery reason |
+|---|---|---|---|
+| `action_policy.py` | `APIActionPolicy` | episode function | task.py `wait_permitted`, `offered_actions` |
+| `action_policy.py` | `APIActionPolicy.permitted_common_actions` | episode function | task.py `wait_permitted`, `offered_actions` |
+| `api_operations.py` | `APIApiOperations` | episode function | task.py `catalog_of` (decide, action) and `service_operation` (tool); the executor itself is BLOCKED-ON-JOB-SERVICE |
+| `api_operations.py` | `APIApiOperations.catalog` | episode function | task.py `catalog_of` (decide, action) and `service_operation` (tool); the executor itself is BLOCKED-ON-JOB-SERVICE |
+| `api_operations.py` | `APIApiOperations.execute` | episode function | task.py `catalog_of` (decide, action) and `service_operation` (tool); the executor itself is BLOCKED-ON-JOB-SERVICE |
+| `binding_record.py` | `APIBindingRecord` | machinery | binding's own as_record(): settings and declared services are journaled by the system (README 3e) |
+| `binding_record.py` | `APIBindingRecord.as_record` | machinery | binding's own as_record(): settings and declared services are journaled by the system (README 3e) |
+| `child_eligibility.py` | `APIChildEligibility` | episode function | task.py `CHILD_SLOTS = {}` |
+| `child_eligibility.py` | `APIChildEligibility.child_roles` | episode function | task.py `CHILD_SLOTS = {}` (leaf) |
+| `child_eligibility.py` | `APIChildEligibility.allowed_children` | episode function | task.py `CHILD_SLOTS = {}` (leaf) |
+| `closed_credit.py` | `APIClosedCredit` | machinery | frozen closed credit view checked against old journal/receipt tables; credit is `credit.py` and the system hands `completion['credit']` |
+| `closed_credit.py` | `APIClosedCredit._closed_credit_carrier` | machinery | frozen closed credit view checked against old journal/receipt tables; credit is `credit.py` and the system hands `completion['credit']` |
+| `closed_credit.py` | `APIClosedCredit._closed_credit_receipts` | machinery | frozen closed credit view checked against old journal/receipt tables; credit is `credit.py` and the system hands `completion['credit']` |
+| `closed_credit.py` | `APIClosedCredit._closed_credit_value` | machinery | frozen closed credit view checked against old journal/receipt tables; credit is `credit.py` and the system hands `completion['credit']` |
+| `closed_credit.py` | `APIClosedCredit._closed_credit_facts` | machinery | frozen closed credit view checked against old journal/receipt tables; credit is `credit.py` and the system hands `completion['credit']` |
+| `closed_credit.py` | `APIClosedCredit._closed_operational_credit_view` | machinery | frozen closed credit view checked against old journal/receipt tables; credit is `credit.py` and the system hands `completion['credit']` |
+| `completion.py` | `APICompletion` | machinery | completion proof read from old runtime_observations; replaced by CompletionYieldController with its target from parent_input (yield_estimator.py) |
+| `completion.py` | `APICompletion.completion_for_action` | machinery | completion proof read from old runtime_observations; replaced by CompletionYieldController with its target from parent_input (yield_estimator.py) |
+| `completion.py` | `APICompletion._closed_completion_verdict` | machinery | completion proof read from old runtime_observations; replaced by CompletionYieldController with its target from parent_input (yield_estimator.py) |
+| `completion.py` | `APICompletion.verify_completion` | machinery | replaced by the completion controller target (yield_estimator.py) |
+| `configuration.py` | `APIConfiguration` | episode function | settings read as `ctx.settings` in task.py (`resources`, `initial_information`, `handoff_unit`, `acquired_record_unit`) and `settings` in yield_estimator.py; the executor it built is the BLOCKED-ON-JOB-SERVICE `job_access` service |
+| `configuration.py` | `APIConfiguration.__init__` | episode function | settings read as `ctx.settings` in task.py (`resources`, `initial_information`, `handoff_unit`, `acquired_record_unit`) and `settings` in yield_estimator.py; the executor it built is the BLOCKED-ON-JOB-SERVICE `job_access` service |
+| `credit.py` | `APICredit` | episode function | credit.py `credit` |
+| `credit.py` | `APICredit.credit_kind` | machinery | credit_kind deleted (README 3d) |
+| `credit.py` | `APICredit.project_credit` | episode function | credit.py `credit` |
+| `credit.py` | `APICredit._live_project_credit` | episode function | credit.py `credit` (the executor's credit view arrives in the tool outcome) |
+| `credit.py` | `APICredit.credit_view` | episode function | credit.py `credit`; tool outcome field `credit` (task.py `service_operation`) |
+| `decision_contracts.py` | `APITaskDecisionContracts` | machinery | decision-exchange loop and saved-exchange checks |
+| `decision_contracts.py` | `APITaskDecisionContracts.interpretation_context` | episode function | task.py `decide` context |
+| `decision_contracts.py` | `APITaskDecisionContracts.exchange_schema` | machinery | decision-exchange loop |
+| `decision_contracts.py` | `APITaskDecisionContracts.exchange_response` | machinery | decision-exchange loop |
+| `decision_contracts.py` | `APITaskDecisionContracts.validate_contract_exchange_request` | machinery | saved-exchange re-validation |
+| `decision_contracts.py` | `APITaskDecisionContracts.validate_contract_exchange_history` | machinery | saved-exchange re-validation |
+| `decision_exchange.py` | `APITaskDecisionExchange` | machinery | decision-exchange loop |
+| `decision_exchange.py` | `APITaskDecisionExchange.exchange_decision` | machinery | decision-exchange loop |
+| `decision_inputs.py` | `APIDecisionInputs` | episode function | task.py `decide` (context fields), messages/internal_summary.py |
+| `decision_inputs.py` | `APIDecisionInputs.decision_inputs` | episode function | task.py `decide` (context fields), messages/internal_summary.py |
+| `decision_provider.py` | `APITaskDecisionProvider` | episode function | task.py `decide` (ModelRequest role REASONING) |
+| `decision_provider.py` | `APITaskDecisionProvider.complete_decision` | episode function | task.py `decide` (ModelRequest role REASONING) |
+| `decision_state.py` | `APIDecisionState` | episode function | messages/internal_summary.py `internal_summary` and task.py `decide` context |
+| `decision_state.py` | `APIDecisionState.decision_state` | episode function | messages/internal_summary.py `internal_summary` and task.py `decide` context |
+| `episode.py` | `ExecutionEpisode` | episode function | episode.py `ApiJobExecution` |
+| `execution_contracts.py` | `launch_operation_catalog` | episode function | task.py `CAPABILITIES_DESCRIPTION`, `capabilities` |
+| `execution_contracts.py` | `native_result_operation_catalog` | episode function, unplaced | results-role catalog of the native protein-structure results operations; never used by this episode's launch_api branch (UNPLACED, in carry_over_blocked) |
+| `execution_contracts.py` | `_outcome` | episode function | task.py tool outcome shape |
+| `execution_state.py` | `APIExecutionState` | machinery | delegation and input re-check of the old runner; the work is task.py `service_operation` |
+| `execution_state.py` | `APIExecutionState._delegate` | episode function | task.py `service_operation` |
+| `execution_state.py` | `APIExecutionState._practical_context` | episode function, unplaced | practical (local/hpc) context of the sibling roles; never used by launch_api (UNPLACED, in carry_over_blocked) |
+| `execution_state.py` | `APIExecutionState.initialize` | machinery | re-check of the parent launch's inputs; custody |
+| `execution_state.py` | `APIExecutionState._result_directory` | episode function, unplaced | results-role directory with an assignment.json manifest; never used by launch_api (UNPLACED, in carry_over_blocked) |
+| `from_parent.py` | `APIFromParent` | episode function | messages/read_from_parent.py `ASSIGNMENT_FORM`, `read_from_parent` |
+| `from_parent.py` | `APIFromParent.required_return_sources` | episode function | messages/final_to_parent.py `RETURN_FORM` (no source required of the parent) |
+| `from_parent.py` | `APIFromParent.child_assignment_schema` | episode function | messages/read_from_parent.py `ASSIGNMENT_FORM`, `read_from_parent` |
+| `from_parent.py` | `APIFromParent.assignment_schema` | episode function | messages/read_from_parent.py `ASSIGNMENT_FORM`, `read_from_parent` |
+| `from_parent.py` | `APIFromParent.prepare_assignment` | episode function | messages/read_from_parent.py `ASSIGNMENT_FORM`, `read_from_parent` |
+| `from_parent.py` | `APIFromParent.initial_references` | episode function | messages/read_from_parent.py `ASSIGNMENT_FORM`, `read_from_parent` |
+| `goal.py` | `APIGoal` | episode function | goal.py `GOAL`; task.py `GOAL_TEXT`, `instructions` |
+| `goal.py` | `APIGoal.instructions` | episode function | goal.py `GOAL`; task.py `GOAL_TEXT`, `instructions` |
+| `instructions.py` | `instructions` | episode function | task.py `instructions` |
+| `internal_summary.py` | `APIInternalSummary` | episode function | messages/internal_summary.py `internal_summary` |
+| `internal_summary.py` | `APIInternalSummary._with_selected_execution_task` | episode function | messages/internal_summary.py `internal_summary` |
+| `internal_summary.py` | `APIInternalSummary.decision_context` | episode function | messages/internal_summary.py `internal_summary` |
+| `parent_input_custody.py` | `APIParentInputCustody` | machinery | custody re-validation of the parent's inputs against old tables; a wrong commission just fails (rule 1); the values are fields of ASSIGNMENT_FORM |
+| `parent_input_custody.py` | `APIParentInputCustody._versions` | machinery | custody re-validation of the parent's inputs against old tables; a wrong commission just fails (rule 1); the values are fields of ASSIGNMENT_FORM |
+| `parent_input_custody.py` | `APIParentInputCustody._check_parent_inputs` | machinery | custody re-validation of the parent's inputs against old tables; a wrong commission just fails (rule 1); the values are fields of ASSIGNMENT_FORM |
+| `parent_input_custody.py` | `APIParentInputCustody._permitted` | machinery | custody re-validation of the parent's inputs against old tables; a wrong commission just fails (rule 1); the values are fields of ASSIGNMENT_FORM |
+| `parent_input_custody.py` | `APIParentInputCustody._request_schema` | machinery | custody re-validation of the parent's inputs against old tables; a wrong commission just fails (rule 1); the values are fields of ASSIGNMENT_FORM |
+| `parent_input_custody.py` | `APIParentInputCustody._validate_request` | machinery | custody re-validation of the parent's inputs against old tables; a wrong commission just fails (rule 1); the values are fields of ASSIGNMENT_FORM |
+| `parent_input_custody.py` | `APIParentInputCustody._launch` | machinery | custody re-validation of the parent's inputs against old tables; a wrong commission just fails (rule 1); the values are fields of ASSIGNMENT_FORM |
+| `parent_input_custody.py` | `APIParentInputCustody._constraints` | machinery | custody re-validation of the parent's inputs against old tables; a wrong commission just fails (rule 1); the values are fields of ASSIGNMENT_FORM |
+| `parent_launch_contract.py` | `parent_launch_schema` | episode function | messages/read_from_parent.py `ASSIGNMENT_FORM` fields |
+| `received_record_selection.py` | `APIReceivedRecordSelection` | machinery | old received-record ledger / record_selection; custody holds are the system's (`records.holds`) |
+| `received_record_selection.py` | `APIReceivedRecordSelection._received` | machinery | old received-record ledger / record_selection; custody holds are the system's (`records.holds`) |
+| `received_records.py` | `APIReceivedRecords` | machinery | old callbacks of the receiving parent (received_report_*); an ancestor reads this episode's RETURN_FORM fields through read_from_child |
+| `received_records.py` | `APIReceivedRecords.received_report_sources` | machinery | old callbacks of the receiving parent (received_report_*); an ancestor reads this episode's RETURN_FORM fields through read_from_child |
+| `received_records.py` | `APIReceivedRecords.received_report_facts` | machinery | old callbacks of the receiving parent (received_report_*); an ancestor reads this episode's RETURN_FORM fields through read_from_child |
+| `received_records.py` | `APIReceivedRecords.received_report_closure_facts` | machinery | old callbacks of the receiving parent (received_report_*); an ancestor reads this episode's RETURN_FORM fields through read_from_child |
+| `received_reference_custody.py` | `APIReceivedReferenceCustody` | machinery | old reference custody and received-form admission (README 3b R1, R3) |
+| `received_reference_custody.py` | `APIReceivedReferenceCustody.resolve_received_reference` | machinery | old reference custody and received-form admission (README 3b R1, R3) |
+| `received_reference_custody.py` | `APIReceivedReferenceCustody.validate_received_report` | machinery | old reference custody and received-form admission (README 3b R1, R3) |
+| `received_reference_custody.py` | `APIReceivedReferenceCustody.received_form_references` | machinery | old reference custody and received-form admission (README 3b R1, R3) |
+| `report_delivery.py` | `APIReportDelivery` | episode function | messages/final_to_parent.py `final_to_parent`; saving and releasing the form are machinery |
+| `report_delivery.py` | `APIReportDelivery.finish` | episode function | messages/final_to_parent.py `final_to_parent`; saving and releasing the form are machinery |
+| `report_reference_access.py` | `APIReportReferenceAccess` | machinery | old reference-namespace resolver; custody is `records.holds` and `record_refs` fields |
+| `report_reference_access.py` | `APIReportReferenceAccess.resolve` | machinery | old reference-namespace resolver; custody is `records.holds` and `record_refs` fields |
+| `resource_information.py` | `APIResourceInformation` | episode function | task.py `resource_capabilities`, `capabilities`, `decide` |
+| `resource_information.py` | `APIResourceInformation._resource_information` | episode function | task.py `resource_capabilities`, `capabilities`, `decide` |
+| `resource_information.py` | `APIResourceInformation.initial_decision_context` | episode function | task.py `resource_capabilities`, `capabilities`, `decide` |
+| `resource_information.py` | `APIResourceInformation.capabilities` | episode function | task.py `resource_capabilities`, `capabilities`, `decide` |
+| `resource_information.py` | `APIResourceInformation.resource_tool_contracts` | episode function, unplaced | describes this episode's resource operations as commissionable tool contracts for the parent; the parent writes its own text and schema in its msg_to_child (README 3a, C3) (UNPLACED, in carry_over_blocked) |
+| `result_selection.py` | `APIResultSelection` | machinery | results-role selector and old received-record selection |
+| `result_selection.py` | `APIResultSelection._target` | machinery | results-role selector and old received-record selection; not this episode's launch_api branch |
+| `result_selection.py` | `APIResultSelection._selector` | machinery | results-role selector and old received-record selection; not this episode's launch_api branch |
+| `result_selection.py` | `APIResultSelection._windows` | machinery | results-role selector and old received-record selection; not this episode's launch_api branch |
+| `result_selection.py` | `APIResultSelection._selection` | machinery | results-role selector and old received-record selection; not this episode's launch_api branch |
+| `result_selection.py` | `APIResultSelection._context_target` | machinery | results-role selector and old received-record selection; not this episode's launch_api branch |
+| `retained_protein_reader.py` | `APIRetainedProteinReader` | machinery | protein-structure custody by old receipts and runtime tables; system custody (README F3) |
+| `retained_protein_reader.py` | `APIRetainedProteinReader.retained_protein_structure_reader` | machinery | protein-structure custody by old receipts and runtime tables; system custody (README F3) |
+| `retained_protein_reader.py` | `APIRetainedProteinReader._protein_reference_access` | machinery | protein-structure custody by old receipts and runtime tables; system custody (README F3) |
+| `retained_protein_reader.py` | `APIRetainedProteinReader._retained_protein_result` | machinery | protein-structure custody by old receipts and runtime tables; system custody (README F3) |
+| `retained_result_acquisition.py` | `APIRetainedResultAcquisition` | machinery | looks a selected action up in the old runtime_actions table |
+| `retained_result_acquisition.py` | `APIRetainedResultAcquisition._selected_result_action` | machinery | looks a selected action up in the old runtime_actions table |
+| `retained_result_publication.py` | `APIRetainedResultPublication` | machinery | results-role retained-result reader over old runtime tables; not this episode's launch_api branch |
+| `retained_result_publication.py` | `APIRetainedResultPublication._validate_result_body` | episode function, unplaced | results-role retained-result body check; not this episode's launch_api branch (UNPLACED, in carry_over_blocked) |
+| `retained_result_publication.py` | `APIRetainedResultPublication._read_result` | episode function, unplaced | results-role retained-result reader; not this episode's launch_api branch (UNPLACED, in carry_over_blocked) |
+| `task.py` | `APIJobTask` | episode function | task.py (the loop is the system's) |
+| `task.py` | `APIJobTask.next` | episode function | task.py `decide`, `action`, `TOOLS` |
+| `task.py` | `APIJobTask.apply_response` | episode function | task.py `decide`, `action`, `TOOLS` |
+| `task.py` | `APIJobTask.execute` | episode function | task.py `decide`, `action`, `TOOLS` |
+| `task_decision.py` | `APITaskDecision` | episode function | task.py `decide`, `instructions` |
+| `task_decision.py` | `APITaskDecision.call` | episode function | task.py `decide`, `instructions` |
+| `task_decision.py` | `APITaskDecision.instructions` | episode function | task.py `decide`, `instructions` |
+| `task_decision.py` | `APITaskDecision.conversation_key` | machinery | conversation state (README 3a) |
+| `task_state.py` | `APITaskState` | machinery | old task state, checkpoint and restore; state is `internal_summary(view)` |
+| `task_state.py` | `APITaskState.__init__` | machinery | old task state, checkpoint and restore; state is `internal_summary(view)` |
+| `task_state.py` | `APITaskState.bind_execution_context` | machinery | old task state, checkpoint and restore; state is `internal_summary(view)` |
+| `task_state.py` | `APITaskState.record_execution_failure` | episode function | task.py `service_operation` returns `failure_outcome(...)` |
+| `task_state.py` | `APITaskState.restore_checkpoint` | machinery | old task state, checkpoint and restore; state is `internal_summary(view)` |
+| `task_state.py` | `APITaskState.restore` | machinery | old task state, checkpoint and restore; state is `internal_summary(view)` |
+| `task_state.py` | `APITaskState.record_effect` | machinery | record_effect |
+| `task_state.py` | `APITaskState.checkpoint` | machinery | old task state, checkpoint and restore; state is `internal_summary(view)` |
+| `terminal_execution.py` | `operation_catalog` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.__init__` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior._operations` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior._assignment` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior._state_directory` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.initialize` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.state` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.as_record` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.child_roles` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.credit_kind` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.assignment_schema` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.permitted_common_actions` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.allowed_children` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.prepare_assignment` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.initial_decision_context` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior._resource_information` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior._resource_instructions` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.instructions` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.decision_context` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.catalog` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.execute` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.completion_for_action` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.practical_estimator` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.fact_sources` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.facts` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.resolve` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.validate_report` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `terminal_execution.py` | `TerminalExecutionBehavior.credit_view` | episode function, unplaced | shell-command execution of the sibling local/hpc roles, a copy in this folder that role launch_api never delegates to; carried by the hpc_job_execution and local_job_execution episodes (UNPLACED, in carry_over_blocked) |
+| `to_parent.py` | `APIToParent` | episode function | messages/final_to_parent.py `RETURN_FORM`, `final_to_parent`, `validate_report` |
+| `to_parent.py` | `APIToParent.fact_sources` | episode function | messages/final_to_parent.py `RETURN_FORM`, `final_to_parent`, `validate_report` |
+| `to_parent.py` | `APIToParent.facts` | episode function | messages/final_to_parent.py `RETURN_FORM`, `final_to_parent`, `validate_report` |
+| `to_parent.py` | `APIToParent._live_facts` | episode function | messages/final_to_parent.py `RETURN_FORM`, `final_to_parent`, `validate_report` |
+| `to_parent.py` | `APIToParent.validate_report` | episode function | messages/final_to_parent.py `RETURN_FORM`, `final_to_parent`, `validate_report` |
+| `waiting.py` | `APIWaiting` | machinery | wait/suspension machinery of the old runner (the wait TOOL is task.py `wait`) |
+| `waiting.py` | `APIWaiting.suspension_changed` | machinery | wait/suspension machinery of the old runner (the wait TOOL is task.py `wait`) |
+| `yield_estimator.py` | `ExecutionEpisodeYield` | episode function | yield_estimator.py |
+| `yield_estimator.py` | `ExecutionEpisodeYield._request_yield_class` | episode function | yield_estimator.py `yield_controller` (completion controller; profile lookup replaced by settings) |
+| `yield_estimator.py` | `ExecutionEpisodeYield._task_yield_profile` | episode function | yield_estimator.py `yield_controller` (completion controller; profile lookup replaced by settings) |
+| `yield_estimator.py` | `ExecutionEpisodeYield.yield_controller` | episode function | yield_estimator.py `yield_controller` (completion controller; profile lookup replaced by settings) |
+| `yield_estimator.py` | `ExecutionEpisodeYield._launch_api_yield_controller` | episode function | yield_estimator.py `yield_controller` (completion controller; profile lookup replaced by settings) |
+| `yield_estimator.py` | `ExecutionEpisodeYield.practical_estimator` | machinery | PracticalYieldEstimator deleted (README 3d, 7b) |

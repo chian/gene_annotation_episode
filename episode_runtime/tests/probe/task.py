@@ -5,15 +5,20 @@ unit that does nothing and earns nothing; the Episode ends when its yield contro
 controller this episode builds when the commissioner names none (a finite target of one credit per plan step)
 that is exactly at the last plan step."""
 import json
+import os
 from pathlib import Path
 
 from episode_runtime import ChildCall, CustodyError, ModelRequest, Rejected, TableDeclaration, ToolCall
 
+from ..operations_library import (capture_download, clear_failure, current_failure, failure_history, fetch,
+                                  freeze_reads, may_be_read_as_a_source, read_page, selected_fasta, selected_reads,
+                                  newest_jobs_first, publish, read_in_thread, record_failure, register_job,
+                                  residue_counts, scope_spans, update_sheet, wait_for_cancel, write_in_thread)
 from ..sheet_library import SHEET, cells, write_cell
 
 CHILD_SLOTS = {'left': 'fact_collection/fact_extraction', 'right': 'fact_collection/fact_extraction',
                'nested': 'probe'}
-SERVICES = ('counter', 'switch')
+SERVICES = ('counter', 'switch', 'work_cache')
 SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['ref'],
           'properties': {'ref': {'type': 'string'}}}
 INSTRUCTIONS = ('Answer with the ref of the record whose name is the wanted name. If the feedback says that record '
@@ -402,12 +407,291 @@ def write_tx(arguments, ctx):
     return {'artifact': artifact, 'source': source, 'resumed': ctx.resumed, 'told': told}
 
 
+# -- the system operations of the scoped store (``test_system_operations.py``) ------------------------------------
+async def scratch_work(arguments, ctx):
+    """A computation in a worker thread on files of the unit's own: the input through custody, the result written
+    by the unit; and what the store does not offer."""
+    out = await residue_counts(ctx.store, arguments['ref'])
+    out['counts'] = json.loads(ctx.store.get_artifact(out['counts_ref']))
+    out['not_offered'] = [name for name in ('db', 'path', 'commit', 'artifact_path', 'context_mask_target_query')
+                          if hasattr(ctx.store, name)]
+    with ctx.store.scratch('names') as scratch:
+        out['unheld'] = attempt(lambda: str(scratch.copy_artifact(arguments['unheld'], 'unheld.bin')))
+        out['outside'] = attempt(lambda: str(scratch.copy_artifact(arguments['ref'], '../outside.bin')))
+        out['damaged'] = attempt(lambda: str(scratch.copy_artifact(arguments['damaged'], 'damaged.bin')))
+        out['empty_at_first'] = sorted(path.name for path in scratch.path.iterdir()) == []
+    out['closed'] = attempt(lambda: str(scratch.path))
+    return out
+
+
+async def thread_refused(arguments, ctx):
+    """A worker thread that is handed the store is refused by it, for a read and for a write."""
+    out = {}
+    with ctx.store.scratch('refused') as scratch:
+        for label, call in (('read', lambda: scratch.compute(read_in_thread, ctx.store, arguments['ref'])),
+                            ('write', lambda: scratch.compute(write_in_thread, ctx.store))):
+            try:
+                out[label] = await call()
+            except CustodyError as error:
+                out[label] = 'CustodyError: ' + str(error).split(':')[0]
+    out['read_in_the_unit'] = json.loads(ctx.store.get_artifact(arguments['ref']))['name']
+    return out
+
+
+async def scratch_cancel(arguments, ctx):
+    """A computation that ends only when it is cancelled; the unit waits for its thread."""
+    switch = ctx.services['switch']
+    with ctx.store.scratch('cancel') as scratch:
+        await scratch.compute(wait_for_cancel, scratch.path, switch.seen, switch.started)
+
+
+def scratch_cut(arguments, ctx):
+    """First attempt: the process ends inside the scratch block, as a killed process does (nothing is cleaned
+    up). Rerun: what is left of that directory."""
+    with ctx.store.scratch('cut') as scratch:
+        (scratch.path / 'partial.bin').write_bytes(b'half a download')
+        if not ctx.resumed:
+            Path(arguments['log']).write_text(str(scratch.path))
+            os._exit(arguments['exit'])
+        left = Path(Path(arguments['log']).read_text())
+        return {'resumed': ctx.resumed, 'left_exists': left.exists(), 'new_directory': left != scratch.path,
+                'directories_of_the_episode': len(list(scratch.path.parent.iterdir())),
+                'same_episode_directory': left.parent == scratch.path.parent}
+
+
+def scratch_left_open(arguments, ctx):
+    """A unit that returns with its scratch directory open."""
+    ctx.services['switch'].seen['manager'] = manager = ctx.store.scratch('open')
+    ctx.services['switch'].seen['path'] = str(manager.__enter__().path)
+    return {'left': 'open'}
+
+
+def capture(arguments, ctx):
+    """An artifact from a file, from a file object and from chunks, without loading it; inside a transaction that
+    rolls back nothing is held."""
+    store, data = ctx.store, arguments['text'].encode() * arguments['times']
+    with store.scratch('capture') as scratch:
+        path = scratch.path / 'download.bin'
+        path.write_bytes(data)
+        from_file = store.artifact_file(path, 'application/x-probe')
+        with path.open('rb') as handle:
+            from_handle = capture_download(store, handle, 'application/x-probe')
+        (scratch.path / 'lost.bin').write_bytes(b'rolled back ' + ctx.operation_key.encode())
+        try:
+            with store.transaction():
+                lost = store.artifact_file(scratch.path / 'lost.bin')
+                held_inside = store.holds(lost)
+                raise ValueError('abort the transaction')
+        except ValueError:
+            pass
+    from_chunks = capture_download(store, (arguments['text'].encode() for _ in range(arguments['times'])),
+                                   'application/x-probe')
+    other = store.artifact_stream([b'other ', bytearray(b'bytes')], 'text/plain')
+    record = store.get(from_file)
+    with store.open_artifact(from_file) as handle:
+        head = handle.read(len(arguments['text'])).decode()
+    return {'from_file': from_file, 'from_handle': from_handle, 'from_chunks': from_chunks, 'other': other,
+            'size': record['size'], 'media_type': record['media_type'], 'head': head,
+            'other_bytes': store.get_artifact(other).decode(),
+            'lost': lost, 'lost_held': [held_inside, store.holds(lost)],
+            'text_chunks': attempt(lambda: store.artifact_stream(['text'], 'text/plain'))}
+
+
+def caller_value(arguments, ctx):
+    """A caller-supplied value written as a source record."""
+    source = ctx.store.caller_source(arguments['value'], arguments['provider'])
+    return {'source': source['id'], 'artifact': source['artifact_ref'], 'provider': source['provider'],
+            'origin': source['origin'], 'value': json.loads(ctx.store.get_artifact(source['artifact_ref'])),
+            'held': [ctx.store.holds(source['id']), ctx.store.holds(source['artifact_ref'])]}
+
+
+def job(arguments, ctx):
+    """A job registry and its one current failure kept as declared tables: no statement, no commit, and a failure
+    that is cleared is withdrawn, not deleted. Fail after the writes when asked."""
+    store, name, out = ctx.store, arguments['job'], {}
+    out['told'] = [[item['written']['withdrawn'], item['written']['revision'],
+                    item['prior'] and [item['prior']['withdrawn'], item['prior']['revision']]]
+                   for item in ctx.abandoned if item['written'] is not None]
+    out['before'] = current_failure(store, name)
+    if 'register' in arguments:
+        out['registered'] = register_job(store, name, arguments['register'])['id']
+    if 'fail' in arguments:
+        row = record_failure(store, name, arguments['fail'])
+        out['failed'] = [row['id'], row['withdrawn'], row['revision']]
+    if arguments.get('clear'):
+        if arguments.get('reclaim') and ctx.abandoned:
+            for item in ctx.abandoned:
+                store.reclaim(item['ref'])
+        else:
+            row = clear_failure(store, name)
+            out['cleared'] = [row['id'], row['withdrawn'], row['revision'], row['unit']]
+    if arguments.get('cut') and ctx.services['switch'].fail:
+        raise RuntimeError('cut after the failure was cleared')
+    out.update(current=current_failure(store, name), history=failure_history(store, name),
+               submitted=newest_jobs_first(store, ['submitted']), in_transaction=store.in_transaction(),
+               unwritten=attempt(lambda: clear_failure(store, 'a job that never failed')))
+    return out
+
+
+def sections(arguments, ctx):
+    """A library function that calls itself knows whether it is the outermost call."""
+    store = ctx.store
+    trace = update_sheet(store, 'main', 'a1', arguments['value'], arguments['ref'], arguments['dependents'])
+    with store.section('probe_sheet_updating') as outer_again:
+        with store.section('probe_sheet_updating') as inner:
+            with store.section('another') as other:
+                pass
+    return {'trace': trace, 'outer_again': outer_again, 'inner': inner, 'other': other,
+            'cells': {sheet: [[row['cell'], row['value']] for row in cells(store, sheet)]
+                      for sheet in ('main', *arguments['dependents'])}}
+
+
+def publish_twice(arguments, ctx):
+    """Which of the records a function writes are new to the Episode: asked of custody, not of the Store."""
+    store, created = ctx.store, []
+    artifact = store.artifact('published as ' + arguments['accession'], 'text/plain')
+    record = {**SOURCE, 'accession': arguments['accession'], 'artifact_ref': artifact, 'text_ref': artifact}
+    first = publish(store, 'source', record, created)
+    second = publish(store, 'source', record, created)
+    return {'first': first, 'second': second, 'created': created}
+
+
+def cached_fetch(arguments, ctx):
+    """Fetch through the work cache: the download is asked once, whoever asks; each Episode holds its artifact."""
+    cache, counter = ctx.services['work_cache'], ctx.services['counter']
+    key = {'url': arguments['url']}
+    cached_before = cache.has('fetched', key)
+
+    def download(url):
+        counter.bump()
+        return ('content of ' + url).encode()
+    ref, asked = fetch(ctx.store, cache, arguments['url'], download)
+    return {'ref': ref, 'asked': asked, 'cached_before': cached_before, 'cached_after': cache.has('fetched', key),
+            'downloads': counter.count, 'receipt': ctx.store.receipt(ref)['how'],
+            'content': ctx.store.get_artifact(ref).decode()}
+
+
+def cache_directory(arguments, ctx):
+    """A directory that persists, for a program that keeps a cache of its own."""
+    index = ctx.services['work_cache'].directory(arguments['directory']) / 'index.txt'
+    existed = index.exists()
+    with index.open('a') as stream:
+        stream.write(ctx.operation_key + '\n')
+    return {'existed': existed, 'entries': len(index.read_text().splitlines()),
+            'bad_name': attempt(lambda: str(ctx.services['work_cache'].directory('../elsewhere')))}
+
+
+def spans(arguments, ctx):
+    """The streamed spans of a scope."""
+    return attempt(lambda: scope_spans(ctx.store, arguments['scope'], arguments.get('target_ref')))
+
+
+async def refusals(arguments, ctx):
+    """What the system operations refuse besides custody: each call and the error it raised."""
+    store, cache = ctx.store, ctx.services['work_cache']
+    row = store.table(LEDGER).put({'k': 'refusals', 'v': 1})['id']
+    out = {'scratch_name': attempt(lambda: store.scratch('Bad Name').__enter__()),
+           'section_name': attempt(lambda: store.section('').__enter__()),
+           'references_of_a_row': attempt(lambda: store.named_references(row)),
+           'withdrawn_filter': attempt(lambda: store.table(LEDGER).select(withdrawn='yes')),
+           'withdrawal_key': attempt(lambda: store.table(LEDGER).withdraw({'v': 1})),
+           'positions_page': attempt(lambda: store.context_mask_positions({'subject_refs': []}, 'input_x', -1)),
+           'cache_data': attempt(lambda: cache.put('fetched', {'url': 'u'}, 'text')),
+           'cache_namespace': attempt(lambda: cache.get('Bad Namespace', {'url': 'u'})),
+           'cache_key': attempt(lambda: cache.has('fetched', {'url': object()}))}
+    with store.scratch('refusals') as scratch:
+        out['copy_of_a_row'] = attempt(lambda: str(scratch.copy_artifact(row, 'row.bin')))
+        try:
+            await scratch.compute(read_in_thread, store, row, cancel_event=None)
+        except ValueError as error:
+            out['cancel_event'] = 'ValueError: ' + str(error)
+    return out
+
+
+# -- the reads of a read library; the diagnostics of tool outcomes; a problem the Episode created -----------------
+READ_FUNCTIONS = {'page': read_page, 'freeze': freeze_reads, 'selected': selected_reads, 'fasta': selected_fasta}
+
+
+def reads(arguments, ctx):
+    """Library functions over a read library: ``{label: [function, [argument, ...], {keyword: value}]}``, each
+    answered or refused."""
+    return {label: attempt(lambda call=call: READ_FUNCTIONS[call[0]](ctx.store, *call[1], **call[2]))
+            for label, call in arguments['calls'].items()}
+
+
+def select_reads(arguments, ctx):
+    """Freeze a selection of a held library's reads, then list, page, measure and write out its reads. A selection
+    frozen in a transaction that rolls back is neither held nor in the Store."""
+    store, library = ctx.store, arguments['library']
+    selection = freeze_reads(store, library, **arguments['choose'])
+    chosen = {'subject_refs': [library], 'read_selection_refs': [selection['id']]}
+    out = {'selection': selection, 'held': store.holds(selection['id']),
+           'receipt': store.receipt(selection['id'])['how'], 'members': selected_reads(store, selection['id']),
+           'page': read_page(store, library, selection_ref=selection['id']),
+           'fasta': selected_fasta(store, selection['id']), 'measure': store.scope_measure(chosen, library),
+           'same_again': freeze_reads(store, library, **arguments['choose'])['id'] == selection['id']}
+    try:
+        with store.transaction():
+            lost = freeze_reads(store, library, **arguments['lose'])['id']
+            inside = [store.holds(lost), selected_reads(store, lost)]
+            raise RuntimeError('abort the transaction')
+    except RuntimeError:
+        pass
+    out.update(lost=lost, lost_inside=inside, lost_held=store.holds(lost),
+               lost_members=attempt(lambda: selected_reads(store, lost)))
+    return out
+
+
+def diagnosed(arguments, ctx):
+    """A tool that keeps some data and reports what went wrong: its outcome names the record of the failure as its
+    diagnostic (``feedback.diagnostic_ref``, or deeper). Of the references it is asked about it says which may be
+    read as a source. Fail after the writes when asked."""
+    store = ctx.store
+    out = {'asked': {ref: attempt(lambda ref=ref: may_be_read_as_a_source(store, ref))
+                     for ref in arguments.get('ask', [])}}
+    if 'data' in arguments:
+        out['data_ref'] = store.artifact(arguments['data'], 'text/plain')
+    if 'error' in arguments:
+        diagnostic = store.artifact(arguments['error'], 'text/plain')
+        out.update(status='partial', feedback={'category': 'execution', 'code': 'probe_failure',
+                                               'diagnostic_ref': diagnostic},
+                   while_running=may_be_read_as_a_source(store, diagnostic))    # no outcome names it yet
+    if 'nested_error' in arguments:
+        out.update(status='partial', feedback={'category': 'representation', 'acquisition_error': {
+            'code': 'probe_failure', 'diagnostic_ref': store.artifact(arguments['nested_error'], 'text/plain')}})
+    if arguments.get('cut') and ctx.services['switch'].fail:
+        raise RuntimeError('cut after the diagnostic was written')
+    return out
+
+
+def open_problem(arguments, ctx):
+    """Create the Store's problem in a tool unit, then ask the inventories what the Episode holds. The Episode
+    holds the problem's own reference too; it is a record of no kind and is read with ``problem()``."""
+    store = ctx.store
+    problem = store.create_problem(raw_sequence=arguments['sequence'], molecule='protein')
+    scope = {'subject_refs': problem['subject_refs']}
+    kinds = ('material', 'parse_attempt', 'collection', 'source')
+    return {'problem': problem['id'], 'subjects': problem['subject_refs'],
+            'holds_problem': store.holds(problem['id']), 'read_problem': store.problem()['id'],
+            'listed': {kind: [row['id'] for row in store.list(kind)] for kind in kinds},
+            'counted': {kind: store.count(kind) for kind in kinds},
+            'listed_in_scope': {kind: [row['id'] for row in store.list(kind, scope)] for kind in kinds},
+            'targets': [row['id'] for row in store.targets()],
+            'view_subjects': [row['id'] for row in store.reasoning_view(scope)['subjects']],
+            'queried_sources': store.query_records('source', scope)['total']}
+
+
 TOOLS = {'idle': idle, 'close': close, 'follow': follow, 'bump': bump, 'echo': echo, 'effect': effect,
          'intent': intent, 'scoped': scoped,
          'transactions': transactions, 'reason': reason, 'material': material, 'unheld_scope': unheld_scope, 'sheet': sheet,
          'read_cells': read_cells, 'ask': ask, 'read_ref': read_ref, 'name_unheld': name_unheld,
          'reason_plain': reason_plain, 'scope_reads': scope_reads, 'parse': parse, 'parse_passed': parse_passed,
-         'many': many, 'leave': leave, 'row_write': row_write, 'read_rows': read_rows, 'write_tx': write_tx}
+         'many': many, 'leave': leave, 'row_write': row_write, 'read_rows': read_rows, 'write_tx': write_tx,
+         'scratch_work': scratch_work, 'thread_refused': thread_refused, 'scratch_cancel': scratch_cancel,
+         'scratch_cut': scratch_cut, 'scratch_left_open': scratch_left_open, 'capture': capture,
+         'caller_value': caller_value, 'job': job, 'sections': sections, 'publish_twice': publish_twice,
+         'cached_fetch': cached_fetch, 'cache_directory': cache_directory, 'spans': spans, 'refusals': refusals,
+         'reads': reads, 'select_reads': select_reads, 'diagnosed': diagnosed, 'open_problem': open_problem}
 
 
 def decide(summary, feedback, ctx):

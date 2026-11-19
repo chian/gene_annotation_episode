@@ -51,8 +51,6 @@ class LiteratureTransportRepository(LiteratureRateRepository):
     components = COMPONENTS
     record_version = "literature_transport_response_record_v2"
     readable_record_versions = ("literature_transport_response_record_v1", record_version)
-    operations_table = "literature_transport_operations"
-    received_table = "literature_transport_received"
     binding_fields = tuple(BINDINGS)
 
     def _provenance(self, context, reference):
@@ -64,8 +62,7 @@ class LiteratureTransportRepository(LiteratureRateRepository):
         return row
 
     def _source(self, context, reference):
-        if reference not in context.received_record_refs:
-            raise ContractError("literature_source_not_received")
+
         row = self._provenance(context, reference)
         page = context.assignment if context.role == "literature_page" else context.assignment.get("page")
         if page:
@@ -85,7 +82,7 @@ class LiteratureTransportRepository(LiteratureRateRepository):
 
     def _quantity(self, reference):
         """Validate an actual selected quantity and its saved operand bindings."""
-        saved = LiteratureQuantityRepository(self.store, self.run_id).read(reference)
+        saved = LiteratureQuantityRepository(self.store).read(reference)
         extraction = saved["sheet"]["extraction"]
         if extraction["quantity"] != "apparent_km" or extraction["unit"] != "uM":
             raise ContractError("literature_transport_apparent_km_required")
@@ -117,26 +114,8 @@ class LiteratureTransportRepository(LiteratureRateRepository):
         return saved
 
     def populate(self, context, arguments, operation_key):
-        if context.run_id != self.run_id:
-            raise ContractError("literature_run_mismatch")
-        if not isinstance(operation_key, str) or not operation_key:
-            raise ContractError("operation_key_required")
         args = plain(arguments)
         validate_schema(args, transport_response_population_schema())
-        signature = canonical({"arguments": args, "scope": plain(context.scope)})
-        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
-            "WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, context.episode_id, operation_key)).fetchone()
-        if old is not None:
-            if old["signature"] != signature:
-                raise ContractError("operation_key_reused_for_different_work")
-            outcome = json.loads(old["outcome"])
-            saved = self.read(outcome["result"]["sheet_ref"])
-            for reference in saved["direct_input_source_refs"]:
-                self._source(context, reference)
-            for reference in saved["input_source_refs"]:
-                self._provenance(context, reference)
-            return outcome
 
         source = self._source(context, args["source_ref"])
         km_payload = None
@@ -191,9 +170,9 @@ class LiteratureTransportRepository(LiteratureRateRepository):
 
             def publish(kind, record):
                 candidate = identity(kind, {"origin": "tool", "record": record})
-                existed = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (candidate,)).fetchone()
+                existed = self.store.holds(candidate)
                 published = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
-                if existed is None:
+                if not existed:
                     created.append(published["id"])
                 return published["id"]
 
@@ -209,14 +188,12 @@ class LiteratureTransportRepository(LiteratureRateRepository):
                     "term_refs": [], "context_refs": []}) if curve else None
             payload["experimental_bindings"] = bindings
             artifact = self.store.artifact(canonical(payload), "application/json")
-            request = self.store.artifact(canonical({"run_id": self.run_id,
-                "episode_id": context.episode_id, "operation_key": operation_key,
+            request = self.store.artifact(canonical({"operation_key": operation_key,
                 "arguments": args}), "application/json")
             sheet_ref = publish("source", {"provider": self.provider, "accession": None, "uri": None,
                 "artifact_ref": artifact, "text_ref": artifact, "request_ref": request,
                 "version": self.record_version, "retrieved_at": None, "parent_source_refs": parents})
-            outcome = {"status": "completed", "operation_ref": identity("operation", {
-                "run_id": self.run_id, "episode_id": context.episode_id, "key": operation_key}),
+            outcome = {"status": "completed", "operation_ref": identity("operation", {"key": operation_key}),
                 "record_refs": list(dict.fromkeys([sheet_ref, *parents,
                     *(ref for ref in bindings.values() if ref)])), "changed_record_refs": created,
                 "result": {"sheet_ref": sheet_ref, "cells": sheet["cells"],
@@ -227,8 +204,7 @@ class LiteratureTransportRepository(LiteratureRateRepository):
                     "reported_km_uncertainty_kind": extraction["km_quantity"]["reported_uncertainty_kind"]
                         if extraction["km_quantity"] else "not_supplied",
                     "evaluated_scope": "interpreted_source_kinetic_response"}, "feedback": None}
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+
         return outcome
 
     def read(self, sheet_ref):
@@ -249,7 +225,7 @@ class LiteratureTransportRepository(LiteratureRateRepository):
                 raise ContractError("literature_transport_km_binding_mismatch")
         return saved
 
-    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+    def project_cells(self, sheet_refs, *, components=None):
         components = self.components if components is None else components
         if (not isinstance(components, (list, tuple))
                 or any(not isinstance(name, str) or name not in self.components for name in components)
@@ -257,8 +233,6 @@ class LiteratureTransportRepository(LiteratureRateRepository):
             raise ContractError("literature_transport_component_selection_invalid")
         rows = []
         for reference in dict.fromkeys(sheet_refs):
-            if reference not in permitted_record_refs:
-                raise ContractError("literature_sheet_not_received")
             saved = self.read(reference)
             extraction = saved["extraction"]
             for name in components:
@@ -277,9 +251,9 @@ class LiteratureTransportRepository(LiteratureRateRepository):
         validate_schema(rows, transport_response_cells_schema())
         return rows
 
-    def validate_returned_values(self, cells, *, permitted_record_refs):
+    def validate_returned_values(self, cells):
         validate_schema(cells, transport_response_cells_schema())
-        super().validate_returned_values(cells, permitted_record_refs=permitted_record_refs)
+        super().validate_returned_values(cells)
 
 
 def transport_response_cells_schema():

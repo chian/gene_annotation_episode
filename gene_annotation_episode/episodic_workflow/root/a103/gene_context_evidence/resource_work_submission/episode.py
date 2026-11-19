@@ -1,25 +1,29 @@
-"""The A103 ``gene_context_evidence/resource_work_submission`` binding on the generic runner.
+"""The A103 ``gene_context_evidence/resource_work_submission`` binding (old ``ResourceEpisode``, role ``launch``,
+commissioned by ``gene_context_evidence``)."""
+from episode_runtime import EpisodeBinding
 
-Commissioned with the concrete resource work requests its parent selected (``requests``: each a
-``request_id`` and the requested ``job``), it hands each request to a resource route child
-(``api_resource_work_execution``, ``local_resource_work_execution`` or ``hpc_resource_work_execution``) with
-that child's own declared assignment. Its decision source and continuation are A103's submission source
-(``execution_job_submission/submission_source``): credit counts the requests with a usable handoff and the
-completion controller's target is the number of requests.
-"""
-from __future__ import annotations
-
-from types import MappingProxyType
-
-from ..contract_binding import A103ContractBinding
-from ..execution_job_submission.submission_source import JobSubmissionBinding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class ResourceEpisode(JobSubmissionBinding, A103ContractBinding):
-    binding_path = 'gene_context_evidence/resource_work_submission'
-    grain_name = 'gene_context_evidence__resource_work_submission'
-    goal = 'Improve the resource work submitted for the parent request'
-    unit = 'One resource route child commissioned for one requested piece of resource work'
-    result = 'The resource work handoff'
-    child_slots = MappingProxyType({'api_resource_work_execution': 'gene_context_evidence/resource_work_submission/api_resource_work_execution', 'hpc_resource_work_execution': 'gene_context_evidence/resource_work_submission/hpc_resource_work_execution', 'local_resource_work_execution': 'gene_context_evidence/resource_work_submission/local_resource_work_execution'})
-    commissioning_parent = 'gene_context_evidence'
+class ResourceWorkSubmission(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

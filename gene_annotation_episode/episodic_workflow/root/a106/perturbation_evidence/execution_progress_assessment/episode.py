@@ -1,35 +1,28 @@
-"""The A106 progress monitor binding (``perturbation_evidence/execution_progress_assessment``).
+"""The A106 progress monitor episode: a private binding on the system's episode base type."""
+from episode_runtime import EpisodeBinding
 
-Its decisions, credit and continuation are the A106 monitor runtime
-(``episode_support/jobs/service_calls/perturbation_evidence/monitor_runtime.py``): model-selected progress tools, its
-received-information credit and its own information-accumulation yield
-controller. Its commission is A106's operational form: ``scope`` and the
-parent's monitor assignment (monitor_assignment_v1) in ``assignment``. Its own
-A106 ``ToolRegistry`` is built by the A106 home factory over the shared Store.
-"""
-from __future__ import annotations
-
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.service_calls.perturbation_evidence.monitor_runtime import A106MonitorRuntime
-from gene_annotation_episode.episodic_workflow.root.a106.perturbation_evidence.episode_contract import (
-    OPERATIONAL_FORM, EpisodeContract)
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class MonitorEpisode(A106MonitorRuntime, EpisodeContract):
-    binding_path = 'perturbation_evidence/execution_progress_assessment'
-    commissioning_parent = 'perturbation_evidence'
-    roles = ('monitor',)
-    goal = "The parent's knowledge of its pending work's progress"
-    unit = "One progress observation"
-    result = "The newly informative progress snapshots"
-    assignment_form = OPERATIONAL_FORM
-
-    def __init__(self, services, *, information_unit, yield_settings, tool_registry):
-        A106MonitorRuntime.__init__(self, information_unit=information_unit, yield_settings=yield_settings,
-                                    tool_registry=tool_registry)
-
-    def contract_credit_unit(self, assignment):
-        return self.information_unit
-
-    @staticmethod
-    def role_assignment(assignment):
-        return assignment['assignment']
+class ExecutionProgressAssessment(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

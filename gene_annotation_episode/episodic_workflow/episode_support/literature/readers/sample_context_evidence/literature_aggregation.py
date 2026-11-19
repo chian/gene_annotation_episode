@@ -72,6 +72,9 @@ def aggregate_a108(arguments, source_cells):
         _validate_selected_cell(row, args)
     if set(rows) != set(requested):
         _fail('selected_components_not_received')
+    # A changed interpretation of one original observation/claim is a revision,
+    # not independent support and conflict. Different contextual claims may
+    # legitimately give the same original observation both directional roles.
     relation_directions = {}
     for row in received:
         for relation in row['relations']:
@@ -118,6 +121,8 @@ def annotation_scalar(cell):
     sets = cell.get('observation_sets')
     if not isinstance(sets, Mapping) or set(sets) != {'support', 'conflict', 'unresolved'}:
         raise ValueError('root_scalar_original_observation_sets_required')
+    # Use original sets rather than adding domain/child counts. A single
+    # observation can legitimately belong to both directional sets.
     support = set(sets['support'])
     conflict = set(sets['conflict'])
     amount, net = (len(support | conflict), len(support) - len(conflict))

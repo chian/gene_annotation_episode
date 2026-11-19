@@ -1,18 +1,25 @@
-"""The A105 literature_table literature binding; its behaviour is the shared ``LiteratureBinding``."""
-from __future__ import annotations
+"""The table evidence extraction episode (A105): a private binding of the system's episode type."""
+from episode_runtime import EpisodeBinding
 
-from .....literature_binding import LiteratureBinding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       read_from_parent as from_parent_file)
 
 
-class TableEvidenceExtractionEpisode(LiteratureBinding):
-    """The table evidence of one examined source."""
-    binding_path = 'experimental_activity_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction'
-    commissioning_parent = 'experimental_activity_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination'
-    role = 'literature_table'
-    child_role_names = ()
-    acquisition = False
-    assignment_shape = ('reading', 'table')
-    instruction = ('Investigate the selected table/sheet and its scientific meaning. Select rows, headers, conditions and '
-                   'footnotes deliberately; revise row selection or reread when outcomes warrant it. XLSX '
-                   'cells/formulas/caches keep their native identity. Article XML tables are read through exact '
-                   'original-source windows.')
+class TableEvidenceExtraction(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

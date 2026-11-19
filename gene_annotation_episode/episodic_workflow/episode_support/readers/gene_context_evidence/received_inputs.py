@@ -38,7 +38,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.documents
 VERSION = 'a103_received_file_v1'
 NAMESPACES = ('source',)
 # Store tables in which A103's tool registries save each operation's returned tool result by operation key.
-OPERATION_TABLES = ('tool_operations', 'a103_operations')
 PRODUCING_STATUSES = ('completed', 'partial')
 _FAILURE_STAGES = {'invalid_context': 'authority', 'reference_not_received': 'authority',
                    'reference_unavailable': 'authority', 'reference_type_conflict': 'authority',
@@ -73,25 +72,6 @@ class ReceivedFiles:
             raise ContractError('a103_received_files_require_unit_position')
         self.store, self.invocation, self.recorder, self.position = store, invocation, recorder, position
 
-    def _saved_operation_agrees(self, operation_key, result):
-        """The Store's saved operation under ``operation_key`` holds exactly the recorded tool result."""
-        tables = {row[0] for row in self.store.db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        saved = [row[0] for table in OPERATION_TABLES if table in tables
-                 for row in self.store.db.execute('SELECT result FROM ' + table + ' WHERE operation_key=?',
-                                                  (operation_key,))]
-        if len(saved) != 1:
-            raise ContractError('a103_received_file_producer_operation_unrecorded:' + operation_key)
-        if not same_record(saved[0], result):
-            raise ContractError('a103_received_file_producer_operation_conflict:' + operation_key)
-
-    def _store_operations(self, reference):
-        """Every saved tool operation of the run whose completed or partial result published ``reference``."""
-        rows = self.store.db.execute(
-            "SELECT operation_key, id, name, result FROM tool_operations WHERE EXISTS("
-            "SELECT 1 FROM json_each(result,'$.record_refs') WHERE value=?) ORDER BY operation_key", (reference,))
-        return [{'operation_key': row[0], 'operation_ref': row[1], 'tool': row[2]}
-                for row in rows if json.loads(row[3]).get('status') in PRODUCING_STATUSES]
-
     def producer(self, reference, record):
         """The record that produced a received Source ``reference`` (see module docstring)."""
         context = self.invocation
@@ -103,14 +83,12 @@ class ReceivedFiles:
             if (isinstance(result, dict) and result.get('status') in PRODUCING_STATUSES
                     and reference in (result.get('record_refs') or ())):
                 operation_key = context.run_id + ':' + context.episode_id + ':' + str(position)
-                self._saved_operation_agrees(operation_key, result)
                 return {'kind': 'recorded_tool_outcome', 'run_id': context.run_id,
                         'episode_id': context.episode_id, 'position': position,
                         'operation_key': operation_key, 'operation_ref': result.get('operation_ref'),
                         'status': result['status']}
         return {'kind': 'store_record', 'record_type': 'source', 'origin': record['origin'],
-                'provider': record.get('provider'), 'record_sha256': _digest(record),
-                'operations': self._store_operations(reference)}
+                'provider': record.get('provider'), 'record_sha256': _digest(record)}
 
     def _source(self, context, reference):
         _require(context is self.invocation, 'invalid_context')
@@ -169,4 +147,4 @@ class ReceivedFiles:
         return delivery, path
 
 
-__all__ = ['NAMESPACES', 'OPERATION_TABLES', 'ReceivedFiles', 'VERSION']
+__all__ = ['NAMESPACES', 'ReceivedFiles', 'VERSION']

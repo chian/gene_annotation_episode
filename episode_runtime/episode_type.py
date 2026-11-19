@@ -47,13 +47,20 @@ The loop of one Episode:
    do not admit, or that passes a record the Episode does not hold, raises and ends the run.
 4. Each unit's controller input is ``{'credit': credit(internal_summary(view.with_unit(outcome)), records),
    'estimation_context': {'progress_time': bound.progress.receipt(position)}}``. The episode's yield controller
-   observes it and alone decides whether the Episode stops: nothing else ends an Episode. A value the model
+   observes it and alone decides whether the Episode stops: nothing else ends an Episode. The controller is built
+   from ``credit`` of the summary before any unit; the system computes that credit when the Episode is first
+   entered and records it, and builds the controller of an Episode that is entered again (resume) from the record,
+   because such an Episode already holds what its recorded units produced. A value the model
    writes when it closes its work (a closing text, a report) is the outcome of a tool unit the episode declares
    for it; the summary holds it like every other outcome.
 5. The result is ``final_to_parent(internal_summary(view of the closed record), completion, selection)`` with
    ``completion = {'ended_by', 'units_consumed', 'credit'}``: ``ended_by`` is ``'yield_stop'`` and ``credit`` is
    the Episode's credit as its controller last saw it (the credit it stopped on). Every result carries ``credit``
    and ``finding``: the class definition requires both as required fields of the episode's own ``return_form``.
+
+A run's caller may step the entry Episode through this same loop (``EpisodeRun.next_decision`` and
+``EpisodeRun.run_unit``, ``runner.py``): the first ``decide`` of step 2 without the model call, and a unit of step 3
+whose action the caller names. Steps 1, 4 and 5 are unchanged.
 """
 from __future__ import annotations
 
@@ -388,13 +395,18 @@ class EpisodeBinding:
         return _credit(self._member('credit')(summary, bound.reader), self.binding_path)
 
     def build_controller(self, bound, settings):
-        """The episode's yield controller over the credit of its summary before any unit."""
-        view = EpisodeView(grain=bound.grain, key=bound.key, path=bound.path, units_consumed=0, updates=(),
-                           controller_state=None, episode_ref=EpisodeRef(bound.run_id, bound.path),
-                           request=bound.request, parent_input=bound.parent_input, outcomes=(),
-                           records=bound.reader)
-        return self._member('yield_controller')(self._credit_of(self._summary(view), bound), settings,
-                                                view.parent_input)
+        """The episode's yield controller over the credit of its summary before any unit. That credit is computed
+        when the Episode is first entered and recorded (``bound.initial_credit``); an Episode that is entered
+        again (a resumed run) holds what its recorded units produced, so its controller is built from the record
+        and ``credit`` is not asked again."""
+        def before_any_unit():
+            view = EpisodeView(grain=bound.grain, key=bound.key, path=bound.path, units_consumed=0, updates=(),
+                               controller_state=None, episode_ref=EpisodeRef(bound.run_id, bound.path),
+                               request=bound.request, parent_input=bound.parent_input, outcomes=(),
+                               records=bound.reader)
+            return self._credit_of(self._summary(view), bound)
+        return self._member('yield_controller')(bound.initial_credit.recorded(before_any_unit), settings,
+                                                bound.parent_input)
 
     def build_episode(self, grain, bound, child_builders):
         source = _SystemSource(self, bound, child_builders)
@@ -445,10 +457,28 @@ class _SystemSource:
         return JsonRecord({'credit': self._binding._credit_of(summary, self._bound),
                            'estimation_context': {'progress_time': self._bound.progress.receipt(position)}})
 
-    async def next(self, view):
+    def _choosing(self, view):
+        """The source is choosing the unit after ``view``: that unit's position and the summary it is chosen
+        from."""
         position = view.units_consumed
         self._bound.position.begin(position)
-        summary = self._binding._summary(view)
+        return position, self._binding._summary(view)
+
+    def next_decision(self, view):
+        """What the episode's ``decide`` returns first for the unit after ``view``: called with the summary, no
+        feedback and the unit's decision context. The model is not asked and no unit is made
+        (``EpisodeRun.next_decision``)."""
+        position, summary = self._choosing(view)
+        return self._binding._member('decide')(summary, None, self._bound.decision_context(position))
+
+    def unit_of(self, view, action):
+        """The unit after ``view`` of an action the run's caller names in place of the episode's own decision
+        (``EpisodeRun.run_unit``)."""
+        position, summary = self._choosing(view)
+        return self._unit(view, position, action, summary)
+
+    async def next(self, view):
+        position, summary = self._choosing(view)
         context = self._bound.decision_context(position)
         decide, act = self._binding._member('decide'), self._binding._member('action')
         feedback = None
@@ -490,8 +520,10 @@ class _SystemSource:
             if inspect.isawaitable(value):
                 value = await value
             bound.attempts.end()
-            return _closed({'kind': 'tool', 'tool': call.name, 'arguments': arguments, 'outcome': value,
-                            'produced': bound.custody.attempt_produced()}, 'tool_outcome')
+            outcome = _closed({'kind': 'tool', 'tool': call.name, 'arguments': arguments, 'outcome': value,
+                               'produced': bound.custody.attempt_produced()}, 'tool_outcome')
+            bound.custody.tool_returned(outcome['outcome'])
+            return outcome
         return Leaf(call, extract, lambda _call, outcome: self._controller_input(view, position, outcome), label)
 
     def _child(self, view, position, call, summary):

@@ -102,18 +102,11 @@ def publish_existing_acquisition(tools, name, arguments, snapshot, scope, operat
     This uses the existing tool publication receipt; no service-specific database
     or new action is introduced. The outer episode journals the selected result.
     """
-    from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError, canonical, identity
+    from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import identity
 
     publication_name = "internal.api_service." + name
     operands = {"arguments": arguments, "snapshot_sha256": snapshot.sha256,
                 "request": snapshot.request, "transport": snapshot.transport}
-    saved = tools.store.db.execute("SELECT * FROM tool_operations WHERE operation_key=?",
-                                   (operation_key,)).fetchone()
-    if saved is not None:
-        if (saved["name"] != publication_name or saved["arguments"] != canonical(operands)
-                or saved["scope"] != canonical(scope)):
-            raise ContractError("operation_key_reused_for_different_work")
-        return json.loads(saved["result"])
     tools.store.validate_scope(scope)
     token = tools._publications.set([])
     grading_failures = tools._grading_failures.set([])
@@ -143,7 +136,6 @@ def publish_existing_acquisition(tools, name, arguments, snapshot, scope, operat
                               "diagnostic_ref": tools.store.artifact(
                                   f"{type(error).__name__}: {error}", "text/plain")})
             outcome["changed_record_refs"] = list(outcome["record_refs"])
-            tools._save(operation_key, publication_name, operands, scope, outcome)
         return outcome
     finally:
         tools._grading_failures.reset(grading_failures)

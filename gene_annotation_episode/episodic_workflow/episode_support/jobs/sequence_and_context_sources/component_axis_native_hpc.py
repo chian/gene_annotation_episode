@@ -11,6 +11,8 @@ import json
 from pathlib import Path
 import zlib
 
+from episode_runtime import TableDeclaration
+
 from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_presence_evidence.communication import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError, canonical
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_and_context_sources.component_axis_native_contracts import VERSION, OPERATIONS, PROFILES
@@ -19,6 +21,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.partner_p
 from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.partner_presence_evidence.hpc_result_receipts import planned_input_files
 
 
+COMPONENT_REQUESTS = TableDeclaration(name='component_native_requests', columns=('source_ref', 'body'),
+                                    key=('source_ref',), record_refs=('source_ref',))
+COMPONENT_OUTPUTS = TableDeclaration(name='component_native_outputs', columns=('source_ref', 'body'),
+                                   key=('source_ref',), record_refs=('source_ref',))
 REQUEST_PROVIDER = 'host.component_axis.native_request'
 RESULT_PROVIDER = 'host.component_axis.native_components'
 STATUS_PROVIDER = 'host.component_axis.native_execution'
@@ -62,13 +68,7 @@ def require(condition, code):
         raise ContractError('component_native_'+code)
 
 
-def install(store):
-    for table in ('component_native_requests', 'component_native_outputs'):
-        store.db.execute('CREATE TABLE IF NOT EXISTS '+table+' (source_ref TEXT PRIMARY KEY,body TEXT NOT NULL)')
-
-
 def publish(store, provider, body):
-    install(store)
     artifact = store.artifact(canonical(body), 'application/json')
     grading = retain_tool_grading(store, provider=provider, native_artifact_ref=artifact,
         grading={'grader': scientific_profile(body), 'failure': None,
@@ -77,8 +77,8 @@ def publish(store, provider, body):
         'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
         'version': VERSION, 'retrieved_at': None, 'operand_refs': body['scope']['subject_refs'],
         **({'auxiliary_artifact_refs': [grading]} if grading is not None else {})}, origin='tool')['id']
-    table = 'component_native_requests' if provider == REQUEST_PROVIDER else 'component_native_outputs'
-    store.db.execute('INSERT OR IGNORE INTO '+table+' VALUES(?,?)', (reference, canonical(body)))
+    table = COMPONENT_REQUESTS if provider == REQUEST_PROVIDER else COMPONENT_OUTPUTS
+    store.table(table).put({'source_ref': reference, 'body': body})
     return reference
 
 
@@ -86,12 +86,11 @@ def read(store, reference, provider):
     source = store.get(reference)
     if source.get('provider') != provider:
         return None
-    table = 'component_native_requests' if provider == REQUEST_PROVIDER else 'component_native_outputs'
-    exists = store.db.execute('SELECT 1 FROM sqlite_master WHERE name=?', (table,)).fetchone()
-    saved = store.db.execute('SELECT body FROM '+table+' WHERE source_ref=?', (reference,)).fetchone() if exists else None
-    require(saved is not None and source['origin'] == 'tool' and source['version'] == VERSION,
+    table = COMPONENT_REQUESTS if provider == REQUEST_PROVIDER else COMPONENT_OUTPUTS
+    rows = store.table(table).select({'source_ref': reference})
+    require(bool(rows) and source['origin'] == 'tool' and source['version'] == VERSION,
         'original_native_grant_required')
-    body = json.loads(saved[0])
+    body = rows[0]['body']
     require(json.loads(store.get_artifact(source['artifact_ref'])) == body, 'original_native_grant_conflict')
     if provider == RESULT_PROVIDER:
         entries = source_tool_grading_entries(store, reference)
@@ -148,13 +147,13 @@ def freeze(registry, args, *, context, known, invocation):
     snapshot = canonical(sources)+'\n'
     request = {'version': VERSION, 'axis': axis, 'operation': OPERATIONS[axis],
         'scientific_profile': PROFILES[axis], 'selection': deepcopy(args['selection']),
-        'run_id': context.run_id, 'scope': plain(context.scope), 'target_ref': next(iter(roots)),
+        'scope': plain(context.scope), 'target_ref': next(iter(roots)),
         'target_regions': footprint, 'resource_id': args['resource_id'],
         'jsonschema_version': version('jsonschema'),
         'input': {'file': file, 'bytes_base64': base64.b64encode(raw).decode()}}
     request_raw = (canonical(request)+'\n').encode()
     body = {'version': VERSION, 'axis': axis, 'operation': OPERATIONS[axis],
-        'scientific_profile': PROFILES[axis], 'run_id': context.run_id,
+        'scientific_profile': PROFILES[axis],
         'scope': plain(context.scope), 'target_ref': next(iter(roots)),
         'target_regions': footprint, 'source_ref': args['source_ref'], 'input_file': file,
         'request': request, 'request_sha256': sha(request_raw),
@@ -197,8 +196,7 @@ def commission(body, resources):
 
 def admit(registry, expected, hpc_ref, *, context, known, reader):
     store = registry.store
-    require(expected['run_id'] == context.run_id and set(expected['evidence_refs']) <= known,
-        'original_run_and_received_operands_required')
+    require(set(expected['evidence_refs']) <= known, 'original_received_operands_required')
     authority = reader(context, hpc_ref)
     receipt, plan, unit = authority['receipt'], authority['plan'], authority['unit']
     result, workspace = receipt['document'], plan['manifest']['workspace']
@@ -214,7 +212,7 @@ def admit(registry, expected, hpc_ref, *, context, known, reader):
         and result.get('pbs_job_id') == receipt['job_id'] and result.get('compute_hostname')
         and not result['compute_hostname'].startswith(('aurora-uan', 'login')), 'original_native_identity_conflict')
     require(result['returncode'] == receipt['unit']['returncode'], 'execution_outcome_conflict')
-    common = {'version': VERSION, 'axis': expected['axis'], 'scope': expected['scope'], 'run_id': context.run_id,
+    common = {'version': VERSION, 'axis': expected['axis'], 'scope': expected['scope'],
         'operation': expected['operation'], 'scientific_profile': scientific_profile(expected),
         'request_ref': expected['request_ref'], 'logical_work_sha256': expected['logical_work_sha256'],
         'hpc_result_ref': hpc_ref, 'hpc_source_artifact_ref': authority['source_artifact_ref'],
@@ -266,7 +264,7 @@ def receive(registry, context, known, *, reader):
     requests = {}
     for ref in known:
         body = read(registry.store, ref, REQUEST_PROVIDER)
-        if body is not None and body['run_id'] == context.run_id:
+        if body is not None:
             # Keep only addresses while inspecting the receipt inventory; frozen
             # source/code/input byte copies need not accumulate in memory.
             requests[body['request_sha256']] = ref
@@ -277,10 +275,10 @@ def receive(registry, context, known, *, reader):
         and body['status'] == 'native_execution_failed')
     generated, needs = [], []
     requests_by_arguments = {body.get('arguments_sha256') for ref in known
-        if (body := read(registry.store, ref, REQUEST_PROVIDER)) is not None and body['run_id'] == context.run_id}
+        if (body := read(registry.store, ref, REQUEST_PROVIDER)) is not None}
     for reference in sorted(known):
         body = read(registry.store, reference, STATUS_PROVIDER)
-        if body is None or body.get('run_id') != context.run_id or body['status'] != 'input_admission_unavailable' or body.get(
+        if body is None or body['status'] != 'input_admission_unavailable' or body.get(
                 'arguments_sha256') in requests_by_arguments:
             continue
         if not registry.store.scope_contains(plain(context.scope), body['scope']):
@@ -300,7 +298,7 @@ def receive(registry, context, known, *, reader):
         expected = {**read(registry.store, request_ref, REQUEST_PROVIDER), 'request_ref': request_ref}
         missing = set(expected['evidence_refs'])-known
         if missing:
-            body = {'version': VERSION, 'axis': expected['axis'], 'scope': expected['scope'], 'run_id': context.run_id,
+            body = {'version': VERSION, 'axis': expected['axis'], 'scope': expected['scope'],
                 'request_ref': expected['request_ref'], 'hpc_result_ref': ref,
                 'status': 'pending_original_operands', 'missing_record_refs': sorted(missing), 'scientific_credit': None}
             generated.append(publish(registry.store, STATUS_PROVIDER, body))
@@ -313,7 +311,7 @@ def receive(registry, context, known, *, reader):
                 generated.append(admit(registry, expected, ref, context=context, known=known, reader=reader))
         except (ValueError, KeyError, OSError, TypeError) as error:
             generated.append(publish(registry.store, STATUS_PROVIDER, {'version': VERSION,
-                'axis': expected['axis'], 'scope': expected['scope'], 'run_id': context.run_id, 'request_ref': expected['request_ref'],
+                'axis': expected['axis'], 'scope': expected['scope'], 'request_ref': expected['request_ref'],
                 'hpc_result_ref': ref, 'status': 'scientific_admission_unavailable',
                 'reason': str(error), 'scientific_credit': None}))
     return list(dict.fromkeys(generated)), needs
@@ -363,7 +361,7 @@ def execution_findings(store, references, scope):
     for reference in sorted(set(references)):
         body = read(store, reference, STATUS_PROVIDER)
         if body is None and (request := read(store, reference, REQUEST_PROVIDER)) is not None:
-            body = {'version': VERSION, 'axis': request['axis'], 'scope': request['scope'], 'run_id': request['run_id'],
+            body = {'version': VERSION, 'axis': request['axis'], 'scope': request['scope'],
                 'request_ref': reference, 'hpc_result_ref': None, 'status': 'native_work_requested',
                 'logical_work_sha256': request['logical_work_sha256'], 'resource_id': request['resource_id'],
                 'arguments_sha256': request.get('arguments_sha256'),
@@ -374,11 +372,11 @@ def execution_findings(store, references, scope):
         if not store.scope_contains(plain(scope), body['scope']):
             continue
         rows.append({'source_ref': reference, **deepcopy(body)})
-    prepared = {(row['run_id'], row['arguments_sha256']): row['source_ref'] for row in rows
+    prepared = {row['arguments_sha256']: row['source_ref'] for row in rows
         if row['status'] == 'native_work_requested' and row.get('arguments_sha256') is not None}
     for row in rows:
         if row['status'] == 'input_admission_unavailable':
-            row['resolved_by_received_request_ref'] = prepared.get((row.get('run_id'), row.get('arguments_sha256')))
+            row['resolved_by_received_request_ref'] = prepared.get(row.get('arguments_sha256'))
     return rows
 
 

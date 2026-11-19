@@ -55,7 +55,7 @@ def restore_request(store,text):
             result={}
             for key,child in item.items():
                 if key in FIELDS and isinstance(child,dict) and set(child)=={MARKER}:
-                    artifact=store.db.execute('SELECT media_type FROM artifacts WHERE id=?',(child[MARKER],)).fetchone()
+                    artifact=store._db.execute('SELECT media_type FROM artifacts WHERE id=?',(child[MARKER],)).fetchone()
                     if artifact is None or artifact['media_type']!=MEDIA_TYPE:
                         raise ValueError('journal_metadata_artifact_type_conflict')
                     # Restore one layer only: a literal marker is opaque data.

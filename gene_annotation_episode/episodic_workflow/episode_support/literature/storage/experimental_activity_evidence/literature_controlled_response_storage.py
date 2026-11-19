@@ -13,10 +13,10 @@ from pathlib import Path
 from types import SimpleNamespace
 from urllib.parse import quote
 from jsonschema import Draft202012Validator
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_ratio_source_storage import LiteratureRatioSourceRepository
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence import literature_controlled_response_inputs as shared
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence import literature_controlled_response_v3_inputs as source
@@ -316,13 +316,15 @@ def _component_rows(extraction, populated, sheet_ref):
     _check(rows, controlled_response_cells_schema(), 'controlled_native_projection_schema_invalid')
     return rows
 
+OPERATIONS = operations_ledger('literature_controlled_response_operations')
+RECEIVED = received_ledger('literature_controlled_response_component_received')
+
 class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
     provider = PROVIDER
     record_version = VERSION
     components = COMPONENTS
-    operations_table = 'literature_controlled_response_operations'
-    received_table = 'literature_controlled_response_component_received'
-    runtime_binding_table = 'literature_controlled_response_runtime_bindings'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ()
 
     def __init__(self, store, run_id, *, evidence_origin='reported_source', expected_descriptor=None):
@@ -340,76 +342,6 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
         permitted = {'synthetic_fixture'} if self.evidence_origin == 'synthetic_fixture' else {'primary_source', 'retained_extraction'}
         if any((arm is not None and arm['source_kind'] not in permitted for arm in arms)):
             raise ContractError('controlled_native_evidence_profile_mismatch')
-
-    def _runtime_original(self, request, signature, outcome, *, required=False):
-        """Inspect the actual original runtime output; never invent a receipt.
-
-        Repository output precedes runtime journal completion. Reads/replay may
-        inspect that valid crash interval, but native fact publication requires
-        the completed original runtime result and retains its FULL digest.
-        """
-        key = (self.run_id, request['episode_id'], request['operation_key'])
-        bound = self.store.db.execute(f'SELECT runtime_digest FROM {self.runtime_binding_table} WHERE run_id=? AND episode_id=? AND operation_key=?', key).fetchone() if self._has_table(self.runtime_binding_table) else None
-        prefix = self.run_id + ':' + request['episode_id'] + ':'
-        suffix = request['operation_key'][len(prefix):] if request['operation_key'].startswith(prefix) else ''
-        valid = suffix.isascii() and suffix.isdigit() and (len(suffix) <= 19) and (int(suffix) <= 2 ** 63 - 1) and (str(int(suffix)) == suffix)
-        if not valid:
-            if required or bound is not None:
-                raise ContractError('controlled_native_original_runtime_required')
-            return None
-        action = self.store.db.execute('SELECT action,result FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=?', (self.run_id, request['episode_id'], int(suffix))).fetchone() if self._has_table('runtime_actions') else None
-        if action is None:
-            if required or bound is not None:
-                raise ContractError('controlled_native_original_runtime_uncommitted')
-            return None
-        selected = json.loads(action['action'])
-        if set(selected) != {'kind', 'tool', 'arguments'} or selected['kind'] != 'tool' or selected['tool'] != 'literature.controlled_response.source_v3.populate' or (canonical(selected['arguments']) != canonical(request['arguments'])):
-            raise ContractError('controlled_native_original_runtime_mismatch')
-        episode = self.store.db.execute('SELECT request,path FROM runtime_episodes WHERE run_id=? AND episode_id=?', (self.run_id, request['episode_id'])).fetchone() if self._has_table('runtime_episodes') else None
-        if episode is None:
-            raise ContractError('controlled_native_original_runtime_episode_unavailable')
-        original_request = json.loads(episode['request'])
-        path = json.loads(episode['path'])
-        message = original_request.get('message', {})
-        if not path or path[-1][0] != signature['role'] or canonical(message.get('scope')) != canonical(signature['scope']) or (canonical(message.get('episode_assignment', {})) != canonical(signature['assignment'])):
-            raise ContractError('controlled_native_original_runtime_context_mismatch')
-        if action['result'] is None:
-            if required or bound is not None:
-                raise ContractError('controlled_native_original_runtime_uncommitted')
-            return None
-        result = json.loads(action['result'])
-        tool_portion = {name: value for name, value in result.items() if name != 'pending_work_after_action'}
-        if canonical(tool_portion) != canonical(outcome):
-            raise ContractError('controlled_native_original_runtime_mismatch')
-        evidence = {'run_id': self.run_id, 'episode_id': request['episode_id'], 'decision_index': int(suffix), 'operation_key': request['operation_key'], 'action': selected, 'result': result, 'request': original_request, 'path': path}
-        digest = _sha(evidence)
-        if bound is not None and bound['runtime_digest'] != digest:
-            raise ContractError('controlled_native_original_runtime_digest_mismatch')
-        return (evidence, digest, bound is not None)
-
-    def _bind_native_output(self, context, reference):
-        """Bind completed original runtime custody at native fact publication."""
-        record = self._record(reference, 'source')
-        request = self._json(record['request_ref'])
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
-        signature = json.loads(operation['signature'])
-        outcome = json.loads(operation['outcome'])
-        evidence, digest, bound = self._runtime_original(request, signature, outcome, required=True)
-        if context.episode_id != request['episode_id'] or plain(context.path) != evidence['path'] or canonical(plain(context.request)) != canonical(evidence['request']) or (context.role != signature['role']) or (canonical(plain(context.scope)) != canonical(signature['scope'])) or (canonical(plain(context.assignment)) != canonical(signature['assignment'])):
-            raise ContractError('controlled_native_original_runtime_context_mismatch')
-        if bound:
-            return
-        if self.store.db.execute('PRAGMA query_only').fetchone()[0]:
-            raise ContractError('controlled_native_original_runtime_binding_unavailable')
-        try:
-            with self.store.transaction():
-                self.store.db.execute(f'CREATE TABLE IF NOT EXISTS {self.runtime_binding_table} (run_id TEXT NOT NULL,episode_id TEXT NOT NULL,operation_key TEXT NOT NULL,runtime_digest TEXT NOT NULL,PRIMARY KEY(run_id,episode_id,operation_key))')
-                self.store.db.execute(f'INSERT OR IGNORE INTO {self.runtime_binding_table} VALUES(?,?,?,?)', (self.run_id, request['episode_id'], request['operation_key'], digest))
-                self._runtime_original(request, signature, outcome, required=True)
-        except Exception as error:
-            if 'readonly' in str(error).lower():
-                raise ContractError('controlled_native_original_runtime_binding_unavailable') from error
-            raise
 
     def _sources(self, context, selection):
         pairs = shared._reference_closure(selection)
@@ -487,7 +419,7 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
         pairs, direct, closure = self._sources(context, args)
         descriptor = self.descriptor()
         signature = canonical({'arguments': args, 'scope': plain(context.scope), 'role': context.role, 'assignment': plain(context.assignment), 'implementation_descriptor': descriptor, 'evidence_origin': self.evidence_origin})
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
+        old = self._operation(context.episode_id, operation_key)
         if old:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -511,9 +443,9 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
 
             def publish(kind, value):
                 ref = identity(kind, {'origin': 'tool', 'record': value})
-                old = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (ref,)).fetchone()
+                old = self.store.holds(ref)
                 actual = self.store.put(kind, value, origin='tool', scope=plain(context.scope))
-                if old is None:
+                if not old:
                     created.append(ref)
                 return actual['id']
             bindings = self._bindings(extraction, publish)
@@ -525,7 +457,7 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
             sheet_ref = publish('source', {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': closure})
             rows = _component_rows(extraction, populated, sheet_ref)
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [sheet_ref, *_unique((row['record_ref'] for row in [*bindings.values(), *scope_bindings.values()]))], 'changed_record_refs': created, 'result': {'sheet_ref': sheet_ref, 'projection_status': extraction['projection_status'], 'component_keys': payload['component_roster'], 'cells': rows, 'payload_sha256': _sha(payload)}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return cp(outcome)
 
     def populate(self, context, arguments, operation_key):
@@ -538,7 +470,7 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
         request = self._json(record['request_ref'])
         if set(request) != {'run_id', 'episode_id', 'operation_key', 'arguments', 'signature'} or request['run_id'] != self.run_id:
             raise ContractError('controlled_native_request_mismatch')
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
+        operation = self._operation(request['episode_id'], request['operation_key'])
         if operation is None:
             raise ContractError('literature_sheet_not_selected_output')
         outcome = json.loads(operation['outcome'])
@@ -551,7 +483,6 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
         if payload['evidence_origin'] != self.evidence_origin:
             raise ContractError('controlled_native_evidence_profile_mismatch')
         self._profile_selection(payload['selection'])
-        self._runtime_original(request, signature, outcome)
         context = SimpleNamespace(run_id=self.run_id, episode_id=request['episode_id'], scope=signature['scope'], role=signature['role'], assignment=signature['assignment'], received_record_refs=tuple(payload['direct_input_source_refs']))
         pairs, direct, closure = self._sources(context, payload['selection'])
         original = self._record(payload['selection']['source_ref'], 'source')
@@ -636,7 +567,6 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
             record = self._record(ref, 'source')
             request = self._json(record['request_ref'])
             if request['episode_id'] == context.episode_id:
-                self._bind_native_output(context, ref)
                 result.extend(self.project_cells([ref], permitted_record_refs=context.received_record_refs, components=components))
             else:
                 if received is None:
@@ -668,16 +598,10 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
         with self.store.transaction():
             self.validate_returned_values(cells, permitted_record_refs=_unique((r['sheet_ref'] for r in cells)))
             data = canonical(cells)
-            digest = self._delivery_digest(cells)
-            old = self.store.db.execute(f'SELECT cells FROM {self.received_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
-            bound = self._delivery_binding(context, operation_key)
-            if old is not None and (old['cells'] != data or bound is None or bound['cells_digest'] != digest):
+            old = self._delivery(context.episode_id, operation_key)
+            if old is not None and old['cells'] != data:
                 raise ContractError('literature_delivery_binding_mismatch')
-            if old is None and bound is not None:
-                raise ContractError('literature_delivery_binding_mismatch')
-            self._install_delivery_bindings()
-            self.store.db.execute(f'INSERT OR IGNORE INTO {self.received_table} VALUES(?,?,?,?)', (self.run_id, context.episode_id, operation_key, data))
-            self.store.db.execute(f'INSERT OR IGNORE INTO {self._delivery_table} VALUES(?,?,?,?)', (self.run_id, context.episode_id, operation_key, digest))
+            self.store.table(self.received).put({'delivery': operation_key, 'cells': data})
 
     def received_cells(self, context):
         """Forward copied admitted cells, not the complete private child sheet."""
@@ -685,13 +609,8 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
             raise ContractError('literature_run_mismatch')
         result = []
         seen = set()
-        for saved in self.store.db.execute(f'SELECT operation_key,cells FROM {self.received_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id)):
+        for saved in self.store.table(self.received).select({'run_id': self.run_id, 'episode_id': context.episode_id}):
             cells = json.loads(saved['cells'])
-            bound = self._delivery_binding(context, saved['operation_key'])
-            if bound is None:
-                raise ContractError('literature_delivery_binding_unavailable')
-            if bound['cells_digest'] != self._delivery_digest(cells):
-                raise ContractError('literature_delivery_binding_mismatch')
             self.validate_returned_values(cells, permitted_record_refs=[r['sheet_ref'] for r in cells])
             for row in cells:
                 key = (row['sheet_ref'], row['component_key'])

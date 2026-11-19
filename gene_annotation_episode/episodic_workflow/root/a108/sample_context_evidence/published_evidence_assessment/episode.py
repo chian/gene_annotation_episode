@@ -1,54 +1,28 @@
-"""The A108 published-evidence assessment binding (role ``literature``) and the literature home factory.
+"""The A108 published evidence assessment episode: a private binding of the system's episode type."""
+from episode_runtime import EpisodeBinding
 
-Its behaviour is the shared literature implementation (``literature_binding``,
-``literature_source``, ``literature_credit``); this binding declares only what
-is its own.
-"""
-from __future__ import annotations
-
-from copy import deepcopy
-
-from .literature_binding import LiteratureBinding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class PublishedEvidenceAssessmentEpisode(LiteratureBinding):
-    """Which published evidence bears on the commissioned A108 question."""
-    binding_path = 'sample_context_evidence/published_evidence_assessment'
-    commissioning_parent = 'sample_context_evidence'
-    role = 'literature'
-    child_role_names = ('literature_strategy',)
-    acquisition = True
-    assignment_shape = ('question', 'literature_assignment_v1', 'source_refs')
-    instruction = ('Investigate which published evidence bears on the assigned scientific question. You can pursue '
-                   'ordinary searches and source reads directly, or assign a strategy investigation when that '
-                   'narrower question warrants iteration.')
-
-
-def create_binding_tree(*, store, tools, yield_bindings, outcome_page_size):
-    """Construct the seven A108 literature bindings, each with its own tool registry over the run's store.
-
-    ``tools`` are the A108 ``ToolRegistry`` settings; ``yield_bindings`` declares each binding's continuation per
-    commissioned task kind; ``outcome_page_size`` bounds the own-outcome page presented with each decision.
-    """
-    from gene_annotation_episode.episodic_workflow.episode_support.tools.sample_context_evidence.tools import ToolRegistry
-    from .evidence_search_strategy_improvement.episode import EvidenceSearchStrategyImprovementEpisode
-    from .evidence_search_strategy_improvement.source_relevance_assessment.episode import (
-        SourceRelevanceAssessmentEpisode)
-    from .evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode import (
-        SourceEvidenceExaminationEpisode)
-    from .evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.\
-        passage_evidence_extraction.episode import PassageEvidenceExtractionEpisode
-    from .evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.\
-        source_coverage_improvement.episode import SourceCoverageImprovementEpisode
-    from .evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.\
-        table_evidence_extraction.episode import TableEvidenceExtractionEpisode
-    bindings = tuple(binding(tool_registry=ToolRegistry(store, **deepcopy(dict(tools))),
-                             yield_bindings=deepcopy(yield_bindings), outcome_page_size=outcome_page_size)
-                     for binding in (PublishedEvidenceAssessmentEpisode, EvidenceSearchStrategyImprovementEpisode,
-                                     SourceRelevanceAssessmentEpisode, SourceEvidenceExaminationEpisode,
-                                     TableEvidenceExtractionEpisode, SourceCoverageImprovementEpisode,
-                                     PassageEvidenceExtractionEpisode))
-    by_role = {binding.role: binding for binding in bindings}
-    for binding in bindings:
-        binding.bind_children({role: by_role[role] for role in binding.child_role_names})
-    return bindings
+class PublishedEvidenceAssessment(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

@@ -250,3 +250,171 @@ initial_credit, credit, controller_credit, episode_yield and parent_invocation_r
   distinguishes them by binding path.
 - It also builds its sibling execution/resource bindings (`create_execution_bindings`, `create_resource_bindings`)
   with the same construction arguments.
+
+## Carried over
+
+Carried over on 19 November 2026 into the private binding `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence/` (ten files: `goal.py`, `task.py`, `credit.py`, `yield_estimator.py`, `episode.py`, `messages/{read_from_parent,msg_to_child,read_from_child,internal_summary,final_to_parent}.py`). One row per row of `runs/carry_over/functions/a101__sequence_homology_evidence.tsv`. The list of what could not be placed is in `docs/axis_restructure_20261117/carry_over_blocked/a101__sequence_homology_evidence.md`.
+
+| old file | kind | name | machinery or episode function | new place (file and name, or library path) or machinery reason |
+|---|---|---|---|---|
+| alternate_process_selection.py | class | AlternateProcessSelection | episode function | task.py process_revise (the proposed selection of process.revise) |
+| alternate_process_selection.py | method | AlternateProcessSelection._proposed_selection | episode function | task.py process_revise (the proposed selection of process.revise) |
+| binding_record.py | class | ScientificBindingRecord | machinery | binding_record.py / the binding's own as_record() |
+| binding_record.py | method | ScientificBindingRecord.as_record | machinery | binding_record.py / the binding's own as_record() |
+| child_message_owners.py | function | exchange_for_child | machinery | recursive-exchange routing by workflow/registry introspection; slots are CHILD_SLOTS |
+| commissioned_credit_presentation.py | class | CommissionedScientificPresentation | episode function | messages/internal_summary.py internal_summary and task.py decide (commissioned presentation) |
+| commissioned_credit_presentation.py | method | CommissionedScientificPresentation.decision_state | episode function | messages/internal_summary.py internal_summary; task.py decide (context) |
+| commissioned_credit_presentation.py | method | CommissionedScientificPresentation.completed_work | episode function | messages/internal_summary.py internal_summary (units, child_reports) |
+| commissioned_credit_presentation.py | method | CommissionedScientificPresentation.exchange_yield_table | episode function | messages/internal_summary.py internal_summary (action_yields via yield_table) |
+| commissioned_credit_presentation.py | function | _bind_scientific_runtime_providers | machinery | provider patching (_bind_*_runtime_providers) |
+| completion_report.py | function | enrich_completion_snapshot | machinery | completion snapshot: the system hands completion to final_to_parent; credit is completion['credit'] |
+| completion_report.py | function | _bind_original_runtime | machinery | completion snapshot: the system hands completion to final_to_parent; credit is completion['credit'] |
+| configuration.py | class | ScientificConfiguration | episode function | task.py CHILD_SLOTS, replaces_default_instructions; yield_estimator.py (declaration check); settings |
+| configuration.py | method | ScientificConfiguration.__init__ | episode function | task.py CHILD_SLOTS (child roles incl. itself), replaces_default_instructions (library candidate); yield_estimator.py yield_controller (declaration check); library/tool-library records as_record() and tool retrieval/contract profile: machinery (settings directories) |
+| credit.py | function | original_task_projector | episode function | credit.py A101SequenceCredit (credit) |
+| credit.py | class | SequenceHomologyEvidenceCredit | episode function | credit.py credit |
+| credit.py | method | SequenceHomologyEvidenceCredit.credit_kind | machinery | credit_kind is deleted (README 3d) |
+| credit.py | method | SequenceHomologyEvidenceCredit.credit_projector | episode function | credit.py credit; messages/read_from_parent.py (proposed annotation required) |
+| credit.py | method | SequenceHomologyEvidenceCredit.credit_view | episode function | credit.py credit (services.scientific_credit replaced by the projector over records) |
+| decision_inputs.py | class | ScientificDecisionInputs | episode function | task.py decide (context additions) |
+| decision_inputs.py | method | ScientificDecisionInputs.decision_inputs | episode function | task.py decide; the resource/estimate/native-event/waiting/job-episode inputs have no module: unplaced |
+| decision_inputs.py | function | _bind_scientific_runtime_providers | machinery | provider patching (_bind_*_runtime_providers) |
+| decision_state.py | class | ScientificDecisionState | episode function | messages/internal_summary.py internal_summary (one presentation; the standalone proposed-annotation view is the root's) |
+| decision_state.py | method | ScientificDecisionState.credit_presentation | episode function | messages/internal_summary.py internal_summary (one presentation; the standalone proposed-annotation view is the root's) |
+| decision_state.py | method | ScientificDecisionState.decision_state | episode function | messages/internal_summary.py internal_summary (one presentation; the standalone proposed-annotation view is the root's) |
+| episode.py | function | create_execution_bindings | machinery | home factory of sibling bindings |
+| episode.py | function | create_resource_bindings | machinery | home factory of sibling bindings |
+| episode.py | class | SequenceHomologyEvidenceEpisode | episode function | episode.py SequenceHomologyEvidence |
+| episode.py | method | SequenceHomologyEvidenceEpisode.contract_information_profile | machinery | contract-information freezing (README 5 item 16) |
+| episode.py | method | SequenceHomologyEvidenceEpisode._role | machinery | role check of the old single-role registry |
+| episode.py | method | SequenceHomologyEvidenceEpisode.child_roles | episode function | task.py CHILD_SLOTS |
+| episode.py | method | SequenceHomologyEvidenceEpisode.prepare_child_request | episode function | messages/msg_to_child.py msg_to_child |
+| episode.py | method | SequenceHomologyEvidenceEpisode.receive_child_progress_for_role | machinery | progress provider receipt (the monitor returns monitoring_progress_refs) |
+| episode.py | method | SequenceHomologyEvidenceEpisode.permitted_common_actions | episode function | task.py decide / action (tool, reason, child; wait and redeliver_report are not carried) |
+| episode.py | method | SequenceHomologyEvidenceEpisode.allowed_children | episode function | task.py CHILD_SLOTS |
+| episode.py | method | SequenceHomologyEvidenceEpisode.child_request_preparer | episode function | messages/msg_to_child.py ASSIGNMENTS |
+| episode.py | method | SequenceHomologyEvidenceEpisode.child_report_receiver | episode function | messages/read_from_child.py read_from_child |
+| episode.py | method | SequenceHomologyEvidenceEpisode.child_request_preparer_for_binding | episode function | messages/msg_to_child.py ASSIGNMENTS |
+| episode.py | method | SequenceHomologyEvidenceEpisode.child_report_receiver_for_binding | episode function | messages/read_from_child.py read_from_child |
+| execution_planning.py | function | catalog | episode function | task.py process_execution (declared; raises unplaced inputs) |
+| execution_planning.py | function | read | episode function | task.py process_execution (raises NotImplementedError: memory_for / resource_context / hpc commissions have no home) |
+| from_child_execution_job_submission.py | function | receive_report | episode function | receipt custody of the child form; the report is read in messages/read_from_child.py read_from_child |
+| from_child_execution_job_submission.py | function | admit_return | machinery | admit_return / saved report attempts (the system admits the result against the child's form) |
+| from_child_execution_job_submission.py | function | _bind_incoming_runtime | machinery | provider patching (_bind_incoming_runtime) |
+| from_child_execution_progress_assessment.py | function | receive_progress | machinery | progress provider receipt (monitoring_progress_refs is a field of the monitor's return) |
+| from_child_execution_progress_assessment.py | function | receive_report | episode function | receipt custody of the child form; the report is read in messages/read_from_child.py read_from_child |
+| from_child_execution_progress_assessment.py | function | admit_return | machinery | admit_return / saved report attempts (the system admits the result against the child's form) |
+| from_child_execution_progress_assessment.py | function | _bind_incoming_runtime | machinery | provider patching (_bind_incoming_runtime) |
+| from_child_execution_result_acquisition.py | function | receive_report | episode function | receipt custody of the child form; the report is read in messages/read_from_child.py read_from_child |
+| from_child_execution_result_acquisition.py | function | admit_return | machinery | admit_return / saved report attempts (the system admits the result against the child's form) |
+| from_child_execution_result_acquisition.py | function | _bind_incoming_runtime | machinery | provider patching (_bind_incoming_runtime) |
+| from_child_published_evidence_assessment.py | function | receive_report | episode function | receipt custody of the child form; the report is read in messages/read_from_child.py read_from_child |
+| from_child_published_evidence_assessment.py | function | admit_return | machinery | admit_return / saved report attempts (the system admits the result against the child's form) |
+| from_child_published_evidence_assessment.py | function | _bind_incoming_runtime | machinery | provider patching (_bind_incoming_runtime) |
+| from_child_resource_result_acquisition.py | function | receive_report | episode function | receipt custody of the child form; the report is read in messages/read_from_child.py read_from_child |
+| from_child_resource_result_acquisition.py | function | admit_return | machinery | admit_return / saved report attempts (the system admits the result against the child's form) |
+| from_child_resource_result_acquisition.py | function | _bind_incoming_runtime | machinery | provider patching (_bind_incoming_runtime) |
+| from_child_resource_work_submission.py | function | receive_report | episode function | receipt custody of the child form; the report is read in messages/read_from_child.py read_from_child |
+| from_child_resource_work_submission.py | function | admit_return | machinery | admit_return / saved report attempts (the system admits the result against the child's form) |
+| from_child_resource_work_submission.py | function | _bind_incoming_runtime | machinery | provider patching (_bind_incoming_runtime) |
+| from_child_sequence_homology_evidence.py | function | admit_return | machinery | admit_return / saved report attempts (the system admits the result against the child's form) |
+| from_child_sequence_homology_evidence.py | function | receive_report | episode function | receipt custody of the child form; the report is read in messages/read_from_child.py read_from_child |
+| from_parent.py | class | ScientificAssignment | episode function | messages/read_from_parent.py |
+| from_parent.py | method | ScientificAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM |
+| from_parent.py | method | ScientificAssignment.child_assignment_schema | episode function | messages/msg_to_child.py _recursive (proposed annotation inherited) and ASSIGNMENT_FORM |
+| from_parent.py | method | ScientificAssignment._selection | episode function | messages/read_from_parent.py read_from_parent (validate_selection; library/tool resolution is machinery) |
+| from_parent.py | method | ScientificAssignment._assignment | episode function | messages/read_from_parent.py read_from_parent (value checks); scope/reference-in-scope checks are custody |
+| from_parent.py | method | ScientificAssignment._invocation | machinery | invocation record of the parent-written report form (report_form machinery) |
+| from_parent.py | method | ScientificAssignment.prepare_assignment | episode function | messages/msg_to_child.py _recursive |
+| from_parent.py | method | ScientificAssignment._validate_origin | machinery | validation against the parent's recorded preparation (journal rows) |
+| from_parent.py | method | ScientificAssignment.prepare_invocation | episode function | messages/msg_to_child.py _recursive; the closed-context re-authentication is machinery (journal) |
+| from_parent.py | method | ScientificAssignment.validate_context | machinery | filled-process re-verification of the request (journal) |
+| from_parent.py | method | ScientificAssignment.validate_execution_context | machinery | closed-request execution guard (journal) |
+| from_parent.py | method | ScientificAssignment._original_selection | episode function | messages/read_from_parent.py parent_input['selection'] |
+| from_parent.py | method | ScientificAssignment.initial_references | episode function | messages/read_from_parent.py (evidence_refs and proposed_annotation_refs record_refs fields) |
+| goal.py | function | scientific_guidance | episode function | goal.py GOAL |
+| goal.py | class | ScientificGoal | episode function | task.py instructions |
+| goal.py | method | ScientificGoal.instructions | episode function | task.py instructions (INSTRUCTION_ENTRY_BODY, EVIDENCE_AXIS_BODY) |
+| incoming_message_owners.py | function | admission_for_prepared_request | machinery | route table of (role, binding path) admissions; slots are CHILD_SLOTS |
+| internal_summary.py | class | ScientificSummary | episode function | messages/internal_summary.py internal_summary; task.py decide (library entries from settings) |
+| internal_summary.py | method | ScientificSummary.decision_context | episode function | messages/internal_summary.py internal_summary; task.py decide (library entries from settings) |
+| native_correspondence_credit.py | class | A101SequenceCredit | episode function | credit.py A101SequenceCredit (private copy of the projector; base class already in library: grading/sequence_alignment/native_correspondence.py) |
+| native_correspondence_credit.py | method | A101SequenceCredit.as_record | episode function | credit.py A101SequenceCredit (private copy of the projector; base class already in library: grading/sequence_alignment/native_correspondence.py) |
+| native_correspondence_credit.py | method | A101SequenceCredit.__call__ | episode function | credit.py A101SequenceCredit (private copy of the projector; base class already in library: grading/sequence_alignment/native_correspondence.py) |
+| process_state.py | class | SequenceHomologyEvidenceState | machinery | restore of a closed request's filled process (journal) |
+| process_state.py | method | SequenceHomologyEvidenceState.restore_closed_process | machinery | restore of a closed request's filled process (journal) |
+| report_delivery.py | class | ScientificReportDelivery | episode function | messages/final_to_parent.py final_to_parent |
+| report_delivery.py | method | ScientificReportDelivery.finish | episode function | messages/final_to_parent.py final_to_parent (facts and credit; saving the form and releasing are machinery) |
+| report_delivery.py | function | _bind_scientific_runtime_providers | machinery | provider patching (_bind_*_runtime_providers) |
+| scientific_contracts.py | function | _object | machinery | closed-JSON copy of a record (the system journals closed JSON) |
+| scientific_contracts.py | function | _ref_schema | episode function | task.py _THOUGHT_REF / REVISION_ARGUMENTS (option reference schema) |
+| scientific_operations.py | class | ScientificOperations | episode function | task.py execute_selected_tool, process_revise, process_execution |
+| scientific_operations.py | method | ScientificOperations.execute | episode function | task.py execute_selected_tool, process_revise, process_execution |
+| scoring/native_correspondence.py | function | _known | episode function | already in library: gene_annotation_episode/episodic_workflow/episode_support/grading/sequence_alignment/native_correspondence.py (same name) |
+| scoring/native_correspondence.py | function | _regions | episode function | already in library: gene_annotation_episode/episodic_workflow/episode_support/grading/sequence_alignment/native_correspondence.py (same name) |
+| scoring/native_correspondence.py | class | NativeCorrespondenceScoring | episode function | already in library: gene_annotation_episode/episodic_workflow/episode_support/grading/sequence_alignment/native_correspondence.py (same name) |
+| scoring/native_correspondence.py | method | NativeCorrespondenceScoring._annotation_measurements | episode function | already in library: gene_annotation_episode/episodic_workflow/episode_support/grading/sequence_alignment/native_correspondence.py (same name) |
+| scoring/native_correspondence.py | method | NativeCorrespondenceScoring.annotation_contribution | episode function | already in library: gene_annotation_episode/episodic_workflow/episode_support/grading/sequence_alignment/native_correspondence.py (same name) |
+| scoring/native_correspondence.py | method | NativeCorrespondenceScoring.read_details | episode function | already in library: gene_annotation_episode/episodic_workflow/episode_support/grading/sequence_alignment/native_correspondence.py (same name) |
+| standalone_credit_presentation.py | class | StandaloneScientificPresentation | episode function | messages/internal_summary.py internal_summary / task.py decide; the standalone proposed_annotations, annotation_comparisons and arms are the root episode's (unplaced here) |
+| standalone_credit_presentation.py | method | StandaloneScientificPresentation.decision_state | episode function | messages/internal_summary.py internal_summary / task.py decide; the standalone proposed_annotations, annotation_comparisons and arms are the root episode's (unplaced here) |
+| standalone_credit_presentation.py | method | StandaloneScientificPresentation.completed_work | episode function | messages/internal_summary.py internal_summary / task.py decide; the standalone proposed_annotations, annotation_comparisons and arms are the root episode's (unplaced here) |
+| standalone_credit_presentation.py | method | StandaloneScientificPresentation.exchange_yield_table | episode function | messages/internal_summary.py internal_summary / task.py decide; the standalone proposed_annotations, annotation_comparisons and arms are the root episode's (unplaced here) |
+| standalone_credit_presentation.py | function | _bind_scientific_runtime_providers | machinery | provider patching (_bind_*_runtime_providers) |
+| task.py | class | ScientificInvestigationTask | episode function | task.py decide, action and tools |
+| task.py | method | ScientificInvestigationTask.instructions | episode function | task.py instructions |
+| task.py | method | ScientificInvestigationTask.next | episode function | task.py decide (the loop and replays are the system's) |
+| task.py | method | ScientificInvestigationTask.apply_response | episode function | task.py action (reasoning-content rejection, schema admission; report_update is not carried); the job_child failure arm and contract_error repair hints: unplaced |
+| task.py | method | ScientificInvestigationTask.execute | episode function | task.py reason, execute_selected_tool, process_revise (wait: not carried) |
+| task.py | function | _bind_scientific_runtime_providers | machinery | provider patching (_bind_*_runtime_providers) |
+| task_decision.py | class | ScientificTaskDecision | episode function | task.py decide |
+| task_decision.py | method | ScientificTaskDecision.call | episode function | task.py decide (ModelRequest; recording and replay are the system's) |
+| task_decision.py | method | ScientificTaskDecision.conversation_key | machinery | decision-exchange loop / saved-request checks / conversation state (README 3a) |
+| task_decision.py | method | ScientificTaskDecision.interpretation_context | machinery | decision-exchange lookup context |
+| task_decision.py | method | ScientificTaskDecision.exchange_schema | machinery | decision-exchange loop / saved-request checks / conversation state (README 3a) |
+| task_decision.py | method | ScientificTaskDecision.exchange_response | machinery | decision-exchange loop / saved-request checks / conversation state (README 3a) |
+| task_decision.py | method | ScientificTaskDecision.validate_contract_exchange_request | machinery | decision-exchange loop / saved-request checks / conversation state (README 3a) |
+| task_decision.py | method | ScientificTaskDecision.validate_contract_exchange_history | machinery | decision-exchange loop / saved-request checks / conversation state (README 3a) |
+| task_decision.py | method | ScientificTaskDecision.exchange_decision | machinery | decision-exchange loop / saved-request checks / conversation state (README 3a) |
+| task_decision.py | function | _bind_scientific_runtime_providers | machinery | provider patching (_bind_*_runtime_providers) |
+| task_instructions.py | function | instructions | episode function | task.py instructions |
+| task_state.py | class | ScientificTaskState | machinery | per-episode state, restore, checkpoint, record_effect (README 3e) |
+| task_state.py | method | ScientificTaskState.__init__ | machinery | per-episode state, restore, checkpoint, record_effect (README 3e) |
+| task_state.py | method | ScientificTaskState.bind_execution_context | machinery | per-episode state, restore, checkpoint, record_effect (README 3e) |
+| task_state.py | method | ScientificTaskState.record_execution_failure | episode function | task.py execute_selected_tool (failure as an outcome: failure_outcome) |
+| task_state.py | method | ScientificTaskState.restore_checkpoint | machinery | per-episode state, restore, checkpoint, record_effect (README 3e) |
+| task_state.py | method | ScientificTaskState.restore | machinery | per-episode state, restore, checkpoint, record_effect (README 3e) |
+| task_state.py | method | ScientificTaskState.record_effect | machinery | per-episode state, restore, checkpoint, record_effect (README 3e) |
+| task_state.py | method | ScientificTaskState.checkpoint | machinery | per-episode state, restore, checkpoint, record_effect (README 3e) |
+| task_state.py | function | _bind_scientific_runtime_providers | machinery | provider patching (_bind_*_runtime_providers) |
+| to_child_execution_job_submission.py | function | prepare_commission | episode function | messages/msg_to_child.py msg_to_child (ASSIGNMENTS entry of the slot) |
+| to_child_execution_progress_assessment.py | function | prepare_request | episode function | messages/msg_to_child.py _monitor |
+| to_child_execution_progress_assessment.py | function | required_return_sources | episode function | messages/msg_to_child.py msg_to_child (selection: monitoring_progress_refs) |
+| to_child_execution_progress_assessment.py | function | prepare_commission | episode function | messages/msg_to_child.py msg_to_child (ASSIGNMENTS entry of the slot) |
+| to_child_execution_result_acquisition.py | function | prepare_commission | episode function | messages/msg_to_child.py msg_to_child (ASSIGNMENTS entry of the slot) |
+| to_child_published_evidence_assessment.py | function | prepare_request | episode function | messages/msg_to_child.py msg_to_child (ASSIGNMENTS entry of the slot) |
+| to_child_resource_result_acquisition.py | function | prepare_commission | episode function | messages/msg_to_child.py msg_to_child (ASSIGNMENTS entry of the slot) |
+| to_child_resource_work_submission.py | function | prepare_commission | episode function | messages/msg_to_child.py msg_to_child (ASSIGNMENTS entry of the slot) |
+| to_child_sequence_homology_evidence.py | function | prepare_request | episode function | messages/msg_to_child.py msg_to_child (ASSIGNMENTS entry of the slot) |
+| to_parent.py | class | ScientificReport | episode function | messages/final_to_parent.py |
+| to_parent.py | method | ScientificReport.required_return_sources | episode function | messages/msg_to_child.py (the parent's selection) and final_to_parent.py RETURN_FORM |
+| to_parent.py | method | ScientificReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (library report_sources and alignment-site sources: unplaced) |
+| to_parent.py | method | ScientificReport.facts | episode function | messages/final_to_parent.py final_to_parent (process result: raises unplaced) |
+| to_parent.py | method | ScientificReport.resolve | machinery | form reference resolver (report_form machinery) |
+| to_parent.py | method | ScientificReport.validate_report | episode function | messages/final_to_parent.py validate_report |
+| tool_selection.py | class | ScientificToolSelection | episode function | task.py selected_tools / selection_schema |
+| tool_selection.py | method | ScientificToolSelection._information_catalog | machinery | services.tool_catalog callback |
+| tool_selection.py | method | ScientificToolSelection._closed_tool_resolution | machinery | closed-request restore (journal) |
+| tool_selection.py | method | ScientificToolSelection._tool_resolution_for | episode function | task.py selected_tools (tool library resolve_invocations) |
+| tool_selection.py | method | ScientificToolSelection._tool_resolution | episode function | task.py selected_tools (common tool name check) |
+| tool_selection.py | method | ScientificToolSelection.catalog | episode function | task.py selected_tools, DESCRIPTIONS[process_revise], selection_schema |
+| tool_selection.py | method | ScientificToolSelection.create_tool_retriever | machinery | tool retriever service (scientific_tool_retrieval has no home): unplaced |
+| tool_selection.py | method | ScientificToolSelection.common_tool_names | episode function | task.py COMMON_TOOLS |
+| waiting.py | class | ScientificWaiting | machinery | wait/suspension machinery (the wait action is not carried) |
+| waiting.py | method | ScientificWaiting.suspension_changed | machinery | wait/suspension machinery (the wait action is not carried) |
+| waiting.py | method | ScientificWaiting._execute_selected_wait | machinery | wait/suspension machinery (the wait action is not carried) |
+| waiting.py | function | _bind_scientific_runtime_providers | machinery | wait/suspension machinery (the wait action is not carried) |
+| yield_estimator.py | class | SequenceHomologyEvidenceYield | episode function | yield_estimator.py yield_controller |
+| yield_estimator.py | method | SequenceHomologyEvidenceYield.private_yield_binding | machinery | switch for private bindings (this head always has them) |
+| yield_estimator.py | method | SequenceHomologyEvidenceYield.continuation_task | episode function | messages/read_from_parent.py (yield_task key); yield_estimator.py |
+| yield_estimator.py | method | SequenceHomologyEvidenceYield.yield_controller | episode function | yield_estimator.py yield_controller (BoundedQualityYieldController) |

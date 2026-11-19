@@ -51,13 +51,11 @@ class LiteratureBindingModelRepository(LiteratureBindingRepository):
     components = COMPONENTS
     record_version = "literature_binding_model_record_v2"
     readable_record_versions = ("literature_binding_model_record_v1", record_version)
-    operations_table = "literature_binding_model_operations"
-    received_table = "literature_binding_model_received"
 
     def _binding(self, reference):
-        # The ordinary binding repository checks its actual operation receipt,
-        # run, version and source parents. A provider label alone is insufficient.
-        return LiteratureBindingRepository(self.store, self.run_id).read(reference)
+        # The ordinary binding repository checks the saved sheet's version and source parents.
+        # A provider label alone is insufficient.
+        return LiteratureBindingRepository(self.store).read(reference)
 
     def _provenance(self, context, reference):
         # A received committed sheet supplies these original source identities.
@@ -71,26 +69,8 @@ class LiteratureBindingModelRepository(LiteratureBindingRepository):
         return row
 
     def populate(self, context, arguments, operation_key):
-        if context.run_id != self.run_id:
-            raise ContractError("literature_run_mismatch")
-        if not isinstance(operation_key, str) or not operation_key:
-            raise ContractError("operation_key_required")
         args = plain(arguments)
         validate_schema(args, binding_model_population_schema())
-        signature = canonical({"arguments": args, "scope": plain(context.scope)})
-        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
-            "WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, context.episode_id, operation_key)).fetchone()
-        if old is not None:
-            if old["signature"] != signature:
-                raise ContractError("operation_key_reused_for_different_work")
-            outcome = json.loads(old["outcome"])
-            saved = self.read(outcome["result"]["sheet_ref"])
-            for reference in saved["direct_input_source_refs"]:
-                self._source(context, reference)
-            for reference in saved["input_source_refs"]:
-                self._provenance(context, reference)
-            return outcome
 
         source = self._source(context, args["source_ref"])
         binding = self._binding(source["id"])
@@ -149,22 +129,20 @@ class LiteratureBindingModelRepository(LiteratureBindingRepository):
             "model_witnesses": witnesses, "comparison": binding["comparison"]}
         with self.store.transaction():
             artifact = self.store.artifact(canonical(payload), "application/json")
-            request = self.store.artifact(canonical({"run_id": self.run_id,
-                "episode_id": context.episode_id, "operation_key": operation_key,
+            request = self.store.artifact(canonical({"operation_key": operation_key,
                 "arguments": args}), "application/json")
             record = {"provider": self.provider, "accession": None, "uri": None,
                 "artifact_ref": artifact, "text_ref": artifact, "request_ref": request,
                 "version": self.record_version, "retrieved_at": None,
                 "parent_source_refs": payload["input_source_refs"]}
             candidate = identity("source", {"origin": "tool", "record": record})
-            existed = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (candidate,)).fetchone()
+            existed = self.store.holds(candidate)
             published = self.store.put("source", record, origin="tool", scope=plain(context.scope))
             sheet_ref = published["id"]
-            outcome = {"status": "completed", "operation_ref": identity("operation", {
-                "run_id": self.run_id, "episode_id": context.episode_id, "key": operation_key}),
+            outcome = {"status": "completed", "operation_ref": identity("operation", {"key": operation_key}),
                 "record_refs": list(dict.fromkeys([sheet_ref, *payload["input_source_refs"],
                     *(ref for ref in payload["experimental_bindings"].values() if ref)])),
-                "changed_record_refs": [] if existed is not None else [sheet_ref],
+                "changed_record_refs": [] if existed else [sheet_ref],
                 "result": {"sheet_ref": sheet_ref, "evidence_source_ref": source["id"],
                     "original_evidence_source_ref": payload["original_evidence_source_ref"],
                     "model_source_ref": payload["model_source_ref"], "cells": sheet["cells"],
@@ -173,8 +151,7 @@ class LiteratureBindingModelRepository(LiteratureBindingRepository):
                     **{field: sheet[field] for field in ("source_uncertainty_basis",
                         "minimum_experiment_count", "independent_preparation_count")}},
                 "feedback": None}
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+
         return outcome
 
     def read(self, sheet_ref):
@@ -187,7 +164,7 @@ class LiteratureBindingModelRepository(LiteratureBindingRepository):
             raise ContractError("literature_binding_model_source_mismatch")
         return saved
 
-    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+    def project_cells(self, sheet_refs, *, components=None):
         components = self.components if components is None else components
         if (not isinstance(components, (list, tuple))
                 or any(not isinstance(name, str) or name not in self.components for name in components)
@@ -195,8 +172,7 @@ class LiteratureBindingModelRepository(LiteratureBindingRepository):
             raise ContractError("literature_binding_model_component_selection_invalid")
         result = []
         for reference in dict.fromkeys(sheet_refs):
-            if reference not in permitted_record_refs:
-                raise ContractError("literature_sheet_not_received")
+
             saved = self.read(reference)
             sheet = saved["sheet"]
             for name in components:

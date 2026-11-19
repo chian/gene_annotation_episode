@@ -7,6 +7,7 @@ from copy import deepcopy
 import hashlib
 import json
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_presence_evidence.communication import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError, canonical
 from gene_annotation_episode.episodic_workflow.episode_support.grading.partner_presence_evidence.tool_grading_artifacts import retain_tool_grading, source_tool_grading_entries
@@ -31,9 +32,10 @@ def digest(value):
     return hashlib.sha256(canonical(value).encode()).hexdigest()
 
 
-def install(store):
-    for table in ('a107_qualification_requests', 'a107_qualifications'):
-        store.db.execute('CREATE TABLE IF NOT EXISTS '+table+' (source_ref TEXT PRIMARY KEY,body TEXT NOT NULL)')
+REQUESTS = TableDeclaration(name='a107_qualification_requests', columns=('source_ref', 'body'), key=('source_ref',),
+    record_refs=('source_ref',))
+QUALIFICATIONS = TableDeclaration(name='a107_qualifications', columns=('source_ref', 'body'), key=('source_ref',),
+    record_refs=('source_ref',))
 
 
 def _publish(store, provider, body, *, graded=False):
@@ -44,8 +46,7 @@ def _publish(store, provider, body, *, graded=False):
         'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None, 'version': VERSION,
         'retrieved_at': None, 'operand_refs': body['scope']['subject_refs'],
         **({'auxiliary_artifact_refs': [grading]} if graded else {})}, origin='tool')['id']
-    table = 'a107_qualifications' if graded else 'a107_qualification_requests'
-    store.db.execute('INSERT OR IGNORE INTO '+table+' VALUES(?,?)', (source, canonical(body)))
+    store.table(QUALIFICATIONS if graded else REQUESTS).put({'source_ref': source, 'body': body})
     return source
 
 
@@ -54,12 +55,10 @@ def _read(store, reference, *, graded=False):
     provider = PROVIDER if graded else REQUEST_PROVIDER
     if record.get('provider') != provider:
         return None
-    table = 'a107_qualifications' if graded else 'a107_qualification_requests'
-    exists = store.db.execute('SELECT 1 FROM sqlite_master WHERE name=?', (table,)).fetchone()
-    saved = store.db.execute('SELECT body FROM '+table+' WHERE source_ref=?', (reference,)).fetchone() if exists else None
-    require(saved is not None and record['origin'] == 'tool' and record.get('version') == VERSION,
+    saved = store.table(QUALIFICATIONS if graded else REQUESTS).select({'source_ref': reference})
+    require(saved and record['origin'] == 'tool' and record.get('version') == VERSION,
         'a107_original_qualification_grant_required')
-    body = json.loads(saved[0])
+    body = saved[0]['body']
     require(json.loads(store.get_artifact(record['artifact_ref'])) == body, 'a107_qualification_custody_conflict')
     if graded:
         entries = source_tool_grading_entries(store, reference)
@@ -87,7 +86,6 @@ def request(store, operation, args, *, context, known):
             refs.add(args[field])
     require(refs <= known, 'a107_qualification_operands_not_received')
     require(set(store.reference_subset(refs, plain(context.scope))) == refs, 'a107_qualification_operand_outside_scope')
-    install(store)
     body = {'version': VERSION, 'operation': operation, 'arguments': deepcopy(args),
         'run_id': context.run_id, 'scope': plain(context.scope), 'target_ref': next(iter(roots)),
         'target_regions': [[row['start'], row['end']] for row in coverage],
@@ -135,7 +133,7 @@ def _requirement(store, args, known, context):
         from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_partner_storage import LiteraturePartnerRepository
         from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.literature_partner_sheet_records import literal_reference_role
         require(bool(args['components']), 'a107_requested_requirement_components_required')
-        reader = LiteraturePartnerRepository(store, context.run_id)
+        reader = LiteraturePartnerRepository(store)
         rows = reader.fact_cells(context, [args['sheet_ref']], components=args['components'])
         require(len(rows) == len(args['components']), 'a107_requirement_numerical_subset_not_received')
         require(all(row['partner_ref'] == args['component_ref']
@@ -691,7 +689,6 @@ def received_qualifications(store, references, scope, *, full=False, known_recor
 
 def refresh(store, context, known):
     """Hard-coded publication/receipt routing; no action chosen by a model."""
-    install(store)
     known = set(known)
     generated, needs = [], []
     requests = [(ref, body) for ref in sorted(known) if (body := _read(store, ref)) is not None]

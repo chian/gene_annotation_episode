@@ -168,3 +168,157 @@ ledger sqlite and `runtime_forms` facts. `validate_report` enforces fact equalit
 | waiting.py | 50 | activity advice; scheduled monitor wait | table `runtime_observations` |
 | work_operations.py | 54 | HPC tool catalog and dispatch | `communication.plain` |
 | yield_estimator.py | 101 | HPC continuation estimator and evidence | tables `runtime_observations`, `runtime_actions`; `numerical.YieldController/YieldParameters`; `library.hpc_continuation.HPCContinuationEstimator` |
+
+## Carried over
+
+One row per row of `runs/carry_over/functions/a107__partner_presence_evidence__hpc_work_planning.tsv` (old file, kind, name copied). Classification: machinery (not carried, with the reason) or episode function (with its new place: a file of this episode, or the library function it calls; "library candidate" rows would be library functions that are not in the library yet: none of the rows here needs one that is not already in the episode file that uses it, so no row is marked so, and nothing is added to or moved into `episode_support/`). Every `task.py` helper that is a private copy of the sibling allocation episode's code is this episode's own copy (an episode imports nothing from another episode).
+
+| old file | kind | name | classification | new place or machinery reason |
+|---|---|---|---|---|
+| allocation_handoff.py | class | AllocationHandoff | episode function | task.py: the class is dissolved into the module-level functions of its two methods |
+| allocation_handoff.py | method | AllocationHandoff._attach_original_handoff | episode function | task.py hpc_handoff (the custody test is ctx.store.holds; the target read is handoff_target, BLOCKED-ON-JOB-SERVICE) |
+| allocation_handoff.py | method | AllocationHandoff._work_on_original_allocation | episode function | task.py original_plan, original_target and the branches hpc_monitor, hpc_monitor_wait, hpc_allocation_order, hpc_results |
+| allocation_observations.py | class | AllocationObservations | episode function | task.py: the class is dissolved into the module-level functions of its methods |
+| allocation_observations.py | method | AllocationObservations.targets | episode function | task.py handoff_target / observe_target / read_window / write_allocation_control (ExecutionTargetReader is the job-access service: BLOCKED-ON-JOB-SERVICE) |
+| allocation_observations.py | method | AllocationObservations._target | episode function | task.py original_target |
+| allocation_observations.py | method | AllocationObservations._window | episode function | task.py window and window_value |
+| allocation_observations.py | method | AllocationObservations._allocation | episode function | task.py allocation_receipt |
+| allocation_observations.py | method | AllocationObservations._observe_original_allocation | episode function | task.py observe_allocation (the branches by tool are hpc_monitor and hpc_results) |
+| allocation_order.py | class | AllocationOrder | episode function | task.py: dissolved into hpc_allocation_order |
+| allocation_order.py | method | AllocationOrder._order_original_units | episode function | task.py hpc_allocation_order (write_allocation_control: BLOCKED-ON-JOB-SERVICE) |
+| allocation_results.py | class | AllocationResults | episode function | task.py: the class is dissolved into the module-level functions of its methods |
+| allocation_results.py | method | AllocationResults._collected_unit_ids | episode function | task.py collected_unit_ids |
+| allocation_results.py | method | AllocationResults._uncollected_completed_unit_ids | episode function | task.py uncollected_completed_unit_ids |
+| allocation_results.py | method | AllocationResults._publish | episode function | task.py publish_result (ctx.store.artifact and ctx.store.put) |
+| allocation_results.py | method | AllocationResults._collect_original_results | episode function | task.py collect_original_results (the tool is hpc_results) |
+| binding_record.py | class | HPCBindingRecord | machinery | binding_record.py: the binding's own as_record() (README 3d: deleted) |
+| binding_record.py | method | HPCBindingRecord.as_record | machinery | the binding's own as_record() (the system derives the declaration) |
+| closed_models.py | class | ClosedModels | machinery | re-validation of a closed episode's saved form (runtime_forms, EpisodeReturnRecords, a second read-only connection to the ledger); the episode's own check of its model identity is messages/final_to_parent.py resolve and validate_report |
+| closed_models.py | method | ClosedModels.frozen_reference | machinery | as ClosedModels: runtime_forms and EpisodeReturnRecords re-validation of a closed episode |
+| configuration.py | class | HPCConfiguration | episode function | the values are ctx.settings (task.py settings list, yield_estimator.py); the validations are task.py create_ledger and commission_of |
+| configuration.py | method | HPCConfiguration.__init__ | episode function | ctx.settings: directory, resources, commissions, shared_execution_memory (the ExecutionMemory is the estimate_table service: BLOCKED-ON-JOB-SERVICE), units; the resource and commission checks are task.py create_ledger and commission_of; the yield flag and yield_bindings are yield_estimator.py settings cost and parameters; the old services, store, run_id are ctx |
+| credit.py | class | HPCEpisodeCredit | episode function | credit.py (the class is dissolved) |
+| credit.py | method | HPCEpisodeCredit.credit_kind | machinery | credit_kind is deleted (README 3d); the role check is gone with the role argument |
+| credit.py | method | HPCEpisodeCredit.credit_view | episode function | credit.py credit (the ledger's credit view read from the summary's ledger_view; task.py ledger_view builds it) |
+| decision_inputs.py | class | HPCWorkDecisionInputs | episode function | messages/internal_summary.py and task.py decide (the class is dissolved) |
+| decision_inputs.py | method | HPCWorkDecisionInputs.decision_inputs | episode function | task.py decide (launch instruction library and selection, tool knowledge, resource tool estimates read from the estimate_table service, child options as the actions list) and messages/internal_summary.py (requested_action_history is actions); the old-runner parts (resource_context, supplied_initial binding context, completed_action_reports, pending_work, contract_information_profile, waiting_support, native_estimation_context) are machinery or not carried |
+| decision_state.py | class | HPCWorkDecisionState | episode function | messages/internal_summary.py and task.py decide |
+| decision_state.py | method | HPCWorkDecisionState.decision_state | episode function | messages/internal_summary.py internal_summary and task.py decide context; the store snapshot, the runtime_actions read, the receipt projection, the report values and the credit binding are machinery |
+| episode.py | class | HPCEpisode | episode function | episode.py HPCEpisode (one class on EpisodeBinding; the mix-in bases are deleted) |
+| episode.py | method | HPCEpisode.child_roles | episode function | task.py CHILD_SLOTS |
+| episode.py | method | HPCEpisode.allowed_children | episode function | task.py CHILD_SLOTS (which slots are offered is task.py offered) |
+| episode.py | method | HPCEpisode.permitted_common_actions | machinery | the common actions tool, child, wait and redeliver_report: wait and redeliver_report are not carried (a wait action and redelivery do not exist), so the restriction by a commission's monitoring key has nothing to restrict |
+| episode.py | method | HPCEpisode.prepare_child_request | episode function | messages/msg_to_child.py msg_to_child (one branch per slot) |
+| episode.py | method | HPCEpisode.receive_child_progress_for_role | machinery | progress provider channel of the old runner; the monitor's values are read in messages/read_from_child.py |
+| episode.py | method | HPCEpisode.child_report_receiver | episode function | messages/read_from_child.py read_from_child (hpc_prediction and hpc_execution); the recorded-admission receivers are machinery |
+| episode.py | method | HPCEpisode.execution_child_report_receiver | episode function | messages/read_from_child.py read_from_child (results) |
+| episode.py | method | HPCEpisode.child_request_assembler | episode function | messages/msg_to_child.py msg_to_child (results); the goal, receipts and inheritance assembly is machinery |
+| episode.py | function | create_execution_bindings | machinery | home factory building the private child bindings (no table or list of bindings exists) |
+| forecast_observations.py | class | ForecastObservations | episode function | task.py: the class is dissolved into the module-level functions of its methods |
+| forecast_observations.py | method | ForecastObservations._freeze | episode function | task.py freeze_forecast |
+| forecast_observations.py | method | ForecastObservations._last_forecast | episode function | task.py last_forecast |
+| forecast_observations.py | method | ForecastObservations._measure | episode function | task.py measure |
+| forecast_observations.py | method | ForecastObservations._update_conditional_forecast | episode function | task.py update_conditional_forecast (the tool is hpc_monitor) |
+| from_child_execution_job_submission.py | class | LaunchReceiptCustody | machinery | recovered the plan's handoff from the old runner's committed outcome tables (runtime_actions, runtime_episodes) across a report repair; custody and the launch child's returned handoff records replace it |
+| from_child_execution_job_submission.py | method | LaunchReceiptCustody.original_launch_handoff | machinery | as LaunchReceiptCustody (runtime_actions and runtime_episodes reads, EpisodeRef paths) |
+| from_child_execution_progress_assessment.py | function | receive_progress | machinery | admission of the monitor's episode_progress references into the old progress provider; messages/read_from_child.py reads the monitor's typed result |
+| from_child_execution_result_acquisition.py | function | receive_report | machinery | recorded admission, progress forms, receipts and tool attributions of the old runner; messages/read_from_child.py reads the results child's typed result |
+| from_child_hpc_allocation_execution.py | function | receive_allocation_report | machinery | the same old receipt path; messages/read_from_child.py reads the typed result |
+| from_child_hpc_resource_prediction.py | function | receive_prediction_report | machinery | the same old receipt path; messages/read_from_child.py reads the typed result |
+| from_parent.py | class | HPCAssignment | episode function | messages/read_from_parent.py (the class is dissolved) |
+| from_parent.py | method | HPCAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM |
+| from_parent.py | method | HPCAssignment.commission_identity | episode function | task.py commission_identity |
+| from_parent.py | method | HPCAssignment._commission | episode function | task.py commission_of (hpc_commission_sources.read: BLOCKED-ON-STORE-ACCESS, library not carried) |
+| from_parent.py | method | HPCAssignment.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent (the exactly-one identity check); the received-source and yield_bindings checks are not carried (custody; settings) |
+| from_parent.py | method | HPCAssignment._tool_request | episode function | task.py resolve_tool_request (raises: the parent's tool library has no home; unplaced) |
+| goal.py | class | HPCGoal | episode function | goal.py and task.py INSTRUCTIONS |
+| goal.py | method | HPCGoal.instructions | episode function | goal.py GOAL, UNIT, RESULT and task.py INSTRUCTIONS (the goal text, with the report form and report-repair sentences left out and the tool names written with underscores) |
+| initial_information.py | function | initial_information | episode function | not placed (see unplaced_old_functions): selects readers of the old catalog and calls library.execution_initial_information.presentation of the old shared root |
+| internal_summary.py | class | HPCSummary | episode function | messages/internal_summary.py and task.py decide (the class is dissolved) |
+| internal_summary.py | method | HPCSummary.decision_context | episode function | messages/internal_summary.py internal_summary (the ledger fields come from the ledger_view of the last tool outcome, task.py ledger_view) and task.py decide; hpc_launch_deliveries from runtime_report_attempts is the launches of the summary; hpc_launch_report_form and hpc_report_form are not carried |
+| measured_history.py | class | MeasuredHistory | episode function | task.py: the class is dissolved into the module-level functions of its methods |
+| measured_history.py | method | MeasuredHistory._history | episode function | task.py measured_history |
+| measured_history.py | method | MeasuredHistory._shared_history | episode function | task.py shared_history (the [:2000] count cap is not carried; the estimate_table calls are BLOCKED-ON-JOB-SERVICE) |
+| measured_history.py | method | MeasuredHistory.export_closed | episode function | task.py export_closed (estimate_record: BLOCKED-ON-JOB-SERVICE) |
+| measured_history.py | method | MeasuredHistory._refresh_measured_history | episode function | task.py hpc_history_refresh |
+| portfolio_candidates.py | class | PortfolioCandidates | episode function | task.py: dissolved into hpc_candidate_propose |
+| portfolio_candidates.py | method | PortfolioCandidates._propose_portfolio | episode function | task.py hpc_candidate_propose |
+| portfolio_comparison.py | class | PortfolioComparison | episode function | task.py: the class is dissolved into the module-level functions of its methods |
+| portfolio_comparison.py | method | PortfolioComparison._candidates | episode function | task.py candidates_of |
+| portfolio_comparison.py | method | PortfolioComparison._features | episode function | task.py candidate_features |
+| portfolio_comparison.py | method | PortfolioComparison._comparisons | episode function | task.py comparisons |
+| portfolio_comparison.py | method | PortfolioComparison._candidate | episode function | task.py candidate_of |
+| portfolio_comparison.py | method | PortfolioComparison._compare_portfolios | episode function | task.py hpc_compare |
+| portfolio_planning.py | class | PortfolioPlanning | episode function | task.py: dissolved into hpc_plan |
+| portfolio_planning.py | method | PortfolioPlanning._freeze_portfolio_plan | episode function | task.py hpc_plan |
+| portfolio_state.py | class | PortfolioState | episode function | task.py: the class is dissolved into create_ledger, open_ledger and current_model |
+| portfolio_state.py | method | PortfolioState.state | episode function | task.py create_ledger (the first open: the ledger, the owner identity, the tool request) and open_ledger (every later tool); the tool is hpc_open |
+| portfolio_state.py | method | PortfolioState.initialize | episode function | task.py create_ledger (the reference model and the shared-history entry model) |
+| portfolio_state.py | method | PortfolioState._current_model | episode function | task.py current_model |
+| queue_observations.py | class | QueueObservations | episode function | task.py: the class is dissolved into the module-level functions of its methods |
+| queue_observations.py | method | QueueObservations._observe_queue | episode function | task.py observe_queue (observe_queue_value and the estimate_table calls: BLOCKED-ON-JOB-SERVICE) |
+| queue_observations.py | method | QueueObservations._queue | episode function | task.py queue_snapshot |
+| queue_observations.py | method | QueueObservations._observe_resource_queue | episode function | task.py hpc_queue_observe |
+| received_api_reports.py | function | received_api_reports | episode function | not placed (see unplaced_old_functions): selects declared readers of the old catalog |
+| received_evidence.py | class | ReceivedEvidence | episode function | task.py: the class is dissolved into resolve_result_source, read_evidence and hpc_read |
+| received_evidence.py | method | ReceivedEvidence._known | machinery | hand-kept held set (received_record_refs and record_selection); records.holds / ctx.store.holds replace it |
+| received_evidence.py | method | ReceivedEvidence.resolve_received_reference | episode function | task.py resolve_result_source |
+| received_evidence.py | method | ReceivedEvidence.read_evidence | episode function | task.py read_evidence |
+| received_evidence.py | method | ReceivedEvidence._read_retained_evidence | episode function | task.py hpc_read |
+| received_execution_information.py | function | received_execution_information | episode function | not placed (see unplaced_old_functions): selects declared readers of the old catalog |
+| report_delivery.py | class | HPCWorkReportDelivery | machinery | the generic finish of the old runner (source_credit_view, pending_handles, release, journal, runtime_forms); messages/final_to_parent.py final_to_parent returns the result |
+| report_delivery.py | method | HPCWorkReportDelivery.finish | machinery | as HPCWorkReportDelivery (the report facts are messages/final_to_parent.py facts) |
+| resource_discovery.py | class | ResourceDiscovery | episode function | task.py: dissolved into hpc_discovery_run |
+| resource_discovery.py | method | ResourceDiscovery._discover_resource | episode function | task.py hpc_discovery_run (run_command: BLOCKED-ON-JOB-SERVICE; the 90 second timeout and the output truncation are not carried) |
+| task.py | class | HPCWorkTask | machinery | the decision machine of the old runner (task.py decide and action replace it) |
+| task.py | method | HPCWorkTask.next | machinery | the old unit source loop (restore, in-process replay, completions, redelivery, model call, source failure) |
+| task.py | method | HPCWorkTask.apply_response | episode function | task.py action (validation of the model's selection against the offered actions and the plans); the saved-exchange decoding, the report_update interpretation and record_effect are machinery |
+| task.py | method | HPCWorkTask.execute | machinery | unit execution, journaling, credit saving and controller input of the old runner (the system runs a tool and prices the unit) |
+| task_decision.py | class | HPCWorkTaskDecision | machinery | the old decision exchange (task.py decide replaces it) |
+| task_decision.py | method | HPCWorkTaskDecision.call | machinery | the old model call with saved exchanges and contract information; the system records the call |
+| task_decision.py | method | HPCWorkTaskDecision.instructions | episode function | task.py decide (instructions composition, see task_instructions.py) |
+| task_decision.py | method | HPCWorkTaskDecision.conversation_key | machinery | conversation state |
+| task_decision.py | method | HPCWorkTaskDecision.interpretation_context | machinery | the decision exchange |
+| task_decision.py | method | HPCWorkTaskDecision.exchange_schema | machinery | the decision exchange |
+| task_decision.py | method | HPCWorkTaskDecision.exchange_response | machinery | the decision exchange |
+| task_decision.py | method | HPCWorkTaskDecision.validate_contract_exchange_request | machinery | saved-request check |
+| task_decision.py | method | HPCWorkTaskDecision.validate_contract_exchange_history | machinery | saved-request check |
+| task_decision.py | method | HPCWorkTaskDecision.exchange_decision | machinery | the decision exchange |
+| task_decision.py | method | HPCWorkTaskDecision.complete_decision | machinery | the old model call wrapper; decide returns a ModelRequest |
+| task_instructions.py | function | instructions | episode function | task.py decide (INSTRUCTIONS, then the tool-knowledge text and the launch-library text when those libraries are configured); the pending_child_delivery, wait and native_event_targets paragraphs are not carried |
+| task_state.py | class | HPCWorkTaskState | machinery | checkpoint and restore state of the old runner |
+| task_state.py | method | HPCWorkTaskState.__init__ | machinery | old task state (feedback, report values, restored flags) |
+| task_state.py | method | HPCWorkTaskState.bind_execution_context | machinery | old execution context binding |
+| task_state.py | method | HPCWorkTaskState.record_execution_failure | machinery | failure recovery of the old runner (a tool returns its failure as its outcome) |
+| task_state.py | method | HPCWorkTaskState.restore_checkpoint | machinery | checkpoint/restore |
+| task_state.py | method | HPCWorkTaskState.restore | machinery | checkpoint/restore |
+| task_state.py | method | HPCWorkTaskState.record_effect | machinery | recorder (record_effect) |
+| task_state.py | method | HPCWorkTaskState.checkpoint | machinery | checkpoint/restore |
+| task_waiting.py | class | HPCWorkSuspension | machinery | wait/suspension machinery |
+| task_waiting.py | method | HPCWorkSuspension.suspension_changed | machinery | wait/suspension machinery |
+| to_child_execution_job_submission.py | function | authenticate_launch | episode function | task.py action (rejects a second launch of a plan and a launch of a closed plan) and messages/msg_to_child.py (the launch is built from the frozen plan's launch_assignment); the write of the launch:<plan_id> reservation into the ledger is not carried (a commission has no write; the system's unit journal is the one record of a launch) |
+| to_child_execution_job_submission.py | class | LaunchPreparation | episode function | messages/msg_to_child.py (launch branch) and task.py hpc_plan (the input file) |
+| to_child_execution_job_submission.py | method | LaunchPreparation.initial_decision_context | episode function | messages/msg_to_child.py launch: the hpc_execution_job message; task.py hpc_plan writes the immutable input file; the old EpisodeRef path lookup of the owner is the owner episode id of the ledger view |
+| to_child_execution_progress_assessment.py | function | prepare_request | episode function | messages/msg_to_child.py (monitor branch: the assignment passes unchanged with the information unit) |
+| to_child_execution_result_acquisition.py | function | assemble_request | episode function | messages/msg_to_child.py (results branch: the assignment and the initial result records); the goal, the receipt inheritance, the report contract declaration and the in-process order are machinery |
+| to_child_hpc_allocation_execution.py | function | assignment_schema | episode function | messages/msg_to_child.py (hpc_execution branch names the children's form fields) |
+| to_child_hpc_allocation_execution.py | function | commission_identity | episode function | task.py commission_identity (the identity copied into the assignment) |
+| to_child_hpc_allocation_execution.py | function | prepare_request | episode function | messages/msg_to_child.py (hpc_execution branch); the check that the owner is the commissioning parent is by construction |
+| to_child_hpc_resource_prediction.py | function | assignment_schema | episode function | messages/msg_to_child.py (hpc_prediction branch names the children's form fields) |
+| to_child_hpc_resource_prediction.py | function | commission_identity | episode function | task.py commission_identity (the identity copied into the assignment) |
+| to_child_hpc_resource_prediction.py | function | prepare_request | episode function | messages/msg_to_child.py (hpc_prediction branch); the check that the owner is the commissioning parent is by construction |
+| to_parent.py | class | HPCReport | episode function | messages/final_to_parent.py (the class is dissolved) |
+| to_parent.py | method | HPCReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (the four facts as selectable fields) |
+| to_parent.py | method | HPCReport.facts | episode function | messages/final_to_parent.py facts |
+| to_parent.py | method | HPCReport.resolve | episode function | messages/final_to_parent.py resolve |
+| to_parent.py | method | HPCReport.validate_report | episode function | messages/final_to_parent.py validate_report (called by final_to_parent before the result is returned) |
+| waiting.py | class | HPCActivityAdvice | episode function | task.py hpc_monitor_wait (the class is dissolved) |
+| waiting.py | method | HPCActivityAdvice.activity_advice | machinery | read the old continuation estimator's journaled diagnostics (runtime_observations: activity mode, active next gain, pending expected credit) to suggest wait or collect; the three controllers offer none |
+| waiting.py | method | HPCActivityAdvice._wait_for_original_observation | episode function | task.py hpc_monitor_wait (a wait TOOL: the async tool that awaits the monitor controller) |
+| work_operations.py | class | HPCWorkOperations | episode function | task.py (the class is dissolved: TOOL_CATALOG, CHILD_CATALOG, TOOLS) |
+| work_operations.py | method | HPCWorkOperations.catalog | episode function | task.py TOOL_CATALOG, CHILD_CATALOG and offered |
+| work_operations.py | method | HPCWorkOperations.execute | episode function | task.py TOOLS (each tool is one branch; the action_intent, cached and save_action ledger bookkeeping is machinery: the system journals the unit and gives ctx.operation_key) |
+| yield_estimator.py | class | HPCEpisodeYield | episode function | yield_estimator.py (the class is dissolved) |
+| yield_estimator.py | method | HPCEpisodeYield.yield_controller | episode function | yield_estimator.py yield_controller (AccumulationYieldController; cost and parameters from settings) |
+| yield_estimator.py | method | HPCEpisodeYield.continuation_for_action | machinery | the continuation packet of the old HPCContinuationEstimator (README 3d, 7b: deleted; nothing but the controller stops the Episode); includes its min(1.0, ...) scale |
+| yield_estimator.py | method | HPCEpisodeYield.practical_estimator | machinery | the old HPCContinuationEstimator (README 7b) |

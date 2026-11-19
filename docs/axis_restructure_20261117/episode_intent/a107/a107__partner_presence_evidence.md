@@ -107,3 +107,135 @@ Yield estimator: accumulation only. `continuation_task` = `A107:<context.a107_ta
 | to_parent.py | 78 | fact_sources: report_sources + A107 qualification + native hpc sources; facts: partner_presence_evidence_results (own + received, projected), native components/execution findings, qualification facts, scoring facts; validate_report: component axis report + frozen process results must match | import:communication(1), workflow.store(3) |
 | waiting.py | 9 | ScientificWaiting.suspension_changed: report suspension to execution backend | workflow.execution_backend(1), workflow.execution_handle(2) |
 | yield_estimator.py | 46 | continuation task A107:<task name or projector kind>; requires declared binding whose credit_definition digest and yield_method match; only accumulation implemented (YieldController with cutoff and uncertainty_alpha) | import:numerical(1), YieldController(2), YieldParameters(2) |
+
+## Carried over
+
+Every row of `runs/carry_over/functions/a107__partner_presence_evidence.tsv` (the old files at 97308b94c; 43 files, none read from the old shared root). The old shared-root modules these files import (`component_axis_workflow`, `component_axis_reports`, `partner_presence_evidence_reports`, `scientific_decision_presentation`, `episode_work_report`, `execution_initial_information`, `scientific_tool_retrieval`, `composition_information`, `execution_planning`, `hpc_prompt`) have no placement; their uses raise or are left out and are listed in `carry_over_blocked/a107__partner_presence_evidence.md`. Library functions this episode calls are already in `episode_support/` (`findings/partner_presence_evidence/investigation_progress.py`, `grading/qualification.py`, `jobs/sequence_and_context_sources/component_axis_native_hpc.py`, `tools/partner_presence_evidence/evidence_operations.py`, `configuration/partner_presence_evidence/process_options.py`, `tools/tool_knowledge.py`, `instructions/**`). No function is a "library candidate": every episode function stays in this episode's files.
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| binding_record.py | ScientificBindingRecord | machinery | the binding's own as_record (README 3e: deleted) |
+| binding_record.py | ScientificBindingRecord.as_record | machinery | the binding's own as_record: the system journals settings and declared services |
+| child_commissioning.py | ScientificChildCommissioning | episode function | the child roles, common actions and request assemblers: task.py CHILD_SLOTS, action; messages/msg_to_child.py msg_to_child |
+| child_commissioning.py | ScientificChildCommissioning.child_roles | episode function | task.py CHILD_SLOTS (the six old child roles as slots) |
+| child_commissioning.py | ScientificChildCommissioning.permitted_common_actions | episode function | task.py action: the tool, reason and child kinds; the wait and redeliver_report actions are old-runner machinery and are not carried |
+| child_commissioning.py | ScientificChildCommissioning.allowed_children | episode function | task.py CHILD_SLOTS and decide (permitted child roles in the prompt, the slots in the output schema) |
+| child_commissioning.py | ScientificChildCommissioning.prepare_child_request | episode function | messages/msg_to_child.py assignment_for, slot monitor (the old prepare_request; the validation against the child form is the system admission) |
+| child_commissioning.py | ScientificChildCommissioning.receive_child_progress_for_role | machinery | progress provider delivery of the monitor child form (README 3b R5): the monitor returns monitoring_progress_refs in its typed result |
+| child_commissioning.py | ScientificChildCommissioning.execution_child_report_receiver | machinery | receipts and report receivers (README 3b R1, R3): the system admits the result and writes the returned receipts; read_from_child reads it |
+| child_commissioning.py | ScientificChildCommissioning.child_request_assembler | episode function | messages/msg_to_child.py msg_to_child, assignment_for (one branch per slot) |
+| configuration.py | ScientificConfiguration | machinery | home construction operands (services, library, tool_library, child_roles, tool_retrieval, yield_bindings): the library and tools are the declared services of task.py SERVICES; the yield values are settings; child_roles is CHILD_SLOTS |
+| configuration.py | ScientificConfiguration.__init__ | machinery | construction operands as above; the yield binding validation (kind, cutoff, parameters, credit_definition) is the old yield declaration, replaced by settings cost and parameters in yield_estimator.py; tool_retrieval and contract_information_profile belong to the decision exchange (unplaced scientific_tool_retrieval, composition_information) |
+| configuration.py | ScientificConfiguration.contract_information_profile | machinery | decision-exchange contract information (composition_information lookups): there is no exchange inside a decision |
+| credit.py | PartnerPresenceEvidenceCredit | episode function | credit.py credit |
+| credit.py | PartnerPresenceEvidenceCredit.credit_kind | machinery | credit_kind is deleted (README 3d) |
+| credit.py | PartnerPresenceEvidenceCredit.credit_projector | episode function | credit.py credit: the A107 finding progress projector (FindingProgressPolicy, project_finding_progress); the check that proposed_annotation_ref is present when yield bindings are configured belonged to the old yield bindings and is not carried |
+| credit.py | PartnerPresenceEvidenceCredit.credit_view | episode function | credit.py credit (the old services.scientific_credit view is a number computed over the held records) |
+| decision_delivery.py | ScientificDecisionDelivery | machinery | the decision-exchange loop; its episode content is in task.py decide |
+| decision_delivery.py | ScientificDecisionDelivery.call | episode function | task.py decide: the context additions (launch_instruction_library, child options, initial decision context) are carried; the saved-request, journal, receipts, exchange, conversation, resource estimator, execution expectations, waiting support and completed_action_reports parts are machinery or not placed (episode_work_report, estimate tables) |
+| decision_delivery.py | ScientificDecisionDelivery.instructions | episode function | task.py instructions |
+| decision_delivery.py | ScientificDecisionDelivery.conversation_key | machinery | provider conversation state (README 3a: deleted) |
+| decision_delivery.py | ScientificDecisionDelivery.interpretation_context | machinery | decision-exchange lookup results (README 3a: a lookup is a tool) |
+| decision_delivery.py | ScientificDecisionDelivery.exchange_schema | machinery | decision-exchange envelope (deleted) |
+| decision_delivery.py | ScientificDecisionDelivery.exchange_response | machinery | decision-exchange envelope validation (deleted) |
+| decision_delivery.py | ScientificDecisionDelivery.validate_contract_exchange_request | machinery | saved-request check of the exchange (deleted) |
+| decision_delivery.py | ScientificDecisionDelivery.validate_contract_exchange_history | machinery | saved-request check of the exchange (deleted) |
+| decision_delivery.py | ScientificDecisionDelivery.exchange_decision | machinery | the decision-exchange loop (deleted: README 3a) |
+| decision_delivery.py | ScientificDecisionDelivery.decision_completion | machinery | provider presentation patching (README 3a: deleted) |
+| episode.py | PartnerPresenceEvidenceEpisode | episode function | episode.py class PartnerPresenceEvidence(EpisodeBinding) |
+| episode.py | PartnerPresenceEvidenceEpisode._role | machinery | role dispatch: every role is its own episode now |
+| episode.py | create_execution_bindings | machinery | home factory (the registry is built by whoever links the run) |
+| episode.py | create_hpc_bindings | machinery | home factory (the registry is built by whoever links the run) |
+| from_child_execution_job_submission.py | receive_report | machinery | child return receiver (recorded admission, progress provider delivery, receipts ledger, native timing receipts, tool attributions): the system admits the result against the child own form; messages/read_from_child.py read_from_child reads it |
+| from_child_execution_progress_assessment.py | receive_progress | machinery | child return receiver (recorded admission, progress provider delivery, receipts ledger, native timing receipts, tool attributions): the system admits the result against the child own form; messages/read_from_child.py read_from_child reads it |
+| from_child_execution_result_acquisition.py | receive_report | machinery | child return receiver (recorded admission, progress provider delivery, receipts ledger, native timing receipts, tool attributions): the system admits the result against the child own form; messages/read_from_child.py read_from_child reads it |
+| from_child_hpc_work_planning.py | receive_report | machinery | child return receiver (recorded admission, progress provider delivery, receipts ledger, native timing receipts, tool attributions): the system admits the result against the child own form; messages/read_from_child.py read_from_child reads it |
+| from_child_partner_presence_evidence.py | receive_report | machinery | child return receiver (recorded admission, progress provider delivery, receipts ledger, native timing receipts, tool attributions): the system admits the result against the child own form; messages/read_from_child.py read_from_child reads it |
+| from_child_published_evidence_assessment.py | receive_report | machinery | child return receiver (recorded admission, progress provider delivery, receipts ledger, native timing receipts, tool attributions): the system admits the result against the child own form; messages/read_from_child.py read_from_child reads it |
+| from_parent.py | ScientificFromParent | episode function | messages/read_from_parent.py ASSIGNMENT_FORM and read_from_parent |
+| from_parent.py | ScientificFromParent.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM and ASSIGNMENT_SCHEMA |
+| from_parent.py | ScientificFromParent.child_assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (proposed_annotation_ref optional; the old requirement when annotation_task_required was a runner service flag and is not carried) |
+| from_parent.py | ScientificFromParent._selection | episode function | messages/read_from_parent.py read_from_parent (the closed selection schema); the library and tool-library resolution is a lookup in task.py decide and process_revise |
+| from_parent.py | ScientificFromParent._assignment | episode function | messages/read_from_parent.py read_from_parent (ASSIGNMENT_SCHEMA); the reference-in-scope and tool resolution checks are checks of a commission and are not carried |
+| from_parent.py | ScientificFromParent._invocation | machinery | the parent-written invocation (objective, purpose, closed report_schema, initial_report): report-form machinery; the child declares its return |
+| from_parent.py | ScientificFromParent.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent; the inheritance and parent checks (proposed annotation inherited, received by the parent, revision_origin authentication) are checks of a commission and are not carried |
+| from_parent.py | ScientificFromParent._validate_origin | machinery | authentication of revision_origin against the parent's recorded preparation (journal/receipts) |
+| from_parent.py | ScientificFromParent.prepare_invocation | machinery | closed-commission replay, native return channels and the filled process record with digests (report form and recorded commission machinery) |
+| from_parent.py | ScientificFromParent.required_return_sources | episode function | messages/final_to_parent.py RETURN_FORM: committed_record_refs and partner_presence_evidence_results are selectable fields; the parent selects them in its msg_to_child |
+| goal.py | scientific_guidance | episode function | task.py GUIDANCE (without the unplaced component_axis_workflow.INSTRUCTIONS[A107] prefix) |
+| goal.py | ScientificGoal | episode function | goal.py GOAL and task.py INSTRUCTION_VERSION_TEXT |
+| goal.py | ScientificGoal.instructions | episode function | task.py INSTRUCTION_VERSION_TEXT and instructions (the older support-metadata branch applies to axes this binding does not admit; the wait span is not carried) |
+| initial_information.py | initial_information | episode function, unplaced | resource, received API, BLAST and RNA initial information for the decision is episode content; library.execution_initial_information.presentation has no placement; not carried (see carry_over_blocked, unplaced_old_functions) |
+| internal_summary.py | received_qualification_context | episode function | messages/internal_summary.py received_evidence (qualifications) |
+| internal_summary.py | ScientificInternalSummary | episode function | messages/internal_summary.py internal_summary |
+| internal_summary.py | ScientificInternalSummary.decision_context | episode function | messages/internal_summary.py (assignment) and task.py decide, offered_catalog (axis view, thought pattern, tool info resolved through the services); component_axis_source_access has no placement |
+| internal_summary.py | ScientificInternalSummary._component_scoring_facts | episode function | unplaced: component_axis_reports.current_scoring_sheets (no placement; the scoring sheet fact has no field in RETURN_FORM) |
+| internal_summary.py | ScientificInternalSummary.current_report_facts | episode function | unplaced: same module as _component_scoring_facts |
+| internal_summary.py | ScientificInternalSummary.initial_decision_context | episode function | messages/internal_summary.py received_evidence (qualifications, genomic execution, native components, native execution findings); received_reports, mark_native_execution and prepared_assignments are unplaced |
+| internal_summary.py | ScientificDecisionSummary | episode function | messages/internal_summary.py internal_summary |
+| internal_summary.py | ScientificDecisionSummary._decision_snapshot | episode function | messages/internal_summary.py internal_summary and task.py render_prompt (the journal reads, working state, report-form values and delivery status are machinery and are not carried) |
+| presentation.py | present_scientific_context | episode function | task.py render_prompt (the published-scientific A107 branch; the hpc, monitor, API launch, selected-execution and receiver renderers belong to other episodes) |
+| received_api_reports.py | received_api_reports | machinery | reader-authority catalog of the old runner (received API reports) |
+| received_evidence.py | ScientificReceivedEvidence | machinery | role annotation branch of the root (returns {} for this role) |
+| received_evidence.py | ScientificReceivedEvidence.received_report_facts | machinery | role annotation branch of the root (returns {} for this role) |
+| received_evidence.py | ScientificReceivedEvidence.validate_received_report | machinery | role annotation branch of the root (does nothing for this role) |
+| received_execution_information.py | received_execution_information | machinery | reader-authority catalog of the old runner (received execution information) |
+| report_delivery.py | ScientificReportDelivery | episode function | messages/final_to_parent.py final_to_parent |
+| report_delivery.py | ScientificReportDelivery.finish | episode function | messages/final_to_parent.py final_to_parent (credit and facts); saving the form to runtime_forms, pending_handles and release are machinery |
+| report_integrity.py | ScientificReportIntegrity | episode function | messages/final_to_parent.py validate_report |
+| report_integrity.py | ScientificReportIntegrity._validate_component_axis_report | episode function | unplaced: component_axis_reports.report_axis, resolve_report (the check applied to the parent-written form; no such form now) |
+| report_snapshot.py | complete_scientific_snapshot | machinery | completion snapshot (initial credit, credit, controller credit, episode_yield, parent_invocation_ref): the system records the closure with the credit |
+| saved_scientific_state.py | ScientificSavedScientificState | machinery | closed-request replay and filled-request identity checks |
+| saved_scientific_state.py | ScientificSavedScientificState.restore_closed_process | machinery | closed-request restore (replay machinery) |
+| saved_scientific_state.py | ScientificSavedScientificState.validate_context | machinery | filled-request identity, invocation digest and mechanics binding checks |
+| saved_scientific_state.py | ScientificSavedScientificState.validate_execution_context | machinery | a closed request permitted replay, never new dispatch (recorded commission check) |
+| scientific_assignment_contracts.py | _object | machinery | closed-JSON helper of the old validators (the form admission does it) |
+| scientific_assignment_contracts.py | _ref_schema | episode function | messages/read_from_parent.py ref_schema |
+| scientific_operations.py | ScientificScientificOperations | episode function | task.py tools |
+| scientific_operations.py | ScientificScientificOperations.execute | episode function | task.py selected_tool, process_revise, process_search/entry/sources, knowledge_*, process_execution (raises: unplaced execution_planning.read); the source-byte authentication is custody |
+| source_references.py | ScientificSourceReferences | machinery | reference resolver of the parent-written report form |
+| source_references.py | ScientificSourceReferences.resolve | machinery | reference resolver of the parent-written report form (scientific_reference service, reference_in_context) |
+| source_references.py | ScientificSourceReferences.initial_references | machinery | the receipts ledger seed: the evidence and proposed annotation are named in record_refs fields (custody) |
+| task.py | ScientificTask | episode function | task.py decide, action, TOOLS |
+| task.py | ScientificTask.next | machinery | the decision loop with recovery, replay and source-failure machinery (the loop is the system) |
+| task.py | ScientificTask.apply_response | episode function | task.py action (admission of the answer, the empty reasoning commit check); report_update and the delivery repair are machinery |
+| task.py | ScientificTask.execute | episode function | task.py TOOLS (reason: commit_reasoning); the journal, receipts, automatic_score_updates, wait and controller_value are machinery |
+| task_decision.py | _task | episode function | task.py render_prompt (TASK sections) |
+| task_decision.py | render_partner_presence_evidence_prompt | episode function | task.py render_prompt (TASK and STEERING) |
+| task_instructions.py | compose_instructions | episode function | task.py instructions |
+| task_projector.py | original_task_projector | episode function | credit.py credit (the finding progress projector) |
+| task_state.py | ScientificTaskState | machinery | per-episode source state, restore and checkpoint |
+| task_state.py | ScientificTaskState.__init__ | machinery | source state |
+| task_state.py | ScientificTaskState.bind_execution_context | machinery | in-process execution context binding |
+| task_state.py | ScientificTaskState.record_execution_failure | machinery | failure recording (a tool returns its failure as its outcome) |
+| task_state.py | ScientificTaskState.restore_checkpoint | machinery | checkpoint restore |
+| task_state.py | ScientificTaskState.restore | machinery | restore |
+| task_state.py | ScientificTaskState.record_effect | machinery | record_effect |
+| task_state.py | ScientificTaskState.checkpoint | machinery | checkpoint |
+| to_child_execution_job_submission.py | assemble_request | episode function | messages/msg_to_child.py msg_to_child, assignment_for (slot launch); the old envelope (goal, message with initial_report, job_assignment, inprocess order, knowledge_inheritance, invocation ref) is machinery |
+| to_child_execution_progress_assessment.py | prepare_request | episode function | messages/msg_to_child.py assignment_for, slot monitor |
+| to_child_execution_progress_assessment.py | required_return_sources | episode function | messages/msg_to_child.py: the model names return_fields; the monitor required monitoring_progress_refs is a selectable field of the monitor child |
+| to_child_execution_result_acquisition.py | assemble_request | episode function | messages/msg_to_child.py msg_to_child, assignment_for (slot results); the old envelope (goal, message with initial_report, job_assignment, inprocess order, knowledge_inheritance, invocation ref) is machinery |
+| to_child_hpc_work_planning.py | assemble_request | episode function | messages/msg_to_child.py msg_to_child, assignment_for (slot hpc); the old envelope (goal, message with initial_report, job_assignment, inprocess order, knowledge_inheritance, invocation ref) is machinery |
+| to_child_partner_presence_evidence.py | assemble_request | episode function | messages/msg_to_child.py msg_to_child, assignment_for (slot partner_presence_evidence); the old envelope (goal, message with initial_report, job_assignment, inprocess order, knowledge_inheritance, invocation ref) is machinery |
+| to_child_published_evidence_assessment.py | assemble_request | episode function | messages/msg_to_child.py msg_to_child, assignment_for (slot literature); the old envelope (goal, message with initial_report, job_assignment, inprocess order, knowledge_inheritance, invocation ref) is machinery |
+| to_parent.py | qualification_facts | episode function | messages/internal_summary.py received_evidence and messages/final_to_parent.py (a107_qualification_records, a107_genomic_execution_records) |
+| to_parent.py | ScientificToParent | episode function | messages/final_to_parent.py |
+| to_parent.py | ScientificToParent.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (one field per fact source) |
+| to_parent.py | ScientificToParent.facts | episode function | messages/final_to_parent.py final_to_parent (process_results raises: unplaced partner_presence_evidence_reports) |
+| to_parent.py | ScientificToParent.validate_report | episode function | messages/final_to_parent.py validate_report (raises: unplaced partner_presence_evidence_reports.validate_process_result); the parent-form validation is not carried |
+| tool_selection.py | ScientificToolSelection | episode function | task.py offered_catalog, selected_entries, process_revise |
+| tool_selection.py | ScientificToolSelection._information_catalog | machinery | old runner tool_catalog callback: the tool_catalog service |
+| tool_selection.py | ScientificToolSelection._closed_tool_resolution | machinery | closed-request tool resolution (replay machinery) |
+| tool_selection.py | ScientificToolSelection._tool_resolution_for | episode function | task.py selected_entries (resolve_invocations over the catalogue); the closed-request branch is machinery |
+| tool_selection.py | ScientificToolSelection._tool_resolution | episode function | task.py selected_entries (the common-tool-name check) |
+| tool_selection.py | ScientificToolSelection.catalog | episode function | task.py offered_catalog (process.revise entry, selected tools); execution_planning.catalog is unplaced |
+| tool_selection.py | ScientificToolSelection.common_tool_names | episode function | task.py COMMON_TOOLS and offered_catalog |
+| tool_selection.py | ScientificToolSelection._original_selection | machinery | validate_context of the filled request: the selection is parent_input[selection] |
+| tool_selection.py | ScientificToolSelection._proposed_selection | episode function | task.py process_revise |
+| waiting.py | ScientificWaiting | machinery | wait/suspension machinery (README 3b) |
+| waiting.py | ScientificWaiting.suspension_changed | machinery | wait/suspension machinery |
+| yield_estimator.py | PartnerPresenceEvidenceYield | episode function | yield_estimator.py yield_controller |
+| yield_estimator.py | PartnerPresenceEvidenceYield.private_yield_binding | machinery | old yield-binding flag |
+| yield_estimator.py | PartnerPresenceEvidenceYield.continuation_task | machinery | the declared task key A107:<name> of the old yield bindings: settings are keyed by binding path |
+| yield_estimator.py | PartnerPresenceEvidenceYield.yield_controller | episode function | yield_estimator.py yield_controller: AccumulationYieldController; bounded_quality and completion raised scientific_yield_method_unavailable and are not carried |

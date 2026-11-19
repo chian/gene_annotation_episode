@@ -1,0 +1,34 @@
+"""Where the launch stands, as a pure function of the view: the assignment and what the commissioner passed, the
+capabilities lookup, the launches run (each launch child's report with the resource it was commissioned on), the
+resources that have a usable handoff, and the controller's yield table.
+
+Old ``LaunchInternalSummary.decision_context``: ``execution_assignment`` and ``execution_progress`` (the facts of
+the report: ``_live_facts``). The assignment and the progress facts are here; the selected execution task is built
+by ``decide`` (it needs the capabilities lookup and the configured resources, which come from the tool's outcome).
+The old ``LaunchDecisionState.decision_state`` (the generic old-runner context: working state, pending work, report
+deliveries, tools) is old-runner machinery and is not carried."""
+from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
+
+
+def internal_summary(view):
+    parent = view.parent_input
+    capabilities, launches, handoff_refs, handoff_resources = None, [], [], []
+    for unit in view.outcomes:
+        if unit['kind'] == 'tool':
+            capabilities = unit['outcome']
+            continue
+        report = unit['report']
+        resource_id = unit['arguments']['resource_id']
+        launches.append({'slot': unit['slot'], 'resource_id': resource_id, **report})
+        handoff_refs.extend(ref for ref in report['handoff_refs'] if ref not in handoff_refs)
+        if report['completed'] and report['handoff_refs'] and resource_id not in handoff_resources:
+            handoff_resources.append(resource_id)
+    controller = view.controller_state
+    return {'assignment': parent['assignment'], 'message': parent['message'], 'record_refs': parent['record_refs'],
+            'handoff_unit': parent['handoff_unit'], 'acquired_record_unit': parent['acquired_record_unit'],
+            'scientific_task': parent.get('scientific_task'),
+            'received_handoff_resources': parent['received_handoff_resources'], 'permitted': parent['permitted'],
+            'capabilities': capabilities, 'launches': launches, 'handoff_refs': handoff_refs,
+            'handoff_resources': handoff_resources,
+            'controller': None if controller is None else yield_table(controller, forecast_unit='handoff credit'),
+            'units_consumed': view.units_consumed}

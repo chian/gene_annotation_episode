@@ -188,3 +188,202 @@ The parent's `from_child_source_coverage_improvement` admits these cells into th
 - **Table rule.** There is no `literature_table` sheet check; only the table sibling has it.
 - **Sibling copies.** It is byte-identical to passage_evidence_extraction apart from the role name, the binding path
   and the selection shape (`selection = _WINDOW`; `windows = [selected]`).
+
+## Carried over
+
+Carried over on 19 November 2026 into the final ten-file form (episode.py class `SourceCoverageImprovement`). One row per row of `runs/carry_over/functions/<this episode>.tsv`; the first three columns are copied from it. "library not carried" means the library function the new code calls is still in its old form (it opens the Store's `db`), reported in `carry_over_blocked/`.
+
+| old file | kind | name | class | new place or reason |
+|---|---|---|---|---|
+| binding_record.py | class | LiteratureBindingRecord | machinery | binding_record.py: the binding's own as_record (README 3e); settings are journaled by the runner |
+| binding_record.py | method | LiteratureBindingRecord.as_record | machinery | the binding's own as_record (README 3e) |
+| configuration.py | class | LiteratureConfiguration | machinery | old mix-in class of the hook-era episode class; replaced by episode.py::SourceCoverageImprovement and the files named on the rows of its methods |
+| configuration.py | method | LiteratureConfiguration.__init__ | episode function | task.py::population_flags (booleans, optional families require rate_population; values are ctx.settings) and task.py::offered; the check of yield_bindings (validate_yield_bindings) is machinery; the evidence-origin and implementation-descriptor checks of ratio_source/controlled_response/gel are not carried (repositories use the old defaults, see contract_misfits); outcome_page_size is internal_summary.py::OUTCOME_PAGE_SIZE; reference_parent_sources applies only to a root entry episode, not to this commissioned child |
+| configuration.py | method | LiteratureConfiguration.reference_evidence | machinery | old construction path of an entry-caller configuration (reference_parent_sources); never applies to a commissioned child |
+| credit.py | function | _resolve | episode function | credit.py::_resolve |
+| credit.py | function | lead_schema | episode function | credit.py::lead_schema |
+| credit.py | function | lead_return_schema | episode function | credit.py::lead_return_schema |
+| credit.py | function | validate_lead | episode function | credit.py::validate_lead (store.require / ctx.store; the old known-set is the held records) |
+| credit.py | function | lead_dispositions | episode function | credit.py::lead_dispositions (the old runtime_actions and runtime_report_attempts reads are the summary's source_leads, from view.outcomes; this episode has no child) |
+| credit.py | function | screening_schema | episode function | credit.py::screening_schema |
+| credit.py | function | _current_assessments | episode function | credit.py::_current_assessments (library FindingValidity/target_eligible: library not carried) |
+| credit.py | function | screening_answers | episode function | credit.py::screening_answers (the old runtime_actions read is summary no_applicable_witnesses, from view.outcomes) |
+| credit.py | class | LiteratureTaskCredit | episode function | credit.py::credit_view / credit_record / task_answers (the projector class as functions over summary and records) |
+| credit.py | method | LiteratureTaskCredit.as_record | episode function | credit.py::credit_record (the credit projector's as_record is episode content, README 3d) |
+| credit.py | method | LiteratureTaskCredit.__call__ | episode function | credit.py::credit_view; the commission-mismatch, scope and target-annotation checks (literature_task_credit_commission_mismatch, literature_task_annotation_outside_scope, literature_task_requires_target_annotation) are checks of a commission and are not carried (a wrong commission fails) |
+| credit.py | method | LiteratureTaskCredit._answers | episode function | credit.py::task_answers |
+| credit.py | function | measured_answers | episode function | credit.py::measured_answers |
+| credit.py | function | graded_experiment_answers | episode function | credit.py::graded_experiment_answers |
+| credit.py | function | assembled_answers | episode function | credit.py::assembled_answers |
+| credit.py | class | LiteratureCredit | machinery | old credit mix-in routing through services.scientific_credit; replaced by credit.py::credit |
+| credit.py | method | LiteratureCredit._scientific_credit_invocation | machinery | services.scientific_credit / projector_receipt_arguments / projection_view plumbing (README 3d) |
+| credit.py | method | LiteratureCredit.credit_kind | machinery | credit_kind is deleted (README 3d) |
+| credit.py | method | LiteratureCredit.credit_view | episode function | credit.py::credit (number) and credit.py::credit_view (shown from the summary) |
+| credit.py | method | LiteratureCredit.credit_projector | machinery | projector lookup of the old services; credit.py calls its own functions |
+| decision_presentation.py | function | prepare_completed_work | episode function | internal_summary.py::internal_summary (own_literature_outcomes and last_outcome from view.outcomes); the old completed_action_reports of the shared root episode_work_report module is not in the library (unplaced) |
+| decision_presentation.py | function | decision_yield_table | episode function | internal_summary.py::internal_summary (action_yields via library yield_table(view.controller_state)) |
+| episode.py | class | LiteratureEpisode | machinery | mix-in class; replaced by episode.py::SourceCoverageImprovement |
+| episode.py | method | LiteratureEpisode._enabled | episode function | task.py::population_flags |
+| episode.py | method | LiteratureEpisode.contract_information_configuration | machinery | contract-information freezing profile (old shared-root exchange; README section 5 item 16); default None |
+| episode.py | method | LiteratureEpisode.contract_information_profile | machinery | contract-information freezing profile (old shared-root exchange; README section 5 item 16) |
+| episode.py | method | LiteratureEpisode._role | machinery | single-role check of the old shared class; the episode is its own binding |
+| episode.py | method | LiteratureEpisode.allowed_children | episode function | task.py::CHILD_SLOTS = {} (no child) |
+| episode.py | method | LiteratureEpisode.child_roles | episode function | task.py::CHILD_SLOTS = {} (no child) |
+| episode.py | method | LiteratureEpisode.child_assignment_schema | machinery | no child; the parent writes the child's assignment in msg_to_child |
+| episode.py | method | LiteratureEpisode.context_hook_applies | machinery | hook-era context hook selection |
+| from_parent.py | class | LiteratureAssignment | episode function | messages/read_from_parent.py (ASSIGNMENT_FORM, read_from_parent) |
+| from_parent.py | method | LiteratureAssignment.assignment_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM and task_schema (one field per property of the old schema, same names; new fields scope and record_refs) |
+| from_parent.py | method | LiteratureAssignment._validate_page | episode function | messages/read_from_parent.py::read_from_parent (page/window representation, source and offset checks); the records of the page being in scope is custody (record_refs) |
+| from_parent.py | method | LiteratureAssignment._validate_assignment | episode function | messages/read_from_parent.py::read_from_parent |
+| from_parent.py | method | LiteratureAssignment.prepare_assignment | episode function | messages/read_from_parent.py::read_from_parent (task schema, credit unit, completion target = credit_unit x answers); the yield_settings/credit_unit fill from the private yield binding is the settings (yield_estimator.py); the proposed-annotation-equals-parent check is a check of a commission and is not carried |
+| from_parent.py | method | LiteratureAssignment._parent_page_schema | machinery | check of the page against the parent's own page (the child cannot read its parent's assignment; a wrong commission fails) |
+| from_parent.py | method | LiteratureAssignment._validate_parent_page | machinery | check of the page against the parent's own page (a wrong commission fails) |
+| goal.py | function | _yield_kind | episode function | yield_estimator.py::yield_controller (accumulation for verified_source_leads, completion otherwise) |
+| goal.py | function | _task_key | episode function | messages/read_from_parent.py::task_key |
+| goal.py | function | task_schema | episode function | messages/read_from_parent.py::task_schema |
+| goal.py | function | _return_sources | machinery | the parent's report-contract sources of the old return form; the parent writes no return form (README 3b C4) |
+| goal.py | function | _return_components | machinery | the parent's report-contract components of the old return form (README 3b C4) |
+| goal.py | function | commissioned_task | episode function | messages/read_from_parent.py::read_from_parent (task validated and returned in the parent input; the old check of the typed return/requested components against the report contract is a check of the commission and is not carried) |
+| goal.py | function | continuation_task | episode function | messages/read_from_parent.py::task_key |
+| goal.py | function | task_schema_variants | episode function | messages/read_from_parent.py::task_schema |
+| goal.py | function | required_source | machinery | maps the task to the fact source the parent's report contract must request; the parent selects return fields in msg_to_child and nothing checks the commission (README 3b C4) |
+| goal.py | function | validate_commission | episode function | messages/read_from_parent.py::validate_commission |
+| goal.py | class | LiteratureGoal | episode function | messages/internal_summary.py::ROLE_INSTRUCTION, GOAL_INSTRUCTIONS and the literature_goal_plan |
+| goal.py | method | LiteratureGoal.instructions | episode function | messages/internal_summary.py::GOAL_INSTRUCTIONS (used by task.py::instructions) |
+| goal.py | method | LiteratureGoal.planning_context | episode function | messages/internal_summary.py::internal_summary (literature_goal_plan) |
+| grading/assay_subscoring.py | class | AssaySubscoring | machinery | old mix-in class of the hook-era episode class; replaced by episode.py::SourceCoverageImprovement and the files named on the rows of its methods |
+| grading/assay_subscoring.py | method | AssaySubscoring._required_grading_repository | episode function | task.py::reason (the grading repository is built when the settings enable assay_grading_population) |
+| grading/assay_subscoring.py | method | AssaySubscoring._assay_grading_repository | episode function | credit.py::repository('assay_grading') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| grading/experimental_interpretation.py | class | ExperimentalInterpretation | machinery | old mix-in class of the hook-era episode class; replaced by episode.py::SourceCoverageImprovement and the files named on the rows of its methods |
+| grading/experimental_interpretation.py | method | ExperimentalInterpretation.reasoning_action_schema | episode function | task.py::reason_schema (library literature_required_grading.action_schema; source_lead from credit.py::lead_schema) |
+| grading/experimental_interpretation.py | method | ExperimentalInterpretation.reasoning_has_task_content | episode function | task.py::action (a reasoning commit with no row is rejected unless it carries a no-applicable-evidence processing or a source lead) |
+| grading/experimental_interpretation.py | method | ExperimentalInterpretation.execute_reasoning | episode function | task.py::reason (original action: interpretation and grading sheets together via library literature_required_grading.execute; source_lead in one transaction) |
+| internal_summary.py | class | LiteratureSummary | machinery | old mix-in class of the hook-era episode class; replaced by episode.py::SourceCoverageImprovement and the files named on the rows of its methods |
+| internal_summary.py | method | LiteratureSummary.initial_decision_context | machinery | applies only to a root entry episode with reference_parent_sources (role annotation, path length 1); this commissioned child never is one |
+| internal_summary.py | method | LiteratureSummary.decision_context | episode function | messages/internal_summary.py::internal_summary (and task.py::decide) |
+| internal_summary.py | method | LiteratureSummary._owned_population_task_sources | episode function | messages/internal_summary.py::owned_population_sources (the old SQL over the operation tables is the episode's own populate units in view.outcomes; the old population_task_metadata_specs of the literature_task_selection module is not in the library, re-expressed from the storage modules' PROVIDER and VERSION) |
+| internal_summary.py | method | LiteratureSummary._population_task_context | episode function | messages/internal_summary.py::population_task_context (the old runtime_actions read is view.outcomes) |
+| internal_summary.py | method | LiteratureSummary._concentration_window_display_context | episode function | messages/internal_summary.py::receipt_bindings_context (RECEIPT_BINDINGS) |
+| internal_summary.py | method | LiteratureSummary._measurement_comparison_display_context | episode function | messages/internal_summary.py::receipt_bindings_context (RECEIPT_BINDINGS) |
+| internal_summary.py | method | LiteratureSummary._summary_precision_display_context | episode function | messages/internal_summary.py::receipt_bindings_context (RECEIPT_BINDINGS) |
+| internal_summary.py | method | LiteratureSummary._endpoint_signal_display_context | episode function | messages/internal_summary.py::receipt_bindings_context (RECEIPT_BINDINGS) |
+| internal_summary.py | method | LiteratureSummary._controlled_response_bindings | episode function | messages/internal_summary.py::controlled_response_bindings('controlled_response') |
+| internal_summary.py | method | LiteratureSummary._gel_bindings | episode function | messages/internal_summary.py::controlled_response_bindings('gel') (the two differ only in the repository and the requested field names) |
+| internal_summary.py | method | LiteratureSummary._gel_display_context | episode function | messages/internal_summary.py::gel_display_context |
+| internal_summary.py | method | LiteratureSummary._received_fact_display_context | episode function | messages/internal_summary.py::received_fact_display_context (the old source_metadata of the literature_work_report module is not in the library: unplaced) |
+| internal_summary.py | method | LiteratureSummary._native_rate_display_context | episode function | messages/internal_summary.py::rate_display_context (RATE_DISPLAYS: the three differ in projection and name) |
+| internal_summary.py | method | LiteratureSummary._native_rate_domain_display_context | episode function | messages/internal_summary.py::rate_display_context (RATE_DISPLAYS: the three differ in projection and name) |
+| internal_summary.py | method | LiteratureSummary._native_rate_meaning_display_context | episode function | messages/internal_summary.py::rate_display_context (RATE_DISPLAYS: the three differ in projection and name) |
+| received_evidence.py | class | LiteratureReceivedEvidence | machinery | admission of the cells of a child's return into the parent's repositories (README 3b R1/R3, F5); a copy of the parent's, with no caller here: this episode has no child |
+| received_evidence.py | method | LiteratureReceivedEvidence.received_report_sources | machinery | admission of the cells of a child's return into the parent's repositories (README 3b R1/R3, F5); a copy of the parent's, with no caller here: this episode has no child |
+| received_evidence.py | method | LiteratureReceivedEvidence.received_report_facts | machinery | admission of the cells of a child's return into the parent's repositories (README 3b R1/R3, F5); a copy of the parent's, with no caller here: this episode has no child |
+| received_evidence.py | method | LiteratureReceivedEvidence._complete_requested_received_arrays | machinery | admission of the cells of a child's return into the parent's repositories (README 3b R1/R3, F5); a copy of the parent's, with no caller here: this episode has no child |
+| received_evidence.py | method | LiteratureReceivedEvidence.received_form_references | machinery | admission of the cells of a child's return into the parent's repositories (README 3b R1/R3, F5); a copy of the parent's, with no caller here: this episode has no child |
+| received_evidence.py | method | LiteratureReceivedEvidence.received_evidence_tokens | machinery | admission of the cells of a child's return into the parent's repositories (README 3b R1/R3, F5); a copy of the parent's, with no caller here: this episode has no child |
+| scientific_records.py | class | LiteratureScientificRecords | machinery | old mix-in class of the hook-era episode class; replaced by episode.py::SourceCoverageImprovement and the files named on the rows of its methods |
+| scientific_records.py | method | LiteratureScientificRecords.literature_rate_repository | episode function | credit.py::repository('rate') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_calibration_recovery_repository | episode function | credit.py::repository('calibration_recovery') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_rate_observation_repository | episode function | credit.py::repository('rate_observation') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_rate_replicate_repository | episode function | credit.py::repository('rate_replicate') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_quantity_repository | episode function | credit.py::repository('quantity') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_assay_repository | episode function | credit.py::repository('assay') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_amount_repository | episode function | credit.py::repository('amount') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_optical_repository | episode function | credit.py::repository('optical') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_kinetic_repository | episode function | credit.py::repository('kinetic') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_binding_interaction_repository | episode function | credit.py::repository('binding_interaction') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_ratio_repository | episode function | credit.py::repository('ratio') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_binding_repository | episode function | credit.py::repository('binding') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_binding_model_repository | episode function | credit.py::repository('binding_model') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_transport_repository | episode function | credit.py::repository('transport') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_figure_repository | episode function | credit.py::repository('figure') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_ratio_source_repository | episode function | credit.py::repository('ratio_source') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_controlled_response_repository | episode function | credit.py::repository('controlled_response') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords.literature_gel_repository | episode function | credit.py::repository('gel') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._endpoint_signal_repository | episode function | credit.py::repository('endpoint_signal') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._concentration_window_repository | episode function | credit.py::repository('concentration_window') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._measurement_comparison_repository | episode function | credit.py::repository('measurement_comparison') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._summary_precision_repository | episode function | credit.py::repository('summary_precision') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._rate_grid_repository | episode function | credit.py::repository('rate_grid') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._compiled_assay_repository | episode function | credit.py::repository('compiled_assay') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._compiled_assay_v2_repository | episode function | credit.py::repository('compiled_assay_v2') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._compiled_assay_v3_repository | episode function | credit.py::repository('compiled_assay_v3') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._product_coupling_repository | episode function | credit.py::repository('product_coupling') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._measurement_validation_repository | episode function | credit.py::repository('measurement_validation') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._ion_discrimination_repository | episode function | credit.py::repository('ion_discrimination') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._channel_repository | episode function | credit.py::repository('channel') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._completion_time_repository | episode function | credit.py::repository('completion_time') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._active_site_repository | episode function | credit.py::repository('active_site') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._assay_grading_source_cells | episode function | credit.py::assay_grading_source_cells |
+| scientific_records.py | method | LiteratureScientificRecords._parent_depletion_repository | episode function | credit.py::repository('parent_depletion') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._stoichiometric_balance_repository | episode function | credit.py::repository('stoichiometric_balance') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._product_partition_repository | episode function | credit.py::repository('product_partition') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._binding_interaction_model_repository | episode function | credit.py::repository('binding_interaction_model') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._kinetic_model_repository | episode function | credit.py::repository('kinetic_model') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._ratio_source_repository | episode function | credit.py::repository('ratio_source') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._controlled_response_repository | episode function | credit.py::repository('controlled_response') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._gel_repository | episode function | credit.py::repository('gel') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._native_rate_meaning_repository | episode function | credit.py::repository('rate_source_meaning') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| scientific_records.py | method | LiteratureScientificRecords._population_routes | episode function | credit.py::routes (ROUTE_SPECS: every family; which are offered is task.py's choice from the settings) |
+| scoring/experimental_main_sheet.py | class | ExperimentalMainSheet | machinery | old mix-in class of the hook-era episode class; replaced by episode.py::SourceCoverageImprovement and the files named on the rows of its methods |
+| scoring/experimental_main_sheet.py | method | ExperimentalMainSheet._a105_aggregation_repository | episode function | credit.py::repository('a105_aggregation') (old factory method as one row of REPOSITORY_CLASSES; library not carried: the repository opens the Store's db) |
+| source_contracts.py | function | _required_grading_logic | episode function | already in library: literature/grading/experimental_activity_evidence/literature_required_grading.py (imported as required_grading in task.py) |
+| source_contracts.py | function | _population_catalog | episode function | task.py::population_entries (library population_catalog, sorted in the established order) |
+| source_operations.py | class | LiteratureSourceOperations | machinery | old mix-in class of the hook-era episode class; replaced by episode.py::SourceCoverageImprovement and the files named on the rows of its methods |
+| source_operations.py | method | LiteratureSourceOperations._tool_arguments | episode function | task.py::admitted, population_sources, authorize_source_access, authorize_read (the old rejection_detail of the literature_source_access module is not in the library: unplaced) |
+| source_operations.py | method | LiteratureSourceOperations._materialize_text_arguments | episode function | task.py::materialize_text_arguments |
+| source_references.py | class | LiteratureReferences | machinery | old mix-in class of the hook-era episode class; replaced by episode.py::SourceCoverageImprovement and the files named on the rows of its methods |
+| source_references.py | method | LiteratureReferences._require | episode function | already in library: records/received_records.py::read_record_in_scope (reference_in_scope + read_record) |
+| source_references.py | method | LiteratureReferences._artifact | episode function | messages/internal_summary.py::representation_artifact |
+| source_references.py | method | LiteratureReferences._within_source | episode function | task.py::within_source |
+| task.py | class | LiteratureOperations | machinery | old mix-in class of the hook-era episode class; replaced by episode.py::SourceCoverageImprovement and the files named on the rows of its methods |
+| task.py | method | LiteratureOperations.permitted_common_actions | machinery | common actions tool/reason/child/redeliver_report of the old decision machine; decide returns a tool call, reason is a tool, there is no child and no redelivery |
+| task.py | method | LiteratureOperations.catalog | episode function | task.py::catalog, offered, population_entries (the old catalog was the registry's catalog filtered to _ACCESS_TOOLS plus the population catalog) |
+| task.py | method | LiteratureOperations.execute | episode function | task.py tools: run_access_tool and the access tool functions, run_population and the literature_*_populate functions, reason |
+| task.py | class | LiteratureTask | machinery | old decision loop class; replaced by task.py::decide and task.py::action |
+| task.py | method | LiteratureTask.next | machinery | old loop with replay/restore; the system's decision loop |
+| task.py | method | LiteratureTask.apply_response | episode function | task.py::action (validation of the answer, empty reasoning commit rejected, Rejected carries the old rejection feedback) |
+| task.py | method | LiteratureTask.execute | episode function | task.py tools (the unit execution); the runtime_actions/journal/checkpoint writes are machinery |
+| task.py | method | LiteratureTask.finish | machinery | closing of the old action/episode record; the system builds the result by final_to_parent |
+| task_decision.py | class | LiteratureTaskDecision | machinery | old model-decision class (model call, provider patching, decision-exchange loop) |
+| task_decision.py | method | LiteratureTaskDecision.call | machinery | old model call and its recording; decide returns a ModelRequest |
+| task_decision.py | method | LiteratureTaskDecision.instructions | episode function | task.py::instructions |
+| task_decision.py | method | LiteratureTaskDecision.decision_completion | machinery | provider patching and presentation binding (README 3a) |
+| task_decision.py | method | LiteratureTaskDecision.conversation_key | machinery | conversation state is deleted (README 3a) |
+| task_decision.py | method | LiteratureTaskDecision.interpretation_context | machinery | decision-exchange lookup context; a lookup is a tool (README 3a) |
+| task_decision.py | method | LiteratureTaskDecision.exchange_schema | machinery | decision-exchange loop (request_context / select_action) |
+| task_decision.py | method | LiteratureTaskDecision.exchange_response | machinery | decision-exchange loop |
+| task_decision.py | method | LiteratureTaskDecision.validate_contract_exchange_request | machinery | saved-request check of the decision exchange (README 3a) |
+| task_decision.py | method | LiteratureTaskDecision.validate_contract_exchange_history | machinery | saved-request check of the decision exchange (README 3a) |
+| task_decision.py | method | LiteratureTaskDecision.exchange_decision | machinery | decision-exchange loop (exchange_decision is not carried) |
+| task_instructions.py | function | instructions | episode function | task.py::instructions (the redelivery/history paragraphs are replaced; the request_context paragraph the old code appended is not carried) |
+| task_state.py | class | LiteratureTaskState | machinery | old task state (report values, restore, checkpoint); state is the view (internal_summary) |
+| task_state.py | method | LiteratureTaskState.__init__ | machinery | state of the old loop; report_values and interpret_schema are the parent-written report form (README 3b C4, 3a running report) |
+| task_state.py | method | LiteratureTaskState.bind_execution_context | machinery | old execution context binding |
+| task_state.py | method | LiteratureTaskState.suspension_changed | machinery | suspension machinery |
+| task_state.py | method | LiteratureTaskState.record_execution_failure | episode function | task.py::run_access_tool (a failed selected operation is returned as failure_outcome; the runtime_actions/checkpoint writes are machinery) |
+| task_state.py | method | LiteratureTaskState.restore_checkpoint | machinery | checkpoint/restore/effect recording (README 3e) |
+| task_state.py | method | LiteratureTaskState.restore | machinery | checkpoint/restore/effect recording (README 3e) |
+| task_state.py | method | LiteratureTaskState.record_effect | machinery | checkpoint/restore/effect recording (README 3e) |
+| task_state.py | method | LiteratureTaskState.checkpoint | machinery | checkpoint/restore/effect recording (README 3e) |
+| to_parent.py | class | LiteratureReport | episode function | messages/final_to_parent.py |
+| to_parent.py | method | LiteratureReport.fact_sources | episode function | messages/final_to_parent.py::RETURN_FORM (every fact source a selectable field under its old name), fact_sources |
+| to_parent.py | method | LiteratureReport.facts | episode function | messages/final_to_parent.py::final_to_parent and selected_fact (the facts are computed in internal_summary.py::internal_summary over view.records) |
+| to_parent.py | method | LiteratureReport.current_report_facts | episode function | messages/internal_summary.py::internal_summary (literature_current_scoring_sheets via library current_scoring_sheets); literature_completed_work: the completed_work function of the literature_work_report module is not in the library (unplaced), selecting it raises NotImplementedError |
+| to_parent.py | method | LiteratureReport._rate_fact_sources | episode function | messages/final_to_parent.py::FACT_ROWS, fact_sources, fact_meanings (the meaning text and the library schema of each family) |
+| to_parent.py | method | LiteratureReport._rate_facts | episode function | messages/internal_summary.py::family_rows and version_gate |
+| to_parent.py | method | LiteratureReport.validate_received_report | episode function | messages/final_to_parent.py::validate_received_report (summary-only checks) and messages/internal_summary.py::check_family and the worksheet-link check (the Store-dependent checks: final_to_parent is handed no records) |
+| to_parent.py | method | LiteratureReport.resolve | machinery | reference_in_context resolver of the old receipt ledger (README 3b D2); custody is records.holds |
+| to_parent.py | method | LiteratureReport.validate_report | episode function | messages/final_to_parent.py::validate_report (raises NotImplementedError(validate_form_not_built:a105) at the old validate_form call) |
+| waiting.py | class | LiteratureWaiting | machinery | wait machinery (supports_wait is False) |
+| waiting.py | method | LiteratureWaiting.supports_wait | machinery | wait machinery (supports_wait is False) |
+| yield_estimator.py | function | validate_yield_bindings | machinery | check of the configured yield declarations when the old episode was constructed (README 3d); settings are journaled at link |
+| yield_estimator.py | class | _RemainingCommissionedCredit | episode function | yield_estimator.py: CompletionYieldController with target = parent input completion_target (credit_unit x answers requested); README 7b |
+| yield_estimator.py | method | _RemainingCommissionedCredit.__call__ | episode function | the completion controller's own forecast (README 7b); the old max(0, remaining) is the controller's ValueError when credit passes the target |
+| yield_estimator.py | method | _RemainingCommissionedCredit.as_record | machinery | estimator record of the old declaration check (README 3d) |
+| yield_estimator.py | function | _private_yield_controller | episode function | yield_estimator.py::yield_controller |
+| yield_estimator.py | class | _FiniteLiteratureYieldController | machinery | episode-local controller class; no episode supplies a controller class (README 7b) |
+| yield_estimator.py | method | _FiniteLiteratureYieldController.__init__ | machinery | episode-local controller class (README 7b) |
+| yield_estimator.py | method | _FiniteLiteratureYieldController.transitioned | machinery | transitioned(epoch) is deleted (README 3d) |
+| yield_estimator.py | class | LiteratureYield | episode function | yield_estimator.py::yield_controller |
+| yield_estimator.py | method | LiteratureYield.continuation_task | episode function | messages/read_from_parent.py::task_key |
+| yield_estimator.py | method | LiteratureYield.yield_controller | episode function | yield_estimator.py::yield_controller (accumulation for verified_source_leads, completion otherwise; cost and parameters from settings, target from parent input) |

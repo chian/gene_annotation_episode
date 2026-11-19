@@ -2,7 +2,8 @@
 
 The episode has no children and no acquisition tools. Its tools are the access operations of the A103 tool
 registry held to the assigned source, a first lookup of the tool catalog, and a ``report`` tool that carries the
-model's finding. The task always offers a unit and never ends the Episode: its yield controller does."""
+model's controlled report (two fixed-vocabulary choices and the exact windows; no model text leaves the Episode).
+The task always offers a unit and never ends the Episode: its yield controller does."""
 from copy import deepcopy
 import json
 from urllib.parse import urlsplit
@@ -21,7 +22,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.progress_
 from gene_annotation_episode.episodic_workflow.episode_support.records.received_records import reference_in_scope
 from gene_annotation_episode.episodic_workflow.episode_support.tools.gene_context_evidence.tools import ToolRegistry
 
-from .messages.final_to_parent import FINDING_FORM
+from .messages.final_to_parent import REPORT_FORM
 
 CHILD_SLOTS = {}
 SERVICES = ()
@@ -49,10 +50,11 @@ GOAL_INSTRUCTION = (
 TOOL_INSTRUCTION = (
     'Select one operation per answer: give its name in tool and its operands as JSON text in arguments_json. '
     'Every operation that names a source must name the assigned source or a source derived from it. Reading is the '
-    'work: record what the sections read actually say by selecting the report tool with the finding (source_claim, '
-    'source_subject, qualification, target_correspondence and the source windows read, in reading order, with their '
-    'exact quotes; separate windows are never concatenated). '
-    'Selecting report does not end the investigation; report again when new outcomes change the finding. Do not '
+    'work: record what the sections read report by selecting the report tool with its controlled values: '
+    'target_correspondence (established, unresolved or not_applicable), evidence_type (the kind of gene-context '
+    'evidence the sections report, or none_applicable) and the source windows read, in reading order (source_ref, '
+    'representation, offset, limit). No text of yours is returned to your parent. '
+    'Selecting report does not end the investigation; report again when new outcomes change it. Do not '
     'execute native provider tools. The host executes your selected action.')
 
 
@@ -200,16 +202,18 @@ async def execution_estimate(arguments, ctx):
 
 
 def report(arguments, ctx):
-    """The model's finding as the outcome of a unit; the summary holds the latest and ``final_to_parent`` returns it."""
+    """The model's controlled report as the outcome of a unit (the two choices and the exact windows); the summary
+    holds the latest and code reads the finding from it. A report that is not of the declared form, or that names a
+    source this episode does not hold, is an invalid outcome."""
     try:
-        finding = FINDING_FORM.admit(arguments['finding'], 'finding')
+        value = REPORT_FORM.admit(arguments['report'], 'report')
     except FormError as error:
         return {'status': 'invalid', 'feedback': {'category': 'report_format', 'detail': str(error)}}
-    unheld = [window['source_ref'] for window in finding['windows'] if not ctx.store.holds(window['source_ref'])]
+    unheld = [window['source_ref'] for window in value['windows'] if not ctx.store.holds(window['source_ref'])]
     if unheld:
         return {'status': 'invalid', 'feedback': {'category': 'arguments_or_reference',
                                                   'detail': 'window sources not held: ' + ', '.join(unheld)}}
-    return {'status': 'reported', 'finding': finding}
+    return {'status': 'reported', 'report': value}
 
 
 TOOLS = {'tool_catalog': tool_catalog, 'state_query': state_query, 'source_read': source_read,
@@ -276,7 +280,8 @@ def _task(summary, text):
     _section(parts, 'Callable operations', [{'tool': named[entry['name']], 'operation': entry['name'],
                                              'meaning': entry.get('description', ''),
                                              'operands': entry['input_schema']} for entry in summary['catalog']])
-    _section(parts, 'Return', 'Report with the report tool: ' + json.dumps(FINDING_FORM.as_record(), sort_keys=True))
+    _section(parts, 'Current gene-context scoring sheet', summary['completed_work_axis_results'])
+    _section(parts, 'Return', 'Report with the report tool: ' + json.dumps(REPORT_FORM.as_record(), sort_keys=True))
     return '\n'.join(parts)
 
 
@@ -287,6 +292,7 @@ def decide(summary, feedback, ctx):
     offered = _offered(summary)
     context = {'task': _task(summary, instructions()), 'feedback': feedback,
                'own_outcomes': summary['own_outcomes'], 'current_report': summary['report'],
+               'completed_work_axis_results': summary['completed_work_axis_results'],
                'source_custody': summary['source_custody'], 'history_meaning': summary['history_meaning'],
                'controller': summary['controller'], 'time_accounting': time_accounting(ctx.clock.progress_time)}
     return ModelRequest('REASONING', instructions(), context, _output_schema(offered))
@@ -304,6 +310,6 @@ def action(response, summary, records, ctx):
     except (KeyError, TypeError, ValueError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
     if name == 'report':
-        return ToolCall('report', {'finding': arguments})
+        return ToolCall('report', {'report': arguments})
     return ToolCall(name, {'arguments': arguments, 'scope': summary['assignment']['scope'],
                            'source_ref': summary['assignment']['page']['source_ref']})

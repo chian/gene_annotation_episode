@@ -37,12 +37,12 @@ class Store:
         self.path = Path(path).resolve()
         self.path.mkdir(parents=True, exist_ok=True)
         (self.path / "artifacts").mkdir(exist_ok=True)
-        self.db = sqlite3.connect(self.path / "state.sqlite3", isolation_level=None, timeout=30)
-        self.db.row_factory = self._row
-        self.db.execute("PRAGMA journal_mode=WAL")
-        self.db.execute("PRAGMA foreign_keys=ON")
-        self.db.execute("PRAGMA synchronous=FULL")
-        self.db.executescript("""
+        self._db = sqlite3.connect(self.path / "state.sqlite3", isolation_level=None, timeout=30)
+        self._db.row_factory = self._row
+        self._db.execute("PRAGMA journal_mode=WAL")
+        self._db.execute("PRAGMA foreign_keys=ON")
+        self._db.execute("PRAGMA synchronous=FULL")
+        self._db.executescript("""
             CREATE TABLE IF NOT EXISTS artifacts(id TEXT PRIMARY KEY,sha256 TEXT NOT NULL,
                 media_type TEXT NOT NULL,size INTEGER NOT NULL);
             CREATE TABLE IF NOT EXISTS problem(singleton INTEGER PRIMARY KEY CHECK(singleton=1),data TEXT NOT NULL);
@@ -65,7 +65,7 @@ class Store:
         self._savepoint = 0
         materials.install_tables(self)
         libraries.install_tables(self)
-        self.db.create_function("library_scope_record", 2, self._scope_filter_record)
+        self._db.create_function("library_scope_record", 2, self._scope_filter_record)
 
     def __enter__(self):
         return self
@@ -74,8 +74,8 @@ class Store:
         self.close()
 
     def close(self):
-        self.db.row_factory = sqlite3.Row
-        self.db.close()
+        self._db.row_factory = sqlite3.Row
+        self._db.close()
 
     def _row(self,cursor,values):
         # Keep sqlite3.Row and ordinary JSON request semantics for every reader.
@@ -90,39 +90,39 @@ class Store:
 
     @contextmanager
     def transaction(self):
-        own = not self.db.in_transaction
+        own = not self._db.in_transaction
         self._savepoint += 1
         name = f"state_{self._savepoint}"
-        self.db.execute("BEGIN IMMEDIATE" if own else f"SAVEPOINT {name}")
+        self._db.execute("BEGIN IMMEDIATE" if own else f"SAVEPOINT {name}")
         try:
             yield self
         except BaseException:
             if own:
-                self.db.rollback()
+                self._db.rollback()
             else:
-                self.db.execute(f"ROLLBACK TO {name}")
-                self.db.execute(f"RELEASE {name}")
+                self._db.execute(f"ROLLBACK TO {name}")
+                self._db.execute(f"RELEASE {name}")
             raise
         else:
             if own:
-                self.db.commit()
+                self._db.commit()
             else:
-                self.db.execute(f"RELEASE {name}")
+                self._db.execute(f"RELEASE {name}")
 
     @contextmanager
     def read_snapshot(self):
-        own = not self.db.in_transaction
+        own = not self._db.in_transaction
         if own:
-            self.db.execute("BEGIN")
+            self._db.execute("BEGIN")
         try:
             yield self
         except BaseException:
             if own:
-                self.db.rollback()
+                self._db.rollback()
             raise
         else:
             if own:
-                self.db.commit()
+                self._db.commit()
 
     def artifact(self, data: bytes | str, media_type="application/octet-stream") -> str:
         if isinstance(data, str):
@@ -150,12 +150,12 @@ class Store:
             finally:
                 if os.path.exists(temporary):
                     os.unlink(temporary)
-        self.db.execute("INSERT OR IGNORE INTO artifacts VALUES(?,?,?,?)",
+        self._db.execute("INSERT OR IGNORE INTO artifacts VALUES(?,?,?,?)",
                         (ref, digest, media_type, len(data)))
         return ref
 
     def get_artifact(self, ref: str) -> bytes:
-        row = self.db.execute("SELECT sha256 FROM artifacts WHERE id=?", (ref,)).fetchone()
+        row = self._db.execute("SELECT sha256 FROM artifacts WHERE id=?", (ref,)).fetchone()
         if not row:
             raise ContractError("unknown_artifact")
         data = (self.path / "artifacts" / row["sha256"][:2] / row["sha256"]).read_bytes()
@@ -207,7 +207,7 @@ class Store:
         return "aa" if molecule == "protein" else "nt" if molecule in {"dna", "rna"} else "symbol"
 
     def problem(self) -> dict:
-        row = self.db.execute("SELECT data FROM problem WHERE singleton=1").fetchone()
+        row = self._db.execute("SELECT data FROM problem WHERE singleton=1").fetchone()
         if row is None:
             raise ContractError("problem_not_initialized")
         return json.loads(row["data"])
@@ -216,7 +216,7 @@ class Store:
         return [self.get_input(ref) for ref in self.problem()["subject_refs"]]
 
     def get_input(self, ref: str) -> dict:
-        row = self.db.execute("SELECT data FROM inputs WHERE id=?", (ref,)).fetchone()
+        row = self._db.execute("SELECT data FROM inputs WHERE id=?", (ref,)).fetchone()
         if row is None:
             raise ContractError("unknown_input")
         return json.loads(row["data"])
@@ -224,19 +224,19 @@ class Store:
     get_inputmetadata = get_input
 
     def get(self, ref: str) -> dict:
-        row = self.db.execute("SELECT data FROM inputs WHERE id=?", (ref,)).fetchone()
+        row = self._db.execute("SELECT data FROM inputs WHERE id=?", (ref,)).fetchone()
         if row:
             return json.loads(row["data"])
-        row = self.db.execute("SELECT data FROM records WHERE id=?", (ref,)).fetchone()
+        row = self._db.execute("SELECT data FROM records WHERE id=?", (ref,)).fetchone()
         if row:
             return json.loads(row["data"])
         read_subject = libraries.resolve(self, ref)
         if read_subject is not None:
             return read_subject
-        row = self.db.execute("SELECT data FROM material_members WHERE id=?", (ref,)).fetchone()
+        row = self._db.execute("SELECT data FROM material_members WHERE id=?", (ref,)).fetchone()
         if row:
             return json.loads(row[0])
-        row = self.db.execute("SELECT * FROM artifacts WHERE id=?", (ref,)).fetchone()
+        row = self._db.execute("SELECT * FROM artifacts WHERE id=?", (ref,)).fetchone()
         if row:
             return {**dict(row), "record_type": "artifact"}
         raise ContractError("unknown_reference")
@@ -257,12 +257,12 @@ class Store:
         return value
 
     def roots(self, ref: str) -> list[str]:
-        if self.db.execute("SELECT 1 FROM inputs WHERE id=?", (ref,)).fetchone():
+        if self._db.execute("SELECT 1 FROM inputs WHERE id=?", (ref,)).fetchone():
             return [ref]
         record = self.get(ref)
         if record["record_type"] == "read_subject":
             return [record["library_ref"]]
-        return [row[0] for row in self.db.execute("SELECT target_ref FROM record_roots WHERE record_ref=? ORDER BY target_ref", (ref,))]
+        return [row[0] for row in self._db.execute("SELECT target_ref FROM record_roots WHERE record_ref=? ORDER BY target_ref", (ref,))]
 
     @staticmethod
     def _merge_segments(segments):
@@ -414,10 +414,10 @@ class Store:
             raise ContractError("invalid_page")
         scope = self.validate_scope(scope) if scope is not None else None
         if scope is None:
-            rows = self.db.execute("SELECT data FROM records WHERE record_type=? ORDER BY id LIMIT ? OFFSET ?", (kind, limit, offset))
+            rows = self._db.execute("SELECT data FROM records WHERE record_type=? ORDER BY id LIMIT ? OFFSET ?", (kind, limit, offset))
         else:
             placeholders = ",".join("?" for _ in scope["subject_refs"])
-            rows = self.db.execute(f"""SELECT data FROM records r WHERE record_type=? AND (json_type(r.data,'$.context_account_scope') IS NOT NULL OR NOT EXISTS
+            rows = self._db.execute(f"""SELECT data FROM records r WHERE record_type=? AND (json_type(r.data,'$.context_account_scope') IS NOT NULL OR NOT EXISTS
                 (SELECT 1 FROM record_roots rr WHERE rr.record_ref=r.id AND rr.target_ref NOT IN ({placeholders})))
                 AND library_scope_record(r.data,?)
                 ORDER BY id LIMIT ? OFFSET ?""", (kind, *scope["subject_refs"], canonical(scope), limit, offset))
@@ -501,8 +501,8 @@ class Store:
                 where += (' AND ' if where else 'WHERE ') + f'v.id IN ({query})'
                 parameters.extend(selected_parameters)
             cte = f"WITH visible AS ({selection})"
-            total = self.db.execute(f"{cte} SELECT count(*) FROM visible v {where}", parameters).fetchone()[0]
-            rows = self.db.execute(f"{cte} SELECT v.data FROM visible v {where} "
+            total = self._db.execute(f"{cte} SELECT count(*) FROM visible v {where}", parameters).fetchone()[0]
+            rows = self._db.execute(f"{cte} SELECT v.data FROM visible v {where} "
                 "ORDER BY v.sort_group,v.sort_key,v.id LIMIT ? OFFSET ?", [*parameters, limit, offset])
             records = [json.loads(row[0]) for row in rows]
             next_offset = offset + len(records) if offset + len(records) < total else None
@@ -1422,11 +1422,11 @@ class Store:
             if "segments" in scope:
                 member_refs = sorted({span["member_ref"] for span in scope["segments"] if span["target_ref"] == target_ref})
                 allowed = [self.read_subject_ref(target_ref, member_ref) for member_ref in member_refs]
-                missing = self.db.execute("SELECT read_ref FROM library_selection_members WHERE selection_ref=? AND read_ref NOT IN (SELECT value FROM json_each(?)) LIMIT 1",
+                missing = self._db.execute("SELECT read_ref FROM library_selection_members WHERE selection_ref=? AND read_ref NOT IN (SELECT value FROM json_each(?)) LIMIT 1",
                     (selection_ref, canonical(allowed))).fetchone()
             else:
                 owned = libraries.selection_for(self, scope, target_ref)
-                missing = (self.db.execute("SELECT read_ref FROM library_selection_members WHERE selection_ref=? EXCEPT SELECT read_ref FROM library_selection_members WHERE selection_ref=? LIMIT 1",
+                missing = (self._db.execute("SELECT read_ref FROM library_selection_members WHERE selection_ref=? EXCEPT SELECT read_ref FROM library_selection_members WHERE selection_ref=? LIMIT 1",
                     (selection_ref, owned["id"])).fetchone() if owned else None)
             if missing:
                 raise ContractError("record_subject_member_outside_scope", detail={"field_path": field_path,
@@ -1603,7 +1603,7 @@ class Store:
                         "account_scope_sha256": record["context_account_sha256"]})
                 else:
                     key = record["subject_ref"]
-                current = self.db.execute("SELECT revision,record_ref FROM current_revisions WHERE record_type=? AND key_ref=?", (kind, key)).fetchone()
+                current = self._db.execute("SELECT revision,record_ref FROM current_revisions WHERE record_type=? AND key_ref=?", (kind, key)).fetchone()
                 revision = current["revision"] if current else 0
                 if validation_kind == "annotation" or current is not None:
                     self._assert_library_write_scope(validation_kind, record, scope,
@@ -1615,7 +1615,7 @@ class Store:
                 if expected_revision != revision:
                     proposal = {"record": record, "origin": origin, "expected_revision": expected_revision}
                     proposal_ref = identity("proposal", {"kind": kind, "key": key, **proposal})
-                    self.db.execute("INSERT OR IGNORE INTO proposals VALUES(?,?,?,?,?)", (proposal_ref, kind, key, expected_revision, canonical(proposal)))
+                    self._db.execute("INSERT OR IGNORE INTO proposals VALUES(?,?,?,?,?)", (proposal_ref, kind, key, expected_revision, canonical(proposal)))
                     # Caller transaction must preserve this proposal when reporting conflict.
                     conflict = RevisionConflict(kind, key, revision, proposal_ref)
                 else:
@@ -1652,10 +1652,10 @@ class Store:
                         footprint = record["footprint"]
                     if not self.scope_covers(footprint, scope):
                         raise ContractError("record_outside_scope_segments")
-                self.db.execute("INSERT OR IGNORE INTO records VALUES(?,?,?,?)", (ref, kind, origin, canonical(stored)))
-                self.db.executemany("INSERT OR IGNORE INTO record_roots VALUES(?,?)", [(ref, root) for root in roots])
+                self._db.execute("INSERT OR IGNORE INTO records VALUES(?,?,?,?)", (ref, kind, origin, canonical(stored)))
+                self._db.executemany("INSERT OR IGNORE INTO record_roots VALUES(?,?)", [(ref, root) for root in roots])
                 if kind in {"assessment", "annotation", "interpretation_account"}:
-                    self.db.execute("INSERT INTO current_revisions VALUES(?,?,?,?) ON CONFLICT(record_type,key_ref) DO UPDATE SET revision=excluded.revision,record_ref=excluded.record_ref", (kind, key, revision, ref))
+                    self._db.execute("INSERT INTO current_revisions VALUES(?,?,?,?) ON CONFLICT(record_type,key_ref) DO UPDATE SET revision=excluded.revision,record_ref=excluded.record_ref", (kind, key, revision, ref))
         if conflict is not None:
             raise conflict
         return stored
@@ -1674,7 +1674,7 @@ class Store:
                 raise ContractError("invalid_page")
             paging = " LIMIT ? OFFSET ?"
             parameters.extend([limit, offset])
-        rows = self.db.execute("SELECT r.data FROM current_revisions c JOIN records r ON r.id=c.record_ref WHERE c.record_type=?" + condition + " ORDER BY c.key_ref" + paging, parameters)
+        rows = self._db.execute("SELECT r.data FROM current_revisions c JOIN records r ON r.id=c.record_ref WHERE c.record_type=?" + condition + " ORDER BY c.key_ref" + paging, parameters)
         return [json.loads(row[0]) for row in rows]
 
     def iter_current_annotations(self, scope=None, page_size=100):
@@ -1696,7 +1696,7 @@ class Store:
     def current_assessment_subset(self, refs):
         if not refs:
             return {}
-        rows = self.db.execute("SELECT r.data FROM current_revisions c JOIN records r ON r.id=c.record_ref WHERE c.record_type='assessment' AND c.record_ref IN (SELECT value FROM json_each(?))", (canonical(list(dict.fromkeys(refs))),))
+        rows = self._db.execute("SELECT r.data FROM current_revisions c JOIN records r ON r.id=c.record_ref WHERE c.record_type='assessment' AND c.record_ref IN (SELECT value FROM json_each(?))", (canonical(list(dict.fromkeys(refs))),))
         return {row["id"]: row for row in (json.loads(value[0]) for value in rows)}
 
     def current_annotations(self, scope=None, limit=None, offset=0):
@@ -1717,7 +1717,7 @@ class Store:
             placeholders = ",".join("?" for _ in normalized["subject_refs"])
             base += f" AND (json_type(r.data,'$.context_account_scope') IS NOT NULL OR NOT EXISTS (SELECT 1 FROM record_roots rr WHERE rr.record_ref=r.id AND rr.target_ref NOT IN ({placeholders}))) AND library_scope_record(r.data,?)"
             parameters.extend([*normalized["subject_refs"], canonical(normalized)])
-        return self.db.execute(base, parameters).fetchone()[0]
+        return self._db.execute(base, parameters).fetchone()[0]
 
     def _artifact_references(self, candidates=None):
         """The existing scientific artifact ownership projection, optionally filtered.
@@ -1732,17 +1732,17 @@ class Store:
         parameters = () if selected is None else (canonical(sorted(selected)),)
         condition = "" if selected is None else " WHERE EXISTS (SELECT 1 FROM json_tree(records.data) j WHERE j.type='text' AND j.value IN (SELECT value FROM json_each(?)))"
         artifact_refs = set()
-        for row in self.db.execute("SELECT data FROM records" + condition, parameters):
+        for row in self._db.execute("SELECT data FROM records" + condition, parameters):
             for ref in self._refs(json.loads(row[0])):
                 if ref.startswith("artifact_"):
                     artifact_refs.add(ref)
         condition = "" if selected is None else " WHERE json_extract(data,'$.sequence_ref') IN (SELECT value FROM json_each(?))"
-        for row in self.db.execute("SELECT data FROM inputs" + condition, parameters):
+        for row in self._db.execute("SELECT data FROM inputs" + condition, parameters):
             sequence_ref = json.loads(row[0])["sequence_ref"]
             if sequence_ref is not None:
                 artifact_refs.add(sequence_ref)
         condition = "" if selected is None else " AND EXISTS (SELECT 1 FROM material_members m WHERE m.id=json_extract(records.data,'$.member_ref') AND (coalesce(json_extract(m.data,'$.sequence_ref'),'artifact_' || json_extract(m.data,'$.storage.components.sequence.sha256')) IN (SELECT value FROM json_each(?)) OR coalesce(json_extract(m.data,'$.quality_ref'),'artifact_' || json_extract(m.data,'$.storage.components.quality.sha256')) IN (SELECT value FROM json_each(?)) OR coalesce(json_extract(m.data,'$.header_ref'),'artifact_' || json_extract(m.data,'$.storage.components.header.sha256')) IN (SELECT value FROM json_each(?))))"
-        for row in self.db.execute("SELECT json_extract(data,'$.member_ref') FROM records WHERE record_type='reference' AND json_extract(data,'$.member_ref') IS NOT NULL" + condition,
+        for row in self._db.execute("SELECT json_extract(data,'$.member_ref') FROM records WHERE record_type='reference' AND json_extract(data,'$.member_ref') IS NOT NULL" + condition,
                                    parameters * 3):
             member = self.get(row[0])
             artifact_refs.update(ref for ref in materials.packing.materialized_components(self, member).values() if ref)
@@ -1818,7 +1818,7 @@ class Store:
             if record_selection is not None:
                 revision_refs = [row['id'] for field in
                     ('assessments', 'annotations', 'interpretation_accounts') for row in result[field]]
-                current_refs = {row[0] for row in self.db.execute(
+                current_refs = {row[0] for row in self._db.execute(
                     'SELECT record_ref FROM current_revisions WHERE record_ref IN '
                     '(SELECT value FROM json_each(?))', (canonical(revision_refs),))}
                 result['record_view'] = 'received_immutable_versions'
@@ -1839,7 +1839,7 @@ class Store:
             signature_data['account_owner'] = account_owner
         signature = identity("acquisition", signature_data)
         with self.transaction():
-            existing = self.db.execute("SELECT signature,result FROM reasoning_commits WHERE operation_key=?", (operation_key,)).fetchone()
+            existing = self._db.execute("SELECT signature,result FROM reasoning_commits WHERE operation_key=?", (operation_key,)).fetchone()
             if existing:
                 if existing["signature"] != signature:
                     raise ContractError("operation_key_reused_with_different_input")
@@ -1886,7 +1886,7 @@ class Store:
                             if section == "source_subjects":
                                 row["accession"] = identity("source_entity", {"source_ref": row["source_ref"], "label": row["label"], "anchor": row["anchor"]})
                                 row.update(sequence_ref=None, length=None, molecule=row["reference_type"] if row["reference_type"] in MOLECULES else None, term_refs=[], context_refs=[])
-                            before = self.db.total_changes
+                            before = self._db.total_changes
                             write_origin = ("reasoning" if section == "observations" and row.get("visual_anchor") is not None else origin)
                             stored = self.put(kind, row, origin=write_origin, scope=scope,
                                 **({'account_owner': account_owner} if kind == 'interpretation_account' else {}))
@@ -1902,7 +1902,7 @@ class Store:
                             result["aliases"][alias] = stored["id"]
                             if stored["id"] not in result["record_refs"]:
                                 result["record_refs"].append(stored["id"])
-                            if self.db.total_changes > before and stored["id"] not in result["changed_record_refs"]:
+                            if self._db.total_changes > before and stored["id"] not in result["changed_record_refs"]:
                                 result["changed_record_refs"].append(stored["id"])
                         except RevisionConflict as exc:
                             result["conflicts"].append(exc.detail)
@@ -1911,5 +1911,5 @@ class Store:
                 if result["conflicts"] or result["errors"]:
                     result["status"] = "partial" if result["record_refs"] else "invalid"
                     result["error_code"] = "revision_conflict" if result["conflicts"] else "record_contract_error"
-            self.db.execute("INSERT INTO reasoning_commits VALUES(?,?,?)", (operation_key, signature, canonical(result)))
+            self._db.execute("INSERT INTO reasoning_commits VALUES(?,?,?)", (operation_key, signature, canonical(result)))
             return result

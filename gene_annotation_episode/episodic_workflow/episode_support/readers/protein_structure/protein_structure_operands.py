@@ -8,8 +8,8 @@ stages, dispatches work or awards credit.
 from __future__ import annotations
 
 from copy import deepcopy
+import hashlib
 import math
-import sqlite3
 from typing import TYPE_CHECKING, TypedDict, get_args
 
 from jsonschema import Draft202012Validator, validators
@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.structura
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError, RECORD_SCHEMAS
 from gene_annotation_episode.episodic_workflow.episode_support.forms.structural_homology_evidence.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.protein_structure.native_protein_structure_acquisition import (
-    decode_protein_structure_json, retained_protein_structure_file,
+    decode_protein_structure_json,
 )
 from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.native_protein_structure_contracts import (
     CompareRequest, InputFile, required_input_files, validate_input_associations,
@@ -41,7 +41,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
 
 if TYPE_CHECKING:
     from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.runtime_continuation import A102RuntimeContext as BindingContext
-    from gene_annotation_episode.state import Store
 
 
 class ResolvedComparisonOperands(TypedDict):
@@ -96,7 +95,7 @@ def _authority(function, *args, code="original_commission_mismatch", field="rece
         return function(*args, **kwargs)
     except ProteinStructureOperandError:
         raise
-    except (ValueError, TypeError, KeyError, sqlite3.Error):
+    except (ValueError, TypeError, KeyError):
         _fail(code, field=field)
 
 
@@ -163,27 +162,34 @@ def is_protein_structure_sequence_operand(store, reference_ref: str) -> bool:
     return completed[reference_ref]
 
 
+def retained_protein_structure_bytes(store, identity):
+    """The bytes of the held Store artifact a file identity names, checked against the identity's digest and size."""
+    identity = a.validate_file_identity(identity)
+    try:
+        metadata = store.require(identity["artifact_ref"], {"artifact"})
+    except ContractError as error:
+        raise ValueError("retained_artifact_missing" if str(error) in ("unknown_artifact", "unknown_reference")
+                         else "invalid_schema") from error
+    if not (metadata["sha256"] == identity["sha256"] and metadata["size"] == identity["byte_length"]):
+        raise ValueError("input_digest_mismatch")
+    raw = store.get_artifact(identity["artifact_ref"])
+    if len(raw) != identity["byte_length"] or hashlib.sha256(raw).hexdigest() != identity["sha256"]:
+        raise ValueError("input_digest_mismatch")
+    return raw
+
+
 def _file(store, identity, *, format=None, role=None):
     identity = _checked(a.validate_file_identity, identity, stage="input",
         field="file_identity", artifact_role=role)
     _require(format is None or identity["format"] == format, "unsupported_format",
         stage="input", field="file_identity", artifact_role=role)
-    return _checked(retained_protein_structure_file, store, identity, stage="input",
-        field="file_identity", artifact_role=role)
+    return identity
 
 
 def _bytes(store, identity, *, format=None, role=None):
-    path = _file(store, identity, format=format, role=role)
-    try:
-        raw = path.read_bytes()
-    except OSError:
-        _fail("retained_artifact_missing", stage="input", field="file_identity", artifact_role=role)
-    # Retained lookup checked the file before opening. Recheck these actual read
-    # bytes too; a changed file cannot pass through the lookup/read interval.
-    import hashlib
-    _require(len(raw) == identity["byte_length"] and hashlib.sha256(raw).hexdigest() == identity["sha256"],
-        "input_digest_mismatch", stage="input", field="file_identity", artifact_role=role)
-    return raw
+    identity = _file(store, identity, format=format, role=role)
+    return _checked(retained_protein_structure_bytes, store, identity, stage="input",
+        field="file_identity", artifact_role=role)
 
 
 def _json_file(store, identity, *, format=None, role=None, canonical_bytes=True,
@@ -313,22 +319,6 @@ def authenticate_selected_alignment(store, context, alignment, *, fixed, moving,
         and observation["dependencies"] == operands, "alignment_operand_mismatch", **mismatch)
     if "operand_refs" in source:
         _require(source["operand_refs"] == operands, "alignment_operand_mismatch", **mismatch)
-    try:
-        operation = store.db.execute("SELECT * FROM tool_operations WHERE operation_key=?",
-            (alignment["original_operation_key"],)).fetchone()
-    except sqlite3.Error:
-        operation = None
-    _require(operation is not None, "alignment_operand_mismatch", **mismatch)
-    arguments = _checked(decode_protein_structure_json, operation["arguments"].encode("utf-8"),
-        code="alignment_operand_mismatch", **mismatch)
-    expected_args = {"query_ref": query["reference_ref"], "reference_ref": reference["reference_ref"],
-        "molecule": "protein", "mode": alignment["mode"]}
-    outcome = _checked(decode_protein_structure_json, operation["result"].encode("utf-8"),
-        code="alignment_operand_mismatch", **mismatch)
-    _require(operation["name"] == "sequence.align" and a.same(arguments, expected_args)
-        and outcome.get("operation_ref") == operation["id"] and outcome.get("status") in ("completed", "partial")
-        and all(ref in outcome.get("record_refs", []) for ref in (source["id"], observation["id"])),
-        "alignment_operand_mismatch", **mismatch)
     native = _json_file(store, alignment["native_file"], format="biopython_pairwise_json",
         role="alignment_native", canonical_bytes=False, stage="correspondence", field="traceback", code="invalid_traceback")
     candidates = []
@@ -427,9 +417,9 @@ def _resolve_request(store, context, request, *, returns):
         # happens to be another authorized operand or source auxiliary.
         if reference not in authorized or role == "supplied_metadata":
             _received_reference(store, context, reference, returns=returns, known=known)
-        path = _file(store, identity, role=role)
+        _file(store, identity, role=role)
         files.append({"input_id": "input_" + str(i), "role": role, "file_identity": deepcopy(identity),
-            "path": str(path), "staged_relative_path": "inputs/input_" + str(i)})
+            "staged_relative_path": "inputs/input_" + str(i)})
     _checked(validate_input_associations, request, files, field="request")
     return request, files, list(dict.fromkeys([f["file_identity"]["artifact_ref"] for f in files] + references))
 
@@ -458,13 +448,9 @@ def validate_protein_structure_job_inputs(store, context, assignment: dict, *, r
     job = requested["native_protein_structure"]
     _, files, references = _resolve_request(store, context, job["request"], returns=returns)
     expected = {(row["role"], canonical(row["file_identity"])): row for row in files}
-    # C validates ids/staged paths and the role/file multiset. Preserve selected
-    # order and insist that every source path is this exact retained Store path.
     for row in job["inputs"]:
-        match = expected[(row["role"], canonical(row["file_identity"]))]
-        _require(row["path"] == match["path"], "invalid_output_path", stage="input",
+        _require((row["role"], canonical(row["file_identity"])) in expected, "invalid_output_path", stage="input",
             field="file_identity", artifact_role=row["role"])
-    return references
 
 
 def _saved_sheet(store, context, descriptor, *, returns, before_decision_index=None):

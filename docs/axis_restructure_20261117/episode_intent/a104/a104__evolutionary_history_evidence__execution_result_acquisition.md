@@ -190,3 +190,275 @@ Counts are uses (imported names counted per use) summed over this episode's file
 | `waiting.py` | 9 | `suspension_changed` → `execution_backend.set_suspension` (old runner). | `self.workflow.execution_backend`×1; `self.workflow.execution_handle`×2 |
 | `work_operations.py` | 82 | Tool catalog and dispatch per target family: masking, utility, standard / native BLAST database, API service catalog, HMMER preparation, HMMER, BLAST, else `execution.results.status/collect/read`; errors become invalid outcomes except retained-artifact custody failures for local file sources, which raise. | `a104.communication` {plain} |
 | `yield_estimator.py` | 70 | `_results_yield_controller`: generic native target with an open-ended window → `results_yield_profiles['native_unbounded_<kind>']`, plain controller; finite windows → `task_yield_profiles['results:native_finite_<kind>']` with `finite_result_yield`: verified endpoint → completion estimate; no uncredited bytes → exact 0 (`finite_result_selector_exhaustion_v1`); else `estimate_bounded_credit_yield(maximum_credit = acquired_record_unit*(1-already credited fraction))`. API → `results:api_<service>[_<selector version>]`, typed → `results:typed_<kind>_<version>`, both with `PracticalYieldEstimator(verify_completion)`. | `a104.numerical` {NumericBand, YieldController, YieldEstimate, YieldParameters, estimate_bounded_credit_yield}; `a104.practical_yield` {PracticalYieldEstimator} |
+
+## Carried over
+
+The episode is carried as the private ten-file binding `ExecutionResultAcquisition(EpisodeBinding)` in
+`gene_annotation_episode/episodic_workflow/root/a104/evolutionary_history_evidence/execution_result_acquisition/`
+(no children: no `msg_to_child.py`, no `read_from_child.py`; `CHILD_SLOTS = {}`). Source: `git -C
+/home/chia/repos/gene_annotation_episode_disk show 97308b94c:<path>` of the episode's own files (the working tree is not
+a git repository; the hook-era `acquisition_source.py` and its two tests were deleted first, see
+`retired_tests/a104__evolutionary_history_evidence__execution_result_acquisition.tsv`). One row per row of
+`runs/carry_over/functions/a104__evolutionary_history_evidence__execution_result_acquisition.tsv` (248). "class" is
+machinery (old-runner, not carried) or episode function; a place that starts with "unplaced" has no place now (the class
+or module it called is in no place in `episode_support/`, or it needs the `job_access` service); the cause of each is
+in `docs/axis_restructure_20261117/carry_over_blocked/a104__evolutionary_history_evidence__execution_result_acquisition.md`.
+No row is "already in library": the old non-binding files of this folder (grading, scoring, readers) were not in it; the
+library functions the new files call are imported by name (`episode_support/readers/**/evolutionary_history_evidence/*_result_views.py`,
+`acquisition/**/evolutionary_history_evidence/native_*_acquisition.py`, `forms/evolutionary_history_evidence/execution_contracts.py`
+and `communication.py`, `jobs/evolutionary_history_evidence/practical_execution_operations.py`, `jobs/waiting.py`,
+`instructions/launch_instructions.py`, `tools/tool_knowledge.py`, `records/progress_views.py`,
+`records/local_execution/local_file_capture_results.py`, `model_exchange/rejection_feedback.py`). Rows marked "library
+candidate" stay as old code in no file: nothing of them is written into this episode, because the family they serve is
+not placed.
+
+| old file | kind | name | class | new place or reason |
+|---|---|---|---|---|
+| action_outcome.py | function | _outcome | episode function | task.py::_outcome |
+| api_acquisition.py | class | APIResultAcquisition | episode function | container: methods below (API family, unplaced) |
+| api_acquisition.py | method | APIResultAcquisition.__init__ | machinery | service construction and old Store wiring; the services are the job_access service now |
+| api_acquisition.py | method | APIResultAcquisition._legacy_context | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (task.py::_catalog) |
+| api_acquisition.py | method | APIResultAcquisition._context | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (task.py::_catalog / TOOLS) |
+| api_acquisition.py | method | APIResultAcquisition.initialize | machinery | result manifest / result-index files of the old operation ledger; the system journals units |
+| api_acquisition.py | method | APIResultAcquisition.catalog | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (task.py::_catalog / TOOLS) |
+| api_acquisition.py | method | APIResultAcquisition.execute | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (task.py::_catalog / TOOLS) |
+| api_acquisition.py | method | APIResultAcquisition._execute_locked | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (task.py::_catalog / TOOLS) |
+| api_acquisition.py | method | APIResultAcquisition._index_result | machinery | result manifest / result-index files of the old operation ledger; the system journals units |
+| api_acquisition.py | method | APIResultAcquisition.facts | episode function | unplaced: messages/final_to_parent.py::_facts raises unplaced:api.facts |
+| api_acquisition.py | method | APIResultAcquisition.credit_view | episode function | unplaced: credit.py::credit raises unplaced:api.credit_view (handoff_unit * new handoffs + acquired_record_unit * new results) |
+| api_acquisition.py | method | APIResultAcquisition._completion | machinery | completion proof (PracticalYieldEstimator input), not a controller input (README 7b, section 5 item 5) |
+| api_acquisition.py | method | APIResultAcquisition.completion_for_action | machinery | completion proof (PracticalYieldEstimator input), not a controller input (README 7b, section 5 item 5) |
+| api_acquisition.py | method | APIResultAcquisition.verify_completion | machinery | completion proof (PracticalYieldEstimator input), not a controller input (README 7b, section 5 item 5) |
+| api_acquisition.py | method | APIResultAcquisition.decision_context | episode function | unplaced: messages/internal_summary.py::internal_summary (api branch not carried; raises at read_from_parent) |
+| appservice_acquisition.py | class | AppServiceAcquisition | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (AppService result and publication) |
+| appservice_acquisition.py | method | AppServiceAcquisition.__init__ | machinery | wiring of the AppService host over the old API owner and Store |
+| appservice_acquisition.py | method | AppServiceAcquisition._own_receipts | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (AppService result and publication) |
+| appservice_acquisition.py | method | AppServiceAcquisition.facts | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (AppService result and publication) |
+| appservice_acquisition.py | method | AppServiceAcquisition.completion | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (AppService result and publication) |
+| appservice_acquisition.py | method | AppServiceAcquisition.publish_acquisition | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (AppService result and publication) |
+| appservice_publication.py | class | AppServicePublication | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (AppService result and publication) |
+| appservice_publication.py | method | AppServicePublication._put_content | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (AppService result and publication) |
+| appservice_publication.py | method | AppServicePublication.publication_inputs | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (AppService result and publication) |
+| appservice_publication.py | method | AppServicePublication._grade | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (AppService result and publication) |
+| appservice_publication.py | method | AppServicePublication.publish | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (AppService result and publication) |
+| binding_record.py | class | ResultsBindingRecord | machinery | binding_record.py and the binding's own as_record() |
+| binding_record.py | method | ResultsBindingRecord.as_record | machinery | binding_record.py and the binding's own as_record() |
+| closed_credit.py | class | ResultsClosedCredit | machinery | frozen closed credit carrier over runtime_* tables and receipt inheritance; credit is completion[credit] (final_to_parent) |
+| closed_credit.py | method | ResultsClosedCredit._closed_credit_carrier | machinery | frozen closed credit carrier over runtime_* tables and receipt inheritance; credit is completion[credit] (final_to_parent) |
+| closed_credit.py | method | ResultsClosedCredit._closed_credit_receipts | machinery | frozen closed credit carrier over runtime_* tables and receipt inheritance; credit is completion[credit] (final_to_parent) |
+| closed_credit.py | method | ResultsClosedCredit._closed_credit_value | machinery | frozen closed credit carrier over runtime_* tables and receipt inheritance; credit is completion[credit] (final_to_parent) |
+| closed_credit.py | method | ResultsClosedCredit._closed_credit_facts | machinery | frozen closed credit carrier over runtime_* tables and receipt inheritance; credit is completion[credit] (final_to_parent) |
+| closed_credit.py | method | ResultsClosedCredit._closed_operational_credit_view | machinery | frozen closed credit carrier over runtime_* tables and receipt inheritance; credit is completion[credit] (final_to_parent) |
+| completion.py | class | ResultsCompletion | machinery | completion proof / verification over runtime_actions (not a controller input, README 7b) |
+| completion.py | method | ResultsCompletion._native_results_complete | episode function | messages/internal_summary.py::_native_results_complete |
+| completion.py | method | ResultsCompletion._proof_for_action | machinery | completion proof / verification over runtime_actions (not a controller input, README 7b) |
+| completion.py | method | ResultsCompletion.completion_for_action | machinery | completion proof / verification over runtime_actions (not a controller input, README 7b) |
+| completion.py | method | ResultsCompletion._closed_completion_verdict | machinery | completion proof / verification over runtime_actions (not a controller input, README 7b) |
+| completion.py | method | ResultsCompletion.verify_completion | machinery | completion proof / verification over runtime_actions (not a controller input, README 7b) |
+| configuration.py | class | ResultsConfiguration | machinery | configuration: values become ctx.settings (log_window_bytes, yield profiles), the acquired_record_unit assignment field and the job_access service |
+| configuration.py | method | ResultsConfiguration.__init__ | machinery | configuration: values become ctx.settings (log_window_bytes, yield profiles), the acquired_record_unit assignment field and the job_access service |
+| credit.py | class | ResultsCredit | machinery | credit_kind deleted (README 3d); project_credit / credit_view switched to the frozen closed credit view |
+| credit.py | method | ResultsCredit._generic_result_selector_progress | episode function | credit.py::selector_fraction |
+| credit.py | method | ResultsCredit.credit_kind | machinery | credit_kind deleted (README 3d); project_credit / credit_view switched to the frozen closed credit view |
+| credit.py | method | ResultsCredit.project_credit | machinery | credit_kind deleted (README 3d); project_credit / credit_view switched to the frozen closed credit view |
+| credit.py | method | ResultsCredit._live_project_credit | episode function | credit.py::credit |
+| credit.py | method | ResultsCredit.credit_view | machinery | credit_kind deleted (README 3d); project_credit / credit_view switched to the frozen closed credit view |
+| decision_context.py | class | ResultsTaskContext | machinery | old decision context assembly from runtime_actions / working_state / reference_subset; the episode content is in internal_summary and task.decide |
+| decision_context.py | method | ResultsTaskContext.assemble_decision_context | machinery | old decision context assembly from runtime_actions / working_state / reference_subset; the episode content is in internal_summary and task.decide |
+| decision_context.py | function | _bind_preserved_runtime_providers | machinery | old decision context assembly from runtime_actions / working_state / reference_subset; the episode content is in internal_summary and task.decide |
+| decision_contracts.py | class | ResultsTaskDecisionContracts | machinery | decision-exchange loop and saved-exchange contract checks |
+| decision_contracts.py | method | ResultsTaskDecisionContracts.interpretation_context | machinery | decision-exchange loop and saved-exchange contract checks |
+| decision_contracts.py | method | ResultsTaskDecisionContracts.exchange_schema | machinery | decision-exchange loop and saved-exchange contract checks |
+| decision_contracts.py | method | ResultsTaskDecisionContracts.exchange_response | machinery | decision-exchange loop and saved-exchange contract checks |
+| decision_contracts.py | method | ResultsTaskDecisionContracts.validate_contract_exchange_request | machinery | decision-exchange loop and saved-exchange contract checks |
+| decision_contracts.py | method | ResultsTaskDecisionContracts.validate_contract_exchange_history | machinery | decision-exchange loop and saved-exchange contract checks |
+| decision_contracts.py | function | _bind_preserved_runtime_providers | machinery | decision-exchange loop and saved-exchange contract checks |
+| decision_exchange.py | class | ResultsTaskDecisionExchange | machinery | decision-exchange loop and saved-exchange contract checks |
+| decision_exchange.py | method | ResultsTaskDecisionExchange.exchange_decision | machinery | decision-exchange loop and saved-exchange contract checks |
+| decision_exchange.py | function | _bind_preserved_runtime_providers | machinery | decision-exchange loop and saved-exchange contract checks |
+| decision_provider.py | class | ResultsTaskDecisionProvider | machinery | decision-exchange loop and saved-exchange contract checks |
+| decision_provider.py | method | ResultsTaskDecisionProvider.decision_completion | machinery | decision-exchange loop and saved-exchange contract checks |
+| episode.py | class | ExecutionEpisode | machinery | episode.py::ExecutionResultAcquisition (the one class) |
+| episode.py | method | ExecutionEpisode.child_roles | episode function | task.py::CHILD_SLOTS = {} |
+| episode.py | method | ExecutionEpisode.allowed_children | episode function | task.py::CHILD_SLOTS = {} |
+| episode.py | method | ExecutionEpisode.permitted_common_actions | episode function | task.py::TOOLS['wait'] (offered for an API service assignment; family api unplaced) |
+| from_parent.py | class | ResultsFromParent | episode function | container: methods below |
+| from_parent.py | method | ResultsFromParent.required_return_sources | episode function | the parent selects execution_result_refs in its msg_to_child (declared selectable in messages/final_to_parent.py::RETURN_FORM) |
+| from_parent.py | method | ResultsFromParent.child_assignment_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM, RESULTS_SCHEMA, NATIVE_SELECTOR_SCHEMA |
+| from_parent.py | method | ResultsFromParent.assignment_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM, RESULTS_SCHEMA, NATIVE_SELECTOR_SCHEMA |
+| from_parent.py | method | ResultsFromParent.prepare_assignment | episode function | messages/read_from_parent.py::read_from_parent (recorded-commission restore and checks of the commission against held records not carried) |
+| from_parent.py | method | ResultsFromParent.initial_references | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM record_refs (new field: the parent names every record the child reads) |
+| goal.py | class | ResultsGoal | episode function | goal.py::GOAL |
+| goal.py | method | ResultsGoal.instructions | episode function | goal.py::GOAL |
+| hmmer_acquisition.py | class | HMMERResultAcquisition | episode function | container: methods below (HMMER API family, unplaced) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition.__init__ | machinery | wiring over the old Store, provider job registry and tool registry |
+| hmmer_acquisition.py | method | HMMERResultAcquisition._assignment | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (HMMER API: _assignment) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition.initialize | machinery | provider_jobs table and action ledger files of the old runner (job state is the service) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition.catalog | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (HMMER API: catalog) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition._update_job | machinery | provider_jobs table and action ledger files of the old runner (job state is the service) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition._save_action | machinery | provider_jobs table and action ledger files of the old runner (job state is the service) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition._http | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (HMMER API: _http) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition._failure | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (HMMER API: _failure) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition.execute | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (HMMER API: execute) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition.facts | episode function | unplaced: messages/final_to_parent.py::_facts raises unplaced:api.facts |
+| hmmer_acquisition.py | method | HMMERResultAcquisition.credit_view | episode function | unplaced: credit.py::credit raises unplaced:api.credit_view |
+| hmmer_acquisition.py | method | HMMERResultAcquisition.decision_context | episode function | unplaced (library candidate): API service result family; BLOCKED-ON-JOB-SERVICE: job_access api result operations and the AppService / BV-BRC return modules of this axis; the family raises unplaced:api... where it would be called (HMMER API: decision_context) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition.validate_report | episode function | unplaced: messages/final_to_parent.py::validate_report (typed HMMER API facts unplaced) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition._completion | machinery | completion proof (not a controller input, README 7b) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition._results_completion | machinery | completion proof (not a controller input, README 7b) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition.completion_for_action | machinery | completion proof (not a controller input, README 7b) |
+| hmmer_acquisition.py | method | HMMERResultAcquisition.verify_completion | machinery | completion proof (not a controller input, README 7b) |
+| instructions.py | function | instructions | episode function | task.py::_instructions (goal + knowledge + launch text + native-event wait text; pending-child, in-process wait and exchange paragraphs not carried) |
+| instructions.py | function | _bind_preserved_runtime_providers | machinery | provider patching |
+| internal_summary.py | class | ResultsInternalSummary | episode function | container: methods below |
+| internal_summary.py | method | ResultsInternalSummary._with_selected_execution_task | episode function | messages/internal_summary.py::_selected_execution_task (resource information not carried: BLOCKED-ON-JOB-SERVICE job_access capabilities) |
+| internal_summary.py | method | ResultsInternalSummary.decision_context | episode function | messages/internal_summary.py::internal_summary (and task.py::decide) |
+| native_blast_database_result_acquisition.py | function | _saved_failure | episode function | unplaced (library candidate): typed native result family (BLAST database); its class is in no place now; raises unplaced:<family>.* where called (_saved_failure) |
+| native_blast_database_result_acquisition.py | class | NativeBLASTDatabaseResultAcquisition | episode function | unplaced (library candidate): typed native result family (BLAST database); its class is in no place now; raises unplaced:<family>.* where called (NativeBLASTDatabaseResultAcquisition) |
+| native_blast_database_result_acquisition.py | method | NativeBLASTDatabaseResultAcquisition._index | machinery | result-index / action directory files of the old operation ledger (the system journals units and receipts) |
+| native_blast_database_result_acquisition.py | method | NativeBLASTDatabaseResultAcquisition.execute | episode function | unplaced (library candidate): typed native result family (BLAST database); its class is in no place now; raises unplaced:<family>.* where called (execute) |
+| native_blast_masking_result_acquisition.py | function | _failure | episode function | unplaced (library candidate): typed native result family (BLAST masking); its class is in no place now; raises unplaced:<family>.* where called (_failure) |
+| native_blast_masking_result_acquisition.py | class | NativeBLASTMaskingResultAcquisition | episode function | unplaced (library candidate): typed native result family (BLAST masking); its class is in no place now; raises unplaced:<family>.* where called (NativeBLASTMaskingResultAcquisition) |
+| native_blast_masking_result_acquisition.py | method | NativeBLASTMaskingResultAcquisition._index | machinery | result-index / action directory files of the old operation ledger (the system journals units and receipts) |
+| native_blast_masking_result_acquisition.py | method | NativeBLASTMaskingResultAcquisition._prior | episode function | unplaced (library candidate): typed native result family (BLAST masking); its class is in no place now; raises unplaced:<family>.* where called (_prior) |
+| native_blast_masking_result_acquisition.py | method | NativeBLASTMaskingResultAcquisition.execute | episode function | unplaced (library candidate): typed native result family (BLAST masking); its class is in no place now; raises unplaced:<family>.* where called (execute) |
+| native_blast_result_acquisition.py | class | NativeBLASTResultAcquisition | episode function | unplaced (library candidate): typed native result family (BLAST pairwise); its class is in no place now; raises unplaced:<family>.* where called (NativeBLASTResultAcquisition) |
+| native_blast_result_acquisition.py | method | NativeBLASTResultAcquisition._action_directory | machinery | result-index / action directory files of the old operation ledger (the system journals units and receipts) |
+| native_blast_result_acquisition.py | method | NativeBLASTResultAcquisition._index | machinery | result-index / action directory files of the old operation ledger (the system journals units and receipts) |
+| native_blast_result_acquisition.py | method | NativeBLASTResultAcquisition.execute | episode function | unplaced (library candidate): typed native result family (BLAST pairwise); its class is in no place now; raises unplaced:<family>.* where called (execute) |
+| native_blast_standard_database_result_acquisition.py | class | StandardBLASTDatabaseResultAcquisition | episode function | unplaced (library candidate): typed native result family (standard BLAST database); its class is in no place now; raises unplaced:<family>.* where called (StandardBLASTDatabaseResultAcquisition) |
+| native_blast_standard_database_result_acquisition.py | method | StandardBLASTDatabaseResultAcquisition._index | machinery | result-index / action directory files of the old operation ledger (the system journals units and receipts) |
+| native_blast_standard_database_result_acquisition.py | method | StandardBLASTDatabaseResultAcquisition.execute | episode function | unplaced (library candidate): typed native result family (standard BLAST database); its class is in no place now; raises unplaced:<family>.* where called (execute) |
+| native_blast_utility_result_acquisition.py | function | _failure | episode function | unplaced (library candidate): typed native result family (BLAST utility); its class is in no place now; raises unplaced:<family>.* where called (_failure) |
+| native_blast_utility_result_acquisition.py | class | NativeBLASTUtilityResultAcquisition | episode function | unplaced (library candidate): typed native result family (BLAST utility); its class is in no place now; raises unplaced:<family>.* where called (NativeBLASTUtilityResultAcquisition) |
+| native_blast_utility_result_acquisition.py | method | NativeBLASTUtilityResultAcquisition._index | machinery | result-index / action directory files of the old operation ledger (the system journals units and receipts) |
+| native_blast_utility_result_acquisition.py | method | NativeBLASTUtilityResultAcquisition._prior | episode function | unplaced (library candidate): typed native result family (BLAST utility); its class is in no place now; raises unplaced:<family>.* where called (_prior) |
+| native_blast_utility_result_acquisition.py | method | NativeBLASTUtilityResultAcquisition.execute | episode function | unplaced (library candidate): typed native result family (BLAST utility); its class is in no place now; raises unplaced:<family>.* where called (execute) |
+| native_file_acquisition.py | class | ResultsNativeFileAcquisition | episode function | container: methods below |
+| native_file_acquisition.py | method | ResultsNativeFileAcquisition._selected_result_action | machinery | reads runtime_actions to authenticate the selected action; the tool is the selected action now |
+| native_file_acquisition.py | method | ResultsNativeFileAcquisition._execute_native_results | episode function | task.py::_execute_native_results (with _windows, execution_results_status/collect/read) |
+| native_hmmer_preparation_result_acquisition.py | class | NativeHmmerPreparationResultAcquisition | episode function | unplaced (library candidate): typed native result family (HMMER preparation); its class is in no place now; raises unplaced:<family>.* where called (NativeHmmerPreparationResultAcquisition) |
+| native_hmmer_preparation_result_acquisition.py | method | NativeHmmerPreparationResultAcquisition._index | machinery | result-index / action directory files of the old operation ledger (the system journals units and receipts) |
+| native_hmmer_preparation_result_acquisition.py | method | NativeHmmerPreparationResultAcquisition.execute | episode function | unplaced (library candidate): typed native result family (HMMER preparation); its class is in no place now; raises unplaced:<family>.* where called (execute) |
+| native_hmmer_result_acquisition.py | class | NativeHMMERResultAcquisition | episode function | unplaced (library candidate): typed native result family (HMMER); its class is in no place now; raises unplaced:<family>.* where called (NativeHMMERResultAcquisition) |
+| native_hmmer_result_acquisition.py | method | NativeHMMERResultAcquisition._action_directory | machinery | result-index / action directory files of the old operation ledger (the system journals units and receipts) |
+| native_hmmer_result_acquisition.py | method | NativeHMMERResultAcquisition._index | machinery | result-index / action directory files of the old operation ledger (the system journals units and receipts) |
+| native_hmmer_result_acquisition.py | method | NativeHMMERResultAcquisition.execute | episode function | unplaced (library candidate): typed native result family (HMMER); its class is in no place now; raises unplaced:<family>.* where called (execute) |
+| native_result_bindings.py | function | install_primary_result_readers | machinery | wiring of the per-family hosts onto the owner; the family dispatch is read_from_parent.family() |
+| native_result_bindings.py | function | install_preparation_result_readers | machinery | wiring of the per-family hosts onto the owner; the family dispatch is read_from_parent.family() |
+| presentation.py | function | present_execution_context | episode function | task.py::_task_text and decide (state-frame / bootstrap / lookup rendering not carried) |
+| protected_reference_access.py | class | ProtectedReferenceAccess | machinery | custody of received references of protected families (protein structure, fluorescence, ...): system custody (README 3b R3) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._install_protected_reference_readers | machinery | custody of received references of protected families (protein structure, fluorescence, ...): system custody (README 3b R3) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._protein_reference_access | machinery | custody of received references of protected families (protein structure, fluorescence, ...): system custody (README 3b R3) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._fluorescence_reference_access | machinery | custody of received references of protected families (protein structure, fluorescence, ...): system custody (README 3b R3) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._expression_nmf_reference_access | machinery | custody of received references of protected families (protein structure, fluorescence, ...): system custody (README 3b R3) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._atac_reference_access | machinery | custody of received references of protected families (protein structure, fluorescence, ...): system custody (README 3b R3) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._chromatin_reference_access | machinery | custody of received references of protected families (protein structure, fluorescence, ...): system custody (README 3b R3) |
+| receipt_selection.py | class | ResultsReceiptSelection | episode function | container: methods below |
+| receipt_selection.py | method | ResultsReceiptSelection._selection | machinery | known / initial known record refs from the old receipt ledger; custody and ASSIGNMENT_FORM.initial_result_refs |
+| receipt_selection.py | method | ResultsReceiptSelection._received | episode function | messages/internal_summary.py::internal_summary and _initial_result (the receipt ledger itself is custody) |
+| received_launch_requests.py | class | ResultsReceivedLaunchRequests | episode function | unplaced (library candidate): launch-role function (received_launch_requests.py) not used by the results role; carried by the launch episodes |
+| received_launch_requests.py | method | ResultsReceivedLaunchRequests._permitted | episode function | unplaced (library candidate): launch-role function (received_launch_requests.py) not used by the results role; carried by the launch episodes |
+| received_launch_requests.py | method | ResultsReceivedLaunchRequests._request_schema | episode function | unplaced (library candidate): launch-role function (received_launch_requests.py) not used by the results role; carried by the launch episodes |
+| received_launch_requests.py | method | ResultsReceivedLaunchRequests._validate_request | episode function | unplaced (library candidate): launch-role function (received_launch_requests.py) not used by the results role; carried by the launch episodes |
+| received_launch_requests.py | method | ResultsReceivedLaunchRequests._launch | episode function | unplaced (library candidate): launch-role function (received_launch_requests.py) not used by the results role; carried by the launch episodes |
+| received_launch_requests.py | method | ResultsReceivedLaunchRequests._constraints | episode function | unplaced (library candidate): launch-role function (received_launch_requests.py) not used by the results role; carried by the launch episodes |
+| received_parent_records.py | class | ResultsReceivedParentRecords | machinery | container of the parent-role received-report hooks (the parent selects fields; the system admits the result) |
+| received_parent_records.py | method | ResultsReceivedParentRecords._has_appservice | machinery | parent-role hook for received report sources / facts (the child declares every field, the parent selects, README 3b D1-D2) |
+| received_parent_records.py | method | ResultsReceivedParentRecords._has_uniprot | machinery | parent-role hook for received report sources / facts (the child declares every field, the parent selects, README 3b D1-D2) |
+| received_parent_records.py | method | ResultsReceivedParentRecords._appservice_sources | episode function | unplaced: AppService fact sources (messages/final_to_parent.py does not declare them; BLOCKED, modules in no place for this axis) |
+| received_parent_records.py | method | ResultsReceivedParentRecords._forwards_bvbrc_reports | machinery | parent-role hook for received report sources / facts (the child declares every field, the parent selects, README 3b D1-D2) |
+| received_parent_records.py | method | ResultsReceivedParentRecords.received_report_sources | machinery | parent-role hook for received report sources / facts (the child declares every field, the parent selects, README 3b D1-D2) |
+| received_parent_records.py | method | ResultsReceivedParentRecords.received_report_facts | machinery | parent-role hook for received report sources / facts (the child declares every field, the parent selects, README 3b D1-D2) |
+| received_parent_records.py | method | ResultsReceivedParentRecords.received_report_closure_facts | machinery | parent-role hook for received report sources / facts (the child declares every field, the parent selects, README 3b D1-D2) |
+| received_reference_access.py | class | ResultsReceivedParentRecordsReferenceAccess | machinery | received-reference resolution and report admission: system custody and form admission (README 3b R1, R3) |
+| received_reference_access.py | method | ResultsReceivedParentRecordsReferenceAccess._masking_reference_access | machinery | received-reference resolution and report admission: system custody and form admission (README 3b R1, R3) |
+| received_reference_access.py | method | ResultsReceivedParentRecordsReferenceAccess._utility_reference_access | machinery | received-reference resolution and report admission: system custody and form admission (README 3b R1, R3) |
+| received_reference_access.py | method | ResultsReceivedParentRecordsReferenceAccess.resolve_received_reference | machinery | received-reference resolution and report admission: system custody and form admission (README 3b R1, R3) |
+| received_report_admission.py | class | ResultsReceivedParentRecordsAdmission | machinery | received-reference resolution and report admission: system custody and form admission (README 3b R1, R3) |
+| received_report_admission.py | method | ResultsReceivedParentRecordsAdmission.validate_received_report | machinery | received-reference resolution and report admission: system custody and form admission (README 3b R1, R3) |
+| received_report_admission.py | method | ResultsReceivedParentRecordsAdmission.received_form_references | machinery | received-reference resolution and report admission: system custody and form admission (README 3b R1, R3) |
+| report_delivery.py | class | ResultsReportDelivery | machinery | report delivery (finish / report_form machinery) |
+| report_delivery.py | method | ResultsReportDelivery.finish | machinery | report delivery (finish / report_form machinery) |
+| report_delivery.py | function | _bind_preserved_runtime_providers | machinery | report delivery (finish / report_form machinery) |
+| report_fields.py | class | ResultsToParentFields | episode function | messages/final_to_parent.py::RETURN_FORM and SOURCES (old fact_sources) |
+| report_fields.py | method | ResultsToParentFields.fact_sources | episode function | messages/final_to_parent.py::RETURN_FORM and SOURCES (old fact_sources) |
+| report_reference_access.py | class | ResultsToParentReferenceAccess | episode function | container: resolve |
+| report_reference_access.py | method | ResultsToParentReferenceAccess.resolve | episode function | messages/final_to_parent.py::_resolver (reference authority of validate_report over this episode's held results and handoff) |
+| resource_information.py | class | ResultsResourceInformation | episode function | container: methods below |
+| resource_information.py | method | ResultsResourceInformation._resource_information | episode function | unplaced: resource information / initial context (configured resources, received BV-BRC and BLAST job values); BLOCKED-ON-JOB-SERVICE: job_access capabilities, estimate_table |
+| resource_information.py | method | ResultsResourceInformation.initial_decision_context | episode function | unplaced: resource information / initial context (configured resources, received BV-BRC and BLAST job values); BLOCKED-ON-JOB-SERVICE: job_access capabilities, estimate_table |
+| resource_information.py | method | ResultsResourceInformation.capabilities | episode function | unplaced: resource information / initial context (configured resources, received BV-BRC and BLAST job values); BLOCKED-ON-JOB-SERVICE: job_access capabilities, estimate_table |
+| resource_information.py | method | ResultsResourceInformation.resource_tool_contracts | machinery | registry of bound operation contracts by route; the catalogue is TOOLS / task.CATALOG |
+| resource_operations.py | function | launch_operation_catalog | episode function | unplaced (library candidate): launch-role function (resource_operations.py) not used by the results role; carried by the launch episodes |
+| result_operations.py | function | native_result_operation_catalog | episode function | task.py::CATALOG |
+| result_publication.py | class | ResultsResultPublication | episode function | container: methods below |
+| result_publication.py | method | ResultsResultPublication._publish_result | episode function | task.py::_publish_result |
+| result_publication.py | method | ResultsResultPublication._validate_result_body | episode function | task.py::_validate_result_body (runtime_episodes and receipt-file re-validation not carried) |
+| result_publication.py | method | ResultsResultPublication._read_result | episode function | messages/internal_summary.py::_initial_result (source identity re-validation not carried) |
+| result_state.py | class | ResultsResultState | machinery | result directory manifest and start-up validation (the validation is in read_from_parent) |
+| result_state.py | method | ResultsResultState.initialize | machinery | result directory manifest and start-up validation (the validation is in read_from_parent) |
+| result_state.py | method | ResultsResultState._result_directory | machinery | result directory manifest and start-up validation (the validation is in read_from_parent) |
+| retained_native_receipts.py | class | ResultsRetainedNativeReceipts | episode function | unplaced (library candidate): launch-role function (retained_native_receipts.py) not used by the results role; carried by the launch episodes |
+| retained_native_receipts.py | method | ResultsRetainedNativeReceipts._delegate | episode function | unplaced (library candidate): launch-role function (retained_native_receipts.py) not used by the results role; carried by the launch episodes |
+| retained_native_receipts.py | method | ResultsRetainedNativeReceipts._practical_context | machinery | identity delegate of the old practical context |
+| saved_commission.py | class | ResultsSavedCommission | machinery | restore of a recorded commission (resume is the runner) |
+| saved_commission.py | method | ResultsSavedCommission._recorded_results_assignment | machinery | restore of a recorded commission (resume is the runner) |
+| scientific_inputs.py | class | ResultsScientificInputs | machinery | checks of a commission by its child (a wrong commission fails, rule 1) |
+| scientific_inputs.py | method | ResultsScientificInputs._masking_inputs | machinery | checks of a commission by its child (a wrong commission fails, rule 1) |
+| scientific_inputs.py | method | ResultsScientificInputs._utility_inputs | machinery | checks of a commission by its child (a wrong commission fails, rule 1) |
+| scientific_inputs.py | method | ResultsScientificInputs._versions | machinery | checks of a commission by its child (a wrong commission fails, rule 1) |
+| selector_contracts.py | class | ResultsSelectorContracts | episode function | container: methods below |
+| selector_contracts.py | method | ResultsSelectorContracts._masking_selector | episode function | messages/read_from_parent.py::family (selector versions) |
+| selector_contracts.py | method | ResultsSelectorContracts._utility_selector | episode function | messages/read_from_parent.py::family (selector versions) |
+| selector_contracts.py | method | ResultsSelectorContracts._selector | episode function | messages/read_from_parent.py::validated_selector |
+| selector_contracts.py | method | ResultsSelectorContracts._windows | episode function | messages/read_from_parent.py::windows |
+| target_custody.py | class | ResultsTargetCustody | episode function | container: methods below |
+| target_custody.py | method | ResultsTargetCustody._retained_masking_target | episode function | unplaced: retained masking / utility target read from held records (families unplaced); BLOCKED-ON-JOB-SERVICE job record kind |
+| target_custody.py | method | ResultsTargetCustody._retained_utility_target | episode function | unplaced: retained masking / utility target read from held records (families unplaced); BLOCKED-ON-JOB-SERVICE job record kind |
+| target_custody.py | method | ResultsTargetCustody._target | episode function | messages/read_from_parent.py::read_from_parent (the target is a new assignment field; BLOCKED-ON-JOB-SERVICE job record kind) |
+| target_custody.py | method | ResultsTargetCustody._context_target | machinery | launch-role target checks; the results branch (execution_result_target_conflict) is in messages/read_from_parent.py::read_from_parent |
+| task.py | class | ResultsTask | machinery | old task loop / checkpoint / restore / wait suspension |
+| task.py | method | ResultsTask.next | machinery | old task loop / checkpoint / restore / wait suspension |
+| task.py | function | _bind_preserved_runtime_providers | machinery | old task loop / checkpoint / restore / wait suspension |
+| task_action.py | class | ResultsTaskAction | machinery | old execute branches (tool / wait / redeliver_report) and provider patching |
+| task_action.py | method | ResultsTaskAction.apply_response | episode function | task.py::action |
+| task_action.py | method | ResultsTaskAction.execute | machinery | old execute branches (tool / wait / redeliver_report) and provider patching |
+| task_action.py | function | _bind_preserved_runtime_providers | machinery | old execute branches (tool / wait / redeliver_report) and provider patching |
+| task_decision.py | class | ResultsTaskDecision | machinery | old model call / saved decision / context assembly (content moved to decide and internal_summary) |
+| task_decision.py | method | ResultsTaskDecision.call | machinery | old model call / saved decision / context assembly (content moved to decide and internal_summary) |
+| task_decision.py | method | ResultsTaskDecision.instructions | episode function | task.py::_instructions |
+| task_decision.py | method | ResultsTaskDecision.conversation_key | machinery | old model call / saved decision / context assembly (content moved to decide and internal_summary) |
+| task_decision.py | function | _bind_preserved_runtime_providers | machinery | old model call / saved decision / context assembly (content moved to decide and internal_summary) |
+| task_state.py | class | ResultsTaskState | machinery | old task loop / checkpoint / restore / wait suspension |
+| task_state.py | method | ResultsTaskState.__init__ | machinery | old task loop / checkpoint / restore / wait suspension |
+| task_state.py | method | ResultsTaskState.bind_execution_context | machinery | old task loop / checkpoint / restore / wait suspension |
+| task_state.py | method | ResultsTaskState.record_execution_failure | machinery | old task loop / checkpoint / restore / wait suspension |
+| task_state.py | method | ResultsTaskState.restore_checkpoint | machinery | old task loop / checkpoint / restore / wait suspension |
+| task_state.py | method | ResultsTaskState.restore | machinery | old task loop / checkpoint / restore / wait suspension |
+| task_state.py | method | ResultsTaskState.record_effect | machinery | old task loop / checkpoint / restore / wait suspension |
+| task_state.py | method | ResultsTaskState.checkpoint | machinery | old task loop / checkpoint / restore / wait suspension |
+| task_state.py | function | _bind_preserved_runtime_providers | machinery | old task loop / checkpoint / restore / wait suspension |
+| terminal_validation.py | function | operation_catalog | episode function | unplaced (library candidate): launch-role function (terminal_validation.py) not used by the results role; carried by the launch episodes |
+| terminal_validation.py | class | TerminalExecutionBehavior | episode function | unplaced (library candidate): launch-role function (terminal_validation.py) not used by the results role; carried by the launch episodes |
+| terminal_validation.py | method | TerminalExecutionBehavior.__init__ | machinery | state directory / initialization of the launch behavior over the old Store |
+| terminal_validation.py | method | TerminalExecutionBehavior._operations | episode function | unplaced (library candidate): launch-role function (terminal_validation.py) not used by the results role; carried by the launch episodes |
+| terminal_validation.py | method | TerminalExecutionBehavior._assignment | episode function | unplaced (library candidate): launch-role function (terminal_validation.py) not used by the results role; carried by the launch episodes |
+| terminal_validation.py | method | TerminalExecutionBehavior._state_directory | machinery | state directory / initialization of the launch behavior over the old Store |
+| terminal_validation.py | method | TerminalExecutionBehavior.initialize | machinery | state directory / initialization of the launch behavior over the old Store |
+| terminal_validation.py | method | TerminalExecutionBehavior.state | machinery | state directory / initialization of the launch behavior over the old Store |
+| terminal_validation.py | method | TerminalExecutionBehavior.resolve | episode function | unplaced (library candidate): launch-role function (terminal_validation.py) not used by the results role; carried by the launch episodes |
+| to_parent.py | class | ResultsToParent | episode function | container: methods below |
+| to_parent.py | method | ResultsToParent.facts | episode function | messages/final_to_parent.py::_facts (with messages/internal_summary.py progress) |
+| to_parent.py | method | ResultsToParent._live_facts | episode function | messages/final_to_parent.py::_facts (with messages/internal_summary.py progress) |
+| to_parent.py | method | ResultsToParent.validate_report | episode function | messages/final_to_parent.py::validate_report |
+| waiting.py | class | ResultsWaiting | machinery | old task loop / checkpoint / restore / wait suspension |
+| waiting.py | method | ResultsWaiting.suspension_changed | machinery | old task loop / checkpoint / restore / wait suspension |
+| work_operations.py | class | ResultsWorkOperations | episode function | container: methods below |
+| work_operations.py | method | ResultsWorkOperations.catalog | episode function | task.py::_catalog |
+| work_operations.py | method | ResultsWorkOperations.execute | episode function | task.py::TOOLS (execution_results_status/collect/read; family dispatch is read_from_parent.family) |
+| yield_estimator.py | class | ExecutionEpisodeYield | episode function | container: methods below |
+| yield_estimator.py | method | ExecutionEpisodeYield._task_yield_profile | episode function | yield_estimator.py::_profile |
+| yield_estimator.py | method | ExecutionEpisodeYield.yield_controller | episode function | yield_estimator.py::yield_controller |
+| yield_estimator.py | method | ExecutionEpisodeYield._results_yield_controller | episode function | yield_estimator.py::yield_controller |
+| yield_estimator.py | method | ExecutionEpisodeYield.practical_estimator | machinery | PracticalYieldEstimator over verify_completion (not a controller input, README 7b) |

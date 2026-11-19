@@ -144,8 +144,8 @@ def population_sources(tool_name, arguments):
 class LiteraturePopulations:
     """The repositories and population tools of one A105 literature episode over the shared store."""
 
-    def __init__(self, store, run_id, populations):
-        self.store, self.run_id = store, run_id
+    def __init__(self, store, populations):
+        self.store = store
         self.enabled = validate_populations(populations)
         self._repositories = {}
 
@@ -155,36 +155,36 @@ class LiteraturePopulations:
             return self._repositories[key]
         if key == 'grading':
             from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_assay_grading_storage import LiteratureAssayGradingRepository
-            repository = LiteratureAssayGradingRepository(self.store, self.run_id, read_cells=self.source_cells)
+            repository = LiteratureAssayGradingRepository(self.store, read_cells=self.source_cells)
         elif key == 'aggregation':
             from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_aggregation_storage import LiteratureA105AggregationRepository
             grading = self.repository('grading')
             repository = LiteratureA105AggregationRepository(
-                self.store, self.run_id,
+                self.store,
                 read_cells=lambda context, sheet_ref, components: grading.fact_cells(context, [sheet_ref],
                                                                                     components=components))
         elif key == 'ratio_source':
             self._require(key)
             from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_ratio_source_storage import LiteratureRatioSourceRepository
-            repository = LiteratureRatioSourceRepository(self.store, self.run_id, evidence_origin=EVIDENCE_ORIGIN)
+            repository = LiteratureRatioSourceRepository(self.store, evidence_origin=EVIDENCE_ORIGIN)
         elif key == 'controlled_response':
             self._require(key)
             from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_controlled_response_storage import (LiteratureControlledResponseRepository,
                                                                            implementation_descriptor)
             repository = LiteratureControlledResponseRepository(
-                self.store, self.run_id, evidence_origin=EVIDENCE_ORIGIN,
+                self.store, evidence_origin=EVIDENCE_ORIGIN,
                 expected_descriptor=implementation_descriptor(evidence_origin=EVIDENCE_ORIGIN))
         elif key == 'gel':
             self._require(key)
             from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_gel_storage import LiteratureGelRepository, implementation_descriptor
             repository = LiteratureGelRepository(
-                self.store, self.run_id, evidence_origin=EVIDENCE_ORIGIN,
+                self.store, evidence_origin=EVIDENCE_ORIGIN,
                 expected_descriptor=implementation_descriptor(evidence_origin=EVIDENCE_ORIGIN))
         else:
             if key in OPTIONAL:
                 self._require(key)
             module, name = _REPOSITORIES[key]
-            repository = getattr(import_module(_LIBRARY + module), name)(self.store, self.run_id)
+            repository = getattr(import_module(_LIBRARY + module), name)(self.store)
         self._repositories[key] = repository
         return repository
 

@@ -167,8 +167,7 @@ def reference_operands(store, alignment, body, *, molecule):
 def reference_source_operands(store, alignment, source):
     """Bind the original producer's operands, independently of a new observation.
 
-    New pairwise sources retain the ordered operands. Earlier Biopython
-    publications can be proved by their saved original tool operation. Merely
+    New pairwise sources retain the ordered operands. A source without them is refused. Merely
     supplying an observation with a valid hash and equal lengths is not proof.
     """
     query, = alignment['subject_refs']
@@ -178,20 +177,7 @@ def reference_source_operands(store, alignment, source):
         if source['operand_refs'] != expected:
             raise ContractError('site_native_source_operand_conflict')
         return
-    if source['provider'] != 'biopython.alignment':
-        raise ContractError('site_native_source_operands_unavailable')
-    rows = store.db.execute("SELECT name,arguments FROM tool_operations WHERE "
-        "name IN ('sequence.align','reads.align') "
-        "AND json_extract(result,'$.status') IN ('completed','partial') "
-        "AND EXISTS(SELECT 1 FROM json_each(result,'$.record_refs') WHERE value=?)",
-        (alignment['id'],))
-    for row in rows:
-        arguments = json.loads(row['arguments'])
-        queries = ([arguments['query_ref']] if row['name'] == 'sequence.align'
-                   else arguments['subject_refs'])
-        if query in queries and reference == arguments['reference_ref']:
-            return
-    raise ContractError('site_native_source_operand_conflict')
+    raise ContractError('site_native_source_operands_unavailable')
 
 
 def biopython_molecule(store, source, body):

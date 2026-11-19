@@ -71,3 +71,22 @@ def test_the_assignment_admits_a_table_selection_and_a_byte_window():
                       'received_record_refs': ['src_1']}
         admitted = from_parent.ASSIGNMENT_FORM.admit(assignment, 'assignment')
         assert from_parent.read_from_parent(admitted, 'm')['selection'] == selection
+
+
+
+
+def test_the_controlled_report_is_admitted_and_the_returned_finding_is_read_by_code_from_it():
+    """The report the model writes is admitted by the episode's own form; the finding is what code reads from it,
+    admitted by the return form; every text field of the finding is a fixed vocabulary (no model text returns)."""
+    import importlib as modules
+    final = modules.import_module(MODULE + '.messages.final_to_parent')
+    report = final.REPORT_FORM.admit({'target_correspondence': 'unresolved', 'evidence_type': 'phylogenetic_cooccurrence', 'readings': [{'source_ref': 'src_1', 'kind': 'sheet_rows', 'offset': 2, 'limit': 3}]}, 'report')
+    finding = final.finding_of(report)
+    assert finding['reading_count'] == 1 and (finding['covered_offset'], finding['covered_limit']) == (2, 3)
+    result = final.final_to_parent({'finding': finding}, {'ended_by': 'yield_stop', 'units_consumed': 3,
+                                                          'credit': 0.5}, ())
+    assert final.RETURN_FORM.admit(result, 'result') == result and result['credit'] == 0.5
+    fields = final.RETURN_FORM.fields['finding'].form.fields
+    assert all(hasattr(spec, 'options') for spec in fields.values() if spec.type == 'text')
+    empty = final.finding_of(None)
+    assert final.RETURN_FORM.fields['finding'].form.admit(empty, 'finding') == empty

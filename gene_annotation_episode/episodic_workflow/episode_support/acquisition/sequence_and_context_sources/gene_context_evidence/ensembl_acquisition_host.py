@@ -10,11 +10,14 @@ import hashlib
 import json
 import re
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.sequence_and_context_sources.gene_context_evidence import ensembl_acquisition as ensembl
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.gene_context_evidence.acquisition import SourceSnapshot
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.domain import ContractError, canonical, identity, validate_schema
 
 
+PUBLISHED = TableDeclaration(name="ensembl_published_outcomes",
+    columns=("source_ref", "operation_key", "operation_ref", "arguments", "outcome"), key=("source_ref",))
 SELECTION_VERSION = "ensembl_discovery_selection_v1"
 FAILURE_WITNESS_VERSION = "ensembl_acquisition_failure_witness_v1"
 
@@ -94,29 +97,33 @@ def _receipt_refs(value):
         *([value["data_ref"]] if value["acquired"] else [])])
 
 
+def record_ensembl_operation(registry, operation_key, arguments, outcome):
+    """Keep the outcome of one published Ensembl request, keyed by the Source it published, for the lineage of
+    later requests."""
+    return registry.store.table(PUBLISHED).put({"source_ref": outcome["record_refs"][0],
+        "operation_key": operation_key, "operation_ref": outcome["operation_ref"],
+        "arguments": arguments, "outcome": outcome})
+
+
 def _operation(registry, source_ref, *, expected=None):
-    query = ("SELECT * FROM tool_operations WHERE name=? AND EXISTS("
-        "SELECT 1 FROM json_each(result,'$.record_refs') published WHERE published.value=?)")
-    params = [ensembl.TOOL, source_ref]
+    rows = registry.store.table(PUBLISHED).select({"source_ref": source_ref})
     if expected is not None:
-        query += " AND id=? AND operation_key=?"
-        params += [expected["operation_ref"], expected["operation_key"]]
-    rows = registry.store.db.execute(query, params).fetchall()
+        rows = [row for row in rows if row["operation_ref"] == expected["operation_ref"]
+            and row["operation_key"] == expected["operation_key"]]
     _require(len(rows) == 1, "ensembl_original_operation_conflict")
     row = rows[0]
-    arguments, outcome = json.loads(row["arguments"]), json.loads(row["result"])
-    _require(type(outcome) is dict and row["arguments"] == canonical(arguments)
-        and row["result"] == canonical(outcome), "ensembl_original_operation_conflict")
+    arguments, outcome = row["arguments"], row["outcome"]
+    _require(type(outcome) is dict, "ensembl_original_operation_conflict")
     arguments = ensembl.validate_ensembl_arguments(arguments)
-    _require(row["id"] == identity("operation", {"key": row["operation_key"], "name": ensembl.TOOL,
-        "arguments": arguments}) and outcome.get("operation_ref") == row["id"]
+    _require(row["operation_ref"] == identity("operation", {"key": row["operation_key"], "name": ensembl.TOOL,
+        "arguments": arguments}) and outcome.get("operation_ref") == row["operation_ref"]
         and outcome.get("status") in {"completed", "partial", "failed"}
         and outcome.get("record_refs") == (_receipt_refs(outcome["result"])
             if _is_receipt(outcome.get("result")) else [source_ref]), "ensembl_original_operation_conflict")
     if _is_receipt(outcome.get("result")):
         _require(outcome["result"]["source_ref"] == source_ref and outcome["status"] == (
             "completed" if outcome["result"]["acquired"] else "partial"), "ensembl_original_operation_conflict")
-    operation = {"operation_key": row["operation_key"], "operation_ref": row["id"]}
+    operation = {"operation_key": row["operation_key"], "operation_ref": row["operation_ref"]}
     return operation, arguments, outcome
 
 

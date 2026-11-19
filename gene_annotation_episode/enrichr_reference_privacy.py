@@ -30,7 +30,7 @@ def matching_enrichr_publications(store, reference, *, current_run_id=None):
     """
     if not isinstance(reference, str):
         return []
-    tables = {row[0] for row in store.db.execute("SELECT name FROM sqlite_master WHERE type='table' "
+    tables = {row[0] for row in store._db.execute("SELECT name FROM sqlite_master WHERE type='table' "
         "AND name IN ('records','tool_operations','runtime_actions')")}
     if tables != {"records", "tool_operations", "runtime_actions"}:
         return []  # No selected publication chain exists in a fresh non-runtime Store.
@@ -39,7 +39,7 @@ def matching_enrichr_publications(store, reference, *, current_run_id=None):
     else:
         _require(type(current_run_id) is str and bool(current_run_id), "original_context_conflict")
         condition, parameters = "(action.run_id=? OR action.result IS NOT NULL)", [current_run_id]
-    return list(store.db.execute("SELECT DISTINCT source.id,source.data,action.run_id AS publication_run_id,"
+    return list(store._db.execute("SELECT DISTINCT source.id,source.data,action.run_id AS publication_run_id,"
         "action.episode_id,action.decision_index,action.action AS selected_action,action.result AS selected_result,"
         "operation.operation_key,operation.id AS operation_id,operation.arguments AS operation_arguments,"
         "operation.scope AS operation_scope,operation.result AS operation_result "

@@ -236,11 +236,7 @@ class LiteraturePerturbationSummaryProjection(LiteraturePerturbationRepository):
     def __init__(self, store, run_id):
         if not isinstance(run_id,str) or not run_id:
             raise ValueError("explicit_literature_run_required")
-        # No DDL during discovery/reconstruction on an old read-only database.
         self.store, self.run_id = store, run_id
-
-    def _installed(self):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (self.received_table,)).fetchone() is not None
 
     def read(self, sheet_ref):
         saved = LiteratureRateRepository.read(self, sheet_ref)
@@ -249,19 +245,15 @@ class LiteraturePerturbationSummaryProjection(LiteraturePerturbationRepository):
         if "artifact_"+hashlib.sha256(payload).hexdigest() != source["artifact_ref"]:
             raise ContractError("literature_perturbation_summary_artifact_mismatch")
         request = json.loads(self.store.get_artifact(source["request_ref"]))
-        operation = self.store.db.execute(f"SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id,request["episode_id"],request["operation_key"])).fetchone()
-        outcome = json.loads(operation["outcome"])
         if (saved.get("version") != RECORD_VERSION or source.get("version") != RECORD_VERSION
                 or saved.get("data_source_ref") != request["arguments"].get("data_source_ref")
                 or saved.get("extraction",{}).get("version") != "a106_perturbation_inputs_v2"
                 or saved.get("sheet",{}).get("version") != "a106_source_summary_restoration_v2"
-                or saved["sheet"]["cells"] != outcome.get("result",{}).get("cells")
                 or self.store.get(saved["input_source_ref"])["artifact_ref"] != saved["input_artifact_ref"]):
             raise ContractError("literature_perturbation_summary_saved_mismatch")
         validate_covariance_meanings(saved, self.store)
         from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.perturbation_evidence.literature_perturbation_assessments import validate_saved_assessment
-        validate_saved_assessment(self, saved, request)
+        validate_saved_assessment(self, saved, request, sheet_ref)
         return saved
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
@@ -297,18 +289,6 @@ class LiteraturePerturbationSummaryProjection(LiteraturePerturbationRepository):
                 rows.append(row)
         validate_schema(rows,perturbation_summary_cells_schema())
         return rows
-
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError("literature_run_mismatch")
-        return super().received_cells(context) if self._installed() else []
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self.store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.received_table}(
-                run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
-                cells TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))""")
-            super().receive_cells(context,cells,operation_key)
 
 
 __all__=["RECORD_VERSION","NAMESPACE","COMPONENTS","LiteraturePerturbationSummaryProjection","perturbation_summary_cells_schema"]

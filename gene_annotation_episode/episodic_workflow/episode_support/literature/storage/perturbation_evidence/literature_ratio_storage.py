@@ -41,7 +41,6 @@ class LiteratureRatioRepository(LiteratureRateRepository):
     provider=PROVIDER
     components=COMPONENTS
     record_version='literature_relative_signal_record_v1'
-    operations_table='literature_ratio_operations'
     received_table='literature_ratio_received'
     binding_fields=tuple(BINDINGS)
 
@@ -81,17 +80,6 @@ class LiteratureRatioRepository(LiteratureRateRepository):
             raise ContractError('operation_key_required')
         args=plain(arguments)
         validate_schema(args,ratio_population_schema())
-        signature=canonical({'arguments':args,'scope':plain(context.scope)})
-        old=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} '
-            'WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id,context.episode_id,operation_key)).fetchone()
-        if old:
-            if old['signature']!=signature:
-                raise ContractError('operation_key_reused_for_different_work')
-            outcome=json.loads(old['outcome'])
-            for ref in self.read(outcome['result']['sheet_ref'])['input_source_refs']:
-                self._source(context,ref)
-            return outcome
         def read_source(reference,representation):
             row=self._source(context,reference)
             artifact=row['artifact_ref'] if representation=='original' else row.get('text_ref')
@@ -184,9 +172,9 @@ class LiteratureRatioRepository(LiteratureRateRepository):
             created=[]
             def publish(kind,record):
                 candidate=identity(kind,{'origin':'tool','record':record})
-                old=self.store.db.execute('SELECT 1 FROM records WHERE id=?',(candidate,)).fetchone()
+                new = not self.store.holds(candidate)
                 row=self.store.put(kind,record,origin='tool',scope=plain(context.scope))
-                if old is None:created.append(row['id'])
+                if new:created.append(row['id'])
                 return row['id']
             bindings={}
             for name,label in (('subject_ref',args['subject']),('variant_ref',args['variant']),
@@ -206,8 +194,6 @@ class LiteratureRatioRepository(LiteratureRateRepository):
                 'changed_record_refs':created,'result':{'sheet_ref':sheet_ref,'cells':sheet['cells'],
                     'comparison':payload['comparison'],'raw_representation_roster_complete':sheet['candidate_set_complete'],
                     'interpretation_kind':payload['interpretation_kind']},'feedback':None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id,context.episode_id,operation_key,signature,canonical(outcome)))
         return outcome
 
     def project_cells(self,sheet_refs,*,permitted_record_refs,components=None):

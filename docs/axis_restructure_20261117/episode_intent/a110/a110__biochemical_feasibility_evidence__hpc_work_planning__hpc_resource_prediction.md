@@ -84,3 +84,97 @@ Old `yield_estimator.py`: `YieldController(epoch, initial_credit, cutoff, YieldP
 | tests/test_prediction_task.py | 6 | shared prediction task mixin | import root.tests.hpc_prediction_task_behavior x1 |
 
 Per-name rows with counts: `runs/carry_over/calls/a110_05.tsv`.
+
+## Carried over
+
+Source of the old rows: `runs/carry_over/functions/a110__biochemical_feasibility_evidence__hpc_work_planning__hpc_resource_prediction.tsv`. New files are under `gene_annotation_episode/episodic_workflow/root/a110/biochemical_feasibility_evidence/hpc_work_planning/hpc_resource_prediction/`. "library candidate" marks an episode function that is not in the library and stays in the episode file that uses it.
+
+| old file | name | kind | new place / machinery reason |
+|---|---|---|---|
+| binding_record.py | PredictionBindingRecord | machinery | binding's own as_record (binding_record.py), deleted (README 3d/3e) |
+| binding_record.py | PredictionBindingRecord.as_record | machinery | binding's own as_record(): hpc_episode_v1 record of resources, commissions, shared memory; settings are journaled by the system |
+| closed_models.py | ClosedModels | machinery | closed-run authentication of a model ref by EpisodeReturnRecords / runtime_forms and a read-only open of the ledger file (receipts bookkeeping, runtime_* re-validation) |
+| closed_models.py | ClosedModels.frozen_reference | episode function | messages/final_to_parent.py resolve_reference (the model identity must be a model row of the held ledger); the EpisodeReturnRecords.authenticate / runtime_forms / sqlite read-only parts are machinery |
+| configuration.py | PredictionConfiguration | machinery | configuration class; its values are settings (ctx.settings) or constants of the file that uses them |
+| configuration.py | PredictionConfiguration.__init__ | machinery | operands: resources -> ctx.settings['resources'], shared_execution_memory -> ctx.settings['shared_execution_memory'] and the estimate_table service, require_commission_yield/yield_bindings -> settings cost and parameters (yield_estimator.py), commissions -> the commission row of the ledger; run_id/store/directory/services are the system's |
+| credit.py | HPCEpisodeCredit | episode function | credit.py (module functions) |
+| credit.py | HPCEpisodeCredit.credit_kind | machinery | credit_kind is deleted (README 3d) |
+| credit.py | HPCEpisodeCredit._quality | episode function | credit.py quality |
+| credit.py | HPCEpisodeCredit.credit_view | episode function | credit.py credit (formula), quality_improvement, prospective_validation_credit; components computed in messages/internal_summary.py |
+| decision_inputs.py | PredictionDecisionInputs | episode function | task.py decide |
+| decision_inputs.py | PredictionDecisionInputs.decision_inputs | episode function | task.py decide (launch instruction library and selection, tool knowledge, requested_action_history as outcome_page, controller, time accounting); resource context from settings; completed_action_reports, pending_work, execution_expectations, resource estimates, native expectations and contract-information profile not carried (see unplaced) |
+| decision_state.py | PredictionDecisionState | episode function | messages/internal_summary.py internal_summary |
+| decision_state.py | PredictionDecisionState.decision_state | episode function | messages/internal_summary.py internal_summary and task.py decide; the runtime_actions visual_evidence read, delivery status, report_update/report basis and extra report sources are old-runner machinery |
+| episode.py | HPCEpisode | episode function | episode.py HpcResourcePrediction |
+| episode.py | HPCEpisode.child_roles | machinery | no children: CHILD_SLOTS = {} |
+| episode.py | HPCEpisode.allowed_children | machinery | no children: CHILD_SLOTS = {} |
+| episode.py | HPCEpisode.permitted_common_actions | episode function | task.py action (only tool actions exist) |
+| from_parent.py | PredictionAssignment | episode function | messages/read_from_parent.py |
+| from_parent.py | PredictionAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM |
+| from_parent.py | PredictionAssignment.commission_identity | episode function | messages/read_from_parent.py read_from_parent (identity of the assignment), task.py check_owner |
+| from_parent.py | PredictionAssignment._commission | machinery | reads the commission by commission_source_ref (hpc_commission_sources.read, no A110 copy) or the configured commissions; the commission is the 'commission' row of the held ledger (task.py read_ledger) |
+| from_parent.py | PredictionAssignment.prepare_assignment | machinery | admission of the commission by the child (owner must be the hpc parent, identity equal to the parent's, yield_bindings present): a check of a commission, not carried (rule 1) |
+| goal.py | PredictionGoal | episode function | goal.py GOAL |
+| goal.py | PredictionGoal.instructions | episode function | goal.py GOAL (text unchanged); composed into the instructions in task.py instructions |
+| initial_information.py | initial_information | episode function | not placed: resource_information (library.execution_initial_information.presentation) is in no library module; listed in unplaced_old_functions |
+| internal_summary.py | PredictionSummary | episode function | messages/internal_summary.py |
+| internal_summary.py | PredictionSummary.decision_context | episode function | messages/internal_summary.py internal_summary (decision_context); hpc_report_form not carried (report-form machinery) |
+| portfolio_comparison.py | PortfolioComparison | episode function | task.py candidates, candidate_features, comparisons (library candidate) |
+| portfolio_comparison.py | PortfolioComparison._candidates | episode function | task.py candidates (library candidate) |
+| portfolio_comparison.py | PortfolioComparison._features | episode function | task.py candidate_features (library candidate) |
+| portfolio_comparison.py | PortfolioComparison._comparisons | episode function | task.py comparisons (library candidate) |
+| prediction_history.py | PredictionHistory | episode function | task.py history, shared_history (library candidate) |
+| prediction_history.py | PredictionHistory._history | episode function | task.py history (library candidate) |
+| prediction_history.py | PredictionHistory._shared_history | episode function | task.py shared_history (library candidate; the memory reads are the estimate_table service, BLOCKED-ON-JOB-SERVICE; the cut of the observations to 2000 is not carried) |
+| prediction_operations.py | PredictionOperations | episode function | task.py TOOLS and tool functions |
+| prediction_operations.py | PredictionOperations.catalog | episode function | task.py catalog |
+| prediction_operations.py | PredictionOperations.execute | episode function | task.py hpc_read, hpc_history_refresh, hpc_discovery_run, hpc_candidate_propose, hpc_queue_observe, hpc_model_fit, hpc_compare; the old ledger.cached/save_action/once operation ledger, the schema validation (task.py action) and tool_not_available_to_hpc_role (LookupError of the system) are the system's |
+| prediction_state.py | PredictionState | episode function | task.py read_ledger, check_owner, current_model; messages/internal_summary.py |
+| prediction_state.py | PredictionState.state | episode function | task.py read_ledger and check_owner (the ledger opened by directory is the held work table hpc_evidence; the scope comparison is not carried) |
+| prediction_state.py | PredictionState.initialize | episode function | messages/internal_summary.py (reference model = prior_model of the commission, entry model and entry quality computed from the rows named in ledger_refs); the initial model fitted from shared history is not carried (unplaced) |
+| prediction_state.py | PredictionState._current_model | episode function | task.py current_model |
+| queue_observations.py | QueueObservations | episode function | task.py observe_queue, queue_observation (library candidate) |
+| queue_observations.py | QueueObservations._observe_queue | episode function | task.py observe_queue (library candidate; hpc_queue.observe and the memory are services, BLOCKED-ON-JOB-SERVICE) |
+| queue_observations.py | QueueObservations._queue | episode function | task.py queue_observation (library candidate) |
+| received_evidence.py | ReceivedEvidence | episode function | task.py read_evidence, _result_source_received (library candidate) |
+| received_evidence.py | ReceivedEvidence._known | machinery | record_selection / received_record_refs hand-kept known set: replaced by records.holds / ctx.store.holds (README 3c) |
+| received_evidence.py | ReceivedEvidence.resolve_received_reference | episode function | task.py _result_source_received (held source of provider episode.hpc_result, run id, scope validation without a parent scope) |
+| received_evidence.py | ReceivedEvidence.read_evidence | episode function | task.py read_evidence (library candidate) |
+| received_execution_information.py | received_execution_information | episode function | not placed: catalog.configured/received readers of the old execution information catalog are in no library module; listed in unplaced_old_functions |
+| report_delivery.py | PredictionReportDelivery | machinery | report delivery: saved forms in runtime_forms, form_with_facts, release (report_form machinery, README 3b D1/D3) |
+| report_delivery.py | PredictionReportDelivery.finish | machinery | runtime_forms save, form_with_facts, workflow.release, pending_handles; the result is final_to_parent (messages/final_to_parent.py) |
+| task.py | ResourcePredictionTask | episode function | task.py decide, action |
+| task.py | ResourcePredictionTask.next | episode function | task.py decide (journal replay, SourceEnd, restore_checkpoint, inprocess_replay and the transaction wrapping are machinery) |
+| task.py | ResourcePredictionTask.apply_response | episode function | task.py action (validation of the answer and Rejected); the report_update admission, record_effect and report basis are machinery |
+| task.py | ResourcePredictionTask.execute | episode function | task.py tool functions; the runtime_actions rows, journal.measure, receive_outcome, completions.stage, controller_value and ActionFailure are machinery |
+| task_decision.py | PredictionTaskDecision | episode function | task.py decide; the exchange protocol is machinery |
+| task_decision.py | PredictionTaskDecision.call | machinery | model call with runtime_model_calls rows, saved exchange replay and conversation state (README 3a) |
+| task_decision.py | PredictionTaskDecision.instructions | episode function | task.py instructions |
+| task_decision.py | PredictionTaskDecision.complete_decision | machinery | provider.complete wrapper with the prompt renderer (the system calls the provider for a ModelRequest) |
+| task_decision.py | PredictionTaskDecision.conversation_key | machinery | conversation state (README 3a) |
+| task_decision.py | PredictionTaskDecision.interpretation_context | machinery | decision-exchange loop: lookup results into the context (a lookup is a tool) |
+| task_decision.py | PredictionTaskDecision.exchange_schema | machinery | decision-exchange loop schema (request_context / select_action) |
+| task_decision.py | PredictionTaskDecision.exchange_response | machinery | decision-exchange loop envelope validation |
+| task_decision.py | PredictionTaskDecision.validate_contract_exchange_request | machinery | saved-request check of the decision exchange (README 3a) |
+| task_decision.py | PredictionTaskDecision.validate_contract_exchange_history | machinery | saved-request check of the decision exchange (README 3a) |
+| task_decision.py | PredictionTaskDecision.exchange_decision | machinery | decision-exchange loop (exchange_decision), not carried |
+| task_instructions.py | instructions | episode function | task.py instructions (goal text, ToolKnowledge and launch instruction INSTRUCTIONS when the libraries are configured) |
+| task_state.py | PredictionTaskState | machinery | per-episode decision state with checkpoint/restore; the state is the view |
+| task_state.py | PredictionTaskState.__init__ | machinery | state of the old decision source |
+| task_state.py | PredictionTaskState.bind_execution_context | machinery | execution_binding / inprocess_replay binding |
+| task_state.py | PredictionTaskState.record_execution_failure | machinery | record_execution_failure into runtime_actions rows (a failed tool returns its outcome) |
+| task_state.py | PredictionTaskState.restore_checkpoint | machinery | checkpoint/restore |
+| task_state.py | PredictionTaskState.restore | machinery | restore from runtime_actions and the journal |
+| task_state.py | PredictionTaskState.record_effect | machinery | record_effect (the system journals each unit) |
+| task_state.py | PredictionTaskState.checkpoint | machinery | checkpoint |
+| to_parent.py | PredictionReport | episode function | messages/final_to_parent.py |
+| to_parent.py | PredictionReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM |
+| to_parent.py | PredictionReport.facts | episode function | messages/final_to_parent.py facts and final_to_parent (hpc_credit is completion['credit']) |
+| to_parent.py | PredictionReport.resolve | episode function | messages/final_to_parent.py resolve_reference |
+| to_parent.py | PredictionReport.validate_report | episode function | messages/final_to_parent.py validate_report; the validate_form step raises NotImplementedError(validate_form_not_built:A110) in final_to_parent |
+| waiting.py | PredictionSuspension | machinery | wait/suspension machinery |
+| waiting.py | PredictionSuspension.suspension_changed | machinery | suspension of the execution handle (wait/suspension machinery) |
+| yield_estimator.py | HPCEpisodeYield | episode function | yield_estimator.py |
+| yield_estimator.py | HPCEpisodeYield.yield_controller | episode function | yield_estimator.py yield_controller (accumulation controller; cutoff -> settings cost, parameters -> settings parameters) |
+| yield_estimator.py | HPCEpisodeYield.continuation_for_action | machinery | episode-local continuation estimator packet (HPCContinuationEstimator, README 3d/7b); no other stop test |
+| yield_estimator.py | HPCEpisodeYield.practical_estimator | machinery | episode-local estimator HPCContinuationEstimator (README 3d/7b) |

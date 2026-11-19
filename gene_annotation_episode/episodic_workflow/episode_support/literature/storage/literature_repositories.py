@@ -1,7 +1,7 @@
 """The A106 literature sheet repositories of one literature episode, over the run's store.
 
 Each repository is built lazily
-over the shared ``store`` collaborator and the run identity; construction and
+over the custody-scoped ``store`` of the running unit; construction and
 discovery create no state. ``populate`` executes one selected A106 population
 tool against the repository that owns it.
 
@@ -96,14 +96,14 @@ POPULATION_OWNERS = {
     'literature.perturbation.populate': ('source', 'perturbation'),
     'literature.figure.populate': ('source', 'figure'),
 }
-# Repositories whose source and record access rules every literature read must pass.
-ACCESS_GUARDS = ('endpoint_signal', 'summary_precision', 'measurement_comparison', 'concentration_window')
 _CATALOG_ORDER = tuple(POPULATION_OWNERS)
 
 
 @dataclass(frozen=True)
 class LiteratureContext:
-    """The episode identity and commission the A106 sheet repositories read."""
+    """What the A106 sheet repositories read of the Episode whose unit runs: the run and Episode identity (the
+    system's), its role and path, the assigned scope, the commission and the records it holds (custody: what the
+    old Store called received)."""
     run_id: str
     episode_id: str
     role: str
@@ -168,10 +168,7 @@ class LiteratureRepositories:
         if key not in self._built:
             module = import_module(_LIBRARY + '.literature_' + name + '_storage')
             self._built[key] = getattr(module, _SOURCE_REPOSITORIES[name])(self.store, self.run_id, **options)
-        repository = self._built[key]
-        if name == 'rate':
-            repository._ensure_storage()
-        return repository
+        return self._built[key]
 
     def own(self, name):
         """One of A106's own-module repositories, or the intervention grading repository."""
@@ -204,9 +201,6 @@ class LiteratureRepositories:
         if tool_name == 'literature.rate.source.populate':
             return repository.populate_native(context, arguments, operation_key)
         return repository.populate(context, arguments, operation_key)
-
-    def guards(self):
-        return [self.own(name) for name in ACCESS_GUARDS]
 
     def population_routes(self):
         """Each saved sheet namespace a grading reader may read: (namespace, repository)."""
@@ -268,13 +262,11 @@ class LiteratureRepositories:
         """
         from gene_annotation_episode.episodic_workflow.episode_support.acquisition.service_calls.bvbrc_application_facts import FACT_SOURCE, project_application_facts
         from gene_annotation_episode.episodic_workflow.episode_support.records.service_calls.perturbation_evidence.appservice_publication import read_adapter_contents, read_publication
-        if publication_ref not in context.received_record_refs:
-            raise ContractError('literature_sheet_not_received')
         body = read_publication(self.store, publication_ref)
         sheet, components = read_adapter_contents(self.store, body)
         rows = project_application_facts(body, sheet=sheet, components=components)[FACT_SOURCE]
         return [row for row in rows if row['field'] in fields]
 
 
-__all__ = ['ACCESS_GUARDS', 'LiteratureContext', 'LiteratureRepositories', 'OPTIONAL_POPULATIONS', 'POPULATION_OWNERS',
+__all__ = ['LiteratureContext', 'LiteratureRepositories', 'OPTIONAL_POPULATIONS', 'POPULATION_OWNERS',
            'population_catalog', 'validate_populations']

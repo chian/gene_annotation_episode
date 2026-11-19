@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 import hashlib
+import io
 import json
 from pathlib import Path
 import re
@@ -19,7 +20,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.partner_p
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.partner_presence_evidence.hmmer_native_result_views import (NATIVE_HMMER_METRICS, row_schema,
     validate_native_hmmer_result_selector)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.partner_presence_evidence.local_jobs import LocalJobPolicy, check_scratch_budget, run_local_job
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.partner_presence_evidence.materials import artifact_file, artifact_path
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_hmmer_contracts import finite_json_copy, native_hmmer_digest
 from gene_annotation_episode.episodic_workflow.episode_support.grading.partner_presence_evidence.tool_grading_artifacts import retain_tool_grading
 
@@ -40,7 +40,7 @@ def _json_file(path, value):
     temporary.replace(path)
 
 
-def _captured_paths(store, bundle, artifacts):
+def _captured_custody(store, bundle, artifacts):
     """Use retained, digest-checked paths only, never producer original paths."""
     declared = {}
     for kind, rows in (("input", bundle["inputs"]), ("output", bundle["artifacts"])):
@@ -66,7 +66,7 @@ def _captured_paths(store, bundle, artifacts):
                 raise ContractError("native_hmmer_captured_artifact_digest_mismatch")
             if kind == "input" and (expected != native["expected_sha256"] or native["size_bytes"] != native["expected_size_bytes"]):
                 raise ContractError("native_hmmer_input_not_original_selected_bytes")
-            paths.append({**item, "kind": kind, "path": str(artifact_path(store, item["artifact_ref"]))})
+            paths.append({**item, "kind": kind})
         except (ValueError, OSError) as error:
             failures.append(_failure("custody", str(error) if isinstance(error, ValueError) else "native_hmmer_captured_artifact_unreadable"))
     for key in declared.keys() - seen:
@@ -74,7 +74,20 @@ def _captured_paths(store, bundle, artifacts):
     return paths, failures
 
 
+def _captured_paths(scratch, store, bundle, artifacts):
+    items, failures = _captured_custody(store, bundle, artifacts)
+    return [{**item, "path": str(scratch.copy_artifact(item["artifact_ref"], "inputs/" + str(number) + "_" + item["artifact_ref"]))}
+        for number, item in enumerate(items)], failures
+
+
 def prepare_native_hmmer_grading(store, *, bundle, bundle_artifact_ref, artifacts,
+                                 directory, policy, selector):
+    with store.scratch("native_hmmer_grading") as scratch:
+        return _prepare_native_hmmer_grading(scratch, store, bundle=bundle, bundle_artifact_ref=bundle_artifact_ref,
+            artifacts=artifacts, directory=directory, policy=policy, selector=selector)
+
+
+def _prepare_native_hmmer_grading(scratch, store, *, bundle, bundle_artifact_ref, artifacts,
                                  directory, policy, selector):
     """Prepare one retained numerical result, with no full host hydration.
 
@@ -88,8 +101,8 @@ def prepare_native_hmmer_grading(store, *, bundle, bundle_artifact_ref, artifact
     if not isinstance(policy, LocalJobPolicy):
         raise ContractError("native_hmmer_local_job_policy_required")
     selector = validate_native_hmmer_result_selector(selector, program=bundle["program"])
-    artifact_path(store, bundle_artifact_ref)
-    paths, failures = _captured_paths(store, bundle, artifacts)
+    store.require(bundle_artifact_ref, {"artifact"})
+    paths, failures = _captured_paths(scratch, store, bundle, artifacts)
     failures += [_failure(row["stage"], row["code"]) for row in bundle.get("failures", [])]
     if bundle.get("returncode") != 0:
         failures.append(_failure("native", "native_hmmer_native_execution_unsuccessful"))
@@ -106,7 +119,7 @@ def prepare_native_hmmer_grading(store, *, bundle, bundle_artifact_ref, artifact
         prepared = json.loads(saved.read_text())
         for name, reference in prepared.items():
             if name.endswith("artifact_ref") and reference is not None:
-                artifact_path(store, reference)
+                store.require(reference, {"artifact"})
         return prepared
     directory.mkdir(parents=True)
     _json_file(directory / "intent.json", {"request_sha256": fingerprint})
@@ -146,11 +159,11 @@ def prepare_native_hmmer_grading(store, *, bundle, bundle_artifact_ref, artifact
             ("selected_rows_artifact_ref", "selected-rows.ndjson", "application/x-ndjson")):
         path = directory / name
         if path.is_file():
-            prepared[field] = artifact_file(store, path, media_type)
+            prepared[field] = store.artifact_file(path, media_type)
     for name in ("diagnostics.json", "worker.stdout", "worker.stderr", "worker-result.json"):
         path = directory / name
         if path.is_file():
-            retained.append({"role": name, "artifact_ref": artifact_file(store, path)})
+            retained.append({"role": name, "artifact_ref": store.artifact_file(path)})
     prepared.update(failures=failures, numerical_complete=bool(manifest.get("numerical_complete")) and not failures)
     custody = [{k: v for k, v in row.items() if k != "path"} for row in paths]
     stable = {"schema": _SCHEMA_VERSION, "sheet_artifact_ref": prepared["sheet_artifact_ref"],
@@ -192,8 +205,8 @@ def _subject_chunks(store, reference, start=0, end=None, reverse=False):
         for a, b in reversed(segments) if reverse else segments:
             yield from _subject_chunks(store, row["subject_ref"], a, b, reverse)
         return
-    path = artifact_path(store, row["sequence_ref"]) if row.get("sequence_ref") else None
-    if path is None and row["record_type"] != "read_subject":
+    sequence_ref = row.get("sequence_ref")
+    if sequence_ref is None and row["record_type"] != "read_subject":
         raise ContractError("native_hmmer_subject_sequence_unavailable")
     from gene_annotation_episode.episodic_workflow.episode_support.records.documents.partner_presence_evidence import materials_packing
     molecule = store.subject_molecule(reference)
@@ -201,8 +214,8 @@ def _subject_chunks(store, reference, start=0, end=None, reverse=False):
         raise ContractError("native_hmmer_reverse_sequence_model_invalid")
     # A window read never asks Store.get_artifact to hydrate a whole chromosome.
     def read(a, b):
-        if path is not None:
-            with path.open("rb") as handle:
+        if sequence_ref is not None:
+            with store.open_artifact(sequence_ref) as handle:
                 handle.seek(a)
                 return handle.read(b - a)
         return materials_packing.component_window(store, store.get(row["member_ref"]), "sequence", a, b - a)
@@ -298,7 +311,7 @@ def publish_selected_native_hmmer_rows(store, *, source_ref, bundle, prepared, s
     rejected_bindings = {row["record_key"]: row["code"] for row in prepared["failures"]
         if row["stage"] == "binding" and row.get("record_key") is not None}
     seen = set()
-    with artifact_path(store, prepared["selected_rows_artifact_ref"]).open(encoding="utf-8") as stream:
+    with io.TextIOWrapper(store.open_artifact(prepared["selected_rows_artifact_ref"]), encoding="utf-8") as stream:
         for line in stream:
             native = json.loads(line)
             key = native.get("record_key")

@@ -116,3 +116,102 @@ This is the only episode of the four that has children, `child_request_assembler
 | to_child_local_resource_work_execution.py | 36 | Same request for a local child. | import:a103.runtime×1, runtime.ContractInformationError×1, runtime.Episode×2, runtime.EpisodeGoal×2, runtime.EpisodeRequest×1, runtime._plain×3, runtime.Record×1, runtime.validate_saved_fact_form×1, workflow.context(param)×2, workflow.gene_context_evidence_binding(param)×1, workflow.grains(param)×2, workflow.inprocess_completion_order(param)×2, workflow.launch_instructions(param)×1, workflow.legacy_parent_for_path(param)×1, workflow.receipts(param)×2 |
 | to_parent.py | 48 | Facts merged across all adapters; same handoff dedupe and equality check. | none |
 | waiting.py | 9 | Forwards suspension condition to execution backend. | wf.execution_backend×1, wf.execution_handle×2 |
+
+## Carried over
+
+The carried form is in `gene_annotation_episode/episodic_workflow/root/a103/gene_context_evidence/resource_work_submission/` (ten files, class `ResourceWorkSubmission(EpisodeBinding)`). One row per row of `runs/carry_over/functions/a103__gene_context_evidence__resource_work_submission.tsv`.
+
+| old file | name | kind | new place (file and name, or machinery reason) |
+|---|---|---|---|
+| action_contract_feedback.py | ResourceActionContractFeedback | machinery | old-runner machinery: the class wraps the rejected-effect accounting (record_effect, self.feedback); its generic rejection is `action` in task.py (see the method row) |
+| action_contract_feedback.py | ResourceActionContractFeedback.reject_invalid_action | episode function | task.py `action` (raises Rejected(rejection_feedback(error, category='action_contract'))); library: model_exchange/rejection_feedback.py::rejection_feedback. The contract-information repair text, component_native_return_channels_required detail, BV-BRC minhash selector input detail and reads.map parameter feedback are not carried (they served the decision exchange and other tools, none of which this episode offers); `self.record_effect(index, 'rejected')` is machinery |
+| binding_record.py | ResourceBindingRecord | machinery | binding_record.py / the binding's own as_record() is deleted |
+| binding_record.py | ResourceBindingRecord.as_record | machinery | binding's own as_record() is deleted (settings and declared services are recorded by the system) |
+| child_commissioning.py | ResourceChildCommissioning | episode function | task.py CHILD_SLOTS, allowed_children; messages/msg_to_child.py |
+| child_commissioning.py | ResourceChildCommissioning.child_roles | episode function | task.py CHILD_SLOTS = {launch_api, launch_local, launch_hpc: child binding paths} |
+| child_commissioning.py | ResourceChildCommissioning.allowed_children | episode function | task.py `allowed_children(assignment, capabilities, bound_ids)` (the slots offered in the action schema by `decide`/`action`) |
+| child_commissioning.py | ResourceChildCommissioning.child_request_assembler | machinery | binding lookup of the request owner (README 3b C1); the three assemblers are messages/msg_to_child.py `msg_to_child` |
+| configuration.py | ResourceConfiguration | machinery | configuration values are the run's settings (ctx.settings) and the declared service `resource_adapter`; the adapters' required-callable check and duplicate resource_id check are the service's |
+| configuration.py | ResourceConfiguration.__init__ | machinery | settings (`cost`, `parameters`, `tool_knowledge_directory`, `launch_instructions_directory`) and service `resource_adapter` (README 3d); `bind_record_selection` is gone with record_selection; the contract-information profile check belongs to the decision exchange (not carried) |
+| credit.py | ResourceCredit | episode function | credit.py `credit` |
+| credit.py | ResourceCredit.credit_kind | machinery | credit_kind is deleted (README 3d); every resource role was `operational` |
+| credit.py | ResourceCredit.credit_view | episode function | credit.py `credit(summary, records)` (the adapters' credit view is measured by the resource tools of task.py and rides in their outcome as adapter_credit) |
+| decision_context.py | ResourceDecisionContext | episode function | messages/internal_summary.py `internal_summary` (what comes from the view) and task.py `_context` (what comes from ctx) |
+| decision_context.py | ResourceDecisionContext.decision_state | episode function | messages/internal_summary.py `internal_summary` (own outcomes, credit, feedback, controller state via yield_table) and task.py `_context`; the runtime_actions SQL, visual evidence, receipt_projection, pending_work, report_deliveries and report-update parts are machinery and are not carried |
+| decision_contracts.py | ResourceDecisionContracts | machinery | decision-exchange loop |
+| decision_contracts.py | ResourceDecisionContracts.exchange_schema | machinery | decision-exchange loop (composition_lookup_schema) |
+| decision_contracts.py | ResourceDecisionContracts.exchange_response | machinery | decision-exchange loop (request_context / select_action envelope) |
+| decision_exchange.py | ResourceDecisionExchange | machinery | decision-exchange loop; the model call is the ModelRequest of `decide` |
+| decision_exchange.py | ResourceDecisionExchange.conversation_key | machinery | conversation state (README 3a) |
+| decision_exchange.py | ResourceDecisionExchange.interpretation_context | machinery | decision-exchange loop |
+| decision_exchange.py | ResourceDecisionExchange.exchange_decision | machinery | decision-exchange loop (exchange_decision is not carried; lookups are tools) |
+| decision_inputs.py | ResourceDecisionInputs | episode function | task.py `_context` |
+| decision_inputs.py | ResourceDecisionInputs.decision_inputs | episode function | task.py `_context` (launch_instruction_library, selected_launch_instructions, child_options, resource_tool_estimates and native_event_targets through the service read handles, tool_knowledge, time_accounting) and `decide`; completed_action_reports from internal_summary. Not carried: resource_context, shared_information_context, pending_work, hpc request history, job_execution_options and the execution_expectations capture (they read the old workflow object; the adapter's duration information is the `decision_context` member of the `resource_adapter` service) |
+| episode.py | ResourceEpisode | episode function | episode.py `ResourceWorkSubmission(EpisodeBinding)` |
+| episode.py | ResourceEpisode.permitted_common_actions | episode function | task.py `_schema` (tool, reason, child, wait are offered; redeliver_report is not carried) |
+| from_child_api_resource_work_execution.py | receive_handoff | machinery | received-handoff proof is custody: the child returns the handoff records in a record_refs field (messages/read_from_child.py) |
+| from_child_hpc_resource_work_execution.py | receive_handoff | machinery | received-handoff proof is custody: the child returns the handoff records in a record_refs field (messages/read_from_child.py) |
+| from_child_local_resource_work_execution.py | receive_handoff | machinery | received-handoff proof is custody: the child returns the handoff records in a record_refs field (messages/read_from_child.py) |
+| from_parent.py | ResourceFromParent | episode function | messages/read_from_parent.py |
+| from_parent.py | ResourceFromParent.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (one field per LAUNCH_SCHEMA property, same names; library schema records/hpc/resource_records.py::LAUNCH_SCHEMA) |
+| from_parent.py | ResourceFromParent.prepare_assignment | episode function | messages/read_from_parent.py `read_from_parent` (keeps the schema properties and validates them with `_validate`; the check that the parent role owns the child role is machinery) |
+| goal.py | ResourceGoal | episode function | goal.py GOAL; task.py `_instructions` |
+| goal.py | ResourceGoal.contract_information_profile | machinery | contract-information profile belongs to the decision exchange (request_context / episode.return_contract); not carried |
+| goal.py | ResourceGoal.instructions | episode function | goal.py GOAL (old responsibility text and common tail, unchanged); the discovery paragraph is decision-exchange text and is not carried; task.py `_instructions` appends it to the model instructions |
+| handoff_check.py | ResourceHandoffCheck | episode function | task.py `resource_check_handoff` |
+| handoff_check.py | ResourceHandoffCheck.check_selected_handoff | episode function | task.py tool `resource_check_handoff` (async; `receiving_interface_unavailable`, `invalid_resource_handoff`; the adapter is the service `resource_adapter`, members `can_check_handoff`, `check_handoff`) |
+| initial_references.py | ResourceInitialReferences | machinery | initial references of the role `results` (a different episode); this episode's records travel in assignment record_refs (scope_refs, input_refs) |
+| initial_references.py | ResourceInitialReferences.initial_references | machinery | only answered for the role `results`, which this episode does not have; record passing is custody (record_refs fields) |
+| instructions.py | instructions | episode function | task.py `_instructions` (old default INSTRUCTIONS and REASONING_COMMIT_REQUIREMENT from library literature/prompts/gene_context_evidence/literature_investigation_prompt.py, the history/children span replaced with replace_span, KNOWLEDGE_INSTRUCTIONS, LAUNCH_INSTRUCTIONS, the native-events text); the pending-delivery, pending_child_ wait and request_context protocol paragraphs are not carried |
+| internal_summary.py | ResourceInternalSummary | episode function | messages/internal_summary.py `internal_summary`; task.py `_context` |
+| internal_summary.py | ResourceInternalSummary.decision_context | episode function | task.py `_context` (role, assignment, resource_capabilities, resource_tool_estimates) and messages/internal_summary.py; the capabilities and estimates are service reads made in `decide` |
+| operation_catalog.py | ResourceOperationCatalog | episode function | task.py CATALOG |
+| operation_catalog.py | ResourceOperationCatalog.catalog | episode function | task.py CATALOG (resource.capabilities, resource.inspect, resource.check_handoff) and `_schema` |
+| operations.py | ResourceOperations | episode function | task.py TOOLS and `action` |
+| operations.py | ResourceOperations.execute | episode function | task.py tools `resource_capabilities`, `resource_inspect`, `resource_check_handoff` (dispatch is the ToolCall of `action`; the argument validation is the action schema) |
+| received_messages.py | _parent_name_ValueError | machinery | hook-era name helper of the received-handoff callback; custody replaces the callback |
+| received_messages.py | _parent_name_getattr | machinery | hook-era name helper of the received-handoff callback; custody replaces the callback |
+| received_messages.py | ResourceReceivedMessages | machinery | receipts bookkeeping (received_form_references); custody: the child returns the handoff records in record_refs |
+| received_messages.py | ResourceReceivedMessages.received_form_references | machinery | receipts bookkeeping (F3/F5): the proof of a returned handoff is the `returned` receipt; messages/read_from_child.py reads the returned records |
+| received_messages.py | _handoff_receiver | machinery | routing of the received-handoff proof by resource kind; custody replaces it |
+| report_delivery.py | ResourceReportDelivery | episode function | messages/final_to_parent.py |
+| report_delivery.py | ResourceReportDelivery.finish | episode function | messages/final_to_parent.py `final_to_parent` (facts, credit = completion['credit'], finding, validate_report before return); saving of runtime_forms, form_with_facts, pending_handles and release are machinery |
+| report_fields.py | ResourceReportFields | episode function | messages/final_to_parent.py RETURN_FORM |
+| report_fields.py | ResourceReportFields.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (execution_handoff, execution_handoffs, adapter_facts selectable, execution_handoff_refs selectable; credit and finding required). The adapters' own fact sources are one selectable field `adapter_facts` (a form is fixed at class definition) |
+| report_reference_access.py | ResourceReportReferenceAccess | machinery | report reference resolution through the old resolver; custody (`records.holds`) |
+| report_reference_access.py | ResourceReportReferenceAccess.resolve | machinery | old resolver of report references; "does this episode hold the reference" is `records.holds(ref)` (README 3b D2) |
+| resource_contracts.py | _failure | episode function | task.py `_failure` (private copy) |
+| resource_contracts.py | _outcome | episode function | task.py `_outcome` (private copy) |
+| resource_contracts.py | _availability_failure | episode function | task.py `_availability_failure` (private copy) |
+| resource_inspection.py | ResourceInspection | episode function | task.py `resource_inspect` |
+| resource_inspection.py | ResourceInspection.inspect_resource | episode function | task.py tool `resource_inspect` |
+| resource_selection.py | ResourceResourceSelection | episode function | task.py `capabilities_of`, `_permitted`; the adapter lookup is the service `resource_adapter` |
+| resource_selection.py | ResourceResourceSelection.capabilities | episode function | task.py `capabilities_of(declared, adapter_capabilities, bound_ids)` (services.capabilities() is the service member `declared_capabilities`; the per-adapter tool-bound check was only for a selected resource and is not made here) |
+| resource_selection.py | ResourceResourceSelection._adapter | machinery | adapter lookup by selection; the adapters are the service `resource_adapter` (members take the handoff or assignment) |
+| resource_selection.py | ResourceResourceSelection._permitted | episode function | task.py `_permitted` (private copy) |
+| saved_decision_exchange.py | ResourceSavedDecisionExchange | machinery | saved-request checks (README 3a: deleted; the system compares a rebuilt model request with its record) |
+| saved_decision_exchange.py | ResourceSavedDecisionExchange.validate_contract_exchange_request | machinery | saved-request check (deleted) |
+| saved_decision_exchange.py | ResourceSavedDecisionExchange.validate_contract_exchange_history | machinery | saved-request check (deleted) |
+| task.py | ResourceTask | episode function | task.py `decide`, `action`, TOOLS |
+| task.py | ResourceTask.next | machinery | the decision loop, restore/inprocess replay, SourceEnd and the model-call recovery are the system's; the model request is `decide` |
+| task.py | ResourceTask.apply_response | episode function | task.py `action` (decoding, schema validation, reason envelope and empty_reasoning_commit rejection, unheld named-record rejection; raises Rejected). The report_update validation, delivery resolution, EventTargetError feedback, job_child failure feedback and record_effect are machinery |
+| task.py | ResourceTask.execute | episode function | task.py tools `reason` (commit_reasoning through ctx.store with ctx.operation_key), `wait` (selected_wait over the `native_events` service), the three resource tools; ChildCall for `child`. The journal rows, controller_value, receive_outcome, automatic_score_updates and last_observed_credit are machinery |
+| task_decision.py | ResourceTaskDecision | episode function | task.py `decide` |
+| task_decision.py | ResourceTaskDecision.call | episode function | task.py `decide` (ModelRequest('REASONING', instructions, context, generation_schema(schema))); the model-call saving, transport digests, receipts and exchange protocol are machinery |
+| task_decision.py | ResourceTaskDecision.instructions | episode function | task.py `_instructions` |
+| task_state.py | ResourceTaskState | machinery | task state, restore and checkpoint (the system restores the view) |
+| task_state.py | ResourceTaskState.__init__ | machinery | task state (view outcomes replace it) |
+| task_state.py | ResourceTaskState.bind_execution_context | machinery | execution context binding of the old runner |
+| task_state.py | ResourceTaskState.record_execution_failure | machinery | record_execution_failure: a tool returns its failure as its outcome (README 3c) |
+| task_state.py | ResourceTaskState.restore_checkpoint | machinery | restore_checkpoint |
+| task_state.py | ResourceTaskState.restore | machinery | restore |
+| task_state.py | ResourceTaskState.record_effect | machinery | record_effect |
+| task_state.py | ResourceTaskState.checkpoint | machinery | checkpoint |
+| to_child_api_resource_work_execution.py | assemble_request | episode function | messages/msg_to_child.py `msg_to_child` (slot launch_api: assignment of launch fields + scope, scope_refs, input_refs, completion_target; message scope + initial_report; selection of the child's declared return fields). goal/EpisodeGoal, report_contract_declaration validation, inprocess_completion_order, knowledge_inheritance and the identity are machinery |
+| to_child_hpc_resource_work_execution.py | assemble_request | episode function | messages/msg_to_child.py `msg_to_child` (slot launch_hpc; same body as the api one) |
+| to_child_local_resource_work_execution.py | assemble_request | episode function | messages/msg_to_child.py `msg_to_child` (slot launch_local; same body as the api one) |
+| to_parent.py | ResourceToParent | episode function | messages/final_to_parent.py |
+| to_parent.py | ResourceToParent.facts | episode function | messages/final_to_parent.py `handoff_facts(adapter_facts, handoffs)` (merge, de-duplicate by (capability_binding_ref, execution_handle), single handoff); the adapters' facts come through the outcome of the check tool (`facts`) and the children's handoffs through the child reports |
+| to_parent.py | ResourceToParent.validate_report | episode function | messages/final_to_parent.py `validate_report(result, facts)` (every reported handoff field equals the recorded facts; called by `final_to_parent` before it returns). The per-adapter `adapter.validate_report` is not carried (the adapters are a service, and final_to_parent has none) |
+| waiting.py | ResourceWaiting | machinery | suspension of an execution handle by the old runner |
+| waiting.py | ResourceWaiting.suspension_changed | machinery | wait/suspension machinery of the old runner (set_suspension on the execution backend); the wait itself is task.py tool `wait` |

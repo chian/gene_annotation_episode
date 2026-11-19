@@ -4,6 +4,7 @@ from __future__ import annotations
 from copy import deepcopy
 import json
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.grading.partner_presence_evidence.scoring import VERSION, PROFILE, binding_summary, digest, require
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.grading.partner_presence_evidence.tool_grading_artifacts import retain_tool_grading, source_tool_grading_entries
@@ -16,10 +17,11 @@ KINDS = {'a103_locus_binding_v1':'locus_binding', 'a103_neighborhood_v1':'organi
     'a103_contrast_v1':'functional_contrast', 'a103_detection_v1':'component_detection'}
 
 
-def install(store):
-    store.db.execute('''CREATE TABLE IF NOT EXISTS a103_publications (
-        source_ref TEXT PRIMARY KEY, target_ref TEXT NOT NULL, kind TEXT NOT NULL,
-        body TEXT NOT NULL, grading_artifact_ref TEXT NOT NULL, permitted_use TEXT NOT NULL)''')
+PUBLICATIONS = TableDeclaration(name='a103_publications',
+    columns=('source_ref', 'target_ref', 'kind', 'body', 'grading_artifact_ref', 'permitted_use'),
+    key=('source_ref',), record_refs=('source_ref', 'target_ref', 'grading_artifact_ref'))
+BINDINGS = TableDeclaration(name='a103_bindings', columns=('source_ref', 'body'),
+    key=('source_ref',), record_refs=('source_ref',))
 
 
 def native_grade(body):
@@ -40,7 +42,6 @@ def native_grade(body):
 
 
 def publish(store, body, evidence_refs=()):
-    install(store)
     body = deepcopy(body)
     grade = native_grade(body)
     with store.transaction():
@@ -52,8 +53,8 @@ def publish(store, body, evidence_refs=()):
         ref = store.put('source',{'provider':PROVIDER,'accession':digest(body),'uri':None,
             'artifact_ref':artifact,'text_ref':artifact,'request_ref':None,'version':VERSION,
             'retrieved_at':None,'operand_refs':operands,'auxiliary_artifact_refs':[grading]},origin='tool')['id']
-        store.db.execute('INSERT OR IGNORE INTO a103_publications VALUES(?,?,?,?,?,?)',
-            (ref,body['target_ref'],grade['kind'],canonical(body),grading,'a103_scoring'))
+        store.table(PUBLICATIONS).put({'source_ref':ref,'target_ref':body['target_ref'],'kind':grade['kind'],
+            'body':body,'grading_artifact_ref':grading,'permitted_use':'a103_scoring'})
     return ref
 
 
@@ -61,11 +62,11 @@ def received_measurement(store, reference):
     source = store.get(reference)
     if source['record_type']!='source' or source.get('provider')!=PROVIDER:
         return None
-    exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='a103_publications'").fetchone()
-    row = store.db.execute('SELECT * FROM a103_publications WHERE source_ref=?',(reference,)).fetchone() if exists else None
+    rows = store.table(PUBLICATIONS).select({'source_ref':reference})
+    row = rows[0] if rows else None
     require(row is not None and row['permitted_use']=='a103_scoring'
         and source['origin']=='tool' and source.get('version')==VERSION, 'a103_native_scoring_grant_unavailable')
-    body = json.loads(row['body'])
+    body = row['body']
     entries = source_tool_grading_entries(store,reference)
     require(json.loads(store.get_artifact(source['artifact_ref']))==body and len(entries)==1
         and entries[0]['artifact_ref']==row['grading_artifact_ref']
@@ -80,8 +81,8 @@ def binding_body(store, reference, known):
     result = received_measurement(store,reference)
     require(result is not None and result['body']['schema']=='a103_locus_binding_v1',
             'a103_actual_locus_binding_required')
-    row = store.db.execute('SELECT body FROM a103_bindings WHERE source_ref=?',(reference,)).fetchone()
-    require(row is not None,'a103_private_locus_payload_unavailable')
-    body = json.loads(row['body'])
+    rows = store.table(BINDINGS).select({'source_ref':reference})
+    require(rows,'a103_private_locus_payload_unavailable')
+    body = rows[0]['body']
     require(binding_summary(body)==result['body'],'a103_locus_payload_custody_conflict')
     return body

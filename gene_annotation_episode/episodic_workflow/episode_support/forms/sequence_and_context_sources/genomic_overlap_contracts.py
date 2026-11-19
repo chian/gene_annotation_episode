@@ -10,6 +10,7 @@ cross-record scientific validation in addition to these structural checks.
 from __future__ import annotations
 
 from copy import deepcopy
+import hashlib
 import json
 import math
 from typing import Any, TypeAlias
@@ -1428,3 +1429,10 @@ def validate_genomic_overlap_record(record_name: str, value: object) -> dict:
     return result
 
 
+
+def canonical_genomic_overlap_sheet_sha256(sheet: dict) -> str:
+    """Hash the exact structurally valid sheet; do not recalculate its contents."""
+    checked = validate_genomic_overlap_record("Sheet", sheet)
+    raw = json.dumps(checked, sort_keys=True, separators=(",", ":"),
+                     ensure_ascii=False, allow_nan=False).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()

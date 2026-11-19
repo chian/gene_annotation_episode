@@ -5,7 +5,7 @@ selected action through its ``EpisodeRecorder`` and opens
 ``ToolRegistry.current_invocation`` around exactly that action. This check
 requires that binding and that it names this very operation.
 """
-import json
+from episode_runtime import TableDeclaration
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.gene_context_evidence.communication import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.domain import ContractError, canonical
@@ -25,6 +25,9 @@ def authenticate_genomic_source_invocation(registry, name, arguments, scope, ope
         raise ContractError("a103_genomic_source_selected_action_conflict")
     return context, reader
 
+
+DIAGNOSTICS = TableDeclaration(name="a103_operation_diagnostics", columns=("operation", "diagnostic_ref"),
+                               key=("operation", "diagnostic_ref"))
 
 _PROFILES = {
     "ensembl": (None, True, "external", "public.ensembl.request", ("completed", "partial", "failed")),
@@ -60,36 +63,17 @@ def source_reference_restriction(store, context, reference, namespace, *, privat
     selected = _providers(providers)
     if not isinstance(reference, str) or not selected:
         return None
-    tables = {row[0] for row in store.db.execute("SELECT name FROM sqlite_master WHERE type='table' "
-        "AND name IN ('records','tool_operations')")}
-    if "tool_operations" not in tables:
-        return None  # A fresh Store has no ordinary publication or diagnostic.
-    if store.db.execute("""SELECT 1 FROM tool_operations
-        WHERE name IN (SELECT value FROM json_each(?))
-          AND json_extract(result,'$.feedback.diagnostic_ref')=? LIMIT 1""",
-            (json.dumps([operation for name in selected
-                for operation in ((_PROFILES[name][3],) if isinstance(_PROFILES[name][3], str)
-                                  else _PROFILES[name][3])]), reference)).fetchone():
+    operations = [operation for name in selected
+        for operation in ((_PROFILES[name][3],) if isinstance(_PROFILES[name][3], str) else _PROFILES[name][3])]
+    if any(store.table(DIAGNOSTICS).select({"operation": operation, "diagnostic_ref": reference})
+           for operation in operations):
         return False
-    if "records" not in tables:
-        return None
-    profiles = [dict(provider=name, version=_PROFILES[name][0], origin=_PROFILES[name][2],
-        operation=operation, statuses=_PROFILES[name][4]) for name in selected
-        for operation in ((_PROFILES[name][3],) if isinstance(_PROFILES[name][3], str)
-                          else _PROFILES[name][3])]
-    rows = store.db.execute("""SELECT source.data FROM records source, json_each(?) profile
-        WHERE source.record_type='source' AND source.origin=json_extract(profile.value,'$.origin')
-          AND json_extract(source.data,'$.provider')=json_extract(profile.value,'$.provider')
-          AND json_extract(source.data,'$.version') IS json_extract(profile.value,'$.version')
-          AND (source.id=? OR json_extract(source.data,'$.artifact_ref')=?
-            OR json_extract(source.data,'$.request_ref')=? OR EXISTS(
-                SELECT 1 FROM json_each(source.data,'$.auxiliary_artifact_refs') artifact WHERE artifact.value=?))
-          AND EXISTS(SELECT 1 FROM tool_operations operation, json_each(operation.result,'$.record_refs') published
-            WHERE operation.name=json_extract(profile.value,'$.operation') AND published.value=source.id
-              AND json_extract(operation.result,'$.status') IN (
-                SELECT value FROM json_each(json_extract(profile.value,'$.statuses'))))""",
-        (json.dumps(profiles), reference, reference, reference, reference))
-    sources = [json.loads(row[0]) for row in rows]
+    profiles = [dict(provider=name, version=_PROFILES[name][0], origin=_PROFILES[name][2]) for name in selected]
+    sources = [source for source in store.list("source")
+        if any(source["origin"] == profile["origin"] and source["provider"] == profile["provider"]
+               and source["version"] == profile["version"] for profile in profiles)
+        and (source["id"] == reference or source["artifact_ref"] == reference or source["request_ref"] == reference
+             or reference in source.get("auxiliary_artifact_refs", ()))]
     if not sources:
         return None
     if any(source.get("request_ref") == reference for source in sources):

@@ -20,7 +20,6 @@ import stat
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.forms.gene_context_evidence.execution_contracts import validate_target
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.gene_context_evidence.local_jobs import LocalJobPolicy
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.gene_context_evidence.materials import artifact_file
 from gene_annotation_episode.episodic_workflow.episode_support.records.local_execution.native_record_identity import finite_json_copy, native_record_digest
 from gene_annotation_episode.episodic_workflow.episode_support.forms.profile_model_preparation.gene_context_evidence.native_hmmer_preparation_contracts import (
     compile_native_hmmer_preparation_job,
@@ -426,25 +425,24 @@ def _confined_reader(root, relative):
 
 def _capture_file(store, root, relative, media_type="application/octet-stream"):
     with _confined_reader(root, relative) as path:
-        return artifact_file(store, path, media_type)
+        return store.artifact_file(path, media_type)
 
 
 def _retained(store, reference):
     if type(reference) is not str:
         _error("capture_artifact_reference_invalid")
-    metadata = store._require(reference, {"artifact"})
+    metadata = store.require(reference, {"artifact"})
     _sha(metadata["sha256"])
     if (reference != "artifact_" + metadata["sha256"] or type(metadata["size"]) is not int
             or metadata["size"] < 0):
         _error("capture_artifact_identity_conflict")
-    with _confined_reader(store.path / "artifacts", metadata["sha256"][:2] + "/" + metadata["sha256"]) as path:
-        digest, size = hashlib.sha256(), 0
-        with path.open("rb") as stream:
-            for block in iter(lambda: stream.read(1024 * 1024), b""):
-                digest.update(block)
-                size += len(block)
-        if size != metadata["size"] or digest.hexdigest() != metadata["sha256"]:
-            _error("capture_artifact_measurement_conflict")
+    digest, size = hashlib.sha256(), 0
+    with store.open_artifact(reference) as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+            size += len(block)
+    if size != metadata["size"] or digest.hexdigest() != metadata["sha256"]:
+        _error("capture_artifact_measurement_conflict")
     return metadata
 
 

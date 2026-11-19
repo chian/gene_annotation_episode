@@ -16,10 +16,21 @@ Every row is a custody item like a Store record:
   only by an Episode that holds it; it is passed to a child or returned to a parent by naming its reference in a
   ``record_refs`` field, like any record;
 - the references a row names in its declared ``record_refs`` columns must be readable by the writing unit;
+- a row is never deleted. A row that is no longer wanted is **withdrawn**: ``table.withdraw(key)`` writes the
+  next revision of the row with the system column ``withdrawn`` true. ``select`` leaves withdrawn rows out unless
+  it is asked for them, ``get`` returns the row with its mark, and writing the key again makes the row live
+  again (the next revision);
 - what a unit that did not finish wrote is taken back when the run is resumed: a row it created is removed and a
-  row it rewrote is put back as it stood before the unit. The unit's rerun is told in ``ctx.abandoned`` what the
-  abandoned attempt wrote (``written``) and how the row stands again (``prior``), and ``ctx.store.reclaim(ref)``
-  writes the abandoned row again as the rerun's own.
+  row it rewrote (or withdrew) is put back as it stood before the unit. The unit's rerun is told in
+  ``ctx.abandoned`` what the abandoned attempt wrote (``written``) and how the row stands again (``prior``), and
+  ``ctx.store.reclaim(ref)`` writes the abandoned row again as the rerun's own.
+
+**Queries.** ``select`` filters the held rows of one table by equality on value or system columns and returns
+them in receipt order (for the writing Episode: the order in which it first wrote them). That is the whole query
+surface: an order, a range, a membership test, a count or a join of two tables is done on the selected rows in
+Python (one ``select`` is one query of the system table, whatever the number of rows held). There is no query
+over rows the Episode does not hold: such a row is passed in custody by naming its reference, or the fact is
+kept by a declared service.
 
 The rows of every declared table live in one system table of the Store's SQLite file (``episode_work_rows``), on
 the Store's own connection, so a row written inside ``ctx.store.transaction()`` commits or rolls back with the
@@ -38,17 +49,18 @@ from method_loop.jsonvalue import canonical, closed_copy, content_digest, same_j
 from .recording import CustodyError
 
 ROW_PREFIX = 'row_'
-SYSTEM_COLUMNS = ('id', 'record_type', 'table', 'run_id', 'episode_id', 'unit', 'operation_key', 'revision')
+SYSTEM_COLUMNS = ('id', 'record_type', 'table', 'run_id', 'episode_id', 'unit', 'operation_key', 'revision',
+                  'withdrawn')
 _NAME = re.compile(r'^[a-z][a-z0-9_]*$')
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS episode_work_tables(name TEXT PRIMARY KEY, declaration TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS episode_work_rows(row_ref TEXT PRIMARY KEY, table_name TEXT NOT NULL,
     run_id TEXT NOT NULL, episode_id TEXT NOT NULL, row_key TEXT NOT NULL, unit INTEGER NOT NULL,
     operation_key TEXT NOT NULL, revision INTEGER NOT NULL, data TEXT NOT NULL, prior TEXT,
-    UNIQUE(table_name, run_id, episode_id, row_key));
+    withdrawn INTEGER NOT NULL, UNIQUE(table_name, run_id, episode_id, row_key));
 CREATE TABLE IF NOT EXISTS episode_abandoned_rows(row_ref TEXT NOT NULL, unit INTEGER NOT NULL,
     table_name TEXT NOT NULL, run_id TEXT NOT NULL, episode_id TEXT NOT NULL, row_key TEXT NOT NULL,
-    data TEXT NOT NULL, written TEXT NOT NULL, PRIMARY KEY(row_ref, unit));
+    data TEXT NOT NULL, written TEXT NOT NULL, withdrawn INTEGER NOT NULL, PRIMARY KEY(row_ref, unit));
 """
 
 
@@ -98,14 +110,16 @@ def is_row_ref(ref):
 class WorkRows:
     """The system table of work rows in one Store's SQLite file. Built by the runner; never given to episodes.
 
-    Besides its values a row keeps ``prior``: the row as it stood before the unit that last wrote it first touched
-    it (nothing when that unit created the row). ``abandon_unfinished`` uses it to put back what an unfinished
-    unit's attempt wrote, and keeps what the attempt wrote in ``episode_abandoned_rows`` for the rerun."""
+    Besides its values a row keeps ``withdrawn`` (the mark of a row that is no longer wanted; a row is never
+    deleted) and ``prior``: the row as it stood before the unit that last wrote it first touched it (nothing when
+    that unit created the row). ``abandon_unfinished`` uses it to put back what an unfinished unit's attempt
+    wrote, and keeps what the attempt wrote in ``episode_abandoned_rows`` for the rerun."""
 
-    _COLUMNS = 'row_ref, table_name, run_id, episode_id, row_key, unit, operation_key, revision, data, prior'
+    _COLUMNS = ('row_ref, table_name, run_id, episode_id, row_key, unit, operation_key, revision, data, prior, '
+                'withdrawn')
 
     def __init__(self, store):
-        self._db = store.db
+        self._db = store._db
         self._db.executescript(_SCHEMA)
         self._declared = {}
 
@@ -127,9 +141,10 @@ class WorkRows:
 
     @staticmethod
     def _row(values):
-        ref, table, run_id, episode_id, _, unit, operation_key, revision, data, _ = values
+        ref, table, run_id, episode_id, _, unit, operation_key, revision, data, _, withdrawn = values
         return {'id': ref, 'record_type': 'work_row', 'table': table, 'run_id': run_id, 'episode_id': episode_id,
-                'unit': unit, 'operation_key': operation_key, 'revision': revision, **json.loads(data)}
+                'unit': unit, 'operation_key': operation_key, 'revision': revision, 'withdrawn': bool(withdrawn),
+                **json.loads(data)}
 
     def _stored(self, ref):
         found = self._db.execute('SELECT ' + self._COLUMNS + ' FROM episode_work_rows WHERE row_ref=?',
@@ -144,6 +159,13 @@ class WorkRows:
     def exists(self, ref):
         return self.row(ref) is not None
 
+    def rows(self, table, refs):
+        """The rows of ``table`` among ``refs``, in the order of ``refs`` (one query of the system table)."""
+        found = {values[0]: tuple(values) for values in self._db.execute(
+            'SELECT ' + self._COLUMNS + ' FROM episode_work_rows WHERE table_name=? AND row_ref IN '
+            '(SELECT value FROM json_each(?))', (table, json.dumps(list(refs))))}
+        return [self._row(found[ref]) for ref in refs if ref in found]
+
     def references(self, declaration, values):
         """Every record reference the declared ``record_refs`` columns of ``values`` name."""
         refs = []
@@ -156,25 +178,27 @@ class WorkRows:
                 refs.append(ref)
         return refs
 
-    def _put(self, ref, table, run_id, episode_id, row_key, unit, operation_key, data):
-        """Store the values ``data`` (canonical JSON text) as the row ``ref``: a new row, nothing when the values
-        are the stored ones, otherwise the next revision."""
+    def _put(self, ref, table, run_id, episode_id, row_key, unit, operation_key, data, withdrawn):
+        """Store the values ``data`` (canonical JSON text) and the mark ``withdrawn`` as the row ``ref``: a new
+        row, nothing when the values and the mark are the stored ones, otherwise the next revision."""
         current = self._stored(ref)
         if current is None:
-            self._db.execute('INSERT INTO episode_work_rows VALUES(?,?,?,?,?,?,?,?,?,NULL)', (
-                ref, table, run_id, episode_id, row_key, unit, operation_key, 1, data))
-        elif not same_json(json.loads(current[8]), json.loads(data)):
+            self._db.execute('INSERT INTO episode_work_rows VALUES(?,?,?,?,?,?,?,?,?,NULL,?)', (
+                ref, table, run_id, episode_id, row_key, unit, operation_key, 1, data, int(withdrawn)))
+        elif not same_json(json.loads(current[8]), json.loads(data)) or bool(current[10]) != bool(withdrawn):
             # The first write of a unit to a row an earlier unit wrote keeps that earlier row.
             prior = current[9] if current[5] == unit else canonical({
                 'unit': current[5], 'operation_key': current[6], 'revision': current[7],
-                'data': json.loads(current[8])})
-            self._db.execute('UPDATE episode_work_rows SET unit=?, operation_key=?, revision=?, data=?, prior=? '
-                             'WHERE row_ref=?', (unit, operation_key, current[7] + 1, data, prior, ref))
+                'data': json.loads(current[8]), 'withdrawn': bool(current[10])})
+            self._db.execute('UPDATE episode_work_rows SET unit=?, operation_key=?, revision=?, data=?, prior=?, '
+                             'withdrawn=? WHERE row_ref=?',
+                             (unit, operation_key, current[7] + 1, data, prior, int(withdrawn), ref))
         return self.row(ref)
 
     def write(self, declaration, owner, unit, operation_key, values):
         """Write the row of ``owner`` (run id, episode id) with the key in ``values``; returns the stored row.
-        Writing equal values again changes nothing; other values make the next revision."""
+        Writing equal values again changes nothing; other values, or a write to a withdrawn row, make the next
+        revision (a written row is live)."""
         self.declare(declaration)
         if not isinstance(values, Mapping) or set(values) != set(declaration.columns):
             raise WorkTableError('work_table_row_must_have_exactly_its_columns:' + declaration.name + ':'
@@ -183,27 +207,48 @@ class WorkRows:
         run_id, episode_id = owner
         row_key = canonical([values[name] for name in declaration.key])
         ref = ROW_PREFIX + content_digest([declaration.name, run_id, episode_id, row_key])
-        return self._put(ref, declaration.name, run_id, episode_id, row_key, unit, operation_key, canonical(values))
+        return self._put(ref, declaration.name, run_id, episode_id, row_key, unit, operation_key, canonical(values),
+                         False)
+
+    def withdraw(self, declaration, owner, unit, operation_key, key):
+        """Mark the row of ``owner`` with the declared key ``key`` ({key column: value}) withdrawn: the next
+        revision of the row, with its values unchanged. Withdrawing a withdrawn row changes nothing; a row the
+        owner never wrote raises."""
+        self.declare(declaration)
+        if not isinstance(key, Mapping) or set(key) != set(declaration.key):
+            raise WorkTableError('work_table_withdrawal_must_name_exactly_the_key:' + declaration.name + ':'
+                                 + ','.join(declaration.key))
+        key = closed_copy(dict(key), 'work_table_key', WorkTableError)
+        run_id, episode_id = owner
+        row_key = canonical([key[name] for name in declaration.key])
+        ref = ROW_PREFIX + content_digest([declaration.name, run_id, episode_id, row_key])
+        current = self._stored(ref)
+        if current is None:
+            raise WorkTableError('work_table_row_to_withdraw_was_not_written_by_this_episode:' + declaration.name
+                                 + ':' + row_key)
+        return self._put(ref, declaration.name, run_id, episode_id, row_key, unit, operation_key, current[8], True)
 
     # -- what an unfinished unit's attempt wrote --------------------------------------------
     def abandon_unfinished(self, owner, position):
         """Take back every row write of ``owner``'s units from ``position`` on (units that did not finish): a row
-        such a unit created is removed, a row it rewrote is put back as it stood before the unit, and what the
-        attempt wrote is kept for the rerun (``abandoned``). Runs inside the caller's Store transaction."""
+        such a unit created is removed, a row it rewrote or withdrew is put back as it stood before the unit, and
+        what the attempt wrote is kept for the rerun (``abandoned``). Runs inside the caller's Store
+        transaction."""
         run_id, episode_id = owner
         for stored in [tuple(found) for found in self._db.execute(
                 'SELECT ' + self._COLUMNS + ' FROM episode_work_rows WHERE run_id=? AND episode_id=? AND unit>=? '
                 'ORDER BY rowid', (run_id, episode_id, position))]:
-            ref, table, _, _, row_key, unit, _, _, data, prior = stored
-            self._db.execute('INSERT OR REPLACE INTO episode_abandoned_rows VALUES(?,?,?,?,?,?,?,?)', (
-                ref, unit, table, run_id, episode_id, row_key, data, canonical(self._row(stored))))
+            ref, table, _, _, row_key, unit, _, _, data, prior, withdrawn = stored
+            self._db.execute('INSERT OR REPLACE INTO episode_abandoned_rows VALUES(?,?,?,?,?,?,?,?,?)', (
+                ref, unit, table, run_id, episode_id, row_key, data, canonical(self._row(stored)), withdrawn))
             if prior is None:
                 self._db.execute('DELETE FROM episode_work_rows WHERE row_ref=?', (ref,))
             else:
                 before = json.loads(prior)
                 self._db.execute('UPDATE episode_work_rows SET unit=?, operation_key=?, revision=?, data=?, '
-                                 'prior=NULL WHERE row_ref=?', (before['unit'], before['operation_key'],
-                                                                before['revision'], canonical(before['data']), ref))
+                                 'prior=NULL, withdrawn=? WHERE row_ref=?', (
+                                     before['unit'], before['operation_key'], before['revision'],
+                                     canonical(before['data']), int(before['withdrawn']), ref))
 
     def abandoned(self, owner, unit):
         """The rows the abandoned attempts of ``owner``'s ``unit`` wrote, in order: ``{'ref', 'written' (the row as
@@ -218,11 +263,13 @@ class WorkRows:
     def write_abandoned(self, owner, unit, ref, operation_key):
         """Write the row ``ref`` again as the abandoned attempt of ``owner``'s ``unit`` left it (a reclaim)."""
         run_id, episode_id = owner
-        found = self._db.execute('SELECT table_name, row_key, data FROM episode_abandoned_rows WHERE row_ref=? '
-                                 'AND unit=? AND run_id=? AND episode_id=?', (ref, unit, run_id, episode_id)).fetchone()
+        found = self._db.execute('SELECT table_name, row_key, data, withdrawn FROM episode_abandoned_rows WHERE '
+                                 'row_ref=? AND unit=? AND run_id=? AND episode_id=?',
+                                 (ref, unit, run_id, episode_id)).fetchone()
         if found is None:
             raise WorkTableError('work_table_row_not_abandoned_by_this_unit:' + str(ref))
-        return self._put(ref, found[0], run_id, episode_id, found[1], unit, operation_key, found[2])
+        return self._put(ref, found[0], run_id, episode_id, found[1], unit, operation_key, found[2],
+                         bool(found[3]))
 
 
 class TableReader:
@@ -233,7 +280,8 @@ class TableReader:
         self.__rows, self.__custody, self.__declaration = rows, custody, declaration
 
     def get(self, row_ref):
-        """The row ``row_ref`` of this table, only when the Episode holds it."""
+        """The row ``row_ref`` of this table, only when the Episode holds it (a withdrawn row too: its
+        ``withdrawn`` is true)."""
         self.__custody.require_readable(row_ref)
         row = self.__rows.row(row_ref)
         if row is None or row['table'] != self.__declaration.name:
@@ -241,10 +289,11 @@ class TableReader:
                                  + str(row_ref))
         return row
 
-    def select(self, where=None, limit=None, offset=0):
+    def select(self, where=None, limit=None, offset=0, *, withdrawn=False):
         """The held rows of this table, in receipt order, whose columns equal ``where`` ({column: value}; value or
-        system columns). ``limit`` and ``offset`` cut the page after the custody limit and the filter; without a
-        ``limit`` every such row is returned."""
+        system columns). Withdrawn rows are left out unless ``withdrawn`` is true (then they are among the rows,
+        each with its mark). ``limit`` and ``offset`` cut the page after the custody limit and the filter; without
+        a ``limit`` every such row is returned."""
         where = {} if where is None else dict(where)
         unknown = sorted(set(where) - set(self.__declaration.columns) - set(SYSTEM_COLUMNS))
         if unknown:
@@ -252,14 +301,12 @@ class TableReader:
                                  + ','.join(unknown))
         if type(offset) is not int or offset < 0 or (limit is not None and (type(limit) is not int or limit < 0)):
             raise WorkTableError('work_table_page_must_be_nonnegative_integers')
-        found = []
-        for ref in self.__custody.refs():
-            if not is_row_ref(ref):
-                continue
-            row = self.__rows.row(ref)
-            if (row is not None and row['table'] == self.__declaration.name
-                    and all(same_json(row[name], value) for name, value in where.items())):
-                found.append(row)
+        if type(withdrawn) is not bool:
+            raise WorkTableError('work_table_withdrawn_must_be_a_boolean')
+        held = [ref for ref in self.__custody.refs() if is_row_ref(ref)]
+        found = [row for row in self.__rows.rows(self.__declaration.name, held)
+                 if (withdrawn or not row['withdrawn'])
+                 and all(same_json(row[name], value) for name, value in where.items())]
         return found[offset:] if limit is None else found[offset:offset + limit]
 
 
@@ -284,6 +331,19 @@ class ScopedTable(TableReader):
                 raise CustodyError('record_written_outside_a_tool_unit:' + repr(self.__custody.path))
             row = self.__rows.write(self.__declaration, self.__owner, self.__custody.unit,
                                     self.__custody.operation_key, values)
+            self.__custody.produced(row['id'])
+        return row
+
+    def withdraw(self, key):
+        """Withdraw this Episode's row with the declared key ``key`` ({key column: value}): the row stays, marked
+        ``withdrawn`` as its next revision, and ``select`` no longer returns it. This is what a library function
+        does where it used to delete a row. The Episode holds the row as produced by this unit; a row this
+        Episode never wrote raises ``WorkTableError``. ``put`` with the same key makes the row live again."""
+        with self.__transaction():
+            if self.__custody.operation_key is None:
+                raise CustodyError('record_written_outside_a_tool_unit:' + repr(self.__custody.path))
+            row = self.__rows.withdraw(self.__declaration, self.__owner, self.__custody.unit,
+                                       self.__custody.operation_key, key)
             self.__custody.produced(row['id'])
         return row
 

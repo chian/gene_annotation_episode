@@ -47,10 +47,6 @@ def _selected(assignment):
     return list(values)
 
 
-def _signature(request):
-    return canonical({k: request[k] for k in _REQUEST if k != "selected_tool"})
-
-
 def _witness_label(quote):
     """Bound display text only; the exact original witness stays in its anchor."""
     if len(quote) <= 512 and "\n" not in quote and "\r" not in quote:
@@ -149,7 +145,6 @@ class LiteratureKineticRepository(LiteratureRateRepository):
     provider = PROVIDER
     record_version = VERSION
     components = COMPONENTS
-    operations_table = "literature_kinetic_operations"
     received_table = "literature_kinetic_received"
     binding_fields = ()
 
@@ -157,12 +152,6 @@ class LiteratureKineticRepository(LiteratureRateRepository):
         if type(run_id) is not str or not run_id:
             raise ValueError("explicit_literature_run_required")
         self.store, self.run_id = store, run_id
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     def _parents(self, scope, direct):
         result, seen = list(direct), set(direct)
@@ -182,17 +171,6 @@ class LiteratureKineticRepository(LiteratureRateRepository):
         request = {"run_id": self.run_id, "episode_id": context.episode_id, "operation_key": operation_key,
             "selected_tool": "literature.kinetic.populate", "scope": plain(context.scope), "assignment": plain(context.assignment),
             "requested_components": _selected(context.assignment), "arguments": plain(arguments)}
-        signature = _signature(request)
-        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
-        if old is not None:
-            if old["signature"] != signature:
-                raise ContractError("operation_key_reused_for_different_work")
-            outcome = json.loads(old["outcome"])
-            saved = self.read(outcome["result"]["sheet_ref"])
-            for reference in saved["direct_input_source_refs"]:
-                self._native_source(context, reference)
-            return outcome
         def read_source(reference, representation):
             source = self._native_source(context, reference)
             artifact = source["artifact_ref"] if representation == "original" else source.get("text_ref")
@@ -210,14 +188,13 @@ class LiteratureKineticRepository(LiteratureRateRepository):
             "cells": {k: deepcopy(calculation["cells"][k]) for k in COMPONENTS},
             "requested_components": request["requested_components"]}
         with self.store.transaction():
-            self._install()
             created, records = [], []
             def publish(kind, value):
                 ref = identity(kind, {"origin": "tool", "record": value})
-                exists = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (ref,)).fetchone()
+                new = not self.store.holds(ref)
                 actual = self.store.put(kind, value, origin="tool", scope=plain(context.scope))
                 records.append(actual["id"])
-                if exists is None:
+                if new:
                     created.append(actual["id"])
                 return actual["id"]
             saved["role_bindings"], saved["comparison_bindings"] = _bindings(extraction, publish)
@@ -231,8 +208,6 @@ class LiteratureKineticRepository(LiteratureRateRepository):
             outcome = {"status": "completed", "operation_ref": identity("operation", {"run_id": self.run_id,
                 "episode_id": context.episode_id, "key": operation_key}), "record_refs": list(dict.fromkeys([ref, *records])),
                 "changed_record_refs": created, "result": result, "feedback": None}
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     def _artifact_json(self, reference):
@@ -262,15 +237,6 @@ class LiteratureKineticRepository(LiteratureRateRepository):
             _fail("request_mismatch")
         if request["selected_tool"] != "literature.kinetic.populate" or request["requested_components"] != _selected(request["assignment"]):
             _fail("request_mismatch")
-        operation = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, request["episode_id"], request["operation_key"])).fetchone() if self._installed(self.operations_table) else None
-        if operation is None or operation["signature"] != _signature(request):
-            _fail("operation_mismatch")
-        outcome = json.loads(operation["outcome"])
-        if (outcome.get("status") != "completed" or outcome.get("operation_ref") != identity("operation", {
-                "run_id": self.run_id, "episode_id": request["episode_id"], "key": request["operation_key"]})
-                or outcome.get("result", {}).get("sheet_ref") != sheet_ref):
-            _fail("operation_mismatch")
         saved = self._artifact_json(source["artifact_ref"])
         if set(saved) != set(_PAYLOAD):
             _fail("saved_fields_mismatch")
@@ -287,10 +253,6 @@ class LiteratureKineticRepository(LiteratureRateRepository):
         validate_saved_kinetic(saved["selection"], saved["extraction"], saved["calculation"])
         if not _same(saved["cells"], {k: saved["calculation"]["cells"][k] for k in COMPONENTS}):
             _fail("cells_mismatch")
-        expected_result = {"sheet_ref": sheet_ref, "cells": saved["cells"], "evaluation_scope": EVALUATION_SCOPE,
-            "source_kind": saved["extraction"]["source_kind"], "model_input_status": MODEL_INPUT_STATUS, "model_reader_capability": MODEL_CAPABILITY}
-        if not _same(outcome["result"], expected_result):
-            _fail("outcome_mismatch")
         if self._native_provenance(request["scope"], saved["input_source_ref"])["artifact_ref"] != saved["input_artifact_ref"]:
             _fail("source_mismatch")
         for witness in witnesses(saved["extraction"]):
@@ -310,19 +272,7 @@ class LiteratureKineticRepository(LiteratureRateRepository):
         roles, comparison = _bindings(saved["extraction"], expected)
         if not _same((roles, comparison), (saved["role_bindings"], saved["comparison_bindings"])):
             _fail("binding_mismatch")
-        if outcome["record_refs"] != list(dict.fromkeys([sheet_ref, *records])) or any(r not in outcome["record_refs"] for r in outcome["changed_record_refs"]):
-            _fail("operation_records_mismatch")
         return saved
-
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError("literature_run_mismatch")
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self._install()
-            return super().receive_cells(context, cells, operation_key)
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
         selected = _selected({"requested_kinetic_components": self.components if components is None else components})

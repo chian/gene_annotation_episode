@@ -1,20 +1,28 @@
-"""The A102 ``structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination``
-literature binding.
+"""The source evidence examination episode (A102): a private binding of the system's episode type."""
+from episode_runtime import EpisodeBinding
 
-Its behaviour is the shared A102 literature implementation
-(``published_evidence_assessment/literature_binding.py``); this binding declares only what is its own.
-"""
-from __future__ import annotations
-
-from ....literature_binding import LiteratureBinding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class SourceEvidenceExaminationEpisode(LiteratureBinding):
-    """Improve the examination of one source for applicable structural evidence."""
-    binding_path = 'structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination'
-    commissioning_parent = 'structural_homology_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment'
-    acquisition = False
-    instruction = ('Investigate where and how this exact source should be examined. Choose ordinary source operations '
-                   'or selected table, ordered-reading or targeted-passage investigations as useful. Paragraph '
-                   'projections omit some XML headings, tables and footnotes; retained original bytes remain '
-                   'addressable.')
+class SourceEvidenceExamination(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

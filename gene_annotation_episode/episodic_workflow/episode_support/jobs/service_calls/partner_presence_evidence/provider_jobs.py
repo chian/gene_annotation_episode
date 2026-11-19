@@ -1,4 +1,4 @@
-"""Ordinary BLAST/Rfam protocols and read-only historical provider job records.
+"""Ordinary BLAST/Rfam protocols and their provider job rows (declared work tables of the Episode).
 
 HMMER execution belongs to bounded API episode operations.
 """
@@ -9,6 +9,8 @@ from dataclasses import asdict, replace
 import hashlib
 import json
 from typing import Any
+
+from episode_runtime import TableDeclaration
 
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.partner_presence_evidence.acquisition import AcquisitionError, PublicClients, SourceSnapshot
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError, canonical, identity
@@ -69,21 +71,36 @@ def validate_remote_identity(native: dict, request: dict, remote_id: str, *, res
             raise AcquisitionError("remote_identity_conflict_input")
 
 
+PROVIDER_JOBS = TableDeclaration(
+    name="provider_jobs",
+    columns=("job", "search_key", "request", "state", "remote_id", "submission", "latest_status", "result",
+             "error_code", "snapshot_refs"),
+    key=("job",), record_refs=("snapshot_refs",))
+# Operational diagnostics are not scientific source records or results: one current cause per job.
+PROVIDER_JOB_FAILURES = TableDeclaration(
+    name="provider_job_failures", columns=("job", "data", "artifact_refs"), key=("job",),
+    record_refs=("artifact_refs",))
+_FINISHED = ("returned", "SUCCESS", "FAILURE", "REVOKED", "not_submitted", "DEL")
+
+
+def _snapshot_refs(values: dict) -> list:
+    """The artifacts of the snapshots a job row holds."""
+    return [json.loads(values[name])["content_ref"] for name in ("submission", "latest_status", "result")
+            if values[name] is not None]
+
+
+def _active(row: dict) -> bool:
+    provider = json.loads(row["request"]).get("provider", "hmmer")
+    return row["state"] not in _FINISHED and not (provider == "blast" and row["state"] in ("FAILED", "UNKNOWN"))
+
+
+
 class RemoteSearches:
     def __init__(self, store: Any, clients: PublicClients, *, poll_interval_seconds: float = 5):
         if not isinstance(poll_interval_seconds, (int, float)) or poll_interval_seconds < 0:
             raise ValueError("invalid_provider_poll_interval")
         self.store, self.clients = store, clients
         self.poll_interval_seconds = poll_interval_seconds
-        store.db.execute("""CREATE TABLE IF NOT EXISTS provider_jobs (
-            id TEXT PRIMARY KEY, operation_key TEXT UNIQUE NOT NULL, request TEXT NOT NULL,
-            state TEXT NOT NULL, remote_id TEXT, submission TEXT, latest_status TEXT,
-            result TEXT, error_code TEXT)""")
-        # Operational diagnostics are not scientific source records or results.
-        # One current cause per job; exact failed attempts remain in tool audit.
-        store.db.execute("""CREATE TABLE IF NOT EXISTS provider_job_failures (
-            job_ref TEXT PRIMARY KEY, data TEXT NOT NULL)""")
-        store.db.commit()
 
     def _snapshot(self, snapshot: SourceSnapshot) -> str:
         fields = asdict(snapshot)
@@ -97,31 +114,31 @@ class RemoteSearches:
         return SourceSnapshot(**fields)
 
     def _get(self, job_ref: str) -> dict:
-        row = self.store.db.execute("SELECT * FROM provider_jobs WHERE id=?", (job_ref,)).fetchone()
-        if row is None:
+        rows = self.store.table(PROVIDER_JOBS).select({"job": job_ref})
+        if not rows:
             raise ContractError("unknown_provider_job")
-        return dict(row)
+        return rows[0]
 
     def _update(self, job_ref: str, **values) -> None:
         permitted = {"state", "remote_id", "submission", "latest_status", "result", "error_code"}
         if not set(values) <= permitted:
             raise ValueError("invalid_provider_job_field")
         with self.store.transaction():
-            self.store.db.execute("UPDATE provider_jobs SET " + ",".join(key+"=?" for key in values) + " WHERE id=?",
-                                  [*values.values(), job_ref])
-            if "error_code" in values and values["error_code"] is None:
-                self.store.db.execute("DELETE FROM provider_job_failures WHERE job_ref=?", (job_ref,))
+            merged = {**{name: self._get(job_ref)[name] for name in PROVIDER_JOBS.columns}, **values}
+            merged["snapshot_refs"] = _snapshot_refs(merged)
+            self.store.table(PROVIDER_JOBS).put(merged)
+            if "error_code" in values and values["error_code"] is None and self.store.table(PROVIDER_JOB_FAILURES).select({"job": job_ref}):
+                self.store.table(PROVIDER_JOB_FAILURES).withdraw({"job": job_ref})
 
     def _owner_state(self, row: dict) -> dict:
-        failure = self.store.db.execute("SELECT data FROM provider_job_failures WHERE job_ref=?",
-                                        (row["id"],)).fetchone()
+        failure = self.store.table(PROVIDER_JOB_FAILURES).select({"job": row["job"]})
         compatibility = request_identity_feedback(json.loads(row["request"]))
         return {"submission_state": row["state"], "remote_handle_known": row["remote_id"] is not None,
                 # Means addressable through collect (or cached), not a promise
                 # of a successful remote result or a scientific conclusion.
                 "collectable": not compatibility and json.loads(row["request"]).get("provider", "hmmer") != "hmmer"
                     and (row["remote_id"] is not None or row["result"] is not None),
-                "cause": json.loads(failure[0]) if failure else None, **compatibility}
+                "cause": json.loads(failure[0]["data"]) if failure else None, **compatibility}
 
     def _require_supported_request(self, row):
         request = json.loads(row["request"])
@@ -129,7 +146,7 @@ class RemoteSearches:
             try:
                 require_hmmer_identity_version(request)
             except AcquisitionError as error:
-                error.job_ref = row["id"]
+                error.job_ref = row["job"]
                 error.operational = {**self._owner_state(row), **(error.operational or {})}
                 raise
 
@@ -164,8 +181,8 @@ class RemoteSearches:
             if feedback is not None:
                 failure["provider_feedback"] = feedback
         with self.store.transaction():
-            self.store.db.execute("INSERT OR REPLACE INTO provider_job_failures VALUES(?,?)",
-                                  (job_ref, canonical(failure)))
+            self.store.table(PROVIDER_JOB_FAILURES).put({"job": job_ref, "data": canonical(failure),
+                                                         "artifact_refs": [ref for ref in (diagnostic_ref, response_ref) if ref]})
             values = {"error_code": failure["code"]}
             if state is not None:
                 values["state"] = state
@@ -186,18 +203,19 @@ class RemoteSearches:
 
     def describe(self, job_ref: str) -> dict:
         row = self._get(job_ref)
-        return {"job_ref": row["id"], "state": row["state"], "remote_id": row["remote_id"],
+        return {"job_ref": row["job"], "state": row["state"], "remote_id": row["remote_id"],
                 "request": json.loads(row["request"]), "error_code": row["error_code"],
                 **self._owner_state(row)}
 
     def jobs(self, *, limit: int = 100, offset: int = 0, active_only: bool = True) -> list[dict]:
         # Current ownership and handles only, not all HTTP bodies or audit history.
-        return [{"job_ref": row["id"], "state": row["state"], "remote_id": row["remote_id"],
+        rows = self.store.table(PROVIDER_JOBS).select()
+        if active_only:
+            rows = [row for row in rows if _active(row)]
+        return [{"job_ref": row["job"], "state": row["state"], "remote_id": row["remote_id"],
                  "request": json.loads(row["request"]), "error_code": row["error_code"],
-                 **self._owner_state(dict(row))}
-                for row in self.store.db.execute("SELECT * FROM provider_jobs" +
-                    (" WHERE state NOT IN ('returned','SUCCESS','FAILURE','REVOKED','not_submitted','DEL') AND NOT (COALESCE(json_extract(request,'$.provider'),'hmmer')='blast' AND state IN ('FAILED','UNKNOWN'))" if active_only else "") +
-                    " ORDER BY rowid LIMIT ? OFFSET ?", (limit, offset))]
+                 **self._owner_state(row)}
+                for row in rows[offset:offset + limit]]
 
     async def search(self, operation_key: str, *, subject_ref: str, query_fasta: str,
                      algorithm: str, database: str, parameters: dict | None = None,
@@ -228,12 +246,14 @@ class RemoteSearches:
         request["sequence_sha256"] = hashlib.sha256(sequence[0].sequence.encode()).hexdigest()
         if provider == "blast":
             request["query_length"] = len(sequence[0].sequence)
-        row = self.store.db.execute("SELECT * FROM provider_jobs WHERE operation_key=?", (operation_key,)).fetchone()
-        if row is None:
+        rows = self.store.table(PROVIDER_JOBS).select({"search_key": operation_key})
+        if not rows:
             job_ref = identity("provider_job", {"operation_key": operation_key, "request": request})
             with self.store.transaction():
-                self.store.db.execute("INSERT INTO provider_jobs VALUES(?,?,?,?,?,?,?,?,?)",
-                    (job_ref, operation_key, canonical(request), "submitting", None, None, None, None, None))
+                self.store.table(PROVIDER_JOBS).put({
+                    "job": job_ref, "search_key": operation_key, "request": canonical(request), "state": "submitting",
+                    "remote_id": None, "submission": None, "latest_status": None, "result": None,
+                    "error_code": None, "snapshot_refs": []})
             # The intent commits before the one remote submission. A process
             # dying in this gap leaves ambiguity, not permission to submit again.
             try:
@@ -265,10 +285,10 @@ class RemoteSearches:
                     raise
                 raise self._job_error(job_ref) from error
         else:
-            job_ref = row["id"]
-            if row["request"] != canonical(request):
+            job_ref = rows[0]["job"]
+            if rows[0]["request"] != canonical(request):
                 raise ContractError("provider_operation_reused_for_different_search")
-        if row is None and provider == "rfam":
+        if not rows and provider == "rfam":
             # The official batch API requests a short delay before the first GET.
             # A cancellation here leaves the committed accepted handle reusable.
             await asyncio.sleep(self.poll_interval_seconds)

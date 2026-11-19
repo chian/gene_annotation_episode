@@ -1,15 +1,28 @@
-"""The A106 launch binding (``perturbation_evidence/execution_job_submission``): its submission source and completion continuation are
-``execution_job_submission.submission_source.JobSubmissionContract``."""
-from __future__ import annotations
+"""The A106 perturbation launch episode."""
+from episode_runtime import EpisodeBinding
 
-from gene_annotation_episode.episodic_workflow.root.a106.perturbation_evidence.execution_job_submission.submission_source import (
-    JobSubmissionContract)
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class ExecutionEpisode(JobSubmissionContract):
-    binding_path = 'perturbation_evidence/execution_job_submission'
-    commissioning_parent = 'perturbation_evidence'
-    roles = ('launch',)
-    goal = "The analysis work its parent commissioned, carried to retained native records"
-    unit = "One API launch child commissioned for one requested job"
-    result = "The retained handoff and acquired record references"
+class ExecutionJobSubmission(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

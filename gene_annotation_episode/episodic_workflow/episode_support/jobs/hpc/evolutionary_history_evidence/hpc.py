@@ -12,11 +12,17 @@ import json
 import math
 from pathlib import Path
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import ContractError, canonical
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.evolutionary_history_evidence.hpc_worker import VERSION as NATIVE_VERSION, validate_request, alignment_correspondence, read_fasta, tree_summary
 from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.evolutionary_history_evidence.hpc_result_receipts import planned_input_files
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc_ledger import HpcLedger
 
 
+NATIVE_REQUESTS = TableDeclaration(name='a104_native_requests', columns=('source_ref', 'body'), key=('source_ref',),
+                                  record_refs=('source_ref',))
+NATIVE_RESULTS = TableDeclaration(name='a104_native_results', columns=('source_ref', 'body'), key=('source_ref',),
+                                 record_refs=('source_ref',))
 REQUEST_PROVIDER = 'host.a104.native_request'
 RESULT_PROVIDER = 'native.a104.phylogeny'
 VERSION = 'a104_shared_hpc_custody_v1'
@@ -29,11 +35,6 @@ def require(condition, code):
 
 def sha(raw):
     return hashlib.sha256(raw).hexdigest()
-
-
-def install(store):
-    for table in ('a104_native_requests', 'a104_native_results'):
-        store.db.execute('CREATE TABLE IF NOT EXISTS '+table+' (source_ref TEXT PRIMARY KEY, body TEXT NOT NULL)')
 
 
 def _source(store, provider, body, operands):
@@ -49,21 +50,20 @@ def _registered(store, reference, table, provider):
     record = store.get(reference)
     if record['record_type'] != 'source' or record.get('provider') != provider:
         return None
-    exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone()
-    row = store.db.execute('SELECT body FROM '+table+' WHERE source_ref=?', (reference,)).fetchone() if exists else None
-    require(row is not None and record['origin'] == 'tool' and record.get('version') == VERSION,
+    rows = store.table(table).select({'source_ref': reference})
+    require(bool(rows) and record['origin'] == 'tool' and record.get('version') == VERSION,
             'a104_host_scientific_grant_required')
-    body = json.loads(row[0])
+    body = rows[0]['body']
     require(json.loads(store.get_artifact(record['artifact_ref'])) == body, 'a104_native_custody_conflict')
     return body
 
 
 def request_body(store, reference):
-    return _registered(store, reference, 'a104_native_requests', REQUEST_PROVIDER)
+    return _registered(store, reference, NATIVE_REQUESTS, REQUEST_PROVIDER)
 
 
 def native_body(store, reference):
-    body = _registered(store, reference, 'a104_native_results', RESULT_PROVIDER)
+    body = _registered(store, reference, NATIVE_RESULTS, RESULT_PROVIDER)
     if body is not None:
         original = request_body(store, body['request_ref'])
         require(original is not None and original['native_request_sha256'] == body['request_sha256'],
@@ -146,7 +146,6 @@ def independent_marker_basis(store, analysis):
 def prepare_request(store, *, target_ref, analyses, scope, known_record_refs, case_id,
                     threads=4, seed=104, model='LG', target_origin_reference_ref=None):
     """Freeze exact received proteins/regions without requiring an annotation."""
-    install(store)
     known = set(known_record_refs)
     scope = store.validate_scope(scope)
     require(target_ref in known and target_ref in scope['subject_refs'], 'a104_original_target_required')
@@ -229,7 +228,7 @@ def prepare_request(store, *, target_ref, analyses, scope, known_record_refs, ca
         'interpretation': 'exact_scientific_operands; no_tree_measurement_or_function_claim'}
     with store.transaction():
         reference = _source(store, REQUEST_PROVIDER, body, operands)
-        store.db.execute('INSERT OR IGNORE INTO a104_native_requests VALUES(?,?)', (reference, canonical(body)))
+        store.table(NATIVE_REQUESTS).put({'source_ref': reference, 'body': body})
     return reference
 
 
@@ -303,9 +302,8 @@ def commission(store, request_ref, resource, *, queue='debug', scheduler_wall_se
         'limits': {'result_limit_bytes': 512*1024, 'queue_max_age_seconds': 900}}
 
 
-def import_result(store, *, request_ref, hpc_result_ref, known_record_refs, scope, run_id, workflow_directory=None):
+def import_result(store, *, request_ref, hpc_result_ref, known_record_refs, scope, ledger):
     """Admit a result only after original shared-HPC collection and validation."""
-    install(store)
     known = set(known_record_refs)
     require({request_ref, hpc_result_ref} <= known, 'a104_hpc_operands_not_received')
     expected = request_body(store, request_ref)
@@ -318,41 +316,13 @@ def import_result(store, *, request_ref, hpc_result_ref, known_record_refs, scop
             and source['origin'] == 'tool' and source['version'] == 'hpc_result_v1', 'a104_actual_hpc_result_required')
     raw_receipt = store.get_artifact(source['artifact_ref'])
     receipt = json.loads(raw_receipt)
-    require(receipt['run_id'] == run_id and same_scope(receipt['scope'], expected['scope']),
-            'a104_hpc_receiving_run_conflict')
-    require(all(store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (name,)).fetchone()
-                for name in ('runtime_episodes', 'runtime_actions')), 'a104_original_completed_runtime_required')
-    action = store.db.execute("SELECT a.action,a.result FROM runtime_actions a JOIN runtime_episodes e "
-        "USING(run_id,episode_id) WHERE a.run_id=? AND a.episode_id=? AND json_extract(e.path,'$[#-1][0]') IN ('hpc','hpc_execution') "
-        "AND json_extract(a.action,'$.tool')='hpc.results' AND a.result IS NOT NULL", (run_id, receipt['episode_id'])).fetchall()
-    require(any(hpc_result_ref in json.loads(row['result']).get('record_refs', []) for row in action),
-            'a104_hpc_result_requires_original_completed_collection_action')
+    require(same_scope(receipt['scope'], expected['scope']), 'a104_hpc_receiving_scope_conflict')
     # The submitted portfolio must have staged this exact scientific worker
     # and request, rather than an unrelated command which copied their hashes.
-    import sqlite3
-    from contextlib import closing
-    from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.hpc_queue import digest as hpc_digest
-    settings = (store.db.execute('SELECT settings FROM runtime_runs WHERE run_id=?', (run_id,)).fetchone()
-                if store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_runs'").fetchone() else None)
-    from method_loop.identities import EpisodeRef
-    owner_path = store.db.execute('SELECT path FROM runtime_episodes WHERE run_id=? AND episode_id=?',
-                                 (run_id, receipt['episode_id'])).fetchone()
-    require(owner_path is not None, 'a104_original_hpc_receiving_episode_required')
-    path = json.loads(owner_path[0])
-    prefixes = [path[:i+1] for i, part in enumerate(path) if part[0] == 'hpc']
-    require(prefixes, 'a104_original_hpc_parent_required')
-    owner = EpisodeRef(run_id, tuple(map(tuple, prefixes[-1]))).episode_id
-    # Assembled runs persist their directory in runtime_runs. Direct Workflow
-    # callers, including the original pilot, use the case's workflow directory
-    # or explicitly pass their actual host directory. This locates evidence;
-    # the original owning ledger and submission still authenticate every byte.
-    runtime_directory = (Path(json.loads(settings[0])['directory']) if settings is not None else
-                         Path(workflow_directory) if workflow_directory is not None else store.path.parent/'workflow')
-    directory = runtime_directory/'hpc'/hpc_digest([run_id, owner])
-    with closing(sqlite3.connect((directory/'hpc.sqlite').resolve().as_uri()+'?mode=ro', uri=True)) as reader:
-        owners = [json.loads(row[0]) for row in reader.execute("SELECT body FROM evidence WHERE kind='owner'")]
-        plans = [json.loads(row[0]) for row in reader.execute("SELECT body FROM evidence WHERE kind='plan'")]
-    require(len(owners) == 1 and owners[0]['run_id'] == run_id and owners[0]['episode_id'] == owner
+    held = HpcLedger.existing(store, ledger)
+    owners = [row['body'] for row in held.records('owner')]
+    plans = [row['body'] for row in held.records('plan')]
+    require(len(owners) == 1
             and owners[0]['scope'] == receipt['scope'] and same_scope(owners[0]['scope'], expected['scope']),
             'a104_original_hpc_ledger_owner_conflict')
     plans = [plan for plan in plans if plan['plan_id'] == receipt['plan_id']]
@@ -405,5 +375,5 @@ def import_result(store, *, request_ref, hpc_result_ref, known_record_refs, scop
     operands = [part['subject_ref'] for analysis in expected['bindings'] for row in analysis['members'] for part in row['parts']]
     with store.transaction():
         reference = _source(store, RESULT_PROVIDER, body, operands)
-        store.db.execute('INSERT OR IGNORE INTO a104_native_results VALUES(?,?)', (reference, canonical(body)))
+        store.table(NATIVE_RESULTS).put({'source_ref': reference, 'body': body})
     return reference

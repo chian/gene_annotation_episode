@@ -1,34 +1,29 @@
-"""The A101 ``sequence_homology_evidence/execution_progress_assessment`` binding.
+"""The execution progress assessment (monitor) episode of A101 sequence homology: a private binding of the
+system's episode type."""
+from episode_runtime import EpisodeBinding
 
-Binds the A101 monitor runtime (``episode_support/jobs/service_calls/sequence_homology_evidence/monitor_runtime.py``): its progress
-tools, model-selected decisions, information credit and information-accumulation
-yield continuation. Its commission carries the head's monitor assignment in
-``role_assignment``.
-"""
-from __future__ import annotations
-
-from types import MappingProxyType
-
-from episode_runtime import Field, RecordForm
-
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.service_calls.sequence_homology_evidence.monitor_runtime import A101MonitorRuntime
-from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.contract_binding import (
-    SCOPE, A101ContractBinding)
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class ExecutionProgressAssessmentEpisode(A101MonitorRuntime, A101ContractBinding):
-    """Improve what is known about the progress of the assigned execution."""
-    binding_path = 'sequence_homology_evidence/execution_progress_assessment'
-    goal = 'Improve what is known about the progress of the assigned execution'
-    unit = 'One progress observation'
-    result = 'Progress references for the assigned execution'
-    child_slots = MappingProxyType({})
-    commissioning_parent = 'sequence_homology_evidence'
-    assignment_form = RecordForm({
-        'scope': SCOPE,
-        'role_assignment': Field('record', "The commissioning head's monitor assignment (monitor_assignment_v1)"),
-    })
-
-    @staticmethod
-    def role_assignment(assignment):
-        return assignment['role_assignment']
+class ExecutionProgressAssessment(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

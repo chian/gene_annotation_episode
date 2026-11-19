@@ -6,7 +6,7 @@ It never treats a source format, report, or revised judgment as another assay.
 """
 from copy import deepcopy
 import hashlib
-import json
+from episode_runtime import TableDeclaration
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import ContractError, REF, obj, validate_schema
 from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbation_evidence.communication import plain
@@ -32,6 +32,18 @@ EXPERIMENT_TYPES = {
         "combination": "Existing within-experiment source restoration product; no new cross-experiment rule.",
     },
 }
+
+
+ASSESSMENTS = TableDeclaration(
+    name="perturbation_assessments", columns=("sheet_ref", "experiment_ref", "assessment_key", "assessment"),
+    key=("sheet_ref",), record_refs=("sheet_ref", "experiment_ref"))
+
+
+def record_assessment(store, sheet_ref, assessment):
+    """Keep the assessment saved with a sheet as the Episode's row, keyed by the sheet."""
+    return store.table(ASSESSMENTS).put({
+        "sheet_ref": sheet_ref, "experiment_ref": assessment["experiment_ref"],
+        "assessment_key": assessment["assessment_key"], "assessment": deepcopy(assessment)})
 
 
 def assessment_schema():
@@ -85,18 +97,12 @@ def current_assessments(repository):
     This is an inventory, not a numerical aggregate or an independence count.
     """
     histories, superseded = {}, set()
-    for row in repository.store.db.execute(
-        f"SELECT outcome FROM {repository.operations_table} WHERE run_id=?", (repository.run_id,)
-    ):
-        outcome = json.loads(row["outcome"])
-        result = outcome.get("result") or {}
-        assessment = result.get("experiment_assessment")
-        if assessment is None:
-            continue
-        saved = repository.read(result["sheet_ref"])
+    for row in repository.store.table(ASSESSMENTS).select():
+        assessment = row["assessment"]
+        saved = repository.read(row["sheet_ref"])
         if saved.get("experiment_assessment") != assessment:
             raise ContractError("perturbation_assessment_saved_mismatch")
-        histories[result["sheet_ref"]] = deepcopy(assessment)
+        histories[row["sheet_ref"]] = deepcopy(assessment)
         if assessment["revises_sheet_ref"] is not None:
             superseded.add(assessment["revises_sheet_ref"])
     heads = [{"sheet_ref": ref, **value} for ref, value in histories.items() if ref not in superseded]
@@ -117,7 +123,7 @@ def check_revision(repository, value):
                             "perturbation_assessment_predecessor_mismatch")
 
 
-def validate_saved_assessment(repository, saved, request):
+def validate_saved_assessment(repository, saved, request, sheet_ref):
     expected = request["arguments"].get("experiment_assessment")
     if saved.get("experiment_assessment") != expected:
         raise ContractError("perturbation_assessment_saved_mismatch")
@@ -125,17 +131,13 @@ def validate_saved_assessment(repository, saved, request):
         validate_assessment(expected)
         # New assessment metadata is authenticated against the immutable
         # request, sheet bytes and selected outcome, not just matching labels.
-        operation = repository.store.db.execute(
-            f"SELECT outcome FROM {repository.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (repository.run_id, request["episode_id"], request["operation_key"]),
-        ).fetchone()
-        outcome = json.loads(operation["outcome"])
-        source = repository.store.get(outcome["result"]["sheet_ref"])
+        row = repository.store.table(ASSESSMENTS).select({"sheet_ref": sheet_ref})[0]
+        source = repository.store.get(row["sheet_ref"])
         for field in ("artifact_ref", "request_ref"):
             raw = repository.store.get_artifact(source[field])
             if "artifact_" + hashlib.sha256(raw).hexdigest() != source[field]:
                 raise ContractError("perturbation_assessment_artifact_mismatch")
-        if outcome["result"].get("experiment_assessment") != expected:
+        if row["assessment"] != expected:
             raise ContractError("perturbation_assessment_saved_mismatch")
         if saved["experimental_bindings"]["experiment_ref"] != expected["experiment_ref"]:
             raise ContractError("perturbation_assessment_experiment_mismatch")

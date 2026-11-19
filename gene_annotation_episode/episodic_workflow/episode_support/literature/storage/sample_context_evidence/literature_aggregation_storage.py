@@ -1,5 +1,6 @@
 """Persist main A108 evidence counts over actually admitted subscoring cells."""
 from copy import deepcopy
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.domain import ContractError, canonical, obj, validate_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_aggregation import COMPONENTS, SCOPE, aggregate_a108, aggregation_population_schema, aggregation_cell_schema, aggregation_sheet_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_grading_storage import LiteratureA108GradingRepository, grading_cells_schema
@@ -8,6 +9,8 @@ PROVIDER = 'literature.a108.aggregation'
 VERSION = 'literature_a108_context_aggregation_record_v1'
 NAMESPACE = 'literature_a108_aggregation_cells'
 REQUESTED = 'requested_a108_aggregation_components'
+OPERATIONS = TableDeclaration(name='literature_a108_aggregation_operations', columns=('sheet_ref',), key=('sheet_ref',), record_refs=('sheet_ref',))
+CELLS = TableDeclaration(name='literature_a108_aggregation_cells', columns=('sheet_ref', 'component', 'cell'), key=('sheet_ref', 'component'), record_refs=('sheet_ref',))
 OPERATION_DESCRIPTION = 'Populate the main A108 evidence scoring sheet from explicitly selected, possessed evidence_amount components of contextual subscoring sheets. Union original observation identities within physiology, environment, availability and localization and across all four domains. Preserve supporting, conflicting, overlapping and unresolved counts and their actual organism/condition qualifications. The total counts each assessed original observation once; it does not sum child totals, citation counts or repeated representations. Select the intended current assessments; competing revisions of one observation and contextual claim cannot be pooled. These are evidence counts, not annotation probabilities or an automatically installed continuation-credit rule.'
 
 def aggregation_cells_schema():
@@ -22,7 +25,7 @@ class LiteratureA108AggregationRepository(A108SheetRepository):
 
     def current_annotation_cells(self, context):
         """Resolve this owner's admitted current final cells without granting private inputs."""
-        rows = [row for row in self.received_cells(context) if row['component'] == 'overall'] if self._installed(self.received_table) else []
+        rows = [row for row in self.received_cells(context) if row['component'] == 'overall']
         from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.sample_context_evidence.literature_sheet_updates import current_scoring_sheets
         current = [row for row in current_scoring_sheets(self.store, context) if row['axis'] == 'A108']
         return [cell for row in current if row['status'] == 'current' for cell in row['cells'] if cell['component'] == 'overall'] if current else rows
@@ -56,8 +59,8 @@ class LiteratureA108AggregationRepository(A108SheetRepository):
     provider = PROVIDER
     record_version = VERSION
     components = COMPONENTS
-    operations_table = 'literature_a108_aggregation_operations'
-    received_table = 'literature_a108_aggregation_received'
+    operations = OPERATIONS
+    cells_table = CELLS
     requested = REQUESTED
     population_schema = staticmethod(aggregation_population_schema)
     input_schema = staticmethod(grading_cells_schema)
@@ -66,7 +69,7 @@ class LiteratureA108AggregationRepository(A108SheetRepository):
     rows = staticmethod(_rows)
 
     def peer_repository(self):
-        return LiteratureA108GradingRepository(self.store, self.run_id)
+        return LiteratureA108GradingRepository(self.store)
 
     def read_inputs(self, context, arguments, *, read_record, read_source, retain_selection):
         read_record(arguments['assertion_ref'])
@@ -77,7 +80,7 @@ class LiteratureA108AggregationRepository(A108SheetRepository):
             grouped.setdefault(selection['sheet_ref'], []).append(selection['component'])
         if grouped and self._read_cells is None:
             raise ContractError('a108_aggregation_component_reader_unbound')
-        native = LiteratureA108GradingRepository(self.store, self.run_id)
+        native = LiteratureA108GradingRepository(self.store)
         rows = []
         for ref, components in grouped.items():
             read_record(ref)
@@ -105,9 +108,9 @@ class LiteratureA108AggregationRepository(A108SheetRepository):
         return aggregate_current_a108(arguments, extraction, calculation_context)
 
     def validate_saved_inputs(self, saved):
-        native = LiteratureA108GradingRepository(self.store, self.run_id)
+        native = LiteratureA108GradingRepository(self.store)
         for row in saved['extraction']:
-            actual = native.project_cells([row['sheet_ref']], permitted_record_refs=[row['sheet_ref']], components=[row['component']])
+            actual = native.project_cells([row['sheet_ref']], components=[row['component']])
             if canonical(actual) != canonical([row]):
                 raise ContractError('a108_aggregation_saved_component_mismatch')
         if 'calculation_context' in saved:

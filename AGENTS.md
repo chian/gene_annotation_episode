@@ -63,10 +63,32 @@ How the system fails and stops (owner's rules, 2026-11-19):
 - Library functions never write to the Store or its tables directly. Anything
   they read or write goes through custody: the scoped store the system hands
   the episode, or an operation that has custody built in.
+- `store.db` (the old Store's raw SQLite connection) is not part of the
+  structure. Nothing is written against it, wrapped around it, or given back to
+  the custody store as a compatibility layer. Old code that used it is
+  rewritten: records come in through the custody reader, results go out through
+  the scoped store, a function's own tables are declared work tables, and what
+  cannot be expressed gets a system operation with custody built in. No stub or
+  `NotImplementedError` stands in for behaviour that was not rewritten.
 - `yield_estimator.py` reads what `read_from_parent.py` produced, never the raw
   assignment; `read_from_parent.py` is the only place an assignment is read.
 - A child declares every field it can return; the parent selects which of them
   it wants in `msg_to_child.py`; credit and finding are always returned.
+- Controlled messaging overrides everything else in this file. What passes
+  between episodes (`msg_to_child`, `final_to_parent`, what `read_from_child`
+  shows a parent's model) is controlled data only: numbers, booleans, values of a
+  fixed vocabulary and record references. There are no open fields: every
+  field has a controlled answer set that code can validate (a number in a range,
+  a count, a boolean, a value from a fixed vocabulary, a record reference, or an
+  annotation: a gene, function or product ID or name, a controlled name that
+  comes from a looked-up list; an annotation is a real data field, not free
+  text), and one field holds one thing. Evidence is spread over such fields, never put into
+  one field, and never written as a paragraph, which would give prompt injection
+  a way in. The messages are small
+  and chosen by the sender for the receiver's next decision; credit is the
+  progress and productivity signal. A requirement elsewhere in this file that
+  would need free text to pass between episodes is met by keeping the record in
+  the episode that wrote it and passing its reference.
 
 The episode tree was articulated so each episode could be tuned on its own. The
 owner decided on 2026-11-18 that each episode's own files at commit `97308b94c`
@@ -195,10 +217,13 @@ result reference to become a separate experiment. Keep A108 original
 observation identities explicit for its evidence counts.
 
 Each A105/A108 evidence assessment must also retain its typed
-`investigation_finding`: the actual source claim, actual source subject and
-qualification, including unresolved target correspondence. This is the existing
-scientific finding consumed by the iterator and parent; a saved numerical sheet
-alone does not supply it. Do not manufacture target support to obtain credit.
+`investigation_finding`: evidence for an annotation, giving what type of
+evidence it is and how strong it is, as controlled features read from the
+grading (subscoring) sheet by code, such as the number of assays, the
+statistical deviation or noise, and the signal. They are numbers, counts and
+fixed-vocabulary values, never prose. The sheet stays a record of the episode
+that graded it; the parent receives the features and the sheet's reference.
+Do not manufacture target support to obtain credit.
 
 A selected tool or reasoning unit that executes and returns must enter its
 original iterator with its existing progress measurement, including an invalid,

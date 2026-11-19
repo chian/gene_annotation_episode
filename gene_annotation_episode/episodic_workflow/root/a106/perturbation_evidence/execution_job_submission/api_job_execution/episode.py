@@ -1,15 +1,25 @@
-"""The A106 launch_api binding (``perturbation_evidence/execution_job_submission/api_job_execution``): one assigned
-BV-BRC AppService job on ``episode_runtime`` (``binding.ApiJobBinding``)."""
-from __future__ import annotations
+"""The A106 ``api_job_execution`` episode."""
+from episode_runtime import EpisodeBinding
 
-from gene_annotation_episode.episodic_workflow.root.a106.perturbation_evidence.execution_job_submission.api_job_execution.\
-    binding import ApiJobBinding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       read_from_parent as from_parent_file)
 
 
-class ExecutionEpisode(ApiJobBinding):
-    binding_path = 'perturbation_evidence/execution_job_submission/api_job_execution'
-    commissioning_parent = 'perturbation_evidence/execution_job_submission'
-    roles = ('launch_api',)
-    goal = "The analysis work its parent commissioned, carried to retained native records"
-    unit = "One API service action"
-    result = "The retained API handoff and record references"
+class ApiJobExecution(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

@@ -80,8 +80,8 @@ class _Selection:
     """Temporary, disk-backed export index; never a scientific state authority."""
     def __init__(self, store, path, scope, page_size):
         self.store, self.scope, self.page_size = store, scope, page_size
-        self.db = sqlite3.connect(path)
-        self.db.executescript("""
+        self._db = sqlite3.connect(path)
+        self._db.executescript("""
             PRAGMA journal_mode=OFF;
             PRAGMA synchronous=OFF;
             CREATE TABLE nodes(id TEXT PRIMARY KEY,record_type TEXT NOT NULL,data TEXT NOT NULL,processed INTEGER NOT NULL DEFAULT 0);
@@ -100,14 +100,14 @@ class _Selection:
         self._populate()
 
     def close(self):
-        self.db.close()
+        self._db.close()
 
     def add(self, row_or_ref, membership=None):
         row = self.store.get(row_or_ref) if isinstance(row_or_ref, str) else row_or_ref
-        self.db.execute("INSERT OR IGNORE INTO nodes(id,record_type,data) VALUES(?,?,?)",
+        self._db.execute("INSERT OR IGNORE INTO nodes(id,record_type,data) VALUES(?,?,?)",
                         (row["id"], row["record_type"], canonical(row)))
         if membership:
-            self.db.execute("INSERT OR IGNORE INTO membership VALUES(?,?)", (membership, row["id"]))
+            self._db.execute("INSERT OR IGNORE INTO membership VALUES(?,?)", (membership, row["id"]))
 
     def _populate(self):
         # Preserve the whole original problem identity even for a local export.
@@ -161,18 +161,18 @@ class _Selection:
         # It remains evidence inventory, never an input/eligible footprint.
         for collection in self.records(kind="collection"):
             if collection.get("storage_representation") == packing.REPRESENTATION:
-                for (ref,) in self.store.db.execute("SELECT artifact_ref FROM material_pack_chunks WHERE parse_key=? ORDER BY chunk_index", (collection["parse_key"],)):
+                for (ref,) in self.store._db.execute("SELECT artifact_ref FROM material_pack_chunks WHERE parse_key=? ORDER BY chunk_index", (collection["parse_key"],)):
                     self.add(ref)
                 # Explicit selections have reusable semantic references; keep
                 # those actual records, while leaving unexamined native
                 # members in the compact index rather than the main document.
-                selected = self.store.db.execute("SELECT r.data FROM records r JOIN material_members m ON m.id=json_extract(r.data,'$.member_ref') WHERE r.record_type='reference' AND m.collection_ref=? ORDER BY r.id", (collection["id"],))
+                selected = self.store._db.execute("SELECT r.data FROM records r JOIN material_members m ON m.id=json_extract(r.data,'$.member_ref') WHERE r.record_type='reference' AND m.collection_ref=? ORDER BY r.id", (collection["id"],))
                 for (data,) in selected:
                     self.add(json.loads(data), "source_only_record_refs")
                 continue
             offset = 0
             while True:
-                rows = self.store.db.execute("SELECT data FROM material_members WHERE collection_ref=? ORDER BY ordinal LIMIT ? OFFSET ?",
+                rows = self.store._db.execute("SELECT data FROM material_members WHERE collection_ref=? ORDER BY ordinal LIMIT ? OFFSET ?",
                     (collection["id"], self.page_size, offset)).fetchall()
                 for (data,) in rows:
                     self.add(json.loads(data), "indexed_member_refs")
@@ -182,7 +182,7 @@ class _Selection:
         # Traverse just the dependencies of the current account and its scoped
         # working inventory, never runtime journals or all historical revisions.
         while True:
-            rows = self.db.execute("SELECT id,data FROM nodes WHERE processed=0 ORDER BY id LIMIT ?", (self.page_size,)).fetchall()
+            rows = self._db.execute("SELECT id,data FROM nodes WHERE processed=0 ORDER BY id LIMIT ?", (self.page_size,)).fetchall()
             if not rows:
                 break
             for ref, data in rows:
@@ -199,30 +199,30 @@ class _Selection:
                     # using the authoritative source index. A parent's other
                     # derivatives/private histories are not reverse-traversed.
                     for kind in SOURCE_PROVENANCE_KINDS:
-                        related = self.store.db.execute(
+                        related = self.store._db.execute(
                             "SELECT data FROM records WHERE record_type=? AND json_extract(data,'$.source_ref')=? ORDER BY id",
                             (kind, ref))
                         for (native_data,) in related:
                             self.add(json.loads(native_data), "source_only_record_refs")
                 for dependency in _references(record):
                     self.add(dependency)
-                self.db.execute("UPDATE nodes SET processed=1 WHERE id=?", (ref,))
+                self._db.execute("UPDATE nodes SET processed=1 WHERE id=?", (ref,))
         for kind in ("annotation", "assessment"):
-            rows = self.db.execute("SELECT id FROM nodes WHERE record_type=? ORDER BY id", (kind,))
+            rows = self._db.execute("SELECT id FROM nodes WHERE record_type=? ORDER BY id", (kind,))
             for (ref,) in rows:
-                if self.db.execute("SELECT 1 FROM membership WHERE name=? AND id=?", (f"current_{kind}_refs", ref)).fetchone():
+                if self._db.execute("SELECT 1 FROM membership WHERE name=? AND id=?", (f"current_{kind}_refs", ref)).fetchone():
                     continue
-                current = self.store.db.execute("SELECT 1 FROM current_revisions WHERE record_type=? AND record_ref=?", (kind, ref)).fetchone()
+                current = self.store._db.execute("SELECT 1 FROM current_revisions WHERE record_type=? AND record_ref=?", (kind, ref)).fetchone()
                 name = f"referenced_{'current' if current else 'noncurrent'}_{kind}_refs"
-                self.db.execute("INSERT OR IGNORE INTO membership VALUES(?,?)", (name, ref))
+                self._db.execute("INSERT OR IGNORE INTO membership VALUES(?,?)", (name, ref))
         self._index_gff()
-        self.db.commit()
+        self._db.commit()
 
     def _index_gff(self):
         for row in self.members("current_annotation_refs", records=True):
             subject = self.store.get(row["subject_ref"])
             if subject["record_type"] == "feature":
-                self.db.execute("INSERT OR IGNORE INTO gff_accounts VALUES(?,?)", (subject["id"], row["id"]))
+                self._db.execute("INSERT OR IGNORE INTO gff_accounts VALUES(?,?)", (subject["id"], row["id"]))
         for feature in self.members("candidate_feature_refs", records=True):
             parent = self.store.get(feature["subject_ref"])
             reason = None
@@ -237,24 +237,24 @@ class _Selection:
             elif feature["kind"] not in GFF_TYPES:
                 reason = "feature_kind_not_represented_in_gff3"
             if reason:
-                self.db.execute("INSERT INTO gff_exclusions VALUES(?,?)", (feature["id"], reason))
+                self._db.execute("INSERT INTO gff_exclusions VALUES(?,?)", (feature["id"], reason))
             else:
-                self.db.execute("INSERT INTO membership VALUES('gff3_emitted_feature_refs',?)", (feature["id"],))
+                self._db.execute("INSERT INTO membership VALUES('gff3_emitted_feature_refs',?)", (feature["id"],))
 
     def members(self, name, *, records=False):
         if records:
-            rows = self.db.execute("SELECT n.data FROM membership m JOIN nodes n ON n.id=m.id WHERE m.name=? ORDER BY m.id", (name,))
+            rows = self._db.execute("SELECT n.data FROM membership m JOIN nodes n ON n.id=m.id WHERE m.name=? ORDER BY m.id", (name,))
             for (data,) in rows:
                 yield json.loads(data)
         else:
-            for (ref,) in self.db.execute("SELECT id FROM membership WHERE name=? ORDER BY id", (name,)):
+            for (ref,) in self._db.execute("SELECT id FROM membership WHERE name=? ORDER BY id", (name,)):
                 yield ref
 
     def records(self, *, kind=None, scientific=False):
         if scientific:
-            rows = self.db.execute("SELECT data FROM nodes WHERE record_type NOT IN ('input','artifact') ORDER BY record_type,id")
+            rows = self._db.execute("SELECT data FROM nodes WHERE record_type NOT IN ('input','artifact') ORDER BY record_type,id")
         else:
-            rows = self.db.execute("SELECT data FROM nodes WHERE record_type=? ORDER BY id", (kind,))
+            rows = self._db.execute("SELECT data FROM nodes WHERE record_type=? ORDER BY id", (kind,))
         for (data,) in rows:
             yield json.loads(data)
 
@@ -266,7 +266,7 @@ class _Selection:
         and local error index preserve their actual authoritative identity.
         """
         for attempt in self.records(kind="parse_attempt"):
-            rows = self.store.db.execute(
+            rows = self.store._db.execute(
                 "SELECT error_index,data FROM material_errors WHERE parse_key=? ORDER BY error_index",
                 (attempt["parse_key"],))
             for error_index, data in rows:
@@ -280,7 +280,7 @@ class _Selection:
             if source_ref is None:
                 continue
             source = self.store.get(source_ref)
-            rows = self.store.db.execute("SELECT * FROM material_annotations WHERE parse_key=? ORDER BY record_ordinal,entry_kind,entry_ordinal",
+            rows = self.store._db.execute("SELECT * FROM material_annotations WHERE parse_key=? ORDER BY record_ordinal,entry_kind,entry_ordinal",
                 (attempt["parse_key"],))
             for row in rows:
                 yield {"parse_ref": attempt["id"], "parse_key": attempt["parse_key"],
@@ -291,18 +291,18 @@ class _Selection:
                     "preview": json.loads(row["preview"])}
 
     def counts(self):
-        return {"records": {kind: total for kind, total in self.db.execute("SELECT record_type,count(*) FROM nodes GROUP BY record_type ORDER BY record_type")},
-                "membership": {name: self.db.execute("SELECT count(*) FROM membership WHERE name=?", (name,)).fetchone()[0] for name in MEMBERSHIPS}}
+        return {"records": {kind: total for kind, total in self._db.execute("SELECT record_type,count(*) FROM nodes GROUP BY record_type ORDER BY record_type")},
+                "membership": {name: self._db.execute("SELECT count(*) FROM membership WHERE name=?", (name,)).fetchone()[0] for name in MEMBERSHIPS}}
 
     def gff_counts(self):
-        emitted = self.db.execute("SELECT count(*) FROM membership WHERE name='gff3_emitted_feature_refs'").fetchone()[0]
-        excluded = self.db.execute("SELECT count(*) FROM gff_exclusions").fetchone()[0]
+        emitted = self._db.execute("SELECT count(*) FROM membership WHERE name='gff3_emitted_feature_refs'").fetchone()[0]
+        excluded = self._db.execute("SELECT count(*) FROM gff_exclusions").fetchone()[0]
         segments = sum(len(row["segments"]) for row in self.members("gff3_emitted_feature_refs", records=True))
         return {"emitted_features": emitted, "emitted_rows": segments, "excluded_features": excluded,
-                "exclusion_counts": {code: count for code, count in self.db.execute("SELECT code,count(*) FROM gff_exclusions GROUP BY code ORDER BY code")}}
+                "exclusion_counts": {code: count for code, count in self._db.execute("SELECT code,count(*) FROM gff_exclusions GROUP BY code ORDER BY code")}}
 
     def exclusions(self):
-        for ref, code in self.db.execute("SELECT id,code FROM gff_exclusions ORDER BY id"):
+        for ref, code in self._db.execute("SELECT id,code FROM gff_exclusions ORDER BY id"):
             yield {"feature_ref": ref, "code": code}
 
 
@@ -399,7 +399,7 @@ def _write_packed_indexes(selection, json_path, include_artifacts):
                     CREATE TABLE material_pack_chunks(parse_key TEXT NOT NULL,chunk_index INTEGER NOT NULL,artifact_ref TEXT NOT NULL,PRIMARY KEY(parse_key,chunk_index));
                     CREATE TABLE artifacts(id TEXT PRIMARY KEY,sha256 TEXT NOT NULL,media_type TEXT NOT NULL,size INTEGER NOT NULL);
                 """)
-                attempt = next(selection.store.db.execute("SELECT data FROM records WHERE record_type='parse_attempt' AND json_extract(data,'$.parse_key')=?", (collection["parse_key"],)))[0]
+                attempt = next(selection.store._db.execute("SELECT data FROM records WHERE record_type='parse_attempt' AND json_extract(data,'$.parse_key')=?", (collection["parse_key"],)))[0]
                 attempt = json.loads(attempt)
                 metadata = {"format": "gene_annotation_episode.packed_material_index", "schema_version": 1,
                     "storage_representation": packing.REPRESENTATION, "collection": collection,
@@ -413,7 +413,7 @@ def _write_packed_indexes(selection, json_path, include_artifacts):
                     ("artifacts", "SELECT DISTINCT a.id,a.sha256,a.media_type,a.size FROM artifacts a JOIN material_pack_chunks c ON c.artifact_ref=a.id WHERE c.parse_key=? ORDER BY a.id", (collection["parse_key"],), 4),
                 )
                 for table, query, parameters, width in queries:
-                    rows = selection.store.db.execute(query, parameters)
+                    rows = selection.store._db.execute(query, parameters)
                     while batch := rows.fetchmany(selection.page_size):
                         db.executemany("INSERT INTO " + table + " VALUES(" + ",".join("?" for _ in range(width)) + ")", (tuple(row) for row in batch))
                 db.commit()
@@ -459,7 +459,7 @@ def _write_library_indexes(selection, json_path):
             db.executemany("INSERT INTO inputs VALUES(?,?)", ((row["id"], canonical(row)) for row in targets))
             for row in selection.records(kind="read_selection"):
                 db.execute("INSERT INTO selections VALUES(?,?)", (row["id"], canonical(row)))
-                cursor = selection.store.db.execute("SELECT selection_ref,read_ref FROM library_selection_members WHERE selection_ref=? ORDER BY read_ref", (row["id"],))
+                cursor = selection.store._db.execute("SELECT selection_ref,read_ref FROM library_selection_members WHERE selection_ref=? ORDER BY read_ref", (row["id"],))
                 while batch := cursor.fetchmany(selection.page_size):
                     db.executemany("INSERT INTO library_selection_members VALUES(?,?)", (tuple(value) for value in batch))
             db.commit()
@@ -554,7 +554,7 @@ def _write_gff(selection, path, json_path, json_digest):
                 handle.write(f"##sequence-region {target['id']} 1 {target['length']}\n")
         for feature in selection.members("gff3_emitted_feature_refs", records=True):
             parent = selection.store.get(feature["subject_ref"])
-            account_refs = [row[0] for row in selection.db.execute("SELECT annotation_ref FROM gff_accounts WHERE feature_ref=? ORDER BY annotation_ref", (feature["id"],))]
+            account_refs = [row[0] for row in selection._db.execute("SELECT annotation_ref FROM gff_accounts WHERE feature_ref=? ORDER BY annotation_ref", (feature["id"],))]
             accounts = [selection.store.get(ref) for ref in account_refs]
             attrs = {"ID": [feature["id"]], "annotation_kind": [feature["kind"]],
                      "input_name": [parent["name"]], "input_molecule": [parent["molecule"]],

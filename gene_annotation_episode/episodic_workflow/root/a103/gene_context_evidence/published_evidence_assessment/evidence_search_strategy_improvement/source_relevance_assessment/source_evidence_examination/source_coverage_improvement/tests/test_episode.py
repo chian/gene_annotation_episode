@@ -1,5 +1,6 @@
 """The A103 source coverage improvement episode is a private binding in the ten-file form."""
 import ast
+import json
 from pathlib import Path
 
 import pytest
@@ -77,3 +78,45 @@ def test_a_window_of_another_source_is_refused_where_the_assignment_is_read():
 def test_the_return_form_declares_credit_and_finding_as_required():
     required = {name for name, field in RETURN_FORM.fields.items() if field.required}
     assert {'credit', 'finding'} <= required
+
+
+# The unit functions over plain summaries (data, not stand-ins for the system).
+from episode_runtime import Rejected, ToolCall  # noqa: E402
+
+from ..messages.final_to_parent import final_to_parent  # noqa: E402
+from ..task import TOOLS, decide
+
+SCOPE = {'subject_refs': ['sub_1']}
+FINDING = {'source_claim': 'claim', 'source_subject': 'subject', 'qualification': 'q',
+           'target_correspondence': 'unresolved', 'windows': [
+               {'source_ref': 'src_1', 'representation': 'text', 'offset': 0, 'limit': 10, 'quote': 'text'}]}
+
+
+def _summary(**changes):
+    value = {'assignment': {'scope': SCOPE, 'page': {'source_ref': 'src_1'}},
+             'catalog': [{'name': 'source.read'}], 'report': None, 'report_sources_held': {}}
+    return {**value, **changes}
+
+
+def test_the_first_unit_is_the_catalog_lookup():
+    call = decide(_summary(catalog=None), None, None)
+    assert isinstance(call, ToolCall) and call.name == 'tool_catalog' and call.arguments == {'scope': SCOPE}
+
+
+
+
+def test_the_controlled_report_is_admitted_and_the_returned_finding_is_read_by_code_from_it():
+    """The report the model writes is admitted by the episode's own form; the finding is what code reads from it,
+    admitted by the return form; every text field of the finding is a fixed vocabulary (no model text returns)."""
+    import importlib as modules
+    final = modules.import_module(PACKAGE + '.messages.final_to_parent')
+    report = final.REPORT_FORM.admit({'target_correspondence': 'established', 'evidence_type': 'gene_fusion', 'windows': [{'source_ref': 'src_1', 'representation': 'text', 'offset': 10, 'limit': 5}, {'source_ref': 'src_1', 'representation': 'text', 'offset': 40, 'limit': 10}]}, 'report')
+    finding = final.finding_of(report)
+    assert finding['window_count'] == 2 and finding['evidence_type'] == 'gene_fusion'
+    result = final.final_to_parent({'finding': finding}, {'ended_by': 'yield_stop', 'units_consumed': 3,
+                                                          'credit': 0.5}, ())
+    assert final.RETURN_FORM.admit(result, 'result') == result and result['credit'] == 0.5
+    fields = final.RETURN_FORM.fields['finding'].form.fields
+    assert all(hasattr(spec, 'options') for spec in fields.values() if spec.type == 'text')
+    empty = final.finding_of(None)
+    assert final.RETURN_FORM.fields['finding'].form.admit(empty, 'finding') == empty

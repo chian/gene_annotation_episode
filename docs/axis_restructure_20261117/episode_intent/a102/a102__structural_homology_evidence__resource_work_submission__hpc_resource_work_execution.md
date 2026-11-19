@@ -259,3 +259,93 @@ order". Neither is a stopping gate, and neither may become one.
   - The parent returns its configured contract-information profile.
   - The parent's summary, facts and report validation iterate over all adapters, where this child uses only the
     selected adapter.
+
+## Carried over
+
+One row per row of `runs/carry_over/functions/a102__structural_homology_evidence__resource_work_submission__hpc_resource_work_execution.tsv`. New files are in `gene_annotation_episode/episodic_workflow/root/a102/structural_homology_evidence/resource_work_submission/hpc_resource_work_execution/`. No row is a library candidate: every episode function is in the episode files; the library pieces it calls already exist.
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| action_contract_feedback.py | ResourceActionContractFeedback | episode function | not carried: its repairs (closed_top_level_form_required, component_native_return_channels_required, reads.map parameters) concern report forms and tools this episode does not offer; invalid answers are rejected in task.action with rejection_feedback (library) |
+| action_contract_feedback.py | ResourceActionContractFeedback.action_contract_feedback | episode function | task.py action (Rejected(rejection_feedback(error, category='action_contract'))); contract_error/repair details unplaced (see blocked file) |
+| binding_record.py | ResourceBindingRecord | machinery | binding_record.py: the binding's own record (README 3e) |
+| binding_record.py | ResourceBindingRecord.as_record | machinery | the binding's own as_record() is deleted (README 3d) |
+| child_commissioning.py | ResourceChildCommissioning | machinery | no children: CHILD_SLOTS = {} in task.py |
+| child_commissioning.py | ResourceChildCommissioning.child_roles | machinery | no children: CHILD_SLOTS = {} in task.py |
+| child_commissioning.py | ResourceChildCommissioning.allowed_children | machinery | no children: CHILD_SLOTS = {} in task.py |
+| configuration.py | ResourceConfiguration | machinery | adapter registration and record-selection binding: the adapter is the service resource_adapter (task.SERVICES); fixed values are constants of task.py |
+| configuration.py | ResourceConfiguration.__init__ | machinery | home/adapter construction; the adapter API requirement and duplicate_resource_id are the service's (BLOCKED-ON-JOB-SERVICE) |
+| credit.py | ResourceCredit | episode function | credit.py credit |
+| credit.py | ResourceCredit.credit_kind | machinery | credit kind 'operational' / unknown_resource_episode_role: deleted (credit_kind is deleted, README 3d) |
+| credit.py | ResourceCredit.credit_view | episode function | credit.py credit (count of usable handoffs read from the summary; bound_role_credit service call replaced, see blocked file) |
+| decision_context.py | ResourceDecisionContext | episode function | messages/internal_summary.py internal_summary and task.py decide |
+| decision_context.py | ResourceDecisionContext.decision_state | episode function | messages/internal_summary.py internal_summary (state from the view); task.py decide (credit_binding, time_accounting, action_yields, tools, tool_knowledge); report/exchange/annotation-axis parts not carried |
+| decision_contracts.py | ResourceDecisionContracts | machinery | decision-exchange loop (request_context / select_action envelope) |
+| decision_contracts.py | ResourceDecisionContracts.exchange_schema | machinery | decision-exchange loop |
+| decision_contracts.py | ResourceDecisionContracts.exchange_response | machinery | decision-exchange loop |
+| decision_exchange.py | ResourceDecisionExchange | machinery | decision-exchange loop |
+| decision_exchange.py | ResourceDecisionExchange.conversation_key | machinery | conversation state (README 3a) |
+| decision_exchange.py | ResourceDecisionExchange.interpretation_context | machinery | decision-exchange loop |
+| decision_exchange.py | ResourceDecisionExchange.exchange_decision | machinery | decision-exchange loop |
+| decision_inputs.py | ResourceDecisionInputs | episode function | task.py decide |
+| decision_inputs.py | ResourceDecisionInputs.decision_inputs | episode function | task.py decide (assignment, resource capabilities and tool estimates, launch-instruction library and selected sections, tool knowledge, history of own calls); pieces with no source listed in the blocked file |
+| episode.py | ResourceEpisode | machinery | episode.py HpcResourceWorkExecution(EpisodeBinding) (the mix-in class is replaced) |
+| episode.py | ResourceEpisode.permitted_common_actions | machinery | common actions: tool kept (tools); reason, child, wait, redeliver_report not carried (README 3a, 3b) |
+| from_parent.py | ResourceFromParent | episode function | messages/read_from_parent.py ASSIGNMENT_FORM and read_from_parent |
+| from_parent.py | ResourceFromParent.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (one field per LAUNCH_SCHEMA property, plus input_refs) |
+| from_parent.py | ResourceFromParent._require_launch_child_instruction_pins | machinery | checks a commission against the parent's own assignment: not carried (rule 1; the library retain_inherited_selection exists for the parent's msg_to_child) |
+| from_parent.py | ResourceFromParent.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent (schema, validate_selection, explicit_resource_selection_required, kind hpc); task.py selected_capability (declared capability, kind, permitted); parent-equality checks and adapter.prepare_assignment not carried |
+| goal.py | ResourceGoal | episode function | goal.py GOAL, task.py instructions |
+| goal.py | ResourceGoal.contract_information_profile | machinery | returned None for this role: no discovery paragraph; report-contract machinery |
+| goal.py | ResourceGoal.instructions | episode function | goal.py GOAL (the sentences) and task.py instructions (composition) |
+| handoff_check.py | ResourceHandoffCheck | episode function | task.py resource_check_handoff |
+| handoff_check.py | ResourceHandoffCheck.check_selected_handoff | episode function | task.py resource_check_handoff and check_adapter_handoff (BLOCKED-ON-JOB-SERVICE) |
+| initial_references.py | ResourceInitialReferences | machinery | returned [] for this role (only role results); initial references are custody (README 3b P2) |
+| initial_references.py | ResourceInitialReferences.initial_references | machinery | returned [] for this role; custody |
+| instructions.py | instructions | episode function | task.py instructions (reasoning, redelivery, wait, native-event and exchange paragraphs dropped with their actions) |
+| internal_summary.py | ResourceInternalSummary | episode function | messages/internal_summary.py internal_summary; task.py decide |
+| internal_summary.py | ResourceInternalSummary.decision_context | episode function | messages/internal_summary.py (role, assignment) and task.py decide (resource_capabilities, resource_tool_estimates via the service) |
+| operation_catalog.py | ResourceOperationCatalog | episode function | task.py catalog |
+| operation_catalog.py | ResourceOperationCatalog.catalog | episode function | task.py catalog and CAPABILITIES_TOOL |
+| operations.py | ResourceOperations | episode function | task.py TOOLS and action |
+| operations.py | ResourceOperations.execute | episode function | task.py action (dispatch by tool name), resource_capabilities, resource_inspect, resource_check_handoff, adapter_tool |
+| received_messages.py | ResourceReceivedMessages | machinery | receipts bookkeeping (README 3b R3, 3e F1) |
+| received_messages.py | ResourceReceivedMessages.received_form_references | machinery | proof references for received handoff fields: custody (reply_ref and handoff_refs are named in the return); resource_information_handoff_proof_missing not carried |
+| report_delivery.py | ResourceReportDelivery | machinery | report_form machinery (finish: form saved in runtime_forms, release) |
+| report_delivery.py | ResourceReportDelivery.finish | machinery | report_form machinery; the facts it assembled are messages/final_to_parent.py final_to_parent |
+| report_fields.py | ResourceReportFields | episode function | messages/final_to_parent.py RETURN_FORM |
+| report_fields.py | ResourceReportFields.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (execution_handoff, execution_handoffs selectable; adapter fact sources not carried) |
+| report_reference_access.py | ResourceReportReferenceAccess | machinery | report resolver / receiving interfaces (README 3b D2) |
+| report_reference_access.py | ResourceReportReferenceAccess.resolve | machinery | report resolver (README 3b D2) |
+| resource_contracts.py | _failure | episode function | task.py _failure |
+| resource_contracts.py | _outcome | episode function | task.py _outcome |
+| resource_contracts.py | _availability_failure | episode function | task.py _availability_failure |
+| resource_inspection.py | ResourceInspection | episode function | task.py resource_inspect |
+| resource_inspection.py | ResourceInspection.inspect_resource | episode function | task.py resource_inspect (BLOCKED-ON-JOB-SERVICE) |
+| resource_selection.py | ResourceResourceSelection | episode function | task.py declared_capabilities, selected_capability, _permitted |
+| resource_selection.py | ResourceResourceSelection.capabilities | episode function | task.py declared_capabilities and selected_capability (read through the service) |
+| resource_selection.py | ResourceResourceSelection._adapter | machinery | adapter lookup by resource id: the service resource_adapter (task.SERVICES) |
+| resource_selection.py | ResourceResourceSelection._permitted | episode function | task.py _permitted |
+| saved_decision_exchange.py | ResourceSavedDecisionExchange | machinery | saved decision-exchange authentication on resume (README 3a) |
+| saved_decision_exchange.py | ResourceSavedDecisionExchange.validate_contract_exchange_request | machinery | saved-request check (README 3a) |
+| saved_decision_exchange.py | ResourceSavedDecisionExchange.validate_contract_exchange_history | machinery | saved-request check (README 3a) |
+| task.py | ResourceTask | episode function | task.py decide, action and the tools |
+| task.py | ResourceTask.next | machinery | the decision loop (the system's); its model call is decide's ModelRequest |
+| task.py | ResourceTask.apply_response | episode function | task.py action (admission of the selection, Rejected); report_update admission and the reason branch not carried |
+| task.py | ResourceTask.execute | machinery | unit execution, journal rows, receipts, credit staging, ActionFailure: the system's; the tool dispatch is task.py action and TOOLS |
+| task_decision.py | ResourceTaskDecision | machinery | decision call with saved-call reuse (README 3a) |
+| task_decision.py | ResourceTaskDecision.call | machinery | saved model-call reuse and history preview; the request is task.py decide |
+| task_decision.py | ResourceTaskDecision.instructions | episode function | task.py instructions |
+| task_state.py | ResourceTaskState | machinery | task state restore/checkpoint (README 3e) |
+| task_state.py | ResourceTaskState.__init__ | machinery | task state fields: the view (messages/internal_summary.py) |
+| task_state.py | ResourceTaskState.bind_execution_context | machinery | execution binding |
+| task_state.py | ResourceTaskState.record_execution_failure | machinery | failure rows and checkpoint: a failed outcome is the tool's returned outcome |
+| task_state.py | ResourceTaskState.restore_checkpoint | machinery | checkpoint/restore |
+| task_state.py | ResourceTaskState.restore | machinery | checkpoint/restore |
+| task_state.py | ResourceTaskState.record_effect | machinery | record_effect |
+| task_state.py | ResourceTaskState.checkpoint | machinery | checkpoint |
+| to_parent.py | ResourceToParent | episode function | messages/final_to_parent.py |
+| to_parent.py | ResourceToParent.facts | episode function | messages/internal_summary.py (de-duplication by identity) and messages/final_to_parent.py final_to_parent |
+| to_parent.py | ResourceToParent.validate_report | episode function | messages/final_to_parent.py validate_report (handoff mismatch); adapter.validate_report not carried |
+| waiting.py | ResourceWaiting | machinery | wait/suspension machinery |
+| waiting.py | ResourceWaiting.suspension_changed | machinery | suspension machinery |

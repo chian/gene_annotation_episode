@@ -21,7 +21,7 @@ def target_eligible(store, assessment, scope):
                     store.context_mask_overlap(allocation, scope))
     if not finding_target_roots(store, assessment).intersection(scope['subject_refs']):
         return False
-    extent = store._assessment_write_extent(assessment)
+    extent = store.assessment_write_extent(assessment['id'])
     if not extent:
         extent = store.record_coverage(store.get(assessment['hypothesis_ref']))
     return bool(extent) and store.context_mask_overlap({

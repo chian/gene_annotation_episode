@@ -227,3 +227,28 @@ def test_a_row_named_in_the_entry_assignment_must_exist(world):
         run(world, 'missing_row', [], assignment={'held_refs': ['row_missing']})
     with pytest.raises(CustodyError, match='entry_record_not_in_store:artifact_missing'):
         run(world, 'missing_record', [], assignment={'held_refs': ['artifact_missing']})
+
+
+def test_an_episode_that_created_the_problem_lists_the_records_it_holds(world):
+    """The unit that calls ``create_problem`` holds what the call created, the problem's own reference included.
+    That reference is a record of no kind (the Store keeps the problem in a table of its own and reads it with
+    ``problem()``): every inventory lists the held records beside it."""
+    run(world, 'opened', [tool('open_problem', sequence='MKTAYIAKQRQISFVKSHFSRQLEERLGLIEVQ'), tool('many', n=3)])
+    first, second = outcomes(world, 'opened')
+    opened, store = first['outcome'], world['store']
+    assert opened['problem'] == opened['read_problem'] == store.problem()['id']
+    assert opened['holds_problem'] is True and opened['problem'] in first['produced']
+    assert opened['problem'].startswith('problem_')
+    with pytest.raises(Exception, match='unknown_reference'):       # the Store's ``get`` does not know it
+        store.get(opened['problem'])
+    kinds = {ref: store.get(ref)['record_type'] for ref in first['produced'] if ref != opened['problem']}
+    for kind, listed in opened['listed'].items():
+        assert listed == sorted(ref for ref, held in kinds.items() if held == kind) != [], kind
+        assert opened['counted'][kind] == len(listed)
+    assert opened['subjects'] == opened['targets'] == opened['view_subjects'] == store.problem()['subject_refs']
+    assert set(opened['subjects']) <= set(kinds)
+    assert opened['listed_in_scope'] == {kind: [row['id'] for row in store.list(
+        kind, {'subject_refs': opened['subjects']}, 1000) if row['id'] in kinds] for kind in opened['listed']}
+    assert opened['queried_sources'] == len(opened['listed_in_scope']['source'])
+    # A later unit of the Episode lists too: the three sources it writes beside the problem's own.
+    assert second['outcome']['listed'] == second['outcome']['counted'] == 3 + len(opened['listed']['source'])

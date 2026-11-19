@@ -1,6 +1,5 @@
 """Private received sequence extraction for A107."""
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError
-import hashlib
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_operations.sequence_views import view_sequence
 
 
@@ -34,19 +33,6 @@ def sequence(store, reference: str, *, molecule_model: str | None = None) -> str
 REPRESENTATION = "packed_member_components_v1"
 
 
-def _verified_artifact_path(store, ref):
-    """Verify retained byte identity only; callers own access authority."""
-    artifact = store._require(ref, {"artifact"})
-    path = store.path / "artifacts" / artifact["sha256"][:2] / artifact["sha256"]
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    if digest.hexdigest() != artifact["sha256"]:
-        raise ContractError("artifact_digest_mismatch")
-    return path
-
-
 def packed(member):
     return member.get("storage", {}).get("representation") == REPRESENTATION
 
@@ -62,13 +48,13 @@ def component_info(store, member, component):
 
 
 def component_chunks(store, member, component, *, offset=0, limit=None):
-    """Yield only selected component bytes, verifying intersected bounded chunks."""
+    """Yield only the selected component bytes, in bounded windows read through the store."""
     info = component_info(store, member, component)
     if info is None:
         return
     end = info["bytes"] if limit is None else min(info["bytes"], offset + limit)
     if not packed(member):
-        with _verified_artifact_path(store, member[component + "_ref"]).open("rb") as handle:
+        with store.open_artifact(member[component + "_ref"]) as handle:
             handle.seek(offset)
             remaining = max(0, end-offset)
             while remaining:
@@ -78,30 +64,14 @@ def component_chunks(store, member, component, *, offset=0, limit=None):
                 remaining -= len(data)
                 yield data
         return
-    cursor = 0
-    rows = store.db.execute("SELECT s.start,s.end,c.artifact_ref FROM material_component_spans s JOIN material_pack_chunks c ON c.parse_key=? AND c.chunk_index=s.chunk_index WHERE s.member_ref=? AND s.component=? ORDER BY s.part",
-        (member["storage"]["parse_key"], member["id"], component))
-    for start, stop, ref in rows:
-        width = stop-start
-        if width < 0:
-            raise ContractError("material_component_span_invalid")
-        overlap_start, overlap_end = max(offset, cursor), min(end, cursor+width)
-        if overlap_start < overlap_end:
-            artifact = store.get(ref)
-            if not 0 <= start <= stop <= artifact["size"]:
-                raise ContractError("material_component_span_invalid")
-            with _verified_artifact_path(store, ref).open("rb") as handle:
-                handle.seek(start + overlap_start-cursor)
-                remaining = overlap_end-overlap_start
-                while remaining:
-                    data = handle.read(min(65536, remaining))
-                    if not data:
-                        raise ContractError("material_component_size_mismatch")
-                    remaining -= len(data)
-                    yield data
-        cursor += width
-    if cursor != info["bytes"]:
-        raise ContractError("material_component_size_mismatch")
+    cursor = offset
+    while cursor < end:
+        window = store.material_member(member["id"], offset=cursor, limit=min(65536, end-cursor))
+        data = window[component].encode("ascii")
+        if not data:
+            raise ContractError("material_component_size_mismatch")
+        cursor += len(data)
+        yield data
 
 
 def component_window(store, member, component, offset, limit):

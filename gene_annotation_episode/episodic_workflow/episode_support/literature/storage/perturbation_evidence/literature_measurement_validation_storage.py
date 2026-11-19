@@ -11,7 +11,7 @@ import re
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbation_evidence.communication import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import ContractError, canonical, identity, obj, validate_schema
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_rate_storage import LiteratureRateRepository
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_rate_storage import LiteratureRateRepository, RECEIVED_CELLS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_calibration_recovery_storage import LiteratureCalibrationRecoveryRepository
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_measurement_validation_inputs import VERSION as INPUT_VERSION, CONTEXT_FIELDS, RELATIONSHIPS, FORMULA_RELATIONS, measurement_validation_population_schema, measurement_validation_extraction_schema, read_measurement_validation_inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.perturbation_evidence.literature_measurement_validation_calculations import COMPONENTS, PRECISION_COMPONENTS, ZPRIME_COMPONENTS, FORMULAS, QUALIFICATIONS, measurement_validation_cell_schema, measurement_validation_sheet_schema, populate_measurement_validation
@@ -145,7 +145,6 @@ def _key(row):
 
 class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
     provider, record_version, components = PROVIDER, VERSION, COMPONENTS
-    operations_table = 'literature_measurement_validation_operations'
     received_table = 'literature_measurement_validation_received'
     binding_fields = ()
 
@@ -153,12 +152,6 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
         if not isinstance(run_id, str) or not run_id:
             raise ValueError('explicit_literature_run_required')
         self.store, self.run_id = store, run_id
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     @staticmethod
     def _components(values):
@@ -185,14 +178,6 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key,
             'scope': plain(context.scope), 'arguments': args, 'components': requested,
             'role': context.role, 'assignment': plain(context.assignment), 'received_record_refs': list(context.received_record_refs)}
-        signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
-        if old is not None:
-            if old['signature'] != signature:
-                raise ContractError('operation_key_reused_for_different_work')
-            outcome = json.loads(old['outcome']); self.read(outcome['result']['sheet_ref'])
-            return outcome
         source = self._native_source(context, args['source_ref'])
         snapshots = []
         def read_source(ref, representation):
@@ -220,21 +205,18 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
             'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'input_snapshots': snapshots,
             'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
             req_ref = self.store.artifact(canonical(request), 'application/json')
             value = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact,
                 'text_ref': artifact, 'request_ref': req_ref, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': parents}
             reference = identity('source', {'origin': 'tool', 'record': value})
-            exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (reference,)).fetchone()
+            exists = self.store.holds(reference)
             self.store.put('source', value, origin='tool', scope=plain(context.scope))
             rows = _project_saved(payload, reference, requested); validate_schema(rows, measurement_validation_cells_schema())
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id,
                 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [reference],
                 'changed_record_refs': [] if exists else [reference],
                 'result': {'sheet_ref': reference, 'view': VIEW, 'cells': rows}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     def _json(self, reference):
@@ -327,10 +309,6 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
             raise ContractError('measurement_validation_saved_request_mismatch')
         validate_schema(request['arguments'], measurement_validation_population_schema()); self._components(request['components'])
         self._native_provenance(request['scope'], reference)
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
-        if operation is None or operation['signature'] != canonical(request):
-            raise ContractError('literature_sheet_not_selected_output')
         saved = self._json(source['artifact_ref'])
         if (set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs',
                 'input_source_refs', 'source_metadata', 'input_snapshots', 'extraction', 'sheet'}
@@ -344,11 +322,6 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
             raise ContractError('measurement_validation_saved_source_mismatch')
         self._validate_bindings(saved, request)
         rows = _project_saved(saved, reference, request['components']); validate_schema(rows, measurement_validation_cells_schema())
-        outcome = json.loads(operation['outcome'])
-        if (outcome.get('status') != 'completed' or outcome.get('record_refs') != [reference] or outcome.get('feedback') is not None
-                or canonical(outcome.get('result')) != canonical({'sheet_ref': reference, 'view': VIEW, 'cells': rows})
-                or outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
-            raise ContractError('measurement_validation_saved_outcome_mismatch')
         return saved
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
@@ -406,18 +379,9 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
     def received_cells(self, context):
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
-        if not self._installed(self.received_table):
-            return []
         result, seen = [], {}
-        for saved in self.store.db.execute(f'SELECT operation_key,cells FROM {self.received_table} WHERE run_id=? AND episode_id=? ORDER BY rowid',
-                (self.run_id, context.episode_id)):
-            cells = json.loads(saved['cells']); original = self._runtime_delivery_cells(context, saved['operation_key'])
-            bound = self._delivery_binding(context, saved['operation_key'])
-            if bound is None and original is None:
-                raise ContractError('literature_delivery_binding_unavailable')
-            if (bound is not None and bound[0] != self._delivery_digest(cells)
-                    or original is not None and canonical(original) != canonical(cells)):
-                raise ContractError('literature_delivery_binding_mismatch')
+        for saved in self.store.table(RECEIVED_CELLS).select({"view": self.received_table}):
+            cells = json.loads(saved["cells"])
             self.validate_returned_values(cells, permitted_record_refs=[row['sheet_ref'] for row in cells])
             for row in cells:
                 key = _key(row)
@@ -430,16 +394,12 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
     def receive_cells(self, context, cells, operation_key):
         if not cells:
             return
-        with self.store.transaction():
-            self._install(); return super().receive_cells(context, cells, operation_key)
+        return super().receive_cells(context, cells, operation_key)
 
     def selected_sheet_refs(self, context):
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
-        if not self._installed(self.operations_table):
-            return []
-        refs = list(dict.fromkeys(json.loads(row['outcome'])['result']['sheet_ref'] for row in self.store.db.execute(
-            f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id))))
+        refs = self.produced_sheet_refs(context)
         for ref in refs:
             self.read(ref)
         return refs

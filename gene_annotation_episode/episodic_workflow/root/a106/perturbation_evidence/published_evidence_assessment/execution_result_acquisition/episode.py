@@ -1,20 +1,25 @@
-"""The A106 results binding (``perturbation_evidence/published_evidence_assessment/execution_result_acquisition``).
+"""The A106 published-evidence result acquisition episode."""
+from episode_runtime import EpisodeBinding
 
-It acquires the native results of the BV-BRC AppService jobs its sibling ``perturbation_evidence/
-published_evidence_assessment/execution_job_submission`` launched, from the handoffs that submission returned:
-model-selected AppService result operations bound from each returned handoff
-(``perturbation_evidence/execution_result_acquisition/acquisition_source.ResultAcquisitionBinding``).
-"""
-from __future__ import annotations
-
-from gene_annotation_episode.episodic_workflow.root.a106.perturbation_evidence.execution_result_acquisition.\
-    acquisition_source import ResultAcquisitionBinding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       read_from_parent as from_parent_file)
 
 
-class ExecutionEpisode(ResultAcquisitionBinding):
-    binding_path = 'perturbation_evidence/published_evidence_assessment/execution_result_acquisition'
-    commissioning_parent = 'perturbation_evidence/published_evidence_assessment'
-    roles = ('results',)
-    goal = "The analysis work its parent commissioned, carried to retained native records"
-    unit = "One result acquisition action"
-    result = "The retained acquired result record references"
+class ExecutionResultAcquisition(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

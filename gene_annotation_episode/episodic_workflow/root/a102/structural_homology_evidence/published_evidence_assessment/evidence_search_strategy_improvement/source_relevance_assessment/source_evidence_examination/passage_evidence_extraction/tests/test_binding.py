@@ -78,16 +78,38 @@ def test_the_commission_form_admits_a_reading_assignment_and_refuses_an_unknown_
 def test_the_return_declares_credit_and_finding_as_required_and_the_fact_sources_as_selectable():
     form = EPISODE.return_form
     assert form.fields['credit'].required and form.fields['finding'].required
-    for name in ('literature_screening_answers', 'literature_source_lead_dispositions', 'literature_structure_cells'):
+    for name in ('literature_screening_answers', 'literature_source_lead_dispositions'):
         assert not form.fields[name].required
 
 
-def test_the_axis_has_no_report_form_validator_so_the_return_raises_where_the_old_one_called_it():
-    summary = {'report': None, 'report_source_held': {},
-               'literature_assignment': {'page': {'source_ref': 's', 'representation': 'text'},
-                                         'selection': {'spans': [{'source_ref': 's', 'representation': 'text'}]}}}
-    with pytest.raises(NotImplementedError, match='validate_form_not_built:A102'):
-        EPISODE.final_to_parent(summary, {'ended_by': 'yield_stop', 'units_consumed': 0, 'credit': 2.5}, ())
+def test_the_return_carries_credit_the_finding_and_each_selectable_field_as_counts_and_references():
+    span = {'source_ref': 'src_1', 'artifact_ref': 'art_1', 'start': 0, 'end': 100, 'representation': 'text'}
+    summary = {'structure_sheets': [], 'no_applicable_evidence': [span],
+               'screening_answers': [{'proposed_annotation_ref': 'hyp_1', 'disposition': 'no_applicable_evidence',
+                                      'examined': [span], 'annotation_support': 'not_assessed'}],
+               'source_lead_dispositions': [{'source_ref': 'src_1', 'disposition': 'relevant',
+                                             'relevance_rationale': 'model text that never leaves the episode'},
+                                            {'source_ref': 'src_2', 'disposition': 'not_relevant'}]}
+    completion = {'ended_by': 'yield_stop', 'units_consumed': 0, 'credit': 2.5}
+    names = ('literature_screening_answers', 'literature_source_lead_dispositions')
+    result = EPISODE.final_to_parent(summary, completion, names)
+    assert result == {'credit': 2.5, 'finding': {'structure_sheets': []},
+                      'literature_screening_answers': {'examined_span_count': 1, 'commissioned_spans_covered': True},
+                      'literature_source_lead_dispositions': {'relevant_lead_count': 1, 'lead_source_refs': ['src_1']}}
+    form = EPISODE.return_form.select(names)
+    form.admit(result, 'return')
+    assert form.record_refs(form.admit(result, 'return')) == ('src_1',)
+    with pytest.raises(FormError, match='unknown_field'):
+        form.admit({**result, 'literature_source_lead_dispositions': {
+            **result['literature_source_lead_dispositions'], 'relevance_rationale': 'text'}}, 'return')
+    with pytest.raises(FormError, match='must_be_integer'):
+        form.admit({**result, 'literature_screening_answers': {'examined_span_count': '1',
+                                                               'commissioned_spans_covered': True}}, 'return')
+    uncovered = EPISODE.final_to_parent({**summary, 'screening_answers': []}, completion, names)
+    assert uncovered['literature_screening_answers']['commissioned_spans_covered'] is False
+    plain = EPISODE.final_to_parent(summary, completion, ())
+    assert set(plain) == {'credit', 'finding'}
+    EPISODE.return_form.select(()).admit(plain, 'return')
 
 
 def test_the_screening_credit_is_the_unit_when_the_own_declarations_cover_every_requested_span():
@@ -110,21 +132,18 @@ def test_the_controller_follows_the_commissioned_task_kind():
     assert isinstance(screening, CompletionYieldController)
 
 
-def test_the_model_is_offered_the_access_tools_reasoning_and_the_report_and_every_tool_is_declared():
+def test_the_model_is_offered_the_access_tools_structure_grading_and_reasoning_and_every_tool_is_declared():
     task = importlib.import_module(PACKAGE + '.task')
-    names = task.offered({})
-    assert 'execution_estimate' not in names and names[-2:] == ['reason', 'report'] and len(names) == 16
+    names = task.offered({'tool_registry': {}})
+    assert 'execution_estimate' not in names and names[-2:] == ['structure_populate', 'reason'] and len(names) == 16
     assert set(names) <= set(EPISODE.tools)
-    assert 'literature_structure_populate' in task.offered({'structure_population': True})
-    with pytest.raises(NotImplementedError, match='literature_structure_population_not_built'):
-        task.literature_structure_populate({}, None)
 
 
 def test_the_selection_schema_and_its_strict_transport_build_for_every_offered_tool():
     task = importlib.import_module(PACKAGE + '.task')
     summary = {'task': LEADS_TASK, 'reasoning_schema': {'type': 'object', 'properties': {'terms': {'type': 'array'}},
                                                          'required': ['terms'], 'additionalProperties': False}}
-    names = task.offered({})
+    names = task.offered({'tool_registry': {}})
     schema = task.selection_schema(names, summary)
     assert len(schema['properties']['selection']['anyOf']) == len(names)
     assert task.generation_schema(schema)

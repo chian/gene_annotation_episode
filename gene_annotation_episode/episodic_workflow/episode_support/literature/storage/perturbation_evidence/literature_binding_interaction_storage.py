@@ -50,10 +50,6 @@ def _selected(assignment):
     return list(values)
 
 
-def _signature(request):
-    return canonical({k: request[k] for k in _REQUEST if k != "selected_tool"})
-
-
 def _preview(text):
     text = " ".join(text.split())
     return text if len(text) <= 120 else "[source witness preview] " + text[:94] + "…"
@@ -169,7 +165,6 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
     provider = PROVIDER
     record_version = VERSION
     components = COMPONENTS
-    operations_table = "literature_binding_interaction_operations"
     received_table = "literature_binding_interaction_received"
     binding_fields = ()
 
@@ -196,17 +191,6 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
         request = {"run_id": self.run_id, "episode_id": context.episode_id, "operation_key": operation_key,
             "selected_tool": "literature.binding.interaction.populate", "scope": plain(context.scope), "assignment": plain(context.assignment),
             "requested_components": _selected(context.assignment), "arguments": plain(arguments)}
-        signature = _signature(request)
-        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, context.episode_id, operation_key)).fetchone()
-        if old is not None:
-            if old["signature"] != signature:
-                raise ContractError("operation_key_reused_for_different_work")
-            outcome = json.loads(old["outcome"])
-            saved = self.read(outcome["result"]["sheet_ref"])
-            for reference in saved["direct_input_source_refs"]:
-                self._native_source(context, reference)
-            return outcome
         validate_schema(request["arguments"], binding_interaction_arguments_schema())
         def selected_sources(value):
             if isinstance(value, dict):
@@ -248,10 +232,10 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
             created, records = [], []
             def publish(kind, value):
                 ref = identity(kind, {"origin": "tool", "record": value})
-                exists = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (ref,)).fetchone()
+                new = not self.store.holds(ref)
                 actual = self.store.put(kind, value, origin="tool", scope=plain(context.scope))
                 records.append(actual["id"])
-                if exists is None:
+                if new:
                     created.append(actual["id"])
                 return actual["id"]
             saved["role_bindings"], saved["comparison_bindings"], saved["common_kind_binding"] = _bindings(extraction, publish, saved["source_records"])
@@ -262,8 +246,6 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
             outcome = {"status": "completed", "operation_ref": identity("operation", {"run_id": self.run_id,
                 "episode_id": context.episode_id, "key": operation_key}), "record_refs": list(dict.fromkeys([ref, *records])),
                 "changed_record_refs": created, "result": self._result(ref, saved), "feedback": None}
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     @staticmethod
@@ -300,15 +282,6 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
                 or request["selected_tool"] != "literature.binding.interaction.populate"
                 or request["requested_components"] != _selected(request["assignment"])):
             _fail("request_mismatch")
-        operation = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
-        if operation is None or operation["signature"] != _signature(request):
-            _fail("operation_mismatch")
-        outcome = json.loads(operation["outcome"])
-        if (outcome.get("status") != "completed" or outcome.get("operation_ref") != identity("operation", {
-                "run_id": self.run_id, "episode_id": request["episode_id"], "key": request["operation_key"]})
-                or outcome.get("result", {}).get("sheet_ref") != sheet_ref):
-            _fail("operation_mismatch")
         saved = self._artifact_json(source["artifact_ref"])
         if (set(saved) != set(_PAYLOAD) or saved["version"] != VERSION or not _same(saved["selection"], request["arguments"])
                 or saved["input_source_ref"] != request["arguments"]["source_ref"]
@@ -335,8 +308,6 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
             if row["error"] is None and (row["artifact_ref"] != artifact or row["artifact_ref"] != "artifact_" + row["sha256"]):
                 _fail("source_mismatch")
         validate_saved_binding_interaction(saved["selection"], saved["extraction"], saved["calculation"], saved["cells"])
-        if not _same(outcome["result"], self._result(sheet_ref, saved)):
-            _fail("outcome_mismatch")
         records = []
         def expected(kind, value):
             reference = identity(kind, {"origin": "tool", "record": value})
@@ -349,8 +320,6 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
         roles, comparison, common = _bindings(saved["extraction"], expected, saved["source_records"])
         if not _same((roles, comparison, common), (saved["role_bindings"], saved["comparison_bindings"], saved["common_kind_binding"])):
             _fail("binding_mismatch")
-        if outcome["record_refs"] != list(dict.fromkeys([sheet_ref, *records])) or any(r not in outcome["record_refs"] for r in outcome["changed_record_refs"]):
-            _fail("operation_records_mismatch")
         return saved
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):

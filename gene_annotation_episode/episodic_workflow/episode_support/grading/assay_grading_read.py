@@ -1,6 +1,8 @@
 """Read and authenticate received A105 grading sheets for A104 correspondence.
 
-The frozen schemas are the original A105 v1/v2 contracts. This reader performs
+The frozen schemas are the original A105 v1/v2 contracts. The saved request is the one the A104 literature
+storage writes (operation key, arguments, scope, requested components; the old run identity is custody now). This
+reader performs
 no A105 population or grading and writes no repository state.
 """
 from copy import deepcopy
@@ -10,7 +12,7 @@ import json
 from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.evolutionary_history_evidence.communication import plain
-from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import ContractError, canonical, identity, validate_schema
+from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import ContractError, identity, validate_schema
 
 
 @cache
@@ -49,16 +51,10 @@ def _rows(saved, sheet_ref, components):
 class A104AssayGradingReader:
     provider = 'literature.a105.assay_grading'
     record_version = 'literature_assay_grading_record_v2'
-    operations_table = 'literature_assay_grading_operations'
     rows = staticmethod(_rows)
 
-    def __init__(self, store, run_id):
-        if not isinstance(run_id, str) or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id = store, run_id
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
+    def __init__(self, store):
+        self.store = store
 
     def _native_provenance(self, scope, reference):
         if not self.store.reference_subset([reference], plain(scope)):
@@ -89,27 +85,15 @@ class A104AssayGradingReader:
         if identity('source', {'origin': 'tool', 'record': record}) != sheet_ref:
             raise ContractError('assay_grading_saved_identity_mismatch')
         request = self._artifact_json(source['request_ref'])
-        if (set(request) != {'run_id', 'episode_id', 'operation_key', 'arguments', 'scope', 'requested_components'}
-                or request['run_id'] != self.run_id):
+        if set(request) != {'operation_key', 'arguments', 'scope', 'requested_components'}:
             raise ContractError('assay_grading_saved_selection_mismatch')
         scope = self.store.validate_scope(request['scope'])
         self._native_provenance(scope, sheet_ref)
-        operation = self.store.db.execute(
-            f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
-        if operation is None or operation['signature'] != canonical(request):
-            raise ContractError('assay_grading_saved_operation_mismatch')
         saved = self._artifact_json(source['artifact_ref'])
-        outcome = json.loads(operation['outcome'])
         if (set(saved) != {'version', 'selection', 'extraction', 'sheet', 'direct_record_refs',
                 'input_source_refs', 'record_bindings', 'artifact_bindings', 'input_component_rows'}
                 or saved['version'] != source['version'] or saved['selection'] != request['arguments']
-                or saved['input_source_refs'] != source['parent_source_refs']
-                or outcome.get('status') != 'completed'
-                or outcome.get('result', {}).get('sheet_ref') != sheet_ref
-                or outcome.get('record_refs') != [sheet_ref]
-                or outcome.get('operation_ref') != identity('operation', {
-                    'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
+                or saved['input_source_refs'] != source['parent_source_refs']):
             raise ContractError('assay_grading_saved_selection_mismatch')
         contracts = _contracts()
         validate_schema(saved['selection'], contracts['population_schema'])
@@ -130,6 +114,4 @@ class A104AssayGradingReader:
                 raise ContractError('assay_grading_saved_input_mismatch')
         rows = self.rows(saved, sheet_ref, request['requested_components'])
         validate_schema(rows, contracts['cells_schema'])
-        if canonical(rows) != canonical(outcome['result']['cells']):
-            raise ContractError('assay_grading_saved_cells_mismatch')
         return saved

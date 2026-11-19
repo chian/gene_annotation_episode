@@ -1,5 +1,6 @@
 """Persist selected A105 aggregation over the parent's possessed grade rows."""
 from copy import deepcopy
+from episode_runtime import TableDeclaration
 from hashlib import sha256
 import json
 
@@ -11,6 +12,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 
 PROVIDER = 'literature.a105.aggregation'
 VERSION = 'literature_a105_aggregation_record_v1'
+OPERATIONS = TableDeclaration(name='literature_a105_aggregation_operations', columns=('sheet_ref',), key=('sheet_ref',), record_refs=('sheet_ref',))
+CELLS = TableDeclaration(name='literature_a105_aggregation_cells', columns=('sheet_ref', 'component', 'cell'), key=('sheet_ref', 'component'), record_refs=('sheet_ref',))
 NAMESPACE = 'literature_a105_aggregation_cells'
 REQUESTED = 'requested_a105_aggregation_components'
 OPERATION_DESCRIPTION = (
@@ -40,8 +43,7 @@ def _rows(saved, sheet_ref, components):
 class LiteratureA105AggregationRepository(LiteratureRateRepository):
     def current_annotation_cells(self, context):
         """Resolve this owner's admitted current final cells without granting private inputs."""
-        rows = ([row for row in self.received_cells(context) if row['component'] == 'overall']
-            if self._installed(self.received_table) else [])
+        rows = [row for row in self.received_cells(context) if row['component'] == 'overall']
         from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_sheet_updates import current_scoring_sheets
         current = [row for row in current_scoring_sheets(self.store, context) if row['axis'] == 'A105']
         return ([cell for row in current if row['status'] == 'current'
@@ -86,21 +88,13 @@ class LiteratureA105AggregationRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = VERSION
-    operations_table = 'literature_a105_aggregation_operations'
-    received_table = 'literature_a105_aggregation_received'
+    operations = OPERATIONS
+    cells_table = CELLS
     binding_fields = ()
 
-    def __init__(self, store, run_id, *, read_cells=None):
-        if not isinstance(run_id, str) or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id = store, run_id
+    def __init__(self, store, *, read_cells=None):
+        self.store = store
         self._read_cells = read_cells
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     def _record(self, context, reference, kind=None):
         if reference not in context.received_record_refs:
@@ -113,8 +107,6 @@ class LiteratureA105AggregationRepository(LiteratureRateRepository):
         return record
 
     def populate(self, context, arguments, operation_key):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
         if not isinstance(operation_key, str) or not operation_key:
             raise ContractError('operation_key_required')
         args = plain(arguments)
@@ -122,21 +114,9 @@ class LiteratureA105AggregationRepository(LiteratureRateRepository):
         requested = list(context.assignment.get(REQUESTED, ()))
         if len(set(requested)) != len(requested) or any(name not in COMPONENTS for name in requested):
             raise ContractError('a105_aggregation_component_selection_invalid')
-        request = {'run_id': self.run_id, 'episode_id': context.episode_id,
+        request = {
             'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope),
             'requested_components': requested}
-        signature = canonical(request)
-        old = self.store.db.execute(
-            f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
-        if old:
-            if old['signature'] != signature:
-                raise ContractError('operation_key_reused_for_different_work')
-            outcome = json.loads(old['outcome'])
-            saved = self.read(outcome['result']['sheet_ref'])
-            for reference in saved['direct_record_refs']:
-                self._record(context, reference)
-            return outcome
 
         direct, bindings = [], {}
         def retain(reference, kind=None, possessed=True):
@@ -160,7 +140,7 @@ class LiteratureA105AggregationRepository(LiteratureRateRepository):
         input_rows, sources, grouped = [], [], {}
         for sheet_ref, component in selections:
             grouped.setdefault(sheet_ref, []).append(component)
-        native = LiteratureAssayGradingRepository(self.store, self.run_id)
+        native = LiteratureAssayGradingRepository(self.store)
         for sheet_ref, components in grouped.items():
             retain(sheet_ref, 'source')
             rows = self._read_cells(context, sheet_ref, components)
@@ -190,23 +170,21 @@ class LiteratureA105AggregationRepository(LiteratureRateRepository):
             'sheet': sheet, 'direct_record_refs': direct, 'input_source_refs': sources,
             'record_bindings': bindings}
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
-            request_ref = self.store.artifact(signature, 'application/json')
+            request_ref = self.store.artifact(canonical(request), 'application/json')
             record = {'provider': PROVIDER, 'accession': None, 'uri': None,
                 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref,
                 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': sources}
             sheet_ref = identity('source', {'origin': 'tool', 'record': record})
-            exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (sheet_ref,)).fetchone()
+            new = not self.store.holds(sheet_ref)
             self.store.put('source', record, origin='tool', scope=plain(context.scope))
             rows = _rows(payload, sheet_ref, requested)
             validate_schema(rows, aggregation_cells_schema())
-            outcome = {'status': 'completed', 'operation_ref': identity('operation', {
-                'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}),
-                'record_refs': [sheet_ref], 'changed_record_refs': [] if exists else [sheet_ref],
+            outcome = {'status': 'completed', 'operation_ref': identity('operation', {'key': operation_key}),
+                'record_refs': [sheet_ref], 'changed_record_refs': [sheet_ref] if new else [],
                 'result': {'sheet_ref': sheet_ref, 'cells': rows}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self.store.table(self.operations).put({'sheet_ref': sheet_ref})
+            self.publish_cells(sheet_ref, requested)
         return outcome
 
     def _artifact_json(self, reference):
@@ -230,26 +208,15 @@ class LiteratureA105AggregationRepository(LiteratureRateRepository):
         if identity('source', {'origin': 'tool', 'record': record}) != sheet_ref:
             raise ContractError('a105_aggregation_saved_identity_mismatch')
         request = self._artifact_json(source['request_ref'])
-        if (set(request) != {'run_id', 'episode_id', 'operation_key', 'arguments', 'scope', 'requested_components'}
-                or request['run_id'] != self.run_id):
+        if set(request) != {'operation_key', 'arguments', 'scope', 'requested_components'}:
             raise ContractError('a105_aggregation_saved_selection_mismatch')
         scope = self.store.validate_scope(request['scope'])
         self._native_provenance(scope, sheet_ref)
-        operation = self.store.db.execute(
-            f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
-        if operation is None or operation['signature'] != canonical(request):
-            raise ContractError('a105_aggregation_saved_operation_mismatch')
         saved = self._artifact_json(source['artifact_ref'])
-        outcome = json.loads(operation['outcome'])
         if (set(saved) != {'version', 'selection', 'source_cells', 'sheet', 'direct_record_refs',
                 'input_source_refs', 'record_bindings'} or saved['version'] != VERSION
                 or saved['selection'] != request['arguments']
-                or saved['input_source_refs'] != source['parent_source_refs']
-                or outcome.get('status') != 'completed' or outcome.get('result', {}).get('sheet_ref') != sheet_ref
-                or outcome.get('record_refs') != [sheet_ref]
-                or outcome.get('operation_ref') != identity('operation', {
-                    'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
+                or saved['input_source_refs'] != source['parent_source_refs']):
             raise ContractError('a105_aggregation_saved_selection_mismatch')
         validate_schema(saved['selection'], aggregation_population_schema())
         validate_schema(saved['source_cells'], assay_grading_cells_schema())
@@ -260,49 +227,31 @@ class LiteratureA105AggregationRepository(LiteratureRateRepository):
                 raise ContractError('a105_aggregation_saved_input_mismatch')
         if not set(saved['direct_record_refs']) <= set(saved['record_bindings']):
             raise ContractError('a105_aggregation_saved_input_mismatch')
-        native = LiteratureAssayGradingRepository(self.store, self.run_id)
+        native = LiteratureAssayGradingRepository(self.store)
         grouped = {}
         for row in saved['source_cells']:
             grouped.setdefault(row['sheet_ref'], []).append(row)
         for reference, originals in grouped.items():
-            expected_rows = native.project_cells([reference], permitted_record_refs=[reference],
+            expected_rows = native.project_cells([reference],
                 components=[row['component'] for row in originals])
             if canonical(originals) != canonical(expected_rows):
                 raise ContractError('a105_aggregation_saved_input_mismatch')
         rows = _rows(saved, sheet_ref, request['requested_components'])
         validate_schema(rows, aggregation_cells_schema())
-        if canonical(rows) != canonical(outcome['result']['cells']):
-            raise ContractError('a105_aggregation_saved_cells_mismatch')
         return saved
 
-    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+    def project_cells(self, sheet_refs, *, components=None):
         selected = COMPONENTS if components is None else components
         if (not isinstance(selected, (list, tuple)) or len(set(selected)) != len(selected)
                 or any(component not in COMPONENTS for component in selected)):
             raise ContractError('a105_aggregation_component_selection_invalid')
         rows = []
         for reference in dict.fromkeys(sheet_refs):
-            if reference not in permitted_record_refs:
-                raise ContractError('literature_sheet_not_received')
             rows.extend(_rows(self.read(reference), reference, selected))
         return rows
 
-    def received_cells(self, context):
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self._install()
-            return super().receive_cells(context, cells, operation_key)
-
     def selected_sheet_refs(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        if not self._installed(self.operations_table):
-            return []
-        rows = self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid',
-            (self.run_id, context.episode_id))
-        return list(dict.fromkeys(json.loads(row['outcome'])['result']['sheet_ref'] for row in rows))
+        return self.owned_sheet_refs()
 
     def available_sheet_refs(self, context):
         refs = []
@@ -368,7 +317,7 @@ def direct_target_application(store, context, cell, target, scope=None):
             *finding['qualification']['context_refs'], *finding['qualification']['assumption_refs']}
         missing = required - (known | set(store.problem()['subject_refs']))
         needed.update(missing)
-        extent = store._assessment_write_extent(row)
+        extent = store.assessment_write_extent(row['id'])
         if missing or scope is not None and (not extent or not store.scope_contains(
                 {'subject_refs': sorted({span['target_ref'] for span in extent}), 'segments': extent}, scope)):
             states.add('unresolved')

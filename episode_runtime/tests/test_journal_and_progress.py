@@ -139,3 +139,25 @@ def test_a_unit_that_began_and_is_rebuilt_differently_is_refused(journal):
         with pytest.raises(JournalError, match='abandoned_unit_differs'):
             journal.begin_unit('run', PATH, 0, label, key, digest)
     assert journal.times_begun('run', PATH, 0) == 2
+
+
+def test_the_initial_credit_of_an_episode_is_computed_once_and_afterwards_read_from_its_record(journal):
+    journal.open_run('run', {'entry': 1})
+    journal.open_episode('run', PATH, 'example/episode', {'request': {}})
+    assert journal.episodes('run')[0]['initial_credit'] is None      # the Episode was built and not yet entered
+    asked = []
+
+    def credit(value):
+        def compute():
+            asked.append(value)
+            return value
+        return compute
+    assert journal.initial_credit('run', PATH, credit(0.25)) == 0.25
+    assert journal.initial_credit('run', PATH, credit(7.0)) == 0.25 and asked == [0.25]
+    assert journal.episodes('run')[0]['initial_credit'] == 0.25
+    reopened = RunJournal(journal.path)                              # another process over the same file
+    assert reopened.initial_credit('run', PATH, credit(7.0)) == 0.25 and asked == [0.25]
+    # A whole number is recorded and given back as it was computed.
+    other = (('example__episode', 'other'),)
+    journal.open_episode('run', other, 'example/episode', {'request': {}})
+    assert [type(journal.initial_credit('run', other, credit(2))) for _ in range(2)] == [int, int]

@@ -6,6 +6,7 @@ experiment model. Conditions and quantitative attribution remain unresolved.
 from __future__ import annotations
 import json
 import math
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import REF, canonical, identity, obj
 from gene_annotation_episode.domain import ContractError
@@ -16,13 +17,16 @@ REASONS = ('quantity_not_activity_rate', 'reported_spread_unavailable', 'zero_re
 REASONS += ('correction_inputs_not_supplied', 'primitive_covariance_not_supplied', 'distinct_residual_variance_not_supplied')
 BINDINGS = {'reported_subject_ref': 'reference', 'experiment_ref': 'reference', 'condition_ref': 'context', 'endpoint_ref': 'term', 'normalization_ref': 'term', 'quantity_ref': 'term', 'analyte_ref': 'term'}
 
+OPERATIONS = operations_ledger('literature_quantity_operations')
+RECEIVED = received_ledger('literature_quantity_received')
+
 class LiteratureQuantityRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = 'literature_source_quantity_record_v2'
     readable_record_versions = ('literature_source_quantity_record_v1', record_version)
-    operations_table = 'literature_quantity_operations'
-    received_table = 'literature_quantity_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = tuple(BINDINGS)
 
     def populate(self, context, arguments, operation_key):
@@ -40,7 +44,7 @@ class LiteratureQuantityRepository(LiteratureRateRepository):
         if not self.store.reference_subset([source_ref], plain(context.scope)):
             raise ContractError('literature_source_outside_scope')
         signature = canonical({'arguments': args, 'scope': plain(context.scope)})
-        saved = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
+        saved = self._operation(context.episode_id, operation_key)
         if saved:
             if saved['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -80,9 +84,9 @@ class LiteratureQuantityRepository(LiteratureRateRepository):
 
             def publish(kind, record):
                 candidate = identity(kind, {'origin': 'tool', 'record': record})
-                existed = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (candidate,)).fetchone()
+                existed = self.store.holds(candidate)
                 result = self.store.put(kind, record, origin='tool', scope=plain(context.scope))
-                if existed is None:
+                if not existed:
                     newly_created.append(result['id'])
                 return result['id']
 
@@ -97,7 +101,7 @@ class LiteratureQuantityRepository(LiteratureRateRepository):
             request = self.store.artifact(canonical({'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args}), 'application/json')
             sheet_ref = publish('source', {'provider': self.provider, 'accession': None, 'uri': None, 'artifact_ref': sheet_artifact, 'text_ref': sheet_artifact, 'request_ref': request, 'version': self.record_version, 'retrieved_at': None, 'parent_source_refs': [source_ref]})
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [sheet_ref, *dict.fromkeys((ref for ref in bindings.values() if ref))], 'changed_record_refs': newly_created, 'result': {'sheet_ref': sheet_ref, 'cells': cells, 'subject': extracted['subject'], 'quantity': extracted['quantity'], 'analyte': extracted['analyte'], 'source_uncertainty': extracted['uncertainty'], 'text': extracted['source']['paragraph_text'], **{key: extracted['source'][key] for key in ('source_ref', 'artifact_ref', 'section_id', 'paragraph_id', 'expression_start', 'expression_end')}, 'coordinate_unit': 'paragraph_unicode_characters'}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):

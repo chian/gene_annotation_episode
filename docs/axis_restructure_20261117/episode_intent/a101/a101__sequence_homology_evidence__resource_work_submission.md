@@ -167,3 +167,97 @@ Exact counts per name are in `runs/carry_over/calls/a101_04.tsv`. Most hooks beg
 | `credit.py` | 13 | operational credit; bound-role credit | `self.services.bound_role_credit`; hooks `credit_kind`, `credit_view` |
 | `yield_estimator.py` | 25 | continuation from caller's settings, unchanged; no task key for an operational role | `BindingContext` (built by hand); `workflow.controller_factory` (3), `.run_id`, `.receipts.known`, `.scientific_projector_for_context`; `binding.credit_kind`, `continuation_task`; old `root.a101.runtime` (`BindingContext`, `_plain`) |
 | `waiting.py` | 31 | a selected wait is performed; an invalid target is a failed outcome | `self.workflow.perform_selected_wait`, `.execution_handle`, `.execution_backend.set_suspension`; old `root.a101.runtime` (`EventTargetError`, `_wait_target_feedback`); `bind_functions` |
+
+## Carried over
+
+Carried into `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence/resource_work_submission` as a private binding in the ten-file form (episode class `ResourceWorkSubmission`). One row per old function, class and method of `runs/carry_over/functions/a101__sequence_homology_evidence__resource_work_submission.tsv`. Old code files of the episode that are not episode functions or machinery do not exist here (the old tree has none beyond these rows). Items that raise where reached or need something the system does not offer are in `docs/axis_restructure_20261117/carry_over_blocked/a101__sequence_homology_evidence__resource_work_submission.md`.
+
+| old file | kind | name | class | new place |
+|---|---|---|---|---|
+| binding_record.py | class | OperationalBindingRecord | machinery | binding record and the binding's own as_record() (README 3e: deleted) |
+| binding_record.py | method | OperationalBindingRecord.as_record | machinery | binding record and the binding's own as_record() (README 3e: deleted) |
+| configuration.py | class | OperationalConfiguration | machinery | adapter list and API check, services, contract-information profile: values the run sets (the adapters are the service resource_adapters, settings are ctx.settings; README 3) |
+| configuration.py | method | OperationalConfiguration.__init__ | machinery | adapter list and API check, services, contract-information profile: values the run sets (the adapters are the service resource_adapters, settings are ctx.settings; README 3) |
+| credit.py | class | ResourceEpisodeCredit | episode function | credit.py |
+| credit.py | method | ResourceEpisodeCredit.credit_kind | machinery | credit_kind role guard (README 3d: deleted) |
+| credit.py | method | ResourceEpisodeCredit.credit_view | episode function | credit.py credit (adapters' bound_role_credit becomes the count of usable handoffs in the commissioned unit) |
+| decision_inputs.py | class | OperationalDecisionInputs | episode function | task.py decide (resource context, child_options, estimates via recorded service read, library listings, handoffs) and offering |
+| decision_inputs.py | method | OperationalDecisionInputs.decision_inputs | episode function | task.py decide (resource context, child_options, estimates via recorded service read, library listings, handoffs) and offering |
+| decision_inputs.py | function | _bind_original_task_runtime_providers | machinery | provider patching (README 3a) |
+| decision_state.py | class | OperationalDecisionState | episode function | messages/internal_summary.py internal_summary and task.py decide (the model's view of state) |
+| decision_state.py | method | OperationalDecisionState.decision_state | episode function | messages/internal_summary.py internal_summary and task.py decide (the model's view of state) |
+| decision_state.py | function | _bind_original_task_runtime_providers | machinery | provider patching (README 3a) |
+| episode.py | class | ResourceEpisode | episode function | episode.py ResourceWorkSubmission |
+| episode.py | method | ResourceEpisode.child_roles | episode function | task.py CHILD_SLOTS |
+| episode.py | method | ResourceEpisode.contract_information_profile | machinery | contract-information profile and its discovery paragraph (old decision exchange; not carried, see goal.py) |
+| episode.py | method | ResourceEpisode.permitted_common_actions | episode function | task.py selection_schema and action (tool, reason, child); wait and redeliver_report are machinery (README 3b) |
+| episode.py | method | ResourceEpisode.allowed_children | episode function | task.py allowed_slots (library candidate) |
+| episode.py | method | ResourceEpisode.context_hook_applies | machinery | old hook role guard |
+| episode.py | method | ResourceEpisode.child_request_preparer_for_binding | episode function | messages/msg_to_child.py msg_to_child |
+| episode.py | method | ResourceEpisode.child_report_receiver_for_binding | episode function | messages/read_from_child.py read_from_child |
+| execution_contracts.py | function | _failure | episode function | task.py _failure (library candidate) |
+| execution_contracts.py | function | _outcome | episode function | task.py _outcome (library candidate) |
+| execution_contracts.py | function | _availability_failure | episode function | task.py _availability_failure (library candidate) |
+| execution_operations.py | class | OperationalOperations | episode function | task.py TOOLS |
+| execution_operations.py | method | OperationalOperations.capabilities | episode function | task.py capabilities_of (declared and adapter capabilities arrive by service read; BLOCKED-ON-JOB-SERVICE) (library candidate) |
+| execution_operations.py | method | OperationalOperations._adapter | episode function | task.py resource_check_handoff (the bound-adapter test of the handoff's selection; adapter lookup is the service) |
+| execution_operations.py | method | OperationalOperations.catalog | episode function | task.py catalog (three fixed tools) |
+| execution_operations.py | method | OperationalOperations.execute | episode function | task.py resource_capabilities, resource_inspect, resource_check_handoff (async) |
+| from_child_api_resource_work_execution.py | function | receive_report | episode function | messages/read_from_child.py read_from_child (what the parent keeps: handoffs, adapter facts, handoff record refs, finding, credit); admission, progress-provider receipts, proof references, timing receipts and tool attributions are system custody (README 3b R1, R3) |
+| from_child_hpc_resource_work_execution.py | function | receive_report | episode function | messages/read_from_child.py read_from_child (what the parent keeps: handoffs, adapter facts, handoff record refs, finding, credit); admission, progress-provider receipts, proof references, timing receipts and tool attributions are system custody (README 3b R1, R3) |
+| from_child_local_resource_work_execution.py | function | receive_report | episode function | messages/read_from_child.py read_from_child (what the parent keeps: handoffs, adapter facts, handoff record refs, finding, credit); admission, progress-provider receipts, proof references, timing receipts and tool attributions are system custody (README 3b R1, R3) |
+| from_parent.py | class | OperationalAssignment | episode function | messages/read_from_parent.py |
+| from_parent.py | method | OperationalAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM |
+| from_parent.py | method | OperationalAssignment._permitted | episode function | task.py _permitted (library candidate) |
+| from_parent.py | method | OperationalAssignment._require_launch_child_instruction_pins | episode function | task.py check_child_selection (library episode_support/instructions/launch_instructions.py retain_inherited_selection); applied to the model's answer in action |
+| from_parent.py | method | OperationalAssignment.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent (schema, pinned selection, resource kind) and task.py check_child_selection (resource_selection_conflict); the comparison with a launch parent's assignment is not carried (the parent cannot be read) |
+| from_parent.py | method | OperationalAssignment.initial_references | machinery | returned [] (old record-selection receipts; custody) |
+| goal.py | class | OperationalGoal | episode function | goal.py GOAL (launch sentence and common tail); discovery paragraph not carried |
+| goal.py | method | OperationalGoal.instructions | episode function | goal.py GOAL (launch sentence and common tail); discovery paragraph not carried |
+| internal_summary.py | class | OperationalSummary | episode function | messages/internal_summary.py internal_summary (role, assignment) and task.py decide (resource_capabilities, resource_tool_estimates) |
+| internal_summary.py | method | OperationalSummary.decision_context | episode function | messages/internal_summary.py internal_summary (role, assignment) and task.py decide (resource_capabilities, resource_tool_estimates) |
+| received_evidence.py | class | ReceivedOperationalEvidence | machinery | received-reference receipts and handoff proof references (system custody, README 3b R3) |
+| received_evidence.py | method | ReceivedOperationalEvidence.received_form_references | machinery | received-reference receipts and handoff proof references (system custody, README 3b R3) |
+| report_delivery.py | class | OperationalReportDelivery | episode function | messages/final_to_parent.py final_to_parent (form filled once from facts; saving, runtime_forms and release are machinery) |
+| report_delivery.py | method | OperationalReportDelivery.finish | episode function | messages/final_to_parent.py final_to_parent (form filled once from facts; saving, runtime_forms and release are machinery) |
+| report_delivery.py | function | _bind_original_task_runtime_providers | machinery | provider patching (README 3a) |
+| task.py | class | OperationalTask | episode function | task.py (decide, action, TOOLS) |
+| task.py | method | OperationalTask.instructions | episode function | task.py instructions |
+| task.py | method | OperationalTask.next | episode function | task.py decide (the loop, restore, replay and checkpoint parts are the system's) |
+| task.py | method | OperationalTask.apply_response | episode function | task.py action (admission of the selection, empty-reasoning rejection, rejected-answer feedback) |
+| task.py | method | OperationalTask.execute | episode function | task.py reason and the resource tools (execution, journaling, credit measurement are the system's) |
+| task.py | function | _bind_original_task_runtime_providers | machinery | provider patching (README 3a) |
+| task_decision.py | class | OperationalTaskDecision | episode function | task.py decide |
+| task_decision.py | method | OperationalTaskDecision.call | episode function | task.py decide returns ModelRequest('REASONING', ...) |
+| task_decision.py | method | OperationalTaskDecision.conversation_key | machinery | decision-exchange loop, its saved-request checks and conversation state (README 3a) |
+| task_decision.py | method | OperationalTaskDecision.interpretation_context | machinery | decision-exchange loop, its saved-request checks and conversation state (README 3a) |
+| task_decision.py | method | OperationalTaskDecision.exchange_schema | machinery | decision-exchange loop, its saved-request checks and conversation state (README 3a) |
+| task_decision.py | method | OperationalTaskDecision.exchange_response | machinery | decision-exchange loop, its saved-request checks and conversation state (README 3a) |
+| task_decision.py | method | OperationalTaskDecision.validate_contract_exchange_request | machinery | decision-exchange loop, its saved-request checks and conversation state (README 3a) |
+| task_decision.py | method | OperationalTaskDecision.validate_contract_exchange_history | machinery | decision-exchange loop, its saved-request checks and conversation state (README 3a) |
+| task_decision.py | method | OperationalTaskDecision.exchange_decision | machinery | decision-exchange loop, its saved-request checks and conversation state (README 3a) |
+| task_decision.py | function | _bind_original_task_runtime_providers | machinery | provider patching (README 3a) |
+| task_instructions.py | function | instructions | episode function | task.py instructions |
+| task_state.py | class | OperationalTaskState | machinery | task state, checkpoint, restore and record_effect (README 3e) |
+| task_state.py | method | OperationalTaskState.__init__ | machinery | task state, checkpoint, restore and record_effect (README 3e) |
+| task_state.py | method | OperationalTaskState.bind_execution_context | machinery | task state, checkpoint, restore and record_effect (README 3e) |
+| task_state.py | method | OperationalTaskState.record_execution_failure | machinery | record_execution_failure; a failed selected operation is the tool's returned outcome (README 3c) |
+| task_state.py | method | OperationalTaskState.restore_checkpoint | machinery | task state, checkpoint, restore and record_effect (README 3e) |
+| task_state.py | method | OperationalTaskState.restore | machinery | task state, checkpoint, restore and record_effect (README 3e) |
+| task_state.py | method | OperationalTaskState.record_effect | machinery | task state, checkpoint, restore and record_effect (README 3e) |
+| task_state.py | method | OperationalTaskState.checkpoint | machinery | task state, checkpoint, restore and record_effect (README 3e) |
+| task_state.py | function | _bind_original_task_runtime_providers | machinery | provider patching (README 3a) |
+| to_child_api_resource_work_execution.py | function | prepare_commission | episode function | messages/msg_to_child.py msg_to_child |
+| to_child_hpc_resource_work_execution.py | function | prepare_commission | episode function | messages/msg_to_child.py msg_to_child |
+| to_child_local_resource_work_execution.py | function | prepare_commission | episode function | messages/msg_to_child.py msg_to_child |
+| to_parent.py | class | OperationalReport | episode function | messages/final_to_parent.py |
+| to_parent.py | method | OperationalReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM |
+| to_parent.py | method | OperationalReport.facts | episode function | messages/final_to_parent.py facts and final_to_parent |
+| to_parent.py | method | OperationalReport.resolve | machinery | reference resolution (custody; the parent writes no form) |
+| to_parent.py | method | OperationalReport.validate_report | episode function | messages/final_to_parent.py validate_report (called by final_to_parent); the adapters' own validate_report of the parent form is not carried |
+| waiting.py | class | OperationalTaskWaiting | machinery | wait and suspension machinery (README 3b) |
+| waiting.py | method | OperationalTaskWaiting._execute_selected_wait | machinery | wait and suspension machinery (README 3b) |
+| waiting.py | method | OperationalTaskWaiting.suspension_changed | machinery | wait and suspension machinery (README 3b) |
+| waiting.py | function | _bind_original_task_runtime_providers | machinery | wait and suspension machinery (README 3b) |
+| yield_estimator.py | class | OriginalContinuation | episode function | yield_estimator.py yield_controller (AccumulationYieldController, README 7b) |
+| yield_estimator.py | method | OriginalContinuation.original_continuation_controller | episode function | yield_estimator.py yield_controller (AccumulationYieldController, README 7b) |

@@ -156,3 +156,218 @@ counts relevant leads in this form toward its own leads credit.
 | `scoring/intervention_main_sheet.py` | 13 | identical | self.services.workflow.store, run_id |
 
 Full per-file counts: `runs/carry_over/calls/a106_03.tsv`.
+
+## Carried over
+
+Carried over 19 November 2026 by the table_evidence_extraction carry-over. Old code read from the disk repository's git at 97308b94c; the folder is a private binding of the ten-file form. Rows with "UNPLACED" are listed in docs/axis_restructure_20261117/carry_over_blocked/ for this episode.
+
+| old file | name | kind | new place / reason |
+|---|---|---|---|
+| binding_record.py | LiteratureBindingRecord | machinery | machinery: binding record of the old runner (the binding does not record itself) |
+| binding_record.py | LiteratureBindingRecord.as_record | machinery | machinery: binding record of the old runner (the binding does not record itself) |
+| configuration.py | LiteratureConfiguration | machinery | machinery: old configuration/constructor of the hook-era binding; settings are the episode settings (cost, parameters, tool_registry, knowledge_library_directory) |
+| configuration.py | LiteratureConfiguration.__init__ | machinery | machinery: old configuration/constructor of the hook-era binding; settings are the episode settings (cost, parameters, tool_registry, knowledge_library_directory) |
+| configuration.py | LiteratureConfiguration.reference_evidence | machinery | machinery: old configuration/constructor of the hook-era binding; settings are the episode settings (cost, parameters, tool_registry, knowledge_library_directory) |
+| credit.py | _resolve | episode function | already in library: literature/grading/literature_task_credit.py::_resolve, called by task.py validate_source_lead |
+| credit.py | validate_lead | episode function | task.py validate_source_lead (private re-expression on custody; library candidate) |
+| credit.py | lead_dispositions | episode function | credit.py lead_dispositions (library candidate) |
+| credit.py | _current_assessments | episode function | credit.py current_assessments (library candidate) |
+| credit.py | screening_answers | episode function | credit.py screening_answers (library candidate) |
+| credit.py | LiteratureTaskCredit | episode function | credit.py (module functions answers, credit) |
+| credit.py | LiteratureTaskCredit.as_record | episode function | credit.py credit_binding |
+| credit.py | LiteratureTaskCredit.__call__ | episode function | credit.py credit |
+| credit.py | LiteratureTaskCredit._answers | episode function | credit.py answers, assessment_answers |
+| credit.py | LiteratureCredit | machinery | machinery: scientific_credit projector wiring of the old runner |
+| credit.py | LiteratureCredit._scientific_credit_invocation | machinery | machinery: services.scientific_credit invocation |
+| credit.py | LiteratureCredit.credit_kind | machinery | machinery: credit kind hook |
+| credit.py | LiteratureCredit.credit_view | machinery | machinery: credit view hook |
+| credit.py | LiteratureCredit.credit_projector | machinery | machinery: projector hook |
+| decision_inputs.py | LiteratureDecisionInputs | episode function | task.py decide (context) |
+| decision_inputs.py | LiteratureDecisionInputs.decision_inputs | episode function | task.py decide (context) |
+| decision_inputs.py | LiteratureDecisionInputs.current_decision_inputs | episode function | task.py decide (context) |
+| decision_inputs.py | _a106_original_global_ValueError | machinery | machinery: provider patching / old global rebinding |
+| decision_inputs.py | _a106_original_global_child_option_information | machinery | machinery: provider patching / old global rebinding |
+| decision_inputs.py | _a106_original_global_set | machinery | machinery: provider patching / old global rebinding |
+| decision_inputs.py | _bind_original_task_runtime_providers | machinery | machinery: provider patching / old global rebinding |
+| decision_presentation.py | prepare_completed_work | episode function (unplaced) | UNPLACED: completed-work display of the rate-population route |
+| decision_presentation.py | decision_yield_table | episode function | messages/internal_summary.py action_yields (library yield_table) |
+| decision_presentation.py | _bind_original_task_runtime_providers | machinery | machinery: provider patching / old global rebinding |
+| decision_state.py | LiteratureDecisionState | episode function | messages/internal_summary.py internal_summary |
+| decision_state.py | LiteratureDecisionState.decision_state | episode function | messages/internal_summary.py internal_summary |
+| decision_state.py | _bind_original_task_runtime_providers | machinery | machinery: provider patching / old global rebinding |
+| episode.py | LiteratureEpisode | machinery | machinery: old binding class, role/child tables and context hooks; episode.py is now the member assignments |
+| episode.py | LiteratureEpisode.contract_information_configuration | machinery | machinery: old binding class, role/child tables and context hooks; episode.py is now the member assignments |
+| episode.py | LiteratureEpisode.contract_information_profile | machinery | machinery: old binding class, role/child tables and context hooks; episode.py is now the member assignments |
+| episode.py | LiteratureEpisode._role | machinery | machinery: old binding class, role/child tables and context hooks; episode.py is now the member assignments |
+| episode.py | LiteratureEpisode.allowed_children | machinery | machinery: old binding class, role/child tables and context hooks; episode.py is now the member assignments |
+| episode.py | LiteratureEpisode.child_roles | machinery | machinery: old binding class, role/child tables and context hooks; episode.py is now the member assignments |
+| episode.py | LiteratureEpisode.context_hook_applies | machinery | machinery: old binding class, role/child tables and context hooks; episode.py is now the member assignments |
+| from_parent.py | LiteratureAssignment | episode function | messages/read_from_parent.py (ASSIGNMENT_FORM, read_from_parent) |
+| from_parent.py | LiteratureAssignment.child_assignment_schema | machinery | machinery: parent/child assignment schema routing of the old runner |
+| from_parent.py | LiteratureAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (the rate-population requested_* properties are unplaced: no populate tool) |
+| from_parent.py | LiteratureAssignment._validate_page | episode function (unplaced) | UNPLACED: Store checks of the page (source/artifact in scope); a wrong commission fails |
+| from_parent.py | LiteratureAssignment._validate_assignment | episode function | messages/read_from_parent.py read_from_parent (selection checks that need no Store; Store checks not carried) |
+| from_parent.py | LiteratureAssignment.prepare_assignment | machinery | machinery: private yield-binding filling and parent re-validation of the old runner; the commissioned task carries credit_unit |
+| from_parent_page.py | OriginalPageAssignment | episode function (unplaced) | UNPLACED: validates the parent page episode's own page assignment from the Store; the parent commissions, a wrong commission fails (no check carried) |
+| from_parent_page.py | OriginalPageAssignment._parent_page_schema | episode function (unplaced) | UNPLACED: validates the parent page episode's own page assignment from the Store; the parent commissions, a wrong commission fails (no check carried) |
+| from_parent_page.py | OriginalPageAssignment._validate_parent_page | episode function (unplaced) | UNPLACED: validates the parent page episode's own page assignment from the Store; the parent commissions, a wrong commission fails (no check carried) |
+| goal.py | _yield_kind | episode function | yield_estimator.py yield_controller (kind choice) |
+| goal.py | _task_key | episode function | messages/read_from_parent.py task_key |
+| goal.py | task_schema | episode function | messages/read_from_parent.py (literature_task field, TASK_KINDS, ANSWER_KINDS, read_from_parent checks) |
+| goal.py | _return_sources | episode function | messages/final_to_parent.py RETURN_FORM (SCREENING, LEADS) |
+| goal.py | _return_components | episode function (unplaced) | UNPLACED: rate-population return components; not declared |
+| goal.py | commissioned_task | episode function | messages/read_from_parent.py read_from_parent |
+| goal.py | continuation_task | episode function | yield_estimator.py yield_controller (task from parent_input) |
+| goal.py | LiteratureGoal | episode function | goal.py |
+| goal.py | LiteratureGoal.instructions | episode function | goal.py GOAL |
+| goal.py | LiteratureGoal.planning_context | episode function | messages/internal_summary.py credit_binding |
+| grading/intervention_assessment.py | InterventionAssessment | episode function (unplaced) | UNPLACED: rate-population route (intervention grading cell reader); no populate tool offered |
+| grading/intervention_assessment.py | InterventionAssessment._required_grading_repository | episode function (unplaced) | UNPLACED: rate-population route (intervention grading cell reader); no populate tool offered |
+| grading/intervention_assessment.py | InterventionAssessment._intervention_source_cells | episode function (unplaced) | UNPLACED: rate-population route (intervention grading cell reader); no populate tool offered |
+| grading/intervention_assessment.py | InterventionAssessment._intervention_grading_repository | episode function (unplaced) | UNPLACED: rate-population route (intervention grading cell reader); no populate tool offered |
+| internal_summary.py | LiteratureSummary | episode function | messages/internal_summary.py internal_summary |
+| internal_summary.py | LiteratureSummary.initial_decision_context | episode function | messages/internal_summary.py internal_summary / task.py decide |
+| internal_summary.py | LiteratureSummary.decision_context | episode function | messages/internal_summary.py internal_summary / task.py decide |
+| internal_summary.py | LiteratureSummary._owned_population_task_sources | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._population_task_context | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._concentration_window_display_context | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._measurement_comparison_display_context | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._summary_precision_display_context | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._endpoint_signal_display_context | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._controlled_response_bindings | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._gel_bindings | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._gel_display_context | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._received_fact_display_context | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._native_rate_display_context | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._native_rate_domain_display_context | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| internal_summary.py | LiteratureSummary._native_rate_meaning_display_context | episode function (unplaced) | UNPLACED: rate-population display context of the old summary; no populate tool offered |
+| received_evidence.py | LiteratureReceivedEvidence | episode function (unplaced) | UNPLACED: rate-population received facts/receipts; no fact cells returned |
+| received_evidence.py | LiteratureReceivedEvidence.received_report_sources | episode function (unplaced) | UNPLACED: rate-population received facts/receipts; no fact cells returned |
+| received_evidence.py | LiteratureReceivedEvidence.received_report_facts | episode function (unplaced) | UNPLACED: rate-population received facts/receipts; no fact cells returned |
+| received_evidence.py | LiteratureReceivedEvidence._complete_requested_received_arrays | episode function (unplaced) | UNPLACED: rate-population received facts/receipts; no fact cells returned |
+| received_evidence.py | LiteratureReceivedEvidence.received_form_references | episode function (unplaced) | UNPLACED: rate-population received facts/receipts; no fact cells returned |
+| received_evidence.py | LiteratureReceivedEvidence.received_evidence_tokens | episode function (unplaced) | UNPLACED: rate-population received facts/receipts; no fact cells returned |
+| received_evidence.py | LiteratureReceivedEvidence.validate_received_report | episode function | messages/final_to_parent.py validate_report |
+| received_evidence.py | received_application_rows | episode function (unplaced) | UNPLACED: rate-population received facts/receipts; no fact cells returned |
+| report_delivery.py | LiteratureReportDelivery | machinery | machinery: report delivery/release/redelivery machinery; the system returns final_to_parent |
+| report_delivery.py | LiteratureReportDelivery.finish | machinery | machinery: report delivery/release/redelivery machinery; the system returns final_to_parent |
+| report_delivery.py | _bind_original_task_runtime_providers | machinery | machinery: provider patching / old global rebinding |
+| scientific_records.py | LiteratureScientificRecords | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._a106_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._endpoint_signal_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._concentration_window_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._measurement_comparison_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._summary_precision_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._rate_grid_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._compiled_assay_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._compiled_assay_v2_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._compiled_assay_v3_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._product_coupling_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._measurement_validation_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._ion_discrimination_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._channel_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._completion_time_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._active_site_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._perturbation_operand_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._parent_depletion_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._stoichiometric_balance_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._product_partition_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._binding_interaction_model_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._kinetic_model_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._ratio_source_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._controlled_response_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._gel_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._native_rate_meaning_repository | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scientific_records.py | LiteratureScientificRecords._population_routes | episode function (unplaced) | UNPLACED: rate-population route (population operands/records); no populate tool offered |
+| scoring/intervention_main_sheet.py | InterventionMainSheet | episode function (unplaced) | UNPLACED: rate-population route (A106 subscore repository); no populate tool offered |
+| scoring/intervention_main_sheet.py | InterventionMainSheet._a106_subscore_repository | episode function (unplaced) | UNPLACED: rate-population route (A106 subscore repository); no populate tool offered |
+| scoring/intervention_main_sheet.py | InterventionMainSheet.automatic_score_judgments | episode function (unplaced) | UNPLACED: rate-population route (A106 subscore repository); no populate tool offered |
+| scoring/intervention_main_sheet.py | InterventionMainSheet.complete_score_judgment | episode function (unplaced) | UNPLACED: rate-population route (A106 subscore repository); no populate tool offered |
+| source_contracts.py | _required_grading_logic | episode function (unplaced) | UNPLACED: required grading logic of the rate-population route; raises nothing here, not called |
+| source_contracts.py | _population_catalog | episode function (unplaced) | UNPLACED: population catalog of the rate-population route; no populate tool offered |
+| source_operations.py | LiteratureOperations | episode function | task.py |
+| source_operations.py | LiteratureOperations.permitted_common_actions | machinery | machinery: old common-action permission list (tool/reason/child/wait/redeliver_report) |
+| source_operations.py | LiteratureOperations.reasoning_action_schema | episode function | task.py reason_schema |
+| source_operations.py | LiteratureOperations.reasoning_has_task_content | episode function | task.py empty_commit |
+| source_operations.py | LiteratureOperations.execute_reasoning | episode function | task.py reason |
+| source_operations.py | LiteratureOperations.catalog | episode function | task.py catalog, offered, selection_schema |
+| source_operations.py | LiteratureOperations.execute | episode function | task.py run_access_tool and the access tools |
+| source_operations.py | LiteratureOperations._tool_arguments | episode function | task.py admitted (includes this episode's sheet_key rule: literature_table_sheet_mismatch) |
+| source_operations.py | LiteratureOperations._materialize_text_arguments | episode function (unplaced) | UNPLACED: populate branch of the rate-population route |
+| source_operations.py | prepare_analysis_contract | episode function (unplaced) | UNPLACED: literature.intervention_analysis.contract needs the old execution binding of the BV-BRC service; no such tool |
+| source_references.py | LiteratureReferences | episode function | task.py within_source |
+| source_references.py | LiteratureReferences._require | episode function | library records/received_records.py read_record_in_scope, called by task.py within_source |
+| source_references.py | LiteratureReferences._artifact | episode function (unplaced) | UNPLACED: artifact-of-representation check of the page validation (Store check; wrong commission fails) |
+| source_references.py | LiteratureReferences._within_source | episode function | task.py within_source |
+| source_references.py | LiteratureReferences.resolve | episode function (unplaced) | UNPLACED: reference-in-scope resolution of the old runner; custody holds the records |
+| task.py | LiteratureTask | episode function | task.py |
+| task.py | LiteratureTask.instructions | episode function | task.py instructions |
+| task.py | LiteratureTask.next | episode function | task.py decide |
+| task.py | LiteratureTask.apply_response | episode function | task.py action |
+| task.py | LiteratureTask.execute | episode function | task.py TOOLS and the tool functions |
+| task.py | _bind_original_task_runtime_providers | machinery | machinery: provider patching / old global rebinding |
+| task_decision.py | LiteratureTaskDecision | episode function | task.py decide |
+| task_decision.py | LiteratureTaskDecision.call | episode function | task.py decide |
+| task_decision.py | LiteratureTaskDecision.decision_completion | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | LiteratureTaskDecision.conversation_key | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | LiteratureTaskDecision.interpretation_context | episode function | task.py decide (context) |
+| task_decision.py | LiteratureTaskDecision.exchange_schema | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | LiteratureTaskDecision.exchange_response | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | LiteratureTaskDecision.validate_contract_exchange_request | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | LiteratureTaskDecision.validate_contract_exchange_history | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | LiteratureTaskDecision.exchange_decision | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_DECISION_CONTEXT_VERSION | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_OSError | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_TypeError | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_ValidationError | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_ValueError | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global__action_generation_schema | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global__json | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global__plain | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_child_option_information | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_instructional_model_context | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_isinstance | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_len | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_lookup_attempts | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_model_snapshot | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_requested_contract_information | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_schema_failure_diagnostic | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_sqlite3 | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_state_frame | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_str | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _a106_original_global_type | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_decision.py | _bind_original_task_runtime_providers | machinery | machinery: decision-exchange loop / model-call recording / contract exchange validation |
+| task_instructions.py | instructions | episode function | task.py instructions |
+| task_state.py | LiteratureTaskState | machinery | machinery: checkpoint/restore/state bookkeeping of the old runner |
+| task_state.py | LiteratureTaskState.__init__ | machinery | machinery: checkpoint/restore/state bookkeeping of the old runner |
+| task_state.py | LiteratureTaskState.bind_execution_context | machinery | machinery: checkpoint/restore/state bookkeeping of the old runner |
+| task_state.py | LiteratureTaskState.record_execution_failure | episode function | task.py run_access_tool (failure_outcome of an executed operation) |
+| task_state.py | LiteratureTaskState.restore_checkpoint | machinery | machinery: checkpoint/restore/state bookkeeping of the old runner |
+| task_state.py | LiteratureTaskState.restore | machinery | machinery: checkpoint/restore/state bookkeeping of the old runner |
+| task_state.py | LiteratureTaskState.record_effect | machinery | machinery: checkpoint/restore/state bookkeeping of the old runner |
+| task_state.py | LiteratureTaskState.checkpoint | machinery | machinery: checkpoint/restore/state bookkeeping of the old runner |
+| task_state.py | _bind_original_task_runtime_providers | machinery | machinery: provider patching / old global rebinding |
+| to_parent.py | LiteratureReport | episode function | messages/final_to_parent.py |
+| to_parent.py | LiteratureReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM |
+| to_parent.py | LiteratureReport.facts | episode function | messages/final_to_parent.py final_to_parent |
+| to_parent.py | LiteratureReport.current_report_facts | episode function | messages/final_to_parent.py final_to_parent |
+| to_parent.py | LiteratureReport._rate_fact_sources | episode function (unplaced) | UNPLACED: rate-population fact sources; not declared |
+| to_parent.py | LiteratureReport._rate_facts | episode function (unplaced) | UNPLACED: rate-population facts; not returned |
+| to_parent.py | LiteratureReport.validate_report | episode function | messages/final_to_parent.py validate_report |
+| waiting.py | LiteratureWaiting | machinery | machinery: wait/suspension machinery; no wait tool is offered |
+| waiting.py | LiteratureWaiting.supports_wait | machinery | machinery: wait/suspension machinery; no wait tool is offered |
+| waiting.py | LiteratureTaskWaiting | machinery | machinery: wait/suspension machinery; no wait tool is offered |
+| waiting.py | LiteratureTaskWaiting._execute_selected_wait | machinery | machinery: wait/suspension machinery; no wait tool is offered |
+| waiting.py | LiteratureTaskWaiting.suspension_changed | machinery | machinery: wait/suspension machinery; no wait tool is offered |
+| waiting.py | _bind_original_task_runtime_providers | machinery | machinery: provider patching / old global rebinding |
+| yield_estimator.py | validate_yield_bindings | machinery | machinery: private yield-binding link check; the controller is always built from the commissioned task |
+| yield_estimator.py | _RemainingCommissionedCredit | episode function | yield_control CompletionYieldController (target = credit_unit) |
+| yield_estimator.py | _RemainingCommissionedCredit.__call__ | episode function | yield_control CompletionYieldController |
+| yield_estimator.py | _RemainingCommissionedCredit.as_record | machinery | machinery: as_record of the old forecast band projector |
+| yield_estimator.py | _private_yield_controller | episode function | yield_estimator.py yield_controller |
+| yield_estimator.py | _FiniteLiteratureYieldController | episode function | yield_control CompletionYieldController |
+| yield_estimator.py | _FiniteLiteratureYieldController.__init__ | episode function | yield_control CompletionYieldController |
+| yield_estimator.py | _FiniteLiteratureYieldController.transitioned | machinery | machinery: old controller transition hook |
+| yield_estimator.py | LiteratureYield | episode function | yield_estimator.py |
+| yield_estimator.py | LiteratureYield.continuation_task | episode function | yield_estimator.py yield_controller (task from parent_input) |
+| yield_estimator.py | LiteratureYield.yield_controller | episode function | yield_estimator.py yield_controller |

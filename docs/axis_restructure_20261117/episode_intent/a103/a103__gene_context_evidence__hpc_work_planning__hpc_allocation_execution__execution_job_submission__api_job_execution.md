@@ -84,3 +84,199 @@ Old-runner names are counted per file (also in runs/carry_over/calls/a103_05.tsv
 | to_parent.py | 118 | Fact sources (native families, BLAST, BV-BRC, MinHash, handoff/result refs, execution_completed, origin, HSPs, BLAST grader return); facts = api_execution facts with origin null; validate_report checks x-source fields equal recorded facts. | `none` |
 | waiting.py | 9 | suspension_changed: records the wait condition and sets suspension on the execution backend. | `self.workflow.execution_backend×1`, `self.workflow.execution_handle×2` |
 | yield_estimator.py | 50 | Request yield class (api_<service>_<algorithm>_<database>_handoff or practical_<kind>_<native...>_<handoff|outputs>); profile key `launch_api:<class>`; YieldController + PracticalYieldEstimator on verify_completion. | `PracticalYieldEstimator×4`, `root.a103.numerical×1`, `root.a103.practical_yield×2`, `YieldController×2`, `YieldParameters×2` |
+
+## Carried over
+
+Carried 19 November 2026 into the ten-file form (no children: no msg_to_child.py, no read_from_child.py). One row per old function, class and method of the old episode folder (runs/carry_over/functions). Classification: machinery (old runner, not carried) or episode function (placed; "unplaced" rows could not be placed and are in carry_over_blocked).
+
+| old file | kind | name | machinery or episode function | new place or reason |
+|---|---|---|---|---|
+| action_policy.py | class | APIJobActionPolicy | episode function | task.py `_offered` (the wait is offered only for `api_service_assignment_v1`) |
+| action_policy.py | method | APIJobActionPolicy.permitted_common_actions | episode function | task.py `_offered` (the wait is offered only for `api_service_assignment_v1`) |
+| binding_record.py | class | APIJobBindingRecord | machinery | the binding's own as_record() and binding descriptor (README 3) |
+| binding_record.py | method | APIJobBindingRecord.as_record | machinery | the binding's own as_record() and binding descriptor (README 3) |
+| child_eligibility.py | class | APIJobChildEligibility | episode function | task.py `CHILD_SLOTS = {}` (no child roles) |
+| child_eligibility.py | method | APIJobChildEligibility.child_roles | episode function | task.py `CHILD_SLOTS = {}` (no child roles) |
+| child_eligibility.py | method | APIJobChildEligibility.allowed_children | episode function | task.py `CHILD_SLOTS = {}` (no child roles) |
+| closed_credit.py | class | ClosedExecutionCredit | machinery | closed-credit capture and receipt/observation authentication (receipt inheritance, runtime_* tables); credit is `credit.py`, completion credit is `completion['credit']` |
+| closed_credit.py | method | ClosedExecutionCredit._closed_credit_carrier | machinery | closed-credit capture and receipt/observation authentication (receipt inheritance, runtime_* tables); credit is `credit.py`, completion credit is `completion['credit']` |
+| closed_credit.py | method | ClosedExecutionCredit._closed_credit_receipts | machinery | closed-credit capture and receipt/observation authentication (receipt inheritance, runtime_* tables); credit is `credit.py`, completion credit is `completion['credit']` |
+| closed_credit.py | method | ClosedExecutionCredit._closed_credit_value | machinery | closed-credit capture and receipt/observation authentication (receipt inheritance, runtime_* tables); credit is `credit.py`, completion credit is `completion['credit']` |
+| closed_credit.py | method | ClosedExecutionCredit._closed_credit_facts | machinery | closed-credit capture and receipt/observation authentication (receipt inheritance, runtime_* tables); credit is `credit.py`, completion credit is `completion['credit']` |
+| closed_credit.py | method | ClosedExecutionCredit._closed_operational_credit_view | machinery | closed-credit capture and receipt/observation authentication (receipt inheritance, runtime_* tables); credit is `credit.py`, completion credit is `completion['credit']` |
+| completion.py | class | ExecutionCompletion | machinery | completion proof and estimator provenance (reads runtime_observations); replaced by the completion controller in `yield_estimator.py` (README 3d, 7b); the verified-completion value comes from the job-access reply as `execution_completed` in the tool outcome |
+| completion.py | method | ExecutionCompletion.completion_for_action | machinery | completion proof and estimator provenance (reads runtime_observations); replaced by the completion controller in `yield_estimator.py` (README 3d, 7b); the verified-completion value comes from the job-access reply as `execution_completed` in the tool outcome |
+| completion.py | method | ExecutionCompletion._closed_completion_verdict | machinery | completion proof and estimator provenance (reads runtime_observations); replaced by the completion controller in `yield_estimator.py` (README 3d, 7b); the verified-completion value comes from the job-access reply as `execution_completed` in the tool outcome |
+| completion.py | method | ExecutionCompletion.verify_completion | machinery | completion proof and estimator provenance (reads runtime_observations); replaced by the completion controller in `yield_estimator.py` (README 3d, 7b); the verified-completion value comes from the job-access reply as `execution_completed` in the tool outcome |
+| configuration.py | class | APIJobConfiguration | episode function | settings (README 3: configuration values): `handoff_unit`, `acquired_record_unit` read in task.py `_outcome`; `task_yield_profiles` in yield_estimator.py `task_yield_profile`; resources, workspace and native result readers are old-runner/results-role configuration (not carried) |
+| configuration.py | method | APIJobConfiguration.__init__ | episode function | settings (README 3: configuration values): `handoff_unit`, `acquired_record_unit` read in task.py `_outcome`; `task_yield_profiles` in yield_estimator.py `task_yield_profile`; resources, workspace and native result readers are old-runner/results-role configuration (not carried) |
+| contracts.py | function | launch_operation_catalog | episode function | task.py `api_capabilities` tool |
+| contracts.py | function | native_result_operation_catalog | episode function (not placed) | unplaced: local/PBS result acquisition operations (results role); the API launch path never offers them |
+| contracts.py | function | _outcome | episode function | task.py `_outcome` (returned outcome of a job-access reply) |
+| credit.py | class | ExecutionEpisodeCredit | episode function | credit.py `credit` (the old `api_execution.credit_view` is not in the library: reconstructed from handoff_unit and acquired_record_unit; the native result families are not on the API launch path) |
+| credit.py | method | ExecutionEpisodeCredit.credit_kind | machinery | credit_kind is deleted (README 3d) |
+| credit.py | method | ExecutionEpisodeCredit.project_credit | episode function | credit.py `credit` (the old `api_execution.credit_view` is not in the library: reconstructed from handoff_unit and acquired_record_unit; the native result families are not on the API launch path) |
+| credit.py | method | ExecutionEpisodeCredit._live_project_credit | episode function | credit.py `credit` (the old `api_execution.credit_view` is not in the library: reconstructed from handoff_unit and acquired_record_unit; the native result families are not on the API launch path) |
+| credit.py | method | ExecutionEpisodeCredit.credit_view | episode function | credit.py `credit` (the old `api_execution.credit_view` is not in the library: reconstructed from handoff_unit and acquired_record_unit; the native result families are not on the API launch path) |
+| decision_contracts.py | class | APIJobDecisionContracts | machinery | the decision-exchange loop / decision machine (README 3a) |
+| decision_contracts.py | method | APIJobDecisionContracts.exchange_schema | machinery | the decision-exchange loop / decision machine (README 3a) |
+| decision_contracts.py | method | APIJobDecisionContracts.exchange_response | machinery | the decision-exchange loop / decision machine (README 3a) |
+| decision_delivery.py | class | APIJobDecisionDelivery | machinery | the decision-exchange loop / decision machine (README 3a) |
+| decision_delivery.py | method | APIJobDecisionDelivery.call | machinery | the decision-exchange loop / decision machine (README 3a) |
+| decision_delivery.py | method | APIJobDecisionDelivery.instructions | episode function | task.py `_instructions` |
+| decision_exchange.py | class | APIJobDecisionExchange | machinery | the decision-exchange loop / decision machine (README 3a) |
+| decision_exchange.py | method | APIJobDecisionExchange.interpretation_context | machinery | the decision-exchange loop / decision machine (README 3a) |
+| decision_exchange.py | method | APIJobDecisionExchange.exchange_decision | machinery | the decision-exchange loop / decision machine (README 3a) |
+| decision_inputs.py | class | APIJobDecisionInputs | episode function | task.py `_context` (TASK and STEERING sections) and `_offered`; the pieces without a home are in the blocked file |
+| decision_inputs.py | method | APIJobDecisionInputs.decision_inputs | episode function | task.py `_context` (TASK and STEERING sections) and `_offered`; the pieces without a home are in the blocked file |
+| decision_presentation.py | function | select_profile_api_execution_values | machinery | provider masking of operands before generic tracking masking (provider patching) |
+| decision_presentation.py | function | is_api_launch_context | machinery | renderer dispatch of the old provider |
+| decision_presentation.py | function | _scope | episode function (not placed) | unplaced: the old Store scope of the assignment is not an assignment field now; no scope rendering |
+| decision_presentation.py | function | _requested_sources | episode function (not placed) | unplaced: listed the x-source fields of the parent-written return form; the parent selects fields now (rule 5) |
+| decision_presentation.py | function | _task | episode function | task.py `_context` (the TASK section as a mapping) |
+| decision_presentation.py | function | _band | episode function | already in library: episode_support/records/progress_views.py `yield_table` (shown in `action_yields`) |
+| decision_presentation.py | function | _number | episode function | messages/internal_summary.py `_number` |
+| decision_presentation.py | function | _returned_value | episode function | messages/internal_summary.py `_returned_value` |
+| decision_presentation.py | function | _is_error_return | episode function | already in library: episode_support/acquisition/service_calls/api_error_feedback.py `is_api_error_return` |
+| decision_presentation.py | function | _error_text | episode function (not placed) | unplaced: text rendering of an error table; the structured context carries the complete returned error unfiltered |
+| decision_presentation.py | function | _operational_scalars | episode function | messages/internal_summary.py `_operational_scalars` |
+| decision_presentation.py | function | _measurements | episode function | messages/internal_summary.py `_measurements` |
+| decision_presentation.py | function | _qualifications | episode function | messages/internal_summary.py `_qualifications` |
+| decision_presentation.py | function | _operational_facts | episode function | messages/internal_summary.py `_operational_facts` |
+| decision_presentation.py | function | _api_progress | episode function | messages/internal_summary.py `_api_progress` |
+| decision_presentation.py | function | _own_outcome | episode function | messages/internal_summary.py `_own_outcome` |
+| decision_presentation.py | function | _lookup | episode function | task.py `_context` (`requested_information` carries the lookup outcomes; lookups are tools) |
+| decision_presentation.py | function | _steering | episode function | task.py `_context` (the STEERING section as a mapping) |
+| decision_presentation.py | function | render_api_launch_prompt | episode function | task.py `decide` / `_context` (rendered as structured sections, not text tables: the text helpers are not in the library) |
+| decision_presentation.py | function | render_api_job_prompt | machinery | renderer dispatch among the HPC, gene-context, monitor and receiver renderers of other roles |
+| decision_presentation.py | function | present_api_job_task | machinery | provider presentation hook and conversation state frames (README 3a) |
+| decision_provider.py | class | APIJobDecisionProvider | machinery | conversation key and provider call (README 3a) |
+| decision_provider.py | method | APIJobDecisionProvider.conversation_key | machinery | conversation key and provider call (README 3a) |
+| decision_provider.py | method | APIJobDecisionProvider.complete_decision | machinery | conversation key and provider call (README 3a) |
+| decision_state.py | class | APIJobDecisionState | episode function | messages/internal_summary.py `internal_summary` and task.py `_context` |
+| decision_state.py | method | APIJobDecisionState.decision_state | episode function | messages/internal_summary.py `internal_summary` and task.py `_context` |
+| episode.py | class | ExecutionEpisode | episode function | episode.py `ApiJobExecution` |
+| from_parent.py | class | APIJobAssignment | episode function | messages/read_from_parent.py |
+| from_parent.py | method | APIJobAssignment.child_assignment_schema | machinery | the parent-side description of the child assignment (README 3b C3) |
+| from_parent.py | method | APIJobAssignment.assignment_schema | episode function | messages/read_from_parent.py `ASSIGNMENT_FORM` |
+| from_parent.py | method | APIJobAssignment._permitted | episode function (not placed) | unplaced: check of the parent launch request against resources and constraints: a check of a commission (rule 1) |
+| from_parent.py | method | APIJobAssignment.prepare_assignment | episode function | messages/read_from_parent.py `read_from_parent` (`validate_api_assignment`); the checks against the parent launch selection, immutable input versions and native/standard BLAST job inputs are checks of a commission and not carried |
+| from_parent.py | method | APIJobAssignment._request_schema | episode function | messages/read_from_parent.py `ASSIGNMENT_FORM` (API branch) |
+| from_parent.py | method | APIJobAssignment._validate_request | episode function | messages/read_from_parent.py `read_from_parent` (API branch via `validate_api_assignment`; the local/PBS branch is not this episode) |
+| from_parent.py | method | APIJobAssignment._launch | episode function (not placed) | unplaced: validates the parent launch assignment, which a child cannot read (README 5 item 14) |
+| from_parent.py | method | APIJobAssignment._constraints | episode function (not placed) | unplaced: validates the parent launch constraints (README 5 item 14) |
+| from_parent.py | method | APIJobAssignment.required_return_sources | machinery | parent-written return form (README 3b C4); returned () |
+| from_parent.py | method | APIJobAssignment.initial_references | episode function | messages/read_from_parent.py `input_refs` (record_refs field: records are passed in custody) |
+| goal.py | class | APIJobGoal | episode function | goal.py `GOAL` |
+| goal.py | method | APIJobGoal.instructions | episode function | goal.py `GOAL` |
+| instructions.py | function | instructions | episode function | task.py `_instructions`: the old function (20 lines) only composed the binding goal text (old goal.py `APIJobGoal.instructions`, carried in full as goal.py `GOAL`), tool knowledge and the launch library, which `_instructions` still does (GOAL + KNOWLEDGE_INSTRUCTIONS + LAUNCH_INSTRUCTIONS). The pending-delivery, in-process wait and native-event paragraphs and the exchange-history replacement are machinery (redelivery, wait suspension, decision exchange) and are dropped. The 413-line TASK/STEERING text of decision_presentation.py is not part of this function: its content is task.py `_context` (named sections), its text-table renderers are listed as unplaced in the blocked file |
+| internal_summary.py | class | APIJobSummary | episode function | messages/internal_summary.py and task.py `_context` |
+| internal_summary.py | method | APIJobSummary.initial_decision_context | episode function | task.py `_context` (configured resource from `api_capabilities`); received_bvbrc_values, received_blast_jobs, received_minhash_values come from `api_execution` (not in the library): blocked file |
+| internal_summary.py | method | APIJobSummary.decision_context | episode function | messages/internal_summary.py `internal_summary` (assignment, progress facts, API decision context) |
+| internal_summary.py | method | APIJobSummary._with_selected_execution_task | episode function (not placed) | unplaced: reads the scientific parent task (`scientific_parent_task`) and `native_profile_presentation`: the parent task is not a record this episode holds (README 5 item 14) |
+| internal_summary.py | method | APIJobSummary._resource_information | episode function | task.py `api_capabilities` tool and `_context` (`configured_resource`) |
+| internal_summary.py | method | APIJobSummary.capabilities | episode function | task.py `api_capabilities` tool |
+| internal_summary.py | method | APIJobSummary.resource_tool_contracts | episode function | task.py `ARGUMENTS`, `DESCRIPTIONS`, `TOOLS`; `api_execution.operation_contracts` and `homology_api_contracts` are not in the library: blocked file |
+| operations.py | class | APIJobOperations | episode function | task.py `TOOLS` |
+| operations.py | method | APIJobOperations._delegate | episode function | task.py `api_operation` (the API resource is the only delegate) |
+| operations.py | method | APIJobOperations._practical_context | machinery | identity function of the old context |
+| operations.py | method | APIJobOperations.initialize | machinery | local-file-source initialisation and the parent-input check against runtime_episodes (README 3e) |
+| operations.py | method | APIJobOperations._check_parent_inputs | machinery | reads the parent request from runtime_episodes and re-validates it: a commission check (rule 1) and old journal |
+| operations.py | method | APIJobOperations.catalog | episode function | task.py `_offered`, `ARGUMENTS`, `DESCRIPTIONS` |
+| operations.py | method | APIJobOperations.execute | episode function | task.py `api_operation` and `wait_for_service_job` tools |
+| parent_launch_contract.py | function | parent_launch_schema | episode function (not placed) | unplaced: schema of the commissioning parent Launch assignment; the parent's own assignment is not readable by the child (README 5 item 14) |
+| received_information.py | class | ReceivedExecutionInformation | episode function (not placed) | unplaced: forwards report sources of children to a scientific owner (annotation or gene_context_evidence roles); this launch_api leaf is never that role |
+| received_information.py | method | ReceivedExecutionInformation._forwards_bvbrc_reports | episode function (not placed) | unplaced: forwards report sources of children to a scientific owner (annotation or gene_context_evidence roles); this launch_api leaf is never that role |
+| received_information.py | method | ReceivedExecutionInformation._forwards_minhash_reports | episode function (not placed) | unplaced: forwards report sources of children to a scientific owner (annotation or gene_context_evidence roles); this launch_api leaf is never that role |
+| received_information.py | method | ReceivedExecutionInformation.received_report_sources | episode function (not placed) | unplaced: forwards report sources of children to a scientific owner (annotation or gene_context_evidence roles); this launch_api leaf is never that role |
+| received_information.py | method | ReceivedExecutionInformation.received_report_facts | episode function (not placed) | unplaced: forwards report sources of children to a scientific owner (annotation or gene_context_evidence roles); this launch_api leaf is never that role |
+| received_information.py | method | ReceivedExecutionInformation.received_report_closure_facts | episode function (not placed) | unplaced: forwards report sources of children to a scientific owner (annotation or gene_context_evidence roles); this launch_api leaf is never that role |
+| received_record_selection.py | class | ReceivedRecordSelection | machinery | record_selection and received-record custody (README 3c) |
+| received_record_selection.py | method | ReceivedRecordSelection._received | machinery | record_selection and received-record custody (README 3c) |
+| received_reference_custody.py | class | ReceivedReferenceCustody | machinery | received reference custody and received-report validation (README 3b R1, R3) |
+| received_reference_custody.py | method | ReceivedReferenceCustody.resolve_received_reference | machinery | received reference custody and received-report validation (README 3b R1, R3) |
+| received_reference_custody.py | method | ReceivedReferenceCustody.validate_received_report | machinery | received reference custody and received-report validation (README 3b R1, R3) |
+| received_reference_custody.py | method | ReceivedReferenceCustody.received_form_references | machinery | received reference custody and received-report validation (README 3b R1, R3) |
+| report_delivery.py | class | APIJobReportDelivery | machinery | `finish`: saving the report form and release (README 3b D1, D3); the facts are `final_to_parent` |
+| report_delivery.py | method | APIJobReportDelivery.finish | machinery | `finish`: saving the report form and release (README 3b D1, D3); the facts are `final_to_parent` |
+| report_reference_access.py | class | ReportReferenceAccess | machinery | reference resolver and report reference custody (README 3b D2) |
+| report_reference_access.py | method | ReportReferenceAccess.resolve | machinery | reference resolver and report reference custody (README 3b D2) |
+| result_records.py | class | ExecutionResultRecords | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._masking_selector | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._masking_inputs | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._retained_masking_target | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._masking_reference_access | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._utility_selector | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._utility_inputs | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._retained_utility_target | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._utility_reference_access | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._versions | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._target | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._selector | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._result_directory | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._windows | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._selected_result_action | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._validate_result_body | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._read_result | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._selection | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._context_target | episode function (not placed) | unplaced: results-role helper (native masking/utility selectors, result directory and windows, result body reading); the API launch role never reaches it |
+| result_records.py | method | ExecutionResultRecords._has_appservice | episode function | messages/final_to_parent.py (all fact sources are declared as selectable fields; no per-configuration test) |
+| result_records.py | method | ExecutionResultRecords._has_uniprot | episode function | messages/final_to_parent.py (all fact sources are declared as selectable fields; no per-configuration test) |
+| result_records.py | method | ExecutionResultRecords._appservice_sources | episode function | messages/final_to_parent.py `FIXED` (`bvbrc_appservice_support_refs`); `homology_fact_sources` is not in the library: blocked file |
+| saved_decision_exchange.py | class | APIJobSavedDecisionExchange | machinery | saved-request and exchange-history checks (README 3a) |
+| saved_decision_exchange.py | method | APIJobSavedDecisionExchange.validate_contract_exchange_request | machinery | saved-request and exchange-history checks (README 3a) |
+| saved_decision_exchange.py | method | APIJobSavedDecisionExchange.validate_contract_exchange_history | machinery | saved-request and exchange-history checks (README 3a) |
+| task.py | class | APIJobTask | episode function | task.py |
+| task.py | method | APIJobTask.next | episode function | task.py `decide` (loop, replay, in-process restore and SourceEnd are machinery) |
+| task.py | method | APIJobTask.apply_response | episode function | task.py `action` (rejection feedback; the report_update admission and redelivery are machinery) |
+| task.py | method | APIJobTask.execute | episode function | task.py tools `api_operation`, `wait_for_service_job` (journaling, controller_value and score updates are machinery) |
+| task_state.py | class | APIJobTaskState | machinery | task state restore, checkpoint and effect records (README 3e) |
+| task_state.py | method | APIJobTaskState.__init__ | machinery | task state restore, checkpoint and effect records (README 3e) |
+| task_state.py | method | APIJobTaskState.bind_execution_context | machinery | task state restore, checkpoint and effect records (README 3e) |
+| task_state.py | method | APIJobTaskState.record_execution_failure | episode function | task.py `_outcome` (a failed, invalid or unavailable reply is a returned outcome that enters the iterator) |
+| task_state.py | method | APIJobTaskState.restore_checkpoint | machinery | task state restore, checkpoint and effect records (README 3e) |
+| task_state.py | method | APIJobTaskState.restore | machinery | task state restore, checkpoint and effect records (README 3e) |
+| task_state.py | method | APIJobTaskState.record_effect | machinery | task state restore, checkpoint and effect records (README 3e) |
+| task_state.py | method | APIJobTaskState.checkpoint | machinery | task state restore, checkpoint and effect records (README 3e) |
+| terminal_execution.py | function | operation_catalog | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | class | TerminalExecutionBehavior | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.__init__ | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior._operations | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior._assignment | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior._state_directory | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.initialize | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.state | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.as_record | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.child_roles | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.credit_kind | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.assignment_schema | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.permitted_common_actions | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.allowed_children | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.prepare_assignment | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.initial_decision_context | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior._resource_information | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior._resource_instructions | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.instructions | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.decision_context | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.catalog | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.execute | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.completion_for_action | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.practical_estimator | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.fact_sources | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.facts | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.resolve | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.validate_report | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| terminal_execution.py | method | TerminalExecutionBehavior.credit_view | episode function (not placed) | unplaced: single-file terminal (local/PBS) behaviour kept for the contracts import only; the API path never used it (intent record) |
+| to_parent.py | class | APIJobReport | episode function | messages/final_to_parent.py |
+| to_parent.py | method | APIJobReport.fact_sources | episode function | messages/final_to_parent.py `RETURN_FORM` (the declarations come from the library views) |
+| to_parent.py | method | APIJobReport.facts | episode function | messages/final_to_parent.py `final_to_parent` |
+| to_parent.py | method | APIJobReport._live_facts | episode function | messages/final_to_parent.py `final_to_parent` (recorded facts from the summary; the native families are not on the API path) |
+| to_parent.py | method | APIJobReport.validate_report | episode function | messages/final_to_parent.py `validate_report` |
+| waiting.py | class | APIJobWaiting | machinery | `suspension_changed`: wait suspension on the execution backend (README 3b); the wait itself is the `wait_for_service_job` tool |
+| waiting.py | method | APIJobWaiting.suspension_changed | machinery | `suspension_changed`: wait suspension on the execution backend (README 3b); the wait itself is the `wait_for_service_job` tool |
+| yield_estimator.py | class | ExecutionEpisodeYield | episode function | yield_estimator.py |
+| yield_estimator.py | method | ExecutionEpisodeYield._request_yield_class | episode function | yield_estimator.py `request_yield_class` |
+| yield_estimator.py | method | ExecutionEpisodeYield._task_yield_profile | episode function | yield_estimator.py `task_yield_profile` |
+| yield_estimator.py | method | ExecutionEpisodeYield.yield_controller | episode function | yield_estimator.py `yield_controller` |
+| yield_estimator.py | method | ExecutionEpisodeYield._launch_api_yield_controller | episode function | yield_estimator.py `yield_controller` (completion controller) |
+| yield_estimator.py | method | ExecutionEpisodeYield.practical_estimator | machinery | `PracticalYieldEstimator(verify_completion)` (README 3d) |

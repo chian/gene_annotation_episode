@@ -79,6 +79,8 @@ explicit cross-source link remains a witnessed scientific interpretation.
             _require_record(read_record, origin['source_ref'], {'source'})
         observation['original_observation_key'] = origin['key']
         observation['source_refs'] = list(dict.fromkeys([*[item['source_ref'] for item in selected + links], *([origin['source_ref']] if origin['source_ref'] is not None else []), primary]))
+        # A quoted phenotype and its representations are an observation unit,
+        # not extra quantitative measurement rows created by this source reader.
         observation['measurement_keys'] = []
         observation['qualifications'] = list(dict.fromkeys([*observation['qualifications'], *[qualification for item in selected + links for qualification in item['qualifications']]]))
         if all((item['identity_only'] for item in selected)):

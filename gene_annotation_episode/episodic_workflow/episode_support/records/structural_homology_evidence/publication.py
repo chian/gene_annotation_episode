@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.scoring import GRADE_SCHEMA, VERSION, digest, grade_comparison, require
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import canonical, identity
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import retain_tool_grading, source_tool_grading_entries
@@ -16,16 +17,14 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
 PROVIDER='native.a102.structural_comparison'
 
 
-def install(store):
-    store.db.execute('''CREATE TABLE IF NOT EXISTS a102_native_publications (
-        source_ref TEXT PRIMARY KEY, native_artifact_ref TEXT NOT NULL,
-        grading_artifact_ref TEXT NOT NULL, target_ref TEXT NOT NULL,
-        grade_sha256 TEXT NOT NULL, producer TEXT NOT NULL, permitted_use TEXT NOT NULL)''')
+NATIVE_PUBLICATIONS = TableDeclaration(name='a102_native_publications',
+    columns=('source_ref', 'native_artifact_ref', 'grading_artifact_ref', 'target_ref',
+        'grade_sha256', 'producer', 'permitted_use'),
+    key=('source_ref',), record_refs=('source_ref', 'native_artifact_ref', 'grading_artifact_ref', 'target_ref'))
 
 
 def publish_comparison(store, native):
     """Called by a qualified host producer before returning any native result."""
-    install(store)
     grade=grade_comparison(native)
     with store.transaction():
         artifact=store.artifact(canonical(native),'application/json')
@@ -36,10 +35,12 @@ def publish_comparison(store, native):
             'version':VERSION,'retrieved_at':None,'auxiliary_artifact_refs':[grading],
             'operand_refs':[native['target_ref']] if store.get(native['target_ref'])['record_type'] in {
                 'input','reference','read_subject','feature','product'} else []},origin='tool')['id']
-        values=(source,artifact,grading,native['target_ref'],digest(grade),native['producer'],'a102_scoring')
-        old=store.db.execute('SELECT * FROM a102_native_publications WHERE source_ref=?',(source,)).fetchone()
-        require(old is None or tuple(old)==values,'a102_native_publication_conflict')
-        store.db.execute('INSERT OR IGNORE INTO a102_native_publications VALUES(?,?,?,?,?,?,?)',values)
+        values={'source_ref':source,'native_artifact_ref':artifact,'grading_artifact_ref':grading,
+            'target_ref':native['target_ref'],'grade_sha256':digest(grade),'producer':native['producer'],
+            'permitted_use':'a102_scoring'}
+        old=store.table(NATIVE_PUBLICATIONS).select({'source_ref':source})
+        require(not old or all(old[0][name]==value for name,value in values.items()),'a102_native_publication_conflict')
+        store.table(NATIVE_PUBLICATIONS).put(values)
     return {'source_ref':source,'grading_artifact_ref':grading,'grade':grade}
 
 
@@ -47,9 +48,8 @@ def received_grade(store, reference):
     """Resolve only an authenticated published numerical receipt, never coords."""
     source=store.get(reference)
     if source['record_type']!='source' or source.get('provider')!=PROVIDER:return None
-    exists=store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='a102_native_publications'").fetchone()
-    row=(store.db.execute('SELECT * FROM a102_native_publications WHERE source_ref=?',(reference,)).fetchone()
-        if exists else None)
+    rows=store.table(NATIVE_PUBLICATIONS).select({'source_ref':reference})
+    row=rows[0] if rows else None
     require(row is not None and row['permitted_use']=='a102_scoring'
         and source['origin']=='tool' and source.get('version')==VERSION,
         'a102_native_scoring_grant_unavailable',source_ref=reference)

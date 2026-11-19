@@ -44,7 +44,6 @@ class LiteratureBindingRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = "literature_binding_parameter_record_v1"
-    operations_table = "literature_binding_operations"
     received_table = "literature_binding_received"
     binding_fields = BINDINGS
 
@@ -83,17 +82,6 @@ class LiteratureBindingRepository(LiteratureRateRepository):
             raise ContractError("operation_key_required")
         args = plain(arguments)
         validate_schema(args, binding_population_schema())
-        signature = canonical({"arguments": args, "scope": plain(context.scope)})
-        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
-            "WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, context.episode_id, operation_key)).fetchone()
-        if old is not None:
-            if old["signature"] != signature:
-                raise ContractError("operation_key_reused_for_different_work")
-            outcome = json.loads(old["outcome"])
-            for reference in self.read(outcome["result"]["sheet_ref"])["input_source_refs"]:
-                self._source(context, reference)
-            return outcome
 
         source = self._source(context, args["source_ref"])
         try:
@@ -157,9 +145,9 @@ class LiteratureBindingRepository(LiteratureRateRepository):
 
             def publish(kind, record):
                 candidate = identity(kind, {"origin": "tool", "record": record})
-                existed = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (candidate,)).fetchone()
+                new = not self.store.holds(candidate)
                 published = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
-                if existed is None:
+                if new:
                     created.append(published["id"])
                 return published["id"]
 
@@ -189,8 +177,6 @@ class LiteratureBindingRepository(LiteratureRateRepository):
                 "feedback": None}
             outcome["result"].update({field: sheet[field] for field in (
                 "uncertainty_basis", "minimum_experiment_count", "independent_preparation_count")})
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):

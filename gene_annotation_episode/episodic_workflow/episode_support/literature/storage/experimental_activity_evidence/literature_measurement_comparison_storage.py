@@ -8,6 +8,7 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, validate_schema
 from gene_annotation_episode.domain import ContractError
@@ -248,22 +249,14 @@ def _project_once(args, extraction, inputs, sheet):
         rows.append({'row_version': 'measurement_comparison_return_v2', 'evidence_source_ref': selection['source_ref'], 'evaluation_scope': SCOPE, 'component': component, 'cell': deepcopy(cell), 'source_kind': selection['source_kind'], 'assertion_question': selection['assertion']['question'], 'assertion_context': deepcopy(assertion), 'role_meanings': meanings, 'relationships': [{'name': name, 'value': sheet['relationship_meanings'][name]} for name in _relationship_names(selection, component)], 'model_conditions': models, 'conversion_conditions': conversions, 'covariance_provenance': covariance, 'model_settings': _settings(selection, component), 'dependencies': dependencies, 'dependence': dependence, 'assumptions': _assumptions(selection, component, cell, sheet), 'withheld_locations': deepcopy(withheld)})
     return rows
 
+OPERATIONS = operations_ledger('literature_measurement_comparison_operations')
+RECEIVED = received_ledger('literature_measurement_comparison_received')
+
 class LiteratureMeasurementComparisonRepository(LiteratureRateRepository):
     provider, record_version, components = (PROVIDER, VERSION, COMPONENTS)
-    operations_table = 'literature_measurement_comparison_operations'
-    received_table = 'literature_measurement_comparison_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ()
-
-    def __init__(self, store, run_id):
-        if type(run_id) is not str or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id = (store, run_id)
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     def _native_provenance(self, scope, reference):
         source = super()._native_provenance(scope, reference)
@@ -298,7 +291,7 @@ class LiteratureMeasurementComparisonRepository(LiteratureRateRepository):
             raise ContractError('measurement_comparison_assignment_request_roster_mismatch')
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'role': context.role, 'operation_key': operation_key, 'scope': plain(context.scope), 'assignment': plain(context.assignment), 'received_record_refs': list(context.received_record_refs), 'arguments': args, 'components': components}
         signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
+        old = self._operation(context.episode_id, operation_key)
         if old:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -342,17 +335,16 @@ class LiteratureMeasurementComparisonRepository(LiteratureRateRepository):
         for value, key in ((extraction, 'extraction'), (inputs, 'inputs'), (sheet, 'sheet')):
             validate_schema(value, ORIGINAL_SCHEMAS[key])
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(saved), 'application/json')
             request_ref = self.store.artifact(canonical(request), 'application/json')
             record = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': parents}
             ref = identity('source', {'origin': 'tool', 'record': record})
-            exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (ref,)).fetchone()
+            exists = self.store.holds(ref)
             self.store.put('source', record, origin='tool', scope=plain(context.scope))
             rows = [{'sheet_ref': ref, **deepcopy(row)} for row in templates]
             validate_schema(rows, ORIGINAL_SCHEMAS['rows'])
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [ref], 'changed_record_refs': [] if exists else [ref], 'result': {'sheet_ref': ref, 'view': VIEW, 'record_version': VERSION, 'cells': rows}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def _json(self, ref):
@@ -384,8 +376,7 @@ class LiteratureMeasurementComparisonRepository(LiteratureRateRepository):
         require(set(request) == {'run_id', 'episode_id', 'role', 'operation_key', 'scope', 'assignment', 'received_record_refs', 'arguments', 'components'} and request['run_id'] == self.run_id)
         require(set(saved) == {'version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'source_metadata', 'original_schemas', 'extraction', 'calculation_inputs', 'sheet', 'row_templates'})
         require(saved['version'] == VERSION and source['text_ref'] == source['artifact_ref'])
-        require(self._installed(self.operations_table))
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
+        operation = self._operation(request['episode_id'], request['operation_key'])
         require(operation is not None and operation['signature'] == canonical(request))
         schemas = saved['original_schemas']
         require(canonical(schemas) == canonical(ORIGINAL_SCHEMAS))
@@ -509,23 +500,15 @@ class LiteratureMeasurementComparisonRepository(LiteratureRateRepository):
             if canonical(expected) != canonical([row]):
                 raise ContractError('measurement_comparison_return_differs_from_saved_cells')
 
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
     def receive_cells(self, context, cells, operation_key):
         if cells:
             with self.store.transaction():
-                self._install()
                 return super().receive_cells(context, cells, operation_key)
 
     def selected_sheet_refs(self, context):
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
-        if not self._installed(self.operations_table):
-            return []
-        refs = list(dict.fromkeys((json.loads(r['outcome'])['result']['sheet_ref'] for r in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id)))))
+        refs = list(dict.fromkeys((json.loads(r['outcome'])['result']['sheet_ref'] for r in self._operations(context.episode_id))))
         for ref in refs:
             self.read(ref)
         return refs
@@ -558,9 +541,7 @@ class LiteratureMeasurementComparisonRepository(LiteratureRateRepository):
 
     def receipt_bindings(self):
         result = {}
-        if not self._installed(self.operations_table):
-            return result
-        for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=?', (self.run_id,)):
+        for row in self._operations():
             ref = json.loads(row['outcome'])['result']['sheet_ref']
             source = self.store.get(ref)
             result[ref] = {'run_id': self.run_id, 'episode_id': self._sheet_owner(ref), 'artifacts': [source['artifact_ref'], source['request_ref']]}

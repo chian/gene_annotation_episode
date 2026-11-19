@@ -1,0 +1,39 @@
+# passage_evidence_extraction (A106): blocked, unplaced and contract misfits
+
+## BLOCKED-ON-STORE-ACCESS
+
+- function = `gene_annotation_episode/episodic_workflow/episode_support/tools/perturbation_evidence/tools.py::ToolRegistry`, pattern = "library not carried". `task.py run_access_tool` calls `ToolRegistry(ctx.store, **settings['tool_registry']).execute_async(name, arguments, scope=..., operation_key=ctx.operation_key, permitted_record_refs=...)`. Today `ToolRegistry.__init__` runs `store.db.execute("CREATE TABLE IF NOT EXISTS tool_operations ...")`, `execute_async` reads and writes `tool_operations` through `store.db`, and the source checks call `store._require(...)`, `store.path`. Old call -> intended call: `store.db` tool_operations ledger -> deleted (the system journals units; `ctx.operation_key`); `store._require(ref, kinds)` -> `store.require(ref, kinds)`; `store.path` temp/cache -> scratch-directory operation (no replacement yet).
+- function = `.../episode_support/findings/perturbation_evidence/finding_validity.py::FindingValidity` and `::target_eligible` (called by `credit.py current_assessments`), pattern = "library not carried". Old call -> intended call: `sqlite3.connect('')` spool and `store._assessment_write_extent(assessment)` -> a custody-limited `_assessment_write_extent` operation (store-access.md "No replacement yet"); `credit.py` calls them with `records` and the scope as written.
+- function = `.../episode_support/findings/perturbation_evidence/scientific_findings.py::FindingIdentity` (called by `credit.py lead_dispositions`), pattern = "library not carried". Old call -> intended call: `store._require(ref, {...})` -> `store.require(ref, {...})`; `store._record_roots(...)` -> a custody-limited `_record_roots` operation (no replacement yet).
+- function = `.../episode_support/literature/grading/literature_task_credit.py::validate_lead` / `::lead_dispositions` / `::screening_answers` (old forms), pattern = "library not carried". They read `runtime_actions` / `runtime_report_attempts` and `store._require`. The episode carries private re-expressions (`task.py validate_source_lead`, `credit.py lead_dispositions` / `screening_answers`) on custody and does not call the library versions (library candidates). Old call -> intended call: `store._require` -> `store.require`; runtime_* reads -> the view's `outcomes`.
+
+## UNPLACED OLD FUNCTIONS
+
+- Rate-population route (populate tools, repositories, fact sources, display contexts): `scientific_records.py` (all `LiteratureScientificRecords` methods incl. `_population_routes`), `source_contracts.py _required_grading_logic` / `_population_catalog`, `source_operations.py _materialize_text_arguments` and the populate branch of `execute`, `received_evidence.py` (all but `validate_received_report`'s answer check), `to_parent.py` rate fact sources/facts, `internal_summary.py` display contexts, `decision_presentation.py prepare_completed_work` / `decision_yield_table` completed-work parts, `grading/intervention_assessment.py`, `scoring/intervention_main_sheet.py`. No populate tool (including `literature.a106.finalize` and `literature.intervention_grading.populate`) is offered, no requested_*_components property is declared, no fact cell is returned. The A106 sub-score text in GOAL names `literature.a106.finalize`; a model can not select it here.
+- `source_operations.py prepare_analysis_contract` (`literature.intervention_analysis.contract`): needs the old execution binding of the BV-BRC service; no such tool exists in this episode's catalog.
+- `configuration.py LiteratureConfiguration.reference_evidence`: root-only reference_evidence_parent context.
+- `from_parent.py _validate_page` / Store checks of `_validate_assignment` (source/artifact in scope, offset within artifact size) and `from_parent_page.py`: they read the Store or the parent's own page assignment; a wrong commission fails. The tool-level page-source restriction (`task.py within_source`) is carried.
+- `task_decision.py` context pieces without a home here: resource context, shared-information context, launch instructions, child options, pending work, execution expectations, native events, contract-information profile (no job, launch or child tool).
+- Screening credit: `screening_answers` reads `evidence_processing.kind=no_applicable_evidence` declarations that only the assay-grading reason schema offers; the `reason` schema here has none, so a screening commission can earn no credit (the old default had the same limit).
+- Called where the old A106 required-grading logic was None by default: nothing raises NotImplementedError('validate_form_not_built:a106'); this episode calls no validate_form.
+
+## CONTRACT MISFITS
+
+- new field: passage_evidence_extraction scope (assignment; the old episode took the Store scope from its request)
+- new field: passage_evidence_extraction received_record_refs (assignment, record_refs; the old episode read context.received_record_refs). The parent must name the source, its artifact, the sources it derives from, the proposed annotation and, for a lead, the lead's reference subject.
+- new field: passage_evidence_extraction finding (return; the old episode returned the parent-written form). The episode declares `written`, `interpretation`, `passages`, `qualification` and a `report` tool for the model's closing text. A106 is not an A105/A108 evidence episode, so no grader sheet is coupled here.
+- Tool names cannot contain dots: library names (`source.read`, ...) are carried as `source_read`, ... (`LIBRARY_NAMES` in `task.py`).
+- The tool arguments are wrapped by `action` into an envelope `{'arguments', 'scope', 'page_source_ref', 'proposed_annotation_ref'}` so tools (handed no summary) can apply the page-source restriction.
+- Settings read: `cost`, `parameters`, optional `tool_registry`, optional `knowledge_library_directory`.
+- The old no-private-binding case is not carried: the controller is always built from the commissioned task (accumulation for verified_source_leads, completion otherwise).
+- The base investigation text and reasoning-commit requirement are imported from the library `literature/prompts/perturbation_evidence/literature_investigation_prompt.py` instead of a private copy; GOAL imports `PERTURBATION_TASK` and the A106 sub-score `TASK` from the library (constants, not behaviour).
+- completion credit may pass its target: not expected. For assessment/screening `credit.py` counts at most one answer and the target is `credit_unit`.
+- Environment: `/home/chia/repos/gene_annotation_episode` is a symlink to `/tmp/ramrepo`, which has no `.git` and no `.venv`; old code was read with `git -C /home/chia/repos/gene_annotation_episode_disk show 97308b94c:<path>` and a symlink `.venv` -> the disk repo's `.venv` was made in the repo root so the launcher could run.
+
+## Not repaired
+
+- store_access_blocked: task.py run_access_tool -> library ToolRegistry (store.db, store._require, store.path): library not carried.
+- store_access_blocked: credit.py current_assessments / lead_dispositions -> library FindingValidity, target_eligible, FindingIdentity (sqlite3, store private methods): no custody operation yet.
+- library_not_carried: task.py lead_schema and _resolve from literature/grading/literature_task_credit.py (runtime_actions, runtime_report_attempts, store._require).
+- Population route (scientific_records, received_evidence, rate facts, intervention_assessment, intervention_main_sheet, source_contracts, source_operations, configuration.reference_evidence): needs population operations and library code that do not exist; no populate or finalize tool is offered.
+- screening credit: no evidence_processing.no_applicable_evidence declaration in reason_schema, so a screening commission cannot earn credit (the old default had the same limit).

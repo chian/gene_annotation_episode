@@ -7,13 +7,20 @@ state and the report-lifecycle sentence)."""
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.gene_context_evidence.credit import (
+    A103ContextCredit)
+from .final_to_parent import finding_of
+
 OUTCOME_PAGE_SIZE = 8        # the old configuration.outcome_page_size
 READ_TOOLS = ('source_read', 'source_locate', 'source_sequence_scan', 'source_sequence_references',
               'source_experimental_records', 'source_xlsx_rows', 'source_pdf_text', 'image_view')
 CUSTODY_KEYS = ('version', 'artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref', 'parent_source_refs')
 SOURCE_KEYS = ('provider', 'accession', 'uri')
 HISTORY_MEANING = 'Read exact prior outcomes from own_literature_outcomes; source discovery alone is not A103 evidence.'
-REPORT_LIFECYCLE = 'Findings are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.'
+REPORT_LIFECYCLE = 'The report is the last actual reading basis; later tool outcomes are facts, not a new judgment.'
+# The A103 sheets of the credit view (row 9 of LOST_CONTENT_a103.md: the old decision_state.py line 43 put them in
+# the decision context as _completed_work_axis_results, "Current gene-context scoring sheet").
+SHEET_KEYS = ('a103_sheet', 'target_sheets', 'tool_attachments', 'source_contributions')
 
 
 def representation_artifact(source, representation):
@@ -47,8 +54,8 @@ def internal_summary(view):
         if outcome['tool'] == 'tool_catalog':
             catalog = outcome['outcome']['catalog']
         elif outcome['tool'] == 'report' and outcome['outcome']['status'] == 'reported':
-            report = outcome['outcome']['finding']
-    cited = [] if report is None else sorted({reading['source_ref'] for reading in report['readings']})
+            report = outcome['outcome']['report']
+    credit_view = A103ContextCredit()(view.records, parent['scope'], known_record_refs=view.records.refs())
     controller = view.controller_state
     return {
         'assignment': parent,
@@ -64,5 +71,6 @@ def internal_summary(view):
         'action_yields': None if controller is None else yield_table(controller, forecast_unit='credit'),
         'report': report,
         'report_lifecycle': REPORT_LIFECYCLE,
-        'report_sources_held': {reference: bool(view.records.holds(reference)) for reference in cited},
+        'finding': finding_of(report),
+        'completed_work_axis_results': {key: credit_view[key] for key in SHEET_KEYS},
     }

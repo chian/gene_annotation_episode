@@ -71,3 +71,24 @@ def test_the_assignment_admits_a_table_selection_and_a_byte_window():
                       'received_record_refs': ['src_1']}
         admitted = from_parent.ASSIGNMENT_FORM.admit(assignment, 'assignment')
         assert from_parent.read_from_parent(admitted, 'm')['selection'] == selection
+
+
+def test_the_return_carries_the_credit_and_the_finding_and_is_admitted_by_the_return_form():
+    module = importlib.import_module(MODULE + '.messages.final_to_parent')
+    completion = {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 0.5}
+    entry = {'source_ref': 'source_aaaaaaaaaaaaaaaaaaaaaaaa', 'claim_kind': 'reported_sequence_identity', 'subject_relation': 'aligned_homolog',
+             'measured': True, 'row_start': 2, 'row_end': 3, 'column_start': 0, 'column_end': 4}
+    report = {'entries': [entry]}
+    task = importlib.import_module(MODULE + '.task')
+    from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import (
+        validate_schema)
+    validate_schema(report, task.REPORT_SCHEMA)
+    written = module.final_to_parent({'report': report}, completion, ())
+    assert written['credit'] == 0.5 and written['finding']['written'] is True
+    assert module.RETURN_FORM.admit(written, 'return')['finding']['entries'] == [
+        {'source_refs': ['source_aaaaaaaaaaaaaaaaaaaaaaaa'], 'claim_kind': 'reported_sequence_identity', 'subject_relation': 'aligned_homolog',
+         'measured': True, 'row_start': 2, 'row_end': 3, 'column_start': 0, 'column_end': 4}]
+    assert module.RETURN_FORM.record_refs(written) == ('source_aaaaaaaaaaaaaaaaaaaaaaaa',)
+    unwritten = module.final_to_parent({'report': None}, completion, ())
+    assert unwritten['finding']['written'] is False
+    module.RETURN_FORM.admit(unwritten, 'return')

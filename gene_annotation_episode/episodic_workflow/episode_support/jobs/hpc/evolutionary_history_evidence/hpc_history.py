@@ -10,7 +10,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.evol
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.execution_memory import ExecutionMemory, digest, validate_profile
 
 
-def closed_measurement(commission, plan, measured, handoff, *, resources, ledger_path):
+def closed_measurement(commission, plan, measured, handoff, *, resources, ledger):
+    """``ledger`` names the owner ledger in the provenance: its id (an ``HpcLedger`` in custody) or the path of a
+    read-only ledger file."""
     resource = resource_identity(commission['resource_id'], resources[commission['resource_id']])
     profile = commission.get('execution_profile') or {'resource_id': resource,
         'backend': 'hpc', 'tool': 'allocation', 'implementation': 'unclassified:'+plan['plan_id'],
@@ -21,7 +23,7 @@ def closed_measurement(commission, plan, measured, handoff, *, resources, ledger
             'features': plan['original_prediction']['features'], 'metrics': measured['body']['metrics'],
             'queue': plan['practical_assignment']['constraints']['queue'],
             'success': measured['body']['success'],
-            'provenance': [str(Path(ledger_path).resolve()), measured['id'], handoff['job_id']]}}
+            'provenance': [str(ledger), measured['id'], handoff['job_id']]}}
 
 
 def import_ledger(path, *, memory, resources):
@@ -45,7 +47,7 @@ def import_ledger(path, *, memory, resources):
             if row['body']['plan_id'] == plan['plan_id']][-1]
         handoff = [row['body'] for row in rows('handoff') if row['body']['plan_id'] == plan['plan_id']][-1]
         value = closed_measurement(commission, plan, measured, handoff,
-                                  resources=resources, ledger_path=path)
+                                  resources=resources, ledger=path)
         memory.record(**value)
         exported.append({'attempt_id': value['attempt_id'], 'profile': value['profile'],
             'observed_at': value['observation']['observed_at'], 'metrics': value['observation']['metrics']})

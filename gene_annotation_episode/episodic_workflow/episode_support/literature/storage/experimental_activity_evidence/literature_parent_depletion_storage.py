@@ -7,6 +7,7 @@ opening the workbook or rerunning the parser/calculator.
 from copy import deepcopy
 from hashlib import sha256
 import json
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, obj, validate_schema
 from gene_annotation_episode.domain import ContractError
@@ -28,24 +29,16 @@ def _rows(saved, sheet_ref, components):
     e, s = (saved['extraction'], saved['sheet'])
     return [{'sheet_ref': sheet_ref, 'evidence_source_ref': e['source_ref'], 'workbook_artifact_ref': saved['input_artifact_ref'], 'component': component, 'evaluation_scope': s['evaluation_scope'], **deepcopy(s['cells'][component]), 'compound': e['compound'], 'submix': e['submix'], 'time_hours': e['time_hours'], 'sheet_name': e['sheet_name'], 'row_number': e['row_number'], 'shared_active_observation_key': s['shared_active_observation_key'], 'normalization_status': e['normalization_status'], 'repetition_basis': e['repetition_basis'], 'active_control_covariance': e['active_control_covariance'], 'equal_mutant_protein_amount': e['equal_mutant_protein_amount'], 'product_identity_for_studied_enzyme': e['product_identity_for_studied_enzyme'], 'product_coupling_factor': s['product_coupling_factor'], 'annotation_credit': s['annotation_credit']} for component in components]
 
+OPERATIONS = operations_ledger('literature_parent_depletion_operations')
+RECEIVED = received_ledger('literature_parent_depletion_received')
+
 class LiteratureParentDepletionRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = VERSION
-    operations_table = 'literature_parent_depletion_operations'
-    received_table = 'literature_parent_depletion_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ()
-
-    def __init__(self, store, run_id):
-        if not isinstance(run_id, str) or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id = (store, run_id)
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     def populate(self, context, arguments, operation_key):
         if context.run_id != self.run_id:
@@ -56,7 +49,7 @@ class LiteratureParentDepletionRepository(LiteratureRateRepository):
         validate_schema(args, parent_depletion_population_schema())
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope)}
         signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
+        old = self._operation(context.episode_id, operation_key)
         if old:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -70,17 +63,16 @@ class LiteratureParentDepletionRepository(LiteratureRateRepository):
         sheet = populate_parent_depletion_components(extraction)
         payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'selection': args, 'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
             request_ref = self.store.artifact(canonical(request), 'application/json')
             record = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': [args['source_ref']]}
             sheet_ref = identity('source', {'origin': 'tool', 'record': record})
-            exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (sheet_ref,)).fetchone()
+            exists = self.store.holds(sheet_ref)
             self.store.put('source', record, origin='tool', scope=plain(context.scope))
             rows = _rows(payload, sheet_ref, COMPONENTS)
             validate_schema(rows, parent_depletion_cells_schema())
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [sheet_ref], 'changed_record_refs': [] if exists else [sheet_ref], 'result': {'sheet_ref': sheet_ref, 'cells': rows}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def _artifact_json(self, reference):
@@ -107,7 +99,7 @@ class LiteratureParentDepletionRepository(LiteratureRateRepository):
             raise ContractError('parent_depletion_saved_selection_mismatch')
         original_scope = self.store.validate_scope(request['scope'])
         self._native_provenance(original_scope, sheet_ref)
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
+        operation = self._operation(request['episode_id'], request['operation_key'])
         if operation is None or operation['signature'] != canonical(request):
             raise ContractError('parent_depletion_saved_operation_mismatch')
         outcome = json.loads(operation['outcome'])
@@ -132,9 +124,6 @@ class LiteratureParentDepletionRepository(LiteratureRateRepository):
             rows.extend(_rows(self.read(ref), ref, selected))
         return rows
 
-    def received_cells(self, context):
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
     def available_sheet_refs(self, context):
         refs = []
         for ref in context.received_record_refs:
@@ -146,11 +135,6 @@ class LiteratureParentDepletionRepository(LiteratureRateRepository):
                 self.read(ref)
                 refs.append(ref)
         return list(dict.fromkeys(refs))
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self._install()
-            return super().receive_cells(context, cells, operation_key)
 
     @staticmethod
     def cell_record_refs(cells):

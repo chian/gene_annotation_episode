@@ -41,13 +41,10 @@ class LiteratureRatioRepository(LiteratureRateRepository):
     provider=PROVIDER
     components=COMPONENTS
     record_version='literature_relative_signal_record_v1'
-    operations_table='literature_ratio_operations'
-    received_table='literature_ratio_received'
     binding_fields=tuple(BINDINGS)
 
     def _source(self,context,reference):
-        if reference not in context.received_record_refs:
-            raise ContractError('literature_source_not_received')
+
         if not self.store.reference_subset([reference],plain(context.scope)):
             raise ContractError('literature_source_outside_scope')
         page = context.assignment if context.role == 'literature_page' else context.assignment.get('page')
@@ -75,23 +72,9 @@ class LiteratureRatioRepository(LiteratureRateRepository):
 
     def populate(self,context,arguments,operation_key):
         from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_assay_inputs import _Sources
-        if context.run_id!=self.run_id:
-            raise ContractError('literature_run_mismatch')
-        if not isinstance(operation_key,str) or not operation_key:
-            raise ContractError('operation_key_required')
+
         args=plain(arguments)
         validate_schema(args,ratio_population_schema())
-        signature=canonical({'arguments':args,'scope':plain(context.scope)})
-        old=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} '
-            'WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id,context.episode_id,operation_key)).fetchone()
-        if old:
-            if old['signature']!=signature:
-                raise ContractError('operation_key_reused_for_different_work')
-            outcome=json.loads(old['outcome'])
-            for ref in self.read(outcome['result']['sheet_ref'])['input_source_refs']:
-                self._source(context,ref)
-            return outcome
         def read_source(reference,representation):
             row=self._source(context,reference)
             artifact=row['artifact_ref'] if representation=='original' else row.get('text_ref')
@@ -184,9 +167,9 @@ class LiteratureRatioRepository(LiteratureRateRepository):
             created=[]
             def publish(kind,record):
                 candidate=identity(kind,{'origin':'tool','record':record})
-                old=self.store.db.execute('SELECT 1 FROM records WHERE id=?',(candidate,)).fetchone()
+                old = self.store.holds(candidate)
                 row=self.store.put(kind,record,origin='tool',scope=plain(context.scope))
-                if old is None:created.append(row['id'])
+                if not old:created.append(row['id'])
                 return row['id']
             bindings={}
             for name,label in (('subject_ref',args['subject']),('variant_ref',args['variant']),
@@ -196,22 +179,19 @@ class LiteratureRatioRepository(LiteratureRateRepository):
                     'label':label,'sequence_ref':None,'molecule':None,'length':None,'term_refs':[],'context_refs':[]})
             payload['experimental_bindings']=bindings
             artifact=self.store.artifact(canonical(payload),'application/json')
-            request=self.store.artifact(canonical({'run_id':self.run_id,'episode_id':context.episode_id,
-                'operation_key':operation_key,'arguments':args}),'application/json')
+            request=self.store.artifact(canonical({'operation_key':operation_key,'arguments':args}),'application/json')
             sheet_ref=publish('source',{'provider':self.provider,'accession':None,'uri':None,'artifact_ref':artifact,
                 'text_ref':artifact,'request_ref':request,'version':self.record_version,'retrieved_at':None,
                 'parent_source_refs':payload['input_source_refs']})
-            outcome={'status':'completed','operation_ref':identity('operation',{'run_id':self.run_id,
-                'episode_id':context.episode_id,'key':operation_key}),'record_refs':[sheet_ref,*bindings.values()],
+            outcome={'status':'completed','operation_ref':identity('operation',{'key': operation_key}),'record_refs':[sheet_ref,*bindings.values()],
                 'changed_record_refs':created,'result':{'sheet_ref':sheet_ref,'cells':sheet['cells'],
                     'comparison':payload['comparison'],'raw_representation_roster_complete':sheet['candidate_set_complete'],
                     'interpretation_kind':payload['interpretation_kind']},'feedback':None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id,context.episode_id,operation_key,signature,canonical(outcome)))
+
         return outcome
 
-    def project_cells(self,sheet_refs,*,permitted_record_refs,components=None):
-        rows=super().project_cells(sheet_refs,permitted_record_refs=permitted_record_refs,components=components)
+    def project_cells(self,sheet_refs,*,components=None):
+        rows=super().project_cells(sheet_refs, components=components)
         for row in rows:
             saved=self.read(row['sheet_ref'])
             cell=saved['sheet']['cells'][row['component']]

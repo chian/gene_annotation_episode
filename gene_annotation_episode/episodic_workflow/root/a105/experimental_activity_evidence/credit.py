@@ -1,83 +1,49 @@
-"""A105 head credit on its own unbounded scale: distinct retained target findings known to this Episode.
+"""Credit: the A105 head's finding progress on its own unbounded scale.
 
-The head's commission (``episode_runtime`` assignment) carries its own declared
-whole-axis task (``evidence_task``) and the subject ``scope``. Credit is one
-``credit_unit`` per distinct retained typed finding among the assessments this
-Episode has actually received (its ``EpisodeReceipts`` in the scientific
-store). It is never bounded, clamped or rescaled.
-"""
-from __future__ import annotations
+Carried from the old ``credit.py`` (``original_task_projector``: ``ScientificFindingProgress(FindingProgressPolicy(
+credit_unit))`` for the declared ``evidence_axis_task_v1`` / ``whole_axis_findings`` task). The projector's formula
+is the library's own and is unchanged: ``finding_unit`` times the number of distinct retained, current,
+target-eligible typed findings among the assessments this Episode holds; revision, activity and repeated reading
+earn nothing and annotation support stays separate.
 
-import math
+What a child returns is its credit and the controlled features of its grading sheets; its assessments stay inside
+the child. The children's graded experiments therefore enter this credit through the features: ``finding_unit`` for
+each distinct experiment graded in a returned sheet for the proposed annotation that the head's own sheets do not
+already grade. A105 evidence processing: an accepted interpretation earns credit only through its saved subscoring
+sheet; the head's own sheets are written by its ``reason`` unit together with the interpretation, and a returned
+sheet was written the same way by the child that returns it. Never bounded, clamped or rescaled."""
+from gene_annotation_episode.episodic_workflow.episode_support.findings.experimental_activity_evidence.investigation_progress import (
+    FindingProgressPolicy, ScientificFindingProgress, project_finding_progress)
 
-from episode_runtime import RecordForm
-from method_loop import EpisodeRef
-
-from gene_annotation_episode.domain import ContractError
-
-from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
-from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.episodic_workflow.episode_support.findings.experimental_activity_evidence.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
-
-AXIS = 'A105'
-_TASK_FIELDS = {'version', 'kind', 'evidence_axis', 'credit_unit'}
+DETAILS_LIMIT = 24      # the old ScientificFindingProgress.loss_preview_size
 
 
-def evidence_task_projector(task):
-    """The head's finding-progress projector for its own declared whole-axis task."""
-    task = plain(task)
-    if (not isinstance(task, dict) or set(task) != _TASK_FIELDS or task['version'] != 'evidence_axis_task_v1'
-            or task['kind'] != 'whole_axis_findings' or task['evidence_axis'] != AXIS):
-        raise ContractError('original_axis_finding_task_required')
-    return ScientificFindingProgress(FindingProgressPolicy(task['credit_unit']))
+def credit_binding(finding_unit):
+    """The old projector's ``as_record()``: the credit definition the model is shown."""
+    return ScientificFindingProgress(FindingProgressPolicy(finding_unit)).as_record()
 
 
-def parent_episode_id(bound, grain_name):
-    """The Episode id of this head's parent when the parent is itself an A105 head, else ``None``.
-
-    Only an A105 head keeps A105 receipts; the root annotation episode (or any
-    other commissioning parent) hands the head nothing but its ``scope``.
-    """
-    parent = tuple(bound.path[:-1])
-    if parent and parent[-1][0] == grain_name:
-        return EpisodeRef(bound.run_id, parent).episode_id
-    return None
+def held_assessment_refs(records, scope):
+    """The old ``EpisodeReceipts.known(episode, record_type='assessment')``: the assessments the Episode holds."""
+    return [row['id'] for row in records.list('assessment', scope)]
 
 
-class ExperimentalActivityEvidenceCredit:
+def finding_progress(records, scope, finding_unit):
+    """The old ``known_finding_credit``: the projection over the held assessments, with the old details."""
+    return project_finding_progress(records, scope, FindingProgressPolicy(finding_unit),
+                                    known_assessment_refs=held_assessment_refs(records, scope),
+                                    details_limit=DETAILS_LIMIT, details_offset=0)
 
-    def credit_projector(self, assignment):
-        """The projector for an admitted head assignment (``scope`` + declared ``evidence_task``)."""
-        if not isinstance(self.assignment_form, RecordForm):
-            raise ContractError('a105_head_assignment_form_required')
-        admitted = self.assignment_form.admit(assignment, 'a105_head_credit_assignment')
-        return evidence_task_projector(admitted['evidence_task'])
 
-    def open_receipts(self, store, bound):
-        """Bind this Episode's receipts once and receive its subject as initial knowledge.
+def returned_experiments(summary):
+    """The experiments graded for the proposed annotation in sheets the children returned and not in the head's own
+    sheets."""
+    own = {features['experiment_refs'][0] for features in summary['own_assay_sheets']}
+    proposed = [summary['proposed_annotation_ref']]
+    return {features['experiment_refs'][0] for features in summary['assay_sheets']
+            if features['assertion_refs'] == proposed} - own
 
-        Idempotent: a rebuilt Episode recovers the binding it recorded before and
-        re-receives the same subject references (receipts are unique per record).
-        """
-        receipts = EpisodeReceipts(store, bound.run_id)
-        receipts.bind(bound.episode_id, parent_episode_id(bound, self.grain_name))
-        scope = store.validate_scope(plain(bound.assignment['scope']))
-        receipts.receive(bound.episode_id, scope['subject_refs'], kind='initial')
-        return receipts
 
-    def known_finding_credit(self, store, bound):
-        """Project this Episode's credit from the assessments it has received.
-
-        Returns the scalar ``credit`` and the projection's own finding details.
-        """
-        projector = self.credit_projector(bound.assignment)
-        known = list(EpisodeReceipts(store, bound.run_id).known(bound.episode_id, record_type='assessment'))
-        projected = projector(store, plain(bound.assignment['scope']), known_assessment_refs=known)
-        credit = float(projected['credit'])
-        if not math.isfinite(credit):
-            raise ContractError('a105_finite_head_credit_required')
-        result = {'credit': credit}
-        for key in ('retained_finding_count', 'source_contributions', 'inactive_dependencies', 'detail_pages',
-                    'interpretation', 'policy'):
-            result[key] = plain(projected[key])
-        return result
+def credit(summary, records):
+    unit = summary['evidence_task']['credit_unit']
+    return float(summary['progress']['credit']) + unit * len(returned_experiments(summary))

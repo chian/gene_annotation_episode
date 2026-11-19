@@ -2,8 +2,8 @@
 table or window to read), the commissioned literature task, the proposed annotation, the structure components
 requested, the Store scope of the commission and the records passed in custody.
 
-``version``, ``page``, ``selection``, ``literature_task``, ``proposed_annotation_ref`` and
-``requested_structure_components`` are the old assignment's properties under their names (old ``from_parent.py``
+``version``, ``page``, ``selection``, ``literature_task``, ``proposed_annotation_ref``
+are the old assignment's properties under their names (old ``from_parent.py``
 ``assignment_schema``). ``scope`` and ``received_record_refs`` are new fields: the old episode took the scope from
 its request and the records it received from its binding context; the new commission names both.
 
@@ -35,9 +35,6 @@ ASSIGNMENT_FORM = RecordForm({
                              'source_answer), evidence_axis, credit_unit and, for a source answer, answer_kind '
                              'with its source_refs (assessment) or examined spans (screening)'),
     'proposed_annotation_ref': Field('text', 'The proposed annotation the commissioned question is about'),
-    'requested_structure_components': Field('list', 'The structure components the parent requests (the old '
-                                            'requested_structure_components; used by the structure population '
-                                            'route, which is not built)', required=False),
     'scope': Field('record', 'The Store scope of the commission (new field: old request scope)'),
     'received_record_refs': Field('record_refs', 'The source, its artifact, the sources it derives from and the '
                                   'proposed annotation, passed in custody (new field: old binding-context '
@@ -119,6 +116,4 @@ def read_from_parent(assignment, message):
         raise ValueError('literature_finite_task_credit_unit_required')
     return {'page': page, 'selection': selection, 'task': task, 'task_key': task_key(task),
             'proposed_annotation_ref': assignment['proposed_annotation_ref'],
-            'requested_structure_components': assignment.get('requested_structure_components'),
-            'scope': assignment['scope'], 'received_record_refs': assignment['received_record_refs'],
-            'message': message}
+            'scope': assignment['scope'], 'received_record_refs': assignment['received_record_refs']}

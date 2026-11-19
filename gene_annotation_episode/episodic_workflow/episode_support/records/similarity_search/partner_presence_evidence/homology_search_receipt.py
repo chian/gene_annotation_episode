@@ -2,7 +2,11 @@
 import hashlib
 import json
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError
+
+SNAPSHOTS = TableDeclaration(name='homology_result_snapshots', columns=('source_ref', 'body'),
+    key=('source_ref',), record_refs=('source_ref',))
 
 
 def _require(condition, code):
@@ -13,12 +17,11 @@ def _require(condition, code):
 def search_receipt(store, snapshot_ref, native_source_ref, component_ref, known):
     _require({snapshot_ref, native_source_ref, component_ref} <= set(known),
         'a103_native_search_inputs_not_received')
-    exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='homology_result_snapshots'").fetchone()
-    row = store.db.execute('SELECT body FROM homology_result_snapshots WHERE source_ref=?',
-        (snapshot_ref,)).fetchone() if exists else None
+    rows = store.table(SNAPSHOTS).select({'source_ref': snapshot_ref})
+    row = rows[0] if rows else None
     _require(row is not None, 'a103_registered_native_search_required')
     source, native = store.get(snapshot_ref), store.get(native_source_ref)
-    body = json.loads(row[0])
+    body = row['body']
     _require(source['origin'] == 'tool' and source.get('provider') == 'native.phmmer.parsed_snapshot'
         and json.loads(store.get_artifact(source['artifact_ref'])) == body,
         'a103_search_snapshot_custody_conflict')

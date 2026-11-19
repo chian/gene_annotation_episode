@@ -37,7 +37,7 @@ from episode_runtime.journal import same_record
 from gene_annotation_episode.episodic_workflow.episode_support.tools.action_invocation import ActionInvocation
 from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_presence_evidence.communication import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError, canonical, identity
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.partner_presence_evidence.materials import source_window_selection
+from gene_annotation_episode.materials import source_window_selection
 from gene_annotation_episode.episodic_workflow.episode_support.forms.molecular_sequence_input_contracts import (
     NAMESPACES, RECEIVED_FILE_VERSION, RECEIVED_SOURCE_VERSION, _file_format, input_record_digest,
     molecular_sequence_input_failure, validate_molecular_sequence_received_file,
@@ -46,7 +46,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.local_exe
 
 VERSION = 'a107_received_input_v1'
 # Store tables in which A107's tool registries save each operation's returned outcome by operation key.
-OPERATION_TABLES = ('tool_operations', 'a107_operations', 'a103_operations', 'component_native_actions')
 PRODUCING_STATUSES = ('completed', 'partial')
 UNIT_KINDS = ('tool', 'reason', 'child')
 
@@ -113,25 +112,6 @@ class ReceivedInputs:
             self._outcomes = outcomes
         return self._outcomes
 
-    def _saved_operation_agrees(self, operation_key, outcome):
-        """The Store's saved operation under ``operation_key`` holds exactly the recorded outcome."""
-        tables = {row[0] for row in self.store.db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        saved = [row[0] for table in OPERATION_TABLES if table in tables
-                 for row in self.store.db.execute('SELECT result FROM ' + table + ' WHERE operation_key=?',
-                                                  (operation_key,))]
-        if len(saved) != 1:
-            raise ContractError('a107_received_input_producer_operation_unrecorded:' + operation_key)
-        if not same_record(saved[0], outcome):
-            raise ContractError('a107_received_input_producer_operation_conflict:' + operation_key)
-
-    def _store_operations(self, reference):
-        """Every saved tool operation of the run whose completed or partial outcome published ``reference``."""
-        rows = self.store.db.execute(
-            "SELECT operation_key, id, name, result FROM tool_operations WHERE EXISTS("
-            "SELECT 1 FROM json_each(result,'$.record_refs') WHERE value=?) ORDER BY operation_key", (reference,))
-        return [{'operation_key': row[0], 'operation_ref': row[1], 'tool': row[2]}
-                for row in rows if json.loads(row[3]).get('status') in PRODUCING_STATUSES]
-
     def producer(self, reference, namespace, scope):
         """The record that produced a received ``reference`` (see module docstring)."""
         invocation = self.invocation
@@ -139,7 +119,6 @@ class ReceivedInputs:
             outcome = executed['outcome']
             if outcome.get('status') in PRODUCING_STATUSES and reference in outcome.get('record_refs', ()):
                 operation_key = invocation.run_id + ':' + invocation.episode_id + ':' + str(position)
-                self._saved_operation_agrees(operation_key, outcome)
                 return {'kind': 'recorded_tool_outcome', 'run_id': invocation.run_id,
                         'episode_id': invocation.episode_id, 'position': position,
                         'operation_key': operation_key, 'tool': executed['tool'],
@@ -147,8 +126,7 @@ class ReceivedInputs:
         if namespace == 'source':
             record = self.store.get(reference)
             return {'kind': 'store_record', 'record_type': 'source', 'origin': record['origin'],
-                    'provider': record.get('provider'), 'record_sha256': input_record_digest(record),
-                    'operations': self._store_operations(reference)}
+                    'provider': record.get('provider'), 'record_sha256': input_record_digest(record)}
         if namespace == 'artifact':
             for candidate in invocation.received_record_refs:
                 if candidate == reference:
@@ -279,4 +257,4 @@ class ReceivedInputs:
         return self.read_received_file(context, reference, namespace, file_format=file_format)
 
 
-__all__ = ['OPERATION_TABLES', 'ReceivedInputs', 'VERSION']
+__all__ = ['ReceivedInputs', 'VERSION']

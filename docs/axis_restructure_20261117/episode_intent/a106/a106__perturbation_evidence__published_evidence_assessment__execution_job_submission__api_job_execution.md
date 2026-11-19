@@ -205,3 +205,193 @@ Old-runner names use `w.` for `self.workflow.`. Counts are occurrences per file 
 | `to_parent.py` | 125 | `_appservice_report_facts`; facts delegated to the host; `required_return_sources` returns `()`; resolve and validate | `self.services`; `a106.episode_bindings:reference_in_context`; support `bvbrc_appservice_host:SUPPORT_SOURCE`, `bvbrc_application_facts`, `bvbrc_appservice_saved_results`, `form_reference_validation` |
 | `waiting.py` | 30 | Same as parent | `w.perform_selected_wait, w.execution_handle(2), w.execution_backend`; `a106.runtime:EventTargetError, _wait_target_feedback`; `bind_functions` |
 | `yield_estimator.py` | 37 | Plain controller with the practical estimator, keyed `launch_api:<class>` | `a106.numerical:YieldController, YieldParameters`; `a106.practical_yield:PracticalYieldEstimator` |
+
+## Carried over
+
+Every row of `runs/carry_over/functions/a106__perturbation_evidence__published_evidence_assessment__execution_job_submission__api_job_execution.tsv`. Kind is `machinery` (old-runner machinery, not carried, with its reason) or `episode function` (new place: file and name). No library candidates: every carried function sits in the file of this episode that uses it; the library modules it calls already exist in `episode_support/` and are named in the new place column. Nothing was added to `episode_support/`.
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| binding_record.py | OperationalBindingRecord | machinery | binding record: the binding's own as_record(); settings are the run's continuation entry |
+| binding_record.py | OperationalBindingRecord.as_record | machinery | binding record: the binding's own as_record(); settings are the run's continuation entry |
+| configuration.py | OperationalConfiguration | machinery | old __init__ wiring of services, store, tool registry, provider objects and the retained-input authority classes; its values are the episode settings (handoff_unit, acquired_record_unit, initial_information, task_yield_profiles, tool_knowledge_directory, launch_instructions_directory) or the job_access service; log_window_bytes/log_roles/resources/require_private_yield belong to the monitor/service side and are not read by this episode |
+| configuration.py | OperationalConfiguration.__init__ | machinery | old __init__ wiring of services, store, tool registry, provider objects and the retained-input authority classes; its values are the episode settings (handoff_unit, acquired_record_unit, initial_information, task_yield_profiles, tool_knowledge_directory, launch_instructions_directory) or the job_access service; log_window_bytes/log_roles/resources/require_private_yield belong to the monitor/service side and are not read by this episode |
+| credit.py | ExecutionEpisodeCredit | machinery | mix-in class shell |
+| credit.py | ExecutionEpisodeCredit._appservice_completion | machinery | completion proof for the old PracticalYieldEstimator (completion proof is not a controller input) |
+| credit.py | ExecutionEpisodeCredit._api_operational_credit | episode function | credit.py credit() (handoff_unit once plus acquired_record_unit per acquired record; identities and units come from the tool outcomes through the summary). BLOCKED: operational_credit_from_identities is not in the library |
+| credit.py | ExecutionEpisodeCredit.credit_kind | machinery | role check of the old multi-role mix-in; one role, one episode |
+| credit.py | ExecutionEpisodeCredit._closed_credit_carrier | machinery | closed-credit snapshot over runtime_* tables, receipts and journal archive |
+| credit.py | ExecutionEpisodeCredit._closed_credit_receipts | machinery | closed-credit snapshot over runtime_* tables, receipts and journal archive |
+| credit.py | ExecutionEpisodeCredit._closed_credit_value | machinery | closed-credit snapshot over runtime_* tables, receipts and journal archive |
+| credit.py | ExecutionEpisodeCredit._closed_credit_facts | machinery | closed-credit snapshot over runtime_* tables, receipts and journal archive |
+| credit.py | ExecutionEpisodeCredit._closed_operational_credit_view | machinery | closed-credit snapshot over runtime_* tables, receipts and journal archive |
+| credit.py | ExecutionEpisodeCredit.project_credit | machinery | credit view plumbing over the closed-credit snapshot; the system prices each unit with credit(summary, records) |
+| credit.py | ExecutionEpisodeCredit._live_project_credit | machinery | credit view plumbing (api_execution.credit_view) |
+| credit.py | ExecutionEpisodeCredit.credit_view | machinery | credit view plumbing |
+| credit.py | ExecutionEpisodeCredit._proof_for_action | machinery | completion proof reading runtime_actions (verify_completion machinery) |
+| credit.py | ExecutionEpisodeCredit.completion_for_action | machinery | completion proof machinery |
+| credit.py | ExecutionEpisodeCredit._closed_completion_verdict | machinery | completion proof re-validation over runtime_observations |
+| credit.py | ExecutionEpisodeCredit.verify_completion | machinery | completion proof machinery; the verified original handoff becomes handoff_established in the tool outcome and the completion target |
+| decision_inputs.py | OperationalDecisionInputs | machinery | mix-in class shell |
+| decision_inputs.py | OperationalDecisionInputs.decision_inputs | episode function | task.py _context / decide: launch_instruction_library and selected_launch_instructions carried; resource_context, shared_information_context, child_options, completed_action_reports, pending_work, execution_expectations, resource_tool_estimates, native_execution_expectations and waiting_support are old-runner context with no home here (unplaced, see the blocked file) |
+| decision_inputs.py | _a106_original_global_ValueError | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_inputs.py | _a106_original_global_child_option_information | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_inputs.py | _a106_original_global_set | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_inputs.py | _bind_original_task_runtime_providers | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_presentation.py | present_credit_state | machinery | presentation of annotation-axis root credit and child report forms (root arms), not this leaf |
+| decision_presentation.py | prepare_completed_work | machinery | completed_action_reports over the old workflow journal |
+| decision_presentation.py | decision_yield_table | machinery | old yield_table(journal,...); task.py _context shows the controller table from internal_summary (yield_table(view.controller_state)) |
+| decision_presentation.py | _bind_original_task_runtime_providers | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_state.py | OperationalDecisionState | machinery | old decision_state: reads runtime_actions, workflow.working_state, journal.elapsed_view, delivery_status, pending_work; its leaf-relevant content (last outcome, feedback, controller table, time accounting, tool knowledge) is in messages/internal_summary.py and task.py _context |
+| decision_state.py | OperationalDecisionState.decision_state | machinery | old decision_state: reads runtime_actions, workflow.working_state, journal.elapsed_view, delivery_status, pending_work; its leaf-relevant content (last outcome, feedback, controller table, time accounting, tool knowledge) is in messages/internal_summary.py and task.py _context |
+| decision_state.py | _a106_original_global_FACT_MEANINGS | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_state.py | _a106_original_global_FACT_SOURCES | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_state.py | _a106_original_global_Mapping | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_state.py | _a106_original_global__references_in | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_state.py | _a106_original_global_callable | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_state.py | _a106_original_global_getattr | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_state.py | _a106_original_global_isinstance | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_state.py | _a106_original_global_json | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_state.py | _a106_original_global_sorted | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| decision_state.py | _bind_original_task_runtime_providers | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| episode.py | ExecutionEpisode | machinery | mix-in class: replaced by episode.py ApiJobExecution(EpisodeBinding) |
+| episode.py | ExecutionEpisode.child_roles | machinery | no children: CHILD_SLOTS = {} in task.py |
+| episode.py | ExecutionEpisode.allowed_children | machinery | no children: CHILD_SLOTS = {} in task.py |
+| episode.py | ExecutionEpisode.permitted_common_actions | episode function | task.py OFFERED tools (tool and wait: wait_for_service_job is the wait tool) |
+| episode.py | ExecutionEpisode.context_hook_applies | machinery | hook-era context routing by role |
+| execution_contracts.py | launch_operation_catalog | machinery | execution.capabilities catalog of the old launch role; this episode offers api_capabilities (task.py) instead |
+| execution_contracts.py | _outcome | machinery | old outcome wrapper of the host (status/record_refs/changed_record_refs); the outcome is task.py _outcome of the job_access reply |
+| execution_operations.py | OperationalOperations | machinery | mix-in class shell |
+| execution_operations.py | OperationalOperations._api_operation_catalog | episode function | task.py tool api_operation / DESCRIPTIONS (service.launch_catalog is job_access's). BLOCKED-ON-JOB-SERVICE |
+| execution_operations.py | OperationalOperations._resource_information | episode function | task.py tool api_capabilities (capabilities + inventory_snapshot) |
+| execution_operations.py | OperationalOperations.capabilities | episode function | task.py tool api_capabilities (service.api_capabilities). BLOCKED-ON-JOB-SERVICE |
+| execution_operations.py | OperationalOperations.resource_tool_contracts | machinery | routing contracts of the old launch commission of the resource children (invocation_route); no child commission here |
+| execution_operations.py | OperationalOperations.catalog | episode function | task.py decide: callable_operations from OFFERED/DESCRIPTIONS/ARGUMENTS |
+| execution_operations.py | OperationalOperations.execute | episode function | task.py tools api_operation, wait_for_service_job (api_execution.execute / wait). BLOCKED-ON-JOB-SERVICE |
+| execution_operations.py | OperationalOperations._appservice_sources | episode function | messages/final_to_parent.py RETURN_FORM: bvbrc_application_outcomes (library application_fact_sources) and bvbrc_appservice_support_refs |
+| execution_state.py | OperationalExecutionState | machinery | mix-in class shell |
+| execution_state.py | OperationalExecutionState.initialize | machinery | host initialize (journal/runtime_* state); the first unit is the api_capabilities lookup |
+| execution_state.py | OperationalExecutionState._check_parent_inputs | machinery | check of a commission against the parent's own runtime_episodes row (a commission check; the input versions are records the parent passes in input_refs) |
+| execution_state.py | OperationalExecutionState._target | machinery | results-role target (not this role) |
+| execution_state.py | OperationalExecutionState._selection | machinery | receipt selection over runtime_receipt_inheritance and runtime_actions (custody is the system's) |
+| execution_state.py | OperationalExecutionState._context_target | machinery | results-role/launch target checks over the old host |
+| from_parent.py | OperationalAssignment | machinery | mix-in class shell |
+| from_parent.py | OperationalAssignment._api_context | machinery | host context reader (run match, api.services); the assignment is the parent input |
+| from_parent.py | OperationalAssignment.child_assignment_schema | machinery | the parent-side schema of the child assignment: the child's own ASSIGNMENT_FORM is in messages/read_from_parent.py |
+| from_parent.py | OperationalAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (one field per property of the old assignment schema, same names) |
+| from_parent.py | OperationalAssignment._permitted | machinery | check of the commission against the parent launch constraints (a commission check; a wrong commission fails) |
+| from_parent.py | OperationalAssignment.prepare_assignment | machinery | checks of the commission against the parent launch assignment and input versions (commission checks); the validation of the assignment itself is read_from_parent |
+| from_parent.py | OperationalAssignment._request_schema | episode function | library already: forms/perturbation_evidence/execution_contracts.py API_SERVICE_ASSIGNMENT_SCHEMA (the concrete per-resource request schema comes from api_execution.assignment_schema, not in the library: BLOCKED-ON-JOB-SERVICE) |
+| from_parent.py | OperationalAssignment._validate_request | episode function | messages/read_from_parent.py read_from_parent calling library validate_api_assignment |
+| from_parent.py | OperationalAssignment._launch | machinery | re-admission of the parent's own launch assignment (commission check) |
+| from_parent.py | OperationalAssignment._constraints | machinery | check of the parent launch constraints (commission check) |
+| from_parent.py | OperationalAssignment.initial_references | machinery | returned an empty list; held records are the passed input_refs |
+| from_parent_launch.py | LaunchParentAssignment | machinery | schema of the parent's own launch assignment, used only to re-admit the parent (commission check) |
+| from_parent_launch.py | LaunchParentAssignment._parent_launch_assignment_schema | machinery | schema of the parent's own launch assignment, used only to re-admit the parent (commission check) |
+| goal.py | OperationalGoal | episode function | goal.py GOAL and task.py INSTRUCTION_TEMPLATE (the old text with the assignment's service) |
+| goal.py | OperationalGoal.instructions | episode function | goal.py GOAL and task.py INSTRUCTION_TEMPLATE (the old text with the assignment's service) |
+| internal_summary.py | OperationalSummary | machinery | mix-in class shell |
+| internal_summary.py | OperationalSummary._api_decision_summary | episode function | messages/internal_summary.py internal_summary (api_service, api_request, api_received_progress, api_execution_completed) |
+| internal_summary.py | OperationalSummary.initial_decision_context | episode function | task.py api_capabilities tool + internal_summary (capabilities, inventory_snapshot) |
+| internal_summary.py | OperationalSummary.decision_context | episode function | task.py _context (execution_assignment, execution_progress) |
+| native_input_custody.py | NativeInputCustody | machinery | mix-in class shell |
+| native_input_custody.py | NativeInputCustody._versions | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._recorded_results_assignment | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._selector | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._protein_reference_access | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._atac_reference_access | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._chromatin_reference_access | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._flux_balance_reference_access | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._fluorescence_reference_access | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._expression_nmf_reference_access | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._atac_inputs | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._macs2_peak_inputs | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._lumpy_inputs | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._expression_nmf_inputs | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._fluorescence_inputs | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._matches_flux_balance_assignment | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| native_input_custody.py | NativeInputCustody._selected_result_action | machinery | retained-input authority of the results role and native protein/ATAC/NMF/fluorescence/FBA input versions over the old Store and runtime_* tables (results/launch-commission input validation; the API launch role reaches none of it). Inputs the service reads are records passed in input_refs and read with ctx.store.get |
+| received_evidence.py | ReceivedOperationalEvidence | machinery | mix-in class shell |
+| received_evidence.py | ReceivedOperationalEvidence._appservice_received_support_refs | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence._appservice_validate_received_report | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence._application_received_context | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence._application_received_facts | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence._application_validate_received_report | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence._application_record_admission | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence._application_resolve_received | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence._received | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence.received_report_sources | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence.received_report_facts | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence.resolve_received_reference | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence.validate_received_report | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| received_evidence.py | ReceivedOperationalEvidence.received_form_references | machinery | forwarding and re-validation of a child's received report facts over runtime_report_attempts (EpisodeReturnRecords/receipts); this leaf has no child and custody is the system's |
+| report_delivery.py | OperationalReportDelivery | machinery | report_form machinery: finish(record) saves the form to runtime_forms and releases the episode; replaced by final_to_parent |
+| report_delivery.py | OperationalReportDelivery.finish | machinery | report_form machinery: finish(record) saves the form to runtime_forms and releases the episode; replaced by final_to_parent |
+| report_delivery.py | _bind_original_task_runtime_providers | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task.py | OperationalTask | machinery | decision machine class |
+| task.py | OperationalTask.instructions | episode function | task.py _instructions |
+| task.py | OperationalTask.next | machinery | old loop: restore, replay, source failure, saved exchanges; decide/action are the system's loop |
+| task.py | OperationalTask.apply_response | episode function | task.py action (validate the answer against the selection schema; Rejected(feedback)); report_update admission is not carried (no parent-written form) |
+| task.py | OperationalTask.execute | machinery | journal/runtime_actions write, replay and observation staging; the unit is a ToolCall the system runs and records |
+| task.py | _bind_original_task_runtime_providers | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | OperationalTaskDecision | machinery | decision machine class |
+| task_decision.py | OperationalTaskDecision.call | machinery | decide returns the ModelRequest; saved calls/frames and the provider call are the system's |
+| task_decision.py | OperationalTaskDecision.conversation_key | machinery | conversation state (README 3a) |
+| task_decision.py | OperationalTaskDecision.interpretation_context | machinery | decision-exchange lookup result context |
+| task_decision.py | OperationalTaskDecision.exchange_schema | machinery | decision exchange |
+| task_decision.py | OperationalTaskDecision.exchange_response | machinery | decision exchange |
+| task_decision.py | OperationalTaskDecision.validate_contract_exchange_request | machinery | saved-request checks |
+| task_decision.py | OperationalTaskDecision.validate_contract_exchange_history | machinery | saved-request checks |
+| task_decision.py | OperationalTaskDecision.exchange_decision | machinery | decision exchange |
+| task_decision.py | _a106_original_global_DECISION_CONTEXT_VERSION | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_OSError | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_TypeError | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_ValidationError | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_ValueError | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global__action_generation_schema | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global__json | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global__plain | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_child_option_information | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_instructional_model_context | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_isinstance | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_len | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_lookup_attempts | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_model_snapshot | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_requested_contract_information | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_schema_failure_diagnostic | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_sqlite3 | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_state_frame | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_str | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _a106_original_global_type | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_decision.py | _bind_original_task_runtime_providers | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| task_instructions.py | instructions | episode function | task.py _instructions (base goal text, knowledge instructions, launch instructions; the pending-delivery, wait, native-event, decision-exchange and reasoning spans are not carried: those actions no longer exist) |
+| task_state.py | OperationalTaskState | machinery | task state class |
+| task_state.py | OperationalTaskState.__init__ | machinery | task state (report values, restore flags) |
+| task_state.py | OperationalTaskState.bind_execution_context | machinery | execution context binding |
+| task_state.py | OperationalTaskState.record_execution_failure | machinery | record_source_failure/runtime_actions failure staging (an exception in a tool ends the run; a failed reply is a returned outcome) |
+| task_state.py | OperationalTaskState.restore_checkpoint | machinery | checkpoint/restore |
+| task_state.py | OperationalTaskState.restore | machinery | restore |
+| task_state.py | OperationalTaskState.record_effect | machinery | record_effect |
+| task_state.py | OperationalTaskState.checkpoint | machinery | checkpoint |
+| task_state.py | _bind_original_task_runtime_providers | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| to_parent.py | OperationalReport | machinery | mix-in class shell |
+| to_parent.py | OperationalReport._application_facts | machinery | application facts read from saved adapter results through the old publications (results role); the launch role reports an empty list unless job_access returns facts |
+| to_parent.py | OperationalReport._application_resolve_own | machinery | reference resolution of the form (custody is the system's) |
+| to_parent.py | OperationalReport._application_resolve_reference | machinery | reference resolution of the form |
+| to_parent.py | OperationalReport._appservice_report_facts | episode function | messages/final_to_parent.py final_to_parent (execution_handoff_refs, bvbrc_appservice_support_refs, execution_result_refs, execution_completed, bvbrc_application_outcomes) from the summary |
+| to_parent.py | OperationalReport.required_return_sources | machinery | returned () (no required parent-chosen sources); the required fields are credit, finding, execution_handoff_refs, execution_completed in RETURN_FORM |
+| to_parent.py | OperationalReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM |
+| to_parent.py | OperationalReport.facts | episode function | messages/final_to_parent.py final_to_parent (closed-credit facts part is machinery) |
+| to_parent.py | OperationalReport._live_facts | episode function | messages/final_to_parent.py final_to_parent / internal_summary facts_by_source |
+| to_parent.py | OperationalReport.resolve | machinery | reference access of the report (flux balance, fluorescence, NMF, ATAC, chromatin, protein, host, reference_in_context); custody is the system's |
+| to_parent.py | OperationalReport.validate_report | episode function | messages/final_to_parent.py validate_report (fact agreement); validate_form of the parent-written form has no object (rule 5) |
+| waiting.py | OperationalTaskWaiting | machinery | mix-in class shell |
+| waiting.py | OperationalTaskWaiting._execute_selected_wait | episode function | task.py tool wait_for_service_job (wanted: job_access.api_wait). BLOCKED-ON-JOB-SERVICE |
+| waiting.py | OperationalTaskWaiting.suspension_changed | machinery | suspension machinery (execution_backend.set_suspension) |
+| waiting.py | _bind_original_task_runtime_providers | machinery | old-runner provider patching (bind_functions, live_runtime_functions) |
+| yield_estimator.py | ExecutionEpisodeYield | machinery | mix-in class shell |
+| yield_estimator.py | ExecutionEpisodeYield._request_yield_class | episode function | yield_estimator.py request_yield_class |
+| yield_estimator.py | ExecutionEpisodeYield._task_yield_profile | episode function | yield_estimator.py task_yield_profile |
+| yield_estimator.py | ExecutionEpisodeYield.yield_controller | episode function | yield_estimator.py yield_controller (AccumulationYieldController) |
+| yield_estimator.py | ExecutionEpisodeYield._launch_api_yield_controller | episode function | yield_estimator.py yield_controller |
+| yield_estimator.py | ExecutionEpisodeYield.practical_estimator | machinery | PracticalYieldEstimator: accumulating, README 7b maps the old plain YieldController to the accumulation controller |

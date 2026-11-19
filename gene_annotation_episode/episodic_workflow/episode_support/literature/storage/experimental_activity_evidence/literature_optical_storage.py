@@ -8,6 +8,7 @@ identity or independence.
 from __future__ import annotations
 from copy import deepcopy
 import json
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, obj
 from gene_annotation_episode.domain import ContractError
@@ -109,12 +110,6 @@ def _finite_cell(value):
     except (OverflowError, TypeError, ValueError):
         return False
 
-def _admitted_digest(cells):
-    try:
-        return identity('optical_admitted_cells', cells)
-    except (ValueError, TypeError, OverflowError):
-        _fail('delivery_binding_mismatch')
-
 def _validate_calculation(saved):
     result, inputs = (saved['calculation'], saved['extraction']['calculation_inputs'])
     _keys(result, ('version', 'endpoint', *CELL_MAP.values(), 'primitive_observation_refs', 'input_snapshot'))
@@ -139,26 +134,17 @@ def _validate_calculation(saved):
     if variance['value'] is not None and (variance['value'] < 0 or inputs['covariance'] is None or inputs['covariance_status'] == 'unknown'):
         _fail('saved_cell_relationship_mismatch')
 
+OPERATIONS = operations_ledger('literature_optical_operations')
+RECEIVED = received_ledger('literature_optical_received')
+
 class LiteratureOpticalRepository(LiteratureRateRepository):
     provider = PROVIDER
     record_version = VERSION
     components = COMPONENTS
-    operations_table = 'literature_optical_operations'
-    received_table = 'literature_optical_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ()
 
-    def __init__(self, store, run_id):
-        super().__init__(store, run_id)
-        store.db.execute('CREATE TABLE IF NOT EXISTS literature_optical_delivery_bindings(\n            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,\n            cells_digest TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))')
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            super().receive_cells(context, cells, operation_key)
-            digest = _admitted_digest(cells)
-            old = self.store.db.execute('SELECT cells_digest FROM literature_optical_delivery_bindings WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
-            if old is not None and old[0] != digest:
-                _fail('delivery_binding_mismatch')
-            self.store.db.execute('INSERT OR IGNORE INTO literature_optical_delivery_bindings VALUES(?,?,?,?)', (self.run_id, context.episode_id, operation_key, digest))
 
     def _parents(self, scope, direct):
         parents, seen = (list(direct), set(direct))
@@ -179,7 +165,7 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
         args = plain(arguments)
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'selected_tool': 'literature.optical.populate', 'scope': plain(context.scope), 'assignment': plain(context.assignment), 'requested_components': _selected(context.assignment), 'arguments': args}
         signature = _signature(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
+        old = self._operation(context.episode_id, operation_key)
         if old is not None:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -208,10 +194,10 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
 
             def publish(kind, value):
                 ref = identity(kind, {'origin': 'tool', 'record': value})
-                exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (ref,)).fetchone()
+                exists = self.store.holds(ref)
                 actual = self.store.put(kind, value, origin='tool', scope=plain(context.scope))
                 records.append(actual['id'])
-                if exists is None:
+                if not exists:
                     created.append(actual['id'])
                 return actual['id']
             context_refs, operands, interpretations, covariance = _bindings(extraction, publish)
@@ -220,7 +206,7 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
             request_ref = self.store.artifact(canonical(request), 'application/json')
             sheet_ref = publish('source', {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': payload['input_source_refs']})
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': list(dict.fromkeys([sheet_ref, *records])), 'changed_record_refs': created, 'result': {'sheet_ref': sheet_ref, 'cells': payload['cells'], 'source_kind': extraction['source_kind'], 'evaluation_scope': EVALUATION_SCOPE, 'endpoint_kind': 'NADH_depletion'}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def read(self, sheet_ref):
@@ -234,7 +220,7 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
             _fail('sheet_run_mismatch')
         if request['selected_tool'] != 'literature.optical.populate' or request['requested_components'] != _selected(request['assignment']):
             _fail('operation_binding_mismatch')
-        selected = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
+        selected = self._operation(request['episode_id'], request['operation_key'])
         if selected is None:
             raise ContractError('literature_sheet_not_selected_output')
         outcome = json.loads(selected['outcome'])
@@ -326,11 +312,6 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
         return result
 
     def received_cells(self, context):
-        for receipt in self.store.db.execute(f'SELECT operation_key,cells FROM {self.received_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id)):
-            cells = json.loads(receipt['cells'])
-            bound = self.store.db.execute('SELECT cells_digest FROM literature_optical_delivery_bindings WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, receipt['operation_key'])).fetchone()
-            if bound is None or bound[0] != _admitted_digest(cells):
-                _fail('delivery_binding_mismatch')
         rows = super().received_cells(context)
         self.validate_returned_values(rows, permitted_record_refs=[row['sheet_ref'] for row in rows])
         return rows

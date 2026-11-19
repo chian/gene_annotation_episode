@@ -11,11 +11,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.findings.experime
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_worksheet import VERSION, a105_worksheet_template
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import COMPONENTS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_assay_grading_storage import LiteratureAssayGradingRepository, REQUESTED, NAMESPACE, PROVIDER
-from gene_annotation_episode.state import Store
+from .unit_world import in_unit
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.tests.test_literature_a105_assay_type_binding_322 import grading_fixture
 
 def two_experiments(store):
-    context, first, artifact = grading_fixture(store)
+    context, first, artifact = grading_fixture(store, ctx)
     text = store.get_artifact(artifact).decode()
     quote = 'Experiment B'
     start = text.index(quote)
@@ -34,21 +34,21 @@ def two_experiments(store):
     return (replace(context, received_record_refs=[*context.received_record_refs, experiment]), first, second)
 
 
-def test_new_assessments_require_possessed_source_anchored_experiment_identity(tmp_path):
-    with Store(tmp_path) as store:
-        store.create_problem(raw_sequence='ATGGCT', molecule='dna')
-        context, args, _ = grading_fixture(store)
-        repo = LiteratureAssayGradingRepository(store, context.run_id)
-        missing = deepcopy(args)
-        del missing['experiment_ref']
-        with pytest.raises(ContractError, match='experiment_reference_required'):
-            repo.populate(context, missing, 'missing')
-        wrong = deepcopy(args)
-        wrong['experiment_ref'] = args['assertion_ref']
-        with pytest.raises(ContractError, match='anchored_support_required'):
-            repo.populate(context, wrong, 'wrong')
-        refs = [ref for ref in context.received_record_refs if ref != args['experiment_ref']]
-        with pytest.raises(ContractError, match='record_not_received'):
-            repo.populate(replace(context, received_record_refs=refs), args, 'unreceived')
+@in_unit
+def test_new_assessments_require_possessed_source_anchored_experiment_identity(store, ctx):
+    store.create_problem(raw_sequence='ATGGCT', molecule='dna')
+    context, args, _ = grading_fixture(store, ctx)
+    repo = LiteratureAssayGradingRepository(store)
+    missing = deepcopy(args)
+    del missing['experiment_ref']
+    with pytest.raises(ContractError, match='experiment_reference_required'):
+        repo.populate(context.scope, None, missing, 'missing')
+    wrong = deepcopy(args)
+    wrong['experiment_ref'] = args['assertion_ref']
+    with pytest.raises(ContractError, match='anchored_support_required'):
+        repo.populate(context.scope, None, wrong, 'wrong')
+    unheld = {**deepcopy(args), 'experiment_ref': 'reference_' + '0' * 24}
+    with pytest.raises(ContractError, match='record_not_received'):
+        repo.populate(context.scope, None, unheld, 'unreceived')
 
 

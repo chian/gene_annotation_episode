@@ -1,16 +1,25 @@
-"""The A102 ``structural_homology_evidence/resource_work_submission/local_resource_work_execution`` binding.
+"""The A102 local resource work execution episode: the resource agent for one job on the selected local resource."""
+from episode_runtime import EpisodeBinding
 
-It executes the commissioned resource work (a frozen ``practical_assignment_v1``, ``resource_kind`` ``local``)
-on its own configured local resource: model-written ``exec_command`` units, practical requirement credit and
-completion continuation (``episode_support/jobs/local_execution/structural_homology_evidence/local_job_runtime.py``). ``a102_home_factory`` constructs it from
-``services['a102']['local_resource_work_execution']``.
-"""
-from __future__ import annotations
-
-from ...contract_binding import A102ContractBinding
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.structural_homology_evidence.local_job_runtime import A102LocalJobRuntime
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       read_from_parent as from_parent_file)
 
 
-class ResourceEpisode(A102LocalJobRuntime, A102ContractBinding):
-    binding_path = 'structural_homology_evidence/resource_work_submission/local_resource_work_execution'
-    commissioning_parent = 'structural_homology_evidence/resource_work_submission'
+class LocalResourceWorkExecution(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

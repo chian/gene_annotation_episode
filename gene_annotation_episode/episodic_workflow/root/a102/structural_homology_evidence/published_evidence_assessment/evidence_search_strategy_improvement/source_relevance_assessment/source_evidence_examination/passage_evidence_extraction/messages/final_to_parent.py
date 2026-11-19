@@ -1,74 +1,57 @@
-"""The return. The old episode returned the parent's requested form filled from the model's report update and the
-facts of ``to_parent.py`` (``facts``: ``SCREENING`` answers for a screening task, ``LEADS`` dispositions for a
-``verified_source_leads`` task, the structure cells with ``structure_population``). The new return declares what it
-can return: ``credit`` (the system hands it in ``completion``) and ``finding``, the interpretation the model wrote
-with the ``report`` tool, span by span (new field: the old form was written by the parent), and the three fact
-sources as selectable fields under their old names."""
-from method_loop import Field, RecordForm
+"""The return. Always returned: the Episode's credit (the system hands it in ``completion``; it is the productivity
+signal and nothing restates it) and the finding: for each current source-geometry sheet the Episode saved, the
+controlled features code read from the sheet (``INVESTIGATION_FINDING_FEATURES_a102.md`` section 2.13) and the
+sheet's reference. No model-written text is returned.
+
+Selectable, as counts and references only: ``literature_screening_answers`` (how many spans the own
+``no_applicable_evidence`` declarations examined, and whether they cover every commissioned span) and
+``literature_source_lead_dispositions`` (how many sources the validated leads found relevant,
+and those sources)."""
+from method_loop import ChoiceField, Field, RecordForm
+
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.structural_homology_evidence.literature_structure_cells import (
+    FEATURES, MEANINGS)
 
 SCREENING = 'literature_screening_answers'
 LEADS = 'literature_source_lead_dispositions'
-STRUCTURE = 'literature_structure_cells'
+FIELD_TYPES = {'number': 'number', 'count': 'integer', 'boolean': 'boolean', 'refs': 'record_refs'}
 
-PASSAGE_FORM = RecordForm({
-    'source_ref': Field('text', 'The source the passage is in; a source this episode holds'),
-    'offset': Field('integer', 'First byte of the passage in the representation read'),
-    'limit': Field('integer', 'Bytes of the passage'),
-    'statement': Field('text', 'What this passage itself says for the assigned question, in its own terms'),
-    'qualification': Field('text', "The passage's own qualifications: subject, conditions, representation and "
-                           'whether its applicability to the target is resolved'),
-})
+
+def feature_field(name, rule):
+    if rule[0] == 'choice':
+        return ChoiceField('text', MEANINGS[name], rule[1])
+    return Field(FIELD_TYPES[rule[0]], MEANINGS[name])
+
+
+SHEET_FORM = RecordForm({name: feature_field(name, rule) for name, rule in FEATURES.items()})
 FINDING_FORM = RecordForm({
-    'written': Field('boolean', 'Whether the model wrote an interpretation before the episode ended'),
-    'interpretation': Field('text', 'The interpretation of the supplied passages for the assigned question; '
-                            'separate spans stay separate'),
-    'passages': Field('list', 'One entry per passage the interpretation rests on', items=PASSAGE_FORM),
-    'qualification': Field('text', 'What the interpretation leaves unresolved, including target correspondence'),
+    'structure_sheets': Field('list', 'One entry per current source-geometry sheet saved from the supplied passages',
+                              items=SHEET_FORM),
+})
+SCREENING_FORM = RecordForm({
+    'examined_span_count': Field('integer', 'Spans the own no_applicable_evidence declarations examined'),
+    'commissioned_spans_covered': Field('boolean', 'Whether those declarations cover every commissioned span'),
+})
+LEADS_FORM = RecordForm({
+    'relevant_lead_count': Field('integer', 'Sources the latest validated lead per source found relevant'),
+    'lead_source_refs': Field('record_refs', 'Those sources'),
 })
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
-    'finding': Field('record', 'The interpretation of the supplied passages', form=FINDING_FORM),
-    SCREENING: Field('list', 'The screening answer: the commissioned spans examined with no applicable evidence '
-                     '(empty unless the task is a screening answer that the own declarations cover)',
-                     required=False),
-    LEADS: Field('list', 'The latest validated source lead per source for the commissioned question (empty unless '
-                 'the task is verified_source_leads)', required=False),
-    STRUCTURE: Field('list', 'The structure cells of the requested components (the structure population route is '
-                     'not built: selecting this raises)', required=False),
+    'finding': Field('record', 'The controlled features of the saved structure sheets', form=FINDING_FORM),
+    SCREENING: Field('record', 'The screening answer as counts', form=SCREENING_FORM, required=False),
+    LEADS: Field('record', 'The verified source leads as a count and the relevant sources', form=LEADS_FORM,
+                 required=False),
 })
-
-NOT_WRITTEN = {'written': False, 'interpretation': 'no interpretation was written before the episode ended',
-               'passages': [], 'qualification': 'the supplied passages were not interpreted'}
-
-
-def validate_report(summary, finding):
-    """The old ``validate_report`` body, over the summary: the assignment still agrees with itself, the report is a
-    valid form of its own, every reference in it is one this episode holds, and the facts agree with the saved
-    work (the old ``validate_received_report`` compared answers to ``lead_dispositions`` / ``screening_answers``;
-    here both are computed from the same summary the facts are built from)."""
-    page = summary['literature_assignment']['page']
-    for window in summary['literature_assignment']['selection']['spans']:
-        if window['source_ref'] != page['source_ref']:
-            raise ValueError('literature_reading_source_mismatch')
-        if window['representation'] != page['representation']:
-            raise ValueError('literature_reading_representation_mismatch')
-    for reference, held in summary['report_source_held'].items():
-        if not held:
-            raise ValueError('literature_reference_unavailable:' + reference)
-    # The old call validate_form(form, original_schema, resolver) is the axis's report-form validator. A102 has
-    # none (carry_over_guide README 5 item 11): the call raises here.
-    raise NotImplementedError('validate_form_not_built:A102')
 
 
 def final_to_parent(summary, completion, selection):
-    report = summary['report']
-    finding = NOT_WRITTEN if report is None else {'written': True, **report}
-    validate_report(summary, finding)
-    result = {'credit': completion['credit'], 'finding': finding}
+    result = {'credit': completion['credit'], 'finding': {'structure_sheets': summary['structure_sheets']}}
     if SCREENING in selection:
-        result[SCREENING] = summary['screening_answers']
+        result[SCREENING] = {'examined_span_count': len(summary['no_applicable_evidence']),
+                             'commissioned_spans_covered': bool(summary['screening_answers'])}
     if LEADS in selection:
-        result[LEADS] = summary['source_lead_dispositions']
-    if STRUCTURE in selection:
-        raise NotImplementedError('literature_structure_population_not_built')
+        relevant = list(dict.fromkeys(lead['source_ref'] for lead in summary['source_lead_dispositions']
+                                      if lead['disposition'] == 'relevant'))
+        result[LEADS] = {'relevant_lead_count': len(relevant), 'lead_source_refs': relevant}
     return result

@@ -10,6 +10,7 @@ from copy import deepcopy
 import json
 import math
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.publication import received_grade
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.scoring import digest, geometry, require,contrast_panel
 from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.structures import binding_summary
@@ -27,13 +28,20 @@ DIRECT_PRODUCERS = {'US-align': 'structure.align', 'Foldseek': 'structure.discov
     'compare_protein_structures': 'compare_protein_structures'}
 
 
-def install(store):
-    for sql in (
-        'CREATE TABLE IF NOT EXISTS a102_attachment_requests (source_ref TEXT PRIMARY KEY, body TEXT NOT NULL)',
-        '''CREATE TABLE IF NOT EXISTS a102_tool_attachments (source_ref TEXT PRIMARY KEY,
-            request_ref TEXT NOT NULL, measurement_ref TEXT, target_ref TEXT NOT NULL,
-            policy TEXT NOT NULL, grading_artifact_ref TEXT NOT NULL, body TEXT NOT NULL)''',
-    ): store.db.execute(sql)
+ATTACHMENT_REQUESTS = TableDeclaration(name='a102_attachment_requests', columns=('source_ref', 'body'),
+    key=('source_ref',), record_refs=('source_ref',))
+TOOL_ATTACHMENTS = TableDeclaration(name='a102_tool_attachments',
+    columns=('source_ref', 'request_ref', 'measurement_ref', 'target_ref', 'policy', 'grading_artifact_ref', 'body'),
+    key=('source_ref',), record_refs=('source_ref', 'request_ref', 'measurement_ref', 'target_ref', 'grading_artifact_ref'))
+STRUCTURE_BINDINGS = TableDeclaration(name='a102_structure_bindings', columns=('source_ref', 'body'),
+    key=('source_ref',), record_refs=('source_ref',))
+DERIVED_PUBLICATIONS = TableDeclaration(name='a102_derived_publications', columns=('source_ref', 'body', 'permitted_use'),
+    key=('source_ref',), record_refs=('source_ref',))
+
+
+def _held(store, declaration, reference):
+    rows = store.table(declaration).select({'source_ref': reference})
+    return rows[0] if rows else None
 
 
 def _source(store, provider, body, refs, *, grading=None):
@@ -46,20 +54,19 @@ def _source(store, provider, body, refs, *, grading=None):
 
 
 def request(store, body, refs):
-    install(store)
     body = {'version': VERSION, **deepcopy(body)}
     ref = _source(store, REQUEST_PROVIDER, body, refs)
-    store.db.execute('INSERT OR IGNORE INTO a102_attachment_requests VALUES(?,?)', (ref, canonical(body)))
+    store.table(ATTACHMENT_REQUESTS).put({'source_ref': ref, 'body': body})
     return ref
 
 
 def _binding(store, ref, known):
     require(ref in known, 'attachment_binding_not_received')
-    row = store.db.execute('SELECT body FROM a102_structure_bindings WHERE source_ref=?', (ref,)).fetchone()
+    row = _held(store, STRUCTURE_BINDINGS, ref)
     source = store.get(ref)
     require(row is not None and source['origin']=='tool' and source['provider']=='native.a102.structure_binding',
         'attachment_binding_custody_unavailable')
-    body = json.loads(row[0])
+    body = row['body']
     require(json.loads(store.get_artifact(source['artifact_ref'])) == binding_summary(body), 'attachment_binding_custody_conflict')
     return body
 
@@ -78,19 +85,17 @@ def _publish(store, key, body, refs):
         native_artifact_ref=artifact,
         grading={'grader': VERSION, 'failure': None, 'sheet': body})
     source = _source(store, PROVIDER, body, refs, grading=grading)
-    store.db.execute('INSERT OR IGNORE INTO a102_tool_attachments VALUES(?,?,?,?,?,?,?)',
-        (source,key,body.get('measurement_ref'),body['target_ref'],body['policy'],grading,canonical(body)))
+    store.table(TOOL_ATTACHMENTS).put({'source_ref':source,'request_ref':key,'measurement_ref':body.get('measurement_ref'),
+        'target_ref':body['target_ref'],'policy':body['policy'],'grading_artifact_ref':grading,'body':body})
     return source
 
 
 def received_attachments(store, known):
     """Only actual admitted sheets; reading credit never creates a grade."""
-    exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='a102_tool_attachments'").fetchone()
-    if not exists: return []
     known = set(known); latest = {}
-    for row in store.db.execute('SELECT rowid,* FROM a102_tool_attachments ORDER BY rowid'):
+    for row in store.table(TOOL_ATTACHMENTS).select():
         if row['source_ref'] not in known: continue
-        source = store.get(row['source_ref']); body = json.loads(row['body'])
+        source = store.get(row['source_ref']); body = row['body']
         entries = source_tool_grading_entries(store,row['source_ref'])
         require(source['origin']=='tool' and source['provider']==PROVIDER and source['version']==VERSION
             and json.loads(store.get_artifact(source['artifact_ref']))==body and len(entries)==1
@@ -248,10 +253,9 @@ def _traits(store, request_ref, body, known):
             require(trait['measurement_source_ref'] in known and measurement.get('provider')=='native.a102.features',
                 'trait_geometry_requires_received_native_feature_measurement')
             raw = json.loads(store.get_artifact(measurement['artifact_ref']))
-            retained=store.db.execute('SELECT body,permitted_use FROM a102_derived_publications WHERE source_ref=?',
-                (trait['measurement_source_ref'],)).fetchone()
+            retained=_held(store,DERIVED_PUBLICATIONS,trait['measurement_source_ref'])
             require(retained is not None and retained['permitted_use']=='a102_scoring' and measurement['origin']=='tool'
-                and json.loads(retained['body'])==raw,'trait_geometry_measurement_custody_conflict')
+                and retained['body']==raw,'trait_geometry_measurement_custody_conflict')
             grade = received_grade(store,raw['comparison_source_ref'])['grade'] if raw['comparison_source_ref'] in known else None
             measured_binding=grade['target_binding_ref'] if grade else raw.get('actual_measured_binding_ref')
             require(measured_binding is None or measured_binding==body['reference_binding_ref'],'trait_geometry_measured_subject_conflict')
@@ -438,7 +442,7 @@ def _reported(store,ref,body,known):
 
 def refresh(store, known, scope):
     """Host receipt hook, called before credit projection, never by credit reads."""
-    install(store); known = set(known); produced = []; needs = []
+    known = set(known); produced = []; needs = []
     targets = set(scope['subject_refs']); contrasts=[]
     for ref in sorted(known):
         source = store.get(ref)
@@ -461,26 +465,26 @@ def refresh(store, known, scope):
                 body = _direct(store,ref,grade,known)
                 produced.append(_publish(store,ref,body,[ref,grade['target_ref'],grade['target_binding_ref'],grade['reference_ref']]))
         elif source.get('provider')=='native.a102.features':
-            row = store.db.execute('SELECT body FROM a102_derived_publications WHERE source_ref=?',(ref,)).fetchone()
+            row = _held(store,DERIVED_PUBLICATIONS,ref)
             if row is None: continue
-            raw = json.loads(row[0])
+            raw = row['body']
             if raw['target_ref'] not in targets or raw['comparison_source_ref'] not in known: continue
             body,dependencies = _feature_geometry(store,ref,raw,known)
             produced.append(_publish(store,ref,body,[ref,raw['target_ref'],raw['comparison_source_ref'],*raw['definition_source_refs'],*dependencies]))
             if body['missing']: needs.append((ref,body))
         elif source.get('provider')=='native.a102.interface_geometry':
-            row=store.db.execute('SELECT body FROM a102_derived_publications WHERE source_ref=?',(ref,)).fetchone()
+            row = _held(store,DERIVED_PUBLICATIONS,ref)
             if row is None: continue
-            raw=json.loads(row[0])
+            raw = row['body']
             if raw['target_ref'] not in targets: continue
             body,dependencies=_interface(store,ref,raw,known)
             produced.append(_publish(store,ref,body,[ref,raw['target_ref'],*raw['binding_refs'],
                 *[r for c in raw['contacts'] for r in c['definition_source_refs']],*dependencies]))
             if body['missing']: needs.append((ref,body))
         elif source.get('provider')=='native.a102.reported_comparison':
-            row=store.db.execute('SELECT body FROM a102_derived_publications WHERE source_ref=?',(ref,)).fetchone()
+            row = _held(store,DERIVED_PUBLICATIONS,ref)
             if row is None:continue
-            raw=json.loads(row[0])
+            raw = row['body']
             if raw['target_ref'] not in targets or not set(raw['source_refs'])<=known:continue
             body,dependencies=_reported(store,ref,raw,known)
             produced.append(_publish(store,ref,body,[ref,raw['target_ref'],*raw['source_refs'],*dependencies]))
@@ -488,10 +492,10 @@ def refresh(store, known, scope):
         elif source.get('provider')=='native.a102.contrast':
             contrasts.append(ref)
         elif source.get('provider')==REQUEST_PROVIDER:
-            row = store.db.execute('SELECT body FROM a102_attachment_requests WHERE source_ref=?',(ref,)).fetchone()
+            row = _held(store,ATTACHMENT_REQUESTS,ref)
             require(row is not None and source['origin']=='tool' and source['version']==VERSION
-                and json.loads(store.get_artifact(source['artifact_ref']))==json.loads(row[0]),'attachment_request_custody_conflict')
-            body = json.loads(row[0])
+                and json.loads(store.get_artifact(source['artifact_ref']))==row['body'],'attachment_request_custody_conflict')
+            body = row['body']
             if body['target_ref'] not in targets: continue
             if body['operation']=='structure.reference_align':
                 if body['measurement_ref'] not in known or body['measured_binding_ref'] not in known: continue
@@ -508,16 +512,16 @@ def refresh(store, known, scope):
                     if trait['missing']: needs.append((ref,trait))
             else: raise ValueError('unbound_tool_attachment_policy')
     for ref in contrasts:
-        row=store.db.execute('SELECT body FROM a102_derived_publications WHERE source_ref=?',(ref,)).fetchone()
+        row = _held(store,DERIVED_PUBLICATIONS,ref)
         if row is None:continue
-        raw=json.loads(row[0]);selected=[*raw['supporting_source_refs'],*raw['opposing_source_refs']]
+        raw = row['body'];selected=[*raw['supporting_source_refs'],*raw['opposing_source_refs']]
         if 'contrast_witness_refs' not in raw:continue  # immutable historical panel, before automatic local attachments
         if raw['target_ref'] not in targets or not set(selected)<=known:continue
         bodies=[];addresses={}
         for original in selected:
-            saved=store.db.execute('SELECT body FROM a102_derived_publications WHERE source_ref=?',(original,)).fetchone()
+            saved=_held(store,DERIVED_PUBLICATIONS,original)
             require(saved is not None,'contrast_feature_custody_unavailable')
-            feature=qualified_feature(store,original,json.loads(saved[0]),known|set(produced))
+            feature=qualified_feature(store,original,saved['body'],known|set(produced))
             bodies.append(feature);addresses[original]=feature['comparison_ref']
         panel=contrast_panel(bodies,function_ref=raw['function_ref'],
             supporting_refs=[addresses[r] for r in raw['supporting_source_refs']],

@@ -140,3 +140,133 @@ closed episode.
 | to_parent.py | 36 | facts (handoff/result/file refs, origin, completed) + closed credit; validate_report | import:root.a110.communication(2), import:root.a110.flux_balance_return_views(1) |
 | work_operations.py | 27 | catalog execution.capabilities and execute; invalid outcome on error | import:root.a110.communication(0), import:root.a110.execution_contracts(1), import:root.a110.library.execution_resource_information(1), import:root.a110.native_file_capture(1) |
 | yield_estimator.py | 61 | request yield class, task profile, launch bounded yield / exact zero, practical_estimator | import:root.a110.communication(2), import:root.a110.numerical(6), import:root.a110.practical_yield(1), yield:BoundedYieldController(1), yield:NumericBand(1), yield:PracticalYieldEstimator(1), yield:YieldController(1), yield:YieldEstimate(1), yield:YieldParameters(2) |
+
+## Carried over
+
+One row per old function, class and method (`runs/carry_over/functions/a110__biochemical_feasibility_evidence__hpc_work_planning__execution_job_submission.tsv`). Kind is the old kind (class, method, function). Class column: machinery (not carried, with the reason) or episode function (the new place; "unplaced" marks a function whose library has no home in `episode_support/`, the use raises and is reported in `carry_over_blocked/`). Paths in the new-place column are below `gene_annotation_episode/episodic_workflow/root/a110/biochemical_feasibility_evidence/hpc_work_planning/execution_job_submission/`. No row is "library candidate": every episode function of the old files is either in an episode file, carried in a child folder, or unplaced.
+
+| old file | kind | name | class | new place or machinery reason |
+|---|---|---|---|---|
+| action_outcome.py | function | _outcome | episode function | task.py execution_capabilities (the tool returns its own outcome; no wrapper is carried; the tool raises, library not placed) |
+| binding_record.py | class | LaunchBindingRecord | machinery | binding_record.py: the binding's own as_record() is deleted (the system journals settings and service names) |
+| binding_record.py | method | LaunchBindingRecord.as_record | machinery | the binding's own as_record() is deleted |
+| completion.py | class | LaunchCompletion | machinery | completion proof for the practical estimator: deleted (README 7b; the completion proof is not a controller input) |
+| completion.py | method | LaunchCompletion._proof_for_action | machinery | completion proof read from runtime_actions: deleted |
+| completion.py | method | LaunchCompletion.completion_for_action | machinery | completion proof: deleted |
+| completion.py | method | LaunchCompletion._closed_completion_verdict | machinery | verdict over runtime_observations: deleted |
+| completion.py | method | LaunchCompletion.verify_completion | machinery | completion verification: deleted |
+| configuration.py | class | LaunchConfiguration | episode function | values placed: handoff_unit -> messages/read_from_parent.py (assignment field); task_yield_profiles -> yield_estimator.py (settings); launch instruction directory -> task.py (settings). Not carried: resources, log window, results profiles, acquired_record_unit, private-yield flag, progress provider, local file sources, flux-balance bindings (old configuration of other roles / runner machinery) |
+| configuration.py | method | LaunchConfiguration.__init__ | episode function | same: values placed as above; the construction of terminal behaviours, ExecutionProgressProvider, LocalFileSourceResults and flux-balance helpers is old-runner configuration, not carried |
+| context_receipts.py | class | LaunchContextReceipts | machinery | receipt ledger of required return sources and initial references (custody is the system's: record_refs fields) |
+| context_receipts.py | method | LaunchContextReceipts.required_return_sources | machinery | condition false under the HPC parent; the return field execution_handoff_refs is selectable, the parent selects it |
+| context_receipts.py | method | LaunchContextReceipts.initial_references | episode function | messages/read_from_parent.py record_refs field (the input-version records the job inputs name), passed on by msg_to_child to the local child; the Store reads of the old flux_balance_request_binding are not carried |
+| credit.py | class | LaunchCredit | episode function | credit.py credit |
+| credit.py | method | LaunchCredit.credit_kind | machinery | the credit kind label (operational) is deleted |
+| credit.py | method | LaunchCredit._closed_credit_carrier | machinery | closed-credit snapshot over runtime_episodes/runtime_observations: the system closes the Episode with its credit |
+| credit.py | method | LaunchCredit._closed_credit_receipts | machinery | closed-credit receipt prefix over runtime_record_receipts/runtime_receipt_inheritance: custody is the system's |
+| credit.py | method | LaunchCredit._closed_credit_value | machinery | closed-credit view check: deleted |
+| credit.py | method | LaunchCredit._closed_credit_facts | machinery | closed-credit snapshot in the closing facts: final_to_parent returns completion['credit'] |
+| credit.py | method | LaunchCredit._closed_operational_credit_view | machinery | reuse of the saved closed view over runtime_forms: deleted (the system replays the closed run) |
+| credit.py | method | LaunchCredit.project_credit | machinery | dispatch between the closed and the live view: deleted; credit.py credit is the live one |
+| credit.py | method | LaunchCredit._live_project_credit | episode function | credit.py credit (handoff_unit x new resource_ids with a usable handoff; the acquired-record part was fixed 0) |
+| credit.py | method | LaunchCredit.credit_view | machinery | credit_view wrapper: deleted |
+| episode.py | class | ExecutionEpisode | episode function | episode.py ExecutionJobSubmission |
+| episode.py | method | ExecutionEpisode.child_roles | episode function | task.py CHILD_SLOTS |
+| episode.py | method | ExecutionEpisode.allowed_children | episode function | messages/read_from_parent.py permitted (the eligible requests in the parent input); task.py decide offers only those |
+| episode.py | method | ExecutionEpisode.permitted_common_actions | episode function | task.py: only tool and child units are offered (reason, wait and redeliver_report are not carried) |
+| episode.py | method | ExecutionEpisode.prepare_child_request | episode function | identity (the request is the child assignment): messages/msg_to_child.py msg_to_child |
+| episode.py | method | ExecutionEpisode.execution_child_report_receiver | episode function | messages/read_from_child.py read_from_child |
+| episode.py | method | ExecutionEpisode.child_request_assembler | episode function | messages/msg_to_child.py msg_to_child |
+| from_child_hpc_job_execution.py | function | receive_report | episode function | messages/read_from_child.py read_from_child (slot hpc_job_execution); recorded-admission, progress-provider and receipt paths are machinery |
+| from_child_local_job_execution.py | function | receive_report | episode function | messages/read_from_child.py read_from_child (slot local_job_execution); same |
+| from_parent.py | class | LaunchFromParent | episode function | messages/read_from_parent.py |
+| from_parent.py | method | LaunchFromParent.child_assignment_schema | machinery | the child's assignment schema is the child's own ASSIGNMENT_FORM (rule: the parent is handed nothing of the child's forms) |
+| from_parent.py | method | LaunchFromParent.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM and launch_schema |
+| from_parent.py | method | LaunchFromParent._permitted | episode function | messages/read_from_parent.py permitted |
+| from_parent.py | method | LaunchFromParent.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent (checked schema; authenticate_launch, the compact flux-balance preview and the input-version/flux-balance-input checks are not carried: commission checks / library not placed) |
+| from_parent.py | method | LaunchFromParent._request_schema | episode function | messages/read_from_parent.py read_from_parent (validate_assignment per request, resource_id = key); the compact branch is not carried |
+| from_parent.py | method | LaunchFromParent._launch | episode function | messages/read_from_parent.py read_from_parent (checked launch schema, each request validated); the _constraints validation is not placed |
+| goal.py | class | LaunchGoal | episode function | task.py INSTRUCTIONS |
+| goal.py | method | LaunchGoal.instructions | episode function | task.py INSTRUCTIONS (text unchanged) |
+| handoff_receipts.py | class | LaunchHandoffReceipts | episode function | messages/internal_summary.py and messages/read_from_child.py (the handoffs are the child results) |
+| handoff_receipts.py | method | LaunchHandoffReceipts._context_target | machinery | assignment custody check of a handoff target against the compact flux-balance request binding (runtime tables); a no-op for the launch role otherwise |
+| handoff_receipts.py | method | LaunchHandoffReceipts._received | episode function | messages/internal_summary.py (handoff references and resource_ids of the child outcomes) and messages/read_from_child.py; the reader of handoff targets (old job_progress_provider.targets) has no home, so a usable handoff is a non-empty execution_handoff_refs of a child return |
+| initial_information.py | function | initial_information | episode function | unplaced: the reader catalog library.execution_initial_information.presentation.resource_information has no home; the assignment (requests, inventory_snapshot, constraints) is shown in task.py decide as execution_assignment |
+| input_versions.py | class | LaunchInputVersions | episode function | unplaced: see its methods |
+| input_versions.py | method | LaunchInputVersions._versions | episode function | unplaced: validate_execution_input_versions (old shared root) has no home |
+| input_versions.py | method | LaunchInputVersions._flux_balance_inputs | episode function | unplaced: flux_balance_execution_inputs (old shared root) has no home |
+| internal_summary.py | class | LaunchInternalSummary | episode function | messages/internal_summary.py |
+| internal_summary.py | method | LaunchInternalSummary._with_selected_execution_task | episode function | messages/internal_summary.py selected_execution_task (raises: scientific_job_view and resource_information_for_id have no home) |
+| internal_summary.py | method | LaunchInternalSummary.decision_context | episode function | messages/internal_summary.py internal_summary and task.py decide (execution_assignment, execution_progress; the compact branch is not carried) |
+| internal_summary.py | class | LaunchDecisionState | episode function | messages/internal_summary.py and task.py decide |
+| internal_summary.py | method | LaunchDecisionState.decision_state | episode function | task.py decide context (goal, assignment, progress, credit, controller, time, tools, child options, feedback); working_state, visible_record_refs, report_update, report lifecycle, receipts and visual evidence are runner/report machinery |
+| launch_state.py | class | LaunchLaunchState | machinery | launch state initialisation over the request binding and the Store: the system builds the Episode |
+| launch_state.py | method | LaunchLaunchState.initialize | machinery | initialisation of the compact request binding and input versions: not carried |
+| launch_state.py | method | LaunchLaunchState.state | machinery | raised practical_resource_role_required: deleted |
+| received_execution_information.py | function | received_execution_information | machinery | catalog.received/configured reader selection: custody is the system's |
+| received_result_records.py | function | native_result_operation_catalog | episode function | unplaced: the execution.results.* operations belong to the results role (execution_result_acquisition), not to this launch |
+| report_delivery.py | class | LaunchReportDelivery | machinery | report delivery: the system admits the result |
+| report_delivery.py | method | LaunchReportDelivery.finish | machinery | form_with_facts over the parent-written form, runtime_forms, release: deleted; messages/final_to_parent.py final_to_parent returns the typed result |
+| resource_information.py | function | launch_operation_catalog | episode function | task.py TOOL_DESCRIPTIONS (execution_capabilities) |
+| resource_information.py | class | LaunchResourceInformation | episode function | unplaced: see resource_tool_contracts |
+| resource_information.py | method | LaunchResourceInformation.resource_tool_contracts | episode function | unplaced: the commissionable operation contracts per configured resource for the parent's routes (library.execution_operation_information and native_flux_balance_tool_info are in the old shared root and have no home) |
+| scientific_reference_support.py | class | LaunchScientificReferenceSupport | episode function | unplaced: see its method |
+| scientific_reference_support.py | method | LaunchScientificReferenceSupport._matches_flux_balance_assignment | episode function | unplaced: compact flux-balance assignment check (materialized_assignment over the request binding), local only |
+| task.py | class | LaunchTask | episode function | task.py |
+| task.py | method | LaunchTask.next | machinery | decision loop with restore, in-process replay, closed-row SourceEnd: the system's loop; task.py decide |
+| task.py | method | LaunchTask.apply_response | episode function | task.py action (decode, validate, Rejected(rejection_feedback)); report_update admission, validate_hpc_launch_report_contract and recorded-response decoding are report/runner machinery |
+| task.py | method | LaunchTask.execute | machinery | journaling of the unit, reason/wait/tool branches, observation and credit staging: the system's unit execution; the tool is task.py execution_capabilities, the child commission is msg_to_child |
+| task_decision.py | class | LaunchTaskDecision | episode function | task.py |
+| task_decision.py | method | LaunchTaskDecision.call | episode function | task.py decide (context assembly: launch instruction library and selected sections, hpc_execution_job, child options, tools, controller, time); the saved-request replay, receipts, resource estimator and native expectations (estimate table not provided) are not carried |
+| task_decision.py | method | LaunchTaskDecision.instructions | episode function | task.py decide (INSTRUCTIONS) |
+| task_decision.py | method | LaunchTaskDecision.conversation_key | machinery | provider conversation key: deleted (every ModelRequest carries the full context) |
+| task_decision.py | method | LaunchTaskDecision.interpretation_context | machinery | decision-exchange context: deleted |
+| task_decision.py | method | LaunchTaskDecision.exchange_schema | machinery | decision-exchange schema: deleted |
+| task_decision.py | method | LaunchTaskDecision.exchange_response | machinery | decision-exchange response: deleted |
+| task_decision.py | method | LaunchTaskDecision.validate_contract_exchange_request | machinery | saved-request check of the exchange: deleted |
+| task_decision.py | method | LaunchTaskDecision.validate_contract_exchange_history | machinery | saved-request check of the exchange: deleted |
+| task_decision.py | method | LaunchTaskDecision.exchange_decision | machinery | decision-exchange loop: deleted (a lookup is a tool) |
+| task_decision.py | method | LaunchTaskDecision.decision_completion | machinery | provider patching and presentation binding: deleted |
+| task_instructions.py | function | instructions | episode function | task.py INSTRUCTIONS and decide; the reason-commit, pending_child_delivery, wait and native-event paragraphs and the decision-exchange replacement describe actions that are not carried; the tool-knowledge and launch-instruction-library tool paragraphs describe registry tools this episode does not offer |
+| task_presentation.py | function | present_launch_context | episode function | unplaced (part): the renderers library.hpc_prompt, monitor_prompt and scientific_decision_presentation are in the old shared root; the context is sent as the structured ModelRequest context |
+| task_state.py | class | LaunchTaskState | machinery | episode source state, checkpoint and restore: the system's |
+| task_state.py | method | LaunchTaskState.__init__ | machinery | source state fields: the view holds the state |
+| task_state.py | method | LaunchTaskState.bind_execution_context | machinery | execution binding: runner machinery |
+| task_state.py | method | LaunchTaskState.record_execution_failure | machinery | record_execution_failure: a tool returns its failure |
+| task_state.py | method | LaunchTaskState.restore_checkpoint | machinery | checkpoint/restore: the system's resume |
+| task_state.py | method | LaunchTaskState.restore | machinery | restore: the system's resume |
+| task_state.py | method | LaunchTaskState.record_effect | machinery | record_effect: the attempts journal |
+| task_state.py | method | LaunchTaskState.checkpoint | machinery | checkpoint: the system's resume |
+| task_suspension.py | class | LaunchTaskSuspension | machinery | suspension of the execution backend: wait/suspension machinery |
+| task_suspension.py | method | LaunchTaskSuspension.suspension_changed | machinery | wait/suspension machinery |
+| terminal_execution.py | class | TerminalExecutionBehavior | episode function | carried in the route children (hpc_job_execution and local_job_execution task.py, credit.py, final_to_parent.py, read_from_parent.py): the practical terminal behaviour of the resource roles, not of the launch |
+| terminal_execution.py | method | TerminalExecutionBehavior.__init__ | machinery | configuration of the terminal behaviour: the children's settings |
+| terminal_execution.py | method | TerminalExecutionBehavior._operations | episode function | carried in the route children (task.py _operations) |
+| terminal_execution.py | method | TerminalExecutionBehavior._assignment | episode function | carried in the route children (messages/read_from_parent.py) |
+| terminal_execution.py | method | TerminalExecutionBehavior._state_directory | machinery | file-backed practical state directory: not carried |
+| terminal_execution.py | method | TerminalExecutionBehavior.initialize | machinery | file-backed PracticalState: not carried |
+| terminal_execution.py | method | TerminalExecutionBehavior.state | machinery | file-backed PracticalState: not carried |
+| terminal_execution.py | method | TerminalExecutionBehavior.catalog | episode function | carried in the route children (their tool exec_command) |
+| terminal_execution.py | method | TerminalExecutionBehavior.execute | episode function | carried in the route children (task.py exec_command) |
+| terminal_execution.py | method | TerminalExecutionBehavior.completion_for_action | machinery | completion proof as estimator input: deleted (README 7b) |
+| terminal_execution.py | method | TerminalExecutionBehavior.practical_estimator | machinery | PracticalYieldEstimator: deleted (README 7b) |
+| terminal_execution.py | method | TerminalExecutionBehavior.fact_sources | episode function | carried in the route children (messages/final_to_parent.py RETURN_FORM) |
+| terminal_execution.py | method | TerminalExecutionBehavior.facts | episode function | carried in the route children (messages/final_to_parent.py facts) |
+| terminal_execution.py | method | TerminalExecutionBehavior.resolve | machinery | report reference resolver: records.holds / custody |
+| terminal_execution.py | method | TerminalExecutionBehavior.validate_report | episode function | carried in the route children (messages/final_to_parent.py validate_report) |
+| terminal_execution.py | method | TerminalExecutionBehavior.credit_view | episode function | carried in the route children (credit.py) |
+| to_child_hpc_job_execution.py | function | assemble_request | episode function | messages/msg_to_child.py msg_to_child (slot hpc_job_execution; the launch-level launch_instructions of the old episode_assignment are forwarded in the assignment); the envelope scope, completion order, report contract declaration and knowledge_inheritance are machinery |
+| to_child_local_job_execution.py | function | assemble_request | episode function | messages/msg_to_child.py msg_to_child (slot local_job_execution; launch_instructions forwarded likewise); same |
+| to_parent.py | class | LaunchToParent | episode function | messages/final_to_parent.py |
+| to_parent.py | method | LaunchToParent.facts | episode function | messages/final_to_parent.py facts (the closed-credit part is the system's credit) |
+| to_parent.py | method | LaunchToParent._live_facts | episode function | messages/final_to_parent.py facts (handoff refs from the child results; result, file and origin facts empty for a launch; fba_fact_sources not placed) |
+| to_parent.py | method | LaunchToParent.validate_report | episode function | messages/final_to_parent.py validate_report (raises validate_form_not_built:biochemical_feasibility_evidence where the axis validate_form was called) |
+| work_operations.py | class | LaunchWorkOperations | episode function | task.py |
+| work_operations.py | method | LaunchWorkOperations.catalog | episode function | task.py TOOL_DESCRIPTIONS |
+| work_operations.py | method | LaunchWorkOperations.execute | episode function | task.py execution_capabilities (raises: library not placed) |
+| yield_estimator.py | class | ExecutionEpisodeYield | episode function | yield_estimator.py |
+| yield_estimator.py | method | ExecutionEpisodeYield._request_yield_class | episode function | yield_estimator.py request_yield_class (practical branch; compact_ classes are not carried) |
+| yield_estimator.py | method | ExecutionEpisodeYield._task_yield_profile | episode function | yield_estimator.py yield_controller (profile lookup, same error code) |
+| yield_estimator.py | method | ExecutionEpisodeYield.yield_controller | episode function | yield_estimator.py yield_controller (the private-yield-binding flag is configuration, not carried) |
+| yield_estimator.py | method | ExecutionEpisodeYield._launch_yield_controller | episode function | yield_estimator.py yield_controller (BoundedQualityYieldController, maximum = permitted requests not yet handed off x handoff_unit; the exact-zero estimator for nothing remaining is not carried) |
+| yield_estimator.py | method | ExecutionEpisodeYield.practical_estimator | machinery | PracticalYieldEstimator over verify_completion: deleted (README 7b) |

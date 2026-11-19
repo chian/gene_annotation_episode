@@ -6,6 +6,7 @@ explicit limit; report additionally has an explicit native from offset. File
 transfer selects a received File object's literal cloud_metadata.url. No query
 generation, first match, page following, redirect following or analysis occurs.
 """
+from episode_runtime import TableDeclaration
 from copy import deepcopy
 from dataclasses import replace
 from decimal import Decimal
@@ -23,6 +24,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.partner_p
 
 
 TOOL = "public.encode"
+
+PUBLISHED = TableDeclaration(name='encode_published_outcomes',
+    columns=('tool', 'operation_ref', 'operation_key', 'source_ref', 'arguments', 'outcome'),
+    key=('tool', 'operation_ref'))
 ROOT = "https://www.encodeproject.org"
 REQUEST_VERSION = "encode_acquisition_request_v1"
 SELECTION_VERSION = "encode_advertised_file_selection_v1"
@@ -637,29 +642,37 @@ def authenticate_saved_encode_request(registry, arguments, *, authority, outcome
 __all__ = ["TOOL", "ROOT", "ARGUMENTS_SCHEMA", "MAX_METADATA_BYTES", "MAX_FILE_BYTES", "MAX_LIMIT", "FAILURE_CODES",
     "validate_encode_arguments", "encode_request_spec", "encode_tool_contract", "encode_receipt_schema",
     "validate_encode_receipt", "prepare_encode_request", "request_encode", "publish_encode_request",
-    "authenticate_saved_encode_request"]
+    "authenticate_saved_encode_request", "record_encode_operation"]
+
+
+def record_encode_operation(registry, operation_key, arguments, outcome):
+    """Keep the outcome of one published ENCODE request, keyed by its tool and operation, for the files that
+    later authenticate against it."""
+    result = outcome["result"]
+    return registry.store.table(PUBLISHED).put({"tool": TOOL, "operation_ref": outcome["operation_ref"],
+        "operation_key": operation_key, "source_ref": result.get("source_ref") if type(result) is dict else None,
+        "arguments": arguments, "outcome": outcome})
 
 
 def _operation(registry, source_ref, tool_name, *, expected=None, without_source=None):
     if source_ref is None:
-        _require(type(without_source) is dict, 'encode_source_original_operation_conflict')
-        rows = registry.store.db.execute("SELECT * FROM tool_operations WHERE name=? AND id=?",
-            (tool_name, without_source.get('operation_ref'))).fetchall()
+        _require(type(without_source) is dict, "encode_source_original_operation_conflict")
+        rows = registry.store.table(PUBLISHED).select(
+            {"tool": tool_name, "operation_ref": without_source.get("operation_ref")})
     else:
-        rows = registry.store.db.execute("SELECT * FROM tool_operations WHERE name=? "
-            "AND json_extract(result,'$.result.source_ref')=?", (tool_name, source_ref)).fetchall()
+        rows = registry.store.table(PUBLISHED).select({"tool": tool_name, "source_ref": source_ref})
     _require(len(rows) == 1, 'encode_source_original_operation_conflict')
     row = rows[0]
-    arguments, outcome = json.loads(row['arguments']), json.loads(row['result'])
-    _require(type(outcome) is dict and row['id'] == identity('operation', {'key': row['operation_key'], 'name': tool_name,
-        'arguments': arguments}) and outcome.get('operation_ref') == row['id']
+    arguments, outcome = row["arguments"], row["outcome"]
+    _require(type(outcome) is dict and row["operation_ref"] == identity("operation", {"key": row["operation_key"], "name": tool_name,
+        "arguments": arguments}) and outcome.get("operation_ref") == row["operation_ref"]
         and outcome.get('status') in ({'completed', 'partial', 'failed'} if source_ref is not None else
             {'completed', 'partial', 'failed', 'invalid', 'unavailable'})
         and type(outcome.get('record_refs')) is list and all(type(ref) is str for ref in outcome['record_refs'])
         and (source_ref in outcome['record_refs'] if source_ref is not None else
             not outcome['record_refs'] and _same(outcome, without_source)),
         'encode_source_original_operation_conflict')
-    operation = {'operation_key': row['operation_key'], 'operation_ref': row['id']}
+    operation = {"operation_key": row["operation_key"], "operation_ref": row["operation_ref"]}
     _require(expected is None or _same(operation, expected), 'encode_source_original_operation_conflict')
     return operation, arguments, outcome
 

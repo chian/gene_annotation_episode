@@ -45,16 +45,16 @@ def received_source(store, source_ref, representation, *, permitted_inputs, scop
         if reference in seen:
             continue
         seen.add(reference)
-        row = store._require(reference, {"source"})
+        row = store.require(reference, {"source"})
         _immutable(row)
         if reference not in store.reference_subset([reference], scope):
             raise ContractError("source_location_outside_scope")
         pending.extend(row.get("parent_source_refs", ()))
-    source = store._require(source_ref, {"source"})
+    source = store.require(source_ref, {"source"})
     artifact_ref = source["artifact_ref"] if representation == "original" else source.get("text_ref")
     if artifact_ref is None:
         raise ContractError("source_representation_unavailable", detail={"representation": representation})
-    artifact = store._require(artifact_ref, {"artifact"})
+    artifact = store.require(artifact_ref, {"artifact"})
     if (artifact["id"] != "artifact_" + artifact["sha256"]
             or type(artifact["size"]) is not int or artifact["size"] < 0):
         raise ContractError("source_location_artifact_identity_conflict")
@@ -111,11 +111,10 @@ def locate(store, source_ref, representation, needle, *, offset=0, limit=8, cont
     total = artifact["size"]
     if offset > total:
         raise ContractError("source_offset_out_of_bounds")
-    path = store.path / "artifacts" / artifact["sha256"][:2] / artifact["sha256"]
     positions, tail, scanned_end, search_start = [], b"", offset, offset
     decoder = codecs.getincrementaldecoder("utf-8")()
     digest = hashlib.sha256()
-    with path.open("rb") as handle:
+    with store.open_artifact(artifact["id"]) as handle:
         if handle.seek(0, 2) != total:
             raise ContractError("source_location_artifact_size_conflict")
         handle.seek(offset)

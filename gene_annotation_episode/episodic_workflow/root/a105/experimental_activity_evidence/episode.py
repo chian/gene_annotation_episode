@@ -1,28 +1,28 @@
-"""The A105 head binding (``experimental_activity_evidence``).
+"""The A105 head (``experimental_activity_evidence``): a private binding of the system's episode type."""
+from episode_runtime import EpisodeBinding
 
-Its decision behaviour on the generic runner is ``runtime_source`` (built by
-``HeadRuntimeContract.build_episode``); ``ScientificConfiguration`` holds its
-construction-time library, tool registry, child roles and continuation
-declaration; its credit and controller are ``credit`` and ``yield_estimator``.
-"""
-from __future__ import annotations
-
-from gene_annotation_episode.domain import ContractError
-
-from .configuration import ROLE, ROLES, ScientificConfiguration
-from .credit import ExperimentalActivityEvidenceCredit
-from .runtime_binding import HeadRuntimeContract
-from .yield_estimator import ExperimentalActivityEvidenceYield
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class ExperimentalActivityEvidenceEpisode(HeadRuntimeContract, ScientificConfiguration,
-                                          ExperimentalActivityEvidenceCredit, ExperimentalActivityEvidenceYield):
-    """The recursive A105 head: narrower experimental-activity children and literature assessments."""
-    binding_path = 'experimental_activity_evidence'
-    commissioning_parent = 'annotation'
-    roles = ROLES
-
-    def child_roles(self, role):
-        if role != ROLE:
-            raise ContractError('experimental_activity_evidence_role_not_bound')
-        return self._child_roles
+class ExperimentalActivityEvidence(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

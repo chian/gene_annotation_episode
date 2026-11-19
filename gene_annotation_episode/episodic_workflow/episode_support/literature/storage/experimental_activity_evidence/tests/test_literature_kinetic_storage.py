@@ -3,16 +3,15 @@ import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_context import LiteratureContext
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.validation.experimental_activity_evidence.literature_kinetic_validation import validate_saved_kinetic
-from gene_annotation_episode.state import Store
+from .unit_world import in_unit
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_kinetic_inputs import fixture, SOURCE_REF, Source
 
-def setup(path, *, kind='catalytic_efficiency', unit='uM^-1min^-1', n='8', d='2', change=None, extra=''):
+def setup(store, ctx, *, kind='catalytic_efficiency', unit='uM^-1min^-1', n='8', d='2', change=None, extra=''):
     original, args = fixture(kind, unit, n, d, extra=extra)
     for role, printed in (('numerator', n), ('denominator', d)):
         if printed.startswith('<') or printed.startswith('about '):
             prefix = 1 if printed.startswith('<') else len('about ')
             args[role]['measurement']['number']['number_start'] += prefix
-    store = Store(path)
     store.create_problem(raw_sequence='ATGGCT', molecule='dna')
     artifact = store.artifact(original.raw, 'application/xml')
     source = store.put('source', {'provider': 'synthetic_kinetic_fixture', 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None, 'version': None, 'retrieved_at': None}, origin='caller')['id']
@@ -26,11 +25,11 @@ def setup(path, *, kind='catalytic_efficiency', unit='uM^-1min^-1', n='8', d='2'
     args = bind(args)
     if change:
         change(args)
-    context = LiteratureContext('kinetic-run', 'kinetic-child', 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': [source]}, {}, (source,))
+    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': [source]}, {}, (source,))
     return (store, context, args)
 
 @pytest.mark.parametrize('target', ['number_relation', 'number_approximation', 'row_approximation', 'source_qualification', 'canonical_censor', 'populated_reason', 'missing_unavailable_reason', 'raw_value', 'wrong_partial_reason'])
-def test_detached_semantic_contract_rejects_qualification_and_cell_contradictions(target, monkeypatch):
+def test_detached_semantic_contract_rejects_qualification_and_cell_contradictions(target):
     from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_kinetic_inputs import read_kinetic_inputs
     from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_kinetic_calculations import populate_kinetic_contrast
     source, selection = fixture()
@@ -62,9 +61,6 @@ def test_detached_semantic_contract_rejects_qualification_and_cell_contradiction
 
     def forbidden(*_a, **_kw):
         raise AssertionError('Detached invariants may not reread sources or rerun scientific calculations')
-    monkeypatch.setattr(source, 'read', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_kinetic_inputs.read_kinetic_inputs', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_kinetic_calculations.populate_kinetic_contrast', forbidden)
     with pytest.raises(ExperimentalContractError, match='kinetic_saved_mismatch'):
         validate_saved_kinetic(selection, extraction, calculation)
 

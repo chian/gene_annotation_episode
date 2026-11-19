@@ -16,11 +16,15 @@ three passes between Episodes (entry, commissioned, returned) are only in the jo
 Store.
 
 **Unfinished units.** ``abandon_unfinished`` marks, in one Store transaction, what an Episode's units from a
-position on produced as abandoned and takes back their work-table row writes (``work_tables.WorkRows``).
+position on produced as abandoned and takes back their work-table row writes (``work_tables.WorkRows``). It then
+removes the scratch directories a cut process left for the Episode (``scratch.ScratchRoot``): no unit of an Episode
+that is being built is running, so nothing of its scratch is in use.
 """
 from __future__ import annotations
 
 from method_loop.jsonvalue import canonical
+
+from .scratch import ScratchRoot
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS episode_runs(run_id TEXT PRIMARY KEY, journal_id TEXT NOT NULL);
@@ -37,7 +41,8 @@ class StoreLedger:
     """Run claims and produced receipts in one Store's SQLite file (see the module docstring)."""
 
     def __init__(self, store, rows):
-        self._store, self._db, self._rows = store, store.db, rows
+        self._store, self._db, self._rows = store, store._db, rows
+        self._scratch = ScratchRoot(store)
         self._db.executescript(_SCHEMA)
 
     def claim_run(self, run_id, journal_id):
@@ -60,11 +65,13 @@ class StoreLedger:
 
     def abandon_unfinished(self, run_id, holder, owner, position):
         """What ``holder``'s units from ``position`` on produced is abandoned, and their row writes are taken
-        back; ``owner`` is the Episode's ``(run_id, episode_id)``, the key of its rows."""
+        back; ``owner`` is the Episode's ``(run_id, episode_id)``, the key of its rows and of its scratch
+        directories, which are removed."""
         with self._store.transaction():
             self._db.execute('UPDATE episode_produced SET abandoned=1 WHERE run_id=? AND holder=? AND unit>=? '
                              'AND abandoned=0', (run_id, _path(holder), position))
             self._rows.abandon_unfinished(owner, position)
+        self._scratch.clear(owner)
 
     def abandoned_rows(self, owner, unit):
         return self._rows.abandoned(owner, unit)

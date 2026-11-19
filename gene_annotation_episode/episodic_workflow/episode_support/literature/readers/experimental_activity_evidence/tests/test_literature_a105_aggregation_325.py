@@ -1,16 +1,14 @@
 """Exact user-selected A105 sum/max rules and parent numerical custody."""
 from copy import deepcopy
-from dataclasses import replace
 import json
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import ContractError, identity, validate_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_aggregation import COMPONENTS, aggregate_a105, aggregation_sheet_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_aggregation_storage import LiteratureA105AggregationRepository, aggregation_cells_schema, REQUESTED
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import grade_assay
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_assay_grading_storage import LiteratureAssayGradingRepository, _rows
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_assay_grading_storage import _rows
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests.test_literature_assay_grading import fixture
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.tests.test_literature_assay_experiment_instances_323 import two_experiments
 MAPPING = dict(reliability='effect_precision', validity='recovery_deviation', relevance='assertion_prediction_error', attribution='attributed_fraction', overall='source_log_evidence_ratio')
 
 def pure_inputs(values=(1, 2, 5, 4)):
@@ -109,22 +107,4 @@ def test_unrelated_or_duplicate_rows_are_not_silently_combined(mutation, reason)
         rows.append(deepcopy(rows[0]))
     with pytest.raises(ContractError, match=reason):
         aggregate_a105(args, rows)
-
-def parent_fixture(store):
-    context, first, second = two_experiments(store)
-    native = LiteratureAssayGradingRepository(store, context.run_id)
-    outcomes = [native.populate(context, data, key) for data, key in ((first, 'A'), (second, 'B'))]
-    refs = [outcome['result']['sheet_ref'] for outcome in outcomes]
-    parent = replace(context, episode_id='parent325', role='literature', path=(('literature', 'parent325'),), assignment={**dict(context.assignment), REQUESTED: list(COMPONENTS)}, received_record_refs=[*context.received_record_refs, *refs])
-    selected = []
-    for index, ref in enumerate(refs):
-        rows = native.project_cells([ref], permitted_record_refs=refs, components=list(MAPPING.values()))
-        native.receive_cells(parent, rows, 'trusted-child-return-' + str(index))
-        selected.extend(rows)
-    args = {'assertion_ref': first['assertion_ref'], 'comparison_ref': None, 'experiments': [{'experiment_ref': data['experiment_ref'], 'metrics': {metric: {'sheet_ref': ref, 'component': component} for metric, component in MAPPING.items()}} for data, ref in zip((first, second), refs)]}
-    return (parent, args, native, selected)
-
-
-
-
 

@@ -61,7 +61,7 @@ def validate_rfam_metadata_source_scope(store, reference, scope):
     their explicit retained relationships must be checked as well. The return
     reader reuses this exact validation before trusting a metadata parent.
     """
-    selected = store._require(reference, {"source"})
+    selected = store.require(reference, {"source"})
     allowed = set(store.validate_scope(scope)["subject_refs"])
     pending, seen = [selected], set()
     while pending:
@@ -76,7 +76,7 @@ def validate_rfam_metadata_source_scope(store, reference, scope):
             roots.update(store.roots(source["query_selection_ref"]))
         if not roots <= allowed:
             raise ContractError("rfam_subject_out_of_scope")
-        pending.extend(store._require(ref, {"source"}) for ref in source.get("parent_source_refs", []))
+        pending.extend(store.require(ref, {"source"}) for ref in source.get("parent_source_refs", []))
     return selected
 
 

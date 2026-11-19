@@ -1,0 +1,32 @@
+# Blocked and unplaced: A103 execution_job_submission
+
+Old source was read with `git show 97308b94c:<path>` (git dir `/home/chia/repos/gene_annotation_episode_disk/.git`; the working tree has no `.git`). The folder is a private copy of the shape of the finished A101 sibling carry (`a101/sequence_homology_evidence/execution_job_submission`), with this episode's own old content and A103 library modules; nothing is imported from another episode. `tests/test_binding.py` has 13 passing tests (class definition, ten files, no episode import, forms, credit, controller, commissions, return form, report). The children's forms were checked once, outside the tests, against this episode's commissions (api and hpc admitted; local needs a local-kind request).
+
+## BLOCKED-ON-JOB-SERVICE
+- BLOCKED-ON-JOB-SERVICE: job_access.validate_assignment; wanted call: `ctx.services['job_access'].read('validate_assignment', request)` (task._bound: the old `api_execution.validate_assignment(request)` of an API request). Raises `NotImplementedError` where reached.
+- BLOCKED-ON-JOB-SERVICE: job_access.capabilities; wanted call: `await ctx.services['job_access'].capabilities(resource_id)` (task.execution_capabilities: old `api_execution.capabilities(resource_id)`). Raises.
+- BLOCKED-ON-JOB-SERVICE: job_access.received_bvbrc_context; wanted call: `ctx.services['job_access'].received_bvbrc_context()` (task.execution_capabilities: old `api_execution.received_bvbrc_context(context)`). Raises.
+- BLOCKED-ON-JOB-SERVICE: job record kind (handoff row of a declared job ledger work table); wanted call: `records.table(JOB_LEDGER).select({'event': 'handoff', 'job': handle})` (credit.credit, internal_summary: old `job_progress_provider.targets.usable_handoff(target)` and the receipts ledger selection `_received`). Not available: the child's own report (completed with handoff references) is the count.
+
+## BLOCKED-ON-STORE-ACCESS
+- function = `forms/gene_context_evidence/execution_contracts.py::validate_api_assignment`, `records/gene_context_evidence/practical_execution_records.py::validate_assignment`, `jobs/local_execution/gene_context_evidence/terminal_execution.py::TerminalExecution`: they take values and read no Store; none blocked. No raw-Store call is made by this episode.
+- old call -> intended call: `self.store.db.execute('SELECT ... FROM runtime_forms / runtime_episodes / runtime_observations ...')` in `closed_credit.py` -> none (old-runner machinery).
+- old call -> intended call: `self.store.read_snapshot()` / `workflow.journal.*` in `decision_state` -> none (the view and the system's recording).
+
+## Unplaced old functions
+- `a103_execution_bindings.validate_primary_resource_bindings`, `validate_preparation_resource_binding` (old `configuration.__init__`): a module of the old shared root with no library module. `task._resources` raises `NotImplementedError('unplaced:a103_execution_bindings.validate_primary_resource_bindings')` for a configured resource that carries a `native_*` binding.
+- `a103_homology_execution.BLAST_GRADED_REQUEST_SCHEMA` and the BLAST graded request kind (old `_launch`): no library module; `read_from_parent` raises `NotImplementedError('unplaced:a103_homology_execution.BLAST_GRADED_REQUEST_SCHEMA:<version>')`.
+- `native_profile_presentation.native_profile_scientific_job_view` (old `_with_selected_execution_task` for `native_hmmer` and `native_hmmer_preparation`): no library module; `task._selected_execution_task` raises `NotImplementedError('unplaced:native_profile_scientific_job_view')`.
+- `LaunchSummary.resource_tool_contracts`: needs `api_execution.operation_contracts`, `homology_api_contracts`, `native_operation_contracts`, `preparation_operation_contracts`, which have no library module. Not carried; the model is shown the permitted requests and the resource capabilities.
+- AppService fact sources (`result_records._appservice_sources`, `bvbrc_homology_returns.homology_fact_sources`) and `bvbrc_appservice_support_refs`: no library module; not declared in `RETURN_FORM`.
+- `launch role never reaches` (other roles, carried by other episodes): `contracts.native_result_operation_catalog`, `result_records` (the results-role rows), `received_information` (annotation and gene_context_evidence report forwarding), `terminal_execution.py` (local and HPC child behaviour), the results-role `validate_received_report` adapters (masking, utility, UniProt). Every row is in the "Carried over" table.
+- `hpc_launch_authentication.authenticate_launch` (old `prepare_assignment` when the parent role is hpc): a check of this episode's commission against its parent; not carried (rule 1), module of the old shared root.
+
+## Contract misfits
+- new field: execution_job_submission record_refs; new field: execution_job_submission handoff_unit; new field: execution_job_submission acquired_record_unit; new field: execution_job_submission scope; new field: execution_job_submission scientific_task (old `services.scientific_parent_task`); new field: execution_job_submission received_handoff_resources (old initial known handoff records); new field: execution_job_submission finding (old code had no typed finding: a record of the handoff resources, launches and qualification).
+- new field: api_job_execution/local_job_execution/hpc_job_execution commission fields are as the children declare them; the HPC child declares no `record_refs` and no `scientific_task`, so the records the HPC job inputs name cannot be passed to it by this episode.
+- Form field names must match `[a-z][a-z0-9_]*`: the old fact sources `execution.masking_*` and `execution.blast_utility_*` contain a dot and cannot be declared under their old names; they were always empty for this role. The UniProt, local-file and graded-BLAST sources were declared by the old code for the results role only.
+- `execution_result_origin` was always null for this role and a form has no null type: declared as a record, selecting it raises.
+- The old `yield_estimator` exact-zero estimator for a launch whose every eligible request already had a handoff (`no_remaining_requests`) is not carried, and a bounded controller cannot have a maximum of 0: that launch fails at `yield_controller` with `launch_every_original_request_already_has_a_handoff`.
+- The old `permitted_common_actions` offered `reason`; this episode has no reasoning content and declares no reason tool.
+- Counting usable handoffs from the child's report (not from re-reading the handoff record) is a change forced by the missing job record kind.

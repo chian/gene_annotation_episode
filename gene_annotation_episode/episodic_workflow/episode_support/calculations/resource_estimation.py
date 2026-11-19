@@ -6,7 +6,6 @@ No scientific Store, episode score/history, controller or scheduler is available
 from __future__ import annotations
 
 from copy import deepcopy
-from collections.abc import Mapping
 from dataclasses import asdict
 import hashlib
 import json
@@ -14,18 +13,11 @@ import math
 import re
 
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.run_statistics import CONDITIONS, EXECUTION_PHASE_BACKENDS, VERSION as STATISTICS_VERSION, ExecutionClass
-from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbation_evidence.communication import REFERENCE_FORMATS, ReportBoundaryError
 
 
 VERSION = 'resource_tool_duration_estimator_v2'
 METHOD = 'exact_class_current_condition_successful_duration_mean'
 OUTCOMES = ('succeeded', 'failed', 'cancelled', 'resource_limit', 'unknown')
-FORECAST_REFERENCE_FIELDS = {
-    'job_execution_estimate': 'estimate_ref',
-    'execution_class': 'execution_class_ref',
-    'execution_expectation': 'expectation_ref',
-    'execution_proposal': 'proposal_ref',
-}
 
 
 def _object(fields):
@@ -246,87 +238,3 @@ class ResourceToolEstimator:
             value['estimate_ref'] = 'execution_estimate_'+_digest({'version': VERSION, 'estimate': value})[:24]
             records.append(value)
         return records
-
-
-def recorded_estimate(store, reference, job_ref=None, *, namespace='job_execution_estimate'):
-    """Resolve a forecast against the existing authoritative decision journals.
-
-    No new forecast, global read or separate mutable forecast ledger is made.
-    """
-    field_name = FORECAST_REFERENCE_FIELDS.get(namespace)
-    if field_name is None:
-        return None
-    for table, field, path in (
-            ('runtime_actions', 'result', '$.resource_tool_estimates'),
-            ('runtime_model_calls', 'request', '$.context.resource_tool_estimates')):
-        row = store.db.execute(f'''SELECT items.value FROM {table} records
-            JOIN json_each(records.{field}, ?) items
-            WHERE json_extract(items.value,?)=?
-            AND (? IS NULL OR json_extract(items.value,'$.job_ref')=?) LIMIT 1''',
-            (path, '$.'+field_name, reference, job_ref, job_ref)).fetchone()
-        if row is not None:
-            return json.loads(row[0])
-    return None
-
-
-def recorded_forecasts(store, *, run_id, episode_id):
-    """Latest completed own action's original forecasts, without refreshing.
-
-    Assigned-job actions can record a sample-based projection after work.
-    Other actions retain the forecasts supplied with their selected decision.
-    Both come from the same authoritative journals used for replay.
-    """
-    row = store.db.execute('''SELECT CASE
-        WHEN json_type(actions.result,'$.resource_tool_estimates')='array'
-        THEN json_extract(actions.result,'$.resource_tool_estimates')
-        ELSE json_extract(calls.request,'$.context.resource_tool_estimates') END
-        FROM runtime_actions actions LEFT JOIN runtime_model_calls calls
-          ON calls.run_id=actions.run_id AND calls.episode_id=actions.episode_id
-          AND calls.call_index=actions.decision_index
-        WHERE actions.run_id=? AND actions.episode_id=?
-          AND json_extract(actions.result,'$.status') IN ('completed','partial')
-          AND (json_type(actions.result,'$.resource_tool_estimates')='array'
-            OR json_type(calls.request,'$.context.resource_tool_estimates')='array')
-        ORDER BY actions.decision_index DESC LIMIT 1''', (run_id, episode_id)).fetchone()
-    return json.loads(row[0]) if row else []
-
-
-def validate_recorded_estimates(store, value, *, schema=None, job_ref=None, reference_resolver=None):
-    """A forecast identity binds its supplied fields to the original record.
-
-    This is factual communication validation. It does not reassess the estimate,
-    choose a newer snapshot, or judge the scientific interpretation around it.
-
-    Declared reference namespaces identify forecasts; parent field names are
-    unrestricted. Schema-less callers compare only an actual recorded identity.
-    """
-    reference_namespaces = {field: namespace for namespace, field in FORECAST_REFERENCE_FIELDS.items()}
-    reference_namespaces.update(job_ref='homology_job', sample_ref='job_sample')
-    def visit(node, declared):
-        if isinstance(node, Mapping):
-            properties = declared.get('properties', {}) if declared is not None else {}
-            identities = [name for name, field in properties.items()
-                if field.get('format') in REFERENCE_FORMATS
-                and field.get('x-reference-namespace') == 'job_execution_estimate'
-                and node.get(name) is not None]
-            if declared is None and node.get('estimate_ref') is not None and store is not None:
-                if recorded_estimate(store, node['estimate_ref'], job_ref) is not None:
-                    identities.append('estimate_ref')
-            for name in identities:
-                reference = node[name]
-                actual = recorded_estimate(store, reference, job_ref) if store is not None else None
-                fields = node.keys() & actual.keys() if actual is not None else ()
-                # A differently declared reference remains the parent's field,
-                # even if its name also appears in the native forecast record.
-                fields = [key for key in fields if properties.get(key, {}).get('format') not in REFERENCE_FORMATS
-                    or properties[key].get('x-reference-namespace') == reference_namespaces.get(key)]
-                if (actual is None or any(node[key] != actual[key] for key in fields)
-                        or reference_resolver is not None and not reference_resolver(reference, 'job_execution_estimate')):
-                    raise ReportBoundaryError('Execution forecast differs from its recorded estimate',
-                        code='estimate_fact_mismatch')
-            for name, child in node.items():
-                visit(child, properties.get(name) if declared is not None else None)
-        elif isinstance(node, (list, tuple)):
-            for child in node:
-                visit(child, declared.get('items') if declared is not None else None)
-    visit(value, schema)

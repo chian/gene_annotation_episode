@@ -1,6 +1,6 @@
 """Immutable A106 assessment sheets and typed delivery on existing custody."""
 from copy import deepcopy
-import json
+from episode_runtime import TableDeclaration
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import REF, ContractError, obj
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_assay_grading_storage import LiteratureAssayGradingRepository
@@ -14,6 +14,8 @@ VERSION = "literature_intervention_grading_record_v1"
 NAMESPACE = "literature_intervention_grading_cells"
 REQUESTED = "requested_intervention_grading_components"
 SCOPE = EVALUATION_SCOPE
+OPERATIONS = TableDeclaration(name="literature_intervention_grading_operations", columns=("sheet_ref",),
+    key=("sheet_ref",), record_refs=("sheet_ref",))
 OPERATION_DESCRIPTION = (
     "Assess one intervention_response experiment using authenticated source or reader operands. "
     "Retain the actual experimental design, stable experiment identity, assertion and alternative. "
@@ -62,8 +64,7 @@ class LiteratureInterventionRepository(LiteratureAssayGradingRepository):
     provider = PROVIDER
     record_version = VERSION
     requested = REQUESTED
-    operations_table = "literature_intervention_grading_operations"
-    received_table = "literature_intervention_grading_received"
+    operations = OPERATIONS
     population_schema = staticmethod(intervention_population_schema)
     read_inputs = staticmethod(read_intervention_inputs)
     input_schema = staticmethod(intervention_grading_input_schema)
@@ -73,11 +74,8 @@ class LiteratureInterventionRepository(LiteratureAssayGradingRepository):
     cells_schema = staticmethod(intervention_cells_schema)
 
     def current_assessments(self):
-        if not self._installed(self.operations_table):
-            return []
         heads, superseded = {}, set()
-        for row in self.store.db.execute(f"SELECT outcome FROM {self.operations_table} WHERE run_id=?", (self.run_id,)):
-            sheet_ref = json.loads(row["outcome"])["result"]["sheet_ref"]
+        for sheet_ref in dict.fromkeys(row["sheet_ref"] for row in self.store.table(self.operations).select()):
             saved = self.read(sheet_ref)
             assessment = saved["selection"]["experiment_assessment"]
             heads[sheet_ref] = deepcopy(assessment)
@@ -88,6 +86,11 @@ class LiteratureInterventionRepository(LiteratureAssayGradingRepository):
         if len(keys) != len(set(keys)):
             raise ContractError("intervention_conflicting_assessment_heads")
         return result
+
+    def published(self, sheet_ref):
+        """Each saved assessment sheet is a row of this Episode's OPERATIONS table: its current assessments are
+        read from them (``current_assessments``)."""
+        self.store.table(self.operations).put({"sheet_ref": sheet_ref})
 
     def before_publish(self, context, arguments):
         assessment = arguments["experiment_assessment"]
@@ -100,7 +103,7 @@ class LiteratureInterventionRepository(LiteratureAssayGradingRepository):
             if (row["experiment_ref"], row["assessment_key"]) == key), None)
         if (None if head is None else head["sheet_ref"]) != previous:
             detail = {}
-            if head is not None and head["sheet_ref"] in context.received_record_refs:
+            if head is not None and self.store.holds(head["sheet_ref"]):
                 self._record(context, head["sheet_ref"])
                 detail = {"experiment_ref": key[0], "assessment_key": key[1],
                     "requested_predecessor": previous, "latest_sheet_ref": head["sheet_ref"]}

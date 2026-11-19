@@ -76,8 +76,6 @@ class A107ToolRegistry(ComponentNativeHPCMixin, A107GenomicToolRegistry):
         from gene_annotation_episode.episodic_workflow.episode_support.jobs.sequence_and_context_sources.genomic_detection_hpc import normalize
         self.a107_detection_bindings = normalize(a107_detection_bindings)
         super().__init__(*args, a107_genomic_work_directory=a107_work_directory, **kwargs)
-        self.store.db.execute('CREATE TABLE IF NOT EXISTS a107_operations '
-            '(operation_key TEXT PRIMARY KEY,request TEXT NOT NULL,result TEXT NOT NULL)')
 
     def as_record(self):
         return {**super().as_record(), 'a107_tools': {'version': VERSION,
@@ -148,12 +146,6 @@ class A107ToolRegistry(ComponentNativeHPCMixin, A107GenomicToolRegistry):
             require(self.store.validate_scope(scope) == plain(context.scope), 'a107_original_action_scope_required')
             known = set(context.received_record_refs if permitted_record_refs is None else permitted_record_refs)
             require(known <= set(context.received_record_refs), 'a107_explicit_received_inputs_required')
-            signature = canonical({'run_id': context.run_id, 'episode_id': context.episode_id,
-                'operation': name, 'arguments': args, 'scope': plain(context.scope), 'version': VERSION})
-            saved = self.store.db.execute('SELECT * FROM a107_operations WHERE operation_key=?', (operation_key,)).fetchone()
-            if saved is not None:
-                require(saved['request'] == signature, 'a107_operation_identity_conflict')
-                return json.loads(saved['result'])
             with self.store.transaction():
                 reference = request(self.store, name, deepcopy(args), context=context, known=known)
                 generated, _ = refresh(self.store, context, known | {reference})
@@ -164,8 +156,6 @@ class A107ToolRegistry(ComponentNativeHPCMixin, A107GenomicToolRegistry):
                         'derived_record_refs': [ref for ref in generated
                             if self.store.get(ref).get('provider') != QUALIFICATION_PROVIDER],
                         'native_execution_requested': False, 'scientific_credit': None}}
-                self.store.db.execute('INSERT INTO a107_operations VALUES(?,?,?)',
-                    (operation_key, signature, canonical(result)))
             return result
         except (ValueError, KeyError, TypeError) as error:
             return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None,

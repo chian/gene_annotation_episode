@@ -1,7 +1,8 @@
 """The runner's behaviours that need an episode driven by a plan: services, the decision context and the service
 reads it records, side effects and their resumption, abandoned attempts, child slots, a slot that commissions its
 own kind, selected return fields, a closing value written by a tool unit, the three yield controllers (nothing
-else ends an Episode), credit that reads records and is returned as the system's credit, and settings."""
+else ends an Episode), credit that reads records and is returned as the system's credit, a closed run and a cut
+run whose credit counts held records resumed from the recorded initial credit, and settings."""
 import asyncio
 import json
 
@@ -11,19 +12,36 @@ from episode_runtime import BindingRegistry, CustodyError, JournalError, link, r
 from method_loop import FormError
 
 from .fact_collection.fact_extraction.episode import FactExtraction
-from .probe_world import (CONTINUATION, EXTRACTION, SETTINGS, again, child, collaborators, outcomes, probe_path,
-                          registry, run, tool, world)  # noqa: F401 - ``world`` is the fixture
+from .probe.episode import Probe
+from .probe_world import (CONTINUATION, EXTRACTION, SETTINGS, again, child, collaborators, journal_rows, outcomes,
+                          probe_path, registry, run, tool, world)  # noqa: F401 - ``world`` is the fixture
+
+# Credit that is an inventory of the Episode's custody: the number of cells of sheet ``s`` it holds.
+HELD_CELLS = {'rule': 'cells', 'sheet': 's'}
+
+
+def writes(world, *cells):
+    """A plan step: one unit that writes ``cells`` (``[cell, value]`` each) of the sheet whose held cells are the
+    credit."""
+    return tool('sheet', sheet='s', cells=[list(cell) for cell in cells], source_ref=world['subject'])
+
+
+def credit_before_any_unit(linked):
+    """What ``credit`` of the entry Episode's summary before any unit says of the records the Episode holds now."""
+    return Probe.credit({'credit': HELD_CELLS, 'steps': 0, 'outcomes': []}, linked.episode.records)
 
 
 def test_a_tool_reaches_only_the_services_its_episode_declared_and_each_is_built_once(world):
     result = run(world, 'services', [tool('bump'), tool('bump')])
     assert [outcome['outcome'] for outcome in outcomes(world, 'services')] == [
-        {'count': 1, 'secret_hidden': True, 'service_names': ['counter', 'switch']},
-        {'count': 2, 'secret_hidden': True, 'service_names': ['counter', 'switch']}]
-    assert world['built'] == ['counter']      # built once, on first use; 'switch' was not used and 'secret' not declared
+        {'count': 1, 'secret_hidden': True, 'service_names': ['counter', 'switch', 'work_cache']},
+        {'count': 2, 'secret_hidden': True, 'service_names': ['counter', 'switch', 'work_cache']}]
+    # Built once, on first use; 'switch' and 'work_cache' were not used and 'secret' is not declared.
+    assert world['built'] == ['counter']
     assert result['result'].as_record()['n'] == 2
     journal = world['journal']
-    assert journal.services('services') == {'probe': ['counter', 'switch'], 'fact_collection/fact_extraction': []}
+    assert journal.services('services') == {'probe': ['counter', 'switch', 'work_cache'],
+                                            'fact_collection/fact_extraction': []}
     assert journal.service_builds('services') == [{'name': 'counter', 'path': probe_path('services'), 'unit': 0}]
     again(world, 'services')                  # a closed run replays its units: no service is built or recorded again
     assert len(journal.service_builds('services')) == 1
@@ -40,7 +58,7 @@ def test_decide_sees_its_settings_services_clock_and_identity_and_a_resume_sees_
     world['switch'].fail = False
     first = outcomes(world, 'context')[1]['outcome']
     seen = first['decide']
-    assert seen['settings'] == settings and seen['services'] == ['counter', 'switch']
+    assert seen['settings'] == settings and seen['services'] == ['counter', 'switch', 'work_cache']
     assert seen['run_id'] == 'context' and seen['binding_path'] == 'probe' and seen['key'] == 'context'
     assert seen['episode_id'] == first['tool']['episode_id'] and first['tool']['settings'] == settings
     clock = seen['clock']
@@ -197,6 +215,82 @@ def test_a_controller_stop_ends_the_episode_and_a_resume_of_the_stopped_run_repl
     resumed = again(world, 'stopped', continuation=stop)
     assert resumed['record'].ended_by == 'yield_stop'
     assert resumed['result'].as_record() == first['result'].as_record()
+
+
+@pytest.mark.parametrize('controller, cost', [({'kind': 'accumulation'}, 0.5), ({'kind': 'bounded', 'maximum': 3}, 0.0),
+                                              ({'kind': 'completion', 'target': 3}, 0.0)])
+def test_a_closed_run_whose_credit_counts_held_records_is_resumed_from_its_recorded_initial_credit(world, controller,
+                                                                                                    cost):
+    """Credit is the number of cells of a sheet the Episode holds: an inventory of its custody. Three units write
+    one cell each. Under the accumulating controller the units after them earn nothing until the estimator stops
+    the Episode; under the other two the third cell reaches the declared limit. A resume of the closed run builds
+    the Episode with every cell already held, so ``credit`` of its summary before any unit now says 3. The
+    controller is built from the credit recorded when the Episode was first entered (0): it observes the recorded
+    units again and stops where it stopped. No unit runs, no model is asked and nothing is recorded."""
+    run_id = 'held_' + controller['kind']
+    settings = {**CONTINUATION, 'probe': {'cost': cost, 'parameters': SETTINGS['parameters']}}
+    plan = [writes(world, ['a1', 1]), writes(world, ['a2', 2]), writes(world, ['a3', 3])]
+    first = run(world, run_id, plan, continuation=settings, credit=HELD_CELLS, controller=controller)
+    journal, path, record = world['journal'], probe_path(run_id), first['record']
+    units = record.units_consumed
+    assert record.ended_by == 'yield_stop' and (units > 3 if controller['kind'] == 'accumulation' else units == 3)
+    assert [value['credit'] for _, value, _, _ in journal.units(run_id, path)] == [1.0, 2.0, 3.0] + [3.0] * (units - 3)
+    assert journal.episodes(run_id)[0]['initial_credit'] == 0.0
+    recorded = journal_rows(world)
+    relinked = resume(registry(), run_id=run_id, journal=journal, collaborators=collaborators(world, settings))
+    assert credit_before_any_unit(relinked) == 3.0              # the Episode holds the three cells before the replay
+    resumed = asyncio.run(relinked.run())
+    assert resumed['result'].as_record() == first['result'].as_record()
+    assert resumed['record'].units_consumed == units
+    state = resumed['record'].controller_state
+    assert (state.initial_credit, state.current_credit, state.stop) == (0.0, 3.0, True)
+    assert state.history == record.controller_state.history == (1.0, 1.0, 1.0) + (0.0,) * (units - 3)
+    assert [(unit.controller_step.credit, unit.controller_step.marginal_credit, unit.controller_step.stop)
+            for unit in resumed['record'].unit_records] == [
+        (step['credit'], step['marginal_credit'], step['stop']) for step in journal.controller_steps(run_id, path)]
+    assert journal_rows(world) == recorded                      # no unit, no attempt, no model call, no receipt
+    assert journal.model_calls(run_id, path) == [] and list(world['calls'].glob('call-*')) == []
+    assert again(world, run_id, continuation=settings)['result'].as_record() == first['result'].as_record()
+
+
+def test_a_cut_run_whose_credit_counts_held_records_goes_on_mid_way_from_its_recorded_initial_credit(world):
+    """The same credit, toward a target of four cells. The run is cut in its third unit, after two units wrote
+    three cells, so the resumed Episode holds three cells when its controller is built. Built from the recorded
+    initial credit (0), the controller has after the replay the history of the run that was cut, the run goes on
+    from there, and it ends as the same plan ends when nothing cuts it."""
+    log = world['tmp'] / 'side_effects.log'
+    plan = [writes(world, ['a1', 1]), writes(world, ['a2', 2], ['a3', 3]), tool('effect', log=str(log)),
+            writes(world, ['a4', 4])]
+    message = {'credit': HELD_CELLS, 'controller': {'kind': 'completion', 'target': 4}}
+    world['switch'].fail = True
+    with pytest.raises(RuntimeError, match='interrupted after the side effect'):
+        run(world, 'held_cut', plan, **message)
+    world['switch'].fail = False
+    journal, path = world['journal'], probe_path('held_cut')
+    assert [value['credit'] for _, value, _, _ in journal.units('held_cut', path)] == [1.0, 3.0]
+    assert journal.episodes('held_cut')[0]['initial_credit'] == 0.0
+    relinked = resume(registry(), run_id='held_cut', journal=journal, collaborators=collaborators(world))
+    assert credit_before_any_unit(relinked) == 3.0              # the Episode holds three cells before the replay
+    resumed = asyncio.run(relinked.run())
+    state = resumed['record'].controller_state
+    assert (state.initial_credit, state.history, state.current_credit) == (0.0, (1.0, 2.0, 0.0, 1.0), 4.0)
+    assert [(step['credit'], step['marginal_credit'], step['stop'])
+            for step in journal.controller_steps('held_cut', path)] == [
+        (1.0, 1.0, False), (3.0, 2.0, False), (3.0, 0.0, False), (4.0, 1.0, True)]
+    assert [journal.times_begun('held_cut', path, unit) for unit in range(4)] == [1, 1, 2, 1]
+    done = resumed['result'].as_record()
+    assert (done['credit'], done['n']) == (4.0, 4)
+    assert journal.episodes('held_cut')[0]['completion'] == {'ended_by': 'yield_stop', 'units': 4, 'credit': 4.0}
+    # The same plan, not cut: the same controller history, credits and end.
+    whole = run(world, 'held_whole', plan, **message)
+    uncut = whole['record'].controller_state
+    assert (uncut.initial_credit, uncut.history, uncut.current_credit) == (
+        state.initial_credit, state.history, state.current_credit)
+    assert (whole['result'].as_record()['credit'], whole['record'].units_consumed) == (4.0, 4)
+    # The run that was cut and finished is closed: resumed again, it replays to the same end and records nothing.
+    recorded = journal_rows(world)
+    assert again(world, 'held_cut')['result'].as_record() == done
+    assert journal_rows(world) == recorded and journal.model_calls('held_cut', path) == []
 
 
 def test_different_settings_or_services_on_resume_raise_instead_of_changing_the_run(world):

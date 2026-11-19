@@ -77,10 +77,15 @@ def _json(store, reference):
     return _decode(store.get_artifact(reference))
 
 
-def _file(store, reference):
+def _identity(store, reference):
     row = _descriptor(store, reference)
-    return {"path": str(store.path / "artifacts" / row["sha256"][:2] / row["sha256"]),
-            **{k: row[k] for k in ("sha256", "size_bytes")}}
+    return {k: row[k] for k in ("sha256", "size_bytes")}
+
+
+def _file(scratch, store, reference):
+    staged = scratch.path / "inputs" / reference
+    path = staged if staged.exists() else scratch.copy_artifact(reference, "inputs/" + reference)
+    return {"path": str(path), **_identity(store, reference)}
 
 
 def validate_utility_prepared(prepared):
@@ -190,9 +195,9 @@ def validate_prepared_utility_result(store, prepared):
     plan = receipt["plan"]
     if plan["capture"] != capture or plan["context"] != original:
         _error("prepared_worker_context_conflict")
-    if not _same_file_identity(plan["bundle_file"], _file(store, prepared["bundle_artifact_ref"])):
+    if not _same_file_identity(plan["bundle_file"], _identity(store, prepared["bundle_artifact_ref"])):
         _error("prepared_worker_bundle_identity_conflict")
-    expected = [{"occurrence_id": row["occurrence_id"], **_file(store, row["artifact_ref"])} for row in original["occurrences"]]
+    expected = [{"occurrence_id": row["occurrence_id"], **_identity(store, row["artifact_ref"])} for row in original["occurrences"]]
     if [{k: v for k, v in row.items() if k != "path"} for row in plan["files"]] != [
             {k: v for k, v in row.items() if k != "path"} for row in expected]:
         _error("prepared_worker_file_identity_conflict")
@@ -301,10 +306,11 @@ def prepare_native_blast_utility_result(store, *, capture, directory, policy):
     directory, saved = _begin(directory, "native-blast-utility-preparation", intent, "prepared.json")
     if saved is not None:
         return validate_prepared_utility_result(store, saved)
-    plan = {"version": _worker_plan_version(context["operation"]), "task": "parse_original", "directory": str(directory), "capture": capture,
-        "context": context, "bundle_file": _file(store, capture["bundle_artifact_ref"]),
-        "files": [{"occurrence_id": row["occurrence_id"], **_file(store, row["artifact_ref"])} for row in context["occurrences"]]}
-    receipt, reference = _execute_worker(store, directory, plan, policy)
+    with store.scratch("native_blast_utility_preparation") as scratch:
+        plan = {"version": _worker_plan_version(context["operation"]), "task": "parse_original", "directory": str(directory), "capture": capture,
+            "context": context, "bundle_file": _file(scratch, store, capture["bundle_artifact_ref"]),
+            "files": [{"occurrence_id": row["occurrence_id"], **_file(scratch, store, row["artifact_ref"])} for row in context["occurrences"]]}
+        receipt, reference = _execute_worker(store, directory, plan, policy)
     prepared = {"version": PREPARED_VERSION, "source_ref": capture["source_ref"], "bundle_artifact_ref": capture["bundle_artifact_ref"],
         "source_grading_artifact_ref": None, **{k: context[k] for k in ("operation", "native_outcome", "occurrences")},
         "failures": receipt["failures"], "worker_completed": _completed(receipt),
@@ -370,12 +376,13 @@ def publish_selected_utility_result(store, *, source_ref, prepared, selector, di
     if saved is not None:
         return validate_utility_publication(store, source_ref=source_ref, prepared=prepared, selector=selector, publication=saved)
     vdb = _vdb(prepared["operation"])
-    plan = {"version": _worker_plan_version(prepared["operation"]), "task": "project_saved", "directory": str(directory), "source_ref": source_ref,
-        "context": _projection_context(prepared, stable), "selector": selector, "saved_data": _saved_descriptors(store, prepared),
-        "files": {role: _file(store, prepared[key]) if prepared[key] is not None else None for role, key in PAYLOAD_REFS.items()}}
-    if vdb:
-        plan["context_authentication"] = _projection_authentication(store, prepared, stable)
-    receipt, reference = _execute_worker(store, directory, plan, policy)
+    with store.scratch("native_blast_utility_projection") as scratch:
+        plan = {"version": _worker_plan_version(prepared["operation"]), "task": "project_saved", "directory": str(directory), "source_ref": source_ref,
+            "context": _projection_context(prepared, stable), "selector": selector, "saved_data": _saved_descriptors(store, prepared),
+            "files": {role: _file(scratch, store, prepared[key]) if prepared[key] is not None else None for role, key in PAYLOAD_REFS.items()}}
+        if vdb:
+            plan["context_authentication"] = _projection_authentication(store, prepared, stable)
+        receipt, reference = _execute_worker(store, directory, plan, policy)
     if not _completed(receipt) or "projection" not in receipt["outputs"]:
         _immutable(directory / "failure.json", {"intent": intent, "code": "selected_projection_worker_failed", "worker_receipt_artifact_ref": reference})
         _error("selected_projection_worker_failed")
@@ -432,7 +439,7 @@ def validate_utility_publication(store, *, source_ref, prepared, selector, publi
                 or receipt["manifest"]["context_authentication"] != proof):
             _error("publication_vdb_context_authentication_conflict")
     for role, key in PAYLOAD_REFS.items():
-        expected = None if prepared[key] is None else _file(store, prepared[key])
+        expected = None if prepared[key] is None else _identity(store, prepared[key])
         if not _same_file_identity(plan["files"][role], expected):
             _error("publication_saved_input_conflict")
     if not _completed(receipt) or receipt["outputs"]["projection"]["artifact_ref"] != envelope["selected_projection_artifact_ref"]:

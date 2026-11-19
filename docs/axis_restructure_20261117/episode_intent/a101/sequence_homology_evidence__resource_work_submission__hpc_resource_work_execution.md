@@ -315,3 +315,89 @@ blocks at the end of seven files; resume, replay and checkpoint handling (`compl
 recorder replace; receipt recording (`receipts.receive`, `receipts.known`); and the old role names. The
 `annotation_axis_credit` branches and the `reads.map` and `bvbrc_minhash_result_selector_v2` feedback branches in
 `task.py` come with the copied loop and do not concern a resource episode's own tools.
+
+## Carried over
+
+Source: `runs/carry_over/functions/a101__sequence_homology_evidence__resource_work_submission__hpc_resource_work_execution.tsv`. New files are under `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence/resource_work_submission/hpc_resource_work_execution/`. Nothing was added to `episode_support/`; "library candidate" marks a private helper in the episode file.
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| binding_record.py | OperationalBindingRecord | machinery | the binding's own record (`as_record`) is deleted (README 3, `binding_record.py`) |
+| binding_record.py | OperationalBindingRecord.as_record | machinery | the binding's own `as_record()` is deleted |
+| configuration.py | OperationalConfiguration | machinery | construction over explicit resource adapters (home wiring); the adapter is now the service `resource_adapter`, run values are `ctx.settings` |
+| configuration.py | OperationalConfiguration.__init__ | machinery | adapter registration and the adapter-interface check (`explicit_resource_adapter_required`, `duplicate_resource_id`) belong to the service `resource_adapter` (BLOCKED-ON-JOB-SERVICE); `record_selection` binding is gone |
+| credit.py | ResourceEpisodeCredit | machinery | mix-in class; `credit_kind` is deleted (README 3d) |
+| credit.py | ResourceEpisodeCredit.credit_kind | machinery | `credit_kind` is deleted (README 3d) |
+| credit.py | ResourceEpisodeCredit.credit_view | episode function | credit.py `credit` (one per distinct usable handoff; the adapter's `bound_role_credit` is replaced by what the tools returned) |
+| decision_inputs.py | OperationalDecisionInputs | episode function | task.py `decide` (class dissolved) |
+| decision_inputs.py | OperationalDecisionInputs.decision_inputs | episode function | task.py `decide` (capabilities, tools, estimates, launch-instruction library, tool knowledge, requested_action_history from `summary['calls']`); child options, pending work, waiting support, native event targets, execution expectations, visual evidence are machinery or actions not offered |
+| decision_inputs.py | _bind_original_task_runtime_providers | machinery | old runner machinery: provider rebinding block (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| decision_state.py | OperationalDecisionState | episode function | messages/internal_summary.py `internal_summary` and task.py `decide` (class dissolved) |
+| decision_state.py | OperationalDecisionState.decision_state | episode function | messages/internal_summary.py `internal_summary` (outcomes, handoffs, yield table) and task.py `decide` (goal, credit_binding, time_accounting, feedback); journal, receipts, delivery and controller-binding reads are machinery |
+| decision_state.py | _bind_original_task_runtime_providers | machinery | old runner machinery: provider rebinding block (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| episode.py | ResourceEpisode | episode function | episode.py `HpcResourceWorkExecution(EpisodeBinding)` |
+| episode.py | ResourceEpisode.child_roles | episode function | task.py `CHILD_SLOTS = {}` |
+| episode.py | ResourceEpisode.contract_information_profile | machinery | returned a profile only for role `launch`; none for this role (contract-information freezing was the old root, README 5 item 16) |
+| episode.py | ResourceEpisode.permitted_common_actions | episode function | task.py `selection_schema` (tool actions and the `reason` commit; `wait` is machinery, `child` and `redeliver_report` never applied) |
+| episode.py | ResourceEpisode.allowed_children | episode function | task.py `CHILD_SLOTS = {}` |
+| episode.py | ResourceEpisode.context_hook_applies | machinery | old hook dispatch by role; each role is its own episode now |
+| execution_contracts.py | _failure | episode function | task.py `_failure` (library candidate) |
+| execution_contracts.py | _outcome | episode function | task.py `_outcome` (library candidate) |
+| execution_contracts.py | _availability_failure | episode function | unplaced: used only by the `resource.inspect` handler, which this episode's catalog does not list (the launch parent's tool) |
+| execution_operations.py | OperationalOperations | episode function | task.py tools and helpers (class dissolved) |
+| execution_operations.py | OperationalOperations.capabilities | episode function | task.py `declared_capabilities` (decide) and `resource_capabilities` (tool); reads through the service `resource_adapter` (BLOCKED-ON-JOB-SERVICE) |
+| execution_operations.py | OperationalOperations._adapter | machinery | lookup of the adapter by resource id: the service `resource_adapter` is the one adapter of the run (BLOCKED-ON-JOB-SERVICE) |
+| execution_operations.py | OperationalOperations.catalog | episode function | task.py `catalog` (`resource.capabilities` plus `read_adapter(ctx, 'catalog', assignment)`) |
+| execution_operations.py | OperationalOperations.execute | episode function | task.py `resource_capabilities` and `adapter_tool` (`execute_adapter`); the `resource.inspect` and `resource.check_handoff` handlers are unplaced (not in this catalog) |
+| from_parent.py | OperationalAssignment | episode function | messages/read_from_parent.py (class dissolved) |
+| from_parent.py | OperationalAssignment.assignment_schema | episode function | messages/read_from_parent.py `ASSIGNMENT_FORM` |
+| from_parent.py | OperationalAssignment._permitted | episode function | task.py `_permitted` (library candidate) |
+| from_parent.py | OperationalAssignment._require_launch_child_instruction_pins | episode function | unplaced: compares with the launch parent's own assignment, which the child cannot read (README 5 item 14) |
+| from_parent.py | OperationalAssignment.prepare_assignment | episode function | messages/read_from_parent.py `read_from_parent` (schema, non-null selection, kind hpc) and task.py `selected_capability` (capability and constraints); the parent comparisons and `adapter.prepare_assignment` are unplaced (blocked file) |
+| from_parent.py | OperationalAssignment.initial_references | machinery | returned `[]`: nothing to carry |
+| goal.py | OperationalGoal | episode function | goal.py (class dissolved) |
+| goal.py | OperationalGoal.instructions | episode function | goal.py `GOAL` (the `launch_hpc` sentence and the common tail) and task.py `instructions` |
+| internal_summary.py | OperationalSummary | episode function | messages/internal_summary.py (class dissolved) |
+| internal_summary.py | OperationalSummary.decision_context | episode function | messages/internal_summary.py `internal_summary` (`role`, `assignment`) and task.py `decide` (`resource_capabilities`, `resource_tool_estimates` via the adapter reads) |
+| received_evidence.py | ReceivedOperationalEvidence | machinery | receipts bookkeeping (R3) |
+| received_evidence.py | ReceivedOperationalEvidence.received_form_references | machinery | receipt registration of handoff proofs in received forms (R3); the system's custody replaces it |
+| report_delivery.py | OperationalReportDelivery | episode function | messages/final_to_parent.py (class dissolved) |
+| report_delivery.py | OperationalReportDelivery.finish | episode function | messages/final_to_parent.py `final_to_parent`; saving the form (`runtime_forms`), pending handles and `release` are machinery |
+| report_delivery.py | _bind_original_task_runtime_providers | machinery | old runner machinery: provider rebinding block (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| task.py | OperationalTask | episode function | task.py (class dissolved) |
+| task.py | OperationalTask.instructions | episode function | task.py `instructions` |
+| task.py | OperationalTask.next | machinery | the old decision loop (replay, completions, delivery, model-call journal); replaced by `decide` |
+| task.py | OperationalTask.apply_response | episode function | task.py `action` (schema admission of the selection, `Rejected` with the old action_contract feedback); report_update admission and effect records are machinery; the reads.map feedback does not apply; the reasoning branch is carried: the `reason` answer is admitted (empty commit rejected as `empty_reasoning_commit`) and called as the tool `reason` under the scope of `input_refs` |
+| task.py | OperationalTask.execute | episode function | task.py tools `resource_capabilities`, `adapter_tool`, `reason` (`ctx.store.commit_reasoning`); journal, credit measurement, completions and waits are machinery |
+| task.py | _bind_original_task_runtime_providers | machinery | old runner machinery: provider rebinding block (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| task_decision.py | OperationalTaskDecision | machinery | old runner machinery: the decision-exchange loop (README 3a), replaced by `decide`/`action` |
+| task_decision.py | OperationalTaskDecision.call | machinery | old runner machinery: the decision-exchange loop (README 3a), replaced by `decide`/`action` |
+| task_decision.py | OperationalTaskDecision.conversation_key | machinery | old runner machinery: the decision-exchange loop (README 3a), replaced by `decide`/`action` |
+| task_decision.py | OperationalTaskDecision.interpretation_context | machinery | old runner machinery: the decision-exchange loop (README 3a), replaced by `decide`/`action` |
+| task_decision.py | OperationalTaskDecision.exchange_schema | machinery | old runner machinery: the decision-exchange loop (README 3a), replaced by `decide`/`action` |
+| task_decision.py | OperationalTaskDecision.exchange_response | machinery | old runner machinery: the decision-exchange loop (README 3a), replaced by `decide`/`action` |
+| task_decision.py | OperationalTaskDecision.validate_contract_exchange_request | machinery | old runner machinery: the decision-exchange loop (README 3a), replaced by `decide`/`action` |
+| task_decision.py | OperationalTaskDecision.validate_contract_exchange_history | machinery | old runner machinery: the decision-exchange loop (README 3a), replaced by `decide`/`action` |
+| task_decision.py | OperationalTaskDecision.exchange_decision | machinery | old runner machinery: the decision-exchange loop (README 3a), replaced by `decide`/`action` |
+| task_decision.py | _bind_original_task_runtime_providers | machinery | old runner machinery: provider rebinding block (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| task_instructions.py | instructions | episode function | task.py `instructions` |
+| task_state.py | OperationalTaskState | machinery | old runner machinery: checkpoint/restore of task state |
+| task_state.py | OperationalTaskState.__init__ | machinery | old runner machinery: checkpoint/restore and effect records of task state |
+| task_state.py | OperationalTaskState.bind_execution_context | machinery | old runner machinery: checkpoint/restore and effect records of task state |
+| task_state.py | OperationalTaskState.record_execution_failure | machinery | old runner machinery: checkpoint/restore and effect records of task state |
+| task_state.py | OperationalTaskState.restore_checkpoint | machinery | old runner machinery: checkpoint/restore and effect records of task state |
+| task_state.py | OperationalTaskState.restore | machinery | old runner machinery: checkpoint/restore and effect records of task state |
+| task_state.py | OperationalTaskState.record_effect | machinery | old runner machinery: checkpoint/restore and effect records of task state |
+| task_state.py | OperationalTaskState.checkpoint | machinery | old runner machinery: checkpoint/restore and effect records of task state |
+| task_state.py | _bind_original_task_runtime_providers | machinery | old runner machinery: provider rebinding block (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| to_parent.py | OperationalReport | episode function | messages/final_to_parent.py (class dissolved) |
+| to_parent.py | OperationalReport.fact_sources | episode function | messages/final_to_parent.py `RETURN_FORM` (`execution_handoff`, `execution_handoffs`; adapter fact sources are unplaced, blocked file) |
+| to_parent.py | OperationalReport.facts | episode function | messages/final_to_parent.py `final_to_parent` over the summary (de-duplication and ordering in messages/internal_summary.py) |
+| to_parent.py | OperationalReport.resolve | machinery | reference resolution of the report; the system's custody (`returned_record_not_held`) replaces it |
+| to_parent.py | OperationalReport.validate_report | episode function | messages/final_to_parent.py `validate_report` (the handoff fact check); the adapters' `validate_report` is not carried (blocked file) |
+| waiting.py | OperationalTaskWaiting | machinery | wait/suspension machinery |
+| waiting.py | OperationalTaskWaiting._execute_selected_wait | machinery | the `wait` action (`perform_selected_wait`) is machinery that is not carried |
+| waiting.py | OperationalTaskWaiting.suspension_changed | machinery | suspension reporting is machinery |
+| waiting.py | _bind_original_task_runtime_providers | machinery | old runner machinery: provider rebinding block (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| yield_estimator.py | OriginalContinuation | episode function | yield_estimator.py (class dissolved) |
+| yield_estimator.py | OriginalContinuation.original_continuation_controller | episode function | yield_estimator.py `yield_controller` (accumulation controller); `BindingContext` construction and the scientific-child branch are machinery |

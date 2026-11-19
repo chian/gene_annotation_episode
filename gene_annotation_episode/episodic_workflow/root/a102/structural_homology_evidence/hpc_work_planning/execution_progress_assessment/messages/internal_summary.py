@@ -1,51 +1,78 @@
-"""This monitor's internal summary (carried from ``internal_summary.py``, ``received_progress.py`` and
-``progress_records.py``).
+"""Where the episode stands, carried from the old ``internal_summary.py`` (``MonitorSummary.decision_context``),
+``decision_state.py`` (the fields that come from the view), ``received_progress.py`` (``ReceivedProgress``,
+``OwnProgress``) and the goal summary of ``goal.py`` (``MonitorGoal.planning_context``): a pure function of the
+view.
 
-What counts as received progress: the assignment's known observations, the observations its own recorded
-outcomes delivered and those its admitted dependency monitors delivered, in that order, without repeats. A
-snapshot may be read only once received. The summary block the model sees at each decision names the assignment,
-the target description, its exposed direct dependencies, the received progress and what those mean.
-"""
-from __future__ import annotations
+Received progress is the assignment's ``known_progress_refs``, the progress refs of this monitor's own action
+outcomes (in outcome order) and the progress its child monitors returned. The snapshots are those the observe
+tool's outcomes and the children's returns carry; a baseline ref has no snapshot here and raises when the credit
+needs it (``credit.py``). Fields of the old decision state that came from the old runner (the pending work, the
+report lifecycle and deliveries, the recorded-journal views) are not carried."""
+from yield_control import YieldState
 
-from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import (
-    ContractError, plain)
+from ..credit import information_projection
 
-from ..goal import planning_context
+_MEANING = ('Exposed direct relationships and already delivered observations. Empty measurements/log windows do '
+            'not assert absence or a stall.')
+_UNRESOLVED = 'Which exposed progress information would improve the original requested report?'
+_DEFINITION = ('Actual received information under the monitoring projector; repeated identities and timestamps '
+               'alone earn no credit.')
 
-INFORMATION_MEANING = ('Exposed direct relationships and already delivered observations. Empty measurements/log '
-                       'windows do not assert absence or a stall.')
 
-
-def unique(values):
-    """Order-preserving de-duplication."""
+def _unique(values):
     return list(dict.fromkeys(values))
 
 
-def received_progress(assignment, outcomes):
-    """Received progress refs: the assignment's known refs, then every recorded outcome's ``progress_refs``.
-
-    Old ``ReceivedProgress._received`` joined ``known_progress_refs``, ``_own_progress_refs`` (its own outcomes,
-    paged) and ``services.received_progress_refs`` (refs admitted from children). A child unit's recorded outcome
-    carries the progress refs its admitted return delivered, so both are recorded outcomes here.
-    """
-    return unique([*assignment['known_progress_refs'],
-                   *(reference for outcome in outcomes for reference in outcome.get('progress_refs', ()))])
-
-
-def received_snapshot(progress, scope, received, reference):
-    """A progress observation this monitor received; any other raises (old ``ReceivedProgress._snapshot``)."""
-    if reference not in received:
-        raise ContractError('monitor_progress_not_received')
-    return progress.read_progress(reference, plain(scope))
-
-
-def decision_context(progress, request, assignment, scope, received, yield_settings):
-    """The monitor's own block of the decision context (old ``MonitorSummary.decision_context``)."""
-    return {'monitor_assignment': assignment,
-            'monitor_target_description': plain(progress.describe_target(assignment['target_handle'], plain(scope))),
-            'monitor_direct_dependencies': plain(progress.direct_dependencies(assignment['target_handle'],
-                                                                              plain(scope))),
-            'monitor_received_progress_refs': list(received),
-            'monitor_information_meaning': INFORMATION_MEANING,
-            'monitor_goal': planning_context(request, assignment, yield_settings)}
+def internal_summary(view):
+    parent = view.parent_input
+    snapshots, own = {}, []
+    last_outcome = None
+    for outcome in view.outcomes:
+        last_outcome = outcome
+        if outcome['kind'] == 'tool':
+            result = outcome['outcome']
+            own.extend(result['progress_refs'])
+            if 'snapshot' in result and result['status'] != 'invalid':
+                snapshots[result['snapshot']['progress_ref']] = result['snapshot']
+        else:
+            report = outcome['report']
+            own.extend(report['progress_refs'])
+            snapshots.update(report['progress_snapshots'])
+    own = _unique(own)
+    received = _unique([*parent['known_progress_refs'], *own])
+    # The latest delivered observation of the assigned target, in receipt order.
+    target = [snapshots[ref] for ref in own if ref in snapshots
+              and snapshots[ref]['target_handle'] == parent['target_handle']]
+    latest = target[-1] if target else None
+    permitted = set(parent['permitted_committed_record_types'])
+    committed = _unique(record for ref in own if ref in snapshots
+                        for record in snapshots[ref]['committed_record_refs']
+                        if view.records.get(record)['record_type'] in permitted)
+    controller = view.controller_state.as_record() if isinstance(view.controller_state, YieldState) else None
+    summary = {**parent,
+               'received_progress_refs': own,
+               'progress_snapshots': snapshots,
+               'latest_target_observation': latest,
+               'committed_record_refs': committed,
+               'dependencies': [] if latest is None else latest['dependencies'],
+               'last_local_outcome': last_outcome,
+               'outcomes': list(view.outcomes),
+               'controller': controller,
+               'current_credit': None if controller is None else controller['current_credit']}
+    projection = information_projection(summary)
+    return {**summary,
+            'monitoring_information_credit': projection['monitoring_information_credit'],
+            'monitoring_information_binding': projection['monitoring_information_binding'],
+            'newly_informative_received_snapshot_count': projection['newly_informative_received_snapshot_count'],
+            'monitor_assignment': {key: parent[key] for key in ('target_handle', 'requested_fields',
+                                                                'known_progress_refs',
+                                                                'permitted_committed_record_types')},
+            'monitor_direct_dependencies': [] if latest is None else [
+                row for row in latest['dependencies'] if row['kind'] == 'job'],
+            'monitor_received_progress_refs': received,
+            'monitor_information_meaning': _MEANING,
+            'monitor_goal': {'objective': view.goal.objective,
+                             'target_handle': parent['target_handle'],
+                             'requested_fields': parent['requested_fields'],
+                             'unresolved_question': _UNRESOLVED,
+                             'progress_definition': _DEFINITION}}

@@ -210,16 +210,8 @@ def _validate_context_copy(scoped,original,args,component):
 
 class LiteratureConcentrationWindowRepository(LiteratureRateRepository):
     provider,record_version,components=PROVIDER,VERSION,COMPONENTS
-    operations_table='literature_concentration_window_operations'
-    received_table='literature_concentration_window_received'
     binding_fields=()
 
-    def __init__(self,store,run_id):
-        if type(run_id) is not str or not run_id:raise ValueError('explicit_literature_run_required')
-        self.store,self.run_id=store,run_id
-
-    def _installed(self,table):return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",(table,)).fetchone() is not None
-    def _install(self):super().__init__(self.store,self.run_id)
 
     def _native_provenance(self,scope,reference):
         source=super()._native_provenance(scope,reference)
@@ -240,22 +232,12 @@ class LiteratureConcentrationWindowRepository(LiteratureRateRepository):
         return result
 
     def populate(self,context,arguments,operation_key):
-        if context.run_id!=self.run_id:raise ContractError('literature_run_mismatch')
-        if type(operation_key) is not str or not operation_key:raise ContractError('operation_key_required')
         args=plain(arguments);validate_schema(args,CONCENTRATION_WINDOW_REQUEST_SCHEMA_V1)
         components=self._components(context.assignment.get(REQUESTED,[]))
         if components!=args['selection']['requested_cells']:_fail('assignment_request_roster_mismatch')
-        request=dict(run_id=self.run_id,episode_id=context.episode_id,role=context.role,operation_key=operation_key,
-            scope=plain(context.scope),assignment=plain(context.assignment),received_record_refs=list(context.received_record_refs),
+        request=dict(role=context.role,operation_key=operation_key,
+            scope=plain(context.scope),assignment=plain(context.assignment),
             arguments=args,components=components)
-        signature=canonical(request)
-        old=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id,context.episode_id,operation_key)).fetchone() if self._installed(self.operations_table) else None
-        if old:
-            if old['signature']!=signature:raise ContractError('operation_key_reused_for_different_work')
-            outcome=json.loads(old['outcome']);self.read(outcome['result']['sheet_ref'])
-            for ref in _direct(args):self._native_source(context,ref)
-            return outcome
         for ref in _direct(args):self._native_source(context,ref)
         def read_source(ref,representation):
             source=self._native_source(context,ref)
@@ -273,7 +255,6 @@ class LiteratureConcentrationWindowRepository(LiteratureRateRepository):
         direct=_direct(args);parents=self._ancestors(context.scope,direct);source=self._native_source(context,args['selection']['source_ref'])
         for value,key in ((extraction,'extraction'),(inputs,'inputs'),(sheet,'sheet')):validate_schema(value,ORIGINAL_SCHEMAS[key])
         with self.store.transaction():
-            self._install()
             refs={k:self.store.artifact(canonical(v),'application/json') for k,v in
                 (('extraction',extraction),('inputs',inputs),('sheet',sheet),('projection',dict(rows=templates)))}
             saved=dict(version=VERSION,input_source_ref=source['id'],input_artifact_ref=source['artifact_ref'],
@@ -282,12 +263,12 @@ class LiteratureConcentrationWindowRepository(LiteratureRateRepository):
             artifact=self.store.artifact(canonical(saved),'application/json');request_ref=self.store.artifact(canonical(request),'application/json')
             record=dict(provider=PROVIDER,accession=None,uri=None,artifact_ref=artifact,text_ref=artifact,request_ref=request_ref,
                 version=VERSION,retrieved_at=None,parent_source_refs=parents)
-            ref=identity('source',dict(origin='tool',record=record));exists=self.store.db.execute('SELECT 1 FROM records WHERE id=?',(ref,)).fetchone()
+            ref=identity('source',dict(origin='tool',record=record));exists = self.store.holds(ref)
             self.store.put('source',record,origin='tool',scope=plain(context.scope));rows=[dict(sheet_ref=ref,**deepcopy(r)) for r in templates]
             validate_schema(rows,ORIGINAL_SCHEMAS['rows'])
-            outcome=dict(status='completed',operation_ref=identity('operation',dict(run_id=self.run_id,episode_id=context.episode_id,key=operation_key)),
+            outcome=dict(status='completed',operation_ref=identity('operation',dict(key=operation_key)),
                 record_refs=[ref],changed_record_refs=[] if exists else [ref],result=dict(sheet_ref=ref,view=VIEW,record_version=VERSION,cells=rows),feedback=None)
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',(self.run_id,context.episode_id,operation_key,signature,canonical(outcome)))
+
         return outcome
 
     def _json(self,ref):
@@ -309,12 +290,9 @@ class LiteratureConcentrationWindowRepository(LiteratureRateRepository):
         require(source.get('record_type')=='source' and source.get('origin')=='tool' and source.get('provider')==PROVIDER
             and source.get('version')==VERSION and identity('source',dict(origin='tool',record=record))==ref)
         request,saved=self._json(source['request_ref']),self._json(source['artifact_ref'])
-        require(set(request)=={'run_id','episode_id','role','operation_key','scope','assignment','received_record_refs','arguments','components'} and request['run_id']==self.run_id)
+        require(set(request)=={'role','operation_key','scope','assignment','arguments','components'})
         require(set(saved)=={'version','input_source_ref','input_artifact_ref','direct_input_source_refs','input_source_refs','source_metadata','original_schemas','artifacts'})
-        require(saved['version']==VERSION and source['text_ref']==source['artifact_ref'] and self._installed(self.operations_table))
-        operation=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id,request['episode_id'],request['operation_key'])).fetchone()
-        require(operation is not None and operation['signature']==canonical(request))
+        require(saved['version']==VERSION and source['text_ref']==source['artifact_ref'])
         schemas=saved['original_schemas'];require(canonical(schemas)==canonical(ORIGINAL_SCHEMAS))
         require(set(saved['artifacts'])=={'extraction','inputs','sheet','projection'})
         extraction,inputs,sheet,projection=(self._json(saved['artifacts'][k]) for k in ('extraction','inputs','sheet','projection'))
@@ -329,7 +307,6 @@ class LiteratureConcentrationWindowRepository(LiteratureRateRepository):
         require(sheet['scientific_context']==inputs['scientific_context'] and sheet['source_artifacts']==inputs['source_artifacts'] and sheet['covariance_context']==inputs['covariance_context'])
         require([c['component'] for c in sheet['cells']]==request['components'])
         require(saved['input_source_ref']==args['selection']['source_ref'] and saved['direct_input_source_refs']==_direct(args))
-        require(all(r in request['received_record_refs'] for r in saved['direct_input_source_refs']))
         require(saved['input_source_refs']==source['parent_source_refs']==self._ancestors(request['scope'],saved['direct_input_source_refs']))
         require(set(saved['source_metadata'])==set(saved['input_source_refs']))
         for r,metadata in saved['source_metadata'].items():require(canonical(metadata)==canonical(self._native_provenance(request['scope'],r)))
@@ -355,28 +332,20 @@ class LiteratureConcentrationWindowRepository(LiteratureRateRepository):
                     and 0<=loc['start']<loc['end']<=sizes[loc['artifact_ref']])
             require(row['limits']==[v for v in sheet['limits'] if v!='selected_integration_unimplemented'])
         rows=[dict(sheet_ref=ref,**deepcopy(r)) for r in templates];validate_schema(rows,schemas['rows'])
-        outcome=json.loads(operation['outcome'])
-        require(set(outcome)=={'status','operation_ref','record_refs','changed_record_refs','result','feedback'} and outcome['changed_record_refs'] in ([],[ref])
-            and outcome['status']=='completed' and outcome['feedback'] is None and outcome['record_refs']==[ref]
-            and outcome['operation_ref']==identity('operation',dict(run_id=self.run_id,episode_id=request['episode_id'],key=request['operation_key']))
-            and canonical(outcome['result'])==canonical(dict(sheet_ref=ref,view=VIEW,record_version=VERSION,cells=rows)))
         return dict(**saved,extraction=extraction,calculation_inputs=inputs,sheet=sheet,row_templates=templates)
 
-
-    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+    def project_cells(self, sheet_refs, *, components=None):
         selected = None if components is None else self._components(components)
         result = []
         for ref in dict.fromkeys(sheet_refs):
-            if ref not in permitted_record_refs:
-                raise ContractError('literature_sheet_not_received')
+
             saved = self.read(ref)
             by_name = {r['component']: r for r in saved['row_templates']}
             result.extend({'sheet_ref': ref, **deepcopy(by_name[name])} for name in
                 (list(by_name) if selected is None else selected) if name in by_name)
         return result
 
-
-    def validate_returned_values(self, cells, *, permitted_record_refs):
+    def validate_returned_values(self, cells):
         validate_schema(cells, CONCENTRATION_WINDOW_CELLS_SCHEMA_V1)
         seen = set()
         for row in cells:
@@ -384,47 +353,26 @@ class LiteratureConcentrationWindowRepository(LiteratureRateRepository):
             if key in seen:
                 raise ContractError('duplicate_concentration_window_return_cell')
             seen.add(key)
-            expected = self.project_cells([row['sheet_ref']], permitted_record_refs=permitted_record_refs, components=[row['component']])
+            expected = self.project_cells([row['sheet_ref']], components=[row['component']])
             if canonical(expected) != canonical([row]):
                 raise ContractError('concentration_window_return_differs_from_saved_cells')
 
 
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
-
-    def receive_cells(self, context, cells, operation_key):
-        if cells:
-            with self.store.transaction():
-                self._install(); return super().receive_cells(context, cells, operation_key)
-
-
     def selected_sheet_refs(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        if not self._installed(self.operations_table):
-            return []
-        refs = list(dict.fromkeys(json.loads(r['outcome'])['result']['sheet_ref'] for r in self.store.db.execute(
-            f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id))))
+        refs = self.held_sheet_refs()
         for ref in refs:
             self.read(ref)
         return refs
 
-
     def available_sheet_refs(self, context):
-        return list(dict.fromkeys([*(r for r in self.selected_sheet_refs(context) if r in context.received_record_refs),
-            *(r['sheet_ref'] for r in self.received_cells(context) if r['sheet_ref'] in context.received_record_refs)]))
+        return self.selected_sheet_refs(context)
 
 
     def has_work(self, context):
         return bool(self.available_sheet_refs(context))
 
-
     def validate_empty_return_family(self, context):
         return None
-
 
     @staticmethod
     def cell_record_refs(cells):
@@ -441,51 +389,4 @@ class LiteratureConcentrationWindowRepository(LiteratureRateRepository):
                     visit(child)
         visit(cells)
         return list(dict.fromkeys(refs))
-
-
-    def receipt_bindings(self):
-        result = {}
-        if not self._installed(self.operations_table):
-            return result
-        for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=?', (self.run_id,)):
-            ref = json.loads(row['outcome'])['result']['sheet_ref']; source = self.store.get(ref)
-            result[ref] = {'run_id': self.run_id, 'episode_id': self._sheet_owner(ref),
-                'artifacts': [source['artifact_ref'], source['request_ref'], *self._json(source['artifact_ref'])['artifacts'].values()]}
-        return result
-
-
-    def _private_binding(self, ref, artifact=None):
-        bindings = self.receipt_bindings()
-        if ref in bindings:
-            return bindings[ref]
-        for binding in bindings.values():
-            if artifact in binding['artifacts']:
-                return binding
-        source = self.store.get(ref) if ref is not None else {}
-        if source.get('provider') == PROVIDER:
-            raise ContractError('concentration_window_receipt_binding_invalid')
-        return None
-
-
-    def authorize_source_access(self, context, ref, representation, tool_name):
-        source = self.store.get(ref)
-        if source.get('record_type') != 'source':
-            return
-        artifact = (source.get('text_ref') or source['artifact_ref']) if representation == 'text' and tool_name == 'source.read' else (
-            source['artifact_ref'] if representation == 'original' else source.get(representation+'_ref'))
-        binding = self._private_binding(ref, artifact)
-        if binding and (binding['run_id'], binding['episode_id']) != (context.run_id, context.episode_id):
-            raise ContractError('concentration_window_receipt_private')
-
-
-    def authorize_record_access(self, context, record):
-        if record.get('record_type') in {'source', 'artifact'}:
-            return
-        for anchor in (record, record.get('anchor'), record.get('visual_anchor')):
-            if not isinstance(anchor, dict):
-                continue
-            binding = self._private_binding(anchor.get('source_ref'), anchor.get('artifact_ref'))
-            if binding and (binding['run_id'], binding['episode_id']) != (context.run_id, context.episode_id):
-                raise ContractError('concentration_window_receipt_private')
-
 

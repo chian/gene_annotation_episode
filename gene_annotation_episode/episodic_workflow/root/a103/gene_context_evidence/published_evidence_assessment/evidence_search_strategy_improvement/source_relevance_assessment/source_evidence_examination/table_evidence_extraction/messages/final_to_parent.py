@@ -1,54 +1,60 @@
-"""The return. The old episode returned the parent's requested form filled from the model's report update and had
-no facts of its own (``fact_sources`` and ``facts`` were empty). The new return declares what it can return:
-``credit`` (the system hands it in ``completion``) and ``finding``, the typed A103 finding of the selected table or
-sheet that the model wrote with the ``report`` tool: the actual source claim, the actual source subject and its
-qualification (including unresolved target correspondence), reading by reading (new field: the old form was
-written by the parent).
+"""The return. Always returned: the Episode's credit (the system hands it in ``completion``; it is the productivity
+signal and nothing restates it) and the finding: controlled values only (``INVESTIGATION_FINDING_FEATURES_a103.md``
+section B, option D-a; A103 has no literature grading sheet). The model's ``report`` names, from fixed vocabularies,
+whether the source subject corresponds to the target and which kind of gene-context evidence the readings report,
+and the exact readings (source, rows of a sheet or bytes of a table) it rests on; code reads the finding from that report:
+the two choices, the number of readings, the row or byte extent they cover (so the next selection does not repeat it) and
+the readings' sources. No quotation and no model-written text is returned. Nothing is selectable."""
+from method_loop import ChoiceField, Field, RecordForm
 
-The old ``validate_report`` body is ``validate_report`` below: it is this episode's check of its own report."""
-from method_loop import Field, RecordForm
+CORRESPONDENCE = ('established', 'unresolved', 'not_applicable')
+EVIDENCE_TYPES = ('conserved_neighborhood', 'gene_fusion', 'phylogenetic_cooccurrence', 'context_channel_association',
+                  'context_contrast', 'single_locus_organization', 'none_applicable')
+KINDS = ('sheet_rows', 'table_bytes')
 
 READING_FORM = RecordForm({
-    'source_ref': Field('text', 'The source the reading is in; a source this episode holds'),
-    'location': Field('text', 'Where in the source the reading is: the sheet, matching rows, header row, row numbers '
-                      'and cell addresses, or the representation and byte window of an article XML table'),
-    'statement': Field('text', 'What this reading itself says for the assigned question, in its own terms'),
-    'qualification': Field('text', "The reading's own qualifications: headers, conditions, footnotes, and the "
-                           'neighboring-gene identity, order, orientation, spacing, fusion and cooccurrence it states'),
+    'source_ref': Field('text', 'The held source the reading is from'),
+    'kind': ChoiceField('text', 'What offset and limit count: matching sheet rows, or the bytes of an article XML '
+                        'table', KINDS),
+    'offset': Field('integer', 'The first row (sheet_rows) or byte (table_bytes) of the reading'),
+    'limit': Field('integer', 'The number of rows or bytes of the reading'),
+})
+# What the model writes with the report tool (validated by this form; it stays inside the Episode).
+REPORT_FORM = RecordForm({
+    'target_correspondence': ChoiceField('text', 'Whether the source subject corresponds to the target',
+                                         CORRESPONDENCE),
+    'evidence_type': ChoiceField('text', 'The kind of gene-context evidence the readings report', EVIDENCE_TYPES),
+    'readings': Field('list', 'The separate source-bound readings the report rests on', items=READING_FORM),
 })
 FINDING_FORM = RecordForm({
-    'source_claim': Field('text', 'What the examined table or sheet actually claims, in the source scope'),
-    'source_subject': Field('text', 'The actual locus, genome, construct or entity the claim is about'),
-    'qualification': Field('text', 'The conditions, limits and alternative explanations the source attaches'),
-    'target_correspondence': Field('text', 'Whether the source subject corresponds to the target: established, '
-                                   'unresolved or not applicable, and why'),
-    'readings': Field('list', 'One entry per reading the finding rests on', items=READING_FORM),
+    'reported': Field('boolean', 'Whether the episode reported; the other values are empty when not'),
+    'target_correspondence': ChoiceField('text', 'Whether the source subject corresponds to the target',
+                                         CORRESPONDENCE),
+    'evidence_type': ChoiceField('text', 'The kind of gene-context evidence reported', EVIDENCE_TYPES),
+    'reading_count': Field('integer', 'The number of readings the report rests on'),
+    'covered_offset': Field('integer', 'The first row or byte the readings cover'),
+    'covered_limit': Field('integer', 'The extent from covered_offset to the end of the last reading'),
+    'source_refs': Field('record_refs', "The readings' sources"),
 })
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
-    'finding': Field('record', 'The actual source claim, subject and qualification of the examined table or sheet',
-                     form=FINDING_FORM),
+    'finding': Field('record', 'The controlled values of the reported readings', form=FINDING_FORM),
 })
 
 
-def validate_report(summary, finding):
-    """The old ``validate_report`` body, over the summary: the assignment still agrees with itself, the report is a
-    valid form of its own, and every reference in it is one this episode holds."""
-    page = summary['assignment']['page']
-    selection = summary['assignment']['selection']
-    if selection['source_ref'] != page['source_ref']:
-        raise ValueError('literature_reading_source_mismatch')
-    if 'representation' in selection and selection['representation'] != page['representation']:
-        raise ValueError('literature_reading_representation_mismatch')
-    FINDING_FORM.admit(finding, 'finding')
-    for reference, held in summary['report_sources_held'].items():
-        if not held:
-            raise ValueError('literature_reference_unavailable:' + reference)
+def finding_of(report):
+    """The finding code reads from the latest report (``None`` before one)."""
+    if report is None:
+        return {'reported': False, 'target_correspondence': 'unresolved', 'evidence_type': 'none_applicable',
+                'reading_count': 0, 'covered_offset': 0, 'covered_limit': 0, 'source_refs': []}
+    readings = report['readings']
+    start = min((row['offset'] for row in readings), default=0)
+    end = max((row['offset'] + row['limit'] for row in readings), default=0)
+    return {'reported': True, 'target_correspondence': report['target_correspondence'],
+            'evidence_type': report['evidence_type'], 'reading_count': len(readings), 'covered_offset': start,
+            'covered_limit': end - start,
+            'source_refs': list(dict.fromkeys(row['source_ref'] for row in readings))}
 
 
 def final_to_parent(summary, completion, selection):
-    finding = summary['report']
-    if finding is None:
-        raise ValueError('a103_table_evidence_finding_not_reported')
-    validate_report(summary, finding)
-    return {'credit': completion['credit'], 'finding': finding}
+    return {'credit': completion['credit'], 'finding': summary['finding']}

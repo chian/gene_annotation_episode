@@ -36,8 +36,6 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = 'literature_perturbation_record_v1'
-    operations_table = 'literature_perturbation_operations'
-    received_table = 'literature_perturbation_received'
     binding_fields = tuple(BINDINGS)
 
     def _provenance(self, context, reference):
@@ -49,8 +47,7 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
         return source
 
     def _source(self, context, reference):
-        if reference not in context.received_record_refs:
-            raise ContractError('literature_source_not_received')
+
         source = self._provenance(context, reference)
         page = context.assignment if context.role == 'literature_page' else context.assignment.get('page')
         if page:
@@ -69,29 +66,8 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
         return source
 
     def populate(self, context, arguments, operation_key):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        if not isinstance(operation_key, str) or not operation_key:
-            raise ContractError('operation_key_required')
         args = plain(arguments)
         validate_schema(args, perturbation_population_schema())
-        signature = canonical({'arguments': args, 'scope': plain(context.scope)})
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} '
-            'WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, context.episode_id, operation_key)).fetchone()
-        if old is not None:
-            if old['signature'] != signature:
-                raise ContractError('operation_key_reused_for_different_work')
-            outcome = json.loads(old['outcome'])
-            saved = self.read(outcome['result']['sheet_ref'])
-            for ref in saved['direct_input_source_refs']:
-                self._source(context, ref)
-            for ref in saved['input_source_refs']:
-                self._provenance(context, ref)
-            if 'experiment_assessment' in args:
-                from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.evolutionary_history_evidence.literature_perturbation_assessments import authorize_assessment
-                authorize_assessment(self, context, args['experiment_assessment'])
-            return outcome
         assessment = args.get('experiment_assessment')
         if assessment is not None:
             from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.evolutionary_history_evidence.literature_perturbation_assessments import authorize_assessment
@@ -137,9 +113,9 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
             created = []
             def publish(kind, record):
                 candidate = identity(kind, {'origin': 'tool', 'record': record})
-                existed = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (candidate,)).fetchone()
+                existed = self.store.holds(candidate)
                 row = self.store.put(kind, record, origin='tool', scope=plain(context.scope))
-                if existed is None:
+                if not existed:
                     created.append(row['id'])
                 return row['id']
             bindings = {}
@@ -180,24 +156,23 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
                 if covariance_bindings is not None:
                     payload['covariance_support_bindings'] = covariance_bindings
             artifact = self.store.artifact(canonical(payload), 'application/json')
-            request = self.store.artifact(canonical({'run_id': self.run_id, 'episode_id': context.episode_id,
-                'operation_key': operation_key, 'arguments': args}), 'application/json')
+            request = self.store.artifact(canonical({'operation_key': operation_key, 'arguments': args}), 'application/json')
             sheet_ref = publish('source', {'provider': PROVIDER, 'accession': None, 'uri': None,
                 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request,
                 'version': record_version, 'retrieved_at': None, 'parent_source_refs': parents})
-            outcome = {'status': 'completed', 'operation_ref': identity('operation', {
-                'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}),
+            outcome = {'status': 'completed', 'operation_ref': identity('operation', {'key': operation_key}),
                 'record_refs': list(dict.fromkeys([sheet_ref, *parents, *(ref for ref in bindings.values() if ref), *covariance_refs])),
                 'changed_record_refs': created, 'result': {'sheet_ref': sheet_ref,
                     'cells': sheet['cells'], 'assay_interpretation': extraction['literals'],
                     **_metadata(extraction)}, 'feedback': None}
             if assessment is not None:
                 outcome['result']['experiment_assessment'] = deepcopy(assessment)
+                from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.evolutionary_history_evidence.literature_perturbation_assessments import record_assessment
+                record_assessment(self.store, sheet_ref, assessment)
                 previous = assessment['revises_sheet_ref']
                 if previous is not None:
                     outcome['record_refs'].append(previous)
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+
         return outcome
 
     def read(self, sheet_ref):
@@ -211,7 +186,7 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
                 or self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
             raise ContractError('literature_perturbation_sheet_source_mismatch')
         from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.evolutionary_history_evidence.literature_perturbation_assessments import validate_saved_assessment
-        validate_saved_assessment(self, saved, request)
+        validate_saved_assessment(self, saved, request, sheet_ref)
         return saved
 
     def current_assessments(self):
@@ -225,24 +200,15 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
     def summary_projection(self):
         if not hasattr(self, '_summary_projection'):
             from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_perturbation_summary_storage import LiteraturePerturbationSummaryProjection
-            self._summary_projection = LiteraturePerturbationSummaryProjection(self.store, self.run_id)
+            self._summary_projection = LiteraturePerturbationSummaryProjection(self.store)
         return self._summary_projection
 
     def validate_empty_return_family(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        versions = set()
-        for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=?',
-                (self.run_id, context.episode_id)):
-            outcome = json.loads(row['outcome'])
-            if outcome.get('status') == 'completed':
-                source = self.store.get(outcome['result']['sheet_ref'])
-                if source.get('provider') == PROVIDER:
-                    versions.add(source.get('version'))
+        versions = {self.store.get(ref).get('version') for ref in self.held_sheet_refs()}
         if self.record_version not in versions and versions & {'literature_perturbation_record_v1', 'literature_perturbation_record_v2'}:
             raise ContractError('literature_perturbation_projection_version_mismatch')
 
-    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+    def project_cells(self, sheet_refs, *, components=None):
         components = self.components if components is None else components
         if (not isinstance(components, (list, tuple))
                 or any(not isinstance(name, str) or name not in self.components for name in components)
@@ -250,8 +216,6 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
             raise ContractError('literature_perturbation_component_selection_invalid')
         rows = []
         for ref in dict.fromkeys(sheet_refs):
-            if ref not in permitted_record_refs:
-                raise ContractError('literature_sheet_not_received')
             saved = self.read(ref)
             if saved['version'] != self.record_version:
                 raise ContractError('literature_perturbation_projection_version_mismatch')

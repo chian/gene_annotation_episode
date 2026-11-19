@@ -10,6 +10,7 @@ from copy import deepcopy
 import json
 import math
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.publication import received_measurement, binding_body
 from gene_annotation_episode.episodic_workflow.episode_support.grading.gene_context_evidence.scoring import VERSION, PROFILE, digest, require
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.domain import canonical
@@ -20,11 +21,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.gene_cont
 PROVIDER = 'native.a103.tool_attachment'
 
 
-def install(store):
-    store.db.execute('''CREATE TABLE IF NOT EXISTS a103_attachments (
-        source_ref TEXT PRIMARY KEY, measurement_ref TEXT NOT NULL,
-        target_ref TEXT NOT NULL, policy TEXT NOT NULL, body TEXT NOT NULL,
-        grading_artifact_ref TEXT NOT NULL)''')
+ATTACHMENTS = TableDeclaration(name='a103_attachments',
+    columns=('source_ref', 'measurement_ref', 'target_ref', 'policy', 'body', 'grading_artifact_ref'),
+    key=('source_ref',), record_refs=('source_ref', 'measurement_ref', 'target_ref', 'grading_artifact_ref'))
 
 
 def _sequence(store, ref):
@@ -164,22 +163,19 @@ def _publish(store, measurement_ref, body, refs):
         ref = store.put('source',{'provider':PROVIDER,'accession':digest(body),'uri':None,
             'artifact_ref':artifact,'text_ref':artifact,'request_ref':None,'version':VERSION,
             'retrieved_at':None,'operand_refs':operands,'auxiliary_artifact_refs':[grade]},origin='tool')['id']
-        store.db.execute('INSERT OR IGNORE INTO a103_attachments VALUES(?,?,?,?,?,?)',
-            (ref,measurement_ref,body['target_ref'],body['policy'],canonical(body),grade))
+        store.table(ATTACHMENTS).put({'source_ref':ref,'measurement_ref':measurement_ref,'target_ref':body['target_ref'],
+            'policy':body['policy'],'body':body,'grading_artifact_ref':grade})
     return ref
 
 
 def received_attachments(store, known):
-    exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='a103_attachments'").fetchone()
-    if not exists:
-        return []
     known = set(known)
     latest = {}
-    for row in store.db.execute('SELECT rowid,* FROM a103_attachments ORDER BY rowid'):
+    for row in store.table(ATTACHMENTS).select():
         if row['source_ref'] not in known:
             continue
         source = store.get(row['source_ref'])
-        body = json.loads(row['body'])
+        body = row['body']
         entries = source_tool_grading_entries(store,row['source_ref'])
         require(source['origin']=='tool' and source.get('provider')==PROVIDER and source['version']==VERSION
             and json.loads(store.get_artifact(source['artifact_ref']))==body and len(entries)==1
@@ -371,7 +367,6 @@ def _contrast(store,body,known):
 
 def refresh(store, known, scope):
     """Receipt/publication callback; credit reads never execute this function."""
-    install(store)
     known = set(known)
     generated, needs = [],[]
     contrasts = []

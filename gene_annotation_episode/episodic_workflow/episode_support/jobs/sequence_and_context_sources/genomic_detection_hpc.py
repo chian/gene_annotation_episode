@@ -119,7 +119,7 @@ def freeze(registry, args, *, context, known, invocation):
     selection = {key: deepcopy(args[key]) for key in (
         'component_ref', 'database_source_ref', 'genomic_records', 'binding_refs')}
     native = {'version': VERSION, 'axis': 'A107', 'operation': TOOL, 'scientific_profile': PROFILE,
-        'run_id': context.run_id, 'scope': plain(context.scope), 'target_ref': next(iter(roots)),
+        'scope': plain(context.scope), 'target_ref': next(iter(roots)),
         'target_regions': footprint, 'component_ref': args['component_ref'],
         'source_ref': args['database_source_ref'], 'resource_id': args['resource_id'],
         'binding': deepcopy(candidates[0]), 'selection': selection,
@@ -131,7 +131,7 @@ def freeze(registry, args, *, context, known, invocation):
     raw_request = (canonical(native)+'\n').encode()
     require(len(raw_request) <= 2*MAX_INPUT_BYTES, 'a107_detector_frozen_request_exceeds_transfer_capacity')
     body = {'version': VERSION, 'axis': 'A107', 'operation': TOOL, 'scientific_profile': PROFILE,
-        'run_id': context.run_id, 'scope': plain(context.scope), 'target_ref': next(iter(roots)),
+        'scope': plain(context.scope), 'target_ref': next(iter(roots)),
         'target_regions': footprint, 'source_ref': args['database_source_ref'], 'input_file': primary['file'],
         'request': native, 'request_sha256': sha(raw_request),
         'logical_work_sha256': sha(canonical({'selection': selection, 'query_sha256': sha(query.encode()),

@@ -51,7 +51,6 @@ class LiteratureTransportRepository(LiteratureRateRepository):
     components = COMPONENTS
     record_version = "literature_transport_response_record_v2"
     readable_record_versions = (record_version,)
-    operations_table = "literature_transport_operations"
     received_table = "literature_transport_received"
     binding_fields = tuple(BINDINGS)
 
@@ -123,20 +122,6 @@ class LiteratureTransportRepository(LiteratureRateRepository):
             raise ContractError("operation_key_required")
         args = plain(arguments)
         validate_schema(args, transport_response_population_schema())
-        signature = canonical({"arguments": args, "scope": plain(context.scope)})
-        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
-            "WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, context.episode_id, operation_key)).fetchone()
-        if old is not None:
-            if old["signature"] != signature:
-                raise ContractError("operation_key_reused_for_different_work")
-            outcome = json.loads(old["outcome"])
-            saved = self.read(outcome["result"]["sheet_ref"])
-            for reference in saved["direct_input_source_refs"]:
-                self._source(context, reference)
-            for reference in saved["input_source_refs"]:
-                self._provenance(context, reference)
-            return outcome
 
         source = self._source(context, args["source_ref"])
         km_payload = None
@@ -191,9 +176,9 @@ class LiteratureTransportRepository(LiteratureRateRepository):
 
             def publish(kind, record):
                 candidate = identity(kind, {"origin": "tool", "record": record})
-                existed = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (candidate,)).fetchone()
+                new = not self.store.holds(candidate)
                 published = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
-                if existed is None:
+                if new:
                     created.append(published["id"])
                 return published["id"]
 
@@ -227,8 +212,6 @@ class LiteratureTransportRepository(LiteratureRateRepository):
                     "reported_km_uncertainty_kind": extraction["km_quantity"]["reported_uncertainty_kind"]
                         if extraction["km_quantity"] else "not_supplied",
                     "evaluated_scope": "interpreted_source_kinetic_response"}, "feedback": None}
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     def read(self, sheet_ref):

@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import sys
 
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_and_context_sources.genomic_tables import BINDINGS, RESULTS
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.publication import publish, received_measurement, binding_body
 from gene_annotation_episode.episodic_workflow.episode_support.grading.gene_context_evidence.scoring import VERSION, MAX_FILE_BYTES, MAX_PANEL, MAX_FLANK_BP, binding_summary, digest, require
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.gene_context_evidence.acquisition import AcquisitionError
@@ -78,11 +79,6 @@ class A103ToolRegistry(ToolRegistry):
         # Caller-supplied material provenance is not an argument a model can set.
         require(isinstance(target_genomic_sources,dict),'a103_target_genomic_sources_required')
         self.a103_target_genomic_sources = deepcopy(target_genomic_sources)
-        for sql in (
-            'CREATE TABLE IF NOT EXISTS a103_bindings (source_ref TEXT PRIMARY KEY,body TEXT NOT NULL)',
-            'CREATE TABLE IF NOT EXISTS a103_operations (operation_key TEXT PRIMARY KEY,request TEXT NOT NULL,result TEXT NOT NULL)',
-        ):
-            self.store.db.execute(sql)
 
     def as_record(self):
         return {**super().as_record(),'a103_tools':{'version':VERSION,'directory':str(self.a103_directory),
@@ -96,11 +92,6 @@ class A103ToolRegistry(ToolRegistry):
         extra['reference.neighborhood']['input_schema'] = {'oneOf':[
             extra['reference.neighborhood']['input_schema'],legacy['input_schema']]}
         return {**entries,**extra}
-
-    def received_attributions(self,context,known):
-        require(context.role=='gene_context_evidence','a103_received_attributions_head_invocation_required')
-        from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.attachments import refresh
-        return refresh(self.store,set(known),plain(context.scope))
 
     def _received(self,reference,known):
         require(reference in known,'a103_input_not_received')
@@ -116,16 +107,15 @@ class A103ToolRegistry(ToolRegistry):
         regions = [[s['start'],s['end']] for s in footprint]
         return target,regions
 
-    def _file(self,reference,format,known,invocation):
-        self._received(reference,known)
-        context,reader,*_ = invocation
-        delivery,path = reader(context,reference,'source',file_format=format)
-        require(delivery.get('failure') is None and path is not None,'a103_genomic_file_not_received')
+    def _file(self,reference,known,scratch,name):
+        """The bytes of a held source, copied into the unit's scratch directory for the native worker."""
+        source = self._received(reference,known)
+        path = scratch.copy_artifact(source['artifact_ref'],name)
         require(path.stat().st_size<=MAX_FILE_BYTES,'a103_genomic_file_size_limit')
-        return path,delivery['input']['file']
+        return path
 
-    def work_directory(self,context,name,args,scope):
-        return self.a103_directory/digest({'run_id':context.run_id,'episode_id':context.episode_id,
+    def work_directory(self,operation_key,name,args,scope):
+        return self.a103_directory/digest({'operation_key':operation_key,
             'name':name,'args':args,'scope':plain(scope),'version':VERSION,'policy':self.a103_policy.to_dict()})
 
     def _job(self,request,directory,*,cancel_event=None):
@@ -164,36 +154,32 @@ class A103ToolRegistry(ToolRegistry):
         if name not in NAMES or name=='reference.neighborhood' and 'binding_ref' not in args:
             return await super().execute_async(name,args,scope=scope,operation_key=operation_key,
                 permitted_record_refs=permitted_record_refs)
+        with self.store.scratch('a103_inputs') as scratch:
+            return await self._execute_a103(name,args,scope,operation_key,set(permitted_record_refs),scratch)
+
+    async def _execute_a103(self,name,args,scope,operation_key,known,scratch):
+        """One A103 context operation over the records this Episode holds (``known``): the held sources' bytes go to
+        the native worker through the unit's scratch directory; what it measured is published under custody."""
         try:
             validate_schema(args,catalog()[name]['input_schema'])
             scope = self.store.validate_scope(scope)
-            invocation = self._current_invocation.get()
-            require(invocation is not None and invocation[2:]==(name,args,operation_key),
-                'a103_current_action_binding_required')
-            context = invocation[0]
-            known = set(context.received_record_refs if permitted_record_refs is None else permitted_record_refs)
-            require(known<=set(context.received_record_refs),'a103_explicit_received_inputs_required')
-            request = canonical({'run_id':context.run_id,'episode_id':context.episode_id,
-                'name':name,'args':args,'scope':scope,'version':VERSION})
-            prior = self.store.db.execute('SELECT * FROM a103_operations WHERE operation_key=?',(operation_key,)).fetchone()
-            if prior:
-                require(prior['request']==request,'a103_operation_identity_conflict')
-                return json.loads(prior['result'])
-            old = self.store.db.execute('SELECT result FROM a103_operations WHERE request=? LIMIT 1',(request,)).fetchone()
+            # The Episode's own earlier measurement of the same request (a row only this Episode holds).
+            request = canonical({'name':name,'args':args,'scope':scope,'version':VERSION})
+            old = self.store.table(RESULTS).select({"request":request})
             if old:
-                outcome = json.loads(old[0])
+                outcome = json.loads(old[0]["result"])
                 outcome['result']['reused_existing_measurement'] = True
-                self.store.db.execute('INSERT INTO a103_operations VALUES(?,?,?)',(operation_key,request,canonical(outcome)))
                 return outcome
             records,refs = [],[]
             native = None
-            directory = self.work_directory(context,name,args,scope)
+            directory = self.work_directory(operation_key,name,args,scope)
             if name=='context.bind_locus':
                 target,regions = self._target(args['target_ref'],known,scope)
-                path,file = self._file(args['file_source_ref'],'genbank_text' if args['format']=='genbank' else 'gff3_text',known,invocation)
+                path = self._file(args['file_source_ref'],known,scratch,
+                                  'genomic.gb' if args['format']=='genbank' else 'genomic.gff3')
                 sequence_path = None
                 if args['sequence_source_ref'] is not None:
-                    sequence_path,_ = self._file(args['sequence_source_ref'],'fasta_text',known,invocation)
+                    sequence_path = self._file(args['sequence_source_ref'],known,scratch,'sequence.fasta')
                 source = self.store.get(args['file_source_ref'])
                 original_request = json.loads(self.store.get_artifact(source['request_ref'])) if source.get('request_ref') else None
                 if original_request and 'request' in original_request:
@@ -224,7 +210,7 @@ class A103ToolRegistry(ToolRegistry):
                     body['protein_reference_ref'] = protein
                     records.append(protein)
                 binding_ref = publish(self.store,binding_summary(body),[target,args['file_source_ref'],*records])
-                self.store.db.execute('INSERT OR IGNORE INTO a103_bindings VALUES(?,?)',(binding_ref,canonical(body)))
+                self.store.table(BINDINGS).put({"source_ref":binding_ref,"body":body})
                 records.append(binding_ref)
                 result = {'binding_ref':binding_ref,**binding_summary(body)}
             elif name=='reference.neighborhood':
@@ -301,8 +287,8 @@ class A103ToolRegistry(ToolRegistry):
                 from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.gene_context_evidence.homology_search_receipt import search_receipt
                 target,regions = self._target(args['target_ref'],known,scope)
                 metadata,query = search_receipt(self.store,args['snapshot_ref'],args['native_source_ref'],args['component_ref'],known)
-                native_path,_ = self._file(args['native_source_ref'],'hmmer3_text',known,invocation)
-                database_path,_ = self._file(args['database_source_ref'],'fasta_text',known,invocation)
+                native_path = self._file(args['native_source_ref'],known,scratch,'search.hmmer3.txt')
+                database_path = self._file(args['database_source_ref'],known,scratch,'database.fasta')
                 bindings = [binding_body(self.store,r,known) for r in args['binding_refs']]
                 neighborhood = None
                 if args.get('neighborhood_ref'):
@@ -362,7 +348,7 @@ class A103ToolRegistry(ToolRegistry):
             outcome = {'status':'completed','record_refs':list(dict.fromkeys(records)),
                 'changed_record_refs':[],'result':result,'feedback':None}
             if native is not None:outcome['native_execution'] = native
-            self.store.db.execute('INSERT INTO a103_operations VALUES(?,?,?)',(operation_key,request,canonical(outcome)))
+            self.store.table(RESULTS).put({"request":request,"result":canonical(outcome)})
             return outcome
         except AcquisitionError as error:
             return {'status':'unavailable','record_refs':[],'changed_record_refs':[],'result':None,

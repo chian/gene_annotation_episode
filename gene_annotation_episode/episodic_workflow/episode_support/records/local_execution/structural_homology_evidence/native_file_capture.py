@@ -16,7 +16,6 @@ from typing import Literal, TypedDict
 import unicodedata
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.structural_homology_evidence.materials import artifact_file, _verified_artifact_path
 
 
 class NativeFileIdentity(TypedDict):
@@ -131,7 +130,7 @@ def _metadata(store, reference: str) -> dict:
     _require(type(reference) is str and reference.startswith("artifact_")
         and _digest(reference.removeprefix("artifact_")), "invalid_file_identity")
     with _retention_errors():
-        metadata = store._require(reference, {"artifact"})
+        metadata = store.require(reference, {"artifact"})
     _require(type(metadata) is dict and set(metadata) == _METADATA_FIELDS,
         "retained_artifact_mismatch")
     _require(metadata["record_type"] == "artifact" and metadata["id"] == reference
@@ -161,28 +160,17 @@ def _producer_file(directory: PurePosixPath, relative: PurePosixPath):
         yield Path("/proc/self/fd") / str(fd)
 
 
-def retained_native_file(store, identity: NativeFileIdentity) -> Path:
-    """Verify only the retained identity, metadata, complete digest and size.
+def retained_native_file(store, identity: NativeFileIdentity) -> dict:
+    """Verify only the retained identity: the held artifact record, its complete digest and size.
 
-The returned Store path is a verified location, not a lock against subsequent
-external mutation. The caller must keep its retained storage stable while read.
+The bytes are read through the held artifact (``store.open_artifact``) or copied into a scratch
+directory (``scratch.copy_artifact``) by the caller.
 """
     identity = _identity(identity)
     metadata = _metadata(store, identity["artifact_ref"])
     _require(metadata["sha256"] == identity["sha256"]
         and metadata["size"] == identity["size_bytes"], "retained_artifact_mismatch")
-    expected = store.path / "artifacts" / identity["sha256"][:2] / identity["sha256"]
-    with _retention_errors():
-        # Avoid opening an already nonregular or symlinked retained node.
-        initial = expected.lstat()
-        _require(stat.S_ISREG(initial.st_mode), "retained_artifact_unavailable")
-        _require(initial.st_size == identity["size_bytes"], "retained_artifact_mismatch")
-        path = _verified_artifact_path(store, identity["artifact_ref"])
-        _require(isinstance(path, Path) and path == expected, "retained_artifact_mismatch")
-        current = path.lstat()
-        _require(stat.S_ISREG(current.st_mode), "retained_artifact_unavailable")
-        _require(current.st_size == identity["size_bytes"], "retained_artifact_mismatch")
-    return path
+    return metadata
 
 
 def capture_native_file(
@@ -200,7 +188,7 @@ The format and media type are supplied labels, never parser selection rules.
     _require(_label(format) and _label(media_type), "invalid_file_declaration")
     with _producer_file(root, relative) as pinned:
         with _retention_errors():
-            reference = artifact_file(store, pinned, media_type)
+            reference = store.artifact_file(pinned, media_type)
     metadata = _metadata(store, reference)
     identity: NativeFileIdentity = {"artifact_ref": reference, "sha256": metadata["sha256"],
         "size_bytes": metadata["size"], "format": format}

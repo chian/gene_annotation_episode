@@ -6,19 +6,19 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 
 def a108_revision_context(store, context, source_cells):
     """Freeze actual publication order, not model order or a later live view."""
-    known = {row['sheet_ref']: row for row in _rows(store, context)}
+    known = {row['sheet_ref']: row for row in _rows(store)}
     if any((row['sheet_ref'] not in known for row in source_cells)):
         return None
     versions = []
     for cell in source_cells:
         ref = cell['sheet_ref']
         row = known[ref]
-        native = _adapter(store, context.run_id, row['adapter'])
+        native = _adapter(store, row['adapter'])
         source = store.get(ref)
         request = json.loads(store.get_artifact(source['request_ref']))
-        owner = native._sheet_owner(ref)
-        original = store.db.execute(f'SELECT rowid FROM {native.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (context.run_id, owner, request['operation_key'])).fetchone()
-        versions.append({'sheet_ref': ref, 'owner': owner, 'publication_order': original[0]})
+        owner = 'owned' if native.owns(ref) else json.dumps(list(store.receipt(ref)['producer']))
+        original = [entry['sheet_ref'] for entry in store.table(native.operations).select()].index(ref)
+        versions.append({'sheet_ref': ref, 'owner': owner, 'publication_order': original})
     return {'version': VERSION, 'source_versions': versions, 'revision_identity': 'same_owner_original_observation_context_claim_and_domain'}
 
 def aggregate_current_a108(arguments, source_cells, revision_context):

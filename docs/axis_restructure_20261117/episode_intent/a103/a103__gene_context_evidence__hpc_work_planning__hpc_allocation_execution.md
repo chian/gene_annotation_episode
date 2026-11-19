@@ -155,3 +155,140 @@ time limit); `configuration.py`/`yield_estimator.py` require the yield binding f
 | `waiting.py` | 50 | `activity_advice` from the last controller diagnostic (wait/collect) and `hpc.monitor.wait`: schedule the next observation through the monitor controller, wait, observe once; terminal or ready outputs mean collect now. | `BindingContext`: episode_id, run_id; `import`: hpc_monitoring; `table`: runtime_observations |
 | `work_operations.py` | 54 | Tool catalog and dispatch (see "Tools"); every action recorded in the ledger once per operation key. | `BindingContext`: episode_id; `import`: communication, domain, execution_contracts |
 | `yield_estimator.py` | 101 | Continuation (see "Continuation") and `continuation_for_action` evidence. | `BindingContext`: assignment, episode_id×3, role×5, run_id×3, scope; `import`: hpc_monitoring, library, library.hpc_continuation, numerical×2; `table`: runtime_actions×2, runtime_observations; `yield`: HPCContinuationEstimator, YieldController, YieldParameters, estimate_with_context, with_continuation_cost |
+
+## Carried over
+
+Carried over on 19 November 2026 (job: hpc_allocation_execution, a job episode). One row per old function; the first three columns are the function list (`runs/carry_over/functions/a103__gene_context_evidence__hpc_work_planning__hpc_allocation_execution.tsv`). The old files were read with `git -C <disk copy> show 97308b94c:<path>` (the repository directory has no `.git`). The HPC ledger (`HPCLedger`) is called as written (library not carried); the job services (`job_access`, `estimate_table`) and the handoff record kind do not exist, so no unit that reaches them can run yet.
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| allocation_handoff.py | AllocationHandoff | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| allocation_handoff.py | AllocationHandoff._attach_original_handoff | episode function | task.py handoff_body / hpc_handoff (the handoff target read is BLOCKED-ON-JOB-SERVICE: read_target raises; MonitorCronController attach: unplaced) |
+| allocation_handoff.py | AllocationHandoff._work_on_original_allocation | episode function | task.py allocation_work / allocation_tool (hpc_monitor, hpc_results, hpc_allocation_order) and hpc_monitor_wait |
+| allocation_observations.py | AllocationObservations | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| allocation_observations.py | AllocationObservations.targets | episode function | task.py read_target and the job_access calls observe_target / read_file / write_allocation_control (BLOCKED-ON-JOB-SERVICE) |
+| allocation_observations.py | AllocationObservations._target | episode function | task.py allocation_target |
+| allocation_observations.py | AllocationObservations._window | episode function | task.py read_window |
+| allocation_observations.py | AllocationObservations._allocation | episode function | task.py read_allocation |
+| allocation_observations.py | AllocationObservations._observe_original_allocation | episode function | task.py observe_allocation (library candidate); the dispatch is allocation_work |
+| allocation_order.py | AllocationOrder | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| allocation_order.py | AllocationOrder._order_original_units | episode function | task.py order_body / hpc_allocation_order |
+| allocation_results.py | AllocationResults | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| allocation_results.py | AllocationResults._collected_unit_ids | episode function | task.py collected_unit_ids (library candidate) |
+| allocation_results.py | AllocationResults._uncollected_completed_unit_ids | episode function | task.py uncollected_completed_unit_ids (library candidate) |
+| allocation_results.py | AllocationResults._publish | episode function | task.py publish_result (ctx.store.artifact and ctx.store.put; library candidate) |
+| allocation_results.py | AllocationResults._collect_original_results | episode function | task.py collect_original_results / hpc_results (library candidate) |
+| binding_record.py | HPCBindingRecord | machinery | binding_record.py and the binding's own as_record(), deleted (README 3d, 3e) |
+| binding_record.py | HPCBindingRecord.as_record | machinery | binding_record.py and the binding's own as_record(), deleted (README 3d, 3e) |
+| closed_models.py | ClosedModels | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| closed_models.py | ClosedModels.frozen_reference | machinery | validated a closed hpc_model identifier for the old report resolver through EpisodeReturnRecords, runtime_forms and the ledger file; report reference resolution is the system's custody (README 3b D2) |
+| configuration.py | HPCConfiguration | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| configuration.py | HPCConfiguration.__init__ | episode function | ctx.settings of this binding path (directory, resources, monitor_information_unit, acquired_record_unit, shared_execution_memory, tool_knowledge_directory, launch_instructions_directory; documented in task.py); commissions -> the assignment field commission (messages/read_from_parent.py); memory -> the estimate_table service; require_commission_yield -> yield_estimator.py |
+| credit.py | HPCEpisodeCredit | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| credit.py | HPCEpisodeCredit.credit_kind | machinery | credit_kind deleted (README 3d) |
+| credit.py | HPCEpisodeCredit.credit_view | episode function | credit.py credit (reads the ledger credit view the tools return in their outcomes; messages/internal_summary.py carries it) |
+| decision_inputs.py | HPCWorkDecisionInputs | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| decision_inputs.py | HPCWorkDecisionInputs.decision_inputs | episode function | task.py decision_context / decide (launch library, tool knowledge, resource_tool_estimates from the estimate_table service, time accounting, actions); not carried because nothing supplies them: completed_action_reports, requested_action_history, execution_expectations, native_execution_expectations, native_event_targets, waiting_support, child_option_information, pending_work, contract_information_profile |
+| decision_state.py | HPCWorkDecisionState | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| decision_state.py | HPCWorkDecisionState.decision_state | episode function | messages/internal_summary.py internal_summary and task.py decision_context; the old image.view, report-update, report-delivery, pending-work, contract-catalog and journal parts are machinery |
+| episode.py | HPCEpisode | machinery | the old 40-mixin binding class; replaced by episode.py HPCAllocationExecution(EpisodeBinding) |
+| episode.py | HPCEpisode.child_roles | episode function | task.py CHILD_SLOTS (launch, monitor, results) |
+| episode.py | HPCEpisode.allowed_children | machinery | caller-capability filter of the child roles; CHILD_SLOTS names the children |
+| episode.py | HPCEpisode.permitted_common_actions | episode function | task.py action offers tools and children only; the wait action is not carried (hpc_monitor_wait is the wait tool, kept when the commission has monitoring), redeliver_report is not carried |
+| episode.py | HPCEpisode.prepare_child_request | episode function | messages/msg_to_child.py monitor_message (the monitor assignment is passed unchanged) |
+| episode.py | HPCEpisode.receive_child_progress_for_role | episode function | messages/read_from_child.py (slot monitor: the delivered progress observations) |
+| episode.py | create_execution_bindings | machinery | home factory constructing the five descendant bindings with the caller operands; no table or list of bindings is written |
+| forecast_observations.py | ForecastObservations | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| forecast_observations.py | ForecastObservations._freeze | episode function | task.py freeze (library candidate) |
+| forecast_observations.py | ForecastObservations._last_forecast | episode function | task.py last_forecast (library candidate) |
+| forecast_observations.py | ForecastObservations._measure | episode function | task.py measure (library candidate) |
+| forecast_observations.py | ForecastObservations._update_conditional_forecast | episode function | task.py update_conditional_forecast / hpc_monitor (library candidate) |
+| from_child_execution_job_submission.py | LaunchReceiptCustody | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| from_child_execution_job_submission.py | LaunchReceiptCustody.original_launch_handoff | episode function | messages/internal_summary.py summary['launches'] with messages/read_from_child.py (slot launch): the handoff records the Launch child returned are in view.outcomes and held in custody; the SQL over runtime_actions is machinery |
+| from_child_execution_progress_assessment.py | receive_progress | episode function | messages/read_from_child.py read_from_child (slot monitor); the delivery signature and operation-key recording are the system's |
+| from_parent.py | HPCAssignment | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| from_parent.py | HPCAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (owner_episode_id, commission_id, commission_source_ref as record_refs; new fields commission, scope, ledger_credit) |
+| from_parent.py | HPCAssignment.commission_identity | episode function | messages/read_from_parent.py read_from_parent (parent_input['commission_identity']) |
+| from_parent.py | HPCAssignment._commission | episode function | messages/read_from_parent.py read_from_parent: the commission is the assignment field commission; hpc_commission_sources.read has no gene_context copy (unplaced) |
+| from_parent.py | HPCAssignment.prepare_assignment | machinery | the child checking its commission against its parent (owner, identity, scope) is not carried (rule 1); its yield-binding requirement is yield_estimator.py |
+| goal.py | HPCGoal | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| goal.py | HPCGoal.instructions | episode function | goal.py GOAL, UNIT, RESULT and task.py INSTRUCTIONS (the report-form and redelivery sentences are dropped; tool names spelt as form names) |
+| internal_summary.py | HPCSummary | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| internal_summary.py | HPCSummary.decision_context | episode function | task.py hpc_state (the ledger part, returned by every tool), messages/internal_summary.py (the summary) and task.py decision_context (the hpc_* context keys); the runtime_report_attempts delivery query is replaced by summary['launches'] |
+| measured_history.py | MeasuredHistory | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| measured_history.py | MeasuredHistory._history | episode function | task.py history_rows (library candidate) |
+| measured_history.py | MeasuredHistory._shared_history | episode function | task.py shared_history (library candidate; the memory is the estimate_table service, BLOCKED-ON-JOB-SERVICE) |
+| measured_history.py | MeasuredHistory.export_closed | episode function | task.py export_closed (library candidate; estimate_table.record, BLOCKED-ON-JOB-SERVICE) |
+| measured_history.py | MeasuredHistory._refresh_measured_history | episode function | task.py history_refresh_body / hpc_history_refresh |
+| portfolio_candidates.py | PortfolioCandidates | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| portfolio_candidates.py | PortfolioCandidates._propose_portfolio | episode function | task.py candidate_body / hpc_candidate_propose |
+| portfolio_comparison.py | PortfolioComparison | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| portfolio_comparison.py | PortfolioComparison._candidates | episode function | task.py candidates_of (library candidate) |
+| portfolio_comparison.py | PortfolioComparison._features | episode function | task.py candidate_features (library candidate) |
+| portfolio_comparison.py | PortfolioComparison._comparisons | episode function | task.py comparisons (library candidate) |
+| portfolio_comparison.py | PortfolioComparison._candidate | episode function | task.py candidate_of (library candidate) |
+| portfolio_comparison.py | PortfolioComparison._compare_portfolios | episode function | task.py compare_body / hpc_compare |
+| portfolio_planning.py | PortfolioPlanning | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| portfolio_planning.py | PortfolioPlanning._freeze_portfolio_plan | episode function | task.py plan_body / hpc_plan (also stages the Launch child's supplied input: the old LaunchPreparation) |
+| portfolio_state.py | PortfolioState | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| portfolio_state.py | PortfolioState.state | episode function | task.py open_ledger (HPCLedger.open_existing: library not carried); the sister-scope check is a check of the commission and is not carried |
+| portfolio_state.py | PortfolioState.initialize | episode function | task.py open_ledger (reference model and optional shared-history model) |
+| portfolio_state.py | PortfolioState._current_model | episode function | task.py current_model (library candidate) |
+| queue_observations.py | QueueObservations | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| queue_observations.py | QueueObservations._observe_queue | episode function | task.py observe_queue (library candidate; job_access.observe_queue, BLOCKED-ON-JOB-SERVICE) |
+| queue_observations.py | QueueObservations._queue | episode function | task.py queue_snapshot (library candidate) |
+| queue_observations.py | QueueObservations._observe_resource_queue | episode function | task.py queue_body / hpc_queue_observe |
+| received_evidence.py | ReceivedEvidence | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| received_evidence.py | ReceivedEvidence._known | machinery | hand-kept set of received references; ctx.store.holds / records.holds |
+| received_evidence.py | ReceivedEvidence.resolve_received_reference | episode function | task.py resolve_received_reference (held-record check through ctx.store.holds) |
+| received_evidence.py | ReceivedEvidence.read_evidence | episode function | task.py read_evidence |
+| received_evidence.py | ReceivedEvidence._read_retained_evidence | episode function | task.py read_body / hpc_read |
+| report_delivery.py | HPCWorkReportDelivery | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| report_delivery.py | HPCWorkReportDelivery.finish | episode function | messages/final_to_parent.py final_to_parent (the report); the runtime_forms save, form_with_facts, pending_handles and release are machinery |
+| resource_discovery.py | ResourceDiscovery | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| resource_discovery.py | ResourceDiscovery._discover_resource | episode function | task.py discovery_body / hpc_discovery_run (through job_access.discover, BLOCKED-ON-JOB-SERVICE; the subprocess.run and its timeout=90 are not carried) |
+| task.py | HPCWorkTask | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| task.py | HPCWorkTask.next | machinery | the decision loop (replay, completions, model call, admission): the system's; decide and action in task.py |
+| task.py | HPCWorkTask.apply_response | episode function | task.py action (admission of the answer, Rejected feedback); the report_update interpretation and record_effect are machinery |
+| task.py | HPCWorkTask.execute | machinery | the execution, journal and credit loop: the system's (tools run as units); TOOLS in task.py |
+| task_decision.py | HPCWorkTaskDecision | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| task_decision.py | HPCWorkTaskDecision.call | machinery | model call recorded in runtime_model_calls: decide returns a ModelRequest |
+| task_decision.py | HPCWorkTaskDecision.instructions | episode function | task.py instructions |
+| task_decision.py | HPCWorkTaskDecision.conversation_key | machinery | conversation sessions are deleted (README 3a) |
+| task_decision.py | HPCWorkTaskDecision.interpretation_context | machinery | visible_record_refs of lookup results of the decision-exchange loop |
+| task_decision.py | HPCWorkTaskDecision.exchange_schema | machinery | decision-exchange loop |
+| task_decision.py | HPCWorkTaskDecision.exchange_response | machinery | decision-exchange loop |
+| task_decision.py | HPCWorkTaskDecision.validate_contract_exchange_request | machinery | saved-request checks (README 3a) |
+| task_decision.py | HPCWorkTaskDecision.validate_contract_exchange_history | machinery | saved-request checks (README 3a) |
+| task_decision.py | HPCWorkTaskDecision.exchange_decision | machinery | decision-exchange loop |
+| task_decision.py | HPCWorkTaskDecision.complete_decision | machinery | provider call with presentation: decide returns a ModelRequest |
+| task_instructions.py | instructions | episode function | task.py instructions (the pending-child, redelivery, wait and native-event texts describe actions that no longer exist and are not carried) |
+| task_state.py | HPCWorkTaskState | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| task_state.py | HPCWorkTaskState.__init__ | machinery | old task state construction |
+| task_state.py | HPCWorkTaskState.bind_execution_context | machinery | old execution context binding |
+| task_state.py | HPCWorkTaskState.record_execution_failure | machinery | failed own action recorded in runtime_actions: a tool returns its failure as its outcome |
+| task_state.py | HPCWorkTaskState.restore_checkpoint | machinery | checkpoint/restore |
+| task_state.py | HPCWorkTaskState.restore | machinery | checkpoint/restore |
+| task_state.py | HPCWorkTaskState.record_effect | machinery | record_effect (README 3e F6) |
+| task_state.py | HPCWorkTaskState.checkpoint | machinery | checkpoint/restore |
+| task_waiting.py | HPCWorkSuspension | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| task_waiting.py | HPCWorkSuspension.suspension_changed | machinery | wait/suspension machinery |
+| to_child_execution_job_submission.py | authenticate_launch | episode function | task.py action (launch: the plan named, launched once, not closed, input staged) and messages/msg_to_child.py launch_message (the plan's launch_assignment exactly); the launch_commission reservation row is the system's attempts journal |
+| to_child_execution_job_submission.py | LaunchPreparation | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| to_child_execution_job_submission.py | LaunchPreparation.initial_decision_context | episode function | messages/msg_to_child.py launch_message (hpc_execution_job, input_refs) with task.py plan_body staging the input file (job_access.stage_input, BLOCKED-ON-JOB-SERVICE) |
+| to_child_execution_progress_assessment.py | prepare_request | episode function | messages/msg_to_child.py monitor_message |
+| to_parent.py | HPCReport | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| to_parent.py | HPCReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (hpc_credit, hpc_model_ref, hpc_accepted_obligations, hpc_result_refs selectable; new hpc_result_artifact_refs, hpc_handoff_refs) |
+| to_parent.py | HPCReport.facts | episode function | messages/final_to_parent.py facts |
+| to_parent.py | HPCReport.resolve | machinery | report reference resolution through the old receiving context; the system's custody (README 3b D2) |
+| to_parent.py | HPCReport.validate_report | episode function | messages/final_to_parent.py validate_report (called by final_to_parent); its validate_form step has no object any more |
+| waiting.py | HPCActivityAdvice | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| waiting.py | HPCActivityAdvice.activity_advice | episode function | task.py activity_advice (derived from the ledger state: the old estimator diagnostics it read from runtime_observations are not carried) |
+| waiting.py | HPCActivityAdvice._wait_for_original_observation | episode function | task.py hpc_monitor_wait (async tool; MonitorCronController and choose_schedule are unplaced and raise) |
+| work_operations.py | HPCWorkOperations | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| work_operations.py | HPCWorkOperations.catalog | episode function | task.py TOOL_SPECS, CHILD_SPECS, catalog and selection_options |
+| work_operations.py | HPCWorkOperations.execute | machinery | dispatch plus the HPC action ledger (cached / save_action): the operation ledger is the system's attempts journal; the tools are TOOLS in task.py |
+| yield_estimator.py | HPCEpisodeYield | machinery | old mix-in class of the 40-mixin HPCEpisode; its methods are listed on their own rows |
+| yield_estimator.py | HPCEpisodeYield.yield_controller | episode function | yield_estimator.py yield_controller (completion controller; target = the obligations' credit) |
+| yield_estimator.py | HPCEpisodeYield.continuation_for_action | machinery | HPCContinuationEstimator evidence per action: an episode cannot supply a forecast (README 3d, 7b); only the controller stops the Episode |
+| yield_estimator.py | HPCEpisodeYield.practical_estimator | machinery | HPCContinuationEstimator construction (README 7b) |

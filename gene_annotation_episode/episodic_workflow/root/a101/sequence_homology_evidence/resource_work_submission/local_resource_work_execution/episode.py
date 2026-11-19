@@ -1,24 +1,25 @@
-"""The A101 ``sequence_homology_evidence/resource_work_submission/local_resource_work_execution`` binding.
+"""The A101 local resource work execution episode."""
+from episode_runtime import EpisodeBinding
 
-It executes the commissioned resource work (a frozen ``practical_assignment_v1``, ``resource_kind`` ``local``)
-on its own configured local resource: model-written ``exec_command`` units run by its own
-``TerminalExecution``, practical requirement credit and the completion continuation toward the
-assignment's total requirement credit (``episode_support/jobs/local_execution/sequence_homology_evidence/local_job_runtime.py``). ``a101_home_factory``
-constructs it from ``services['a101']['local_resource_work_execution']``.
-"""
-from __future__ import annotations
-
-from types import MappingProxyType
-
-from ...contract_binding import A101ContractBinding
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.sequence_homology_evidence.local_job_runtime import A101LocalJobRuntime
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       read_from_parent as from_parent_file)
 
 
-class LocalResourceWorkExecutionEpisode(A101LocalJobRuntime, A101ContractBinding):
-    """Get the resource work executing as a bounded local job."""
-    binding_path = 'sequence_homology_evidence/resource_work_submission/local_resource_work_execution'
-    goal = 'Get the resource work executing as a bounded local job'
-    unit = 'One local resource action'
-    result = 'The local resource handle and its received status'
-    child_slots = MappingProxyType({})
-    commissioning_parent = 'sequence_homology_evidence/resource_work_submission'
+class LocalResourceWorkExecution(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

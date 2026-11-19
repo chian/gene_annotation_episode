@@ -153,20 +153,8 @@ def _key(row):
 
 class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
     provider, record_version, components = PROVIDER, VERSION, COMPONENTS
-    operations_table = 'literature_measurement_validation_operations'
-    received_table = 'literature_measurement_validation_received'
     binding_fields = ()
 
-    def __init__(self, store, run_id):
-        if not isinstance(run_id, str) or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id = store, run_id
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     @staticmethod
     def _components(values):
@@ -184,23 +172,11 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
         return result
 
     def populate(self, context, arguments, operation_key):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        if not isinstance(operation_key, str) or not operation_key:
-            raise ContractError('operation_key_required')
         args = plain(arguments); validate_schema(args, measurement_validation_population_schema())
         requested = self._components(plain(context.assignment.get(REQUESTED, [])))
-        request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key,
+        request = {'operation_key': operation_key,
             'scope': plain(context.scope), 'arguments': args, 'components': requested,
-            'role': context.role, 'assignment': plain(context.assignment), 'received_record_refs': list(context.received_record_refs)}
-        signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
-        if old is not None:
-            if old['signature'] != signature:
-                raise ContractError('operation_key_reused_for_different_work')
-            outcome = json.loads(old['outcome']); self.read(outcome['result']['sheet_ref'])
-            return outcome
+            'role': context.role, 'assignment': plain(context.assignment)}
         source = self._native_source(context, args['source_ref'])
         snapshots = []
         def read_source(ref, representation):
@@ -213,7 +189,7 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
             refs = [selection['sheet_ref']]
             if self.store.reference_subset(refs, plain(context.scope)) != refs:
                 raise ContractError('literature_source_outside_scope')
-            rows = LiteratureCalibrationRecoveryRepository(self.store, self.run_id).fact_cells(
+            rows = LiteratureCalibrationRecoveryRepository(self.store).fact_cells(
                 context, refs, components=[selection['component']])
             if len(rows) != 1:
                 raise ContractError('selected_recovery_component_not_received')
@@ -228,21 +204,18 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
             'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'input_snapshots': snapshots,
             'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
             req_ref = self.store.artifact(canonical(request), 'application/json')
             value = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact,
                 'text_ref': artifact, 'request_ref': req_ref, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': parents}
             reference = identity('source', {'origin': 'tool', 'record': value})
-            exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (reference,)).fetchone()
+            exists = self.store.holds(reference)
             self.store.put('source', value, origin='tool', scope=plain(context.scope))
             rows = _project_saved(payload, reference, requested); validate_schema(rows, measurement_validation_cells_schema())
-            outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id,
-                'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [reference],
+            outcome = {'status': 'completed', 'operation_ref': identity('operation', {'key': operation_key}), 'record_refs': [reference],
                 'changed_record_refs': [] if exists else [reference],
                 'result': {'sheet_ref': reference, 'view': VIEW, 'cells': rows}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+
         return outcome
 
     def _json(self, reference):
@@ -269,8 +242,7 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
         def witness(selected):
             source = self._native_provenance(request['scope'], selected['source_ref'])
             artifact = source['artifact_ref'] if selected['representation'] == 'original' else source.get('text_ref')
-            if (artifact is None or selected['source_ref'] not in e['source_refs']
-                    or selected['source_ref'] not in request['received_record_refs']):
+            if artifact is None or selected['source_ref'] not in e['source_refs']:
                 raise ContractError('measurement_validation_saved_source_binding_mismatch')
             return {**deepcopy(selected), 'artifact_ref': artifact}
         for name, selected in args['context'].items():
@@ -283,7 +255,7 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
             if (selection is None) != (operand is None):
                 raise ContractError('measurement_validation_saved_recovery_binding_mismatch')
             if selection is not None:
-                if (operand['selection'] != selection or selection['sheet_ref'] not in request['received_record_refs']
+                if (operand['selection'] != selection
                         or operand['row']['sheet_ref'] != selection['sheet_ref'] or operand['row']['component'] != role):
                     raise ContractError('measurement_validation_saved_recovery_binding_mismatch')
                 snapshots.append({'selection': selection, 'row': operand['row']})
@@ -329,16 +301,12 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
                 or source.get('version') != VERSION or identity('source', {'origin': 'tool', 'record': value}) != reference):
             raise ContractError('literature_measurement_validation_sheet_required')
         request = self._json(source['request_ref'])
-        if (set(request) != {'run_id', 'episode_id', 'operation_key', 'scope', 'arguments', 'components', 'role', 'assignment', 'received_record_refs'}
-                or request['run_id'] != self.run_id or not all(isinstance(request[f], str) and request[f] for f in ('episode_id', 'operation_key', 'role'))
+        if (set(request) != {'operation_key', 'scope', 'arguments', 'components', 'role', 'assignment'}
+                or not all(isinstance(request[f], str) and request[f] for f in ('operation_key', 'role'))
                 or request['components'] != request['assignment'].get(REQUESTED, [])):
             raise ContractError('measurement_validation_saved_request_mismatch')
         validate_schema(request['arguments'], measurement_validation_population_schema()); self._components(request['components'])
         self._native_provenance(request['scope'], reference)
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
-        if operation is None or operation['signature'] != canonical(request):
-            raise ContractError('literature_sheet_not_selected_output')
         saved = self._json(source['artifact_ref'])
         if (set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs',
                 'input_source_refs', 'source_metadata', 'input_snapshots', 'extraction', 'sheet'}
@@ -352,25 +320,19 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
             raise ContractError('measurement_validation_saved_source_mismatch')
         self._validate_bindings(saved, request)
         rows = _project_saved(saved, reference, request['components']); validate_schema(rows, measurement_validation_cells_schema())
-        outcome = json.loads(operation['outcome'])
-        if (outcome.get('status') != 'completed' or outcome.get('record_refs') != [reference] or outcome.get('feedback') is not None
-                or canonical(outcome.get('result')) != canonical({'sheet_ref': reference, 'view': VIEW, 'cells': rows})
-                or outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
-            raise ContractError('measurement_validation_saved_outcome_mismatch')
         return saved
 
-    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+    def project_cells(self, sheet_refs, *, components=None):
         selected = None if components is None else self._components(components); rows = []
         for ref in dict.fromkeys(sheet_refs):
-            if ref not in permitted_record_refs:
-                raise ContractError('literature_sheet_not_received')
+
             saved = self.read(ref); requested = self._json(self.store.get(ref)['request_ref'])['components']
             if selected is not None and any(name not in requested for name in selected):
                 raise ContractError('measurement_validation_component_not_selected')
             rows.extend(_project_saved(saved, ref, requested if selected is None else selected))
         return rows
 
-    def validate_returned_values(self, cells, *, permitted_record_refs):
+    def validate_returned_values(self, cells):
         validate_schema(cells, measurement_validation_cells_schema())
         seen = set()
         for row in cells:
@@ -378,86 +340,41 @@ class LiteratureMeasurementValidationRepository(LiteratureRateRepository):
             if key in seen:
                 raise ContractError('duplicate_measurement_validation_return_cell')
             seen.add(key)
-            expected = self.project_cells([row['sheet_ref']], permitted_record_refs=permitted_record_refs, components=[row['component']])
+            expected = self.project_cells([row['sheet_ref']], components=[row['component']])
             matching = [candidate for candidate in expected if _key(candidate) == key]
             if len(matching) != 1 or canonical(row) != canonical(matching[0]):
                 raise ContractError('measurement_validation_return_differs_from_saved_cells')
 
     def fact_cells(self, context, sheet_refs, *, components):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
         refs = list(dict.fromkeys(sheet_refs)); selected = self._components(components)
         if self.store.reference_subset(refs, plain(context.scope)) != refs:
             raise ContractError('literature_source_outside_scope')
-        received = None; result = []
+        result = []
         for ref in refs:
-            if ref not in context.received_record_refs:
-                raise ContractError('literature_sheet_not_received')
-            if self._sheet_owner(ref) == context.episode_id:
-                requested = self._json(self.store.get(ref)['request_ref'])['components']
-                result.extend(self.project_cells([ref], permitted_record_refs=context.received_record_refs,
-                    components=[name for name in selected if name in requested]))
-            else:
-                if received is None:
-                    received = self.received_cells(context)
-                result.extend(deepcopy(row) for row in received if row['sheet_ref'] == ref and row['component'] in selected)
+            requested = self._json(self.store.get(ref)['request_ref'])['components']
+            result.extend(self.project_cells([ref], components=[name for name in selected if name in requested]))
         return result
 
     def validate_fact_values(self, context, cells):
-        self.validate_returned_values(cells, permitted_record_refs=context.received_record_refs)
+        self.validate_returned_values(cells)
         expected = {_key(row): row for row in self.fact_cells(context,
             list(dict.fromkeys(row['sheet_ref'] for row in cells)),
             components=list(dict.fromkeys(row['component'] for row in cells)))}
         if any(canonical(row) != canonical(expected.get(_key(row))) for row in cells):
             raise ContractError('literature_cell_not_received')
 
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        if not self._installed(self.received_table):
-            return []
-        result, seen = [], {}
-        for saved in self.store.db.execute(f'SELECT operation_key,cells FROM {self.received_table} WHERE run_id=? AND episode_id=? ORDER BY rowid',
-                (self.run_id, context.episode_id)):
-            cells = json.loads(saved['cells']); original = self._runtime_delivery_cells(context, saved['operation_key'])
-            bound = self._delivery_binding(context, saved['operation_key'])
-            if bound is None and original is None:
-                raise ContractError('literature_delivery_binding_unavailable')
-            if (bound is not None and bound[0] != self._delivery_digest(cells)
-                    or original is not None and canonical(original) != canonical(cells)):
-                raise ContractError('literature_delivery_binding_mismatch')
-            self.validate_returned_values(cells, permitted_record_refs=[row['sheet_ref'] for row in cells])
-            for row in cells:
-                key = _key(row)
-                if key in seen and canonical(row) != canonical(seen[key]):
-                    raise ContractError('measurement_validation_received_identity_conflict')
-                if key not in seen:
-                    seen[key] = row; result.append(deepcopy(row))
-        return result
-
-    def receive_cells(self, context, cells, operation_key):
-        if not cells:
-            return
-        with self.store.transaction():
-            self._install(); return super().receive_cells(context, cells, operation_key)
 
     def selected_sheet_refs(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        if not self._installed(self.operations_table):
-            return []
-        refs = list(dict.fromkeys(json.loads(row['outcome'])['result']['sheet_ref'] for row in self.store.db.execute(
-            f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id))))
+        refs = self.held_sheet_refs()
         for ref in refs:
             self.read(ref)
         return refs
 
     def owned_sheet_refs(self, context):
-        return [ref for ref in self.selected_sheet_refs(context) if ref in context.received_record_refs]
+        return self.selected_sheet_refs(context)
 
     def available_sheet_refs(self, context):
-        return list(dict.fromkeys([*self.owned_sheet_refs(context), *(row['sheet_ref'] for row in self.received_cells(context)
-            if row['sheet_ref'] in context.received_record_refs)]))
+        return self.selected_sheet_refs(context)
 
     def has_work(self, context):
         return bool(self.available_sheet_refs(context))

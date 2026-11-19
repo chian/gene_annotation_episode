@@ -10,6 +10,7 @@ import json
 import math
 import re
 from PIL import Image, UnidentifiedImageError
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import REF, canonical, identity, obj, validate_schema
 from gene_annotation_episode.domain import ContractError
@@ -27,12 +28,15 @@ def ratio_population_schema():
     text = {'type': 'string', 'minLength': 1}
     return obj({'source_ref': REF, 'source_kind': {'enum': ['primary_jats', 'synthetic_fixture']}, **{name: dict(text) for name in ('section_id', 'subject', 'variant', 'reference_literal')}, 'paragraph_index': {'type': 'integer', 'minimum': 0}, 'visual_source_refs': {'type': 'array', 'uniqueItems': True, 'items': REF}, 'signal_kind': {'enum': list(SIGNALS)}, 'reference_role': {'enum': list(REFERENCES)}, 'arrangement': {'enum': list(ARRANGEMENTS)}, 'interpretation_witnesses': {'type': 'array', 'items': _witness_schema()}})
 
+OPERATIONS = operations_ledger('literature_ratio_operations')
+RECEIVED = received_ledger('literature_ratio_received')
+
 class LiteratureRatioRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = 'literature_relative_signal_record_v1'
-    operations_table = 'literature_ratio_operations'
-    received_table = 'literature_ratio_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = tuple(BINDINGS)
 
     def _source(self, context, reference):
@@ -72,7 +76,7 @@ class LiteratureRatioRepository(LiteratureRateRepository):
         args = plain(arguments)
         validate_schema(args, ratio_population_schema())
         signature = canonical({'arguments': args, 'scope': plain(context.scope)})
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
+        old = self._operation(context.episode_id, operation_key)
         if old:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -157,9 +161,9 @@ class LiteratureRatioRepository(LiteratureRateRepository):
 
             def publish(kind, record):
                 candidate = identity(kind, {'origin': 'tool', 'record': record})
-                old = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (candidate,)).fetchone()
+                old = self.store.holds(candidate)
                 row = self.store.put(kind, record, origin='tool', scope=plain(context.scope))
-                if old is None:
+                if not old:
                     created.append(row['id'])
                 return row['id']
             bindings = {}
@@ -170,7 +174,7 @@ class LiteratureRatioRepository(LiteratureRateRepository):
             request = self.store.artifact(canonical({'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args}), 'application/json')
             sheet_ref = publish('source', {'provider': self.provider, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request, 'version': self.record_version, 'retrieved_at': None, 'parent_source_refs': payload['input_source_refs']})
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [sheet_ref, *bindings.values()], 'changed_record_refs': created, 'result': {'sheet_ref': sheet_ref, 'cells': sheet['cells'], 'comparison': payload['comparison'], 'raw_representation_roster_complete': sheet['candidate_set_complete'], 'interpretation_kind': payload['interpretation_kind']}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):

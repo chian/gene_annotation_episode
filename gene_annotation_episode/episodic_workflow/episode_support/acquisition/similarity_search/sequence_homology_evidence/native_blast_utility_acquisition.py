@@ -124,7 +124,7 @@ def _validate_saved(store, capture):
             or any(row["sha256"] is not None and key not in seen for key, row in selected.items())):
         _error("capture_missing_original_association")
     if capture["source_ref"] is not None:
-        source = store._require(capture["source_ref"], {"source"})
+        source = store.require(capture["source_ref"], {"source"})
         if {k: v for k, v in source.items() if k not in {"id", "origin", "record_type"}} != _source_payload(capture):
             _error("capture_source_association_conflict")
     if bundle is not None and capture["plan"]["requested_job"]["native_blast_utility"]["version"] == JOB_VERSION_V2:

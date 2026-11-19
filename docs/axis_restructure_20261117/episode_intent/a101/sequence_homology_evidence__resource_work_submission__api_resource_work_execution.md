@@ -315,3 +315,91 @@ blocks at the end of seven files; resume, replay and checkpoint handling (`compl
 recorder replace; receipt recording (`receipts.receive`, `receipts.known`); and the old role names. The
 `annotation_axis_credit` branches and the `reads.map` and `bvbrc_minhash_result_selector_v2` feedback branches in
 `task.py` come with the copied loop and do not concern a resource episode's own tools.
+
+## Carried over
+
+One row per row of `runs/carry_over/functions/a101__sequence_homology_evidence__resource_work_submission__api_resource_work_execution.tsv`: old file, kind, name copied, then the classification and the new place or the machinery reason. "library candidate" = a function that is not in `episode_support/` and stays in the episode file that uses it.
+
+| old file | kind | name | class | new place / reason |
+|---|---|---|---|---|
+| binding_record.py | class | `OperationalBindingRecord` | machinery | binding_record.py: the binding's own record; the system records settings and declared services |
+| binding_record.py | method | `OperationalBindingRecord.as_record` | machinery | the binding's own as_record() (README 3e) |
+| configuration.py | class | `OperationalConfiguration` | machinery | configuration object over resource adapters: the adapters are the service `resource_adapter` the run supplies (SERVICES in task.py); the interface the service must offer is listed in the task.py docstring; hook-era home construction |
+| configuration.py | method | `OperationalConfiguration.__init__` | machinery | construction over explicit adapters (required members, duplicate resource_id, `bind_record_selection`, the contract-information profile check) belongs to whoever builds the service; `record_selection` has no use (README 3c) |
+| credit.py | class | `ResourceEpisodeCredit` | episode function | credit.py `credit` |
+| credit.py | method | `ResourceEpisodeCredit.credit_kind` | machinery | credit kind is deleted (README 3d); the unknown-role check goes with the role names (each role is its own episode) |
+| credit.py | method | `ResourceEpisodeCredit.credit_view` | episode function | credit.py `credit` reads `summary[adapter_credit]`; the adapter credit view is asked in task.py `resource_operation` and returned in its outcome (credit has no services) |
+| decision_inputs.py | class | `OperationalDecisionInputs` | episode function | task.py `_context` |
+| decision_inputs.py | method | `OperationalDecisionInputs.decision_inputs` | episode function | task.py `_context` (launch_instruction_library, selected_launch_instructions, resource_tool_estimates, native_event_targets as recorded service reads; completed_action_reports from the summary); not carried: `resource_context`, `shared_information_context`, `child_options`, contract information profile (never for this role), `requested_action_history`/`execution_expectations`/`job_execution_options`/`native_execution_expectations` (the adapter and `native_events` services supply the same information through `decision_context` and `targets`), `waiting_support` (the wait tool and its schema) |
+| decision_inputs.py | function | `_bind_original_task_runtime_providers` | machinery | provider patching (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| decision_state.py | class | `OperationalDecisionState` | episode function | messages/internal_summary.py `internal_summary` |
+| decision_state.py | method | `OperationalDecisionState.decision_state` | episode function | messages/internal_summary.py `internal_summary` and task.py `_context`; not carried: working_state/visible_record_refs/visual_evidence (journal-row reads and `image.view`, not a tool of this episode), `annotation_axis_credit` branches (root episode), `report_lifecycle`/`current_report_update`/`requested_form` (report-form machinery) |
+| decision_state.py | function | `_bind_original_task_runtime_providers` | machinery | provider patching (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| episode.py | class | `ResourceEpisode` | episode function | episode.py `ApiResourceWorkExecution` (the old class assembled mix-ins; the new class only assigns members) |
+| episode.py | method | `ResourceEpisode.child_roles` | episode function | task.py `CHILD_SLOTS = {}` |
+| episode.py | method | `ResourceEpisode.contract_information_profile` | machinery | never applied to this role (profile only for `launch`); the discovery paragraph is not carried (goal.py docstring) |
+| episode.py | method | `ResourceEpisode.permitted_common_actions` | episode function | task.py `_schema` / `action` (tool, reason, wait; `child` and `redeliver_report` could never be carried out here) |
+| episode.py | method | `ResourceEpisode.allowed_children` | episode function | task.py `CHILD_SLOTS = {}` |
+| episode.py | method | `ResourceEpisode.context_hook_applies` | machinery | hook applicability by role: each role is its own episode |
+| execution_contracts.py | function | `_failure` | episode function | task.py `_failure` (library candidate) |
+| execution_contracts.py | function | `_outcome` | episode function | task.py `_outcome` (library candidate) |
+| execution_contracts.py | function | `_availability_failure` | episode function | task.py `_availability_failure` (library candidate) |
+| execution_operations.py | class | `OperationalOperations` | episode function | task.py tools `prepare_resource_assignment`, `resource_capabilities`, `resource_operation` |
+| execution_operations.py | method | `OperationalOperations.capabilities` | episode function | task.py `capabilities_of` and `_capabilities` (library candidate) |
+| execution_operations.py | method | `OperationalOperations._adapter` | episode function | task.py `prepare_resource_assignment` (`resource_not_bound` against the service `bound_resource_ids()`); the results-handoff branch (`RESULTS_VERSION`) is the service's `check_handoff` |
+| execution_operations.py | method | `OperationalOperations.catalog` | episode function | task.py `_catalog` and `CAPABILITIES_ENTRY` |
+| execution_operations.py | method | `OperationalOperations.execute` | episode function | task.py `resource_operation` (`resource.capabilities` is the tool `resource_capabilities`; the catalog and argument check `tool_not_owned_by_resource_role` / `_validate` are `action`'s schema validation) |
+| from_parent.py | class | `OperationalAssignment` | episode function | messages/read_from_parent.py |
+| from_parent.py | method | `OperationalAssignment.assignment_schema` | episode function | messages/read_from_parent.py `ASSIGNMENT_FORM` (one field per `LAUNCH_SCHEMA` property) |
+| from_parent.py | method | `OperationalAssignment._permitted` | episode function | task.py `_permitted` (library candidate) |
+| from_parent.py | method | `OperationalAssignment._require_launch_child_instruction_pins` | machinery | check of a commission against the launch parent (`launch_instruction_inheritance_conflict`): a wrong commission just fails, nothing checks it (README 3b C3) |
+| from_parent.py | method | `OperationalAssignment.prepare_assignment` | episode function | messages/read_from_parent.py `read_from_parent` (schema validation, explicit selection of kind api) and task.py `prepare_resource_assignment` (capability kind and constraints, bound, adapter preparation); the equality checks against the parent's assignment (`resource_assignment_conflict`, `resource_selection_conflict`) are checks of a commission and are not carried |
+| from_parent.py | method | `OperationalAssignment.initial_references` | machinery | returned `[]`; records are passed by `record_refs` fields of the assignment |
+| goal.py | class | `OperationalGoal` | episode function | goal.py |
+| goal.py | method | `OperationalGoal.instructions` | episode function | goal.py `GOAL` (responsibility and common tail) and task.py `_instructions` |
+| internal_summary.py | class | `OperationalSummary` | episode function | messages/internal_summary.py |
+| internal_summary.py | method | `OperationalSummary.decision_context` | episode function | messages/internal_summary.py `internal_summary` (role, assignment, capabilities) and task.py `_context` (`resource_tool_estimates` through a recorded service read) |
+| received_evidence.py | class | `ReceivedOperationalEvidence` | machinery | receipts bookkeeping: proof references of a handoff inside a received form; custody replaces it (the handoff records are returned in `execution_handoff_refs`) |
+| received_evidence.py | method | `ReceivedOperationalEvidence.received_form_references` | machinery | receipts bookkeeping (`received_form_references`, README 3b R3) |
+| report_delivery.py | class | `OperationalReportDelivery` | episode function | messages/final_to_parent.py |
+| report_delivery.py | method | `OperationalReportDelivery.finish` | episode function | messages/final_to_parent.py `final_to_parent` (the form-filling with the parent's schema and `runtime_forms` saving is report-form machinery; the no-contract result `credit`/`pending_handles`/facts: credit and facts are returned, `pending_handles` is deleted) |
+| report_delivery.py | function | `_bind_original_task_runtime_providers` | machinery | provider patching (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| task.py | class | `OperationalTask` | episode function | task.py |
+| task.py | method | `OperationalTask.instructions` | episode function | task.py `_instructions` |
+| task.py | method | `OperationalTask.next` | episode function | task.py `decide`; the restore, replay, checkpoint, `SourceEnd`, pending-delivery and ready-child parts are old-runner machinery |
+| task.py | method | `OperationalTask.apply_response` | episode function | task.py `action` (validation of the selection, the `empty_reasoning_commit` check, `Rejected` feedback); not carried: `report_update` admission (`report_format`, `validate_report` of the parent-defined form), wait-target `invalid` feedback (the wait validates its targets in the tool and returns a failed outcome), `ContractInformationError`/results-selector/`reads.map` feedback branches (other episodes' tools), `record_effect` |
+| task.py | method | `OperationalTask.execute` | episode function | task.py tools (`reason`, `wait`, `resource_operation`, lookups); the journaling, measuring, `receive_outcome`, `automatic_score_updates` and controller input are the system's |
+| task.py | function | `_bind_original_task_runtime_providers` | machinery | provider patching (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| task_decision.py | class | `OperationalTaskDecision` | episode function | task.py `decide` |
+| task_decision.py | method | `OperationalTaskDecision.call` | episode function | task.py `decide` returns the `ModelRequest`; the saved request/response per call and `journal.measure` are the system's |
+| task_decision.py | method | `OperationalTaskDecision.conversation_key` | machinery | conversation state (README 3a: deleted) |
+| task_decision.py | method | `OperationalTaskDecision.interpretation_context` | machinery | `request_context` exchange (a lookup is a tool) |
+| task_decision.py | method | `OperationalTaskDecision.exchange_schema` | machinery | decision-exchange loop |
+| task_decision.py | method | `OperationalTaskDecision.exchange_response` | machinery | decision-exchange loop |
+| task_decision.py | method | `OperationalTaskDecision.validate_contract_exchange_request` | machinery | saved-request check of the decision exchange |
+| task_decision.py | method | `OperationalTaskDecision.validate_contract_exchange_history` | machinery | saved-request check of the decision exchange |
+| task_decision.py | method | `OperationalTaskDecision.exchange_decision` | machinery | decision-exchange loop (`exchange_decision`) |
+| task_decision.py | function | `_bind_original_task_runtime_providers` | machinery | provider patching (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| task_instructions.py | function | `instructions` | episode function | task.py `_instructions` (INSTRUCTIONS with the report/redelivery/history span replaced, goal, reasoning commit requirement, tool knowledge, launch instructions, native events; the pending-child-delivery and pending-child wait paragraphs and the `decision_exchange_v1` replacement are not carried: no child, no exchange) |
+| task_state.py | class | `OperationalTaskState` | episode function | messages/internal_summary.py (the state between decisions is a pure function of the view) |
+| task_state.py | method | `OperationalTaskState.__init__` | episode function | messages/internal_summary.py (feedback, last outcome); the report values/basis are report-form machinery |
+| task_state.py | method | `OperationalTaskState.bind_execution_context` | machinery | execution context binding of the old runner |
+| task_state.py | method | `OperationalTaskState.record_execution_failure` | machinery | a failed or invalid returned outcome is the tool's returned outcome and enters the iterator; the summary reads its feedback |
+| task_state.py | method | `OperationalTaskState.restore_checkpoint` | machinery | checkpoint/restore |
+| task_state.py | method | `OperationalTaskState.restore` | machinery | checkpoint/restore |
+| task_state.py | method | `OperationalTaskState.record_effect` | machinery | recorder (`record_effect`) |
+| task_state.py | method | `OperationalTaskState.checkpoint` | machinery | checkpoint/restore |
+| task_state.py | function | `_bind_original_task_runtime_providers` | machinery | provider patching (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| to_parent.py | class | `OperationalReport` | episode function | messages/final_to_parent.py |
+| to_parent.py | method | `OperationalReport.fact_sources` | episode function | messages/final_to_parent.py `RETURN_FORM` (`execution_handoff`, `execution_handoffs`; the adapter's own fact sources in the selectable field `adapter_facts`) |
+| to_parent.py | method | `OperationalReport.facts` | episode function | messages/final_to_parent.py `handoff_facts` and `final_to_parent` (library candidate) |
+| to_parent.py | method | `OperationalReport.resolve` | machinery | reference resolution for the parent-defined form: `records.holds` and custody (README 3b D2) |
+| to_parent.py | method | `OperationalReport.validate_report` | episode function | messages/final_to_parent.py `validate_report` (handoff fields equal the recorded facts, `resource_handoff_fact_mismatch`); the adapter's `validate_report` of the parent-defined JSON-Schema form is not carried (that form no longer exists) |
+| waiting.py | class | `OperationalTaskWaiting` | episode function | task.py `wait` |
+| waiting.py | method | `OperationalTaskWaiting._execute_selected_wait` | episode function | task.py `wait` (calls the library `selected_wait` with the service `native_events`) |
+| waiting.py | method | `OperationalTaskWaiting.suspension_changed` | machinery | suspension of the old execution backend (`set_suspension`): wait/suspension machinery |
+| waiting.py | function | `_bind_original_task_runtime_providers` | machinery | provider patching (`_bind_original_task_runtime_providers`, `bind_functions`) |
+| yield_estimator.py | class | `OriginalContinuation` | machinery | delegate of the old runner's `controller_factory`; replaced by yield_estimator.py `yield_controller` |
+| yield_estimator.py | method | `OriginalContinuation.original_continuation_controller` | episode function | yield_estimator.py `yield_controller` (the completion controller; the old file chose none itself) |
+
+The old tests folder held only an empty `tests/__init__.py`; nothing was retired. The new tests are `tests/test_api_resource_work_execution_binding.py`.

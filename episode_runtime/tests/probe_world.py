@@ -1,10 +1,11 @@
-"""What the probe-episode tests share: a real Store, journal, model provider and two real services."""
+"""What the probe-episode tests share: a real Store, journal, model provider and three real services."""
 import asyncio
 import json
+import threading
 
 import pytest
 
-from episode_runtime import BindingRegistry, RunJournal, link, resume
+from episode_runtime import BindingRegistry, RunJournal, WorkCache, link, resume
 from gene_annotation_episode.model_provider import ModelProvider, load_config
 from gene_annotation_episode.state import Store
 
@@ -28,17 +29,19 @@ class Counter:
 
 
 class Switch:
-    """A real service: whether the next tool failure is wanted."""
+    """A real service: whether the next tool failure is wanted; and what a tool's worker thread tells the test
+    (``started``: the thread is running; ``seen``: what it saw)."""
 
     def __init__(self, fail=False):
         self.fail = fail
+        self.started = threading.Event()
+        self.seen = {}
 
 
-@pytest.fixture
-def world(tmp_path):
-    store = Store(tmp_path / 'store')
-    subject = store.artifact(json.dumps({'name': 'GeneX', 'function': 'kinase'}), 'application/json')
-    unrelated = store.artifact(json.dumps({'name': 'GeneY', 'function': 'unknown'}), 'application/json')
+def open_world(directory, calls='model_calls'):
+    """The Store, journal, model provider and services kept below ``directory``. A second process that opens the
+    same directory works on the same Store, journal and work cache (``cut_run.py``); it names a folder of its
+    own for its model provider's call files (the provider makes that folder and requires it to be new)."""
     built = []
     counter, switch = Counter(), Switch()
 
@@ -48,11 +51,21 @@ def world(tmp_path):
             return value
         return factory
     services = {'counter': make('counter', counter), 'switch': make('switch', switch),
+                'work_cache': make('work_cache', WorkCache(directory / 'work_cache')),
                 'secret': make('secret', object())}
-    yield {'store': store, 'subject': subject, 'unrelated': unrelated, 'counter': counter, 'switch': switch,
-           'built': built, 'services': services, 'journal': RunJournal(tmp_path / 'journal.sqlite3'),
-           'provider': ModelProvider(load_config(), tmp_path / 'model_calls', tmp_path), 'tmp': tmp_path,
-           'calls': tmp_path / 'model_calls'}
+    return {'store': Store(directory / 'store'), 'counter': counter, 'switch': switch, 'built': built,
+            'services': services, 'journal': RunJournal(directory / 'journal.sqlite3'),
+            'provider': ModelProvider(load_config(), directory / calls, directory), 'tmp': directory,
+            'calls': directory / calls}
+
+
+@pytest.fixture
+def world(tmp_path):
+    opened = open_world(tmp_path)
+    store = opened['store']
+    subject = store.artifact(json.dumps({'name': 'GeneX', 'function': 'kinase'}), 'application/json')
+    unrelated = store.artifact(json.dumps({'name': 'GeneY', 'function': 'unknown'}), 'application/json')
+    yield {**opened, 'subject': subject, 'unrelated': unrelated}
     store.close()
 
 
@@ -95,3 +108,10 @@ def tool(name, **arguments):
 
 def child(slot, **arguments):
     return {'child': slot, 'arguments': arguments}
+
+
+def journal_rows(world):
+    """Every row of every table of the journal, by table (to show that a replay recorded nothing)."""
+    db = world['journal'].db
+    names = [row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")]
+    return {name: db.execute('SELECT * FROM ' + name + ' ORDER BY rowid').fetchall() for name in names}

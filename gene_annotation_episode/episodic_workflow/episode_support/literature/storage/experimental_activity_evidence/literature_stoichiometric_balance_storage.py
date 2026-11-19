@@ -3,6 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 from hashlib import sha256
 import json
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, obj, validate_schema
 from gene_annotation_episode.domain import ContractError
@@ -26,24 +27,16 @@ def _rows(saved, sheet_ref, components):
     reaction_conditions = {'nominal_donor_mM': float(conditions['aGlc1-P']['value']['exact_decimal']), 'nominal_acceptor_mM': float(conditions['Cellobiose (G2)']['value']['exact_decimal']), 'enzyme_U_per_mL': float(conditions['Cellodextrin phosphorylase from Clostridium cellulosi']['value']['exact_decimal']), 'MES_mM': float(conditions['MES buffer']['value']['exact_decimal']), 'pH': float(conditions['pH']['value']['exact_decimal']), 'temperature_C': float(conditions['Temperature']['value']['exact_decimal'])}
     return [{'sheet_ref': sheet_ref, 'evidence_source_ref': e['source_ref'], 'workbook_artifact_ref': saved['input_artifact_ref'], 'component': component, 'evaluation_scope': s['evaluation_scope'], **deepcopy(s['cells'][component]), 'panel': e['panel'], 'sheet_name': e['sheet_name'], 'assayed_molecule': e['assayed_molecule'], 'construct_status': e['construct_status'], 'expression_host': e['expression_host'], 'row_number': e['row_number'], 'time_minutes': e['time_minutes'], 'reaction_conditions': reaction_conditions, 'calibration_source_cell': e['calibration_source_cell'], 'one_pi_per_transfer_source_cell': e['model_premise']['source_cell'], 'one_pi_per_transfer_premise': e['model_premise']['meaning'], 'pi_method_source_cell': e['pi_method']['source_cell'], 'reported_sd_basis': 'duplicate_reactions', 'initial_baseline_status': e['initial_baseline_status'], 'ratio_sd': s['ratio_sd'], 'ratio_se': s['ratio_se'], 'ratio_confidence_interval': s['ratio_confidence_interval'], 'joint_covariance': s['joint_covariance'], 'matched_no_enzyme_arm': s['matched_no_enzyme_arm'], 'independent_preparation_count': s['independent_preparation_count'], 'molecule_specific_attribution': s['molecule_specific_attribution'], 'assay_validity_multiplier': s['assay_validity_multiplier'], 'annotation_credit': s['annotation_credit']} for component in components]
 
+OPERATIONS = operations_ledger('literature_stoichiometric_balance_operations')
+RECEIVED = received_ledger('literature_stoichiometric_balance_received')
+
 class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = VERSION
-    operations_table = 'literature_stoichiometric_balance_operations'
-    received_table = 'literature_stoichiometric_balance_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ()
-
-    def __init__(self, store, run_id):
-        if not isinstance(run_id, str) or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id = (store, run_id)
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     def populate(self, context, arguments, operation_key):
         if context.run_id != self.run_id:
@@ -54,7 +47,7 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
         validate_schema(args, stoichiometric_balance_population_schema())
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope)}
         signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
+        old = self._operation(context.episode_id, operation_key)
         if old:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -67,17 +60,16 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
         sheet = populate_stoichiometric_balance_components(extraction)
         payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'selection': args, 'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
             request_ref = self.store.artifact(canonical(request), 'application/json')
             record = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': [args['source_ref']]}
             sheet_ref = identity('source', {'origin': 'tool', 'record': record})
-            exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (sheet_ref,)).fetchone()
+            exists = self.store.holds(sheet_ref)
             self.store.put('source', record, origin='tool', scope=plain(context.scope))
             rows = _rows(payload, sheet_ref, COMPONENTS)
             validate_schema(rows, stoichiometric_balance_cells_schema())
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [sheet_ref], 'changed_record_refs': [] if exists else [sheet_ref], 'result': {'sheet_ref': sheet_ref, 'cells': rows}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def _artifact_json(self, reference):
@@ -104,7 +96,7 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
             raise ContractError('stoichiometric_balance_saved_selection_mismatch')
         original_scope = self.store.validate_scope(request['scope'])
         self._native_provenance(original_scope, sheet_ref)
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
+        operation = self._operation(request['episode_id'], request['operation_key'])
         if operation is None or operation['signature'] != canonical(request):
             raise ContractError('stoichiometric_balance_saved_operation_mismatch')
         outcome = json.loads(operation['outcome'])
@@ -129,9 +121,6 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
             rows.extend(_rows(self.read(ref), ref, selected))
         return rows
 
-    def received_cells(self, context):
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
     def available_sheet_refs(self, context):
         refs = []
         for ref in context.received_record_refs:
@@ -143,11 +132,6 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
                 self.read(ref)
                 refs.append(ref)
         return list(dict.fromkeys(refs))
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self._install()
-            return super().receive_cells(context, cells, operation_key)
 
     @staticmethod
     def cell_record_refs(cells):

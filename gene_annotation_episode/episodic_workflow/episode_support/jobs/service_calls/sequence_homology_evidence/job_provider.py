@@ -1,10 +1,8 @@
-"""A101's execution job provider over the run's shared Store (the ``job_provider`` of ``progress_provider``).
+"""A101's execution job provider over the records the Episode holds (the ``job_provider`` of ``progress_provider``).
 
 A target is one job an A101 job execution binding recorded in this run. Two kinds are recorded:
 
-- a practical job: the ``practical_assignment_v1`` one local or HPC job execution Episode executed
-  (``jobs/local_execution/sequence_homology_evidence/local_job_runtime.publish_receipt`` and
-  ``execution_job_submission/hpc_job_execution/runtime.HpcJobTools.publish``). Each executed command of that
+- a practical job: the ``practical_assignment_v1`` one local or HPC job execution Episode executed. Each executed command of that
   Episode is published to the Store as a ``source`` record of provider ``episode.practical_receipt``: its
   artifact is the ``practical_receipt_information_v1`` body (run, Episode, assignment digest, scope and the
   immutable command receipt) and its request artifact the ``practical_receipt_assignment_v1`` snapshot of the
@@ -63,21 +61,19 @@ PROGRESS_VERSION = 'progress_snapshot_v1'
 
 
 class JobProvider:
-    """The practical and API jobs A101's job execution bindings recorded in one run of the shared Store."""
+    """The practical and API jobs A101's job execution bindings the Episode holds."""
 
-    def __init__(self, store, *, run_id):
-        if not isinstance(run_id, str) or not run_id:
-            raise ContractError('a101_job_provider_run_identity_required')
-        self.store, self.run_id = store, run_id
+    def __init__(self, store):
+        self.store = store
 
     # -- the recorded jobs ----------------------------------------------------------------------------------
     def _json(self, reference):
         return json.loads(self.store.get_artifact(reference))
 
     def _receipt_sources(self, provider):
-        for row in self.store.db.execute("SELECT id FROM records WHERE record_type='source' AND "
-                                         "json_extract(data,'$.provider')=? ORDER BY rowid", (provider,)):
-            yield row[0], self.store.get(row[0])
+        for source in self.store.list('source'):
+            if source.get('provider') == provider:
+                yield source['id'], source
 
     def jobs(self):
         """Every practical and API job of this run, by handle, with its receipts in publication order."""
@@ -86,8 +82,6 @@ class JobProvider:
             body = self._json(source['artifact_ref'])
             if body.get('version') != RECEIPT_VERSION:
                 raise ContractError('a101_job_provider_receipt_version_unknown:' + reference)
-            if body['run_id'] != self.run_id:
-                continue
             snapshot = self._json(source['request_ref'])
             if (snapshot.get('version') != ASSIGNMENT_VERSION or snapshot['run_id'] != body['run_id']
                     or snapshot['episode_id'] != body['episode_id'] or snapshot['scope'] != body['scope']
@@ -109,8 +103,6 @@ class JobProvider:
             body = self._json(source['artifact_ref'])
             if body.get('version') != API_RECEIPT_VERSION:
                 raise ContractError('a101_job_provider_api_receipt_version_unknown:' + reference)
-            if body['run_id'] != self.run_id:
-                continue
             snapshot = self._json(source['request_ref'])
             if (snapshot.get('version') != API_ASSIGNMENT_VERSION or snapshot['run_id'] != body['run_id']
                     or snapshot['episode_id'] != body['episode_id'] or snapshot['scope'] != body['scope']
@@ -130,6 +122,8 @@ class JobProvider:
                 raise ContractError('a101_job_provider_api_job_identity_conflict:' + handle)
             job['receipts'].append({'ref': reference, 'artifact_ref': source['artifact_ref'],
                                     'receipt': body['receipt']})
+        for job in jobs.values():
+            job['receipts'].sort(key=lambda row: (row['receipt']['finished_at'], row['ref']))
         return jobs
 
     def _job(self, handle):
@@ -173,7 +167,7 @@ class JobProvider:
     def _response_refs(job):
         return list(dict.fromkeys(ref for row in job['receipts'] for ref in row['receipt']['response_refs']))
 
-    def observe(self, handle, requested_fields, scope, *, operation_key):
+    def observe(self, handle, requested_fields, scope):
         """The job's state as its receipts record it; ``requested_fields`` are selected by the progress provider."""
         job = self._job(handle)
         receipts = job['receipts']

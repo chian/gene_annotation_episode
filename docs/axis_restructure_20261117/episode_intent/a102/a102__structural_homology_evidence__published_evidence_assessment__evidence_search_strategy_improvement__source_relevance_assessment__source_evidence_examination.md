@@ -183,3 +183,117 @@ Old-runner names are counted per occurrence: `workflow.<member>` covers `self.wo
 | `SourceView` | 4 | 8 |
 | `table` | 5 | 36 |
 | `workflow` | 79 | 337 |
+
+## Carried over
+
+Carried 19 November 2026 into the ten-file form (private binding `SourceEvidenceExamination`, three child slots). "UNPLACED" rows are also in `docs/axis_restructure_20261117/carry_over_blocked/a102__structural_homology_evidence__published_evidence_assessment__evidence_search_strategy_improvement__source_relevance_assessment__source_evidence_examination.md`.
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| binding_record.py | SourceBindingRecord | machinery | binding_record.py: the binding's own record (README 3e) |
+| binding_record.py | SourceBindingRecord.as_record | machinery | the binding's own as_record() is deleted (README 3d/3e) |
+| child_commissioning.py | SourceChildCommissioning | episode function | task.py CHILD_SLOTS (three slots) |
+| child_commissioning.py | SourceChildCommissioning.allowed_children | episode function | task.py CHILD_SLOTS; the slots offered are in task.py selection_schema |
+| child_commissioning.py | SourceChildCommissioning.child_roles | episode function | task.py CHILD_SLOTS = {'literature_table', 'literature_ordered', 'literature_targeted'} (the old roles, as slot names) |
+| configuration.py | SourceConfiguration | machinery | contract-information profile configuration (decision exchange, README 3a) |
+| configuration.py | SourceConfiguration.contract_information_configuration | machinery | contract-information freezing (README 5 item 16) |
+| configuration.py | SourceConfiguration.contract_information_profile | machinery | contract-information freezing (README 5 item 16) |
+| credit.py | SourceCredit | episode function | credit.py (the mix-in is not carried; its three methods are below) |
+| credit.py | SourceCredit.credit_kind | machinery | credit_kind is deleted (README 3d); it was the constant 'scientific' |
+| credit.py | SourceCredit.credit_view | episode function | credit.py credit(summary, records) (and messages/internal_summary.py for the other fields of the old view) |
+| credit.py | SourceCredit.credit_projector | episode function | credit.py credit, answers, lead_dispositions (own and child leads), screening_answers, assessment_answers, credit_binding (private re-expression of LiteratureTaskCredit) |
+| decision_delivery.py | SourceDecisionDelivery | machinery | old decision machine class (README 3a) |
+| decision_delivery.py | SourceDecisionDelivery.call | machinery | journaled model call and decision-exchange loop (README 3a) |
+| decision_delivery.py | SourceDecisionDelivery.instructions | episode function | task.py instructions |
+| decision_delivery.py | SourceDecisionDelivery.conversation_key | machinery | conversation state (README 3a) |
+| decision_delivery.py | SourceDecisionDelivery.interpretation_context | machinery | request_context exchange (README 3a) |
+| decision_delivery.py | SourceDecisionDelivery.exchange_schema | machinery | request_context exchange (README 3a) |
+| decision_delivery.py | SourceDecisionDelivery.exchange_response | machinery | request_context exchange (README 3a) |
+| decision_delivery.py | SourceDecisionDelivery.validate_contract_exchange_request | machinery | saved-request check (README 3a) |
+| decision_delivery.py | SourceDecisionDelivery.validate_contract_exchange_history | machinery | saved-request check (README 3a) |
+| decision_delivery.py | SourceDecisionDelivery.exchange_decision | machinery | decision-exchange loop (README 3a) |
+| decision_delivery.py | SourceDecisionDelivery.complete_decision | episode function | task.py decide (returns the ModelRequest; the system asks the model) |
+| decision_presentation.py | present_source_decision | machinery | prompt renderer chosen from reconstructed state frames (README 3a); the episode's own context is built in task.py decide |
+| episode.py | LiteratureEpisode | episode function | episode.py SourceEvidenceExamination(EpisodeBinding) |
+| episode.py | LiteratureEpisode.__init__ | episode function | constructor values: outcome_page_size -> messages/internal_summary.py OUTCOME_PAGE_SIZE; structure_population -> settings key read in task.py offered/decide; private_yield_binding / yield_bindings -> machinery (the controller is always bound from the task, yield_estimator.py); contract_information_profile -> machinery |
+| episode.py | LiteratureEpisode.reference_evidence | episode function | UNPLACED: root-only entry that builds a reference-source investigation (reference_parent_sources); not this episode's |
+| episode.py | LiteratureEpisode._role | machinery | role check; each role is its own episode (README 3a BindingContext.role) |
+| episode.py | LiteratureEpisode.permitted_common_actions | episode function | task.py TOOLS and offered (tool, reason) and selection_schema (child); redeliver_report is gone (README 3b R2) |
+| episode.py | LiteratureEpisode.child_report_receiver | episode function | messages/read_from_child.py read_from_child (the three old receivers are one function branching on nothing: they differed only in a docstring) |
+| episode.py | LiteratureEpisode.child_request_assembler | episode function | messages/msg_to_child.py msg_to_child (the three old assemblers are one function with the slot's objective) |
+| from_child_passage_evidence_extraction.py | receive_report | episode function | messages/read_from_child.py read_from_child (slot literature_targeted): the report keeps credit, finding and the selected answers; admission, progress receipt, report attempts, receipts and timing records are machinery (README 3b R1, R3, R5) |
+| from_child_source_coverage_improvement.py | receive_report | episode function | messages/read_from_child.py read_from_child (slot literature_ordered): the report keeps credit, finding and the selected answers; admission, progress receipt, report attempts, receipts and timing records are machinery (README 3b R1, R3, R5) |
+| from_child_table_evidence_extraction.py | receive_report | episode function | messages/read_from_child.py read_from_child (slot literature_table): the report keeps credit, finding and the selected answers; admission, progress receipt, report attempts, receipts and timing records are machinery (README 3b R1, R3, R5) |
+| from_parent.py | SourceFromParent | episode function | messages/read_from_parent.py (the mix-in is not carried; its methods are below) |
+| from_parent.py | SourceFromParent.child_assignment_schema | machinery | the parent's view of this assignment (README 3b C3: the parent writes its own) |
+| from_parent.py | SourceFromParent.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (the page assignment fields, literature_task, proposed_annotation_ref, requested_structure_components) |
+| from_parent.py | SourceFromParent._validate_page | episode function | UNPLACED: checks the page against the Store (artifact equals the source's artifact for the representation; refs in scope): a check of a commission (rule 1); read_from_parent has no records |
+| from_parent.py | SourceFromParent._validate_assignment | episode function | messages/read_from_parent.py ASSIGNMENT_FORM admission (the schema); the page check against the Store is UNPLACED as a check of a commission |
+| from_parent.py | SourceFromParent.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent (task and credit unit); the private-yield fill-in becomes settings; the proposed-annotation equality check is UNPLACED (a check of a commission, rule 1) |
+| goal.py | SourceGoal | episode function | goal.py |
+| goal.py | SourceGoal.instructions | episode function | goal.py GOAL (also placed in the instructions by task.py instructions) |
+| internal_summary.py | SourceInternalSummary | episode function | messages/internal_summary.py |
+| internal_summary.py | SourceInternalSummary.initial_decision_context | episode function | UNPLACED: root-only reference_evidence_parent initial context (reference_parent_sources, annotation role at depth 1); not this episode's |
+| internal_summary.py | SourceInternalSummary.decision_context | episode function | messages/internal_summary.py internal_summary (assignment, source custody, own outcomes page, history meaning, child reports); structure context UNPLACED with the population route |
+| internal_summary.py | SourceInternalSummary._owned_population_task_sources | episode function | UNPLACED: classifies owned population outputs by SQL on store.db / sqlite_master / runtime tables; population route not built |
+| internal_summary.py | SourceInternalSummary._population_task_context | episode function | UNPLACED: population route not built; reads runtime_actions through store.db |
+| presentation_selection.py | source_presentation_selection | machinery | order of prompt renderers over state frames (README 3a) |
+| received_evidence.py | SourceReceivedEvidence | episode function | messages/final_to_parent.py (validate_report), messages/read_from_child.py and UNPLACED parts below |
+| received_evidence.py | SourceReceivedEvidence.received_report_sources | machinery | the receiving side of a child return (README 3b R1): the child declares its fields, the parent selects them in messages/msg_to_child.py |
+| received_evidence.py | SourceReceivedEvidence.received_report_facts | episode function | UNPLACED: structure population cells (route not built) |
+| received_evidence.py | SourceReceivedEvidence._complete_requested_received_arrays | episode function | UNPLACED: completes structure fact arrays of the parent-written report contract (the parent writes none now, rule 5) |
+| received_evidence.py | SourceReceivedEvidence.received_form_references | machinery | receipt of returned references (README 3b R3, system custody) |
+| received_evidence.py | SourceReceivedEvidence.received_evidence_tokens | machinery | received-cell tokens for receipt bookkeeping (README 3b R3); structure cells not built |
+| received_evidence.py | SourceReceivedEvidence.validate_received_report | episode function | messages/final_to_parent.py validate_report (the LEADS/SCREENING answers are computed from one summary: own and child leads merged in messages/internal_summary.py); the structure-cell validation is UNPLACED |
+| report_delivery.py | SourceReportDelivery | episode function | messages/final_to_parent.py |
+| report_delivery.py | SourceReportDelivery.finish | episode function | messages/final_to_parent.py final_to_parent (the saved runtime_forms row, Record wrapper, release and pending handles are machinery) |
+| source_contracts.py | _population_catalog | episode function | task.py POPULATE_DESCRIPTION / literature_structure_populate (raises: population route not built) |
+| source_interpretation.py | SourceSourceInterpretation | episode function | task.py (reason tool and action) |
+| source_interpretation.py | SourceSourceInterpretation.reasoning_action_schema | episode function | task.py reason_schema (source_lead for verified_source_leads) |
+| source_interpretation.py | SourceSourceInterpretation.reasoning_has_task_content | episode function | task.py action (a reason answer with an empty commit is rejected unless it carries a source_lead) and empty_commit |
+| source_interpretation.py | SourceSourceInterpretation.execute_reasoning | episode function | task.py reason tool (commit_reasoning and lead validation in one transaction) and validate_source_lead; library candidate: validate_source_lead |
+| source_operations.py | SourceSourceOperations | episode function | task.py (access tools, catalog, admitted) |
+| source_operations.py | SourceSourceOperations.catalog | episode function | task.py catalog, offered, selection_schema (descriptions and input schemas of the access tools) |
+| source_operations.py | SourceSourceOperations.execute | episode function | task.py run_access_tool and the per-tool functions; reason; literature_structure_populate (raises) |
+| source_operations.py | SourceSourceOperations._tool_arguments | episode function | task.py admitted |
+| source_operations.py | SourceSourceOperations._materialize_text_arguments | episode function | UNPLACED: materializes text witnesses for the population route (not built) |
+| source_references.py | SourceSourceReferences | episode function | task.py within_source; library records/received_records.py |
+| source_references.py | SourceSourceReferences._require | episode function | already in library: episode_support/records/received_records.py read_record_in_scope |
+| source_references.py | SourceSourceReferences._artifact | episode function | UNPLACED: only used by the dropped page-artifact check of the commission |
+| source_references.py | SourceSourceReferences._within_source | episode function | task.py within_source (library candidate) |
+| source_references.py | SourceSourceReferences.resolve | machinery | reference_in_context resolver of the old report validation; held check is records.holds (messages/internal_summary.py report_source_held) |
+| structural_sheet_operations.py | SourceStructuralSheetOperations | episode function | UNPLACED: structure population route (repository not in the library) |
+| structural_sheet_operations.py | SourceStructuralSheetOperations.literature_structure_repository | episode function | UNPLACED: LiteratureStructureRepository(store, run_id) is not in the library (lost at 97308b94c, not placed) |
+| structural_sheet_operations.py | SourceStructuralSheetOperations._population_routes | episode function | UNPLACED: population_route comes from the old shared a102_literature_bindings |
+| task.py | SourceTask | episode function | task.py |
+| task.py | SourceTask.next | episode function | task.py decide (context of the old decision; the loop, replay, restore and exchange are machinery) |
+| task.py | SourceTask.apply_response | episode function | task.py action (selection validation, empty-commit rejection, child selection to ChildCall); replay, journal rows and delivery resolution are machinery |
+| task.py | SourceTask.execute | episode function | task.py tools (reason, report, access tools) and ChildCall for a child; reasoning, tool, wait and redelivery dispatch is machinery |
+| task_instructions.py | compose_instructions | episode function | task.py instructions |
+| task_state.py | SourceTaskState | machinery | old loop state (README 3e) |
+| task_state.py | SourceTaskState.__init__ | machinery | old loop state |
+| task_state.py | SourceTaskState.bind_execution_context | machinery | old runner binding |
+| task_state.py | SourceTaskState.record_execution_failure | machinery | record_execution_failure: a failed tool returns failure_outcome (task.py run_access_tool) |
+| task_state.py | SourceTaskState.restore_checkpoint | machinery | checkpoint/restore |
+| task_state.py | SourceTaskState.restore | machinery | checkpoint/restore |
+| task_state.py | SourceTaskState.record_effect | machinery | record_effect (README 3e) |
+| task_state.py | SourceTaskState.checkpoint | machinery | checkpoint/restore |
+| task_waiting.py | SourceTaskWaiting | machinery | wait/suspension machinery |
+| task_waiting.py | SourceTaskWaiting.suspension_changed | machinery | wait/suspension machinery |
+| to_child_passage_evidence_extraction.py | assemble_request | episode function | messages/msg_to_child.py msg_to_child (slot literature_targeted): objective, assignment, selection; EpisodeGoal/EpisodeRequest/Record, knowledge inheritance, inprocess completion order and the report-contract declaration are machinery (README 3b C3, C4) |
+| to_child_source_coverage_improvement.py | assemble_request | episode function | messages/msg_to_child.py msg_to_child (slot literature_ordered): objective, assignment, selection; EpisodeGoal/EpisodeRequest/Record, knowledge inheritance, inprocess completion order and the report-contract declaration are machinery (README 3b C3, C4) |
+| to_child_table_evidence_extraction.py | assemble_request | episode function | messages/msg_to_child.py msg_to_child (slot literature_table): objective, assignment, selection; EpisodeGoal/EpisodeRequest/Record, knowledge inheritance, inprocess completion order and the report-contract declaration are machinery (README 3b C3, C4) |
+| to_parent.py | SourceToParent | episode function | messages/final_to_parent.py |
+| to_parent.py | SourceToParent.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (SCREENING, LEADS, STRUCTURE as selectable fields) |
+| to_parent.py | SourceToParent.facts | episode function | messages/final_to_parent.py final_to_parent; the answers are computed in messages/internal_summary.py through credit.py lead_dispositions / screening_answers |
+| to_parent.py | SourceToParent.current_report_facts | machinery | returned {}: no content |
+| to_parent.py | SourceToParent._rate_fact_sources | episode function | messages/final_to_parent.py STRUCTURE field (raises when selected: population route not built) |
+| to_parent.py | SourceToParent._rate_facts | episode function | UNPLACED: structure rate cells read through LiteratureStructureRepository.fact_cells (not in the library) |
+| to_parent.py | SourceToParent.validate_report | episode function | messages/final_to_parent.py validate_report (raises NotImplementedError validate_form_not_built:A102 where validate_form was called) |
+| waiting.py | SourceWaiting | machinery | wait support |
+| waiting.py | SourceWaiting.supports_wait | machinery | wait support (was False) |
+| yield_estimator.py | SourceYield | episode function | yield_estimator.py |
+| yield_estimator.py | SourceYield.continuation_task | episode function | messages/read_from_parent.py task_key (carried in the parent input as task_key) |
+| yield_estimator.py | SourceYield.yield_controller | episode function | yield_estimator.py yield_controller (Accumulation for verified_source_leads; Completion with target credit_unit for a source answer; README 7b) |
+
+Library candidates: `task.py validate_source_lead` (the library's `literature_task_credit.validate_lead` takes the old binding context), `task.py within_source`, `credit.py` private projector logic (`lead_dispositions`, `screening_answers`, `assessment_answers`). Already in library: `read_record_in_scope`, `outcome_page`, `yield_table`, `time_accounting`, `extend_context`, `rejection_feedback`, `replace_span`, `failure_outcome`, `strict_output_schema`/`decode_strict_output`, `ToolRegistry`, `ToolKnowledge`, `lead_schema`, `INSTRUCTIONS`/`REASONING_COMMIT_REQUIREMENT` of `instructions/structural_homology_evidence/runtime_prompt.py`, `FindingIdentity`, `FindingValidity`/`target_eligible`.

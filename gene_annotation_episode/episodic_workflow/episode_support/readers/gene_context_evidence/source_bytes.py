@@ -1,53 +1,6 @@
 """Private A103 source-byte capture, digest verification and literal windows."""
-import hashlib
-import os
-from pathlib import Path
-import tempfile
+
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.domain import ContractError
-
-
-def artifact_file(store, path, media_type="application/octet-stream"):
-    """Capture a file with bounded memory before attempting its representation."""
-    digest, size = hashlib.sha256(), 0
-    fd, temporary = tempfile.mkstemp(dir=store.path / "artifacts", prefix=".capture-")
-    try:
-        with os.fdopen(fd, "wb") as output, Path(path).open("rb") as original:
-            for chunk in iter(lambda: original.read(1024 * 1024), b""):
-                digest.update(chunk)
-                size += len(chunk)
-                output.write(chunk)
-            output.flush()
-            os.fsync(output.fileno())
-        checksum = digest.hexdigest()
-        directory = store.path / "artifacts" / checksum[:2]
-        directory.mkdir(exist_ok=True)
-        destination = directory / checksum
-        if not destination.exists():
-            os.replace(temporary, destination)
-            descriptor = os.open(directory, os.O_RDONLY)
-            try:
-                os.fsync(descriptor)
-            finally:
-                os.close(descriptor)
-        ref = "artifact_" + checksum
-        store.db.execute("INSERT OR IGNORE INTO artifacts VALUES(?,?,?,?)", (ref, checksum, media_type, size))
-        return ref
-    finally:
-        if os.path.exists(temporary):
-            os.unlink(temporary)
-
-
-def artifact_path(store, ref):
-    """Verify retained byte identity only; callers own access authority."""
-    artifact = store._require(ref, {"artifact"})
-    path = store.path / "artifacts" / artifact["sha256"][:2] / artifact["sha256"]
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    if digest.hexdigest() != artifact["sha256"]:
-        raise ContractError("artifact_digest_mismatch")
-    return path
 
 
 def source_window_selection(source, representation):
@@ -88,13 +41,13 @@ def _source_character_span(handle, offset):
 
 
 def source_window(store, source_ref, *, offset=0, limit=12000, representation="text"):
-    source = store._require(source_ref, {"source"})
+    source = store.require(source_ref, {"source"})
     requested_representation = representation
     selected_ref, representation, available = source_window_selection(source, representation)
     artifact = store.get(selected_ref)
     if type(offset) is not int or not 0 <= offset <= artifact["size"] or type(limit) is not int or limit < 1:
         raise ContractError("source_offset_out_of_bounds")
-    with artifact_path(store, artifact["id"]).open("rb") as handle:
+    with store.open_artifact(artifact["id"]) as handle:
         handle.seek(offset)
         content = handle.read(limit)
         if content and content[0] & 0xC0 == 0x80:

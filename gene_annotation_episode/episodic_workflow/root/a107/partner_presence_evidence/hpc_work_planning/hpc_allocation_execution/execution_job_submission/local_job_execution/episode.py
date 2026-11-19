@@ -1,14 +1,25 @@
-"""A107 binding ``partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution``: the A107 local job runtime (``episode_support/jobs/local_execution/partner_presence_evidence/local_job_runtime.py``)."""
-from __future__ import annotations
+"""The A107 local job execution episode: the execution agent for one job on the local resource."""
+from episode_runtime import EpisodeBinding
 
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.partner_presence_evidence.local_job_runtime import A107LocalJobRuntime
-from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.runtime_binding import DescendantBinding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       read_from_parent as from_parent_file)
 
 
-class ExecutionEpisode(A107LocalJobRuntime, DescendantBinding):
-    binding_path = 'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution'
-    goal = 'Improve completion of the assigned local job and retention of its native outputs'
-    unit = 'One local job action'
-    result = 'The local job receipt and retained native outputs'
-    child_slots = {}
-    commissioning_parent = 'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission'
+class LocalJobExecution(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

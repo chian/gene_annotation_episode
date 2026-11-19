@@ -186,3 +186,138 @@ These are the API copy's own pieces:
 - **science.py**: `_validate_blast_api_parent_request`.
 - **from_parent.py**: `_validate_blast_launch_selection` in `prepare_assignment`. The siblings omit it.
 - **yield_estimator.py**: profile prefix `launch_api:`. `practical_estimator` builds `PracticalYieldEstimator(verify_completion)`; the siblings delegate to the terminal behaviour.
+
+## Carried over
+
+Episode folder: `gene_annotation_episode/episodic_workflow/root/a107/partner_presence_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution` (ten-file form). Old files read from `97308b94c`. One row per row of `runs/carry_over/functions/a107__partner_presence_evidence__hpc_work_planning__hpc_allocation_execution__execution_job_submission__api_job_execution.tsv`.
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| binding_record.py | NativeBindingRecord | machinery | the binding's own as_record() and recorded configuration (README 3, binding_record.py): the system journals settings and declared services |
+| binding_record.py | NativeBindingRecord.as_record | machinery | the binding's own as_record() and recorded configuration (README 3, binding_record.py): the system journals settings and declared services |
+| completion.py | NativeCompletion | machinery | completion proof and verified-completion lookup in runtime_observations (README 3d: completion proof is no controller input); the handoff-completion value now comes from the job_access reply (tool outcome execution_completed, task.py::_outcome) and the completion controller target (yield_estimator.py) |
+| completion.py | NativeCompletion.completion_for_action | machinery | completion proof and verified-completion lookup in runtime_observations (README 3d: completion proof is no controller input); the handoff-completion value now comes from the job_access reply (tool outcome execution_completed, task.py::_outcome) and the completion controller target (yield_estimator.py) |
+| completion.py | NativeCompletion._closed_completion_verdict | machinery | completion proof and verified-completion lookup in runtime_observations (README 3d: completion proof is no controller input); the handoff-completion value now comes from the job_access reply (tool outcome execution_completed, task.py::_outcome) and the completion controller target (yield_estimator.py) |
+| completion.py | NativeCompletion.verify_completion | machinery | completion proof and verified-completion lookup in runtime_observations (README 3d: completion proof is no controller input); the handoff-completion value now comes from the job_access reply (tool outcome execution_completed, task.py::_outcome) and the completion controller target (yield_estimator.py) |
+| configuration.py | NativeConfiguration | machinery | home factory/configuration of the old runner (services, providers, APIServiceExecution, ExecutionProgressProvider, result readers, TerminalExecutionBehavior); its values are the continuation settings read in task.py::_outcome (handoff_unit, acquired_record_unit) and yield_estimator.py::task_yield_profile (task_yield_profiles), tool_knowledge_directory, launch_instructions_directory |
+| configuration.py | NativeConfiguration.__init__ | machinery | home factory/configuration of the old runner (see class row); resources/initial_information validation has no home (reported unplaced) |
+| credit.py | ExecutionEpisodeCredit | episode function | credit.py::credit (the class); closed-credit snapshot parts are machinery (rows below) |
+| credit.py | ExecutionEpisodeCredit.credit_kind | machinery | credit_kind is deleted (README 3d) |
+| credit.py | ExecutionEpisodeCredit._closed_credit_carrier | machinery | closed-credit snapshot over runtime_episodes/runtime_observations (store.db) and EpisodeReturnRecords |
+| credit.py | ExecutionEpisodeCredit._closed_credit_receipts | machinery | closed-credit snapshot over runtime_receipt_inheritance/runtime_record_receipts (EpisodeReceipts) |
+| credit.py | ExecutionEpisodeCredit._closed_credit_value | machinery | closed-credit snapshot check |
+| credit.py | ExecutionEpisodeCredit._closed_credit_facts | machinery | closed-credit snapshot captured into runtime_forms facts |
+| credit.py | ExecutionEpisodeCredit._closed_operational_credit_view | machinery | closed-credit snapshot read from runtime_forms (the system returns completion[credit]; final_to_parent.py returns it) |
+| credit.py | ExecutionEpisodeCredit.project_credit | episode function | credit.py::credit (live credit over summary; the closed view is machinery) |
+| credit.py | ExecutionEpisodeCredit._live_project_credit | episode function | credit.py::credit (old api_execution.credit_view; formula reconstructed, see blocked file) |
+| credit.py | ExecutionEpisodeCredit.credit_view | episode function | credit.py::credit |
+| episode.py | ExecutionEpisode | episode function | episode.py::ApiJobExecution (one class, members from the ten files) |
+| episode.py | ExecutionEpisode.child_roles | episode function | task.py::CHILD_SLOTS = {} (no child) |
+| episode.py | ExecutionEpisode.allowed_children | episode function | task.py::CHILD_SLOTS = {} (no child) |
+| episode.py | ExecutionEpisode.permitted_common_actions | episode function | task.py::_offered (wait only for api_service_assignment_v1) |
+| execution_contracts.py | native_result_operation_catalog | episode function | unplaced: local/PBS result acquisition operations of the results role; the API launch path never offers them (reported) |
+| from_parent.py | NativeParentRequests | episode function | messages/read_from_parent.py (ASSIGNMENT_FORM, read_from_parent); parent-launch checks are not carried |
+| from_parent.py | NativeParentRequests._permitted | episode function | unplaced: check of the parent launch assignment (a commission check, rule 1; reported) |
+| from_parent.py | NativeParentRequests._request_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM (the api branch; the non-api requested_job branches belong to the local/hpc routes) |
+| from_parent.py | NativeParentRequests._launch | episode function | unplaced: re-validation of the parent launch assignment (a commission check, rule 1; reported) |
+| from_parent.py | NativeParentRequests._constraints | episode function | unplaced: check of the parent launch constraints (a commission check; reported) |
+| from_parent.py | NativeParentRequests.child_assignment_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM |
+| from_parent.py | NativeParentRequests.assignment_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM |
+| from_parent.py | NativeParentRequests.prepare_assignment | episode function | messages/read_from_parent.py::read_from_parent (validate_api_assignment from forms/partner_presence_evidence/execution_contracts.py: already in library); the later parent-launch/BLAST/masking/utility/version/DB checks are commission checks and are not carried (reported) |
+| goal.py | NativeGoal | episode function | goal.py GOAL; task.py INSTRUCTIONS |
+| goal.py | NativeGoal.instructions | episode function | task.py::INSTRUCTIONS (with {service}) and task.py::_instructions; goal.py::GOAL |
+| initial_information.py | initial_information | episode function | task.py::api_capabilities (first unit, lookup tool) and task.py::_context configured_resource; its reader catalog (resource_information, received_api_information) has no library home (reported) |
+| internal_summary.py | native_decision_snapshot | machinery | old decision snapshot over working_state, journal.db runtime_actions, source_credit_view, pending_work, delivery_status (README 3a); its content is rebuilt in messages/internal_summary.py::internal_summary and task.py::_context |
+| internal_summary.py | NativeInternalSummary | episode function | messages/internal_summary.py::internal_summary and task.py::_context |
+| internal_summary.py | NativeInternalSummary._with_selected_execution_task | episode function | unplaced: reads the scientific parent task through services.scientific_parent_task (ebi_hmmer only); no home (reported) |
+| internal_summary.py | NativeInternalSummary.decision_context | episode function | messages/internal_summary.py::internal_summary (execution_assignment, execution_progress) and task.py::_context; api_execution.decision_context has no library copy (reported) |
+| presentation.py | present_context | episode function | task.py::_context (TASK and STEERING as named sections of the model context); the old renderer chain (render_api_launch_prompt, render_partner_presence_evidence_prompt, apply_state_frame) lives in the old shared root and the state-frame part is machinery (reported) |
+| received_api_reports.py | received_api_reports | machinery | old received-information catalog authority (catalog.received/configured): replaced by system custody (README 3b R3, F1) |
+| received_execution_information.py | received_execution_information | machinery | old received-information catalog authority (catalog.received/configured): replaced by system custody (README 3b R3, F1) |
+| received_records.py | NativeReceivedRecords | machinery | received-record custody (README 3b P2, R3): the system holds what the parent named in input_refs |
+| received_records.py | NativeReceivedRecords._context_target | machinery | commission/handoff-target checks against the parent launch (rule 1: not carried; custody replaces) |
+| received_records.py | NativeReceivedRecords._received | machinery | receipt ledger of received references (EpisodeReceipts, store.read_snapshot): system custody |
+| received_records.py | NativeReceivedRecords.initial_references | machinery | initial received references: system custody (input_refs named in msg_to_child of the parent) |
+| resource_information.py | NativeResourceInformation | episode function | task.py::api_capabilities (job_access.api_capabilities returns the operation contracts); api_execution.operation_contracts has no library copy (BLOCKED-ON-JOB-SERVICE) |
+| resource_information.py | NativeResourceInformation.resource_tool_contracts | episode function | task.py::api_capabilities / task.py::_context callable_operations; the contracts come from the job_access service (BLOCKED-ON-JOB-SERVICE) |
+| science.py | NativeScienceInputs | episode function | unplaced: checks of the parent launch inputs (commission checks); see rows |
+| science.py | NativeScienceInputs._masking_inputs | episode function | unplaced: commission check against the parent launch (reported) |
+| science.py | NativeScienceInputs._utility_inputs | episode function | unplaced: commission check against the parent launch (reported) |
+| science.py | NativeScienceInputs._expression_nmf_inputs | episode function | unplaced: commission check against the parent launch (reported) |
+| science.py | NativeScienceInputs._versions | episode function | unplaced: immutable-input-version check against the parent launch (reported) |
+| science.py | NativeScienceInputs._check_parent_inputs | episode function | unplaced: re-read of the parent launch request (commission check; reported) |
+| science.py | NativeScienceInputs._validate_blast_api_parent_request | episode function | unplaced: BLAST graded-request check (service ncbi_blast, query sha256 of the subject sequence, fixed database) against the parent request, reading the Store through tool_registry; a commission check and A107BlastExecution is not in the library (reported) |
+| state.py | NativeState | machinery | old practical-state hooks (initialize/state: practical_resource_role_required); the API child has no practical state |
+| state.py | NativeState.initialize | machinery | old practical-state hooks (initialize/state: practical_resource_role_required); the API child has no practical state |
+| state.py | NativeState.state | machinery | old practical-state hooks (initialize/state: practical_resource_role_required); the API child has no practical state |
+| task.py | NativeTask | machinery | old decision loop; own parts rows below |
+| task.py | NativeTask.next | machinery | old decision loop (inprocess_replay, completions, runtime_model_calls, SourceEnd, decision exchange); the loop is the system decide/action cycle |
+| task.py | NativeTask.apply_response | episode function | task.py::action (schema admission of the answer, rejection with feedback, record held check); reasoning commit, redelivery, report_update and recorder parts are machinery |
+| task.py | NativeTask.execute | episode function | task.py TOOLS (api_operation, wait_for_service_job, lookups run as tool units); journal.save/measure, receive_outcome, automatic_score_updates are machinery |
+| task_decision.py | NativeTaskDecision | machinery | model-call machinery (journal runtime_model_calls, decision exchange, receipts); own parts rows below |
+| task_decision.py | NativeTaskDecision.call | episode function | task.py::decide (context pieces: launch_instruction_library and selected_launch_instructions, tool knowledge, waiting support text) ; context pieces resource_context, shared_information_context, completed_action_reports, execution_expectations, resource_tool_estimates, native_execution_expectations, waiting_support have no home here (reported); recording is machinery |
+| task_decision.py | NativeTaskDecision.instructions | episode function | task.py::_instructions |
+| task_decision.py | NativeTaskDecision.conversation_key | machinery | provider conversation key (README 3a conversation state) |
+| task_decision.py | NativeTaskDecision.interpretation_context | machinery | decision-exchange lookup references (decision-exchange loop) |
+| task_decision.py | NativeTaskDecision.exchange_schema | machinery | decision-exchange loop |
+| task_decision.py | NativeTaskDecision.exchange_response | machinery | decision-exchange loop |
+| task_decision.py | NativeTaskDecision.validate_contract_exchange_request | machinery | saved-request check of the decision-exchange loop |
+| task_decision.py | NativeTaskDecision.validate_contract_exchange_history | machinery | saved-request check of the decision-exchange loop |
+| task_decision.py | NativeTaskDecision.exchange_decision | machinery | decision-exchange loop |
+| task_decision.py | NativeTaskDecision.decision_completion | machinery | provider patching (decision completion binding) |
+| task_instructions.py | instructions | episode function | task.py::_instructions (goal text, knowledge and launch instructions, wait text); reasoning-commit, in-process child wait, redelivery and decision-exchange texts describe actions that no longer exist |
+| task_report.py | NativeTaskReport | machinery | report_form machinery: finish, form_with_facts, runtime_forms, workflow.release (README 3b D1, D3) |
+| task_report.py | NativeTaskReport.finish | machinery | report_form machinery: finish, form_with_facts, runtime_forms, workflow.release (README 3b D1, D3) |
+| task_state.py | NativeTaskState | machinery | recorder/checkpoint/restore/record_effect/inprocess_replay source state (README 3e) |
+| task_state.py | NativeTaskState.__init__ | machinery | recorder/checkpoint/restore/record_effect/inprocess_replay source state (README 3e) |
+| task_state.py | NativeTaskState.bind_execution_context | machinery | recorder/checkpoint/restore/record_effect/inprocess_replay source state (README 3e) |
+| task_state.py | NativeTaskState.record_execution_failure | machinery | recorder/checkpoint/restore/record_effect/inprocess_replay source state (README 3e) |
+| task_state.py | NativeTaskState.restore_checkpoint | machinery | recorder/checkpoint/restore/record_effect/inprocess_replay source state (README 3e) |
+| task_state.py | NativeTaskState.restore | machinery | recorder/checkpoint/restore/record_effect/inprocess_replay source state (README 3e) |
+| task_state.py | NativeTaskState.record_effect | machinery | recorder/checkpoint/restore/record_effect/inprocess_replay source state (README 3e) |
+| task_state.py | NativeTaskState.checkpoint | machinery | recorder/checkpoint/restore/record_effect/inprocess_replay source state (README 3e) |
+| task_suspension.py | NativeTaskSuspension | machinery | suspension forwarding to the old execution backend (wait/suspension machinery) |
+| task_suspension.py | NativeTaskSuspension.suspension_changed | machinery | suspension forwarding to the old execution backend (wait/suspension machinery) |
+| terminal_execution.py | TerminalExecutionBehavior | episode function | unplaced: byte-identical copy of the local/HPC terminal behaviour, never built for API resources (reported) |
+| terminal_execution.py | TerminalExecutionBehavior.__init__ | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior._operations | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior._assignment | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior._state_directory | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.initialize | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.state | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.as_record | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.child_roles | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.credit_kind | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.assignment_schema | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.permitted_common_actions | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.allowed_children | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.prepare_assignment | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.initial_decision_context | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior._resource_information | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior._resource_instructions | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.instructions | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.decision_context | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.catalog | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.execute | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.completion_for_action | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.practical_estimator | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.fact_sources | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.facts | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.resolve | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.validate_report | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| terminal_execution.py | TerminalExecutionBehavior.credit_view | episode function | unplaced (see class row): terminal behaviour never built for API resources |
+| to_parent.py | NativeParentReturns | episode function | messages/final_to_parent.py (RETURN_FORM, final_to_parent, validate_report) |
+| to_parent.py | NativeParentReturns.required_return_sources | machinery | returns () : the parent selects return fields in msg_to_child (rule 5) |
+| to_parent.py | NativeParentReturns.facts | episode function | messages/final_to_parent.py::final_to_parent (credit, finding, handoff refs, completion, selected facts); closed-credit facts are machinery |
+| to_parent.py | NativeParentReturns._live_facts | episode function | messages/final_to_parent.py::final_to_parent / EMPTY / FIELDS (native empty families; api_execution.facts arrive in the tool outcome facts) |
+| to_parent.py | NativeParentReturns.validate_report | episode function | messages/final_to_parent.py::validate_report (the recorded-facts agreement check); validate_received_report of masking/utility/uniprot/rfam returns has no library copy and raises validate_received_report_not_built (reported) |
+| waiting.py | perform_selected_native_wait | episode function | task.py::wait_for_service_job (the wait TOOL; the failed wait is a returned outcome) |
+| work_operations.py | NativeWorkOperations | episode function | task.py TOOLS |
+| work_operations.py | NativeWorkOperations.catalog | episode function | task.py::api_capabilities and task.py::_context callable_operations |
+| work_operations.py | NativeWorkOperations.execute | episode function | task.py::api_operation (parent-input check dropped: commission check) |
+| yield_estimator.py | ExecutionEpisodeYield | episode function | yield_estimator.py |
+| yield_estimator.py | ExecutionEpisodeYield._request_yield_class | episode function | yield_estimator.py::request_yield_class |
+| yield_estimator.py | ExecutionEpisodeYield._task_yield_profile | episode function | yield_estimator.py::task_yield_profile |
+| yield_estimator.py | ExecutionEpisodeYield.yield_controller | episode function | yield_estimator.py::yield_controller (CompletionYieldController; target from parent_input) |
+| yield_estimator.py | ExecutionEpisodeYield._launch_api_yield_controller | episode function | yield_estimator.py::yield_controller |
+| yield_estimator.py | ExecutionEpisodeYield.practical_estimator | machinery | PracticalYieldEstimator deleted (README 3d): one of the three controllers |

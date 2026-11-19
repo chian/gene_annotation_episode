@@ -5,8 +5,10 @@ This issue replaces the 18 November issue; it was revised the same day for the d
 `BINDING_CONTRACT.md`, which is the source of truth for every system name used here.
 
 The system parts named here (`ctx.store`, `ctx.services`, `ctx.clock`, custody, the attempts journal, the
-selection of return fields) exist in `episode_runtime/` and are tested on its test episodes. The job episodes,
-the services and the job library described here are the design. The last section lists what is not provided yet.
+selection of return fields) exist in `episode_runtime/` and are tested on its test episodes. The job services
+exist too and run on real local jobs; the section "Provided now" gives their real names and calls, which differ
+from the example names used in sections 5 to 9. The job episodes are still the design. The last section lists
+what is not provided yet.
 
 The owner's rules bind every line (`AGENTS.md`, "How the system fails and stops"): a wrong commission fails with
 its error; stopping belongs to the episode's yield estimator alone; no library function touches the Store
@@ -102,8 +104,9 @@ A service is the run's access to something outside the Store.
   A monitor's credit therefore reads what its check tool returned and wrote, not the scheduler.
 
 **Job access** is the scheduler, SSH, the transport, local execution and the native event ledger. It submits,
-asks status, fetches and cancels. The library functions behind it exist in `episode_support/` today in their old
-form, several as per-axis copies; none is yet wrapped as a service.
+asks status, fetches and cancels. It is the service `JobAccess` with one route per resource ("Provided now").
+The older library functions in the table below exist in `episode_support/` in their old form, several as per-axis
+copies; the routes do not call them.
 
 | Job kind | Status request | Fetch | Cancel |
 |---|---|---|---|
@@ -115,7 +118,8 @@ form, several as per-axis copies; none is yet wrapped as a service.
 detached local jobs: registered job identities, each job's one service-exit publication and an event cursor, in
 its own SQLite file. `register_native_target` and `publish_native_event` accept an identical repeat and refuse a
 different one (`identity_conflict`). `wait_events(condition)` is `async` and returns the next events or its
-reconsideration time. The ledger is outside the Store and outside custody; episodes reach it only as a service.
+reconsideration time. The ledger is outside the Store and outside custody; episodes reach it only as the service
+`NativeEvents`, whose `wait(ctx, condition)` writes the receipt of each event it woke on through `ctx.store`.
 
 **The estimate table** is the memory of earlier runs: for each kind of action, what was predicted and what
 happened (gain, duration, cost, scores). Tools add rows through it, once per `ctx.operation_key`. `decide` and
@@ -415,27 +419,97 @@ only through the root's message in the commission.
   A value the owner fixed in an overrides file is not recomputed; the log says what would have been set. So the
   settings are logged, readable and overridable, and each run's journal says which were in force.
 
+## Provided now: the job services (19 November 2026)
+
+Built and run by `episode_support/jobs/tests/test_job_services.py` (15 tests through the real runner; local jobs
+are real detached systemd services). The run's caller gets every factory from
+`episode_support/jobs/job_services.py`: `job_services(configuration)` returns `{name: factory}` for the
+`services` collaborator. The names in sections 5 to 9 were examples; these are the real ones.
+
+| Service name | Class, module | What a tool calls (`service = ctx.services[name]`) | What a decision reads (`.read(member, ...)`) |
+|---|---|---|---|
+| `job_access` | `JobAccess`, `episode_runtime/job_access.py` | `launch(ctx, resource_id, job, inputs=None, estimates=None, name='job')`, `check(ctx, handoff_ref, assess=None)`, `fetch(ctx, handoff_ref, names=None)`, `cancel(ctx, handoff_ref)`, `await run(ctx, resource_id, job, inputs=None, name='command')` (launch, wait, fetch in one unit) | `resources`, `describe(resource_id)` |
+| `estimate_table` | `EstimateTable`, `episode_runtime/estimate_table.py` | `expect(kind, expectation, key=, at=)` before a costly action, `resolve(key, actual, at=)` after it; `observe(resource, kind, data, observed_at=, provenance=)`, `record(attempt_id=, profile=, observation=)` | `kind_statistics(kind)`, `rows(kind, limit)`, `expectation(key)`, `kinds`, `latest(resource, kind, now)`, `history(profile, now, queue_only, limit)`, `profiles(tools, now, limit)`, `policy`, `as_record` |
+| `native_events` | `NativeEvents`, `episode_support/jobs/native_events.py` | `await wait(ctx, condition)` (the receipts of the events come into custody), `receipt(ctx, handle, record_ref)`; the ledger's own `register_native_target`, `validate_event_targets`, `wait_events` (so `waiting.selected_wait(service, condition)` works) | `targets(handles)` |
+| `resource_adapter`, `resources` (one object) | `ResourceAdapters`, `episode_runtime/resource_adapters.py`; each bound resource is a `JobResourceAdapter` (`episode_support/jobs/job_resource_adapter.py`) | `prepare_assignment(ctx, assignment)`, `await execute(ctx, assignment, tool, arguments)`, `await check_handoff(ctx, handoff)` | `declared_capabilities`, `adapter_capabilities`, `bound_resource_ids`, `is_bound(resource_id)`, `catalog(assignment)`, `decision_context(assignment)`, `facts(assignment)` |
+| `instruction_libraries` | `InstructionLibraries`, `episode_support/jobs/instruction_libraries.py` | `execute(name, arguments)` (one lookup of either frozen library) | `launch_instruction_library`, `tool_knowledge`, `context`, `catalog`, `for_resource(configuration)`, `materialize(selection)`, `entries_for_tool(name)` |
+
+Not services, because they read nothing outside the Store:
+
+- **The job record kind** is the declared work table `JOB_LEDGER` (`episode_runtime/job_access.py`: columns
+  `job`, `event`, `at`, `detail`, `source_ref`, `result_refs`; key `job`, `event`, `at`; events `handoff`, `check`,
+  `closure`). `job_access` writes the rows through `ctx.store` with the route's reply as an artifact, so the tool
+  does not write them itself (section 7's example tool is replaced by one call). The readers for summaries and
+  credit are `episode_support/jobs/job_records.py`: `outstanding_jobs(reader)`, `handoff`, `checks`, `closure`,
+  `job_rows`.
+- **The HPC ledger** is the declared work table `HPC_LEDGER` (`episode_support/jobs/hpc_ledger.py`):
+  `HpcLedger.open(ctx.store, commission)`, `HpcLedger.existing(reader, ledger_id)`, `put`, `read`, `records`,
+  `freeze`, `score(measured_ref, log_score=, measured_value=, forecast_metric=)`, `accept`, `model_credit`,
+  `credit_view`, `refs` (the rows to pass or return in custody). An episode that named a `hpc_ledger` service drops
+  it from `SERVICES`. The old `once`, `cached` and `save_action` are not carried: the journal replays finished
+  units.
+- **The action-value calculation** (section 13) is `episode_support/jobs/action_value.py`: `discrimination`,
+  `definitive_outcomes`, `expected_gain`, `refusal`.
+
+**No relaunch on resume, without a table of finished operations.** A job's handle is derived from the unit's
+`ctx.operation_key`. A unit that runs again takes over the row its abandoned attempt wrote (`ctx.abandoned`,
+`ctx.store.reclaim`) and the route is not asked (`replayed`). When the attempt was cut before its row committed,
+the route is asked again with the same handle and returns the job it already has (`adopted`). Section 9's
+`submit(..., key=ctx.operation_key)` is this.
+
+**Routes** (one per resource id; the protocol is stated in `episode_runtime/job_access.py`):
+
+- `LocalJobRoute` (`episode_support/jobs/local_job_route.py`): a job `{'command', 'env'}` runs as a detached
+  systemd user service through `gene_annotation_episode.native_lifecycle`. The job runs
+  `episode_support/jobs/detached_job.py`, which writes the command's receipt and publishes it to the native event
+  ledger from the job's own process.
+- `PbsSshRoute` (`episode_support/jobs/pbs_job_route.py`): a job `{'mode', 'script', 'arguments', 'env'}` through
+  the configured transport (`ssh_argv`); `mode: 'batch'` uses `qsub`, `qstat -x -f -F json`, `qdel` and, for an
+  unrecorded submission, `qselect -x -N`; `mode: 'login'` runs the script as a detached process on the node the
+  transport reaches.
+
+**How the wanted calls of the carried episodes map.** The carried episodes name about eighty different members of
+`job_access` in their `BLOCKED-ON-JOB-SERVICE` notes. They reduce to these:
+
+| Wanted call | Real call |
+|---|---|
+| `exec_command`, `run_command`, `run_discovery`, `run_remote`, `execute_command`, `begin_command` with `finish_command`, `stage_input` | `await job_access.run(ctx, resource_id, job, inputs={name: ref})`: the command is launched once under the unit's key, waited for, and its files come back as artifacts |
+| `submit`, `launch_operation`, `api_operation` (a submission) | `job_access.launch(ctx, resource_id, job, inputs=, estimates=)` |
+| `status`, `observe_target`, `observe_progress`, `observe_queue` (as a `run` of the queue command), `read_progress` | `job_access.check(ctx, handoff_ref, assess=<the episode's own reading of the reply>)`; an earlier check is read from the held check rows |
+| `read_file`, `read_target`, `result_host`, `api_result_catalog`, `api_result_operation` | `job_access.fetch(ctx, handoff_ref, names=[...])` |
+| `handoff_refs`, `native_event_targets`, `describe_progress_target`, `describe_result_target` | the held handoff row (`job_records.handoff`, `outstanding_jobs`); its `detail['native']` names the event target |
+| `capabilities`, `api_capabilities`, `launch_catalog`, `api_catalog` | `job_access.read('resources')`, `.read('describe', resource_id)`; `resource_adapter.read('catalog', assignment)` |
+| `estimate_table.observe`, `latest`, `record`, `history`, `policy`, `as_record` | the same members (`record` takes `attempt_id`, not `key`) |
+| `validate_assignment`, `validate_action`, `validate_report`, `credit_view`, `resolve`, `direct_dependencies`, `execution_expectations`, `received_bvbrc_context`, `api_decision_context` | not a service: each reads only the Episode's own assignment and held records, so it is the episode's own code or a library function it calls |
+
 ## Not provided yet (for a later build)
 
-1. **The root waiting in the process until a check time.** The system has no wait. Today a wait can only be a
-   tool unit (for example an `async` tool that awaits the native event ledger's `wait_events`), whose credit is
-   whatever that episode's `credit.py` gives it. Otherwise the run ends: an interrupted run is resumed by its
-   caller, and after a closed run the caller links a later run (section 8). Nothing starts either at `check_at`.
-2. **The estimate table and the action-value calculation.** No library module exists for either. They would
-   live in `episode_support/`: the table as a service (durable, writes once per `ctx.operation_key`; what a
-   decision reads from it is recorded by the system), the calculation as pure functions called from `action`.
-3. **The recomputation of settings after a run**, its change log and the overrides file (section 14).
-4. **The real job-access services.** The scheduler, SSH, transport and local-execution code exists in
-   `episode_support/` in its old form, partly as per-axis copies. No service wraps it. A `qdel` cancel and a
-   cancel operation for API services do not exist.
-5. **The job records and their library.** The handoff, check and closure records are not defined. No module of
-   `episode_support/` declares a work table yet.
-6. **Per-call model timing.** The journal keeps each model call's request and response, not when it was asked
+1. **The root waiting in the process until a check time.** The system has no wait. A wait is a tool unit: an
+   `async` tool that awaits `native_events.wait(ctx, condition)`, whose credit is whatever that episode's
+   `credit.py` gives it. Otherwise the run ends: an interrupted run is resumed by its caller, and after a closed
+   run the caller links a later run (section 8). Nothing starts either at `check_at`.
+2. **The recomputation of settings after a run**, its change log and the overrides file (section 14).
+   `EstimateTable.kind_statistics` gives the numbers; nothing writes them into `continuation`.
+3. **A route to API services** (NCBI BLAST, BV-BRC and others). The route protocol admits one; none is written,
+   and a cancel operation for API services does not exist. The library's API code
+   (`episode_support/jobs/service_calls/`) is still in its old form.
+4. **The PBS scheduler calls have not run.** `PbsSshRoute` is tested through a local shell as its transport: the
+   remote program, a login-mode job, staging, status, results, reading, cancelling, adoption of a recorded
+   submission and the refusal of an unknown one all run. No PBS scheduler is installed where the tests run and
+   nothing authenticates to Aurora, so `qsub`, `qstat`, `qdel` and `qselect` (the batch mode, and the reading of
+   the `qstat` reply) are written and have never been executed.
+5. **The scheduler-specific observations of the old `TerminalExecution`** (`observe_execution` with its PBS field
+   measurements, `write_allocation_control`, the `qsub` shim that records the submitted script) are not carried
+   into a route. They stay in the library's per-axis copies until the jobs family is carried over.
+6. **The time model and the scores of estimates** (`hpc_prediction.py`: `predict`, `update`, `log_score`) remain
+   per-axis library copies. An episode passes its own functions (`check(..., assess=...)`, `HpcLedger.score`).
+7. **Per-call model timing.** The journal keeps each model call's request and response, not when it was asked
    or how long it took. The decision clock is one time per unit position.
-7. **A count of rejections visible to `decide`.** `decide` receives only the latest feedback. It cannot see how
+8. **A count of rejections visible to `decide`.** `decide` receives only the latest feedback. It cannot see how
    many answers were rejected for this unit, or the earlier feedback.
-8. **Writing an artifact from a file without loading it, and a scratch directory under the Store.**
-   `ctx.store.artifact(data, media_type)` takes the bytes, so such a result passes through memory.
-9. **Real episodes.** No real episode is yet written as an `EpisodeBinding` class. The launching, monitor and
-   result-acquisition children and the heads are still in their earlier form.
-10. **A real-job test.** No test runs launch, monitor and extraction on a real job through the class API.
+9. **Writing an artifact from a file without loading it, and a scratch directory under the Store.**
+   `job_access.fetch` reads each result file into memory and writes it with `ctx.store.artifact(data, media_type)`.
+10. **Real episodes on the services.** The carried launch, monitor, result-acquisition, resource and HPC planning
+    episodes still raise at their `BLOCKED-ON-JOB-SERVICE` notes; each is rewritten onto the calls above in the
+    episode stage. The only episode that runs on the services today is the test episode
+    `episode_support/jobs/tests/job_probe/`.

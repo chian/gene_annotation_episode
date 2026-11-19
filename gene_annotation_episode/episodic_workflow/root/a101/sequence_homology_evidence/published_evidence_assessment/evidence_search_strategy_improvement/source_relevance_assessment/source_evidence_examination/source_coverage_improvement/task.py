@@ -1,4 +1,4 @@
-"""The task: read the assigned source in document order through the access tools, and write the interpretation with
+"""The task: read the assigned source in document order through the access tools, and write the controlled report with
 the ``report`` tool.
 
 Carried from the old ``task.py``, ``task_decision.py``, ``task_instructions.py``, ``decision_state.py``,
@@ -16,6 +16,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.laun
     INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.sequence_homology_evidence.literature_investigation_prompt import (
     INSTRUCTIONS)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sequence_homology_evidence.literature_claim_reports import (
+    PASSAGE_LOCATION, report_schema, report_source_refs)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
@@ -132,23 +134,19 @@ INPUT_SCHEMAS = {
 INPUT_SCHEMAS['execution.estimate'] = {'anyOf': [
     obj({'tool': {'const': name}, 'arguments': INPUT_SCHEMAS[name]}) for name in ('source.xlsx.sheets', 'source.xlsx.rows')]}
 
-REPORT_DESCRIPTION = ('Write your interpretation of the source read in order for the assigned question: what each '
-                      'window itself says, its own qualifications, and what stays unresolved. Windows stay separate '
-                      'and keep their representation identity. Writing it can be repeated and the latest one is '
-                      'what is returned.')
-REPORT_SCHEMA = obj({
-    'interpretation': TEXT,
-    'windows': {'type': 'array', 'items': obj({'source_ref': TEXT,
-                                               'representation': {'enum': ['text', 'original', 'stdout', 'stderr']},
-                                               'offset': INTEGER, 'limit': POSITIVE,
-                                               'statement': TEXT, 'qualification': TEXT})},
-    'qualification': TEXT})
+REPORT_DESCRIPTION = ('Report the source read in order for the assigned question as controlled entries, one per '
+                      'window a claim rests on, in document order: the source it is in, its byte window (offset, '
+                      'limit), the kind of claim the window makes, how the subject of the claim relates to the '
+                      'target (unresolved when the correspondence is not established), whether it reports a '
+                      'measurement, and optionally the function name or ID as written in the source. Windows stay '
+                      'separate. Writing it can be repeated and the latest one is what is returned.')
+REPORT_SCHEMA = report_schema(PASSAGE_LOCATION)
 
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
                     'no new action and does not execute or credit the historical work again.\n')
-REPORT_GUIDANCE = ('\nSelect the report tool with your interpretation of the source read in order when the outcomes '
+REPORT_GUIDANCE = ('\nSelect the report tool with your controlled report of the source read in order when the outcomes '
                    'warrant it. The report is returned to your parent as its finding. Selecting report does not end '
                    'your work: only the numerical controller does.')
 
@@ -169,7 +167,7 @@ def instructions(*, knowledge, launch):
 def offered(settings):
     """The access tools offered now: ``execution_estimate`` only with timing statistics configured."""
     tools = [name for name in LIBRARY_NAMES
-             if name != 'execution_estimate' or settings.get('tool_registry', {}).get('native_statistics') is not None]
+             if name != 'execution_estimate' or settings['tool_registry'].get('native_statistics') is not None]
     return tools + ['report']
 
 
@@ -230,7 +228,7 @@ async def run_access_tool(name, envelope, ctx):
                 'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': name, 'arguments': arguments}),
                 'record_refs': [], 'changed_record_refs': [], 'result': None,
                 'feedback': {'category': 'arguments_or_reference', 'code': str(error), **detail}}
-    registry = ToolRegistry(ctx.store, **ctx.settings.get('tool_registry', {}))
+    registry = ToolRegistry(ctx.store, **ctx.settings['tool_registry'])
     permitted = tuple(ctx.store.refs()) if name in HELD_SOURCE_TOOLS else None
     try:
         return await registry.execute_async(name, arguments, scope=scope, operation_key=ctx.operation_key,
@@ -350,9 +348,9 @@ def action(response, summary, records, ctx):
         selection = validate_selection(decode_response(response, schema), schema)
         name, arguments = selection['tool'], selection['arguments']
         if name == 'report':
-            for window in arguments['windows']:
-                if not records.holds(window['source_ref']):
-                    raise ContractError('literature_reference_unavailable', detail={'reference': window['source_ref']})
+            for reference in report_source_refs(arguments):
+                if not records.holds(reference):
+                    raise ContractError('literature_reference_unavailable', detail={'reference': reference})
             return ToolCall('report', arguments)
     except (ValueError, KeyError, TypeError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='selection'))

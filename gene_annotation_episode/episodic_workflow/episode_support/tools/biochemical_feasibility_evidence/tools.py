@@ -1,6 +1,7 @@
 """Private A110 source and sequence identity tools."""
 from __future__ import annotations
 import asyncio
+from contextlib import ExitStack
 from contextvars import ContextVar
 from dataclasses import replace
 from datetime import datetime, timezone
@@ -22,8 +23,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_operations.sequence_views import VERSION as VIEW_VERSION, view_sequence
 from gene_annotation_episode.episodic_workflow.episode_support.readers.documents.biochemical_feasibility_evidence.material_parsing import FORMATS
 from gene_annotation_episode.episodic_workflow.episode_support.records.biochemical_feasibility_evidence import library_targets as libraries
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.biochemical_feasibility_evidence import materials_packing as packing
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.biochemical_feasibility_evidence.materials import artifact_path, source_window
+from gene_annotation_episode import materials_packing as packing
+from gene_annotation_episode.materials import source_window
 from gene_annotation_episode.episodic_workflow.episode_support.readers.biochemical_feasibility_evidence.source_locations import locate as locate_source, locate_schema, received_source as received_location_source
 from gene_annotation_episode.episodic_workflow.episode_support.tools.documents.biochemical_feasibility_evidence.document_tools import DocumentOutput, archive_extract, archive_inventory, pdf_native, resource as document_resource
 from gene_annotation_episode.episodic_workflow.episode_support.tools.documents.biochemical_feasibility_evidence.spreadsheet_tools import xlsx_native, VERSION as XLSX_VERSION
@@ -107,8 +108,6 @@ class ToolRegistry:
                 raise TypeError('typed_ordinary_execution_statistics_required')
         self.native_statistics = native_statistics
         self.clients = clients or PublicClients()
-        store.db.execute('CREATE TABLE IF NOT EXISTS tool_operations (\n            operation_key TEXT PRIMARY KEY, id TEXT NOT NULL, name TEXT NOT NULL,\n            arguments TEXT NOT NULL, scope TEXT NOT NULL, result TEXT NOT NULL)')
-        store.db.commit()
         self._publications = ContextVar('annotation_tool_publications', default=None)
         self._publication_batch = ContextVar('annotation_native_publication_batch', default=None)
         self._mapping_directories = ContextVar('annotation_mapping_directories', default=None)
@@ -295,13 +294,13 @@ class ToolRegistry:
     def _check_source_bytes(self, name, arguments):
         """Apply the finite Source/File receipt policies before byte tools."""
         if name in {'material.parse', 'material.read'}:
-            material = self.store._require(arguments['material_ref'], {'material'})
-            source = self.store._require(material['source_ref'], {'source'})
+            material = self.store.require(arguments['material_ref'], {'material'})
+            source = self.store.require(material['source_ref'], {'source'})
             artifact_ref = source['artifact_ref']
         elif name in {'source.read', 'source.locate', 'source.sequence.scan', 'source.sequence.references', 'source.archive.members', 'source.xlsx.sheets', 'source.xlsx.rows', 'source.pdf.info', 'source.pdf.text', 'source.pdf.page', 'image.view'}:
-            source = self.store._require(arguments['source_ref'], {'source'})
+            source = self.store.require(arguments['source_ref'], {'source'})
             if name in {'source.read', 'source.locate', 'source.sequence.scan', 'source.sequence.references'}:
-                from gene_annotation_episode.episodic_workflow.episode_support.records.documents.biochemical_feasibility_evidence.materials import source_window_selection
+                from gene_annotation_episode.materials import source_window_selection
                 representation = 'original' if name == 'source.sequence.references' else arguments.get('representation', 'text')
                 artifact_ref, _, _ = source_window_selection(source, representation)
             else:
@@ -326,16 +325,14 @@ class ToolRegistry:
                 return {'status': 'invalid', 'operation_ref': None, 'record_refs': [], 'changed_record_refs': [], 'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': 'source_location_arguments_not_json'}}
         token = self._publications.set([])
         batch_token = self._publication_batch.set(None)
-        directories = self._mapping_directories.set([])
+        directories = self._mapping_directories.set(ExitStack())
         native_receipts = self._native_execution_refs.set([])
         grading_failures = self._grading_failures.set([])
         permitted = self._permitted_record_refs.set(None if permitted_record_refs is None else tuple(permitted_record_refs))
         try:
             return await self._execute_operation_async(name, args, scope=scope, operation_key=operation_key)
         finally:
-            import shutil
-            for directory in self._mapping_directories.get():
-                shutil.rmtree(directory)
+            self._mapping_directories.get().close()
             self._mapping_directories.reset(directories)
             self._native_execution_refs.reset(native_receipts)
             self._grading_failures.reset(grading_failures)
@@ -350,29 +347,6 @@ class ToolRegistry:
         getter_failure_codes = {name: PROVIDER_FAILURE_CODES for name in CHEMICAL_SOURCE_OPERATIONS}
         getter_validators = {name: validate_provider_receipt for name in CHEMICAL_SOURCE_OPERATIONS}
         getter_source_providers = {name: name.split('.')[1] for name in CHEMICAL_SOURCE_OPERATIONS}
-        saved = self.store.db.execute('SELECT * FROM tool_operations WHERE operation_key=?', (operation_key,)).fetchone()
-        if saved:
-            if saved['name'] != name or saved['arguments'] != canonical(args) or saved['scope'] != canonical(scope):
-                raise ContractError('operation_key_reused_for_different_work')
-            try:
-                if json.loads(saved['result']).get('status') in {'completed', 'partial'}:
-                    self._check_source_bytes(name, args)
-                    if name in {'public.literature.sequence_identity', 'source.sequence.scan', 'source.sequence.references'}:
-                        from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.biochemical_feasibility_evidence.literature_sequence_discovery import protein_operand
-                        protein_operand(self, args['subject_ref'], scope)
-                    if name in {'source.sequence.scan', 'source.sequence.references', 'source.experimental.records'}:
-                        received_location_source(self.store, args['source_ref'], args.get('representation', 'original'), permitted_inputs=self._permitted_record_refs.get(), scope=scope)
-            except ContractError as error:
-                return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [], 'changed_record_refs': [], 'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': str(error)}}
-            if name == 'source.locate' and json.loads(saved['result'])['status'] == 'completed':
-                try:
-                    artifact = received_location_source(self.store, args['source_ref'], args['representation'], permitted_inputs=self._permitted_record_refs.get(), scope=scope)
-                    original = json.loads(saved['result'])
-                    if original['result']['artifact_ref'] != artifact['id'] or original['result']['total_bytes'] != artifact['size']:
-                        raise ContractError('source_location_artifact_identity_conflict')
-                except ContractError as error:
-                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [], 'changed_record_refs': [], 'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': str(error)}}
-            return json.loads(saved['result'])
         operation_ref = identity('operation', {'key': operation_key, 'name': name, 'arguments': args})
         result = {'status': 'invalid', 'operation_ref': operation_ref, 'record_refs': [], 'result': None, 'feedback': None}
         try:
@@ -478,7 +452,6 @@ class ToolRegistry:
         batch = self._publication_batch.get()
         if batch is not None:
             result['published_batch'] = dict(batch)
-        self.store.db.execute('INSERT INTO tool_operations VALUES(?,?,?,?,?,?)', (key, result['operation_ref'], name, canonical(args), canonical(scope), canonical(result)))
 
     def _estimate_native(self, args, scope):
         from gene_annotation_episode.episodic_workflow.episode_support.jobs.biochemical_feasibility_evidence.execution_expectations import capture_execution_scopes
@@ -505,27 +478,32 @@ class ToolRegistry:
         return await run_cancellable_native(function, *args, **kwargs)
 
     def resolve_image_input(self, selected: dict) -> dict:
-        return resolve_selected_image(self.store, selected)
+        return resolve_selected_image(self.store, self._mapping_directories.get().enter_context(self.store.scratch("image")), selected)
+
+    def _artifact_file(self, ref):
+        """A file holding the bytes of the held artifact ``ref``, in a scratch directory of the running unit
+        (removed when the tool call ends), for a native program or a reader that needs a path."""
+        return self._mapping_directories.get().enter_context(self.store.scratch('input')).copy_artifact(ref, 'input')
 
     def _spreadsheet_arguments(self, name, args):
-        source = self.store._require(args['source_ref'], {'source'})
-        path = artifact_path(self.store, source['artifact_ref'])
+        source = self.store.require(args['source_ref'], {'source'})
+        path = self._artifact_file(source['artifact_ref'])
         return (source, path, name.rsplit('.', 1)[1], {key: value for key, value in args.items() if key != 'source_ref'})
 
     async def _document_async(self, name: str, args: dict) -> DocumentOutput:
-        if self.store.db.in_transaction:
+        if self.store.in_transaction():
             raise ContractError('native_document_work_requires_no_active_store_transaction')
         if name.startswith('source.xlsx.'):
             source, path, operation, arguments = self._spreadsheet_arguments(name, args)
             member = None
         elif name == 'source.archive.extract':
-            member = self.store._require(args['member_ref'], {'archive_member'})
-            source = self.store._require(member['source_ref'], {'source'})
-            path = artifact_path(self.store, source['artifact_ref'])
+            member = self.store.require(args['member_ref'], {'archive_member'})
+            source = self.store.require(member['source_ref'], {'source'})
+            path = self._artifact_file(source['artifact_ref'])
         else:
             member = None
-            source = self.store._require(args['source_ref'], {'source'})
-            path = artifact_path(self.store, source['artifact_ref'])
+            source = self.store.require(args['source_ref'], {'source'})
+            path = self._artifact_file(source['artifact_ref'])
         if name == 'source.archive.members':
             output = await asyncio.to_thread(archive_inventory, path, offset=args.get('offset', 0), limit=args.get('limit', 50))
         elif name == 'source.archive.extract':
@@ -642,11 +620,11 @@ class ToolRegistry:
         if name == 'public.pmc.versions':
             return (self.clients.pmc_versions, args)
         if name == 'public.pmc.files':
-            selected = self.store._require(args['version_ref'], {'pmc_version'})
+            selected = self.store.require(args['version_ref'], {'pmc_version'})
             return (self.clients.pmc_files, {'prefix': selected['prefix'], **({'continuation_token': args['continuation_token']} if 'continuation_token' in args else {})})
         if name == 'public.pmc.asset':
-            asset = self.store._require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
-            selected = self.store._require(asset['version_ref'], {'pmc_version'})
+            asset = self.store.require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
+            selected = self.store.require(asset['version_ref'], {'pmc_version'})
             uri = asset.get('original_uri') or 's3://' + BUCKET + '/' + asset['object_key']
             return (self.clients.pmc_asset, {'original_uri': uri, 'prefix': selected['prefix']})
         if name == 'public.uniprot.record':
@@ -715,7 +693,7 @@ class ToolRegistry:
             self._written.append(selected['id'])
             return ({'selection': selected, 'scope': {'subject_refs': [selected['library_ref']], 'read_selection_refs': [selected['id']]}}, [selected['id']])
         if name == 'library.read':
-            subject = self.store._require(args['subject_ref'], {'read_subject'})
+            subject = self.store.require(args['subject_ref'], {'read_subject'})
             offset, limit = (args.get('offset', 0), args.get('limit', 12000))
             if type(offset) is not int or not 0 <= offset <= subject['length'] or type(limit) is not int or (limit < 1):
                 raise ContractError('invalid_member_window')
@@ -759,7 +737,7 @@ class ToolRegistry:
                 rows = [self.store.get(item) for item in args['refs']]
                 for row in rows:
                     if row['record_type'] in {'input', 'feature', 'product', 'read_subject'}:
-                        if not self.store._in_scope(row['id'], self.store.validate_scope(scope)):
+                        if not self.store.in_scope(row['id'], scope):
                             raise ContractError('subject_outside_assigned_scope')
                 return ({'records': [received(row) for row in rows], 'count': len(rows), 'next_offset': None}, [])
             kind, offset, limit = (args.get('kind', 'hypothesis'), args.get('offset', 0), args.get('limit', 100))
@@ -807,7 +785,7 @@ class ToolRegistry:
         return ({'source_ref': source['id'], 'versions': versions, 'next_continuation_token': page['next_continuation_token'], 'listing_complete': not page['truncated'], 'version_preference': 'not_assigned', 'next_query': {'pmcid': args['pmcid'], 'continuation_token': page['next_continuation_token']} if page['next_continuation_token'] else None}, refs)
 
     def _publish_pmc_files(self, args: dict, snapshots: PmcFiles) -> tuple[dict, list[str]]:
-        selected = self.store._require(args['version_ref'], {'pmc_version'})
+        selected = self.store.require(args['version_ref'], {'pmc_version'})
         listing = self._source(snapshots.listing.service, None, snapshot=snapshots.listing, parent_source_refs=[selected['source_ref']])
         refs, objects, assets = ([listing['id']], [], [])
         page = parse_listing(snapshots.listing.content)
@@ -846,7 +824,7 @@ class ToolRegistry:
         return (body, refs)
 
     def _publish_pmc_asset(self, args: dict, snapshot: SourceSnapshot) -> tuple[dict, list[str]]:
-        advertisement = self.store._require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
+        advertisement = self.store.require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
         snapshot = replace(snapshot, request={**snapshot.request, 'selected_asset_ref': advertisement['id'], 'selected_version_ref': advertisement['version_ref']})
         source = self._source(snapshot.service, None, snapshot=snapshot, parent_source_refs=[advertisement['source_ref']])
         material = self.store.register_material(source_ref=source['id'], format='opaque', use='evidence')

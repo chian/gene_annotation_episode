@@ -175,3 +175,162 @@ operational credit; the monitor has information credit and no reason action.
 | tool_selection.py | 84 | tool catalog = resolved selected tools (direct only) + process.revise + process.execution; common tool names; resource tool contracts read from launch->launch_api and results children | `import:resource_tool_information` x1, `services.tool_catalog` x3, `services.tool_information_catalog` x1, `services.tool_information_catalog_for` x1, `services.workflow` x2, `workflow.episode_bindings` x1 |
 | waiting.py | 30 | suspension_changed and selected wait execution with failure feedback | `bind_functions` x2, `import:library.live_runtime_functions` x1, `import:runtime` x2, `self.workflow.execution_backend` x1, `self.workflow.execution_handle` x2, `self.workflow.perform_selected_wait` x1 |
 | yield_estimator.py | 49 | continuation task A106:whole_axis_findings; yield controller chosen from yield_bindings[task]: accumulation -> YieldController, bounded_quality -> BoundedYieldController(native_score_maximum), completion -> CompletionYieldController; checks credit_definition digest and projector.yield_method match | `import:numerical` x3 |
+
+## Carried over
+
+Old file | name | kind | new place or machinery reason
+--- | --- | --- | ---
+alternate_process_selection.py | AlternateProcessSelection | episode function | task.py process_revise (the class is dissolved into functions)
+alternate_process_selection.py | AlternateProcessSelection._proposed_selection | episode function | task.py proposed_selection (library candidate: the same selection arithmetic is in every axis head)
+binding_record.py | ScientificBindingRecord | machinery | binding_record.py is not carried (README 3e)
+binding_record.py | ScientificBindingRecord.as_record | machinery | the binding's own as_record(); deleted (README 3e)
+child_message_owners.py | exchange_for_child | machinery | routes the recursive exchange to this episode functions through the binding registry (identity checks only, README 3b C1)
+commissioned_credit_presentation.py | CommissionedScientificPresentation | episode function | messages/internal_summary.py internal_summary (the decision state of a commissioned episode)
+commissioned_credit_presentation.py | CommissionedScientificPresentation.decision_state | episode function | messages/internal_summary.py internal_summary (credit binding, investigation_progress, own_outcomes, last_local_outcome, held_record_refs, child_reports, report) and task.py decide (tools, tool knowledge, time_accounting); the old deliveries, controller_binding, pending_work, working_state and annotation_context are the old runner and are not carried
+commissioned_credit_presentation.py | CommissionedScientificPresentation.completed_work | episode function | messages/internal_summary.py own_outcomes (outcome_page) and child_reports
+commissioned_credit_presentation.py | CommissionedScientificPresentation.exchange_yield_table | episode function | messages/internal_summary.py action_yields (yield_table over view.controller_state)
+commissioned_credit_presentation.py | _bind_scientific_runtime_providers | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+completion_snapshot.py | completion_snapshot | machinery | closing snapshot read from runtime_episodes and the old controller (initial_credit, credit, controller_credit, episode_yield, parent_invocation_ref); the system hands the credit in completion (README 3b D1)
+configuration.py | ScientificConfiguration | episode function | settings (ctx.settings) and constants of the files that use them: task.py process_library, tool_library, replaces_default_instructions, offered_slots; the class itself is deleted
+configuration.py | ScientificConfiguration.__init__ | episode function | library and tool_library -> task.py process_library / tool_library (the frozen directories named by settings); child_roles -> task.py offered_slots (settings child_roles); replaces_default_instructions -> task.py replaces_default_instructions; tool_retrieval -> settings tool_registry; contract_information_profile and the yield_bindings validation are configuration checks of the old runner (README 5 item 16, 3d) and are not carried
+credit.py | original_task_projector | episode function | credit.py finding_progress (FindingProgressPolicy from the evidence task) and messages/read_from_parent.py evidence_task (the check of context.evidence_task)
+credit.py | PerturbationEvidenceCredit | episode function | credit.py credit
+credit.py | PerturbationEvidenceCredit._scientific_credit_invocation | machinery | assembled the arguments of workflow.projection_view / projector_receipt_arguments for services.scientific_credit; credit is computed over held records now (README 3d)
+credit.py | PerturbationEvidenceCredit.credit_kind | machinery | 'scientific' kind label; credit_kind is deleted (README 3d)
+credit.py | PerturbationEvidenceCredit.credit_projector | episode function | credit.py finding_progress (the projector ScientificFindingProgress, over the library function project_finding_progress); the proposed-annotation requirement is messages/read_from_parent.py read_from_parent
+credit.py | PerturbationEvidenceCredit.credit_view | episode function | credit.py credit (replaces services.scientific_credit)
+decision_inputs.py | ScientificDecisionInputs | episode function | task.py decide (the context of the model request)
+decision_inputs.py | ScientificDecisionInputs.decision_inputs | episode function | task.py decide: launch_instruction_library, tool_knowledge, child_options. resource_context, shared_information_context, execution_expectations, resource_tool_estimates, native_execution_expectations, waiting_support and pending_work come from job services and actions that are not built or no longer exist; not carried (BLOCKED-ON-JOB-SERVICE for the first five)
+decision_inputs.py | _bind_scientific_runtime_providers | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+decision_state.py | ScientificDecisionState | episode function | messages/internal_summary.py internal_summary (one presentation)
+decision_state.py | ScientificDecisionState.credit_presentation | machinery | chose the standalone or commissioned presentation class by path length and by the saved annotation_axis_credit mode (saved-credit compatibility of the old runner); not carried
+decision_state.py | ScientificDecisionState.decision_state | episode function | messages/internal_summary.py internal_summary
+episode.py | create_execution_bindings | machinery | home factory constructing the three execution bindings; there is no table or list of bindings (AGENTS.md)
+episode.py | PerturbationEvidenceEpisode | episode function | episode.py PerturbationEvidence (the one class)
+episode.py | PerturbationEvidenceEpisode.contract_information_profile | machinery | contract-information freezing for commissioning parents (README 5 item 16); not carried
+episode.py | PerturbationEvidenceEpisode._role | machinery | role guard of the shared per-role class; the role is its own episode now
+episode.py | PerturbationEvidenceEpisode.child_roles | episode function | task.py CHILD_SLOTS and offered_slots
+episode.py | PerturbationEvidenceEpisode.permitted_common_actions | episode function | task.py offered / selection_schema: the model is offered tools, reason and child commissions; 'wait' and 'redeliver_report' are not carried
+episode.py | PerturbationEvidenceEpisode.allowed_children | episode function | task.py offered_slots (settings child_roles) over CHILD_SLOTS
+episode.py | PerturbationEvidenceEpisode._component_scoring_facts | machinery | returned {}: A106 has no component scoring facts; a hook of the old report machinery
+episode.py | PerturbationEvidenceEpisode.current_report_facts | machinery | returned {} (the old report hook); not carried
+episode.py | PerturbationEvidenceEpisode.initial_decision_context | machinery | returned {} (the old initial binding-context hook); not carried
+episode.py | PerturbationEvidenceEpisode._validate_component_axis_report | machinery | returned None (the old component-axis report hook); not carried
+episode.py | PerturbationEvidenceEpisode.prepare_child_request | episode function | messages/msg_to_child.py monitor (the monitor assignment passes through; its monitor_assignment_v1 schema check is a check of a commission and is the child read_from_parent); other roles passed the assignment unchanged
+episode.py | PerturbationEvidenceEpisode.receive_child_progress_for_role | machinery | admitted the monitor delivered progress references into the old progress provider (README 3b R5); the delivered snapshots travel in the monitor return and read_from_child keeps them
+episode.py | PerturbationEvidenceEpisode.child_request_preparer | machinery | binding lookup of the preparer by role (README 3b C1)
+episode.py | PerturbationEvidenceEpisode.child_report_receiver | machinery | binding lookup of the receiver by role (README 3b C1)
+episode.py | PerturbationEvidenceEpisode.child_request_preparer_for_binding | episode function | task.py CHILD_SLOTS (role -> child binding path) and messages/msg_to_child.py COMMISSIONS (role -> preparer)
+episode.py | PerturbationEvidenceEpisode.child_report_receiver_for_binding | episode function | task.py CHILD_SLOTS and messages/read_from_child.py read_from_child (branch on slot)
+execution_planning.py | catalog | episode function | task.py catalog (the process_execution entry: description, input schema)
+execution_planning.py | read | episode function | task.py process_execution (resolves the selected tool, then raises NotImplementedError BLOCKED-ON-JOB-SERVICE for the execution memory, resource context and HPC commissions)
+from_child_execution_job_submission.py | receive_report | episode function | messages/read_from_child.py read_from_child (launch)
+from_child_execution_job_submission.py | admit_return | machinery | admitted the child return through the receipts ledger and saved attempts (README 3b R1)
+from_child_execution_job_submission.py | _bind_incoming_runtime | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+from_child_execution_progress_assessment.py | receive_progress | episode function | messages/read_from_child.py read_from_child (monitor: progress_snapshots); the provider admission is machinery (README 3b R5)
+from_child_execution_progress_assessment.py | receive_report | episode function | messages/read_from_child.py read_from_child (monitor)
+from_child_execution_progress_assessment.py | admit_return | machinery | admitted the child return through the receipts ledger and saved attempts (README 3b R1)
+from_child_execution_progress_assessment.py | _bind_incoming_runtime | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+from_child_execution_result_acquisition.py | receive_report | episode function | messages/read_from_child.py read_from_child (results)
+from_child_execution_result_acquisition.py | admit_return | machinery | admitted the child return through the receipts ledger and saved attempts (README 3b R1)
+from_child_execution_result_acquisition.py | _bind_incoming_runtime | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+from_child_perturbation_evidence.py | admit_return | machinery | admitted the child return through the saved attempt, receipts and progress (README 3b R1, R3)
+from_child_perturbation_evidence.py | receive_report | episode function | messages/read_from_child.py read_from_child (perturbation_evidence)
+from_child_published_evidence_assessment.py | receive_report | episode function | messages/read_from_child.py read_from_child (literature)
+from_child_published_evidence_assessment.py | admit_return | machinery | admitted the child return through the receipts ledger and saved attempts (README 3b R1)
+from_child_published_evidence_assessment.py | _bind_incoming_runtime | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+from_parent.py | ScientificAssignment | episode function | messages/read_from_parent.py ASSIGNMENT_FORM and read_from_parent
+from_parent.py | ScientificAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (one field per property of the old _ASSIGNMENT, same names)
+from_parent.py | ScientificAssignment.child_assignment_schema | episode function | messages/read_from_parent.py: the 'proposed_annotation_ref required when the annotation task is required' addition is the check in read_from_parent; the parent-side child schema itself is not carried (README 3b C3)
+from_parent.py | ScientificAssignment._selection | episode function | task.py selection_checked (library candidate) used by process_revise; messages/read_from_parent.py validate_selection (shape). The library-side resolution of the selection is a check of a commission and is not made when the assignment is read
+from_parent.py | ScientificAssignment._assignment | episode function | messages/read_from_parent.py read_from_parent (the checks of the assignment itself: evidence task, selection and revision-origin shape, evidence reference pattern); the commission checks (reference_in_scope, tool resolution, filled identity) are not carried (rule 1)
+from_parent.py | ScientificAssignment._invocation | episode function | messages/msg_to_child.py (objective and message are the old invocation objective and purpose); the report_schema and initial_report have no place: the child declares its return form
+from_parent.py | ScientificAssignment.prepare_assignment | episode function | messages/msg_to_child.py own_kind (the proposed annotation a child inherits); its checks of the commission are not carried (rule 1)
+from_parent.py | ScientificAssignment._validate_origin | machinery | checked the revision origin against the parent recorded preparation (journal read); a check of a commission, not carried (rule 1)
+from_parent.py | ScientificAssignment.prepare_invocation | episode function | messages/msg_to_child.py own_kind; the closed-commission replay of the old method is the system resume (README 3b C5)
+from_parent.py | ScientificAssignment.validate_context | machinery | filled-process identity checks of the old request (digests, saved request); the system compares a rebuilt commission with its record
+from_parent.py | ScientificAssignment.validate_execution_context | machinery | historical-closure and mechanics-binding identity checks of the old runner; not carried
+from_parent.py | ScientificAssignment._original_selection | episode function | parent_input['selection'] (messages/read_from_parent.py)
+from_parent.py | ScientificAssignment.initial_references | episode function | messages/read_from_parent.py ASSIGNMENT_FORM: evidence_refs and received_record_refs are record_refs fields (custody entry/commissioned receipts)
+goal.py | ScientificGoal | episode function | goal.py GOAL and EVIDENCE_AXIS_GOAL
+goal.py | ScientificGoal.instructions | episode function | goal.py GOAL / EVIDENCE_AXIS_GOAL (the two texts) and task.py entry_of / decide (the choice by entry_version)
+incoming_message_owners.py | _static | machinery | routing of the incoming prepared request through the binding registry (identity checks only)
+incoming_message_owners.py | _state | machinery | routing of the incoming prepared request through the binding registry (identity checks only)
+incoming_message_owners.py | _current_class | machinery | routing of the incoming prepared request through the binding registry (identity checks only)
+incoming_message_owners.py | admission_for_prepared_request | machinery | admitted the four non-recursive child returns through the old admission path (README 3b R1)
+internal_summary.py | ScientificSummary | episode function | messages/internal_summary.py internal_summary
+internal_summary.py | ScientificSummary.decision_context | episode function | task.py decide (the selected entries, thought pattern, resolved tools, permitted children: read from the frozen libraries, which are files outside the Store) and messages/internal_summary.py (the assignment); annotation_support_routes of an evidence-axis entry raises NotImplementedError BLOCKED-ON-SUPPORT-ROUTES
+process_state.py | PerturbationEvidenceState | machinery | restore of a closed or saved process request (replay authentication); the system restores the view
+process_state.py | PerturbationEvidenceState.restore_closed_process | machinery | replay authentication of a closed request (README 3e F8)
+process_state.py | PerturbationEvidenceState.restore_saved_process | machinery | replay authentication of a saved request (README 3e F8)
+report_delivery.py | ScientificReportDelivery | episode function | messages/final_to_parent.py final_to_parent
+report_delivery.py | ScientificReportDelivery.finish | episode function | messages/final_to_parent.py final_to_parent (the filled facts); saving the form once (runtime_forms), release and pending_handles are machinery and not carried (README 3b D1, D3)
+report_delivery.py | _bind_scientific_runtime_providers | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+scientific_contracts.py | _object | machinery | closed-JSON admission of a value with its digest; the forms admit closed JSON (RecordForm)
+scientific_contracts.py | _ref_schema | episode function | task.py THOUGHT_REF (private copy of the option reference schema of the revision arguments)
+scientific_operations.py | ScientificOperations | episode function | task.py tools process_revise, process_execution, selected_tool
+scientific_operations.py | ScientificOperations.execute | episode function | task.py process_revise (the revision), process_execution (planning read, BLOCKED-ON-JOB-SERVICE) and selected_tool (services.execute_tool -> ToolRegistry.execute_async; the byte-operand authentication is not carried)
+standalone_credit_presentation.py | StandaloneScientificPresentation | episode function | messages/internal_summary.py internal_summary (the part shared with the commissioned presentation); the annotation_axis_credit mode (arms, annotation credits, comparisons, a101-a104 sheets) is the root episode and is not this one
+standalone_credit_presentation.py | StandaloneScientificPresentation.decision_state | episode function | messages/internal_summary.py internal_summary (shared part); root-only annotation_axis_credit mode not carried
+standalone_credit_presentation.py | StandaloneScientificPresentation.completed_work | episode function | messages/internal_summary.py own_outcomes and child_reports; the root sheets are not carried
+standalone_credit_presentation.py | StandaloneScientificPresentation.exchange_yield_table | episode function | messages/internal_summary.py action_yields
+standalone_credit_presentation.py | _bind_scientific_runtime_providers | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+task.py | ScientificInvestigationTask | episode function | task.py decide, action and TOOLS
+task.py | ScientificInvestigationTask.instructions | episode function | task.py instructions (called in decide)
+task.py | ScientificInvestigationTask.next | episode function | task.py decide (the model request); replay, resume and the source_failed end are the system
+task.py | ScientificInvestigationTask.apply_response | episode function | task.py action (validation of the answer against the schema, the empty-commit rejection, the held-reference rejection, Rejected feedback)
+task.py | ScientificInvestigationTask.execute | episode function | task.py tools reason, selected_tool, process_*; wait and redeliver_report are not carried; receive_outcome, automatic score updates and shared grading retention are the old runner
+task.py | _bind_scientific_runtime_providers | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+task_decision.py | ScientificTaskDecision | episode function | task.py decide (the request) and action
+task_decision.py | ScientificTaskDecision.call | episode function | task.py decide returns ModelRequest(REASONING, instructions, context, generation_schema(...)); recording and saved-request reconstruction are the system
+task_decision.py | ScientificTaskDecision.conversation_key | machinery | provider conversation state (README 3a); every ModelRequest carries the full context
+task_decision.py | ScientificTaskDecision.interpretation_context | machinery | extended visible_record_refs from the lookup results of the decision exchange; the exchange is not carried (a lookup is a tool)
+task_decision.py | ScientificTaskDecision.exchange_schema | machinery | decision-exchange envelope (README 3a)
+task_decision.py | ScientificTaskDecision.exchange_response | machinery | decision-exchange envelope (README 3a)
+task_decision.py | ScientificTaskDecision.validate_contract_exchange_request | machinery | saved-request check (README 3a)
+task_decision.py | ScientificTaskDecision.validate_contract_exchange_history | machinery | saved-request check (README 3a)
+task_decision.py | ScientificTaskDecision.exchange_decision | machinery | the decision-exchange loop (README 3a)
+task_decision.py | _bind_scientific_runtime_providers | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+task_instructions.py | instructions | episode function | task.py instructions
+task_state.py | ScientificTaskState | machinery | per-episode decision state, checkpoint and restore of the old loop; the loop holds the state
+task_state.py | ScientificTaskState.__init__ | machinery | per-episode decision state of the old loop (calls, feedback, report_values: the report is the report tool outcome)
+task_state.py | ScientificTaskState.bind_execution_context | machinery | binding of the old execution context
+task_state.py | ScientificTaskState.record_execution_failure | episode function | task.py selected_tool (a failed selected operation is returned as failure_outcome, which enters the iterator)
+task_state.py | ScientificTaskState.restore_checkpoint | machinery | checkpoint restore (README 3e)
+task_state.py | ScientificTaskState.restore | machinery | restore of the old loop (README 3e)
+task_state.py | ScientificTaskState.record_effect | machinery | record_effect: the system journals each unit (README 3e F6)
+task_state.py | ScientificTaskState.checkpoint | machinery | checkpoint (README 3e)
+task_state.py | _bind_scientific_runtime_providers | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+to_child_execution_job_submission.py | prepare_commission | episode function | messages/msg_to_child.py launch
+to_child_execution_progress_assessment.py | prepare_request | episode function | messages/msg_to_child.py monitor (the monitor_assignment_v1 schema check is the child read_from_parent)
+to_child_execution_progress_assessment.py | required_return_sources | episode function | messages/msg_to_child.py REQUIRED['monitor'] (selection) and task.py REQUIRED_FACTS
+to_child_execution_progress_assessment.py | prepare_commission | episode function | messages/msg_to_child.py monitor
+to_child_execution_result_acquisition.py | prepare_commission | episode function | messages/msg_to_child.py results
+to_child_perturbation_evidence.py | prepare_request | episode function | messages/msg_to_child.py own_kind
+to_child_published_evidence_assessment.py | prepare_request | episode function | messages/msg_to_child.py literature
+to_parent.py | build_process_result | episode function | messages/final_to_parent.py process_results (BLOCKED: validate_process_result, project_process_result and credit_binding_ref of the old perturbation_evidence_reports are not placed; raises NotImplementedError when perturbation_evidence_results is selected)
+to_parent.py | merge_process_results | episode function | messages/final_to_parent.py process_results (own-first merge; BLOCKED with build_process_result)
+to_parent.py | ScientificReport | episode function | messages/final_to_parent.py RETURN_FORM and final_to_parent
+to_parent.py | ScientificReport.required_return_sources | episode function | messages/msg_to_child.py REQUIRED['perturbation_evidence'] (what this parent selects from its own children); the old path-length rule is not carried
+to_parent.py | ScientificReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (perturbation_evidence_results, committed_record_refs; report_sources(library, tool_library) is not placed: unplaced)
+to_parent.py | ScientificReport.facts | episode function | messages/final_to_parent.py facts
+to_parent.py | ScientificReport.resolve | machinery | resolved a reference by namespace through the old receipts and scientific_reference service; holding a record is records.holds (README 3b D2)
+to_parent.py | ScientificReport.validate_report | episode function | messages/final_to_parent.py validate_report (called before the result is returned); the axis validate_form step of the parent-written form has no object
+to_parent.py | private_received_results | machinery | read the received results from the old provenance store under read_snapshot (SQL over runtime tables)
+to_parent.py | private_frozen_results | machinery | read the frozen closing results from runtime_forms (SQL); the facts are built from the summary
+tool_selection.py | ScientificToolSelection | episode function | task.py direct_tools, catalog, selected_catalog
+tool_selection.py | ScientificToolSelection._information_catalog | machinery | services.tool_information_catalog(_for): the old runner tool catalog service; the frozen tool library is read without an availability check
+tool_selection.py | ScientificToolSelection._closed_tool_resolution | machinery | closed-process replay of the tool resolution (restore_closed_process)
+tool_selection.py | ScientificToolSelection._tool_resolution_for | episode function | task.py direct_tools (ScientificToolLibrary.resolve_invocations without the available catalog)
+tool_selection.py | ScientificToolSelection._tool_resolution | episode function | task.py direct_tools (the common-tool name collision check is not carried: the selected library names travel inside the selected_tool arguments)
+tool_selection.py | ScientificToolSelection.catalog | episode function | task.py direct_tools and catalog (process_revise description by entry version, process_execution entry)
+tool_selection.py | ScientificToolSelection.common_tool_names | machinery | the list of common tool names of the old catalog; the tools are static names of TOOLS now
+tool_selection.py | ScientificToolSelection._resource_information_catalog | episode function | UNPLACED: read the contracts of the launch and results children resource tools through resource_tool_information (bound_resource_tool_contracts, tool_information_contracts), old shared root, not placed; the availability check of the selected tools against them is not made
+waiting.py | ScientificWaiting | machinery | wait machinery (README 3b)
+waiting.py | ScientificWaiting.suspension_changed | machinery | suspension of the old runner (README 3b)
+waiting.py | ScientificWaiting._execute_selected_wait | machinery | the wait action; not carried (README 3b)
+waiting.py | _bind_scientific_runtime_providers | machinery | provider patching (`_bind_scientific_runtime_providers` / `bind_functions` onto the old runtime module); not carried (README 3a, 3e)
+yield_estimator.py | PerturbationEvidenceYield | episode function | yield_estimator.py yield_controller
+yield_estimator.py | PerturbationEvidenceYield.private_yield_binding | machinery | whether the old private yield declarations were configured; the controller is always built
+yield_estimator.py | PerturbationEvidenceYield.continuation_task | episode function | yield_estimator.py TASK and messages/read_from_parent.py task_key (A106:whole_axis_findings)
+yield_estimator.py | PerturbationEvidenceYield.yield_controller | episode function | yield_estimator.py yield_controller (AccumulationYieldController, README 7b)

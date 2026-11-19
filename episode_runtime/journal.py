@@ -2,14 +2,16 @@
 
 The runner writes everything here itself; no episode reads or writes the journal. For each run it records
 the run's entry (including any scoped ancestors), the continuation settings and
-declared services of each binding, each Episode's commission (request, assignment, selection), each unit that
+declared services of each binding, each Episode's commission (request, assignment, selection) and the credit its
+yield controller was built from (its initial credit), each unit that
 began (label, operation key, digest of its arguments, how often it began), each completed unit's label,
 controller input, controller step, outcome and update, each model call (request and response), each record
 receipt (custody) and each receipt an abandoned attempt left, each service the run built, each value a decision
 read from a service, each Episode's closure (how it ended, its units and its credit) and result, and the runner's
 own clock points. On resume
 the runner re-links the same entry, rejects any rebuilt commission, setting, service declaration, unit or model
-request that differs from its record, replays recorded units with their outcomes through the method loop's
+request that differs from its record, builds each Episode's yield controller from its recorded initial credit,
+replays recorded units with their outcomes through the method loop's
 ``resume_units`` (completed child Episodes are therefore not rebuilt), returns recorded model responses instead
 of asking again, and reloads every receipt.
 """
@@ -42,7 +44,8 @@ CREATE TABLE IF NOT EXISTS journal(identity TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS runs(run_id TEXT PRIMARY KEY, entry TEXT NOT NULL, state TEXT NOT NULL,
     result TEXT, failure TEXT);
 CREATE TABLE IF NOT EXISTS episodes(run_id TEXT NOT NULL, path TEXT NOT NULL, binding_path TEXT NOT NULL,
-    commission TEXT NOT NULL, state TEXT NOT NULL, completion TEXT, result TEXT, PRIMARY KEY(run_id, path));
+    commission TEXT NOT NULL, initial_credit TEXT, state TEXT NOT NULL, completion TEXT, result TEXT,
+    PRIMARY KEY(run_id, path));
 CREATE TABLE IF NOT EXISTS units(run_id TEXT NOT NULL, path TEXT NOT NULL, unit_index INTEGER NOT NULL,
     label TEXT NOT NULL, controller_input TEXT NOT NULL, outcome TEXT NOT NULL, episode_update TEXT,
     controller_step TEXT NOT NULL, PRIMARY KEY(run_id, path, unit_index));
@@ -134,12 +137,23 @@ class RunJournal:
         row = self.db.execute('SELECT binding_path, commission FROM episodes WHERE run_id=? AND path=?',
                               (run_id, _path(path))).fetchone()
         if row is None:
-            self.db.execute('INSERT INTO episodes VALUES(?,?,?,?,?,NULL,NULL)',
+            self.db.execute('INSERT INTO episodes VALUES(?,?,?,?,NULL,?,NULL,NULL)',
                             (run_id, _path(path), binding_path, canonical(commission), 'active'))
             return False
         if row[0] != binding_path or not same_record(row[1], commission):
             raise JournalError('reconstructed_episode_differs_from_record:' + _path(path))
         return True
+
+    def initial_credit(self, run_id, path, compute):
+        """The credit the yield controller of the Episode at ``path`` is built from: the value recorded when the
+        Episode was first entered, or ``compute()`` recorded now. It is computed once. An Episode that is entered
+        again (a resumed run) holds by then what its recorded units produced, so ``credit`` of its summary before
+        any unit would no longer say what its controller started from."""
+        select, where = 'SELECT initial_credit FROM episodes WHERE run_id=? AND path=?', (run_id, _path(path))
+        if self.db.execute(select, where).fetchone()[0] is None:
+            self.db.execute('UPDATE episodes SET initial_credit=? WHERE run_id=? AND path=?',
+                            (canonical(compute()), *where))
+        return json.loads(self.db.execute(select, where).fetchone()[0])
 
     def close_episode(self, run_id, path, completion):
         """Record how an Episode ended: ``{'ended_by', 'units', 'credit'}`` (``credit`` is the cumulative credit
@@ -162,10 +176,14 @@ class RunJournal:
                         (canonical(result), run_id, _path(path)))
 
     def episodes(self, run_id):
+        """Each Episode of the run, in the order they were built: ``{'path', 'binding_path', 'state',
+        'initial_credit', 'completion'}`` (``initial_credit`` is ``None`` until the Episode is first entered,
+        ``completion`` until it is closed)."""
         return [{'path': json.loads(row[0]), 'binding_path': row[1], 'state': row[2],
-                 'completion': None if row[3] is None else json.loads(row[3])}
-                for row in self.db.execute('SELECT path, binding_path, state, completion FROM episodes '
-                                           'WHERE run_id=? ORDER BY rowid', (run_id,))]
+                 'initial_credit': None if row[3] is None else json.loads(row[3]),
+                 'completion': None if row[4] is None else json.loads(row[4])}
+                for row in self.db.execute('SELECT path, binding_path, state, initial_credit, completion FROM '
+                                           'episodes WHERE run_id=? ORDER BY rowid', (run_id,))]
 
     # -- units ----------------------------------------------------------------
     def begin_unit(self, run_id, path, unit_index, label, operation_key, arguments_digest):

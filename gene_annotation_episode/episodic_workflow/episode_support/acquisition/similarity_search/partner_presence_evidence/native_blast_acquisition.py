@@ -13,7 +13,6 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_presence_evidence.execution_contracts import validate_target
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.partner_presence_evidence.local_jobs import LocalJobPolicy
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.partner_presence_evidence.materials import artifact_file, artifact_path
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import (
     _absolute, compile_native_blast_job, finite_json_copy, native_blast_digest,
     validate_native_blast_requested_job,
@@ -227,11 +226,14 @@ def _capture_shape(value):
     return capture
 
 
+def _retained_size(store, reference):
+    with store.open_artifact(reference) as stream:
+        return stream.seek(0, 2)
+
+
 def _retained(store, reference):
-    path = artifact_path(store, reference)
-    if path.stat().st_size != store.get(reference)["size"]:
+    if _retained_size(store, reference) != store.get(reference)["size"]:
         raise ContractError("native_blast_retained_artifact_size_mismatch")
-    return path
 
 
 def _retained_rows(store, capture, bundle):
@@ -276,11 +278,10 @@ def _capture_file(store, result, root, row, *, sha, size, invalid=False):
     reference = None
     try:
         path = _file(root, row["relative_path"])
-        reference = artifact_file(store, path)
-        retained = artifact_path(store, reference)
+        reference = store.artifact_file(path)
         captured = store.get(reference)
         if (invalid or captured["sha256"].lower() != (sha or "").lower()
-                or captured["size"] != size or retained.stat().st_size != size):
+                or captured["size"] != size or _retained_size(store, reference) != size):
             raise ContractError("native_blast_sealed_artifact_digest_mismatch:" + row["relative_path"])
         result["artifacts"].append({**item, "artifact_ref": reference})
     except (ValueError, OSError) as error:
@@ -309,7 +310,7 @@ def capture_local_bundle(store, *, target, directory):
             if reference is not None:
                 _retained(store, reference)
         if saved["bundle_validated"]:
-            bundle = validate_original_bundle(json.loads(_retained(store, saved["bundle_artifact_ref"]).read_bytes()), plan)
+            bundle = validate_original_bundle(json.loads(store.get_artifact(saved["bundle_artifact_ref"])), plan)
             _retained_rows(store, saved, bundle)
         return saved
     plan = _target_plan(target)
@@ -321,9 +322,9 @@ def capture_local_bundle(store, *, target, directory):
     try:
         if json.loads(_file(root, OWNER_NAME).read_bytes()) != plan:
             raise ContractError("native_blast_original_attempt_owner_conflict")
-        reference = artifact_file(store, _file(root, "bundle.json"), "application/json")
+        reference = store.artifact_file(_file(root, "bundle.json"), "application/json")
         result["bundle_artifact_ref"] = reference
-        bundle = validate_original_bundle(json.loads(artifact_path(store, reference).read_bytes()), plan)
+        bundle = validate_original_bundle(json.loads(store.get_artifact(reference)), plan)
         result["bundle_validated"] = True
     except (ValueError, OSError) as error:
         result["failures"].append({"stage": "capture", "code": str(error) if isinstance(error, ValueError)
@@ -370,7 +371,7 @@ def original_source_payload(*, bundle, capture, prepared):
 
 def publish_original_source(store, *, bundle, capture, prepared):
     payload = original_source_payload(bundle=bundle, capture=capture, prepared=prepared)
-    retained = json.loads(_retained(store, payload["artifact_ref"]).read_bytes())
+    retained = json.loads(store.get_artifact(payload["artifact_ref"]))
     if native_blast_digest(retained) != native_blast_digest(bundle):
         raise ContractError("native_blast_source_bundle_association_conflict")
     _retained_rows(store, capture, bundle)

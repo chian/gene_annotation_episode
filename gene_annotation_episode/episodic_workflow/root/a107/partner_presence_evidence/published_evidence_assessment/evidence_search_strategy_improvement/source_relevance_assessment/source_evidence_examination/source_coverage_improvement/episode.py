@@ -1,21 +1,25 @@
-"""A107 literature binding ``partner_presence_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement``.
+"""The source coverage improvement episode (A107): a private binding of the system's episode type."""
+from episode_runtime import EpisodeBinding
 
-Its behaviour is the shared A107 literature implementation
-(``published_evidence_assessment/literature_binding.py``); this binding declares only what is its own.
-"""
-from __future__ import annotations
-
-from ..... import literature_binding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       read_from_parent as from_parent_file)
 
 
-class LiteratureEpisode(literature_binding.LiteratureBinding):
-    binding_path = 'partner_presence_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement'
-    goal = 'Improve the coverage of one source examined in reading order'
-    unit = 'One ordered reading action'
-    result = 'Findings from the newly covered portions of the source'
-    child_slots = {}
-    commissioning_parent = 'partner_presence_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination'
-    acquisition = False
-    instruction = ('Investigate the source in document order as useful for the assigned question. Use returned UTF-8 '
-                   'byte continuations and retain representation identity. Decide whether to continue, reread, change '
-                   'the examined window or interpret obtained evidence from actual outcomes.')
+class SourceCoverageImprovement(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

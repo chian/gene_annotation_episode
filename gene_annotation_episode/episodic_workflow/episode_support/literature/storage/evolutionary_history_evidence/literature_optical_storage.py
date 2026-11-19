@@ -48,7 +48,7 @@ _OPERAND_REFS = ("measurement_ref", "physical_observation_ref", "semantic_owner_
 _PAYLOAD_FIELDS = ("version", "input_source_ref", "input_artifact_ref", "direct_input_source_refs",
     "input_source_refs", "selection", "extraction", "calculation", "cells", "context_bindings",
     "operand_bindings", "interpretation_bindings", "covariance_binding_ref", "requested_components")
-_REQUEST_FIELDS = ("run_id", "episode_id", "operation_key", "selected_tool", "scope", "assignment",
+_REQUEST_FIELDS = ("operation_key", "selected_tool", "scope", "assignment",
     "requested_components", "arguments")
 
 
@@ -68,10 +68,6 @@ def _selected(assignment):
         _fail("component_selection_invalid")
     return list(values)
 
-
-def _signature(request):
-    return canonical({name: request[name] for name in (
-        "arguments", "scope", "run_id", "episode_id", "assignment", "requested_components")})
 
 
 def _validate_inputs(selection, extraction):
@@ -172,12 +168,6 @@ def _finite_cell(value):
         return False
 
 
-def _admitted_digest(cells):
-    try:
-        return identity("optical_admitted_cells", cells)
-    except (ValueError, TypeError, OverflowError):
-        _fail("delivery_binding_mismatch")
-
 
 def _validate_calculation(saved):
     result, inputs = saved["calculation"], saved["extraction"]["calculation_inputs"]
@@ -215,47 +205,7 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
     provider = PROVIDER
     record_version = VERSION
     components = COMPONENTS
-    operations_table = "literature_optical_operations"
-    received_table = "literature_optical_received"
     binding_fields = ()
-
-    def __init__(self, store, run_id):
-        super().__init__(store, run_id)
-        store.db.execute("""CREATE TABLE IF NOT EXISTS literature_optical_delivery_bindings(
-            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
-            cells_digest TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))""")
-
-    def _original_delivery_cells(self, context, operation_key):
-        prefix = self.run_id + ":" + context.episode_id + ":"
-        if not operation_key.startswith(prefix):
-            # Standalone repository consumers supply an explicit admitted call;
-            # runtime calls additionally authenticate their original form attempt.
-            return None
-        suffix = operation_key[len(prefix):].split(":")
-        if len(suffix) != 2 or not suffix[0].isdigit() or suffix[1] != "typed_form":
-            _fail("delivery_binding_mismatch")
-        exists = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_report_attempts'").fetchone()
-        attempt = self.store.db.execute("SELECT form,contract,failure FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND decision_index=?",
-            (self.run_id, context.episode_id, int(suffix[0]))).fetchone() if exists else None
-        if attempt is None or attempt["form"] is None or attempt["failure"] is not None:
-            _fail("delivery_binding_mismatch")
-        form, contract = json.loads(attempt["form"]), json.loads(attempt["contract"])
-        schema = contract["measurements"]["schema"]
-        return [row for name, node in schema["properties"].items() if node.get("x-source") == "literature_optical_cells" for row in form[name]]
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            original = self._original_delivery_cells(context, operation_key)
-            if original is not None and not _saved_equal(cells, original):
-                _fail("delivery_binding_mismatch")
-            super().receive_cells(context, cells, operation_key)
-            digest = _admitted_digest(cells)
-            old = self.store.db.execute("SELECT cells_digest FROM literature_optical_delivery_bindings WHERE run_id=? AND episode_id=? AND operation_key=?",
-                (self.run_id, context.episode_id, operation_key)).fetchone()
-            if old is not None and old[0] != digest:
-                _fail("delivery_binding_mismatch")
-            self.store.db.execute("INSERT OR IGNORE INTO literature_optical_delivery_bindings VALUES(?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, digest))
 
     def _parents(self, scope, direct):
         parents, seen = list(direct), set(direct)
@@ -269,27 +219,10 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
         return parents
 
     def populate(self, context, arguments, operation_key):
-        if context.run_id != self.run_id:
-            raise ContractError("literature_run_mismatch")
-        if not isinstance(operation_key, str) or not operation_key:
-            raise ContractError("operation_key_required")
         args = plain(arguments)
-        request = {"run_id": self.run_id, "episode_id": context.episode_id, "operation_key": operation_key,
+        request = {"operation_key": operation_key,
             "selected_tool": "literature.optical.populate", "scope": plain(context.scope),
             "assignment": plain(context.assignment), "requested_components": _selected(context.assignment), "arguments": args}
-        signature = _signature(request)
-        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, context.episode_id, operation_key)).fetchone()
-        if old is not None:
-            if old["signature"] != signature:
-                raise ContractError("operation_key_reused_for_different_work")
-            outcome = json.loads(old["outcome"])
-            saved = self.read(outcome["result"]["sheet_ref"])
-            for ref in saved["direct_input_source_refs"]:
-                self._native_source(context, ref)
-            if self._parents(context.scope, saved["direct_input_source_refs"]) != saved["input_source_refs"]:
-                _fail("source_ancestry_mismatch")
-            return outcome
 
         def read_source(reference, representation):
             row = self._native_source(context, reference)
@@ -312,10 +245,10 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
             created, records = [], []
             def publish(kind, value):
                 ref = identity(kind, {"origin": "tool", "record": value})
-                exists = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (ref,)).fetchone()
+                exists = self.store.holds(ref)
                 actual = self.store.put(kind, value, origin="tool", scope=plain(context.scope))
                 records.append(actual["id"])
-                if exists is None:
+                if not exists:
                     created.append(actual["id"])
                 return actual["id"]
             context_refs, operands, interpretations, covariance = _bindings(extraction, publish)
@@ -326,13 +259,11 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
             sheet_ref = publish("source", {"provider": PROVIDER, "accession": None, "uri": None,
                 "artifact_ref": artifact, "text_ref": artifact, "request_ref": request_ref, "version": VERSION,
                 "retrieved_at": None, "parent_source_refs": payload["input_source_refs"]})
-            outcome = {"status": "completed", "operation_ref": identity("operation", {
-                "run_id": self.run_id, "episode_id": context.episode_id, "key": operation_key}),
+            outcome = {"status": "completed", "operation_ref": identity("operation", {"key": operation_key}),
                 "record_refs": list(dict.fromkeys([sheet_ref, *records])), "changed_record_refs": created,
                 "result": {"sheet_ref": sheet_ref, "cells": payload["cells"], "source_kind": extraction["source_kind"],
                     "evaluation_scope": EVALUATION_SCOPE, "endpoint_kind": "NADH_depletion"}, "feedback": None}
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+
         return outcome
 
     def read(self, sheet_ref):
@@ -343,18 +274,7 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
             _fail("sheet_required")
         request = json.loads(self.store.get_artifact(source["request_ref"]))
         _keys(request, _REQUEST_FIELDS)
-        if request["run_id"] != self.run_id:
-            _fail("sheet_run_mismatch")
         if request["selected_tool"] != "literature.optical.populate" or request["requested_components"] != _selected(request["assignment"]):
-            _fail("operation_binding_mismatch")
-        selected = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
-        if selected is None:
-            raise ContractError("literature_sheet_not_selected_output")
-        outcome = json.loads(selected["outcome"])
-        if (selected["signature"] != _signature(request) or outcome.get("status") != "completed"
-                or outcome.get("operation_ref") != identity("operation", {"run_id": self.run_id, "episode_id": request["episode_id"], "key": request["operation_key"]})
-                or outcome.get("result", {}).get("sheet_ref") != sheet_ref):
             _fail("operation_binding_mismatch")
         saved = json.loads(self.store.get_artifact(source["artifact_ref"]))
         _keys(saved, _PAYLOAD_FIELDS)
@@ -368,9 +288,6 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
             _fail("saved_mismatch")
         _validate_inputs(saved["selection"], saved["extraction"])
         _validate_calculation(saved)
-        if not _saved_equal(outcome["result"], {"sheet_ref": sheet_ref, "cells": saved["cells"], "source_kind": saved["extraction"]["source_kind"],
-                "evaluation_scope": EVALUATION_SCOPE, "endpoint_kind": "NADH_depletion"}):
-            _fail("outcome_mismatch")
         root = self.store.get(saved["input_source_ref"])
         if root.get("artifact_ref") != saved["input_artifact_ref"]:
             _fail("source_mismatch")
@@ -394,19 +311,14 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
         bindings = _bindings(saved["extraction"], expected)
         if not _saved_equal(bindings, (saved["context_bindings"], saved["operand_bindings"], saved["interpretation_bindings"], saved["covariance_binding_ref"])):
             _fail("binding_mismatch")
-        if outcome.get("record_refs") != list(dict.fromkeys([sheet_ref, *records])):
-            _fail("operation_records_mismatch")
-        if any(ref not in outcome["record_refs"] for ref in outcome.get("changed_record_refs", ())):
-            _fail("operation_records_mismatch")
         return saved
 
-    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+    def project_cells(self, sheet_refs, *, components=None):
         components = list(self.components) if components is None else list(components)
         selected = _selected({"requested_optical_components": components})
         result = []
         for ref in dict.fromkeys(sheet_refs):
-            if ref not in permitted_record_refs:
-                raise ContractError("literature_sheet_not_received")
+
             saved = self.read(ref)
             extraction = saved["extraction"]
             covariance = extraction["covariance_source"]
@@ -429,52 +341,30 @@ class LiteratureOpticalRepository(LiteratureRateRepository):
                     "operands": deepcopy(saved["operand_bindings"])})
         return result
 
-    def validate_cells(self, cells, *, sheet_refs, permitted_record_refs, components=None):
-        expected = self.project_cells(sheet_refs, permitted_record_refs=permitted_record_refs, components=components)
+    def validate_cells(self, cells, *, sheet_refs, components=None):
+        expected = self.project_cells(sheet_refs, components=components)
         if not _saved_equal(cells, expected):
             raise ContractError("literature_rate_return_differs_from_saved_cells")
 
-    def validate_returned_values(self, cells, *, permitted_record_refs):
+    def validate_returned_values(self, cells):
         seen = set()
         for row in cells:
             key = (row["sheet_ref"], row["component"])
             if key in seen:
                 raise ContractError("duplicate_literature_rate_return_cell")
             seen.add(key)
-            expected = self.project_cells([row["sheet_ref"]], permitted_record_refs=permitted_record_refs, components=[row["component"]])
+            expected = self.project_cells([row["sheet_ref"]], components=[row["component"]])
             if not _saved_equal(row, expected[0]):
                 raise ContractError("literature_rate_return_differs_from_saved_cells")
 
     def fact_cells(self, context, sheet_refs, *, components):
-        """Own sheets can project; child sheets forward only actually admitted cells."""
+        """The requested cells of the held sheets."""
         selected = _selected({"requested_optical_components": list(components)})
-        received = {(row["sheet_ref"], row["component"]): row for row in self.received_cells(context)}
         result = []
         for ref in dict.fromkeys(sheet_refs):
-            if ref not in context.received_record_refs:
-                raise ContractError("literature_sheet_not_received")
             self.read(ref)
-            source = self.store.get(ref)
-            owner = json.loads(self.store.get_artifact(source["request_ref"]))["episode_id"]
-            if owner == context.episode_id:
-                result.extend(self.project_cells([ref], permitted_record_refs=context.received_record_refs, components=selected))
-            else:
-                result.extend(deepcopy(received[(ref, name)]) for name in selected if (ref, name) in received)
+            result.extend(self.project_cells([ref], components=selected))
         return result
-
-    def received_cells(self, context):
-        for receipt in self.store.db.execute(f"SELECT operation_key,cells FROM {self.received_table} WHERE run_id=? AND episode_id=? ORDER BY rowid",
-                (self.run_id, context.episode_id)):
-            cells = json.loads(receipt["cells"])
-            bound = self.store.db.execute("SELECT cells_digest FROM literature_optical_delivery_bindings WHERE run_id=? AND episode_id=? AND operation_key=?",
-                (self.run_id, context.episode_id, receipt["operation_key"])).fetchone()
-            original = self._original_delivery_cells(context, receipt["operation_key"])
-            if (bound is None or bound[0] != _admitted_digest(cells)
-                    or original is not None and not _saved_equal(original, cells)):
-                _fail("delivery_binding_mismatch")
-        rows = super().received_cells(context)
-        self.validate_returned_values(rows, permitted_record_refs=[row["sheet_ref"] for row in rows])
-        return rows
 
 
 def optical_cells_schema():

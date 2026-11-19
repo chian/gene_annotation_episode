@@ -1,29 +1,28 @@
-"""The A110 hpc_work_planning binding on the generic runner.
+"""The A110 ``biochemical_feasibility_evidence/hpc_work_planning`` binding."""
+from episode_runtime import EpisodeBinding
 
-Its decision source, credit and continuation are ``hpc_runtime`` (role ``hpc``): model-selected HPC
-planning operations over the commission's own ledger and commissions of its
-``hpc_resource_prediction`` sister. It does not commission its submission, progress, results or allocation
-slots.
-"""
-from __future__ import annotations
-
-from types import MappingProxyType
-
-from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.runtime_contract import (
-    CHILD_ASSIGNMENT_FORM, RETURN_FORM, EpisodeRuntimeContract)
-
-from .hpc_runtime import PLANNING, HPCRuntime
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class HpcWorkPlanningEpisode(HPCRuntime, EpisodeRuntimeContract):
-    """Plan the HPC work that the commissioned computation needs and coordinate its allocation."""
-    binding_path = 'biochemical_feasibility_evidence/hpc_work_planning'
-    grain_name = binding_path.replace('/', '__')
-    goal = 'Plan the HPC work that the commissioned computation needs and coordinate its allocation'
-    unit = 'One planning, prediction or commission action'
-    result = 'The HPC plan and its execution findings'
-    child_slots = MappingProxyType({'execution_job_submission': 'biochemical_feasibility_evidence/hpc_work_planning/execution_job_submission', 'execution_progress_assessment': 'biochemical_feasibility_evidence/hpc_work_planning/execution_progress_assessment', 'execution_result_acquisition': 'biochemical_feasibility_evidence/hpc_work_planning/execution_result_acquisition', 'hpc_allocation_execution': 'biochemical_feasibility_evidence/hpc_work_planning/hpc_allocation_execution', 'hpc_resource_prediction': 'biochemical_feasibility_evidence/hpc_work_planning/hpc_resource_prediction'})
-    assignment_form = CHILD_ASSIGNMENT_FORM
-    return_form = RETURN_FORM
-    commissioning_parent = 'biochemical_feasibility_evidence'
-    hpc_role = PLANNING
+class HPCWorkPlanning(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

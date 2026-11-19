@@ -1,23 +1,34 @@
-"""The task: read the assigned source's passages, with their neighbouring context, through the access tools,
-commit reasoning (with the commissioned task's typed answer), and write the interpretation with the ``report`` tool.
+"""The task: read the assigned source's passages, with their neighbouring context, through the access tools, grade a
+deposited structure the passages supply with ``structure_populate`` (the A102 literature grader
+``structural_feature_geometry``, sheet ``literature_structure_cells``), and commit reasoning (with the commissioned
+task's typed answer).
 
 Carried from the old ``task.py``, ``decision_delivery.py``, ``decision_presentation.py``, ``task_instructions.py``,
-``source_operations.py``, ``source_interpretation.py``, ``source_references.py`` and ``source_contracts.py``. One
+``source_operations.py``, ``source_interpretation.py``, ``source_references.py``, ``source_contracts.py``,
+``structural_sheet_operations.py`` and ``literature_task_selection.py``. The old ``report`` tool is gone: the
+return is controlled features read by code from the saved sheets, not the model's prose. One
 unit is one model-selected tool call. The task always offers a unit and never ends the Episode: only the yield
-controller does. The episode has no child and cannot search or fetch new sources (no acquisition tools). The
-structure population route (``literature.structure.populate``) is not built: it raises where it is reached."""
+controller does. The episode has no child and cannot search or fetch new sources (no acquisition tools)."""
 import json
 
 from jsonschema import ValidationError
 
-from episode_runtime import CustodyError, ModelRequest, Rejected, ToolCall
+from episode_runtime import ModelRequest, Rejected, ToolCall
 
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.instruction_spans import replace_span
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.structural_homology_evidence.runtime_prompt import (
     INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.literature_contract_error import (
+    ExperimentalContractError)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.structural_homology_evidence.literature_structure_types import (
+    EXPERIMENT_TYPES)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_task_credit import (
     lead_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.literature_structure_prompt import (
+    STRUCTURE_TASK)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.structural_homology_evidence.literature_structure_storage import (
+    TOOL_DESCRIPTION as STRUCTURE_TOOL_DESCRIPTION, populate_structure_sheet, population_input_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_assay_inputs import (
     _Sources)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.structural_homology_evidence.literature_sequence_discovery import (
@@ -41,7 +52,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structural_
     ToolRegistry)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
     INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
 
 from .goal import GOAL
 
@@ -156,56 +166,53 @@ REASON_DESCRIPTION = ('Commit one typed scientific reasoning payload about the s
                       'evidence_processing no_applicable_evidence declares, with its reason and the exact '
                       'examined byte spans, that the examined passages contain no applicable evidence; '
                       'missing access is not absence.')
-REPORT_DESCRIPTION = ('Write your interpretation of the supplied passages for the assigned question: what each '
-                      'passage itself says, its own qualifications, and what stays unresolved. Spans stay separate; '
-                      'never concatenate them into a fabricated quotation. Writing it can be repeated and the latest '
-                      'one is what is returned.')
-REPORT_SCHEMA = obj({
-    'interpretation': TEXT,
-    'passages': {'type': 'array', 'items': obj({'source_ref': TEXT, 'offset': INTEGER, 'limit': POSITIVE,
-                                                'statement': TEXT, 'qualification': TEXT})},
-    'qualification': TEXT})
-POPULATE_DESCRIPTION = ('Populate the structure cells of the requested structure components from a deposited '
-                        'structure model the source names (not built: raises where it is selected).')
-
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
                     'no new action and does not execute or credit the historical work again.\n')
 REPORT_START = "A commissioned child returns ONLY the parent's typed form."
 REPORT_END = 'A report_delivery_failure is operational feedback'
-REPORT_GUIDANCE = ("Your interpretation is returned to your parent as its finding, written with the report tool "
-                   "(the latest one counts). Selecting report does not end your work: only the numerical "
-                   'controller does. Later tool outcomes are facts, not a new judgment.\n')
-TAIL_GUIDANCE = ('\nSelect report with your interpretation of the supplied passages when the outcomes warrant it.')
-LIFECYCLE = ('Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new '
-             'judgment.')
+RETURN_GUIDANCE = ('What returns to your parent is your credit and the features code reads from the structure '
+                   'sheets you saved with structure_populate (bounds, status and reason of each cell, the panel '
+                   'sizes, the validation binding); no prose of yours is returned. Selecting a tool does not end '
+                   'your work: only the numerical controller does. Later tool outcomes are facts, not a new '
+                   'judgment.\n')
+TAIL_GUIDANCE = ('\nSelect structure_populate when the supplied passages give the coordinates and the fixed '
+                 'feature panel of the assigned question.')
+
+# The A102 literature grader (``structural_feature_geometry``, sheet ``literature_structure_cells``): the owner's
+# question, what the grading keeps apart, its cells and their combination, and the recurring structural questions
+# of ``STRUCTURE_TASK``; part of the instructions of every decision.
+GRADER = EXPERIMENT_TYPES['structural_feature_geometry']
+STRUCTURE_SECTION = ('\nLiterature structure grading (tool structure_populate, grader structural_feature_geometry, '
+                     'sheet literature_structure_cells). Question: ' + GRADER['question'] + ' Keep apart: '
+                     + '; '.join(GRADER['considerations']) + '. Cells: ' + ', '.join(GRADER['components'])
+                     + '. Combination: ' + GRADER['combination'] + '\n' + STRUCTURE_TASK + '\n')
 
 
 def instructions(*, knowledge):
     """The old ``task_instructions.compose_instructions``: the A102 investigation text (with the span about the
     parent-written report form, the span about redelivery and the span about the decision-exchange history
-    replaced: those actions no longer exist), this episode's goal, the reasoning-commit requirement, and the
-    tool-knowledge text when it is offered. The pending-delivery paragraph, the wait paragraphs and the
-    native-event paragraph are not carried: there is no such action."""
-    text = replace_span(INSTRUCTIONS, REPORT_START, REPORT_END, REPORT_GUIDANCE)
+    replaced: those actions no longer exist), this episode's goal, the reasoning-commit requirement, the
+    structure grader's section (the old ``selected_literature_task_sections``), and the tool-knowledge text when
+    it is offered. The pending-delivery paragraph, the wait paragraphs and the native-event paragraph are not
+    carried: there is no such action."""
+    text = replace_span(INSTRUCTIONS, REPORT_START, REPORT_END, RETURN_GUIDANCE)
     text = replace_span(text, REPORT_END, HISTORY_START, '')
     text = replace_span(text, HISTORY_START, HISTORY_END, HISTORY_GUIDANCE)
     text += '\n' + GOAL
     text += '\n' + REASONING_COMMIT_REQUIREMENT
+    text += STRUCTURE_SECTION
     if knowledge is not None:
         text += KNOWLEDGE_INSTRUCTIONS
     return text + TAIL_GUIDANCE
 
 
 def offered(settings):
-    """The tools offered now: ``execution_estimate`` only with timing statistics configured, the structure
-    population only when the episode's settings ask for it."""
+    """The tools offered now: ``execution_estimate`` only with timing statistics configured."""
     names = [name for name in LIBRARY_NAMES
-             if name != 'execution_estimate' or settings.get('tool_registry', {}).get('native_statistics') is not None]
-    names += ['reason', 'report']
-    if settings.get('structure_population'):
-        names.append('literature_structure_populate')
+             if name != 'execution_estimate' or settings['tool_registry'].get('native_statistics') is not None]
+    names += ['structure_populate', 'reason']
     return names
 
 
@@ -228,12 +235,11 @@ def catalog(names, summary):
     is projected through ``source_location_inputs``)."""
     entries = []
     for name in names:
-        if name == 'report':
-            entries.append({'name': name, 'description': REPORT_DESCRIPTION, 'input_schema': REPORT_SCHEMA})
+        if name == 'structure_populate':
+            entries.append({'name': name, 'description': STRUCTURE_TOOL_DESCRIPTION,
+                            'input_schema': population_input_schema()})
         elif name == 'reason':
             entries.append({'name': name, 'description': REASON_DESCRIPTION, 'input_schema': reason_schema(summary)})
-        elif name == 'literature_structure_populate':
-            entries.append({'name': name, 'description': POPULATE_DESCRIPTION, 'input_schema': obj({})})
         else:
             entries.append({'name': name, 'description': DESCRIPTIONS[LIBRARY_NAMES[name]],
                             'input_schema': source_location_inputs(INPUT_SCHEMAS[LIBRARY_NAMES[name]])})
@@ -289,15 +295,10 @@ async def run_access_tool(name, envelope, ctx):
         admitted(ctx.store, name, arguments, scope, root)
     except (ContractError, ValidationError) as error:
         return invalid(identity('operation', {'key': ctx.operation_key, 'name': name, 'arguments': arguments}), error)
-    registry = ToolRegistry(ctx.store, **ctx.settings.get('tool_registry', {}))
+    registry = ToolRegistry(ctx.store, **ctx.settings['tool_registry'])
     permitted = tuple(ctx.store.refs()) if name in HELD_SOURCE_TOOLS else None
-    try:
-        return await registry.execute_async(name, arguments, scope=scope, operation_key=ctx.operation_key,
-                                            permitted_record_refs=permitted)
-    except CustodyError:
-        raise
-    except Exception as error:   # the old record_execution_failure: a failed selected operation is an outcome
-        return failure_outcome(ctx.store, error, category='episode_execution', cause_code='selected_operation_failed')
+    return await registry.execute_async(name, arguments, scope=scope, operation_key=ctx.operation_key,
+                                        permitted_record_refs=permitted)
 
 
 async def state_query(arguments, ctx):
@@ -454,16 +455,18 @@ def reason(arguments, ctx):
                              'code': getattr(error, 'code', str(error))}}
 
 
-def report(arguments, ctx):
-    """The closing value the model writes: its interpretation. It is this unit's outcome; the summary holds the
-    latest one and ``final_to_parent`` returns it as the finding."""
-    return {'report': arguments}
-
-
-def literature_structure_populate(arguments, ctx):
-    """The structure population route (the old ``literature.structure.populate`` with ``LiteratureStructureRepository``):
-    its repository, reader and calculations are not in the library (lost at 97308b94c, not placed). It raises here."""
-    raise NotImplementedError('literature_structure_population_not_built')
+def structure_populate(arguments, ctx):
+    """``literature.structure.populate``: read the selected coordinates, validation and literal witnesses of held
+    sources below the assigned page, calculate the six source-geometry cells and save the sheet, its cell rows,
+    its revision family and its experiment assessment through ``ctx.store``. Arguments the library refuses are
+    returned as an ``invalid`` outcome with their code, as the old ``execute`` did; the outcome enters the
+    iterator like any other."""
+    try:
+        return populate_structure_sheet(ctx.store, arguments['scope'], arguments['page_source_ref'],
+                                        arguments['arguments'], ctx.operation_key)
+    except (ContractError, ExperimentalContractError) as error:
+        return invalid(identity('operation', {'key': ctx.operation_key, 'name': 'literature.structure.populate',
+                                              'arguments': arguments['arguments']}), error)
 
 
 TOOLS = {'state_query': state_query, 'source_read': source_read, 'source_locate': source_locate,
@@ -472,8 +475,7 @@ TOOLS = {'state_query': state_query, 'source_read': source_read, 'source_locate'
          'source_archive_members': source_archive_members, 'source_archive_extract': source_archive_extract,
          'source_xlsx_sheets': source_xlsx_sheets, 'source_xlsx_rows': source_xlsx_rows,
          'source_pdf_info': source_pdf_info, 'source_pdf_text': source_pdf_text, 'source_pdf_page': source_pdf_page,
-         'execution_estimate': execution_estimate, 'reason': reason, 'report': report,
-         'literature_structure_populate': literature_structure_populate}
+         'execution_estimate': execution_estimate, 'structure_populate': structure_populate, 'reason': reason}
 
 
 def generation_schema(schema):
@@ -486,10 +488,8 @@ def decode_response(value, schema):
 
 def decide(summary, feedback, ctx):
     """Ask the model for the next tool, shown the assignment, the custody of the source, its own read outcomes,
-    the interpretation so far, the tools, the measured time, the credit definition and the yield table (the old
-    decision state and inputs, over this episode's summary)."""
-    if ctx.settings.get('structure_population'):
-        raise NotImplementedError('literature_structure_population_not_built')
+    the structure sheets it saved (their controlled features), the tools, the measured time, the credit definition
+    and the yield table (the old decision state and inputs, over this episode's summary)."""
     names = offered(ctx.settings)
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
@@ -497,7 +497,7 @@ def decide(summary, feedback, ctx):
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
                'credit_binding': summary['credit_binding'],
-               'current_report_update': summary['report'], 'report_lifecycle': LIFECYCLE,
+               'structure_sheets': summary['structure_sheets'],
                'tools': catalog(names, summary), 'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
@@ -517,8 +517,7 @@ def empty_commit(commit, schema, processing):
 
 def action(response, summary, records, ctx):
     """Turn the model's answer into one tool call, or reject it (no unit). An answer that selects no offered tool,
-    arguments that do not fit its schema, an empty reasoning commit without task content, or a report naming a
-    source this episode does not hold is invalid."""
+    arguments that do not fit its schema, or an empty reasoning commit without task content is invalid."""
     names = offered(ctx.settings)
     schema = selection_schema(names, summary)
     try:
@@ -526,13 +525,6 @@ def action(response, summary, records, ctx):
         validate_schema(value, schema)
         selection = value['selection']
         name, arguments = selection['tool'], selection['arguments']
-        if name == 'report':
-            for passage in arguments['passages']:
-                if not records.holds(passage['source_ref']):
-                    raise ContractError('literature_reference_unavailable', detail={'reference': passage['source_ref']})
-            return ToolCall('report', arguments)
-        if name == 'literature_structure_populate':
-            return ToolCall(name, arguments)
         if name == 'reason':
             if 'source_lead' not in arguments and empty_commit(arguments['commit'], summary['reasoning_schema'],
                                                                arguments.get('evidence_processing')):

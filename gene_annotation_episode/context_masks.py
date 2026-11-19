@@ -43,7 +43,7 @@ def normalize(store, mask):
             if value["target_ref"] not in targets:
                 raise ContractError("context_segment_outside_target")
             selected = _selections(store, result, value["target_ref"])
-            if selected and not store.db.execute("SELECT 1 FROM library_selection_members WHERE selection_ref IN (SELECT value FROM json_each(?)) AND read_ref=? LIMIT 1",
+            if selected and not store._db.execute("SELECT 1 FROM library_selection_members WHERE selection_ref IN (SELECT value FROM json_each(?)) AND read_ref=? LIMIT 1",
                     (canonical(selected), libraries.read_ref(value["target_ref"], value["member_ref"]))).fetchone():
                 raise ContractError("context_segment_outside_selection_union")
         if {row["target_ref"] for row in mask["segments"]} != set(targets):
@@ -90,7 +90,7 @@ def target_full(store, mask, target_ref):
         return True
     target = store.get_input(target_ref)
     sql, params = target_query(store, mask, target_ref)
-    measured = store.db.execute("SELECT coalesce(sum(end-start),0) FROM ("+sql+")",params).fetchone()[0]
+    measured = store._db.execute("SELECT coalesce(sum(end-start),0) FROM ("+sql+")",params).fetchone()[0]
     return measured == (target["position_mass"] if libraries.is_library(target) else target["length"])
 
 
@@ -102,7 +102,7 @@ def measure(store, mask, target_ref):
     if "segments" not in mask and not _selections(store, mask, target_ref):
         return target["position_mass"] if libraries.is_library(target) else target["length"]
     sql, params = target_query(store, mask, target_ref)
-    return store.db.execute("SELECT coalesce(sum(end-start),0) FROM ("+sql+")", params).fetchone()[0]
+    return store._db.execute("SELECT coalesce(sum(end-start),0) FROM ("+sql+")", params).fetchone()[0]
 
 
 def identity_digest(store, mask):
@@ -114,7 +114,7 @@ def identity_digest(store, mask):
             continue
         digest.update((canonical({"target_ref":ref,"kind":"position_set"})+"\n").encode())
         sql, params = target_query(store, mask, ref)
-        for row in store.db.execute("SELECT member_ref,unit,start,end FROM ("+sql+") ORDER BY coalesce(member_ref,''),unit,start,end",params):
+        for row in store._db.execute("SELECT member_ref,unit,start,end FROM ("+sql+") ORDER BY coalesce(member_ref,''),unit,start,end",params):
             digest.update((canonical(dict(row))+"\n").encode())
     return digest.hexdigest()
 
@@ -129,7 +129,7 @@ def subset(store, left, right):
         if target_full(store,left,ref):
             return False
         ls, lp = target_query(store,left,ref); rs,rp = target_query(store,right,ref)
-        if store.db.execute("SELECT 1 FROM ("+ls+") l WHERE NOT EXISTS (SELECT 1 FROM ("+rs+") r WHERE r.member_ref IS l.member_ref AND r.unit=l.unit AND r.start<=l.start AND l.end<=r.end) LIMIT 1",lp+rp).fetchone():
+        if store._db.execute("SELECT 1 FROM ("+ls+") l WHERE NOT EXISTS (SELECT 1 FROM ("+rs+") r WHERE r.member_ref IS l.member_ref AND r.unit=l.unit AND r.start<=l.start AND l.end<=r.end) LIMIT 1",lp+rp).fetchone():
             return False
     return True
 
@@ -140,7 +140,7 @@ def overlap(store, left, right):
         if target_full(store,left,ref) or target_full(store,right,ref):
             return True
         ls,lp=target_query(store,left,ref); rs,rp=target_query(store,right,ref)
-        if store.db.execute("SELECT 1 FROM ("+ls+") l JOIN ("+rs+") r ON r.member_ref IS l.member_ref AND r.unit=l.unit AND max(l.start,r.start)<min(l.end,r.end) LIMIT 1",lp+rp).fetchone():
+        if store._db.execute("SELECT 1 FROM ("+ls+") l JOIN ("+rs+") r ON r.member_ref IS l.member_ref AND r.unit=l.unit AND max(l.start,r.start)<min(l.end,r.end) LIMIT 1",lp+rp).fetchone():
             return True
     return False
 
@@ -159,6 +159,6 @@ def dimension_segments(store, mask, dimension_ref):
     if "segments" in mask:
         return [{"start":part["start"],"end":part["end"]} for part in mask["segments"] if part["target_ref"]==target_ref and part.get("member_ref")==member_ref]
     selected=_selections(store,mask,target_ref)
-    if selected and not store.db.execute("SELECT 1 FROM library_selection_members WHERE selection_ref IN (SELECT value FROM json_each(?)) AND read_ref=? LIMIT 1",(canonical(selected),dimension_ref)).fetchone():
+    if selected and not store._db.execute("SELECT 1 FROM library_selection_members WHERE selection_ref IN (SELECT value FROM json_each(?)) AND read_ref=? LIMIT 1",(canonical(selected),dimension_ref)).fetchone():
         return []
     return [{"start":0,"end":row["length"]}]

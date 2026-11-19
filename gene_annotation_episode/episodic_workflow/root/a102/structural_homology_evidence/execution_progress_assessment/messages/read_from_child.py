@@ -2,28 +2,22 @@
 
 The old receiver validated the child's typed form and read every ``episode_progress`` reference in it through the
 progress provider before admitting it into this monitor's received progress. Here the child's result is admitted
-against its return form by its builder; every delivered progress reference is read through the run's progress
-provider in this monitor's scope (a reference it cannot read raises) and the admitted references join this
-monitor's received progress through the unit's recorded outcome. The old ``provider._receive_progress`` ledger
-and its form/schema/scope signature are old-runner receipts and are not carried.
+against its return form by the system; each delivered progress reference must come with its snapshot (the child
+returns them as ``monitoring_progress_snapshots``), because ``credit`` and the summary have no provider to read it
+from. The admitted references join this monitor's received progress through the unit's report. The old
+``provider._receive_progress`` ledger and its form/schema/scope signature are old-runner receipts, not carried.
 """
 from __future__ import annotations
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError
 
 
-def _unique(values):
-    return list(dict.fromkeys(values))
-
-
-def received_progress(provider, admitted, scope):
-    """The progress references the dependency monitor delivered, each read in this monitor's scope."""
-    references = admitted['finding'].get('monitoring_progress_refs')
-    if not isinstance(references, list) or any(type(reference) is not str for reference in references):
-        raise ContractError('dependency_monitor_report_requires_progress_refs')
+def read_from_child(slot, result, summary, records):
+    references = list(dict.fromkeys(result['monitoring_progress_refs']))
+    snapshots = result['monitoring_progress_snapshots']
     for reference in references:
-        provider.read_progress(reference, scope)
-    return _unique(references)
-
-
-__all__ = ['received_progress']
+        if reference not in snapshots:
+            raise ContractError('dependency_monitor_report_requires_progress_refs')
+    return {'slot': slot, 'progress_refs': references,
+            'progress_snapshots': {reference: snapshots[reference] for reference in references},
+            'child_credit': result['credit'], 'child_finding': result['finding']}

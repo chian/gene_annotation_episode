@@ -1,0 +1,90 @@
+"""The return. Always returned: the Episode's credit (the system hands it in ``completion``) and the finding (which
+resources got a usable handoff and which launches ran). Selectable: ``execution_handoff_refs`` and
+``execution_completed`` (what the parent selects to preserve the original job identity across a return), the result
+and hsp sources, the pairwise result references and the array-valued native result family sources of the readers. A
+launch acquires no results: every result source and every array family source is empty for it."""
+import re
+
+from method_loop import Field, RecordForm
+
+from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.\
+    evolutionary_history_evidence.hmmer_preparation_result_views import preparation_fact_sources
+from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.\
+    evolutionary_history_evidence.blast_pairwise_result_views import native_blast_fact_sources
+from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.\
+    evolutionary_history_evidence.hmmer_native_result_views import native_hmmer_fact_sources
+from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.\
+    evolutionary_history_evidence.native_blast_database_result_views import native_blast_database_fact_sources
+from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.\
+    evolutionary_history_evidence.native_blast_standard_database_result_views import (
+        standard_blast_database_fact_sources)
+
+LAUNCH_FORM = RecordForm({
+    'slot': Field('text', 'The launch child commissioned'),
+    'resource_id': Field('text', 'The resource it was commissioned on'),
+    'completed': Field('boolean', 'Whether the child verified the requested endpoint'),
+    'handoff_refs': Field('list', 'The handoff records the child returned'),
+})
+FINDING_FORM = RecordForm({
+    'handoff_established': Field('boolean', 'Whether at least one usable handoff was received'),
+    'handoff_resources': Field('list', 'The resource ids that have a usable handoff from this launch'),
+    'new_handoff_count': Field('integer', 'The handoffs of resources that had none when this launch began'),
+    'launches_run': Field('integer', 'The launch children commissioned'),
+    'launches': Field('list', 'Each launch child commissioned, in order', items=LAUNCH_FORM),
+})
+
+_FAMILY_SOURCE_FUNCTIONS = (native_hmmer_fact_sources, standard_blast_database_fact_sources,
+                            native_blast_database_fact_sources, preparation_fact_sources, native_blast_fact_sources)
+_IDENTIFIER = re.compile(r'^[a-z][a-z0-9_]*$')
+# The array-valued native result family sources, by name and meaning.
+FAMILY_SOURCES = {name: declared['meaning']
+                  for declare in _FAMILY_SOURCE_FUNCTIONS for name, declared in declare().items()
+                  if _IDENTIFIER.fullmatch(name) and declared['type'] == 'array'}
+
+RETURN_FORM = RecordForm({
+    'credit': Field('number', "The Episode's credit when its controller stopped it"),
+    'finding': Field('record', 'Which resources got a usable handoff and which launches ran', form=FINDING_FORM),
+    'execution_handoff_refs': Field('record_refs', 'Qualified original handoff sources received from the launch '
+                                                   'children: the job identity, preserved across a return'),
+    'execution_completed': Field('boolean', 'Whether this assignment has actual verified endpoint information (a '
+                                            'usable handoff was received); yielding alone is false'),
+    'execution_result_refs': Field('record_refs', 'Qualified actual requested result acquisitions: none, a launch '
+                                                  'acquires no results', required=False),
+    'execution_file_source_refs': Field('record_refs', 'Source references of retained local file streams: none, a '
+                                                       'launch acquires no results', required=False),
+    'execution_file_capture_outcomes': Field('list', 'Recorded selected-file availability: always empty here',
+                                             required=False),
+    'execution_blast_hsps': Field('list', 'Optional explicitly requested native measurements of acquired HSPs: '
+                                          'none for a launch', required=False),
+    'execution_blast_pairwise_result_refs': Field('record_refs', 'Native BLAST pairwise result references: none for '
+                                                                  'a launch', required=False),
+    **{name: Field('list', meaning, required=False) for name, meaning in FAMILY_SOURCES.items()},
+})
+
+
+def _facts(summary):
+    """The facts a parent may select: the handoff references and whether one was received; a launch acquires no
+    results, so every result source and every array family source is empty."""
+    facts = {'execution_handoff_refs': sorted(summary['handoff_refs']),
+             'execution_completed': bool(summary['handoff_resources']),
+             'execution_result_refs': [], 'execution_file_source_refs': [], 'execution_file_capture_outcomes': [],
+             'execution_blast_hsps': [], 'execution_blast_pairwise_result_refs': []}
+    facts.update({name: [] for name in FAMILY_SOURCES})
+    return facts
+
+
+def final_to_parent(summary, completion, selection):
+    facts = _facts(summary)
+    new = len(set(summary['handoff_resources']) - set(summary['received_handoff_resources']))
+    established = facts['execution_completed']
+    result = {'credit': completion['credit'],
+              'finding': {'handoff_established': established, 'handoff_resources': list(summary['handoff_resources']),
+                          'new_handoff_count': new, 'launches_run': len(summary['launches']),
+                          'launches': [{'slot': launch['slot'], 'resource_id': launch['resource_id'],
+                                        'completed': launch['completed'], 'handoff_refs': launch['handoff_refs']}
+                                       for launch in summary['launches']]},
+              'execution_handoff_refs': facts['execution_handoff_refs'],
+              'execution_completed': established}
+    for name in selection:
+        result[name] = facts[name]
+    return result

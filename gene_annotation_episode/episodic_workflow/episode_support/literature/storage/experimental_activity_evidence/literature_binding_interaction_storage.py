@@ -11,6 +11,7 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, obj, validate_schema
 from gene_annotation_episode.domain import ContractError
@@ -121,12 +122,15 @@ def _bindings(extraction, publish, source_records):
         roles[role] = {'selection_status': row['selection_status'], 'parameter_kind': interpreted(row['parameter_kind'], 'parameter_kind'), 'definitions': definitions, 'physical_fit': physical_binding, 'source_cell_ref': cell_ref, 'parse_status': measure['parse_status'], 'expression': expression, 'unit': unit, 'unavailable_reasons': list(row['unavailable_reasons']), 'uncertainty': unc, 'numeric_locations': [{k: v for k, v in t.items() if k != 'artifact_ref'} for t in {canonical(v): v for v in numbers}.values()], 'numeric_values': numeric}
     return (roles, {name: interpreted(extraction['relationships'][name], name) for name in RELATIONS}, interpreted(extraction['parameter_kind'], 'common_parameter_kind'))
 
+OPERATIONS = operations_ledger('literature_binding_interaction_operations')
+RECEIVED = received_ledger('literature_binding_interaction_received')
+
 class LiteratureBindingInteractionRepository(LiteratureRateRepository):
     provider = PROVIDER
     record_version = VERSION
     components = COMPONENTS
-    operations_table = 'literature_binding_interaction_operations'
-    received_table = 'literature_binding_interaction_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ()
 
     def _parents(self, scope, direct):
@@ -151,7 +155,7 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
             raise ContractError('operation_key_required')
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'selected_tool': 'literature.binding.interaction.populate', 'scope': plain(context.scope), 'assignment': plain(context.assignment), 'requested_components': _selected(context.assignment), 'arguments': plain(arguments)}
         signature = _signature(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
+        old = self._operation(context.episode_id, operation_key)
         if old is not None:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -199,10 +203,10 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
 
             def publish(kind, value):
                 ref = identity(kind, {'origin': 'tool', 'record': value})
-                exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (ref,)).fetchone()
+                exists = self.store.holds(ref)
                 actual = self.store.put(kind, value, origin='tool', scope=plain(context.scope))
                 records.append(actual['id'])
-                if exists is None:
+                if not exists:
                     created.append(actual['id'])
                 return actual['id']
             saved['role_bindings'], saved['comparison_bindings'], saved['common_kind_binding'] = _bindings(extraction, publish, saved['source_records'])
@@ -210,7 +214,7 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
             request_ref = self.store.artifact(canonical(request), 'application/json')
             ref = publish('source', {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': sources})
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': list(dict.fromkeys([ref, *records])), 'changed_record_refs': created, 'result': self._result(ref, saved), 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     @staticmethod
@@ -241,7 +245,7 @@ class LiteratureBindingInteractionRepository(LiteratureRateRepository):
         request = self._artifact_json(source['request_ref'])
         if set(request) != set(_REQUEST) or request['run_id'] != self.run_id or request['selected_tool'] != 'literature.binding.interaction.populate' or (request['requested_components'] != _selected(request['assignment'])):
             _fail('request_mismatch')
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
+        operation = self._operation(request['episode_id'], request['operation_key'])
         if operation is None or operation['signature'] != _signature(request):
             _fail('operation_mismatch')
         outcome = json.loads(operation['outcome'])

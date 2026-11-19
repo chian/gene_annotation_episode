@@ -3,26 +3,27 @@ from __future__ import annotations
 
 import json
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.evolutionary_history_evidence.hpc import require
 from gene_annotation_episode.episodic_workflow.episode_support.grading.evolutionary_history_evidence.scoring import VERSION
 from gene_annotation_episode.episodic_workflow.episode_support.grading.evolutionary_history_evidence.tool_grading_artifacts import source_tool_grading_entries
 
 
 PROVIDER = 'native.a104.tool_attachment'
+ATTACHMENTS = TableDeclaration(name='a104_attachments', columns=('source_ref', 'body', 'grading_artifact_ref'),
+    key=('source_ref',), record_refs=('source_ref', 'grading_artifact_ref'))
 
 
 def received_attachments(store, known):
-    exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='a104_attachments'").fetchone()
-    if not exists:
-        return []
     result = []
     for reference in sorted(known):
         source = store.get(reference)
         if source['record_type'] != 'source' or source.get('provider') != PROVIDER:
             continue
-        row = store.db.execute('SELECT * FROM a104_attachments WHERE source_ref=?', (reference,)).fetchone()
+        rows = store.table(ATTACHMENTS).select({'source_ref': reference})
+        row = rows[0] if rows else None
         require(row is not None and source['origin'] == 'tool', 'a104_attachment_host_grant_required')
-        body = json.loads(row['body'])
+        body = row['body']
         entries = source_tool_grading_entries(store, reference)
         require(json.loads(store.get_artifact(source['artifact_ref'])) == body and len(entries) == 1
                 and entries[0]['artifact_ref'] == row['grading_artifact_ref']

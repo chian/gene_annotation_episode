@@ -197,3 +197,202 @@ The parent's `from_child_table_evidence_extraction` admits these cells into the 
   same check, under `context.role == 'literature_table'`.
 - **Sibling copies.** Apart from the role name, the binding path, the selection shape and that sheet check, it is
   byte-identical to passage_evidence_extraction and source_coverage_improvement.
+
+## Carried over
+
+The old files were not readable in this checkout (no git history of 97308b94c); the carry was written from this record, the old-call table and the library. Rows with a first-three-column copy of `runs/carry_over/functions/a105__experimental_activity_evidence__published_evidence_assessment__evidence_search_strategy_improvement__source_relevance_assessment__source_evidence_examination__table_evidence_extraction.tsv`. Old tests: none (the episode had no `tests/` folder).
+
+| old_file | name | kind | new place or reason |
+|---|---|---|---|
+| binding_record.py | LiteratureBindingRecord | machinery | binding_record.py and the binding's own as_record() are deleted (README 3) |
+| binding_record.py | LiteratureBindingRecord.as_record | machinery | binding_record.py and the binding's own as_record() are deleted (README 3) |
+| configuration.py | LiteratureConfiguration | machinery | configuration values become the run's settings (ctx.settings) or constants of the file that uses them; old binding configuration is not carried |
+| configuration.py | LiteratureConfiguration.__init__ | machinery | configuration values become the run's settings (ctx.settings) or constants of the file that uses them; old binding configuration is not carried |
+| configuration.py | LiteratureConfiguration.reference_evidence | machinery | root-only reference_evidence configuration (caller-assigned reference investigation); not this episode's; settings are the run's |
+| credit.py | _resolve | episode function | already in library: literature/grading/literature_task_credit.py::_resolve (imported by task.py) |
+| credit.py | lead_schema | episode function | already in library: literature/grading/literature_task_credit.py::lead_schema (imported by task.py) |
+| credit.py | lead_return_schema | episode function | not carried: the lead disposition field is declared by messages/final_to_parent.py RETURN_FORM (LEADS, a list) |
+| credit.py | validate_lead | episode function | task.py::validate_source_lead (private copy on custody; library candidate) |
+| credit.py | lead_dispositions | episode function | credit.py::lead_dispositions (private copy; library candidate) |
+| credit.py | screening_schema | episode function | not carried: the screening field is declared by messages/final_to_parent.py RETURN_FORM (SCREENING, a list) |
+| credit.py | _current_assessments | episode function | credit.py::current_assessments (private copy over records) |
+| credit.py | screening_answers | episode function | credit.py::screening_answers (private copy; library candidate) |
+| credit.py | LiteratureTaskCredit | episode function | credit.py::credit (the class becomes credit(summary, records)) |
+| credit.py | LiteratureTaskCredit.as_record | episode function | credit.py::credit_binding (the credit projector's as_record(), README 3d) |
+| credit.py | LiteratureTaskCredit.__call__ | episode function | credit.py::credit (credit_unit x answers; the commission-equality, scope and receiver checks are the old runner's custody/commission checks and are not carried) |
+| credit.py | LiteratureTaskCredit._answers | episode function | credit.py::answers |
+| credit.py | measured_answers | episode function | credit.py::measured_answers (BLOCKED-ON-STORE-ACCESS: sheet reads) |
+| credit.py | graded_experiment_answers | episode function | credit.py::graded_experiment_answers (BLOCKED-ON-STORE-ACCESS: sheet reads) |
+| credit.py | assembled_answers | episode function | credit.py::assembled_answers (BLOCKED-ON-STORE-ACCESS: sheet reads) |
+| credit.py | LiteratureCredit | machinery | class LiteratureCredit: credit_kind/credit_view/credit_projector wiring of the old scientific_credit service |
+| credit.py | LiteratureCredit._scientific_credit_invocation | machinery | old credit wiring (credit_kind, credit_view, services.scientific_credit invocation, credit_projector) |
+| credit.py | LiteratureCredit.credit_kind | machinery | old credit wiring (credit_kind, credit_view, services.scientific_credit invocation, credit_projector) |
+| credit.py | LiteratureCredit.credit_view | machinery | old credit wiring (credit_kind, credit_view, services.scientific_credit invocation, credit_projector) |
+| credit.py | LiteratureCredit.credit_projector | machinery | old credit wiring (credit_kind, credit_view, services.scientific_credit invocation, credit_projector) |
+| decision_presentation.py | prepare_completed_work | machinery | prepare_completed_work and decision_yield_table read the old runtime and controller binding; the yield table is messages/internal_summary.py (yield_table of the library over view.controller_state), the completed-work context belongs to the population route (not built) |
+| decision_presentation.py | decision_yield_table | machinery | prepare_completed_work and decision_yield_table read the old runtime and controller binding; the yield table is messages/internal_summary.py (yield_table of the library over view.controller_state), the completed-work context belongs to the population route (not built) |
+| episode.py | LiteratureEpisode | episode function | episode.py::TableEvidenceExtraction (the one class of the ten-file form) |
+| episode.py | LiteratureEpisode._enabled | machinery | old mix-in hooks (_enabled, contract_information_*, _role, context_hook_applies): contract-information profile and role dispatch of the old runner |
+| episode.py | LiteratureEpisode.contract_information_configuration | machinery | old mix-in hooks (_enabled, contract_information_*, _role, context_hook_applies): contract-information profile and role dispatch of the old runner |
+| episode.py | LiteratureEpisode.contract_information_profile | machinery | old mix-in hooks (_enabled, contract_information_*, _role, context_hook_applies): contract-information profile and role dispatch of the old runner |
+| episode.py | LiteratureEpisode._role | machinery | old mix-in hooks (_enabled, contract_information_*, _role, context_hook_applies): contract-information profile and role dispatch of the old runner |
+| episode.py | LiteratureEpisode.allowed_children | episode function | task.py::CHILD_SLOTS = {} (no child) |
+| episode.py | LiteratureEpisode.child_roles | episode function | task.py::CHILD_SLOTS = {} (no child) |
+| episode.py | LiteratureEpisode.child_assignment_schema | episode function | task.py::CHILD_SLOTS = {} (no child) |
+| episode.py | LiteratureEpisode.context_hook_applies | machinery | old mix-in hooks (_enabled, contract_information_*, _role, context_hook_applies): contract-information profile and role dispatch of the old runner |
+| from_parent.py | LiteratureAssignment | episode function | messages/read_from_parent.py (ASSIGNMENT_FORM and read_from_parent) |
+| from_parent.py | LiteratureAssignment.assignment_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM |
+| from_parent.py | LiteratureAssignment._validate_page | episode function | messages/read_from_parent.py::read_from_parent (span/selection against page; the Store checks of the page are a commission check and are not carried) |
+| from_parent.py | LiteratureAssignment._validate_assignment | episode function | messages/read_from_parent.py::read_from_parent (selection against page) |
+| from_parent.py | LiteratureAssignment.prepare_assignment | episode function | messages/read_from_parent.py::read_from_parent (the credit_unit/yield_settings fill and the proposed-annotation/parent-page equality checks are not carried: credit_unit is a field of the commissioned task, cost and parameters are settings, a wrong commission fails) |
+| from_parent.py | LiteratureAssignment._parent_page_schema | machinery | check of the page against the parent's page: a commission check against another episode (rule 1), not carried |
+| from_parent.py | LiteratureAssignment._validate_parent_page | machinery | check of the page against the parent's page: a commission check against another episode (rule 1), not carried |
+| goal.py | _yield_kind | episode function | yield_estimator.py::yield_controller (kind choice) |
+| goal.py | _task_key | episode function | messages/read_from_parent.py::task_key |
+| goal.py | task_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM (literature_task field) |
+| goal.py | _return_sources | machinery | check of the return schema against the original return contract (x-source scan): a commission check against the parent, not carried |
+| goal.py | _return_components | machinery | check of the return schema against the original return contract (x-source scan): a commission check against the parent, not carried |
+| goal.py | commissioned_task | episode function | messages/read_from_parent.py::read_from_parent (task kind, axis, credit_unit and experiments checks) |
+| goal.py | continuation_task | episode function | messages/read_from_parent.py::task_key |
+| goal.py | task_schema_variants | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM (task kinds and answer kinds) |
+| goal.py | required_source | episode function | messages/final_to_parent.py::CELLS (the cell family each task kind requires) |
+| goal.py | validate_commission | episode function | messages/read_from_parent.py::read_from_parent (duplicate experiments); requested-component checks are commission checks and are not carried |
+| goal.py | LiteratureGoal | episode function | goal.py (GOAL, UNIT, RESULT) and task.py::instructions |
+| goal.py | LiteratureGoal.instructions | episode function | goal.py::GOAL and task.py::instructions |
+| goal.py | LiteratureGoal.planning_context | episode function | messages/internal_summary.py (assignment, credit_binding, controller yield table) |
+| grading/assay_subscoring.py | AssaySubscoring | episode function | library: literature/storage/experimental_activity_evidence/literature_assay_grading_storage.py::LiteratureAssayGradingRepository (already in library; called by task.py::reason, library not carried) |
+| grading/assay_subscoring.py | AssaySubscoring._required_grading_repository | episode function | library: literature/storage/experimental_activity_evidence/literature_assay_grading_storage.py::LiteratureAssayGradingRepository (already in library; called by task.py::reason, library not carried) |
+| grading/assay_subscoring.py | AssaySubscoring._assay_grading_repository | episode function | library: literature/storage/experimental_activity_evidence/literature_assay_grading_storage.py::LiteratureAssayGradingRepository (already in library; called by task.py::reason, library not carried) |
+| grading/experimental_interpretation.py | ExperimentalInterpretation | episode function | task.py::reason |
+| grading/experimental_interpretation.py | ExperimentalInterpretation.reasoning_action_schema | episode function | task.py::reason_schema (library literature_required_grading.action_schema) |
+| grading/experimental_interpretation.py | ExperimentalInterpretation.reasoning_has_task_content | episode function | task.py::empty_commit and task.py::action |
+| grading/experimental_interpretation.py | ExperimentalInterpretation.execute_reasoning | episode function | task.py::reason (library literature_required_grading.execute; BLOCKED, library not carried) |
+| internal_summary.py | LiteratureSummary | episode function | messages/internal_summary.py::internal_summary and task.py::decide |
+| internal_summary.py | LiteratureSummary.initial_decision_context | episode function | messages/internal_summary.py::internal_summary and task.py::decide |
+| internal_summary.py | LiteratureSummary.decision_context | episode function | messages/internal_summary.py::internal_summary and task.py::decide |
+| internal_summary.py | LiteratureSummary._owned_population_task_sources | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _owned_population_task_sources ) |
+| internal_summary.py | LiteratureSummary._population_task_context | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _population_task_context ) |
+| internal_summary.py | LiteratureSummary._concentration_window_display_context | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _concentration_window_display_context ) |
+| internal_summary.py | LiteratureSummary._measurement_comparison_display_context | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _measurement_comparison_display_context ) |
+| internal_summary.py | LiteratureSummary._summary_precision_display_context | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _summary_precision_display_context ) |
+| internal_summary.py | LiteratureSummary._endpoint_signal_display_context | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _endpoint_signal_display_context ) |
+| internal_summary.py | LiteratureSummary._controlled_response_bindings | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _controlled_response_bindings ) |
+| internal_summary.py | LiteratureSummary._gel_bindings | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _gel_bindings ) |
+| internal_summary.py | LiteratureSummary._gel_display_context | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _gel_display_context ) |
+| internal_summary.py | LiteratureSummary._received_fact_display_context | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _received_fact_display_context ) |
+| internal_summary.py | LiteratureSummary._native_rate_display_context | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _native_rate_display_context ) |
+| internal_summary.py | LiteratureSummary._native_rate_domain_display_context | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _native_rate_domain_display_context ) |
+| internal_summary.py | LiteratureSummary._native_rate_meaning_display_context | episode function (unplaced) | UNPLACED: population route not built (population-route display context (not built): _native_rate_meaning_display_context ) |
+| received_evidence.py | LiteratureReceivedEvidence | machinery | received-cell admission and receipt tokens of the old receipts bookkeeping; the copy of the parent's child-cell admission has no caller here (no child) |
+| received_evidence.py | LiteratureReceivedEvidence.received_report_sources | machinery | received-cell admission and receipt tokens of the old receipts bookkeeping; the copy of the parent's child-cell admission has no caller here (no child) |
+| received_evidence.py | LiteratureReceivedEvidence.received_report_facts | machinery | received-cell admission and receipt tokens of the old receipts bookkeeping; the copy of the parent's child-cell admission has no caller here (no child) |
+| received_evidence.py | LiteratureReceivedEvidence._complete_requested_received_arrays | machinery | received-cell admission and receipt tokens of the old receipts bookkeeping; the copy of the parent's child-cell admission has no caller here (no child) |
+| received_evidence.py | LiteratureReceivedEvidence.received_form_references | machinery | received-cell admission and receipt tokens of the old receipts bookkeeping; the copy of the parent's child-cell admission has no caller here (no child) |
+| received_evidence.py | LiteratureReceivedEvidence.received_evidence_tokens | machinery | received-cell admission and receipt tokens of the old receipts bookkeeping; the copy of the parent's child-cell admission has no caller here (no child) |
+| scientific_records.py | LiteratureScientificRecords | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_rate_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_calibration_recovery_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_rate_observation_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_rate_replicate_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_quantity_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_assay_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_amount_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_optical_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_kinetic_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_binding_interaction_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_ratio_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_binding_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_binding_model_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_transport_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_figure_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_ratio_source_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_controlled_response_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords.literature_gel_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._endpoint_signal_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._concentration_window_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._measurement_comparison_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._summary_precision_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._rate_grid_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._compiled_assay_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._compiled_assay_v2_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._compiled_assay_v3_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._product_coupling_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._measurement_validation_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._ion_discrimination_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._channel_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._completion_time_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._active_site_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._assay_grading_source_cells | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._parent_depletion_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._stoichiometric_balance_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._product_partition_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._binding_interaction_model_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._kinetic_model_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._ratio_source_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._controlled_response_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._gel_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._native_rate_meaning_repository | episode function | already in library: literature/storage/experimental_activity_evidence/* repositories (one per scientific family; the population route that builds them is not built here) |
+| scientific_records.py | LiteratureScientificRecords._population_routes | episode function (unplaced) | UNPLACED: population route not built (population-route dispatch of the old runner (not built) ) |
+| scoring/experimental_main_sheet.py | ExperimentalMainSheet | episode function | library: literature/storage/experimental_activity_evidence/literature_aggregation_storage.py (already in library; the aggregation repository) |
+| scoring/experimental_main_sheet.py | ExperimentalMainSheet._a105_aggregation_repository | episode function | library: literature/storage/experimental_activity_evidence/literature_aggregation_storage.py (already in library; the aggregation repository) |
+| source_contracts.py | _required_grading_logic | episode function | final_to_parent.py::cells (required grading logic: library literature_required_grading, called by task.py::reason) |
+| source_contracts.py | _population_catalog | episode function | goal.py::GOAL (role instruction) and messages/read_from_parent.py::ASSIGNMENT_FORM (population catalog: already in library literature/forms/experimental_activity_evidence/literature_population_catalog.py) |
+| source_operations.py | LiteratureSourceOperations | episode function | task.py::run_access_tool (text-witness materialization is the library's materialize_text_witness_inputs, called inside literature_required_grading.execute) |
+| source_operations.py | LiteratureSourceOperations._tool_arguments | episode function | task.py::admitted (operand schema, source containment and the sheet_key lock) and task.py::run_access_tool |
+| source_operations.py | LiteratureSourceOperations._materialize_text_arguments | episode function | task.py::run_access_tool (text-witness materialization is the library's materialize_text_witness_inputs, called inside literature_required_grading.execute) |
+| source_references.py | LiteratureReferences | episode function | task.py::within_source |
+| source_references.py | LiteratureReferences._require | episode function | task.py::within_source (read_record_in_scope of the library) |
+| source_references.py | LiteratureReferences._artifact | episode function | task.py::validate_source_lead (artifact by representation) and credit.py::screening (messages/internal_summary.py) |
+| source_references.py | LiteratureReferences._within_source | episode function | task.py::within_source |
+| task.py | LiteratureOperations | episode function | task.py::run_access_tool and the TOOLS table |
+| task.py | LiteratureOperations.permitted_common_actions | machinery | common-action list (tool, reason, child, redeliver_report) of the old loop; the closing report is the report tool |
+| task.py | LiteratureOperations.catalog | episode function | task.py::catalog and task.py::offered |
+| task.py | LiteratureOperations.execute | episode function | task.py::run_access_tool |
+| task.py | LiteratureTask | episode function | task.py::decide and task.py::action |
+| task.py | LiteratureTask.next | episode function | task.py::decide |
+| task.py | LiteratureTask.apply_response | episode function | task.py::action |
+| task.py | LiteratureTask.execute | episode function | task.py::TOOLS (run_access_tool, reason, report) |
+| task.py | LiteratureTask.finish | episode function | messages/final_to_parent.py::final_to_parent |
+| task_decision.py | LiteratureTaskDecision | machinery | decision-exchange loop, exchange schema/response/history validation and decision completion (exchange_decision), receipts and resource-estimate branch |
+| task_decision.py | LiteratureTaskDecision.call | episode function | task.py::decide (the model request); the provider call and exchange are the system's |
+| task_decision.py | LiteratureTaskDecision.instructions | episode function | task.py::instructions |
+| task_decision.py | LiteratureTaskDecision.decision_completion | machinery | decision-exchange loop, exchange schema/response/history validation and decision completion (exchange_decision), receipts and resource-estimate branch |
+| task_decision.py | LiteratureTaskDecision.conversation_key | machinery | decision-exchange loop, exchange schema/response/history validation and decision completion (exchange_decision), receipts and resource-estimate branch |
+| task_decision.py | LiteratureTaskDecision.interpretation_context | episode function | task.py::decide (context) |
+| task_decision.py | LiteratureTaskDecision.exchange_schema | machinery | decision-exchange loop, exchange schema/response/history validation and decision completion (exchange_decision), receipts and resource-estimate branch |
+| task_decision.py | LiteratureTaskDecision.exchange_response | machinery | decision-exchange loop, exchange schema/response/history validation and decision completion (exchange_decision), receipts and resource-estimate branch |
+| task_decision.py | LiteratureTaskDecision.validate_contract_exchange_request | machinery | decision-exchange loop, exchange schema/response/history validation and decision completion (exchange_decision), receipts and resource-estimate branch |
+| task_decision.py | LiteratureTaskDecision.validate_contract_exchange_history | machinery | decision-exchange loop, exchange schema/response/history validation and decision completion (exchange_decision), receipts and resource-estimate branch |
+| task_decision.py | LiteratureTaskDecision.exchange_decision | machinery | decision-exchange loop, exchange schema/response/history validation and decision completion (exchange_decision), receipts and resource-estimate branch |
+| task_instructions.py | instructions | episode function | task.py::instructions (the pending-delivery repair text and wait paragraphs are not carried) |
+| task_state.py | LiteratureTaskState | episode function | messages/internal_summary.py::internal_summary (report values from the outcomes; the interpretation schema is view.records.reasoning_schema()) |
+| task_state.py | LiteratureTaskState.__init__ | episode function | messages/internal_summary.py::internal_summary (report values from the outcomes; the interpretation schema is view.records.reasoning_schema()) |
+| task_state.py | LiteratureTaskState.bind_execution_context | machinery | restore/checkpoint, execution-context binding, suspension and effect recording of the old runner (bind_execution_context) |
+| task_state.py | LiteratureTaskState.suspension_changed | machinery | restore/checkpoint, execution-context binding, suspension and effect recording of the old runner (suspension_changed) |
+| task_state.py | LiteratureTaskState.record_execution_failure | machinery | restore/checkpoint, execution-context binding, suspension and effect recording of the old runner (record_execution_failure) |
+| task_state.py | LiteratureTaskState.restore_checkpoint | machinery | restore/checkpoint, execution-context binding, suspension and effect recording of the old runner (restore_checkpoint) |
+| task_state.py | LiteratureTaskState.restore | machinery | restore/checkpoint, execution-context binding, suspension and effect recording of the old runner (restore) |
+| task_state.py | LiteratureTaskState.record_effect | machinery | restore/checkpoint, execution-context binding, suspension and effect recording of the old runner (record_effect) |
+| task_state.py | LiteratureTaskState.checkpoint | machinery | restore/checkpoint, execution-context binding, suspension and effect recording of the old runner (checkpoint) |
+| to_parent.py | LiteratureReport | episode function | messages/final_to_parent.py |
+| to_parent.py | LiteratureReport.fact_sources | episode function | messages/final_to_parent.py::RETURN_FORM |
+| to_parent.py | LiteratureReport.facts | episode function | messages/final_to_parent.py::final_to_parent |
+| to_parent.py | LiteratureReport.current_report_facts | episode function | messages/internal_summary.py (investigation_findings, graded_sheet_refs) |
+| to_parent.py | LiteratureReport._rate_fact_sources | episode function (unplaced) | UNPLACED: population route not built (population-route cell families (rate): not built, not declared in RETURN_FORM ) |
+| to_parent.py | LiteratureReport._rate_facts | episode function (unplaced) | UNPLACED: population route not built (population-route cell families (rate): not built, not declared in RETURN_FORM ) |
+| to_parent.py | LiteratureReport.validate_received_report | episode function | messages/final_to_parent.py::validate_report (answers computed from the same summary; the requested-subset and worksheet-link checks belong to the cell families: BLOCKED with cells) |
+| to_parent.py | LiteratureReport.resolve | machinery | reference resolution of the old report delivery (resolve(context, reference, namespace)); the reference is read through custody |
+| to_parent.py | LiteratureReport.validate_report | episode function | messages/final_to_parent.py::validate_report |
+| waiting.py | LiteratureWaiting | machinery | supports_wait = False: wait machinery; this episode has no wait tool |
+| waiting.py | LiteratureWaiting.supports_wait | machinery | supports_wait = False: wait machinery; this episode has no wait tool |
+| yield_estimator.py | validate_yield_bindings | machinery | old checks of the cutoff and alpha: the controllers' own checks |
+| yield_estimator.py | _RemainingCommissionedCredit | machinery | episode-local estimator class: the CompletionYieldController of yield_control replaces it (README 7b) |
+| yield_estimator.py | _RemainingCommissionedCredit.__call__ | machinery | episode-local estimator: replaced by CompletionYieldController |
+| yield_estimator.py | _RemainingCommissionedCredit.as_record | machinery | estimator as_record: deleted |
+| yield_estimator.py | _private_yield_controller | episode function | yield_estimator.py::yield_controller |
+| yield_estimator.py | _FiniteLiteratureYieldController | machinery | finite controller class: CompletionYieldController replaces it |
+| yield_estimator.py | _FiniteLiteratureYieldController.__init__ | machinery | finite controller: CompletionYieldController replaces it |
+| yield_estimator.py | _FiniteLiteratureYieldController.transitioned | machinery | finite controller transition: CompletionYieldController replaces it |
+| yield_estimator.py | LiteratureYield | episode function | yield_estimator.py::yield_controller |
+| yield_estimator.py | LiteratureYield.continuation_task | episode function | messages/read_from_parent.py::task_key |
+| yield_estimator.py | LiteratureYield.yield_controller | episode function | yield_estimator.py::yield_controller |

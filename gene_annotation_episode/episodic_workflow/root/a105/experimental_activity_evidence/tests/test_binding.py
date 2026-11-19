@@ -1,0 +1,203 @@
+"""The real checks of this episode's binding: importing ``episode.py`` runs the class-definition checks; the folder
+holds exactly the ten-file set of an episode with children (its child episode folder aside); no module of the folder
+imports another episode folder; the episode's own forms and functions behave on real data. Nothing here is faked."""
+import ast
+import importlib
+from pathlib import Path
+
+import pytest
+
+from episode_runtime import ChildMessage, EpisodeBinding
+from method_loop import FormError
+
+PACKAGE = __name__.rsplit('.', 2)[0]
+FOLDER = Path(__file__).resolve().parents[1]
+EPISODE = importlib.import_module(PACKAGE + '.episode').ExperimentalActivityEvidence
+CHILDREN = ('published_evidence_assessment',)
+FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
+         'messages/__init__.py', 'messages/read_from_parent.py', 'messages/msg_to_child.py',
+         'messages/read_from_child.py', 'messages/internal_summary.py', 'messages/final_to_parent.py',
+         'tests/__init__.py', 'tests/test_binding.py', 'tests/grading_world.py', 'tests/test_grading.py'}
+ROOT = 'gene_annotation_episode.episodic_workflow.root'
+OPTION = {'version': 'experimental_activity_evidence_option_ref_v1', 'library_id': 'a' * 64,
+          'entry_sha256': 'b' * 64}
+SCOPE = {'subject_refs': ['sub_1']}
+
+
+def own_files():
+    return {path for path in FOLDER.rglob('*') if path.is_file() and '__pycache__' not in path.parts
+            and path.relative_to(FOLDER).parts[0] not in CHILDREN}
+
+
+def assignment():
+    return {'selection': {'version': 'experimental_activity_evidence_selection_v1',
+                          'evidence_axis': {**OPTION, 'slot': 'evidence_axis', 'option_id': 'A105'},
+                          'thought_pattern': {**OPTION, 'slot': 'thought_pattern', 'option_id': 'P1'},
+                          'child_tool_info': [{'name': 'source.read', 'resources': 'api'}]},
+            'proposed_annotation_ref': 'hyp_1', 'evidence_refs': ['sub_1', 'hyp_1'], 'constraints': {},
+            'context': {'evidence_task': {'version': 'evidence_axis_task_v1', 'kind': 'whole_axis_findings',
+                                          'evidence_axis': 'A105', 'credit_unit': 1.0}},
+            'scope': SCOPE}
+
+
+def parent_input():
+    return EPISODE.read_from_parent(EPISODE.assignment_form.admit(assignment(), 'test'), {'purpose': 'x'})
+
+
+def summary(**changes):
+    parent = parent_input()
+    value = {**{name: parent[name] for name in ('selection', 'proposed_annotation_ref', 'evidence_refs',
+                                                'constraints', 'evidence_task', 'revision_origin', 'scope')},
+             'held_record_refs': ['hyp_1', 'sub_1'], 'investigations': [], 'assessment_refs': [], 'sheet_refs': [],
+             'no_applicable_evidence': [], 'child_returns': [], 'child_finding_refs': [], 'child_sheet_refs': [],
+             'progress': {'credit': 0.0}, 'committed_record_refs': []}
+    value.update(changes)
+    return value
+
+
+def test_the_class_inherits_only_the_episode_type_and_is_its_own_binding():
+    assert EPISODE.__bases__ == (EpisodeBinding,)
+    assert EPISODE.binding_path == importlib.import_module(PACKAGE + '.goal').BINDING_PATH
+    assert EPISODE.binding_path == 'experimental_activity_evidence'
+    assert PACKAGE.endswith(EPISODE.binding_path.replace('/', '.'))
+    assert dict(EPISODE.child_slots) == {
+        'experimental_activity_evidence': 'experimental_activity_evidence',
+        'published_evidence_assessment': 'experimental_activity_evidence/published_evidence_assessment'}
+
+
+def test_the_folder_holds_exactly_the_ten_files_of_an_episode_with_children_and_its_child_folder():
+    assert {str(path.relative_to(FOLDER)) for path in own_files()} == FILES
+    assert {path.name for path in FOLDER.iterdir() if path.is_dir() and path.name != '__pycache__'} == {
+        'messages', 'tests', *CHILDREN}
+
+
+def test_no_module_of_the_folder_imports_another_episode_folder():
+    for path in own_files():
+        if path.suffix != '.py':
+            continue
+        for node in ast.walk(ast.parse(path.read_text())):
+            modules = ([alias.name for alias in node.names] if isinstance(node, ast.Import)
+                       else [node.module or ''] if isinstance(node, ast.ImportFrom) and not node.level else [])
+            for module in modules:
+                assert not module.startswith(ROOT) or module == PACKAGE or module.startswith(PACKAGE + '.'), \
+                    str(path.relative_to(FOLDER)) + ' imports ' + module
+                assert not any(module == PACKAGE + '.' + child or module.startswith(PACKAGE + '.' + child + '.')
+                               for child in CHILDREN), str(path.relative_to(FOLDER)) + ' imports ' + module
+
+
+def test_the_commission_form_admits_the_old_assignment_properties_and_refuses_an_unknown_field():
+    form = EPISODE.assignment_form
+    admitted = form.admit(assignment(), 'test')
+    assert set(form.fields) == {'selection', 'proposed_annotation_ref', 'evidence_refs', 'constraints', 'context',
+                                'revision_origin', 'scope'}
+    assert set(form.record_refs(admitted)) == {'sub_1', 'hyp_1'}
+    with pytest.raises(FormError, match='unknown_field'):
+        form.admit({**assignment(), 'extra': 1}, 'test')
+    with pytest.raises(FormError, match='missing_field'):
+        form.admit({name: value for name, value in assignment().items() if name != 'evidence_refs'}, 'test')
+    parent = EPISODE.read_from_parent(admitted, {'purpose': 'x'})
+    assert parent['evidence_task']['credit_unit'] == 1.0 and parent['revision_origin'] is None
+    wrong_axis = assignment()
+    wrong_axis['selection']['evidence_axis']['option_id'] = 'A106'
+    with pytest.raises(ValueError, match='A105'):
+        EPISODE.read_from_parent(form.admit(wrong_axis, 'test'), {})
+    wrong_unit = assignment()
+    wrong_unit['context']['evidence_task']['credit_unit'] = 0
+    with pytest.raises(ValueError, match='positive_finding_unit'):
+        EPISODE.read_from_parent(form.admit(wrong_unit, 'test'), {})
+
+
+def test_the_yield_controller_is_the_accumulation_controller_from_the_settings():
+    controller = EPISODE.yield_controller(2.0, {'cost': 0.1, 'parameters': {'uncertainty_alpha': 0.1}},
+                                          parent_input())
+    assert type(controller).__name__ == 'AccumulationYieldController' and controller.cost == 0.1
+
+
+def test_the_credit_is_real_code_over_the_finding_progress_projection():
+    credit_module = importlib.import_module(PACKAGE + '.credit')
+    assert EPISODE.credit is credit_module.credit
+    assert 'NotImplementedError' not in (FOLDER / 'credit.py').read_text()
+    assert credit_module.credit_binding(1.0)['policy']['finding_unit'] == 1.0
+
+
+def test_the_model_is_offered_the_selected_tools_the_lookups_the_revision_and_the_reasoning():
+    task = importlib.import_module(PACKAGE + '.task')
+    names = task.offered(summary())
+    assert names == ['source.read', 'process.search', 'process.entry', 'process.sources', 'process.revise', 'reason']
+    schema = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
+              'properties': {'terms': {'type': 'array'}}}
+    entries = task.catalog(names, schema)
+    assert {entry['name'] for entry in entries} <= set(EPISODE.tools)
+    assert 'evidence_processing' in [entry for entry in entries if entry['name'] == 'reason'][0]['input_schema']['properties']
+    assert len(task.selection_schema(names, schema)['properties']['selection']['anyOf']) == len(names) + 2
+    assert set(task.CHILD_ARGUMENTS) == set(EPISODE.child_slots)
+    assert task.empty_commit({'terms': []}, schema) and not task.empty_commit({'terms': [{}]}, schema)
+    assert set(task.TOOL_NAMES.values()) <= set(EPISODE.tools)
+    unknown = summary(selection={**assignment()['selection'], 'child_tool_info': [
+        {'name': 'material.read', 'resources': 'local'}]})
+    with pytest.raises(ValueError, match='a105_selected_tools_not_in_the_tool_library:material.read'):
+        task.offered(unknown)
+
+
+def test_the_head_commission_names_the_records_the_scope_the_proposed_annotation_and_the_selected_returns():
+    sub_scope = {'subject_refs': ['sub_2']}
+    given = {**assignment(), 'scope': sub_scope}
+    given.pop('scope')
+    given.pop('proposed_annotation_ref')
+    given['evidence_refs'] = ['ev_1']
+    arguments = {'objective': 'narrow', 'scope': sub_scope, 'assignment': given}
+    message = EPISODE.msg_to_child('experimental_activity_evidence', arguments, summary())
+    assert isinstance(message, ChildMessage) and message.objective == 'narrow'
+    sent = message.assignment
+    assert sent['evidence_refs'] == ['ev_1', 'sub_2', 'hyp_1'] and sent['scope'] == sub_scope
+    assert sent['proposed_annotation_ref'] == 'hyp_1'
+    assert message.selection == ('committed_record_refs',)
+
+
+def test_the_literature_commission_passes_the_assignment_the_scope_every_held_record_and_the_task_returns():
+    task = {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
+            'credit_unit': 1.0}
+    given = {'version': 'literature_assignment_v1', 'question_context_refs': ['ctx_1'], 'source_refs': ['src_1'],
+             'literature_task': task, 'proposed_annotation_ref': 'hyp_1'}
+    message = EPISODE.msg_to_child('published_evidence_assessment',
+                                   {'objective': 'read', 'scope': SCOPE, 'assignment': given}, summary())
+    assert message.assignment == {**given, 'scope': SCOPE, 'received_record_refs': ['hyp_1', 'sub_1']}
+    assert message.selection == ('literature_source_lead_dispositions',)
+    graded = {**given, 'literature_task': {**task, 'kind': 'a105_experiments'},
+              'requested_assay_grading_components': ['score']}
+    selected = EPISODE.msg_to_child('published_evidence_assessment',
+                                    {'objective': 'grade', 'scope': SCOPE, 'assignment': graded}, summary())
+    assert selected.selection == ()
+    with pytest.raises(LookupError):
+        EPISODE.msg_to_child('no_such_slot', {'objective': 'x'}, summary())
+
+
+
+
+def test_the_return_is_credit_and_the_controlled_finding_and_the_committed_records():
+    form = EPISODE.return_form
+    assert form.fields['credit'].required and form.fields['finding'].required
+    assert set(form.fields) == {'credit', 'finding', 'committed_record_refs'}
+    completion = {'ended_by': 'yield_stop', 'units_consumed': 0, 'credit': 2.5}
+    bare = summary(assay_sheets=[], aggregation_sheets=[], no_applicable_spans=[])
+    result = EPISODE.final_to_parent(bare, completion, ())
+    assert result['credit'] == 2.5 and result['finding']['assay_sheets'] == []
+    form.admit(result, 'return')
+    selected = EPISODE.final_to_parent({**bare, 'committed_record_refs': ['a1', 's1']}, completion,
+                                       ('committed_record_refs',))
+    assert form.select(('committed_record_refs',)).admit(selected, 'return')['committed_record_refs'] == ['a1', 's1']
+
+
+def test_what_the_children_returned_is_their_credit_the_features_counts_and_references():
+    from_child = importlib.import_module(PACKAGE + '.messages.read_from_child').read_from_child
+    finding = {'assay_sheets': [], 'aggregation_sheets': [], 'assay_count': 0, 'assessment_count': 0,
+               'assay_count_with_evidence_ratio': 0, 'no_applicable_span_count': 0}
+    result = {'credit': 1.0, 'finding': finding,
+              'literature_source_lead_dispositions': {'relevant_lead_count': 1, 'lead_source_refs': ['src_1']}}
+    report = from_child('published_evidence_assessment', result, {}, None)
+    assert report['lead_source_refs'] == ['src_1'] and report['committed_record_refs'] == []
+    own = from_child('experimental_activity_evidence',
+                     {'credit': 2.0, 'finding': finding, 'committed_record_refs': ['a1']}, {}, None)
+    assert own['committed_record_refs'] == ['a1'] and own['credit'] == 2.0
+    with pytest.raises(LookupError):
+        from_child('no_such_slot', result, {}, None)

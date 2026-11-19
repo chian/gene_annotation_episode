@@ -1,27 +1,28 @@
-"""The A110 execution_job_submission binding.
+"""The A110 execution_job_submission episode."""
+from episode_runtime import EpisodeBinding
 
-Its decision source and completion continuation are ``execution_job_submission.submission_source``: the model
-hands each commissioned execution request to a route child; credit counts the requests with a usable handoff.
-"""
-from __future__ import annotations
-
-from types import MappingProxyType
-
-from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.runtime_contract import (
-    CHILD_ASSIGNMENT_FORM, REQUIRED_COLLABORATORS, RETURN_FORM, EpisodeRuntimeContract)
-from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.execution_job_submission.submission_source import (
-    JobSubmissionBinding)
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class ExecutionJobSubmissionEpisode(JobSubmissionBinding, EpisodeRuntimeContract):
-    """Submit the planned computation and keep its handoff to the actual job and inputs."""
-    binding_path = 'biochemical_feasibility_evidence/hpc_work_planning/execution_job_submission'
-    grain_name = binding_path.replace('/', '__')
-    goal = 'Submit the planned computation and keep its handoff to the actual job and inputs'
-    unit = 'One local or HPC route child commissioned for one requested job'
-    result = 'The job handoff references and submission findings'
-    child_slots = MappingProxyType({'hpc_job_execution': 'biochemical_feasibility_evidence/hpc_work_planning/execution_job_submission/hpc_job_execution', 'local_job_execution': 'biochemical_feasibility_evidence/hpc_work_planning/execution_job_submission/local_job_execution'})
-    required_collaborators = REQUIRED_COLLABORATORS
-    assignment_form = CHILD_ASSIGNMENT_FORM
-    return_form = RETURN_FORM
-    commissioning_parent = 'biochemical_feasibility_evidence/hpc_work_planning'
+class ExecutionJobSubmission(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

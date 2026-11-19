@@ -7,6 +7,7 @@ repeat digitization. Ordinary episode accounting belongs to the caller.
 from __future__ import annotations
 from copy import deepcopy
 import json
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, obj, validate_schema
 from gene_annotation_episode.domain import ContractError
@@ -58,12 +59,15 @@ def _condition_role(literal, entry):
 def _condition_refs(extraction):
     return [identity('reference', {'origin': 'tool', 'record': _condition_role(literal, entry)}) for literal, kind in BINDINGS.values() if kind == 'context' and (entry := extraction['literals'][literal]) is not None]
 
+OPERATIONS = operations_ledger('literature_figure_operations')
+RECEIVED = received_ledger('literature_figure_received')
+
 class LiteratureFigureRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = 'literature_figure_record_v1'
-    operations_table = 'literature_figure_operations'
-    received_table = 'literature_figure_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = tuple(BINDINGS)
 
     def _provenance(self, scope, reference):
@@ -126,15 +130,10 @@ class LiteratureFigureRepository(LiteratureRateRepository):
         args = plain(arguments)
         validate_schema(args, figure_population_schema())
         signature = canonical({'arguments': args, 'scope': plain(context.scope)})
-        parameters = (self.run_id, context.episode_id, operation_key)
-        query = f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?'
-        old = self.store.db.execute(query, parameters).fetchone()
+        old = self._operation(context.episode_id, operation_key)
         if old is not None:
             return self._replay(context, old, signature)
         with self.store.transaction():
-            old = self.store.db.execute(query, parameters).fetchone()
-            if old is not None:
-                return self._replay(context, old, signature)
 
             def read_source(reference, representation):
                 source = self._source(context, reference)
@@ -157,9 +156,9 @@ class LiteratureFigureRepository(LiteratureRateRepository):
 
             def publish(kind, record):
                 candidate = identity(kind, {'origin': 'tool', 'record': record})
-                exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (candidate,)).fetchone()
+                exists = self.store.holds(candidate)
                 row = self.store.put(kind, record, origin='tool', scope=plain(context.scope))
-                if exists is None:
+                if not exists:
                     created.append(row['id'])
                 return row['id']
             bindings = {}
@@ -173,7 +172,7 @@ class LiteratureFigureRepository(LiteratureRateRepository):
             request = self.store.artifact(canonical({'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope)}), 'application/json')
             sheet_ref = publish('source', {'provider': self.provider, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request, 'version': self.record_version, 'retrieved_at': None, 'parent_source_refs': parents})
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': list(dict.fromkeys([sheet_ref, *parents, *(reference for reference in bindings.values() if reference), *_condition_refs(extraction)])), 'changed_record_refs': created, 'result': {'sheet_ref': sheet_ref, 'cells': deepcopy(extraction['cells']), 'assay_interpretation': deepcopy(extraction['literals']), **_metadata(extraction)}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (*parameters, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def read(self, sheet_ref):
@@ -197,7 +196,7 @@ class LiteratureFigureRepository(LiteratureRateRepository):
         require(set(request) == {'run_id', 'episode_id', 'operation_key', 'arguments', 'scope'})
         args, extraction = (request['arguments'], saved['extraction'])
         validate_schema(args, figure_population_schema())
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
+        operation = self._operation(request['episode_id'], request['operation_key'])
         require(operation is not None and operation['signature'] == canonical({'arguments': args, 'scope': request['scope']}))
         require(set(saved) == {'version', 'input_source_ref', 'input_artifact_ref', 'input_source_refs', 'direct_input_source_refs', 'data_source_ref', 'extraction', 'experimental_bindings', 'sheet'})
         require(source['version'] == self.record_version and source['text_ref'] == source['artifact_ref'])

@@ -1,12 +1,12 @@
-"""A110 execution progress observations over the run's shared Store (the monitors' ``a110_progress_provider``).
+"""A110 execution progress observations.
 
 A monitor target is an execution handle owned by A110's execution job provider
 (``job_provider``: ``scope(handle)``, ``describe_target(handle, scope)``,
-``observe(handle, requested_fields, scope, *, operation_key)`` and
+``observe(handle, requested_fields, scope)`` and
 ``direct_dependencies(handle, scope)``). The provider records each delivered
-progress observation once in the Store's transaction, gives an unchanged
+progress observation once as a row of the Episode, and gives an unchanged
 observation its original identity (new read timestamps alone are not new
-information), and replays a selected observation by its operation key.
+information).
 
 Execution owners publish exposed facts (committed records, measured values,
 source-bound log windows, job relations) with ``expose``; each is checked
@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 
+from episode_runtime import TableDeclaration
 from method_loop.jsonvalue import canonical, content_digest
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.biochemical_feasibility_evidence.communication import plain
@@ -49,6 +50,15 @@ _SNAPSHOT = obj({'version': {'const': PROGRESS_VERSION}, 'progress_ref': _TEXT, 
                  'measurements': {'type': 'array', 'items': _MEASUREMENT},
                  'log_windows': {'type': 'array', 'items': _LOG}, 'committed_record_refs': _REFS,
                  'dependencies': {'type': 'array', 'items': _DEPENDENCY}, 'result_available': {'type': 'boolean'}})
+
+
+EXPOSURES = TableDeclaration(name='a110_progress_exposures',
+                             columns=('target_handle', 'signature', 'publication_ref', 'payload', 'record_refs'),
+                             key=('target_handle', 'signature'), record_refs=('record_refs',))
+OBSERVATIONS = TableDeclaration(name='a110_progress_observations',
+                                columns=('progress_ref', 'target_handle', 'scope', 'signature', 'snapshot',
+                                         'observation_identity', 'record_refs'),
+                                key=('target_handle', 'scope', 'signature'), record_refs=('record_refs',))
 
 
 def _now():
@@ -83,26 +93,16 @@ def _same_observation(value):
 
 
 class ProgressProvider:
-    """Progress observations of A110 execution targets, recorded in the run's shared Store."""
+    """Progress observations of A110 execution targets, kept as work-table rows of the Episode.
 
-    def __init__(self, store, *, run_id, job_provider):
-        if not isinstance(run_id, str) or not run_id:
-            raise ContractError('progress_run_identity_required')
+    ``store`` is ``ctx.store`` of a tool (``observe`` and ``expose`` write) or the read-only reader (``read_progress``,
+    ``resolve``, ``direct_dependencies`` and ``describe_target`` only read)."""
+
+    def __init__(self, store, *, job_provider):
         for method in ('scope', 'describe_target', 'observe', 'direct_dependencies'):
             if not callable(getattr(job_provider, method, None)):
                 raise ContractError('progress_job_provider_requires:' + method)
-        self.store, self.run_id, self.job_provider = store, run_id, job_provider
-        with store.transaction():
-            store.db.execute("""CREATE TABLE IF NOT EXISTS a110_progress_exposures (
-                run_id TEXT NOT NULL, target_handle TEXT NOT NULL, operation_key TEXT NOT NULL,
-                signature TEXT NOT NULL, payload TEXT NOT NULL, PRIMARY KEY(run_id,target_handle,operation_key))""")
-            store.db.execute("""CREATE TABLE IF NOT EXISTS a110_progress_observations (
-                run_id TEXT NOT NULL, progress_ref TEXT NOT NULL, target_handle TEXT NOT NULL,
-                scope TEXT NOT NULL, signature TEXT NOT NULL, snapshot TEXT NOT NULL, observation_identity TEXT NOT NULL,
-                PRIMARY KEY(run_id,progress_ref), UNIQUE(run_id,target_handle,scope,signature))""")
-            store.db.execute("""CREATE TABLE IF NOT EXISTS a110_progress_selections (
-                run_id TEXT NOT NULL, operation_key TEXT NOT NULL, signature TEXT NOT NULL,
-                selection TEXT NOT NULL, progress_ref TEXT NOT NULL, PRIMARY KEY(run_id,operation_key))""")
+        self.store, self.job_provider = store, job_provider
 
     def _target_scope(self, handle, scope=None):
         if not isinstance(handle, str) or not handle:
@@ -163,11 +163,16 @@ class ProgressProvider:
             if not self.resolve(reference, scope, None):
                 raise ContractError('progress_provenance_unavailable')
 
-    def expose(self, target_handle, *, operation_key, committed_record_refs=(), dependencies=(), measurements=(),
+    @staticmethod
+    def _held_refs(fields):
+        """The records a snapshot or exposure names, to be held with its row."""
+        return _unique([*fields['committed_record_refs'], *(row['relation_ref'] for row in fields['dependencies']),
+                        *(ref for row in fields['log_windows'] for ref in (row['source_ref'], row['artifact_ref']))])
+
+    def expose(self, target_handle, *, committed_record_refs=(), dependencies=(), measurements=(),
                log_windows=(), provenance_refs=()):
-        """Publish actual committed exposed information for a target, under its operation identity."""
-        if not isinstance(operation_key, str) or not operation_key:
-            raise ContractError('progress_operation_key_required')
+        """Publish actual committed exposed information for a target; the same information again is the same
+        publication."""
         scope = self._target_scope(target_handle)
         payload = {'version': 'progress_exposure_v1', 'target_handle': target_handle,
                    'committed_record_refs': _unique(committed_record_refs), 'dependencies': plain(dependencies),
@@ -175,25 +180,20 @@ class ProgressProvider:
                    'provenance_refs': _unique(provenance_refs)}
         signature = content_digest(payload)
         with self.store.transaction():
-            row = self.store.db.execute('SELECT signature,payload FROM a110_progress_exposures WHERE run_id=? '
-                                        'AND target_handle=? AND operation_key=?',
-                                        (self.run_id, target_handle, operation_key)).fetchone()
-            if row:
-                if row['signature'] != signature:
-                    raise ContractError('progress_operation_identity_conflict')
-                return json.loads(row['payload'])
+            held = self.store.table(EXPOSURES).select({'target_handle': target_handle, 'signature': signature})
+            if held:
+                return held[0]['payload']
             self._validate_exposed(payload, scope)
             payload.update(observed_at=_now(), publication_ref='progress_publication_' + content_digest(
-                {'run_id': self.run_id, 'target_handle': target_handle, 'operation_key': operation_key,
-                 'signature': signature}))
-            self.store.db.execute('INSERT INTO a110_progress_exposures VALUES(?,?,?,?,?)',
-                                  (self.run_id, target_handle, operation_key, signature, canonical(payload)))
+                {'target_handle': target_handle, 'signature': signature}))
+            self.store.table(EXPOSURES).put({
+                'target_handle': target_handle, 'signature': signature,
+                'publication_ref': payload['publication_ref'], 'payload': payload,
+                'record_refs': self._held_refs(payload)})
         return payload
 
     def _exposures(self, target):
-        rows = self.store.db.execute('SELECT payload FROM a110_progress_exposures WHERE run_id=? AND target_handle=? '
-                                     'ORDER BY rowid', (self.run_id, target))
-        return [json.loads(row[0]) for row in rows]
+        return [row['payload'] for row in self.store.table(EXPOSURES).select({'target_handle': target})]
 
     def direct_dependencies(self, target_handle, scope):
         target_scope = self._target_scope(target_handle, scope)
@@ -208,34 +208,15 @@ class ProgressProvider:
                 by_handle[dependency['handle']] = dependency
         return list(by_handle.values())
 
-    def _selected_observation(self, operation_key, signature, scope):
-        if operation_key is None:
-            return None
-        row = self.store.db.execute('SELECT signature,progress_ref FROM a110_progress_selections WHERE run_id=? '
-                                    'AND operation_key=?', (self.run_id, operation_key)).fetchone()
-        if row is None:
-            return None
-        if row['signature'] != signature:
-            raise ContractError('progress_operation_identity_conflict')
-        return self.read_progress(row['progress_ref'], scope)
-
-    def observe(self, target_handle, requested_fields, scope, *, permitted_committed_record_types, operation_key):
-        """One delivered observation of the target's requested fields; a selected observation replays by key."""
+    def observe(self, target_handle, requested_fields, scope, *, permitted_committed_record_types):
+        """One delivered observation of the target's requested fields; an observation unchanged since an earlier
+        one is that earlier observation."""
         requested_fields = plain(requested_fields)
         permitted = plain(permitted_committed_record_types)
         validate_schema(permitted, _RECORD_TYPES)
         validate_schema(requested_fields, _FIELDS)
-        if not isinstance(operation_key, str) or not operation_key:
-            raise ContractError('progress_operation_key_required')
-        selection = {'target_handle': target_handle, 'requested_fields': requested_fields, 'scope': plain(scope),
-                     'permitted_committed_record_types': permitted}
-        selection_signature = content_digest(selection)
-        replay = self._selected_observation(operation_key, selection_signature, scope)
-        if replay is not None:
-            return replay
         target_scope = self._target_scope(target_handle, scope)
-        raw = plain(self.job_provider.observe(target_handle, requested_fields, target_scope,
-                                              operation_key=operation_key))
+        raw = plain(self.job_provider.observe(target_handle, requested_fields, target_scope))
         validate_schema(raw, _SNAPSHOT)
         if raw['target_handle'] != target_handle:
             raise ContractError('progress_job_target_mismatch')
@@ -271,54 +252,41 @@ class ProgressProvider:
                  'result_available': raw['result_available']}
         value['provenance_refs'] = [*value['provenance_refs'], observation_identity]
         signature = content_digest(_same_observation(value))
-        serialized_scope = canonical(target_scope)
         with self.store.transaction():
-            replay = self._selected_observation(operation_key, selection_signature, scope)
-            if replay is not None:
-                return replay
-            old = self.store.db.execute('SELECT snapshot FROM a110_progress_observations WHERE run_id=? AND '
-                                        'target_handle=? AND scope=? AND signature=?',
-                                        (self.run_id, target_handle, serialized_scope, signature)).fetchone()
+            old = self.store.table(OBSERVATIONS).select({'target_handle': target_handle, 'scope': target_scope,
+                                                         'signature': signature})
             if old:
-                value = json.loads(old[0])
-            else:
-                value['progress_ref'] = 'progress_' + content_digest(
-                    {'run_id': self.run_id, 'target_handle': target_handle, 'scope': target_scope,
-                     'signature': signature})
-                validate_schema(value, _SNAPSHOT)
-                self.store.db.execute('INSERT INTO a110_progress_observations VALUES(?,?,?,?,?,?,?)',
-                                      (self.run_id, value['progress_ref'], target_handle, serialized_scope, signature,
-                                       canonical(value), observation_identity))
-            self.store.db.execute('INSERT INTO a110_progress_selections VALUES(?,?,?,?,?)',
-                                  (self.run_id, operation_key, selection_signature, canonical(selection),
-                                   value['progress_ref']))
+                return old[0]['snapshot']
+            value['progress_ref'] = 'progress_' + content_digest(
+                {'target_handle': target_handle, 'scope': target_scope, 'signature': signature})
+            validate_schema(value, _SNAPSHOT)
+            self.store.table(OBSERVATIONS).put({
+                'progress_ref': value['progress_ref'], 'target_handle': target_handle, 'scope': target_scope,
+                'signature': signature, 'snapshot': value, 'observation_identity': observation_identity,
+                'record_refs': self._held_refs(value)})
         return value
 
     def read_progress(self, reference, scope=None):
-        row = self.store.db.execute('SELECT scope,snapshot FROM a110_progress_observations WHERE run_id=? AND '
-                                    'progress_ref=?', (self.run_id, reference)).fetchone()
-        if row is None:
+        rows = self.store.table(OBSERVATIONS).select({'progress_ref': reference})
+        if not rows:
             raise ContractError('progress_reference_unavailable')
-        if scope is not None and not self.store.scope_contains(plain(scope), json.loads(row['scope'])):
+        if scope is not None and not self.store.scope_contains(plain(scope), rows[0]['scope']):
             raise ContractError('progress_reference_outside_scope')
-        return json.loads(row['snapshot'])
+        return rows[0]['snapshot']
 
     def resolve(self, reference, scope, namespace=None):
-        """Whether ``reference`` names, within ``scope``, something of ``namespace`` this provider holds."""
+        """Whether ``reference`` names, within ``scope``, something of ``namespace`` the Episode holds."""
         if namespace in (None, 'progress_provenance'):
-            for row in self.store.db.execute("SELECT target_handle FROM a110_progress_exposures WHERE run_id=? "
-                                             "AND json_extract(payload,'$.publication_ref')=?",
-                                             (self.run_id, reference)):
+            for row in self.store.table(EXPOSURES).select({'publication_ref': reference}):
                 try:
-                    self._target_scope(row[0], scope)
+                    self._target_scope(row['target_handle'], scope)
                 except ContractError:
                     continue
                 return True
         if namespace in (None, 'progress_observation', 'progress_provenance'):
-            for row in self.store.db.execute('SELECT progress_ref FROM a110_progress_observations WHERE run_id=? '
-                                             'AND observation_identity=?', (self.run_id, reference)):
+            for row in self.store.table(OBSERVATIONS).select({'observation_identity': reference}):
                 try:
-                    self.read_progress(row[0], scope)
+                    self.read_progress(row['progress_ref'], scope)
                 except ContractError:
                     continue
                 return True

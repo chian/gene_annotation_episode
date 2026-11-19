@@ -7,6 +7,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.attachments import received_attachments
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.evolutionary_history_evidence.hpc import require
 from gene_annotation_episode.episodic_workflow.episode_support.grading.evolutionary_history_evidence.scoring import PROFILE, VERSION
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.evolutionary_history_evidence.hpc import NATIVE_REQUESTS, NATIVE_RESULTS
 
 
 @dataclass(frozen=True)
@@ -85,87 +86,86 @@ class A104EvolutionaryCredit:
                 'a104_nonnegative_detail_window_required')
         require(not isinstance(known_record_refs, (str, bytes, dict)), 'a104_explicit_receipts_required')
         known = set(known_record_refs)
-        with store.read_snapshot():
-            scope = store.validate_scope(scope)
-            require(assignment is None or store.validate_scope(assignment['scope']) == scope,
-                    'a104_original_commission_scope_required')
-            from gene_annotation_episode.episodic_workflow.episode_support.calculations.evolutionary_history_evidence.evidence_geometry import native_subject_regions, _intersection
-            from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_and_context_sources.evolutionary_history_evidence.component_assessment_dependencies import assigned_annotation
-            annotation = assigned_annotation(store, known, assignment)
-            if annotation is not None:
-                subjects, evidence_regions = annotation['subject_refs'], {}
-                for subject in subjects:
-                    _, selected, _ = self._annotation_measurements(store, known, annotation, subject, scope)
-                    evidence_regions.update(selected)
-            selected_regions = native_subject_regions(store, scope, subjects) if subjects is not None else None
-            selected_subjects = selected_regions if selected_regions is not None else scope['subject_refs']
-            attachments = [row for row in received_attachments(store, known) if row['target_ref'] in selected_subjects
-                and (evidence_regions is None or row['source_ref'] in evidence_regions)]
-            # Late receipt yields a new immutable sheet. Retain the sheet with
-            # the encompassing actual qualification inputs, not a prior unknown
-            # sheet or a scalar selected because its value happens to be larger.
-            attachments = [row for row in attachments if not any(
-                other['measurement_ref'] == row['measurement_ref'] and
-                set(row['qualification_dependencies']) < set(other['qualification_dependencies'])
-                for other in attachments)]
-            by_measurement = {}
-            for row in attachments:
-                by_measurement.setdefault(row['measurement_ref'], []).append(row)
-            incompatible_qualifications = {key for key, values in by_measurement.items()
-                if len({frozenset(row['qualification_dependencies']) for row in values}) > 1}
-            variants = {}
-            for row in attachments:
-                if row.get('variant_group'):
-                    variants.setdefault(row['variant_group'], set()).add(row['variant'])
-            competing = {key for key, values in variants.items() if len(values) > 1}
-            contributions = [{'source_ref': row['source_ref'], 'grading_artifact_ref': row['grading_artifact_ref'],
-                'measurement_ref': row['measurement_ref'], 'target_ref': row['target_ref'],
-                'target_regions': (_intersection(row['target_regions'], evidence_regions[row['source_ref']])
-                    if evidence_regions is not None else row['target_regions']), 'value': row['score'], 'policy': row['policy'],
-                'dimension': 'history_comparison' if 'compare_histories' in row['policy'] else
-                             'characterized_clade' if 'clade_functions' in row['policy'] else 'placement',
-                'state': row['state']} for row in attachments if row['score'] is not None
-                and row.get('variant_group') not in competing and row['measurement_ref'] not in incompatible_qualifications
-                and (not row.get('compared_variant_group') or
-                     variants.get(row['compared_variant_group'], set()) <= set(row['compared_variants']))]
-            contributions = [row for row in contributions if row['target_regions']]
-            targets = {}
-            for target in selected_subjects:
-                regions = (selected_regions[target] if selected_regions is not None else
-                    [[row['start'], row['end']] for row in scope['segments'] if row['target_ref'] == target]
-                    if 'segments' in scope else [[0, store.subject_length(target)]])
-                if not regions:
-                    continue
-                own, cells = [row for row in contributions if row['target_ref'] == target], []
-                for start, end in regions:
-                    points = sorted({start, end, *[p for row in own for span in row['target_regions'] for p in span if start < p < end]})
-                    for a, b in zip(points, points[1:]):
-                        dimensions = {name: max((row['value'] for row in own if row['dimension'] == name
-                            and any(x <= a and b <= y for x, y in row['target_regions'])), default=0.)
-                            for name in ('placement', 'history_comparison', 'characterized_clade')}
-                        p, h, c = (dimensions[name] for name in ('placement', 'history_comparison', 'characterized_clade'))
-                        cells.append({'start': a, 'end': b, 'value': ((1+p)*(1+h)*(1+c)-1)/7,
-                                      'native_dimensions': dimensions})
-                length = sum(b-a for a, b in regions)
-                value = math.fsum((row['end']-row['start'])*row['value'] for row in cells)/length
-                pending = [row['measurement_ref'] for row in attachments if row['target_ref'] == target and row['missing']]
-                targets[target] = {'assigned_length': length, 'value': value, 'cells': cells,
-                    'pending_measurement_refs': sorted(set(pending)), 'unresolved_variant_groups': sorted(competing),
-                    'status': 'attributed_phylogeny_received' if own else 'unresolved_attribution' if pending
-                              else 'no_received_native_phylogeny_test'}
-            denominator = sum(row['assigned_length'] for row in targets.values())
-            require(denominator > 0, 'a104_nonempty_original_scope_required')
-            value = math.fsum(row['value']*row['assigned_length'] for row in targets.values())/denominator
-            page = contributions[details_offset:details_offset+details_limit]
-            return {'credit': value, 'scope': scope, 'target_sheets': targets,
-                'a104_sheet': {'placement': [row for row in attachments if 'measure_placement' in row['policy']],
-                    'history_comparison': [row for row in attachments if 'compare_histories' in row['policy']],
-                    'characterized_clades': [row for row in attachments if 'clade_functions' in row['policy']],
-                    'robustness': [row for row in attachments if 'compare_placements' in row['policy']]},
-                'tool_attachments': attachments, 'source_contributions': page,
-                'source_contribution_count': len(contributions), 'inactive_dependencies': [], 'inactive_dependency_count': 0,
-                'next_offset': details_offset+len(page) if details_limit and details_offset+len(page) < len(contributions) else None,
-                'interpretation': 'native_tree_tests_with_specific_target_region_and_reference_attribution'}
+        scope = store.validate_scope(scope)
+        require(assignment is None or store.validate_scope(assignment['scope']) == scope,
+                'a104_original_commission_scope_required')
+        from gene_annotation_episode.episodic_workflow.episode_support.calculations.evolutionary_history_evidence.evidence_geometry import native_subject_regions, _intersection
+        from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_and_context_sources.evolutionary_history_evidence.component_assessment_dependencies import assigned_annotation
+        annotation = assigned_annotation(store, known, assignment)
+        if annotation is not None:
+            subjects, evidence_regions = annotation['subject_refs'], {}
+            for subject in subjects:
+                _, selected, _ = self._annotation_measurements(store, known, annotation, subject, scope)
+                evidence_regions.update(selected)
+        selected_regions = native_subject_regions(store, scope, subjects) if subjects is not None else None
+        selected_subjects = selected_regions if selected_regions is not None else scope['subject_refs']
+        attachments = [row for row in received_attachments(store, known) if row['target_ref'] in selected_subjects
+            and (evidence_regions is None or row['source_ref'] in evidence_regions)]
+        # Late receipt yields a new immutable sheet. Retain the sheet with
+        # the encompassing actual qualification inputs, not a prior unknown
+        # sheet or a scalar selected because its value happens to be larger.
+        attachments = [row for row in attachments if not any(
+            other['measurement_ref'] == row['measurement_ref'] and
+            set(row['qualification_dependencies']) < set(other['qualification_dependencies'])
+            for other in attachments)]
+        by_measurement = {}
+        for row in attachments:
+            by_measurement.setdefault(row['measurement_ref'], []).append(row)
+        incompatible_qualifications = {key for key, values in by_measurement.items()
+            if len({frozenset(row['qualification_dependencies']) for row in values}) > 1}
+        variants = {}
+        for row in attachments:
+            if row.get('variant_group'):
+                variants.setdefault(row['variant_group'], set()).add(row['variant'])
+        competing = {key for key, values in variants.items() if len(values) > 1}
+        contributions = [{'source_ref': row['source_ref'], 'grading_artifact_ref': row['grading_artifact_ref'],
+            'measurement_ref': row['measurement_ref'], 'target_ref': row['target_ref'],
+            'target_regions': (_intersection(row['target_regions'], evidence_regions[row['source_ref']])
+                if evidence_regions is not None else row['target_regions']), 'value': row['score'], 'policy': row['policy'],
+            'dimension': 'history_comparison' if 'compare_histories' in row['policy'] else
+                         'characterized_clade' if 'clade_functions' in row['policy'] else 'placement',
+            'state': row['state']} for row in attachments if row['score'] is not None
+            and row.get('variant_group') not in competing and row['measurement_ref'] not in incompatible_qualifications
+            and (not row.get('compared_variant_group') or
+                 variants.get(row['compared_variant_group'], set()) <= set(row['compared_variants']))]
+        contributions = [row for row in contributions if row['target_regions']]
+        targets = {}
+        for target in selected_subjects:
+            regions = (selected_regions[target] if selected_regions is not None else
+                [[row['start'], row['end']] for row in scope['segments'] if row['target_ref'] == target]
+                if 'segments' in scope else [[0, store.subject_length(target)]])
+            if not regions:
+                continue
+            own, cells = [row for row in contributions if row['target_ref'] == target], []
+            for start, end in regions:
+                points = sorted({start, end, *[p for row in own for span in row['target_regions'] for p in span if start < p < end]})
+                for a, b in zip(points, points[1:]):
+                    dimensions = {name: max((row['value'] for row in own if row['dimension'] == name
+                        and any(x <= a and b <= y for x, y in row['target_regions'])), default=0.)
+                        for name in ('placement', 'history_comparison', 'characterized_clade')}
+                    p, h, c = (dimensions[name] for name in ('placement', 'history_comparison', 'characterized_clade'))
+                    cells.append({'start': a, 'end': b, 'value': ((1+p)*(1+h)*(1+c)-1)/7,
+                                  'native_dimensions': dimensions})
+            length = sum(b-a for a, b in regions)
+            value = math.fsum((row['end']-row['start'])*row['value'] for row in cells)/length
+            pending = [row['measurement_ref'] for row in attachments if row['target_ref'] == target and row['missing']]
+            targets[target] = {'assigned_length': length, 'value': value, 'cells': cells,
+                'pending_measurement_refs': sorted(set(pending)), 'unresolved_variant_groups': sorted(competing),
+                'status': 'attributed_phylogeny_received' if own else 'unresolved_attribution' if pending
+                          else 'no_received_native_phylogeny_test'}
+        denominator = sum(row['assigned_length'] for row in targets.values())
+        require(denominator > 0, 'a104_nonempty_original_scope_required')
+        value = math.fsum(row['value']*row['assigned_length'] for row in targets.values())/denominator
+        page = contributions[details_offset:details_offset+details_limit]
+        return {'credit': value, 'scope': scope, 'target_sheets': targets,
+            'a104_sheet': {'placement': [row for row in attachments if 'measure_placement' in row['policy']],
+                'history_comparison': [row for row in attachments if 'compare_histories' in row['policy']],
+                'characterized_clades': [row for row in attachments if 'clade_functions' in row['policy']],
+                'robustness': [row for row in attachments if 'compare_placements' in row['policy']]},
+            'tool_attachments': attachments, 'source_contributions': page,
+            'source_contribution_count': len(contributions), 'inactive_dependencies': [], 'inactive_dependency_count': 0,
+            'next_offset': details_offset+len(page) if details_limit and details_offset+len(page) < len(contributions) else None,
+            'interpretation': 'native_tree_tests_with_specific_target_region_and_reference_attribution'}
 
 
 @dataclass(frozen=True)
@@ -196,50 +196,49 @@ class A104RobustnessCredit:
         from gene_annotation_episode.episodic_workflow.episode_support.calculations.evolutionary_history_evidence.evidence_geometry import _intersection, native_subject_regions
         from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import canonical
         known = set(known_record_refs)
-        with store.read_snapshot():
-            scope = store.validate_scope(scope)
-            require(assignment is not None and store.validate_scope(assignment['scope']) == scope,
-                'a104_original_commission_scope_required')
-            annotation = assigned_annotation(store, known, assignment)
-            require(annotation is not None, 'a104_robustness_proposed_annotation_required')
-            regions = native_subject_regions(store, scope, annotation['subject_refs'])
-            links = {}
-            for subject in regions:
-                for row in annotation_assessments(store, known, annotation, subject, scope):
-                    if row['transfer_status'] == 'established' and row['regions']:
-                        links.setdefault(row['observation']['source_ref'], []).append(row)
-            attachments = received_attachments(store, known)
-            by_measurement, variants = {}, {}
-            for item in attachments:
-                by_measurement.setdefault(item['measurement_ref'], set()).add(
-                    frozenset(item['qualification_dependencies']))
-                if item.get('variant_group'):
-                    variants.setdefault(item['variant_group'], set()).add(item['variant'])
-            incompatible = {ref for ref, groups in by_measurement.items() if len(groups) > 1}
-            selected = {}
-            for item in attachments:
-                if (item['policy'] != 'phylogeny.compare_placements_original_native_operands_v1'
-                        or item['score'] is None or item['state'] != 'attributed_phylogeny_received'
-                        or item['target_ref'] not in regions
-                        or item['measurement_ref'] in incompatible
-                        or item.get('compared_variant_group') and not
-                        variants.get(item['compared_variant_group'], set()) <= set(item['compared_variants'])):
-                    continue
-                matched = [row for source in (item['source_ref'], item['measurement_ref'])
-                    for row in links.get(source, ())
-                    if _intersection(item['target_regions'], row['regions'])]
-                if not matched:
-                    continue
-                key = (item['measurement_ref'], item['target_ref'], canonical(item['target_regions']))
-                selected[key] = {'source_ref': item['source_ref'],
-                    'measurement_ref': item['measurement_ref'], 'target_ref': item['target_ref'],
-                    'target_regions': item['target_regions'], 'native_value': item['score'],
-                    'assessment_refs': sorted({row['assessment_ref'] for row in matched}),
-                    'credit': 1}
-            details = [selected[key] for key in sorted(selected)]
-            return {'credit': len(details), 'scope': scope,
-                'source_contributions': details[details_offset:details_offset+details_limit],
-                'source_contribution_count': len(details), 'policy': self.as_record()}
+        scope = store.validate_scope(scope)
+        require(assignment is not None and store.validate_scope(assignment['scope']) == scope,
+            'a104_original_commission_scope_required')
+        annotation = assigned_annotation(store, known, assignment)
+        require(annotation is not None, 'a104_robustness_proposed_annotation_required')
+        regions = native_subject_regions(store, scope, annotation['subject_refs'])
+        links = {}
+        for subject in regions:
+            for row in annotation_assessments(store, known, annotation, subject, scope):
+                if row['transfer_status'] == 'established' and row['regions']:
+                    links.setdefault(row['observation']['source_ref'], []).append(row)
+        attachments = received_attachments(store, known)
+        by_measurement, variants = {}, {}
+        for item in attachments:
+            by_measurement.setdefault(item['measurement_ref'], set()).add(
+                frozenset(item['qualification_dependencies']))
+            if item.get('variant_group'):
+                variants.setdefault(item['variant_group'], set()).add(item['variant'])
+        incompatible = {ref for ref, groups in by_measurement.items() if len(groups) > 1}
+        selected = {}
+        for item in attachments:
+            if (item['policy'] != 'phylogeny.compare_placements_original_native_operands_v1'
+                    or item['score'] is None or item['state'] != 'attributed_phylogeny_received'
+                    or item['target_ref'] not in regions
+                    or item['measurement_ref'] in incompatible
+                    or item.get('compared_variant_group') and not
+                    variants.get(item['compared_variant_group'], set()) <= set(item['compared_variants'])):
+                continue
+            matched = [row for source in (item['source_ref'], item['measurement_ref'])
+                for row in links.get(source, ())
+                if _intersection(item['target_regions'], row['regions'])]
+            if not matched:
+                continue
+            key = (item['measurement_ref'], item['target_ref'], canonical(item['target_regions']))
+            selected[key] = {'source_ref': item['source_ref'],
+                'measurement_ref': item['measurement_ref'], 'target_ref': item['target_ref'],
+                'target_regions': item['target_regions'], 'native_value': item['score'],
+                'assessment_refs': sorted({row['assessment_ref'] for row in matched}),
+                'credit': 1}
+        details = [selected[key] for key in sorted(selected)]
+        return {'credit': len(details), 'scope': scope,
+            'source_contributions': details[details_offset:details_offset+details_limit],
+            'source_contribution_count': len(details), 'policy': self.as_record()}
 
 
 @dataclass(frozen=True)
@@ -269,38 +268,33 @@ class A104PanelIdentityCredit:
         from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_and_context_sources.evolutionary_history_evidence.component_assessment_dependencies import assigned_annotation
         from gene_annotation_episode.episodic_workflow.episode_support.calculations.evolutionary_history_evidence.evidence_geometry import native_subject_regions, _intersection
         known = set(known_record_refs)
-        with store.read_snapshot():
-            scope = store.validate_scope(scope)
-            require(assignment is not None and store.validate_scope(assignment['scope']) == scope,
-                'a104_original_commission_scope_required')
-            annotation = assigned_annotation(store, known, assignment)
-            require(annotation is not None, 'a104_preparation_proposed_annotation_required')
-            regions = native_subject_regions(store, scope, annotation['subject_refs'])
-            chosen = None
-            exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
-                "AND name='a104_native_requests'").fetchone()
-            candidates = (store.db.execute('SELECT source_ref FROM a104_native_requests ORDER BY rowid')
-                if exists else ())
-            for row in candidates:
-                source_ref = row['source_ref']
-                if source_ref not in known:
-                    continue
-                body = request_body(store, source_ref)
-                target = body['target_ref']
-                if (target not in regions or body['scope'] != scope
-                        or not any(_intersection(part['target_regions'], regions[target])
-                            for analysis in body['bindings'] for member in analysis['members']
-                            for part in member['parts'])):
-                    continue
-                chosen = {'source_ref': source_ref, 'target_ref': target,
-                    'native_request_sha256': body['native_request_sha256'],
-                    'analysis_names': [analysis['name'] for analysis in body['bindings']],
-                    'credit': 1}
-                break
-            details = [chosen] if chosen else []
-            return {'credit': len(details), 'scope': scope,
-                'source_contributions': details[details_offset:details_offset+details_limit],
-                'source_contribution_count': len(details), 'policy': self.as_record()}
+        scope = store.validate_scope(scope)
+        require(assignment is not None and store.validate_scope(assignment['scope']) == scope,
+            'a104_original_commission_scope_required')
+        annotation = assigned_annotation(store, known, assignment)
+        require(annotation is not None, 'a104_preparation_proposed_annotation_required')
+        regions = native_subject_regions(store, scope, annotation['subject_refs'])
+        chosen = None
+        for row in store.table(NATIVE_REQUESTS).select():
+            source_ref = row['source_ref']
+            if source_ref not in known:
+                continue
+            body = request_body(store, source_ref)
+            target = body['target_ref']
+            if (target not in regions or body['scope'] != scope
+                    or not any(_intersection(part['target_regions'], regions[target])
+                        for analysis in body['bindings'] for member in analysis['members']
+                        for part in member['parts'])):
+                continue
+            chosen = {'source_ref': source_ref, 'target_ref': target,
+                'native_request_sha256': body['native_request_sha256'],
+                'analysis_names': [analysis['name'] for analysis in body['bindings']],
+                'credit': 1}
+            break
+        details = [chosen] if chosen else []
+        return {'credit': len(details), 'scope': scope,
+            'source_contributions': details[details_offset:details_offset+details_limit],
+            'source_contribution_count': len(details), 'policy': self.as_record()}
 
 
 @dataclass(frozen=True)
@@ -330,41 +324,36 @@ class A104AlignmentSuitabilityCredit:
         from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_and_context_sources.evolutionary_history_evidence.component_assessment_dependencies import assigned_annotation
         from gene_annotation_episode.episodic_workflow.episode_support.calculations.evolutionary_history_evidence.evidence_geometry import native_subject_regions, _intersection
         known = set(known_record_refs)
-        with store.read_snapshot():
-            scope = store.validate_scope(scope)
-            require(assignment is not None and store.validate_scope(assignment['scope']) == scope,
-                'a104_original_commission_scope_required')
-            annotation = assigned_annotation(store, known, assignment)
-            require(annotation is not None, 'a104_preparation_proposed_annotation_required')
-            regions = native_subject_regions(store, scope, annotation['subject_refs'])
-            chosen = None
-            exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
-                "AND name='a104_native_results'").fetchone()
-            candidates = (store.db.execute('SELECT source_ref FROM a104_native_results ORDER BY rowid')
-                if exists else ())
-            for row in candidates:
-                source_ref = row['source_ref']
-                if source_ref not in known:
-                    continue
-                body = native_body(store, source_ref)
-                original = request_body(store, body['request_ref'])
-                target = body['target_ref']
-                if (body['target_ref'] not in regions or body['scope'] != scope
-                        or body['request_ref'] not in known or body['hpc_result_ref'] not in known
-                        or body['partial_execution'] or not body['result']['completed']
-                        or not any(_intersection(part['target_regions'], regions[target])
-                            for analysis in original['bindings'] for member in analysis['members']
-                            for part in member['parts'])):
-                    continue
-                chosen = {'source_ref': source_ref, 'request_ref': body['request_ref'],
-                    'hpc_result_ref': body['hpc_result_ref'], 'target_ref': body['target_ref'],
-                    'analysis_names': [analysis['name'] for analysis in body['result']['analyses']],
-                    'credit': 1}
-                break
-            details = [chosen] if chosen else []
-            return {'credit': len(details), 'scope': scope,
-                'source_contributions': details[details_offset:details_offset+details_limit],
-                'source_contribution_count': len(details), 'policy': self.as_record()}
+        scope = store.validate_scope(scope)
+        require(assignment is not None and store.validate_scope(assignment['scope']) == scope,
+            'a104_original_commission_scope_required')
+        annotation = assigned_annotation(store, known, assignment)
+        require(annotation is not None, 'a104_preparation_proposed_annotation_required')
+        regions = native_subject_regions(store, scope, annotation['subject_refs'])
+        chosen = None
+        for row in store.table(NATIVE_RESULTS).select():
+            source_ref = row['source_ref']
+            if source_ref not in known:
+                continue
+            body = native_body(store, source_ref)
+            original = request_body(store, body['request_ref'])
+            target = body['target_ref']
+            if (body['target_ref'] not in regions or body['scope'] != scope
+                    or body['request_ref'] not in known or body['hpc_result_ref'] not in known
+                    or body['partial_execution'] or not body['result']['completed']
+                    or not any(_intersection(part['target_regions'], regions[target])
+                        for analysis in original['bindings'] for member in analysis['members']
+                        for part in member['parts'])):
+                continue
+            chosen = {'source_ref': source_ref, 'request_ref': body['request_ref'],
+                'hpc_result_ref': body['hpc_result_ref'], 'target_ref': body['target_ref'],
+                'analysis_names': [analysis['name'] for analysis in body['result']['analyses']],
+                'credit': 1}
+            break
+        details = [chosen] if chosen else []
+        return {'credit': len(details), 'scope': scope,
+            'source_contributions': details[details_offset:details_offset+details_limit],
+            'source_contribution_count': len(details), 'policy': self.as_record()}
 
 
 def combine_received_task_progress(projected_tasks):

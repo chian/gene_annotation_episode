@@ -8,11 +8,15 @@ from copy import deepcopy
 import hashlib
 import json
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.protein_structure import alphafold_acquisition as af
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.structural_homology_evidence.acquisition import SourceSnapshot
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError, canonical, identity
 
 
+PUBLISHED = TableDeclaration(name='alphafold_published_outcomes',
+    columns=('tool', 'operation_ref', 'request_operation_key', 'source_ref', 'arguments', 'outcome'),
+    key=('tool', 'operation_ref'))
 PREDICTION_TOOL = 'public.alphafold.prediction'
 FILE_TOOL = 'public.alphafold.file'
 SELECTION_VERSION = 'alphafold_file_selection_v1'
@@ -82,26 +86,34 @@ def _saved_response(transport, retained_bytes):
         'retained_bytes': retained_bytes, **counts}
 
 
+def record_alphafold_operation(registry, tool_name, operation_key, arguments, outcome):
+    """Keep the outcome of one published AlphaFold request, keyed by its tool and operation, for the files that
+    later authenticate against it."""
+    result = outcome['result']
+    return registry.store.table(PUBLISHED).put({'tool': tool_name, 'operation_ref': outcome['operation_ref'],
+        'request_operation_key': operation_key, 'source_ref': result.get('source_ref') if type(result) is dict else None,
+        'arguments': arguments, 'outcome': outcome})
+
+
 def _operation(registry, source_ref, tool_name, *, expected=None, without_source=None):
     if source_ref is None:
         _require(type(without_source) is dict, 'alphafold_file_original_operation_conflict')
-        rows = registry.store.db.execute("SELECT * FROM tool_operations WHERE name=? AND id=?",
-            (tool_name, without_source.get('operation_ref'))).fetchall()
+        rows = registry.store.table(PUBLISHED).select(
+            {'tool': tool_name, 'operation_ref': without_source.get('operation_ref')})
     else:
-        rows = registry.store.db.execute("SELECT * FROM tool_operations WHERE name=? "
-            "AND json_extract(result,'$.result.source_ref')=?", (tool_name, source_ref)).fetchall()
+        rows = registry.store.table(PUBLISHED).select({'tool': tool_name, 'source_ref': source_ref})
     _require(len(rows) == 1, 'alphafold_file_original_operation_conflict')
     row = rows[0]
-    arguments, outcome = json.loads(row['arguments']), json.loads(row['result'])
-    _require(type(outcome) is dict and row['id'] == identity('operation', {'key': row['operation_key'], 'name': tool_name,
-        'arguments': arguments}) and outcome.get('operation_ref') == row['id']
+    arguments, outcome = row['arguments'], row['outcome']
+    _require(type(outcome) is dict and row['operation_ref'] == identity('operation', {'key': row['request_operation_key'], 'name': tool_name,
+        'arguments': arguments}) and outcome.get('operation_ref') == row['operation_ref']
         and outcome.get('status') in ({'completed', 'partial', 'failed'} if source_ref is not None else
             {'completed', 'partial', 'failed', 'invalid', 'unavailable'})
         and type(outcome.get('record_refs')) is list and all(type(ref) is str for ref in outcome['record_refs'])
         and (source_ref in outcome['record_refs'] if source_ref is not None else
             not outcome['record_refs'] and _same(outcome, without_source)),
         'alphafold_file_original_operation_conflict')
-    operation = {'operation_key': row['operation_key'], 'operation_ref': row['id']}
+    operation = {'operation_key': row['request_operation_key'], 'operation_ref': row['operation_ref']}
     _require(expected is None or _same(operation, expected), 'alphafold_file_original_operation_conflict')
     return operation, arguments, outcome
 

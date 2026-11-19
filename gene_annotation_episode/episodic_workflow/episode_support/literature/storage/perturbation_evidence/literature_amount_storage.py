@@ -62,7 +62,6 @@ class LiteratureAmountRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = VERSION
-    operations_table = "literature_amount_operations"
     received_table = "literature_amount_received"
     binding_fields = ()
 
@@ -72,20 +71,6 @@ class LiteratureAmountRepository(LiteratureRateRepository):
         if not isinstance(operation_key, str) or not operation_key:
             raise ContractError("operation_key_required")
         args = plain(arguments)
-        signature = canonical({"arguments": args, "scope": plain(context.scope),
-            "run_id": self.run_id, "episode_id": context.episode_id})
-        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
-            "WHERE run_id=? AND episode_id=? AND operation_key=?", (self.run_id, context.episode_id, operation_key)).fetchone()
-        if old is not None:
-            if old["signature"] != signature:
-                raise ContractError("operation_key_reused_for_different_work")
-            outcome = json.loads(old["outcome"])
-            saved = self.read(outcome["result"]["sheet_ref"])
-            for reference in saved["direct_input_source_refs"]:
-                self._native_source(context, reference)
-            for reference in saved["input_source_refs"]:
-                self._native_provenance(context.scope, reference)
-            return outcome
 
         def read_source(reference, representation):
             source = self._native_source(context, reference)
@@ -113,9 +98,9 @@ class LiteratureAmountRepository(LiteratureRateRepository):
             created = []
             def publish(kind, value):
                 key = identity(kind, {"origin": "tool", "record": value})
-                exists = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (key,)).fetchone()
+                new = not self.store.holds(key)
                 row = self.store.put(kind, value, origin="tool", scope=plain(context.scope))
-                if exists is None:
+                if new:
                     created.append(row["id"])
                 return row["id"]
             quantities, experimental = _bindings(extraction, publish)
@@ -139,8 +124,6 @@ class LiteratureAmountRepository(LiteratureRateRepository):
                     "quantity_metadata": quantities,
                     "variance_status": sheet["variance_status"], "covariance_origin": sheet["covariance_origin"],
                     "mass_factor_applied_to_rate": False}, "feedback": None}
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     def read(self, sheet_ref):
@@ -151,18 +134,12 @@ class LiteratureAmountRepository(LiteratureRateRepository):
         request = json.loads(self.store.get_artifact(source["request_ref"]))
         if request.get("run_id") != self.run_id:
             raise ContractError("literature_amount_sheet_run_mismatch")
-        row = self.store.db.execute(f"SELECT outcome FROM {self.operations_table} WHERE "
-            "run_id=? AND episode_id=? AND operation_key=?", (self.run_id, request.get("episode_id"), request.get("operation_key"))).fetchone()
-        outcome = json.loads(row["outcome"]) if row else None
-        if outcome is None or outcome.get("result", {}).get("sheet_ref") != sheet_ref:
-            raise ContractError("literature_sheet_not_selected_output")
         saved = json.loads(self.store.get_artifact(source["artifact_ref"]))
         if (set(saved) != {"version", "input_source_ref", "input_artifact_ref", "direct_input_source_refs",
                 "input_source_refs", "selection", "extraction", "sheet", "quantity_bindings", "experimental_bindings"}
                 or saved["version"] != VERSION or saved["selection"] != request.get("arguments")
                 or saved["input_source_ref"] != saved["selection"].get("source_ref")
                 or source.get("parent_source_refs") != saved["input_source_refs"]
-                or outcome["result"].get("cells") != saved["sheet"]["cells"]
                 or saved["sheet"]["inputs"] != saved["extraction"]["calculation_inputs"]):
             raise ContractError("literature_amount_saved_mismatch")
         extraction = validate_amount_extraction(saved["extraction"])

@@ -81,7 +81,7 @@ def main(argv=None):
                     raise ValueError("invalid_status_page")
                 annotations = store.current_annotations(limit=args.limit+1, offset=args.offset)
                 _print({"problem": store.problem(), "targets": store.targets(),
-                    "record_counts": {row[0]: row[1] for row in store.db.execute(
+                    "record_counts": {row[0]: row[1] for row in store._db.execute(
                         "SELECT record_type,COUNT(*) FROM records GROUP BY record_type")},
                     "current_annotations": annotations[:args.limit],
                     "annotation_page": {"offset": args.offset, "limit": args.limit,

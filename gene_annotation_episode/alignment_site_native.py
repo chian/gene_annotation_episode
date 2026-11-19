@@ -184,7 +184,7 @@ def reference_source_operands(store, alignment, source):
         return
     if source['provider'] != 'biopython.alignment':
         raise ContractError('site_native_source_operands_unavailable')
-    rows = store.db.execute("SELECT name,arguments FROM tool_operations WHERE "
+    rows = store._db.execute("SELECT name,arguments FROM tool_operations WHERE "
         "name IN ('sequence.align','reads.align') "
         "AND json_extract(result,'$.status') IN ('completed','partial') "
         "AND EXISTS(SELECT 1 FROM json_each(result,'$.record_refs') WHERE value=?)",

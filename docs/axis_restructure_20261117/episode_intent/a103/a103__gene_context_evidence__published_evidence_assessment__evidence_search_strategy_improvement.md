@@ -123,3 +123,117 @@ Names: `self.workflow.<m>` = old runner member; `runtime.<x>` = `_live_original_
 | `to_parent.py` | 21 | no own fact sources (`fact_sources`/`facts`/`current_report_facts` return `{}`); report validated against the parent's form with this episode's resolver, then `validate_received_report` | `BindingContext.assignment`×1, `BindingContext.scope`×1 |
 | `waiting.py` | 8 | `supports_wait = False` | none |
 | `yield_estimator.py` | 12 | `continuation_task` and `yield_controller` both return `None` (no private continuation; the runner's recorded controller decides) | none |
+
+## Carried over
+
+One row per row of `runs/carry_over/functions/a103__gene_context_evidence__published_evidence_assessment__evidence_search_strategy_improvement.tsv`. Old file names are the files at 97308b94c. Library pieces named are existing `episode_support/` functions called by this episode; none was added or moved. Pieces without a home in this episode are marked unplaced and are listed in `docs/axis_restructure_20261117/carry_over_blocked/a103__gene_context_evidence__published_evidence_assessment__evidence_search_strategy_improvement.md`. Functions that are not in the library stay in the episode file that uses them (`task.py`: `instructions`, `catalog`, `admitted`, `run_operation`, `source_operands`, `section`, `present`, `child_operands`; library candidates, since the sibling A103 and A101 episodes carry copies).
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| action_policy.py | SourceActionPolicy | machinery | old class shell of the old runner; its methods have their own rows |
+| action_policy.py | SourceActionPolicy._role | machinery | old runner role check of the seven literature roles; the class-definition checks and the binding path replace it |
+| action_policy.py | SourceActionPolicy.permitted_common_actions | machinery | old runner action-kind permission (tool, child, redeliver_report); task.py decide/action offer tool and child units (redelivery does not exist) |
+| binding_record.py | SourceEpisodeBindingRecord | machinery | binding_record.py / the binding's own as_record() (README 3e) |
+| binding_record.py | SourceEpisodeBindingRecord.as_record | machinery | binding_record.py / the binding's own as_record() (README 3e) |
+| call.py | SourceTaskCall | machinery | old decision call: replay of saved requests, contract-information checks, receipts, exchange protocol |
+| call.py | SourceTaskCall.call | machinery | old decision call: replay of saved requests, contract-information checks, receipts, exchange protocol; the model request is task.py decide |
+| call.py | SourceTaskCall.instructions | episode function | task.py instructions(knowledge=, launch=) |
+| child_commissioning.py | SourceChildCommissioning | machinery | old class shell of the old runner; its methods have their own rows |
+| child_commissioning.py | SourceChildCommissioning.allowed_children | episode function | task.py CHILD_SLOTS (the one slot source_relevance_assessment) |
+| child_commissioning.py | SourceChildCommissioning.child_roles | episode function | task.py CHILD_SLOTS |
+| child_commissioning.py | SourceChildCommissioning.child_request_assembler | episode function | messages/msg_to_child.py msg_to_child |
+| child_commissioning.py | SourceChildCommissioning.child_report_receiver | episode function | messages/read_from_child.py read_from_child |
+| configuration.py | SourceEpisodeConfiguration | machinery | old configuration class; outcome_page_size is the constant OUTCOME_PAGE_SIZE of messages/internal_summary.py, the run settings are ctx.settings |
+| configuration.py | SourceEpisodeConfiguration.__init__ | episode function | messages/internal_summary.py OUTCOME_PAGE_SIZE = 8 (the one setting the episode owned) |
+| configuration.py | SourceEpisodeConfiguration.contract_information_configuration | machinery | contract-information freezing (old shared root content, returned None); README 5 item 16 |
+| configuration.py | SourceEpisodeConfiguration.contract_information_profile | machinery | contract-information freezing (old shared root content, returned None); README 5 item 16 |
+| credit.py | SourceInvestigationCredit | machinery | old class shell of the old runner; its methods have their own rows |
+| credit.py | SourceInvestigationCredit.credit_kind | machinery | credit_kind is deleted (README 3d) |
+| credit.py | SourceInvestigationCredit.credit_view | episode function | credit.py credit (library episode_support/grading/gene_context_evidence/credit.py A103ContextCredit; already in library) |
+| credit.py | SourceInvestigationCredit.credit_projector | episode function | credit.py (A103ContextCredit named there; the old method returned None) |
+| decision_contracts.py | SourceDecisionContracts | machinery | decision-exchange loop (request_context / select_action envelope) |
+| decision_contracts.py | SourceDecisionContracts.exchange_schema | machinery | decision-exchange loop |
+| decision_contracts.py | SourceDecisionContracts.exchange_response | machinery | decision-exchange loop |
+| decision_exchange.py | SourceDecisionExchange | machinery | decision-exchange loop |
+| decision_exchange.py | SourceDecisionExchange.interpretation_context | machinery | decision-exchange loop (published_references of lookup results); a lookup is a tool unit whose outcome is in the summary |
+| decision_exchange.py | SourceDecisionExchange.exchange_decision | machinery | decision-exchange loop; lookups are tools (tool_catalog and the access tools); the yield table is internal_summary action_yields |
+| decision_inputs.py | SourceTaskDecisionInputs | machinery | old class shell of the old runner; its methods have their own rows |
+| decision_inputs.py | SourceTaskDecisionInputs.decision_inputs | episode function | task.py decide (tool knowledge, launch-instruction library from settings, child options in present) and messages/internal_summary.py; the other pieces are unplaced (blocked file) |
+| decision_provider.py | SourceDecisionProvider | machinery | provider call and conversation key; ModelRequest and the system's recorded call replace it |
+| decision_provider.py | SourceDecisionProvider.conversation_key | machinery | conversation state (README 3a) |
+| decision_provider.py | SourceDecisionProvider.complete_decision | machinery | model call through the provider; decide returns ModelRequest('REASONING', ...) |
+| decision_state.py | SourceTaskDecisionState | machinery | old class shell of the old runner; its methods have their own rows |
+| decision_state.py | SourceTaskDecisionState.decision_state | episode function | messages/internal_summary.py internal_summary (catalog, visual_evidence, child_reports, action_yields, report, report_lifecycle) and task.py decide; root-only and report-delivery pieces unplaced (blocked file) |
+| episode.py | LiteratureEpisode | episode function | episode.py EvidenceSearchStrategyImprovement (binding_path, goal, unit, result, child_slots from goal.py / task.py) |
+| from_child_source_relevance_assessment.py | receive_source_relevance_assessment_report | episode function | messages/read_from_child.py read_from_child (credit and finding of the child); the receipt ledger, progress-provider hand-off, runtime_report_attempts and tool attributions are machinery |
+| from_parent.py | SourceAssignment | machinery | old class shell of the old runner; its methods have their own rows |
+| from_parent.py | SourceAssignment.child_assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM |
+| from_parent.py | SourceAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (version strategy_assignment_v1, question_context_refs, prior_search_refs) |
+| from_parent.py | SourceAssignment._validate_assignment | episode function (unplaced) | Store checks of the commission (each ref in scope, each prior_search_refs entry a source record, an operation key): a wrong commission fails (rule 1); read_from_parent has no records. Listed in the blocked file |
+| from_parent.py | SourceAssignment.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent (the operation-key check is not carried: the system journals units) |
+| goal.py | SourceInvestigationGoal | machinery | old class shell of the old runner; its methods have their own rows |
+| goal.py | SourceInvestigationGoal.instructions | episode function | goal.py GOAL (the A103 sentence and the literature_strategy role sentence) |
+| internal_summary.py | SourceInvestigationSummary | machinery | old class shell of the old runner; its methods have their own rows |
+| internal_summary.py | SourceInvestigationSummary.initial_decision_context | episode function | messages/internal_summary.py internal_summary (returned {}; nothing to carry) |
+| internal_summary.py | SourceInvestigationSummary.decision_context | episode function | messages/internal_summary.py internal_summary (assignment, source_custody built from prior_search_refs (the old code read source_refs, which the strategy assignment does not have), own_literature_outcomes via library outcome_page, history meaning) |
+| received_evidence.py | SourceReceivedEvidence | machinery | received-report hooks, all empty or None |
+| received_evidence.py | SourceReceivedEvidence.received_report_sources | machinery | received-report hook returning {}; child fields are declared by the child |
+| received_evidence.py | SourceReceivedEvidence.received_report_facts | machinery | received-report hook returning {} |
+| received_evidence.py | SourceReceivedEvidence.received_form_references | machinery | received-form references hook returning []; records come back in custody |
+| received_evidence.py | SourceReceivedEvidence.received_evidence_tokens | machinery | received-evidence hook returning [] |
+| received_evidence.py | SourceReceivedEvidence.validate_received_report | machinery | received-report validation (no-op); the system admits the child result against its form |
+| report_delivery.py | SourceTaskReportDelivery | machinery | old class shell of the old runner; its methods have their own rows |
+| report_delivery.py | SourceTaskReportDelivery.finish | episode function | messages/final_to_parent.py final_to_parent (RETURN_FORM credit + finding); runtime_forms saving, pending_handles and release are machinery |
+| saved_decision_exchange.py | SourceSavedDecisionExchange | machinery | saved-request replay checks |
+| saved_decision_exchange.py | SourceSavedDecisionExchange.validate_contract_exchange_request | machinery | saved-request replay checks (the system compares a rebuilt model request with its record) |
+| saved_decision_exchange.py | SourceSavedDecisionExchange.validate_contract_exchange_history | machinery | saved-request replay checks |
+| scientific_records.py | SourceScientificRecords | machinery | old class shell of the old runner; its methods have their own rows |
+| scientific_records.py | SourceScientificRecords.automatic_score_judgments | machinery | hook returning []; no automatic score judgments |
+| scientific_records.py | SourceScientificRecords.complete_score_judgment | machinery | hook that raised a103_automatic_judgment_unavailable; nothing to carry |
+| source_interpretation.py | SourceInterpretation | machinery | no reasoning action in this episode (all hooks None / False / raising) |
+| source_interpretation.py | SourceInterpretation.reasoning_action_schema | machinery | no reasoning action (returned None) |
+| source_interpretation.py | SourceInterpretation.reasoning_has_task_content | machinery | no reasoning action (returned False) |
+| source_interpretation.py | SourceInterpretation.execute_reasoning | machinery | no reasoning action (raised a103_literature_reasoning_not_commissioned) |
+| source_operations.py | SourceOperations | machinery | old class shell of the old runner; its methods have their own rows |
+| source_operations.py | SourceOperations.catalog | episode function | task.py catalog (access + acquisition lists, ncbi limited to pubmed, execution.estimate cut to xlsx branches, source_location_inputs) and tool_catalog |
+| source_operations.py | SourceOperations.execute | episode function | task.py run_operation and the 22 module-level tools (invalid outcome with arguments_or_reference feedback; permitted_record_refs = ctx.store.refs() for the four source-locating tools) |
+| source_operations.py | SourceOperations._tool_arguments | episode function | task.py admitted (offered operation and schema; the per-call assignment re-validation is not carried) |
+| source_references.py | SourceReferences | machinery | old class shell of the old runner; its methods have their own rows |
+| source_references.py | SourceReferences._require | episode function (unplaced) | Store check in scope then read of an episode's own commission; custody (records.holds / get) replaces it, a wrong commission fails |
+| source_references.py | SourceReferences.resolve | episode function | messages/final_to_parent.py validate_report (references of the report held by this episode, records.holds in internal_summary report_sources_held) |
+| task.py | SourceInvestigationTask | machinery | old decision-source class: replay/restore, exchange, credit hand-off to the controller |
+| task.py | SourceInvestigationTask.next | episode function | task.py decide (first unit is the tool_catalog lookup, then the model request); replay branches, call counting and source_failed are machinery |
+| task.py | SourceInvestigationTask.apply_response | episode function | task.py action (rejection of an invalid answer through Rejected; report update admission is the report tool) |
+| task.py | SourceInvestigationTask.execute | episode function | task.py TOOLS and ChildCall (tool and child branches; reason and wait branches never offered); outcome recording and credit hand-off are the system's |
+| task_instructions.py | instructions | episode function | task.py instructions(knowledge=, launch=) over library literature_investigation_prompt.INSTRUCTIONS (already in library); reasoning, wait, redelivery and exchange paragraphs dropped |
+| task_presentation.py | _text | machinery | helper of the old renderer; not needed (task.py section / present use json.dumps) |
+| task_presentation.py | render_requested_return | episode function | task.py present, section Return (the child return form is FINDING_FORM.as_record()) |
+| task_presentation.py | _goal | episode function | task.py present, section Assigned work |
+| task_presentation.py | _guidance | episode function (unplaced) | evidence-axis, thought-pattern, child-tool-info and annotation-support guidance and launch manuals: no home here; listed in the blocked file |
+| task_presentation.py | _source_operands | episode function | task.py source_operands |
+| task_presentation.py | _task | episode function | task.py present (assigned work, scope, parent constraints, context, evidence operands, sources, operations, child investigation) |
+| task_presentation.py | render_receiver_prompt | episode function | task.py present |
+| task_presentation_policy.py | _ordinary_runtime_receiver_context | machinery | renderer-choice helper of the old policy (HPC, API launch, monitor renderers); this episode has one prompt |
+| task_presentation_policy.py | present_source_task | machinery | renderer choice per state frame (decision_bootstrap / update / lookup frames); the single prompt is task.py present |
+| task_state.py | SourceTaskState | machinery | decision-source state: checkpoint, restore, replay |
+| task_state.py | SourceTaskState.__init__ | machinery | decision-source state (call count, feedback, last outcome, report values); state is the view: internal_summary |
+| task_state.py | SourceTaskState.bind_execution_context | machinery | execution-context binding of the old runner |
+| task_state.py | SourceTaskState.record_execution_failure | machinery | record_execution_failure; a tool returns its failure as its outcome (failure_outcome in task.py run_operation) |
+| task_state.py | SourceTaskState.restore_checkpoint | machinery | checkpoint/restore |
+| task_state.py | SourceTaskState.restore | machinery | checkpoint/restore |
+| task_state.py | SourceTaskState.record_effect | machinery | record_effect (README 3e) |
+| task_state.py | SourceTaskState.checkpoint | machinery | checkpoint/restore |
+| task_suspension.py | SourceTaskSuspension | machinery | wait/suspension machinery |
+| task_suspension.py | SourceTaskSuspension.suspension_changed | machinery | wait/suspension machinery |
+| to_child_source_relevance_assessment.py | SourceRelevanceAssessmentRequest | machinery | old class shell of the old runner; its methods have their own rows |
+| to_child_source_relevance_assessment.py | SourceRelevanceAssessmentRequest._assemble_source_relevance_assessment_request | episode function | messages/msg_to_child.py msg_to_child (objective, scope, search assignment with the question context, the model-chosen sources and every held record in received_record_refs, gene_context_evidence); the goal/report-contract wiring, report_contract_declaration, in-process completion order, job_assignment, episode_assignment and knowledge_inheritance are machinery or unplaced (blocked file) |
+| to_parent.py | SourceInvestigationReport | machinery | old class shell of the old runner; its methods have their own rows |
+| to_parent.py | SourceInvestigationReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (the old fact sources were empty; the form declares credit and finding, finding being the strategy report) |
+| to_parent.py | SourceInvestigationReport.facts | episode function | messages/final_to_parent.py final_to_parent (old facts were {}; returns credit and finding) |
+| to_parent.py | SourceInvestigationReport.current_report_facts | machinery | hook returning {}; no report facts |
+| to_parent.py | SourceInvestigationReport.validate_report | episode function | messages/final_to_parent.py validate_report (form check and held-reference check of the candidate sources; the first-line assignment re-validation against the Store is unplaced, blocked file) |
+| waiting.py | SourceInvestigationWaiting | machinery | wait machinery (waiting not supported) |
+| waiting.py | SourceInvestigationWaiting.supports_wait | machinery | wait machinery (returned False) |
+| yield_estimator.py | SourceInvestigationYield | machinery | old class shell of the old runner; its methods have their own rows |
+| yield_estimator.py | SourceInvestigationYield.continuation_task | machinery | returned None; continuation_task is deleted (README 3d) |
+| yield_estimator.py | SourceInvestigationYield.yield_controller | episode function | yield_estimator.py yield_controller (old returned None = default; BoundedQualityYieldController chosen from A103ContextCredit) |

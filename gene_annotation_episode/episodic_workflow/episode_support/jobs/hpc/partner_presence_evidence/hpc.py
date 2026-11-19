@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 import zlib
 
+from episode_runtime import TableDeclaration
+
 from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_presence_evidence.communication import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.grading.partner_presence_evidence.scoring import VERSION as SCIENTIFIC_PROFILE, digest, require
@@ -17,14 +19,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.partn
 VERSION = 'a103_shared_hpc_custody_v1'
 REQUEST_PROVIDER = 'host.a103.hpc_request'
 RESULT_PROVIDER = 'host.a103.hpc_admission'
+HPC_REQUESTS = TableDeclaration(name='a103_hpc_requests', columns=('source_ref','body'), key=('source_ref',),
+                              record_refs=('source_ref',))
+HPC_RESULTS = TableDeclaration(name='a103_hpc_results', columns=('source_ref','body'), key=('source_ref',),
+                             record_refs=('source_ref',))
 
 def sha(raw):
     return hashlib.sha256(raw).hexdigest()
-
-
-def install(store):
-    for table in ('a103_hpc_requests','a103_hpc_results'):
-        store.db.execute('CREATE TABLE IF NOT EXISTS '+table+' (source_ref TEXT PRIMARY KEY,body TEXT NOT NULL)')
 
 
 def source(store,provider,body):
@@ -37,41 +38,24 @@ def source(store,provider,body):
 def registered(store,reference,table,provider):
     row = store.get(reference)
     if row.get('provider')!=provider:return None
-    exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE name=?",(table,)).fetchone()
-    saved = store.db.execute('SELECT body FROM '+table+' WHERE source_ref=?',(reference,)).fetchone() if exists else None
-    require(saved is not None and row['origin']=='tool' and row['version']==VERSION,'a103_original_hpc_grant_required')
-    body = json.loads(saved[0])
+    rows = store.table(table).select({'source_ref': reference})
+    require(bool(rows) and row['origin']=='tool' and row['version']==VERSION,'a103_original_hpc_grant_required')
+    body = rows[0]['body']
     require(json.loads(store.get_artifact(row['artifact_ref']))==body,'a103_hpc_custody_conflict')
     return body
 
 
 def request_body(store,reference):
-    return registered(store,reference,'a103_hpc_requests',REQUEST_PROVIDER)
+    return registered(store,reference,HPC_REQUESTS,REQUEST_PROVIDER)
 
 
 def result_body(store,reference):
-    return registered(store,reference,'a103_hpc_results',RESULT_PROVIDER)
-
-
-def existing_local(store,operation,args,scope,known):
-    """Reuse only actual received numerical publications, never private output."""
-    from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.publication import received_measurement
-    exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE name='a103_operations'").fetchone()
-    if not exists:return []
-    for row in store.db.execute('SELECT request,result FROM a103_operations ORDER BY rowid'):
-        request,outcome = json.loads(row['request']),json.loads(row['result'])
-        if (request.get('name')!=operation or request.get('args')!=args or request.get('scope')!=scope
-                or outcome.get('status')!='completed' or not set(outcome['record_refs'])<=known):continue
-        if any((measurement:=received_measurement(store,ref)) is not None
-                and measurement['body']['producer_operation']==operation for ref in outcome['record_refs']):
-            return list(outcome['record_refs'])
-    return []
+    return registered(store,reference,HPC_RESULTS,RESULT_PROVIDER)
 
 
 def freeze(registry,operation,args,resource_id,*,context,scope,known,invocation):
     import Bio
     store = registry.store
-    install(store)
     plan = prepare(registry,operation,args,context=context,scope=scope,known=known,invocation=invocation)
     assets = {}
     for field,asset in plan['assets'].items():
@@ -94,13 +78,13 @@ def freeze(registry,operation,args,resource_id,*,context,scope,known,invocation)
     request = {'version':NATIVE_VERSION,'scientific_profile':SCIENTIFIC_PROFILE,'biopython_version':Bio.__version__,
         'plan':plan,'assets':assets}
     raw = (canonical(request)+'\n').encode()
-    body = {'version':VERSION,'run_id':context.run_id,'scope':plain(scope),'operation':operation,
+    body = {'version':VERSION,'scope':plain(scope),'operation':operation,
         'logical_work_sha256':logical,'request':request,'request_sha256':sha(raw),
         'resource_id':resource_id,'evidence_refs':plan['evidence_refs'],
         'files':{'a103-worker.py':worker,'a103-sources.json':snapshot,'a103-request.json':raw.decode()}}
     with store.transaction():
         reference = source(store,REQUEST_PROVIDER,body)
-        store.db.execute('INSERT OR IGNORE INTO a103_hpc_requests VALUES(?,?)',(reference,canonical(body)))
+        store.table(HPC_REQUESTS).put({'source_ref':reference,'body':body})
     return reference,body
 
 
@@ -131,7 +115,6 @@ def commission(body,resources):
 
 def admit(registry,expected,hpc_ref,*,context,known,reader):
     store = registry.store
-    require(expected['run_id']==context.run_id,'a103_hpc_receiving_run_conflict')
     require(set(expected['evidence_refs'])<=known,'a103_hpc_original_operands_not_received')
     authority = reader(context,hpc_ref)
     receipt,plan,unit = authority['receipt'],authority['plan'],authority['unit']
@@ -172,7 +155,7 @@ def admit(registry,expected,hpc_ref,*,context,known,reader):
         'python_version':result.get('python_version'),'measurement_refs':records,
         'scientific_credit':'existing_A103_measurement_and_per_use_attribution; not_HPC_acceptance'}
     reference = source(store,RESULT_PROVIDER,body)
-    store.db.execute('INSERT OR IGNORE INTO a103_hpc_results VALUES(?,?)',(reference,canonical(body)))
+    store.table(HPC_RESULTS).put({'source_ref':reference,'body':body})
     return [reference,*records]
 
 

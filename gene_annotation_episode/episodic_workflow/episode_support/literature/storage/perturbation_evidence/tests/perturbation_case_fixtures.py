@@ -1,4 +1,4 @@
-"""Constructed A106 perturbation cases over the run store, and a commissioner's typed receipt of their cells.
+"""Constructed A106 perturbation cases on the scoped store of a running episode, and a commissioner's typed receipt of their cells.
 
 Synthetic or cited-source inputs for repository tests; they make no scientific
 claim. A literature episode populates its sheet through its repository and
@@ -11,7 +11,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbatio
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_perturbation_inputs import LITERAL_FIELDS, PRIMITIVE_ORDER
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_repositories import LiteratureContext
-from gene_annotation_episode.state import Store
 
 BASE = Path(__file__).parent / 'fixtures'
 PRIMARY = BASE / 'primary_cas2/PMC4075942.xml'
@@ -32,9 +31,8 @@ def witness(ref, raw, quote):
             'end': start+len(token), 'quote': quote}
 
 
-def setup_case(path, *, primary=False):
-    store = Store(path)
-    store.create_problem(raw_sequence='ATGGCT', molecule='dna')
+def setup_case(ctx, *, primary=False):
+    store = ctx.store
     raw = PRIMARY.read_bytes() if primary else (
         b'SyntheticProtein in recipient cells: reference, perturbed and restored arms measure '
         b'the same calibrated endpoint. Restored protein amount is a nuisance comparison; '
@@ -72,7 +70,7 @@ def setup_case(path, *, primary=False):
         'orientation': None if primary else 1, 'interpretation_witnesses': interpretation}
     assignment = {'version': 'literature_assignment_v1', 'question_context_refs': [],
                   'source_refs': refs, 'requested_perturbation_components': COMPONENTS}
-    context = LiteratureContext('perturbation-fixture-run', 'perturbation-fixture-child', 'literature',
+    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature',
         (('literature', 'fixture'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), assignment, {}, tuple(refs))
     return store, context, args
 

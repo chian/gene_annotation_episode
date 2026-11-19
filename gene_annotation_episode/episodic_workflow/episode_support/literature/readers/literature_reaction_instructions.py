@@ -5,3 +5,22 @@ A110_SOURCE_LEAD = 'Investigate the assigned source-reading question for A110, b
 def lead(family):
     return REACTION_LEAD + '\n\n' + REACTION_VIEW_MEANING if family == 'reaction' else A110_SOURCE_LEAD
 
+
+
+def selected_family(selected, sources):
+    """Which A110 literature lead a leaf follows (owner, R10 of ``LOST_CONTENT_a110.md``): a literature leaf grades
+    into the reaction sheet only when the reaction cells are requested; otherwise it does A110 source reading.
+    ``selected`` are the requested reaction fields of the assignment, ``sources`` the fact sources the parent
+    asked for."""
+    if selected and selected <= {'requested_reaction_components', 'requested_reaction_native_positions'}:
+        return 'reaction'
+    if not selected:
+        if sources and sources <= {'literature_reaction_cells', 'literature_reaction_semantic_cells',
+                                   'literature_reaction_native_observations'}:
+            return 'reaction'
+        return 'A110_source'
+    return None
+
+
+def operation_family():
+    return 'reaction'

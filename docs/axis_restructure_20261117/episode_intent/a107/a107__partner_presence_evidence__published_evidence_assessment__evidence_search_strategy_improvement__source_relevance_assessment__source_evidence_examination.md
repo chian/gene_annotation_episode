@@ -97,3 +97,121 @@ Typed form via `form_with_facts` with partner fact cells of committed refs (requ
 | to_parent.py | 18 | Report facts sources; reference resolution in context; `validate_report` = assignment revalidated + form validated + received partner cells validated. | `none` | SPC |
 | waiting.py | 8 | `supports_wait` False. | `none` | SPC |
 | yield_estimator.py | 12 | `continuation_task` None and `yield_controller` None: no episode-specific continuation; the old runner's default controller applied. | `none` | SPC |
+
+## Carried over
+
+The episode is carried to the ten-file form (19 November 2026). Columns: old file (at 97308b94c) | kind | name | class | new place (file and name, or the reason it is machinery). Every old function of `runs/carry_over/functions/a107__partner_presence_evidence__published_evidence_assessment__evidence_search_strategy_improvement__source_relevance_assessment__source_evidence_examination.tsv` has one row. No row is "already in library" or "copied from <old path>": this episode imports no other episode, and the library functions it calls (`ToolRegistry`, `replace_span`, `strict_output`, `rejection_feedback`, `outcome_page`, `yield_table`, `project_finding_progress`, `materialize_text_witness_inputs`, `failure_outcome`) are called as they are in `episode_support/`. "Library candidate": none of the episode functions is generic enough to move now; the partner population catalogue, partner cells and the paragraphs of `literature_source_presentation` are not placed in `episode_support/` and their use raises.
+
+| old file | kind | name | class | new place |
+|---|---|---|---|---|
+| binding_record.py | class | LiteratureBindingRecord | machinery | binding_record.py and the binding's own as_record(): old-runner machinery (README 3e) |
+| binding_record.py | method | LiteratureBindingRecord.as_record | machinery | the binding's own as_record(): old-runner machinery (README 3e) |
+| configuration.py | class | LiteratureConfiguration | machinery | old configuration class: settings are `ctx.settings`/`settings` (README 3d); fixed values are constants of the file that uses them |
+| configuration.py | method | LiteratureConfiguration.__init__ | episode function | outcome_page_size -> OUTCOME_PAGE_SIZE = 8 in messages/internal_summary.py; reference_parent_sources and contract_information_profile belong to the annotation-head case and the old contract-information freezing (not in this episode; README 5 item 16): not carried |
+| configuration.py | method | LiteratureConfiguration.reference_evidence | machinery | classmethod that configured the annotation-head case (`reference_parent_sources`), not this episode's own work |
+| configuration.py | method | LiteratureConfiguration.contract_information_configuration | machinery | contract-information freezing profile (old shared-root content, README 5 item 16) |
+| configuration.py | method | LiteratureConfiguration.reasoning_action_schema | machinery | returned None: this episode has no reasoning action (no `reason` tool) |
+| configuration.py | method | LiteratureConfiguration.reasoning_has_task_content | machinery | returned False: no reasoning action |
+| configuration.py | method | LiteratureConfiguration.execute_reasoning | machinery | returned None: no reasoning action |
+| contracts.py | function | _population_catalog | episode function | task.py population_catalog (library candidate; raises NotImplementedError('partner_source_contracts_not_placed:population_catalog_entries'): module not placed) |
+| credit.py | class | LiteratureCredit | episode function | credit.py credit |
+| credit.py | method | LiteratureCredit.credit_kind | machinery | `credit_kind` is deleted (README 3d): the kind `scientific` is the library finding progress called in credit.py |
+| credit.py | method | LiteratureCredit.credit_view | episode function | credit.py credit(summary, records) over library findings/partner_presence_evidence/investigation_progress.py project_finding_progress |
+| credit.py | method | LiteratureCredit.credit_projector | machinery | returned None: no projector of this episode's own |
+| episode.py | class | LiteratureEpisode | machinery | old mix-in class: episode.py is the one class SourceEvidenceExamination(EpisodeBinding) |
+| episode.py | method | LiteratureEpisode._role | machinery | role dispatch: each role is its own episode now |
+| episode.py | method | LiteratureEpisode.permitted_common_actions | machinery | actions `tool` and `child` are the two units; `redeliver_report` is redelivery machinery (README 3b R2); no reason, no wait |
+| episode.py | method | LiteratureEpisode.allowed_children | episode function | task.py CHILD_SLOTS |
+| episode.py | method | LiteratureEpisode.child_roles | episode function | task.py CHILD_SLOTS (slots literature_table, literature_ordered, literature_targeted) |
+| episode.py | method | LiteratureEpisode.child_request_assembler | episode function | messages/msg_to_child.py msg_to_child (the old assemble_request modules) |
+| episode.py | method | LiteratureEpisode.execution_child_report_receiver | episode function | messages/read_from_child.py read_from_child |
+| from_child_passage_evidence_extraction.py | function | receive_report | machinery | from_child_passage_evidence_extraction.py: admitting the child's form, receipts and progress notifications (README 3b R1, R3, R5); the child's credit, finding and cells are taken in messages/read_from_child.py |
+| from_child_source_coverage_improvement.py | function | receive_report | machinery | from_child_source_coverage_improvement.py: admitting the child's form, receipts and progress notifications (README 3b R1, R3, R5); taken in messages/read_from_child.py |
+| from_child_table_evidence_extraction.py | function | receive_report | machinery | from_child_table_evidence_extraction.py: admitting the child's form, receipts and progress notifications (README 3b R1, R3, R5); taken in messages/read_from_child.py |
+| from_parent.py | class | LiteratureAssignment | episode function | messages/read_from_parent.py ASSIGNMENT_FORM and read_from_parent |
+| from_parent.py | method | LiteratureAssignment.child_assignment_schema | machinery | the parent's reading of what a child takes: a wrong commission fails (rule 1); each child's own ASSIGNMENT_FORM is its form |
+| from_parent.py | method | LiteratureAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (_PAGE properties as fields; partner fields: not placed, `literature_partner_components` new field) |
+| from_parent.py | method | LiteratureAssignment._validate_assignment | machinery | the episode's check of its own commission against the Store (artifact, scope): a wrong commission fails; the schema part is the form |
+| from_parent.py | method | LiteratureAssignment.prepare_assignment | machinery | building the child's assignment through the child's schema: now msg_to_child writes it and the child's form admits it (README 3b C3) |
+| goal.py | class | LiteratureGoal | episode function | goal.py GOAL |
+| goal.py | method | LiteratureGoal.instructions | episode function | goal.py GOAL (the `literature_page` role sentence followed by the A107 partner sentences); composed with the shared text in task.py instructions |
+| initial_information.py | function | initial_information | machinery | execution/resource information shown at the first decision from `catalog.readers` of the old runner; no placement (README 5 item 16); `decide` shows the context of this episode's own summary |
+| internal_summary.py | class | LiteratureSummary | episode function | messages/internal_summary.py internal_summary |
+| internal_summary.py | method | LiteratureSummary.decision_context | episode function | messages/internal_summary.py internal_summary (state) and task.py render_prompt/decide (context) |
+| internal_summary.py | method | LiteratureSummary.facts | episode function | messages/final_to_parent.py final_to_parent |
+| internal_summary.py | method | LiteratureSummary.current_report_facts | episode function | messages/internal_summary.py (cells, sheet_refs, report) |
+| internal_summary.py | method | LiteratureSummary._owned_population_task_sources | machinery | owned population sources of the annotation-head case (`reference_evidence_parent`, README 5 item 16): not this episode |
+| internal_summary.py | method | LiteratureSummary._population_task_context | machinery | context of the annotation-head case: not this episode |
+| internal_summary.py | class | SourceDecisionSummary | episode function | messages/internal_summary.py internal_summary and task.py decide |
+| internal_summary.py | method | SourceDecisionSummary._decision_snapshot | episode function | task.py decide/render_prompt and messages/internal_summary.py; the old-runner frames (view.model_inputs, time_accounting, conversation state, controller state frames) are not carried |
+| numerical_report_facts.py | class | LiteratureNumericalReportFacts | episode function | messages/final_to_parent.py RETURN_FORM fields literature_partner_cells and sheet_refs, messages/internal_summary.py own_cells |
+| numerical_report_facts.py | method | LiteratureNumericalReportFacts._rate_fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (old fact source literature_partner_cells of partner_source_contracts.fact_sources(), not placed) |
+| numerical_report_facts.py | method | LiteratureNumericalReportFacts._rate_facts | episode function | messages/internal_summary.py own_cells (raises NotImplementedError('partner_source_contracts_not_placed:fact_cells_over_held_sheets') when this episode holds own sheets) and the children's cells from read_from_child |
+| parent_context.py | class | LiteratureParentContext | machinery | context of the annotation-head case |
+| parent_context.py | method | LiteratureParentContext.initial_decision_context | machinery | returns {} for this role: no context |
+| parent_context.py | method | LiteratureParentContext.contract_information_profile | machinery | contract-information freezing (old shared-root content, README 5 item 16) |
+| received_api_reports.py | function | received_api_reports | machinery | old receipts reader for API job reports: this episode has no job |
+| received_execution_information.py | function | received_execution_information | machinery | old receipts reader for execution information: this episode has no job |
+| received_reports.py | class | LiteratureReceivedReports | episode function | messages/final_to_parent.py validate_report and messages/internal_summary.py |
+| received_reports.py | method | LiteratureReceivedReports.received_report_sources | episode function | messages/final_to_parent.py RETURN_FORM (the fields a child declares) |
+| received_reports.py | method | LiteratureReceivedReports.received_report_facts | episode function | messages/read_from_child.py read_from_child (cells and sheet refs a child returned) and messages/internal_summary.py |
+| received_reports.py | method | LiteratureReceivedReports._complete_requested_received_arrays | machinery | completed selected declared arrays in the parent's own form: the child declares fields and the return form admits them exactly |
+| received_reports.py | method | LiteratureReceivedReports.received_form_references | machinery | receipts of references named in a child's form: system custody (README 3b R3, F4) |
+| received_reports.py | method | LiteratureReceivedReports.received_evidence_tokens | machinery | receipt tokens of the old ledger (F1) |
+| received_reports.py | method | LiteratureReceivedReports.validate_received_report | episode function | messages/final_to_parent.py validate_report (sheet named is known, only requested components) |
+| source_custody.py | class | LiteratureSourceCustody | episode function | messages/internal_summary.py (source custody) and task.py within_source |
+| source_custody.py | method | LiteratureSourceCustody._require | machinery | private Store method: custody (`records.get`) |
+| source_custody.py | method | LiteratureSourceCustody._artifact | machinery | not carried: the old page-artifact versus source-artifact check of a representation is a check of a commission, and a wrong commission just fails (no check); no body exists in the new place. The source's artifact is only displayed from the source in internal_summary (SOURCE_FIELDS) |
+| source_custody.py | method | LiteratureSourceCustody._within_source | episode function | task.py within_source |
+| source_custody.py | method | LiteratureSourceCustody._validate_page | machinery | the episode's check of its own commission against the Store: a wrong commission fails |
+| source_operations.py | class | LiteratureSourceOperations | episode function | task.py (tools, offered_catalog, action, check_sources) |
+| source_operations.py | method | LiteratureSourceOperations.catalog | episode function | task.py offered_catalog (entries read from the declared service tool_catalog) and population_catalog |
+| source_operations.py | method | LiteratureSourceOperations.execute | episode function | task.py run_registry and the tools state_query ... execution_estimate, populate |
+| source_operations.py | method | LiteratureSourceOperations._tool_arguments | episode function | task.py action and check_sources (arguments against the offered schema; every named source within the page source) |
+| source_operations.py | method | LiteratureSourceOperations._materialize_text_arguments | episode function | task.py materialize_text_arguments |
+| source_repositories.py | class | LiteratureRepositories | machinery | old repository factory for the partner population routes (partner_source_contracts, not placed) |
+| source_repositories.py | method | LiteratureRepositories.literature_partner_repository | machinery | old repository factory (LiteraturePartnerRepository over the raw Store); reached only through task.py populate, which raises |
+| source_repositories.py | method | LiteratureRepositories._population_routes | machinery | old population route table (partner_source_contracts, not placed) |
+| task.py | class | SourceInvestigationTask | machinery | old decision machine class: decide and action in task.py |
+| task.py | method | SourceInvestigationTask.next | episode function | task.py decide and action (the loop is the system's) |
+| task_action.py | class | SourceTaskAction | machinery | old class: task.py action and the tools |
+| task_action.py | method | SourceTaskAction.apply_response | episode function | task.py action (admission of the answer; the saved-action decoding, reasoning, wait and redelivery branches are old-runner machinery) |
+| task_action.py | method | SourceTaskAction.execute | episode function | task.py action (ToolCall / ChildCall) and the tools; recorded execution failure is the tool's returned outcome (run_registry); `wait` and `redeliver_report` are not carried |
+| task_decision.py | class | SourceTaskDecision | machinery | old class: task.py decide |
+| task_decision.py | method | SourceTaskDecision.call | episode function | task.py decide (ModelRequest; the model call and its recording are the system's) |
+| task_decision.py | method | SourceTaskDecision.instructions | episode function | task.py instructions |
+| task_decision.py | method | SourceTaskDecision.conversation_key | machinery | conversation state (README 3a) |
+| task_decision.py | method | SourceTaskDecision.interpretation_context | machinery | old context-exchange helper |
+| task_decision.py | method | SourceTaskDecision.exchange_schema | machinery | decision-exchange loop (README 3a) |
+| task_decision.py | method | SourceTaskDecision.exchange_response | machinery | decision-exchange loop |
+| task_decision.py | method | SourceTaskDecision.validate_contract_exchange_request | machinery | saved-request checks of the exchange loop |
+| task_decision.py | method | SourceTaskDecision.validate_contract_exchange_history | machinery | saved-request checks of the exchange loop |
+| task_decision.py | method | SourceTaskDecision.exchange_decision | machinery | decision-exchange loop |
+| task_decision.py | method | SourceTaskDecision.decision_completion | machinery | old completion of a decision against the recorder |
+| task_instructions.py | function | instructions | episode function | task.py instructions (shared INSTRUCTIONS with redelivery, history and wait text removed or replaced; this episode's goal, child and report text added) |
+| task_presentation.py | function | present_source_context | episode function | task.py render_prompt (the old frame reconstruction is not carried) |
+| task_reading_prompt.py | function | render_literature_experimental_prompt | episode function | task.py render_prompt (TASK/STEERING layout; fixed paragraphs of literature_source_presentation not placed) |
+| task_report_delivery.py | class | SourceTaskReportDelivery | machinery | report delivery (finish, release): README 3b D1/D3 |
+| task_report_delivery.py | method | SourceTaskReportDelivery.finish | episode function | messages/final_to_parent.py final_to_parent (the typed report); saving, release and delivery are not carried |
+| task_state.py | class | SourceTaskState | machinery | old per-run state: the view is the state |
+| task_state.py | method | SourceTaskState.__init__ | machinery | old per-run state |
+| task_state.py | method | SourceTaskState.bind_execution_context | machinery | old per-run state |
+| task_state.py | method | SourceTaskState.record_execution_failure | machinery | failed execution is the tool's returned outcome (run_registry via failure_outcome) |
+| task_state.py | method | SourceTaskState.restore_checkpoint | machinery | checkpoint/restore (README 3e) |
+| task_state.py | method | SourceTaskState.restore | machinery | checkpoint/restore (README 3e) |
+| task_state.py | method | SourceTaskState.record_effect | machinery | record_effect (README 3e) |
+| task_state.py | method | SourceTaskState.checkpoint | machinery | checkpoint (README 3e) |
+| task_suspension.py | class | SourceTaskSuspension | machinery | suspension machinery |
+| task_suspension.py | method | SourceTaskSuspension.suspension_changed | machinery | suspension machinery |
+| to_child_passage_evidence_extraction.py | function | assemble_request | episode function | messages/msg_to_child.py msg_to_child (to_child_passage_evidence_extraction.py: slot literature_targeted; goal, message and assignment; the receipts bind, the saved fact form declaration and the identity are old-runner machinery) |
+| to_child_source_coverage_improvement.py | function | assemble_request | episode function | messages/msg_to_child.py msg_to_child (to_child_source_coverage_improvement.py: slot literature_ordered) |
+| to_child_table_evidence_extraction.py | function | assemble_request | episode function | messages/msg_to_child.py msg_to_child (to_child_table_evidence_extraction.py: slot literature_table) |
+| to_parent.py | class | LiteratureReport | episode function | messages/final_to_parent.py |
+| to_parent.py | method | LiteratureReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM |
+| to_parent.py | method | LiteratureReport.resolve | machinery | reference resolution through the old runner's receipts (`reference_in_context`); holding is records.holds in internal_summary and action |
+| to_parent.py | method | LiteratureReport.validate_report | episode function | messages/final_to_parent.py validate_report, called by final_to_parent (assignment revalidation done by read_from_parent; the form is admitted by the system) |
+| waiting.py | class | LiteratureWaiting | machinery | wait machinery (README 3b) |
+| waiting.py | method | LiteratureWaiting.supports_wait | machinery | wait machinery: no wait for this episode |
+| yield_estimator.py | class | LiteratureYield | episode function | yield_estimator.py yield_controller |
+| yield_estimator.py | method | LiteratureYield.continuation_task | machinery | returned None: no continuation declaration of its own |
+| yield_estimator.py | method | LiteratureYield.yield_controller | episode function | yield_estimator.py yield_controller (None meant the old default controller: accumulation, README 7b) |

@@ -48,17 +48,18 @@ def _descriptor(store, reference):
     meta = _retained(store, reference)
     return {'artifact_ref': reference, 'sha256': meta['sha256'], 'size_bytes': meta['size']}
 
-def _path(store, reference):
-    descriptor = _descriptor(store, reference)
-    return store.path / 'artifacts' / descriptor['sha256'][:2] / descriptor['sha256']
-
 def _json(store, reference):
     _descriptor(store, reference)
     return _decode(store.get_artifact(reference))
 
-def _file(store, reference):
+def _identity(store, reference):
     row = _descriptor(store, reference)
-    return {'path': str(store.path / 'artifacts' / row['sha256'][:2] / row['sha256']), **{k: row[k] for k in ('sha256', 'size_bytes')}}
+    return {k: row[k] for k in ('sha256', 'size_bytes')}
+
+def _file(scratch, store, reference):
+    staged = scratch.path / 'inputs' / reference
+    path = staged if staged.exists() else scratch.copy_artifact(reference, 'inputs/' + reference)
+    return {'path': str(path), **_identity(store, reference)}
 
 def validate_masking_prepared(prepared):
     """Validate only closed fields; Store-aware custody is a separate port."""
@@ -148,7 +149,7 @@ def validate_prepared_masking_result(store, prepared, *, bundle=None):
     plan = receipt['plan']
     if any((plan[k] != stable[k] for k in ('bundle', 'capture', 'original_plan', 'bundle_artifact_ref', 'occurrences', 'native_outcome'))) or plan['failures'] != original_failures:
         _error('prepared_worker_context_conflict')
-    expected_files = [{'occurrence_id': r['occurrence_id'], **_file(store, r['artifact_ref'])} for r in occurrences if r['role'] not in {'stdout', 'stderr'}]
+    expected_files = [{'occurrence_id': r['occurrence_id'], **_identity(store, r['artifact_ref'])} for r in occurrences if r['role'] not in {'stdout', 'stderr'}]
     if [{k: v for k, v in r.items() if k != 'path'} for r in plan['files']] != [{k: v for k, v in r.items() if k != 'path'} for r in expected_files]:
         _error('prepared_worker_input_identity_conflict')
     numerical = stable['numerical_artifacts']
@@ -232,8 +233,9 @@ def prepare_native_blast_masking_result(store, *, bundle, bundle_artifact_ref, a
     directory, saved = _begin(directory, 'native-blast-masking-preparation', intent, 'prepared.json')
     if saved is not None:
         return validate_prepared_masking_result(store, saved, bundle=bundle)
-    plan = {'version': PLAN_VERSION, 'task': 'parse_calculate', 'directory': str(directory), 'bundle': bundle, 'bundle_artifact_ref': bundle_artifact_ref, 'original_plan': original_plan, 'capture': capture, 'occurrences': occurrences, 'native_outcome': outcome, 'failures': failures, 'files': [{'occurrence_id': r['occurrence_id'], **_file(store, r['artifact_ref'])} for r in occurrences if r['role'] not in {'stdout', 'stderr'}]}
-    receipt, receipt_ref, completed = _execute_worker(store, directory, plan, policy)
+    with store.scratch("native_blast_masking_preparation") as scratch:
+        plan = {'version': PLAN_VERSION, 'task': 'parse_calculate', 'directory': str(directory), 'bundle': bundle, 'bundle_artifact_ref': bundle_artifact_ref, 'original_plan': original_plan, 'capture': capture, 'occurrences': occurrences, 'native_outcome': outcome, 'failures': failures, 'files': [{'occurrence_id': r['occurrence_id'], **_file(scratch, store, r['artifact_ref'])} for r in occurrences if r['role'] not in {'stdout', 'stderr'}]}
+        receipt, receipt_ref, completed = _execute_worker(store, directory, plan, policy)
     prepared = {'version': PREPARED_VERSION, 'bundle_artifact_ref': bundle_artifact_ref, 'source_grading_artifact_ref': None, 'operation': bundle['operation'], 'native_outcome': outcome, 'occurrences': occurrences, 'failures': receipt['failures'], 'worker_completed': completed, **{key: receipt['outputs'].get(role, {}).get('artifact_ref') for role, key in NUMERICAL_REFS.items()}}
     stable = {'version': RETAINED_VERSION, 'bundle': bundle, 'capture': capture, 'original_plan': original_plan, 'bundle_sha256': native_blast_digest(bundle), 'numerical_artifacts': receipt['outputs'], 'worker_receipt_artifact_ref': receipt_ref, **{k: prepared[k] for k in _PREPARED_FIELDS - {'version', 'source_grading_artifact_ref'}}}
     prepared['source_grading_artifact_ref'] = retain_tool_grading(store, provider='episode.execution_result', native_artifact_ref=bundle_artifact_ref, grading=stable)
@@ -242,7 +244,7 @@ def prepare_native_blast_masking_result(store, *, bundle, bundle_artifact_ref, a
     return prepared
 
 def _source(store, source_ref, prepared, stable):
-    source = store._require(source_ref, {'source'})
+    source = store.require(source_ref, {'source'})
     expected = original_source_payload(bundle=stable['bundle'], capture=stable['capture'], prepared=prepared)
     if source.get('origin') != 'tool' or any((source.get(k) != v for k, v in expected.items())):
         _error('publication_source_custody_conflict')
@@ -270,8 +272,9 @@ def publish_selected_masking_result(store, *, source_ref, prepared, selector, di
     directory, saved = _begin(directory, 'native-blast-masking-projection', intent, 'publication.json')
     if saved is not None:
         return validate_masking_publication(store, source_ref=source_ref, prepared=prepared, selector=selector, publication=saved)
-    plan = {'version': PLAN_VERSION, 'task': 'project_saved', 'directory': str(directory), 'source_ref': source_ref, 'operation': prepared['operation'], 'native_outcome': prepared['native_outcome'], 'selector': selector, 'occurrences': prepared['occurrences'], 'failures': prepared['failures'], 'saved_data': _saved_descriptors(store, source_ref, prepared), 'files': {role: _file(store, prepared[key]) if prepared[key] is not None else None for role, key in NUMERICAL_REFS.items()}}
-    receipt, receipt_ref, completed = _execute_worker(store, directory, plan, policy)
+    with store.scratch("native_blast_masking_projection") as scratch:
+        plan = {'version': PLAN_VERSION, 'task': 'project_saved', 'directory': str(directory), 'source_ref': source_ref, 'operation': prepared['operation'], 'native_outcome': prepared['native_outcome'], 'selector': selector, 'occurrences': prepared['occurrences'], 'failures': prepared['failures'], 'saved_data': _saved_descriptors(store, source_ref, prepared), 'files': {role: _file(scratch, store, prepared[key]) if prepared[key] is not None else None for role, key in NUMERICAL_REFS.items()}}
+        receipt, receipt_ref, completed = _execute_worker(store, directory, plan, policy)
     if not completed or 'projection' not in receipt['outputs']:
         _immutable(directory / 'failure.json', {'intent': intent, 'code': 'selected_projection_worker_failed', 'worker_receipt_artifact_ref': receipt_ref})
         _error('selected_projection_worker_failed')

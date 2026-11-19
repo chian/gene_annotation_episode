@@ -1,0 +1,35 @@
+# source_relevance_assessment (A101): blocked, unplaced and contract misfits
+
+## BLOCKED-ON-STORE-ACCESS
+
+- function = `gene_annotation_episode/episodic_workflow/episode_support/tools/sequence_homology_evidence/tools.py::ToolRegistry`, pattern = "library not carried". `task.py run_access_tool` calls `ToolRegistry(ctx.store, **settings['tool_registry']).execute_async(name, arguments, scope=..., operation_key=ctx.operation_key, permitted_record_refs=...)` for the 15 access and the 7 acquisition tools (public.literature.search/read/sequence_identity, public.ncbi.search, public.pmc.versions/files/asset). Old call -> intended call: `store.db` tool_operations ledger -> deleted (the system journals units; `ctx.operation_key`); `store._require(ref, kinds)` -> `store.require(ref, kinds)`; `store.path / 'cache'` -> a service.
+- function = `.../episode_support/readers/sequence_homology_evidence/source_locations.py::received_source`, pattern = "library not carried" (called by `ToolRegistry` for source.locate).
+- function = `.../episode_support/records/documents/sequence_homology_evidence/materials.py::source_window_selection`, pattern = "library not carried" (called by `ToolRegistry._check_source_bytes`).
+- function = `.../episode_support/grading/sequence_alignment/native_correspondence.py::NativeCorrespondenceScoring.read_details`, pattern = "library not carried". Old call -> intended call: `store.read_snapshot()`, `store.db.execute('SELECT query_ref FROM homology_result_snapshots ...')`, `store.db.execute('SELECT result FROM tool_operations ...')` -> custody reads (`records.table(...)` / work table); `store.get` -> `records.get`. `credit.py` is real code and calls it with `records`.
+
+## UNPLACED OLD FUNCTIONS
+
+- `from_parent.py LiteratureAssignment._validate_page` (page artifact equals the source's artifact for the representation; refs in scope): a Store check of a page commission; it never applied to this episode (the assignment has no page), and a wrong commission fails.
+- `from_parent.py LiteratureAssignment._validate_assignment` Store parts (every ref in scope; `search_result_refs` must be source records): checks of the commission against the Store; a wrong commission fails and `read_from_parent` has no records.
+- `source_references.py LiteratureReferences._artifact`, `_within_source`: their only uses were the page checks (page-artifact and page-source restriction), which never applied here.
+- `to_child_source_evidence_examination.py prepare_request` parts: child scope validation inside the episode's scope (`store.validate_scope`), model-composed report schema/declaration, initial report, launch-instruction materialization, allowed-role check, the child's `prepare_assignment`. The child declares its own return; a wrong commission fails.
+- `decision_inputs.py` context pieces without a home here: resource context, shared-information context, launch-instruction library and selected launch instructions, pending work, execution expectations, job execution options, resource tool estimates, native event targets, requested-action history. No job or launch tool exists in this episode. The old `child_option_information` is not in today's library; `task.py CHILD_OPTIONS` is written from the old role sentences.
+- `redeliver_report` action and the pending-child-delivery text: old-runner machinery.
+
+## CONTRACT MISFITS
+
+- new field: source_relevance_assessment scope (assignment; the old episode took the Store scope from its request)
+- new field: source_relevance_assessment received_record_refs (assignment, `record_refs`; the old episode read `context.received_record_refs`). The parent must name the question context and the search results.
+- new field: source_relevance_assessment finding (return; the old episode returned the parent's requested form filled from the model's report update and had no fact sources). The episode declares its own finding form (`written`, `interpretation`, `assessments`, `qualification`) and a `report` tool. It declares no selectable return field (no old fact source). The finding is not the A105/A108 investigation_finding (this is A101).
+- The model no longer supplies the child's `scope` (old `selection['scope']`): the child's scope is this episode's scope. The child's page is still model-supplied (as `arguments['page']`).
+- The commission passes every record this episode holds (`summary['held_record_refs']`) as the child's `received_record_refs`, since a pass carries only the records named and `msg_to_child` cannot read the Store. The model-chosen page's source and artifact must therefore be held by this episode, or the commission fails with CustodyError.
+- The child returns no `record_refs` field (its return form declares only `credit` and `finding`), so records a child produced or read are not held by this episode and do not enter its credit (`read_details(records, ..., known_record_refs=records.refs())`). The old credit view read the axis credit after the child's report recorded its refs as received. The child and this parent must agree on a record-refs return field for the credit to see child work.
+- A101's `validate_form` (closed report schema) admits no free-text strings, so the old `validate_report` call cannot validate this episode's finding; `validate_report` checks the finding with the episode's own `RecordForm` and the held references.
+- Tool names cannot contain dots: library names (`source.read`, `public.pmc.files`, ...) are carried as `source_read`, `public_pmc_files`, ... (`LIBRARY_NAMES` in `task.py`).
+- The tool arguments the model fills are wrapped by `action` into an envelope `{'arguments', 'scope'}` so that the tool, which is handed no summary, can still return an `invalid` outcome that enters the iterator.
+- Settings the episode reads: `cost` and `parameters` (yield controller), optional `tool_registry` (keyword arguments of `ToolRegistry`; `native_statistics` there makes `execution_estimate` available), optional `knowledge_library_directory`.
+- The old controller was the old runner's default (None); the bounded-quality controller is chosen because the A101 projector declares yield_method bounded_quality with native_score_maximum 1.0 (README 7b), as in the child.
+- `A101SequenceCredit` is a private copy of the projector (the old projector lived in the axis head, which a leaf may not import); credit calls `read_details` with no assignment (the old call passed the old assignment, which names no annotation here).
+- The test does not check the commission against the child's `assignment_form` (the brief forbids importing the child); `test_binding.py` checks the commission's content only.
+- `docs/axis_restructure_20261117/GOAL.md` named in the job does not exist.
+- `/home/chia/repos/gene_annotation_episode` is a ramdisk copy without `.git`; old code was read through `/home/chia/repos/gene_annotation_episode_disk` (read-only).

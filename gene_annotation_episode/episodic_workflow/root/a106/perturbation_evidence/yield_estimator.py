@@ -1,27 +1,21 @@
-"""The A106 head's continuation: its declared credit-based yield controller."""
-from __future__ import annotations
-from .scientific_contracts import AXIS, ContractError, plain, scientific_digest
+"""Continuation, carried from the old ``yield_estimator.py`` (``PerturbationEvidenceYield.yield_controller``) at
+97308b94c, mapped by README 7b. The task key is ``A106:whole_axis_findings``; the projector of the task,
+``ScientificFindingProgress``, declares ``yield_method = 'accumulation'`` (finding units accumulate without a
+declared limit), so the old ``YieldController`` is the ``AccumulationYieldController`` of the system. The old cutoff is
+its cost and the old ``parameters`` are the episode's settings. Nothing but this controller ends the Episode.
 
-TASK = AXIS + ':whole_axis_findings'
+Not carried: the old declaration lookup ``yield_bindings[task]`` (the settings of the episode are its own entry of the
+run's ``continuation`` collaborator), the old comparison of the declared ``credit_definition`` digest with the
+projector's record and of the declared ``kind`` with the projector's ``yield_method`` (checks of the configuration the
+caller makes), and the other two kinds of the old declaration (``bounded_quality`` and ``completion``: this
+projector's method is accumulation, so a declaration of another kind was an error)."""
+from yield_control import AccumulationYieldController
+
+TASK = 'A106:whole_axis_findings'
 
 
-class PerturbationEvidenceYield:
-
-    def head_continuation(self, evidence_task, initial_credit, epoch):
-        """The yield controller this head declared for its commissioned whole-axis finding task.
-
-        The saved task declaration fixes the estimator kind, its parameters and
-        the continuation cutoff; its credit definition must be exactly the
-        projector of the commissioned evidence task. Credit is never bounded.
-        """
-        from .credit import original_task_projector
-        from yield_control import AccumulationYieldController, YieldParameters
-        if TASK not in self._yield_bindings:
-            raise ContractError('scientific_yield_binding_missing_for_task:' + TASK)
-        declaration = self._yield_bindings[TASK]
-        projector = original_task_projector({'context': {'evidence_task': plain(evidence_task)}})
-        if scientific_digest(plain(projector.as_record())) != scientific_digest(declaration['credit_definition']):
-            raise ContractError('scientific_yield_credit_definition_mismatch:' + TASK)
-        if projector.yield_method != declaration['kind']:
-            raise ContractError('scientific_yield_method_credit_mismatch:' + TASK)
-        return AccumulationYieldController(epoch, initial_credit, declaration['cutoff'], YieldParameters(**declaration['parameters']))
+def yield_controller(initial_credit, settings, parent_input):
+    if parent_input['task_key'] != TASK:
+        raise ValueError('scientific_yield_binding_missing_for_task:' + parent_input['task_key'])
+    return AccumulationYieldController('perturbation_evidence', initial_credit, settings['cost'],
+                                       settings['parameters'])

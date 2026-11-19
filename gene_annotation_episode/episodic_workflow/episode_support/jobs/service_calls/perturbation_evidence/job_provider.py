@@ -1,11 +1,11 @@
-"""A106's execution job provider over the run's shared Store (the ``job_provider`` of ``progress_provider``).
+"""A106's execution job provider over the records the Episode holds (the ``job_provider`` of ``progress_provider``).
 
 A106's only job execution bindings are its BV-BRC AppService API job bindings
 (``perturbation_evidence/.../execution_job_submission/api_job_execution``). Each retains its typed receipts in
 the Store as ``source`` records of provider ``episode.bvbrc_appservice_receipt``
 (``bvbrc_appservice_records.PROVIDER``; artifact ``{'version', 'contract', 'scope', 'value'}``: ``scope`` is the
 admitted Store scope the operation ran under, whose digest is the receipt's ``origin.scope_sha256``). A target
-is one AppService task a ``TaskHandoff`` receipt of this run recorded: handle ``appservice_task_`` + the digest
+is one AppService task a ``TaskHandoff`` receipt the Episode holds recorded: handle ``appservice_task_`` + the digest
 of the run, the receipt's ``original_task.resource_id`` and ``task_id``; its scope is the scope that receipt
 records.
 
@@ -43,29 +43,25 @@ PROGRESS_VERSION = 'progress_snapshot_v1'
 
 
 class JobProvider:
-    """The AppService tasks A106's API job execution bindings recorded in one run of the shared Store."""
+    """The AppService tasks A106's API job execution bindings the Episode holds."""
 
-    def __init__(self, store, *, run_id):
-        if not isinstance(run_id, str) or not run_id:
-            raise ContractError('a106_job_provider_run_identity_required')
-        self.store, self.run_id = store, run_id
+    def __init__(self, store):
+        self.store = store
 
     # -- the recorded tasks -----------------------------------------------------------------------------------
     def _receipts(self):
         """Every retained AppService receipt of this run, in retention order."""
         rows = []
-        for row in self.store.db.execute("SELECT id FROM records WHERE record_type='source' AND "
-                                         "json_extract(data,'$.provider')=? ORDER BY rowid", (RECEIPT_PROVIDER,)):
-            source = self.store.get(row[0])
+        for source in self.store.list('source'):
+            if source.get('provider') != RECEIPT_PROVIDER:
+                continue
             stored = json.loads(self.store.get_artifact(source['artifact_ref']))
             if stored.get('version') != RECEIPT_VERSION:
-                raise ContractError('a106_job_provider_receipt_version_unknown:' + row[0])
+                raise ContractError('a106_job_provider_receipt_version_unknown:' + source['id'])
             # A CommonReceipt and an AcquisitionReceipt carry origin and snapshot at their top level.
             common = (stored['value'] if stored['contract'] in ('CommonReceipt', 'AcquisitionReceipt')
                       else stored['value']['receipt'])
-            if common['origin']['run_id'] != self.run_id:
-                continue
-            rows.append({'ref': row[0], 'artifact_ref': source['artifact_ref'], 'stored': stored, 'common': common})
+            rows.append({'ref': source['id'], 'artifact_ref': source['artifact_ref'], 'stored': stored, 'common': common})
         return rows
 
     def jobs(self):
@@ -82,13 +78,14 @@ class JobProvider:
             if digest(scope) != origin['scope_sha256']:
                 raise ContractError('a106_job_provider_task_handoff_scope_digest_conflict:' + reference)
             task = value['original_task']
-            handle = HANDLE_PREFIX + digest({'run_id': self.run_id, 'resource_id': task['resource_id'],
+            handle = HANDLE_PREFIX + digest({'run_id': origin['run_id'], 'resource_id': task['resource_id'],
                                              'task_id': task['task_id']})
             if handle in jobs:
                 raise ContractError('a106_job_provider_task_handed_off_twice:' + handle)
             observations = [item for item in receipts if item['stored']['contract'] == 'TaskObservation'
                             and item['stored']['value']['original_task'].get('submission_receipt_ref') == reference
                             and item['common']['origin']['scope_sha256'] == origin['scope_sha256']]
+            observations.sort(key=lambda item: ((item['common']['snapshot'] or {}).get('retrieved_at') or '', item['ref']))
             jobs[handle] = {'handle': handle, 'handoff': row, 'observations': observations,
                             'resource_id': task['resource_id'], 'task_id': task['task_id'], 'origin': origin,
                             'owner': value['original_job_owner'], 'scope': scope}
@@ -108,7 +105,7 @@ class JobProvider:
     def describe_target(self, handle, scope):
         job = self._job(handle)
         task = job['handoff']['stored']['value']['original_task']
-        return {'handle': handle, 'kind': 'appservice_task', 'run_id': self.run_id,
+        return {'handle': handle, 'kind': 'appservice_task', 'run_id': job['origin']['run_id'],
                 'launch_episode_id': job['origin']['episode_id'], 'resource_id': job['resource_id'],
                 'task_id': job['task_id'], 'required_application_id': task['required_application_id'],
                 'native_application_id': task['native_application_id'],
@@ -120,7 +117,7 @@ class JobProvider:
         self._job(handle)
         return []
 
-    def observe(self, handle, requested_fields, scope, *, operation_key):
+    def observe(self, handle, requested_fields, scope):
         """The task's state as its receipts record it; ``requested_fields`` are selected by the progress provider."""
         job = self._job(handle)
         rows = [job['handoff'], *job['observations']]

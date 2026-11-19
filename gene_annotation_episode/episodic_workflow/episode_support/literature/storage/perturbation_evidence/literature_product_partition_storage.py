@@ -70,7 +70,6 @@ class LiteratureProductPartitionRepository(LiteratureRateRepository):
     provider = PROVIDER
     record_version = VERSION
     components = COMPONENTS
-    operations_table = "literature_product_partition_operations"
     received_table = "literature_product_partition_received"
     binding_fields = ()
 
@@ -78,23 +77,6 @@ class LiteratureProductPartitionRepository(LiteratureRateRepository):
         if not isinstance(run_id, str) or not run_id:
             raise ValueError("explicit_literature_run_required")
         self.store, self.run_id = store, run_id
-
-    def _installed(self):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
-            (self.operations_table,)).fetchone() is not None
-
-    def _install(self):
-        LiteratureRateRepository.__init__(self, self.store, self.run_id)
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self._install()
-            return super().receive_cells(context, cells, operation_key)
-
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError("literature_run_mismatch")
-        return super().received_cells(context) if self._installed() else []
 
     def validate_empty_return_family(self, context):
         if context.run_id != self.run_id:
@@ -114,19 +96,6 @@ class LiteratureProductPartitionRepository(LiteratureRateRepository):
         validate_schema(args, product_partition_arguments_schema())
         requested = list(context.assignment.get("requested_product_partition_components", ()))
         self.project_cells([], permitted_record_refs=(), components=requested)
-        signature = canonical({"arguments": args, "scope": plain(context.scope), "requested_components": requested})
-        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed() else None
-        if old is not None:
-            if signature != old["signature"]:
-                raise ContractError("operation_key_reused_for_different_work")
-            outcome = json.loads(old["outcome"])
-            saved = self.read(outcome["result"]["sheet_ref"])
-            for reference in saved["direct_input_source_refs"]:
-                self._native_source(context, reference)
-            for reference in saved["input_source_refs"]:
-                self._native_provenance(context.scope, reference)
-            return outcome
         def read_source(reference, representation):
             source = self._native_source(context, reference)
             artifact = source["artifact_ref"] if representation == "original" else source.get("text_ref")
@@ -143,13 +112,12 @@ class LiteratureProductPartitionRepository(LiteratureRateRepository):
                     parents.append(ancestor)
         root = self._native_source(context, args["source_ref"])
         with self.store.transaction():
-            self._install()
             created = []
             def publish(kind, record):
                 candidate = identity(kind, {"origin": "tool", "record": record})
-                existed = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (candidate,)).fetchone()
+                new = not self.store.holds(candidate)
                 result = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
-                if existed is None: created.append(result["id"])
+                if new: created.append(result["id"])
                 return result["id"]
             bindings = {name: _bindings(extraction, name, publish) for name in COMPONENTS}
             payload = {"version": VERSION, "selection": args, "extraction": extraction, "sheet": sheet,
@@ -168,23 +136,16 @@ class LiteratureProductPartitionRepository(LiteratureRateRepository):
                 "episode_id": context.episode_id, "key": operation_key}), "record_refs": references,
                 "changed_record_refs": [r for r in created if r in references],
                 "result": {"view": "reported_product_partition_components", "sheet_ref": ref, "cells": rows}, "feedback": None}
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     def read(self, sheet_ref):
-        if not self._installed():
-            raise ContractError("literature_sheet_not_selected_output")
         saved = super().read(sheet_ref)
         source = self.store.get(sheet_ref)
         request = json.loads(self.store.get_artifact(source["request_ref"]))
-        operation = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
         raw = self.store.get_artifact(source["artifact_ref"])
         if ("artifact_" + hashlib.sha256(raw).hexdigest() != source["artifact_ref"] or source["version"] != VERSION
                 or "artifact_" + hashlib.sha256(self.store.get_artifact(source["request_ref"])).hexdigest() != source["request_ref"]
                 or saved["selection"] != request["arguments"]
-                or operation["signature"] != canonical({"arguments": request["arguments"], "scope": request["scope"], "requested_components": request["requested_components"]})
                 or saved["direct_input_source_refs"] != saved["extraction"]["source_refs"]
                 or saved["input_artifact_ref"] != self.store.get(saved["input_source_ref"])["artifact_ref"]):
             raise ContractError("literature_product_partition_saved_mismatch")
@@ -213,8 +174,6 @@ class LiteratureProductPartitionRepository(LiteratureRateRepository):
             return ref
         if saved["bindings"] != {name: _bindings(saved["extraction"], name, expected) for name in COMPONENTS}:
             raise ContractError("literature_product_partition_binding_mismatch")
-        if json.loads(operation["outcome"])["result"]["cells"] != self._project_saved(saved, sheet_ref, request["requested_components"]):
-            raise ContractError("literature_product_partition_saved_return_mismatch")
         return saved
 
     @staticmethod

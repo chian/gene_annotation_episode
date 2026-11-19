@@ -21,7 +21,7 @@ def validate_finding(store, assessment, observation):
             'field_path': ['investigation_finding', 'withdrawal_reason']})
     actual = set(observation['subject_refs']) | set(observation['source_subject_refs'])
     for index, ref in enumerate(finding['source_claim']['subject_refs']):
-        store._require(ref, SUBJECT_KINDS)
+        store.require(ref, SUBJECT_KINDS)
         if ref not in actual:
             raise ContractError('finding_source_subject_not_in_observation', detail={
                 'field_path': ['investigation_finding', 'source_claim', 'subject_refs', index],
@@ -35,7 +35,7 @@ def validate_finding(store, assessment, observation):
                     'These references do not establish a functional claim or target correspondence.'})
     equivalent = finding['same_source_claim_as_ref']
     for ref in ([equivalent] if equivalent is not None else []) + finding['replaces_refs']:
-        previous = store._require(ref, {'assessment'})
+        previous = store.require(ref, {'assessment'})
         if 'investigation_finding' not in previous:
             raise ContractError('finding_reference_has_no_typed_finding', detail={'reference': ref})
         if ref in finding['replaces_refs'] and not finding_target_roots(store, previous) <= finding_target_roots(
@@ -50,7 +50,7 @@ def finding_target_roots(store, assessment):
         # Clearing a revisable allocation does not change the original target
         # domain or cancel a legitimately owned correction declaration.
         return set(assessment['context_account_scope']['subject_refs'])
-    return set(store._record_roots('assessment', assessment))
+    return set(store.roots(assessment['id']))
 
 
 def validate_replacement_scope(store, assessment, scope):
@@ -65,12 +65,12 @@ def validate_replacement_scope(store, assessment, scope):
             continue
         visited.add(ref)
         previous = store.get(ref)
-        store._assert_library_write_scope('assessment', previous, normalized, current=previous)
+        store.assert_library_write_scope(previous['id'], normalized)
         if 'context_account_scope' in previous:
             allocation = previous.get('context_scope')
             outside = allocation is not None and not store.context_mask_subset(allocation, normalized)
         else:
-            extent = store._assessment_write_extent(previous)
+            extent = store.assessment_write_extent(previous['id'])
             if not extent:
                 # Logical account_context of an unlocalized finding is distinct from
                 # inventing a measured extent or a nonzero annotation score.

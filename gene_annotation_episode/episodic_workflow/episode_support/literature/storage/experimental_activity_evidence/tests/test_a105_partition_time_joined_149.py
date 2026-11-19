@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_product_partition_inputs import MEANINGS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.literature_product_partition_prompt import PRODUCT_PARTITION_TASK
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_product_partition_storage import LiteratureProductPartitionRepository, product_partition_cells_schema
-from gene_annotation_episode.state import Store
+from .unit_world import in_unit
 RAW_NUMBERS = ('47.125713', '6.234891', '71.234567', '28.765433')
 TEXT = 'Synthetic investigation. Single mixture and baseline mixture contain reference protein. Cleanup took >47.125713 h; baseline took <6.234891 min to equilibrium. Purification changed; heating also changed. Single mixture has component A 71.234567% and component B 28.765433%. NMR amount composition at equilibrium. Common selected denominator. Native construct. Fixed assay condition. Source describes these reports as approximate. One preparation; no independent repeat.'
 TIME_REQUEST = ['completion_time_ratio']
@@ -56,15 +56,13 @@ def synthetic_inputs(store, *, numerical_endpoint=False):
     partition = {'source_ref': source, 'source_kind': 'synthetic_fixture', 'experiment': witness('Synthetic investigation'), 'quantities': {'a': fraction(RAW_NUMBERS[2], 'component A', 0), 'b': fraction(RAW_NUMBERS[3], 'component B', 1)}, 'relationships': {field: interpreted('supported', 'Common selected denominator') for field in ('same_preparation', 'same_endpoint', 'shared_denominator')}, 'evidence': [{'role': 'repetition_basis', 'witness': witness('One preparation; no independent repeat')}, {'role': 'composition', 'witness': witness('component A 71.234567% and component B 28.765433%')}]}
     return (source, artifact, times, partition)
 
-def test_both_optional_cold_repositories_are_lazy_under_query_only(tmp_path):
-    with Store(tmp_path) as store:
-        store.create_problem(raw_sequence='ATGGCT', molecule='dna')
-        context = LiteratureContext('cold-run', 'receiver', 'annotation', (('annotation', 'receiver'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {}, {}, [])
-        store.db.execute('PRAGMA query_only=ON')
-        before = store.db.total_changes
-        for cls in (LiteratureCompletionTimeRepository, LiteratureProductPartitionRepository):
-            repo = cls(store, context.run_id)
-            assert repo.received_cells(context) == []
-            assert repo.project_cells([], permitted_record_refs=[], components=[]) == []
-        assert store.db.total_changes == before
-        assert not store.db.execute("SELECT name FROM sqlite_master WHERE name IN ('literature_completion_time_operations','literature_product_partition_operations')").fetchall()
+@in_unit
+def test_both_optional_cold_repositories_read_nothing_and_write_nothing(store, ctx):
+    store.create_problem(raw_sequence='ATGGCT', molecule='dna')
+    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'annotation', (('annotation', 'receiver'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {}, {}, [])
+    before = store.refs()
+    for cls in (LiteratureCompletionTimeRepository, LiteratureProductPartitionRepository):
+        repo = cls(store, context.run_id)
+        assert repo.received_cells(context) == []
+        assert repo.project_cells([], permitted_record_refs=[], components=[]) == []
+    assert store.refs() == before

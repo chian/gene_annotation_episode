@@ -179,3 +179,126 @@ Read at commit `97308b94c`, only the files directly in this episode's folder. Co
 - **Old runtime module:** every task file ends with `from ...root.a103 import runtime as _live_original_runtime` and calls its helpers through that alias (and imports a long list of names from it, most unused).
 - **Old shared prompt pieces:** `task_presentation.py` / `task_presentation_policy.py` import from `root.a103.gene_context_evidence_prompt`, `root.a103.decision_context`, `root.a103.execution_prompt`, `root.a103.native_profile_presentation`, `root.a103.library.hpc_prompt`, `root.a103.library.monitor_prompt`.
 - **Other old shared root modules:** `root.a103.communication`, `root.a103.domain`, `root.a103.episode_bindings`, `root.a103.composition_information` (via `source_contracts.py`), `root.a103.library.action_contracts`, `root.a103.library.private_policy_call`, `root.a103.library.report_fact_assembly`, `root.a103.episode_work_report`, `root.a103.episode_source_failure`, `root.a103.providers`, `root.a103.episode_return_records`, `root.a103.delivery_counterpart`, `root.a103.episode_contract_information`.
+
+## Carried over
+
+One row per row of `runs/carry_over/functions/a103__gene_context_evidence__published_evidence_assessment__evidence_search_strategy_improvement__source_relevance_assessment__source_evidence_examination.tsv`. Old file names are the files at 97308b94c. Library pieces named are existing `episode_support/` functions called by this episode; none was added or moved. Pieces without a home in this episode are marked unplaced and are listed in `docs/axis_restructure_20261117/carry_over_blocked/a103__gene_context_evidence__published_evidence_assessment__evidence_search_strategy_improvement__source_relevance_assessment__source_evidence_examination.md`.
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| action_policy.py | SourceActionPolicy | machinery | old class shell of the old runner; its methods have their own rows |
+| action_policy.py | SourceActionPolicy._role | machinery | old runner role check of the seven literature roles; the class-definition checks and the binding path replace it |
+| action_policy.py | SourceActionPolicy.permitted_common_actions | machinery | old runner action-kind permission (tool, child, redeliver_report); task.py decide/action offer tool and child units (redelivery does not exist) |
+| binding_record.py | SourceEpisodeBindingRecord | machinery | binding_record.py / the binding's own as_record() (README 3e) |
+| binding_record.py | SourceEpisodeBindingRecord.as_record | machinery | binding_record.py / the binding's own as_record() (README 3e) |
+| call.py | SourceTaskCall | machinery | old decision call: replay of saved requests, contract-information checks, receipts, exchange protocol |
+| call.py | SourceTaskCall.call | machinery | old decision call: replay of saved requests, contract-information checks, receipts, exchange protocol |
+| call.py | SourceTaskCall.instructions | machinery | old decision call: replay of saved requests, contract-information checks, receipts, exchange protocol |
+| child_commissioning.py | SourceChildCommissioning | episode function | task.py CHILD_SLOTS (the three children by slot) |
+| child_commissioning.py | SourceChildCommissioning.allowed_children | episode function | task.py CHILD_SLOTS, offered(summary) (the slots the model may select) |
+| child_commissioning.py | SourceChildCommissioning.child_roles | episode function | task.py CHILD_SLOTS (old _CHILDREN[literature_page]) |
+| child_commissioning.py | SourceChildCommissioning.child_request_assembler | episode function | messages/msg_to_child.py msg_to_child (one assignment per slot) |
+| child_commissioning.py | SourceChildCommissioning.child_report_receiver | episode function | messages/read_from_child.py read_from_child |
+| configuration.py | SourceEpisodeConfiguration | machinery | old class shell of the old runner; its methods have their own rows |
+| configuration.py | SourceEpisodeConfiguration.__init__ | episode function | messages/internal_summary.py OUTCOME_PAGE_SIZE = 8 (the old outcome_page_size default) |
+| configuration.py | SourceEpisodeConfiguration.contract_information_configuration | machinery | contract-information exchange configuration of the old decision exchange |
+| configuration.py | SourceEpisodeConfiguration.contract_information_profile | machinery | contract-information profile of the old decision exchange |
+| credit.py | SourceInvestigationCredit | machinery | old class shell of the old runner; its methods have their own rows |
+| credit.py | SourceInvestigationCredit.credit_kind | machinery | credit-kind declaration of the old runner; credit.py credit is the scientific A103 credit |
+| credit.py | SourceInvestigationCredit.credit_view | episode function | credit.py credit (the old services.scientific_credit view over the records this Episode holds; library grading/gene_context_evidence/credit.py::A103ContextCredit) |
+| credit.py | SourceInvestigationCredit.credit_projector | episode function | credit.py credit (A103ContextCredit, library) |
+| decision_contracts.py | SourceDecisionContracts | machinery | decision-exchange envelope (request_context / select_action) |
+| decision_contracts.py | SourceDecisionContracts.exchange_schema | machinery | decision-exchange envelope (request_context / select_action) |
+| decision_contracts.py | SourceDecisionContracts.exchange_response | machinery | decision-exchange envelope (request_context / select_action) |
+| decision_exchange.py | SourceDecisionExchange | machinery | decision-exchange loop (exchange_decision) and its context frame |
+| decision_exchange.py | SourceDecisionExchange.interpretation_context | machinery | decision-exchange loop (exchange_decision) and its context frame |
+| decision_exchange.py | SourceDecisionExchange.exchange_decision | machinery | decision-exchange loop (exchange_decision) and its context frame |
+| decision_inputs.py | SourceTaskDecisionInputs | episode function | task.py decide / present (context, tools, child investigations, launch-instruction library and tool knowledge from settings); resource, shared-information, child-option text of the library, HPC, execution-expectation and native-event pieces are unplaced (no job, launch or acquisition tool here) |
+| decision_inputs.py | SourceTaskDecisionInputs.decision_inputs | episode function | task.py decide / present (context, tools, child investigations, launch-instruction library and tool knowledge from settings); resource, shared-information, child-option text of the library, HPC, execution-expectation and native-event pieces are unplaced (no job, launch or acquisition tool here) |
+| decision_provider.py | SourceDecisionProvider | machinery | old class shell of the old runner; its methods have their own rows |
+| decision_provider.py | SourceDecisionProvider.conversation_key | machinery | provider conversation key of the old runner |
+| decision_provider.py | SourceDecisionProvider.complete_decision | episode function | task.py decide: ModelRequest('REASONING', instructions, context, output_schema); the presentation renderer is task.py present |
+| decision_state.py | SourceTaskDecisionState | episode function | task.py decide (goal, scope, assignment, custody, own outcomes, child reports, report, visual evidence, time, yield table) and messages/internal_summary.py; annotation context, credit binding, receipt projection and report deliveries are unplaced |
+| decision_state.py | SourceTaskDecisionState.decision_state | episode function | task.py decide (goal, scope, assignment, custody, own outcomes, child reports, report, visual evidence, time, yield table) and messages/internal_summary.py; annotation context, credit binding, receipt projection and report deliveries are unplaced |
+| episode.py | LiteratureEpisode | episode function | episode.py SourceEvidenceExamination |
+| from_child_passage_evidence_extraction.py | receive_passage_evidence_extraction_report | episode function | messages/read_from_child.py read_from_child (the child's credit and finding); admission references, progress-provider hand-off, timing receipts and receipts are machinery (system custody) |
+| from_child_source_coverage_improvement.py | receive_source_coverage_improvement_report | episode function | messages/read_from_child.py read_from_child (the child's credit and finding); admission references, progress-provider hand-off, timing receipts and receipts are machinery (system custody) |
+| from_child_table_evidence_extraction.py | receive_table_evidence_extraction_report | episode function | messages/read_from_child.py read_from_child (the child's credit and finding); admission references, progress-provider hand-off, timing receipts and receipts are machinery (system custody) |
+| from_parent.py | SourceAssignment | machinery | old class shell of the old runner; its methods have their own rows |
+| from_parent.py | SourceAssignment.child_assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (schema of the assignment) |
+| from_parent.py | SourceAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (the _PAGE schema, one field per property) |
+| from_parent.py | SourceAssignment._validate_page | episode function | unplaced: Store check of the commission (artifact against the source's artifact for the representation, refs in scope); a wrong commission fails |
+| from_parent.py | SourceAssignment._validate_assignment | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (version, representation choice, field types admitted by the form); the Store checks are unplaced |
+| from_parent.py | SourceAssignment.prepare_assignment | episode function | messages/msg_to_child.py msg_to_child (the parent side: it builds each child's assignment from this page); operation_key requirement is system (unit operation key) |
+| goal.py | SourceInvestigationGoal | machinery | old class shell of the old runner; its methods have their own rows |
+| goal.py | SourceInvestigationGoal.instructions | episode function | goal.py GOAL |
+| internal_summary.py | SourceInvestigationSummary | machinery | old class shell of the old runner; its methods have their own rows |
+| internal_summary.py | SourceInvestigationSummary.initial_decision_context | machinery | initial binding context of the old runner; internal_summary takes the parent input from the view |
+| internal_summary.py | SourceInvestigationSummary.decision_context | episode function | messages/internal_summary.py internal_summary (literature_assignment -> assignment, literature_source_custody -> source_custody, own_literature_outcomes, literature_history_meaning) |
+| received_evidence.py | SourceReceivedEvidence | machinery | old class shell of the old runner; its methods have their own rows |
+| received_evidence.py | SourceReceivedEvidence.received_report_sources | machinery | received-report hooks of the old runner; all returned empty or None for this episode |
+| received_evidence.py | SourceReceivedEvidence.received_report_facts | machinery | received-report hooks of the old runner; all returned empty or None for this episode |
+| received_evidence.py | SourceReceivedEvidence.received_form_references | machinery | received-report hooks of the old runner; all returned empty or None for this episode |
+| received_evidence.py | SourceReceivedEvidence.received_evidence_tokens | machinery | received-report hooks of the old runner; all returned empty or None for this episode |
+| received_evidence.py | SourceReceivedEvidence.validate_received_report | machinery | received-report hooks of the old runner; all returned empty or None for this episode |
+| report_delivery.py | SourceTaskReportDelivery | machinery | old class shell of the old runner; its methods have their own rows |
+| report_delivery.py | SourceTaskReportDelivery.finish | episode function | messages/final_to_parent.py final_to_parent (credit and finding); the saved parent form, pending handles and release are old report-form machinery |
+| saved_decision_exchange.py | SourceSavedDecisionExchange | machinery | replay authentication of saved decision exchanges |
+| saved_decision_exchange.py | SourceSavedDecisionExchange.validate_contract_exchange_request | machinery | replay authentication of saved decision exchanges |
+| saved_decision_exchange.py | SourceSavedDecisionExchange.validate_contract_exchange_history | machinery | replay authentication of saved decision exchanges |
+| scientific_records.py | SourceScientificRecords | machinery | old class shell of the old runner; its methods have their own rows |
+| scientific_records.py | SourceScientificRecords.automatic_score_judgments | machinery | automatic score judgments hook of the old runner (this episode had none) |
+| scientific_records.py | SourceScientificRecords.complete_score_judgment | machinery | score judgment hook of the old runner; it only raised a103_automatic_judgment_unavailable |
+| source_interpretation.py | SourceInterpretation | machinery | old class shell of the old runner; its methods have their own rows |
+| source_interpretation.py | SourceInterpretation.reasoning_action_schema | machinery | reasoning-commit hook; this episode has no reason action (execute_reasoning only raised a103_literature_reasoning_not_commissioned) |
+| source_interpretation.py | SourceInterpretation.reasoning_has_task_content | machinery | reasoning-commit hook; this episode has no reason action (execute_reasoning only raised a103_literature_reasoning_not_commissioned) |
+| source_interpretation.py | SourceInterpretation.execute_reasoning | machinery | reasoning-commit hook; this episode has no reason action (execute_reasoning only raised a103_literature_reasoning_not_commissioned) |
+| source_operations.py | SourceOperations | machinery | old class shell of the old runner; its methods have their own rows |
+| source_operations.py | SourceOperations.catalog | episode function | task.py catalog (access tools only, execution.estimate cut to its workbook branches, source_location_inputs); tool_catalog tool |
+| source_operations.py | SourceOperations.execute | episode function | task.py run_access_tool and the access tools (state_query ... execution_estimate); library tools/gene_context_evidence/tools.py::ToolRegistry |
+| source_operations.py | SourceOperations._tool_arguments | episode function | task.py admitted (schema, source within the assigned page source) |
+| source_references.py | SourceReferences | machinery | old class shell of the old runner; its methods have their own rows |
+| source_references.py | SourceReferences._require | episode function | already in library: episode_support/records/received_records.py::read_record_in_scope (called by task.py) |
+| source_references.py | SourceReferences._artifact | episode function | messages/internal_summary.py representation_artifact |
+| source_references.py | SourceReferences._within_source | episode function | task.py within_source |
+| source_references.py | SourceReferences.resolve | machinery | reference resolution is custody (records.get / ctx.store.get) |
+| task.py | SourceInvestigationTask | machinery | old class shell of the old runner; its methods have their own rows |
+| task.py | SourceInvestigationTask.next | episode function | task.py decide (the unit choice and prompt); replay/restore parts are machinery |
+| task.py | SourceInvestigationTask.apply_response | episode function | task.py action (the model answer to one tool call or child commission, or Rejected); the report update is the report tool |
+| task.py | SourceInvestigationTask.execute | episode function | task.py run_access_tool, the access tools and report; child commissions are ChildCall units (messages/msg_to_child.py); wait and reason branches are not carried |
+| task_instructions.py | instructions | episode function | task.py instructions |
+| task_presentation.py | _text | episode function | task.py section (text/JSON body of a prompt section) |
+| task_presentation.py | render_requested_return | episode function | task.py present, section Return (FINDING_FORM) |
+| task_presentation.py | _goal | episode function | task.py present, section Assigned work |
+| task_presentation.py | _guidance | episode function | unplaced: evidence-axis, thought-pattern, child-tool and annotation-support guidance and launch manuals; the parent's constraints, context and evidence operands are in task.py present |
+| task_presentation.py | _source_operands | episode function | task.py source_operands |
+| task_presentation.py | _task | episode function | task.py present |
+| task_presentation.py | render_receiver_prompt | episode function | task.py present |
+| task_presentation_policy.py | _ordinary_runtime_receiver_context | machinery | renderer selector per decision frame (HPC, monitor, launch ...); the receiver renderer it chose is task.py present |
+| task_presentation_policy.py | present_source_task | machinery | renderer selector per decision frame (HPC, monitor, launch ...); the receiver renderer it chose is task.py present |
+| task_state.py | SourceTaskState | machinery | old class shell of the old runner; its methods have their own rows |
+| task_state.py | SourceTaskState.__init__ | machinery | old runner state fields |
+| task_state.py | SourceTaskState.bind_execution_context | machinery | execution binding of the old runner |
+| task_state.py | SourceTaskState.record_execution_failure | episode function | task.py run_access_tool: a failed selected operation is the unit outcome (library tools/unit_outcomes.py::failure_outcome) |
+| task_state.py | SourceTaskState.restore_checkpoint | machinery | checkpoint/restore |
+| task_state.py | SourceTaskState.restore | machinery | checkpoint/restore |
+| task_state.py | SourceTaskState.record_effect | machinery | journal of decision effects (rejected/selected/redelivery): the system records units and rejections |
+| task_state.py | SourceTaskState.checkpoint | machinery | checkpoint/restore |
+| task_suspension.py | SourceTaskSuspension | machinery | suspension forwarding to the old execution backend; no wait or suspension in the new system |
+| task_suspension.py | SourceTaskSuspension.suspension_changed | machinery | suspension forwarding to the old execution backend; no wait or suspension in the new system |
+| to_child_passage_evidence_extraction.py | PassageEvidenceExtractionRequest | episode function | messages/msg_to_child.py msg_to_child (slot passage_evidence_extraction: page, spans selection, scope, record_refs, gene_context_evidence, objective, message); goal/EpisodeRequest construction, report-contract declaration, knowledge inheritance and completion order are machinery |
+| to_child_passage_evidence_extraction.py | PassageEvidenceExtractionRequest._assemble_passage_evidence_extraction_request | episode function | messages/msg_to_child.py msg_to_child (slot passage_evidence_extraction: page, spans selection, scope, record_refs, gene_context_evidence, objective, message); goal/EpisodeRequest construction, report-contract declaration, knowledge inheritance and completion order are machinery |
+| to_child_source_coverage_improvement.py | SourceCoverageImprovementRequest | episode function | messages/msg_to_child.py msg_to_child (slot source_coverage_improvement: page, window selection, scope, record_refs, gene_context_evidence, objective, message); goal/EpisodeRequest construction, report-contract declaration, knowledge inheritance and completion order are machinery |
+| to_child_source_coverage_improvement.py | SourceCoverageImprovementRequest._assemble_source_coverage_improvement_request | episode function | messages/msg_to_child.py msg_to_child (slot source_coverage_improvement: page, window selection, scope, record_refs, gene_context_evidence, objective, message); goal/EpisodeRequest construction, report-contract declaration, knowledge inheritance and completion order are machinery |
+| to_child_table_evidence_extraction.py | TableEvidenceExtractionRequest | episode function | messages/msg_to_child.py msg_to_child (slot table_evidence_extraction: page, table or window selection, scope, received_record_refs, objective, message); goal/EpisodeRequest construction, report-contract declaration, knowledge inheritance and completion order are machinery |
+| to_child_table_evidence_extraction.py | TableEvidenceExtractionRequest._assemble_table_evidence_extraction_request | episode function | messages/msg_to_child.py msg_to_child (slot table_evidence_extraction: page, table or window selection, scope, received_record_refs, objective, message); goal/EpisodeRequest construction, report-contract declaration, knowledge inheritance and completion order are machinery |
+| to_parent.py | SourceInvestigationReport | machinery | old class shell of the old runner; its methods have their own rows |
+| to_parent.py | SourceInvestigationReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (credit and finding; the old fact sources were empty) |
+| to_parent.py | SourceInvestigationReport.facts | episode function | messages/final_to_parent.py final_to_parent (no facts of its own) |
+| to_parent.py | SourceInvestigationReport.current_report_facts | machinery | old report-form machinery (current facts of a report without contract); returned {} |
+| to_parent.py | SourceInvestigationReport.validate_report | episode function | messages/final_to_parent.py validate_report (the report is a valid form of its own and every cited source is held); the assignment re-validation against the Store is unplaced |
+| waiting.py | SourceInvestigationWaiting | machinery | wait/suspension machinery: supports_wait was False |
+| waiting.py | SourceInvestigationWaiting.supports_wait | machinery | wait/suspension machinery: supports_wait was False |
+| yield_estimator.py | SourceInvestigationYield | machinery | old class shell of the old runner; its methods have their own rows |
+| yield_estimator.py | SourceInvestigationYield.continuation_task | machinery | old runner continuation task (returned None) |
+| yield_estimator.py | SourceInvestigationYield.yield_controller | episode function | yield_estimator.py yield_controller (BoundedQualityYieldController, README 7b) |

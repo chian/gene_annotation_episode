@@ -1,11 +1,11 @@
-"""Commit an A105 interpretation and its selected graders as one action.
+"""Commit an A105 interpretation and its selected graders as one action (on the custody-scoped store: ``scope`` and
+the assigned page's source replace the old ``BindingContext`` operand; the repository is built from the store alone).
 
 Acquisition and metadata preparation remain ordinary work. This boundary admits
 no completed scientific interpretation without its purpose-specific sheet; it
 does not select a grader, infer applicability, or alter iterator credit.
 """
 from copy import deepcopy
-from dataclasses import replace
 import json
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, obj, source_location_inputs, validate_schema
@@ -89,7 +89,7 @@ hypothesis; there is no second model-supplied list of these same links.
             return True
     return False
 
-def execute(context, selection, operation_key, repository, *, authorize_source_access):
+def execute(scope, page_source_ref, selection, operation_key, repository, *, authorize_source_access):
     """Save the interpretation and its sheets before ordinary credit projection."""
     store = repository.store
     payload = plain(selection['commit'])
@@ -108,13 +108,14 @@ def execute(context, selection, operation_key, repository, *, authorize_source_a
             raise ContractError('no_applicable_evidence_cannot_assess_evidence')
         missing_findings = [row.get('alias') for row in payload.get('assessments', []) if isinstance(row, dict) and (not isinstance(row.get('investigation_finding'), dict))]
         if missing_findings:
-            raise ContractError('evidence_assessment_source_finding_required', detail={'assessment_aliases': missing_findings, 'required_field': 'investigation_finding', 'meaning': 'Record the actual source claim, its subject and qualification. A saved numerical sheet does not replace this scientific finding. Preserve unknown target correspondence; do not manufacture target support.'})
+            raise ContractError('evidence_assessment_source_finding_required', detail={'assessment_aliases': missing_findings, 'required_field': 'investigation_finding', 'meaning': 'Record the typed investigation_finding of the common schema: source_claim subject records, predicate and value, the qualification kind and the status. It stays a record of this episode; the parent receives the features read from the saved sheet. Preserve unknown target correspondence; do not manufacture target support.'})
+        # Owner (ASSAY_GRADING_TASK): "The host saves the source records and selected grader's partial sheet together."
         with store.transaction():
             if processing is not None and processing['kind'] == 'no_applicable_evidence':
                 attempted = True
 
                 def read_source(ref, representation):
-                    record = repository._native_source(context, ref)
+                    record = repository.source(scope, page_source_ref, ref)
                     authorize_source_access(ref, representation)
                     artifact = record.get('artifact_ref' if representation == 'original' else 'text_ref')
                     if artifact is None:
@@ -123,9 +124,8 @@ def execute(context, selection, operation_key, repository, *, authorize_source_a
                 sources = _Sources(read_source)
                 examined = [sources.witness(witness, f'examined[{index}]') for index, witness in enumerate(processing['examined'])]
                 processing['examined'] = [{**original, 'quote': witness['quote']} for original, witness in zip(processing['examined'], examined)]
-            account_context = {'account_owner': (context.run_id, context.episode_id)} if payload.get('interpretation_accounts') else {}
             attempted = True
-            outcome = store.commit_reasoning(payload, plain(context.scope), operation_key, **account_context)
+            outcome = store.commit_reasoning(payload, plain(scope), operation_key)
             if outcome['status'] not in ('completed', 'partial'):
                 return outcome
             if processing is not None and processing['kind'] == 'no_applicable_evidence':
@@ -138,7 +138,6 @@ def execute(context, selection, operation_key, repository, *, authorize_source_a
                         raise ContractError('no_applicable_observation_outside_examined_material')
             if processing is None or processing['kind'] == 'no_applicable_evidence':
                 return {**outcome, 'evidence_processing': processing}
-            grading_context = replace(context, received_record_refs=tuple(dict.fromkeys([*context.received_record_refs, *outcome['record_refs']])))
             gradings = _resolve(processing['gradings'], outcome['aliases'])
             required_refs = {ref for ref in outcome['record_refs'] if _requires_sheet(store.get(ref))}
             linked = set()
@@ -154,7 +153,7 @@ def execute(context, selection, operation_key, repository, *, authorize_source_a
                 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_assay_inputs import materialize_text_witness_inputs
 
                 def read_grading_source(ref, representation):
-                    record = repository._native_source(grading_context, ref)
+                    record = repository.source(scope, page_source_ref, ref)
                     authorize_source_access(ref, representation)
                     artifact = record.get('artifact_ref' if representation == 'original' else 'text_ref')
                     if artifact is None:
@@ -164,7 +163,7 @@ def execute(context, selection, operation_key, repository, *, authorize_source_a
                 validate_schema(arguments, repository.population_schema())
                 linked_observations = [ref for ref in required_refs if store.get(ref)['record_type'] == 'observation']
                 graded_refs = [ref for ref in required_refs if _matches_grading(store, ref, arguments, linked_observations=linked_observations)]
-                result = repository.populate(grading_context, arguments, f'{operation_key}:grading:{index}')
+                result = repository.populate(scope, page_source_ref, arguments, f'{operation_key}:grading:{index}')
                 if result['status'] not in ('completed', 'partial') or not result['result'].get('sheet_ref'):
                     raise ContractError('required_grading_sheet_not_saved')
                 linked.update(graded_refs)

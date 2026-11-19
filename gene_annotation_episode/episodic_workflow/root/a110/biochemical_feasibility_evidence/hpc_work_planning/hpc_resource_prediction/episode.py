@@ -1,28 +1,26 @@
-"""The A110 hpc_resource_prediction binding on the generic runner.
+"""The hpc resource prediction episode of A110 hpc work planning: a private binding of the system's episode type.
+It has no children (no ``msg_to_child.py`` and no ``read_from_child.py``)."""
+from episode_runtime import EpisodeBinding
 
-Its decision source, credit and continuation are ``hpc_work_planning/hpc_runtime`` (role
-``hpc_prediction``): model-selected fit, measurement and comparison operations over its owner's HPC
-ledger.
-"""
-from __future__ import annotations
-
-from types import MappingProxyType
-
-from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.runtime_contract import (
-    CHILD_ASSIGNMENT_FORM, RETURN_FORM, EpisodeRuntimeContract)
-
-from ..hpc_runtime import PREDICTION, HPCRuntime
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       read_from_parent as from_parent_file)
 
 
-class HpcResourcePredictionEpisode(HPCRuntime, EpisodeRuntimeContract):
-    """Predict the resources the planned computation needs."""
-    binding_path = 'biochemical_feasibility_evidence/hpc_work_planning/hpc_resource_prediction'
-    grain_name = binding_path.replace('/', '__')
-    goal = 'Predict the resources the planned computation needs'
-    unit = 'One resource-prediction action'
-    result = 'The resource prediction'
-    child_slots = MappingProxyType({})
-    assignment_form = CHILD_ASSIGNMENT_FORM
-    return_form = RETURN_FORM
-    commissioning_parent = 'biochemical_feasibility_evidence/hpc_work_planning'
-    hpc_role = PREDICTION
+class HpcResourcePrediction(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

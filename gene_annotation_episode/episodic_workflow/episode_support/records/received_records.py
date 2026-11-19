@@ -3,15 +3,12 @@
 Which records an episode holds is not decided here: the runner keeps custody (``episode_runtime`` ``Custody``,
 given to every tool as ``records``; see ``docs/axis_restructure_20261117/carry_over_guide/README.md``, section 3e). These functions answer Store
 questions only: the record handles a value or typed form names (``references_in``), visibility of a reference
-under a scope (``reference_in_scope``, ``read_record_in_scope``), and the ``record_selection`` argument that
-pages exactly given references (for example ``records.refs()``). No episode's role, axis, prompt or settings is
+under a scope (``reference_in_scope``, ``read_record_in_scope``). No episode's role, axis, prompt or settings is
 inside; what differs between episodes is a parameter.
 """
 from __future__ import annotations
 
 from collections.abc import Mapping
-import json
-
 from gene_annotation_episode.domain import ContractError
 
 # Record kinds the Store treats as a subject (Store.subjects / query_records(kind='subject')).
@@ -20,12 +17,7 @@ SUBJECT_KINDS = frozenset({'input', 'feature', 'product', 'read_subject'})
 
 def _lookup(store, reference, cache):
     if reference not in cache:
-        try:
-            cache[reference] = store.get(reference)
-        except ContractError as error:
-            if str(error) != 'unknown_reference':
-                raise
-            cache[reference] = None
+        cache[reference] = store.get(reference) if store.holds(reference) else None
     return cache[reference]
 
 
@@ -113,16 +105,4 @@ def read_record_in_scope(store, reference, scope, namespace=None):
     return store.get(reference)
 
 
-def record_selection(refs):
-    """The ``record_selection`` argument of ``Store.query_records`` / ``Store.reasoning_view`` for ``refs``.
-
-    With ``refs = records.refs()`` (the records the runner says this episode holds) the Store pages only those.
-    """
-    refs = list(refs)
-    if any(type(ref) is not str or not ref for ref in refs):
-        raise ContractError('record_selection_references_must_be_nonempty_text')
-    return 'SELECT value FROM json_each(?)', [json.dumps(list(dict.fromkeys(refs)))]
-
-
-__all__ = ['SUBJECT_KINDS', 'read_record_in_scope', 'record_selection',
-           'reference_in_scope', 'references_in']
+__all__ = ['SUBJECT_KINDS', 'read_record_in_scope', 'reference_in_scope', 'references_in']

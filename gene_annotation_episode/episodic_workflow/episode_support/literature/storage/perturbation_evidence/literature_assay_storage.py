@@ -43,7 +43,6 @@ class LiteratureAssayRepository(LiteratureRateRepository):
     components = COMPONENTS
     record_version = 'literature_assay_population_record_v2'
     readable_record_versions = (record_version,)
-    operations_table = 'literature_assay_operations'
     received_table = 'literature_assay_received'
     binding_fields = tuple(BINDINGS)
 
@@ -55,19 +54,6 @@ class LiteratureAssayRepository(LiteratureRateRepository):
         if not isinstance(operation_key, str) or not operation_key:
             raise ContractError('operation_key_required')
         args = plain(arguments)
-        signature = canonical({'arguments': args, 'scope': plain(context.scope)})
-        # Recheck all original source custody on replay without parsing the
-        # inputs again. A shared/global source is never receipt authorization.
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} '
-            'WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, context.episode_id, operation_key)).fetchone()
-        if old:
-            if old['signature'] != signature:
-                raise ContractError('operation_key_reused_for_different_work')
-            outcome = json.loads(old['outcome'])
-            for ref in self.read(outcome['result']['sheet_ref'])['input_source_refs']:
-                self._received_source(context, ref)
-            return outcome
 
         def read_source(reference, representation):
             source = self._received_source(context, reference)
@@ -132,9 +118,9 @@ class LiteratureAssayRepository(LiteratureRateRepository):
             newly_created = []
             def publish(kind, record):
                 candidate = identity(kind, {'origin': 'tool', 'record': record})
-                existed = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (candidate,)).fetchone()
+                new = not self.store.holds(candidate)
                 row = self.store.put(kind, record, origin='tool', scope=plain(context.scope))
-                if existed is None:
+                if new:
                     newly_created.append(row['id'])
                 return row['id']
             def reference(field, literal):
@@ -200,8 +186,6 @@ class LiteratureAssayRepository(LiteratureRateRepository):
                     'model_assumptions': {'variance_status': extracted['variance_status'],
                         'observation_model': extracted['observation_model'],
                         'covariance_origin': extracted.get('covariance_origin')}}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     def _received_source(self, context, reference):

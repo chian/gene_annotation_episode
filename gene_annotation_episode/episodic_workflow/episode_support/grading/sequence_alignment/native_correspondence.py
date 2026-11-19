@@ -5,10 +5,15 @@ not a function probability or a count of assertions. Function-specific and
 feature-qualified indices remain unavailable without their own grounded inputs.
 """
 from __future__ import annotations
-import json
 import math
+
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import VERSION, A101ScoringUnavailable, compile_native_sheet, intervals, route_native_grading
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import source_tool_grading_entries
+
+SEARCHES = TableDeclaration(name='a101_native_searches', columns=('source_ref', 'query_ref', 'profile'), key=('source_ref', 'query_ref', 'profile'),
+    record_refs=('source_ref', 'query_ref'))
+
 
 def _known(values):
     if isinstance(values, (str, bytes, dict)):
@@ -75,119 +80,109 @@ class NativeCorrespondenceScoring:
         if type(details_limit) is not int or details_limit < 0 or type(details_offset) is not int or (details_offset < 0):
             raise ValueError('a101_nonnegative_detail_page_required')
         known = _known(known_record_refs)
-        with store.read_snapshot():
-            scope = store.validate_scope(scope)
-            if assignment is not None and store.validate_scope(assignment['scope']) != scope:
-                raise ValueError('a101_credit_scope_differs_from_original_commission')
-            from gene_annotation_episode.episodic_workflow.episode_support.calculations.sequence_homology_evidence.evidence_geometry import native_subject_regions, _intersection
-            from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_and_context_sources.sequence_homology_evidence.component_assessment_dependencies import assigned_annotation
-            annotation = assigned_annotation(store, known, assignment)
-            if annotation is not None:
-                subjects, evidence_regions = (annotation['subject_refs'], {})
-                for subject in subjects:
-                    _, selected, _ = self._annotation_measurements(store, known, annotation, subject, scope)
-                    evidence_regions.update(selected)
-            targets = native_subject_regions(store, scope, subjects) if subjects is not None else {ref: _regions(store, scope, ref) for ref in scope['subject_refs']}
-            targets = {ref: regions for ref, regions in targets.items() if regions}
-            rows = {ref: [] for ref in targets}
-            profiles = {ref: set() for ref in targets}
-            sources, unsupported = ([], [])
-            cached_grades = {}
-            routed_grades, target_sequences = ({}, {})
-            for reference in known:
-                if evidence_regions is not None:
+        scope = store.validate_scope(scope)
+        if assignment is not None and store.validate_scope(assignment['scope']) != scope:
+            raise ValueError('a101_credit_scope_differs_from_original_commission')
+        from gene_annotation_episode.episodic_workflow.episode_support.calculations.sequence_homology_evidence.evidence_geometry import native_subject_regions, _intersection
+        from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_and_context_sources.sequence_homology_evidence.component_assessment_dependencies import assigned_annotation
+        annotation = assigned_annotation(store, known, assignment)
+        if annotation is not None:
+            subjects, evidence_regions = (annotation['subject_refs'], {})
+            for subject in subjects:
+                _, selected, _ = self._annotation_measurements(store, known, annotation, subject, scope)
+                evidence_regions.update(selected)
+        targets = native_subject_regions(store, scope, subjects) if subjects is not None else {ref: _regions(store, scope, ref) for ref in scope['subject_refs']}
+        targets = {ref: regions for ref, regions in targets.items() if regions}
+        rows = {ref: [] for ref in targets}
+        profiles = {ref: set() for ref in targets}
+        sources, unsupported = ([], [])
+        cached_grades = {}
+        routed_grades, target_sequences = ({}, {})
+        for reference in known:
+            if evidence_regions is not None:
+                continue
+            source = store.get(reference)
+            if source['record_type'] != 'source' or source['origin'] not in {'tool', 'external'}:
+                continue
+            for search in store.table(SEARCHES).select({'source_ref': reference}):
+                if search['query_ref'] in targets:
+                    profiles[search['query_ref']].add(search['profile'])
+            cached_grades[reference] = source_tool_grading_entries(store, reference)
+        for reference in known:
+            if evidence_regions is not None and reference not in evidence_regions:
+                continue
+            observed = store.get(reference)
+            if observed['record_type'] != 'observation' or observed['kind'] not in {'alignment', 'comparison'}:
+                continue
+            if observed['origin'] != 'tool':
+                continue
+            subjects = [ref for ref in observed['subject_refs'] if ref in targets]
+            if not subjects:
+                continue
+            source = store.get(observed['source_ref'])
+            grades = cached_grades.get(source['id'])
+            if grades is None:
+                grades = source_tool_grading_entries(store, source['id'])
+            native_candidate = observed['kind'] == 'alignment' or 'native_blast' in observed
+            if native_candidate and (not grades):
+                raise A101ScoringUnavailable('a101_native_grader_not_attached', observation_ref=reference, source_ref=source['id'])
+            for entry in grades:
+                grading = entry['grading']
+                if grading.get('failure'):
+                    if native_candidate:
+                        raise A101ScoringUnavailable('a101_native_grader_failed', observation_ref=reference, failure=grading['failure'])
                     continue
-                source = store.get(reference)
-                if source['record_type'] != 'source' or source['origin'] not in {'tool', 'external'}:
+                schema = (grading.get('sheet') or {}).get('schema', '')
+                if not (schema == 'hmmer_search_sheet_v1' or schema.startswith('blast_')):
+                    if observed['kind'] == 'alignment':
+                        unsupported.append({'observation_ref': reference, 'schema': schema})
                     continue
-                if source.get('provider') == 'native.phmmer.parsed_snapshot':
-                    captured = store.db.execute('SELECT query_ref FROM homology_result_snapshots WHERE source_ref=?', (reference,)).fetchone()
-                    if captured and captured[0] in targets:
-                        profiles[captured[0]].add('hmmer')
-                grades = cached_grades[reference] = source_tool_grading_entries(store, reference)
-                for entry in grades:
-                    schema = (entry['grading'].get('sheet') or {}).get('schema', '')
-                    if not schema.startswith('blast_'):
+                if entry['artifact_ref'] not in routed_grades:
+                    routed_grades[entry['artifact_ref']] = route_native_grading(grading)
+                populated = routed_grades[entry['artifact_ref']]
+                if 'native_blast' in observed:
+                    native = observed['native_blast']
+                    address = native.get('shared_projection', {})
+                    if address.get('grading_artifact_ref') != entry['artifact_ref']:
                         continue
-                    for operation in store.db.execute("SELECT result FROM tool_operations WHERE json_extract(result,'$.result.source_ref')=?", (reference,)):
-                        query = (json.loads(operation[0]).get('result') or {}).get('subject_ref')
-                        if query in targets:
-                            profiles[query].add('blast')
-            for reference in known:
-                if evidence_regions is not None and reference not in evidence_regions:
-                    continue
-                observed = store.get(reference)
-                if observed['record_type'] != 'observation' or observed['kind'] not in {'alignment', 'comparison'}:
-                    continue
-                if observed['origin'] != 'tool':
-                    continue
-                subjects = [ref for ref in observed['subject_refs'] if ref in targets]
-                if not subjects:
-                    continue
-                source = store.get(observed['source_ref'])
-                grades = cached_grades.get(source['id'])
-                if grades is None:
-                    grades = source_tool_grading_entries(store, source['id'])
-                native_candidate = observed['kind'] == 'alignment' or 'native_blast' in observed
-                if native_candidate and (not grades):
-                    raise A101ScoringUnavailable('a101_native_grader_not_attached', observation_ref=reference, source_ref=source['id'])
-                for entry in grades:
-                    grading = entry['grading']
-                    if grading.get('failure'):
-                        if native_candidate:
-                            raise A101ScoringUnavailable('a101_native_grader_failed', observation_ref=reference, failure=grading['failure'])
-                        continue
-                    schema = (grading.get('sheet') or {}).get('schema', '')
-                    if not (schema == 'hmmer_search_sheet_v1' or schema.startswith('blast_')):
-                        if observed['kind'] == 'alignment':
-                            unsupported.append({'observation_ref': reference, 'schema': schema})
-                        continue
-                    if entry['artifact_ref'] not in routed_grades:
-                        routed_grades[entry['artifact_ref']] = route_native_grading(grading)
-                    populated = routed_grades[entry['artifact_ref']]
-                    if 'native_blast' in observed:
-                        native = observed['native_blast']
-                        address = native.get('shared_projection', {})
-                        if address.get('grading_artifact_ref') != entry['artifact_ref']:
+                    populated = [row for row in populated if row.get('hit_index') == native.get('hit_ordinal') and row.get('hsp_index') == native.get('hsp_ordinal')]
+                for target in subjects:
+                    if store.subject_molecule(target) != 'protein':
+                        raise A101ScoringUnavailable('a101_original_protein_mapping_required', target_ref=target)
+                    length = store.subject_length(target)
+                    declared = [operand for operand in observed.get('operand_intervals', []) if operand['subject_ref'] == target and operand['role'] == 'query']
+                    if not declared:
+                        raise A101ScoringUnavailable('a101_target_correspondence_unavailable', observation_ref=reference)
+                    if any((operand['unit'] != 'aa' for operand in declared)):
+                        raise A101ScoringUnavailable('a101_original_protein_mapping_required', target_ref=target)
+                    expected = intervals([[p['start'], p['end']] for p in declared], length=length)
+                    matches = [row for row in populated if (intervals(row['target_intervals'], length=length) == expected if source.get('provider') == 'native.phmmer.alignment' else all((any((a <= x and y <= b for a, b in expected)) for x, y in row['target_intervals'])))]
+                    if len(matches) != 1:
+                        raise A101ScoringUnavailable('a101_observation_grader_join_ambiguous', observation_ref=reference, candidate_count=len(matches))
+                    row = dict(matches[0])
+                    if target not in target_sequences:
+                        target_sequences[target] = store.get_artifact(store.get(target)['sequence_ref']).decode('ascii').upper()
+                    sequence = target_sequences[target]
+                    if any((sequence[position] != symbol for position, symbol in row.pop('target_symbols'))):
+                        raise A101ScoringUnavailable('a101_target_sequence_conflict', observation_ref=reference)
+                    row.pop('residue_pairs', None)
+                    row['target_intervals'] = intervals(row['target_intervals'], length=length)
+                    if evidence_regions is not None:
+                        row['native_target_intervals'] = row['target_intervals']
+                        row['target_intervals'] = _intersection(row['target_intervals'], intervals(evidence_regions[reference], length=length))
+                        if not row['target_intervals']:
                             continue
-                        populated = [row for row in populated if row.get('hit_index') == native.get('hit_ordinal') and row.get('hsp_index') == native.get('hsp_ordinal')]
-                    for target in subjects:
-                        if store.subject_molecule(target) != 'protein':
-                            raise A101ScoringUnavailable('a101_original_protein_mapping_required', target_ref=target)
-                        length = store.subject_length(target)
-                        declared = [operand for operand in observed.get('operand_intervals', []) if operand['subject_ref'] == target and operand['role'] == 'query']
-                        if not declared:
-                            raise A101ScoringUnavailable('a101_target_correspondence_unavailable', observation_ref=reference)
-                        if any((operand['unit'] != 'aa' for operand in declared)):
-                            raise A101ScoringUnavailable('a101_original_protein_mapping_required', target_ref=target)
-                        expected = intervals([[p['start'], p['end']] for p in declared], length=length)
-                        matches = [row for row in populated if (intervals(row['target_intervals'], length=length) == expected if source.get('provider') == 'native.phmmer.alignment' else all((any((a <= x and y <= b for a, b in expected)) for x, y in row['target_intervals'])))]
-                        if len(matches) != 1:
-                            raise A101ScoringUnavailable('a101_observation_grader_join_ambiguous', observation_ref=reference, candidate_count=len(matches))
-                        row = dict(matches[0])
-                        if target not in target_sequences:
-                            target_sequences[target] = store.get_artifact(store.get(target)['sequence_ref']).decode('ascii').upper()
-                        sequence = target_sequences[target]
-                        if any((sequence[position] != symbol for position, symbol in row.pop('target_symbols'))):
-                            raise A101ScoringUnavailable('a101_target_sequence_conflict', observation_ref=reference)
-                        row.pop('residue_pairs', None)
-                        row['target_intervals'] = intervals(row['target_intervals'], length=length)
-                        if evidence_regions is not None:
-                            row['native_target_intervals'] = row['target_intervals']
-                            row['target_intervals'] = _intersection(row['target_intervals'], intervals(evidence_regions[reference], length=length))
-                            if not row['target_intervals']:
-                                continue
-                        row.update(observation_ref=reference, source_ref=source['id'], grading_artifact_ref=entry['artifact_ref'], target_ref=target)
-                        rows[target].append(row)
-                        profiles[target].add(row['algorithm'])
-                        sources.append({'observation_ref': reference, 'source_ref': source['id'], 'grading_artifact_ref': entry['artifact_ref'], 'target_ref': target, 'native_record_key': row['native_record_key']})
-            if unsupported and (not sources):
-                raise A101ScoringUnavailable('a101_unsupported_score_profile', profiles=unsupported)
-            sheets = {target: compile_native_sheet(rows[target], supplied_length=store.subject_length(target), regions=regions, profile=profiles[target]) for target, regions in targets.items()}
-            denominator = sum((sum((b - a for a, b in regions)) for regions in targets.values()))
-            if denominator <= 0:
-                raise A101ScoringUnavailable('a101_required_scope_empty')
-            credit = math.fsum((sheet['value'] * sum((b - a for a, b in targets[target])) for target, sheet in sheets.items())) / denominator
-            calculated = [row for sheet in sheets.values() for row in sheet['comparisons']]
-            summaries = {target: {**{key: value for key, value in sheet.items() if key != 'comparisons'}, 'comparison_count': len(sheet['comparisons'])} for target, sheet in sheets.items()}
-            return {'credit': credit, 'axis_components': {'A101': credit}, 'interpretation': 'native_correspondence_not_assertion_count_or_function_probability', 'a101_sheet': {'version': VERSION, 'targets': summaries, 'unsupported_profiles': unsupported, 'policy': self.as_record()}, 'source_contributions': calculated[details_offset:details_offset + details_limit], 'inactive_dependencies': [], 'detail_pages': {'offset': details_offset, 'limit': details_limit, 'source_contributions_total': len(calculated), 'inactive_dependencies_total': 0}}
+                    row.update(observation_ref=reference, source_ref=source['id'], grading_artifact_ref=entry['artifact_ref'], target_ref=target)
+                    rows[target].append(row)
+                    profiles[target].add(row['algorithm'])
+                    sources.append({'observation_ref': reference, 'source_ref': source['id'], 'grading_artifact_ref': entry['artifact_ref'], 'target_ref': target, 'native_record_key': row['native_record_key']})
+        if unsupported and (not sources):
+            raise A101ScoringUnavailable('a101_unsupported_score_profile', profiles=unsupported)
+        sheets = {target: compile_native_sheet(rows[target], supplied_length=store.subject_length(target), regions=regions, profile=profiles[target]) for target, regions in targets.items()}
+        denominator = sum((sum((b - a for a, b in regions)) for regions in targets.values()))
+        if denominator <= 0:
+            raise A101ScoringUnavailable('a101_required_scope_empty')
+        credit = math.fsum((sheet['value'] * sum((b - a for a, b in targets[target])) for target, sheet in sheets.items())) / denominator
+        calculated = [row for sheet in sheets.values() for row in sheet['comparisons']]
+        summaries = {target: {**{key: value for key, value in sheet.items() if key != 'comparisons'}, 'comparison_count': len(sheet['comparisons'])} for target, sheet in sheets.items()}
+        return {'credit': credit, 'axis_components': {'A101': credit}, 'interpretation': 'native_correspondence_not_assertion_count_or_function_probability', 'a101_sheet': {'version': VERSION, 'targets': summaries, 'unsupported_profiles': unsupported, 'policy': self.as_record()}, 'source_contributions': calculated[details_offset:details_offset + details_limit], 'inactive_dependencies': [], 'detail_pages': {'offset': details_offset, 'limit': details_limit, 'source_contributions_total': len(calculated), 'inactive_dependencies_total': 0}}

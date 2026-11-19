@@ -1,0 +1,50 @@
+# Blocked, unplaced and misfit items: A103 hpc_job_execution (19 November 2026)
+
+Episode: `gene_context_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution`.
+No tests of this episode contact a remote service; none can run a real unit until the `job_access` service exists.
+
+## blocked_on_store_access
+
+- `episode_support/records/practical_receipt_information.py::PracticalReceiptInformation` (old: `PracticalReceiptInformation(self.store, context.run_id).publish(context, receipt)` in `terminal_operations.execute` and in `terminal_report.facts`). Pattern: "library not carried". The module reads `store.db` (`SELECT data FROM records ...`, `sqlite_master`, `runtime_actions`, `runtime_episodes`) and imports `root.a102...runtime_continuation`; its `publish` needs the old `BindingContext`. Old call -> intended call: `store.put('source', {...receipt...}, origin='tool')` through `ctx.store`. It is not called: `task.py exec_command` writes the receipt with `ctx.store.artifact(canonical(receipt), 'application/json')` and returns that reference as the receipt's `record_refs`.
+- Inputs in custody: `input_refs` (record_refs of ASSIGNMENT_FORM) arrive held, but no operation puts a held artifact on disk for a command (store-access.md, "No replacement yet": a scratch directory of the scoped store). Old call -> intended call: the executor read the job inputs by path under the Store directory (`store.path / 'artifacts' / sha[:2] / sha`) -> `ctx.store.open_artifact(ref)` copied into a scratch directory. `exec_command` reads none of them today.
+
+## BLOCKED-ON-JOB-SERVICE
+
+- BLOCKED-ON-JOB-SERVICE: `job_access` (declared in `SERVICES`; no factory or class exists, so a link raises `LinkError('service_required:...')`); wanted call: `ctx.services['job_access'].exec_command(assignment, command, key=ctx.operation_key)`, idempotent on the key, returning the old `operations.execute` outcome (`{'facts': ..., 'native_outcome': ...}`). The library behind it is `jobs/local_execution/gene_context_evidence/terminal_execution.py::TerminalExecution` (built with `artifact_selector=terminal_artifact_paths` from `findings/gene_context_evidence/terminal_scientific_evidence.py`) over `PracticalState` (file ledger). `exec_command` is not among the operations the mechanics doc names (submit, status, fetch, cancel).
+- BLOCKED-ON-JOB-SERVICE: `job_access`; wanted call: `ctx.services['job_access'].validate_action(assignment, 'exec_command', command)` (old `TerminalExecution.validate_action`, raising `ValueError`/`TypeError` on a command outside the assignment).
+- BLOCKED-ON-JOB-SERVICE: `job_access`; wanted reads in `decide`: `read('resource_information', resource_id)` (old `TerminalSummary._resource_information`: workspace, kind, policy, account, ssh_argv, python_executable, scheduler, inventory_snapshot), `read('resource_instructions', resource_id)` (old `LaunchInstructions.for_resource`, returning `{'sections': [{'text': ...}]}` or `None`), `read('coordinator_workspace')` (old `str(self.directory.resolve())`), `read('launch_instruction_sections', selection)` (old `LaunchInstructions.materialize`).
+- BLOCKED-ON-JOB-SERVICE: job record kinds (handoff, check, closure) and their work table (`JOB_LEDGER` of the mechanics doc): no module declares them. The handoff of the job travels as the receipt artifact reference of the command that observed the job submitted (`execution_handoff_refs`); wanted call: `ctx.store.table(JOB_LEDGER).put({'job': ..., 'event': 'handoff', 'at': ..., 'detail': ..., 'source_ref': receipt_ref})` and its row reference in `execution_handoff_refs`.
+
+## unplaced_old_functions
+
+- `contracts.py::launch_operation_catalog`: `execution.capabilities` is an operation of the launch head (`execution_job_submission`), not of this leaf.
+- `contracts.py::native_result_operation_catalog`: `execution.results.status|collect|read` belong to the results role (`execution_result_acquisition`).
+- `from_parent.py::NativeAssignment.child_assignment_schema` and `_permitted`: the frozen-HPC enum of the parent's already permitted request and the selection among permitted requests are the parent's commission (`execution_job_submission` `msg_to_child`); this episode carries the child side (ASSIGNMENT_FORM).
+- `internal_summary.py::NativeSummary.capabilities` and `resource_tool_contracts`: the parent's catalogue of launch and result contracts over all resources.
+- `result_records.py::ExecutionResultRecords` and its 18 methods: result readers of the results role; `execution_result_acquisition` carries its own copy.
+- `decision_presentation.py::present_native_task`: `render_hpc_prompt` is in the old shared root (not read, not restored); the context travels as `ModelRequest.context`.
+- `decision_inputs.py::NativeDecisionInputs.decision_inputs`: not carried because nothing supplies them: `launch_instruction_library` and its search/entry/read/select lookups (the old catalogue of this episode offers only `exec_command`), `shared_information_context`, `child_options`, `completed_action_reports`, `requested_action_history`, `execution_expectations`, `resource_tool_estimates`, `native_execution_expectations`, `native_event_targets`, `waiting_support`.
+- Fact sources not declared in RETURN_FORM: `execution_file_source_refs`, `execution_file_capture_outcomes` (results role only), the UniProt sources (results role only), and the sources that exist only when API resources are configured (AppService, MinHash); the old `native_empty` entries for them were never a source of this role.
+- `native_blast_database_results.empty_facts` and `native_blast_standard_database_results.empty_facts` (old names `execution_blast_database_acquisition`, `execution_blast_standard_database_acquisition`): not in the library; selecting either field raises.
+
+## contract_misfits
+
+- BLOCKED-ON-JOB-SERVICE: job_access.exec_command, validate_action and the reads named above; wanted call: see the BLOCKED-ON-JOB-SERVICE items.
+- BLOCKED-ON-JOB-SERVICE: job record kinds (handoff) and `JOB_LEDGER`; wanted call: `ctx.store.table(JOB_LEDGER).put(...)`.
+- new field: hpc_job_execution input_refs (record_refs of ASSIGNMENT_FORM, optional: the records the job inputs are read from; the old code named them as `immutable_input_versions` and received references, not as custody).
+- A form field name is a lowercase identifier (`^[a-z][a-z0-9_]*$`): the 7 `execution.masking_*` and 14 `execution.blast_utility_*` fact sources are declared as `execution_masking_*` and `execution_blast_utility_*` (the dot is an underscore). This renames them against the rule "names both sides use are the old names".
+- A form has no null: `execution_result_origin` (null for a launch episode in the old report) cannot be returned; with `execution_blast_database_acquisition` and `execution_blast_standard_database_acquisition` it is declared selectable and selecting it raises `ValueError('a_launch_episode_has_no_value_for:...')`.
+- completion credit may pass its target: the target is the sum of the credits of the requirements named by `completion_keys` (the credit the verified completion earns, README 7b), while the credit sums every satisfied requirement, so a requirement outside the completion keys that is satisfied lifts the credit above the target and the controller raises `ValueError('completion_credit_exceeds_target')`; the credit may also fall when an established fact is lost (signed, never clamped).
+- Completion differs from the old proof: the old completion also required the last command's own validations to satisfy the endpoint predicate (`messages/internal_summary.py completion_of`, shown to the model as `execution_completion`); the controller stops when the credit reaches the target. `final_to_parent` reports `execution_completed` from `completion_of`, so the two can disagree for one unit.
+- The baseline validations in the summary carry the fixed `checked_at` `1970-01-01T00:00:00+00:00` (the old baseline was stamped with the clock; `internal_summary` is a pure function of the view and must be replayable). It does not enter credit.
+- Settings: the caller's `continuation` entry for this binding path must carry `task_yield_profiles` keyed `launch_hpc:practical_hpc_<native families>_<handoff|outputs>` with `{'cutoff', 'parameters'}` (the old profile table; a missing profile raises `execution_original_task_yield_profile_required:<key>`); `cutoff` must be below the completion target and above zero.
+- An invalid command (arguments outside the schema, or refused by `validate_action`) is a returned `invalid` outcome that enters the iterator with the credit unchanged, as the old `terminal_operations.execute`; a schema-invalid model answer is rejected in `action` before any unit.
+- The command arguments carry the assignment and the working context (`ToolCall` arguments `assignment`, `context_before`) because a tool is handed only its arguments and `ctx`.
+- `final_to_parent`'s `validate_report` keeps the old x-source agreement check (returned facts equal the recorded facts); it is trivially true because both come from the summary.
+- The old test (`tests/test_native_task.py`) imported the shared test helper of the deleted root and is retired (own file under `retired_tests/`).
+
+## Not repaired
+
+System, contract or guide limits, left as reported above and not worked around: job_access service (BLOCKED-ON-JOB-SERVICE), held input records not put on disk for a command and PracticalReceiptInformation.publish not carried (BLOCKED-ON-STORE-ACCESS), no JOB_LEDGER 'handoff' table, null-valued record fields selectable but raising, dotted fact-source names renamed to underscores, completion_credit_exceeds_target and the completion_of / controller stop disagreement, and the 29 role-owned unplaced old functions (owner to confirm each exists in its role's episode).
+
+Repaired in this step: tests/test_pure_functions.py now calls read_from_parent, internal_summary, credit, yield_controller and final_to_parent on the real EpisodeView, the real library assessment and the real controller and return form (11 tests with test_binding.py pass).

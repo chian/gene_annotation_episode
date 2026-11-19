@@ -1,17 +1,17 @@
-"""A107 private source and file custody for its genomic acquisitions."""
-import json
+"""A107 private source and file custody for its genomic acquisitions.
 
+A public source or native file reference is judged among the sources the reading episode holds."""
+
+# provider: (version, private auxiliaries, origin)
 _PROFILES = {
-    "public.ncbi.geo": (None, True, "external", ("public.ncbi.geo", "internal.api_service.public.ncbi.geo"), ("completed", "partial", "failed")),
-    "public.ncbi.sra.file": (None, True, "external", "public.ncbi.sra.file", ("completed", "partial", "failed")),
-    "public.encode": (None, True, "external", "public.encode", ("completed", "partial", "failed")),
-    "ensembl": (None, True, "external", "public.ensembl.request", ("completed", "partial", "failed")),
-    "string": (None, True, "external", "public.string.network", ("completed", "partial", "failed")),
-    "ucsc": (None, True, "external", "public.ucsc.request", ("completed", "partial", "failed")),
-    "public.ncbi.entrez": (None, True, "external",
-        ("public.ncbi.entrez", "internal.api_service.public.ncbi.entrez"), ("completed", "partial", "failed")),
-    "bvbrc_minhash": (None, True, "external",
-        "internal.api_service.api.bvbrc.minhash.result", ("completed", "partial")),
+    "public.ncbi.geo": (None, True, "external"),
+    "public.ncbi.sra.file": (None, True, "external"),
+    "public.encode": (None, True, "external"),
+    "ensembl": (None, True, "external"),
+    "string": (None, True, "external"),
+    "ucsc": (None, True, "external"),
+    "public.ncbi.entrez": (None, True, "external"),
+    "bvbrc_minhash": (None, True, "external"),
 }
 
 def _providers(value):
@@ -26,10 +26,9 @@ def _providers(value):
 def source_reference_restriction(store, permitted_record_refs, reference, namespace, *, private_only=False, providers=None):
     """Resolve the original A107 source receipt, or defer for unrelated references.
 
-    Private controls and diagnostics always deny. Source-only auxiliaries are
-    private too.
+    Source-only auxiliaries are private: always denied.
     Public Source/native File handles must be among the record references the
-    acting episode received (``permitted_record_refs``); Store membership is insufficient. A
+    acting episode received (``permitted_record_refs``). A
     private-only caller defers public handles so a prior context-aware verdict
     is not overturned. Neither path creates a receipt or traverses Source refs.
     """
@@ -38,36 +37,11 @@ def source_reference_restriction(store, permitted_record_refs, reference, namesp
     selected = _providers(providers)
     if not isinstance(reference, str) or not selected:
         return None
-    tables = {row[0] for row in store.db.execute("SELECT name FROM sqlite_master WHERE type='table' "
-        "AND name IN ('records','tool_operations')")}
-    if "tool_operations" not in tables:
-        return None  # A fresh Store has no ordinary publication or diagnostic.
-    if store.db.execute("""SELECT 1 FROM tool_operations
-        WHERE name IN (SELECT value FROM json_each(?))
-          AND json_extract(result,'$.feedback.diagnostic_ref')=? LIMIT 1""",
-            (json.dumps([operation for name in selected
-                for operation in ((_PROFILES[name][3],) if isinstance(_PROFILES[name][3], str)
-                                  else _PROFILES[name][3])]), reference)).fetchone():
-        return False
-    if "records" not in tables:
-        return None
-    profiles = [dict(provider=name, version=_PROFILES[name][0], origin=_PROFILES[name][2],
-        operation=operation, statuses=_PROFILES[name][4]) for name in selected
-        for operation in ((_PROFILES[name][3],) if isinstance(_PROFILES[name][3], str)
-                          else _PROFILES[name][3])]
-    rows = store.db.execute("""SELECT source.data FROM records source, json_each(?) profile
-        WHERE source.record_type='source' AND source.origin=json_extract(profile.value,'$.origin')
-          AND json_extract(source.data,'$.provider')=json_extract(profile.value,'$.provider')
-          AND json_extract(source.data,'$.version') IS json_extract(profile.value,'$.version')
-          AND (source.id=? OR json_extract(source.data,'$.artifact_ref')=?
-            OR json_extract(source.data,'$.request_ref')=? OR EXISTS(
-                SELECT 1 FROM json_each(source.data,'$.auxiliary_artifact_refs') artifact WHERE artifact.value=?))
-          AND EXISTS(SELECT 1 FROM tool_operations operation, json_each(operation.result,'$.record_refs') published
-            WHERE operation.name=json_extract(profile.value,'$.operation') AND published.value=source.id
-              AND json_extract(operation.result,'$.status') IN (
-                SELECT value FROM json_each(json_extract(profile.value,'$.statuses'))))""",
-        (json.dumps(profiles), reference, reference, reference, reference))
-    sources = [json.loads(row[0]) for row in rows]
+    sources = [row for row in store.list("source")
+        if row.get("provider") in selected and row["origin"] == _PROFILES[row["provider"]][2]
+        and row.get("version") == _PROFILES[row["provider"]][0]
+        and (row["id"] == reference or row.get("artifact_ref") == reference
+            or row.get("request_ref") == reference or reference in row.get("auxiliary_artifact_refs", ()))]
     if not sources:
         return None
     if any(source.get("request_ref") == reference for source in sources):
@@ -86,4 +60,3 @@ def source_reference_restriction(store, permitted_record_refs, reference, namesp
             or not isinstance(permitted_record_refs, tuple)):
         return False
     return reference in permitted_record_refs
-

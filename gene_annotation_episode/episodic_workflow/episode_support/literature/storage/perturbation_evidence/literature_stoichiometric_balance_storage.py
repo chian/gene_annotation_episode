@@ -101,7 +101,6 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = VERSION
-    operations_table = 'literature_stoichiometric_balance_operations'
     received_table = 'literature_stoichiometric_balance_received'
     binding_fields = ()
 
@@ -109,12 +108,6 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
         if not isinstance(run_id, str) or not run_id:
             raise ValueError('explicit_literature_run_required')
         self.store, self.run_id = store, run_id
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     def populate(self, context, arguments, operation_key):
         if context.run_id != self.run_id:
@@ -125,17 +118,6 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
         validate_schema(args, stoichiometric_balance_population_schema())
         request = {'run_id': self.run_id, 'episode_id': context.episode_id,
             'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope)}
-        signature = canonical(request)
-        old = (self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, context.episode_id, operation_key)).fetchone()
-            if self._installed(self.operations_table) else None)
-        if old:
-            if old['signature'] != signature:
-                raise ContractError('operation_key_reused_for_different_work')
-            outcome = json.loads(old['outcome'])
-            self.read(outcome['result']['sheet_ref'])
-            self._native_source(context, args['source_ref'])
-            return outcome
         source = self._native_source(context, args['source_ref'])
         extraction = read_stoichiometric_balance_inputs(args, self.store.get_artifact(source['artifact_ref']))
         sheet = populate_stoichiometric_balance_components(extraction)
@@ -143,7 +125,6 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
             'input_artifact_ref': source['artifact_ref'], 'selection': args,
             'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
             request_ref = self.store.artifact(canonical(request), 'application/json')
             record = {'provider': PROVIDER, 'accession': None, 'uri': None,
@@ -151,16 +132,14 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
                 'version': VERSION, 'retrieved_at': None,
                 'parent_source_refs': [args['source_ref']]}
             sheet_ref = identity('source', {'origin': 'tool', 'record': record})
-            exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (sheet_ref,)).fetchone()
+            new = not self.store.holds(sheet_ref)
             self.store.put('source', record, origin='tool', scope=plain(context.scope))
             rows = _rows(payload, sheet_ref, COMPONENTS)
             validate_schema(rows, stoichiometric_balance_cells_schema())
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {
                 'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}),
-                'record_refs': [sheet_ref], 'changed_record_refs': [] if exists else [sheet_ref],
+                'record_refs': [sheet_ref], 'changed_record_refs': [sheet_ref] if new else [],
                 'result': {'sheet_ref': sheet_ref, 'cells': rows}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     def _artifact_json(self, reference):
@@ -188,12 +167,6 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
             raise ContractError('stoichiometric_balance_saved_selection_mismatch')
         original_scope = self.store.validate_scope(request['scope'])
         self._native_provenance(original_scope, sheet_ref)
-        operation = (self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
-            if self._installed(self.operations_table) else None)
-        if operation is None or operation['signature'] != canonical(request):
-            raise ContractError('stoichiometric_balance_saved_operation_mismatch')
-        outcome = json.loads(operation['outcome'])
         saved = self._artifact_json(source['artifact_ref'])
         validate_schema(saved['selection'], stoichiometric_balance_population_schema())
         if (set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'extraction', 'sheet'}
@@ -202,16 +175,10 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
                 or saved['extraction']['source_ref'] != saved['input_source_ref']
                 or saved['extraction']['workbook_sha256'] != saved['selection']['expected_sha256']
                 or source['parent_source_refs'] != [saved['input_source_ref']]
-                or self._native_provenance(original_scope, saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']
-                or outcome.get('status') != 'completed'
-                or outcome.get('result', {}).get('sheet_ref') != sheet_ref
-                or outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id,
-                    'episode_id': request['episode_id'], 'key': request['operation_key']})):
+                or self._native_provenance(original_scope, saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
             raise ContractError('stoichiometric_balance_saved_selection_mismatch')
         rows = _rows(saved, sheet_ref, COMPONENTS)
         validate_schema(rows, stoichiometric_balance_cells_schema())
-        if canonical(rows) != canonical(outcome['result']['cells']):
-            raise ContractError('stoichiometric_balance_saved_cells_mismatch')
         return saved
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
@@ -226,9 +193,6 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
             rows.extend(_rows(self.read(ref), ref, selected))
         return rows
 
-    def received_cells(self, context):
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
     def available_sheet_refs(self, context):
         refs = []
         for ref in context.received_record_refs:
@@ -240,11 +204,6 @@ class LiteratureStoichiometricBalanceRepository(LiteratureRateRepository):
                 self.read(ref)
                 refs.append(ref)
         return list(dict.fromkeys(refs))
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self._install()
-            return super().receive_cells(context, cells, operation_key)
 
     @staticmethod
     def cell_record_refs(cells):

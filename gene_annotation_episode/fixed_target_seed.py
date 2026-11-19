@@ -365,10 +365,10 @@ def prepare_fixed_target_seed(*, case_directory, source_workspace, destination_w
                 caller_context=context, format='fasta')
             if created != problem or store.get_input(target['id']) != target:
                 raise FixedTargetSeedError('intake_mismatch', [problem['id'], target['id']], stage)
-            actual = _closure(store.db, created)
-            if actual != records or _indexes(store.db, created) != indexes:
+            actual = _closure(store._db, created)
+            if actual != records or _indexes(store._db, created) != indexes:
                 raise FixedTargetSeedError('intake_mismatch', [problem['id']], stage)
-            actual_roots = [dict(row) for ref in sorted(actual) for row in store.db.execute(
+            actual_roots = [dict(row) for ref in sorted(actual) for row in store._db.execute(
                 'SELECT * FROM record_roots WHERE record_ref=? ORDER BY target_ref', (ref,))]
             if actual_roots != roots:
                 raise FixedTargetSeedError('intake_mismatch', [problem['id']], stage)
@@ -377,10 +377,10 @@ def prepare_fixed_target_seed(*, case_directory, source_workspace, destination_w
             known = sorted(actual)
             if any(store.get(ref) != actual[ref] for ref in known):
                 raise FixedTargetSeedError('intake_mismatch', known, stage)
-            excluded = {kind: store.db.execute('SELECT count(*) FROM records WHERE record_type=?', (kind,)).fetchone()[0]
+            excluded = {kind: store._db.execute('SELECT count(*) FROM records WHERE record_type=?', (kind,)).fetchone()[0]
                         for kind in _EXCLUDED_KINDS}
-            tables = [row[0] for row in store.db.execute("SELECT name FROM sqlite_master WHERE type='table'")]
-            excluded_tables = {name: store.db.execute(f'SELECT count(*) FROM "{name}"').fetchone()[0]
+            tables = [row[0] for row in store._db.execute("SELECT name FROM sqlite_master WHERE type='table'")]
+            excluded_tables = {name: store._db.execute(f'SELECT count(*) FROM "{name}"').fetchone()[0]
                 for name in tables if name in {'current_revisions', 'proposals', 'reasoning_commits'}
                 or name.startswith(('runtime_', 'homology_', 'native_', 'remote_')) or name == 'tool_operations'}
             if any(excluded.values()) or any(excluded_tables.values()):

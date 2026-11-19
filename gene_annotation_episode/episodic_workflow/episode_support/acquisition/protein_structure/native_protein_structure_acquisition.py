@@ -16,7 +16,6 @@ from typing import Literal, TypedDict, get_args
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.forms.structural_homology_evidence.execution_contracts import canonical, digest, validate_target
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.structural_homology_evidence.materials import artifact_file, artifact_path
 from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.native_protein_structure_contracts import (
     ATTEMPT_DIRECTORY_NAME, BUNDLE_FILENAME, ManifestFile, NativeProteinBundle,
     NativeProteinRunPlan, validate_protein_structure_bundle,
@@ -212,19 +211,18 @@ def _immutable_control(directory_fd, name, value):
         os.unlink(temporary, dir_fd=directory_fd)
 
 
-def retained_protein_structure_file(store, identity: FileIdentity) -> Path:
+def verify_retained_protein_structure_file(store, identity: FileIdentity) -> None:
     """Validate an exact Store artifact, never a path from the original plan."""
     identity = validate_file_identity(identity)
     try:
-        metadata = store._require(identity["artifact_ref"], {"artifact"})
+        metadata = store.require(identity["artifact_ref"], {"artifact"})
         _require(type(metadata) is dict and set(metadata) == {"id", "record_type", "sha256", "size", "media_type"})
         _require(metadata["record_type"] == "artifact" and type(metadata["media_type"]) is str
             and metadata["media_type"] and "\0" not in metadata["media_type"])
         _require(metadata["id"] == identity["artifact_ref"] and metadata["sha256"] == identity["sha256"]
             and type(metadata["size"]) is int and metadata["size"] == identity["byte_length"], "input_digest_mismatch")
-        path = artifact_path(store, identity["artifact_ref"])
-        _require(path.stat().st_size == identity["byte_length"], "input_digest_mismatch")
-        return path
+        with store.open_artifact(identity["artifact_ref"]) as stream:
+            _require(stream.seek(0, 2) == identity["byte_length"], "input_digest_mismatch")
     except ContractError as error:
         code = "input_digest_mismatch" if str(error) == "artifact_digest_mismatch" else (
             "retained_artifact_missing" if str(error) in ("unknown_artifact", "unknown_reference") else "invalid_schema")
@@ -249,14 +247,14 @@ def _capture_file(store, directory, relative, format, command_proof=None):
         _require(len(matches) == 1 and matches[0]['available'], 'capture_incomplete')
         captured_terminal_file(store, matches[0], format)
         identity = _protein_terminal_identity(matches[0], format)
-        retained_protein_structure_file(store, identity)
+        verify_retained_protein_structure_file(store, identity)
         return identity
     with _producer_file(directory, relative) as path:
-        reference = artifact_file(store, path)
-    metadata = store._require(reference, {"artifact"})
+        reference = store.artifact_file(path)
+    metadata = store.require(reference, {"artifact"})
     identity = {"artifact_ref": reference, "sha256": metadata["sha256"],
         "byte_length": metadata["size"], "format": format}
-    retained_protein_structure_file(store, identity)
+    verify_retained_protein_structure_file(store, identity)
     return identity
 
 
@@ -267,9 +265,9 @@ def _failure_code(error):
 
 def _bundle(store, identity, plan) -> NativeProteinBundle:
     _require(identity["format"] == BUNDLE_FORMAT)
-    path = retained_protein_structure_file(store, identity)
+    verify_retained_protein_structure_file(store, identity)
     return validate_protein_structure_bundle(
-        decode_protein_structure_json(path.read_bytes(), canonical_bytes=True), plan=plan)
+        decode_protein_structure_json(store.get_artifact(identity["artifact_ref"]), canonical_bytes=True), plan=plan)
 
 
 def validate_protein_structure_capture(
@@ -327,7 +325,7 @@ def _validate_capture(store, capture, *, qualify_plan):
         plan = qualify_plan(plan)
     bundle_file = capture["bundle_file"]
     if bundle_file is not None:
-        retained_protein_structure_file(store, bundle_file)
+        verify_retained_protein_structure_file(store, bundle_file)
         _require(bundle_file["format"] == BUNDLE_FORMAT and plan is not None)
     if not capture["bundle_validated"]:
         _require(not capture["capture_complete"] and not capture["files"] and len(capture["failures"]) == 1)
@@ -360,7 +358,7 @@ def _validate_capture(store, capture, *, qualify_plan):
             outcome = "unavailable"
             expected_issue = issue("capture_incomplete", stage="capture", field="manifest", artifact_role=declared["role"])
         else:
-            retained_protein_structure_file(store, observed)
+            verify_retained_protein_structure_file(store, observed)
             _require(observed["format"] == declared["format"])
             equal = all(observed[k] == declared[k] for k in ("sha256", "byte_length"))
             outcome = "verified" if equal else "digest_mismatch"

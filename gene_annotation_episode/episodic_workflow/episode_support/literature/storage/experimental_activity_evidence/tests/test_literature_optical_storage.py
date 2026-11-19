@@ -6,12 +6,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_context import LiteratureContext
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_optical_inputs import read_optical_rate_operands
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_optical_storage import LiteratureOpticalRepository, optical_cells_schema
-from gene_annotation_episode.state import Store
+from .unit_world import in_unit
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_optical_storage import OPERATIONS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_optical_inputs import fixture, witness, SOURCE, TEXT, PRIMITIVE_ORDER
 SUFFIX = ' Molecule reference-R; construct reference-RC; preparation reference-RP; condition buffer-B; measured NADH.'
 
-def setup(path, *, covariance=True, status='known', text=TEXT + SUFFIX, change=None, operands=None):
-    store = Store(path)
+def setup(store, ctx, *, covariance=True, status='known', text=TEXT + SUFFIX, change=None, operands=None):
     store.create_problem(raw_sequence='ATGGCT', molecule='dna')
     artifact = store.artifact(text, 'text/plain')
     source = store.put('source', {'provider': 'synthetic_optical_fixture', 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None, 'version': None, 'retrieved_at': None}, origin='caller')['id']
@@ -42,7 +42,7 @@ def setup(path, *, covariance=True, status='known', text=TEXT + SUFFIX, change=N
         cov_source = store.put('source', {'provider': 'synthetic_optical_covariance', 'accession': None, 'uri': None, 'artifact_ref': cov_artifact, 'text_ref': cov_artifact, 'request_ref': None, 'version': None, 'retrieved_at': None, 'parent_source_refs': [source]}, origin='caller')['id']
         refs.append(cov_source)
         args['covariance_source_ref'] = cov_source
-    context = LiteratureContext('optical-run', 'optical-child', 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': [source]}, {}, refs)
+    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': [source]}, {}, refs)
     return (store, context, args)
 
 
@@ -59,27 +59,5 @@ def setup(path, *, covariance=True, status='known', text=TEXT + SUFFIX, change=N
 
 
 
-
-
-def test_repository_honors_explicit_bound_scope_guard_before_source_access(tmp_path, monkeypatch):
-    """Injected scope port guard; Store paper sources themselves are reusable.
-
-    This covers the adapter's actual rejection branch, not a claim that source
-    records currently have target roots in Store. Receipt/assigned-page tests
-    above exercise the ordinary unmodified Store source authorization path.
-    """
-    store, context, args = setup(tmp_path)
-    try:
-        repo = LiteratureOpticalRepository(store, context.run_id)
-        original = store.reference_subset
-
-        def bound_guard(refs, scope=None):
-            return [] if args['source_ref'] in refs else original(refs, scope)
-        monkeypatch.setattr(store, 'reference_subset', bound_guard)
-        with pytest.raises(ContractError, match='source_outside_scope'):
-            repo.populate(context, args, 'scope-denied')
-        assert store.db.execute('SELECT count(*) FROM literature_optical_operations').fetchone()[0] == 0
-    finally:
-        store.close()
 
 

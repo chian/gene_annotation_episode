@@ -1,23 +1,28 @@
-"""A107 binding ``partner_presence_evidence/hpc_work_planning`` on the generic runner.
+"""The A107 HPC work planning episode: a private binding of the system's episode type."""
+from episode_runtime import EpisodeBinding
 
-Its decision source, credit and continuation are ``hpc_runtime`` (role ``hpc``): model-selected
-HPC planning operations over the commission's own ledger and commissions of its
-``hpc_prediction`` sister. Its launch, monitor, results and allocation slots are declared
-but not commissioned by it (``hpc_runtime``).
-"""
-from __future__ import annotations
-
-from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.runtime_binding import \
-    DescendantBinding
-
-from .hpc_runtime import PLANNING, HPCRuntime
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class HPCEpisode(HPCRuntime, DescendantBinding):
-    binding_path = 'partner_presence_evidence/hpc_work_planning'
-    goal = 'Improve the plan, resource prediction and allocation that bring the assigned computation to completion on HPC'
-    unit = 'One planning action or commissioned prediction, allocation, launch, monitor or results child'
-    result = 'The HPC plan, allocation outcome and execution handoffs'
-    child_slots = {'launch': 'partner_presence_evidence/hpc_work_planning/execution_job_submission', 'monitor': 'partner_presence_evidence/hpc_work_planning/execution_progress_assessment', 'results': 'partner_presence_evidence/hpc_work_planning/execution_result_acquisition', 'hpc_execution': 'partner_presence_evidence/hpc_work_planning/hpc_allocation_execution', 'hpc_prediction': 'partner_presence_evidence/hpc_work_planning/hpc_resource_prediction'}
-    commissioning_parent = 'partner_presence_evidence'
-    hpc_role = PLANNING
+class HPCEpisode(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

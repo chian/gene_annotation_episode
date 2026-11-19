@@ -5,6 +5,16 @@ This is the central progress record for evidence axes. Individual implementation
 documents and dated run reports supply detail; they do not independently set an
 axis's current status.
 
+## 2026-11-19 — A102 literature structure grading rebuilt on the new runner (pilot 102)
+
+Scope: implementation only, the seven A102 literature episodes and the head's summary rule; no workflow
+validation and no model run. The grader `structural_feature_geometry` and its sheet `literature_structure_cells`
+(`LOST_CONTENT_a102.md` rows 1 to 13) are back in `episode_support/literature/*/structural_homology_evidence/` on
+the scoped store, offered as `structure_populate` in each literature episode's `task.py`; the return is the
+controlled sheet features (`INVESTIGATION_FINDING_FEATURES_a102.md` 2.13). Evidence: real runner tests, 111 passed
+(`runs/pilot102_6/`); the 3 failures there are the head's `hpc` child (missing HPC ledger), outside this scope.
+Open items: `docs/axis_restructure_20261117/PILOT102_BLOCKERS.md`.
+
 ## 2026-11-14 — original organizational goal complete
 
 Main accepts all 584 existing homes and all 34 original organizational requirements.

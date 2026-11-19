@@ -7,8 +7,8 @@ episode's own scope and the references it holds. The scalar is the sheet's nativ
 never bounded, clamped or rescaled here (the declared native maximum is the yield controller's maximum, kept in
 ``yield_estimator.py``).
 
-The library's ``read_details`` still reads the Store in its old form (``store.db``, ``store.read_snapshot``): that
-is reported as blocked on store access, and the call stays as written.
+The library's ``read_details`` reads only through the custody reader (``records``): the held sources, their
+retained gradings and the declared search rows (``native_correspondence.SEARCHES``).
 """
 from dataclasses import dataclass
 

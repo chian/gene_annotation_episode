@@ -104,33 +104,6 @@ def materialize_text_witness_inputs(value, *, read_source):
         return deepcopy(selected)
     return materialize(value, 'arguments')
 
-def saved_text_witness_inputs(value, *, repository, episode_id, operation_key):
-    """Saved operands of an operation key that are these coordinate selections.
-
-    A saved operation already holds every quotation the host read for it, so
-    its selection is recognised from the coordinates alone and no source is
-    read again. Returns None when the key has no saved operation or the saved
-    operands are other work; the ordinary population path then decides.
-    """
-    database = repository.store.db
-    if database.execute('SELECT 1 FROM sqlite_master WHERE type=? AND name=?', ('table', repository.operations_table)).fetchone() is None:
-        return None
-    saved = database.execute(f'SELECT signature FROM {repository.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (repository.run_id, episode_id, operation_key)).fetchone()
-    if saved is None:
-        return None
-    operands = json.loads(saved[0])['arguments']
-    locations = set(_WITNESS_LOCATION_FIELDS)
-
-    def located(selected):
-        if isinstance(selected, dict):
-            if set(selected) == locations | {'quote'} or (set(selected) == locations | {'kind', 'quote'} and selected.get('kind') == 'text'):
-                return {key: selected[key] for key in selected if key != 'quote'}
-            return {key: located(child) for key, child in selected.items()}
-        if isinstance(selected, list):
-            return [located(child) for child in selected]
-        return selected
-    return operands if located(operands) == value else None
-
 def _nullable(schema):
     return {'anyOf': [schema, {'type': 'null'}]}
 
@@ -355,4 +328,4 @@ def read_assay_inputs(arguments, *, read_source):
         _fail('model_witness_required', 'model_witnesses')
     covariance, origin = _covariance(arguments['covariance_source_ref'], observations, sources)
     return {'version': VERSION, 'source_ref': arguments['source_ref'], 'source_kind': arguments['source_kind'], 'assay': assay, 'primitive_order': list(PRIMITIVE_ORDER), 'values': {role: observations[role]['value'] if observations[role] else None for role in PRIMITIVE_ORDER}, 'primitive_observations': observations, 'covariance': covariance, 'covariance_origin': origin, 'variance_status': arguments['variance_status'], 'distinct_residual_variance': residual['value'] if residual else None, 'distinct_residual_observation': residual, 'observation_model': arguments['observation_model'], 'model_witnesses': model_witnesses, 'source_refs': list(sources.references)}
-__all__ = ['VERSION', 'PRIMITIVE_ORDER', 'ASSAY_LITERAL_FIELDS', 'ENDPOINTS', 'ARRANGEMENTS', 'SOURCE_KINDS', 'assay_arguments_schema', 'materialize_text_witness_inputs', 'saved_text_witness_inputs', 'read_assay_inputs']
+__all__ = ['VERSION', 'PRIMITIVE_ORDER', 'ASSAY_LITERAL_FIELDS', 'ENDPOINTS', 'ARRANGEMENTS', 'SOURCE_KINDS', 'assay_arguments_schema', 'materialize_text_witness_inputs', 'read_assay_inputs']

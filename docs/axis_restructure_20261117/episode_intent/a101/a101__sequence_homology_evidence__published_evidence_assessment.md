@@ -139,3 +139,111 @@ It has no fact sources and no facts of its own (`to_parent` returns `{}`), and n
 | yield_estimator.py | 11 | continuation_task None and yield_controller None: no private continuation; the caller's configured controller decides. | none |
 
 Old-runner names are counted per file: `self.workflow.<member>` (also `source.workflow` and `workflow.` in module functions), `self.services.<member>`, journal/receipt table names, imports from old shared-root modules (`import:<module>`), and old yield/rebinding names (`name:`). No `BindingContext` literal occurs in these files; the old binding context arrives through `self.workflow.binding_context(...)`. The same rows are in `runs/carry_over/calls/a101_02.tsv`.
+
+## Carried over
+
+One row per function of the old episode files at 97308b94c (`runs/carry_over/functions/a101__sequence_homology_evidence__published_evidence_assessment.tsv`). Columns: old file, kind, name (copied), classification (machinery or episode function), new place or machinery reason. The episode folder is `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence/published_evidence_assessment/`.
+
+| old file | kind | name | classification | new place / reason |
+|---|---|---|---|---|
+| binding_record.py | class | LiteratureBindingRecord | machinery | the binding's own as_record() and binding record id/version: system record of the binding, not carried |
+| binding_record.py | method | LiteratureBindingRecord.as_record | machinery | the binding's own as_record() and binding record id/version: system record of the binding, not carried |
+| configuration.py | class | LiteratureConfiguration | episode function | messages/internal_summary.py OUTCOME_PAGE_SIZE = 8 (the fixed value outcome_page_size; the positive-int check is dropped with the constructor; services and contract-information profile are old-runner values) |
+| configuration.py | method | LiteratureConfiguration.__init__ | episode function | messages/internal_summary.py OUTCOME_PAGE_SIZE = 8 (the fixed value outcome_page_size; the positive-int check is dropped with the constructor; services and contract-information profile are old-runner values) |
+| credit.py | class | LiteratureCredit | episode function | credit.py (credit, A101SequenceCredit) |
+| credit.py | method | LiteratureCredit.credit_kind | machinery | credit_kind is deleted (README 3d): the credit is one number from credit.py |
+| credit.py | method | LiteratureCredit.credit_view | episode function | credit.py credit(summary, records): the scientific credit projector over the held records (old services.scientific_credit) |
+| credit.py | method | LiteratureCredit.credit_projector | episode function | credit.py A101SequenceCredit: private copy of the axis head's projector (git show 97308b94c native_correspondence_credit.py), called with this episode's scope and records.refs(); library candidate |
+| decision_inputs.py | class | LiteratureDecisionInputs | episode function | task.py decide (context assembly) |
+| decision_inputs.py | method | LiteratureDecisionInputs.decision_inputs | episode function | task.py decide: child_options, tool_knowledge (ctx.settings knowledge_library_directory); resource, shared-information, launch-instruction, pending-work, execution-expectation, resource-estimate, native-event and completed-action-report parts have no home in this episode (no job or launch tool; unplaced, see blocked file) |
+| decision_inputs.py | function | _bind_original_task_runtime_providers | machinery | provider patching |
+| decision_state.py | class | LiteratureDecisionState | episode function | messages/internal_summary.py and task.py decide (decision state) |
+| decision_state.py | method | LiteratureDecisionState.decision_state | episode function | messages/internal_summary.py internal_summary (assignment, scope, outcomes, child reports, report, yield table) and task.py decide (goal, scope, tools, time_accounting from ctx.clock, feedback, action_yields, tool_knowledge); working_state/visible_record_refs/visual_evidence/report_deliveries/annotation context parts were old-runner or journal reads (runtime_actions, receipts, delivery_status) and are not carried |
+| decision_state.py | function | _bind_original_task_runtime_providers | machinery | provider patching |
+| episode.py | class | LiteratureEpisode | episode function | episode.py PublishedEvidenceAssessment (the one class) |
+| episode.py | method | LiteratureEpisode.contract_information_configuration | machinery | contract-information freezing (README 5 item 16): the profile was never configured for this episode |
+| episode.py | method | LiteratureEpisode.contract_information_profile | machinery | contract-information freezing: never applied here |
+| episode.py | method | LiteratureEpisode._role | machinery | role check of a one-role binding: each role is its own episode now |
+| episode.py | method | LiteratureEpisode.allowed_children | episode function | task.py CHILD_SLOTS |
+| episode.py | method | LiteratureEpisode.child_roles | episode function | task.py CHILD_SLOTS (literature_strategy -> slot evidence_search_strategy_improvement) |
+| episode.py | method | LiteratureEpisode.context_hook_applies | machinery | hook-era context hook selection |
+| episode.py | method | LiteratureEpisode.child_request_preparer | episode function | messages/msg_to_child.py msg_to_child |
+| episode.py | method | LiteratureEpisode.child_report_receiver | episode function | messages/read_from_child.py read_from_child |
+| episode.py | function | create_binding_tree | machinery | home factory / binding tree assembly: deleted (C1) |
+| from_child_evidence_search_strategy_improvement.py | function | receive_report | episode function | messages/read_from_child.py read_from_child (the child's credit and finding); recorded-admission refs, progress-provider receipt, runtime_report_attempts timing receipts, receipts.receive and tool attributions are machinery (custody and recording are the system's) |
+| from_parent.py | class | LiteratureAssignment | episode function | messages/read_from_parent.py ASSIGNMENT_FORM and read_from_parent |
+| from_parent.py | method | LiteratureAssignment.child_assignment_schema | machinery | parent-side schema of a child's assignment: the parent writes its own schema in task.py (STRATEGY) and the child declares its form (C3) |
+| from_parent.py | method | LiteratureAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (version literature_assignment_v1, question_context_refs, source_refs) |
+| from_parent.py | method | LiteratureAssignment._validate_page | episode function | not placed: a Store check of a page commission; unreachable here (role fixed to literature) and a wrong commission fails (blocked file) |
+| from_parent.py | method | LiteratureAssignment._validate_assignment | episode function | messages/read_from_parent.py (schema); the Store part (every ref in scope, source_refs are sources) is a check of the commission against the Store: not carried (blocked file); the source-kind check is made by internal_summary's records.require(ref, {'source'}) |
+| from_parent.py | method | LiteratureAssignment.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent; the operation_key check and the literature_page branch are not carried (unreachable here; the system gives ctx.operation_key) |
+| goal.py | class | LiteratureGoal | episode function | goal.py GOAL |
+| goal.py | method | LiteratureGoal.instructions | episode function | goal.py GOAL (A101 sentence plus the literature role sentence); task.py instructions appends GOAL |
+| internal_summary.py | class | LiteratureSummary | episode function | messages/internal_summary.py internal_summary |
+| internal_summary.py | method | LiteratureSummary.initial_decision_context | episode function | none to carry: it returned {} (no initial decision context) |
+| internal_summary.py | method | LiteratureSummary.decision_context | episode function | messages/internal_summary.py internal_summary (literature_assignment, literature_source_custody via view.records.require, own_literature_outcomes via outcome_page, literature_history_meaning) |
+| received_evidence.py | class | LiteratureReceivedEvidence | episode function | none to carry: no received report sources, facts, form references or evidence tokens, and no received report validation (all returned {} or None); RETURN_FORM of the child carries its own fields |
+| received_evidence.py | method | LiteratureReceivedEvidence.received_report_sources | episode function | none to carry: no received report sources, facts, form references or evidence tokens, and no received report validation (all returned {} or None); RETURN_FORM of the child carries its own fields |
+| received_evidence.py | method | LiteratureReceivedEvidence.received_report_facts | episode function | none to carry: no received report sources, facts, form references or evidence tokens, and no received report validation (all returned {} or None); RETURN_FORM of the child carries its own fields |
+| received_evidence.py | method | LiteratureReceivedEvidence.received_form_references | episode function | none to carry: no received report sources, facts, form references or evidence tokens, and no received report validation (all returned {} or None); RETURN_FORM of the child carries its own fields |
+| received_evidence.py | method | LiteratureReceivedEvidence.received_evidence_tokens | episode function | none to carry: no received report sources, facts, form references or evidence tokens, and no received report validation (all returned {} or None); RETURN_FORM of the child carries its own fields |
+| received_evidence.py | method | LiteratureReceivedEvidence.validate_received_report | episode function | none to carry: no received report sources, facts, form references or evidence tokens, and no received report validation (all returned {} or None); RETURN_FORM of the child carries its own fields |
+| report_delivery.py | class | LiteratureReportDelivery | episode function | messages/final_to_parent.py final_to_parent |
+| report_delivery.py | method | LiteratureReportDelivery.finish | episode function | messages/final_to_parent.py final_to_parent (credit from completion, finding from the report); runtime_forms saving, pending_handles, release and Record wrappers are machinery |
+| report_delivery.py | function | _bind_original_task_runtime_providers | machinery | provider patching |
+| scientific_records.py | class | LiteratureScientificRecords | episode function | none to carry: no automatic score judgments; completing one raised a101_automatic_judgment_unavailable (no tool of this episode produces one) |
+| scientific_records.py | method | LiteratureScientificRecords.automatic_score_judgments | episode function | none to carry: no automatic score judgments; completing one raised a101_automatic_judgment_unavailable (no tool of this episode produces one) |
+| scientific_records.py | method | LiteratureScientificRecords.complete_score_judgment | episode function | none to carry: no automatic score judgments; completing one raised a101_automatic_judgment_unavailable (no tool of this episode produces one) |
+| source_operations.py | class | LiteratureOperations | episode function | task.py (tools, catalog, instructions) |
+| source_operations.py | method | LiteratureOperations.permitted_common_actions | episode function | task.py selection_schema: tool and child only (no reasoning action, no redeliver_report: machinery) |
+| source_operations.py | method | LiteratureOperations.reasoning_action_schema | episode function | none to carry: it returned None (no reasoning action in selection_schema) |
+| source_operations.py | method | LiteratureOperations.reasoning_has_task_content | episode function | none to carry: it returned False (no reasoning action) |
+| source_operations.py | method | LiteratureOperations.execute_reasoning | episode function | none to carry: a101_literature_reasoning_not_commissioned (no reasoning action is offered, so nothing reaches it) |
+| source_operations.py | method | LiteratureOperations.catalog | episode function | task.py DESCRIPTIONS, INPUT_SCHEMAS, offered, catalog (ncbi restricted to pubmed; execution.estimate only its xlsx branches); tool descriptions and schemas are the tool library's text re-stated; library candidate |
+| source_operations.py | method | LiteratureOperations.execute | episode function | task.py run_access_tool and the 22 tool functions (library ToolRegistry.execute_async with permitted_record_refs for locate/sequence/experimental tools) |
+| source_operations.py | method | LiteratureOperations._tool_arguments | episode function | task.py admitted (schema check; the page-source restriction never applied: no page); an invalid argument is an invalid outcome that enters the iterator |
+| source_references.py | class | LiteratureReferences | episode function | messages/internal_summary.py (custody) and task.py action (held-record check) |
+| source_references.py | method | LiteratureReferences._require | episode function | records.require / records.holds (custody replaces reference_in_scope + read_record) |
+| source_references.py | method | LiteratureReferences._artifact | episode function | not placed: only used by the page check (blocked file) |
+| source_references.py | method | LiteratureReferences._within_source | episode function | not placed: only used by the page-source restriction, never applicable here (blocked file) |
+| source_references.py | method | LiteratureReferences.resolve | machinery | reference resolution for validate_form in the old report path (reference_in_context): custody (records.holds) replaces it |
+| task.py | class | LiteratureTask | episode function | task.py decide, action and tools |
+| task.py | method | LiteratureTask.instructions | episode function | task.py instructions |
+| task.py | method | LiteratureTask.next | machinery | the old decision loop (source_failed, in-process replay, completions, pending deliveries, exchange): the system's loop; the model call is decide's ModelRequest |
+| task.py | method | LiteratureTask.apply_response | episode function | task.py action (validate the answer, Rejected with rejection_feedback); report-update validation and ReportRedelivery are machinery |
+| task.py | method | LiteratureTask.execute | machinery | unit execution, journal rows, credit and controller value: the system's; the tool call is a ToolCall; automatic_score_updates, receive_outcome, retain_shared_grading_results are machinery or not applicable |
+| task.py | function | _bind_original_task_runtime_providers | machinery | provider patching |
+| task_decision.py | class | LiteratureTaskDecision | episode function | task.py decide (model request) and its rendering |
+| task_decision.py | method | LiteratureTaskDecision.decision_completion | machinery | provider patching around complete_with_presentation: the system calls the provider; the prompt rendering is the episode's ModelRequest.context |
+| task_decision.py | method | LiteratureTaskDecision.call | machinery | model call recording, saved-request checks, contract-information, exchange: the system records model calls |
+| task_decision.py | method | LiteratureTaskDecision.conversation_key | machinery | conversation state (deleted, README 3a) |
+| task_decision.py | method | LiteratureTaskDecision.interpretation_context | machinery | decision-exchange context after lookups (a lookup is a tool now) |
+| task_decision.py | method | LiteratureTaskDecision.exchange_schema | machinery | decision-exchange loop |
+| task_decision.py | method | LiteratureTaskDecision.exchange_response | machinery | decision-exchange loop |
+| task_decision.py | method | LiteratureTaskDecision.validate_contract_exchange_request | machinery | decision-exchange saved-request check |
+| task_decision.py | method | LiteratureTaskDecision.validate_contract_exchange_history | machinery | decision-exchange saved-request check |
+| task_decision.py | method | LiteratureTaskDecision.exchange_decision | machinery | decision-exchange loop |
+| task_decision.py | function | _bind_original_task_runtime_providers | machinery | provider patching |
+| task_instructions.py | function | instructions | episode function | task.py instructions(*, knowledge): the literature investigation INSTRUCTIONS with the history span replaced (replace_span), the goal appended, tool knowledge when offered; the launch-instruction text, the pending_child_delivery paragraph and the request_context replacement are not carried (no such action or tool) |
+| task_state.py | class | LiteratureTaskState | machinery | task state, failure recording, checkpoint and restore: the system's view, outcomes and resume (record_execution_failure's failure outcome is task.py run_access_tool via failure_outcome) |
+| task_state.py | method | LiteratureTaskState.__init__ | machinery | task state, failure recording, checkpoint and restore: the system's view, outcomes and resume (record_execution_failure's failure outcome is task.py run_access_tool via failure_outcome) |
+| task_state.py | method | LiteratureTaskState.bind_execution_context | machinery | task state, failure recording, checkpoint and restore: the system's view, outcomes and resume (record_execution_failure's failure outcome is task.py run_access_tool via failure_outcome) |
+| task_state.py | method | LiteratureTaskState.record_execution_failure | machinery | task state, failure recording, checkpoint and restore: the system's view, outcomes and resume (record_execution_failure's failure outcome is task.py run_access_tool via failure_outcome) |
+| task_state.py | method | LiteratureTaskState.restore_checkpoint | machinery | task state, failure recording, checkpoint and restore: the system's view, outcomes and resume (record_execution_failure's failure outcome is task.py run_access_tool via failure_outcome) |
+| task_state.py | method | LiteratureTaskState.restore | machinery | task state, failure recording, checkpoint and restore: the system's view, outcomes and resume (record_execution_failure's failure outcome is task.py run_access_tool via failure_outcome) |
+| task_state.py | method | LiteratureTaskState.record_effect | machinery | task state, failure recording, checkpoint and restore: the system's view, outcomes and resume (record_execution_failure's failure outcome is task.py run_access_tool via failure_outcome) |
+| task_state.py | method | LiteratureTaskState.checkpoint | machinery | task state, failure recording, checkpoint and restore: the system's view, outcomes and resume (record_execution_failure's failure outcome is task.py run_access_tool via failure_outcome) |
+| task_state.py | function | _bind_original_task_runtime_providers | machinery | task state, failure recording, checkpoint and restore: the system's view, outcomes and resume (record_execution_failure's failure outcome is task.py run_access_tool via failure_outcome) |
+| to_child_evidence_search_strategy_improvement.py | function | prepare_request | episode function | messages/msg_to_child.py msg_to_child (the strategy assignment, scope, held records); scope validation, expanded report contract, required return sources, initial report, role check, launch-instruction materialization and prepare_assignment are checks or construction of the commission by the old runner: not carried (a wrong commission fails) |
+| to_parent.py | class | LiteratureReport | episode function | messages/final_to_parent.py RETURN_FORM (no fact sources: only credit and finding) |
+| to_parent.py | method | LiteratureReport.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (no fact sources: only credit and finding) |
+| to_parent.py | method | LiteratureReport.facts | episode function | messages/final_to_parent.py RETURN_FORM (no fact sources: only credit and finding) |
+| to_parent.py | method | LiteratureReport.current_report_facts | episode function | messages/final_to_parent.py RETURN_FORM (no fact sources: only credit and finding) |
+| to_parent.py | method | LiteratureReport.validate_report | episode function | messages/final_to_parent.py validate_report (the report is a valid FINDING_FORM, every reference held); the assignment re-validation reads the Store and is not carried |
+| waiting.py | class | LiteratureWaiting | machinery | wait/suspension machinery (supports_wait was False) |
+| waiting.py | method | LiteratureWaiting.supports_wait | machinery | wait machinery (False: no wait tool in this episode) |
+| waiting.py | class | LiteratureTaskWaiting | machinery | suspension machinery |
+| waiting.py | method | LiteratureTaskWaiting.suspension_changed | machinery | external-backend suspension marking |
+| yield_estimator.py | class | LiteratureYield | episode function | yield_estimator.py yield_controller |
+| yield_estimator.py | method | LiteratureYield.continuation_task | machinery | continuation_task returned None (the caller's controller decided); a declaration lookup of the old runner |
+| yield_estimator.py | method | LiteratureYield.yield_controller | episode function | yield_estimator.py yield_controller: BoundedQualityYieldController over the A101 projector's declared maximum (README 7b); the old None meant the caller's configured controller |

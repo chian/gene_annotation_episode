@@ -13,7 +13,6 @@ import json
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import identity
-from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.runtime_continuation import A102RuntimeContext as BindingContext
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.practical_execution_records import (canonical, digest, validate_assignment,
     validate_context, validate_receipt, validate_validations)
 
@@ -47,32 +46,8 @@ class PracticalReceiptInformation:
         return 'practical_receipt_' + digest([self.run_id, episode_id, operation_key])
 
     def _sources(self, accession):
-        return [json.loads(row[0]) for row in self.store.db.execute(
-            "SELECT data FROM records WHERE record_type='source' "
-            "AND json_extract(data,'$.provider')=? AND json_extract(data,'$.accession')=? ORDER BY id",
-            (PROVIDER, accession))]
-
-    def _table_exists(self, name):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
-            (name,)).fetchone() is not None
-
-    def _selected(self, receipt):
-        prefix = f"{self.run_id}:{receipt['episode_id']}:"
-        key = receipt['operation_key']
-        index = key.removeprefix(prefix)
-        if (not key.startswith(prefix) or not index.isdecimal() or str(int(index)) != index
-                or not self._table_exists('runtime_actions')):
-            raise ValueError('practical_receipt_selected_action_missing')
-        row = self.store.db.execute('SELECT action,result FROM runtime_actions '
-            'WHERE run_id=? AND episode_id=? AND decision_index=?',
-            (self.run_id, receipt['episode_id'], int(index))).fetchone()
-        if row is None:
-            raise ValueError('practical_receipt_selected_action_missing')
-        action = json.loads(row['action'])
-        if (action.get('kind') != 'tool' or action.get('tool') != receipt['tool_name']
-                or canonical(action.get('arguments')) != canonical(receipt['arguments'])):
-            raise ValueError('practical_receipt_selected_action_conflict')
-        return row
+        return [row for row in self.store.list('source')
+            if row.get('provider') == PROVIDER and row.get('accession') == accession]
 
     def _original_assignment(self, body, snapshot):
         assignment = validate_assignment(snapshot['assignment'])
@@ -81,22 +56,6 @@ class PracticalReceiptInformation:
                 or canonical(snapshot['scope']) != canonical(body['scope'])
                 or digest(assignment) != body['assignment_sha256']):
             raise ValueError('practical_receipt_assignment_conflict')
-        if self._table_exists('runtime_episodes'):
-            episode = self.store.db.execute('SELECT path,request FROM runtime_episodes '
-                'WHERE run_id=? AND episode_id=?', (self.run_id, body['episode_id'])).fetchone()
-            if episode is not None:
-                request = json.loads(episode['request'])
-                message = request.get('message', {})
-                original = message.get('episode_assignment', message.get('assignment'))
-                if (original is None or canonical(original) != canonical(assignment)
-                        or canonical(message.get('scope')) != canonical(body['scope'])):
-                    raise ValueError('practical_receipt_original_assignment_conflict')
-                path = json.loads(episode['path'])
-                kind = assignment['resource_kind']
-                if (not isinstance(path, list) or not path
-                        or not isinstance(path[-1], list) or len(path[-1]) != 2
-                        or path[-1][0] != 'launch_' + kind):
-                    raise ValueError('practical_receipt_original_episode_conflict')
         return assignment
 
     def _qualify(self, body, snapshot, receiving_scope):
@@ -122,7 +81,7 @@ class PracticalReceiptInformation:
             raise ValueError('practical_receipt_context_revision_conflict')
         validate_validations(receipt['validations'], assignment, receipt['outcome'], after,
             tool_name=receipt['tool_name'])
-        return body, self._selected(receipt)
+        return body
 
     def _artifact_json(self, reference):
         raw = self.store.get_artifact(reference)
@@ -146,7 +105,7 @@ class PracticalReceiptInformation:
             'version': VERSION, 'retrieved_at': receipt['finished_at']}
 
     def publish(self, context, receipt):
-        if not isinstance(context, BindingContext) or context.run_id != self.run_id:
+        if context.run_id != self.run_id:
             raise ValueError('practical_receipt_publication_context_conflict')
         receipt = validate_receipt(receipt)
         assignment = validate_assignment(plain(context.assignment))
@@ -178,7 +137,7 @@ class PracticalReceiptInformation:
         try:
             body = self._artifact_json(source['artifact_ref'])
             snapshot = self._artifact_json(source['request_ref'])
-            body, selected = self._qualify(body, snapshot, scope)
+            body = self._qualify(body, snapshot, scope)
             expected = self._source_payload(body, source['artifact_ref'], source['request_ref'])
             actual = {key: value for key, value in source.items() if key not in {'id', 'record_type', 'origin'}}
             if (source.get('origin') != 'tool' or canonical(actual) != canonical(expected)
@@ -186,19 +145,12 @@ class PracticalReceiptInformation:
                 raise ValueError('practical_receipt_source_identity_conflict')
             if len(self._sources(expected['accession'])) != 1:
                 raise ValueError('practical_receipt_publication_identity_conflict')
-            if selected['result'] is not None:
-                result = json.loads(selected['result'])
-                recorded = body['receipt']
-                if (result.get('status') not in {'completed', 'partial'}
-                        or canonical(result.get('result')) != canonical(recorded)
-                        or reference not in result.get('record_refs', [])):
-                    raise ValueError('practical_receipt_saved_outcome_conflict')
             return deepcopy(body)
         except (KeyError, TypeError, OverflowError) as error:
             raise ValueError('invalid_practical_receipt_information') from error
 
     def resolve(self, context, reference, namespace):
-        if not isinstance(context, BindingContext) or context.run_id != self.run_id:
+        if context.run_id != self.run_id:
             return False
         if namespace not in {None, 'source', 'practical_receipt'}:
             return False

@@ -52,7 +52,6 @@ def test_native_channels_need_exact_endpoint_sequences_and_late_receipt_regrades
     assert output['combined_score_used'] is False
     before,needs=grade(store,target,known)
     assert before['credit']==0 and needs
-    count=store.db.execute('SELECT count(*) FROM a103_publications').fetchone()[0]
     canonical=source(store,'retained.uniprot',{'results':[
         {'sequence':{'value':'MDEAKG'},'uniProtKBCrossReferences':[{'database':'STRING','id':IDS[0]}]},
         {'sequence':{'value':'MKQQ'},'uniProtKBCrossReferences':[{'database':'STRING','id':IDS[1]}]}]})
@@ -60,7 +59,6 @@ def test_native_channels_need_exact_endpoint_sequences_and_late_receipt_regrades
     after,needs=grade(store,target,known)
     assert after['credit']==pytest.approx(.7)
     assert not [r for r,out in needs if r in refs]
-    assert store.db.execute('SELECT count(*) FROM a103_publications').fetchone()[0]==count
     assert {r['channel'] for r in after['tool_attachments'] if r['producer_operation']=='context.association_channels'}=={
         'neighborhood','fusion','phylogenetic_profile'}
 

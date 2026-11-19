@@ -8,17 +8,24 @@ scoped boundary of the Context and never built or executed.
 
 ``EpisodeRun.run`` runs the entry Episode until its yield controller stops it (nothing else ends an Episode).
 Every run is journaled (``RunJournal``) and ``resume`` re-links a recorded run: rebuilt commissions, the
-continuation settings, the declared services and each Episode's parent input must equal their records, completed
+continuation settings, the declared services and each Episode's parent input must equal their records, each
+Episode's yield controller is built from the initial credit recorded when the Episode was first entered, completed
 units replay through ``resume_units`` and are not executed again, recorded model responses are returned instead
 of asking again, what a decision read from a service is given back as recorded, and every record receipt is
 reloaded. A unit that began and did not finish runs again with the same operation key.
 
+``EpisodeRun.next_decision`` and ``EpisodeRun.run_unit`` step the entry Episode of a linked or resumed run in
+place of ``run``: the first returns what the episode's ``decide`` returns first, without asking the model; the
+second runs one ``ToolCall`` the caller names as the Episode's next unit. Both go through the Episode's own loop
+(``_Steps``), so the controller, the journal, custody and replay are those of any run; ``run`` finishes a stepped
+run, and ``resume`` replays its units.
+
 The runner decides nothing an episode owns. Its source, tools, credit, yield controller and messages are the
 members of its ``EpisodeBinding``. The runner records: every commission and the records it
-passes, every unit's attempt, outcome, controller input, controller step and update, every model call, every
-return and the records it carries, every closure (with the credit the controller stopped on) and result, the
-continuation settings, the declared and built services, what each decision read from a service, and the clock
-points.
+passes, the credit every Episode's controller is built from, every unit's attempt, outcome, controller input,
+controller step and update, every model call, every return and the records it carries, every closure (with the
+credit the controller stopped on) and result, the continuation settings, the declared and built services, what
+each decision read from a service, and the clock points.
 """
 from __future__ import annotations
 
@@ -39,8 +46,8 @@ from .collaborators import STANDARD_COLLABORATORS, interface_failures
 from .episode_type import YIELD_CONTROLLERS, closing_credit
 from .journal import EpisodeRecorder, JournalError, RunJournal
 from .progress import ProgressClock
-from .recording import (Custody, DecisionContext, RecordedModel, ServiceReads, UnitAttempts, UnitContext,
-                        UnitPosition, admit_entry, pass_records, return_records)
+from .recording import (Custody, DecisionContext, InitialCredit, RecordedModel, ServiceReads, UnitAttempts,
+                        UnitContext, UnitPosition, admit_entry, pass_records, return_records)
 from .services import DecisionServices, RunServices
 from .store_ledger import StoreLedger
 from .store_scope import RecordReader, ScopedStore, require_in_store
@@ -74,18 +81,161 @@ def _step_record(step):
     return closed_copy(plain(step.as_record()), 'controller_step', TypeError)
 
 
+_DECIDE = object()      # the caller's answer to a waiting stepped loop: show the first decision for this unit
+_RUN_ON = object()      # the caller's answer to a waiting stepped loop: the Episode decides its own units from here
+
+
+class _Waiting:
+    """Awaited by the source of a stepped Episode at each unit. The loop waits here, with the view the unit is
+    chosen from (and the decision the caller asked to see), until the run's caller answers."""
+
+    def __init__(self, view, decision):
+        self.view, self.decision = view, decision
+
+    def __await__(self):
+        return (yield self)
+
+
+class _Advance:
+    """Awaitable: give ``answer`` to the waiting loop of a stepped Episode and run that loop, inside the caller's
+    own task, until its source waits again (``(view, decision, None)``) or its controller has stopped the Episode
+    (``(None, None, record)``). What the loop awaits on the way (a tool's worker thread, the model call of a
+    child) is awaited by the caller's event loop, and a cancellation of the caller is raised in the loop where
+    it waits. The loop holds nothing of an event loop while it waits for the caller, so each step may be run by
+    an ``asyncio.run`` of its own."""
+
+    def __init__(self, loop, answer):
+        self._loop, self._answer = loop, answer
+
+    def __await__(self):
+        step, value = self._loop.send, self._answer
+        while True:
+            try:
+                awaited = step(value)
+            except StopIteration as ended:
+                return None, None, ended.value
+            if isinstance(awaited, _Waiting):
+                return awaited.view, awaited.decision, None
+            try:
+                step, value = self._loop.send, (yield awaited)
+            except GeneratorExit:
+                self._loop.close()
+                raise
+            except BaseException as error:
+                step, value = self._loop.throw, error
+
+
+class _Steps:
+    """The loop of the entry Episode while the run's caller steps it (``EpisodeRun.next_decision``, ``run_unit``).
+
+    It is the Episode's own loop (``Episode.run_async``: entered, its yield controller built, its recorded units
+    replayed, every unit journaled by the runner's hooks) with this object as its unit source. At each unit the
+    source waits for the caller, who asks for the first decision, names the unit's action, or lets the Episode
+    run on; after that its own source decides every unit. ``view`` is the ``EpisodeView`` the loop waits at
+    (the view of the closed Episode once its controller has stopped it), ``decision`` what the caller last asked
+    to see, ``record`` the closed Episode's record."""
+
+    def __init__(self, episode, context):
+        self._episode, self._source = episode, episode.source
+        self._loop = dataclasses.replace(episode, source=self).run_async(context)
+        self._stepped = True
+        self.view = self.decision = self.record = None
+
+    async def next(self, view):
+        if self._stepped:
+            answer = await _Waiting(view, None)
+            while answer is _DECIDE:
+                answer = await _Waiting(view, self._source.next_decision(view))
+            if answer is not _RUN_ON:
+                return self._source.unit_of(view, answer)
+            self._stepped = False
+        return await self._source.next(view)
+
+    async def advance(self, answer):
+        """Give the waiting loop ``answer`` (``None`` starts it) and run it until it waits again or the Episode
+        is closed; the closed Episode's record, else ``None``."""
+        view, self.decision, self.record = await _Advance(self._loop, answer)
+        self.view = self._episode.view_of(self.record) if view is None else view
+        return self.record
+
+
 @dataclass
 class EpisodeRun:
-    """One linked subtree. ``run()`` executes it (or finishes a resumed run)."""
+    """One linked subtree. ``run()`` executes it (or finishes a resumed run). ``next_decision()`` and
+    ``run_unit(tool_call)`` step its entry Episode instead: the same loop, journal, custody and replay, with the
+    run's caller in the place of the model."""
     run_id: str
     entry_path: str
     episode: Episode
     context: Context
     journal: RunJournal
+    _steps: object = dataclasses.field(default=None, repr=False)
+    _closed: object = dataclasses.field(default=None, repr=False)
 
     async def run(self):
+        """Run the entry Episode until its yield controller stops it, build its result and close the run:
+        ``{'entry', 'record', 'result'}``. A run that was stepped goes on from where its steps left it."""
+        if self._closed is None:
+            await self._part(self.episode.run_async(self.context) if self._steps is None
+                             else self._steps.advance(_RUN_ON))
+        return self._closed
+
+    async def next_decision(self):
+        """What the entry Episode's ``decide`` returns first, from where the run stands: a ``ModelRequest``, a
+        ``ToolCall`` or a ``ChildCall``.
+
+        The Episode is entered as ``run()`` enters it: its yield controller is built from ``credit`` of its
+        initial summary (in a resumed run: from that credit as it was recorded), the units recorded for it (none
+        in a new run) are replayed, ``internal_summary`` is built and ``decide(summary, None, ctx)`` is called
+        with the decision context of the next unit (its clock and service reads recorded as in any run). The
+        model is not asked and no unit is consumed. After ``run_unit`` it is the first decision for the unit that
+        follows."""
+        steps = await self._waiting()
+        await self._part(steps.advance(_DECIDE))
+        return steps.decision
+
+    async def run_unit(self, tool_call):
+        """Run ``tool_call`` (a ``ToolCall``) as the entry Episode's next unit and return the unit's outcome
+        (``{'kind': 'tool', 'tool', 'arguments', 'outcome', 'produced'}``).
+
+        It is the unit the loop runs for that action when the episode's own decision names it: its attempt is
+        journaled before the tool runs, the tool is handed the Episode's ``UnitContext`` (the custody-scoped
+        Store, the declared services, the recorded model, the unit's operation key), what it writes is
+        receipted, ``credit`` of the summary with the outcome goes to the yield controller, and the unit is
+        journaled with the controller's step, so ``resume`` replays it. Only the decision is the caller's:
+        ``decide`` and the model are not asked. When the controller stops the Episode on this unit the result
+        is built and the run closed, as ``run()`` does; ``run()`` then returns it."""
+        steps = await self._waiting()
+        position = steps.view.units_consumed
+        await self._part(steps.advance(tool_call))
+        return steps.view.outcomes[position]
+
+    @property
+    def view(self):
+        """The entry Episode's ``EpisodeView`` where the stepped run stands: after the units run so far (the view
+        of the closed Episode once its controller has stopped it). Its ``records`` is the Episode's read-only
+        reader and its ``controller_state`` the state of its yield controller."""
+        return self._steps.view
+
+    async def _waiting(self):
+        """The stepped loop of the entry Episode, waiting at its next unit (the first step starts it). A unit
+        of an Episode its yield controller has stopped does not exist: asking for one raises."""
+        if self._steps is None:
+            self._steps = _Steps(self.episode, self.context)
+            await self._part(self._steps.advance(None))
+        if self._steps.record is not None:
+            raise RuntimeError('episode_stopped_by_its_yield_controller:' + self.entry_path)
+        return self._steps
+
+    async def _part(self, part):
+        """Await one part of the run: the entry Episode's whole loop, or one step of its stepped loop. ``part``
+        returns the Episode's record once its yield controller has stopped it (``None`` while a stepped Episode
+        waits at its next unit); the result is then built and the run closed. An error is recorded as the run's
+        failure."""
         try:
-            record = await self.episode.run_async(self.context)
+            record = await part
+            if record is None:
+                return
             result = self.episode.build_result(record)
             if inspect.isawaitable(result):
                 result = await result
@@ -95,7 +245,7 @@ class EpisodeRun:
             raise
         self.journal.close_run(self.run_id, {'ended_by': record.ended_by, 'units': record.units_consumed,
                                              'result': value})
-        return MappingProxyType({'entry': self.entry_path, 'record': record, 'result': result})
+        self._closed = MappingProxyType({'entry': self.entry_path, 'record': record, 'result': result})
 
 
 def _check_collaborators(bindings, collaborators):
@@ -195,7 +345,9 @@ class BoundEpisode:
     ``reader`` is their read-only view for ``view.records``, ``credit``, ``action`` and ``read_from_child``;
     ``store`` is the custody-scoped Store of its tools; ``services`` are the services the episode declared
     (handed to its tools); ``reads`` records what its decisions read from them; ``attempts`` journals each unit's
-    attempt; ``settings()`` is a copy of the episode's continuation settings; ``decision_context(position)`` is
+    attempt; ``initial_credit`` records the credit its yield controller is built from (computed when the Episode
+    is first entered, read from the journal ever after);
+    ``settings()`` is a copy of the episode's continuation settings; ``decision_context(position)`` is
     what ``decide`` and ``action`` receive (the services as read handles whose reads are recorded for that
     position) and ``context(attempt)`` what a tool receives.
     """
@@ -219,6 +371,7 @@ class BoundEpisode:
     services: Mapping
     reads: ServiceReads
     attempts: UnitAttempts
+    initial_credit: InitialCredit
     continuation: Mapping
 
     def settings(self):
@@ -347,7 +500,8 @@ def _link(journal, run_id, entry, collaborators, prepared):
             grains[path], position, RecordedModel(journal, run_id, episode_path, episode_id, provider, position),
             custody, RecordReader(store, custody, rows), ScopedStore(store, custody, rows, (run_id, episode_id)),
             run_services.view(binding.services, custody), ServiceReads(journal, run_id, episode_path),
-            UnitAttempts(journal, run_id, episode_path, custody, position), collaborators['continuation'][path])
+            UnitAttempts(journal, run_id, episode_path, custody, position),
+            InitialCredit(journal, run_id, episode_path), collaborators['continuation'][path])
         bound_by_path[episode_path] = bound
         child_builders = {}
         for slot, child_path in binding.child_slots.items():

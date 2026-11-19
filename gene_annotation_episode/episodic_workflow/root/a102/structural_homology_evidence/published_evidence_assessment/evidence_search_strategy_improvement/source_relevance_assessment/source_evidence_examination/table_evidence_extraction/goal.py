@@ -15,8 +15,8 @@ GOAL = ('Investigate the selected table/sheet and its scientific meaning. Select
         "with the common reasoning action and update only the parent's declared typed form in that same work call. "
         'Navigation, byte coverage and repeated reading earn no scientific credit by themselves. The commissioned '
         "task's own yield settings guide continuation.")
-UNIT = ('one model-selected tool call on the assigned source (an access tool, a reasoning commit, or the report of '
-        'the interpretation)')
-RESULT = ('the interpretation of what the selected table or sheet says for the assigned question, row, cell or '
-          "window by reading, with the commissioned task's typed answers (screening answers, source-lead "
+UNIT = ('one model-selected tool call on the assigned source (an access tool, a structure grading that saves a '
+        'source-geometry sheet, or a reasoning commit)')
+RESULT = ('the controlled features of the current source-geometry sheets saved from the selected table or sheet, '
+          "with the commissioned task's typed answers (screening answers, source-lead "
           'dispositions)')

@@ -1,0 +1,12 @@
+"""Continuation: the work has a definite end, a usable execution handoff for the assigned job, so the controller is
+the completion controller (README 7b). The old episode had no estimator of its own ("Only the configured local
+controller governs continuation") and handed the initial credit to the caller's controller factory.
+
+The target is the commission's ``completion_target`` (a new field of the assignment, read by ``read_from_parent``);
+the cost and the estimator parameters are this episode's settings."""
+from yield_control import CompletionYieldController
+
+
+def yield_controller(initial_credit, settings, parent_input):
+    return CompletionYieldController('resource_work_submission', initial_credit, settings['cost'],
+                                     parent_input['completion_target'], settings['parameters'])

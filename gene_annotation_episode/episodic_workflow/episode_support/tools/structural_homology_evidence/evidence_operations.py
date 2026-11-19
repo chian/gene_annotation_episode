@@ -16,6 +16,7 @@ from pathlib import Path
 import shutil
 import sys
 
+from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.structure_tables import DERIVED_PUBLICATIONS, STRUCTURE_BINDINGS, TOOL_RESULTS
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.publication import publish_comparison, received_grade
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.scoring import VERSION, digest, feature_sheet, contrast_panel, require
 from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.structures import MAX_FILE_BYTES, binding_summary, comparison_identity
@@ -126,11 +127,6 @@ class A102ToolRegistry(ToolRegistry):
         self.a102_software={'US-align':_software(usalign_executable,'US-align'),
             'Foldseek':_software(foldseek_executable,'Foldseek')}
         self.a102_policy=LocalJobPolicy(min(2 * 1024 ** 3, self.local_job_policy.memory_bytes), min(1024 ** 3, self.local_job_policy.scratch_bytes))
-        for sql in [
-            'CREATE TABLE IF NOT EXISTS a102_structure_bindings (source_ref TEXT PRIMARY KEY,body TEXT NOT NULL)',
-            'CREATE TABLE IF NOT EXISTS a102_tool_operations (operation_key TEXT PRIMARY KEY,request TEXT NOT NULL,result TEXT NOT NULL)',
-            'CREATE TABLE IF NOT EXISTS a102_derived_publications (source_ref TEXT PRIMARY KEY,body TEXT NOT NULL,permitted_use TEXT NOT NULL)',
-        ]:self.store.db.execute(sql)
 
     def as_record(self):
         from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.attachments import VERSION as attribution_version
@@ -195,10 +191,10 @@ class A102ToolRegistry(ToolRegistry):
 
     def _binding(self,reference,known,scope):
         source=self._received(reference,known)
-        row=self.store.db.execute('SELECT body FROM a102_structure_bindings WHERE source_ref=?',(reference,)).fetchone()
-        require(row is not None and source.get('provider')=='native.a102.structure_binding'
+        rows=self.store.table(STRUCTURE_BINDINGS).select({'source_ref':reference})
+        require(rows and source.get('provider')=='native.a102.structure_binding'
             and source['origin']=='tool','a102_structure_binding_custody_required')
-        body=json.loads(row['body'])
+        body=json.loads(rows[0]['body'])
         require(json.loads(self.store.get_artifact(source['artifact_ref']))==binding_summary(body),
             'a102_structure_binding_custody_conflict')
         if body['target_ref'] is not None:
@@ -220,8 +216,7 @@ class A102ToolRegistry(ToolRegistry):
 
     def _derived(self,kind,body):
         source=self._source('native.a102.'+kind,body)
-        self.store.db.execute('INSERT OR IGNORE INTO a102_derived_publications VALUES(?,?,?)',
-            (source,canonical(body),'a102_scoring'))
+        self.store.table(DERIVED_PUBLICATIONS).put({'source_ref':source,'body':canonical(body),'permitted_use':'a102_scoring'})
         return source
 
     def _file(self,reference,format,known,invocation):
@@ -280,16 +275,10 @@ class A102ToolRegistry(ToolRegistry):
             request=canonical({'name':name,'arguments':args,'scope':scope,'run_id':context.run_id,
                 'episode_id':context.episode_id,'software':self.a102_software,
                 'policy':self.a102_policy.to_dict()})
-            old=self.store.db.execute('SELECT * FROM a102_tool_operations WHERE operation_key=?',(operation_key,)).fetchone()
-            if old:
-                require(old['request']==request,'a102_operation_identity_conflict')
-                return json.loads(old['result'])
-            previous=self.store.db.execute('SELECT result FROM a102_tool_operations WHERE request=? LIMIT 1',
-                (request,)).fetchone()
-            if previous is not None and name!='structure.request_hpc_comparison':
-                result=json.loads(previous['result'])
+            previous=self.store.table(TOOL_RESULTS).select({'request':request})
+            if previous and name!='structure.request_hpc_comparison':
+                result=json.loads(previous[0]['result'])
                 result['result']['reused_existing_result']=True
-                self.store.db.execute('INSERT INTO a102_tool_operations VALUES(?,?,?)',(operation_key,request,canonical(result)))
                 return result
             directory=self.work_directory(context,name,args,scope)
             records=[];native_metadata=None
@@ -380,7 +369,7 @@ class A102ToolRegistry(ToolRegistry):
                         row['input_position']=positions[row['input_position']]
                 summary=binding_summary(body)
                 ref=self._source('native.a102.structure_binding',summary)
-                self.store.db.execute('INSERT OR IGNORE INTO a102_structure_bindings VALUES(?,?)',(ref,canonical(body)))
+                self.store.table(STRUCTURE_BINDINGS).put({'source_ref':ref,'body':canonical(body)})
                 records=[ref];result={'binding_ref':ref,**summary}
             elif name=='structure.inspect':
                 result={'binding_ref':args['binding_ref'],**binding_summary(self._binding(args['binding_ref'],known,scope))}
@@ -430,7 +419,7 @@ class A102ToolRegistry(ToolRegistry):
                                 attached=self._reference_request(args,reference)
                                 outcome['record_refs'].append(attached)
                                 outcome['result'].update(attachment_request_ref=attached,measurement_subject='reference_only')
-                            self.store.db.execute('INSERT INTO a102_tool_operations VALUES(?,?,?)',(operation_key,request,canonical(outcome)))
+                            self.store.table(TOOL_RESULTS).put({'request':request,'result':canonical(outcome)})
                             return outcome
                         require(not (args['primary'] and prior['primary'] and prior['comparison_group']==group),
                             'a102_comparison_primary_already_declared',existing_comparison_source_ref=reference,
@@ -513,7 +502,7 @@ class A102ToolRegistry(ToolRegistry):
             outcome={'status':'completed','record_refs':records,'changed_record_refs':[],
                 'result':result,'feedback':None}
             if native_metadata is not None:outcome['native_execution']=native_metadata
-            self.store.db.execute('INSERT INTO a102_tool_operations VALUES(?,?,?)',(operation_key,request,canonical(outcome)))
+            self.store.table(TOOL_RESULTS).put({'request':request,'result':canonical(outcome)})
             return outcome
         except AcquisitionError as error:
             return {'status':'unavailable','record_refs':[],'changed_record_refs':[],'result':None,
@@ -603,9 +592,9 @@ class A102ToolRegistry(ToolRegistry):
         rows=[];refs={}
         for ref in [*args['supporting_source_refs'],*args['opposing_source_refs']]:
             source=self._received(ref,known)
-            stored=self.store.db.execute('SELECT * FROM a102_derived_publications WHERE source_ref=?',(ref,)).fetchone()
-            require(stored is not None and source.get('provider')=='native.a102.features','a102_received_feature_sheet_required')
-            body=json.loads(stored['body'])
+            stored=self.store.table(DERIVED_PUBLICATIONS).select({'source_ref':ref})
+            require(stored and source.get('provider')=='native.a102.features','a102_received_feature_sheet_required')
+            body=json.loads(stored[0]['body'])
             require(json.loads(self.store.get_artifact(source['artifact_ref']))==body and body['target_ref']==args['target_ref'],
                 'a102_contrast_target_or_custody_conflict')
             from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.attachments import qualified_feature

@@ -6,6 +6,7 @@ import json
 import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.publication import received_grade
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.derived_publications import DERIVED_PUBLICATIONS
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.scoring import VERSION, compile_native_sheet, require
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.attachments import VERSION as ATTACHMENT_VERSION, received_attachments, reference_region_value, qualified_feature
 
@@ -115,19 +116,18 @@ class A102StructuralCredit:
                 if regions:targets[ref]=(length,regions)
             require(bool(targets),'a102_required_scope_empty')
             rows={ref:[] for ref in targets};sources=[];feature_sheets=[];contrast_sheets=[];allowed={}
-            derived=store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='a102_derived_publications'").fetchone()
             for reference in known:
                 if evidence_regions is not None and reference not in evidence_regions:
                     continue
+                derived=store.table(DERIVED_PUBLICATIONS).select({'source_ref':reference})
                 if derived:
-                    row=store.db.execute('SELECT * FROM a102_derived_publications WHERE source_ref=?',(reference,)).fetchone()
-                    if row is not None:
-                        source=store.get(reference);body=json.loads(row['body'])
-                        require(source['origin']=='tool' and row['permitted_use']=='a102_scoring'
-                            and json.loads(store.get_artifact(source['artifact_ref']))==body,'a102_derived_sheet_custody_conflict')
-                        if body.get('target_ref') in targets:
-                            if source['provider']=='native.a102.features':feature_sheets.append({'source_ref':reference,**qualified_feature(store,reference,body,known)})
-                            elif source['provider']=='native.a102.contrast':contrast_sheets.append({'source_ref':reference,**body})
+                    row=derived[0]
+                    source=store.get(reference);body=row['body']
+                    require(source['origin']=='tool' and row['permitted_use']=='a102_scoring'
+                        and json.loads(store.get_artifact(source['artifact_ref']))==body,'a102_derived_sheet_custody_conflict')
+                    if body.get('target_ref') in targets:
+                        if source['provider']=='native.a102.features':feature_sheets.append({'source_ref':reference,**qualified_feature(store,reference,body,known)})
+                        elif source['provider']=='native.a102.contrast':contrast_sheets.append({'source_ref':reference,**body})
                 received=received_grade(store,reference)
                 if received is None:continue
                 target=received['grade']['target_ref']
@@ -206,13 +206,12 @@ def _received_task_sheet(store, reference, known, provider):
     source = store.get(reference)
     if source['record_type'] != 'source' or source.get('provider') != provider:
         return None
-    row = store.db.execute('SELECT body,permitted_use FROM a102_derived_publications '
-        'WHERE source_ref=?', (reference,)).fetchone()
+    rows = store.table(DERIVED_PUBLICATIONS).select({'source_ref': reference})
     from gene_annotation_episode.episodic_workflow.episode_support.tools.structural_homology_evidence.evidence_operations import VERSION as TOOLS_VERSION
-    require(row is not None and row['permitted_use'] == 'a102_scoring'
+    require(rows and rows[0]['permitted_use'] == 'a102_scoring'
         and source['origin'] == 'tool' and source['version'] == TOOLS_VERSION,
         'a102_task_native_sheet_custody_required')
-    body = json.loads(row['body'])
+    body = rows[0]['body']
     require(json.loads(store.get_artifact(source['artifact_ref'])) == body,
         'a102_task_native_sheet_custody_conflict')
     return body
@@ -526,13 +525,12 @@ class A102InterfaceContactCredit:
                 if measurement not in known:
                     continue
                 source = store.get(measurement)
-                publication = store.db.execute('SELECT body FROM a102_derived_publications '
-                    'WHERE source_ref=?', (measurement,)).fetchone()
+                publication = store.table(DERIVED_PUBLICATIONS).select({'source_ref': measurement})
                 if (source['record_type'] != 'source' or source['origin'] != 'tool'
                         or source['provider'] != 'native.a102.interface_geometry'
-                        or publication is None):
+                        or not publication):
                     continue
-                body = json.loads(publication['body'])
+                body = publication[0]['body']
                 require(json.loads(store.get_artifact(source['artifact_ref'])) == body,
                     'a102_interface_contact_source_conflict')
                 if (body.get('schema') != 'a102_interface_constraint_v1'

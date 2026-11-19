@@ -9,6 +9,7 @@ from copy import deepcopy
 import hashlib
 import json
 import math
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, obj, validate_schema
 from gene_annotation_episode.domain import ContractError
@@ -30,13 +31,16 @@ def _quantity_key(extraction):
     encoded = json.dumps(anchor, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode('utf-8')
     return 'transport_quantity_' + hashlib.sha256(encoded).hexdigest()
 
+OPERATIONS = operations_ledger('literature_transport_operations')
+RECEIVED = received_ledger('literature_transport_received')
+
 class LiteratureTransportRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = 'literature_transport_response_record_v2'
     readable_record_versions = ('literature_transport_response_record_v1', record_version)
-    operations_table = 'literature_transport_operations'
-    received_table = 'literature_transport_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = tuple(BINDINGS)
 
     def _provenance(self, context, reference):
@@ -102,7 +106,7 @@ class LiteratureTransportRepository(LiteratureRateRepository):
         args = plain(arguments)
         validate_schema(args, transport_response_population_schema())
         signature = canonical({'arguments': args, 'scope': plain(context.scope)})
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
+        old = self._operation(context.episode_id, operation_key)
         if old is not None:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -149,9 +153,9 @@ class LiteratureTransportRepository(LiteratureRateRepository):
 
             def publish(kind, record):
                 candidate = identity(kind, {'origin': 'tool', 'record': record})
-                existed = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (candidate,)).fetchone()
+                existed = self.store.holds(candidate)
                 published = self.store.put(kind, record, origin='tool', scope=plain(context.scope))
-                if existed is None:
+                if not existed:
                     created.append(published['id'])
                 return published['id']
             bindings = {field: extraction['km_quantity'][field] if extraction['km_quantity'] else None for field in ('reported_subject_ref', 'analyte_ref')}
@@ -163,7 +167,7 @@ class LiteratureTransportRepository(LiteratureRateRepository):
             request = self.store.artifact(canonical({'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args}), 'application/json')
             sheet_ref = publish('source', {'provider': self.provider, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request, 'version': self.record_version, 'retrieved_at': None, 'parent_source_refs': parents})
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': list(dict.fromkeys([sheet_ref, *parents, *(ref for ref in bindings.values() if ref)])), 'changed_record_refs': created, 'result': {'sheet_ref': sheet_ref, 'cells': sheet['cells'], 'observation_model': extraction['observation_model'], 'variance_status': extraction['variance_status'], 'operand_source_kind': extraction['source_kind'], 'covariance_origin': extraction['covariance_origin'], 'reported_km_uncertainty_kind': extraction['km_quantity']['reported_uncertainty_kind'] if extraction['km_quantity'] else 'not_supplied', 'evaluated_scope': 'interpreted_source_kinetic_response'}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def read(self, sheet_ref):

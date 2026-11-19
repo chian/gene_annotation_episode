@@ -20,23 +20,18 @@ REQUESTED='requested_rate_observation_components'
 VIEW='reported_rate_observation_components'
 ALL_REASONS=(*REASONS,*ENTRY_REASONS)
 
-
 def _array(schema,unique=False):
     return {'type':'array','items':deepcopy(schema),**({'uniqueItems':True} if unique else {})}
 
-
 def _nullable(schema):
     return {'anyOf':[deepcopy(schema),{'type':'null'}]}
-
 
 def _exact():
     return _nullable(obj({'numerator':{'type':'string','pattern':'^-?[0-9]+$'},
         'denominator':{'type':'string','pattern':'^[1-9][0-9]*$'}}))
 
-
 def _custody():
     return obj({name:deepcopy(TEXT) for name in ('source_ref','artifact_ref','workbook_sha256','worksheet','member','member_sha256')})
-
 
 def _witness():
     formula=obj({'text':{'type':['string','null']},'attributes':{'type':'object','additionalProperties':{'type':'string'}}})
@@ -44,13 +39,11 @@ def _witness():
         **{name:{'type':['string','null']} for name in ('value','raw_value','style_index','error')},
         'formula':_nullable(formula),'value_is_formula_cache':{'type':'boolean'}})
 
-
 def _cell():
     return obj({'value':{'type':['number','null']},'unit':deepcopy(TEXT),
         'formula':{'enum':list(dict.fromkeys(FORMULAS.values()))},'origin':{'const':'derived'},
         'status':{'enum':['populated','unavailable']},'unavailable_reason':{'enum':[*ALL_REASONS,None]},
         'source_exact_value':_exact()})
-
 
 def _entry():
     meaning=obj({name:deepcopy(TEXT) for name in ('source_ref','artifact_ref','worksheet','panel','subject','native_unit','group','observation_label',
@@ -60,7 +53,6 @@ def _entry():
         'bound':{'enum':['none','<','>','<=','>=','≤','≥']},'exact_value':_exact(),
         'origin':{'enum':['reported','synthetic']},
         **{name:_witness() for name in ('group_source','label_source','value_source')}})
-
 
 def _group(numeric=False):
     observation=obj({'record_identity':deepcopy(TEXT),'label':deepcopy(TEXT),'status':{'enum':list(STATUSES)},
@@ -74,7 +66,6 @@ def _group(numeric=False):
         fields['cells']=obj({name:_cell() for name in ('rate','sample_sd','cv','observed_point_mean','observed_point_sd')})
     return obj(fields)
 
-
 def _sheet_schema():
     extraction=obj({'version':{'const':INPUT_VERSION},'source_kind':{'enum':list(SOURCE_KINDS)},
         'custody':_custody(),'meanings':obj({name:_witness() for name in ('panel','subject','native_unit')}),
@@ -84,7 +75,6 @@ def _sheet_schema():
         'reference_group':deepcopy(TEXT),'test_group':deepcopy(TEXT),'cells':obj({name:_cell() for name in COMPONENTS}),
         'qualifications':{'const':list(QUALIFICATIONS)},**{name:{'type':'null'} for name in
             ('preparation_count','between_preparation_sd','mean_se','difference_se','corrected_activity','annotation_credit','assay_error_rate')}})
-
 
 def _project_saved(saved,reference,components):
     sheet=saved['sheet'];data=sheet['extraction']
@@ -103,7 +93,6 @@ def _project_saved(saved,reference,components):
         'groups':deepcopy(groups),'grouping':'unknown','physical_conversion':'unknown',
         'qualifications':deepcopy(sheet['qualifications']),'input_origins':origins} for name in components]
 
-
 def rate_observation_cells_schema():
     ref={'type':'string','format':'reference','x-reference-namespace':'source'}
     group=obj({'requested_label':deepcopy(TEXT),'status':{'enum':['observed','not_observed']},
@@ -116,23 +105,10 @@ def rate_observation_cells_schema():
         'qualifications':{'const':list(QUALIFICATIONS)},'input_origins':_array({'enum':['reported','synthetic']},True)})
     return {**_array(row),'x-source':NAMESPACE}
 
-
 class LiteratureRateObservationRepository(LiteratureRateRepository):
     """Reuse existing authenticated admission; original XLSX never reread at return."""
     provider,components,record_version=PROVIDER,COMPONENTS,VERSION
-    operations_table='literature_rate_observation_operations'
-    received_table='literature_rate_observation_received'
     binding_fields=()
-
-    def __init__(self,store,run_id):
-        if not isinstance(run_id,str) or not run_id:raise ValueError('explicit_literature_run_required')
-        self.store,self.run_id=store,run_id
-
-    def _installed(self,table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",(table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store,self.run_id)
 
     @staticmethod
     def _components(components):
@@ -151,20 +127,12 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
     def populate(self,context,arguments,operation_key):
         if isinstance(arguments,dict) and arguments.get('version')==GRID_POPULATION:
             return self.grid_projection().populate(context,arguments,operation_key)
-        if context.run_id!=self.run_id:raise ContractError('literature_run_mismatch')
-        if not isinstance(operation_key,str) or not operation_key:raise ContractError('operation_key_required')
+
         args=plain(arguments);validate_schema(args,rate_observation_population_schema())
         source=self._native_source(context,args['source_ref'])
         requested=self._components(plain(context.assignment.get(REQUESTED,[])))
-        request={'run_id':self.run_id,'episode_id':context.episode_id,'operation_key':operation_key,
+        request={'operation_key':operation_key,
             'arguments':args,'scope':plain(context.scope),'components':requested}
-        signature=canonical(request)
-        old=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id,context.episode_id,operation_key)).fetchone() if self._installed(self.operations_table) else None
-        if old is not None:
-            if old['signature']!=signature:raise ContractError('operation_key_reused_for_different_work')
-            outcome=json.loads(old['outcome']);self.read(outcome['result']['sheet_ref'])
-            return outcome
         artifact=source['artifact_ref']
         extraction=read_rate_observations(self.store.get_artifact(artifact),args,artifact_ref=artifact)
         sheet=populate_rate_observation_contrast(extraction,reference_group=args['reference_group'],test_group=args['test_group'])
@@ -173,19 +141,17 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
         payload={'version':VERSION,'input_source_ref':args['source_ref'],'input_artifact_ref':artifact,
             'input_source_refs':ancestors,'selection':args,'sheet':sheet}
         with self.store.transaction():
-            self._install()
             sheet_artifact=self.store.artifact(canonical(payload),'application/json')
             request_ref=self.store.artifact(canonical(request),'application/json')
             value={'provider':PROVIDER,'accession':None,'uri':None,'artifact_ref':sheet_artifact,'text_ref':sheet_artifact,
                 'request_ref':request_ref,'version':VERSION,'retrieved_at':None,'parent_source_refs':ancestors}
             reference=identity('source',{'origin':'tool','record':value})
-            existed=self.store.db.execute('SELECT 1 FROM records WHERE id=?',(reference,)).fetchone()
+            existed = self.store.holds(reference)
             self.store.put('source',value,origin='tool',scope=plain(context.scope))
-            outcome={'status':'completed','operation_ref':identity('operation',{'run_id':self.run_id,'episode_id':context.episode_id,'key':operation_key}),
+            outcome={'status':'completed','operation_ref':identity('operation',{'key': operation_key}),
                 'record_refs':[reference],'changed_record_refs':[] if existed else [reference],
                 'result':{'sheet_ref':reference,'view':VIEW,'cells':_project_saved(payload,reference,requested)},'feedback':None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id,context.episode_id,operation_key,signature,canonical(outcome)))
+
         return outcome
 
     def _json_artifact(self,reference):
@@ -203,24 +169,15 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
                 or source.get('version')!=VERSION or identity('source',{'origin':'tool','record':value})!=sheet_ref):
             raise ContractError('literature_rate_observation_sheet_required')
         request=self._json_artifact(source['request_ref'])
-        if set(request)!={'run_id','episode_id','operation_key','arguments','scope','components'} or request['run_id']!=self.run_id:
+        if set(request)!={'operation_key','arguments','scope','components'}:
             raise ContractError('rate_observation_saved_request_mismatch')
         validate_schema(request['arguments'],rate_observation_population_schema());self._components(request['components'])
-        operation=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id,request['episode_id'],request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
-        if operation is None or operation['signature']!=canonical(request):raise ContractError('literature_sheet_not_selected_output')
         saved=self._json_artifact(source['artifact_ref'])
         if (set(saved)!={'version','input_source_ref','input_artifact_ref','input_source_refs','selection','sheet'}
                 or saved['version']!=VERSION or saved['selection']!=request['arguments']
                 or saved['input_source_ref']!=request['arguments']['source_ref'] or saved['input_source_refs']!=source['parent_source_refs']):
             raise ContractError('rate_observation_saved_selection_mismatch')
         validate_schema(saved['sheet'],_sheet_schema());self._validate_saved_bindings(saved,request)
-        outcome=json.loads(operation['outcome'])
-        expected={'sheet_ref':sheet_ref,'view':VIEW,'cells':_project_saved(saved,sheet_ref,request['components'])}
-        if (outcome.get('status')!='completed' or canonical(outcome.get('result'))!=canonical(expected)
-                or outcome.get('record_refs')!=[sheet_ref] or outcome.get('feedback') is not None
-                or outcome.get('operation_ref')!=identity('operation',{'run_id':self.run_id,'episode_id':request['episode_id'],'key':request['operation_key']})):
-            raise ContractError('rate_observation_saved_outcome_mismatch')
         return saved
 
     def _validate_saved_bindings(self,saved,request):
@@ -271,31 +228,17 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
                 raise ContractError('rate_observation_saved_cell_binding_mismatch')
 
     def owned_sheet_refs(self,context):
-        """Original selected outputs of this reporting episode, never new work."""
-        if context.run_id!=self.run_id:raise ContractError('literature_run_mismatch')
-        if not self._installed(self.operations_table):return []
-        references=[]
-        for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid',
-                (self.run_id,context.episode_id)):
-            outcome=json.loads(row['outcome'])
-            if (outcome.get('status')=='completed'
-                    and self.store.get(outcome['result']['sheet_ref']).get('version')==self.record_version
-                    and outcome['result']['sheet_ref'] in context.received_record_refs):
-                references.append(outcome['result']['sheet_ref'])
-        return list(dict.fromkeys(references))
+        """The sheets of this record version that the Episode holds."""
+        return [ref for ref in self.held_sheet_refs() if self.store.get(ref).get('version')==self.record_version]
 
     def available_sheet_refs(self,context):
-        """Known own outputs plus exact admitted subsets; storage alone grants none."""
-        references=self.owned_sheet_refs(context)
-        references.extend(row['sheet_ref'] for row in self.received_cells(context)
-            if row['sheet_ref'] in context.received_record_refs)
-        return list(dict.fromkeys(references))
+        return self.owned_sheet_refs(context)
 
-    def project_cells(self,sheet_refs,*,permitted_record_refs,components=None):
+    def project_cells(self,sheet_refs,*,components=None):
         selected=self._components(COMPONENTS if components is None else components)
         result=[]
         for reference in dict.fromkeys(sheet_refs):
-            if reference not in permitted_record_refs:raise ContractError('literature_sheet_not_received')
+
             result.extend(_project_saved(self.read(reference),reference,selected))
         return result
 
@@ -304,33 +247,19 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
         if self.store.reference_subset(refs,plain(context.scope))!=refs:raise ContractError('literature_source_outside_scope')
         return super().fact_cells(context,refs,components=components)
 
-    def received_cells(self,context):
-        if context.run_id!=self.run_id:raise ContractError('literature_run_mismatch')
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
-    def receive_cells(self,context,cells,operation_key):
-        with self.store.transaction():
-            self._install();return super().receive_cells(context,cells,operation_key)
-
     @staticmethod
     def cell_record_refs(cells):
         return list(dict.fromkeys(ref for row in cells for ref in (row['sheet_ref'],row['evidence_source_ref'])))
 
     def grid_projection(self):
-        """A versioned view of the same selected operation; discovery writes none."""
-        if not hasattr(self,'_grid_projection'):
-            self._grid_projection=LiteratureReportedCurveRepository(self.store,self.run_id)
-        return self._grid_projection
+        """A versioned view of the same selected operation."""
+        return LiteratureReportedCurveRepository(self.store)
 
     def validate_empty_return_family(self,context):
-        if not self._installed(self.operations_table):return
-        versions={self.store.get(json.loads(row['outcome'])['result']['sheet_ref']).get('version')
-            for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=?',
-                (self.run_id,context.episode_id))}
+        versions={self.store.get(ref).get('version') for ref in self.held_sheet_refs()}
         if self.record_version==VERSION and GRID_RECORD not in versions:return
         if versions and self.record_version not in versions:
             raise ContractError('literature_rate_grid_projection_version_mismatch')
-
 
 # Explicit reported-curve branch; original v1 schemas and numerical meaning stay separate.
 GRID_POPULATION='a105_reported_curve_population_v1'
@@ -340,7 +269,6 @@ GRID_REQUESTED='requested_rate_grid_components'
 GRID_VIEW='reported_curve_precision_components'
 GRID_SCOPE='source_reported_curve_precision'
 
-
 def rate_observation_operation_schema():
     from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_rate_observation_inputs import reported_rate_grid_population_schema
     from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.evolutionary_history_evidence.literature_rate_observation_calculations import reported_curve_precision_request_schema
@@ -348,15 +276,12 @@ def rate_observation_operation_schema():
         'version':{'const':GRID_POPULATION},'grid':reported_rate_grid_population_schema(),
         'calculation':reported_curve_precision_request_schema()})]}
 
-
 def _grid_ref(kind):
     return {'type':'string','format':'reference','x-reference-namespace':kind}
-
 
 def _grid_location_schema():
     return obj({'source_ref':_grid_ref('source'),'artifact_ref':_grid_ref('artifact'),
         'member':deepcopy(TEXT),'cell':{'type':'string','pattern':'^[A-Z]+[1-9][0-9]*$'}})
-
 
 def rate_grid_cells_schema():
     from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.evolutionary_history_evidence.literature_rate_observation_calculations import reported_curve_precision_sheet_schema
@@ -396,7 +321,6 @@ def rate_grid_cells_schema():
         'source_kind':{'enum':list(SOURCE_KINDS)}}
     return {**_array(obj(props)),'x-source':GRID_NAMESPACE}
 
-
 def _grid_selector_keys(components):
     from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.evolutionary_history_evidence.literature_rate_observation_calculations import reported_curve_precision_selector_schema
     if not isinstance(components,(list,tuple)):raise ContractError('literature_rate_grid_selectors_required')
@@ -413,17 +337,14 @@ def _grid_selector_keys(components):
         keys.append(key)
     return keys
 
-
 def _grid_context_selectors(arguments):
     grid=arguments['grid']
     return [w for w in (grid['rate_unit']['witness'],grid['concentration_unit']['witness'],
         *grid['endpoint_relationship']['witnesses'],*grid['curve_sampling']['witnesses'])
         if w is not None and w['kind']=='context_span']
 
-
 def _grid_location(witness):
     return {key:witness[key] for key in ('source_ref','artifact_ref','member','cell')}
-
 
 def _grid_scoped_label(witness):
     """Bounded label display, never a reconstruction of a source quotation."""
@@ -445,7 +366,6 @@ def _grid_scoped_label(witness):
         'status':'numerical_scope_unresolved' if unresolved else 'exact_source_label',
         'implementation_reason':'unrequested_numerical_scope_unresolved' if unresolved else None,
         'location':_grid_location(witness)}
-
 
 def _grid_row_context(extraction,request,cell):
     """Build once at selected population, not at saved reconstruction."""
@@ -487,18 +407,15 @@ def _grid_row_context(extraction,request,cell):
             for w in extraction['context_witnesses'] if w['kind']=='context_span'],
             'selected_cell_locations':[json.loads(v) for v in locations]},'source_kind':args['source_kind']}
 
-
 def _project_grid_saved(saved,reference,components):
     selected=_grid_selector_keys(components)
     rows={row['component']:row for row in saved['projected_cells']}
     if any(key not in rows for key in selected):raise ContractError('literature_rate_grid_component_not_selected')
     return [{**deepcopy(rows[key]),'sheet_ref':reference,'evidence_source_ref':saved['input_source_ref']} for key in selected]
 
-
 class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
     """Versioned selected scalar view; same operation and ordinary typed receipts."""
     record_version=GRID_RECORD
-    received_table='literature_rate_grid_received'
 
     @staticmethod
     def _components(components):return _grid_selector_keys(components)
@@ -509,20 +426,13 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
     def populate(self,context,arguments,operation_key):
         from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_rate_observation_inputs import read_reported_rate_grid
         from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.evolutionary_history_evidence.literature_rate_observation_calculations import populate_reported_curve_precision
-        if context.run_id!=self.run_id:raise ContractError('literature_run_mismatch')
-        if not isinstance(operation_key,str) or not operation_key:raise ContractError('operation_key_required')
+
         args=plain(arguments);validate_schema(args,rate_observation_operation_schema()['anyOf'][1])
         requested=plain(context.assignment.get(GRID_REQUESTED,[]));self._components(requested)
         if requested!=args['calculation']['requested_components']:raise ContractError('literature_rate_grid_requested_subset_mismatch')
-        request={'run_id':self.run_id,'episode_id':context.episode_id,'operation_key':operation_key,
+        request={'operation_key':operation_key,
             'arguments':args,'scope':plain(context.scope),'components':requested,'role':context.role,
-            'assignment':plain(context.assignment),'received_record_refs':list(context.received_record_refs)}
-        signature=canonical(request)
-        old=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id,context.episode_id,operation_key)).fetchone() if self._installed(self.operations_table) else None
-        if old is not None:
-            if old['signature']!=signature:raise ContractError('operation_key_reused_for_different_work')
-            outcome=json.loads(old['outcome']);self.read(outcome['result']['sheet_ref']);return outcome
+            'assignment':plain(context.assignment)}
         source=self._native_source(context,args['grid']['source_ref']);artifact=source['artifact_ref']
         documents=[];context_artifacts=[];direct=[args['grid']['source_ref']]
         for w in _grid_context_selectors(args):
@@ -544,20 +454,19 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
             'source_metadata':{r:plain(self._native_provenance(context.scope,r)) for r in ancestors},
             'selection':args,'extraction':extraction,'sheet':sheet,'projected_cells':rows}
         with self.store.transaction():
-            self._install();sheet_artifact=self.store.artifact(canonical(payload),'application/json')
+            sheet_artifact=self.store.artifact(canonical(payload),'application/json')
             request_ref=self.store.artifact(canonical(request),'application/json')
             value={'provider':PROVIDER,'accession':None,'uri':None,'artifact_ref':sheet_artifact,'text_ref':sheet_artifact,
                 'request_ref':request_ref,'version':GRID_RECORD,'retrieved_at':None,'parent_source_refs':ancestors}
             reference=identity('source',{'origin':'tool','record':value})
-            existed=self.store.db.execute('SELECT 1 FROM records WHERE id=?',(reference,)).fetchone()
+            existed = self.store.holds(reference)
             self.store.put('source',value,origin='tool',scope=plain(context.scope))
-            outcome={'status':'completed','operation_ref':identity('operation',{'run_id':self.run_id,'episode_id':context.episode_id,'key':operation_key}),
+            outcome={'status':'completed','operation_ref':identity('operation',{'key': operation_key}),
                 'record_refs':[reference],'changed_record_refs':[] if existed else [reference],
                 'result':{'sheet_ref':reference,'view':GRID_VIEW,'record_version':GRID_RECORD,
                     'cells':_project_grid_saved(payload,reference,requested)},'feedback':None}
             validate_schema(outcome['result']['cells'],rate_grid_cells_schema())
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id,context.episode_id,operation_key,signature,canonical(outcome)))
+
         return outcome
 
     def read(self,sheet_ref):
@@ -571,15 +480,11 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
                 or identity('source',{'origin':'tool','record':value})!=sheet_ref):
             raise ContractError('literature_rate_grid_sheet_required')
         request=self._json_artifact(source['request_ref'])
-        if (set(request)!={'run_id','episode_id','operation_key','arguments','scope','components','role','assignment','received_record_refs'}
-                or request['run_id']!=self.run_id or not all(isinstance(request[n],str) and request[n] for n in ('episode_id','operation_key','role'))
+        if (set(request)!={'operation_key','arguments','scope','components','role','assignment'}
                 or request['components']!=request['assignment'].get(GRID_REQUESTED,[])
                 or request['components']!=request['arguments']['calculation']['requested_components']):
             raise ContractError('rate_grid_saved_request_mismatch')
         validate_schema(request['arguments'],rate_observation_operation_schema()['anyOf'][1]);keys=self._components(request['components'])
-        operation=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id,request['episode_id'],request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
-        if operation is None or operation['signature']!=canonical(request):raise ContractError('literature_sheet_not_selected_output')
         saved=self._json_artifact(source['artifact_ref'])
         if (set(saved)!={'version','input_source_ref','input_artifact_ref','direct_input_source_refs','input_source_refs','context_artifacts','source_metadata','selection','extraction','sheet','projected_cells'}
                 or saved['version']!=GRID_RECORD or saved['selection']!=request['arguments']
@@ -591,7 +496,7 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
         if data['original_arguments']!=args['grid'] or sheet['extraction']!=data or sheet['request']!=args['calculation']:
             raise ContractError('rate_grid_saved_sheet_binding_mismatch')
         direct=list(dict.fromkeys([saved['input_source_ref'],*(w['source_ref'] for w in _grid_context_selectors(args))]))
-        if (saved['direct_input_source_refs']!=direct or any(r not in request['received_record_refs'] for r in direct)
+        if (saved['direct_input_source_refs']!=direct
                 or saved['input_source_refs']!=self._all_ancestors(request['scope'],direct)
                 or set(saved['source_metadata'])!=set(saved['input_source_refs'])
                 or any(canonical(self._native_provenance(request['scope'],r))!=canonical(meta) for r,meta in saved['source_metadata'].items())
@@ -697,18 +602,12 @@ class LiteratureReportedCurveRepository(LiteratureRateObservationRepository):
         expected={'sheet_ref':sheet_ref,'view':GRID_VIEW,'record_version':GRID_RECORD,
             'cells':_project_grid_saved(saved,sheet_ref,request['components'])}
         validate_schema(expected['cells'],rate_grid_cells_schema())
-        outcome=json.loads(operation['outcome'])
-        if (outcome.get('status')!='completed' or canonical(outcome.get('result'))!=canonical(expected)
-                or outcome.get('record_refs')!=[sheet_ref] or outcome.get('feedback') is not None
-                or outcome.get('operation_ref')!=identity('operation',{'run_id':self.run_id,'episode_id':request['episode_id'],'key':request['operation_key']})):
-            raise ContractError('rate_grid_saved_outcome_mismatch')
         return saved
 
-    def project_cells(self,sheet_refs,*,permitted_record_refs,components=None):
+    def project_cells(self,sheet_refs,*,components=None):
         result=[]
         if components is not None:self._components(components)
         for reference in dict.fromkeys(sheet_refs):
-            if reference not in permitted_record_refs:raise ContractError('literature_sheet_not_received')
             saved=self.read(reference)
             selected=saved['sheet']['request']['requested_components'] if components is None else components
             result.extend(_project_grid_saved(saved,reference,selected))

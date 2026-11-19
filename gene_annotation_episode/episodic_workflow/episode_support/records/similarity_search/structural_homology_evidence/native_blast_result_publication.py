@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 import hashlib
+import io
 import json
 from pathlib import Path
 import re
@@ -18,7 +19,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.similarit
                                          row_schema, validate_native_blast_result_selector)
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError, identity, validate_schema
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.structural_homology_evidence.local_jobs import LocalJobPolicy, check_scratch_budget, run_local_job
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.structural_homology_evidence.materials import artifact_file, artifact_path
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import finite_json_copy, native_blast_digest
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.structural_homology_evidence.native_blast_result_worker import record_key, write_json, validate_native_blast_correspondence_collections
 from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.structural_homology_evidence.native_hmmer_result_publication import _subject_chunks
@@ -36,7 +36,7 @@ def _failure(stage, code, record_key=None):
 
 
 def _read_json(store, ref):
-    with artifact_path(store, ref).open(encoding="utf-8") as stream:
+    with io.TextIOWrapper(store.open_artifact(ref), encoding="utf-8") as stream:
         return finite_json_copy(json.load(stream))
 
 
@@ -56,7 +56,7 @@ def _original_bundle(store, bundle, bundle_artifact_ref, policy):
         raise ContractError("native_blast_original_bundle_invalid") from error
 
 
-def _captured_paths(store, bundle, artifacts):
+def _captured_custody(store, bundle, artifacts):
     declared, paths, failures, seen = {}, [], [], set()
     for kind, rows in (("input", bundle["inputs"]), ("output", bundle["artifacts"])):
         for row in rows:
@@ -81,13 +81,19 @@ def _captured_paths(store, bundle, artifacts):
             if kind == "input" and (expected != native["expected_sha256"]
                     or native["size_bytes"] != native["expected_size_bytes"]):
                 raise ContractError("native_blast_input_not_original_selected_bytes")
-            paths.append({**item, "kind": kind, "path": str(artifact_path(store, item["artifact_ref"]))})
+            paths.append({**item, "kind": kind})
         except (ValueError, OSError) as error:
             failures.append(_failure("custody", str(error) if isinstance(error, ValueError)
                                      else "native_blast_captured_artifact_unreadable"))
     for key in declared.keys() - seen:
         failures.append(_failure("custody", "native_blast_captured_artifact_missing:" + key[0]))
     return paths, sorted(failures, key=lambda row: (row["stage"], row["code"]))
+
+
+def _captured_paths(scratch, store, bundle, artifacts):
+    items, failures = _captured_custody(store, bundle, artifacts)
+    return [{**item, "path": str(scratch.copy_artifact(item["artifact_ref"], "inputs/" + str(number) + "_" + item["artifact_ref"]))}
+        for number, item in enumerate(items)], failures
 
 
 def _binding_snapshots(store, bundle):
@@ -112,12 +118,19 @@ def _binding_snapshots(store, bundle):
 
 def prepare_native_blast_grading(store, *, bundle, bundle_artifact_ref, artifacts,
                                  directory, policy, selector):
+    with store.scratch("native_blast_grading") as scratch:
+        return _prepare_native_blast_grading(scratch, store, bundle=bundle, bundle_artifact_ref=bundle_artifact_ref,
+            artifacts=artifacts, directory=directory, policy=policy, selector=selector)
+
+
+def _prepare_native_blast_grading(scratch, store, *, bundle, bundle_artifact_ref, artifacts,
+                                 directory, policy, selector):
     bundle, artifacts = finite_json_copy(bundle), finite_json_copy(artifacts)
     if not isinstance(policy, LocalJobPolicy):
         raise ContractError("native_blast_local_job_policy_required")
     selector = validate_native_blast_result_selector(selector, program=bundle["program"])
     _original_bundle(store, bundle, bundle_artifact_ref, policy)
-    paths, failures = _captured_paths(store, bundle, artifacts)
+    paths, failures = _captured_paths(scratch, store, bundle, artifacts)
     failures += [_failure(row["stage"], row["code"]) for row in bundle["failures"]]
     if bundle["returncode"] != 0:
         failures.append(_failure("native", "native_blast_native_execution_unsuccessful"))
@@ -136,7 +149,7 @@ def prepare_native_blast_grading(store, *, bundle, bundle_artifact_ref, artifact
             raise ContractError("native_blast_grading_retained_artifact_changed")
         for field in _ARTIFACT_FIELDS:
             if prepared[field] is not None:
-                artifact_path(store, prepared[field])
+                store.require(prepared[field], {"artifact"})
         stable = _read_json(store, prepared["source_grading_artifact_ref"])["grading"]
         if stable.get("sheet_artifact_ref") is not None and stable.get("scores_artifact_ref") is not None:
             try:
@@ -146,7 +159,7 @@ def prepare_native_blast_grading(store, *, bundle, bundle_artifact_ref, artifact
                 raise ContractError("native_blast_retained_correspondence_conflict") from error
         for ref in [stable.get("complete_rows_artifact_ref"), *stable.get("sequence_artifact_refs", {}).values()]:
             if ref is not None:
-                artifact_path(store, ref)
+                store.require(ref, {"artifact"})
         return prepared
     directory.mkdir(parents=True)
     write_json(directory / "intent.json", {"request_sha256": fingerprint})
@@ -194,13 +207,13 @@ def prepare_native_blast_grading(store, *, bundle, bundle_artifact_ref, artifact
             ("scores_artifact_ref", "scores.json", "application/json"),
             ("selected_rows_artifact_ref", "selected-rows.ndjson", "application/x-ndjson")):
         if (directory / name).is_file():
-            prepared[field] = artifact_file(store, directory / name, media)
-    retained = [{"role": name, "artifact_ref": artifact_file(store, directory / name)}
+            prepared[field] = store.artifact_file(directory / name, media)
+    retained = [{"role": name, "artifact_ref": store.artifact_file(directory / name)}
         for name in ("diagnostics.json", "worker.stdout", "worker.stderr", "worker-result.json", "worker-receipt.json")
         if (directory / name).is_file()]
-    rows_ref = (artifact_file(store, directory / "complete-rows.ndjson", "application/x-ndjson")
+    rows_ref = (store.artifact_file(directory / "complete-rows.ndjson", "application/x-ndjson")
                 if (directory / "complete-rows.ndjson").is_file() else None)
-    sequences = {axis: artifact_file(store, directory / ("sequence-" + axis + ".txt"), "text/plain")
+    sequences = {axis: store.artifact_file(directory / ("sequence-" + axis + ".txt"), "text/plain")
         for axis in ("query", "reference") if (directory / ("sequence-" + axis + ".txt")).is_file()}
     prepared.update(failures=failures, numerical_complete=bool(manifest.get("numerical_complete"))
         and all(prepared[field] is not None for field in ("sheet_artifact_ref", "scores_artifact_ref", "selected_rows_artifact_ref"))
@@ -255,7 +268,7 @@ def _qualified_grading(store, source_ref, bundle, prepared, selector):
         raise ContractError("native_blast_prepared_grading_identity_mismatch")
     for field in ("sheet_artifact_ref", "scores_artifact_ref", "complete_rows_artifact_ref"):
         if stable.get(field) is not None:
-            artifact_path(store, stable[field])
+            store.require(stable[field], {"artifact"})
     if stable.get("sheet_artifact_ref") is not None and stable.get("scores_artifact_ref") is not None:
         try:
             validate_native_blast_correspondence_collections(_read_json(store, stable["sheet_artifact_ref"]),
@@ -263,7 +276,7 @@ def _qualified_grading(store, source_ref, bundle, prepared, selector):
         except (ValueError, KeyError, TypeError, IndexError) as error:
             raise ContractError("native_blast_retained_correspondence_conflict") from error
     captured = [{k: v for k, v in row.items() if k != "kind"} for row in stable["captured_artifacts"]]
-    _, custody_failures = _captured_paths(store, bundle, captured)
+    _, custody_failures = _captured_custody(store, bundle, captured)
     original_failures = {(row["stage"], row["code"]) for row in prepared["failures"]}
     if any((row["stage"], row["code"]) not in original_failures for row in custody_failures):
         raise ContractError("native_blast_retained_capture_changed")
@@ -282,7 +295,7 @@ def _frozen_rows(store, grading, selector, bundle):
     selection = requested["rows"]
     wanted = selection.get("record_keys")
     rows, expected, seen, ordinal = [], [], set(), 0
-    with artifact_path(store, rows_ref).open(encoding="utf-8") as stream:
+    with io.TextIOWrapper(store.open_artifact(rows_ref), encoding="utf-8") as stream:
         for line in stream:
             row = json.loads(line)
             if row["family"] != requested["family"]:
@@ -301,7 +314,7 @@ def _frozen_rows(store, grading, selector, bundle):
                     "record_key": row["record_key"], "native_ordinal": ordinal,
                     "measurements": values, "unavailable": unavailable})
             ordinal += 1
-    with artifact_path(store, selected_ref).open(encoding="utf-8") as stream:
+    with io.TextIOWrapper(store.open_artifact(selected_ref), encoding="utf-8") as stream:
         actual = [json.loads(line) for line in stream]
     if actual != expected:
         raise ContractError("native_blast_selected_rows_frozen_measurement_mismatch")
@@ -355,7 +368,7 @@ def _reference(store, operand, grading, source_ref, scope, publish):
     if seqref is None:
         raise ContractError("native_blast_reference_sequence_unavailable")
     sequence = store.get(seqref)
-    artifact_path(store, seqref)
+    store.require(seqref, {"artifact"})
     if sequence["sha256"] != operand["sequence_sha256"] or sequence["size"] != operand["length"]:
         raise ContractError("native_blast_reference_sequence_mismatch")
     accession = operand["native_id"]

@@ -171,3 +171,210 @@ support refs when bound. `validate_report` requires `x-source` fields to equal t
 | `to_parent.py` | 84 | Report facts: native empty sources, terminal practical facts, received handoffs incl. returnable practical receipts, result refs, file sources/outcomes, origin, `execution_completed` = practical_completed; report validation. | `import:communication` (2) |
 | `waiting.py` | 9 | `suspension_changed`. | `self.workflow.execution_backend` (1), `self.workflow.execution_handle` (2) |
 | `yield_estimator.py` | 49 | Continuation for role launch_hpc: profile `launch_hpc:` + request class (`practical_<kind>[_native_*]_handoff\|outputs`); estimator ends at a verified completion proof. | `import:communication` (1), `import:numerical` (1), `import:practical_yield` (1), `name:PracticalYieldEstimator` (1), `name:YieldController` (1), `name:YieldParameters` (1) |
+
+## Carried over
+
+One row per old function, class and method (`runs/carry_over/functions/...tsv`). Kind: `machinery` (old runner, not carried), `episode function` (new place), `unplaced` (not carried, reported with its reason). Carried 19 November 2026 into the ten-file form; the library calls are `episode_support/...` names, the job service is BLOCKED-ON-JOB-SERVICE (see the blocked file).
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| action_outcome.py | _outcome | machinery | the old outcome envelope (completed/invalid): a tool returns its own outcome, a rejected answer is Rejected in task.py action |
+| binding_record.py | HPCExecutionBindingRecord | machinery | the binding's own as_record() (README 3) |
+| binding_record.py | HPCExecutionBindingRecord.as_record | machinery | the binding's own as_record() (README 3) |
+| closed_credit.py | HPCExecutionClosedCredit | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| closed_credit.py | HPCExecutionClosedCredit._closed_credit_carrier | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| closed_credit.py | HPCExecutionClosedCredit._closed_credit_receipts | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| closed_credit.py | HPCExecutionClosedCredit._closed_credit_value | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| closed_credit.py | HPCExecutionClosedCredit._closed_credit_facts | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| closed_credit.py | HPCExecutionClosedCredit._closed_operational_credit_view | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| completion.py | HPCExecutionCompletion | machinery | completion proof as a controller input and its re-validation against runtime_observations: the controller is CompletionYieldController in yield_estimator.py; the proof itself is computed in messages/internal_summary.py _completion |
+| completion.py | HPCExecutionCompletion.completion_for_action | machinery | completion proof as a controller input and its re-validation against runtime_observations: the controller is CompletionYieldController in yield_estimator.py; the proof itself is computed in messages/internal_summary.py _completion |
+| completion.py | HPCExecutionCompletion._closed_completion_verdict | machinery | completion proof as a controller input and its re-validation against runtime_observations: the controller is CompletionYieldController in yield_estimator.py; the proof itself is computed in messages/internal_summary.py _completion |
+| completion.py | HPCExecutionCompletion.verify_completion | machinery | completion proof as a controller input and its re-validation against runtime_observations: the controller is CompletionYieldController in yield_estimator.py; the proof itself is computed in messages/internal_summary.py _completion |
+| configuration.py | HPCExecutionConfiguration | episode function | the values become ctx.settings (resource, coordinator_workspace, initial_information, launch/tool-knowledge directories, task_yield_profiles; task.py _operations and _resource, yield_estimator.py _task_yield_profile); the old-runner wiring (providers, readers, progress provider) is not carried |
+| configuration.py | HPCExecutionConfiguration.__init__ | episode function | the values become ctx.settings (resource, coordinator_workspace, initial_information, launch/tool-knowledge directories, task_yield_profiles; task.py _operations and _resource, yield_estimator.py _task_yield_profile); the old-runner wiring (providers, readers, progress provider) is not carried |
+| credit.py | HPCExecutionCredit | episode function | credit.py credit (the old operational credit) |
+| credit.py | HPCExecutionCredit.credit_kind | machinery | constant 'operational': no credit kind in the final form; credit.py is the operational credit |
+| credit.py | HPCExecutionCredit.project_credit | episode function | credit.py credit (the closed-view branch is machinery: frozen closed credit) |
+| credit.py | HPCExecutionCredit._live_project_credit | episode function | credit.py credit (project_practical_credit over the summary's receipts); the applies() calls of the result readers are machinery |
+| credit.py | HPCExecutionCredit.credit_view | episode function | credit.py credit |
+| decision_context.py | HPCExecutionTaskContext | machinery | generic old-runner decision context (working state, visible refs, pending work, report deliveries, runtime_actions); what is the episode's own is in messages/internal_summary.py and task.py decide |
+| decision_context.py | HPCExecutionTaskContext.assemble_decision_context | machinery | generic old-runner decision context (working state, visible refs, pending work, report deliveries, runtime_actions); what is the episode's own is in messages/internal_summary.py and task.py decide |
+| decision_context.py | _bind_preserved_runtime_providers | machinery | generic old-runner decision context (working state, visible refs, pending work, report deliveries, runtime_actions); what is the episode's own is in messages/internal_summary.py and task.py decide |
+| decision_contracts.py | HPCExecutionTaskDecisionContracts | machinery | decision-exchange contract validation (saved-request checks, request_context exchange) |
+| decision_contracts.py | HPCExecutionTaskDecisionContracts.interpretation_context | machinery | decision-exchange contract validation (saved-request checks, request_context exchange) |
+| decision_contracts.py | HPCExecutionTaskDecisionContracts.exchange_schema | machinery | decision-exchange contract validation (saved-request checks, request_context exchange) |
+| decision_contracts.py | HPCExecutionTaskDecisionContracts.exchange_response | machinery | decision-exchange contract validation (saved-request checks, request_context exchange) |
+| decision_contracts.py | HPCExecutionTaskDecisionContracts.validate_contract_exchange_request | machinery | decision-exchange contract validation (saved-request checks, request_context exchange) |
+| decision_contracts.py | HPCExecutionTaskDecisionContracts.validate_contract_exchange_history | machinery | decision-exchange contract validation (saved-request checks, request_context exchange) |
+| decision_contracts.py | _bind_preserved_runtime_providers | machinery | decision-exchange contract validation (saved-request checks, request_context exchange) |
+| decision_exchange.py | HPCExecutionTaskDecisionExchange | machinery | the decision-exchange loop (exchange_decision) |
+| decision_exchange.py | HPCExecutionTaskDecisionExchange.exchange_decision | machinery | the decision-exchange loop (exchange_decision) |
+| decision_exchange.py | _bind_preserved_runtime_providers | machinery | the decision-exchange loop (exchange_decision) |
+| decision_provider.py | HPCExecutionTaskDecisionProvider | machinery | provider routing of the decision prompt (complete_with_presentation, provider patching) |
+| decision_provider.py | HPCExecutionTaskDecisionProvider.decision_completion | machinery | provider routing of the decision prompt (complete_with_presentation, provider patching) |
+| episode.py | ExecutionEpisode | episode function | episode.py HPCJobExecution |
+| episode.py | ExecutionEpisode.child_roles | episode function | task.py CHILD_SLOTS = {} (no children) |
+| episode.py | ExecutionEpisode.allowed_children | episode function | task.py CHILD_SLOTS = {} (no children) |
+| episode.py | ExecutionEpisode.permitted_common_actions | episode function | task.py action: only ToolCall exec_command is offered |
+| from_parent.py | HPCExecutionFromParent | episode function | messages/read_from_parent.py |
+| from_parent.py | HPCExecutionFromParent.required_return_sources | machinery | returned () always (the parent selects return fields, README 3b C4) |
+| from_parent.py | HPCExecutionFromParent.child_assignment_schema | unplaced | the frozen-request enum (a launch parent under an hpc ancestor may pass only its already authorised hpc request) is a check of a commission against the parent's own assignment: no check of a commission (rule 1); the parent's msg_to_child copies its authorised request. Reported in contract_misfits |
+| from_parent.py | HPCExecutionFromParent.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM |
+| from_parent.py | HPCExecutionFromParent.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent (validate_assignment); the checks against the commissioning launch request (masking, utility, versions, BLAST database inputs) are checks of a commission and are not carried |
+| from_parent.py | HPCExecutionFromParent.initial_references | episode function | messages/read_from_parent.py ASSIGNMENT_FORM field record_refs (the records the job inputs name, passed in custody) |
+| goal.py | HPCExecutionGoal | episode function | goal.py GOAL and task.py GOAL_INSTRUCTION / _instructions |
+| goal.py | HPCExecutionGoal.instructions | episode function | goal.py GOAL and task.py GOAL_INSTRUCTION / _instructions |
+| instructions.py | instructions | episode function | task.py _instructions (specialist text, tool knowledge, launch library; the child-delivery repair, wait and exchange-protocol paragraphs describe actions that no longer exist and are not carried) |
+| instructions.py | _bind_preserved_runtime_providers | machinery | provider patching |
+| internal_summary.py | HPCExecutionInternalSummary | episode function | messages/internal_summary.py |
+| internal_summary.py | HPCExecutionInternalSummary._with_selected_execution_task | machinery | returned its value unchanged for hpc (no selected-execution-task view): nothing to carry |
+| internal_summary.py | HPCExecutionInternalSummary.decision_context | episode function | messages/internal_summary.py internal_summary and task.py decide |
+| native_actions.py | HPCExecutionNativeActions | episode function | task.py TOOLS / exec_command (the parent-input check before execution is a commission check and is not carried) |
+| native_actions.py | HPCExecutionNativeActions.catalog | episode function | task.py TOOLS / exec_command (the parent-input check before execution is a commission check and is not carried) |
+| native_actions.py | HPCExecutionNativeActions.execute | episode function | task.py TOOLS / exec_command (the parent-input check before execution is a commission check and is not carried) |
+| native_assignment.py | HPCExecutionNativeAssignment | episode function | messages/read_from_parent.py |
+| native_assignment.py | HPCExecutionNativeAssignment._assignment | episode function | messages/read_from_parent.py read_from_parent (validate_assignment) and task.py _operations (the transport's validate_assignment) |
+| native_assignment.py | HPCExecutionNativeAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM |
+| native_assignment.py | HPCExecutionNativeAssignment.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent |
+| native_completion.py | HPCExecutionNativeCompletion | machinery | completion proof / practical estimator: CompletionYieldController in yield_estimator.py, the proof in messages/internal_summary.py _completion |
+| native_completion.py | HPCExecutionNativeCompletion.completion_for_action | machinery | completion proof / practical estimator: CompletionYieldController in yield_estimator.py, the proof in messages/internal_summary.py _completion |
+| native_completion.py | HPCExecutionNativeCompletion.practical_estimator | machinery | completion proof / practical estimator: CompletionYieldController in yield_estimator.py, the proof in messages/internal_summary.py _completion |
+| native_configuration.py | HPCExecutionNativeConfiguration | episode function | task.py _operations (TerminalExecution of the configured PBS resource, from ctx.settings) and settings |
+| native_configuration.py | HPCExecutionNativeConfiguration.__init__ | episode function | task.py _operations (TerminalExecution of the configured PBS resource, from ctx.settings) and settings |
+| native_configuration.py | HPCExecutionNativeConfiguration._operations | episode function | task.py _operations (TerminalExecution of the configured PBS resource, from ctx.settings) and settings |
+| native_configuration.py | HPCExecutionNativeConfiguration.as_record | machinery | the binding's own as_record() (README 3) |
+| native_credit.py | HPCExecutionNativeCredit | episode function | credit.py credit |
+| native_credit.py | HPCExecutionNativeCredit.credit_kind | machinery | constant 'operational' |
+| native_credit.py | HPCExecutionNativeCredit.credit_view | episode function | credit.py credit |
+| native_execution_service.py | TerminalExecutionBehavior | machinery | mix-in composition of the practical executor behaviour (child_roles () and tool-only common actions are CHILD_SLOTS = {} and task.py action) |
+| native_execution_service.py | TerminalExecutionBehavior.child_roles | machinery | mix-in composition of the practical executor behaviour (child_roles () and tool-only common actions are CHILD_SLOTS = {} and task.py action) |
+| native_execution_service.py | TerminalExecutionBehavior.permitted_common_actions | machinery | mix-in composition of the practical executor behaviour (child_roles () and tool-only common actions are CHILD_SLOTS = {} and task.py action) |
+| native_execution_service.py | TerminalExecutionBehavior.allowed_children | machinery | mix-in composition of the practical executor behaviour (child_roles () and tool-only common actions are CHILD_SLOTS = {} and task.py action) |
+| native_goal.py | HPCExecutionNativeGoal | episode function | task.py GOAL_INSTRUCTION and _instructions |
+| native_goal.py | HPCExecutionNativeGoal._resource_instructions | episode function | task.py GOAL_INSTRUCTION and _instructions |
+| native_goal.py | HPCExecutionNativeGoal.instructions | episode function | task.py GOAL_INSTRUCTION and _instructions |
+| native_internal_summary.py | HPCExecutionNativeInternalSummary | episode function | task.py decide and messages/internal_summary.py |
+| native_internal_summary.py | HPCExecutionNativeInternalSummary.initial_decision_context | episode function | task.py decide (execution_resource_information from settings) |
+| native_internal_summary.py | HPCExecutionNativeInternalSummary._resource_information | episode function | task.py _resource |
+| native_internal_summary.py | HPCExecutionNativeInternalSummary.decision_context | episode function | messages/internal_summary.py internal_summary and task.py decide |
+| native_receipt_state.py | HPCExecutionNativeReceiptState | machinery | PracticalState bookkeeping (intent/receipt files, begin/finish idempotency): the system's attempts journal and ctx.operation_key; the receipt is a tool outcome and a held artifact |
+| native_receipt_state.py | HPCExecutionNativeReceiptState._state_directory | machinery | PracticalState bookkeeping (intent/receipt files, begin/finish idempotency): the system's attempts journal and ctx.operation_key; the receipt is a tool outcome and a held artifact |
+| native_receipt_state.py | HPCExecutionNativeReceiptState.initialize | machinery | PracticalState bookkeeping (intent/receipt files, begin/finish idempotency): the system's attempts journal and ctx.operation_key; the receipt is a tool outcome and a held artifact |
+| native_receipt_state.py | HPCExecutionNativeReceiptState.state | machinery | PracticalState bookkeeping (intent/receipt files, begin/finish idempotency): the system's attempts journal and ctx.operation_key; the receipt is a tool outcome and a held artifact |
+| native_return.py | HPCExecutionNativeReturn | episode function | messages/final_to_parent.py |
+| native_return.py | HPCExecutionNativeReturn.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM |
+| native_return.py | HPCExecutionNativeReturn.facts | episode function | messages/final_to_parent.py _facts |
+| native_return.py | HPCExecutionNativeReturn.resolve | machinery | resolution of references named in a report (the system admits record_refs fields against custody) |
+| native_return.py | HPCExecutionNativeReturn.validate_report | episode function | messages/final_to_parent.py validate_report (called by final_to_parent); the form validation of the old body is the system's admission of RETURN_FORM |
+| native_state.py | HPCExecutionNativeState | machinery | filesystem state of the results role (assignment manifest of the results directory): hpc launch has no results; custody replaces files |
+| native_state.py | HPCExecutionNativeState.initialize | machinery | filesystem state of the results role (assignment manifest of the results directory): hpc launch has no results; custody replaces files |
+| native_state.py | HPCExecutionNativeState._result_directory | machinery | filesystem state of the results role (assignment manifest of the results directory): hpc launch has no results; custody replaces files |
+| native_tool_actions.py | HPCExecutionNativeToolActions | episode function | task.py exec_command (tool) and EXEC_COMMAND (catalog); the intent/receipt state (begin/finish) is machinery, the receipt, context tracking, validations and failure outcome are in the tool |
+| native_tool_actions.py | HPCExecutionNativeToolActions.catalog | episode function | task.py exec_command (tool) and EXEC_COMMAND (catalog); the intent/receipt state (begin/finish) is machinery, the receipt, context tracking, validations and failure outcome are in the tool |
+| native_tool_actions.py | HPCExecutionNativeToolActions.execute | episode function | task.py exec_command (tool) and EXEC_COMMAND (catalog); the intent/receipt state (begin/finish) is machinery, the receipt, context tracking, validations and failure outcome are in the tool |
+| native_tool_contracts.py | operation_catalog | episode function | task.py EXEC_COMMAND |
+| parent_launch_contract.py | parent_launch_schema | machinery | the commissioning launch's own schema, used to re-validate the parent's request from runtime_episodes: a check of a commission |
+| parent_request_contracts.py | HPCExecutionParentRequestContracts | episode function | messages/read_from_parent.py and task.py _operations (only _validate_request); the rest are commission checks |
+| parent_request_contracts.py | HPCExecutionParentRequestContracts._check_parent_inputs | machinery | check of a commission against the parent's launch request (read from runtime_episodes): a wrong commission fails (rule 1) |
+| parent_request_contracts.py | HPCExecutionParentRequestContracts._permitted | machinery | check of a commission against the parent's launch request (read from runtime_episodes): a wrong commission fails (rule 1) |
+| parent_request_contracts.py | HPCExecutionParentRequestContracts._request_schema | machinery | check of a commission against the parent's launch request (read from runtime_episodes): a wrong commission fails (rule 1) |
+| parent_request_contracts.py | HPCExecutionParentRequestContracts._validate_request | episode function | messages/read_from_parent.py read_from_parent (validate_assignment) and task.py _operations (the transport's validate_assignment) |
+| parent_request_contracts.py | HPCExecutionParentRequestContracts._launch | machinery | check of a commission against the parent's launch request (read from runtime_episodes): a wrong commission fails (rule 1) |
+| parent_request_contracts.py | HPCExecutionParentRequestContracts._constraints | machinery | check of a commission against the parent's launch request (read from runtime_episodes): a wrong commission fails (rule 1) |
+| presentation.py | present_execution_context | episode function | task.py _task_text and decide (the HPC prompt presentation over this episode's own summary; the provider presentation-state machinery is not carried) |
+| protected_reference_access.py | ProtectedReferenceAccess | machinery | installation of protected reference readers for resolving references named in a report (report reference resolution) |
+| protected_reference_access.py | ProtectedReferenceAccess._install_protected_reference_readers | machinery | installation of protected reference readers for resolving references named in a report (report reference resolution) |
+| protected_reference_access.py | ProtectedReferenceAccess._protein_reference_access | machinery | installation of protected reference readers for resolving references named in a report (report reference resolution) |
+| protected_reference_access.py | ProtectedReferenceAccess._fluorescence_reference_access | machinery | installation of protected reference readers for resolving references named in a report (report reference resolution) |
+| protected_reference_access.py | ProtectedReferenceAccess._expression_nmf_reference_access | machinery | installation of protected reference readers for resolving references named in a report (report reference resolution) |
+| protected_reference_access.py | ProtectedReferenceAccess._atac_reference_access | machinery | installation of protected reference readers for resolving references named in a report (report reference resolution) |
+| protected_reference_access.py | ProtectedReferenceAccess._chromatin_reference_access | machinery | installation of protected reference readers for resolving references named in a report (report reference resolution) |
+| receipt_selection.py | HPCExecutionReceiptSelection | machinery | receipts bookkeeping (selection of received records) |
+| receipt_selection.py | HPCExecutionReceiptSelection._selection | machinery | receipts bookkeeping (selection of received records) |
+| receipt_selection.py | HPCExecutionReceiptSelection._received | machinery | receipts bookkeeping (selection of received records) |
+| received_action_identity.py | HPCExecutionReceivedActionIdentity | machinery | receipts bookkeeping (identity of the selected result action) |
+| received_action_identity.py | HPCExecutionReceivedActionIdentity._selected_result_action | machinery | receipts bookkeeping (identity of the selected result action) |
+| received_parent_records.py | HPCExecutionReceivedParentRecords | machinery | received report sources and facts read from receipts and runtime_* tables (custody replaces them) |
+| received_parent_records.py | HPCExecutionReceivedParentRecords._has_appservice | machinery | received report sources and facts read from receipts and runtime_* tables (custody replaces them) |
+| received_parent_records.py | HPCExecutionReceivedParentRecords._has_uniprot | machinery | received report sources and facts read from receipts and runtime_* tables (custody replaces them) |
+| received_parent_records.py | HPCExecutionReceivedParentRecords._appservice_sources | machinery | received report sources and facts read from receipts and runtime_* tables (custody replaces them) |
+| received_parent_records.py | HPCExecutionReceivedParentRecords._forwards_bvbrc_reports | machinery | received report sources and facts read from receipts and runtime_* tables (custody replaces them) |
+| received_parent_records.py | HPCExecutionReceivedParentRecords.received_report_sources | machinery | received report sources and facts read from receipts and runtime_* tables (custody replaces them) |
+| received_parent_records.py | HPCExecutionReceivedParentRecords.received_report_facts | machinery | received report sources and facts read from receipts and runtime_* tables (custody replaces them) |
+| received_parent_records.py | HPCExecutionReceivedParentRecords.received_report_closure_facts | machinery | received report sources and facts read from receipts and runtime_* tables (custody replaces them) |
+| received_reference_access.py | HPCExecutionReceivedParentRecordsReferenceAccess | machinery | resolution of received references (custody) |
+| received_reference_access.py | HPCExecutionReceivedParentRecordsReferenceAccess._masking_reference_access | machinery | resolution of received references (custody) |
+| received_reference_access.py | HPCExecutionReceivedParentRecordsReferenceAccess._utility_reference_access | machinery | resolution of received references (custody) |
+| received_reference_access.py | HPCExecutionReceivedParentRecordsReferenceAccess.resolve_received_reference | machinery | resolution of received references (custody) |
+| received_report_admission.py | HPCExecutionReceivedParentRecordsAdmission | machinery | admission of received reports (the system admits results against the child's form) |
+| received_report_admission.py | HPCExecutionReceivedParentRecordsAdmission.validate_received_report | machinery | admission of received reports (the system admits results against the child's form) |
+| received_report_admission.py | HPCExecutionReceivedParentRecordsAdmission.received_form_references | machinery | admission of received reports (the system admits results against the child's form) |
+| received_result_custody.py | HPCExecutionReceivedResultCustody | machinery | custody of received result bodies of the results role (system custody) |
+| received_result_custody.py | HPCExecutionReceivedResultCustody._validate_result_body | machinery | custody of received result bodies of the results role (system custody) |
+| received_result_custody.py | HPCExecutionReceivedResultCustody._read_result | machinery | custody of received result bodies of the results role (system custody) |
+| report_delivery.py | HPCExecutionReportDelivery | machinery | report finish, runtime_forms and release (report_form machinery) |
+| report_delivery.py | HPCExecutionReportDelivery.finish | machinery | report finish, runtime_forms and release (report_form machinery) |
+| report_delivery.py | _bind_preserved_runtime_providers | machinery | report finish, runtime_forms and release (report_form machinery) |
+| report_fields.py | HPCExecutionToParentFields | episode function | messages/final_to_parent.py RETURN_FORM |
+| report_fields.py | HPCExecutionToParentFields.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM |
+| report_reference_access.py | HPCExecutionToParentReferenceAccess | machinery | resolution of references in the report (the system admits record_refs fields against custody) |
+| report_reference_access.py | HPCExecutionToParentReferenceAccess.resolve | machinery | resolution of references in the report (the system admits record_refs fields against custody) |
+| resource_information.py | HPCExecutionResourceInformation | episode function | task.py _resource / decide (the hpc part); the resource list and commission routes are the parent's own text |
+| resource_information.py | HPCExecutionResourceInformation._resource_information | episode function | task.py _resource (the hpc resource; the api configuration facts do not apply to hpc) |
+| resource_information.py | HPCExecutionResourceInformation.initial_decision_context | episode function | task.py decide (execution_resource_information); the received BV-BRC values and BLAST jobs are for api and scientific roles |
+| resource_information.py | HPCExecutionResourceInformation.capabilities | unplaced | configured operation availability of every bound resource, shown to the commissioning parent's model when it picks a resource: the parent's own text, not this episode's |
+| resource_information.py | HPCExecutionResourceInformation.resource_tool_contracts | unplaced | commission routes and tool contracts of every resource, for the commissioning parent's model: the parent's own text, not this episode's |
+| resource_operations.py | launch_operation_catalog | unplaced | declared launch operation execution.capabilities (read the configured resource) belonged to the parent's catalogue; the resource is in this episode's decide context |
+| result_operations.py | native_result_operation_catalog | unplaced | catalogue of the results role (execution.results.status / collect / read): belongs to the result acquisition episode |
+| retained_native_receipts.py | HPCExecutionRetainedNativeReceipts | machinery | delegate to the practical state of the resource role (receipts bookkeeping) |
+| retained_native_receipts.py | HPCExecutionRetainedNativeReceipts._delegate | machinery | delegate to the practical state of the resource role (receipts bookkeeping) |
+| retained_native_receipts.py | HPCExecutionRetainedNativeReceipts._practical_context | machinery | delegate to the practical state of the resource role (receipts bookkeeping) |
+| retained_native_receipts.py | HPCExecutionRetainedNativeReceipts.state | machinery | delegate to the practical state of the resource role (receipts bookkeeping) |
+| scientific_inputs.py | HPCExecutionScientificInputs | machinery | check of a commission's masking, utility and pinned input versions against the parent's request: a wrong commission fails (rule 1) |
+| scientific_inputs.py | HPCExecutionScientificInputs._masking_inputs | machinery | check of a commission's masking, utility and pinned input versions against the parent's request: a wrong commission fails (rule 1) |
+| scientific_inputs.py | HPCExecutionScientificInputs._utility_inputs | machinery | check of a commission's masking, utility and pinned input versions against the parent's request: a wrong commission fails (rule 1) |
+| scientific_inputs.py | HPCExecutionScientificInputs._versions | machinery | check of a commission's masking, utility and pinned input versions against the parent's request: a wrong commission fails (rule 1) |
+| selector_contracts.py | HPCExecutionSelectorContracts | machinery | validation of result selectors for the results role (a commission to result acquisition): not this episode's, and a commission check |
+| selector_contracts.py | HPCExecutionSelectorContracts._masking_selector | machinery | validation of result selectors for the results role (a commission to result acquisition): not this episode's, and a commission check |
+| selector_contracts.py | HPCExecutionSelectorContracts._utility_selector | machinery | validation of result selectors for the results role (a commission to result acquisition): not this episode's, and a commission check |
+| selector_contracts.py | HPCExecutionSelectorContracts._selector | machinery | validation of result selectors for the results role (a commission to result acquisition): not this episode's, and a commission check |
+| selector_contracts.py | HPCExecutionSelectorContracts._windows | machinery | validation of result selectors for the results role (a commission to result acquisition): not this episode's, and a commission check |
+| target_custody.py | HPCExecutionTargetCustody | machinery | authentication of the handed-off target for the results role (receipt custody) |
+| target_custody.py | HPCExecutionTargetCustody._retained_masking_target | machinery | authentication of the handed-off target for the results role (receipt custody) |
+| target_custody.py | HPCExecutionTargetCustody._retained_utility_target | machinery | authentication of the handed-off target for the results role (receipt custody) |
+| target_custody.py | HPCExecutionTargetCustody._target | machinery | authentication of the handed-off target for the results role (receipt custody) |
+| target_custody.py | HPCExecutionTargetCustody._context_target | machinery | authentication of the handed-off target for the results role (receipt custody) |
+| task.py | HPCExecutionTask | machinery | the old task class (mix-in composition of the decision machine): task.py decide, action and exec_command |
+| task.py | HPCExecutionTask.next | machinery | the old decision loop with checkpoint/restore, completions and pending deliveries; task.py decide and action |
+| task.py | _bind_preserved_runtime_providers | machinery | provider patching |
+| task_action.py | HPCExecutionTaskAction | episode function | task.py action and exec_command |
+| task_action.py | HPCExecutionTaskAction.apply_response | episode function | task.py action (the answer is decoded, validated against EXEC_COMMAND's schema and the resource, rejected with Rejected otherwise) |
+| task_action.py | HPCExecutionTaskAction.execute | episode function | task.py exec_command (the journalled action, score, credit and controller input are the system's: machinery) |
+| task_action.py | _bind_preserved_runtime_providers | machinery | provider patching |
+| task_decision.py | HPCExecutionTaskDecision | episode function | task.py decide |
+| task_decision.py | HPCExecutionTaskDecision.call | episode function | task.py decide (the context of the model request; the old-runner assembly, journalling of the model call and the exchange are machinery) |
+| task_decision.py | HPCExecutionTaskDecision.instructions | episode function | task.py _instructions |
+| task_decision.py | HPCExecutionTaskDecision.conversation_key | machinery | conversation state across calls: every ModelRequest carries the full context |
+| task_decision.py | _bind_preserved_runtime_providers | machinery | provider patching |
+| task_state.py | HPCExecutionTaskState | machinery | task state, checkpoint, restore and effect records (the system journals units and restores the view) |
+| task_state.py | HPCExecutionTaskState.__init__ | machinery | task state, checkpoint, restore and effect records (the system journals units and restores the view) |
+| task_state.py | HPCExecutionTaskState.bind_execution_context | machinery | task state, checkpoint, restore and effect records (the system journals units and restores the view) |
+| task_state.py | HPCExecutionTaskState.record_execution_failure | episode function | task.py _failure and exec_command (a failed command is a returned outcome with its receipt) |
+| task_state.py | HPCExecutionTaskState.restore_checkpoint | machinery | task state, checkpoint, restore and effect records (the system journals units and restores the view) |
+| task_state.py | HPCExecutionTaskState.restore | machinery | task state, checkpoint, restore and effect records (the system journals units and restores the view) |
+| task_state.py | HPCExecutionTaskState.record_effect | machinery | task state, checkpoint, restore and effect records (the system journals units and restores the view) |
+| task_state.py | HPCExecutionTaskState.checkpoint | machinery | task state, checkpoint, restore and effect records (the system journals units and restores the view) |
+| task_state.py | _bind_preserved_runtime_providers | machinery | task state, checkpoint, restore and effect records (the system journals units and restores the view) |
+| to_parent.py | HPCExecutionToParent | episode function | messages/final_to_parent.py |
+| to_parent.py | HPCExecutionToParent.facts | episode function | messages/final_to_parent.py _facts |
+| to_parent.py | HPCExecutionToParent._live_facts | episode function | messages/final_to_parent.py _facts (the native empty families; the handoff references come from the summary's receipts; the masking and utility families cannot be form fields; the file-capture, BV-BRC and AppService facts do not apply to hpc) |
+| to_parent.py | HPCExecutionToParent.validate_report | episode function | messages/final_to_parent.py validate_report (the masking, utility and UniProt received-report checks belong to the results role) |
+| waiting.py | HPCExecutionWaiting | machinery | suspension/wait machinery (set_suspension) |
+| waiting.py | HPCExecutionWaiting.suspension_changed | machinery | suspension/wait machinery (set_suspension) |
+| yield_estimator.py | ExecutionEpisodeYield | episode function | yield_estimator.py |
+| yield_estimator.py | ExecutionEpisodeYield._request_yield_class | episode function | yield_estimator.py _request_yield_class (library candidate; the api branch does not apply) |
+| yield_estimator.py | ExecutionEpisodeYield._task_yield_profile | episode function | yield_estimator.py _task_yield_profile (library candidate) |
+| yield_estimator.py | ExecutionEpisodeYield.yield_controller | episode function | yield_estimator.py yield_controller (the private-yield flag is configuration machinery) |
+| yield_estimator.py | ExecutionEpisodeYield._launch_hpc_yield_controller | episode function | yield_estimator.py yield_controller (CompletionYieldController replaces YieldController with PracticalYieldEstimator) |
+| yield_estimator.py | ExecutionEpisodeYield.practical_estimator | machinery | the practical estimator (PracticalYieldEstimator): CompletionYieldController |

@@ -6,11 +6,19 @@ It never treats a source format, report, or revised judgment as another assay.
 """
 from copy import deepcopy
 import hashlib
-import json
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import REF, obj, validate_schema
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 EXPERIMENT_TYPES = {'intervention_response': {'question': "What does the intervention establish about the molecule's contribution to the observed outcome?", 'designs': ('native_deletion_restoration', 'selective_perturbation_restoration', 'cas_free_reconstitution', 'variant_replacement', 'other_explicit', 'unknown', 'conflicting'), 'considerations': ('actual molecule, recipient, donor, coexisting copies and required partners', 'intended intervention, measured extent and unintended amount changes', 'same endpoint, eligibility denominator, normalization, conditions and timing', 'measurement calibration, detection limits and source uncertainty', 'reference/intervention contrast and genuinely separate restoration arm if present', 'nuisance amount comparability versus endpoint-scale alternative-effect bounds', 'biological/preparation/technical units, pairing and shared controls'), 'reader': 'read_perturbation_inputs', 'calculators': ('populate_source_restoration', 'populate_source_summary_restoration'), 'combination': 'Existing within-experiment source restoration product; no new cross-experiment rule.'}}
+
+ASSESSMENTS = TableDeclaration(name='experimental_activity_assessments',
+                               columns=('sheet_ref', 'experiment_ref', 'assessment_key', 'assessment'),
+                               key=('sheet_ref',), record_refs=('sheet_ref', 'experiment_ref'))
+
+def record_assessment(store, sheet_ref, assessment):
+    """Keep the assessment saved with a sheet as the Episode's row, keyed by the sheet."""
+    return store.table(ASSESSMENTS).put({'sheet_ref': sheet_ref, 'experiment_ref': assessment['experiment_ref'], 'assessment_key': assessment['assessment_key'], 'assessment': deepcopy(assessment)})
 
 def assessment_schema():
     reference = {**REF, 'x-reference-namespace': 'reference'}
@@ -52,16 +60,12 @@ def current_assessments(repository):
     Historical unlinked sheets remain available through their original APIs.
     """
     histories, superseded = ({}, set())
-    for row in repository.store.db.execute(f'SELECT outcome FROM {repository.operations_table} WHERE run_id=?', (repository.run_id,)):
-        outcome = json.loads(row['outcome'])
-        result = outcome.get('result') or {}
-        assessment = result.get('experiment_assessment')
-        if assessment is None:
-            continue
-        saved = repository.read(result['sheet_ref'])
+    for row in repository.store.table(ASSESSMENTS).select():
+        assessment = row['assessment']
+        saved = repository.read(row['sheet_ref'])
         if saved.get('experiment_assessment') != assessment:
             raise ContractError('perturbation_assessment_saved_mismatch')
-        histories[result['sheet_ref']] = deepcopy(assessment)
+        histories[row['sheet_ref']] = deepcopy(assessment)
         if assessment['revises_sheet_ref'] is not None:
             superseded.add(assessment['revises_sheet_ref'])
     heads = [{'sheet_ref': ref, **value} for ref, value in histories.items() if ref not in superseded]
@@ -78,20 +82,19 @@ def check_revision(repository, value):
     if expected != value['revises_sheet_ref']:
         raise ContractError('perturbation_assessment_revision_required' if expected else 'perturbation_assessment_predecessor_mismatch')
 
-def validate_saved_assessment(repository, saved, request):
+def validate_saved_assessment(repository, saved, request, sheet_ref):
     expected = request['arguments'].get('experiment_assessment')
     if saved.get('experiment_assessment') != expected:
         raise ContractError('perturbation_assessment_saved_mismatch')
     if expected is not None:
         validate_assessment(expected)
-        operation = repository.store.db.execute(f'SELECT outcome FROM {repository.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (repository.run_id, request['episode_id'], request['operation_key'])).fetchone()
-        outcome = json.loads(operation['outcome'])
-        source = repository.store.get(outcome['result']['sheet_ref'])
+        row = repository.store.table(ASSESSMENTS).select({"sheet_ref": sheet_ref})[0]
+        source = repository.store.get(row['sheet_ref'])
         for field in ('artifact_ref', 'request_ref'):
             raw = repository.store.get_artifact(source[field])
             if 'artifact_' + hashlib.sha256(raw).hexdigest() != source[field]:
                 raise ContractError('perturbation_assessment_artifact_mismatch')
-        if outcome['result'].get('experiment_assessment') != expected:
+        if row['assessment'] != expected:
             raise ContractError('perturbation_assessment_saved_mismatch')
         if saved['experimental_bindings']['experiment_ref'] != expected['experiment_ref']:
             raise ContractError('perturbation_assessment_experiment_mismatch')

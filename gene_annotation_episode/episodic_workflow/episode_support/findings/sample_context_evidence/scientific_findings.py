@@ -16,7 +16,7 @@ def finding_target_roots(store, assessment):
         # Clearing a revisable allocation does not change the original target
         # domain or cancel a legitimately owned correction declaration.
         return set(assessment['context_account_scope']['subject_refs'])
-    return set(store._record_roots('assessment', assessment))
+    return set(store.roots(assessment['id']))
 
 
 class FindingIdentity:

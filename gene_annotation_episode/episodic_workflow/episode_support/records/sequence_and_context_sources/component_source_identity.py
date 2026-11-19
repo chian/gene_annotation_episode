@@ -151,8 +151,7 @@ def calculate(store, args, context, known):
         if width > 1048576:
             missing.append('source_identity_declaration_exceeds_source_reader_capacity')
         else:
-            path = store.path/'artifacts'/artifact['sha256'][:2]/artifact['sha256']
-            with path.open('rb') as stream:
+            with store.open_artifact(artifact['id']) as stream:
                 stream.seek(anchor['start'])
                 raw = stream.read(width)
             require(raw.decode('utf-8') == anchor['quote'], 'declaration_bytes_conflict')

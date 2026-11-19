@@ -11,7 +11,7 @@ from episode_runtime import EPISODE_API
 LIBRARY = Path(episode_runtime.__file__).parents[1] / 'gene_annotation_episode' / 'episodic_workflow' / 'episode_support'
 RUNNER_MODULES = ('episode_runtime.recording', 'episode_runtime.runner', 'episode_runtime.store_scope',
                   'episode_runtime.work_tables', 'episode_runtime.services', 'episode_runtime.episode_type',
-                  'episode_runtime.store_ledger')
+                  'episode_runtime.store_ledger', 'episode_runtime.scratch')
 RUNNER_NAMES = ('Custody', 'UnitAttempts', 'UnitPosition', 'RecordedModel', 'Attempt', 'BoundEpisode', 'ChildBuilder',
                 'WorkRows', 'StoreLedger', 'admit_entry', 'pass_records', 'return_records')
 STORE_MODULE = 'gene_annotation_episode.state'

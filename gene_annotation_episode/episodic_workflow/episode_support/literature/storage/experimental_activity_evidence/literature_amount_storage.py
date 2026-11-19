@@ -1,6 +1,7 @@
 """Selected source-amount persistence and exact typed subsets; no credit policy."""
 from __future__ import annotations
 import json
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, obj
 from gene_annotation_episode.domain import ContractError
@@ -40,12 +41,15 @@ def _bindings(extraction, publish):
     experimental = {'experiment_ref': reference(extraction['experiment'], 'experiment'), 'intended_change_ref': reference(extraction['intended_change'], 'intended_change'), 'covariance_source_ref': extraction['covariance_source']['source_ref'] if extraction['covariance_source'] else None}
     return (quantity_bindings, experimental)
 
+OPERATIONS = operations_ledger('literature_amount_operations')
+RECEIVED = received_ledger('literature_amount_received')
+
 class LiteratureAmountRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = VERSION
-    operations_table = 'literature_amount_operations'
-    received_table = 'literature_amount_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ()
 
     def populate(self, context, arguments, operation_key):
@@ -55,7 +59,7 @@ class LiteratureAmountRepository(LiteratureRateRepository):
             raise ContractError('operation_key_required')
         args = plain(arguments)
         signature = canonical({'arguments': args, 'scope': plain(context.scope), 'run_id': self.run_id, 'episode_id': context.episode_id})
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
+        old = self._operation(context.episode_id, operation_key)
         if old is not None:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -91,9 +95,9 @@ class LiteratureAmountRepository(LiteratureRateRepository):
 
             def publish(kind, value):
                 key = identity(kind, {'origin': 'tool', 'record': value})
-                exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (key,)).fetchone()
+                exists = self.store.holds(key)
                 row = self.store.put(kind, value, origin='tool', scope=plain(context.scope))
-                if exists is None:
+                if not exists:
                     created.append(row['id'])
                 return row['id']
             quantities, experimental = _bindings(extraction, publish)
@@ -103,7 +107,7 @@ class LiteratureAmountRepository(LiteratureRateRepository):
             sheet_ref = publish('source', {'provider': self.provider, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': parents})
             refs = [sheet_ref, *dict.fromkeys((ref for bindings in quantities.values() for field, ref in bindings.items() if field in _QUANTITY_REF_FIELDS and ref)), *[ref for ref in experimental.values() if ref]]
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': list(dict.fromkeys(refs)), 'changed_record_refs': created, 'result': {'sheet_ref': sheet_ref, 'cells': sheet['cells'], 'comparison_kind': extraction['comparison_kind']['value'], 'pair_relationship': extraction['pair_relationship']['value'], 'stock_relationship': extraction['stock_relationship']['value'], 'quantity_metadata': quantities, 'variance_status': sheet['variance_status'], 'covariance_origin': sheet['covariance_origin'], 'mass_factor_applied_to_rate': False}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def read(self, sheet_ref):
@@ -113,7 +117,7 @@ class LiteratureAmountRepository(LiteratureRateRepository):
         request = json.loads(self.store.get_artifact(source['request_ref']))
         if request.get('run_id') != self.run_id:
             raise ContractError('literature_amount_sheet_run_mismatch')
-        row = self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request.get('episode_id'), request.get('operation_key'))).fetchone()
+        row = self._operation(request.get('episode_id'), request.get('operation_key'))
         outcome = json.loads(row['outcome']) if row else None
         if outcome is None or outcome.get('result', {}).get('sheet_ref') != sheet_ref:
             raise ContractError('literature_sheet_not_selected_output')

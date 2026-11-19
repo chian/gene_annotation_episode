@@ -23,6 +23,49 @@ def grade_hmmer_api_result(content, *, algorithm, artifact_ref, inputs,
     return {"sheet": sheet, "scores": calculate_hmmer_search_scores(sheet, parameters=parameters)}
 
 
+def grade_hmmer_native_artifacts(*, program, artifacts, artifact_refs,
+                                engine_version, inputs, parameters=None,
+                                checkpoints=()):
+    """Grade explicitly supplied complete or partial native text artifacts.
+
+    Searches take stdout/tblout/domtblout as applicable. hmmalign takes the
+    actual Stockholm under the ``stockholm`` role; a log or HTML page is not
+    an alignment. Large callers can instead use the family streaming parsers
+    and the same sheet builders/calculators on their explicitly associated rows.
+    """
+    if program in {"phmmer", "hmmscan", "hmmsearch", "jackhmmer"}:
+        from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.hmmer_search_inputs import parse_hmmer_search_artifacts, build_hmmer_search_sheet
+        from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.gene_context_evidence.hmmer_search_grader import calculate_hmmer_search_scores
+        native = parse_hmmer_search_artifacts(program=program, artifacts=artifacts,
+            artifact_refs=artifact_refs, engine_version=engine_version, checkpoints=checkpoints)
+        sheet = build_hmmer_search_sheet(native, inputs=inputs)
+        scores = calculate_hmmer_search_scores(sheet, parameters=parameters)
+    elif program in {"nhmmer", "nhmmscan"}:
+        if checkpoints:
+            raise ValueError("hmmer_checkpoints_not_applicable_to_nucleotide_search")
+        from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.nhmmer_inputs import parse_nhmmer_artifacts, build_nhmmer_sheet
+        from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.nhmmer_grader import calculate_nhmmer_scores
+        native = parse_nhmmer_artifacts(program=program, artifacts=artifacts,
+            artifact_refs=artifact_refs, engine_version=engine_version)
+        sheet = build_nhmmer_sheet(native, inputs=inputs)
+        scores = calculate_nhmmer_scores(sheet, parameters=parameters)
+    elif program == "hmmalign":
+        if checkpoints:
+            raise ValueError("hmmer_checkpoints_not_applicable_to_profile_alignment")
+        if (not isinstance(artifacts, dict) or set(artifacts) != {"stockholm"}
+                or not isinstance(artifact_refs, dict) or "stockholm" not in artifact_refs):
+            raise ValueError("hmmalign_stockholm_artifact_required")
+        from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_alignment.hmmalign_inputs import parse_hmmalign_stockholm, build_hmmalign_sheet
+        from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.hmmalign_grader import calculate_hmmalign_scores
+        native = parse_hmmalign_stockholm(artifacts["stockholm"],
+            artifact_ref=artifact_refs["stockholm"], engine_version=engine_version)
+        sheet = build_hmmalign_sheet(native, inputs=inputs)
+        scores = calculate_hmmalign_scores(sheet, parameters=parameters)
+    else:
+        raise ValueError("hmmer_grading_program_unsupported")
+    return {"sheet": sheet, "scores": scores}
+
+
 HMMER_DOMAIN_METRICS = (
     "model_length", "sequence_length", "model_span_positions",
     "sequence_span_residues", "sequence_envelope_residues", "model_span_coverage",

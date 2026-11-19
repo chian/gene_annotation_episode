@@ -13,20 +13,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 class A108SheetRepository(LiteratureRateRepository):
     binding_fields = ()
 
-    def __init__(self, store, run_id, *, read_cells=None):
-        if not isinstance(run_id, str) or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id, self._read_cells = (store, run_id, read_cells)
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
+    def __init__(self, store, *, read_cells=None):
+        self.store, self._read_cells = (store, read_cells)
 
     def _record(self, context, ref, kind=None):
-        if ref not in context.received_record_refs:
-            raise ContractError('a108_record_not_received')
         if not self.store.reference_subset([ref], plain(context.scope)):
             raise ContractError('a108_record_outside_scope')
         record = self.store.get(ref)
@@ -52,24 +42,11 @@ class A108SheetRepository(LiteratureRateRepository):
         return value
 
     def populate(self, context, arguments, operation_key):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        if not isinstance(operation_key, str) or not operation_key:
-            raise ContractError('operation_key_required')
         args = plain(arguments)
         validate_schema(args, self.population_schema())
         requested = self._components(context.assignment.get(self.requested, ()))
-        request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope), 'requested_components': requested}
+        request = {'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope), 'requested_components': requested}
         signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
-        if old:
-            if old['signature'] != signature:
-                raise ContractError('operation_key_reused_for_different_work')
-            outcome = json.loads(old['outcome'])
-            saved = self.read(outcome['result']['sheet_ref'])
-            for ref in saved['direct_record_refs']:
-                self._record(context, ref)
-            return outcome
         direct, bindings, artifacts, reader_records = ([], {}, {}, [])
 
         def retain(record, possessed=False):
@@ -116,17 +93,17 @@ class A108SheetRepository(LiteratureRateRepository):
         if calculation_context is not None:
             payload['calculation_context'] = calculation_context
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
             request_ref = self.store.artifact(signature, 'application/json')
             record = {'provider': self.provider, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref, 'version': self.record_version, 'retrieved_at': None, 'parent_source_refs': sources}
             sheet_ref = identity('source', {'origin': 'tool', 'record': record})
-            exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (sheet_ref,)).fetchone()
+            new = not self.store.holds(sheet_ref)
             self.store.put('source', record, origin='tool', scope=plain(context.scope))
             rows = self.rows(payload, sheet_ref, requested)
             validate_schema(rows, self.cells_schema())
-            outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [sheet_ref], 'changed_record_refs': [] if exists else [sheet_ref], 'result': {'sheet_ref': sheet_ref, 'cells': rows}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            outcome = {'status': 'completed', 'operation_ref': identity('operation', {'key': operation_key}), 'record_refs': [sheet_ref], 'changed_record_refs': [sheet_ref] if new else [], 'result': {'sheet_ref': sheet_ref, 'cells': rows}, 'feedback': None}
+            self.store.table(self.operations).put({'sheet_ref': sheet_ref})
+            self.publish_cells(sheet_ref, requested)
         return outcome
 
     def peer_repository(self):
@@ -143,16 +120,12 @@ class A108SheetRepository(LiteratureRateRepository):
         if identity('source', {'origin': 'tool', 'record': record}) != sheet_ref:
             raise ContractError('a108_saved_identity_mismatch')
         request = self._artifact_json(source['request_ref'])
-        if set(request) != {'run_id', 'episode_id', 'operation_key', 'arguments', 'scope', 'requested_components'} or request['run_id'] != self.run_id:
+        if set(request) != {'operation_key', 'arguments', 'scope', 'requested_components'}:
             raise ContractError('a108_saved_request_mismatch')
         scope = self.store.validate_scope(request['scope'])
         self._native_provenance(scope, sheet_ref)
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
-        if operation is None or operation['signature'] != canonical(request):
-            raise ContractError('a108_saved_operation_mismatch')
         saved = self._artifact_json(source['artifact_ref'])
-        outcome = json.loads(operation['outcome'])
-        if set(saved) - {'calculation_context'} != {'version', 'selection', 'extraction', 'sheet', 'reader_records', 'direct_record_refs', 'input_source_refs', 'record_bindings', 'artifact_bindings'} or saved['version'] != self.record_version or saved['selection'] != request['arguments'] or (saved['input_source_refs'] != source['parent_source_refs']) or (outcome.get('status') != 'completed') or (outcome.get('result', {}).get('sheet_ref') != sheet_ref) or (outcome.get('record_refs') != [sheet_ref]) or (outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
+        if set(saved) - {'calculation_context'} != {'version', 'selection', 'extraction', 'sheet', 'reader_records', 'direct_record_refs', 'input_source_refs', 'record_bindings', 'artifact_bindings'} or saved['version'] != self.record_version or saved['selection'] != request['arguments'] or (saved['input_source_refs'] != source['parent_source_refs']):
             raise ContractError('a108_saved_selection_mismatch')
         validate_schema(saved['selection'], self.population_schema())
         validate_schema(saved['extraction'], self.input_schema())
@@ -169,80 +142,43 @@ class A108SheetRepository(LiteratureRateRepository):
         self.validate_saved_inputs(saved)
         rows = self.rows(saved, sheet_ref, self._components(request['requested_components']))
         validate_schema(rows, self.cells_schema())
-        if canonical(rows) != canonical(outcome['result']['cells']):
-            raise ContractError('a108_saved_cells_mismatch')
         return saved
 
     def validate_saved_inputs(self, saved):
         """Optional structural provenance checks, without scientific recomputation."""
 
-    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+    def project_cells(self, sheet_refs, *, components=None):
         selected = self._components(self.components if components is None else components)
         rows = []
         for ref in dict.fromkeys(sheet_refs):
-            if ref not in permitted_record_refs:
-                raise ContractError('literature_sheet_not_received')
             rows.extend(self.rows(self.read(ref), ref, selected))
         return rows
 
     def selected_sheet_refs(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        if not self._installed(self.operations_table):
-            return []
-        rows = self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id))
-        return list(dict.fromkeys((json.loads(row['outcome'])['result']['sheet_ref'] for row in rows)))
+        return self.owned_sheet_refs()
 
     def available_sheet_refs(self, context):
-        refs = []
-        for ref in context.received_record_refs:
-            record = self.store.get(ref)
-            if record.get('provider') == self.provider and record.get('version') == self.record_version:
-                self.read(ref)
-                refs.append(ref)
-        return list(dict.fromkeys(refs))
+        held = [row['sheet_ref'] for row in self.store.table(self.cells_table).select()]
+        return list(dict.fromkeys([*self.owned_sheet_refs(), *held]))
 
-    def received_cells(self, context):
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self._install()
-            return super().receive_cells(context, cells, operation_key)
-
-    def _private_binding(self, source_ref, artifact_ref):
-        if not self._installed(self.operations_table):
-            return None
-        for row in self.store.db.execute(f'SELECT run_id,episode_id,outcome FROM {self.operations_table}'):
-            outcome = json.loads(row['outcome'])
-            ref = outcome.get('result', {}).get('sheet_ref')
-            if ref is None:
-                continue
-            source = self.store.get(ref)
-            if source_ref == ref or (artifact_ref is not None and artifact_ref in {source.get('artifact_ref'), source.get('text_ref'), source.get('request_ref')}):
-                return (row['run_id'], row['episode_id'])
-        return None
+    def _foreign_sheet(self, source_ref):
+        """Whether ``source_ref`` is a saved sheet of this repository that another Episode produced."""
+        source = self.store.get(source_ref)
+        return source.get('provider') == self.provider and self.store.receipt(source_ref)['how'] != 'produced'
 
     def authorize_source_access(self, context, source_ref, representation, tool_name):
         source = self.store.get(source_ref)
         if source.get('record_type') != 'source':
             return
-        field = 'artifact_ref' if representation == 'original' else 'text_ref' if representation == 'text' else representation + '_ref'
-        artifact = source.get(field)
-        if representation == 'text' and tool_name == 'source.read':
-            artifact = artifact or source.get('artifact_ref')
-        owner = self._private_binding(source_ref, artifact)
-        if owner is not None and owner != (context.run_id, context.episode_id):
+        if self._foreign_sheet(source_ref):
             raise ContractError('a108_selected_components_required_for_nonowner')
 
     def authorize_record_access(self, context, record):
         if record.get('record_type') in {'source', 'artifact'}:
             return
         for anchor in (record, record.get('anchor'), record.get('visual_anchor')):
-            if isinstance(anchor, dict):
-                owner = self._private_binding(anchor.get('source_ref'), anchor.get('artifact_ref'))
-                if owner is not None and owner != (context.run_id, context.episode_id):
-                    raise ContractError('a108_selected_components_required_for_nonowner')
+            if isinstance(anchor, dict) and anchor.get('source_ref') is not None and self._foreign_sheet(anchor['source_ref']):
+                raise ContractError('a108_selected_components_required_for_nonowner')
 
     @staticmethod
     def cell_record_refs(cells):

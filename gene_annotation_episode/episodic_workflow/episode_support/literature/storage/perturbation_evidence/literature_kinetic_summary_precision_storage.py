@@ -232,7 +232,6 @@ def _project_once(args, extraction, sheet):
 
 class LiteratureKineticSummaryPrecisionRepository(LiteratureRateRepository):
     provider, record_version, components = PROVIDER, VERSION, COMPONENTS
-    operations_table = 'literature_kinetic_summary_precision_operations'
     received_table = 'literature_kinetic_summary_precision_received'
     binding_fields = ()
 
@@ -240,12 +239,6 @@ class LiteratureKineticSummaryPrecisionRepository(LiteratureRateRepository):
         if type(run_id) is not str or not run_id:
             raise ValueError('explicit_literature_run_required')
         self.store, self.run_id = store, run_id
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     @staticmethod
     def _components(values):
@@ -277,14 +270,6 @@ class LiteratureKineticSummaryPrecisionRepository(LiteratureRateRepository):
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'role': context.role,
             'operation_key': operation_key, 'scope': plain(context.scope), 'assignment': plain(context.assignment),
             'received_record_refs': list(context.received_record_refs), 'arguments': args, 'components': components}
-        signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
-        if old:
-            if old['signature'] != signature:
-                raise ContractError('operation_key_reused_for_different_work')
-            outcome = json.loads(old['outcome']); self.read(outcome['result']['sheet_ref'])
-            return outcome
         for ref in _direct(args):
             self._native_source(context, ref)
         errors = []
@@ -322,14 +307,13 @@ class LiteratureKineticSummaryPrecisionRepository(LiteratureRateRepository):
         for value, key in ((extraction, 'extraction'), (inputs, 'inputs'), (sheet, 'sheet')):
             validate_schema(value, schemas[key])
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(saved), 'application/json')
             request_ref = self.store.artifact(canonical(request), 'application/json')
             record = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact,
                 'text_ref': artifact, 'request_ref': request_ref, 'version': VERSION,
                 'retrieved_at': None, 'parent_source_refs': parents}
             ref = identity('source', {'origin': 'tool', 'record': record})
-            exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (ref,)).fetchone()
+            exists = self.store.holds(ref)
             self.store.put('source', record, origin='tool', scope=plain(context.scope))
             rows = [{'sheet_ref': ref, **deepcopy(row)} for row in templates]
             validate_schema(rows, schemas['rows'])
@@ -337,8 +321,6 @@ class LiteratureKineticSummaryPrecisionRepository(LiteratureRateRepository):
                 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [ref],
                 'changed_record_refs': [] if exists else [ref], 'result': {'sheet_ref': ref,
                     'view': VIEW, 'record_version': VERSION, 'cells': rows}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     def _json(self, ref):
@@ -374,10 +356,6 @@ class LiteratureKineticSummaryPrecisionRepository(LiteratureRateRepository):
             'input_source_refs', 'source_metadata', 'original_schemas',
             'extraction', 'calculation_inputs', 'sheet', 'row_templates'})
         require(saved['version'] == VERSION and source['text_ref'] == source['artifact_ref'])
-        require(self._installed(self.operations_table))
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
-        require(operation is not None and operation['signature'] == canonical(request))
         schemas = saved['original_schemas']
         require(set(schemas) == set(ORIGINAL_SCHEMAS))
         # Immutable original metadata constants, never current scientific factories.
@@ -415,14 +393,6 @@ class LiteratureKineticSummaryPrecisionRepository(LiteratureRateRepository):
                         and fragment['text'].encode() == actual['quote'].encode()[a:b])
         rows = [{'sheet_ref': ref, **deepcopy(r)} for r in templates]
         validate_schema(rows, schemas['rows'])
-        outcome = json.loads(operation['outcome'])
-        require(set(outcome) == {'status', 'operation_ref', 'record_refs', 'changed_record_refs', 'result', 'feedback'}
-            and outcome['changed_record_refs'] in ([], [ref]))
-        require(outcome['status'] == 'completed' and outcome['feedback'] is None and outcome['record_refs'] == [ref])
-        require(outcome['operation_ref'] == identity('operation', {'run_id': self.run_id,
-            'episode_id': request['episode_id'], 'key': request['operation_key']}))
-        require(canonical(outcome['result']) == canonical({'sheet_ref': ref, 'view': VIEW,
-            'record_version': VERSION, 'cells': rows}))
         return saved
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
@@ -449,23 +419,14 @@ class LiteratureKineticSummaryPrecisionRepository(LiteratureRateRepository):
             if canonical(expected) != canonical([row]):
                 raise ContractError('summary_precision_return_differs_from_saved_cells')
 
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
     def receive_cells(self, context, cells, operation_key):
         if cells:
-            with self.store.transaction():
-                self._install(); return super().receive_cells(context, cells, operation_key)
+            return super().receive_cells(context, cells, operation_key)
 
     def selected_sheet_refs(self, context):
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
-        if not self._installed(self.operations_table):
-            return []
-        refs = list(dict.fromkeys(json.loads(r['outcome'])['result']['sheet_ref'] for r in self.store.db.execute(
-            f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id))))
+        refs = self.produced_sheet_refs(context)
         for ref in refs:
             self.read(ref)
         return refs
@@ -498,10 +459,8 @@ class LiteratureKineticSummaryPrecisionRepository(LiteratureRateRepository):
 
     def receipt_bindings(self):
         result = {}
-        if not self._installed(self.operations_table):
-            return result
-        for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=?', (self.run_id,)):
-            ref = json.loads(row['outcome'])['result']['sheet_ref']; source = self.store.get(ref)
+        for ref in [row["id"] for row in self.store.list("source") if row["provider"] == self.provider]:
+            source = self.store.get(ref)
             result[ref] = {'run_id': self.run_id, 'episode_id': self._sheet_owner(ref),
                 'artifacts': [source['artifact_ref'], source['request_ref']]}
         return result

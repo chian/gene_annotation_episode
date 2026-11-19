@@ -16,6 +16,7 @@ tools whose implementation exists in this axis folder:
 from __future__ import annotations
 
 import asyncio
+from contextlib import ExitStack
 from contextvars import ContextVar
 from dataclasses import replace
 from datetime import datetime, timezone
@@ -29,7 +30,7 @@ from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.domain import ContractError
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence import library_targets as libraries
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.experimental_activity_evidence import materials_packing as packing
+from gene_annotation_episode import materials_packing as packing
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.experimental_activity_evidence.acquisition import PublicClients, SourceSnapshot, article_details, parse_genbank
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.service_calls.api_error_feedback import api_error_feedback
 from gene_annotation_episode.episodic_workflow.episode_support.tools.documents.experimental_activity_evidence.document_tools import DocumentOutput, archive_extract, archive_inventory, pdf_native, resource as document_resource
@@ -45,7 +46,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
                                                     publish_identity, references as sequence_references,
                                                     references_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.experimental_activity_evidence.local_jobs import LocalJobPolicy, run_cancellable_native
-from gene_annotation_episode.episodic_workflow.episode_support.readers.experimental_activity_evidence.source_bytes import artifact_path, source_window, source_window_selection
+from gene_annotation_episode.episodic_workflow.episode_support.readers.experimental_activity_evidence.source_bytes import source_window, source_window_selection
 from gene_annotation_episode.episodic_workflow.episode_support.readers.experimental_activity_evidence.source_locations import locate as locate_source, locate_schema, received_source as received_location_source
 
 INTEGER = {'type': 'integer', 'minimum': 0}
@@ -94,10 +95,9 @@ class A105ToolRegistry:
         self.clients = PublicClients()
         self.pdf_executables = {name: document_resource(path)['executable'] for name, path in (
             ('pdfinfo', pdfinfo_executable), ('pdftotext', pdftotext_executable), ('pdftoppm', pdftoppm_executable))}
-        store.db.execute('CREATE TABLE IF NOT EXISTS tool_operations (\n            operation_key TEXT PRIMARY KEY, id TEXT NOT NULL, name TEXT NOT NULL,\n            arguments TEXT NOT NULL, scope TEXT NOT NULL, result TEXT NOT NULL)')
-        store.db.commit()
         self._publications = ContextVar('a105_tool_publications', default=None)
         self._permitted_record_refs = ContextVar('a105_tool_permitted_record_refs', default=None)
+        self._mapping_directories = ContextVar('a105_unit_scratch_directories', default=None)
 
     @property
     def _written(self) -> list[str]:
@@ -171,7 +171,7 @@ class A105ToolRegistry:
         """Only received sources may be read when the caller names its received records."""
         if name not in _SOURCE_BYTE_READERS:
             return
-        source = self.store._require(arguments['source_ref'], {'source'})
+        source = self.store.require(arguments['source_ref'], {'source'})
         if name in _WINDOW_READERS:
             representation = 'original' if name == 'source.sequence.references' else arguments.get('representation', 'text')
             source_window_selection(source, representation)
@@ -259,45 +259,21 @@ class A105ToolRegistry:
                         'result': None,
                         'feedback': {'category': 'arguments_or_reference', 'code': 'source_location_arguments_not_json'}}
         token = self._publications.set([])
+        directories = self._mapping_directories.set(ExitStack())
         permitted = self._permitted_record_refs.set(
             None if permitted_record_refs is None else tuple(permitted_record_refs))
         try:
             return await self._execute_operation_async(name, args, scope=scope, operation_key=operation_key)
         finally:
+            self._mapping_directories.get().close()
+            self._mapping_directories.reset(directories)
             self._permitted_record_refs.reset(permitted)
             self._publications.reset(token)
-
-    def _replayed(self, saved, name, args, scope):
-        """A saved operation is returned again only while its received sources are still received."""
-        if saved['name'] != name or saved['arguments'] != canonical(args) or saved['scope'] != canonical(scope):
-            raise ContractError('operation_key_reused_for_different_work')
-        original = json.loads(saved['result'])
-        try:
-            if original.get('status') in {'completed', 'partial'}:
-                self._check_source_bytes(name, args)
-                if name in {'public.literature.sequence_identity', 'source.sequence.references'}:
-                    protein_operand(self, args['subject_ref'], scope)
-                if name in {'source.sequence.references', EXPERIMENT_RECORDS}:
-                    received_location_source(self.store, args['source_ref'], args.get('representation', 'original'),
-                                             permitted_inputs=self._permitted_record_refs.get(), scope=scope)
-            if name == 'source.locate' and original['status'] == 'completed':
-                artifact = received_location_source(self.store, args['source_ref'], args['representation'],
-                                                    permitted_inputs=self._permitted_record_refs.get(), scope=scope)
-                if original['result']['artifact_ref'] != artifact['id'] or \
-                        original['result']['total_bytes'] != artifact['size']:
-                    raise ContractError('source_location_artifact_identity_conflict')
-        except ContractError as error:
-            return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [], 'changed_record_refs': [],
-                    'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': str(error)}}
-        return original
 
     async def _execute_operation_async(self, name: str, args: dict, *, scope: dict | None = None,
                                        operation_key: str | None = None) -> dict:
         operation_key = operation_key or identity('manual_operation', {
             'name': name, 'args': args, 'time': datetime.now(timezone.utc).isoformat()})
-        saved = self.store.db.execute('SELECT * FROM tool_operations WHERE operation_key=?', (operation_key,)).fetchone()
-        if saved:
-            return self._replayed(saved, name, args, scope)
         operation_ref = identity('operation', {'key': operation_key, 'name': name, 'arguments': args})
         result = {'status': 'invalid', 'operation_ref': operation_ref, 'record_refs': [], 'result': None, 'feedback': None}
         try:
@@ -338,7 +314,6 @@ class A105ToolRegistry:
                     if isinstance(error, ContractError) and error.detail:
                         result['feedback']['detail'] = error.detail
                     result['feedback'].update(api_error_feedback(error))
-                self._save(operation_key, name, args, scope, result)
             return result
         except AcquisitionError as error:
             operational = error.operational or {}
@@ -369,25 +344,24 @@ class A105ToolRegistry:
             diagnostic = self.store.artifact(f'{type(error).__name__}: {error}', 'text/plain')
             result.update(status='failed', feedback={**api_error_feedback(error), 'category': 'execution',
                                                      'code': 'adapter_execution_failed', 'diagnostic_ref': diagnostic})
-        with self.store.transaction():
-            self._save(operation_key, name, args, scope, result)
         return result
 
-    def _save(self, key: str, name: str, args: dict, scope: dict | None, result: dict) -> None:
-        self.store.db.execute('INSERT INTO tool_operations VALUES(?,?,?,?,?,?)', (
-            key, result['operation_ref'], name, canonical(args), canonical(scope), canonical(result)))
+    def _artifact_file(self, ref):
+        """A file holding the bytes of the held artifact ``ref``, in a scratch directory of the running unit
+        (removed when the tool call ends), for a native program or a reader that needs a path."""
+        return self._mapping_directories.get().enter_context(self.store.scratch('input')).copy_artifact(ref, 'input')
 
     # -- native documents -------------------------------------------------------------------------------------------
     async def _document_async(self, name: str, args: dict) -> DocumentOutput:
-        if self.store.db.in_transaction:
+        if self.store.in_transaction():
             raise ContractError('native_document_work_requires_no_active_store_transaction')
         if name == 'source.archive.extract':
-            member = self.store._require(args['member_ref'], {'archive_member'})
-            source = self.store._require(member['source_ref'], {'source'})
+            member = self.store.require(args['member_ref'], {'archive_member'})
+            source = self.store.require(member['source_ref'], {'source'})
         else:
             member = None
-            source = self.store._require(args['source_ref'], {'source'})
-        path = artifact_path(self.store, source['artifact_ref'])
+            source = self.store.require(args['source_ref'], {'source'})
+        path = self._artifact_file(source['artifact_ref'])
         if name == 'source.archive.members':
             output = await asyncio.to_thread(archive_inventory, path, offset=args.get('offset', 0),
                                              limit=args.get('limit', 50))
@@ -483,12 +457,12 @@ class A105ToolRegistry:
         if name == 'public.pmc.versions':
             return self.clients.pmc_versions, args
         if name == 'public.pmc.files':
-            selected = self.store._require(args['version_ref'], {'pmc_version'})
+            selected = self.store.require(args['version_ref'], {'pmc_version'})
             return self.clients.pmc_files, {'prefix': selected['prefix'], **(
                 {'continuation_token': args['continuation_token']} if 'continuation_token' in args else {})}
         if name == 'public.pmc.asset':
-            asset = self.store._require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
-            selected = self.store._require(asset['version_ref'], {'pmc_version'})
+            asset = self.store.require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
+            selected = self.store.require(asset['version_ref'], {'pmc_version'})
             uri = asset.get('original_uri') or 's3://' + BUCKET + '/' + asset['object_key']
             return self.clients.pmc_asset, {'original_uri': uri, 'prefix': selected['prefix']}
         if name == 'public.ncbi.search':
@@ -544,7 +518,7 @@ class A105ToolRegistry:
             rows = [self.store.get(item) for item in args['refs']]
             for row in rows:
                 if row['record_type'] in {'input', 'feature', 'product', 'read_subject'} and \
-                        not self.store._in_scope(row['id'], self.store.validate_scope(scope)):
+                        not self.store.in_scope(row['id'], scope):
                     raise ContractError('subject_outside_assigned_scope')
             return {'records': [received(row) for row in rows], 'count': len(rows), 'next_offset': None}
         page = self.store.query_records(args.get('kind', 'hypothesis'), scope=scope, offset=args.get('offset', 0),
@@ -571,7 +545,7 @@ class A105ToolRegistry:
                  if page['next_continuation_token'] else None}, refs)
 
     def _publish_pmc_files(self, args: dict, snapshots: PmcFiles) -> tuple[dict, list[str]]:
-        selected = self.store._require(args['version_ref'], {'pmc_version'})
+        selected = self.store.require(args['version_ref'], {'pmc_version'})
         listing = self._source(snapshots.listing.service, None, snapshot=snapshots.listing,
                                parent_source_refs=[selected['source_ref']])
         refs, objects, assets = [listing['id']], [], []
@@ -625,7 +599,7 @@ class A105ToolRegistry:
         return body, refs
 
     def _publish_pmc_asset(self, args: dict, snapshot: SourceSnapshot) -> tuple[dict, list[str]]:
-        advertisement = self.store._require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
+        advertisement = self.store.require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
         snapshot = replace(snapshot, request={**snapshot.request, 'selected_asset_ref': advertisement['id'],
                                               'selected_version_ref': advertisement['version_ref']})
         source = self._source(snapshot.service, None, snapshot=snapshot, parent_source_refs=[advertisement['source_ref']])

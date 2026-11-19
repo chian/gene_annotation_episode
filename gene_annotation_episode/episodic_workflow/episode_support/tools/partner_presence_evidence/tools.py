@@ -1,6 +1,7 @@
 """A107 private state, received-source and sequence-context tool implementation."""
 from __future__ import annotations
 import asyncio
+from contextlib import ExitStack
 from contextvars import ContextVar
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
@@ -27,9 +28,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.service_call
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search import blast_search as blast
 from gene_annotation_episode.episodic_workflow.episode_support.readers.documents.partner_presence_evidence.material_parsing import FORMATS
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence import library_targets as libraries
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.partner_presence_evidence import materials_packing as packing
+from gene_annotation_episode import materials_packing as packing
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_alignment.partner_presence_evidence import read_mapping as mapper
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.partner_presence_evidence.materials import artifact_file, artifact_path, source_window
+from gene_annotation_episode.materials import source_window
 from gene_annotation_episode.episodic_workflow.episode_support.readers.partner_presence_evidence.source_locations import locate as locate_source, locate_schema, received_source as received_location_source
 from gene_annotation_episode.episodic_workflow.episode_support.tools.documents.partner_presence_evidence.document_tools import DocumentOutput, archive_extract, archive_inventory, pdf_native, resource as document_resource
 from gene_annotation_episode.episodic_workflow.episode_support.tools.documents.partner_presence_evidence.spreadsheet_tools import xlsx_native, VERSION as XLSX_VERSION
@@ -75,8 +76,6 @@ class ToolRegistry:
         if not isinstance(minimap2_cache_dir, (str, Path)):
             raise TypeError('a107_minimap2_cache_dir_required')
         self.clients = clients
-        store.db.execute('CREATE TABLE IF NOT EXISTS tool_operations (\n            operation_key TEXT PRIMARY KEY, id TEXT NOT NULL, name TEXT NOT NULL,\n            arguments TEXT NOT NULL, scope TEXT NOT NULL, result TEXT NOT NULL)')
-        store.db.commit()
         self.remote_searches = RemoteSearches(store, self.clients, poll_interval_seconds=provider_poll_interval_seconds)
         self._publications = ContextVar('annotation_tool_publications', default=None)
         self._publication_batch = ContextVar('annotation_native_publication_batch', default=None)
@@ -274,11 +273,11 @@ class ToolRegistry:
     def _check_source_bytes(self, name, arguments):
         """Apply the finite Source/File receipt policies before byte tools."""
         if name in {'material.parse', 'material.read'}:
-            material = self.store._require(arguments['material_ref'], {'material'})
-            source = self.store._require(material['source_ref'], {'source'})
+            material = self.store.require(arguments['material_ref'], {'material'})
+            source = self.store.require(material['source_ref'], {'source'})
             artifact_ref = source['artifact_ref']
         elif name in {'source.read', 'source.locate', 'source.sequence.scan', 'source.sequence.references', 'source.archive.members', 'source.xlsx.sheets', 'source.xlsx.rows', 'source.pdf.info', 'source.pdf.text', 'source.pdf.page', 'image.view'}:
-            source = self.store._require(arguments['source_ref'], {'source'})
+            source = self.store.require(arguments['source_ref'], {'source'})
             if name in {'source.read', 'source.locate', 'source.sequence.scan', 'source.sequence.references'}:
                 from gene_annotation_episode.episodic_workflow.episode_support.readers.partner_presence_evidence.source_bytes import source_window_selection
                 representation = 'original' if name == 'source.sequence.references' else arguments.get('representation', 'text')
@@ -309,16 +308,14 @@ class ToolRegistry:
                 return {'status': 'invalid', 'operation_ref': None, 'record_refs': [], 'changed_record_refs': [], 'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': 'source_location_arguments_not_json'}}
         token = self._publications.set([])
         batch_token = self._publication_batch.set(None)
-        directories = self._mapping_directories.set([])
+        directories = self._mapping_directories.set(ExitStack())
         native_receipts = self._native_execution_refs.set([])
         grading_failures = self._grading_failures.set([])
         permitted = self._permitted_record_refs.set(None if permitted_record_refs is None else tuple(permitted_record_refs))
         try:
             return await self._execute_operation_async(name, args, scope=scope, operation_key=operation_key)
         finally:
-            import shutil
-            for directory in self._mapping_directories.get():
-                shutil.rmtree(directory)
+            self._mapping_directories.get().close()
             self._mapping_directories.reset(directories)
             self._native_execution_refs.reset(native_receipts)
             self._grading_failures.reset(grading_failures)
@@ -345,59 +342,6 @@ class ToolRegistry:
         sra_file_authority = authenticate_genomic_source_invocation(self, name, args, scope, operation_key) if name == SRA_FILE_TOOL else None
         encode_authority = authenticate_genomic_source_invocation(self, name, args, scope, operation_key) if name == ENCODE_TOOL and type(args) is dict and (args.get('operation') == 'file') else None
         ensembl_authority = authenticate_genomic_source_invocation(self, name, args, scope, operation_key) if name == ENSEMBL_TOOL and (type(args) is not dict or args.get('operation') != 'registry') else None
-        saved = self.store.db.execute('SELECT * FROM tool_operations WHERE operation_key=?', (operation_key,)).fetchone()
-        if saved:
-            if saved['name'] != name or saved['arguments'] != canonical(args) or saved['scope'] != canonical(scope):
-                raise ContractError('operation_key_reused_for_different_work')
-            try:
-                if json.loads(saved['result']).get('status') in {'completed', 'partial'}:
-                    self._check_source_bytes(name, args)
-                    if name in {'public.literature.sequence_identity', 'source.sequence.scan', 'source.sequence.references'}:
-                        from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.partner_presence_evidence.literature_sequence_discovery import protein_operand
-                        protein_operand(self, args['subject_ref'], scope)
-                    if name in {'source.sequence.scan', 'source.sequence.references'}:
-                        received_location_source(self.store, args['source_ref'], args.get('representation', 'original'), permitted_inputs=self._permitted_record_refs.get(), scope=scope)
-            except ContractError as error:
-                return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [], 'changed_record_refs': [], 'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': str(error)}}
-            if name == 'source.locate' and json.loads(saved['result'])['status'] == 'completed':
-                try:
-                    artifact = received_location_source(self.store, args['source_ref'], args['representation'], permitted_inputs=self._permitted_record_refs.get(), scope=scope)
-                    original = json.loads(saved['result'])
-                    if original['result']['artifact_ref'] != artifact['id'] or original['result']['total_bytes'] != artifact['size']:
-                        raise ContractError('source_location_artifact_identity_conflict')
-                except ContractError as error:
-                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [], 'changed_record_refs': [], 'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': str(error)}}
-            if name == 'result.blast.hsp':
-                from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.partner_presence_evidence.blast_result_views import require_permitted_hsp
-                try:
-                    require_permitted_hsp(args.get('observation_ref'), self._permitted_record_refs.get())
-                except ContractError as error:
-                    return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': str(error)}}
-            if name == SRA_FILE_TOOL:
-                try:
-                    from gene_annotation_episode.episodic_workflow.episode_support.acquisition.sequence_and_context_sources.ncbi_sra_acquisition_host import authenticate_saved_sra_file
-                    authenticate_saved_sra_file(self, args, authority=sra_file_authority, operation_key=operation_key, outcome=json.loads(saved['result']))
-                except (ContractError, ValueError, KeyError, TypeError) as error:
-                    code = str(error) if isinstance(error, ValueError) else 'sra_file_saved_outcome_conflict'
-                    code = code if code in SRA_FILE_FAILURE_CODES else 'sra_file_saved_outcome_conflict'
-                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [], 'changed_record_refs': [], 'result': failed_sra_file_receipt(code), 'feedback': {'category': 'arguments_or_reference', 'code': code}}
-            if name == ENSEMBL_TOOL:
-                try:
-                    from gene_annotation_episode.episodic_workflow.episode_support.acquisition.sequence_and_context_sources.partner_presence_evidence.ensembl_acquisition_host import authenticate_saved_ensembl_request
-                    authenticate_saved_ensembl_request(self, args, authority=ensembl_authority, outcome=json.loads(saved["result"]), operation_key=operation_key)
-                except (ContractError, ValueError, KeyError, TypeError) as error:
-                    code = str(error) if isinstance(error, ValueError) else 'ensembl_saved_result_conflict'
-                    code = code if code in ENSEMBL_FAILURE_CODES else 'ensembl_saved_result_conflict'
-                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [], 'changed_record_refs': [], 'result': failed_ensembl_receipt(code), 'feedback': {'category': 'arguments_or_reference', 'code': code}}
-            if name == ENCODE_TOOL and type(args) is dict and (args.get('operation') == 'file'):
-                try:
-                    from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_and_context_sources.encode_tools import authenticate_saved_encode_request
-                    authenticate_saved_encode_request(self, args, authority=encode_authority, outcome=json.loads(saved['result']))
-                except (ContractError, ValueError, KeyError, TypeError) as error:
-                    code = str(error) if isinstance(error, ContractError) else 'encode_saved_outcome_conflict'
-                    code = code if code in ENCODE_FAILURE_CODES else 'encode_saved_outcome_conflict'
-                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [], 'changed_record_refs': [], 'result': validate_encode_receipt({'acquired': False, 'source_ref': None, 'data_ref': None, 'failure_code': code}), 'feedback': {'category': 'arguments_or_reference', 'code': code}}
-            return json.loads(saved['result'])
         operation_ref = identity('operation', {'key': operation_key, 'name': name, 'arguments': args})
         result = {'status': 'invalid', 'operation_ref': operation_ref, 'record_refs': [], 'result': None, 'feedback': None}
         try:
@@ -518,7 +462,15 @@ class ToolRegistry:
         batch = self._publication_batch.get()
         if batch is not None:
             result['published_batch'] = dict(batch)
-        self.store.db.execute('INSERT INTO tool_operations VALUES(?,?,?,?,?,?)', (key, result['operation_ref'], name, canonical(args), canonical(scope), canonical(result)))
+        from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_and_context_sources.encode_tools import TOOL as ENCODE_TOOL, record_encode_operation
+        if name == ENCODE_TOOL:
+            record_encode_operation(self, key, args, result)
+        if name == "public.ensembl.request":
+            from gene_annotation_episode.episodic_workflow.episode_support.acquisition.sequence_and_context_sources.partner_presence_evidence.ensembl_acquisition_host import record_ensembl_operation
+            record_ensembl_operation(self, key, args, result)
+        from gene_annotation_episode.episodic_workflow.episode_support.acquisition.sequence_and_context_sources.ncbi_sra_acquisition_host import TOOL as SRA_TOOL, record_sra_file_operation
+        if name == SRA_TOOL:
+            record_sra_file_operation(self, key, args, scope, result)
 
     async def _sequence_worker_async(self, operation: str, arguments: dict, *, directory: Path) -> SequenceWork:
         """Native work has no Store handle and no in-process fallback.
@@ -526,7 +478,7 @@ class ToolRegistry:
         This method is the explicit native-worker seam for synthetic publisher
         tests; production always uses the common bounded local-job runner.
         """
-        if self.store.db.in_transaction:
+        if self.store.in_transaction():
             raise ContractError('native_sequence_work_requires_no_active_store_transaction')
         with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', prefix='sequence-', suffix='.request.json', dir=directory, delete=False) as handle:
             json.dump({'operation': operation, 'arguments': arguments}, handle, allow_nan=False)
@@ -549,7 +501,7 @@ class ToolRegistry:
                     failure = json.loads(output.read_text(encoding='utf-8'))
                     if failure.get('exception_type') == 'MemoryError':
                         worker_failure = {'worker_failure': 'native_memory_allocation_failed'}
-                diagnostic = artifact_file(self.store, stderr, 'text/plain') if stderr.exists() else None
+                diagnostic = self.store.artifact_file(stderr, 'text/plain') if stderr.exists() else None
                 raise AcquisitionError('local_job_execution_failed', phase='local_execution', operational={**job.metadata, **worker_failure, 'diagnostic_ref': diagnostic, 'native_returncode': job.returncode, 'worker_operation': operation})
             if not output.is_file():
                 raise AcquisitionError('local_job_output_missing', phase='local_execution', operational={**job.metadata, 'worker_operation': operation})
@@ -563,10 +515,9 @@ class ToolRegistry:
                 output.unlink(missing_ok=True)
 
     async def _prepare_sequence_work_async(self, name: str, args: dict, scope: dict | None):
-        if self.store.db.in_transaction:
+        if self.store.in_transaction():
             raise ContractError('native_sequence_work_requires_no_active_store_transaction')
-        directory = Path(tempfile.mkdtemp(prefix='.native-sequence-', dir=self.store.path))
-        self._mapping_directories.get().append(directory)
+        directory = self._mapping_directories.get().enter_context(self.store.scratch('native-sequence')).path
         if name == 'reads.align':
             prepared = []
             for index, reference in enumerate(args['subject_refs']):
@@ -659,27 +610,32 @@ class ToolRegistry:
         return await run_cancellable_native(function, *args, **kwargs)
 
     def resolve_image_input(self, selected: dict) -> dict:
-        return resolve_selected_image(self.store, selected)
+        return resolve_selected_image(self.store, self._mapping_directories.get().enter_context(self.store.scratch("image")), selected)
+
+    def _artifact_file(self, ref):
+        """A file holding the bytes of the held artifact ``ref``, in a scratch directory of the running unit
+        (removed when the tool call ends), for a native program or a reader that needs a path."""
+        return self._mapping_directories.get().enter_context(self.store.scratch('input')).copy_artifact(ref, 'input')
 
     def _spreadsheet_arguments(self, name, args):
-        source = self.store._require(args['source_ref'], {'source'})
-        path = artifact_path(self.store, source['artifact_ref'])
+        source = self.store.require(args['source_ref'], {'source'})
+        path = self._artifact_file(source['artifact_ref'])
         return (source, path, name.rsplit('.', 1)[1], {key: value for key, value in args.items() if key != 'source_ref'})
 
     async def _document_async(self, name: str, args: dict) -> DocumentOutput:
-        if self.store.db.in_transaction:
+        if self.store.in_transaction():
             raise ContractError('native_document_work_requires_no_active_store_transaction')
         if name.startswith('source.xlsx.'):
             source, path, operation, arguments = self._spreadsheet_arguments(name, args)
             member = None
         elif name == 'source.archive.extract':
-            member = self.store._require(args['member_ref'], {'archive_member'})
-            source = self.store._require(member['source_ref'], {'source'})
-            path = artifact_path(self.store, source['artifact_ref'])
+            member = self.store.require(args['member_ref'], {'archive_member'})
+            source = self.store.require(member['source_ref'], {'source'})
+            path = self._artifact_file(source['artifact_ref'])
         else:
             member = None
-            source = self.store._require(args['source_ref'], {'source'})
-            path = artifact_path(self.store, source['artifact_ref'])
+            source = self.store.require(args['source_ref'], {'source'})
+            path = self._artifact_file(source['artifact_ref'])
         if name == 'source.archive.members':
             output = await asyncio.to_thread(archive_inventory, path, offset=args.get('offset', 0), limit=args.get('limit', 50))
         elif name == 'source.archive.extract':
@@ -759,19 +715,18 @@ class ToolRegistry:
 
     async def _native_mapping_async(self, args, scope):
         import tempfile
-        selection = self.store._require(args['query_selection_ref'], {'read_selection'})
+        selection = self.store.require(args['query_selection_ref'], {'read_selection'})
         selected_scope = {'subject_refs': [selection['library_ref']], 'read_selection_refs': [selection['id']]}
         self.store.validate_scope(selected_scope, parent_scope=scope)
         mapper.settings(args['preset'], args.get('parameters'))
-        if self.store.db.in_transaction:
+        if self.store.in_transaction():
             raise ContractError('native_mapping_requires_no_active_store_transaction')
-        directory = Path(tempfile.mkdtemp(prefix='.native-read-mapping-', dir=self.store.path))
-        self._mapping_directories.get().append(directory)
+        directory = self._mapping_directories.get().enter_context(self.store.scratch('native-read-mapping')).path
         source_refs = set()
         import sqlite3
         with sqlite3.connect(directory / 'operands.sqlite') as index:
             index.execute('CREATE TABLE operands(role TEXT,subject_ref TEXT,length INTEGER,PRIMARY KEY(role,subject_ref))')
-            for role, filename, subjects in (('query', 'queries.fasta', (row[0] for row in self.store.db.execute('SELECT read_ref FROM library_selection_members WHERE selection_ref=? ORDER BY read_ref', (selection['id'],)))), ('reference', 'references.fasta', iter(args['reference_refs']))):
+            for role, filename, subjects in (('query', 'queries.fasta', iter(self.store.selection_members(selection['id']))), ('reference', 'references.fasta', iter(args['reference_refs']))):
                 with (directory / filename).open('w', encoding='ascii') as handle:
                     for reference in subjects:
                         row = self._check_sequence_operand(reference, scope) if role == 'query' else self.store.get(reference)
@@ -800,7 +755,6 @@ class ToolRegistry:
         no scientific decisions or durable workflow state.
         """
         import sqlite3
-        from gene_annotation_episode.episodic_workflow.episode_support.records.documents.partner_presence_evidence.materials import artifact_file
         from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.partner_presence_evidence.minimap2_grader import grade_minimap2_placement, calculate_minimap2_query_scores
         row_path = native.path('grading-placements.jsonl')
         query_path = native.path('grading-queries.jsonl')
@@ -836,17 +790,16 @@ class ToolRegistry:
                     output.write(canonical({'query_metadata': query, 'output_complete': complete, 'scores': scores}) + '\n')
                 output.flush()
                 os.fsync(output.fileno())
-        rows_ref = artifact_file(self.store, row_path, 'application/x-ndjson')
-        queries_ref = artifact_file(self.store, query_path, 'application/x-ndjson')
+        rows_ref = self.store.artifact_file(row_path, 'application/x-ndjson')
+        queries_ref = self.store.artifact_file(query_path, 'application/x-ndjson')
         return ({'schema': 'minimap2_grading_collection_v1', 'placement_count': row_count, 'rows_artifact_ref': rows_ref, 'query_scores_artifact_ref': queries_ref, 'output_complete': complete, 'row_format': 'native_row_locator_and_grading_jsonlines'}, [rows_ref, queries_ref])
 
     def _publish_mapping(self, args, native):
         batch = self._begin_publication_batch(failures=True)
-        from gene_annotation_episode.episodic_workflow.episode_support.records.documents.partner_presence_evidence.materials import artifact_file
         artifacts = {}
         for name in ('queries.fasta', 'references.fasta', 'mappings.paf', 'mapping.stderr', 'version.stdout', 'version.stderr', 'help.stdout', 'help.stderr', 'index.stdout', 'index.stderr', 'projection-errors.jsonl'):
             if native.path(name).is_file():
-                artifacts[name] = artifact_file(self.store, native.path(name), 'text/x-fasta' if name.endswith('.fasta') else 'text/plain')
+                artifacts[name] = self.store.artifact_file(native.path(name), 'text/x-fasta' if name.endswith('.fasta') else 'text/plain')
         grading, grading_artifacts = self._retain_mapping_grading(native)
         source = self._source('minimap2.mapping', {**native.metadata, 'artifacts': artifacts}, software_version=native.metadata['native_version'], parent_source_refs=native.metadata['input_metadata']['source_refs'], stdout_ref=artifacts.get('mappings.paf', artifacts.get('index.stdout')), stderr_ref=artifacts.get('mapping.stderr', artifacts.get('index.stderr')), auxiliary_artifact_refs=list(dict.fromkeys([*artifacts.values(), *grading_artifacts])), operand_refs=args['reference_refs'], query_selection_ref=args['query_selection_ref'], tool_grading=grading)
         preview, refs, total = ([], [source['id']], 0)
@@ -940,11 +893,11 @@ class ToolRegistry:
         if name == 'public.pmc.versions':
             return (self.clients.pmc_versions, args)
         if name == 'public.pmc.files':
-            selected = self.store._require(args['version_ref'], {'pmc_version'})
+            selected = self.store.require(args['version_ref'], {'pmc_version'})
             return (self.clients.pmc_files, {'prefix': selected['prefix'], **({'continuation_token': args['continuation_token']} if 'continuation_token' in args else {})})
         if name == 'public.pmc.asset':
-            asset = self.store._require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
-            selected = self.store._require(asset['version_ref'], {'pmc_version'})
+            asset = self.store.require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
+            selected = self.store.require(asset['version_ref'], {'pmc_version'})
             uri = asset.get('original_uri') or 's3://' + BUCKET + '/' + asset['object_key']
             return (self.clients.pmc_asset, {'original_uri': uri, 'prefix': selected['prefix']})
         if name == 'public.uniprot.record':
@@ -1037,7 +990,7 @@ class ToolRegistry:
             self._written.append(selected['id'])
             return ({'selection': selected, 'scope': {'subject_refs': [selected['library_ref']], 'read_selection_refs': [selected['id']]}}, [selected['id']])
         if name == 'library.read':
-            subject = self.store._require(args['subject_ref'], {'read_subject'})
+            subject = self.store.require(args['subject_ref'], {'read_subject'})
             offset, limit = (args.get('offset', 0), args.get('limit', 12000))
             if type(offset) is not int or not 0 <= offset <= subject['length'] or type(limit) is not int or (limit < 1):
                 raise ContractError('invalid_member_window')
@@ -1093,7 +1046,7 @@ class ToolRegistry:
                 rows = [self.store.get(item) for item in args['refs']]
                 for row in rows:
                     if row['record_type'] in {'input', 'feature', 'product', 'read_subject'}:
-                        if not self.store._in_scope(row['id'], self.store.validate_scope(scope)):
+                        if not self.store.in_scope(row['id'], scope):
                             raise ContractError('subject_outside_assigned_scope')
                 return ({'records': [received(row) for row in rows], 'count': len(rows), 'next_offset': None}, [])
             kind, offset, limit = (args.get('kind', 'hypothesis'), args.get('offset', 0), args.get('limit', 100))
@@ -1184,7 +1137,7 @@ class ToolRegistry:
         if len(alignment['subject_refs']) != 1 or len(alignment['source_subject_refs']) != 1:
             raise ContractError('site_operand_identity_conflict')
         for subject in alignment['subject_refs']:
-            if self.store.roots(subject) and (not self.store._in_scope(subject, self.store.validate_scope(scope))):
+            if self.store.roots(subject) and (not self.store.in_scope(subject, scope)):
                 raise ContractError('subject_outside_assigned_scope')
         reference = self.store.get(alignment['source_subject_refs'][0])
         reference_length = reference['length'] if reference['record_type'] == 'reference' and reference.get('sequence_ref') is None else self.store.subject_length(reference['id'])
@@ -1235,13 +1188,13 @@ class ToolRegistry:
 
     def _inspect_reads(self, args, scope):
         batch = self._begin_publication_batch()
-        from gene_annotation_episode.episodic_workflow.episode_support.records.documents.partner_presence_evidence.materials import artifact_file
         import tempfile
         import os
         subjects = [self._check_sequence_operand(ref, scope) for ref in args['subject_refs']]
         if any((row['record_type'] != 'read_subject' for row in subjects)):
             raise ContractError('original_read_subject_required')
-        with tempfile.TemporaryDirectory(prefix='.read-inspection-', dir=self.store.path) as directory:
+        with self.store.scratch('read-inspection') as scratch:
+            directory = scratch.path
             path = Path(directory) / 'native.jsonl'
             grading_path = Path(directory) / 'grading.jsonl'
             with path.open('w') as handle, grading_path.open('w') as grading_handle:
@@ -1256,8 +1209,8 @@ class ToolRegistry:
                 os.fsync(handle.fileno())
                 grading_handle.flush()
                 os.fsync(grading_handle.fileno())
-            artifact = artifact_file(self.store, path, 'application/x-ndjson')
-            grading_rows = artifact_file(self.store, grading_path, 'application/x-ndjson')
+            artifact = self.store.artifact_file(path, 'application/x-ndjson')
+            grading_rows = self.store.artifact_file(grading_path, 'application/x-ndjson')
             from gene_annotation_episode.episodic_workflow.episode_support.grading.partner_presence_evidence.tool_grading_artifacts import retain_tool_grading
             grading_artifact = retain_tool_grading(self.store, provider='reads.inspect', native_artifact_ref=artifact, grading={'schema': 'sequence_composition_collection_v1', 'row_count': len(subjects), 'rows_artifact_ref': grading_rows, 'row_format': 'subject_ref_and_grading_jsonlines'})
             source = self._put('source', {'provider': 'reads.inspect', 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': self.store.artifact(canonical(args), 'application/json'), 'version': version('biopython'), 'retrieved_at': datetime.now(timezone.utc).isoformat(), 'auxiliary_artifact_refs': [grading_rows, grading_artifact], 'parent_source_refs': sorted({row['source_ref'] for row in subjects})}, origin='tool')
@@ -1393,7 +1346,7 @@ class ToolRegistry:
         return ({'source_ref': source['id'], 'versions': versions, 'next_continuation_token': page['next_continuation_token'], 'listing_complete': not page['truncated'], 'version_preference': 'not_assigned', 'next_query': {'pmcid': args['pmcid'], 'continuation_token': page['next_continuation_token']} if page['next_continuation_token'] else None}, refs)
 
     def _publish_pmc_files(self, args: dict, snapshots: PmcFiles) -> tuple[dict, list[str]]:
-        selected = self.store._require(args['version_ref'], {'pmc_version'})
+        selected = self.store.require(args['version_ref'], {'pmc_version'})
         listing = self._source(snapshots.listing.service, None, snapshot=snapshots.listing, parent_source_refs=[selected['source_ref']])
         refs, objects, assets = ([listing['id']], [], [])
         page = parse_listing(snapshots.listing.content)
@@ -1432,7 +1385,7 @@ class ToolRegistry:
         return (body, refs)
 
     def _publish_pmc_asset(self, args: dict, snapshot: SourceSnapshot) -> tuple[dict, list[str]]:
-        advertisement = self.store._require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
+        advertisement = self.store.require(args['asset_ref'], {'pmc_asset', 'pmc_object'})
         snapshot = replace(snapshot, request={**snapshot.request, 'selected_asset_ref': advertisement['id'], 'selected_version_ref': advertisement['version_ref']})
         source = self._source(snapshot.service, None, snapshot=snapshot, parent_source_refs=[advertisement['source_ref']])
         material = self.store.register_material(source_ref=source['id'], format='opaque', use='evidence')
@@ -1678,11 +1631,6 @@ class ToolRegistry:
         """
         name = 'internal.hmmer.result_publication'
         arguments = {'snapshot_sha256': snapshot.sha256, 'request': snapshot.request, 'transport': snapshot.transport}
-        saved = self.store.db.execute('SELECT * FROM tool_operations WHERE operation_key=?', (operation_key,)).fetchone()
-        if saved is not None:
-            if saved['name'] != name or saved['arguments'] != canonical(arguments) or saved['scope'] != canonical(scope):
-                raise ContractError('operation_key_reused_for_different_work')
-            return json.loads(saved['result'])
         self._check_sequence_operand(snapshot.request['subject_ref'], scope)
         token = self._publications.set([])
         grading_token = self._grading_failures.set([])
@@ -1806,7 +1754,7 @@ class ToolRegistry:
         source = self.store.get(model['source_ref'])
         if source['provider'] != 'rfam_covariance_model':
             raise ContractError('acquired_covariance_model_source_required')
-        if self.store.db.in_transaction:
+        if self.store.in_transaction():
             raise ContractError('native_search_requires_no_active_store_transaction')
         orientation_model = molecule if molecule in {'dna', 'rna'} else 'rna'
         native = await self._native_thread_async(run_cmsearch, sequence=self._sequence(subject['id'], molecule_model=orientation_model), subject_ref=subject['id'], model=self.store.get_artifact(source['artifact_ref']), model_ref=model['id'], configuration=dict(self.cmsearch_configuration), parameters=args.get('parameters'), job_limits=self.local_job_policy.to_dict())

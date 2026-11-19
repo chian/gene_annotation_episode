@@ -26,9 +26,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.struc
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.forms.structural_homology_evidence.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.structural_homology_evidence.local_jobs import LocalJobPolicy
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.structural_homology_evidence.materials import artifact_file
+from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_structure.protein_structure_operands import retained_protein_structure_bytes
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.protein_structure.native_protein_structure_acquisition import (
-    decode_protein_structure_json, retained_protein_structure_file,
+    decode_protein_structure_json,
 )
 from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.protein_structure_contracts import (
     ArtifactRef, IssueCode, StructuredIssue, issue, same, validate_file_identity,
@@ -181,28 +181,21 @@ def _artifact_ref(value):
 
 
 def _retained(store, ref):
+    """The identity of the held artifact ``ref``; its bytes are checked against the identity's digest."""
     _artifact_ref(ref)
     try:
-        row = store._require(ref, {"artifact"})
+        row = store.require(ref, {"artifact"})
     except ContractError as error:
         raise ValueError("retained_artifact_missing" if str(error) in ("unknown_reference", "unknown_artifact")
                          else "invalid_schema") from error
     identity = {"artifact_ref": ref, "sha256": row.get("sha256"), "byte_length": row.get("size"), "format": "text"}
     validate_file_identity(identity)
-    path = store.path / "artifacts" / identity["sha256"][:2] / identity["sha256"]
-    try:
-        with _directory(path.parent) as parent, _regular(parent, path.name):
-            # Reject known symlinks/nonregular paths before the shared retained
-            # lookup opens bytes. The Store content address is authoritative.
-            return retained_protein_structure_file(store, identity)
-    except FileNotFoundError as error:
-        raise ValueError("retained_artifact_missing") from error
-    except OSError as error:
-        raise ValueError("invalid_output_path") from error
+    return identity
+
 
 
 def _stored_json(store, ref, *, canonical_bytes=True):
-    return decode_protein_structure_json(_retained(store, ref).read_bytes(), canonical_bytes=canonical_bytes)
+    return decode_protein_structure_json(retained_protein_structure_bytes(store, _retained(store, ref)), canonical_bytes=canonical_bytes)
 
 
 def _inputs(store, plan):
@@ -210,9 +203,12 @@ def _inputs(store, plan):
             else [plan["sheet"], plan["original_components"]])
     for row in rows:
         if row is not None:
-            path = _retained(store, row["file_identity"]["artifact_ref"])
-            _require(str(path) == row["path"], "invalid_output_path")
-            retained_protein_structure_file(store, row["file_identity"])
+            raw = retained_protein_structure_bytes(store, row["file_identity"])
+            try:
+                staged = Path(row["path"]).read_bytes()
+            except OSError as error:
+                raise ValueError("invalid_output_path") from error
+            _require(staged == raw, "invalid_output_path")
 
 
 def _environment(plan, package_root):
@@ -334,7 +330,7 @@ def _host_issue(code, *, field="manifest", artifact_role=None, stage="capture"):
 
 def _capture(store, directory_fd, filename):
     with _regular(directory_fd, filename) as fd:
-        ref = artifact_file(store, Path("/proc/self/fd") / str(fd))
+        ref = store.artifact_file(Path("/proc/self/fd") / str(fd))
     _retained(store, ref)
     return ref
 
@@ -387,7 +383,7 @@ def _qualify(store, diagnostics, execution, plan):
             issues.append(_host_issue("input_digest_mismatch", artifact_role=role))
         else:
             try:
-                retained_protein_structure_file(store, output["file_identity"])
+                retained_protein_structure_bytes(store, output["file_identity"])
             except ValueError as error:
                 issues.append(_host_issue(str(error) if str(error) in _CODES else "invalid_schema", artifact_role=role))
     return (None if issues else result), issues
@@ -470,7 +466,7 @@ def validate_prepared_protein_structure_worker(
     return deepcopy({"prepared": prepared, "plan": stored_plan, "execution": execution, "result": result})
 
 
-def _run(directory_fd, intent, policy, *, cancel_event=None):
+def _run(directory_fd, intent, policy, *, cancel_event):
     directory = Path(intent["plan"]["directory"])
     handle = native_lifecycle.NativeJobHandle(directory / "worker.handle.json")
     try:
@@ -481,18 +477,11 @@ def _run(directory_fd, intent, policy, *, cancel_event=None):
                 handle_path=handle.path, stdout_path=directory / "worker.stdout",
                 stderr_path=directory / "worker.stderr", env=intent["environment"])
             _live_handle(directory_fd, intent)
-            if cancel_event is None:
-                native_lifecycle.start_prepared(handle)
-            else:
-                native_lifecycle.start_prepared(handle, cancel_event=cancel_event)
+            native_lifecycle.start_prepared(handle, cancel_event=cancel_event)
         else:
             _live_handle(directory_fd, intent)
-            if cancel_event is None:
-                native_lifecycle.resume_start(handle)
-            else:
-                native_lifecycle.resume_start(handle, cancel_event=cancel_event)
-        result = (native_lifecycle.wait_job(handle) if cancel_event is None else
-            native_lifecycle.wait_job(handle, cancel_event=cancel_event))
+            native_lifecycle.resume_start(handle, cancel_event=cancel_event)
+        result = native_lifecycle.wait_job(handle, cancel_event=cancel_event)
         execution = {"version": "protein_structure_worker_execution_v1", "outcome": "returned",
             "returncode": result.returncode, "metadata": deepcopy(result.metadata), "failure": None}
     except AcquisitionError as error:
@@ -549,11 +538,29 @@ def _finish(store, directory_fd, plan, intent, execution):
     return deepcopy(prepared)
 
 
-def prepare_protein_structure_worker(
+@contextmanager
+def _reserved(plan):
+    """The worker directory of the plan, locked for this process."""
+    with _directory(plan["directory"], create=True) as directory_fd:
+        _require(os.fstat(directory_fd).st_uid == os.geteuid(), "invalid_output_path")
+        with _regular(directory_fd, ".preparation.lock", flags=os.O_RDWR | os.O_CREAT) as lock_fd:
+            fcntl.flock(lock_fd, fcntl.LOCK_EX)
+            yield directory_fd
+
+
+def _run_worker(plan, intent, policy, *, cancel_event):
+    """The native execution of one reservation, run in a worker thread: it is given the plan, the intent and the
+    policy, plain values and the worker directory, never the Store."""
+    with _reserved(plan) as directory_fd:
+        return _run(directory_fd, intent, policy, cancel_event=cancel_event)
+
+
+async def prepare_protein_structure_worker(
     store, *, plan: ProteinResultWorkerPlan, policy: LocalJobPolicy,
-    executable=None, package_root=None, environment=None, cancel_event=None,
+    executable=None, package_root=None, environment=None,
 ) -> PreparedProteinWorker:
-    """Prepare/execute once, or recover that exact reservation and retained result."""
+    """Prepare/execute once, or recover that exact reservation and retained result. The unit reads and writes the
+    Store before and after the execution; the execution itself runs in a worker thread on the worker directory."""
     plan = validate_protein_structure_result_worker_plan(plan)
     _require(type(policy) is LocalJobPolicy and same(policy.to_dict(), _POLICY), "resource_budget_exceeded")
     _inputs(store, plan)
@@ -564,31 +571,28 @@ def prepare_protein_structure_worker(
         selected_root = (_PACKAGE_ROOT if package_root is None else package_root) if environment is None else package_root
         intent = _intent(plan, executable=selected_executable, package_root=selected_root, environment=environment)
     try:
-        with _directory(plan["directory"], create=True) as directory_fd:
-            _require(os.fstat(directory_fd).st_uid == os.geteuid(), "invalid_output_path")
-            with _regular(directory_fd, ".preparation.lock", flags=os.O_RDWR | os.O_CREAT) as lock_fd:
-                fcntl.flock(lock_fd, fcntl.LOCK_EX)
-                old_intent = _read(directory_fd, "intent.json")
-                if old_intent is None:
-                    _require(_read(directory_fd, "prepared.json") is None
-                             and _read(directory_fd, "worker.handle.json") is None, "original_commission_mismatch")
-                _immutable(directory_fd, "intent.json", intent)
-                saved = _read(directory_fd, "prepared.json")
-                if saved is not None:
-                    prepared = decode_protein_structure_json(saved, canonical_bytes=True)
-                    return validate_prepared_protein_structure_worker(store, prepared, plan=plan)["prepared"]
-                _immutable(directory_fd, "plan.json", plan)
-                # No source/observation is created: these are custody artifacts.
-                store.artifact(canonical(intent), "application/json")
-                for name in ("tmp", "cache"):
-                    with _directory(plan["directory"] + "/" + name, create=True):
-                        pass
-                execution = (_run(directory_fd, intent, policy) if cancel_event is None else
-                    _run(directory_fd, intent, policy, cancel_event=cancel_event))
-                return _finish(store, directory_fd, plan, intent, execution)
+        with _reserved(plan) as directory_fd:
+            old_intent = _read(directory_fd, "intent.json")
+            if old_intent is None:
+                _require(_read(directory_fd, "prepared.json") is None
+                         and _read(directory_fd, "worker.handle.json") is None, "original_commission_mismatch")
+            _immutable(directory_fd, "intent.json", intent)
+            saved = _read(directory_fd, "prepared.json")
+            if saved is not None:
+                prepared = decode_protein_structure_json(saved, canonical_bytes=True)
+                return validate_prepared_protein_structure_worker(store, prepared, plan=plan)["prepared"]
+            _immutable(directory_fd, "plan.json", plan)
+            # No source/observation is created: these are custody artifacts.
+            store.artifact(canonical(intent), "application/json")
+            for name in ("tmp", "cache"):
+                with _directory(plan["directory"] + "/" + name, create=True):
+                    pass
+        with store.scratch("protein_structure_worker") as scratch:
+            execution = await scratch.compute(_run_worker, plan, intent, policy)
+        with _reserved(plan) as directory_fd:
+            return _finish(store, directory_fd, plan, intent, execution)
     except OSError as error:
         raise ValueError("invalid_output_path") from error
 
-
-__all__ = ["ProteinWorkerDiagnostic", "ProteinWorkerExecution", "PreparedProteinWorker", "ValidatedProteinWorker",
+__all__ = ["retained_protein_structure_bytes", "ProteinWorkerDiagnostic", "ProteinWorkerExecution", "PreparedProteinWorker", "ValidatedProteinWorker",
            "prepare_protein_structure_worker", "validate_prepared_protein_structure_worker"]

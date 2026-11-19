@@ -104,7 +104,7 @@ def _project_snapshot(store, scope, policy, known, limit, offset):
             spool.execute('INSERT INTO current_findings VALUES(?,?,?)',
                 (value['finding_key'], row['id'], canonical(value)))
         for ref in known:
-            row = store._require(ref, {'assessment'})
+            row = store.require(ref, {'assessment'})
             finding = row.get('investigation_finding')
             reason = ('typed_finding_not_recorded' if finding is None else
                 'finding_target_outside_scope' if not target_eligible(store, row, scope) else
@@ -124,8 +124,8 @@ def _project_snapshot(store, scope, policy, known, limit, offset):
             if reason == 'scientific_finding_withdrawn':
                 item['withdrawal_reason'] = finding['withdrawal_reason']
             elif reason == 'not_current_assessment_revision':
-                revision = store.db.execute('SELECT record_ref FROM current_revisions '
-                    "WHERE record_type='assessment' AND key_ref=?", (store.assessment_key(row),)).fetchone()
+                revision = [current['id'] for current in store.current_assessments()
+                    if store.assessment_key(current) == store.assessment_key(row)]
                 if revision:
                     item['current_assessment_ref'] = revision[0]
                     replacement = store.get(revision[0]).get('investigation_finding', {})

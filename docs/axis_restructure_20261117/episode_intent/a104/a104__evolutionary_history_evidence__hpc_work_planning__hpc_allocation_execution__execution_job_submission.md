@@ -182,3 +182,186 @@ Old-runner names are listed as `name×uses`. `workflow.*` means `self.workflow.*
 | `to_child_local_job_execution.py` | 30 | assemble_request only (old). | root.a104.episode_contract_information×1; root.a104.runtime×1; EpisodeGoal×3; Episode.identity×2; EpisodeRequest×2; Record×2; workflow.context×2; workflow.evolutionary_history_evidence_binding×1; workflow.grains×2; workflow.inprocess_completion_order×2; workflow.launch_instructions×1; workflow.receipts×2 |
 | `to_parent.py` | 31 | validate_report: masking/utility received report checks, UniProt frozen facts, recorded facts must match. | root.a104.uniprot_return_contracts×1 |
 | `yield_estimator.py` | 67 | Private yield: remaining = eligible original requests without an initial usable handoff x handoff_unit; BoundedYieldController capped by remaining with profile `launch:<sorted request classes>`; exact-zero estimator when nothing remains. | BindingContext .assignment×1; BindingContext .role×1; BindingContext .scope×1; root.a104.numerical×1; root.a104.practical_yield×1; BoundedYieldController×2; NumericBand×2; PracticalYieldEstimator×2; YieldController×2; YieldEstimate×2; YieldParameters×3 |
+
+## Carried over
+
+One row per old function, class and method (`runs/carry_over/functions/...tsv`). Kind: `machinery` (old runner, not carried), `episode function` (new place) or `unplaced` (not carried, reported with its reason). Carried 19 November 2026 into the ten-file form; the job service is BLOCKED-ON-JOB-SERVICE (see the blocked file). "library candidate" marks a function of this episode's file that is not episode-specific.
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| binding_record.py | LaunchBindingRecord | machinery | the binding's own as_record() (README 3) |
+| binding_record.py | LaunchBindingRecord.as_record | machinery | the binding's own as_record() (README 3) |
+| capability_operations.py | LaunchCapabilities | episode function | task.py: execution_capabilities (TOOLS) |
+| capability_operations.py | LaunchCapabilities.catalog | episode function | task.py: TOOLS = {execution_capabilities} |
+| capability_operations.py | LaunchCapabilities.execute | episode function | task.py: execution_capabilities (the tool body) |
+| closed_credit.py | ExecutionEpisodeCreditClosed | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| closed_credit.py | ExecutionEpisodeCreditClosed._closed_credit_carrier | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| closed_credit.py | ExecutionEpisodeCreditClosed._closed_credit_receipts | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| closed_credit.py | ExecutionEpisodeCreditClosed._closed_credit_value | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| closed_credit.py | ExecutionEpisodeCreditClosed._closed_credit_facts | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| closed_credit.py | ExecutionEpisodeCreditClosed._closed_operational_credit_view | machinery | frozen closed credit from runtime_episodes, runtime_forms, runtime_observations and the receipt tables (journal re-validation); the system hands completion['credit'] to final_to_parent |
+| completion.py | ExecutionEpisodeCreditCompletion | machinery | completion proof read from runtime_actions / runtime_observations and re-verified (verify_completion, ESTIMATOR_VERSION); the proof is not a controller input (README 5 item 5, 3d) |
+| completion.py | ExecutionEpisodeCreditCompletion._proof_for_action | machinery | completion proof read from runtime_actions / runtime_observations and re-verified (verify_completion, ESTIMATOR_VERSION); the proof is not a controller input (README 5 item 5, 3d) |
+| completion.py | ExecutionEpisodeCreditCompletion.completion_for_action | machinery | completion proof read from runtime_actions / runtime_observations and re-verified (verify_completion, ESTIMATOR_VERSION); the proof is not a controller input (README 5 item 5, 3d) |
+| completion.py | ExecutionEpisodeCreditCompletion._closed_completion_verdict | machinery | completion proof read from runtime_actions / runtime_observations and re-verified (verify_completion, ESTIMATOR_VERSION); the proof is not a controller input (README 5 item 5, 3d) |
+| completion.py | ExecutionEpisodeCreditCompletion.verify_completion | machinery | completion proof read from runtime_actions / runtime_observations and re-verified (verify_completion, ESTIMATOR_VERSION); the proof is not a controller input (README 5 item 5, 3d) |
+| configuration.py | LaunchConfiguration | episode function | values: ctx.settings (resources, initial_information, coordinator_workspace, launch_instructions_directory, tool_knowledge_directory, task_yield_profiles); handoff_unit and acquired_record_unit are fields of ASSIGNMENT_FORM (messages/read_from_parent.py). The construction of api_execution, the progress provider, the result readers and the validators of resource bindings is old-runner machinery |
+| configuration.py | LaunchConfiguration.__init__ | episode function | values: ctx.settings (resources, initial_information, coordinator_workspace, launch_instructions_directory, tool_knowledge_directory, task_yield_profiles); handoff_unit and acquired_record_unit are fields of ASSIGNMENT_FORM (messages/read_from_parent.py). The construction of api_execution, the progress provider, the result readers and the validators of resource bindings is old-runner machinery |
+| contracts.py | launch_operation_catalog | episode function | task.py: TOOLS / execution_capabilities (name execution.capabilities became execution_capabilities) |
+| contracts.py | native_result_operation_catalog | unplaced | catalogue of the results role (execution.results.*); belongs to execution_result_acquisition |
+| contracts.py | _outcome | machinery | old outcome envelope (completed/invalid): a tool returns its own outcome, a rejected answer is Rejected in task.py action |
+| credit.py | ExecutionEpisodeCredit | episode function | credit.py: credit |
+| credit.py | ExecutionEpisodeCredit.credit_kind | machinery | credit_kind is deleted (README 3d) |
+| credit.py | ExecutionEpisodeCredit.project_credit | machinery | choice between the frozen closed view and the live projection; the closed view is not carried |
+| credit.py | ExecutionEpisodeCredit._live_project_credit | episode function | credit.py: credit (handoff_unit * new handoff resources + acquired_record_unit * 0) |
+| credit.py | ExecutionEpisodeCredit.credit_view | machinery | credit view record: credit returns the number (README 3d) |
+| decision_context.py | LaunchTaskContext | episode function | task.py: decide (context) and messages/internal_summary.py: internal_summary |
+| decision_context.py | LaunchTaskContext.assemble_decision_context | episode function | task.py: decide (context for the model) and messages/internal_summary.py: internal_summary (state from the view); the generic fields (visible_record_refs, credit_binding, journal queries, image view) are old-runner machinery |
+| decision_context.py | _bind_preserved_runtime_providers | machinery | provider patching (_bind_preserved_runtime_providers, README 3a) |
+| decision_contracts.py | LaunchTaskDecisionContracts | machinery | decision-exchange loop: saved-request checks and exchange schema (README 3a) |
+| decision_contracts.py | LaunchTaskDecisionContracts.interpretation_context | machinery | decision-exchange loop: saved-request checks and exchange schema (README 3a) |
+| decision_contracts.py | LaunchTaskDecisionContracts.exchange_schema | machinery | decision-exchange loop: saved-request checks and exchange schema (README 3a) |
+| decision_contracts.py | LaunchTaskDecisionContracts.exchange_response | machinery | decision-exchange loop: saved-request checks and exchange schema (README 3a) |
+| decision_contracts.py | LaunchTaskDecisionContracts.validate_contract_exchange_request | machinery | decision-exchange loop: saved-request checks and exchange schema (README 3a) |
+| decision_contracts.py | LaunchTaskDecisionContracts.validate_contract_exchange_history | machinery | decision-exchange loop: saved-request checks and exchange schema (README 3a) |
+| decision_contracts.py | _bind_preserved_runtime_providers | machinery | provider patching (_bind_preserved_runtime_providers, README 3a) |
+| decision_exchange.py | LaunchTaskDecisionExchange | machinery | decision-exchange loop (exchange_decision, README 3a) |
+| decision_exchange.py | LaunchTaskDecisionExchange.exchange_decision | machinery | decision-exchange loop (exchange_decision, README 3a) |
+| decision_exchange.py | _bind_preserved_runtime_providers | machinery | provider patching (_bind_preserved_runtime_providers, README 3a) |
+| decision_provider.py | LaunchTaskDecisionProvider | machinery | model call wrapped in journal.save / saved exchanges (decision_completion): decide returns a ModelRequest, the system calls and records (README 3a) |
+| decision_provider.py | LaunchTaskDecisionProvider.decision_completion | machinery | model call wrapped in journal.save / saved exchanges (decision_completion): decide returns a ModelRequest, the system calls and records (README 3a) |
+| episode.py | ExecutionEpisode | episode function | episode.py: ExecutionJobSubmission |
+| episode.py | ExecutionEpisode.child_roles | episode function | task.py: CHILD_SLOTS (launch_api, launch_local, launch_hpc) |
+| episode.py | ExecutionEpisode.required_return_sources | episode function | messages/final_to_parent.py: RETURN_FORM (execution_handoff_refs is a required field) |
+| episode.py | ExecutionEpisode.allowed_children | episode function | messages/read_from_parent.py: read_from_parent (parent_input['permitted'], library candidate: _permitted) and task.py: action |
+| episode.py | ExecutionEpisode.permitted_common_actions | machinery | common action set (tool, reason, child, wait, redeliver_report): there is no reason, wait or redeliver_report action |
+| episode.py | ExecutionEpisode.child_request_assembler | episode function | messages/msg_to_child.py: msg_to_child |
+| episode.py | ExecutionEpisode.child_report_receiver | episode function | messages/read_from_child.py: read_from_child |
+| from_child_api_job_execution.py | receive_report | episode function | messages/read_from_child.py: read_from_child (the progress-provider and receipts-ledger parts of the old receive_report are system custody) |
+| from_child_hpc_job_execution.py | receive_report | episode function | messages/read_from_child.py: read_from_child (the progress-provider and receipts-ledger parts of the old receive_report are system custody) |
+| from_child_local_job_execution.py | receive_report | episode function | messages/read_from_child.py: read_from_child (the progress-provider and receipts-ledger parts of the old receive_report are system custody) |
+| from_parent.py | LaunchAssignment | episode function | messages/read_from_parent.py: ASSIGNMENT_FORM, read_from_parent |
+| from_parent.py | LaunchAssignment.child_assignment_schema | episode function | task.py: _output_schema (the parent describes the choice in its own schema); the child assignment schema is the child's own ASSIGNMENT_FORM (README 5 item 10) |
+| from_parent.py | LaunchAssignment.assignment_schema | episode function | messages/read_from_parent.py: ASSIGNMENT_FORM |
+| from_parent.py | LaunchAssignment.prepare_assignment | episode function | messages/read_from_parent.py: read_from_parent (the assignment check); authenticate_launch, masking, utility, pinned-version and native / standard BLAST database input checks are checks of a commission and are not carried |
+| from_parent.py | LaunchAssignment._launch | episode function | messages/read_from_parent.py: read_from_parent, _request, _constraints; the BLAST graded request branch (BLAST_GRADED_REQUEST_*) is not found in the library: such a request fails validate_api_assignment |
+| goal.py | LaunchGoal | episode function | goal.py: GOAL; task.py: decide (instructions) |
+| goal.py | LaunchGoal.instructions | episode function | goal.py: GOAL (text unchanged); task.py: decide composes it into the instructions |
+| internal_summary.py | LaunchSummary | episode function | messages/internal_summary.py and task.py |
+| internal_summary.py | LaunchSummary._with_selected_execution_task | episode function | task.py: _selected_execution_task (library candidate) |
+| internal_summary.py | LaunchSummary.decision_context | episode function | messages/internal_summary.py: internal_summary (execution_assignment, execution_progress) and task.py: decide |
+| launch_state.py | LaunchState | episode function | messages/read_from_parent.py: read_from_parent |
+| launch_state.py | LaunchState.initialize | episode function | messages/read_from_parent.py: read_from_parent (request validation); masking / utility inputs and pinned versions are commission checks, not carried |
+| native_receipt_support.py | LaunchNativeReceiptSupport | machinery | delegation of workflow.execute to the practical operations of the old runner (receipts, runtime tables) |
+| native_receipt_support.py | LaunchNativeReceiptSupport._delegate | machinery | delegation of workflow.execute to the practical operations of the old runner (receipts, runtime tables) |
+| native_receipt_support.py | LaunchNativeReceiptSupport._practical_context | machinery | delegation of workflow.execute to the practical operations of the old runner (receipts, runtime tables) |
+| presentation.py | present_execution_context | episode function | task.py: _task_text (rewritten over the summary; the old render_api_launch_prompt and render_selected_execution_prompt are outside the episode trees and not found); library candidate |
+| protected_reference_access.py | ProtectedReferenceAccess | machinery | reference readers installed for the old report-reference resolver (report_form machinery); custody replaces them |
+| protected_reference_access.py | ProtectedReferenceAccess._install_protected_reference_readers | machinery | reference readers installed for the old report-reference resolver (report_form machinery); custody replaces them |
+| protected_reference_access.py | ProtectedReferenceAccess._protein_reference_access | machinery | reference readers installed for the old report-reference resolver (report_form machinery); custody replaces them |
+| protected_reference_access.py | ProtectedReferenceAccess._fluorescence_reference_access | machinery | reference readers installed for the old report-reference resolver (report_form machinery); custody replaces them |
+| protected_reference_access.py | ProtectedReferenceAccess._expression_nmf_reference_access | machinery | reference readers installed for the old report-reference resolver (report_form machinery); custody replaces them |
+| protected_reference_access.py | ProtectedReferenceAccess._atac_reference_access | machinery | reference readers installed for the old report-reference resolver (report_form machinery); custody replaces them |
+| protected_reference_access.py | ProtectedReferenceAccess._chromatin_reference_access | machinery | reference readers installed for the old report-reference resolver (report_form machinery); custody replaces them |
+| received_records.py | LaunchReceivedRecords | machinery | receipts ledger and runtime_actions reads (known_record_refs, initial_known_record_refs); the handoff count is in messages/internal_summary.py and credit.py |
+| received_records.py | LaunchReceivedRecords._selection | machinery | receipts ledger (EpisodeReceipts, runtime_receipt_inheritance, runtime_actions) |
+| received_records.py | LaunchReceivedRecords._received | machinery | receipts ledger and provider reads (job_progress_provider.targets.usable_handoff); the usable handoff count is read_from_child.py + internal_summary.py (handoff_resources) + credit.py |
+| received_reference_access.py | LaunchReceivedReportsReferenceAccess | machinery | old resolver of received references against the receipts ledger (resolve_received_reference); custody replaces it |
+| received_reference_access.py | LaunchReceivedReportsReferenceAccess.resolve_received_reference | machinery | old resolver of received references against the receipts ledger (resolve_received_reference); custody replaces it |
+| received_report_admission.py | LaunchReceivedReportsAdmission | machinery | old admission of received reports and received_form_references (receipts ledger, report_form machinery); the system admits a child result against its form |
+| received_report_admission.py | LaunchReceivedReportsAdmission.validate_received_report | machinery | old admission of received reports and received_form_references (receipts ledger, report_form machinery); the system admits a child result against its form |
+| received_report_admission.py | LaunchReceivedReportsAdmission.received_form_references | machinery | old admission of received reports and received_form_references (receipts ledger, report_form machinery); the system admits a child result against its form |
+| received_reports.py | LaunchReceivedReports | machinery | old received-report sources, facts and initial_references over the receipts ledger and old providers; records are named in record_refs fields |
+| received_reports.py | LaunchReceivedReports.received_report_sources | machinery | old received-report sources, facts and initial_references over the receipts ledger and old providers; records are named in record_refs fields |
+| received_reports.py | LaunchReceivedReports.received_report_facts | machinery | old received-report sources, facts and initial_references over the receipts ledger and old providers; records are named in record_refs fields |
+| received_reports.py | LaunchReceivedReports.received_report_closure_facts | machinery | old received-report sources, facts and initial_references over the receipts ledger and old providers; records are named in record_refs fields |
+| received_reports.py | LaunchReceivedReports.initial_references | machinery | old received-report sources, facts and initial_references over the receipts ledger and old providers; records are named in record_refs fields |
+| report_delivery.py | LaunchReportDelivery | machinery | report_form machinery (finish: fill and save the typed form) |
+| report_delivery.py | LaunchReportDelivery.finish | machinery | report_form machinery (finish): final_to_parent returns the result |
+| report_delivery.py | _bind_preserved_runtime_providers | machinery | provider patching (_bind_preserved_runtime_providers, README 3a) |
+| report_facts.py | LaunchReportFacts | episode function | messages/final_to_parent.py: _facts |
+| report_facts.py | LaunchReportFacts.facts | episode function | messages/final_to_parent.py: _facts (the closed credit facts are machinery) |
+| report_facts.py | LaunchReportFacts._live_facts | episode function | messages/final_to_parent.py: _facts (handoff refs from the children's returns; result sources empty); bvbrc_appservice_support_refs: selecting it raises |
+| report_fields.py | LaunchReportFields | episode function | messages/final_to_parent.py: RETURN_FORM |
+| report_fields.py | LaunchReportFields.fact_sources | episode function | messages/final_to_parent.py: RETURN_FORM (one field per old fact source; the masking / utility sources named execution.<name> and the BV-BRC data / AppService sources are not declared: see the blocked file) |
+| report_reference_access.py | LaunchReportReferenceAccess | machinery | old report-reference resolver for validate_form (workflow.resolver); custody replaces it |
+| report_reference_access.py | LaunchReportReferenceAccess.resolve | machinery | old report-reference resolver for validate_form (workflow.resolver); custody replaces it |
+| request_validation.py | LaunchRequestValidation | episode function | messages/read_from_parent.py and task.py |
+| request_validation.py | LaunchRequestValidation._request_schema | episode function | messages/read_from_parent.py: _request (the closed concrete request is validated by validate_assignment / validate_api_assignment; the per-resource schema over the configured resources is not rebuilt) |
+| request_validation.py | LaunchRequestValidation._validate_request | episode function | messages/read_from_parent.py: _request (closed request, resource identity) and task.py: _bound (bound resource, kind, transport / API service validation) |
+| request_validation.py | LaunchRequestValidation._constraints | episode function | messages/read_from_parent.py: _constraints (library candidate) |
+| request_validation.py | LaunchRequestValidation._permitted | episode function | messages/read_from_parent.py: _permitted (library candidate) |
+| request_validation.py | LaunchRequestValidation._versions | machinery | validate_execution_input_versions of the pinned input versions: a check of a commission (rule 1); the module is also not in episode_support |
+| resource_information.py | LaunchResourceInformation | episode function | task.py: execution_capabilities |
+| resource_information.py | LaunchResourceInformation._resource_information | episode function | task.py: execution_capabilities (one entry per configured resource) |
+| resource_information.py | LaunchResourceInformation.initial_decision_context | episode function | task.py: execution_capabilities (the initial lookup is the first unit of the task); received_bvbrc_values and received_blast_jobs belong to the annotation roles |
+| resource_information.py | LaunchResourceInformation.capabilities | episode function | task.py: execution_capabilities (tool_names; API names are BLOCKED-ON-JOB-SERVICE) |
+| resource_information.py | LaunchResourceInformation.resource_tool_contracts | unplaced | the commissioning parent's catalogue of resource operations and commission routes for the old shared tool registry; the launch parent describes the choice in its own output schema |
+| resource_return_support.py | LaunchResourceReturns | unplaced | API return support (BV-BRC AppService / UniProt / BV-BRC data sources of the old api_execution): no A104 reader module is found |
+| resource_return_support.py | LaunchResourceReturns._has_appservice | unplaced | asks the old api_execution for a bvbrc_appservice service; the BV-BRC AppService fact sources have no A104 module (selecting bvbrc_appservice_support_refs raises) |
+| resource_return_support.py | LaunchResourceReturns._has_uniprot | unplaced | asks the old api_execution for a uniprot service; its fact sources belong to the results role |
+| resource_return_support.py | LaunchResourceReturns._appservice_sources | unplaced | bvbrc_homology_returns, bvbrc_phylogeny_returns and bvbrc_proteome_returns are outside the episode trees and not found for A104 |
+| resource_return_support.py | LaunchResourceReturns._forwards_bvbrc_reports | unplaced | forwards BV-BRC data reports to the annotation roles: the BV-BRC data sources have no A104 module |
+| retained_result_receipts.py | LaunchRetainedResults | unplaced | results-role code (selector, windows, retained result bodies) of the old shared launch class; belongs to execution_result_acquisition, not to the launch role of this episode |
+| retained_result_receipts.py | LaunchRetainedResults._target | unplaced | results-role code (selector, windows, retained result bodies) of the old shared launch class; belongs to execution_result_acquisition, not to the launch role of this episode |
+| retained_result_receipts.py | LaunchRetainedResults._selector | unplaced | results-role code (selector, windows, retained result bodies) of the old shared launch class; belongs to execution_result_acquisition, not to the launch role of this episode |
+| retained_result_receipts.py | LaunchRetainedResults._result_directory | unplaced | results-role code (selector, windows, retained result bodies) of the old shared launch class; belongs to execution_result_acquisition, not to the launch role of this episode |
+| retained_result_receipts.py | LaunchRetainedResults._windows | unplaced | results-role code (selector, windows, retained result bodies) of the old shared launch class; belongs to execution_result_acquisition, not to the launch role of this episode |
+| retained_result_receipts.py | LaunchRetainedResults._selected_result_action | unplaced | results-role code (selector, windows, retained result bodies) of the old shared launch class; belongs to execution_result_acquisition, not to the launch role of this episode |
+| retained_result_receipts.py | LaunchRetainedResults._validate_result_body | unplaced | results-role code (selector, windows, retained result bodies) of the old shared launch class; belongs to execution_result_acquisition, not to the launch role of this episode |
+| retained_result_receipts.py | LaunchRetainedResults._read_result | unplaced | results-role code (selector, windows, retained result bodies) of the old shared launch class; belongs to execution_result_acquisition, not to the launch role of this episode |
+| retained_result_receipts.py | LaunchRetainedResults._context_target | unplaced | results-role code (selector, windows, retained result bodies) of the old shared launch class; belongs to execution_result_acquisition, not to the launch role of this episode |
+| scientific_inputs.py | LaunchScientificInputs | machinery | checks of a commission (masking and utility job inputs against received records): a wrong commission fails, nothing checks it ahead (rule 1) |
+| scientific_inputs.py | LaunchScientificInputs._masking_selector | machinery | checks of a commission (masking and utility job inputs against received records): a wrong commission fails, nothing checks it ahead (rule 1) |
+| scientific_inputs.py | LaunchScientificInputs._masking_inputs | machinery | checks of a commission (masking and utility job inputs against received records): a wrong commission fails, nothing checks it ahead (rule 1) |
+| scientific_inputs.py | LaunchScientificInputs._retained_masking_target | machinery | checks of a commission (masking and utility job inputs against received records): a wrong commission fails, nothing checks it ahead (rule 1) |
+| scientific_inputs.py | LaunchScientificInputs._masking_reference_access | machinery | checks of a commission (masking and utility job inputs against received records): a wrong commission fails, nothing checks it ahead (rule 1) |
+| scientific_inputs.py | LaunchScientificInputs._utility_selector | machinery | checks of a commission (masking and utility job inputs against received records): a wrong commission fails, nothing checks it ahead (rule 1) |
+| scientific_inputs.py | LaunchScientificInputs._utility_inputs | machinery | checks of a commission (masking and utility job inputs against received records): a wrong commission fails, nothing checks it ahead (rule 1) |
+| scientific_inputs.py | LaunchScientificInputs._retained_utility_target | machinery | checks of a commission (masking and utility job inputs against received records): a wrong commission fails, nothing checks it ahead (rule 1) |
+| scientific_inputs.py | LaunchScientificInputs._utility_reference_access | machinery | checks of a commission (masking and utility job inputs against received records): a wrong commission fails, nothing checks it ahead (rule 1) |
+| task.py | LaunchTask | episode function | task.py: decide, action, TOOLS |
+| task.py | LaunchTask.next | episode function | task.py: decide and action (the loop, restore, closed-episode and in-process replay branches are the system's) |
+| task.py | _bind_preserved_runtime_providers | machinery | provider patching (_bind_preserved_runtime_providers, README 3a) |
+| task_action.py | LaunchTaskAction | episode function | task.py: action |
+| task_action.py | LaunchTaskAction.apply_response | episode function | task.py: action (the selection is validated, else Rejected); the reason / exchange / report_update branches and the journal rows are the old decision machine |
+| task_action.py | LaunchTaskAction.execute | machinery | journal.save of runtime_actions, receive_native_outcome, automatic_score_updates, completions.stage: a unit is a ChildCall or a tool; the system journals it and prices it |
+| task_action.py | _bind_preserved_runtime_providers | machinery | provider patching (_bind_preserved_runtime_providers, README 3a) |
+| task_decision.py | LaunchTaskDecision | episode function | task.py: decide |
+| task_decision.py | LaunchTaskDecision.call | machinery | model call with saved decision contracts, sessions and state frames (README 3a): decide returns a ModelRequest |
+| task_decision.py | LaunchTaskDecision.instructions | episode function | task.py: decide (instructions) |
+| task_decision.py | LaunchTaskDecision.conversation_key | machinery | conversation state (README 3a): every ModelRequest carries the full context |
+| task_decision.py | _bind_preserved_runtime_providers | machinery | provider patching (_bind_preserved_runtime_providers, README 3a) |
+| task_instructions.py | instructions | episode function | task.py: decide (goal text + ACTION_BOUNDARY + HOST_EXECUTION_GUIDANCE + the tool knowledge and launch instruction libraries); the report, history, repair, wait, native-event and resource-estimate guidance describes actions or inputs that no longer exist and is not carried |
+| task_instructions.py | _bind_preserved_runtime_providers | machinery | provider patching (_bind_preserved_runtime_providers, README 3a) |
+| task_state.py | LaunchTaskState | machinery | checkpoint / restore / record_effect state of the old decision machine (README 3e) |
+| task_state.py | LaunchTaskState.__init__ | machinery | checkpoint / restore / record_effect state of the old decision machine (README 3e) |
+| task_state.py | LaunchTaskState.bind_execution_context | machinery | checkpoint / restore / record_effect state of the old decision machine (README 3e) |
+| task_state.py | LaunchTaskState.record_execution_failure | machinery | checkpoint / restore / record_effect state of the old decision machine (README 3e) |
+| task_state.py | LaunchTaskState.restore_checkpoint | machinery | checkpoint / restore / record_effect state of the old decision machine (README 3e) |
+| task_state.py | LaunchTaskState.restore | machinery | checkpoint / restore / record_effect state of the old decision machine (README 3e) |
+| task_state.py | LaunchTaskState.record_effect | machinery | checkpoint / restore / record_effect state of the old decision machine (README 3e) |
+| task_state.py | LaunchTaskState.checkpoint | machinery | checkpoint / restore / record_effect state of the old decision machine (README 3e) |
+| task_state.py | _bind_preserved_runtime_providers | machinery | provider patching (_bind_preserved_runtime_providers, README 3a) |
+| task_waiting.py | LaunchTaskSuspension | machinery | wait / suspension machinery (README 3b) |
+| task_waiting.py | LaunchTaskSuspension.suspension_changed | machinery | wait / suspension machinery (README 3b) |
+| terminal_validation.py | operation_catalog | episode function | task.py: PRACTICAL_TOOL_NAMES (the local and HPC resources offer exec_command; the tool itself is the children's) |
+| terminal_validation.py | TerminalExecutionBehavior | machinery | practical-execution state and receipts of the launch_local / launch_hpc children, built on PracticalState directories and PracticalReceiptInformation (old runner machinery); the children carry what is episode content |
+| terminal_validation.py | TerminalExecutionBehavior.__init__ | machinery | construction over services, directory, store (old configuration) |
+| terminal_validation.py | TerminalExecutionBehavior._operations | episode function | task.py: _bound (TerminalExecution(config, coordinator_workspace=..., artifact_selector=terminal_artifact_paths).validate_assignment) |
+| terminal_validation.py | TerminalExecutionBehavior._assignment | episode function | task.py: _bound (resource kind against the bound resource; validate_assignment) and messages/read_from_parent.py: _request |
+| terminal_validation.py | TerminalExecutionBehavior._state_directory | machinery | per-episode practical state directory (state files, not custody) |
+| terminal_validation.py | TerminalExecutionBehavior.initialize | machinery | PracticalState construction on a state directory (old runner state) |
+| terminal_validation.py | TerminalExecutionBehavior.state | machinery | PracticalState lookup (old runner state) |
+| terminal_validation.py | TerminalExecutionBehavior.resolve | machinery | PracticalReceiptInformation reference resolver (report_form machinery) |
+| to_child_api_job_execution.py | assemble_request | episode function | messages/msg_to_child.py: msg_to_child (the old request envelope, knowledge_inheritance and EpisodeGoal are machinery; the child assignment is the selected request) |
+| to_child_hpc_job_execution.py | assemble_request | episode function | messages/msg_to_child.py: msg_to_child (the old request envelope, knowledge_inheritance and EpisodeGoal are machinery; the child assignment is the selected request) |
+| to_child_local_job_execution.py | assemble_request | episode function | messages/msg_to_child.py: msg_to_child (the old request envelope, knowledge_inheritance and EpisodeGoal are machinery; the child assignment is the selected request) |
+| to_parent.py | LaunchReport | episode function | messages/final_to_parent.py: final_to_parent |
+| to_parent.py | LaunchReport.validate_report | episode function | messages/final_to_parent.py: validate_report (the x-source equality check; the masking, utility and UniProt received-report checks and the axis validate_form call belong to a parent that wrote a JSON-schema form) |
+| yield_estimator.py | ExecutionEpisodeYield | episode function | yield_estimator.py: yield_controller |
+| yield_estimator.py | ExecutionEpisodeYield._request_yield_class | episode function | messages/read_from_parent.py: _yield_class (library candidate; the class is part of parent_input['permitted']) |
+| yield_estimator.py | ExecutionEpisodeYield._task_yield_profile | episode function | yield_estimator.py: _task_yield_profile (library candidate) |
+| yield_estimator.py | ExecutionEpisodeYield.yield_controller | episode function | yield_estimator.py: yield_controller |
+| yield_estimator.py | ExecutionEpisodeYield._launch_yield_controller | episode function | yield_estimator.py: yield_controller (BoundedQualityYieldController, maximum = uncredited requests * handoff_unit; the exact-zero estimator is not carried) |
+| yield_estimator.py | ExecutionEpisodeYield.practical_estimator | machinery | PracticalYieldEstimator over verify_completion: the completion proof is not a controller input (README 5 item 5, 7b) |

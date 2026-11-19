@@ -6,22 +6,18 @@ chooses another image, frame, region or scientific interpretation.
 from __future__ import annotations
 
 import hashlib
-from pathlib import Path
-import tempfile
 
 from PIL import Image, UnidentifiedImageError, __version__ as PILLOW_VERSION
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import ContractError, canonical
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.evolutionary_history_evidence.materials import artifact_file, artifact_path
 
 VERSION = "selected_native_image_frame_v1"
 
 
 def prepare_image(store, source_ref, *, frame=0, colour_conversion="preserve"):
-    source = store._require(source_ref, {"source"})
-    original = artifact_path(store, source["artifact_ref"])
+    source = store.require(source_ref, {"source"})
     try:
-        with Image.open(original) as image:
+        with store.open_artifact(source["artifact_ref"]) as original, Image.open(original) as image:
             native_format, native_mode = image.format, image.mode
             frame_count = getattr(image, "n_frames", 1)
             if not 0 <= frame < frame_count:
@@ -31,8 +27,8 @@ def prepare_image(store, source_ref, *, frame=0, colour_conversion="preserve"):
             image.load()
             width, height = image.size
             selected = image.convert("RGB") if colour_conversion == "rgb" else image
-            with tempfile.TemporaryDirectory(prefix="image-view-", dir=store.path) as temporary:
-                output = Path(temporary) / "selected.png"
+            with store.scratch("image-view") as scratch:
+                output = scratch.path / "selected.png"
                 try:
                     selected.save(output, format="PNG")
                 except (OSError, ValueError) as error:
@@ -58,7 +54,7 @@ def prepare_image(store, source_ref, *, frame=0, colour_conversion="preserve"):
                                 "source_ref": source_ref, "native_mode": selected.mode,
                                 "display_mode": display_mode,
                                 "available_conversion": "rgb"})
-                artifact = artifact_file(store, output, "image/png")
+                artifact = store.artifact_file(output, "image/png")
             return {"representation": VERSION, "input_source_ref": source_ref,
                 "original_artifact_ref": source["artifact_ref"], "image_artifact_ref": artifact,
                 "native_format": native_format, "native_initial_mode": native_mode,
@@ -73,18 +69,18 @@ def prepare_image(store, source_ref, *, frame=0, colour_conversion="preserve"):
 
 
 def view_metadata(store, view_ref):
-    view = store._require(view_ref, {"image_view"})
+    view = store.require(view_ref, {"image_view"})
     if view["origin"] != "tool":
         raise ContractError("native_image_view_required")
-    source = store._require(view["source_ref"], {"source"})
+    source = store.require(view["source_ref"], {"source"})
     if source["origin"] != "tool" or source["provider"] != "image.view":
         raise ContractError("native_image_view_source_required")
     if view["representation"] != VERSION:
         raise ContractError("image_view_representation_mismatch")
-    original = store._require(view["input_source_ref"], {"source"})
+    original = store.require(view["input_source_ref"], {"source"})
     if original["artifact_ref"] != view["original_artifact_ref"]:
         raise ContractError("image_original_source_mismatch")
-    artifact = store._require(view["image_artifact_ref"], {"artifact"})
+    artifact = store.require(view["image_artifact_ref"], {"artifact"})
     if source["artifact_ref"] != artifact["id"]:
         raise ContractError("image_display_source_mismatch")
     # Artifacts identify bytes. If identical native PNG bytes were captured as
@@ -97,12 +93,12 @@ def visual_input(store, view_ref):
     return view_metadata(store, view_ref)
 
 
-def resolve_image_input(store, selected):
+def resolve_image_input(store, scratch, selected):
     """Resolve only an actual view selection, not arbitrary paths or source JSON."""
     expected = visual_input(store, selected["id"])
     if canonical(selected) != canonical(expected):
         raise ContractError("image_input_selection_mismatch")
-    path = artifact_path(store, expected["image_artifact_ref"])
+    path = scratch.copy_artifact(expected["image_artifact_ref"], "image.png")
     with Image.open(path) as image:
         if image.format != "PNG" or image.size != (expected["width"], expected["height"]):
             raise ContractError("image_display_dimensions_mismatch")

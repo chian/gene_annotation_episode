@@ -1,45 +1,17 @@
-"""A105 head continuation: the configured yield controller over the head's cumulative, unbounded credit."""
-from __future__ import annotations
+"""Continuation, carried from the old ``yield_estimator.py`` (``ExperimentalActivityEvidenceYield.yield_controller``;
+README 7b): the head's only credit is accumulated distinct findings, whose projector declared
+``yield_method = 'accumulation'`` for the task ``A105:whole_axis_findings``, so its controller is the accumulation
+controller (old ``numerical.YieldController`` over ``declaration['cutoff']`` and ``declaration['parameters']``).
 
-from gene_annotation_episode.domain import ContractError
+The cutoff is the controller's ``cost`` and the parameters are the old ``uncertainty_alpha``: both are this
+episode's settings (``settings['cost']``, ``settings['parameters']``). The old configuration admitted accumulation, bounded_quality and completion, but this head's projector fixed
+``yield_method = 'accumulation'``, so the accumulation controller is the one; the old declaration checks (``credit_definition`` digest against the projector record, ``yield_method``
+against ``kind``) have nothing left to compare: the kind is fixed and the finding unit is the commission's own
+(``parent_input['evidence_task']``, which ``credit.py`` projects with). A setting that does not make a controller
+(a cost of zero never stops an accumulating Episode) is the controller's own error."""
+from yield_control import AccumulationYieldController
 
-from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
-from gene_annotation_episode.episodic_workflow.episode_support.records.option_records import scientific_digest
-from yield_control import AccumulationYieldController, YieldParameters
 
-TASK = 'A105:whole_axis_findings'
-INITIAL_CREDIT_DECISION = 'a105.head.initial_credit'
-
-
-class ExperimentalActivityEvidenceYield:
-
-    def yield_declaration(self, projector):
-        """This head's configured declaration for its whole-axis task, checked against its projector."""
-        if self._yield_bindings is None:
-            raise ContractError('a105_head_yield_binding_required:' + TASK)
-        declaration = self._yield_bindings.get(TASK)
-        if declaration is None:
-            raise ContractError('scientific_yield_binding_missing_for_task:' + TASK)
-        if scientific_digest(plain(projector.as_record())) != scientific_digest(declaration['credit_definition']):
-            raise ContractError('scientific_yield_credit_definition_mismatch:' + TASK)
-        if projector.yield_method != declaration['kind']:
-            raise ContractError('scientific_yield_method_credit_mismatch:' + TASK)
-        return declaration
-
-    def head_controller(self, bound, collaborators):
-        """Open the head's controller with the credit this Episode already knows.
-
-        The opening credit is projected over the ``store`` collaborator from the
-        Episode's own receipts (its subject, plus what an A105 parent head had
-        received) and recorded, so a resumed Episode reopens with the same value.
-        Continuation is the configured accumulation yield controller; credit is
-        cumulative and unbounded.
-        """
-        store = collaborators['store']
-        projector = self.credit_projector(bound.assignment)
-        declaration = self.yield_declaration(projector)
-        self.open_receipts(store, bound)
-        initial = bound.recorder.recorded(INITIAL_CREDIT_DECISION,
-                                          lambda: self.known_finding_credit(store, bound)['credit'])
-        return AccumulationYieldController(bound.episode_id, initial, declaration['cutoff'],
-                                           YieldParameters(**declaration['parameters']))
+def yield_controller(initial_credit, settings, parent_input):
+    return AccumulationYieldController('experimental_activity_evidence', initial_credit, settings['cost'],
+                                       settings['parameters'])

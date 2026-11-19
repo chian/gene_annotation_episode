@@ -2,6 +2,7 @@
 from copy import deepcopy
 import hashlib
 import json
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, obj
 from gene_annotation_episode.domain import ContractError
@@ -56,24 +57,16 @@ def _project_saved(saved, sheet_ref, components):
         result.append({'sheet_ref': sheet_ref, 'evidence_source_ref': saved['input_source_ref'], 'component': component, **{field: deepcopy(cell[field]) for field in ('value', 'unit', 'status', 'unavailable_reason', 'approximate', 'origin', 'conditional_on', 'reported_domain', 'exact_domain')}, 'evaluation_scope': 'source_preparation_completion_time', 'experiment': meaning(extraction['experiment']), 'intended_change': meaning(extraction['intended_change']), 'other_changes': [meaning(w) for w in extraction['other_changes']], 'comparison': {field: interpretation(extraction['comparison'][field]) for field in COMPARISON_FIELDS}, 'operands': operands})
     return result
 
+OPERATIONS = operations_ledger('literature_completion_time_operations')
+RECEIVED = received_ledger('literature_completion_time_received')
+
 class LiteratureCompletionTimeRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = VERSION
-    operations_table = 'literature_completion_time_operations'
-    received_table = 'literature_completion_time_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ()
-
-    def __init__(self, store, run_id):
-        if not isinstance(run_id, str) or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id = (store, run_id)
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     def populate(self, context, arguments, operation_key):
         if context.run_id != self.run_id:
@@ -83,7 +76,7 @@ class LiteratureCompletionTimeRepository(LiteratureRateRepository):
         args = plain(arguments)
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope)}
         signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
+        old = self._operation(context.episode_id, operation_key)
         if old:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -113,15 +106,14 @@ class LiteratureCompletionTimeRepository(LiteratureRateRepository):
         root = self._native_source(context, args['source_ref'])
         payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': root['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': ancestors, 'selection': args, 'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
             request_ref = self.store.artifact(canonical(request), 'application/json')
             record = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': ancestors}
             sheet_ref = identity('source', {'origin': 'tool', 'record': record})
-            exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (sheet_ref,)).fetchone()
+            exists = self.store.holds(sheet_ref)
             self.store.put('source', record, origin='tool', scope=plain(context.scope))
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [sheet_ref], 'changed_record_refs': [] if exists else [sheet_ref], 'result': {'sheet_ref': sheet_ref, 'cells': _project_saved(payload, sheet_ref, COMPONENTS)}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def _artifact_json(self, reference):
@@ -140,7 +132,7 @@ class LiteratureCompletionTimeRepository(LiteratureRateRepository):
         request = self._artifact_json(source['request_ref'])
         if request.get('run_id') != self.run_id:
             raise ContractError('literature_run_mismatch')
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request.get('episode_id'), request.get('operation_key'))).fetchone() if self._installed(self.operations_table) else None
+        operation = self._operation(request.get('episode_id'), request.get('operation_key'))
         if operation is None or operation['signature'] != canonical(request):
             raise ContractError('literature_sheet_not_selected_output')
         outcome = json.loads(operation['outcome'])
@@ -173,16 +165,6 @@ class LiteratureCompletionTimeRepository(LiteratureRateRepository):
                 raise ContractError('literature_sheet_not_received')
             result.extend(_project_saved(self.read(reference), reference, selected))
         return result
-
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self._install()
-            return super().receive_cells(context, cells, operation_key)
 
     @staticmethod
     def cell_record_refs(cells):

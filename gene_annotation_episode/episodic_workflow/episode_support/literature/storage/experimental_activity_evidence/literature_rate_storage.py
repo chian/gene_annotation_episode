@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 import hashlib
 from copy import deepcopy
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity
 from gene_annotation_episode.domain import ContractError
@@ -19,13 +20,26 @@ COMPONENTS = ('reference_rate', 'test_rate', 'rate_difference', 'retained_fracti
 UNAVAILABLE_REASONS = ('nonfinite_calculation', 'missing_reference_arm', 'missing_test_arm', 'conflicting_source_identity', 'ambiguous_reference_arm', 'ambiguous_test_arm', 'source_measurement_unavailable', 'censored_measurement', 'conflicting_measurement', 'mean_uncertainty_unreported', 'observation_model_unspecified', 'measurement_count_unreported', 'insufficient_measurement_count', 'positive_sd_required', 'zero_reference_rate', 'dependence_unknown', 'profile_requires_sample_sd', 'numerical_model_range')
 NATIVE_RECORD_VERSION = 'literature_rate_population_record_v2'
 
+
+def operations_ledger(name):
+    """The declared work table of a repository's saved operations: one row per operation key, holding the signature of the work and its outcome."""
+    return TableDeclaration(name=name, columns=('key', 'signature', 'outcome'), key=('key',))
+
+def received_ledger(name):
+    """The declared work table of the cells an Episode received: one row per delivery."""
+    return TableDeclaration(name=name, columns=('delivery', 'cells'), key=('delivery',))
+OPERATIONS = operations_ledger('literature_rate_operations')
+RECEIVED = received_ledger('literature_rate_received')
+SOURCE_RECEIVED = received_ledger('literature_rate_source_received')
+SOURCE_DOMAIN_RECEIVED = received_ledger('literature_rate_source_domain_received')
+
 class LiteratureRateRepository:
     """Use one application's existing Store and explicit run/episode identities."""
     provider = PROVIDER
     components = COMPONENTS
     record_version = 'literature_rate_population_record_v1'
-    operations_table = 'literature_rate_operations'
-    received_table = 'literature_rate_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ('assayed_subject_ref', 'experiment_ref', 'reference_condition_ref', 'test_condition_ref', 'endpoint_ref', 'normalization_ref')
 
     def __init_subclass__(cls, **kwargs):
@@ -39,27 +53,23 @@ class LiteratureRateRepository:
         if not isinstance(run_id, str) or not run_id:
             raise ValueError('explicit_literature_run_required')
         self.store, self.run_id = (store, run_id)
-        self._ensure_storage()
 
-    def _ensure_storage(self):
-        """Restore this adapter's schema after a caller transaction rolls back."""
-        self.store.db.execute(f'CREATE TABLE IF NOT EXISTS {self.operations_table}(\n            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,\n            signature TEXT NOT NULL, outcome TEXT NOT NULL,\n            PRIMARY KEY(run_id,episode_id,operation_key))')
-        self.store.db.execute(f'CREATE TABLE IF NOT EXISTS {self.received_table}(\n            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,\n            cells TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))')
+    def _operation(self, episode_id, operation_key):
+        """The saved operation of ``episode_id`` under ``operation_key`` that this Episode holds, or None."""
+        rows = self.store.table(self.operations).select({'run_id': self.run_id, 'episode_id': episode_id, 'key': operation_key})
+        return rows[0] if rows else None
 
-    @property
-    def _delivery_table(self):
-        return self.received_table.removesuffix('_received') + '_delivery_bindings'
+    def _operations(self, episode_id=None):
+        """The saved operations this Episode holds: those of ``episode_id``, or of every Episode of the run."""
+        where = {'run_id': self.run_id} if episode_id is None else {'run_id': self.run_id, 'episode_id': episode_id}
+        return self.store.table(self.operations).select(where)
 
-    def _delivery_binding(self, context, operation_key):
-        installed = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (self._delivery_table,)).fetchone()
-        return self.store.db.execute(f'SELECT cells_digest FROM {self._delivery_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone() if installed else None
+    def _save_operation(self, operation_key, signature, outcome):
+        return self.store.table(self.operations).put({'key': operation_key, 'signature': signature, 'outcome': canonical(outcome)})
 
-    def _install_delivery_bindings(self):
-        self.store.db.execute(f'CREATE TABLE IF NOT EXISTS {self._delivery_table}(\n            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,\n            cells_digest TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))')
-
-    def _delivery_digest(self, cells):
-        kind = self.received_table.removeprefix('literature_').removesuffix('_received')
-        return identity(kind + '_admitted_cells', cells)
+    def _delivery(self, episode_id, operation_key):
+        rows = self.store.table(self.received).select({'run_id': self.run_id, 'episode_id': episode_id, 'delivery': operation_key})
+        return rows[0] if rows else None
 
     def populate(self, context, arguments, operation_key):
         """Parse the exact selected retained table and save this action atomically.
@@ -84,7 +94,7 @@ class LiteratureRateRepository:
         if not self.store.reference_subset([source_ref], plain(context.scope)):
             raise ContractError('literature_source_outside_scope')
         signature = canonical({'arguments': args, 'scope': plain(context.scope)})
-        saved = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
+        saved = self._operation(context.episode_id, operation_key)
         if saved is not None:
             if saved['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -109,9 +119,9 @@ class LiteratureRateRepository:
 
             def publish(kind, value):
                 candidate = identity(kind, {'origin': 'tool', 'record': value})
-                existed = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (candidate,)).fetchone()
+                existed = self.store.holds(candidate)
                 row = self.store.put(kind, value, origin='tool', scope=plain(context.scope))
-                if existed is None:
+                if not existed:
                     newly_created.append(row['id'])
                 return row
             subject = publish('reference', {'reference_type': 'assay', 'source_ref': source_ref, 'accession': identity('source_assay', {'source_ref': source_ref, 'subject': args['subject']}), 'label': args['subject'], 'sequence_ref': None, 'molecule': None, 'length': None, 'term_refs': [], 'context_refs': []}) if extraction['rows'] else None
@@ -128,7 +138,7 @@ class LiteratureRateRepository:
             request_ref = self.store.artifact(canonical({'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args}), 'application/json')
             record = publish('source', {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': sheet_artifact, 'text_ref': sheet_artifact, 'request_ref': request_ref, 'version': payload['version'], 'retrieved_at': None, 'parent_source_refs': [source_ref]})
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [record['id'], *dict.fromkeys((ref for ref in bindings.values() if ref))], 'changed_record_refs': newly_created, 'result': {'sheet_ref': record['id'], 'cells': sheet['cells']}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def _native_provenance(self, scope, reference):
@@ -170,7 +180,7 @@ class LiteratureRateRepository:
         args = plain(arguments)
         validate_schema(args, rate_source_population_schema())
         signature = canonical({'input_mode': 'native_source_spans', 'arguments': args, 'scope': plain(context.scope)})
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
+        old = self._operation(context.episode_id, operation_key)
         if old is not None:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -210,9 +220,9 @@ class LiteratureRateRepository:
 
             def publish(kind, value):
                 key = identity(kind, {'origin': 'tool', 'record': value})
-                exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (key,)).fetchone()
+                exists = self.store.holds(key)
                 record = self.store.put(kind, value, origin='tool', scope=plain(context.scope))
-                if exists is None:
+                if not exists:
                     created.append(record['id'])
                 return record
 
@@ -241,7 +251,7 @@ class LiteratureRateRepository:
             request_ref = self.store.artifact(canonical({'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args}), 'application/json')
             record = publish('source', {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': sheet_artifact, 'text_ref': sheet_artifact, 'request_ref': request_ref, 'version': NATIVE_RECORD_VERSION, 'retrieved_at': None, 'parent_source_refs': parents})
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [record['id'], *dict.fromkeys((ref for ref in (*bindings.values(), *native_bindings.values()) if ref))], 'changed_record_refs': created, 'result': {'sheet_ref': record['id'], 'cells': sheet['cells']}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     def read(self, sheet_ref):
@@ -257,7 +267,7 @@ class LiteratureRateRepository:
         request = json.loads(self.store.get_artifact(source['request_ref']))
         if request.get('run_id') != self.run_id:
             raise ContractError('literature_rate_sheet_run_mismatch')
-        operation = self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request.get('episode_id'), request.get('operation_key'))).fetchone()
+        operation = self._operation(request.get('episode_id'), request.get('operation_key'))
         if operation is None or json.loads(operation['outcome']).get('result', {}).get('sheet_ref') != sheet_ref:
             raise ContractError('literature_sheet_not_selected_output')
         payload = json.loads(self.store.get_artifact(source['artifact_ref']))
@@ -430,17 +440,15 @@ class LiteratureRateRepository:
 
     def source_projection(self):
         """A closed native return view over the same saved numerical operations."""
-        if self.provider != PROVIDER or self.operations_table != 'literature_rate_operations':
+        if self.provider != PROVIDER or self.operations != OPERATIONS:
             raise ContractError('native_rate_return_view_requires_rate_repository')
         if not hasattr(self, '_source_projection'):
             self._source_projection = LiteratureRateSourceProjection(self.store, self.run_id)
-        else:
-            self._source_projection._ensure_storage()
         return self._source_projection
 
     def source_domain_projection(self):
         """Versioned domain return over the same original numerical operations."""
-        if self.provider != PROVIDER or self.operations_table != 'literature_rate_operations':
+        if self.provider != PROVIDER or self.operations != OPERATIONS:
             raise ContractError('native_rate_return_view_requires_rate_repository')
         if not hasattr(self, '_source_domain_projection'):
             self._source_domain_projection = LiteratureRateSourceDomainProjection(self.store, self.run_id)
@@ -455,7 +463,7 @@ class LiteratureRateRepository:
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
         versions = set()
-        for saved in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=?', (self.run_id, context.episode_id)):
+        for saved in self._operations(context.episode_id):
             outcome = json.loads(saved['outcome'])
             if outcome.get('status') != 'completed':
                 continue
@@ -497,7 +505,7 @@ class LiteratureRateRepository:
         request = json.loads(request_bytes)
         if request.get('run_id') != self.run_id or type(request.get('episode_id')) is not str or (not request['episode_id']) or (type(request.get('operation_key')) is not str) or (not request['operation_key']):
             raise ContractError('literature_sheet_owner_mismatch')
-        operation = self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
+        operation = self._operation(request['episode_id'], request['operation_key'])
         outcome = json.loads(operation['outcome']) if operation else {}
         if outcome.get('status') != 'completed' or outcome.get('result', {}).get('sheet_ref') != reference or reference not in outcome.get('record_refs', ()) or (outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
             raise ContractError('literature_sheet_owner_mismatch')
@@ -541,18 +549,10 @@ class LiteratureRateRepository:
         with self.store.transaction():
             self.validate_returned_values(cells, permitted_record_refs=[row['sheet_ref'] for row in cells])
             data = canonical(cells)
-            old = self.store.db.execute(f'SELECT cells FROM {self.received_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
+            old = self._delivery(context.episode_id, operation_key)
             if old is not None and old['cells'] != data:
                 raise ContractError('literature_rate_delivery_identity_conflict')
-            digest = self._delivery_digest(cells)
-            bound = self._delivery_binding(context, operation_key)
-            if bound is not None and bound[0] != digest:
-                raise ContractError('literature_delivery_binding_mismatch')
-            if old is not None and bound is None:
-                raise ContractError('literature_delivery_binding_unavailable')
-            self._install_delivery_bindings()
-            self.store.db.execute(f'INSERT OR IGNORE INTO {self.received_table} VALUES(?,?,?,?)', (self.run_id, context.episode_id, operation_key, data))
-            self.store.db.execute(f'INSERT OR IGNORE INTO {self._delivery_table} VALUES(?,?,?,?)', (self.run_id, context.episode_id, operation_key, digest))
+            self.store.table(self.received).put({'delivery': operation_key, 'cells': data})
             from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_sheet_updates import admitted
             admitted(self, context, cells, operation_key)
 
@@ -561,14 +561,8 @@ class LiteratureRateRepository:
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
         result, seen = ([], set())
-        rows = self.store.db.execute(f'SELECT operation_key,cells FROM {self.received_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id))
-        for saved in rows:
+        for saved in self.store.table(self.received).select({'run_id': self.run_id, 'episode_id': context.episode_id}):
             cells = json.loads(saved['cells'])
-            bound = self._delivery_binding(context, saved['operation_key'])
-            if bound is None:
-                raise ContractError('literature_delivery_binding_unavailable')
-            if bound[0] != self._delivery_digest(cells):
-                raise ContractError('literature_delivery_binding_mismatch')
             self.validate_returned_values(cells, permitted_record_refs=[row['sheet_ref'] for row in cells])
             for row in cells:
                 key = (row['sheet_ref'], row['component'])
@@ -588,32 +582,14 @@ def rate_cells_schema():
 class LiteratureRateSourceProjection(LiteratureRateRepository):
     """Native typed-return view; shares the single numerical sheet/operation table."""
     record_version = NATIVE_RECORD_VERSION
-    received_table = 'literature_rate_source_received'
+    received = SOURCE_RECEIVED
 
     def populate(self, context, arguments, operation_key):
         raise ContractError('native_rate_return_view_cannot_publish_legacy_table')
 
 class LiteratureRateSourceDomainProjection(LiteratureRateSourceProjection):
     """Independent typed custody for constraints, without a second sheet."""
-    received_table = 'literature_rate_source_domain_received'
-
-    def __init__(self, store, run_id):
-        if not isinstance(run_id, str) or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id = (store, run_id)
-
-    def _installed(self):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (self.received_table,)).fetchone() is not None
-
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        return super().received_cells(context) if self._installed() else []
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self.store.db.execute(f'CREATE TABLE IF NOT EXISTS {self.received_table}(\n                run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,\n                cells TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))')
-            return super().receive_cells(context, cells, operation_key)
+    received = SOURCE_DOMAIN_RECEIVED
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
         from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_rate_domains import _project, _point

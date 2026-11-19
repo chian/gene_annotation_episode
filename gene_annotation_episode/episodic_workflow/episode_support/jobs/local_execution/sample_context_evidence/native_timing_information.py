@@ -5,7 +5,12 @@ decision occurs here.
 """
 import json
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.execution_recording import NativeMeasurement
+
+NATIVE_MEASUREMENTS = TableDeclaration(name='native_measurements',
+                                       columns=('operation', 'operands', 'measurement_artifact_ref'),
+                                       key=('measurement_artifact_ref',), record_refs=('measurement_artifact_ref',))
 
 
 def record_native_measurement(store, measurement, *, operation, operands):
@@ -15,11 +20,10 @@ def record_native_measurement(store, measurement, *, operation, operands):
         raise TypeError('typed_native_measurement_required')
     with store.transaction():
         artifact = store.artifact(canonical(measurement.as_record()), 'application/json')
-        return store.put('native_execution', {
-            'representation': 'native_execution_receipt_v2', 'operation': operation,
-            'measurement_artifact_ref': artifact, 'operands': operands}, origin='tool')['id']
+        return store.table(NATIVE_MEASUREMENTS).put({
+            'operation': operation, 'operands': operands, 'measurement_artifact_ref': artifact})['id']
 
 
 def read_measurement(store, reference):
-    record = store._require(reference, {'native_execution'})
-    return NativeMeasurement.from_record(json.loads(store.get_artifact(record['measurement_artifact_ref'])))
+    row = store.table(NATIVE_MEASUREMENTS).get(reference)
+    return NativeMeasurement.from_record(json.loads(store.get_artifact(row['measurement_artifact_ref'])))

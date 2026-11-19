@@ -57,3 +57,21 @@ def test_no_module_imports_another_episode_folder():
                     assert name == own or name.startswith(own + '.'), (relative, name)
             if isinstance(node, ast.ImportFrom) and node.level > 1:
                 raise AssertionError((relative, 'relative import above the episode folder'))
+
+
+def test_the_return_carries_the_credit_and_the_finding_and_is_admitted_by_the_return_form():
+    module = importlib.import_module(MODULE + '.messages.final_to_parent')
+    completion = {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 0.5}
+    report = {'entries': [{'source_ref': 'src_1', 'claim_kind': 'reported_family_assignment',
+                           'subject_relation': 'family_member', 'measured': False, 'offset': 0, 'limit': 100,
+                           'function': 'PF00001'}]}
+    written = module.final_to_parent({'report': report}, completion, ())
+    assert written['credit'] == 0.5 and written['finding']['written'] is True
+    finding = module.RETURN_FORM.admit(written, 'return')['finding']
+    assert finding['claim_count_reported_family_assignment'] == 1
+    assert finding['entries'][0] == {'source_refs': ['src_1'], 'claim_kind': 'reported_family_assignment',
+                                     'subject_relation': 'family_member', 'measured': False, 'offset': 0,
+                                     'limit': 100, 'function': 'PF00001'}
+    unwritten = module.final_to_parent({'report': None}, completion, ())
+    assert unwritten['finding']['written'] is False
+    module.RETURN_FORM.admit(unwritten, 'return')

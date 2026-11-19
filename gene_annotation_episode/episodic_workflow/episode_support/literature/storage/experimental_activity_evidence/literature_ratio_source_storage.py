@@ -9,6 +9,7 @@ import hashlib
 import json
 from pathlib import Path
 from types import SimpleNamespace
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, validate_schema
 from gene_annotation_episode.domain import ContractError
@@ -42,33 +43,22 @@ def ratio_source_population_schema():
 def ratio_source_cells_schema():
     return deepcopy(_RETURN_SCHEMA)
 
+OPERATIONS = operations_ledger('literature_ratio_source_operations')
+RECEIVED = received_ledger('literature_ratio_source_received')
+
 class LiteratureRatioSourceRepository(LiteratureRateRepository):
     provider = PROVIDER
     record_version = VERSION
     components = COMPONENTS
-    operations_table = 'literature_ratio_source_operations'
-    received_table = 'literature_ratio_source_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = tuple((name + '_ref' for name in MEANINGS))
 
     def __init__(self, store, run_id, *, evidence_origin='reported_source'):
-        if type(run_id) is not str or not run_id:
-            raise ValueError('explicit_literature_run_required')
         if evidence_origin not in ('reported_source', 'synthetic_fixture'):
             raise ContractError('relative_signal_evidence_origin_invalid')
-        self.store, self.run_id, self.evidence_origin = (store, run_id, evidence_origin)
-        for table, columns in ((self.operations_table, 'run_id TEXT NOT NULL,episode_id TEXT NOT NULL,operation_key TEXT NOT NULL,signature TEXT NOT NULL,outcome TEXT NOT NULL'), (self.received_table, 'run_id TEXT NOT NULL,episode_id TEXT NOT NULL,operation_key TEXT NOT NULL,cells TEXT NOT NULL')):
-            if not self._has_table(table):
-                if store.db.execute('PRAGMA query_only').fetchone()[0]:
-                    raise ContractError('relative_signal_saved_state_unavailable')
-                try:
-                    store.db.execute(f'CREATE TABLE {table}({columns},PRIMARY KEY(run_id,episode_id,operation_key))')
-                except Exception as error:
-                    if 'readonly' in str(error).lower():
-                        raise ContractError('relative_signal_saved_state_unavailable') from error
-                    raise
-
-    def _has_table(self, name):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (name,)).fetchone() is not None
+        super().__init__(store, run_id)
+        self.evidence_origin = evidence_origin
 
     def _record(self, reference, kind=None):
         row = self.store.get(reference)
@@ -163,31 +153,15 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
                     closure.append(parent)
         return (direct, closure, views)
 
-    def _own_view_receipt(self, context, view_ref, *, saved_receipt=None):
+    def _own_view_receipt(self, context, view_ref):
         view, display = self._view_records(view_ref)
         body = {key: value for key, value in view.items() if key not in ('id', 'record_type', 'origin', 'source_ref')}
         if display.get('request_ref') is None or self._json(display['request_ref']) != body:
             raise ContractError('relative_signal_native_view_request_mismatch')
-        if not self._has_table('runtime_actions') or not self._has_table('tool_operations'):
+        held = self.store.receipt(view_ref)
+        if held['how'] != 'produced':
             raise ContractError('relative_signal_own_view_action_required')
-        rows = self.store.db.execute("SELECT decision_index,action,result FROM runtime_actions WHERE run_id=? AND episode_id=? AND json_extract(action,'$.kind')='tool' AND json_extract(action,'$.tool')='image.view' AND json_extract(result,'$.status')='completed' ORDER BY decision_index", (self.run_id, context.episode_id))
-        for row in rows:
-            action, result = (json.loads(row['action']), json.loads(row['result']))
-            if result.get('result', {}).get('view_ref') != view_ref:
-                continue
-            index = row['decision_index']
-            if type(index) is not int or index < 0:
-                raise ContractError('relative_signal_own_view_action_mismatch')
-            key = f'{self.run_id}:{context.episode_id}:{index}'
-            native = self.store.db.execute('SELECT * FROM tool_operations WHERE operation_key=?', (key,)).fetchone()
-            args = action.get('arguments')
-            tool_result = {key: value for key, value in result.items() if key != 'pending_work_after_action'}
-            if set(action) != {'kind', 'tool', 'arguments'} or not isinstance(args, dict) or set(args) - {'source_ref', 'frame', 'colour_conversion'} or (args.get('source_ref') != view['input_source_ref']) or (args.get('frame', 0) != view['frame']) or (args.get('colour_conversion', 'preserve') != view['colour_conversion']) or (native is None) or (native['name'] != 'image.view') or (native['arguments'] != canonical(args)) or (native['scope'] != canonical(plain(context.scope))) or (canonical(tool_result) != native['result']) or (result.get('operation_ref') != native['id']) or (native['id'] != identity('operation', {'key': key, 'name': 'image.view', 'arguments': args})) or (result.get('result') != {'view_ref': view_ref, 'view': view}) or (result.get('visual_inputs') != [view]) or (result.get('feedback') is not None) or (result.get('record_refs') != [view['source_ref'], view_ref]):
-                raise ContractError('relative_signal_own_view_action_mismatch')
-            receipt = {'run_id': self.run_id, 'episode_id': context.episode_id, 'decision_index': index, 'operation_ref': native['id'], 'result_sha256': _sha(result), 'view_ref': view_ref}
-            if saved_receipt is None or receipt == saved_receipt:
-                return receipt
-        raise ContractError('relative_signal_own_view_action_required')
+        return {'run_id': self.run_id, 'episode_id': context.episode_id, 'view_ref': view_ref, 'producer_unit': held['producer_unit']}
 
     def _binding_specs(self, extraction, source_ref):
         """Source-qualified interpreted identities; equality of labels proves nothing."""
@@ -239,7 +213,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
         args = validate_relative_signal_source_selection(plain(selection))
         direct, closure, views = self._dependencies(context, args)
         signature = canonical({'arguments': args, 'scope': plain(context.scope), 'evidence_origin': self.evidence_origin, 'role': context.role, 'assignment': plain(context.assignment)})
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone()
+        old = self._operation(context.episode_id, operation_key)
         if old:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -268,9 +242,9 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
 
             def publish(kind, value):
                 reference = identity(kind, {'origin': 'tool', 'record': value})
-                exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (reference,)).fetchone()
+                exists = self.store.holds(reference)
                 row = self.store.put(kind, value, origin='tool', scope=plain(context.scope))
-                if exists is None:
+                if not exists:
                     created.append(row['id'])
                 return row['id']
             bindings, measurements = self._bindings(extraction, root['id'], publish)
@@ -284,7 +258,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': references, 'changed_record_refs': created, 'result': {'sheet_ref': sheet_ref, 'cells': sheet['cells'], **{key: sheet[key] for key in FLAGS}}, 'feedback': None}
             from gene_annotation_episode.episodic_workflow.episode_support.literature.validation.experimental_activity_evidence.literature_ratio_source_validation import validate_relative_signal_saved
             validate_relative_signal_saved(args, extraction, sheet, outcome)
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return deepcopy(outcome)
 
     def read(self, sheet_ref):
@@ -295,7 +269,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
         request = self._json(source['request_ref'])
         if set(request) != {'run_id', 'episode_id', 'operation_key', 'arguments'} or request['run_id'] != self.run_id or any((type(request[key]) is not str or not request[key] for key in ('episode_id', 'operation_key'))):
             raise ContractError('relative_signal_saved_request_mismatch')
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
+        operation = self._operation(request['episode_id'], request['operation_key'])
         if operation is None:
             raise ContractError('literature_sheet_not_selected_output')
         outcome, signature = (json.loads(operation['outcome']), json.loads(operation['signature']))
@@ -318,8 +292,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
                 raise ContractError('relative_signal_saved_input_identity_mismatch')
         for item in payload['extraction']['views']:
             actual, _ = self._view_records(item['view_ref'])
-            receipt = self._own_view_receipt(context, item['view_ref'], saved_receipt=item['own_action_receipt'])
-            if item['state'] == 'available' and (item['metadata'] != actual or receipt != item['own_action_receipt'] or 'artifact_' + item['original_sha256'] != actual['original_artifact_ref'] or ('artifact_' + item['display_sha256'] != actual['image_artifact_ref'])):
+            if item['state'] == 'available' and (item['metadata'] != actual or 'artifact_' + item['original_sha256'] != actual['original_artifact_ref'] or ('artifact_' + item['display_sha256'] != actual['image_artifact_ref'])):
                 raise ContractError('relative_signal_saved_view_identity_mismatch')
         calculation = self._json(payload['calculation_artifact_ref'])
         if set(calculation) != {'version', 'input_extraction_sha256', 'sheet'} or calculation['version'] != 'relative_signal_calculation_v2' or calculation['input_extraction_sha256'] != _sha(payload['extraction']) or (calculation['sheet'] != payload['sheet']):

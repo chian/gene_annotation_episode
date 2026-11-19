@@ -1,25 +1,25 @@
-"""The A101 ``sequence_homology_evidence/execution_result_acquisition`` binding.
+"""The A101 result acquisition episode: acquire the results of the original handoff."""
+from episode_runtime import EpisodeBinding
 
-Its decision source and continuation are ``acquisition_source``: the model acquires the native results of the
-usable handoffs ``execution_job_submission`` returned, from the responses and native result receipts their route
-children retained on the run's shared Store; credit counts the requests with acquired results and the completion
-controller's target is the number of assigned handoffs.
-"""
-from __future__ import annotations
-
-from types import MappingProxyType
-
-from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.contract_binding import (
-    A101ContractBinding)
-
-from .acquisition_source import ResultAcquisitionBinding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       read_from_parent as from_parent_file)
 
 
-class ExecutionResultAcquisitionEpisode(ResultAcquisitionBinding, A101ContractBinding):
-    """Acquire and qualify the native results of the assigned execution."""
-    binding_path = 'sequence_homology_evidence/execution_result_acquisition'
-    goal = 'Acquire and qualify the native results of the assigned execution'
-    unit = 'One result acquisition action'
-    result = 'Acquired, graded execution result references'
-    child_slots = MappingProxyType({})
-    commissioning_parent = 'sequence_homology_evidence'
+class ExecutionResultAcquisition(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

@@ -1,133 +1,24 @@
-"""One experiment survives corrected assessments and selected parent delivery."""
-from copy import deepcopy
-from dataclasses import replace
-
+"""One experiment survives corrected assessments and selected parent delivery, through the real runner."""
 import pytest
 
-from gene_annotation_episode.domain import ContractError, obj
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.perturbation_evidence.literature_perturbation_assessments import EXPERIMENT_TYPES
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_perturbation_storage import LiteraturePerturbationRepository, perturbation_cells_schema
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_perturbation_summary_storage import perturbation_summary_cells_schema
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.tests.perturbation_case_fixtures import setup_case, returned_form
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.tests.perturbation_summary_fixtures import fixture as summary_fixture
+from .library_world import run_scenarios, world  # noqa: F401 - ``world`` is the fixture
 
 
-def identify(store, context, args, name="experiment-one"):
-    record = store.put("reference", {"reference_type": "assay", "source_ref": args["source_ref"],
-        "accession": name, "label": name, "sequence_ref": None, "molecule": None,
-        "length": None, "term_refs": [], "context_refs": []}, origin="caller")
-    args = deepcopy(args)
-    args["experiment_assessment"] = {"experiment_ref": record["id"],
-        "experiment_type": "intervention_response", "assessment_key": "intervention-contribution",
-        "scientific_question": "Does the intervention alter the measured outcome?",
-        "conclusion": "The endpoint changes under the selected intervention.",
-        "limitations": ["Joint uncertainty of the source index remains unreported."],
-        "revises_sheet_ref": None, "revision_reason": None}
-    context = replace(context, received_record_refs=(*context.received_record_refs, record["id"]))
-    return context, args
+@pytest.mark.parametrize('summary', [False, True])
+def test_multiple_experiments_revisions_parent_numbers_and_saved_reconstruction(world, summary):
+    outcome, = run_scenarios(world, 'experiments', ('multiple_experiments', {'summary': summary}))
+    assert outcome['sheets'] == 3 and outcome['received_rows'] > 0
 
 
-@pytest.mark.parametrize("summary", [False, True])
-def test_multiple_experiments_revisions_parent_numbers_and_saved_reconstruction(tmp_path, monkeypatch, summary):
-    store, context, args = (summary_fixture if summary else setup_case)(tmp_path)
-    try:
-        repo = LiteraturePerturbationRepository(store, context.run_id)
-        context, args = identify(store, context, args)
-        original = repo.populate(context, args, "original")
-        assert original["status"] == "completed", original
-        first = original["result"]["sheet_ref"]
-        context = replace(context, received_record_refs=tuple(dict.fromkeys((*context.received_record_refs, *original["record_refs"]))))
-        revision = deepcopy(args)
-        revision["experiment_assessment"].update(revises_sheet_ref=first,
-            revision_reason="Restrict the conclusion to the experimentally measured endpoint.",
-            conclusion="The measured endpoint changes; a direct catalytic function is not established.")
-        revised = repo.populate(context, revision, "revision")
-        assert revised["status"] == "completed", revised
-        second = revised["result"]["sheet_ref"]
-        assert first != second
-        assert original["result"]["cells"] == revised["result"]["cells"]
-        context = replace(context, received_record_refs=tuple(dict.fromkeys((*context.received_record_refs, *revised["record_refs"]))))
-        other_context, other_args = identify(store, context, args, "experiment-two")
-        other = repo.populate(other_context, other_args, "second-experiment")
-        heads = repo.current_assessments()
-        assert len(heads) == 2
-        assert {row["sheet_ref"] for row in heads} == {second, other["result"]["sheet_ref"]}
-        assert len({row["experiment_ref"] for row in heads}) == 2
-        assert [row["sheet_ref"] for row in repo.assessment_history(second)] == [first, second]
-
-        schema = obj({"measurements": (perturbation_summary_cells_schema if summary else perturbation_cells_schema)()})
-        projection = repo.summary_projection() if summary else repo
-        requested = context.assignment["requested_perturbation_summary_components" if summary else "requested_perturbation_components"]
-        form = returned_form(projection, context, [second], schema, requested)
-        rows = form["measurements"]
-        assert rows and any(row["value"] is not None for row in rows)
-        assert all(row["experiment_ref"] == args["experiment_assessment"]["experiment_ref"] for row in rows)
-        parent = replace(context, episode_id="parent", role="annotation", assignment={}, path=(("annotation", "root"),))
-        projection.receive_cells(parent, rows, "assessment-delivery")
-        assert projection.received_cells(parent) == rows
-
-        saved = [repo.read(ref) for ref in (first, second, other["result"]["sheet_ref"])]
-        allowed = {store.get(ref)[key] for ref in (first, second, other["result"]["sheet_ref"])
-                   for key in ("artifact_ref", "request_ref")}
-        get_artifact = store.get_artifact
-        def saved_only(ref):
-            assert ref in allowed, "source data must not be reread"
-            return get_artifact(ref)
-        def forbidden(*args, **kwargs):
-            raise AssertionError("saved reconstruction must not recalculate")
-        monkeypatch.setattr(store, "get_artifact", saved_only)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_perturbation_storage.read_perturbation_inputs', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_perturbation_storage.populate_source_restoration', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_perturbation_storage.populate_source_summary_restoration', forbidden)
-        store.db.execute("pragma query_only=ON")
-        before = store.db.total_changes
-        assert repo.current_assessments() == heads
-        assert len(repo.assessment_history(second)) == 2
-        assert repo.populate(context, revision, "revision") == revised
-        assert projection.received_cells(parent) == rows
-        assert [repo.read(ref) for ref in (first, second, other["result"]["sheet_ref"])] == saved
-        assert store.db.total_changes == before
-        assert not store.list("observation") and not store.list("assessment")
-    finally:
-        store.close()
+def test_duplicate_representation_and_stale_revision_cannot_create_another_experiment(world):
+    outcome, = run_scenarios(world, 'duplicates', ('duplicate_and_stale_revision', {}))
+    assert outcome == {'current': 1}
 
 
-def test_duplicate_representation_and_stale_revision_cannot_create_another_experiment(tmp_path):
-    store, context, args = setup_case(tmp_path)
-    try:
-        context, args = identify(store, context, args)
-        repo = LiteraturePerturbationRepository(store, context.run_id)
-        first = repo.populate(context, args, "one")
-        context = replace(context, received_record_refs=(*context.received_record_refs, *first["record_refs"]))
-        with pytest.raises(ContractError, match="revision_required"):
-            repo.populate(context, args, "duplicate-report")
-        revision = deepcopy(args)
-        revision["experiment_assessment"].update(revises_sheet_ref=first["result"]["sheet_ref"], revision_reason="Correction")
-        repo.populate(context, revision, "two")
-        with pytest.raises(ContractError, match="revision_required"):
-            repo.populate(context, revision, "stale-correction")
-        assert len(repo.current_assessments()) == 1
-        assert store.db.execute("SELECT count(*) FROM literature_perturbation_operations").fetchone()[0] == 2
-    finally:
-        store.close()
-
-
-def test_cannot_revise_another_experiment_or_use_unreceived_identity(tmp_path):
-    store, context, args = setup_case(tmp_path)
-    try:
-        received, args = identify(store, context, args)
-        repo = LiteraturePerturbationRepository(store, context.run_id)
-        with pytest.raises(ContractError, match="experiment_not_received"):
-            repo.populate(context, args, "unreceived")
-        first = repo.populate(received, args, "one")
-        received = replace(received, received_record_refs=(*received.received_record_refs, *first["record_refs"]))
-        other, other_args = identify(store, received, args, "another-experiment")
-        other_args["experiment_assessment"].update(revises_sheet_ref=first["result"]["sheet_ref"], revision_reason="Wrong experiment")
-        with pytest.raises(ContractError, match="predecessor_mismatch"):
-            repo.populate(other, other_args, "wrong")
-        assert len(repo.current_assessments()) == 1
-    finally:
-        store.close()
+def test_cannot_revise_another_experiment_or_use_unreceived_identity(world):
+    outcome, = run_scenarios(world, 'revisions', ('revise_other_experiment', {}))
+    assert outcome == {'current': 1}
 
 
 def test_reusable_type_includes_intervention_designs_and_separate_scientific_considerations():

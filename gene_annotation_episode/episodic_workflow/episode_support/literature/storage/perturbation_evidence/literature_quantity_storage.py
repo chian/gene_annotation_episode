@@ -32,7 +32,6 @@ class LiteratureQuantityRepository(LiteratureRateRepository):
     components = COMPONENTS
     record_version = "literature_source_quantity_record_v2"
     readable_record_versions = (record_version,)
-    operations_table = "literature_quantity_operations"
     received_table = "literature_quantity_received"
     binding_fields = tuple(BINDINGS)
 
@@ -50,14 +49,6 @@ class LiteratureQuantityRepository(LiteratureRateRepository):
             raise ContractError("literature_source_not_received")
         if not self.store.reference_subset([source_ref], plain(context.scope)):
             raise ContractError("literature_source_outside_scope")
-        signature = canonical({"arguments": args, "scope": plain(context.scope)})
-        saved = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
-            "WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, context.episode_id, operation_key)).fetchone()
-        if saved:
-            if saved["signature"] != signature:
-                raise ContractError("operation_key_reused_for_different_work")
-            return json.loads(saved["outcome"])
         source = self.store.get(source_ref)
         if source["record_type"] != "source":
             raise ContractError("literature_source_required")
@@ -112,9 +103,9 @@ class LiteratureQuantityRepository(LiteratureRateRepository):
             newly_created = []
             def publish(kind, record):
                 candidate = identity(kind, {"origin": "tool", "record": record})
-                existed = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (candidate,)).fetchone()
+                new = not self.store.holds(candidate)
                 result = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
-                if existed is None:
+                if new:
                     newly_created.append(result["id"])
                 return result["id"]
             def reference(label, key):
@@ -147,8 +138,6 @@ class LiteratureQuantityRepository(LiteratureRateRepository):
                     **{key: extracted["source"][key] for key in ("source_ref", "artifact_ref", "section_id",
                         "paragraph_id", "expression_start", "expression_end")},
                     "coordinate_unit": "paragraph_unicode_characters"}, "feedback": None}
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):

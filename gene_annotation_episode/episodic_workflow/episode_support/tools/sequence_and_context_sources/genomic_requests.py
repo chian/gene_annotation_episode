@@ -6,6 +6,7 @@ host provenance and numerical publishers as the original local operations.
 from copy import deepcopy
 import json
 
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_and_context_sources.genomic_tables import BINDINGS
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.publication import binding_body, publish, received_measurement
 from gene_annotation_episode.episodic_workflow.episode_support.grading.partner_presence_evidence.scoring import binding_summary, digest, require
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import canonical
@@ -106,7 +107,7 @@ def publish_result(registry, plan, native_result):
             body['protein_reference_ref'] = reference
             records.append(reference)
         reference = publish(store,binding_summary(body),[*plan['publication_refs'],*records])
-        store.db.execute('INSERT OR IGNORE INTO a103_bindings VALUES(?,?)',(reference,canonical(body)))
+        store.table(BINDINGS).put({"source_ref":reference,"body":body})
     else:
         if name == 'reference.neighborhood':
             locus = plan['native_request']['binding']

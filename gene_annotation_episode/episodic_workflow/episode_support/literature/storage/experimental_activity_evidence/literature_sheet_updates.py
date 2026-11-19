@@ -8,6 +8,7 @@ or a credit event and never acquires an unreturned child component.
 from copy import deepcopy
 from dataclasses import replace
 from functools import wraps
+from episode_runtime import TableDeclaration
 from importlib import import_module
 import inspect
 import json
@@ -15,8 +16,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity
 from gene_annotation_episode.domain import ContractError
 VERSION = 'literature_sheet_dependencies_v1'
-TABLE = 'literature_sheet_dependencies'
-CURRENT = 'literature_current_scoring_sheets'
+DEPENDENCIES = TableDeclaration(name='literature_sheet_dependencies', columns=('sheet_ref', 'family', 'provider', 'adapter', 'method', 'arguments', 'assignment', 'possessed', 'dependencies', 'receipt'), key=('sheet_ref',), record_refs=('sheet_ref',))
+CURRENT_SHEETS = TableDeclaration(name='literature_current_scoring_sheets', columns=('family', 'sheet_ref', 'status', 'detail'), key=('family',), record_refs=('sheet_ref',))
 
 def _policy_for(provider):
     """Resolve A105's private scientific use policy."""
@@ -28,13 +29,6 @@ def _policy_for(provider):
 
 def _supported(repository):
     return repository.provider.startswith('literature.a105.')
-
-def _installed(store):
-    return store.db.execute('SELECT 1 FROM sqlite_master WHERE name=?', (TABLE,)).fetchone() is not None
-
-def _install(store):
-    store.db.execute(f'CREATE TABLE IF NOT EXISTS {TABLE}(\n        run_id TEXT NOT NULL, episode_id TEXT NOT NULL, sheet_ref TEXT NOT NULL,\n        family TEXT NOT NULL, provider TEXT NOT NULL, adapter TEXT NOT NULL,\n        method TEXT NOT NULL, arguments TEXT NOT NULL, assignment TEXT NOT NULL,\n        possessed TEXT NOT NULL, dependencies TEXT NOT NULL, receipt TEXT NOT NULL,\n        PRIMARY KEY(run_id,episode_id,sheet_ref))')
-    store.db.execute(f'CREATE TABLE IF NOT EXISTS {CURRENT}(\n        run_id TEXT NOT NULL, episode_id TEXT NOT NULL, family TEXT NOT NULL,\n        sheet_ref TEXT, status TEXT NOT NULL, detail TEXT,\n        PRIMARY KEY(run_id,episode_id,family))')
 
 def _refs(value):
     if isinstance(value, dict):
@@ -78,9 +72,22 @@ def _family(repository, arguments, saved, dependency_families):
     return identity('literature_scientific_sheet_use', {'provider': provider, 'use': use})
 
 def _rows(store, context):
-    if not _installed(store):
-        return []
-    return [dict(row) for row in store.db.execute(f'SELECT d.rowid,d.*, c.sheet_ref AS current_ref,c.status AS current_status,c.detail AS current_detail FROM {TABLE} d LEFT JOIN {CURRENT} c USING(run_id,episode_id,family) WHERE d.run_id=? AND d.episode_id=? ORDER BY d.rowid', (context.run_id, context.episode_id)) if row['provider'].startswith('literature.a105.')]
+    own = {'run_id': context.run_id, 'episode_id': context.episode_id}
+    current = {row['family']: row for row in store.table(CURRENT_SHEETS).select(own)}
+    rows = []
+    for row in store.table(DEPENDENCIES).select(own):
+        if row['provider'].startswith('literature.a105.'):
+            saved = current.get(row['family'])
+            rows.append({**row, 'current_ref': saved['sheet_ref'] if saved else None, 'current_status': saved['status'] if saved else None, 'current_detail': saved['detail'] if saved else None})
+    return rows
+
+def _mark_unavailable(store, context, family, detail):
+    row = store.table(CURRENT_SHEETS).select({'run_id': context.run_id, 'episode_id': context.episode_id, 'family': family})[0]
+    store.table(CURRENT_SHEETS).put({'family': family, 'sheet_ref': row['sheet_ref'], 'status': 'unavailable', 'detail': canonical(detail)})
+
+def _dependency(store, run_id, episode_id, ref):
+    rows = store.table(DEPENDENCIES).select({'run_id': run_id, 'episode_id': episode_id, 'sheet_ref': ref})
+    return rows[0] if rows else None
 
 def _heads(rows):
     result = {}
@@ -94,7 +101,6 @@ def _register(repository, context, arguments, outcome, method):
     if not ref:
         return None
     store = repository.store
-    _install(store)
     saved = repository.read(ref)
     prior = _rows(store, context)
     families = {row['sheet_ref']: row['family'] for row in prior}
@@ -106,10 +112,9 @@ def _register(repository, context, arguments, outcome, method):
         family = identity('literature_scientific_sheet_owner_use', {'family': family, 'owner': owner})
     dependencies = list(dict.fromkeys([*_refs(args), *context.assignment.get('_automatic_literature_input_versions', ())]))
     receipt = {'version': VERSION, 'input_versions': dependencies, 'publication_operation_ref': outcome.get('operation_ref'), 'scientific_calculator': type(repository).__module__ + ':' + type(repository).__name__, 'credit': 'belongs_to_original_scientific_action', 'custody': 'owned' if owner == context.episode_id else 'admitted'}
-    exists = store.db.execute(f'SELECT 1 FROM {TABLE} WHERE run_id=? AND episode_id=? AND sheet_ref=?', (context.run_id, context.episode_id, ref)).fetchone()
-    store.db.execute(f'INSERT OR IGNORE INTO {TABLE} VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', (context.run_id, context.episode_id, ref, family, repository.provider, type(repository).__module__ + ':' + type(repository).__name__, method, canonical(args), canonical(plain(context.assignment)), canonical(list(dict.fromkeys([*context.received_record_refs, *outcome['record_refs']]))), canonical(dependencies), canonical(receipt)))
-    if exists is None:
-        store.db.execute(f'INSERT OR REPLACE INTO {CURRENT} VALUES(?,?,?,?,?,?)', (context.run_id, context.episode_id, family, ref, 'current', None))
+    if _dependency(store, context.run_id, context.episode_id, ref) is None:
+        store.table(DEPENDENCIES).put({'sheet_ref': ref, 'family': family, 'provider': repository.provider, 'adapter': type(repository).__module__ + ':' + type(repository).__name__, 'method': method, 'arguments': canonical(args), 'assignment': canonical(plain(context.assignment)), 'possessed': canonical(list(dict.fromkeys([*context.received_record_refs, *outcome['record_refs']]))), 'dependencies': canonical(dependencies), 'receipt': canonical(receipt)})
+        store.table(CURRENT_SHEETS).put({'family': family, 'sheet_ref': ref, 'status': 'current', 'detail': None})
     return family
 
 def _adapter(store, run_id, name):
@@ -119,7 +124,7 @@ def _adapter(store, run_id, name):
     def read_cells(context, *selection):
         ref, components = selection[-2:]
         source = store.get(ref)
-        candidates = store.db.execute(f'SELECT adapter FROM {TABLE} WHERE run_id=? AND sheet_ref=? ORDER BY rowid DESC', (run_id, ref)).fetchall()
+        candidates = list(reversed(store.table(DEPENDENCIES).select({'run_id': run_id, 'sheet_ref': ref})))
         if not candidates:
             raise ContractError('literature_dependency_adapter_not_registered')
         for candidate in candidates:
@@ -151,7 +156,7 @@ def _refresh_dependents(repository, context):
             if policy is not None and hasattr(policy, 'dependent_revision'):
                 decision, detail = policy.dependent_revision(row['provider'], args, replacements)
                 if decision == 'unavailable':
-                    store.db.execute(f'UPDATE {CURRENT} SET status=?,detail=? WHERE run_id=? AND episode_id=? AND family=?', ('unavailable', canonical(detail), context.run_id, context.episode_id, row['family']))
+                    _mark_unavailable(store, context, row['family'], detail)
                 if decision in {'unavailable', 'skip'}:
                     continue
             if policy is not None and row['provider'] == policy.SCORING_PROVIDER and hasattr(policy, 'revised_arguments'):
@@ -177,7 +182,7 @@ def _refresh_dependents(repository, context):
                 if not str(error).endswith(('component_not_received', 'cell_not_received', 'sheet_not_received')):
                     raise
                 detail = {'version': VERSION, 'reason': str(error), 'input_versions': list(dict.fromkeys(_refs(arguments))), 'requirement': 'dependent_component_not_in_admitted_subset'}
-                store.db.execute(f'UPDATE {CURRENT} SET status=?,detail=? WHERE run_id=? AND episode_id=? AND family=?', ('unavailable', canonical(detail), context.run_id, context.episode_id, row['family']))
+                _mark_unavailable(store, context, row['family'], detail)
                 unavailable.add(fingerprint)
                 continue
             produced.append(outcome)
@@ -222,9 +227,9 @@ def _merge(outcome, updates):
 
 def _publication_receipt(repository, context, outcome):
     ref = (outcome.get('result') or {}).get('sheet_ref')
-    if not ref or not _installed(repository.store):
+    if not ref:
         return None
-    row = repository.store.db.execute(f'SELECT receipt FROM {TABLE} WHERE run_id=? AND episode_id=? AND sheet_ref=?', (context.run_id, context.episode_id, ref)).fetchone()
+    row = _dependency(repository.store, context.run_id, context.episode_id, ref)
     return json.loads(row['receipt']) if row else None
 
 def _replay_publication(repository, context, outcome):
@@ -239,7 +244,8 @@ def _retain_publication(repository, context, outcome):
     receipt = _publication_receipt(repository, context, outcome)
     if receipt is not None:
         receipt['returned_record_refs'] = {field: outcome[field] for field in ('record_refs', 'changed_record_refs') if field in outcome}
-        repository.store.db.execute(f'UPDATE {TABLE} SET receipt=? WHERE run_id=? AND episode_id=? AND sheet_ref=?', (canonical(receipt), context.run_id, context.episode_id, outcome['result']['sheet_ref']))
+        row = _dependency(repository.store, context.run_id, context.episode_id, outcome['result']['sheet_ref'])
+        repository.store.table(DEPENDENCIES).put({**{name: row[name] for name in DEPENDENCIES.columns}, 'receipt': canonical(receipt)})
     return outcome
 
 def publication(method):
@@ -252,14 +258,10 @@ def publication(method):
         store = repository.store
         if not _supported(repository):
             return method(repository, context, arguments, operation_key)
-        installed = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (repository.operations_table,)).fetchone()
-        if installed and isinstance(operation_key, str) and store.db.execute(f'SELECT 1 FROM {repository.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (repository.run_id, context.episode_id, operation_key)).fetchone():
+        if repository._operation(context.episode_id, operation_key) is not None:
             outcome = method(repository, context, arguments, operation_key)
             return _replay_publication(repository, context, outcome)
-        outer = not getattr(store, '_literature_sheet_updating', False)
-        if outer:
-            store._literature_sheet_updating = True
-        try:
+        with store.section('literature_sheet_updating') as outer:
             with store.transaction():
                 outcome = method(repository, context, arguments, operation_key)
                 if outcome.get('status') not in {'completed', 'partial'}:
@@ -271,9 +273,6 @@ def publication(method):
                 updates.extend(_refresh_main(repository, context))
                 updates.extend(_refresh_dependents(repository, context))
                 return _retain_publication(repository, context, _merge(outcome, updates))
-        finally:
-            if outer:
-                store._literature_sheet_updating = False
     populate._automatic_literature_updates = True
     return populate
 
@@ -282,12 +281,11 @@ def admitted(repository, context, cells, operation_key):
     if not cells or not _supported(repository):
         return
     store = repository.store
-    _install(store)
     for ref in dict.fromkeys((row['sheet_ref'] for row in cells)):
         source = store.get(ref)
         request = json.loads(store.get_artifact(source['request_ref']))
         owner = request['episode_id']
-        row = store.db.execute(f'SELECT adapter,method FROM {TABLE} WHERE run_id=? AND episode_id=? AND sheet_ref=?', (context.run_id, owner, ref)).fetchone()
+        row = _dependency(store, context.run_id, owner, ref)
         if row is None:
             adapter, method = (repository, 'populate')
         else:
@@ -296,20 +294,14 @@ def admitted(repository, context, cells, operation_key):
         refs = list(dict.fromkeys([*context.received_record_refs, *cell_refs]))
         receiving = replace(context, received_record_refs=tuple(refs))
         _register(adapter, receiving, request['arguments'], {'result': {'sheet_ref': ref}, 'record_refs': [ref], 'operation_ref': operation_key}, method)
-    outer = not getattr(store, '_literature_sheet_updating', False)
-    if outer:
-        store._literature_sheet_updating = True
-        try:
+    with store.section('literature_sheet_updating') as outer:
+        if outer:
             _refresh_dependents(repository, receiving)
             _refresh_main(repository, receiving)
             _refresh_dependents(repository, receiving)
-        finally:
-            store._literature_sheet_updating = False
 
 def current_sheet_refs(store, context, provider=None):
     """Saved current versions, restricted to this scientific owner/receiver."""
-    if not _installed(store):
-        return []
     heads = _heads(_rows(store, context))
     return [row['sheet_ref'] for row in heads.values() if row['current_status'] == 'current' and (provider is None or row['provider'] == provider)]
 

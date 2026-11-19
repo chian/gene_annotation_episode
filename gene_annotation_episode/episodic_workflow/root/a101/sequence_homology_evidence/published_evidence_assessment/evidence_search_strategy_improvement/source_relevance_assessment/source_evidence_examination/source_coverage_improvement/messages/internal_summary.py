@@ -41,7 +41,7 @@ def internal_summary(view):
     outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
     written = [outcome['outcome']['report'] for outcome in outcomes if outcome['tool'] == 'report']
     report = written[-1] if written else None
-    sources = [] if report is None else sorted({item['source_ref'] for item in report['windows']})
+    sources = [] if report is None else sorted({item['source_ref'] for item in report['entries']})
     return {
         'literature_assignment': {'version': 'reading_assignment_v1', 'page': page, 'selection': parent['window']},
         'scope': parent['scope'],

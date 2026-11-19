@@ -80,7 +80,7 @@ def model_record_view(store, row):
 
 
 def install_tables(store):
-    store.db.executescript("""
+    store._db.executescript("""
         CREATE TABLE IF NOT EXISTS material_members(
             id TEXT PRIMARY KEY,parse_key TEXT NOT NULL,ordinal INTEGER NOT NULL,
             collection_ref TEXT,data TEXT NOT NULL,UNIQUE(parse_key,ordinal));
@@ -120,7 +120,7 @@ def artifact_file(store, path, media_type="application/octet-stream"):
             finally:
                 os.close(descriptor)
         ref = "artifact_" + checksum
-        store.db.execute("INSERT OR IGNORE INTO artifacts VALUES(?,?,?,?)", (ref, checksum, media_type, size))
+        store._db.execute("INSERT OR IGNORE INTO artifacts VALUES(?,?,?,?)", (ref, checksum, media_type, size))
         return ref
     finally:
         if os.path.exists(temporary):
@@ -193,7 +193,7 @@ def _native_entry(store, key, event, handle):
             "feature_type_preview": text_preview(feature["type"]) if feature else None,
             "location_preview": text_preview(feature["location"]["text"]) if feature and feature["location"] is not None else None,
             "qualifier_count": len(feature["qualifiers"]) if feature else None}
-    store.db.execute("INSERT INTO material_annotations VALUES(?,?,?,?,?,?,?)",
+    store._db.execute("INSERT INTO material_annotations VALUES(?,?,?,?,?,?,?)",
         (key, event["ordinal"], event["entry_kind"], event["entry_ordinal"], start, handle.tell(), canonical(preview)))
 
 
@@ -243,7 +243,7 @@ def parse_material(store, material_ref, *, format=None):
     if not isinstance(requested, str):
         raise ContractError("invalid_parser_format")
     key = identity("parse", {"material_ref": material_ref, "format": requested, "parser_version": VERSION})
-    cached = store.db.execute("SELECT data FROM records WHERE record_type='parse_attempt' AND json_extract(data,'$.parse_key')=?", (key,)).fetchone()
+    cached = store._db.execute("SELECT data FROM records WHERE record_type='parse_attempt' AND json_extract(data,'$.parse_key')=?", (key,)).fetchone()
     if cached:
         return json.loads(cached[0])
     original = store.get(material["source_ref"])
@@ -258,7 +258,7 @@ def parse_material(store, material_ref, *, format=None):
     with store.transaction():
         def error(value):
             nonlocal failures
-            store.db.execute("INSERT INTO material_errors VALUES(?,?,?)", (key, failures, canonical(value)))
+            store._db.execute("INSERT INTO material_errors VALUES(?,?,?)", (key, failures, canonical(value)))
             failures += 1
 
         try:
@@ -326,7 +326,7 @@ def parse_material(store, material_ref, *, format=None):
                             "quality_ref": quality_ref, "quality_encoding": material["quality_encoding"],
                             "length": length, "molecule": material["molecule"], "role": material["role"],
                             **({"storage": storage} if storage else {})}
-                        store.db.execute("INSERT INTO material_members VALUES(?,?,?,?,?)", (member_id, key, record["ordinal"], None, canonical(data)))
+                        store._db.execute("INSERT INTO material_members VALUES(?,?,?,?,?)", (member_id, key, record["ordinal"], None, canonical(data)))
                         valid += 1
                         symbols += length
                 if not valid and not failures:
@@ -371,7 +371,7 @@ def parse_material(store, material_ref, *, format=None):
                 "sample_ref": material["sample_ref"], "library_ref": material["library_ref"],
                 "context_source_refs": material["context_source_refs"], "quality_encoding": material["quality_encoding"],
                 **({"storage_representation": packing.REPRESENTATION} if packer else {})}, origin="tool")
-            store.db.execute("UPDATE material_members SET collection_ref=?,data=json_set(data,'$.collection_ref',?) WHERE parse_key=?",
+            store._db.execute("UPDATE material_members SET collection_ref=?,data=json_set(data,'$.collection_ref',?) WHERE parse_key=?",
                 (collection["id"], collection["id"], key))
         return store.put("parse_attempt", {"material_ref": material_ref, "source_ref": source["id"],
             "requested_format": requested, "representation": representation, "compression": compression,
@@ -402,8 +402,8 @@ def annotation_page(store, parse_ref, *, record_ordinal=None, kind="record", off
     if record_ordinal is not None:
         where += " AND record_ordinal=?"
         parameters.append(record_ordinal)
-    total = store.db.execute("SELECT count(*) FROM material_annotations WHERE " + where, parameters).fetchone()[0]
-    rows = store.db.execute("SELECT * FROM material_annotations WHERE " + where +
+    total = store._db.execute("SELECT count(*) FROM material_annotations WHERE " + where, parameters).fetchone()[0]
+    rows = store._db.execute("SELECT * FROM material_annotations WHERE " + where +
         " ORDER BY record_ordinal,entry_ordinal LIMIT ? OFFSET ?", (*parameters, limit, offset))
     entries = [{"record_ordinal": row["record_ordinal"], "entry_kind": row["entry_kind"],
         "entry_ordinal": row["entry_ordinal"], "source_ref": source_ref, "artifact_ref": source["artifact_ref"],
@@ -425,7 +425,7 @@ def member_page(store, collection_ref, *, offset=0, limit=50):
     collection = store._require(collection_ref, {"collection"})
     if type(offset) is not int or offset < 0 or type(limit) is not int or limit < 1:
         raise ContractError("invalid_page")
-    rows = store.db.execute("SELECT data FROM material_members WHERE collection_ref=? ORDER BY ordinal LIMIT ? OFFSET ?",
+    rows = store._db.execute("SELECT data FROM material_members WHERE collection_ref=? ORDER BY ordinal LIMIT ? OFFSET ?",
         (collection_ref, limit, offset))
     data = []
     for row in rows:
@@ -445,7 +445,7 @@ def error_page(store, parse_ref, *, offset=0, limit=50):
     attempt = store._require(parse_ref, {"parse_attempt"})
     if type(offset) is not int or offset < 0 or type(limit) is not int or limit < 1:
         raise ContractError("invalid_page")
-    rows = store.db.execute("SELECT data FROM material_errors WHERE parse_key=? ORDER BY error_index LIMIT ? OFFSET ?",
+    rows = store._db.execute("SELECT data FROM material_errors WHERE parse_key=? ORDER BY error_index LIMIT ? OFFSET ?",
         (attempt["parse_key"], limit, offset))
     errors = [json.loads(row[0]) for row in rows]
     next_offset = offset + len(errors) if offset + len(errors) < attempt["error_count"] else None
@@ -507,13 +507,13 @@ def _source_character_span(handle, offset):
 
 
 def source_window(store, source_ref, *, offset=0, limit=12000, representation="text"):
-    source = store._require(source_ref, {"source"})
+    source = store.require(source_ref, {"source"})
     requested_representation = representation
     selected_ref, representation, available = source_window_selection(source, representation)
     artifact = store.get(selected_ref)
     if type(offset) is not int or not 0 <= offset <= artifact["size"] or type(limit) is not int or limit < 1:
         raise ContractError("source_offset_out_of_bounds")
-    with artifact_path(store, artifact["id"]).open("rb") as handle:
+    with store.open_artifact(artifact["id"]) as handle:
         handle.seek(offset)
         content = handle.read(limit)
         if content and content[0] & 0xC0 == 0x80:
@@ -622,7 +622,7 @@ def member_reference(store, member_ref):
 
 def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspecified", role="unspecified",
         manifest_path=None, caller_context=None, format="auto"):
-    if store.db.execute("SELECT 1 FROM problem").fetchone():
+    if store._db.execute("SELECT 1 FROM problem").fetchone():
         raise ContractError("problem_already_exists")
     if sum(value is not None for value in (input_path, raw_sequence, manifest_path)) != 1:
         raise ContractError("choose_one_input_source")
@@ -698,7 +698,7 @@ def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspe
             parameters.extend(selected)
         found = set()
         with store.transaction():
-            for row in store.db.execute("SELECT data FROM material_members WHERE " + where + " ORDER BY ordinal", parameters):
+            for row in store._db.execute("SELECT data FROM material_members WHERE " + where + " ORDER BY ordinal", parameters):
                 member = json.loads(row[0])
                 selected_components = packing.materialize(store, member)
                 found.add(member["ordinal"])
@@ -711,7 +711,7 @@ def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspe
                     "context_source_refs": material["context_source_refs"]}
                 ref = identity("input", record)
                 record.update(id=ref, record_type="input", origin="caller")
-                store.db.execute("INSERT OR IGNORE INTO inputs VALUES(?,?)", (ref, canonical(record)))
+                store._db.execute("INSERT OR IGNORE INTO inputs VALUES(?,?)", (ref, canonical(record)))
                 subjects.append(ref)
         if selected is not None and set(selected)-found:
             feedback.append({"entry_index": entry_index, "code": "selected_target_record_unavailable"})
@@ -746,5 +746,5 @@ def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspe
         "intake_status": "partial" if feedback else "completed", "intake_feedback": feedback}
     data["id"] = identity("problem", data)
     with store.transaction():
-        store.db.execute("INSERT INTO problem VALUES(1,?)", (canonical(data),))
+        store._db.execute("INSERT INTO problem VALUES(1,?)", (canonical(data),))
     return data

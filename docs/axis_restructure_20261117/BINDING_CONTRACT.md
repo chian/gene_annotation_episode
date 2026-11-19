@@ -41,15 +41,15 @@ decision is implemented in one place, which that section names, so that it is ea
 | Package | Owns |
 |---|---|
 | `method_loop/` (vendored loop, local patch `generic_loop_outcomes_forms_v10` in `LOCAL_PATCHES.json`) | The generic Episode loop (`Episode`, `EpisodeView`, `Leaf`, `ChildEpisodeUnit`, `ChildProjection`, the `Controller` protocol and `ControllerRuntime`), the declaration record (`EpisodeBindingDeclaration`), the typed forms (`forms.py`: `RecordForm`, `Field`, `DeclaredField`, `ChoiceField`, `SubsetField`, `FormError`, `Commission`) and `jsonvalue.py`. No Store, no application, no episode files, no detached execution. |
-| `episode_runtime/` | **The Episode type** (`episode_type.py`: `EpisodeBinding`, `ModelRequest`, `ToolCall`, `ChildCall`, `Rejected`, `ChildMessage`). Linking a registry below any entry (`runner.py`: `link`, `resume`; `bindings.py`: `BindingRegistry`), the run journal (`journal.py`: `RunJournal`), the recording services (`recording.py`: model calls, custody, unit attempts, `DecisionContext`, `UnitContext`; `progress.py`: `ProgressClock`, `DecisionClock`), the Store under custody (`store_scope.py`: `RecordReader`, `ScopedStore`; `work_tables.py`: `TableDeclaration`, `TableReader`, `ScopedTable`; `store_ledger.py`: the system's own tables in the Store file, which are the run's claim of its id and the receipts of what units produced), the services channel (`services.py`: the services themselves for tools, read handles with recorded reads for decisions), the collaborator check (`collaborators.py`). |
+| `episode_runtime/` | **The Episode type** (`episode_type.py`: `EpisodeBinding`, `ModelRequest`, `ToolCall`, `ChildCall`, `Rejected`, `ChildMessage`). Linking a registry below any entry (`runner.py`: `link`, `resume`, and `EpisodeRun` with `run`, `next_decision` and `run_unit`; `bindings.py`: `BindingRegistry`), the run journal (`journal.py`: `RunJournal`), the recording services (`recording.py`: model calls, custody, unit attempts, `DecisionContext`, `UnitContext`; `progress.py`: `ProgressClock`, `DecisionClock`), the Store under custody (`store_scope.py`: `RecordReader`, `ScopedStore`; `work_tables.py`: `TableDeclaration`, `TableReader`, `ScopedTable`; `scratch.py`: `ScratchDirectory`, the files of a tool unit's own; `store_ledger.py`: the system's own tables in the Store file, which are the run's claim of its id and the receipts of what units produced), the services channel (`services.py`: the services themselves for tools, read handles with recorded reads for decisions; `work_cache.py`: `WorkCache`, the cache a run may give its episodes as a service), the collaborator check (`collaborators.py`). |
 | `yield_control/` | The three yield controllers (`AccumulationYieldController`, `BoundedQualityYieldController`, `CompletionYieldController`) and the version of the progress receipt they read (`PROGRESS_TIME_VERSION`). It imports nothing from the runner. An episode's `yield_estimator.py` returns one of the three; nothing else decides continuation. |
 | `episode_support/` | The library, by function. `jobs/native_event_ledger.py` (`NativeEventLedger`) is the ledger of detached local jobs' event targets and publications; it is job support and not part of the loop. It is meant to be reached as a declared service; today no service wraps it and 21 library modules import it directly. |
 
 `episode_runtime.EPISODE_API` names what an episode's files and the library may import from `episode_runtime`:
 `ChildCall`, `ChildMessage`, `CustodyError`, `DecisionClock`, `DecisionContext`, `EpisodeBinding`,
-`ModelRequest`, `RecordReader`, `Rejected`, `ScopedStore`, `ScopedTable`, `ServiceReader`, `TableDeclaration`,
-`TableReader`, `ToolCall`, `UnitContext`, `WorkTableError`. Forms come from `method_loop`, controllers from
-`yield_control`.
+`ModelRequest`, `RecordReader`, `Rejected`, `ScopedStore`, `ScopedTable`, `ScratchDirectory`, `ServiceReader`,
+`TableDeclaration`, `TableReader`, `ToolCall`, `UnitContext`, `WorkTableError`. Forms come from `method_loop`,
+controllers from `yield_control`.
 
 The three system packages (`method_loop/`, `episode_runtime/`, `yield_control/`) are top-level packages of the
 repository, beside `gene_annotation_episode/`. They are not inside `episode_support/`.
@@ -192,7 +192,7 @@ def final_to_parent(summary, completion, selection):
 | `decide(summary, feedback, ctx)` | the summary; the feedback of the last rejected model answer (`None` at first); the `DecisionContext` |
 | `action(response, summary, records, ctx)` | the model's response; the summary; the `RecordReader`; the same `DecisionContext` |
 | `credit(summary, records)` | the summary of the view as it stands once the unit completes; the `RecordReader` |
-| `yield_controller(initial_credit, settings, parent_input)` | `credit` of the summary before any unit; the episode's settings; the parent input |
+| `yield_controller(initial_credit, settings, parent_input)` | `credit` of the summary before any unit, computed when the Episode is first entered and journaled (on resume the journaled value is handed over, "Resume"); the episode's settings; the parent input |
 | `read_from_parent(assignment, message)` | the admitted assignment and the commissioner's message |
 | `msg_to_child(slot, arguments, summary)` | the slot and arguments of the `ChildCall`; the summary |
 | `read_from_child(slot, result, summary, records)` | the slot; the child's admitted result; the summary; the `RecordReader` |
@@ -259,9 +259,13 @@ idempotent on `ctx.operation_key` and may check on `ctx.resumed` whether the eff
 ## The Store under custody
 
 The run has one shared Store (`gene_annotation_episode.state.Store`, the `store` collaborator). No episode and no
-library function receives it, its SQLite connection (`db`) or its directory (`path`), and no operation hands out a
-path inside that directory. A library function that works inside an episode run is handed `ctx.store` (or
-`records`) by the tool that calls it and calls only what it offers.
+library function receives it, its SQLite connection (`db`) or its directory (`path`), and no operation hands out
+the path of a record, an artifact or a table. One operation hands out a path: `ctx.store.scratch(name)` gives the
+running tool unit a directory of its own (`scratch.path`), which the system places beside the Store's files
+(`<store directory>/scratch/<episode id>/`). Nothing in it is a record, it is removed when its block is left, and
+a library function never builds a path to the Store from it ("Files of the unit's own", below). A library
+function that works inside an episode run is handed `ctx.store` (or `records`) by the tool that calls it and
+calls only what it offers.
 
 `episode_runtime/tests/test_library_boundary.py` has three tests over the library's source. One fails when a
 library module imports a runner internal. One fails when a library function module imports the `Store` class at
@@ -326,19 +330,27 @@ No write is a way round: a write requires every record it names to be readable.
 Outside the Store, and outside custody, are the run's services (the external world: schedulers, transports, the
 native event ledger, tables of earlier estimates), the model provider's call files and the run journal itself.
 
-`records` offers every row of this table except the last three; `ctx.store` offers all of it, and nothing else:
+`records` offers every row of this table that is not marked "`ctx.store` only"; `ctx.store` offers all of it, and
+nothing else. The operations stage 1 of the carry-over built (19 November 2026) are in the table with the others;
+`carry_over_guide/store-access.md`, "System operations built in stage 1", names the old library pattern each one
+replaces.
 
 | Kind | Operations | Custody rule |
 |---|---|---|
 | Custody questions | `holds(ref)`, `refs()`, `receipt(ref)` | |
-| Reads of one named record | `get`, `get_artifact`, `open_artifact(ref)`, `require(ref, kinds=None, *, field_path=None)`, `is_current(ref)`, `get_input`, `roots`, `subject_length`, `subject_unit`, `subject_molecule`, `coverage`, `record_coverage(row)`, `sequence_mapping`, `has_exact_mapping`, `map_segments`, `material_members`, `material_errors`, `material_read`, `material_member`, `material_annotations` | the record must be held, and so must every record the operation reads beyond it ("What a read reaches"), else `CustodyError`. A collection member is read by an Episode that holds it or its collection |
+| Reads of one named record | `get`, `get_artifact`, `open_artifact(ref)`, `require(ref, kinds=None, *, field_path=None)`, `is_current(ref)`, `get_input`, `roots(ref)`, `named_references(ref)`, `subject_length`, `subject_unit`, `subject_molecule`, `coverage`, `record_coverage(row)`, `sequence_mapping`, `has_exact_mapping`, `map_segments`, `material_members`, `material_errors`, `material_read`, `material_member`, `material_annotations` | the record must be held, and so must every record the operation reads beyond it ("What a read reaches"), else `CustodyError`. A collection member is read by an Episode that holds it or its collection. `named_references` only lists the references the record names: naming is not holding |
+| The Store's ownership rules over a held record | `assessment_write_extent(ref)`, `assert_library_write_scope(ref, scope)` | the record, and every record the rule reads (the hypothesis and observation of an assessment, the subjects those name, what each subject's coverage and mapping follow, the scope's subjects and read selections), must be held, else `CustodyError` |
 | Inventories | `list(kind, scope=None, limit=None, offset=0)`, `count(kind, scope=None, *, current=False)`, `subjects(scope)`, `references(scope)`, `targets()`, `problem()`, `current_assessments(scope=None, limit=None, offset=0)`, `current_annotations(...)`, `iter_current_annotations(...)`, `iter_current_accounts(kind, scope=None, page_size=100)`, `current_assessment_subset(refs)`, `reference_subset(candidates, scope)`, `in_scope(ref, scope)`, `query_records(kind, scope, limit=100, offset=0, *, current_only=False, references=None)`, `reasoning_view(scope, limit=100)` | each returns only what the Episode holds; a `scope` must name only held subjects and read selections |
-| Scope arithmetic over held subjects | `validate_scope(scope, parent_scope=None)`, `scope_contains`, `scope_covers`, `scope_coverage(scope)`, `scope_dimension_segments(scope, dimension_ref)` | every subject and read selection a scope names must be held, else `CustodyError` (the Store reads those inputs to answer) |
-| Arithmetic over a value the caller builds | `normalize_context_mask`, `context_mask_identity`, `context_mask_subset`, `context_mask_overlap`, `footprint_dimension`, `footprint_from_mapping`, `assessment_key` | every subject, read selection or target the value names must be held, else `CustodyError` (the Store reads those to answer) |
+| The reads of a read library | `library_members(library_ref, *, selection_ref=None, offset=0, limit=50, scope=None)`, `selection_members(selection_ref, limit=None, offset=0)`, `read_subject_ref(library_ref, member_ref)` | `library_members`: the library, every collection it binds, the scope's subjects and read selections and `selection_ref` must be held. `selection_members`: the read selection must be held. `read_subject_ref`: the library must be held. The read references these return are names: `get` of a read subject needs that reference held |
+| The diagnostics of the Episode's own tool outcomes | `is_diagnostic_ref(ref)` | `ref` must be held, else `CustodyError`; another Episode's diagnostic is not one of this Episode's |
+| Scope arithmetic over held subjects | `validate_scope(scope, parent_scope=None)`, `scope_contains`, `scope_covers`, `scope_coverage(scope)`, `scope_dimension_segments(scope, dimension_ref)`, `scope_measure(scope, target_ref)`, `iter_scope_coverage(scope, target_ref=None)` | every subject and read selection a scope names must be held, else `CustodyError` (the Store reads those inputs to answer) |
+| Arithmetic over a value the caller builds | `normalize_context_mask`, `context_mask_identity`, `context_mask_subset`, `context_mask_overlap`, `context_mask_measure(mask, target_ref)`, `context_mask_target_full(mask, target_ref)`, `context_mask_dimension_segments(mask, dimension_ref)`, `context_mask_positions(mask, target_ref, limit=None, offset=0)`, `footprint_dimension`, `footprint_from_mapping`, `assessment_key` | every subject, read selection or target the value names must be held, else `CustodyError` (the Store reads those to answer) |
 | Reads no record | `reasoning_schema()` | |
-| Work tables, read | `table(declaration)`: `get(row_ref)`, `select(where=None, limit=None, offset=0)` | below |
-| Writes (`ctx.store` only) | `put(kind, record, *, origin, scope=None)`, `artifact(data, media_type='application/octet-stream')`, `commit_reasoning(payload, scope, operation_key)`, `register_material(input_path=None, *, source_ref=None, **options)`, `create_problem(input_path=None, **options)`, `parse_material(material_ref, *, format=None)`, `material_header(member_ref, *, offset=0, limit=12000)`, `material_reference(member_ref)`, `reclaim(ref)` | every record the write names must be readable by the unit, else `CustodyError`; the Episode holds what the write created or changed as produced at this unit |
-| Work tables, write (`ctx.store` only) | `table(declaration).put(values)` | below |
+| Work tables, read | `table(declaration)`: `get(row_ref)`, `select(where=None, limit=None, offset=0, *, withdrawn=False)` | below |
+| Writes (`ctx.store` only) | `put(kind, record, *, origin, scope=None)`, `artifact(data, media_type='application/octet-stream')`, `artifact_file(path, media_type='application/octet-stream')`, `artifact_stream(stream, media_type='application/octet-stream')`, `caller_source(value, provider)`, `commit_reasoning(payload, scope, operation_key)`, `register_material(input_path=None, *, source_ref=None, **options)`, `create_problem(input_path=None, **options)`, `parse_material(material_ref, *, format=None)`, `material_header(member_ref, *, offset=0, limit=12000)`, `material_reference(member_ref)`, `select_library_members(library_ref, *, member_refs=None, ordinal_ranges=None, scope=None)`, `reclaim(ref)` | every record the write names must be readable by the unit, else `CustodyError`; the Episode holds what the write created or changed as produced at this unit |
+| Work tables, write (`ctx.store` only) | `table(declaration).put(values)`, `table(declaration).withdraw(key)` | below |
+| Files of the unit's own (`ctx.store` only) | `with scratch(name='work') as scratch:` then `scratch.path`, `scratch.copy_artifact(ref, name)`, `await scratch.compute(function, *args, **kwargs)` | outside custody: nothing in the directory is a record. Only while a tool unit runs; `copy_artifact` requires the artifact held |
+| Sections of the unit's work (`ctx.store` only) | `with section(name) as outer:` | only while a tool unit runs; the state is this Episode's and lasts for the call |
 | Transactions (`ctx.store` only) | `transaction()`, `read_snapshot()`, `in_transaction()` | the writes of a transaction are receipted when it commits |
 
 Details that matter:
@@ -356,8 +368,8 @@ Details that matter:
   `iter_current_accounts` reads every page.
 - **`open_artifact(ref)`** returns a read-only binary file object over the bytes of a held artifact, for content
   too large to load with `get_artifact`. It is opened by descriptor and has no path. A tool that needs a file on
-  disk for an external program copies the bytes into a scratch directory of its own (a scratch directory is not
-  offered yet).
+  disk for an external program copies the artifact into a scratch directory of its unit:
+  `scratch.copy_artifact(ref, name)` ("Files of the unit's own", below).
 - **`record_coverage(row)`** uses only `row['id']`: the coverage is computed from the stored record.
 - **`query_records(references=[...])`** requires each named reference to be held.
 - **`is_current(ref)`** says whether a held assessment, annotation or interpretation account is the current
@@ -384,15 +396,63 @@ Details that matter:
   not hold what it wrote, and the unit's `produced` list does not name it. A write that raises (also the Store's
   `RevisionConflict`) therefore leaves nothing in the Store. A custody write inside a Store transaction that
   `ctx.store` did not open raises `CustodyError`.
-- Not offered, because no custody-limited form exists yet: the Store's private helpers (`_caller_source`,
-  `_assessment_write_extent`, `_record_roots`, `_assert_library_write_scope`, `_refs`, `_unit`, `_merge_segments`,
-  `_covered_by`), `scope_measure`, `context_mask_measure`, `context_mask_target_full`,
-  `context_mask_target_query`, `context_mask_dimension_segments`, `read_subject_ref`, `iter_scope_coverage`, a
-  scratch directory, and writing an artifact from a file without loading it. (`_literature_sheet_updating` is not
-  a Store helper: it is a flag the literature library sets on the Store object it was handed. The scoped store
-  takes no such attribute; the library keeps that state in its own call, or asks `in_transaction()`.)
-  `carry_over_guide/store-access.md` maps every old raw-Store pattern of the library to its replacement or to
-  "not built yet".
+- **What stage 1 built, and what is still not offered.** Everything an earlier version of this contract listed as
+  "not offered, because no custody-limited form exists yet" now has one, in the table above:
+
+  | Old use of the Store | The custody-limited operation |
+  |---|---|
+  | `store._caller_source(value, provider)` | `store.caller_source(value, provider)`: the canonical bytes of `value` as an artifact and a `source` record of origin `caller`; the Episode holds both as produced |
+  | `store._assessment_write_extent(row)` | `reader.assessment_write_extent(row['id'])`: the same segments, `[]` or `None`, computed over held records; a reference that is not an assessment raises `ValueError` |
+  | `store._record_roots(kind, row)` | `reader.roots(row['id'])` |
+  | `store._assert_library_write_scope(kind, row, scope, current=row)` | `reader.assert_library_write_scope(row['id'], scope)`: raises the Store's `ContractError` unless the held record is owned within `scope` |
+  | `store._refs(row)` | `reader.named_references(row['id'])` |
+  | `scope_measure`, `iter_scope_coverage`, `read_subject_ref`, `context_mask_measure`, `context_mask_target_full`, `context_mask_dimension_segments` | the same names on `reader` |
+  | `context_mask_target_query(mask, target_ref)` (returned SQL for the caller to run) | `reader.context_mask_positions(mask, target_ref, limit=None, offset=0)`: the rows of that query (`target_ref`, `member_ref`, `dimension_ref`, `read_ref`, `length`, `unit`, `start`, `end`), ordered by member, unit, start and end |
+  | a temporary file or directory under `store.path`; an artifact's file given to an external program; `Store(path)` opened in a worker thread | `store.scratch(name)`, `scratch.copy_artifact(ref, name)`, `await scratch.compute(function, ...)` |
+  | an artifact captured from a file or a download without loading it | `store.artifact_file(path, media_type)`, `store.artifact_stream(stream, media_type)` |
+  | `store._literature_sheet_updating` (a flag the literature library set on the Store object it was handed) | `with store.section('literature_sheet_updating') as outer:` |
+  | `DELETE` of a row of the function's own table | `store.table(T).withdraw(key)` |
+  | a cache directory under `store.path`; "was this already fetched by anyone" | the `work_cache` service (`episode_runtime.WorkCache`), declared like any service ("Collaborators and services") |
+
+  Still not offered, and not planned: the Store itself, its connection (`db`), its directory (`path`), `commit`
+  (a single write is a transaction of its own; several writes that must be one step are `with
+  store.transaction():`), the path of an artifact (`artifact_path`), the SQL of `context_mask_target_query`, and
+  any query over rows or records the Episode does not hold. The Store's static helpers `_unit`, `_merge_segments`
+  and `_covered_by` read nothing: they are not store operations and become pure functions of a library module
+  (stage 2). `carry_over_guide/store-access.md` maps every old raw-Store pattern of the library to its
+  replacement; its table "No replacement yet" is empty.
+- **Files of the unit's own** (`episode_runtime/scratch.py`). `with ctx.store.scratch('label') as scratch:` gives
+  the running tool unit a new, empty directory (`scratch.path`, a `pathlib.Path`), removed with everything in it
+  when the block is left, also by an error. Nothing in it is a record: an input enters through a custody read
+  (`scratch.copy_artifact(ref, 'inputs/name')` returns the path of a copy checked against the artifact's digest)
+  and a result leaves as a write of the store (`artifact_file`). `await scratch.compute(function, *args,
+  **kwargs)` runs `function(*args, cancel_event=<threading.Event>, **kwargs)` in a worker thread and returns its
+  value; the thread is given files and plain values, and `ctx.store` refuses every call from it
+  (`CustodyError('scoped_store_used_outside_the_thread_of_its_unit')`). A cancelled unit sets the event and
+  waits for the thread before the directory is removed. A unit that ends with a directory open raises
+  `CustodyError('unit_ended_with_an_open_scratch_directory')`. What a cut process left is removed when the
+  Episode is next built, so a rerun gets an empty directory: a scratch file never carries work across an
+  interruption.
+- **`artifact_file(path)` and `artifact_stream(stream)`** write an artifact from a file, or from a binary file
+  object or an iterable of `bytes`, hashed while copied and never loaded. Each is one receipted write, like
+  `artifact`.
+- **`section(name)`** yields `True` for the outermost entry of the named section in this Episode's unit and
+  `False` for a call made inside it, so a library function whose work calls itself does its once-per-call part
+  only at the outermost entry. It is released by an error too.
+- **The reads of a read library.** `library_members` returns the Store's own page (`{'library_ref',
+  'selection_ref', 'members', 'total', 'offset', 'limit', 'next_offset', 'next_query'}`, each member the read
+  subject in its model view, in the library's order; `scope=None` is the whole library).
+  `select_library_members` is the Store's own `select` as one receipted transaction: it returns the
+  `read_selection` record, which the Episode holds as produced at the unit (the library, every collection it
+  binds, the scope's subjects and read selections and every member named must be held; the Store's refusals are
+  unchanged). `selection_members` returns the references of the reads a held read selection froze, ordered by
+  reference (all, or a page). A read is read without holding its reference through the page (its record) and
+  `material_member(member['member_ref'])` (its sequence, through the held collection).
+- **`is_diagnostic_ref(ref)`** says whether the value a tool unit of this Episode returned names the held record
+  `ref` under a key `diagnostic_ref`, at any depth. It is known for every recorded unit (again after a resume)
+  and for the unit being completed from the moment its tool returned, so `credit` of that unit sees it; the tool
+  that is still running has no outcome yet. A library function uses it to keep a diagnostic from being read as
+  a source.
 
 **Work tables.** A library function that kept its own SQL table of an Episode's work (a scoring sheet and its
 cells, a grading ledger, a credit projection) declares it and uses it only through custody:
@@ -421,7 +481,13 @@ def cells(reader, sheet):                                        # called with c
 - The rows of every declared table live in one system table of the Store's SQLite file, on the Store's own
   connection, so they commit or roll back with the records written beside them. A table's declaration is recorded
   on its first committed use; a later use with another declaration raises `WorkTableError`.
-- What a unit that did not finish wrote to a row is taken back when the run is resumed ("Resume").
+- `withdraw(key)` (the declared key columns and their values) is what a library function does where it used to
+  delete a row: the row stays, marked, as its next revision with the system column `withdrawn` true, held as
+  produced by the unit. `select` leaves withdrawn rows out (`select(where, withdrawn=True)` returns them too),
+  `get(row_ref)` returns the row with its mark, and `put` with the same key makes it live again. Only a row this
+  Episode wrote can be withdrawn (`WorkTableError` otherwise).
+- What a unit that did not finish wrote to a row (a withdrawal too) is taken back when the run is resumed
+  ("Resume").
 
 **Custody is a rule, not a wall.** It is enforced by the system's own paths and by tests, not against deliberate
 bypass. No object an episode receives has an admission method (the three passes are functions of `recording.py`
@@ -478,7 +544,9 @@ Episode that wrote these bytes); two episodes that declare the same service shar
    observes it and decides whether the Episode stops (rule 2). Its step for each unit (credit, marginal credit,
    estimate, decision, stop) is journaled. The runner checks that the controller from
    `yield_controller(credit(initial summary), settings, parent_input)` is one of the three `yield_control`
-   controllers. **This is the only way an Episode ends** (`ended_by` has the one value `'yield_stop'`):
+   controllers. `credit(initial summary)` is the Episode's initial credit: it is computed once, when the Episode
+   is first entered, and journaled (`episodes.initial_credit`); an Episode that is entered again is built from the
+   journaled value ("Resume"). **This is the only way an Episode ends** (`ended_by` has the one value `'yield_stop'`):
    - a controller stops when its forecast upper bound of the next unit's credit is at or below its cost: a
      completion controller at the latest when credit reaches the commission's target (the forecast is then
      exactly zero), a bounded-quality controller at the latest at its maximum, and any of the three earlier, when
@@ -551,6 +619,8 @@ The method loop requires every child edge to carry a reporting contract; the sys
   run. An error that ends the run is recorded (`journal.run_failure(run_id)`).
   Nothing closes such a run, so its state stays `active`; a resume gets further after an interruption and raises
   the same error again after a wrong commission.
+- `EpisodeRun.next_decision()` and `EpisodeRun.run_unit(tool_call)` step the entry Episode of a linked or resumed
+  run in place of `run()` ("Stepping a run", below).
 - `resume(registry, *, run_id, journal, collaborators)` re-links a recorded run from its recorded entry.
 - `BindingRegistry(bindings)` registers only instances of classes that passed the definition check, are unchanged
   since, and have no attributes of their own ("Class definition checks"); a home constructs them.
@@ -558,6 +628,54 @@ The method loop requires every child edge to carry a reporting contract; the sys
 **Ancestors.** With `ancestors` (top-down `{'binding_path', 'key', 'goal'}`), the entry is an inner node below a scoped
 boundary: the top goal must be a root goal, each later goal refines its predecessor, each ancestor is a declared child
 slot of the one above it, and ancestors are never built, run or journaled.
+
+### Stepping a run: the first decision and one tool unit, without a model call
+
+A real run of an episode whose `decide` returns a `ModelRequest` asks the model. Two operations of `EpisodeRun`
+let the run's caller (a test, a driver) take the model's place for the entry Episode. They are system
+operations: the Episode's own loop runs (`method_loop.Episode.run_async`, with the runner's hooks), so the yield
+controller, the journal, custody and replay are those of any run, and the caller touches nothing of the runner.
+Both are coroutines, like `run()`; each call may be given to an `asyncio.run` of its own.
+
+| Call | Returns | What it does |
+|---|---|---|
+| `await linked.next_decision()` | what the episode's `decide` returns first: a `ModelRequest`, a `ToolCall` or a `ChildCall` | enters the Episode exactly as `run()` does (its yield controller is built from `credit` of the initial summary, in a resumed run from that credit as it was journaled; the units recorded for it, none in a new run, are replayed), builds `internal_summary(view)` and calls `decide(summary, None, ctx)` with the decision context of the next unit (its clock and its service reads are recorded as in any run). The model is not asked and no unit is consumed. Asked again, it returns the same decision, made on the recorded clock and reads. After `run_unit` it is the first decision for the unit that follows |
+| `await linked.run_unit(tool_call)` | the unit's outcome: `{'kind': 'tool', 'tool', 'arguments', 'outcome', 'produced'}` | runs `tool_call` (a `ToolCall(name, arguments)`) as the Episode's next unit, as the loop runs it when the episode's own decision names that action: the attempt is journaled before the tool runs, the tool is handed the Episode's `UnitContext` (the custody-scoped Store on the run's real Store, the declared services, the recorded model, the unit's operation key), what it writes is receipted as produced by the unit, `credit` of the summary with the outcome goes to the yield controller, and the unit is journaled with the controller's step. `decide` and the model are not asked. The first step enters the Episode as `next_decision` does |
+| `linked.view` | the entry Episode's `EpisodeView` where the stepped run stands | after the units run so far (of the closed Episode once its controller has stopped it): `outcomes`, `units_consumed`, `controller_state` (the yield controller's state: `stop`, `current_credit`), and `records`, the Episode's read-only `RecordReader`. A test calls the episode's own functions on it (`X.internal_summary(linked.view)`, `X.credit(summary, linked.view.records)`) |
+
+What follows from the loop being the real one:
+
+- **Stopping stays the yield estimator's.** When the controller's step for a stepped unit says stop, the Episode
+  is closed, its result built and admitted and the run closed, as `run()` does; `await linked.run()` then returns
+  that `{'entry', 'record', 'result'}`. A stopped Episode has no further unit and no further decision:
+  `run_unit` and `next_decision` raise `RuntimeError('episode_stopped_by_its_yield_controller:<entry path>')`
+  (the run is closed, so nothing is recorded as its failure). A test that steps several units gives the episode
+  settings under which its controller goes on.
+- **`run()` finishes a stepped run.** While the Episode is open, `await linked.run()` lets it run on from where
+  the steps left it, by its own decisions (the model is asked from then on), until its controller stops it.
+- **Resume replays stepped units.** A stepped unit is in the journal like any unit, so `resume(...)` replays it
+  and does not run it again; `next_decision()` on the resumed run is the decision after the recorded units, and
+  `run()` on it goes on by the episode's own decisions. A resumed closed run has nothing left to step.
+- **A cut stepped unit runs again.** An error a tool raises ends the step and is recorded as the run's failure;
+  the unit stays `began`. On the resumed run `run_unit` with the same `ToolCall` runs it again with the same
+  `ctx.operation_key`, `ctx.resumed` true and `ctx.abandoned` naming what the cut attempt wrote. Another action at
+  that position raises `JournalError('abandoned_unit_differs:...')`, as it does when a decision is rebuilt
+  differently.
+- **Only the entry Episode is stepped.** `run_unit` takes a `ChildCall(slot, arguments)` the same way: the
+  commission is built by `msg_to_child` and the child runs as in any run, by its own decisions.
+- An action that is neither raises the loop's `TypeError('task_action_must_be_a_ToolCall_or_a_ChildCall:...')`; a
+  tool the episode did not declare raises `LookupError`.
+
+```python
+linked = link(BindingRegistry([X()]), X.binding_path, entry_input, run_id='r', journal=journal,
+              collaborators=collaborators)
+request = asyncio.run(linked.next_decision())                       # the episode's ModelRequest; no model call
+outcome = asyncio.run(linked.run_unit(ToolCall('populate', arguments)))   # a real, journaled, receipted unit
+summary = X.internal_summary(linked.view)                            # the Episode after that unit
+assert linked.view.records.receipt(outcome['produced'][0])['how'] == 'produced'
+```
+
+`episode_runtime/tests/test_stepped_runs.py` is the worked example (the `probe` episode).
 
 ## Collaborators and services
 
@@ -578,6 +696,15 @@ read is journaled per unit position and replayed ("What each function is handed"
 resumed run builds its services again, and their in-memory state starts empty: a service that keeps state across a
 resume must keep it durably and be idempotent on `ctx.operation_key`.
 
+**The work cache** (`episode_runtime.WorkCache`) is the service for work worth keeping across Episodes and runs
+that is no record: the run's caller supplies `{'work_cache': lambda: WorkCache(directory)}`, an episode declares
+`'work_cache'` in its `services`, and a tool calls `ctx.services['work_cache'].directory(name)` (a `Path` that
+persists, for an external program's own cache), `.get(namespace, key)` (the bytes kept under a key of closed
+JSON, or `None`), `.put(namespace, key, data)` and `.has(namespace, key)` (the question a decision may read).
+Bytes found in the cache become the Episode's own product when the tool writes them with `ctx.store.artifact`.
+It is a service and not an operation of the scoped store because a cache is nothing an Episode holds, passes or
+returns, and it outlives the unit.
+
 Errors: `LinkError('collaborator_required:<names>')`, `LinkError('collaborator_interface:<name>:<what>')`,
 `LinkError('continuation_settings_required:<paths>')`, `LinkError('service_required:<path>:<service>')`,
 `LinkError('yield_controller_must_be_a_yield_control_controller:<path>')` (when the controller is built), and the
@@ -592,11 +719,11 @@ own (`journal.identity`, made once with the file). A run id is unique within one
 
 | Table | What | When |
 |---|---|---|
-| `runs` | entry (path, input, ancestors, key), state, closing record (`ended_by`, `units`, `result`), the failure that ended it | `link`; `EpisodeRun.run` end or error |
+| `runs` | entry (path, input, ancestors, key), state, closing record (`ended_by`, `units`, `result`), the failure that ended it | `link`; when the entry Episode's controller stops it (in `EpisodeRun.run`, or on a stepped unit), or on an error of `run` or of a step |
 | `settings` | the continuation settings of each binding path | `link` (compared on resume) |
 | `services` | the service names each binding path declares | `link` (compared on resume) |
 | `service_builds` | each service the run built: name, the Episode that first used it, its unit | first use (again after a resume) |
-| `episodes` | binding path and commission (request, assignment, selection); completion (`ended_by`, `units`, `credit`: the credit the controller stopped on); admitted result | when built; when closed; when its result is admitted |
+| `episodes` | binding path and commission (request, assignment, selection); initial credit (`credit` of the summary before any unit, which the yield controller is built from); completion (`ended_by`, `units`, `credit`: the credit the controller stopped on); admitted result | when built; when first entered (the controller build; read, never computed again, on resume); when closed; when its result is admitted |
 | `parent_inputs` | digest of each Episode's parent input | controller build (compared on resume) |
 | `attempts` | each unit that began: label, operation key, arguments digest, state `began`/`finished`, how often it began | before a tool runs or a child is built; with the unit record |
 | `units` | label, controller input, outcome, (child units) update, and the controller's step of each completed unit | the loop's completed-unit hook |
@@ -650,6 +777,18 @@ and a changed abandoned unit. `resume` claims the run id in the Store again (ref
 holds it there). Each Episode gets its
 recorded units (controller input, outcome, update) as `method_loop.resume_units`; a child whose parent unit completed
 is not rebuilt; receipts reload from the journal.
+
+**The initial credit is journaled, not recomputed.** An Episode's yield controller is built from `credit` of its
+summary before any unit. The system computes that credit once, when the Episode is first entered (`run`,
+`next_decision` or `run_unit`), and journals it (`episodes.initial_credit`; `journal.episodes(run_id)` shows it). An
+Episode that is entered again (the entry of a resumed run, closed or cut; a child whose parent's unit runs again)
+holds from the start every record its recorded units produced or received, because its receipts reload before its
+controller is built. `credit` of its summary before any unit would then count them (a credit that reads an
+inventory of custody: `records.list`, `records.refs()`, a work-table `select`) and the controller would start from
+the credit of the end of the run. So on resume `credit` is not asked for the initial summary: the controller is
+built from the journaled value and observes the recorded controller inputs, which gives the recorded marginal
+credits, steps and stop. This is the system's; an episode's `credit` and `internal_summary` may read whatever
+inventory they like.
 
 Resuming a closed run replays its recorded units: the controller observes the recorded controller inputs again
 and stops at the same unit, so no decision is made and no service is read. `final_to_parent` runs again. The
@@ -719,7 +858,10 @@ answer calls the model (`-m model_run`).
   and services compared on resume, several child slots, an episode commissioning its own kind three deep,
   completion and bounded controllers built from the parent input, credit reading records and returned as the
   system's credit, an episode with nothing left to do going on until its estimator stops it, no stop at cost
-  zero, a closing value written by a tool unit, selected return fields, a wrong commission failing;
+  zero, a closing value written by a tool unit, selected return fields, a wrong commission failing; a credit that
+  counts held records (the cells of a sheet) under each of the three controllers: the closed run resumed with
+  every product already held replays to the recorded stop with no unit, no model call and no new journal row, and
+  a run cut mid-way goes on with the controller history of the uncut run;
 - `test_scoped_store.py`: what `ctx.store` offers and refuses, an artifact opened without its path, transactions
   and receipts on commit, the reasoning commit and the inventories, the account owner, scopes over unheld subjects,
   material registration, work tables;
@@ -732,11 +874,24 @@ answer calls the model (`-m model_run`).
 - `test_abandoned_attempts.py`: an abandoned record taken over, one not taken over, abandonment before the unit is
   decided again, a rewritten row put back, a created row removed, a cut between the Store's commit and the
   journal's receipt, no Store receipt after a rollback;
+- `test_system_operations.py`: the operations stage 1 built, each through a library function of
+  `operations_library.py`: the scratch directory, its worker thread, cancellation and a cut process; artifacts
+  from a file and from a stream; a caller value as a source; a row withdrawn instead of deleted; sections; the
+  work cache; the Store's ownership rules and the measures of a scope and a context mask over held records; the
+  reads of a read library paged, frozen and listed; the diagnostics of the Episode's own tool outcomes;
+- `test_stepped_runs.py`: `next_decision` returns the episode's own model request and asks no model; a unit
+  the caller names with `run_unit` leaves the same units, credits, controller steps, attempts, receipts, closure
+  and result as the whole run that names the same actions; a stopped Episode has no further step; a cut stepped
+  unit runs again on resume with its key, and another action in its place is refused; resume replays stepped
+  units and `run()` finishes the run; a cancellation reaches the stepped unit; a worker thread and a child call
+  inside a stepped unit; an action the episode cannot run; a resumed stepped run whose credit counts held records
+  shows the controller of the run that was stepped (the journaled initial credit) in `view`;
 - `test_link.py`: every reachable `LinkError`, the ancestry refusals, an inner entry;
 - `test_class_definition.py`: each class-definition refusal (a return form without required `credit` and
   `finding` among them) and each registry refusal;
 - `test_journal_and_progress.py`: the journal, a service read recorded once per request and unit position, a
-  unit rebuilt differently refused, the progress and decision clocks, the forms, `yield_control`'s imports;
+  unit rebuilt differently refused, the initial credit computed once and read from its record afterwards, the
+  progress and decision clocks, the forms, `yield_control`'s imports;
 - `test_library_boundary.py`: the library imports no runner internal; no library function module imports the
   `Store` class at run time (red today for one module, see "The Store under custody"); the report of raw-Store
   sites per function family;

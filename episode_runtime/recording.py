@@ -1,10 +1,11 @@
-"""What the runner records for every Episode besides its units: model calls, what its decisions read from
-services, record custody and unit attempts.
+"""What the runner records for every Episode besides its units: the credit its yield controller is built from,
+model calls, what its decisions read from services, record custody and unit attempts.
 
 The runner builds these per Episode and gives them to the Episode type on its ``BoundEpisode``. Everything is
-written to the run journal; on resume they are rebuilt from it, so recorded model responses are returned instead
-of asking again and every receipt is reloaded. (Units, their controller inputs, steps, outcomes and updates are
-recorded by the runner's ``on_unit`` hook from ``method_loop``'s own trace and restored as ``ResumeUnit``s.)
+written to the run journal; on resume they are rebuilt from it, so the controller is built from the recorded
+initial credit, recorded model responses are returned instead of asking again and every receipt is reloaded.
+(Units, their controller inputs, steps, outcomes and updates are recorded by the runner's ``on_unit`` hook from
+``method_loop``'s own trace and restored as ``ResumeUnit``s.)
 An episode's own files never call these objects: ``EpisodeBinding`` does. An episode receives the read-only
 ``RecordReader`` (``view.records``, ``records`` of ``credit``, ``action`` and ``read_from_child``), the
 ``DecisionContext`` (``ctx`` of ``decide`` and ``action``: settings, read handles of the declared services whose
@@ -46,17 +47,39 @@ abandoned records through ``ctx.store``; ``ctx.store.reclaim(ref)`` makes one it
 held as produced by the rerun). What it does not reclaim is readable by nothing once the tool returns. The system
 guarantees the key and the journal, not the external world: a tool with an external side effect must be
 idempotent on the key.
+
+**The diagnostics of tool outcomes.** A tool that reports what went wrong names the record of it in what it
+returns, under a key ``diagnostic_ref`` (at any depth). Custody knows those references for the Episode's tool
+units (``is_diagnostic``): of every recorded unit from the journal, and of the unit whose tool has just returned
+from the moment it returned. The reader answers ``is_diagnostic_ref(ref)`` from it, so that a library function
+can keep a diagnostic from being read as a source; nothing is kept for it but the unit outcomes themselves.
 """
 from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass
+import threading
 
 from method_loop.jsonvalue import closed_copy, content_digest
 
 
 class CustodyError(RuntimeError):
     """A record was read, passed, returned or written against the custody rules."""
+
+
+def diagnostic_refs(value):
+    """Every reference a tool's returned value names as a diagnostic: the text under a key ``diagnostic_ref``, at
+    any depth of the value."""
+    if isinstance(value, Mapping):
+        for key, child in value.items():
+            if key == 'diagnostic_ref':
+                if type(child) is str:
+                    yield child
+            else:
+                yield from diagnostic_refs(child)
+    elif isinstance(value, (list, tuple)):
+        for child in value:
+            yield from diagnostic_refs(child)
 
 
 class UnitPosition:
@@ -100,6 +123,22 @@ class RecordedModel:
                                                closed_copy(response, 'model_response', TypeError))
 
 
+class InitialCredit:
+    """The credit an Episode's yield controller is built from (``bound.initial_credit``): ``credit`` of the
+    Episode's summary before any unit, recorded in the run journal. ``recorded(compute)`` is the recorded value, or
+    ``compute()`` recorded now, when the Episode is entered for the first time. An Episode that is entered again
+    (a resumed run, closed or cut; a child whose parent's unit runs again) holds from the start what its recorded
+    units produced, so the credit its summary before any unit has by then is not the credit its controller
+    started from: the controller is built from the record, and the units replayed to it give the recorded
+    steps and the recorded stop."""
+
+    def __init__(self, journal, run_id, path):
+        self._journal, self._run_id, self._path = journal, run_id, tuple(path)
+
+    def recorded(self, compute):
+        return self._journal.initial_credit(self._run_id, self._path, compute)
+
+
 class ServiceReads:
     """What the decisions of one Episode read from its declared services (``bound.reads``), recorded in the run
     journal by unit position. ``at(position)`` is the ``recorded(request, ask)`` function of the decision for unit
@@ -133,10 +172,21 @@ class Custody:
         self._position = position
         self._recover()
         self._held = {receipt['ref']: receipt for receipt in journal.receipts(run_id, path)}
+        # What the outcomes of the Episode's tool units name as their diagnostics (``is_diagnostic``).
+        self._diagnostics = {ref for _, _, outcome, _ in journal.units(run_id, path) if outcome['kind'] == 'tool'
+                             for ref in diagnostic_refs(outcome['outcome'])}
         self._attempt_produced = []
         self._abandoned = {}        # reference -> entry of ``abandoned()``, only while the rerun's own work runs
         self._pending = []          # one list of references per open scoped-store transaction, innermost last
         self.operation_key = None   # of the unit attempt in progress (``None`` outside a tool unit)
+        self._unit_thread = None    # the thread the unit attempt in progress runs in
+        self._open = []             # what the unit's tool has open besides transactions (a scratch directory)
+
+    def _in_unit_thread(self):
+        """Raise when custody is asked from a thread other than the one its unit runs in. A tool that computes in
+        a worker thread gives the thread files of its own (``ctx.store.scratch()``); the thread has no Store."""
+        if self._unit_thread is not None and threading.get_ident() != self._unit_thread:
+            raise CustodyError('scoped_store_used_outside_the_thread_of_its_unit:' + repr(self.path))
 
     def _recover(self):
         unfinished = self._position.position
@@ -159,14 +209,17 @@ class Custody:
 
     def holds(self, ref):
         """Held by a recorded receipt, or written in a transaction of this unit that is still open."""
+        self._in_unit_thread()
         return ref in self._held or self._provisional(ref)
 
     def refs(self):
         """Every held record reference, in receipt order (then what open transactions wrote)."""
+        self._in_unit_thread()
         return tuple(dict.fromkeys((*self._held, *(ref for refs in self._pending for ref in refs))))
 
     def receipt(self, ref):
         """How this Episode holds ``ref``: ``{'ref', 'how', 'from', 'to', 'unit', 'producer', 'producer_unit'}``."""
+        self._in_unit_thread()
         if ref in self._held:
             return dict(self._held[ref])
         if self._provisional(ref):
@@ -181,6 +234,7 @@ class Custody:
     def require_unit_readable(self, ref):
         """Raise unless the running tool may read ``ref``: the Episode holds it, or an abandoned attempt of the
         unit now running again produced it."""
+        self._in_unit_thread()
         if not self.holds(ref) and ref not in self._abandoned:
             raise CustodyError('record_not_held:' + repr(self.path) + ':' + str(ref))
 
@@ -198,6 +252,7 @@ class Custody:
     def produced(self, ref):
         """The current unit wrote ``ref`` inside the scoped-store transaction now open. The write is receipted
         when the outermost transaction commits."""
+        self._in_unit_thread()
         if self.operation_key is None:
             raise CustodyError('record_written_outside_a_tool_unit:' + repr(self.path) + ':' + str(ref))
         if not self._pending:
@@ -210,7 +265,24 @@ class Custody:
         return bool(self._pending)
 
     def begin_transaction(self):
+        self._in_unit_thread()
         self._pending.append([])
+
+    # -- what the unit's tool has open besides transactions ----------------------------
+    def require_unit(self, what):
+        """Raise unless a tool unit of this Episode is running, in this thread; its operation key."""
+        self._in_unit_thread()
+        if self.operation_key is None:
+            raise CustodyError(what + '_outside_a_tool_unit:' + repr(self.path))
+        return self.operation_key
+
+    def opened(self, what):
+        """The running tool opened ``what`` (a scratch directory); it must close it before the unit ends."""
+        self.require_unit(what)
+        self._open.append(what)
+
+    def closed(self, what):
+        self._open.remove(what)
 
     def seal_transaction(self):
         """The innermost transaction is about to commit. For the outermost one the Store's own receipt of each
@@ -271,15 +343,31 @@ class Custody:
                 self._abandoned[ref] = {'ref': ref, 'producer_unit': unit, 'written': row['written'],
                                         'prior': row['prior']}
         self._attempt_produced = []
+        self._open = []
         self.operation_key = operation_key
+        self._unit_thread = threading.get_ident()
 
     def end_attempt(self):
         """The unit's own work returned: nothing more is written for it, and what its abandoned attempts wrote
         and it did not reclaim is no longer readable by anything."""
         if self._pending:
             raise CustodyError('unit_ended_inside_an_open_transaction:' + repr(self.path))
+        if self._open:
+            raise CustodyError('unit_ended_with_an_open_' + self._open[-1] + ':' + repr(self.path))
         self._abandoned = {}
         self.operation_key = None
+        self._unit_thread = None
+
+    # -- the diagnostics of the Episode's tool outcomes ----------------------------------
+    def tool_returned(self, value):
+        """The tool of the current unit returned ``value``, the unit's outcome: what it names as a diagnostic is
+        from now on a diagnostic of an outcome of this Episode."""
+        self._diagnostics.update(diagnostic_refs(value))
+
+    def is_diagnostic(self, ref):
+        """Whether the outcome of a tool unit of this Episode names ``ref`` as its diagnostic."""
+        self._in_unit_thread()
+        return ref in self._diagnostics
 
     def _receive(self, receipt):
         receipt = {**receipt, 'to': self.path}
@@ -386,5 +474,5 @@ class UnitContext:
     binding_path: str
 
 
-__all__ = ['Attempt', 'Custody', 'CustodyError', 'DecisionContext', 'RecordedModel', 'ServiceReads', 'UnitAttempts',
-           'UnitContext', 'UnitPosition', 'admit_entry', 'pass_records', 'return_records']
+__all__ = ['Attempt', 'Custody', 'CustodyError', 'DecisionContext', 'InitialCredit', 'RecordedModel', 'ServiceReads',
+           'UnitAttempts', 'UnitContext', 'UnitPosition', 'admit_entry', 'pass_records', 'return_records']

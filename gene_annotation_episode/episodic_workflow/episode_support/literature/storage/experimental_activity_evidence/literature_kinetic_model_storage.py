@@ -8,6 +8,7 @@ from copy import deepcopy
 import hashlib
 import json
 import math
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import operations_ledger, received_ledger
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import REF, NULL_REF, canonical, identity, obj, validate_schema
 from gene_annotation_episode.domain import ContractError
@@ -40,24 +41,16 @@ def _metadata(calculation):
     model = calculation['model']
     return {'variance_status': calculation['variance_status'], 'observation_model': model['observation_model'] if model else 'not_supplied', 'log_basis': model['log_basis'] if model else 'not_supplied', 'model_origin': model['origin'] if model else 'not_supplied'}
 
+OPERATIONS = operations_ledger('literature_kinetic_model_operations')
+RECEIVED = received_ledger('literature_kinetic_model_received')
+
 class LiteratureKineticModelRepository(LiteratureRateRepository):
     provider = PROVIDER
     record_version = VERSION
     components = COMPONENTS
-    operations_table = 'literature_kinetic_model_operations'
-    received_table = 'literature_kinetic_model_received'
+    operations = OPERATIONS
+    received = RECEIVED
     binding_fields = ()
-
-    def __init__(self, store, run_id):
-        if type(run_id) is not str or not run_id:
-            raise ValueError('explicit_literature_run_required')
-        self.store, self.run_id = (store, run_id)
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     def _native(self):
         repo = LiteratureKineticRepository.__new__(LiteratureKineticRepository)
@@ -85,7 +78,7 @@ class LiteratureKineticModelRepository(LiteratureRateRepository):
         validate_schema(args, kinetic_model_population_schema())
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'selected_tool': 'literature.kinetic.model.populate', 'arguments': args, 'scope': plain(context.scope), 'assignment': plain(context.assignment), 'requested_components': _selected(context.assignment)}
         signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
+        old = self._operation(context.episode_id, operation_key)
         if old is not None:
             if old['signature'] != signature:
                 raise ContractError('operation_key_reused_for_different_work')
@@ -125,25 +118,24 @@ class LiteratureKineticModelRepository(LiteratureRateRepository):
         calculation = populate_kinetic_contrast(native['extraction']['calculation_inputs'], model)
         saved = {'version': VERSION, 'input_source_ref': source['id'], 'input_artifact_ref': source['artifact_ref'], 'model_source_ref': args['model_source_ref'], 'model_witnesses': witnesses, 'direct_input_source_refs': list(dict.fromkeys(direct)), 'input_source_refs': self._parents(context.scope, list(dict.fromkeys(direct))), 'requested_components': request['requested_components'], 'calculation': calculation}
         with self.store.transaction():
-            self._install()
             supports, created = ([], [])
             for value in self._support_records(witnesses):
                 candidate = identity('reference', {'origin': 'tool', 'record': value})
-                exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (candidate,)).fetchone()
+                exists = self.store.holds(candidate)
                 support = self.store.put('reference', value, origin='tool', scope=plain(context.scope))['id']
                 supports.append(support)
-                if exists is None:
+                if not exists:
                     created.append(support)
             saved['model_support_refs'] = supports
             artifact = self.store.artifact(canonical(saved), 'application/json')
             request_ref = self.store.artifact(canonical(request), 'application/json')
             record = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref, 'version': VERSION, 'retrieved_at': None, 'parent_source_refs': saved['input_source_refs']}
             candidate = identity('source', {'origin': 'tool', 'record': record})
-            existed = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (candidate,)).fetchone()
+            existed = self.store.holds(candidate)
             row = self.store.put('source', record, origin='tool', scope=plain(context.scope))
             semantic = self._semantic_refs(native)
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': list(dict.fromkeys([row['id'], *saved['direct_input_source_refs'], *semantic, *supports])), 'changed_record_refs': [*created, *([] if existed else [row['id']])], 'result': {'sheet_ref': row['id'], **self._result(saved, row['id'])}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)', (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+            self._save_operation(operation_key, signature, outcome)
         return outcome
 
     @staticmethod
@@ -183,7 +175,7 @@ class LiteratureKineticModelRepository(LiteratureRateRepository):
         if set(request) != {'run_id', 'episode_id', 'operation_key', 'selected_tool', 'arguments', 'scope', 'assignment', 'requested_components'} or request['run_id'] != self.run_id or request['selected_tool'] != 'literature.kinetic.model.populate' or (request['requested_components'] != _selected(request['assignment'])):
             _fail()
         validate_schema(request['arguments'], kinetic_model_population_schema())
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?', (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
+        operation = self._operation(request['episode_id'], request['operation_key'])
         if operation is None or operation['signature'] != canonical(request):
             _fail()
         saved = self._json(source['artifact_ref'])
@@ -276,16 +268,6 @@ class LiteratureKineticModelRepository(LiteratureRateRepository):
             private_locations = [*saved['model_witnesses'], *([model['source']] if model else [])]
             rows.append({'sheet_ref': reference, 'evidence_source_ref': native['input_source_ref'], 'kinetic_sheet_ref': saved['input_source_ref'], 'model_source_ref': saved['model_source_ref'], 'model_support_refs': deepcopy(saved['model_support_refs']), 'model_support_locations': [{k: witness[k] for k in ('source_ref', 'artifact_ref', 'start', 'end')} for witness in private_locations], 'view': VIEW, 'component': name, **{k: deepcopy(v) for k, v in cell.items() if k != 'formula'}, 'formula_code': FORMULA_CODES[name], **_metadata(saved['calculation']), 'evaluation_scope': 'source_kinetic_parameter_contrast', 'contrast_meaning': 'numerator_parameter_exceeds_denominator', 'model_input_status': 'supplied' if saved['model_source_ref'] else 'not_supplied', 'model_reader_capability': 'implemented', 'comparison': deepcopy(native['comparison_bindings']), **deepcopy(roles)})
         return rows
-
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self._install()
-            return super().receive_cells(context, cells, operation_key)
 
 def kinetic_model_cells_schema():
     schema = kinetic_cells_schema()

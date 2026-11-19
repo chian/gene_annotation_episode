@@ -1,23 +1,28 @@
-"""The A110 evidence_search_strategy_improvement literature binding.
+"""The evidence search strategy improvement episode (A110): a private binding of the system's episode type."""
+from episode_runtime import EpisodeBinding
 
-Its behaviour is the shared A110 literature implementation
-(``published_evidence_assessment/literature_binding.py``); this binding declares only what is its own.
-"""
-from __future__ import annotations
-
-from types import MappingProxyType
-
-from ..literature_binding import LiteratureBinding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class EvidenceSearchStrategyImprovementEpisode(LiteratureBinding):
-    """Improve the search strategy for applicable published evidence."""
-    binding_path = 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement'
-    grain_name = binding_path.replace('/', '__')
-    goal = 'Improve the search strategy for applicable published evidence'
-    unit = 'One search-strategy action'
-    result = 'The improved search strategy and its findings'
-    child_slots = MappingProxyType({'source_relevance_assessment': 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment'})
-    commissioning_parent = 'biochemical_feasibility_evidence/published_evidence_assessment'
-    acquisition = True
-    instruction = 'Investigate which search approach is productive for the commissioned A110 question. Keep the information objective and evidence context separate from a literal provider query. Revise terms or source choices in light of actual search and read outcomes; a source-relevance child can assess which returned sources deserve examination.'
+class EvidenceSearchStrategyImprovement(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

@@ -1,23 +1,25 @@
-"""The A110 table_evidence_extraction literature binding.
+"""The A110 table_evidence_extraction episode: the investigation of one table of a source."""
+from episode_runtime import EpisodeBinding
 
-Its behaviour is the shared A110 literature implementation
-(``published_evidence_assessment/literature_binding.py``); this binding declares only what is its own.
-"""
-from __future__ import annotations
-
-from types import MappingProxyType
-
-from .....literature_binding import LiteratureBinding
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       read_from_parent as from_parent_file)
 
 
-class TableEvidenceExtractionEpisode(LiteratureBinding):
-    """Extract applicable evidence from source tables."""
-    binding_path = 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction'
-    grain_name = binding_path.replace('/', '__')
-    goal = 'Extract applicable evidence from source tables'
-    unit = 'One table-extraction action'
-    result = 'The extracted table evidence'
-    child_slots = MappingProxyType({})
-    commissioning_parent = 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination'
-    acquisition = False
-    instruction = 'Extract the applicable evidence from the assigned source tables: read the actual rows, keep their native units, conditions and identities, and commit what they establish.'
+class TableEvidenceExtraction(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

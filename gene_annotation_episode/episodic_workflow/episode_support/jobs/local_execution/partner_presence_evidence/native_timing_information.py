@@ -5,14 +5,17 @@ The inherited prefix and original inputs supply its fixed baseline. No native
 work, shared-history access, child-private action or continuation decision occurs.
 """
 from dataclasses import dataclass
-from collections.abc import Mapping
 from copy import deepcopy
 import json
 import math
 
-from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_presence_evidence.communication import REFERENCE_FORMATS, ReportBoundaryError
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.execution_recording import NativeMeasurement
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import NATIVE_EXECUTION_OPERATIONS
+
+NATIVE_MEASUREMENTS = TableDeclaration(name='native_measurements',
+                                       columns=('operation', 'operands', 'measurement_artifact_ref'),
+                                       key=('measurement_artifact_ref',), record_refs=('measurement_artifact_ref',))
 
 
 def record_native_measurement(store, measurement, *, operation, operands):
@@ -22,9 +25,8 @@ def record_native_measurement(store, measurement, *, operation, operands):
         raise TypeError('typed_native_measurement_required')
     with store.transaction():
         artifact = store.artifact(canonical(measurement.as_record()), 'application/json')
-        return store.put('native_execution', {
-            'representation': 'native_execution_receipt_v2', 'operation': operation,
-            'measurement_artifact_ref': artifact, 'operands': operands}, origin='tool')['id']
+        return store.table(NATIVE_MEASUREMENTS).put({
+            'operation': operation, 'operands': operands, 'measurement_artifact_ref': artifact})['id']
 
 
 def _object(fields):
@@ -32,7 +34,7 @@ def _object(fields):
 
 
 MEASUREMENT_SCHEMA = _object({
-    'receipt_ref': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'native_execution'},
+    'receipt_ref': {'type': 'string'},
     'operation': {'type': 'string', 'enum': list(NATIVE_EXECUTION_OPERATIONS)},
     'phase': {'type': 'string', 'enum': list(dict.fromkeys(NATIVE_EXECUTION_OPERATIONS.values()))},
     'outcome': {'type': 'string', 'enum': ['succeeded', 'failed', 'cancelled', 'resource_limit', 'unknown']},
@@ -48,8 +50,8 @@ MEASUREMENT_SCHEMA = _object({
 
 
 def read_measurement(store, reference):
-    record = store._require(reference, {'native_execution'})
-    return NativeMeasurement.from_record(json.loads(store.get_artifact(record['measurement_artifact_ref'])))
+    row = store.table(NATIVE_MEASUREMENTS).get(reference)
+    return NativeMeasurement.from_record(json.loads(store.get_artifact(row['measurement_artifact_ref'])))
 
 
 def measurement_fields(reference, measured, *, operation):
@@ -108,7 +110,7 @@ class NativeTimingInformation:
             seen.add(attempt)
             count += 1
             if total >= details_offset and (details_limit is None or len(rows) < details_limit):
-                rows.append(measurement_fields(ref, measured, operation=store.get(ref)['operation']))
+                rows.append(measurement_fields(ref, measured, operation=store.table(NATIVE_MEASUREMENTS).get(ref)['operation']))
             total += 1
         credit = self.information_unit*count
         if not math.isfinite(credit):
@@ -131,33 +133,3 @@ class NativeTimingInformation:
                 'report_schema': {'type': 'array', 'items': deepcopy(MEASUREMENT_SCHEMA),
                                   'x-source': 'native_execution_measurements'}}}
 
-
-def validate_native_measurements(store, value, *, schema):
-    """Keep a receipt identity and supplied measurement fields consistent.
-
-    This checks recorded facts, not their usefulness or a scientific conclusion.
-    Parent field names are unrestricted; the declared reference namespace
-    identifies the receipt. Ordinary contract validation resolves the reference.
-    """
-    def visit(node, declared):
-        if isinstance(node, Mapping):
-            properties = declared.get('properties', {})
-            for name, definition in properties.items():
-                if (definition.get('format') in REFERENCE_FORMATS
-                        and definition.get('x-reference-namespace') == 'native_execution'
-                        and node.get(name) is not None):
-                    ref = node[name]
-                    actual = measurement_fields(ref, read_measurement(store, ref), operation=store.get(ref)['operation'])
-                    fields = node.keys() & actual.keys()
-                    fields = [key for key in fields if key == name or properties.get(key, {}).get('format')
-                              not in REFERENCE_FORMATS]
-                    if any(node[key] != actual[key] for key in fields):
-                        raise ReportBoundaryError('Native timing fields differ from their receipt',
-                                                  code='native_measurement_fact_mismatch')
-            for name, child in node.items():
-                if name in properties:
-                    visit(child, properties[name])
-        elif isinstance(node, (list, tuple)) and 'items' in declared:
-            for child in node:
-                visit(child, declared['items'])
-    visit(value, schema)

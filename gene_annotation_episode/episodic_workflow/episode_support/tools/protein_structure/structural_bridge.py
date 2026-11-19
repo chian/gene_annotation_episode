@@ -16,6 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execut
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.publication import publish_comparison
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.scoring import NATIVE_SCHEMA,digest,require
 from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.structures import comparison_identity
+from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.structure_tables import STRUCTURE_BINDINGS
 
 VERSION = 'a102_received_saved_comparison_bridge_v2'
 
@@ -77,9 +78,9 @@ def publish_bridge(registry,*,scientific,source_ref,selection,known_record_refs,
     # above. Both require the actual selected saved-sheet grant.
     candidates={side:[] for side in ('fixed','moving')}
     for ref in known_record_refs:
-        row=registry.store.db.execute('SELECT body FROM a102_structure_bindings WHERE source_ref=?',(ref,)).fetchone()
-        if row is None:continue
-        binding=json.loads(row['body'])
+        rows=registry.store.table(STRUCTURE_BINDINGS).select({'source_ref':ref})
+        if not rows:continue
+        binding=json.loads(rows[0]['body'])
         for side in candidates:
             selected=sheet['sequences'][side]['selection']
             if (binding['file_identity']==selected['file_identity'] and all(

@@ -44,13 +44,10 @@ class LiteratureBindingRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
     record_version = "literature_binding_parameter_record_v1"
-    operations_table = "literature_binding_operations"
-    received_table = "literature_binding_received"
     binding_fields = BINDINGS
 
     def _source(self, context, reference):
-        if reference not in context.received_record_refs:
-            raise ContractError("literature_source_not_received")
+
         if not self.store.reference_subset([reference], plain(context.scope)):
             raise ContractError("literature_source_outside_scope")
         row = self.store.get(reference)
@@ -77,23 +74,8 @@ class LiteratureBindingRepository(LiteratureRateRepository):
         return row
 
     def populate(self, context, arguments, operation_key):
-        if context.run_id != self.run_id:
-            raise ContractError("literature_run_mismatch")
-        if not isinstance(operation_key, str) or not operation_key:
-            raise ContractError("operation_key_required")
         args = plain(arguments)
         validate_schema(args, binding_population_schema())
-        signature = canonical({"arguments": args, "scope": plain(context.scope)})
-        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
-            "WHERE run_id=? AND episode_id=? AND operation_key=?",
-            (self.run_id, context.episode_id, operation_key)).fetchone()
-        if old is not None:
-            if old["signature"] != signature:
-                raise ContractError("operation_key_reused_for_different_work")
-            outcome = json.loads(old["outcome"])
-            for reference in self.read(outcome["result"]["sheet_ref"])["input_source_refs"]:
-                self._source(context, reference)
-            return outcome
 
         source = self._source(context, args["source_ref"])
         try:
@@ -157,9 +139,9 @@ class LiteratureBindingRepository(LiteratureRateRepository):
 
             def publish(kind, record):
                 candidate = identity(kind, {"origin": "tool", "record": record})
-                existed = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (candidate,)).fetchone()
+                existed = self.store.holds(candidate)
                 published = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
-                if existed is None:
+                if not existed:
                     created.append(published["id"])
                 return published["id"]
 
@@ -175,33 +157,29 @@ class LiteratureBindingRepository(LiteratureRateRepository):
                     "term_refs": [], "context_refs": []}) if present else None
             payload["experimental_bindings"] = bindings
             artifact = self.store.artifact(canonical(payload), "application/json")
-            request = self.store.artifact(canonical({"run_id": self.run_id, "episode_id": context.episode_id,
-                "operation_key": operation_key, "arguments": args}), "application/json")
+            request = self.store.artifact(canonical({"operation_key": operation_key, "arguments": args}), "application/json")
             sheet_ref = publish("source", {"provider": self.provider, "accession": None, "uri": None,
                 "artifact_ref": artifact, "text_ref": artifact, "request_ref": request,
                 "version": self.record_version, "retrieved_at": None,
                 "parent_source_refs": payload["input_source_refs"]})
-            outcome = {"status": "completed", "operation_ref": identity("operation", {
-                "run_id": self.run_id, "episode_id": context.episode_id, "key": operation_key}),
+            outcome = {"status": "completed", "operation_ref": identity("operation", {"key": operation_key}),
                 "record_refs": [sheet_ref, *dict.fromkeys(ref for ref in bindings.values() if ref)],
                 "changed_record_refs": created, "result": {"sheet_ref": sheet_ref, "cells": sheet["cells"],
                     "comparison": payload["comparison"], "interpretation_kind": payload["interpretation_kind"]},
                 "feedback": None}
             outcome["result"].update({field: sheet[field] for field in (
                 "uncertainty_basis", "minimum_experiment_count", "independent_preparation_count")})
-            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+
         return outcome
 
-    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+    def project_cells(self, sheet_refs, *, components=None):
         components = self.components if components is None else components
         if (not isinstance(components, (list, tuple)) or len(set(components)) != len(components)
                 or any(name not in self.components for name in components)):
             raise ContractError("literature_binding_component_selection_invalid")
         result = []
         for reference in dict.fromkeys(sheet_refs):
-            if reference not in permitted_record_refs:
-                raise ContractError("literature_sheet_not_received")
+
             saved = self.read(reference)
             sheet = saved["sheet"]
             for name in components:

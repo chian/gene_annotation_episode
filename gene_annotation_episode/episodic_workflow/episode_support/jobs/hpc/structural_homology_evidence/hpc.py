@@ -11,9 +11,12 @@ import math
 from pathlib import Path
 import zlib
 
+from episode_runtime import TableDeclaration
+
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.scoring import digest, require
+from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.structure_tables import STRUCTURE_BINDINGS
 from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.structures import binding_summary, comparison_identity
 from gene_annotation_episode.episodic_workflow.episode_support.tools.native_setup import PINS
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.structural_homology_evidence.hpc_worker import VERSION as NATIVE_VERSION
@@ -23,15 +26,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.struc
 VERSION = 'a102_shared_hpc_custody_v1'
 REQUEST_PROVIDER = 'host.a102.hpc_request'
 RESULT_PROVIDER = 'host.a102.hpc_admission'
+HPC_REQUESTS = TableDeclaration(name='a102_hpc_requests', columns=('source_ref', 'body'), key=('source_ref',),
+                              record_refs=('source_ref',))
+HPC_RESULTS = TableDeclaration(name='a102_hpc_results', columns=('source_ref', 'body'), key=('source_ref',),
+                             record_refs=('source_ref',))
 
 def sha(raw):
     return hashlib.sha256(raw).hexdigest()
-
-
-def install(store):
-    for table in ('a102_hpc_requests', 'a102_hpc_results'):
-        store.db.execute('CREATE TABLE IF NOT EXISTS '+table+
-            ' (source_ref TEXT PRIMARY KEY, body TEXT NOT NULL)')
 
 
 def _source(store, provider, body, scope):
@@ -45,31 +46,29 @@ def _registered(store, reference, table, provider):
     record = store.get(reference)
     if record.get('provider') != provider:
         return None
-    exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE name=?", (table,)).fetchone()
-    row = store.db.execute('SELECT body FROM '+table+' WHERE source_ref=?', (reference,)).fetchone() if exists else None
-    require(row is not None and record['origin'] == 'tool' and record['version'] == VERSION,
+    rows = store.table(table).select({'source_ref': reference})
+    require(bool(rows) and record['origin'] == 'tool' and record['version'] == VERSION,
         'a102_original_hpc_scientific_grant_required')
-    body = json.loads(row[0])
+    body = rows[0]['body']
     require(json.loads(store.get_artifact(record['artifact_ref'])) == body, 'a102_hpc_scientific_custody_conflict')
     return body
 
 
 def request_body(store, reference):
-    return _registered(store, reference, 'a102_hpc_requests', REQUEST_PROVIDER)
+    return _registered(store, reference, HPC_REQUESTS, REQUEST_PROVIDER)
 
 
 def result_body(store, reference):
-    return _registered(store, reference, 'a102_hpc_results', RESULT_PROVIDER)
+    return _registered(store, reference, HPC_RESULTS, RESULT_PROVIDER)
 
 
 def binding(store, reference, known, scope):
     require(reference in known, 'a102_hpc_structure_binding_not_received')
     source = store.get(reference)
-    exists = store.db.execute("SELECT 1 FROM sqlite_master WHERE name='a102_structure_bindings'").fetchone()
-    row = store.db.execute('SELECT body FROM a102_structure_bindings WHERE source_ref=?', (reference,)).fetchone() if exists else None
-    require(row is not None and source['origin'] == 'tool'
+    rows = store.table(STRUCTURE_BINDINGS).select({'source_ref': reference})
+    require(bool(rows) and source['origin'] == 'tool'
         and source['provider'] == 'native.a102.structure_binding', 'a102_hpc_structure_binding_custody_required')
-    body = json.loads(row[0])
+    body = rows[0]['body']
     require(json.loads(store.get_artifact(source['artifact_ref'])) == binding_summary(body),
         'a102_hpc_structure_binding_custody_conflict')
     if body['target_ref'] is not None:
@@ -86,7 +85,6 @@ def _native_binding(body):
 
 
 def prepare_request(store, arguments, *, context, known):
-    install(store)
     scope = store.validate_scope(plain(context.scope))
     target = _native_binding(binding(store, arguments['target_binding_ref'], known, scope))
     references = list(arguments['reference_binding_refs'])
@@ -134,13 +132,13 @@ def prepare_request(store, arguments, *, context, known):
     request = {'version': NATIVE_VERSION, 'algorithm': algorithm, 'software_pin': deepcopy(PINS[algorithm]),
         'native_request': native}
     raw = (canonical(request)+'\n').encode()
-    body = {'version': VERSION, 'run_id': context.run_id, 'scope': scope,
+    body = {'version': VERSION, 'scope': scope,
         'target_binding_ref': arguments['target_binding_ref'], 'reference_binding_refs': references,
         'attribution': plain(attribution), 'request': request, 'request_json': raw.decode(),
         'request_sha256': sha(raw), 'files': files, 'resource_id': arguments['resource_id']}
     with store.transaction():
         reference = _source(store, REQUEST_PROVIDER, body, scope)
-        store.db.execute('INSERT OR IGNORE INTO a102_hpc_requests VALUES(?,?)', (reference, canonical(body)))
+        store.table(HPC_REQUESTS).put({'source_ref': reference, 'body': body})
     return reference
 
 
@@ -209,10 +207,9 @@ def admit_result(store, request_ref, hpc_result_ref, *, context, known, read_res
     """Publish existing A102 numerical grants from qualified original HPC bytes."""
     from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.publication import publish_comparison
     from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.structural_homology_evidence.native_worker import _native
-    install(store)
     require({request_ref, hpc_result_ref} <= known, 'a102_hpc_original_operands_not_received')
     expected = request_body(store, request_ref)
-    require(expected is not None and expected['run_id'] == context.run_id, 'a102_hpc_original_request_required')
+    require(expected is not None, 'a102_hpc_original_request_required')
     store.validate_scope(expected['scope'], parent_scope=plain(context.scope))
     for ref in [expected['target_binding_ref'], *expected['reference_binding_refs']]:
         binding(store, ref, known, expected['scope'])
@@ -304,7 +301,7 @@ def admit_result(store, request_ref, hpc_result_ref, *, context, known, read_res
         'interpretation': 'original_native_comparisons_use_existing_A102_grader; execution_credit_separate'}
     with store.transaction():
         reference = _source(store, RESULT_PROVIDER, body, expected['scope'])
-        store.db.execute('INSERT OR IGNORE INTO a102_hpc_results VALUES(?,?)', (reference, canonical(body)))
+        store.table(HPC_RESULTS).put({'source_ref': reference, 'body': body})
     return [reference, *refs]
 
 

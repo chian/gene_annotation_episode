@@ -88,7 +88,6 @@ def _project_saved(saved, reference, components):
 
 class LiteratureCalibrationRecoveryRepository(LiteratureRateRepository):
     provider, components, record_version = PROVIDER, COMPONENTS, VERSION
-    operations_table = 'literature_calibration_recovery_operations'
     received_table = 'literature_calibration_recovery_received'
     binding_fields = ()
 
@@ -96,12 +95,6 @@ class LiteratureCalibrationRecoveryRepository(LiteratureRateRepository):
         if not isinstance(run_id, str) or not run_id:
             raise ValueError('explicit_literature_run_required')
         self.store, self.run_id = store, run_id
-
-    def _installed(self, table):
-        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
-
-    def _install(self):
-        super().__init__(self.store, self.run_id)
 
     @staticmethod
     def _components(components):
@@ -130,16 +123,6 @@ class LiteratureCalibrationRecoveryRepository(LiteratureRateRepository):
         requested = self._components(plain(context.assignment.get(REQUESTED, [])))
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key,
             'arguments': args, 'scope': plain(context.scope), 'components': requested}
-        signature = canonical(request)
-        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
-        if old is not None:
-            if old['signature'] != signature:
-                raise ContractError('operation_key_reused_for_different_work')
-            outcome = json.loads(old['outcome']); saved = self.read(outcome['result']['sheet_ref'])
-            for reference in saved['direct_input_source_refs']:
-                self._native_source(context, reference)
-            return outcome
 
         def read_source(reference, representation):
             row = self._native_source(context, reference)
@@ -154,21 +137,18 @@ class LiteratureCalibrationRecoveryRepository(LiteratureRateRepository):
         payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'],
             'direct_input_source_refs': extraction['source_refs'], 'input_source_refs': ancestors, 'selection': args, 'sheet': sheet}
         with self.store.transaction():
-            self._install()
             artifact = self.store.artifact(canonical(payload), 'application/json')
             request_ref = self.store.artifact(canonical(request), 'application/json')
             value = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact,
                 'text_ref': artifact, 'request_ref': request_ref, 'version': VERSION, 'retrieved_at': None,
                 'parent_source_refs': ancestors}
             reference = identity('source', {'origin': 'tool', 'record': value})
-            existed = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (reference,)).fetchone()
+            existed = self.store.holds(reference)
             self.store.put('source', value, origin='tool', scope=plain(context.scope))
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id,
                 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [reference],
                 'changed_record_refs': [] if existed else [reference], 'result': {'sheet_ref': reference,
                     'view': VIEW, 'cells': _project_saved(payload, reference, requested)}, 'feedback': None}
-            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
-                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
         return outcome
 
     def _json_artifact(self, reference):
@@ -191,22 +171,12 @@ class LiteratureCalibrationRecoveryRepository(LiteratureRateRepository):
         if set(request) != {'run_id', 'episode_id', 'operation_key', 'arguments', 'scope', 'components'} or request['run_id'] != self.run_id:
             raise ContractError('calibration_recovery_saved_request_mismatch')
         validate_schema(request['arguments'], calibration_recovery_population_schema()); self._components(request['components'])
-        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
-            (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
-        if operation is None or operation['signature'] != canonical(request):
-            raise ContractError('literature_sheet_not_selected_output')
         saved = self._json_artifact(source['artifact_ref'])
         if (set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'selection', 'sheet'}
                 or saved['version'] != VERSION or saved['selection'] != request['arguments']
                 or saved['input_source_ref'] != request['arguments']['source_ref'] or saved['input_source_refs'] != source['parent_source_refs']):
             raise ContractError('calibration_recovery_saved_selection_mismatch')
         validate_schema(saved['sheet'], _sheet_schema()); self._validate_saved_bindings(saved, request)
-        outcome = json.loads(operation['outcome'])
-        expected = {'sheet_ref': sheet_ref, 'view': VIEW, 'cells': _project_saved(saved, sheet_ref, request['components'])}
-        if (outcome.get('status') != 'completed' or canonical(outcome.get('result')) != canonical(expected)
-                or outcome.get('record_refs') != [sheet_ref] or outcome.get('feedback') is not None
-                or outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
-            raise ContractError('calibration_recovery_saved_outcome_mismatch')
         return saved
 
     def _validate_saved_bindings(self, saved, request):
@@ -256,14 +226,7 @@ class LiteratureCalibrationRecoveryRepository(LiteratureRateRepository):
     def owned_sheet_refs(self, context):
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
-        if not self._installed(self.operations_table):
-            return []
-        references = []
-        for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id)):
-            outcome = json.loads(row['outcome'])
-            if outcome.get('status') == 'completed' and outcome['result']['sheet_ref'] in context.received_record_refs:
-                references.append(outcome['result']['sheet_ref'])
-        return list(dict.fromkeys(references))
+        return [ref for ref in self.produced_sheet_refs(context) if ref in context.received_record_refs]
 
     def available_sheet_refs(self, context):
         references = self.owned_sheet_refs(context)
@@ -284,15 +247,6 @@ class LiteratureCalibrationRecoveryRepository(LiteratureRateRepository):
         if self.store.reference_subset(refs, plain(context.scope)) != refs:
             raise ContractError('literature_source_outside_scope')
         return super().fact_cells(context, refs, components=components)
-
-    def received_cells(self, context):
-        if context.run_id != self.run_id:
-            raise ContractError('literature_run_mismatch')
-        return super().received_cells(context) if self._installed(self.received_table) else []
-
-    def receive_cells(self, context, cells, operation_key):
-        with self.store.transaction():
-            self._install(); return super().receive_cells(context, cells, operation_key)
 
     @staticmethod
     def cell_record_refs(cells):

@@ -88,7 +88,7 @@ def annotation_assessments(store, known_record_refs, annotation, subject, scope)
             status, missing = 'invalid', ['assessment_explicitly_incomparable']
         elif needed:
             status, missing = 'unresolved', ['assessment_dependencies_not_received']
-        extent = store._assessment_write_extent(assessment)
+        extent = store.assessment_write_extent(assessment["id"])
         regions = (_intersection(native_regions_for_footprint(store, subject, extent),
             native_subject_regions(store, scope, (subject,)).get(subject, [])) if extent else [])
         if status == 'established' and (not regions or assessment['extent_basis'] == 'context_allocation'):

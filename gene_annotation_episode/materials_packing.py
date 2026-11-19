@@ -20,7 +20,7 @@ MEDIA = {"header": "text/x-parser-title; charset=utf-8", "sequence": "text/x-seq
 
 
 def install_tables(store):
-    store.db.executescript("""
+    store._db.executescript("""
         CREATE TABLE IF NOT EXISTS material_pack_chunks(
             parse_key TEXT NOT NULL,chunk_index INTEGER NOT NULL,artifact_ref TEXT NOT NULL,
             PRIMARY KEY(parse_key,chunk_index));
@@ -40,15 +40,15 @@ class Occurrences:
         self.store, self.key = store, key
 
     def __call__(self, name):
-        row = self.store.db.execute("SELECT next_occurrence FROM material_name_counts WHERE parse_key=? AND name=?",
+        row = self.store._db.execute("SELECT next_occurrence FROM material_name_counts WHERE parse_key=? AND name=?",
                                     (self.key, name)).fetchone()
         occurrence = row[0] if row else 0
-        self.store.db.execute("INSERT INTO material_name_counts VALUES(?,?,?) ON CONFLICT(parse_key,name) DO UPDATE SET next_occurrence=excluded.next_occurrence",
+        self.store._db.execute("INSERT INTO material_name_counts VALUES(?,?,?) ON CONFLICT(parse_key,name) DO UPDATE SET next_occurrence=excluded.next_occurrence",
                               (self.key, name, occurrence + 1))
         return occurrence
 
     def close(self):
-        self.store.db.execute("DELETE FROM material_name_counts WHERE parse_key=?", (self.key,))
+        self.store._db.execute("DELETE FROM material_name_counts WHERE parse_key=?", (self.key,))
 
 
 class Packer:
@@ -63,7 +63,7 @@ class Packer:
         if not self.buffer:
             return
         ref = self.store.artifact(bytes(self.buffer), "application/x-packed-member-components")
-        self.store.db.execute("INSERT INTO material_pack_chunks VALUES(?,?,?)", (self.key, self.chunk_index, ref))
+        self.store._db.execute("INSERT INTO material_pack_chunks VALUES(?,?,?)", (self.key, self.chunk_index, ref))
         self.buffer.clear()
         self.chunk_index += 1
 
@@ -83,7 +83,7 @@ class Packer:
                 count = min(self.budget - len(self.buffer), len(encoded) - cursor)
                 start = len(self.buffer)
                 self.buffer.extend(memoryview(encoded)[cursor:cursor+count])
-                self.store.db.execute("INSERT INTO material_component_spans VALUES(?,?,?,?,?,?)",
+                self.store._db.execute("INSERT INTO material_component_spans VALUES(?,?,?,?,?,?)",
                     (member_ref, component, part, self.chunk_index, start, start + count))
                 cursor += count
                 part += 1
@@ -118,7 +118,7 @@ def materialized_components(store, member):
             refs[component] = None
             continue
         ref = "artifact_" + info["sha256"]
-        row = store.db.execute("SELECT sha256,size FROM artifacts WHERE id=?", (ref,)).fetchone()
+        row = store._db.execute("SELECT sha256,size FROM artifacts WHERE id=?", (ref,)).fetchone()
         refs[component] = ref if row is not None and row[0] == info["sha256"] and row[1] == info["bytes"] else None
     return refs
 
@@ -142,7 +142,7 @@ def component_chunks(store, member, component, *, offset=0, limit=None):
                 yield data
         return
     cursor = 0
-    rows = store.db.execute("SELECT s.start,s.end,c.artifact_ref FROM material_component_spans s JOIN material_pack_chunks c ON c.parse_key=? AND c.chunk_index=s.chunk_index WHERE s.member_ref=? AND s.component=? ORDER BY s.part",
+    rows = store._db.execute("SELECT s.start,s.end,c.artifact_ref FROM material_component_spans s JOIN material_pack_chunks c ON c.parse_key=? AND c.chunk_index=s.chunk_index WHERE s.member_ref=? AND s.component=? ORDER BY s.part",
         (member["storage"]["parse_key"], member["id"], component))
     for start, stop, ref in rows:
         width = stop-start

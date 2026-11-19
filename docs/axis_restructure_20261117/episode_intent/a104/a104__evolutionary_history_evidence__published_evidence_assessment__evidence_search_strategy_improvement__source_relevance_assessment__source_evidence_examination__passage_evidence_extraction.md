@@ -224,3 +224,197 @@ observes_action_outcome, validate_form`; task_report_delivery.py `Record, form_w
 `episode_support/literature/grading/literature_task_credit.py`): `task_schema, _task_key, validate_yield_bindings,
 commissioned_task, continuation_task, _private_yield_controller, LiteratureTaskCredit, SCREENING, LEADS, screening_*,
 lead_*, validate_lead`.
+
+## Carried over
+
+Carried over on 19 November 2026 (private binding, ten-file form). Old files at 97308b94c.
+
+| old file | kind | name | machinery or episode function | new place or reason |
+|---|---|---|---|---|
+| assignment_fields.py | class | LiteratureAssignmentFields | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (one field per property of the old schema; the rate-population properties are not declared, see unplaced) |
+| assignment_fields.py | method | LiteratureAssignmentFields._assignment_fields | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (one field per property of the old schema; the rate-population properties are not declared, see unplaced) |
+| binding_record.py | class | LiteratureBindingRecord | machinery | binding_record.py and the binding's own as_record() |
+| binding_record.py | method | LiteratureBindingRecord.as_record | machinery | binding_record.py and the binding's own as_record() |
+| configuration.py | class | LiteratureConfiguration | machinery | binding configuration class |
+| configuration.py | method | LiteratureConfiguration.__init__ | machinery | construction-time settings of the old binding; the episode's settings are ctx.settings (cost, parameters, tool_registry, knowledge_library_directory); outcome_page_size is OUTCOME_PAGE_SIZE in messages/internal_summary.py |
+| configuration.py | method | LiteratureConfiguration.reference_evidence | episode function | not carried: root-only reference_evidence_parent context (not this episode's); see unplaced |
+| configuration.py | method | LiteratureConfiguration.contract_information_configuration | machinery | report-contract information profile (decision-exchange / report_form machinery) |
+| contracts.py | function | _required_grading_logic | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions (_required_grading_logic) |
+| contracts.py | function | _population_catalog | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions (_population_catalog) |
+| credit.py | class | LiteratureCredit | episode function | credit.py (module) |
+| credit.py | method | LiteratureCredit.credit_kind | machinery | credit kind declaration of the old runner |
+| credit.py | method | LiteratureCredit.credit_view | machinery | services.scientific_credit view; credit(summary, records) is called by the system |
+| credit.py | method | LiteratureCredit.credit_projector | episode function | credit.py credit (and credit_binding, lead_dispositions, screening_answers, assessment_answers, answers: private re-expression of the library LiteratureTaskCredit, library candidate) |
+| decision_context.py | class | SourceInvestigationTaskContext | episode function | task.py decide / messages/internal_summary.py |
+| decision_context.py | method | SourceInvestigationTaskContext.assemble_decision_context | episode function | task.py decide (the context the model is shown) over messages/internal_summary.py internal_summary |
+| decision_context.py | function | _bind_preserved_runtime_providers | machinery | provider patching of the old runner (bind_functions) |
+| decision_contracts.py | class | SourceTaskDecisionContracts | machinery | decision-exchange loop and contract-information (report_form) machinery |
+| decision_contracts.py | method | SourceTaskDecisionContracts.interpretation_context | machinery | decision-exchange loop and contract-information (report_form) machinery |
+| decision_contracts.py | method | SourceTaskDecisionContracts.exchange_schema | machinery | decision-exchange loop and contract-information (report_form) machinery |
+| decision_contracts.py | method | SourceTaskDecisionContracts.exchange_response | machinery | decision-exchange loop and contract-information (report_form) machinery |
+| decision_contracts.py | method | SourceTaskDecisionContracts.validate_contract_exchange_request | machinery | decision-exchange loop and contract-information (report_form) machinery |
+| decision_contracts.py | method | SourceTaskDecisionContracts.validate_contract_exchange_history | machinery | decision-exchange loop and contract-information (report_form) machinery |
+| decision_contracts.py | function | _bind_preserved_runtime_providers | machinery | provider patching of the old runner (bind_functions) |
+| decision_exchange.py | class | SourceTaskDecisionExchange | machinery | decision-exchange loop (exchange_decision) |
+| decision_exchange.py | method | SourceTaskDecisionExchange.exchange_decision | machinery | decision-exchange loop (exchange_decision) |
+| decision_exchange.py | function | _bind_preserved_runtime_providers | machinery | provider patching of the old runner (bind_functions) |
+| decision_provider.py | class | SourceTaskDecisionProvider | machinery | recorded model call (decision_completion); the system records ModelRequest calls |
+| decision_provider.py | method | SourceTaskDecisionProvider.decision_completion | machinery | recorded model call (decision_completion); the system records ModelRequest calls |
+| episode.py | class | LiteratureEpisode | episode function | episode.py class PassageEvidenceExtraction(EpisodeBinding) |
+| evidence_grading.py | function | execute | episode function | not carried: required assay-grading logic of the A105-style population route (assay_grading_population); see unplaced |
+| from_parent.py | class | LiteratureAssignment | episode function | messages/read_from_parent.py ASSIGNMENT_FORM |
+| from_parent.py | method | LiteratureAssignment.child_assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM |
+| from_parent.py | method | LiteratureAssignment.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM |
+| from_parent.py | method | LiteratureAssignment._validate_assignment | episode function | messages/read_from_parent.py read_from_parent (checks that need no Store); the Store checks of the page are unplaced |
+| from_parent.py | method | LiteratureAssignment.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent (the within-parent-page check is unplaced: it reads the parent's own assignment) |
+| goal.py | class | LiteratureGoal | episode function | goal.py GOAL |
+| goal.py | method | LiteratureGoal.instructions | episode function | goal.py GOAL |
+| internal_summary.py | class | LiteratureSummary | episode function | messages/internal_summary.py internal_summary |
+| internal_summary.py | method | LiteratureSummary.decision_context | episode function | messages/internal_summary.py internal_summary |
+| numerical_report_facts.py | class | LiteratureNumericalReportFacts | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions; fact cells not declared in RETURN_FORM |
+| numerical_report_facts.py | method | LiteratureNumericalReportFacts._rate_facts | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions; fact cells not declared in RETURN_FORM |
+| parent_context.py | class | LiteratureParentContext | episode function | task.py decide / messages/internal_summary.py (the initial decision context is the summary) |
+| parent_context.py | method | LiteratureParentContext.initial_decision_context | episode function | task.py decide / messages/internal_summary.py (the initial decision context is the summary) |
+| parent_context.py | method | LiteratureParentContext.contract_information_profile | machinery | report-contract information profile machinery |
+| parent_page_contract.py | class | LiteratureParentPageContract | episode function | not carried: reads the parent's own page assignment (a child cannot read it); see unplaced |
+| parent_page_contract.py | method | LiteratureParentPageContract._parent_page_assignment_schema | episode function | not carried: reads the parent's own page assignment (a child cannot read it); see unplaced |
+| parent_page_contract.py | method | LiteratureParentPageContract._validate_parent_page_assignment | episode function | not carried: reads the parent's own page assignment (a child cannot read it); see unplaced |
+| population_routes.py | class | LiteraturePopulationRoutes | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| population_routes.py | method | LiteraturePopulationRoutes._population_routes | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| population_task_context.py | class | LiteraturePopulationTaskContext | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| population_task_context.py | method | LiteraturePopulationTaskContext._owned_population_task_sources | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| population_task_context.py | method | LiteraturePopulationTaskContext._population_task_context | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| presentation_selection.py | function | source_presentation_selection | episode function | task.py decide (the context is presented as the closed JSON; the text-TASK renderers select on contexts of other shapes and not on this episode's) |
+| received_evidence.py | class | LiteratureReceivedEvidence | machinery | received-report admission of child returns (this episode has no child) / receipts bookkeeping |
+| received_evidence.py | method | LiteratureReceivedEvidence.received_form_references | machinery | received-report admission of child returns (this episode has no child) / receipts bookkeeping |
+| received_evidence.py | method | LiteratureReceivedEvidence.received_evidence_tokens | machinery | received-report admission of child returns (this episode has no child) / receipts bookkeeping |
+| received_report_admission.py | class | LiteratureReceivedReportAdmission | machinery | received-report admission of child returns (this episode has no child) / receipts bookkeeping |
+| received_report_admission.py | method | LiteratureReceivedReportAdmission.validate_received_report | machinery | received-report admission of child returns (this episode has no child) / receipts bookkeeping |
+| received_reports.py | class | LiteratureReceivedReports | machinery | received-report admission of child returns (this episode has no child) / receipts bookkeeping |
+| received_reports.py | method | LiteratureReceivedReports.received_report_sources | machinery | received-report admission of child returns (this episode has no child) / receipts bookkeeping |
+| received_reports.py | method | LiteratureReceivedReports.received_report_facts | machinery | received-report admission of child returns (this episode has no child) / receipts bookkeeping |
+| received_reports.py | method | LiteratureReceivedReports._complete_requested_received_arrays | machinery | received-report admission of child returns (this episode has no child) / receipts bookkeeping |
+| report_facts.py | class | LiteratureReportFacts | episode function | messages/final_to_parent.py final_to_parent (screening answers and lead dispositions as selectable fields) |
+| report_facts.py | method | LiteratureReportFacts.facts | episode function | messages/final_to_parent.py final_to_parent (screening answers and lead dispositions as selectable fields) |
+| report_facts.py | method | LiteratureReportFacts.current_report_facts | episode function | messages/final_to_parent.py final_to_parent (screening answers and lead dispositions as selectable fields) |
+| report_field_contracts.py | class | LiteratureReportFieldContracts | episode function | messages/final_to_parent.py RETURN_FORM (SCREENING, LEADS fields); the rate fact sources are not declared |
+| report_field_contracts.py | method | LiteratureReportFieldContracts._rate_fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (SCREENING, LEADS fields); the rate fact sources are not declared |
+| report_fields.py | class | LiteratureReportFields | episode function | messages/final_to_parent.py RETURN_FORM (fact sources) |
+| report_fields.py | method | LiteratureReportFields.fact_sources | episode function | messages/final_to_parent.py RETURN_FORM (fact sources) |
+| report_reference_access.py | class | LiteratureReportReferenceAccess | machinery | report reference resolver of the old runner; the held check is records.holds (report_source_held in messages/internal_summary.py) |
+| report_reference_access.py | method | LiteratureReportReferenceAccess.resolve | machinery | report reference resolver of the old runner; the held check is records.holds (report_source_held in messages/internal_summary.py) |
+| repository_display.py | class | LiteratureRepositoryDisplay | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| repository_display.py | method | LiteratureRepositoryDisplay._concentration_window_display_context | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| repository_display.py | method | LiteratureRepositoryDisplay._measurement_comparison_display_context | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| repository_display.py | method | LiteratureRepositoryDisplay._summary_precision_display_context | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| repository_display.py | method | LiteratureRepositoryDisplay._endpoint_signal_display_context | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| repository_display.py | method | LiteratureRepositoryDisplay._controlled_response_bindings | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| repository_display.py | method | LiteratureRepositoryDisplay._gel_bindings | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| repository_display.py | method | LiteratureRepositoryDisplay._gel_display_context | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| repository_display.py | method | LiteratureRepositoryDisplay._received_fact_display_context | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| repository_display.py | method | LiteratureRepositoryDisplay._native_rate_display_context | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| repository_display.py | method | LiteratureRepositoryDisplay._native_rate_domain_display_context | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| repository_display.py | method | LiteratureRepositoryDisplay._native_rate_meaning_display_context | episode function | not carried: display contexts of the rate-population route (population route not built); see unplaced |
+| role_policy.py | class | LiteratureRolePolicy | episode function | task.py CHILD_SLOTS = {} and offered() (no child, no wait; permitted actions are tools) |
+| role_policy.py | method | LiteratureRolePolicy._role | episode function | task.py CHILD_SLOTS = {} and offered() (no child, no wait; permitted actions are tools) |
+| role_policy.py | method | LiteratureRolePolicy.permitted_common_actions | episode function | task.py CHILD_SLOTS = {} and offered() (no child, no wait; permitted actions are tools) |
+| role_policy.py | method | LiteratureRolePolicy.allowed_children | episode function | task.py CHILD_SLOTS = {} and offered() (no child, no wait; permitted actions are tools) |
+| role_policy.py | method | LiteratureRolePolicy.child_roles | episode function | task.py CHILD_SLOTS = {} and offered() (no child, no wait; permitted actions are tools) |
+| scientific_interpretation.py | class | LiteratureScientificInterpretation | episode function | task.py reason tool (validate_source_lead; library candidate) |
+| scientific_interpretation.py | method | LiteratureScientificInterpretation._required_grading_repository | episode function | not carried: required assay grading (population route); see unplaced |
+| scientific_interpretation.py | method | LiteratureScientificInterpretation.reasoning_action_schema | episode function | task.py reason_schema |
+| scientific_interpretation.py | method | LiteratureScientificInterpretation.reasoning_has_task_content | episode function | task.py action (a source_lead is the task content of a verified_source_leads commit) |
+| scientific_interpretation.py | method | LiteratureScientificInterpretation.execute_reasoning | episode function | task.py reason tool (validate_source_lead; library candidate) |
+| source_admission.py | class | LiteratureSourceAdmission | episode function | task.py admitted / within_source (page-source restriction); population source authorization not carried |
+| source_admission.py | method | LiteratureSourceAdmission._tool_arguments | episode function | task.py admitted / within_source (page-source restriction); population source authorization not carried |
+| source_catalog.py | class | LiteratureSourceCatalog | episode function | task.py catalog / offered / DESCRIPTIONS / INPUT_SCHEMAS (population catalog not carried) |
+| source_catalog.py | method | LiteratureSourceCatalog.catalog | episode function | task.py catalog / offered / DESCRIPTIONS / INPUT_SCHEMAS (population catalog not carried) |
+| source_custody.py | class | LiteratureSourceCustody | episode function | task.py within_source (reads through read_record_in_scope); page checks of the commission are unplaced |
+| source_custody.py | method | LiteratureSourceCustody._require | episode function | task.py within_source (reads through read_record_in_scope); page checks of the commission are unplaced |
+| source_custody.py | method | LiteratureSourceCustody._artifact | episode function | task.py within_source (reads through read_record_in_scope); page checks of the commission are unplaced |
+| source_custody.py | method | LiteratureSourceCustody._within_source | episode function | task.py within_source (reads through read_record_in_scope); page checks of the commission are unplaced |
+| source_custody.py | method | LiteratureSourceCustody._validate_page | episode function | task.py within_source (reads through read_record_in_scope); page checks of the commission are unplaced |
+| source_operations.py | class | LiteratureSourceOperations | episode function | task.py run_access_tool and the per-tool wrappers (ToolRegistry.execute_async; the populate branch is not carried) |
+| source_operations.py | method | LiteratureSourceOperations.execute | episode function | task.py run_access_tool and the per-tool wrappers (ToolRegistry.execute_async; the populate branch is not carried) |
+| source_repositories.py | class | LiteratureRepositories | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_rate_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_calibration_recovery_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_rate_observation_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_rate_replicate_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_quantity_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_assay_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_amount_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_optical_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_kinetic_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_binding_interaction_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_ratio_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_binding_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_binding_model_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_transport_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_figure_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_ratio_source_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_controlled_response_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories.literature_gel_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._endpoint_signal_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._concentration_window_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._measurement_comparison_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._summary_precision_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._rate_grid_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._compiled_assay_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._compiled_assay_v2_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._compiled_assay_v3_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._product_coupling_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._measurement_validation_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._ion_discrimination_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._channel_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._completion_time_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._active_site_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._assay_grading_source_cells | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._assay_grading_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._a105_aggregation_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._parent_depletion_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._stoichiometric_balance_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._product_partition_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._binding_interaction_model_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._kinetic_model_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._ratio_source_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._controlled_response_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._gel_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_repositories.py | method | LiteratureRepositories._native_rate_meaning_repository | episode function | population route not built (rate_population and its populate tools); not carried, listed in unplaced_old_functions |
+| source_text_inputs.py | class | LiteratureSourceTextInputs | episode function | not carried: text-witness materialization for the populate tools (population route) |
+| source_text_inputs.py | method | LiteratureSourceTextInputs._materialize_text_arguments | episode function | not carried: text-witness materialization for the populate tools (population route) |
+| task.py | class | SourceInvestigationTask | episode function | task.py decide / action / TOOLS (SourceInvestigationTask.next: one unit per decision; the restore/replay branches are machinery) |
+| task.py | method | SourceInvestigationTask.next | episode function | task.py decide / action / TOOLS (SourceInvestigationTask.next: one unit per decision; the restore/replay branches are machinery) |
+| task.py | function | _bind_preserved_runtime_providers | machinery | provider patching of the old runner (bind_functions) |
+| task_action.py | class | SourceTaskAction | episode function | task.py TOOLS (reason, report, access tools) and credit.py; wait/redelivery/native-score branches are machinery |
+| task_action.py | method | SourceTaskAction.apply_response | episode function | task.py action (selection validation; empty reasoning commit rejected; the report_update admission is the report tool) |
+| task_action.py | method | SourceTaskAction.execute | episode function | task.py TOOLS (reason, report, access tools) and credit.py; wait/redelivery/native-score branches are machinery |
+| task_action.py | function | _bind_preserved_runtime_providers | machinery | provider patching of the old runner (bind_functions) |
+| task_decision.py | class | SourceTaskDecision | episode function | task.py decide (the model request); the journal/exchange/contract branches are machinery |
+| task_decision.py | method | SourceTaskDecision.call | episode function | task.py decide (the model request); the journal/exchange/contract branches are machinery |
+| task_decision.py | method | SourceTaskDecision.instructions | episode function | task.py instructions |
+| task_decision.py | method | SourceTaskDecision.conversation_key | machinery | provider conversation key of the old runner |
+| task_decision.py | function | _bind_preserved_runtime_providers | machinery | provider patching of the old runner (bind_functions) |
+| task_instructions.py | function | instructions | episode function | task.py INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT, instructions |
+| task_presentation.py | function | present_source_context | episode function | task.py decide (the context is presented as the closed JSON; the text-TASK renderers select on contexts of other shapes and not on this episode's) |
+| task_report_delivery.py | class | SourceTaskReportDelivery | machinery | report delivery attempts (runtime_report_attempts); the result is final_to_parent |
+| task_report_delivery.py | method | SourceTaskReportDelivery.finish | machinery | report delivery attempts (runtime_report_attempts); the result is final_to_parent |
+| task_report_delivery.py | function | _bind_preserved_runtime_providers | machinery | provider patching of the old runner (bind_functions) |
+| task_state.py | class | SourceTaskState | machinery | old decision state, checkpoint/restore and replay bookkeeping; the state is the view |
+| task_state.py | method | SourceTaskState.__init__ | machinery | old decision state, checkpoint/restore and replay bookkeeping; the state is the view |
+| task_state.py | method | SourceTaskState.bind_execution_context | machinery | old decision state, checkpoint/restore and replay bookkeeping; the state is the view |
+| task_state.py | method | SourceTaskState.record_execution_failure | machinery | old decision state, checkpoint/restore and replay bookkeeping; the state is the view |
+| task_state.py | method | SourceTaskState.restore_checkpoint | machinery | old decision state, checkpoint/restore and replay bookkeeping; the state is the view |
+| task_state.py | method | SourceTaskState.restore | machinery | old decision state, checkpoint/restore and replay bookkeeping; the state is the view |
+| task_state.py | method | SourceTaskState.record_effect | machinery | old decision state, checkpoint/restore and replay bookkeeping; the state is the view |
+| task_state.py | method | SourceTaskState.checkpoint | machinery | old decision state, checkpoint/restore and replay bookkeeping; the state is the view |
+| task_state.py | function | _bind_preserved_runtime_providers | machinery | provider patching of the old runner (bind_functions) |
+| task_suspension.py | class | SourceTaskSuspension | machinery | suspension machinery |
+| task_suspension.py | method | SourceTaskSuspension.suspension_changed | machinery | suspension machinery |
+| to_parent.py | class | LiteratureReport | episode function | messages/final_to_parent.py validate_report |
+| to_parent.py | method | LiteratureReport.validate_report | episode function | messages/final_to_parent.py validate_report |
+| waiting.py | class | LiteratureWaiting | machinery | wait support (supports_wait is False; no wait action) |
+| waiting.py | method | LiteratureWaiting.supports_wait | machinery | wait support (supports_wait is False; no wait action) |
+| yield_estimator.py | class | LiteratureYield | episode function | yield_estimator.py yield_controller |
+| yield_estimator.py | method | LiteratureYield.continuation_task | episode function | messages/read_from_parent.py task_key (the old task key) |
+| yield_estimator.py | method | LiteratureYield.yield_controller | episode function | yield_estimator.py yield_controller |

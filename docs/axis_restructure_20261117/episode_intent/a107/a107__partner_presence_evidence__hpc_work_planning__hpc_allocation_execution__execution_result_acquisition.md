@@ -177,3 +177,140 @@ recorded facts (`execution_report_disagrees_with_recorded_facts`). Finish: saved
 | `to_parent.py` | 145 | facts: per-adapter native facts with empty families for others; API facts plus BLAST grader rows; generic: execution_handoff_refs, execution_result_refs, file sources, file capture outcomes, NATIVE_RESULT_ORIGIN, execution_completed; plus closed credit facts; `validate_report` requires typed-return adapters to accept and every x-source field equal recorded facts | `import:communication` (2) |
 | `work_operations.py` | 121 | `catalog`/`execute`: dispatch by target to the per-tool result operation catalog (NMF, masking, utility, RNA comparison/structure, BLAST databases, API, HMMER prep/HMMER, BLAST, Infernal/prep) or native status/collect/read; argument errors become invalid outcomes | `import:communication` |
 | `yield_estimator.py` | 99 | `yield_controller` (requires `require_private_yield`): unbounded native selectors use `results_yield_profiles[native_unbounded_<kind>]`; finite native selectors use `task_yield_profiles['results:native_finite_<kind>']` with a finite-result estimator (verified endpoint -> completion; zero remaining -> exact 0; else bounded-credit yield with maximum = remaining uncredited selector credit); API/typed selectors use `results:api_<service>[_<version>]` / `results:typed_<kind>_<version>` profiles with PracticalYieldEstimator | `import:communication`, `import:numerical`, `import:practical_yield` (2), `yield:estimate_bounded_credit_yield` (2), `yield:NumericBand` (2), `yield:PracticalYieldEstimator` (5), `yield:YieldController` (4), `yield:YieldEstimate` (2), `yield:YieldParameters` (4) |
+
+## Carried over
+
+Carried over on 19 November 2026 (job: execution_result_acquisition). The generic native path (local or HPC resource, requested paths and byte windows) is carried in full against the `job_access` service; typed, API and local-file-source targets raise at `messages/read_from_parent.py` (BLOCKED-ON-JOB-SERVICE). One row per old function; the first three columns are the function list. "unplaced" rows are in `carry_over_blocked/a107__partner_presence_evidence__hpc_work_planning__hpc_allocation_execution__execution_result_acquisition.md`.
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| action_outcome.py | _outcome | episode function | task.py _outcome |
+| binding_record.py | ResultsBindingRecord | machinery | binding_record.py: old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| binding_record.py | ResultsBindingRecord.as_record | machinery | the binding's own as_record() is deleted (README 3d) |
+| closed_credit.py | ResultsClosedCredit | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| closed_credit.py | ResultsClosedCredit._closed_credit_carrier | machinery | reads runtime_episodes/runtime_observations and the archive digest of the old journal to freeze a closing credit view |
+| closed_credit.py | ResultsClosedCredit._closed_credit_receipts | machinery | receipts bookkeeping and inheritance (runtime_record_receipts, runtime_receipt_inheritance) |
+| closed_credit.py | ResultsClosedCredit._closed_credit_value | machinery | validity check of the frozen closing view; the closing credit is the system completion credit |
+| closed_credit.py | ResultsClosedCredit._closed_credit_facts | machinery | captures the closing credit view in runtime_forms (report_form machinery); final_to_parent returns completion[credit] |
+| closed_credit.py | ResultsClosedCredit._closed_operational_credit_view | machinery | returns the frozen closing view from runtime_forms; credit is a function of the summary and held records |
+| completion.py | ResultsCompletion | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| completion.py | ResultsCompletion._native_results_complete | episode function | messages/internal_summary.py native_results_complete (library candidate); adapter/API/local-file branches: unplaced, typed targets raise in read_from_parent |
+| completion.py | ResultsCompletion._proof_for_action | machinery | completion proof read from runtime_actions; the completion proof is not a controller input (README 5 item 5); completion is the summary flag native_results_complete |
+| completion.py | ResultsCompletion.completion_for_action | machinery | completion proof for the old PracticalYieldEstimator (README 3d) |
+| completion.py | ResultsCompletion._closed_completion_verdict | machinery | reads runtime_observations/ESTIMATOR_VERSION of earlier controller records (README 3d) |
+| completion.py | ResultsCompletion.verify_completion | machinery | verification callback of the old PracticalYieldEstimator (README 3d) |
+| configuration.py | ResultsConfiguration | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| configuration.py | ResultsConfiguration.__init__ | episode function | values: log_window_bytes -> ctx.settings (task.py _windows); acquired_record_unit -> assignment field (messages/read_from_parent.py); yield profiles/cutoff -> settings (yield_estimator.py). Resource, adapter and provider construction (TerminalExecutionBehavior, APIServiceExecution, ExecutionProgressProvider, native adapters, LocalFileSourceResults) is not carried: it is the job_access service (BLOCKED-ON-JOB-SERVICE) |
+| credit.py | ResultsCredit | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| credit.py | ResultsCredit._generic_result_selector_progress | episode function | credit.py selector_progress (library candidate) |
+| credit.py | ResultsCredit.credit_kind | machinery | role check returning "operational"; the episode is one role |
+| credit.py | ResultsCredit.project_credit | machinery | chose the frozen closing view or the live projection (journal/runtime_forms) |
+| credit.py | ResultsCredit._live_project_credit | episode function | credit.py credit (generic native: acquired_record_unit * selector_progress). Adapter credit views (masking, utility, RNA, NMF, Infernal, BLAST DB, HMMER, BLAST, API) and the local-file count: unplaced, typed targets raise in read_from_parent |
+| credit.py | ResultsCredit.credit_view | machinery | returned the projection record; credit is a number |
+| episode.py | ExecutionEpisode | episode function | episode.py ExecutionResultAcquisition (the one EpisodeBinding class) |
+| from_parent.py | ResultsFromParent | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| from_parent.py | ResultsFromParent.required_return_sources | episode function | messages/final_to_parent.py RETURN_FORM: execution_result_refs is a required field |
+| from_parent.py | ResultsFromParent.child_assignment_schema | machinery | returned assignment_schema unchanged (dead `and False` branch) |
+| from_parent.py | ResultsFromParent.assignment_schema | episode function | messages/read_from_parent.py ASSIGNMENT_FORM (handoff_ref, selector, constraints + new fields); the typed selector allOf branches are unplaced (typed selectors raise in read_from_parent) |
+| from_parent.py | ResultsFromParent.prepare_assignment | episode function | messages/read_from_parent.py read_from_parent + native_windows (selector against requested windows, paths confined to the workspace). Restoring a returned commission, the retained NMF/utility/masking target reads, the handoff target read and the typed selected-input validations: machinery or BLOCKED-ON-JOB-SERVICE (task.py _read_target) |
+| from_parent.py | ResultsFromParent.initial_references | episode function | ASSIGNMENT_FORM handoff_ref (the handoff) and initial_result_refs (passed in custody); typed input references (NMF saved sheet, RNA, BLAST inputs): unplaced |
+| goal.py | ResultsGoal | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| goal.py | ResultsGoal.child_roles | machinery | no children: CHILD_SLOTS = {} in task.py |
+| goal.py | ResultsGoal.allowed_children | machinery | no children: CHILD_SLOTS = {} in task.py |
+| goal.py | ResultsGoal.permitted_common_actions | episode function | task.py action: only tool units (the wait of an API target is not carried; API targets raise in read_from_parent) |
+| initial_information.py | initial_information | episode function | unplaced: the initial resource capability/inventory of the old reader catalog (received_api_information, resource_information); needs the job_access service |
+| input_versions.py | ResultsInputVersions | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| input_versions.py | ResultsInputVersions._masking_inputs | episode function | unplaced: launch-role function (not called by the results role) (launch input validation against the parent request, README 5 item 14) |
+| input_versions.py | ResultsInputVersions._utility_inputs | episode function | unplaced: launch-role function (not called by the results role) (launch input validation against the parent request, README 5 item 14) |
+| input_versions.py | ResultsInputVersions._expression_nmf_inputs | episode function | unplaced: launch-role function (not called by the results role) (launch input validation against the parent request, README 5 item 14) |
+| input_versions.py | ResultsInputVersions._versions | episode function | unplaced: launch-role function (not called by the results role) (execution input versions of a launch request) |
+| instructions.py | ResultsInstructions | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| instructions.py | ResultsInstructions.instructions | episode function | goal.py GOAL; task.py INSTRUCTIONS |
+| internal_summary.py | ResultsInternalSummary | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| internal_summary.py | ResultsInternalSummary._with_selected_execution_task | episode function | task.py decide (selected_execution_task: the scientific task is the parent message, constraints and selector); the per-resource requests with their resource information come from the job_access service (unplaced) |
+| internal_summary.py | ResultsInternalSummary.decision_context | episode function | task.py decide (execution_assignment, execution_progress, execution_target, execution_target_description as reads of job_access) and messages/internal_summary.py |
+| internal_summary.py | results_decision_snapshot | episode function | task.py decide: goal, tools, controller, time_accounting, feedback and the actions so far. Old working state, visible record refs, report deliveries, pending work, visual evidence, report update and job episode options: machinery |
+| native_file_acquisition.py | ResultsNativeFileAcquisition | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| native_file_acquisition.py | ResultsNativeFileAcquisition._execute_native_results | episode function | task.py _acquire, _windows and the tools execution_results_status/collect/read; the intent/observation/window/receipt files and runtime_actions scan are machinery (attempts journal, ctx.operation_key) |
+| native_target_state.py | ResultsNativeTargetState | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| native_target_state.py | ResultsNativeTargetState.state | machinery | only raised practical_resource_role_required (practical state of launch roles) |
+| presentation.py | present_results_context | episode function | unplaced: the per-context text TASK renderers (hpc, monitor, selected execution, RNA, API) are in the old shared root, which is not read; decide hands the JSON context. The saved state-frame replay is machinery |
+| receipt_selection.py | ResultsReceiptSelection | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| receipt_selection.py | ResultsReceiptSelection._received | episode function | messages/internal_summary.py _initial_bodies (the earlier result records passed in custody) and the outcomes of this episode; reading handoffs through the old handoff reader: BLOCKED-ON-JOB-SERVICE (task.py _read_target) |
+| received_api_reports.py | received_api_reports | machinery | selects the API reader authority of the old reader catalog |
+| received_execution_information.py | received_execution_information | machinery | selects the result readers of the old reader catalog |
+| received_launch_requests.py | ResultsReceivedLaunchRequests | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| received_launch_requests.py | ResultsReceivedLaunchRequests._permitted | episode function | unplaced: launch-role function (not called by the results role) (filters the parent launch requests; reads the parent assignment) |
+| received_launch_requests.py | ResultsReceivedLaunchRequests._request_schema | episode function | unplaced: launch-role function (not called by the results role) (schema of a launch request) |
+| received_launch_requests.py | ResultsReceivedLaunchRequests._launch | episode function | unplaced: launch-role function (not called by the results role) (validation of a launch assignment) |
+| received_launch_requests.py | ResultsReceivedLaunchRequests._constraints | episode function | unplaced: launch-role function (not called by the results role) (validation of launch resource constraints) |
+| report_delivery.py | ResultsReportDelivery | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| report_delivery.py | ResultsReportDelivery.finish | machinery | saved form in runtime_forms, form_with_facts, release (report_form machinery); the facts are final_to_parent |
+| resource_information.py | ResultsResourceInformation | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| resource_information.py | ResultsResourceInformation.resource_tool_contracts | episode function | unplaced: the commissionable launch/results operation contracts per resource, for the parent roles; the parent states what the child takes in its own msg_to_child |
+| result_publication.py | ResultsResultPublication | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| result_publication.py | ResultsResultPublication._publish_result | episode function | task.py _publish (artifact + episode.execution_result source via ctx.store) and validate_result_body |
+| result_records.py | native_result_operation_catalog | episode function | task.py OPERATIONS / CATALOG |
+| result_state.py | ResultsResultState | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| result_state.py | ResultsResultState.initialize | episode function | messages/read_from_parent.py native_windows (selector validated at the commission). The BLAST grader typed-return requirement and API initialize: unplaced (API targets raise); the result directory is file-backed state (machinery) |
+| saved_commission.py | ResultsSavedCommission | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| saved_commission.py | ResultsSavedCommission._recorded_results_assignment | machinery | restores a returned commission from runtime_report_attempts/receipt manifests |
+| target_custody.py | ResultsTargetCustody | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| target_custody.py | ResultsTargetCustody._context_target | machinery | compares the target with the target read again and with the launch request of the old binding context (receipts) |
+| target_custody.py | ResultsTargetCustody._blast_target_requirement | episode function | unplaced: rebuilds the BLAST graded-return check of an API target from runtime_episodes (old journal); API targets raise in read_from_parent |
+| task.py | ResultsTask | machinery | old task class of the decision machine |
+| task.py | ResultsTask.next | episode function | task.py decide (the decision); replay, completions slots, redelivery, SourceEnd and checkpoint are machinery |
+| task.py | ResultsTask.apply_response | episode function | task.py action (validation of the answer, Rejected with feedback); reason and job_child branches, the wait-target feedback and the reads.map feedback are not this episode (no reason action, no jobs) |
+| task.py | ResultsTask.execute | episode function | task.py: a selected tool is a ToolCall unit (tools execution_results_*); child, wait and redeliver_report branches are machinery |
+| task_decision.py | ResultsTaskDecision | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| task_decision.py | ResultsTaskDecision.call | episode function | task.py decide returns the ModelRequest; the provider call, conversation state and journaling are machinery |
+| task_decision.py | ResultsTaskDecision.instructions | episode function | task.py INSTRUCTIONS |
+| task_decision.py | ResultsTaskDecision.conversation_key | machinery | provider conversation key (README 3a conversation state) |
+| task_decision.py | ResultsTaskDecision.interpretation_context | machinery | context of the request_context/select_action exchange |
+| task_decision.py | ResultsTaskDecision.exchange_schema | machinery | decision-exchange loop |
+| task_decision.py | ResultsTaskDecision.exchange_response | machinery | decision-exchange loop |
+| task_decision.py | ResultsTaskDecision.validate_contract_exchange_request | machinery | saved-request check of the decision-exchange loop |
+| task_decision.py | ResultsTaskDecision.validate_contract_exchange_history | machinery | saved-request check of the decision-exchange loop |
+| task_decision.py | ResultsTaskDecision.exchange_decision | machinery | decision-exchange loop |
+| task_decision.py | ResultsTaskDecision.decision_completion | machinery | provider patching/completion binding |
+| task_instructions.py | instructions | episode function | task.py INSTRUCTIONS and the tool-knowledge text in decide (settings knowledge_library_directory); reasoning-commit text (reason not permitted), launch instruction library (launch roles), pending-child redelivery, wait and native-event texts and the exchange-history text: machinery or not this episode |
+| task_state.py | ResultsTaskState | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| task_state.py | ResultsTaskState.__init__ | machinery | checkpoint/restore/effect/failure recording of the old decision machine (README 3e) |
+| task_state.py | ResultsTaskState.bind_execution_context | machinery | checkpoint/restore/effect/failure recording of the old decision machine (README 3e) |
+| task_state.py | ResultsTaskState.record_execution_failure | machinery | checkpoint/restore/effect/failure recording of the old decision machine (README 3e) |
+| task_state.py | ResultsTaskState.restore_checkpoint | machinery | checkpoint/restore/effect/failure recording of the old decision machine (README 3e) |
+| task_state.py | ResultsTaskState.restore | machinery | checkpoint/restore/effect/failure recording of the old decision machine (README 3e) |
+| task_state.py | ResultsTaskState.record_effect | machinery | checkpoint/restore/effect/failure recording of the old decision machine (README 3e) |
+| task_state.py | ResultsTaskState.checkpoint | machinery | checkpoint/restore/effect/failure recording of the old decision machine (README 3e) |
+| task_suspension.py | ResultsTaskSuspension | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| task_suspension.py | ResultsTaskSuspension.suspension_changed | machinery | wait/suspension machinery |
+| terminal_execution.py | TerminalExecutionBehavior | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior.__init__ | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior._operations | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior._assignment | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior._state_directory | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior.initialize | machinery | file-backed PracticalState (launch roles) |
+| terminal_execution.py | TerminalExecutionBehavior.state | machinery | file-backed PracticalState (launch roles) |
+| terminal_execution.py | TerminalExecutionBehavior.catalog | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior.execute | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior.completion_for_action | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior.practical_estimator | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior.fact_sources | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior.facts | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior.resolve | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior.validate_report | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| terminal_execution.py | TerminalExecutionBehavior.credit_view | episode function | unplaced: launch-role function (not called by the results role); carried by local_job_execution / hpc_job_execution |
+| to_parent.py | ResultsToParent | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| to_parent.py | ResultsToParent.facts | episode function | messages/final_to_parent.py _facts; the closed credit facts are machinery |
+| to_parent.py | ResultsToParent._live_facts | episode function | messages/final_to_parent.py _facts (generic native: every family empty, handoff refs, result refs, origin, completed) and the declared family fields of RETURN_FORM; the adapter/API fact branches, the Infernal families and bvbrc_appservice_support_refs values: unplaced (typed targets raise in read_from_parent) |
+| to_parent.py | ResultsToParent.validate_report | episode function | messages/final_to_parent.py validate_report (facts agreement) called by final_to_parent; adapter validate_received_report calls and validate_form over the parent-written form: unplaced |
+| to_parent.py | ResultsToParent._blast_grader_rows | episode function | unplaced: BLAST graded rows of an API target (api_execution.read_result is the job_access service; API targets raise in read_from_parent) |
+| work_operations.py | ResultsWorkOperations | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| work_operations.py | ResultsWorkOperations.catalog | episode function | task.py CATALOG (generic native); adapter and API catalogs: unplaced (typed targets raise in read_from_parent) |
+| work_operations.py | ResultsWorkOperations.execute | episode function | task.py tools execution_results_status/collect/read (generic native); adapter routes: unplaced; argument errors become invalid outcomes (task.py _acquire) |
+| yield_estimator.py | ExecutionEpisodeYield | machinery | old mix-in class of the 33-mixin ExecutionEpisode; its methods are listed on their own rows |
+| yield_estimator.py | ExecutionEpisodeYield._request_yield_class | episode function | unplaced: launch-role function (not called by the results role) (profile key of practical/API handoffs) |
+| yield_estimator.py | ExecutionEpisodeYield._task_yield_profile | episode function | yield_estimator.py _profile |
+| yield_estimator.py | ExecutionEpisodeYield.yield_controller | episode function | yield_estimator.py yield_controller |
+| yield_estimator.py | ExecutionEpisodeYield._results_yield_controller | episode function | yield_estimator.py yield_controller (unbounded native -> accumulation, finite native -> bounded quality); API/typed profiles with the completion-proof estimator and the exact-zero forecast: not carried |
+| yield_estimator.py | ExecutionEpisodeYield.practical_estimator | machinery | PracticalYieldEstimator over verify_completion (README 3d) |

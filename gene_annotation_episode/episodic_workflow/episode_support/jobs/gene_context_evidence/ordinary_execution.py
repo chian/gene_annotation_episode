@@ -150,27 +150,3 @@ class OrdinaryExecutionStatistics:
                 summary['invalid'] += 1
                 summary['failures']['receipt_invalid'] += 1
         return summary
-
-    def recorded_class(self, store, class_ref):
-        """Resolve actual native forecast declarations in existing journals.
-
-        These are the typed statistical inputs supplied to decisions/work, not
-        a new proposal ledger or inspection of a child's private reasoning.
-        """
-        for table, field, forecasts, classes in (
-                ('runtime_actions', 'result', '$.resource_tool_estimates',
-                 '$.native_execution_expectations.execution_classes'),
-                ('runtime_model_calls', 'request', '$.context.resource_tool_estimates',
-                 '$.context.native_execution_expectations.execution_classes')):
-            row = store.db.execute(f'''SELECT json_extract(records.{field},?) FROM {table} records
-                JOIN json_each(records.{field},?) forecasts
-                WHERE json_extract(forecasts.value,'$.execution_class_ref')=?
-                AND json_type(records.{field},?)='array' LIMIT 1''',
-                (classes, forecasts, class_ref, classes)).fetchone()
-            if row is not None:
-                for value in json.loads(row[0]):
-                    scope = ExecutionClass(**value)
-                    if (scope.ref == class_ref and scope.phase in PHASE_TO_TOOLS
-                            and scope.resource_id == self.resource_id):
-                        return scope
-        return None

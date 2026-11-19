@@ -4,14 +4,13 @@ from dataclasses import replace
 from fractions import Fraction
 import math
 import re
-import sqlite3
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import ContractError, obj
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_rate_calculations import populate_rate_contrast
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_rate_domains import VERSION, NAMESPACE, rate_source_domain_cells_schema
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository, rate_source_cells_schema
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository, SOURCE_DOMAIN_RECEIVED, rate_source_cells_schema
+from .unit_world import in_unit
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_rate_native_inputs import synthetic_case, read_case, calculate
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.tests.test_literature_rate_native_storage import setup_native_store
 
@@ -150,73 +149,58 @@ def test_underflow_point_remains_unknown_while_its_constraints_and_complement_su
     assert domain(result, 'fractional_decrease')['projection'] == 'outward'
 
 
-def test_absent_domain_receipt_table_stays_absent_on_first_readonly_access(tmp_path):
-    store, owner, args = setup_native_store(tmp_path)
+@in_unit
+def test_domain_projection_receives_nothing_until_cells_are_delivered(store, ctx):
+    store, owner, args = setup_native_store(store, ctx)
     repo = LiteratureRateRepository(store, owner.run_id)
     repo.populate_native(owner, args, 'selected')
-    assert not repo.source_domain_projection()._installed()
-    store.close()
-    reopened = Store.__new__(Store)
-    reopened.path = tmp_path.resolve()
-    reopened._savepoint = 0
-    reopened.db = sqlite3.connect((tmp_path / 'state.sqlite3').as_uri() + '?mode=ro', uri=True, isolation_level=None)
-    reopened.db.row_factory = sqlite3.Row
-    reopened.db.execute('PRAGMA query_only=ON')
-    try:
-        view = LiteratureRateRepository(reopened, owner.run_id).source_domain_projection()
-        assert view.received_cells(owner) == []
-        assert not view._installed() and reopened.db.total_changes == 0
-    finally:
-        reopened.close()
+    view = repo.source_domain_projection()
+    assert view.received_cells(owner) == []
+    assert store.table(SOURCE_DOMAIN_RECEIVED).select() == []
 
-
-def test_new_saved_trace_rejects_versions_constraints_and_source_association_tampering(tmp_path):
-    store, owner, args = setup_native_store(tmp_path, reference='> 12')
-    try:
-        repo = LiteratureRateRepository(store, owner.run_id)
-        outcome = repo.populate_native(owner, args, 'selected')
-        saved = repo.read(outcome['result']['sheet_ref'])
-        request = {'arguments': args}
-        for alteration in ('version', 'constraint', 'source'):
-            changed = deepcopy(saved)
-            trace = changed['sheet']['native_bound_arithmetic']
-            if alteration == 'version':
-                trace['version'] = 'unknown_version'
-            elif alteration == 'constraint':
-                trace['components']['retained_fraction']['reported_domain']['upper'] = 99
-            else:
-                trace['components']['retained_fraction']['input_rows'][0]['source_ref'] = 'source_forged'
-            with pytest.raises(ContractError, match='bound_version_unsupported|saved_domain_mismatch'):
-                repo._validate_native_saved(changed, request, outcome)
-    finally:
-        store.close()
+@in_unit
+def test_new_saved_trace_rejects_versions_constraints_and_source_association_tampering(store, ctx):
+    store, owner, args = setup_native_store(store, ctx, reference='> 12')
+    repo = LiteratureRateRepository(store, owner.run_id)
+    outcome = repo.populate_native(owner, args, 'selected')
+    saved = repo.read(outcome['result']['sheet_ref'])
+    request = {'arguments': args}
+    for alteration in ('version', 'constraint', 'source'):
+        changed = deepcopy(saved)
+        trace = changed['sheet']['native_bound_arithmetic']
+        if alteration == 'version':
+            trace['version'] = 'unknown_version'
+        elif alteration == 'constraint':
+            trace['components']['retained_fraction']['reported_domain']['upper'] = 99
+        else:
+            trace['components']['retained_fraction']['input_rows'][0]['source_ref'] = 'source_forged'
+        with pytest.raises(ContractError, match='bound_version_unsupported|saved_domain_mismatch'):
+            repo._validate_native_saved(changed, request, outcome)
 
 @pytest.mark.parametrize('field,value', [('value', True), ('value', math.inf), ('threshold', True), ('threshold', -math.inf)])
-def test_new_saved_identified_one_cannot_be_forged_as_boolean_or_nonfinite(tmp_path, field, value):
-    store, owner, _ = setup_native_store(tmp_path)
-    try:
-        raw, args = operands('12', '12')
-        artifact = store.artifact(raw, 'text/plain')
-        source = store.put('source', {'provider': 'constructed_equal_rate_fixture', 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None, 'version': None, 'retrieved_at': None}, origin='caller')
+@in_unit
+def test_new_saved_identified_one_cannot_be_forged_as_boolean_or_nonfinite(store, ctx, field, value):
+    store, owner, _ = setup_native_store(store, ctx)
+    raw, args = operands('12', '12')
+    artifact = store.artifact(raw, 'text/plain')
+    source = store.put('source', {'provider': 'constructed_equal_rate_fixture', 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None, 'version': None, 'retrieved_at': None}, origin='caller')
 
-        def bind(value):
-            if isinstance(value, dict):
-                return {key: source['id'] if key == 'source_ref' else bind(child) for key, child in value.items()}
-            if isinstance(value, list):
-                return [bind(child) for child in value]
-            return value
-        args = bind(args)
-        owner = replace(owner, received_record_refs=(source['id'],), assignment={**plain(owner.assignment), 'source_refs': [source['id']]})
-        repo = LiteratureRateRepository(store, owner.run_id)
-        outcome = repo.populate_native(owner, args, 'equal-source-rates')
-        saved = repo.read(outcome['result']['sheet_ref'])
-        assert saved['sheet']['cells']['retained_fraction']['value'] == 1
-        changed = deepcopy(saved)
-        changed['sheet']['cells']['retained_fraction'][field] = value
-        altered_outcome = deepcopy(outcome)
-        altered_outcome['result']['cells'] = deepcopy(changed['sheet']['cells'])
-        with pytest.raises(ContractError, match='saved_numeric_type_mismatch'):
-            repo._validate_native_saved(changed, {'arguments': args}, altered_outcome)
-        assert repo.read(outcome['result']['sheet_ref']) == saved
-    finally:
-        store.close()
+    def bind(value):
+        if isinstance(value, dict):
+            return {key: source['id'] if key == 'source_ref' else bind(child) for key, child in value.items()}
+        if isinstance(value, list):
+            return [bind(child) for child in value]
+        return value
+    args = bind(args)
+    owner = replace(owner, received_record_refs=(source['id'],), assignment={**plain(owner.assignment), 'source_refs': [source['id']]})
+    repo = LiteratureRateRepository(store, owner.run_id)
+    outcome = repo.populate_native(owner, args, 'equal-source-rates')
+    saved = repo.read(outcome['result']['sheet_ref'])
+    assert saved['sheet']['cells']['retained_fraction']['value'] == 1
+    changed = deepcopy(saved)
+    changed['sheet']['cells']['retained_fraction'][field] = value
+    altered_outcome = deepcopy(outcome)
+    altered_outcome['result']['cells'] = deepcopy(changed['sheet']['cells'])
+    with pytest.raises(ContractError, match='saved_numeric_type_mismatch'):
+        repo._validate_native_saved(changed, {'arguments': args}, altered_outcome)
+    assert repo.read(outcome['result']['sheet_ref']) == saved

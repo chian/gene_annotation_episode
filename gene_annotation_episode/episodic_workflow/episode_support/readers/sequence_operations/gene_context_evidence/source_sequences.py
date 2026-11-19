@@ -158,8 +158,7 @@ def scan(registry, arguments, scope, permitted_inputs):
     total = artifact['size']
     if offset > total:
         raise ContractError('source_sequence_offset_out_of_bounds')
-    path = registry.store.path / 'artifacts' / artifact['sha256'][:2] / artifact['sha256']
-    with path.open('rb') as stream:
+    with registry.store.open_artifact(artifact['id']) as stream:
         if stream.seek(0, 2) != total:
             raise ContractError('source_sequence_artifact_size_conflict')
         stream.seek(offset)

@@ -147,3 +147,121 @@ Counts are uses (imported names counted per use) summed over this episode's file
 | `to_parent.py` | 91 | Facts `monitoring_progress_refs`, `monitoring_target_handle`, `monitoring_execution_state` (latest delivered target observation; null without one), `monitoring_result_available`, `monitoring_observed_at_unix_seconds` (not refreshed), `monitoring_committed_record_refs` (permitted types only), `monitoring_dependency_handles` (direct only). `resolve` for progress / handle namespaces; `validate_report`: recorded fields equal facts, and any record reference must be a permitted, received committed record. | `a104.communication` {plain, validate_form}; `a104.episode_bindings` {reference_in_context} |
 | `waiting.py` | 9 | `suspension_changed` → `execution_backend` (old runner). | `self.workflow.execution_backend`×1; `self.workflow.execution_handle`×2 |
 | `yield_estimator.py` | 23 | `_monitor_information_yield`: credit may never decrease; `estimate_nonnegative_yield` with binding `monitor_information_accumulation_v1` (forecast = next action's information credit; stop when predicted upper gain ≤ cutoff). `yield_controller` requires the private binding, uses `yield_settings.cutoff` and `uncertainty_alpha`. | `a104.numerical` {YieldController, YieldParameters, estimate_nonnegative_yield} |
+
+## Carried over
+
+Written 19 November 2026 by the carry-over of this episode (job episode; monitor). Old files read with `git show 97308b94c:<path>` from `/home/chia/repos/gene_annotation_episode_disk` (the working checkout has no `.git`). Items blocked or unplaced are in `docs/axis_restructure_20261117/carry_over_blocked/a104__evolutionary_history_evidence__execution_progress_assessment.md`.
+
+| old file | name | kind | new place or machinery reason |
+|---|---|---|---|
+| action_admission.py | ProgressMonitoringTaskAdmission | machinery | hook-era class that held the bound copy of the old runner apply_response |
+| action_admission.py | ProgressMonitoringTaskAdmission.apply_response | episode function | task.py::action (validation of the answer and Rejected feedback; the decision-exchange, journal, receipt, report-redelivery and runtime_* parts of the old body are machinery) |
+| action_admission.py | _bind_preserved_runtime_providers | machinery | provider patching / bind_functions (README 3a) |
+| action_execution.py | ProgressMonitoringTaskExecution | machinery | hook-era class that held the bound copy of the old runner execute |
+| action_execution.py | ProgressMonitoringTaskExecution.execute | episode function | task.py::progress_observe, progress_read, progress_log, called as ToolCall (the journal, completions, controller_value, pending_work, wait and runtime_actions parts are machinery) |
+| action_execution.py | _bind_preserved_runtime_providers | machinery | provider patching / bind_functions (README 3a) |
+| api_observer.py | APIObserver | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also uses api_execution_* files, store.artifact on a raw reader |
+| api_observer.py | APIObserver.__init__ | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also uses api_execution_* files, store.artifact on a raw reader |
+| api_observer.py | APIObserver._observation | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also uses api_execution_* files, store.artifact on a raw reader |
+| api_observer.py | APIObserver.observe_target | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also uses api_execution_* files, store.artifact on a raw reader |
+| appservice_observer.py | AppServiceObserver | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also reads runtime_actions (machinery) and keeps intent/response files by operation key |
+| appservice_observer.py | AppServiceObserver._selection | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also reads runtime_actions (machinery) and keeps intent/response files by operation key |
+| appservice_observer.py | AppServiceObserver._prepare | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also reads runtime_actions (machinery) and keeps intent/response files by operation key |
+| appservice_observer.py | AppServiceObserver._response | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also reads runtime_actions (machinery) and keeps intent/response files by operation key |
+| appservice_observer.py | AppServiceObserver._source | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also reads runtime_actions (machinery) and keeps intent/response files by operation key |
+| appservice_observer.py | AppServiceObserver._project | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also reads runtime_actions (machinery) and keeps intent/response files by operation key |
+| appservice_observer.py | AppServiceObserver.observe | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also reads runtime_actions (machinery) and keeps intent/response files by operation key |
+| binding_record.py | MonitorBindingRecord | machinery | binding_record.py (README 3 table) |
+| binding_record.py | MonitorBindingRecord.as_record | machinery | the binding's own as_record() |
+| configuration.py | MonitorConfiguration | episode function | yield_estimator.py::yield_controller (yield settings), messages/read_from_parent.py ASSIGNMENT_FORM (information_unit); outcome_page_size not carried (view.outcomes is read whole) |
+| configuration.py | MonitorConfiguration.__init__ | episode function | yield_estimator.py::yield_controller (cutoff >= 0 and uncertainty_alpha in (0,1) checks, monitor_private_yield_binding_not_enabled); messages/read_from_parent.py (information_unit) |
+| configuration.py | MonitorConfiguration._role | machinery | single role monitor; each role is its own episode |
+| credit.py | MonitorEpisodeCredit | episode function | credit.py |
+| credit.py | MonitorEpisodeCredit.credit_kind | machinery | credit_kind is deleted (README 3d) |
+| credit.py | MonitorEpisodeCredit.credit_view | episode function | credit.py::credit (the episode owns its projector call; services.bound_role_credit is old runner) |
+| credit.py | MonitorEpisodeCredit.information_credit | episode function | credit.py::information_projection (calls the library ProgressInformationCredit, already in library: grading/evolutionary_history_evidence/progress_information_credit.py) |
+| decision_contracts.py | MonitorTaskDecisionContracts | machinery | decision-exchange contract / saved-request checks (README 3a) |
+| decision_contracts.py | MonitorTaskDecisionContracts.interpretation_context | machinery | decision-exchange contract / saved-request checks (README 3a) |
+| decision_contracts.py | MonitorTaskDecisionContracts.exchange_schema | machinery | decision-exchange contract / saved-request checks (README 3a) |
+| decision_contracts.py | MonitorTaskDecisionContracts.exchange_response | machinery | decision-exchange contract / saved-request checks (README 3a) |
+| decision_contracts.py | MonitorTaskDecisionContracts.validate_contract_exchange_request | machinery | decision-exchange contract / saved-request checks (README 3a) |
+| decision_contracts.py | MonitorTaskDecisionContracts.validate_contract_exchange_history | machinery | decision-exchange contract / saved-request checks (README 3a) |
+| decision_contracts.py | _bind_preserved_runtime_providers | machinery | provider patching / bind_functions (README 3a) |
+| decision_exchange.py | MonitorTaskDecisionExchange | machinery | decision-exchange loop |
+| decision_exchange.py | MonitorTaskDecisionExchange.exchange_decision | machinery | exchange_decision (a lookup is a tool) |
+| decision_exchange.py | _bind_preserved_runtime_providers | machinery | provider patching / bind_functions (README 3a) |
+| decision_inputs.py | MonitorDecisionInputs | episode function | task.py::decide (context) |
+| decision_inputs.py | MonitorDecisionInputs.decision_inputs | episode function | task.py::decide: launch_instruction_library and selected_launch_instructions; resource_context, execution_expectations, resource/native estimates, native_event_targets, waiting_support, completed_action_reports and pending_work are not carried (estimate_table service not provided; wait and pending work do not exist) - listed in the blocked file |
+| decision_inputs.py | _bind_preserved_runtime_providers | machinery | provider patching / bind_functions (README 3a) |
+| decision_provider.py | MonitorTaskDecisionProvider | machinery | model-call hook / provider patching |
+| decision_provider.py | MonitorTaskDecisionProvider.decision_completion | machinery | model-call hook (the system calls the provider and records the call) |
+| decision_state.py | MonitorDecisionState | episode function | messages/internal_summary.py and task.py::decide |
+| decision_state.py | MonitorDecisionState.decision_state | episode function | messages/internal_summary.py::internal_summary and task.py::decide context (the annotation-axis branch, runtime_actions reads, pending_work, report_deliveries and elapsed_view are old runner and not carried; time is ctx.clock via time_accounting) |
+| decision_state.py | _bind_preserved_runtime_providers | machinery | provider patching / bind_functions (README 3a) |
+| episode.py | MonitorEpisode | episode function | episode.py::ExecutionProgressAssessment |
+| episode.py | MonitorEpisode.child_roles | episode function | task.py CHILD_SLOTS = {'monitor': BINDING_PATH} |
+| episode.py | MonitorEpisode.required_return_sources | machinery | replaced by RETURN_FORM selectable fields and ChildMessage.selection (README 3b C4) |
+| episode.py | MonitorEpisode.permitted_common_actions | machinery | common actions tool/child are ToolCall/ChildCall; wait and redeliver_report are not carried |
+| episode.py | MonitorEpisode.allowed_children | episode function | task.py::selection_schema (monitor_dependency offered only while the observed target exposes direct dependencies) |
+| episode.py | MonitorEpisode.prepare_child_request | episode function | messages/msg_to_child.py::msg_to_child |
+| episode.py | MonitorEpisode.child_request_assembler | machinery | child_request_assembler / assemble_request (README 3b C1) |
+| episode.py | MonitorEpisode.receive_child_progress | episode function | messages/read_from_child.py::read_from_child |
+| from_child_execution_progress_assessment.py | receive_progress | episode function | messages/read_from_child.py::read_from_child (provider._receive_progress and the content_digest signature are old runner) |
+| from_parent.py | MonitorAssignment | episode function | messages/read_from_parent.py |
+| from_parent.py | MonitorAssignment.assignment_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM |
+| from_parent.py | MonitorAssignment._assignment | episode function | messages/read_from_parent.py::read_from_parent and ASSIGNMENT_FORM (the in-scope and same-target admission through the old provider is not carried: no records or services there) |
+| from_parent.py | MonitorAssignment.prepare_assignment | episode function | messages/msg_to_child.py::msg_to_child |
+| goal.py | MonitorGoal | episode function | goal.py, task.py::instructions, messages/internal_summary.py |
+| goal.py | MonitorGoal.instructions | episode function | goal.py::GOAL and task.py::instructions |
+| goal.py | MonitorGoal.planning_context | episode function | messages/internal_summary.py (monitor_goal) |
+| hmmer_observer.py | HMMERObserver | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also store.db on api_execution_observations |
+| hmmer_observer.py | HMMERObserver.__init__ | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also store.db on api_execution_observations |
+| hmmer_observer.py | HMMERObserver.observe_target | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also store.db on api_execution_observations |
+| hmmer_observer.py | HMMERObserver._unknown_observation | episode function | unplaced: BLOCKED-ON-JOB-SERVICE (job-access service internals; no service is written here); also store.db on api_execution_observations |
+| internal_summary.py | MonitorSummary | episode function | messages/internal_summary.py |
+| internal_summary.py | MonitorSummary.decision_context | episode function | messages/internal_summary.py::internal_summary (monitor_* fields); the target description is a recorded job_access read in task.py::decide |
+| own_progress.py | OwnProgress | episode function | messages/internal_summary.py |
+| own_progress.py | OwnProgress._own_progress_refs | episode function | messages/internal_summary.py::internal_summary (own progress refs from view.outcomes; the outcome paging is not needed) |
+| presentation.py | present_task_context | episode function | unplaced: library candidate (the monitor prompt renderer render_monitor_prompt is in no library module; the context travels as ModelRequest.context) |
+| presentation_selection.py | task_presentation_selection | episode function | unplaced: library candidate (renderer selection over hpc/monitor/api-launch prompt renderers that are in no library module) |
+| progress_operations.py | ProgressOperations | episode function | task.py (TOOLS, catalog) |
+| progress_operations.py | ProgressOperations.catalog | episode function | task.py::catalog |
+| progress_operations.py | ProgressOperations.execute | episode function | task.py::progress_observe, progress_read, progress_log (observe is BLOCKED-ON-JOB-SERVICE) |
+| progress_records.py | _timestamp | episode function | messages/final_to_parent.py::_timestamp_seconds |
+| progress_records.py | _unique | episode function | messages/internal_summary.py::_unique |
+| received_progress.py | ReceivedProgress | episode function | messages/internal_summary.py, task.py |
+| received_progress.py | ReceivedProgress._received | episode function | messages/internal_summary.py::internal_summary (monitor_received_progress_refs = known + own + child; services.progress_selection and received_progress_refs are old runner) |
+| received_progress.py | ReceivedProgress._snapshot | episode function | task.py::_tool_call (a snapshot is handed to progress_read / progress_log only for a received ref) |
+| report_delivery.py | MonitorReportDelivery | episode function | messages/final_to_parent.py |
+| report_delivery.py | MonitorReportDelivery.finish | episode function | messages/final_to_parent.py::final_to_parent (form_with_facts, journal, release, pending_handles, runtime_forms are old runner) |
+| report_delivery.py | _bind_preserved_runtime_providers | machinery | provider patching / bind_functions (README 3a) |
+| task.py | ProgressMonitoringTask | episode function | task.py (decide, action, tools) |
+| task.py | ProgressMonitoringTask.next | episode function | task.py::decide and task.py::action (the replay, completions, pending delivery, SourceEnd and checkpoint parts of the old body are machinery) |
+| task.py | _bind_preserved_runtime_providers | machinery | provider patching / bind_functions (README 3a) |
+| task_decision.py | MonitorTaskDecision | episode function | task.py::decide |
+| task_decision.py | MonitorTaskDecision.call | machinery | old runner model-call wrapper (decision exchange, receipts, runtime_model_calls) |
+| task_decision.py | MonitorTaskDecision.instructions | episode function | task.py::instructions |
+| task_decision.py | MonitorTaskDecision.conversation_key | machinery | conversation state (README 3a) |
+| task_decision.py | _bind_preserved_runtime_providers | machinery | provider patching / bind_functions (README 3a) |
+| task_instructions.py | instructions | episode function | task.py::instructions (goal + ACTION_BOUNDARY + CREDIT_COMPONENT_GUIDANCE + RESOURCE_ESTIMATE_GUIDANCE + HOST_EXECUTION_GUIDANCE; REPORT, HISTORY, REPAIR, WAIT and NATIVE_EVENT guidance describe actions that no longer exist and are not carried) |
+| task_state.py | MonitorTaskState | machinery | task state / checkpoint (README 3 table) |
+| task_state.py | MonitorTaskState.__init__ | machinery | task_state.py: restore / checkpoint / record_effect / failure recording (the tool returns its failure as its outcome) |
+| task_state.py | MonitorTaskState.bind_execution_context | machinery | task_state.py: restore / checkpoint / record_effect / failure recording (the tool returns its failure as its outcome) |
+| task_state.py | MonitorTaskState.record_execution_failure | machinery | task_state.py: restore / checkpoint / record_effect / failure recording (the tool returns its failure as its outcome) |
+| task_state.py | MonitorTaskState.restore_checkpoint | machinery | task_state.py: restore / checkpoint / record_effect / failure recording (the tool returns its failure as its outcome) |
+| task_state.py | MonitorTaskState.restore | machinery | task_state.py: restore / checkpoint / record_effect / failure recording (the tool returns its failure as its outcome) |
+| task_state.py | MonitorTaskState.record_effect | machinery | task_state.py: restore / checkpoint / record_effect / failure recording (the tool returns its failure as its outcome) |
+| task_state.py | MonitorTaskState.checkpoint | machinery | task_state.py: restore / checkpoint / record_effect / failure recording (the tool returns its failure as its outcome) |
+| task_state.py | _bind_preserved_runtime_providers | machinery | provider patching / bind_functions (README 3a) |
+| to_child_execution_progress_assessment.py | prepare_dependency_request | episode function | messages/msg_to_child.py::msg_to_child (both refusals kept as the errors it raises) |
+| to_child_execution_progress_assessment.py | assemble_request | machinery | child_request_assembler / assemble_request (README 3b C1, C3) |
+| to_parent.py | MonitorReport | episode function | messages/final_to_parent.py |
+| to_parent.py | MonitorReport.fact_sources | episode function | messages/final_to_parent.py::RETURN_FORM |
+| to_parent.py | MonitorReport.facts | episode function | messages/final_to_parent.py::monitor_facts |
+| to_parent.py | MonitorReport.resolve | episode function | messages/final_to_parent.py::resolve_reference |
+| to_parent.py | MonitorReport.validate_report | episode function | messages/final_to_parent.py::validate_report (called by final_to_parent; its validate_form step has no counterpart, see the blocked file) |
+| waiting.py | MonitorWaiting | machinery | wait / suspension machinery (README 3b) |
+| waiting.py | MonitorWaiting.suspension_changed | machinery | suspension_changed -> execution_backend (old runner) |
+| yield_estimator.py | _monitor_information_yield | machinery | episode-local estimator deleted (README 3d, 7b): accumulation controller; its refusal of a decreasing credit is in credit.py::credit |
+| yield_estimator.py | MonitorEpisodeYield | episode function | yield_estimator.py |
+| yield_estimator.py | MonitorEpisodeYield.yield_controller | episode function | yield_estimator.py::yield_controller (AccumulationYieldController, README 7b) |

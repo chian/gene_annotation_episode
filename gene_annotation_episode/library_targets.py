@@ -16,7 +16,7 @@ VERSION = "fixed_original_read_position_measure_v1"
 
 
 def install_tables(store):
-    store.db.executescript("""
+    store._db.executescript("""
         CREATE TABLE IF NOT EXISTS library_selection_members(
             selection_ref TEXT NOT NULL,read_ref TEXT NOT NULL,
             PRIMARY KEY(selection_ref,read_ref));
@@ -45,7 +45,7 @@ def bind(store, collection_refs):
         raise ContractError("library_binding_requires_caller_target_material")
     digest, count, mass = hashlib.sha256(), 0, 0
     for collection in collections:
-        for (raw,) in store.db.execute("SELECT data FROM material_members WHERE collection_ref=? ORDER BY ordinal", (collection["id"],)):
+        for (raw,) in store._db.execute("SELECT data FROM material_members WHERE collection_ref=? ORDER BY ordinal", (collection["id"],)):
             member = json.loads(raw)
             unit = store._unit(member["molecule"])
             digest.update((canonical({"member_ref": member["id"], "length": member["length"], "unit": unit}) + "\n").encode())
@@ -71,7 +71,7 @@ def bind(store, collection_refs):
     ref = identity("input", record)
     record.update(id=ref, record_type="input", origin="caller")
     with store.transaction():
-        store.db.execute("INSERT OR IGNORE INTO inputs VALUES(?,?)", (ref, canonical(record)))
+        store._db.execute("INSERT OR IGNORE INTO inputs VALUES(?,?)", (ref, canonical(record)))
     return record
 
 
@@ -98,7 +98,7 @@ def resolve(store, reference):
         return None
     before = target["collection_refs"][:target["collection_refs"].index(member["collection_ref"])]
     ordinal = sum(store.get(ref)["member_count"] for ref in before)
-    ordinal += store.db.execute("SELECT count(*) FROM material_members WHERE collection_ref=? AND ordinal<?",
+    ordinal += store._db.execute("SELECT count(*) FROM material_members WHERE collection_ref=? AND ordinal<?",
         (member["collection_ref"], member["ordinal"])).fetchone()[0]
     return {"id": reference, "record_type": "read_subject", "origin": "caller",
         "library_ref": library_ref, "member_ref": member_ref,
@@ -115,7 +115,7 @@ def resolve(store, reference):
 def _rows(store, library_ref):
     target = store.get_input(library_ref)
     for collection_ref in target["collection_refs"]:
-        for (data,) in store.db.execute("SELECT data FROM material_members WHERE collection_ref=? ORDER BY ordinal", (collection_ref,)):
+        for (data,) in store._db.execute("SELECT data FROM material_members WHERE collection_ref=? ORDER BY ordinal", (collection_ref,)):
             yield json.loads(data)
 
 
@@ -174,7 +174,7 @@ def contains(store, scope, value):
     selected = selection_for(store, scope, value["target_ref"])
     if selected is None:
         return True
-    return store.db.execute("SELECT 1 FROM library_selection_members WHERE selection_ref=? AND read_ref=?",
+    return store._db.execute("SELECT 1 FROM library_selection_members WHERE selection_ref=? AND read_ref=?",
         (selected["id"], read_ref(value["target_ref"], value["member_ref"]))).fetchone() is not None
 
 
@@ -201,8 +201,8 @@ def member_page(store, library_ref, *, scope, selection_ref=None, offset=0, limi
         parameters.append(canonical(members))
     where = " AND ".join(clauses)
     query = "SELECT * FROM (" + base_query + ") n WHERE " + where
-    total = store.db.execute("SELECT count(*) FROM (" + query + ")", parameters).fetchone()[0]
-    refs = store.db.execute("SELECT read_ref FROM (" + query + ") ORDER BY ordinal LIMIT ? OFFSET ?", (*parameters, limit, offset))
+    total = store._db.execute("SELECT count(*) FROM (" + query + ")", parameters).fetchone()[0]
+    refs = store._db.execute("SELECT read_ref FROM (" + query + ") ORDER BY ordinal LIMIT ? OFFSET ?", (*parameters, limit, offset))
     rows = [resolve(store, row[0]) for row in refs]
     # Native labels are not automatically unbounded model context.
     from .materials import model_record_view
@@ -241,7 +241,7 @@ def select(store, library_ref, *, scope, member_refs=None, ordinal_ranges=None):
         requested = None
     query = "SELECT n.* FROM (" + base_query + ") n WHERE (" + condition + ") ORDER BY ordinal"
     digest, count, mass = hashlib.sha256(), 0, 0
-    for row in store.db.execute(query, parameters):
+    for row in store._db.execute(query, parameters):
         value = {"target_ref": library_ref, "member_ref": row["member_ref"], "start": 0, "end": row["length"], "unit": row["unit"]}
         if not contains(store, normalized, value):
             raise ContractError("selected_member_outside_assigned_scope")
@@ -254,8 +254,8 @@ def select(store, library_ref, *, scope, member_refs=None, ordinal_ranges=None):
         "member_count": count, "position_mass": mass, "membership_sha256": digest.hexdigest()}
     with store.transaction():
         selected = store.put("read_selection", record, origin="tool", scope=normalized)
-        store.db.executemany("INSERT OR IGNORE INTO library_selection_members VALUES(?,?)",
-            ((selected["id"], row["read_ref"]) for row in store.db.execute(query, parameters)))
+        store._db.executemany("INSERT OR IGNORE INTO library_selection_members VALUES(?,?)",
+            ((selected["id"], row["read_ref"]) for row in store._db.execute(query, parameters)))
     return selected
 
 
@@ -274,7 +274,7 @@ def iter_eligible(store, scope, target_ref=None):
             continue
         selection = selection_for(store, normalized, ref)
         for member in _rows(store, ref):
-            if selection and store.db.execute("SELECT 1 FROM library_selection_members WHERE selection_ref=? AND read_ref=?",
+            if selection and store._db.execute("SELECT 1 FROM library_selection_members WHERE selection_ref=? AND read_ref=?",
                     (selection["id"], read_ref(ref, member["id"]))).fetchone() is None:
                 continue
             yield {"target_ref": ref, "member_ref": member["id"], "start": 0, "end": member["length"], "unit": store._unit(member["molecule"])}
@@ -350,7 +350,7 @@ def validate_scope(store, scope, parent_scope=None):
                     if child_selection is None:
                         if parent_selection["member_count"] != store.get_input(ref)["member_count"]:
                             raise ContractError("scope_members_outside_parent")
-                    elif store.db.execute("SELECT read_ref FROM library_selection_members WHERE selection_ref=? EXCEPT SELECT read_ref FROM library_selection_members WHERE selection_ref=? LIMIT 1",
+                    elif store._db.execute("SELECT read_ref FROM library_selection_members WHERE selection_ref=? EXCEPT SELECT read_ref FROM library_selection_members WHERE selection_ref=? LIMIT 1",
                             (child_selection["id"], parent_selection["id"])).fetchone():
                         raise ContractError("scope_members_outside_parent")
     return result

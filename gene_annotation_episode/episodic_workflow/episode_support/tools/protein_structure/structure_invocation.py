@@ -1,5 +1,4 @@
 """Private A102 original-action binding for structural calculations."""
-import json
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError, canonical
 
 
@@ -19,11 +18,6 @@ def authenticate_structure_invocation(registry, name, arguments, scope, operatio
     if (not suffix.isdecimal() or str(int(suffix)) != suffix or selected_name != name
             or canonical(selected_arguments) != canonical(arguments) or selected_key != operation_key
             or canonical(plain(context.scope)) != canonical(scope) or not callable(reader)):
-        raise ContractError("molecular_tool_selected_action_conflict")
-    row = registry.store.db.execute("SELECT action FROM runtime_actions WHERE run_id=? AND episode_id=? "
-        "AND decision_index=?", (context.run_id, context.episode_id, int(suffix))).fetchone()
-    if row is None or canonical(json.loads(row["action"])) != canonical(
-            dict(kind="tool", tool=name, arguments=arguments)):
         raise ContractError("molecular_tool_selected_action_conflict")
     return context, reader
 

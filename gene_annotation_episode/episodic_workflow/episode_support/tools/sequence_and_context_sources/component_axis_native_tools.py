@@ -13,9 +13,6 @@ class ComponentNativeHPCMixin:
     def __init__(self, *args, **kwargs):
         self.component_native_resources = None
         super().__init__(*args, **kwargs)
-        self.store.db.execute('CREATE TABLE IF NOT EXISTS component_native_actions '
-            '(operation_key TEXT PRIMARY KEY,request TEXT NOT NULL,result TEXT NOT NULL)')
-
     def configure_component_native_hpc(self, resources):
         resources = plain(resources)
         require(any(row.get('kind') == 'pbs_ssh' for row in resources.values()), 'configured_hpc_resource_required')
@@ -87,13 +84,6 @@ class ComponentNativeHPCMixin:
             resources = self.component_native_resources
             require(resources is not None and args['resource_id'] in resources
                 and resources[args['resource_id']].get('kind') == 'pbs_ssh', 'configured_hpc_resource_required')
-            signature = canonical({'run_id': context.run_id, 'episode_id': context.episode_id,
-                'operation': name, 'arguments': args, 'scope': plain(context.scope), 'version': VERSION})
-            saved = self.store.db.execute('SELECT * FROM component_native_actions WHERE operation_key=?',
-                (operation_key,)).fetchone()
-            if saved is not None:
-                require(saved['request'] == signature, 'operation_identity_conflict')
-                return json.loads(saved['result'])
             with self.store.transaction():
                 request_ref, body = freeze(self, args, context=context, known=known, invocation=invocation)
                 retained = [(ref, row) for ref in sorted(known)
@@ -114,8 +104,6 @@ class ComponentNativeHPCMixin:
                         'new_execution_requested': True, 'scientific_credit': None}
                 outcome = {'status': 'completed', 'record_refs': records, 'changed_record_refs': [],
                     'feedback': None, 'result': result}
-                self.store.db.execute('INSERT INTO component_native_actions VALUES(?,?,?)',
-                    (operation_key, signature, canonical(outcome)))
             return outcome
         except (ValueError, KeyError, OSError, TypeError) as error:
             if isinstance(error, ContractError) and error.detail.get('input_admission'):

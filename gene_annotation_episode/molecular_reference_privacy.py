@@ -101,11 +101,11 @@ def molecular_capture_reference_restriction(store, reference, *, provider):
         raise ValueError("molecular_capture_provider_invalid")
     if type(reference) is not str:
         return None
-    tables = {row[0] for row in store.db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    tables = {row[0] for row in store._db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
     if "records" not in tables:
         return None
     capture_version, _ = _CAPTURE_PROFILES[provider]
-    rows = store.db.execute("""SELECT data FROM records WHERE record_type='source' AND origin='tool'
+    rows = store._db.execute("""SELECT data FROM records WHERE record_type='source' AND origin='tool'
         AND json_extract(data,'$.provider')=? AND json_extract(data,'$.version')=?
         AND (id=? OR json_extract(data,'$.artifact_ref')=? OR json_extract(data,'$.request_ref')=?
           OR EXISTS(SELECT 1 FROM json_each(data,'$.auxiliary_artifact_refs') a WHERE a.value=?))""",
@@ -113,7 +113,7 @@ def molecular_capture_reference_restriction(store, reference, *, provider):
     for row in rows:
         capture = json.loads(row[0])
         immutable_record(capture)
-        operation = (store.db.execute("SELECT arguments FROM tool_operations WHERE id=? AND name=?",
+        operation = (store._db.execute("SELECT arguments FROM tool_operations WHERE id=? AND name=?",
             (capture.get("accession"), provider)).fetchone() if "tool_operations" in tables else None)
         if operation is None:
             return False
@@ -158,11 +158,11 @@ def molecular_reference_restriction(store, received_record_refs, reference, name
     selected = _providers(providers)
     if not isinstance(reference, str) or not selected:
         return None
-    tables = {row[0] for row in store.db.execute("SELECT name FROM sqlite_master WHERE type='table' "
+    tables = {row[0] for row in store._db.execute("SELECT name FROM sqlite_master WHERE type='table' "
         "AND name IN ('records','tool_operations')")}
     if "tool_operations" not in tables:
         return None  # A fresh Store has no ordinary publication or diagnostic.
-    if store.db.execute("""SELECT 1 FROM tool_operations
+    if store._db.execute("""SELECT 1 FROM tool_operations
         WHERE name IN (SELECT value FROM json_each(?))
           AND json_extract(result,'$.feedback.diagnostic_ref')=? LIMIT 1""",
             (json.dumps([operation for name in selected
@@ -178,7 +178,7 @@ def molecular_reference_restriction(store, received_record_refs, reference, name
         operation=operation, statuses=_PROFILES[name][4]) for name in selected
         for operation in ((_PROFILES[name][3],) if isinstance(_PROFILES[name][3], str)
                           else _PROFILES[name][3])]
-    rows = store.db.execute("""SELECT source.data FROM records source, json_each(?) profile
+    rows = store._db.execute("""SELECT source.data FROM records source, json_each(?) profile
         WHERE source.record_type='source' AND source.origin=json_extract(profile.value,'$.origin')
           AND json_extract(source.data,'$.provider')=json_extract(profile.value,'$.provider')
           AND json_extract(source.data,'$.version') IS json_extract(profile.value,'$.version')

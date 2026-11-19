@@ -14,7 +14,7 @@ GOAL = ('Investigate the supplied source-bound passages for the assigned questio
         "with the common reasoning action and update only the parent's declared typed form in that same work call. "
         'Navigation, byte coverage and repeated reading earn no scientific credit by themselves. The commissioned '
         "task's own yield settings guide continuation.")
-UNIT = ('one model-selected tool call on the assigned source (an access tool, a reasoning commit, or the report of '
-        'the interpretation)')
-RESULT = ('the interpretation of what the supplied passages say for the assigned question, span by span, with '
+UNIT = ('one model-selected tool call on the assigned source (an access tool, a structure grading that saves a '
+        'source-geometry sheet, or a reasoning commit)')
+RESULT = ('the controlled features of the current source-geometry sheets saved from the supplied passages, with '
           "the commissioned task's typed answers (screening answers, source-lead dispositions)")

@@ -1,24 +1,28 @@
-"""The A103 ``gene_context_evidence/hpc_work_planning/hpc_allocation_execution`` binding on the generic runner.
+"""The HPC allocation execution episode of A103 under hpc_work_planning."""
+from episode_runtime import EpisodeBinding
 
-Its decision source, credit and continuation are ``allocation_runtime`` (role ``hpc_execution``): model-selected
-handoff binding, job observation, result parsing and unit ordering over one frozen plan of its owner's HPC
-ledger, and commissions of its launch, monitor and result children.
-"""
-from __future__ import annotations
-
-from types import MappingProxyType
-
-from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.contract_binding import (
-    A103ContractBinding)
-
-from .allocation_runtime import AllocationRuntime
+from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
+from .messages import (final_to_parent as final_file, internal_summary as summary_file,
+                       msg_to_child as to_child_file, read_from_child as from_child_file,
+                       read_from_parent as from_parent_file)
 
 
-class HPCEpisode(AllocationRuntime, A103ContractBinding):
-    binding_path = 'gene_context_evidence/hpc_work_planning/hpc_allocation_execution'
-    grain_name = 'gene_context_evidence__hpc_work_planning__hpc_allocation_execution'
-    goal = 'Improve the work completed inside one HPC allocation'
-    unit = 'One allocation-portfolio action or child commission'
-    result = 'The allocation portfolio outcome'
-    child_slots = MappingProxyType({'execution_job_submission': 'gene_context_evidence/hpc_work_planning/hpc_allocation_execution/execution_job_submission', 'execution_progress_assessment': 'gene_context_evidence/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment', 'execution_result_acquisition': 'gene_context_evidence/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition'})
-    commissioning_parent = 'gene_context_evidence/hpc_work_planning'
+class HPCAllocationExecution(EpisodeBinding):
+    binding_path = goal_file.BINDING_PATH
+    goal = goal_file.GOAL
+    unit = goal_file.UNIT
+    result = goal_file.RESULT
+    child_slots = task_file.CHILD_SLOTS
+    tools = task_file.TOOLS
+    services = task_file.SERVICES
+    decide = task_file.decide
+    action = task_file.action
+    credit = credit_file.credit
+    yield_controller = yield_file.yield_controller
+    assignment_form = from_parent_file.ASSIGNMENT_FORM
+    read_from_parent = from_parent_file.read_from_parent
+    msg_to_child = to_child_file.msg_to_child
+    read_from_child = from_child_file.read_from_child
+    internal_summary = summary_file.internal_summary
+    return_form = final_file.RETURN_FORM
+    final_to_parent = final_file.final_to_parent

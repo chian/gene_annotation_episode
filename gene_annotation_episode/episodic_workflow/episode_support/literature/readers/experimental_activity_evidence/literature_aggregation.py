@@ -12,6 +12,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 VERSION = 'a105_across_experiment_aggregation_v1'
 SCOPE = 'a105_across_experiment_aggregation'
 COMPONENTS = ('reliability', 'validity', 'relevance', 'attribution', 'overall')
+# Owner (A105_AGGREGATION_TASK): "Use these exact across-experiment rules: reliability SUM; validity SUM; relevance
+# MAXIMUM; attribution MAXIMUM; overall experimental score SUM."
 REDUCERS = dict(reliability='sum', validity='sum', relevance='max', attribution='max', overall='sum')
 DIMENSIONS = {name: 'experimental_evidence' if name == 'overall' else name for name in COMPONENTS}
 

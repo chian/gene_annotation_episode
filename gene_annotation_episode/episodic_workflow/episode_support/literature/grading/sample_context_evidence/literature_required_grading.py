@@ -59,6 +59,8 @@ hypothesis; there is no second model-supplied list of these same links.
         if record['hypothesis_ref'] != arguments['assertion_ref']:
             arguments = {**arguments, 'observations': [item for item in arguments['observations'] if item['context_claim_ref'] == record['hypothesis_ref']]}
         return _matches_grading(store, record['observation_ref'], arguments)
+    # Merely sharing a paper, a support ref or an anchor does not establish this
+    # relationship. A108 original observations retain their own identities.
     if record['record_type'] == 'reference':
         return reference in {item['original_observation_ref'] for item in arguments['observations']}
     if record['record_type'] != 'observation':
@@ -73,6 +75,8 @@ hypothesis; there is no second model-supplied list of these same links.
         sources = {arguments['source_ref'], original.get('source_ref')}
         for selection in [*unit.get('evidence', []), *unit.get('origin_link_evidence', [])]:
             sources.add(selection.get('source_ref', selection.get('witness', {}).get('source_ref')))
+        # An explicit original-result link or its exact authenticated anchor
+        # identifies the experiment/observation; source identity alone does not.
         if record['source_ref'] in sources and (original_ref in linked or (anchor is not None and anchor == original_anchor)):
             return True
     return False
@@ -113,9 +117,8 @@ def execute(context, selection, operation_key, repository, *, authorize_source_a
                 sources = _Sources(read_source)
                 examined = [sources.witness(witness, f'examined[{index}]') for index, witness in enumerate(processing['examined'])]
                 processing['examined'] = [{**original, 'quote': witness['quote']} for original, witness in zip(processing['examined'], examined)]
-            account_context = {'account_owner': (context.run_id, context.episode_id)} if payload.get('interpretation_accounts') else {}
             attempted = True
-            outcome = store.commit_reasoning(payload, plain(context.scope), operation_key, **account_context)
+            outcome = store.commit_reasoning(payload, plain(context.scope), operation_key)
             if outcome['status'] not in ('completed', 'partial'):
                 return outcome
             if processing is not None and processing['kind'] == 'no_applicable_evidence':
@@ -152,6 +155,11 @@ def execute(context, selection, operation_key, repository, *, authorize_source_a
                     return {'artifact_ref': artifact, 'content': store.get_artifact(artifact)}
                 arguments = materialize_text_witness_inputs(arguments, read_source=read_grading_source)
                 validate_schema(arguments, repository.population_schema())
+                # Descriptive metadata remain committed context. Only actual
+                # results and scientific interpretations require a matching
+                # sheet. Their already saved observation, hypothesis and
+                # experiment/original-result links supply the association;
+                # the episode does not enumerate that association again.
                 graded_refs = [ref for ref in required_refs if _matches_grading(store, ref, arguments)]
                 result = repository.populate(grading_context, arguments, f'{operation_key}:grading:{index}')
                 if result['status'] not in ('completed', 'partial') or not result['result'].get('sheet_ref'):

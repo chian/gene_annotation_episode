@@ -73,6 +73,8 @@ _SCHEMAS = {
     'literature_perturbation_operand_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.readers.perturbation_evidence.literature_perturbation_operands', 'cells_schema'),
     'literature_intervention_grading_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_intervention_storage', 'intervention_cells_schema'),
     'literature_a106_subscore_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.readers.literature_subscore', 'cells_schema'),
+    'literature_a108_grading_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_grading_storage', 'grading_cells_schema'),
+    'literature_a108_aggregation_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.sample_context_evidence.literature_aggregation_storage', 'aggregation_cells_schema'),
 }
 
 # These describe returned scientific information, without enumerating internal
@@ -122,6 +124,8 @@ RETURN_MEANINGS = {
     'literature_perturbation_operand_cells': 'Selected original perturbation effects and matching mean variances retain original measurement identities, shared controls and full source cell meanings. No additional experiment, independence claim or recalculated science.',
     'literature_intervention_grading_cells': 'A106 intervention assessments, native diagnostics and conditional signed evidence ratios retain experiment identity, comparison, design and revisions.',
     'literature_a106_subscore_cells': 'A106 final signed log evidence ratio is bound to the subject, assertion, alternative, scope and current original experiments; retain missing scores, dependence and revisions.',
+    'literature_a108_grading_cells': 'Requested purpose-specific A108 numerical counts of supporting, conflicting, overlapping and unresolved original organism-context observations. Preserve candidate and actual target organism/context, source-specific scientific criteria, original observation identity, qualified transfer and conditions. Evidence amount counts the supporting/conflicting union once; net support is separate. Repeated source representations add no observation, and these counts are not annotation probability or the Episode progress scalar.',
+    'literature_a108_aggregation_cells': 'Requested A108 main evidence scoring sheet components for physiology, environment, availability, localization and overall. Each retains evidence amount and separate support/conflict/overlap/net/unresolved counts, recomputed from possessed original observation unions. Shared observations across sources, children or domains count once. Unselected domains remain unavailable; source context, actual contributors and unresolved relationships remain explicit.',
 }
 
 

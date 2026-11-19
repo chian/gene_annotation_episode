@@ -199,3 +199,210 @@ Counts are uses (imported names counted per use) summed over this episode's file
 | `to_parent.py` | 84 | `facts()` = live facts + closed credit facts. Live: empty lists for every native family source, then the terminal service's practical facts; `execution_handoff_refs` = returnable handoffs read from its own practical receipt refs; AppService support refs; `execution_result_refs`, file sources / capture outcomes, `execution_result_origin`, `execution_completed` = practical completion. `validate_report`: masking / utility / UniProt return checks, form validation, and every `x-source` field must equal the recorded fact. | `a104.communication` {plain, validate_form} |
 | `waiting.py` | 9 | `suspension_changed` → `execution_backend.set_suspension` (old runner). | `self.workflow.execution_backend`×1; `self.workflow.execution_handle`×2 |
 | `yield_estimator.py` | 49 | `_request_yield_class(request)` → e.g. `practical_local_native_blast_outputs` or `api_<service>_<algorithm>_<database>_handoff`; `yield_controller` requires `require_private_yield` and picks `task_yield_profiles['launch_local:'+class]` `{cutoff, parameters}` with `PracticalYieldEstimator(verify_completion)`. | `a104.communication` {plain}; `a104.numerical` {YieldController, YieldParameters}; `a104.practical_yield` {PracticalYieldEstimator} |
+
+## Carried over
+
+Carried over on 19 November 2026 to the ten-file form (private binding `LocalJobExecution`, `episode.py`). Columns: old file (under the old episode folder at `97308b94c`), kind of the old name, old name, whether it is old-runner machinery or an episode function, and its new place (file and name, or the machinery reason). A row marked `unplaced` is an episode function of another role (results) that this launch role does not use. Library candidates (kept in the file that uses them): `messages/internal_summary.py::_completion` (the old `PracticalState._completion` over receipts), `yield_estimator.py::_request_yield_class`. Already in library and called from here: `grading/evolutionary_history_evidence/practical_execution_credit.py::project_practical_credit`, `records/evolutionary_history_evidence/practical_execution_records.py` (`validate_assignment`, `assess_validations`, `canonical`, `digest`), `acquisition/native_terminal_transport.py::TerminalExecution`, `findings/evolutionary_history_evidence/terminal_scientific_evidence.py::terminal_artifact_paths`, `instructions/launch_instructions.py`, `tools/tool_knowledge.py`, the fact source functions of `readers/*/evolutionary_history_evidence/`.
+
+| old file | kind | name | class | new place |
+|---|---|---|---|---|
+| action_outcome.py | function | _outcome | machinery | old action-result envelope (status completed/invalid, record_refs); the tool returns its outcome and the system journals it with the unit |
+| binding_record.py | class | LocalExecutionBindingRecord | machinery | binding_record.py and the binding's own as_record() |
+| binding_record.py | method | LocalExecutionBindingRecord.as_record | machinery | binding_record.py and the binding's own as_record() |
+| closed_credit.py | class | LocalExecutionClosedCredit | machinery | frozen closed-credit snapshot built from runtime_episodes, runtime_forms, runtime_observations and receipt tables; the system's closure credit (completion['credit']) is returned by final_to_parent |
+| closed_credit.py | method | LocalExecutionClosedCredit._closed_credit_carrier | machinery | frozen closed-credit snapshot built from runtime_episodes, runtime_forms, runtime_observations and receipt tables; the system's closure credit (completion['credit']) is returned by final_to_parent |
+| closed_credit.py | method | LocalExecutionClosedCredit._closed_credit_receipts | machinery | frozen closed-credit snapshot built from runtime_episodes, runtime_forms, runtime_observations and receipt tables; the system's closure credit (completion['credit']) is returned by final_to_parent |
+| closed_credit.py | method | LocalExecutionClosedCredit._closed_credit_value | machinery | frozen closed-credit snapshot built from runtime_episodes, runtime_forms, runtime_observations and receipt tables; the system's closure credit (completion['credit']) is returned by final_to_parent |
+| closed_credit.py | method | LocalExecutionClosedCredit._closed_credit_facts | machinery | frozen closed-credit snapshot built from runtime_episodes, runtime_forms, runtime_observations and receipt tables; the system's closure credit (completion['credit']) is returned by final_to_parent |
+| closed_credit.py | method | LocalExecutionClosedCredit._closed_operational_credit_view | machinery | frozen closed-credit snapshot built from runtime_episodes, runtime_forms, runtime_observations and receipt tables; the system's closure credit (completion['credit']) is returned by final_to_parent |
+| completion.py | class | LocalExecutionCompletion | machinery | completion proof as controller input and its re-validation against runtime_observations (README 5 item 5); the completion proof is derived from the held receipts in messages/internal_summary.py::_completion and the target comes from parent_input |
+| completion.py | method | LocalExecutionCompletion.completion_for_action | machinery | completion proof as controller input and its re-validation against runtime_observations (README 5 item 5); the completion proof is derived from the held receipts in messages/internal_summary.py::_completion and the target comes from parent_input |
+| completion.py | method | LocalExecutionCompletion._closed_completion_verdict | machinery | completion proof as controller input and its re-validation against runtime_observations (README 5 item 5); the completion proof is derived from the held receipts in messages/internal_summary.py::_completion and the target comes from parent_input |
+| completion.py | method | LocalExecutionCompletion.verify_completion | machinery | completion proof as controller input and its re-validation against runtime_observations (README 5 item 5); the completion proof is derived from the held receipts in messages/internal_summary.py::_completion and the target comes from parent_input |
+| configuration.py | class | LocalExecutionConfiguration | machinery | class of constructor values; the values are the episode's settings |
+| configuration.py | method | LocalExecutionConfiguration.__init__ | episode function | settings read by task.py::_resource_configuration (explicit local resource, only the seven A104 native kinds bound) and task.py::_resource, ::_capabilities (initial_information), yield_estimator.py::_task_yield_profile (task_yield_profiles); the other constructor parts (handoff_unit, acquired_record_unit, log window, results yield profiles, API execution, progress provider, result readers, local file sources, protected readers) are result/api/monitor-role or old-runner machinery and are not carried |
+| credit.py | class | LocalExecutionCredit | episode function | credit.py::credit (the operational practical credit over the summary; the frozen closed view is machinery) |
+| credit.py | method | LocalExecutionCredit.credit_kind | machinery | credit_kind deleted |
+| credit.py | method | LocalExecutionCredit.project_credit | episode function | credit.py::credit (the operational practical credit over the summary; the frozen closed view is machinery) |
+| credit.py | method | LocalExecutionCredit._live_project_credit | episode function | credit.py::credit (the operational practical credit over the summary; the frozen closed view is machinery) |
+| credit.py | method | LocalExecutionCredit.credit_view | episode function | credit.py::credit (the operational practical credit over the summary; the frozen closed view is machinery) |
+| decision_context.py | class | LocalExecutionTaskContext | machinery | generic old-runner decision context (working state, pending work, receipt projection, journal reads); the episode's own content is in messages/internal_summary.py and task.py::decide |
+| decision_context.py | method | LocalExecutionTaskContext.assemble_decision_context | machinery | generic old-runner decision context (working state, pending work, receipt projection, journal reads); the episode's own content is in messages/internal_summary.py and task.py::decide |
+| decision_context.py | function | _bind_preserved_runtime_providers | machinery | generic old-runner decision context (working state, pending work, receipt projection, journal reads); the episode's own content is in messages/internal_summary.py and task.py::decide |
+| decision_contracts.py | class | LocalExecutionTaskDecisionContracts | machinery | decision-exchange contract validation (README 3a) |
+| decision_contracts.py | method | LocalExecutionTaskDecisionContracts.interpretation_context | machinery | decision-exchange contract validation (README 3a) |
+| decision_contracts.py | method | LocalExecutionTaskDecisionContracts.exchange_schema | machinery | decision-exchange contract validation (README 3a) |
+| decision_contracts.py | method | LocalExecutionTaskDecisionContracts.exchange_response | machinery | decision-exchange contract validation (README 3a) |
+| decision_contracts.py | method | LocalExecutionTaskDecisionContracts.validate_contract_exchange_request | machinery | decision-exchange contract validation (README 3a) |
+| decision_contracts.py | method | LocalExecutionTaskDecisionContracts.validate_contract_exchange_history | machinery | decision-exchange contract validation (README 3a) |
+| decision_contracts.py | function | _bind_preserved_runtime_providers | machinery | decision-exchange contract validation (README 3a) |
+| decision_exchange.py | class | LocalExecutionTaskDecisionExchange | machinery | exchange_decision loop (README 3a) |
+| decision_exchange.py | method | LocalExecutionTaskDecisionExchange.exchange_decision | machinery | exchange_decision loop (README 3a) |
+| decision_exchange.py | function | _bind_preserved_runtime_providers | machinery | exchange_decision loop (README 3a) |
+| decision_provider.py | class | LocalExecutionTaskDecisionProvider | machinery | provider patching and presentation routing; decide returns ModelRequest |
+| decision_provider.py | method | LocalExecutionTaskDecisionProvider.decision_completion | machinery | provider patching and presentation routing; decide returns ModelRequest |
+| episode.py | class | ExecutionEpisode | episode function | episode.py::LocalJobExecution (binding_path, goal, tools, services, forms; mix-ins of the old shared root and of this folder are not carried) |
+| episode.py | method | ExecutionEpisode.child_roles | episode function | task.py::CHILD_SLOTS = {} |
+| episode.py | method | ExecutionEpisode.allowed_children | episode function | task.py::CHILD_SLOTS = {} |
+| episode.py | method | ExecutionEpisode.permitted_common_actions | episode function | task.py::decide and ::action (only the exec_command tool is offered) |
+| from_parent.py | class | LocalExecutionFromParent | episode function | messages/read_from_parent.py (ASSIGNMENT_FORM, read_from_parent) |
+| from_parent.py | method | LocalExecutionFromParent.required_return_sources | machinery | old required return sources (always empty); RETURN_FORM declares what is returned |
+| from_parent.py | method | LocalExecutionFromParent.child_assignment_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM |
+| from_parent.py | method | LocalExecutionFromParent.assignment_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM |
+| from_parent.py | method | LocalExecutionFromParent.prepare_assignment | episode function | messages/read_from_parent.py::read_from_parent (validate_assignment); the checks of the commissioning launch request, masking and utility inputs, pinned versions and native database job inputs read runtime_episodes and are not carried (a wrong commission fails) |
+| from_parent.py | method | LocalExecutionFromParent.initial_references | machinery | initial receipts of input references; the records the job inputs name are the record_refs field of ASSIGNMENT_FORM |
+| goal.py | class | LocalExecutionGoal | episode function | task.py::_instructions (GOAL_INSTRUCTION) |
+| goal.py | method | LocalExecutionGoal.instructions | episode function | task.py::_instructions (GOAL_INSTRUCTION) |
+| instructions.py | function | instructions | episode function | task.py::_instructions (specialist text replaces the default, then tool knowledge, launch library and the answer instruction; the child-delivery repair, wait/native-event and exchange-history paragraphs describe actions that do not exist and are not carried) |
+| instructions.py | function | _bind_preserved_runtime_providers | machinery | provider patching |
+| internal_summary.py | class | LocalExecutionInternalSummary | episode function | messages/internal_summary.py::internal_summary |
+| internal_summary.py | method | LocalExecutionInternalSummary._with_selected_execution_task | episode function | messages/internal_summary.py::_selected_execution_task (the HMMER job view native_profile_scientific_job_view is in no place now: raises NotImplementedError('unplaced:native_profile_scientific_job_view')) |
+| internal_summary.py | method | LocalExecutionInternalSummary.decision_context | episode function | messages/internal_summary.py::internal_summary |
+| native_actions.py | class | LocalExecutionNativeActions | episode function | task.py::TOOLS |
+| native_actions.py | method | LocalExecutionNativeActions.catalog | episode function | task.py::EXEC_COMMAND and ::decide |
+| native_actions.py | method | LocalExecutionNativeActions.execute | episode function | task.py::exec_command (the parent-input check is not carried: a wrong commission fails) |
+| native_assignment.py | class | LocalExecutionNativeAssignment | episode function | messages/read_from_parent.py::read_from_parent and ::ASSIGNMENT_FORM (resource kind is the DeclaredField local); task.py::_operations validates the assignment against the configured resource |
+| native_assignment.py | method | LocalExecutionNativeAssignment._assignment | episode function | messages/read_from_parent.py::read_from_parent and ::ASSIGNMENT_FORM (resource kind is the DeclaredField local); task.py::_operations validates the assignment against the configured resource |
+| native_assignment.py | method | LocalExecutionNativeAssignment.assignment_schema | episode function | messages/read_from_parent.py::read_from_parent and ::ASSIGNMENT_FORM (resource kind is the DeclaredField local); task.py::_operations validates the assignment against the configured resource |
+| native_assignment.py | method | LocalExecutionNativeAssignment.prepare_assignment | episode function | messages/read_from_parent.py::read_from_parent and ::ASSIGNMENT_FORM (resource kind is the DeclaredField local); task.py::_operations validates the assignment against the configured resource |
+| native_completion.py | class | LocalExecutionNativeCompletion | machinery | completion_for_action (completion proof as controller input) and practical_estimator (PracticalYieldEstimator); yield_estimator.py returns CompletionYieldController |
+| native_completion.py | method | LocalExecutionNativeCompletion.completion_for_action | machinery | completion_for_action (completion proof as controller input) and practical_estimator (PracticalYieldEstimator); yield_estimator.py returns CompletionYieldController |
+| native_completion.py | method | LocalExecutionNativeCompletion.practical_estimator | machinery | completion_for_action (completion proof as controller input) and practical_estimator (PracticalYieldEstimator); yield_estimator.py returns CompletionYieldController |
+| native_configuration.py | class | LocalExecutionNativeConfiguration | episode function | task.py::_operations and ::_resource_configuration (local resources only) |
+| native_configuration.py | method | LocalExecutionNativeConfiguration.__init__ | episode function | task.py::_resource_configuration (explicit resource, inventory bound to it through settings) |
+| native_configuration.py | method | LocalExecutionNativeConfiguration._operations | episode function | task.py::_operations (TerminalExecution with terminal_artifact_paths) |
+| native_configuration.py | method | LocalExecutionNativeConfiguration.as_record | machinery | as_record() of the binding |
+| native_credit.py | class | LocalExecutionNativeCredit | episode function | credit.py::credit |
+| native_credit.py | method | LocalExecutionNativeCredit.credit_kind | machinery | credit_kind deleted |
+| native_credit.py | method | LocalExecutionNativeCredit.credit_view | episode function | credit.py::credit |
+| native_execution_service.py | class | TerminalExecutionBehavior | machinery | composition class of the practical behaviour mix-ins |
+| native_execution_service.py | method | TerminalExecutionBehavior.child_roles | episode function | task.py::CHILD_SLOTS = {} and the one exec_command tool |
+| native_execution_service.py | method | TerminalExecutionBehavior.permitted_common_actions | episode function | task.py::CHILD_SLOTS = {} and the one exec_command tool |
+| native_execution_service.py | method | TerminalExecutionBehavior.allowed_children | episode function | task.py::CHILD_SLOTS = {} and the one exec_command tool |
+| native_goal.py | class | LocalExecutionNativeGoal | episode function | task.py::GOAL_INSTRUCTION and ::_instructions (resource instructions from the frozen launch library) |
+| native_goal.py | method | LocalExecutionNativeGoal._resource_instructions | episode function | task.py::GOAL_INSTRUCTION and ::_instructions (resource instructions from the frozen launch library) |
+| native_goal.py | method | LocalExecutionNativeGoal.instructions | episode function | task.py::GOAL_INSTRUCTION and ::_instructions (resource instructions from the frozen launch library) |
+| native_internal_summary.py | class | LocalExecutionNativeInternalSummary | episode function | task.py::decide and messages/internal_summary.py |
+| native_internal_summary.py | method | LocalExecutionNativeInternalSummary.initial_decision_context | episode function | task.py::decide (execution_initial_information from settings) |
+| native_internal_summary.py | method | LocalExecutionNativeInternalSummary._resource_information | episode function | task.py::_resource |
+| native_internal_summary.py | method | LocalExecutionNativeInternalSummary.decision_context | episode function | task.py::decide and messages/internal_summary.py::internal_summary |
+| native_receipt_state.py | class | LocalExecutionNativeReceiptState | machinery | PracticalState per episode under practical-execution/<digest>: file ledger of intents and receipts; replaced by the receipts in the tool outcomes (view.outcomes) and the attempts journal |
+| native_receipt_state.py | method | LocalExecutionNativeReceiptState._state_directory | machinery | PracticalState per episode under practical-execution/<digest>: file ledger of intents and receipts; replaced by the receipts in the tool outcomes (view.outcomes) and the attempts journal |
+| native_receipt_state.py | method | LocalExecutionNativeReceiptState.initialize | machinery | PracticalState per episode under practical-execution/<digest>: file ledger of intents and receipts; replaced by the receipts in the tool outcomes (view.outcomes) and the attempts journal |
+| native_receipt_state.py | method | LocalExecutionNativeReceiptState.state | machinery | PracticalState per episode under practical-execution/<digest>: file ledger of intents and receipts; replaced by the receipts in the tool outcomes (view.outcomes) and the attempts journal |
+| native_return.py | class | LocalExecutionNativeReturn | episode function | messages/final_to_parent.py |
+| native_return.py | method | LocalExecutionNativeReturn.fact_sources | episode function | messages/final_to_parent.py::RETURN_FORM (practical_completed, practical_receipt_digests, practical_receipt_refs) |
+| native_return.py | method | LocalExecutionNativeReturn.facts | episode function | messages/final_to_parent.py::_facts (the receipt references are the receipt artifacts the tool wrote; PracticalReceiptInformation.publish is BLOCKED-ON-STORE-ACCESS: library not carried) |
+| native_return.py | method | LocalExecutionNativeReturn.resolve | machinery | resolution of report references against the old receipt records (D2); custody checks returned records |
+| native_return.py | method | LocalExecutionNativeReturn.validate_report | episode function | messages/final_to_parent.py::validate_report (fact fields equal the recorded facts) |
+| native_state.py | class | LocalExecutionNativeState | machinery | old state class |
+| native_state.py | method | LocalExecutionNativeState.initialize | machinery | old state initialisation (local file sources, parent input check, PracticalState) |
+| native_state.py | method | LocalExecutionNativeState._result_directory | unplaced | immutable execution-results directory manifest of the results role (execution_result_acquisition), not used by launch_local |
+| native_tool_actions.py | class | LocalExecutionNativeToolActions | episode function | task.py::exec_command |
+| native_tool_actions.py | method | LocalExecutionNativeToolActions.catalog | episode function | task.py::EXEC_COMMAND |
+| native_tool_actions.py | method | LocalExecutionNativeToolActions.execute | episode function | task.py::exec_command (BLOCKED-ON-JOB-SERVICE: job_access.exec_command does the begin/run/finalize_scientific_command/cwd-env revision/assess_validations/finish of the old body; the handoff test is task.py::_handoff) |
+| native_tool_contracts.py | function | operation_catalog | episode function | task.py::EXEC_COMMAND (single exec_command tool; only the local kind applies) |
+| parent_launch_contract.py | function | parent_launch_schema | machinery | schema of the commissioning launch request, checked against runtime_episodes; a wrong commission fails |
+| parent_request_contracts.py | class | LocalExecutionParentRequestContracts | machinery | class of commission checks |
+| parent_request_contracts.py | method | LocalExecutionParentRequestContracts._check_parent_inputs | machinery | reads the commissioning request from runtime_episodes (commission check) |
+| parent_request_contracts.py | method | LocalExecutionParentRequestContracts._permitted | machinery | check of the commissioning launch request against its constraints (commission check) |
+| parent_request_contracts.py | method | LocalExecutionParentRequestContracts._request_schema | episode function | messages/read_from_parent.py::ASSIGNMENT_FORM (the per-resource requested_job alternatives are validated by validate_assignment and the configured bindings by task.py::_operations) |
+| parent_request_contracts.py | method | LocalExecutionParentRequestContracts._validate_request | episode function | messages/read_from_parent.py::read_from_parent (validate_assignment) and task.py::_operations (workspace confinement, validate_assignment of the transport) |
+| parent_request_contracts.py | method | LocalExecutionParentRequestContracts._launch | machinery | validation of the commissioning launch request (commission check) |
+| parent_request_contracts.py | method | LocalExecutionParentRequestContracts._constraints | machinery | validation of the commissioning launch constraints (commission check) |
+| presentation.py | function | present_execution_context | episode function | task.py::_task_text (the selected-execution presentation); the per-episode prompt state frames (apply_state_frame, scientific_prompt_states) are machinery and the hpc, monitor, api and receiver renderers do not apply to this role |
+| protected_reference_access.py | class | ProtectedReferenceAccess | machinery | read authority of protected references: custody (a read of an unheld record raises CustodyError) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._install_protected_reference_readers | machinery | read authority of protected references: custody (a read of an unheld record raises CustodyError) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._protein_reference_access | machinery | read authority of protected references: custody (a read of an unheld record raises CustodyError) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._fluorescence_reference_access | machinery | read authority of protected references: custody (a read of an unheld record raises CustodyError) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._expression_nmf_reference_access | machinery | read authority of protected references: custody (a read of an unheld record raises CustodyError) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._atac_reference_access | machinery | read authority of protected references: custody (a read of an unheld record raises CustodyError) |
+| protected_reference_access.py | method | ProtectedReferenceAccess._chromatin_reference_access | machinery | read authority of protected references: custody (a read of an unheld record raises CustodyError) |
+| receipt_selection.py | class | LocalExecutionReceiptSelection | machinery | record_selection and the received receipts: custody (README 3c, F1, F2) |
+| receipt_selection.py | method | LocalExecutionReceiptSelection._selection | machinery | record_selection and the received receipts: custody (README 3c, F1, F2) |
+| receipt_selection.py | method | LocalExecutionReceiptSelection._received | machinery | record_selection and the received receipts: custody (README 3c, F1, F2) |
+| received_action_identity.py | class | LocalExecutionReceivedActionIdentity | machinery | identity of a selected result action read from runtime_actions (results role) |
+| received_action_identity.py | method | LocalExecutionReceivedActionIdentity._selected_result_action | machinery | identity of a selected result action read from runtime_actions (results role) |
+| received_parent_records.py | class | LocalExecutionReceivedParentRecords | machinery | received report sources, facts and closure facts of received child reports: custody and F5 (a launch returns the empty families) |
+| received_parent_records.py | method | LocalExecutionReceivedParentRecords._has_appservice | machinery | received report sources, facts and closure facts of received child reports: custody and F5 (a launch returns the empty families) |
+| received_parent_records.py | method | LocalExecutionReceivedParentRecords._has_uniprot | machinery | received report sources, facts and closure facts of received child reports: custody and F5 (a launch returns the empty families) |
+| received_parent_records.py | method | LocalExecutionReceivedParentRecords._appservice_sources | machinery | received report sources, facts and closure facts of received child reports: custody and F5 (a launch returns the empty families) |
+| received_parent_records.py | method | LocalExecutionReceivedParentRecords._forwards_bvbrc_reports | machinery | received report sources, facts and closure facts of received child reports: custody and F5 (a launch returns the empty families) |
+| received_parent_records.py | method | LocalExecutionReceivedParentRecords.received_report_sources | machinery | received report sources, facts and closure facts of received child reports: custody and F5 (a launch returns the empty families) |
+| received_parent_records.py | method | LocalExecutionReceivedParentRecords.received_report_facts | machinery | received report sources, facts and closure facts of received child reports: custody and F5 (a launch returns the empty families) |
+| received_parent_records.py | method | LocalExecutionReceivedParentRecords.received_report_closure_facts | machinery | received report sources, facts and closure facts of received child reports: custody and F5 (a launch returns the empty families) |
+| received_reference_access.py | class | LocalExecutionReceivedParentRecordsReferenceAccess | machinery | resolution of received references: custody |
+| received_reference_access.py | method | LocalExecutionReceivedParentRecordsReferenceAccess._masking_reference_access | machinery | resolution of received references: custody |
+| received_reference_access.py | method | LocalExecutionReceivedParentRecordsReferenceAccess._utility_reference_access | machinery | resolution of received references: custody |
+| received_reference_access.py | method | LocalExecutionReceivedParentRecordsReferenceAccess.resolve_received_reference | machinery | resolution of received references: custody |
+| received_report_admission.py | class | LocalExecutionReceivedParentRecordsAdmission | machinery | validate_received_report and received_form_references: the system admits results (README 3b R1) |
+| received_report_admission.py | method | LocalExecutionReceivedParentRecordsAdmission.validate_received_report | machinery | validate_received_report and received_form_references: the system admits results (README 3b R1) |
+| received_report_admission.py | method | LocalExecutionReceivedParentRecordsAdmission.received_form_references | machinery | validate_received_report and received_form_references: the system admits results (README 3b R1) |
+| received_result_custody.py | class | LocalExecutionReceivedResultCustody | machinery | results-role record custody read from runtime_episodes: custody |
+| received_result_custody.py | method | LocalExecutionReceivedResultCustody._validate_result_body | machinery | results-role record custody read from runtime_episodes: custody |
+| received_result_custody.py | method | LocalExecutionReceivedResultCustody._read_result | machinery | results-role record custody read from runtime_episodes: custody |
+| report_delivery.py | class | LocalExecutionReportDelivery | machinery | class of finish |
+| report_delivery.py | method | LocalExecutionReportDelivery.finish | machinery | finish(record) built the parent's form and saved it in runtime_forms; final_to_parent returns the result |
+| report_delivery.py | function | _bind_preserved_runtime_providers | machinery | provider patching |
+| report_fields.py | class | LocalExecutionToParentFields | episode function | messages/final_to_parent.py::RETURN_FORM (the native family sources, execution_handoff_refs, execution_result_refs, execution_completed, execution_result_origin, execution_blast_hsps; the AppService, UniProt, BV-BRC data, BLAST-graded and local-file sources belong to api/results roles or to resources not bound for local and are not carried) |
+| report_fields.py | method | LocalExecutionToParentFields.fact_sources | episode function | messages/final_to_parent.py::RETURN_FORM (the native family sources, execution_handoff_refs, execution_result_refs, execution_completed, execution_result_origin, execution_blast_hsps; the AppService, UniProt, BV-BRC data, BLAST-graded and local-file sources belong to api/results roles or to resources not bound for local and are not carried) |
+| report_reference_access.py | class | LocalExecutionToParentReferenceAccess | machinery | resolve(context, reference, namespace) of report references (README 3b D2): custody |
+| report_reference_access.py | method | LocalExecutionToParentReferenceAccess.resolve | machinery | resolve(context, reference, namespace) of report references (README 3b D2): custody |
+| resource_information.py | class | LocalExecutionResourceInformation | episode function | task.py::_resource, ::_capabilities |
+| resource_information.py | method | LocalExecutionResourceInformation._resource_information | episode function | task.py::_resource (the api configuration facts do not apply) |
+| resource_information.py | method | LocalExecutionResourceInformation.initial_decision_context | episode function | task.py::decide (execution_resource_capabilities, execution_initial_information; the received BV-BRC and BLAST jobs are api/scientific-role values and are not carried) |
+| resource_information.py | method | LocalExecutionResourceInformation.capabilities | episode function | task.py::_capabilities |
+| resource_information.py | method | LocalExecutionResourceInformation.resource_tool_contracts | machinery | commission routes of tool contracts shown to the commissioning parent (child_option_information; the parent's own text) |
+| resource_operations.py | function | launch_operation_catalog | machinery | launch_operation_catalog (execution.capabilities) for the commissioning parent (job_episode_options) |
+| result_operations.py | function | native_result_operation_catalog | unplaced | native_result_operation_catalog (execution.results.status/collect/read) belongs to the results role (execution_result_acquisition) |
+| retained_native_receipts.py | class | LocalExecutionRetainedNativeReceipts | machinery | delegation to the practical state of the resource role |
+| retained_native_receipts.py | method | LocalExecutionRetainedNativeReceipts._delegate | machinery | delegation to the practical state of the resource role |
+| retained_native_receipts.py | method | LocalExecutionRetainedNativeReceipts._practical_context | machinery | delegation to the practical state of the resource role |
+| retained_native_receipts.py | method | LocalExecutionRetainedNativeReceipts.state | machinery | delegation to the practical state of the resource role |
+| scientific_inputs.py | class | LocalExecutionScientificInputs | machinery | checks of the commissioned masking and utility inputs and pinned input versions through the old receipts: custody (a record not passed raises CustodyError) and commission checks |
+| scientific_inputs.py | method | LocalExecutionScientificInputs._masking_inputs | machinery | checks of the commissioned masking and utility inputs and pinned input versions through the old receipts: custody (a record not passed raises CustodyError) and commission checks |
+| scientific_inputs.py | method | LocalExecutionScientificInputs._utility_inputs | machinery | checks of the commissioned masking and utility inputs and pinned input versions through the old receipts: custody (a record not passed raises CustodyError) and commission checks |
+| scientific_inputs.py | method | LocalExecutionScientificInputs._versions | machinery | checks of the commissioned masking and utility inputs and pinned input versions through the old receipts: custody (a record not passed raises CustodyError) and commission checks |
+| selector_contracts.py | class | LocalExecutionSelectorContracts | unplaced | result selector validation per native target family belongs to the results role (execution_result_acquisition) |
+| selector_contracts.py | method | LocalExecutionSelectorContracts._masking_selector | unplaced | result selector validation per native target family belongs to the results role (execution_result_acquisition) |
+| selector_contracts.py | method | LocalExecutionSelectorContracts._utility_selector | unplaced | result selector validation per native target family belongs to the results role (execution_result_acquisition) |
+| selector_contracts.py | method | LocalExecutionSelectorContracts._selector | unplaced | result selector validation per native target family belongs to the results role (execution_result_acquisition) |
+| selector_contracts.py | method | LocalExecutionSelectorContracts._windows | unplaced | result selector validation per native target family belongs to the results role (execution_result_acquisition) |
+| target_custody.py | class | LocalExecutionTargetCustody | machinery | authentication of the handed-off target by the old receipts (results role): custody |
+| target_custody.py | method | LocalExecutionTargetCustody._retained_masking_target | machinery | authentication of the handed-off target by the old receipts (results role): custody |
+| target_custody.py | method | LocalExecutionTargetCustody._retained_utility_target | machinery | authentication of the handed-off target by the old receipts (results role): custody |
+| target_custody.py | method | LocalExecutionTargetCustody._target | machinery | authentication of the handed-off target by the old receipts (results role): custody |
+| target_custody.py | method | LocalExecutionTargetCustody._context_target | machinery | authentication of the handed-off target by the old receipts (results role): custody |
+| task.py | class | LocalExecutionTask | machinery | the old decision loop class |
+| task.py | method | LocalExecutionTask.next | machinery | the loop is the system's; its episode content is task.py::decide and ::action |
+| task.py | function | _bind_preserved_runtime_providers | machinery | provider patching |
+| task_action.py | class | LocalExecutionTaskAction | machinery | class of the old action machine |
+| task_action.py | method | LocalExecutionTaskAction.apply_response | episode function | task.py::action (the answer is decoded and validated against the exec_command schema and the resource, or rejected with feedback; the report_update admission, delivery resolution, job_child, reads.map and contract-information repairs do not apply) |
+| task_action.py | method | LocalExecutionTaskAction.execute | machinery | journal, receive_outcome, scoring, credit and controller input staging of the action (the unit is the system's; a failed command is the receipt returned by the tool) |
+| task_action.py | function | _bind_preserved_runtime_providers | machinery | provider patching |
+| task_decision.py | class | LocalExecutionTaskDecision | episode function | task.py::decide |
+| task_decision.py | method | LocalExecutionTaskDecision.call | episode function | task.py::decide (resource context, launch library, tool knowledge, time accounting; the exchange, pending work, history and receipt parts are machinery) |
+| task_decision.py | method | LocalExecutionTaskDecision.instructions | episode function | task.py::_instructions |
+| task_decision.py | method | LocalExecutionTaskDecision.conversation_key | machinery | conversation sessions (README 3a) |
+| task_decision.py | function | _bind_preserved_runtime_providers | machinery | provider patching |
+| task_state.py | class | LocalExecutionTaskState | machinery | episode-source state, record_execution_failure, restore, restore_checkpoint, record_effect, checkpoint (README 3e) |
+| task_state.py | method | LocalExecutionTaskState.__init__ | machinery | episode-source state, record_execution_failure, restore, restore_checkpoint, record_effect, checkpoint (README 3e) |
+| task_state.py | method | LocalExecutionTaskState.bind_execution_context | machinery | episode-source state, record_execution_failure, restore, restore_checkpoint, record_effect, checkpoint (README 3e) |
+| task_state.py | method | LocalExecutionTaskState.record_execution_failure | machinery | episode-source state, record_execution_failure, restore, restore_checkpoint, record_effect, checkpoint (README 3e) |
+| task_state.py | method | LocalExecutionTaskState.restore_checkpoint | machinery | episode-source state, record_execution_failure, restore, restore_checkpoint, record_effect, checkpoint (README 3e) |
+| task_state.py | method | LocalExecutionTaskState.restore | machinery | episode-source state, record_execution_failure, restore, restore_checkpoint, record_effect, checkpoint (README 3e) |
+| task_state.py | method | LocalExecutionTaskState.record_effect | machinery | episode-source state, record_execution_failure, restore, restore_checkpoint, record_effect, checkpoint (README 3e) |
+| task_state.py | method | LocalExecutionTaskState.checkpoint | machinery | episode-source state, record_execution_failure, restore, restore_checkpoint, record_effect, checkpoint (README 3e) |
+| task_state.py | function | _bind_preserved_runtime_providers | machinery | episode-source state, record_execution_failure, restore, restore_checkpoint, record_effect, checkpoint (README 3e) |
+| to_parent.py | class | LocalExecutionToParent | episode function | messages/final_to_parent.py |
+| to_parent.py | method | LocalExecutionToParent.facts | episode function | messages/final_to_parent.py::_facts (the closed-credit facts are machinery) |
+| to_parent.py | method | LocalExecutionToParent._live_facts | episode function | messages/final_to_parent.py::_facts (the family sources empty; the file source facts of the results role and the AppService support refs are not carried) |
+| to_parent.py | method | LocalExecutionToParent.validate_report | episode function | messages/final_to_parent.py::validate_report (the masking, utility and UniProt returns validations belong to the result readers of the results role) |
+| waiting.py | class | LocalExecutionWaiting | machinery | suspension_changed: wait/suspension machinery |
+| waiting.py | method | LocalExecutionWaiting.suspension_changed | machinery | suspension_changed: wait/suspension machinery |
+| yield_estimator.py | class | ExecutionEpisodeYield | episode function | yield_estimator.py |
+| yield_estimator.py | method | ExecutionEpisodeYield._request_yield_class | episode function | yield_estimator.py::_request_yield_class (practical branch only: the version is a DeclaredField) |
+| yield_estimator.py | method | ExecutionEpisodeYield._task_yield_profile | episode function | yield_estimator.py::_task_yield_profile |
+| yield_estimator.py | method | ExecutionEpisodeYield.yield_controller | episode function | yield_estimator.py::yield_controller |
+| yield_estimator.py | method | ExecutionEpisodeYield._launch_local_yield_controller | episode function | yield_estimator.py::yield_controller (CompletionYieldController from the profile; PracticalYieldEstimator is machinery) |
+| yield_estimator.py | method | ExecutionEpisodeYield.practical_estimator | machinery | PracticalYieldEstimator |

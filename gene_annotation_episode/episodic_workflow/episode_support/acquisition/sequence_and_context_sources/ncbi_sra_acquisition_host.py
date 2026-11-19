@@ -12,6 +12,7 @@ import hashlib
 import json
 import math
 
+from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.sequence_and_context_sources.partner_presence_evidence import ncbi_sra_acquisition as sra
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.partner_presence_evidence.acquisition import SourceSnapshot
 from gene_annotation_episode.episodic_workflow.episode_support.tools.action_invocation import ActionInvocation
@@ -25,6 +26,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.source_in
 
 
 TOOL = sra.TOOL
+PUBLISHED = TableDeclaration(name="sra_file_published_outcomes",
+    columns=("operation_key", "operation_ref", "arguments", "scope", "outcome"), key=("operation_key",))
 PREPARED_VERSION = "ncbi_sra_file_prepared_v1"
 EVIDENCE_VERSION = "ncbi_sra_file_receipt_evidence_v1"
 
@@ -196,15 +199,23 @@ def _source(store, reference):
     return value
 
 
+def record_sra_file_operation(registry, operation_key, arguments, scope, outcome):
+    """Keep the outcome of one published SRA file request, keyed by its operation key, for its later
+    authentication."""
+    return registry.store.table(PUBLISHED).put({"operation_key": operation_key,
+        "operation_ref": outcome["operation_ref"], "arguments": arguments, "scope": scope, "outcome": outcome})
+
+
 def _operation(registry, arguments, context, operation_key, outcome):
-    """The Store's saved operation of this action; the recorded decision was checked by ``_authority``."""
-    row = registry.store.db.execute("SELECT * FROM tool_operations WHERE operation_key=?", (operation_key,)).fetchone()
-    _require(row is not None and row["name"] == TOOL and row["arguments"] == canonical(arguments)
-        and row["scope"] == canonical(plain(context.scope))
-        and row["id"] == identity("operation", dict(key=operation_key, name=TOOL, arguments=arguments)),
+    """The saved operation of this action; the recorded decision was checked by ``_authority``."""
+    rows = registry.store.table(PUBLISHED).select({"operation_key": operation_key})
+    _require(len(rows) == 1, "sra_file_saved_outcome_conflict")
+    row = rows[0]
+    _require(_same(row["arguments"], arguments) and _same(row["scope"], plain(context.scope))
+        and row["operation_ref"] == identity("operation", dict(key=operation_key, name=TOOL, arguments=arguments)),
         "sra_file_saved_outcome_conflict")
-    saved = json.loads(row["result"])
-    _require(_same(saved, outcome) and saved.get("operation_ref") == row["id"], "sra_file_saved_outcome_conflict")
+    saved = row["outcome"]
+    _require(_same(saved, outcome) and saved.get("operation_ref") == row["operation_ref"], "sra_file_saved_outcome_conflict")
     return saved
 
 
@@ -249,4 +260,4 @@ def authenticate_saved_sra_file(registry, arguments, *, authority, operation_key
 
 
 __all__ = ["TOOL", "PREPARED_VERSION", "EVIDENCE_VERSION", "prepare_sra_file",
-    "publish_sra_file_request", "authenticate_saved_sra_file"]
+    "publish_sra_file_request", "authenticate_saved_sra_file", "record_sra_file_operation", "PUBLISHED"]

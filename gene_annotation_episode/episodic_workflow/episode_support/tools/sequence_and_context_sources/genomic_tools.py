@@ -4,6 +4,7 @@ from copy import deepcopy
 import json
 from pathlib import Path
 
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_and_context_sources.genomic_tables import RESULTS
 from gene_annotation_episode.episodic_workflow.episode_support.grading.partner_presence_evidence.scoring import VERSION, MAX_FILE_BYTES, MAX_PANEL, MAX_FLANK_BP, digest, require
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.partner_presence_evidence.acquisition import AcquisitionError
 from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_presence_evidence.communication import plain
@@ -56,11 +57,6 @@ class A107GenomicToolRegistry(ToolRegistry):
         self.a107_genomic_policy = LocalJobPolicy(min(2 * 1024 ** 3, self.local_job_policy.memory_bytes), min(1024 ** 3, self.local_job_policy.scratch_bytes))
         # Caller-supplied material provenance is not an argument a model can set.
         self.a107_target_genomic_sources = deepcopy(target_genomic_sources or {})
-        for sql in (
-            'CREATE TABLE IF NOT EXISTS a103_bindings (source_ref TEXT PRIMARY KEY,body TEXT NOT NULL)',
-            'CREATE TABLE IF NOT EXISTS a103_operations (operation_key TEXT PRIMARY KEY,request TEXT NOT NULL,result TEXT NOT NULL)',
-        ):
-            self.store.db.execute(sql)
 
     def as_record(self):
         return {**super().as_record(),'a107_genomic_tools':{'version':VERSION,'directory':str(self.a107_genomic_directory),
@@ -140,10 +136,6 @@ class A107GenomicToolRegistry(ToolRegistry):
             require(known<=set(context.received_record_refs),'a103_explicit_received_inputs_required')
             request = canonical({'run_id':context.run_id,'episode_id':context.episode_id,
                 'name':name,'args':args,'scope':scope,'version':VERSION})
-            prior = self.store.db.execute('SELECT * FROM a103_operations WHERE operation_key=?',(operation_key,)).fetchone()
-            if prior:
-                require(prior['request']==request,'a103_operation_identity_conflict')
-                return json.loads(prior['result'])
             from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.partner_presence_evidence.hpc import freeze,commission,existing_local,result_body
             require(self.a107_genomic_execution_resources is not None and args['resource_id'] in self.a107_genomic_execution_resources,
                 'a103_configured_hpc_resource_required')
@@ -174,7 +166,7 @@ class A107GenomicToolRegistry(ToolRegistry):
                         'new_execution_requested':True,'scientific_credit':0.}
             outcome = {'status':'completed','record_refs':list(dict.fromkeys(records)),
                 'changed_record_refs':[],'result':result,'feedback':None}
-            self.store.db.execute('INSERT INTO a103_operations VALUES(?,?,?)',(operation_key,request,canonical(outcome)))
+            self.store.table(RESULTS).put({"request":request,"result":canonical(outcome)})
             return outcome
         except AcquisitionError as error:
             return {'status':'unavailable','record_refs':[],'changed_record_refs':[],'result':None,
