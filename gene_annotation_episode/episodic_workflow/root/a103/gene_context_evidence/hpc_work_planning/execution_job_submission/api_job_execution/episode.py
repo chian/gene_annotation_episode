@@ -1,32 +1,21 @@
-"""Private launch_api episode behavior for A103."""
+"""The A103 ``gene_context_evidence/hpc_work_planning/execution_job_submission/api_job_execution``
+binding on the generic runner: one assigned API job over its own API services, its
+model-selected operations and its completion continuation (``runtime_binding``).
+"""
 from __future__ import annotations
-from .contracts import A103HomologyExecution, ASSIGNMENT_SCHEMA, BLAST_GRADED_REQUEST_SCHEMA, BLAST_GRADED_REQUEST_VERSION, BLAST_GRADED_RETURN_SCHEMA, BLAST_GRADED_RETURN_SOURCE, FILE_LIMIT, GENERIC_REQUESTED_JOB_SCHEMA, INPUT_VERSION_SCHEMA, KINDS, LAUNCH_VERSION, LIMIT, LOCAL_FILE_SOURCE_PROVIDER, LOCAL_FILE_SOURCE_RECEIPT_VERSION, LOCAL_FILE_SOURCE_SELECTOR_SCHEMA, LocalFileSourceResults, NATIVE_RESULT_ORIGIN, NATIVE_RESULT_ORIGIN_SCHEMA, NATIVE_SELECTOR_SCHEMA, OFFSET, Path, PracticalReceiptInformation, RESULTS_SCHEMA, RESULTS_VERSION, RESULT_PROVIDER, ROLES, ROLE_KINDS, SELECTION_SCHEMA, TEXT, TerminalExecutionBehavior, VERSION, _CLOSED_CREDIT, _immutable, _outcome, _read, base64, canonical, checked, confined, deepcopy, digest, hashlib, homology_api_contracts, identity, install_preparation_result_readers, install_primary_result_readers, is_file_source_selector, is_native_blast_database_target, is_native_blast_masking_target, is_native_blast_target, is_native_blast_utility_target, is_native_hmmer_preparation_target, is_native_hmmer_target, is_standard_blast_database_target, json, launch_operation_catalog, launch_request_schema, math, native_operation_contracts, native_result_operation_catalog, obj, operation_catalog, plain, preparation_job_schemas, preparation_operation_contracts, requested_job_schemas, result_selector_conditions, validate_assignment, validate_completion_proof, validate_form, validate_preparation_resource_binding, validate_primary_resource_bindings
-from .decision_presentation import render_api_job_prompt
-from .task import APIJobTask
-from .goal import APIJobGoal
-from .result_records import ExecutionResultRecords
-from .operations import APIJobOperations
-from .internal_summary import APIJobSummary
-from .to_parent import APIJobReport
-from .received_information import ReceivedExecutionInformation
-from .from_parent import APIJobAssignment
-from .credit import ExecutionEpisodeCredit
-from importlib import import_module as _import_module
-from .yield_estimator import ExecutionEpisodeYield
 
-from .configuration import APIJobConfiguration
-from .binding_record import APIJobBindingRecord
+from types import MappingProxyType
 
-from .action_policy import APIJobActionPolicy
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.contract_binding import A103ContractBinding
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.execution_job_submission.\
+    api_job_execution.runtime_binding import ApiJobExecutionBinding
 
-from .child_eligibility import APIJobChildEligibility
 
-class ExecutionEpisode(APIJobChildEligibility, APIJobActionPolicy, APIJobConfiguration, APIJobBindingRecord, APIJobAssignment, ReceivedExecutionInformation, APIJobReport, ExecutionEpisodeCredit, ExecutionEpisodeYield, APIJobSummary, APIJobOperations, ExecutionResultRecords, APIJobGoal, A103HomologyExecution):
+class ExecutionEpisode(ApiJobExecutionBinding, A103ContractBinding):
     binding_path = 'gene_context_evidence/hpc_work_planning/execution_job_submission/api_job_execution'
+    grain_name = 'gene_context_evidence__hpc_work_planning__execution_job_submission__api_job_execution'
+    goal = 'Improve the API job submission and its handoff'
+    unit = 'One API submission action'
+    result = 'The API job handoff'
+    child_slots = MappingProxyType({})
     commissioning_parent = 'gene_context_evidence/hpc_work_planning/execution_job_submission'
-    roles = ('launch_api',)
-    decision_source_type = APIJobTask
-    decision_prompt_renderer = staticmethod(render_api_job_prompt)
-    entry_roles = ()
-    replaces_default_instructions = True
-

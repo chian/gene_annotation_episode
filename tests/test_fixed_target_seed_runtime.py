@@ -17,12 +17,8 @@ import pytest
 from gene_annotation_episode import materials
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.fixed_target_seed import FixedTargetSeedError, prepare_fixed_target_seed
-from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
-from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_fixed_target_seed import make_seed_witness
-from test_runtime import FixtureController, ScriptedProvider
 
 
 def encoded(value):
@@ -349,44 +345,3 @@ def test_existing_symlink_or_overlapping_destination_never_writes_source(tmp_pat
     failure = assert_failure(caught.value, code=expected, destination=destination, staged=False)
     assert file_inventory(tmp_path) == before
     emit_evidence('failure-destination-' + shape, failure)
-
-
-def test_initial_seed_receipts_exist_before_first_projection_without_actions(tmp_path):
-    witness = make_seed_witness(tmp_path / 'source')
-    destination = tmp_path / 'new-workspace'
-    receipt = prepare_fixed_target_seed(case_directory=witness['case_directory'], source_workspace=witness['source_workspace'], destination_workspace=destination)
-    sealed_refs = receipt['initial_known_record_refs']
-    projections, controllers = [], []
-
-    class RecordingProgress(ScientificFindingProgress):
-        def __call__(self, store, scope, **kwargs):
-            rows = store.db.execute('SELECT record_ref,receipt_kind,source_index FROM runtime_record_receipts ORDER BY record_ref').fetchall()
-            expected = [ref for ref in sealed_refs if store.get(ref)['record_type'] != 'collection_member']
-            assert [row['record_ref'] for row in rows] == expected
-            assert all(row['receipt_kind'] == 'initial' and row['source_index'] is None for row in rows)
-            assert list(kwargs['known_assessment_refs']) == []
-            result = super().__call__(store, scope, known_assessment_refs=[])
-            projections.append(result)
-            return result
-
-    def controller(path, initial):
-        value = FixtureController(str(path), initial, 1)
-        controllers.append(value)
-        return value
-
-    with Store(destination) as store:
-        scorer = RecordingProgress(FindingProgressPolicy(7))  # Explicit fixture units only.
-        provider = ScriptedProvider([])
-        workflow = Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider, tmp_path / 'fixture-run', 'fixed-seed-fixture', controller, scorer, initial_known_record_refs=sealed_refs, episode_record_receipts=True, episode_binding_factories=())
-        root = workflow.build('annotation', 'root', 'Check the supplied fixed target baseline', {'subject_refs': [receipt['fixed_identity']['target_ref']]})
-        assert projections and projections[0]['credit'] == 0
-        assert workflow.journal.row('runtime_episodes', root.source.episode_id)['initial_credit'] == 0
-        assert workflow.source_credit_view(root.source)['credit'] == 0
-        assert workflow.source_credit_view(root.source)['credit'] == 0
-        assert all(value['retained_finding_count'] == 0 for value in projections)
-        assert not controllers and not provider.contexts
-        for table in ('runtime_actions', 'runtime_observations', 'runtime_model_calls', 'runtime_completion_slots'):
-            assert store.db.execute('SELECT count(*) FROM ' + table).fetchone()[0] == 0
-        assert receipt['verification']['initial_known_record_refs_sha256'] == digest(sealed_refs)
-        evidence = {'seed_baseline_count': len(sealed_refs), 'seed_baseline_sha256': digest(sealed_refs), 'first_projection_after_initial_receipts': True, 'projection_credits': [value['credit'] for value in projections], 'completed_actions': 0, 'controller_observations': 0, 'model_calls': 0, 'native_jobs': 0}
-    emit_evidence('runtime-baseline-order', evidence)

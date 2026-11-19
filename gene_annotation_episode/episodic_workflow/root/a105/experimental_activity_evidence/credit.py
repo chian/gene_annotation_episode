@@ -1,61 +1,83 @@
-"""Private scientific-process credit behavior for A105."""
+"""A105 head credit on its own unbounded scale: distinct retained target findings known to this Episode.
+
+The head's commission (``episode_runtime`` assignment) carries its own declared
+whole-axis task (``evidence_task``) and the subject ``scope``. Credit is one
+``credit_unit`` per distinct retained typed finding among the assessments this
+Episode has actually received (its ``EpisodeReceipts`` in the scientific
+store). It is never bounded, clamped or rescaled.
+"""
 from __future__ import annotations
-from .scientific_contracts import EVIDENCE_AXIS_VERSION, INSTRUCTION_VERSION, ROLE, selection_fields
+
+import math
+
+from episode_runtime import RecordForm
+from method_loop import EpisodeRef
+
 from gene_annotation_episode.domain import ContractError
 
-from ..communication import plain
-from gene_annotation_episode.domain import ContractError
-from ..investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import plain
+from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.episode_support.findings.experimental_activity_evidence.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 
-def original_task_projector(assignment):
-    task = plain(assignment).get('context', {}).get('evidence_task')
-    if (not isinstance(task, dict) or set(task) != {
-            'version', 'kind', 'evidence_axis', 'credit_unit'}
-            or task['version'] != 'evidence_axis_task_v1'
-            or task['kind'] != 'whole_axis_findings' or task['evidence_axis'] != 'A105'):
+AXIS = 'A105'
+_TASK_FIELDS = {'version', 'kind', 'evidence_axis', 'credit_unit'}
+
+
+def evidence_task_projector(task):
+    """The head's finding-progress projector for its own declared whole-axis task."""
+    task = plain(task)
+    if (not isinstance(task, dict) or set(task) != _TASK_FIELDS or task['version'] != 'evidence_axis_task_v1'
+            or task['kind'] != 'whole_axis_findings' or task['evidence_axis'] != AXIS):
         raise ContractError('original_axis_finding_task_required')
     return ScientificFindingProgress(FindingProgressPolicy(task['credit_unit']))
 
+
+def parent_episode_id(bound, grain_name):
+    """The Episode id of this head's parent when the parent is itself an A105 head, else ``None``.
+
+    Only an A105 head keeps A105 receipts; the root annotation episode (or any
+    other commissioning parent) hands the head nothing but its ``scope``.
+    """
+    parent = tuple(bound.path[:-1])
+    if parent and parent[-1][0] == grain_name:
+        return EpisodeRef(bound.run_id, parent).episode_id
+    return None
+
+
 class ExperimentalActivityEvidenceCredit:
 
-    def _scientific_credit_invocation(self, services, context, receiver_selection):
-        workflow = services.workflow
-        local = len(context.path) > 1
-        projector = workflow.scientific_projector_for_context(context)
-        arguments = {}
-        if local:
-            request = context.request
-            contract = request['report_contract']
-            arguments.update(assignment={'goal': plain(request['goal']), 'scope': plain(context.scope), 'purpose': contract['decision'], 'schema': plain(contract['measurements']['schema']), 'initial_report': plain(request['message']['initial_report'])}, episode_id=context.episode_id, run_id=context.run_id)
-            annotation = services.proposed_annotation_for(context)
-            if annotation is not None:
-                arguments['assignment']['proposed_annotation_ref'] = annotation
-            elif services.annotation_task_required():
-                raise ValueError('scientific_task_requires_original_proposed_annotation')
-        arguments.update(workflow.projector_receipt_arguments(projector, context.episode_id))
-        result = workflow.projection_view(projector, plain(context.scope), **arguments)
-        if local and arguments['assignment'].get('proposed_annotation_ref') is not None:
-            result['proposed_annotation_ref'] = arguments['assignment']['proposed_annotation_ref']
+    def credit_projector(self, assignment):
+        """The projector for an admitted head assignment (``scope`` + declared ``evidence_task``)."""
+        if not isinstance(self.assignment_form, RecordForm):
+            raise ContractError('a105_head_assignment_form_required')
+        admitted = self.assignment_form.admit(assignment, 'a105_head_credit_assignment')
+        return evidence_task_projector(admitted['evidence_task'])
+
+    def open_receipts(self, store, bound):
+        """Bind this Episode's receipts once and receive its subject as initial knowledge.
+
+        Idempotent: a rebuilt Episode recovers the binding it recorded before and
+        re-receives the same subject references (receipts are unique per record).
+        """
+        receipts = EpisodeReceipts(store, bound.run_id)
+        receipts.bind(bound.episode_id, parent_episode_id(bound, self.grain_name))
+        scope = store.validate_scope(plain(bound.assignment['scope']))
+        receipts.receive(bound.episode_id, scope['subject_refs'], kind='initial')
+        return receipts
+
+    def known_finding_credit(self, store, bound):
+        """Project this Episode's credit from the assessments it has received.
+
+        Returns the scalar ``credit`` and the projection's own finding details.
+        """
+        projector = self.credit_projector(bound.assignment)
+        known = list(EpisodeReceipts(store, bound.run_id).known(bound.episode_id, record_type='assessment'))
+        projected = projector(store, plain(bound.assignment['scope']), known_assessment_refs=known)
+        credit = float(projected['credit'])
+        if not math.isfinite(credit):
+            raise ContractError('a105_finite_head_credit_required')
+        result = {'credit': credit}
+        for key in ('retained_finding_count', 'source_contributions', 'inactive_dependencies', 'detail_pages',
+                    'interpretation', 'policy'):
+            result[key] = plain(projected[key])
         return result
-
-    def credit_kind(self, role):
-        self._role(role)
-        return 'scientific'
-
-    def credit_projector(self, context):
-        if context.role != ROLE:
-            return None
-        if self._yield_bindings is not None and (not context.assignment.get('proposed_annotation_ref')):
-            raise ContractError('scientific_task_proposed_annotation_required')
-        selection = self._original_selection(context)
-        axis = selection[selection_fields(selection)[0]]
-        if self.library.resolve(axis).get('entry_version') not in (INSTRUCTION_VERSION, EVIDENCE_AXIS_VERSION):
-            return None
-        return original_task_projector(context.assignment)
-
-    def credit_view(self, context, receiver_selection):
-        self.validate_context(context)
-        invocation = getattr(self.services, 'scientific_credit_for', None)
-        if callable(invocation):
-            return invocation(self._scientific_credit_invocation, context, receiver_selection)
-        return self.services.scientific_credit(context, receiver_selection)

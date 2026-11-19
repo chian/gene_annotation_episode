@@ -33,7 +33,7 @@ from gene_annotation_episode.sequence_extraction_grader import calculate_extract
 from gene_annotation_episode.sequence_mapping import VERSION
 
 ROOT = Path(__file__).resolve().parents[1]
-CAPTURE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/sequence_support'
+CAPTURE = ROOT / 'tests/fixtures/sequence_support'
 
 
 def identity_mapping(length, source_ref):

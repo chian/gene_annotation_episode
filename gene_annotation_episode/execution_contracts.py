@@ -1,12 +1,30 @@
 """Pure shared contracts for explicit execution episodes and physical targets."""
+from collections.abc import Mapping
 from copy import deepcopy
 import hashlib
 import json
 
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.episodic_workflow.root.library.record_serialization import plain, canonical, digest
 from .launch_instructions import SELECTION_SCHEMA, validate_selection
+
+
+def plain(value):
+    """Plain JSON containers from mappings and sequences."""
+    if isinstance(value, Mapping):
+        return {k: plain(v) for k, v in value.items()}
+    if isinstance(value, (tuple, list)):
+        return [plain(v) for v in value]
+    return value
+
+
+def canonical(value):
+    return json.dumps(plain(value), sort_keys=True, separators=(',', ':'),
+                      ensure_ascii=False, allow_nan=False)
+
+
+def digest(value):
+    return hashlib.sha256(canonical(value).encode('utf-8')).hexdigest()
 
 
 def obj(properties, required=None):

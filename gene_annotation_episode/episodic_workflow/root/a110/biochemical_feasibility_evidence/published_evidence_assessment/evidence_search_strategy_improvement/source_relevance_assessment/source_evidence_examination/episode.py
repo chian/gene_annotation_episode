@@ -1,77 +1,23 @@
-"""Private literature_page episode behavior for A110."""
+"""The A110 source_evidence_examination literature binding.
+
+Its behaviour is the shared A110 literature implementation
+(``published_evidence_assessment/literature_binding.py``); this binding declares only what is its own.
+"""
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.received_execution_information import received_execution_information as _received_execution_information
-from .initial_information import initial_information as _private_initial_information
-from importlib import import_module as _import_module
-from .configuration import LiteratureConfiguration
-from .binding_record import LiteratureBindingRecord
-from .from_parent import LiteratureAssignment
-from .source_custody import LiteratureSourceCustody
-from .source_operations import LiteratureSourceOperations
-from .goal import LiteratureGoal
-from .internal_summary import LiteratureSummary
-from .parent_context import LiteratureParentContext
-from .numerical_report_facts import LiteratureNumericalReportFacts
-from .received_reports import LiteratureReceivedReports
-from .to_parent import LiteratureReport
-from .credit import LiteratureCredit
-from .yield_estimator import LiteratureYield
-from .waiting import LiteratureWaiting
-from .reaction_records import LiteratureReactionRecords
-from .task import SourceInvestigationTask
-from .task_presentation import present_source_context
-from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.received_execution_information import received_execution_information as _received_execution_information
-from .initial_information import initial_information as _private_initial_information
 
-class LiteratureEpisode(LiteratureConfiguration, LiteratureBindingRecord, LiteratureAssignment, LiteratureSourceCustody, LiteratureSourceOperations, LiteratureGoal, LiteratureSummary, LiteratureParentContext, LiteratureNumericalReportFacts, LiteratureReceivedReports, LiteratureReport, LiteratureCredit, LiteratureYield, LiteratureWaiting, LiteratureReactionRecords):
-    received_execution_information = staticmethod(_received_execution_information)
-    initial_information = staticmethod(_private_initial_information)
+from types import MappingProxyType
+
+from ....literature_binding import LiteratureBinding
+
+
+class SourceEvidenceExaminationEpisode(LiteratureBinding):
+    """Examine one source for applicable evidence."""
     binding_path = 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination'
+    grain_name = binding_path.replace('/', '__')
+    goal = 'Examine one source for applicable evidence'
+    unit = 'One source-examination action'
+    result = 'The examined evidence with its subscoring sheet'
+    child_slots = MappingProxyType({'passage_evidence_extraction': 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction', 'source_coverage_improvement': 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement', 'table_evidence_extraction': 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction'})
     commissioning_parent = 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment'
-    "A110's private reaction and feasibility literature episode."
-    roles = ('literature_page',)
-    entry_roles = ()
-
-    @staticmethod
-    def _role(role):
-        if role != 'literature_page':
-            raise ValueError('unsupported_literature_role:' + str(role))
-        return role
-
-    def allowed_children(self, parent, caller_capabilities):
-        self._role(parent.role)
-        return self.child_roles(parent.role, context=parent)
-
-    def child_roles(self, role, *, context=None):
-        self._role(role)
-        return ('literature_table', 'literature_ordered', 'literature_targeted')
-
-    def permitted_common_actions(self, context):
-        self._role(context.role)
-        return ('tool', 'child', 'redeliver_report')
-    decision_source_type = SourceInvestigationTask
-    decision_prompt_renderer = staticmethod(present_source_context)
-
-    def child_request_assembler(self, role):
-        if role == 'literature_table':
-            from .to_child_table_evidence_extraction import assemble_request
-            return assemble_request
-        if role == 'literature_ordered':
-            from .to_child_source_coverage_improvement import assemble_request
-            return assemble_request
-        if role == 'literature_targeted':
-            from .to_child_passage_evidence_extraction import assemble_request
-            return assemble_request
-        return None
-
-    def execution_child_report_receiver(self, role):
-        if role == 'literature_table':
-            from .from_child_table_evidence_extraction import receive_report
-            return receive_report
-        if role == 'literature_ordered':
-            from .from_child_source_coverage_improvement import receive_report
-            return receive_report
-        if role == 'literature_targeted':
-            from .from_child_passage_evidence_extraction import receive_report
-            return receive_report
-        return None
+    acquisition = False
+    instruction = 'Examine one assigned source for applicable chemical, reaction or resource evidence. Read its actual representation; commission table extraction, passage extraction or ordered coverage children for the parts of the source that need them.'

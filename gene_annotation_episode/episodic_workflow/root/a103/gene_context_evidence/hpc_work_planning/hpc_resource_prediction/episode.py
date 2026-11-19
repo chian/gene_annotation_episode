@@ -1,38 +1,25 @@
-"""Predefined private HPC resource prediction for A103."""
-from importlib import import_module
-from .task import ResourcePredictionTask
-from gene_annotation_episode.episodic_workflow.root.a103.library.hpc_prompt import render_hpc_prompt
-from .configuration import PredictionConfiguration
-from .from_parent import PredictionAssignment
-from .to_parent import PredictionReport
-from .goal import PredictionGoal
-from .internal_summary import PredictionSummary
-from .prediction_state import PredictionState
-from .prediction_history import PredictionHistory
-from .prediction_operations import PredictionOperations
-from .portfolio_comparison import PortfolioComparison
-from .received_evidence import ReceivedEvidence
-from .closed_models import ClosedModels
-from .credit import HPCEpisodeCredit
-from .queue_observations import QueueObservations
-from .binding_record import PredictionBindingRecord
-from .yield_estimator import HPCEpisodeYield
+"""The A103 ``gene_context_evidence/hpc_work_planning/hpc_resource_prediction`` binding on the generic runner.
 
-class HPCEpisode(PredictionConfiguration, PredictionAssignment, PredictionReport, PredictionGoal, PredictionSummary, PredictionState, PredictionHistory, PredictionOperations, PortfolioComparison, ReceivedEvidence, ClosedModels, HPCEpisodeCredit, HPCEpisodeYield, QueueObservations, PredictionBindingRecord):
+Its decision source, credit and continuation are ``hpc_work_planning/hpc_runtime``
+(role ``hpc_prediction``): model-selected fit, measurement and comparison
+operations over its owner's HPC ledger.
+"""
+from __future__ import annotations
+
+from types import MappingProxyType
+
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.contract_binding import (
+    A103ContractBinding)
+
+from ..hpc_runtime import PREDICTION, HPCRuntime
+
+
+class HPCEpisode(HPCRuntime, A103ContractBinding):
     binding_path = 'gene_context_evidence/hpc_work_planning/hpc_resource_prediction'
+    grain_name = 'gene_context_evidence__hpc_work_planning__hpc_resource_prediction'
+    goal = 'Improve the predicted resource needs of the planned HPC work'
+    unit = 'One prediction action'
+    result = 'The resource prediction'
+    child_slots = MappingProxyType({})
     commissioning_parent = 'gene_context_evidence/hpc_work_planning'
-    roles = ('hpc_prediction',)
-    decision_source_type = ResourcePredictionTask
-    decision_prompt_renderer = staticmethod(render_hpc_prompt)
-    entry_roles = ()
-    replaces_default_instructions = True
-
-    def child_roles(self, role):
-        self.credit_kind(role)
-        return ()
-
-    def allowed_children(self, parent, caller_capabilities):
-        return self.child_roles(parent.role)
-
-    def permitted_common_actions(self, context):
-        return ('tool',)
+    hpc_role = PREDICTION

@@ -1,6 +1,0 @@
-from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_comparative_systems_bundle_contracts import validate_parameters
-from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_comparative_systems_fact_contracts import validate_requested_form
-ADAPTER_ID = 'bvbrc_comparative_systems'
-ADAPTER_VERSION = '1'
-

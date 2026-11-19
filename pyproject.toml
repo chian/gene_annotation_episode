@@ -16,26 +16,23 @@ dev = ["pytest>=8,<10"]
 gene-episode = "gene_annotation_episode.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["gene_annotation_episode*", "method_loop*"]
+include = ["gene_annotation_episode*", "method_loop*", "episode_runtime*"]
 exclude = ["tests*", "_superseded*"]
 
 [tool.setuptools.package-data]
-"gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_information" = ["bvbrc_appservice_schemas.json"]
-"gene_annotation_episode.episodic_workflow.root.a103" = ["defaults.toml"]
-"gene_annotation_episode.episodic_workflow.root.a103.tests" = ["fixtures/source_investigation/*.xml"]
-"gene_annotation_episode.episodic_workflow.root.a104.tests" = ["fixtures/source_investigation/*.xml"]
-"gene_annotation_episode.episodic_workflow.root.a104.execution_instruction_library" = ["*.md"]
+"gene_annotation_episode.episodic_workflow.episode_support.configuration.gene_context_evidence" = ["defaults.toml"]
+"gene_annotation_episode.episodic_workflow.episode_support.grading.gene_context_evidence.tests" = ["fixtures/source_investigation/*.xml"]
+"gene_annotation_episode.episodic_workflow.episode_support.acquisition.evolutionary_history_evidence.tests" = ["fixtures/source_investigation/*.xml"]
+"gene_annotation_episode.episodic_workflow.episode_support.instructions.execution" = ["*.md", "partner_presence_evidence/*.md"]
 "gene_annotation_episode.episodic_workflow.root.tests" = ["fixtures/hpc_prediction/*.json", "fixtures/public_callers/inert_native", "fixtures/public_callers/references.faa", "fixtures/public_callers/policy.py", "fixtures/fresh_decision_binding.json", "fixtures/homer_v51_selected_region_inputs.zip"]
-"gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies" = ["*.json", "adapter_source_custody/*.source"]
-"gene_annotation_episode.execution_instruction_library" = ["*.md"]
-gene_annotation_episode = ["defaults.toml", "vendor/*.json", "vendor/LICENSE*", "knowledge/*.json", "knowledge/*.md", "launch_instruction_library/*.json", "launch_instruction_library/*.md", "bvbrc_application_specs/MANIFEST.json", "bvbrc_application_specs/original/*.json", "bvbrc_application_specs/derived/*.json", "bvbrc_application_specs/README.md", "bvbrc_appservice_schemas.json", "bvbrc_fastqutils_schemas.json"]
+gene_annotation_episode = ["defaults.toml", "vendor/*.json", "vendor/LICENSE*", "knowledge/*.json", "knowledge/*.md", "launch_instruction_library/*.json", "launch_instruction_library/*.md", "bvbrc_fastqutils_schemas.json"]
 method_loop = ["LICENSE", "SOURCE.json", "LOCAL_PATCHES.json"]
 
 [tool.pytest.ini_options]
 testpaths = [
+    "episode_runtime/tests",
     "tests",
     "gene_annotation_episode/episodic_workflow/root/tests",
-    "gene_annotation_episode/episodic_workflow/root/execution_monitoring",
     "gene_annotation_episode/episodic_workflow/root/a101",
     "gene_annotation_episode/episodic_workflow/root/a102",
     "gene_annotation_episode/episodic_workflow/root/a103",
@@ -45,25 +42,17 @@ testpaths = [
     "gene_annotation_episode/episodic_workflow/root/a107",
     "gene_annotation_episode/episodic_workflow/root/a108",
     "gene_annotation_episode/episodic_workflow/root/a110",
+    "gene_annotation_episode/episodic_workflow/episode_support",
 ]
 pythonpath = [
     ".",
     "tests",
     "gene_annotation_episode/episodic_workflow/root/tests",
-    "gene_annotation_episode/episodic_workflow/root/execution_monitoring",
-    "gene_annotation_episode/episodic_workflow/root/a101/tests",
-    "gene_annotation_episode/episodic_workflow/root/a102/tests",
-    "gene_annotation_episode/episodic_workflow/root/a103/tests",
-    "gene_annotation_episode/episodic_workflow/root/a104/tests",
-    "gene_annotation_episode/episodic_workflow/root/a105/tests",
-    "gene_annotation_episode/episodic_workflow/root/a106/tests",
-    "gene_annotation_episode/episodic_workflow/root/a107/tests",
-    "gene_annotation_episode/episodic_workflow/root/a108/tests",
     "gene_annotation_episode/episodic_workflow/root/a110/tests",
-    "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/tests",
-    "gene_annotation_episode/episodic_workflow/root/a106/published_evidence_assessment/tests",
-    "gene_annotation_episode/episodic_workflow/root/a107/published_evidence_assessment/tests",
-    "gene_annotation_episode/episodic_workflow/root/a108/published_evidence_assessment/tests",
 ]
+markers = [
+    "model_run: a real episode run that calls the model; select with -m model_run",
+]
+addopts = "-m 'not model_run'"
 cache_dir = "runs/pytest-cache"
 norecursedirs = ["fixtures", "__pycache__", "runs", "verification"]

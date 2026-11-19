@@ -607,29 +607,6 @@ def read_macs2_peak_output(plan, *, path, offset, limit):
         bytes_base64=base64.b64encode(raw).decode('ascii'), text_utf8=raw.decode('utf-8', errors='replace'))
 
 
-_DESCRIPTION = 'Call narrow ChIP-seq peaks from supplied treatment and matched-control reads with MACS2; retain native peak measurements.'
-_INSTRUCTIONS = (
-    'Use the supplied read Files and their declared sample/reference associations, effective genome size and q-value cutoff. '
-    'Run one callpeak operation with the selected MACS2 installation and its native input-detection and '
-    'fragment-size/strand-shift model defaults. Retain original XLS, narrowPeak, summit, model and log outputs. '
-    'Populate the existing shared peak components and return the requested intervals, native statistics and qualifications. '
-    'Preserve each format’s coordinates and native values; the three representations do not count as three separate peak sets. '
-    'Missing or failed output remains distinguishable from a complete empty result. Later reads use retained results.'
-)
-
-
-def macs2_peak_tool_contracts(bindings, *, resource_kind, resource_id):
-    from .macs2_peak_request_binding import resource_assignment_schema
-    require(resource_kind == 'local' and type(resource_id) is str and bool(resource_id) and '\0' not in resource_id)
-    bindings = validate_macs2_peak_bindings(bindings)
-    if not bindings:
-        return []
-    return [dict(name=OPERATION, description=_DESCRIPTION, resources='local', instructions=_INSTRUCTIONS,
-        input_schema=resource_assignment_schema(resource_id, bindings=bindings),
-        invocation_route=dict(kind='commission', routes=[dict(entry_role='launch', resource_id=resource_id,
-            resource_role='launch_local')]))]
-
-
 def freeze_macs2_peak_software_binding(*, module_root, snapshot_directory, native_runtime):
     from .native_atac_differential_software import freeze_atac_native_software_binding
     return freeze_atac_native_software_binding(module_root=module_root, snapshot_directory=snapshot_directory,
@@ -649,7 +626,7 @@ __all__ = ['OPERATION', 'MODE', 'POLICY', 'DRIVER_MODULE', 'RUN_PLAN_FILENAME', 
     'validate_macs2_peak_native_job', 'validate_macs2_peak_requested_job', 'validate_macs2_peak_run_plan',
     'macs2_peak_plan',
     'validate_macs2_peak_original_controls',
-    'requested_job_from_macs2_peak', 'macs2_peak_tool_contracts', 'macs2_peak_output_files', 'macs2_peak_driver_argv',
+    'requested_job_from_macs2_peak', 'macs2_peak_output_files', 'macs2_peak_driver_argv',
     'macs2_peak_command_argv', 'prepare_local_macs2_peak', 'read_local_macs2_peak_plan', 'run_macs2_peak',
     'validate_macs2_peak_seal', 'macs2_peak_callpeak_binding', 'macs2_peak_observed_files', 'read_macs2_peak_output',
     'freeze_macs2_peak_software_binding']

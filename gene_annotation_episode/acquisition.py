@@ -554,10 +554,7 @@ except Exception as error:
             return False
 
         def error_echo(error):
-            try:
-                return literal_echo(str(error), type(error).__name__)
-            except Exception:
-                return False
+            return literal_echo(str(error), type(error).__name__)
 
         def authentication_error(code, *, phase, status=None, captured=None, capture=None,
                                  exception_type=None):
@@ -691,7 +688,7 @@ except Exception as error:
     def _read_bounded_response(response, limit, *, decoded=False, retain=None, progress=None):
         """Retain observed bytes under a caller limit, never infer completeness."""
         pieces, observed, failure, error_name = [], 0, None, None
-        headers = getattr(response, "headers", {})
+        headers = response.headers
         length_text = headers.get("Content-Length")
         declared = (int(length_text) if isinstance(length_text, str)
                     and re.fullmatch(r"[0-9]+", length_text) is not None
@@ -922,31 +919,6 @@ except Exception as error:
     def taxonomy(self, taxon_id: int) -> SourceSnapshot:
         return self._http("ncbi_entrez", "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi",
                           {"db": "taxonomy", "id": taxon_id, "retmode": "xml"}, "application/xml")
-
-    def rcsb_entry(self, entry_id: str, *, fields: list[str], max_bytes: int) -> SourceSnapshot:
-        from .rcsb_acquisition import validate_rcsb_entry_arguments, rcsb_entry_url
-        arguments = validate_rcsb_entry_arguments(dict(entry_id=entry_id, fields=fields, max_bytes=max_bytes))
-        return self._rcsb_get(rcsb_entry_url(entry_id), "application/json", arguments)
-
-    def rcsb_structure_file(self, entry_id: str, *, file_format: str, max_bytes: int) -> SourceSnapshot:
-        from .rcsb_acquisition import validate_rcsb_file_arguments, rcsb_file_url
-        arguments = validate_rcsb_file_arguments(dict(entry_id=entry_id, file_format=file_format, max_bytes=max_bytes))
-        return self._rcsb_get(rcsb_file_url(entry_id, file_format), "application/octet-stream", arguments)
-
-    def _rcsb_get(self, url, media_type, arguments):
-        return self._bounded_provider_get("rcsb_pdb", url, media_type, arguments)
-
-    def alphafold_prediction(self, identifier: str, *, max_bytes: int) -> SourceSnapshot:
-        from .alphafold_acquisition import SERVICE, alphafold_prediction_url, validate_alphafold_prediction_arguments
-        arguments = validate_alphafold_prediction_arguments(dict(identifier=identifier, max_bytes=max_bytes))
-        return self._bounded_provider_get(SERVICE, alphafold_prediction_url(identifier), "application/json", arguments)
-
-    def alphafold_structure_file(self, *, arguments: dict, association: dict) -> SourceSnapshot:
-        """Fetch the literal advertisement authenticated by the calling host."""
-        from .alphafold_acquisition import SERVICE, validate_alphafold_file_arguments, validate_alphafold_file_association
-        arguments = validate_alphafold_file_arguments(arguments)
-        association = validate_alphafold_file_association(association, arguments=arguments)
-        return self._bounded_provider_get(SERVICE, association["advertised_url"], "application/octet-stream", arguments)
 
     def emdb_entry(self, entry_id: str, *, max_bytes: int) -> SourceSnapshot:
         from .emdb_acquisition import SERVICE, emdb_entry_url, validate_emdb_entry_arguments

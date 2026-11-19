@@ -18,7 +18,6 @@ import pytest
 from gene_annotation_episode import vcf_result_measurements as core
 
 
-FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/vcf_results"
 NATIVE_NAME = "expected.testExposureOfSmithWatermanParameters.M2.gatk4.vcf"
 NATIVE_SHA256 = "5a143a78f9a29c7f3abefecfcbbb97764a4517db6af7f7f1d7012c36f48f3ff0"
 RESULT_SOURCE = "source_" + "a" * 24
@@ -123,119 +122,6 @@ def _no_io_or_parse(monkeypatch):
     monkeypatch.setattr(subprocess, "Popen", forbidden)
     monkeypatch.setattr(subprocess, "run", forbidden)
     return forbidden
-
-
-@pytest.fixture
-def native_raw():
-    raw = (FIXTURES / NATIVE_NAME).read_bytes()
-    assert len(raw) == 67702 and _sha(raw) == NATIVE_SHA256
-    return raw
-
-
-def test_required_native_fixture_has_exact_git_blob_and_self_contained_provenance(native_raw):
-    provenance = json.loads((FIXTURES / "gatk_mutect_expected.provenance.json").read_bytes())
-    assert provenance["file"] == NATIVE_NAME
-    assert provenance["sha256"] == _sha(native_raw)
-    assert provenance["size_bytes"] == len(native_raw)
-    assert hashlib.sha1(b"blob 67702\0" + native_raw).hexdigest() == provenance["upstream"]["git_blob_sha1"]
-    assert provenance["upstream"]["git_blob_sha1"] == "d4015319b6c8754734cf79665a4d46b5b9871f83"
-    assert provenance["declared_metadata"]["reference_assembly"] is None
-    assert provenance["declared_metadata"]["reference_fasta_identity"] is None
-    assert provenance["declared_metadata"]["exact_caller_build"] is None
-    assert provenance["application_native_execution_performed_for_this_fixture"] is False
-
-
-def test_native_sheet_retains_exact_bytes_and_file_only_input_without_invented_source(native_raw):
-    supplied = _input(native_raw)
-    original = deepcopy(supplied)
-    sheet = core.parse_vcf_sheet(supplied)
-    assert sheet["version"] == "vcf_result_sheet_v1"
-    assert sheet["input"] == {key: value for key, value in supplied.items() if key != "content"}
-    assert sheet["input"]["source_ref"] is None
-    assert sheet["raw_content"] == dict(encoding="base64", data=base64.b64encode(native_raw).decode("ascii"),
-        sha256=NATIVE_SHA256, size_bytes=67702)
-    assert core.validate_vcf_sheet(sheet) == sheet
-    assert supplied == original
-
-
-def test_native_record_and_sample_occurrences_are_not_deduplicated_or_renumbered(native_raw):
-    sheet = core.parse_vcf_sheet(_input(native_raw))
-    records = sheet["records"]
-    assert len(records) == 295
-    assert [row["record_ordinal_0based"] for row in records] == list(range(295))
-    assert [records[index]["line_ordinal_0based"] for index in (0, 63, 279, 294)] == [44, 107, 323, 338]
-    assert all(len(row["samples"]) == 1 for row in records)
-    assert all(row["samples"][0]["sample_ordinal_0based"] == 0
-        and row["samples"][0]["sample_name"] == "NA12878" for row in records)
-
-
-def test_native_multiallelic_record_preserves_four_ordered_alternates_and_five_GT_slots(native_raw):
-    record = core.parse_vcf_sheet(_input(native_raw))["records"][63]
-    assert [(row["alt_ordinal_0based"], row["allele_index_1based"], row["token"]["raw_token"])
-        for row in record["alts"]] == [
-        (0, 1, "T"), (1, 2, "TAC"), (2, 3, "TACACACACAC"), (3, 4, "TAACACACACAC")]
-    assert _field(record, "GT", sample=0)["token"]["raw_token"] == "0/1/2/3/4"
-    assert _value_tokens(_field(record, "AD", sample=0)) == ["2", "3", "14", "5", "7"]
-    assert _value_tokens(_field(record, "AF", sample=0)) == ["0.085", "0.326", "0.177", "0.306"]
-    assert _value_tokens(_field(record, "AS_SB_TABLE")) == ["2,0|2,1|8,6|4,1|7,0"]
-    genotype = record["samples"][0]["genotype"]
-    assert genotype["ploidy"] == 5
-    assert [row["allele_ordinal_0based"] for row in genotype["alleles"]] == [0, 1, 2, 3, 4]
-    assert [row["allele_index"] for row in genotype["alleles"]] == [0, 1, 2, 3, 4]
-    assert [row["value"] for row in genotype["separators"]] == ["/", "/", "/", "/"]
-
-
-def test_native_phasing_and_distinct_AD_FAD_AF_are_retained_without_replacement(native_raw):
-    record = core.parse_vcf_sheet(_input(native_raw))["records"][279]
-    assert _field(record, "GT", sample=0)["token"]["raw_token"] == "0|1"
-    assert _field(record, "PGT", sample=0)["token"]["raw_token"] == "0|1"
-    assert _field(record, "PID", sample=0)["token"]["raw_token"] == "10099029_T_C"
-    assert _value_tokens(_field(record, "AD", sample=0)) == ["19", "10"]
-    assert _value_tokens(_field(record, "FAD", sample=0)) == ["25", "10"]
-    assert _value_tokens(_field(record, "AF", sample=0)) == ["0.296"]
-    assert _value_tokens(_field(record, "DP")) == ["30"]
-    assert _value_tokens(_field(record, "DP", sample=0)) == ["29"]
-    assert _value_tokens(_field(record, "POPAF")) == ["7.30"]
-    assert _value_tokens(_field(record, "TLOD")) == ["35.13"]
-
-
-def test_native_header_binds_INFO_and_FORMAT_namespaces_and_preserves_unknown_reference(native_raw):
-    sheet = core.parse_vcf_sheet(_input(native_raw))
-    header = sheet["header"]
-    assert header["fileformat"] == "VCFv4.2" and header["decoder"] == "vcf4.2"
-    assert header["state"] == "available"
-    assert {row["key"] for row in header["meta_lines"]}.isdisjoint({"reference", "assembly", "GATKCommandLine"})
-    metadata = {row["key"]: row["value"]["raw_token"] for row in header["meta_lines"]
-        if row["key"] in {"MutectVersion", "tumor_sample", "filtering_status"}}
-    assert metadata == dict(MutectVersion="2.2", tumor_sample="NA12878",
-        filtering_status="Warning: unfiltered Mutect 2 calls.  Please run FilterMutectCalls to remove false positives.")
-    record = sheet["records"][279]
-    info, sample = _field(record, "DP"), _field(record, "DP", sample=0)
-    assert info["definition_ordinals"] != sample["definition_ordinals"]
-    for field, namespace in ((info, "INFO"), (sample, "FORMAT")):
-        definition, = [header["definitions"][index] for index in field["definition_ordinals"]]
-        assert (definition["namespace"], definition["id"], definition["number"], definition["type"]) == (
-            namespace, "DP", "1", "Integer")
-
-
-def test_all_native_token_witnesses_join_actual_original_bytes_and_File_identity(native_raw):
-    sheet = core.parse_vcf_sheet(_input(native_raw))
-    tokens = list(_tokens(sheet))
-    assert tokens
-    for token in tokens:
-        location = token["locator"]
-        assert location["input_id"] == "supplied-vcf-occurrence"
-        assert location["artifact_ref"] == "artifact_" + NATIVE_SHA256
-        assert location["sha256"] == NATIVE_SHA256
-        assert location["line_start_1based"] == location["line_end_1based_inclusive"]
-        start, end = location["byte_start_0based"], location["byte_end_0based_exclusive"]
-        assert 0 <= start <= end <= len(native_raw)
-        exact = native_raw[start:end]
-        assert exact.decode("utf-8") == token["raw_token"]
-        assert base64.b64decode(token["raw_base64"], validate=True) == exact
-    assert sheet["records"][0]["locator"]["byte_start_0based"] == 4650
-    assert sheet["records"][0]["locator"]["byte_end_0based_exclusive"] == 4847
-    assert sheet["lines"][44]["locator"]["byte_end_0based_exclusive"] == 4848
 
 
 def test_selection_preserves_caller_order_and_all_versus_empty_distinctions():

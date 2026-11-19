@@ -1,5 +1,94 @@
 # Repository layout
 
+Episode folders (`gene_annotation_episode/episodic_workflow/root/` and the
+nine axis folders beneath it) contain only episode bindings and their tests.
+The library lives in `gene_annotation_episode/episodic_workflow/episode_support/`,
+grouped by what the code does. The system is three top-level packages of the
+repository, beside `gene_annotation_episode/`; none is inside `episode_support/`:
+`episode_runtime/` is the generic runner (linking, the run journal, custody, the
+Store under custody, resume) and holds the episode base type
+`episode_runtime/episode_type.py`; `method_loop/` is the generic method loop the
+runner is built on; `yield_control/` holds the yield estimators.
+
+# Private episode bindings
+
+Every episode is its own private binding. An episode never inherits from,
+subclasses or shares a behaviour module with another episode: tuning one
+episode must not change any other. Every episode binding inherits directly from
+the system's episode base type, `EpisodeBinding` in `episode_runtime/episode_type.py` (not in the
+generic `method_loop`), which carries the system
+behaviour (recording, custody, tracing, replay, the runner's hooks) and declares
+what each episode must supply; it inherits from nothing else. Similar episodes therefore have copies of
+their binding files, and the copies are intended. Shared code is library
+functions only, which an episode calls explicitly with its own pieces. There is
+no table of bindings and no base class for bindings.
+
+Each episode folder holds exactly these files (plus `__init__.py`, its child
+episode folders and `tests/`): `goal.py`, `task.py`, `credit.py`,
+`yield_estimator.py`, `episode.py` (ties it together), and a `messages/` folder
+with `read_from_parent.py`, `msg_to_child.py`, `read_from_child.py`,
+`internal_summary.py` and `final_to_parent.py`. Every function an episode needs
+fits into one of these files. In the carry-over, old-runner machinery is
+not needed and is not carried; every episode function must end up somewhere in
+the scheme — in the episode file it serves, or as a parameterized library
+function in `episode_support/` that the episode calls. None is dropped. An episode with no children has no
+`msg_to_child.py` or `read_from_child.py`.
+
+How records are passed faithfully between episodes — receipts and custody:
+which records a parent passed to a child, what a child returned, what an
+action produced, and the check that an episode reads only records it actually
+received or produced — is part of the system (the generic runner, like
+`method_loop` and `episode_runtime`), not part of any episode definition and not
+a per-axis library. Episodes only name the records they pass and read through
+the runner. The same holds for every tracking, tracing and replay device:
+recording decisions and model calls, units and their outcomes, commissions,
+child returns, reports and progress, the run journal, and resume. These are
+part of the system and work automatically for any episode that follows the
+system; episodes contain no recording or replay code.
+
+How the system fails and stops (owner's rules, 2026-11-19):
+
+- A parent knows how to call its child; that is what writing its
+  `msg_to_child.py` and prompt is for. If a commission is wrong — a selection
+  the child does not declare, a record the parent does not hold, any error in
+  the prompt construction — it fails. There is no fallback, no extra check,
+  no autofix, no feedback path and no cleanup for it: the run fails with its
+  error message. Nothing is added to the system to catch or repair a wrong
+  commission, and no link-time check of one episode's names against another's.
+- Stopping belongs to the episode's yield estimator alone. Every unit's credit
+  change goes to the estimator and the estimator decides when the episode
+  stops. The system has no concept of observed or unobserved units, and no
+  other stopping rule. Whether a lookup, wait or check earns credit is that
+  episode's own credit and settings.
+- Library functions never write to the Store or its tables directly. Anything
+  they read or write goes through custody: the scoped store the system hands
+  the episode, or an operation that has custody built in.
+- `yield_estimator.py` reads what `read_from_parent.py` produced, never the raw
+  assignment; `read_from_parent.py` is the only place an assignment is read.
+- A child declares every field it can return; the parent selects which of them
+  it wants in `msg_to_child.py`; credit and finding are always returned.
+
+The episode tree was articulated so each episode could be tuned on its own. The
+owner decided on 2026-11-18 that each episode's own files at commit `97308b94c`
+(the episode trees `root/<axis>/<role>_evidence/**` only) are carried over as
+the source of that episode's intention: the files return to that episode's
+folder and only their old-runner machinery is replaced by the new runner and
+library functions. The old shared root (files directly under `root/`,
+`root/library`, `root/scientific_process` and the duplicate top-level trees at
+that commit) is never restored and never read as a guide.
+
+# Removing unwanted code
+
+When something is no longer wanted, delete it directly. Not wanting it is the
+judgement: nothing about it is preserved. Do not trace its dependants first,
+keep backward compatibility, add shims or aliases, wait until nothing imports
+it, or run tests or tools to decide whether it may go. The breakage that
+follows is the useful signal: each break is either rebuilt on the wanted design
+or was only serving the unwanted thing and is deleted with it. In a
+replacement, delete the old path before porting onto the new one, so hidden
+dependencies fail immediately instead of passing silently. Never restore
+deleted code to make something pass.
+
 # Local execution policy
 
 Keep instructions local to their subject. Machine resource bounds and research
@@ -82,7 +171,8 @@ within the owning window's slice.
 
 # Required literature evidence processing
 
-For A105 and A108, interpreting applicable evidence includes selecting its
+For experimental_activity_evidence (A105) and sample_context_evidence (A108),
+interpreting applicable evidence includes selecting its
 purpose-specific grader and saving its subscoring sheet. An accepted scientific
 interpretation must not receive credit before that sheet exists. Couple those
 operations within the original action; preserve the ordinary iterator and

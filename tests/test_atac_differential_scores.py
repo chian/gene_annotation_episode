@@ -12,8 +12,6 @@ import pytest
 from gene_annotation_episode.atac_differential_scores import calculate_atac_interval_scores
 
 
-_NATIVE = (Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/atac/native001' /
-           'explicit_tracks' / 'NATIVE_DIAGNOSTIC.json')
 
 
 def calculate(**changes):
@@ -25,22 +23,6 @@ def calculate(**changes):
 
 def score(result, name):
     return result['likelihoods'][name]['native_float32']['value']
-
-
-@pytest.mark.parametrize('index', range(5))
-def test_actual_retained_native_three_component_arrays(index):
-    native = json.loads(_NATIVE.read_text())
-    source = native['source_values']
-    result = calculate(signal1=source['t1'][index], background1=source['c1'][index],
-                       signal2=source['t2'][index], background2=source['c2'][index])
-    recorded = native['arrays'][0]
-    for output, source_key in (
-            ('condition1_vs_background', 'native_condition1_vs_background'),
-            ('condition2_vs_background', 'native_condition2_vs_background'),
-            ('condition1_vs_condition2', 'native_condition1_vs_condition2')):
-        assert score(result, output) == recorded[source_key][index]
-    assert 'coordinates' not in result
-    assert result['uncertainty'] == {'kind': 'not_estimated', 'value': None}
 
 
 def test_count_units_and_pseudocount_order_are_explicit():

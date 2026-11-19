@@ -135,12 +135,6 @@ def _observation_extent(store, observation):
     Reported external experiments cannot supply native target coordinates by
     reusing their reported query start/end numbers.
     """
-    if observation.get('native_blast_standard_database') is not None:
-        from .episodic_workflow.root.a101.native_blast_standard_database_result_publication import validate_standard_blast_database_observation
-        validate_standard_blast_database_observation(store, observation)
-    if observation.get('native_blast_database') is not None:
-        from .episodic_workflow.root.a101.native_blast_database_result_publication import validate_native_blast_database_observation
-        validate_native_blast_database_observation(store, observation)
     footprint = _mapped_coverage(store, observation["subject_refs"])
     if observation["kind"] not in {"alignment", "profile_match", "comparison", "structure_match"}:
         return footprint, 1., {"extent_mode": "subject_footprint"}
@@ -153,7 +147,6 @@ def _observation_extent(store, observation):
         subject_ref = observation["subject_refs"][0]
         subject = store.get(subject_ref)
         if (footprint and subject["record_type"] in {"input", "read_subject", "feature", "product"}
-                and hasattr(store, "has_exact_mapping")
                 and store.has_exact_mapping(subject_ref)):
             if (isinstance(start, bool) or isinstance(end, bool)
                     or int(start) != start or int(end) != end or not 0 <= start < end):
@@ -197,12 +190,6 @@ def _observation_extents(store, observation):
     input into alignment coverage. Exact physical paths on external references
     and their derivatives do not supply any original-input footprint.
     """
-    if observation.get('native_blast_standard_database') is not None:
-        from .episodic_workflow.root.a101.native_blast_standard_database_result_publication import validate_standard_blast_database_observation
-        validate_standard_blast_database_observation(store, observation)
-    if observation.get('native_blast_database') is not None:
-        from .episodic_workflow.root.a101.native_blast_database_result_publication import validate_native_blast_database_observation
-        validate_native_blast_database_observation(store, observation)
     intervals = observation.get("operand_intervals")
     if observation.get("origin") != "tool" or intervals is None:
         footprint, factor, details = _observation_extent(store, observation)
@@ -227,9 +214,7 @@ def _observation_extents(store, observation):
         # The observation retains the complete operand list. A contribution
         # needs its own interval, not another copy of every other measured site.
         details = {"native_operand_interval": dict(operand), metric: coverage}
-        exact_mapping = (hasattr(store, "has_exact_mapping")
-                         and store.has_exact_mapping(subject_ref))
-        if exact_mapping:
+        if store.has_exact_mapping(subject_ref):
             mapped = store.map_segments(subject_ref, [{"start": operand["start"], "end": operand["end"]}])
             exact = {}
             for span in mapped:
@@ -243,7 +228,7 @@ def _observation_extents(store, observation):
                            mapping_version=store.sequence_mapping(subject_ref)["version"])
             factor = 1.
         elif subject["record_type"] == "input":
-            # Lightweight interface fixtures may omit the exact-map API.
+            # An original input without an exact map uses its own coordinates.
             if not 0 <= operand["start"] < operand["end"] <= subject["length"]:
                 raise ValueError("native operand interval is outside its actual input")
             footprint = {subject_ref: [(operand["start"], operand["end"])]}
@@ -255,13 +240,17 @@ def _observation_extents(store, observation):
             # it must not rescale an exactly mapped other operand.
             details["extent_mode"] = ("fractional_query_coverage_without_residue_map" if role == "query"
                                       else "fractional_reference_coverage_without_residue_map")
-            factor = coverage if coverage is not None else 1.
+            if coverage is None:
+                raise ValueError(f"{metric} is required for an unmapped native {role} operand")
+            factor = coverage
         details[f"native_{role}_interval"] = interval
         extents.append((footprint, factor, details))
     if extents:
         return extents
     coverage = _metric(observation, "query_coverage")
-    factor = _number(coverage, "query_coverage", maximum=1) if coverage is not None else 1.
+    if coverage is None:
+        raise ValueError("query_coverage is required for source-subject operand intervals")
+    factor = _number(coverage, "query_coverage", maximum=1)
     unmeasured = _mapped_coverage(store, [*observation["subject_refs"],
                                         *observation.get("source_subject_refs", ())])
     return [({}, factor, {"extent_mode": "source_subject_operand_intervals",

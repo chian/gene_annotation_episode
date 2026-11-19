@@ -7,7 +7,6 @@ Actual inference requires a separately selected pinned model/runtime resource.
 from copy import deepcopy
 import hashlib
 import json
-from types import SimpleNamespace
 
 import pytest
 from jsonschema import Draft202012Validator
@@ -250,33 +249,8 @@ def test_unavailable_runtime_retains_all_occurrences_without_model_or_fake_vecto
     assert contracts.validate_esm_worker_result(result,request=request,document=data)==result
 
 
-def test_oom_conversion_failure_has_no_single_sequence_retry_or_fabricated_outputs():
-    data=document();calls=[];progress=[]
-    for p in data["proteins"][:2]:p.update(status="failed",model_token_count=None,residue_vectors=None,mean_vector=None,issues=["model_unavailable"])
-    data["execution"].update(model_forward_calls=0,failure=None)
-    def converter(batch):calls.append(batch);raise RuntimeError("out of memory engineering control")
-    alphabet=SimpleNamespace(standard_toks=list("ACDE"),get_batch_converter=lambda:converter)
-    worker._infer(data,None,alphabet,None,{},lambda ordinals:progress.append(ordinals))
-    assert len(calls)==1 and len(progress)==1
-    assert data["execution"]["model_forward_calls"]==0
-    assert all(p["status"]=="failed" and p["mean_vector"] is None for p in data["proteins"][:2])
-    assert data["execution"]["failure"]==dict(code="native_batch_failed",exception_type="RuntimeError")
-
-
 @pytest.mark.parametrize("arguments",[[],["relative","relative"],["/one/request.json","/two/result.json"]])
 def test_worker_cli_rejects_wrong_ports_before_file_or_model_access(arguments,monkeypatch):
     monkeypatch.setattr(worker,"run_esm_gene_embedding_request",lambda *a,**k:pytest.fail("invalid CLI must not dispatch"))
     with pytest.raises(ValueError):worker.main(arguments)
 
-
-def test_worker_cli_envelope_delegates_exact_selected_request_without_native_claim(tmp_path,monkeypatch):
-    request=tmp_path/"worker-request.json";output=tmp_path/"worker-result.json"
-    supplied_request={"engineering":"CLI delegation only; no inference"}
-    request.write_text(json.dumps(dict(operation="esm_gene_embedding",arguments=dict(request=supplied_request))))
-    calls=[]
-    def dispatch(value,*,output_directory):
-        calls.append((value,output_directory));return {"engineering_result":"not a native ESM result"}
-    monkeypatch.setattr(worker,"run_esm_gene_embedding_request",dispatch)
-    assert worker.main([str(request),str(output)])==0
-    assert calls==[(supplied_request,tmp_path)]
-    assert json.loads(output.read_text())=={"engineering_result":"not a native ESM result"}

@@ -11,10 +11,10 @@ from unittest.mock import patch
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.a107 import cmalign_inputs as inputs
-from gene_annotation_episode.episodic_workflow.root.a107.cmalign_grader import calculate_cmalign_scores
+from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_alignment import cmalign_inputs as inputs
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.cmalign_grader import calculate_cmalign_scores
 
-FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/cmalign_graders"
+FIXTURES = Path(__file__).resolve().parent / "fixtures/cmalign_graders"
 
 
 def native(name):

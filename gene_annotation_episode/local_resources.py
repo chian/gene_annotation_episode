@@ -1,8 +1,12 @@
-"""Caller-owned local capacity, shared by independent registries and runs.
+"""Caller-owned local capacity: one module and one definition for a whole run.
 
+The root and every evidence axis reserve local native work through this module,
+so a composed run keeps one capacity definition in its run directory.
 Reservations precede native dispatch and survive the launching process. Only
 observed service quiescence, cancellation, or a never-dispatched dead owner can
-free capacity. Unknown execution retains its reservation.
+free capacity. Unknown execution retains its reservation. Capacity is byte
+resources only; a requested thread count is recorded with its reservation as
+metadata and never participates in capacity, availability or admission.
 """
 from __future__ import annotations
 
@@ -18,12 +22,13 @@ import subprocess
 import tomllib
 import uuid
 
-from .acquisition import AcquisitionError
+from .acquisition_types import AcquisitionError
 
 
-VERSION = 'shared_local_resources_v1'
+VERSION = 'shared_local_resources_v3'
 DIRECTORY_ENV = 'GENE_EPISODE_LOCAL_RESOURCE_DIRECTORY'
 _LIVE = {'active', 'activating', 'deactivating', 'reloading'}
+_RESOURCE_FIELDS = {'memory_bytes', 'scratch_bytes'}
 
 
 def _boot():
@@ -61,31 +66,44 @@ def _resource_id():
 
 def _limits(settings):
     defaults = tomllib.loads(Path(__file__).with_name('defaults.toml').read_text())['local_resources']
-    fields = {'memory_bytes', 'scratch_bytes'}
-    if set(defaults) != fields or not isinstance(settings, dict) or set(settings)-fields:
+    if (set(defaults) != _RESOURCE_FIELDS or not isinstance(settings, dict)
+            or set(settings)-_RESOURCE_FIELDS):
         raise ValueError('invalid_local_resource_settings')
     result = {**defaults, **settings}
     if any(type(value) is not int or value <= 0 for value in result.values()):
         raise ValueError('invalid_local_resource_limits')
+    # Local jobs run inside the launcher's workload; memory it cannot provide
+    # is a configuration error, never silently reduced.
+    from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+    if result['memory_bytes'] > ENVIRONMENT_BOUNDS['memory_bytes']:
+        raise ValueError('local_resource_limits_exceed_environment_bounds')
     return result
 
 
-def _effective_limits(limits):
-    limits = _limits(limits)
-    from .workflow_budget import ENV, active_budget
-    if os.environ.get(ENV):
-        limits['memory_bytes'] = min(limits['memory_bytes'],
-            active_budget()['environment_bounds']['memory_bytes'])
-    return limits
+def _saved_definition(definition, directory, workflow_slice):
+    if (not isinstance(definition, dict)
+            or definition.get('version') != VERSION
+            or definition.get('resource_id') != _resource_id()
+            or definition.get('directory') != str(directory)
+            or definition.get('workflow_slice') != workflow_slice):
+        raise ValueError('local_resource_binding_conflict')
+    limits = definition['limits']
+    if not isinstance(limits, dict) or set(limits) != _RESOURCE_FIELDS:
+        raise ValueError('invalid_local_resource_settings')
+    if any(type(value) is not int or value <= 0 for value in limits.values()):
+        raise ValueError('invalid_local_resource_limits')
 
 
 class LocalResources:
     def __init__(self, directory, settings=None, *, workflow_slice=None):
-        if settings is not None and not isinstance(settings, dict):
-            raise ValueError('invalid_local_resource_settings')
+        if settings is not None:
+            # Reject malformed settings before any storage is created or opened.
+            _limits(settings)
         self.directory = Path(directory).expanduser().resolve()
-        self.directory.mkdir(parents=True, exist_ok=True)
         self.path = self.directory/'capacity.sqlite3'
+        self._existing_definition = None
+        self._configuration_json = None
+        self.directory.mkdir(parents=True, exist_ok=True)
         with self._transaction() as db:
             db.execute('CREATE TABLE IF NOT EXISTS configuration (id INTEGER PRIMARY KEY CHECK(id=1), value TEXT NOT NULL)')
             db.execute('CREATE TABLE IF NOT EXISTS reservations ('
@@ -95,26 +113,28 @@ class LocalResources:
                 'created_at TEXT NOT NULL)')
             saved = db.execute('SELECT value FROM configuration WHERE id=1').fetchone()
             if saved is None:
-                definition = {'version': VERSION, 'resource_id': _resource_id(),
-                    'directory': str(self.directory), 'limits': _limits(settings or {})}
+                definition = {'version': VERSION,
+                    'resource_id': _resource_id(), 'directory': str(self.directory),
+                    'limits': _limits(settings or {})}
                 if workflow_slice is not None:
                     definition['workflow_slice'] = workflow_slice
-                db.execute('INSERT INTO configuration VALUES(1,?)', (json.dumps(definition, sort_keys=True),))
+                raw = json.dumps(definition, sort_keys=True)
+                db.execute('INSERT INTO configuration VALUES(1,?)', (raw,))
+                self._existing_definition = json.loads(raw)
+                self._configuration_json = raw
             else:
                 definition = json.loads(saved[0])
-                if (definition.get('version') != VERSION or definition.get('resource_id') != _resource_id()
-                        or definition.get('directory') != str(self.directory)
-                        or definition.get('workflow_slice') != workflow_slice):
-                    raise ValueError('local_resource_binding_conflict')
-                active = _limits(definition['limits'])
-                if settings is not None and _limits({**active, **settings}) != active:
+                _saved_definition(definition, self.directory, workflow_slice)
+                self._existing_definition = json.loads(json.dumps(definition))
+                self._authenticate_existing(db)
+                if settings is not None and _limits({**definition['limits'], **settings}) != definition['limits']:
                     raise ValueError('local_resource_limits_conflict')
             self.definition = definition
 
     @classmethod
     def configured(cls, settings=None):
         selected = os.environ.get(DIRECTORY_ENV)
-        from .workflow_budget import ENV, active_budget
+        from gene_annotation_episode.workflow_budget import ENV, active_budget
         if selected is None and os.environ.get(ENV):
             budget = active_budget()
             return cls(Path(budget['run_directory'])/'local-resources', settings,
@@ -124,6 +144,8 @@ class LocalResources:
 
     @classmethod
     def reopen(cls, definition):
+        if not isinstance(definition, dict) or not isinstance(definition.get('directory'), str):
+            raise ValueError('local_resource_binding_conflict')
         value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'))
         if value.as_record() != definition:
             raise ValueError('local_resource_binding_conflict')
@@ -132,12 +154,28 @@ class LocalResources:
     def as_record(self):
         return json.loads(json.dumps(self.definition))
 
+    def _authenticate_existing(self, db):
+        row = db.execute('SELECT value FROM configuration WHERE id=1').fetchone()
+        if row is None:
+            raise ValueError('local_resource_binding_conflict')
+        raw = row['value']
+        if (json.loads(raw) != self._existing_definition
+                or self._configuration_json is not None and raw != self._configuration_json):
+            raise ValueError('local_resource_binding_conflict')
+        self._configuration_json = raw
+
     @contextmanager
     def _transaction(self):
-        db = sqlite3.connect(self.path, timeout=30, isolation_level=None)
+        if self._existing_definition is not None:
+            db = sqlite3.connect(self.path.as_uri() + '?mode=rw',
+                uri=True, timeout=30, isolation_level=None)
+        else:
+            db = sqlite3.connect(self.path, timeout=30, isolation_level=None)
         db.row_factory = sqlite3.Row
         try:
             db.execute('BEGIN IMMEDIATE')
+            if self._existing_definition is not None:
+                self._authenticate_existing(db)
             yield db
             db.commit()
         except BaseException:
@@ -192,7 +230,8 @@ class LocalResources:
         if inventory is None or inventory.returncode != 0:
             jobs.append({'reservation_ref': None, 'execution_handle': None,
                 'state': 'capacity_unavailable',
-                'allocation': _effective_limits(self.definition['limits'])})
+                'allocation': {key: self.definition['limits'][key]
+                    for key in _RESOURCE_FIELDS}})
         else:
             for line in inventory.stdout.splitlines():
                 fields = line.split()
@@ -203,13 +242,16 @@ class LocalResources:
                             continue
                     jobs.append({'reservation_ref': None, 'execution_handle': fields[0],
                         'state': 'untracked_running',
-                        'allocation': _effective_limits(self.definition['limits'])})
+                        'allocation': {key: self.definition['limits'][key]
+                            for key in _RESOURCE_FIELDS}})
         return jobs
 
     def _view(self, jobs):
-        limits = _effective_limits(self.definition['limits'])
+        # Requested threads in real reservation/job rows remain metadata;
+        # only byte resources define capacity, availability and admission.
+        limits = {key: self.definition['limits'][key] for key in _RESOURCE_FIELDS}
         used = {key: sum(job['allocation'][key] for job in jobs)
-            for key in ('memory_bytes', 'scratch_bytes')}
+            for key in _RESOURCE_FIELDS}
         remaining = {key: max(0, limits[key]-used[key]) for key in used}
         return {'version': VERSION, 'resource_id': self.definition['resource_id'],
             'observed_at': datetime.now(timezone.utc).isoformat(), 'limits': dict(limits),
@@ -236,13 +278,13 @@ class LocalResources:
                 raise AcquisitionError('local_job_boundary_unavailable', phase='local_admission',
                     operational={'reason': 'local_capacity_unavailable', 'retryable': True,
                         'local_resources': view})
-            for key in ('memory_bytes', 'scratch_bytes'):
-                value = requested[key]
+            admission = {key: requested[key] for key in _RESOURCE_FIELDS}
+            for key, value in admission.items():
                 if value > view['limits'][key]:
                     raise AcquisitionError('local_job_resource_limit', phase='local_admission',
                         operational={'resource': key, 'limit': view['limits'][key], 'requested': value,
                             'retryable': False, 'local_resources': view})
-            if any(requested[key] > view['available'][key] for key in ('memory_bytes', 'scratch_bytes')):
+            if any(value > view['available'][key] for key, value in admission.items()):
                 raise AcquisitionError('local_resource_busy', phase='local_admission', operational={
                     'retryable': True, 'retry_same_prepared_job': True, 'local_resources': view})
             token = 'local_reservation_' + uuid.uuid4().hex

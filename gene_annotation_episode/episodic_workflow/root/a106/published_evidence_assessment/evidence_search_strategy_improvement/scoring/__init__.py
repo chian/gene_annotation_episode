@@ -1,1 +1,0 @@
-"""Private selected scientific responsibilities."""

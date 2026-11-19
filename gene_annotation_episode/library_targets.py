@@ -178,7 +178,7 @@ def contains(store, scope, value):
         (selected["id"], read_ref(value["target_ref"], value["member_ref"]))).fetchone() is not None
 
 
-def member_page(store, library_ref, *, selection_ref=None, offset=0, limit=50, scope=None):
+def member_page(store, library_ref, *, scope, selection_ref=None, offset=0, limit=50):
     target = store.get_input(library_ref)
     if not is_library(target):
         raise ContractError("read_library_target_required")
@@ -214,7 +214,7 @@ def member_page(store, library_ref, *, selection_ref=None, offset=0, limit=50, s
             "offset": next_offset, "limit": limit} if next_offset is not None else None}
 
 
-def select(store, library_ref, *, member_refs=None, ordinal_ranges=None, scope=None):
+def select(store, library_ref, *, scope, member_refs=None, ordinal_ranges=None):
     """Freeze an owner's explicit original-member selection, without discovery."""
     target = store.get_input(library_ref)
     if not is_library(target):
@@ -293,10 +293,8 @@ def measure(store, scope, target_ref):
     return (selection or target)["position_mass"]
 
 
-def validate_scope(store, scope=None, parent_scope=None):
+def validate_scope(store, scope, parent_scope=None):
     available = set(store.problem()["subject_refs"])
-    if scope is None:
-        scope = {"subject_refs": sorted(available)}
     if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
             or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
         raise ContractError("invalid_scope")

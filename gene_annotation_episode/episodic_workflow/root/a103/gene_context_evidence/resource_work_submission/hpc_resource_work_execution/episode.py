@@ -1,25 +1,23 @@
-"""Connect this exact private resource task and its explicit responsibilities."""
+"""The A103 ``gene_context_evidence/resource_work_submission/hpc_resource_work_execution`` binding.
+
+It executes the commissioned resource work (a ``practical_assignment_v1``, ``resource_kind`` ``hpc``) through
+model-written ``exec_command`` units on its own ``HpcJobTools`` over the run's shared Store: practical
+requirement credit and completion continuation (``execution_job_submission/hpc_job_execution/runtime``). The
+A103 home factory constructs it with ``runtime.construct`` from ``a103_hpc_resource_work_execution``.
+"""
 from __future__ import annotations
-from .configuration import ResourceConfiguration
-from .binding_record import ResourceBindingRecord
-from .child_commissioning import ResourceChildCommissioning
-from .from_parent import ResourceFromParent
-from .resource_selection import ResourceResourceSelection
-from .goal import ResourceGoal
-from .internal_summary import ResourceInternalSummary
-from .operations import ResourceOperations
-from .to_parent import ResourceToParent
-from .received_messages import ResourceReceivedMessages
-from .credit import ResourceCredit
-from .task import ResourceTask
 
-class ResourceEpisode(ResourceConfiguration, ResourceBindingRecord, ResourceChildCommissioning, ResourceFromParent, ResourceResourceSelection, ResourceGoal, ResourceInternalSummary, ResourceOperations, ResourceToParent, ResourceReceivedMessages, ResourceCredit):
-    decision_source_type = ResourceTask
+from types import MappingProxyType
+
+from ...contract_binding import A103ContractBinding
+from ...execution_job_submission.hpc_job_execution.runtime import HpcJobExecutionRuntime
+
+
+class ResourceEpisode(HpcJobExecutionRuntime, A103ContractBinding):
     binding_path = 'gene_context_evidence/resource_work_submission/hpc_resource_work_execution'
+    grain_name = 'gene_context_evidence__resource_work_submission__hpc_resource_work_execution'
+    goal = 'Improve the HPC resource work and its handoff'
+    unit = 'One HPC resource action'
+    result = 'The HPC resource handoff'
+    child_slots = MappingProxyType({})
     commissioning_parent = 'gene_context_evidence/resource_work_submission'
-    "C7 binding; all iteration/commissioning remains in shared method_loop.\n\n    Adapter API: resource_id, capability(), as_record(), prepare_assignment(\n    context, role, launch_assignment, scope, operation_key), catalog(context),\n    execute(context, tool_name, arguments, operation_key), fact_sources(role),\n    facts(context, completion_snapshot), resolve(context, reference, namespace),\n    validate_report(context, form, original_schema), credit_view(context,\n    receiver_selection). An optional decision_context(context) supplies actual\n    prospective duration information. An adapter's tool list is authoritative.\n    "
-    roles = ('launch_hpc',)
-    entry_roles = ()
-
-    def permitted_common_actions(self, context):
-        return ('tool', 'reason', 'child', 'wait', 'redeliver_report')

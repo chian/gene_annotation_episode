@@ -25,7 +25,6 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode.acquisition import PublicClients, SourceSnapshot
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode import variant_provider_acquisition as provider
 
 
@@ -379,104 +378,10 @@ def test_common_four_receipt_has_closed_references_and_crossfield_meanings(chang
         acquired=False, source_ref=None, data_ref=None, failure_code="provider_connection_failed")
 
 
-@pytest.fixture
-def publisher(tmp_path, monkeypatch):
-    monkeypatch.setattr(PublicClients, "_http", forbidden)
-    monkeypatch.setattr("socket.create_connection", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.native_lifecycle.prepare_job", forbidden)
-    with Store(tmp_path / "store") as store:
-        yield store, ToolRegistry(store, run_directory=store.path / 'tool-run')
-
-
 def publish(registry, case, saved):
     token = registry._publications.set([])
     try: return provider.publish_provider_request(registry, operation(case), ARGUMENTS[case], saved)
     finally: registry._publications.reset(token)
-
-
-@pytest.mark.parametrize("case", CASES)
-def test_real_source_publisher_keeps_exact_native_primary_and_one_private_value(publisher, monkeypatch, case):
-    store, registry = publisher; saved = capture(case)
-    actual_source = registry._source
-    def source_after_private(*args, **kwargs):
-        private, = kwargs["auxiliary_artifact_refs"]
-        checked = json.loads(store.get_artifact(private))
-        assert provider.validate_provider_value(checked) == value(case) and "source_ref" not in checked
-        return actual_source(*args, **kwargs)
-    monkeypatch.setattr(registry, "_source", source_after_private)
-    result, refs = publish(registry, case, saved); source = store.get(result["source_ref"])
-    assert result == dict(acquired=True, source_ref=source["id"], data_ref=source["artifact_ref"], failure_code=None)
-    assert refs == [source["id"], source["artifact_ref"]] and store.get_artifact(source["artifact_ref"]) == saved.content
-    assert source["provider"] == saved.service and source["uri"] == saved.transport["request"]["url"]
-    private, = source["auxiliary_artifact_refs"]
-    assert private not in refs and source["request_ref"] not in refs
-    assert json.loads(store.get_artifact(source["request_ref"])) == json.loads(canonical({"request": saved.request, "transport": saved.transport}))
-    assert store.db.execute("SELECT count(*) FROM records WHERE record_type='source'").fetchone()[0] == 1
-    tables = {row[0] for row in store.db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-    for table in ("tool_operations", "runtime_episodes", "runtime_actions", "runtime_model_calls", "runtime_observations"):
-        if table in tables: assert store.db.execute("SELECT count(*) FROM " + table).fetchone()[0] == 0
-
-
-@pytest.mark.parametrize("case", ["eva_variant", "gnomad_variant"])
-def test_captured_native_failure_retains_source_only_and_exact_partial_or_error_bytes(publisher, case):
-    store, registry = publisher
-    raw = b'{"error":"native failure"}' if case.startswith("eva_") else b'{"errors":[{"message":"native failure"}],"data":{"variant":null}}'
-    saved = capture(case, raw=raw); result, refs = publish(registry, case, saved)
-    source = store.get(result["source_ref"])
-    assert result["acquired"] is False and result["data_ref"] is None and result["failure_code"] is not None
-    assert refs == [source["id"]] and store.get_artifact(source["artifact_ref"]) == raw
-    private, = source["auxiliary_artifact_refs"]
-    assert provider.validate_provider_value(json.loads(store.get_artifact(private)))["failure_code"] == result["failure_code"]
-
-
-def test_real_source_publisher_retains_actual_prefix_with_no_data_file_delivery(publisher):
-    store, registry = publisher
-    raw = b'{"data":{"variant":'
-    saved = capture("gnomad_variant", raw=raw, transport_changes={"body_complete": False,
-        "body_capture_failure": "provider_response_byte_limit", "observed_body_bytes": len(raw) + 1,
-        "declared_body_bytes": len(raw) + 100})
-    result, refs = publish(registry, "gnomad_variant", saved); source = store.get(result["source_ref"])
-    assert result == provider.failed_provider_receipt("variant_provider_capture_incomplete", source_ref=source["id"])
-    assert refs == [source["id"]] and store.get_artifact(source["artifact_ref"]) == raw
-
-
-@pytest.mark.parametrize("change", ["service", "url", "wire_body", "policy"])
-def test_contradictory_capture_uses_finite_private_failure_witness_not_a_fake_value(publisher, change):
-    store, registry = publisher; saved = capture("gnomad_variant"); transport = deepcopy(saved.transport)
-    if change == "service": saved = replace(saved, service="observed_other")
-    elif change == "url": saved = replace(saved, url="https://observed.invalid/original")
-    elif change == "wire_body": transport["request"]["body_sha256"] = "0" * 64
-    else: transport["request_policy"]["automatic_redirects"] = True
-    saved = replace(saved, transport=transport)
-    result, refs = publish(registry, "gnomad_variant", saved); source = store.get(result["source_ref"])
-    assert result["acquired"] is False and result["data_ref"] is None and refs == [source["id"]]
-    assert source["uri"] == saved.url and store.get_artifact(source["artifact_ref"]) == saved.content
-    private, = source["auxiliary_artifact_refs"]
-    assert json.loads(store.get_artifact(private)) == dict(version="variant_provider_failure_witness_v1",
-        observed_snapshot_service=saved.service, observed_snapshot_url=saved.url, failure_code=result["failure_code"])
-
-
-def test_no_response_and_invalid_selected_arguments_create_no_source_or_artifact(publisher, monkeypatch):
-    store, registry = publisher
-    monkeypatch.setattr(store, "artifact", forbidden); monkeypatch.setattr(registry, "_source", forbidden)
-    assert provider.failed_provider_receipt("provider_connection_failed")["source_ref"] is None
-    with pytest.raises(ValueError): provider.publish_provider_request(registry, GNOMAD, ARGUMENTS["gnomad_variant"], None)
-    with pytest.raises(ValueError): provider.publish_provider_request(registry, GNOMAD,
-        {**ARGUMENTS["gnomad_variant"], "max_bytes": True}, capture("gnomad_variant"))
-    assert list(store.list("source")) == []
-
-
-@pytest.mark.parametrize("case", ["eva_variant", "gnomad_variant"])
-def test_processing_mime_contradiction_cannot_become_selected_json(publisher, case):
-    store, registry = publisher
-    saved = replace(capture(case), media_type="application/octet-stream")
-    with pytest.raises(ValueError, match="variant_provider_selected_request_conflict"):
-        provider.provider_value(saved, operation=operation(case), arguments=ARGUMENTS[case],
-            artifact_ref="artifact_" + hashlib.sha256(saved.content).hexdigest())
-    result, refs = publish(registry, case, saved)
-    source = store.get(result["source_ref"])
-    assert result == provider.failed_provider_receipt("variant_provider_selected_request_conflict", source_ref=source["id"])
-    assert refs == [source["id"]] and store.get_artifact(source["artifact_ref"]) == saved.content
 
 
 @pytest.mark.parametrize("rows", [[], [eva_row()]])

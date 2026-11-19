@@ -1,16 +1,10 @@
-"""Private A103 literature_ordered credit."""
-from __future__ import annotations
+"""Credit: the A103 context credit of the records this Episode holds, over the fixed scope. The projector is the
+library's; it reads the held attachments and measurements through the records it is handed and never bounds,
+clamps or rescales the value."""
+from gene_annotation_episode.episodic_workflow.episode_support.grading.gene_context_evidence.credit import (
+    A103ContextCredit)
 
-class SourceInvestigationCredit:
 
-    def credit_kind(self, role):
-        self._role(role)
-        return 'scientific'
-
-    def credit_view(self, context, receiver_selection):
-        self._role('literature_ordered')
-        return self.services.scientific_credit(context, receiver_selection)
-
-    def credit_projector(self, context):
-        self._role('literature_ordered')
-        return None
+def credit(summary, records):
+    view = A103ContextCredit()(records, summary['assignment']['scope'], known_record_refs=records.refs())
+    return view['credit']

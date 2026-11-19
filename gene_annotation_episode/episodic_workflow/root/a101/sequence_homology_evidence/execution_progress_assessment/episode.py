@@ -1,57 +1,34 @@
-"""Connect the predefined A101 progress-monitoring task, reports, credit and continuation."""
+"""The A101 ``sequence_homology_evidence/execution_progress_assessment`` binding.
+
+Binds the A101 monitor runtime (``episode_support/jobs/service_calls/sequence_homology_evidence/monitor_runtime.py``): its progress
+tools, model-selected decisions, information credit and information-accumulation
+yield continuation. Its commission carries the head's monitor assignment in
+``role_assignment``.
+"""
 from __future__ import annotations
-from .configuration import MonitorConfiguration
-from .from_parent import MonitorAssignment
-from .to_parent import MonitorReport
-from .internal_summary import MonitorSummary
-from .received_progress import ReceivedProgress
-from .received_progress import OwnProgress
-from .progress_operations import ProgressOperations
-from .goal import MonitorGoal
-from .binding_record import MonitorBindingRecord
-from .credit import MonitorEpisodeCredit
-from importlib import import_module
-from .yield_estimator import MonitorEpisodeYield
-from .task import ProgressMonitoringTask
-from gene_annotation_episode.episodic_workflow.root.a101.library.monitor_prompt import render_monitor_prompt
-from .target_identity import is_blast_job
-from .to_child_execution_progress_assessment import prepare_dependency_request
-from .from_child_execution_progress_assessment import receive_progress
-from gene_annotation_episode.episodic_workflow.root.a101.communication import plain
-from ..to_child_execution_progress_assessment import required_return_sources as scientific_parent_return_sources
 
-class MonitorEpisode(MonitorConfiguration, MonitorAssignment, MonitorReport, MonitorSummary, ReceivedProgress, OwnProgress, ProgressOperations, MonitorGoal, MonitorBindingRecord, MonitorEpisodeCredit, MonitorEpisodeYield):
+from types import MappingProxyType
+
+from episode_runtime import Field, RecordForm
+
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.service_calls.sequence_homology_evidence.monitor_runtime import A101MonitorRuntime
+from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.contract_binding import (
+    SCOPE, A101ContractBinding)
+
+
+class ExecutionProgressAssessmentEpisode(A101MonitorRuntime, A101ContractBinding):
+    """Improve what is known about the progress of the assigned execution."""
     binding_path = 'sequence_homology_evidence/execution_progress_assessment'
+    goal = 'Improve what is known about the progress of the assigned execution'
+    unit = 'One progress observation'
+    result = 'Progress references for the assigned execution'
+    child_slots = MappingProxyType({})
     commissioning_parent = 'sequence_homology_evidence'
-    roles = ('monitor',)
-    entry_roles = ('monitor',)
-    decision_source_type = ProgressMonitoringTask
-    decision_prompt_renderer = staticmethod(render_monitor_prompt)
+    assignment_form = RecordForm({
+        'scope': SCOPE,
+        'role_assignment': Field('record', "The commissioning head's monitor assignment (monitor_assignment_v1)"),
+    })
 
-    def prepare_child_request(self, parent, role, assignment):
-        self._role(role)
-        return prepare_dependency_request(self, parent, plain(assignment))
-
-    def receive_child_progress(self, context, form, schema, operation_key, provider):
-        return receive_progress(context, form, schema, operation_key, provider)
-
-    def child_roles(self, role):
-        self._role(role)
-        return ('monitor',)
-
-    def required_return_sources(self, parent, role):
-        self._role(role)
-        if parent is not None and parent.path[-1][0] == 'sequence_homology_evidence':
-            return scientific_parent_return_sources(self.services)
-        return ()
-
-    def permitted_common_actions(self, context):
-        self._role(context.role)
-        if self.private_yield_binding and is_blast_job(self.services, context):
-            return ('tool', 'child', 'redeliver_report')
-        return ('tool', 'child', 'wait', 'redeliver_report')
-
-    def allowed_children(self, parent, caller_capabilities):
-        self._role(parent.role)
-        assignment = self._assignment(parent.assignment, parent.scope)
-        return ('monitor',) if self.services.dependencies(assignment['target_handle'], parent.scope) else ()
+    @staticmethod
+    def role_assignment(assignment):
+        return assignment['role_assignment']

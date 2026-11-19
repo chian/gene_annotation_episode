@@ -41,7 +41,12 @@ def annotation(store, target, h, a, *, revision=0, contexts=None):
         "resolution": "selected", "expected_revision": revision}, origin="reasoning")
 
 
-def collect(store, query, scope=None):
+def whole(store):
+    """The whole problem as an explicit Store scope."""
+    return {"subject_refs": store.problem()["subject_refs"]}
+
+
+def collect(store, query, scope):
     records = []
     pages = []
     while query is not None:
@@ -65,16 +70,16 @@ def test_view_next_query_reads_exact_current_rows_without_repeating_history(tmp_
             histories.append(old["id"])
             assessment(store, h, o, revision=1, relation="weakens")
         expected = store.current_assessments()
-        view = store.reasoning_view(limit=1)
-        rest, pages = collect(store, view["pages"]["assessments"]["next_query"])
+        view = store.reasoning_view(whole(store), limit=1)
+        rest, pages = collect(store, view["pages"]["assessments"]["next_query"], whole(store))
         assert view["assessments"] + rest == expected
         assert all(page["total"] == 3 and page["current_only"] is True for page in pages)
         assert len({row["id"] for row in view["assessments"] + rest}) == 3
         assert not set(histories) & {row["id"] for row in expected}
-        all_rows, all_pages = collect(store, {"kind": "assessment", "limit": 2})
+        all_rows, all_pages = collect(store, {"kind": "assessment", "limit": 2}, whole(store))
         assert len(all_rows) == 6 and all(page["total"] == 6 for page in all_pages)
     with Store(path) as store:
-        reopened, _ = collect(store, {"kind": "assessment", "limit": 1, "current_only": True})
+        reopened, _ = collect(store, {"kind": "assessment", "limit": 1, "current_only": True}, whole(store))
         assert reopened == expected
 
 
@@ -90,12 +95,12 @@ def test_current_annotation_page_and_immutable_pages_share_view_contract(tmp_pat
             a = assessment(store, h, o)
             annotation(store, target["id"], h, a)
             annotation(store, target["id"], h, a, revision=1, contexts=[h["id"]])
-        view = store.reasoning_view(limit=1)
+        view = store.reasoning_view(whole(store), limit=1)
         for kind, field, getter in (("annotation", "annotations", store.current_annotations),
                                     ("hypothesis", "hypotheses", lambda: store.list("hypothesis"))):
             meta = view["pages"][field]
             assert meta["next_query"]["kind"] == kind
-            rest, _ = collect(store, meta["next_query"])
+            rest, _ = collect(store, meta["next_query"], whole(store))
             assert view[field] + rest == getter()
 
 
@@ -113,20 +118,20 @@ def test_reverse_query_finds_real_semantic_paths_and_anchor_provenance_not_quote
         o = observation(store, target, src, anchor=anchor)
         a = assessment(store, h, o, assumptions=[assumption["id"]])
         n = annotation(store, target, h, a, contexts=[assumption["id"]])
-        result = store.query_records("assessment", references=[assumption["id"]], current_only=True)
+        result = store.query_records("assessment", whole(store), references=[assumption["id"]], current_only=True)
         assert result["records"] == [a]
         assert result["reference_matches"] == [{"record_ref": a["id"],
             "reference_ref": assumption["id"], "field_path": ["assumption_refs", 0]}]
-        assert store.query_records("observation", references=[assumption["id"]])["total"] == 0
-        assert store.query_records("hypothesis", references=[assumption["id"]])["total"] == 0
-        page = store.query_records("annotation", references=[assumption["id"]])
+        assert store.query_records("observation", whole(store), references=[assumption["id"]])["total"] == 0
+        assert store.query_records("hypothesis", whole(store), references=[assumption["id"]])["total"] == 0
+        page = store.query_records("annotation", whole(store), references=[assumption["id"]])
         assert page["records"] == [n]
         assert page["reference_matches"][0]["field_path"] == ["coherent_sets", 0, "context_refs", 0]
-        page = store.query_records("observation", references=[src["id"]])
+        page = store.query_records("observation", whole(store), references=[src["id"]])
         assert page["records"] == [o]
         assert {tuple(row["field_path"]) for row in page["reference_matches"]} == {
             ("source_ref",), ("anchor", "source_ref")}
-        page = store.query_records("observation", references=[src["text_ref"]])
+        page = store.query_records("observation", whole(store), references=[src["text_ref"]])
         assert page["reference_matches"] == [{"record_ref": o["id"],
             "reference_ref": src["text_ref"], "field_path": ["anchor", "artifact_ref"]}]
 
@@ -147,10 +152,10 @@ def test_subject_union_is_bounded_scoped_and_filtered_without_subject_materializ
                 "molecule": "dna", "sequence_ref": store.artifact("AC" if name == "A" else "GG"),
                 "derivation": "extraction", "context_refs": [],
                 "footprint": store.coverage(features[name]["id"])}, origin="tool")
-        expected = store.subjects()
+        expected = store.subjects(whole(store))
         monkeypatch.setattr(store, "subjects", lambda *a, **k: pytest.fail("materialized all subjects"))
         monkeypatch.setattr(store, "get_artifact", lambda *a: pytest.fail("hydrated sequence/source data"))
-        rows, pages = collect(store, {"kind": "subject", "limit": 1})
+        rows, pages = collect(store, {"kind": "subject", "limit": 1}, whole(store))
         assert rows == expected and all(page["total"] == 6 for page in pages)
         scope = {"subject_refs": [targets["A"]["id"]]}
         rows, _ = collect(store, {"kind": "subject", "limit": 1}, scope)
@@ -178,11 +183,11 @@ def test_query_count_and_rows_share_one_snapshot_across_concurrent_commit(tmp_pa
                 hypothesis(writer, target, "partial")
 
         reader.db.set_trace_callback(interleave)
-        page = reader.query_records("hypothesis", limit=10)
+        page = reader.query_records("hypothesis", whole(reader), limit=10)
         reader.db.set_trace_callback(None)
         assert wrote
         assert page["total"] == 1 and page["records"] == [first]
-        assert reader.query_records("hypothesis")["total"] == 2
+        assert reader.query_records("hypothesis", whole(reader))["total"] == 2
 
 
 def test_query_rejects_malformed_selectors_without_state_mutation(tmp_path):
@@ -195,6 +200,6 @@ def test_query_rejects_malformed_selectors_without_state_mutation(tmp_path):
                 ({"references": []}, "invalid_reference_filter"),
                 ({"references": ["hypothesis_" + "f" * 24]}, "unknown_reference")):
             with pytest.raises(ContractError, match=code):
-                store.query_records("hypothesis", **arguments)
-        assert store.query_records("hypothesis", references=[target, target])["references"] == [target]
+                store.query_records("hypothesis", whole(store), **arguments)
+        assert store.query_records("hypothesis", whole(store), references=[target, target])["references"] == [target]
         assert store.db.total_changes == changes

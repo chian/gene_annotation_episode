@@ -1,22 +1,19 @@
-"""Private A102 literature_ordered yield."""
-from __future__ import annotations
-from .source_contracts import ContractError
+"""Continuation from the commissioned task, carried from the old ``yield_estimator.py``
+(``yield_controller`` -> ``_private_yield_controller``; README 7b).
 
-class SourceYield:
+``verified_source_leads`` accumulates (old ``AccumulationYieldController``): one credit unit per verified source,
+without limit. A source answer is one answer to the commission (old ``_FiniteLiteratureYieldController`` /
+``CompletionYieldController`` with the commissioned ``credit_unit`` as its finite target): the target is
+``task['credit_unit']`` from the parent input. This episode's credit for a source answer is at most one
+``credit_unit`` (screening and assessment each return at most one answer), so it cannot pass the target.
+The cost is the old task cutoff, now the episode's setting; the parameters are its settings."""
+from yield_control import AccumulationYieldController, CompletionYieldController
 
-    def continuation_task(self, context):
-        from gene_annotation_episode.episodic_workflow.root.a102.literature_task_credit import continuation_task
-        self._role(context.role)
-        return continuation_task(context)
 
-    def yield_controller(self, context, initial_credit, epoch):
-        """Bind this commissioned literature episode's estimator and cutoff."""
-        self._role(context.role)
-        if not self.private_yield_binding:
-            return None
-        from gene_annotation_episode.episodic_workflow.root.a102.literature_task_credit import _private_yield_controller, continuation_task
-        key = continuation_task(context)
-        declaration = self._yield_bindings.get(key)
-        if declaration is None:
-            raise ContractError('literature_yield_binding_missing_for_task:' + key)
-        return _private_yield_controller(context, initial_credit, epoch, declaration)
+def yield_controller(initial_credit, settings, parent_input):
+    task = parent_input['task']
+    if task['kind'] == 'verified_source_leads':
+        return AccumulationYieldController('source_coverage_improvement', initial_credit, settings['cost'],
+                                           settings['parameters'])
+    return CompletionYieldController('source_coverage_improvement', initial_credit, settings['cost'],
+                                     task['credit_unit'], settings['parameters'])

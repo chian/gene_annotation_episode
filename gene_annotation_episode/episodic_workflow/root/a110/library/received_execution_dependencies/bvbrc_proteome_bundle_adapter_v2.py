@@ -1,5 +1,0 @@
-from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_proteome_bundle_v2_contracts import validate_parameters_v2 as validate_parameters, validate_result_selector_v2 as validate_result_selector
-from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_proteome_directional_fact_contracts import validate_requested_form_v2 as validate_requested_form
-ADAPTER_ID = 'bvbrc_proteome'
-ADAPTER_VERSION = '2'
-

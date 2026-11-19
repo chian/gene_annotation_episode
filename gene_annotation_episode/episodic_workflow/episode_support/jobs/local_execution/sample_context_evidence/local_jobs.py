@@ -1,0 +1,102 @@
+"""Caller-owned limits and blocking adapters for the durable native lifecycle.
+
+Blocking and detached jobs share native_lifecycle and one protected worker.
+The worker/cgroup owns resource enforcement independently of episode lifetimes.
+Scratch is monitored with possible overshoot, plus a hard per-file size limit.
+This is not a filesystem sandbox or a scientific continuation rule.
+"""
+from __future__ import annotations
+
+import asyncio
+from dataclasses import asdict, dataclass
+import os
+from pathlib import Path
+import threading
+import tomllib
+from typing import Mapping
+
+
+
+@dataclass(frozen=True)
+class LocalJobPolicy:
+    memory_bytes: int
+    scratch_bytes: int
+
+    def __post_init__(self) -> None:
+        for name in ("memory_bytes", "scratch_bytes"):
+            value = getattr(self, name)
+            if type(value) is not int or value <= 0:
+                raise ValueError(f"invalid_local_job_{name}")
+
+    @classmethod
+    def from_config(cls, settings: Mapping) -> LocalJobPolicy:
+        defaults = tomllib.loads((Path(__file__).parents[3]/"configuration"/"sample_context_evidence"/"defaults.toml").read_text())["local_jobs"]
+        if not isinstance(settings, Mapping):
+            raise ValueError("invalid_local_job_settings")
+        supplied = dict(settings)
+        unknown = supplied.keys() - {"memory_bytes", "scratch_bytes"}
+        if unknown:
+            raise ValueError("unknown_local_job_setting:" + ",".join(sorted(unknown)))
+        configured = {**defaults, **supplied}
+        if "memory_bytes" not in supplied:
+            from gene_annotation_episode.workflow_budget import ENV, active_budget
+            if os.environ.get(ENV):
+                # An inherited default is a ceiling, not a declaration that
+                # every native helper needs the desktop's full allocation.
+                # Explicit caller requests retain their original semantics.
+                memory = active_budget()["environment_bounds"]["memory_bytes"]
+                configured["memory_bytes"] = min(configured["memory_bytes"], memory)
+        return cls(**configured)
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class LocalJobResult:
+    returncode: int
+    stdout_path: Path
+    stderr_path: Path
+    metadata: dict
+
+
+def run_local_job(command: list[str], *, cwd: Path, policy: LocalJobPolicy,
+                  stdout_path: Path | None = None, stderr_path: Path | None = None,
+                  stdin_path: Path | None = None, env: Mapping[str, str] | None = None,
+                  cancel_event: threading.Event | None = None, statistics=None,
+                  cpu_threads: int = 1) -> LocalJobResult:
+    """Wait through the same durable lifecycle used by detached execution."""
+    from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.sample_context_evidence.native_lifecycle import run_blocking
+    return run_blocking(command, cwd=cwd, policy=policy, stdout_path=stdout_path,
+        stderr_path=stderr_path, stdin_path=stdin_path, env=env, cancel_event=cancel_event,
+        statistics=statistics, cpu_threads=cpu_threads)
+
+
+async def run_cancellable_native(function, *args, **kwargs):
+    """Await a synchronous native adapter without abandoning its process tree.
+
+    The supplied adapter must consume cancel_event and reap its native jobs
+    before returning. This helper does not make an arbitrary function stoppable.
+    """
+    if "cancel_event" in kwargs:
+        raise ValueError("async_local_job_owns_cancel_event")
+    cancellation = threading.Event()
+    task = asyncio.create_task(asyncio.to_thread(function, *args,
+                              cancel_event=cancellation, **kwargs))
+    try:
+        return await asyncio.shield(task)
+    except asyncio.CancelledError:
+        cancellation.set()
+        # A repeated cancellation must not let the caller delete live scratch.
+        while not task.done():
+            try:
+                await asyncio.shield(task)
+            except asyncio.CancelledError:
+                continue
+            except Exception:
+                break
+        if task.done() and not task.cancelled():
+            task.exception()
+        raise
+
+

@@ -16,7 +16,7 @@ from gene_annotation_episode.ncbi_gene_native import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-CAPTURE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/sequence_support'
+CAPTURE = ROOT / 'tests/fixtures/sequence_support'
 NATIVE_SHA = '06caac1d71d16e5cad9278bb81ff41cd7abc067681638cbaca3e050e025d82ca'
 
 

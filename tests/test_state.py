@@ -216,8 +216,8 @@ def test_caller_context_is_readable_source_and_sample_identity_linked(tmp_path):
         assert a["sample_ref"] == b["sample_ref"] != c["sample_ref"]
         src = db.get(problem["caller_context_source_ref"])
         assert json.loads(db.get_artifact(src["text_ref"])) == {"observed_growth": "slow"}
-        assert src["id"] in db.reasoning_view()["supplied_context_source_refs"]
-        assert a["context_source_refs"][0] in db.reasoning_view()["supplied_context_source_refs"]
+        assert src["id"] in db.reasoning_view({"subject_refs": problem["subject_refs"]})["supplied_context_source_refs"]
+        assert a["context_source_refs"][0] in db.reasoning_view({"subject_refs": problem["subject_refs"]})["supplied_context_source_refs"]
 
 
 def test_view_pages_current_records_and_artifact_registry_excludes_diagnostics(store):
@@ -225,13 +225,14 @@ def test_view_pages_current_records_and_artifact_registry_excludes_diagnostics(s
     for index in range(3):
         o = observation(store, src=source(store, text=str(index)))
         assessment(store, h, o)
-    view = store.reasoning_view(limit=2)
+    whole = {"subject_refs": store.problem()["subject_refs"]}
+    view = store.reasoning_view(whole, limit=2)
     assert len(view["assessments"]) == 2
     assert view["pages"]["assessments"] == {"offset": 0, "limit": 2, "total": 3, "next_offset": 2, "current_only": True,
         "next_query": {"kind": "assessment", "offset": 2, "limit": 2, "current_only": True}}
     diagnostic = store.artifact("private error details")
-    assert diagnostic not in store.references()["artifact"]
-    assert store.targets()[0]["sequence_ref"] in store.references()["artifact"]
+    assert diagnostic not in store.references(whole)["artifact"]
+    assert store.targets()[0]["sequence_ref"] in store.references(whole)["artifact"]
     assert len(store.current_assessments(limit=2, offset=2)) == 1
 
 
@@ -286,7 +287,7 @@ def test_reasoning_cas_conflict_preserves_other_acquired_rows(store):
         "predicate": "sequence_integrity", "value": {"type": "enum", "value": "frameshift"}, "context_refs": []}]
     payload["assessments"] = [{"extent_basis": "observed_extent", "alias": "stale", "hypothesis_ref": h["id"], "observation_ref": o["id"],
         "relation": "weakens", "applicability": "direct", "condition_refs": [], "assumption_refs": [], "expected_revision": 0}]
-    result = store.commit_reasoning(payload, None, "stale-with-independent-work")
+    result = store.commit_reasoning(payload, {"subject_refs": store.problem()["subject_refs"]}, "stale-with-independent-work")
     assert result["status"] == "partial"
     assert len(result["changed_record_refs"]) == 1
     assert result["conflicts"][0]["current_revision"] == 1
@@ -392,12 +393,12 @@ def test_optional_bridge_absence_and_null_do_not_create_semantic_revisions(store
     assert "target_footprint" not in unchanged
     payload = empty_payload()
     payload["assessments"] = [{"alias": "same", **row}]
-    result = store.commit_reasoning(payload, None, "null-bridge-representation")
+    result = store.commit_reasoning(payload, {"subject_refs": store.problem()["subject_refs"]}, "null-bridge-representation")
     assert result["status"] == "completed", result
     assert result["record_refs"] == [original["id"]]
     assert result["changed_record_refs"] == []
     del payload["assessments"][0]["target_footprint"]
-    result2 = store.commit_reasoning(payload, None, "absent-bridge-representation")
+    result2 = store.commit_reasoning(payload, {"subject_refs": store.problem()["subject_refs"]}, "absent-bridge-representation")
     assert result2["status"] == "completed"
     assert result2["changed_record_refs"] == []
     assert store.current_assessments() == [original]

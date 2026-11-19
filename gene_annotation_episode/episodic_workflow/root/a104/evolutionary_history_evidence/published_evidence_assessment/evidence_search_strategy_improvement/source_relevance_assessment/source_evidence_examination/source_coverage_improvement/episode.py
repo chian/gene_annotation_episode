@@ -1,34 +1,20 @@
-"""Private literature_ordered episode behavior for A104."""
+"""The A104 ``evolutionary_history_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement``
+literature binding.
+
+Its behaviour is the shared A104 literature implementation
+(``published_evidence_assessment/literature_binding.py``); this binding declares only what is its own.
+"""
 from __future__ import annotations
-from importlib import import_module as _import_module
-from .task import SourceInvestigationTask
-from .task_presentation import present_source_context
-from .contracts import ROLES, _CHILDREN
-from .configuration import LiteratureConfiguration
-from .binding_record import LiteratureBindingRecord
-from .from_parent import LiteratureAssignment
-from .source_custody import LiteratureSourceCustody
-from .source_operations import LiteratureSourceOperations
-from .goal import LiteratureGoal
-from .internal_summary import LiteratureSummary
-from .parent_context import LiteratureParentContext
-from .scientific_interpretation import LiteratureScientificInterpretation
-from .numerical_report_facts import LiteratureNumericalReportFacts
-from .received_reports import LiteratureReceivedReports
-from .to_parent import LiteratureReport
-from .credit import LiteratureCredit
-from .yield_estimator import LiteratureYield
-from .waiting import LiteratureWaiting
-from .source_repositories import LiteratureRepositories
 
-from .role_policy import LiteratureRolePolicy
+from .....literature_binding import LiteratureBinding
 
-class LiteratureEpisode(LiteratureRolePolicy, LiteratureConfiguration, LiteratureBindingRecord, LiteratureAssignment, LiteratureSourceCustody, LiteratureSourceOperations, LiteratureGoal, LiteratureSummary, LiteratureParentContext, LiteratureScientificInterpretation, LiteratureNumericalReportFacts, LiteratureReceivedReports, LiteratureReport, LiteratureCredit, LiteratureYield, LiteratureWaiting, LiteratureRepositories):
+
+class SourceCoverageImprovementEpisode(LiteratureBinding):
+    """Improve coverage of the examined source."""
     binding_path = 'evolutionary_history_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement'
+    role = 'literature_ordered'
     commissioning_parent = 'evolutionary_history_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination'
-    'Private scientific investigation with its own task and original configured services.'
-    roles = ('literature_ordered',)
-    entry_roles = ()
-
-    decision_source_type = SourceInvestigationTask
-    decision_prompt_renderer = staticmethod(present_source_context)
+    acquisition = False
+    instruction = ('Investigate the source in document order as useful for the assigned question. Use returned UTF-8 '
+                   'byte continuations and retain representation identity. Decide whether to continue, reread, change '
+                   'the examined window or interpret obtained evidence from actual outcomes.')

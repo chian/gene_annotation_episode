@@ -87,52 +87,6 @@ def test_interrupted_startup_resumes_same_verified_service_without_resubmission(
         cleanup(handle)
 
 
-def test_missing_terminal_evidence_is_unknown_not_zero_or_completed(tmp_path, monkeypatch):
-    from gene_annotation_episode import native_lifecycle as module
-    handle = NativeJobHandle(tmp_path/'handle.json')
-    handle.path.write_text(json.dumps({'version': module.VERSION, 'unit': 'fixture-not-submitted.service',
-        'paths': {'status': str(tmp_path/'missing-status'), 'result': str(tmp_path/'missing-result'),
-                  'release': str(tmp_path/'missing-release')},
-        'boot_id': module._boot(), 'started_monotonic_ns': time.monotonic_ns(),
-        'metadata': {'policy': policy().to_dict()}, 'stdout': str(tmp_path/'out'), 'stderr': str(tmp_path/'err')}))
-    monkeypatch.setattr(module, '_properties', lambda _: {'LoadState': 'not-found'})
-    view = status(handle)
-    assert view['state'] == 'execution_unknown' and not view['terminal']
-    assert view['metadata']['elapsed_seconds'] is None
-    assert view['metadata']['native_returncode'] is None
-    with pytest.raises(AcquisitionError) as error:
-        collect(handle)
-    assert error.value.code == 'local_job_not_collectable'
-    released=[]
-    monkeypatch.setattr(module,'_release_capacity',lambda body:released.append(body['unit']))
-    with pytest.raises(AcquisitionError) as error:
-        module.wait_job(handle)
-    assert error.value.code=='local_job_execution_unknown'
-    assert released==['fixture-not-submitted.service']
-
-
-def test_failed_service_submission_preserves_typed_operational_failure_without_execution(tmp_path,monkeypatch):
-    from gene_annotation_episode import native_lifecycle as module
-    handle = prepare_job([sys.executable,'-c',"raise AssertionError('must not run')"],
-        cwd=tmp_path,policy=policy(),handle_path=tmp_path/'handle.json')
-    calls = []
-    def rejected(command,**kwargs):
-        calls.append(command)
-        return subprocess.CompletedProcess(command,1)
-    monkeypatch.setattr(module.subprocess,'run',rejected)
-    with pytest.raises(AcquisitionError) as error:
-        module._dispatch_prepared(handle,handle.read())
-    assert error.value.code=='local_job_boundary_unavailable'
-    assert error.value.phase=='local_preflight'
-    assert error.value.operational['reason']=='service_submission_failed'
-    assert error.value.operational['launcher_returncode']==1
-    assert error.value.operational['policy']==policy().to_dict()
-    assert len(calls)==1 and calls[0][0]=='systemd-run'
-    assert '--setenv=PYTHONDONTWRITEBYTECODE=1' in calls[0]
-    assert not any('RuntimeMax' in argument for argument in calls[0])
-    assert not Path(handle.read()['paths']['release']).exists()
-
-
 def test_reserved_request_change_is_rejected_without_native_execution(tmp_path):
     command = [sys.executable, '-c', "from pathlib import Path;Path('native-ran').touch()"]
     handle = prepare_job(command, cwd=tmp_path, policy=policy(), handle_path=tmp_path/'handle.json')

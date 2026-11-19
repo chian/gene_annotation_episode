@@ -1,5 +1,5 @@
-"""Original own-A102 Scientific scientific_guidance."""
-from ..a102_structural_evidence import is_merged_entry
+"""The A102 head's scientific guidance, prefixed to its model instructions (``runtime_head.instructions``)."""
+from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_evidence import is_merged_entry
 
 
 def scientific_guidance(entry):
@@ -15,4 +15,4 @@ def scientific_guidance(entry):
         "unknown functional features do not erase measured native correspondence. "
         "Follow up for missing structural cells, preserve original scope and model uncertainty, "
         "and distinguish fold resemblance from exact function. Novel folding requires an explicit configured "
-        "remote/API/HPC binding; use structure.model_request when it is missing.\n\n")
+        "remote/API/HPC binding.\n\n")

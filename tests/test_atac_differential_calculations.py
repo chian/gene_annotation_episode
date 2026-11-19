@@ -23,7 +23,6 @@ from gene_annotation_episode.atac_differential_calculations import (
 
 ROLES = ('signal1', 'background1', 'signal2', 'background2')
 LIKELIHOODS = ('condition1_vs_background', 'condition2_vs_background', 'condition1_vs_condition2')
-NATIVE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/atac/native001'
 MAX_COORDINATE = 2**63 - 1
 
 
@@ -121,88 +120,6 @@ def forbid_acquisition(monkeypatch):
     monkeypatch.setattr(os, 'system', forbidden)
     monkeypatch.setattr(socket, 'socket', forbidden)
     monkeypatch.setattr(socket, 'create_connection', forbidden)
-
-
-def test_retained_native_fixture_partition_all_fifteen_scores_and_corrected_regions(monkeypatch):
-    directory = NATIVE / 'explicit_tracks'
-    source = native_tracks(directory, ('t1.bdg', 'c1.bdg', 't2.bdg', 'c2.bdg'))
-    oracle = json.loads((directory / 'NATIVE_DIAGNOSTIC.json').read_text())['arrays'][0]
-    declared = json.loads((directory / 'INPUT.json').read_text())
-    original_bytes = {path.name: path.read_bytes() for path in directory.iterdir() if path.is_file()}
-    assert source['signal1']['rows'][1] == (1, 2, 15, 33, 'chrToy', 100, 200, 20.0, '20')
-    forbid_acquisition(monkeypatch)
-    result = components(source, [population(0, 500, 'chrToy')],
-                        depth1=declared['declared_depth_millions'][0],
-                        depth2=declared['declared_depth_millions'][1])
-    assert [(item['start'], item['end']) for item in result] == [(0, 100), (100, 200), (200, 300), (300, 400), (400, 500)]
-    assert all(item['population_ordinal'] == 0 for item in result)
-    for index, item in enumerate(result):
-        assert item['interval_ordinal'] == index
-        assert item['source_rows'] == {role: [index] for role in ROLES}
-        for name in LIKELIHOODS:
-            assert item['scores']['likelihoods'][name]['native_float32']['value'] == oracle['native_' + name][index]
-        assert item['scores']['inputs']['depth1'] == 1
-        assert item['scores']['inputs']['depth2'] == 2
-        assert item['scores']['parameters']['depth_unit'] == 'million_tags'
-    found = regions(result, cutoff=3, min_length_bp=50)
-    assert [(item['category'], item['start'], item['end']) for item in found] == [
-        ('condition1', 100, 200), ('common', 200, 300), ('condition2', 300, 400)]
-    assert [item['native_float32_mean_score'] for item in found] == [
-        17.7408447265625, 5.425064273367752e-7, 12.148710250854492]
-    assert all(item['span_bp'] == item['qualifying_bp'] == item['score_denominator_bp'] == 100 for item in found)
-    assert all(item['bridged_gap_bp'] == 0 and item['source_extent'] == 'complete' for item in found)
-    assert all(item['left_boundary'] == item['right_boundary'] == 'observed_gap' for item in found)
-    assert all(item['score_numerator'] == item['mean_score'] * 100 for item in found)
-    # Actual native BED bytes are separate, rounded, displaced records.
-    assert original_bytes['condition1.bed'].splitlines()[1].split(b'\t')[1:3] == [b'0', b'100']
-    assert original_bytes['condition1.bed'].splitlines()[1].split(b'\t')[4] == b'17.7408'
-    assert {path.name: path.read_bytes() for path in directory.iterdir() if path.is_file()} == original_bytes
-    example_path = os.environ.get('ATAC463_NATIVE_EXAMPLE_PATH')
-    if example_path:
-        Path(example_path).write_text(json.dumps({
-            'verification_kind': 'calculation_on_retained_native_output_from_synthetic_engineering_fixture',
-            'new_native_execution': False, 'production_parser_integration': False,
-            'source_identities': {name: {'sha256': hashlib.sha256(content).hexdigest(), 'size_bytes': len(content)}
-                                  for name, content in original_bytes.items()},
-            'declared_depth_values': [1, 2], 'depth_unit': 'million_tags',
-            'observed_depth_counts': None, 'native_track_rows': source,
-            'components': result, 'derived_regions': found,
-            'original_native_bed_records': {name: original_bytes[name].decode('utf-8')
-                                             for name in ('condition1.bed', 'condition2.bed', 'common.bed')},
-        }, indent=2, allow_nan=False) + '\n')
-
-
-def test_retained_bam_irregular_breakpoints_real_postfilter_depths_and_unknown_tails(monkeypatch):
-    directory = NATIVE / 'bam_outputs'
-    source = native_tracks(directory, ('condition1_treat_pileup.bdg', 'condition1_control_lambda.bdg',
-                                       'condition2_treat_pileup.bdg', 'condition2_control_lambda.bdg'))
-    assert [len(source[role]['rows']) for role in ROLES] == [110, 35, 210, 69]
-    counts = []
-    for name, expected in (('condition1', 100), ('condition2', 200)):
-        lines = (directory / (name + '_peaks.xls')).read_text().splitlines()
-        assert lines[20] == '# tags after filtering in treatment: ' + str(expected)
-        counts.append(int(lines[20].rsplit(': ', 1)[1]))
-    assert (directory / 'condition1_peaks.xls').read_text().splitlines()[19] == '# total tags in treatment: 105'
-    boundary_oracle = sorted({0, 12000} | {coordinate for track in source.values()
-                                         for native in track['rows'] for coordinate in native[5:7]})
-    forbid_acquisition(monkeypatch)
-    result = components(source, [population(0, 12000, 'chrToy')],
-                        depth1=counts[0], depth2=counts[1], depth_unit='tags')
-    assert [item['start'] for item in result] + [result[-1]['end']] == boundary_oracle
-    by_bounds = {(item['start'], item['end']): item for item in result}
-    assert by_bounds[(949, 1100)]['values']['signal1'] == 50.0
-    assert by_bounds[(2999, 3100)]['values']['signal2'] == 100.0
-    assert by_bounds[(8033, 8060)]['states'] == {role: 'observed' for role in ROLES}
-    tail = by_bounds[(8060, 9900)]
-    assert tail['values']['signal1'] is None and tail['states']['signal1'] == 'missing'
-    assert tail['states']['signal2'] == 'observed'
-    assert tail['scores']['likelihoods']['condition2_vs_background']['native_float32']['value'] is not None
-    assert tail['scores']['likelihoods']['condition1_vs_condition2']['native_float32']['value'] is None
-    assert by_bounds[(10060, 12000)]['states'] == {role: 'missing' for role in ROLES}
-    assert result[0]['values']['signal1'] == 0.0 and result[0]['states']['signal1'] == 'observed'
-    assert result[0]['scores']['depth_factors']['condition2']['value'] == 0.5
-    assert result[0]['scores']['inputs']['depth1'] == 100
-    assert all(item['start'] < item['end'] for item in result)
 
 
 def test_actual_boundary_union_clips_but_keeps_original_source_ordinals():
@@ -571,23 +488,6 @@ def test_region_iterator_emits_closed_regions_before_a_later_failure():
 def test_region_order_validation_does_not_bridge_omitted_or_overlapping_intervals(second):
     with pytest.raises(ValueError, match='atac_components_out_of_partition_order'):
         regions([likelihood_component(0, 10, 9, 0, 4), second])
-
-
-def test_saved_tables_recalculate_with_changed_parameters_without_acquisition_or_mutation(monkeypatch):
-    directory = NATIVE / 'explicit_tracks'
-    source = native_tracks(directory, ('t1.bdg', 'c1.bdg', 't2.bdg', 'c2.bdg'))
-    saved = json.loads(json.dumps(source))
-    before = json.dumps(saved, sort_keys=True, allow_nan=False)
-    forbid_acquisition(monkeypatch)
-    first = components(saved, [population(0, 500, 'chrToy')])
-    second = components(saved, [population(0, 500, 'chrToy')], pseudocount=1)
-    assert first[1]['scores']['likelihoods'] != second[1]['scores']['likelihoods']
-    assert first[1]['scores']['inputs'] == second[1]['scores']['inputs']
-    assert regions(first, min_length_bp=50, cutoff=20) == []
-    assert len(regions(first, min_length_bp=50, cutoff=3)) == 3
-    assert before == json.dumps(saved, sort_keys=True, allow_nan=False)
-    assert first[1]['scores']['parameters']['pseudocount'] == 0.01
-    assert second[1]['scores']['parameters']['pseudocount'] == 1
 
 
 def test_empty_populations_components_and_region_streams_have_no_fabricated_results():

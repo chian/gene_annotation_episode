@@ -77,6 +77,11 @@ def reference_values(value):
             yield from reference_values(child)
 
 
+def whole(store):
+    """The whole problem as an explicit Store scope."""
+    return {"subject_refs": store.problem()["subject_refs"]}
+
+
 def load(result):
     return json.loads(Path(result["json"]["path"]).read_text())
 
@@ -97,7 +102,7 @@ def test_json_preserves_current_alternatives_and_exact_dependency_history(store,
     assessment_update.update(relation="weakens", expected_revision=1)
     a2 = store.put("assessment", assessment_update, origin="reasoning")
     private = store.artifact("private execution diagnostic")
-    result = export_annotation(store, tmp_path / "annotation.json", page_size=1)
+    result = export_annotation(store, tmp_path / "annotation.json", scope=whole(store), page_size=1)
     document = load(result)
     assert document["format"] == FORMAT
     assert document["problem"] == store.problem()
@@ -137,7 +142,7 @@ def test_optional_credit_reports_unavailable_without_hydrating_artifacts(store, 
 
 def test_bundle_is_portable_hash_checked_and_streamed(store, tmp_path, monkeypatch):
     monkeypatch.setattr(store, "get_artifact", lambda ref: pytest.fail("bundle copy must stream from content-addressed files"))
-    result = export_annotation(store, tmp_path / "portable.json", include_artifacts=True, page_size=1)
+    result = export_annotation(store, tmp_path / "portable.json", scope=whole(store), include_artifacts=True, page_size=1)
     document = load(result)
     for artifact in document["artifacts"]:
         copied = Path(result["json"]["path"]).parent / artifact["relative_path"]
@@ -161,7 +166,7 @@ def test_gff3_only_projects_actual_nt_features_and_preserves_alternatives(store,
     update["coherent_sets"] = [{"interpretations": [{"hypothesis_ref": h["id"], "disposition": "unresolved", "assessment_refs": [a["id"]]}], "context_refs": [condition["id"]]}]
     update.update(alternative_refs=[alt["id"]], resolution="alternatives_retained", expected_revision=1)
     current = store.put("annotation", update, origin="reasoning")
-    result = export_annotation(store, tmp_path / "annotation.gff3", format="gff3")
+    result = export_annotation(store, tmp_path / "annotation.gff3", scope=whole(store), format="gff3")
     document = load(result)
     text = Path(result["gff3"]["path"]).read_text()
     rows = [line.split("\t") for line in text.splitlines() if line and not line.startswith("#")]
@@ -183,7 +188,7 @@ def test_gff3_only_projects_actual_nt_features_and_preserves_alternatives(store,
 
 
 def test_input_itself_never_becomes_fabricated_gff_gene(store, tmp_path):
-    result = export_annotation(store, tmp_path / "no-features.gff3", format="gff3")
+    result = export_annotation(store, tmp_path / "no-features.gff3", scope=whole(store), format="gff3")
     assert result["gff3"]["emitted_features"] == 0
     assert all(not line or line.startswith("#") for line in Path(result["gff3"]["path"]).read_text().splitlines())
     assert load(result)["membership"]["candidate_feature_refs"] == []
@@ -219,8 +224,8 @@ def test_paged_stream_is_complete_deterministic_and_skips_unreferenced_history(s
         assert kind not in {"annotation", "assessment"}, "use current pointer pages rather than loading audit history"
         return original_list(kind, *args, **kwargs)
     monkeypatch.setattr(store, "list", no_history)
-    one = export_annotation(store, tmp_path / "one.json", page_size=1)
-    many = export_annotation(store, tmp_path / "many.json", page_size=3)
+    one = export_annotation(store, tmp_path / "one.json", scope=whole(store), page_size=1)
+    many = export_annotation(store, tmp_path / "many.json", scope=whole(store), page_size=3)
     assert Path(one["json"]["path"]).read_bytes() == Path(many["json"]["path"]).read_bytes()
     document = load(one)
     assert len(document["membership"]["candidate_feature_refs"]) == 5
@@ -246,7 +251,7 @@ def test_export_keeps_one_snapshot_when_requested_scoring_is_unavailable(store, 
         return rows
     monkeypatch.setattr(store, "list", interleave)
     try:
-        document = load(export_annotation(store, tmp_path / "snapshot.json", include_credit=True))
+        document = load(export_annotation(store, tmp_path / "snapshot.json", scope=whole(store), include_credit=True))
         assert document["membership"]["current_assessment_refs"] == [a1["id"]]
         assert document["credit_projection"] == expected
         assert store.current_assessments()[0]["id"] != a1["id"]
@@ -256,16 +261,16 @@ def test_export_keeps_one_snapshot_when_requested_scoring_is_unavailable(store, 
 
 def test_export_cannot_replace_authoritative_storage(store):
     with pytest.raises(ContractError, match="authoritative_storage"):
-        export_annotation(store, store.path / "state.sqlite3")
+        export_annotation(store, store.path / "state.sqlite3", scope=whole(store))
     with pytest.raises(ContractError, match="authoritative_storage"):
-        export_annotation(store, store.path / "artifacts" / "bad-output.json")
+        export_annotation(store, store.path / "artifacts" / "bad-output.json", scope=whole(store))
 
 
 def test_discontinuous_gff_segments_retain_identity_and_order_without_circularity(store, tmp_path):
     rna = store.targets()[1]
     f = store.put("feature", {"subject_ref": rna["id"], "kind": "ncRNA",
         "segments": [{"start": 6, "end": 8}, {"start": 0, "end": 3}], "strand": "-", "context_refs": []}, origin="reasoning")
-    result = export_annotation(store, tmp_path / "segments.gff3", format="gff3")
+    result = export_annotation(store, tmp_path / "segments.gff3", scope=whole(store), format="gff3")
     text = Path(result["gff3"]["path"]).read_text()
     rows = [line.split("\t") for line in text.splitlines() if line and not line.startswith("#")]
     assert [row[3:5] for row in rows] == [["7", "8"], ["1", "3"]]
@@ -291,7 +296,7 @@ def test_partial_material_export_keeps_exact_indexed_errors_and_portable_members
                      "error_index": index, **error} for index, error in enumerate(actual)]
         native_members = store.material_members(attempt["collection_ref"])["members"]
     with Store(workspace) as store:
-        result = export_annotation(store, tmp_path / "partial.json", include_artifacts=True, page_size=1)
+        result = export_annotation(store, tmp_path / "partial.json", scope=whole(store), include_artifacts=True, page_size=1)
         data = load(result)
         assert data["parse_errors"] == expected
         exported_attempt = next(row for row in data["records"] if row["id"] == attempt["id"])

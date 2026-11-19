@@ -96,3 +96,26 @@ collection, dangling-name scan (`runs/claude_inputs/la/dangling.py`), commit.
   baseline. Collection 50,565, 0 errors; dangling scan unchanged.
 - Phase 1 complete: every arm's head carries its axis role. Remaining `scientific_process` outside docs/: the shared
   root's generic role and home, and their references.
+
+## Global plan (18 November 2026; owner's goal: one generic runner, root with nine named axis children)
+
+End state: one generic runner that starts at any subtree head and takes everything episode-specific from bindings;
+each axis folder holds only its subtree's bindings and axis helpers (no private runner, root task, registry, generic
+improvement child or duplicate trees); the root binding has the nine named axis children and the ε = 0.5 hypervolume
+credit; no `scientific_process` role/home and no `legacy_annotation`.
+
+- P0 Binding contract (blocks P1, P2): the class contract of `BINDING_CONTRACT.md` (an episode is one class of
+  `episode_runtime.EpisodeBinding` whose members its ten files supply; revised 19 November 2026), plus one entry point
+  that starts a run at any head. Inputs gathered in parallel: P0a, the shared runner's role/axis-keyed
+  sites and the binding member replacing each; P0b, a pilot port of A108 onto the shared runner without touching shared code,
+  recording each gap.
+- P1 Shared runner made generic (after P0; parallel with P2): each role/axis branch becomes a member supplied
+  by the binding of the episode it belongs to (root annotation, literature, execution, monitor, HPC, homology).
+- P2 Each axis ported (after P0; parallel with P1; one agent per axis, disjoint folders, at most three at once): subtree
+  runs from its head on the shared runner; parent `annotation`; generic improvement child and private runner, root task,
+  registry and duplicate trees deleted; tests ported and compared per file with the baseline.
+- P3 Root assembled (after P1, P2): nine explicit children; returns and credit from each axis binding; axis-id tables
+  deleted; hypervolume credit.
+- P4 Generic `scientific_process` home and its duplicate subtree deleted (after P3).
+- P5 Final verification: searches empty, whole-tree per-file run against 7e662ea29 with every change recorded, per-home
+  table, zero-error collection, no dangling names.

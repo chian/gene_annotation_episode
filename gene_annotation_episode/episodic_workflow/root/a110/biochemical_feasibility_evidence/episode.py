@@ -1,54 +1,50 @@
-"""Private A110 scientific assembly and original factories."""
-from __future__ import annotations
-from .scientific_assignment_contracts import ContractError, ROLE, ROLES
-from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.received_execution_information import received_execution_information as _received_execution_information
-from .initial_information import initial_information as _private_initial_information
-from .configuration import ScientificConfiguration
-from .binding_record import ScientificBindingRecord
-from .goal import ScientificGoal
-from .child_commissioning import ScientificChildCommissioning
-from .tool_selection import ScientificToolSelection
-from .scientific_operations import ScientificScientificOperations
-from .internal_summary import ScientificInternalSummary
-from .from_parent import ScientificFromParent
-from .saved_scientific_state import ScientificSavedScientificState
-from .to_parent import ScientificToParent
-from .report_integrity import ScientificReportIntegrity
-from .received_evidence import ScientificReceivedEvidence
-from .source_references import ScientificSourceReferences
-from .credit import BiochemicalFeasibilityEvidenceCredit
-from importlib import import_module as _import_module
-from .yield_estimator import BiochemicalFeasibilityEvidenceYield
-from .task import ScientificTask
-from .presentation import present_scientific_context
+"""The A110 head binding (biochemical_feasibility_evidence).
 
-class BiochemicalFeasibilityEvidenceEpisode(ScientificConfiguration, ScientificBindingRecord, ScientificGoal, ScientificChildCommissioning, ScientificToolSelection, ScientificScientificOperations, ScientificInternalSummary, ScientificFromParent, ScientificSavedScientificState, ScientificToParent, ScientificReportIntegrity, ScientificReceivedEvidence, ScientificSourceReferences, BiochemicalFeasibilityEvidenceCredit, BiochemicalFeasibilityEvidenceYield):
-    """One recursive C7 role with parent-selected A/P and actual tool assignment data."""
-    received_execution_information = staticmethod(_received_execution_information)
-    initial_information = staticmethod(_private_initial_information)
+The head runs the A110 unit source (``unit_source.py``) with its own A110 tool
+registry, constructed by the A110 home factory over the run's shared Store
+(ruling C4); the runtime ``store`` collaborator must be that Store. Its
+commissioner (the root) fills ``scope`` with the subject it holds, copies the
+declared ``evidence_task`` and chooses ``tools`` (C6), the subset of the head's
+operations this commission may use.
+"""
+from __future__ import annotations
+
+from types import MappingProxyType
+
+from episode_runtime import DeclaredField, RecordForm, SubsetField
+
+from .head_episode import instructions
+from .runtime_contract import EpisodeRuntimeContract, REQUIRED_COLLABORATORS, RETURN_FORM, SCOPE
+from .unit_source import build_unit_episode, selectable_tools
+
+EVIDENCE_TASK = DeclaredField('text', 'The evidence axis this head investigates',
+                              'A110 biochemical feasibility and chemical/resource accounting')
+
+
+class BiochemicalFeasibilityEvidenceEpisode(EpisodeRuntimeContract):
+    """The A110 evidence-axis head: model-selected tool, reasoning and child units over its finding credit."""
     binding_path = 'biochemical_feasibility_evidence'
-    commissioning_parent = 'legacy_annotation'
-    roles = ROLES
-    entry_roles = ROLES
-    decision_source_type = ScientificTask
-    decision_prompt_renderer = staticmethod(present_scientific_context)
+    grain_name = binding_path.replace('/', '__')
+    goal = 'Improve the evidence on whether the proposed reaction or pathway is chemically and resource feasible under its declared conditions'
+    unit = 'One selected scientific tool action or commissioned child investigation'
+    result = 'The retained biochemical-feasibility findings and their unbounded credit'
+    child_slots = MappingProxyType({'biochemical_feasibility_evidence': 'biochemical_feasibility_evidence', 'execution_job_submission': 'biochemical_feasibility_evidence/execution_job_submission', 'execution_progress_assessment': 'biochemical_feasibility_evidence/execution_progress_assessment', 'execution_result_acquisition': 'biochemical_feasibility_evidence/execution_result_acquisition', 'hpc_work_planning': 'biochemical_feasibility_evidence/hpc_work_planning', 'published_evidence_assessment': 'biochemical_feasibility_evidence/published_evidence_assessment'})
+    required_collaborators = REQUIRED_COLLABORATORS
+    return_form = RETURN_FORM
+
+    def __init__(self, tool_registry):
+        self.tool_registry = tool_registry
+        self.assignment_form = RecordForm({
+            'scope': SCOPE,
+            'evidence_task': EVIDENCE_TASK,
+            'tools': SubsetField('text', 'The operations of this head this commission may use',
+                                 selectable_tools(tool_registry)),
+        })
 
     @staticmethod
-    def _role(role):
-        if role != ROLE:
-            raise ContractError('biochemical_feasibility_evidence_role_not_bound')
+    def instructions():
+        return instructions()
 
-def create_execution_bindings(*args, **configuration):
-    """Construct private bindings with this caller's existing operands."""
-    from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.execution_job_submission.episode import ExecutionEpisode as Private0
-    from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.execution_job_submission.local_job_execution.episode import ExecutionEpisode as Private1
-    from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as Private2
-    from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.execution_result_acquisition.episode import ExecutionEpisode as Private3
-    return (Private0(*args, **configuration), Private1(*args, **configuration), Private2(*args, **configuration), Private3(*args, **configuration))
-
-def create_hpc_bindings(*args, **configuration):
-    """Construct private bindings with this caller's existing operands."""
-    from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.hpc_work_planning.episode import HPCEpisode as Private0
-    from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.hpc_work_planning.hpc_resource_prediction.episode import HPCEpisode as Private1
-    from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.hpc_work_planning.hpc_allocation_execution.episode import HPCEpisode as Private2
-    return (Private0(*args, **configuration), Private1(*args, **configuration), Private2(*args, **configuration))
+    def build_episode(self, grain, bound, collaborators, child_builders):
+        """The head's own model-selected tool, reasoning and child units over its finding credit."""
+        return build_unit_episode(self, grain, bound, collaborators, child_builders)

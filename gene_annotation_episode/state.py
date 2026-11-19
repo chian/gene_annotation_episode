@@ -274,7 +274,7 @@ class Store:
                 merged.append(dict(segment))
         return merged
 
-    def scope_coverage(self, scope=None):
+    def scope_coverage(self, scope):
         scope = self.validate_scope(scope)
         if "segments" in scope:
             return scope["segments"]
@@ -282,7 +282,7 @@ class Store:
             raise ContractError("library_scope_requires_streamed_geometry")
         return [span for ref in scope["subject_refs"] for span in self.coverage(ref)]
 
-    def iter_scope_coverage(self, scope=None, target_ref=None):
+    def iter_scope_coverage(self, scope, target_ref=None):
         yield from libraries.iter_eligible(self, scope, target_ref)
 
     def scope_measure(self, scope, target_ref):
@@ -341,11 +341,11 @@ class Store:
     def _covered_by(segments, allowed):
         return all(any(libraries.key(a) == libraries.key(s) and a["start"] <= s["start"] < s["end"] <= a["end"] for a in allowed) for s in segments)
 
-    def scope_covers(self, segments, scope=None):
+    def scope_covers(self, segments, scope):
         normalized = self.validate_scope(scope)
         return all(libraries.contains(self, normalized, span) for span in segments)
 
-    def validate_scope(self, scope=None, parent_scope=None) -> dict:
+    def validate_scope(self, scope, parent_scope=None) -> dict:
         return libraries.validate_scope(self, scope, parent_scope)
 
     def scope_contains(self, parent_scope, child_scope) -> bool:
@@ -423,11 +423,11 @@ class Store:
                 ORDER BY id LIMIT ? OFFSET ?""", (kind, *scope["subject_refs"], canonical(scope), limit, offset))
         return [json.loads(row[0]) for row in rows]
 
-    def subjects(self, scope=None) -> list[dict]:
+    def subjects(self, scope) -> list[dict]:
         normalized = self.validate_scope(scope)
         return [self.get_input(ref) for ref in normalized["subject_refs"]] + self.list("feature", normalized, limit=2**31-1) + self.list("product", normalized, limit=2**31-1)
 
-    def query_records(self, kind, scope=None, limit=100, offset=0, *,
+    def query_records(self, kind, scope, limit=100, offset=0, *,
                       current_only=False, references=None, record_selection=None) -> dict:
         """Read one exact scientific page without changing dependency meaning.
 
@@ -735,7 +735,7 @@ class Store:
                 refs = [value["ref"]] if atom_type == "reference" else [role["ref"] for role in value["roles"]]
                 for ref in refs:
                     if self.get(ref)["record_type"] in {
-                        "artifact", "source", "native_execution", "image_view", "material", "material_link",
+                        "artifact", "source", "image_view", "material", "material_link",
                         "collection", "parse_attempt", "pmc_version", "pmc_catalog",
                         "pmc_object", "pmc_asset", "archive_member", "source_derivative", "read_selection",
                     }:
@@ -763,8 +763,6 @@ class Store:
             raise ContractError("origin_not_allowed")
         if kind == "image_view" and origin != "tool":
             raise ContractError("image_view_requires_native_tool_origin")
-        if kind == "native_execution" and origin != "tool":
-            raise ContractError("native_execution_requires_native_tool_origin")
         if origin == "extracted" and kind not in {"term", "observation", "reference", "context"}:
             raise ContractError("origin_not_allowed")
         custody = {"pmc_version", "pmc_catalog", "pmc_object", "pmc_asset", "archive_member", "source_derivative"}
@@ -791,37 +789,6 @@ class Store:
                 for index, child in enumerate(value):
                     constrained_refs(child, (*path, index))
         constrained_refs(data)
-        if kind == "native_execution":
-            from gene_annotation_episode.episodic_workflow.root.native_measurement import NativeMeasurement
-            from .domain import NATIVE_EXECUTION_OPERATIONS
-            self._require(data['measurement_artifact_ref'], {'artifact'})
-            measured = NativeMeasurement.from_record(json.loads(self.get_artifact(data['measurement_artifact_ref'])))
-            if measured.execution_class.phase != NATIVE_EXECUTION_OPERATIONS[data['operation']]:
-                raise ContractError('native_execution_operation_phase_mismatch')
-            roles = [operand['role'] for operand in data['operands']]
-            if len(set(roles)) != len(roles):
-                raise ContractError('native_execution_operand_role_repeated')
-            for operand in data['operands']:
-                if operand['role'] == 'input_source':
-                    self._require(operand['subject_ref'], {'source'})
-                else:
-                    self._require(operand['subject_ref'], {'input', 'reference', 'read_subject', 'feature', 'product'})
-                    length = getattr(measured.execution_class, operand['role']+'_residues')
-                    if length is not None and self.subject_length(operand['subject_ref']) != length:
-                        raise ContractError('native_execution_operand_length_mismatch')
-            if measured.execution_class.phase == 'pairwise_sequence_alignment':
-                if set(roles) != {'query', 'reference'} or data['operation'] != 'align_pair':
-                    raise ContractError('native_alignment_requires_query_and_reference_operands')
-            if measured.execution_class.phase == 'spreadsheet_selection':
-                if set(roles) != {'input_source'} or data['operation'] not in {'xlsx_sheets', 'xlsx_rows'}:
-                    raise ContractError('native_spreadsheet_requires_source_operand')
-                if measured.execution_class.query_residues is not None or measured.execution_class.reference_residues is not None:
-                    raise ContractError('spreadsheet_workload_has_no_sequence_residues')
-            if measured.execution_class.phase == 'protein_homology_search':
-                if set(roles) != {'query'} or data['operation'] != 'phmmer_search':
-                    raise ContractError('native_homology_requires_query_operand')
-                if self.subject_unit(data['operands'][0]['subject_ref']) != 'aa':
-                    raise ContractError('native_homology_requires_protein_query')
         if kind == "source":
             for ref in data.get("operand_refs", []):
                 self._require(ref, {"input", "reference", "read_subject", "feature", "product"})
@@ -1783,7 +1750,7 @@ class Store:
         artifact_refs.update(ref for key, ref in problem.items() if key.endswith("_ref") and isinstance(ref, str) and ref.startswith("artifact_"))
         return artifact_refs if selected is None else artifact_refs & selected
 
-    def reference_subset(self, candidates, scope=None):
+    def reference_subset(self, candidates, scope):
         """Resolve just supplied candidates under the existing form registry boundary."""
         scope = self.validate_scope(scope)
         records = {}
@@ -1801,7 +1768,7 @@ class Store:
             or (row["record_type"] == "read_subject" and self._in_scope(ref, scope))
             or (row["record_type"] in RECORD_SCHEMAS and self._in_scope(ref, scope))]
 
-    def references(self, scope=None):
+    def references(self, scope):
         scope = self.validate_scope(scope)
         result = {kind: [] for kind in ["input", "subject", "artifact", *RECORD_SCHEMAS]}
         result["input"] = list(scope["subject_refs"])
@@ -1814,7 +1781,7 @@ class Store:
         result["artifact"] = sorted(self._artifact_references())
         return result
 
-    def reasoning_view(self, scope=None, limit=100, *, record_selection=None):
+    def reasoning_view(self, scope, limit=100, *, record_selection=None):
         scope = self.validate_scope(scope)
         if type(limit) is not int or limit < 1:
             raise ContractError("invalid_page")

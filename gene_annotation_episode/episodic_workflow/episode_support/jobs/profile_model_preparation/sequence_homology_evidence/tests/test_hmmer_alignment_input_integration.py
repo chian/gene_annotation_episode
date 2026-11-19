@@ -1,0 +1,315 @@
+"""Input context admission, immutable JSON, native preflight and saved returns.
+
+Native tests reuse the existing selected-driver harness under the root's bounded
+lifecycle. Diagnostic copies are engineering inputs; retained originals stay fixed.
+"""
+from copy import deepcopy
+import hashlib
+import json
+from pathlib import Path
+
+import pytest
+
+from gene_annotation_episode.episodic_workflow.episode_support.calculations.profile_model_preparation.sequence_homology_evidence import hmmer_alignment_preparation_calculations as calc
+from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.sequence_homology_evidence import hmmer_alignment_preparation_data as data
+from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.sequence_homology_evidence import hmmer_preparation_result_views as views
+from gene_annotation_episode.episodic_workflow.episode_support.tools.profile_model_preparation.sequence_homology_evidence import native_hmmer_preparation_driver as driver
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.profile_model_preparation.sequence_homology_evidence import native_hmmer_preparation_result_worker as result_worker
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.profile_model_preparation.sequence_homology_evidence import native_hmmer_preparation_worker as worker
+from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import ContractError
+from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.practical_execution_records import canonical as practical_canonical
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.sequence_homology_evidence.practical_execution_state import _immutable
+from gene_annotation_episode.episodic_workflow.episode_support.calculations.profile_model_preparation.sequence_homology_evidence.tests.test_hmmer_alignment_input_calculations import ORACLE, EMISSION, annotated_selex, checks, sheet_for
+from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.sequence_homology_evidence.tests.test_hmmer_alignment_preparation_data import payload
+from gene_annotation_episode.episodic_workflow.episode_support.forms.profile_model_preparation.sequence_homology_evidence.tests.test_native_hmmer_preparation_contracts import job, operand
+from gene_annotation_episode.episodic_workflow.episode_support.tools.profile_model_preparation.sequence_homology_evidence.tests.test_native_hmmer_preparation_driver import make_plan, output_bytes, run_actual
+import gene_annotation_episode.episodic_workflow.episode_support.jobs.profile_model_preparation.native_hmmer_preparation_worker_context as _scientific_native_hmmer_preparation_result_worker
+
+
+def grading_for(sheet):
+    formats = {item["occurrence_id"]: (sheet["operation"]["settings"]["--informat"]
+        if item["direction"] == "input" else "stockholm") for item in sheet["artifact_occurrences"]}
+    grading = {"version": "native_hmmer_preparation_grading_v1", "operation": deepcopy(sheet["operation"]),
+        "formats": formats, "metadata": {}, "native_abi": None, "requested_parameters": {},
+        "sheet": sheet, "calculations": worker.recalculate_hmmer_preparation(sheet, parameters={})}
+    occurrences = [{**item, "format": formats[item["occurrence_id"]],
+        "relative_path": item["direction"] + "/" + item["role"]} for item in sheet["artifact_occurrences"]]
+    return grading, occurrences
+
+
+def selection(*quantities):
+    return {"version": "native_hmmer_preparation_result_selector_v1", "acquisition": "complete_bound_bundle",
+        "projection": {"collection": "calculations", "rows": {"offset": 0, "limit": 1},
+                       "quantities": list(quantities), "checks": []}, "artifacts": []}
+
+
+def selected_values(grading, occurrences, *quantities):
+    return views.project_preparation_result(grading, selector=selection(*quantities),
+        source_ref="source:retained-input-547", occurrences=occurrences)
+
+
+@pytest.mark.parametrize("mutation", ["profile", "hash", "probe", "native_row", "output_handoff"])
+def test_saved_view_validates_new_facts_after_original_custody(mutation):
+    source = (ORACLE / "afa_auto_dna.input").read_bytes()
+    output = b"# STOCKHOLM 1.0\na ACGTACGTACGT\nb ACGTACGTACGT\n#=GC MM mm..........\n//\n"
+    grading, occurrences = grading_for(sheet_for(source, "afa", output=output))
+    expected = selected_values(grading, occurrences, "components.input_sequence_count")
+    assert expected["rows"][0]["quantities"][0]["value"] == 2
+    changed = deepcopy(grading)
+    record = changed["sheet"]["input_records"][0]
+    if mutation == "profile":
+        record["input_decoding"]["reader_profile"] = "unbound-profile"
+    elif mutation == "hash":
+        record["input_decoding"]["source_sha256"] = "0" * 64
+    elif mutation == "probe":
+        record["input_decoding"]["alphabet_probe"]["counted_letters"] += 1
+    elif mutation == "native_row":
+        record["native_input"]["rows"][0]["name_bytes_hex"] = "00"
+    else:
+        changed["sheet"]["output_records"][0]["source_alphabet"]["alphabet"] = "RNA"
+    with pytest.raises(ContractError, match="projection_input_decoding_invalid"):
+        selected_values(changed, occurrences, "components.input_sequence_count")
+    bad_custody = deepcopy(occurrences)
+    bad_custody[0]["sha256"] = "f" * 64
+    with pytest.raises(ContractError, match="projection_sheet_occurrence_mismatch"):
+        selected_values(changed, bad_custody, "components.input_sequence_count")
+
+
+def test_numerical_writer_is_byte_identical_for_previously_encodable_values(tmp_path):
+    value = {"literal": "é\x00\\udcff😀", "numbers": [None, True, 1, .125]}
+    old = tmp_path / "old.json"
+    _immutable(old, value)
+    receipt = result_worker._write(tmp_path, "new.json", value)
+    raw = (tmp_path / "new.json").read_bytes()
+    assert raw == old.read_bytes() == (practical_canonical(value) + "\n").encode("utf-8")
+    assert receipt == {"filename": "new.json", "sha256": hashlib.sha256(raw).hexdigest(), "size_bytes": len(raw)}
+    assert result_worker._write(tmp_path, "new.json", value) == receipt
+    with pytest.raises(ValueError, match="practical_immutable_record_conflict"):
+        result_worker._write(tmp_path, "new.json", {"changed": True})
+    assert (tmp_path / "new.json").read_bytes() == raw
+    assert not list(tmp_path.glob(".hmmer-numerical-*"))
+
+
+def test_numerical_writer_cleans_exclusive_temporary_after_link_failure(tmp_path, monkeypatch):
+    def fail(*args, **kwargs):
+        raise OSError("authored link failure")
+    monkeypatch.setattr(result_worker.os, "link", fail)
+    with pytest.raises(OSError, match="authored link failure"):
+        result_worker._write(tmp_path, "unpublished.json", {"value": "\udcff"})
+    assert not (tmp_path / "unpublished.json").exists()
+    assert not list(tmp_path.glob(".hmmer-numerical-*"))
+
+
+@pytest.mark.parametrize("tag", ["RF", "MM", "SS_cons", "SS", "SA"])
+def test_byte_annotations_round_trip_saved_admission_and_requested_scalar(tmp_path, tag):
+    content = annotated_selex(tag, b"\xff")
+    sheet = sheet_for(content, "selex", alphabet="RNA", mode="mask_model",
+        **{"--fast": True, "--wnone": True})
+    grading, occurrences = grading_for(sheet)
+    receipt = result_worker._write(tmp_path, "grading.json", grading)
+    raw = (tmp_path / receipt["filename"]).read_bytes()
+    assert b"\\udcff" in raw and hashlib.sha256(raw).hexdigest() == receipt["sha256"]
+    saved = json.loads(raw)
+    assert saved == grading
+    row = saved["sheet"]["input_records"][0]
+    assert b"\xff" in b"".join(event["raw"].encode("utf-8", errors="surrogateescape") for event in row["original_events"])
+    projected = selected_values(saved, occurrences, "components.input_sequence_count", "components.rf_consensus_count",
+        "components.input_masked_count", "components.mapped_model_position_count")
+    values = projected["rows"][0]["quantities"]
+    cells = saved["calculations"]["rows"][0]["components"]
+    for quantity in values:
+        cell = cells[quantity["path"].removeprefix("components.")]
+        assert {key: quantity[key] for key in ("value", "state", "unit")} == {key: cell[key] for key in ("value", "state", "unit")}
+    assert values[0]["value"] == 11
+    assert values[3]["state"] == "present"
+    if tag == "RF":
+        assert values[1]["value"] is None and values[1]["state"] == "missing"
+    if tag == "MM":
+        assert values[2]["value"] is None and values[2]["state"] == "incompatible"
+
+
+def test_byte_name_is_retained_without_becoming_a_numeric_projection(tmp_path):
+    content = b">name\xff\nACGT\n>other\nACGT\n"
+    sheet = sheet_for(content, "afa", alphabet="DNA")
+    grading, occurrences = grading_for(sheet)
+    result_worker._write(tmp_path, "grading.json", grading)
+    saved = json.loads((tmp_path / "grading.json").read_bytes())
+    assert saved["sheet"]["input_records"][0]["rows"][0]["name"].encode("utf-8", errors="surrogateescape") == b"name\xff"
+    selected = selected_values(saved, occurrences, "components.input_sequence_count")
+    assert selected["rows"][0]["name"] is None
+    assert selected["rows"][0]["quantities"][0]["value"] == 2
+
+
+@pytest.mark.parametrize("mode", ["mask_alignment", "mask_model", "model_to_alignment"])
+def test_other_modes_return_before_any_decoder_or_map_preflight(monkeypatch, mode):
+    def forbidden(*args, **kwargs):
+        pytest.fail("mode without unsafe map scan entered shared decoding")
+    monkeypatch.setattr(data, "read_hmmer_alignment_input", forbidden)
+    monkeypatch.setattr(calc, "reconstruct_alimask_model_map", forbidden)
+    driver._alimask_preflight_shared(None, {"mode": mode}, {})
+
+
+@pytest.mark.parametrize("mode,flag", [("mask_alignment", "--alirange"),
+    ("mask_model", "--modelrange"), ("model_to_alignment", "--model2ali")])
+def test_actual_new_input_modes_keep_selected_native_command(tmp_path, mode, flag):
+    selected = job("alimask", mode, ["--dna", "--fast", "--wnone", flag, "1-2"])
+    selected["operands"] = [operand("alignment", ORACLE / "afa_auto_dna.input", "afa")]
+    original = deepcopy(selected)
+    plan, bundle = run_actual(tmp_path, selected)
+    assert bundle["returncode"] == 0 and bundle["failures"] == []
+    assert bundle["realized_argv"][1:1 + len(selected["options"])] == selected["options"]
+    assert selected == original
+    assert all(item["staged_sha256"] == item["final_sha256"] == item["expected_sha256"] for item in bundle["inputs"])
+    assert output_bytes(plan, bundle, "stdout")
+
+
+def test_actual_native_alphabet_refusal_keeps_exit_and_logs(tmp_path):
+    selected = job("alimask", "mask_alignment", ["--alirange", "1-1"])
+    selected["operands"] = [operand("alignment", ORACLE / "afa_auto_refusal.input", "afa")]
+    plan, bundle = run_actual(tmp_path, selected)
+    assert type(bundle["returncode"]) is int and bundle["returncode"] != 0
+    assert any(item["code"].endswith("nonzero_returncode") and item["detail"]["returncode"] == bundle["returncode"] for item in bundle["failures"])
+    assert not any(item["stage"] == "preflight" for item in bundle["failures"])
+    assert output_bytes(plan, bundle, "stdout") + output_bytes(plan, bundle, "stderr")
+    assert not {"--dna", "--rna", "--amino"} & set(bundle["realized_argv"])
+
+
+@pytest.mark.parametrize("case,content,reason", [
+    ("empty-map", b">a\n----\n>b\n----\n", "empty_model_map"),
+    ("after-last", b">a\nACGT--\n>b\nACGT--\n", None),
+    ("alphabet-refusal", b">a\nAC\n", "alphabet_undetermined"),
+    ("failed-a2m", b">a\nACGT\n>b\nACG\n", "malformed_alignment"),
+])
+def test_unsafe_or_unavailable_new_input_never_launches(tmp_path, monkeypatch, case, content, reason):
+    source = tmp_path / ("authored-" + case + ".input")
+    source.write_bytes(content)
+    fmt = "a2m" if case == "failed-a2m" else "afa"
+    options = ([] if case == "alphabet-refusal" else ["--dna"]) + ["--fast", "--wnone", "--fragthresh", "0", "--ali2model", "5-6" if case == "after-last" else "1-2"]
+    selected = job("alimask", "alignment_to_model", options)
+    selected["operands"] = [operand("alignment", source, fmt)]
+    monkeypatch.setattr(driver.subprocess, "run", lambda *a, **k: pytest.fail("unsafe selected input launched"))
+    plan = make_plan(tmp_path, selected)
+    bundle = driver.run_native_hmmer_preparation(plan)
+    assert bundle["returncode"] is None
+    failures = [item for item in bundle["failures"] if item["stage"] == "preflight"]
+    assert len(failures) == 1
+    if reason is None:
+        assert failures[0]["code"].endswith("unsafe_alimask_range")
+        assert failures[0]["detail"] == {"start": 5, "end": 6, "last_match": 4}
+    else:
+        assert failures[0]["detail"]["reason"] == reason
+    assert driver.run_native_hmmer_preparation(plan) == bundle
+
+
+def test_complete_first_phylip_record_survives_unprocessed_malformed_suffix(tmp_path):
+    original = (EMISSION / "aligned_phylip/emitted.out").read_bytes()
+    # Explicitly labeled diagnostic suffix; the retained first record is intact.
+    content = original + b"2 4\nfirst     ACGU\nsecond    AC\n"
+    source = tmp_path / "authored-malformed-second-record.phy"
+    source.write_bytes(content)
+    selected = job("alimask", "alignment_to_model", ["--fast", "--wnone", "--ali2model", "1-2"])
+    selected["operands"] = [operand("alignment", source, "phylip")]
+    decoded = data.read_hmmer_alignment_input(content, declared_format="phylip",
+        occurrence=payload("alignment", content)["occurrence"], explicit_alphabet=None, engine_version="3.4")
+    assert decoded["input_decoding"]["reader_state"] == "partial"
+    assert decoded["records"][0]["complete"] is True
+    assert decoded["input_decoding"]["first_record_end_byte"] < decoded["input_decoding"]["alphabet_probe"]["scan_end_byte"] == len(content)
+    plan, bundle = run_actual(tmp_path, selected)
+    assert bundle["returncode"] == 0 and bundle["failures"] == []
+    assert bundle["inputs"][0]["staged_size_bytes"] == len(content)
+    assert b"1..2" in output_bytes(plan, bundle, "stdout")
+
+
+def grade_actual(plan, bundle, *, retained_directory=None):
+    """Allow a pinned snapshot location without rewriting the original plan."""
+    directory = Path(plan["attempt_directory"]) if retained_directory is None else retained_directory
+    inputs, outputs, formats, occurrences = {}, {}, {}, []
+    for collection, direction in (("inputs", "input"), ("artifacts", "output")):
+        for index, item in enumerate(bundle[collection]):
+            content = (directory / item["relative_path"]).read_bytes()
+            role = item["role"]
+            value = payload(role, content, direction, oid="retained:actual547#/" + collection + "/" + str(index))
+            value["occurrence"]["artifact_ref"] = "artifact_" + hashlib.sha256(content).hexdigest()
+            (inputs if direction == "input" else outputs).setdefault(role, []).append(value)
+            formats[value["occurrence"]["occurrence_id"]] = item["format"]
+            occurrences.append({**value["occurrence"], "format": item["format"], "relative_path": item["relative_path"]})
+    metadata, problems = _scientific_native_hmmer_preparation_result_worker.effective_metadata(bundle, occurrences)
+    assert problems == []
+    return worker.grade_hmmer_preparation(operation=bundle["operation"], inputs=inputs, outputs=outputs,
+        formats=formats, metadata=metadata, parameters={}, native_abi=bundle["native_abi"]), occurrences
+
+
+@pytest.mark.parametrize("fmt,fixture", [("a2m", "a2m_insertions"), ("clustal", "aligned_clustal")])
+def test_actual_hmmbuild_original_alphabet_checksum_map_and_saved_return(tmp_path, monkeypatch, fmt, fixture):
+    selected = job("hmmbuild", "build_alignment", ["--cpu", "1", "--seed", "42", "--wnone", "-n", "input547"])
+    selected["operands"] = [operand("alignment", EMISSION / fixture / "emitted.out", fmt)]
+    selected["outputs"].append({"role": "resaved_alignment", "format": "stockholm", "relative_path": "outputs/resaved.sto"})
+    plan, bundle = run_actual(tmp_path, selected)
+    assert bundle["returncode"] == 0 and bundle["failures"] == []
+    _assert_hmmbuild_original_alphabet_checksum_map_and_saved_return(
+        tmp_path, monkeypatch, plan, bundle, fixture)
+
+
+def _assert_hmmbuild_original_alphabet_checksum_map_and_saved_return(
+        tmp_path, monkeypatch, plan, bundle, fixture, *, retained_directory=None):
+    grading, occurrences = grade_actual(plan, bundle, retained_directory=retained_directory)
+    sheet, result = grading["sheet"], grading["calculations"]
+    source = sheet["input_records"][0]
+    transformed = next(item for item in sheet["output_records"] if item["kind"] == "alignment")
+    model = sheet["model_extraction"]["records"][0]
+    assert source["input_decoding"]["alphabet_basis"] == "native_source_inference"
+    assert source["input_decoding"]["effective_alphabet"] == transformed["source_alphabet"]["alphabet"] == model["alphabet"]["kind"] == "RNA"
+    assert checks(result, "source_checksum")[0]["state"] == "pass"
+    assert checks(result, "alphabet")[0]["state"] == "pass"
+    assert checks(result, "sequence_content")[0]["state"] == "pass"
+    assert result["rows"][0]["coordinates"]["model_to_source_alignment"] == data._model_map(model, source["column_count"])
+    selected_result = selected_values(grading, occurrences, "components.input_sequence_count", "components.model_length")
+    assert [item["value"] for item in selected_result["rows"][0]["quantities"]] == [len(source["rows"]), model["length"]]
+    for quantity in selected_result["rows"][0]["quantities"]:
+        cell = result["rows"][0]["components"][quantity["path"].removeprefix("components.")]
+        assert {key: quantity[key] for key in ("value", "state", "unit")} == {key: cell[key] for key in ("value", "state", "unit")}
+    changed = deepcopy(sheet)
+    changed["model_extraction"]["records"][0]["alphabet"]["kind"] = "DNA"
+    conflict = worker.recalculate_hmmer_preparation(changed, parameters={})
+    assert checks(conflict, "source_checksum")[0]["state"] == "fail"
+    assert checks(conflict, "alphabet")[0]["state"] == "fail"
+    assert "alphabet_incompatible" in {item["code"] for item in conflict["issues"]}
+    receipt = result_worker._write(tmp_path, "hmmbuild-grading.json", grading)
+    saved_bytes = (tmp_path / receipt["filename"]).read_bytes()
+    assert hashlib.sha256(saved_bytes).hexdigest() == receipt["sha256"]
+    saved = json.loads(saved_bytes)
+    assert saved == grading
+    def forbidden(*args, **kwargs):
+        pytest.fail("saved result used original input reader")
+    with monkeypatch.context() as guard:
+        for name in ("read_hmmer_alignment_input", "read_hmmer_alignment_output", "infer_hmmer_alignment_alphabet",
+                     "decode_native_fasta_alignment", "decode_native_block_alignment", "decode_native_phylip_alignment"):
+            guard.setattr(data, name, forbidden)
+        guard.setattr(worker.model_data, "extract_hmmer_models", forbidden)
+        guard.setattr(Path, "read_bytes", forbidden)
+        guard.setattr(Path, "open", forbidden)
+        assert worker.recalculate_hmmer_preparation(saved["sheet"], parameters={}) == result
+        guard.setattr(calc, "calculate_hmmer_alignment_preparation_components", forbidden)
+        assert selected_values(saved, occurrences, "components.input_sequence_count", "components.model_length") == selected_result
+    (tmp_path / "NATIVE_INPUT_CONSUMER_EXAMPLE.json").write_text(json.dumps({
+        "fixture": str(EMISSION / fixture / "emitted.out"), "native_returncode": bundle["returncode"],
+        "source_alphabet": source["input_decoding"], "source_checksum": checks(result, "source_checksum"),
+        "native_model_map": result["rows"][0]["coordinates"]["model_to_source_alignment"],
+        "selected_return": selected_result}, indent=2) + "\n")
+    return grading, selected_result
+
+
+def test_syntax_failure_returns_before_reconstruction_or_native(tmp_path, monkeypatch):
+    source = tmp_path / "authored-invalid-rf.sto"
+    source.write_bytes(b"# STOCKHOLM 1.0\na ACGT\n#=GC RF xxx\n//\n")
+    selected = job("alimask", "alignment_to_model", ["--dna", "--fast", "--wnone", "--ali2model", "1-2"])
+    selected["operands"] = [operand("alignment", source, "stockholm")]
+    def forbidden(*args, **kwargs):
+        pytest.fail("syntax rejection continued into map reconstruction or native work")
+    monkeypatch.setattr(calc, "resolve_alimask_map_context", forbidden)
+    monkeypatch.setattr(calc, "reconstruct_alimask_model_map", forbidden)
+    monkeypatch.setattr(driver.subprocess, "run", forbidden)
+    bundle = driver.run_native_hmmer_preparation(make_plan(tmp_path, selected))
+    assert bundle["returncode"] is None
+    assert [item["detail"]["reason"] for item in bundle["failures"] if item["stage"] == "preflight"] == ["malformed_stockholm"]
+

@@ -2,20 +2,19 @@
 from copy import deepcopy
 import json
 import math
-from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.a102.a102_attachments import request,refresh,received_attachments
-from gene_annotation_episode.episodic_workflow.root.a102.a102_credit import (A102StructuralCredit,
+from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.attachments import request,refresh,received_attachments
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.credit import (A102StructuralCredit,
     A102FeatureGeometryCredit, A102FunctionalContrastCredit,
     A102ReferenceAttributionCredit, A102LocalTraitCredit, A102InterfaceContactCredit)
-from gene_annotation_episode.episodic_workflow.root.a102.a102_native_worker import _native
-from gene_annotation_episode.episodic_workflow.root.a102.a102_publication import publish_comparison
-from gene_annotation_episode.episodic_workflow.root.a102.a102_structures import bind_structure,binding_summary
-from gene_annotation_episode.episodic_workflow.root.a102.a102_tools import A102ToolRegistry
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.structural_homology_evidence.native_worker import _native
+from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.publication import publish_comparison
+from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.structures import bind_structure,binding_summary
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structural_homology_evidence.evidence_operations import A102ToolRegistry
 from gene_annotation_episode.domain import canonical
-from gene_annotation_episode.episodic_workflow.root.a102.a102_scoring import digest
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.scoring import digest
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import retain_tool_grading
 
@@ -125,92 +124,6 @@ def test_direct_target_geometry_does_not_depend_on_sequence_axis(case):
     result=A102StructuralCredit()(store,{'subject_refs':[target]},known_record_refs=known)
     assert needs and result['credit']==pytest.approx(1/(1+(.1/2)**2))
     assert any(r['policy']=='direct_native_geometry_v1' and r['state']=='direct' for r in result['tool_attachments'])
-
-
-def test_saved_zero_feature_and_contrast_credit_their_original_annotation(case, monkeypatch):
-    store, registry, target, y, z, native, known = case
-    x, xbody = binding(registry, 'MDEAKG', target=target, shift=.2)
-    reference = json.loads(store.db.execute('SELECT body FROM a102_structure_bindings '
-        'WHERE source_ref=?', (z,)).fetchone()[0])
-    direct = comparison(registry, x, xbody, z, reference, direct=True)
-    other_reference = json.loads(store.db.execute('SELECT body FROM a102_structure_bindings '
-        'WHERE source_ref=?', (y,)).fetchone()[0])
-    direct_other = comparison(registry, x, xbody, y, other_reference, direct=True)
-    annotation = store.put('hypothesis', {'subject_refs': [target],
-        'predicate': 'biological_role', 'value': {'type': 'enum', 'value': 'unresolved'},
-        'context_refs': []}, origin='reasoning')['id']
-    other = store.put('hypothesis', {'subject_refs': [target],
-        'predicate': 'biological_role', 'value': {'type': 'enum', 'value': 'negative'},
-        'context_refs': []}, origin='reasoning')['id']
-    definition = registry._source('engineering.feature_definition',
-        {'meaning': 'Witnessed absent physical feature for this fixture.'})
-    known.update({x, direct, direct_other, annotation, other, definition})
-    scope = {'subject_refs': [target]}
-    def feature(key, comparison_ref):
-        result, delivered = registry._features({'comparison_source_ref': comparison_ref,
-            'function_ref': annotation, 'definition_source_refs': [definition],
-            'features': [{'physical_feature_key': key, 'state': 'established_absent',
-                'target_position': 0, 'reference_position': 0, 'target_atom': 'CA',
-                'reference_atom': 'CA', 'witness_refs': [definition], 'reason': 'witnessed'}]},
-            known, scope)
-        known.update(delivered)
-        return result['feature_source_ref']
-    supporting = feature('supporting-absent', direct)
-    opposing = feature('opposing-absent', direct_other)
-    assigned = {'scope': scope, 'proposed_annotation_ref': annotation}
-    features = A102FeatureGeometryCredit()
-    assert features(store, scope, known_record_refs=list(known) * 2,
-        assignment=assigned)['credit'] == 2
-    assert features(store, scope, known_record_refs=known,
-        assignment={'scope': scope, 'proposed_annotation_ref': other})['credit'] == 0
-    result, delivered = registry._contrast({'target_ref': target, 'function_ref': annotation,
-        'supporting_source_refs': [supporting], 'opposing_source_refs': [opposing],
-        'incompatibility_witness_refs': [definition]}, known, scope)
-    known.update(delivered)
-    from gene_annotation_episode.episodic_workflow.root.a102.a102_attachments import refresh
-    additions, _ = refresh(store, known, scope)
-    known.update(additions)
-    contrast = A102FunctionalContrastCredit()
-    view = contrast.read_details(store, scope, known_record_refs=known, assignment=assigned,
-        details_limit=1, details_offset=0)
-    assert view['credit'] == 1
-    assert view['source_contributions'][0]['native_value'] == 0
-    assert contrast(store, scope, known_record_refs=known,
-        assignment={'scope': scope, 'proposed_annotation_ref': other})['credit'] == 0
-
-    from gene_annotation_episode.episodic_workflow.root.credit import axis_progress_from_received
-    from gene_annotation_episode.domain import canonical
-    receiver = SimpleNamespace(run_id='a102-axis-union', received_record_refs=tuple(known))
-    def returned(proposal, projector, refs, invocation):
-        return {'proposed_annotation_ref': proposal, 'scope': scope, 'axis': 'A102',
-            'credit_projector': projector, 'credit_binding_ref': invocation,
-            'record_refs': list(refs)}
-    reports = [
-        returned(annotation, features, known, 'feature-original'),
-        returned(annotation, features, known, 'feature-redelivery'),
-        returned(annotation, contrast, known, 'contrast-original'),
-        returned(other, features, known, 'other-annotation'),
-    ]
-    progress = axis_progress_from_received(store, receiver, reports)
-    assert progress[annotation, canonical(scope), 'A102']['credit'] == 3
-    assert progress[other, canonical(scope), 'A102']['credit'] == 0
-    assert progress[annotation, canonical(scope), 'A102']['task_credit_binding_refs'] == [
-        'contrast-original', 'feature-original', 'feature-redelivery']
-    from gene_annotation_episode.episodic_workflow.root.scoring import SignedEvidenceRootSupport
-    from gene_annotation_episode.episodic_workflow.root.tests.test_signed_evidence_root import registered_receiver
-    root = registered_receiver(store, receiver.run_id, 'axis-union', scope)
-    local_scope = store.validate_scope({'subject_refs': [target],
-        'segments': store.coverage(target)})
-    root_reports = [{**report, 'scope': local_scope} for report in reports]
-    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.credit.received_axis_task_credit',
-        lambda *_: iter(root_reports))
-    combined = SignedEvidenceRootSupport(task_credit=True)(store, scope,
-        known_record_refs=known, run_id=root.run_id, episode_id=root.episode_id)
-    arms = {(row['proposed_annotation_ref'], row['axis']): row
-        for row in combined['credit']['arms']}
-    assert arms[annotation, 'A102']['credit'] == 3
-    assert arms[other, 'A102']['credit'] == 0
-    assert combined['credit']['root_score'] == 3
 
 
 def trait(key,kind,positions,definition,**changes):

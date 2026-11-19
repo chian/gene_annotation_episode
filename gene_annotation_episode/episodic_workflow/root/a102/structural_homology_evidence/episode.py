@@ -1,107 +1,93 @@
-"""Connect the original own-A102 scientific process."""
+"""The A102 head binding (``structural_homology_evidence``) on the generic runner.
+
+It is constructed by the A102 home factory (``contract_binding.a102_home_factory``)
+with its frozen ``StructuralHomologyEvidenceLibrary`` publication, its own
+``ToolRegistry`` over the run's shared Store and its per-task yield declarations
+(``yield_bindings['A102:<task>']``). Its commission (``assignment_form``) carries
+the subject scope and proposed annotation the root holds, and the A102 task,
+thought pattern and tool subset the root chooses among the options declared here
+(C3/C6). Its decisions, credit and continuation are ``runtime_head``.
+"""
 from __future__ import annotations
-from .scientific_contracts import ContractError, INSTRUCTION_VERSION, ROLE, ROLES, VERSION, _object, deepcopy
-from .configuration import ScientificConfiguration
-from .goal import ScientificGoal
-from .child_commissioning import ScientificChildCommissioning
-from .operations import ScientificOperations
-from .internal_summary import ScientificInternalSummary
-from .from_parent import ScientificFromParent
-from .saved_scientific_state import ScientificSavedScientificState
-from .to_parent import ScientificToParent
-from .report_integrity import ScientificReportIntegrity
-from .received_evidence import ScientificReceivedEvidence
-from .source_references import ScientificSourceReferences
-from .credit import StructuralHomologyEvidenceCredit
-from importlib import import_module as _import_module
-from .yield_estimator import StructuralHomologyEvidenceYield
-from .to_child_published_evidence_assessment import assemble_request as assemble_published_evidence_assessment
-from .from_child_published_evidence_assessment import select_report_receiver
 
-class StructuralHomologyEvidenceEpisode(ScientificConfiguration, ScientificGoal, ScientificChildCommissioning, ScientificOperations, ScientificInternalSummary, ScientificFromParent, ScientificSavedScientificState, ScientificToParent, ScientificReportIntegrity, ScientificReceivedEvidence, ScientificSourceReferences, StructuralHomologyEvidenceCredit, StructuralHomologyEvidenceYield):
-    """One recursive C7 role with parent-selected A/P and actual tool assignment data."""
-    binding_path = 'structural_homology_evidence'
-    commissioning_parent = 'legacy_annotation'
-    roles = ROLES
-    entry_roles = ROLES
+from collections.abc import Mapping
+import json
+import math
 
-    def __init__(self, services, *, library, tool_library, child_roles, tool_retrieval=None, contract_information_profile=None, yield_bindings=None):
-        if not isinstance(child_roles, (tuple, list)) or not child_roles or any((not isinstance(role, str) or not role for role in child_roles)) or (len(set(child_roles)) != len(child_roles)) or (ROLE not in child_roles):
-            raise ContractError('scientific_child_roles_invalid')
-        self.services, self.library, self.tool_library = (services, library, tool_library)
-        self._child_roles = tuple(child_roles)
-        self._library_record = _object(library.as_record(), 'scientific_library_invalid')
-        self._tools_record = _object(tool_library.as_record(), 'scientific_tool_library_invalid')
-        axes = [header['option_ref'] for header in library.headers() if header['option_ref']['slot'] == 'evidence_axis']
-        self.replaces_default_instructions = bool(axes) and all((library.resolve(reference).get('entry_version') == INSTRUCTION_VERSION for reference in axes))
-        from gene_annotation_episode.episodic_workflow.root.a102.scientific_tool_retrieval import configuration
-        self.tool_retrieval = configuration(tool_retrieval)
-        from gene_annotation_episode.episodic_workflow.root.a102.composition_information import CONTRACT_INFORMATION_PROFILE
-        if contract_information_profile not in (None, CONTRACT_INFORMATION_PROFILE):
-            raise ContractError('unsupported_scientific_contract_information_profile')
-        self._contract_information_profile = contract_information_profile
-        self._yield_bindings = None if yield_bindings is None else _object(yield_bindings, 'scientific_yield_bindings_invalid')
-        if self._yield_bindings is not None:
-            if not isinstance(self._yield_bindings, dict):
-                raise ContractError('scientific_yield_bindings_invalid')
-            from gene_annotation_episode.episodic_workflow.root.a102.numerical import BoundedYieldController, CompletionYieldController, YieldController, YieldParameters
-            for task, declaration in self._yield_bindings.items():
-                if not isinstance(task, str) or ':' not in task or (not isinstance(declaration, dict)) or (set(declaration) != {'kind', 'cutoff', 'parameters', 'credit_definition'}) or (declaration['kind'] not in {'accumulation', 'bounded_quality', 'completion'}) or (not isinstance(declaration['parameters'], dict)) or (set(declaration['parameters']) != {'uncertainty_alpha'}) or (not isinstance(declaration['credit_definition'], dict)) or (not declaration['credit_definition']):
-                    raise ContractError('scientific_yield_task_binding_invalid:' + str(task))
-                try:
-                    parameters = YieldParameters(**declaration['parameters'])
-                    if declaration['kind'] == 'bounded_quality':
-                        BoundedYieldController('configuration', 0, declaration['cutoff'], 1.0, parameters)
-                    elif declaration['kind'] == 'completion':
-                        CompletionYieldController('configuration', 0, declaration['cutoff'], parameters)
-                    else:
-                        YieldController('configuration', 0, declaration['cutoff'], parameters)
-                except (TypeError, ValueError) as error:
-                    raise ContractError('scientific_yield_task_binding_invalid:' + task) from error
+from episode_runtime import ChoiceField, DeclaredField, Field, RecordForm, SubsetField
 
-    def as_record(self):
-        return {'version': VERSION, 'binding_id': ROLE, 'configuration': {'library': deepcopy(self._library_record), 'tool_library': deepcopy(self._tools_record), 'child_roles': list(self._child_roles), **({'tool_retrieval': deepcopy(self.tool_retrieval)} if self.tool_retrieval else {}), **({'contract_information_profile': self._contract_information_profile} if self._contract_information_profile is not None else {}), **({'yield_bindings': deepcopy(self._yield_bindings)} if self._yield_bindings is not None else {})}}
+from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_evidence import TASKS
+from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError
+from .contract_binding import A102ContractBinding
+from .runtime_head import evidence_axis_entry, thought_patterns
 
-    @staticmethod
-    def _role(role):
-        if role != ROLE:
-            raise ContractError('structural_homology_evidence_role_not_bound')
+ROLE = 'structural_homology_evidence'
+_YIELD_KINDS = frozenset({'accumulation', 'bounded_quality', 'completion'})
 
-    def resource_information_catalog(self, registry):
-        from .scientific_commission_catalog import resource_information_catalog
-        return resource_information_catalog(self, registry)
 
-    def child_request_assembler(self, role):
-        if role == 'literature':
-            return assemble_published_evidence_assessment
-        return None
-    published_evidence_report_receiver = staticmethod(select_report_receiver)
+def _yield_bindings(value):
+    """Each declaration: kind, cutoff, parameters (uncertainty_alpha) and its exact credit definition."""
+    if not isinstance(value, Mapping) or not value:
+        raise ContractError('scientific_yield_bindings_invalid')
+    from yield_control import YieldParameters
+    bindings = json.loads(json.dumps(dict(value), allow_nan=False))
+    for task, declaration in bindings.items():
+        if (not isinstance(task, str) or not task.startswith('A102:') or not isinstance(declaration, dict)
+                or set(declaration) != {'kind', 'cutoff', 'parameters', 'credit_definition'}
+                or declaration['kind'] not in _YIELD_KINDS or not isinstance(declaration['parameters'], dict)
+                or set(declaration['parameters']) != {'uncertainty_alpha'}
+                or not isinstance(declaration['credit_definition'], dict) or not declaration['credit_definition']
+                or isinstance(declaration['cutoff'], bool) or not isinstance(declaration['cutoff'], (int, float))
+                or not math.isfinite(declaration['cutoff'])):
+            raise ContractError('scientific_yield_task_binding_invalid:' + str(task))
+        try:
+            YieldParameters(**declaration['parameters'])
+        except (TypeError, ValueError) as error:
+            raise ContractError('scientific_yield_task_binding_invalid:' + task) from error
+    return bindings
 
-def create_execution_bindings(*args, **configuration):
-    """Construct private bindings with this caller's existing operands."""
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_job_submission.episode import ExecutionEpisode as Private0
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_job_submission.api_job_execution.episode import ExecutionEpisode as Private1
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_job_submission.local_job_execution.episode import ExecutionEpisode as Private2
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as Private3
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.execution_result_acquisition.episode import ExecutionEpisode as Private4
-    return (Private0(*args, **configuration), Private1(*args, **configuration), Private2(*args, **configuration), Private3(*args, **configuration), Private4(*args, **configuration))
 
-def create_hpc_bindings(*args, **configuration):
-    """Construct private bindings with this caller's existing operands."""
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.episode import HPCEpisode as Private0
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.hpc_resource_prediction.episode import HPCEpisode as Private1
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.hpc_work_planning.hpc_allocation_execution.episode import HPCEpisode as Private2
-    return (Private0(*args, **configuration), Private1(*args, **configuration), Private2(*args, **configuration))
+class StructuralHomologyEvidenceEpisode(A102ContractBinding):
+    """The A102 axis head, commissioned by the root annotation episode."""
+    binding_path = ROLE
+    commissioning_parent = 'annotation'
+    required_collaborators = ('store', 'model_provider')
 
-def create_resource_bindings(*args, **configuration):
-    """Construct private bindings with this caller's existing operands."""
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.resource_work_submission.episode import ResourceEpisode as Private0
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.resource_work_submission.api_resource_work_execution.episode import ResourceEpisode as Private1
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.resource_work_submission.local_resource_work_execution.episode import ResourceEpisode as Private2
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.resource_work_submission.hpc_resource_work_execution.episode import ResourceEpisode as Private3
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.resource_result_acquisition.episode import ResourceEpisode as Private4
-    return (Private0(*args, **configuration), Private1(*args, **configuration), Private2(*args, **configuration), Private3(*args, **configuration), Private4(*args, **configuration))
-from .task import StructuralHomologyEvidenceTask
-from .decision_presentation import present_scientific_decision
-StructuralHomologyEvidenceEpisode.decision_source_type = StructuralHomologyEvidenceTask
-StructuralHomologyEvidenceEpisode.decision_prompt_renderer = staticmethod(present_scientific_decision)
+    def __init__(self, *, library, tool_registry, yield_bindings):
+        self.library = library
+        evidence_axis_entry(library)
+        self.thought_patterns = thought_patterns(library)
+        if not self.thought_patterns:
+            raise ContractError('a102_head_library_requires_thought_patterns')
+        self.tool_registry = tool_registry
+        self.selectable_tools = tuple(sorted(tool_registry.catalog()))
+        if not self.selectable_tools:
+            raise ContractError('a102_head_tool_registry_offers_no_tools')
+        self.yield_bindings = _yield_bindings(yield_bindings)
+
+    @property
+    def assignment_form(self):
+        """What the root fills (scope, proposed annotation) and chooses (task, thought pattern, tools)."""
+        return RecordForm({
+            'scope': Field('record', 'The subject whose structural-homology evidence is investigated'),
+            'evidence_axis': DeclaredField('text', 'The evidence axis this head investigates', 'A102'),
+            'a102_task': ChoiceField('text', 'The A102 structural evidence task this commission investigates',
+                                     TASKS),
+            'proposed_annotation_ref': Field('text', 'The proposed annotation this commission evaluates'),
+            'thought_pattern': ChoiceField('text', 'The library thought pattern this commission investigates with',
+                                           tuple(sorted(self.thought_patterns))),
+            'tools': SubsetField('text', 'The tools of this head this commission may use', self.selectable_tools),
+        })
+
+    def build_controller(self, bound, collaborators):
+        from .runtime_head import head_controller
+        return head_controller(self, bound, collaborators['store'])
+
+    def build_episode(self, grain, bound, collaborators, child_builders):
+        from method_loop import Episode
+        from .runtime_head import StructuralHomologyEvidenceSource
+        source = StructuralHomologyEvidenceSource(self, bound, collaborators, child_builders)
+        return Episode(grain, bound.key, source, bound.request, source.result)
+
+
+__all__ = ['ROLE', 'StructuralHomologyEvidenceEpisode']

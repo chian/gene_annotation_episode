@@ -1,6 +1,6 @@
 """Private monitor assignment and report contracts."""
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a103.domain import REF, RECORD_SCHEMAS, obj
+from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.domain import REF, RECORD_SCHEMAS, obj
 VERSION = 'monitor_episode_binding_v1'
 FIELDS = ('execution_status', 'measurements', 'log_windows', 'committed_record_refs', 'dependencies', 'result_available')
 _STATES = ('pending', 'executing', 'returned', 'admitted')

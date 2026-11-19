@@ -1,35 +1,24 @@
-"""Connect the predefined private A103 literature_search source investigation."""
+"""The A103 ``gene_context_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment`` literature binding.
+
+Its behaviour is the shared A103 literature implementation
+(``published_evidence_assessment/literature_binding.py``); this binding declares only what is its own.
+"""
 from __future__ import annotations
-from .task_presentation import render_receiver_prompt
-from .task import SourceInvestigationTask
-from .configuration import SourceEpisodeConfiguration
-from .binding_record import SourceEpisodeBindingRecord
-from .goal import SourceInvestigationGoal
-from .from_parent import SourceAssignment
-from .source_operations import SourceOperations
-from .source_interpretation import SourceInterpretation
-from .scientific_records import SourceScientificRecords
-from .source_references import SourceReferences
-from .internal_summary import SourceInvestigationSummary
-from .to_parent import SourceInvestigationReport
-from .received_evidence import SourceReceivedEvidence
-from .credit import SourceInvestigationCredit
-from importlib import import_module
-from .yield_estimator import SourceInvestigationYield
-from .waiting import SourceInvestigationWaiting
-from .source_contracts import ROLES, _CHILDREN
-from .to_child_source_evidence_examination import SourceEvidenceExaminationRequest
-from .from_child_source_evidence_examination import receive_source_evidence_examination_report
 
-from .action_policy import SourceActionPolicy
-from .child_commissioning import SourceChildCommissioning
+from types import MappingProxyType
 
-class LiteratureEpisode(SourceActionPolicy, SourceChildCommissioning,SourceEpisodeConfiguration, SourceEpisodeBindingRecord, SourceInvestigationGoal, SourceAssignment, SourceOperations, SourceInterpretation, SourceScientificRecords, SourceReferences, SourceInvestigationSummary, SourceInvestigationReport, SourceReceivedEvidence, SourceInvestigationCredit, SourceInvestigationYield, SourceInvestigationWaiting, SourceEvidenceExaminationRequest):
-    decision_source_type = SourceInvestigationTask
-    decision_prompt_renderer = staticmethod(render_receiver_prompt)
+from ...literature_binding import LiteratureBinding
+
+
+class LiteratureEpisode(LiteratureBinding):
     binding_path = 'gene_context_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment'
+    grain_name = 'gene_context_evidence__published_evidence_assessment__evidence_search_strategy_improvement__source_relevance_assessment'
+    goal = 'Improve the set of sources judged relevant to the question'
+    unit = 'One relevance judgement or child source examination'
+    result = 'The sources judged relevant, with their judgements'
+    child_slots = MappingProxyType({'source_evidence_examination': 'gene_context_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination'})
     commissioning_parent = 'gene_context_evidence/published_evidence_assessment/evidence_search_strategy_improvement'
-    'C7 binding for C10 assignments; no model connection or private loop.'
-    roles = ('literature_search',)
-    entry_roles = ()
-
+    acquisition = True
+    instruction = ('Investigate which returned sources merit examination for the assigned question. Search results are '
+                   'source-discovery information. Examine original sources and their conditions before asserting '
+                   'biological evidence. A page child can investigate where and how to examine a selected source.')

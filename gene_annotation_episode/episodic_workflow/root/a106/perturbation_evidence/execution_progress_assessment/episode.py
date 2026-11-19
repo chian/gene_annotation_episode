@@ -1,54 +1,35 @@
-"""Connect the predefined A106 progress-monitoring task, reports, credit and continuation."""
-from __future__ import annotations
-from .to_child_execution_progress_assessment import prepare_dependency_request
-from .from_child_execution_progress_assessment import receive_progress
-from gene_annotation_episode.episodic_workflow.root.a106.communication import plain
-from ..to_child_execution_progress_assessment import required_return_sources as parent_return_sources
-from .configuration import MonitorConfiguration
-from .from_parent import MonitorAssignment
-from .to_parent import MonitorReport
-from .internal_summary import MonitorSummary
-from .received_progress import ReceivedProgress
-from .received_progress import OwnProgress
-from .progress_operations import ProgressOperations
-from .goal import MonitorGoal
-from .binding_record import MonitorBindingRecord
-from .credit import MonitorEpisodeCredit
-from importlib import import_module
-from .yield_estimator import MonitorEpisodeYield
-from .task import ProgressMonitoringTask
-from gene_annotation_episode.episodic_workflow.root.a106.library.monitor_prompt import render_monitor_prompt
+"""The A106 progress monitor binding (``perturbation_evidence/execution_progress_assessment``).
 
-class MonitorEpisode(MonitorConfiguration, MonitorAssignment, MonitorReport, MonitorSummary, ReceivedProgress, OwnProgress, ProgressOperations, MonitorGoal, MonitorBindingRecord, MonitorEpisodeCredit, MonitorEpisodeYield):
+Its decisions, credit and continuation are the A106 monitor runtime
+(``episode_support/jobs/service_calls/perturbation_evidence/monitor_runtime.py``): model-selected progress tools, its
+received-information credit and its own information-accumulation yield
+controller. Its commission is A106's operational form: ``scope`` and the
+parent's monitor assignment (monitor_assignment_v1) in ``assignment``. Its own
+A106 ``ToolRegistry`` is built by the A106 home factory over the shared Store.
+"""
+from __future__ import annotations
+
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.service_calls.perturbation_evidence.monitor_runtime import A106MonitorRuntime
+from gene_annotation_episode.episodic_workflow.root.a106.perturbation_evidence.episode_contract import (
+    OPERATIONAL_FORM, EpisodeContract)
+
+
+class MonitorEpisode(A106MonitorRuntime, EpisodeContract):
     binding_path = 'perturbation_evidence/execution_progress_assessment'
     commissioning_parent = 'perturbation_evidence'
     roles = ('monitor',)
-    entry_roles = ('monitor',)
-    decision_source_type = ProgressMonitoringTask
-    decision_prompt_renderer = staticmethod(render_monitor_prompt)
+    goal = "The parent's knowledge of its pending work's progress"
+    unit = "One progress observation"
+    result = "The newly informative progress snapshots"
+    assignment_form = OPERATIONAL_FORM
 
-    def child_roles(self, role):
-        self._role(role)
-        return ('monitor',)
+    def __init__(self, services, *, information_unit, yield_settings, tool_registry):
+        A106MonitorRuntime.__init__(self, information_unit=information_unit, yield_settings=yield_settings,
+                                    tool_registry=tool_registry)
 
-    def required_return_sources(self, parent, role):
-        self._role(role)
-        if parent is not None and parent.path[-1][0] == 'perturbation_evidence':
-            return parent_return_sources(self.services)
-        return ()
+    def contract_credit_unit(self, assignment):
+        return self.information_unit
 
-    def permitted_common_actions(self, context):
-        self._role(context.role)
-        return ('tool', 'child', 'wait', 'redeliver_report')
-
-    def allowed_children(self, parent, caller_capabilities):
-        self._role(parent.role)
-        assignment = self._assignment(parent.assignment, parent.scope)
-        return ('monitor',) if self.services.dependencies(assignment['target_handle'], parent.scope) else ()
-
-    def prepare_child_request(self, parent, role, assignment):
-        self._role(role)
-        return prepare_dependency_request(self, parent, plain(assignment))
-
-    def receive_child_progress(self, context, form, schema, operation_key, provider):
-        return receive_progress(context, form, schema, operation_key, provider)
+    @staticmethod
+    def role_assignment(assignment):
+        return assignment['assignment']

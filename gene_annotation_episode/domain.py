@@ -396,15 +396,7 @@ RECORD_SCHEMAS['assessment']['properties']['investigation_finding'] = {
     'description': 'Optional typed scientific information in this assessment. source_claim names the actual observed/source-reported subject, proposition and conditions, not a transferred target measurement. The assessment hypothesis is the target issue. qualification states an explicit limitation; valid negative/nontransferable findings remain retained. Withdrawn means this finding is no longer relied upon, with a concrete reason. same_source_claim_as_ref can identify an earlier assessment of the same underlying source claim when names/representations differ; that is an explicit episode interpretation, not automatically proven equivalence. replaces_refs names exact earlier assessment findings corrected by this one. Quotes, IDs, account copies and scoring opinions are not new information.'}
 
 # Host/tool provenance records are not model-authored scientific findings.
-NATIVE_EXECUTION_OPERATIONS = {'align_pair': 'pairwise_sequence_alignment',
-    'xlsx_sheets': 'spreadsheet_selection', 'xlsx_rows': 'spreadsheet_selection',
-    'phmmer_search': 'protein_homology_search'}
 RECORD_SCHEMAS.update({
-    "native_execution": obj({"representation": {"const": "native_execution_receipt_v2"},
-        'operation': {'enum': list(NATIVE_EXECUTION_OPERATIONS)},
-        "measurement_artifact_ref": REF,
-        "operands": {'type': 'array', 'uniqueItems': True, 'items': obj({
-            'role': {'enum': ['query', 'reference', 'input_source']}, 'subject_ref': REF})}}),
     "image_view": obj({"representation": {"const": "selected_native_image_frame_v1"},
         "source_ref": REF, "input_source_ref": REF, "original_artifact_ref": REF,
         "image_artifact_ref": REF, "native_format": IDENTIFIER,

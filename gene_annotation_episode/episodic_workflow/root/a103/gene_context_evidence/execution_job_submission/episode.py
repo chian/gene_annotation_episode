@@ -1,34 +1,23 @@
-"""Private launch episode behavior for A103."""
+"""The A103 ``gene_context_evidence/execution_job_submission`` binding on the generic runner.
+
+Its decision source and completion continuation are ``execution_job_submission.submission_source``:
+the model hands each commissioned execution request to a route child; credit counts the requests with a
+usable handoff.
+"""
 from __future__ import annotations
-from .from_child_hpc_job_execution import receive_hpc_job_report
-from .from_child_local_job_execution import receive_local_job_report
-from .contracts import A103HomologyExecution, ASSIGNMENT_SCHEMA, BLAST_GRADED_REQUEST_SCHEMA, BLAST_GRADED_REQUEST_VERSION, BLAST_GRADED_RETURN_SCHEMA, BLAST_GRADED_RETURN_SOURCE, FILE_LIMIT, GENERIC_REQUESTED_JOB_SCHEMA, INPUT_VERSION_SCHEMA, KINDS, LAUNCH_VERSION, LIMIT, LOCAL_FILE_SOURCE_PROVIDER, LOCAL_FILE_SOURCE_RECEIPT_VERSION, LOCAL_FILE_SOURCE_SELECTOR_SCHEMA, LocalFileSourceResults, NATIVE_RESULT_ORIGIN, NATIVE_RESULT_ORIGIN_SCHEMA, NATIVE_SELECTOR_SCHEMA, OFFSET, Path, PracticalReceiptInformation, RESULTS_SCHEMA, RESULTS_VERSION, RESULT_PROVIDER, ROLES, ROLE_KINDS, SELECTION_SCHEMA, TEXT, TerminalExecutionBehavior, VERSION, _CLOSED_CREDIT, _immutable, _outcome, _read, base64, canonical, checked, confined, deepcopy, digest, hashlib, homology_api_contracts, identity, install_preparation_result_readers, install_primary_result_readers, is_file_source_selector, is_native_blast_database_target, is_native_blast_masking_target, is_native_blast_target, is_native_blast_utility_target, is_native_hmmer_preparation_target, is_native_hmmer_target, is_standard_blast_database_target, json, launch_operation_catalog, launch_request_schema, math, native_operation_contracts, native_result_operation_catalog, obj, operation_catalog, plain, preparation_job_schemas, preparation_operation_contracts, requested_job_schemas, result_selector_conditions, validate_assignment, validate_completion_proof, validate_form, validate_preparation_resource_binding, validate_primary_resource_bindings
-from .decision_presentation import present_launch_task
-from .task import LaunchTask
-from .goal import LaunchGoal
-from .result_records import ExecutionResultRecords
-from .child_commissioning import LaunchChildCommissioning
-from .operations import LaunchOperations
-from .internal_summary import LaunchSummary
-from .to_parent import LaunchReport
-from .received_information import ReceivedExecutionInformation
-from .from_parent import LaunchAssignment
-from .from_child_api_job_execution import receive_api_job_report
-from .credit import ExecutionEpisodeCredit
-from importlib import import_module as _import_module
-from .yield_estimator import ExecutionEpisodeYield
 
-from .configuration import LaunchConfiguration
-from .binding_record import LaunchBindingRecord
+from types import MappingProxyType
 
-from .action_policy import LaunchActionPolicy
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.contract_binding import A103ContractBinding
+from gene_annotation_episode.episodic_workflow.root.a103.gene_context_evidence.execution_job_submission.submission_source import (
+    JobSubmissionBinding)
 
-class ExecutionEpisode(LaunchActionPolicy, LaunchConfiguration, LaunchBindingRecord, LaunchAssignment, ReceivedExecutionInformation, LaunchReport, ExecutionEpisodeCredit, ExecutionEpisodeYield, LaunchSummary, LaunchOperations, LaunchChildCommissioning, ExecutionResultRecords, LaunchGoal, A103HomologyExecution):
+
+class ExecutionEpisode(JobSubmissionBinding, A103ContractBinding):
     binding_path = 'gene_context_evidence/execution_job_submission'
+    grain_name = 'gene_context_evidence__execution_job_submission'
+    goal = 'Improve the execution work submitted for the parent requested jobs'
+    unit = 'One route child commissioned for one requested job'
+    result = 'Execution handoffs for the submitted jobs'
+    child_slots = MappingProxyType({'api_job_execution': 'gene_context_evidence/execution_job_submission/api_job_execution', 'hpc_job_execution': 'gene_context_evidence/execution_job_submission/hpc_job_execution', 'local_job_execution': 'gene_context_evidence/execution_job_submission/local_job_execution'})
     commissioning_parent = 'gene_context_evidence'
-    roles = ('launch',)
-    decision_source_type = LaunchTask
-    decision_prompt_renderer = staticmethod(present_launch_task)
-    entry_roles = ('launch',)
-    replaces_default_instructions = True
-

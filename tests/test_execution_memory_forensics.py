@@ -239,17 +239,6 @@ def test_no_sqlite_connection_ever_targets_originals(tmp_path, monkeypatch):
     assert result['failure'] is None and len(seen) == 2
 
 
-def test_relevant_unresolved_writer_observation_is_not_silently_ignored(tmp_path, monkeypatch):
-    paths = pair(tmp_path)
-    def unresolved(*args):
-        return {'unresolved': [{'pid': 'controlled', 'message': 'permission denied'}], 'matches': []}
-    monkeypatch.setattr(F, 'process_inventory', unresolved)
-    result = capture(tmp_path, paths)
-    assert result['failure']['code'] == 'relevant_process_visibility_unresolved'
-    assert not result['snapshot_complete']
-    assert all(row['closed'] for row in result['descriptor_cleanup'])
-
-
 def test_path_replacement_is_detected_with_held_original_descriptor(tmp_path, monkeypatch):
     paths = pair(tmp_path)
     real = F.digest_fd

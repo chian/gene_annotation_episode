@@ -36,13 +36,13 @@ def boundary(tmp_path):
 
 
 def test_configuration_is_caller_owned_and_closed():
-    defaults = LocalJobPolicy.from_config()
-    changed = LocalJobPolicy.from_config({"memory_bytes": 64 * MiB})
+    changed = LocalJobPolicy.from_config({"memory_bytes": 64 * MiB, "scratch_bytes": 4 * MiB})
     assert changed.memory_bytes == 64 * MiB
-    assert changed.scratch_bytes == defaults.scratch_bytes
+    assert changed.scratch_bytes == 4 * MiB
     assert not hasattr(changed, 'wall_seconds')
     assert changed.to_dict() == {'memory_bytes': changed.memory_bytes, 'scratch_bytes': changed.scratch_bytes}
-    for settings in ({"memory_bytes": True}, {"scratch_bytes": 0},
+    for settings in ({"memory_bytes": True, "scratch_bytes": MiB}, {"memory_bytes": MiB, "scratch_bytes": 0},
+                     {"memory_bytes": MiB}, {},
                      {"wall_seconds": float("nan")}, {"wall_seconds": -1}, {"wall_seconds": None},
                      {"wall_seconds": 3600}, {"max_turns": 3}, []):
         with pytest.raises(ValueError):

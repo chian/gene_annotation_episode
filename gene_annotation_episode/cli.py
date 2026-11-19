@@ -1,13 +1,10 @@
-"""Workspace registration, ordinary tools and the private Root workflow."""
+"""Workspace registration, inspection and export."""
 from __future__ import annotations
 
 import argparse
-import asyncio
-from datetime import datetime, timezone
 import json
 from pathlib import Path
 import sys
-import tomllib
 
 from .boundary_validation import parse_json_object
 from .domain import MOLECULES, ROLES
@@ -39,29 +36,19 @@ def parser():
     add.add_argument("--molecule", choices=MOLECULES, default="unspecified")
     add.add_argument("--role", choices=ROLES, default="unspecified")
     add.add_argument("--name")
-    for name in ("status", "capabilities", "tool", "run", "artifact", "export"):
+    for name in ("status", "artifact", "export"):
         command = sub.add_parser(name)
         command.add_argument("--workspace", type=Path, required=True)
-        if name in {"tool", "run", "capabilities", "export"}:
-            command.add_argument("--config", type=Path)
         if name == "status":
             command.add_argument("--limit", type=int, default=100)
             command.add_argument("--offset", type=int, default=0)
-        elif name == "tool":
-            command.add_argument("name")
-            command.add_argument("--args", default="{}")
-            command.add_argument("--scope")
-        elif name == "run":
-            command.add_argument("--run-dir", type=Path)
-            command.add_argument("--resume", action="store_true")
-            command.add_argument("--goal")
         elif name == "artifact":
             command.add_argument("--ref", required=True)
             command.add_argument("--output", type=Path, required=True)
         elif name == "export":
             command.add_argument("--output", type=Path, required=True)
             command.add_argument("--format", choices=("json", "gff3"), default="json")
-            command.add_argument("--scope")
+            command.add_argument("--scope", required=True)
             command.add_argument("--include-credit", action="store_true")
             command.add_argument("--include-artifacts", action="store_true")
     return result
@@ -101,55 +88,13 @@ def main(argv=None):
                         "total": store.count("annotation", current=True),
                         "next_offset": args.offset+args.limit if len(annotations)>args.limit else None}})
                 return 0
-            config = tomllib.loads(args.config.read_text()) if args.config else None
             if args.command == "export":
                 from .export import export_annotation
                 _print(export_annotation(store, args.output, format=args.format,
-                    scope=parse_json_object(args.scope) if args.scope else None,
+                    scope=parse_json_object(args.scope),
                     include_credit=args.include_credit,
                     include_artifacts=args.include_artifacts))
                 return 0
-            genome = (config or {}).get('genome_investigation')
-            if genome is not None:
-                if (not isinstance(genome, dict)
-                        or set(genome) != {'version', 'root', 'services'}
-                        or genome['version'] != 'combined_genome_investigation_v2'
-                        or not isinstance(genome['root'], dict)
-                        or not isinstance(genome['services'], dict)
-                        or 'scientific_yield_bindings' not in genome['services']
-                        or set(config) & {'credit', 'controller'}):
-                    raise ValueError('explicit_combined_genome_root_and_services_required')
-                raise ValueError('combined_genome_private_tool_bindings_unavailable')
-            from .episodic_workflow.root.tool_configuration import build_tools
-            run_dir = args.run_dir if args.command == "run" else None
-            if run_dir is None:
-                if args.command == "run" and args.resume:
-                    from .episodic_workflow.root.saved_run_configuration import _run_location
-                    run_dir, _ = _run_location(store, None, True)
-                else:
-                    run_dir = store.path/"runs"/datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
-            tools = build_tools(store, config, run_directory=run_dir)
-            if args.command == "capabilities":
-                _print(tools.catalog())
-                return 0
-            if args.command == "tool":
-                result = tools.execute(args.name, parse_json_object(args.args),
-                                       scope=parse_json_object(args.scope) if args.scope else None)
-                _print(result)
-                return 0 if result["status"] in {"completed", "partial"} else 1
-            from .episodic_workflow.root.run_execution import run_workflow
-            if not store.targets():
-                _print({"status": "operational_unavailable", "code": "biological_target_binding_unavailable",
-                    "target_binding": store.problem().get("target_binding"),
-                    "available_work": ["material.parse", "material.read", "material.members", "material.member", "source.read"],
-                    "scientific_completion": "not_established"})
-                return 1
-            run_options = {'provider_config': config, 'run_dir': run_dir,
-                'resume': args.resume, 'goal': args.goal,
-                'credit_policy': (config or {}).get('credit')}
-            summary = asyncio.run(run_workflow(store, tools, **run_options))
-            _print(summary)
-            return 0
     except KeyboardInterrupt:
         _print({"status": "externally_interrupted", "scientific_completion": "not_established"})
         return 130

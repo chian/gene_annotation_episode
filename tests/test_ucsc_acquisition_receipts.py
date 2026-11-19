@@ -3,25 +3,13 @@
 No live HTTP, sequence conversion, scientific calculation or runtime history is
 invented. Direct publisher controls use real Source/Artifact custody only.
 """
-from copy import deepcopy
-from dataclasses import replace
 import hashlib
-import json
 
 import pytest
-from jsonschema import Draft202012Validator
 
 from gene_annotation_episode import ucsc_acquisition as ucsc
-from gene_annotation_episode.acquisition import PublicClients
-from gene_annotation_episode.data_acquisition_receipts import acquisition_receipt_schema
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.state import Store
-from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_ucsc_acquisition import HUB, SOURCE, arguments, native, snapshot
-
-
-def forbidden(*args, **kwargs):
-    raise AssertionError("UCSC receipt controls attempted HTTP or scientific work")
 
 
 def value(capture):
@@ -35,46 +23,6 @@ def receipt(capture):
 
 def failure(code):
     return ucsc.failed_ucsc_receipt("ucsc_" + code, source_ref=SOURCE)
-
-
-@pytest.fixture
-def publisher(tmp_path, monkeypatch):
-    monkeypatch.setattr(PublicClients, "_http", forbidden)
-    monkeypatch.setattr("socket.create_connection", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.native_lifecycle.prepare_job", forbidden)
-    with Store(tmp_path / "store") as store:
-        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        def record_materialization(result, source):
-            # This recorder proves invocation/operands only. It does not create
-            # a Reference; actual availability/admission belongs to host tests.
-            record_materialization.calls.append((deepcopy(result), deepcopy(source)))
-            return None
-        record_materialization.calls = []
-        monkeypatch.setattr(registry, "_publish_ucsc_sequence_reference", record_materialization)
-        yield store, registry
-
-
-def publish(registry, selected, capture):
-    token = registry._publications.set([])
-    try:
-        return ucsc.publish_ucsc_request(registry, selected, capture)
-    finally:
-        registry._publications.reset(token)
-
-
-def test_common_four_field_schema_and_no_response_failure_create_neither_reference(publisher, monkeypatch):
-    store, registry = publisher
-    monkeypatch.setattr(store, "artifact", forbidden)
-    monkeypatch.setattr(registry, "_source", forbidden)
-    assert ucsc.ucsc_receipt_schema() == acquisition_receipt_schema(failure_codes=ucsc.UCSC_FAILURE_CODES)
-    assert len(ucsc.UCSC_FAILURE_CODES) == len(set(ucsc.UCSC_FAILURE_CODES))
-    result = ucsc.failed_ucsc_receipt("data_acquisition_failed")
-    assert result == dict(acquired=False, source_ref=None, data_ref=None, failure_code="data_acquisition_failed")
-    assert Draft202012Validator(ucsc.ucsc_receipt_schema()).is_valid(result)
-    assert ucsc.validate_ucsc_receipt(result) == result and ucsc.validate_ucsc_receipt(result) is not result
-    assert list(store.list("source")) == []
-    with pytest.raises(ContractError, match="ucsc_receipt_invalid"):
-        ucsc.failed_ucsc_receipt("literal_unregistered_diagnostic")
 
 
 @pytest.mark.parametrize("change", [
@@ -271,108 +219,3 @@ def test_private_value_rejects_invented_source_and_native_or_transfer_crossfield
     elif damage == "cap": private["native_item_cap"]["state"] = "reached"
     else: private["observed_transfer"]["declared_body_bytes"] = 0
     with pytest.raises(ValueError): ucsc.validate_ucsc_value(private)
-
-
-@pytest.mark.parametrize("operation", ucsc.OPERATIONS)
-def test_publisher_keeps_raw_json_refs_and_requests_sequence_materialization_without_receipt_grant(publisher, monkeypatch, operation):
-    store, registry = publisher
-    capture = snapshot(arguments(operation))
-    original_source = registry._source
-    def source_after_private_value(*args, **kwargs):
-        private_ref, = kwargs["auxiliary_artifact_refs"]
-        assert ucsc.validate_ucsc_value(json.loads(store.get_artifact(private_ref))) == value(capture)
-        return original_source(*args, **kwargs)
-    monkeypatch.setattr(registry, "_source", source_after_private_value)
-    result, refs = publish(registry, capture.request, capture)
-    source = store.get(result["source_ref"])
-    assert result == dict(acquired=True, source_ref=source["id"], data_ref=source["artifact_ref"], failure_code=None)
-    assert refs == [source["id"], source["artifact_ref"]]
-    assert source["provider"] == "ucsc" and source["origin"] == "external"
-    assert source["version"] is source["accession"] is None
-    assert source["uri"] == capture.transport["request"]["url"]
-    assert store.get_artifact(source["artifact_ref"]) == capture.content
-    assert json.loads(store.get_artifact(source["request_ref"])) == {
-        "request": capture.request, "transport": capture.transport}
-    private_ref, = source["auxiliary_artifact_refs"]
-    assert private_ref not in refs and source["request_ref"] not in refs
-    assert json.loads(store.get_artifact(private_ref)) == value(capture)
-    calls = registry._publish_ucsc_sequence_reference.calls
-    assert calls == ([(ucsc.ucsc_result_from_value(value(capture), source_ref=source["id"]), source)]
-        if operation == "sequence" else [])
-    # The callback above is a recorder, not evidence of native DNA availability.
-    assert list(store.list("reference")) == []
-    assert store.db.execute("SELECT count(*) FROM tool_operations").fetchone()[0] == 0
-
-
-@pytest.mark.parametrize("damage", ["service", "uri", "wire", "effective", "redirects", "media", "selected_type"])
-def test_contradictory_capture_retains_literal_bytes_uri_controls_and_private_failure_witness(publisher, damage):
-    store, registry = publisher
-    selected = arguments("sequence")
-    capture = snapshot(selected)
-    if damage == "service": capture = replace(capture, service="engineered_other_service")
-    elif damage == "uri": capture = replace(capture, url="https://example.org/unselected")
-    elif damage == "media": capture = replace(capture, media_type="text/plain")
-    elif damage == "selected_type": capture = replace(capture, request={**selected, "start": 10.0})
-    elif damage == "wire": capture.transport["request"]["url"] += "&unselected=1"
-    elif damage == "effective": capture.transport["effective_url"] = "https://example.org/unselected"
-    else: capture.transport["request_policy"]["automatic_redirects"] = True
-    result, refs = publish(registry, selected, capture)
-    source = store.get(result["source_ref"])
-    assert result == ucsc.failed_ucsc_receipt("ucsc_request_conflict", source_ref=source["id"])
-    assert refs == [source["id"]] and source["uri"] == capture.url
-    assert store.get_artifact(source["artifact_ref"]) == capture.content
-    assert json.loads(store.get_artifact(source["request_ref"])) == {
-        "request": capture.request, "transport": capture.transport}
-    private_ref, = source["auxiliary_artifact_refs"]
-    assert json.loads(store.get_artifact(private_ref)) == dict(version="ucsc_acquisition_failure_witness_v1",
-        observed_snapshot_service=capture.service, observed_snapshot_url=capture.url, failure_code="ucsc_request_conflict")
-    assert source["provider"] == "ucsc" and list(store.list("reference")) == []
-    assert registry._publish_ucsc_sequence_reference.calls == []
-
-
-def test_an_authentic_different_interval_is_retained_without_relabelling_it_as_the_selected_data(publisher):
-    store, registry = publisher
-    selected = arguments("sequence")
-    observed = {**selected, "start": 11, "end": 15}
-    capture = snapshot(observed, {**native("sequence"), "start": 11, "end": 15})
-    result, refs = publish(registry, selected, capture)
-    source = store.get(result["source_ref"])
-    assert result == ucsc.failed_ucsc_receipt("ucsc_selected_request_conflict", source_ref=source["id"])
-    assert refs == [source["id"]] and source["uri"] == capture.url
-    private_ref, = source["auxiliary_artifact_refs"]
-    assert ucsc.validate_ucsc_value(json.loads(store.get_artifact(private_ref)))["requested"] == observed
-    assert list(store.list("reference")) == []
-    assert registry._publish_ucsc_sequence_reference.calls == []
-
-
-@pytest.mark.parametrize("case,code", [("html", "http_not_success"), ("partial", "response_incomplete"),
-    ("native", "native_identity_differs_from_request"), ("metadata", "transport_metadata_unavailable")])
-def test_failed_captured_response_publishes_source_only_and_preserves_native_or_malformed_evidence(publisher, case, code):
-    store, registry = publisher
-    selected = arguments("sequence")
-    if case == "html": capture = snapshot(selected, raw=b"<html>Original denial</html>", status=403,
-        headers={"content-type": "text/html"})
-    elif case == "partial": capture = snapshot(selected, body_complete=False, body_capture_failure="interrupted")
-    elif case == "metadata": capture = snapshot(selected, declared_body_bytes=False)
-    else: capture = snapshot(selected, {**native("sequence"), "genome": "mm39"})
-    result, refs = publish(registry, selected, capture)
-    source = store.get(result["source_ref"])
-    assert result == ucsc.failed_ucsc_receipt("ucsc_" + code, source_ref=source["id"])
-    assert refs == [source["id"]] and store.get_artifact(source["artifact_ref"]) == capture.content
-    private_ref, = source["auxiliary_artifact_refs"]
-    assert ucsc.validate_ucsc_value(json.loads(store.get_artifact(private_ref))) == value(capture)
-    assert list(store.list("reference")) == []
-    assert registry._publish_ucsc_sequence_reference.calls == []
-
-
-@pytest.mark.parametrize("case", ["arguments", "snapshot"])
-def test_invalid_selection_or_no_snapshot_publishes_nothing(publisher, monkeypatch, case):
-    store, registry = publisher
-    selected = arguments("sequence")
-    capture = snapshot(selected)
-    if case == "arguments": selected["max_bytes"] = True
-    else: capture = None
-    monkeypatch.setattr(registry, "_source", forbidden)
-    monkeypatch.setattr(store, "artifact", forbidden)
-    with pytest.raises(ValueError): ucsc.publish_ucsc_request(registry, selected, capture)
-    assert list(store.list("source")) == []

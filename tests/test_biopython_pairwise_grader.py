@@ -313,7 +313,7 @@ def test_calculator_rejects_corrupted_saved_components(change):
 
 
 def test_retained_native_examples_recalculate_without_native_execution():
-    directory = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/biopython_pairwise"
+    directory = Path(__file__).parents[1] / "tests/fixtures/biopython_pairwise"
     examples = json.loads((directory / "native_examples.json").read_text())
     filled = json.loads((directory / "filled_examples.json").read_text())
     assert len(examples) == len(filled) == 8

@@ -1,11 +1,10 @@
-"""User-supplied public-service contact defaults and frozen caller operands.
+"""User-supplied public-service contact defaults.
 
 This contains configuration only: no service discovery, request or episode work.
 An explicit value (including null) is authoritative when reopening a saved run.
 """
 from __future__ import annotations
 
-from copy import deepcopy
 import json
 import os
 from pathlib import Path
@@ -48,14 +47,6 @@ def ncbi_contact(explicit=UNSET) -> str | None:
     except FileNotFoundError:
         return None
     return _email(data.get("public", {}).get("ncbi_email"))
-
-
-def configured_tools(configuration=None) -> dict:
-    """Freeze the actual contact with the existing tool reconstruction inputs."""
-    result = deepcopy(configuration or {})
-    public = result.setdefault("public", {})
-    public["ncbi_email"] = ncbi_contact(public.get("ncbi_email", UNSET))
-    return result
 
 
 def save_ncbi_contact(email: str) -> Path:

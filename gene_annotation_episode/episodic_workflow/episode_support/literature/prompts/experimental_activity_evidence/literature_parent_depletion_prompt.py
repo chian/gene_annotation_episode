@@ -1,0 +1,4 @@
+"""Aspect-specific A105 investigation guidance; the numerical sheet stays separate."""
+
+
+PARENT_DEPLETION_OPERATION_DESCRIPTION = "Read one selected original XLSX analyte/time/submixture row with native cell custody. This adapter requires its fixed Time/Bio/Stdev1/Ab/Stdev2/inactive_enzyme/Stdev3/Compound/Submix/Difference_dead_enzyme/Difference_abio column layout; it is not a general substrate-depletion table reader. Compound, submixture and time select source rows, not assay types. Preserve reported active, inactive and abiotic removal fractions and SD labels. Calculate active-minus-inactive and active-minus-abiotic exactly and verify the workbook's reported differences within 1e-12 fraction. These are dependent parent-disappearance contrasts, not rates, product yields, independent evidence or annotation credit. Missing normalization denominator, replicate unit, covariance, mutant protein amount and product identity remain unknown."

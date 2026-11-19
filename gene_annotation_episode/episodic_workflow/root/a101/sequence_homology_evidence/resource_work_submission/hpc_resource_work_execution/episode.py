@@ -1,46 +1,24 @@
-"""Connect private A101 launch_hpc operational responsibilities."""
+"""The A101 ``sequence_homology_evidence/resource_work_submission/hpc_resource_work_execution`` binding.
+
+It executes the commissioned resource work (a ``practical_assignment_v1``, ``resource_kind`` ``hpc``) through
+model-written ``exec_command`` units on its own ``HpcJobTools`` over the run's shared Store: credit is the
+work's practical requirement credit and continuation its completion yield controller toward the work's own
+target (``execution_job_submission/hpc_job_execution/runtime``). ``a101_home_factory`` constructs it with
+``runtime.construct`` from ``services['a101']['hpc_resource_work_execution']``.
+"""
 from __future__ import annotations
-from importlib import import_module as _original_yield_import
-OriginalContinuation = _original_yield_import('.yield_estimator', __package__).OriginalContinuation
-from .task import OperationalTask
-from .execution_contracts import RESOURCE_ROLES
-from .credit import ResourceEpisodeCredit
-from .configuration import OperationalConfiguration
-from .binding_record import OperationalBindingRecord
-from .goal import OperationalGoal
-from .from_parent import OperationalAssignment
-from .to_parent import OperationalReport
-from .received_evidence import ReceivedOperationalEvidence
-from .internal_summary import OperationalSummary
-from .execution_operations import OperationalOperations
 
-class ResourceEpisode(OperationalConfiguration, OperationalBindingRecord, OperationalGoal, OperationalAssignment, OperationalReport, ReceivedOperationalEvidence, OperationalSummary, OperationalOperations, ResourceEpisodeCredit):
-    decision_source_type = OperationalTask
-    _original_continuation_owner = ('launch_hpc', OriginalContinuation.original_continuation_controller)
+from types import MappingProxyType
+
+from ...contract_binding import A101ContractBinding
+from ...execution_job_submission.hpc_job_execution.runtime import HpcJobExecutionRuntime
+
+
+class HpcResourceWorkExecutionEpisode(HpcJobExecutionRuntime, A101ContractBinding):
+    """Get the resource work executing as an HPC job."""
     binding_path = 'sequence_homology_evidence/resource_work_submission/hpc_resource_work_execution'
+    goal = 'Get the resource work executing as an HPC job'
+    unit = 'One HPC resource action'
+    result = 'The HPC resource handle and its received status'
+    child_slots = MappingProxyType({})
     commissioning_parent = 'sequence_homology_evidence/resource_work_submission'
-    "C7 binding; all iteration/commissioning remains in shared method_loop.\n\n    Adapter API: resource_id, capability(), as_record(), prepare_assignment(\n    context, role, launch_assignment, scope, operation_key), catalog(context),\n    execute(context, tool_name, arguments, operation_key), fact_sources(role),\n    facts(context, completion_snapshot), resolve(context, reference, namespace),\n    validate_report(context, form, original_schema), credit_view(context,\n    receiver_selection). An optional decision_context(context) supplies actual\n    prospective duration information. An adapter's tool list is authoritative.\n    "
-    roles = ('launch_hpc',)
-    entry_roles = ()
-
-    def child_roles(self, role):
-        self.credit_kind(role)
-        return ()
-
-    def contract_information_profile(self, context):
-        return self._contract_information_profile if context.role == 'launch' else None
-
-    def permitted_common_actions(self, context):
-        return ('tool', 'reason', 'child', 'wait', 'redeliver_report')
-
-    def allowed_children(self, parent, caller_capabilities):
-        self.credit_kind(parent.role)
-        return ()
-
-    def context_hook_applies(self, context):
-        """Own role hooks; the original Launch parent admits external delivery."""
-        role = getattr(context, 'role', None)
-        path = getattr(context, 'path', None)
-        if role is None:
-            role = path[-1][0] if path else context if isinstance(context, str) else None
-        return role == 'launch_hpc' if role in ('launch', 'launch_local', 'launch_hpc', 'launch_api', 'results') else False

@@ -5,8 +5,8 @@ positive result for the carbon-starvation study that motivated this unit.
 """
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.a106.library.literature_experimental_contracts import ExperimentalContractError
-from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_source import (
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
+from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.tests.test_literature_perturbation_source import (
     covariance_arguments, extract, summary_grading_parent_return,
 )
 

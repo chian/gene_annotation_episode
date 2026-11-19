@@ -1,9 +1,0 @@
-"""Private A107 Launch task suspension"""
-from __future__ import annotations
-
-class LaunchTaskSuspension:
-
-    def suspension_changed(self, condition):
-        self._suspension_condition = condition
-        if self.workflow.execution_handle is not None:
-            self.workflow.execution_backend.set_suspension(self.workflow.execution_handle, None if condition is None else {'episode_id': self.episode_id, 'dependency': condition})

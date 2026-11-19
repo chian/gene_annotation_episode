@@ -1,102 +1,79 @@
-"""Private scientific-process episode behavior for A106."""
+"""The A106 head binding (``perturbation_evidence``).
+
+Its decision behaviour on the generic runner is ``runtime_source`` (built by
+``HeadContract.build_episode``); ``ScientificConfiguration`` holds its
+construction-time library, tool library, own tool registry, child roles and
+continuation declaration, and ``PerturbationEvidenceYield`` builds its declared
+yield controller.
+"""
 from __future__ import annotations
-from .task import ScientificInvestigationTask
-from .scientific_contracts import ContractError, ROLE, ROLES
-from .credit import PerturbationEvidenceCredit
-from importlib import import_module as _import_module
-from .yield_estimator import PerturbationEvidenceYield
-from .to_child_execution_progress_assessment import prepare_request as prepare_monitor_request
-from .from_child_execution_progress_assessment import receive_progress as receive_monitor_progress
 
-def create_execution_bindings(*args, **configuration):
-    """Construct private bindings with this caller's existing operands."""
-    from gene_annotation_episode.episodic_workflow.root.a106.perturbation_evidence.execution_job_submission.episode import ExecutionEpisode as Private0
-    from gene_annotation_episode.episodic_workflow.root.a106.perturbation_evidence.execution_job_submission.api_job_execution.episode import ExecutionEpisode as Private1
-    from gene_annotation_episode.episodic_workflow.root.a106.perturbation_evidence.execution_result_acquisition.episode import ExecutionEpisode as Private2
-    return (Private0(*args, **configuration), Private1(*args, **configuration), Private2(*args, **configuration))
+from collections.abc import Mapping
+from types import MappingProxyType
+
 from .configuration import ScientificConfiguration
-from .binding_record import ScientificBindingRecord
+from .episode_contract import CHILD_SLOTS, HeadContract, head_form, scientific_credit_unit
 from .goal import ScientificGoal
-from .from_parent import ScientificAssignment
-from .process_state import PerturbationEvidenceState
-from .alternate_process_selection import AlternateProcessSelection
-from .to_parent import ScientificReport
-from .tool_selection import ScientificToolSelection
-from .internal_summary import ScientificSummary
-from .scientific_operations import ScientificOperations
-from .to_child_published_evidence_assessment import prepare_request as prepare_published_evidence_assessment
-from .from_child_published_evidence_assessment import receive_report as receive_published_evidence_assessment
-from .to_child_execution_job_submission import prepare_commission as prepare_execution_job_submission
-from .from_child_execution_job_submission import receive_report as receive_execution_job_submission
-from .to_child_execution_progress_assessment import prepare_commission as prepare_execution_progress_assessment
-from .from_child_execution_progress_assessment import receive_report as receive_execution_progress_assessment
-from .to_child_execution_result_acquisition import prepare_commission as prepare_execution_result_acquisition
-from .from_child_execution_result_acquisition import receive_report as receive_execution_result_acquisition
+from .scientific_contracts import AXIS, ContractError, ROLE, ROLES
+from .yield_estimator import TASK, PerturbationEvidenceYield
 
-class PerturbationEvidenceEpisode(ScientificConfiguration, ScientificBindingRecord, ScientificGoal, ScientificAssignment, PerturbationEvidenceState, AlternateProcessSelection, ScientificReport, ScientificToolSelection, ScientificSummary, ScientificOperations, PerturbationEvidenceCredit, PerturbationEvidenceYield):
-    """One recursive C7 role with parent-selected A/P and actual tool assignment data."""
-    decision_source_type = ScientificInvestigationTask
+
+class PerturbationEvidenceEpisode(HeadContract, ScientificConfiguration, ScientificGoal, PerturbationEvidenceYield):
+    """The recursive A106 head: its own sub-scope children and literature assessments."""
     binding_path = 'perturbation_evidence'
-    commissioning_parent = 'legacy_annotation'
+    goal = "The parent's annotation question, answered by distinct retained perturbation-evidence findings about the target"
+    unit = "One selected tool, reasoning or child action of the perturbation investigation"
+    result = "The distinct retained perturbation findings and their accumulated credit"
+    commissioning_parent = 'annotation'
     roles = ROLES
-    entry_roles = ROLES
 
-    def contract_information_profile(self, context):
-        """Expose frozen contract information to scientific commissioning parents."""
-        return self._contract_information_profile if context.role in ('annotation', ROLE) else None
-
-    @staticmethod
-    def _role(role):
-        if role != ROLE:
-            raise ContractError('perturbation_evidence_role_not_bound')
+    def __init__(self, services, **configuration):
+        super().__init__(services, **configuration)
+        if TASK not in self._yield_bindings:
+            raise ContractError('scientific_yield_binding_missing_for_task:' + TASK)
+        policy = self._yield_bindings[TASK]['credit_definition'].get('policy')
+        if not isinstance(policy, Mapping) or 'finding_unit' not in policy:
+            raise ContractError('scientific_yield_credit_definition_requires_finding_unit:' + TASK)
+        unit = policy['finding_unit']
+        # The declared evidence task carries the finding unit of the head's own declared credit definition.
+        self.assignment_form = head_form(unit, self.thought_patterns, self.selectable_tools)
 
     def child_roles(self, role):
-        self._role(role)
+        if role != ROLE:
+            raise ContractError('perturbation_evidence_role_not_bound')
         return self._child_roles
 
-    def permitted_common_actions(self, context):
-        self.validate_context(context)
-        return ('tool', 'reason', 'child', 'wait', 'redeliver_report')
+    @property
+    def child_slots(self):
+        """Declared slots limited to this head's configured child roles."""
+        return MappingProxyType({slot: path for slot, path in CHILD_SLOTS[self.binding_path].items()
+                                 if slot in self._child_roles})
 
-    def allowed_children(self, parent, caller_capabilities):
-        self.validate_context(parent)
-        return self._child_roles
+    _literature_binding = None
 
-    def _component_scoring_facts(self, context):
-        return {}
+    def bind_literature(self, literature):
+        """Take the literature binding, whose own commission check and typed report the literature child uses."""
+        if self._literature_binding is not None:
+            raise ContractError('a106_head_literature_already_bound')
+        if literature.binding_path != CHILD_SLOTS[self.binding_path]['literature']:
+            raise ContractError('a106_head_literature_binding_required:' + str(literature.binding_path))
+        self._literature_binding = literature
 
-    def current_report_facts(self, context):
-        return self._component_scoring_facts(context)
+    @property
+    def literature_binding(self):
+        if self._literature_binding is None:
+            raise ContractError('a106_head_literature_unbound')
+        return self._literature_binding
 
-    def initial_decision_context(self, context):
-        if context.role not in {'annotation', ROLE}:
-            return {}
-        workflow = getattr(self.services, 'workflow', None)
-        result = self._component_scoring_facts(context)
-        return result
+    def contract_credit_unit(self, assignment):
+        return scientific_credit_unit(assignment)
 
-    def _validate_component_axis_report(self, context, form, schema):
-        return
+    def instructions(self):
+        """The A106 investigation instructions this head presents with every decision."""
+        from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.perturbation_evidence.literature_investigation_prompt import INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT
+        specialized = self.specialized_instructions()
+        instructions = specialized if self.replaces_default_instructions else INSTRUCTIONS + '\n' + specialized
+        return instructions + '\n' + REASONING_COMMIT_REQUIREMENT
 
-    def prepare_child_request(self, parent, role, assignment):
-        if role == 'monitor':
-            return prepare_monitor_request(assignment)
-        return assignment
 
-    def receive_child_progress_for_role(self, context, role, form, schema, operation_key, provider):
-        if role != 'monitor':
-            return False
-        receive_monitor_progress(context, form, schema, operation_key, provider)
-        return True
-
-    def child_request_preparer(self, role):
-        return {'literature': prepare_published_evidence_assessment}.get(role)
-
-    def child_report_receiver(self, role):
-        return {'literature': receive_published_evidence_assessment}.get(role)
-
-    def child_request_preparer_for_binding(self, role, binding_path):
-        return {('launch', 'perturbation_evidence/execution_job_submission'): prepare_execution_job_submission, ('monitor', 'perturbation_evidence/execution_progress_assessment'): prepare_execution_progress_assessment, ('results', 'perturbation_evidence/execution_result_acquisition'): prepare_execution_result_acquisition}.get((role, binding_path))
-
-    def child_report_receiver_for_binding(self, role, binding_path):
-        return {('launch', 'perturbation_evidence/execution_job_submission'): receive_execution_job_submission, ('monitor', 'perturbation_evidence/execution_progress_assessment'): receive_execution_progress_assessment, ('results', 'perturbation_evidence/execution_result_acquisition'): receive_execution_result_acquisition}.get((role, binding_path))
+__all__ = ['AXIS', 'PerturbationEvidenceEpisode']

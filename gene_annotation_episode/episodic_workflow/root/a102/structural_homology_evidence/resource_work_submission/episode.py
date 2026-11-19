@@ -1,25 +1,18 @@
-"""Connect this exact private resource task and its explicit responsibilities."""
-from __future__ import annotations
-from .configuration import ResourceConfiguration
-from .binding_record import ResourceBindingRecord
-from .child_commissioning import ResourceChildCommissioning
-from .from_parent import ResourceFromParent
-from .resource_selection import ResourceResourceSelection
-from .goal import ResourceGoal
-from .internal_summary import ResourceInternalSummary
-from .operations import ResourceOperations
-from .to_parent import ResourceToParent
-from .received_messages import ResourceReceivedMessages
-from .credit import ResourceCredit
-from .task import ResourceTask
+"""The A102 ``structural_homology_evidence/resource_work_submission`` binding on the generic runner.
 
-class ResourceEpisode(ResourceConfiguration, ResourceBindingRecord, ResourceChildCommissioning, ResourceFromParent, ResourceResourceSelection, ResourceGoal, ResourceInternalSummary, ResourceOperations, ResourceToParent, ResourceReceivedMessages, ResourceCredit):
-    decision_source_type = ResourceTask
+Commissioned with the concrete resource work requests its parent selected (``requests``: each a
+``request_id`` and the requested ``job``), it hands each request to a resource route child
+(``api_resource_work_execution``, ``local_resource_work_execution`` or ``hpc_resource_work_execution``) with
+that child's own declared assignment. Its decision source and continuation are A102's submission source
+(``execution_job_submission/submission_source``): credit counts the requests with a usable handoff and the
+completion controller's target is the number of requests.
+"""
+from __future__ import annotations
+
+from ..contract_binding import A102ContractBinding
+from ..execution_job_submission.submission_source import JobSubmissionBinding
+
+
+class ResourceEpisode(JobSubmissionBinding, A102ContractBinding):
     binding_path = 'structural_homology_evidence/resource_work_submission'
     commissioning_parent = 'structural_homology_evidence'
-    "C7 binding; all iteration/commissioning remains in shared method_loop.\n\n    Adapter API: resource_id, capability(), as_record(), prepare_assignment(\n    context, role, launch_assignment, scope, operation_key), catalog(context),\n    execute(context, tool_name, arguments, operation_key), fact_sources(role),\n    facts(context, completion_snapshot), resolve(context, reference, namespace),\n    validate_report(context, form, original_schema), credit_view(context,\n    receiver_selection). An optional decision_context(context) supplies actual\n    prospective duration information. An adapter's tool list is authoritative.\n    "
-    roles = ('launch',)
-    entry_roles = ()
-
-    def permitted_common_actions(self, context):
-        return ('tool', 'reason', 'child', 'wait', 'redeliver_report')

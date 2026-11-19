@@ -585,7 +585,7 @@ def _temporary_output(path):
             os.unlink(temporary)
 
 
-def export_annotation(store, path: str | Path, *, format="json", scope=None,
+def export_annotation(store, path: str | Path, *, scope, format="json",
                       include_credit=False,
                       include_artifacts=False, page_size=128) -> dict[str, Any]:
     """Write one current-state snapshot without changing scientific state.

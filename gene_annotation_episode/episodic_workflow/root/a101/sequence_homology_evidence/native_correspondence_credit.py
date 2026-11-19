@@ -1,8 +1,8 @@
 """Original A101 native correspondence progress binding."""
 from __future__ import annotations
 from dataclasses import dataclass
-from gene_annotation_episode.episodic_workflow.root.a101.library.a101_scoring import VERSION, SCALES
-from .scoring.native_correspondence import NativeCorrespondenceScoring
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import VERSION, SCALES
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import NativeCorrespondenceScoring
 
 @dataclass(frozen=True)
 class A101SequenceCredit(NativeCorrespondenceScoring):

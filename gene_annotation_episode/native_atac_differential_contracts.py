@@ -380,11 +380,9 @@ def validate_atac_run_plan(value):
     identity = value["identity"]
     execution = path_value(identity["execution_id"], absolute=True)
     attempt = path_value(value["attempt_directory"], absolute=True)
-    from .episodic_workflow.root.terminal_scientific_evidence import terminal_plan_identity
-    current = terminal_plan_identity(identity, attempt_directory=str(attempt))
-    require((current or execution.name == "native.json") and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME)
+    require(execution.name == "native.json" and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME)
     require(identity["attempt_id"] == digest(identity["operation_key"]) and identity["requested_job_sha256"] == digest(requested))
-    require(current or execution.parent.name == identity["attempt_id"] and execution.parent.parent.name ==
+    require(execution.parent.name == identity["attempt_id"] and execution.parent.parent.name ==
         digest({"run": identity["run_id"], "episode": identity["episode_id"]}) and execution.parent.parent.parent.name == ".episode-operations")
     require(value["policy"] == POLICY and type(value["policy"]["memory_bytes"]) is int and type(value["policy"]["scratch_bytes"]) is int)
     require(value["outputs"] == atac_output_files(requested["native_atac_differential"]["request"]))

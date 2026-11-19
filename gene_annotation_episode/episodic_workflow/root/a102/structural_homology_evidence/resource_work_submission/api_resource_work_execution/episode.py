@@ -1,25 +1,16 @@
-"""Connect this exact private resource task and its explicit responsibilities."""
-from __future__ import annotations
-from .configuration import ResourceConfiguration
-from .binding_record import ResourceBindingRecord
-from .child_commissioning import ResourceChildCommissioning
-from .from_parent import ResourceFromParent
-from .resource_selection import ResourceResourceSelection
-from .goal import ResourceGoal
-from .internal_summary import ResourceInternalSummary
-from .operations import ResourceOperations
-from .to_parent import ResourceToParent
-from .received_messages import ResourceReceivedMessages
-from .credit import ResourceCredit
-from .task import ResourceTask
+"""The A102 ``structural_homology_evidence/resource_work_submission/api_resource_work_execution`` binding.
 
-class ResourceEpisode(ResourceConfiguration, ResourceBindingRecord, ResourceChildCommissioning, ResourceFromParent, ResourceResourceSelection, ResourceGoal, ResourceInternalSummary, ResourceOperations, ResourceToParent, ResourceReceivedMessages, ResourceCredit):
-    decision_source_type = ResourceTask
+It runs the commissioned resource work through one of its own configured API services, its model-selected
+service operations and its completion continuation toward one usable handoff
+(``execution_job_submission/api_job_execution/runtime_binding``). ``a102_home_factory`` constructs it from
+``services['a102']['api_resource_work_execution']`` over its own A102 tool registry on the shared store.
+"""
+from __future__ import annotations
+
+from ...contract_binding import A102ContractBinding
+from ...execution_job_submission.api_job_execution.runtime_binding import ApiJobExecutionBinding
+
+
+class ResourceEpisode(ApiJobExecutionBinding, A102ContractBinding):
     binding_path = 'structural_homology_evidence/resource_work_submission/api_resource_work_execution'
     commissioning_parent = 'structural_homology_evidence/resource_work_submission'
-    "C7 binding; all iteration/commissioning remains in shared method_loop.\n\n    Adapter API: resource_id, capability(), as_record(), prepare_assignment(\n    context, role, launch_assignment, scope, operation_key), catalog(context),\n    execute(context, tool_name, arguments, operation_key), fact_sources(role),\n    facts(context, completion_snapshot), resolve(context, reference, namespace),\n    validate_report(context, form, original_schema), credit_view(context,\n    receiver_selection). An optional decision_context(context) supplies actual\n    prospective duration information. An adapter's tool list is authoritative.\n    "
-    roles = ('launch_api',)
-    entry_roles = ()
-
-    def permitted_common_actions(self, context):
-        return ('tool', 'reason', 'child', 'wait', 'redeliver_report')

@@ -76,7 +76,7 @@ def _metadata(policy):
 
 
 def prepare_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_path=None,
-                stdin_path=None, env=None, statistics=None, native_events=None, cpu_threads=1):
+                stdin_path=None, env=None, cpu_threads=1):
     """Persist a complete reservation without submitting a service.
 
     Publication of the handle is last. A crash before that publication cannot
@@ -87,15 +87,6 @@ def prepare_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_p
         raise TypeError('local_job_policy_required')
     if type(cpu_threads) is not int or cpu_threads < 1:
         raise ValueError('invalid_local_job_cpu_threads')
-    if statistics is not None:
-        from gene_annotation_episode.episodic_workflow.root.execution_recording import NativeStatistics
-        if type(statistics) is not NativeStatistics:
-            raise TypeError('typed_native_execution_statistics_required')
-        statistics.validate_policy(policy)
-    if native_events is not None:
-        from gene_annotation_episode.episodic_workflow.root.native_events import NativeEventBinding
-        if type(native_events) is not NativeEventBinding:
-            raise TypeError('typed_native_event_binding_required')
     if not command or any(type(item) is not str or not item or '\0' in item for item in command):
         raise ValueError('invalid_local_job_command')
     cwd = Path(cwd).resolve(strict=True)
@@ -136,22 +127,12 @@ def prepare_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_p
     token = '.local-job-' + uuid.uuid4().hex
     paths = {name: str(cwd/(token+'.'+name)) for name in
              ('request', 'ready', 'release', 'status', 'result', 'launcher')}
-    if statistics is not None:
-        paths['statistics'] = str(cwd/(token+'.statistics'))
-    if native_events is not None:
-        paths['native_events'] = str(cwd/(token+'.native_events'))
     if {stdout, stderr, handle_path} & {Path(p) for p in paths.values()}:
         raise ValueError('native_job_control_path_collision')
     body = {'version': VERSION, 'unit': 'gene-local-job-'+uuid.uuid4().hex+'.service',
         'command': list(command), 'cwd': str(cwd), 'stdout': str(stdout), 'stderr': str(stderr),
         'paths': paths, 'metadata': metadata, 'stage': 'prepared',
         'started_at': None, 'started_monotonic_ns': None, 'boot_id': None}
-    if statistics is not None:
-        from .execution_memory import ExecutionMemory
-        body['statistics'] = statistics.as_record()
-        body['execution_memory_path'] = str(ExecutionMemory.configured().path)
-    if native_events is not None:
-        body['native_events'] = native_events.as_record()
     stdout.write_bytes(b''); stderr.write_bytes(b'')
     from .workflow_budget import ENV as WORKFLOW_ENV,WINDOW_ENV
     environment={**dict(env or {}),WORKFLOW_ENV:str(Path(workflow['run_directory'])/'workflow-budget.json'),
@@ -185,7 +166,6 @@ def start_prepared(handle, *, cancel_event=None):
     if hashlib.sha256(Path(paths['request']).read_bytes()).hexdigest() != body['request_sha256']:
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
             operational={**metadata, 'reason': 'native_request_identity_mismatch'})
-    _ensure_event_registration(handle, body)
     resources = LocalResources.reopen(metadata['local_resources'])
     body['capacity_reservation'] = resources.reserve(handle,
         cpu_threads=metadata['cpu_threads'], policy=policy)
@@ -203,12 +183,6 @@ def _dispatch_prepared(handle, body, *, cancel_event=None):
     policy = LocalJobPolicy(**body['metadata']['policy'])
     paths = body['paths']
     stdout, stderr, handle_path = Path(body['stdout']), Path(body['stderr']), handle.path
-    if 'statistics' in body:
-        from gene_annotation_episode.episodic_workflow.root.execution_recording import NativeStatistics
-        context = NativeStatistics.from_record(body['statistics'])
-        if context.condition_capture == 'not_started':
-            body['statistics'] = NativeStatistics.capture(context.history_path, context.execution_class,
-                recovery_directory=context.recovery_directory).as_record()
     body.update(started_at=datetime.now(timezone.utc).isoformat(),
                 started_monotonic_ns=time.monotonic_ns(), boot_id=_boot(), stage='submitting')
     worker = Path(__file__).with_name('_local_job_worker.py')
@@ -216,8 +190,7 @@ def _dispatch_prepared(handle, body, *, cancel_event=None):
         'OOMPolicy=kill', 'TimeoutStopSec=15', 'SendSIGKILL=yes',
         'StandardOutput=file:'+str(stdout).replace('%', '%%'),
         'StandardError=file:'+str(stderr).replace('%', '%%'),
-        'ExecStopPost='+' '.join(_word(str(v)) for v in (sys.executable, worker, 'report', paths['status'],
-            *([handle_path] if 'statistics' in body or 'native_events' in body else [])))]
+        'ExecStopPost='+' '.join(_word(str(v)) for v in (sys.executable, worker, 'report', paths['status']))]
     properties.append(f"CPUQuota={body['metadata']['cpu_threads']*100}%")
     from .workflow_budget import SLICE as WORKFLOW_SLICE,UNIT as WORKFLOW_UNIT
     properties.extend(['BindsTo='+WORKFLOW_UNIT,'After='+WORKFLOW_UNIT])
@@ -236,19 +209,17 @@ def _dispatch_prepared(handle, body, *, cancel_event=None):
 
 
 def start_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_path=None,
-              stdin_path=None, env=None, cancel_event=None, statistics=None, native_events=None,
-              cpu_threads=1):
+              stdin_path=None, env=None, cancel_event=None, cpu_threads=1):
     """Blocking adapters and detached tools share preparation and dispatch."""
     handle = prepare_job(command, cwd=cwd, policy=policy, handle_path=handle_path,
         stdout_path=stdout_path, stderr_path=stderr_path, stdin_path=stdin_path, env=env,
-        statistics=statistics, native_events=native_events, cpu_threads=cpu_threads)
+        cpu_threads=cpu_threads)
     try:
         return start_prepared(handle, cancel_event=cancel_event)
     except BaseException:
         # No native command runs before release. If startup was released before
         # an exception, stop/reap its existing unit rather than submitting again.
-        if native_events is None or handle.read()['stage'] != 'prepared':
-            cancel(handle)
+        cancel(handle)
         raise
 
 
@@ -257,7 +228,6 @@ def resume_start(handle, *, cancel_event=None):
     body = handle.read()
     if body['stage'] == 'prepared':
         return start_prepared(handle, cancel_event=cancel_event)
-    _ensure_event_registration(handle, body)
     if Path(body['paths']['release']).exists():
         return handle
     policy = LocalJobPolicy(**body['metadata']['policy'])
@@ -307,22 +277,6 @@ def resume_start(handle, *, cancel_event=None):
     return handle
 
 
-def _ensure_event_registration(handle, body):
-    if 'native_events' not in body:
-        return
-    from gene_annotation_episode.episodic_workflow.root.method_loop.durable import DurableExecutionError
-    from gene_annotation_episode.episodic_workflow.root.native_events import ensure_native_event_target
-    try:
-        ensure_native_event_target(handle.path)
-    except (DurableExecutionError, OSError, ValueError, KeyError, TypeError) as error:
-        code = ('native_event_identity_conflict' if isinstance(error, DurableExecutionError)
-            and error.failure['code'] == 'identity_conflict' or str(error) == 'native_event_identity_conflict'
-            else 'native_event_storage_unavailable')
-        raise AcquisitionError(code, phase='local_preflight', operational={
-            **body['metadata'], 'reason': 'native_event_registration_failed',
-            'exception_type': type(error).__name__}) from error
-
-
 def status(handle):
     """A read: no controller observation, resubmission or state invention."""
     body = handle.read()
@@ -348,10 +302,6 @@ def status(handle):
         'service_exit': end, 'elapsed_seconds': elapsed,
         'native_returncode': receipt['native_returncode'] if receipt else None,
         'observed_scratch_bytes': receipt['observed_scratch_bytes'] if receipt else None}
-    if 'statistics' in body['paths']:
-        metadata['statistics_export'] = _load(body['paths']['statistics'])
-    if 'native_events' in body['paths']:
-        metadata['native_events_export'] = _load(body['paths']['native_events'])
     files = {}
     for name in ('stdout', 'stderr'):
         path = Path(body[name])
@@ -424,22 +374,17 @@ def release(handle):
     for path in body['paths'].values():
         Path(path).unlink(missing_ok=True)
         Path(path+'.writing').unlink(missing_ok=True)
-    if 'statistics' in body['paths']:
-        Path(body['paths']['statistics']+'.lock').unlink(missing_ok=True)
-    if 'native_events' in body['paths']:
-        Path(body['paths']['native_events']+'.lock').unlink(missing_ok=True)
-        Path(body['paths']['status']+'.lock').unlink(missing_ok=True)
     handle.path.unlink()
 
 
 def run_blocking(command, *, cwd, policy, stdout_path=None, stderr_path=None,
-                 stdin_path=None, env=None, cancel_event=None, statistics=None, cpu_threads=1):
+                 stdin_path=None, env=None, cancel_event=None, cpu_threads=1):
     path = Path(cwd).resolve()/('.local-job-'+uuid.uuid4().hex+'.handle.json')
     handle = NativeJobHandle(path)
     try:
         start_job(command, cwd=cwd, policy=policy, handle_path=path, stdout_path=stdout_path,
                   stderr_path=stderr_path, stdin_path=stdin_path, env=env, cancel_event=cancel_event,
-                  statistics=statistics, cpu_threads=cpu_threads)
+                  cpu_threads=cpu_threads)
         return wait_job(handle, cancel_event=cancel_event)
     except (OSError, subprocess.SubprocessError) as error:
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',

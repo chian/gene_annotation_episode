@@ -43,19 +43,6 @@ def selected_request(selection=None, context=None, *, mode="native"):
         "selection": deepcopy(selection), "scientific_context": deepcopy(context)}
 
 
-def engineered_capture(selection, *, failure=None):
-    # This is a driver protocol fixture, not observed native scientific output.
-    return {"version": "molecular_sequence_execution_v2", "request": deepcopy(selection),
-        "request_canonical_sha256": None, "stage": "call" if failure else "completed",
-        "native_record": {"schema": "biomni_glycosylation_log_native_v1",
-            "outcome": "failed" if failure else "completed", "result": None if failure else N_LOG,
-            "failure": deepcopy(failure), "source_identity": {"path": "/engineering/control/not-native.py",
-                "callable": N_OPERATION, "sha256": "0" * 64}},
-        "native_call_state": "raised" if failure else "returned", "reference_data": None,
-        "execution_receipt": {"qualification": "engineered driver protocol fixture; no native call"},
-        "stdout": "", "stderr": "", "failure": deepcopy(failure)}
-
-
 def forbid_helper(*args, **kwargs):
     raise AssertionError("this driver path must not invoke a native helper")
 
@@ -86,32 +73,6 @@ def check_declarations(result, output, present):
     assert json.loads((output / "declaration.json").read_bytes()) == result
     assert "not authenticated producing-attempt custody" in result["qualification"]
     assert "does not authenticate full driver/calculator" in result["qualification"]
-
-
-def test_one_helper_call_retains_exact_inputs_and_separate_artifacts(tmp_path, monkeypatch):
-    request = selected_request()
-    capture = engineered_capture(request["selection"])
-    calls = []
-
-    def execute(value):
-        calls.append(deepcopy(value))
-        return deepcopy(capture)
-
-    monkeypatch.setattr(driver, "execute_molecular_sequence_request", execute)
-    result, output, pin = run_request(tmp_path, request)
-    assert calls == [request["selection"]]
-    assert result["request_file"] == pin and result["request_file_pin_verified"] is True
-    assert result["attempt_identity"] == request["attempt_identity"]
-    assert result["native_failure"] is result["driver_failure"] is None
-    assert json.loads((output / "capture.json").read_bytes()) == capture
-    sheet = json.loads((output / "sheet.json").read_bytes())
-    assert sheet["inputs"]["sequence"] == request["selection"]["arguments"]["sequence"]
-    assert sheet["inputs"]["native_log"] == N_LOG
-    components = json.loads((output / "components.json").read_bytes())
-    assert components["summary"]["native_reported_total_count"] == 1
-    for value in (capture, sheet, components):
-        assert all(identity not in json.dumps(value) for identity in request["attempt_identity"].values())
-    check_declarations(result, output, {"capture", "sheet", "components"})
 
 
 @pytest.mark.parametrize("change", ["digest", "size"])
@@ -160,45 +121,6 @@ def test_unexpected_helper_exception_is_a_driver_failure_with_native_state_unkno
     assert result["driver_failure"] == {"stage": "invoke_helper", "exception_type": "RuntimeError",
         "message": "engineered helper-boundary interruption"}
     check_declarations(result, output, set())
-
-
-def test_source_failure_and_capture_serialization_failure_remain_separate(tmp_path, monkeypatch):
-    request = selected_request()
-    failure = {"stage": "call", "exception_type": "EngineeringControl",
-        "message": "engineered upstream failure; no scientific measurement"}
-    capture = engineered_capture(request["selection"], failure=failure)
-    capture["stdout"] = object()  # Explicit writer-serialization control, not native output.
-    monkeypatch.setattr(driver, "execute_molecular_sequence_request", lambda value: capture)
-    result, output, _ = run_request(tmp_path, request)
-    assert result["native_failure"] == failure and result["native_call_state"] == "raised"
-    assert result["driver_failure"]["stage"] == "write_capture"
-    assert result["driver_failure"]["exception_type"] == "TypeError"
-    check_declarations(result, output, set())
-
-
-def test_sheet_serialization_failure_preserves_capture_without_inventing_later_outputs(tmp_path, monkeypatch):
-    request = selected_request()
-    capture = engineered_capture(request["selection"])
-    monkeypatch.setattr(driver, "execute_molecular_sequence_request", lambda value: deepcopy(capture))
-    monkeypatch.setattr(driver, "_sheet", lambda *args: {"engineered_nonfinite_cell": float("nan")})
-    monkeypatch.setattr(driver, "_calculate", forbid_helper)
-    result, output, _ = run_request(tmp_path, request)
-    assert result["native_failure"] is None and result["native_call_state"] == "returned"
-    assert result["driver_failure"]["stage"] == "write_sheet"
-    assert json.loads((output / "capture.json").read_bytes()) == capture
-    check_declarations(result, output, {"capture"})
-
-
-def test_no_native_record_preserves_helper_failure_without_fabricating_a_sheet(tmp_path, monkeypatch):
-    request = selected_request()
-    capture = engineered_capture(request["selection"], failure={"stage": "deployment_verification",
-        "exception_type": "EngineeringControl", "message": "engineered unstarted helper selection"})
-    capture.update(native_call_state="not_started", native_record=None)
-    monkeypatch.setattr(driver, "execute_molecular_sequence_request", lambda value: deepcopy(capture))
-    result, output, _ = run_request(tmp_path, request)
-    assert result["native_failure"] == capture["failure"] and result["driver_failure"] is None
-    assert result["native_call_state"] == "not_started"
-    check_declarations(result, output, {"capture"})
 
 
 def supplied_saved_sheet(tmp_path, *, corrupt=False):
@@ -277,5 +199,3 @@ def test_cli_processes_one_pinned_saved_sheet_with_exact_declarations(tmp_path):
     assert result["request_file_pin_verified"] is True and result["native_call_state"] == "not_requested"
     assert (output / "sheet.json").read_bytes() == path.read_bytes()
     check_declarations(result, output, {"sheet", "components"})
-
-

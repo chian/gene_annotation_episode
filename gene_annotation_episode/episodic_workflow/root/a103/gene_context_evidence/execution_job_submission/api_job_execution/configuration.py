@@ -1,65 +1,53 @@
-"""Private launch_api resource configuration and original reader installation."""
+"""Construction-time configuration of the A103 API job-execution bindings.
+
+The A103 home factory (``home.factory``) builds each API job-execution binding with its
+own ``A103ToolRegistry`` over the run's shared store and ``services['a103_api_job_execution']``:
+
+- ``resources``: ``{resource_id: service configuration}``; each configuration names
+  its API ``service`` kind; A103's own ``api_services.build_service`` validates it and
+  builds that service (one of the binding's own tools) over its registry.
+- ``continuation``: ``{'cutoff', 'uncertainty_alpha'}`` of its completion controller.
+
+Nothing is defaulted: a missing or malformed value raises when the binding is
+constructed. A ``bvbrc_appservice`` resource runs its jobs through
+``appservice_source``; every other service kind through ``runtime_source``.
+"""
 from __future__ import annotations
-from .contracts import KINDS, LocalFileSourceResults, Path, TerminalExecutionBehavior, canonical, install_preparation_result_readers, install_primary_result_readers, json, math, plain, validate_preparation_resource_binding, validate_primary_resource_bindings
 
-class APIJobConfiguration:
+from collections.abc import Mapping
+from types import MappingProxyType
 
-    def __init__(self, services, *, store, directory, run_id, resources, initial_information, tool_registry, handoff_unit, acquired_record_unit, log_window_bytes, log_roles, require_private_yield=False, results_yield_profiles=None, task_yield_profiles=None):
-        self.services, self.store, self.directory = (services, store, Path(directory))
-        self.run_id, self.tool_registry = (run_id, tool_registry)
-        self.resources = json.loads(canonical(resources))
-        self.initial_information = json.loads(canonical(initial_information))
-        if not isinstance(self.resources, dict) or not self.resources or any((not isinstance(key, str) or not key or (not isinstance(value, dict)) or (value.get('kind') not in KINDS) for key, value in self.resources.items())):
-            raise ValueError('explicit_execution_resources_required')
-        if not isinstance(self.initial_information, dict) or not set(self.initial_information) <= set(self.resources):
-            raise ValueError('initial_inventory_resource_not_bound')
-        for unit in (handoff_unit, acquired_record_unit):
-            if type(unit) not in (int, float) or not math.isfinite(unit) or unit <= 0:
-                raise ValueError('explicit_positive_operational_credit_units_required')
-        if type(log_window_bytes) is not int or log_window_bytes < 1 or (not isinstance(log_roles, (tuple, list))) or any((not isinstance(role, str) or not role for role in log_roles)):
-            raise ValueError('explicit_execution_log_selection_required')
-        self.handoff_unit, self.acquired_record_unit = (handoff_unit, acquired_record_unit)
-        self.log_window_bytes, self.log_roles = (log_window_bytes, tuple(log_roles))
-        if type(require_private_yield) is not bool:
-            raise TypeError('execution_private_yield_binding_requires_boolean')
-        self.private_yield_binding = require_private_yield
-        profiles = {} if results_yield_profiles is None else plain(results_yield_profiles)
-        if not isinstance(profiles, dict) or set(profiles) - {'native_unbounded_local', 'native_unbounded_hpc'}:
-            raise ValueError('explicit_results_yield_profiles_invalid')
-        from gene_annotation_episode.episodic_workflow.root.a103.numerical import YieldController, YieldParameters
-        for key, binding in profiles.items():
-            if not isinstance(binding, dict) or set(binding) != {'cutoff', 'parameters'} or (not isinstance(binding['parameters'], dict)) or (type(binding['cutoff']) not in (int, float)) or (not math.isfinite(binding['cutoff'])) or (binding['cutoff'] <= 0):
-                raise ValueError('explicit_results_yield_profile_invalid:' + key)
-            YieldController('configuration', 0.0, binding['cutoff'], YieldParameters(**binding['parameters']))
-        self.results_yield_profiles = profiles
-        task_profiles = {} if task_yield_profiles is None else plain(task_yield_profiles)
-        if not isinstance(task_profiles, dict) or any((not isinstance(key, str) or not key or (not isinstance(binding, dict)) or (set(binding) != {'cutoff', 'parameters'}) or (not isinstance(binding['parameters'], dict)) or (type(binding['cutoff']) not in (int, float)) or (not math.isfinite(binding['cutoff'])) or (binding['cutoff'] <= 0) for key, binding in task_profiles.items())):
-            raise ValueError('explicit_execution_task_yield_profiles_invalid')
-        for binding in task_profiles.values():
-            YieldController('configuration', 0.0, binding['cutoff'], YieldParameters(**binding['parameters']))
-        self.task_yield_profiles = task_profiles
-        self._practical = {}
-        allowed_native = {'native_blast', 'native_blast_masking', 'native_blast_utility', 'native_blast_database', 'native_blast_standard_database', 'native_hmmer', 'native_hmmer_preparation'}
-        for resource_id, configuration in self.resources.items():
-            kind = KINDS[configuration['kind']]
-            foreign = {name for name in configuration if name.startswith('native_') and name not in allowed_native}
-            if foreign:
-                raise ValueError('a103_execution_resource_binding_conflict')
-            validate_primary_resource_bindings(configuration, kind)
-            validate_preparation_resource_binding(configuration, kind)
-            if kind != 'api':
-                inventory = self.initial_information.get(resource_id)
-                self._practical[resource_id] = TerminalExecutionBehavior(services, directory=self.directory, resources={kind: configuration}, store=store, initial_information={} if inventory is None else {kind: inventory})
-        from gene_annotation_episode.episodic_workflow.root.a103.api_service_execution import APIServiceExecution
-        api_resources = {key: value for key, value in self.resources.items() if KINDS[value['kind']] == 'api'}
-        self.api_execution = None if not api_resources else APIServiceExecution(store, run_id=run_id, directory=self.directory, configuration=api_resources, tool_registry=tool_registry, handoff_unit=handoff_unit, acquired_record_unit=acquired_record_unit, received_input_reader=getattr(services, 'read_received_molecular_input', None))
-        from gene_annotation_episode.episodic_workflow.root.a103.execution_progress import ExecutionProgressProvider
-        self.job_progress_provider = ExecutionProgressProvider(store, run_id=run_id, directory=self.directory, resources=self.resources, api_execution=self.api_execution, log_window_bytes=log_window_bytes, log_roles=self.log_roles)
-        self.local_file_sources = LocalFileSourceResults(self)
-        if services is not None:
-            bind_execution_owner = getattr(tool_registry, 'bind_execution_owner', None)
-            if callable(bind_execution_owner):
-                bind_execution_owner(self)
-        install_primary_result_readers(self)
-        install_preparation_result_readers(self)
+from gene_annotation_episode.domain import ContractError
 
+_CONFIGURATION = ('resources', 'continuation')
+_CONTINUATION = ('cutoff', 'uncertainty_alpha')
+
+
+def build_api_service(kind, configuration, tool_registry):
+    """One of this binding's own API services over its own tool registry."""
+    from gene_annotation_episode.episodic_workflow.episode_support.acquisition.service_calls.gene_context_evidence.api_services import build_service
+    return build_service(kind, dict(configuration), tool_registry)
+
+
+class ApiJobConfiguration:
+    """The binding's own API services (its tools) and its completion continuation settings."""
+
+    def __init__(self, *, tool_registry, configuration):
+        if not isinstance(configuration, Mapping) or set(configuration) != set(_CONFIGURATION):
+            raise ContractError('a103_api_job_configuration_requires_exactly:' + ','.join(_CONFIGURATION))
+        resources, continuation = configuration['resources'], configuration['continuation']
+        if not isinstance(resources, Mapping) or not resources:
+            raise ContractError('a103_api_job_resources_required')
+        if not isinstance(continuation, Mapping) or set(continuation) != set(_CONTINUATION):
+            raise ContractError('a103_api_job_continuation_requires_exactly:' + ','.join(_CONTINUATION))
+        services = {}
+        for resource_id, service in resources.items():
+            if not isinstance(resource_id, str) or not resource_id or not isinstance(service, Mapping) \
+                    or not isinstance(service.get('service'), str):
+                raise ContractError('a103_api_job_resource_must_name_its_service:' + str(resource_id))
+            services[resource_id] = build_api_service(service['service'], service, tool_registry)
+        self.tool_registry = tool_registry
+        self.services = MappingProxyType(services)
+        self.continuation = MappingProxyType(dict(continuation))
+        from .runtime_credit import completion_controller
+        completion_controller('configuration', 0.0, self.continuation)  # rejects an unusable cutoff now

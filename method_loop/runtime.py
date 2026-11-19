@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Any, Callable, Protocol, runtime_checkable
 
-from .identities import UnitRef
 
 __all__ = [
     "Controller",
@@ -24,8 +23,8 @@ class Controller(Protocol):
 
     The method does not know the controller's estimator, observation shape,
     thresholds, or state schema. It routes the binding-produced value into
-    ``observe`` (or the optional ``observe_unit`` identity port) and uses only
-    the two structural booleans on the returned step.
+    ``observe`` and uses only the boolean ``stop`` of the returned step and of
+    ``state()``.
     """
 
     epoch: str
@@ -39,8 +38,6 @@ class Controller(Protocol):
     ) -> Any: ...
 
     def state(self) -> Any: ...
-
-    def transitioned(self, epoch: str) -> "Controller": ...
 
 
 ControllerFactory = Callable[[Path], Controller]
@@ -88,7 +85,7 @@ class ControllerRuntime:
         if not isinstance(controller, Controller):
             raise TypeError(
                 "a Grain controller function must return an object with "
-                "observe(), state(), transitioned(), and epoch"
+                "observe(), state(), and epoch"
             )
         self._controllers[scope] = controller
         return scope
@@ -96,46 +93,12 @@ class ControllerRuntime:
     def epoch(self, scope: Scope) -> str:
         return str(self.controller(scope).epoch)
 
-    def transition_scope(self, scope: Scope, epoch: str) -> Scope:
+    def advance(self, scope: Scope, unit_label: str, value: object) -> Any:
+        """Observe once; the controller step must expose a boolean ``stop``."""
         scope = self._normalize_path(scope)
-        controller = self.controller(scope).transitioned(epoch)
-        if not isinstance(controller, Controller):
-            raise TypeError("transitioned() must return a Controller")
-        self._controllers[scope] = controller
-        return scope
-
-    def advance(
-        self,
-        scope: Scope,
-        unit_label: str,
-        value: object,
-        *,
-        unit_ref: UnitRef | None = None,
-    ) -> Any:
-        """Observe once, preserving an explicitly supplied completion identity."""
-        scope = self._normalize_path(scope)
-        if unit_ref is not None and not isinstance(unit_ref, UnitRef):
-            raise TypeError("unit_ref must be an actual UnitRef")
-        controller = self.controller(scope)
-        # A path alone has no run identity. Episode supplies and validates the
-        # actual reference where its Context run identity is available.
-        observe_unit = (
-            getattr(controller, "observe_unit", None) if unit_ref is not None else None
-        )
-        if callable(observe_unit):
-            step = observe_unit(
-                str(unit_label), value, unit_ref=unit_ref, is_root=len(scope) == 1
-            )
-        else:
-            step = controller.observe(
-                str(unit_label), value, is_root=len(scope) == 1
-            )
+        step = self.controller(scope).observe(str(unit_label), value, is_root=len(scope) == 1)
         if not isinstance(getattr(step, "stop", None), bool):
             raise TypeError("a controller step must expose a boolean stop")
-        if not isinstance(getattr(step, "requests_transition", None), bool):
-            raise TypeError(
-                "a controller step must expose a boolean requests_transition"
-            )
         return step
 
     def state(self, scope: Scope) -> Any:

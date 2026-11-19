@@ -1,0 +1,7 @@
+[local_jobs]
+# Caller-owned operational limits; Episodes cannot override these in tool arguments.
+# Scratch is an aggregate monitored limit (possible overshoot), with a hard
+# per-file limit. Time is intentionally unset pending the user's yield/credit
+# design. These are not scientific stopping rules or score thresholds.
+memory_bytes = 5368709120
+scratch_bytes = 4294967296

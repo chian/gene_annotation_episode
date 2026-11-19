@@ -11,7 +11,7 @@ from gene_annotation_episode.prodigal_grader import (
 )
 
 
-DATA = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/prodigal"
+DATA = Path(__file__).resolve().parents[1] / "tests/fixtures/prodigal"
 
 
 def candidate(**changes):

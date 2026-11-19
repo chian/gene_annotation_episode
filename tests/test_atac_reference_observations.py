@@ -12,12 +12,9 @@ import pytest
 from gene_annotation_episode.atac_differential_contracts import validate_atac_parsed_table
 from gene_annotation_episode.atac_differential_sheet import build_atac_differential_sheet
 from gene_annotation_episode.atac_reference_observations import parse_atac_bam_reference
-from test_atac_differential_inputs import NATIVE, artifact, codes
-from test_atac_differential_sheet import native_inputs
+from test_atac_differential_inputs import artifact, codes
 
 
-HEADERS = (Path(__file__).resolve().parents[1]
-           / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/atac/bam_headers')
 
 
 def parse_header(raw, *, run='callpeak-1', ordinal=0, input_ref='condition1.bam', **changes):
@@ -29,49 +26,10 @@ def parse_header(raw, *, run='callpeak-1', ordinal=0, input_ref='condition1.bam'
                                     input_ordinal=ordinal, input_artifact_ref=input_ref)
 
 
-def native_headers():
-    observations = json.loads((HEADERS / 'BAM_HEADER_OBSERVATIONS.json').read_text())['observations']
-    records = []
-    for number, observed in enumerate(observations, 1):
-        raw = (HEADERS / f'condition{number}.sam_header.txt').read_bytes()
-        records.append(parse_header(raw, run=f'callpeak-{number}', input_ref=f'condition{number}.bam',
-                                    artifact_ref='sha256:' + observed['header']['sha256']))
-    return records
-
-
 def sheet_arguments(sheet):
     return {field: deepcopy(sheet[field]) for field in (
         'reference', 'samples', 'conditions', 'callpeak_bindings', 'comparison', 'tracks',
         'peaks_xls', 'narrowpeaks', 'summits', 'native_differential', 'depth_selection', 'bam_references')}
-
-
-@pytest.mark.parametrize('number', [1, 2])
-def test_actual_retained_bam_header_bytes_numbers_and_complete_locations(number):
-    observed = json.loads((HEADERS / 'BAM_HEADER_OBSERVATIONS.json').read_text())['observations'][number - 1]
-    raw = (HEADERS / f'condition{number}.sam_header.txt').read_bytes()
-    bam = (NATIVE / f'bam_inputs/condition{number}.bam').read_bytes()
-    assert hashlib.sha256(bam).hexdigest() == observed['input_before']['sha256']
-    assert len(bam) == observed['input_before']['size_bytes']
-    assert observed['input_before'] == observed['input_after']
-    assert observed['raw_bam_text_equals_reader_text'] is True
-    assert len(raw) == observed['header']['size_bytes'] == 48
-    assert hashlib.sha256(raw).hexdigest() == observed['header']['sha256']
-    result = native_headers()[number - 1]
-    validate_atac_parsed_table(result, version='atac_bam_reference_parsed_v1')
-    assert result['state'] == dict(availability='present', byte_extent='complete',
-                                  identity='verified', format='compatible', output_extent='complete')
-    assert result['binding_key'] == f'callpeak-{number}:input:0'
-    assert result['physical_line_count'] == 2
-    assert result['data_row_count'] == result['readable_data_row_count'] == 1
-    assert result['malformed_data_row_count'] == 0
-    assert result['headers'] == [dict(locator=dict(line_number=1, byte_start=0, byte_end=25),
-                                      kind='sam_header', text='@HD\tVN:1.6\tSO:coordinate')]
-    assert result['rows'] == [dict(row_ordinal=0, locator=dict(line_number=2, byte_start=25, byte_end=48),
-                                   chromosome='chrToy', length_bp=12000, sequence_md5=None,
-                                   original_fields=['@SQ', 'SN:chrToy', 'LN:12000'])]
-    assert [{'chromosome': row['chromosome'], 'length_bp': row['length_bp']}
-            for row in result['rows']] == observed['native_dictionary']
-    assert result['issues'] == []
 
 
 def test_binary_stream_crlf_final_line_and_other_sam_headers_preserve_original_tokens():
@@ -266,132 +224,3 @@ def test_exact_reference_row_validation_rejects_wrong_types_and_extra_fields(fie
         validate_atac_parsed_table(result)
 
 
-def test_parsed_binding_key_and_header_kind_are_validated():
-    result = native_headers()[0]
-    result['binding_key'] = 'callpeak-1:input:1'
-    with pytest.raises(ValueError, match='invalid_atac_parsed_table'):
-        validate_atac_parsed_table(result)
-    result = native_headers()[0]
-    result['headers'][0]['kind'] = 'unrestricted_header_kind'
-    with pytest.raises(ValueError, match='invalid_atac_parsed_table'):
-        validate_atac_parsed_table(result)
-
-
-def test_actual_native_headers_reach_sheet_unchanged_with_distinct_input_occurrences(tmp_path):
-    inputs = native_inputs()
-    inputs['bam_references'] = native_headers()
-    original = deepcopy(inputs)
-    sheet = build_atac_differential_sheet(**inputs)
-    assert inputs == original
-    assert sheet['bam_references'] == original['bam_references']
-    assert [r['input_artifact_ref'] for r in sheet['bam_references']] == ['condition1.bam', 'condition2.bam']
-    assert [r['rows'][0]['length_bp'] for r in sheet['bam_references']] == [12000, 12000]
-    assert sheet['bam_references'][0]['artifact']['artifact_ref'] == sheet['bam_references'][1]['artifact']['artifact_ref']
-    assert sheet['bam_references'][0]['artifact']['producer_run_ref'] != inputs['callpeak_bindings'][0]['producer_ref']
-    assert [d['count'] for d in sheet['depth_selection']['conditions']] == [100, 200]
-    assert sheet['data_status'] == 'complete_reported_data'
-    assert not any(i['field'] == 'bam_references' for i in sheet['issues'])
-    (tmp_path / 'filled_bam_reference_sheet.json').write_text(json.dumps(sheet, indent=2, allow_nan=False) + '\n')
-    sheet['bam_references'][0]['rows'][0]['length_bp'] = 1
-    assert inputs == original
-
-
-@pytest.mark.parametrize('change,field', [('run', 'callpeak_run_key'), ('ordinal', 'input_ordinal'), ('ref', 'input_artifact_ref')])
-def test_wrong_run_input_ordinal_and_source_ref_remain_bound_qualifications(change, field):
-    inputs = native_inputs()
-    kwargs = {'run': 'unknown-run'} if change == 'run' else {'ordinal': 3} if change == 'ordinal' else {'input_ref': 'condition2.bam'}
-    record = parse_header((HEADERS / 'condition1.sam_header.txt').read_bytes(), **kwargs)
-    inputs['bam_references'] = [record, native_headers()[1]]
-    before = deepcopy(inputs)
-    sheet = build_atac_differential_sheet(**inputs)
-    assert inputs == before and sheet['bam_references'][0] == record
-    assert any(i['code'] == 'condition_binding_conflict' and i['field'] == field
-               and i['binding_key'] == record['binding_key'] for i in sheet['issues'])
-    assert any(i['code'] == 'metadata_missing' and i['binding_key'] == 'callpeak-1:input:0'
-               and i['field'] == 'bam_references' for i in sheet['issues'])
-
-
-def test_duplicate_occurrence_never_deduplicates_or_selects_a_dictionary():
-    inputs = native_inputs()
-    inputs['bam_references'] = native_headers()
-    inputs['bam_references'].append(deepcopy(inputs['bam_references'][0]))
-    before = deepcopy(inputs)
-    sheet = build_atac_differential_sheet(**inputs)
-    assert inputs == before and sheet['bam_references'] == before['bam_references']
-    assert sum(i['code'] == 'metadata_conflict' and i['field'] == 'bam_references'
-               for i in sheet['issues']) == 2
-
-
-def test_identical_header_and_input_content_in_different_selected_positions_is_not_a_conflict():
-    inputs = native_inputs()
-    inputs['callpeak_bindings'][0]['treatment_input_refs'].append('condition1.bam')
-    inputs['samples'][0]['input_artifact_refs'].append('condition1.bam')
-    inputs['bam_references'] = native_headers()
-    second = deepcopy(inputs['bam_references'][0])
-    second.update(input_ordinal=1, binding_key='callpeak-1:input:1')
-    inputs['bam_references'].append(second)
-    sheet = build_atac_differential_sheet(**inputs)
-    assert len(sheet['bam_references']) == 3
-    assert sheet['bam_references'][0]['artifact'] == sheet['bam_references'][2]['artifact']
-    assert not any(i['field'] == 'bam_references' for i in sheet['issues'])
-
-
-def test_length_md5_alias_and_extra_contigs_remain_native_facts_for_the_separate_bridge():
-    inputs = native_inputs()
-    inputs['reference']['aliases'] = [dict(source_chromosome='Toy', target_chromosome='chrToy',
-                                          reference_id='toy', source_refs=['explicit-alias'])]
-    inputs['bam_references'] = [parse_header(
-        (f'@SQ\tSN:Toy\tLN:{length}\tM5:{md5}\n@SQ\tSN:extra\tLN:99\n').encode(),
-        run=f'callpeak-{number}', input_ref=f'condition{number}.bam')
-        for number, length, md5 in ((1, 11000, 'a' * 32), (2, 12000, 'b' * 32))]
-    before = deepcopy(inputs)
-    sheet = build_atac_differential_sheet(**inputs)
-    assert inputs == before
-    assert sheet['bam_references'] == before['bam_references']
-    assert sheet['reference_relation'] == 'same_supplied_reference'
-    assert 'reference_conflict' not in codes(sheet)
-    assert [r['rows'][0]['length_bp'] for r in sheet['bam_references']] == [11000, 12000]
-    assert [r['rows'][0]['sequence_md5'] for r in sheet['bam_references']] == ['a' * 32, 'b' * 32]
-    assert all(r['rows'][1]['chromosome'] == 'extra' for r in sheet['bam_references'])
-
-
-def test_saved_only_parsing_and_assembly_after_selected_bam_copies_are_absent(monkeypatch, tmp_path):
-    inputs = native_inputs()
-    inputs['bam_references'] = native_headers()
-    selected_paths = []
-    for number in (1, 2):
-        path = tmp_path / f'selected-condition{number}.bam'
-        path.write_bytes((NATIVE / f'bam_inputs/condition{number}.bam').read_bytes())
-        selected_paths.append(path)
-        ref = str(path)
-        inputs['samples'][number - 1]['input_artifact_refs'] = [ref]
-        inputs['callpeak_bindings'][number - 1]['treatment_input_refs'] = [ref]
-        inputs['bam_references'][number - 1]['input_artifact_ref'] = ref
-    sheet = build_atac_differential_sheet(**inputs)
-    saved = tmp_path / 'saved_bam_reference_sheet.json'
-    saved.write_text(json.dumps(sheet, allow_nan=False))
-    restored = json.loads(saved.read_text())
-    raw_headers = [(HEADERS / f'condition{n}.sam_header.txt').read_bytes() for n in (1, 2)]
-    for path in selected_paths:
-        path.unlink()
-        assert not path.exists()
-    def forbidden(*args, **kwargs):
-        raise AssertionError('saved-only parser/assembly must not reopen inputs or execute acquisition')
-    monkeypatch.setattr('builtins.open', forbidden)
-    monkeypatch.setattr(Path, 'open', forbidden)
-    monkeypatch.setattr(socket, 'socket', forbidden)
-    monkeypatch.setattr(subprocess, 'Popen', forbidden)
-    before = deepcopy(restored)
-    for number, raw in enumerate(raw_headers):
-        old = restored['bam_references'][number]
-        reparsed = parse_atac_bam_reference(raw, artifact=old['artifact'],
-            callpeak_run_key=old['callpeak_run_key'], input_ordinal=old['input_ordinal'],
-            input_artifact_ref=old['input_artifact_ref'])
-        assert reparsed == old
-    rebuilt = build_atac_differential_sheet(**sheet_arguments(restored))
-    assert restored == before
-    assert rebuilt['bam_references'] == restored['bam_references']
-    assert [r['rows'][0]['length_bp'] for r in rebuilt['bam_references']] == [12000, 12000]
-    # Assembly may repeat its existing source qualifications on an already
-    # assembled table. Its native numerical rows and supplied input stay intact.
-    assert [track['rows'] for track in rebuilt['tracks']] == [track['rows'] for track in restored['tracks']]

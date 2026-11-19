@@ -26,24 +26,15 @@ def _required_correspondence(grading):
 def validate_tool_correspondence(grading, correspondence, *, admission=False):
     from .alignment_correspondence import validate_correspondence_artifacts
     from .biopython_pairwise_grader import validate_biopython_correspondence
-    from gene_annotation_episode.episodic_workflow.root.a101.library.blast_pairwise_grader import validate_blast_correspondence_instance
     correspondence = validate_correspondence_artifacts(correspondence, admission=admission)
     schema = grading["sheet"]["schema"]
     instances = correspondence["instances"]
-    if schema == "biopython_pairwise_sheet_v1":
-        if len(instances) != 1:
-            raise ValueError("tool_grading_correspondence_instances_conflict")
-        validate_biopython_correspondence(grading, instances[0])
-    else:
-        expected = ([('/sheet', grading['sheet'])] if schema == 'blast_pairwise_sheet_v1' else
-            [('/sheet/hits/' + str(i), hit) for i, hit in enumerate(grading['sheet']['hits'])])
-        if len(instances) != len(expected):
-            raise ValueError("tool_grading_correspondence_instances_conflict")
-        for instance, (pointer, legacy) in zip(instances, expected):
-            if instance['legacy_pointer'] != pointer or instance['axis_basis'] != 'reported':
-                raise ValueError("tool_grading_correspondence_address_conflict")
-            program = grading["sheet"].get("normalized_result", {}).get("search", {}).get("program")
-            validate_blast_correspondence_instance(legacy, instance, program=program)
+    if schema != "biopython_pairwise_sheet_v1":
+        # BLAST correspondence is validated by its axis grader, not here.
+        raise ValueError("tool_grading_correspondence_validator_not_shared:" + schema)
+    if len(instances) != 1:
+        raise ValueError("tool_grading_correspondence_instances_conflict")
+    validate_biopython_correspondence(grading, instances[0])
 
 
 def retain_tool_grading(store, *, provider: str, native_artifact_ref: str,

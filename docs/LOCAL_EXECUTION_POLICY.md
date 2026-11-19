@@ -81,8 +81,3 @@ Repeated large contract schemas are interned in digest-verified Store artifacts.
 Store readers restore the complete original JSON. SQL-visible scopes, tools,
 scientific outcomes and receipts remain inline; this is a storage change, not
 an information or credit filter.
-
-`tests/workflow_budget_probe.py` checks real child processes, separate process
-sessions, nested native services, rejected competing launches, oversized
-requests, provider lifecycle and abandoned-child cleanup. Its provider is a
-small RPC fixture; it performs no model calls or biological computation.

@@ -1,0 +1,35 @@
+
+[local_jobs]
+# Caller-owned operational limits; Episodes cannot override these in tool arguments.
+# Scratch is an aggregate monitored limit (possible overshoot), with a hard
+# per-file limit. Time is intentionally unset pending the user's yield/credit
+# design. These are not scientific stopping rules or score thresholds.
+memory_bytes = 5368709120
+scratch_bytes = 4294967296
+
+
+[local_resources]
+# Shared host/account budget for this application's local native jobs.
+# Each job reserves its allocation before dispatch, across registries and runs.
+memory_bytes = 5368709120
+scratch_bytes = 4294967296
+
+
+[controller]
+cost = 0.001
+uncertainty_alpha = 0.05
+
+
+[scientific_progress]
+# Provisional information units, independent of annotation-support hypervolume.
+# Existing knowledge belongs to the caller; resume restores its original set.
+finding_unit = 1
+loss_preview_size = 24
+initial_known_record_refs = []
+
+
+[restoration]
+# Own-decision metadata rows supplied to a new provider conversation.
+# This controls transport preview size, never Episode work or continuation.
+preview_size = 24
+

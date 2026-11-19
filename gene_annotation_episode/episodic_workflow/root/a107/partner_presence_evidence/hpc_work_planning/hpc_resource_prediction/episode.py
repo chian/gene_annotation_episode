@@ -1,44 +1,22 @@
-"""Predefined private HPC resource prediction for A107."""
-from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.hpc_work_planning.hpc_resource_prediction.received_execution_information import received_execution_information as _received_execution_information
-from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.hpc_work_planning.hpc_resource_prediction.received_api_reports import received_api_reports as _received_api_reports
-from .initial_information import initial_information as _private_initial_information
-from importlib import import_module
-from .task import ResourcePredictionTask
-from gene_annotation_episode.episodic_workflow.root.a107.library.hpc_prompt import render_hpc_prompt
-from .configuration import PredictionConfiguration
-from .from_parent import PredictionAssignment
-from .to_parent import PredictionReport
-from .goal import PredictionGoal
-from .internal_summary import PredictionSummary
-from .prediction_state import PredictionState
-from .prediction_history import PredictionHistory
-from .prediction_operations import PredictionOperations
-from .portfolio_comparison import PortfolioComparison
-from .received_evidence import ReceivedEvidence
-from .closed_models import ClosedModels
-from .credit import HPCEpisodeCredit
-from .queue_observations import QueueObservations
-from .binding_record import PredictionBindingRecord
-from .yield_estimator import HPCEpisodeYield
+"""A107 binding ``partner_presence_evidence/hpc_work_planning/hpc_resource_prediction`` on the generic runner.
 
-class HPCEpisode(PredictionConfiguration, PredictionAssignment, PredictionReport, PredictionGoal, PredictionSummary, PredictionState, PredictionHistory, PredictionOperations, PortfolioComparison, ReceivedEvidence, ClosedModels, HPCEpisodeCredit, HPCEpisodeYield, QueueObservations, PredictionBindingRecord):
-    received_execution_information = staticmethod(_received_execution_information)
-    received_api_reports = staticmethod(_received_api_reports)
-    initial_information = staticmethod(_private_initial_information)
+Its decision source, credit and continuation are ``hpc_work_planning/hpc_runtime`` (role
+``hpc_prediction``): model-selected fit, measurement and comparison operations over its
+owner's HPC ledger.
+"""
+from __future__ import annotations
+
+from gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.runtime_binding import \
+    DescendantBinding
+
+from ..hpc_runtime import PREDICTION, HPCRuntime
+
+
+class HPCEpisode(HPCRuntime, DescendantBinding):
     binding_path = 'partner_presence_evidence/hpc_work_planning/hpc_resource_prediction'
+    goal = 'Improve the resource prediction for the planned HPC work'
+    unit = 'One prediction action'
+    result = 'The resource prediction with its basis'
+    child_slots = {}
     commissioning_parent = 'partner_presence_evidence/hpc_work_planning'
-    roles = ('hpc_prediction',)
-    decision_source_type = ResourcePredictionTask
-    decision_prompt_renderer = staticmethod(render_hpc_prompt)
-    entry_roles = ()
-    replaces_default_instructions = True
-
-    def child_roles(self, role):
-        self.credit_kind(role)
-        return ()
-
-    def allowed_children(self, parent, caller_capabilities):
-        return self.child_roles(parent.role)
-
-    def permitted_common_actions(self, context):
-        return ('tool',)
+    hpc_role = PREDICTION

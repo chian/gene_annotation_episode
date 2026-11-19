@@ -221,6 +221,9 @@ class EpisodeBindingDeclaration:
     build_result: EpisodeFunctionBinding
     components: tuple[EpisodeFunctionBinding, ...]
     child_slots: tuple[EpisodeChildSlot, ...] = ()
+    # Local patch: the Episode's own running summary, folded over its recorded
+    # unit outcomes (``episode_runtime.EpisodeBinding.internal_summary``).
+    internal_summary: EpisodeFunctionBinding | None = None
 
     def __post_init__(self) -> None:
         _text(self.grain_name, "grain name")
@@ -246,6 +249,8 @@ class EpisodeBindingDeclaration:
             raise ValueError(
                 "components must contain EpisodeFunctionBinding values"
             )
+        if self.internal_summary is not None and not isinstance(self.internal_summary, EpisodeFunctionBinding):
+            raise TypeError("internal_summary must be an EpisodeFunctionBinding")
         if not isinstance(self.child_slots, tuple) or any(
             not isinstance(slot, EpisodeChildSlot) for slot in self.child_slots
         ):
@@ -256,6 +261,7 @@ class EpisodeBindingDeclaration:
             self.build_result.name,
             *(selection.name for selection in self.controller.selections()),
             *(component.name for component in self.components),
+            *(() if self.internal_summary is None else (self.internal_summary.name,)),
             *(
                 boundary.name
                 for slot in self.child_slots
@@ -300,6 +306,7 @@ class EpisodeBindingDeclaration:
             *self.controller.selections(),
             self.build_result,
             *self.components,
+            *(() if self.internal_summary is None else (self.internal_summary,)),
             *(
                 boundary
                 for slot in self.child_slots
@@ -329,6 +336,7 @@ class EpisodeBindingDeclaration:
                 component.as_record() for component in self.components
             ],
             "child_slots": [slot.as_record() for slot in self.child_slots],
+            "internal_summary": None if self.internal_summary is None else self.internal_summary.as_record(),
         }
 
 

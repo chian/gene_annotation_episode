@@ -44,44 +44,19 @@ def event_time():
             'boot_id': Path('/proc/sys/kernel/random/boot_id').read_text().strip()}
 
 
-def report(status_path, handle_path=None):
-    """Commit the physical exit, then independently try optional exports."""
-    body = None
-    if handle_path is not None:
-        sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-        body = json.loads(Path(handle_path).read_bytes())
+def report(status_path):
+    """Commit the physical exit."""
     service_exit = {name: os.environ.get(name) for name in ('SERVICE_RESULT', 'EXIT_CODE', 'EXIT_STATUS')}
-    if body is not None and 'native_events' in body:
-        try:
-            from gene_annotation_episode.episodic_workflow.root.native_events import commit_service_exit_receipt
-            commit_service_exit_receipt(handle_path, status_path, service_exit=service_exit, event_time=event_time)
-        except Exception as error:
-            print(json.dumps({'code': 'native_event_receipt_hook_failed',
-                              'exception_type': type(error).__name__}), file=sys.stderr)
-    else:
-        # Unbound hooks retain their original wire representation.
-        atomic_json(status_path, {**service_exit, 'ended': event_time()})
-    if body is not None and 'statistics' in body:
-        try:
-            from gene_annotation_episode.episodic_workflow.root.execution_recording import publish_native_statistics
-            publish_native_statistics(handle_path)
-        except Exception as error:
-            print(json.dumps({'code': 'statistics_export_hook_failed',
-                              'exception_type': type(error).__name__}), file=sys.stderr)
-    if body is not None and 'native_events' in body:
-        try:
-            from gene_annotation_episode.episodic_workflow.root.native_events import publish_native_events
-            publish_native_events(handle_path)
-        except Exception as error:
-            print(json.dumps({'code': 'native_event_export_hook_failed',
-                              'exception_type': type(error).__name__}), file=sys.stderr)
+    atomic_json(status_path, {**service_exit, 'ended': event_time()})
 
 
 def main() -> None:
     operation, request_name, *extra = sys.argv[1:]
     request_path = Path(request_name)
     if operation == "report":
-        report(request_path, extra[0] if extra else None)
+        if extra:
+            raise SystemExit('report_takes_only_the_status_path')
+        report(request_path)
         return
     raw_request = request_path.read_bytes()
     if len(extra) != 1 or hashlib.sha256(raw_request).hexdigest() != extra[0]:
@@ -94,7 +69,7 @@ def main() -> None:
     while not Path(request["release_path"]).exists():
         time.sleep(0.01)
     environment = dict(os.environ)
-    environment.update(request.get("env") or {})
+    environment.update(request["env"])
     # Native temporary output belongs to this job's monitored directory.
     environment.update({name: request["cwd"] for name in ("TMPDIR", "TMP", "TEMP")})
     # The wrapper and all native descendants share this verified cgroup. The

@@ -1,9 +1,6 @@
-"""Private A103 literature_ordered goal."""
-from __future__ import annotations
-from .source_contracts import _ROLE_INSTRUCTIONS
+"""What this episode is for."""
 
-class SourceInvestigationGoal:
-
-    def instructions(self, context):
-        self._role('literature_ordered')
-        return 'For A103, identify the actual locus and genome before using a source claim. Keep neighboring-gene identity, order, orientation, spacing, fusion, cooccurrence, and alternative explanations tied to their source and scope.\n\n' + _ROLE_INSTRUCTIONS['literature_ordered']
+BINDING_PATH = 'gene_context_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement'
+GOAL = 'Improve coverage of the source in its reading order'
+UNIT = 'One ordered-section reading action'
+RESULT = 'Evidence from the newly covered sections'

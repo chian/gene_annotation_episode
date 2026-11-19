@@ -1,42 +1,28 @@
-"""Predefined private HPC resource prediction for A110."""
-from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.hpc_work_planning.hpc_resource_prediction.received_execution_information import received_execution_information as _received_execution_information
-from .initial_information import initial_information as _private_initial_information
-from importlib import import_module
-from .task import ResourcePredictionTask
-from gene_annotation_episode.episodic_workflow.root.a110.library.hpc_prompt import render_hpc_prompt
-from .configuration import PredictionConfiguration
-from .from_parent import PredictionAssignment
-from .to_parent import PredictionReport
-from .goal import PredictionGoal
-from .internal_summary import PredictionSummary
-from .prediction_state import PredictionState
-from .prediction_history import PredictionHistory
-from .prediction_operations import PredictionOperations
-from .portfolio_comparison import PortfolioComparison
-from .received_evidence import ReceivedEvidence
-from .closed_models import ClosedModels
-from .credit import HPCEpisodeCredit
-from .queue_observations import QueueObservations
-from .binding_record import PredictionBindingRecord
-from .yield_estimator import HPCEpisodeYield
+"""The A110 hpc_resource_prediction binding on the generic runner.
 
-class HPCEpisode(PredictionConfiguration, PredictionAssignment, PredictionReport, PredictionGoal, PredictionSummary, PredictionState, PredictionHistory, PredictionOperations, PortfolioComparison, ReceivedEvidence, ClosedModels, HPCEpisodeCredit, HPCEpisodeYield, QueueObservations, PredictionBindingRecord):
-    received_execution_information = staticmethod(_received_execution_information)
-    initial_information = staticmethod(_private_initial_information)
+Its decision source, credit and continuation are ``hpc_work_planning/hpc_runtime`` (role
+``hpc_prediction``): model-selected fit, measurement and comparison operations over its owner's HPC
+ledger.
+"""
+from __future__ import annotations
+
+from types import MappingProxyType
+
+from gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.runtime_contract import (
+    CHILD_ASSIGNMENT_FORM, RETURN_FORM, EpisodeRuntimeContract)
+
+from ..hpc_runtime import PREDICTION, HPCRuntime
+
+
+class HpcResourcePredictionEpisode(HPCRuntime, EpisodeRuntimeContract):
+    """Predict the resources the planned computation needs."""
     binding_path = 'biochemical_feasibility_evidence/hpc_work_planning/hpc_resource_prediction'
+    grain_name = binding_path.replace('/', '__')
+    goal = 'Predict the resources the planned computation needs'
+    unit = 'One resource-prediction action'
+    result = 'The resource prediction'
+    child_slots = MappingProxyType({})
+    assignment_form = CHILD_ASSIGNMENT_FORM
+    return_form = RETURN_FORM
     commissioning_parent = 'biochemical_feasibility_evidence/hpc_work_planning'
-    roles = ('hpc_prediction',)
-    decision_source_type = ResourcePredictionTask
-    decision_prompt_renderer = staticmethod(render_hpc_prompt)
-    entry_roles = ()
-    replaces_default_instructions = True
-
-    def child_roles(self, role):
-        self.credit_kind(role)
-        return ()
-
-    def allowed_children(self, parent, caller_capabilities):
-        return self.child_roles(parent.role)
-
-    def permitted_common_actions(self, context):
-        return ('tool',)
+    hpc_role = PREDICTION

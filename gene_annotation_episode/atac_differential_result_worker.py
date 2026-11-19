@@ -68,25 +68,8 @@ def validate_atac_result_worker_plan(value):
     directory = path_value(value['directory'], absolute=True)
     require(selector['mode'] == value['mode'], 'atac_worker_mode_mismatch')
     if value['mode'] == 'native_result':
-        original = validate_atac_run_plan(value['original_plan'])
-        from .native_atac_differential_capture import validate_atac_native_capture
-        validate_atac_native_capture(dict(version='atac_native_capture_v1', **{key: value[key] for key in (
-            'bundle', 'files', 'source_action_receipt_ref', 'writer_closure_receipt_ref', 'driver_state', 'failures')}), original_plan=original)
-        request = original['requested_job']['native_atac_differential']['request']
-        require(request['comparison_key'] == selector['comparison_key'], 'atac_result_comparison_conflict')
-        require([r['specification'] for r in value['files']] == original['outputs'], 'atac_worker_manifest_mismatch')
-        retained = ([value['bundle']] if value['bundle'] else []) + [r['retained'] for r in value['files'] if r['retained']]
-        for row in value['files']:
-            spec, declared, actual = row['specification'], row['declared'], row['retained']
-            if declared is not None:
-                require(all(declared[k] == spec[k] for k in ('relative_path', 'format')), 'atac_worker_manifest_mismatch')
-            if actual is not None:
-                require(actual['file']['format'] == spec['format'], 'atac_worker_manifest_mismatch')
-            if row['outcome'] == 'verified':
-                require(declared is not None and declared['state'] == 'present' and actual is not None
-                    and all(declared[k] == actual['file'][k] for k in ('sha256', 'size_bytes', 'format')), 'atac_worker_capture_mismatch')
-            elif row['outcome'] == 'declared_absent':
-                require(declared is not None and declared['state'] == 'absent' and actual is None, 'atac_worker_capture_mismatch')
+        # The native capture validator belonged to the deleted root terminal design.
+        require(False, 'atac_native_result_capture_unavailable')
     else:
         saved = value['sheet_bundle']
         public = dict(sheet=saved['sheet']['file'], tables=[dict(track_key=r['track_key'], file=r['file']) for r in saved['tables']])

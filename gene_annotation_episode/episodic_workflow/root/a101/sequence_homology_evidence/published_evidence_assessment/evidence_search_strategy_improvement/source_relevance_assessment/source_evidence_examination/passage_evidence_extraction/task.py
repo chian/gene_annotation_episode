@@ -1,214 +1,353 @@
-"""Private A101 literature_targeted task."""
-from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.root.a101.runtime import ActionFailure, ContractError, ContractInformationError, Draft202012Validator, EventTargetError, Mapping, ReportBoundaryError, ReportRedelivery, SourceEnd, ValidationError, WorkflowError, _decode_recorded_action_response, _json, _plain, _wait_target_feedback, inspect, json, nullcontext, observes_action_outcome, schema_failure_diagnostic, validate_form
-from .task_state import LiteratureTaskState
-from .task_decision import LiteratureTaskDecision
-from .waiting import LiteratureTaskWaiting
-from .report_delivery import LiteratureReportDelivery
-from .decision_state import LiteratureDecisionState
-from .decision_inputs import LiteratureDecisionInputs
-from .task_instructions import instructions as compose_instructions
+"""The task: read the assigned source's passages, with its neighbouring context, through the access tools, and
+write the interpretation with the ``report`` tool.
 
-class LiteratureTask(LiteratureTaskState, LiteratureTaskDecision, LiteratureTaskWaiting, LiteratureReportDelivery, LiteratureDecisionState, LiteratureDecisionInputs):
-    instruction_composer = staticmethod(compose_instructions)
+Carried from the old ``task.py``, ``task_decision.py``, ``task_instructions.py``, ``source_operations.py`` and
+``source_references.py``. One unit is one model-selected tool call. The task always offers a unit and never ends
+the Episode: only the yield controller does. The episode has no child and no reasoning commit and cannot search
+or fetch new sources (no acquisition tools)."""
+from jsonschema import ValidationError
 
-    def instructions(self, context):
-        return self.workflow.services.instructions(self, context)
+from episode_runtime import CustodyError, ModelRequest, Rejected, ToolCall
 
-    async def next(self, view, *, delivery_ref=None):
-        if delivery_ref is None:
-            self._selection_view = view
-            closed = self.workflow.journal.row('runtime_episodes', self.episode_id)
-            if closed is not None and closed['state'] == 'yielded' and (closed['completion'] is not None):
-                completion = json.loads(closed['completion'])
-                if completion['ended_by'] == 'source_failed' and view.units_consumed == completion['actions']:
-                    return SourceEnd('source_failed')
-        if self.workflow.inprocess_replay is not None and delivery_ref is None:
-            if not self._restored:
-                self.restore()
-            ready = self.workflow.inprocess_replay.unit(self, view.units_consumed)
-            if ready is not None:
-                return ready
-            self.restore_checkpoint()
-            self._inprocess_replay_ready = True
-            with self.workflow.store.transaction():
-                self.workflow.inprocess_replay.capture(self)
-            if self._unfinished_own_actions:
-                index = self._unfinished_own_actions.pop(0)
-                action = self.workflow.journal.row('runtime_actions', self.episode_id, index)
-                return self.workflow.selected(self, json.loads(action['action']), index)
-        if self.workflow.execution_binding is not None and delivery_ref is None:
-            if not self._restored:
-                self.restore()
-            ready = self.workflow.completions.slot(self.episode_id, view.units_consumed)
-            if ready is not None:
-                return self.workflow.completed_unit(self, ready)
-            self.restore_checkpoint()
-            if self._unfinished_own_actions:
-                index = self._unfinished_own_actions.pop(0)
-                action = self.workflow.journal.row('runtime_actions', self.episode_id, index)
-                return self.workflow.selected(self, json.loads(action['action']), index)
-            ready = self.workflow.next_return(self)
-            if ready is not None:
-                return self.workflow.completed_unit(self, ready)
-            await self.workflow.resolve_pending_deliveries(self, view)
-            ready = self.workflow.completions.slot(self.episode_id, view.units_consumed)
-            if ready is not None:
-                return self.workflow.completed_unit(self, ready)
-        while True:
-            original_call = self.workflow.journal.row('runtime_model_calls', self.episode_id, self.calls)
-            if delivery_ref is None and original_call is None and (self._execution_context is not None):
-                ready = self._execution_context._ready_owned_child(self.path)
-                if ready is not None:
-                    return ready
-            original_request = json.loads(original_call['request']) if original_call is not None else None
-            if original_request is not None and (original_call['response'] is not None or 'contract_information' in original_request or 'literature_numerical_contracts' in original_request):
-                context, schema = (original_request['context'], original_request['schema'])
-            else:
-                context = self.decision_state(view)
-                schema = self.workflow.action_schema(self)
-                if delivery_ref is not None:
-                    context, schema = self.workflow.delivery_resolution_inputs(self, delivery_ref, context)
-            if delivery_ref is not None and context.get('pending_child_delivery', {}).get('delivery_ref') != delivery_ref:
-                raise WorkflowError('restored_delivery_resolution_identity_conflict')
-            from gene_annotation_episode.episodic_workflow.root.a101.providers import ModelCallError
-            try:
-                response, index, actual_context, schema = await self.call(context, schema)
-            except ModelCallError as error:
-                from gene_annotation_episode.episodic_workflow.root.a101.episode_source_failure import record_source_failure
-                record_source_failure(self.workflow.store, self.workflow.run_id, self.episode_id, self.calls - 1, error)
-                self.feedback = {'status': 'failed', 'category': 'decision_source', 'exception_type': type(error).__name__, 'detail': str(error)}
-                self.checkpoint()
-                if delivery_ref is not None:
-                    raise
-                return SourceEnd('source_failed')
-            with self.workflow.store.transaction() if self.workflow.execution_binding is not None or self.workflow.inprocess_replay is not None else nullcontext():
-                unit = self.apply_response(response, index, actual_context, schema)
-            if unit is not None:
-                return unit
+from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.episode_support.instructions.instruction_spans import replace_span
+from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.sequence_homology_evidence.literature_investigation_prompt import (
+    INSTRUCTIONS)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
+    rejection_feedback)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.sequence_homology_evidence.action_transport import (
+    decode_response, generation_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_homology_evidence.source_locations import (
+    locate_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_operations.sequence_homology_evidence.source_sequences import (
+    scan_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
+from gene_annotation_episode.episodic_workflow.episode_support.records.received_records import read_record_in_scope
+from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_discovery_values import (
+    references_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import (
+    RECORD_SCHEMAS, REF, REFS, identity, obj, source_location_inputs, validate_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.experimental_database_records import (
+    reader_schema as experimental_records_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
+from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
+    INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)
 
-    def apply_response(self, response, index, actual_context, schema):
-        selection = None
-        try:
-            original = self.workflow.journal.row('runtime_actions', self.episode_id, index)
-            call = self.workflow.journal.row('runtime_model_calls', self.episode_id, index) if original is None and self.workflow.decision_exchanges is not None else None
-            saved = {} if call is None else json.loads(call['request'])
-            response = _decode_recorded_action_response(response, schema, recorded_selection=None if original is None else json.loads(original['action']), exchanges=() if original is not None or self.workflow.decision_exchanges is None else self.workflow.decision_exchanges.rows(self.episode_id, index), exchange_schema=saved.get('contract_information', {}).get('exchange_schema'))
-            selection = response['selection']
-            if self._delivery_resolution_ref is not None:
-                Draft202012Validator(schema).validate(response)
-                if response['report_update'] != self.report_values:
-                    raise ValueError('delivery_resolution_must_preserve_current_interpretation')
-            Draft202012Validator(schema['properties']['selection']).validate(selection)
-            with self.workflow.store.transaction() if self.workflow.execution_binding is not None else nullcontext():
-                unit = self.workflow.selected(self, selection, index)
-        except EventTargetError as error:
-            self.feedback = _wait_target_feedback(error, status='invalid')
-            self.record_effect(index, 'rejected')
-            return None
-        except (ValueError, KeyError, TypeError, ValidationError) as error:
-            self.feedback = {'status': 'invalid', 'category': 'action_contract', 'detail': schema_failure_diagnostic(error) if isinstance(error, ValidationError) else str(error)}
-            if isinstance(error, ContractInformationError):
-                self.feedback['contract_error'] = {'code': error.code, 'field': error.field}
-                if error.code == 'closed_top_level_form_required':
-                    self.feedback['repair'] = 'schema_json must encode a JSON Schema object with the explicit top-level field "type": "object" and a properties object. Keep the intended properties, declare every field in required, and set additionalProperties to false. A properties object alone does not declare the required outer type.'
-                if isinstance(error.__cause__, ReportBoundaryError):
-                    self.feedback['schema_reason'] = str(error.__cause__)
-            if isinstance(error, ContractError) and str(error) == 'component_native_return_channels_required':
-                self.feedback['contract_error'] = {'code': str(error), 'field': error.detail['field']}
-                self.feedback['required_fact_sources'] = error.detail['missing_fact_sources']
-                self.feedback['repair'] = error.detail['repair']
-            assignment = selection.get('assignment') if isinstance(selection, Mapping) else None
-            selector = assignment.get('selector') if isinstance(assignment, Mapping) else None
-            if isinstance(error, ContractError) and isinstance(error.detail, Mapping) and isinstance(selection, Mapping) and isinstance(assignment, Mapping) and (selection.get('kind') == 'episode_child') and (selection.get('role') == 'results') and (assignment.get('version') == 'execution_results_assignment_v1') and isinstance(selector, Mapping) and (selector.get('version') == 'bvbrc_minhash_result_selector_v2'):
-                affected = {key: _plain(error.detail[key]) for key in ('source_ref', 'artifact_ref', 'handoff_ref', 'pair_metadata_index', 'row_index', 'genome_id', 'field', 'record_path') if key in error.detail}
-                if affected:
-                    self.feedback['input_detail'] = affected
-            if isinstance(error, ValidationError) and isinstance(selection, Mapping) and (selection.get('kind') == 'tool') and (selection.get('tool') == 'reads.map'):
-                from gene_annotation_episode.episodic_workflow.root.a101.library.read_mapping_values import parameter_schema_failure
-                branches = schema['properties']['selection']['anyOf']
-                for branch_error in error.context:
-                    branch_path = list(branch_error.schema_path)
-                    if not branch_path or not isinstance(branch_path[0], int):
-                        continue
-                    branch = branches[branch_path[0]]
-                    if branch.get('properties', {}).get('tool', {}).get('const') != 'reads.map':
-                        continue
-                    feedback = parameter_schema_failure(branch_error, path_prefix=('arguments',))
-                    if feedback is not None:
-                        self.feedback.update(feedback)
-                        break
-            self.record_effect(index, 'rejected')
-            return None
-        try:
-            resolve_report_reference = self.workflow.resolver(self.scope, source=self)
-            admitted = validate_form(response['report_update'], self.interpret_schema, resolve_report_reference)
-            self.workflow.validate_report(admitted, self.scope, assignment=self.request.message.as_record().get('job_assignment'), grain=self.path[-1][0], schema=self.interpret_schema, source=self)
-            self.report_values = admitted
-            self.report_basis = [ref for ref in actual_context['visible_record_refs'] if resolve_report_reference(ref)]
-            self.feedback = None
-        except (ValueError, KeyError, TypeError) as error:
-            self.feedback = {'status': 'invalid', 'category': 'report_format', 'detail': getattr(error, 'diagnostic', {'code': 'invalid_report_update'})}
-        if isinstance(unit, ReportRedelivery):
-            self.feedback = None if unit.failure is None else unit.failure.as_record()
-        self.record_effect(index, 'redelivery' if isinstance(unit, ReportRedelivery) else 'selected')
-        return unit
+from .goal import GOAL
 
-    async def execute(self, selection, index):
-        journal = self.workflow.journal
-        old = journal.row('runtime_actions', self.episode_id, index)
-        if old and json.loads(old['action']) != selection:
-            raise WorkflowError('reconstructed selected work changed')
-        if old and old['result'] is not None:
-            result, credit = (json.loads(old['result']), old['credit'])
-        else:
-            journal.save('runtime_actions', {'episode_id': self.episode_id, 'decision_index': index, 'action': _json(selection), 'result': None, 'credit': None})
-            key = f'{self.workflow.run_id}:{self.episode_id}:{index}'
-            with journal.measure('runtime_actions', self.episode_id, index):
-                result = self.workflow.execute(self, selection['tool'], selection['arguments'], decision_index=index, operation_key=key)
-                if inspect.isawaitable(result):
-                    result = await result
-            result = {**result, 'pending_work_after_action': self.workflow.pending_work(self)}
-            with self.workflow.store.transaction() if self.workflow.execution_binding is not None else nullcontext():
-                journal.save('runtime_actions', {'episode_id': self.episode_id, 'decision_index': index, 'action': _json(selection), 'result': _json(result), 'credit': None})
-                self.last_outcome, self.last_outcome_index = (result, index)
-                if result['status'] not in ('completed', 'partial'):
-                    self.feedback = result.get('feedback') or {'status': result['status'], 'category': result.get('error_code', 'work_failed')}
-                self.checkpoint()
-            credit = None
-        observed_outcome = observes_action_outcome(selection['kind'], result['status'])
-        with self.workflow.store.transaction() if self.workflow.execution_binding is not None else nullcontext():
-            self.workflow.receive_native_outcome(self, result, index)
-            if credit is None and observed_outcome:
-                self.workflow.receive_outcome(self, selection, result, index)
-        if credit is None and observed_outcome:
-            result = await self.workflow.automatic_score_updates(self, index, result)
-        with self.workflow.store.transaction() if self.workflow.execution_binding is not None else nullcontext():
-            if credit is None and observed_outcome:
-                credit_view = self.workflow.source_credit_view(self)
-                credit = credit_view['credit']
-                if selection.get('kind') == 'tool' and selection.get('tool') == 'shared.read_information':
-                    self.workflow.retain_shared_grading_results(self, result, credit_view)
-                journal.save('runtime_actions', {'episode_id': self.episode_id, 'decision_index': index, 'action': _json(selection), 'result': _json(result), 'credit': credit})
-            if self.workflow.execution_binding is not None and observed_outcome:
-                self.workflow.completions.stage(self.episode_id, index, label=f"{selection['kind']}:{index}", kind='own_action', controller_input=self.workflow.controller_value(self, index, credit), child_return=None)
-                self.last_outcome, self.last_outcome_index = (result, index)
-                self.checkpoint()
-        self.last_outcome = result
-        self.last_outcome_index = index
-        if not observed_outcome:
-            raise ActionFailure(result.get('feedback') or {'status': result['status'], 'category': result.get('error_code', 'work_failed')})
-        return self.workflow.controller_value(self, index, credit)
+CHILD_SLOTS = {}
+SERVICES = ()
+
+INTEGER = {'type': 'integer', 'minimum': 0}
+POSITIVE = {'type': 'integer', 'minimum': 1}
+TEXT = {'type': 'string', 'minLength': 1}
+
+# The access tools of the old ``_ACCESS_TOOLS``; descriptions as the tool library states them.
+DESCRIPTIONS = {
+    'state.query':
+        'Read an exact page of typed scientific records, current revisions, or records referring to actual references. Follow the returned next_query for the same selection and order. Exact refs is a separate mode and cannot be combined with page selectors.',
+    'source.read':
+        'Read a bounded UTF-8 byte window from an actual source. Choose original for retained source bytes, including XML tables/headings omitted by a paragraph projection; text selects that projection when available. Explicit stdout/stderr select retained native stream bytes when present, without falling back to another representation. Returned artifact/offsets support exact anchors.',
+    'source.locate':
+        'Locate an exact supplied literal quote in an explicitly received original or text source representation. Return UTF-8 byte witnesses, unchanged neighboring context and bounded match continuation. Multiple occurrences remain separate. No normalization, scientific interpretation, measurement parsing or evidence credit is performed; no literal match means only no match in the examined bytes.',
+    'source.sequence.scan':
+        'Recognize candidate protein sequence blocks in received source text/XML/HTML, preserving original UTF-8 positions. Normalize case, whitespace, numbering and soft hyphens; report exact containment, extra residues and literal differences. For numbered GenBank/GenPept blocks, include the ORIGIN marker and contiguous residue rows in the selected window. Hard hyphens remain explicit, with conditional correspondence, until their byte offsets are selected as formatting_hyphen_offsets after inspecting the layout. A document boundary may require an overlapping window. No biological gaps, tags or substitutions are silently removed.',
+    'source.sequence.references':
+        'Read a page of publication identifiers, titles and reported citation scopes from a received sequence-identity response. Reverify full sequence equality for the selected record. Citation metadata supplies leads; it does not establish experimental results.',
+    'source.experimental.records':
+        'Inspect one page of a received experimental database response. Return native assay records, source measurement selectors and literal record links. Optional contains and contains_all filter retained rows by one or several literal terms, including their native headers and section labels. Record and whole-page link continuations are separate. These records locate the characterized homolog and its source evidence; metadata and deposited scores retain their native meanings.',
+    'image.view':
+        'Inspect one explicitly selected frame of a registered scientific image. The next reasoning call receives its actual pixels and exact source/frame metadata. Stored axes are preserved; no contrast adjustment, resizing, interpretation or annotation is performed. An optional RGB conversion is explicit and recorded; original bytes remain intact.',
+    'source.archive.members':
+        'Inventory one page of an actual ZIP/TAR source. Member IDs preserve ordinal identity, including duplicate names; no members are extracted or selected for you.',
+    'source.archive.extract':
+        "Extract exactly one inventoried regular member to a source artifact; never follow a member's host path or link. Original archive and member identity remain attached.",
+    'source.xlsx.sheets':
+        'Read the actual sheet names, relationship keys and package parts of a retained XLSX source. No sheet or biological interpretation is selected for you.',
+    'source.xlsx.rows':
+        'Read a selected page of actual XLSX rows, optionally matching literal cell values. Select sheet_key from source.xlsx.sheets; row offsets count matching rows, while returned row numbers/cell addresses retain native identity. Header row is caller-selected or null. Original numeric/date lexical values, styles, formulas and caches remain distinct; no formula is recalculated or biology inferred.',
+    'source.pdf.info':
+        'Read native PDF information and physical page count for a selected actual source; no biological interpretation.',
+    'source.pdf.text':
+        'Extract a selected physical PDF page or contiguous page range as a reusable UTF-8 text derivative. page is the first page; optional last_page is inclusive and defaults to page. Use source.pdf.info for the physical page count, then source.locate on the extracted text to find a section without guessing pages. Native page breaks and the selected range are retained. Byte offsets refer to this text derivative, not the PDF. No OCR or interpretation is performed.',
+    'source.pdf.page':
+        'Render one explicitly selected physical PDF page as a reusable PNG source. Rendering does not by itself supply image input to a model or interpret a figure.',
+    'execution.estimate':
+        'Obtain recorded duration expectations before a proposed native alignment or workbook selection. Uses the same operands, actual settings and caller resource as execution. Creates no native job or scientific evidence; missing history stays unknown. This is an optional information tool, not a scheduling or continuation decision.',
+}
+
+# python tool name -> the library's tool name (a tool name here is lowercase letters, digits and underscores)
+LIBRARY_NAMES = {
+    'state_query': 'state.query', 'source_read': 'source.read', 'source_locate': 'source.locate',
+    'source_sequence_scan': 'source.sequence.scan', 'source_sequence_references': 'source.sequence.references',
+    'source_experimental_records': 'source.experimental.records', 'image_view': 'image.view',
+    'source_archive_members': 'source.archive.members', 'source_archive_extract': 'source.archive.extract',
+    'source_xlsx_sheets': 'source.xlsx.sheets', 'source_xlsx_rows': 'source.xlsx.rows',
+    'source_pdf_info': 'source.pdf.info', 'source_pdf_text': 'source.pdf.text', 'source_pdf_page': 'source.pdf.page',
+    'execution_estimate': 'execution.estimate'}
+# Tools whose source reads are bound to the records this episode holds (the old ``authorization``).
+HELD_SOURCE_TOOLS = ('source.locate', 'source.sequence.scan', 'source.sequence.references',
+                     'source.experimental.records')
+
+INPUT_SCHEMAS = {
+    'state.query': obj({
+        'kind': {'enum': list(RECORD_SCHEMAS) + ['subject']}, 'offset': INTEGER, 'limit': POSITIVE,
+        'refs': {**REFS,
+                 'description': 'Exact reference mode: supply refs alone, including an empty array for no records. '
+                                'Omit kind, offset, limit, current_only and references in this mode.'},
+        'current_only': {'type': 'boolean'},
+        'references': {'type': 'array', 'items': REF, 'minItems': 1,
+                       'description': "Select records that refer to any supplied ID through reference fields or "
+                                      "provenance anchors. This does not match a record's own ID; to read known "
+                                      "records themselves, supply refs alone instead."}}, required=[]),
+    'source.read': obj({'source_ref': REF, 'offset': INTEGER, 'limit': POSITIVE,
+                        'representation': {'enum': ['text', 'original', 'stdout', 'stderr']}}, ['source_ref']),
+    'source.locate': locate_schema(),
+    'source.sequence.scan': scan_schema(),
+    'source.sequence.references': references_schema(),
+    'source.experimental.records': experimental_records_schema(),
+    'image.view': obj({'source_ref': REF, 'frame': INTEGER, 'colour_conversion': {'enum': ['preserve', 'rgb']}},
+                      ['source_ref']),
+    'source.archive.members': obj({'source_ref': REF, 'offset': INTEGER, 'limit': POSITIVE}, ['source_ref']),
+    'source.archive.extract': obj({'member_ref': REF}),
+    'source.xlsx.sheets': obj({'source_ref': REF}),
+    'source.xlsx.rows': obj({
+        'source_ref': REF, 'sheet_key': TEXT, 'offset': INTEGER, 'limit': INTEGER,
+        'header_row': {'type': ['integer', 'null'], 'minimum': 1},
+        'where': {**obj({'column': {'type': ['string', 'null'], 'pattern': '^[A-Z]+$'},
+                         'match': {'enum': ['equals', 'contains']}, 'value': TEXT,
+                         'case_sensitive': {'type': 'boolean'}}), 'type': ['object', 'null']}}),
+    'source.pdf.info': obj({'source_ref': REF}),
+    'source.pdf.text': obj({'source_ref': REF, 'page': POSITIVE, 'last_page': POSITIVE,
+                            'layout': {'enum': ['reading_order', 'layout', 'raw']}}, ['source_ref', 'page']),
+    'source.pdf.page': obj({'source_ref': REF, 'page': POSITIVE, 'dpi': {'type': 'number', 'exclusiveMinimum': 0}},
+                           ['source_ref', 'page']),
+}
+# ``execution.estimate`` is offered for the workbook tools only, and only when the run has timing statistics.
+INPUT_SCHEMAS['execution.estimate'] = {'anyOf': [
+    obj({'tool': {'const': name}, 'arguments': INPUT_SCHEMAS[name]}) for name in ('source.xlsx.sheets', 'source.xlsx.rows')]}
+
+REPORT_DESCRIPTION = ('Write your interpretation of the supplied passages for the assigned question: what each '
+                      'passage itself says, its own qualifications, and what stays unresolved. Spans stay separate; '
+                      'never concatenate them into a fabricated quotation. Writing it can be repeated and the latest '
+                      'one is what is returned.')
+REPORT_SCHEMA = obj({
+    'interpretation': TEXT,
+    'passages': {'type': 'array', 'items': obj({'source_ref': TEXT, 'offset': INTEGER, 'limit': POSITIVE,
+                                                'statement': TEXT, 'qualification': TEXT})},
+    'qualification': TEXT})
+
+HISTORY_START = 'On a fresh provider conversation,'
+HISTORY_END = 'Do not execute native provider tools.'
+HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
+                    'no new action and does not execute or credit the historical work again.\n')
+REPORT_GUIDANCE = ('\nSelect the report tool with your interpretation of the supplied passages when the outcomes '
+                   'warrant it. The report is returned to your parent as its finding. Selecting report does not end '
+                   'your work: only the numerical controller does.')
 
 
-def _bind_original_task_runtime_providers(namespace):
-    from gene_annotation_episode.episodic_workflow.root.a101.library.live_runtime_functions import bind_functions
-    names = {'next': 'LiteratureTask.next', 'apply_response': 'LiteratureTask.apply_response', 'execute': 'LiteratureTask.execute'}
-    functions = bind_functions(namespace, {name: LiteratureTask.__dict__[name] for name in names},
-        runtime_module='gene_annotation_episode.episodic_workflow.root.a101.runtime', qualified_names=names,
-        defining_module='gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.task')
-    for name, function in functions.items():
-        setattr(LiteratureTask, name, function)
+def instructions(*, knowledge):
+    """The old ``task_instructions.instructions``: the literature investigation text, this episode's goal, the
+    tool-knowledge text when it is offered. The ``request_context`` exchange paragraph, the pending-delivery
+    paragraph and the ``redeliver_report`` text are not carried: no such action exists."""
+    text = replace_span(INSTRUCTIONS, HISTORY_START, HISTORY_END, HISTORY_GUIDANCE)
+    text += '\n' + GOAL
+    if knowledge is not None:
+        text += KNOWLEDGE_INSTRUCTIONS
+    return text + REPORT_GUIDANCE
 
-from gene_annotation_episode.episodic_workflow.root.a101 import runtime as _original_runtime
-_bind_original_task_runtime_providers(vars(_original_runtime))
+
+def offered(settings):
+    """The access tools offered now: ``execution_estimate`` only with timing statistics configured."""
+    tools = [name for name in LIBRARY_NAMES
+             if name != 'execution_estimate' or settings.get('tool_registry', {}).get('native_statistics') is not None]
+    return tools + ['report']
+
+
+def catalog(names):
+    """The tools the model is shown: name, description and input schema (the old ``catalog``; every input schema
+    is projected through ``source_location_inputs``)."""
+    entries = [{'name': name, 'description': DESCRIPTIONS[LIBRARY_NAMES[name]],
+                'input_schema': source_location_inputs(INPUT_SCHEMAS[LIBRARY_NAMES[name]])}
+               for name in names if name != 'report']
+    if 'report' in names:
+        entries.append({'name': 'report', 'description': REPORT_DESCRIPTION, 'input_schema': REPORT_SCHEMA})
+    return entries
+
+
+def selection_schema(names):
+    """What the model answers with: one tool and its arguments (the old action schema, tool kind only)."""
+    return obj({'selection': {'anyOf': [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']},
+                                             'arguments': entry['input_schema']}) for entry in catalog(names)]}})
+
+
+def within_source(store, reference, root, scope):
+    """Whether ``reference`` is ``root`` or a source derived from it through ``parent_source_refs`` (the old
+    ``_within_source``; each source on the way is read in scope)."""
+    pending, seen = [reference], set()
+    while pending:
+        current = pending.pop()
+        if current == root:
+            return True
+        if current in seen:
+            continue
+        seen.add(current)
+        source = read_record_in_scope(store, current, scope, 'source')
+        pending.extend(source.get('parent_source_refs', ()))
+    return False
+
+
+def admitted(store, name, arguments, scope, root):
+    """The old ``_tool_arguments``: the arguments against the offered schema, and the source they name against the
+    assigned page's source. A violation is a ``ContractError``."""
+    validate_schema(arguments, source_location_inputs(INPUT_SCHEMAS[name]))
+    selected = arguments['arguments'] if name == 'execution.estimate' else arguments
+    source_ref = selected.get('source_ref')
+    if name == 'source.archive.extract':
+        source_ref = read_record_in_scope(store, arguments['member_ref'], scope, 'archive_member')['source_ref']
+    if source_ref is not None and not within_source(store, source_ref, root, scope):
+        raise ContractError('literature_reading_outside_assigned_source')
+
+
+async def run_access_tool(name, envelope, ctx):
+    """Execute one access tool. A contract error is returned as an ``invalid`` outcome with ``arguments_or_reference``
+    feedback, as the old ``execute`` did; the outcome is the unit's outcome like any other."""
+    arguments, scope, root = envelope['arguments'], envelope['scope'], envelope['page_source_ref']
+    try:
+        admitted(ctx.store, name, arguments, scope, root)
+    except (ContractError, ValidationError) as error:
+        detail = {'detail': error.detail} if getattr(error, 'detail', None) else {}
+        return {'status': 'invalid',
+                'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': name, 'arguments': arguments}),
+                'record_refs': [], 'changed_record_refs': [], 'result': None,
+                'feedback': {'category': 'arguments_or_reference', 'code': str(error), **detail}}
+    registry = ToolRegistry(ctx.store, **ctx.settings.get('tool_registry', {}))
+    permitted = tuple(ctx.store.refs()) if name in HELD_SOURCE_TOOLS else None
+    try:
+        return await registry.execute_async(name, arguments, scope=scope, operation_key=ctx.operation_key,
+                                            permitted_record_refs=permitted)
+    except CustodyError:
+        raise
+    except Exception as error:   # the old record_execution_failure: a failed selected operation is an outcome
+        return failure_outcome(ctx.store, error, category='episode_execution', cause_code='selected_operation_failed')
+
+
+async def state_query(arguments, ctx):
+    return await run_access_tool('state.query', arguments, ctx)
+
+
+async def source_read(arguments, ctx):
+    return await run_access_tool('source.read', arguments, ctx)
+
+
+async def source_locate(arguments, ctx):
+    return await run_access_tool('source.locate', arguments, ctx)
+
+
+async def source_sequence_scan(arguments, ctx):
+    return await run_access_tool('source.sequence.scan', arguments, ctx)
+
+
+async def source_sequence_references(arguments, ctx):
+    return await run_access_tool('source.sequence.references', arguments, ctx)
+
+
+async def source_experimental_records(arguments, ctx):
+    return await run_access_tool('source.experimental.records', arguments, ctx)
+
+
+async def image_view(arguments, ctx):
+    return await run_access_tool('image.view', arguments, ctx)
+
+
+async def source_archive_members(arguments, ctx):
+    return await run_access_tool('source.archive.members', arguments, ctx)
+
+
+async def source_archive_extract(arguments, ctx):
+    return await run_access_tool('source.archive.extract', arguments, ctx)
+
+
+async def source_xlsx_sheets(arguments, ctx):
+    return await run_access_tool('source.xlsx.sheets', arguments, ctx)
+
+
+async def source_xlsx_rows(arguments, ctx):
+    return await run_access_tool('source.xlsx.rows', arguments, ctx)
+
+
+async def source_pdf_info(arguments, ctx):
+    return await run_access_tool('source.pdf.info', arguments, ctx)
+
+
+async def source_pdf_text(arguments, ctx):
+    return await run_access_tool('source.pdf.text', arguments, ctx)
+
+
+async def source_pdf_page(arguments, ctx):
+    return await run_access_tool('source.pdf.page', arguments, ctx)
+
+
+async def execution_estimate(arguments, ctx):
+    return await run_access_tool('execution.estimate', arguments, ctx)
+
+
+def report(arguments, ctx):
+    """The closing value the model writes: its interpretation. It is this unit's outcome; the summary holds the
+    latest one and ``final_to_parent`` returns it as the finding."""
+    return {'report': arguments}
+
+
+TOOLS = {'state_query': state_query, 'source_read': source_read, 'source_locate': source_locate,
+         'source_sequence_scan': source_sequence_scan, 'source_sequence_references': source_sequence_references,
+         'source_experimental_records': source_experimental_records, 'image_view': image_view,
+         'source_archive_members': source_archive_members, 'source_archive_extract': source_archive_extract,
+         'source_xlsx_sheets': source_xlsx_sheets, 'source_xlsx_rows': source_xlsx_rows,
+         'source_pdf_info': source_pdf_info, 'source_pdf_text': source_pdf_text, 'source_pdf_page': source_pdf_page,
+         'execution_estimate': execution_estimate, 'report': report}
+
+
+def decide(summary, feedback, ctx):
+    """Ask the model for the next tool, shown the assignment, the custody of the source, its own read outcomes,
+    the interpretation so far, the tools, the measured time and the yield table (the old decision state and
+    inputs, over this episode's summary)."""
+    names = offered(ctx.settings)
+    knowledge_directory = ctx.settings.get('knowledge_library_directory')
+    context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
+               'literature_source_custody': summary['literature_source_custody'],
+               'own_literature_outcomes': summary['own_literature_outcomes'],
+               'literature_history_meaning': summary['literature_history_meaning'],
+               'current_report_update': summary['report'], 'tools': catalog(names),
+               'time_accounting': time_accounting(ctx.clock.progress_time)}
+    context = extend_context(context, {
+        'feedback': feedback, 'action_yields': summary['action_yields'],
+        'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
+        conflict='initial_binding_context_field_conflict')
+    return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge')), context,
+                        generation_schema(selection_schema(names)))
+
+
+def action(response, summary, records, ctx):
+    """Turn the model's answer into one tool call, or reject it (no unit). An answer that selects no offered tool,
+    arguments that do not fit its schema, or a report naming a source this episode does not hold is invalid."""
+    names = offered(ctx.settings)
+    schema = selection_schema(names)
+    try:
+        selection = validate_selection(decode_response(response, schema), schema)
+        name, arguments = selection['tool'], selection['arguments']
+        if name == 'report':
+            for passage in arguments['passages']:
+                if not records.holds(passage['source_ref']):
+                    raise ContractError('literature_reference_unavailable', detail={'reference': passage['source_ref']})
+            return ToolCall('report', arguments)
+    except (ValueError, KeyError, TypeError, ValidationError) as error:
+        raise Rejected(rejection_feedback(error, category='selection'))
+    return ToolCall(name, {'arguments': arguments, 'scope': summary['scope'],
+                           'page_source_ref': summary['literature_assignment']['page']['source_ref']})
+
+
+def validate_selection(value, schema):
+    validate_schema(value, schema)
+    return value['selection']

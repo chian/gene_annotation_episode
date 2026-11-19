@@ -1,99 +1,62 @@
-"""Private scientific-process episode behavior for A101."""
+"""The A101 head binding (``sequence_homology_evidence``), commissioned by the root annotation episode.
+
+Its decision source on the generic runner is ``runtime_source.SequenceHomologyEvidenceSource``;
+its credit and continuation are ``runtime_credit.head_controller``. ``ScientificConfiguration``
+holds its construction-time library, own tool registry and yield declaration.
+"""
 from __future__ import annotations
-from .task import ScientificInvestigationTask
-from .scientific_contracts import ContractError, ROLE, ROLES
-from .credit import SequenceHomologyEvidenceCredit
-from importlib import import_module as _import_module
-from .yield_estimator import SequenceHomologyEvidenceYield
-from .to_child_execution_progress_assessment import prepare_request as prepare_monitor_request
-from .from_child_execution_progress_assessment import receive_progress as receive_monitor_progress
 
-def create_execution_bindings(*args, **configuration):
-    """Construct private bindings with this caller's existing operands."""
-    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.execution_job_submission.episode import ExecutionEpisode as Private0
-    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.execution_job_submission.api_job_execution.episode import ExecutionEpisode as Private1
-    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.execution_job_submission.local_job_execution.episode import ExecutionEpisode as Private2
-    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as Private3
-    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.execution_result_acquisition.episode import ExecutionEpisode as Private4
-    return (Private0(*args, **configuration), Private1(*args, **configuration), Private2(*args, **configuration), Private3(*args, **configuration), Private4(*args, **configuration))
+from types import MappingProxyType
 
-def create_resource_bindings(*args, **configuration):
-    """Construct private bindings with this caller's existing operands."""
-    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.resource_work_submission.episode import ResourceEpisode as Private0
-    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.resource_work_submission.api_resource_work_execution.episode import ResourceEpisode as Private1
-    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.resource_work_submission.local_resource_work_execution.episode import ResourceEpisode as Private2
-    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.resource_work_submission.hpc_resource_work_execution.episode import ResourceEpisode as Private3
-    from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.resource_result_acquisition.episode import ResourceEpisode as Private4
-    return (Private0(*args, **configuration), Private1(*args, **configuration), Private2(*args, **configuration), Private3(*args, **configuration), Private4(*args, **configuration))
+from episode_runtime import ChoiceField, DeclaredField, RecordForm, SubsetField
+
 from .configuration import ScientificConfiguration
-from .binding_record import ScientificBindingRecord
-from .goal import ScientificGoal
-from .from_parent import ScientificAssignment
-from .process_state import SequenceHomologyEvidenceState
-from .alternate_process_selection import AlternateProcessSelection
-from .to_parent import ScientificReport
-from .tool_selection import ScientificToolSelection
-from .internal_summary import ScientificSummary
-from .scientific_operations import ScientificOperations
-from .to_child_published_evidence_assessment import prepare_request as prepare_published_evidence_assessment
-from .from_child_published_evidence_assessment import receive_report as receive_published_evidence_assessment
-from .to_child_execution_job_submission import prepare_commission as prepare_execution_job_submission
-from .from_child_execution_job_submission import receive_report as receive_execution_job_submission
-from .to_child_execution_progress_assessment import prepare_commission as prepare_execution_progress_assessment
-from .from_child_execution_progress_assessment import receive_report as receive_execution_progress_assessment
-from .to_child_execution_result_acquisition import prepare_commission as prepare_execution_result_acquisition
-from .from_child_execution_result_acquisition import receive_report as receive_execution_result_acquisition
-from .to_child_resource_result_acquisition import prepare_commission as prepare_resource_result_acquisition
-from .from_child_resource_result_acquisition import receive_report as receive_resource_result_acquisition
-from .to_child_resource_work_submission import prepare_commission as prepare_resource_work_submission
-from .from_child_resource_work_submission import receive_report as receive_resource_work_submission
+from .contract_binding import SCOPE, A101ContractBinding
+from .yield_estimator import SequenceHomologyEvidenceYield
 
-class SequenceHomologyEvidenceEpisode(ScientificConfiguration, ScientificBindingRecord, ScientificGoal, ScientificAssignment, SequenceHomologyEvidenceState, AlternateProcessSelection, ScientificReport, ScientificToolSelection, ScientificSummary, ScientificOperations, SequenceHomologyEvidenceCredit, SequenceHomologyEvidenceYield):
-    """One recursive C7 role with parent-selected A/P and actual tool assignment data."""
-    decision_source_type = ScientificInvestigationTask
-    binding_path = 'sequence_homology_evidence'
-    commissioning_parent = 'legacy_annotation'
-    roles = ROLES
-    entry_roles = ROLES
+HEAD = 'sequence_homology_evidence'
+EVIDENCE_TASK = ('A101 sequence homology: which sequence-similar references support or contradict each '
+                 'candidate function')
 
-    def contract_information_profile(self, context):
-        """Expose frozen contract information to scientific commissioning parents."""
-        return self._contract_information_profile if context.role in ('annotation', ROLE) else None
 
-    @staticmethod
-    def _role(role):
-        if role != ROLE:
-            raise ContractError('sequence_homology_evidence_role_not_bound')
+class SequenceHomologyEvidenceEpisode(A101ContractBinding, ScientificConfiguration, SequenceHomologyEvidenceYield):
+    """The recursive A101 head: its own tools, reasoning, sub-scope heads and operational/literature children."""
+    binding_path = HEAD
+    commissioning_parent = 'annotation'
+    goal = ('Improve the sequence-homology evidence for the assigned subject: which sequence-similar references '
+            'support or contradict each candidate function, as qualified, source-grounded findings')
+    unit = 'One selected tool, reasoning or child action of this sequence-homology investigation'
+    result = 'Qualified sequence-homology findings with their record references and A101 credit'
+    child_slots = MappingProxyType({
+        'execution_job_submission': HEAD + '/execution_job_submission',
+        'execution_progress_assessment': HEAD + '/execution_progress_assessment',
+        'execution_result_acquisition': HEAD + '/execution_result_acquisition',
+        'resource_work_submission': HEAD + '/resource_work_submission',
+        'resource_result_acquisition': HEAD + '/resource_result_acquisition',
+        'published_evidence_assessment': HEAD + '/published_evidence_assessment',
+        'sequence_homology_evidence': HEAD,
+    })
 
-    def child_roles(self, role):
-        self._role(role)
-        return self._child_roles
+    @property
+    def assignment_form(self):
+        """``scope`` is held by the commissioner; the evidence task is the head's own declaration;
+        the thought pattern and the tools are the commissioner's choice among the head's options (C3, C6)."""
+        return RecordForm({
+            'scope': SCOPE,
+            'evidence_task': DeclaredField('text', 'The evidence task this axis owns', EVIDENCE_TASK),
+            'thought_pattern': ChoiceField('text', 'The library thought pattern this commission investigates with',
+                                           tuple(sorted(self.thought_patterns))),
+            'tools': SubsetField('text', 'The tools of this head this commission may use', self.selectable_tools),
+        })
 
-    def prepare_child_request(self, parent, role, assignment):
-        return prepare_monitor_request(assignment) if role == 'monitor' else assignment
+    def build_controller(self, bound, collaborators):
+        """The head's own credit (native sequence correspondence over its receipts) and continuation."""
+        from .runtime_credit import head_controller
+        return head_controller(self, bound, collaborators)
 
-    def receive_child_progress_for_role(self, context, role, form, schema, operation_key, provider):
-        if role != 'monitor':
-            return False
-        receive_monitor_progress(context, form, schema, operation_key, provider)
-        return True
-
-    def permitted_common_actions(self, context):
-        self.validate_context(context)
-        return ('tool', 'reason', 'child', 'wait', 'redeliver_report')
-
-    def allowed_children(self, parent, caller_capabilities):
-        self.validate_context(parent)
-        return self._child_roles
-
-    def child_request_preparer(self, role):
-        return {'literature': prepare_published_evidence_assessment}.get(role)
-
-    def child_report_receiver(self, role):
-        return {'literature': receive_published_evidence_assessment}.get(role)
-
-    def child_request_preparer_for_binding(self, role, binding_path):
-        return {('launch', 'sequence_homology_evidence/execution_job_submission'): prepare_execution_job_submission, ('monitor', 'sequence_homology_evidence/execution_progress_assessment'): prepare_execution_progress_assessment, ('results', 'sequence_homology_evidence/execution_result_acquisition'): prepare_execution_result_acquisition, ('results', 'sequence_homology_evidence/resource_result_acquisition'): prepare_resource_result_acquisition, ('launch', 'sequence_homology_evidence/resource_work_submission'): prepare_resource_work_submission}.get((role, binding_path))
-
-    def child_report_receiver_for_binding(self, role, binding_path):
-        return {('launch', 'sequence_homology_evidence/execution_job_submission'): receive_execution_job_submission, ('monitor', 'sequence_homology_evidence/execution_progress_assessment'): receive_execution_progress_assessment, ('results', 'sequence_homology_evidence/execution_result_acquisition'): receive_execution_result_acquisition, ('results', 'sequence_homology_evidence/resource_result_acquisition'): receive_resource_result_acquisition, ('launch', 'sequence_homology_evidence/resource_work_submission'): receive_resource_work_submission}.get((role, binding_path))
+    def build_episode(self, grain, bound, collaborators, child_builders):
+        """The head's own model-selected units (``runtime_source``) over ``bound`` and its collaborators."""
+        from method_loop import Episode
+        from .runtime_source import SequenceHomologyEvidenceSource
+        source = SequenceHomologyEvidenceSource(self, bound, collaborators, child_builders)
+        return Episode(grain, bound.key, source, bound.request, source.result)

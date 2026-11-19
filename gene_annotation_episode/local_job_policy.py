@@ -1,13 +1,10 @@
 """Caller-supplied memory/scratch policy and staged-file scratch preflight.
 
-The module stays beside defaults.toml and applies the inherited workflow
-memory ceiling. Process creation and lifetime remain in native_lifecycle.
+Process creation and lifetime remain in native_lifecycle.
 """
 from __future__ import annotations
 from dataclasses import asdict, dataclass
-import os
 from pathlib import Path
-import tomllib
 from typing import Mapping
 from .acquisition_types import AcquisitionError
 from .local_scratch import allocated_bytes
@@ -25,24 +22,18 @@ class LocalJobPolicy:
                 raise ValueError(f"invalid_local_job_{name}")
 
     @classmethod
-    def from_config(cls, settings: Mapping | None = None) -> LocalJobPolicy:
-        defaults = tomllib.loads(Path(__file__).with_name("defaults.toml").read_text())["local_jobs"]
-        if settings is not None and not isinstance(settings, Mapping):
+    def from_config(cls, settings: Mapping) -> LocalJobPolicy:
+        """The caller's declared ``memory_bytes`` and ``scratch_bytes``; anything else raises."""
+        if not isinstance(settings, Mapping):
             raise ValueError("invalid_local_job_settings")
-        supplied = dict(settings or {})
+        supplied = dict(settings)
         unknown = supplied.keys() - {"memory_bytes", "scratch_bytes"}
         if unknown:
             raise ValueError("unknown_local_job_setting:" + ",".join(sorted(unknown)))
-        configured = {**defaults, **supplied}
-        if "memory_bytes" not in supplied:
-            from .workflow_budget import ENV, active_budget
-            if os.environ.get(ENV):
-                # An inherited default is a ceiling, not a declaration that
-                # every native helper needs the desktop's full allocation.
-                # Explicit caller requests retain their original semantics.
-                memory = active_budget()["environment_bounds"]["memory_bytes"]
-                configured["memory_bytes"] = min(configured["memory_bytes"], memory)
-        return cls(**configured)
+        missing = {"memory_bytes", "scratch_bytes"} - supplied.keys()
+        if missing:
+            raise ValueError("local_job_setting_required:" + ",".join(sorted(missing)))
+        return cls(**supplied)
 
     def to_dict(self) -> dict:
         return asdict(self)

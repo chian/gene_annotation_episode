@@ -1,54 +1,37 @@
-"""Private scientific-process yield behavior for A101."""
+"""The A101 head's continuation: its configured yield binding for its own credit task."""
 from __future__ import annotations
-from .scientific_contracts import (AXIS, ContractError, ROLE, plain, scientific_digest)
+
+from method_loop.jsonvalue import content_digest
+
+from gene_annotation_episode.domain import ContractError
+
+from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.communication import plain
+from .contract_binding import AXIS
+from .native_correspondence_credit import A101SequenceCredit
+
+# The head's one credit task: A101's native sequence-correspondence projection.
+HEAD_TASK = AXIS + ':' + A101SequenceCredit().as_record()['kind']
+
 
 class SequenceHomologyEvidenceYield:
-    @property
-    def private_yield_binding(self):
-        return self._yield_bindings is not None
 
-    def continuation_task(self, context):
-        projector = self.credit_projector(context)
-        if projector is None:
-            raise ContractError('scientific_task_credit_not_declared')
-        assigned = plain(context.assignment).get('context', {}).get(AXIS.lower() + '_task')
-        if assigned is not None:
-            if not isinstance(assigned, dict) or not isinstance(assigned.get('name'), str) or not assigned['name']:
-                raise ContractError('scientific_continuation_original_task_required')
-            return AXIS + ':' + assigned['name']
-        return AXIS + ':' + projector.as_record()['kind']
+    def head_yield_controller(self, epoch, initial_credit):
+        """Bind this head episode to its configured credit forecast and continuation cutoff.
 
-    def yield_controller(self, context, initial_credit, epoch):
-        """Bind this commissioned scientific task to its own credit forecast.
-
-        A saved task declaration fixes the estimator, its parameters, the
-        continuation cutoff and the exact credit units. An old workflow with
-        no private declarations keeps its recorded controller contract.
+        The yield declaration for ``HEAD_TASK`` fixes the estimator kind, its
+        parameters, the cutoff and the exact credit definition. A head
+        configured without one has no continuation and raises.
         """
         if self._yield_bindings is None:
-            return None
-        if context.role != ROLE:
-            raise ContractError('scientific_yield_role_not_bound')
-        task = self.continuation_task(context)
-        declaration = self._yield_bindings.get(task)
+            raise ContractError('a101_head_yield_bindings_not_configured')
+        declaration = self._yield_bindings.get(HEAD_TASK)
         if declaration is None:
-            raise ContractError('scientific_yield_binding_missing_for_task:' + task)
-        projector = self.credit_projector(context)
-        if scientific_digest(plain(projector.as_record())) != scientific_digest(
-                declaration['credit_definition']):
-            raise ContractError('scientific_yield_credit_definition_mismatch:' + task)
-        if getattr(projector, 'yield_method', None) != declaration['kind']:
-            raise ContractError('scientific_yield_method_credit_mismatch:' + task)
-        if declaration['kind'] == 'accumulation':
-            from gene_annotation_episode.episodic_workflow.root.a101.numerical import YieldController, YieldParameters
-            return YieldController(epoch, initial_credit, declaration['cutoff'],
-                YieldParameters(**declaration['parameters']))
-        if declaration['kind'] == 'bounded_quality':
-            from gene_annotation_episode.episodic_workflow.root.a101.numerical import BoundedYieldController, YieldParameters
-            return BoundedYieldController(epoch, initial_credit, declaration['cutoff'],
-                projector.native_score_maximum, YieldParameters(**declaration['parameters']))
-        if declaration['kind'] == 'completion':
-            from gene_annotation_episode.episodic_workflow.root.a101.numerical import CompletionYieldController, YieldParameters
-            return CompletionYieldController(epoch, initial_credit, declaration['cutoff'],
-                YieldParameters(**declaration['parameters']))
-        raise ContractError('scientific_yield_method_unavailable:' + task)
+            raise ContractError('a101_head_yield_binding_missing_for_task:' + HEAD_TASK)
+        projector = A101SequenceCredit()
+        if content_digest(plain(projector.as_record())) != content_digest(declaration['credit_definition']):
+            raise ContractError('a101_head_yield_credit_definition_mismatch:' + HEAD_TASK)
+        if declaration['kind'] != projector.yield_method:
+            raise ContractError('a101_head_yield_method_credit_mismatch:' + HEAD_TASK)
+        from yield_control import BoundedQualityYieldController, YieldParameters
+        return BoundedQualityYieldController(epoch, initial_credit, declaration['cutoff'], projector.native_score_maximum,
+                                           YieldParameters(**declaration['parameters']))

@@ -2,7 +2,7 @@
 import json
 import re
 from urllib.parse import unquote
-from method_loop.durable import canonical
+from method_loop.jsonvalue import canonical
 from gene_annotation_episode.schema_support import _schema_nodes
 
 

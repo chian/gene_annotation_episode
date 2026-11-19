@@ -1,46 +1,20 @@
-"""Private literature_strategy episode behavior for A104."""
+"""The A104 ``evolutionary_history_evidence/published_evidence_assessment/evidence_search_strategy_improvement``
+literature binding.
+
+Its behaviour is the shared A104 literature implementation
+(``published_evidence_assessment/literature_binding.py``); this binding declares only what is its own.
+"""
 from __future__ import annotations
-from importlib import import_module as _import_module
-from .task import SourceInvestigationTask
-from .task_presentation import present_source_context
-from .contracts import ROLES, _CHILDREN
-from .configuration import LiteratureConfiguration
-from .binding_record import LiteratureBindingRecord
-from .from_parent import LiteratureAssignment
-from .source_custody import LiteratureSourceCustody
-from .source_operations import LiteratureSourceOperations
-from .goal import LiteratureGoal
-from .internal_summary import LiteratureSummary
-from .parent_context import LiteratureParentContext
-from .scientific_interpretation import LiteratureScientificInterpretation
-from .numerical_report_facts import LiteratureNumericalReportFacts
-from .received_reports import LiteratureReceivedReports
-from .to_parent import LiteratureReport
-from .credit import LiteratureCredit
-from .yield_estimator import LiteratureYield
-from .waiting import LiteratureWaiting
-from .source_repositories import LiteratureRepositories
 
-from .role_policy import LiteratureRolePolicy
+from ..literature_binding import LiteratureBinding
 
-class LiteratureEpisode(LiteratureRolePolicy, LiteratureConfiguration, LiteratureBindingRecord, LiteratureAssignment, LiteratureSourceCustody, LiteratureSourceOperations, LiteratureGoal, LiteratureSummary, LiteratureParentContext, LiteratureScientificInterpretation, LiteratureNumericalReportFacts, LiteratureReceivedReports, LiteratureReport, LiteratureCredit, LiteratureYield, LiteratureWaiting, LiteratureRepositories):
+
+class EvidenceSearchStrategyImprovementEpisode(LiteratureBinding):
+    """Improve the evidence search strategy."""
     binding_path = 'evolutionary_history_evidence/published_evidence_assessment/evidence_search_strategy_improvement'
+    role = 'literature_strategy'
     commissioning_parent = 'evolutionary_history_evidence/published_evidence_assessment'
-    'Private scientific investigation with its own task and original configured services.'
-    roles = ('literature_strategy',)
-    entry_roles = ()
-
-    decision_source_type = SourceInvestigationTask
-    decision_prompt_renderer = staticmethod(present_source_context)
-
-    def child_request_assembler(self, role):
-        if role == 'literature_search':
-            from .to_child_source_relevance_assessment import assemble_request
-            return assemble_request
-        return None
-
-    def child_report_receiver(self, role):
-        if role == 'literature_search':
-            from .from_child_source_relevance_assessment import receive_report
-            return receive_report
-        return None
+    acquisition = True
+    instruction = ('Investigate which search approach is productive. Keep the information objective and evidence '
+                   'context separate from a literal provider query. Revise terms or source choices in light of actual '
+                   'search/read outcomes; a relevance child can investigate which returned sources deserve examination.')

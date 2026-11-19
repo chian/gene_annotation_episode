@@ -1,28 +1,16 @@
 """Negative Enrichr File restrictions from committed publication metadata.
 
 This reader needs no configured API resource. It neither grants references nor
-imports another run's scientific facts. A Source-like record is insufficient:
-classification authenticates its original selected publication and receipt.
+imports another run's scientific facts.
 """
 from __future__ import annotations
 
-from copy import deepcopy
-import hashlib
-import json
-import re
-
-from .domain import identity, canonical as domain_canonical
-from .enrichr_contracts import validate_enrichr_selector
-
-
-def _boundary(code):
-    from .episodic_workflow.root.communication import ReportBoundaryError
-    return ReportBoundaryError("enrichr_" + code, code="enrichr_" + code)
+from .domain import identity
 
 
 def _require(condition, code):
     if not condition:
-        raise _boundary(code)
+        raise ValueError("enrichr_" + code)
 
 
 def validated_enrichr_source(store, reference):
@@ -32,14 +20,6 @@ def validated_enrichr_source(store, reference):
         and source.get("origin") == "external"
         and reference == identity("source", {"origin": "external", "record": payload}), "source_snapshot_conflict")
     return source
-
-
-def normalized_enrichr_outcome(value):
-    value = deepcopy(value)
-    if isinstance(value, dict) and "pending_work_after_action" in value:
-        from .episodic_workflow.root.wait_events import validate_pending
-        validate_pending(value.pop("pending_work_after_action"))
-    return value
 
 
 def matching_enrichr_publications(store, reference, *, current_run_id=None):
@@ -76,125 +56,18 @@ def matching_enrichr_publications(store, reference, *, current_run_id=None):
         (*parameters, reference, reference, reference, reference, reference)))
 
 
-def committed_enrichr_reference_kind(store, row, reference):
-    """The original committed-chain classifier; never read API paths or bytes."""
-    from .episodic_workflow.root.enrichr_publication_metadata import PROTOCOL_VERSION, WIRE_PROFILE, _prepared as validate_prepared_enrichr
-    from .episodic_workflow.root.communication import ReportBoundaryError, plain
-    from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords, _same
-    from .episodic_workflow.root.library.receipt_digest import digest
-    try:
-        run_id, key = row["publication_run_id"], row["operation_key"].removesuffix(":publication")
-        records = EpisodeReturnRecords(store, run_id, failure_prefix="enrichr_foreign_")
-        context = records.context(row["episode_id"])
-        _require(context.role == "results" and type(row["decision_index"]) is int
-            and row["decision_index"] >= 0 and key == f"{run_id}:{context.episode_id}:{row['decision_index']}",
-            "foreign_publication_conflict")
-        _require(_same(json.loads(row["selected_action"]), {"kind": "tool",
-            "tool": "api.enrichr.result", "arguments": {}}), "foreign_publication_conflict")
-        action = normalized_enrichr_outcome(json.loads(row["selected_result"]))
-        original = json.loads(row["operation_result"])
-        operands = json.loads(row["operation_arguments"])
-        assignment = plain(context.assignment)
-        selector = validate_enrichr_selector(assignment["selector"])
-        _require(assignment["version"] == "execution_results_assignment_v1"
-            and _same(json.loads(row["operation_scope"]), context.scope)
-            and original["status"] in {"completed", "partial"}
-            and original["record_refs"] == [row["id"]]
-            and original["result"]["source_ref"] == row["id"]
-            and original["operation_ref"] == row["operation_id"] == identity("operation", {
-                "key": row["operation_key"], "name": "internal.api_service.enrichr.result", "arguments": operands}),
-            "foreign_publication_conflict")
-        source = validated_enrichr_source(store, row["id"])
-        receipt = action["result"]["acquisition_receipt"]
-        _require(receipt["version"] == "api_service_acquisition_v1"
-            and receipt["run_id"] == run_id and receipt["episode_id"] == context.episode_id
-            and receipt["operation_key"] == key and receipt["name"] == "api.enrichr.result"
-            and receipt["arguments"] == {} and receipt["assignment_sha256"] == digest(assignment)
-            and receipt["handoff_ref"] == assignment["handoff_ref"]
-            and _same(receipt["selector"], selector) and receipt["source_ref"] == source["id"]
-            and receipt["record_refs"] == original["record_refs"]
-            and _same(operands["arguments"]["selector"], selector)
-            and source["artifact_ref"] == "artifact_" + operands["snapshot_sha256"]
-            and receipt["snapshot_sha256"] == operands["snapshot_sha256"], "foreign_publication_conflict")
-        expected = deepcopy(original)
-        expected["operation_ref"] = identity("api_operation", {"key": key})
-        expected["result"].update(acquisition_receipt=receipt, handoff_ref=assignment["handoff_ref"])
-        _require(_same(action, expected), "foreign_publication_conflict")
-        transport = operands["transport"]
-        protocol = transport["enrichr_protocol"]
-        prepared = validate_prepared_enrichr(protocol["prepared"], query_only=True)
-        _require(protocol["version"] == PROTOCOL_VERSION and protocol["wire_profile"] == WIRE_PROFILE
-            and _same(prepared["request"], operands["arguments"]["request"])
-            and source["request_ref"] == "artifact_" + hashlib.sha256(domain_canonical({
-                "request": operands["request"], "transport": transport}).encode()).hexdigest(),
-            "foreign_publication_conflict")
-        stages = protocol["stages"]
-        _require(type(stages) is list and len(stages) == (
-            3 if prepared["request"]["background"]["policy"] == "supplied" else 2), "foreign_publication_conflict")
-        stage_refs = []
-        for ordinal, stage in enumerate(stages):
-            _require(type(stage) is dict and set(stage) == {"ordinal", "stage_code", "snapshot"}
-                and type(stage["ordinal"]) is int and stage["ordinal"] == ordinal
-                and type(stage["snapshot"]) is dict and stage["snapshot"]["service"] == "enrichr"
-                and type(stage["snapshot"]["content_ref"]) is str
-                and re.fullmatch(r"artifact_[a-f0-9]{64}", stage["snapshot"]["content_ref"]), "foreign_publication_conflict")
-            stage_refs.append(stage["snapshot"]["content_ref"])
-        final = stages[-1]["snapshot"]
-        bare_transport = deepcopy(transport)
-        bare_transport.pop("enrichr_protocol")
-        _require(stage_refs[-1] == source["artifact_ref"] and source["uri"] == final["url"]
-            and source["retrieved_at"] == final["retrieved_at"]
-            and _same(operands["request"], final["request"])
-            and _same(bare_transport, final["transport"]), "foreign_publication_conflict")
-        if reference == source["id"]:
-            return "source"
-        if reference == source["artifact_ref"]:
-            return "raw"
-        _require(reference == source["request_ref"] or reference in source.get("auxiliary_artifact_refs", [])
-            or reference in stage_refs, "foreign_publication_conflict")
-        return "private"
-    except ReportBoundaryError:
-        raise
-    except (ValueError, TypeError, KeyError, IndexError) as error:
-        raise _boundary("foreign_publication_conflict") from error
-
-
 def enrichr_reference_restriction(store, context, reference, namespace, *, initial_record_refs=(), private_only=False):
     """Return a negative verdict or defer; this function never grants access.
 
-    ``initial_record_refs`` comes only from the caller's original root input
-    selection. A Source seed is never expanded into an implicit File seed.
-    Contextless scope checks can request private-only restrictions so they do
-    not overturn File authority already established by a context-aware caller.
+    The committed-chain classifier that separated raw from private Enrichr
+    Files belonged to the deleted root publication records, so every reference
+    of a committed Enrichr publication is denied.
     """
     _require(type(private_only) is bool, "original_context_conflict")
     _require(type(initial_record_refs) in (list, tuple)
         and all(type(reference) is str for reference in initial_record_refs), "original_context_conflict")
-    kinds = {committed_enrichr_reference_kind(store, row, reference)
-        for row in matching_enrichr_publications(store, reference)}
-    if "private" in kinds:
-        return False
-    if "raw" not in kinds or private_only:
-        return None
-    from .episode_bindings import BindingContext
-    from .episodic_workflow.root import receiving_context
-    if namespace not in {None, "artifact"} or not (
-            isinstance(context, BindingContext)
-            or type(context) is receiving_context.BindingContext):
-        return False
-    try:
-        from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
-        from .episodic_workflow.root.episode_receipts import EpisodeReceipts
-        EpisodeReturnRecords(store, context.run_id, failure_prefix="enrichr_reference_").authenticate(
-            context, allow_unsaved=True)
-        if len(context.path) == 1 and reference in initial_record_refs:
-            return None
-        receipts = EpisodeReceipts.__new__(EpisodeReceipts)
-        receipts.store, receipts.db, receipts.run_id = store, store.db, context.run_id
-        return None if reference in set(receipts.known(context.episode_id)) else False
-    except (ValueError, TypeError, KeyError):
-        return False
+    return False if matching_enrichr_publications(store, reference) else None
 
 
-__all__ = ["validated_enrichr_source", "normalized_enrichr_outcome", "matching_enrichr_publications",
-    "committed_enrichr_reference_kind", "enrichr_reference_restriction"]
+__all__ = ["validated_enrichr_source", "matching_enrichr_publications",
+    "enrichr_reference_restriction"]
