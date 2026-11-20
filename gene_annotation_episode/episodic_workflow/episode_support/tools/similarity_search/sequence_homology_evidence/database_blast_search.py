@@ -422,7 +422,7 @@ def _observations(store, report, grading, grading_ref, result_ref, source_ref, q
     (``native_correspondence.read_details`` scores the graded cell of each held ``comparison`` observation), in the shape the
     registry's ``_import_blast`` gives them (without its taxon terms and processing context). An alignment that
     cannot be projected is counted, never hidden: ``(observation refs, reference refs, unprojected alignment count)``."""
-    query_unit, reference_unit, model_unit = blast_search.PROGRAM_UNITS[program]
+    _, reference_unit, model_unit = blast_search.PROGRAM_UNITS[program]
     parsed = blast_search.document(report)
     observations, references, unprojected = [], [], 0
     for hit_index, hit in enumerate(parsed['search'].get('hits', [])):
@@ -455,10 +455,12 @@ def _observations(store, report, grading, grading_ref, result_ref, source_ref, q
                                              **{name: number(value) for name, value in row['measurements'].items()}),
                 'dependencies': [query_ref, reference['id']],
                 'operand_intervals': [
-                    {'role': 'query', 'subject_ref': query_ref, 'start': start, 'end': end, 'unit': query_unit,
+                    {'role': 'query', 'subject_ref': query_ref, 'start': start, 'end': end,
+                     'unit': store.subject_unit(query_ref),
                      'model_unit': model_unit},
                     {'role': 'reference', 'subject_ref': reference['id'], 'start': reference_start,
-                     'end': reference_end, 'unit': reference_unit, 'model_unit': model_unit}],
+                     'end': reference_end, 'unit': store.subject_unit(reference['id']),
+                     'model_unit': model_unit}],
                 'native_blast': row['native_blast']}, origin='tool')['id'])
     return observations, references, unprojected
 
