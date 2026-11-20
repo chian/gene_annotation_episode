@@ -1,48 +1,37 @@
-"""What the commissioning launch parent gives (carried from ``from_parent.py``, ``from_parent_launch.py`` and the
-request message).
+"""What the commissioning launch parent gives: where the job runs, its query in custody, the parameters of the
+service's request the parent fixed, and the credit the handoff earns.
 
-Old assignment properties, under the same names: ``version`` (``api_execution_assignment_v1`` or
-``api_service_assignment_v1``), ``service``, ``algorithm``, ``database``, ``resource_id``. The old code re-read the
-parent launch's own assignment (``requests``, ``immutable_input_versions``, ``constraints``,
-``launch_instructions``) and the parent's scientific task through ``services.scientific_parent_task``
-(``scientific_question``, ``selected_tool_info``, used for an ``ebi_hmmer`` request): in the final form the parent
-copies what this episode reads into the assignment (``msg_to_child``), so each is a field here. Fields the old code
-did not have are listed in the carry-over record as new fields: ``scope``, ``request``, ``input_refs``,
-``completion_target``.
-"""
-from method_loop import ChoiceField, Field, RecordForm
+Every field is controlled data: ids, record references, a number, and ``fixed_request``, whose names are parameters
+of the service's request form and whose values ``task.action`` holds the built request to. The old assignment
+(``api_execution_assignment_v1`` / ``api_service_assignment_v1``: ``version``, ``service``, ``algorithm``,
+``database``, ``resource_id``, and the parent launch's ``requests`` re-read through the old runner) reaches this
+form as: ``service`` and ``resource_id`` under the same names; the request's sequence subject as
+``query_subject_refs`` (the old code read it from the Store by reference); its program (old ``algorithm``),
+database and hit-list size, where the parent fixed them, in ``fixed_request``. ``completion_target`` is the
+parent's ``handoff_unit``. Not carried: ``version`` (it only decided whether the old ``wait`` action was offered),
+``scope`` and ``immutable_input_versions`` (custody passes the records), the ``initial_report`` message and the
+``ebi_hmmer`` task fields (``scientific_question``, ``selected_tool_info``: no route to that service is bound).
 
-VERSIONS = ('api_execution_assignment_v1', 'api_service_assignment_v1')
+This is the only place the assignment is read."""
+from method_loop import Field, RecordForm
 
 ASSIGNMENT_FORM = RecordForm({
-    'scope': Field('record', 'The subject scope fixed by the commissioning parent'),
-    'version': ChoiceField('text', 'The assignment version; the service-job version permits waiting', VERSIONS),
-    'service': Field('text', 'The configured API service that carries out the work'),
-    'algorithm': Field('text', 'The service algorithm, when the service has one', required=False),
-    'database': Field('text', 'The service database, when the service has one', required=False),
-    'resource_id': Field('text', 'The configured API resource that runs the work'),
-    'request': Field('record', "The parent's request for this resource, in the service's request form"),
-    'input_refs': Field('record_refs', 'The input records the request names, passed in custody'),
-    'immutable_input_versions': Field('record', 'The input versions that stay fixed while the work runs'),
-    'launch_instructions': Field('record', 'The launch instruction selection chosen for this assignment',
+    'resource_id': Field('text', 'The resource of the job service the job is submitted on (a bound API route)'),
+    'service': Field('text', 'The public web service of that resource, by its name'),
+    'query_subject_refs': Field('record_refs', 'The one sequence subject that is the query of the job'),
+    'input_refs': Field('record_refs', "The records the query is read from: the subject's sequence artifact"),
+    'fixed_request': Field('record', "The parameters of the service's request the parent fixed, by parameter "
+                                     'name (empty when it fixed none); the rest is built in this episode'),
+    'launch_instructions': Field('record', 'The launch instruction sections the parent selected for this job',
                                  required=False),
-    'scientific_question': Field('record', "The parent's scientific question, shown for an ebi_hmmer request",
-                                 required=False),
-    'selected_tool_info': Field('record', "The parent's selected tool information, shown for an ebi_hmmer request",
-                                required=False),
-    'completion_target': Field('number', 'The credit one verified handoff earns: the commission is complete there'),
+    'completion_target': Field('number', 'The credit the established handoff earns: the commission is complete '
+                                         'there'),
 })
 
 
 def read_from_parent(assignment, message):
-    """The parent input: every assignment field (``None`` for an omitted optional one) and the message's values."""
-    return {'version': assignment['version'], 'service': assignment['service'],
-            'algorithm': assignment.get('algorithm'), 'database': assignment.get('database'),
-            'resource_id': assignment['resource_id'], 'scope': assignment['scope'],
-            'request': assignment['request'], 'input_refs': list(assignment['input_refs']),
-            'immutable_input_versions': assignment['immutable_input_versions'],
+    query, = assignment['query_subject_refs']
+    return {'resource_id': assignment['resource_id'], 'service': assignment['service'], 'query_subject_ref': query,
+            'fixed_request': dict(assignment['fixed_request']),
             'launch_instructions': assignment.get('launch_instructions'),
-            'scientific_question': assignment.get('scientific_question'),
-            'selected_tool_info': assignment.get('selected_tool_info'),
-            'completion_target': assignment['completion_target'],
-            'initial_report': message['initial_report']}
+            'completion_target': assignment['completion_target']}

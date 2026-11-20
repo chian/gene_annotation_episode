@@ -39,8 +39,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.prompt
     INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.sequence_homology_evidence.action_transport import (
-    decode_response, generation_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.strict_output import (
+    decode_strict_output, strict_output_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resource_records import (
     CAPABILITY_SCHEMA, RESOURCE_ROLES, _validate, obj)
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
@@ -51,6 +51,9 @@ from .goal import GOAL
 
 CHILD_SLOTS = {}
 SERVICES = ('resource_adapter', 'native_events')
+# How the action schema travels to the model: the model endpoint takes no open object, so a record whose fields the
+# schema leaves open travels as JSON text and is decoded in ``action``.
+TRANSPORT = {'open_records_as_text': True, 'argument_transport_error': 'a101_tool_argument_transport_unsupported'}
 ADAPTER = 'resource_adapter'
 EVENTS = 'native_events'
 
@@ -263,7 +266,7 @@ def decide(summary, feedback, ctx):
         return ToolCall('prepare_resource_assignment', {'assignment': summary['assignment'],
                                                         'scope': summary['scope']})
     return ModelRequest('REASONING', _instructions(), _context(summary, feedback, ctx),
-                        generation_schema(_schema(_catalog(summary, ctx))))
+                        strict_output_schema(_schema(_catalog(summary, ctx)), **TRANSPORT))
 
 
 def _named_refs(value):
@@ -295,7 +298,7 @@ def _empty_commit(selection, commit_schema):
 def action(response, summary, records, ctx):
     schema = _schema(_catalog(summary, ctx))
     try:
-        selection = decode_response(response, schema)['selection']
+        selection = decode_strict_output(response, schema, **TRANSPORT)['selection']
         Draft202012Validator(schema['properties']['selection']).validate(selection)
         unheld = [ref for ref in _named_refs(selection) if not records.holds(ref)]
         if unheld:

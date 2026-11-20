@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A101 plan: BLAST uses, grading chain, regions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { --bg:#fbfbfa; --fg:#1d1f21; --muted:#5c6168; --line:#d9dbde; --card:#ffffff;
+          --none:#e8e9eb; --designed:#cfe0f5; --built:#f3e2a9; --real:#bfe3c4; --verified:#7fc48a; --blocked:#f0c2bd; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#17181a; --fg:#e6e7e8; --muted:#9aa0a6; --line:#34373b; --card:#1f2124;
+            --none:#2c2f33; --designed:#27405f; --built:#5e4f1d; --real:#25533a; --verified:#2f7a45; --blocked:#6a2f2a; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:28px 32px 80px; background:var(--bg); color:var(--fg);
+         font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; max-width:1280px; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  h2 { font-size:18px; margin:36px 0 8px; padding-top:12px; border-top:1px solid var(--line); }
+  h3 { font-size:15px; margin:18px 0 6px; }
+  .sub { color:var(--muted); margin:0 0 14px; max-width:900px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px 14px; }
+  .legend { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 4px; }
+  .chip { display:inline-block; padding:1px 9px; border-radius:999px; border:1px solid var(--line);
+          font-size:12.5px; white-space:nowrap; }
+  .s-none { background:var(--none); } .s-designed { background:var(--designed); }
+  .s-built { background:var(--built); } .s-real { background:var(--real); }
+  .s-verified { background:var(--verified); } .s-blocked { background:var(--blocked); }
+  table { border-collapse:collapse; width:100%; }
+  th, td { border:1px solid var(--line); padding:6px 8px; text-align:left; vertical-align:top; font-size:13.5px; }
+  th { background:var(--card); position:sticky; top:0; }
+  td.cell { min-width:92px; text-align:center; }
+  td.cell small { display:block; color:var(--muted); font-size:11.5px; margin-top:2px; }
+  .who-owner { background:#d8ecd8; } .who-me { background:#f6dfc4; }
+  @media (prefers-color-scheme: dark) { .who-owner { background:#244a2c; } .who-me { background:#5a4020; } }
+  ul.tree, ul.tree ul { list-style:none; margin:0; padding-left:20px; border-left:1px dashed var(--line); }
+  ul.tree { border-left:none; padding-left:0; }
+  ul.tree li { margin:6px 0; }
+  .node { display:inline-block; padding:4px 10px; border:1px solid var(--line); border-radius:6px; background:var(--card); }
+  .node b { font-weight:600; }
+  .note { color:var(--muted); font-size:13px; display:block; margin-top:2px; max-width:900px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:900px) { .two { grid-template-columns:1fr; } }
+  .small { font-size:12.5px; color:var(--muted); }
+  code { font-family:ui-monospace,Menlo,monospace; font-size:12.5px; }
+</style>
+</head>
+<body>
+
+<h1 id="title"></h1>
+<p class="sub" id="purpose"></p>
+<div class="legend" id="legend"></div>
+<p class="small" id="rules"></p>
+
+<h2>1. Where the BLAST uses stand: use by stage</h2>
+<p class="sub">Each cell is a status backed by evidence. A cell turns green only after a real run; nothing is owner-verified yet.</p>
+<div id="matrix"></div>
+
+<h2>2. The A101 tree and the intent of each episode</h2>
+<p class="sub">One plain sentence per episode, as understood now. Every intent is unverified until you confirm it.</p>
+<div id="tree"></div>
+
+<h2>3. Decisions</h2>
+<p class="sub">What you said (dated, with its reason), kept apart from what I inferred. Inferences are proposals until you accept them.</p>
+<div id="decisions"></div>
+
+<h2>4. Work items, leaves up</h2>
+<p class="sub">Status changes only with evidence. “Prediction” is written before a run; outcome after.</p>
+<div id="work"></div>
+
+<h2>5. Open questions</h2>
+<div id="questions"></div>
+
+<h2>6. How work is carried out</h2>
+<div id="method" class="card"></div>
+
+<script type="application/json" id="plan">
+{
+ "title": "A101 plan: BLAST uses, the grading chain, and functional regions",
+ "date": "2026-11-20",
+ "purpose": "One record of the ideas, decisions, status and next work for A101 sequence homology, so that the plan can be assessed visually and carried out. This file is the single source of truth: the data below is read by the page and by Claude. It is separate from the evidence-axis ledger, which records verified status; an item moves there only after owner verification.",
+ "rules": "Rules: (1) A decision is marked 'owner' only if the owner said it; my inferences are marked 'inference' and stay proposals. (2) A status moves only with evidence (run directory). (3) Old code is read for intention only; everything is built in the new paradigm.",
+ "status_legend": [
+  ["none", "not started"],
+  ["designed", "designed in discussion, no code"],
+  ["built", "code exists, not run for real"],
+  ["real", "run for real, evidence kept"],
+  ["verified", "owner-verified"],
+  ["blocked", "blocked on a decision or dependency"]
+ ],
+ "matrix": {
+  "stages": ["commission", "job built", "launch (resource)", "monitor", "fetch", "grade", "subscore", "credit", "return", "reachable from head"],
+  "rows": [
+   {"kind": "Pairwise BLAST (1 vs 1: which residues align)",
+    "cells": [
+      ["built", "declared kind in the results commission"],
+      ["real", "own pairwise job contract, compiled"],
+      ["real", "local, run_a101_real_pairwise_chain_7"],
+      ["designed", "status check only inside results; monitor episode untested"],
+      ["real", "report file only"],
+      ["real", "pairwise sheet"],
+      ["real", "score route accepts it"],
+      ["real", "earned once at grading"],
+      ["real", "controlled features, E-value as context"],
+      ["blocked", "head commission builders do not exist"]
+    ]},
+   {"kind": "Database search (1 vs a reference set: identification)",
+    "cells": [["none",""],["none",""],["none",""],["none",""],["none",""],["none","whole hit list, taxa, source, representation"],["none","Bayesian-style identification"],["none",""],["none",""],["none",""]]},
+   {"kind": "All-vs-all (set vs same set: relationships, clusters)",
+    "cells": [["designed","set operand, thresholds"],["none",""],["none","cluster resource for large sets"],["none",""],["none",""],["designed","graph grader"],["designed","target-centric family-context sheet"],["none",""],["none",""],["none",""]]},
+   {"kind": "Database or data preparation (masking, makeblastdb, utilities)",
+    "cells": [["none",""],["none",""],["none",""],["none",""],["blocked","result families are NotImplementedError stubs"],["none","no evidence sheet by design"],["none","none by design"],["none","earned for a usable prepared database"],["none","prepared-database record"],["none",""]]},
+   {"kind": "Region confirmation (functional regions of an exemplar checked in the target)",
+    "cells": [["designed","consumes region records by reference"],["none",""],["none",""],["none",""],["none",""],["designed","per-region facts: confirmed / denied / indeterminate"],["designed","two certainties kept apart"],["designed","gain in certainty, symmetric"],["designed",""],["none",""]]}
+  ]
+ },
+ "tree": [
+  {"name": "sequence_homology_evidence (the A101 head)", "status": "built",
+   "intent": "Owns sequence-similarity evidence: commissions children, reads their graded results and earns credit from them through the native correspondence scoring.",
+   "note": "Offers only some children to its model. The two resource children are never offered. Its 'literature' slot points to a subtree that is deleted on purpose.",
+   "children": [
+    {"name": "execution_job_submission", "status": "built",
+     "intent": "Choose a concrete launch request and commission a launch child on one explicit resource.",
+     "note": "The head can only build the BLAST API request as a controlled commission today.",
+     "children": [
+      {"name": "api_job_execution (leaf)", "status": "none", "intent": "Build the request, submit it once to the public web service, and establish a usable monitoring and results handoff.", "note": "Not run for real yet. Needs the public NCBI service."},
+      {"name": "hpc_job_execution (leaf)", "status": "none", "intent": "Write and run shell commands on the HPC resource to prepare, submit and observe the job until a usable handoff or the job's outputs exist.", "note": "Not run for real yet. Needs Aurora and the owner's authenticated master connection."},
+      {"name": "local_job_execution (leaf)", "status": "real", "intent": "Launch the assigned job as a detached local job and return its handoff record; the episode ends at handoff.", "note": "Ran for real (run_a101_real_L1_local_job_execution, and with a compiled pairwise BLAST command). It launches the job unchanged; it does not build jobs."}
+     ]},
+    {"name": "execution_progress_assessment", "status": "built",
+     "intent": "Monitor one already-launched job through its handoff (status, logs); it never fetches results.",
+     "note": "Not run for real as its own episode.", "children": []},
+    {"name": "execution_result_acquisition", "status": "real",
+     "intent": "Acquire the results of one handed-off job through the job service and grade them; the sheet stays in this episode, the parent gets controlled features and a reference.",
+     "note": "The local pairwise BLAST path is run for real. Other result families (masking, utility, standard and custom database, HMMER preparation, HMMER other than phmmer, API, local file source, wait) still raise NotImplementedError, which AGENTS.md forbids.", "children": []},
+    {"name": "resource_work_submission", "status": "blocked",
+     "intent": "Under review. The old role chose among API, local and HPC resources and had the chosen child prepare, submit and check the receiving interface through the resource's tools. How it differs from the execution family is unresolved.",
+     "note": "Not reachable from the head. Its forms carry an open job_request, which breaks controlled messaging.",
+     "children": [
+      {"name": "api_resource_work_execution (leaf)", "status": "blocked", "intent": "Same carried-over intent for an API resource; goal text still the unclear carried-over sentences.", "note": ""},
+      {"name": "hpc_resource_work_execution (leaf)", "status": "blocked", "intent": "Same carried-over intent for an HPC resource; goal text still the unclear carried-over sentences.", "note": ""},
+      {"name": "local_resource_work_execution (leaf)", "status": "blocked", "intent": "Carry out the parent's job on the one local resource it selected and end with a usable handoff: prepare, submit, and check that results can be received. Goal text rewritten 2026-11-20, unverified.", "note": "Task still calls resource-adapter functions the system no longer has. Needs a controlled job request and a rewrite in the new scheme."}
+     ]},
+    {"name": "resource_result_acquisition (leaf)", "status": "blocked",
+     "intent": "Acquire the requested data through the supplied receiving interface; the parent interprets it.", "note": "Not reachable from the head. Unverified intent.", "children": []},
+    {"name": "literature (deleted)", "status": "none",
+     "intent": "The A101 published-evidence subtree is deleted on purpose (owner, 2026-11-20). A101 does not read literature; region and exemplar evidence comes from the experimental axes.", "note": "", "children": []}
+   ]}
+ ],
+ "decisions": [
+  {"id": "D1", "who": "owner", "date": "2026-11-20", "text": "Test for real, not with pytest. Test each subtree leaf to root and make it work slowly: predict, run, inspect the evidence, learn, then decide the next change. Running a leaf is not a test; judge it against its intention.", "why": "Mocked or synthetic passes hide the failures that matter."},
+  {"id": "D2", "who": "owner", "date": "2026-11-20", "text": "Old code is only read for its intentions and intended functions. Everything is built in the new organization and paradigm; nothing from the old runner is implemented or repaired.", "why": "The carry-over was not faithful; the old machinery is not wanted."},
+  {"id": "D3", "who": "owner", "date": "2026-11-20", "text": "The A101 literature subtree stays deleted for now.", "why": "Intentional."},
+  {"id": "D4", "who": "owner", "date": "2026-10-24", "text": "Every tool needs a deterministic grader. The grader fills slots of the tool's scoring sheet from what the tool reported; the sheet's scorer computes from the filled slots. Transformations of raw BLAST numbers live inside the grader.", "why": "A clear line between grader and sheet prevents spaghetti."},
+  {"id": "D5", "who": "owner", "date": "2026-10-27", "text": "The same analysis uses the same scoring sheet with a different parser per format or source. No separate sheets for the same or near-identical algorithms.", "why": "Otherwise the same thing is scored two ways."},
+  {"id": "D6", "who": "owner", "date": "2026-11-20", "text": "BLAST has several uses: pairwise (residue correspondence), database search (identification), all-vs-all (relationships and clusters; does not exist yet and must be reasoned out), and preparation (masking, utilities, databases: setup for later work). Database setup and cluster jobs make most sense for custom databases and large-scale clustering.", "why": "The use decides the job, the resource, the grader and whether any evidence sheet exists."},
+  {"id": "D7", "who": "owner", "date": "2026-10-24", "text": "Pairwise answers how many residues align and which. A database search is for identification and needs the whole hit list scored Bayesian-style, with adjustments such as how often a function is in the database, the taxa of the hits and whether they cohere, and the source (metagenome vs cultured or closed genome). Deterministic, no model, built once as functions. Database BLAST is not run locally.", "why": "Machine limits; repeatable intelligence belongs in code."},
+  {"id": "D8", "who": "owner", "date": "2026-11-20", "text": "E-value is meaningful in context. For pairwise the primary measure is residue correspondence, and E-value is recorded with the search space the report gives.", "why": "Corrects my earlier reading that it is meaningless."},
+  {"id": "D9", "who": "owner", "date": "2026-11-20", "text": "The kind of BLAST use is declared in the commission and also derived from the job as a validation; a mismatch fails with its error.", "why": "Routing is deterministic and a wrong commission is caught at the first point it can be seen."},
+  {"id": "D10", "who": "owner", "date": "2026-11-20", "text": "No honoring or writing of stdout/stderr paths. Make the job work for the grader.", "why": "The grader needs the report only."},
+  {"id": "D11", "who": "owner", "date": "2026-11-20", "text": "Regions confirm that key functions or sequence features exist; a region does not make a better hit, and small regions have little scoring power. The regions and the reference sequence are defined from outside and need an experimental anchor; they should not come from the sequence-homology tools.", "why": "Functional aspects need an experimental basis."},
+  {"id": "D12", "who": "owner", "date": "2026-11-20", "text": "Region certainty: a region on a close homolog counts more than on a distant exemplar because the mapping is more certain; a region that holds across many exemplars in an alignment counts more again. A chain to something certain to map to is strong. A single distant sequence carries two uncertainties: is it the same function, and did the regions line up.", "why": "Mapping certainty and functional equivalence are different things."},
+  {"id": "D13", "who": "owner", "date": "2026-11-20", "text": "Region confirmation can both raise and lower support, because it can deny a region (possible when sequences are far enough apart).", "why": "A denial is information."},
+  {"id": "D14", "who": "owner", "date": "2026-11-20", "text": "Credit is progress. Lowering support still earns credit, because knowledge is now sharper.", "why": "Credit and support are separate measures."},
+  {"id": "D15", "who": "owner", "date": "2026-11-20", "text": "Credit for regions is not yet settled: either a new axis unifies it, or credit is shared, with A105/A106 credited for evidencing regions and A101 credited for region confirmation by alignment.", "why": "Open design."},
+  {"id": "I1", "who": "inference", "date": "2026-11-20", "text": "A functional region is a shared record type (controlled fields only: exemplar sequence, position or interval, expected residues, role from a fixed vocabulary, perturbation type, effect direction, evidence type, source observation reference), produced by the experimental axes and by any axis that has the anchor, and consumed by a region-confirmation check. It is not itself a new axis.", "why": "A region adds specificity to existing experimental evidence."},
+  {"id": "I2", "who": "inference", "date": "2026-11-20", "text": "The producer runs a numbering check: the stated residue at the stated position must match the exemplar sequence, or the record is unresolved.", "why": "Source numbering often differs from the sequence record."},
+  {"id": "I3", "who": "inference", "date": "2026-11-20", "text": "Region confirmation reports confirmed, denied or indeterminate, with mapping certainty and functional-equivalence certainty kept as separate recorded quantities, plus the count of independent exemplars. Indeterminate earns nothing and does not count as denial.", "why": "Failing to align is not evidence of absence."},
+  {"id": "I4", "who": "inference", "date": "2026-11-20", "text": "Credit for a region question is the gain in certainty over what was already known, symmetric for confirmed and denied. Repeating a held determination earns nothing. Credit falls only when an established fact is lost.", "why": "Follows from D14 and prevents confirmation bias."},
+  {"id": "I5", "who": "inference", "date": "2026-11-20", "text": "Joint region credit is earned only when both an experimental anchor and a mapped target exist for the same region, as a product-like term, with an increment-only rule against double counting the base evidence.", "why": "Keeps each episode's credit its own and removes a gaming route. One of the options under D15."},
+  {"id": "I6", "who": "inference", "date": "2026-11-20", "text": "Near-duplicate exemplars are not independent support. All-vs-all clustering is the way to count independent exemplars.", "why": "Repeated results add no independent vote (D5 principle)."},
+  {"id": "I7", "who": "inference", "date": "2026-11-20", "text": "All-vs-all is a data product (similarity graph) until read relative to a target. Stages: job, graph grader, clustering step, target-centric family-context sheet and subscore. The large graph stays a retained artifact; only controlled features move upward. A run with missing pieces is incomplete, never zero hits.", "why": "Reasoned from the nature of the analysis; to be confirmed."}
+ ],
+ "work": [
+  {"id": "W1", "title": "local_job_execution leaf: real run", "status": "real", "depends": [], "owner": "done", "evidence": "run_a101_real_L1_local_job_execution", "prediction": "", "note": "Launched a real detached job, credit 4.0, ended by the yield controller, resume asked no model."},
+  {"id": "W2", "title": "Pairwise BLAST through result acquisition (fetch, grade, features, credit, kind check)", "status": "real", "depends": ["W1"], "owner": "done", "evidence": "run_a101_real_pairwise_chain_7 (earlier runs 1, 4 showed the same path)", "prediction": "", "note": "Edits are uncommitted and were reverted once for unknown reasons, then re-applied. A checkpoint commit is an owner decision."},
+  {"id": "W3", "title": "Decide how the launch leaf carries the A101 pairwise job (parent holds the full job, tied by request digest, or the launch validation learns the job)", "status": "blocked", "depends": ["W2"], "owner": "owner decision", "evidence": "", "prediction": "", "note": "See question Q1."},
+  {"id": "W4", "title": "Monitor episode: real run on a pairwise job handoff", "status": "none", "depends": ["W2"], "owner": "me or a fork", "evidence": "", "prediction": "To be written before the run.", "note": ""},
+  {"id": "W5", "title": "api_job_execution leaf: real run against the public NCBI BLAST service", "status": "none", "depends": [], "owner": "me or a fork", "evidence": "", "prediction": "To be written before the run.", "note": "Real network."},
+  {"id": "W6", "title": "hpc_job_execution leaf: real run on Aurora", "status": "none", "depends": [], "owner": "owner must authenticate first", "evidence": "", "prediction": "", "note": "Never authenticate or replace the master connection myself."},
+  {"id": "W7", "title": "Head commission builders for the pairwise kind (launch, monitor, results with declared kind, operands in custody)", "status": "none", "depends": ["W2", "W3", "W4"], "owner": "me or a fork", "evidence": "", "prediction": "", "note": "Head currently builds none of this."},
+  {"id": "W8", "title": "Parents: execution_job_submission, then the head, tested for real with real children", "status": "none", "depends": ["W5", "W7"], "owner": "me or a fork", "evidence": "", "prediction": "", "note": "Known open defect in the ledger: unsupported score profile for a pairwise alignment observation."},
+  {"id": "W9", "title": "Resolve the purpose of resource_work_submission vs the execution family; then rewrite its leaves (local first) with a controlled job request in the new scheme", "status": "blocked", "depends": [], "owner": "owner decision", "evidence": "", "prediction": "", "note": "See question Q2."},
+  {"id": "W10", "title": "Database search kind end to end (hosted and custom database; API and HPC parsers; whole-hit-list grader; identification subscore)", "status": "none", "depends": ["W2"], "owner": "design then build", "evidence": "", "prediction": "", "note": "Needs a prepared-database record for custom databases (W11)."},
+  {"id": "W11", "title": "Database preparation kind; replace or delete the NotImplementedError stubs per AGENTS.md", "status": "none", "depends": [], "owner": "design then build", "evidence": "", "prediction": "", "note": "Result families still stubbed: masking, utility, standard and custom database, HMMER preparation, HMMER other than phmmer, API, local file source, wait."},
+  {"id": "W12", "title": "All-vs-all: design, then build a small local set first (graph grader, clustering step, target-centric sheet)", "status": "designed", "depends": ["W2"], "owner": "design then build", "evidence": "", "prediction": "", "note": "See decision I7."},
+  {"id": "W13", "title": "Region check back half: reference + region record + target in custody, alignment chain, per-region facts, sheet; test with a real documented example", "status": "designed", "depends": ["W2"], "owner": "me or a fork", "evidence": "", "prediction": "To be written before the run.", "note": "Needs the region record fields settled (Q4)."},
+  {"id": "W14", "title": "Region records: shared type and emission by A105/A106 (and other axes with an anchor)", "status": "blocked", "depends": [], "owner": "waiting on the read-only research of A105/A106", "evidence": "", "prediction": "", "note": ""},
+  {"id": "W15", "title": "Region credit design (shared, joint, or new axis)", "status": "blocked", "depends": ["W13", "W14"], "owner": "owner decision", "evidence": "", "prediction": "", "note": "See D15, I4, I5."},
+  {"id": "W16", "title": "Who supplies the yield-profile settings in a real run (launch leaf and results episode both look up a per-class profile)", "status": "blocked", "depends": [], "owner": "owner decision", "evidence": "", "prediction": "", "note": "Test worlds define them; a real run must too."},
+  {"id": "W17", "title": "Old shared-contract pairwise family in results stays unplaced", "status": "none", "depends": [], "owner": "decide or delete", "evidence": "", "prediction": "", "note": "A101 now has its own pairwise job contract; the shared contract was not changed."}
+ ],
+ "questions": [
+  {"id": "Q1", "who": "owner", "text": "The launch leaf's job validation knows only a generic command or the shared native jobs, so the launch carried the compiled command alone. Does the parent keep the full pairwise job for the results commission (tied by request digest), or should the launch validation learn the A101 pairwise job?"},
+  {"id": "Q2", "who": "owner", "text": "What is resource_work_submission for, and how does it differ from execution_job_submission? It is not reachable from the head and its forms carry an open job request."},
+  {"id": "Q3", "who": "owner", "text": "'Far enough away' for denial: local denial (flanks align reliably on both sides but the key residues are gone or substituted), distance denial (too divergent to expect the region to transfer), or both?"},
+  {"id": "Q4", "who": "owner", "text": "Region records: accept the shared-record-type view (I1), and decide where it is produced and which controlled fields it carries. Waiting on the read-only research of A105 and A106."},
+  {"id": "Q5", "who": "owner", "text": "Are curated active-site, domain and motif resources acceptable as grounding for regions alongside literature? Is region confirmation an A101 child or shared with the structure axis?"},
+  {"id": "Q6", "who": "owner", "text": "Commit a checkpoint of the A101 work? Source edits were reverted once without a known cause."},
+  {"id": "Q7", "who": "me", "text": "Does the head's commission of results carry the pairwise job's operand records in custody? To be answered when the head builders are designed (W7)."}
+ ],
+ "method": [
+  "Each work item gets a brief: scope, what it depends on, a prediction written before the run, how to run it for real, and what counts as done.",
+  "Run through the single-workflow launcher (one workload at a time, confirm it exited), outputs under runs/, scripts outside the source tree. No pytest.",
+  "After each run read the evidence, not the exit status: journal units, the model's decisions, handoff and check rows, the saved sheet, credit, the returned fields, and whether resume asks the model nothing.",
+  "A status changes only with a run directory as evidence. Owner-verified items move to the evidence-axis ledger by its own rules.",
+  "Work is delegated to forks with a brief like the above; the main conversation stays free for planning. Only one fork runs workflows at a time in this window."
+ ]
+}
+</script>
+
+<script>
+(function () {
+  const plan = JSON.parse(document.getElementById('plan').textContent);
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const label = Object.fromEntries(plan.status_legend);
+  const chip = (s) => el('span', 'chip s-' + s, label[s] || s);
+
+  document.getElementById('title').textContent = plan.title + ' (' + plan.date + ')';
+  document.getElementById('purpose').textContent = plan.purpose;
+  document.getElementById('rules').textContent = plan.rules;
+  const lg = document.getElementById('legend');
+  plan.status_legend.forEach(([s, t]) => lg.appendChild(el('span', 'chip s-' + s, t)));
+
+  // matrix
+  const mt = el('table'); const hr = el('tr'); hr.appendChild(el('th', null, 'Use'));
+  plan.matrix.stages.forEach(s => hr.appendChild(el('th', null, s))); mt.appendChild(hr);
+  plan.matrix.rows.forEach(r => {
+    const tr = el('tr'); tr.appendChild(el('th', null, r.kind));
+    r.cells.forEach(([s, t]) => { const td = el('td', 'cell s-' + s, label[s]); if (t) td.appendChild(el('small', null, t)); tr.appendChild(td); });
+    mt.appendChild(tr);
+  });
+  document.getElementById('matrix').appendChild(mt);
+
+  // tree
+  function build(nodes) {
+    const ul = el('ul', 'tree');
+    nodes.forEach(n => {
+      const li = el('li'); const box = el('div', 'node');
+      const b = el('b', null, n.name); box.appendChild(b); box.appendChild(document.createTextNode(' ')); box.appendChild(chip(n.status));
+      li.appendChild(box); li.appendChild(el('span', 'note', n.intent));
+      if (n.note) li.appendChild(el('span', 'note', 'Note: ' + n.note));
+      if (n.children && n.children.length) { const sub = build(n.children); sub.className = ''; sub.style.cssText = ''; const w = el('ul'); w.className = 'tree'; w.style.borderLeft = '1px dashed var(--line)'; w.style.paddingLeft = '20px'; while (sub.firstChild) w.appendChild(sub.firstChild); li.appendChild(w); }
+      ul.appendChild(li);
+    });
+    return ul;
+  }
+  document.getElementById('tree').appendChild(build(plan.tree));
+
+  // decisions
+  const dt = el('table'); const dh = el('tr');
+  ['Id', 'Who', 'Date', 'Decision', 'Reason'].forEach(h => dh.appendChild(el('th', null, h))); dt.appendChild(dh);
+  plan.decisions.forEach(d => { const tr = el('tr'); tr.appendChild(el('td', null, d.id));
+    tr.appendChild(el('td', 'who-' + (d.who === 'owner' ? 'owner' : 'me'), d.who));
+    tr.appendChild(el('td', null, d.date)); tr.appendChild(el('td', null, d.text)); tr.appendChild(el('td', null, d.why)); dt.appendChild(tr); });
+  document.getElementById('decisions').appendChild(dt);
+
+  // work
+  const wt = el('table'); const wh = el('tr');
+  ['Id', 'Work item', 'Status', 'Depends on', 'Who', 'Evidence / prediction / note'].forEach(h => wh.appendChild(el('th', null, h))); wt.appendChild(wh);
+  plan.work.forEach(w => { const tr = el('tr'); tr.appendChild(el('td', null, w.id)); tr.appendChild(el('td', null, w.title));
+    const st = el('td'); st.appendChild(chip(w.status)); tr.appendChild(st);
+    tr.appendChild(el('td', null, w.depends.join(', ') || '-')); tr.appendChild(el('td', null, w.owner));
+    const parts = [w.evidence && 'Evidence: ' + w.evidence, w.prediction && 'Prediction: ' + w.prediction, w.note].filter(Boolean).join(' | ');
+    tr.appendChild(el('td', null, parts)); wt.appendChild(tr); });
+  document.getElementById('work').appendChild(wt);
+
+  // questions
+  const qt = el('table'); const qh = el('tr'); ['Id', 'Answers', 'Question'].forEach(h => qh.appendChild(el('th', null, h))); qt.appendChild(qh);
+  plan.questions.forEach(q => { const tr = el('tr'); tr.appendChild(el('td', null, q.id)); tr.appendChild(el('td', 'who-' + (q.who === 'owner' ? 'owner' : 'me'), q.who)); tr.appendChild(el('td', null, q.text)); qt.appendChild(tr); });
+  document.getElementById('questions').appendChild(qt);
+
+  // method
+  const ul = el('ul'); plan.method.forEach(m => ul.appendChild(el('li', null, m))); document.getElementById('method').appendChild(ul);
+})();
+</script>
+</body>
+</html>
+

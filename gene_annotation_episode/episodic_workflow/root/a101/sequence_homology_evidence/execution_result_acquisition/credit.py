@@ -1,19 +1,20 @@
-"""Credit: the old operational credit of the results role (``ExecutionEpisodeCredit._live_project_credit``).
+"""Credit: the operational credit of the results role.
 
-For a native byte selector it is ``acquired_record_unit * newly covered requested-byte fraction``: each requested byte
-position counts once, minus what the results already known at the start (the initial results) covered, and the
-fraction is the mean over the requested paths (binding ``execution_received_selector_coverage_credit_v2``; the
-``handoff_count`` term was fixed at 0). It is unbounded, never clamped and never rescaled.
+For the plain file results of a job it is ``acquired_record_unit * newly covered requested-byte fraction``: each
+requested byte position counts once, minus what the results already known at the start (the initial results the
+parent passed) covered, and the fraction is the mean over the requested paths. It is unbounded, never clamped and
+never rescaled. The windows are those of the result records the Episode holds: the summary reads every result
+acquisition, the initial ones and those of this Episode's own units, from its held record, so a status check, a
+refused fetch and a window of bytes already covered earn nothing.
 
-The coverage windows of every known result are in the summary (the tools returned them; the initial results were
-read through the held records), so no service is read. The other old credit views belong to classes that are in no
-place now (typed native families, API execution, local file sources): credit raises at the call that would have been
-made, not at its top."""
+A graded return earns the credit unit once, when its grading is saved. The other old credit views belong to classes
+that are in no place now (typed native families, API execution, local file sources): credit raises at the call that
+would have been made, not at its top."""
 import math
 
 
 def _covered(windows, start, end):
-    """The number of byte positions of ``[start, end)`` the windows cover once (old ``covered``)."""
+    """The number of byte positions of ``[start, end)`` the windows cover once."""
     intervals = sorted((max(start, window['offset']), min(end, window['offset'] + window['returned_bytes']))
                        for window in windows
                        if window['offset'] < end and window['offset'] + window['returned_bytes'] > start)
@@ -26,8 +27,9 @@ def _covered(windows, start, end):
 
 
 def selector_fraction(requested, results):
-    """The mean over the requested paths of the covered fraction of the requested interval (old
-    ``_generic_result_selector_progress``: the new part, the initial results subtracted)."""
+    """The mean over the requested paths of the newly covered fraction of the requested interval: what all held
+    results cover minus what the initial results covered. An interval without a requested length ends at the size
+    of the fetched file."""
     if not requested:
         return 0.0
     fractions = []

@@ -3,7 +3,7 @@ the seven child roles). The old ``admit_return`` / ``receive_report`` custody (s
 the receipts of child-form references, progress provider forms, native timing receipts, tool attributions) is
 machinery: the system admits the result against the child's own form and writes the ``returned`` receipts of the
 records its ``record_refs`` fields name. The old ``receive_progress`` of the monitor (reading every
-``episode_progress`` reference through the progress provider) is the monitor's own ``monitoring_progress_refs``
+``episode_progress`` reference through the progress provider) is the monitor's own ``check_refs``
 field here.
 
 The report is the child's credit (its productivity: whether to launch it again) and its controlled finding

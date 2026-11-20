@@ -1,10 +1,8 @@
 """The world of the graded BLAST return: a real Store with a protein target, a fetched native BLAST JSON2 result of
 that target (the synthetic native document of the A101 BLAST grader tests, three hits over a ten-residue query) and
-the entry input of the result acquisition episode that passes them. The libraries the decision reads (tool knowledge
-and launch instructions) are frozen from the axis's own folders. Nothing is faked."""
+the entry input of the result acquisition episode that passes them. Nothing is faked."""
 import hashlib
 import json
-from pathlib import Path
 
 from episode_runtime import BindingRegistry, RunJournal, link
 from episode_runtime.job_access import JobAccess
@@ -13,14 +11,10 @@ from gene_annotation_episode.model_provider import ModelProvider, load_config
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.blast_return_contracts import (
     BLAST_GRADED_REQUEST_VERSION)
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (
-    LaunchInstructions)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_job_route import LocalJobRoute
-from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import ToolKnowledge
 
 from ..episode import ExecutionResultAcquisition
 
-LIBRARY = Path(__file__).resolve().parents[5] / 'episode_support'
 PATH = ExecutionResultAcquisition.binding_path
 RESOURCE = 'ncbi_blast_api'
 QUERY = 'ACDEFGHIKL'
@@ -47,11 +41,7 @@ def native_document():
 
 
 def settings(directory):
-    knowledge = ToolKnowledge.freeze(directory / 'knowledge', source=LIBRARY / 'knowledge' / 'sequence_homology_evidence')
-    launch = LaunchInstructions.freeze(directory / 'launch',
-                                       source=LIBRARY / 'instructions' / 'launch' / 'sequence_homology_evidence')
-    return {'cost': 0.0, 'log_window_bytes': 4096, 'tool_knowledge_directory': str(knowledge.directory),
-            'launch_instructions_directory': str(launch.directory),
+    return {'log_window_bytes': 4096,
             'task_yield_profiles': {PROFILE_KEY: {'cutoff': 0.1, 'parameters': {'uncertainty_alpha': 0.05}}}}
 
 

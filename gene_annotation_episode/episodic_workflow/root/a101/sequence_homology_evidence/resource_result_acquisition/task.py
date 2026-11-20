@@ -40,8 +40,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.prompt
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.sequence_homology_evidence.action_transport import (
-    decode_response, generation_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.strict_output import (
+    decode_strict_output, strict_output_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resource_records import (
     CAPABILITY_SCHEMA, _validate, obj)
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
@@ -52,6 +52,9 @@ from .goal import GOAL
 
 CHILD_SLOTS = {}
 SERVICES = ('resources', 'native_events', 'instruction_libraries')
+# How the action schema travels to the model: the model endpoint takes no open object, so a record whose fields the
+# schema leaves open travels as JSON text and is decoded in ``action``.
+TRANSPORT = {'open_records_as_text': True, 'argument_transport_error': 'a101_tool_argument_transport_unsupported'}
 
 HISTORY_SPAN = ('On a fresh provider conversation,', 'Do not execute native provider tools.')
 OWN_OUTCOMES_TEXT = ('Your own earlier units are listed in own_outcomes and the last one in full in last_outcome. '
@@ -168,7 +171,7 @@ def decide(summary, feedback, ctx):
     schema = _selection_schema(catalog, summary['reasoning_schema'])
     return ModelRequest('REASONING', instructions(has_knowledge=knowledge is not None,
                                                    has_launch=launch_library is not None),
-                        context, generation_schema(schema))
+                        context, strict_output_schema(schema, **TRANSPORT))
 
 
 def _empty_commit(commit, reasoning_schema):
@@ -183,7 +186,7 @@ def action(response, summary, records, ctx):
     catalog = _tools(ctx.services['resources'], assignment)
     schema = _selection_schema(catalog, summary['reasoning_schema'])
     try:
-        selection = decode_response(response, schema)['selection']
+        selection = decode_strict_output(response, schema, **TRANSPORT)['selection']
         Draft202012Validator(schema['properties']['selection']).validate(selection)
         if selection['kind'] == 'reason' and _empty_commit(selection['commit'], summary['reasoning_schema']):
             raise ValueError('empty_reasoning_commit')

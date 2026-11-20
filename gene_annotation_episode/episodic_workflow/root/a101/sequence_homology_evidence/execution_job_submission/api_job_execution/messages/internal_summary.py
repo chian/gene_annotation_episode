@@ -1,31 +1,27 @@
-"""Where the job stands, from the loop's view (carried from ``internal_summary.py``, ``decision_state.py``,
-``task_state.py`` and ``execution_state.py``).
-
-Own fields of the old decision context: ``execution_assignment`` (the parent input) and ``execution_progress`` (the
-recorded facts: here the operations so far, the handoff and result references and the facts the service reported).
-The credit is the credit the API service executor's credit view gave after the last unit that reported one; a wait,
-a capabilities read, a lookup and a failed operation report none and keep it.
-"""
-INITIAL_CREDIT = 0.0
+"""Where the launch stands, from the loop's view: the assigned job with its query read from the held records, the
+submissions made (the built request, whether the service accepted it, and for a failure its code and whether the
+request was sent), the handoff rows it holds, the lookups and what they returned, and the credit its controller
+holds."""
 
 
 def internal_summary(view):
-    summary = {**view.parent_input, 'steps': [], 'credit': INITIAL_CREDIT, 'handoff_refs': [], 'result_refs': [],
-               'completed': False, 'facts': {}, 'report_update': view.parent_input['initial_report'],
-               'last_status': None,
-               'controller': None if view.controller_state is None else view.controller_state.as_record()}
+    parent, records = view.parent_input, view.records
+    subject = parent['query_subject_ref']
+    summary = {**parent,
+               'query': {'subject_ref': subject, 'sequence_ref': records.get(subject)['sequence_ref'],
+                         'molecule': records.subject_molecule(subject), 'length': records.subject_length(subject)},
+               'submissions': [], 'lookups': [], 'handoff_refs': [],
+               'credit': 0.0 if view.controller_state is None else view.controller_state.current_credit}
     for unit in view.outcomes:
         outcome = unit['outcome']
-        summary['steps'].append({'tool': unit['tool'], 'operation': outcome.get('operation'),
-                                 'status': outcome['status'], 'event': outcome.get('event'),
-                                 'feedback': outcome.get('feedback')})
-        summary['last_status'] = outcome['status']
-        if 'report_update' in unit['arguments']:
-            summary['report_update'] = unit['arguments']['report_update']
-        if outcome.get('credit') is not None:
-            summary['credit'] = outcome['credit']
-        for name in ('handoff_refs', 'result_refs'):
-            summary[name] += [ref for ref in outcome.get(name, ()) if ref not in summary[name]]
-        summary['completed'] = summary['completed'] or bool(outcome.get('completed'))
-        summary['facts'].update(outcome.get('facts') or {})
+        if unit['tool'] == 'submit':
+            summary['submissions'].append({
+                'request': unit['arguments']['request'], 'status': outcome['status'],
+                'failure_code': outcome['failure_code'], 'sent': outcome['sent'],
+                'retry_after_seconds': outcome['retry_after_seconds']})
+            summary['handoff_refs'].extend(outcome['handoff_refs'])
+        else:
+            summary['lookups'].append({'tool': unit['tool'], 'operation': unit['arguments']['operation'],
+                                       'arguments': unit['arguments']['arguments'], 'status': outcome['status'],
+                                       'result': outcome['result'], 'feedback': outcome['feedback']})
     return summary

@@ -13,7 +13,7 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
 MESSAGES = {'__init__.py', 'read_from_parent.py', 'msg_to_child.py', 'read_from_child.py', 'internal_summary.py',
             'final_to_parent.py'}
 CHILDREN = ('execution_job_submission', 'execution_progress_assessment', 'execution_result_acquisition',
-            'published_evidence_assessment', 'resource_result_acquisition', 'resource_work_submission')
+            'literature', 'resource_result_acquisition', 'resource_work_submission')
 
 
 def names(folder):

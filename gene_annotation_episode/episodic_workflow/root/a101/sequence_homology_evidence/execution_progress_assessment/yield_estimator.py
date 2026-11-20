@@ -1,6 +1,7 @@
 """Continuation, carried from the old ``yield_estimator.py`` (``MonitorEpisodeYield.yield_controller``,
 ``_monitor_information_yield`` and ``blast_monitor_yield``), ``configuration.py`` (``MonitorConfiguration``) and
-``target_identity.py`` (``is_blast_job``, now in ``messages/read_from_parent.py``).
+``target_identity.py`` (``is_blast_job``: now the commissioner's ``blast_status_target`` of the assignment, read in
+``messages/read_from_parent.py``).
 
 The old monitor had two modes. With its own yield settings (exactly ``{kind: 'information_accumulation', cutoff >=
 0, uncertainty_alpha in (0, 1)}``) it opened ``YieldController(epoch, initial_credit, cutoff,
@@ -9,8 +10,10 @@ YieldParameters(uncertainty_alpha=...))``; without them asking for the controlle
 one original status observation (README 7b: completion, target = the information unit). Now: ``settings`` is this
 episode's entry of the run's ``continuation`` collaborator, ``{'cost': <old cutoff, >= 0>, 'parameters':
 {'uncertainty_alpha': ...}}``; an entry without them raises the same error. A BLAST status target (from the parent
-input) gets the completion controller with the information unit as its target; every other target gets the
-accumulation controller. The cutoff is the controller's ``cost``. Nothing else ends this Episode."""
+input) gets the completion controller with the information unit as its target: the visit is complete with the
+first check that shows a new fact. Every other target gets the accumulation controller. The cutoff is the
+controller's ``cost``. Nothing else ends this Episode. The old estimator's refusal of a decreasing information
+credit is in ``credit.py``."""
 import math
 
 from yield_control import AccumulationYieldController, CompletionYieldController

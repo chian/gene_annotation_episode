@@ -1,32 +1,29 @@
-"""The task: one selected action per unit on the one assigned API service (carried from ``task.py``,
-``task_decision.py``, ``task_instructions.py``, ``decision_inputs.py``, ``decision_state.py``,
-``internal_summary.py``, ``execution_operations.py``, ``execution_state.py`` and ``waiting.py``).
+"""The task: build the request of the assigned job, submit it once through the job service, end at handoff.
 
-Each decision the model selects one of: ``service_operation`` (one operation of the API service's catalog),
-``capabilities`` (the caller-bound resource configuration), ``wait`` (only for a service job that continues
-remotely: assignment version ``api_service_assignment_v1``), and, when the settings name the libraries,
-``launch_instructions`` and ``tool_knowledge`` lookups. This episode has no ``reason`` action (the old launch loop
-without the reasoning path). The model's ``report_update`` (its current interpretation for the parent) rides in the
-arguments of the unit it selects. A selection that fails admission is rejected and creates no unit. The task offers a
-unit at every decision and never ends the Episode: the yield controller does. The old goal text replaced the default
-instructions (``replaces_default_instructions``); it is the instruction text here.
+Each decision the model selects one tool: ``submit`` (the request it built, sent as one submission on the assigned
+resource of the ``job_access`` service) or, when the settings name the libraries, one lookup in the run-frozen
+launch-instruction or tool-knowledge library. The job continues at the service after the submission has returned:
+this episode does not wait for it, ask its status or fetch its results (the monitor and result-acquisition
+episodes do, from the handoff record). The task offers a unit at every decision and never ends the Episode: the
+yield controller does, at the handoff.
 
-Settings read (the episode's own entry of the run's ``continuation`` collaborator): ``resources`` and
-``initial_information`` (caller-bound resource configuration and inventory, by resource id), ``handoff_unit`` and
-``acquired_record_unit`` (positive credit units passed to the service), ``task_yield_profiles`` (the controller's),
-and optionally ``launch_instructions_directory`` and ``tool_knowledge_directory``.
+What ties the request to the assigned job is code, not the model's care: the query is the held sequence record
+the parent named and the ``submit`` tool stages it (the model never writes a sequence); ``action`` rejects a
+request that is not of the service's request form, that changes a parameter the parent fixed, or whose program
+does not take a query of the assigned molecule. A rejection creates no unit.
 
-BLOCKED-ON-JOB-SERVICE. The API service executor (its operation catalog, its execution of one operation with the
-credit view and facts it returns, the received BV-BRC values and decision context it showed the model, and a wait on
-a service job) was not in the episode trees; it is the ``job_access`` service of
-``LAUNCH_MONITOR_EXTRACT_MECHANICS.md`` and the system does not provide it yet. This file names the service and the
-calls it wants (``read('api_catalog', ...)``, ``read('received_bvbrc_context', ...)``,
-``read('api_decision_context', ...)``, ``api_execute(...)``, ``wait_for_job(...)``) and raises
-``NotImplementedError('BLOCKED-ON-JOB-SERVICE: ...')`` where the service does not offer them. The handoff record (the
-handoff row of a declared job ledger work table, and the receipts of ``ApiJobReceipts``) is not defined either:
-``write_handoff_record`` raises.
+Carried from the episode's own files at ``97308b94c``: one selected operation per turn, the goal text's decisions
+(keep the original inputs, request, resource and parent constraints fixed; a missing reply does not establish
+that no job was created; the handoff completes the commission), the request bound to the parent's query and
+database (``blast_request_custody.py``), and the two library lookups. Not carried, by the launch design
+(``LAUNCH_MONITOR_EXTRACT_MECHANICS.md`` section 3: a launching child submits once, returns the handoff and never
+waits): the ``wait`` action, the status and result operations of the old service catalog, and the capabilities
+read (what a decision needs of the resource is read from the job service into every request). The model's
+free-text ``report_update`` for the parent is not carried: nothing a model writes leaves this episode.
+
+Settings read (the episode's own entry of the run's ``continuation`` collaborator): ``task_yield_profiles`` (read
+by ``yield_estimator.py``) and, optionally, ``launch_instructions_directory`` and ``tool_knowledge_directory``.
 """
-import copy
 import json
 
 from jsonschema import Draft202012Validator, ValidationError
@@ -34,242 +31,211 @@ from jsonschema import Draft202012Validator, ValidationError
 from episode_runtime import ModelRequest, Rejected, ToolCall
 
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (
-    INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
+    LaunchInstructions, catalog as launch_catalog)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
-from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
-    INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
+    ToolKnowledge, catalog as knowledge_catalog)
 
 CHILD_SLOTS = {}
 SERVICES = ('job_access',)
-WAIT_VERSION = 'api_service_assignment_v1'
+QUERY_FILE = 'query.fasta'
+# The unit a program's query is counted in, for each molecule a held sequence subject can have.
+MOLECULE_UNITS = {'protein': 'aa', 'dna': 'nt', 'rna': 'nt'}
+# The lookups: the setting that names the library, the library, its operations offered here (reading only; a
+# selection of sections is for an episode that commissions a child) and what the lookup is for.
+LOOKUPS = {
+    'launch_instructions': ('launch_instructions_directory', LaunchInstructions, launch_catalog,
+                            ('launch.instructions.search', 'launch.instructions.entry', 'launch.instructions.read'),
+                            'Read the run-frozen launch instruction library: notes on how a service or resource '
+                            'is used.'),
+    'tool_knowledge': ('tool_knowledge_directory', ToolKnowledge, knowledge_catalog,
+                       ('knowledge.search', 'knowledge.entry', 'knowledge.read'),
+                       'Read the run-frozen tool knowledge library: notes on tools and their parameters.')}
 
-GOAL_TEXT = (
-    'Carry out the assigned work through {service} using one selected operation each turn. Keep the original '
-    'inputs, request, resource and parent constraints fixed. Choose useful preparation, service requests, '
-    'observations or repair from the actual available operations and received outcomes. Distinguish an immediate '
-    'returned response from a service job that continues remotely. Preserve the actual request or job identity and '
-    'submission uncertainty; a missing reply does not establish that no job was created. Establish the requested '
-    'usable monitoring/results handoff from recorded service facts. The configured controller governs '
-    'continuation; verified original handoff completion gives exact zero future credit.')
-ACTION_TEXT = (
-    ' Each answer selects one action: action=service_operation with operation (a name of the catalog) and '
-    'arguments_json (the operation arguments as JSON text); action=capabilities to read the caller-bound resource '
-    'configuration and recorded inventory (no discovery, no selection); action=wait with arguments_json naming the '
-    'service job and condition, only when a wait is offered. Give report_update, your current interpretation for '
-    'the parent, with every answer.')
-WAIT_TEXT = (' A wait is offered because this assignment is a service job that continues remotely: use it to let '
-             'the job run; it does not establish the job state.')
-LOOKUP_ACTIONS = {'launch_instructions': ('launch_instructions_directory', LAUNCH_INSTRUCTIONS, LaunchInstructions),
-                  'tool_knowledge': ('tool_knowledge_directory', KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)}
-
-
-def wait_permitted(summary):
-    """Old ``permitted_common_actions``: ``tool`` always; ``wait`` only for ``api_service_assignment_v1``."""
-    return summary['version'] == WAIT_VERSION
-
-
-def offered_actions(summary, settings):
-    names = ['service_operation', 'capabilities']
-    if wait_permitted(summary):
-        names.append('wait')
-    return names + [name for name, (key, _text, _library) in LOOKUP_ACTIONS.items() if key in settings]
-
-
-def resource_capabilities(settings, resource_id, service):
-    """The old first-decision ``execution_resource_capabilities`` for the one assigned resource (no probe)."""
-    resource = settings['resources'][resource_id]
-    return {'resource_id': resource_id, 'resource_kind': 'api', 'availability': 'unknown', 'service': service,
-            'configuration': resource, 'inventory_snapshot': settings['initial_information'][resource_id]}
-
-
-def selected_execution_task(summary, settings):
-    """Old ``_with_selected_execution_task``: the parent's scientific task, shown only for an ``ebi_hmmer`` request."""
-    if summary['service'] != 'ebi_hmmer' or summary['scientific_question'] is None:
-        return None
-    return {'version': 'selected_execution_task_v1', 'scientific_question': summary['scientific_question'],
-            'selected_tool_info': summary['selected_tool_info'],
-            'requests': [{'resource_id': summary['resource_id'], 'resource_kind': 'api',
-                          'endpoint': copy.deepcopy(summary['request'].get('endpoint')),
-                          'constraints': copy.deepcopy(summary['request'].get('constraints', {})),
-                          'job': copy.deepcopy(summary['request']),
-                          'resource': resource_capabilities(settings, summary['resource_id'], summary['service'])}],
-            'constraints': summary['request'].get('constraints', {}), 'selector': summary['request'].get('selector'),
-            'result_description': None}
+PURPOSE = (
+    'You are the launch step of one job on the public web service {service}. Build the request of the assigned '
+    'job, submit it once through the job service, and end at handoff. The handoff is the recorded identity of '
+    'the accepted submission; other episodes monitor the job and fetch its results from that record. Do not wait '
+    'for the job, ask its status or fetch anything here.')
+ASSIGNED_JOB = (
+    'Assigned job. It is assigned_job in the context. Its query is the held sequence record named there: the '
+    'submit tool attaches it, you never write a sequence. Keep the original inputs, request, resource and parent '
+    'constraints fixed: every parameter under assigned_job.fixed is the parent\'s decision and is copied exactly. '
+    'You choose the parameters listed in assigned_job.open, within service.request_form.')
+TOOL_TEXT = (
+    'Tools. Each answer selects one tool; tools in the context says what each does. For submit give request with '
+    'every parameter of service.request_form{null_lookup}.')
+LOOKUP_TOOLS = (
+    ' For a lookup give lookup (one operation of that library and its arguments as JSON text) and request null. '
+    'A lookup is optional and earns nothing; use one only when the request cannot be built without it.')
+OUTCOMES = (
+    'Outcomes. progress in the context lists the submissions made so far. An accepted submission is the handoff. '
+    'A failed submission says whether the request was sent: sent false means it was not sent and no job exists '
+    '(retry_after_seconds, when given, is how long the service asks to be left alone); sent unknown means the '
+    'reply was lost: a missing reply does not establish that no job was created, and another submission may '
+    'create a second job; sent true means the service answered and refused the request.')
+CREDIT = (
+    'Credit. The established handoff earns {target} and completes the commission; after it further credit is '
+    'exactly zero. A lookup or a failed submission earns nothing. The episode\'s controller ends the episode, at '
+    'the handoff or when further units are not expected to earn.')
 
 
-def output_schema(actions):
-    return {'type': 'object', 'additionalProperties': False,
-            'required': ['action', 'operation', 'arguments_json', 'report_update'],
-            'properties': {'action': {'enum': list(actions)}, 'operation': {'type': 'string'},
-                           'arguments_json': {'type': 'string'}, 'report_update': {'type': 'string'}}}
+def offered_lookups(settings):
+    return [name for name, (setting, *_rest) in LOOKUPS.items() if setting in settings]
+
+
+def request_form(description):
+    """The service's request form as the model is asked for it: each parameter with its type, its allowed values
+    and its meaning. ``action`` validates the answer against the service's whole schema."""
+    schema = description['request_schema']
+    return {'type': 'object', 'additionalProperties': False, 'required': list(schema['properties']),
+            'properties': {name: {key: value for key, value in parameter.items()
+                                  if key in ('type', 'enum', 'description')}
+                           for name, parameter in schema['properties'].items()}}
+
+
+def lookup_form(names):
+    operations = [operation for name in names for operation in LOOKUPS[name][3]]
+    return {'type': 'object', 'additionalProperties': False, 'required': ['operation', 'arguments_json'],
+            'properties': {'operation': {'type': 'string', 'enum': operations},
+                           'arguments_json': {'type': 'string',
+                                              'description': 'The arguments of the operation, as JSON text'}}}
+
+
+def output_schema(description, settings):
+    lookups = offered_lookups(settings)
+    properties = {'action': {'type': 'string', 'enum': ['submit', *lookups]},
+                  'request': {'anyOf': [request_form(description), {'type': 'null'}]}}
+    if lookups:
+        properties['lookup'] = {'anyOf': [lookup_form(lookups), {'type': 'null'}]}
+    return {'type': 'object', 'additionalProperties': False, 'required': list(properties), 'properties': properties}
 
 
 def instructions(summary, settings):
-    """Old ``task_instructions.instructions`` for this role: the goal text replaces the default instructions."""
-    text = GOAL_TEXT.format(service=summary['service']) + ACTION_TEXT
-    if wait_permitted(summary):
-        text += WAIT_TEXT
-    for name, (key, library_text, _library) in LOOKUP_ACTIONS.items():
-        if key in settings:
-            text += library_text
-    return text
+    lookups = offered_lookups(settings)
+    tools = TOOL_TEXT.format(null_lookup=' and lookup null' if lookups else '') + (LOOKUP_TOOLS if lookups else '')
+    return '\n\n'.join((PURPOSE.format(service=summary['service']), ASSIGNED_JOB, tools, OUTCOMES,
+                        CREDIT.format(target=summary['completion_target'])))
 
 
-def catalog_of(summary, ctx):
-    """The API service executor's operation catalog for this assignment: a recorded read of the service."""
-    catalog = ctx.services['job_access'].read('api_catalog', summary['service'], summary['algorithm'],
-                                              summary['database'])
-    if not isinstance(catalog, dict):
-        raise TypeError('api_catalog_must_be_a_mapping_of_operation_to_contract')
-    return catalog
+def arguments_shown(schema):
+    """An operation's arguments in one line each: the type, and ``optional`` for one that may be left out."""
+    return {name: ' or '.join(map(str, [parameter['type']] if type(parameter['type']) is str else parameter['type']))
+            + ('' if name in schema['required'] else ', optional')
+            for name, parameter in schema['properties'].items()}
+
+
+def tools_shown(settings):
+    shown = [{'name': 'submit',
+              'does': 'Sends the request you give, with the assigned query attached, to the service as one '
+                      'submission. When the service accepts it, the handoff record is written and the commission '
+                      'is complete. A failure is returned as the outcome of the submission.',
+              'give': 'request'}]
+    for name in offered_lookups(settings):
+        _setting, _library, catalog, operations, does = LOOKUPS[name]
+        shown.append({'name': name, 'does': does, 'give': 'lookup',
+                      'operations': {entry['name']: arguments_shown(entry['input_schema'])
+                                     for entry in catalog() if entry['name'] in operations}})
+    return shown
+
+
+def assigned_job(summary, description):
+    """The job as the decision needs it: where it runs, the query, what the parent fixed and what is open. A
+    fixed parameter that is not of the service's request form raises: the commission is wrong."""
+    parameters = description['request_schema']['properties']
+    units = description['query_unit_by_program']
+    unit = MOLECULE_UNITS[summary['query']['molecule']]
+    return {'service': summary['service'], 'resource_id': summary['resource_id'],
+            'query': {'record': summary['query']['subject_ref'], 'molecule': summary['query']['molecule'],
+                      'length': summary['query']['length'],
+                      'programs_that_take_it': [name for name in sorted(units) if units[name] == unit]},
+            'fixed': {name: {'value': value, 'parameter': parameters[name]['description']}
+                      for name, value in summary['fixed_request'].items()},
+            'open': [name for name in parameters if name not in summary['fixed_request']]}
 
 
 def decide(summary, feedback, ctx):
-    context = {'goal': GOAL_TEXT.format(service=summary['service']), 'execution_assignment': {
-                   name: summary[name] for name in ('version', 'service', 'algorithm', 'database', 'resource_id',
-                                                    'request', 'immutable_input_versions')},
-               'execution_resource_capabilities': resource_capabilities(ctx.settings, summary['resource_id'],
-                                                                        summary['service']),
-               'execution_initial_information': ctx.settings['initial_information'],
-               'received_bvbrc_values': ctx.services['job_access'].read('received_bvbrc_context',
-                                                                        summary['resource_id']),
-               'tools': catalog_of(summary, ctx), 'offered_actions': offered_actions(summary, ctx.settings),
-               'execution_progress': {'steps': summary['steps'], 'handoff_refs': summary['handoff_refs'],
-                                      'result_refs': summary['result_refs'], 'completed': summary['completed'],
-                                      'facts': summary['facts']},
-               'current_credit': summary['credit'], 'controller': summary['controller'],
-               'time_accounting': time_accounting(ctx.clock.progress_time),
-               'current_report_update': summary['report_update'], 'feedback': feedback}
-    context.update(ctx.services['job_access'].read('api_decision_context', summary['resource_id'],
-                                                   summary['service']))
-    task = selected_execution_task(summary, ctx.settings)
-    if task is not None:
-        context['selected_execution_task'] = task
-    if 'launch_instructions_directory' in ctx.settings:
-        library = LaunchInstructions(ctx.settings['launch_instructions_directory'])
-        context['launch_instruction_library'] = library.context()
-        context['selected_launch_instructions'] = library.materialize(summary['launch_instructions'])
-    elif summary['launch_instructions'] is not None:
-        raise ValueError('selected_launch_instructions_require_the_launch_instructions_directory_setting')
-    if 'tool_knowledge_directory' in ctx.settings:
-        context['tool_knowledge'] = ToolKnowledge(ctx.settings['tool_knowledge_directory']).context()
+    description = ctx.services['job_access'].read('describe', summary['resource_id'])
+    context = {'assigned_job': assigned_job(summary, description),
+               'service': {'name': description['service'], 'protocol': description['protocol'],
+                           'request_form': request_form(description),
+                           'seconds_between_contacts': description['request_spacing_seconds']},
+               'tools': tools_shown(ctx.settings),
+               'progress': {'handoff_established': bool(summary['handoff_refs']),
+                            'submissions': summary['submissions'], 'lookups': summary['lookups']},
+               'credit': {'now': summary['credit'], 'the_handoff_earns': summary['completion_target']},
+               'feedback': feedback}
+    if summary['launch_instructions'] is not None:
+        context['launch_instructions_selected_by_the_parent'] = LaunchInstructions(
+            ctx.settings['launch_instructions_directory']).materialize(summary['launch_instructions'])
     return ModelRequest('REASONING', instructions(summary, ctx.settings), context,
-                        output_schema(offered_actions(summary, ctx.settings)))
+                        output_schema(description, ctx.settings))
 
 
 def action(response, summary, records, ctx):
-    """Admit the model's selection (old ``apply_response`` for a tool or wait): a rejection creates no unit."""
+    """The one unit the answer selects, or a rejection. A submission is admitted only as the request of the
+    assigned job; ``submit`` is always acceptable with such a request, so a unit is always offered."""
+    description = ctx.services['job_access'].read('describe', summary['resource_id'])
     try:
-        Draft202012Validator(output_schema(offered_actions(summary, ctx.settings))).validate(response)
-        selected = response['action']
-        arguments = json.loads(response['arguments_json']) if response['arguments_json'] else {}
-        if selected == 'service_operation':
-            if response['operation'] not in catalog_of(summary, ctx):
-                raise ValueError('operation_not_in_the_service_catalog:' + response['operation'])
-        elif selected in LOOKUP_ACTIONS and not response['operation']:
-            raise ValueError('lookup_requires_the_operation_name')
+        Draft202012Validator(output_schema(description, ctx.settings)).validate(response)
+        if response['action'] == 'submit':
+            request = response['request']
+            Draft202012Validator(description['request_schema']).validate(request)
+            for name, value in summary['fixed_request'].items():
+                if request[name] != value:
+                    raise ValueError('request_changes_a_parameter_the_parent_fixed:' + name + ':assigned:'
+                                     + json.dumps(value) + ':given:' + json.dumps(request[name]))
+            unit = MOLECULE_UNITS[summary['query']['molecule']]
+            if description['query_unit_by_program'][request['program']] != unit:
+                raise ValueError('program_does_not_take_the_assigned_query:' + request['program'] + ':query_is:'
+                                 + summary['query']['molecule'])
+            return ToolCall('submit', {'resource_id': summary['resource_id'], 'request': request,
+                                       'query_sequence_ref': summary['query']['sequence_ref']})
+        lookup = response['lookup']
+        if lookup is None:
+            raise ValueError('a_lookup_requires_the_lookup_member:' + response['action'])
+        if lookup['operation'] not in LOOKUPS[response['action']][3]:
+            raise ValueError('operation_is_not_of_the_selected_library:' + lookup['operation'])
+        return ToolCall(response['action'], {'operation': lookup['operation'],
+                                             'arguments': json.loads(lookup['arguments_json'])})
     except (ValueError, KeyError, TypeError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='selection'))
-    report = {'report_update': response['report_update']}
-    if selected == 'service_operation':
-        return ToolCall('service_operation', {
-            'operation': response['operation'], 'arguments': arguments, 'resource_id': summary['resource_id'],
-            'service': summary['service'], 'algorithm': summary['algorithm'], 'database': summary['database'],
-            'scope': summary['scope'], 'request': summary['request'], 'input_refs': summary['input_refs'],
-            'immutable_input_versions': summary['immutable_input_versions'], **report})
-    if selected == 'capabilities':
-        return ToolCall('capabilities', {'resource_id': summary['resource_id'], 'service': summary['service'],
-                                         **report})
-    if selected == 'wait':
-        return ToolCall('wait', {'resource_id': summary['resource_id'], 'service': summary['service'],
-                                 'condition': arguments, 'handoff_refs': summary['handoff_refs'], **report})
-    return ToolCall(selected, {'name': response['operation'], 'lookup': arguments, **report})
 
 
-def required_member(service, member):
-    """The service's operation, or the explicit block when the system does not provide it yet."""
-    call = getattr(service, member, None)
-    if call is None:
-        raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: job_access.' + member)
-    return call
+def submit(arguments, ctx):
+    """One submission of the built request on the assigned resource, through the ``job_access`` service: the
+    query is staged from the held sequence record, the job's handle comes from this unit's operation key (a unit
+    that runs again does not submit again) and the handoff row is written through ``ctx.store`` with the
+    service's reply as an artifact. A request that failed is the returned outcome, with whether it was sent."""
+    launched = ctx.services['job_access'].launch(
+        ctx, arguments['resource_id'], {**arguments['request'], 'query_file': QUERY_FILE},
+        inputs={QUERY_FILE: arguments['query_sequence_ref']})
+    if launched['status'] != 'completed':
+        failure = launched['failure']
+        return {'status': 'failed', 'job': launched['job'], 'handoff_refs': [], 'failure_code': failure['code'],
+                'sent': failure['detail']['sent'],
+                'retry_after_seconds': failure['detail'].get('retry_after_seconds'), 'failure': failure}
+    return {'status': 'completed', 'job': launched['job'], 'handoff_refs': [launched['handoff_ref']],
+            'failure_code': None, 'sent': True, 'retry_after_seconds': None, 'failure': None,
+            'submitted_at': launched['submitted_at'], 'reply_ref': launched['reply_ref'],
+            'adopted': launched['adopted'], 'replayed': launched['replayed']}
 
 
-def write_handoff_record(store, reply, operation_key):
-    """The handoff record of the job: a row of a declared job ledger work table, written through ``store``.
-
-    Wanted calls: ``store.table(JOB_LEDGER).put({'job': ..., 'event': 'handoff', 'at': ..., 'detail': ...,
-    'source_ref': ...})`` and ``ApiJobReceipts(store, bound, scope, resource_id, service, request).publish(position,
-    outcome)`` (``records/service_calls/sequence_homology_evidence/api_job_receipts.py``, still taking the old
-    ``bound``) for the retained response. Neither the job record kind nor a custody-aware receipts library exists
-    yet.
-    """
-    raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: job record kind (the handoff row of a declared job ledger '
-                              'work table)')
-
-
-def service_operation(arguments, ctx):
-    """One operation of the API service, through the ``job_access`` service, idempotent on the operation key."""
-    execute = required_member(ctx.services['job_access'], 'api_execute')
-    try:
-        reply = execute(resource_id=arguments['resource_id'], service=arguments['service'],
-                        algorithm=arguments['algorithm'], database=arguments['database'],
-                        operation=arguments['operation'], arguments=arguments['arguments'],
-                        request=arguments['request'], scope=arguments['scope'],
-                        input_refs=arguments['input_refs'],
-                        immutable_input_versions=arguments['immutable_input_versions'],
-                        handoff_unit=ctx.settings['handoff_unit'],
-                        acquired_record_unit=ctx.settings['acquired_record_unit'], key=ctx.operation_key)
-    except NotImplementedError:
-        raise
-    except Exception as error:      # noqa: BLE001 - an operation that raised is a failed outcome that still earns
-        return {**failure_outcome(ctx.store, error, category='service_operation',
-                                  cause_code='api_operation_raised'), 'operation': arguments['operation'],
-                'event': None, 'credit': None, 'completed': False, 'handoff_refs': [], 'result_refs': [],
-                'facts': {}}
-    event = reply['event']
-    handoff_refs = write_handoff_record(ctx.store, reply, ctx.operation_key) \
-        if event['handoff_ready'] or event['native_handle'] is not None else []
-    return {'operation': arguments['operation'], 'status': reply['status'], 'event': event,
-            'feedback': reply['feedback'], 'credit': reply['credit'],
-            'completed': reply['facts']['execution_completed'], 'handoff_refs': handoff_refs,
-            'result_refs': list(reply['facts']['execution_result_refs']), 'facts': reply['facts']}
-
-
-def capabilities(arguments, ctx):
-    """The old ``execution.capabilities`` operation: the resource configuration and recorded inventory."""
-    return {'operation': 'execution.capabilities', 'status': 'completed', 'event': None, 'feedback': None,
-            'credit': None, 'completed': False,
-            'capabilities': resource_capabilities(ctx.settings, arguments['resource_id'], arguments['service'])}
-
-
-async def wait(arguments, ctx):
-    """Wait on the service job (old ``waiting.py`` / the ``wait`` action), through the ``job_access`` service."""
-    wait_for_job = required_member(ctx.services['job_access'], 'wait_for_job')
-    reply = await wait_for_job(resource_id=arguments['resource_id'], service=arguments['service'],
-                               condition=arguments['condition'], handoff_refs=arguments['handoff_refs'],
-                               key=ctx.operation_key)
-    return {'operation': 'wait', 'status': reply['status'], 'event': reply['event'], 'feedback': None,
-            'credit': None, 'completed': False}
+def _lookup(name, arguments, ctx):
+    setting, library, _catalog, _operations, _does = LOOKUPS[name]
+    found = library(ctx.settings[setting]).execute(arguments['operation'], arguments['arguments'])
+    return {'status': found['status'], 'result': found['result'], 'feedback': found['feedback']}
 
 
 def launch_instructions(arguments, ctx):
-    """A lookup in the run-frozen launch instruction library (old ``launch.instructions.*`` operations)."""
-    result = LaunchInstructions(ctx.settings['launch_instructions_directory']).execute(arguments['name'],
-                                                                                       arguments['lookup'])
-    return {'operation': arguments['name'], 'status': 'completed', 'event': None, 'feedback': None,
-            'credit': None, 'completed': False, 'result': result}
+    """One reading operation of the run-frozen launch instruction library."""
+    return _lookup('launch_instructions', arguments, ctx)
 
 
 def tool_knowledge(arguments, ctx):
-    """A lookup in the run-frozen tool knowledge library (old ``knowledge.*`` operations)."""
-    result = ToolKnowledge(ctx.settings['tool_knowledge_directory']).execute(arguments['name'],
-                                                                           arguments['lookup'])
-    return {'operation': arguments['name'], 'status': 'completed', 'event': None, 'feedback': None,
-            'credit': None, 'completed': False, 'result': result}
+    """One reading operation of the run-frozen tool knowledge library."""
+    return _lookup('tool_knowledge', arguments, ctx)
 
 
-TOOLS = {'service_operation': service_operation, 'capabilities': capabilities, 'wait': wait,
-         'launch_instructions': launch_instructions, 'tool_knowledge': tool_knowledge}
+TOOLS = {'submit': submit, 'launch_instructions': launch_instructions, 'tool_knowledge': tool_knowledge}

@@ -1,82 +1,99 @@
-"""Where the episode stands, carried from the old ``internal_summary.py`` (``MonitorSummary.decision_context``),
-``decision_state.py`` (the fields that come from the view), ``received_progress.py`` (``ReceivedProgress``,
-``OwnProgress``) and the goal summary of ``goal.py`` (``MonitorGoal.planning_context``): a pure function of the
-view.
+"""Where the episode stands: the job it was handed, every check of it the Episode holds, what its units did and
+what each earned. A pure function of the view; the job and its checks are read from the job ledger rows in the
+Episode's custody (``view.records``), never from a service.
 
-Received progress is the assignment's ``known_progress_refs``, the progress refs of this monitor's own action
-outcomes (in outcome order) and the progress its child monitors returned. The snapshots are those the observe
-tool's outcomes and the children's returns carry; a baseline ref has no snapshot here and raises when the credit
-needs it (``credit.py``). Fields of the old decision state that came from the old runner (the pending work, the
-report lifecycle and deliveries, the recorded-journal views) are not carried.
+Carried from the old ``internal_summary.py`` (``MonitorSummary.decision_context``), ``decision_state.py`` and
+``received_progress.py`` (``ReceivedProgress``, ``OwnProgress``): the received progress is the check rows the
+commissioner passed (the baseline), the check rows this monitor's own units wrote and the check rows its dependency
+monitors returned, in receipt order. Fields of the old decision state that came from the old runner (the pending
+work, the report lifecycle and deliveries, the recorded-journal views) are not carried.
 
-A committed record of a delivered observation is read through ``view.records`` to know its type; a record the
-Episode does not hold raises ``CustodyError`` (BLOCKED-ON-JOB-SERVICE: the records the job owner publishes pass
-through ``job_access`` and have no receipt)."""
+What the job has depends on the kind of its route, read from the handoff row: ``log_names`` are the logs a job of
+that kind keeps (``job_progress.LOGS``: two for a local and a PBS job, none for an API job) and ``event_target``
+is named by a local job only. ``task.py`` offers a log window and a wait only for a job that has them."""
 from yield_control import YieldState
 
-from ..credit import information_projection
-
-_MEANING = ('Exposed direct relationships and already delivered observations. Empty measurements/log windows do '
-            'not assert absence or a stall.')
-_UNRESOLVED = 'Which exposed progress information would improve the original requested report?'
-_DEFINITION = ('Actual received information under the monitoring projector; repeated identities and timestamps '
-               'alone earn no credit.')
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_progress import (
+    LOGS, check_view, held_checks, progress_information)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import JOB_LEDGER
 
 
-def _unique(values):
-    return list(dict.fromkeys(values))
+def _unit(outcome):
+    """One completed unit, as later decisions need it: the action, how it ended and what it named."""
+    if outcome['kind'] == 'child':
+        return {'action': 'monitor_dependency', 'dependency_handle': outcome['arguments']['dependency_handle'],
+                'status': 'completed', 'dependency_credit': outcome['report']['credit'],
+                **outcome['report']['finding']}
+    result = outcome['outcome']
+    unit = {'action': outcome['tool'], 'status': result['status']}
+    if result['status'] != 'completed':
+        return {**unit, 'failure_code': result['failure']['code']}
+    if outcome['tool'] == 'progress_observe':
+        return {**unit, 'check_ref': result['check_ref'], 'new_information': result['informative']}
+    if outcome['tool'] == 'progress_read':
+        return {**unit, 'check_ref': result['check_ref']}
+    if outcome['tool'] == 'progress_log':
+        return {**unit, 'log': result['name'], 'offset': result['offset'], 'bytes': result['bytes']}
+    return {**unit, 'woke_on': result['woke_on']}
+
+
+def _last(outcome, unit):
+    """The last unit with what only the next decision needs of it: the text of its log window, the detail of its
+    failed request. (A check it made or read is in ``checks``.)"""
+    if unit['status'] != 'completed':
+        return {**unit, 'failure_detail': outcome['outcome']['failure']['detail']}
+    if unit['action'] == 'progress_log':
+        return {**unit, 'text': outcome['outcome']['text']}
+    return unit
 
 
 def internal_summary(view):
-    parent = view.parent_input
-    snapshots, own = {}, []
-    last_outcome = None
-    for outcome in view.outcomes:
-        last_outcome = outcome
-        if outcome['kind'] == 'tool':
-            result = outcome['outcome']
-            own.extend(result['progress_refs'])
-            if 'snapshot' in result and result['status'] != 'invalid':
-                snapshots[result['snapshot']['progress_ref']] = result['snapshot']
-        else:
-            report = outcome['report']
-            own.extend(report['progress_refs'])
-            snapshots.update(report['progress_snapshots'])
-    own = _unique(own)
-    received = _unique([*parent['known_progress_refs'], *own])
-    # The latest delivered observation of the assigned target, in receipt order.
-    target = [snapshots[ref] for ref in own if ref in snapshots
-              and snapshots[ref]['target_handle'] == parent['target_handle']]
-    latest = target[-1] if target else None
-    permitted = set(parent['permitted_committed_record_types'])
-    committed = _unique(record for ref in own if ref in snapshots
-                        for record in snapshots[ref]['committed_record_refs']
-                        if view.records.get(record)['record_type'] in permitted)
-    controller = view.controller_state.as_record() if isinstance(view.controller_state, YieldState) else None
-    summary = {**parent,
-               'received_progress_refs': own,
-               'progress_snapshots': snapshots,
-               'latest_target_observation': latest,
-               'committed_record_refs': committed,
-               'dependencies': [] if latest is None else latest['dependencies'],
-               'last_local_outcome': last_outcome,
-               'outcomes': list(view.outcomes),
-               'controller': controller,
-               'current_credit': None if controller is None else controller['current_credit']}
-    projection = information_projection(summary)
-    return {**summary,
-            'monitoring_information_credit': projection['monitoring_information_credit'],
-            'monitoring_information_binding': projection['monitoring_information_binding'],
-            'newly_informative_received_snapshot_count': projection['newly_informative_received_snapshot_count'],
-            'monitor_assignment': {key: parent[key] for key in ('target_handle', 'requested_fields',
-                                                                'known_progress_refs',
-                                                                'permitted_committed_record_types')},
-            'monitor_direct_dependencies': [] if latest is None else [
-                row for row in latest['dependencies'] if row['kind'] == 'job'],
-            'monitor_received_progress_refs': received,
-            'monitor_information_meaning': _MEANING,
-            'monitor_goal': {'objective': view.goal.objective,
-                             'target_handle': parent['target_handle'],
-                             'requested_fields': parent['requested_fields'],
-                             'unresolved_question': _UNRESOLVED,
-                             'progress_definition': _DEFINITION}}
+    parent, records = view.parent_input, view.records
+    fields, baseline = parent['requested_fields'], parent['known_progress_refs']
+    ledger = records.table(JOB_LEDGER)
+    target = ledger.get(parent['handoff_ref'])
+    checks = [{**check_view(row, fields), 'made_by': 'commissioner' if row['id'] in baseline else 'this_monitor'}
+              for row in held_checks(records, target['job'])]
+    own = [check for check in checks if check['made_by'] == 'this_monitor']
+    dependencies = []
+    for ref in parent['dependency_handoff_refs']:
+        row = ledger.get(ref)
+        seen = [check_view(item, fields) for item in held_checks(records, row['job'])]
+        dependencies.append({'handle': row['job'], 'handoff_ref': ref, 'resource_id': row['detail']['resource_id'],
+                             'resource_kind': row['detail']['kind'], 'submitted_at': row['at'],
+                             'blast_status_target': (row['detail']['kind'] == 'api' and
+                                                     row['detail']['native'].get('service') == 'ncbi_blast'),
+                             'check_refs': [item['check_ref'] for item in seen],
+                             'latest_check': seen[-1] if seen else None})
+    scores = (list(view.controller_state.as_record()['scores'])
+              if isinstance(view.controller_state, YieldState) else [])
+    units, windows, receipts, cursor = [], [], [], 0
+    for index, outcome in enumerate(view.outcomes):
+        unit = _unit(outcome)
+        if index < len(scores):
+            unit['credit_earned'] = scores[index]
+        units.append(unit)
+        if outcome['kind'] == 'tool' and unit['status'] == 'completed':
+            if unit['action'] == 'progress_log':
+                windows.extend([outcome['outcome']['window_ref'], outcome['outcome']['content_ref']])
+            if unit['action'] == 'progress_wait':
+                receipts.extend(outcome['outcome']['receipt_refs'])
+                cursor = max(cursor, outcome['outcome']['event_cursor'])
+    if units:
+        units[-1] = _last(view.outcomes[-1], units[-1])
+    information = progress_information(records, baseline, fields, parent['information_unit'])
+    return {**parent,
+            'job': {'handle': target['job'], 'resource_id': target['detail']['resource_id'],
+                    'resource_kind': target['detail']['kind'], 'submitted_at': target['at'],
+                    'launch_estimates': target['detail']['estimates'],
+                    'event_target': target['detail']['native'].get('event_target'),
+                    'log_names': list(LOGS[target['detail']['kind']])},
+            'checks': checks,
+            'latest': own[-1] if own else None,
+            'received_check_refs': [row['id'] for row in held_checks(records) if row['id'] not in baseline],
+            'dependencies': dependencies,
+            'units': units,
+            'log_window_refs': list(dict.fromkeys(windows)),
+            'event_receipt_refs': list(dict.fromkeys(receipts)),
+            'event_cursor': cursor,
+            'monitoring_information': information}

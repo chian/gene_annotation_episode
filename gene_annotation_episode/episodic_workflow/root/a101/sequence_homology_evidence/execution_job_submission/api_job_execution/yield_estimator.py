@@ -2,24 +2,21 @@
 
 The old controller was ``YieldController`` with ``PracticalYieldEstimator(verify_completion)``: the profile
 ``launch_api:<request class>`` of ``task_yield_profiles`` gave its cutoff and parameters, and a verified original
-handoff completion gave exact zero future gain. That is README 7b: completion, with the credit one verified
+handoff completion gave exact zero future gain. That is README 7b: completion, with the credit one established
 handoff earns as its target. The target is the commission's ``completion_target`` (read by ``read_from_parent``);
 the cutoff is the controller's cost; the profile lookup keeps its key and reads this episode's own settings
 (``settings['task_yield_profiles']``).
-"""
+
+The request class is the old ``_request_yield_class`` of an API request without generated ids: ``api``, the
+service, the program and the database where the parent fixed them, ``handoff``."""
 from yield_control import CompletionYieldController
 
 
-def request_yield_class(request):
-    """Classify the original API request without generated ids (old ``_request_yield_class``, API branch)."""
-    version = request.get('version')
-    if version in ('api_execution_assignment_v1', 'api_service_assignment_v1'):
-        parts = ['api', request.get('service', 'unknown')]
-        for field in ('algorithm', 'database'):
-            if request.get(field) is not None:
-                parts.append(request[field])
-        return '_'.join(parts) + '_handoff'
-    return 'compact_' + str(version)
+def request_yield_class(parent_input):
+    parts = ['api', parent_input['service']]
+    parts.extend(parent_input['fixed_request'][name] for name in ('program', 'database')
+                 if name in parent_input['fixed_request'])
+    return '_'.join(parts) + '_handoff'
 
 
 def task_yield_profile(settings, key):

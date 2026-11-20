@@ -42,8 +42,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.prompt
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.sequence_homology_evidence.action_transport import (
-    decode_response, generation_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.strict_output import (
+    decode_strict_output, strict_output_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resource_records import (
     CAPABILITY_SCHEMA, HANDOFF_SCHEMA, RESOURCE_ROLES, SELECTION_SCHEMA, _validate, obj)
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
@@ -58,6 +58,9 @@ CHILD_SLOTS = {'launch_api': PREFIX + 'api_resource_work_execution',
                'launch_local': PREFIX + 'local_resource_work_execution'}
 SERVICE = 'resource_adapters'
 SERVICES = (SERVICE,)
+# How the action schema travels to the model: the model endpoint takes no open object, so a record whose fields the
+# schema leaves open travels as JSON text and is decoded in ``action``.
+TRANSPORT = {'open_records_as_text': True, 'argument_transport_error': 'a101_tool_argument_transport_unsupported'}
 
 CAPABILITIES_ENTRY = {'name': 'resource.capabilities',
                       'description': 'Read actual capability availability and configured resource information; '
@@ -325,7 +328,7 @@ def decide(summary, feedback, ctx):
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=knowledge,
                                                   launch_library=context.get('launch_instruction_library')),
-                        context, generation_schema(schema))
+                        context, strict_output_schema(schema, **TRANSPORT))
 
 
 def named_refs(value):
@@ -382,7 +385,7 @@ def action(response, summary, records, ctx):
     capabilities, slots, schema = offering(summary, ctx)
     assignment = summary['assignment']
     try:
-        selection = decode_response(response, schema)['selection']
+        selection = decode_strict_output(response, schema, **TRANSPORT)['selection']
         Draft202012Validator(schema['properties']['selection']).validate(selection)
         if selection['kind'] == 'reason':
             unheld = [ref for ref in named_refs(selection['commit']) if not records.holds(ref)]

@@ -9,9 +9,12 @@ from pathlib import Path
 
 import pytest
 
-from episode_runtime import ChildMessage, EpisodeBinding, Rejected
+from episode_runtime import ChildCall, ChildMessage, EpisodeBinding, Rejected, ToolCall
 from method_loop import FormError
 from yield_control import BoundedQualityYieldController
+
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.tests.provider_schema_rules import (
+    violations)
 
 PACKAGE = __name__.rsplit('.', 2)[0]
 FOLDER = Path(__file__).resolve().parents[1]
@@ -22,7 +25,9 @@ CHILDREN = {'api_job_execution', 'hpc_job_execution', 'local_job_execution'}
 FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
          'messages/__init__.py', 'messages/read_from_parent.py', 'messages/msg_to_child.py',
          'messages/read_from_child.py', 'messages/internal_summary.py', 'messages/final_to_parent.py',
-         'tests/__init__.py', 'tests/test_binding.py'}
+         'tests/__init__.py', 'tests/test_binding.py', 'tests/launch_world.py', 'tests/test_api_launch.py',
+         'tests/test_branch_api_launch_model_run.py', 'tests/submission_world.py',
+         'tests/test_local_submission_stepped.py', 'tests/test_branch_execution_job_submission_model_run.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 BINDING = 'sequence_homology_evidence/execution_job_submission'
 WORKSPACE = '/lus/flare/projects/BioReason-Aurora-Test/chian/runs'
@@ -57,10 +62,11 @@ def parent_input(**changes):
 def summary(**changes):
     parent = parent_input()
     value = {'assignment': parent['assignment'], 'message': parent['message'], 'record_refs': parent['record_refs'],
-             'handoff_unit': 2.0, 'acquired_record_unit': 0.5, 'scope': parent['scope'], 'scientific_task': None,
+             'handoff_unit': 2.0, 'acquired_record_unit': 0.5, 'scope': parent['scope'],
              'received_handoff_resources': [], 'permitted': parent['permitted'], 'capabilities': None,
-             'lookups': [], 'launches': [], 'handoff_refs': [], 'handoff_resources': [], 'progress': {},
-             'controller': None, 'units_consumed': 0}
+             'lookups': [], 'pinned_launch_instructions': None, 'launches': [], 'handoff_refs': [],
+             'handoff_resources': [], 'credit_by_action': [],
+             'units_consumed': 0}
     return {**value, **changes}
 
 
@@ -143,20 +149,33 @@ def test_the_controller_is_bounded_by_the_credit_of_the_requests_still_without_a
 
 
 def test_each_slot_commissions_the_chosen_request_and_selects_the_return_fields_it_wants():
-    value = summary(scientific_task={'scientific_question': 'q', 'selected_tool_info': {'tool': 't'}})
+    described = [{'resource_id': 'ebi', 'service': 'ebi_hmmer'}, {'resource_id': 'ncbi', 'service': 'ncbi_blast'}]
+    value = summary(capabilities={'execution_resource_capabilities': described, 'execution_initial_information': {}},
+                    record_refs=['input_1', 'artifact_1'])
     selection = ('execution_handoff_refs', 'execution_completed')
     api = EPISODE.msg_to_child('launch_api', {'resource_id': 'ebi'}, value)
-    assert isinstance(api, ChildMessage) and api.selection == selection
-    assert api.assignment['input_refs'] == ['input_1'] and api.assignment['service'] == 'ebi_hmmer'
-    assert api.assignment['completion_target'] == 2.0 and api.assignment['scope'] == {'subjects': ['input_1']}
-    assert api.assignment['immutable_input_versions'] == {'versions': []}
-    assert api.assignment['algorithm'] == 'phmmer' and api.assignment['request']['resource_id'] == 'ebi'
-    assert api.assignment['scientific_question'] == 'q' and api.message == {'initial_report': {}}
+    assert isinstance(api, ChildMessage) and api.selection == selection and api.message == {'resource_id': 'ebi'}
+    assert api.assignment == {'resource_id': 'ebi', 'service': 'ebi_hmmer', 'query_subject_refs': ['input_1'],
+                              'input_refs': ['artifact_1'], 'completion_target': 2.0,
+                              'fixed_request': {'program': 'phmmer', 'database': 'swissprot'}}
+    # The two BLAST request forms: the grader request leaves the program to the child; a service assignment
+    # carries the service's own request, whose every parameter is fixed.
+    graded = {'version': 'blast_database_grader_return_request_v1', 'resource_id': 'ncbi',
+              'return_type': 'blast_database_sheet_v1', 'query_subject_ref': 'input_1', 'database': 'swissprot'}
+    service = {'version': 'api_service_assignment_v1', 'resource_id': 'ncbi', 'service': 'ncbi_blast',
+               'request': {'subject_ref': 'input_1', 'program': 'blastp', 'database': 'nr', 'hitlist_size': 20},
+               'endpoint': 'usable_handoff', 'constraints': {}}
+    for request, fixed in ((graded, {'database': 'swissprot'}),
+                           (service, {'program': 'blastp', 'database': 'nr', 'hitlist_size': 20})):
+        chosen = {**value, 'assignment': {**value['assignment'], 'requests': {'ncbi': request}}}
+        blast = EPISODE.msg_to_child('launch_api', {'resource_id': 'ncbi'}, chosen)
+        assert blast.assignment == {'resource_id': 'ncbi', 'service': 'ncbi_blast', 'query_subject_refs': ['input_1'],
+                                    'input_refs': ['artifact_1'], 'fixed_request': fixed, 'completion_target': 2.0}
     hpc = EPISODE.msg_to_child('launch_hpc', {'resource_id': 'aurora'}, value)
     assert hpc.assignment == HPC_REQUEST and hpc.selection == selection
     local = EPISODE.msg_to_child('launch_local', {'resource_id': 'aurora'}, value)
-    assert local.assignment['record_refs'] == ['input_1']
-    assert local.assignment['scientific_task']['scientific_question'] == 'q'
+    # The local launch child is given the request of the resource and nothing else.
+    assert local.assignment == HPC_REQUEST and local.message == {'resource_id': 'aurora'}
     with pytest.raises(ValueError, match='execution_launch_slot_unknown:nowhere'):
         EPISODE.msg_to_child('nowhere', {'resource_id': 'aurora'}, value)
     result = {'credit': 3.0, 'finding': {}, 'execution_handoff_refs': ['r'], 'execution_completed': True}
@@ -200,18 +219,50 @@ def test_the_return_carries_the_systems_credit_the_finding_and_the_selected_fact
     EPISODE.return_form.admit(everything, 'return')
     assert everything['execution_result_origin'] == {}
 
-def test_the_model_selection_schema_names_every_permitted_request_and_every_library_operation():
-    schema = TASK._schema(summary())
-    branches = schema['properties']['selection']['anyOf']
-    children = [branch for branch in branches if branch['properties']['kind']['const'] == 'child']
-    assert [branch['properties']['resource_id']['const'] for branch in children] == ['aurora', 'ebi']
-    tools = {(branch['properties']['tool']['const'], branch['properties']['operation']['const'])
-             for branch in branches if branch['properties']['kind']['const'] == 'tool'}
-    assert {tool for tool, _ in tools} == {'knowledge_lookup', 'launch_instruction_lookup'}
-    assert ('launch_instruction_lookup', 'launch.instructions.select') in tools
-    assert TASK.generation_schema(schema)
 
-
-def test_the_task_rejects_an_answer_that_selects_no_unit():
+def test_the_answer_is_one_defined_action_and_code_makes_the_commission_or_the_lookup():
+    schema = TASK.output_schema(summary())
+    assert violations(schema) == []
+    actions = schema['properties']['action']['anyOf']
+    offered = [(one['properties']['name']['enum'][0], one['properties'].get('operation', {}).get('enum', [None])[0])
+               for one in actions]
+    # The commission and every read of the two libraries. The pinning operation of the launch library is not a
+    # choice: code pins what was read.
+    assert offered == [
+        ('commission_launch', None), ('knowledge_lookup', 'knowledge.search'),
+        ('knowledge_lookup', 'knowledge.entry'), ('knowledge_lookup', 'knowledge.read'),
+        ('launch_instruction_lookup', 'launch.instructions.search'),
+        ('launch_instruction_lookup', 'launch.instructions.entry'),
+        ('launch_instruction_lookup', 'launch.instructions.read')]
+    assert actions[0]['properties']['resource_id']['enum'] == ['aurora', 'ebi']
+    # The model names the resource; the slot is the launch child that owns the resource's kind.
+    assert EPISODE.action({'action': {'name': 'commission_launch', 'resource_id': 'aurora'}}, summary(), None,
+                          None) == ChildCall('launch_hpc', {'resource_id': 'aurora'})
+    assert EPISODE.action({'action': {'name': 'commission_launch', 'resource_id': 'ebi'}}, summary(), None,
+                          None) == ChildCall('launch_api', {'resource_id': 'ebi'})
+    # A lookup keeps the operation and the arguments of the answer; an optional argument left null is left out.
+    assert EPISODE.action({'action': {'name': 'launch_instruction_lookup', 'operation': 'launch.instructions.search',
+                                      'arguments': {'query': 'pbs', 'offset': 0, 'limit': 2, 'resource_kind': None}}},
+                          summary(), None, None) == ToolCall('launch_instruction_lookup', {
+                              'operation': 'launch.instructions.search',
+                              'arguments': {'query': 'pbs', 'offset': 0, 'limit': 2}})
     with pytest.raises(Rejected):
-        EPISODE.action({}, summary(), None, None)
+        EPISODE.action({'action': {'name': 'commission_launch', 'resource_id': 'nowhere'}}, summary(), None, None)
+
+
+def test_the_sections_a_lookup_read_are_added_to_the_instructions_the_commissioner_pinned():
+    pin = {'entry_id': 'e', 'section_id': 's', 'sha256': 'a' * 64}
+    read = {'version': 'launch_instruction_selection_v1', 'library_id': 'launch_instructions_' + 'b' * 64,
+            'sections': [pin]}
+    value = summary(pinned_launch_instructions=read)
+    assert EPISODE.msg_to_child('launch_hpc', {'resource_id': 'aurora'}, value).assignment == {
+        **HPC_REQUEST, 'launch_instructions': read}
+    given = {**read, 'sections': [{**pin, 'section_id': 'first'}]}
+    value['assignment'] = {**value['assignment'], 'launch_instructions': given}
+    assert EPISODE.msg_to_child('launch_hpc', {'resource_id': 'aurora'}, value).assignment['launch_instructions'] == {
+        **read, 'sections': [*given['sections'], pin]}
+    # Pins of another library than the one the lookups read cannot be combined: the commission fails.
+    other = {**given, 'library_id': 'launch_instructions_' + 'c' * 64}
+    value['assignment'] = {**value['assignment'], 'launch_instructions': other}
+    with pytest.raises(ValueError, match='launch_instruction_inheritance_conflict'):
+        EPISODE.msg_to_child('launch_hpc', {'resource_id': 'aurora'}, value)

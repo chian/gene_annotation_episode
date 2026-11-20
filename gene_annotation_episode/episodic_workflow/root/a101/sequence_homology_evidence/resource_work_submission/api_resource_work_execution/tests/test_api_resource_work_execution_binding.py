@@ -107,7 +107,7 @@ def test_the_action_schema_is_offered_to_the_provider_transport():
     schema = task._schema(catalog)
     names = [branch['properties'].get('tool', {}).get('const') for branch in schema['properties']['selection']['anyOf']]
     assert names[:2] == ['resource.capabilities', 'blast.submit']
-    assert task.generation_schema(schema)
+    assert task.strict_output_schema(schema, **task.TRANSPORT)
 
 
 def test_the_handoffs_are_deduplicated_by_identity_and_a_single_one_is_the_handoff():

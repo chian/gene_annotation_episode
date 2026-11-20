@@ -1,18 +1,14 @@
-"""Credit (carried from ``credit.py``: ``project_credit`` / ``credit_view`` for the API role).
+"""Credit: the established handoff earns the commission's completion target, once.
 
-The old live credit of this role was the one the API service executor's credit view gave
-(``api_execution.credit_view``, built with the positive units ``handoff_unit`` and ``acquired_record_unit``). The
-tool that ran the operation passes those units to the ``job_access`` service and returns the executor's credit in
-its outcome (``task.service_operation``), so ``credit`` reads it from the summary and has no service. A wait, a
-capabilities read, a lookup and a failed operation report none and keep the credit the last unit that reported one
-gave. Never bounded, clamped or rescaled. The old frozen closed view (``_closed_*``) is old-journal bookkeeping and
-is not carried: the system's closure credit is the credit the controller last saw.
-"""
-import math
+The old live credit of this role was ``handoff_unit`` for a usable handoff (``api_execution.credit_view``; the
+acquired-record part was zero for a launch, which acquires nothing). The launching parent commissions this episode
+with that unit as ``completion_target``, so the credit is the target when the Episode holds the handoff row of a
+submission the service accepted (a row of the job ledger, written by the ``job_access`` service in the ``submit``
+unit and read here through ``records``), and zero before. A lookup and a failed submission earn nothing. Never
+bounded, clamped or rescaled."""
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import JOB_LEDGER
 
 
 def credit(summary, records):
-    value = summary['credit']
-    if type(value) not in (int, float) or not math.isfinite(value):
-        raise ValueError('api_job_credit_must_be_a_finite_number')
-    return value
+    held = [records.table(JOB_LEDGER).get(ref)['event'] for ref in summary['handoff_refs']]
+    return float(summary['completion_target']) if 'handoff' in held else 0.0
