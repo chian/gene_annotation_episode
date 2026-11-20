@@ -5,7 +5,7 @@ state and the availability of the results) and the graded result (``graded_unit`
 rejected answer earn nothing."""
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_progress import progress_information
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_blast_search import (
-    PROVIDER, STATUS_FIELDS)
+    PROVIDER, SOURCE_ACCESSION, STATUS_FIELDS)
 
 
 def credit(summary, records):
@@ -13,6 +13,6 @@ def credit(summary, records):
     estimated = summary['state_facts']['estimates_made'] > 0 or summary['state_facts']['launches'] > 0
     handoffs = sum(1 for row in summary['unit_rows'] if row['action'] == 'launch' and row['status'] == 'completed')
     information = progress_information(records, set(), STATUS_FIELDS, units['information_unit'])['credit']
-    graded = any(source['provider'] == PROVIDER for source in records.list('source'))
+    graded = any(source['provider'] == PROVIDER and source['accession'] == SOURCE_ACCESSION for source in records.list('source'))
     return ((units['information_unit'] if estimated else 0.0) + units['handoff_unit'] * handoffs + information
             + (units['graded_unit'] if graded else 0.0))
