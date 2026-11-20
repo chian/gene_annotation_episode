@@ -15,7 +15,7 @@ from ..episode import LaunchLocal
 PATH = LaunchLocal.binding_path
 RESOURCE_ID = 'local_prep'
 # The bundled BLAST+ is not in the live tree: it is read, as an input, from the disk checkout.
-BLAST_BIN = Path('/home/chia/repos/gene_annotation_episode_disk/resources/software/ncbi-blast-2.17.0+/bin')
+BLAST_BIN = Path('/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin')
 POLICY = {'memory_bytes': 1024 ** 3, 'scratch_bytes': 256 * 1024 ** 2}
 HANDOFF_UNIT = 4.0
 PROTEINS = (
