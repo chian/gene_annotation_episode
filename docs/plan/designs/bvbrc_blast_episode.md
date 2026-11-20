@@ -85,4 +85,60 @@ Run A (`runs/bvbrc_a101_run_A1`, workspace `runs/bvbrc_a101_ws_A`: the target on
 
 ## Observed
 
-(to be written after each run)
+`Homology` submissions made: 3 in total (the one outside run `runs/bvbrc_route_check_1*` task 24003087; run A2; run B1).
+Folders written in the owner's BV-BRC home workspace: `gene_annotation_episode_a101` and one subfolder per submission (3);
+nothing else was written, deleted or changed. Spacing kept: 10 s between contacts (inside the route), 60 s or more per job.
+
+### Run A (`runs/bvbrc_a101_run_A1` failed at link; `runs/bvbrc_a101_run_A2`, resumed as `runs/bvbrc_a101_run_A2r`;
+workspace `runs/bvbrc_a101_ws_A`, journal `journal_A2.sqlite3`, report `report_A2.json`)
+
+1. Head offered `reason` and `bvbrc_blast`: as predicted; its first and only decision was the commission of `bvbrc_blast`
+   (blastp, bacteria-archaea, `bvbrc`). Predicted.
+2. Child: `estimate` (basis `no_earlier_measurement`, 180 s), `launch` (accepted), ONE `monitor` (wait 60 s, expected remaining
+   120 s: it showed `finished` already), `extract` (graded: 300 hits, 300 comparison observations, 0 unprojected), then five
+   `estimate` repeats (the model's choice; the one action left; no credit), then the controller stopped it (`yield_stop`,
+   9 units). Child credit 4.0 (estimate 1, handoff 1, finished fact 1, graded 1). Predicted two to four monitors and credit 5 or
+   6: not as predicted (the search was faster than the first wait: 66.4 s from submission to the first observation of `finished`,
+   the earlier outside run took about 110 s).
+3. The head's credit after the graded return: 0.99999998 (comparison_count 300, one region, no uncovered region): predicted
+   above 0.9, observed. Its estimator ended it after that one unit.
+4. The estimate table: the kind `bvbrc_blast:bvbrc_homology:bacteria-archaea:blastp` got the resolution 66.443147 s
+   (outcome `finished`). The five estimate repeats after the extract read it (`learned_from_earlier_searches`, 66.443147 s).
+5. Token search: no file of any run directory, workspace, journal or model-call folder holds `sig=` followed by hex
+   (`grep -rlaE 'sig=[0-9a-f]{16,}'` over every `runs/bvbrc_*`: 0 files). The name `KB_AUTH_TOKEN` appears (services file, journal).
+
+Defects found and fixed in this run: (a) the continuation file must name the settings of every child slot of the head, also
+the one that is not bound (`LinkError`); (b) `extract` raised `ContractError: native_blast_requires_native_tool_source`
+(`gene_annotation_episode/state.py` line 1155 admits an observation with native BLAST rows only from a source of provider
+`ncbi_blast`): the source now carries provider `ncbi_blast` with accession `bvbrc_homology`, which `graded_rows` and the credit
+read. The failed run was resumed (`resume`, replay of the recorded units, the extract unit run again): no new submission.
+Needed change outside my files: `state.py` could name a provider set instead of the one name.
+
+### Run B (`runs/bvbrc_a101_run_B1`, workspace `runs/bvbrc_a101_ws_B`: a fresh workspace, the estimate table of run A)
+
+Prediction written after A and before B: the model's first estimate is learned from A (basis `learned_from_earlier_searches`,
+66.4 s); the second search measures near 60 to 130 s; the next learned value is the median of the two.
+Observed: first estimate `learned_from_earlier_searches`, 66.443147 s (the measured duration of A, as predicted); `launch`;
+`monitor` (wait 11 s: `running`), `monitor` (wait 61 s: `finished`), `extract` (300 hits), six `estimate` repeats (75.95 s,
+the median of 66.44 and 85.45), `yield_stop`, 11 units, child credit 5.0 (estimate, handoff, running, finished, graded). The measured
+duration of the second search resolved at 85.452264 s. Head credit 0.99999998 again.
+
+### Refusals (direct calls of the checks, NOT a real run: `runs/bvbrc_refuse_check_1`; no service contacted)
+
+`launch` without an estimate: `estimate_required`; launch on a local resource: `resource_is_not_a_bvbrc_service`; estimate
+basis `learned_from_earlier_searches` with no measured search: `basis_does_not_match_the_learned_statistics`; estimate of 0 s:
+`expected_seconds_out_of_range`; launch while launched: `search_already_launched`; extract before the handoff exists:
+`no_search_held`, while launched: `search_not_known_to_be_finished`; monitor with a wait below the minimum:
+`wait_seconds_out_of_range`; launch after a failure without a fix: `fix_required_after_the_failure`; fix with a wrong code:
+`is_not_the_last_failure`; fix with nothing failed: `nothing_to_fix`; the same request again in the fixed field:
+`repeats_the_failed_request_in_the_fixed_field`; a repeat commission: `search_already_commissioned`; a commission on a local
+resource: `resource_is_not_a_bvbrc_service`. The model made no wrong request in a real run; the failure paths (`fix`, a failed
+launch, a failed search) were not exercised against the service: not verified in a run.
+
+### Surprises and open points
+
+- The service answered faster than the hours-long public queue: 66 to 110 s for a 353-residue query over 23.9 million proteins.
+- Hit titles are empty in the report (`blast_out.metadata.json` is `{}`): the sheet has no function labels (`functions` empty).
+- The repeated `estimate` actions after the extract leave open expectation rows in the estimate table (they never resolve);
+  `<kind>:remaining` revision rows stay open as well.
+- A search still running when the estimator stops the child (the later "detaching" case) did not occur: not verified.
