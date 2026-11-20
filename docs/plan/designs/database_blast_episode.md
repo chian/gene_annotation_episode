@@ -139,3 +139,19 @@ Prediction: the model commissions `database_blast`; `submit`; a first `check` (q
 third (finished: new fact); `fetch_and_grade` (graded, 1 hit, the sheet's features with no function rows); the child's credit
 1 + 1 + 1 + 1 = 4 (handoff, queued, finished, graded); the head's credit small but above 0 (5 of 76 positions covered through
 the sheet's blastp hit), so the head's estimator stops it shortly after.
+
+### Offline check O1 observed, the defect it showed, and the prediction for O2
+
+Observed in `runs/a101_dbblast_run_O1` (journal `runs/a101_dbblast_ws_A/journal_O1.sqlite3`): the child's flow worked as
+predicted (submit; three checks with the local service's two `WAITING` answers; `fetch_and_grade`; then holds with
+`graded_result_established` until the estimator stopped it, six holds after the graded unit); the model then commissioned the child two more times
+for different searches (tblastn on `core_nt`, then blastp with hit-list 200), each also graded. Not as predicted: **the head's credit stayed 0.0**
+(`comparison_count` 0 in its finding) although the sheets were saved and the scoring raised no error.
+Cause, read in `native_correspondence.read_details`: the head's credit scores the graded cell of each held *observation*
+(`alignment` or `comparison`, origin `tool`), not a saved sheet; a source with a search row only enters the tool profile.
+The old `blast_grade` kept no observation (the registry's `_import_blast` did). Fix: `fetch_and_grade_search` now also keeps,
+in the same transaction, one `reference` record per hit and one `comparison` observation per alignment with the address of its graded cell
+(`blast_search.shared_hsp_component`, `hsp_row`, as `_import_blast` does; without its taxon terms and processing context), and
+returns the references in `graded_refs`.
+Prediction O2 (`runs/a101_dbblast_run_O2`, same local server and commission): the child's flow as in O1; the head's credit
+above 0 and small: the fixed hit covers 5 of the 76 positions, so the credit is under 0.1.

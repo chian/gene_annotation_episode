@@ -48,6 +48,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records 
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_wait import wait_for_job
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import (
     ContractError)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
+    measurements, number, ref)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search import blast_search
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     PROGRAM_UNITS)
 
@@ -412,6 +415,54 @@ def _grading(store, result_ref, fields, query_ref, sequence):
     return grading
 
 
+def _observations(store, report, grading, grading_ref, result_ref, source_ref, query_ref, program, query_length):
+    """One ``reference`` record for each hit of the report and one ``comparison`` observation for each of its
+    alignments, projected from the already graded cell of the sheet (nothing is calculated or graded again), with the
+    address of that cell and the grading artifact on its source: what the A101 native-correspondence projection reads
+    (``native_correspondence.read_details`` scores the graded cell of each held ``comparison`` observation), in the shape the
+    registry's ``_import_blast`` gives them (without its taxon terms and processing context). An alignment that
+    cannot be projected is counted, never hidden: ``(observation refs, reference refs, unprojected alignment count)``."""
+    query_unit, reference_unit, model_unit = blast_search.PROGRAM_UNITS[program]
+    parsed = blast_search.document(report)
+    observations, references, unprojected = [], [], 0
+    for hit_index, hit in enumerate(parsed['search'].get('hits', [])):
+        first = (hit.get('description') or [{}])[0]
+        accession = first.get('accession') or first.get('id')
+        reference = store.put('reference', {
+            'reference_type': 'protein' if reference_unit == 'aa' else 'sequence', 'source_ref': source_ref,
+            'accession': accession, 'label': first.get('title') or accession, 'sequence_ref': None,
+            'molecule': 'protein' if reference_unit == 'aa' else 'unspecified',
+            'length': blast_search.integer(hit['len'], 'hit_length', minimum=1), 'term_refs': [],
+            'context_refs': []}, origin='external')
+        references.append(reference['id'])
+        for hsp_index, native in enumerate(hit.get('hsps', [])):
+            try:
+                component, address = blast_search.shared_hsp_component(grading, hit_ordinal=hit_index,
+                                                                       hsp_ordinal=hsp_index)
+                row = blast_search.hsp_row(native, component=component, program=program, query_length=query_length,
+                                           reference_length=hit['len'], hit_ordinal=hit_index, hsp_ordinal=hsp_index)
+            except (ValueError, TypeError, KeyError):
+                unprojected += 1
+                continue
+            row['native_blast']['shared_projection'] = {
+                'version': blast_search.HSP_PROJECTION_VERSION, 'grading_artifact_ref': grading_ref,
+                'native_artifact_ref': result_ref, **address}
+            (start, end), (reference_start, reference_end) = row['query_interval'], row['reference_interval']
+            observations.append(store.put('observation', {
+                'kind': 'comparison', 'subject_refs': [query_ref], 'source_subject_refs': [reference['id']],
+                'source_ref': source_ref, 'anchor': None,
+                'measurements': measurements(reference_ref=ref(reference['id']),
+                                             **{name: number(value) for name, value in row['measurements'].items()}),
+                'dependencies': [query_ref, reference['id']],
+                'operand_intervals': [
+                    {'role': 'query', 'subject_ref': query_ref, 'start': start, 'end': end, 'unit': query_unit,
+                     'model_unit': model_unit},
+                    {'role': 'reference', 'subject_ref': reference['id'], 'start': reference_start,
+                     'end': reference_end, 'unit': reference_unit, 'model_unit': model_unit}],
+                'native_blast': row['native_blast']}, origin='tool')['id'])
+    return observations, references, unprojected
+
+
 def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
     """Fetch the report of the finished search and grade it in the same unit into the database sheet, kept through
     custody as the old ``blast_grade`` kept it: the grading artifact, a source of the provider over the fetched report
@@ -436,10 +487,14 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
             'request_ref': None, 'version': normalized['search']['version'], 'retrieved_at': None,
             'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [query_ref]}, origin='tool')
         search = store.table(SEARCHES).put({'source_ref': source['id'], 'query_ref': query_ref, 'profile': 'blast'})
-    refs = [source['id'], grading_ref, search['id']]
+        observations, references, unprojected = _observations(
+            store, store.get_artifact(result_ref), grading, grading_ref, result_ref, source['id'], query_ref,
+            fields['program'], len(sequence))
+    refs = [source['id'], grading_ref, search['id'], *references, *observations]
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'closure_ref': fetched['closure_ref'],
             'graded_refs': refs, 'record_refs': [*refs, fetched['closure_ref']],
-            'hit_count': len(grading['sheet']['hits'])}
+            'hit_count': len(grading['sheet']['hits']), 'observation_count': len(observations),
+            'unprojected_alignment_count': unprojected}
 
 
 __all__ = ['ANALYSIS_KIND', 'DATABASES', 'FAILURE_CODES', 'HITLIST_RANGE', 'HOLD_REASONS', 'MOLECULE_UNITS', 'PROVIDER',
