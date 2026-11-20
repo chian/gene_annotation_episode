@@ -23,6 +23,9 @@ ASSIGNMENT_FORM = RecordForm({
 
 
 def read_from_parent(assignment, message):
+    for name in ('handoff_refs', 'plan_refs', 'input_refs'):
+        if len(assignment[name]) != 1:
+            raise ValueError('blast_preparation_results_' + name + '_must_be_exactly_one')
     (handoff_ref,) = assignment['handoff_refs']
     unit = assignment['prepared_unit']
     if not math.isfinite(unit) or unit <= 0:

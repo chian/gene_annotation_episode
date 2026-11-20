@@ -32,6 +32,8 @@ OPTIONAL = ('parse_seqids', 'hash_index', 'db_version', 'program', 'output_forma
 
 
 def read_from_parent(assignment, message):
+    if len(assignment['input_refs']) != 1:
+        raise ValueError('blast_preparation_exactly_one_input_record_required')
     (input_ref,) = assignment['input_refs']
     unit = assignment['handoff_unit']
     if not math.isfinite(unit) or unit <= 0:
