@@ -19,6 +19,8 @@ repeated hit adds no independent vote; and no title, description, assumption or 
 """
 import math
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.feature_rules import valid, validated
+
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_source_class import (
     DEFAULT_TABLES, SOURCE_CLASSES, source_class_counts)
 
@@ -70,31 +72,6 @@ MEANINGS = {
 }
 
 
-def _valid(value, rule):
-    kind = rule[0]
-    if kind == 'optional':
-        return _valid(value, rule[1])
-    if kind == 'number':
-        return type(value) in (int, float) and math.isfinite(value) and rule[1] <= value <= rule[2]
-    if kind == 'count':
-        return type(value) is int and value >= 0
-    if kind == 'choice':
-        return value in rule[1]
-    if kind == 'boolean':
-        return type(value) is bool
-    return type(value) is str and 0 < len(value) <= 200
-
-
-def _closed(entry, rules, what):
-    required = {name for name, rule in rules.items() if rule[0] != 'optional'}
-    if not required <= set(entry) <= set(rules):
-        raise ValueError(what + '_features_mismatch')
-    for name, value in entry.items():
-        if not _valid(value, rules[name]):
-            raise ValueError(what + '_feature_invalid:' + name)
-    return entry
-
-
 def _present(**values):
     return {name: value for name, value in values.items() if value is not None}
 
@@ -104,7 +81,7 @@ def rank_entry(row):
     counts = row['taxon_group_counts']
     unambiguous = row['unambiguous_group_count']
     dominant = max(counts.values()) / unambiguous if counts and unambiguous else None
-    return _closed({'rank': row['rank'], 'unambiguous_group_count': unambiguous,
+    return validated({'rank': row['rank'], 'unambiguous_group_count': unambiguous,
                     'ambiguous_group_count': row['ambiguous_group_count'],
                     'unknown_group_count': row['unknown_group_count'], 'distinct_taxon_count': len(counts),
                     **_present(dominant_taxon_share=dominant,
@@ -134,7 +111,7 @@ def quality_entries(source_quality):
     for summary in source_quality['numerical_summaries']:
         if summary['field'] not in QUALITY_FIELDS:
             continue
-        rows.append(_closed({'field': summary['field'], 'count': summary['count'], **_present(
+        rows.append(validated({'field': summary['field'], 'count': summary['count'], **_present(
             quality_method=summary['quality_method'], minimum=summary['minimum'], maximum=summary['maximum'],
             mean=summary['mean'])}, QUALITY_RULES, 'blast_database_quality'))
     return rows
@@ -143,7 +120,7 @@ def quality_entries(source_quality):
 def representation_entries(representation):
     """How often each function occurs in the searched database, as the independently supplied profile gave it.
     ``available`` is true only when the counts matched the database and release; otherwise the counts are absent."""
-    rows = [_closed({'function': row['function'], **_present(
+    rows = [validated({'function': row['function'], **_present(
         database_sequence_count=row['database_sequence_count'],
         database_total_sequence_count=row['database_total_sequence_count'],
         database_fraction=row['database_fraction'])}, REPRESENTATION_ROW_RULES, 'blast_database_representation')
@@ -161,15 +138,15 @@ def context_features(grading, tables=DEFAULT_TABLES):
     fraction = {row['function']: row.get('database_fraction') for row in representation['rows']}
     functions = []
     for row in sheet['functions']:
-        entry = _closed({'function': row['function']}, FUNCTION_RULES, 'blast_database_function')
+        entry = validated({'function': row['function']}, FUNCTION_RULES, 'blast_database_function')
         entry['taxonomy'] = taxonomy_features(row['taxonomy'])
         if fraction.get(row['function']) is not None:
             entry['database_fraction'] = fraction[row['function']]
-            if not _valid(entry['database_fraction'], ('number', 0, 1)):
+            if not valid(entry['database_fraction'], ('number', 0, 1)):
                 raise ValueError('blast_database_function_feature_invalid:database_fraction')
         functions.append(entry)
     return {'taxonomy': taxonomy_features(sheet['taxonomy']),
-            'source': {'class_counts': [_closed(row, CLASS_RULES, 'blast_database_source_class')
+            'source': {'class_counts': [validated(row, CLASS_RULES, 'blast_database_source_class')
                                         for row in source_class_counts(sheet, tables)],
                        'quality': quality_entries(sheet['source_quality'])},
             'representation': representation, 'functions': functions}

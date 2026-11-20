@@ -12,6 +12,8 @@ absent from the entry: nothing is defaulted."""
 import json
 import math
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.feature_rules import validated
+
 EVIDENCE_TYPE = 'pairwise_residue_correspondence'
 SHEET_SCHEMA = 'blast_pairwise_sheet_v1'
 
@@ -19,7 +21,7 @@ SHEET_SCHEMA = 'blast_pairwise_sheet_v1'
 # marks a feature absent when the sheet or the report holds no value for it.
 SHEET_FEATURES = {
     'evidence_type': ('choice', (EVIDENCE_TYPE,)),
-    'sheet_refs': ('refs',),
+    'sheet_refs': ('ref',),
     'routed_to_axis_credit': ('boolean',),
     'traceback_complete': ('boolean',),
     'hsp_count': ('count',),
@@ -71,27 +73,9 @@ STATISTICS = {'eff_space': 'effective_search_space', 'hsp_len': 'effective_hsp_l
               'kappa': 'karlin_kappa', 'entropy': 'karlin_entropy'}
 
 
-def _valid(value, rule):
-    if rule[0] == 'number':
-        return type(value) in (int, float) and math.isfinite(value) and rule[1] <= value <= rule[2]
-    if rule[0] == 'count':
-        return type(value) is int and value >= 0
-    if rule[0] == 'choice':
-        return value in rule[1]
-    if rule[0] == 'boolean':
-        return type(value) is bool
-    return type(value) is list and len(value) == 1 and type(value[0]) is str
-
-
 def validate_features(features):
     """Each feature against its validator; a violation raises ``ValueError``."""
-    required = {name for name, rule in SHEET_FEATURES.items() if rule[-1] != 'optional'}
-    if not required <= set(features) <= set(SHEET_FEATURES):
-        raise ValueError('blast_pairwise_finding_features_mismatch')
-    for name, value in features.items():
-        if not _valid(value, SHEET_FEATURES[name]):
-            raise ValueError('blast_pairwise_finding_feature_invalid:' + name)
-    return features
+    return validated(features, SHEET_FEATURES, 'blast_pairwise_finding')
 
 
 def _number(value):

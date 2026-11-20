@@ -8,6 +8,8 @@ from the entry; nothing is defaulted. The per-residue intervals, target symbols 
 sheet."""
 import math
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.feature_rules import validated
+
 EVIDENCE_TYPE = 'native_correspondence_aggregate'
 ALGORITHMS = ('blast', 'hmmer')
 UNCERTAINTY_KIND = 'native_evalue'
@@ -57,25 +59,9 @@ MEANINGS = {
 }
 
 
-def _valid(value, rule):
-    if rule[0] == 'number':
-        return type(value) in (int, float) and math.isfinite(value) and rule[1] <= value <= rule[2]
-    if rule[0] == 'count':
-        return type(value) is int and value >= 0
-    if rule[0] == 'choice':
-        return value in rule[1]
-    return type(value) is bool
-
-
 def validate_features(features):
     """Each feature against its validator; a violation raises ``ValueError``."""
-    required = {name for name, rule in FEATURES.items() if rule[-1] != 'optional'}
-    if not required <= set(features) <= set(FEATURES):
-        raise ValueError('a101_axis_finding_features_mismatch')
-    for name, value in features.items():
-        if not _valid(value, FEATURES[name]):
-            raise ValueError('a101_axis_finding_feature_invalid:' + name)
-    return features
+    return validated(features, FEATURES, 'a101_axis_finding')
 
 
 def _present(**values):

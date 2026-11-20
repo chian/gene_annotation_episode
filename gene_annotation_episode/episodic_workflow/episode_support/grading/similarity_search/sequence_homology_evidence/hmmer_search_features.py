@@ -10,6 +10,8 @@ stay in the sheet."""
 import json
 import math
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.feature_rules import validated
+
 EVIDENCE_TYPE = 'protein_profile_match'
 PROGRAMS = ('phmmer', 'hmmsearch', 'hmmscan', 'jackhmmer')
 ROUTED = ('phmmer', 'hmmsearch', 'hmmscan')          # ``route_native_grading`` routes these into the axis sheet
@@ -62,27 +64,9 @@ MEANINGS = {
 }
 
 
-def _valid(value, rule):
-    if rule[0] == 'number':
-        return type(value) in (int, float) and math.isfinite(value) and rule[1] <= value <= rule[2]
-    if rule[0] == 'count':
-        return type(value) is int and value >= 0
-    if rule[0] == 'choice':
-        return value in rule[1]
-    if rule[0] == 'boolean':
-        return type(value) is bool
-    return type(value) is list and value and all(type(ref) is str for ref in value)
-
-
 def validate_features(features):
     """Each feature against its validator; a violation raises ``ValueError``."""
-    required = {name for name, rule in FEATURES.items() if rule[-1] != 'optional'}
-    if not required <= set(features) <= set(FEATURES):
-        raise ValueError('hmmer_search_finding_features_mismatch')
-    for name, value in features.items():
-        if not _valid(value, FEATURES[name]):
-            raise ValueError('hmmer_search_finding_feature_invalid:' + name)
-    return features
+    return validated(features, FEATURES, 'hmmer_search_finding')
 
 
 def _union_positions(intervals):

@@ -15,6 +15,8 @@ it is never read as 'no relatives'.
 """
 from __future__ import annotations
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import intervals
+
 REPORT_FIELDS = ("qaccver", "saccver", "pident", "nident", "length", "mismatch", "gapopen",
                  "qstart", "qend", "sstart", "send", "qlen", "slen", "evalue", "bitscore")
 _INTEGERS = ("nident", "length", "mismatch", "gapopen", "qstart", "qend", "sstart", "send", "qlen", "slen")
@@ -47,16 +49,10 @@ def parse_report(text, fields=REPORT_FIELDS):
     return rows
 
 
-def _union_length(intervals):
-    total, right = 0, None
-    for left, stop in sorted(intervals):
-        if right is None or left > right:
-            total += stop - left + 1
-            right = stop
-        elif stop > right:
-            total += stop - right
-            right = stop
-    return total
+def _covered(pairs, length):
+    """The number of positions the 1-based inclusive HSP intervals cover once (the union, never a sum), by the shared
+    half-open interval union."""
+    return sum(stop - start for start, stop in intervals([(first - 1, last) for first, last in pairs], length=length))
 
 
 def build_edges(rows):
@@ -77,8 +73,8 @@ def build_edges(rows):
                 raise ValueError("blast_all_vs_all_hsp_outside_sequence:" + query + ":" + subject)
         best = sorted(hsps, key=lambda h: (-h["bitscore"], h["evalue"], min(h["qstart"], h["qend"]),
                                            min(h["sstart"], h["send"])))[0]
-        covered_q = _union_length([(min(h["qstart"], h["qend"]), max(h["qstart"], h["qend"])) for h in hsps])
-        covered_s = _union_length([(min(h["sstart"], h["send"]), max(h["sstart"], h["send"])) for h in hsps])
+        covered_q = _covered([(min(h["qstart"], h["qend"]), max(h["qstart"], h["qend"])) for h in hsps], qlen)
+        covered_s = _covered([(min(h["sstart"], h["send"]), max(h["sstart"], h["send"])) for h in hsps], slen)
         edges.append({"query": query, "subject": subject, "self": query == subject,
                       "query_length": qlen, "subject_length": slen,
                       "identity": round(best["nident"] / best["length"], 6),

@@ -10,6 +10,8 @@ defaulted. No source titles, descriptions, assumptions or meanings travel: they 
 import json
 import math
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.feature_rules import validated
+
 EVIDENCE_TYPE = 'protein_database_homologs'
 SHEET_SCHEMAS = ('blast_database_sheet_v1', 'blast_database_sheet_v2', 'blast_database_sheet_v3')
 UNCERTAINTY_KIND = 'native_evalue'
@@ -22,7 +24,7 @@ TAXON_RANK = 'genus'
 # ``optional`` marks a feature absent when the sheet's value is null.
 SHEET_FEATURES = {
     'evidence_type': ('choice', (EVIDENCE_TYPE,)),
-    'sheet_refs': ('refs',),
+    'sheet_refs': ('ref',),
     'routed_to_axis_credit': ('boolean',),
     'total_group_count': ('count',),
     'groups_without_function': ('count',),
@@ -72,36 +74,12 @@ FUNCTION_MEANINGS = {**MEANINGS, 'uncertainty_magnitude': 'The smallest native E
                                                           'function (expected chance hits)'}
 
 
-def _valid(value, rule):
-    if rule[0] == 'number':
-        return type(value) in (int, float) and math.isfinite(value) and rule[1] <= value <= rule[2]
-    if rule[0] == 'count':
-        return type(value) is int and value >= 0
-    if rule[0] == 'choice':
-        return value in rule[1]
-    if rule[0] == 'boolean':
-        return type(value) is bool
-    if rule[0] == 'text':
-        return type(value) is str and 0 < len(value) <= 200
-    return type(value) is list and len(value) == 1 and type(value[0]) is str
-
-
-def _validated(features, rules, what):
-    required = {name for name, rule in rules.items() if rule[-1] != 'optional'}
-    if not required <= set(features) <= set(rules):
-        raise ValueError(what + '_features_mismatch')
-    for name, value in features.items():
-        if not _valid(value, rules[name]):
-            raise ValueError(what + '_feature_invalid:' + name)
-    return features
-
-
 def validate_features(features):
     """Each feature against its validator; a violation raises ``ValueError``."""
     sheet = {name: value for name, value in features.items() if name != 'functions'}
-    _validated(sheet, SHEET_FEATURES, 'blast_database_finding')
+    validated(sheet, SHEET_FEATURES, 'blast_database_finding')
     for row in features['functions']:
-        _validated(row, FUNCTION_FEATURES, 'blast_database_function')
+        validated(row, FUNCTION_FEATURES, 'blast_database_function')
     return features
 
 

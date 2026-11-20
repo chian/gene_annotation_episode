@@ -10,7 +10,10 @@ from __future__ import annotations
 import hashlib
 import re
 
-_ALPHABET = re.compile(r"[A-Za-z*\-]+")
+from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import (
+    ContractError, parse_sequences)
+
+_ALPHABET = re.compile(r"[A-Z*\-]+")
 
 
 def parse_set_fasta(text):
@@ -18,24 +21,15 @@ def parse_set_fasta(text):
     one letter, and a set has at least two records (a set of one has nothing to relate)."""
     if type(text) is not str:
         raise ValueError("blast_all_vs_all_set_text_required")
-    records, current, letters = [], None, 0
-    for line in text.splitlines():
-        if line.startswith(">"):
-            if current is not None:
-                records.append((current, letters))
-            fields = line[1:].split()
-            if not fields:
-                raise ValueError("blast_all_vs_all_set_record_without_id")
-            current, letters = fields[0], 0
-        elif line.strip():
-            if current is None:
-                raise ValueError("blast_all_vs_all_set_sequence_before_header")
-            body = line.strip()
-            if _ALPHABET.fullmatch(body) is None:
-                raise ValueError("blast_all_vs_all_set_invalid_sequence_line")
-            letters += len(body.replace("-", ""))
-    if current is not None:
-        records.append((current, letters))
+    try:
+        parsed = parse_sequences(text, format="fasta", molecule="unspecified")
+    except ContractError as error:
+        raise ValueError("blast_all_vs_all_set_" + str(error)) from error
+    records = []
+    for record in parsed:
+        if _ALPHABET.fullmatch(record.sequence) is None:
+            raise ValueError("blast_all_vs_all_set_invalid_sequence_line")
+        records.append((record.name, len(record.sequence.replace("-", ""))))
     ids = [name for name, _ in records]
     if len(set(ids)) != len(ids):
         raise ValueError("blast_all_vs_all_set_duplicate_record_id")
