@@ -36,8 +36,12 @@ RETURN_FORM = RecordForm({
 })
 
 
+# The slots whose report closes one handoff (a result acquisition that completed). A child is added here when built.
+CLOSING_SLOTS = ()
+
+
 def final_to_parent(summary, completion, selection):
-    completed = sum(1 for row in summary['child_reports'] if row['slot'] == 'pairwise_blast'
+    completed = sum(1 for row in summary['child_reports'] if row['slot'] in CLOSING_SLOTS
                     and row['finding']['execution_completed'])
     result = {'credit': completion['credit'],
               'finding': {'evidence_axis': 'A101', 'targets': summary['axis_findings'],

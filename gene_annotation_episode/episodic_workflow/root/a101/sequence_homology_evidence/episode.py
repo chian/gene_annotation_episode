@@ -3,7 +3,6 @@ from episode_runtime import EpisodeBinding
 
 from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
 from .messages import (final_to_parent as final_file, internal_summary as summary_file,
-                       msg_to_child as to_child_file, read_from_child as from_child_file,
                        read_from_parent as from_parent_file)
 
 
@@ -21,8 +20,6 @@ class SequenceHomologyEvidence(EpisodeBinding):
     yield_controller = yield_file.yield_controller
     assignment_form = from_parent_file.ASSIGNMENT_FORM
     read_from_parent = from_parent_file.read_from_parent
-    msg_to_child = to_child_file.msg_to_child
-    read_from_child = from_child_file.read_from_child
     internal_summary = summary_file.internal_summary
     return_form = final_file.RETURN_FORM
     final_to_parent = final_file.final_to_parent

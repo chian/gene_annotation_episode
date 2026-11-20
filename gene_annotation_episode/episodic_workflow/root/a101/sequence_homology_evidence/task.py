@@ -6,13 +6,14 @@ Tools. ``reason`` is the ``Store.commit_reasoning`` path. ``execute_selected_too
 selected to the library's ``ToolRegistry``, called with ``ctx.store`` (a tool name here has lowercase letters, digits
 and underscores, so the selected name travels as an argument).
 
-Children. The head's children are those of the approved A101 tree that exist; today that is ``pairwise_blast``. The model
-is the router: for a child it answers with the slot and the controlled fields of that slot's commission
-(``commission_fields``: a program of a fixed set, the query, a subject of this episode's scope, a held subject record
-to compare it with, and a bound local resource); it writes no assignment, objective or message. ``msg_to_child``
-builds the child's assignment, in the child's own form, from those choices and the summary. A slot is offered while
-this episode holds what its commission is chosen from. The service ``job_access`` is read for the bound local
-resources a comparison may name (``local_resources``).
+Children. The head's child episodes in the A101 tree are ``blast_database_preparation``, ``database_blast`` and
+``all_vs_all_blast`` (HMMER later). A child is declared in ``CHILD_SLOTS`` when its episode is built (the runner
+refuses a declared slot with no episode behind it), together with its commission in ``COMMISSIONS``. The model is the
+router: for a child it answers with the slot and the controlled fields of that slot's commission
+(``commission_fields``); it writes no assignment, objective or message. ``msg_to_child`` builds the child's
+assignment, in the child's own form, from those choices and the summary. A slot is offered while its commission can
+be stated from what this episode holds. The service ``job_access`` is read for the bound resources a commission or a
+tool may name (``local_resources``).
 
 Settings: ``process_library_directory`` (the frozen process library), ``tool_library_directory`` (the frozen
 scientific tool library), ``tool_registry`` (the keyword settings of the library's ``ToolRegistry``) and
@@ -29,8 +30,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.sequ
     VERSION as INSTRUCTION_VERSION, instruction_view)
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.evidence_axis_contracts import (
     VERSION as EVIDENCE_AXIS_VERSION)
-from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import (
-    PROGRAMS)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.sequence_homology_evidence.literature_investigation_prompt import (
     INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
@@ -50,8 +49,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcom
 from .goal import GOAL
 
 HEAD = 'sequence_homology_evidence'
-PAIRWISE = 'pairwise_blast'
-CHILD_SLOTS = {PAIRWISE: HEAD + '/' + PAIRWISE}
+# The child episodes that are built, by slot. A child is added here with its entries in ``COMMISSIONS``,
+# ``CHILD_DESCRIPTIONS`` and ``SELECTABLE`` and its builder in ``messages/msg_to_child.py``.
+CHILD_SLOTS = {}
+# What the model supplies to commission each slot: a function of (summary, resources) that returns
+# ``(properties, required)`` of controlled values, or ``None`` while the commission cannot be stated.
+COMMISSIONS = {}
 SERVICES = ('job_access',)
 
 # The common tool names a selected tool may not reuse.
@@ -67,9 +70,8 @@ OPEN = {'anyOf': [{'type': 'object'}]}   # an object the host validates; the pro
 THOUGHT_FIELDS = ('id', 'name', 'description', 'use_when', 'live_alternatives', 'decision_guidance',
                   'outcome_contingencies', 'boundary')
 # The optional return fields a commission may select from what the child declares (read from the child's own
-# ``RETURN_FORM``). The graded records and ``execution_completed`` are always selected by ``msg_to_child``; credit and
-# finding are always returned.
-SELECTABLE = {PAIRWISE: ['execution_handoff_refs', 'execution_job_record_refs']}
+# ``RETURN_FORM``); credit and finding are always returned. A child's entry is added with its commission.
+SELECTABLE = {}
 
 # The two bodies the old ``ScientificGoal.instructions`` appended after the goal text, by the entry version of the
 # selected evidence axis (instruction text, unchanged).
@@ -86,19 +88,9 @@ DESCRIPTIONS = {
     'reason': REASONING_COMMIT_REQUIREMENT,
 }
 # What the model is told of each child it may commission: what the child does, the controlled fields of its
-# commission (the model chooses values; code builds the child's assignment) and what comes back.
-CHILD_DESCRIPTIONS = {
-    PAIRWISE: ('Compare one query sequence with one subject sequence by a pairwise BLAST on a bound local resource and '
-               'keep the graded correspondence of the two. program: the BLAST program (blastp for two proteins, '
-               'blastn for two nucleotide sequences, blastx for a nucleotide query against a protein subject, '
-               'tblastn for a protein query against a nucleotide subject, tblastx for two nucleotide sequences '
-               'compared in translation). query_ref: a subject of your scope. subject_ref: a held subject record to '
-               'compare it with. resource_id: one of local_resources. Returns its credit, its finding (whether the '
-               'comparison is graded and the controlled features of the saved pairwise sheet: counts and fractions '
-               'of paired and identical residues and the native E-value with the context the report gives) and the '
-               'graded records your credit reads. The graded correspondence is evidence of how the two sequences '
-               'correspond; the launch is operational progress, not homology evidence.'),
-}
+# commission (the model chooses values; code builds the child's assignment) and what comes back. A child's entry is
+# added with its commission.
+CHILD_DESCRIPTIONS = {}
 
 
 def axis_entry(library, selection):
@@ -145,29 +137,18 @@ def selected_tools(settings, selection):
 
 
 def local_resources(ctx):
-    """The local resources bound to the job service, which a comparison may name (read through the service's read
-    handle, so the read is recorded with the decision)."""
+    """The local resources bound to the job service, which a commission or a tool may name (read through the
+    service's read handle, so the read is recorded with the decision)."""
     access = ctx.services['job_access']
     return [resource['resource_id'] for resource in access.read('resources') if resource['kind'] == 'local']
 
 
-def held_subjects(summary):
-    """The subject records this episode holds: what a comparison's subject is chosen from."""
-    return [ref for ref in summary['held_record_refs'] if ref.startswith('subject_')]
-
-
 def commission_fields(slot, summary, resources):
-    """What the model supplies to commission ``slot``, as ``(properties, required)``: controlled values only (a program
-    of the fixed set, a subject of this episode's scope, a held subject record, a bound local resource). ``None``
-    while this episode holds nothing the commission could be chosen from: the slot is then not offered.
+    """What the model supplies to commission ``slot``, as ``(properties, required)``: controlled values only.
+    ``None`` while this episode holds nothing the commission could be chosen from: the slot is then not offered.
     ``msg_to_child`` builds the child's assignment from these fields and the summary; the model writes no
-    assignment, objective or message. The query is a subject of the scope because this episode's credit reads the
-    correspondence of the scope's target."""
-    if slot == PAIRWISE and resources and len(held_subjects(summary)) >= 2:
-        return ({'program': {'enum': list(PROGRAMS)}, 'query_ref': {'enum': list(summary['scope']['subject_refs'])},
-                 'subject_ref': {'enum': held_subjects(summary)}, 'resource_id': {'enum': list(resources)}},
-                ['program', 'query_ref', 'subject_ref', 'resource_id'])
-    return None
+    assignment, objective or message."""
+    return COMMISSIONS[slot](summary, resources)
 
 
 def offered_children(summary, resources):
@@ -185,13 +166,6 @@ def child_option(slot, summary, resources):
     if SELECTABLE[slot]:
         properties['selection'] = {'type': 'array', 'uniqueItems': True, 'items': {'enum': SELECTABLE[slot]}}
     return obj(properties, required=['kind', 'slot', *required])
-
-
-def unheld_references(arguments, summary):
-    """The references of a commission the model wrote that name no record this episode holds."""
-    held = set(summary['held_record_refs'])
-    return [ref for ref in (arguments.get('query_ref'), arguments.get('subject_ref'))
-            if ref is not None and ref not in held]
 
 
 def selection_schema(summary, tools, resources):
@@ -253,9 +227,7 @@ def empty_commit(commit):
 
 def action(response, summary, records, ctx):
     """Turn the model's answer into one tool call or one commission, or reject it (no unit): an answer that does not
-    fit the schema, a reasoning commit with every section empty (rejected before acquisition), or a commission
-    that names a record this episode does not hold, or a comparison of a sequence with itself (an invalid answer of
-    the model, never a check of what ``msg_to_child`` builds)."""
+    fit the schema, or a reasoning commit with every section empty (rejected before acquisition)."""
     tools = selected_tools(ctx.settings, summary['selection'])
     schema = selection_schema(summary, tools, local_resources(ctx))
     try:
@@ -266,11 +238,6 @@ def action(response, summary, records, ctx):
         if selection['kind'] == 'tool' and selection['tool'] == 'reason' and empty_commit(
                 selection['arguments']['commit']):
             raise ValueError('empty_reasoning_commit')
-        if selection['kind'] == 'episode_child':
-            if unheld_references(selection, summary):
-                raise ValueError('commission_names_records_not_held:' + ','.join(unheld_references(selection, summary)))
-            if selection['query_ref'] == selection['subject_ref']:
-                raise ValueError('pairwise_blast_query_and_subject_must_differ')
     except (ValueError, KeyError, TypeError, ContractError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract')) from error
     if selection['kind'] == 'episode_child':
