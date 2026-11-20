@@ -20,16 +20,18 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
     PROVIDER as PAIRWISE_PROVIDER)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.hmmer_profile_scan import (
+    PROVIDER as PROFILE_PROVIDER)
 
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
     held_searches)
 
 from ..credit import A101SequenceCredit
-from ..task import CHILD_SLOTS, PAIRWISE_TOOL
+from ..task import CHILD_SLOTS, PAIRWISE_TOOL, PROFILE_TOOL
 
 EXECUTED = ('completed', 'partial')
 # The tools whose records this episode's credit reads and so returns: its reasoning commits and its graded comparisons.
-CREDITED_TOOLS = ('reason', PAIRWISE_TOOL)
+CREDITED_TOOLS = ('reason', PAIRWISE_TOOL, PROFILE_TOOL)
 EVIDENCE_RECORD_TYPES = ('observation', 'assessment')
 # The record types that carry a sequence: what the two sequences of a comparison are chosen from.
 SEQUENCE_RECORD_TYPES = ('input', 'reference', 'product')
@@ -58,6 +60,14 @@ def _held_comparisons(records):
     return rows
 
 
+def _held_profile_scans(records):
+    """The profile scans this episode holds, read from their sources: the query, the profile database and the number
+    of families that matched."""
+    return [{'query_ref': source['operand_refs'][0], 'database': source['accession'], 'source_ref': source['id'],
+             'family_count': sum(1 for row in records.list('reference') if row['source_ref'] == source['id'])}
+            for source in records.list('source') if source['provider'] == PROFILE_PROVIDER]
+
+
 def internal_summary(view):
     records = view.records
     parent = view.parent_input
@@ -70,6 +80,9 @@ def internal_summary(view):
                    'record_refs': list(result['record_refs']), 'feedback': result.get('feedback')}
             if outcome['tool'] == PAIRWISE_TOOL:
                 row['comparison'] = dict(outcome['arguments'])
+                row['features'] = result['result']
+            if outcome['tool'] == PROFILE_TOOL:
+                row['scan'] = dict(outcome['arguments'])
                 row['features'] = result['result']
             if outcome['tool'] in CREDITED_TOOLS and result['status'] in EXECUTED:
                 committed.extend(ref for ref in result['record_refs'] if ref not in committed)
@@ -100,6 +113,7 @@ def internal_summary(view):
             'held_record_refs': held,
             'held_source_refs': [row['id'] for row in records.list('source')],
             'held_comparisons': _held_comparisons(records),
+            'held_profile_scans': _held_profile_scans(records),
             'held_sequences': held_sequences,
             'database_searches': held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
             'named_refs': {ref: _named(records, ref) for ref in held},

@@ -56,6 +56,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
     DATABASES, HITLIST_RANGE, check_commission)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
     PROGRAM_MOLECULES, check_pairwise_request, pairwise_blast_comparison)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.hmmer_profile_scan import (
+    check_profile_scan_request, hmmer_profile_scan)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_catalog import ScientificToolLibrary
 from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
 
@@ -102,7 +104,22 @@ HISTORY_GUIDANCE = ('Your own earlier outcomes are shown to you as own_outcomes,
                     'children\'s reports are in child_reports. Reading them creates no completed action or '
                     'observation and does not execute or credit the historical work again.\n')
 PAIRWISE_TOOL = 'pairwise_blast'
+PROFILE_TOOL = 'hmmer_profile_scan'
 DESCRIPTIONS = {
+    PROFILE_TOOL: ('Scan one protein sequence of your scope against a database of protein family profiles (HMMER '
+                   'hmmscan) on a local resource. No reference sequence is needed: the database holds one trained '
+                   'profile per family, each with its own trained reporting threshold. Fill out the three fields of '
+                   'its request: query_ref (a protein sequence of your scope), database (a profile database of the '
+                   'schema) and resource_id (a local resource of bound_resources). Code checks the request before '
+                   'anything runs; if something is wrong it comes back in feedback with the things to fix and '
+                   'nothing has run. A request that passes runs as one unit, with no second call: code runs the '
+                   'scan, fetches its report and tables and grades them. The completed outcome lists each family '
+                   'that passed its own threshold: its reference record, its accession and name in the profile '
+                   'database, and for each matched domain the interval of your sequence, the bit score, the '
+                   'independent E-value, the fraction of the profile that is paired and the match strength. A scan '
+                   'that matched no family is completed with no family. A scan you already hold is not run again. '
+                   'The grading is automatic. A failed outcome is a fault of the environment and the same request '
+                   'is not made again.'),
     'reason': REASONING_COMMIT_REQUIREMENT,
     PAIRWISE_TOOL: ('Compare one query sequence with one reference sequence by a pairwise BLAST on a local resource. Fill '
                     'out the four fields of its request: query_ref (a sequence of your scope), reference_ref (another '
@@ -212,6 +229,29 @@ def pairwise_options(summary, resources):
                                    'resource_id': {'enum': list(resources)}})})]
 
 
+def profile_scan_options(summary, resources, databases):
+    """The request of the ``hmmer_profile_scan`` tool, as the model fills it out: each field from a fixed set (the
+    held sequence records, the configured profile databases, the bound resources). Whether the filled request can
+    run is decided by ``check_profile_scan_request`` in ``action``. Not offered while no profile database is
+    configured, no sequence record is held or no resource is bound."""
+    held = list(summary['held_sequences'])
+    if not databases or not held or not resources:
+        return []
+    return [obj({'kind': {'const': 'tool'}, 'tool': {'const': PROFILE_TOOL},
+                 'arguments': obj({'query_ref': {'enum': held}, 'database': {'enum': list(databases)},
+                                   'resource_id': {'enum': list(resources)}})})]
+
+
+def scans_made(summary):
+    """The profile scans this episode holds (``completed``) or saw fail (``failed``), by query and database: what
+    ``check_profile_scan_request`` refuses to run again."""
+    made = {(row['scan']['query_ref'], row['scan']['database']): 'failed'
+            for row in summary['units'] if row['kind'] == 'tool' and row['tool'] == PROFILE_TOOL
+            and row['status'] != 'completed'}
+    made.update({(row['query_ref'], row['database']): 'completed' for row in summary['held_profile_scans']})
+    return made
+
+
 def comparisons_made(summary):
     """The comparisons this episode holds (``completed``) or saw fail (``failed``), by query, reference and
     program: what ``check_pairwise_request`` refuses to run again."""
@@ -279,8 +319,9 @@ def child_option(slot, summary, resources):
     return obj(properties, required=['kind', 'slot', *required])
 
 
-def selection_schema(summary, tools, resources):
-    """What the model answers with: one reasoning commit, one selected tool, one pairwise comparison, or one child.
+def selection_schema(summary, tools, resources, databases):
+    """What the model answers with: one reasoning commit, one selected tool, one pairwise comparison, one profile
+    scan, or one child.
     The reasoning commit is the tool ``reason``, as the model is shown it: the arguments of a tool whose schema is
     composed travel as JSON text, and the Store's reasoning schema sent as output schema itself has more enum
     values than the model endpoint takes in one schema."""
@@ -289,6 +330,7 @@ def selection_schema(summary, tools, resources):
     options.extend(obj({'kind': {'const': 'tool'}, 'tool': {'const': row['name']},
                         'arguments': row.get('input_schema', OPEN)}) for row in tools)
     options.extend(pairwise_options(summary, resources))
+    options.extend(profile_scan_options(summary, resources, databases))
     options.extend(child_option(slot, summary, resources) for slot in offered_children(summary, resources))
     return obj({'selection': {'anyOf': options}})
 
@@ -305,8 +347,11 @@ def decide(summary, feedback, ctx):
     tools = selected_tools(settings, selection)
     resources = bound_resources(ctx)
     offered = offered_children(summary, resources)
+    databases = settings.get('profile_databases', {})
     own = ([{'name': PAIRWISE_TOOL, 'description': DESCRIPTIONS[PAIRWISE_TOOL]}]
            if pairwise_options(summary, resources) else [])
+    own += ([{'name': PROFILE_TOOL, 'description': DESCRIPTIONS[PROFILE_TOOL]}]
+            if profile_scan_options(summary, resources, databases) else [])
     context = {
         'goal': GOAL, 'scope': summary['scope'],
         'sequence_homology_evidence': {
@@ -324,6 +369,7 @@ def decide(summary, feedback, ctx):
         'last_local_outcome': summary['last_local_outcome'], 'child_reports': summary['child_reports'],
         'handoff_refs': summary['handoff_refs'], 'bound_resources': resources,
         'held_sequences': summary['held_sequences'], 'held_comparisons': summary['held_comparisons'],
+        'held_profile_scans': summary['held_profile_scans'],
         'database_searches': summary['database_searches'],
         'tools': [{'name': 'reason', 'description': DESCRIPTIONS['reason']}, *own, *tools],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot],
@@ -333,7 +379,7 @@ def decide(summary, feedback, ctx):
         'feedback': feedback, 'action_yields': summary['action_yields'],
         'revision_origin': summary.get('revision_origin')}, conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(library, selection), context,
-                        generation_schema(selection_schema(summary, tools, resources)))
+                        generation_schema(selection_schema(summary, tools, resources, databases)))
 
 
 def empty_commit(commit):
@@ -347,7 +393,7 @@ def action(response, summary, records, ctx):
     the check finds something to fix in (rejected with the things to fix)."""
     tools = selected_tools(ctx.settings, summary['selection'])
     resources = bound_resources(ctx)
-    schema = selection_schema(summary, tools, resources)
+    schema = selection_schema(summary, tools, resources, ctx.settings.get('profile_databases', {}))
     try:
         if not isinstance(response, dict) or set(response) != {'selection'}:
             raise ValueError('a101_decision_response_must_be_exactly_selection')
@@ -363,6 +409,13 @@ def action(response, summary, records, ctx):
             if problems:
                 raise Rejected({'status': 'invalid', 'category': 'pairwise_blast_request',
                                 'detail': {'request': selection['arguments'], 'fix': problems}})
+        if selection['kind'] == 'tool' and selection['tool'] == PROFILE_TOOL:
+            problems = check_profile_scan_request(
+                selection['arguments'], sequences=summary['held_sequences'],
+                scope_subjects=summary['scope']['subject_refs'], resources=resources, made=scans_made(summary))
+            if problems:
+                raise Rejected({'status': 'invalid', 'category': 'hmmer_profile_scan_request',
+                                'detail': {'request': selection['arguments'], 'fix': problems}})
     except (ValueError, KeyError, TypeError, ContractError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract')) from error
     if selection['kind'] == 'episode_child':
@@ -376,8 +429,8 @@ def action(response, summary, records, ctx):
     scope = summary['scope']
     if selection['tool'] == 'reason':
         return ToolCall('reason', {'commit': selection['arguments']['commit'], 'scope': scope})
-    if selection['tool'] == PAIRWISE_TOOL:
-        return ToolCall(PAIRWISE_TOOL, dict(selection['arguments']))
+    if selection['tool'] in (PAIRWISE_TOOL, PROFILE_TOOL):
+        return ToolCall(selection['tool'], dict(selection['arguments']))
     return ToolCall('execute_selected_tool', {'tool': selection['tool'], 'arguments': selection['arguments'],
                                               'scope': scope,
                                               'permitted_record_refs': (summary['held_record_refs']
@@ -422,4 +475,14 @@ async def pairwise_blast(arguments, ctx):
         resource_id=arguments['resource_id'], executable_directory=ctx.settings['blast_executable_directory'])
 
 
-TOOLS = {'reason': reason, 'execute_selected_tool': execute_selected_tool, PAIRWISE_TOOL: pairwise_blast}
+async def profile_scan(arguments, ctx):
+    """One profile scan as one unit: run, fetch and grade, by the library's one function. The arguments are the
+    model's three controlled choices; the database's manifest and the programs' directory are settings."""
+    return await hmmer_profile_scan(
+        ctx, query_ref=arguments['query_ref'], database=arguments['database'], resource_id=arguments['resource_id'],
+        executable_directory=ctx.settings['hmmer_executable_directory'],
+        manifest_path=ctx.settings['profile_databases'][arguments['database']])
+
+
+TOOLS = {'reason': reason, 'execute_selected_tool': execute_selected_tool, PAIRWISE_TOOL: pairwise_blast,
+         PROFILE_TOOL: profile_scan}
