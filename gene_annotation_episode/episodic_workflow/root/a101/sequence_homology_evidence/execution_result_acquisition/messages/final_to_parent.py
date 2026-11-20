@@ -24,11 +24,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.hmmer_search_features import (
     FEATURES as HIT_FEATURES, MEANINGS as HIT_MEANINGS)
 
-FAMILIES = ('blast_graded', 'blast_pairwise', 'phmmer_graded', 'local_file_source', 'native_blast_masking', 'native_blast_utility', 'api',
+FAMILIES = ('blast_graded', 'blast_pairwise', 'phmmer_graded', 'local_file_source', 'native_blast_masking', 'api',
             'native_blast_standard_database', 'native_blast_database', 'native_hmmer_preparation', 'native_hmmer',
             'native_bytes')
 JOB_STATES = ('not_observed', 'queued', 'running', 'finished', 'failed', 'cancelled', 'unknown')
-FIELD_TYPES = {'number': 'number', 'count': 'integer', 'boolean': 'boolean', 'refs': 'record_refs', 'text': 'text'}
+FIELD_TYPES = {'number': 'number', 'count': 'integer', 'boolean': 'boolean', 'refs': 'record_refs', 'ref': 'record_refs', 'text': 'text'}
 
 
 def feature_field(name, rule, meanings):

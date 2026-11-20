@@ -21,8 +21,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.nativ
     is_native_blast_masking_target)
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.profile_model_preparation.sequence_homology_evidence.native_hmmer_preparation_acquisition import (
     is_native_hmmer_preparation_target)
-from gene_annotation_episode.episodic_workflow.episode_support.acquisition.similarity_search.sequence_homology_evidence.native_blast_utility_acquisition import (
-    is_native_blast_utility_target)
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.blast_analysis_kind import (
     ANALYSIS_KINDS, checked_analysis_kind)
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.blast_return_contracts import (
@@ -36,8 +34,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_m
     validate_preparation_result_selector)
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_masking.sequence_homology_evidence.sequence_masking_result_views import (
     validate_masking_result_selector)
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.blast_utility_result_views import (
-    validate_blast_utility_result_selector)
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.hmmer_native_result_views import (
     validate_native_hmmer_result_selector)
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.native_blast_database_result_views import (
@@ -53,7 +49,6 @@ RESULTS_SCHEMA = obj({'version': {'const': RESULTS_VERSION}, 'handoff_ref': TEXT
 NATIVE_SELECTOR_SCHEMA = obj({'paths': {'type': 'array', 'minItems': 1, 'uniqueItems': True, 'items': TEXT},
                               'path': TEXT, 'offset': OFFSET, 'limit': LIMIT}, [])
 MASKING_SELECTOR_VERSION = 'native_blast_masking_result_selector_v1'
-UTILITY_SELECTOR_VERSIONS = ('native_blast_utility_result_selector_v1', 'native_blast_utility_result_selector_v2')
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The assignment version', RESULTS_VERSION),
@@ -94,8 +89,6 @@ def family(target, selector):
         return 'local_file_source'
     if selector.get('version') == MASKING_SELECTOR_VERSION or is_native_blast_masking_target(target):
         return 'native_blast_masking'
-    if selector.get('version') in UTILITY_SELECTOR_VERSIONS or is_native_blast_utility_target(target):
-        return 'native_blast_utility'
     if target['resource_kind'] == 'api':
         return 'api'
     jobs = _jobs(target) if target['resource_kind'] != 'api' else {}
@@ -146,8 +139,6 @@ def validated_selector(target, selector, kind):
         raise NotImplementedError('unplaced:LocalFileSourceResults.selector')
     if kind == 'native_blast_masking':
         return validate_masking_result_selector(selector, operation=jobs['native_blast_masking']['operation'])
-    if kind == 'native_blast_utility':
-        return validate_blast_utility_result_selector(selector, operation=jobs['native_blast_utility']['operation'])
     if kind == 'api':
         raise NotImplementedError('unplaced:api_execution.validate_result_selector')
     if kind == 'native_blast_standard_database':

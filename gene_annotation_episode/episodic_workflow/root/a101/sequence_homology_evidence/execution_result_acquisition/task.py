@@ -40,8 +40,8 @@ The task always offers a unit and never ends the Episode; the yield controller s
 for a job: a status request stays available when nothing else is.
 
 ``wait`` is the old selected wait of an API service assignment (``api_service_assignment_v1``); no placed family
-offers it. The old typed result families (masking, utility, standard BLAST database, BLAST database, HMMER
-preparation, HMMER, BLAST pairwise), the other API service results and the local file sources were classes of the
+offers it. The old typed result families (masking, standard BLAST database, BLAST database, HMMER
+preparation, HMMER), the other API service results and the local file sources were classes of the
 old shared root that are in no place now: ``decide`` raises ``NotImplementedError('unplaced:<family> ...')`` where
 their catalog would have been read.
 
