@@ -4,7 +4,11 @@ commissions its children. It never ends the Episode: only the yield controller d
 
 Tools. ``reason`` is the ``Store.commit_reasoning`` path. ``execute_selected_tool`` dispatches a tool the commission
 selected to the library's ``ToolRegistry``, called with ``ctx.store`` (a tool name here has lowercase letters, digits
-and underscores, so the selected name travels as an argument).
+and underscores, so the selected name travels as an argument). ``pairwise_blast`` is this episode's own defined tool:
+the model chooses the program, the query (a subject of the scope), the subject record to compare it with and a bound
+local resource, all from fixed sets; code runs the comparison, fetches its report and grades it in the same unit
+(``pairwise_blast_comparison``), and the graded sheet is what this episode's credit reads. It is offered while this
+episode holds a second subject record and a local resource is bound.
 
 Children. The head's child episodes in the A101 tree are ``blast_database_preparation``, ``database_blast`` and
 ``all_vs_all_blast`` (HMMER later). A child is declared in ``CHILD_SLOTS`` when its episode is built (the runner
@@ -16,8 +20,9 @@ be stated from what this episode holds. The service ``job_access`` is read for t
 tool may name (``local_resources``).
 
 Settings: ``process_library_directory`` (the frozen process library), ``tool_library_directory`` (the frozen
-scientific tool library), ``tool_registry`` (the keyword settings of the library's ``ToolRegistry``) and
-``yield_bindings`` (``yield_estimator.py``)."""
+scientific tool library), ``tool_registry`` (the keyword settings of the library's ``ToolRegistry``),
+``blast_executable_directory`` (the directory that holds the BLAST programs) and ``yield_bindings``
+(``yield_estimator.py``)."""
 from jsonschema import Draft202012Validator, ValidationError
 
 from episode_runtime import ChildCall, CustodyError, ModelRequest, Rejected, ToolCall
@@ -30,6 +35,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.sequ
     VERSION as INSTRUCTION_VERSION, instruction_view)
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.evidence_axis_contracts import (
     VERSION as EVIDENCE_AXIS_VERSION)
+from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import (
+    PROGRAMS)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.sequence_homology_evidence.literature_investigation_prompt import (
     INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
@@ -43,6 +50,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import obj
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
     ToolRegistry)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
+    pairwise_blast_comparison)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_catalog import ScientificToolLibrary
 from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
 
@@ -84,8 +93,21 @@ HISTORY_GUIDANCE = ('Your own earlier outcomes are shown to you as own_outcomes,
                     'the records each produced; a failed or invalid outcome is shown with its feedback. Your '
                     'children\'s reports are in child_reports. Reading them creates no completed action or '
                     'observation and does not execute or credit the historical work again.\n')
+PAIRWISE_TOOL = 'pairwise_blast'
 DESCRIPTIONS = {
     'reason': REASONING_COMMIT_REQUIREMENT,
+    PAIRWISE_TOOL: ('Compare one query sequence with one subject sequence by a pairwise BLAST on a bound local '
+                    'resource. You choose four values from the offered sets: program (blastp for two proteins, '
+                    'blastn for two nucleotide sequences, blastx for a nucleotide query against a protein subject, '
+                    'tblastn for a protein query against a nucleotide subject, tblastx for two nucleotide sequences '
+                    'compared in translation), query_ref (a subject of your scope), subject_ref (another subject '
+                    'record you hold) and resource_id (one of local_resources). Code runs the search, fetches its '
+                    'report and grades it in this one unit; you do not grade. The outcome shows the controlled '
+                    'features of the saved pairwise sheet: counts and fractions of paired and identical residues, '
+                    'the two lengths and the native E-value with the search-space context the report gives. The '
+                    'graded correspondence is what your credit measures. Repeating a comparison you already hold '
+                    'adds no correspondence and earns nothing. A program that does not take the two molecules is '
+                    'an invalid outcome.'),
 }
 # What the model is told of each child it may commission: what the child does, the controlled fields of its
 # commission (the model chooses values; code builds the child's assignment) and what comes back. A child's entry is
@@ -143,6 +165,26 @@ def local_resources(ctx):
     return [resource['resource_id'] for resource in access.read('resources') if resource['kind'] == 'local']
 
 
+def held_subjects(summary):
+    """The subject records this episode holds: what a comparison's two sequences are chosen from."""
+    return [ref for ref in summary['held_record_refs'] if ref.startswith('subject_')]
+
+
+def pairwise_options(summary, resources):
+    """The ``pairwise_blast`` choices this decision offers, one per query: the query is a held subject of the scope
+    and the subject is any other held subject record; every value is from a fixed set. None while no local resource
+    is bound or no second subject record is held."""
+    held, options = held_subjects(summary), []
+    for query in summary['scope']['subject_refs']:
+        subjects = [ref for ref in held if ref != query]
+        if query in held and subjects and resources:
+            options.append(obj({'kind': {'const': 'tool'}, 'tool': {'const': PAIRWISE_TOOL},
+                                'arguments': obj({'program': {'enum': list(PROGRAMS)}, 'query_ref': {'enum': [query]},
+                                                  'subject_ref': {'enum': subjects},
+                                                  'resource_id': {'enum': list(resources)}})}))
+    return options
+
+
 def commission_fields(slot, summary, resources):
     """What the model supplies to commission ``slot``, as ``(properties, required)``: controlled values only.
     ``None`` while this episode holds nothing the commission could be chosen from: the slot is then not offered.
@@ -169,7 +211,7 @@ def child_option(slot, summary, resources):
 
 
 def selection_schema(summary, tools, resources):
-    """What the model answers with: one reasoning commit, one selected tool, or one child.
+    """What the model answers with: one reasoning commit, one selected tool, one pairwise comparison, or one child.
     The reasoning commit is the tool ``reason``, as the model is shown it: the arguments of a tool whose schema is
     composed travel as JSON text, and the Store's reasoning schema sent as output schema itself has more enum
     values than the model endpoint takes in one schema."""
@@ -177,6 +219,7 @@ def selection_schema(summary, tools, resources):
                     'arguments': obj({'commit': summary['reasoning_schema']})})]
     options.extend(obj({'kind': {'const': 'tool'}, 'tool': {'const': row['name']},
                         'arguments': row.get('input_schema', OPEN)}) for row in tools)
+    options.extend(pairwise_options(summary, resources))
     options.extend(child_option(slot, summary, resources) for slot in offered_children(summary, resources))
     return obj({'selection': {'anyOf': options}})
 
@@ -193,6 +236,8 @@ def decide(summary, feedback, ctx):
     tools = selected_tools(settings, selection)
     resources = local_resources(ctx)
     offered = offered_children(summary, resources)
+    own = ([{'name': PAIRWISE_TOOL, 'description': DESCRIPTIONS[PAIRWISE_TOOL]}]
+           if pairwise_options(summary, resources) else [])
     context = {
         'goal': GOAL, 'scope': summary['scope'],
         'sequence_homology_evidence': {
@@ -209,7 +254,7 @@ def decide(summary, feedback, ctx):
         'credit_binding': summary['credit_binding'], 'own_outcomes': summary['units'],
         'last_local_outcome': summary['last_local_outcome'], 'child_reports': summary['child_reports'],
         'handoff_refs': summary['handoff_refs'], 'local_resources': resources,
-        'tools': [{'name': 'reason', 'description': DESCRIPTIONS['reason']}, *tools],
+        'tools': [{'name': 'reason', 'description': DESCRIPTIONS['reason']}, *own, *tools],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot],
                            'selectable_return_fields': SELECTABLE[slot]} for slot in offered],
         'time_accounting': time_accounting(ctx.clock.progress_time)}
@@ -246,6 +291,8 @@ def action(response, summary, records, ctx):
     scope = summary['scope']
     if selection['tool'] == 'reason':
         return ToolCall('reason', {'commit': selection['arguments']['commit'], 'scope': scope})
+    if selection['tool'] == PAIRWISE_TOOL:
+        return ToolCall(PAIRWISE_TOOL, dict(selection['arguments']))
     return ToolCall('execute_selected_tool', {'tool': selection['tool'], 'arguments': selection['arguments'],
                                               'scope': scope,
                                               'permitted_record_refs': (summary['held_record_refs']
@@ -282,4 +329,12 @@ async def execute_selected_tool(arguments, ctx):
         return failure_outcome(ctx.store, error, category='episode_execution', cause_code='selected_operation_failed')
 
 
-TOOLS = {'reason': reason, 'execute_selected_tool': execute_selected_tool}
+async def pairwise_blast(arguments, ctx):
+    """One pairwise comparison as one unit: run, fetch and grade, by the library's one function. The arguments are
+    the model's four controlled choices."""
+    return await pairwise_blast_comparison(
+        ctx, program=arguments['program'], query_ref=arguments['query_ref'], subject_ref=arguments['subject_ref'],
+        resource_id=arguments['resource_id'], executable_directory=ctx.settings['blast_executable_directory'])
+
+
+TOOLS = {'reason': reason, 'execute_selected_tool': execute_selected_tool, PAIRWISE_TOOL: pairwise_blast}

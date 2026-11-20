@@ -6,7 +6,7 @@ New fields the final form needs (the old code read them from the runner or the c
 ``scope`` (the Store scope the old runner passed as the request scope), ``scope_refs`` (the records the scope names,
 in custody), ``proposed_annotation_refs`` (the proposed annotation in custody: the old ``initial_references`` named
 it with ``evidence_refs``) and ``child_credit_units`` (the credit units of the children this episode commissions,
-by name in ``_UNITS``; a unit is added there when a child that takes one is built).
+by name in ``_UNITS``: exactly the four the root sends, ``OPERATIONAL_CREDIT_UNITS`` of the root's ``credit.py``).
 
 This is the only place the assignment is read. The old checks of the assignment that need nothing but its value are
 carried: the selection and the revision origin are valid, every evidence reference has the reference form, the
@@ -32,7 +32,7 @@ _EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task_v1'}, 'kind': {'c
                       'credit_unit': {'type': 'number', 'exclusiveMinimum': 0}}, required=['version', 'kind',
                                                                                          'evidence_axis',
                                                                                          'credit_unit'])
-_UNITS = ()
+_UNITS = ('handoff_unit', 'acquired_record_unit', 'information_unit', 'completion_target')
 
 ASSIGNMENT_FORM = RecordForm({
     'selection': Field('record', 'The selected evidence axis (A101), thought pattern and the child tool info '

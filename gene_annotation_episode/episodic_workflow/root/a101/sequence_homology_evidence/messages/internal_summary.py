@@ -1,6 +1,7 @@
 """Where the episode stands, as a pure function of the loop's view: the commission, one row per completed unit
-(a selected tool, a reasoning commit or a child commission), what each child reported, the records this episode
-committed, the handoff records its children returned, the working state of the scope and the controller's yield
+(a selected tool, a reasoning commit, a pairwise comparison or a child commission), what each child reported, the
+records this episode committed or graded (its reasoning commits and the graded records of its comparisons: what its
+credit reads), the handoff records its children returned, the working state of the scope and the controller's yield
 table.
 
 For the commissions (``task.commission_fields``, ``msg_to_child``) the summary also holds what a commission is
@@ -15,9 +16,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     ALL, axis_features)
 
 from ..credit import A101SequenceCredit
-from ..task import CHILD_SLOTS
+from ..task import CHILD_SLOTS, PAIRWISE_TOOL
 
 EXECUTED = ('completed', 'partial')
+# The tools whose records this episode's credit reads and so returns: its reasoning commits and its graded comparisons.
+CREDITED_TOOLS = ('reason', PAIRWISE_TOOL)
 EVIDENCE_RECORD_TYPES = ('observation', 'assessment')
 
 
@@ -41,7 +44,10 @@ def internal_summary(view):
             row = {'position': position, 'kind': 'tool', 'tool': outcome['tool'],
                    'selected': outcome['arguments'].get('tool'), 'status': result['status'],
                    'record_refs': list(result['record_refs']), 'feedback': result.get('feedback')}
-            if outcome['tool'] == 'reason' and result['status'] in EXECUTED:
+            if outcome['tool'] == PAIRWISE_TOOL:
+                row['comparison'] = dict(outcome['arguments'])
+                row['features'] = result['result']
+            if outcome['tool'] in CREDITED_TOOLS and result['status'] in EXECUTED:
                 committed.extend(ref for ref in result['record_refs'] if ref not in committed)
         else:
             report = outcome['report']

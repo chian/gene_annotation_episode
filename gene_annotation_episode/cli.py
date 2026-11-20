@@ -13,7 +13,7 @@ from .material_parsing import FORMATS
 
 
 def _print(value):
-    print(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False))
+    print(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False, default=str))
 
 
 def parser():
@@ -51,6 +51,34 @@ def parser():
             command.add_argument("--scope", required=True)
             command.add_argument("--include-credit", action="store_true")
             command.add_argument("--include-artifacts", action="store_true")
+    run = sub.add_parser("run", help="Run an episode and everything below it from the caller's commission, to the end.")
+    run.add_argument("--workspace", type=Path, required=True)
+    run.add_argument("--entry", required=True, help="The entry binding path, for example sequence_homology_evidence.")
+    run.add_argument("--commission", type=Path, required=True, help="JSON {assignment, message, selection}: what a parent sends.")
+    for command in (run, sub.add_parser("resume", help="Replay a recorded run; recorded units and model calls are not made again.")):
+        if command is not run:
+            command.add_argument("--workspace", type=Path, required=True)
+        command.add_argument("--continuation", type=Path, required=True, help="JSON: binding path -> yield controller settings.")
+        command.add_argument("--services", type=Path, required=True, help="JSON: the job services configuration.")
+        command.add_argument("--run-id", required=True)
+        command.add_argument("--journal", type=Path, required=True)
+        command.add_argument("--model-calls", type=Path, required=True, help="A new directory for the model provider's calls.")
+    shown = sub.add_parser("report", help="What the journal recorded of a run: episodes, units, model answers, controller steps.")
+    shown.add_argument("--workspace", type=Path, required=True)
+    shown.add_argument("--run-id", required=True)
+    shown.add_argument("--journal", type=Path, required=True)
+    proposed = sub.add_parser("propose-annotation", help="Register the caller's proposed annotation of a subject (one hypothesis record).")
+    proposed.add_argument("--workspace", type=Path, required=True)
+    proposed.add_argument("--subject", required=True)
+    proposed.add_argument("--predicate", required=True)
+    proposed.add_argument("--value", required=True, help="JSON: the typed value of the hypothesis.")
+    frozen = sub.add_parser("freeze-libraries", help="Freeze the process library and the tool library for a run and print the axis selection.")
+    frozen.add_argument("--workspace", type=Path, required=True)
+    frozen.add_argument("--directory", type=Path, required=True)
+    frozen.add_argument("--source", type=Path, required=True, help="The published process library to freeze.")
+    frozen.add_argument("--axis", required=True, help="The evidence-axis option, for example A101.")
+    frozen.add_argument("--tool", action="append", default=[], help="A tool of the tool registry to offer; may repeat.")
+    frozen.add_argument("--tool-registry", type=Path, required=True, help="JSON: the keyword settings of the tool registry.")
     return result
 
 
@@ -87,6 +115,27 @@ def main(argv=None):
                     "annotation_page": {"offset": args.offset, "limit": args.limit,
                         "total": store.count("annotation", current=True),
                         "next_offset": args.offset+args.limit if len(annotations)>args.limit else None}})
+                return 0
+            if args.command in ("run", "resume", "report", "propose-annotation", "freeze-libraries"):
+                from . import run_command
+                if args.command == "run":
+                    _print(run_command.run(store, entry=args.entry, commission=run_command.read_json(args.commission),
+                        continuation=run_command.read_json(args.continuation),
+                        services=run_command.read_json(args.services), run_id=args.run_id, journal=args.journal,
+                        model_calls=args.model_calls))
+                elif args.command == "resume":
+                    _print(run_command.resume_run(store, continuation=run_command.read_json(args.continuation),
+                        services=run_command.read_json(args.services), run_id=args.run_id, journal=args.journal,
+                        model_calls=args.model_calls))
+                elif args.command == "report":
+                    _print(run_command.report(run_id=args.run_id, journal=args.journal))
+                elif args.command == "propose-annotation":
+                    _print(run_command.propose_annotation(store, subject=args.subject, predicate=args.predicate,
+                        value=parse_json_object(args.value)))
+                else:
+                    _print(run_command.freeze_libraries(store, directory=args.directory, source=args.source,
+                        axis=args.axis, tools=args.tool,
+                        tool_registry=run_command.read_json(args.tool_registry)))
                 return 0
             if args.command == "export":
                 from .export import export_annotation

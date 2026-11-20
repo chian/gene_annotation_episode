@@ -4,7 +4,8 @@ and ``finding``: the controlled features code read from the A101 axis sheet of e
 results. No held-record lists, no per-child rows and no prose: the root decides which axis to commission next and
 whether to come back for an outstanding job, and that is what it needs.
 
-Selectable: ``committed_record_refs`` (the records this episode committed through its reasoning units) and
+Selectable: ``committed_record_refs`` (the records this episode committed through its reasoning units and the graded
+records of its comparisons: the records its credit reads, which a parent passes back on a later visit) and
 ``execution_handoff_refs`` (the handoff records its launches returned)."""
 from method_loop import ChoiceField, Field, RecordForm
 
@@ -30,7 +31,8 @@ FINDING_FORM = RecordForm({
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
     'finding': Field('record', 'The controlled features of the A101 axis sheet of each target', form=FINDING_FORM),
-    'committed_record_refs': Field('record_refs', 'The records this episode committed', required=False),
+    'committed_record_refs': Field('record_refs', 'The records this episode committed or graded: what its credit '
+                                                  'reads', required=False),
     'execution_handoff_refs': Field('record_refs', 'The original handoff records its launches returned',
                                     required=False),
 })
