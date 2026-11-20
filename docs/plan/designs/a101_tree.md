@@ -283,3 +283,25 @@ Predicted for run `a101-patternA-4` (a fresh workspace, `runs/a101_patternA_ws_2
 4. The return: credit 0.947, the target's sheet features, and `committed_record_refs` holding the source, the
    grading artifact, the search row and the observation.
 5. `resume` asks the model nothing and returns the same result.
+
+**Observed, run `a101-patternA-4` (`runs/a101_patternA_run_4`; journal read back with `report`,
+`runs/a101_patternA_report_4`).** As predicted on every point: one model call, the request `blastp` / target /
+reference / `local`; the unit `pairwise_blast` completed in one shot (76 paired query positions, 75 identical pairs,
+E-value 3.9499e-56, effective search space 4899, one observation; 14 records produced); the credit right after it
+is 0.9471855819086874 with no reasoning commit; the estimator stopped at that step (largest gain still possible
+0.0528, cost 0.1); the return carries the four graded records in `committed_record_refs`. `resume`
+(`runs/a101_patternA_resume_4`) made 0 model calls and returned the same result.
+
+### Pattern A: prediction for the fifth run, a later visit to the head (written before it)
+
+The commission of run `a101-patternA-5` is what the root sends when it comes back to the head: the same commission
+plus, in `evidence_refs`, the four records the head returned in run 4. The cutoff is 0.05 for this run so that the
+model is asked at least once (0.0528 still possible).
+
+1. The initial credit is 0.947: the head holds its earlier graded comparison, so the visit starts where it stood.
+2. The model is asked. `pairwise_blast` is still offered (two sequence records are held), and the context shows
+   the comparison already held. If the model requests the same comparison, the check returns
+   `comparison_already_held` for it, the request is rejected with that fix-list and no unit is recorded. I cannot
+   make the model do this; if it does not, the rejection path is not shown by a real run.
+3. Nothing the model can do adds correspondence, so the credit stays 0.947 and the estimator ends the episode after
+   at most a few units.
