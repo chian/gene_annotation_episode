@@ -41,6 +41,12 @@ def yield_controller(initial_credit, settings, parent_input):
         profile = _profile(settings['task_yield_profiles'], key, 'execution_original_task_yield_profile_required')
         return CompletionYieldController(EPOCH, initial_credit, profile['cutoff'], parent_input['acquired_record_unit'],
                                          profile['parameters'])
+    if family == 'blast_pairwise':
+        # results:typed_blast_pairwise_<request version>: the verified completion is the graded pairwise sheet.
+        key = 'results:typed_blast_pairwise_' + parent_input['selector']['version']
+        profile = _profile(settings['task_yield_profiles'], key, 'execution_original_task_yield_profile_required')
+        return CompletionYieldController(EPOCH, initial_credit, profile['cutoff'], parent_input['acquired_record_unit'],
+                                         profile['parameters'])
     if family != 'native_bytes':
         # old: results:api_<service>[_<version>] / results:typed_<kind>_<version> with PracticalYieldEstimator
         raise NotImplementedError('unplaced:' + family + '.credit_view: the completion target of the typed family')

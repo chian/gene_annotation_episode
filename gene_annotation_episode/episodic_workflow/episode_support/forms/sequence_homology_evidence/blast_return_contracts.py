@@ -28,3 +28,13 @@ BLAST_GRADED_RETURN_SCHEMA = {'type': 'array', 'items': obj({
                              'x-reference-namespace': 'artifact'},
     'sheet_schema': {'const': 'blast_database_sheet_v1'},
 }), 'x-source': BLAST_GRADED_RETURN_SOURCE}
+
+# The graded return of A101's pairwise BLAST job (one query sequence against one subject sequence). The request names
+# only the resource and the sheet it wants; the original operands are the ones the job itself declares (the job is
+# in the target the commissioner built from the handoff row), so a request cannot name another pair.
+BLAST_PAIRWISE_GRADED_REQUEST_VERSION = 'blast_pairwise_grader_return_request_v1'
+BLAST_PAIRWISE_GRADED_REQUEST_SCHEMA = obj({
+    'version': {'const': BLAST_PAIRWISE_GRADED_REQUEST_VERSION},
+    'resource_id': TEXT,
+    'return_type': {'const': 'blast_pairwise_sheet_v1'},
+})

@@ -7,7 +7,8 @@ never rescaled. The windows are those of the result records the Episode holds: t
 acquisition, the initial ones and those of this Episode's own units, from its held record, so a status check, a
 refused fetch and a window of bytes already covered earn nothing.
 
-A graded return earns the credit unit once, when its grading is saved. The other old credit views belong to classes
+A graded return (a BLAST database grading, a pairwise BLAST grading or a phmmer grading) earns the credit unit
+once, when its grading is saved. The other old credit views belong to classes
 that are in no place now (typed native families, API execution, local file sources): credit raises at the call that
 would have been made, not at its top."""
 import math
@@ -56,6 +57,10 @@ def credit(summary, records):
     if family == 'phmmer_graded':
         # The verified completion of a local phmmer return: its capture graded and published once (a search that
         # printed no alignment is complete too: it stays in the tool profile).
+        return summary['acquired_record_unit'] if summary['execution_completed'] else 0.0
+    if family == 'blast_pairwise':
+        # The verified completion of a pairwise BLAST return: a saved grading of the pairwise sheet of the job's own
+        # operands earns the credit unit once.
         return summary['acquired_record_unit'] if summary['execution_completed'] else 0.0
     if family == 'native_bytes':
         return summary['acquired_record_unit'] * selector_fraction(summary['requested'], summary['results'])

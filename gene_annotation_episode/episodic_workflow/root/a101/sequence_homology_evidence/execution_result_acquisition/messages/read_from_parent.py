@@ -15,7 +15,7 @@ where their old class would have been called (``unplaced``): their classes are i
 import math
 from pathlib import Path
 
-from method_loop import Field, DeclaredField, RecordForm
+from method_loop import ChoiceField, Field, DeclaredField, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.native_blast_masking_acquisition import (
     is_native_blast_masking_target)
@@ -25,8 +25,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.simil
     is_native_blast_target)
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.similarity_search.sequence_homology_evidence.native_blast_utility_acquisition import (
     is_native_blast_utility_target)
+from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.blast_analysis_kind import (
+    ANALYSIS_KINDS, checked_analysis_kind)
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.blast_return_contracts import (
-    BLAST_GRADED_REQUEST_SCHEMA, BLAST_GRADED_REQUEST_VERSION)
+    BLAST_GRADED_REQUEST_SCHEMA, BLAST_GRADED_REQUEST_VERSION, BLAST_PAIRWISE_GRADED_REQUEST_SCHEMA,
+    BLAST_PAIRWISE_GRADED_REQUEST_VERSION)
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.execution_contracts import (
     TEXT, checked, obj, validate_target)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.sequence_homology_evidence.practical_execution_operations import (
@@ -65,6 +68,11 @@ ASSIGNMENT_FORM = RecordForm({
                                 'result selector'),
     'target': Field('record', 'The execution target the handoff names (execution_target_v1); the commissioner '
                               'builds it from the handoff row'),
+    'analysis_kind': ChoiceField('text', 'The declared analysis kind of the BLAST job whose result is acquired '
+                                         '(pairwise: one query sequence against one subject sequence). The kind is '
+                                         'derived again from the job itself and the two must agree; it is required '
+                                         'for a pairwise BLAST target and not allowed for any other', ANALYSIS_KINDS,
+                                 required=False),
     'acquired_record_unit': Field('number', 'The credit of one fully acquired requested selector'),
     'record_refs': Field('record_refs', 'Every record the code reads, passed in custody: the handoff row, the job '
                                         'rows and result artifacts of an earlier acquisition, and the records the '
@@ -84,6 +92,8 @@ def family(target, selector):
     (``blast_graded``) is the API BLAST result whose return is its graded sheet."""
     if selector.get('version') == BLAST_GRADED_REQUEST_VERSION:
         return 'blast_graded'
+    if selector.get('version') == BLAST_PAIRWISE_GRADED_REQUEST_VERSION:
+        return 'blast_pairwise'
     if selector.get('version') == LOCAL_FILE_SOURCE_VERSION:
         return 'local_file_source'
     if selector.get('version') == MASKING_SELECTOR_VERSION or is_native_blast_masking_target(target):
@@ -132,6 +142,12 @@ def validated_selector(target, selector, kind):
         if target['resource_kind'] != 'api' or value['resource_id'] != target['resource_id']:
             raise ValueError('blast_database_grader_resource_conflict')
         return value
+    if kind == 'blast_pairwise':
+        # The graded return of A101's pairwise BLAST job: the request names the resource and the sheet it wants.
+        value = checked(selector, BLAST_PAIRWISE_GRADED_REQUEST_SCHEMA, 'blast_pairwise_grader_return_request_invalid')
+        if target['resource_kind'] != 'local' or value['resource_id'] != target['resource_id']:
+            raise ValueError('blast_pairwise_grader_resource_conflict')
+        return value
     if kind == 'local_file_source':
         raise NotImplementedError('unplaced:LocalFileSourceResults.selector')
     if kind == 'native_blast_masking':
@@ -178,13 +194,24 @@ def read_from_parent(assignment, message):
     if not math.isfinite(unit) or unit <= 0:
         raise ValueError('explicit_positive_operational_credit_units_required')
     kind = family(target, own['selector'])
+    declared = assignment.get('analysis_kind')
+    if kind == 'blast_pairwise':
+        # The declared kind of the commission and the kind derived from the job itself must agree (no fallback).
+        analysis_kind = checked_analysis_kind(declared, _jobs(target))
+    elif declared is not None:
+        raise ValueError('analysis_kind_not_applicable_to_family:' + kind)
+    else:
+        analysis_kind = None
     selector = validated_selector(target, own['selector'], kind)
     requested = windows(selector) if kind == 'native_bytes' else {}
     parent_input = {'assignment': own, 'target': target, 'family': kind, 'selector': selector,
                     'requested': requested,
                     'result_names': result_names(target, requested) if kind == 'native_bytes' else {},
-                    'acquired_record_unit': unit, 'record_refs': list(assignment.get('record_refs', [])),
+                    'analysis_kind': analysis_kind, 'acquired_record_unit': unit,
+                    'record_refs': list(assignment.get('record_refs', [])),
                     'initial_result_refs': list(assignment.get('initial_result_refs', []))}
+    if kind == 'blast_pairwise':
+        parent_input['report_name'] = _jobs(target)['blast_pairwise']['report']['relative_path']
     if kind == 'phmmer_graded':
         # The original query operand: the one subject bound to the job's query sequence.
         queries = [binding['subject_ref'] for binding in target['assignment']['requested_job']['native_hmmer'][

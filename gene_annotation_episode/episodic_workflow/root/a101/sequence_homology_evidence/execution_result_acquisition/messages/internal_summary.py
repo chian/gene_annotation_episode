@@ -16,6 +16,8 @@ import json
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_database_features import (
     saved_grading_features)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_pairwise_features import (
+    saved_grading_features as saved_pairwise_features)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.hmmer_search_features import (
     saved_hit_features)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import (
@@ -140,7 +142,7 @@ def _plain(view, parent):
                                    'execution_result_refs': result_refs, 'execution_file_source_refs': [],
                                    'execution_completed': complete, 'execution_blast_graded_refs': [],
                                    'execution_phmmer_graded_refs': []},
-            'execution_completed': complete, 'graded_sheets': [], 'profile_sheets': [],
+            'execution_completed': complete, 'graded_sheets': [], 'profile_sheets': [], 'pairwise_sheets': [],
             'credit_view': _credit_view(view, parent), 'units_consumed': view.units_consumed}
 
 
@@ -164,6 +166,29 @@ def _blast_graded(view, parent):
                 graded.append({'source_ref': outcome['result']['result_ref'],
                                'search_ref': outcome['result']['search_ref'],
                                **saved_grading_features(view.records, outcome['result']['grading_artifact_ref'])})
+    return fetched, closed, graded, gradings
+
+
+def _pairwise_graded(view, parent):
+    """The graded pairwise BLAST return: the result files fetched so far (those the parent passed and those this
+    Episode's fetch units acquired through the job service's closure row) and, for each grading unit that
+    completed, the controlled features code reads from the saved grading artifact (``blast_pairwise_features``)."""
+    fetched = [{'result_ref': ref, 'name': None, 'initial': True} for ref in parent['initial_result_refs']]
+    closed, graded, gradings = False, [], []
+    for unit in view.outcomes:
+        outcome = unit['outcome']
+        if unit['tool'] == 'execution_results_fetch' and outcome['status'] == 'completed':
+            closed = True
+            fetched.extend({'result_ref': item['ref'], 'name': item['name'], 'initial': False}
+                           for item in outcome['results'])
+        if unit['tool'] == 'blast_pairwise_grade':
+            gradings.append({'status': outcome['status'],
+                             **({'code': outcome['feedback']['code']} if outcome['status'] != 'completed' else {})})
+            if outcome['status'] == 'completed' and outcome['result']['grading_artifact_ref'] not in {
+                    row['sheet_refs'][0] for row in graded}:
+                graded.append({'source_ref': outcome['result']['result_ref'],
+                               'search_ref': outcome['result']['search_ref'],
+                               **saved_pairwise_features(view.records, outcome['result']['grading_artifact_ref'])})
     return fetched, closed, graded, gradings
 
 
@@ -215,7 +240,7 @@ def _graded(view, parent, *, fetched, closed, gradings, complete, graded_sheets,
                                    'execution_result_refs': [], 'execution_file_source_refs': [],
                                    'execution_completed': complete, 'execution_blast_graded_refs': blast_refs,
                                    'execution_phmmer_graded_refs': phmmer_refs},
-            'execution_completed': complete, 'results': [], 'acquisitions': [],
+            'execution_completed': complete, 'results': [], 'acquisitions': [], 'pairwise_sheets': [],
             'credit_view': _credit_view(view, parent), 'units_consumed': view.units_consumed}
 
 
@@ -227,6 +252,14 @@ def internal_summary(view):
         return {**_graded(view, parent, fetched=fetched, closed=closed, gradings=gradings, complete=graded,
                           graded_sheets=[], profile_sheets=sheets, blast_refs=[], phmmer_refs=refs),
                 'query_ref': parent['query_ref']}
+    if parent['family'] == 'blast_pairwise':
+        fetched, closed, graded, gradings = _pairwise_graded(view, parent)
+        refs = [ref for row in graded for ref in (row['source_ref'], row['sheet_refs'][0], row['search_ref'])]
+        return {**_graded(view, parent, fetched=fetched, closed=closed, gradings=gradings, complete=bool(graded),
+                          graded_sheets=[], profile_sheets=[], blast_refs=refs, phmmer_refs=[]),
+                'pairwise_sheets': [{key: value for key, value in row.items() if key not in ('source_ref', 'search_ref')}
+                                    for row in graded],
+                'report_name': parent['report_name'], 'analysis_kind': parent['analysis_kind']}
     if parent['family'] == 'blast_graded':
         fetched, closed, graded, gradings = _blast_graded(view, parent)
         refs = [ref for row in graded for ref in (row['source_ref'], row['sheet_refs'][0], row['search_ref'])]

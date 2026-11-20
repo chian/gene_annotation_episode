@@ -29,6 +29,13 @@ original query, retains it and enters the search into the A101 tool profile. The
 meanings and the owner's request contract reach the model in the instruction text; the finding is the controlled
 features code reads from the saved sheets.
 
+The pairwise BLAST return (family ``blast_pairwise``, A101's own job of one query sequence against one subject sequence):
+``execution_results_fetch`` fetches only the one report file the job declares, and ``blast_pairwise_grade`` grades that
+native JSON document into the ``blast_pairwise_sheet_v1`` of the job's own operands (which operands they are comes from
+the job, and the grading is refused when the document is of other sequences), retains the grading with its source and
+the search's tool-profile row, and the finding is the controlled features code reads from the saved sheet. The job
+declares no stdout or stderr output and nothing here fetches, writes or checks one.
+
 The task always offers a unit and never ends the Episode; the yield controller stops it. This episode does not wait
 for a job: a status request stays available when nothing else is.
 
@@ -167,10 +174,11 @@ async def wait(arguments, ctx):
 
 
 def execution_results_fetch(arguments, ctx):
-    """Fetch the result files of the original handoff through the job service: each file becomes an artifact this
-    Episode holds and the handoff is closed by the service's closure row. A refused request (the job has not
-    ended, the transport is down) is the ``failed`` outcome the service returns."""
-    return ctx.services['job_access'].fetch(ctx, arguments['handoff_ref'])
+    """Fetch the result files of the original handoff through the job service (all of them, or the ``names`` the
+    assignment's family needs): each file becomes an artifact this Episode holds and the handoff is closed by the
+    service's closure row. A refused request (the job has not ended, the transport is down) is the ``failed``
+    outcome the service returns."""
+    return ctx.services['job_access'].fetch(ctx, arguments['handoff_ref'], names=arguments.get('names'))
 
 
 def _invalid(code):
@@ -218,6 +226,72 @@ def blast_grade(arguments, ctx):
         source = ctx.store.put('source', {
             'provider': 'ncbi_blast', 'accession': None, 'uri': None, 'artifact_ref': result_ref,
             'text_ref': None, 'request_ref': None, 'version': normalized['search']['version'],
+            'retrieved_at': None, 'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [query]},
+            origin='tool')
+        search = ctx.store.table(SEARCHES).put({'source_ref': source['id'], 'query_ref': query, 'profile': 'blast'})
+    return {'status': 'completed', 'record_refs': [source['id'], grading_ref, search['id']],
+            'changed_record_refs': [source['id'], grading_ref, search['id']],
+            'result': {'result_ref': source['id'], 'grading_artifact_ref': grading_ref,
+                       'search_ref': search['id'], 'sheet_schema': sheet['schema']}, 'feedback': None}
+
+
+def _fasta_residues(data):
+    """The residues (upper case) of a FASTA file of exactly one record."""
+    lines = data.decode('ascii').splitlines()
+    if sum(1 for line in lines if line.startswith('>')) != 1:
+        raise ValueError('blast_pairwise_operand_single_record_required')
+    return ''.join(line.strip() for line in lines if not line.startswith('>')).upper()
+
+
+def blast_pairwise_grade(arguments, ctx):
+    """Grade the fetched native JSON report of the job's one query against its one subject into the pairwise sheet,
+    and keep the grading.
+
+    Which sequences the report must be about is the job's own declaration: each operand is a FASTA artifact this
+    Episode holds (its digest is the one the job declares), the query operand is bound to a subject record whose
+    sequence it carries, and the sheet's query and subject lengths are those of the operands. A report of other
+    sequences, or of another sheet type than the request, is refused (an invalid outcome, nothing retained). The
+    result is retained as a ``native.blast.pairwise`` source over the fetched artifact with the full grading artifact
+    beside it (``retain_tool_grading``), and the search enters the A101 sheet's tool profile from the identity of its
+    producer (``native_correspondence.SEARCHES``)."""
+    request, job, result_ref = arguments['request'], arguments['job'], arguments['result_ref']
+    try:
+        if not ctx.store.holds(result_ref):
+            raise ValueError('blast_pairwise_result_not_held')
+        residues = {}
+        for operand in job['operands']:
+            if operand['artifact_ref'] is None or not ctx.store.holds(operand['artifact_ref']):
+                raise ValueError('blast_pairwise_operand_not_held:' + operand['role'])
+            data = ctx.store.get_artifact(operand['artifact_ref'])
+            if hashlib.sha256(data).hexdigest() != operand['sha256']:
+                raise ValueError('blast_pairwise_operand_digest_conflict:' + operand['role'])
+            residues[operand['role']] = _fasta_residues(data)
+        bound = [row['subject_ref'] for row in job['operand_bindings']
+                 if row['operand_role'] == 'query_sequence' and row['subject_ref']]
+        if len(bound) != 1:
+            raise ValueError('blast_pairwise_query_subject_binding_required')
+        query = bound[0]
+        if ctx.store.get_artifact(ctx.store.get(query)['sequence_ref']).decode('ascii').upper() != residues[
+                'query_sequence']:
+            raise ValueError('blast_pairwise_query_operand_conflict')
+        grading = grade_blast_result(ctx.store.get_artifact(result_ref), mode='pairwise', resource='local',
+                                     output_format='json2', request={'program': job['program'],
+                                                                     'query_length': len(residues['query_sequence'])},
+                                     _retain_correspondence=True)
+        sheet = grading['sheet']
+        if sheet['schema'] != request['return_type']:
+            raise ValueError('blast_pairwise_result_type_conflict')
+        if (sheet['query']['length'] != len(residues['query_sequence'])
+                or sheet['reference']['length'] != len(residues['subject_sequence'])):
+            raise ValueError('blast_pairwise_result_operand_conflict')
+    except (ValueError, ContractError) as error:
+        return _invalid(str(error))
+    with ctx.store.transaction():
+        grading_ref = retain_tool_grading(ctx.store, provider='native.blast.pairwise', native_artifact_ref=result_ref,
+                                          grading=grading)
+        source = ctx.store.put('source', {
+            'provider': 'native.blast.pairwise', 'accession': None, 'uri': None, 'artifact_ref': result_ref,
+            'text_ref': None, 'request_ref': None, 'version': sheet['input']['search']['version'],
             'retrieved_at': None, 'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [query]},
             origin='tool')
         search = ctx.store.table(SEARCHES).put({'source_ref': source['id'], 'query_ref': query, 'profile': 'blast'})
@@ -415,7 +489,7 @@ def phmmer_grade(arguments, ctx):
 TOOLS = {'execution_results_status': execution_results_status, 'execution_results_collect': execution_results_collect,
          'execution_results_read': execution_results_read, 'wait': wait,
          'execution_results_fetch': execution_results_fetch, 'blast_grade': blast_grade,
-         'phmmer_grade': phmmer_grade}
+         'blast_pairwise_grade': blast_pairwise_grade, 'phmmer_grade': phmmer_grade}
 
 FETCH = {'name': 'execution_results_fetch',
          'description': 'Fetch the result files of the original handoff once its job has ended; each file is kept '
@@ -448,6 +522,32 @@ def _blast_catalog(summary):
                         'description': 'Grade one fetched native BLAST JSON2 result file into the '
                                        'blast_database_sheet_v1 of the original query and keep the grading.',
                         'input_schema': obj({'result_ref': {'enum': refs}})})
+    return catalog
+
+
+PAIRWISE_GRADER_INSTRUCTIONS = (
+    '\n\nPairwise BLAST return. The job compared one query sequence with one subject sequence; its report says which '
+    'residues of the two correspond and how many. Fetch the job\'s report once it has ended (the job service refuses '
+    'before that and the job stays open), then select blast_pairwise_grade to grade the fetched native report into '
+    'the blast_pairwise_sheet_v1 of the job\'s own operands: a report of other sequences is refused. The sheet '
+    'records every reported alignment, the residue pairs of their union, and the counts and fractions of paired and '
+    'identical residues; it does not sum alternative alignments. The smallest native E-value of the alignments is '
+    'reported with what the report gives to interpret it: the lengths of the two sequences, the effective search '
+    'space, the effective alignment length, the scoring system\'s Karlin-Altschul parameters and the E-value '
+    'threshold of the search. A value the report does not give is absent. The scientific parent interprets them.')
+
+
+def _pairwise_catalog(summary):
+    """The operations offered for a pairwise BLAST return: a status request always, the fetch while the job is not
+    closed, and the grading once the report is fetched."""
+    catalog = [STATUS]
+    if summary['fetch_offered']:
+        catalog.append(FETCH)
+    if any(row['name'] == summary['report_name'] for row in summary['fetched_results']):
+        catalog.append({'name': 'blast_pairwise_grade',
+                        'description': 'Grade the fetched native BLAST report of the job into the '
+                                       'blast_pairwise_sheet_v1 of its query and subject and keep the grading.',
+                        'input_schema': obj({})})
     return catalog
 
 
@@ -496,11 +596,15 @@ PLAIN_INSTRUCTIONS = (
 BLAST_CREDIT = (
     '\n\nCredit. The credit unit is earned once, when a grading of the requested sheet type for the original query '
     'is saved. A fetch and a refused grading earn nothing.')
+PAIRWISE_CREDIT = (
+    '\n\nCredit. The credit unit is earned once, when a grading of the pairwise sheet for the job\'s own query and '
+    'subject is saved. A status request, a fetch and a refused grading earn nothing.')
 PHMMER_CREDIT = (
     '\n\nCredit. The credit unit is earned once, when the fetched capture is graded and published. A fetch and a '
     'refused grading earn nothing.')
 FAMILY_INSTRUCTIONS = {'native_bytes': PLAIN_INSTRUCTIONS, 'blast_graded': GRADER_INSTRUCTIONS + BLAST_CREDIT,
-                       'phmmer_graded': PHMMER_GRADER_INSTRUCTIONS + PHMMER_CREDIT}
+                       'phmmer_graded': PHMMER_GRADER_INSTRUCTIONS + PHMMER_CREDIT,
+                       'blast_pairwise': PAIRWISE_GRADER_INSTRUCTIONS + PAIRWISE_CREDIT}
 ANSWER_INSTRUCTION = (
     '\n\nAnswer with one of these operations and its operands as one JSON object in arguments_json (an empty object '
     'for an operation without operands). You select the operation; code carries it out. No operation ends the '
@@ -529,6 +633,8 @@ def _catalog(summary):
         return _blast_catalog(summary)
     if family == 'phmmer_graded':
         return _phmmer_catalog(summary)
+    if family == 'blast_pairwise':
+        return _pairwise_catalog(summary)
     if family == 'native_bytes':
         return _plain_catalog(summary)
     raise NotImplementedError('unplaced:' + family + '.operation_catalog')
@@ -548,6 +654,11 @@ def _context(summary, feedback, settings):
     if summary['family'] == 'blast_graded':
         context.update(graded_return_request=summary['selector'], fetched_results=summary['fetched_results'],
                        gradings=summary['gradings'], graded_sheets=summary['graded_sheets'])
+    elif summary['family'] == 'blast_pairwise':
+        context.update(graded_return_request=summary['selector'], analysis_kind=summary['analysis_kind'],
+                       job={**summary['job'], 'report_name': summary['report_name']},
+                       fetched_results=summary['fetched_results'], gradings=summary['gradings'],
+                       pairwise_sheets=summary['pairwise_sheets'])
     elif summary['family'] == 'phmmer_graded':
         context.update(fetched_results=summary['fetched_results'], gradings=summary['gradings'],
                        profile_sheets=summary['profile_sheets'])
@@ -608,7 +719,13 @@ def action(response, summary, records, ctx):
                                'closure': {'ref': summary['job']['closure_ref'], 'at': summary['job']['closed_at']},
                                'assignment': assignment, 'requested': summary['requested']})
     if tool == 'execution_results_fetch':
-        return ToolCall(tool, {'handoff_ref': assignment['handoff_ref']})
+        return ToolCall(tool, {'handoff_ref': assignment['handoff_ref'],
+                               'names': [summary['report_name']] if summary['family'] == 'blast_pairwise' else None})
+    if tool == 'blast_pairwise_grade':
+        report = next(row['result_ref'] for row in summary['fetched_results']
+                      if row['name'] == summary['report_name'])
+        return ToolCall(tool, {'result_ref': report, 'request': summary['selector'],
+                               'job': summary['target']['assignment']['requested_job']['blast_pairwise']})
     if tool == 'blast_grade':
         return ToolCall(tool, {'result_ref': arguments['result_ref'], 'request': summary['selector']})
     return ToolCall('phmmer_grade', {'files': arguments, 'query_ref': summary['query_ref'],
