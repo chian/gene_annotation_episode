@@ -119,7 +119,7 @@ def main(argv):
     except (OSError, KeyError, ValueError, TypeError):
         return 2
     receipt = {'version': 'blast_preparation_receipt_v1', 'plan_sha256': sha256_of(argv[1]), 'steps': [],
-               'files': [], 'info': None, 'mask': None, 'input_verified': True}
+               'files': [], 'info': None, 'readback': None, 'mask': None, 'input_verified': True}
     failed = False
     for step in plan['steps']:
         if failed:
@@ -137,6 +137,13 @@ def main(argv):
         receipt['steps'].append({'name': step['name'], 'ran': True, 'returncode': code})
         if code != 0:
             failed = True
+        elif step['name'] == 'check':
+            entries, letters = 0, 0
+            for line in open(stdout_path, errors='replace'):
+                parts = line.split()
+                if len(parts) == 2 and parts[1].isdigit():
+                    entries, letters = entries + 1, letters + int(parts[1])
+            receipt['readback'] = {'entries': entries, 'letters': letters}
         elif step['name'] == 'info':
             match = INFO.search(open(stdout_path, errors='replace').read())
             receipt['info'] = (None if match is None else
