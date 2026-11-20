@@ -193,3 +193,31 @@ A101 credit (`native_correspondence.read_details`, given the proposed annotation
 observations that an assessment relates to the proposed annotation with relation `strengthens` and an established
 extent. So after a `pairwise_blast` unit the credit is unchanged; it rises when the model commits a reasoning unit
 that assesses the proposed annotation against the comparison's observation.
+
+### Pattern A: the first real run (prediction, written before the run)
+
+Workspace `runs/a101_patternA_ws_1`, made with the command line only: `init` registered a two-record protein FASTA (the
+76-residue ubiquitin target and a 78-residue reference that differs by one substitution and two added residues);
+`propose-annotation` registered the caller's proposed annotation (the target is of the functional family of the
+reference); `freeze-libraries` froze the process library and an empty tool library and printed the A101 selection.
+The commission file is what the root sends the head: that selection, the proposed annotation, the scope (the
+target), the reference and its sequence as evidence, the whole-axis task, the four credit units, and the root's
+selection of `committed_record_refs` and `execution_handoff_refs`.
+
+Predicted:
+
+1. The head's first decision: the model chooses the tool `pairwise_blast` with `blastp`, the target as query, the
+   reference as subject, the resource `local`. (The only other choice offered is a reasoning commit.)
+2. That unit completes: one alignment; 76 of 76 query residues paired, 76 of 78 reference residues, 75 identical;
+   E-value about 3.95e-56 with effective search space 4899; one `comparison` observation; four records kept (source,
+   grading artifact, search row, observation).
+3. The credit after that unit is still 0.0: no assessment relates the observation to the proposed annotation yet.
+4. The model then commits a reasoning unit with an assessment of the proposed annotation against the observation.
+   If its relation is `strengthens` and its extent is established, the credit rises to the native correspondence of
+   the target, a value near 1 (I expect between 0.9 and 1.0; I have not derived the exact value). If the model
+   does not write such an assessment, the credit stays 0.0.
+5. The yield controller (bounded quality, cutoff 0.01, maximum 1.0) ends the episode within a few units after the
+   credit rises, or after a few units that earn nothing.
+6. The return: the credit, the finding with the target's sheet features, and `committed_record_refs` holding the
+   graded records and the committed reasoning records.
+7. `resume` asks the model nothing and returns the same result.
