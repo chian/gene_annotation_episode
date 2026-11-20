@@ -50,11 +50,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
     ENDED_STATES, FAILURE_CODES, MOLECULE_UNITS, SPACING, STATUS_FIELDS, _choose, _ended, _failed, _observations,
     failure_code, now_text, search_facts, seconds_between, seconds_until_allowed, timing)
 
-# The source's provider is the BLAST family ``ncbi_blast``: the Store admits an observation carrying native BLAST rows only
-# from such a source (``state.py``: ``native_blast_requires_native_tool_source``), and the native-correspondence scoring
-# reads it by that name. The source's ``accession`` names the service that ran the search.
-PROVIDER = 'ncbi_blast'
-SOURCE_ACCESSION = 'bvbrc_homology'
+# The source's provider names the service that ran the search. The Store admits an observation carrying native BLAST
+# rows from a source of this provider (``state.py``: ``NATIVE_BLAST_DATABASE_PROVIDERS``).
+PROVIDER = 'bvbrc_homology'
 SERVICE = 'bvbrc_homology'
 JOB_NAME = 'bvbrc_blast'
 QUERY_FILE = 'query.fasta'
@@ -110,7 +108,7 @@ def graded_rows(reader):
     hit count of the sheet and the controlled features the feature reader gives."""
     rows = []
     for source in reader.list('source'):
-        if source['provider'] != PROVIDER or source['accession'] != SOURCE_ACCESSION:
+        if source['provider'] != PROVIDER:
             continue
         grading_ref = source['auxiliary_artifact_refs'][0]
         grading = json.loads(reader.get_artifact(grading_ref))['grading']
@@ -421,7 +419,7 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
     with store.transaction():
         grading_ref = retain_tool_grading(store, provider=PROVIDER, native_artifact_ref=result_ref, grading=grading)
         source = store.put('source', {
-            'provider': PROVIDER, 'accession': SOURCE_ACCESSION, 'uri': None, 'artifact_ref': result_ref, 'text_ref': None,
+            'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': result_ref, 'text_ref': None,
             'request_ref': None, 'version': normalized['search']['version'], 'retrieved_at': None,
             'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [query_ref]}, origin='tool')
         search = store.table(SEARCHES).put({'source_ref': source['id'], 'query_ref': query_ref, 'profile': 'blast'})
@@ -435,7 +433,7 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
             'unprojected_alignment_count': unprojected}
 
 
-__all__ = ['ACTIONS', 'SOURCE_ACCESSION', 'DATABASES', 'ESTIMATE_BASES', 'ESTIMATE_RANGE', 'FAILURE_CODES', 'PROVIDER', 'REQUEST_FIELDS',
+__all__ = ['ACTIONS', 'DATABASES', 'ESTIMATE_BASES', 'ESTIMATE_RANGE', 'FAILURE_CODES', 'PROVIDER', 'REQUEST_FIELDS',
            'ROUTE_KIND', 'STATES', 'STATUS_FIELDS', 'WAIT_RANGE_MAX', 'check_commission', 'check_estimate',
            'check_extract', 'check_fix', 'check_launch', 'check_monitor', 'combinations', 'episode_state',
            'fetch_and_grade_search', 'graded_rows', 'launch_search', 'learned_statistics', 'minimum_wait',

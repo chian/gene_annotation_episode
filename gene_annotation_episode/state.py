@@ -32,6 +32,11 @@ class RevisionConflict(ContractError):
                        "current_revision": current_revision, "proposal_ref": proposal_ref}
 
 
+# The providers of a tool source whose observations may carry native BLAST rows of a database search: each is a
+# service that ran BLAST itself and returned its native report (the public NCBI service; BV-BRC's Homology service).
+NATIVE_BLAST_DATABASE_PROVIDERS = ("ncbi_blast", "bvbrc_homology")
+
+
 class Store:
     def __init__(self, path: str | Path):
         self.path = Path(path).resolve()
@@ -1151,7 +1156,7 @@ class Store:
                 if data.get("operand_intervals") != expected:
                     raise ContractError("native_minimap2_operand_interval_mismatch")
             if data.get("native_blast") is not None:
-                if origin != "tool" or data["kind"] != "comparison" or self.get(data["source_ref"])["provider"] != "ncbi_blast":
+                if origin != "tool" or data["kind"] != "comparison" or self.get(data["source_ref"])["provider"] not in NATIVE_BLAST_DATABASE_PROVIDERS:
                     raise ContractError("native_blast_requires_native_tool_source")
             native = data.get("native_cmsearch")
             if native is not None:
