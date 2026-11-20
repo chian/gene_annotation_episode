@@ -25,12 +25,13 @@ from __future__ import annotations
 import hashlib
 import inspect
 import json
+import os
 from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.blast_preparation_job import (
-    DRIVER_NAME, PLAN_NAME, RECEIPT_NAME, validate_plan)
+    DRIVER_NAME, PLAN_NAME, RECEIPT_NAME, compile_preparation, describe_fasta, validate_commission, validate_plan)
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.blast_analysis_kind import (
-    derived_analysis_kind)
+    checked_analysis_kind, derived_analysis_kind)
 from episode_runtime.job_access import JOB_LEDGER
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.pbs_batch_job import pbs_batch_job
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.resource_local import execute_on_local_resource
@@ -44,20 +45,25 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 DRIVER_SOURCE = Path(inspect.getsourcefile(blast_preparation_driver)).read_bytes()
 ENDED = ('finished', 'failed', 'cancelled')
 
-async def launch_preparation(ctx, resource_id, compiled, *, allocation=None):
-    """Stage and launch the compiled preparation job on ``resource_id``; returns the job service's launch outcome
-    (``handoff_ref`` is the handoff row to return in a ``record_refs`` field) plus ``plan_ref``, the artifact of the
-    plan the job runs. A refused launch is returned, never raised, and writes no row.
-
-    The caller has already checked the kind: ``compile_preparation`` derives it again from the compiled plan."""
+def _staged(ctx, compiled):
+    """The plan and the driver kept as artifacts the Episode holds, and the job's inputs ``{name: reference}``."""
     plan = validate_plan(compiled['plan'])
     if derived_analysis_kind(plan) != compiled['kind']:
         raise ValueError('blast_preparation_declared_and_derived_kind_differ')
     with ctx.store.transaction():
         plan_ref = ctx.store.artifact(compiled['plan_bytes'], 'application/json')
         driver_ref = ctx.store.artifact(DRIVER_SOURCE, 'text/x-python')
-    inputs = {name: {'input': plan['input']['artifact_ref'], 'plan': plan_ref, 'driver': driver_ref}[role]
-              for name, role in compiled['inputs'].items()}
+    return plan_ref, {name: {'input': plan['input']['artifact_ref'], 'plan': plan_ref, 'driver': driver_ref}[role]
+                      for name, role in compiled['inputs'].items()}
+
+
+async def launch_preparation(ctx, resource_id, compiled, *, allocation=None):
+    """Stage and launch the compiled preparation job on ``resource_id``; returns the job service's launch outcome
+    (``handoff_ref`` is the handoff row to return in a ``record_refs`` field) plus ``plan_ref``, the artifact of the
+    plan the job runs. A refused launch is returned, never raised, and writes no row.
+
+    The caller has already checked the kind: ``compile_preparation`` derives it again from the compiled plan."""
+    plan_ref, inputs = _staged(ctx, compiled)
     access = ctx.services['job_access']
     kind = access.describe(resource_id)['kind']
     if kind == 'local':
@@ -70,6 +76,16 @@ async def launch_preparation(ctx, resource_id, compiled, *, allocation=None):
     else:
         raise ValueError('blast_preparation_resource_kind_not_placed:' + str(kind))
     return {**launched, 'plan_ref': plan_ref}
+
+
+def establish_prepared(ctx, plan, plan_bytes, receipt, catalog, *, resource_id, job, plan_ref, receipt_ref,
+                       handoff_ref, closure_ref):
+    """Evaluate the receipt of an ended job against the plan and the route's listing and write the prepared-data
+    row, usable or not. Returns the row, the evaluation and the row's values."""
+    evaluation = evaluate(plan, hashlib.sha256(plan_bytes).hexdigest(), receipt, catalog, ended=True)
+    values = prepared_values(plan, evaluation, resource_id=resource_id, job=job, plan_ref=plan_ref,
+                             receipt_ref=receipt_ref, handoff_ref=handoff_ref, closure_ref=closure_ref)
+    return put_prepared(ctx, values), evaluation, values
 
 
 def acquire_prepared_data(ctx, handoff_ref, *, declared_kind):
@@ -110,11 +126,11 @@ def acquire_prepared_data(ctx, handoff_ref, *, declared_kind):
         catalog = json.loads(ctx.store.get_artifact(fetched['reply_ref']))['catalog']
     elif fetched['failure']['code'] != 'result_not_in_catalog':
         return fetched
-    evaluation = evaluate(plan, hashlib.sha256(plan_bytes).hexdigest(), receipt, catalog, ended=True)
-    closure_ref = fetched.get('closure_ref') if fetched['status'] == 'completed' else None
-    values = prepared_values(plan, evaluation, resource_id=resource_id, job=job, plan_ref=plan_ref,
-                             receipt_ref=receipt_ref, handoff_ref=handoff_ref, closure_ref=closure_ref)
-    row = put_prepared(ctx, values)
+    row, evaluation, values = establish_prepared(ctx, plan, plan_bytes, receipt, catalog, resource_id=resource_id,
+                                                 job=job, plan_ref=plan_ref, receipt_ref=receipt_ref,
+                                                 handoff_ref=handoff_ref,
+                                                 closure_ref=fetched.get('closure_ref') if fetched['status'] == 'completed' else None)
+    closure_ref = values['closure_ref']
     refs = [row['id'], checked['check_ref']] + ([closure_ref] if closure_ref else [])
     return {'status': 'completed', 'state': checked['state'], 'check_ref': checked['check_ref'],
             'prepared': {'ref': row['id'], 'state': evaluation['state'], 'usable': evaluation['usable'],
@@ -122,4 +138,109 @@ def acquire_prepared_data(ctx, handoff_ref, *, declared_kind):
             'record_refs': refs}
 
 
-__all__ = ['DRIVER_SOURCE', 'acquire_prepared_data', 'launch_preparation']
+PROGRAMS = {'database_build': ('makeblastdb', 'blastdbcmd', 'blastdbcheck')}
+JOB_NAME = 'preparation'
+PROBLEM_CODES = ('resource_not_bound', 'resource_not_local', 'kind_differs_from_commission', 'commission_invalid',
+                 'input_not_held', 'input_not_parsable', 'input_above_local_bound', 'program_missing',
+                 'python_missing', 'job_not_compilable')
+
+
+def software_identities(executable_directory, programs):
+    """``{program: {executable, sha256, engine_version}}`` of the BLAST programs in ``executable_directory``: the
+    resource's own configuration (a commission carries no path)."""
+    found = {}
+    for program in programs:
+        executable = (Path(executable_directory) / program).resolve()
+        found[program] = {'executable': str(executable), 'sha256': hashlib.sha256(executable.read_bytes()).hexdigest(),
+                          'engine_version': None}
+    return found
+
+
+def _programs(fields):
+    return PROGRAMS['database_build'] if fields['kind'] == 'database_build' else (fields['program'],)
+
+
+def preparation_problems(call, *, fields, records, resources, executable_directory, python):
+    """The one deterministic check of a ``launch_local`` call, made before anything runs. ``call`` is the model's
+    JSON (``resource_id``, ``kind``); ``fields`` the commission's controlled fields; ``records`` what the Episode
+    holds; ``resources`` ``{resource_id: the route's description}`` of the bound resources. Returns the list of
+    things to fix, each ``{'code', 'field', 'detail'}`` (empty when the call can simply run). Conditions, in order:
+    the resource is bound; it is local; the call's kind is the commission's kind; the commission is a valid job
+    description; the input set is held; it parses as a FASTA of the molecule; it is within the resource's local size
+    bound (``policy.scratch_bytes``); each program the job runs exists; the Python of the job exists; the job
+    compiles (which derives its kind from the plan and compares it with the declared one)."""
+    problems = []
+
+    def add(code, field, detail=None):
+        problems.append({'code': code, 'field': field, 'detail': detail})
+    resource = resources.get(call['resource_id'])
+    if resource is None:
+        add('resource_not_bound', 'resource_id')
+    elif resource['kind'] != 'local':
+        add('resource_not_local', 'resource_id')
+    if call['kind'] != fields['kind']:
+        add('kind_differs_from_commission', 'kind')
+    try:
+        validate_commission(fields)
+    except ValueError as error:
+        add('commission_invalid', 'commission', str(error))
+        return problems
+    data = None
+    if not records.holds(fields['input_ref']):
+        add('input_not_held', 'input_ref')
+    else:
+        data = records.get_artifact(fields['input_ref'])
+        try:
+            describe_fasta(data, molecule=fields['molecule'], parse_seqids=fields.get('parse_seqids', False))
+        except ValueError as error:
+            add('input_not_parsable', 'input_ref', str(error))
+    if data is not None and resource is not None and len(data) > resource['policy']['scratch_bytes']:
+        add('input_above_local_bound', 'resource_id')
+    for program in _programs(fields):
+        if not os.access(Path(executable_directory) / program, os.X_OK):
+            add('program_missing', 'program', program)
+    if not os.access(python, os.X_OK):
+        add('python_missing', 'python')
+    if not problems:
+        try:
+            compile_preparation(fields, input_bytes=data, software=software_identities(
+                executable_directory, _programs(fields)), python=python)
+        except ValueError as error:
+            add('job_not_compilable', 'commission', str(error))
+    return problems
+
+
+async def prepare_locally(ctx, resource_id, fields, *, executable_directory, python):
+    """The whole local preparation as one unit, for a call that passed ``preparation_problems``: build the job
+    from the commission, check the kind derived from the plan against the declared one, launch it on the local
+    resource, wait for its end, fetch what it left, decide ``usable`` from the receipt and write the prepared-data
+    record through custody. Returns ``{'status': 'usable'|'failed'|'incomplete', 'failure_code', 'retryable' (always
+    false: the same checked call gives the same outcome), 'failure_codes', 'prepared_ref', 'features',
+    'record_refs'}``."""
+    compiled = compile_preparation(fields, input_bytes=ctx.store.get_artifact(fields['input_ref']),
+                                   software=software_identities(executable_directory, _programs(fields)),
+                                   python=python)
+    checked_analysis_kind(fields['kind'], compiled['plan'])
+    plan_ref, inputs = _staged(ctx, compiled)
+    ran = await execute_on_local_resource(ctx, resource_id, compiled['job']['command'], compiled['job']['env'],
+                                          wait=True, inputs=inputs, name=JOB_NAME)
+    if ran['status'] != 'completed':
+        code = 'job_not_accepted' if ran['launch']['status'] != 'completed' else 'job_not_fetched'
+        return {'status': 'failed', 'failure_code': code, 'retryable': False, 'failure_codes': [code],
+                'prepared_ref': None, 'features': None, 'record_refs': [plan_ref]}
+    fetched = ran['fetch']
+    receipt_ref = next((item['ref'] for item in fetched['results'] if item['name'] == RECEIPT_NAME), None)
+    receipt = None if receipt_ref is None else json.loads(ctx.store.get_artifact(receipt_ref))
+    catalog = json.loads(ctx.store.get_artifact(fetched['reply_ref']))['catalog']
+    row, evaluation, values = establish_prepared(
+        ctx, compiled['plan'], compiled['plan_bytes'], receipt, catalog, resource_id=resource_id,
+        job=ran['launch']['job'], plan_ref=plan_ref, receipt_ref=receipt_ref, handoff_ref=ran['launch']['handoff_ref'],
+        closure_ref=fetched['closure_ref'])
+    codes = evaluation['failure_codes']
+    return {'status': evaluation['state'], 'failure_code': codes[0] if codes else None, 'retryable': False,
+            'failure_codes': codes, 'prepared_ref': row['id'], 'features': prepared_features(values),
+            'record_refs': [row['id'], ran['launch']['handoff_ref'], fetched['closure_ref']]}
+
+
+__all__ = ['DRIVER_SOURCE', 'PROBLEM_CODES', 'acquire_prepared_data', 'establish_prepared', 'launch_preparation',
+           'prepare_locally', 'preparation_problems', 'software_identities']

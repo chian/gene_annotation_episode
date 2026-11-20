@@ -59,9 +59,10 @@ def prepared_rows(reader, *, usable=None):
     return reader.table(PREPARED_DATA).select(where)
 
 
-def prepared_credit(reader, unit):
-    """The credit of the held prepared-data records: ``unit`` for each distinct usable record."""
-    return unit * len({row['data_key'] for row in prepared_rows(reader, usable=True)})
+def prepared_credit(reader, unit, *, known_keys=()):
+    """The credit of the held prepared-data records: ``unit`` for each distinct usable record whose key is not one
+    the parent already held (``known_keys``: a repeat earns nothing)."""
+    return unit * len({row['data_key'] for row in prepared_rows(reader, usable=True)} - set(known_keys))
 
 
 def prepared_features(row):
