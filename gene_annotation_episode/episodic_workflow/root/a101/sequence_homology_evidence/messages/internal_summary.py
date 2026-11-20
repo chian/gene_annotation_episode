@@ -5,8 +5,8 @@ credit reads), the handoff records its children returned, the working state of t
 table.
 
 For the commissions (``task.commission_fields``, ``msg_to_child``) the summary also holds what a commission is
-chosen from and built with: ``held_record_refs`` (the held records, of which the subject records are what a
-comparison's subject is chosen from), ``held_source_refs`` (the held sources) and ``named_refs`` (for each held
+chosen from and built with: ``held_record_refs`` (the held records), ``held_sequences`` (the held records
+that carry a sequence, each with its molecule: what the two sequences of a comparison are chosen from), ``held_source_refs`` (the held sources) and ``named_refs`` (for each held
 record, the held records it names: what travels in custody beside it)."""
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.construction_records import (
@@ -22,6 +22,8 @@ EXECUTED = ('completed', 'partial')
 # The tools whose records this episode's credit reads and so returns: its reasoning commits and its graded comparisons.
 CREDITED_TOOLS = ('reason', PAIRWISE_TOOL)
 EVIDENCE_RECORD_TYPES = ('observation', 'assessment')
+# The record types that carry a sequence: what the two sequences of a comparison are chosen from.
+SEQUENCE_RECORD_TYPES = ('input', 'reference', 'product')
 
 
 def _named(records, reference):
@@ -69,6 +71,8 @@ def internal_summary(view):
             'committed_record_refs': committed, 'handoff_refs': handoff_refs,
             'held_record_refs': held,
             'held_source_refs': [row['id'] for row in records.list('source')],
+            'held_sequences': {ref: records.get(ref).get('molecule') for ref in held
+                               if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')},
             'named_refs': {ref: _named(records, ref) for ref in held},
             'evidence_refs': [row['id'] for kind in EVIDENCE_RECORD_TYPES for row in records.list(kind)],
             'working_state': records.reasoning_view(parent['scope']),

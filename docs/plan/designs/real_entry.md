@@ -38,6 +38,17 @@ Nothing else is imported (so the reference-only `old_*` folders are never loaded
 `ModelProvider` (the owner's Codex sign-in) and the real job services, runs to the end, and prints a JSON summary:
 the result record, why the entry ended, the unit count, the journal path and the model-call directory.
 
+Every command is started through the single-workflow launcher. The local resource of the `--services` file must have
+its job folder (`workspace`) inside the launcher's run directory of that command: the local job route refuses a job
+whose output would lie outside the workflow's run (`native_output_outside_workflow_run`). The Store, the journal and
+the frozen libraries may live anywhere under `runs/`.
+
+`report` reads a run back from its journal (episodes, units, model answers, controller steps, receipts).
+`propose-annotation` registers the caller's proposed annotation (one hypothesis record of caller origin), and
+`freeze-libraries` freezes the process library and the tool library for a run and prints the axis selection a parent
+commissions its head with. These two are the registrations a run's caller makes before `run`; no command reached
+them before.
+
 `resume` takes the same arguments except the commission (it is in the journal). It replays the recorded run; a unit
 already recorded is not run again and no recorded model call is asked again.
 

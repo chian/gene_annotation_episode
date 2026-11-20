@@ -221,3 +221,33 @@ Predicted:
 6. The return: the credit, the finding with the target's sheet features, and `committed_record_refs` holding the
    graded records and the committed reasoning records.
 7. `resume` asks the model nothing and returns the same result.
+
+### Pattern A: what the first two runs showed, and the prediction for the third (written before it)
+
+- **Run `a101-patternA-1` (`runs/a101_patternA_run_1`): not predicted.** The model's first call was right (`blastp`,
+  the target, the reference, `local`), but every `pairwise_blast` unit was refused before BLAST started
+  (`whole_workflow_budget_unavailable`, reason `native_output_outside_workflow_run`, `retryable` false): my services
+  file put the local resource's job folder outside the launcher's run directory of that command. The model made the
+  same call 21 more times; the credit stayed 0.0; I stopped the run. Two causes, both mine: the configuration, and a
+  tool whose offer let a call that cannot succeed be repeated.
+- **Run `a101-patternA-2` (`runs/a101_patternA_run_2`): not predicted.** With the job folder inside the run directory
+  BLAST ran, and the unit then raised `native_blast_requires_native_tool_source`: the Store admits an observation
+  with a BLAST alignment address only on a source of the public BLAST provider. The run failed with that error
+  after one model call.
+- **Changes.** The observation is an `alignment` observation in the shape of the registry's `sequence.align` (no
+  address field). The tool's arguments are `query_ref`, `reference_ref`, `program`, `resource_id`; only programs
+  that compare the two molecules are offered; a comparison is offered once (not again after it completed or failed
+  with `retryable` false); a failed outcome shows its code and `retryable`. The local resource's job folder in the
+  services file is inside the launcher's run directory of the command (`real_entry.md`).
+
+Predicted for run `a101-patternA-3`:
+
+1. First decision: `pairwise_blast` with the target as `query_ref`, the reference as `reference_ref`, `blastp` (the
+   only program offered for two proteins) and `local`.
+2. That unit completes in one shot: one alignment; 76 of 76 query residues paired, 76 of 78 reference residues, 75
+   identical; E-value about 3.95e-56 with effective search space 4899; one `alignment` observation; four records
+   kept. Credit after it: 0.0.
+3. `pairwise_blast` is not offered again. The model's next units are reasoning commits. If one assesses the
+   proposed annotation against the observation with relation `strengthens` and an established extent, the credit
+   rises to a value near 1; otherwise it stays 0.0.
+4. The yield controller ends the episode. `resume` asks the model nothing and returns the same result.

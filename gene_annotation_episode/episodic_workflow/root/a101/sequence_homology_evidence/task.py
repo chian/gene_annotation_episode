@@ -5,10 +5,11 @@ commissions its children. It never ends the Episode: only the yield controller d
 Tools. ``reason`` is the ``Store.commit_reasoning`` path. ``execute_selected_tool`` dispatches a tool the commission
 selected to the library's ``ToolRegistry``, called with ``ctx.store`` (a tool name here has lowercase letters, digits
 and underscores, so the selected name travels as an argument). ``pairwise_blast`` is this episode's own defined tool:
-the model chooses the program, the query (a subject of the scope), the subject record to compare it with and a bound
-local resource, all from fixed sets; code runs the comparison, fetches its report and grades it in the same unit
-(``pairwise_blast_comparison``), and the graded sheet is what this episode's credit reads. It is offered while this
-episode holds a second subject record and a local resource is bound.
+the model chooses the query (a sequence of the scope), the reference sequence record to compare it with, the program
+(only those that compare the two molecules) and a bound local resource, all from fixed sets; code runs the
+comparison, fetches its report and grades it in the same unit (``pairwise_blast_comparison``). Each comparison is
+offered once: not again after it completed or failed with ``retryable`` false. The credit reads the graded cells of
+the comparison's observations once a reasoning commit assesses them against the proposed annotation.
 
 Children. The head's child episodes in the A101 tree are ``blast_database_preparation``, ``database_blast`` and
 ``all_vs_all_blast`` (HMMER later). A child is declared in ``CHILD_SLOTS`` when its episode is built (the runner
@@ -35,8 +36,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.sequ
     VERSION as INSTRUCTION_VERSION, instruction_view)
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.evidence_axis_contracts import (
     VERSION as EVIDENCE_AXIS_VERSION)
-from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import (
-    PROGRAMS)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.sequence_homology_evidence.literature_investigation_prompt import (
     INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
@@ -51,7 +50,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
     ToolRegistry)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
-    pairwise_blast_comparison)
+    PROGRAM_MOLECULES, pairwise_blast_comparison)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_catalog import ScientificToolLibrary
 from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
 
@@ -96,22 +95,20 @@ HISTORY_GUIDANCE = ('Your own earlier outcomes are shown to you as own_outcomes,
 PAIRWISE_TOOL = 'pairwise_blast'
 DESCRIPTIONS = {
     'reason': REASONING_COMMIT_REQUIREMENT,
-    PAIRWISE_TOOL: ('Compare one query sequence with one subject sequence by a pairwise BLAST on a bound local '
-                    'resource. You choose four values from the offered sets: program (blastp for two proteins, '
-                    'blastn for two nucleotide sequences, blastx for a nucleotide query against a protein subject, '
-                    'tblastn for a protein query against a nucleotide subject, tblastx for two nucleotide sequences '
-                    'compared in translation), query_ref (a subject of your scope), subject_ref (another subject '
-                    'record you hold) and resource_id (one of local_resources). Code runs the search, fetches its '
-                    'report and grades it in this one unit; you do not grade. The outcome shows the controlled '
-                    'features of the saved pairwise sheet: counts and fractions of paired and identical residues, '
-                    'the two lengths and the native E-value with the search-space context the report gives, and '
-                    'observation_refs: one comparison observation per reported alignment, which you now hold. '
-                    'The comparison itself is a measurement, not yet evidence about the proposed annotation: your '
-                    'credit measures the graded correspondence of the observations that an assessment of yours '
-                    'relates to the proposed annotation (a reasoning commit with an assessment of the proposed '
-                    'annotation against the observation, its relation, applicability and extent). Repeating a '
-                    'comparison you already hold adds no correspondence and earns nothing. A program that does '
-                    'not take the two molecules is an invalid outcome.'),
+    PAIRWISE_TOOL: ('Compare one query sequence with one reference sequence by a pairwise BLAST on a local resource. One '
+                    'call does the whole comparison: code runs the search, fetches its report and grades it in this '
+                    'one unit. You choose from the offered sets: query_ref (a sequence of your scope), reference_ref '
+                    '(another sequence record you hold), program (only the programs that compare those two '
+                    'molecules are offered) and resource_id. A comparison is offered once: after it completes, or '
+                    'after it fails with retryable false, the same call is no longer offered, because it would give '
+                    'the same outcome. A completed outcome shows the controlled features of the saved pairwise '
+                    'sheet (counts and fractions of paired and identical residues, the two lengths, the native '
+                    'E-value with the search-space context the report gives) and observation_refs: one alignment '
+                    'observation per reported alignment, which you now hold. The comparison is a measurement, not '
+                    'yet evidence about the proposed annotation: your credit measures the graded correspondence of '
+                    'the observations that an assessment of yours relates to the proposed annotation, so the next '
+                    'step after a completed comparison is a reasoning commit with that assessment (its relation, '
+                    'applicability and extent). A failed outcome shows its code and retryable.'),
 }
 # What the model is told of each child it may commission: what the child does, the controlled fields of its
 # commission (the model chooses values; code builds the child's assignment) and what comes back. A child's entry is
@@ -169,23 +166,27 @@ def local_resources(ctx):
     return [resource['resource_id'] for resource in access.read('resources') if resource['kind'] == 'local']
 
 
-def held_subjects(summary):
-    """The subject records this episode holds: what a comparison's two sequences are chosen from."""
-    return [ref for ref in summary['held_record_refs'] if ref.startswith('subject_')]
-
-
 def pairwise_options(summary, resources):
-    """The ``pairwise_blast`` choices this decision offers, one per query: the query is a held subject of the scope
-    and the subject is any other held subject record; every value is from a fixed set. None while no local resource
-    is bound or no second subject record is held."""
-    held, options = held_subjects(summary), []
+    """The ``pairwise_blast`` choices this decision offers, one per pair of a held sequence of the scope (the query)
+    and another held sequence record (the reference): the programs that compare the two molecules, less those this
+    episode already ran for the pair to completion or to a failure that cannot be retried. Every value is from a
+    fixed set, so a call the schema admits is a call that can succeed. None while no local resource is bound, no
+    second sequence record is held, or every comparison has been made."""
+    held, options = summary['held_sequences'], []
+    done = {(row['comparison']['query_ref'], row['comparison']['reference_ref'], row['comparison']['program'])
+            for row in summary['units'] if row['kind'] == 'tool' and row['tool'] == PAIRWISE_TOOL
+            and (row['status'] == 'completed' or not row['feedback']['retryable'])}
     for query in summary['scope']['subject_refs']:
-        subjects = [ref for ref in held if ref != query]
-        if query in held and subjects and resources:
-            options.append(obj({'kind': {'const': 'tool'}, 'tool': {'const': PAIRWISE_TOOL},
-                                'arguments': obj({'program': {'enum': list(PROGRAMS)}, 'query_ref': {'enum': [query]},
-                                                  'subject_ref': {'enum': subjects},
-                                                  'resource_id': {'enum': list(resources)}})}))
+        for reference in held:
+            programs = [program for program, (queries, references) in PROGRAM_MOLECULES.items()
+                        if query in held and reference != query and held[query] in queries
+                        and held[reference] in references and (query, reference, program) not in done]
+            if programs and resources:
+                options.append(obj({'kind': {'const': 'tool'}, 'tool': {'const': PAIRWISE_TOOL},
+                                    'arguments': obj({'query_ref': {'enum': [query]},
+                                                      'reference_ref': {'enum': [reference]},
+                                                      'program': {'enum': programs},
+                                                      'resource_id': {'enum': list(resources)}})}))
     return options
 
 
@@ -337,7 +338,7 @@ async def pairwise_blast(arguments, ctx):
     """One pairwise comparison as one unit: run, fetch and grade, by the library's one function. The arguments are
     the model's four controlled choices."""
     return await pairwise_blast_comparison(
-        ctx, program=arguments['program'], query_ref=arguments['query_ref'], subject_ref=arguments['subject_ref'],
+        ctx, program=arguments['program'], query_ref=arguments['query_ref'], reference_ref=arguments['reference_ref'],
         resource_id=arguments['resource_id'], executable_directory=ctx.settings['blast_executable_directory'])
 
 

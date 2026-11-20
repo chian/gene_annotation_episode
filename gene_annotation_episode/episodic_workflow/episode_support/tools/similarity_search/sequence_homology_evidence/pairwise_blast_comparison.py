@@ -1,8 +1,8 @@
-"""One pairwise BLAST comparison as one unit: one query sequence against one subject sequence on a local resource,
+"""One pairwise BLAST comparison as one unit: one query sequence against one reference sequence on a local resource,
 from the job to the graded correspondence of the two.
 
 ``pairwise_blast_comparison`` is what an episode's ``pairwise_blast`` tool calls. The episode's model chose the
-controlled values (the program, the two subject records, the local resource); everything else is done here by code,
+controlled values (the program, the two sequence records, the local resource); everything else is done here by code,
 in this order, inside the one unit that calls it:
 
 1. read the two sequences through custody and make the two FASTA files as artifacts;
@@ -12,10 +12,11 @@ in this order, inside the one unit that calls it:
    launch, wait for the end, fetch what the job left), with the two files staged in the job's own directory;
 4. grade the one report the job declares into the pairwise sheet of the job's own two operands;
 5. keep the grading through custody: the grading artifact, a ``native.blast.pairwise`` source over the fetched
-   report, the search row that enters the search into the A101 sheet's tool profile, and one ``comparison``
-   observation for each reported alignment (the query's interval, the subject's interval and the measurements of
-   the already graded cells, addressed to its cell of the grading artifact). The observation is what a reasoning
-   commit assesses against a hypothesis; the A101 credit reads the graded cells of assessed observations.
+   report, the search row that enters the search into the A101 sheet's tool profile, and one ``alignment``
+   observation for each reported alignment (the query's interval, the reference's interval and the measurements of
+   the already graded cell), in the shape the registry's ``sequence.align`` gives its observation. The observation
+   is what a reasoning commit assesses against a hypothesis; the A101 credit reads the graded cells of assessed
+   observations.
 
 Grading is not a choice of anyone: it follows the fetch in the same unit.
 
@@ -24,7 +25,9 @@ The outcome has the shape of every tool outcome of an episode (``status``, ``rec
 the search row and the observations, and ``result`` holds the controlled features code read from the sheet with the
 references of the observations. ``invalid``: the two molecules are not what
 the program compares, or the report is not of the two operands; nothing is kept. ``failed``: the resource refused the
-job or the program ended with a nonzero exit code; nothing is graded. The codes are in ``feedback``."""
+job or the program ended with a nonzero exit code; nothing is graded. ``feedback`` holds the code and ``retryable``:
+whether the same call can succeed if made again. The comparison is deterministic, so only a refusal the resource
+itself marks as retryable is."""
 import hashlib
 from pathlib import Path
 
@@ -61,8 +64,8 @@ PROGRAM_MOLECULES = {'blastp': (('protein',), ('protein',)), 'blastn': (NUCLEOTI
                      'tblastx': (NUCLEOTIDE, NUCLEOTIDE)}
 
 
-def _outcome(status, code, *, category, detail=None):
-    feedback = {'category': category, 'code': code}
+def _outcome(status, code, *, category, detail=None, retryable=False):
+    feedback = {'category': category, 'code': code, 'retryable': retryable}
     if detail is not None:
         feedback['detail'] = detail
     return {'status': status, 'record_refs': [], 'changed_record_refs': [], 'result': None, 'feedback': feedback}
@@ -111,23 +114,20 @@ def _graded(store, report_ref, program, query, subject):
     return grading
 
 
-def _observations(store, grading, grading_ref, report_ref, source_ref, program, sequences):
-    """One ``comparison`` observation for each alignment of the sheet, projected from its already graded cell (nothing
-    is calculated or graded again). The query is the subject of the observation; the compared record is its source
+def _observations(store, grading, source_ref, program, sequences):
+    """One ``alignment`` observation for each alignment of the sheet, projected from its already graded cell (nothing
+    is calculated or graded again). The query is the subject of the observation; the reference record is its source
     subject."""
     (query_ref, _, query), (subject_ref, _, subject) = sequences['query_sequence'], sequences['subject_sequence']
     query_unit, subject_unit, model_unit = blast_search.PROGRAM_UNITS[program]
     refs = []
-    for position, hsp in enumerate(grading['sheet']['hsps']):
+    for hsp in grading['sheet']['hsps']:
         row = blast_search.hsp_row(hsp['native'], component=hsp['components'], program=program,
                                    query_length=len(query), reference_length=len(subject), hit_ordinal=0,
                                    hsp_ordinal=hsp['hsp_index'])
-        row['native_blast']['shared_projection'] = {
-            'version': blast_search.HSP_PROJECTION_VERSION, 'grading_artifact_ref': grading_ref,
-            'native_artifact_ref': report_ref, 'hit_row': 0, 'hsp_row': position}
         (start, end), (subject_start, subject_end) = row['query_interval'], row['reference_interval']
         refs.append(store.put('observation', {
-            'kind': 'comparison', 'subject_refs': [query_ref], 'source_subject_refs': [subject_ref],
+            'kind': 'alignment', 'subject_refs': [query_ref], 'source_subject_refs': [subject_ref],
             'source_ref': source_ref, 'anchor': None,
             'measurements': measurements(reference_ref=ref(subject_ref),
                                          **{name: number(value) for name, value in row['measurements'].items()}),
@@ -136,17 +136,16 @@ def _observations(store, grading, grading_ref, report_ref, source_ref, program, 
                 {'role': 'query', 'subject_ref': query_ref, 'start': start, 'end': end, 'unit': query_unit,
                  'model_unit': model_unit},
                 {'role': 'reference', 'subject_ref': subject_ref, 'start': subject_start, 'end': subject_end,
-                 'unit': subject_unit, 'model_unit': model_unit}],
-            'native_blast': row['native_blast']}, origin='tool')['id'])
+                 'unit': subject_unit, 'model_unit': model_unit}]}, origin='tool')['id'])
     return refs
 
 
-async def pairwise_blast_comparison(ctx, *, program, query_ref, subject_ref, resource_id, executable_directory):
-    """Compare the query with the subject by ``program`` on the local resource and keep the graded correspondence.
+async def pairwise_blast_comparison(ctx, *, program, query_ref, reference_ref, resource_id, executable_directory):
+    """Compare the query with the reference by ``program`` on the local resource and keep the graded correspondence.
     ``ctx`` is the tool's ``UnitContext`` of an episode that declares the service ``job_access``."""
     store, access = ctx.store, ctx.services['job_access']
     sequences = {'query_sequence': (query_ref, *_sequence(store, query_ref)),
-                 'subject_sequence': (subject_ref, *_sequence(store, subject_ref))}
+                 'subject_sequence': (reference_ref, *_sequence(store, reference_ref))}
     for (role, (_, molecule, _)), allowed in zip(sequences.items(), PROGRAM_MOLECULES[program]):
         if molecule not in allowed:
             return _outcome('invalid', 'pairwise_blast_molecules_not_comparable', category='arguments_or_reference',
@@ -158,8 +157,10 @@ async def pairwise_blast_comparison(ctx, *, program, query_ref, subject_ref, res
     ran = await execute_on_local_resource(ctx, resource_id, requested['argv'], requested['environment'], wait=True,
                                           inputs=inputs, name=JOB_NAME)
     if ran['status'] != 'completed':
-        refused = ran['launch'] if ran['launch']['status'] != 'completed' else ran['fetch']
-        return _outcome('failed', refused['failure']['code'], category='job', detail=refused['failure']['detail'])
+        refused = (ran['launch'] if ran['launch']['status'] != 'completed' else ran['fetch'])['failure']
+        operational = refused['detail'].get('operational', {}) if isinstance(refused['detail'], dict) else {}
+        return _outcome('failed', refused['code'], category='job', detail=refused['detail'],
+                        retryable=operational.get('retryable', False))
     if ran['returncode'] != 0:
         return _outcome('failed', 'pairwise_blast_program_exit_nonzero', category='job',
                         detail={'returncode': ran['returncode'], 'stderr': ran['stderr'][-2000:]})
@@ -177,7 +178,7 @@ async def pairwise_blast_comparison(ctx, *, program, query_ref, subject_ref, res
             'request_ref': None, 'version': sheet['input']['search']['version'], 'retrieved_at': None,
             'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [query_ref]}, origin='tool')
         search = store.table(SEARCHES).put({'source_ref': source['id'], 'query_ref': query_ref, 'profile': 'blast'})
-        observations = _observations(store, grading, grading_ref, report_ref, source['id'], program, sequences)
+        observations = _observations(store, grading, source['id'], program, sequences)
     refs = [source['id'], grading_ref, search['id'], *observations]
     return {'status': 'completed', 'record_refs': refs, 'changed_record_refs': refs,
             'result': {**grading_features(grading, grading_ref), 'observation_refs': observations}, 'feedback': None}
