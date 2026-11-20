@@ -157,8 +157,54 @@ extra residues (78 residues). No model asked.
 - Refusals, each failing with its error and no job started: no declared kind; a declared kind outside the vocabulary;
   a query record the commission names but custody does not hold; a protein pair with `blastn`.
 
-## 13. Comparison with the generic path
+## 13. Observed (real runs, 2026-11-20) and comparison with the generic path
 
-Counted after the run: what this removes against the generic path (children, model calls, files and lines), the
-number of places a change to the pairwise analysis touches, and anything that was harder. The pairwise path inside
-the generic results episode is not removed (follow-up).
+Runs: `runs/a101_pairwise_blast_real_1` and `runs/a101_pairwise_blast_real_2` (the second after fixing a bug in my
+script that kept two of the four refusal cases from running; the first run's commission is identical).
+
+Predicted against observed:
+
+- Three units `launch_job`, `wait_for_end`, `fetch_and_grade`, zero model calls: observed exactly (0 model calls in the
+  journal, on disk and on resume). The wait woke on the job's end event (`state_changed`).
+- Credit 0, 0, 1.0 and the controller stopped at the grading: observed (`ended_by: yield_stop`, 3 units). The risk that
+  the controller would stop on the two zero-credit units did not occur.
+- Sheet: 76 of 76 query residues paired, 76 of 78 subject residues, 75 identical pairs, identity 0.9868, one alignment,
+  E-value 3.9499e-56 with effective search space 4899, effective alignment length 7, Karlin parameters 0.267, 0.041,
+  0.14 and threshold 10: observed exactly, read by code from the saved sheet.
+- Returned fields only (credit, finding, the references); the job state was `finished`, read from the closure row; the
+  only job record is the closure (no check unit, so no check row).
+- Resume returned the same result and asked nothing: observed.
+- The existing A101 score route accepted the saved grading: one comparison, bits 153.68, 76 residue pairs: observed.
+- Refusals, each failing with its error and no job started (one job directory exists in the whole run): no declared
+  kind (`missing_field:analysis_kind`); a kind outside the vocabulary (`differs_from_declared_value`); a query record
+  custody does not hold (`entry_record_not_in_store`); a protein pair with `blastn`
+  (`pairwise_blast_molecules_not_comparable`).
+
+Not exercised by a real run: the grader's refusal of a report of other sequences (the commission cannot tamper with
+it, since the episode builds the job itself); that code is a copy of the generic episode's and is untested here. A fetch
+refused because results are not yet available (the wait on the end event made the fetch succeed the first time).
+
+Comparison with the generic path, from the actual files:
+
+| | generic (launch leaf + monitor + results episode) | pairwise_blast |
+|---|---|---|
+| episodes | 3 (plus the head that commissions them) | 1, no children |
+| files / lines (py, no tests) | 26 files, 2,426 lines (269 + 665 + 1,492) | 8 files, 438 lines |
+| model calls for the same comparison | 4 in the launch and results chain I ran (1 + 3), plus 4 to 7 per monitor visit | 0 |
+| commissions a parent must build | 3 (launch, monitor, results), none built yet by the head | 1 |
+| places that carry the pairwise analysis | 6 files of the results episode plus the shared contract and features | one folder plus the same shared library |
+
+Removed: two episodes, all child commissioning, every model call, about 1,990 lines. Not removed: the pairwise path in
+the generic results episode (follow-up).
+
+What was harder or worse:
+
+- The library's job contract needs an absolute operand path, so the staged files are addressed as
+  `<workspace>/<handle>/<name>`. That couples the episode to the route's directory layout (both pieces are public).
+- About 60 lines (the grading unit, the feature form) are copies of the generic episodes' code. That is what private
+  bindings intend, and it is what to expect each time a similar episode is added.
+- The system requires an `action` member and a model-provider collaborator even for an episode that never asks a model.
+  `action` here can never be reached and raises; the run supplies a provider it never uses.
+- No monitor means no check rows, no progress credit and no estimate-table record of how long the job took; the job
+  state comes from the closure row only. For a one-second job nothing is lost; for a long job it would be.
+- The settings carry `blast_executable_directory`: the location of the programs is configuration an episode now reads.
