@@ -9,9 +9,10 @@ given in the order they arrived. The tests are ordered by their first measuremen
 - A candidate is a possibility only on positive evidence: it is admitted with its first value above zero and earns
   its score after the test that admitted it. A candidate that never scored above zero is not on the list and earns
   nothing.
-- A test that two admitted candidates both underwent earns ``|d_A - d_B|`` for that pair, where ``d_c`` is the
-  change of ``S_c`` over that test. A test only one of them underwent earns nothing for the pair until the other
-  undergoes it too.
+- A test that two candidates both underwent after both were already on the list earns ``|d_A - d_B|`` for that
+  pair, where ``d_c`` is the change of ``S_c`` over that test. The test that admits a candidate earns that
+  candidate's entry score only: its rise from nothing is not counted a second time as a differential. A test only
+  one of the two underwent earns nothing for the pair until the other undergoes it too.
 
 ``credit`` is the sum of the entry scores and of the differentials. Nothing here reads a record, a file or a model."""
 import math
@@ -26,7 +27,7 @@ def differential_credit(measurements):
             tests.append(row['test'])
         values.setdefault((row['test'], row['candidate']), []).append(row['value'])
     candidates = sorted({candidate for _, candidate in values})
-    scores, changes, entries = dict.fromkeys(candidates, 0.0), {}, {}
+    scores, changes, entries, admitted = dict.fromkeys(candidates, 0.0), {}, {}, {}
     undergone = {candidate: [] for candidate in candidates}
     for test in tests:
         for candidate in candidates:
@@ -38,11 +39,12 @@ def differential_credit(measurements):
             changes[test, candidate] = score - scores[candidate]
             scores[candidate] = score
             if candidate not in entries and score > 0:
-                entries[candidate] = score
+                entries[candidate], admitted[candidate] = score, tests.index(test)
     differentials = [{'test': test, 'pair': [first, second],
                       'value': abs(changes[test, first] - changes[test, second])}
-                     for test in tests for first, second in combinations(sorted(entries), 2)
-                     if (test, first) in changes and (test, second) in changes]
+                     for position, test in enumerate(tests) for first, second in combinations(sorted(entries), 2)
+                     if (test, first) in changes and (test, second) in changes
+                     and position > max(admitted[first], admitted[second])]
     return {'scores': {candidate: scores[candidate] for candidate in sorted(entries)}, 'entries': entries,
             'differentials': differentials,
             'credit': math.fsum(entries.values()) + math.fsum(row['value'] for row in differentials)}
