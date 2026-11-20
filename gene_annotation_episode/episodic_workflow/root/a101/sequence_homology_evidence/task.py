@@ -52,6 +52,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_ho
     ToolRegistry)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
     DATABASES, HITLIST_RANGE, check_commission)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
+    bvbrc_blast_search as bvbrc)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
     PROGRAM_MOLECULES, check_pairwise_request, pairwise_blast_comparison)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.hmmer_profile_scan import (
@@ -64,14 +66,18 @@ from .goal import GOAL
 HEAD = 'sequence_homology_evidence'
 # The child episodes that are built, by slot. A child is added here with its entries in ``COMMISSIONS``,
 # ``CHILD_DESCRIPTIONS`` and ``SELECTABLE`` and its builder in ``messages/msg_to_child.py``.
-CHILD_SLOTS = {'database_blast': 'sequence_homology_evidence/database_blast'}
+CHILD_SLOTS = {'database_blast': 'sequence_homology_evidence/database_blast',
+               'bvbrc_blast': 'sequence_homology_evidence/bvbrc_blast'}
 # What the model supplies to commission each slot: a function of (summary, resources) that returns
 # ``(properties, required)`` of controlled values, or ``None`` while the commission cannot be stated.
-COMMISSIONS = {'database_blast': lambda summary, resources: database_blast_fields(summary, resources)}
+COMMISSIONS = {'database_blast': lambda summary, resources: database_blast_fields(summary, resources),
+               'bvbrc_blast': lambda summary, resources: bvbrc_blast_fields(summary, resources)}
 # The one deterministic check of each slot's filled commission: a function of (the model's commission, summary,
 # resources) that returns the things to fix (an empty list: it can be commissioned). Added with the slot.
 COMMISSION_CHECKS = {'database_blast': lambda commission, summary, resources: check_database_blast(
-    commission, summary, resources)}
+    commission, summary, resources),
+                     'bvbrc_blast': lambda commission, summary, resources: check_bvbrc_blast(
+                         commission, summary, resources)}
 # The programs the head commissions: those its credit can score. The A101 native-correspondence projection scores the
 # sheet of a ``blastp`` search; for any other program it raises (``a101_translated_or_nucleotide_map_not_bound``,
 # ``a101_original_protein_mapping_required``), which would end the run (offline run O3). The child itself takes every
@@ -93,7 +99,7 @@ THOUGHT_FIELDS = ('id', 'name', 'description', 'use_when', 'live_alternatives', 
                   'outcome_contingencies', 'boundary')
 # The optional return fields a commission may select from what the child declares (read from the child's own
 # ``RETURN_FORM``); credit and finding are always returned. A child's entry is added with its commission.
-SELECTABLE = {'database_blast': []}
+SELECTABLE = {'database_blast': [], 'bvbrc_blast': []}
 
 # The two bodies the old ``ScientificGoal.instructions`` appended after the goal text, by the entry version of the
 # selected evidence axis (instruction text, unchanged).
@@ -163,6 +169,21 @@ CHILD_DESCRIPTIONS = {
         'is outstanding (database_searches shows it) commission this child again with the same fields to continue that '
         'search: code passes back the records the child returned and it checks the search again or fetches and grades '
         'it. A search that failed or is already held graded is not commissioned again.'),
+    'bvbrc_blast': (
+        'Search one query sequence of your scope against a precomputed BV-BRC database through the BV-BRC application '
+        'service (the Homology application, run on the owner\'s account): the identification of the query from the best '
+        'hits of the database (the same graded sheet also gives the residue correspondence of the best hits, which your '
+        'credit counts when the search is graded). Fill the four fields of its commission: query_ref (a sequence of '
+        'your scope; held_sequences gives the molecule of each), program (only blastp is offered: a protein query against '
+        'a protein database; your credit scores that program only), database (bacteria-archaea holds the proteins of the '
+        'reference and representative bacterial and archaeal genomes) and resource_id (a bvbrc resource of '
+        'bound_resources). Code checks the commission before the child is commissioned; if something is wrong it comes '
+        'back in feedback with the things to fix and nothing was commissioned. One commission does the whole search: the '
+        'child estimates its duration, launches the search, monitors it until the service has ended it and extracts the '
+        'result into the graded sheet, and returns the state of the search (no_estimate, estimated, launched, finished, '
+        'extracted or failed), the hit count and the controlled identification features of the graded sheet, the seconds '
+        'estimated and observed, the last failure code and its credit. Nothing is passed back to a later commission, so '
+        'a search is commissioned once: the same query, program and database are not commissioned again.'),
 }
 
 
@@ -293,6 +314,28 @@ def commissions_failed(summary):
     return [(row['arguments']['query_ref'], row['arguments']['program'], row['arguments']['database'],
              row['arguments']['hitlist_size']) for row in summary['units']
             if row['kind'] == 'child' and row['slot'] == 'database_blast' and row['child_state'] == 'failed']
+
+
+def bvbrc_blast_fields(summary, resources):
+    """The commission of ``bvbrc_blast``: the query among the scope's held sequences, the program, the precomputed BV-BRC
+    database and the BV-BRC resource, each from a fixed set. Not offered while the scope holds no sequence or no BV-BRC
+    resource is bound."""
+    queries = [ref for ref in summary['scope']['subject_refs'] if ref in summary['held_sequences']]
+    services = [name for name, kind in resources.items() if kind == bvbrc.ROUTE_KIND]
+    if not queries or not services:
+        return None
+    properties = {'query_ref': {'enum': queries}, 'program': {'enum': list(COMMISSION_PROGRAMS)},
+                  'database': {'enum': list(bvbrc.DATABASES)}, 'resource_id': {'enum': services}}
+    return properties, list(properties)
+
+
+def check_bvbrc_blast(commission, summary, resources):
+    """The things to fix in a commission of ``bvbrc_blast`` (``bvbrc_blast_search.check_commission``)."""
+    return bvbrc.check_commission(
+        commission, programs=COMMISSION_PROGRAMS, sequences=summary['held_sequences'],
+        scope_subjects=summary['scope']['subject_refs'], resources=resources,
+        commissioned=[(row['arguments']['query_ref'], row['arguments']['program'], row['arguments']['database'])
+                      for row in summary['units'] if row['kind'] == 'child' and row['slot'] == 'bvbrc_blast'])
 
 
 def commission_fields(slot, summary, resources):

@@ -44,7 +44,7 @@ RETURN_FORM = RecordForm({
 
 # The slots whose report closes one handoff, by the state of the child's finding that does it. A child is added here when
 # built.
-CLOSING_STATES = {'database_blast': 'graded'}
+CLOSING_STATES = {'database_blast': 'graded', 'bvbrc_blast': 'extracted'}
 
 
 def final_to_parent(summary, completion, selection):

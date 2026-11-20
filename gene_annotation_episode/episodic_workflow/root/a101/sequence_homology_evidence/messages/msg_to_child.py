@@ -23,10 +23,14 @@ OBJECTIVES = {
     'database_blast': 'Search the query sequence against the hosted database through the public BLAST service, follow '
                       'the search without waiting for it and return what it established: the handoff, the status '
                       'records and, when the service has finished it, the graded result.',
+    'bvbrc_blast': 'Search the query sequence against the precomputed BV-BRC database through the BV-BRC application '
+                   'service, in this one commission: estimate the duration, launch the search, monitor it until the '
+                   'service has ended it and extract the graded result, and return what it established.',
 }
 # The return fields every commission of a slot selects.
 REQUIRED_RETURN = {
     'database_blast': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
+    'bvbrc_blast': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
 }
 
 
@@ -67,7 +71,18 @@ def _database_blast(arguments, summary):
     return assignment
 
 
-ASSIGNMENTS = {'database_blast': _database_blast}
+def _bvbrc_blast(arguments, summary):
+    """The assignment of one BV-BRC database search: the query and its sequence in custody, the program, the database,
+    the resource and the three credit units. One commission does the whole search: nothing is passed back."""
+    query = arguments['query_ref']
+    units = summary['child_credit_units']
+    return {'query_refs': [query], 'input_refs': [ref for ref in _custody([query], summary) if ref != query],
+            'program': arguments['program'], 'database': arguments['database'], 'resource_id': arguments['resource_id'],
+            'handoff_unit': units['handoff_unit'], 'information_unit': units['information_unit'],
+            'graded_unit': units['acquired_record_unit']}
+
+
+ASSIGNMENTS = {'database_blast': _database_blast, 'bvbrc_blast': _bvbrc_blast}
 
 
 def msg_to_child(slot, arguments, summary):
