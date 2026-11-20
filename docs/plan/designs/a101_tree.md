@@ -322,3 +322,28 @@ Not shown by a real run: a request with a program that does not compare the two 
 query, a query outside the scope, or a resource that is not local. The model never made one. `check_pairwise_request`
 returned the expected fix-list for each of them when called directly (through the launcher, on made-up inputs),
 which is not a real run.
+
+## After the first job child works: the two next steps (owner, 2026-11-20)
+
+The job child's controlled shape, the owner's words: "one child with 6 actions. make estimate/reason, [must be gated
+on having made an estimate] launch job, fix mistakes/reason, monitor/update estimate, extract results", and "I think
+we can work on that in one loop first and then we can practice the detaching while monitoring (i.e., come back to
+this process later or wait overall) after we get these basic forms down". `bvbrc_blast` is the first child built in
+this shape, in one loop.
+
+The owner's words on what follows, once that one episode is tested:
+
+"(1) create a global ledger that the estimator has access to so it can learn what to expect time-wise (that means
+across all runs ever and it needs some run info on size of job, what database was queried, and general time and so
+on) that can be turned into soem very short trend data (maybe even a numerical function at some point if we have
+enough initial data points) thereby making this more accurate as time goes on and then (2) figure out how to
+"release" (dangerous word since it can be used multiple ways---find a better one) this child to run in background
+while other pieces of the episodic workflow can do other work (i.e., bounce a waiting notice/info back up to parent
+with about how long we expect to wait so parent can choose what to do next. it could just wait, it could send off
+another tool, it could go all the way back up to root with the same info)"
+
+Neither is started. What exists that they build on (read, not run, unless said): the estimate table
+(`episode_runtime/estimate_table.py`: one SQLite file the run's caller names, expectations and resolutions by kind;
+today each family of runs names its own file and a row carries no job size or database); an earlier run-statistics
+store (`resources/run_statistics.sqlite`, `docs/RUN_EXPECTATIONS.md`); and the return of an outstanding search with
+its handoff that `database_blast` makes, which carries no expected wait.
