@@ -33,10 +33,42 @@ input size) is never stuck in rejections.
 | `internal_summary` | `prepared_rows`, `prepared_features`, `describe_fasta`, `yield_table` | the summary rows |
 | `final_to_parent` | `FAILURE_CODES`, `RecordForm` | the form |
 
+## Prediction for run 1 (written before any run)
+
+Input: the first 12 records of `globins45.fa` (12 sequences, 1771 letters, 1915 bytes as written), protein,
+`parse_seqids` true, `hash_index` false, `db_version` 5, `prepared_unit` 1.0. One local resource `local`
+(scratch bound 64 MiB), bundled BLAST+ 2.17.0.
+
+1. Model decision 1: `launch_local`, resource `local`, kind `database_build`. The check passes (no rejection).
+2. Unit 1: one job; the receipt shows build, info and check each returning 0; the prepared-data row is `usable`,
+   native summary 12 sequences and 1771 letters, `counts_match` true, `integrity_ok` true, `inventory_complete`
+   true, 6 to 9 files (`.phr .pin .psq`, plus the `.pdb .pot .ptf .pto` and `.pog`/`.pos`-type files that
+   `-parse_seqids` adds). Outcome status `usable`, `retryable` false.
+3. Credit 0.0 before, 1.0 after unit 1 (equal to the target).
+4. The completion controller sees the target reached (forecast exactly zero) and ends the episode by `yield_stop`
+   after 1 unit. Zero model calls after the first.
+5. Return: credit 1.0; finding `usable`, 12, 1771, `files_count` as in 2, no failure code; `prepared_data_refs`
+   holding the one row.
+Risks I expect: `blastdbcheck -full` may fail on this bundled BLAST+ (an earlier attempt's commit says it raises an
+internal exception on every valid database); if so the build is `failed` with `native_nonzero_exit` and that is a
+defect of the preparation library to fix, not of the episode.
+
 ## The check: every condition
 
-(filled in with the code, below)
+`preparation_problems` (`blast_preparation_run.py`) returns the list of `{code, field, detail}`; empty means the call
+simply runs. In order: `resource_not_bound` (resource_id); `resource_not_local` (resource_id); `kind_differs_from_
+commission` (kind); `commission_invalid` (commission; the library's own `validate_commission` error as detail; the
+check stops there); `input_not_held` (input_ref); `input_not_parsable` (input_ref; `describe_fasta` error);
+`input_above_local_bound` (resource_id; input bytes above the resource's `policy.scratch_bytes`); `program_missing`
+(program; each BLAST program the job runs must be an executable of the configured directory); `python_missing`
+(python); `job_not_compilable` (commission; `compile_preparation` raises, including its own declared-versus-derived
+kind comparison). `action` raises `Rejected` with `{status: invalid, category: launch_local_check, problems}`.
 
-## Prediction, observed, head wiring
+Note on `input_not_held` and `input_not_parsable`: `internal_summary` reads and counts the input (the facts shown to
+the model), so a commission whose input is not held or does not parse fails the run at the first summary with its own
+error (AGENTS.md: a wrong commission fails); the check still tests both, and they are the conditions a changed input
+would hit. The model cannot repair a wrong commission, so these are not offered as fix-lists that would loop.
 
-(below, added before and after the runs)
+## Head wiring, observed, run records
+
+(added after the runs)
