@@ -51,12 +51,12 @@
 <div class="legend" id="legend"></div>
 <p class="small" id="rules"></p>
 
-<h2>1. Where the BLAST uses stand: use by stage</h2>
+<h2>1. Where each piece stands</h2>
 <p class="sub">Each cell is a status backed by evidence. A cell turns green only after a real run; nothing is owner-verified yet.</p>
 <div id="matrix"></div>
 
-<h2>2. The A101 tree and the intent of each episode</h2>
-<p class="sub">One plain sentence per episode, as understood now. Every intent is unverified until you confirm it.</p>
+<h2>2. The A101 tree</h2>
+<p class="sub">The owner's approved tree, with each leaf marked tool or child episode (docs/plan/designs/a101_tree.md).</p>
 <div id="tree"></div>
 
 <h2>3. Decisions</h2>
@@ -77,139 +77,685 @@
 {
  "title": "A101 plan: BLAST uses, the grading chain, and functional regions",
  "date": "2026-11-20",
- "purpose": "One record of the ideas, decisions, status and next work for A101 sequence homology, so that the plan can be assessed visually and carried out. This file is the single source of truth: the data below is read by the page and by Claude. It is separate from the evidence-axis ledger, which records verified status; an item moves there only after owner verification.",
+ "purpose": "One record of the decisions, the tree, the status and the next work for A101 sequence homology. The design of the tree is docs/plan/designs/a101_tree.md. Statuses change only with a real command-line run as evidence; nothing here is owner-verified unless marked.",
  "rules": "Rules: (1) A decision is marked 'owner' only if the owner said it; my inferences are marked 'inference' and stay proposals. (2) A status moves only with evidence (run directory). (3) Old code is read for intention only; everything is built in the new paradigm.",
  "status_legend": [
-  ["none", "not started"],
-  ["designed", "designed in discussion, no code"],
-  ["built", "code exists, not run for real"],
-  ["real", "run for real, evidence kept"],
-  ["verified", "owner-verified"],
-  ["blocked", "blocked on a decision or dependency"]
+  [
+   "none",
+   "not started"
+  ],
+  [
+   "designed",
+   "designed in discussion, no code"
+  ],
+  [
+   "built",
+   "code exists, not run for real"
+  ],
+  [
+   "real",
+   "run for real, evidence kept"
+  ],
+  [
+   "verified",
+   "owner-verified"
+  ],
+  [
+   "blocked",
+   "blocked on a decision or dependency"
+  ]
  ],
  "matrix": {
-  "stages": ["commission", "job built", "launch (resource)", "monitor", "fetch", "grade", "subscore", "credit", "return", "reachable from head"],
+  "stages": [
+   "design",
+   "built",
+   "real run through the head",
+   "owner-verified"
+  ],
   "rows": [
-   {"kind": "Pairwise BLAST (1 vs 1: which residues align)",
+   {
+    "kind": "pairwise_blast (tool of the head)",
     "cells": [
-      ["built", "declared kind in the results commission"],
-      ["real", "own pairwise job contract, compiled"],
-      ["real", "local, run_a101_real_pairwise_chain_7"],
-      ["real", "local job seen running, finished and failed (a101_real_monitor_1, _2); logs, wait, dependency monitor, API job untested"],
-      ["real", "report file only"],
-      ["real", "pairwise sheet"],
-      ["real", "score route accepts it"],
-      ["real", "earned once at grading"],
-      ["real", "controlled features, E-value as context"],
-      ["blocked", "head commission builders do not exist"]
-    ]},
-   {"kind": "Database search (1 vs a reference set: identification)",
-    "cells": [["none",""],["none",""],["none",""],["none",""],["none",""],["none","whole hit list, taxa, source, representation"],["none","Bayesian-style identification"],["none",""],["none",""],["none",""]]},
-   {"kind": "All-vs-all (set vs same set: relationships, clusters)",
-    "cells": [["designed","set operand, thresholds"],["none",""],["none","cluster resource for large sets"],["none",""],["none",""],["designed","graph grader"],["designed","target-centric family-context sheet"],["none",""],["none",""],["none",""]]},
-   {"kind": "Database or data preparation (masking, makeblastdb, utilities)",
-    "cells": [["none",""],["none",""],["none",""],["none",""],["blocked","result families are NotImplementedError stubs"],["none","no evidence sheet by design"],["none","none by design"],["none","earned for a usable prepared database"],["none","prepared-database record"],["none",""]]},
-   {"kind": "Region confirmation (functional regions of an exemplar checked in the target)",
-    "cells": [["designed","consumes region records by reference"],["none",""],["none",""],["none",""],["none",""],["designed","per-region facts: confirmed / denied / indeterminate"],["designed","two certainties kept apart"],["designed","gain in certainty, symmetric"],["designed",""],["none",""]]}
+     [
+      "designed",
+      "a101_tree.md"
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ]
+    ]
+   },
+   {
+    "kind": "blast_database_preparation, local",
+    "cells": [
+     [
+      "designed",
+      "a101_tree.md"
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ]
+    ]
+   },
+   {
+    "kind": "all_vs_all_blast, local",
+    "cells": [
+     [
+      "designed",
+      "a101_tree.md"
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ]
+    ]
+   },
+   {
+    "kind": "database_blast, hosted service",
+    "cells": [
+     [
+      "designed",
+      "a101_tree.md"
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ]
+    ]
+   },
+   {
+    "kind": "cluster leaves (all actions)",
+    "cells": [
+     [
+      "none",
+      "last"
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ]
+    ]
+   },
+   {
+    "kind": "hmmer",
+    "cells": [
+     [
+      "none",
+      "after BLAST"
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ]
+    ]
+   },
+   {
+    "kind": "region confirmation (deferred, root level)",
+    "cells": [
+     [
+      "designed",
+      "DEFERRED record"
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ],
+     [
+      "none",
+      ""
+     ]
+    ]
+   }
   ]
  },
  "tree": [
-  {"name": "sequence_homology_evidence (the A101 head)", "status": "built",
-   "intent": "Owns sequence-similarity evidence: commissions children, reads their graded results and earns credit from them through the native correspondence scoring.",
-   "note": "Offers only some children to its model. The two resource children are never offered. Its 'literature' slot points to a subtree that is deleted on purpose.",
+  {
+   "name": "sequence_homology_evidence (the A101 head)",
+   "status": "built",
+   "intent": "Holds the records and decides which analysis to commission next; its credit is the native sequence correspondence read from the graded sheets it holds.",
+   "note": "Imports (commit 844a16d75). Offers its two existing tools; no child episode is built yet, so no child slot is declared.",
    "children": [
-    {"name": "execution_job_submission", "status": "built",
-     "intent": "Choose a concrete launch request and commission a launch child on one explicit resource.",
-     "note": "The head can only build the BLAST API request as a controlled commission today.",
+    {
+     "name": "pairwise_blast: TOOL of the head",
+     "status": "designed",
+     "intent": "One query against one subject on a local resource: run, fetch and grade as one unit.",
+     "note": "First pattern. Working step logic is in git history (910c8cc38); to become one library function.",
+     "children": []
+    },
+    {
+     "name": "blast_database_preparation: CHILD EPISODE",
+     "status": "designed",
+     "intent": "Builds or masks a database from a sequence set; returns a prepared-data record the head holds and passes on.",
+     "note": "Second pattern (local part).",
      "children": [
-      {"name": "api_job_execution (leaf)", "status": "none", "intent": "Build the request, submit it once to the public web service, and establish a usable monitoring and results handoff.", "note": "Not run for real yet. Needs the public NCBI service."},
-      {"name": "hpc_job_execution (leaf)", "status": "none", "intent": "Write and run shell commands on the HPC resource to prepare, submit and observe the job until a usable handoff or the job's outputs exist.", "note": "Not run for real yet. Needs Aurora and the owner's authenticated master connection."},
-      {"name": "local_job_execution (leaf)", "status": "real", "intent": "Launch the assigned job as a detached local job and return its handoff record; the episode ends at handoff.", "note": "Ran for real (run_a101_real_L1_local_job_execution, and with a compiled pairwise BLAST command). It launches the job unchanged; it does not build jobs."}
-     ]},
-    {"name": "execution_progress_assessment", "status": "real",
-     "intent": "Monitor one already-launched job through its handoff (status, logs); it never fetches results.",
-     "note": "Run for real on a local tblastx job (a101_real_monitor_1, a101_real_monitor_2): states running, finished and failed observed; credit only for new facts; resume asked no model. Not tested: log windows, the end-event wait, the dependency monitor, API jobs. Observation: ending the episode takes several no-gain re-reads, see W4.", "children": []},
-    {"name": "execution_result_acquisition", "status": "real",
-     "intent": "Acquire the results of one handed-off job through the job service and grade them; the sheet stays in this episode, the parent gets controlled features and a reference.",
-     "note": "The local pairwise BLAST path is run for real. Other result families (masking, utility, standard and custom database, HMMER preparation, HMMER other than phmmer, API, local file source, wait) still raise NotImplementedError, which AGENTS.md forbids.", "children": []},
-    {"name": "resource_work_submission", "status": "blocked",
-     "intent": "Under review. The old role chose among API, local and HPC resources and had the chosen child prepare, submit and check the receiving interface through the resource's tools. How it differs from the execution family is unresolved.",
-     "note": "Not reachable from the head. Its forms carry an open job_request, which breaks controlled messaging.",
+      {
+       "name": "launch_local: TOOL",
+       "status": "designed",
+       "intent": "A small set: build and check as one unit; writes the prepared-data record.",
+       "note": "",
+       "children": []
+      },
+      {
+       "name": "launch_hpc: CHILD EPISODE",
+       "status": "none",
+       "intent": "Starts a long job that detaches; ends at the handoff.",
+       "note": "Built last (cluster).",
+       "children": []
+      },
+      {
+       "name": "monitor: CHILD EPISODE",
+       "status": "none",
+       "intent": "Iterates visits on a long job.",
+       "note": "Built last (cluster).",
+       "children": []
+      },
+      {
+       "name": "results: CHILD EPISODE",
+       "status": "none",
+       "intent": "Acquires a long job's result; the usable check is automatic in its fetch.",
+       "note": "Built last (cluster).",
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "database_blast: CHILD EPISODE",
+     "status": "designed",
+     "intent": "One query against a reference set: identification; feeds both the identification sheet and the correspondence sheet.",
+     "note": "Not local. Built after the local part.",
      "children": [
-      {"name": "api_resource_work_execution (leaf)", "status": "blocked", "intent": "Same carried-over intent for an API resource; goal text still the unclear carried-over sentences.", "note": ""},
-      {"name": "hpc_resource_work_execution (leaf)", "status": "blocked", "intent": "Same carried-over intent for an HPC resource; goal text still the unclear carried-over sentences.", "note": ""},
-      {"name": "local_resource_work_execution (leaf)", "status": "blocked", "intent": "Carry out the parent's job on the one local resource it selected and end with a usable handoff: prepare, submit, and check that results can be received. Goal text rewritten 2026-11-20, unverified.", "note": "Task still calls resource-adapter functions the system no longer has. Needs a controlled job request and a rewrite in the new scheme."}
-     ]},
-    {"name": "resource_result_acquisition (leaf)", "status": "blocked",
-     "intent": "Acquire the requested data through the supplied receiving interface; the parent interprets it.", "note": "Not reachable from the head. Unverified intent.", "children": []},
-    {"name": "literature (deleted)", "status": "none",
-     "intent": "The A101 published-evidence subtree is deleted on purpose (owner, 2026-11-20). A101 does not read literature; region and exemplar evidence comes from the experimental axes.", "note": "", "children": []}
-   ]}
+      {
+       "name": "launch_api: CHILD EPISODE",
+       "status": "none",
+       "intent": "Submits to the hosted service; ends at the handoff.",
+       "note": "",
+       "children": []
+      },
+      {
+       "name": "launch_hpc: CHILD EPISODE",
+       "status": "none",
+       "intent": "Custom database: a prepared-data record named by the head.",
+       "note": "Built last (cluster).",
+       "children": []
+      },
+      {
+       "name": "monitor: CHILD EPISODE",
+       "status": "none",
+       "intent": "Iterates visits on the search.",
+       "note": "",
+       "children": []
+      },
+      {
+       "name": "results: CHILD EPISODE",
+       "status": "none",
+       "intent": "Fetches the report; grading into both sheets is automatic in its fetch.",
+       "note": "",
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "all_vs_all_blast: CHILD EPISODE",
+     "status": "designed",
+     "intent": "A set against itself: relationships, clusters and the family context of the target.",
+     "note": "A repeat of the second pattern (local part).",
+     "children": [
+      {
+       "name": "launch_local: TOOL",
+       "status": "designed",
+       "intent": "A small set: run, fetch, graph, cluster and family-context sheet as one unit.",
+       "note": "",
+       "children": []
+      },
+      {
+       "name": "launch_hpc: CHILD EPISODE",
+       "status": "none",
+       "intent": "Chunked large sets.",
+       "note": "Built last (cluster).",
+       "children": []
+      },
+      {
+       "name": "monitor: CHILD EPISODE",
+       "status": "none",
+       "intent": "Iterates visits on a long job.",
+       "note": "Built last (cluster).",
+       "children": []
+      },
+      {
+       "name": "results: CHILD EPISODE",
+       "status": "none",
+       "intent": "Graph, clustering and family-context sheet automatic in its fetch.",
+       "note": "Built last (cluster).",
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "hmmer",
+     "status": "none",
+     "intent": "To be built out after the BLAST part.",
+     "note": "",
+     "children": []
+    },
+    {
+     "name": "old_* (five folders)",
+     "status": "none",
+     "intent": "The old generic launch, monitor, results and resource-work episodes: reference only, not for running.",
+     "note": "Deleted when the new tree has replaced them.",
+     "children": []
+    }
+   ]
+  }
  ],
  "decisions": [
-  {"id": "D1", "who": "owner", "date": "2026-11-20", "text": "Test for real, not with pytest. Test each subtree leaf to root and make it work slowly: predict, run, inspect the evidence, learn, then decide the next change. Running a leaf is not a test; judge it against its intention.", "why": "Mocked or synthetic passes hide the failures that matter."},
-  {"id": "D2", "who": "owner", "date": "2026-11-20", "text": "Old code is only read for its intentions and intended functions. Everything is built in the new organization and paradigm; nothing from the old runner is implemented or repaired.", "why": "The carry-over was not faithful; the old machinery is not wanted."},
-  {"id": "D3", "who": "owner", "date": "2026-11-20", "text": "The A101 literature subtree stays deleted for now.", "why": "Intentional."},
-  {"id": "D4", "who": "owner", "date": "2026-10-24", "text": "Every tool needs a deterministic grader. The grader fills slots of the tool's scoring sheet from what the tool reported; the sheet's scorer computes from the filled slots. Transformations of raw BLAST numbers live inside the grader.", "why": "A clear line between grader and sheet prevents spaghetti."},
-  {"id": "D5", "who": "owner", "date": "2026-10-27", "text": "The same analysis uses the same scoring sheet with a different parser per format or source. No separate sheets for the same or near-identical algorithms.", "why": "Otherwise the same thing is scored two ways."},
-  {"id": "D6", "who": "owner", "date": "2026-11-20", "text": "BLAST has several uses: pairwise (residue correspondence), database search (identification), all-vs-all (relationships and clusters; does not exist yet and must be reasoned out), and preparation (masking, utilities, databases: setup for later work). Database setup and cluster jobs make most sense for custom databases and large-scale clustering.", "why": "The use decides the job, the resource, the grader and whether any evidence sheet exists."},
-  {"id": "D7", "who": "owner", "date": "2026-10-24", "text": "Pairwise answers how many residues align and which. A database search is for identification and needs the whole hit list scored Bayesian-style, with adjustments such as how often a function is in the database, the taxa of the hits and whether they cohere, and the source (metagenome vs cultured or closed genome). Deterministic, no model, built once as functions. Database BLAST is not run locally.", "why": "Machine limits; repeatable intelligence belongs in code."},
-  {"id": "D8", "who": "owner", "date": "2026-11-20", "text": "E-value is meaningful in context. For pairwise the primary measure is residue correspondence, and E-value is recorded with the search space the report gives.", "why": "Corrects my earlier reading that it is meaningless."},
-  {"id": "D9", "who": "owner", "date": "2026-11-20", "text": "The kind of BLAST use is declared in the commission and also derived from the job as a validation; a mismatch fails with its error.", "why": "Routing is deterministic and a wrong commission is caught at the first point it can be seen."},
-  {"id": "D10", "who": "owner", "date": "2026-11-20", "text": "No honoring or writing of stdout/stderr paths. Make the job work for the grader.", "why": "The grader needs the report only."},
-  {"id": "D11", "who": "owner", "date": "2026-11-20", "text": "Regions confirm that key functions or sequence features exist; a region does not make a better hit, and small regions have little scoring power. The regions and the reference sequence are defined from outside and need an experimental anchor; they should not come from the sequence-homology tools.", "why": "Functional aspects need an experimental basis."},
-  {"id": "D12", "who": "owner", "date": "2026-11-20", "text": "Region certainty: a region on a close homolog counts more than on a distant exemplar because the mapping is more certain; a region that holds across many exemplars in an alignment counts more again. A chain to something certain to map to is strong. A single distant sequence carries two uncertainties: is it the same function, and did the regions line up.", "why": "Mapping certainty and functional equivalence are different things."},
-  {"id": "D13", "who": "owner", "date": "2026-11-20", "text": "Region confirmation can both raise and lower support, because it can deny a region (possible when sequences are far enough apart).", "why": "A denial is information."},
-  {"id": "D14", "who": "owner", "date": "2026-11-20", "text": "Credit is progress. Lowering support still earns credit, because knowledge is now sharper.", "why": "Credit and support are separate measures."},
-  {"id": "D15", "who": "owner", "date": "2026-11-20", "text": "Credit for regions is not yet settled: either a new axis unifies it, or credit is shared, with A105/A106 credited for evidencing regions and A101 credited for region confirmation by alignment.", "why": "Open design."},
-  {"id": "D16", "who": "owner", "date": "2026-11-20", "text": "Preparation tools: implement masking, makeblastdb (as a database build) and, later, sequence extraction; delete the alias tool, makembindex, makeprofiledb and the VDB tools. The standard and custom database result families belong to database search. These are tools to implement or delete, not stubs.", "why": "Agreed from the preparation design; tools that are not wanted are deleted outright."},
-  {"id": "D17", "who": "owner", "date": "2026-11-20", "text": "Credit is only for what is gained. Nothing is earned for repeating something already known. (The current flat unit earned once when a grading is stored is a simplification to revisit.)", "why": "Credit is progress; a repeat gains nothing."},
-  {"id": "D18", "who": "owner", "date": "2026-11-20", "text": "Family-context is its own evidence about what a sequence is, unrelated to regions: closeness to members of the same function, farness from members of a different function, whether the target sits in the cluster core or is an outlier nearer one function, and separation between clusters. It belongs to the all-vs-all chain, not the root.", "why": "Cluster position changes certainty about identity on its own."},
-  {"id": "D19", "who": "owner", "date": "2026-11-20", "text": "The launching episode sets the scheduler allocation, including walltime, in the job request. It is a scheduler operand, not an episode deadline.", "why": "The cluster needs a walltime; the application must not impose a time budget."},
-  {"id": "D20", "who": "owner", "date": "2026-11-20", "text": "A database search feeds both identification (what the query probably is, from the whole hit list) and residue correspondence (how the target lines up with each reference: which residues, how much is covered, full-length or domain-only).", "why": "They answer different questions from the same result; dropping correspondence would discard residue-level information that later mapping work needs."},
-  {"id": "I8", "who": "inference", "date": "2026-11-20", "text": "The two measures from a database search are kept as separate sheets or subscores, and where they are combined the same hit is not treated as two independent votes. Member function labels for family-context travel with the set record as controlled annotation values. Controlled function identifiers: EC, GO molecular function, KEGG orthology; domain identifiers are context; free-text names count only when matched to a controlled name.", "why": "Avoids double counting; to be checked against what the library readers accept."},
-  {"id": "I1", "who": "inference", "date": "2026-11-20", "text": "A functional region is a shared record type (controlled fields only: exemplar sequence, position or interval, expected residues, role from a fixed vocabulary, perturbation type, effect direction, evidence type, source observation reference), produced by the experimental axes and by any axis that has the anchor, and consumed by a region-confirmation check. It is not itself a new axis.", "why": "A region adds specificity to existing experimental evidence."},
-  {"id": "I2", "who": "inference", "date": "2026-11-20", "text": "The producer runs a numbering check: the stated residue at the stated position must match the exemplar sequence, or the record is unresolved.", "why": "Source numbering often differs from the sequence record."},
-  {"id": "I3", "who": "inference", "date": "2026-11-20", "text": "Region confirmation reports confirmed, denied or indeterminate, with mapping certainty and functional-equivalence certainty kept as separate recorded quantities, plus the count of independent exemplars. Indeterminate earns nothing and does not count as denial.", "why": "Failing to align is not evidence of absence."},
-  {"id": "I4", "who": "inference", "date": "2026-11-20", "text": "Credit for a region question is the gain in certainty over what was already known, symmetric for confirmed and denied. Repeating a held determination earns nothing. Credit falls only when an established fact is lost.", "why": "Follows from D14 and prevents confirmation bias."},
-  {"id": "I5", "who": "inference", "date": "2026-11-20", "text": "Joint region credit is earned only when both an experimental anchor and a mapped target exist for the same region, as a product-like term, with an increment-only rule against double counting the base evidence.", "why": "Keeps each episode's credit its own and removes a gaming route. One of the options under D15."},
-  {"id": "I6", "who": "inference", "date": "2026-11-20", "text": "Near-duplicate exemplars are not independent support. All-vs-all clustering is the way to count independent exemplars.", "why": "Repeated results add no independent vote (D5 principle)."},
-  {"id": "I7", "who": "inference", "date": "2026-11-20", "text": "All-vs-all is a data product (similarity graph) until read relative to a target. Stages: job, graph grader, clustering step, target-centric family-context sheet and subscore. The large graph stays a retained artifact; only controlled features move upward. A run with missing pieces is incomplete, never zero hits.", "why": "Reasoned from the nature of the analysis; to be confirmed."}
+  {
+   "id": "D1",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Test for real, not with pytest. Test each subtree leaf to root and make it work slowly: predict, run, inspect the evidence, learn, then decide the next change. Running a leaf is not a test; judge it against its intention.",
+   "why": "Mocked or synthetic passes hide the failures that matter."
+  },
+  {
+   "id": "D2",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Old code is only read for its intentions and intended functions. Everything is built in the new organization and paradigm; nothing from the old runner is implemented or repaired.",
+   "why": "The carry-over was not faithful; the old machinery is not wanted."
+  },
+  {
+   "id": "D3",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "The A101 literature subtree stays deleted for now.",
+   "why": "Intentional."
+  },
+  {
+   "id": "D4",
+   "who": "owner",
+   "date": "2026-10-24",
+   "text": "Every tool needs a deterministic grader. The grader fills slots of the tool's scoring sheet from what the tool reported; the sheet's scorer computes from the filled slots. Transformations of raw BLAST numbers live inside the grader.",
+   "why": "A clear line between grader and sheet prevents spaghetti."
+  },
+  {
+   "id": "D5",
+   "who": "owner",
+   "date": "2026-10-27",
+   "text": "The same analysis uses the same scoring sheet with a different parser per format or source. No separate sheets for the same or near-identical algorithms.",
+   "why": "Otherwise the same thing is scored two ways."
+  },
+  {
+   "id": "D6",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "BLAST has several uses: pairwise (residue correspondence), database search (identification), all-vs-all (relationships and clusters; does not exist yet and must be reasoned out), and preparation (masking, utilities, databases: setup for later work). Database setup and cluster jobs make most sense for custom databases and large-scale clustering.",
+   "why": "The use decides the job, the resource, the grader and whether any evidence sheet exists."
+  },
+  {
+   "id": "D7",
+   "who": "owner",
+   "date": "2026-10-24",
+   "text": "Pairwise answers how many residues align and which. A database search is for identification and needs the whole hit list scored Bayesian-style, with adjustments such as how often a function is in the database, the taxa of the hits and whether they cohere, and the source (metagenome vs cultured or closed genome). Deterministic, no model, built once as functions. Database BLAST is not run locally.",
+   "why": "Machine limits; repeatable intelligence belongs in code."
+  },
+  {
+   "id": "D8",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "E-value is meaningful in context. For pairwise the primary measure is residue correspondence, and E-value is recorded with the search space the report gives.",
+   "why": "Corrects my earlier reading that it is meaningless."
+  },
+  {
+   "id": "D9",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "The kind of BLAST use is declared in the commission and also derived from the job as a validation; a mismatch fails with its error.",
+   "why": "Routing is deterministic and a wrong commission is caught at the first point it can be seen."
+  },
+  {
+   "id": "D10",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "No honoring or writing of stdout/stderr paths. Make the job work for the grader.",
+   "why": "The grader needs the report only."
+  },
+  {
+   "id": "D11",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Regions confirm that key functions or sequence features exist; a region does not make a better hit, and small regions have little scoring power. The regions and the reference sequence are defined from outside and need an experimental anchor; they should not come from the sequence-homology tools.",
+   "why": "Functional aspects need an experimental basis."
+  },
+  {
+   "id": "D12",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Region certainty: a region on a close homolog counts more than on a distant exemplar because the mapping is more certain; a region that holds across many exemplars in an alignment counts more again. A chain to something certain to map to is strong. A single distant sequence carries two uncertainties: is it the same function, and did the regions line up.",
+   "why": "Mapping certainty and functional equivalence are different things."
+  },
+  {
+   "id": "D13",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Region confirmation can both raise and lower support, because it can deny a region (possible when sequences are far enough apart).",
+   "why": "A denial is information."
+  },
+  {
+   "id": "D14",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Credit is progress. Lowering support still earns credit, because knowledge is now sharper.",
+   "why": "Credit and support are separate measures."
+  },
+  {
+   "id": "D15",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Credit for regions is not yet settled: either a new axis unifies it, or credit is shared, with A105/A106 credited for evidencing regions and A101 credited for region confirmation by alignment.",
+   "why": "Open design."
+  },
+  {
+   "id": "D16",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Preparation tools: implement masking, makeblastdb (as a database build) and, later, sequence extraction; delete the alias tool, makembindex, makeprofiledb and the VDB tools. The standard and custom database result families belong to database search. These are tools to implement or delete, not stubs.",
+   "why": "Agreed from the preparation design; tools that are not wanted are deleted outright."
+  },
+  {
+   "id": "D17",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Credit is only for what is gained. Nothing is earned for repeating something already known. (The current flat unit earned once when a grading is stored is a simplification to revisit.)",
+   "why": "Credit is progress; a repeat gains nothing."
+  },
+  {
+   "id": "D18",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Family-context is its own evidence about what a sequence is, unrelated to regions: closeness to members of the same function, farness from members of a different function, whether the target sits in the cluster core or is an outlier nearer one function, and separation between clusters. It belongs to the all-vs-all chain, not the root.",
+   "why": "Cluster position changes certainty about identity on its own."
+  },
+  {
+   "id": "D19",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "The launching episode sets the scheduler allocation, including walltime, in the job request. It is a scheduler operand, not an episode deadline.",
+   "why": "The cluster needs a walltime; the application must not impose a time budget."
+  },
+  {
+   "id": "D20",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "A database search feeds both identification (what the query probably is, from the whole hit list) and residue correspondence (how the target lines up with each reference: which residues, how much is covered, full-length or domain-only).",
+   "why": "They answer different questions from the same result; dropping correspondence would discard residue-level information that later mapping work needs."
+  },
+  {
+   "id": "D21",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "There is no such thing as a code-decided episode. In every episode the model is the router: it chooses one defined action per decision and code carries it out. The system is not changed to allow anything else.",
+   "why": "Nine code-only episodes were built on my invented premise and deleted."
+  },
+  {
+   "id": "D22",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "pairwise_blast is a tool call, not an episode.",
+   "why": "A job that ends within the turn has nothing to iterate, detach or monitor."
+  },
+  {
+   "id": "D23",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Anything nested in the tree is a child episode. A leaf is a tool or a child episode. Grading is automatic, never an episode.",
+   "why": "So a head with nested nodes always has children."
+  },
+  {
+   "id": "D24",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "The approved A101 tree: head; pairwise_blast; blast_database_preparation (launch_local, launch_hpc, monitor, results); database_blast (launch_api, launch_hpc, monitor, results); all_vs_all_blast (launch_local, launch_hpc, monitor, results); hmmer, to be built out after the BLAST part. The head holds the prepared-data record and names it in later commissions.",
+   "why": "Action-oriented episodes: everything about an episode in one place, where it can be tuned."
+  },
+  {
+   "id": "D25",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Real runs only: a real run is a command-line run through episode_runtime. No pytest, no tests/ folders, no harness scripts in the repository. A leaf is tested with the input its real parent sends.",
+   "why": "A script inside tests is not a real run."
+  },
+  {
+   "id": "D26",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "The old generic A101 folders are renamed old_* and are reference only, not for running.",
+   "why": "To delineate the old structure from the new while it is replaced."
+  },
+  {
+   "id": "D27",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "Order of work: set up a pattern in one branch first, then parallelize the repeated patterns. Start local. No HPC first. HMMER after BLAST.",
+   "why": "HPC is the most work; parallel work on an unproven pattern multiplies mistakes."
+  },
+  {
+   "id": "D28",
+   "who": "owner",
+   "date": "2026-11-20",
+   "text": "One repository: /home/chia/repos/gene_annotation_episode. No RAM copy, no _disk directory.",
+   "why": "Two working trees over one history overwrote work."
+  },
+  {
+   "id": "I8",
+   "who": "inference",
+   "date": "2026-11-20",
+   "text": "The two measures from a database search are kept as separate sheets or subscores, and where they are combined the same hit is not treated as two independent votes. Member function labels for family-context travel with the set record as controlled annotation values. Controlled function identifiers: EC, GO molecular function, KEGG orthology; domain identifiers are context; free-text names count only when matched to a controlled name.",
+   "why": "Avoids double counting; to be checked against what the library readers accept."
+  },
+  {
+   "id": "I1",
+   "who": "inference",
+   "date": "2026-11-20",
+   "text": "A functional region is a shared record type (controlled fields only: exemplar sequence, position or interval, expected residues, role from a fixed vocabulary, perturbation type, effect direction, evidence type, source observation reference), produced by the experimental axes and by any axis that has the anchor, and consumed by a region-confirmation check. It is not itself a new axis.",
+   "why": "A region adds specificity to existing experimental evidence."
+  },
+  {
+   "id": "I2",
+   "who": "inference",
+   "date": "2026-11-20",
+   "text": "The producer runs a numbering check: the stated residue at the stated position must match the exemplar sequence, or the record is unresolved.",
+   "why": "Source numbering often differs from the sequence record."
+  },
+  {
+   "id": "I3",
+   "who": "inference",
+   "date": "2026-11-20",
+   "text": "Region confirmation reports confirmed, denied or indeterminate, with mapping certainty and functional-equivalence certainty kept as separate recorded quantities, plus the count of independent exemplars. Indeterminate earns nothing and does not count as denial.",
+   "why": "Failing to align is not evidence of absence."
+  },
+  {
+   "id": "I4",
+   "who": "inference",
+   "date": "2026-11-20",
+   "text": "Credit for a region question is the gain in certainty over what was already known, symmetric for confirmed and denied. Repeating a held determination earns nothing. Credit falls only when an established fact is lost.",
+   "why": "Follows from D14 and prevents confirmation bias."
+  },
+  {
+   "id": "I5",
+   "who": "inference",
+   "date": "2026-11-20",
+   "text": "Joint region credit is earned only when both an experimental anchor and a mapped target exist for the same region, as a product-like term, with an increment-only rule against double counting the base evidence.",
+   "why": "Keeps each episode's credit its own and removes a gaming route. One of the options under D15."
+  },
+  {
+   "id": "I6",
+   "who": "inference",
+   "date": "2026-11-20",
+   "text": "Near-duplicate exemplars are not independent support. All-vs-all clustering is the way to count independent exemplars.",
+   "why": "Repeated results add no independent vote (D5 principle)."
+  },
+  {
+   "id": "I7",
+   "who": "inference",
+   "date": "2026-11-20",
+   "text": "All-vs-all is a data product (similarity graph) until read relative to a target. Stages: job, graph grader, clustering step, target-centric family-context sheet and subscore. The large graph stays a retained artifact; only controlled features move upward. A run with missing pieces is incomplete, never zero hits.",
+   "why": "Reasoned from the nature of the analysis; to be confirmed."
+  }
  ],
  "work": [
-  {"id": "W1", "title": "local_job_execution leaf: real run", "status": "real", "depends": [], "owner": "done", "evidence": "run_a101_real_L1_local_job_execution", "prediction": "", "note": "Launched a real detached job, credit 4.0, ended by the yield controller, resume asked no model."},
-  {"id": "W2", "title": "Pairwise BLAST through result acquisition (fetch, grade, features, credit, kind check)", "status": "real", "depends": ["W1"], "owner": "done", "evidence": "run_a101_real_pairwise_chain_7 (earlier runs 1, 4 showed the same path)", "prediction": "", "note": "Edits are uncommitted and were reverted once for unknown reasons, then re-applied. A checkpoint commit is an owner decision."},
-  {"id": "W3", "title": "Decide how the launch leaf carries the A101 pairwise job (parent holds the full job, tied by request digest, or the launch validation learns the job)", "status": "blocked", "depends": ["W2"], "owner": "owner decision", "evidence": "", "prediction": "", "note": "See question Q1."},
-  {"id": "W4", "title": "Monitor episode: real run on a pairwise job handoff", "status": "real", "depends": ["W2"], "owner": "done (fork); owner review of the observations below", "evidence": "runs/a101_real_monitor_1 (job OOM-killed by my 256 MiB world policy: state failed observed), runs/a101_real_monitor_2 (1.0 Mb tblastx, 1 GiB policy: running then finished observed); timing benchmarks runs/a101_monitor_timing_20261120_1..4", "prediction": "Written before the second run: visit 1 first fresh check shows running (elapsed known, return code unknown, results not available) and earns 1.0; a second fresh check while running earns 0; a later fresh check after the end shows finished, return code 0, duration and earns 1.0; a visit that only re-reads held checks earns 0; the return is controlled fields only; resume asks no model.", "note": "Observed vs prediction: matched. Visit 1 earned 2.0 (running, then finished, 82.8 s duration, return code 0) in 10 model calls; the repeated re-reads earned 0; a repeated fresh check on the failed job (run 1) earned 0; visits 2 and 3 (job long ended, baseline already shows finished) made only re-reads, observed false, credit 0.0, in 4 calls each; resume made 0 model calls in all five monitor runs. The return held controlled fields only and nothing was fetched or graded. First run: tblastx at 1.5 Mb needs about 385 MB and 11 min; my first world policy of 256 MiB killed the job in about a second, so the monitor saw failed with return code unknown and no cause. Observations for the owner: (1) with no stop action the model ends an episode by re-reading a held check, and the accumulation controller at cost 0.2 needs 4 to 7 such no-gain units (about 90 to 100 s of model calls) to stop, even when the held check already shows a terminal state; (2) the check does not carry the route's end reason (OOM kill), so a commissioner cannot tell an out-of-memory failure from any other failure; (3) when the model makes no fresh check the finding says observed false and returns no state, although a held check shows it. Not tested: log windows, the end-event wait, the dependency monitor, an API job, the BLAST status-target completion controller. No code changed."},
-  {"id": "W5", "title": "api_job_execution leaf: real run against the public NCBI BLAST service", "status": "none", "depends": [], "owner": "me or a fork", "evidence": "", "prediction": "To be written before the run.", "note": "Real network."},
-  {"id": "W6", "title": "hpc_job_execution leaf: real run on Aurora", "status": "none", "depends": [], "owner": "owner must authenticate first", "evidence": "", "prediction": "", "note": "Never authenticate or replace the master connection myself."},
-  {"id": "W7", "title": "Head commission builders for the pairwise kind (launch, monitor, results with declared kind, operands in custody)", "status": "none", "depends": ["W2", "W3", "W4"], "owner": "me or a fork", "evidence": "", "prediction": "", "note": "Head currently builds none of this."},
-  {"id": "W8", "title": "Parents: execution_job_submission, then the head, tested for real with real children", "status": "none", "depends": ["W5", "W7"], "owner": "me or a fork", "evidence": "", "prediction": "", "note": "Known open defect in the ledger: unsupported score profile for a pairwise alignment observation."},
-  {"id": "W9", "title": "Resolve the purpose of resource_work_submission vs the execution family; then rewrite its leaves (local first) with a controlled job request in the new scheme", "status": "blocked", "depends": [], "owner": "owner decision", "evidence": "", "prediction": "", "note": "See question Q2."},
-  {"id": "W10", "title": "Database search kind end to end (hosted and custom database; API and HPC parsers; whole-hit-list grader; identification subscore)", "status": "none", "depends": ["W2"], "owner": "design then build", "evidence": "", "prediction": "", "note": "Needs a prepared-database record for custom databases (W11)."},
-  {"id": "W11", "title": "Database preparation kind: implement masking, database build and later sequence extraction; delete alias, makembindex, makeprofiledb and VDB tools (D16)", "status": "none", "depends": [], "owner": "design then build", "evidence": "", "prediction": "", "note": "Tools still to implement or delete: masking, utility, standard and custom database families (database search), HMMER preparation, HMMER other than phmmer, API, local file source, wait. Design record: docs/plan/designs/blast_database_preparation.md."},
-  {"id": "W12", "title": "All-vs-all: design, then build a small local set first (graph grader, clustering step, target-centric sheet)", "status": "designed", "depends": ["W2"], "owner": "design then build", "evidence": "", "prediction": "", "note": "See decision I7."},
-  {"id": "W13", "title": "Region check back half: reference + region record + target in custody, alignment chain, per-region facts, sheet; test with a real documented example", "status": "designed", "depends": ["W2"], "owner": "me or a fork", "evidence": "", "prediction": "To be written before the run.", "note": "Needs the region record fields settled (Q4)."},
-  {"id": "W14", "title": "Region records: shared type and emission by A105/A106 (and other axes with an anchor)", "status": "blocked", "depends": [], "owner": "waiting on the read-only research of A105/A106", "evidence": "", "prediction": "", "note": ""},
-  {"id": "W15", "title": "Region credit design (shared, joint, or new axis)", "status": "blocked", "depends": ["W13", "W14"], "owner": "owner decision", "evidence": "", "prediction": "", "note": "See D15, I4, I5."},
-  {"id": "W16", "title": "Who supplies the yield-profile settings in a real run (launch leaf and results episode both look up a per-class profile)", "status": "blocked", "depends": [], "owner": "owner decision", "evidence": "", "prediction": "", "note": "Test worlds define them; a real run must too."},
-  {"id": "W17", "title": "Old shared-contract pairwise family in results stays unplaced", "status": "none", "depends": [], "owner": "decide or delete", "evidence": "", "prediction": "", "note": "A101 now has its own pairwise job contract; the shared contract was not changed."}
+  {
+   "id": "N1",
+   "title": "Pattern A: pairwise_blast tool on the head; the real entry (run and resume commands); a real command-line run through the head",
+   "status": "designed",
+   "depends": [],
+   "owner": "Claude",
+   "evidence": "",
+   "prediction": "",
+   "note": "One branch first."
+  },
+  {
+   "id": "N2",
+   "title": "Pattern B: blast_database_preparation child episode with its launch_local tool; the head's child wiring; a real run through the head",
+   "status": "designed",
+   "depends": [
+    "N1"
+   ],
+   "owner": "Claude",
+   "evidence": "",
+   "prediction": "",
+   "note": ""
+  },
+  {
+   "id": "N3",
+   "title": "all_vs_all_blast child episode, local part (a repeat of pattern B); real run through the head",
+   "status": "designed",
+   "depends": [
+    "N2"
+   ],
+   "owner": "Claude",
+   "evidence": "",
+   "prediction": "",
+   "note": "Parallel with N4."
+  },
+  {
+   "id": "N4",
+   "title": "Pattern C: database_blast with launch_api, monitor and results child episodes against the hosted service; real run through the head",
+   "status": "designed",
+   "depends": [
+    "N2"
+   ],
+   "owner": "Claude",
+   "evidence": "",
+   "prediction": "",
+   "note": "Parallel with N3."
+  },
+  {
+   "id": "N5",
+   "title": "Cluster leaves for the three actions (launch_hpc, monitor, results)",
+   "status": "none",
+   "depends": [
+    "N3",
+    "N4"
+   ],
+   "owner": "Claude",
+   "evidence": "",
+   "prediction": "",
+   "note": "Last. Needs the owner's Aurora login for real runs."
+  },
+  {
+   "id": "N6",
+   "title": "HMMER arms",
+   "status": "none",
+   "depends": [
+    "N4"
+   ],
+   "owner": "Claude",
+   "evidence": "",
+   "prediction": "",
+   "note": ""
+  },
+  {
+   "id": "N7",
+   "title": "Delete the old_* folders and the library modules only they use",
+   "status": "none",
+   "depends": [
+    "N5"
+   ],
+   "owner": "Claude",
+   "evidence": "",
+   "prediction": "",
+   "note": ""
+  },
+  {
+   "id": "N8",
+   "title": "Functional regions and joint credit (deferred)",
+   "status": "blocked",
+   "depends": [],
+   "owner": "Claude",
+   "evidence": "",
+   "prediction": "",
+   "note": "Waits until each axis's base function is in better shape."
+  }
  ],
- "questions": [
-  {"id": "Q1", "who": "owner", "text": "The launch leaf's job validation knows only a generic command or the shared native jobs, so the launch carried the compiled command alone. Does the parent keep the full pairwise job for the results commission (tied by request digest), or should the launch validation learn the A101 pairwise job?"},
-  {"id": "Q2", "who": "owner", "text": "What is resource_work_submission for, and how does it differ from execution_job_submission? It is not reachable from the head and its forms carry an open job request."},
-  {"id": "Q3", "who": "owner", "text": "'Far enough away' for denial: local denial (flanks align reliably on both sides but the key residues are gone or substituted), distance denial (too divergent to expect the region to transfer), or both?"},
-  {"id": "Q4", "who": "owner", "text": "Region records: accept the shared-record-type view (I1), and decide where it is produced and which controlled fields it carries. Waiting on the read-only research of A105 and A106."},
-  {"id": "Q5", "who": "owner", "text": "Are curated active-site, domain and motif resources acceptable as grounding for regions alongside literature? Is region confirmation an A101 child or shared with the structure axis?"},
-  {"id": "Q6", "who": "owner", "text": "Commit a checkpoint of the A101 work? Source edits were reverted once without a known cause."},
-  {"id": "Q7", "who": "me", "text": "Does the head's commission of results carry the pairwise job's operand records in custody? To be answered when the head builders are designed (W7)."}
- ],
+ "questions": [],
  "method": [
-  "Each work item gets a brief: scope, what it depends on, a prediction written before the run, how to run it for real, and what counts as done.",
-  "Run through the single-workflow launcher (one workload at a time, confirm it exited), outputs under runs/, scripts outside the source tree. No pytest.",
-  "After each run read the evidence, not the exit status: journal units, the model's decisions, handoff and check rows, the saved sheet, credit, the returned fields, and whether resume asks the model nothing.",
-  "A status changes only with a run directory as evidence. Owner-verified items move to the evidence-axis ledger by its own rules.",
-  "Work is delegated to forks with a brief like the above; the main conversation stays free for planning. Only one fork runs workflows at a time in this window."
+  "Each piece: read what exists and list it before writing; anything that exists is called, not rewritten.",
+  "Predict first, then run from the command line through the runner (lane a101 of the single-workflow launcher), then read the journal, the records and the credit.",
+  "A status changes only with a real run directory as evidence. Report only what was verified; label what a fork reported as relayed.",
+  "One pattern in one branch first; then forks in parallel for the repeats, each with one complete brief."
  ]
 }
 </script>

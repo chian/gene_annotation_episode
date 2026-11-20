@@ -50,12 +50,15 @@ The runner is generic and must stay so; the application CLI is where a caller al
 caller's next step (run) belongs there. Episode folders stay free of run harness code, and nothing is written into
 a `tests/` folder.
 
-## Real-run recipe for the pairwise pilot (written before it is run)
+## Real-run recipe for the first real run: the head and its `pairwise_blast` tool (written before it is run)
 
-1. `init` a workspace with the 76-residue ubiquitin target and `add-material`/`init` the 78-residue reference.
+`pairwise_blast` is a tool of the head (`a101_tree.md`), not an episode.
+
+1. `init` a workspace with the 76-residue ubiquitin target and `add-material` the 78-residue reference.
 2. Write the head's commission (its assignment form) and the continuation and services files for the run.
-3. `run --entry sequence_homology_evidence` with the real model. Prediction is in the pairwise section of
-   `a101_head_wiring.md` and in the run record written before the run.
-4. `resume` the same run id into a fresh model-call directory: prediction zero model calls and the same result.
-5. Refusal runs from the same command: a commission the child does not declare; a record the head does not hold;
-   `blastn` on a protein; a subject whose bytes differ from the job's declared operand.
+3. `run --entry sequence_homology_evidence` with the real model. The prediction is written in the run's own record
+   before the run: the model chooses the `pairwise_blast` tool with controlled arguments; the unit runs `blastp`,
+   fetches and grades; the head's credit rises from the saved sheet.
+4. `resume` the same run id into a fresh model-call directory: the model is asked nothing and the result is the same.
+5. Refusal runs from the same command: a tool call naming a record the head does not hold; `blastn` on a protein;
+   a repeat of the same comparison (it earns nothing).
