@@ -121,12 +121,12 @@
       "a101_tree.md"
      ],
      [
-      "none",
-      ""
+      "built",
+      "head tool + one library function + run/resume/report commands"
      ],
      [
-      "none",
-      ""
+      "real",
+      "runs/a101_patternA_run_4, _resume_4, _run_5"
      ],
      [
       "none",
@@ -265,15 +265,15 @@
  "tree": [
   {
    "name": "sequence_homology_evidence (the A101 head)",
-   "status": "built",
+   "status": "real",
    "intent": "Holds the records and decides which analysis to commission next; its credit is the native sequence correspondence read from the graded sheets it holds.",
-   "note": "Imports (commit 844a16d75). Offers its two existing tools; no child episode is built yet, so no child slot is declared.",
+   "note": "Run for real from the command line with its pairwise_blast tool (runs/a101_patternA_run_4). No child episode is built yet, so no child slot is declared.",
    "children": [
     {
      "name": "pairwise_blast: TOOL of the head",
-     "status": "designed",
+     "status": "real",
      "intent": "One query against one subject on a local resource: run, fetch and grade as one unit.",
-     "note": "First pattern. Working step logic is in git history (910c8cc38); to become one library function.",
+     "note": "The model fills out one request; check_pairwise_request checks it before anything runs; a correct request ran blastp on the first call; the graded comparison counts in the credit at once.",
      "children": []
     },
     {
@@ -659,12 +659,12 @@
   {
    "id": "N1",
    "title": "Pattern A: pairwise_blast tool on the head; the real entry (run and resume commands); a real command-line run through the head",
-   "status": "designed",
+   "status": "real",
    "depends": [],
    "owner": "Claude",
-   "evidence": "",
-   "prediction": "",
-   "note": "One branch first."
+   "evidence": "runs/a101_patternA_run_4 (first call succeeds, credit 0.947 after the one unit, yield stop), runs/a101_patternA_resume_4 (0 model calls), runs/a101_patternA_run_5 (later visit: credit continues; a repeated request is rejected with its fix-list and no unit)",
+   "prediction": "Written before each run in docs/plan/designs/a101_tree.md.",
+   "note": "Runs 1 to 3 failed or were stopped; what each showed is in a101_tree.md. Not owner-verified."
   },
   {
    "id": "N2",

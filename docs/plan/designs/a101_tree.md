@@ -305,3 +305,20 @@ model is asked at least once (0.0528 still possible).
    make the model do this; if it does not, the rejection path is not shown by a real run.
 3. Nothing the model can do adds correspondence, so the credit stays 0.947 and the estimator ends the episode after
    at most a few units.
+
+**Observed, run `a101-patternA-5` (`runs/a101_patternA_run_5`; read back with `report`, `runs/a101_patternA_report_5`).**
+
+1. As predicted: the initial credit was 0.9471855819086874 (the head held its earlier graded comparison).
+2. The model made four reasoning commits (credit unchanged at 0.947 after each: a reasoning commit does not move the
+   grading's credit), then, at its fifth call, requested the same comparison again. The check returned
+   `[{"field": "reference_ref", "code": "comparison_already_held"}]`; the request was rejected with that fix-list;
+   no unit was recorded (the unit count was 4 before and after) and no job ran. The model then went back to
+   reasoning commits.
+3. The credit ended at 0.947. Not as predicted: the estimator needed seven units, not "a few", to stop at the cutoff
+   0.05, because the largest gain still possible (0.0528) stayed just above that cutoff until its own estimate fell
+   to 0.037 at the seventh unit. With the cutoff 0.1 of run 4 this visit would make no unit at all.
+
+Not shown by a real run: a request with a program that does not compare the two molecules, a reference that is the
+query, a query outside the scope, or a resource that is not local. The model never made one. `check_pairwise_request`
+returned the expected fix-list for each of them when called directly (through the launcher, on made-up inputs),
+which is not a real run.
