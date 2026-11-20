@@ -170,3 +170,26 @@ Two things found while reading that the real run depends on:
 - The root passes back to the head, on a later visit, only the records the head returned to it, and selects
   `committed_record_refs` and `execution_handoff_refs`. For the head's credit to continue on a later visit, the
   graded records its credit reads must be among the records it returns. They go into `committed_record_refs`.
+
+### Checked against the tool registry (the library's `ToolRegistry`, reached by `execute_selected_tool`)
+
+The registry already has tools of nearly this shape, so each was read before anything was kept:
+
+| Existing in the registry | What it does | Why `pairwise_blast` does not go through it as is |
+|---|---|---|
+| `sequence.align` (`_align_one`) | aligns two held sequences with the Biopython aligner in a short local job, grades, keeps a source and an `alignment` observation | it is not BLAST, and it runs its job with the registry's own blocking runner (`run_local_job_async`), not through the job service; the registry is handed only the Store, so it cannot reach `job_access` or name a bound resource |
+| `public.blast.search` / `public.blast.collect` (`_import_blast`) | imports a result of the public BLAST service: grades it in database mode, keeps a source and one `comparison` observation per alignment | bound to a public-service snapshot and to the database sheet (`shared_hsp_component` refuses a pairwise sheet) |
+| `_source`, `_observation` | the registry's private record writers | methods of a registry instance; `_source` takes a body or a service snapshot, not an artifact already fetched |
+
+So `pairwise_blast` is the head's own defined tool, and its one library function is a composition of existing
+functions: `requested_job_from_pairwise`, `checked_analysis_kind`, `execute_on_local_resource`,
+`grade_blast_result`, `retain_tool_grading`, `grading_features`, `blast_search.hsp_row`, and the registry module's
+`measurements`, `number`, `ref`. It produces the same records the registry's BLAST import produces (a source with
+its grading artifact and one `comparison` observation per alignment, addressed to its graded cell), which is what
+the A101 credit reads.
+
+One correction to this record, found in the code: the head's credit does not rise from a saved sheet alone. The
+A101 credit (`native_correspondence.read_details`, given the proposed annotation) scores only the graded cells of
+observations that an assessment relates to the proposed annotation with relation `strengthens` and an established
+extent. So after a `pairwise_blast` unit the credit is unchanged; it rises when the model commits a reasoning unit
+that assesses the proposed annotation against the comparison's observation.

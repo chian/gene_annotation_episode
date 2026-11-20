@@ -104,10 +104,14 @@ DESCRIPTIONS = {
                     'record you hold) and resource_id (one of local_resources). Code runs the search, fetches its '
                     'report and grades it in this one unit; you do not grade. The outcome shows the controlled '
                     'features of the saved pairwise sheet: counts and fractions of paired and identical residues, '
-                    'the two lengths and the native E-value with the search-space context the report gives. The '
-                    'graded correspondence is what your credit measures. Repeating a comparison you already hold '
-                    'adds no correspondence and earns nothing. A program that does not take the two molecules is '
-                    'an invalid outcome.'),
+                    'the two lengths and the native E-value with the search-space context the report gives, and '
+                    'observation_refs: one comparison observation per reported alignment, which you now hold. '
+                    'The comparison itself is a measurement, not yet evidence about the proposed annotation: your '
+                    'credit measures the graded correspondence of the observations that an assessment of yours '
+                    'relates to the proposed annotation (a reasoning commit with an assessment of the proposed '
+                    'annotation against the observation, its relation, applicability and extent). Repeating a '
+                    'comparison you already hold adds no correspondence and earns nothing. A program that does '
+                    'not take the two molecules is an invalid outcome.'),
 }
 # What the model is told of each child it may commission: what the child does, the controlled fields of its
 # commission (the model chooses values; code builds the child's assignment) and what comes back. A child's entry is
