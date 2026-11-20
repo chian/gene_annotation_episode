@@ -251,3 +251,35 @@ Predicted for run `a101-patternA-3`:
    proposed annotation against the observation with relation `strengthens` and an established extent, the credit
    rises to a value near 1; otherwise it stays 0.0.
 4. The yield controller ends the episode. `resume` asks the model nothing and returns the same result.
+
+### Pattern A: what the third run showed, the owner's rulings on it, and the prediction for the fourth
+
+- **Run `a101-patternA-3` (`runs/a101_patternA_run_3`).** Call 1 was `pairwise_blast` with a correct request and the
+  unit completed in one shot (76 of 76 query residues paired, 75 identical, E-value 3.9499e-56, effective search
+  space 4899, one alignment observation), as predicted. The credit stayed 0.0 until call 2, a reasoning commit that
+  assessed the observation, raised it to 0.947; the model then kept revising its assessment and the credit went up
+  and down with it. I stopped the run after 20 model calls. The estimator at cutoff 0.01 had not stopped.
+- **Owner's rulings (2026-11-20).** The head fills out one JSON; one deterministic function checks it and either
+  returns the things to fix or the job runs; a correct JSON must simply work. Grading is automatic: no reasoning
+  commit assesses anything, and none switches the credit on or off.
+- **Changes.** `check_pairwise_request` (in the tool's library module) is the one check; the head's `action` rejects
+  a request with problems (`Rejected`, so no unit is made) and the feedback lists the things to fix. The running
+  function no longer checks inputs; a failure after a passed check is a fault of the environment, `failed` and not
+  retryable. The head's credit no longer hands the proposed annotation to the native-correspondence projection, so
+  every graded comparison the head holds counts as soon as its sheet is saved (the projection given a proposed
+  annotation counts only assessed observations; without it, it scores every held graded observation over the scope).
+  Nothing was added to the scoring: the same `read_details` and `compile_native_sheet` are called.
+- **Setting.** The head's yield cutoff for these runs is 0.1 (it was 0.01): the native correspondence is at most
+  1.0, a unit is worth making only if it can add at least 0.1, and after a comparison that gives 0.947 at most
+  0.053 remains.
+
+Predicted for run `a101-patternA-4` (a fresh workspace, `runs/a101_patternA_ws_2`, same inputs):
+
+1. Call 1: the `pairwise_blast` request with the target as `query_ref`, the reference as `reference_ref`, `blastp`,
+   `local`. The check finds nothing to fix. The unit completes in one shot with the same features as in run 3.
+2. The credit right after that unit is 0.947, with no reasoning commit.
+3. The yield estimator ends the episode after that unit (at most 0.053 remains, below the cutoff 0.1): one unit,
+   one model call. If its estimate is not bounded by the remaining amount it may allow one more unit.
+4. The return: credit 0.947, the target's sheet features, and `committed_record_refs` holding the source, the
+   grading artifact, the search row and the observation.
+5. `resume` asks the model nothing and returns the same result.

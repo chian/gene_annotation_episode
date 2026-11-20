@@ -1,9 +1,14 @@
-"""One pairwise BLAST comparison as one unit: one query sequence against one reference sequence on a local resource,
-from the job to the graded correspondence of the two.
+"""One pairwise BLAST comparison: the check of the request, and the comparison as one unit.
 
-``pairwise_blast_comparison`` is what an episode's ``pairwise_blast`` tool calls. The episode's model chose the
-controlled values (the program, the two sequence records, the local resource); everything else is done here by code,
-in this order, inside the one unit that calls it:
+The episode's model fills out one request: ``program``, ``query_ref``, ``reference_ref``, ``resource_id``. Two
+functions of this module do the rest, deterministically:
+
+``check_pairwise_request`` examines the request against what the episode holds and the bound resources, before
+anything runs. It returns the things to fix (one entry per problem: the field, a code and what to choose from); an
+empty list means the request can run. The episode's ``action`` rejects a request with problems, so no unit is made
+and the model corrects the request.
+
+``pairwise_blast_comparison`` runs a request that passed the check, as one unit, in this order:
 
 1. read the two sequences through custody and make the two FASTA files as artifacts;
 2. build the pairwise job with the library's contract and check that the kind derived from the job is ``pairwise``
@@ -12,22 +17,21 @@ in this order, inside the one unit that calls it:
    launch, wait for the end, fetch what the job left), with the two files staged in the job's own directory;
 4. grade the one report the job declares into the pairwise sheet of the job's own two operands;
 5. keep the grading through custody: the grading artifact, a ``native.blast.pairwise`` source over the fetched
-   report, the search row that enters the search into the A101 sheet's tool profile, and one ``alignment``
-   observation for each reported alignment (the query's interval, the reference's interval and the measurements of
-   the already graded cell), in the shape the registry's ``sequence.align`` gives its observation. The observation
-   is what a reasoning commit assesses against a hypothesis; the A101 credit reads the graded cells of assessed
-   observations.
+   report (its operands are the query and the reference), the search row that enters the search into the A101
+   sheet's tool profile, and one ``alignment`` observation for each reported alignment (the query's interval, the
+   reference's interval and the measurements of the already graded cell), in the shape the registry's
+   ``sequence.align`` gives its observation. The A101 native-correspondence projection reads the graded cell of
+   each such observation from the grading artifact on its source.
 
 Grading is not a choice of anyone: it follows the fetch in the same unit.
 
 The outcome has the shape of every tool outcome of an episode (``status``, ``record_refs``, ``changed_record_refs``,
-``result``, ``feedback``). ``completed``: ``record_refs`` are the source, the grading artifact and the search row,
-the search row and the observations, and ``result`` holds the controlled features code read from the sheet with the
-references of the observations. ``invalid``: the two molecules are not what
-the program compares, or the report is not of the two operands; nothing is kept. ``failed``: the resource refused the
-job or the program ended with a nonzero exit code; nothing is graded. ``feedback`` holds the code and ``retryable``:
-whether the same call can succeed if made again. The comparison is deterministic, so only a refusal the resource
-itself marks as retryable is."""
+``result``, ``feedback``). ``completed``: ``record_refs`` are the source, the grading artifact, the search row and
+the observations, and ``result`` holds the controlled features code read from the sheet with the references of the
+observations. A request that passed the check needs no second call: what can still go wrong is a fault of the
+environment (the resource refused the job, the program ended with a nonzero exit code, the report is not of the two
+operands). That is a ``failed`` outcome with its code and ``retryable`` false; it is reported once and is not
+something the model repairs by calling again."""
 import hashlib
 from pathlib import Path
 
@@ -64,8 +68,49 @@ PROGRAM_MOLECULES = {'blastp': (('protein',), ('protein',)), 'blastn': (NUCLEOTI
                      'tblastx': (NUCLEOTIDE, NUCLEOTIDE)}
 
 
-def _outcome(status, code, *, category, detail=None, retryable=False):
-    feedback = {'category': category, 'code': code, 'retryable': retryable}
+def check_pairwise_request(request, *, sequences, scope_subjects, resources, made):
+    """The things to fix in a pairwise request, before anything runs; an empty list means it can run.
+
+    ``request`` holds ``program`` (one of ``PROGRAM_MOLECULES``), ``query_ref``, ``reference_ref`` (each a key of
+    ``sequences``) and ``resource_id`` (a key of ``resources``); the caller's schema has already bound each to those
+    sets. ``sequences`` is ``{record: molecule}`` of the sequence records the episode holds, ``scope_subjects`` the
+    subjects of its scope, ``resources`` ``{resource id: kind}`` of the bound resources, and ``made``
+    ``{(query, reference, program): 'completed' | 'failed'}`` of the comparisons the episode already holds or already
+    saw fail. The conditions, each one problem with the field it concerns:
+
+    1. the query is a subject of the episode's scope (the comparison is about the scope's own sequence);
+    2. the reference is another record than the query;
+    3. the program compares a query of the query's molecule with a reference of the reference's molecule;
+    4. the resource is a local resource;
+    5. the same comparison (query, reference, program) is not already held;
+    6. the same comparison has not already failed (a failure after a passed check is a fault of the environment and
+       cannot be repaired by the same call)."""
+    query, reference, program = request['query_ref'], request['reference_ref'], request['program']
+    problems = []
+    if query not in scope_subjects:
+        problems.append({'field': 'query_ref', 'code': 'query_is_not_a_sequence_of_the_scope',
+                         'choose_from': [ref for ref in scope_subjects if ref in sequences]})
+    if reference == query:
+        problems.append({'field': 'reference_ref', 'code': 'reference_is_the_query',
+                         'choose_from': [ref for ref in sequences if ref != query]})
+    queries, references = PROGRAM_MOLECULES[program]
+    if sequences[query] not in queries or sequences[reference] not in references:
+        problems.append({'field': 'program', 'code': 'program_does_not_compare_these_molecules',
+                         'query_molecule': sequences[query], 'reference_molecule': sequences[reference],
+                         'choose_from': [name for name, (takes, against) in PROGRAM_MOLECULES.items()
+                                         if sequences[query] in takes and sequences[reference] in against]})
+    if resources[request['resource_id']] != 'local':
+        problems.append({'field': 'resource_id', 'code': 'resource_is_not_local',
+                         'choose_from': [name for name, kind in resources.items() if kind == 'local']})
+    if (query, reference, program) in made:
+        problems.append({'field': 'reference_ref', 'code': {
+            'completed': 'comparison_already_held', 'failed': 'comparison_already_failed_and_cannot_be_retried'}[
+                made[query, reference, program]]})
+    return problems
+
+
+def _outcome(status, code, *, category, detail=None):
+    feedback = {'category': category, 'code': code, 'retryable': False}
     if detail is not None:
         feedback['detail'] = detail
     return {'status': status, 'record_refs': [], 'changed_record_refs': [], 'result': None, 'feedback': feedback}
@@ -146,10 +191,6 @@ async def pairwise_blast_comparison(ctx, *, program, query_ref, reference_ref, r
     store, access = ctx.store, ctx.services['job_access']
     sequences = {'query_sequence': (query_ref, *_sequence(store, query_ref)),
                  'subject_sequence': (reference_ref, *_sequence(store, reference_ref))}
-    for (role, (_, molecule, _)), allowed in zip(sequences.items(), PROGRAM_MOLECULES[program]):
-        if molecule not in allowed:
-            return _outcome('invalid', 'pairwise_blast_molecules_not_comparable', category='arguments_or_reference',
-                            detail={'program': program, 'operand': role, 'molecule': molecule})
     directory = Path(access.describe(resource_id)['workspace']) / job_handle(ctx.operation_key, resource_id, JOB_NAME)
     requested, inputs = _job(store, directory, program, sequences, executable_directory)
     checked_analysis_kind(PAIRWISE, requested)
@@ -158,9 +199,7 @@ async def pairwise_blast_comparison(ctx, *, program, query_ref, reference_ref, r
                                           inputs=inputs, name=JOB_NAME)
     if ran['status'] != 'completed':
         refused = (ran['launch'] if ran['launch']['status'] != 'completed' else ran['fetch'])['failure']
-        operational = refused['detail'].get('operational', {}) if isinstance(refused['detail'], dict) else {}
-        return _outcome('failed', refused['code'], category='job', detail=refused['detail'],
-                        retryable=operational.get('retryable', False))
+        return _outcome('failed', refused['code'], category='job', detail=refused['detail'])
     if ran['returncode'] != 0:
         return _outcome('failed', 'pairwise_blast_program_exit_nonzero', category='job',
                         detail={'returncode': ran['returncode'], 'stderr': ran['stderr'][-2000:]})
@@ -169,14 +208,14 @@ async def pairwise_blast_comparison(ctx, *, program, query_ref, reference_ref, r
     try:
         grading = _graded(store, report_ref, program, query, subject)
     except (ValueError, ContractError) as error:
-        return _outcome('invalid', str(error), category='grading')
+        return _outcome('failed', str(error), category='grading')
     sheet = grading['sheet']
     with store.transaction():
         grading_ref = retain_tool_grading(store, provider=PROVIDER, native_artifact_ref=report_ref, grading=grading)
         source = store.put('source', {
             'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': report_ref, 'text_ref': None,
             'request_ref': None, 'version': sheet['input']['search']['version'], 'retrieved_at': None,
-            'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [query_ref]}, origin='tool')
+            'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [query_ref, reference_ref]}, origin='tool')
         search = store.table(SEARCHES).put({'source_ref': source['id'], 'query_ref': query_ref, 'profile': 'blast'})
         observations = _observations(store, grading, source['id'], program, sequences)
     refs = [source['id'], grading_ref, search['id'], *observations]
@@ -184,4 +223,4 @@ async def pairwise_blast_comparison(ctx, *, program, query_ref, reference_ref, r
             'result': {**grading_features(grading, grading_ref), 'observation_refs': observations}, 'feedback': None}
 
 
-__all__ = ['PROGRAM_MOLECULES', 'pairwise_blast_comparison']
+__all__ = ['PROGRAM_MOLECULES', 'PROVIDER', 'check_pairwise_request', 'pairwise_blast_comparison']

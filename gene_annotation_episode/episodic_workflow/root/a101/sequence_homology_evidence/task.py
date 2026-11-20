@@ -5,11 +5,12 @@ commissions its children. It never ends the Episode: only the yield controller d
 Tools. ``reason`` is the ``Store.commit_reasoning`` path. ``execute_selected_tool`` dispatches a tool the commission
 selected to the library's ``ToolRegistry``, called with ``ctx.store`` (a tool name here has lowercase letters, digits
 and underscores, so the selected name travels as an argument). ``pairwise_blast`` is this episode's own defined tool:
-the model chooses the query (a sequence of the scope), the reference sequence record to compare it with, the program
-(only those that compare the two molecules) and a bound local resource, all from fixed sets; code runs the
-comparison, fetches its report and grades it in the same unit (``pairwise_blast_comparison``). Each comparison is
-offered once: not again after it completed or failed with ``retryable`` false. The credit reads the graded cells of
-the comparison's observations once a reasoning commit assesses them against the proposed annotation.
+the model fills out one request (the query, the reference sequence record, the program and a bound resource, each
+from a fixed set). ``action`` runs the library's one deterministic check of that request against what the episode
+holds and the bound resources (``check_pairwise_request``): a request with problems is rejected with the things to
+fix and no unit is made; a request that passes runs as one unit (``pairwise_blast_comparison``: the search, the
+fetch of its report and the grading). The credit counts the graded comparison as soon as its sheet is saved; no
+reasoning commit is needed for it.
 
 Children. The head's child episodes in the A101 tree are ``blast_database_preparation``, ``database_blast`` and
 ``all_vs_all_blast`` (HMMER later). A child is declared in ``CHILD_SLOTS`` when its episode is built (the runner
@@ -18,7 +19,7 @@ router: for a child it answers with the slot and the controlled fields of that s
 (``commission_fields``); it writes no assignment, objective or message. ``msg_to_child`` builds the child's
 assignment, in the child's own form, from those choices and the summary. A slot is offered while its commission can
 be stated from what this episode holds. The service ``job_access`` is read for the bound resources a commission or a
-tool may name (``local_resources``).
+tool may name (``bound_resources``).
 
 Settings: ``process_library_directory`` (the frozen process library), ``tool_library_directory`` (the frozen
 scientific tool library), ``tool_registry`` (the keyword settings of the library's ``ToolRegistry``),
@@ -50,7 +51,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
     ToolRegistry)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
-    PROGRAM_MOLECULES, pairwise_blast_comparison)
+    PROGRAM_MOLECULES, check_pairwise_request, pairwise_blast_comparison)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_catalog import ScientificToolLibrary
 from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
 
@@ -95,20 +96,24 @@ HISTORY_GUIDANCE = ('Your own earlier outcomes are shown to you as own_outcomes,
 PAIRWISE_TOOL = 'pairwise_blast'
 DESCRIPTIONS = {
     'reason': REASONING_COMMIT_REQUIREMENT,
-    PAIRWISE_TOOL: ('Compare one query sequence with one reference sequence by a pairwise BLAST on a local resource. One '
-                    'call does the whole comparison: code runs the search, fetches its report and grades it in this '
-                    'one unit. You choose from the offered sets: query_ref (a sequence of your scope), reference_ref '
-                    '(another sequence record you hold), program (only the programs that compare those two '
-                    'molecules are offered) and resource_id. A comparison is offered once: after it completes, or '
-                    'after it fails with retryable false, the same call is no longer offered, because it would give '
-                    'the same outcome. A completed outcome shows the controlled features of the saved pairwise '
-                    'sheet (counts and fractions of paired and identical residues, the two lengths, the native '
-                    'E-value with the search-space context the report gives) and observation_refs: one alignment '
-                    'observation per reported alignment, which you now hold. The comparison is a measurement, not '
-                    'yet evidence about the proposed annotation: your credit measures the graded correspondence of '
-                    'the observations that an assessment of yours relates to the proposed annotation, so the next '
-                    'step after a completed comparison is a reasoning commit with that assessment (its relation, '
-                    'applicability and extent). A failed outcome shows its code and retryable.'),
+    PAIRWISE_TOOL: ('Compare one query sequence with one reference sequence by a pairwise BLAST on a local resource. Fill '
+                    'out the four fields of its request: query_ref (a sequence of your scope), reference_ref (another '
+                    'sequence record you hold; held_sequences gives each record with its molecule), program (blastp '
+                    'compares a protein query with a protein reference, blastn nucleotide with nucleotide, blastx a '
+                    'nucleotide query with a protein reference, tblastn a protein query with a nucleotide '
+                    'reference, tblastx two nucleotide sequences in translation) and resource_id (a local resource '
+                    'of bound_resources). Code checks the request before anything runs. If something is wrong the '
+                    'request comes back in feedback with the things to fix (each names the field, a code and what to '
+                    'choose from) and nothing has run: correct those fields. A request that passes the check runs '
+                    'as one unit, with no second call: code runs the search, fetches its report and grades it. The '
+                    'completed outcome shows the controlled features of the saved pairwise sheet (counts and '
+                    'fractions of paired and identical residues, the two lengths, the native E-value with the '
+                    'search-space context the report gives) and observation_refs: one alignment observation per '
+                    'reported alignment, which you now hold. A comparison you already hold is not run again. The '
+                    'grading is automatic and your credit counts the graded correspondence as soon as the unit '
+                    'completes: no reasoning commit is needed for it and none changes it. A failed outcome is a fault of '
+                    'the environment, not of your request: it is reported once and the same request is not made '
+                    'again.'),
 }
 # What the model is told of each child it may commission: what the child does, the controlled fields of its
 # commission (the model chooses values; code builds the child's assignment) and what comes back. A child's entry is
@@ -159,35 +164,36 @@ def selected_tools(settings, selection):
             for row in direct]
 
 
-def local_resources(ctx):
-    """The local resources bound to the job service, which a commission or a tool may name (read through the
-    service's read handle, so the read is recorded with the decision)."""
+def bound_resources(ctx):
+    """The resources bound to the job service, each with its kind, which a commission or a tool may name (read
+    through the service's read handle, so the read is recorded with the decision)."""
     access = ctx.services['job_access']
-    return [resource['resource_id'] for resource in access.read('resources') if resource['kind'] == 'local']
+    return {resource['resource_id']: resource['kind'] for resource in access.read('resources')}
 
 
 def pairwise_options(summary, resources):
-    """The ``pairwise_blast`` choices this decision offers, one per pair of a held sequence of the scope (the query)
-    and another held sequence record (the reference): the programs that compare the two molecules, less those this
-    episode already ran for the pair to completion or to a failure that cannot be retried. Every value is from a
-    fixed set, so a call the schema admits is a call that can succeed. None while no local resource is bound, no
-    second sequence record is held, or every comparison has been made."""
-    held, options = summary['held_sequences'], []
-    done = {(row['comparison']['query_ref'], row['comparison']['reference_ref'], row['comparison']['program'])
+    """The request of the ``pairwise_blast`` tool, as the model fills it out: each field from a fixed set (the held
+    sequence records, the programs, the bound resources). Whether the filled request can run is decided by
+    ``check_pairwise_request`` in ``action``. Not offered while fewer than two sequence records are held or no
+    resource is bound."""
+    held = list(summary['held_sequences'])
+    if len(held) < 2 or not resources:
+        return []
+    return [obj({'kind': {'const': 'tool'}, 'tool': {'const': PAIRWISE_TOOL},
+                 'arguments': obj({'query_ref': {'enum': held}, 'reference_ref': {'enum': held},
+                                   'program': {'enum': list(PROGRAM_MOLECULES)},
+                                   'resource_id': {'enum': list(resources)}})})]
+
+
+def comparisons_made(summary):
+    """The comparisons this episode holds (``completed``) or saw fail (``failed``), by query, reference and
+    program: what ``check_pairwise_request`` refuses to run again."""
+    made = {(row['comparison']['query_ref'], row['comparison']['reference_ref'], row['comparison']['program']): 'failed'
             for row in summary['units'] if row['kind'] == 'tool' and row['tool'] == PAIRWISE_TOOL
-            and (row['status'] == 'completed' or not row['feedback']['retryable'])}
-    for query in summary['scope']['subject_refs']:
-        for reference in held:
-            programs = [program for program, (queries, references) in PROGRAM_MOLECULES.items()
-                        if query in held and reference != query and held[query] in queries
-                        and held[reference] in references and (query, reference, program) not in done]
-            if programs and resources:
-                options.append(obj({'kind': {'const': 'tool'}, 'tool': {'const': PAIRWISE_TOOL},
-                                    'arguments': obj({'query_ref': {'enum': [query]},
-                                                      'reference_ref': {'enum': [reference]},
-                                                      'program': {'enum': programs},
-                                                      'resource_id': {'enum': list(resources)}})}))
-    return options
+            and row['status'] != 'completed'}
+    made.update({(row['query_ref'], row['reference_ref'], row['program']): 'completed'
+                 for row in summary['held_comparisons']})
+    return made
 
 
 def commission_fields(slot, summary, resources):
@@ -239,7 +245,7 @@ def decide(summary, feedback, ctx):
     _, axis_view = axis_entry(library, selection)
     thought = library.resolve(selection[selection_fields(selection)[1]])
     tools = selected_tools(settings, selection)
-    resources = local_resources(ctx)
+    resources = bound_resources(ctx)
     offered = offered_children(summary, resources)
     own = ([{'name': PAIRWISE_TOOL, 'description': DESCRIPTIONS[PAIRWISE_TOOL]}]
            if pairwise_options(summary, resources) else [])
@@ -258,7 +264,8 @@ def decide(summary, feedback, ctx):
         'held_source_refs': summary['held_source_refs'],
         'credit_binding': summary['credit_binding'], 'own_outcomes': summary['units'],
         'last_local_outcome': summary['last_local_outcome'], 'child_reports': summary['child_reports'],
-        'handoff_refs': summary['handoff_refs'], 'local_resources': resources,
+        'handoff_refs': summary['handoff_refs'], 'bound_resources': resources,
+        'held_sequences': summary['held_sequences'], 'held_comparisons': summary['held_comparisons'],
         'tools': [{'name': 'reason', 'description': DESCRIPTIONS['reason']}, *own, *tools],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot],
                            'selectable_return_fields': SELECTABLE[slot]} for slot in offered],
@@ -277,9 +284,11 @@ def empty_commit(commit):
 
 def action(response, summary, records, ctx):
     """Turn the model's answer into one tool call or one commission, or reject it (no unit): an answer that does not
-    fit the schema, or a reasoning commit with every section empty (rejected before acquisition)."""
+    fit the schema, a reasoning commit with every section empty (rejected before acquisition), or a pairwise request
+    the check finds something to fix in (rejected with the things to fix)."""
     tools = selected_tools(ctx.settings, summary['selection'])
-    schema = selection_schema(summary, tools, local_resources(ctx))
+    resources = bound_resources(ctx)
+    schema = selection_schema(summary, tools, resources)
     try:
         if not isinstance(response, dict) or set(response) != {'selection'}:
             raise ValueError('a101_decision_response_must_be_exactly_selection')
@@ -288,6 +297,13 @@ def action(response, summary, records, ctx):
         if selection['kind'] == 'tool' and selection['tool'] == 'reason' and empty_commit(
                 selection['arguments']['commit']):
             raise ValueError('empty_reasoning_commit')
+        if selection['kind'] == 'tool' and selection['tool'] == PAIRWISE_TOOL:
+            problems = check_pairwise_request(
+                selection['arguments'], sequences=summary['held_sequences'],
+                scope_subjects=summary['scope']['subject_refs'], resources=resources, made=comparisons_made(summary))
+            if problems:
+                raise Rejected({'status': 'invalid', 'category': 'pairwise_blast_request',
+                                'detail': {'request': selection['arguments'], 'fix': problems}})
     except (ValueError, KeyError, TypeError, ContractError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract')) from error
     if selection['kind'] == 'episode_child':

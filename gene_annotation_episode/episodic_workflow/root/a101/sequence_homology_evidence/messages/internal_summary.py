@@ -6,14 +6,20 @@ table.
 
 For the commissions (``task.commission_fields``, ``msg_to_child``) the summary also holds what a commission is
 chosen from and built with: ``held_record_refs`` (the held records), ``held_sequences`` (the held records
-that carry a sequence, each with its molecule: what the two sequences of a comparison are chosen from), ``held_source_refs`` (the held sources) and ``named_refs`` (for each held
+that carry a sequence, each with its molecule: what the two sequences of a comparison are chosen from),
+``held_comparisons`` (the pairwise comparisons already held: what the check refuses to run again), ``held_source_refs`` (the held sources) and ``named_refs`` (for each held
 record, the held records it names: what travels in custody beside it)."""
+import json
+
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.construction_records import (
     scientific_digest)
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.axis_features import (
     ALL, axis_features)
+
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
+    PROVIDER as PAIRWISE_PROVIDER)
 
 from ..credit import A101SequenceCredit
 from ..task import CHILD_SLOTS, PAIRWISE_TOOL
@@ -34,6 +40,19 @@ def _named(records, reference):
         return []
     return [named for named in dict.fromkeys(records.named_references(reference))
             if named != reference and records.holds(named)]
+
+
+def _held_comparisons(records):
+    """The pairwise comparisons this episode holds, read from their sources: the query, the reference and the
+    program of the retained sheet."""
+    rows = []
+    for source in records.list('source'):
+        if source['provider'] == PAIRWISE_PROVIDER:
+            sheet = json.loads(records.get_artifact(source['auxiliary_artifact_refs'][0]))['grading']['sheet']
+            query, reference = source['operand_refs']
+            rows.append({'query_ref': query, 'reference_ref': reference, 'program': sheet['input']['search']['program'],
+                         'source_ref': source['id']})
+    return rows
 
 
 def internal_summary(view):
@@ -60,8 +79,7 @@ def internal_summary(view):
         units.append(row)
         last = row
     held = [ref for ref in records.refs() if not ref.startswith('row_')]
-    assignment = {'scope': parent['scope'], 'proposed_annotation_ref': parent['proposed_annotation_ref']}
-    details = A101SequenceCredit().read_details(records, parent['scope'], known_record_refs=held, assignment=assignment,
+    details = A101SequenceCredit().read_details(records, parent['scope'], known_record_refs=held,
                                                 details_limit=ALL, details_offset=0)
     return {**parent,
             'path_depth': len(view.path),
@@ -71,6 +89,7 @@ def internal_summary(view):
             'committed_record_refs': committed, 'handoff_refs': handoff_refs,
             'held_record_refs': held,
             'held_source_refs': [row['id'] for row in records.list('source')],
+            'held_comparisons': _held_comparisons(records),
             'held_sequences': {ref: records.get(ref).get('molecule') for ref in held
                                if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')},
             'named_refs': {ref: _named(records, ref) for ref in held},

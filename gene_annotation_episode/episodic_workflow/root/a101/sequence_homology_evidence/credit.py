@@ -44,7 +44,10 @@ class A101SequenceCredit(NativeCorrespondenceScoring):
 
 
 def credit(summary, records):
-    """The native-correspondence credit of the held records over the commissioned scope."""
+    """The native-correspondence credit of the held records over the commissioned scope: every graded comparison
+    this episode holds counts as soon as its sheet is saved. No assessment or reasoning commit switches it on or
+    off: the measure is the correspondence of the scope's sequence with what it was compared with, independent of
+    a functional hypothesis (``scoring.py``), so the projection is not given the proposed annotation (given it,
+    ``read_details`` scores only the observations an assessment relates to that annotation)."""
     known = [ref for ref in records.refs() if not ref.startswith('row_')]
-    assignment = {'scope': summary['scope'], 'proposed_annotation_ref': summary['proposed_annotation_ref']}
-    return A101SequenceCredit()(records, summary['scope'], known_record_refs=known, assignment=assignment)['credit']
+    return A101SequenceCredit()(records, summary['scope'], known_record_refs=known)['credit']
