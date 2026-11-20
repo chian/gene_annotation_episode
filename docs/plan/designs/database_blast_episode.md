@@ -89,4 +89,32 @@ Run A (the head with only the target; query human ubiquitin, 76 aa, MQIFVKTLTGKT
 
 ## Observed
 
-(filled after each run)
+### Run A1 (`runs/a101_dbblast_run_A1`, workspace `runs/a101_dbblast_ws_A`, journal `journal_A1.sqlite3`, report `report_A1.json`)
+
+Predicted against observed:
+1. Head offered `reason` and `database_blast`: as predicted; the model's first choice was the commission of `database_blast`
+   with blastp, swissprot, hit-list 50, resource `ncbi` (call 1). Not `reason`.
+2. Child: `submit` (accepted; RID G1FEGRZW014, the service's RTOE 3 s; predicted duration none, basis
+   `no_earlier_measurement`), then `check` three times (waits of 5.0, 54.8 and 54.7 s), each `queued` (service
+   `WAITING`). Not as predicted: the search did not finish. The child's credit: 1.0 (handoff) then 2.0 (the first `queued` is
+   a fact), the next checks 0; the controller stopped it after the third check (units 4). The model never held: it chose
+   `check` every time (the instruction text then said only that a check waits the spacing; changed afterwards).
+3. The head commissioned the child four times (the later three continue the held search: the records were passed back by
+   code: `check_refs` grew 3, 5, 7): two checks each, all `queued`; the head's yield estimator stopped it at its fourth unit.
+   Head credit 0.0 (nothing graded). Return: 1 handoff row, 9 check rows, `outstanding_handoff_count` 1. The search was
+   still `WAITING` at its ninth status request, about 9 minutes after the submission.
+
+### Run A2: a later visit (prediction written before it)
+
+`runs/a101_dbblast_run_A2`: the commission is the one of A1 plus, in `evidence_refs`, the ten records the head returned (the
+handoff row and the nine check rows). Its API workspace is the one of A1 (`runs/a101_dbblast_run_A1/api_jobs`: the job's
+record and the spacing file are there).
+1. The head holds the outstanding search (`database_searches`) and its model commissions `database_blast` with the same
+   values: the check passes (it continues the search).
+2. The child holds the handoff and nine checks: its credit starts at 0; its first `check` waits only what the spacing leaves
+   (the last contact was minutes ago: none) and shows either `queued` (nothing new: 0 credit; then a hold) or `finished`
+   (the new fact: 1.0), after which `fetch_and_grade` (graded 1.0).
+3. If finished: the sheet's hits are Swiss-Prot entries; the top hits are ubiquitin entries (UBIQ_HUMAN, UBB/UBC products and
+   the ubiquitin-ribosomal fusion proteins); the head's credit rises through the existing credit function, near 1 for the
+   covered positions. The measured duration (first `finished` observation minus the submission, at least 9 minutes)
+   is recorded and resolves the expectation of this search.
