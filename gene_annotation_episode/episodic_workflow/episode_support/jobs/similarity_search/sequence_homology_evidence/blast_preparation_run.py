@@ -25,7 +25,6 @@ from __future__ import annotations
 import hashlib
 import inspect
 import json
-import re
 from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.blast_preparation_job import (
@@ -33,6 +32,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.blast_analysis_kind import (
     derived_analysis_kind)
 from episode_runtime.job_access import JOB_LEDGER
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.pbs_batch_job import pbs_batch_job
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.resource_local import execute_on_local_resource
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.blast_preparation_receipt import (
     evaluate)
@@ -43,25 +43,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 
 DRIVER_SOURCE = Path(inspect.getsourcefile(blast_preparation_driver)).read_bytes()
 ENDED = ('finished', 'failed', 'cancelled')
-PBS_FIELDS = ('account', 'queue', 'select', 'walltime', 'filesystems')
-_OPERAND = re.compile(r'^[A-Za-z0-9_.:=+@,-]+$')
-
-
-def pbs_job(compiled, allocation, *, env=None):
-    """The batch job of ``compiled`` for a PBS resource: a script that runs the driver in the job's directory and
-    the qsub operands of ``allocation`` (``account``, ``queue``, ``select``, ``walltime``, ``filesystems``, each a
-    plain operand). Nothing is defaulted: a missing or malformed operand is a wrong commission."""
-    if type(allocation) is not dict or set(allocation) != set(PBS_FIELDS):
-        raise ValueError('blast_preparation_pbs_allocation_fields')
-    for name in PBS_FIELDS:
-        if type(allocation[name]) is not str or not _OPERAND.match(allocation[name]):
-            raise ValueError('blast_preparation_pbs_allocation_operand:' + name)
-    python = compiled['job']['command'][0]
-    script = '#!/bin/bash\ncd "$PBS_O_WORKDIR" || exit 2\n' + python + ' ' + DRIVER_NAME + ' ' + PLAN_NAME + '\n'
-    arguments = ['-A', allocation['account'], '-q', allocation['queue'], '-l', 'select=' + allocation['select'],
-                 '-l', 'walltime=' + allocation['walltime'], '-l', 'filesystems=' + allocation['filesystems']]
-    return {'mode': 'batch', 'script': script, 'arguments': arguments, 'env': dict(env or {})}
-
 
 async def launch_preparation(ctx, resource_id, compiled, *, allocation=None):
     """Stage and launch the compiled preparation job on ``resource_id``; returns the job service's launch outcome
@@ -84,7 +65,7 @@ async def launch_preparation(ctx, resource_id, compiled, *, allocation=None):
                                                    compiled['job']['env'], wait=False, inputs=inputs,
                                                    estimates=compiled['estimates'])
     elif kind == 'pbs':
-        launched = access.launch(ctx, resource_id, pbs_job(compiled, allocation), inputs=inputs,
+        launched = access.launch(ctx, resource_id, pbs_batch_job(compiled['job']['command'], allocation), inputs=inputs,
                                  estimates=compiled['estimates'])
     else:
         raise ValueError('blast_preparation_resource_kind_not_placed:' + str(kind))
@@ -141,4 +122,4 @@ def acquire_prepared_data(ctx, handoff_ref, *, declared_kind):
             'record_refs': refs}
 
 
-__all__ = ['DRIVER_SOURCE', 'PBS_FIELDS', 'acquire_prepared_data', 'launch_preparation', 'pbs_job']
+__all__ = ['DRIVER_SOURCE', 'acquire_prepared_data', 'launch_preparation']
