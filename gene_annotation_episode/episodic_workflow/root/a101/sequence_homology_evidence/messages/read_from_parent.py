@@ -5,8 +5,9 @@ property, under the same names) and the values the old episode took from its run
 New fields the final form needs (the old code read them from the runner or the configuration):
 ``scope`` (the Store scope the old runner passed as the request scope), ``scope_refs`` (the records the scope names,
 in custody), ``proposed_annotation_refs`` (the proposed annotation in custody: the old ``initial_references`` named
-it with ``evidence_refs``) and ``child_credit_units`` (the credit units the old configuration gave the
-operational children: ``handoff_unit``, ``acquired_record_unit``, ``information_unit``, ``completion_target``).
+it with ``evidence_refs``) and ``child_credit_units`` (the credit units of the children this episode commissions:
+today ``information_unit``, the credit of establishing the correspondence of two sequences, which the pairwise child
+takes; a unit is added here when a child that needs one is wired).
 
 This is the only place the assignment is read. The old checks of the assignment that need nothing but its value are
 carried: the selection and the revision origin are valid, every evidence reference has the reference form, the
@@ -32,7 +33,7 @@ _EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task_v1'}, 'kind': {'c
                       'credit_unit': {'type': 'number', 'exclusiveMinimum': 0}}, required=['version', 'kind',
                                                                                          'evidence_axis',
                                                                                          'credit_unit'])
-_UNITS = ('handoff_unit', 'acquired_record_unit', 'information_unit', 'completion_target')
+_UNITS = ('information_unit',)
 
 ASSIGNMENT_FORM = RecordForm({
     'selection': Field('record', 'The selected evidence axis (A101), thought pattern and the child tool info '
@@ -49,9 +50,9 @@ ASSIGNMENT_FORM = RecordForm({
     'scope_refs': Field('record_refs', 'The records the scope names (new field)'),
     'proposed_annotation_refs': Field('record_refs', 'The proposed annotation in custody (new field)',
                                       required=False),
-    'child_credit_units': Field('record', 'The credit units of the operational children: handoff_unit, '
-                                          'acquired_record_unit, information_unit, completion_target (new field: '
-                                          'the old configuration values)'),
+    'child_credit_units': Field('record', 'The credit units of the children this episode commissions: '
+                                          'information_unit, the credit of establishing the correspondence of '
+                                          'two sequences (new field)'),
 })
 
 

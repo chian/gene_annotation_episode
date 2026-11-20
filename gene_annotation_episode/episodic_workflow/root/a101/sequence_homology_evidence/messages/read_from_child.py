@@ -1,12 +1,8 @@
-"""What this episode takes from a child's admitted result (the old ``from_child_<role>.receive_report`` of each of
-the seven child roles). The old ``admit_return`` / ``receive_report`` custody (saved attempts per ``delivery_ref``,
-the receipts of child-form references, progress provider forms, native timing receipts, tool attributions) is
-machinery: the system admits the result against the child's own form and writes the ``returned`` receipts of the
-records its ``record_refs`` fields name. The old ``receive_progress`` of the monitor (reading every
-``episode_progress`` reference through the progress provider) is the monitor's own ``check_refs``
-field here.
+"""What this episode takes from a child's admitted result. The system admits the result against the child's own form
+and writes the ``returned`` receipts of the records its ``record_refs`` fields name; nothing of that custody is done
+here.
 
-The report is the child's credit (its productivity: whether to launch it again) and its controlled finding
+The report is the child's credit (its productivity: whether to commission it again) and its controlled finding
 (information for the summary, never added into this episode's credit), the records the child returned (the
 references of its ``*_refs`` fields, in custody) and the handoff records a launch returned
 (``execution_handoff_refs``). Nothing else of the result is kept: no returned list or record is shown to this
