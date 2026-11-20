@@ -82,3 +82,34 @@ target with the held reference by a pairwise BLAST.
 5. Refusals, each with its own error and no job started (the jobs directory empty): a commission selecting a field the
    child does not declare fails at the child's form admission; a commission naming a record the head does not hold
    fails where `msg_to_child` follows the record's named records (a `KeyError`).
+
+## State after wiring (verified, 2026-11-20)
+
+Verified through the single-workflow launcher by a throwaway check kept outside the repository
+(`runs/a101_head_wiring_check_1`):
+
+- The registry builds with the head and `pairwise_blast`; the head's child slots are exactly `pairwise_blast`, and the
+  slot resolves to the child's own binding path.
+- The assignment the head's `msg_to_child` builds (version, declared kind `pairwise`, program, one query and one
+  subject reference, the local resource, the information unit, and four records in custody: the two subjects with the
+  sequence artifacts they name) is admitted by the child's own assignment form.
+- The return fields the head selects (`execution_blast_graded_refs`, `execution_completed`, and the optional
+  `execution_handoff_refs`) are all declared fields of the child's return form.
+- A wrong declared kind is refused by the child's form with its own error.
+
+What was done in this step: the head's `child_credit_units` now requires only `information_unit` (the one unit the
+child takes); the other three belonged to the removed children. The docstring of `read_from_child` no longer describes
+the old children. The head imports nothing from `old_*` or from the deleted literature subtree. The head's prompt
+still uses its own process library (its assignment's evidence axis and thought pattern) and the shared prompt text
+module `episode_support/literature/prompts/...`, which is a library module, not the deleted subtree.
+
+Not verified (no real run has been made through the head: real runs wait for the owner's entry): that the real model
+commissions `pairwise_blast` with these fields, the head's credit after the child, resume, and the two refusals of the
+prediction above. The prediction stands as written.
+
+## Pending on the other forks
+
+The other three approved actions have no parent episode yet (`blast_database_preparation`, `database_blast`,
+`all_vs_all_blast` hold only child folders or empty packages). Each slot is added to the head only when its parent
+exists: its `CHILD_SLOTS` entry, `commission_fields`, `CHILD_DESCRIPTIONS`, `SELECTABLE`, a builder in `msg_to_child`
+and, if the child needs one, a credit unit in `child_credit_units`. `hmmer` is later.
