@@ -162,3 +162,39 @@ credit with `A101ScoringUnavailable: a101_translated_or_nucleotide_map_not_bound
 the head's model, which chose it): the A101 native-correspondence projection scores a `blastp` sheet only. The head
 therefore commissions `database_blast` with `blastp` only (`COMMISSION_PROGRAMS` in the head's `task.py`, enum and check;
 the child itself takes every program of the service). Prediction O4: as O2 (flow as O1, head credit above 0 and under 0.1).
+
+### Observed: public service, later visits and run B (all in `runs/a101_dbblast_ws_A` and `_B`; run directories `runs/a101_dbblast_run_<tag>`)
+
+- A2, A3, A4, A6, A8 continue the search of A1 (records passed back by code and by the commission's `evidence_refs`; the API
+  workspace is that of A1, so the spacing file is shared): in each the head commissioned the child four times; in the first
+  visit the child made one `check` (`queued`, nothing new: 0 credit) then held (`search_not_finished`) until the estimator
+  stopped it (two holds); no check was made after the first of a visit (the model held when the next request was not yet
+  allowed). Every visit's credit 0.0; every return `outstanding_handoff_count` 1. A7 does the same for the search of A5.
+  The search of A1 was still `WAITING` ("Status Searching", the page of the service) 74 minutes after its submission
+  (21:38 to 22:52 UTC), the search of A5 still after 45 minutes.
+- Surprise about the service: the RTOE it returns with the submission is not a duration to rely on: A1 got 3 s (at 21:38),
+  A5 16969 s (22:06), and a probe submission of mine by `curl` (a 76-residue query, hit-list 5, 22:52) 24273 s. The
+  service's queue of the day is hours, not seconds. Predicted by me: finished within a minute. Not as predicted. The
+  model saw `service_estimate_seconds` and `seconds_past_service_estimate` as facts and held.
+- No public search finished, so no public duration was measured: `runs/a101_dbblast_estimates/table.sqlite3` holds two open
+  expectations (`no_earlier_measurement`, one per submission) and no resolution.
+- B1 (`runs/a101_dbblast_run_B1`): as predicted, the head's first and only decision was `pairwise_blast` (blastp, target
+  against reference, `local`); credit 0.9471855819086874 (the same sheet as the earlier pairwise runs: 76 paired positions,
+  E-value 3.9499e-56) stopped its estimator at one unit; the model had no occasion to choose `database_blast`.
+- O4 (offline, local protocol server, own estimate table `runs/a101_dbblast_estimates_offline`): the flow as predicted:
+  child `submit` (predicted 17.07 s, learned from the median of earlier offline searches of the kind; measured 17.79 s: the
+  duration is submission to the observation of the first `finished` check and includes the model's own decision time),
+  three checks (queued, queued, finished), `fetch_and_grade` (1 hit, 1 observation), then five holds; the child's credit
+  4.0 (handoff, queued, finished, graded); the finding carries the controlled sheet features (`total_group_count` 1,
+  `groups_without_function` 1, `unannotated_fraction` 1.0, E-value 1e-09, `functions` empty) and the three durations; the
+  head's credit 0.002735978873046042 (5 of 76 positions; its finding `comparison_count` 1), as predicted (above 0, under 0.1),
+  then six `reason` commits of the head with `revision_conflict` outcomes (the head's own tool, not this episode's).
+  The offline table's resolutions (seconds): 17.03, 17.50, 18.64, 17.11, 17.99, 15.94, 16.87, 17.79: each prediction after
+  the first was the median of the earlier ones.
+- Refusals: the checks were called directly (not by a real run: the model never made a wrong request), through the
+  launcher (`runs/a101_dbblast_refuse_1`): a commission with blastn on a protein query and swissprot gives
+  `program_does_not_take_the_query_molecule` and `database_does_not_hold_what_the_program_searches` with their `choose_from`;
+  a commission with a local resource and hit-list 500 gives `hitlist_size_out_of_range` and `resource_is_not_an_api_service`; a
+  second `submit` while a search is held gives `search_already_held`; `fetch_and_grade` on an outstanding search gives
+  `search_not_known_to_be_finished`. A database outside the vocabulary, or a program outside the set, is refused earlier by the
+  answer schema (an enum).
