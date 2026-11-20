@@ -118,3 +118,12 @@ record and the spacing file are there).
    the ubiquitin-ribosomal fusion proteins); the head's credit rises through the existing credit function, near 1 for the
    covered positions. The measured duration (first `finished` observation minus the submission, at least 9 minutes)
    is recorded and resolves the expectation of this search.
+
+### Run B (prediction written before it)
+
+`runs/a101_dbblast_run_B1`, workspace `runs/a101_dbblast_ws_B`: the target (ubiquitin, 76 aa) and one reference (78 aa, one
+substitution and two added residues), both held; the head is offered `reason`, `pairwise_blast` and `database_blast`.
+Prediction: the model picks `pairwise_blast` first (blastp, target against reference, local): the reference is at hand, the
+comparison runs in about a second, and the pairwise tool is described first. Then, with the head's credit at 0.947 (the
+estimator cutoff of these runs is 0.1, so the head's units end soon after), it either stops or commissions
+`database_blast` once more; I do not predict that second choice. No outcome is wrong here.
