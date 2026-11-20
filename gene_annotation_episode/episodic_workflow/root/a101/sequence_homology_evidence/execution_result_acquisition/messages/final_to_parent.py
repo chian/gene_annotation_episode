@@ -26,7 +26,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.similarit
 
 FAMILIES = ('blast_graded', 'blast_pairwise', 'phmmer_graded', 'local_file_source', 'native_blast_masking', 'native_blast_utility', 'api',
             'native_blast_standard_database', 'native_blast_database', 'native_hmmer_preparation', 'native_hmmer',
-            'native_blast', 'native_bytes')
+            'native_bytes')
 JOB_STATES = ('not_observed', 'queued', 'running', 'finished', 'failed', 'cancelled', 'unknown')
 FIELD_TYPES = {'number': 'number', 'count': 'integer', 'boolean': 'boolean', 'refs': 'record_refs', 'text': 'text'}
 

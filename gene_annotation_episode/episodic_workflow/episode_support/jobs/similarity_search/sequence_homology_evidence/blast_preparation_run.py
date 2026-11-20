@@ -29,7 +29,9 @@ import re
 from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.blast_preparation_job import (
-    DRIVER_NAME, PLAN_NAME, RECEIPT_NAME, derive_kind, validate_plan)
+    DRIVER_NAME, PLAN_NAME, RECEIPT_NAME, validate_plan)
+from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.blast_analysis_kind import (
+    derived_analysis_kind)
 from episode_runtime.job_access import JOB_LEDGER
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.resource_local import execute_on_local_resource
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.blast_preparation_receipt import (
@@ -68,7 +70,7 @@ async def launch_preparation(ctx, resource_id, compiled, *, allocation=None):
 
     The caller has already checked the kind: ``compile_preparation`` derives it again from the compiled plan."""
     plan = validate_plan(compiled['plan'])
-    if derive_kind(plan) != compiled['kind']:
+    if derived_analysis_kind(plan) != compiled['kind']:
         raise ValueError('blast_preparation_declared_and_derived_kind_differ')
     with ctx.store.transaction():
         plan_ref = ctx.store.artifact(compiled['plan_bytes'], 'application/json')
@@ -107,7 +109,7 @@ def acquire_prepared_data(ctx, handoff_ref, *, declared_kind):
         raise ValueError('blast_preparation_handoff_has_no_staged_plan')
     plan_bytes = ctx.store.get_artifact(plan_ref)
     plan = validate_plan(json.loads(plan_bytes))
-    if derive_kind(plan) != declared_kind:
+    if derived_analysis_kind(plan) != declared_kind:
         raise ValueError('blast_preparation_declared_and_derived_kind_differ')
     checked = access.check(ctx, handoff_ref)
     if checked['status'] != 'completed':

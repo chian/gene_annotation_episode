@@ -5,9 +5,9 @@ whole set (one chunk) or one contiguous chunk of it; the job declares which, so 
 results merge. The job declares one tabular report and nothing else: no stdout or stderr is declared, honoured or
 checked. The report carries both sequence lengths, which the graph needs for coverage in both directions.
 
-The analysis kind ``all_vs_all`` is DERIVED from the job here (``derive_analysis_kind``): the subject operand is the
-declared whole set, the query operand is that set or a declared slice of it, and the set has at least two records.
-The commission also DECLARES the kind; the two must agree or the commission fails with its error.
+The analysis kind ``all_vs_all`` is derived from this job by the one kind function (``blast_analysis_kind``): the
+subject operand is the declared whole set, the query operand is that set or a declared slice of it, and the set has at
+least two records. The commission also declares the kind; the two must agree or the commission fails with its error.
 
 Controlled values only: the program from a fixed set, three numeric search parameters in fixed ranges, record
 digests and counts. The compiler writes every option token; a caller writes none. This module reads the shared
@@ -21,7 +21,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
     RESERVED_ENVIRONMENT, _absolute, _options, _relative, _schema, finite_json_copy, native_blast_digest)
 
 VERSION = "native_blast_all_vs_all_job_v1"
-ANALYSIS_KIND = "all_vs_all"
 PROGRAMS = ("blastp", "blastn")
 REPORT_FIELDS = ("qaccver", "saccver", "pident", "nident", "length", "mismatch", "gapopen",
                  "qstart", "qend", "sstart", "send", "qlen", "slen", "evalue", "bitscore")
@@ -133,20 +132,6 @@ def validate_requested_job(value):
     return request
 
 
-def derive_analysis_kind(requested_job):
-    """The analysis kind the job itself shows. It is ``all_vs_all`` for a valid job of this contract; any other
-    shape raises, so a commission that declares this kind over a different job fails."""
-    validate_requested_job(requested_job)
-    return ANALYSIS_KIND
-
-
-def check_declared_kind(declared, requested_job):
-    """The declared kind must equal the derived one: a missing or different declaration fails with its error."""
-    if declared != derive_analysis_kind(requested_job):
-        _fail("declared_kind_conflicts_with_the_job:" + repr(declared))
-    return declared
-
-
 def search_space(job):
     """What an E-value of this search is relative to: the number of subject sequences and their total letters,
     read from the job's declared whole set."""
@@ -158,6 +143,5 @@ def job_digest(job):
     return native_blast_digest(validate_job(job))
 
 
-__all__ = ["ANALYSIS_KIND", "PROGRAMS", "REPORT_FIELDS", "REPORT_PATH", "VERSION", "check_declared_kind",
-           "compile_job", "derive_analysis_kind", "job_digest", "requested_job_from_native", "search_space",
-           "validate_job", "validate_requested_job"]
+__all__ = ["PROGRAMS", "REPORT_FIELDS", "REPORT_PATH", "VERSION", "compile_job", "job_digest",
+           "requested_job_from_native", "search_space", "validate_job", "validate_requested_job"]

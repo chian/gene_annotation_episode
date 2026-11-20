@@ -9,8 +9,9 @@ a kind from a fixed vocabulary, record references (resolved by the caller throug
 here), booleans, a value from a fixed set and numbers in a range. There is no command, no path and no free text. A
 wrong commission raises ``ValueError`` with a stable ``blast_preparation_*`` code and nothing repairs it.
 
-**Declared and derived kind.** The commission declares its kind. ``derive_kind`` reads the kind again from the
-compiled job (the program its first step runs), and ``compile_preparation`` raises when the two differ.
+**Declared and derived kind.** The commission declares its kind. The one kind function (``blast_analysis_kind``) reads
+the kind again from the compiled plan (the program its first step runs), and ``compile_preparation`` raises when the
+two differ.
 
 **What is compiled.** ``compile_preparation`` returns the job a ``JobAccess`` route runs (a command and its
 environment), the plan the job reads (``plan.json``), the driver's source bytes and the names under which they are
@@ -24,17 +25,18 @@ import hashlib
 import json
 import re
 
+from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.blast_analysis_kind import (
+    PREPARATION_KINDS, PREPARATION_PLAN_VERSION, derived_analysis_kind)
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import (
     finite_json_copy, native_blast_digest)
 
-PLAN_VERSION = 'blast_preparation_job_v1'
+PLAN_VERSION = PREPARATION_PLAN_VERSION
 RECEIPT_VERSION = 'blast_preparation_receipt_v1'
-KINDS = ('database_build', 'masking')
+KINDS = PREPARATION_KINDS
 MOLECULES = ('protein', 'nucleotide')
 DB_VERSIONS = (4, 5)
 MASKING_PROGRAMS = ('dustmasker', 'segmasker')
 MASKING_OUTPUTS = ('interval', 'fasta')
-KIND_OF_PROGRAM = {'makeblastdb': 'database_build', 'dustmasker': 'masking', 'segmasker': 'masking'}
 PREPARED_KIND = {('database_build', 'protein'): 'blast_protein_database',
                  ('database_build', 'nucleotide'): 'blast_nucleotide_database',
                  ('masking', 'fasta'): 'masked_sequences', ('masking', 'interval'): 'mask_intervals'}
@@ -214,7 +216,7 @@ def compile_preparation(fields, *, input_bytes, software, python, scratch_bytes=
     plan = {'version': PLAN_VERSION, 'kind': kind, 'prepared_kind': prepared, 'key': key, 'input': identity,
             'operation': operation, 'steps': steps, 'receipt': RECEIPT_NAME}
     plan = finite_json_copy(plan)
-    if derive_kind(plan) != kind:
+    if derived_analysis_kind(plan) != kind:
         _fail('declared_and_derived_kind_differ')
     plan_bytes = json.dumps(plan, sort_keys=True, separators=(',', ':')).encode()
     return {'job': {'command': [python, DRIVER_NAME, PLAN_NAME], 'env': {}}, 'plan': plan, 'plan_bytes': plan_bytes,
@@ -225,25 +227,15 @@ def compile_preparation(fields, *, input_bytes, software, python, scratch_bytes=
                           'input_residues': counts['residues']}}
 
 
-def derive_kind(plan):
-    """The kind of a compiled plan, read from the program its first step runs (never from the declared field)."""
-    if type(plan) is not dict or type(plan.get('steps')) is not list or not plan['steps']:
-        _fail('plan_has_no_steps')
-    program = plan['steps'][0]['argv'][0].rsplit('/', 1)[-1]
-    if program not in KIND_OF_PROGRAM:
-        _fail('program_not_a_preparation_program')
-    return KIND_OF_PROGRAM[program]
-
-
 def validate_plan(plan):
     """A plan as the driver and the receipt reader read it: closed, with a kind that agrees with its steps."""
     plan = finite_json_copy(plan)
     if (type(plan) is not dict or plan.get('version') != PLAN_VERSION or plan.get('kind') not in KINDS
-            or derive_kind(plan) != plan['kind']):
+            or derived_analysis_kind(plan) != plan["kind"]):
         _fail('plan_invalid_or_kind_conflict')
     return plan
 
 
 __all__ = ['KINDS', 'PREPARED_KIND', 'PLAN_VERSION', 'RECEIPT_VERSION', 'RECEIPT_NAME', 'INPUT_NAME', 'PLAN_NAME',
-           'DRIVER_NAME', 'DATABASE_PREFIX', 'MASK_OUTPUT', 'compile_preparation', 'derive_kind', 'describe_fasta',
+           'DRIVER_NAME', 'DATABASE_PREFIX', 'MASK_OUTPUT', 'compile_preparation', 'describe_fasta',
            'validate_commission', 'validate_plan']

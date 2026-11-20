@@ -21,8 +21,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.nativ
     is_native_blast_masking_target)
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.profile_model_preparation.sequence_homology_evidence.native_hmmer_preparation_acquisition import (
     is_native_hmmer_preparation_target)
-from gene_annotation_episode.episodic_workflow.episode_support.acquisition.similarity_search.sequence_homology_evidence.native_blast_acquisition import (
-    is_native_blast_target)
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.similarity_search.sequence_homology_evidence.native_blast_utility_acquisition import (
     is_native_blast_utility_target)
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.blast_analysis_kind import (
@@ -38,8 +36,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_m
     validate_preparation_result_selector)
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_masking.sequence_homology_evidence.sequence_masking_result_views import (
     validate_masking_result_selector)
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.blast_pairwise_result_views import (
-    validate_native_blast_result_selector)
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.blast_utility_result_views import (
     validate_blast_utility_result_selector)
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.hmmer_native_result_views import (
@@ -112,8 +108,6 @@ def family(target, selector):
     if 'native_hmmer' in jobs:
         # A local phmmer search is graded into the HMMER search sheet by this episode (``phmmer_grade``).
         return 'phmmer_graded' if jobs['native_hmmer']['program'] == 'phmmer' else 'native_hmmer'
-    if is_native_blast_target(target):
-        return 'native_blast'
     return 'native_bytes'
 
 
@@ -166,8 +160,6 @@ def validated_selector(target, selector, kind):
         return validate_preparation_result_selector(selector, program=job['program'], mode=job['mode'])
     if kind in ('native_hmmer', 'phmmer_graded'):
         return validate_native_hmmer_result_selector(selector, program=jobs['native_hmmer']['program'])
-    if kind == 'native_blast':
-        return validate_native_blast_result_selector(selector, program=jobs['native_blast']['program'])
     value = checked(selector, NATIVE_SELECTOR_SCHEMA, 'invalid_execution_native_selector')
     paths = list(value.get('paths', []))
     if 'path' in value:
