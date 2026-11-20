@@ -11,10 +11,10 @@ import asyncio
 
 import pytest
 
-from episode_runtime import BindingRegistry, ChildCall, RunJournal, ToolCall, resume
+from episode_runtime import BindingRegistry, RunJournal, ToolCall, resume
 
 from ..messages.final_to_parent import RETURN_FORM
-from .a101_world import PATH, collaborators, linked, report_children, subtree, world
+from .a101_world import PATH, collaborators, linked, subtree, world
 
 ALIGN = 'sequence.align'
 INSPECT = 'sequence.inspect'
@@ -107,37 +107,3 @@ def test_an_invalid_local_call_is_a_returned_outcome_that_enters_the_iterator(tm
     held['store'].close()
 
 
-@pytest.mark.model_run
-def test_branch3_a_commissioned_run_runs_and_reports(tmp_path):
-    """The commission the head's model chose in the earlier runs, made here as a stepped unit so that it is always
-    exercised: after a real alignment the head commissions the published evidence assessment with controlled
-    fields (the hypothesis and the target as the question's context, the alignment's source); ``msg_to_child``
-    builds the child's assignment, the child runs by its own real-model decisions to its controller's stop, its
-    return is admitted and reported, and the head runs on by its own decisions to its own stop."""
-    held = world(tmp_path, [ALIGN])
-    journal = RunJournal(tmp_path / 'journal.sqlite3')
-    run = linked(held, 'a101-localtool-3', journal=journal)
-    aligned = asyncio.run(run.run_unit(ToolCall('execute_selected_tool', {
-        'tool': ALIGN, 'arguments': {'query_ref': held['target'], 'reference_ref': held['reference'],
-                                     'molecule': 'protein', 'mode': 'global'},
-        'scope': held['assignment']['scope'], 'permitted_record_refs': None})))
-    source, = (ref for ref in aligned['outcome']['record_refs'] if ref.startswith('source_'))
-    child = asyncio.run(run.run_unit(ChildCall('literature', {
-        'objective': 'evidence_in_supplied_sources',
-        'question_context_refs': [held['hypothesis'], held['target']], 'source_refs': [source]})))
-    print('CHILD', child['completion'], child['report'])
-    report_children(journal, 'a101-localtool-3')
-    assert child['message']['message'] == {'objective': 'evidence_in_supplied_sources'}
-    assert child['completion']['ended_by'] == 'yield_stop'
-    assert set(child['report']) == {'credit', 'finding', 'record_refs', 'handoff_refs'}
-    closed = asyncio.run(run.run())
-    result = closed['result'].as_record()
-    rows, calls = report(journal, 'a101-localtool-3', result)
-    assert journal.run_state('a101-localtool-3')[1]['ended_by'] == 'yield_stop'
-    assert RETURN_FORM.select(('committed_record_refs',)).admit(result, 'return') == result
-    asked = len(list((tmp_path / 'model_calls').glob('call-*')))
-    again = asyncio.run(resumed(held, journal, 'a101-localtool-3')).as_record()
-    assert again == result
-    assert len(list((tmp_path / 'model_calls').glob('call-*'))) == asked
-    assert not list((tmp_path / 'model_calls_resumed').glob('call-*'))
-    held['store'].close()

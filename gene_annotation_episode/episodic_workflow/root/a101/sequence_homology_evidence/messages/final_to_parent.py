@@ -37,7 +37,7 @@ RETURN_FORM = RecordForm({
 
 
 def final_to_parent(summary, completion, selection):
-    completed = sum(1 for row in summary['child_reports'] if row['slot'] == 'execution_result_acquisition'
+    completed = sum(1 for row in summary['child_reports'] if row['slot'] == 'pairwise_blast'
                     and row['finding']['execution_completed'])
     result = {'credit': completion['credit'],
               'finding': {'evidence_axis': 'A101', 'targets': summary['axis_findings'],

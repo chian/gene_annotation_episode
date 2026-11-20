@@ -22,11 +22,11 @@ from ..credit import A101SequenceCredit
 from ..episode import SequenceHomologyEvidence
 
 PATH = SequenceHomologyEvidence.binding_path
-LITERATURE_PATH = PATH + '/literature'
 LIBRARY_SOURCE = Path(__file__).resolve().parents[6] / 'research' / 'slotted_process_library' / 'publications' / \
     '2026-10-24-001'
 TARGET = 'MKTAYIAKQRQISFVKSHFSRQLEERLGLIEVQAPILSRVGDGTQDNLSGAEKAVQVKVKALPDAQFEVV'
 REFERENCE = 'MKTAYIAKQRQISFVKSHFSRQLEERLGLIEVQGPILSRVGDGTQDNLSGAEKAVQVKVKALPDAQFEVV'
+BLAST_BIN = Path(__file__).resolve().parents[6] / 'resources' / 'software' / 'ncbi-blast-2.17.0+' / 'bin'
 TASK = 'Measure how similar the target protein is to the held reference protein and report what the measurement shows.'
 
 
@@ -90,10 +90,10 @@ def subtree():
 
 def services(directory, bindings):
     """The run's services: the real job services with one local resource bound (the head reads the bound resources
-    at every decision; no API resource is bound, so no launch is offered in this world)."""
+    at every decision and offers a pairwise comparison on the local one)."""
     real = job_services({
         'local': {'local': {'workspace': str(directory / 'jobs'), 'cpu_threads': 1,
-                            'policy': {'memory_bytes': 256 * 1024 ** 2, 'scratch_bytes': 64 * 1024 ** 2}}},
+                            'policy': {'memory_bytes': 1024 ** 3, 'scratch_bytes': 64 * 1024 ** 2}}},
         'pbs': {}, 'capabilities': [], 'event_ledger_directory': str(directory / 'events'),
         'estimate_table_path': str(directory / 'estimates' / 'table.sqlite3'),
         'launch_instructions_directory': str(directory / 'no_launch_instructions'),
@@ -108,13 +108,12 @@ def services(directory, bindings):
 
 
 def collaborators(world, bindings, model_calls='model_calls'):
-    """The head's settings; for the published evidence subtree (which the head can commission in this world) the
-    settings its episodes read: the cost and parameters of their yield controllers and the tool registry."""
-    literature = {'cost': 0.1, 'parameters': {'uncertainty_alpha': 0.1},
-                  'tool_registry': tool_registry_settings(world['directory'])}
-    continuation = {binding.binding_path: literature if binding.binding_path.startswith(LITERATURE_PATH) else {}
-                    for binding in bindings}
+    """The head's settings and those of the child it can commission: a pairwise BLAST's cost, uncertainty
+    parameter and the directory of the BLAST programs."""
+    pairwise = {'cost': 0.2, 'parameters': {'uncertainty_alpha': 0.05}, 'blast_executable_directory': str(BLAST_BIN)}
+    continuation = {binding.binding_path: {} for binding in bindings}
     continuation[PATH] = world['settings']
+    continuation[PATH + '/pairwise_blast'] = pairwise
     return {'store': world['store'],
             'model_provider': ModelProvider(load_config(), world['directory'] / model_calls, world['directory']),
             'continuation': continuation, 'services': services(world['directory'], bindings)}
