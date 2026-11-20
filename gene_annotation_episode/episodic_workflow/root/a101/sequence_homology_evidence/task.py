@@ -50,8 +50,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import obj
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
     ToolRegistry)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
-    PROGRAM_UNITS)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
     DATABASES, HITLIST_RANGE, check_commission)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
@@ -74,6 +72,11 @@ COMMISSIONS = {'database_blast': lambda summary, resources: database_blast_field
 # resources) that returns the things to fix (an empty list: it can be commissioned). Added with the slot.
 COMMISSION_CHECKS = {'database_blast': lambda commission, summary, resources: check_database_blast(
     commission, summary, resources)}
+# The programs the head commissions: those its credit can score. The A101 native-correspondence projection scores the
+# sheet of a ``blastp`` search; for any other program it raises (``a101_translated_or_nucleotide_map_not_bound``,
+# ``a101_original_protein_mapping_required``), which would end the run (offline run O3). The child itself takes every
+# program of the service.
+COMMISSION_PROGRAMS = ('blastp',)
 SERVICES = ('job_access',)
 
 # The common tool names a selected tool may not reuse.
@@ -149,10 +152,8 @@ CHILD_DESCRIPTIONS = {
         'identification of the query from the best hits of the database (the same graded sheet also gives the residue '
         'correspondence of the best hits, which your credit counts when the search is graded). Fill the five fields of '
         'its commission: query_ref (a sequence of your scope; held_sequences gives the molecule of each), program '
-        '(blastp: a protein query against a protein database; blastn: nucleotide against nucleotide; blastx: a nucleotide '
-        'query in translation against a protein database; tblastn: a protein query against a nucleotide database; '
-        'tblastx: nucleotide in translation against a nucleotide database translated), database (swissprot holds '
-        'curated protein sequences, core_nt nucleotide sequences), hitlist_size (1 to 200) and resource_id (an API '
+        '(only blastp is offered: a protein query against a protein database; your credit scores that program only), database (swissprot holds '
+        'curated protein sequences; core_nt holds nucleotide sequences and no program offered here searches it), hitlist_size (1 to 200) and resource_id (an API '
         'resource of bound_resources). Code checks the commission before the child is commissioned; if something is '
         'wrong it comes back in feedback with the things to fix and nothing was commissioned. The search runs at the '
         'service for seconds to minutes and the child never waits for it: it returns the state of the search '
@@ -272,7 +273,7 @@ def database_blast_fields(summary, resources):
     apis = [name for name, kind in resources.items() if kind == 'api']
     if not queries or not apis:
         return None
-    properties = {'query_ref': {'enum': queries}, 'program': {'enum': sorted(PROGRAM_UNITS)},
+    properties = {'query_ref': {'enum': queries}, 'program': {'enum': list(COMMISSION_PROGRAMS)},
                   'database': {'enum': list(DATABASES)},
                   'hitlist_size': {'type': 'integer', 'minimum': HITLIST_RANGE[0], 'maximum': HITLIST_RANGE[1]},
                   'resource_id': {'enum': apis}}
@@ -281,7 +282,7 @@ def database_blast_fields(summary, resources):
 
 def check_database_blast(commission, summary, resources):
     """The things to fix in a commission of ``database_blast`` (``database_blast_search.check_commission``)."""
-    return check_commission(commission, sequences=summary['held_sequences'],
+    return check_commission(commission, programs=COMMISSION_PROGRAMS, sequences=summary['held_sequences'],
                             scope_subjects=summary['scope']['subject_refs'], resources=resources,
                             searches=summary['database_searches'], failed=commissions_failed(summary))
 

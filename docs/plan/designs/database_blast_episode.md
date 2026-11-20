@@ -155,3 +155,10 @@ in the same transaction, one `reference` record per hit and one `comparison` obs
 returns the references in `graded_refs`.
 Prediction O2 (`runs/a101_dbblast_run_O2`, same local server and commission): the child's flow as in O1; the head's credit
 above 0 and small: the fixed hit covers 5 of the 76 positions, so the credit is under 0.1.
+
+Observed O2 and O3 (offline): O2 failed with `operand_interval_unit_mismatch` (my observation's reference unit came from the
+program, the store's from the held reference record: fixed, units now read from the held records). O3 then failed in the head's
+credit with `A101ScoringUnavailable: a101_translated_or_nucleotide_map_not_bound` (program `tblastn`, offered by me to
+the head's model, which chose it): the A101 native-correspondence projection scores a `blastp` sheet only. The head
+therefore commissions `database_blast` with `blastp` only (`COMMISSION_PROGRAMS` in the head's `task.py`, enum and check;
+the child itself takes every program of the service). Prediction O4: as O2 (flow as O1, head credit above 0 and under 0.1).

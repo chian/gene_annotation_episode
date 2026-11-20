@@ -297,9 +297,10 @@ def held_searches(reader, sequences):
     return found
 
 
-def check_commission(request, *, sequences, scope_subjects, resources, searches, failed):
+def check_commission(request, *, programs, sequences, scope_subjects, resources, searches, failed):
     """The things to fix in the head's commission of this episode (``request``: ``query_ref``, ``program``,
-    ``database``, ``hitlist_size``, ``resource_id``), before any child is commissioned. ``sequences`` is
+    ``database``, ``hitlist_size``, ``resource_id``), before any child is commissioned. ``programs`` are the programs the
+    commissioning episode offers (those its own credit can score). ``sequences`` is
     ``{record: molecule}``, ``searches`` is ``held_searches`` and ``failed`` the commissions (query, program, database,
     hit-list size) whose child reported the search failed. The conditions: the query is a sequence of the scope; the
     program takes its molecule; the database holds what the program searches; the hit-list size is in its range; the
@@ -308,6 +309,8 @@ def check_commission(request, *, sequences, scope_subjects, resources, searches,
     query, program, database = request['query_ref'], request['program'], request['database']
     key = (query, program, database, request['hitlist_size'])
     problems = []
+    if program not in programs:
+        problems.append(_choose('program', 'program_is_not_offered', choose_from=list(programs)))
     if query not in scope_subjects:
         problems.append(_choose('query_ref', 'query_is_not_a_sequence_of_the_scope',
                                 choose_from=[ref for ref in scope_subjects if ref in sequences]))
