@@ -140,3 +140,33 @@ the local part, and before any cluster leaf.
 - The library modules for these kinds are committed but mostly unrun; each is checked by the real run of the piece
   that calls it.
 - Functional regions and joint credit are deferred: `../DEFERRED_functional_regions_joint_credit.md`.
+
+## Pattern A build notes (step zero, written before the code)
+
+What already exists for each thing Pattern A needs; anything that exists is called, not rewritten.
+
+| Needed | What exists (called) | What is written new |
+|---|---|---|
+| Read the two sequences through custody | `ctx.store.get`, `ctx.store.get_artifact` (the tool's custody-scoped store) | nothing |
+| Build the pairwise job, compile its command | `forms/sequence_homology_evidence/blast_pairwise_job.requested_job_from_pairwise` | nothing |
+| Declared kind against the kind derived from the job | `forms/sequence_homology_evidence/blast_analysis_kind.checked_analysis_kind` | nothing |
+| Launch on the local resource, wait for the end, fetch the files | `jobs/resource_local.execute_on_local_resource(..., wait=True)` (the one inspection point; it calls `JobAccess.run`) | nothing |
+| Where the staged files sit | `episode_runtime.job_access.job_handle` and `JobAccess.describe` | nothing |
+| Grade the report | `grading/similarity_search/sequence_homology_evidence/blast_graders.grade_blast_result` (mode `pairwise`) | nothing |
+| Keep the sheet in custody | `grading/sequence_homology_evidence/tool_grading_artifacts.retain_tool_grading`, `store.put('source', ...)`, the declared search table `native_correspondence.SEARCHES` | nothing |
+| Controlled features of the sheet | `grading/similarity_search/sequence_homology_evidence/blast_pairwise_features.grading_features` | nothing |
+| The head's credit from the saved sheet | the head's `credit.py` (`A101SequenceCredit`, unchanged) | nothing |
+| One function that does the comparison as one unit | the step logic of the deleted episode (commit `910c8cc38`, `pairwise_blast/task.py`: `launch_job`, `wait_for_end`, `fetch_and_grade`) | `tools/similarity_search/sequence_homology_evidence/pairwise_blast_comparison.py`: the three steps joined into one function; `wait=True` replaces the separate wait unit |
+| The head offers the tool and acts on the choice | the head's `selection_schema`, `decide`, `action`, `TOOLS` | the `pairwise_blast` option, description and tool function in the head's `task.py`; its outcome row in `messages/internal_summary.py` |
+| Start a run from the command line | `episode_runtime.link` / `resume`, `RunJournal`, `ModelProvider`, `job_services`, `Store`; the CLI's `init` | `gene_annotation_episode/run_command.py` (`run`, `resume`, `report`) and their subcommands in `cli.py` |
+| The proposed annotation as a record | `Store.put('hypothesis', ..., origin='caller')` (the caller's own record type and origin; no command reaches it) | CLI subcommand `propose-annotation` (one `Store.put`) |
+| The frozen process and tool libraries the head's settings name | `SequenceHomologyEvidenceLibrary.freeze`, `ScientificToolLibrary.freeze`, `resolve_tool_info` (no command reaches them) | CLI subcommand `freeze-libraries` (calls those three and prints the selection) |
+
+Two things found while reading that the real run depends on:
+
+- The root sends the head four credit units (`handoff_unit`, `acquired_record_unit`, `information_unit`,
+  `completion_target`). The head's `read_from_parent` currently accepts none, so the root's commission would fail.
+  The head must accept what its real parent sends.
+- The root passes back to the head, on a later visit, only the records the head returned to it, and selects
+  `committed_record_refs` and `execution_handoff_refs`. For the head's credit to continue on a later visit, the
+  graded records its credit reads must be among the records it returns. They go into `committed_record_refs`.
