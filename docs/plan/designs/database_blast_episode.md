@@ -127,3 +127,15 @@ Prediction: the model picks `pairwise_blast` first (blastp, target against refer
 comparison runs in about a second, and the pairwise tool is described first. Then, with the head's credit at 0.947 (the
 estimator cutoff of these runs is 0.1, so the head's units end soon after), it either stops or commissions
 `database_blast` once more; I do not predict that second choice. No outcome is wrong here.
+
+### Offline protocol check O1 (not the public service; prediction written before it)
+
+The public service answered `WAITING` for every search of runs A1 to A7 (see Observed). To exercise `fetch_and_grade`, the grading,
+the child's return and the head's credit, `runs/a101_dbblast_run_O1` runs the same command (`run`, through the head) against the
+library's local server that speaks the NCBI URL API (`jobs/tests/blast_url_api_server.py`; a fixed one-hit report over the
+submitted query: hit `sp|TEST1|TEST_HIT`, 5 identical residues), with its own estimate table
+(`runs/a101_dbblast_estimates_offline/table.sqlite3`), so no fake duration enters the table of the public runs.
+Prediction: the model commissions `database_blast`; `submit`; a first `check` (queued), a second (queued: nothing new), a
+third (finished: new fact); `fetch_and_grade` (graded, 1 hit, the sheet's features with no function rows); the child's credit
+1 + 1 + 1 + 1 = 4 (handoff, queued, finished, graded); the head's credit small but above 0 (5 of 76 positions covered through
+the sheet's blastp hit), so the head's estimator stops it shortly after.
