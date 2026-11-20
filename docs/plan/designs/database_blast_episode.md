@@ -166,7 +166,7 @@ the child itself takes every program of the service). Prediction O4: as O2 (flow
 ### Observed: public service, later visits and run B (all in `runs/a101_dbblast_ws_A` and `_B`; run directories `runs/a101_dbblast_run_<tag>`)
 
 - A2, A3, A4, A6, A8 continue the search of A1 (records passed back by code and by the commission's `evidence_refs`; the API
-  workspace is that of A1, so the spacing file is shared): in each the head commissioned the child four times; in the first
+  workspace is that of A1, so the spacing file is shared): in each the head commissioned the child four times (A8 made two checks, the others one); in the first
   visit the child made one `check` (`queued`, nothing new: 0 credit) then held (`search_not_finished`) until the estimator
   stopped it (two holds); no check was made after the first of a visit (the model held when the next request was not yet
   allowed). Every visit's credit 0.0; every return `outstanding_handoff_count` 1. A7 does the same for the search of A5.
