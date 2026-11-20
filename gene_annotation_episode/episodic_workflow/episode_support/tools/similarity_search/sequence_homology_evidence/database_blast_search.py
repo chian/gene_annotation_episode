@@ -273,6 +273,71 @@ def check_hold(request, *, state):
     return []
 
 
+def held_searches(reader, sequences):
+    """The searches of the service a parent (the head) holds, from its job ledger rows: one row per handoff of an API
+    job, with its request, its query (the held subject whose sequence artifact was staged), the state its latest held
+    check showed (``submitted`` before any) and whether it is outstanding (no closure held, and not shown failed or
+    lost), and the references of its handoff, status and closure rows: ``outstanding`` searches are continued by a later commission. ``sequences`` is ``{subject record: its
+    sequence artifact}``."""
+    found = []
+    for handoff in (row for row in job_rows(reader) if row['event'] == 'handoff' and row['detail']['kind'] == 'api'):
+        shown, ended = checks(reader, handoff['job']), closure(reader, handoff['job'])
+        state = 'submitted' if not shown else shown[-1]['detail']['state']
+        request = handoff['detail']['native']['request']
+        (query,) = [ref for ref, artifact in sequences.items() if artifact == handoff['detail']['input_refs'][QUERY_FILE]]
+        found.append({'handoff_ref': handoff['id'], 'resource_id': handoff['detail']['resource_id'], 'query_ref': query,
+                      'program': request['program'], 'database': request['database'],
+                      'hitlist_size': request['hitlist_size'], 'latest_state': state,
+                      'closed': ended is not None, 'outstanding': ended is None and state not in ('failed', 'unknown'),
+                      'check_refs': [row['id'] for row in shown],
+                      'closure_refs': [] if ended is None else [ended['id']]})
+    return found
+
+
+def check_commission(request, *, sequences, scope_subjects, resources, searches, failed):
+    """The things to fix in the head's commission of this episode (``request``: ``query_ref``, ``program``,
+    ``database``, ``hitlist_size``, ``resource_id``), before any child is commissioned. ``sequences`` is
+    ``{record: molecule}``, ``searches`` is ``held_searches`` and ``failed`` the commissions (query, program, database,
+    hit-list size) whose child reported the search failed. The conditions: the query is a sequence of the scope; the
+    program takes its molecule; the database holds what the program searches; the hit-list size is in its range; the
+    resource is a bound API service; a search of the query held outstanding is continued (its program, database,
+    hit-list size and resource, no other); a search already closed or already failed is not commissioned again."""
+    query, program, database = request['query_ref'], request['program'], request['database']
+    key = (query, program, database, request['hitlist_size'])
+    problems = []
+    if query not in scope_subjects:
+        problems.append(_choose('query_ref', 'query_is_not_a_sequence_of_the_scope',
+                                choose_from=[ref for ref in scope_subjects if ref in sequences]))
+    units = PROGRAM_UNITS[program]
+    if units[0] != MOLECULE_UNITS[sequences[query]]:
+        problems.append(_choose('program', 'program_does_not_take_the_query_molecule', query_molecule=sequences[query],
+                                choose_from=[name for name, (unit, *_) in PROGRAM_UNITS.items()
+                                             if unit == MOLECULE_UNITS[sequences[query]]]))
+    if DATABASES[database] != units[1]:
+        problems.append(_choose('database', 'database_does_not_hold_what_the_program_searches',
+                                choose_from=[name for name, unit in DATABASES.items() if unit == units[1]]))
+    if not HITLIST_RANGE[0] <= request['hitlist_size'] <= HITLIST_RANGE[1]:
+        problems.append(_choose('hitlist_size', 'hitlist_size_out_of_range', minimum=HITLIST_RANGE[0],
+                                maximum=HITLIST_RANGE[1]))
+    if resources.get(request['resource_id']) != 'api':
+        problems.append(_choose('resource_id', 'resource_is_not_an_api_service',
+                                choose_from=[name for name, kind in resources.items() if kind == 'api']))
+    for held in searches:
+        if held['query_ref'] != query:
+            continue
+        same = (held['program'], held['database'], held['hitlist_size'], held['resource_id']) == (
+            program, database, request['hitlist_size'], request['resource_id'])
+        if held['outstanding'] and not same:
+            problems.append(_choose('program', 'commission_must_continue_the_outstanding_search',
+                                    program=held['program'], database=held['database'],
+                                    hitlist_size=held['hitlist_size'], resource_id=held['resource_id']))
+        if held['closed'] and same:
+            problems.append(_choose('database', 'search_already_held'))
+    if key in failed:
+        problems.append(_choose('database', 'search_already_failed_and_cannot_be_retried'))
+    return problems
+
+
 # -- the tools --------------------------------------------------------------------------------------------------------
 def _failed(code, retryable, **detail):
     return {'status': 'failed', 'failure_code': failure_code(code), 'retryable': retryable, 'record_refs': [],
@@ -379,5 +444,5 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
 
 __all__ = ['ANALYSIS_KIND', 'DATABASES', 'FAILURE_CODES', 'HITLIST_RANGE', 'HOLD_REASONS', 'MOLECULE_UNITS', 'PROVIDER',
            'STATES', 'STATUS_FIELDS', 'check_fetch_request', 'check_hold', 'check_search', 'check_status_request',
-           'check_submit', 'failure_code', 'fetch_and_grade_search', 'graded_rows', 'search_kind', 'search_state',
+           'check_commission', 'check_submit', 'failure_code', 'held_searches', 'fetch_and_grade_search', 'graded_rows', 'search_kind', 'search_state',
            'search_facts', 'search_view', 'seconds_until_allowed', 'submit_search', 'timing']

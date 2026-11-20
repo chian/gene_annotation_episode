@@ -7,7 +7,7 @@ table.
 For the commissions (``task.commission_fields``, ``msg_to_child``) the summary also holds what a commission is
 chosen from and built with: ``held_record_refs`` (the held records), ``held_sequences`` (the held records
 that carry a sequence, each with its molecule: what the two sequences of a comparison are chosen from),
-``held_comparisons`` (the pairwise comparisons already held: what the check refuses to run again), ``held_source_refs`` (the held sources) and ``named_refs`` (for each held
+``held_comparisons`` (the pairwise comparisons already held: what the check refuses to run again), ``database_searches`` (the searches of the hosted service this episode holds, with their records: what a commission of ``database_blast`` continues), ``held_source_refs`` (the held sources) and ``named_refs`` (for each held
 record, the held records it names: what travels in custody beside it)."""
 import json
 
@@ -20,6 +20,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
     PROVIDER as PAIRWISE_PROVIDER)
+
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
+    held_searches)
 
 from ..credit import A101SequenceCredit
 from ..task import CHILD_SLOTS, PAIRWISE_TOOL
@@ -58,7 +61,7 @@ def _held_comparisons(records):
 def internal_summary(view):
     records = view.records
     parent = view.parent_input
-    units, child_reports, committed, handoff_refs, last = [], [], [], [], None
+    units, child_reports, committed, handoff_refs, check_refs, closure_refs, last = [], [], [], [], [], [], None
     for position, outcome in enumerate(view.outcomes):
         if outcome['kind'] == 'tool':
             result = outcome['outcome']
@@ -73,12 +76,18 @@ def internal_summary(view):
         else:
             report = outcome['report']
             row = {'position': position, 'kind': 'child', 'slot': outcome['slot'], 'status': 'completed',
+                   'arguments': outcome['arguments'], 'child_state': report['finding'].get('state'),
                    'credit': report['credit'], 'record_refs': list(report['record_refs'])}
+            committed.extend(ref for ref in report['graded_refs'] if ref not in committed)
             child_reports.append({'slot': outcome['slot'], **report})
             handoff_refs.extend(ref for ref in report['handoff_refs'] if ref not in handoff_refs)
+            check_refs.extend(ref for ref in report['check_refs'] if ref not in check_refs)
+            closure_refs.extend(ref for ref in report['closure_refs'] if ref not in closure_refs)
         units.append(row)
         last = row
     held = [ref for ref in records.refs() if not ref.startswith('row_')]
+    held_sequences = {ref: records.get(ref).get('molecule') for ref in held
+                      if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')}
     details = A101SequenceCredit().read_details(records, parent['scope'], known_record_refs=held,
                                                 details_limit=ALL, details_offset=0)
     return {**parent,
@@ -86,12 +95,13 @@ def internal_summary(view):
             'initial_selection_sha256': scientific_digest(parent['selection']),
             'permitted_children': sorted(CHILD_SLOTS),
             'units': units, 'last_local_outcome': last, 'child_reports': child_reports,
-            'committed_record_refs': committed, 'handoff_refs': handoff_refs,
+            'committed_record_refs': committed, 'handoff_refs': handoff_refs, 'check_refs': check_refs,
+            'closure_refs': closure_refs,
             'held_record_refs': held,
             'held_source_refs': [row['id'] for row in records.list('source')],
             'held_comparisons': _held_comparisons(records),
-            'held_sequences': {ref: records.get(ref).get('molecule') for ref in held
-                               if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')},
+            'held_sequences': held_sequences,
+            'database_searches': held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
             'named_refs': {ref: _named(records, ref) for ref in held},
             'evidence_refs': [row['id'] for kind in EVIDENCE_RECORD_TYPES for row in records.list(kind)],
             'working_state': records.reasoning_view(parent['scope']),

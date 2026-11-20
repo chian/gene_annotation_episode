@@ -50,6 +50,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import obj
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
     ToolRegistry)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
+    PROGRAM_UNITS)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
+    DATABASES, HITLIST_RANGE, check_commission)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
     PROGRAM_MOLECULES, check_pairwise_request, pairwise_blast_comparison)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_catalog import ScientificToolLibrary
@@ -60,10 +64,14 @@ from .goal import GOAL
 HEAD = 'sequence_homology_evidence'
 # The child episodes that are built, by slot. A child is added here with its entries in ``COMMISSIONS``,
 # ``CHILD_DESCRIPTIONS`` and ``SELECTABLE`` and its builder in ``messages/msg_to_child.py``.
-CHILD_SLOTS = {}
+CHILD_SLOTS = {'database_blast': 'sequence_homology_evidence/database_blast'}
 # What the model supplies to commission each slot: a function of (summary, resources) that returns
 # ``(properties, required)`` of controlled values, or ``None`` while the commission cannot be stated.
-COMMISSIONS = {}
+COMMISSIONS = {'database_blast': lambda summary, resources: database_blast_fields(summary, resources)}
+# The one deterministic check of each slot's filled commission: a function of (the model's commission, summary,
+# resources) that returns the things to fix (an empty list: it can be commissioned). Added with the slot.
+COMMISSION_CHECKS = {'database_blast': lambda commission, summary, resources: check_database_blast(
+    commission, summary, resources)}
 SERVICES = ('job_access',)
 
 # The common tool names a selected tool may not reuse.
@@ -80,7 +88,7 @@ THOUGHT_FIELDS = ('id', 'name', 'description', 'use_when', 'live_alternatives', 
                   'outcome_contingencies', 'boundary')
 # The optional return fields a commission may select from what the child declares (read from the child's own
 # ``RETURN_FORM``); credit and finding are always returned. A child's entry is added with its commission.
-SELECTABLE = {}
+SELECTABLE = {'database_blast': []}
 
 # The two bodies the old ``ScientificGoal.instructions`` appended after the goal text, by the entry version of the
 # selected evidence axis (instruction text, unchanged).
@@ -118,7 +126,26 @@ DESCRIPTIONS = {
 # What the model is told of each child it may commission: what the child does, the controlled fields of its
 # commission (the model chooses values; code builds the child's assignment) and what comes back. A child's entry is
 # added with its commission.
-CHILD_DESCRIPTIONS = {}
+CHILD_DESCRIPTIONS = {
+    'database_blast': (
+        'Search one query sequence of your scope against a hosted database through the public NCBI BLAST service: the '
+        'identification of the query from the best hits of the database (the same graded sheet also gives the residue '
+        'correspondence of the best hits, which your credit counts when the search is graded). Fill the five fields of '
+        'its commission: query_ref (a sequence of your scope; held_sequences gives the molecule of each), program '
+        '(blastp: a protein query against a protein database; blastn: nucleotide against nucleotide; blastx: a nucleotide '
+        'query in translation against a protein database; tblastn: a protein query against a nucleotide database; '
+        'tblastx: nucleotide in translation against a nucleotide database translated), database (swissprot holds '
+        'curated protein sequences, core_nt nucleotide sequences), hitlist_size (1 to 200) and resource_id (an API '
+        'resource of bound_resources). Code checks the commission before the child is commissioned; if something is '
+        'wrong it comes back in feedback with the things to fix and nothing was commissioned. The search runs at the '
+        'service for seconds to minutes and the child never waits for it: it returns the state of the search '
+        '(not_submitted, outstanding, finished, graded or failed), the hit count and the controlled identification '
+        'features of the graded sheet, the seconds predicted, estimated by the service and observed, the last failure '
+        'code and its credit (an outstanding search is information: it is not graded yet). While a search of a query '
+        'is outstanding (database_searches shows it) commission this child again with the same fields to continue that '
+        'search: code passes back the records the child returned and it checks the search again or fetches and grades '
+        'it. A search that failed or is already held graded is not commissioned again.'),
+}
 
 
 def axis_entry(library, selection):
@@ -196,6 +223,37 @@ def comparisons_made(summary):
     return made
 
 
+def database_blast_fields(summary, resources):
+    """The commission of ``database_blast``: the query among the scope's held sequences, the program, the hosted
+    database, the hit-list size and the API resource, each from a fixed set. Not offered while the scope holds no
+    sequence or no API resource is bound. While a search of the scope's query is held outstanding, the values are
+    that search's (the commission continues it)."""
+    queries = [ref for ref in summary['scope']['subject_refs'] if ref in summary['held_sequences']]
+    apis = [name for name, kind in resources.items() if kind == 'api']
+    if not queries or not apis:
+        return None
+    properties = {'query_ref': {'enum': queries}, 'program': {'enum': sorted(PROGRAM_UNITS)},
+                  'database': {'enum': list(DATABASES)},
+                  'hitlist_size': {'type': 'integer', 'minimum': HITLIST_RANGE[0], 'maximum': HITLIST_RANGE[1]},
+                  'resource_id': {'enum': apis}}
+    return properties, list(properties)
+
+
+def check_database_blast(commission, summary, resources):
+    """The things to fix in a commission of ``database_blast`` (``database_blast_search.check_commission``)."""
+    return check_commission(commission, sequences=summary['held_sequences'],
+                            scope_subjects=summary['scope']['subject_refs'], resources=resources,
+                            searches=summary['database_searches'], failed=commissions_failed(summary))
+
+
+def commissions_failed(summary):
+    """The ``database_blast`` commissions (query, program, database, hit-list size) whose child reported the search
+    failed: what ``check_commission`` refuses to commission again."""
+    return [(row['arguments']['query_ref'], row['arguments']['program'], row['arguments']['database'],
+             row['arguments']['hitlist_size']) for row in summary['units']
+            if row['kind'] == 'child' and row['slot'] == 'database_blast' and row['child_state'] == 'failed']
+
+
 def commission_fields(slot, summary, resources):
     """What the model supplies to commission ``slot``, as ``(properties, required)``: controlled values only.
     ``None`` while this episode holds nothing the commission could be chosen from: the slot is then not offered.
@@ -266,6 +324,7 @@ def decide(summary, feedback, ctx):
         'last_local_outcome': summary['last_local_outcome'], 'child_reports': summary['child_reports'],
         'handoff_refs': summary['handoff_refs'], 'bound_resources': resources,
         'held_sequences': summary['held_sequences'], 'held_comparisons': summary['held_comparisons'],
+        'database_searches': summary['database_searches'],
         'tools': [{'name': 'reason', 'description': DESCRIPTIONS['reason']}, *own, *tools],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot],
                            'selectable_return_fields': SELECTABLE[slot]} for slot in offered],
@@ -307,6 +366,11 @@ def action(response, summary, records, ctx):
     except (ValueError, KeyError, TypeError, ContractError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract')) from error
     if selection['kind'] == 'episode_child':
+        problems = COMMISSION_CHECKS[selection['slot']](selection, summary, resources)
+        if problems:
+            raise Rejected({'status': 'invalid', 'category': selection['slot'] + '_commission',
+                            'detail': {'commission': {key: value for key, value in selection.items()
+                                                      if key not in ('kind', 'slot')}, 'fix': problems}})
         arguments = {key: value for key, value in selection.items() if key not in ('kind', 'slot')}
         return ChildCall(selection['slot'], arguments)
     scope = summary['scope']

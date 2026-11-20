@@ -6,7 +6,7 @@ whether to come back for an outstanding job, and that is what it needs.
 
 Selectable: ``committed_record_refs`` (the records this episode committed through its reasoning units and the graded
 records of its comparisons: the records its credit reads, which a parent passes back on a later visit) and
-``execution_handoff_refs`` (the handoff records its launches returned)."""
+``execution_handoff_refs`` (the handoff records its launches returned), ``execution_check_refs`` and ``execution_closure_refs`` (the status and closure records its children returned)."""
 from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.axis_features import (
@@ -35,16 +35,21 @@ RETURN_FORM = RecordForm({
                                                   'reads', required=False),
     'execution_handoff_refs': Field('record_refs', 'The original handoff records its launches returned',
                                     required=False),
+    'execution_check_refs': Field('record_refs', 'The status records its children returned for their searches, which a '
+                                                'later visit passes back', required=False),
+    'execution_closure_refs': Field('record_refs', 'The closure records its children returned for fetched reports',
+                                    required=False),
 })
 
 
-# The slots whose report closes one handoff (a result acquisition that completed). A child is added here when built.
-CLOSING_SLOTS = ()
+# The slots whose report closes one handoff, by the state of the child's finding that does it. A child is added here when
+# built.
+CLOSING_STATES = {'database_blast': 'graded'}
 
 
 def final_to_parent(summary, completion, selection):
-    completed = sum(1 for row in summary['child_reports'] if row['slot'] in CLOSING_SLOTS
-                    and row['finding']['execution_completed'])
+    completed = sum(1 for row in summary['child_reports'] if row['slot'] in CLOSING_STATES
+                    and row['finding']['state'] == CLOSING_STATES[row['slot']])
     result = {'credit': completion['credit'],
               'finding': {'evidence_axis': 'A101', 'targets': summary['axis_findings'],
                           'outstanding_handoff_count': max(len(summary['handoff_refs']) - completed, 0)}}
@@ -52,4 +57,8 @@ def final_to_parent(summary, completion, selection):
         result['committed_record_refs'] = summary['committed_record_refs']
     if 'execution_handoff_refs' in selection:
         result['execution_handoff_refs'] = summary['handoff_refs']
+    if 'execution_check_refs' in selection:
+        result['execution_check_refs'] = summary['check_refs']
+    if 'execution_closure_refs' in selection:
+        result['execution_closure_refs'] = summary['closure_refs']
     return result
