@@ -48,8 +48,12 @@ The kinds of held graded source read, by the content of their retained sheet:
   in the set one measurement: its value is the SHARE of the group's sequences that fall in the target's cluster (0 to 1), the
   same scale as the other tests (about 1 for a strong typical result, as the other tests' values; the MSA's count is weighted
   by W = 1 / E to land there). A candidate with no sequence in the set gives no measurement. The measurement also records
-  ``size`` and ``in_target_cluster``. ``cluster`` is a subscoring sheet like ``msa`` and ``database_search``: a candidate's
-  value on it is the sum of its values in the clustering tests.
+  ``size`` and ``in_target_cluster``, and its ``dataset``: the graded search the set is drawn from. The owner: "You only can
+  earn one credit for one dataset - you can improve a clustering to earn more, but you cannot replicate". So all the
+  clusterings of one dataset together earn the largest test credit among them (a later one earns only its improvement over the
+  best so far; a replicate earns 0), and a candidate's value on the cluster sheet from one dataset is its largest value over
+  that dataset's clusterings (``differential_credit``). ``dataset_bests`` gives each dataset's best so far (what the
+  ceiling reads).
 * a MetaCATS report (``metacats_sheet_v1``) gives no measurement: its significant positions are kept on its own sheet and
   confirm which distinguishing sites are statistically supported; they are not used as a filter of the sites.
 
@@ -185,10 +189,14 @@ def _held_msa(source, grading, seen):
 
 def _held_cluster(source, grading):
     """A graded clustering (``cluster_sheet_v1``): test ``cluster:<method>``; one measurement per candidate group with a
-    sequence in the set (``cluster_sheet.group_values``), value = the share of its sequences in the target's cluster."""
+    sequence in the set (``cluster_sheet.group_values``), value = the share of its sequences in the target's cluster. Its
+    ``dataset`` is the graded search the set's sequences are drawn from (the commission's ``search_ref``): all the clusterings
+    of one dataset earn one test's credit together (``differential_credit``, the owner's "You only can earn one credit for one
+    dataset")."""
     sheet = grading['sheet']
     test = 'cluster:' + sheet['method']
-    return [(test, 'product', candidate, None, share, {'size': size, 'in_target_cluster': inside})
+    dataset = sheet['commission']['search_ref']
+    return [(test, 'product', candidate, None, share, {'size': size, 'in_target_cluster': inside, 'dataset': dataset})
             for candidate, share, size, inside in group_values(sheet)], 0
 
 
@@ -252,6 +260,14 @@ def candidate_standing(reader, scope, sources):
     measurements)}``), after the graded ``sources``: what a further test's ceiling is computed from."""
     measurements, _, _ = _read(reader, scope, sources)
     return {target: standing(rows) for target, rows in _by(measurements, 'target').items()}
+
+
+def dataset_bests(reader, scope, sources):
+    """Per target of the scope, ``{dataset: best}``: for each dataset (the graded search a held clustering's set is drawn from)
+    the largest test credit of its held clusterings (``differential_credit(...)['datasets']``), what the dataset already earned."""
+    measurements, _, _ = _read(reader, scope, sources)
+    return {target: {dataset: held['best'] for dataset, held in differential_credit(rows)['datasets'].items()}
+            for target, rows in _by(measurements, 'target').items()}
 
 
 def matched_positions_taken(reader, scope, sources):

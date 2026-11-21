@@ -31,7 +31,16 @@ given in the order they arrived. The tests are ordered by their first measuremen
   too.
 
 ``credit`` is the sum of the entry scores and of the differentials: it never falls. Nothing here reads a record, a
-file or a model."""
+file or a model.
+
+ONE CREDIT FOR ONE DATASET (the owner, 2026-11-21: "You only can earn one credit for one dataset - you can improve a clustering
+to earn more, but you cannot replicate"). A measurement may name its ``dataset`` (a graded clustering names the graded search its
+sequences are drawn from). Each test of a dataset is computed as a test at its own place in the order, its entries and
+differentials exactly as above; its TEST CREDIT is the sum of the entries it admitted and of its differentials. All the tests of
+one dataset together earn the MAXIMUM of their test credits: a later test of the dataset earns only the amount by which it beats
+the best so far (an improvement), a replicate earns 0, and the credit never falls. A candidate's value on the sheet from one
+dataset reads the same maximum: its largest value over the dataset's tests (not their sum), so a replicate adds nothing to a
+score either. A test that names no dataset counts as before."""
 import math
 from itertools import combinations
 
@@ -64,10 +73,27 @@ def _kind(test):
     return test.split('@', 1)[0]
 
 
+def _datasets(measurements):
+    """``{test: dataset}`` for the tests whose measurements name a dataset."""
+    return {row['test']: row['dataset'] for row in measurements if row.get('dataset') is not None}
+
+
+def _sheet_value(held):
+    """A candidate's value on one sheet from its weighted test values ``[(dataset or None, value)]``: the sum of the values of
+    tests of no dataset plus, per dataset, its largest value over that dataset's tests."""
+    best = {}
+    for dataset, value in held:
+        if dataset is not None:
+            best[dataset] = max(best.get(dataset, value), value)
+    return math.fsum([value for dataset, value in held if dataset is None] + list(best.values()))
+
+
 def differential_credit(measurements):
-    """The scores, the sheets and the credit of ``measurements`` (``[{'test', 'candidate', 'value'}]`` in arrival
-    order)."""
+    """The scores, the sheets and the credit of ``measurements`` (``[{'test', 'candidate', 'value'}]``, each optionally
+    with its ``dataset``, in arrival order). Also ``test_credits`` (each test's entries plus differentials) and ``datasets``
+    (per dataset: its ``best`` test credit so far, the ``best_test`` and the credit each of its tests ``earned``)."""
     tests, values = [], {}
+    dataset_of = _datasets(measurements)
     for row in measurements:
         if row['test'] not in tests:
             tests.append(row['test'])
@@ -77,14 +103,14 @@ def differential_credit(measurements):
     changes, entries, admitted = {}, {}, {}
 
     def score(candidate):
-        return math.fsum(math.fsum(held) for held in sheets[candidate].values())
+        return math.fsum(_sheet_value(held) for held in sheets[candidate].values())
     for test in tests:
         for candidate in candidates:
             if (test, candidate) not in values:
                 continue
             replicates = values[test, candidate]
             value = sheet_weight(test) * math.fsum(replicates) / len(replicates)
-            sheets[candidate].setdefault(_kind(test), []).append(value)
+            sheets[candidate].setdefault(_kind(test), []).append((dataset_of.get(test), value))
             changes[test, candidate] = value
             if candidate not in entries and value > 0:
                 entries[candidate], admitted[candidate] = score(candidate), tests.index(test)
@@ -93,25 +119,35 @@ def differential_credit(measurements):
                      for position, test in enumerate(tests) for first, second in combinations(sorted(entries), 2)
                      if (test, first) in changes and (test, second) in changes
                      and position > max(admitted[first], admitted[second])]
+    test_credits = {test: math.fsum([entries[candidate] for candidate in entries if tests[admitted[candidate]] == test]
+                                    + [row['value'] for row in differentials if row['test'] == test]) for test in tests}
+    datasets = {}
+    for test in tests:
+        if test in dataset_of:
+            held = datasets.setdefault(dataset_of[test], {'best': 0.0, 'best_test': None, 'earned': {}})
+            held['earned'][test] = max(0.0, test_credits[test] - held['best'])
+            if held['best_test'] is None or test_credits[test] > held['best']:
+                held['best'], held['best_test'] = test_credits[test], test
     return {'scores': {candidate: score(candidate) for candidate in sorted(entries)},
-            'sheets': {candidate: {kind: math.fsum(held) for kind, held in sheets[candidate].items()}
+            'sheets': {candidate: {kind: _sheet_value(held) for kind, held in sheets[candidate].items()}
                        for candidate in sorted(entries)},
-            'entries': entries, 'differentials': differentials,
-            'credit': math.fsum(entries.values()) + math.fsum(row['value'] for row in differentials)}
+            'entries': entries, 'differentials': differentials, 'test_credits': test_credits, 'datasets': datasets,
+            'credit': math.fsum([credit for test, credit in test_credits.items() if test not in dataset_of]
+                                + [held['best'] for held in datasets.values()])}
 
 
 def standing(measurements):
     """Where each candidate stands before a further test: ``{candidate: {'sheets', 'score', 'listed'}}`` for every
     candidate measured so far (listed or not): its value on each sheet (the sum of its values in the tests of that kind),
     its score (the sum of its sheet values) and whether it is on the list (its score is above zero; values are never
-    below zero)."""
-    held = {}
+    below zero). A sheet value from the tests of one dataset is the largest of them (``_sheet_value``)."""
+    held, dataset_of = {}, _datasets(measurements)
     for row_test, row_candidate in dict.fromkeys((row['test'], row['candidate']) for row in measurements):
         replicates = [row['value'] for row in measurements
                       if row['test'] == row_test and row['candidate'] == row_candidate]
         held.setdefault(row_candidate, {}).setdefault(_kind(row_test), []).append(
-            sheet_weight(row_test) * math.fsum(replicates) / len(replicates))
-    sheets = {candidate: {kind: math.fsum(values) for kind, values in kinds.items()}
+            (dataset_of.get(row_test), sheet_weight(row_test) * math.fsum(replicates) / len(replicates)))
+    sheets = {candidate: {kind: _sheet_value(values) for kind, values in kinds.items()}
               for candidate, kinds in held.items()}
     return {candidate: {'sheets': kinds, 'score': math.fsum(kinds.values()), 'listed': math.fsum(kinds.values()) > 0}
             for candidate, kinds in sheets.items()}
@@ -140,6 +176,17 @@ def test_ceiling(held, measurable, family, unseen=0, limit=None):
     if limit is None:
         return weight * float(count * (count - 1) // 2 + new)
     return weight * float(max(m * (m - 1) // 2 + min(limit - m, new) for m in range(min(limit, count) + 1)))
+
+
+def dataset_test_ceiling(bound, best):
+    """The most one further test of a dataset can add to the credit, given ``bound``, the most that test's own credit (its
+    entries plus its differentials) can be (``test_ceiling``), and ``best``, the largest test credit of the dataset's tests held
+    so far (``differential_credit(...)['datasets'][dataset]['best']``, 0 with none): ``max(0, bound - best)``.
+
+    Proof. The dataset contributes the largest test credit of its tests to the credit, and nothing else of the credit changes
+    when a test is appended (earlier entries and differentials are fixed; the new test's entries and differentials are its own
+    test credit). So the credit rises by ``max(0, T - best)`` where ``T`` is the new test's credit, and ``T <= bound``."""
+    return max(0.0, bound - best)
 
 
 def msa_test_ceiling(held, maxima, measurable):

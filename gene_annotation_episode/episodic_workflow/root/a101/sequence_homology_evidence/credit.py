@@ -21,9 +21,9 @@ from method_loop import UNBOUNDED
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
     NativeCorrespondenceScoring)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
-    SITE_WEIGHT, alignment_contexts, candidate_standing, candidate_table, held_sources, matched_positions_taken)
+    SITE_WEIGHT, alignment_contexts, candidate_standing, candidate_table, dataset_bests, held_sources, matched_positions_taken)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
-    SHEET_WEIGHT, msa_test_ceiling, test_ceiling)
+    SHEET_WEIGHT, dataset_test_ceiling, msa_test_ceiling, test_ceiling)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.msa_alignment_sheet import (
     MINIMUM_GROUP_SIZE)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_msa_alignment import (
@@ -59,7 +59,7 @@ class A101DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v3', 'axis': 'A101',
+        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v4', 'axis': 'A101',
                 'measurement': 'subscore_of_one_references_alignments_over_the_scope_regions',
                 'subscore_version': VERSION,
                 'candidates': 'product_from_database_search_functions_profile_family_reference_sequence',
@@ -70,6 +70,7 @@ class A101DifferentialCredit:
                 'entry': 'score_after_the_admitting_test_only',
                 'differential': 'abs_difference_of_score_moves_of_two_listed_candidates_in_a_test_both_underwent',
                 'credit': 'sum_of_entry_scores_and_differentials', 'maximum': 'none',
+                'dataset': 'tests_of_one_dataset_earn_their_largest_test_credit_once_and_sheet_reads_largest_value',
                 'repeat': 'earns_nothing'}
 
 
@@ -217,11 +218,15 @@ def ceiling(summary, records, action_type, arguments, ctx):
       that differs from every held alignment keeps the open bound: the aligner's columns for a group depend on the other
       groups in the alignment, so nothing about a pair already compared carries over.
     * ``all_vs_all``: the cluster test of the commission's committed clustering: it measures the candidates named once each, a
-      value being the share of a candidate's sequences in the target's cluster, raw in [0, 1], so bounded as every such test is
-      (``test_ceiling`` of the family ``cluster``): a pair of listed candidates at most ``w``, a candidate it admits at most ``w``,
-      a single listed candidate 0. A commission identical to one already commissioned or already graded (the search, the candidates, the
-      sequences per candidate) earns 0. With ``arguments`` ``None``: the largest over the held graded searches' admitted
-      candidates (the bound only grows with candidates).
+      value being the share of a candidate's sequences in the target's cluster, raw in [0, 1], so its own test credit is bounded
+      as every such test's is (``test_ceiling`` of the family ``cluster``): a pair of listed candidates at most ``w``, a candidate
+      it admits at most ``w``, a single listed candidate 0. Its dataset is the commission's search: all the clusterings of one
+      dataset earn one test's credit together, the largest (the owner: "You only can earn one credit for one dataset - you can
+      improve a clustering to earn more, but you cannot replicate"), so the ceiling is that bound minus the dataset's best test
+      credit so far, floored at 0 (``differential_credit.dataset_test_ceiling``, proof there; ``dataset_bests``). A commission
+      identical to one already commissioned or already graded (the search, the candidates, the sequences per candidate) earns 0.
+      With ``arguments`` ``None``: the largest over the held graded searches with their admitted candidates (the bound only grows
+      with candidates; the dataset's best is the same for every commission of that search).
     * ``bvbrc_metacats``: 0. A MetaCATS report gives no measurement (``candidate_measurements``).
     * ``hmmer_profile_scan``: the scan of the target ``query_ref`` against the profile database ``database`` reports
       each family at most once, so it measures at most as many families as the database holds profiles (``model_count``
@@ -264,14 +269,16 @@ def ceiling(summary, records, action_type, arguments, ctx):
                     for query in queries if not searched('bvbrc_searches', query)), default=0.0)
     if action_type == 'all_vs_all':
         if arguments is None:
-            options = [(item['query_ref'], item['candidates']) for item in summary['msa_options']
+            options = [(item['query_ref'], item['search_ref'], item['candidates']) for item in summary['msa_options']
                        if len(item['candidates']) >= ALL_VS_ALL_MINIMUM_CANDIDATES]
         elif (arguments['search_ref'], sorted(arguments['candidates']), arguments['per_candidate']) in all_vs_all_commission_keys(summary):
             options = []
         else:
-            options = [(arguments['query_ref'], arguments['candidates'])]
-        return max((test_ceiling(standing.get(query, {}), ['product:' + name for name in names], 'cluster')
-                    for query, names in options), default=0.0)
+            options = [(arguments['query_ref'], arguments['search_ref'], arguments['candidates'])]
+        bests = dataset_bests(records, scope, held_sources(records)) if options else {}
+        return max((dataset_test_ceiling(test_ceiling(standing.get(query, {}), ['product:' + name for name in names], 'cluster'),
+                                         bests.get(query, {}).get(search, 0.0))
+                    for query, search, names in options), default=0.0)
     if action_type == 'bvbrc_msa':
         if arguments is None:
             return msa_best(summary, records)[0]
