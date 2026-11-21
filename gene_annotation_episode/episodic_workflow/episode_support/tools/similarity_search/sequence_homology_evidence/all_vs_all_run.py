@@ -253,6 +253,14 @@ def held_clusterings(reader):
     return found
 
 
+def commission_keys(summary):
+    """The identities (search, sorted candidates, per_candidate) of the commissions of this child the head holds: those it made
+    (the units that were child commissions of the slot) and those whose clustering it holds graded (``held_clusterings``)."""
+    made = [(row['arguments']['search_ref'], sorted(row['arguments']['candidates']), row['arguments']['per_candidate'])
+            for row in summary['units'] if row['kind'] == 'child' and row['slot'] == CHILD]
+    return made + [(row['search_ref'], sorted(row['candidates']), row['per_candidate']) for row in summary['held_clusterings']]
+
+
 def check_commission(request, *, scope_subjects, sequences, options, commissioned):
     """The things to fix in the head's commission of this child (``request``: ``query_ref``, ``search_ref``, ``candidates``,
     ``per_candidate``). ``options`` is ``msa_options`` (each held graded BV-BRC search with the product candidates the head admitted
@@ -436,5 +444,5 @@ def commit_clustering(ctx, clusters_ref, commission, per_candidate):
 
 __all__ = ['BLAST_PROGRAMS', 'CHILD', 'CONTRASTS', 'CLUSTERS_KIND', 'DATABASE_KIND', 'EVALUE', 'HOLD_REASONS', 'INFLATIONS', 'OWN_FAILURE_CODES', 'MATRIX_KIND',
            'MINIMUM_CANDIDATES', 'PER_CANDIDATE_RANGE', 'PROVIDER', 'SET_KIND', 'TOOLS', 'all_vs_all_blast', 'check_blast',
-           'check_cluster', 'check_commission', 'check_commit', 'check_prepare', 'held_clusterings', 'cluster', 'commit_clustering', 'database_settings', 'matrix_settings', 'clusters_settings',
+           'check_cluster', 'check_commission', 'commission_keys', 'check_commit', 'check_prepare', 'held_clusterings', 'cluster', 'commit_clustering', 'database_settings', 'matrix_settings', 'clusters_settings',
            'pack_database', 'prepare_database', 'set_members', 'set_settings']

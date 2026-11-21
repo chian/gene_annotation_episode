@@ -3,6 +3,12 @@
 "The graders should additively add to the subscoring sheets and then the subscoring sheets additively add to the score"
 (the owner, 2026-11-21).
 
+THE SCORING SHEET'S WEIGHTS (the owner, 2026-11-21: the scoring sheet weighs the subscoring sheets into the score with stated weights, so each
+sheet's typical strong result counts comparably). ``SHEET_WEIGHT[family]`` multiplies every value of a test of that family (the part of the
+test name before its first ``:``); a candidate's value in a test, its sheet value, its score, its entry and every differential are in these
+weighted units. The weight of a family is ONE OVER ITS TYPICAL STRONG VALUE (``TYPICAL_STRONG_VALUE``), so the typical strong result of each
+sheet is worth about 1; the derivation is beside the constants.
+
 A measurement is one graded result: the test it belongs to (the same tool, settings and region of the target), the
 candidate annotation its reference stands for, and its value on the subscoring sheet (0 to 1). Measurements are
 given in the order they arrived. The tests are ordered by their first measurement.
@@ -30,6 +36,29 @@ import math
 from itertools import combinations
 
 
+# The typical strong value of each sheet's family: the value, in ONE test of that family, of the candidate that leads a stored real run
+# (direct read, 2026-11-21, of the stored head records of runs a101_conserved_ws_C2, a101_diff_ws_H1 and a101_final_ws_cspa, all of E.
+# coli CspA, 70 residues, one BV-BRC bacteria-archaea blastp search; the unweighted values; the other stored runs, a101_msa_ws_M1/M2 and
+# a101_returns_ws_R1, hold the same search and scan and an older alignment sheet that the present reading does not take):
+#   database_search  0.9592726552144761  the CspA product's mean hit value in the search (the same in all three runs; the other products
+#                                        are 0.81 to 0.84)
+#   profile_scan     0.8198338046876612  the cold-shock-domain family's value in the Pfam hmmscan (the same in all three runs)
+#   msa              12 / 7              the CspA product's value in the first alignment (12 new matched distinguishing sites x W = 1/7;
+#                                        later alignments of the same target add 0.0 to 0.29 because a site counts once)
+#   cluster          1.0                 the CspA product's share of its sequences in the target's cluster in the committed clustering of
+#                                        the C2 set (MCL, inflation 4.0, rescaled contrast: CspA 10/10, CspB/CspG/CspI 10/10, CspC 0/9)
+#   pairwise         1.0                 no stored run holds a pairwise value: the weight is 1 until one does
+# The data is one target: re-derive these as runs of other targets accumulate.
+TYPICAL_STRONG_VALUE = {'database_search': 0.9592726552144761, 'profile_scan': 0.8198338046876612, 'msa': 12 / 7, 'cluster': 1.0,
+                        'pairwise': 1.0}
+SHEET_WEIGHT = {family: 1 / value for family, value in TYPICAL_STRONG_VALUE.items()}
+
+
+def sheet_weight(test):
+    """The weight of the family of ``test`` (the part of its name before the first ``:`` or ``@``)."""
+    return SHEET_WEIGHT[test.split('@', 1)[0].split(':', 1)[0]]
+
+
 def _kind(test):
     """The subscoring sheet of a test: its kind, the part of the name before ``@``."""
     return test.split('@', 1)[0]
@@ -54,7 +83,7 @@ def differential_credit(measurements):
             if (test, candidate) not in values:
                 continue
             replicates = values[test, candidate]
-            value = math.fsum(replicates) / len(replicates)
+            value = sheet_weight(test) * math.fsum(replicates) / len(replicates)
             sheets[candidate].setdefault(_kind(test), []).append(value)
             changes[test, candidate] = value
             if candidate not in entries and value > 0:
@@ -80,35 +109,37 @@ def standing(measurements):
     for row_test, row_candidate in dict.fromkeys((row['test'], row['candidate']) for row in measurements):
         replicates = [row['value'] for row in measurements
                       if row['test'] == row_test and row['candidate'] == row_candidate]
-        held.setdefault(row_candidate, {}).setdefault(_kind(row_test), []).append(math.fsum(replicates) / len(replicates))
+        held.setdefault(row_candidate, {}).setdefault(_kind(row_test), []).append(
+            sheet_weight(row_test) * math.fsum(replicates) / len(replicates))
     sheets = {candidate: {kind: math.fsum(values) for kind, values in kinds.items()}
               for candidate, kinds in held.items()}
     return {candidate: {'sheets': kinds, 'score': math.fsum(kinds.values()), 'listed': math.fsum(kinds.values()) > 0}
             for candidate, kinds in sheets.items()}
 
 
-def test_ceiling(held, measurable, unseen=0, limit=None):
+def test_ceiling(held, measurable, family, unseen=0, limit=None):
     """The most one further test can add to the credit of one target, from where the list stands.
 
     ``held`` is ``standing`` of the target. The test measures candidates of ``measurable`` (identifiers, each possibly
     not yet held) and up to ``unseen`` others never met, at most ``limit`` candidates in all when ``limit`` is given.
-    Scores are additive and a candidate's value in a test is in [0, 1], so the test moves a score by its value, between
-    0 and 1. The test is the last one, so it earns:
+    Scores are additive and a candidate's value in a test of ``family`` is in [0, w], ``w`` = ``SHEET_WEIGHT[family]`` (the raw
+    value is in [0, 1]), so the test moves a score by its value, between 0 and ``w``. The test is the last one, so it earns:
 
-    * for two candidates on the list that it measures, the size of the difference of their moves: at most 1 for each pair;
-    * for a candidate not on the list that it admits, the entry score (its first score): at most 1 each (the test that
+    * for two candidates on the list that it measures, the size of the difference of their moves: at most ``w`` for each pair;
+    * for a candidate not on the list that it admits, the entry score (its first score): at most ``w`` each (the test that
       admits a candidate earns that candidate's entry only, so a pair with it earns nothing in this test);
     * nothing else: a test that measures one candidate on the list and admits none earns 0.
 
-    With ``m`` listed candidates measured and the others new, the bound is ``m(m-1)/2`` pairs plus one for each new one;
-    with a ``limit`` of ``k`` it is the largest of that over the ``m`` that leave ``k - m`` places for the new ones. It is
-    a bound, not a forecast."""
+    With ``m`` listed candidates measured and the others new, the bound is ``m(m-1)/2`` pairs plus one for each new one, times
+    ``w``; with a ``limit`` of ``k`` it is the largest of that over the ``m`` that leave ``k - m`` places for the new ones. It
+    is a bound, not a forecast."""
+    weight = SHEET_WEIGHT[family]
     listed = {candidate for candidate, state in held.items() if state['listed']}
     count = len({candidate for candidate in measurable if candidate in listed})
     new = len({candidate for candidate in measurable if candidate not in listed}) + unseen
     if limit is None:
-        return float(count * (count - 1) // 2 + new)
-    return float(max(m * (m - 1) // 2 + min(limit - m, new) for m in range(min(limit, count) + 1)))
+        return weight * float(count * (count - 1) // 2 + new)
+    return weight * float(max(m * (m - 1) // 2 + min(limit - m, new) for m in range(min(limit, count) + 1)))
 
 
 def msa_test_ceiling(held, maxima, measurable):
@@ -159,19 +190,3 @@ def msa_test_ceiling(held, maxima, measurable):
         outside = len(listed) - len(inside)
         best = max(best, math.fsum(abs(a - b) for a, b in combinations(inside, 2)) + outside * math.fsum(inside))
     return new + best
-
-
-def cluster_commission_ceiling(held, candidates, clusterings):
-    """The most one commission of the all-vs-all child can add to the credit of one target, from where the list stands.
-
-    ``held`` is ``standing`` of the target; ``candidates`` the candidates the commission names (identifiers); ``clusterings``
-    how many clustering tests the commission can still produce (one for each of its allowed inflations not yet graded for
-    this set). A clustering test measures each named candidate once, its value the share of its sequences in the target's
-    cluster, in [0, 1] (the same scale as every test but the alignment). It is bounded as any such test is
-    (``test_ceiling``: a pair of listed candidates at most 1, a candidate it admits at most 1, a single listed candidate 0).
-    Once the first clustering has been graded every named candidate is listed, so each further one can earn only the pairs:
-    ``m(m-1)/2``. The bound is the first test's plus those of the others. It is a bound, not a forecast."""
-    names = list(dict.fromkeys(candidates))
-    if clusterings == 0:
-        return 0.0
-    return test_ceiling(held, names) + (clusterings - 1) * float(len(names) * (len(names) - 1) // 2)

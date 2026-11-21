@@ -23,13 +23,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
     SITE_WEIGHT, alignment_contexts, candidate_standing, candidate_table, held_sources, matched_positions_taken)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
-    msa_test_ceiling, test_ceiling)
+    SHEET_WEIGHT, msa_test_ceiling, test_ceiling)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.msa_alignment_sheet import (
     MINIMUM_GROUP_SIZE)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_msa_alignment import (
     PER_CANDIDATE_RANGE, plan_rows, search_rows)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
-    HITLIST_RANGE)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.all_vs_all_run import (
+    MINIMUM_CANDIDATES as ALL_VS_ALL_MINIMUM_CANDIDATES, commission_keys as all_vs_all_commission_keys)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import (
     SCALES, VERSION)
 
@@ -59,12 +59,13 @@ class A101DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v2', 'axis': 'A101',
+        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v3', 'axis': 'A101',
                 'measurement': 'subscore_of_one_references_alignments_over_the_scope_regions',
                 'subscore_version': VERSION,
                 'candidates': 'product_from_database_search_functions_profile_family_reference_sequence',
                 'test': 'one_graded_source_kind_with_its_program_and_database',
-                'score': 'sum_over_subscoring_sheets_of_sum_of_mean_value_in_test_of_that_kind',
+                'sheet_weights': dict(SHEET_WEIGHT),
+                'score': 'sum_over_subscoring_sheets_of_weight_times_sum_of_mean_value_in_test_of_that_kind',
                 'admission': 'first_value_above_zero',
                 'entry': 'score_after_the_admitting_test_only',
                 'differential': 'abs_difference_of_score_moves_of_two_listed_candidates_in_a_test_both_underwent',
@@ -109,7 +110,9 @@ def msa_value(state, records, query, search_ref, names, per_candidate):
     """The proved maximum of one commission of ``bvbrc_msa`` (see ``ceiling``): 0 unless two candidates each have at least
     ``MINIMUM_GROUP_SIZE`` sequences in the plan and the plan is not exactly a held alignment's input; else
     ``differential_credit.msa_test_ceiling`` over the eligible candidates."""
-    rows = state['rows'].setdefault(search_ref, search_rows(records, {'subject_refs': [query]}, search_ref))
+    if search_ref not in state['rows']:
+        state['rows'][search_ref] = search_rows(records, {'subject_refs': [query]}, search_ref)
+    rows = state['rows'][search_ref]
     plan = []
     for name in names:
         plan.extend(state['plans'].setdefault((search_ref, name, per_candidate),
@@ -122,7 +125,8 @@ def msa_value(state, records, query, search_ref, names, per_candidate):
         return 0.0
     length, taken = records.subject_length(query), state['taken'].get(query, {})
     return msa_test_ceiling(state['standing'].get(query, {}),
-                            {name: (length - taken.get(name, 0)) * SITE_WEIGHT for name in eligible}, eligible)
+                            {name: (length - taken.get(name, 0)) * SITE_WEIGHT * SHEET_WEIGHT['msa'] for name in eligible},
+                            eligible)
 
 
 def msa_refused(summary, search_ref, names, per_candidate):
@@ -145,7 +149,7 @@ def msa_best(summary, records):
     """``(ceiling, arguments)`` of the commission of ``bvbrc_msa`` with the largest proved maximum among those the head's checks
     would accept now: every held graded search with at least two admitted candidates (``summary['msa_options']``), every
     subset of at least two of them (in the option's order), every sequence count (largest first); ties go to the
-    larger candidate set, then the larger count, then the first found. ``(0.0, None)`` when there is none. More than 12
+    smaller candidate set (a candidate that adds nothing is not named), then the larger count, then the first found. ``(0.0, None)`` when there is none. More than 12
     admitted candidates: only the full set (the maximum is not lowered by adding a candidate, apart from repeats)."""
     state, best = msa_state(summary, records), (0.0, None)
     low, high = PER_CANDIDATE_RANGE
@@ -163,7 +167,7 @@ def msa_best(summary, records):
                     continue
                 value = msa_value(state, records, item['query_ref'], item['search_ref'], chosen, count)
                 if value > best[0] + 1e-12 or (best[1] is not None and abs(value - best[0]) <= 1e-12 and value > 0
-                                               and len(chosen) > len(best[1]['candidates'])):
+                                               and len(chosen) < len(best[1]['candidates'])):
                     best = (value, {'query_ref': item['query_ref'], 'search_ref': item['search_ref'],
                                     'candidates': list(chosen), 'per_candidate': count})
     return best
@@ -185,10 +189,11 @@ def ceiling(summary, records, action_type, arguments, ctx):
 
     The credit is, per target, the sum of the entry scores of the candidates and of the differentials
     (``differential_credit``). A unit adds at most one graded source, which is one test appended after the earlier ones.
-    A candidate's score is the sum of its values over the tests, each value in [0, 1] except an alignment's (below), so
-    that test moves a candidate's score by its value. ``differential_credit.test_ceiling`` (for the alignment, ``msa_test_ceiling``) then bounds what the one test can add to
-    the target's credit: a pair of candidates on the list that the test measures earns at most 1 (the difference of two
-    moves in [0, 1]); a candidate the test admits earns its entry, its first score, at most 1, and its pairs earn
+    A candidate's score is the sum of its weighted values over the tests (``differential_credit.SHEET_WEIGHT``: the value of a test
+    of a family is the family's weight times its raw value, which is in [0, 1] except an alignment's, below), so that test moves a
+    candidate's score by its weighted value. ``differential_credit.test_ceiling`` (for the alignment, ``msa_test_ceiling``) then bounds what the one test can add to
+    the target's credit: a pair of candidates on the list that the test measures earns at most ``w`` (the family's weight: the
+    difference of two moves in [0, ``w``]); a candidate the test admits earns its entry, its first score, at most ``w``, and its pairs earn
     nothing in that test; a test that measures one candidate on the list and admits none earns 0. Per action type:
 
     * ``reason``: 0. A reasoning commit holds interpretations and writes no graded source, and the credit is read from
@@ -196,9 +201,6 @@ def ceiling(summary, records, action_type, arguments, ctx):
     * ``pairwise_blast``: the one test measures one candidate, the reference sequence (``reference_sequence:<ref>``)
       of the target ``query_ref``. With no pair, a candidate already on the list earns 0; one not on the list can be
       admitted for at most 1.
-    * ``database_blast``: a search of the target ``query_ref`` that returns at most ``hitlist_size`` hits, each naming
-      at most one function (the reference metadata of a hit carries one function), so it measures at most
-      ``hitlist_size`` product candidates, any of those on the list or new ones.
     * ``bvbrc_blast``: the same, with the hits bounded by the application's ``blast_max_hits`` default
       (``bvbrc_hit_bound``).
     * ``bvbrc_msa``: derived from the current state, as a proved maximum (the proof is in
@@ -214,6 +216,12 @@ def ceiling(summary, records, action_type, arguments, ctx):
       ceiling of the row shown to the model is the ceiling of one named commission, ``best_arguments``. A group context
       that differs from every held alignment keeps the open bound: the aligner's columns for a group depend on the other
       groups in the alignment, so nothing about a pair already compared carries over.
+    * ``all_vs_all``: the cluster test of the commission's committed clustering: it measures the candidates named once each, a
+      value being the share of a candidate's sequences in the target's cluster, raw in [0, 1], so bounded as every such test is
+      (``test_ceiling`` of the family ``cluster``): a pair of listed candidates at most ``w``, a candidate it admits at most ``w``,
+      a single listed candidate 0. A commission identical to one already commissioned or already graded (the search, the candidates, the
+      sequences per candidate) earns 0. With ``arguments`` ``None``: the largest over the held graded searches' admitted
+      candidates (the bound only grows with candidates).
     * ``bvbrc_metacats``: 0. A MetaCATS report gives no measurement (``candidate_measurements``).
     * ``hmmer_profile_scan``: the scan of the target ``query_ref`` against the profile database ``database`` reports
       each family at most once, so it measures at most as many families as the database holds profiles (``model_count``
@@ -225,7 +233,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
     An action the head's request checks would refuse as a repeat earns nothing, so its ceiling is 0: a pairwise
     comparison already held (``held_comparisons``), a profile scan of the same query and database already held
     (``held_profile_scans``), a search of the same query, program and database already graded (a closed search of
-    ``database_searches`` / ``bvbrc_searches``; an outstanding one can still be continued and keeps its ceiling)."""
+    ``bvbrc_searches``; an outstanding one can still be continued and keeps its ceiling)."""
     if action_type == 'reason' or action_type == 'bvbrc_metacats':
         return 0.0
     scope = summary['scope']
@@ -247,17 +255,23 @@ def ceiling(summary, records, action_type, arguments, ctx):
         return [candidate for candidate in standing.get(target, {}) if candidate.startswith('product:')]
     if action_type == 'pairwise_blast':
         references = list(summary['held_sequences']) if arguments is None else [arguments['reference_ref']]
-        return max((test_ceiling(standing.get(query, {}), ['reference_sequence:' + reference])
+        return max((test_ceiling(standing.get(query, {}), ['reference_sequence:' + reference], 'pairwise')
                     for query in queries for reference in references if (query, reference) not in compared),
                    default=0.0)
-    if action_type in ('database_blast', 'bvbrc_blast'):
-        if action_type == 'bvbrc_blast':
-            limit = bvbrc_hit_bound()
+    if action_type == 'bvbrc_blast':
+        limit = bvbrc_hit_bound()
+        return max((test_ceiling(standing.get(query, {}), products(query), 'database_search', unseen=limit, limit=limit)
+                    for query in queries if not searched('bvbrc_searches', query)), default=0.0)
+    if action_type == 'all_vs_all':
+        if arguments is None:
+            options = [(item['query_ref'], item['candidates']) for item in summary['msa_options']
+                       if len(item['candidates']) >= ALL_VS_ALL_MINIMUM_CANDIDATES]
+        elif (arguments['search_ref'], sorted(arguments['candidates']), arguments['per_candidate']) in all_vs_all_commission_keys(summary):
+            options = []
         else:
-            limit = HITLIST_RANGE[1] if arguments is None else arguments['hitlist_size']
-        view = 'bvbrc_searches' if action_type == 'bvbrc_blast' else 'database_searches'
-        return max((test_ceiling(standing.get(query, {}), products(query), unseen=limit, limit=limit)
-                    for query in queries if not searched(view, query)), default=0.0)
+            options = [(arguments['query_ref'], arguments['candidates'])]
+        return max((test_ceiling(standing.get(query, {}), ['product:' + name for name in names], 'cluster')
+                    for query, names in options), default=0.0)
     if action_type == 'bvbrc_msa':
         if arguments is None:
             return msa_best(summary, records)[0]
@@ -269,7 +283,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
         sizes = [json.loads(Path(path).read_text())['model_count'] for path in databases.values()]
         families = lambda target: [candidate for candidate in standing.get(target, {})
                                    if candidate.startswith('profile_family:')]
-        return max((test_ceiling(standing.get(query, {}), families(query), unseen=size, limit=size)
+        return max((test_ceiling(standing.get(query, {}), families(query), 'profile_scan', unseen=size, limit=size)
                     for query in queries for name, size in zip(databases, sizes) if (query, name) not in scanned),
                    default=0.0)
     if action_type == 'execute_selected_tool':

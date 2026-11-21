@@ -7,7 +7,7 @@ for the slot and the message is empty. A commission the child does not admit fai
 Every record the child's code reads is named in a ``record_refs`` field of the assignment: the query subject record and,
 in ``input_refs``, every held record it names, and those name in turn (a subject and its sequence artifact: ``_custody``
 over the summary's ``named_refs``). When this episode holds an outstanding search of the query that the commission
-names (``summary['database_searches']``), the commission continues it and code passes back, in custody, the records the
+names (``summary['bvbrc_searches']``), the commission continues it and code passes back, in custody, the records the
 child returned for it: its handoff, status and closure records (the rows and what they name, as held). The credit units
 are this episode's ``child_credit_units``: ``handoff_unit`` for the handoff, ``information_unit`` for a status request
 that shows something new and ``acquired_record_unit`` for the graded result.
@@ -20,25 +20,25 @@ ANALYSIS_KIND = 'database_search'
 
 # The objective of each commission: this episode's own text, never the model's.
 OBJECTIVES = {
-    'database_blast': 'Search the query sequence against the hosted database through the public BLAST service, follow '
-                      'the search without waiting for it and return what it established: the handoff, the status '
-                      'records and, when the service has finished it, the graded result.',
     'bvbrc_blast': 'Search the query sequence against the precomputed BV-BRC database through the BV-BRC application '
                    'service, in this one commission: estimate the duration, launch the search, monitor it until the '
                    'service has ended it and extract the graded result, and return what it established.',
     'bvbrc_msa': 'Align the target with the sequences of the chosen candidates of the held graded BV-BRC search through '
                  'the BV-BRC application service: estimate the duration, launch the alignment, monitor it until the '
                  'service has ended it and extract the graded alignment, and return what it established.',
+    'all_vs_all': 'Put the target and the sequences of the chosen candidates of the held graded BV-BRC search in one set, search it '
+                  'against itself with BLAST+ on a local resource, tune and commit a clustering of the pairwise bit scores, and '
+                  'return what it established: the labelled data products and the graded clustering.',
     'bvbrc_metacats': 'Test the held alignment with MetaCATS through the BV-BRC application service, with groups built by '
                       'code from its candidates and the target in none: estimate the duration, launch the job, monitor it '
                       'until the service has ended it and extract the graded result, and return what it established.',
 }
 # The return fields every commission of a slot selects.
 REQUIRED_RETURN = {
-    'database_blast': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
     'bvbrc_blast': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
     'bvbrc_msa': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
     'bvbrc_metacats': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
+    'all_vs_all': ('execution_handoff_refs', 'closure_refs', 'graded_refs'),
 }
 
 
@@ -68,26 +68,6 @@ def _continued(assignment, job, summary):
                       known_ended=job['known_ended'],
                       input_refs=list(dict.fromkeys([*assignment['input_refs'],
                                                      *(ref for ref in _custody(rows, summary) if ref not in rows)])))
-
-
-def _database_blast(arguments, summary):
-    """The assignment of one database search: the declared kind, the query and its sequence in custody, the program,
-    the database, the hit-list size, the resource, the three credit units and, when the commission continues an
-    outstanding search of the query, the records of that search passed back."""
-    query = arguments['query_ref']
-    units = summary['child_credit_units']
-    assignment = {'analysis_kind': ANALYSIS_KIND, 'query_refs': [query],
-                  'input_refs': [ref for ref in _custody([query], summary) if ref != query],
-                  'program': arguments['program'], 'database': arguments['database'],
-                  'hitlist_size': arguments['hitlist_size'], 'resource_id': arguments['resource_id'],
-                  'handoff_unit': units['handoff_unit'], 'information_unit': units['information_unit'],
-                  'graded_unit': units['acquired_record_unit']}
-    held = [search for search in summary['database_searches'] if search['query_ref'] == query and search['outstanding']]
-    if held:
-        (search,) = held
-        assignment.update(handoff_refs=[search['handoff_ref']], check_refs=search['check_refs'],
-                          closure_refs=search['closure_refs'])
-    return assignment
 
 
 def _bvbrc_blast(arguments, summary):
@@ -152,8 +132,21 @@ def _bvbrc_metacats(arguments, summary):
     return assignment
 
 
-ASSIGNMENTS = {'database_blast': _database_blast, 'bvbrc_blast': _bvbrc_blast, 'bvbrc_msa': _bvbrc_msa,
-               'bvbrc_metacats': _bvbrc_metacats}
+def _all_vs_all(arguments, summary):
+    """The assignment of one all-vs-all: the target and the held search in custody (with every held record they name), the
+    candidates (each ``{name}``), ``per_candidate`` and the three credit units. The child runs on a local resource and chooses the
+    clustering tuning itself."""
+    query, search = arguments['query_ref'], arguments['search_ref']
+    units = summary['child_credit_units']
+    named = [ref for ref in _custody([query, search], summary) if ref not in (query, search)]
+    return {'query_refs': [query], 'search_refs': [search], 'input_refs': named,
+            'candidates': [{'name': name} for name in arguments['candidates']], 'per_candidate': arguments['per_candidate'],
+            'handoff_unit': units['handoff_unit'], 'information_unit': units['information_unit'],
+            'graded_unit': units['acquired_record_unit']}
+
+
+ASSIGNMENTS = {'bvbrc_blast': _bvbrc_blast, 'bvbrc_msa': _bvbrc_msa, 'bvbrc_metacats': _bvbrc_metacats,
+               'all_vs_all': _all_vs_all}
 
 
 def msg_to_child(slot, arguments, summary):

@@ -7,7 +7,7 @@ table.
 For the commissions (``task.commission_fields``, ``msg_to_child``) the summary also holds what a commission is
 chosen from and built with: ``held_record_refs`` (the held records), ``held_sequences`` (the held records
 that carry a sequence, each with its molecule: what the two sequences of a comparison are chosen from),
-``held_comparisons`` (the pairwise comparisons already held: what the check refuses to run again), ``database_searches`` (the searches of the hosted service this episode holds, with their records: what a commission of ``database_blast`` continues), ``held_source_refs`` (the held sources) and ``named_refs`` (for each held
+``held_comparisons`` (the pairwise comparisons already held: what the check refuses to run again), ``bvbrc_searches`` (the BV-BRC searches this episode holds, with their records: what a commission of ``bvbrc_blast`` continues), ``held_clusterings`` (the committed clusterings of the ``all_vs_all`` child), ``held_source_refs`` (the held sources) and ``named_refs`` (for each held
 record, job ledger rows included, the held records it names: what travels in custody beside it)."""
 import json
 
@@ -24,15 +24,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.hmmer_profile_scan import (
     PROVIDER as PROFILE_PROVIDER)
 
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
-    held_searches)
-
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_blast_search as bvbrc)
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import products
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
-    bvbrc_job_child as job_child, bvbrc_metacats_search as metacats, bvbrc_msa_alignment as msa)
+    all_vs_all_run as all_vs_all, bvbrc_job_child as job_child, bvbrc_metacats_search as metacats, bvbrc_msa_alignment as msa)
 
 from ..credit import A101DifferentialCredit, A101SequenceCredit, held_candidate_table
 from ..task import CHILD_SLOTS, PAIRWISE_TOOL, PROFILE_TOOL
@@ -107,6 +104,7 @@ def internal_summary(view):
             closure_refs.extend(ref for ref in report['closure_refs'] if ref not in closure_refs)
         units.append(row)
         last = row
+    ended_inside_children = {ref for row in child_reports if row['slot'] == 'all_vs_all' for ref in row['handoff_refs']}
     held = [ref for ref in records.refs() if not ref.startswith('row_')]
     held_sequences = {ref: records.get(ref).get('molecule') for ref in held
                       if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')}
@@ -129,15 +127,17 @@ def internal_summary(view):
             'held_comparisons': _held_comparisons(records),
             'held_profile_scans': _held_profile_scans(records),
             'held_sequences': held_sequences,
-            'database_searches': held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
             'bvbrc_searches': bvbrc.held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
             'named_refs': {ref: named_records(records, ref) for ref in records.refs()},
-            'handoff_count': sum(1 for row in job_rows(records) if row['event'] == 'handoff'),
+            # the all_vs_all child's jobs are each waited for and closed inside its own units: they are never outstanding
+            'handoff_count': sum(1 for row in job_rows(records) if row['event'] == 'handoff'
+                                 and row['id'] not in ended_inside_children),
             'msa_options': msa.msa_options(records, parent['scope'], table),
             'bvbrc_msa_jobs': job_child.held_jobs(records, msa.APPLICATION),
             'held_alignments': msa.graded_rows(records),
             'metacats_options': metacats.held_alignments(records),
             'bvbrc_metacats_jobs': job_child.held_jobs(records, metacats.APPLICATION),
+            'held_clusterings': all_vs_all.held_clusterings(records),
             'held_metacats': metacats.graded_rows(records),
             'data_products': [{'row_ref': row['id'], 'kind': row['kind'], 'edam_data': row['edam_data'],
                                'edam_format': row['edam_format'], 'locations': row['locations'],

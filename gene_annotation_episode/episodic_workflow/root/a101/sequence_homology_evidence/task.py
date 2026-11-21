@@ -12,8 +12,8 @@ fix and no unit is made; a request that passes runs as one unit (``pairwise_blas
 fetch of its report and the grading). The graded comparison is counted by the credit as soon as its sheet is saved (the
 reference sequence is a candidate; ``CREDIT_TEXT`` says how the credit counts); no reasoning commit is needed for it.
 
-Children. The head's child episodes in the A101 tree are ``blast_database_preparation``, ``database_blast`` and
-``all_vs_all_blast`` (HMMER later). A child is declared in ``CHILD_SLOTS`` when its episode is built (the runner
+Children. The head's child episodes in the A101 tree are ``bvbrc_blast``, ``bvbrc_msa``, ``bvbrc_metacats`` and ``all_vs_all``
+(HMMER later). A child is declared in ``CHILD_SLOTS`` when its episode is built (the runner
 refuses a declared slot with no episode behind it), together with its commission in ``COMMISSIONS``. The model is the
 router: for a child it answers with the slot and the controlled fields of that slot's commission
 (``commission_fields``); it writes no assignment, objective or message. ``msg_to_child`` builds the child's
@@ -50,10 +50,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import obj
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
     ToolRegistry)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
-    DATABASES, HITLIST_RANGE, check_commission)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_blast_search as bvbrc)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
+    all_vs_all_run as all_vs_all)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_msa_alignment as msa)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
@@ -72,26 +72,25 @@ from .goal import GOAL
 HEAD = 'sequence_homology_evidence'
 # The child episodes that are built, by slot. A child is added here with its entries in ``COMMISSIONS``,
 # ``CHILD_DESCRIPTIONS`` and ``SELECTABLE`` and its builder in ``messages/msg_to_child.py``.
-CHILD_SLOTS = {'database_blast': 'sequence_homology_evidence/database_blast',
-               'bvbrc_blast': 'sequence_homology_evidence/bvbrc_blast',
+CHILD_SLOTS = {'bvbrc_blast': 'sequence_homology_evidence/bvbrc_blast',
                'bvbrc_msa': 'sequence_homology_evidence/bvbrc_msa',
-               'bvbrc_metacats': 'sequence_homology_evidence/bvbrc_metacats'}
+               'bvbrc_metacats': 'sequence_homology_evidence/bvbrc_metacats',
+               'all_vs_all': 'sequence_homology_evidence/all_vs_all'}
 # What the model supplies to commission each slot: a function of (summary, resources) that returns
 # ``(properties, required)`` of controlled values, or ``None`` while the commission cannot be stated.
-COMMISSIONS = {'database_blast': lambda summary, resources: database_blast_fields(summary, resources),
-               'bvbrc_blast': lambda summary, resources: bvbrc_blast_fields(summary, resources),
+COMMISSIONS = {'bvbrc_blast': lambda summary, resources: bvbrc_blast_fields(summary, resources),
                'bvbrc_msa': lambda summary, resources: bvbrc_msa_fields(summary, resources),
-               'bvbrc_metacats': lambda summary, resources: bvbrc_metacats_fields(summary, resources)}
+               'bvbrc_metacats': lambda summary, resources: bvbrc_metacats_fields(summary, resources),
+               'all_vs_all': lambda summary, resources: all_vs_all_fields(summary, resources)}
 # The one deterministic check of each slot's filled commission: a function of (the model's commission, summary,
 # resources, records: the custody reader) that returns the things to fix (an empty list: it can be commissioned). Added with the slot.
-COMMISSION_CHECKS = {'database_blast': lambda commission, summary, resources, records: check_database_blast(
-    commission, summary, resources),
-                     'bvbrc_blast': lambda commission, summary, resources, records: check_bvbrc_blast(
+COMMISSION_CHECKS = {'bvbrc_blast': lambda commission, summary, resources, records: check_bvbrc_blast(
                          commission, summary, resources),
                      'bvbrc_msa': lambda commission, summary, resources, records: check_bvbrc_msa(
                          commission, summary, resources),
                      'bvbrc_metacats': lambda commission, summary, resources, records: check_bvbrc_metacats(
-                         commission, summary, resources, records)}
+                         commission, summary, resources, records),
+                     'all_vs_all': lambda commission, summary, resources, records: check_all_vs_all(commission, summary)}
 # The programs the head commissions: those its credit can score. The A101 subscore (``route_native_grading``) scores the
 # sheet of a ``blastp`` search; for any other program it raises (``a101_translated_or_nucleotide_map_not_bound``,
 # ``a101_original_protein_mapping_required``), which would end the run (offline run O3). The child itself takes every
@@ -113,7 +112,7 @@ THOUGHT_FIELDS = ('id', 'name', 'description', 'use_when', 'live_alternatives', 
                   'outcome_contingencies', 'boundary')
 # The optional return fields a commission may select from what the child declares (read from the child's own
 # ``RETURN_FORM``); credit and finding are always returned. A child's entry is added with its commission.
-SELECTABLE = {'database_blast': [], 'bvbrc_blast': [], 'bvbrc_msa': [], 'bvbrc_metacats': []}
+SELECTABLE = {'bvbrc_blast': [], 'bvbrc_msa': [], 'bvbrc_metacats': [], 'all_vs_all': []}
 
 # The two bodies the old ``ScientificGoal.instructions`` appended after the goal text, by the entry version of the
 # selected evidence axis (instruction text, unchanged).
@@ -174,23 +173,6 @@ DESCRIPTIONS = {
 # commission (the model chooses values; code builds the child's assignment) and what comes back. A child's entry is
 # added with its commission.
 CHILD_DESCRIPTIONS = {
-    'database_blast': (
-        'Search one query sequence of your scope against a hosted database through the public NCBI BLAST service: the '
-        'identification of the query from the best hits of the database (when the search is graded, each distinct function '
-        'the hits carry is a candidate of vocabulary product, with the score of its hits\' alignments over your scope, and '
-        'is counted as soon as the search is graded; a hit with no function names no candidate). ' + CREDIT_TEXT + ' Fill the five fields of '
-        'its commission: query_ref (a sequence of your scope; held_sequences gives the molecule of each), program '
-        '(only blastp is offered: a protein query against a protein database), database (swissprot holds '
-        'curated protein sequences; core_nt holds nucleotide sequences and no program offered here searches it), hitlist_size (1 to 200) and resource_id (an API '
-        'resource of bound_resources). Code checks the commission before the child is commissioned; if something is '
-        'wrong it comes back in feedback with the things to fix and nothing was commissioned. The search runs at the '
-        'service for seconds to minutes and the child never waits for it: it returns the state of the search '
-        '(not_submitted, outstanding, finished, graded or failed), the hit count and the controlled identification '
-        'features of the graded sheet, the seconds predicted, estimated by the service and observed, the last failure '
-        'code and its credit (an outstanding search is information: it is not graded yet). While a search of a query '
-        'is outstanding (database_searches shows it) commission this child again with the same fields to continue that '
-        'search: code passes back the records the child returned and it checks the search again or fetches and grades '
-        'it. A search that failed or is already held graded is not commissioned again.'),
     'bvbrc_blast': (
         'Search one query sequence of your scope against a precomputed BV-BRC database through the BV-BRC application '
         'service (the Homology application, run on the owner\'s account): the identification of the query from the best '
@@ -246,6 +228,26 @@ CHILD_DESCRIPTIONS = {
         'a labelled data product (data_products shows it with where it also lies in the BV-BRC workspace) that a later '
         'child that needs an alignment is passed. An alignment already held is not commissioned again; a job that failed is '
         'not commissioned again.'),
+    'all_vs_all': (
+        'Put the target (a protein sequence of your scope) and the sequences of several candidates of a graded BV-BRC database search '
+        'you hold in one set, search the set against itself with BLAST+ on a local resource (every sequence against all) and cluster '
+        'it with MCL on the pairwise bit scores, to see where the target falls among each candidate\'s sequences. Code, not you, '
+        'chooses the sequences: for each candidate you name, the hits of that search with the highest values (one per distinct '
+        'sequence), the number per candidate you choose; the target is always in the set. The child\'s own model prepares the '
+        'database, runs the all-against-all and tunes the clustering (the inflation and how the pairwise scores are contrasted), '
+        'trying clusterings and committing one. The committed clustering is graded: for each candidate with sequences in the set, '
+        'the measurement in one more test, cluster, is the share of that candidate\'s sequences that fall in the target\'s cluster '
+        '(0 to 1; about 1 when they cluster with the target, 0 when none does). Candidates already on your list that both undergo '
+        'this test can differentiate each other. ' + CREDIT_TEXT + ' Fill the four fields of its commission: query_ref (a protein '
+        'sequence of your scope), search_ref (a held graded BV-BRC search of that query; msa_options shows each with the product '
+        'candidates you admitted from it), candidates (two or more of those product names, exactly as shown) and per_candidate (2 '
+        'to 20 sequences of each). Code checks the commission before the child is commissioned; if something is wrong it comes back '
+        'in feedback with the things to fix and nothing was commissioned. The child works to its end in this one commission '
+        '(minutes on a local resource). What comes back: the state of the work (nothing_done, database_ready, matrix_ready, tried or '
+        'clustered), the sequences and letters of the set, the pairs of the matrix, the number of tries, the committed clustering '
+        '(inflation, contrast, cluster count, size of the target\'s cluster), the last failure code and the credit. The set, '
+        'database, matrix and clusters are kept as labelled data products (data_products). A set already commissioned is not '
+        'commissioned again.'),
     'bvbrc_metacats': (
         'Test the alignment you hold with MetaCATS through the BV-BRC application service (the MetaCATS application, protein, '
         'run on the owner\'s account). The alignment must be a labelled data product of kind multiple_sequence_alignment that '
@@ -373,37 +375,6 @@ def comparisons_made(summary):
     return made
 
 
-def database_blast_fields(summary, resources):
-    """The commission of ``database_blast``: the query among the scope's held sequences, the program, the hosted
-    database, the hit-list size and the API resource, each from a fixed set. Not offered while the scope holds no
-    sequence or no API resource is bound. While a search of the scope's query is held outstanding, the values are
-    that search's (the commission continues it)."""
-    queries = [ref for ref in summary['scope']['subject_refs'] if ref in summary['held_sequences']]
-    apis = [name for name, kind in resources.items() if kind == 'api']
-    if not queries or not apis:
-        return None
-    properties = {'query_ref': {'enum': queries}, 'program': {'enum': list(COMMISSION_PROGRAMS)},
-                  'database': {'enum': list(DATABASES)},
-                  'hitlist_size': {'type': 'integer', 'minimum': HITLIST_RANGE[0], 'maximum': HITLIST_RANGE[1]},
-                  'resource_id': {'enum': apis}}
-    return properties, list(properties)
-
-
-def check_database_blast(commission, summary, resources):
-    """The things to fix in a commission of ``database_blast`` (``database_blast_search.check_commission``)."""
-    return check_commission(commission, programs=COMMISSION_PROGRAMS, sequences=summary['held_sequences'],
-                            scope_subjects=summary['scope']['subject_refs'], resources=resources,
-                            searches=summary['database_searches'], failed=commissions_failed(summary))
-
-
-def commissions_failed(summary):
-    """The ``database_blast`` commissions (query, program, database, hit-list size) whose child reported the search
-    failed: what ``check_commission`` refuses to commission again."""
-    return [(row['arguments']['query_ref'], row['arguments']['program'], row['arguments']['database'],
-             row['arguments']['hitlist_size']) for row in summary['units']
-            if row['kind'] == 'child' and row['slot'] == 'database_blast' and row['child_state'] == 'failed']
-
-
 def bvbrc_blast_fields(summary, resources):
     """The commission of ``bvbrc_blast``: the query among the scope's held sequences, the program, the precomputed BV-BRC
     database and the BV-BRC resource, each from a fixed set. Not offered while the scope holds no sequence or no BV-BRC
@@ -451,6 +422,32 @@ def check_bvbrc_msa(commission, summary, resources):
                        if commission['search_ref'] in row['used'] and row['settings']['candidates'] == sorted(
                            commission['candidates']) and row['settings']['per_candidate'] == commission['per_candidate']),
                       None))
+
+
+def all_vs_all_fields(summary, resources):
+    """The commission of ``all_vs_all``: the target and the held graded BV-BRC search (each from the held ones that admit at least
+    two product candidates for it), the candidates (two or more of the admitted names) and the number of sequences per candidate. Not
+    offered while no held graded BV-BRC search admits two product candidates. (The child runs on a local resource and its model
+    chooses the clustering tuning: neither is a field of the commission.)"""
+    options = [item for item in summary['msa_options'] if len(item['candidates']) >= all_vs_all.MINIMUM_CANDIDATES
+               and summary['held_sequences'].get(item['query_ref']) == 'protein']
+    if not options:
+        return None
+    names = list(dict.fromkeys(name for item in options for name in item['candidates']))
+    properties = {'query_ref': {'enum': list(dict.fromkeys(item['query_ref'] for item in options))},
+                  'search_ref': {'enum': [item['search_ref'] for item in options]},
+                  'candidates': {'type': 'array', 'uniqueItems': True, 'minItems': all_vs_all.MINIMUM_CANDIDATES,
+                                 'items': {'enum': names}},
+                  'per_candidate': {'type': 'integer', 'minimum': all_vs_all.PER_CANDIDATE_RANGE[0],
+                                    'maximum': all_vs_all.PER_CANDIDATE_RANGE[1]}}
+    return properties, list(properties)
+
+
+def check_all_vs_all(commission, summary):
+    """The things to fix in a commission of ``all_vs_all`` (``all_vs_all_run.check_commission``)."""
+    return all_vs_all.check_commission(
+        commission, scope_subjects=summary['scope']['subject_refs'], sequences=summary['held_sequences'],
+        options=summary['msa_options'], commissioned=all_vs_all.commission_keys(summary))
 
 
 def bvbrc_metacats_fields(summary, resources):
@@ -602,13 +599,13 @@ def decide(summary, feedback, ctx):
         'handoff_refs': summary['handoff_refs'], 'bound_resources': resources,
         'held_sequences': summary['held_sequences'], 'held_comparisons': summary['held_comparisons'],
         'held_profile_scans': summary['held_profile_scans'],
-        'database_searches': summary['database_searches'],
         'bvbrc_searches': bvbrc_searches_view(summary['bvbrc_searches'], ctx.clock.now),
         'msa_options': summary['msa_options'],
         'bvbrc_msa_jobs': bvbrc_searches_view(summary['bvbrc_msa_jobs'], ctx.clock.now, msa=True),
         'held_alignments': summary['held_alignments'], 'data_products': summary['data_products'],
         'metacats_options': summary['metacats_options'],
         'bvbrc_metacats_jobs': bvbrc_searches_view(summary['bvbrc_metacats_jobs'], ctx.clock.now, msa=True),
+        'held_clusterings': summary['held_clusterings'],
         'held_metacats': summary['held_metacats'],
         'tools': [{'name': 'reason', 'description': DESCRIPTIONS['reason']}, *own, *tools],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot],
