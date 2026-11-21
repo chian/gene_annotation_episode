@@ -60,3 +60,39 @@ async def classify_unknowns(outcome, scope, windows, ctx):
 
 def credit(summary, records):
     return classified_task_credit(summary, records)
+
+
+
+def ceiling(summary, records, action_type, arguments, ctx):
+    """The most the credit can rise if ``action_type`` is the next unit (``arguments`` None: over every arguments).
+
+    Credit is ``credit_unit`` times the answers to the commissioned task, read only from the held grading and
+    aggregation sheets, the held assessments and quantity sheets, the validated source leads and the declared
+    no-applicable-evidence spans of this Episode's own ``reason`` units.
+
+    The ten access tools (``state_query``, ``source_read``, ``source_locate``, ``source_sequence_references``,
+    ``source_experimental_records``, ``source_archive_members``, ``source_archive_extract``, ``source_pdf_info``,
+    ``source_pdf_text``, ``source_pdf_page``) only read or derive source bytes; none saves an assessment, a sheet,
+    a lead or a screening declaration, so none changes any answer: ceiling 0.
+
+    ``reason`` commits the interpretation with its grading sheets (and a lead or a no-applicable declaration), and
+    its tail classifies the sheets' unknown fields. For a ``verified_source_leads`` task each answer is one relevant
+    source and one reason carries at most one source lead, so it adds at most one source: ``credit_unit``. For an
+    ``a105_experiments`` task the credit is ``credit_unit`` times the sum over the commissioned experiments of the
+    graded share of the experiment's current sheet; each share is at most 1 (entered plus justified unknown fields
+    over all fields), so the credit cannot exceed ``credit_unit`` times the number of experiments and the rise is at
+    most that maximum minus the credit now (an experiment already at share 1 can add nothing, one with no sheet can
+    add a whole unit). For every other task (screening, assessment, measurement, assembly) there is at most one
+    answer, so the credit cannot exceed ``credit_unit`` and the rise is at most ``credit_unit`` minus the credit now
+    (0 when the answer is already held)."""
+    if action_type == 'reason':
+        task = summary['task']
+        if task['kind'] == 'verified_source_leads':
+            return float(task['credit_unit'])
+        maximum = task['credit_unit'] * (len(task['experiments']) if task['kind'] == 'a105_experiments' else 1)
+        return max(0.0, float(maximum - credit(summary, records)))
+    if action_type in ('state_query', 'source_read', 'source_locate', 'source_sequence_references',
+                       'source_experimental_records', 'source_archive_members', 'source_archive_extract',
+                       'source_pdf_info', 'source_pdf_text', 'source_pdf_page'):
+        return 0.0
+    raise ValueError('ceiling_unknown_action_type:' + str(action_type))

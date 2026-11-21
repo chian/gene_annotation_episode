@@ -199,6 +199,11 @@ def offered():
     return [*LIBRARY_NAMES, 'reason']
 
 
+def offered_actions(summary, ctx):
+    """The action types offered at this decision: the names ``decide`` shows the model (``offered``)."""
+    return list(offered())
+
+
 def catalog(names, commit_schema, leads):
     """The tools the model is shown: name, description and input schema (the old catalog; every input schema
     is projected through source_location_inputs)."""
