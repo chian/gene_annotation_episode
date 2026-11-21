@@ -324,3 +324,24 @@ Design (nothing of `episode_runtime`, `method_loop` or `yield_control` is change
    trend therefore also gives the median distance of the measured durations from the line
    (`typical_distance_seconds`), added after this run.
 5. The head's credit: 1.0 with no further call.
+
+### Run P1: prediction (written before the run)
+
+Query: E. coli K-12 chaperone protein DnaK (UniProt P0A6Y8, 638 residues: a fourth query length). Fresh workspace
+`runs/bvbrc_a101_ws_F`, run `runs/bvbrc_a101_run_P1`; local and BV-BRC resources bound (no NCBI); the global ledger
+(`resources/estimate_ledger.sqlite3`); the head's settings carry `profile_databases` (Pfam-A) so the head has
+`hmmer_profile_scan` to send off. Homology submissions for this step: at most three; this run uses one.
+1. The head's model is offered `reason`, `hmmer_profile_scan` and `bvbrc_blast` (and not `pairwise_blast`: one sequence). I do not
+   predict `until`: the description says what each means and does not recommend. If it chooses `extracted` the run is a
+   one-loop run (valid); then a second run follows in which the park path is taken, if the model ever takes it.
+2. If `until` is `launched`: the child's units are `estimate` (learned, near 90 s with the ledger's trend) and `launch`, then it
+   ends at once (credit 2.0 = the target, `yield_stop`, 2 units, no wind-down), returning the notice: `parked`, `seconds_since_launch`
+   about 0, `estimated_seconds` about 90, `expected_remaining_seconds` about 90. The head is shown it in `child_reports` and
+   `bvbrc_searches`. The head's next choice is not predicted (another tool, or the resuming commission).
+3. The resuming commission (same query, program, database, resource, `until` extracted) passes the handoff and status records back;
+   the child's state is `launched`; its units are `monitor` (one or two, wait at least the minimum, the search takes about 90 s) and
+   `extract` (about 70 s longer for the 7 data requests); target 2.0 (ended + graded), `yield_stop` at the extract, no wind-down.
+   The Homology service sees ONE job folder for this query; the ledger has one row for the launch, resolved with the measured
+   duration (about 90 s, from the submission to the first `finished` status).
+4. The head's credit counts the graded result with no further call (near 1).
+5. The identification names `Chaperone protein DnaK` (a single product or a few close variants of it).
