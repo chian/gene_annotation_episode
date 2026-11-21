@@ -4,10 +4,10 @@ and what the episode holds (``bvbrc_job_child.check_*``, and the requirement tha
 data product of kind ``multiple_sequence_alignment``); a check with problems makes ``action`` raise ``Rejected`` (no unit).
 A passed check runs as one unit by one library function:
 
-* ``estimate``: ``p_value`` and the expected seconds with the basis; code records it as the expectation of the launch.
+* ``estimate``: the expected seconds with the basis; code records it as the expectation of the launch.
 * ``launch``: submit the ``MetaCATS`` job (code builds the groups from the held alignment, writes the group file and the
   alignment without the target's row under the job's own folder). Gated: refused unless an estimate is held, unless the
-  alignment is a held product of its kind, and when the report of the same groups and p-value is held.
+  alignment is a held product of its kind, and when the report of the same groups is held (the p-value is one fixed value, not a field).
 * ``fix`` (after a failure), ``monitor`` and ``extract`` as in ``bvbrc_job_child``.
 
 The decision shows the commission, the state, the held estimate, the planned size of the job (sequences, groups, columns and
@@ -34,12 +34,12 @@ INSTRUCTIONS = common_instructions(
     'test the assigned held alignment with MetaCATS (the target\'s sequence is in the alignment and is what is being placed). '
     'Code, not you, builds the groups: one group per product candidate of the alignment, its members that candidate\'s '
     'reference sequences; the target is in no group. The job is the MetaCATS application on protein sequences; the p-value '
-    'is the commission\'s. In the estimate and the launch, p_value is the commission\'s; planned shows the size of the job '
+    'is one fixed value, not your choice. planned shows the size of the job '
     '(sequences, groups, columns and the size of each candidate group).',
-    'the service\'s table of the positions that differ between the groups at the p-value is read and, for each such position, '
-    'the residue counts per group and the target\'s residue are saved, with each candidate group\'s value (the mean over '
-    'those positions of the fraction of its sequences that carry the target\'s residue); the head\'s credit counts the values '
-    'as one more test of the candidates; when no position is significant the sheet says so and gives no value; nothing more '
+    'the service\'s table of the positions that differ between the groups at the fixed p-value is read and, for each such '
+    'position, the residue counts per group and the target\'s residue are saved; the significant positions confirm which '
+    'distinguishing sites of the alignment are statistically supported; the head\'s credit takes no measurement from them; '
+    'when no position is significant the sheet says so; nothing more '
     'is needed for the result to count.')
 
 
@@ -92,7 +92,7 @@ def action(response, summary, records, ctx):
                                            commission=commission)
     elif name == 'launch':
         resources = {item['resource_id']: item['kind'] for item in ctx.services['job_access'].read('resources')}
-        reusable = None if needed else reusable_report(records, commission['alignment_ref'], chosen['p_value'])
+        reusable = None if needed else reusable_report(records, commission['alignment_ref'])
         problems = needed + check_launch(APPLICATION, chosen, state=facts, fields=fields, resources=resources,
                                          commission=commission, reusable=reusable)
     elif name == 'fix':
@@ -106,8 +106,7 @@ def action(response, summary, records, ctx):
     if problems:
         raise Rejected({'status': 'invalid', 'category': name + '_check', 'problems': problems})
     if name == 'estimate':
-        return ToolCall('estimate', {'estimate': {key: chosen[key] for key in ('p_value', 'expected_seconds',
-                                                                               'basis')}})
+        return ToolCall('estimate', {'estimate': {key: chosen[key] for key in ('expected_seconds', 'basis')}})
     if name == 'launch':
         return ToolCall('launch', {'request': {key: chosen[key] for key in APPLICATION.request_fields},
                                    'estimate': facts['estimate'], 'commission': commission})

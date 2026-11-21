@@ -10,7 +10,7 @@ reference's alignments, the target's length and the scope's regions of the targe
 
 ONE TEST IS ONE GRADED SOURCE: one job or tool run, made under the same conditions for every candidate it measured.
 Its name is the kind of test below followed by ``@<source reference>``, so two jobs of one method on different inputs
-(two alignments of different candidate sets, MetaCATS on two alignments) are two tests and are never pooled as
+(two alignments of different candidate sets) are two tests and are never pooled as
 replicates, and a later test never changes an earlier test's differentials. Replicates are the measurements of one
 candidate within one test (the hits of one search that share a product).
 
@@ -28,11 +28,16 @@ The kinds of held graded source read, by the content of their retained sheet:
   it was compared with is a candidate of vocabulary ``reference_sequence`` (identifier: its record reference, name: the
   record's name); its value is the subscore of its alignments.
 
-* a MetaCATS test (``metacats_sheet_v1``, the sheet of ``bvbrc_metacats_analysis.grade``): test
-  ``metacats:<provider>:p<value>``; each candidate group is a candidate of vocabulary ``product`` (the same product the
-  search and the alignment use); its value is the sheet's value (the mean over the significant positions of the fraction of
-  the group's sequences that carry the target's residue). A sheet with no significant position gives no measurement: the
-  test placed no candidate.
+* a multiple sequence alignment (``msa_alignment_sheet_v1``): test ``msa:<provider>:<aligner>:<alphabet>``; the owner's
+  conserved-site measurement (2026-11-21): the residue conservation pattern of one candidate group against another
+  differentiates function, so the same residue pattern on the same conserved sites adds nothing. A distinguishing site is
+  identified by (target position, the group's conserved residue, the group's candidate), never by column or job
+  (``msa_alignment_sheet.conserved_sites`` records them). Evidence is cumulative over the head's alignments, in arrival
+  order: only the sites not identified by an earlier alignment count. For each candidate with at least one new
+  distinguishing site, one measurement: its new matched sites over its new matched plus new mismatched sites. An alignment
+  that adds no new site gives no measurement.
+* a MetaCATS report (``metacats_sheet_v1``) gives no measurement: its significant positions are kept on its own sheet and
+  confirm which distinguishing sites are statistically supported; they are not used as a filter of the sites.
 
 A candidate is identified by its vocabulary and its identifier (its name when it has none). Candidates of different
 vocabularies are different candidates: nothing merges a family with a product or a sequence.
@@ -59,7 +64,6 @@ VOCABULARIES = ('product', 'profile_family', 'reference_sequence')
 DATABASE_SHEETS = ('blast_database_sheet_v1', 'blast_database_sheet_v2', 'blast_database_sheet_v3')
 PAIRWISE_SHEET = 'blast_pairwise_sheet_v1'
 PROFILE_SHEET = 'hmmer_search_sheet_v1'
-METACATS_SHEET = 'metacats_sheet_v1'
 MSA_SHEET = 'msa_alignment_sheet_v1'
 
 
@@ -116,14 +120,35 @@ def _database_search(source, grading, value_of):
     return found, sum(1 for row in rows if row['product'] is None)
 
 
-def _held_msa(reader, source, grading, value_of):
+def new_site_values(sites, seen, target):
+    """The measurements of one alignment's conserved-site section (``msa_alignment_sheet.conserved_sites``) given the
+    sites the head's earlier alignments already identified. ``sites`` is the section's ``sites``; ``seen`` is the set of
+    identified sites (target, target position, the group's conserved residue, the group's candidate), which this call
+    extends with the sites it counts. Only a distinguishing site not in ``seen`` and with a target position counts (a
+    site at a target gap has no position and is identified by nothing). Returns ``[(candidate, value)]``: for each
+    candidate with at least one new site, its new matched sites over its new matched plus new mismatched sites; a candidate
+    with no new site gives nothing."""
+    new = {}
+    for site in sites:
+        key = (target, site['target_position'], site['residue'], site['candidate'])
+        if site['target_position'] is None or key in seen:
+            continue
+        seen.add(key)
+        new.setdefault(site['candidate'], []).append(site['matched'])
+    return [(candidate, sum(found) / len(found)) for candidate, found in new.items()]
+
+
+def _held_msa(source, grading, seen):
     """A graded multiple sequence alignment (``msa_alignment_sheet_v1``): test ``msa:<provider>:<aligner>:<alphabet>``;
-    one measurement per reference sequence: its candidate is the ``product`` the search gave it (the same candidate
-    identity, so the same candidate on the list) and its value is the sheet's (identical columns over the target's
-    length)."""
+    one measurement per candidate with new distinguishing sites (``new_site_values``): its candidate is the ``product`` the
+    search gave it (the same candidate identity, so the same candidate on the list). Evidence is cumulative over the head's
+    alignments in arrival order (``seen``): the same residue pattern on the same conserved sites adds nothing, and an
+    alignment that adds no new site gives no measurement."""
     sheet = grading['sheet']
     test = 'msa:' + source['provider'] + ':' + sheet['aligner'] + ':' + sheet['alphabet']
-    return [(test, 'product', row['candidate'], None, row['value']) for row in sheet['references']], 0
+    target = source['operand_refs'][0]
+    return [(test, 'product', candidate, None, value)
+            for candidate, value in new_site_values(sheet['conserved_sites']['sites'], seen, target)], 0
 
 
 def _profile_scan(source, grading, value_of):
@@ -141,16 +166,11 @@ def _pairwise(reader, source, grading, value_of):
              value_of(route_native_grading(grading)))], 0
 
 
-def _metacats(source, grading, value_of):
-    sheet = grading['sheet']
-    test = 'metacats:' + source['provider'] + ':p%g' % sheet['p_value']
-    return [(test, 'product', row['product'], None, row['value']) for row in sheet['values']], 0
-
-
 def _read(reader, scope, sources):
     """The measurements in arrival order and the unlabelled hits of each target."""
     scope = reader.validate_scope(scope)
     measurements, unlabelled = [], {target: 0 for target in scope['subject_refs']}
+    identified = set()
     for reference in sources:
         source = reader.get(reference)
         for entry in source_tool_grading_entries(reader, reference):
@@ -161,9 +181,7 @@ def _read(reader, scope, sources):
             elif sheet['schema'] == PROFILE_SHEET and sheet['operation']['program'] == 'hmmscan':
                 read = _profile_scan
             elif sheet['schema'] == MSA_SHEET:
-                read = lambda s, g, v: _held_msa(reader, s, g, v)
-            elif sheet['schema'] == METACATS_SHEET:
-                read = _metacats
+                read = lambda s, g, v: _held_msa(s, g, identified)
             elif sheet['schema'] == PAIRWISE_SHEET:
                 read = lambda s, g, v: _pairwise(reader, s, g, v)
             else:

@@ -58,8 +58,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
     bvbrc_msa_alignment as msa)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_metacats_search as metacats)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_metacats_analysis import (
-    P_VALUES as METACATS_P_VALUES)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
     seconds_between)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
@@ -223,10 +221,15 @@ CHILD_DESCRIPTIONS = {
         'database search you hold, through the BV-BRC application service (the MSA application, Muscle, protein, run on the '
         'owner\'s account). Code, not you, chooses the sequences: for each candidate you name, the hits of that search with '
         'the highest values (one per distinct sequence), the number per candidate you choose; the target is always in the '
-        'alignment. When the alignment is extracted, each reference sequence is a measurement of its candidate (the product '
-        'it had in the search, the same candidate on your list) in one more test, msa, whose value is the identical aligned '
-        'columns over the target\'s length: candidates already on your list that both undergo this test can differentiate '
-        'each other. ' + CREDIT_TEXT + ' Fill the six fields of its commission: query_ref (a protein sequence of your scope), '
+        'alignment. When the alignment is extracted, code reads from it the conserved sites of each candidate group (the '
+        'reference sequences of one product; the target is in no group): the alignment columns where at least 80% of the '
+        'group\'s sequences carry the same residue, for a group of at least 3 sequences. A conserved site whose residue '
+        'differs from the residue another group conserves at the same column is a distinguishing site; it is identified by '
+        'the target\'s residue position, the group\'s residue and the candidate (never by the column or the job). For each '
+        'candidate with distinguishing sites that no earlier alignment you hold has identified, the measurement in one more '
+        'test, msa, is the fraction of those new sites where the target carries the group\'s residue. Repeating the same '
+        'residue pattern on the same sites adds nothing, and an alignment with no new distinguishing site earns nothing. '
+        'Candidates already on your list that both undergo this test can differentiate each other. ' + CREDIT_TEXT + ' Fill the six fields of its commission: query_ref (a protein sequence of your scope), '
         'search_ref (a held graded BV-BRC search of that query; msa_options shows each with the product candidates you '
         'admitted from it), candidates (two or more of those product names, exactly as shown), per_candidate (2 to 20 '
         'sequences of each), resource_id (a bvbrc resource of bound_resources) and until. Code checks the commission before '
@@ -247,16 +250,15 @@ CHILD_DESCRIPTIONS = {
         'Test the alignment you hold with MetaCATS through the BV-BRC application service (the MetaCATS application, protein, '
         'run on the owner\'s account). The alignment must be a labelled data product of kind multiple_sequence_alignment that '
         'you hold (data_products shows it; metacats_options shows each one MetaCATS can take, with its candidate groups). '
-        'MetaCATS looks for the alignment positions where the sequences of different groups differ significantly. Code, not '
-        'you, builds the groups: one group per product candidate of the alignment, its members that candidate\'s reference '
-        'sequences; the target is in no group, because it is what is being placed. When the result is extracted, for each '
-        'significant position the residue counts per group and the target\'s residue are saved, and each candidate group '
-        'has a value in one more test, metacats at the p-value you chose: the mean over the significant positions of the '
-        'fraction of the group\'s sequences that carry the target\'s residue there (0 to 1; a position where the target has a '
-        'gap counts 0). Candidates already on your list that both undergo this test can differentiate each other. If no '
-        'position is significant the groups do not differ at that p-value: that is a result, but it places no candidate and '
-        'earns nothing. ' + CREDIT_TEXT + ' Fill the five fields of its commission: query_ref (the alignment\'s target), '
-        'alignment_ref (a row_ref of metacats_options), p_value (0.05 or 0.01), resource_id (a bvbrc resource of '
+        'MetaCATS looks for the alignment positions where the sequences of different groups differ significantly (a '
+        'chi-square test per position at the p-value 0.05, which is fixed and not your choice). Code, not you, builds the '
+        'groups: one group per product candidate of the alignment, its members that candidate\'s reference sequences; the '
+        'target is in no group, because it is what is being placed. When the result is extracted, for each significant '
+        'position the residue counts per group and the target\'s residue are saved. The significant positions confirm which '
+        'distinguishing sites of that alignment (the conserved-site reading described for bvbrc_msa) are statistically '
+        'supported; they give no measurement of their own and earn nothing by themselves, and a second analysis of the same '
+        'alignment is not made. ' + CREDIT_TEXT +' Fill the four fields of its commission: query_ref (the alignment\'s target), '
+        'alignment_ref (a row_ref of metacats_options), resource_id (a bvbrc resource of '
         'bound_resources) and until. Code checks the commission before the child is commissioned; if something is wrong it '
         'comes back in feedback with the things to fix and nothing was commissioned. While a child runs, you do nothing '
         'else: your next decision comes after it returns. What until means: with until launched the child estimates the '
@@ -268,7 +270,7 @@ CHILD_DESCRIPTIONS = {
         'launched, finished, extracted or failed), the groups, sequences, columns and significant positions, the seconds '
         'estimated and observed, the last failure code and the credit; when parked (parked true) a wait notice: '
         'seconds_since_launch, estimated_seconds and expected_remaining_seconds. The result is also kept as a labelled data '
-        'product (an alignment position report). A report of the same groups and p-value already held is not commissioned '
+        'product (an alignment position report). A report of the same groups already held is not commissioned '
         'again; a job that failed is not commissioned again.'),
 }
 
@@ -453,15 +455,15 @@ def check_bvbrc_msa(commission, summary, resources):
 
 def bvbrc_metacats_fields(summary, resources):
     """The commission of ``bvbrc_metacats``: the alignment (a held data-product row of kind ``multiple_sequence_alignment``
-    with at least two candidate groups of at least two sequences: ``metacats_options``), its target, the p-value and the
-    BV-BRC resource, each from a fixed set. Not offered while no such alignment is held or no BV-BRC resource is bound."""
+    with at least two candidate groups of at least two sequences: ``metacats_options``), its target and the
+    BV-BRC resource (the p-value is fixed, not a field), each from a fixed set. Not offered while no such alignment is held or no BV-BRC resource is bound."""
     options = summary['metacats_options']
     services = [name for name, kind in resources.items() if kind == bvbrc.ROUTE_KIND]
     if not options or not services:
         return None
     properties = {'query_ref': {'enum': list(dict.fromkeys(item['query_ref'] for item in options))},
                   'alignment_ref': {'enum': [item['alignment_ref'] for item in options]},
-                  'p_value': {'enum': list(METACATS_P_VALUES)}, 'resource_id': {'enum': services},
+                  'resource_id': {'enum': services},
                   'until': {'enum': list(bvbrc.UNTIL)}}
     return properties, list(properties)
 
@@ -472,7 +474,7 @@ def check_bvbrc_metacats(commission, summary, resources, records):
     return metacats.check_commission(
         commission, reader=records, options=summary['metacats_options'], resources=resources,
         jobs=summary['bvbrc_metacats_jobs'],
-        commissioned=[(row['arguments']['alignment_ref'], row['arguments']['p_value']) for row in summary['units']
+        commissioned=[row['arguments']['alignment_ref'] for row in summary['units']
                       if row['kind'] == 'child' and row['slot'] == 'bvbrc_metacats'])
 
 

@@ -30,7 +30,12 @@ CHISQ_FILE = GROUP_HEADER + '-chisqTable.tsv'
 MC_FILE = GROUP_HEADER + '-mcTable.tsv'
 ALIGNMENT_FILE = 'alignment.afa'
 GROUP_FILE = 'groups.tsv'
-P_VALUES = (0.05, 0.01)
+# the owner accepted: at least 80% of the group's sequences share the residue, and the group has at least 3 sequences
+# (the rule of the conserved sites, ``msa_alignment_sheet``); the p-value of MetaCATS is not a choice of the model: one fixed value.
+P_VALUE = 0.05
+P_VALUES = (P_VALUE,)   # the route (``bvbrc_job_route``) checks a job's p-value against this set: the one fixed value
+SHEET_MEANING = ('the significant positions confirm which distinguishing sites (the conserved-site grading of the alignment) '
+                 'are statistically supported; they are not a filter of the sites and give no measurement of their own')
 MINIMUM_GROUP_SIZE = 2
 MINIMUM_GROUPS = 2
 SCHEMA = 'metacats_sheet_v1'
@@ -94,8 +99,8 @@ def read_chisq_table(text):
     return labels, rows
 
 
-def grade(rows, groups, target_id, chisq_text, *, p_value):
-    """The sheet of a MetaCATS result: the positions the service reports as significant at ``p_value`` (its own statistic
+def grade(rows, groups, target_id, chisq_text):
+    """The sheet of a MetaCATS result: the positions the service reports as significant at ``P_VALUE`` (its own statistic
     and p-value; the table holds only those), for each the residue counts per group and the target's residue (read from the
     held alignment ``rows`` at the same column), and per group its VALUE: the mean over the significant positions of the
     fraction of the group's sequences that carry the target's residue there (0 to 1; a position where the target has a gap
@@ -115,7 +120,7 @@ def grade(rows, groups, target_id, chisq_text, *, p_value):
         positions.append({**row, 'target_residue': carried, 'fractions': fractions})
     values = ({group['label']: fmean(position['fractions'][group['label']] for position in positions) for group in groups}
               if positions else {})
-    return {'schema': SCHEMA, 'application': 'MetaCATS', 'p_value': p_value, 'target': target_id, 'columns': columns,
+    return {'schema': SCHEMA, 'application': 'MetaCATS', 'p_value': P_VALUE, 'meaning': SHEET_MEANING, 'target': target_id, 'columns': columns,
             'sequence_count': sum(len(group['ids']) for group in groups), 'group_count': len(groups),
             'groups': [{'label': group['label'], 'product': group['product'], 'size': len(group['ids'])} for group in groups],
             'significant_positions': positions, 'significant_count': len(positions),
@@ -124,6 +129,6 @@ def grade(rows, groups, target_id, chisq_text, *, p_value):
                        for group in groups] if positions else []}
 
 
-__all__ = ['ALIGNMENT_FILE', 'CHISQ_FILE', 'GROUP_FILE', 'MC_FILE', 'MINIMUM_GROUPS', 'MINIMUM_GROUP_SIZE', 'P_VALUES',
+__all__ = ['ALIGNMENT_FILE', 'CHISQ_FILE', 'GROUP_FILE', 'MC_FILE', 'MINIMUM_GROUPS', 'MINIMUM_GROUP_SIZE', 'P_VALUE', 'P_VALUES',
            'SCHEMA', 'build_groups', 'derived_alignment', 'grade', 'group_file_text', 'parse_alignment',
            'read_chisq_table']

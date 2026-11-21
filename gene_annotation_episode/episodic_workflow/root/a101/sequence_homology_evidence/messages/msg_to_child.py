@@ -134,18 +134,18 @@ def _bvbrc_msa(arguments, summary):
 def _bvbrc_metacats(arguments, summary):
     """The assignment of one MetaCATS analysis: the target, the alignment's data-product row and the alignment's source (the
     held record whose alignment artifact the row labels), each in custody with every held record it names (the sheet and the
-    alignment artifact), the p-value, the resource, ``until``, the three credit units and, when the commission continues an
+    alignment artifact), the resource, ``until``, the three credit units and, when the commission continues an
     outstanding job of the same fields, the records of that job passed back."""
     query, alignment = arguments['query_ref'], arguments['alignment_ref']
     units = summary['child_credit_units']
     (option,) = [item for item in summary['metacats_options'] if item['alignment_ref'] == alignment]
     named = [ref for ref in _custody([query, option['source_ref']], summary) if ref != query]
     assignment = {'query_refs': [query], 'alignment_refs': [alignment], 'input_refs': named,
-                  'p_value': arguments['p_value'], 'resource_id': arguments['resource_id'], 'until': arguments['until'],
+                  'resource_id': arguments['resource_id'], 'until': arguments['until'],
                   'handoff_unit': units['handoff_unit'], 'information_unit': units['information_unit'],
                   'graded_unit': units['acquired_record_unit']}
-    held = [job for job in summary['bvbrc_metacats_jobs'] if job['outstanding'] and job['request']['p_value'] == arguments[
-        'p_value'] and job['resource_id'] == arguments['resource_id'] and job['identity']['groups_ref'] == option['groups_ref']]
+    held = [job for job in summary['bvbrc_metacats_jobs'] if job['outstanding'] and job['resource_id'] == arguments[
+        'resource_id'] and job['identity']['groups_ref'] == option['groups_ref']]
     if held:
         (job,) = held
         _continued(assignment, job, summary)
