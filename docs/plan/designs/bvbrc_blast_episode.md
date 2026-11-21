@@ -269,7 +269,7 @@ in background while other pieces of the episodic workflow can do other work (i.e
 parent with about how long we expect to wait so parent can choose what to do next. it could just wait, it could send off
 another tool, it could go all the way back up to root with the same info)".
 
-Design (nothing of `episode_runtime`, `method_loop` or `yield_control` is changed; no action added):
+Design (no action added; the rule that the head finishes a parked job is the system's, below):
 - The commission has `until`: `launched` (estimate, launch, then the child returns: it parks) or `extracted` (follow the search
   to its result; also how a parked search is resumed).
 - The child's credit is bounded: four units, each once and only when new in this commission: an estimate held
@@ -297,8 +297,16 @@ Design (nothing of `episode_runtime`, `method_loop` or `yield_control` is change
   The head's model also sees `bvbrc_searches` with the seconds since the launch and the seconds still expected as of each of its
   own decisions, and its own return carries `waiting_searches` (slot, seconds since launch, expected remaining seconds) beside
   `outstanding_handoff_count`, with the handoff and status records in its selectable lists.
-- The head's three choices stay with its model, from its existing actions; the description of the child says what `until` means
-  and what the notice is, and does not say which to choose.
+- The head finishes every job it parks (owner's decision, 2026-11-21: "the head must finish parked jobs"; it replaces "it could go
+  all the way back up to root with the same info"). `HEAD/task.py` `resume_action`: while a child's BV-BRC job is parked
+  (outstanding in `bvbrc_searches`, `bvbrc_msa_jobs` or `bvbrc_metacats_jobs`) it returns the resume, the job's own commission
+  again with `until` extracted (`resume_commission`; it passes the head's check, else it raises), `due` once the job's expected
+  remaining seconds (the estimate recorded with the launch minus the seconds since the launch at the decision's recorded time)
+  have passed; the earliest launched due job first, else the earliest launched. The system (`method_loop/episode_type.py`,
+  `forecast_yield_controller.md`): the head does not stop while a job is parked; once the job is due its resume is the only action
+  offered and is taken without the model; before then the model may choose other work worth its cost, and when none is, the
+  resume is taken instead of stopping; the forecast gate never refuses that resume. The child descriptions say so (`PARKED_TEXT`)
+  and do not say whether to park.
 - The head's forecast (2026-11-21, `forecast_yield_controller.md`): the unit of a commission whose child returned parked is
   pending (`HEAD/credit.py` `outcome_pending`): its rise (0, nothing extracted) is not learned as `bvbrc_blast`'s share and its
   seconds (the launch only) are not its unit seconds, in the run's own history or in the ledger (row resolved `pending`); the
@@ -308,8 +316,14 @@ Design (nothing of `episode_runtime`, `method_loop` or `yield_control` is change
   `a_continuation_follows_the_search_to_its_result`), and the `bvbrc_blast` row shown to the model names it as
   `best_arguments` (`bvbrc_blast_best`). Found in the real run `runs/a101_goal7_ws_reca` (RecA, `until launched`): the parked
   unit's 0 made the resume not worth it (forecast 1.79 < threshold 2.09), the head stopped with the search outstanding and the
-  RecA product never became a candidate; under the rule (direct check, not a real run) the resume row is forecast 3.589 over
-  355.4 s (threshold 2.132), worth it, with `best_arguments` the continuation.
+  RecA product never became a candidate; under the pending rule (direct check, not a real run) the resume row is forecast 3.589
+  over 355.4 s (threshold 2.132), worth it, with `best_arguments` the continuation. Under the rule that the head finishes parked
+  jobs (direct check, not a real run, `runs/parked_rule_check_2`, the run's journaled histories): at `call-00004` (search launched
+  1.3 s before, estimate 35.9 s) the resume is owed, not due, and every action stays offered (`reason`, `hmmer_profile_scan`,
+  `bvbrc_blast`); 1 s after the estimate has passed only `bvbrc_blast` is offered and its resume is the unit; after the scan
+  `must_continue` is true and the controller does not stop, and with the controller as the run learned it (no pending rule:
+  nothing worth its cost) the resume is taken in place of the stop and passes the gate as the owed resume (as a model choice the
+  gate refuses it: 1.794 < 2.089).
 
 ### Run E1: observed (`runs/bvbrc_a101_run_E1`, workspace `runs/bvbrc_a101_ws_E`)
 

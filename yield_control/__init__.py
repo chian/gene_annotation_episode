@@ -977,7 +977,11 @@ class CompletionYieldController:
 #   wall seconds of the units of k that are not pending (ledger history and this episode); with none, the median unit seconds of this
 #   episode so far; with none, unknown (cost 0 in the stop rule). Seconds are not credit: the ledger's seconds of k
 #   (unit and decision seconds) are every resolved row of k that is not pending, whatever definition it was recorded under.
-# * the stop rule: stop when no offered action's forecast exceeds expected seconds x ``exchange_rate``.
+# * the stop rule: stop when no offered action's forecast exceeds expected seconds x ``exchange_rate`` and the episode
+#   must not continue. The episode must continue while it holds work it started and has not finished (the owner,
+#   2026-11-21: "the head must finish parked jobs": a job a child launched and returned parked); the unit's facts say so
+#   (``must_continue``, from the episode's ``resume_action``, ``method_loop.episode_type``), and while it is true the
+#   controller does not stop, whatever the forecasts. There is no default: every unit's facts say whether it must.
 # * the per-action gate (``method_loop.episode_type``): the same threshold also refuses the model's chosen action
 #   before it runs when its forecast does not exceed it (the owner: "since the numbers for credit are very similar, you
 #   should be able to find one threshold to cap wasteful actions reasonably well"). It is a forecast comparison, not a
@@ -1071,7 +1075,7 @@ def _forecast_parameters(value):
 
 def _forecast_context(context):
     """The facts of one completed unit the system puts in its estimation context (``estimation_context['forecast']``)."""
-    required = {"action_type", "ceiling", "unit_seconds", "decision_seconds", "pending", "next_offered"}
+    required = {"action_type", "ceiling", "unit_seconds", "decision_seconds", "pending", "must_continue", "next_offered"}
     if not isinstance(context, Mapping) or not isinstance(context.get("forecast"), Mapping):
         raise ValueError("forecast_controller_requires_estimation_context_forecast")
     facts = context["forecast"]
@@ -1083,6 +1087,8 @@ def _forecast_context(context):
         _score(facts[name], name)
     if type(facts["pending"]) is not bool:
         raise ValueError("forecast_pending_must_be_a_boolean")
+    if type(facts["must_continue"]) is not bool:
+        raise ValueError("forecast_must_continue_must_be_a_boolean")
     if _is_ceiling_number(facts["ceiling"]):
         _score(facts["ceiling"], "ceiling")
     elif facts["ceiling"] != UNBOUNDED_TEXT:
@@ -1161,12 +1167,15 @@ def forecast_actions(parameters, observations, histories, offered):
 
 @dataclass(frozen=True)
 class ForecastDecision:
+    """``must_continue``: the episode holds work it started and must finish, so it does not stop (``stop`` is False)."""
     stop: bool
     rows: tuple
+    must_continue: bool
 
     def as_record(self):
-        return {"stop": self.stop, "rows": [dict(row) for row in self.rows],
-                "decision_basis": "no_offered_action_forecast_exceeds_expected_seconds_times_exchange_rate"}
+        return {"stop": self.stop, "rows": [dict(row) for row in self.rows], "must_continue": self.must_continue,
+                "decision_basis": "no_offered_action_forecast_exceeds_expected_seconds_times_exchange_rate_"
+                                  "and_no_started_work_to_finish"}
 
 
 @dataclass(frozen=True)
@@ -1213,7 +1222,8 @@ def forecast_provenance():
     return {"controller": FORECAST_VERSION, "forecast": "realized_fraction_times_ceiling_or_typical_gain_if_unbounded",
             "fraction": "mean_of_ledger_mean_and_own_recency_weighted_mean_each_one_half_own_half_life_one_unit",
             "pending": "a_pending_unit_gives_its_kind_no_share_gain_or_unit_seconds_own_or_ledger",
-            "cost": "expected_seconds", "stop": "no_offered_forecast_exceeds_expected_seconds_times_exchange_rate",
+            "cost": "expected_seconds",
+            "stop": "no_offered_forecast_exceeds_expected_seconds_times_exchange_rate_and_not_must_continue",
             "model_estimates": False}
 
 
@@ -1222,7 +1232,9 @@ class ForecastYieldController:
 
     The system attaches the estimate-ledger access once (``attach``) and gives each completed unit's facts in its
     estimation context (``estimation_context['forecast']``: the action type and its ceiling, the unit's measured
-    seconds and decision seconds, whether its outcome is pending, and the ceilings the next decision offers). Nothing here writes the ledger."""
+    seconds and decision seconds, whether its outcome is pending, whether the episode must continue (it holds started
+    work it must finish: no stop while it does) and the ceilings the next decision offers). Nothing here writes the
+    ledger."""
 
     def __init__(self, epoch, initial_credit, settings):
         self.epoch = _epoch(epoch)
@@ -1231,7 +1243,7 @@ class ForecastYieldController:
         self.exchange_rate = self.settings.exchange_rate
         self._ledger, self._observations, self._scores = None, (), ()
         self._current_credit = self.initial_credit
-        self._decision = ForecastDecision(False, ())
+        self._decision = ForecastDecision(False, (), False)
 
     def attach(self, ledger):
         """The runner's read access to the estimate ledger: ``ledger.history(action_type, job_prefix, forget)``. The
@@ -1263,7 +1275,8 @@ class ForecastYieldController:
         self._scores = (*self._scores, delta)
         self._current_credit = cumulative
         rows = self._rows(self._observations, facts["next_offered"])
-        self._decision = ForecastDecision(not any(row["worth"] for row in rows), rows)
+        must_continue = facts["must_continue"]
+        self._decision = ForecastDecision(not must_continue and not any(row["worth"] for row in rows), rows, must_continue)
         return ForecastStep(str(unit_label), cumulative, delta, self._decision, bool(is_root))
 
     def state(self):

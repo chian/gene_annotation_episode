@@ -10,7 +10,7 @@ services (``BoundEpisode``); this type only calls them, and an episode's own fil
 | Episode file | Members (signature) |
 |---|---|
 | ``goal.py`` | ``binding_path``, ``goal``, ``unit``, ``result`` (text) |
-| ``task.py`` | ``child_slots`` ({slot: child binding path}), ``tools`` ({name: ``tool(arguments, ctx)``}), ``services`` (names), ``decide(summary, feedback, ctx)``, ``offered_actions(summary, ctx)`` -> the action types this decision offers, ``action(response, summary, records, ctx)`` |
+| ``task.py`` | ``child_slots`` ({slot: child binding path}), ``tools`` ({name: ``tool(arguments, ctx)``}), ``services`` (names), ``decide(summary, feedback, ctx)``, ``offered_actions(summary, ctx)`` -> the action types this decision offers, ``action(response, summary, records, ctx)``; optional ``resume_action(summary, records, ctx)`` (``OPTIONAL_MEMBERS``) |
 | ``credit.py`` | ``credit(summary, records)`` -> finite number; ``ceiling(summary, records, action_type, arguments, ctx)`` -> ``UNBOUNDED`` or a finite number >= 0; optional ``best_arguments(summary, records, action_type, ctx)`` and ``outcome_pending(summary, records, position)`` (``OPTIONAL_MEMBERS``) |
 | ``yield_estimator.py`` | ``yield_controller(initial_credit, settings, parent_input)`` -> a ``yield_control`` controller |
 | ``messages/read_from_parent.py`` | ``assignment_form``, ``read_from_parent(assignment, message)`` -> parent input |
@@ -72,6 +72,21 @@ The loop of one Episode:
    forecast controller and child slots must supply ``outcome_pending`` (a child can park): without it the unit's facts
    raise ``forecast_episode_with_children_must_supply_outcome_pending``; one without children has none to declare (a tool
    unit ends its work in the unit).
+   Started work is finished (the owner, 2026-11-21: "the head must finish parked jobs"). The optional member ``task.py``
+   ``resume_action(summary, records, ctx)`` returns ``None`` while the Episode holds no work it started and has not
+   finished, else the unit that resumes it: ``{'action_type', 'arguments', 'due'}`` (the action type is a tool name or a
+   child slot; ``arguments`` exactly those the episode's own ``action`` would make, e.g. a parked job's commission again
+   with ``until`` extracted; ``due`` True once the work is expected to have ended). With a forecast controller: (a) each
+   unit's facts carry ``must_continue`` (a resume is owed after the unit) and the controller does not stop while it is
+   True; (b) while a resume is owed its action type must be offered (``episode_resume_not_offered``); when it is due it is
+   the only action offered (the decision's offered actions and the facts' ``next_offered`` are narrowed to it); (c) the
+   resume is taken by the system as the unit, without asking the model, when it is due, or when no offered action's
+   forecast is worth its cost (where the Episode would otherwise have stopped); (d) the forecast gate never refuses that
+   resume (only that exact action type and arguments, taken in (c)): completing started work is not optional. Its
+   forecast is still recorded in the ledger. Before the resume is due and while another action is worth its cost the
+   model chooses as usual (the resume is an ordinary, gated choice then). An Episode with a forecast controller and
+   child slots must supply ``resume_action`` (``forecast_episode_with_children_must_supply_resume_action``); one whose
+   controller is not a forecast controller may not (``resume_action_requires_a_forecast_controller``).
 4. Each unit's controller input is ``{'credit': credit(internal_summary(view.with_unit(outcome)), records),
    'estimation_context': {'progress_time': bound.progress.receipt(position)}}``. The episode's yield controller
    observes it and alone decides whether the Episode stops: nothing else ends an Episode. The controller is built
@@ -103,7 +118,7 @@ from types import MappingProxyType
 from . import (ChildEpisodeUnit, ChildProjection, Commission, EpisodeBindingDeclaration, EpisodeChildSlot,
                EpisodeControllerBinding, EpisodeFunctionBinding, EpisodeGoal, EpisodeRef, EpisodeRequest,
                EpisodeTopologyRole, EpisodeView, Episode, JsonRecord, Leaf, RecordForm, ReportContract)
-from .jsonvalue import closed_copy
+from .jsonvalue import closed_copy, same_json
 from yield_control import (AccumulationYieldController, BoundedQualityYieldController, CompletionYieldController,
                            ForecastYieldController, ForecastYieldState, UNBOUNDED_TEXT)
 
@@ -188,7 +203,10 @@ CHILD_MEMBERS = ('msg_to_child', 'read_from_child')
 # ``credit.py`` ``outcome_pending(summary, records, position)`` (``summary`` after unit ``position``) returns ``True`` when
 # that unit's outcome is pending (its action started work that a later unit of the same action finishes: a child that
 # returned parked), else ``False``. An Episode with a forecast controller and child slots must supply it.
-OPTIONAL_MEMBERS = ('best_arguments', 'outcome_pending')
+# ``task.py`` ``resume_action(summary, records, ctx)`` returns ``None`` or the unit that resumes work the Episode started and
+# has not finished, ``{'action_type', 'arguments', 'due'}`` (module docstring, step 3). An Episode with a forecast controller
+# and child slots must supply it.
+OPTIONAL_MEMBERS = ('best_arguments', 'outcome_pending', 'resume_action')
 SUPPLIED = tuple(name for names in SUPPLIED_BY_FILE.values() for name in names)
 # Each function member: the parameters it takes, and the module (below the episode package) that defines it.
 SIGNATURES = MappingProxyType({
@@ -198,6 +216,7 @@ SIGNATURES = MappingProxyType({
     'ceiling': ('summary', 'records', 'action_type', 'arguments', 'ctx'),
     'best_arguments': ('summary', 'records', 'action_type', 'ctx'),
     'outcome_pending': ('summary', 'records', 'position'),
+    'resume_action': ('summary', 'records', 'ctx'),
     'offered_actions': ('summary', 'ctx'),
     'yield_controller': ('initial_credit', 'settings', 'parent_input'),
     'read_from_parent': ('assignment', 'message'),
@@ -207,7 +226,7 @@ SIGNATURES = MappingProxyType({
     'final_to_parent': ('summary', 'completion', 'selection'),
 })
 FILE_OF = MappingProxyType({
-    'decide': 'task', 'action': 'task', 'offered_actions': 'task', 'credit': 'credit', 'ceiling': 'credit', 'best_arguments': 'credit', 'outcome_pending': 'credit', 'yield_controller': 'yield_estimator',
+    'decide': 'task', 'action': 'task', 'offered_actions': 'task', 'credit': 'credit', 'ceiling': 'credit', 'best_arguments': 'credit', 'outcome_pending': 'credit', 'resume_action': 'task', 'yield_controller': 'yield_estimator',
     'read_from_parent': 'messages.read_from_parent', 'msg_to_child': 'messages.msg_to_child',
     'read_from_child': 'messages.read_from_child', 'internal_summary': 'messages.internal_summary',
     'final_to_parent': 'messages.final_to_parent'})
@@ -564,28 +583,64 @@ class _SystemSource:
         ceiling, the unit's measured seconds, whether its outcome is pending, and the ceilings the next decision offers
         (computed from the summary after the unit, as that decision will compute them)."""
         context = self._bound.decision_context(position + 1)
-        offered = self._offered_ceilings(summary, context)
+        resume = self._resume(summary, context, forecast=True)
+        offered = self._offered_ceilings(summary, context, resume)
         return {'action_type': chosen['action_type'], 'ceiling': _written(chosen['ceiling']),
                 'unit_seconds': self._unit_seconds(position), 'decision_seconds': chosen['decision_seconds'],
-                'pending': self._pending(summary, position),
+                'pending': self._pending(summary, position), 'must_continue': resume is not None,
                 'next_offered': {name: _written(ceiling) for name, ceiling in offered.items()}}
+
+    def _resume(self, summary, context, *, forecast):
+        """The resume the Episode owes, from its optional ``resume_action`` (module docstring, step 3): ``None``, or
+        ``{'action_type', 'arguments', 'due'}``. ``forecast``: whether the Episode's controller is a forecast controller.
+        A forecast Episode with children must supply the member; one with another controller must not."""
+        path, binding = self._binding.binding_path, self._binding
+        member = getattr(type(binding), 'resume_action', None)
+        if member is None:
+            if forecast and binding.child_slots:
+                raise TypeError('forecast_episode_with_children_must_supply_resume_action:' + path)
+            return None
+        if not forecast:
+            raise TypeError('resume_action_requires_a_forecast_controller:' + path)
+        resume = member(summary, self._bound.reader, context)
+        if resume is None:
+            return None
+        if (not isinstance(resume, Mapping) or set(resume) != {'action_type', 'arguments', 'due'}
+                or type(resume['due']) is not bool or not isinstance(resume['arguments'], Mapping)
+                or (resume['action_type'] not in binding.tools and resume['action_type'] not in binding.child_slots)):
+            raise TypeError('episode_resume_action_must_be_none_or_action_type_arguments_due:' + path + ':'
+                            + repr(resume))
+        return {'action_type': resume['action_type'], 'arguments': _closed(dict(resume['arguments']), 'resume_arguments'),
+                'due': resume['due']}
+
+    def _resume_call(self, resume):
+        """The resume as the action it is: a ``ChildCall`` of its slot or a ``ToolCall`` of its tool."""
+        if resume['action_type'] in self._binding.child_slots:
+            return ChildCall(resume['action_type'], dict(resume['arguments']))
+        return ToolCall(resume['action_type'], dict(resume['arguments']))
 
     def _ceiling_of(self, summary, action_type, arguments, context):
         return _ceiling(self._binding._member('ceiling')(summary, self._bound.reader, action_type, arguments, context),
                         self._binding.binding_path, action_type)
 
-    def _offered_ceilings(self, summary, context):
-        """The ceiling of every action type a decision offers."""
+    def _offered_ceilings(self, summary, context, resume):
+        """The ceiling of every action type a decision offers: the episode's ``offered_actions``; while a resume is owed
+        (``resume``) its action type must be among them, and when it is due it is the only one."""
         path = self._binding.binding_path
         names = self._binding._member('offered_actions')(summary, context)
         if (not isinstance(names, (list, tuple)) or len(set(names)) != len(names)
                 or any(type(name) is not str or not name for name in names)):
             raise TypeError('episode_offered_actions_must_be_distinct_action_type_names:' + path + ':' + repr(names))
+        if resume is not None:
+            if resume['action_type'] not in names:
+                raise LookupError('episode_resume_not_offered:' + path + ':' + resume['action_type'])
+            if resume['due']:
+                names = [resume['action_type']]
         return {name: self._ceiling_of(summary, name, None, context) for name in names}
 
-    def _offered(self, summary, position, context):
+    def _offered(self, summary, position, context, resume):
         """The ceiling of every action type this decision offers (journaled for unit ``position``)."""
-        offered = self._offered_ceilings(summary, context)
+        offered = self._offered_ceilings(summary, context, resume)
         self._bound.ceilings.offered(position, offered)
         return offered
 
@@ -620,12 +675,19 @@ class _SystemSource:
             shown.append(item)
         return shown
 
-    def _gate(self, view, decision, summary, context, offered):
+    def _gate(self, view, decision, summary, context, offered, owed=None):
         """The per-action gate of a ``ForecastYieldController``: the chosen action's forecast row, for its ceiling
         asked with its arguments, must be worth its cost (threshold: expected seconds x exchange rate), else the
-        response is rejected like any ``Rejected``: no unit, feedback to the next ``decide``."""
+        response is rejected like any ``Rejected``: no unit, feedback to the next ``decide``.
+
+        The one exception, explicit and narrow: ``owed``, the resume the system takes (``next``: due, or in place of a
+        stop), is never refused, whatever its forecast: completing started work is not optional. Only a decision of
+        exactly its action type and arguments is exempt; any other decision is gated as usual."""
         action_type = decision.name if isinstance(decision, ToolCall) else decision.slot
         if action_type not in offered:
+            return
+        if (owed is not None and action_type == owed['action_type']
+                and same_json(_closed(dict(decision.arguments), 'gate_arguments'), owed['arguments'])):
             return
         ceiling = self._ceiling_of(summary, action_type, _closed(dict(decision.arguments), 'ceiling_arguments'), context)
         rows = self._forecast_rows(view, {action_type: ceiling})
@@ -690,17 +752,24 @@ class _SystemSource:
         (``EpisodeRun.run_unit``)."""
         position, summary = self._choosing(view)
         context = self._bound.decision_context(position)
-        return self._unit(view, position, action, summary, context, self._offered(summary, position, context))
+        resume = self._resume(summary, context, forecast=isinstance(view.controller_state, ForecastYieldState))
+        return self._unit(view, position, action, summary, context, self._offered(summary, position, context, resume))
 
     async def next(self, view):
         position, summary = self._choosing(view)
         context = self._bound.decision_context(position)
+        resume = self._resume(summary, context, forecast=isinstance(view.controller_state, ForecastYieldState))
+        offered = self._offered(summary, position, context, resume)
+        if resume is not None and (resume['due'] or not any(row['worth'] for row in self._forecast_rows(view, offered))):
+            # The owed resume is the unit (module docstring, step 3): due, or no offered action is worth its cost and the
+            # Episode may not stop. The model is not asked; the gate is asked and lets exactly this resume pass.
+            decision = self._resume_call(resume)
+            self._gate(view, decision, summary, context, offered, owed=resume)
+            return self._unit(view, position, decision, summary, context, offered)
         decide, act = self._binding._member('decide'), self._binding._member('action')
-        feedback = offered = None
+        feedback = None
         while True:
             decision = decide(summary, feedback, context)
-            if offered is None:
-                offered = self._offered(summary, position, context)
             if not isinstance(decision, ModelRequest):
                 break
             rows = self._forecast_rows(view, offered)

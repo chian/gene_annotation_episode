@@ -17,6 +17,7 @@ class SequenceHomologyEvidence(EpisodeBinding):
     services = task_file.SERVICES
     decide = task_file.decide
     offered_actions = task_file.offered_actions
+    resume_action = task_file.resume_action
     action = task_file.action
     credit = credit_file.credit
     ceiling = credit_file.ceiling

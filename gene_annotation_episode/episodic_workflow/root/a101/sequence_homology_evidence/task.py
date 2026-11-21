@@ -18,7 +18,9 @@ refuses a declared slot with no episode behind it), together with its commission
 router: for a child it answers with the slot and the controlled fields of that slot's commission
 (``commission_fields``); it writes no assignment, objective or message. ``msg_to_child`` builds the child's
 assignment, in the child's own form, from those choices and the summary. A slot is offered while its commission can
-be stated from what this episode holds. The service ``job_access`` is read for the bound resources a commission or a
+be stated from what this episode holds. A BV-BRC job a child launched and returned parked is always finished
+(``resume_action``: the episode does not stop while one is parked, and once it is due, or when nothing else is worth its
+cost, its resume is the unit; the rule is the system's, ``method_loop.episode_type``). The service ``job_access`` is read for the bound resources a commission or a
 tool may name (``bound_resources``).
 
 Settings: ``process_library_directory`` (the frozen process library), ``tool_library_directory`` (the frozen
@@ -169,6 +171,11 @@ DESCRIPTIONS = {
                     'the environment, not of your request: it is reported once and the same request is not made '
                     'again.'),
 }
+# What every BV-BRC child's description says of a parked job (the system's rule, ``resume_action``).
+PARKED_TEXT = ('A parked job is always finished: this episode does not end while one is parked; once its expected '
+               'remaining seconds have passed, or when none of your other actions is worth its cost, code commissions '
+               'its continuation (until extracted) as the next unit without asking you; before then you may do other '
+               'work worth its cost.')
 # What the model is told of each child it may commission: what the child does, the controlled fields of its
 # commission (the model chooses values; code builds the child's assignment) and what comes back. A child's entry is
 # added with its commission.
@@ -186,7 +193,7 @@ CHILD_DESCRIPTIONS = {
         'feedback with the things to fix and nothing was commissioned. While a child runs, you do nothing else: your next '
         'decision comes after it returns. What until means: with until launched the child estimates the duration, launches '
         'the search and returns at once; the search then keeps running at the service, you can use your other actions '
-        'while it runs, and the child is said to be parked. With until extracted the child follows the search '
+        'while it runs, and the child is said to be parked. ' + PARKED_TEXT + ' With until extracted the child follows the search '
         'to its end, waiting between status requests for as long as the search takes and extracts the result into the graded sheet; it is also how a '
         'parked search is continued: while bvbrc_searches shows a search of the query as outstanding, commissioning the '
         'child again with the same query, program, database and resource and until extracted continues that search and '
@@ -219,7 +226,7 @@ CHILD_DESCRIPTIONS = {
         'commissioned. While a child runs, you do nothing else: your next decision comes after it returns. What until '
         'means: with until launched the child estimates the duration, launches the job and returns at once; the job then '
         'keeps running at the service, you can use your other actions while it runs, and the child is said to be parked. '
-        'With until extracted the child follows the job to its end and extracts the alignment into the graded sheet; it is '
+        + PARKED_TEXT + ' With until extracted the child follows the job to its end and extracts the alignment into the graded sheet; it is '
         'also how a parked job is continued: while bvbrc_msa_jobs shows a job as outstanding, commissioning the child again '
         'with the same fields and until extracted continues that job and submits nothing. What comes back: the state of the '
         'job (no_estimate, estimated, launched, finished, extracted or failed), the sequences, columns and candidates of the '
@@ -266,7 +273,7 @@ CHILD_DESCRIPTIONS = {
         'comes back in feedback with the things to fix and nothing was commissioned. While a child runs, you do nothing '
         'else: your next decision comes after it returns. What until means: with until launched the child estimates the '
         'duration, launches the job and returns at once; the job then keeps running at the service, you can use your other '
-        'actions while it runs, and the child is said to be parked. With until extracted the child follows the job to its '
+        'actions while it runs, and the child is said to be parked. ' + PARKED_TEXT + ' With until extracted the child follows the job to its '
         'end and extracts the result into the graded sheet; it is also how a parked job is continued: while '
         'bvbrc_metacats_jobs shows a job as outstanding, commissioning the child again with the same fields and until '
         'extracted continues that job and submits nothing. What comes back: the state of the job (no_estimate, estimated, '
@@ -561,6 +568,58 @@ def offered_actions(summary, ctx):
     if profile_scan_options(summary, resources, ctx.settings.get('profile_databases', {})):
         names.append(PROFILE_TOOL)
     return names + offered_children(summary, resources)
+
+
+def parked_jobs(summary):
+    """The BV-BRC jobs of this episode's children that are parked (outstanding: launched, no closure held, not shown
+    failed or lost), each as ``(slot, job row)``, from the summary's views of the job ledger rows (``bvbrc_searches``,
+    ``bvbrc_msa_jobs``, ``bvbrc_metacats_jobs``)."""
+    return [(slot, job) for slot, view in (('bvbrc_blast', 'bvbrc_searches'), ('bvbrc_msa', 'bvbrc_msa_jobs'),
+                                           ('bvbrc_metacats', 'bvbrc_metacats_jobs'))
+            for job in summary[view] if job['outstanding']]
+
+
+def resume_commission(slot, job, summary):
+    """The commission that resumes the parked ``job`` of ``slot``: the job's own commission again with ``until``
+    ``extracted`` (the one commission of it the head's check accepts while it is outstanding; it submits nothing): for
+    ``bvbrc_blast`` the search's query, program, database and resource; for ``bvbrc_msa`` the job's identity (target,
+    search, candidates, sequences per candidate) and resource; for ``bvbrc_metacats`` the held alignment whose candidate
+    groups the job was given (``metacats_options``' ``groups_ref``), its target and the resource."""
+    if slot == 'bvbrc_blast':
+        return {'query_ref': job['query_ref'], 'program': job['program'], 'database': job['database'],
+                'resource_id': job['resource_id'], 'until': 'extracted'}
+    if slot == 'bvbrc_msa':
+        identity = job['identity']
+        return {'query_ref': identity['query_ref'], 'search_ref': identity['search_ref'],
+                'candidates': list(identity['candidates']), 'per_candidate': identity['per_candidate'],
+                'resource_id': job['resource_id'], 'until': 'extracted'}
+    (option,) = [item for item in summary['metacats_options'] if item['groups_ref'] == job['identity']['groups_ref']]
+    return {'query_ref': option['query_ref'], 'alignment_ref': option['alignment_ref'], 'resource_id': job['resource_id'],
+            'until': 'extracted'}
+
+
+def resume_action(summary, records, ctx):
+    """The resume this episode owes (``method_loop.episode_type``, step 3; the owner, 2026-11-21: "the head must finish
+    parked jobs"): ``None`` while no child's BV-BRC job is parked, else the resume of one parked job as
+    ``{'action_type': its slot, 'arguments': resume_commission(...), 'due': ...}``. ``due`` is True once the job's expected
+    remaining seconds have passed: the estimate recorded with its launch minus the seconds from the launch to this
+    decision's recorded time (the wait notice ``bvbrc_searches_view`` shows), at or below zero. The job chosen: the
+    earliest launched among the due ones, else the earliest launched. While a job is parked the episode does not stop;
+    once it is due its resume is the only action offered; before that the model may choose other work worth its cost,
+    and when none is worth it the resume is taken in place of a stop (the system's rule). The commission passes the
+    head's own check (``COMMISSION_CHECKS``), else this raises: a resume the check refuses is a fault of the episode."""
+    parked = parked_jobs(summary)
+    if not parked:
+        return None
+    remaining = lambda job: job['estimated_seconds'] - seconds_between(job['launched_at'], ctx.clock.now)
+    due = [(slot, job) for slot, job in parked if remaining(job) <= 0]
+    slot, job = min(due or parked, key=lambda item: item[1]['launched_at'])
+    arguments = resume_commission(slot, job, summary)
+    problems = COMMISSION_CHECKS[slot]({'kind': 'episode_child', 'slot': slot, **arguments}, summary,
+                                       bound_resources(ctx), records)
+    if problems:
+        raise ContractError('a101_resume_commission_refused_by_its_check:' + slot + ':' + repr(problems))
+    return {'action_type': slot, 'arguments': arguments, 'due': bool(due)}
 
 
 def decide(summary, feedback, ctx):

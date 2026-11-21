@@ -57,7 +57,9 @@ DIFFERENTIAL_FORM = RecordForm({
     'test': Field('text', 'The test two listed candidates both underwent'),
     'first': Field('record', 'The first candidate', form=CANDIDATE_REFERENCE_FORM),
     'second': Field('record', 'The second candidate', form=CANDIDATE_REFERENCE_FORM),
-    'value': Field('number', 'The difference of the moves of their scores over the test (the credit it earned)'),
+    'value': Field('number', 'The credit the test earned by differentiating them: the difference of the moves of their '
+                             'scores over the test times the weaker evidence of the two (1 except in a cluster test, where '
+                             'a candidate with n sequences in the set has evidence n/(n+4))'),
 })
 TARGET_FORM = RecordForm({
     **{name: feature_field(name, rule) for name, rule in FEATURES.items()},

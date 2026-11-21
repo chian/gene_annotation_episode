@@ -82,8 +82,26 @@ formula enters only through `credit.ceiling` (the most the credit can rise if an
   `best_arguments`; the row the model is shown carries them as `best_arguments`, and its ceiling and forecast are those of exactly that commission). An unknown forecast (no history anywhere for an UNBOUNDED action) is not refused;
   only episodes with a forecast controller are gated. The `action_forecasts` rows the model sees gain `worth`.
   It is a forecast comparison, never a limit on the episode.
-- Stop: the episode stops when no offered action's forecast exceeds `expected seconds x exchange_rate`. Stopping is
-  the controller's alone; no budget of time, tokens or turns exists, the cost is a forecast input.
+- Stop: the episode stops when no offered action's forecast exceeds `expected seconds x exchange_rate` and it holds no
+  started work it must finish. Stopping is the controller's alone; no budget of time, tokens or turns exists, the cost is a
+  forecast input.
+- Started work is finished (owner, 2026-11-21: "the head must finish parked jobs"). Each unit's facts carry the required
+  boolean `must_continue`, from the episode's optional member `task.py` `resume_action(summary, records, ctx)` (`None`, or
+  `{action_type, arguments, due}`: the unit that resumes work the episode started, e.g. a parked BV-BRC job's commission again
+  with `until` extracted, `due` once its expected remaining seconds have passed); while it is true the controller does not
+  stop, whatever the forecasts. The unit source (`method_loop/episode_type.py`): while a resume is owed its action type must
+  be offered (`episode_resume_not_offered`); once it is due it is the only action offered; it is taken as the unit without
+  the model when it is due or when no offered action is worth its cost (where the episode would have stopped); and the gate
+  never refuses that resume (only that exact action type and arguments: completing launched work is not optional), while
+  its forecast is still recorded in the ledger. Before it is due and while other work is worth its cost, the model chooses
+  as usual and the resume is an ordinary gated choice. An episode with a forecast controller and child slots must supply
+  `resume_action` (`forecast_episode_with_children_must_supply_resume_action`); one with another controller may not
+  (`resume_action_requires_a_forecast_controller`). Found in the real run `runs/a101_goal7_ws_reca`: the head launched a
+  `bvbrc_blast` search `until launched`, ran `hmmer_profile_scan` and stopped by its estimator with the search outstanding;
+  the job row stayed open. Under the rule (direct check, not a real run, `runs/parked_rule_check_2`): with the controller as
+  that run learned (unit 0 not pending), the stop after the scan does not fire (`must_continue` true; it would have without
+  the rule), the next decision takes the resume (`bvbrc_blast`, `until extracted`) without the model, and the gate, which
+  refuses it as a model choice (forecast 1.794 < threshold 2.089), lets it pass as the owed resume.
 
 ### Parameter set (declared in the episode's `yield_bindings` entry, `kind: "forecast"`, no `cutoff`)
 
@@ -105,9 +123,10 @@ Declaration to put in the continuation settings of the head (the other agent edi
   place that has both the offered ceilings and the summary. A stop is decided after each unit but the next decision's
   offered actions are not yet asked, so the source computes the ceilings the next decision will offer from the summary after the
   unit (the same functions) and puts them in the unit's controller input (`estimation_context['forecast']`), together with
-  the action type, its ceiling, the measured unit seconds, the decision seconds and `pending` (the episode's
-  `outcome_pending`). The controller input is journaled, so resume and replay rebuild the controller exactly; a journal
-  written before `pending` existed raises `forecast_context_requires_exactly` on resume (loud, not repaired). Nothing changes for the three older controllers (the source acts only when
+  the action type, its ceiling, the measured unit seconds, the decision seconds, `pending` (the episode's
+  `outcome_pending`) and `must_continue` (the episode's `resume_action` is not `None`). The controller input is journaled, so
+  resume and replay rebuild the controller exactly; a journal written before `pending` or `must_continue` existed raises
+  `forecast_context_requires_exactly` on resume (loud, not repaired). Nothing changes for the three older controllers (the source acts only when
   `view.controller_state` is a `ForecastYieldState`).
 - The runner (`episode_runtime/runner.py`) builds a `ForecastLedger` per Episode (`episode_runtime/forecast_ledger.py`),
   hands it to a `ForecastYieldController` once (read: `history`) and gives the source the writing side. The ledger service is
@@ -159,7 +178,7 @@ that narrow.
 
 No real run, no model call; the live write of ledger rows through a run (`expect`/`resolve`) was exercised only on a scratch table;
 a resumed run on another boot (receipts unavailable) raises; `next_decision` (stepped, no model) does not add `action_forecasts`.
-The pending rule ran in no real run (direct check only). The real ledger's row of the reca launch unit
+The pending rule and the rule that started work is finished (`resume_action`) ran in no real run (direct checks only). The real ledger's row of the reca launch unit
 (`forecast:episode_18d798d0ca56fbbc7daccbf4f42951a3ef438677abddff11daccdafc8bf87165:0`, `bvbrc_blast`) was written before the
 rule as `finished` with gain 0 and 47.4 s and is unchanged (the ledger is not rewritten here): until it is resolved
 `pending`, later runs read it as a 0 share and a 47.4 s unit of `bvbrc_blast` (on a copy: the ledger's share falls from

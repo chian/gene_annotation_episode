@@ -60,6 +60,7 @@ definition raises `TypeError` for a member in the wrong file or with the wrong a
 | `credit.py` | `ceiling` | `(summary, records, action_type, arguments, ctx)`: `UNBOUNDED` or a finite number >= 0 |
 | `credit.py` | `best_arguments` (optional) | `(summary, records, action_type, ctx)`: the arguments that reach the ceiling asked with `arguments` None, or None |
 | `credit.py` | `outcome_pending` (optional; required with a forecast controller and child slots) | `(summary, records, position)`: True when that unit's outcome is pending (a child returned parked), else False |
+| `task.py` | `resume_action` (optional; required with a forecast controller and child slots) | `(summary, records, ctx)`: None, or the resume of started work (a parked job) `{action_type, arguments, due}` |
 | `yield_estimator.py` | `yield_controller` | `(initial_credit, settings, parent_input)` |
 | `messages/read_from_parent.py` | `assignment_form`, `read_from_parent` | `(assignment, message)`: the parent input |
 | `messages/msg_to_child.py` | `msg_to_child` | `(slot, arguments, summary)`: a `ChildMessage` |
@@ -177,7 +178,13 @@ estimate, extract results" (`bvbrc_blast_episode.md`). The built actions are fiv
   (`bvbrc_blast_episode.md`). The word chosen is "park".
 - The wait notice a parked child returns: `parked`, `seconds_since_launch`, `estimated_seconds`, `expected_remaining_seconds`
   (the estimate minus the seconds since launch, not below zero, or a later revised figure). The parent's model is shown the
-  seconds since launch and the seconds still expected as of each of its own decisions. Facts only: never a deadline.
+  seconds since launch and the seconds still expected as of each of its own decisions.
+- The parent finishes every job it parks (owner's decision, 2026-11-21: "the head must finish parked jobs"). Its `task.py`
+  `resume_action` returns the resume of a parked job (the same commission with `until` extracted, which its check accepts) and
+  whether it is due (its expected remaining seconds have passed). The system then keeps the parent from stopping while a job is
+  parked, offers only the resume once it is due and takes it without the model, takes it instead of stopping when nothing else
+  is worth its cost, and never lets the forecast gate refuse it. Before it is due the parent's model may do other work worth its
+  cost. A parent cannot end with a job parked, so a later parent run never has to resume one.
 - One place in the library for the shared machinery: `bvbrc_job_child.py`. A child makes ONE `JobApplication(...)` and its five
   files call the module's functions. Do not copy the machinery into a child; write only what is specific to the application
   (`prepare`, `extract`, `describe_identity`, `field_problems`).
@@ -567,8 +574,8 @@ Read at the time of writing (2026-11-21), from the notes and the code:
 - The scoring sheet's weights (`SHEET_WEIGHT`, `TYPICAL_STRONG_VALUE`) and the head's credit record `a101_differential_credit_v6` are in
   the working tree and derive from a single target; they are to be re-derived and the continuation files of earlier runs name `v2`.
 - The weight W = 1/E (E = 7) rests on seven alignments of one 70-residue target.
-- A parked job resumed by a later head run, after the head itself ended while the job was parked, was not achieved (`bvbrc_blast_episode.md`,
-  run P2b). The `fix` path, a failed launch and a search that keeps running until the controller winds the child down were not exercised
+- The rule that the head finishes parked jobs (`resume_action`) has been checked only directly, on stored records (`runs/parked_rule_check_2`),
+  not in a real run. The `fix` path, a failed launch and a search that keeps running until the controller winds the child down were not exercised
   in a real run.
 - The profile-scan ceiling is the profile database's model count (53275 for Pfam-A), which is loose: with no history of the kind the
   forecast stays large (`forecast_yield_controller.md`).
