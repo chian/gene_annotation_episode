@@ -7,15 +7,16 @@ the sequences of the candidates a graded BV-BRC database search found, as plain 
   ordered by their value in the search (the subscore the head's credit reads; highest first, ties by accession), one per
   distinct ``aa_sequence_md5``, the first ``per_candidate``. The target's own sequence is always first, under the fixed
   name ``target``; the references are named ``r1``, ``r2`` ... in that order (``plan_rows``);
-* the sequences: fetched in the launch unit from BV-BRC's public Data API by md5 (``bvbrc_hit_metadata.sequences_by_md5``:
-  the ``feature_sequence`` collection, each checked against its md5), each kept as an artifact, assembled as the FASTA the
-  application is given (``sequences.fasta``, with the plan as ``plan.json``) and labelled as a ``protein_sequences`` data
-  product (``records/data_products``);
+* the inputs: the chosen hits go in as a BV-BRC feature group (``group.json``: their ``feature_id``s; the route creates the
+  feature group object ``<job folder>/hits`` in the BV-BRC workspace) and the target as pasted FASTA in the same job
+  (``sequences.fasta``; the service accepts both together, verified live); BV-BRC reads the hits' sequences itself, so
+  they are not fetched (``bvbrc_hit_metadata.sequences_by_md5`` stays in the library; the grading does not need it: each
+  aligned row is checked against the hit's ``aa_sequence_md5``);
 * the extract: the aligned FASTA ``msa.afa`` is fetched and graded in the same unit (``msa_alignment_sheet.grade_alignment``,
   which reads it with the existing ``parse_aligned_fasta``): the sheet, a source of provider ``bvbrc_msa``, a ``reference``
   record per sequence and one ``alignment`` observation per reference sequence (``compared_symbol_count``: the columns
   where both have a residue; ``matching_symbol_count``: how many are identical; ``query_selected_length``: the target's
-  length), and the alignment labelled as a ``multiple_sequence_alignment`` data product with its place in the BV-BRC
+  length), and the alignment labelled as a ``multiple_sequence_alignment`` data product (``used``: the target's sequence artifact, the search source and the feature group's artifact) with its place in the BV-BRC
   workspace in ``locations``: THE RECORD a later child (MetaCATS) is passed and requires.
 
 The reuse key of the alignment is computed from what is known before the launch: ``used`` = the target's sequence artifact
@@ -34,14 +35,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     retain_tool_grading, source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import (
-    find_reusable, products, record_product)
+    find_reusable, record_product)
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
     measurements, number, ref)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_blast_search import (
     PROVIDER as SEARCH_PROVIDER)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_hit_metadata import (
-    sequences_by_md5)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
     JobApplication, check_resource_and_continuation, job_view)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
@@ -53,7 +52,7 @@ ALIGNER, ALPHABET = 'Muscle', 'protein'
 TARGET_NAME = 'target'
 PER_CANDIDATE_RANGE = (2, 20)
 MINIMUM_CANDIDATES = 2
-SEQUENCES_FILE, PLAN_FILE, ALIGNMENT_FILE = 'sequences.fasta', 'plan.json', 'msa.afa'
+SEQUENCES_FILE, GROUP_FILE, PLAN_FILE, ALIGNMENT_FILE = 'sequences.fasta', 'group.json', 'plan.json', 'msa.afa'
 PRODUCT_KIND = 'multiple_sequence_alignment'
 REQUEST_FIELDS = ('per_candidate', 'resource_id')
 
@@ -89,8 +88,8 @@ def plan_rows(rows, candidates, per_candidate):
             if row['aa_sequence_md5'] not in seen and len(seen) < per_candidate:
                 seen.add(row['aa_sequence_md5'])
                 chosen.append({'candidate': candidate, 'accession': row['accession'], 'md5': row['aa_sequence_md5'],
-                               'aa_length': row['aa_length'], 'value': row['value']})
-    return [{'name': 'r' + str(index), **row} for index, row in enumerate(chosen, 1)]
+                               'aa_length': row['aa_length'], 'value': row['value'], 'feature_id': row['feature_id']})
+    return [{'name': 'fig|' + row['accession'], **row} for row in chosen]
 
 
 def planned_size(plan, target_length):
@@ -129,42 +128,39 @@ def _plan(store, request, commission):
     return plan_rows(rows, commission['candidates'], request['per_candidate'])
 
 
+def feature_group_bytes(plan):
+    """The feature group of the plan's hits (their ``feature_id``s, in plan order) as the closed JSON the job is given
+    (``group.json``): the route creates the BV-BRC feature group object from it and BV-BRC reads the sequences itself."""
+    return canonical({'feature_ids': [row['feature_id'] for row in plan]})
+
+
+def feature_group_ref(plan):
+    """The reference the group's artifact has (content-addressed: ``artifact_`` and the SHA-256 of its bytes), known before
+    the launch: it is in ``used`` of the alignment's product and so in its reuse key."""
+    return 'artifact_' + hashlib.sha256(feature_group_bytes(plan)).hexdigest()
+
+
 def prepare(ctx, request, commission):
-    """The job of one launch: the plan, its sequences fetched from the Data API by md5 and kept as artifacts, the FASTA
-    and the plan as the job's two inputs. A sequence the service does not return is ``ValueError``."""
+    """The job of one launch: the plan; the hits go in as a BV-BRC feature group (``group.json``: their feature ids; the
+    route creates the group object under the job's folder) and the target as the pasted FASTA, in the same job. The
+    sequences of the hits are not fetched: BV-BRC reads them, and the grading checks each aligned row against the hit's
+    ``aa_sequence_md5``."""
     store = ctx.store
     plan = _plan(store, request, commission)
-    fetched = sequences_by_md5([row['md5'] for row in plan])
-    absent = sorted({row['md5'] for row in plan} - set(fetched['sequences']))
-    if absent:
-        raise ValueError('hit_sequence_not_returned_by_the_data_service:' + ','.join(absent))
     target = store.get_artifact(store.get(commission['query_ref'])['sequence_ref']).decode('ascii').strip().upper()
-    rows = [{**row, 'sequence': fetched['sequences'][row['md5']],
-             'sequence_ref': store.artifact(fetched['sequences'][row['md5']].encode('ascii'), 'text/plain')}
-            for row in plan]
-    fasta = '>' + TARGET_NAME + '\n' + target + '\n' + ''.join('>' + row['name'] + '\n' + row['sequence'] + '\n'
-                                                            for row in rows)
-    fasta_ref = store.artifact(fasta.encode('ascii'), 'text/plain')
+    fasta_ref = store.artifact(('>' + TARGET_NAME + '\n' + target + '\n').encode('ascii'), 'text/plain')
+    group_ref = store.artifact(feature_group_bytes(plan), 'application/json')
     body = {'query_ref': commission['query_ref'], 'search_ref': commission['search_ref'],
             'candidates': list(commission['candidates']), 'per_candidate': request['per_candidate'],
-            'target': {'name': TARGET_NAME, 'sequence': target}, 'references': rows,
-            'data_requests': fetched['requests']}
+            'target': {'name': TARGET_NAME, 'sequence': target}, 'references': plan, 'feature_group_ref': group_ref}
     plan_ref = store.artifact(canonical(body), 'application/json')
-    lengths = [len(target), *(len(row['sequence']) for row in rows)]
-    return {'job': {'application': 'MSA', 'aligner': ALIGNER, 'alphabet': ALPHABET, 'sequences_file': SEQUENCES_FILE},
-            'inputs': {SEQUENCES_FILE: fasta_ref, PLAN_FILE: plan_ref},
+    lengths = [len(target), *(row['aa_length'] for row in plan)]
+    return {'job': {'application': 'MSA', 'aligner': ALIGNER, 'alphabet': ALPHABET, 'sequences_file': SEQUENCES_FILE,
+                    'feature_group_file': GROUP_FILE},
+            'inputs': {SEQUENCES_FILE: fasta_ref, GROUP_FILE: group_ref, PLAN_FILE: plan_ref},
             'job_facts': {'sequences': len(lengths), 'residues': sum(lengths), 'longest': max(lengths)},
             'identity': {'query_ref': commission['query_ref'], 'search_ref': commission['search_ref'],
                          'candidates': sorted(commission['candidates']), 'per_candidate': request['per_candidate']}}
-
-
-def after_launch(ctx, request, commission, prepared, launched):
-    """The fetched sequences as a ``protein_sequences`` data product, generated by the launch's handoff row; its row."""
-    row = record_product(ctx.store, artifact_ref=prepared['inputs'][SEQUENCES_FILE], kind='protein_sequences',
-                         generated_by=launched['handoff_ref'], used=[commission['search_ref']],
-                         settings={'candidates': sorted(commission['candidates']),
-                                   'per_candidate': request['per_candidate']})
-    return [row['id']]
 
 
 def describe_identity(reader, handoff):
@@ -176,7 +172,8 @@ def describe_identity(reader, handoff):
 def reusable_alignment(reader, commission, per_candidate):
     """The held alignment product of exactly this target, search and settings, or ``None``."""
     sequence_ref = reader.get(commission['query_ref'])['sequence_ref']
-    return find_reusable(reader, PRODUCT_KIND, [sequence_ref, commission['search_ref']],
+    plan = _plan(reader, {'per_candidate': per_candidate}, commission)
+    return find_reusable(reader, PRODUCT_KIND, [sequence_ref, commission['search_ref'], feature_group_ref(plan)],
                          settings_of(commission['candidates'], per_candidate))
 
 
@@ -193,8 +190,8 @@ def extract(ctx, handoff_ref, request, commission):
     handoff = job_view(store, APPLICATION)['handoff']
     plan = json.loads(store.get_artifact(handoff['detail']['input_refs'][PLAN_FILE]))
     given = [{'name': TARGET_NAME, 'sequence': plan['target']['sequence']},
-             *({'name': row['name'], 'sequence': row['sequence'], 'candidate': row['candidate'],
-                'accession': row['accession'], 'md5': row['md5']} for row in plan['references'])]
+             *({'name': row['name'], 'candidate': row['candidate'], 'accession': row['accession'], 'md5': row['md5']}
+               for row in plan['references'])]
     try:
         grading = grade_alignment(store.get_artifact(result_ref), given=given, target_name=TARGET_NAME,
                                   aligner=ALIGNER.lower(), alphabet=ALPHABET, source_ref=handoff_ref)
@@ -211,7 +208,7 @@ def extract(ctx, handoff_ref, request, commission):
             'request_ref': None, 'version': sheet['aligner'] + ':' + sheet['alphabet'], 'retrieved_at': None,
             'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [target_ref]}, origin='tool')
         references, observations = [], []
-        for row, plan_row in zip(sheet['references'], plan['references']):
+        for row in sheet['references']:
             reference = store.put('reference', {
                 'reference_type': 'protein', 'source_ref': source['id'], 'accession': row['accession'],
                 'label': row['candidate'], 'sequence_ref': None, 'molecule': 'protein',
@@ -226,11 +223,9 @@ def extract(ctx, handoff_ref, request, commission):
                     query_selected_length=number(sheet['alignment']['target_length'])),
                 'dependencies': [target_ref, reference['id']]}, origin='tool')['id'])
         sequence_ref = store.get(target_ref)['sequence_ref']
-        derived = [row['id'] for row in products(store, 'protein_sequences')
-                   if row['artifact_ref'] == handoff['detail']['input_refs'][SEQUENCES_FILE]]
         product = record_product(
             store, artifact_ref=result_ref, kind=PRODUCT_KIND, generated_by=handoff_ref,
-            used=[sequence_ref, plan['search_ref']], derived_from=derived,
+            used=[sequence_ref, plan['search_ref'], plan['feature_group_ref']],
             settings=settings_of(plan['candidates'], plan['per_candidate']),
             locations=[{'service': 'bvbrc_workspace', 'path': path}])
     refs = [source['id'], grading_ref, product['id'], *references, *observations]
@@ -301,8 +296,7 @@ APPLICATION = JobApplication(
                                      'maximum': PER_CANDIDATE_RANGE[1]},
                    'resource_id': {'type': 'string', 'minLength': 1}},
     size_field='residues', kind=lambda fields: 'MSA:' + ALIGNER.lower() + ':' + ALPHABET,
-    field_problems=field_problems, prepare=prepare, extract=extract, describe_identity=describe_identity,
-    after_launch=after_launch)
+    field_problems=field_problems, prepare=prepare, extract=extract, describe_identity=describe_identity)
 
 __all__ = ['ALIGNER', 'ALPHABET', 'APPLICATION', 'CHILD', 'PER_CANDIDATE_RANGE', 'PROVIDER', 'REQUEST_FIELDS',
            'TARGET_NAME', 'check_commission', 'graded_rows', 'msa_options', 'plan_rows', 'planned_size',

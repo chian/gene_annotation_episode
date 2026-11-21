@@ -89,6 +89,7 @@ CONFIGURATION = ('service', 'endpoints', 'authorization_env', 'workspace', 'root
 # the last path component).
 PRECOMPUTED_DATABASES = {
     'bacteria-archaea': {'db_type': 'faa', 'unit': 'aa', 'database_file': 'bacteria-archaea.features.faa'}}
+FEATURE_GROUP = 'hits'
 MSA_ALIGNERS = ('Muscle',)
 MSA_ALPHABETS = ('protein',)
 SPECS = Path(__file__).parents[1] / 'forms' / 'application_service_specs' / 'original'
@@ -166,15 +167,21 @@ def _msa_prepare(job, files):
         raise ValueError('bvbrc_msa_job_aligner_or_alphabet_invalid')
     text = files[job['sequences_file']].decode('ascii')
     records = parse_sequences(text, format='fasta', name='sequence')
-    if len(records) < 2 or len({record.name for record in records}) != len(records):
+    ids = [] if 'feature_group_file' not in job else json.loads(files[job['feature_group_file']])['feature_ids']
+    if (len(records) + len(ids) < 2 or len({record.name for record in records}) != len(records)
+            or len(set(ids)) != len(ids) or not all(isinstance(item, str) and item for item in ids)):
         raise ValueError('bvbrc_msa_job_requires_two_or_more_sequences_with_distinct_names')
     return {'aligner': job['aligner'], 'alphabet': job['alphabet'], 'sequence_count': len(records),
-            'residues': sum(len(record.sequence) for record in records),
+            'residues': sum(len(record.sequence) for record in records), 'feature_ids': ids,
             'sequences_sha256': hashlib.sha256(text.encode()).hexdigest(), 'sequences_fasta': text}
 
 
 def _msa_parameters(prepared, folder, output_file):
-    return {'input_type': 'input_sequence', 'alphabet': prepared['alphabet'], 'aligner': prepared['aligner'],
+    """Pasted FASTA alone: ``input_sequence``. With a feature group (its path is ``folder`` + ``/`` + ``FEATURE_GROUP``)
+    the group and the pasted FASTA are given together: ``input_group``."""
+    group = {'input_type': 'input_group', 'feature_groups': [folder + '/' + FEATURE_GROUP]} if prepared['feature_ids'] else {
+        'input_type': 'input_sequence'}
+    return {**group, 'alphabet': prepared['alphabet'], 'aligner': prepared['aligner'],
             'fasta_keyboard_input': prepared['sequences_fasta'], 'output_path': folder, 'output_file': output_file}
 
 
@@ -239,7 +246,8 @@ APPLICATIONS = {
                  'parameters': _homology_parameters, 'native': _homology_native, 'output_file': 'blast',
                  'bulk': 'query_fasta',
                  'result_files': {'blast_out.raw.json': 'the single-query JSON15 report'}},
-    'MSA': {'job': ('application', 'aligner', 'alphabet', 'sequences_file'), 'prepare': _msa_prepare,
+    'MSA': {'job': ('application', 'aligner', 'alphabet', 'sequences_file'), 'optional': ('feature_group_file',),
+            'prepare': _msa_prepare,
             'parameters': _msa_parameters, 'native': lambda prepared, parameters: native_params('MSA', parameters),
             'output_file': 'msa', 'bulk': 'sequences_fasta',
             'result_files': {'msa.afa': 'the aligned FASTA of the sequences'}},
@@ -330,8 +338,9 @@ class BvbrcJobRoute(ApiJobRoute):
         if not isinstance(job, dict) or job.get('application') not in APPLICATIONS:
             raise ValueError('bvbrc_job_requires_an_application_of:' + ','.join(sorted(APPLICATIONS)))
         spec = APPLICATIONS[job['application']]
-        if set(job) != set(spec['job']):
-            raise ValueError('bvbrc_' + job['application'] + '_job_requires_exactly:' + ','.join(spec['job']))
+        if not set(spec['job']) <= set(job) <= set(spec['job']) | set(spec.get('optional', ())):
+            raise ValueError('bvbrc_' + job['application'] + '_job_requires:' + ','.join(spec['job'])
+                             + ':and_may_have:' + ','.join(spec.get('optional', ())))
         return {'application': job['application'], **spec['prepare'](job, files)}
 
     def submit(self, handle, job, files, owner):
@@ -352,6 +361,10 @@ class BvbrcJobRoute(ApiJobRoute):
             made = {'outcome': 'refused', 'failure': None}
             try:
                 self._request('Workspace.create', [{'objects': [[folder, 'folder']]}], 'submit')
+                if prepared.get('feature_ids'):
+                    self._request('Workspace.create', [{'objects': [[folder + '/' + FEATURE_GROUP, 'feature_group', {},
+                                                                    {'id_list': {'feature_id': prepared['feature_ids']}}]]}],
+                                  'submit')
                 if 'uploads' in spec:
                     self._request('Workspace.create', [{'objects': spec['uploads'](prepared, folder)}], 'submit')
                 value, snapshot = self._request('AppService.start_app2', native_params_, 'submit')

@@ -15,9 +15,10 @@ SCHEMA = 'msa_alignment_sheet_v1'
 
 
 def grade_alignment(aligned, *, given, target_name, aligner, alphabet, source_ref):
-    """The sheet of the aligned FASTA ``aligned`` (bytes). ``given`` is the plan's rows, in the order given to the
-    aligner: ``[{'name', 'sequence', 'candidate', 'accession', 'md5'}]`` for the references and the target's own
-    ``{'name': target_name, 'sequence'}`` first."""
+    """The sheet of the aligned FASTA ``aligned`` (bytes). ``given`` is the plan's rows: the target's own
+    ``{'name': target_name, 'sequence'}`` and the references ``{'name', 'candidate', 'accession', 'md5'}`` (a reference
+    row, gaps removed, must have the MD5 of its hit's protein sequence, BV-BRC's ``aa_sequence_md5``) or with a
+    ``sequence`` the row must equal."""
     parsed = parse_aligned_fasta(aligned, artifact={'raw_artifact_ref': source_ref, 'source_ref': source_ref,
                                                     'sha256': hashlib.sha256(aligned).hexdigest()},
                                  id_rule='first_whitespace_token')
@@ -28,8 +29,13 @@ def grade_alignment(aligned, *, given, target_name, aligner, alphabet, source_re
         raise ValueError('alignment_rows_differ_from_the_sequences_given')
     columns = parsed['value']['observed_column_count']
     for item in given:
-        if rows[item['name']].replace('-', '').upper() != item['sequence'].upper():
-            raise ValueError('alignment_row_differs_from_input:' + item['name'])
+        ungapped = rows[item['name']].replace('-', '').upper()
+        if 'sequence' in item:
+            if ungapped != item['sequence'].upper():
+                raise ValueError('alignment_row_differs_from_input:' + item['name'])
+        elif hashlib.md5(ungapped.encode('ascii')).hexdigest() != item['md5']:
+            raise ValueError('alignment_row_differs_from_the_hit_md5:' + item['name'])
+        item.setdefault('length', len(ungapped))
     target = rows[target_name]
     length = len(target.replace('-', ''))
     references = []
@@ -40,7 +46,7 @@ def grade_alignment(aligned, *, given, target_name, aligner, alphabet, source_re
         paired = [(a, b) for a, b in zip(target, row) if a != '-' and b != '-']
         identical = sum(1 for a, b in paired if a.upper() == b.upper())
         references.append({'name': item['name'], 'candidate': item['candidate'], 'accession': item['accession'],
-                           'aa_sequence_md5': item['md5'], 'length': len(item['sequence']),
+                           'aa_sequence_md5': item['md5'], 'length': item['length'],
                            'paired_columns': len(paired), 'identical_columns': identical, 'value': identical / length})
     return {'sheet': {'schema': SCHEMA, 'aligner': aligner, 'alphabet': alphabet,
                       'alignment': {'sequences': len(rows), 'columns': columns, 'target_row': [item['name'] for item in
