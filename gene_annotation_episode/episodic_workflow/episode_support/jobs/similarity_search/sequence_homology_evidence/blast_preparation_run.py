@@ -216,7 +216,8 @@ async def prepare_locally(ctx, resource_id, fields, *, executable_directory, pyt
     resource, wait for its end, fetch what it left, decide ``usable`` from the receipt and write the prepared-data
     record through custody. Returns ``{'status': 'usable'|'failed'|'incomplete', 'failure_code', 'retryable' (always
     false: the same checked call gives the same outcome), 'failure_codes', 'prepared_ref', 'features',
-    'record_refs'}``."""
+    'record_refs', 'handoff_ref', 'closure_ref', 'files'}``; ``files`` are the result files the job left, each ``{'name',
+    'ref', 'bytes', 'sha256'}`` (a database's files are under ``db/``), which the all-vs-all child packs into one product."""
     compiled = compile_preparation(fields, input_bytes=ctx.store.get_artifact(fields['input_ref']),
                                    software=software_identities(executable_directory, _programs(fields)),
                                    python=python)
@@ -227,7 +228,8 @@ async def prepare_locally(ctx, resource_id, fields, *, executable_directory, pyt
     if ran['status'] != 'completed':
         code = 'job_not_accepted' if ran['launch']['status'] != 'completed' else 'job_not_fetched'
         return {'status': 'failed', 'failure_code': code, 'retryable': False, 'failure_codes': [code],
-                'prepared_ref': None, 'features': None, 'record_refs': [plan_ref]}
+                'prepared_ref': None, 'features': None, 'record_refs': [plan_ref], 'handoff_ref': None,
+                'closure_ref': None, 'files': []}
     fetched = ran['fetch']
     receipt_ref = next((item['ref'] for item in fetched['results'] if item['name'] == RECEIPT_NAME), None)
     receipt = None if receipt_ref is None else json.loads(ctx.store.get_artifact(receipt_ref))
@@ -239,7 +241,8 @@ async def prepare_locally(ctx, resource_id, fields, *, executable_directory, pyt
     codes = evaluation['failure_codes']
     return {'status': evaluation['state'], 'failure_code': codes[0] if codes else None, 'retryable': False,
             'failure_codes': codes, 'prepared_ref': row['id'], 'features': prepared_features(values),
-            'record_refs': [row['id'], ran['launch']['handoff_ref'], fetched['closure_ref']]}
+            'record_refs': [row['id'], ran['launch']['handoff_ref'], fetched['closure_ref']],
+            'handoff_ref': ran['launch']['handoff_ref'], 'closure_ref': fetched['closure_ref'], 'files': fetched['results']}
 
 
 __all__ = ['DRIVER_SOURCE', 'PROBLEM_CODES', 'acquire_prepared_data', 'establish_prepared', 'launch_preparation',

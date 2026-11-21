@@ -135,3 +135,19 @@ def msa_test_ceiling(held, maxima, measurable, full):
     most = lambda candidate: maxima.get(candidate, full)
     return (math.fsum(max(most(first), most(second)) for first, second in combinations(listed, 2))
             + math.fsum(most(candidate) for candidate in measured if candidate not in listed))
+
+
+def cluster_commission_ceiling(held, candidates, clusterings):
+    """The most one commission of the all-vs-all child can add to the credit of one target, from where the list stands.
+
+    ``held`` is ``standing`` of the target; ``candidates`` the candidates the commission names (identifiers); ``clusterings``
+    how many clustering tests the commission can still produce (one for each of its allowed inflations not yet graded for
+    this set). A clustering test measures each named candidate once, its value the share of its sequences in the target's
+    cluster, in [0, 1] (the same scale as every test but the alignment). It is bounded as any such test is
+    (``test_ceiling``: a pair of listed candidates at most 1, a candidate it admits at most 1, a single listed candidate 0).
+    Once the first clustering has been graded every named candidate is listed, so each further one can earn only the pairs:
+    ``m(m-1)/2``. The bound is the first test's plus those of the others. It is a bound, not a forecast."""
+    names = list(dict.fromkeys(candidates))
+    if clusterings == 0:
+        return 0.0
+    return test_ceiling(held, names) + (clusterings - 1) * float(len(names) * (len(names) - 1) // 2)

@@ -42,6 +42,14 @@ The kinds of held graded source read, by the content of their retained sheet:
   and a candidate's msa sheet cannot exceed (the target's length) x ``SITE_WEIGHT``, because a site counts once.
   ``unidentified_positions`` gives, per candidate, the target positions that no held alignment has yet identified as a site
   of it (what the ceiling reads).
+* a graded clustering (``cluster_sheet_v1``, the all-vs-all child): test ``cluster:<method>`` (``cluster:mcl``; one test per
+  graded clustering, as every test is named, so ``@<source>`` follows); the sheet's groups are the candidate groups (the
+  sequences of one ``product`` candidate in the set; the target is in no group), and for each candidate group with a sequence
+  in the set one measurement: its value is the SHARE of the group's sequences that fall in the target's cluster (0 to 1), the
+  same scale as the other tests (about 1 for a strong typical result, as the other tests' values; the MSA's count is weighted
+  by W = 1 / E to land there). A candidate with no sequence in the set gives no measurement. The measurement also records
+  ``size`` and ``in_target_cluster``. ``cluster`` is a subscoring sheet like ``msa`` and ``database_search``: a candidate's
+  value on it is the sum of its values in the clustering tests.
 * a MetaCATS report (``metacats_sheet_v1``) gives no measurement: its significant positions are kept on its own sheet and
   confirm which distinguishing sites are statistically supported; they are not used as a filter of the sites.
 
@@ -59,6 +67,8 @@ import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
     _regions)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.cluster_sheet import (
+    SCHEMA as CLUSTER_SHEET, group_values)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
     differential_credit, standing)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import (
@@ -173,6 +183,15 @@ def _held_msa(source, grading, seen):
             in new_site_values(sheet['conserved_sites']['sites'], seen, target)], 0
 
 
+def _held_cluster(source, grading):
+    """A graded clustering (``cluster_sheet_v1``): test ``cluster:<method>``; one measurement per candidate group with a
+    sequence in the set (``cluster_sheet.group_values``), value = the share of its sequences in the target's cluster."""
+    sheet = grading['sheet']
+    test = 'cluster:' + sheet['method']
+    return [(test, 'product', candidate, None, share, {'size': size, 'in_target_cluster': inside})
+            for candidate, share, size, inside in group_values(sheet)], 0
+
+
 def _profile_scan(source, grading, value_of):
     accessions = {hit['target_name']: hit['target_accession'] for hit in grading['sheet']['hits']}
     families = _by(hmmer_comparisons(grading), 'target_name')
@@ -205,6 +224,8 @@ def _read(reader, scope, sources):
                 read = _profile_scan
             elif sheet['schema'] == MSA_SHEET:
                 read = lambda s, g, v: _held_msa(s, g, identified)
+            elif sheet['schema'] == CLUSTER_SHEET:
+                read = lambda s, g, v: _held_cluster(s, g)
             elif sheet['schema'] == PAIRWISE_SHEET:
                 read = lambda s, g, v: _pairwise(reader, s, g, v)
             else:

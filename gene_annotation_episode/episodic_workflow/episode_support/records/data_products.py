@@ -39,6 +39,18 @@ KINDS = {
     # format for it closer than format_2330 Textual format.
     'profile_scan_results': ('http://edamontology.org/data_0858', 'http://edamontology.org/format_2330',
                              'Sequence signature matches, textual (HMMER hmmscan domain table)'),
+    # The three products of the all-vs-all child. EDAM.tsv, read 2026-11-21 (https://edamontology.org/EDAM.tsv), none obsolete.
+    # data_1233 Sequence set (protein) for the prepared BLAST database: EDAM has no term for a BLAST database, so the closest
+    # one is the protein sequence set it holds, in format_3981 TAR format (the files makeblastdb wrote, packed in one archive).
+    'blast_protein_database': ('http://edamontology.org/data_1233', 'http://edamontology.org/format_3981',
+                               'Sequence set (protein), TAR (the files of a BLAST protein database)'),
+    # data_2082 Matrix ("a broad data type ... a placeholder for other, more specific types"): EDAM has no sequence-similarity
+    # matrix of pair scores (data_0870 Sequence distance matrix is evolutionary distance); format_3475 TSV (query, subject, bit score).
+    'sequence_similarity_matrix': ('http://edamontology.org/data_2082', 'http://edamontology.org/format_3475',
+                                   'Matrix, TSV (BLAST bit score of each ordered pair of a sequence set)'),
+    # data_1245 Sequence cluster (protein) in format_2171 Sequence cluster format (protein) (one cluster per line).
+    'sequence_clusters': ('http://edamontology.org/data_1245', 'http://edamontology.org/format_2171',
+                          'Sequence cluster (protein), one cluster per line'),
     'alignment_position_report': ('http://edamontology.org/data_0867', 'http://edamontology.org/format_3475',
                                   'Sequence alignment report, TSV (statistics per alignment position)'),
 }
