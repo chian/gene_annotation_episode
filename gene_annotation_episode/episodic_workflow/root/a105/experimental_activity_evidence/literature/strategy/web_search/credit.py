@@ -6,6 +6,7 @@ answers are: the relevant source leads (``verified_source_leads``); the screenin
 commissioned selection (``measurement``); one current grading sheet per commissioned experiment, matched to a current
 assessment (``a105_experiments``); one aggregation sheet over the commissioned experiments (``a105_assembly``). An
 accepted interpretation earns credit only through its saved grading sheet. Never bounded, clamped or rescaled."""
+from method_loop import UNBOUNDED
 import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
@@ -54,7 +55,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
     verified_source_leads: one answer per relevant source, read only from the Episode's own ``reason`` outcomes (one
     validated source lead each) and from the lead sources a child returned. ``reason`` with a source lead adds at most
     one source (credit_unit); without one it adds 0; tools add 0. The page child can return any number of lead
-    sources (it can acquire and judge new ones) with no finite bound: that ceiling is NOT written and raises.
+    sources (it can acquire and judge new ones) with no finite bound: that ceiling is ``UNBOUNDED``.
     screening: one answer, once the commissioned spans are covered, by ``reason`` declarations or a child's return:
     ``reason`` and the page child can each add credit_unit minus what is held; tools add 0.
     assessment: one answer (the first current retained anchored assessment of the task's sources): ``reason`` (which
@@ -81,7 +82,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
         if action_type == 'reason':
             return unit if _lead_in(arguments) else 0.0
         if action_type == 'page':
-            raise NotImplementedError('web_search_page_lead_sources_have_no_finite_bound')
+            return UNBOUNDED   # a page can return any number of lead sources
         return 0.0
     remaining = max(0.0, unit - held) + _SLACK * unit
     if answer == 'screening':

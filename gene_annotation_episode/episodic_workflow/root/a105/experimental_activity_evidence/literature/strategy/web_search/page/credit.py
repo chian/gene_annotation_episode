@@ -20,6 +20,7 @@ sheet (``task.py`` ``reason``) calls it as its tail, the model never selects it 
 model call per sheet through ``ctx.model`` (recorded with the unit and replayed), answered in a closed schema (one of
 ``justified`` / ``unjustified`` per unknown field, validated by code) and saved as a record the Episode holds.
 ``credit`` stays a pure read of the summary and the held records."""
+from method_loop import UNBOUNDED
 import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
@@ -97,8 +98,8 @@ def ceiling(summary, records, action_type, arguments, ctx):
     these kinds.
     verified_source_leads: one ``reason`` carries at most one source lead and so changes at most one source's
     disposition: ceiling ``credit_unit``. ``table`` and ``report`` return their own list of relevant leads, which
-    has no finite bound known here (their own units can each add one, without limit): that ceiling is left unwritten
-    and raises. ``chunk`` returns no lead, the access tools, population operations and ``update_sheet`` produce none:
+    has no finite bound known here (their own units can each add one, without limit): that ceiling is
+    ``UNBOUNDED``. ``chunk`` returns no lead, the access tools, population operations and ``update_sheet`` produce none:
     0.
     screening: answered once the commissioned spans are covered, by a ``reason`` declaring no applicable evidence or by
     a ``table`` or ``report`` child returning them covered: ``credit_unit`` if not covered now, else 0; other actions
@@ -122,8 +123,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
         if action_type == 'reason':
             return float(unit)
         if action_type in ('table', 'report'):
-            raise NotImplementedError('ceiling_unbounded:verified_source_leads:' + action_type
-                                      + ': a child returns any number of relevant leads')
+            return UNBOUNDED   # a table or report child returns any number of relevant leads
         return 0.0
     if task.get('answer_kind') == 'screening':
         return float(remaining) if action_type in ('reason', 'table', 'report') else 0.0

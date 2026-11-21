@@ -6,6 +6,7 @@ answers are: the relevant source leads (``verified_source_leads``); the screenin
 commissioned selection (``measurement``); one current grading sheet per commissioned experiment, matched to a current
 assessment (``a105_experiments``); one aggregation sheet over the commissioned experiments (``a105_assembly``). An
 accepted interpretation earns credit only through its saved grading sheet. Never bounded, clamped or rescaled."""
+from method_loop import UNBOUNDED
 import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
@@ -39,7 +40,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
     * ``verified_source_leads``: credit is ``u`` per relevant lead source. ``reason`` saves at most one source lead
       (the selection carries one ``source_lead``), so ``u``, or 0 when the given arguments carry no ``source_lead``.
       Every other tool is 0 (leads come only from ``reason`` units and child returns). The strategy child returns a
-      list of lead sources whose length nothing held bounds: no finite ceiling exists and the call raises.
+      list of lead sources whose length nothing held bounds: no finite ceiling exists: ``UNBOUNDED``.
     * ``source_answer`` screening: one answer, earned only by ``reason`` (a source-grounded no-applicable-evidence
       declaration) or by a child returning the spans covered. ``reason`` and the strategy commission: the unit not yet
       earned, ``u - credit`` (never below 0); every other tool 0.
@@ -60,7 +61,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
     remaining = max(0.0, unit - credit(summary, records))
     if kind == 'verified_source_leads':
         if child:
-            raise ValueError('literature_ceiling_unbounded:strategy_child_returns_an_unbounded_number_of_lead_sources')
+            return UNBOUNDED   # the strategy child returns any number of lead sources
         if action_type != 'reason':
             return 0.0
         if arguments is not None and 'source_lead' not in arguments['arguments']:

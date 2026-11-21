@@ -10,6 +10,7 @@ What a child returns is its credit, its per-annotation scores, the features of i
 its assessments stay inside the child. The children's credit therefore enters this credit as returned (the page child
 credits the change of the resolution of the sheet, see the page ``credit.py``); this level computes nothing from the
 scores or features. Never bounded, clamped or rescaled."""
+from method_loop import UNBOUNDED
 import math
 
 from .task import TOOLS
@@ -61,32 +62,32 @@ def ceiling(summary, records, action_type, arguments, ctx):
     * ``reason``: each assessment the commit saves adds at most one distinct finding key, so at most
       ``finding_unit * len(commit['assessments'])``. The gradings, sheets and other sections add no assessment. A
       commit's assessments are not bounded by anything held now (the schema has no maximum and the commit may create its
-      own observations and hypotheses), so with ``arguments`` None there is no finite bound and the call raises.
+      own observations and hypotheses), so with ``arguments`` None there is no finite bound: ``UNBOUNDED``.
     * ``literature``: its assessments stay in the child, so only its returned credit enters. By task kind: ``a105_experiments``
       returns the sum of page credits, each the change of 1 - mean resolution of the one commissioned claim's classes over a
       sheet that starts from the sheet the previous run returned, so the sum is at most the remaining 1 - R <= 1, times the
       task's ``credit_unit``; ``source_answer`` (assessment, screening, measurement) and ``a105_assembly`` earn
       ``credit_unit`` for the one answer; ``verified_source_leads`` earns ``credit_unit`` per verified lead source, and the
-      number of leads is not bounded by anything held now, so it (and ``arguments`` None, which spans that kind) raises.
+      number of leads is not bounded by anything held now, so it (and ``arguments`` None, which spans that kind) is ``UNBOUNDED``.
     * ``experimental_activity_evidence`` (a narrower head): the child returns its own credit, a count of retained findings
-      with no bound held now, so there is no finite ceiling and the call raises.
+      with no bound held now, so there is no finite ceiling: ``UNBOUNDED``.
 
-    Where no finite bound exists the call raises instead of returning a made-up number."""
+    Where no finite bound exists the ceiling is ``UNBOUNDED`` (the owner: UNBOUNDED where truly unbounded), never a made-up number."""
     unit = summary['evidence_task']['credit_unit']
     if action_type == 'reason':
         if arguments is None:
-            raise ValueError('a105_head_ceiling_unbounded:reason_assessments_not_bounded_without_arguments')
+            return UNBOUNDED   # a commit can carry any number of assessments; nothing held limits it
         commit = arguments['arguments']['commit']
         return float(unit * len(commit.get('assessments', [])))
     if action_type == 'literature':
         if arguments is None:
-            raise ValueError('a105_head_ceiling_unbounded:literature_verified_source_leads_not_bounded')
+            return UNBOUNDED   # over every arguments: a leads task can return any number of lead sources
         task = arguments['assignment']['literature_task']
         if task['kind'] == 'verified_source_leads':
-            raise ValueError('a105_head_ceiling_unbounded:verified_source_leads_count_not_bounded')
+            return UNBOUNDED   # each relevant lead source earns a unit; nothing limits how many a child returns
         return float(task['credit_unit'])
     if action_type == 'experimental_activity_evidence':
-        raise ValueError('a105_head_ceiling_unbounded:narrower_head_returns_unbounded_finding_count')
+        return UNBOUNDED   # the narrower head returns its own finding count, which has no limit
     if action_type in TOOLS:
         return 0.0
     raise LookupError('no_such_action_type:' + action_type)

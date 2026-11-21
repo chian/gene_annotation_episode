@@ -6,6 +6,7 @@ answers are: the relevant source leads (``verified_source_leads``); the screenin
 commissioned selection (``measurement``); one current grading sheet per commissioned experiment, matched to a current
 assessment (``a105_experiments``); one aggregation sheet over the commissioned experiments (``a105_assembly``). An
 accepted interpretation earns credit only through its saved grading sheet. Never bounded, clamped or rescaled."""
+from method_loop import UNBOUNDED
 import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
@@ -42,8 +43,8 @@ def ceiling(summary, records, action_type, arguments, ctx):
     * ``verified_source_leads``: one credit unit per relevant source. A reasoning commit carries at most one source
       lead, so it adds at most one source: ``credit_unit``. Nothing else a tool does enters the leads, so 0. A child
       returns every relevant source it found, and the number of sources it can find has no finite bound (it
-      searches, reads and reasons for as many units as its own yield controller lets it run): that ceiling is not
-      written and raises ``NotImplementedError``.
+      searches, reads and reasons for as many units as its own yield controller lets it run): its ceiling is
+      ``UNBOUNDED``.
     * ``source_answer`` ``screening``: one answer, held once the commissioned spans are covered. If covered, every
       action has ceiling 0. Otherwise a reasoning commit (declaring spans without applicable evidence) or a child
       (returning them covered) can earn the one ``credit_unit``; the tools cannot.
@@ -68,8 +69,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
         if action_type == 'reason':
             return float(unit)
         if is_child:
-            raise NotImplementedError(
-                'strategy_child_ceiling_unwritten: the relevant sources a search child can return have no finite bound')
+            return UNBOUNDED   # the relevant sources a search child can return have no limit
         return 0.0
     remaining = float(unit) * (1 - len(answers(summary, records)))
     if answer == 'screening':
