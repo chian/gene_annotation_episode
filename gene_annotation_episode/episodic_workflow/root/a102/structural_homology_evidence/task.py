@@ -80,8 +80,9 @@ INSTRUCTIONS = (
 # chooses values; code builds the child's assignment) and what comes back. Facts the system enforces; no recommendation.
 CREDIT_TEXT = ('Your credit counts possible annotations (candidates). A candidate found with positive evidence is admitted to the '
                'list and earns its score; a possible annotation with no positive evidence is not on the list. Applying the same '
-               'test to candidates already on the list earns by how differently they respond: the size of the difference of the '
-               'moves of their scores. A repeat earns nothing.')
+               'test earns by how differently the two leading candidates respond: of the candidates already on the list that the '
+               'test measures, the two with the highest scores earn the size of the difference of the moves of their scores in '
+               'that test, and no other pair earns anything. A repeat earns nothing.')
 PARKED_TEXT = ('A parked job is always finished: this episode does not end while one is parked; once its expected remaining '
                'seconds have passed, or when none of your other actions is worth its cost, code commissions its continuation '
                '(until extracted) as the next unit without asking you; before then you may do other work worth its cost.')

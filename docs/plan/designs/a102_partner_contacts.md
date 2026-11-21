@@ -28,7 +28,9 @@ Files: tool `tools/structure_search/structural_homology_evidence/partner_contact
   `execute_on_local_resource`; `ctx.settings` holds `python_executable` and `usalign_executable_directory`.
 * Hits asked: not a control, with a B, in rank order (a hit with no product still binds partners and enters test 2). One solved ENTRY
   FILE at a time (entry and assembly number as the hit target names it: `1mjc-assembly1.cif.gz_A`; an entry with several hit chains is
-  fetched once), in batches of 10 files. Stopping rule (exact): after each batch the candidate picture of the hits done in BOTH tests
+  fetched once), in batches of 10 files. An entry whose contents (from the held hit metadata, commit `0ff712e14`) show no non-additive
+  ligand and no nucleic acid is not downloaded (`no_partner_in_entry`, counted as `entries_skipped_no_partner`); an entry whose contents RCSB
+  did not state is not asked (`entry_contents_unknown`). Stopping rule (exact): after each batch the candidate picture of the hits done in BOTH tests
   is recomputed (`differential_credit` scores of the two tests' measurements); the unit stops when, after at least two batches, the batch
   admitted no new candidate in either test (no key outside the picture before it) and moved no candidate's value by more than
   `SETTLE` = 0.01 (`uniprot_hit_names.SETTLE`), or when all files are done; the first batch always has a second when files remain. Hits
@@ -201,15 +203,17 @@ float32). The first hand run of CspA differed (1.6e-4) because the script did no
 | search test alone | 32.3159 (159 candidates) | 12.2487 (104 candidates) |
 | + TEST 1 (rise) | 41.9558 (+9.6397) | 12.5635 (+0.3148) |
 | + TEST 2 (rise) | 42.8543 (+0.8985) | 15.3895 (+2.8260) |
-| ceiling before TEST 1 (`site_test_ceiling`, the search's products) | 6320 (159 listed: 159^2 // 4) | 2704 (104 listed) |
-| ceiling before TEST 2 (`bound_partner_test_ceiling`) | 1.41e9 | 2.21e9 |
+| ceiling before TEST 1 (`site_test_ceiling`, the search's products) | 1 (two or more listed: `w` once) | 1 |
+| ceiling before TEST 2 (`bound_partner_test_ceiling`) | `w (u + 1)`, `u` = the possible partners (79 for CspA with no partner listed yet: 79) | 72 (P = 72) |
 
-TEST 2's ceiling (`differential_credit.bound_partner_test_ceiling(held, partner_slots)`, proof in its docstring) is `w (max(slots - k, 0) + k^2 // 4)` with k the partner candidates already listed. The number of
-partner candidates is NOT known before the unit runs: the held hit metadata (the RCSB reply of `pdb_chain_proteins.QUERY`) asks `polymer_entities` only, so it lists no non-polymer entity and no partner count;
-the entries could not be skipped by it. The proved bound uses the machine bound of the unit: a file unpacks to at most `MAX_UNPACKED_BYTES` (128 MiB) and every atom row has at least 52 bytes (the smallest in the
-fetched files is 91), so a file has at most `MAX_ATOMS_PER_FILE` = 2,581,110 molecules, and `partner_slots` = asked hits x that (CspA 548, RecA 858 hits). It is proved and extremely loose. If the head wants the
-tight figure "one new partner per hit" (548, 858) that is a forecast, not a bound. Both rises are far below their ceilings. A tighter proof needs the entries' non-polymer entity counts (RCSB
-`rcsb_entry_info.nonpolymer_entity_count` is a different request, not made) or a rule that caps partners per hit; none was invented.
+(Under the pair sum the ceilings were 6320 and 2704 before TEST 1 and 1.41e9 and 2.21e9 before TEST 2; they were replaced by the top-two
+rule on 2026-11-21, see `a102_head.md`, end. The rises above were computed under the pair sum.)
+
+TEST 2's ceiling (`differential_credit.bound_partner_test_ceiling(held, possible_partners)`, proof in its docstring) is `w (u + 1)` with `u` the possible partners not yet listed (`w u` with fewer than two
+of them listed): each can enter with at most `w`, plus ONE differential, the top two listed partners' difference. The set of possible partners is read from the held hit metadata (commit `0ff712e14`:
+the RCSB reply asks the non-polymer entities and the polymer types of each hit entry; `partner_contacts.possible_partners`), an upper set of what the entries contain; the unit fails if a file shows a
+partner outside it. An entry with no non-additive ligand and no nucleic acid is not downloaded (`no_partner_in_entry`, `entries_skipped_no_partner`), and an entry whose contents RCSB did not state is not asked.
+Both rises are below their ceilings. (The earlier machine-bound form with `partner_slots` = asked hits x `MAX_ATOMS_PER_FILE` is gone.)
 
 ## Not verified, and what did not fit
 

@@ -3,9 +3,9 @@
 
 ``credit(summary, records)`` is ``candidate_table(...)['credit']`` (library: ``grading/structural_homology_evidence/
 candidate_measurements.py``, which reads the held graded sources in the order the head obtained them and calls
-``differential_credit``): a candidate annotation with positive evidence is admitted and earns its score; applying a test the
-candidates already on the list have all undergone earns the sizes of the differences of their moves; a repeat changes
-nothing, so it earns nothing. The sum has no fixed maximum; every action the head offers has a ceiling (``ceiling``), so the
+``differential_credit``): a candidate annotation with positive evidence is admitted and earns its score; a test earns the size of the difference of the
+moves of the TWO highest-scored candidates already on the list that it measures (the top two, whatever their kind), and
+nothing for any other pair; a repeat changes nothing, so it earns nothing. The sum has no fixed maximum; every action the head offers has a ceiling (``ceiling``), so the
 credit's controller is the forecast controller (``yield_estimator.py``). ``A102DifferentialCredit`` is its definition record.
 A child's credit is information in the summary and is never added."""
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
@@ -47,7 +47,7 @@ class A102DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit_v3', 'axis': 'A102',
+        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit_v4', 'axis': 'A102',
                 'measurement': 'index_b_of_each_hit_of_one_structure_search_from_the_aligned_pairs_after_superposition',
                 'site_measurement': 'mean_e_of_the_hits_with_sites_e_is_b_times_the_mean_residue_score_of_class_match_times_kernel',
                 'candidates': 'product_from_the_uniprot_name_of_the_hit',
@@ -60,7 +60,8 @@ class A102DifferentialCredit:
                 'score': 'sum_over_subscoring_sheets_of_weight_times_sum_of_mean_value_in_test_of_that_kind',
                 'admission': 'first_value_above_zero',
                 'entry': 'score_after_the_admitting_test_only',
-                'differential': 'abs_difference_of_score_moves_of_two_listed_candidates_in_a_test_both_underwent',
+                'differential': ('abs_difference_of_the_score_moves_in_a_test_of_the_top_two_candidates_listed_before_the_test_that_the_test_measures_'
+                                 'ties_by_candidate_key_nothing_for_any_other_pair_none_with_fewer_than_two'),
                 'credit': 'sum_of_entry_scores_and_differentials', 'maximum': 'none',
                 'repeat': 'earns_nothing'}
 
@@ -240,8 +241,8 @@ def outcome_pending(summary, records, position):
 # What ``ceiling`` means for each action type the head offers. The forecast controller learns an action's share of its
 # ceiling only from ledger rows recorded under the same credit definition and the same version of that action's ceiling
 # (``yield_estimator.py``): change an action's version whenever its ceiling's derivation changes, and only that action's.
-CEILING_VERSIONS = {'structure_search': 'a102_ceiling_v1', 'site_correspondence': 'a102_ceiling_v1',
-                    'partner_contacts': 'a102_ceiling_v1'}
+CEILING_VERSIONS = {'structure_search': 'a102_ceiling_v2', 'site_correspondence': 'a102_ceiling_v2',
+                    'partner_contacts': 'a102_ceiling_v2'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
@@ -251,22 +252,23 @@ def ceiling(summary, records, action_type, arguments, ctx):
     The credit is, per target, the sum of the entry scores of the candidates and of the differentials
     (``differential_credit``). A unit adds at most one graded source, which is one test appended after the earlier ones. A
     candidate's value in a test is the family's weight times its mean index B of the test, in [0, w] (B lies in [0, 1]), so
-    the test moves a score by at most ``w`` and ``differential_credit.test_ceiling`` bounds what the one test can add: a pair of
-    candidates on the list that the test measures earns at most ``w``; a candidate it admits earns at most its entry, ``w``; a
-    test that measures one listed candidate and admits none earns 0.
+    the test moves a score by at most ``w`` and the one test earns the entries of the candidates it admits (each at most ``w``)
+    plus ONE differential, the difference of the moves of the top two listed candidates it measures (at most ``w``, and only with
+    two such candidates); nothing else.
 
     * ``site_correspondence``: the one site test of a held graded search measures at most the product candidates of that
       search's own test (``mean_B`` not null on its sheet), each with a value in [0, w] (its mean E = B F, E in [0, 1]), and
       the candidates are all listed or unlisted by the search's own test; ``differential_credit.site_test_ceiling`` is the proved
-      maximum (``w (u + k^2 // 4)``, ``k`` listed and ``u`` unlisted candidates; the proof is in its docstring). A pair already
+      maximum (``w`` when at least two of the candidates are listed, else 0: the family weight once; the proof is in its
+      docstring). A pair already
       graded (``graded_site_pairs``) earns 0: the request check refuses it. With ``arguments`` ``None``: the largest over the
       pairs still offered (``offered_site_pairs``), 0 when none is offered, and ``best_arguments`` names the pair.
     * ``partner_contacts``: one unit appends two tests, in this order. TEST 1 (``site_correspondence:partner_contacts``) measures
       at most the product candidates of the named search's own test, each with a value in [0, w] (its mean E): the bound is
       ``differential_credit.site_test_ceiling`` over them. TEST 2 (``bound_partner:pdb100``) measures partner candidates, which
       are all in the set the search's entries make possible (``partner_contacts.possible_partners``, read from the held hit
-      metadata; the unit fails if a file shows another): ``differential_credit.bound_partner_test_ceiling`` (``w (u + k^2 // 4)``
-      over that set, ``k`` of them listed; proof in its docstring). Test 1 adds only product candidates, so it changes no partner
+      metadata; the unit fails if a file shows another): ``differential_credit.bound_partner_test_ceiling`` (``w (u + 1)`` over that
+      set with ``u`` of them unlisted and at least two listed, ``w u`` otherwise; proof in its docstring). Test 1 adds only product candidates, so it changes no partner
       candidate's standing and the two bounds add. A search already analysed earns 0 (the request check refuses it). With
       ``arguments`` ``None``: the largest over the searches still offered (``offered_partner_searches``), 0 when none is offered.
     * ``structure_search``: the one test of one search measures the product candidates of its hits: the ones already on the

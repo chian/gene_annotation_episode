@@ -134,12 +134,12 @@ No request carries a name, an email or a key. The job route for the Foldseek ser
 
 ## Credit, ceilings, controller (SOP Steps 7 to 9)
 
-- Credit: the owner's differential credit, unchanged in rule (entry on positive evidence, differentials for tests after both
-  candidates are listed, never falls). A102 has its own definition record (`A102DifferentialCredit`) and its own copies of
+- Credit: the owner's differential credit as A101 counts it (entry on positive evidence; a test earns ONE differential, the
+  difference of the moves of the top two candidates listed before it that it measures; never falls). A102 has its own definition record (`A102DifferentialCredit`) and its own copies of
   the arithmetic and the measurements reader under `LIB/grading/structural_homology_evidence/` (the repository's per-axis
   library convention; A101's modules name A101's sheet families and stay untouched).
 - Ceilings: `structure_search` = the proved bound of one search test (the hits it can name x the family weight, by
-  `test_ceiling`, as A101's `bvbrc_blast`); 0 for a search of a database and model already held or commissioned.
+  `test_ceiling`, as A101's `bvbrc_blast`: `w` for the one differential plus the entries of the candidates it can admit); 0 for a search of a database and model already held or commissioned.
 - Controller: forecast, with `CEILING_VERSIONS` per action, `outcome_pending`, `resume_action` (the head finishes parked
   jobs) and `best_arguments`, as in A101's head. Exchange rate: 0.006 to start, PROVISIONAL (A101's value; the owner on a
   first figure: "you have to start somewhere that's fine"). It is re-derived from A102's own resolved forecast rows after

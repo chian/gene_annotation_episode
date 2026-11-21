@@ -39,7 +39,7 @@ selection prepared for a new child) is not.
 * `credit.py`: `A102DifferentialCredit` (test = one graded source `structure_search:foldseek:tmalign:<database>@<source>`; sheet
   weights from `SHEET_WEIGHT`); `credit` = the candidate table's credit; `ceiling` (below); `best_arguments` (the resume commission of
   the parked job, else the first database not searched with a held model, else `None`); `outcome_pending` (a child unit that returned
-  parked); `CEILING_VERSIONS = {'structure_search': 'a102_ceiling_v1'}`. No `UNBOUNDED`.
+  parked); `CEILING_VERSIONS` (`a102_ceiling_v2` for each of the three actions since the top-two correction, end of this note). No `UNBOUNDED`.
 * `yield_estimator.py`: the forecast controller, opened as A101HEAD does. The run's declaration (continuation settings, key
   `A102:a102_structural_correspondence`): kind `forecast`, `exchange_rate` 0.006, `forget_old_rows` true, `job_kinds` `{}`.
   **PROVISIONAL: 0.006 is A101's value** (the owner on a first figure: "you have to start somewhere that's fine"); it is A101's
@@ -54,8 +54,9 @@ selection prepared for a new child) is not.
 
 The proved bound of one search test: `differential_credit.test_ceiling(standing, products, 'structure_search', unseen=1000,
 limit=1000)`, the number of products one search can measure being at most the number of hits it can name. A value of one hit is B,
-in [0, 1], and the weight of the family is 1, so a test moves a score by at most 1: a pair of listed candidates earns at most 1, a
-candidate the search admits earns at most its entry, 1.
+in [0, 1], and the weight of the family is 1, so a test moves a score by at most 1: the test earns ONE differential, the top two
+listed candidates it measures, at most 1 (and only with two of them), and each candidate it admits earns at most its entry, 1:
+`w x ((1 if two listed are measured) + the candidates admitted)`, the admitted at most 1000 less the listed measured.
 
 **The number 1000 and where it comes from.** The Foldseek server's documentation (`LIB/forms/application_service_specs/original/
 StructureSearch_server_api_docs.html`) names no limit on the hits of a result. The Foldseek README (`runs/a102_measure_check/
@@ -117,6 +118,8 @@ Target: E. coli RecA (P0A7G6), 353 residues (`runs/a101_goal12_ws_reca/target.fa
    estimator with `outstanding_handoff_count` 0. The Foldseek duration observed: tens of seconds (CspA: 16.7 s). No custody error.
 
 ## What happened (real runs, 2026-11-21, worktree `gae_a102_24c08fa33`, commit `24c08fa33`)
+
+(Numbers in this section computed under the pair sum (credit definition v3, ceiling v1) unless marked; see "The differential is the top two's only" at the end.)
 
 Runs used: 3 of 5 (1 failed at the start, CspA 2, RecA 3). Foldseek tickets: 0 (run 1), 1 (CspA), 1 (RecA).
 
@@ -189,7 +192,7 @@ request schema), `task.check_site_request` (the library check fed with the summa
   and its `sheet_weights` carry `site_correspondence` 1.0); the test is `site_correspondence:<site source>@<source>`.
 * Ceiling: `differential_credit.site_test_ceiling` over the product candidates of the named search's own sheet (`mean_B` not null);
   0 for a graded pair; with arguments `None` the largest over the pairs still offered; `best_arguments` the first pair (searches in
-  order, `annotated` before `catalytic`) with the largest value; `CEILING_VERSIONS['site_correspondence']` `a102_ceiling_v1`.
+  order, `annotated` before `catalytic`) with the largest value; `CEILING_VERSIONS['site_correspondence']` `a102_ceiling_v2` (v1: `w (u + k^2 // 4)`, the pair sum).
 * Custody: the tool opens the search's source, its retained grading (artifact), its raw result (artifact), the model (artifact) and
   the target's sequence; `search_inputs` reports `result_held` and `model_held` and the schema offers only held ones.
 
@@ -220,6 +223,8 @@ CspA:
    a rise under 2, below the ceiling (which is large, `u + k^2 // 4` over 135 candidates, about 4000). `catalytic`: 0 measured.
 
 ## What happened with site_correspondence (real runs, 2026-11-21)
+
+(Numbers in this section computed under the pair sum (credit definition v3, ceiling v1) unless marked; see "The differential is the top two's only" at the end.)
 
 Runs used: 2 of 5. Foldseek tickets: RecA 1, CspA 2 (afdb-swissprot, then pdb100 chosen by the model). Workspaces are built by
 `/tmp/.../build_ws.py`-style scripts: `init`, `propose-annotation`, a continuation written with `A102DifferentialCredit().as_record()` imported from
@@ -295,16 +300,17 @@ candidates, counts per kind, `partner_tests`). SERVICES stays `('job_access',)` 
 as A101's `hmmer_profile_scan`); the head's continuation settings gain `python_executable` and `usalign_executable_directory`
 (`resources/software/usalign.json`: `resources/software/usalign-20261019/bin`). The credit definition is version
 `a102_differential_credit_v3` (it names the partner measurement and candidates and the two new test kinds; `sheet_weights` carries
-`bound_partner` 1.0). `CEILING_VERSIONS['partner_contacts']` = `a102_ceiling_v1`.
+`bound_partner` 1.0; v4 since the top-two correction). `CEILING_VERSIONS['partner_contacts']` = `a102_ceiling_v2`.
 
 * Request: action `partner_contacts`, fields `search_ref` (a held graded pdb100 search with raw result, model, hit metadata and the
   partner metadata, not yet analysed) and `resource_id` (a bound local resource). A search graded before the entry contents existed
   in the hit metadata is refused by the check with `search_predates_the_partner_metadata`.
-* Ceiling = `site_test_ceiling` over the product candidates of the named search + `bound_partner_test_ceiling` over the set of
-  partner candidates the search's entries make possible (`partner_contacts.possible_partners`; the proof is in the docstring: the
+* Ceiling = `site_test_ceiling` over the product candidates of the named search (TEST 1: `w` once, with two listed candidates) +
+  `bound_partner_test_ceiling` over the set of partner candidates the search's entries make possible (TEST 2: `w (u + 1)` with `u`
+  of them unlisted and two listed, else `w u`; `partner_contacts.possible_partners`; the proof is in the docstring: the
   entry contents RCSB lists are an upper set, and the unit fails with `grading_refused` if a file shows a partner outside it).
   0 for an analysed search; with arguments `None` the largest over the searches still offered. Direct check on the stored data
-  (not a real run): CspA P = 79 candidates, ceiling 79 (rise 0.8985 earlier); RecA P = 72, ceiling 72 (rise 2.826).
+  (not a real run): CspA P = 79 candidates, ceiling 79 (rise 0.8985 earlier); RecA P = 72, ceiling 72 (rise 2.826) (pair sum: with the top two, the ceilings of the run units are in the correction section).
 * The library fix (commit `0ff712e14`): the pdb100 hit lookup also asks `nonpolymer_entities { nonpolymer_comp { chem_comp { id } } }`
   (verified live; the polymer types were already asked); the hit rows carry `entry_nonpolymer_components` and `entry_polymer_types`;
   an entry whose contents show no non-additive ligand and no nucleic acid is not downloaded (`no_partner_in_entry`, counted on the
@@ -339,6 +345,8 @@ is below the expected seconds times 0.006, or by having nothing left to offer. A
 
 ## What happened with partner_contacts (real runs, 2026-11-21, worktree `gae_a102_66cef935e`, commit `66cef935e`)
 
+(Numbers in this section computed under the pair sum (credit definition v3, ceiling v1) unless marked; see "The differential is the top two's only" at the end.)
+
 Runs used: 2 of 4. Foldseek tickets 2 per run (afdb-swissprot, pdb100). RCSB entry-file downloads: CspA 80 (+1 refused by length: 4BTS), RecA 160.
 Both runs closed by `yield_stop`, no failure, no `episode_ceiling_exceeded`, no custody error, `outstanding_handoff_count` 0; the unit's local US-align
 jobs ran through the job service (CspA 8 jobs, RecA 16, one job directory each; handoff and closure rows in the unit's `record_refs`: CspA 109 refs of which 93
@@ -370,3 +378,77 @@ Predicted against observed:
 * Second-pdb100 behaviour: in both runs the model took the pdb100 search before the tool and never asked for site_correspondence on it (refused by construction).
 
 Unit durations are far above the earlier direct-check stand-in (one hundred twenty seconds): the cost of the unit is the US-align job per batch and the downloads; `partner_contacts` took 466.8 s and 915.7 s, which is also the learned `seconds` the controller will carry.
+
+## The differential is the top two's only (correction, 2026-11-21)
+
+The owner: "if S_A moves +0.5 and S_B only moves +0.1, then you have differentiated the lead candidates by 0.4"; "Do you not remember that
+you only do the differential between the top two candidates?"; "i told you to use a101 differential as template"; "Okay keep the top two".
+A102's copy had summed the differential over every pair of listed candidates (one test added over a thousand pairs: CspA credit 41 -> 304
+after a second search). Now, as A101 (`a101_differential_credit.md`): entries unchanged; among the candidates listed BEFORE a test that
+the test measures (whatever their kind: `product:`, `ligand:`, `nucleic_acid:`), the two with the highest scores before it (a tie by
+candidate key: `differential_credit.lead_pair`) earn `|d_A - d_B|` for that test, nothing for any other pair, nothing with fewer than two.
+A test has at most one differential row (`pair`, `value`, `difference`, `moves`). A102 has no cluster test and no dataset rule. Credit
+definition `a102_differential_credit_v4`; each action's ceiling `a102_ceiling_v2`. Scores do not change (only credit does).
+
+Ceilings (proved in the docstrings of `differential_credit.py`):
+
+* `test_ceiling` (`structure_search`): `w x ((1 if >= 2 listed products are measured) + the new ones)`, at most 1000 candidates in all.
+* `site_test_ceiling` (`site_correspondence`, and TEST 1 of `partner_contacts`): every candidate of the graded search's own test is
+  listed, so at most `w` once (the top two's difference, two numbers in [0, w]), and 0 with fewer than two listed candidates.
+* `bound_partner_test_ceiling` (TEST 2 of `partner_contacts`): each unlisted possible partner enters with at most `w`, plus one pair
+  among the listed ones: `w (u + 1)` with two or more of them listed, else `w u`.
+
+Deleted: `vertex_maximum` and the closed pair-count forms `w (u + k^2 // 4)` and `m (m - 1) / 2`. `candidate_measurements.py`,
+`task.py` (its `CREDIT_TEXT` now states the top-two rule) and `final_to_parent.py` (no pair text in it) needed no other change.
+
+### Direct check: the head's credit replayed unit by unit (not a real run)
+
+`runs/a102_top_two_check/` (script `replay.py`, driver `go.sh`, output `table.txt`, `table_site.txt`): scratch copies of the stored real
+runs, the head's custody rebuilt before each unit, the credit counted under the old rule (equal to the journal at every unit) and the new
+rule, with the old and new ceilings. The site run RecA (`a102_site_ws_reca_1`) was made at commit `4f840abe6`, whose episode the present
+tree cannot rebuild: it was replayed on that commit's tree (old) and on that tree with the new `differential_credit.py` (new). Final
+credits: CspA 338.78 -> 61.46; RecA (partner run) 30.64 -> 19.84; RecA (site run) 43.57 -> 6.31. The leading products and their scores are
+unchanged (CspA: CspB 2.0458, CspC 1.6636, Probable cold shock protein A 1.5651, Cold shock protein 1.5627, CspA 1.5174; RecA: Protein
+RecA 1.2471, Protein RecA 2 0.6147, ...). Every new rise is at or below its new ceiling. Per unit (chosen ceiling = the arguments the model
+chose; with arguments `None` it was equal in every unit):
+
+```
+===== partner_ws_cspa_1 final old 338.7807 new 61.4642
+ leading old [('Cold shock protein CspB', 2.0458), ('Cold shock-like protein CspC', 1.6636), ('Probable cold shock protein A', 1.5651), ('Cold shock protein', 1.5627), ('Cold shock protein CspA', 1.5174)]
+ leading new [('Cold shock protein CspB', 2.0458), ('Cold shock-like protein CspC', 1.6636), ('Probable cold shock protein A', 1.5651), ('Cold shock protein', 1.5627), ('Cold shock protein CspA', 1.5174)]
+0 structure_search | old after 41.408 rise 41.408 journal {'credit': 41.408} | NEW after 41.408 rise 41.408 | ceil chosen old 1000.0 new 1000.0 | none old 1000.0 new 1000.0 | rise<=ceil True | journal ceil {'position': 0, 'offered': {'structure_search': 1000.0}, 'chosen': {'action_type': 'structure_search', 'ceiling': 1000.0}, 'rise': 41.40795121466759}
+     old pairs 0 old sum 0
+1 site_correspondence | old after 45.059 rise 3.651 journal {'credit': 45.059} | NEW after 41.408 rise 0.0 | ceil chosen old 4225.0 new 1.0 | none old 4225.0 new 1.0 | rise<=ceil True | journal ceil {'position': 1, 'offered': {'site_correspondence': 4225.0, 'structure_search': 9255.0}, 'chosen': {'action_type': 'site_correspondence', 'ceiling': 4225.0}, 'rise': 3.6510305790424695}
+     top two Protein lin-28 | Protein lin-28 homolog moves [0.0, 0.0] earned 0.0
+     old pairs 666 old sum 3.651
+2 structure_search | old after 307.7405 rise 262.6816 journal {'credit': 307.7405} | NEW after 61.0427 rise 19.6348 | ceil chosen old 9255.0 new 1000.0 | none old 9255.0 new 1000.0 | rise<=ceil True | journal ceil {'position': 2, 'offered': {'site_correspondence': 4225.0, 'structure_search': 9255.0}, 'chosen': {'action_type': 'structure_search', 'ceiling': 9255.0}, 'rise': 262.6815620897689}
+     top two Probable cold shock protein A | Cold shock-like protein CspC moves [0.6546, 0.7573] earned 0.1027
+     old pairs 1128 old sum 243.1495
+3 partner_contacts | old after 338.7807 rise 31.0402 journal {'credit': 338.7807} | NEW after 61.4642 rise 0.4215 | ceil chosen old 6399.0 new 80.0 | none old 6399.0 new 80.0 | rise<=ceil True | journal ceil {'position': 3, 'offered': {'partner_contacts': 6399.0, 'site_correspondence': 4225.0, 'structure_search': 0.0}, 'chosen': {'action_type': 'partner_contacts', 'ceiling': 6399.0}, 'rise': 31.04017106840638}
+     top two Cold shock protein CspB | Y-box-binding protein 1 moves [0.4359, 0.3741] earned 0.0618
+     old pairs 276 old sum 30.6805
+4 site_correspondence | old after 338.7807 rise 0.0 journal {'credit': 338.7807} | NEW after 61.4642 rise 0.0 | ceil chosen old 4225.0 new 1.0 | none old 4225.0 new 1.0 | rise<=ceil True | journal ceil {'position': 4, 'offered': {'site_correspondence': 4225.0, 'structure_search': 0.0}, 'chosen': {'action_type': 'site_correspondence', 'ceiling': 4225.0}, 'rise': 0.0}
+     old pairs 0 old sum 0
+===== partner_ws_reca_1 final old 30.6376 new 19.8396
+ leading old [('Protein RecA', 1.2471), ('Protein RecA 2', 0.6147), ('DNA repair and recombination protein Rad', 0.5814), ('DNA repair and recombination protein Rad', 0.5625), ('Protein RecA 1', 0.5486)]
+ leading new [('Protein RecA', 1.2471), ('Protein RecA 2', 0.6147), ('DNA repair and recombination protein Rad', 0.5814), ('DNA repair and recombination protein Rad', 0.5625), ('Protein RecA 1', 0.5486)]
+0 structure_search | old after 6.2504 rise 6.2504 journal {'credit': 6.2504} | NEW after 6.2504 rise 6.2504 | ceil chosen old 1000.0 new 1000.0 | none old 1000.0 new 1000.0 | rise<=ceil True | journal ceil {'position': 0, 'offered': {'structure_search': 1000.0}, 'chosen': {'action_type': 'structure_search', 'ceiling': 1000.0}, 'rise': 6.2503909646924924}
+     old pairs 0 old sum 0
+1 structure_search | old after 18.931 rise 12.6806 journal {'credit': 18.931} | NEW after 17.4848 rise 11.2344 | ceil chosen old 1135.0 new 1000.0 | none old 1135.0 new 1000.0 | rise<=ceil True | journal ceil {'position': 1, 'offered': {'site_correspondence': 81.0, 'structure_search': 1135.0}, 'chosen': {'action_type': 'structure_search', 'ceiling': 1135.0}, 'rise': 12.680590404717595}
+     top two Protein RecA | DNA repair and recombination protein Rad moves [0.4317, 0.2682] earned 0.1635
+     old pairs 10 old sum 1.6097
+2 partner_contacts | old after 30.6376 rise 11.7066 journal {'credit': 30.6376} | NEW after 19.8396 rise 2.3549 | ceil chosen old 2776.0 new 73.0 | none old 2776.0 new 73.0 | rise<=ceil True | journal ceil {'position': 2, 'offered': {'partner_contacts': 2776.0, 'site_correspondence': 81.0, 'structure_search': 0.0}, 'chosen': {'action_type': 'partner_contacts', 'ceiling': 2776.0}, 'rise': 11.706593112234213}
+     top two Protein RecA | DNA repair and recombination protein Rad moves [0.2028, 0.0748] earned 0.1279
+     old pairs 231 old sum 9.4797
+
+===== site_ws_reca_1 final old 43.5737 new 6.311
+ leading old [('Protein RecA 2', 1.2103), ('Protein RecA', 1.1475), ('Mitochondrial DNA repair protein recA ho', 1.043), ('Protein RecA 1', 1.0007), ('DNA repair protein recA homolog 1, chlor', 0.9195)]
+ leading new [('Protein RecA 2', 1.2103), ('Protein RecA', 1.1475), ('Mitochondrial DNA repair protein recA ho', 1.043), ('Protein RecA 1', 1.0007), ('DNA repair protein recA homolog 1, chlor', 0.9195)]
+0 structure_search | old after 6.2504 rise 6.2504 journal {'credit': 6.2504} | NEW after 6.2504 rise 6.2504 | ceil chosen old 1000.0 new 1000.0 | none old 1000.0 new 1000.0 | rise<=ceil True | journal ceil {'position': 0, 'offered': {'structure_search': 1000.0}, 'chosen': {'action_type': 'structure_search', 'ceiling': 1000.0}, 'rise': 6.2503909646924924}
+     old pairs 0 old sum 0
+1 site_correspondence | old after 43.5737 rise 37.3233 journal {'credit': 43.5737} | NEW after 6.311 rise 0.0606 | ceil chosen old 81.0 new 1.0 | none old 81.0 new 1.0 | rise<=ceil True | journal ceil {'position': 1, 'offered': {'site_correspondence': 81.0, 'structure_search': 0.0}, 'chosen': {'action_type': 'site_correspondence', 'ceiling': 81.0}, 'rise': 37.323328122497436}
+     top two Protein RecA 2 | Protein RecA moves [0.5956, 0.5349] earned 0.0606
+     old pairs 153 old sum 37.3233
+2 site_correspondence | old after 43.5737 rise 0.0 journal {'credit': 43.5737} | NEW after 6.311 rise 0.0 | ceil chosen old 81.0 new 1.0 | none old 81.0 new 1.0 | rise<=ceil True | journal ceil {'position': 2, 'offered': {'site_correspondence': 81.0, 'structure_search': 0.0}, 'chosen': {'action_type': 'site_correspondence', 'ceiling': 81.0}, 'rise': 0.0}
+     old pairs 0 old sum 0
+```

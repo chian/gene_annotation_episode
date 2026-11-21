@@ -185,7 +185,9 @@ commission passes back as `model_refs`.
 
 Bounded, each unit once and only when new in the commission: a model obtained by `get_model` (`model_unit`; not when a model was
 passed or a job is resumed; `not_found` earns nothing), an estimate held, the job launched (once however many launches), the job
-known ended, the graded result (a held source of provider `foldseek_search`). Ceilings are the terms an action can still newly earn
+known ended, the graded result (a held source of provider `foldseek_search`). (This is the child's own completion credit; the HEAD's
+credit over candidate annotations is the differential credit of `a102_head.md`: a test earns the entries it admits and ONE differential, the
+top two listed candidates' difference, with ceilings `a102_ceiling_v2`.) Ceilings are the terms an action can still newly earn
 (0 for an action its check would refuse). Controller: `CompletionYieldController` to the sum of the obtainable units, through
 `structure_search_child.completion_controller`. The child's instructions state facts the system enforces and recommend nothing.
 
