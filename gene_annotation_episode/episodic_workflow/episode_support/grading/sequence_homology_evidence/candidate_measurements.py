@@ -22,6 +22,12 @@ Three kinds of held graded source are read, by the content of their retained she
   it was compared with is a candidate of vocabulary ``reference_sequence`` (identifier: its record reference, name: the
   record's name); its value is the subscore of its alignments.
 
+* a MetaCATS test (``metacats_sheet_v1``, the sheet of ``bvbrc_metacats_analysis.grade``): test
+  ``metacats:<provider>:p<value>``; each candidate group is a candidate of vocabulary ``product`` (the same product the
+  search and the alignment use); its value is the sheet's value (the mean over the significant positions of the fraction of
+  the group's sequences that carry the target's residue). A sheet with no significant position gives no measurement: the
+  test placed no candidate.
+
 A candidate is identified by its vocabulary and its identifier (its name when it has none). Candidates of different
 vocabularies are different candidates: nothing merges a family with a product or a sequence.
 
@@ -47,6 +53,7 @@ VOCABULARIES = ('product', 'profile_family', 'reference_sequence')
 DATABASE_SHEETS = ('blast_database_sheet_v1', 'blast_database_sheet_v2', 'blast_database_sheet_v3')
 PAIRWISE_SHEET = 'blast_pairwise_sheet_v1'
 PROFILE_SHEET = 'hmmer_search_sheet_v1'
+METACATS_SHEET = 'metacats_sheet_v1'
 
 
 def held_sources(reader):
@@ -98,6 +105,12 @@ def _pairwise(reader, source, grading, value_of):
              value_of(route_native_grading(grading)))], 0
 
 
+def _metacats(source, grading, value_of):
+    sheet = grading['sheet']
+    test = 'metacats:' + source['provider'] + ':p%g' % sheet['p_value']
+    return [(test, 'product', row['product'], None, row['value']) for row in sheet['values']], 0
+
+
 def _read(reader, scope, sources):
     """The measurements in arrival order and the unlabelled hits of each target."""
     scope = reader.validate_scope(scope)
@@ -111,6 +124,8 @@ def _read(reader, scope, sources):
                 read = _database_search
             elif sheet['schema'] == PROFILE_SHEET and sheet['operation']['program'] == 'hmmscan':
                 read = _profile_scan
+            elif sheet['schema'] == METACATS_SHEET:
+                read = _metacats
             elif sheet['schema'] == PAIRWISE_SHEET:
                 read = lambda s, g, v: _pairwise(reader, s, g, v)
             else:
