@@ -37,10 +37,10 @@ quoting them outside this page.
      `literature_page_update._weight_input`.
    - That table sets 15 types and holds 10 at 0.9 as "PENDING".
    - The column "WT now" below shows those values for comparison. I did not edit them.
-4. **The Trp converter uses `WEIGHT_UNKNOWN` inside a degree curve.** This happens in `_judge_excitation` (line 128)
-   and `_judge_incubation` (line 171). The SOP step 4 forbids it ("Never use the unknown weight as part of a degree
-   curve"). If the unknown weight becomes per type, those two judges will be tied to whichever constant they import.
-   Someone should decouple them. Not done here, because converters are off limits.
+4. **The Trp converter used `WEIGHT_UNKNOWN` inside a degree curve (checked again 2026-11-21: no longer).** It was in
+   `_judge_excitation` and `_judge_incubation`. The SOP step 4 forbids it ("Never use the unknown weight as part of a
+   degree curve"). In the current `literature_trp_converter.py` the name `WEIGHT_UNKNOWN` appears only in a comment,
+   and `_judge_incubation` is now the curve of the cross-assay pass below, so nothing needs decoupling.
 5. **The working copies of some converters currently have no `EXPERT_REVIEW` constants.** This applies to AlphaScreen,
    radioligand, SPA, EMSA, SEC, dialysis and DSF; they are being softened right now. For those, the values quoted
    here are from `HEAD`.
@@ -689,6 +689,106 @@ Constants named are the converter's `EXPERT_REVIEW` values; they apply to stated
 
 ---
 
+## Cross-assay pass (2026-11-21)
+
+The owner decided five cross-assay rules (see the SOP, step 3, "Cross-assay rules"). They were applied to fcs, elisa,
+spa, trp, fp, fret, mst, emsa, alpha, radioligand and dialysis. Numbers below are copied from the converters in
+`episode_support/literature/grading/experimental_activity_evidence/` and from the per-assay reports. Citations in the
+constants are from memory, as the converters say.
+
+### (i) The incubation rule per assay, as it is now
+
+Rule: with no stated equilibrium fact, `t <= T_FAST` is conflicting, `t >= T_SLOW` is full, and between them the
+degree is linear in log time. The floor is proportional (`t / floor`) and the degree is the smaller of the two. The
+`T_SLOW / T_FAST` factor is the fast rate over the slow rate.
+
+| assay | floor | fast rate or reference | slow rate | `T_SLOW / T_FAST` | no constant |
+| --- | --- | --- | --- | --- | --- |
+| fcs | `MIN_INCUBATION_MIN` 5 min | `KON_MAX_PER_M_S` 1e8; five half-lives at k_obs = 2 kon KD | `KON_SLOW_PER_M_S` 1e5 | 1000 | unknown, also below the floor |
+| elisa | `MIN_INCUBATION_MIN` 30 min | 30 min at 1 nM (`EQUILIBRATION_REFERENCE_MIN`, `EQUILIBRATION_REFERENCE_NM`); `KON_FAST_PER_M_S` 1e6 | `KON_SLOW_PER_M_S` 1e4 | 100 | unknown, also below the floor |
+| spa | `MIN_INCUBATION_MIN` 30 min | `KON_FAST_PER_M_S` 1e8; five half-lives at k_obs = kon KD | `KON_SLOW_PER_M_S` 1e5 | 1000 | unknown, also below the floor |
+| trp | `MIN_INCUBATION_MIN` 2 min | `FAST_KON_PER_M_PER_S` 1e8; koff = kon KD | `SLOW_KON_PER_M_PER_S` 1e5 | 1000 | unknown, also within the mixing minute |
+| fp | `MIN_INCUBATION_MIN` 5 min | `FAST_KON_PER_M_PER_S` 1e7; koff = kon x constant | `SLOW_KON_PER_M_PER_S` 1e5 | 100 | unknown, also below the floor |
+| fret | none | 15 min at 2 nM (`MIN_INCUBATION_MIN`, `EQUILIBRATION_REFERENCE_NM`); `KON_FAST_PER_M_S` 1e6 | `KON_SLOW_PER_M_S` 1e5 | 10 | unknown |
+| mst | none | 10 min at 10 nM (`MIN_INCUBATION_MIN`, `EQUILIBRATION_REFERENCE_NM`); `KON_FAST_PER_M_S` 1e6 | `KON_SLOW_PER_M_S` 1e5 | 10 | unknown (KD or Ki; an EC50 alone is also unknown) |
+| emsa | none (`MIN_INCUBATION_MIN` deleted) | `FAST_ASSOCIATION_RATE_PER_M_PER_S` 1e8; k_obs = 2 kon KD | `SLOW_ASSOCIATION_RATE_PER_M_PER_S` 1e6 | 100 | unknown at any time |
+| alpha | none | 30 min at 1 nM (`MIN_INCUBATION_MIN`, `EQUILIBRATION_REFERENCE_NM`); `FAST_ASSOCIATION_RATE_PER_M_S` 1e6 | `SLOW_ASSOCIATION_RATE_PER_M_S` 1e5 | 10 | unknown |
+| radioligand | none; no `T_FAST` / `T_SLOW` curve | needed time = `MIN_INCUBATION_MIN` 30 min x max(1, `REFERENCE_KD_NM` / KD); approach curve unchanged | none | not applicable | the 30 min stands; never conflicting |
+| dialysis | not changed | its own hours route (`EQUILIBRATION_ZERO_AGREEMENT_H` 1, `MIN_EQUILIBRATION_H` 4) | none | not applicable | not applicable |
+
+- In fret, mst and alpha, `MIN_INCUBATION_MIN` is the reference time of the fast end. It is not a floor.
+- A stated koff or association half-time is used instead where the assay has that route (fret and radioligand: koff;
+  spa: association half-times). Those routes were not changed.
+- Worked radioligand numbers (code formula `(1 - 0.5^(5 t / needed)) / (31 / 32)`): KD 0.1 nM, 60 min gives 0.516;
+  KD 0.5 nM, 30 min gives 0.850; KD 2 nM, 30 min gives 1.0; KD 50 nM, 6 min gives 0.516.
+
+### (ii) New constants for the owner to confirm
+
+All are tagged `EXPERT_REVIEW`. The reason is the converter's, shortened. Citations are from memory.
+
+| assay | name | value | reason |
+| --- | --- | --- | --- |
+| radioligand | `REFERENCE_KD_NM` | 1.0 | the KD for which 30 min stands; five half-lives grow as 1 / KD at a fixed kon |
+| elisa | `KON_SLOW_PER_M_S` | 1e4 | slow end: no electrostatic steering gives 1e5 to 1e6, gating lowers it to 1e4 or less, a coated well is slower still |
+| elisa | `KON_FAST_PER_M_S`, `EQUILIBRATION_REFERENCE_MIN` | 1e6, 30.0 | the old fast rate and the old 30 min number, now named and kept |
+| fret | `KON_SLOW_PER_M_S` | 1e5 | slow protein association without electrostatic steering, or gated; the slow end for FRET partners |
+| fret | `EQUILIBRATION_REFERENCE_NM` | 2.0 | the constant at which 15 min is five half-lives at kon 1e6 (from the code comment, not the report) |
+| fret | `KON_FAST_PER_M_S` | 1e6 | names the rate already behind the old T_FAST |
+| alpha | `SLOW_ASSOCIATION_RATE_PER_M_S` | 1e5 | slow end for proteins, peptides and tagged ligands without electrostatic steering |
+| alpha | `FAST_ASSOCIATION_RATE_PER_M_S` | 1e6 | names the rate already behind the old T_FAST |
+| fp | `SLOW_KON_PER_M_PER_S` | 1e5 | slow end for a labelled peptide, small ligand or oligonucleotide tracer with a protein |
+| trp | `SLOW_KON_PER_M_PER_S` | 1e5 | low end of the usual 1e5 to 1e7 for small ligands and proteins; gated binding can be slower |
+| trp | `FAST_KON_PER_M_PER_S` | 1e8 | fast end for small molecules (code comment: range review 2026-11-21, owner to confirm) |
+| spa | `KON_FAST_PER_M_S` | 1e8 | fastest plausible association of a small-molecule radioligand (about 1e5 to 1e8 in the literature) |
+| spa | `KON_SLOW_PER_M_S` | 1e5 | slow association for a purified or membrane target on a bead, gating included |
+| fcs | `KON_SLOW_PER_M_S` | 1e5 | protein association without electrostatic steering is about 1e5 to 1e6; gating lowers it |
+| fcs | `KON_MAX_PER_M_S` | 1e8 | fastest plausible protein association (code comment: added 2026-11-21, owner to confirm) |
+| fcs | `EQUILIBRATION_HALF_LIVES` | 5.0 | five half-lives give 97 percent of the equilibrium signal (code comment: added 2026-11-21, owner to confirm) |
+| fcs | `DEPLETION_BIAS_SLOPE` | 0.5 | the apparent KD is the KD plus half the labelled partner: bias = 1 + 0.5 r |
+| emsa | `SLOW_ASSOCIATION_RATE_PER_M_PER_S` | 1e6 | slow end of the usual 1e6 to 1e8 for a protein finding its DNA site, two decades below the fast end |
+| mst | `EQUILIBRATION_REFERENCE_NM` | 10.0 | the KD at which the old 10 min stands: koff = 1e6 x 1e-8 = 0.01 per s |
+| mst | `KON_FAST_PER_M_S` | 1e6 | names the rate already behind the old 10 min |
+| mst | `KON_SLOW_PER_M_S` | 1e5 | slow end for MST partners; 1e5 chosen over 1e4 to stay inside the guide's range |
+| dialysis | none | not applicable | the occupancy ends were not new numbers; the converter paragraph "Decision C" is marked owner to confirm |
+
+### (iii) Where an agent decided differently from the general rule, and why
+
+- **No floor in fret, mst, emsa and alpha.** fret, mst and alpha have no mixing or settling time of their own: their
+  `MIN_INCUBATION_MIN` is the reference time of the fast end. A floor would be a new number with no researched value.
+  emsa: the old 15 min was lab habit, not physics (mixing and settling take seconds), and the earlier review showed it
+  marked a 20 nM binder at 10 min as wrong.
+- **A researched constant removed.** emsa `MIN_INCUBATION_MIN` (15 min) is deleted because nothing uses it any more.
+  The report asks the owner to say if it should be kept.
+- **radioligand is not on the T_FAST / T_SLOW curve.** The association rate is not collected, so the time asked for
+  scales as 1 / KD at a fixed kon, from the 30 min at 1 nM. A weaker KD never asks for less than 30 min. It never
+  conflicts. The koff route and its Q1-Q5 are unchanged.
+- **spa has a new T_FAST.** The old rule was an absolute time with no formula. `KON_FAST_PER_M_S` is new for this
+  assay. It uses the KD only, not the Ki, because equilibration is of the radioligand. Its k_obs is kon KD, not
+  2 kon KD as in fcs and emsa, because the slowest relaxation is at the lowest radioligand concentration.
+- **Different fast and slow rates per assay.** fp uses 1e7 / 1e5, elisa 1e6 / 1e4, emsa 1e8 / 1e6, trp and spa and fcs
+  1e8 / 1e5, and fret, mst and alpha 1e6 / 1e5. Each is the assay's own reason, not one shared pair.
+- **trp.** `INCUBATION_ZERO_AGREEMENT_MIN` (1 min) is kept but decides nothing now, because the floor is proportional.
+  A Stern-Volmer fit with no KD gives unknown.
+- **elisa.** The constant may be an EC50 or IC50 when no KD or Ki is given. That is the grader's existing order, so the
+  time scale is then only approximate. It was left and noted in the docstring.
+- **mst.** The picomolar end is strict on purpose (long incubations are known for MST at picomolar KD). The constant
+  is the KD, else the Ki.
+- **Behaviour changes to confirm.** An incubation exactly at `T_FAST` is now conflicting (it was unknown) in elisa,
+  fret and alpha. With no constant, the old conflict below the floor is gone and the result is unknown (elisa, fp, trp,
+  emsa, fcs, spa; the reports state it for each). A stated KD above `T_FAST` is now supported with a degree where it
+  was unknown (stated in the fcs report; the same shape in the others).
+- **Partner over the KD (rule b).** fcs, fret, alpha and emsa moved to the log of `b = 1 + r / 2`. fp and mst already
+  judged it on the log of a bias and were not changed. The old reason (the bias grows linearly with the ratio) holds
+  for every assay, so no assay was exempted. The factor 0.5 is a named constant only in fcs (`DEPLETION_BIAS_SLOPE`);
+  fret and alpha write `1 + r / 2` in their bias function.
+- **Occupancy ends (rule c).** fcs (low end), emsa (both ends of the protein range) and dialysis (both ends) moved to
+  `x / (1 + x)`. No assay-specific reason against it was found, and no new constants were added.
+- **Number mismatch fixed in this doc.** The radioligand report gave 0.667 for KD 0.5 nM, 30 min. The code formula and
+  the test give 0.850. The doc uses 0.850.
+- **A stale comment in code.** The comment above `_judge_incubation` in `literature_fret_converter.py` still says "No
+  degree ... Conflicting only when the stated incubation is shorter" (the old rule). The code below it is the new
+  curve. It is not changed here, because no code was edited.
+
 ## 4. Notes for the owner's decision
 
 - **Per type or per type and sheet criterion.**
@@ -700,8 +800,7 @@ Constants named are the converter's `EXPERT_REVIEW` values; they apply to stated
 - **A finer option, not proposed now.** The converter could pass which members of a pooled sheet criterion were
   unknown, and the weight could use member-level b/g/p values. That would stop a benign unstated member, such as a
   Y2H reciprocal orientation, from pulling the whole BC to the assay's critical value.
-- **Trp converter coupling (section 0, item 4).** If u becomes per type, the two Trp judges that use
-  `WEIGHT_UNKNOWN` inside a degree should be decoupled, as SOP step 4 requires.
+- **Trp converter coupling (section 0, item 4).** Resolved: no Trp judge uses `WEIGHT_UNKNOWN` in a degree any more.
 - **Mistakes and limits, stated plainly.**
   - The citations are from memory and not web-verified.
   - The P(adequate) values behind each u are expert judgment, not measured reporting rates.

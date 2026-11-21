@@ -7,13 +7,13 @@ Written 2026-11-21 under `A105_EXPERIMENT_SOP.md` step 0. Read-only search; this
 here is owner-confirmed.** It is one entry per reapplicable protocol ("assay generally refers to a type of protocol
 that can be reapplied to anything", owner, `EXPERIMENT_INVENTORY_SEARCH_2.md` 2(d)), not per paper or per case.
 
-No code was changed. In particular `CLAIM_PREDICATES_BY_CLASS`, `EXPERIMENT_TYPES`, `CLASS_OF_EXPERIMENT_TYPE` and the
-design doc `A105_SCORING_DESIGN.md` were **not** edited: this task was read-only except for this file. The SOP 0b and
-0d acceptance items (predicate added, list placed in the design doc) are therefore still open.
+**Update 2026-11-21 (SOP 0b, 0c, 0d done in code and docs, no experiment type yet).** `catalyzes` is now in
+`CLAIM_PREDICATES_BY_CLASS`; the class list is copied into `A105_SCORING_DESIGN.md` section 6b; the class-scoped direction
+function and its anchors exist in `G`. Class decisions are recorded in section 6 ("decided 2026-11-21, owner to confirm").
+`EXPERIMENT_TYPES` and `CLASS_OF_EXPERIMENT_TYPE` still hold the 25 binding types only.
 
-All judgement forms below follow the OWNER RULE: no hard-coded thresholds, directional and gradual, scaled only by
-quantities of the same paper or record, `unknown` when the record gives nothing to compare against, and no numeric
-constant other than 0, 1 and 2. The forms are **illustrative, not owner-approved** (as in SOP step 3).
+The generic judgement forms (`d = n/(n + 1)` and similar) that this draft first proposed were REJECTED by the owner and are
+deleted; section 4 now points to SOP step 3 (researched per-assay values made gradual) and gives the direction form.
 
 ---
 
@@ -28,7 +28,7 @@ constant other than 0, 1 and 2. The forms are **illustrative, not owner-approved
 | `verification/a105_sheet_reader_inventory_315/SHEETS.tsv` | Old sheets under prior type 1/2/5: corrected endpoint activity (1), source rate contrast (2), NADH optical rate (11), kinetic parameter contrast (12), kinetic statistical model (14), controlled response (16), rate observations (21), concentration-rate curve precision (22), raw rate replicate contrast (23), kinetic summary precision (30). | Past-work fields. These are calculations, not types. |
 | `verification/a105_arad_kinetic_selected_300`, `a105_pa0142_kinetic_selected_303` | Kinetic-parameter cases (Fan 2013 JACS pterin deaminase; Hall 2010 JACS 8-oxoguanine deaminase). Assay method not restated in the report headers read. | Past work for steady-state kinetic outputs (method-agnostic). |
 | `verification/tool_graders_biochemical_measurement_boundaries_2026-10-28_532/README.md` | Biomni `analyze_protease_kinetics` (MM fit; turnover units wrong without calibration) and an ITC binding tool (binding only, no ITC kinetics). | Noise notes for fluorogenic/protease and ITC entries. |
-| `research/experimental_scoring_review_2026-10-23/template_a105_reactions_001/11_component_synthesis_001.md` and paper notes 01-09 | Nine primary papers: CsiD/LhgO (PMC6265302, Clark O2 electrode, NMR, LC-MS), HFP (PMC12051542), CysQ (PMC2711008, colour assay vs AMP MS), FrsA (PMC6450606, pNPA spectrophotometric, Smax/Km), F420 (PMC8764529, coupled partner), TriA/AtzA (PMC95154, nondetection limit), QueF (PMC555470, NMR, 2 NADPH per product), RidA (PMC3270999, coupled ketoacid/ferricyanide trapping), FolM (PMC2805310, composite extinction coefficients). Proposed same-paper forms: `v = v_sample - v_blank`, `Ru = 1/(1 + V/v^2)`, `Rcal = min(r, 1/r)`, `Smax/(Km + Smax)`. | Noise and certainty fields; the same-paper judgement forms in section 4 (several are the old proposals rewritten without constants). |
+| `research/experimental_scoring_review_2026-10-23/template_a105_reactions_001/11_component_synthesis_001.md` and paper notes 01-09 | Nine primary papers: CsiD/LhgO (PMC6265302, Clark O2 electrode, NMR, LC-MS), HFP (PMC12051542), CysQ (PMC2711008, colour assay vs AMP MS), FrsA (PMC6450606, pNPA spectrophotometric, Smax/Km), F420 (PMC8764529, coupled partner), TriA/AtzA (PMC95154, nondetection limit), QueF (PMC555470, NMR, 2 NADPH per product), RidA (PMC3270999, coupled ketoacid/ferricyanide trapping), FolM (PMC2805310, composite extinction coefficients). Proposed same-paper forms: `v = v_sample - v_blank`, `Ru = 1/(1 + V/v^2)`, `Rcal = min(r, 1/r)`, `Smax/(Km + Smax)`. | Noise and certainty fields; same-paper quantities the sheet side can compare (the generic forms once derived from them are deleted, section 4). |
 | `.../template_a105_reactions_002/` (`reaction_component_proposal.md`, `frsa_2013_review.md`, `moral_2011_review.md`) | FrsA 2013 ADH/NADH coupled assay (coupling-enzyme activity checked by adding acetaldehyde at the end); OxDC 2011 continuous MIMS versus quenched FDH-coupled formate endpoint; calibrated channel rate `y = (s - b)/m`. | Coupled-assay and continuous-MS entries. |
 | `.../a105_raw_rate_primary_case_164/REPORT_001.md` | BbPK (PLOS Biol, 10.1371/journal.pbio.3002285): coupled NADPH 340 nm (AckA/HK/G6PDH), direct HPLC acetate, chromogenic AcP; U/mg workbook values not bound to one method. | Coupled, chromatographic and stopped-colorimetric entries; the "value not bound to its method" risk. |
 | `.../a105_optical_case_031/FINDINGS.md` | Bcd/EtfAB (PMC2223550): NADH 340 nm with stated epsilon 6.2 mM^-1 cm^-1 but no raw slope, blank slope or path length; methyl viologen changes H2 rate 5 to 0.02 and NADH rate 7 to 5 umol/min/mg. | Direct spectrophotometric and redox-mediator entries. |
@@ -98,17 +98,17 @@ Known gaps: figures are not read). Workbook/XLSX supplements were read by the ol
 ## 3. The draft experiment list (19 types)
 
 Grouped by family. Type ids are snake_case and do not collide with the 25 binding ids (`itc` is taken, so the ITC
-kinetics type is `itc_kinetics`). Entries marked **(merge?)** are candidates the owner may fold into a neighbour.
+kinetics type is `itc_kinetics`). Decided 2026-11-21, owner to confirm: all 19 stand, none merged (section 6, decision 1).
 
 | # | Type id | Experiment | Family |
 | --- | --- | --- | --- |
 | 1 | `spectro_direct` | Continuous direct spectrophotometric (absorbance) assay | Optical, continuous |
 | 2 | `coupled_enzyme` | Continuous coupled (auxiliary-enzyme) assay | Optical, continuous, indirect |
-| 3 | `redox_mediator` | Artificial electron donor/acceptor dye assay (merge? into 1) | Optical, continuous, indirect |
+| 3 | `redox_mediator` | Artificial electron donor/acceptor dye assay (stays apart from 1, decided) | Optical, continuous, indirect |
 | 4 | `fluorogenic` | Fluorogenic / fluorescent substrate or product assay | Optical, continuous |
 | 5 | `luminescent` | Luminescent product-detection assay (luciferase-coupled ATP/ADP etc.) | Optical, plate, stopped or continuous |
 | 6 | `stopped_flow` | Stopped-flow rapid mixing (pre-steady-state, single turnover) | Rapid kinetics, continuous |
-| 7 | `quench_flow` | Rapid chemical quench-flow (merge? into 6) | Rapid kinetics, discontinuous |
+| 7 | `quench_flow` | Rapid chemical quench-flow (stays apart from 6, decided) | Rapid kinetics, discontinuous |
 | 8 | `chromatographic` | Discontinuous HPLC / LC-MS / GC product (or substrate) quantification | Separation, discontinuous |
 | 9 | `stopped_colorimetric` | Stopped assay with colorimetric derivatization (malachite green phosphate, DNS, DTNB, chromogenic) | Optical, discontinuous |
 | 10 | `radiometric` | Radiolabelled substrate, product separated and counted | Isotope, discontinuous |
@@ -178,7 +178,7 @@ noise expectations:    paper states the spread; coupling capacity relative to th
                        stoichiometry per product (e.g. 1 NADH per product); stated or not, the lag phase
 replicates needed:     count + kind, no cut-off
 certainty:             quantitative: rate of the primary reaction only if coupling is not limiting; the degree falls
-                       as the coupling capacity approaches the measured rate (section 4)
+                       as the coupling capacity approaches the measured rate (the curve is researched by the type's builder, SOP step 3)
 readers that supply it:text, tables
 past work (where):     frsa_2013_review.md (ADH/NADH, 10.1021/bi400093y); moral_2011_review.md (FDH-coupled formate,
                        10.1016/j.ab.2011.06.031); a105_raw_rate_primary_case_164 (BbPK AckA/HK/G6PDH NADPH);
@@ -186,7 +186,7 @@ past work (where):     frsa_2013_review.md (ADH/NADH, 10.1021/bi400093y); moral_
                        observed preference); old literature_rate_native_inputs.py
 ```
 
-### 3.3 `redox_mediator` (merge? into `spectro_direct`)
+### 3.3 `redox_mediator` (stays apart from `spectro_direct`: decided 2026-11-21, owner to confirm)
 
 ```text
 experiment:            artificial electron donor/acceptor assay          (type id redox_mediator)
@@ -267,7 +267,7 @@ readers that supply it:text, tables; traces are figures (unavailable)
 past work (where):     none found in the places searched
 ```
 
-### 3.7 `quench_flow` (merge? into `stopped_flow`)
+### 3.7 `quench_flow` (stays apart from `stopped_flow`: decided 2026-11-21, owner to confirm)
 
 ```text
 experiment:            rapid chemical quench-flow                         (type id quench_flow)
@@ -512,42 +512,68 @@ past work (where):     none found
 
 ---
 
-## 4. Direction and judgement forms for the class (illustrative, owner rule, not approved)
+## 4. Direction and judgement for the class (decided 2026-11-21, owner to confirm)
 
-`G/literature_direction.strength` assumes a binding constant in nM, smaller is stronger. `activity_rate` needs its
-own class-scoped rule (SOP 0c). Draft forms, each using only same-record quantities and the constants 0, 1, 2:
+The draft of this section proposed generic forms (`d = n/(n + 1)`, `d = (f - 1)/f`, `d = 1 - p` and similar) for every
+criterion. **The owner rejected generic forms of that kind. They are deleted and must not be used.** The per-criterion
+judgement of each experiment type is SOP step 3: the values are researched for that assay (its method literature and its
+physics), each carries its reason and is tagged `EXPERT_REVIEW`, "owner to confirm", and each is made gradual around the
+researched value (full agreement at the researched good value, smooth fall towards a researched no-longer-meaningful
+value; never a step; unknown when the paper states nothing; an unknown weight is never part of a degree). The builder of
+each type researches them with that type's controls and noise (the per-type entries in section 3 list what each paper must
+state).
 
-| What is judged | Same-record quantities | Form (degree on `supported`) | Unknown when | Conflicting when |
+**Direction and strength of a quantitative activity result** (class-scoped; code in
+`G/literature_activity_direction.py`, constants in `G/literature_row_contract.py` section 5c). Same paradigm as binding
+(`G/literature_direction.py`, `QUANTITATIVE_STRENGTH_ANCHORS`):
+
+```text
+p = clip( (log10 e - log10 noise_end) / (log10 strong_end - log10 noise_end), 0, 1 )      (for rates LARGER is stronger)
+s = (3 p^2 - 2 p^3) / (1 + r^2),    r = sd / e    (0 when no spread is stated)
+log_ratio = QUALITATIVE_LOG_RATIO[type] * s
+```
+
+- A stated rate SUPPORTS by its graded strength `s`; `s == 0` (at or under the noise end) is neutral. A quantitative result
+  never opposes. Controls, blanks, the initial-rate regime and the other sheet criteria lower the WEIGHT only, never the
+  direction (as for binding).
+- The paper itself showing no activity above its own control or detection limit is the measured-zero / not-detected
+  case: the qualitative path (statement `interaction_not_detected`, read "activity not detected"), which opposes.
+- Anchors are per QUANTITY, not per experiment type (the physics is the same in every assay). Each is `EXPERT_REVIEW`,
+  owner to confirm; the literature figures are from memory and must be verified:
+
+| Quantity | Unit | noise_end | strong_end | Reason |
 | --- | --- | --- | --- | --- |
-| Activity over the paper's own control (direction) | test rate `t`, control rate `c` (no-enzyme, inactive enzyme), same unit | `f = t/c`; `d = (f - 1)/f` | no control rate stated (a "control done" fact alone gives the fact, not a magnitude) | `t <= c` as stated by the paper |
-| Activity against nondetection | test rate `t`, stated detection limit `L` | `f = t/L`; `d = (f - 1)/f` | no limit stated | `t <= L` |
-| Effect against its own uncertainty | rate (or ratio) `e`, spread `s` | `r = s/|e|`; `d = 1/(1 + r^2)` | no spread stated, or spread kind needed and unstated | - |
-| Replicates | count `n` | `d = n/(n + 1)` | count not stated | - |
-| Initial-rate regime | fraction converted `p` in the rate window (or initial and remaining substrate) | `d = 1 - p` | neither stated | - |
-| Substrate range against Km | `km`, lowest and highest substrate `c_low`, `c_high` | `d = (km/(km + c_low)) * (c_high/(c_high + km))` (SPR series form with Km for KD) | no Km or no series | - |
-| Coupling not limiting (`coupled_enzyme`) | coupling capacity `k` (U) and measured primary rate `v` (U), same unit | `g = k/v`; `d = (g - 1)/g` | either missing | `k <= v` |
-| Calibration recovery | recovered `a` versus known `b` of a standard | `r = a/b`; `d = min(r, 1/r)` | no recovery experiment | - |
-| Two estimates of one quantity (two methods, two preparations) | estimates `x1`, `x2` | fold `f = max/min`; `d = 1/f` | only one estimate | - |
-| Pre-steady-state rate against dead time (`stopped_flow`) | `k_obs`, dead time `t_d` | `u = k_obs * t_d`; `d = 1/(1 + u)` | dead time not stated | - |
-| Assay temperature against the organism's stated growth temperature | both in kelvin, same paper | `f = max/min`; `d = 1/f` | growth temperature not stated in the paper | - |
+| catalytic efficiency kcat/Km | M^-1 s^-1 | 1e2 | 1e6 | Bar-Even et al. 2011 Biochemistry 50:4402 (from memory): median natural kcat/Km near 1e5, upper quartile near 1e6. Promiscuous (side) activities sit near 1e3 (Khersonsky and Tawfik 2010 Annu Rev Biochem 79:471, from memory); the noise end is one decade under that. |
+| turnover kcat | s^-1 | 1e-2 | 1e2 | Same source: median kcat near 10 s^-1, upper quartile near 70, rounded to 1e2. Promiscuous kcat is about 1e-2 to 1 s^-1; the noise end is the low end. |
+| specific activity | U/mg | kcat noise end at the enzyme mass | kcat strong end at the enzyme mass | `U/mg = kcat x 60 x 1000 / M` (M in g/mol): the ends are derived from the kcat ends at the stated enzyme mass, else at the reference mass 5e4 g/mol (50 kDa, a typical subunit; `REFERENCE_ENZYME_MASS_G_PER_MOL`). At 50 kDa the ends are 0.012 and 120 U/mg. |
+| rate over the paper's own control | fold | 1 | 1e3 | No better than the control is the noise end; three orders over background is the practical dynamic range of most activity assays. A fold at or under 1 is strength 0 (neutral), never opposition. |
 
-Notes:
-
-- The class direction for a claim `E catalyzes R` is **supports** when the activity-over-control degree is positive,
-  **opposes** only when the paper itself shows no activity (rate not above its own control, or below its stated
-  detection limit), and **unknown** otherwise. A rate stated with no control and no limit has a known magnitude
-  but no same-paper comparator for direction: `unknown`, never opposition. **This needs the owner's ruling**: an
-  alternative is that a positive stated rate alone supports, with the control degree as a separate criterion.
-- `direction_field_support` is the support class of the field that fixes the direction (`rate` and `control_rate`,
-  the weaker of the two).
-- Every form is monotone and bounded in [0, 1]. None holds a numeric literal other than 0, 1, 2. They are the SOP
-  step-3 forms or the old research forms (`11_component_synthesis_001.md`: `Ru = 1/(1 + V/v^2)`,
-  `Rcal = min(r, 1/r)`, `Smax/(Km + Smax)`) rewritten without constants. `QUALITATIVE_LOG_RATIO` for `zymogram` is a
-  per-type constant whose status under the no-threshold rule is still open (SOP Known gaps).
+- Consistency of the two scales: the median natural enzyme sits at `p = 0.75` on both the kcat/Km and the kcat scale.
+- The effect used when a record states several is the best-determined one, in the order catalytic efficiency, turnover,
+  specific activity, rate over control (`ACTIVITY_EFFECT_ORDER`, `select_activity_effect`). Why: kcat/Km is a ratio of two
+  fitted constants and needs neither the active-site amount nor saturation; kcat needs the active-site concentration and a
+  saturating curve; specific activity needs only a protein mass, which includes inactive protein, at one substrate
+  concentration; a fold is relative to a control whose own activity differs between papers.
+- `direction_field_support` is the support class of the field that fixes the direction (the chosen effect).
+- A converter of an `activity_rate` type must also return `enzyme_mass_g_per_mol` (the stated molar mass, or None);
+  `literature_page_update` passes it to the direction function.
+- `QUALITATIVE_LOG_RATIO[type]` (the per-type maximum) is added with each type; whether a per-type constant stands under the
+  no-threshold rule is still open (SOP Known gaps).
 
 ---
 
-## 5. Claim predicate proposal
+## 5. Claim predicate (decided 2026-11-21, owner to confirm; the options below are kept as the record of the question)
+
+**Decided and implemented in `G`:** `catalyzes` is in `CLAIM_PREDICATES_BY_CLASS['activity_rate']`, not symmetric. Subject =
+the enzyme (the record's `target_id`). When the hypothesis value is a `reference` to a molecule record, that molecule is the
+claim's partner (the substrate); the record's stated substrate must then agree, else `different_subject`
+(`partner_contradicts_claim`). When the value is a `term_ref` (the existing A105 hypotheses carry a reaction term), the
+claim's partner is null and bearing is by the target alone (`literature_claim.TERM_PARTNER_IS_NOT_A_MOLECULE`). **Limit:** G
+sees only the labels of the records, not the term type, so a `term_ref` that is a chemical (a substrate given as a term) is
+also read as target-only. Keeping it as a substrate partner needs the caller (the page's `hypothesis_claim` in `task.py`)
+to pass the term types: a change outside G, reported, not made.
+
+Earlier analysis:
 
 - **Predicate:** `catalyzes` (spelling already used by A105 test hypotheses in `root/a105/.../tests/grading_world.py`
   and by A104 `characterization.py`; the contract comment's `catalyses` spelling should not be used).
@@ -573,27 +599,43 @@ Notes:
 
 ---
 
-## 6. Class decisions to make before the first type (SOP 0c), as read from the code
+## 6. Class decisions before the first type (SOP 0c), as read from the code (decisions of 2026-11-21 below the table)
 
 | Item | Finding | Proposal (owner to decide) |
 | --- | --- | --- |
 | `QUANTITY_KINDS['activity_rate']`, `CRITERIA_BY_TYPE` | 11 kinds; criteria `COMMON_CRITERIA` + rate_regime, normalization_basis, kinetic_model, partner_perturbation; `_required_criteria` makes kinetic_model optional for plain rates and rate_regime/normalization_basis optional for kinetic parameters. | Use as is. Each type's converter fills `rate` / `rate_ratio` / `turnover` / `catalytic_efficiency` / `kinetic_parameter` as stated. |
-| `QUALITATIVE_STATEMENT` | Binding wording only (`interaction_detected`, ...). | Needed by `zymogram`, by `separation_band` when only a band is reported, and by any type reporting "no activity detected". Add `activity_detected`, `activity_not_detected`, `activity_not_stated` (a contract change: ask first). |
+| `QUALITATIVE_STATEMENT` | Binding wording only (`interaction_detected`, ...). | Needed by `zymogram`, by `separation_band` when only a band is reported, and by any type reporting "no activity detected". Decided: no new values (decision 3 below); `interaction_detected` reads "activity detected". |
 | `ROLE`, `IMMOBILIZATION_SIDES`, `ROW_DEPENDENCE_KEYS` | Binding-flavoured (`analyte`, `immobilized`, `surface`). | Enzyme preparation -> `analyte_preparation_ref`; substrate/coupling system -> `immobilized_preparation_ref` None; `surface_ref` None; except `protein_film_electrochem` (enzyme -> immobilized, electrode -> surface). Each converter documents its mapping. |
-| Direction | `literature_direction` is nM-binding only. | A separate class-scoped function per section 4; owner agreement on its form first. |
+| Direction | `literature_direction` is nM-binding only. | Decided: a separate class-scoped function, section 4. |
 | Hypothesis value type | `catalyzes` hypotheses carry a reaction `term_ref`. | Section 5. |
 | One value, one method | The BbPK case shows U/mg values not bound to one of three methods in the same paper. | A leaf records a rate under a type only when the passage ties that rate to that method; otherwise no type can be named and the SOP's "a leaf that cannot name its type has no experiment" applies. |
 
 ---
 
+### Decided 2026-11-21 (the owner told the coordinator to decide by the standing rules; owner to confirm)
+
+1. **The 19 draft types stand, none merged.** `redox_mediator` stays apart from `spectro_direct` (its own controls: dye
+   autoxidation, mediator specificity) and `quench_flow` apart from `stopped_flow` (chemical quench and separation, not an
+   optical trace).
+2. **Predicate `catalyzes`**, not symmetric; subject the enzyme; partner per section 5. Implemented in `G`.
+3. **Qualitative results keep the existing `QUALITATIVE_STATEMENT` values** (no contract change). They state whether the
+   CLAIMED RELATION was detected; for this class `interaction_detected` reads "activity detected",
+   `interaction_not_detected` reads "activity not detected", `interaction_not_stated` reads "activity not stated". The
+   earlier proposal to add `activity_detected` and the like is dropped. The reading is written beside the vocabulary in
+   `G/literature_row_contract.py`.
+4. **Preparations** map onto the existing keys as the table above proposes: enzyme preparation to
+   `analyte_preparation_ref`; `immobilized_preparation_ref` and `surface_ref` None, except a type with an immobilized
+   enzyme or an electrode (`protein_film_electrochem`: enzyme to immobilized, electrode to surface).
+5. **Direction and strength** of a quantitative activity result: section 4 (same paradigm as binding, class-scoped function,
+   anchors per quantity, larger is stronger, best-determined quantity first).
+
 ## 7. What is still open
 
-- Owner confirmation or correction of the 19 types, including the five **(merge?)** / boundary questions
-  (`redox_mediator`, `quench_flow`, partner omission/addback as a type or a design, inhibition, cell-based
-  phospho-blots).
-- The predicate's partner (section 5) and `QUALITATIVE_STATEMENT` wording (section 6).
-- SOP 0b/0d placement: add `catalyzes` to `CLAIM_PREDICATES_BY_CLASS` and copy the list into
-  `A105_SCORING_DESIGN.md`; not done here (read-only task).
+- Owner confirmation or correction of the 19 types, including the boundary questions that are not about merging
+  (partner omission/addback as a type or a design, inhibition, cell-based phospho-blots).
+- Owner confirmation of every number in section 4 (all `EXPERT_REVIEW`; the literature figures are from memory).
+- A change outside `G` for chemical `term_ref` partners (section 5).
+- SOP 0d placement: the class list is copied into `A105_SCORING_DESIGN.md` section 6b, marked draft.
 - The Codex sessions were not searched (permission refused); the October 150-paper inventory remains unfound.
 - No real published paragraph has been found for any type yet (SOP step 6); the "past work" papers above are
   candidates, and only those with PMC ids (PMC2223550, PMC6265302, PMC6450606, PMC2805310, PMC2711008, PMC555470,

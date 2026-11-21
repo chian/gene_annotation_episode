@@ -72,13 +72,12 @@ def parser():
     proposed.add_argument("--subject", required=True)
     proposed.add_argument("--predicate", required=True)
     proposed.add_argument("--value", required=True, help="JSON: the typed value of the hypothesis.")
-    frozen = sub.add_parser("freeze-libraries", help="Freeze the process library and the tool library for a run and print the axis selection.")
+    frozen = sub.add_parser("freeze-libraries", help="Freeze the libraries of every axis a run covers, where the run reads them, and print each axis selection.")
     frozen.add_argument("--workspace", type=Path, required=True)
-    frozen.add_argument("--directory", type=Path, required=True)
     frozen.add_argument("--source", type=Path, required=True, help="The published process library to freeze.")
-    frozen.add_argument("--axis", required=True, help="The evidence-axis option, for example A101.")
+    frozen.add_argument("--continuation", type=Path, required=True, help="JSON: the run's own continuation file (binding path -> settings); it names the axis heads and where each reads its libraries.")
+    frozen.add_argument("--axis", help="Optional: freeze only this axis, for example A105. Default: every axis head in the continuation.")
     frozen.add_argument("--tool", action="append", default=[], help="A tool of the tool registry to offer; may repeat.")
-    frozen.add_argument("--tool-registry", type=Path, required=True, help="JSON: the keyword settings of the tool registry.")
     return result
 
 
@@ -133,9 +132,8 @@ def main(argv=None):
                     _print(run_command.propose_annotation(store, subject=args.subject, predicate=args.predicate,
                         value=parse_json_object(args.value)))
                 else:
-                    _print(run_command.freeze_libraries(store, directory=args.directory, source=args.source,
-                        axis=args.axis, tools=args.tool,
-                        tool_registry=run_command.read_json(args.tool_registry)))
+                    _print(run_command.freeze_libraries(store, source=args.source,
+                        continuation=run_command.read_json(args.continuation), tools=args.tool, axis=args.axis))
                 return 0
             if args.command == "export":
                 from .export import export_annotation

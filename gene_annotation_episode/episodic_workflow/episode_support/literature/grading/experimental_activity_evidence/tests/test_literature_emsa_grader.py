@@ -241,8 +241,8 @@ def test_the_probe_over_the_kd_is_recorded_and_the_sheet_judges_it_with_a_degree
     assert status(r, 'probe_concentration') == 'supported'
     r['quantities']['probe_concentration'] = point(20.0, 'nM', 'p', ['s'])                 # exactly the KD, the sheet's full-agreement limit
     assert judged(r, 'probe_concentration')['status'] == 'supported' and judged(r, 'probe_concentration')['degree'] == 1.0
-    r['quantities']['probe_concentration'] = point(110.0, 'nM', 'p', ['s'])                # 5.5 x the KD: halfway to the zero limit of 10 x
-    assert judged(r, 'probe_concentration')['degree'] == pytest.approx(0.5)
+    r['quantities']['probe_concentration'] = point(110.0, 'nM', 'p', ['s'])                # 5.5 x the KD: log-bias degree (ln 6 - ln 3.75) / (ln 6 - ln 1.5)
+    assert judged(r, 'probe_concentration')['degree'] == pytest.approx(0.33904, abs=1e-4)
     r['quantities']['probe_concentration'] = point(0.2, 'uM', 'p', ['s'])                  # 200 nM in micromolar: ten times the KD, the zero limit
     assert status(r, 'probe_concentration') == 'conflicting' and 'degree' not in judged(r, 'probe_concentration') and grade_emsa(r)['native']['probe_nM'] == pytest.approx(200.0)
     r['facts']['probe_at_or_below_kd'] = fact('yes', ['s'])                                # the numbers decide, not the fact
@@ -265,11 +265,11 @@ def test_the_protein_concentrations_over_the_kd_are_recorded_and_the_sheet_judge
     assert (graded['criteria']['protein_range'], graded['reasons']['protein_range']) == ({'status': 'unknown', 'support_refs': []}, 'protein_range_recorded_for_the_sheet')
     assert graded['native']['protein_low_over_kd'] == pytest.approx(0.05) and graded['native']['protein_high_over_kd'] == pytest.approx(32.0) and graded['native']['protein_range_refs'] == ['span_exp_synthetic_emsa_1']
     assert status(r, 'protein_range') == 'supported'
-    for low, high, expected, degree in ((5.0, 100.0, 'supported', 1.0), (12.5, 100.0, 'supported', 0.5), (5.0, 60.0, 'supported', 0.5), (12.5, 60.0, 'supported', 0.5), (5.0, 20.0, 'conflicting', None), (20.0, 640.0, 'conflicting', None)):
+    for low, high, expected, degree in ((5.0, 100.0, 'supported', 1.0), (12.5, 100.0, 'supported', 0.3846), (5.0, 60.0, 'supported', 0.75), (12.5, 60.0, 'supported', 0.3846), (5.0, 20.0, 'conflicting', None), (20.0, 640.0, 'conflicting', None)):
         r['quantities']['protein_concentration_lowest'] = point(low, 'nM', 'l', ['s'])
         r['quantities']['protein_concentration_highest'] = point(high, 'nM', 'h', ['s'])
         verdict = judged(r, 'protein_range')
-        assert verdict['status'] == expected and verdict.get('degree') == (pytest.approx(degree) if degree is not None else None), (low, high)
+        assert verdict['status'] == expected and verdict.get('degree') == (pytest.approx(degree, abs=1e-4) if degree is not None else None), (low, high)
     r['quantities']['protein_concentration_lowest'] = point(0.005, 'uM', 'l', ['s'])        # 5 nM in micromolar
     r['quantities']['protein_concentration_highest'] = point(0.1, 'uM', 'h', ['s'])
     assert status(r, 'protein_range') == 'supported'
@@ -331,7 +331,7 @@ def test_a_one_site_model_is_judged_by_the_sheet_against_the_probe_and_a_quadrat
     assert (grader_status(r, 'fit_model'), reason(r, 'fit_model')) == ('unknown', 'one_site_probe_over_kd_recorded_for_the_sheet')
     assert judged(r, 'fit_model') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_emsa_1'], 'degree': 1.0}
     r['quantities']['probe_concentration'] = point(110.0, 'nM', 'p', ['s'])                # 5.5 x the KD
-    assert judged(r, 'fit_model')['status'] == 'supported' and judged(r, 'fit_model')['degree'] == pytest.approx(0.5)
+    assert judged(r, 'fit_model')['status'] == 'supported' and judged(r, 'fit_model')['degree'] == pytest.approx(0.33904, abs=1e-4)
     r['quantities']['probe_concentration'] = point(200.0, 'nM', 'p', ['s'])                # ten times the KD
     assert status(r, 'fit_model') == 'conflicting'
     assert grade_emsa(r)['native']['fit_model_probe_refs'] == ['span_exp_synthetic_emsa_1', 's'] and judged(r, 'fit_model')['support_refs'] == ['span_exp_synthetic_emsa_1', 's']          # the spans of the KD and of the probe concentration

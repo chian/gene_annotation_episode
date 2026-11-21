@@ -280,17 +280,17 @@ def test_equilibrium():
     r['facts']['equilibrium_reached'] = fact('unknown')
     assert (grader_status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('unknown', 'incubation_recorded_for_the_sheet') and grade_fcs(r)['native']['incubation_min'] == 20.0
     # KD 20 nM: T_FAST 5 ln 2 / (2 * 1e8 * 2e-8) s = 0.866 s = 0.01444 min, T_SLOW (kon 1e5) = 866 s = 14.44 min; degree = min(t / 5, ln(t / T_FAST) / ln 1000)
-    assert status(r, 'equilibrium') == 'supported' and 'degree' not in _criterion(grade_fcs(r), 'equilibrium')      # 20 min: full
+    assert status(r, 'equilibrium') == 'supported' and 'degree' not in _criterion(grade_fcs(r), 'equilibrium')      # 20 min: beyond T_SLOW, full
     r['quantities']['incubation_time'] = point(1.0, 'min', 'i', ['s'])
     assert status(r, 'equilibrium') == 'supported' and _criterion(grade_fcs(r), 'equilibrium')['degree'] == pytest.approx(0.2) and grade_fcs(r)['native']['incubation_refs'] == ['s']
     assert _criterion(grade_fcs(r), 'equilibrium')['support_refs'] == ['s', 'span_exp_synthetic_fcs_1']      # the incubation and the KD it is judged against
-    r['quantities']['incubation_time'] = point(300.0, 's', 'i', ['s'])      # 5 min exactly: full
-    assert status(r, 'equilibrium') == 'supported' and 'degree' not in _criterion(grade_fcs(r), 'equilibrium')
-    r['quantities']['incubation_time'] = point(240.0, 's', 'i', ['s'])      # 4 min
+    r['quantities']['incubation_time'] = point(300.0, 's', 'i', ['s'])      # 5 min: the floor is met, the association-rate share is ln(5 / 0.014438) / ln 1000 = 0.8465
+    assert status(r, 'equilibrium') == 'supported' and _criterion(grade_fcs(r), 'equilibrium')['degree'] == pytest.approx(0.8465, abs=1e-3)
+    r['quantities']['incubation_time'] = point(240.0, 's', 'i', ['s'])      # 4 min: floor 0.8, association share 0.8146
     assert _criterion(grade_fcs(r), 'equilibrium')['degree'] == pytest.approx(0.8)
     r['quantities']['incubation_time'] = point(0.5, 's', 'i', ['s'])      # below T_FAST (0.87 s): even the fastest association has not equilibrated
     assert status(r, 'equilibrium') == 'conflicting'
-    r['quantities']['incubation_time'] = point(1.0, 'h', 'i', ['s'])
+    r['quantities']['incubation_time'] = point(1.0, 'h', 'i', ['s'])      # 60 min, beyond T_SLOW: full
     assert status(r, 'equilibrium') == 'supported' and 'degree' not in _criterion(grade_fcs(r), 'equilibrium')
     missing(r, 'incubation_time')
     assert (grader_status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('unknown', 'fact_unknown')

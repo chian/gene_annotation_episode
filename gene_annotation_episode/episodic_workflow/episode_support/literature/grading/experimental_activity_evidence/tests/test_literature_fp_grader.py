@@ -237,3 +237,47 @@ def test_direct_vs_competition():
     assert reason(r, 'direct_vs_competition') == 'kd_or_ki_missing'
     r['facts']['single_estimate_method'] = fact('yes', ['s'])
     assert status(r, 'direct_vs_competition') == 'not_applicable'
+
+
+def test_the_noise_of_the_reads_is_recorded_with_the_window_and_judged_nowhere_in_the_grader():
+    r = synthetic_record()
+    assert grade_fp(r)['native']['window_noise_mP'] is None and grade_fp(r)['native']['window_noise_refs'] == []      # not stated: nothing recorded
+    r['quantities']['signal_noise'] = point(10.0, 'mP', 'n', ['n'])
+    graded = grade_fp(r)
+    assert graded['native']['window_noise_mP'] == 10.0 and graded['native']['window_noise_refs'] == ['n'] and graded['native']['window_mP'] == 200.0
+    assert graded['criteria']['assay_window'] == {'status': 'unknown', 'support_refs': []} and graded['reasons']['assay_window'] == 'window_recorded_for_the_sheet'
+    missing(r, 'signal_maximum')                                                             # no window: the noise alone is not recorded as a window
+    graded = grade_fp(r)
+    assert graded['native']['window_noise_refs'] == [] and reason(r, 'assay_window') == 'minimum_or_maximum_missing'
+
+
+def test_the_direction_of_the_intensity_change_is_recorded_as_stated_and_never_decides_in_the_grader():
+    r = synthetic_record()
+    r['facts']['intensity_change_checked'] = fact('unknown')
+    assert grade_fp(r)['native']['intensity_change_direction'] is None                        # not stated
+    for direction in ('increase', 'decrease'):
+        r['intensity_change_direction'] = direction
+        graded = grade_fp(r)
+        assert graded['native']['intensity_change_direction'] == direction and graded['native']['intensity_change_percent'] == 10.0
+        assert graded['criteria']['intensity_change'] == {'status': 'unknown', 'support_refs': []} and graded['reasons']['intensity_change'] == 'intensity_change_recorded_for_the_sheet'
+
+
+def test_a_series_stated_as_competitor_is_read_against_the_ic50_else_against_the_constant():
+    r = synthetic_record()                                                                    # KD 20 nM, series 2 to 2000 nM
+    native = grade_fp(r)['native']
+    assert native['series_kind'] is None and native['ic50_nM'] is None and native['series_reference'] == 'kd'
+    r['quantities']['ic50'] = point(200.0, 'nM', 'i', ['i'])
+    r['series_kind'] = 'titrant'                                                              # a titrant series stays on the constant even with an IC50 given
+    native = grade_fp(r)['native']
+    assert native['series_reference'] == 'kd' and native['concentration_high_over_constant'] == pytest.approx(100.0) and 'i' not in native['series_refs']
+    r['series_kind'] = 'competitor'                                                           # 2 nM is 0.01 x IC50, 2000 nM is 10 x IC50
+    graded = grade_fp(r)
+    native = graded['native']
+    assert native['series_kind'] == 'competitor' and native['ic50_nM'] == 200.0 and native['series_reference'] == 'ic50'
+    assert native['concentration_low_over_constant'] == pytest.approx(0.01) and native['concentration_high_over_constant'] == pytest.approx(10.0) and native['series_refs'][-1] == 'i'
+    assert graded['criteria']['concentration_series'] == {'status': 'unknown', 'support_refs': []} and graded['reasons']['concentration_series'] == 'series_recorded_for_the_sheet'
+    missing(r, 'ic50')                                                                        # competitor without an IC50: the constant, as before
+    native = grade_fp(r)['native']
+    assert native['series_reference'] == 'kd' and native['concentration_high_over_constant'] == pytest.approx(100.0)
+    missing(r, 'kd')                                                                          # no IC50, no KD: the Ki is the constant
+    assert grade_fp(r)['native']['series_reference'] == 'ki'

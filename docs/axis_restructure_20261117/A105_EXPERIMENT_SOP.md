@@ -287,6 +287,70 @@ This is the procedure. Do it per assay; never apply one formula to every assay.
 4. **No unreasoned new numbers.** A zero end or shape constant added while softening must carry its physics or
    literature reason in its `EXPERT_REVIEW` comment, or be removed.
 
+### Cross-assay rules (decided 2026-11-21)
+
+For whoever builds the next classes. These were applied to fcs, elisa, spa, trp, fp, fret, mst, emsa, alpha,
+radioligand and dialysis (rule a: fcs, elisa, spa, trp, fp, fret, mst, emsa, alpha, radioligand; rule b: fcs, fret,
+alpha, emsa; rule c: changed in fcs, emsa and dialysis; elisa, alpha and radioligand already used the occupancy). Each assay still writes its Q1-Q5 answers in its converter docstring. The values named
+below are in the converters; check them there before copying.
+
+**a. Incubation time with no stated equilibrium fact is a curve, never a cliff.**
+- It applies when the paper gives no equilibrium fact, no koff and no association half-time. A stated koff or
+  association half-time is used instead when the paper gives one. A stated equilibrium fact still decides first.
+- Zero end, `T_FAST`: five half-lives at the fastest plausible association for the assay's partners, at the paper's
+  own constant. At or below `T_FAST` the verdict is `conflicting`.
+- Full end, `T_SLOW`: the same time with a slow association rate. At or above it the degree is full.
+- Between the two, `d_kon = ln(t / T_FAST) / ln(T_SLOW / T_FAST)`, so the degree is linear in log time.
+- A handling floor (mixing, diffusion to a surface, bead capture) is proportional: `d_floor = min(1, t / floor)`. It
+  never conflicts by itself. The degree is the smaller of `d_kon` and `d_floor`.
+- No constant stated: `unknown`, also below the floor. A time alone is not the paper against equilibrium.
+- An assay with no handling floor of its own gets none. Do not add a floor number with no researched value.
+- Each rate is a named `EXPERT_REVIEW` constant with its reason. The per-assay values are in the table in
+  `A105_ASSAY_CALIBRATION_DETAILS.md`, section "Cross-assay pass (2026-11-21)".
+
+**b. A fixed labelled or constant partner over the KD, with no tight-binding analysis.**
+- Judge it on the log of the KD bias `b = 1 + r / 2`, between the assay's own ends.
+- The ends are the assay's own values for `r`. For fcs, fret, alpha and emsa, `r = 1` is full (`b = 1.5`) and
+  `r = 10` is conflicting (`b = 6`). The shape is `(ln b(zero) - ln b(r)) / (ln b(zero) - ln b(full))`.
+- This was changed in fcs, fret, alpha and emsa. fp and mst already judged their partner on the log of the bias
+  (their own bias functions); they were not changed.
+- The reason is that the apparent KD is the KD plus half the partner concentration. The bias is therefore `1 + r / 2`.
+  The old linear-in-ratio shape had no assay-specific reason.
+- The tight-binding branch (where the paper analyses it) is not changed.
+
+**c. The ends of a concentration series are judged linearly in the one-site occupancy `x / (1 + x)`.**
+- `x` is the end concentration over the KD. Use the assay's own end values (full end and zero end), mapped through
+  the same occupancy function.
+- BLI keeps linear-in-ratio for its stated kinetic reason: `C / KD` is linear in `kobs / koff`, the kinetic
+  information itself.
+- Dialysis was changed this way: the ends stay `LOW_FACTOR` 0.5, `LOW_ZERO_AGREEMENT_FACTOR` 1.0, `HIGH_FACTOR`
+  4.0 and `HIGH_ZERO_AGREEMENT_FACTOR` 1.0.
+
+**d. How far past the KD the top must reach is NOT unified.** Copied from the converters (and the read-only inventory
+of all 25):
+- **5 x KD** (the usual 10 with a factor of 2 slack, about 83 percent occupancy): bli, spr, gci, spa, radioligand,
+  emsa, bret (over BRET50), auc, cetsa (over the EC50), dsf, split_reporter. Zero end 1 in each.
+  - spa, radioligand and emsa: Bmax (or the plateau) must be defined by data.
+  - gci also cites Deranleau 1969, about 80 percent saturation.
+  - bli keeps it on the kinetic argument above.
+  - spr, bret, auc, cetsa and split_reporter state occupancy 5/6, the mirror of their low end.
+- **4 x KD** (about 80 percent of the sites occupied): dialysis (Klotz 1982, Bmax needs about 80 percent).
+- **80 percent bound** (the 80-percent form, equal to 4 x KD; zero end 20 percent): fcs, in
+  `MIN_FRACTION_BOUND_MAXIMUM_PERCENT` and `FRACTION_BOUND_ZERO_AGREEMENT_PERCENT` (Deranleau 1969).
+- **10 x KD** (about 90 percent saturation; zero end 1): elisa, trp, fp, fret, mst, alpha. The reason in each is that
+  the plateau is only known by reaching it. elisa adds that the top of a plate titration is where non-specific
+  adsorption rises. alpha adds that a hook effect above the plateau does not lower the need.
+- The working rule for a new assay: about 5 (the usual 10 with a factor of 2 slack) where the plateau is on an
+  absolute scale or is constrained independently. Use 10 where the plateau is a free signal amplitude known only by
+  reaching it. Write which one applies, and why, in the Q1-Q5 block.
+
+**e. Count curves are not unified.** Each keeps its own stated shape.
+- Replicates: `sqrt(n / MIN_REPLICATES)`, never conflicting for a stated count, `unknown` when independence is not
+  stated yes.
+- Concentration counts: mostly linear in the residual degrees of freedom, `(n - parameters) / (MIN - parameters)`.
+  Some assays keep their own power or shape (for example bli and gci, concave with power 2; cetsa, convex).
+- A short count lowers the degree and never conflicts.
+
 ### Range review (after softening, per assay)
 
 Go through EVERY researched value and curve of the assay and ask the owner's questions, writing the answers in a short

@@ -534,5 +534,29 @@ class ExperimentalActivityEvidenceLibrary:
                     "exception_type": type(error).__name__}}
 
 
-__all__ = ["ExperimentalActivityEvidenceLibrary", "catalog", "instruction_entry",
-           "evidence_axis_instruction_view"]
+# The version a commissioner writes on the selection it sends the A105 head (the head's SELECTION form takes any text).
+SELECTION_VERSION = "experimental_activity_evidence_selection_v1"
+
+
+def freeze_selection(store, *, source, settings, axis, tools):
+    """What ``freeze-libraries`` does for this axis (the general run rule: a run reads a frozen copy of its library,
+    so a later edit of the published library cannot change the run). Freezes the published process library ``source``
+    into the directory the head reads (``settings['library_directory']``) and gives the selection a parent commissions
+    the head with: the ``axis`` option, the first thought pattern of the library, and the named ``tools`` of the A105
+    tool registry by name and resource (a tool run as a local program is 'local', every other one 'api'). This axis has
+    no separate tool library. A tool the registry does not have raises."""
+    from gene_annotation_episode.episodic_workflow.episode_support.tools.experimental_activity_evidence.tools import (
+        A105ToolRegistry)
+    library = ExperimentalActivityEvidenceLibrary.freeze(settings["library_directory"], source=source)
+    thought = next(header["option_ref"] for header in library.headers()
+                   if header["option_ref"]["slot"] == "thought_pattern")
+    available = A105ToolRegistry(store, **settings["tool_registry"]).catalog()
+    information = [{"name": name, "resources": "local" if "configuration" in available[name] else "api"}
+                   for name in tools]
+    return {"process_library_directory": str(library.directory),
+            "selection": {"version": SELECTION_VERSION, "evidence_axis": library.reference(axis),
+                          "thought_pattern": thought, "child_tool_info": information}}
+
+
+__all__ = ["ExperimentalActivityEvidenceLibrary", "SELECTION_VERSION", "catalog", "freeze_selection",
+           "instruction_entry", "evidence_axis_instruction_view"]

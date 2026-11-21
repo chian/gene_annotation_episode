@@ -176,15 +176,15 @@ def test_equilibrium():
         r['facts']['equilibrium_reached'] = fact(answer, ['s'])
         assert status(r, 'equilibrium') == expected
     r['facts']['equilibrium_reached'] = fact('unknown')
-    assert status(r, 'equilibrium') == 'unknown'                    # 15 min, but nothing says equilibrium
+    assert grade_mst(r)['criteria']['equilibrium']['status'] == 'unknown' and status(r, 'equilibrium') == 'supported'      # nothing says equilibrium: handed to the sheet (15 min at KD 20 nM: 0.477)
     r['quantities']['incubation_time'] = point(9.0, 'min', 'i', ['s'])
     graded = grade_mst(r)
-    assert graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet' and graded['native']['incubation_min'] == 9.0 and graded['native']['incubation_refs'] == ['s']
+    assert graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet' and graded['native']['incubation_min'] == 9.0 and set(graded['native']['incubation_refs']) == {'s', 'span_exp_synthetic_mst_1'}
     assert graded['native']['incubation_constant_nM'] == 20.0                               # the KD (20 nM) is handed over with the time; the grader holds no threshold
     assert graded['criteria']['equilibrium'] == {'status': 'unknown', 'support_refs': []}
     # KD 20 nM: T_FAST = 10 min x 10 nM / 20 nM = 5 min, T_SLOW 50 min; 9 min: log(9 / 5) / log(10) = 0.2553
     verdict = _criterion(graded, 'equilibrium')
-    assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(math.log10(9 / 5)) and verdict['support_refs'] == ['s']
+    assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(math.log10(9 / 5)) and set(verdict['support_refs']) == {'s', 'span_exp_synthetic_mst_1'}
     r['quantities']['incubation_time'] = point(300.0, 's', 'i', ['s'])      # 5 min exactly: the zero end, conflicting
     assert status(r, 'equilibrium') == 'conflicting'
     r['quantities']['incubation_time'] = point(1.0, 'h', 'i', ['s'])        # 60 min: past T_SLOW, full

@@ -492,7 +492,9 @@ So:
 - A real run is `python -m gene_annotation_episode run` with the real model and real services, started through the single-workflow
   launcher: `bash tools/one_workflow.sh --slot <lane> runs/<unique-run> -- <command>`. One workload per lane at a time. Everything
   disposable goes under `runs/`. The steps of a run: `init` and `add-material` (register the caller's material), `propose-annotation`,
-  `freeze-libraries` (prints the axis selection the commission carries), write the commission, continuation and services JSON,
+  write the continuation and services JSON, `freeze-libraries --source <published library> --continuation <that file>` (freezes every
+  axis the run covers where the run reads it and prints each axis selection; `--axis` only narrows it; the axis's library module
+  supplies `freeze_selection`), write the commission with the printed selection,
   `run`, then `report` (reads the journal back) and `resume` (replays; asks the model nothing). The design of the commands is
   `docs/plan/designs/real_entry.md`; a complete set of files is any workspace `runs/a101_final_ws_*`.
 - Write the prediction BEFORE the run, in the note of the piece. After the run, state predicted against observed, point by point,

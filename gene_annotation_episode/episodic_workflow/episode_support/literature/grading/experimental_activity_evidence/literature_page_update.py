@@ -60,6 +60,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_cetsa_converter import convert_cetsa
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_dialysis_converter import convert_dialysis
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_direction import direction_and_ratio
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_activity_direction import activity_direction_and_ratio
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_dsf_converter import convert_dsf
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_elisa_converter import convert_elisa
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_emsa_converter import convert_emsa
@@ -173,7 +174,13 @@ def _results_of_grader(grader, converted, record, claims):
     for assertion_ref in sorted(claims):
         claim = claims[assertion_ref]
         is_direct = bearing(bearing_record, claim)['bearing']
-        direction = direction_and_ratio(converted) if is_direct == 'direct' else {'direction': 'unknown', 'log_ratio': None, 'effect_support': None}
+        if is_direct != 'direct':
+            direction = {'direction': 'unknown', 'log_ratio': None, 'effect_support': None}
+        elif CLASS_OF_EXPERIMENT_TYPE[grader['experiment_type']] == 'activity_rate':
+            # an activity_rate converter carries 'enzyme_mass_g_per_mol' (the stated molar mass, or None): specific activity ends need it
+            direction = activity_direction_and_ratio(converted, converted['enzyme_mass_g_per_mol'])
+        else:
+            direction = direction_and_ratio(converted)
         known = direction['direction'] != 'unknown'
         result = {
             'result_ref': _result_ref(grader['grader_ref'], assertion_ref),

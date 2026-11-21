@@ -126,6 +126,10 @@ DIRECTION = ('supports', 'opposes', 'neutral', 'unknown')
 ROW_STATUS = ('measured', 'measured_zero', 'unknown')
 CRITERION_STATUS = ('supported', 'conflicting', 'unknown', 'not_applicable')
 QUALITATIVE_STATEMENT = ('interaction_detected', 'interaction_not_detected', 'interaction_not_stated')
+# The statements say whether the CLAIMED RELATION was detected. For the ligand_binding class the relation is binding; for the
+# activity_rate class (decided 2026-11-21, owner to confirm) 'interaction_detected' reads "activity detected",
+# 'interaction_not_detected' reads "activity not detected" (no activity above the paper's own control or detection limit) and
+# 'interaction_not_stated' reads "activity not stated". No new values: the vocabulary is unchanged.
 
 # Candidate claim predicates. OWNER_DECISION 1: a candidate carries predicate + subject_id + partner_id (annotation
 # IDs or names from a looked-up list). A claim names molecules only: it never carries a physical prediction or threshold
@@ -134,6 +138,9 @@ QUALITATIVE_STATEMENT = ('interaction_detected', 'interaction_not_detected', 'in
 # to be added here WITH THEIR CLASS, by the builder who adds that class; a predicate not listed for a class is refused.
 CLAIM_PREDICATES_BY_CLASS = {
     'ligand_binding': ('binds',),
+    # decided 2026-11-21, owner to confirm: 'E catalyzes R' (R a reaction term or a substrate molecule). Subject = the enzyme
+    # (the record's target_id). NOT symmetric. Spelling 'catalyzes' as the A105 hypotheses and A104 already use.
+    'activity_rate': ('catalyzes',),
 }
 # A symmetric predicate holds both ways: 'A binds B' is 'B binds A'. A result whose target is the claim's partner and whose
 # partner is the claim's subject is then direct for the claim (bearing, reason partner_route).
@@ -367,12 +374,50 @@ QUANTITATIVE_STRENGTH_ANCHORS = {   # OWNER_DECISION 15
 }
 
 # ---------------------------------------------------------------------------------------------------------------
+# (5c) ACTIVITY_STRENGTH_ANCHORS: the activity_rate class's gray-scale ends (decided 2026-11-21, owner to confirm; every
+# number below is EXPERT_REVIEW and every literature citation is from memory, to be verified). Anchors are per QUANTITY, not per
+# experiment type: the physics of kcat, kcat/Km, specific activity and fold over control is the same in every assay. For these
+# quantities LARGER is stronger; the position runs on the log10 scale from noise_end (strength 0) to strong_end (strength 1), as
+# for the binding anchors. They are the two ends of a gray scale, never thresholds.
+# Reference points (from memory, Bar-Even A et al. 2011 Biochemistry 50:4402-4410): natural enzymes have a median kcat near
+# 10 s^-1 and a median kcat/Km near 1e5 M^-1 s^-1; the upper quartiles are near 70 s^-1 and 1e6 M^-1 s^-1. Promiscuous
+# (side) activities of enzymes are typically 1e2 to 1e4 times less efficient than the main activity, so their kcat/Km sits near
+# 1e3 M^-1 s^-1 and their kcat near 1e-2 to 1 s^-1 (from memory, Khersonsky O, Tawfik DS 2010 Annu Rev Biochem 79:471-505).
+# noise_end: a rate this low is no better than promiscuous or background chemistry. strong_end: about the upper quartile of
+# natural enzymes. A median natural enzyme then sits at p = 0.75 on both scales, so the two scales agree with each other.
+ACTIVITY_STRENGTH_ANCHORS = {
+    # catalytic efficiency kcat/Km. noise_end: one decade under the typical promiscuous activity (1e3). strong_end: upper quartile of natural enzymes.
+    'catalytic_efficiency': {'unit': 'M^-1s^-1', 'noise_end': 1e2, 'strong_end': 1e6},   # EXPERT_REVIEW, owner to confirm
+    # turnover kcat. noise_end: the low end of promiscuous turnover (1e-2 s^-1, about one turnover per two minutes). strong_end: the upper quartile (70) rounded to 1e2.
+    'turnover': {'unit': 's^-1', 'noise_end': 1e-2, 'strong_end': 1e2},                  # EXPERT_REVIEW, owner to confirm
+    # a rate over the paper's own control, as a fold. noise_end: 1 (no better than the control). strong_end: three orders over the control, the practical dynamic range of most activity assays (signal over background); a fold at or under 1 is strength 0, never opposition.
+    'rate_over_control': {'unit': 'fold', 'noise_end': 1.0, 'strong_end': 1e3},          # EXPERT_REVIEW, owner to confirm
+}
+# Specific activity (U/mg, U = umol per minute) has no ends of its own: its ends are the kcat ends at the enzyme's molar mass M
+# (g/mol): U/mg = kcat * SECONDS_PER_MINUTE * UMOL_PER_MMOL / M (literature_activity_direction.specific_activity_ends).
+SECONDS_PER_MINUTE = 60.0          # FIXED_BY_DEFINITION: U = umol/min, kcat in s^-1.
+UMOL_PER_MMOL = 1000.0             # FIXED_BY_DEFINITION: M g/mol is M mg per mmol, so one enzyme molecule's mass in mg per umol is M / 1000.
+REFERENCE_ENZYME_MASS_G_PER_MOL = 5.0e4   # EXPERT_REVIEW, owner to confirm: used for the specific-activity ends only when the record does not state the enzyme's mass; 50 kDa, a typical subunit (the median enzyme subunit is about 40 to 50 kDa, from memory).
+# Which stated quantity is the effect when a record states several: the best-determined first (decided 2026-11-21, owner to
+# confirm). kcat/Km is a ratio of two fitted constants taken at low substrate and does not depend on the active-site amount
+# being known or on saturation; kcat needs the active-site concentration and a saturating curve; specific activity needs only
+# the mass of protein, which includes inactive protein and depends on the one substrate concentration used; a fold over the
+# paper's own control is relative to a control whose own activity differs between papers.
+ACTIVITY_EFFECT_ORDER = ('catalytic_efficiency', 'turnover', 'specific_activity', 'rate_over_control')
+# The record's quantity kind (QUANTITY_KINDS['activity_rate']) of the effect, and the anchor quantity it is read against.
+ACTIVITY_QUANTITY_OF_KIND = {'catalytic_efficiency': 'catalytic_efficiency', 'turnover': 'turnover', 'rate': 'specific_activity', 'rate_ratio': 'rate_over_control'}
+
+# ---------------------------------------------------------------------------------------------------------------
 # (4) Field lists. Each field: kind, plus lo/hi for numbers, vocab for vocabularies, nullable.
 #   kinds: 'vocab', 'number' (finite float or int, not bool), 'count' (int >= 0), 'ref' (a record reference: no
 #   whitespace, <= 200 chars; never prose), 'map' (a controlled mapping, checked by its own rule), 'bool' (true or
 #   false), 'refs' (a list of distinct record references; lo = the least length, default 1).
 # ---------------------------------------------------------------------------------------------------------------
 REF_PATTERN = re.compile(r'^[A-Za-z0-9_.:/#@+\-]{1,200}$')
+# A UNIT of a stated value: a spelling from a record form's fixed UNITS vocabulary. It is short and never prose, but it
+# is not a reference: the forms write powers and products as papers do ('s^-1', 'M^-1 s^-1', 'RU^2'), so a unit may hold
+# '^' and '%' and at most three space-separated parts.
+UNIT_PATTERN = re.compile(r'^[A-Za-z0-9_.:/#@+\-^%]{1,24}( [A-Za-z0-9_.:/#@+\-^%]{1,24}){0,2}$')
 
 # A MOLECULE NAME (target_id, partner_id, claim subject_id and partner_id): the molecule's name as the passage writes it,
 # normalized (casefold, whitespace collapsed: normalize_identity_ref). It is NOT a record reference: names contain spaces,
@@ -1237,7 +1282,7 @@ def validate_state_grader_fields(states):
     (STATE_FIELD_FIELDS); a stated value may also be a non-empty list of numbers (a series with its unit). A 'stated' entry holds at least one value and has reason null and conflicting false, or holds
     several different values and is conflicting with reason ambiguous_or_conflicting_in_passage. An 'unavailable' entry
     holds no value; its reason is not_stated_in_passage (conflicting false) or ambiguous_or_conflicting_in_passage
-    (conflicting true). Each value is {value: a number, string or boolean, unit: a reference or null, spans: [[start,
+    (conflicting true). Each value is {value: a number, string or boolean, unit: a unit spelling (UNIT_PATTERN) or null, spans: [[start,
     end], ...] of absolute byte spans with end >= start}; no two values of a field are equal."""
     if not isinstance(states, dict):
         raise ValueError('states must be a mapping')
@@ -1261,8 +1306,8 @@ def validate_state_grader_fields(states):
                 raise ValueError(f'{owner}.values item value is a string that is empty, longer than 200 characters or multi-line, so not a controlled value: {value["value"]!r}')
             if isinstance(value['value'], float) and not math.isfinite(value['value']):
                 raise ValueError(f'{owner}.values item value must be finite')
-            if value['unit'] is not None and (not isinstance(value['unit'], str) or not REF_PATTERN.match(value['unit'])):
-                raise ValueError(f'{owner}.values item unit must be a reference or null')
+            if value['unit'] is not None and (not isinstance(value['unit'], str) or not UNIT_PATTERN.match(value['unit'])):
+                raise ValueError(f'{owner}.values item unit must be a unit spelling (UNIT_PATTERN) or null: {value["unit"]!r}')
             if not isinstance(value['spans'], list):
                 raise ValueError(f'{owner}.values item spans must be a list')
             for span in value['spans']:

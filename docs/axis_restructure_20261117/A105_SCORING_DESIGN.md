@@ -78,6 +78,36 @@ binding only indirectly. Each has different goodness metrics, controls, noise an
 number from different experiments means different things. Several different experiments agreeing is stronger
 because their error sources differ.
 
+## 6b. The activity_rate class (DRAFT, written 2026-11-21, owner to confirm)
+
+The list is a draft for the owner to correct, drafted from the sources found and domain knowledge (no owner-supplied
+list). Predicate `catalyzes` (subject the enzyme; not symmetric). One entry per reapplicable protocol. The 19 types stand,
+none merged (`redox_mediator` is not folded into `spectro_direct`, `quench_flow` not into `stopped_flow`). The full filled
+templates (step 7 below), the sources searched, the class core, the direction and anchors and the class decisions are in
+`A105_ACTIVITY_RATE_INVENTORY.md`.
+
+| # | Type id | Experiment | Family |
+| --- | --- | --- | --- |
+| 1 | `spectro_direct` | Continuous direct spectrophotometric (absorbance) assay | Optical, continuous |
+| 2 | `coupled_enzyme` | Continuous coupled (auxiliary-enzyme) assay | Optical, continuous, indirect |
+| 3 | `redox_mediator` | Artificial electron donor/acceptor dye assay | Optical, continuous, indirect |
+| 4 | `fluorogenic` | Fluorogenic / fluorescent substrate or product assay | Optical, continuous |
+| 5 | `luminescent` | Luminescent product-detection assay (luciferase-coupled ATP/ADP etc.) | Optical, plate |
+| 6 | `stopped_flow` | Stopped-flow rapid mixing (pre-steady-state, single turnover) | Rapid kinetics, continuous |
+| 7 | `quench_flow` | Rapid chemical quench-flow | Rapid kinetics, discontinuous |
+| 8 | `chromatographic` | Discontinuous HPLC / LC-MS / GC product (or substrate) quantification | Separation, discontinuous |
+| 9 | `stopped_colorimetric` | Stopped assay with colorimetric derivatization | Optical, discontinuous |
+| 10 | `radiometric` | Radiolabelled substrate, product separated and counted | Isotope, discontinuous |
+| 11 | `separation_band` | Gel / TLC separation of substrate and product with densitometry | Separation, discontinuous |
+| 12 | `oxygen_electrode` | O2 consumption/evolution by Clark-type or optical O2 sensor | Electrode, continuous |
+| 13 | `ph_stat` | pH-stat titration of released protons | Electrode, continuous |
+| 14 | `protein_film_electrochem` | Protein-film voltammetry / chronoamperometry catalytic current | Electrode, continuous |
+| 15 | `itc_kinetics` | Isothermal titration calorimetry enzyme kinetics (heat rate) | Calorimetric, continuous |
+| 16 | `continuous_ms` | Continuous mass spectrometry (membrane-inlet MS, real-time ESI-MS) | MS, continuous |
+| 17 | `nmr_timecourse` | Real-time NMR progress curve | NMR, continuous |
+| 18 | `product_immunodetection` | Antibody detection of the modified product (TR-FRET/HTRF, ELISA, AlphaScreen) | Immuno, stopped |
+| 19 | `zymogram` | In-gel activity staining (zymography) | Gel, qualitative |
+
 ## 7. How to add an experiment (the repeatable procedure; each step is hand-written)
 
 1. Inventory entry: the experiment's name and family; what it evidences (which sheet); its native outputs and units;

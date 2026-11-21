@@ -106,7 +106,8 @@ Biophys Rev 12:85; Jarmoskaite et al. 2020 eLife 9:e57264; Sanchez-Ruiz 1992 Bio
     -> CHANGED: linear in n - 1 from REPLICATES_ZERO 1 (conflicting) -> sqrt(n / MIN_REPLICATES); REPLICATES_ZERO removed; SD_MIN_EXPERIMENTS 2 added for the variance only.
   Unknown weight (row_contract WEIGHT_UNKNOWN_BY_TYPE['dsf'], not in this file and not a degree): the readout is a temperature read from a relative fluorescence curve; the shift shows
     binding only indirectly; an apparent KD is model-dependent and refers to the Tm, not 25 degrees; unstated ligand-alone controls hide the common false positives (fluorescent or dye-binding
-    compounds, aggregators). Purified protein makes it cleaner than CETSA (0.6) and close to Trp quenching (0.65). Recommended 0.65; pending (outside this file).
+    compounds, aggregators). Purified protein makes it cleaner than CETSA and close to Trp quenching. Registered in the row contract: 0.70 for the type (CETSA 0.65,
+    Trp quenching 0.70), with binding_regime 0.65 and binding_controls 0.80 for those criteria.
 Quote support (SUPPORT_DEGREE in literature_quote_support.py): the record carries, per stated field, how well its quote supports it (direct 1.0,
 implied 0.7, about_something_else 0.3) and the grader keeps, per criterion, the supports of the fields it reads. A supported member criterion whose
 weakest read field is implied or about_something_else gets that factor as its degree where it had none, or the product with its own degree; direct leaves it unchanged. Support never changes a status. variance_correspondence takes

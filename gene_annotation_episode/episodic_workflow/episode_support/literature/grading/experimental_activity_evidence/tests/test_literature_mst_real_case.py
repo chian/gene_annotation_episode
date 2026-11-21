@@ -9,7 +9,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 def test_the_labelled_concentration_and_the_fit_model_are_decided_and_nothing_conflicts():
     graded = grade_mst(real_record())
     statuses = {name: _criterion(graded, name)['status'] for name in graded['criteria']}       # the sheet judges what the grader only records
-    assert [name for name, status in statuses.items() if status == 'supported'] == ['labelled_concentration', 'fit_model']
+    assert [name for name, status in statuses.items() if status == 'supported'] == ['labelled_concentration', 'equilibrium', 'fit_model']      # equilibrium: 10 min at a KD of 532 nM is past T_SLOW (the curve of the incubation)
     assert 'conflicting' not in statuses.values() and set(statuses.values()) <= {'supported', 'unknown', 'not_applicable'}
     # 10 nM detected partner over a KD of 532 nM = 0.0188
     assert graded['native']['kd_nM'] == pytest.approx(532.0) and graded['native']['labelled_over_kd'] == pytest.approx(10 / 532)

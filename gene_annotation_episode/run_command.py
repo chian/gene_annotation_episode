@@ -117,27 +117,33 @@ def propose_annotation(store, *, subject, predicate, value):
     return {'proposed_annotation_ref': record['id'], 'record': record}
 
 
-def freeze_libraries(store, *, directory, source, axis, tools, tool_registry):
-    """Freeze the process library (from its published ``source``) and the tool library (the named tools of the tool
-    registry) into ``directory`` for a run, and give the selection of ``axis`` a parent commissions its head with:
-    the axis option, the first thought pattern of the library and the tool information of the named tools."""
-    from .episodic_workflow.episode_support.configuration.sequence_homology_evidence.process_options import (
-        SequenceHomologyEvidenceLibrary)
-    from .episodic_workflow.episode_support.records.sequence_homology_evidence.construction_records import (
-        SELECTION_VERSION)
-    from .episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import ToolRegistry
-    from .episodic_workflow.episode_support.tools.tool_catalog import ScientificToolLibrary
-    directory = Path(directory)
-    library = SequenceHomologyEvidenceLibrary.freeze(directory / 'process-library', source=source)
-    thought = next(header['option_ref'] for header in library.headers()
-                   if header['option_ref']['slot'] == 'thought_pattern')
-    available = ToolRegistry(store, **tool_registry).catalog()
-    catalog = [{'name': name, 'resources': 'local', **available[name]} for name in tools]
-    tool_library = ScientificToolLibrary.freeze(directory / 'tool-library', catalog=catalog)
-    information = tool_library.resolve_tool_info([{'name': name, 'resources': 'local'} for name in tools])
-    return {'process_library_directory': str(library.directory), 'tool_library_directory': str(tool_library.directory),
-            'selection': {'version': SELECTION_VERSION, 'evidence_axis': library.reference(axis),
-                          'thought_pattern': thought, 'child_tool_info': information}}
+def freeze_libraries(store, *, source, continuation, tools, axis=None):
+    """The general run rule: a run reads frozen copies of its libraries, so a later edit of a published library cannot
+    change a run that has started. For every axis head the run's ``continuation`` names (or only the head of ``axis``
+    when one is given), freeze that axis's libraries from the published ``source`` into the directories the head's own
+    settings name (the same file ``run`` takes, so the run reads exactly what was frozen), and give the selection a
+    parent commissions that head with. Nothing here knows an axis: each axis's library module
+    (``episode_support/configuration/<head>/process_options.py``) supplies ``freeze_selection`` with its own pieces.
+    An axis that has no such function is reported as not frozen; it does not stop the others (this is a help to keep
+    runs tidy, not a gate). Freezing an already frozen directory returns the snapshot that is there."""
+    configuration = ROOT.parent / 'episode_support' / 'configuration'
+    package = PACKAGE.rsplit('.', 1)[0] + '.episode_support.configuration'
+    result = {}
+    for head in sorted(path for path in continuation if '/' not in path and path != 'root'):
+        own_axis = _folder(head).parent.name.upper()
+        if axis is not None and axis != own_axis:
+            continue
+        freeze = None
+        if (configuration / head / 'process_options.py').is_file():
+            freeze = getattr(importlib.import_module(f'{package}.{head}.process_options'), 'freeze_selection', None)
+        if freeze is None:
+            result[head] = {'axis': own_axis, 'frozen': False,
+                            'reason': 'the_library_module_of_this_axis_supplies_no_freeze_selection'}
+            continue
+        result[head] = {'axis': own_axis, 'frozen': True,
+                        **freeze(store, source=Path(source), settings=continuation[head], axis=own_axis,
+                                 tools=list(tools))}
+    return result
 
 
 def read_json(path):

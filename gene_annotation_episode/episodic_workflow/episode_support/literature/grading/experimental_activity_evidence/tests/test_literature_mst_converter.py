@@ -305,7 +305,7 @@ def test_the_sheet_judges_the_incubation_as_a_curve_on_the_papers_own_constant()
         assert got_status == expected, minutes
         assert got_degree == (pytest.approx(degree) if degree is not None else None), minutes
     assert math.log10(2) == pytest.approx(0.30103, abs=1e-5) and math.log10(3) == pytest.approx(0.47712, abs=1e-5)
-    assert judged(r, 'equilibrium')['support_refs'] == ['s']
+    assert set(judged(r, 'equilibrium')['support_refs']) == {'s', 'span_exp_synthetic_mst_1'}                    # the incubation's and the KD's refs
     r['facts']['equilibrium_reached'] = fact('yes', ['s'])
     assert judged(r, 'equilibrium')['status'] == 'supported' and 'degree' not in judged(r, 'equilibrium')      # the stated fact is the grader's, whatever the time
 

@@ -309,9 +309,10 @@ def _judge_series(native):
 
 
 def _judge_incubation(native):
-    # No degree (an incubation time alone never shows equilibrium). Conflicting only when the stated incubation is shorter than the time the binding needs at the
-    # paper's own constant, MIN_INCUBATION_MIN x EQUILIBRATION_REFERENCE_NM / constant_nM (the approach rate kon (C + KD) is proportional to the constant at C = KD);
-    # with no constant there is no scale, and the time alone is not the paper showing against equilibrium: unknown.
+    # A gradual degree against the paper's own kinetics. With a stated koff: the fraction of the approach to equilibrium reached. Without it: the time the binding
+    # needs at the paper's own constant, MIN_INCUBATION_MIN x EQUILIBRATION_REFERENCE_NM / constant_nM at the fastest plausible association (the approach rate
+    # kon (C + KD) is proportional to the constant at C = KD), is the zero end, and the same time at the slow association is the full end (see below).
+    # With no constant there is no scale, and the time alone is not the paper showing against equilibrium: unknown.
     koff = native['koff_per_s']
     if koff is not None:      # the paper's own dissociation rate: the fraction of the approach to equilibrium that the incubation reaches, with a degree
         reached = 1 - 2 ** (-native['incubation_min'] * 60 * koff / math.log(2))

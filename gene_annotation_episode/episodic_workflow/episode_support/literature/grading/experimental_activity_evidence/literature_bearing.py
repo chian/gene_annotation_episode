@@ -24,6 +24,13 @@ Result: {'bearing': one of BEARING, 'reasons': [one code of BEARING_REASONS]}. C
                      conflict).
   transfer           NEVER returned: the contract has no relation vocabulary (homolog / related subject) yet.
 
+'catalyzes' (activity_rate class) is NOT symmetric: the subject is the enzyme (the record's target_id), so a record whose target
+is the claim's substrate or reaction is different_subject. Its claim partner is null when the hypothesis value is a reaction
+term (literature_claim.TERM_PARTNER_IS_NOT_A_MOLECULE), and then the record's stated substrate is not compared (a partner stated
+by one side only is not a conflict): bearing is by the target alone. When the claim names a substrate molecule and the record
+states another substrate, the result is different_subject (partner_contradicts_claim). No code differs from binding: the rule
+above already does this.
+
 SYMMETRIC predicates (SYMMETRIC_PREDICATES): when the target is the claim's partner and the record's partner is the
 claim's subject (both stated), the result is direct, reason partner_route. A pair named only by the target stays
 different_subject.

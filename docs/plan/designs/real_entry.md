@@ -43,9 +43,15 @@ the frozen libraries may live anywhere under `runs/`.
 
 `report` reads a run back from its journal (episodes, units, model answers, controller steps, receipts).
 `propose-annotation` registers the caller's proposed annotation (one hypothesis record of caller origin), and
-`freeze-libraries` freezes the process library and the tool library for a run and prints the axis selection a parent
-commissions its head with. These two are the registrations a run's caller makes before `run`; no command reached
-them before.
+`freeze-libraries` is the general run rule that keeps runs tidy: a run reads frozen copies of its libraries, so a later
+edit of a published library cannot change a run that has started. It takes the run's own continuation file
+(`--continuation`, the file `run` takes) and the published library (`--source`), and for every axis head that file
+names it freezes the axis's libraries into the directories that head's settings name, then prints the selection a
+parent commissions each head with. `--axis A105` is optional and narrows it to one axis; `--tool` names the tools to
+offer. The command knows no axis: each axis's library module
+(`episode_support/configuration/<head>/process_options.py`) supplies `freeze_selection` with its own pieces (A101 and
+A105 do today). An axis without one is reported as not frozen and does not stop the others: the rule is a help, not a
+gate. These two are the registrations a run's caller makes before `run`; no command reached them before.
 
 `resume` takes the same arguments except the commission (it is in the journal). It replays the recorded run; a unit
 already recorded is not run again and no recorded model call is asked again.
