@@ -102,3 +102,16 @@ Target: E. coli CspA (P0A9X9), 70 residues, protein. Run: from a pinned worktree
 4. After that unit the same search has ceiling 0 (a graded search of the query and database; the only database), nothing is worth
    its cost (forecast 0), and the head ends by its estimator with `outstanding_handoff_count` 0.
 5. No custody error.
+
+## Prediction for the RecA run, written before it (after the CspA runs)
+
+Target: E. coli RecA (P0A7G6), 353 residues (`runs/a101_goal12_ws_reca/target.fasta`). Same head, same worktree commit (`24c08fa33`).
+
+1. One head unit, `structure_search` on `afdb-swissprot`, then a yield stop (as in the CspA run). Inside the child: `get_model`, estimate, launch,
+   monitor, extract. The model: AlphaFold DB (P0A7G6, 353 residues, mean pLDDT in the 90s) if the child's model picks it; the CspA run
+   showed it picks `esmfold` first, and an ESMFold model of 353 residues was folded live before (18 s), so that is as likely. With an
+   ESMFold model there is no self control; with an AlphaFold model the own entry is the control.
+2. The sheet: close to 1000 hits; candidates dominated by RecA and RadA/Rad51/DMC1-like recombinases (names such as "Protein RecA",
+   "DNA repair protein RadA", "DNA repair protein RAD51 homolog"), the leading candidates with mean B above 0.8.
+3. Credit: the sum of the candidates' entry values (tens, below the ceiling 1000); one unit; ceiling after it 0; the head ends by its
+   estimator with `outstanding_handoff_count` 0. The Foldseek duration observed: tens of seconds (CspA: 16.7 s). No custody error.
