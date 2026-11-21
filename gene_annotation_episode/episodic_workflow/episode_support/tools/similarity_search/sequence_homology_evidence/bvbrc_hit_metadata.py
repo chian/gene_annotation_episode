@@ -33,6 +33,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.gene_
     AcquisitionError)
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.sequence_and_context_sources.sequence_homology_evidence.bvbrc_data_query import (
     encode_native_query)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
+    differential_credit)
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.service_calls.api_bvbrc import (
     BVBRCDataClient, DEFAULT_BASE_URL)
 
@@ -96,6 +98,64 @@ def lookup(accessions):
             'failures': state['failures'], 'responses': state['responses'], 'duplicate_feature_ids': duplicates}
 
 
+SETTLE = 0.01
+
+
+def _merge(whole, part):
+    """Add one batch's ``lookup`` result to the running one."""
+    for record in part['features']:
+        known = whole['_chosen'].get(record['patric_id'])
+        if known is not None:
+            whole['duplicate_feature_ids'] += 1
+        if known is None or record.get('annotation', '') < known.get('annotation', ''):
+            whole['_chosen'][record['patric_id']] = record
+    whole['families'].update(part['families'])
+    whole['genomes'].update(part['genomes'])
+    whole['requests'] += part['requests']
+    whole['failures'].extend(part['failures'])
+    whole['responses'].extend(part['responses'])
+    whole['duplicate_feature_ids'] += part['duplicate_feature_ids']
+
+
+def _picture(chosen, values):
+    """The candidate list the named hits give so far: product -> score, by the head's own arithmetic
+    (``differential_credit``: one test, the score of a candidate is the mean of its hits' values; admitted when above 0)."""
+    rows = [{'test': 'named_hits', 'candidate': chosen[accession]['product'], 'value': values[accession]}
+            for accession in values if accession in chosen and chosen[accession].get('product')]
+    return differential_credit(rows)['scores']
+
+
+def name_hits(ordered):
+    """Name the hits of a graded search in the order of their value, in batches of ``BATCH``. ``ordered`` is
+    ``[(accession, value)]``, highest value first, ties by accession (the per-hit value the head's credit reads). After each
+    batch the candidate list and scores of the hits named so far are computed (``_picture``); the naming STOPS when a
+    batch, against the picture before it, admits no new product and moves no existing candidate's score by more than
+    ``SETTLE`` (stop reason ``settled``), or when every hit is named (``all_named``). The first batch has no picture
+    before it, so a second batch is always asked for when hits remain. Returns the merged ``lookup`` result (as
+    ``lookup`` gives it, for the hits named) with ``naming``: ``{'named', 'not_asked', 'batches', 'stopped'}``; a hit not
+    named is NOT ASKED (not asked-and-missing)."""
+    whole = {'_chosen': {}, 'families': {}, 'genomes': {}, 'requests': 0, 'failures': [], 'responses': [],
+             'duplicate_feature_ids': 0}
+    values, before, batches = {}, {}, 0
+    stopped = 'all_named'
+    for start in range(0, len(ordered), BATCH):
+        part = ordered[start:start + BATCH]
+        _merge(whole, lookup([accession for accession, _ in part]))
+        values.update(dict(part))
+        batches += 1
+        after = _picture(whole['_chosen'], values)
+        settled = (batches > 1 and set(after) <= set(before)
+                   and all(abs(after[name] - before[name]) <= SETTLE for name in after))
+        before = after
+        if start + BATCH < len(ordered) and settled:
+            stopped = 'settled'
+            break
+    chosen = whole.pop('_chosen')
+    named = len(values)
+    return {'features': [chosen[key] for key in sorted(chosen)], **whole,
+            'naming': {'named': named, 'not_asked': len(ordered) - named, 'batches': batches, 'stopped': stopped}}
+
+
 def sequences_by_md5(md5s):
     """The protein sequences of the BV-BRC ``feature_sequence`` collection (public Data API, no login; its key ``md5``
     is a hit feature's ``aa_sequence_md5``), in batches of ``BATCH`` at least ``SPACING_SECONDS`` apart: ``{'sequences':
@@ -132,4 +192,4 @@ def reference_metadata(found):
     return rows
 
 
-__all__ = ['BATCH', 'SOURCE', 'SPACING_SECONDS', 'lookup', 'reference_metadata', 'sequences_by_md5']
+__all__ = ['BATCH', 'SOURCE', 'SPACING_SECONDS', 'SETTLE', 'lookup', 'name_hits', 'reference_metadata', 'sequences_by_md5']

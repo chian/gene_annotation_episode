@@ -49,7 +49,9 @@ def internal_summary(view):
             'unit_rows': rows, 'state_facts': facts, 'state': facts['state'],
             'last_failure_code': facts['last_failure_code'], 'search': search_facts(search), 'graded': graded,
             'metadata': [{name: unit['outcome'][name] for name in ('metadata_covered_count', 'metadata_hit_count',
-                                                                    'metadata_request_count')}
+                                                                    'metadata_request_count', 'named_hit_count',
+                                                                    'not_asked_hit_count', 'naming_batch_count',
+                                                                    'naming_stopped')}
                          for unit in view.outcomes if unit['tool'] == 'extract' and unit['outcome']['status'] == 'completed'],
             'handoff_refs': [ref for unit in view.outcomes if unit['tool'] == 'launch'
                              for ref in unit['outcome']['handoff_refs']],

@@ -77,7 +77,7 @@ def _by(rows, key):
 def search_hits(grading, value_of):
     """The hits of a database search with names, one row per (hit, product name) in hit order: ``hit_index``, ``product``
     (the function the sheet's reference metadata gives it), ``value`` (the subscore of that hit's alignments), and the
-    hit's ``accession``, ``aa_sequence_md5`` and ``aa_length`` (BV-BRC's feature fields; ``None`` where the metadata has
+    hit's ``accession``, ``aa_sequence_md5``, ``aa_length`` and ``feature_id`` (BV-BRC's feature fields; ``None`` where the metadata has
     none), plus ``unlabelled`` (a hit that names no product gives one row with ``product`` ``None``)."""
     sheet = grading['sheet']
     rows = _by(route_native_grading(grading), 'hit_index')
@@ -85,6 +85,8 @@ def search_hits(grading, value_of):
     for hit in sheet['hits']:
         names = {}
         for association in hit['associations']:
+            if association['metadata_index'] is None:
+                continue
             metadata = sheet['reference_metadata'][association['metadata_index']]
             for function in metadata['functions']:
                 if function['function']:
@@ -92,9 +94,10 @@ def search_hits(grading, value_of):
         value = value_of(rows.get(hit['hit_index'], []))
         if not names:
             found.append({'hit_index': hit['hit_index'], 'product': None, 'value': value, 'accession': None,
-                          'aa_sequence_md5': None, 'aa_length': None})
+                          'aa_sequence_md5': None, 'aa_length': None, 'feature_id': None})
         found.extend({'hit_index': hit['hit_index'], 'product': name, 'value': value, 'accession': accession,
-                      'aa_sequence_md5': feature.get('aa_sequence_md5'), 'aa_length': feature.get('aa_length')}
+                      'aa_sequence_md5': feature.get('aa_sequence_md5'), 'aa_length': feature.get('aa_length'),
+                      'feature_id': feature.get('feature_id')}
                      for name, (accession, feature) in names.items())
     return found
 

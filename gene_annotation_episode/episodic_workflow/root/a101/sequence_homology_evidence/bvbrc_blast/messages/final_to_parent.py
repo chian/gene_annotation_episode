@@ -38,6 +38,14 @@ FINDING_FORM = RecordForm({
     'metadata_hit_count': Field('integer', 'The hits of the report that the data service was asked about', required=False),
     'metadata_covered_count': Field('integer', 'The hits whose feature the data service described (a hit without it is '
                                                'missing, not a hit with no function)', required=False),
+    'named_hit_count': Field('integer', 'The hits whose names were asked of the data service, in the order of their value '
+                             'in the search, in batches of 100', required=False),
+    'not_asked_hit_count': Field('integer', 'The hits never asked about (the naming stopped): not asked, which is not '
+                                            'asked-and-missing', required=False),
+    'naming_batch_count': Field('integer', 'The batches of 100 hits named', required=False),
+    'naming_stopped': ChoiceField('text', 'Why the naming stopped: settled (a batch admitted no new product and moved no '
+                                          'candidate\'s score by more than 0.01) or all_named', ('settled', 'all_named'),
+                                  required=False),
     'data_request_count': Field('integer', 'The requests made to the data service for the names of the hits',
                                 required=False),
     'parked': Field('boolean', 'The search is launched and not extracted: this child parked, and the parent is shown the '
@@ -79,7 +87,9 @@ def final_to_parent(summary, completion, selection):
         counts = summary['metadata'][-1]
         finding.update(metadata_hit_count=counts['metadata_hit_count'],
                        metadata_covered_count=counts['metadata_covered_count'],
-                       data_request_count=counts['metadata_request_count'])
+                       data_request_count=counts['metadata_request_count'], named_hit_count=counts['named_hit_count'],
+                       not_asked_hit_count=counts['not_asked_hit_count'], naming_batch_count=counts['naming_batch_count'],
+                       naming_stopped=counts['naming_stopped'])
     if summary['notice'] is not None:
         finding.update(parked=True, seconds_since_launch=summary['notice']['seconds_since_launch'],
                        expected_remaining_seconds=summary['notice']['expected_remaining_seconds'])

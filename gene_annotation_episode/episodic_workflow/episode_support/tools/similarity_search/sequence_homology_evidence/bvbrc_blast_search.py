@@ -33,6 +33,10 @@ from episode_runtime.job_access import job_handle
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
     SEARCHES)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
+    search_hits)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import (
+    compile_native_sheet, intervals)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     retain_tool_grading)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_database_features import (
@@ -52,7 +56,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     document as blast_document)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_hit_metadata import (
-    lookup, reference_metadata)
+    SETTLE, lookup, name_hits, reference_metadata)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     PROGRAM_UNITS)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
@@ -525,6 +529,16 @@ def _named(report, rows):
     return json.dumps(document).encode()
 
 
+def ordered_hits(report, grading, length):
+    """The hits of the report as ``[(accession, value)]``, highest value first, ties by accession: the per-hit value is the
+    one the head's credit reads (``candidate_measurements.search_hits``: the subscore of the hit's alignments over the whole
+    query). ``grading`` is the grading of the report (with or without reference metadata)."""
+    regions = intervals([[0, length]], length=length)
+    accessions = _accessions(report)
+    rows = search_hits(grading, lambda rows_: compile_native_sheet(rows_, supplied_length=length, regions=regions)['value'])
+    return sorted(((accessions[row['hit_index']], row['value']) for row in rows), key=lambda pair: (-pair[1], pair[0]))
+
+
 def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
     """Fetch the report of the finished search, learn what its hits are from BV-BRC's data service
     (``bvbrc_hit_metadata``) and grade the report with that as reference metadata, all in the same unit, kept through
@@ -541,7 +555,12 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
     (result_ref,) = [item['ref'] for item in fetched['results'] if item['name'] == REPORT]
     report = store.get_artifact(result_ref)
     sequence = store.get_artifact(store.get(query_ref)['sequence_ref']).decode('ascii').upper()
-    found = lookup(_accessions(report))
+    try:
+        ordered = ordered_hits(report, _grading(store, result_ref, fields, query_ref, sequence, []), len(sequence))
+    except (ValueError, ContractError) as error:
+        code = str(error) if str(error) in FAILURE_CODES else 'grading_refused'
+        return {**_failed(code, False, reason=str(error)), 'closure_ref': fetched['closure_ref']}
+    found = name_hits(ordered)
     rows = reference_metadata(found)
     try:
         grading = _grading(store, result_ref, fields, query_ref, sequence, rows)
@@ -557,8 +576,8 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
             'request_ref': None, 'version': normalized['search']['version'], 'retrieved_at': None,
             'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [query_ref]}, origin='tool')
         metadata_ref = store.artifact(canonical({key: found[key] for key in (
-            'features', 'families', 'genomes', 'requests', 'failures', 'responses', 'duplicate_feature_ids')}),
-            'application/json')
+            'features', 'families', 'genomes', 'requests', 'failures', 'responses', 'duplicate_feature_ids',
+            'naming')}), 'application/json')
         metadata_source = store.put('source', {
             'provider': METADATA_PROVIDER, 'accession': None, 'uri': DATA_BASE_URL, 'artifact_ref': metadata_ref,
             'text_ref': None, 'request_ref': None, 'version': None, 'retrieved_at': None,
@@ -573,7 +592,9 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
             'hit_count': len(grading['sheet']['hits']), 'observation_count': len(observations),
             'unprojected_alignment_count': unprojected, 'metadata_covered_count': accounting['covered_count'],
             'metadata_hit_count': accounting['hit_accession_count'], 'metadata_request_count': found['requests'],
-            'metadata_failure_count': len(found['failures']), 'metadata_complete': accounting['complete']}
+            'metadata_failure_count': len(found['failures']), 'metadata_complete': accounting['complete'],
+            'named_hit_count': found['naming']['named'], 'not_asked_hit_count': found['naming']['not_asked'],
+            'naming_batch_count': found['naming']['batches'], 'naming_stopped': found['naming']['stopped']}
 
 
 __all__ = ['ACTIONS', 'DATABASES', 'ESTIMATE_BASES', 'ESTIMATE_RANGE', 'FAILURE_CODES', 'PROVIDER', 'REQUEST_FIELDS',
