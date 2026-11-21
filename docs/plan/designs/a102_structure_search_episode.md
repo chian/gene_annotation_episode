@@ -101,3 +101,141 @@ X00000 (HTTP 400), A0A0A0A0A1 (HTTP 404)) and file 2; UniProt search 1; ESM Atla
   page only when `truncated` is true.
 - Nothing here was run inside an episode unit: no `JobAccess.launch` (custody, handoff row) with this route; only the route members
   directly.
+
+# The child episode `structure_search`
+
+Status: built and checked directly on 2026-11-21 (direct checks, not a real run: no model was asked). Episode folder
+`gene_annotation_episode/episodic_workflow/root/a102/structural_homology_evidence/structure_search/` (binding path
+`structural_homology_evidence/structure_search`; `goal.py`, `task.py`, `credit.py`, `yield_estimator.py`, `episode.py`,
+`messages/{read_from_parent,internal_summary,final_to_parent}.py`; the class inherits only from `EpisodeBinding`). Library:
+`LIB/tools/structure_search/structural_homology_evidence/structure_search_child.py` (the job-child machinery) and
+`foldseek_search.py` (the application). The tree and the reasons are `a102_tree.md`; the SOP is Steps 1, 3, 4, 5, 6 and 13.
+
+## Step zero: what is called, what is new
+
+| Need | Called as it is | New, and why |
+| --- | --- | --- |
+| The job-child machinery (estimate gate with `ledger_estimate`, launch once, fix after a failure, monitor wait range, extract = fetch + grade, until launched / extracted, wait notice, continuation from the handoff's staged inputs, bounded credit, completion controller, closure under naming) | the owner's rules and A101's `bvbrc_job_child.py` as the model to copy | `structure_search_child.py`: A102's own copy (per-axis library convention). A101's module is fixed to resource kind `bvbrc`, its credit has four units and it has no `get_model`; it stays untouched. Differences: resource kind `foldseek`; `get_model` (check `check_get_model`, offered sources `sources_offered`); the credit has a fifth unit (`model_unit`); states `no_model`, `model_held` before `estimated`; `launch` also needs a model (`model_required`); `FIRST_JOB_SECONDS` = 10 (the live check of 2026-11-21 observed 6 to 10 s, `a102_services.md`; the ledger replaces it after the first measured job); `JobApplication.after_launch` is dropped (nothing uses it) |
+| The route | `LIB/jobs/foldseek_job_route.FoldseekJobRoute`, `job_services` (`foldseek` block), `JobAccess` | nothing |
+| A model of the target | `target_model_sources.uniprot_accessions_by_sequence`, `alphafold_model`, `esmfold_model` | `foldseek_search.obtain_model` (the unit: custody, source record, data product), `model_positions` (the numbering check) |
+| Data products | `data_products.record_product`, `find_reusable`, `require_product`, `products`; kinds `protein_structure_model`, `structure_search_results`, `search_hit_metadata`, `tool_grading_sheet` | `tool_grading_artifacts.record_grading_product` in A102's folder (it lacked it; mirror of A101's) |
+| The result | `foldseek_result.parse_foldseek_result`, `structure_search_sheet.measure_hits` and `grade_structure_search`, `uniprot_hit_names.name_hits`, `retain_tool_grading` | `foldseek_search.extract` (the unit that calls them in order); the self control in the sheet; `uniprot_hit_names` asks only the fields it uses |
+| Returned records closed under naming | `job_records.returned_with_names` (from the summary) | nothing |
+
+## The commission (`messages/read_from_parent.py`, `ASSIGNMENT_FORM`)
+
+Controlled values and record references only. `query_refs` (exactly one protein subject record of the parent's scope), `input_refs`
+(the records its sequence is read from, and, with a model, what the model row names: the artifact), `database` (one of
+`foldseek_job_route.DATABASES`), `resource_id` (a bound resource of kind `foldseek`), `until` (`launched` or `extracted`),
+`handoff_unit`, `information_unit`, `graded_unit`, `model_unit` (positive numbers), and optional: `model_refs` (zero or one HELD
+data-product row of kind `protein_structure_model`, passed with the artifact it names: when present the child uses it and
+`get_model` is never offered; the row must be made from this target's sequence artifact, else the run fails), and, for a resumed
+parked job, `handoff_refs`, `check_refs`, `closure_refs` (each closed under naming: the handoff row names the model file the job
+was given and its identity) and `known_ended`. The mode is not a field (fixed `tmalign` in the route). A continuation passes no
+`model_refs` (it reads its model from the handoff row). The commission's finite target is the credit still obtainable: the model
+(unless one is passed or a job is resumed), the estimate and the launch (unless resumed), and for `extracted` the job known ended
+and the graded result. Wrong commissions fail: nothing repairs them.
+
+## States and actions (each answer is ONE JSON action with ONE deterministic check; a check with problems raises `Rejected` with the fix list)
+
+States: `no_model`, `model_held` (a model, no estimate), `estimated` (a model and an estimate), `launched`, `finished`,
+`extracted`, `failed`.
+
+| Action | Fields | Check (problem codes) | Unit |
+| --- | --- | --- | --- |
+| `get_model` | `source` in (`alphafold_db`, `esmfold`) | `model_already_held`, `source_already_tried` (`choose_from` the untried), `sequence_longer_than_the_esmfold_limit` (400, UNVERIFIED figure), `target_sequence_has_residues_no_model_source_takes`; the schema offers it only while a source is untried and no model is held | `alphafold_db`: exact UniProt entries of the sequence, then the model of the FIRST accession (reviewed, score, accession); no entry or no model = `not_found`, a COMPLETED unit that holds nothing and earns nothing, the source is not offered again. `esmfold`: the prediction. A model found: artifact (PDB text), source record (provider `alphafold_db` / `esmfold`), product `protein_structure_model` (settings: origin, accession or null, model version, residues covered, mean pLDDT 0 to 100, SHA-256; location: the file's URL; `used`: the target's sequence artifact). The numbering is checked (below) |
+| `estimate` | `database`, `expected_seconds`, `basis` | the ledger's figure exactly (`basis_does_not_match_the_learned_statistics`, `expected_seconds_is_not_the_ledger_estimate`, `choose_from` the figure); not while launched, finished or failed | recorded; the ledger gets ONE row per launch |
+| `launch` | `database`, `resource_id` | `estimate_required`, `model_required`, `differs_from_the_estimate`, `differs_from_the_commission`, `resource_is_not_a_foldseek_service`, `job_already_launched`, `fix_required_after_the_failure`, `repeats_the_failed_request_in_the_fixed_field`, `structure_search_results_already_held` (same model file and database), `model_numbering_is_not_the_target_positions` | job `{application: StructureSearch, database, query_file: query.pdb}`, the model file staged as the input; ledger kind `structure_search:foldseek:tmalign:<database>`; job facts: service, application, database, mode, `residues` (the size field); identity kept in the handoff row's `estimates` (database, mode, model SHA-256, target length, model origin, accession, version, residues, mean pLDDT) |
+| `fix` | `failure_code`, `field` | only after a failure; the code is the last failure's | nothing runs |
+| `monitor` | `handoff_ref`, `wait_seconds`, `expected_remaining_seconds` | the held job, state launched, wait within the stated range | one status request; the first request that shows the end resolves the ledger row (the ticket has no task times: `duration_source` `first_status_showing_the_end`) |
+| `extract` | `handoff_ref` | the held job, state finished | one unit: fetch + grade (below) |
+
+THE NUMBERING OF THE MODEL. The server numbers the query residues by their order in the file and the grading takes the model's
+C-alpha by that number as the target's position. `model_positions` checks, for every model (found or passed), that the `i`-th
+C-alpha has residue number `i` and the three-letter name of the target's residue `i` (and at most as many residues as the
+target). It holds for the AlphaFold DB model of CspA (70 of 70) in the direct check; a model that fails is refused.
+
+The extract unit: fetch `result.json` through the route; parse; `measure_hits` (the superposition and B of every hit, once); the
+hits in rank order are named by UniProt (the self hit is given no value in the naming picture); `grade_structure_search`; keep:
+the result (product `structure_search_results`, `generated_by` the handoff row, `used` the model file, `derived_from` the model's
+row when held), the UniProt replies (product `search_hit_metadata`, source provider `uniprot_data`), the grading (source
+provider `foldseek_search`, `retain_tool_grading`, product `tool_grading_sheet` by `record_grading_product`). The model file is
+read from the handoff row's staged inputs; nothing is recomputed from the commission. A fault of parsing or grading is returned
+once as `grading_refused` (or `result_of_another_query`).
+
+THE SELF CONTROL (`structure_search_sheet`, rule source `LIB/knowledge/structural_homology_evidence/native-structural-homology.md`,
+"Identical model copies are controls"). With model origin `alphafold_db`, the hit whose target id is the model's own entry
+(`AF-<accession>-F<n>-model_v<n>`; an isoform of the entry is another sequence and counts) is the model compared with itself. Its row
+has `control: 'model_itself'`, `control_B` and `control_rmsd_A` as facts, `product` null, `B` null: it is in no candidate's mean and in no
+candidate's hit count (`control_count`). Other entries with the same sequence are separate models and count.
+
+## The return (`messages/final_to_parent.py`, `RETURN_FORM`)
+
+`credit` and `finding` always. The finding (controlled numbers and vocabulary values; no protein name, no text): `state` (the seven
+states), `model_origin` (`alphafold_db` or `esmfold`), `model_residues`, `model_mean_plddt`, once graded `hit_count`, `named_count`,
+`not_asked_count`, `candidate_count`, `control_count`, `data_request_count`, `naming_batch_count`, `naming_stopped`; the wait notice of a
+parked job `parked`, `seconds_since_launch`, `expected_remaining_seconds`; `estimated_seconds`, `estimate_basis`, `observed_seconds`,
+`seconds_past_estimate`; `last_failure_code` (a fixed vocabulary, which adds `model_source_request_failed` and
+`model_source_response_invalid`). Selectable record lists, each closed under naming by the summary (`returned_with_names`):
+`execution_handoff_refs`, `execution_check_refs`, `execution_closure_refs`, `graded_refs` (the model's product row, the result, the hit
+metadata and the grading sheet with their sources and the artifacts they name). The product row of the model is what a later
+commission passes back as `model_refs`.
+
+## Credit, ceilings, controller
+
+Bounded, each unit once and only when new in the commission: a model obtained by `get_model` (`model_unit`; not when a model was
+passed or a job is resumed; `not_found` earns nothing), an estimate held, the job launched (once however many launches), the job
+known ended, the graded result (a held source of provider `foldseek_search`). Ceilings are the terms an action can still newly earn
+(0 for an action its check would refuse). Controller: `CompletionYieldController` to the sum of the obtainable units, through
+`structure_search_child.completion_controller`. The child's instructions state facts the system enforces and recommend nothing.
+
+## The source providers (SOP Step 13, pitfall 12)
+
+`state.py` constrains a source's operands (`input`, `reference`, `read_subject`, `feature`, `product` records, with a length), its
+artifacts and its parents, and names providers only where another record type needs a particular source (`NATIVE_BLAST_DATABASE_PROVIDERS`,
+`episode.execution_result`, `rhea`, `chebi`, ...); a source of any other provider text is admitted. The direct check wrote sources of
+providers `alphafold_db`, `foldseek_search` and `uniprot_data` through the scoped Store without a central change.
+
+## Direct checks (not a real run; scripts and outputs under `runs/a102_child_check/`, none in the repository)
+
+All through `tools/one_workflow.sh --slot a101`. The Foldseek server is replaced by a route of kind `foldseek` that serves the stored
+result of the live ticket (`runs/a102_service_probe/foldseek/result_tmalign_afdb_swissprot_cspa.json`); the Store, the journal, custody, the
+unit functions, the model sources (live) and the naming (live, in part b) are real. The run steps the entry episode with
+`EpisodeRun.run_unit` (no model is asked); `decide` is called for real through `next_decision()`.
+
+* `run_import1`: the class builds (the `EpisodeBinding` class definition checks every member); `run_command.subtree('sequence_homology_evidence')`
+  = 5 (A101 still links).
+* `run_uniprot1` (the verification of the `fields` request): 3 accessions, `format=json&fields=accession,protein_name,ec,go_id,
+  annotation_score,reviewed`: HTTP 200, 5,612 bytes (45,679 for the whole entries), `proteinDescription.recommendedName.fullName.value`,
+  `annotationScore`, `entryType` and the GO cross references present.
+* `run_a4` (part a: get_model live, the refusals, launch, monitor, extract with naming switched off): refusals with their fix lists: launch
+  without an estimate and a model (`estimate_required`, `model_required`); extract before launched (`no_job_held`) and before finished
+  (`job_not_known_to_be_finished`); an estimate of 99 s (`expected_seconds_is_not_the_ledger_estimate`, `choose_from` 10); launch with an
+  estimate and no model (`model_required`); a second launch (`job_already_launched`); a second `get_model` once a model is held (the schema
+  does not offer it) and, by a direct call of the check on synthetic rows, a second `get_model` of a source that answered `not_found`
+  (`source_already_tried`, `choose_from` esmfold). `get_model` alphafold_db live: found P0A9X9, 70 residues, mean pLDDT 88.44, product row
+  written. The handoff row's identity and staged `query.pdb` (SHA-256 of the model) were read back; the ledger row has the job facts; the
+  monitor resolved it with `duration_source` `first_status_showing_the_end`. Credit 5.0 = target 5.0.
+* `run_b2` (part b: the model passed with what it names, live naming): `get_model` not offered; estimate, launch, monitor, extract: credit 4.0 =
+  target 4.0; every record of each returned list is held (5, 6, 8 and 12 records); the tables:
+  control row: rank 1, `AF-P0A9X9-F1-model_v6`, B (control_B) 1.0000, RMSD 0.0001 A, 70 pairs, product null. Top 10 hits: P0A9Y1 Cold shock
+  protein CspA 0.9943; P0A9Y0 Cold shock protein CspA 0.9930; P0A9Y2 CspA 0.9781; P0A9Y4 CspA 0.9764; Q46664 Major cold shock protein 0.9761;
+  P0A9Y5 CspA 0.9754; P0A9Y3 CspA 0.9734; P0A981 Cold shock-like protein CspG 0.9679; P0A979 CspG 0.9643; P0A980 CspG 0.9649. Candidates: 130;
+  top 10 (product, hits, mean B): Cold shock-like protein CspG 5 0.9501; Cold shock protein CapB 2 0.9192; Cold shock protein CspC 1 0.9119;
+  Probable cold shock protein A 4 0.9105; Cold shock-like protein CspC 11 0.9063; Cold shock-like protein CspB 4 0.9061; Cold shock-like protein
+  CspI 2 0.9015; Cold shock protein CspA 21 0.8970; Cold shock-like protein CspLA 1 0.8968; Cold shock-like protein CspJ 3 0.8968. Naming: 976 asked,
+  975 named (the control is given no name), 0 not asked, 10 batches of 100 (all named: the picture did not settle before the end), 10 requests,
+  0 failures. UniProt requests of the checks: 12 (two sequence lookups and 10 naming batches) after the 1 of the verification.
+
+## Not verified
+
+* A real run through the head; a resumed parked job (the continuation path was written from the pattern, not run); the `fix` path and a failed
+  launch; the `until` `launched` path.
+* `esmfold` live through the unit (`esmfold_model` was verified in the library check); a `not_found` unit through `obtain_model` (the check of
+  its tried source was called directly on synthetic rows); `ESMFOLD_MAX_LENGTH` = 400.
+* A second job of the kind: the estimate was the first figure (10 s) in every check; the ledger's learning from a measured Foldseek job and the
+  `size_fit` were not exercised.
+* The route's `queued` and `running` states and `wait` (a102_structure_search_episode, "Not verified" above); the check route answered `finished` at
+  once.
+* UniProt entries whose accession is secondary: the `fields` request does not ask for secondary accessions, so a hit named by a merged accession
+  stays unnamed (`no_name_count`); none occurred in the 976 hits.

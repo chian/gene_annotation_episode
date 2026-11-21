@@ -21,6 +21,15 @@ One search is one test. The value of a hit is the existing A102 index B (``scori
 * A hit with fewer than 3 usable pairs, or whose superposition is not unique (collinear or degenerate pairs), gets NO value
   (``B`` null with a ``no_value_reason``), never a zero. A value of zero is a measured value; a missing one is not.
 
+THE SELF CONTROL (``LIB/knowledge/structural_homology_evidence/native-structural-homology.md``: "Identical model copies are
+controls"). When the model's origin is ``alphafold_db`` and a hit is the model's own entry (the hit's target id is
+``AF-<the model's accession>-F<n>-model_v<n>``: the same entry, not one of its isoforms, which are other sequences), that hit is
+the model compared with itself. Its row carries ``control`` ``model_itself`` and its measurement is kept as the facts
+``control_B`` and ``control_rmsd_A``, but it names no candidate (``product`` null, ``named`` false, ``B`` null) and so gives no
+value to any candidate: it is in no candidate's mean and in no candidate's hit count (``control_count`` counts it). Other
+entries with the same sequence are separate models and count like any hit. A model of another origin has no control row (an
+ESMFold model is in no database).
+
 The grader holds no threshold: it does not say a hit is good or bad. The server's ``score`` and ``eval`` are kept as
 reported (``score_as_reported``: in ``tmalign`` mode the query-normalised TM-score x 100; ``eval_as_reported``: the mean of
 the query- and target-normalised TM-scores; Foldseek README, quoted in ``foldseek_result``), beside ``seq_id``, ``prob`` and
@@ -32,6 +41,7 @@ a looked-up list (a product name of UniProt, an accession). The value of a produ
 its hits (replicates inside one test, as in A101); ``candidate_measurements`` reads it from the hit rows.
 """
 import math
+import re
 
 import numpy as np
 
@@ -144,6 +154,13 @@ def _names(names):
     return names['products'], set(names['asked'])
 
 
+def is_model_itself(hit, model_facts):
+    """Whether ``hit`` is the entry the model itself is (the self control, see the module): the model is an AlphaFold DB model
+    of the accession and the hit's target id is that entry's own model, ``AF-<accession>-F<n>-model_v<n>``."""
+    return (model_facts['origin'] == 'alphafold_db' and model_facts['accession'] is not None
+            and re.fullmatch('AF-' + re.escape(model_facts['accession']) + r'-F\d+-model_v\d+', hit['target_id']) is not None)
+
+
 def grade_structure_search(hits, model_ca, target_length, names, *, database, mode, model_facts, measured=None):
     """The sheet ``a102_structure_search_sheet_v1`` of one search.
 
@@ -155,8 +172,9 @@ def grade_structure_search(hits, model_ca, target_length, names, *, database, mo
     hits when the caller already holds it.
 
     The sheet: the schema, the index profile (``scoring.VERSION``), ``provider``, ``database``, ``mode``,
-    ``target_length``, ``hit_count``, ``named_count`` (hits with a product), ``not_asked_count`` (hits never asked),
-    ``no_name_count`` (asked, no product), ``valued_count`` (hits with a B), ``model`` (the facts: weigh nothing),
+    ``target_length``, ``hit_count``, ``named_count`` (hits with a product), ``control_count`` (hits that are the model itself), ``not_asked_count`` (hits never asked,
+    controls excepted),
+    ``no_name_count`` (asked, no product, controls excepted), ``valued_count`` (hits with a B), ``model`` (the facts: weigh nothing),
     ``candidates`` (per product: ``hit_count`` of its hits with a B and the ``mean_B``: its value in this test; a product
     none of whose hits has a B is listed with ``mean_B`` null) and ``hits`` (the rows listed in the module docstring)."""
     _require(database in DATABASES and mode in MODES, 'database_or_mode')
@@ -167,12 +185,16 @@ def grade_structure_search(hits, model_ca, target_length, names, *, database, mo
     rows = []
     for hit, value in zip(hits, measured):
         _require(hit['accession'] is not None, 'hit_without_accession')
-        name = products.get(hit['accession'])
+        itself = is_model_itself(hit, facts)
+        name = None if itself else products.get(hit['accession'])
         rows.append({'rank': hit['rank'], 'accession': hit['accession'], 'target_id': hit['target_id'],
+                     'control': 'model_itself' if itself else None, 'control_B': value['B'] if itself else None,
+                     'control_rmsd_A': value['rmsd_A'] if itself else None,
                      'asked': hit['accession'] in asked, 'named': name is not None,
                      'product': None if name is None else name['product'],
                      'name_source': None if name is None else name['name_source'],
-                     'B': value['B'], 'no_value_reason': value['no_value_reason'], 'aligned_pairs': value['aligned_pairs'],
+                     'B': None if itself else value['B'],
+                     'no_value_reason': None if itself else value['no_value_reason'], 'aligned_pairs': value['aligned_pairs'],
                      'usable_pairs': value['usable_pairs'], 'dropped_pairs': value['dropped_pairs'],
                      'rmsd_A': value['rmsd_A'], 'target_length': target_length,
                      'reference_length': value['reference_length'], 'target_coverage': value['target_coverage'],
@@ -184,8 +206,9 @@ def grade_structure_search(hits, model_ca, target_length, names, *, database, mo
             candidates.setdefault(row['product'], []).append(row['B'])
     return {'schema': SCHEMA, 'profile': INDEX_VERSION, 'provider': PROVIDER, 'database': database, 'mode': mode,
             'target_length': target_length, 'hit_count': len(rows), 'named_count': sum(r['named'] for r in rows),
-            'not_asked_count': sum(not r['asked'] for r in rows),
-            'no_name_count': sum(r['asked'] and not r['named'] for r in rows),
+            'not_asked_count': sum(not r['asked'] and r['control'] is None for r in rows),
+            'no_name_count': sum(r['asked'] and not r['named'] and r['control'] is None for r in rows),
+            'control_count': sum(r['control'] is not None for r in rows),
             'valued_count': sum(r['B'] is not None for r in rows), 'model': facts,
             'candidates': [{'product': product, 'hit_count': sum(b is not None for b in values),
                             'mean_B': (math.fsum(b for b in values if b is not None) / sum(b is not None for b in values)
