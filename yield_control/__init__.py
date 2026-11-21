@@ -951,9 +951,16 @@ class CompletionYieldController:
 #   current history always more. the ledger should count for equal weight with current history": the ledger's
 #   history of k as a whole (each earlier run's unit weighted by its age when old rows are forgotten) and this
 #   episode's own units of k as a whole each weigh one half: the fraction is the mean of the ledger's mean fraction
-#   and this episode's mean fraction. With only one of the two, that one alone; with neither, one half.
+#   and this episode's mean fraction. With only one of the two, that one alone; with neither, one half. Within this
+#   episode's own units of k the recent ones count more (the owner: "the yield estimator must learn just like the
+#   accumulation estimator from past experience after the first round. So after nothing new is added a second
+#   time, the yield estimator should be very low for that"; "why you can't just threshold better or have the yield
+#   estimator update faster"): the latest own unit of k has weight 1 and each earlier one half the weight of the one
+#   after it (half-life: one unit), so this episode's own fraction (own mean gain when UNBOUNDED) is that
+#   recency-weighted mean, not the plain mean. The ledger's half and the equal weighting of ledger and own history
+#   are unchanged.
 # * an UNBOUNDED action: there is no ceiling to scale, so the forecast is the typical gain of k, by the same rule: the
-#   mean of the ledger's mean gain and this episode's mean gain, or the one that exists. With no unit of k anywhere
+#   mean of the ledger's mean gain and this episode's recency-weighted mean gain, or the one that exists. With no unit of k anywhere
 #   the forecast is unknown, and an unknown forecast never lets the episode stop (as in the three controllers,
 #   unknown stays unknown).
 # * the cost of ``a`` is its expected seconds: for an action type of ``job_kinds`` whose ledger kind has measured
@@ -961,6 +968,10 @@ class CompletionYieldController:
 #   wall seconds of the units of k (ledger history and this episode); with none, the median unit seconds of this
 #   episode so far; with none, unknown (cost 0 in the stop rule).
 # * the stop rule: stop when no offered action's forecast exceeds expected seconds x ``exchange_rate``.
+# * the per-action gate (``method_loop.episode_type``): the same threshold also refuses the model's chosen action
+#   before it runs when its forecast does not exceed it (the owner: "since the numbers for credit are very similar, you
+#   should be able to find one threshold to cap wasteful actions reasonably well"). It is a forecast comparison, not a
+#   budget. An unknown forecast is not refused.
 # ============================================================================
 
 FORECAST_VERSION = "forecast_yield_v1"
@@ -1053,6 +1064,12 @@ def _forecast_context(context):
     return facts
 
 
+def _recent(values):
+    """This episode's own ``(_, value)`` pairs of one action kind, oldest first, with the weights of recency: the
+    latest has weight 1 and each earlier one half the weight of the one after it (half-life: one unit)."""
+    return [(0.5 ** (len(values) - 1 - index), value) for index, (_, value) in enumerate(values)]
+
+
 def forecast_actions(parameters, observations, histories, offered):
     """One row per offered action (``{action type: ceiling number or 'unbounded'}``), from this episode's own
     ``observations`` (each ``{'action_type', 'ceiling', 'gain', 'unit_seconds', 'decision_seconds'}``) and the
@@ -1072,16 +1089,18 @@ def forecast_actions(parameters, observations, histories, offered):
             else:
                 ledger = [(row["weight"], _fraction(row["gain"], row["ceiling"], action_type))
                           for row in history["rows"] if _is_ceiling_number(row["ceiling"]) and row["ceiling"] > 0]
-                mine = [_fraction(item["gain"], item["ceiling"], action_type)
+                mine = [(0.0, _fraction(item["gain"], item["ceiling"], action_type))
                         for item in own if _is_ceiling_number(item["ceiling"]) and item["ceiling"] > 0]
+                mine = _recent(mine)
                 weight = math.fsum(w for w, _ in ledger)
                 means = ([math.fsum(w * f for w, f in ledger) / weight] if weight else []) + (
-                    [math.fsum(mine) / len(mine)] if mine else [])
+                    [math.fsum(w * f for w, f in mine) / math.fsum(w for w, _ in mine)] if mine else [])
                 forecast = (math.fsum(means) / len(means) if means else 0.5) * ceiling
         else:
             weight = math.fsum(row["weight"] for row in history["rows"])
+            mine = _recent([(0.0, item["gain"]) for item in own])
             means = ([math.fsum(row["weight"] * row["gain"] for row in history["rows"]) / weight] if weight else []) + (
-                [math.fsum(item["gain"] for item in own) / len(own)] if own else [])
+                [math.fsum(w * g for w, g in mine) / math.fsum(w for w, _ in mine)] if mine else [])
             forecast = math.fsum(means) / len(means) if means else None
         decision = (_median(decision_pool) if decision_pool
                     else _median([row["decision_seconds"] for row in history["rows"]]) if history["rows"] else None)
@@ -1154,7 +1173,7 @@ class ForecastYieldState:
 
 def forecast_provenance():
     return {"controller": FORECAST_VERSION, "forecast": "realized_fraction_times_ceiling_or_typical_gain_if_unbounded",
-            "fraction": "mean_of_ledger_mean_and_own_mean_each_one_half",
+            "fraction": "mean_of_ledger_mean_and_own_recency_weighted_mean_each_one_half_own_half_life_one_unit",
             "cost": "expected_seconds", "stop": "no_offered_forecast_exceeds_expected_seconds_times_exchange_rate",
             "model_estimates": False}
 

@@ -58,8 +58,12 @@ The loop of one Episode:
    Episode stops. With a ``ForecastYieldController`` the ceilings are its input: the system gives it, with each unit's
    completion, the ceilings the next decision will offer, it adds the forecast of every offered action to the model's
    request under the key ``action_forecasts`` (one row per offered action: ``action_type``, ``ceiling`` (a number or
-   ``'unbounded'``), ``forecast_gain`` and ``expected_seconds`` (numbers or ``'unknown'``); facts only, a task
-   changes nothing for it), and it records the unit's forecast before the unit and its result after it in the
+   ``'unbounded'``), ``forecast_gain`` and ``expected_seconds`` (numbers or ``'unknown'``) and ``worth`` (the forecast exceeds
+   expected seconds x exchange rate, or is unknown); facts only, a task changes nothing for it), it refuses the
+   chosen action before any unit when its forecast (for the ceiling asked with its arguments) is not worth its
+   cost, exactly like a ``Rejected`` (feedback ``{'status': 'invalid', 'category': 'forecast', 'code':
+   'action_forecast_not_worth_its_cost', 'detail': {action_type, ceiling, forecast_gain, expected_seconds,
+   threshold}}``; an unknown forecast is not refused), and it records the unit's forecast before the unit and its result after it in the
    estimate ledger (``episode_runtime.forecast_ledger``).
 4. Each unit's controller input is ``{'credit': credit(internal_summary(view.with_unit(outcome)), records),
    'estimation_context': {'progress_time': bound.progress.receipt(position)}}``. The episode's yield controller
@@ -567,8 +571,25 @@ class _SystemSource:
         """The forecast rows as the model sees them: facts only."""
         return [{'action_type': row['action_type'], 'ceiling': row['ceiling'],
                  'forecast_gain': 'unknown' if row['forecast_gain'] is None else row['forecast_gain'],
-                 'expected_seconds': 'unknown' if row['expected_seconds'] is None else row['expected_seconds']}
+                 'expected_seconds': 'unknown' if row['expected_seconds'] is None else row['expected_seconds'],
+                 'worth': row['worth']}
                 for row in rows]
+
+    def _gate(self, view, decision, summary, context, offered):
+        """The per-action gate of a ``ForecastYieldController``: the chosen action's forecast row, for its ceiling
+        asked with its arguments, must be worth its cost (threshold: expected seconds x exchange rate), else the
+        response is rejected like any ``Rejected``: no unit, feedback to the next ``decide``."""
+        action_type = decision.name if isinstance(decision, ToolCall) else decision.slot
+        if action_type not in offered:
+            return
+        ceiling = self._ceiling_of(summary, action_type, _closed(dict(decision.arguments), 'ceiling_arguments'), context)
+        rows = self._forecast_rows(view, {action_type: ceiling})
+        if rows is not None and not rows[0]['worth']:
+            row = rows[0]
+            raise Rejected({'status': 'invalid', 'category': 'forecast', 'code': 'action_forecast_not_worth_its_cost',
+                            'detail': {'action_type': action_type, 'ceiling': row['ceiling'],
+                                       'forecast_gain': row['forecast_gain'],
+                                       'expected_seconds': row['expected_seconds'], 'threshold': row['threshold']}})
 
     def _chosen(self, view, position, decision, summary, context, offered):
         """The action taken: its type, its ceiling (asked again with its arguments), the credit before the unit and
@@ -641,6 +662,7 @@ class _SystemSource:
                                                         decision.output_schema)
             try:
                 decision = act(response, summary, self._bound.reader, context)
+                self._gate(view, decision, summary, context, offered)
             except Rejected as rejection:
                 # Rejected before acquisition: no unit, no observation; the task decides again.
                 feedback = _closed(rejection.feedback, 'rejection_feedback')

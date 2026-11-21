@@ -22,6 +22,12 @@ formula enters only through `credit.ceiling` (the most the credit can rise if an
   forgotten) and this episode's own units of `k` as a whole each weigh one half: `m` = the mean of the ledger's mean share
   and this episode's mean share; with only one of them, that one; with neither, 1/2. Ceiling 0 forecasts 0. A unit that
   lost credit raises (`forecast_cannot_learn_a_negative_rise`): a share of a ceiling cannot be negative.
+- Recency within this episode's own units (owner, 2026-11-21: "the yield estimator must learn just like the accumulation
+  estimator from past experience after the first round. So after nothing new is added a second time, the yield estimator
+  should be very low for that"; "why you can't just threshold better or have the yield estimator update faster"): this
+  episode's own share (bounded) or own mean gain (UNBOUNDED) of `k` is a recency-weighted mean: the latest own unit of
+  `k` has weight 1 and each earlier one half the weight of the one after it (half-life: one unit). The ledger's half
+  and the equal weighting of ledger and own history are unchanged.
 - `UNBOUNDED`: forecast = typical gain of `k` by the same rule: the mean of the ledger's mean gain and this episode's mean
   gain, or the one that exists. With no unit of `k` anywhere it is **unknown**, and an unknown forecast never lets the
   episode stop (unknown stays unknown, as in the other controllers).
@@ -30,6 +36,15 @@ formula enters only through `credit.ceiling` (the most the credit can rise if an
   episode's decisions, else the kind's ledger rows). Otherwise the median measured seconds of units of `k` (ledger + this
   episode). With none, the median unit seconds of this episode so far. With none: unknown (counted as 0 in the stop rule).
   A unit's seconds are measured from the previous unit's progress receipt to its own, so the decision time is in it.
+- Per-action gate (owner, 2026-11-21: "since the numbers for credit are very similar, you should be able to find one
+  threshold to cap wasteful actions reasonably well"; "if you did this right 4-7 is on your thresholding"): after the
+  episode's `action` has made a call and its ceiling is asked with its arguments, the unit source compares that action's
+  forecast row (the same row the model is shown) with its threshold (expected seconds x exchange rate). If it is not
+  worth it the response is raised as `Rejected` (no unit, the model decides again) with feedback `{'status': 'invalid',
+  'category': 'forecast', 'code': 'action_forecast_not_worth_its_cost', 'detail': {action_type, ceiling, forecast_gain,
+  expected_seconds, threshold}}`. An unknown forecast (no history anywhere for an UNBOUNDED action) is not refused;
+  only episodes with a forecast controller are gated. The `action_forecasts` rows the model sees gain `worth`.
+  It is a forecast comparison, never a limit on the episode.
 - Stop: the episode stops when no offered action's forecast exceeds `expected seconds x exchange_rate`. Stopping is
   the controller's alone; no budget of time, tokens or turns exists, the cost is a forecast input.
 
@@ -37,13 +52,13 @@ formula enters only through `credit.ceiling` (the most the credit can rise if an
 
 | parameter | value (A101 head) | reason |
 |---|---|---|
-| `exchange_rate` | 0.01 credit per second | a unit forecast to earn less than a hundredth of a credit unit per second of its cost is not worth it: a 30 s unit must forecast 0.3, about a third of one admitted candidate (an entry earns up to 1) |
+| `exchange_rate` | 0.0065 credit per second | chosen from the replay of runs/a101_conserved_ws_C2 (runs/forecast_direct_ws_C2_v5, v5_fine) with the per-action gate and recency weighting: the one rate range that runs units 0 to 2, refuses 3, 4, 7 and 6 and wastes at most unit 5, with no ledger history and with one pass of history, is 0.00641 to 0.00654 (below it unit 6 runs, above it the one-pass history refuses unit 2). The window is narrow; see the section on the gate |
 | `forget_old_rows` | true | weight ledger rows by the estimate table's `ForgettingPolicy` (dropped after `history_seconds` = 90 days, half every `history_half_life_seconds` = 14 days), so a changed service or code is learned |
 | `job_kinds` | none (`{}`) | a job action's cost is its measured unit seconds (launch, monitoring and extraction included); the service's job duration alone undercounted it (about 27 s against 190 s for an MSA unit in C2) |
 
 Declaration to put in the continuation settings of the head (the other agent edits `runs/` settings; this is the exact entry):
 `yield_bindings["A101:a101_native_sequence_correspondence"] = {"kind": "forecast", "parameters": {
-"exchange_rate": 0.01, "forget_old_rows": true, "job_kinds": {}}, "credit_definition": A101DifferentialCredit().as_record()}`
+"exchange_rate": 0.0065, "forget_old_rows": true, "job_kinds": {}}, "credit_definition": A101DifferentialCredit().as_record()}`
 (credit definition v2, unchanged).
 
 ## Wiring (why here)
