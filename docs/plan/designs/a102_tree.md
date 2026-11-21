@@ -13,43 +13,72 @@ From a supplied sequence only (no name, no accession, no structure): compare the
 functionally characterized proteins; keep each structure's origin (experimental or predicted), the matched extent and the
 actual structural statistics; a prediction's confidence describes the model and is not similarity.
 
-## The tree (round 1 is the pattern; the owner's plan decision D27: one pattern in one branch first)
+## Step 0A: what structure can show that sequence cannot (the derivation; SOP Step 0A)
+
+The first design of this note mapped A101's nodes onto structure. The owner (2026-11-21): "This is all just sequence homology
+under another name which is not the point". This section replaces it. Facts: `a102_inventory_structure_specific.md` (the
+entry's 14 evidence cases; what code exists) and `a102_tool_survey.md` (what runs today).
+
+Targets: protein (3D) and RNA (2D, rarely 3D). The head learns the molecule type from the subject record
+(`ScopedStore.subject_molecule`) and offers only the analyses of that kind.
+
+What the axis's own 14 cases rest on: conserved catalytic residues (Arad3529, TM0936); machinery that is ABSENT in a matching
+fold (EnvC resembles LytM but lacks its zinc ligands); an inserted loop that blocks an interaction (BC1793); a ligand-bound
+homolog that locates the pocket and its contacts (Cc0300, Cc2672, MJ0056, RidA, Pa0142); docking that proposed a substrate
+(HpbD, Lmo2620); and twice that a fold search alone was uninformative (DUF1537, MJ0577). The direct check of the fold search
+on CspA shows the same: 130 candidate products, the cold shock family within a few hundredths of each other, CspA not first
+(`a102_structure_search_episode.md`).
+
+| # | Evidence | Question it answers | Needs first | Does it today (verified) | Measured | Tells candidates apart? | Another axis could give it? |
+|---|---|---|---|---|---|---|---|
+| P1 | Fold resemblance | which characterized proteins have this shape | a model | Foldseek server (built: `structure_search`) | B per hit | admits a family; not its members | A101 in spirit (search, name, score) |
+| P2 | Functional machinery present or absent | does the target have the candidate's catalytic, binding or metal residues, in place | P1's alignment and coordinates; the candidate's sites | sites: M-CSA API, UniProt features (sparse: CspA none, RecA one), ligand contacts from the candidate's experimental structure (mmCIF) | per candidate: its site residues carried through the structural alignment, residue class kept, distance after superposition (the existing kernel `1/(1+(d/1 A)^2)`, `scoring.py`) | yes: same fold, different machinery | no |
+| P3 | A place for the ligand | which ligands or cofactors fit the target as they sit in homologs | a model (an AlphaFold accession for AlphaFill) | AlphaFill API (RecA: 21 transplants, 15 ligand types, with identity, local RMSD, clash) | per ligand: transplant quality | yes, between ligand classes | no |
+| P4 | Seen bound, in experiment | what the same or a near-identical protein is bound to in solved structures (ligand, nucleic acid, partner) | the sequence | RCSB sequence search, entry files; contacts computed from coordinates | per partner: contact residues, kept as an observation separate from resemblance | yes | no (A105 reads the papers, not the coordinates) |
+| P5 | Arrangement of elements and regions | which helices, strands and loops correspond; what is inserted or missing, and where relative to the sites | P1's alignment; element ranges (already in AlphaFold mmCIF `_struct_conf`) | computed locally | per candidate: elements matched in order; inserted and deleted segments with their place | partly (distant candidates; loops at sites) | no |
+| P6 | Surface for a partner | is there an exposed basic or aromatic face (nucleic-acid binders; not everything is an enzyme) | a model | solvent accessibility in the repository's Python (Biopython) | exposed residues by class, clustered | weakly; supports P4 | no |
+| P7 | Does the proposed ligand fit | docking of the ligands P3 and P4 name, against decoys | a model, a pocket, ligand files | nothing installed (Vina wheel 6.9 MB, rdkit, meeko; CPU only, no GPU here) | score against decoys; compatibility, never measured binding | yes, between ligands | no |
+| P8 | Domains and confidence | which residues are confidently modelled; where the domains are | a model | TED API by accession (RecA 2 domains, CspA 1); pLDDT in the model | boundaries and labels (facts; they shape P1 and P2) | prerequisite | no |
+| R1 | RNA family by covariance | which structured RNA family | the sequence | Rfam batch service (tRNA found as RF00005); Infernal installed, `Rfam.cm` (46 MB) not on disk | bit score, model and sequence spans (grader exists) | admits families | A101 in spirit, with base pairs |
+| R2 | Does the target form the family's structure | are the family's stems, loops and junctions formable and present | R1's alignment; the consensus structure; a predicted fold | consensus from Rfam; folding needs ViennaRNA (wheel 14 MB, not installed); comparison and topology code exist | consensus pairs the target can form; elements kept, lost, gained | yes | no |
+| R3 | Known structure of this RNA | has this exact RNA a curated 2D structure | the sequence | RNAcentral lookup (dot-bracket) | fact; input to R2 | prerequisite | no |
+| R4 | Probing assays (SHAPE, DMS) | does measured reactivity agree with the pairing | data for this RNA | no API found (RMDB) | - | - | not reachable now |
+
+The check of Step 0A: only P1 and R1 have a counterpart in A101. The first design was P1 alone.
+
+## The tree derived from the table
 
 ```
-structural_homology_evidence      HEAD. Model-routed. Forecast yield controller, differential credit (SOP 7 to 9).
-└─ structure_search               CHILD. One search of one structure database with one model of the target = one test.
-      get_model   tool of the child: obtain a model of the target from one source (round 1: alphafold_db, esmfold)
-      estimate    gated, from the estimate ledger          (the job-child shape of SOP Step 4)
-      launch      submit the search to the Foldseek server
-      fix         only after a failed launch
-      monitor     one status request after a stated wait
-      extract     fetch the result, name the hits, grade: one unit
+structural_homology_evidence          HEAD (forecast controller, differential credit). No `reason` action.
+│  protein target
+├─ structure_search                   CHILD  P1. Built. get_model is its tool (P8's confidence facts come with the model).
+├─ site_correspondence                TOOL   P2. One candidate set of one graded search, one site source per call:
+│                                            catalytic (M-CSA), annotated (UniProt features), ligand_contacts (the candidate's
+│                                            experimental structure). The functional-pocket comparison is this tool with
+│                                            ligand_contacts. Inserted and missing segments at the sites (P5) are on its sheet.
+├─ ligand_transplants                 TOOL   P3. AlphaFill for the model's accession.
+├─ bound_in_experiment                TOOL   P4. Solved structures of the same sequence and what they hold.
+├─ surface_faces                      TOOL   P6.
+├─ ligand_docking                     CHILD  P7. Local job per ligand, minutes each, iterates over a panel. Needs installs.
+│  RNA target
+├─ rna_family_scan                    TOOL   R1. Local Infernal against Rfam (the counterpart in kind of A101's Pfam scan).
+└─ rna_structure_agreement            TOOL   R2 (with R3 as its input when the RNA is known).
 ```
 
-The head has no `reason` action (the owner, 2026-11-21: "i don't see why reason needs to be an explicit child"). In A101
-it is an action whose ceiling is always 0, so the gate never lets it run; an action that can never be taken is not offered
-here. The head's actions are only the ones that can earn; when none is worth its cost the yield controller stops the episode.
+Tool or child (SOP Step 2): the tools end within the turn (one to a few requests that answer in seconds, then arithmetic);
+`structure_search` is a ticketed job on an outside service; `ligand_docking` runs local jobs of minutes and iterates.
 
-Later rounds, in this order, each only after the one before ran for real: (2) `pdb100` and `cath50` as databases of
-`structure_search` (their hits need a name lookup: PDB chain to UniProt; CATH domain to superfamily), and the model source
-`rcsb_pdb` (an experimental structure of the identical sequence); (3) the head tool `pairwise_structure_alignment`
-(US-align, local; the counterpart of `pairwise_blast`); (4) a local structural all-vs-all of the candidates' structures
-(the counterpart of `all_vs_all`). Functional-site geometry (catalytic residues, pockets, interfaces) is deferred as
-functional regions were in A101 (`docs/plan/DEFERRED_functional_regions_joint_credit.md`).
+Candidates are of more than one kind: `product` (P1, P2), `ligand` (P3, P4, P7: a chemical component identifier, a controlled
+name), `rna_family` (R1, R2). A test measures candidates of one kind; the differential credit is unchanged.
 
-## Tool or child (SOP Step 2), one line each
+Dependencies: P2 reads P1's alignments and coordinates, so it is offered only when a graded search is held. P3 needs a model
+with an AlphaFold accession. P7 needs P3 or P4 to name ligands. R2 needs R1. A model is a product of `structure_search`; no
+head action exists only to make one.
 
-- `structure_search` is a child: the search is a ticketed job on an outside service (submit, poll, fetch), which SOP Step 4
-  makes a job child; and its steps are choices of its own model (which model source, when to monitor).
-- `get_model` is a tool OF THAT CHILD, not a head action. Reason: a model of the target is a prerequisite, not evidence for
-  an annotation, so as a head action its ceiling would be 0 and the forecast gate would never let it run. The owner's
-  precedent: database preparation "almost is a tool of the all vs all blast" (`all_vs_all_episode.md`). The child's own
-  credit counts the held model as one of its units (completion controller), and the child returns the model as a labelled
-  data product, so a later commission passes the held model and `get_model` is not needed again.
-- Why `get_model` is the model's choice and not code inside `launch`: whether a source has the target is unknown until
-  asked (AlphaFold DB holds only sequences in UniProt), so a source can answer `not_found` (a completed unit that holds
-  nothing) and the child's model then chooses another source. The sources differ in origin, which the axis must keep.
-- The lookups inside `get_model` are single HTTP requests that answer in under 20 s (`a102_services.md`): one unit.
+Order (distinctive first, then what depends on it): P2 `site_correspondence`; then P4 and P3 (the ligand and partner
+evidence, which is what serves a protein that is not an enzyme); then the RNA pair R1, R2; then P6; then P7 (installs,
+least reliable); pairwise alignment and a structural all-vs-all of candidates repeat A101's shape and come last, if at all.
+Other databases of `structure_search` (`pdb100`, `cath50`) are added when P2's `ligand_contacts` needs experimental hits.
 
 ## Services (verified live, `a102_services.md`)
 
