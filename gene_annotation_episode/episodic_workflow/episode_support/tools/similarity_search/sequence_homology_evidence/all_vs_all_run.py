@@ -285,19 +285,22 @@ def held_clusterings(reader):
 
 
 def commission_keys(summary):
-    """The identities (search, sorted candidates, per_candidate) of the commissions of this child the head holds: those it made
-    (the units that were child commissions of the slot) and those whose clustering it holds graded (``held_clusterings``)."""
-    made = [(row['arguments']['search_ref'], sorted(row['arguments']['candidates']), row['arguments']['per_candidate'])
+    """The identities (search, sorted candidates) of the commissions of this child the head holds: those it made (the units that
+    were child commissions of the slot) and those whose clustering it holds graded (``held_clusterings``). The sequences per
+    candidate are not part of the identity: the same candidates of the same search, with more or fewer sequences each, are the
+    same dataset clustered again, a replicate (the owner: "You only can earn one credit for one dataset - you can improve a
+    clustering to earn more, but you cannot replicate"); improving a clustering is the child's tuning of its tries."""
+    made = [(row['arguments']['search_ref'], sorted(row['arguments']['candidates']))
             for row in summary['units'] if row['kind'] == 'child' and row['slot'] == CHILD]
-    return made + [(row['search_ref'], sorted(row['candidates']), row['per_candidate']) for row in summary['held_clusterings']]
+    return made + [(row['search_ref'], sorted(row['candidates'])) for row in summary['held_clusterings']]
 
 
 def check_commission(request, *, scope_subjects, sequences, options, commissioned):
     """The things to fix in the head's commission of this child (``request``: ``query_ref``, ``search_ref``, ``candidates``,
     ``per_candidate``). ``options`` is ``msa_options`` (each held graded BV-BRC search with the product candidates the head admitted
-    from it); ``commissioned`` the (search, sorted candidates, per_candidate) of the earlier commissions. The conditions: the query
+    from it); ``commissioned`` the (search, sorted candidates) of the earlier commissions. The conditions: the query
     is a protein sequence of the scope; the search is a held graded search of that query; at least two distinct candidates, each
-    admitted from that search; ``per_candidate`` in range; the same set not commissioned before (graded or not)."""
+    admitted from that search; ``per_candidate`` in range; the same candidates of the same search not commissioned before at any per_candidate (graded or not): a replicate."""
     problems = []
     query, search = request['query_ref'], request['search_ref']
     if query not in scope_subjects or sequences.get(query) != 'protein':
@@ -317,7 +320,7 @@ def check_commission(request, *, scope_subjects, sequences, options, commissione
     if not PER_CANDIDATE_RANGE[0] <= request['per_candidate'] <= PER_CANDIDATE_RANGE[1]:
         problems.append({'field': 'per_candidate', 'code': 'per_candidate_out_of_range', 'minimum': PER_CANDIDATE_RANGE[0],
                          'maximum': PER_CANDIDATE_RANGE[1]})
-    if (search, sorted(request['candidates']), request['per_candidate']) in commissioned:
+    if (search, sorted(request['candidates'])) in commissioned:
         problems.append({'field': 'candidates', 'code': 'this_set_was_already_commissioned'})
     return problems
 

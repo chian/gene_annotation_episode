@@ -232,12 +232,12 @@ def all_vs_all_value(standing, bests, query, search_ref, names):
 def all_vs_all_best(summary, records):
     """``(ceiling, arguments)`` of the commission of ``all_vs_all`` with the largest proved maximum among those the head's check
     (``all_vs_all_run.check_commission``) would accept now: the query a protein sequence of the scope, a held graded search of it
-    (``summary['msa_options']``), two or more of the candidates admitted from it, a ``per_candidate`` in range, the set not
-    commissioned or graded before (``commission_keys``). The arguments are ``{'query_ref', 'search_ref', 'candidates',
+    (``summary['msa_options']``), two or more of the candidates admitted from it, the candidate set of that search not
+    commissioned or graded before at any ``per_candidate`` (``commission_keys``: the same candidates again are a replicate). The arguments are ``{'query_ref', 'search_ref', 'candidates',
     'per_candidate'}``; ``(0.0, None)`` when none can earn.
 
     Order (the first found wins a tie): the options in their order, larger candidate sets first, the sets of one size in the
-    option's order (``itertools.combinations``), the largest ``per_candidate`` not commissioned with that set (the count does not
+    option's order (``itertools.combinations``), at the largest ``per_candidate`` (the count does not
     change the maximum: every named candidate has at least one sequence in the set). A size is skipped, and the search ends, when
     no set of that size can beat the best found: the maximum of a set of ``k`` candidates is largest for the set with the most
     unlisted candidates or the one with the most listed ones (``u + floor(l^2 / 4)`` is convex in ``u`` with ``u + l = k``), and
@@ -264,10 +264,9 @@ def all_vs_all_best(summary, records):
                 value = all_vs_all_value(standing, bests, query, search, chosen)
                 if value <= best[0] + 1e-12:
                     continue
-                count = next((count for count in range(high, low - 1, -1)
-                              if (search, sorted(chosen), count) not in commissioned), None)
-                if count is None:
+                if (search, sorted(chosen)) in commissioned:
                     continue
+                count = high
                 best = (value, {'query_ref': query, 'search_ref': search, 'candidates': list(chosen), 'per_candidate': count})
                 if value >= top - 1e-12:
                     break
@@ -338,7 +337,7 @@ def outcome_pending(summary, records, position):
 CEILING_VERSIONS = {'reason': 'a101_ceiling_v1', 'execute_selected_tool': 'a101_ceiling_v1',
                     'pairwise_blast': 'a101_ceiling_v1', 'hmmer_profile_scan': 'a101_ceiling_v1',
                     'bvbrc_blast': 'a101_ceiling_v1', 'bvbrc_msa': 'a101_ceiling_v1',
-                    'bvbrc_metacats': 'a101_ceiling_v1', 'all_vs_all': 'a101_ceiling_v2'}
+                    'bvbrc_metacats': 'a101_ceiling_v1', 'all_vs_all': 'a101_ceiling_v3'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
@@ -441,7 +440,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
     if action_type == 'all_vs_all':
         if arguments is None:
             return all_vs_all_best(summary, records)[0]
-        if (arguments['search_ref'], sorted(arguments['candidates']), arguments['per_candidate']) in all_vs_all_commission_keys(summary):
+        if (arguments['search_ref'], sorted(arguments['candidates'])) in all_vs_all_commission_keys(summary):
             return 0.0
         return all_vs_all_value(standing, dataset_bests(records, scope, held_sources(records)), arguments['query_ref'],
                                 arguments['search_ref'], arguments['candidates'])

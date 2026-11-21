@@ -201,3 +201,14 @@ the child's summary rebuilt from its journal units and receipts as they stood at
 - The completion controller replayed over the children's recorded controller inputs, then zero-gain tries 10 s apart: the upper bound of the
   next gain is 1.0 after the first, second and third try, then 0.83, 0.69 and 0.62 (`all_vs_all_2`; 0.61 for `all_vs_all_6`), always above the
   cost 0.5: no stop through six tries before the commit.
+
+## A replicate is refused (2026-11-21)
+
+The owner: "You only can earn one credit for one dataset - you can improve a clustering to earn more, but you cannot replicate".
+The real run `runs/a101_goal9_ws_cspa` (commit 44b55f054) commissioned the same five candidates of the same search three times,
+at 20, 19 and 18 sequences per candidate (calls 12, 28, 34); the second and third earned 0 (head units 6 and 7), because the
+commission's identity held `per_candidate` and the best commission then lowered the count by one. The identity of a commission is
+now the search and the sorted candidates only (`all_vs_all_run.commission_keys`, `check_commission`): the same candidates of
+the same search again, with any count, are a replicate and refused (`this_set_was_already_commissioned`); its ceiling is 0 and
+the best commission (`credit.all_vs_all_best`) skips it. Improving a clustering is the child's tuning of its tries. The
+ceiling version of `all_vs_all` is `a101_ceiling_v3`.
