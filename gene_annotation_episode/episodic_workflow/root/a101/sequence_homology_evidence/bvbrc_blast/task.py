@@ -110,6 +110,12 @@ def output_schema(state):
             'properties': {'action': {'anyOf': options}}}
 
 
+def offered_actions(summary, ctx):
+    """The action types offered at this decision: the names of the options of ``output_schema`` (as ``decide`` offers them;
+    ``fix`` only while a failure waits for it). The names are the tool names."""
+    return [option['properties']['name']['enum'][0] for option in output_schema(summary['state'])['properties']['action']['anyOf']]
+
+
 def _resource(summary):
     request = summary['state_facts']['request']
     return summary['fields']['resource_id'] if request is None else request['resource_id']
