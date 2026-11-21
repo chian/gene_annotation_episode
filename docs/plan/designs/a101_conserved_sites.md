@@ -80,3 +80,12 @@ local and BV-BRC resources, Pfam, the yield and children settings of R1's contin
 Head's actions in order, credit after each: (1) `hmmer_profile_scan` 0.8198; (2) child `bvbrc_blast` (blastp, bacteria-archaea, until extracted; 4 child units, credit 4.0) 5.1003; (3) to (18) sixteen `reason` commits, credit 5.1003 each (marginal 0.0); the estimator stopped the head at the 16th of them (18 units, `yield_stop`). 16 units followed the last gain.
 Jobs: 1 Homology, 0 MSA, 0 MetaCATS (no limit was approached; I did not stop the run). No alignment, so no conserved-site measurement was exercised in a real run.
 Cause, from the model's own request (call 7): `msa_options` showed the held search with `candidates: []`, so `bvbrc_msa` was never offered (and so `bvbrc_metacats` was not). `bvbrc_msa_alignment.msa_options` (LIB/tools/.../bvbrc_msa_alignment.py, line 109) builds the test name `database_search:<provider>:<program>:<database>` without the `@<source reference>` that commit `f227c34a8` added to every test name in `candidate_measurements`, so no candidate's `tests` list matches it. This is a defect brought in by `f227c34a8`; the file is outside what this change may edit, so it is not fixed here. Against the prediction: scan, blast and credit 5.1003 as predicted; no MSA (predicted 0.9) because it was not offered.
+
+## Run C2: prediction (written before the run; after the lead's fix `2111b654f`; a FRESH workspace `runs/a101_conserved_ws_C2`, run `runs/a101_conserved_run_C2`, run id `a101_conserved_C2`; everything else exactly as C1)
+
+Limits: at most 1 Homology, 3 MSA, 2 MetaCATS jobs; a guard stops the run's unit at the commission that would exceed one.
+1. Scan (about 0.82), `bvbrc_blast` (about 5.1), as in C1; the search now offers product candidates in `msa_options` (five, as the lead's direct call shows).
+2. The model commissions `bvbrc_msa` (probability 0.85), 3 or 4 candidates, `per_candidate` about 10. Its first alignment adds many new distinguishing sites (R1's: 29) and earns about +0.5 to +1.0 (R1 direct check +0.86); credit about 5.6 to 6.1 after it.
+3. MetaCATS is commissioned in 0.5 of runs; its extract earns exactly 0.0; a second MetaCATS on the same alignment, if tried, is refused by the reuse check (feedback, no job).
+4. A second MSA (probability 0.5) adds few new sites and earns 0.0 to 0.1; a third (0.15).
+5. The estimator stops the head 3 to 8 units after the last gain; 7 to 14 head units in all, with 1 or 2 MSA and 0 to 2 MetaCATS jobs, against R1's 16 units with 4 and 7.
