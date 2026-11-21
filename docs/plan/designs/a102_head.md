@@ -218,3 +218,67 @@ CspA:
    search the direct check measured 9 candidates of 69 and a rise of about 0.81. With an ESMFold model (the child picked `esmfold`
    in run 2) the search has other hits (754, 135 candidates) and the numbers differ; I predict a few candidates measured (under 15),
    a rise under 2, below the ceiling (which is large, `u + k^2 // 4` over 135 candidates, about 4000). `catalytic`: 0 measured.
+
+## What happened with site_correspondence (real runs, 2026-11-21)
+
+Runs used: 2 of 5. Foldseek tickets: RecA 1, CspA 2 (afdb-swissprot, then pdb100 chosen by the model). Workspaces are built by
+`/tmp/.../build_ws.py`-style scripts: `init`, `propose-annotation`, a continuation written with `A102DifferentialCredit().as_record()` imported from
+the PINNED worktree, `freeze-libraries --axis A102 --source research/slotted_process_library/publications/2026-10-24-001`
+(the new `freeze_selection` worked first time), then the commission; every run a fresh workspace and run id.
+
+* RecA: `runs/a102_site_ws_reca_1`, run dir `runs/a102_site_run_reca_1`, run id `a102_site_reca_1`, worktree `gae_a102_4f840abe6`, commit
+  `4f840abe6` (no pdb100). Ended `yield_stop`, 3 units, credit 43.5737, no failure.
+* CspA: `runs/a102_site_ws_cspa_1`, run dir `runs/a102_site_run_cspa_1`, run id `a102_site_cspa_1`, worktree `gae_a102_4acf9f254`, commit
+  `4acf9f254` (pdb100 present; `site_correspondence` refuses and does not offer a pdb100 search). Ended `yield_stop`, 4 units, credit 307.7405, no failure.
+
+Per-unit tables (ceiling = offered ceiling of the chosen action; forecast and threshold as the controller showed them for the NEXT decision):
+
+| run | unit | action, arguments | ceiling | rise | credit after | next decision: site forecast / threshold |
+| --- | --- | --- | --- | --- | --- | --- |
+| RecA | 0 | structure_search afdb-swissprot, obtain_one | 1000 | 6.2504 | 6.2504 | 40.5 / 1.915 |
+| RecA | 1 | site_correspondence annotated | 81 | 37.3233 | 43.5737 | 37.32 / 0.238 |
+| RecA | 2 | site_correspondence catalytic | 81 | 0 | 43.5737 | none offered; stop |
+| CspA | 0 | structure_search afdb-swissprot, obtain_one | 1000 | 41.4080 | 41.4080 | 973.4 / 0.154 |
+| CspA | 1 | site_correspondence annotated | 4225 | 3.6510 | 45.0590 | 488.5 / 0.238 |
+| CspA | 2 | structure_search pdb100 (held model) | 9255 | 262.6816 | 307.7405 | 488.5 / 0.238 |
+| CspA | 3 | site_correspondence catalytic | 4225 | 0 | 307.7405 | none offered; stop |
+
+### Predicted against observed
+
+RecA. (1) Unit 0 as predicted (AlphaFold model, 353 residues, mean pLDDT 91.38; credit 6.2504, as run 3); `annotated` and `catalytic` both offered, ceiling 81 =
+18 candidates, 18 squared over 4 (I predicted "tens"). (2) The model took `annotated`: NOT as predicted in size: 899 hits asked (the naming settled this time, 899
+named, not the 399 of the direct check), 889 with sites, 18 candidates measured (predicted 3 or more), rise 37.32 (predicted near 0.30). Cause: with 18 listed
+candidates measured, the rise is the sum of 153 pairwise differentials; the direct check had 3 candidates. Below the ceiling 81. (3) `catalytic`: the model took it;
+0 hits with sites, 18 candidates without a site, rise 0, as predicted. The learned share did NOT make it unworthy beforehand (the forecast is per action type, not per site
+source: 37.32 against a threshold 0.238 after unit 1); it ended because no pair was left offered. (4) No custody error, no ceiling breach.
+
+CspA. The child's model was the AlphaFold one this time (P0A9X9, mean pLDDT 88.44), 976 hits, 975 asked, 130 candidates; search credit 41.408 (the prediction of the
+first runs). `annotated`: 975 asked, 221 with sites, 37 candidates measured (predicted under 15; the direct check measured 9 of 69 on 404 hits), rise 3.651 (predicted
+under 2; direct check 0.81 on fewer hits); Y-box-binding protein 1 matches the direct check exactly (8/9 hits, E 0.101, F 0.487). Ceiling 4225 = 130 squared over 4. `catalytic`:
+0 measured, rise 0, as predicted. The model also chose a pdb100 search (unit 2: rise 262.68, ceiling 9255) and the tool was not offered for it.
+
+### Candidates measured, search value against site value
+
+RecA (hits with sites of hits asked; search mean B; site mean E; mean F), sorted by E:
+Protein RecA 2 1/1, 0.615, 0.596, 0.969; Protein RecA 644/652, 0.613, 0.535, 0.859; Mitochondrial DNA repair protein recA homolog 1/1, 0.535, 0.508, 0.951;
+Protein RecA 1 1/1, 0.549, 0.452, 0.824; DNA repair protein recA homolog 1, chloroplastic 1/1, 0.479, 0.441, 0.921; Protein RecA, chromosomal 1/1, 0.440, 0.400,
+0.909; recA homolog 3, mitochondrial 1/1, 0.514, 0.390, 0.758; Protein RecA, plasmid 1/1, 0.501, 0.366, 0.730; recA homolog 2, mitochondrial 1/1, 0.445, 0.339, 0.762;
+Putative recA homolog 4 1/1, 0.327, 0.192, 0.589; RadB 3/5, 0.313, 0.165, 0.515; RadA 47/47, 0.228, 0.075, 0.329; rhp55 1/1, 0.154, 0.036, 0.232; ATP synthase
+subunit alpha (five names, 185 hits), B 0.106 to 0.109, E 0.015 to 0.023, F 0.14 to 0.21. The test separates the RecA family (E 0.34 to 0.60) from RadA/RadB (0.075,
+0.165) and ATP synthase alpha (0.02) that the fold search has at B 0.11 to 0.31; the ordering of the top RecA names changes little. All 7276 residues were aligned
+(absent outside 0, within 0): the global alignment of RecA covers the P-loop.
+
+CspA, top by E (hits with sites/asked, B, E, F, residues absent outside / within the alignment): Y-box-binding protein 1 8/9, 0.203, 0.101, 0.487, 10/0;
+lin-28 (four names) 0.258 to 0.374, E 0 (F 0; 8 to 32 residues absent outside the alignment: the zinc knuckles, another domain); CcmE (three names) 0.179 to 0.206, E 0
+(4 to 34 outside); EfpL 29/29, 0.175, 0 (22 outside, 7 within); RsgA 16/16, 0.160, 0 (272 outside); ModC 24/24, 0.105, 0 (192 outside). Over the test: 1376 residues, 1345
+absent outside the alignment, 12 within: the new split shows that the zero of the lin-28, CcmE and RsgA families is another domain, and only EfpL has a gap inside the aligned span.
+
+### Timing
+
+Grader, RecA 397 hits with sites (stored result, direct check): 88.1 s before, 0.1 s after, all 3179 residue rows equal in every field. The unit in the real RecA
+run (899 hits asked, 889 with sites, 10 UniProt requests) took about 40 s per decision to decision (controller `expected_seconds` 39.65 for the site tool).
+
+### Not exercised / unverified
+
+A failed site source (a fault of UniProt or M-CSA after a passed check); a model request refused by the check (the model never asked a graded pair: the schema offers only
+valid pairs); a pdb100 search through the tool (refused by construction, not tried); a second search of the same target for the tool; resume.
