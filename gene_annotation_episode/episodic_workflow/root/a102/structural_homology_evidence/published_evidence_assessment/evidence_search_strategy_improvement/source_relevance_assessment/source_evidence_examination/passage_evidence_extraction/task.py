@@ -162,10 +162,15 @@ EVIDENCE_PROCESSING = obj({
 REASON_DESCRIPTION = ('Commit one typed scientific reasoning payload about the supplied passages, using the '
                       'common reasoning commit schema. A payload with every section empty is rejected before '
                       'it runs and creates no unit. For a verified_source_leads task the commit carries the '
-                      'source_lead the commissioned question asks for. For a screening answer, '
-                      'evidence_processing no_applicable_evidence declares, with its reason and the exact '
-                      'examined byte spans, that the examined passages contain no applicable evidence; '
-                      'missing access is not absence.')
+                      'source_lead the commissioned question asks for. evidence_processing '
+                      'no_applicable_evidence declares, with its reason and the exact examined byte spans (inside '
+                      'the unconsumed windows of the input list), that the examined passages contain no applicable '
+                      'evidence, and consumes them (a screening answer rests on it); missing access is not absence.')
+INPUT_LIST_MEANING = ('input_list holds the commissioned passages (byte windows [start, end] of the page source) not '
+                      'yet processed, in commission order. A passage you declare examined with evidence_processing '
+                      'no_applicable_evidence, or in which a validated source lead was found, is consumed and no '
+                      'longer offered; a declaration may only examine bytes still in the list. The episode ends '
+                      'when the list is empty.')
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
@@ -216,6 +221,22 @@ def offered(settings):
     return names
 
 
+def processing_schema(summary):
+    """The ``no_applicable_evidence`` declaration, which consumes passages of the input list (``input_list``): each
+    examined span must lie inside a window still in the list (and in the page's source and representation), so a
+    consumed passage cannot be declared again. It is offered with every task kind: it is how the episode finishes
+    with a passage that holds nothing applicable."""
+    page = summary['literature_assignment']['page']
+    representation = ({'const': page['representation']} if page['representation'] in ('original', 'text')
+                      else EVIDENCE_PROCESSING['properties']['examined']['items']['properties']['representation'])
+    windows = [obj({'source_ref': {'const': page['source_ref']}, 'representation': representation,
+                    'start': {'type': 'integer', 'minimum': start, 'maximum': end - 1},
+                    'end': {'type': 'integer', 'minimum': start + 1, 'maximum': end}})
+               for start, end in summary['input_list']]
+    return obj({'kind': {'const': NO_APPLICABLE_EVIDENCE}, 'reason': TEXT,
+                'examined': {'type': 'array', 'minItems': 1, 'items': {'anyOf': windows}}})
+
+
 def reason_schema(summary):
     """The reason tool's arguments: the common commit, plus the commissioned task's own typed content (the old
     ``reasoning_action_schema``: a ``source_lead`` for ``verified_source_leads``)."""
@@ -225,8 +246,7 @@ def reason_schema(summary):
     if task['kind'] == 'verified_source_leads':
         properties['source_lead'] = lead_schema()
         required.append('source_lead')
-    elif task['kind'] == 'source_answer' and task['answer_kind'] == 'screening':
-        properties['evidence_processing'] = EVIDENCE_PROCESSING
+    properties['evidence_processing'] = processing_schema(summary)
     return source_location_inputs(obj(properties, required))
 
 
@@ -490,9 +510,12 @@ def decide(summary, feedback, ctx):
     """Ask the model for the next tool, shown the assignment, the custody of the source, its own read outcomes,
     the structure sheets it saved (their controlled features), the tools, the measured time, the credit definition
     and the yield table (the old decision state and inputs, over this episode's summary)."""
+    if not summary['input_list']:
+        raise LookupError('passage_input_list_empty')
     names = offered(ctx.settings)
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
+               'input_list': summary['input_list'], 'input_list_meaning': INPUT_LIST_MEANING,
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
@@ -536,3 +559,9 @@ def action(response, summary, records, ctx):
         raise Rejected(rejection_feedback(error, category='selection'))
     return ToolCall(name, {'arguments': arguments, 'scope': summary['scope'],
                            'page_source_ref': summary['literature_assignment']['page']['source_ref']})
+
+
+def offered_actions(summary, ctx):
+    """The action types offered at this decision: the tools ``decide`` offers while the input list still holds a
+    passage; with every passage consumed nothing is offered (the yield estimator ends the episode)."""
+    return offered(ctx.settings) if summary['input_list'] else []

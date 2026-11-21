@@ -269,7 +269,8 @@ def _task(summary, text):
     assignment = summary['assignment']
     parts = ['TASK', '', text]
     _section(parts, 'Assigned work', {'goal': GOAL_INSTRUCTION.split('\n\n')[1], 'page': assignment['page'],
-                                      'spans': assignment['selection']['spans']})
+                                      'spans': summary['input_list']})
+    _section(parts, 'Already processed passages (consumed; not offered again)', summary['consumed_inputs'])
     _section(parts, 'Fixed scope', assignment['scope'])
     context = assignment.get('gene_context_evidence', {}).get('assignment', {})
     _section(parts, 'Parent constraints', context.get('constraints'))
@@ -286,12 +287,16 @@ def _task(summary, text):
 
 
 def decide(summary, feedback, ctx):
-    """The tool catalog first (a lookup, one unit); then the model chooses one operation or the report."""
+    """The tool catalog first (a lookup, one unit); then the model chooses one operation or the report. The assigned
+    passages are the input list: a passage an accepted report has processed is consumed and not offered again; with
+    the input list empty the yield estimator ends the episode, so a decision asked for then is an error."""
+    if not summary['input_list']:
+        raise LookupError('passage_input_list_empty')
     if summary['catalog'] is None:
         return ToolCall('tool_catalog', {'scope': summary['assignment']['scope']})
     offered = _offered(summary)
     context = {'task': _task(summary, instructions()), 'feedback': feedback,
-               'own_outcomes': summary['own_outcomes'], 'current_report': summary['report'],
+               'input_list': summary['input_list'], 'own_outcomes': summary['own_outcomes'], 'current_report': summary['report'],
                'completed_work_axis_results': summary['completed_work_axis_results'],
                'source_custody': summary['source_custody'], 'history_meaning': summary['history_meaning'],
                'controller': summary['controller'], 'time_accounting': time_accounting(ctx.clock.progress_time)}

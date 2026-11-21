@@ -22,7 +22,23 @@ def msg_to_child(slot, arguments, summary):
     page = {key: summary['literature_assignment'][key] for key in
             ('version', 'source_ref', 'representation', 'artifact_ref', 'question_context_refs',
              'prior_delivery_refs')}
-    assignment = {'version': 'reading_assignment_v1', 'page': page, 'selection': arguments['selection'],
+    by_id = {item['candidate_id']: item for item in summary['content_candidates']}
+
+    def window(start, end):
+        return {'source_ref': page['source_ref'], 'representation': page['representation'],
+                'offset': start, 'limit': end - start}
+    # The selection is built from the page's input list: a table region, the first window of the remaining prose in
+    # document order (the child continues from it), or the windows of the chosen unconsumed candidates.
+    if slot == 'literature_table':
+        item = by_id[arguments['candidate_id']]
+        selection = window(item['start'], item['end'])
+    elif slot == 'literature_ordered':
+        start, end = summary['report_windows'][0]
+        selection = window(start, end)
+    else:
+        selection = {'spans': [window(by_id[candidate_id]['start'], by_id[candidate_id]['end'])
+                               for candidate_id in arguments['candidate_ids']]}
+    assignment = {'version': 'reading_assignment_v1', 'page': page, 'selection': selection,
                   'literature_task': task, 'proposed_annotation_ref': summary['proposed_annotation_ref'],
                   'scope': summary['scope'], 'received_record_refs': summary['received_record_refs']}
     selection = (LEADS,) if task['kind'] == 'verified_source_leads' else (

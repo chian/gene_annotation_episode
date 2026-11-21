@@ -152,7 +152,7 @@ def test_the_credit_is_real_code_and_counts_nothing_without_a_validated_lead():
 def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_the_report_and_the_search_child():
     task = importlib.import_module(MODULE + '.task')
     episode = importlib.import_module(MODULE + '.episode')
-    names = task.offered({})
+    names = task.offered({}, ['src_1'])
     assert names[-2:] == ['reason', 'source_relevance_assessment'] and 'report' not in names and len(names) == 34
     assert set(names) - set(task.CHILD_SLOTS) <= set(episode.EvidenceSearchStrategyImprovement.tools)
     assert {'public_literature_search', 'public_literature_read', 'public_ncbi_search', 'public_pmc_asset',
@@ -160,7 +160,39 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_the
     assert task.INPUT_SCHEMAS['public.ncbi.search']['properties']['database'] == {'enum': ['pubmed']}
     commit_schema = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
                      'properties': {'terms': {'type': 'array'}}}
-    schema = task.selection_schema(names, commit_schema, True)
+    schema = task.selection_schema(names, commit_schema, True, ['src_1'])
     assert len(schema['properties']['selection']['anyOf']) == len(names)
     kinds = [option['properties']['kind']['const'] for option in schema['properties']['selection']['anyOf']]
     assert kinds.count('child') == 1 and kinds.count('tool') == len(names) - 1
+    child = [option for option in schema['properties']['selection']['anyOf']
+             if option['properties']['kind']['const'] == 'child'][0]
+    assert child['properties']['arguments']['properties']['search_result_refs']['items'] == {'enum': ['src_1']}
+
+
+def test_a_search_result_handed_to_a_child_is_consumed_and_the_child_is_withdrawn_when_the_list_is_empty():
+    task = importlib.import_module(MODULE + '.task')
+    summary = importlib.import_module(MODULE + '.messages.internal_summary')
+
+    class Records:
+        def holds(self, ref):
+            return True
+
+        def get(self, ref):
+            return {'uri': 'https://example.org/' + ref}
+
+    def tool(name, refs):
+        return {'kind': 'tool', 'tool': name, 'outcome': {'record_refs': refs}}
+    view = type('View', (), {'records': Records(), 'outcomes': [
+        tool('public_literature_search', ['src_3']), tool('source_read', ['src_9']),
+        {'kind': 'child', 'arguments': {'search_result_refs': ['src_1', 'src_3']}}]})()
+    assert summary.search_results(view, ['src_1', 'src_2']) == ['src_1', 'src_2', 'src_3']
+    assert summary.consumed_search_results(view) == ['src_1', 'src_3']
+    assert 'source_relevance_assessment' not in task.offered({}, [])
+    assert task.search_call.__name__ == 'search_call'
+    try:
+        task.search_call('source_relevance_assessment',
+                         {'objective': 'o', 'search_result_refs': ['src_1']}, Records(), ['src_2'])
+    except Exception as error:
+        assert 'not_in_input_list' in str(error)
+    else:
+        raise AssertionError('a consumed search result was accepted')

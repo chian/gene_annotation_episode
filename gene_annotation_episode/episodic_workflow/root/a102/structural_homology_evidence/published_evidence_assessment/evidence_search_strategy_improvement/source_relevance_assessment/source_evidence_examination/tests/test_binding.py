@@ -119,18 +119,43 @@ def test_the_commission_names_the_page_the_selection_the_task_and_selects_the_an
     summary = {'literature_assignment': {**parent_input['page'], 'literature_task': SCREENING_TASK,
                                          'proposed_annotation_ref': 'hyp_1'},
                'task': SCREENING_TASK, 'proposed_annotation_ref': 'hyp_1', 'scope': parent_input['scope'],
-               'received_record_refs': parent_input['received_record_refs']}
-    message = EPISODE.msg_to_child('literature_ordered', {'selection': WINDOW}, summary)
+               'received_record_refs': parent_input['received_record_refs'],
+               'content_candidates': [{'candidate_id': 'prose_chunk:0000', 'start': 0, 'end': 10},
+                                      {'candidate_id': 'source_table:t1', 'start': 20, 'end': 40}],
+               'report_windows': [[0, 10]]}
+    message = EPISODE.msg_to_child('literature_ordered', {}, summary)
     assert isinstance(message, ChildMessage)
     assert message.message == {} and message.objective == 'read_source_in_order'
     assert message.assignment['selection'] == WINDOW and message.assignment['page']['source_ref'] == 'src_1'
     assert message.assignment['received_record_refs'] == ['src_1', 'art_1', 'hyp_1']
     assert tuple(message.selection) == ('literature_screening_answers',)
-    leads = EPISODE.msg_to_child('literature_targeted', {'selection': {'spans': [WINDOW]}},
+    leads = EPISODE.msg_to_child('literature_targeted', {'candidate_ids': ['prose_chunk:0000']},
                                  {**summary, 'task': LEADS_TASK})
     assert tuple(leads.selection) == ('literature_source_lead_dispositions',)
+    assert leads.assignment['selection'] == {'spans': [WINDOW]}
+    table = EPISODE.msg_to_child('literature_table', {'candidate_id': 'source_table:t1'}, summary)
+    assert table.assignment['selection'] == {**WINDOW, 'offset': 20, 'limit': 20}
     with pytest.raises(KeyError):
-        EPISODE.msg_to_child('literature_other', {'selection': WINDOW}, summary)
+        EPISODE.msg_to_child('literature_other', {}, summary)
+
+
+def test_the_input_list_is_consumed_by_the_children_and_only_unconsumed_candidates_are_offered():
+    internal = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    task = importlib.import_module(PACKAGE + '.task')
+    candidates = [{'candidate_id': 'prose_chunk:0000', 'candidate_type': 'prose_chunk'},
+                  {'candidate_id': 'source_table:t1', 'candidate_type': 'source_table'},
+                  {'candidate_id': 'prose_chunk:0001', 'candidate_type': 'prose_chunk'},
+                  {'candidate_id': 'prose_chunk:0002', 'candidate_type': 'prose_chunk'}]
+    children = [{'slot': 'literature_targeted', 'arguments': {'candidate_ids': ['prose_chunk:0001']}}]
+    assert internal.consumed_candidates(children, candidates) == ['prose_chunk:0001']
+    children.append({'slot': 'literature_ordered', 'arguments': {}})
+    assert internal.consumed_candidates(children, candidates) == ['prose_chunk:0001', 'prose_chunk:0000',
+                                                                   'prose_chunk:0002']
+    summary = {'unconsumed_table_ids': ['source_table:t1'], 'report_windows': [], 'input_list': ['source_table:t1']}
+    assert task.available_slots(summary) == ['literature_table', 'literature_targeted']
+    assert task.child_arguments('literature_table', summary)['properties']['candidate_id'] == {
+        'enum': ['source_table:t1']}
+    assert task.available_slots({**summary, 'unconsumed_table_ids': [], 'input_list': []}) == []
 
 
 def test_the_report_of_a_child_keeps_its_credit_structure_sheets_and_the_relevant_lead_sources():
@@ -165,7 +190,8 @@ def test_the_controller_follows_the_commissioned_task_kind():
 
 def test_every_offered_tool_and_the_three_children_are_in_the_selection_schema_and_its_strict_transport():
     task = importlib.import_module(PACKAGE + '.task')
-    summary = {'task': LEADS_TASK, 'reasoning_schema': {'type': 'object', 'properties': {'terms': {'type': 'array'}},
+    summary = {'task': LEADS_TASK, 'unconsumed_table_ids': ['source_table:t1'], 'report_windows': [[0, 10]],
+               'input_list': ['prose_chunk:0000', 'source_table:t1'], 'reasoning_schema': {'type': 'object', 'properties': {'terms': {'type': 'array'}},
                                                          'required': ['terms'], 'additionalProperties': False}}
     names = task.offered({'tool_registry': {}})
     assert 'execution_estimate' not in names and names[-2:] == ['structure_populate', 'reason']

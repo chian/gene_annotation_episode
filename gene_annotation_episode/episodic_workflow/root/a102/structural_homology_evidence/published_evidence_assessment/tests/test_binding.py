@@ -122,6 +122,7 @@ def commission_summary(task):
             | {'literature_task': task, 'proposed_annotation_ref': 'hyp_1'},
             'task': task, 'proposed_annotation_ref': 'hyp_1', 'scope': parent_input['scope'],
             'received_record_refs': parent_input['received_record_refs'],
+            'input_list': ['src_1', 'src_2'], 'consumed_source_refs': [],
             'literature_source_custody': [{'source_ref': 'src_1', 'artifact_ref': 'art_1',
                                            'passed_record_refs': ['src_1', 'art_1', 'src_0']}]}
 
@@ -180,8 +181,9 @@ def test_the_controller_follows_the_commissioned_task_kind():
 
 def test_the_acquisition_and_access_tools_and_the_strategy_child_are_in_the_selection_schema_and_its_transport():
     task = importlib.import_module(PACKAGE + '.task')
-    summary = {'task': LEADS_TASK, 'reasoning_schema': {'type': 'object', 'properties': {'terms': {'type': 'array'}},
-                                                         'required': ['terms'], 'additionalProperties': False}}
+    summary = {'task': LEADS_TASK, 'input_list': ['src_1', 'src_2'],
+               'reasoning_schema': {'type': 'object', 'properties': {'terms': {'type': 'array'}},
+                                    'required': ['terms'], 'additionalProperties': False}}
     names = task.offered({})
     assert 'execution_estimate' not in names and names[-2:] == ['structure_populate', 'reason']
     for name in ('public_literature_search', 'public_literature_read', 'public_ncbi_search', 'public_pmc_asset',
@@ -192,3 +194,20 @@ def test_the_acquisition_and_access_tools_and_the_strategy_child_are_in_the_sele
     assert len(schema['properties']['selection']['anyOf']) == len(names) + 1
     assert task.generation_schema(schema)
     assert task.INPUT_SCHEMAS['public.ncbi.search']['properties']['database'] == {'enum': ['pubmed']}
+    child = task.child_arguments('literature_strategy', summary)
+    assert child['properties']['strategy']['properties']['prior_search_refs']['items'] == {'enum': ['src_1', 'src_2']}
+    emptied = task.selection_schema(names, {**summary, 'input_list': []})
+    assert len(emptied['properties']['selection']['anyOf']) == len(names)
+
+
+def test_a_source_handed_to_a_strategy_child_is_consumed_and_not_offered_again():
+    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+
+    class View:
+        parent_input = {'source_refs': ['src_1', 'src_2']}
+        outcomes = [{'kind': 'child', 'arguments': {'strategy': STRATEGY}}]
+    assert summary_module.consumed_sources(View) == ['src_1']
+    summary = commission_summary(LEADS_TASK)
+    summary['input_list'] = ['src_2']
+    with pytest.raises(KeyError):
+        EPISODE.msg_to_child('literature_strategy', {'strategy': STRATEGY}, summary)

@@ -40,7 +40,17 @@ differentials exactly as above; its TEST CREDIT is the sum of the entries it adm
 one dataset together earn the MAXIMUM of their test credits: a later test of the dataset earns only the amount by which it beats
 the best so far (an improvement), a replicate earns 0, and the credit never falls. A candidate's value on the sheet from one
 dataset reads the same maximum: its largest value over the dataset's tests (not their sum), so a replicate adds nothing to a
-score either. A test that names no dataset counts as before."""
+score either. A test that names no dataset counts as before.
+
+THE CLUSTER TEST WEIGHS ITS CREDIT BY THE EVIDENCE (the owner, 2026-11-21, on a second clustering that earned 0.90 almost entirely
+by adding "hypothetical protein", one sequence, 0/1 in the target's cluster: "you need a better cluster metric the weights overall
+evidence not just goodness of clusters ... more data is better and clusters with little data earn less"; approved rule "pair x
+weaker side"). In a test of the ``cluster`` family a candidate's value stays its plain share of sequences in the target's cluster
+(its sheet value and its score are unchanged), but the credit the test earns is weighed by how many sequences each candidate
+has in the set: with ``n`` its sequences, its evidence is ``r(n) = n / (n + CLUSTER_PSEUDO_COUNT)`` (``cluster_evidence``). A
+differential of two candidates is ``min(r_a, r_b) x |d_a - d_b|``: a pair is only as good as its weaker side. A candidate the
+test admits (an entry) earns ``r(n) x`` its entry score: a candidate entering on thin data enters with less. Every other family
+(search, scan, alignment, MetaCATS, pairwise) has evidence 1, so its rule is unchanged."""
 import math
 from itertools import combinations
 
@@ -54,13 +64,34 @@ from itertools import combinations
 #   profile_scan     0.8198338046876612  the cold-shock-domain family's value in the Pfam hmmscan (the same in all three runs)
 #   msa              12 / 7              the CspA product's value in the first alignment (12 new matched distinguishing sites x W = 1/7;
 #                                        later alignments of the same target add 0.0 to 0.29 because a site counts once)
-#   cluster          1.0                 the CspA product's share of its sequences in the target's cluster in the committed clustering of
-#                                        the C2 set (MCL, inflation 4.0, rescaled contrast: CspA 10/10, CspB/CspG/CspI 10/10, CspC 0/9)
+#   cluster          1.0                 the leading candidate's (the CspA product's) share of its sequences in the target's cluster,
+#                                        the median over the 21 committed clusterings of the stored real runs (direct read, 2026-11-21,
+#                                        of the all_vs_all sources of runs a101_goal3_ws_cspa to a101_goal10_ws_cspa; the RecA runs hold
+#                                        none): 1.0 in 15 (18/18 in 12, 10/10 in 2, 17/17 in 1), 15/18 = 0.8333 in 6 (goal5 once,
+#                                        goal9 three times, goal10 twice). The value stays the plain share under the evidence weighting
+#                                        of the cluster credit (below), so the typical strong value is unchanged: 1.0
 #   pairwise         1.0                 no stored run holds a pairwise value: the weight is 1 until one does
 # The data is one target: re-derive these as runs of other targets accumulate.
 TYPICAL_STRONG_VALUE = {'database_search': 0.9592726552144761, 'profile_scan': 0.8198338046876612, 'msa': 12 / 7, 'cluster': 1.0,
                         'pairwise': 1.0}
 SHEET_WEIGHT = {family: 1 / value for family, value in TYPICAL_STRONG_VALUE.items()}
+# The pseudo-count of the cluster test's evidence ``r(n) = n / (n + c)`` (``cluster_evidence``), c = 4: a candidate with one
+# sequence in the set weighs 0.2, one with 4 weighs 0.5, one with 18 (a strong candidate at 20 sequences per candidate: the CspA
+# product of the stored runs) weighs 0.82. A candidate with few sequences can therefore earn little whatever its share, and one with
+# many can earn nearly its whole share: "more data is better and clusters with little data earn less" (the owner).
+CLUSTER_PSEUDO_COUNT = 4
+
+
+def cluster_evidence(size):
+    """The evidence ``r(n) = n / (n + CLUSTER_PSEUDO_COUNT)`` of a candidate with ``size`` = n sequences in a clustered set."""
+    return size / (size + CLUSTER_PSEUDO_COUNT)
+
+
+def _evidence(row):
+    """The evidence a measurement carries: ``cluster_evidence`` of its ``size`` for a test of the ``cluster`` family, else 1."""
+    if row['test'].split('@', 1)[0].split(':', 1)[0] == 'cluster':
+        return cluster_evidence(row['size'])
+    return 1.0
 
 
 def sheet_weight(test):
@@ -90,14 +121,20 @@ def _sheet_value(held):
 
 def differential_credit(measurements):
     """The scores, the sheets and the credit of ``measurements`` (``[{'test', 'candidate', 'value'}]``, each optionally
-    with its ``dataset``, in arrival order). Also ``test_credits`` (each test's entries plus differentials) and ``datasets``
-    (per dataset: its ``best`` test credit so far, the ``best_test`` and the credit each of its tests ``earned``)."""
-    tests, values = [], {}
+    with its ``dataset``, in arrival order; a measurement of a ``cluster`` test also has its ``size``). Also ``test_credits``
+    (each test's entries, each times the evidence of the admitting measurement, plus its differentials, each times the weaker
+    evidence of the pair: ``_evidence``) and ``datasets`` (per dataset: its ``best`` test credit so far, the ``best_test`` and the
+    credit each of its tests ``earned``). A differential row carries the credit it earned (``value``), the ``difference`` of the
+    two moves and the pair's ``evidence``."""
+    tests, values, evidence = [], {}, {}
     dataset_of = _datasets(measurements)
     for row in measurements:
         if row['test'] not in tests:
             tests.append(row['test'])
         values.setdefault((row['test'], row['candidate']), []).append(row['value'])
+        known = evidence.setdefault((row['test'], row['candidate']), _evidence(row))
+        if known != _evidence(row):
+            raise ValueError('replicates_of_a_candidate_differ_in_evidence:' + row['test'])
     candidates = sorted({candidate for _, candidate in values})
     sheets = {candidate: {} for candidate in candidates}
     changes, entries, admitted = {}, {}, {}
@@ -115,11 +152,15 @@ def differential_credit(measurements):
             if candidate not in entries and value > 0:
                 entries[candidate], admitted[candidate] = score(candidate), tests.index(test)
     differentials = [{'test': test, 'pair': [first, second],
-                      'value': abs(changes[test, first] - changes[test, second])}
+                      'value': min(evidence[test, first], evidence[test, second])
+                      * abs(changes[test, first] - changes[test, second]),
+                      'difference': abs(changes[test, first] - changes[test, second]),
+                      'evidence': min(evidence[test, first], evidence[test, second])}
                      for position, test in enumerate(tests) for first, second in combinations(sorted(entries), 2)
                      if (test, first) in changes and (test, second) in changes
                      and position > max(admitted[first], admitted[second])]
-    test_credits = {test: math.fsum([entries[candidate] for candidate in entries if tests[admitted[candidate]] == test]
+    test_credits = {test: math.fsum([evidence[test, candidate] * entries[candidate] for candidate in entries
+                                     if tests[admitted[candidate]] == test]
                                     + [row['value'] for row in differentials if row['test'] == test]) for test in tests}
     datasets = {}
     for test in tests:
@@ -189,39 +230,57 @@ def dataset_test_ceiling(bound, best):
     return max(0.0, bound - best)
 
 
-def cluster_test_ceiling(held, measurable, best):
+def cluster_test_ceiling(held, sizes, best):
     """The most one further graded clustering of a dataset can add to the credit of one target: a PROVED, TIGHT maximum.
 
-    ``held`` is ``standing`` of the target; ``measurable`` lists the candidates (identifiers) the clustering's set has a group of
-    sequences for (each named candidate of a commission: it is admitted from the dataset's search, so it has at least one hit of
-    its product and the set holds at least one of its sequences); ``best`` is the dataset's largest test credit so far
-    (``differential_credit(...)['datasets'][dataset]['best']``, 0 with none). With ``w`` = ``SHEET_WEIGHT['cluster']``, ``l`` the
-    listed candidates measured and ``u`` the unlisted ones, the ceiling is ``max(0, w (u + floor(l^2 / 4)) - best)``.
+    ``held`` is ``standing`` of the target; ``sizes`` maps each candidate (identifier) the clustering's set has a group of
+    sequences for to ``n_c``, its number of sequences in the planned set (the commission's plan is deterministic:
+    ``bvbrc_msa_alignment.plan_rows``; a candidate with none gives no measurement and is left out); ``best`` is the dataset's
+    largest test credit so far (``differential_credit(...)['datasets'][dataset]['best']``, 0 with none). With ``w`` =
+    ``SHEET_WEIGHT['cluster']`` and ``r_c = cluster_evidence(n_c)``, the ceiling is ``max(0, B - best)`` with
+    ``B = w (sum of r_c over the unlisted candidates + max over the sets S of listed candidates of the sum over the pairs
+    a in S, b not in S of min(r_a, r_b))``.
 
     Proof.
 
     1. The test measures each candidate group once: its value is ``w`` x the share of the group's sequences in the target's
-       cluster, so ``0 <= v_c <= w`` (``cluster_sheet.group_values``; a group with share 0 is still measured). Nothing else is
-       measured: the set holds only the target and the named candidates' sequences.
-    2. Appended last, the test's own credit ``T`` is the entries of the candidates it admits (each ``v_c``: an unlisted candidate
-       has no earlier value above 0, and its sheet value from the dataset, the largest over the dataset's tests, is ``v_c``) plus
-       ``|v_a - v_b|`` for each pair of listed candidates (``differential_credit``): ``T(v)`` is convex on the box
-       ``0 <= v_c <= w``, so its maximum is at a vertex (``msa_test_ceiling`` step 3; ``vertex_maximum`` with every maximum ``w``).
-       At a vertex with ``k`` of the listed candidates at ``w`` and ``l - k`` at 0, a pair inside either set earns 0 and a pair
-       across earns ``w``, so ``T = w (u + k (l - k))``, largest at ``k = floor(l / 2)``: ``w (u + floor(l^2 / 4))``. This is the
-       vertex bound in closed form, exact for any ``l`` (``vertex_maximum`` loosens above 16 listed candidates).
+       cluster, so ``0 <= v_c <= w`` (``cluster_sheet.group_values``; a group with share 0 is still measured), and its evidence is
+       ``r_c``, fixed by the plan (``_evidence``). Nothing else is measured: the set holds only the target and the named
+       candidates' sequences.
+    2. Appended last, the test's own credit ``T`` is, for each candidate it admits (unlisted: no earlier value above 0, so its
+       entry score is its sheet value from the dataset, the largest over the dataset's tests, which is ``v_c``), ``r_c v_c``,
+       plus ``min(r_a, r_b) |v_a - v_b|`` for each pair of listed candidates (``differential_credit``). Each term is convex in
+       ``v`` (linear, or a nonnegative multiple of an absolute value), so ``T(v)`` is convex on the box ``0 <= v_c <= w`` and its
+       maximum is at a vertex: every unlisted ``v_c = w`` (its term grows with ``v_c`` and it is in no pair) and the listed
+       candidates split into ``S`` at ``w`` and the rest at 0. A pair inside ``S`` or inside the rest earns 0 and a pair across
+       earns ``w min(r_a, r_b)``, so the vertex value is ``w (sum r_u + cut(S))``; ``B`` is the largest. ``cluster_vertex_bound``
+       takes the maximum over every ``S`` up to 16 listed candidates, and above that the looser sum over all listed pairs of
+       ``w min(r_a, r_b)`` (never below the maximum).
     3. The dataset earns the largest test credit of its tests and nothing else of the credit changes when its test is appended
-       (``dataset_test_ceiling``), so the credit rises by ``max(0, T - best) <= max(0, w (u + floor(l^2 / 4)) - best)``.
-    4. Tight: each group has at least one sequence, so a share of 0 and a share of 1 are both outcomes the clustering can give;
-       the partition that puts the groups of ``floor(l / 2)`` listed candidates and of every unlisted one in the target's cluster
-       and the other groups outside it gives exactly ``T = w (u + floor(l^2 / 4))``.
+       (``dataset_test_ceiling``), so the credit rises by ``max(0, T - best) <= max(0, B - best)``.
+    4. Tight (up to 16 listed candidates): each group has at least one sequence, so a share of 0 and a share of 1 are both
+       outcomes the clustering can give; the partition that puts the groups of the best ``S`` and of every unlisted candidate in
+       the target's cluster and the other groups outside it gives exactly ``T = B``.
 
     Not bounded further, and why: which partition MCL gives depends on the sequences and on the tuning the child's model chooses
     after the commission, so no vertex is excluded before the clustering runs."""
+    return dataset_test_ceiling(cluster_vertex_bound(held, sizes), best)
+
+
+def cluster_vertex_bound(held, sizes):
+    """``B`` of ``cluster_test_ceiling``: the largest credit one cluster test can earn over the candidates of ``sizes`` (candidate
+    -> sequences in the planned set), from where the list stands (``held``, ``standing`` of the target)."""
     weight = SHEET_WEIGHT['cluster']
-    measured = list(dict.fromkeys(measurable))
-    listed = sum(1 for candidate in measured if held.get(candidate, {}).get('listed'))
-    return dataset_test_ceiling(weight * float(len(measured) - listed + listed * listed // 4), best)
+    measured = {candidate: cluster_evidence(size) for candidate, size in sizes.items() if size > 0}
+    listed = [r for candidate, r in measured.items() if held.get(candidate, {}).get('listed')]
+    new = math.fsum(r for candidate, r in measured.items() if not held.get(candidate, {}).get('listed'))
+    if len(listed) > 16:
+        return weight * (new + math.fsum(min(a, b) for a, b in combinations(listed, 2)))
+    cut = 0.0
+    for mask in range(1 << max(0, len(listed) - 1)):    # S and its complement give the same cut: the last one stays outside
+        cut = max(cut, math.fsum(min(listed[i], listed[j]) for i, j in combinations(range(len(listed)), 2)
+                                 if (mask >> i & 1) != (mask >> j & 1)))
+    return weight * (new + cut)
 
 
 def msa_test_ceiling(held, maxima, measurable):

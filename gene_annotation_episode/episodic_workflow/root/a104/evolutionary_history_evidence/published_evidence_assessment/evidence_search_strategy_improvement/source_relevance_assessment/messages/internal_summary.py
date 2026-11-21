@@ -11,6 +11,9 @@ listed here is that of the returned search results, which the commission of the 
 references of each source). The rate-population display contexts of the old file (``literature_experimental_work``,
 owned population sources, the latest failed population attempt, ``literature_completed_work``) belong to the
 population route, which is not built. The root-only ``reference_evidence_parent`` context is not this episode's."""
+from episode_runtime.store_scope import is_problem_ref
+from episode_runtime.work_tables import is_row_ref
+
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.evolutionary_history_evidence.literature_assay_grading_features import (
     current_sheet_features, merged_sheet_features)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_assay_grading_storage import (
@@ -31,6 +34,19 @@ CUSTODY_KEYS = ('version', 'artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref
 HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through own_literature_outcomes. Source '
                    'delivery does not establish scientific understanding, absence or resolved science.')
 LEADS = 'literature_source_lead_dispositions'
+
+
+def source_input_list(view, search):
+    """The episode's input list (nano-graphrag's ``web_search_binding`` candidate sources): the returned search results
+    in the order returned, then the sources acquired since (held source records that are no search result), without the
+    sources a page child was commissioned for (consumed: ``PageRunState.processed_chunk_ids``). Returns
+    (input_list, consumed source refs in the order consumed)."""
+    consumed = list(dict.fromkeys(outcome['arguments']['source_ref'] for outcome in view.outcomes
+                                  if outcome['kind'] == 'child'))
+    results = list(search['search_result_refs'])
+    acquired = [ref for ref in sorted(view.records.refs()) if ref not in results and not is_row_ref(ref)
+                and not is_problem_ref(ref) and view.records.get(ref).get('record_type') == 'source']
+    return [ref for ref in (*results, *acquired) if ref not in consumed], consumed
 
 
 def internal_summary(view):
@@ -60,8 +76,13 @@ def internal_summary(view):
     for source_ref in search['search_result_refs']:
         source = view.records.get(source_ref)
         custody.append({'source_ref': source_ref, **{key: source.get(key) for key in CUSTODY_KEYS}})
+    input_list, consumed_source_refs = source_input_list(view, search)
     summary = {
         'assignment': parent,
+        # The episode's input list: the sources still to be examined (returned search results, then acquired sources),
+        # each consumed once a page child is commissioned for it; it shrinks with each commission and the yield
+        # estimator stops the episode when it is empty.
+        'input_list': input_list, 'consumed_source_refs': consumed_source_refs,
         'literature_assignment': assignment,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],

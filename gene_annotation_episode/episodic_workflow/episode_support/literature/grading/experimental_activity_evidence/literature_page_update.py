@@ -173,7 +173,7 @@ def _results_of_grader(grader, converted, record, claims):
     for assertion_ref in sorted(claims):
         claim = claims[assertion_ref]
         is_direct = bearing(bearing_record, claim)['bearing']
-        direction = direction_and_ratio(converted, claim) if is_direct == 'direct' else {'direction': 'unknown', 'log_ratio': None, 'effect_support': None}
+        direction = direction_and_ratio(converted) if is_direct == 'direct' else {'direction': 'unknown', 'log_ratio': None, 'effect_support': None}
         known = direction['direction'] != 'unknown'
         result = {
             'result_ref': _result_ref(grader['grader_ref'], assertion_ref),

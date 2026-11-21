@@ -199,11 +199,29 @@ CHILD_DESCRIPTIONS = {
     'literature_strategy': ('Commission an investigation of which search approach is productive for the assigned '
                             'question: its strategy names the records giving the question context and the prior '
                             'search sources (sources this episode holds) it starts from. The child can search and '
-                            'read itself or commission an assessment of which returned sources merit examination.'),
+                            'read itself or commission an assessment of which returned sources merit examination. '
+                            'The prior search sources are chosen only among input_list (the held sources not yet '
+                            'handed to a strategy child); a source handed to a child is consumed and no longer '
+                            'offered, and no strategy child is offered when input_list is empty.'),
 }
 REFERENCES = {'type': 'array', 'items': REF, 'uniqueItems': True}
-STRATEGY = obj({'question_context_refs': REFERENCES, 'prior_search_refs': {**REFERENCES, 'minItems': 1}})
-CHILD_ARGUMENTS = {'literature_strategy': obj({'strategy': STRATEGY})}
+
+
+def child_arguments(slot, summary):
+    """The arguments a child takes now: the prior search sources are chosen among the input list only (the held
+    sources no strategy child has been handed); a handed-out source is consumed and offered no more."""
+    if slot != 'literature_strategy':
+        raise KeyError(slot)
+    strategy = obj({'question_context_refs': REFERENCES,
+                    'prior_search_refs': {'type': 'array', 'items': {'enum': list(summary['input_list'])},
+                                          'uniqueItems': True, 'minItems': 1,
+                                          'description': 'Unconsumed sources of input_list only'}})
+    return obj({'strategy': strategy})
+
+
+def available_slots(summary):
+    """The child slots valid now: the strategy child while the input list is not empty."""
+    return [slot for slot in CHILD_SLOTS if summary['input_list']]
 
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
@@ -292,8 +310,8 @@ def selection_schema(names, summary):
     schema: kinds ``tool`` and ``child``)."""
     tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
              for entry in catalog(names, summary)]
-    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': CHILD_ARGUMENTS[slot]})
-                for slot in CHILD_SLOTS]
+    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': child_arguments(slot, summary)})
+                for slot in available_slots(summary)]
     return obj({'selection': {'anyOf': tools + children}})
 
 
@@ -306,11 +324,14 @@ def artifact_of(source, representation):
     return source.get(representation + '_ref')
 
 
-def checked_strategy(strategy, records):
+def checked_strategy(strategy, records, summary):
     """The commission the model chose, over the held records: every prior search source is a source this episode
     holds and every question-context record is held. A violation is a wrong commission: it raises and fails the
     run (no rejection, no feedback)."""
     for reference in strategy['prior_search_refs']:
+        if reference not in summary['input_list']:
+            raise ContractError('literature_reference_unavailable', detail={'reference': reference,
+                                                                            'namespace': 'input_list'})
         if not records.holds(reference) or records.get(reference).get('record_type') != 'source':
             raise ContractError('literature_reference_unavailable', detail={'reference': reference,
                                                                             'namespace': 'source'})
@@ -637,11 +658,13 @@ def decide(summary, feedback, ctx):
     names = offered(ctx.settings)
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
+               'input_list': summary['input_list'], 'consumed_source_refs': summary['consumed_source_refs'],
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
                'child_reports': summary['child_reports'],
-               'children': [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot]} for slot in CHILD_SLOTS],
+               'children': [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot]}
+                            for slot in available_slots(summary)],
                'credit_binding': summary['credit_binding'],
                'structure_sheets': summary['structure_sheets'],
                'tools': catalog(names, summary), 'time_accounting': time_accounting(ctx.clock.progress_time)}
@@ -689,6 +712,6 @@ def action(response, summary, records, ctx):
     except (ValueError, KeyError, TypeError, ValidationError, ContractError) as error:
         raise Rejected(rejection_feedback(error, category='selection'))
     if commission is not None:
-        checked_strategy(commission.arguments['strategy'], records)
+        checked_strategy(commission.arguments['strategy'], records, summary)
         return commission
     return ToolCall(name, {'arguments': arguments, 'scope': summary['scope']})

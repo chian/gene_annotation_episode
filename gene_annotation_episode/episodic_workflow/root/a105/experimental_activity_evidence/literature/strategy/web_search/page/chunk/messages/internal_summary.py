@@ -1,20 +1,19 @@
 """Where the extraction stands, from the loop's view: the chunk's text (read through custody from the artifact of the
-source's representation the page commissioned), the extraction records its units held, and the counts of the fields they
-state (stated, newly stated, asked)."""
-from gene_annotation_episode.episodic_workflow.root.a105.experimental_activity_evidence.literature.strategy.web_search.page.chunk.credit import field_counts
+source's representation the page commissioned, ``representation_content``), and the library's ``extraction_state``: the
+extraction records its units held (``held_record_refs``), the counts of the fields they state (stated, newly stated, asked;
+over every held record), the records that stand (``record_refs``), and what they already state and leave unstated.
 
-# The source record's field holding the artifact of each representation the page can commission (the source record's
-# custody keys: artifact_ref the original bytes, text_ref the text projection, stdout_ref and stderr_ref the retained streams).
-ARTIFACT_FIELD = {'original': 'artifact_ref', 'text': 'text_ref', 'stdout': 'stdout_ref', 'stderr': 'stderr_ref'}
+The input list (nano-graphrag: a leaf's input units are consumed, not re-read): ``input_list`` holds the one window of the
+commission, ``[[offset, offset + limit]]``, until it has been extracted once, and is empty after that."""
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
+    extraction_state, representation_content)
 
 
 def internal_summary(view):
     parent = view.parent_input
-    artifact = view.records.get(parent['source_ref']).get(ARTIFACT_FIELD[parent['representation']])
-    if artifact is None:
-        raise LookupError('literature_source_representation_unavailable:' + parent['representation'])
-    window = view.records.get_artifact(artifact)[parent['offset']:parent['offset'] + parent['limit']]
-    held = [unit['outcome'] for unit in view.outcomes]
-    record_refs = list(dict.fromkeys(outcome['record_ref'] for outcome in held))   # content-addressed: the same answer holds the same record
-    return {**parent, 'chunk': window.decode('utf-8'), 'chunk_bytes': len(window), 'record_refs': record_refs,
-            'counts': field_counts(view.records, record_refs), 'units_consumed': view.units_consumed}
+    content = representation_content(view.records, parent['source_ref'], parent['representation'])
+    window = content[parent['offset']:parent['offset'] + parent['limit']]
+    extracted = [outcome for outcome in view.outcomes if outcome['tool'] == 'extract']
+    return {**parent, 'chunk': window.decode('utf-8'), 'chunk_bytes': len(window),
+            **extraction_state(view.records, extracted), 'units_consumed': view.units_consumed,
+            'input_list': [] if extracted else [[parent['offset'], parent['offset'] + parent['limit']]]}

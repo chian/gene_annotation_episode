@@ -199,13 +199,23 @@ CHILD_DESCRIPTIONS = {
         'the question_context_refs (records you hold that give the question its context), the prior_search_refs '
         '(acquired search pages or other sources you hold), the objective of the investigation and optionally other '
         'records you hold that it needs. The child investigates which search approach is productive with the same '
-        'commissioned task and returns its interpretation and its credit.',
+        'commissioned task and returns its interpretation and its credit. The prior_search_refs are chosen only among '
+        'input_list (the held sources not yet handed to a strategy child); a source handed to the child is consumed '
+        'and no longer offered, and no strategy child is offered when input_list is empty.',
 }
-CHILD_INPUT = {STRATEGY: obj({
-    'objective': TEXT, 'question_context_refs': {'type': 'array', 'items': REF, 'uniqueItems': True},
-    'prior_search_refs': {'type': 'array', 'items': REF, 'uniqueItems': True},
-    'extra_record_refs': {'type': 'array', 'items': REF, 'uniqueItems': True}},
-    ['objective', 'question_context_refs', 'prior_search_refs'])}
+
+
+def child_input(slot, input_list):
+    """The arguments a child takes now: the prior searches are chosen among the input list only (the held sources no
+    strategy child has been handed); a handed-out source is consumed and offered no more."""
+    if slot != STRATEGY:
+        raise KeyError(slot)
+    return obj({
+        'objective': TEXT, 'question_context_refs': {'type': 'array', 'items': REF, 'uniqueItems': True},
+        'prior_search_refs': {'type': 'array', 'items': {'enum': list(input_list)}, 'uniqueItems': True,
+                              'minItems': 1, 'description': 'Unconsumed sources of input_list only'},
+        'extra_record_refs': {'type': 'array', 'items': REF, 'uniqueItems': True}},
+        ['objective', 'question_context_refs', 'prior_search_refs'])
 
 INSTRUCTIONS = (
     'You own an iterative scientific annotation improvement, not a tool itinerary.\n'
@@ -419,7 +429,9 @@ CHILD_GUIDANCE = ('\nA strategy child investigation (evidence_search_strategy_im
                   'you acquired or other sources you hold; it carries out the same commissioned task and returns its '
                   'interpretation and credit, shown to you as child_reports. A tool lookup alone is not a child '
                   'investigation. The literature, PMC, NCBI and experimental-database tools acquire sources; search '
-                  'results are discovery information.')
+                  'results are discovery information. The input list (context.input_list) is the held sources not yet '
+                  'handed to a strategy child; the prior searches are chosen only among it, a source handed to the '
+                  'child is consumed and offered no more, and no child is offered when the list is empty.')
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
                  'inspected source, its anchored reference subject, whether it is a useful lead for the original '
                  'question and the exact witnessed byte interval. A search hit or title alone verifies nothing.')
@@ -441,12 +453,13 @@ def instructions(*, knowledge, leads):
     return text + GRADING_SECTION + RETURN_GUIDANCE
 
 
-def offered(settings):
+def offered(settings, input_list):
     """The tools offered now: the access and acquisition tools (execution_estimate only with timing statistics
-    configured), then the reasoning commit, the report and the strategy child commission."""
+    configured), then the reasoning commit and the strategy child commission, which only while the input list is not
+    empty."""
     tools = [name for name in LIBRARY_NAMES
              if name != 'execution_estimate' or settings.get('tool_registry', {}).get('native_statistics') is not None]
-    return tools + ['reason', *CHILD_SLOTS]
+    return tools + ['reason', *(slot for slot in CHILD_SLOTS if input_list)]
 
 
 def reason_schema(commit_schema, leads):
@@ -461,30 +474,30 @@ def reason_schema(commit_schema, leads):
     return source_location_inputs(obj(properties, required=['commit']))
 
 
-def catalog(names, commit_schema, leads):
+def catalog(names, commit_schema, leads, input_list):
     """The tools the model is shown: name, description and input schema (the old catalog; every input schema
-    is projected through source_location_inputs)."""
+    is projected through source_location_inputs; a child takes only the sources of the input list)."""
     entries = []
     for name in names:
         if name == 'reason':
             entries.append({'name': 'reason', 'description': REASON_DESCRIPTION,
                             'input_schema': reason_schema(commit_schema, leads)})
         elif name in CHILD_SLOTS:
-            entries.append({'name': name, 'description': CHILD_DESCRIPTIONS[name], 'input_schema': CHILD_INPUT[name]})
+            entries.append({'name': name, 'description': CHILD_DESCRIPTIONS[name], 'input_schema': child_input(name, input_list)})
         else:
             entries.append({'name': name, 'description': DESCRIPTIONS[LIBRARY_NAMES[name]],
                             'input_schema': source_location_inputs(INPUT_SCHEMAS[LIBRARY_NAMES[name]])})
     return entries
 
 
-def selection_schema(names, commit_schema, leads):
+def selection_schema(names, commit_schema, leads, input_list):
     """What the model answers with: one tool and its arguments, or one child and its objective and source (the
     old action schema; the report_update of the old response is gone: the return is read by code from the sheets)."""
     return obj({'selection': {'anyOf': [
         obj({'kind': {'const': 'child'}, 'slot': {'const': entry['name']}, 'arguments': entry['input_schema']})
         if entry['name'] in CHILD_SLOTS else
         obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
-        for entry in catalog(names, commit_schema, leads)]}})
+        for entry in catalog(names, commit_schema, leads, input_list)]}})
 
 
 def admitted(name, arguments):
@@ -758,7 +771,7 @@ def decide(summary, feedback, ctx):
     read and acquisition outcomes, what its child returned, the interpretation so far, the latest image it looked at,
     the tools, the measured time and the yield table (the old decision state and inputs, over this episode's
     summary)."""
-    names = offered(ctx.settings)
+    names = offered(ctx.settings, summary['input_list'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
@@ -768,16 +781,18 @@ def decide(summary, feedback, ctx):
                'credit_binding': summary['credit_binding'], 'visual_evidence': summary['visual_evidence'],
                'last_local_outcome': summary['last_local_outcome'], 'held_record_refs': summary['held_record_refs'],
                'child_reports': summary['child_reports'],
+               'input_list': summary['input_list'], 'consumed_source_refs': summary['consumed_source_refs'],
                'assay_sheets': summary['assay_sheets'],
                'source_lead_dispositions': summary['source_lead_dispositions'],
-               'tools': catalog(names, summary['reasoning_schema'], leads),
+               'tools': catalog(names, summary['reasoning_schema'], leads, summary['input_list']),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads)))
+                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads,
+                                                            summary['input_list'])))
 
 
 def empty_commit(commit, commit_schema):
@@ -812,10 +827,10 @@ def action(response, summary, records, ctx):
     """Turn the model's answer into one tool call or one child commission, or reject it (no unit). An answer that
     selects no offered tool or child, arguments that do not fit its schema, an empty reasoning commit without a
     source lead, a report or a child record this episode does not hold is invalid."""
-    names = offered(ctx.settings)
+    names = offered(ctx.settings, summary['input_list'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads)
+    schema = selection_schema(names, commit_schema, leads, summary['input_list'])
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         if selection['kind'] == 'child':

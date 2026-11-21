@@ -27,6 +27,8 @@ def msg_to_child(slot, arguments, summary):
     custody = {entry['source_ref']: entry for entry in summary['literature_source_custody']}
     passed = [*strategy['question_context_refs'], summary['proposed_annotation_ref']]
     for reference in strategy['prior_search_refs']:
+        if reference not in summary['input_list']:      # a consumed or unheld source is not offered
+            raise KeyError(reference)
         passed.extend(custody[reference]['passed_record_refs'])
     assignment = {'version': 'strategy_assignment_v1', 'question_context_refs': strategy['question_context_refs'],
                   'prior_search_refs': strategy['prior_search_refs'], 'literature_task': task,

@@ -34,9 +34,32 @@ HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through
 LEADS = 'literature_source_lead_dispositions'
 
 
+def held_sources(view):
+    """The assigned sources and the sources the episode's own tool units produced, in order."""
+    references = list(view.parent_input['literature']['source_refs'])
+    for outcome in view.outcomes:
+        if outcome['kind'] == 'tool':
+            references.extend(outcome['produced'])
+    return [reference for reference in dict.fromkeys(references)
+            if view.records.get(reference).get('record_type') == 'source']
+
+
+def consumed_sources(view):
+    """The sources already handed to the strategy child as its prior search sources, in the order handed out
+    (nano-graphrag ``processed_chunk_ids``: an input handed out is consumed)."""
+    return list(dict.fromkeys(reference for outcome in view.outcomes if outcome['kind'] == 'child'
+                              for reference in outcome['arguments']['prior_search_refs']))
+
+
 def internal_summary(view):
     parent = view.parent_input
     literature, task = parent['literature'], parent['task']
+    # The input list (nano-graphrag's input-list paradigm): the held sources (assigned and acquired) no strategy child
+    # has been handed. Only these are offered to a commission; the list shrinks as a commission consumes its prior
+    # search sources and grows when an acquisition produces a new source. The yield estimator stops the episode when
+    # it is empty.
+    consumed = consumed_sources(view)
+    input_list = [reference for reference in held_sources(view) if reference not in consumed]
     outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
     last = outcomes[-1] if outcomes else None
     visual = (last['outcome'].get('visual_inputs', []) if last is not None and last['tool'] == 'image_view'
@@ -69,6 +92,7 @@ def internal_summary(view):
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],
         'question_context_refs': literature['question_context_refs'],
         'literature_source_custody': custody,
+        'input_list': input_list, 'consumed_source_refs': consumed,
         'own_literature_outcomes': outcome_page(outcomes, offset=0, limit=OUTCOME_PAGE_SIZE, tools=READ_TOOLS,
                                                 tool_of=lambda outcome: outcome.get('tool')),
         'literature_history_meaning': HISTORY_MEANING,

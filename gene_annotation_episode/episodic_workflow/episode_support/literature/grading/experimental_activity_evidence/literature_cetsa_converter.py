@@ -20,7 +20,7 @@ the effect (it is not on the nM scale). What the experiment does contribute is c
   statement             'interaction_detected' (a target engagement is stated), 'interaction_not_detected' (it is stated that there was none) or 'interaction_not_stated'
   support_refs          the spans of the fact that states it (empty when not stated)
   thermal_shift_celsius the shift of the melting temperature in degrees Celsius, or None
-The merger (literature_binding_merger.py) reads 'qualitative_effect' to take such a result into the row's interpretations and its own qualitative block; the merger's contract is not changed.
+The scoring reads 'qualitative_effect': its statement fixes the direction (literature_direction.py) and its support refs join the row (literature_row.py).
 
 Criteria mapping (CETSA criteria -> sheet criteria), declared in CRITERIA_MAP
 -----------------------------------------------------------------------------

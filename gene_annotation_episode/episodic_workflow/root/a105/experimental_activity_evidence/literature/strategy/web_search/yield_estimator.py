@@ -9,14 +9,13 @@ change of the resolution of the one commissioned candidate's subscoring sheet), 
 resolution going from 0 to 1; it is no longer ``credit_unit`` times the number of experiments. The cost is the old
 task cutoff and the parameters the old ``uncertainty_alpha``, now the episode's settings. The old
 ``validate_yield_bindings`` checks of the cutoff and alpha are the controllers' own."""
-from yield_control import AccumulationYieldController, CompletionYieldController
+from yield_control import ADAPTIVE_CONTROL, AccumulationYieldController, CompletionYieldController
 
 
 def yield_controller(initial_credit, settings, parent_input):
     task = parent_input['task']
     if task['kind'] == 'verified_source_leads':
-        return AccumulationYieldController('web_search', initial_credit, settings['cost'],
-                                           settings['parameters'])
+        return AccumulationYieldController('web_search', initial_credit, ADAPTIVE_CONTROL, items=None)
     # The credit of an a105_experiments commission is the change of the commissioned candidate's resolution earned by its
     # pages (credit.py): one candidate, so the target is one credit_unit.
     target = task['credit_unit']

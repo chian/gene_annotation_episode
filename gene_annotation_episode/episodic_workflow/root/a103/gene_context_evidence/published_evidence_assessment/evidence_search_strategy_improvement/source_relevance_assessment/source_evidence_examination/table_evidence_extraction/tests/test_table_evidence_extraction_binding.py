@@ -90,3 +90,30 @@ def test_the_controlled_report_is_admitted_and_the_returned_finding_is_read_by_c
     assert all(hasattr(spec, 'options') for spec in fields.values() if spec.type == 'text')
     empty = final.finding_of(None)
     assert final.RETURN_FORM.fields['finding'].form.admit(empty, 'finding') == empty
+
+
+def test_the_input_list_is_the_unread_selection_and_shrinks_as_it_is_read():
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.gene_context_evidence import (
+        literature_selection_input_list as inputs)
+    window = {'source_ref': 's', 'representation': 'original', 'offset': 100, 'limit': 100}
+
+    def read(offset, limit, **extra):
+        return {'kind': 'tool', 'tool': 'source_read', 'outcome': {'status': 'completed'},
+                'arguments': {'arguments': {'source_ref': 's', 'representation': 'original', 'offset': offset,
+                                            'limit': limit, **extra}}}
+    assert inputs.selection_input_list(window, []) == [[100, 200]]
+    outcomes = [read(120, 30), read(0, 10, source_ref='other')]
+    assert inputs.selection_input_list(window, outcomes) == [[100, 120], [150, 200]]
+    consumed = inputs.consumed_extents(window, outcomes)
+    assert inputs.already_read(window, consumed, 'source_read',
+                               {'source_ref': 's', 'representation': 'original', 'offset': 125, 'limit': 10})
+    assert not inputs.already_read(window, consumed, 'source_read',
+                                   {'source_ref': 's', 'representation': 'original', 'offset': 110, 'limit': 20})
+    report = {'kind': 'tool', 'tool': 'report', 'arguments': {}, 'outcome': {'status': 'reported', 'report': {
+        'readings': [{'source_ref': 's', 'kind': 'table_bytes', 'offset': 100, 'limit': 100}]}}}
+    assert inputs.selection_input_list(window, [report]) == []
+    sheet = {'source_ref': 's', 'sheet_key': 'k', 'offset': 0, 'limit': 20}
+    rows = {'kind': 'tool', 'tool': 'source_xlsx_rows', 'outcome': {'status': 'completed'},
+            'arguments': {'arguments': {'source_ref': 's', 'sheet_key': 'k', 'offset': 0, 'limit': 20}}}
+    assert inputs.selection_input_list(sheet, [rows]) == []
+    assert inputs.selection_input_list({**sheet, 'limit': 0}, []) == []

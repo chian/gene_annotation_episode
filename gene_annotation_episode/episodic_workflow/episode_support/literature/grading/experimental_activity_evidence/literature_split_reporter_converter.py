@@ -25,8 +25,8 @@ background nor the signal over the negative control is put into the effect (they
   statement                    'interaction_detected' (a signal above the controls is stated), 'interaction_not_detected' (no such signal is stated) or 'interaction_not_stated'
   support_refs                 the spans of the fact that states it (empty when not stated)
   signal_over_negative_control the stated fold of the signal over the negative control, or None
-The merger (literature_binding_merger.py) reads 'qualitative_effect' to take such a result into the row's interpretations and its own qualitative block; the
-merger's contract is not changed (it reads only 'statement' and 'support_refs').
+The scoring reads only 'statement' and 'support_refs' of 'qualitative_effect': the statement fixes the direction
+(literature_direction.py) and the support refs join the row (literature_row.py).
 
 Criteria mapping (split-reporter criteria -> sheet criteria), declared in CRITERIA_MAP
 --------------------------------------------------------------------------------------

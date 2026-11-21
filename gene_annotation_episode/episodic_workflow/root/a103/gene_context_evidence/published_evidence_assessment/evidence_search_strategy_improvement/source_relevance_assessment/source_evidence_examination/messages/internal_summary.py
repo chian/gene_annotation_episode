@@ -4,6 +4,8 @@ image view, what each child returned and the finding written so far (carried fro
 ``literature_assignment``, ``literature_source_custody``, ``own_literature_outcomes``,
 ``literature_history_meaning``; and from the old ``decision_state.py``: the visual evidence rule, the controller
 state and the report-lifecycle sentence)."""
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.gene_context_evidence.literature_input_list import (
+    input_list_state)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -57,6 +59,13 @@ def internal_summary(view):
             report = outcome['outcome']['report']
     credit_view = A103ContextCredit()(view.records, parent['scope'], known_record_refs=view.records.refs())
     controller = view.controller_state
+    # The page's input list (nano-graphrag's page state, ``literature_input_list``): the candidate input units of the
+    # source (table regions and prose chunks, byte intervals of the assigned representation); a candidate handed to a
+    # child is consumed and offered no more. The list shrinks as children are commissioned.
+    content = view.records.get_artifact(representation_artifact(source, parent['representation']))
+    inputs = input_list_state(content, [
+        {'slot': outcome['slot'], 'selection': outcome['arguments']['selection'],
+         'finding': outcome['report']['finding']} for outcome in view.outcomes if outcome['kind'] == 'child'])
     return {
         'assignment': parent,
         'source_custody': [{'source_ref': parent['source_ref'],
@@ -69,6 +78,14 @@ def internal_summary(view):
         'literature_history_meaning': HISTORY_MEANING,
         'visual_evidence': visual_evidence(view.outcomes),
         'child_reports': child_reports,
+        'source_bytes': len(content),
+        'content_candidates': inputs['candidates'],
+        'consumed_candidate_ids': inputs['consumed'],
+        'unconsumed_candidates': inputs['unconsumed'],
+        'remaining_windows': inputs['remaining_windows'],
+        # The page's input list: the unconsumed candidates in document order. The yield estimator stops the episode
+        # when it is empty.
+        'input_list': inputs['input_list'],
         'units_consumed': view.units_consumed,
         'action_yields': None if controller is None else yield_table(controller, forecast_unit='credit'),
         'report': report,

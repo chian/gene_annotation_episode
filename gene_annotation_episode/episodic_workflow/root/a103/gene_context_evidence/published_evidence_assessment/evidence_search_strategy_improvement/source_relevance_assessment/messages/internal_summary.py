@@ -35,10 +35,27 @@ def visual_evidence(outcomes):
     return []
 
 
+def consumed_sources(outcomes):
+    """The returned sources already worked through, in the order consumed (nano-graphrag ``processed_chunk_ids`` /
+    ``processed_row_ids``): a source handed to a child commission, and a source judged in a reported ``report``. A
+    consumed source is no longer offered."""
+    consumed = []
+    for outcome in outcomes:
+        if outcome['kind'] == 'child':
+            consumed.append(outcome['arguments']['source_ref'])
+        elif outcome['tool'] == 'report' and outcome['outcome']['status'] == 'reported':
+            consumed.extend(row['source_ref'] for row in outcome['outcome']['report']['judgements'])
+    return list(dict.fromkeys(consumed))
+
+
 def internal_summary(view):
     parent = view.parent_input
     catalog, report, child_reports = None, None, []
     knowledge, launch = None, None
+    consumed = consumed_sources(view.outcomes)
+    # The input list: the returned sources not yet consumed, in the assignment's order. It shrinks as a source is
+    # handed to the child or judged; the yield estimator stops the episode when it is empty.
+    input_list = [reference for reference in parent['search_result_refs'] if reference not in consumed]
     for outcome in view.outcomes:
         if outcome['kind'] == 'child':
             child_reports.append({'slot': outcome['slot'], 'objective': outcome['message']['objective'],
@@ -57,6 +74,8 @@ def internal_summary(view):
     return {
         'assignment': parent,
         'source_custody': custody,
+        'input_list': input_list,
+        'consumed_source_refs': consumed,
         'catalog': catalog,
         'tool_knowledge': knowledge,
         'launch_instruction_library': launch,

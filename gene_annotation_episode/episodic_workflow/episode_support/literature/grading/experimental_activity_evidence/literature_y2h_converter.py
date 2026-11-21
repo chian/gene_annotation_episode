@@ -13,7 +13,7 @@ effect_variance and effect_precision cells are unavailable, with the reason 'qua
   statement       'interaction_detected' (an interaction is stated), 'interaction_not_detected' (no interaction is stated) or 'interaction_not_stated'
   support_refs    the spans of the fact that states it (empty when not stated)
   reporter_fold   the beta-galactosidase activity of the pair over that of the negative control, or None
-The merger (literature_binding_merger.py) reads 'statement' and 'support_refs' of 'qualitative_effect'; the merger's contract is not changed.
+The scoring reads 'statement' (the direction, literature_direction.py) and 'support_refs' (the row, literature_row.py) of 'qualitative_effect'.
 
 Criteria mapping (Y2H criteria -> sheet criteria), declared in CRITERIA_MAP
 ---------------------------------------------------------------------------

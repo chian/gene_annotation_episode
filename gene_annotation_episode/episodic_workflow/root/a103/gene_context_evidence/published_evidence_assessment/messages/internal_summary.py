@@ -32,8 +32,22 @@ def visual_evidence(outcomes):
     return []
 
 
+def consumed_sources(outcomes):
+    """The source refs this episode has consumed, in the order consumed (nano-graphrag ``processed_chunk_ids`` /
+    ``processed_row_ids``): a source handed to the child as a prior-search source, and a source a reported assessment
+    names (a ``report`` unit that was admitted). A source consumed is no longer offered."""
+    consumed = []
+    for outcome in outcomes:
+        if outcome['kind'] == 'child':
+            consumed.extend(outcome['arguments']['prior_search_refs'])
+        elif outcome['tool'] == 'report' and outcome['outcome']['status'] == 'reported':
+            consumed.extend(item['source_ref'] for item in outcome['outcome']['report']['assessments'])
+    return list(dict.fromkeys(consumed))
+
+
 def internal_summary(view):
     parent = view.parent_input
+    consumed = consumed_sources(view.outcomes)
     catalog, report, child_reports = None, None, []
     for outcome in view.outcomes:
         if outcome['kind'] == 'child':
@@ -60,6 +74,11 @@ def internal_summary(view):
         'literature_history_meaning': HISTORY_MEANING,
         'visual_evidence': visual_evidence(view.outcomes),
         'child_reports': child_reports,
+        # The input list (nano-graphrag's input-list paradigm): the assigned sources not yet consumed, in assignment
+        # order. It shrinks as a source is handed to the child or assessed in a report; the yield estimator stops the
+        # episode when it is empty.
+        'consumed_source_refs': consumed,
+        'input_list': [reference for reference in parent['source_refs'] if reference not in consumed],
         'units_consumed': view.units_consumed,
         'action_yields': None if controller is None else yield_table(controller, forecast_unit='credit'),
         'report': report,

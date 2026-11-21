@@ -18,8 +18,8 @@ What the experiment does contribute is carried beside the sheet, in 'qualitative
   support_refs       the spans of the fact that states it (empty when not stated)
   fold_enrichment    the stated fold enrichment over the control (a number), or None
 and its interpretations (controls, regime, species, response definition, calibration, sampling) go into the sheet's interpretations like those of every other
-experiment. The merger (literature_binding_merger.py) reads 'qualitative_effect' to take such a result into the row's interpretations and its own
-qualitative block, without an effect to pool.
+experiment. The scoring reads 'qualitative_effect', without an effect to pool: its statement fixes the direction
+(literature_direction.py) and its support refs join the row (literature_row.py).
 
 Criteria mapping (pull-down criteria -> sheet criteria), declared in CRITERIA_MAP
 ---------------------------------------------------------------------------------

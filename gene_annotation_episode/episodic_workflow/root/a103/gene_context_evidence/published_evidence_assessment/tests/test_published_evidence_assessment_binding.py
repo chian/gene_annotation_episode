@@ -108,7 +108,8 @@ def test_action_turns_an_answer_into_a_tool_call_or_a_child_call_and_rejects_the
     from episode_runtime import ChildCall, Rejected, ToolCall
     task = importlib.import_module(MODULE + '.task')
     summary = {'assignment': {**literature(), 'message': {}},
-               'catalog': [{'name': task.ACCESS['source_read']}]}
+               'catalog': [{'name': task.ACCESS['source_read']}], 'consumed_source_refs': ['src_0'],
+               'input_list': []}
     scope = literature()['scope']
 
     def answer(operation, arguments):
@@ -119,7 +120,9 @@ def test_action_turns_an_answer_into_a_tool_call_or_a_child_call_and_rejects_the
     commission = {'objective': 'o', 'prior_search_refs': ['src_1']}
     assert task.action(answer('evidence_search_strategy_improvement', commission), summary, None, None) == ChildCall(
         'evidence_search_strategy_improvement', commission)
-    for bad in (answer('public_pmc_files', {}), {'operation': 'report', 'arguments_json': '[]'}, {}):
+    consumed = {'objective': 'o', 'prior_search_refs': ['src_0']}
+    for bad in (answer('public_pmc_files', {}), {'operation': 'report', 'arguments_json': '[]'}, {},
+                answer('evidence_search_strategy_improvement', consumed)):
         with pytest.raises(Rejected):
             task.action(bad, summary, None, None)
 

@@ -13,7 +13,7 @@ null_components. What the experiment does contribute is carried beside the sheet
                     No statement is added and the merger is not changed; the experiment type 'proximity' that travels with the result tells the reader which kind of statement it is.
   support_refs      the spans of the fact that states it (empty when not stated)
   fold_enrichment   the fold enrichment of the candidate over the control as a ratio, or None
-The merger (literature_binding_merger.py) reads 'qualitative_effect' to take such a result into the row's interpretations and its own qualitative block; the merger's contract is not changed.
+The scoring reads 'qualitative_effect': its statement fixes the direction (literature_direction.py) and its support refs join the row (literature_row.py).
 
 Criteria mapping (proximity criteria -> sheet criteria), declared in CRITERIA_MAP
 ---------------------------------------------------------------------------------

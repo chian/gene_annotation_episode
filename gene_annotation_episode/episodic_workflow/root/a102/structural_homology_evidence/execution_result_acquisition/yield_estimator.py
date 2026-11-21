@@ -11,17 +11,13 @@
 The ``<kind>`` is the resource kind of the handed-off job (``local`` or ``hpc``), which the commission names
 (``resource_kind``): ``yield_controller`` is handed only the parent input and no record. A profile is
 ``{'cutoff': cost, 'parameters': {...}}``; the cutoff is the controller's cost. Nothing else ends this Episode."""
-from yield_control import AccumulationYieldController, BoundedQualityYieldController
+from yield_control import AccumulationYieldController, BoundedQualityYieldController, FIXED_CONTROL
 
 
 def yield_controller(initial_credit, settings, parent_input):
     if any(length is None for _, length in parent_input['requested'].values()):
-        key = 'native_unbounded_' + parent_input['resource_kind']
-        profile = settings['results_yield_profiles'].get(key)
-        if profile is None:
-            raise ValueError('results_original_task_yield_profile_required:' + key)
-        return AccumulationYieldController('execution_result_acquisition', initial_credit, profile['cutoff'],
-                                           profile['parameters'])
+        return AccumulationYieldController('execution_result_acquisition', initial_credit, FIXED_CONTROL,
+                                           items=None)
     key = 'results:native_finite_' + parent_input['resource_kind']
     profile = settings['task_yield_profiles'].get(key)
     if profile is None:

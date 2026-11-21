@@ -205,7 +205,6 @@ REFERENCES = {'type': 'array', 'items': REF, 'uniqueItems': True}
 REPRESENTATIONS = ['text', 'original', 'stdout', 'stderr']
 PAGE = obj({'version': {'const': 'page_assignment_v1'}, 'source_ref': REF, 'representation': {'enum': REPRESENTATIONS},
             'artifact_ref': REF, 'question_context_refs': REFERENCES, 'prior_delivery_refs': REFERENCES})
-CHILD_ARGUMENTS = {'literature_page': obj({'page': PAGE})}
 
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
@@ -289,13 +288,21 @@ def catalog(names, summary):
     return entries
 
 
+def child_arguments(summary):
+    """The page child's arguments with ``source_ref`` restricted to the unconsumed sources of the input list."""
+    page = {**PAGE, 'properties': {**PAGE['properties'], 'source_ref': {'enum': list(summary['input_list'])}}}
+    return obj({'page': page})
+
+
 def selection_schema(names, summary):
     """What the model answers with: one tool and its arguments, or one child and its page (the old action
     schema: kinds ``tool`` and ``child``)."""
     tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
              for entry in catalog(names, summary)]
-    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': CHILD_ARGUMENTS[slot]})
-                for slot in CHILD_SLOTS]
+    # A child is offered only while an unconsumed source remains, and its page names one of them (nano-graphrag
+    # child options only for unconsumed inputs).
+    children = ([obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': child_arguments(summary)})
+                 for slot in CHILD_SLOTS] if summary['input_list'] else [])
     return obj({'selection': {'anyOf': tools + children}})
 
 
@@ -647,6 +654,8 @@ def decide(summary, feedback, ctx):
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
                'literature_source_custody': summary['literature_source_custody'],
+               'input_list': summary['input_list'],
+               'consumed_source_refs': summary['consumed_source_refs'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
                'child_reports': summary['child_reports'],

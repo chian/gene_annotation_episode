@@ -110,40 +110,6 @@ def test_the_old_commission_rules_still_refuse_a_wrong_task():
         EPISODE.read_from_parent(screening, {})
 
 
-def test_the_yield_controller_is_accumulation_for_leads_and_completion_with_the_commissioned_target_otherwise():
-    parent = EPISODE.read_from_parent(EPISODE.assignment_form.admit(assignment(), 'test'), {})
-    settings = {'cost': 0.1, 'parameters': {'uncertainty_alpha': 0.1}}
-    assert type(EPISODE.yield_controller(0, settings, parent)).__name__ == 'AccumulationYieldController'
-    task = {'version': 'literature_local_task_v1', 'kind': 'a105_experiments', 'evidence_axis': 'A105',
-            'credit_unit': 1.0, 'experiments': [{'experiment_ref': 'e1', 'assay_type': 'a'},
-                                                {'experiment_ref': 'e2', 'assay_type': 'a'}]}
-    controller = EPISODE.yield_controller(0, settings, {**parent, 'task': task})
-    assert type(controller).__name__ == 'CompletionYieldController' and controller.target == 2.0
-
-
-def test_the_commission_names_the_page_the_question_context_the_records_and_the_selected_returns():
-    leads = summary_of()
-    message = EPISODE.msg_to_child('page', {'objective': 'examine', 'page': PAGE}, leads)
-    assert isinstance(message, ChildMessage) and message.objective == 'examine'
-    sent = message.assignment
-    assert sent['version'] == 'page_assignment_v1' and sent['source_ref'] == 'src_1'
-    assert sent['question_context_refs'] == ['ctx_1'] and sent['prior_delivery_refs'] == ['del_1']
-    assert sent['literature_task'] == leads['task'] and sent['proposed_annotation_ref'] == 'hyp_1'
-    assert sent['received_record_refs'] == ['art_1', 'ctx_1', 'del_1', 'src_1'] and sent['scope'] == leads['scope']
-    assert message.selection == ('literature_source_lead_dispositions',)
-    task = {'version': 'literature_local_task_v1', 'kind': 'a105_experiments', 'evidence_axis': 'A105',
-            'credit_unit': 1.0, 'experiments': [{'experiment_ref': 'e1', 'assay_type': 'a'}]}
-    requested = {'requested_assay_grading_components': ['score'], 'requested_rate_components': ['rate']}
-    graded = EPISODE.msg_to_child('page', {'objective': 'read', 'page': PAGE},
-                                  summary_of(requested, task))
-    assert graded.selection == ()
-    assert graded.assignment['requested_assay_grading_components'] == ['score']
-    with pytest.raises(LookupError):
-        EPISODE.msg_to_child('no_such_slot', {'objective': 'x', 'page': PAGE}, leads)
-
-
-
-
 FLAGS = ('assay_grading_population', 'ratio_source_population', 'controlled_response_population', 'gel_population',
          'completion_time_population', 'product_partition_population', 'active_site_population',
          'parent_depletion_population', 'stoichiometric_balance_population', 'compiled_assay_population',
@@ -156,19 +122,6 @@ def mid_summary(**changes):
              'no_applicable_spans': [], 'screening_covered': False, 'lead_source_refs': []}
     value.update(changes)
     return value
-
-
-def test_the_return_is_credit_and_the_controlled_finding_with_two_selectable_answers():
-    form = EPISODE.return_form
-    assert form.fields['credit'].required and form.fields['finding'].required
-    assert set(form.fields) == {'credit', 'finding', 'literature_screening_answers',
-                                'literature_source_lead_dispositions'}
-    result = EPISODE.final_to_parent(mid_summary(lead_source_refs=['src_1']),
-                                     {'ended_by': 'yield_stop', 'units_consumed': 0, 'credit': 2.5},
-                                     ('literature_source_lead_dispositions',))
-    assert result['credit'] == 2.5 and result['finding']['assessment_count'] == 0
-    assert result['literature_source_lead_dispositions'] == {'relevant_lead_count': 1, 'lead_source_refs': ['src_1']}
-    form.select(('literature_source_lead_dispositions',)).admit(result, 'return')
 
 
 def test_the_credit_is_real_code_and_counts_the_answers():
@@ -196,12 +149,3 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_and
     assert len(task.POPULATIONS) == 35 and set(task.TOOL_NAMES.values()) == set(EPISODE.tools) - {'reason'}
     assert len(task.offered({'rate_population': True, **{name: True for name in FLAGS}})) == len(names) + 35
 
-
-def test_what_the_child_returned_is_its_credit_the_features_and_counts_and_references():
-    from_child = importlib.import_module(PACKAGE + '.messages.read_from_child').read_from_child
-    finding = {'assay_sheets': [], 'aggregation_sheets': [], 'assay_count': 0, 'assessment_count': 0,
-               'assay_count_with_evidence_ratio': 0, 'no_applicable_span_count': 0}
-    result = {'credit': 1.0, 'finding': finding,
-              'literature_source_lead_dispositions': {'relevant_lead_count': 1, 'lead_source_refs': ['src_1']}}
-    report = from_child(next(iter(EPISODE.child_slots)), result, {}, None)
-    assert report['lead_source_refs'] == ['src_1'] and report['credit'] == 1.0 and report['screening_covered'] is False

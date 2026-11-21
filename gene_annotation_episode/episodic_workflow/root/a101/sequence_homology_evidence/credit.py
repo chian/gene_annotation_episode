@@ -25,7 +25,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     SITE_WEIGHT, alignment_contexts, candidate_standing, candidate_table, dataset_bests, held_sources, matched_positions_taken,
     unconfirmed_matched_sites)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
-    SHEET_WEIGHT, cluster_test_ceiling, metacats_test_ceiling, msa_test_ceiling, test_ceiling)
+    CLUSTER_PSEUDO_COUNT, SHEET_WEIGHT, cluster_test_ceiling, metacats_test_ceiling, msa_test_ceiling, test_ceiling)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_metacats_search as metacats)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.msa_alignment_sheet import (
@@ -64,7 +64,7 @@ class A101DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v5', 'axis': 'A101',
+        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v6', 'axis': 'A101',
                 'measurement': 'subscore_of_one_references_alignments_over_the_scope_regions',
                 'subscore_version': VERSION,
                 'candidates': 'product_from_database_search_functions_profile_family_reference_sequence',
@@ -77,6 +77,8 @@ class A101DifferentialCredit:
                 'credit': 'sum_of_entry_scores_and_differentials', 'maximum': 'none',
                 'dataset': 'tests_of_one_dataset_earn_their_largest_test_credit_once_and_sheet_reads_largest_value',
                 'metacats': 'matched_conserved_sites_confirmed_significant_not_confirmed_before_times_site_weight_msa_family',
+                'cluster_evidence': 'pair_times_min_r_entry_times_own_r_r_is_n_over_n_plus_pseudo_count_value_stays_share',
+                'cluster_pseudo_count': CLUSTER_PSEUDO_COUNT,
                 'repeat': 'earns_nothing'}
 
 
@@ -221,28 +223,39 @@ def metacats_best(summary, records):
     return best
 
 
-def all_vs_all_value(standing, bests, query, search_ref, names):
+def all_vs_all_sizes(records, query, search_ref, names, per_candidate, rows=None):
+    """``{'product:<name>': n}``: each named candidate's sequences in the set of the commission (``all_vs_all_run.set_members``
+    plans it with ``plan_rows`` over the held search: each candidate's hits by value, one per distinct sequence, the first
+    ``per_candidate``). ``rows`` are the search's ``search_rows`` when the caller holds them."""
+    rows = search_rows(records, {'subject_refs': [query]}, search_ref) if rows is None else rows
+    plan = plan_rows(rows, list(names), per_candidate)
+    return {'product:' + name: sum(1 for row in plan if row['candidate'] == name) for name in names}
+
+
+def all_vs_all_value(standing, bests, query, search_ref, sizes):
     """The proved maximum of one commission of ``all_vs_all`` that the head's check accepts (see ``ceiling``):
-    ``differential_credit.cluster_test_ceiling`` over the named product candidates, less the dataset's (the search's) best test
-    credit so far (``dataset_bests``). ``standing`` and ``bests`` are ``candidate_standing`` and ``dataset_bests`` of the head."""
-    return cluster_test_ceiling(standing.get(query, {}), ['product:' + name for name in names],
-                                bests.get(query, {}).get(search_ref, 0.0))
+    ``differential_credit.cluster_test_ceiling`` over the named product candidates with their planned sizes (``all_vs_all_sizes``),
+    less the dataset's (the search's) best test credit so far (``dataset_bests``). ``standing`` and ``bests`` are
+    ``candidate_standing`` and ``dataset_bests`` of the head."""
+    return cluster_test_ceiling(standing.get(query, {}), sizes, bests.get(query, {}).get(search_ref, 0.0))
 
 
 def all_vs_all_best(summary, records):
     """``(ceiling, arguments)`` of the commission of ``all_vs_all`` with the largest proved maximum among those the head's check
     (``all_vs_all_run.check_commission``) would accept now: the query a protein sequence of the scope, a held graded search of it
     (``summary['msa_options']``), two or more of the candidates admitted from it, the candidate set of that search not
-    commissioned or graded before at any ``per_candidate`` (``commission_keys``: the same candidates again are a replicate). The arguments are ``{'query_ref', 'search_ref', 'candidates',
-    'per_candidate'}``; ``(0.0, None)`` when none can earn.
+    commissioned or graded before at any ``per_candidate`` (``commission_keys``: the same candidates again are a replicate). The
+    arguments are ``{'query_ref', 'search_ref', 'candidates', 'per_candidate'}``; ``(0.0, None)`` when none can earn.
 
-    Order (the first found wins a tie): the options in their order, larger candidate sets first, the sets of one size in the
-    option's order (``itertools.combinations``), at the largest ``per_candidate`` (the count does not
-    change the maximum: every named candidate has at least one sequence in the set). A size is skipped, and the search ends, when
-    no set of that size can beat the best found: the maximum of a set of ``k`` candidates is largest for the set with the most
-    unlisted candidates or the one with the most listed ones (``u + floor(l^2 / 4)`` is convex in ``u`` with ``u + l = k``), and
-    it does not grow as ``k`` falls."""
-    scope, low, high = summary['scope'], *ALL_VS_ALL_PER_CANDIDATE_RANGE
+    The maximum never falls when a candidate is added to a set (every term of the cluster test's credit is nonnegative, so the best
+    vertex of the smaller set, with the added candidate at any value, earns at least as much) or when ``per_candidate`` rises (a
+    candidate's planned sequences do not fall, so its evidence ``n / (n + 4)``, which weighs its entry and its pairs, does not fall).
+    So the commission is at the largest ``per_candidate``, and the best set is among the sets reached from the option's full set by
+    removing one candidate at a time through sets already commissioned (a set not commissioned is not reduced further: any set
+    inside it earns no more). Every set not commissioned lies inside one of these: walking down from the full set to it, the first
+    set not commissioned is reached. Order (the first found wins a tie): the options in their order, larger sets first, the sets
+    of one size in the option's order (``itertools.combinations``)."""
+    scope, high = summary['scope'], ALL_VS_ALL_PER_CANDIDATE_RANGE[1]
     options = [item for item in summary['msa_options'] if item['query_ref'] in scope['subject_refs']
                and summary['held_sequences'].get(item['query_ref']) == 'protein'
                and len(set(item['candidates'])) >= ALL_VS_ALL_MINIMUM_CANDIDATES]
@@ -253,23 +266,20 @@ def all_vs_all_best(summary, records):
     commissioned, best = all_vs_all_commission_keys(summary), (0.0, None)
     for item in options:
         query, search, names = item['query_ref'], item['search_ref'], list(dict.fromkeys(item['candidates']))
-        listed = lambda name: bool(standing.get(query, {}).get('product:' + name, {}).get('listed'))
-        unlisted_first, listed_first = sorted(names, key=listed), sorted(names, key=lambda name: not listed(name))
-        for size in range(len(names), ALL_VS_ALL_MINIMUM_CANDIDATES - 1, -1):
-            top = max(all_vs_all_value(standing, bests, query, search, unlisted_first[:size]),
-                      all_vs_all_value(standing, bests, query, search, listed_first[:size]))
-            if top <= best[0] + 1e-12:
-                break
-            for chosen in combinations(names, size):
-                value = all_vs_all_value(standing, bests, query, search, chosen)
-                if value <= best[0] + 1e-12:
-                    continue
+        rows, place = search_rows(records, {'subject_refs': [query]}, search), {name: i for i, name in enumerate(names)}
+        level = [tuple(names)]
+        while level:
+            below = set()
+            for chosen in level:
                 if (search, sorted(chosen)) in commissioned:
+                    if len(chosen) > ALL_VS_ALL_MINIMUM_CANDIDATES:
+                        below.update(combinations(chosen, len(chosen) - 1))
                     continue
-                count = high
-                best = (value, {'query_ref': query, 'search_ref': search, 'candidates': list(chosen), 'per_candidate': count})
-                if value >= top - 1e-12:
-                    break
+                value = all_vs_all_value(standing, bests, query, search,
+                                         all_vs_all_sizes(records, query, search, chosen, high, rows))
+                if value > best[0] + 1e-12:
+                    best = (value, {'query_ref': query, 'search_ref': search, 'candidates': list(chosen), 'per_candidate': high})
+            level = sorted(below, key=lambda chosen: [place[name] for name in chosen])
     return best
 
 
@@ -332,12 +342,13 @@ def outcome_pending(summary, records, position):
 # action's share of its ceiling only from ledger rows recorded under the same credit definition and the same version of
 # that action's ceiling (``yield_estimator.py``), so change an action's version whenever its ceiling's derivation changes,
 # and only that action's. Every offered action has one; an action without one raises
-# (``forecast_definition_missing_for_action``). ``all_vs_all`` v2: the cluster test's vertex bound minus the dataset best
-# (``cluster_test_ceiling``, commit b95a11691); every other action keeps the derivation it had under v1.
+# (``forecast_definition_missing_for_action``). ``all_vs_all`` v4: the cluster test's vertex bound with each pair weighed by
+# the weaker side's evidence and each entry by its own (``cluster_test_ceiling`` over the planned group sizes), minus the dataset
+# best; every other action keeps the derivation it had under v1.
 CEILING_VERSIONS = {'reason': 'a101_ceiling_v1', 'execute_selected_tool': 'a101_ceiling_v1',
                     'pairwise_blast': 'a101_ceiling_v1', 'hmmer_profile_scan': 'a101_ceiling_v1',
                     'bvbrc_blast': 'a101_ceiling_v1', 'bvbrc_msa': 'a101_ceiling_v1',
-                    'bvbrc_metacats': 'a101_ceiling_v1', 'all_vs_all': 'a101_ceiling_v3'}
+                    'bvbrc_metacats': 'a101_ceiling_v1', 'all_vs_all': 'a101_ceiling_v4'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
@@ -375,14 +386,15 @@ def ceiling(summary, records, action_type, arguments, ctx):
       groups in the alignment, so nothing about a pair already compared carries over.
     * ``all_vs_all``: derived from the current state, as a proved and tight maximum (the proof is in
       ``differential_credit.cluster_test_ceiling``). The cluster test of the commission's committed clustering measures each named
-      candidate once, its value ``w`` x the share of its sequences in the target's cluster, in [0, ``w``]; appended last, its own
-      test credit (the entries it admits plus ``|v_a - v_b|`` over the listed pairs) is convex on that box and largest at a vertex:
-      with ``l`` listed and ``u`` unlisted candidates named, ``w (u + floor(l^2 / 4))`` (half the listed at ``w``, half at 0). Its
-      dataset is the commission's search: all the clusterings of one dataset earn one test's credit together, the largest (the
+      candidate once, its value ``w`` x the share of its sequences in the target's cluster, in [0, ``w``], with its evidence
+      ``r = n / (n + 4)`` for its ``n`` sequences in the planned set (``all_vs_all_sizes``: the plan is deterministic); appended
+      last, its own test credit (``r`` x the entry of each candidate it admits plus ``min(r_a, r_b) |v_a - v_b|`` over the listed
+      pairs) is convex on that box and largest at a vertex: ``w`` (the sum of ``r`` over the unlisted candidates plus the largest
+      cut of the listed ones, a pair across the cut earning ``min(r_a, r_b)``). Its dataset is the commission's search: all the clusterings of one dataset earn one test's credit together, the largest (the
       owner: "You only can earn one credit for one dataset - you can improve a clustering to earn more, but you cannot
       replicate"), so the ceiling is that vertex bound minus the dataset's best test credit so far, floored at 0
       (``dataset_test_ceiling``; ``dataset_bests``). A commission identical to one already commissioned or already graded (the
-      search, the candidates, the sequences per candidate) earns 0. With ``arguments`` ``None``: the largest over every
+      search and the candidates, at any sequences per candidate) earns 0. With ``arguments`` ``None``: the largest over every
       commission the head's check would accept now (``all_vs_all_best``), and ``best_arguments`` names that commission.
     * ``bvbrc_metacats``: derived from the current state, as a proved maximum (proof in
       ``differential_credit.metacats_test_ceiling``). The owner: "It's wrong that it has no credit. i told you it gains credit by
@@ -443,7 +455,8 @@ def ceiling(summary, records, action_type, arguments, ctx):
         if (arguments['search_ref'], sorted(arguments['candidates'])) in all_vs_all_commission_keys(summary):
             return 0.0
         return all_vs_all_value(standing, dataset_bests(records, scope, held_sources(records)), arguments['query_ref'],
-                                arguments['search_ref'], arguments['candidates'])
+                                arguments['search_ref'], all_vs_all_sizes(records, arguments['query_ref'], arguments['search_ref'],
+                                                                          arguments['candidates'], arguments['per_candidate']))
     if action_type == 'bvbrc_msa':
         if arguments is None:
             return msa_best(summary, records)[0]

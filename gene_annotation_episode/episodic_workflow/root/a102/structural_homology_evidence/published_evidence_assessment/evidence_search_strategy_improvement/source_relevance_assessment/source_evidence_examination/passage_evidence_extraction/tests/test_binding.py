@@ -141,7 +141,8 @@ def test_the_model_is_offered_the_access_tools_structure_grading_and_reasoning_a
 
 def test_the_selection_schema_and_its_strict_transport_build_for_every_offered_tool():
     task = importlib.import_module(PACKAGE + '.task')
-    summary = {'task': LEADS_TASK, 'reasoning_schema': {'type': 'object', 'properties': {'terms': {'type': 'array'}},
+    summary = {'task': LEADS_TASK, 'input_list': [[0, 10]], 'literature_assignment': {'page': PAGE},
+               'reasoning_schema': {'type': 'object', 'properties': {'terms': {'type': 'array'}},
                                                          'required': ['terms'], 'additionalProperties': False}}
     names = task.offered({'tool_registry': {}})
     schema = task.selection_schema(names, summary)
@@ -149,3 +150,18 @@ def test_the_selection_schema_and_its_strict_transport_build_for_every_offered_t
     assert task.generation_schema(schema)
     reason = [entry for entry in task.catalog(names, summary) if entry['name'] == 'reason'][0]
     assert 'source_lead' in reason['input_schema']['required']
+
+
+def test_the_input_list_shrinks_as_passages_are_examined_or_yield_a_lead():
+    summary_file = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    spans = [WINDOW, {**WINDOW, 'offset': 20, 'limit': 10}]
+    examined = {'source_ref': 'src_1', 'representation': 'text', 'start': 0, 'end': 4}
+    assert summary_file.remaining_windows(spans, [], []) == [[0, 10], [20, 30]]
+    assert summary_file.remaining_windows(spans, [examined], []) == [[4, 10], [20, 30]]
+    assert summary_file.remaining_windows(spans, [{**examined, 'end': 10}], []) == [[20, 30]]
+    lead = {'witness': {'source_ref': 'src_1', 'representation': 'text', 'start': 21, 'end': 25}}
+    assert summary_file.remaining_windows(spans, [{**examined, 'end': 10}], [lead]) == []
+    task = importlib.import_module(PACKAGE + '.task')
+    summary = {'input_list': [[4, 10]], 'literature_assignment': {'page': PAGE}}
+    windows = task.processing_schema(summary)['properties']['examined']['items']['anyOf']
+    assert len(windows) == 1 and windows[0]['properties']['start']['minimum'] == 4

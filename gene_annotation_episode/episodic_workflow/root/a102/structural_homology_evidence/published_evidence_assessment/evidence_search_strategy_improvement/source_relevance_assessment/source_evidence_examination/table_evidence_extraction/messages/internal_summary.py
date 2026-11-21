@@ -47,6 +47,11 @@ def internal_summary(view):
         'no_applicable_evidence': [span for outcome in reasons if 'evidence_processing' in outcome
                                    for span in outcome['evidence_processing']['examined']],
     }
+    # The input list (nano-graphrag: a table region is consumed when it has been processed): the one selected table or
+    # window, until a typed reasoning commit about it has been accepted (the examination's answer); empty after that.
+    committed = any(outcome['outcome'].get('status') in ('completed', 'partial') for outcome in reasons)
+    summary['input_list'] = [] if committed else [parent['selection']]
+    summary['consumed_inputs'] = [parent['selection']] if committed else []
     summary['source_lead_dispositions'] = (lead_dispositions(summary, view.records)
                                            if task['kind'] == 'verified_source_leads' else [])
     summary['screening_answers'] = screening_answers(summary)

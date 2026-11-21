@@ -10,7 +10,7 @@ episode's entry of the run's ``continuation`` collaborator, ``{'cost': <old cuto
 The old estimator's raise on a decreasing information credit is in ``credit.py``. Nothing else ends this Episode."""
 import math
 
-from yield_control import AccumulationYieldController
+from yield_control import ADAPTIVE_CONTROL, AccumulationYieldController
 
 
 def yield_controller(initial_credit, settings, parent_input):
@@ -22,4 +22,4 @@ def yield_controller(initial_credit, settings, parent_input):
     alpha = parameters.get('uncertainty_alpha') if isinstance(parameters, dict) else None
     if isinstance(alpha, bool) or not isinstance(alpha, (int, float)) or not 0 < alpha < 1:
         raise ValueError('monitor_information_yield_values_invalid')
-    return AccumulationYieldController('monitor', initial_credit, cost, parameters)
+    return AccumulationYieldController('monitor', initial_credit, ADAPTIVE_CONTROL, items=None)

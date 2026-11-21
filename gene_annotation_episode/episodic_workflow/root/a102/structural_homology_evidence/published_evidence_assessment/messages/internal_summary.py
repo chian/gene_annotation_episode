@@ -59,8 +59,20 @@ def held_sources(view):
             if view.records.get(reference).get('record_type') == 'source']
 
 
+def consumed_sources(view):
+    """The sources already handed to a strategy child as its prior search sources, in the order handed out
+    (nano-graphrag ``processed_chunk_ids``: an input handed out is consumed)."""
+    return list(dict.fromkeys(reference for outcome in view.outcomes if outcome['kind'] == 'child'
+                              for reference in outcome['arguments']['strategy']['prior_search_refs']))
+
+
 def internal_summary(view):
     parent = view.parent_input
+    # The input list: the held sources (assigned and acquired) no strategy child has been handed. Only these are
+    # offered to a commission; the list shrinks as a commission consumes its prior search sources and grows when an
+    # acquisition produces a new source.
+    consumed = consumed_sources(view)
+    input_list = [reference for reference in held_sources(view) if reference not in consumed]
     task = parent['task']
     tool_outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
     reasons = [outcome['outcome'] for outcome in tool_outcomes if outcome['tool'] == 'reason']
@@ -82,6 +94,7 @@ def internal_summary(view):
         'literature_assignment': assignment,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],
+        'input_list': input_list, 'consumed_source_refs': consumed,
         'literature_source_custody': [source_custody(view.records, reference) for reference in held_sources(view)],
         'own_literature_outcomes': outcome_page(view.outcomes, offset=0, limit=OUTCOME_PAGE_SIZE,
                                                 tools=(*ACQUISITION_TOOLS, *READ_TOOLS),

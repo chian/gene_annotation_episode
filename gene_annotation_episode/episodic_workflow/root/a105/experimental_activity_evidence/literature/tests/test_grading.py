@@ -50,22 +50,3 @@ def test_the_first_decision_offers_reason_with_the_owners_grading_instructions(t
     assert summary['assay_sheets'] == [] and EPISODE.credit(summary, run.view.records) == 0
     world['store'].close()
 
-
-def test_the_reason_unit_saves_the_sheet_and_the_finding_is_its_features(tmp_path):
-    world = held_world(tmp_path)
-    run = linked_run(tmp_path, world, 'a105-upper-reason')
-    asyncio.run(run.next_decision())
-    summary = EPISODE()._summary(run.view)
-    unit = asyncio.run(run.run_unit(ToolCall('reason', {
-        'arguments': reasoning_selection(world), 'scope': world['scope'],
-        'assignment': summary['literature_assignment'], 'requested': summary['requested'],
-        'proposed_annotation_ref': world['proposed']})))
-    assert unit['outcome']['status'] == 'completed', json.dumps(unit['outcome'])[:2000]
-    sheet_ref = unit['outcome']['evidence_processing']['gradings'][0]['result']['sheet_ref']
-    summary = EPISODE()._summary(run.view)
-    features, = summary['assay_sheets']
-    assert features['sheet_refs'] == [sheet_ref] and features['effect_value'] == 12.5
-    assert EPISODE.credit(summary, run.view.records) == 1.0
-    result = EPISODE.final_to_parent(summary, {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 1.0}, ())
-    assert EPISODE.return_form.select(()).admit(result, 'return') == result
-    world['store'].close()

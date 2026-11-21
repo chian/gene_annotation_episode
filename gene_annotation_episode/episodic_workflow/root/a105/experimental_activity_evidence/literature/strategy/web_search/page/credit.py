@@ -20,7 +20,6 @@ sheet (``task.py`` ``reason``) calls it as its tail, the model never selects it 
 model call per sheet through ``ctx.model`` (recorded with the unit and replayed), answered in a closed schema (one of
 ``justified`` / ``unjustified`` per unknown field, validated by code) and saved as a record the Episode holds.
 ``credit`` stays a pure read of the summary and the held records."""
-from method_loop import UNBOUNDED
 import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
@@ -62,19 +61,24 @@ async def classify_unknowns(outcome, scope, windows, ctx):
 
 
 def credit(summary, records):
-    """For an ``a105_experiments`` task the credit is ``credit_unit`` times the credit of the page's latest sheet update
-    (A105 scoring paradigm, OWNER_DECISION 10: the update of the subscoring sheet produces the credit in the same step:
-    the change of the resolution R of the rows, then of 1 - mean R over the commissioned classes at the main level, for the
-    commissioned candidate). The page earns nothing before it has updated the sheet, and a repeat of a held fact earns
-    nothing. Every update regroups all the leaf records from the states the page was given, so the latest update is the
-    page's whole credit, not an increment. The other task kinds keep the library's classified task credit."""
+    """For an ``a105_experiments`` task the credit is ``credit_unit`` times the larger of two measures of progress: the
+    best credit of a leaf child, ``chunk``, ``table`` or ``report`` (the share of the asked fields it newly stated: the uncertainty it lessened) and the
+    credit of the page's latest sheet update (A105 scoring paradigm, OWNER_DECISION 10: the update of the subscoring sheet
+    produces the credit in the same step: the change of the resolution R of the rows, then of 1 - mean R over the
+    commissioned classes at the main level, for the commissioned candidate). A repeat of a held fact earns nothing. Every
+    update regroups all the leaf records from the states the page was given, so the latest update is the page's whole
+    sheet credit, not an increment. The other task kinds keep the library's classified task credit."""
     task = summary['task']
     if task['kind'] != 'a105_experiments':
         return classified_task_credit(summary, records)
     update = summary['sheet_update']
-    if update is None:
-        return 0.0
-    value = task['credit_unit'] * math.fsum(item['credit'] for item in update['credit'])
+    # The chunk's own progress counts: when a leaf extractor states fields of the experiment, the uncertainty about it has
+    # lessened, whether or not the sheet has been updated yet (the share of the asked fields it newly stated). The page's
+    # credit is the larger of that and the sheet update's credit, so it never falls when the update comes (EXPERT_REVIEW:
+    # owner's choice of how the two measures of progress combine).
+    leaf = max((child['credit'] for child in summary['child_returns']), default=0.0)   # every child is a leaf extractor
+    sheet = 0.0 if update is None else math.fsum(item['credit'] for item in update['credit'])
+    value = task['credit_unit'] * max(leaf, sheet)
     if not math.isfinite(value):
         raise ValueError('literature_finite_task_credit_required')
     return value
@@ -85,29 +89,26 @@ def ceiling(summary, records, action_type, arguments, ctx):
     every arguments that type can take now). The bound does not depend on the arguments or on ``ctx``. ``action_type`` is the name
     the runner records: a tool name (``task.TOOLS``) or a child slot (``task.CHILD_SLOTS``); any other name raises.
 
-    a105_experiments task. The credit is ``credit_unit`` times the credit of the latest ``update_sheet`` and reads
-    nothing else, so every action other than ``update_sheet`` (tools, ``reason``, the three children) has ceiling 0:
-    none of them changes ``summary['sheet_update']``. ``update_sheet`` recomputes the whole sheet from the held leaf
-    records and the base states; the credit of the one commissioned candidate is the mean over its commissioned classes of
-    R(after) - R(before), each R in [0, 1], so it is at most 1 and the credit at most ``credit_unit``. The rise is
-    therefore at most ``credit_unit`` minus the credit held now (not below 0). With no leaf record held the update
-    has nothing to add and a sheet update cannot exist yet, so the ceiling is 0.
+    a105_experiments task. The credit is ``credit_unit`` times the larger of the best leaf child credit and the latest
+    ``update_sheet`` credit, each at most 1: a leaf's credit is a share of its asked fields (newly stated / asked; for
+    ``report`` half a share of windows plus half such a share), and the sheet credit is the one axis of the one commissioned
+    candidate (``page_update`` is handed one claim and ``merge_main`` refuses any other candidate's row), the mean over its
+    commissioned classes of R(after) - R(before) with R in [0, 1]. So the credit is at most ``credit_unit`` and a rise is
+    at most ``credit_unit`` minus the credit held now (not below 0). This bound is ``yield_estimator.CEILING_VERSION``. Only a leaf child, ``chunk``, ``table`` or ``report`` (its credit is a share of fields stated), and
+    ``update_sheet`` (with a leaf record held; without one a sheet update cannot exist) can raise it; every other action
+    (tools, ``reason``) has ceiling 0.
 
     Every other task kind: the credit is ``credit_unit`` for each answer, and a task holds at most one answer
     (``verified_source_leads``: one per relevant source). The tail ``classify_unknowns`` of ``reason`` earns nothing for
-    these kinds.
+    these kinds. The children are leaf extractors: they return no lead, no screening and no sheet, so their ceiling is 0.
     verified_source_leads: one ``reason`` carries at most one source lead and so changes at most one source's
-    disposition: ceiling ``credit_unit``. ``table`` and ``report`` return their own list of relevant leads, which
-    has no finite bound known here (their own units can each add one, without limit): that ceiling is
-    ``UNBOUNDED``. ``chunk`` returns no lead, the access tools, population operations and ``update_sheet`` produce none:
-    0.
-    screening: answered once the commissioned spans are covered, by a ``reason`` declaring no applicable evidence or by
-    a ``table`` or ``report`` child returning them covered: ``credit_unit`` if not covered now, else 0; other actions
-    0 (``chunk`` always returns not covered).
+    disposition: ceiling ``credit_unit``; the access tools, population operations and ``update_sheet`` produce none: 0.
+    screening: answered once the commissioned spans are covered, by a ``reason`` declaring no applicable evidence:
+    ``credit_unit`` if not covered now, else 0; other actions 0.
     assessment, measurement, a105_assembly: one answer, a retained assessment, a quantity sheet or an aggregation
-    sheet, saved by ``reason``, a population operation or a ``table`` or ``report`` child: ``credit_unit`` times
-    (1 - answers held now) for those actions (a loose bound: it does not tell which of them can make this
-    kind's record), 0 for the access tools, ``chunk`` (leaf records only) and ``update_sheet``."""
+    sheet, saved by ``reason`` or a population operation: ``credit_unit`` times (1 - answers held now) for those actions
+    (a loose bound: it does not tell which of them can make this kind's record), 0 for the access tools, the children
+    and ``update_sheet``."""
     from . import task as episode_task
     if action_type not in episode_task.TOOLS and action_type not in episode_task.CHILD_SLOTS:
         raise ValueError('ceiling_unknown_action_type:' + repr(action_type))
@@ -115,18 +116,15 @@ def ceiling(summary, records, action_type, arguments, ctx):
     unit = task['credit_unit']
     populations = {episode_task.TOOL_NAMES[name] for name in episode_task.POPULATIONS}
     if task['kind'] == 'a105_experiments':
-        if action_type != 'update_sheet' or not summary['leaf_record_refs']:
-            return 0.0
-        return max(0.0, unit - credit(summary, records))
+        if action_type in episode_task.CHILD_SLOTS or (action_type == 'update_sheet'
+                                                      and summary['unused_leaf_record_refs']):
+            return max(0.0, unit - credit(summary, records))
+        return 0.0
     remaining = unit * (1 - len(answers(summary, records)))
     if task['kind'] == 'verified_source_leads':
-        if action_type == 'reason':
-            return float(unit)
-        if action_type in ('table', 'report'):
-            return UNBOUNDED   # a table or report child returns any number of relevant leads
-        return 0.0
+        return float(unit) if action_type == 'reason' else 0.0
     if task.get('answer_kind') == 'screening':
-        return float(remaining) if action_type in ('reason', 'table', 'report') else 0.0
-    if action_type in ('reason', 'table', 'report') or action_type in populations:
+        return float(remaining) if action_type == 'reason' else 0.0
+    if action_type == 'reason' or action_type in populations:
         return float(max(0.0, remaining))
     return 0.0

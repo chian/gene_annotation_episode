@@ -26,8 +26,7 @@ in 'qualitative_effect' ({'statement', 'support_refs', 'elution_shift_ml'}):
   statement          'interaction_detected' (a complex peak is stated), 'interaction_not_detected' (no complex peak is stated) or 'interaction_not_stated'
   support_refs       the spans of the fact that states it (empty when not stated)
   elution_shift_ml   the shift of the elution volume in mL (stated, or the difference of the two stated volumes), or None
-The merger (literature_binding_merger.py) reads 'qualitative_effect' to take such a result into the row's interpretations and its own qualitative block; the
-merger's contract is not changed.
+The scoring reads 'qualitative_effect': its statement fixes the direction (literature_direction.py) and its support refs join the row (literature_row.py).
 
 Criteria mapping (SEC criteria -> sheet criteria), declared in CRITERIA_MAP
 ---------------------------------------------------------------------------

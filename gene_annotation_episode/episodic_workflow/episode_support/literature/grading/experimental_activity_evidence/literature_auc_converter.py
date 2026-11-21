@@ -25,8 +25,7 @@ put into the effect (they are not on the nM scale). What the experiment does con
   statement                    'interaction_detected' (a complex is stated), 'interaction_not_detected' (no complex is stated) or 'interaction_not_stated'
   support_refs                 the spans of the fact that states it (empty when not stated)
   sedimentation_shift_percent  how many percent larger the s of the complex is than the s of the larger component alone, or None
-The merger (literature_binding_merger.py) reads 'qualitative_effect' to take such a result into the row's interpretations and its own qualitative block; the
-merger's contract is not changed.
+The scoring reads 'qualitative_effect': its statement fixes the direction (literature_direction.py) and its support refs join the row (literature_row.py).
 
 Criteria mapping (AUC criteria -> sheet criteria), declared in CRITERIA_MAP
 ---------------------------------------------------------------------------

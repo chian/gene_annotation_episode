@@ -35,9 +35,29 @@ def visual_evidence(outcomes):
     return []
 
 
+SEARCH_TOOLS = ('public_literature_search', 'public_ncbi_search')
+
+
+def candidate_sources(parent, outcomes, records):
+    """The candidate sources of the episode's input list (nano-graphrag's web search state: the search results and
+    candidate sources), in the order they arrived: the prior search results the assignment names, then the source
+    records the episode's own searches returned and this episode holds."""
+    found = list(parent['prior_search_refs'])
+    for outcome in outcomes:
+        if outcome['kind'] == 'tool' and outcome['tool'] in SEARCH_TOOLS:
+            found.extend(ref for ref in outcome['outcome'].get('record_refs', ())
+                         if ref.startswith('source_') and records.holds(ref))
+    return list(dict.fromkeys(found))
+
+
 def internal_summary(view):
     parent = view.parent_input
     catalog, report, child_reports = None, None, []
+    # The input list: candidate sources not yet handed to the assessment child. A source handed out in a commission
+    # is consumed and is no longer offered (nano-graphrag ``PageRunState.processed_chunk_ids`` / ``remaining_chunks``).
+    consumed = list(dict.fromkeys(ref for outcome in view.outcomes if outcome['kind'] == 'child'
+                                  for ref in outcome['arguments']['search_result_refs']))
+    input_list = [ref for ref in candidate_sources(parent, view.outcomes, view.records) if ref not in consumed]
     for outcome in view.outcomes:
         if outcome['kind'] == 'child':
             child_reports.append({'slot': outcome['slot'], 'objective': outcome['message']['objective'],
@@ -63,6 +83,8 @@ def internal_summary(view):
         'literature_history_meaning': HISTORY_MEANING,
         'visual_evidence': visual_evidence(view.outcomes),
         'child_reports': child_reports,
+        'input_list': input_list,
+        'consumed_search_result_refs': consumed,
         'units_consumed': view.units_consumed,
         'action_yields': None if controller is None else yield_table(controller, forecast_unit='credit'),
         'report': report,

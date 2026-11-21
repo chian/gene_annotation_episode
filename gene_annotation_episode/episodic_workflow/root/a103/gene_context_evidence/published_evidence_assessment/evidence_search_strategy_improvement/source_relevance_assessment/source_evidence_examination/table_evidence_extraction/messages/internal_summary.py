@@ -4,6 +4,8 @@ latest completed image view and the finding written so far (carried from the old
 ``literature_assignment``, ``literature_source_custody``, ``own_literature_outcomes``,
 ``literature_history_meaning``; and from the old ``decision_state.py``: the visual evidence rule, the controller
 state and the report-lifecycle sentence)."""
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.gene_context_evidence.literature_selection_input_list import (
+    consumed_extents, selection_input_list)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -67,6 +69,11 @@ def internal_summary(view):
                                                 tool_of=lambda outcome: outcome.get('tool')),
         'literature_history_meaning': HISTORY_MEANING,
         'visual_evidence': visual_evidence(view.outcomes),
+        # The input list (nano-graphrag): what remains unread of the commissioned selection, [[start, end]] in document
+        # order (bytes of the window, or matching rows of the sheet); an extent the episode has read or reported is
+        # consumed and is not offered again. Empty when all of it has been read; the yield estimator then ends it.
+        'input_list': selection_input_list(parent['selection'], view.outcomes),
+        'consumed_inputs': consumed_extents(parent['selection'], view.outcomes),
         'units_consumed': view.units_consumed,
         'action_yields': None if controller is None else yield_table(controller, forecast_unit='credit'),
         'report': report,

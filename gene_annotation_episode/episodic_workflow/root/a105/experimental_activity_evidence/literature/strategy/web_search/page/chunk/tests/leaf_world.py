@@ -31,7 +31,8 @@ def held_world(directory, text, offset, length, name='world', experiment_type='s
     proposed = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'binds',
                                         'value': {'type': 'term_ref', 'ref': reaction}, 'context_refs': []},
                          origin='reasoning')['id']
-    assignment = {'source_ref': source, 'passed_refs': [source, artifact], 'offset': offset, 'limit': length,
+    assignment = {'source_ref': source, 'passed_refs': [source, artifact], 'representation': 'text',
+                  'offset': offset, 'limit': length,
                   'experiment_type': experiment_type, 'proposed_annotation_ref': proposed}
     return {'directory': directory, 'store': store, 'source': source, 'artifact': artifact, 'proposed': proposed,
             'input': {'assignment': assignment, 'message': {}, 'selection': ['record_refs']}}

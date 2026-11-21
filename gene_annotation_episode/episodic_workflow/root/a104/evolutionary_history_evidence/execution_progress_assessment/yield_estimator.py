@@ -11,7 +11,7 @@ without them raises the same error. The cutoff is the controller's ``cost``. Not
 old estimator's refusal of a decreasing information credit is in ``credit.py``."""
 import math
 
-from yield_control import AccumulationYieldController
+from yield_control import AccumulationYieldController, ADAPTIVE_CONTROL
 
 
 def yield_controller(initial_credit, settings, parent_input):
@@ -23,4 +23,4 @@ def yield_controller(initial_credit, settings, parent_input):
     alpha = parameters.get('uncertainty_alpha') if isinstance(parameters, dict) else None
     if isinstance(alpha, bool) or not isinstance(alpha, (int, float)) or not 0 < alpha < 1:
         raise ValueError('monitor_information_yield_values_invalid')
-    return AccumulationYieldController('execution_progress_assessment', initial_credit, cost, parameters)
+    return AccumulationYieldController('execution_progress_assessment', initial_credit, ADAPTIVE_CONTROL, items=None)

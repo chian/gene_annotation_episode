@@ -5,6 +5,10 @@ and the typed answers the commissioned task asks for (carried from the old ``int
 ``literature_history_meaning``; the old reads of ``runtime_actions`` are the unit outcomes of ``view``)."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.structural_homology_evidence.literature_structure_cells import (
     current_sheet_features)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
+    representation_content)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_page_content import (
+    PROSE_CHUNK, page_candidates, report_windows)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -15,6 +19,36 @@ CUSTODY_KEYS = ('version', 'artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref
 HISTORY_MEANING = ('own_literature_outcomes is the latest page of your own tool outcomes, each with its arguments and '
                    'result, in unit order (total counts them all). Source '
                    'delivery does not establish scientific understanding.')
+
+
+def read_spans(outcomes, source_ref, representation):
+    """The byte spans of the page source's commissioned representation that completed ``source.read`` units delivered
+    (nano-graphrag ``PageRunState.processed_chunk_ids``: what was handed out is processed)."""
+    spans = []
+    for outcome in outcomes:
+        if outcome['kind'] != 'tool' or outcome['tool'] != 'source_read':
+            continue
+        result = outcome['outcome'].get('result')
+        if outcome['outcome']['status'] in ('completed', 'partial') and result is not None \
+                and result['source_ref'] == source_ref and result['representation'] == representation:
+            spans.append((result['start'], result['end']))
+    return spans
+
+
+def input_state(records, page, window, outcomes):
+    """The input list of the reading (nano-graphrag ``report_binding`` remaining chunks in document order): the source's
+    content candidates (prose chunks and table regions, all read as prose here) from the starting window on, the
+    ones fully inside a delivered ``source.read`` span consumed; ``input_list`` is the remaining candidates as
+    ``[[start, end], ...]`` windows in document order (``report_windows``), ``consumed_candidate_ids`` the consumed ones."""
+    content = representation_content(records, page['source_ref'], page['representation'])
+    candidates = [{**candidate, 'candidate_type': PROSE_CHUNK} for candidate in page_candidates(content)
+                  if candidate['end'] > window['offset']]
+    spans = read_spans(outcomes, page['source_ref'], page['representation'])
+    consumed = [candidate['candidate_id'] for candidate in candidates
+                if any(start <= candidate['start'] and candidate['end'] <= end for start, end in spans)]
+    remaining = {candidate['candidate_id'] for candidate in candidates} - set(consumed)
+    return {'input_list': report_windows(candidates, remaining), 'consumed_candidate_ids': consumed,
+            'input_candidates_total': len(candidates)}
 
 
 def internal_summary(view):
@@ -39,6 +73,7 @@ def internal_summary(view):
         'literature_history_meaning': HISTORY_MEANING,
         'credit_binding': credit_binding(parent['task_key'], task),
         'reasoning_schema': view.records.reasoning_schema(),
+        **input_state(view.records, page, parent['window'], view.outcomes),
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),

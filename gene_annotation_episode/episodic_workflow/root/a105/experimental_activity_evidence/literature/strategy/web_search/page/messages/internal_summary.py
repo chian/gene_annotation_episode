@@ -1,9 +1,13 @@
 """Where the examination stands, as a pure function of the loop's view: the assignment, custody of the page's
 source, the commission (the commissioner's objective, a value of this episode's fixed vocabulary, with this episode's
 meaning of it), the first page of the episode's own read outcomes, the goal plan, the controlled features of the current
-grading and aggregation sheets it saved and its children returned (each sheet its own entry), the returns of the
-children commissioned (their credit and the counts of their findings), and what the units answer for the
-commissioned task.
+grading and aggregation sheets it saved (each sheet its own entry), the returns of the leaf children commissioned (their
+credit, the counts of their findings, their window and experiment type), the byte length of the source and the windows the
+returned leaf records cover, the commissioned experiments of an a105_experiments task with their anchors, the leaf
+records they returned, and what the units answer for the commissioned task. The page's input list, ported from
+nano-graphrag's page (``literature_page_content``): the candidate input units of the source (table regions and prose
+chunks, byte offsets), the information needs of the commission, Jev's held assessment, which candidates the leaf
+children consumed, and the planner context over the unconsumed candidates only (``input_list``).
 
 Carried from the old ``internal_summary.py`` (``SourceSummary.decision_context``: ``literature_assignment``,
 ``literature_source_custody``, ``own_literature_outcomes``, ``literature_history_meaning``,
@@ -13,6 +17,17 @@ Carried from the old ``internal_summary.py`` (``SourceSummary.decision_context``
 and the unwired decision-prompt renderer that were parked here are deleted: the texts are in the library prompt
 files and reach the model through ``task.py``. The population display contexts of the old ``SourceSummary`` read the
 reader repositories' received-cell ledgers, which are custody now, and are not carried."""
+import json
+
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_identity_extraction import (
+    one_record_per_experiment)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
+    representation_content)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_claim import (
+    PARTNER_VALUE_TYPES, claim_of_hypothesis)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_page_content import (
+    CHUNK_SIZE, PROSE_CHUNK, SOURCE_TABLE, TABLE_PREVIEW_CHARS, candidate_text, information_needs, page_candidates,
+    planner_context, report_windows)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reasoning import (
     no_applicable_spans, relevant_lead_sources, screening_covered)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
@@ -20,7 +35,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_unknown_classification import (
     examined_windows)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_assay_grading_features import (
-    current_aggregation_features, current_sheet_features, merged_sheet_features)
+    current_aggregation_features, current_sheet_features)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -35,24 +50,98 @@ HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through
                    'delivery does not establish scientific understanding, absence or resolved science.')
 
 
+def commissioned_experiment(records, item):
+    """One experiment of an a105_experiments task with its anchor (start, end: the byte interval where the source
+    states it), read through custody from the held reference record the task names; a record without an anchor shows
+    ``anchor: None``."""
+    anchor = records.get(item['experiment_ref'])['anchor']
+    return {'experiment_ref': item['experiment_ref'], 'assay_type': item['assay_type'],
+            'anchor': None if anchor is None else {'start': anchor['start'], 'end': anchor['end']}}
+
+
+def text_preview(content, candidate):
+    """The exact beginning of a table candidate (nano-graphrag ``exact_table_beginning``)."""
+    return candidate_text(content, candidate)[:TABLE_PREVIEW_CHARS]
+
+
+def commission_claim(records, proposed):
+    """The claim (predicate, subject, partner) of the commissioned hypothesis, with the names read from the records it
+    points at (``literature_claim.claim_of_hypothesis``; a hypothesis that is no claim raises: the commission is wrong)."""
+    hypothesis = records.get(proposed)
+    refs = list(hypothesis['subject_refs'])
+    if hypothesis['value']['type'] in PARTNER_VALUE_TYPES:
+        refs.append(hypothesis['value']['ref'])
+    return claim_of_hypothesis(hypothesis, {ref: records.get(ref)['label'] for ref in refs})
+
+
+def consumed_candidates(children, candidates, records):
+    """The candidate ids a leaf child consumed, in the order consumed (nano-graphrag ``selected_source_table_ids`` and
+    ``processed_chunk_ids``): the candidate a ``chunk`` or ``table`` child was handed, when it was commissioned; and every
+    prose chunk lying inside a window a ``report`` child returned a leaf record of (the windows it actually read)."""
+    consumed = []
+    for outcome in children:
+        if outcome['slot'] in ('chunk', 'table'):
+            consumed.append(outcome['arguments']['candidate_id'])
+            continue
+        for ref in outcome['report']['record_refs']:
+            record = json.loads(records.get_artifact(ref))
+            consumed.extend(candidate['candidate_id'] for candidate in candidates
+                            if candidate['candidate_type'] == PROSE_CHUNK
+                            and record['span_start'] <= candidate['start'] and candidate['end'] <= record['span_end'])
+    return list(dict.fromkeys(consumed))
+
+
 def internal_summary(view):
     parent = view.parent_input
     page, task = parent['page'], parent['task']
     records = view.records
     source = records.get(page['source_ref'])
     children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
+    # The page's input list (nano-graphrag's page state): the candidate input units of its source (table regions and
+    # prose chunks), the information needs of the commission, Jev's held assessment of them (the outcome of the page's
+    # ``assess_content`` unit) and which candidates the leaf children consumed. Only unconsumed candidates are offered
+    # and shown with their probabilities; the list shrinks as each child consumes its candidate.
+    content = representation_content(records, page['source_ref'], page['representation'])
+    candidates = page_candidates(content)
+    consumed = consumed_candidates(children, candidates, records)
+    unconsumed = [candidate for candidate in candidates if candidate['candidate_id'] not in consumed]
+    claim = commission_claim(records, parent['proposed_annotation_ref'])
+    experiments = ([{'experiment_ref': item['experiment_ref'], 'assay_type': item['assay_type'],
+                     'label': records.get(item['experiment_ref'])['label']} for item in task['experiments']]
+                   if task['kind'] == 'a105_experiments' else [])
+    assessed = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool' and outcome['tool'] == 'assess_content']
+    assessment_ref = assessed[-1]['outcome']['assessment_ref'] if assessed else None
+    assessment = None if assessment_ref is None else json.loads(records.get_artifact(assessment_ref))
+    text = content.decode('utf-8')
     last = view.outcomes[-1] if view.outcomes else None
     spans = no_applicable_spans(view.outcomes, records)
     assignment = {**page, 'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref'],
                   **parent['requested']}
-    # The sheet: the leaf records the chunk children returned (distinct refs, in arrival order), the states the commissioner
-    # passed in, and the latest sheet update (each update regroups all the leaf records from those states, so the latest
-    # one is the page's whole result).
-    leaf_record_refs = list(dict.fromkeys(ref for outcome in children if outcome['slot'] in LEAF_SLOTS
-                                          for ref in outcome['report']['record_refs']))
-    updates = [outcome['outcome']['sheet_update'] for outcome in view.outcomes
-               if outcome['kind'] == 'tool' and outcome['tool'] == 'update_sheet']
-    sheet_update = updates[-1] if updates else None
+    # The sheet: the leaf records the leaf children (chunk, table, report) returned (in arrival order, one per experiment
+    # ref: two children that
+    # extracted the same window of the same kind return the same experiment ref, and the record stating the most fields
+    # stands, ties broken by the latest; a re-extraction supersedes, it is not merged), the states the commissioner passed
+    # in, and the latest sheet update (each update regroups all the leaf records from those states, so the latest one is the
+    # page's whole result).
+    leaf_record_refs = one_record_per_experiment([(ref, json.loads(records.get_artifact(ref)))
+                                                  for outcome in children if outcome['slot'] in LEAF_SLOTS
+                                                  for ref in outcome['report']['record_refs']])
+    updates = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool' and outcome['tool'] == 'update_sheet']
+    sheet_update = updates[-1]['outcome']['sheet_update'] if updates else None
+    # The leaf records the latest update did not group (all of them before any update): an update without one regroups
+    # the same records and changes nothing, so update_sheet is offered only while there is one.
+    grouped = set(updates[-1]['arguments']['leaf_record_refs']) if updates else set()
+    unused_leaf_record_refs = [ref for ref in leaf_record_refs if ref not in grouped]
+    # How long the source is (the bytes of the commissioned representation, read through custody) and which byte ranges the
+    # leaf children already read: each returned leaf record's own span (span_start, span_end: the bytes its window actually
+    # held, so a window past the end shows where it really stopped) with its experiment type and the child's slot.
+    source_bytes = len(content)
+    covered_windows = []
+    for outcome in children:
+        for ref in outcome['report']['record_refs']:
+            record = json.loads(records.get_artifact(ref))
+            covered_windows.append({'offset': record['span_start'], 'end': record['span_end'],
+                                    'experiment_type': record['experiment_type'], 'slot': outcome['slot']})
     return {
         'commission': {'objective': parent['objective']['value'], 'objective_meaning': parent['objective']['meaning'],
                        'task': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref']},
@@ -77,17 +166,48 @@ def internal_summary(view):
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),
+        # A leaf's return also says which candidate (chunk, table) or which windows (report) it was handed and which kind
+        # of experiment it extracted (the page's own commission), so the model sees what each child consumed.
         'child_returns': [{'slot': outcome['slot'], 'objective': outcome['message']['objective'],
-                           'credit': outcome['report']['credit'], **outcome['report']['counts']}
+                           'credit': outcome['report']['credit'], **outcome['report']['counts'],
+                           **({'windows': outcome['message']['assignment']['windows']} if outcome['slot'] == 'report'
+                              else {'candidate_id': outcome['arguments']['candidate_id']}),
+                           'experiment_type': outcome['arguments']['experiment_type']}
                           for outcome in children],
-        'assay_sheets': merged_sheet_features(current_sheet_features(records),
-                                              [features for outcome in children if outcome['slot'] not in LEAF_SLOTS
-                                               for features in outcome['report']['assay_sheets']]),
-        'aggregation_sheets': merged_sheet_features(current_aggregation_features(records),
-                                                    [features for outcome in children
-                                                     if outcome['slot'] not in LEAF_SLOTS
-                                                     for features in outcome['report']['aggregation_sheets']]),
-        'leaf_record_refs': leaf_record_refs, 'base_state_refs': parent['sheet_state_refs'],
+        'source_bytes': source_bytes, 'covered_windows': covered_windows,
+        # The candidates, the needs and Jev's assessment (nano-graphrag ``PageChildProposer``): ``jev_goal`` and
+        # ``jev_page_context`` are what the ``assess_content`` unit sends Jev with the needs; ``planner_context`` is the
+        # assessment over the unconsumed candidates only.
+        'content_candidates': candidates,
+        'consumed_candidate_ids': consumed,
+        'unconsumed_chunk_ids': [item['candidate_id'] for item in unconsumed if item['candidate_type'] == PROSE_CHUNK],
+        'unconsumed_table_ids': [item['candidate_id'] for item in unconsumed if item['candidate_type'] == SOURCE_TABLE],
+        'report_windows': report_windows(candidates, {item['candidate_id'] for item in unconsumed}),
+        'table_previews': {item['candidate_id']: text_preview(content, item) for item in unconsumed
+                           if item['candidate_type'] == SOURCE_TABLE},
+        'information_needs': information_needs(experiments, claim),
+        'jev_goal': {'objective': parent['objective']['value'], 'objective_meaning': parent['objective']['meaning'],
+                     'task_kind': task['kind'], 'claim': claim,
+                     'commissioned_experiments': [{'label': item['label'], 'assay_type': item['assay_type']}
+                                                  for item in experiments]},
+        'jev_page_context': {'source_ref': page['source_ref'], 'representation': page['representation'],
+                             'source_bytes': source_bytes,
+                             'prose_chunk_count': sum(item['candidate_type'] == PROSE_CHUNK for item in candidates),
+                             'source_table_count': sum(item['candidate_type'] == SOURCE_TABLE for item in candidates),
+                             'exact_beginning': text[:CHUNK_SIZE]},
+        'content_assessment_ref': assessment_ref,
+        'planner_context': (None if assessment is None
+                            else planner_context(assessment, [item['candidate_id'] for item in unconsumed])),
+        # The page's input list: what is still to be consumed, the unconsumed candidates in document order and the leaf
+        # records the latest update_sheet did not group. It shrinks as a child consumes a candidate and as an update
+        # groups the held leaf records.
+        'input_list': [item['candidate_id'] for item in unconsumed] + unused_leaf_record_refs,
+        'commissioned_experiments': ([commissioned_experiment(records, item) for item in task['experiments']]
+                                     if task['kind'] == 'a105_experiments' else []),
+        'assay_sheets': current_sheet_features(records),
+        'aggregation_sheets': current_aggregation_features(records),
+        'leaf_record_refs': leaf_record_refs, 'unused_leaf_record_refs': unused_leaf_record_refs,
+        'base_state_refs': parent['sheet_state_refs'],
         'sheet_update': sheet_update,
         'sheet_state_refs': sheet_update['sheet_state_refs'] if sheet_update is not None else parent['sheet_state_refs'],
         'no_applicable_spans': spans,

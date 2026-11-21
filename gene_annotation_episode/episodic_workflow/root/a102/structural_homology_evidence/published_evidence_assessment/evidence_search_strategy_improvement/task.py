@@ -198,12 +198,12 @@ REASON_DESCRIPTION = ('Commit one typed scientific reasoning payload about the e
 CHILD_DESCRIPTIONS = {
     'literature_search': ('Commission an investigation of which returned search results deserve examination for the '
                           'assigned question: its search names the records giving the question context and the '
-                          'returned search-result sources (sources this episode holds) to assess. The child can '
+                          'returned search-result sources (only sources of input_list, the held results not yet '
+                          'handed to a child; a result handed to a child is consumed and offered no more) to '
+                          'assess. The child can '
                           'read the sources itself or commission an examination of one selected source.'),
 }
 REFERENCES = {'type': 'array', 'items': REF, 'uniqueItems': True}
-SEARCH = obj({'question_context_refs': REFERENCES, 'search_result_refs': {**REFERENCES, 'minItems': 1}})
-CHILD_ARGUMENTS = {'literature_search': obj({'search': SEARCH})}
 
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
@@ -292,8 +292,13 @@ def selection_schema(names, summary):
     schema: kinds ``tool`` and ``child``)."""
     tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
              for entry in catalog(names, summary)]
-    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': CHILD_ARGUMENTS[slot]})
-                for slot in CHILD_SLOTS]
+    # A search child exists only while the input list holds an unconsumed search result, and may name only those.
+    unconsumed = [entry['source_ref'] for entry in summary['input_list']]
+    search = obj({'question_context_refs': REFERENCES,
+                  'search_result_refs': {'type': 'array', 'items': {'enum': unconsumed}, 'uniqueItems': True,
+                                        'minItems': 1}})
+    children = ([obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': obj({'search': search})})
+                 for slot in CHILD_SLOTS] if unconsumed else [])
     return obj({'selection': {'anyOf': tools + children}})
 
 
@@ -306,11 +311,13 @@ def artifact_of(source, representation):
     return source.get(representation + '_ref')
 
 
-def checked_search(search, records):
+def checked_search(search, records, unconsumed):
     """The model's chosen search assignment over the held records: every search result is a source this episode
     holds and every question-context record is held. A violation rejects the model's answer (it is not a check of
-    a commission: what ``msg_to_child`` builds is never checked)."""
+    a commission: what ``msg_to_child`` builds is never checked). A consumed search result is not offered."""
     for reference in search['search_result_refs']:
+        if reference not in unconsumed:
+            raise ContractError('literature_input_consumed_or_unlisted', detail={'reference': reference})
         if not records.holds(reference) or records.get(reference).get('record_type') != 'source':
             raise ContractError('literature_reference_unavailable', detail={'reference': reference,
                                                                             'namespace': 'source'})
@@ -637,7 +644,7 @@ def decide(summary, feedback, ctx):
     names = offered(ctx.settings)
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
-               'literature_source_custody': summary['literature_source_custody'],
+               'input_list': summary['input_list'], 'consumed_source_refs': summary['consumed_source_refs'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
                'child_reports': summary['child_reports'],
@@ -674,7 +681,7 @@ def action(response, summary, records, ctx):
         selection = value['selection']
         arguments = selection['arguments']
         if selection['kind'] == 'child':
-            checked_search(arguments['search'], records)
+            checked_search(arguments['search'], records, [entry['source_ref'] for entry in summary['input_list']])
             return ChildCall(selection['slot'], arguments)
         name = selection['tool']
         if name == 'reason':

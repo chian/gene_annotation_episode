@@ -11,6 +11,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.own_outco
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.gene_context_evidence.credit import (
     A103ContextCredit)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.gene_context_evidence.reading_windows import (
+    read_spans, reading_windows, remaining_windows)
 from .final_to_parent import finding_of
 
 OUTCOME_PAGE_SIZE = 8
@@ -37,7 +39,14 @@ def internal_summary(view):
             report = outcome['outcome']['report']
     credit_view = A103ContextCredit()(view.records, parent['scope'], known_record_refs=view.records.refs())
     controller = view.controller_state
+    # The input list (nano-graphrag ``ReportWindowSource``): the windows of the source from the assigned start, in
+    # document order, not yet read; a window whose bytes the completed reads of the page's artifact cover is consumed.
+    selection = parent['selection']
+    size = len(view.records.get_artifact(parent['page']['artifact_ref']))
+    windows = reading_windows(selection['offset'], selection['limit'], size)
+    input_list = remaining_windows(windows, read_spans(view.outcomes, parent['page']['artifact_ref']))
     return {'assignment': parent, 'source_custody': custody, 'catalog': catalog, 'report': report,
+            'input_list': input_list, 'windows_total': len(windows),
             'finding': finding_of(report),
             'completed_work_axis_results': {key: credit_view[key] for key in SHEET_KEYS},
             'own_outcomes': outcome_page(view.outcomes, offset=0, limit=OUTCOME_PAGE_SIZE, tools=READ_TOOLS,

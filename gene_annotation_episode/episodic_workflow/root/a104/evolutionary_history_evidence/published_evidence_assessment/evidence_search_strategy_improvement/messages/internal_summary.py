@@ -31,6 +31,29 @@ CUSTODY_KEYS = ('version', 'artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref
 HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through own_literature_outcomes. Source '
                    'delivery does not establish scientific understanding, absence or resolved science.')
 LEADS = 'literature_source_lead_dispositions'
+SEARCH_TOOLS = ('public_literature_search', 'public_ncbi_search', 'public_literature_sequence_identity')
+
+
+def search_results(view, prior_search_refs):
+    """The search results this episode works through, in the order they came (nano-graphrag ``web_search_binding``:
+    the buffered provider results): the prior searches it was given, then the sources its own search tools acquired
+    (each held ``source`` record a search tool unit returned), each once."""
+    refs = list(prior_search_refs)
+    for outcome in view.outcomes:
+        if outcome['kind'] == 'tool' and outcome['tool'] in SEARCH_TOOLS:
+            refs.extend(ref for ref in outcome['outcome'].get('record_refs', ())
+                        if view.records.holds(ref) and view.records.get(ref).get('uri') is not None)
+    return list(dict.fromkeys(refs))
+
+
+def consumed_search_results(view):
+    """The search results handed to a ``source_relevance_assessment`` child, in the order handed out (nano-graphrag
+    ``processed_row_ids`` / ``processed_chunk_ids``): a result handed out is consumed and is never offered again."""
+    consumed = []
+    for outcome in view.outcomes:
+        if outcome['kind'] == 'child':
+            consumed.extend(outcome['arguments']['search_result_refs'])
+    return list(dict.fromkeys(consumed))
 
 
 def internal_summary(view):
@@ -61,8 +84,13 @@ def internal_summary(view):
     for source_ref in strategy['prior_search_refs']:
         source = view.records.get(source_ref)
         custody.append({'source_ref': source_ref, **{key: source.get(key) for key in CUSTODY_KEYS}})
+    results = search_results(view, strategy['prior_search_refs'])
+    consumed = consumed_search_results(view)
     summary = {
         'assignment': parent,
+        'search_results': results,
+        'consumed_search_result_refs': consumed,
+        'input_list': [ref for ref in results if ref not in consumed],
         'literature_assignment': assignment,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],

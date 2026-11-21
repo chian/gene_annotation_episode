@@ -59,8 +59,20 @@ def held_sources(view):
             if view.records.get(reference).get('record_type') == 'source']
 
 
+def consumed_sources(view):
+    """The search results a search child was handed, in the order handed (nano-graphrag ``processed_chunk_ids``:
+    an input handed out is consumed and no longer offered)."""
+    handed = []
+    for outcome in view.outcomes:
+        if outcome['kind'] == 'child':
+            handed.extend(outcome['arguments']['search']['search_result_refs'])
+    return list(dict.fromkeys(handed))
+
+
 def internal_summary(view):
     parent = view.parent_input
+    consumed = consumed_sources(view)
+    custody = [source_custody(view.records, reference) for reference in held_sources(view)]
     task = parent['task']
     tool_outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
     reasons = [outcome['outcome'] for outcome in tool_outcomes if outcome['tool'] == 'reason']
@@ -82,7 +94,11 @@ def internal_summary(view):
         'literature_assignment': assignment,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],
-        'literature_source_custody': [source_custody(view.records, reference) for reference in held_sources(view)],
+        'literature_source_custody': custody,
+        # The input list: the held search results not yet handed to a search child, in custody order. A result
+        # handed to a child is consumed and offered no more; the yield estimator stops on an empty list.
+        'input_list': [entry for entry in custody if entry['source_ref'] not in consumed],
+        'consumed_source_refs': consumed,
         'own_literature_outcomes': outcome_page(view.outcomes, offset=0, limit=OUTCOME_PAGE_SIZE,
                                                 tools=(*ACQUISITION_TOOLS, *READ_TOOLS),
                                                 tool_of=lambda outcome: outcome.get('tool')),

@@ -180,7 +180,8 @@ def test_the_controller_follows_the_commissioned_task_kind():
 def test_the_acquisition_and_access_tools_and_the_page_child_are_in_the_selection_schema_and_its_strict_transport():
     task = importlib.import_module(PACKAGE + '.task')
     summary = {'task': LEADS_TASK, 'reasoning_schema': {'type': 'object', 'properties': {'terms': {'type': 'array'}},
-                                                         'required': ['terms'], 'additionalProperties': False}}
+                                                         'required': ['terms'], 'additionalProperties': False},
+               'input_list': ['src_1', 'src_2']}
     names = task.offered({})
     assert 'execution_estimate' not in names and names[-2:] == ['structure_populate', 'reason']
     for name in ('public_literature_search', 'public_literature_read', 'public_ncbi_search', 'public_pmc_asset',
@@ -190,4 +191,9 @@ def test_the_acquisition_and_access_tools_and_the_page_child_are_in_the_selectio
     schema = task.selection_schema(names, summary)
     assert len(schema['properties']['selection']['anyOf']) == len(names) + 1
     assert task.generation_schema(schema)
+    child = schema['properties']['selection']['anyOf'][-1]
+    assert child['properties']['arguments']['properties']['page']['properties']['source_ref'] == {
+        'enum': ['src_1', 'src_2']}
+    emptied = task.selection_schema(names, {**summary, 'input_list': []})
+    assert len(emptied['properties']['selection']['anyOf']) == len(names)
     assert task.INPUT_SCHEMAS['public.ncbi.search']['properties']['database'] == {'enum': ['pubmed']}

@@ -22,6 +22,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.laun
     INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.gene_context_evidence import (
     literature_investigation_prompt)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.gene_context_evidence.literature_selection_input_list import (
+    already_read)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
@@ -303,6 +305,9 @@ def present(summary, text):
                                      'selection': assignment['selection']})
     section(parts, 'Fixed scope', assignment['scope'])
     section(parts, 'Parent message', assignment['message'])
+    section(parts, 'Input list: the unread extents [start, end] of the selection, in document order (bytes of the '
+                   'window, or matching rows of the sheet); an extent already read or reported is consumed and is '
+                   'not offered again', summary['input_list'])
     section(parts, 'Callable supplied Sources', source_operands(summary['source_custody']))
     named = {operation: name for name, operation in ACCESS.items()}
     section(parts, 'Callable operations', [{'tool': named[entry['name']], 'operation': entry['name'],
@@ -324,7 +329,10 @@ def decide(summary, feedback, ctx):
     knowledge = None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()
     launch = None if launch_directory is None else LaunchInstructions(launch_directory).context()
     text = instructions(knowledge=knowledge, launch=launch)
+    if not summary['input_list']:
+        raise LookupError('reader_input_list_empty')   # the selection is all read: the yield estimator ends the episode
     context = {'task': present(summary, text), 'goal': GOAL, 'scope': summary['assignment']['scope'],
+               'input_list': summary['input_list'],
                'literature_source_custody': summary['source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
@@ -349,6 +357,9 @@ def action(response, summary, records, ctx):
         arguments = json.loads(response['arguments_json'])
         if not isinstance(arguments, dict):
             raise ValueError('arguments_json_must_be_a_JSON_object')
+        if name != 'report' and already_read(summary['assignment']['selection'], summary['consumed_inputs'],
+                                             name, arguments):
+            raise ValueError('input_already_consumed:' + name)
     except (KeyError, TypeError, ValueError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
     if name == 'report':

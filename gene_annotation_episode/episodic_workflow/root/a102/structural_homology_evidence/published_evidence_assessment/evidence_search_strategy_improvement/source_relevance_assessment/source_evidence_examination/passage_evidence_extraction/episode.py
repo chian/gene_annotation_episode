@@ -16,6 +16,7 @@ class PassageEvidenceExtraction(EpisodeBinding):
     services = task_file.SERVICES
     decide = task_file.decide
     action = task_file.action
+    offered_actions = task_file.offered_actions
     credit = credit_file.credit
     yield_controller = yield_file.yield_controller
     assignment_form = from_parent_file.ASSIGNMENT_FORM

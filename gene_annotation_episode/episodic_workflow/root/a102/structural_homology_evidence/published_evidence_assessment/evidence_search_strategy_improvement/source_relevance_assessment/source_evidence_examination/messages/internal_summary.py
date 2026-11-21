@@ -6,6 +6,10 @@ structure sheets it saved and its children returned (each its own entry), and th
 reads of ``runtime_report_attempts`` the child reports of ``view``)."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.structural_homology_evidence.literature_structure_cells import (
     current_sheet_features, merged_sheet_features)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
+    representation_content)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_page_content import (
+    PROSE_CHUNK, SOURCE_TABLE, TABLE_PREVIEW_CHARS, candidate_text, page_candidates, report_windows)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -18,10 +22,36 @@ HISTORY_MEANING = ('own_literature_outcomes is the latest page of your own tool 
                    'delivery does not establish scientific understanding.')
 
 
+def consumed_candidates(children, candidates):
+    """The candidate ids the reading children were handed, in the order handed out (nano-graphrag
+    ``selected_source_table_ids`` and ``processed_chunk_ids``), replayed over the child outcomes in unit order:
+    ``literature_table`` consumed its ``candidate_id``, ``literature_targeted`` its ``candidate_ids``, and
+    ``literature_ordered`` every prose chunk still unconsumed when it was commissioned (it reads the remaining
+    prose in document order)."""
+    consumed = []
+    for outcome in children:
+        arguments = outcome['arguments']
+        if outcome['slot'] == 'literature_table':
+            consumed.append(arguments['candidate_id'])
+        elif outcome['slot'] == 'literature_targeted':
+            consumed.extend(arguments['candidate_ids'])
+        else:
+            consumed.extend(item['candidate_id'] for item in candidates
+                            if item['candidate_type'] == PROSE_CHUNK and item['candidate_id'] not in consumed)
+    return list(dict.fromkeys(consumed))
+
+
 def internal_summary(view):
     parent = view.parent_input
     page, task = parent['page'], parent['task']
     source = view.records.get(page['source_ref'])
+    # The page's input list (nano-graphrag's page state): the candidate input units of the source (table regions and
+    # prose chunks, byte offsets of the commissioned representation) minus the ones the reading children were handed.
+    # Only unconsumed candidates are offered; the list shrinks as each child consumes its candidates.
+    content = representation_content(view.records, page['source_ref'], page['representation'])
+    candidates = page_candidates(content)
+    consumed = consumed_candidates([outcome for outcome in view.outcomes if outcome['kind'] == 'child'], candidates)
+    unconsumed = [item for item in candidates if item['candidate_id'] not in consumed]
     tool_outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
     reasons = [outcome['outcome'] for outcome in tool_outcomes if outcome['tool'] == 'reason']
     assignment = {**page, 'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref']}
@@ -45,8 +75,18 @@ def internal_summary(view):
         'own_literature_outcomes': outcome_page(tool_outcomes, offset=max(0, len(tool_outcomes) - OUTCOME_PAGE_SIZE),
                                                 limit=OUTCOME_PAGE_SIZE),
         'literature_history_meaning': HISTORY_MEANING,
-        'child_reports': [{'slot': outcome['slot'], 'selection': outcome['arguments']['selection'],
+        'child_reports': [{'slot': outcome['slot'], 'arguments': outcome['arguments'],
                            'report': outcome['report']} for outcome in view.outcomes if outcome['kind'] == 'child'],
+        'content_candidates': candidates,
+        'consumed_candidate_ids': consumed,
+        'unconsumed_table_ids': [item['candidate_id'] for item in unconsumed if item['candidate_type'] == SOURCE_TABLE],
+        'unconsumed_chunk_ids': [item['candidate_id'] for item in unconsumed if item['candidate_type'] == PROSE_CHUNK],
+        'report_windows': report_windows(candidates, {item['candidate_id'] for item in unconsumed}),
+        'table_previews': {item['candidate_id']: candidate_text(content, item)[:TABLE_PREVIEW_CHARS]
+                           for item in unconsumed if item['candidate_type'] == SOURCE_TABLE},
+        # The page's input list: the unconsumed candidate ids in document order; the yield estimator (another
+        # workflow's) stops the episode when it is empty.
+        'input_list': [item['candidate_id'] for item in unconsumed],
         'credit_binding': credit_binding(parent['task_key'], task),
         'reasoning_schema': view.records.reasoning_schema(),
         'units_consumed': view.units_consumed,

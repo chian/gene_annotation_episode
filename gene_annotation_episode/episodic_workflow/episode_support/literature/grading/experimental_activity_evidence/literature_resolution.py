@@ -36,7 +36,7 @@ def _check_status_degree(status, degree):
 
 def criterion_resolution(status, degree):
     """OWNER_DECISION 4 (weight rule): r_c for the WEIGHT. supported = its degree, or WEIGHT_NO_DEGREE (1.0) when the
-    degree is absent; conflicting = WEIGHT_CONFLICTING (0); unknown = WEIGHT_UNKNOWN (0). not_applicable is refused:
+    degree is absent; conflicting = WEIGHT_CONFLICTING (0); unknown = WEIGHT_UNKNOWN (0.9). not_applicable is refused:
     the caller drops it."""
     _check_status_degree(status, degree)
     if status == 'supported':
@@ -63,8 +63,8 @@ def row_weight(results):
     (4c, ROW_WEIGHT_RULE). `results` is a list of converted results (RESULT_FIELDS); each result's optional 'interpretations'
     ({criterion: {'status': CRITERION_STATUS, 'degree': 0..1 or null}}) gives its criteria; r_c is criterion_resolution.
     not_applicable criteria are dropped from the sum and from N_applicable. A result with no applicable criterion (all
-    not_applicable, or no interpretations) has w = WEIGHT_NO_APPLICABLE_CRITERIA (0.0, 4b): no reliability is established,
-    and 1.0 is never invented; an empty list gives 0.0."""
+    not_applicable, or no interpretations) has w = WEIGHT_NO_APPLICABLE_CRITERIA (= WEIGHT_UNKNOWN, 4b): an unvetted
+    measurement, and 1.0 is never invented; an empty list gives 0.0."""
     if ROW_WEIGHT_RULE != 'mean_of_per_result_weights':
         raise ValueError('ROW_WEIGHT_RULE changed: row_weight must follow it')
     results = list(results)

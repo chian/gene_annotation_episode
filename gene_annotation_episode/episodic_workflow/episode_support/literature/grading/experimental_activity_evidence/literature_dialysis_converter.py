@@ -24,8 +24,7 @@ into the effect (they are not on the nM scale). What the experiment does contrib
                      or 'interaction_not_stated'
   support_refs       the spans of the fact or of the stated fraction that decides it (empty when not stated)
   percent_bound      the percent of the total ligand that was bound (stated, or from the percent unbound, the fraction bound or the fraction unbound), or None
-The merger (literature_binding_merger.py) reads 'qualitative_effect' to take such a result into the row's interpretations and its own qualitative block; the
-merger's contract is not changed.
+The scoring reads 'qualitative_effect': its statement fixes the direction (literature_direction.py) and its support refs join the row (literature_row.py).
 
 Criteria mapping (dialysis criteria -> sheet criteria), declared in CRITERIA_MAP
 -------------------------------------------------------------------------------

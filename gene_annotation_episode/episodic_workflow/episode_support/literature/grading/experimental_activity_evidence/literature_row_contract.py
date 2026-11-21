@@ -68,7 +68,7 @@ REVISION OF 2026-11-20 (gaps the builders reported; OWNER_DECISIONS 15, 16, 17 a
   independence_known), the credit from credit_change(before, after): the two outputs (scores, credit) stay separate.
 * The persistent subscoring sheet holds a STATE (SHEET_STATE_FIELDS): the row, the member results it was built from, and a
   version. merge_row_state returns it; a repeat result (same result_ref) changes nothing and earns no credit.
-* The direction is computed directly from the effect (DIRECTION_FORMULA); the criteria never gate it.
+* The direction is computed directly from the effect (QUANTITATIVE_STRENGTH); the criteria never gate it.
 
 OWNER RULING OF 2026-11-20 ON THE TARGET MOLECULE (OWNER_DECISION 18; replaces partner_a_*/partner_b_*):
 
@@ -128,7 +128,8 @@ CRITERION_STATUS = ('supported', 'conflicting', 'unknown', 'not_applicable')
 QUALITATIVE_STATEMENT = ('interaction_detected', 'interaction_not_detected', 'interaction_not_stated')
 
 # Candidate claim predicates. OWNER_DECISION 1: a candidate carries predicate + subject_id + partner_id (annotation
-# IDs or names from a looked-up list) + an optional prediction pair with a unit.
+# IDs or names from a looked-up list). A claim names molecules only: it never carries a physical prediction or threshold
+# (owner ruling of 2026-11-21); the sheet grades the measurement itself (QUANTITATIVE_STRENGTH).
 # EXTENSION POINT: the predicates of the other seven classes (for example catalyses, transports, changes_amount) are
 # to be added here WITH THEIR CLASS, by the builder who adds that class; a predicate not listed for a class is refused.
 CLAIM_PREDICATES_BY_CLASS = {
@@ -142,9 +143,6 @@ CLAIM_FIELDS = {   # OWNER_DECISION 1
     'predicate': 'vocab CLAIM_PREDICATES',
     'subject_id': 'molecule name (is_name; compared after normalize_identity_ref): the target the annotation is about',
     'partner_id': 'molecule name or null (is_name; compared after normalize_identity_ref)',
-    'prediction_under_claim': 'number or null',
-    'prediction_under_alternative': 'number or null',
-    'prediction_unit': 'ref or null (required when a prediction is given)',
 }
 
 # Support classes and factors: not redefined here; imported from literature_quote_support (SUPPORTS, SUPPORT_DEGREE).
@@ -158,18 +156,18 @@ SUPPORT_FACTORS = SUPPORT_DEGREE
 # not_applicable dropped. Unknown lowers magnitude and never flips the sign.
 WEIGHT_NO_DEGREE = 1.0           # EXPERT_REVIEW: OWNER_DECISION 4: a supported criterion without a degree is fully supported.
 WEIGHT_CONFLICTING = 0.0         # EXPERT_REVIEW: OWNER_DECISION 4: a conflicting criterion gives the measurement no reliability for the weight.
-WEIGHT_UNKNOWN = 0.0             # EXPERT_REVIEW: OWNER_DECISION 4: an unknown criterion lowers the magnitude; it is never treated as opposition.
+WEIGHT_UNKNOWN = 0.9             # OWNER_DECISION 4 (owner, 2026-11-21: 0.9; real paragraphs decide about 1 criterion in 7, so an unknown criterion barely lowers the weight): it is never treated as opposition.
 # OWNER_DECISION 4 sub-rules (defaults; each EXPERT_REVIEW):
 #  (4a) a POOLED supported criterion of a row carries the MINIMUM degree over the experiments that gave one (the weakest
 #       experiment limits it; matches the pooled status rule 'supported only if all are supported').
-#  (4b) a result with NO applicable criterion (every criterion not_applicable, or none given) has weight 0.0; 1.0 is never
-#       invented.
+#  (4b) a result with NO applicable criterion (every criterion not_applicable, or none given) has the weight of an unvetted
+#       measurement, WEIGHT_UNKNOWN; 1.0 is never invented.
 #  (4c) the row weight is the MEAN of the per-result weights (each w = sum r_c / N_applicable).
 #  (4d) a group mean (support_g, opposition_g) divides by ALL members of the group: a member whose direction is unknown
 #       contributes 0 and dilutes its group.
 #  (4e) a group counts as KNOWN when ANY member's direction is known; the row is 'unknown' only when no group is known.
 WEIGHT_POOLED_DEGREE = 'minimum_over_experiments'            # OWNER_DECISION 4a
-WEIGHT_NO_APPLICABLE_CRITERIA = 0.0                          # OWNER_DECISION 4b
+WEIGHT_NO_APPLICABLE_CRITERIA = WEIGHT_UNKNOWN               # OWNER_DECISION 4b: unvetted, not unreliable
 ROW_WEIGHT_RULE = 'mean_of_per_result_weights'               # OWNER_DECISION 4c
 GROUP_MEAN_DIVIDES_BY = 'all_members'                        # OWNER_DECISION 4d
 GROUP_KNOWN_WHEN = 'any_member_direction_known'              # OWNER_DECISION 4e
@@ -185,29 +183,21 @@ CREDIT_QUESTIONS_EXTRA = ('direction_known', 'independence_known')   # OWNER_DEC
 # independence_known: r = 1 if no dependence group rests on an unknown preparation, else 0.
 MAIN_CREDIT_CLASSES = 'classes the parent commissioned for the candidate (N_k)'   # OWNER_DECISION 5
 
-# Direction of a quantitative result, OWNER_DECISIONS 3 and 15: COMPUTED DIRECTLY from the measured effect e, its variance
-# v and the candidate's prediction pair (a under the claim, b under the alternative), not through the old sheet's
-# grade_assay cell. Positive supports, negative opposes, exactly 0.0 neutral (a measured zero), the cases below unknown.
-# The criteria NEVER gate the direction: they only lower the weight (OWNER_DECISION 15).
-NEUTRAL_LOG_RATIO = 0.0                                        # OWNER_DECISION 3: the measured zero.
-DIRECTION_FORMULA = {   # OWNER_DECISION 15 (completes 3)
-    'model': 'plug-in normal: the effect is N(prediction, v), v the estimated variance of the effect',
-    'log_ratio_signed': '(a - b) * (e - b - (a - b) / 2) / v',   # = log N(e | a, v) - log N(e | b, v), natural log
-    'sign': {'positive': 'supports', 'negative': 'opposes', 'exactly_zero': 'neutral'},
-    'log_ratio': 'absolute value of the signed ratio (>= 0); exactly 0.0 for neutral',
-    'unknown_when': (
-        'effect_is_bounded_or_censored',
-        'no_effect_variance',
-        'effect_variance_not_positive',
-        'unit_mismatch_between_effect_and_prediction_or_variance',
-        'claim_gives_no_prediction_pair',
-        'result_not_finite',
-    ),
+# Direction of a quantitative result, OWNER_DECISIONS 3 and 15 (owner ruling of 2026-11-21: graded, sheet-side, from the
+# measurement itself; a claim supplies no prediction or threshold). The effect e (with its variance v when stated) gets a
+# STRENGTH s in [0, 1] on its experiment type's own scale (QUANTITATIVE_STRENGTH_ANCHORS, section 5b). s > 0 supports, s == 0
+# is neutral; log_ratio = QUALITATIVE_LOG_RATIO[type] * s. A quantitative result never opposes: opposition comes only from a
+# stated non-detection (the qualitative path). The criteria NEVER gate the direction: they only lower the weight.
+NEUTRAL_LOG_RATIO = 0.0                                        # OWNER_DECISION 3: strength 0 (at the type's noise end).
+QUANTITATIVE_STRENGTH = {   # OWNER_DECISION 15 (completes 3)
+    'position': 'p = (log10 e - log10 noise_end) / (log10 strong_end - log10 noise_end), clipped to [0, 1] (a smaller constant is stronger)',
+    'strength': 's = (3 p^2 - 2 p^3) / (1 + r^2), r = sqrt(v) / e the relative uncertainty; r = 0 when no variance is stated',
+    'direction': {'s > 0': 'supports', 's == 0': 'neutral'},
+    'log_ratio': 'QUALITATIVE_LOG_RATIO[experiment_type] * s',
+    'opposition': 'never from a quantitative effect; only a stated non-detection (qualitative path) opposes',
     'criteria_gate_direction': False,   # criteria statuses and degrees lower the WEIGHT only, never remove a direction
-    'unit_conversion': False,           # a unit that differs makes the direction unknown; no unit is converted here
+    'unit_conversion': False,           # the effect is in the anchors' unit and the variance in that unit squared; anything else is a converter error
 }
-DIRECTION_UNKNOWN_CASES = DIRECTION_FORMULA['unknown_when']
-CRITERIA_GATE_DIRECTION = DIRECTION_FORMULA['criteria_gate_direction']   # OWNER_DECISION 15
 
 # Effect support, OWNER_DECISIONS 8 and 17: the quote-support factor of the field that fixes the direction multiplies the
 # magnitude. The converted result carries it as direction_field_support (a support class); the factor is
@@ -264,8 +254,8 @@ OLD_PATH_DELETED = ('per_assertion_aggregate', 'reason_required_grading_for_a105
 # ---------------------------------------------------------------------------------------------------------------
 # (5) QUALITATIVE_LOG_RATIO: PROPOSALS, not facts. Natural-log-ratio units, the unit of grade_assay's
 # source_log_evidence_ratio and of tanh(overall / 2). Used for 'interaction_detected' (supports) and
-# 'interaction_not_detected' (opposes) alike (OWNER_DECISION 2). Rule: a positive result of a weaker assay carries
-# less evidence than a quantitative KD; every value here is deliberately below what a well-measured KD gives.
+# 'interaction_not_detected' (opposes) alike (OWNER_DECISION 2), and the per-type maximum of a quantitative result
+# (log_ratio = QUALITATIVE_LOG_RATIO[type] * strength, QUANTITATIVE_STRENGTH). Rule: a weaker assay carries less evidence.
 # Each value is an EXPERT_REVIEW constant for the owner or an expert to correct.
 # ---------------------------------------------------------------------------------------------------------------
 QUALITATIVE_LOG_RATIO = {   # OWNER_DECISION 2
@@ -294,6 +284,39 @@ QUALITATIVE_LOG_RATIO = {   # OWNER_DECISION 2
     'pla': 0.5,             # EXPERT_REVIEW: in-situ proximity ligation shows nearness within about 40 nm, not binding.
     'y2h': 0.4,             # EXPERT_REVIEW: heterologous nuclear reporter; high false-positive and false-negative rates.
     'split_reporter': 0.4,  # EXPERT_REVIEW: reporter reconstitution can occur through proximity or forced association; weakest direct-binding evidence.
+}
+
+# ---------------------------------------------------------------------------------------------------------------
+# (5b) QUANTITATIVE_STRENGTH_ANCHORS: the two ENDS of each type's gray scale for its measured effect (QUANTITATIVE_STRENGTH),
+# in the effect's own unit. Every converter that fills an effect reports a binding or engagement constant in nM (variance in
+# nM_squared), so each scale runs on log10 of the constant. noise_end: a constant this weak is indistinguishable from the
+# type's nonspecific background or detection floor (strength 0); strong_end: a constant this tight is the strongest signal
+# the type resolves (strength 1). They are never thresholds: every value between them gets a smoothly graded strength.
+# Types whose converters fill no effect (pulldown, y2h, pla, proximity: qualitative only) have no anchors.
+# Each pair is an EXPERT_REVIEW proposal for the owner or an expert to correct.
+# ---------------------------------------------------------------------------------------------------------------
+QUANTITATIVE_STRENGTH_ANCHORS = {   # OWNER_DECISION 15
+    'spr': {'quantity': 'KD', 'unit': 'nM', 'noise_end': 1e6, 'strong_end': 1.0},                # EXPERT_REVIEW: label-free; resolves fragments near 1 mM up to sub-nM kinetics.
+    'itc': {'quantity': 'KD', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 10.0},               # EXPERT_REVIEW: the c-window: weak heats are lost near 100 uM, tighter than about 10 nM is not resolved by direct titration.
+    'bli': {'quantity': 'KD', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 1.0},                # EXPERT_REVIEW: label-free like SPR, less sensitive for weak or small analytes.
+    'gci': {'quantity': 'KD', 'unit': 'nM', 'noise_end': 1e6, 'strong_end': 1.0},                # EXPERT_REVIEW: label-free like SPR.
+    'fp': {'quantity': 'KD or Ki', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 1.0},           # EXPERT_REVIEW: limited by the tracer concentration at the tight end.
+    'fret': {'quantity': 'KD or Ki', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 1.0},         # EXPERT_REVIEW: labelled titration; weak end limited by label concentration and inner-filter effects.
+    'mst': {'quantity': 'KD or Ki', 'unit': 'nM', 'noise_end': 1e6, 'strong_end': 1.0},          # EXPERT_REVIEW: solution titration resolves mM binders; tight end limited by the labelled partner.
+    'trp_quenching': {'quantity': 'KD', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 10.0},     # EXPERT_REVIEW: micromolar protein limits the tight end; inner-filter effects the weak end.
+    'fcs': {'quantity': 'KD', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 1.0},                # EXPERT_REVIEW: single-molecule concentrations resolve tight binding.
+    'elisa': {'quantity': 'KD or Ki', 'unit': 'nM', 'noise_end': 1e4, 'strong_end': 1.0},        # EXPERT_REVIEW: washed endpoint loses weak binders; avidity inflates the tight end.
+    'alphascreen': {'quantity': 'KD or Ki', 'unit': 'nM', 'noise_end': 1e4, 'strong_end': 1.0},  # EXPERT_REVIEW: bead-proximity signal; weak complexes fall below the background.
+    'radioligand': {'quantity': 'KD or Ki', 'unit': 'nM', 'noise_end': 1e4, 'strong_end': 0.1},  # EXPERT_REVIEW: picomolar radioligands; filtration loses fast-dissociating weak binders.
+    'spa': {'quantity': 'KD or Ki', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 0.1},          # EXPERT_REVIEW: radioligand without a wash keeps weaker binders than filtration.
+    'emsa': {'quantity': 'apparent KD', 'unit': 'nM', 'noise_end': 1e4, 'strong_end': 1.0},      # EXPERT_REVIEW: weak complexes dissociate in the gel.
+    'sec': {'quantity': 'KD', 'unit': 'nM', 'noise_end': 1e4, 'strong_end': 10.0},              # EXPERT_REVIEW: column dilution dissociates weak complexes.
+    'dialysis': {'quantity': 'KD or Ki', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 10.0},    # EXPERT_REVIEW: equilibrium partition is direct but coarse at both ends.
+    'auc': {'quantity': 'KD', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 10.0},              # EXPERT_REVIEW: sedimentation resolves micromolar to tens of nM.
+    'dsf': {'quantity': 'apparent KD', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 10.0},      # EXPERT_REVIEW: an apparent constant from a thermal dose response; indirect.
+    'cetsa': {'quantity': 'apparent engagement EC50', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 10.0},   # EXPERT_REVIEW: in-cell isothermal dose response; depends on heating temperature and time.
+    'bret': {'quantity': 'KD or Ki', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 1.0},         # EXPERT_REVIEW: cellular tracer engagement.
+    'split_reporter': {'quantity': 'KD', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 10.0},    # EXPERT_REVIEW: reporter reconstitution titration; coarse.
 }
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -695,9 +718,9 @@ SIGNATURES = {
     },
     'direction_and_ratio': {
         'module': 'literature_direction',
-        'args': ('converted', 'claim'),
+        'args': ('converted',),
         'returns': {'direction': 'DIRECTION', 'log_ratio': 'number >= 0 or null', 'effect_support': 'number 0..1 or null'},
-        'note': 'OWNER_DECISION 15: quantitative: computed directly by DIRECTION_FORMULA from effect, variance and the claim prediction pair (criteria never gate it); qualitative: QUALITATIVE_LOG_RATIO[type]; unstated: unknown with null; effect_support from converted direction_field_support (OWNER_DECISION 17), required when the direction is known',
+        'note': 'OWNER_DECISION 15: quantitative: a graded strength s in [0, 1] from the effect and its variance on the type scale (QUANTITATIVE_STRENGTH, QUANTITATIVE_STRENGTH_ANCHORS), supports when s > 0, neutral at 0, log_ratio = QUALITATIVE_LOG_RATIO[type] * s (criteria never gate it); qualitative: QUALITATIVE_LOG_RATIO[type]; unstated: unknown with null; called only for a direct result (the claim is not read); effect_support from converted direction_field_support (OWNER_DECISION 17), required when the direction is known',
     },
     'criterion_resolution': {
         'module': 'literature_resolution',
@@ -811,10 +834,10 @@ SIGNATURES = {
 # 13 and 14 (owner rulings of 2026-11-20). Decision 10 is rewritten by owner ruling A; it changes the 'where' of 6 and 11.
 # ---------------------------------------------------------------------------------------------------------------
 OWNER_DECISIONS = {
-    1: ('candidate claim shape', 'predicate vocabulary + subject_id + partner_id + optional prediction pair with a unit (CLAIM_FIELDS, CLAIM_PREDICATES_BY_CLASS)'),
-    2: ('evidence magnitude constants', 'expert-review QUALITATIVE_LOG_RATIO per experiment type in this file; proposals'),
-    3: ('direction of a quantitative result', "the claim's prediction pair and the measured effect with its variance give the signed natural-log ratio, computed directly (DIRECTION_FORMULA, decision 15); positive supports, negative opposes, exactly 0 neutral, the unknown cases of DIRECTION_FORMULA unknown (NEUTRAL_LOG_RATIO)"),
-    4: ('weight rule', 'w = sum r_c / N_applicable; unknown 0, conflicting 0 (WEIGHT_*). Sub-rules (defaults): 4a a pooled supported criterion carries the MINIMUM degree over the experiments (WEIGHT_POOLED_DEGREE); 4b a result with no applicable criterion has weight 0.0 (WEIGHT_NO_APPLICABLE_CRITERIA); 4c the row weight is the mean of the per-result weights (ROW_WEIGHT_RULE); 4d group means divide by ALL members, so an unknown-direction member dilutes its group (GROUP_MEAN_DIVIDES_BY); 4e a group counts as known when any member direction is known (GROUP_KNOWN_WHEN)'),
+    1: ('candidate claim shape', 'predicate vocabulary + subject_id + partner_id; a claim names molecules only and never carries a physical prediction or threshold (owner ruling of 2026-11-21) (CLAIM_FIELDS, CLAIM_PREDICATES_BY_CLASS)'),
+    2: ('evidence magnitude constants', 'expert-review QUALITATIVE_LOG_RATIO per experiment type in this file, also the per-type maximum of a quantitative result; proposals'),
+    3: ('direction of a quantitative result', 'graded, sheet-side, from the measurement itself (owner ruling of 2026-11-21): a strength s in [0, 1] on the type scale (QUANTITATIVE_STRENGTH, decision 15); s > 0 supports, s == 0 neutral (NEUTRAL_LOG_RATIO); a quantitative result never opposes'),
+    4: ('weight rule', 'w = sum r_c / N_applicable; unknown counts 0.9 (WEIGHT_UNKNOWN, owner 2026-11-21), conflicting 0 (WEIGHT_*). Sub-rules (defaults): 4a a pooled supported criterion carries the MINIMUM degree over the experiments (WEIGHT_POOLED_DEGREE); 4b a result with no applicable criterion has the unvetted weight WEIGHT_UNKNOWN (WEIGHT_NO_APPLICABLE_CRITERIA); 4c the row weight is the mean of the per-result weights (ROW_WEIGHT_RULE); 4d group means divide by ALL members, so an unknown-direction member dilutes its group (GROUP_MEAN_DIVIDES_BY); 4e a group counts as known when any member direction is known (GROUP_KNOWN_WHEN)'),
     5: ('credit definition and N_k', 'R = mean open-question resolution, conflicting resolved; N_k = classes the parent commissioned (RESOLVED_*, CREDIT_QUESTIONS_EXTRA)'),
     6: ('cross-class dependence at merger 2', 'collapse rows on a shared dataset_ref, then source_ref (CROSS_CLASS_DEPENDENCE_KEYS); runs at the page in the sheet-update step (decision 10); the collapse statistic is decision 16'),
     7: ('net or split at the axis-to-root boundary', 'one scalar tanh(net / 2), with support and opposition also returned (AXIS_SCALAR_DIVISOR, AXIS_FIELDS)'),
@@ -825,7 +848,7 @@ OWNER_DECISIONS = {
     12: ('delete the old path', 'delete the old per-assertion aggregate, reason/required_grading for A105, criteria_counts as credit (OLD_PATH_DELETED)'),
     13: ('identity rule (OWNER RULING D, 2026-11-20)', 'same source_ref and same experiment_type merge by default; split only on a conflict of an identity-bearing feature both sides state; per feature agree/conflict/missing, missing skipped; a measured-value difference is held conflicting inside one grader, never a split; a positive tie is recorded, not required (IDENTITY_MUST_MATCH, IDENTITY_DEFAULT, IDENTITY_FEATURES, IDENTITY_BEARING, IDENTITY_FIELDS, IDENTITY_COMPARISON, LEAF_RECORD_IDENTITY)'),
     14: ('immutable leaf records, derived grader grouping (OWNER RULINGS B, C, F, G, 2026-11-20)', 'one experiment = one grader (one version, one document, never spanning documents); leaf records are immutable; a grader is a code-derived, re-derivable grouping of them until the page finalizes; every grader is finalized and converted, incomplete ones included, except a source-grounded no-applicable-experiment finding; dedupe on absolute byte spans; a repeat earns no credit; the page assigns grader_ref (GRADER_REF_FIELDS, FINALIZE_WHEN, SKIPPED_GRADER, STATE_DEDUPE_KEY, LEAF_RECORDS_IMMUTABLE, GRADER_DERIVED_BY, CREDIT_FOR_REPEATED_FACT)'),
-    15: ('direction computed directly; criteria never gate it (revision of 2026-11-20; default)', 'the direction of a quantitative result is computed from the measured effect, its variance and the claim prediction pair by the plug-in normal log ratio (a - b) * (e - b - (a - b) / 2) / v; bounded effect, no variance, variance <= 0, unit mismatch and no prediction pair give unknown; criteria statuses and degrees lower the weight only and never remove a direction (DIRECTION_FORMULA, DIRECTION_UNKNOWN_CASES, CRITERIA_GATE_DIRECTION)'),
+    15: ('graded strength of a quantitative result; criteria never gate it (owner ruling of 2026-11-21)', 'the strength s = smoothstep(p) / (1 + r^2), p the position of log10 of the constant between the type noise end (0) and strong end (1), r = sqrt(v) / e the relative uncertainty (0 when not stated); the anchors are the ends of a gray scale, never thresholds; log_ratio = QUALITATIVE_LOG_RATIO[type] * s; criteria statuses and degrees lower the weight only and never remove a direction (QUANTITATIVE_STRENGTH, QUANTITATIVE_STRENGTH_ANCHORS)'),
     16: ('cross-class collapse rule (revision of 2026-11-20; default)', 'main rows sharing a dataset_ref (first) or else a source_ref collapse to one unit using the MEAN support and opposition over the unit rows of known status; a row with neither key is independent; the axis sums over units (CROSS_CLASS_COLLAPSE_RULE, MAIN_ROW_INPUT_KEYS, CROSS_CLASS_DEPENDENCE_KEYS)'),
     18: ('target molecule (OWNER RULING, 2026-11-20)', "every experimental grader has a target molecule: target_id (the molecule the assay is about), optional partner_id and partner_role replace partner_a_*/partner_b_*; bearing requires the target: no stated target gives bearing none (target_not_stated), no score, credit as the resolution says, and no 'target known' question is added; direct iff the class bears the predicate and the normalized target_id equals the claim subject_id and, when both sides state a partner, the partner_ids are equal; different_subject when the stated target differs from the subject or both partners are stated and differ; a result of a SYMMETRIC predicate (SYMMETRIC_PREDICATES, binds) whose target is the claim's partner and whose partner is the claim's subject IS direct (reason partner_route); the row and score still belong to the claim's subject; transfer stays unused; the target applies at every level: a converted result, every subscoring row, every main row (placeholders too), the axis score channel and the investigation_finding features carry the target_id the score is about (the scoring sheet IS the annotation score, one per candidate per target; credit stays a separate quantity); target_id and partner_id are identity-bearing, compared by equality after casefold and whitespace collapse, missing skipped, agreeing is a positive tie; every identity number is stated by the leaf form in the field's canonical unit (IDENTITY_FIELDS, IDENTITY_FEATURES, POSITIVE_TIE_FEATURES, IDENTITY_REF_NORMALIZATION)"),
     17: ('effect support (revision of 2026-11-20; default)', 'a converted result carries direction_field_support, copied from the support class of the field that fixes the direction: the KD operand for a quantitative result, the field(s) the statement derives from for a qualitative one, the weakest if several; effect_support = SUPPORT_FACTORS[direction_field_support] (EFFECT_SUPPORT_FIELD, SUPPORT_WEAKEST_ORDER, RESULT_FIELDS.direction_field_support)'),

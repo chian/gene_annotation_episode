@@ -169,27 +169,40 @@ REASON_DESCRIPTION = ('Commit one typed scientific reasoning payload about the s
                       'examined byte spans, that the examined passages contain no applicable evidence; '
                       'missing access is not absence.')
 CHILD_DESCRIPTIONS = {
-    'literature_table': ('Commission an investigation of one selected table or sheet of this source: either a table '
-                         'selector (sheet_key, row offset and limit, header_row, optional where) or an exact '
-                         'original-source byte window. XLSX cells keep their native identity; article XML tables '
-                         'are read through exact original-source windows.'),
-    'literature_ordered': ('Commission an investigation of this source in document order from one starting '
-                           'window, following the returned UTF-8 byte continuations.'),
-    'literature_targeted': ('Commission an investigation of one or more supplied source-bound passages (windows) '
-                            'of this source, with their neighbouring context.'),
+    'literature_table': ('Commission an investigation of ONE unconsumed table region of this source '
+                         '(candidate_id of context.unconsumed_table_ids). The region is consumed.'),
+    'literature_ordered': ('Commission an investigation of the remaining prose of this source in document order, '
+                           'from the first remaining window (context.report_windows), following the returned UTF-8 '
+                           'byte continuations. Every prose chunk still unconsumed is consumed.'),
+    'literature_targeted': ('Commission an investigation of one or more UNCONSUMED candidates of this source '
+                            '(candidate_ids from context.input_list: table regions or prose chunks), each read with '
+                            'its neighbouring context. The candidates are consumed.'),
 }
-WINDOW = obj({'source_ref': REF, 'representation': {'enum': ['text', 'original', 'stdout', 'stderr']},
-              'offset': INTEGER, 'limit': POSITIVE})
-TABLE = obj({'source_ref': REF, 'sheet_key': TEXT, 'offset': INTEGER, 'limit': INTEGER,
-             'header_row': {'type': ['integer', 'null'], 'minimum': 1},
-             'where': {**obj({'column': {'type': ['string', 'null'], 'pattern': '^[A-Z]+$'},
-                              'match': {'enum': ['equals', 'contains']}, 'value': TEXT,
-                              'case_sensitive': {'type': 'boolean'}}), 'type': ['object', 'null']}})
-CHILD_ARGUMENTS = {
-    'literature_table': obj({'selection': {'anyOf': [TABLE, WINDOW]}}),
-    'literature_ordered': obj({'selection': WINDOW}),
-    'literature_targeted': obj({'selection': obj({'spans': {'type': 'array', 'minItems': 1, 'items': WINDOW}})}),
-}
+INPUT_LIST_GUIDANCE = (
+    '\nTHE PAGE\'S INPUT LIST: the source is split into candidate input units, every table region and every prose chunk, '
+    'each with its byte interval (context.content_candidates). context.input_list is what is still to be worked '
+    'through: the candidates not yet consumed, in document order. A candidate handed to a reading child is consumed: it '
+    'is not offered again, and a reading child is offered only while an unconsumed candidate of its kind remains. '
+    'Source tools (reads, locates) do not consume.\n')
+
+
+def available_slots(summary):
+    """The reading children valid now (nano-graphrag ``PageChildProposer._valid_children``): table while an
+    unconsumed table region remains, ordered while a remaining prose window can be read, targeted while any
+    candidate is unconsumed."""
+    return [slot for slot in CHILD_SLOTS
+            if summary[{'literature_table': 'unconsumed_table_ids', 'literature_ordered': 'report_windows',
+                        'literature_targeted': 'input_list'}[slot]]]
+
+
+def child_arguments(slot, summary):
+    """The arguments a child takes now: only unconsumed candidates of the page's input list can be named."""
+    if slot == 'literature_table':
+        return obj({'candidate_id': {'enum': list(summary['unconsumed_table_ids'])}})
+    if slot == 'literature_ordered':
+        return obj({})
+    return obj({'candidate_ids': {'type': 'array', 'minItems': 1, 'uniqueItems': True,
+                                  'items': {'enum': list(summary['input_list'])}}})
 
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
@@ -228,7 +241,7 @@ def instructions(*, knowledge):
     text = replace_span(text, HISTORY_START, HISTORY_END, HISTORY_GUIDANCE)
     text += '\n' + GOAL
     text += '\n' + REASONING_COMMIT_REQUIREMENT
-    text += STRUCTURE_SECTION
+    text += STRUCTURE_SECTION + INPUT_LIST_GUIDANCE
     if knowledge is not None:
         text += KNOWLEDGE_INSTRUCTIONS
     return text + TAIL_GUIDANCE
@@ -277,8 +290,8 @@ def selection_schema(names, summary):
     schema: kinds ``tool`` and ``child``)."""
     tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
              for entry in catalog(names, summary)]
-    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': CHILD_ARGUMENTS[slot]})
-                for slot in CHILD_SLOTS]
+    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': child_arguments(slot, summary)})
+                for slot in available_slots(summary)]
     return obj({'selection': {'anyOf': tools + children}})
 
 
@@ -526,7 +539,11 @@ def decide(summary, feedback, ctx):
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
                'child_reports': summary['child_reports'],
-               'children': [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot]} for slot in CHILD_SLOTS],
+               'children': [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot]}
+                            for slot in available_slots(summary)],
+               'content_candidates': summary['content_candidates'], 'input_list': summary['input_list'],
+               'consumed_candidate_ids': summary['consumed_candidate_ids'],
+               'table_previews': summary['table_previews'], 'report_windows': summary['report_windows'],
                'credit_binding': summary['credit_binding'],
                'structure_sheets': summary['structure_sheets'],
                'tools': catalog(names, summary), 'time_accounting': time_accounting(ctx.clock.progress_time)}

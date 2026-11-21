@@ -1,14 +1,12 @@
-"""Continuation by the commissioned task. Verified source leads accumulate without a finite target. Every other
-task is a finite commission (old kind ``remaining_commissioned_credit``): its credit counts toward the credit unit
-of the task times the answers requested (the experiments of a105_experiments, otherwise one), which
-``read_from_parent`` put into the parent input. The cost (the old cutoff) and the estimator parameters (the old
-``uncertainty_alpha``) are this episode's settings."""
-from yield_control import AccumulationYieldController, CompletionYieldController
+"""Continuation: the completion controller over the leaf's credit (half the share of the commission's windows read plus
+half the share of the asked fields the held records newly state, ``credit.credit``), target 1.0; it stops the Episode when
+the forecast of the credit still to come is at or below its cost. Each new window earns its share of the coverage, so the
+Episode reads on while windows remain. Not the forecast controller: see chunk/yield_estimator.py (a refused first
+extraction never ends the Episode)."""
+from yield_control import CompletionYieldController
+
+TARGET = 1.0
 
 
 def yield_controller(initial_credit, settings, parent_input):
-    if parent_input['literature_task']['kind'] == 'verified_source_leads':
-        return AccumulationYieldController('report', initial_credit, settings['cost'],
-                                           settings['parameters'])
-    return CompletionYieldController('report', initial_credit, settings['cost'],
-                                     parent_input['completion_target'], settings['parameters'])
+    return CompletionYieldController('report', initial_credit, settings['cost'], TARGET, settings['parameters'])

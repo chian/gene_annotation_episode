@@ -23,6 +23,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.laun
     INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.gene_context_evidence import (
     literature_investigation_prompt)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.gene_context_evidence.literature_input_list import (
+    selection_offered)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
@@ -81,7 +83,14 @@ HELD_SOURCE_TOOLS = ('source.locate', 'source.sequence.scan', 'source.sequence.r
 # ``execution.estimate`` is cut down to its workbook branches; with none it is not offered.
 XLSX_ESTIMATES = ('source.xlsx.sheets', 'source.xlsx.rows')
 
-REASONING_START = 'Select one ordinary tool, one typed reasoning commitment'
+INPUT_LIST_MEANING = (
+    'The page is split into candidate input units (table regions and prose chunks, byte intervals of the assigned '
+    'representation). A candidate lying inside a window handed to a child (a table child: a table region the window '
+    'overlaps) is consumed and no longer offered; a child selection must hold at least one unconsumed candidate in each '
+    'window. The consumed candidates are unavailable. source_coverage_improvement reads the remaining windows in '
+    'document order. The investigation is exhausted when no candidate remains.')
+
+REASONING_START ='Select one ordinary tool, one typed reasoning commitment'
 REASONING_END = 'Reasoning owns scientific interpretation'
 TAIL_START = 'When annotation_score is supplied'
 TAIL_END = 'Do not execute native provider tools.'
@@ -283,9 +292,11 @@ TOOLS = {'tool_catalog': tool_catalog, 'state_query': state_query, 'source_read'
 
 
 def offered(summary):
-    """The model's operation names: the catalog's operations (dots out), ``report`` and the three child slots."""
+    """The model's operation names: the catalog's operations (dots out), ``report`` and the three child slots while
+    the page's input list holds an unconsumed candidate (a child is offered only for unconsumed input)."""
     named = {operation: name for name, operation in ACCESS.items()}
-    return [named[entry['name']] for entry in summary['catalog']] + ['report', *CHILD_SLOTS]
+    return [named[entry['name']] for entry in summary['catalog']] + ['report',
+                                                                     *(CHILD_SLOTS if summary['input_list'] else ())]
 
 
 def output_schema(names):
@@ -341,7 +352,12 @@ def present(summary, text):
     section(parts, 'Callable operations', [{'tool': named[entry['name']], 'operation': entry['name'],
                                             'meaning': entry.get('description', ''),
                                             'operands': entry['input_schema']} for entry in summary['catalog']])
-    section(parts, 'Child investigations', CHILD_SELECTIONS)
+    section(parts, 'Input list', {
+        'meaning': INPUT_LIST_MEANING, 'source_bytes': summary['source_bytes'],
+        'unconsumed_candidates': summary['unconsumed_candidates'],
+        'remaining_windows_in_document_order': summary['remaining_windows'],
+        'consumed_candidate_ids_unavailable': summary['consumed_candidate_ids']})
+    section(parts, 'Child investigations', CHILD_SELECTIONS if summary['input_list'] else None)
     section(parts, 'Returned by child investigations', summary['child_reports'])
     section(parts, 'Current gene-context scoring sheet', summary['completed_work_axis_results'])
     section(parts, 'Return', 'Report with the report tool: ' + json.dumps(REPORT_FORM.as_record(), sort_keys=True))
@@ -365,6 +381,10 @@ def decide(summary, feedback, ctx):
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
                'child_reports': summary['child_reports'],
+               'input_list': summary['input_list'],
+               'unconsumed_candidates': summary['unconsumed_candidates'],
+               'consumed_candidate_ids': summary['consumed_candidate_ids'],
+               'remaining_windows': summary['remaining_windows'],
                'current_report': summary['report'], 'report_lifecycle': summary['report_lifecycle'],
                'completed_work_axis_results': summary['completed_work_axis_results'],
                'visual_evidence': summary['visual_evidence'],
@@ -391,6 +411,9 @@ def action(response, summary, records, ctx):
             if type(arguments.get('objective')) is not str or not arguments['objective'].strip() \
                     or not isinstance(arguments.get('selection'), dict):
                 raise ValueError('child_operands_need_an_objective_text_and_a_selection_object')
+            if not selection_offered(name, arguments['selection'], summary['unconsumed_candidates']):
+                raise ValueError('selection_names_no_unconsumed_input:the_window_must_hold_an_unconsumed_candidate_'
+                                 'of_input_list')
     except (KeyError, TypeError, ValueError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
     if name in CHILD_SLOTS:

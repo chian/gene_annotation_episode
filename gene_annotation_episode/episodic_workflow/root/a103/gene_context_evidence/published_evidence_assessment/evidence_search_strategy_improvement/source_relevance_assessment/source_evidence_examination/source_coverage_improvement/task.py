@@ -26,6 +26,7 @@ from .messages.final_to_parent import REPORT_FORM
 
 CHILD_SLOTS = {}
 SERVICES = ()
+SOURCE_READ_LIMIT = 12000   # the registry's default window of ``source.read``
 
 # The model's tool names carry no dots; each names one operation of the A103 tool registry.
 ACCESS = {
@@ -226,6 +227,21 @@ TOOLS = {'tool_catalog': tool_catalog, 'state_query': state_query, 'source_read'
          'execution_estimate': execution_estimate, 'report': report}
 
 
+INPUT_LIST_MEANING = ('The windows of the assigned source, from the starting window on, that no read has covered yet. '
+                      'A window whose bytes were read is consumed and is not offered again; a source_read of the '
+                      'assigned source that touches none of these windows is not accepted.')
+
+
+def _reads_consumed(arguments, summary):
+    """Whether a ``source_read`` of the assigned source and representation touches no window of the input list."""
+    page = summary['assignment']['page']
+    if arguments.get('source_ref') != page['source_ref'] or arguments.get('representation', 'text') != page['representation']:
+        return False
+    start = arguments.get('offset', 0)
+    end = start + arguments.get('limit', SOURCE_READ_LIMIT)
+    return not any(start < window_end and window_start < end for window_start, window_end in summary['input_list'])
+
+
 def _offered(summary):
     """The model's tool names: the catalog's operations (dots out) and ``report``."""
     named = {operation: name for name, operation in ACCESS.items()}
@@ -280,17 +296,24 @@ def _task(summary, text):
     _section(parts, 'Callable operations', [{'tool': named[entry['name']], 'operation': entry['name'],
                                              'meaning': entry.get('description', ''),
                                              'operands': entry['input_schema']} for entry in summary['catalog']])
+    _section(parts, 'Input list: the windows [start, end] of the assigned source still to read, in document order',
+             {'input_list': summary['input_list'], 'meaning': INPUT_LIST_MEANING})
     _section(parts, 'Current gene-context scoring sheet', summary['completed_work_axis_results'])
     _section(parts, 'Return', 'Report with the report tool: ' + json.dumps(REPORT_FORM.as_record(), sort_keys=True))
     return '\n'.join(parts)
 
 
 def decide(summary, feedback, ctx):
-    """The tool catalog first (a lookup, one unit); then the model chooses one operation or the report."""
+    """The tool catalog first (a lookup, one unit); then the model chooses one operation or the report. The windows of the
+    input list (``input_list``) are the ones still to read; a window read is consumed and never offered again. With the
+    input list empty the episode's yield estimator ends it, so a decision asked for then is an error."""
+    if not summary['input_list']:
+        raise LookupError('reading_input_list_empty')
     if summary['catalog'] is None:
         return ToolCall('tool_catalog', {'scope': summary['assignment']['scope']})
     offered = _offered(summary)
-    context = {'task': _task(summary, instructions()), 'feedback': feedback,
+    context = {'task': _task(summary, instructions()), 'feedback': feedback, 'input_list': summary['input_list'],
+               'input_list_meaning': INPUT_LIST_MEANING,
                'own_outcomes': summary['own_outcomes'], 'current_report': summary['report'],
                'completed_work_axis_results': summary['completed_work_axis_results'],
                'source_custody': summary['source_custody'], 'history_meaning': summary['history_meaning'],
@@ -311,5 +334,8 @@ def action(response, summary, records, ctx):
         raise Rejected(rejection_feedback(error, category='action_contract'))
     if name == 'report':
         return ToolCall('report', {'report': arguments})
+    if name == 'source_read' and _reads_consumed(arguments, summary):
+        raise Rejected(rejection_feedback(ValueError('window_already_consumed_see_input_list'),
+                                          category='action_contract'))
     return ToolCall(name, {'arguments': arguments, 'scope': summary['assignment']['scope'],
                            'source_ref': summary['assignment']['page']['source_ref']})

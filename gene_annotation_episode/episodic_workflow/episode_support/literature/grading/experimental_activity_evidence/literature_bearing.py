@@ -5,8 +5,7 @@ Computed by code from controlled fields only, never by the model. Pure: argument
 record  a mapping that carries the experiment's identity features (contract IDENTITY_FIELDS): 'experiment_type',
         'target_id' (the molecule the assay is about; null when no member record states it) and 'partner_id' (the
         optional other molecule the target is tested against; null when not stated). Each is a record reference or null.
-claim   the candidate claim (contract CLAIM_FIELDS): predicate, subject_id, partner_id (or null), and the prediction
-        fields, which bearing does not read.
+claim   the candidate claim (contract CLAIM_FIELDS): predicate, subject_id and partner_id (or null).
 
 OWNER_DECISION 18 (the target molecule). The target is the one identity field bearing requires. Values are compared
 after the contract's normalize_identity_ref (casefold, whitespace collapse).

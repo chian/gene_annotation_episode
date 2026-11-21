@@ -16,6 +16,9 @@ LEADS = 'literature_source_lead_dispositions'
 
 def msg_to_child(slot, arguments, summary):
     parent = summary['assignment']
+    for reference in arguments['prior_search_refs']:
+        if reference not in summary['input_list']:      # a consumed or unheld source is not offered
+            raise KeyError(reference)
     strategy = {'version': 'strategy_assignment_v1',
                 'question_context_refs': list(arguments['question_context_refs']),
                 'prior_search_refs': list(arguments['prior_search_refs'])}

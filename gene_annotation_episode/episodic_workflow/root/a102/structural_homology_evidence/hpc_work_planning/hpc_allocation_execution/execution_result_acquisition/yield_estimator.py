@@ -10,7 +10,7 @@
 
 The ``<kind>`` is ``hpc``: this episode is the result acquisition of the HPC allocation. A profile is
 ``{'cutoff': cost, 'parameters': {...}}``; the cutoff is the controller's cost. Nothing else ends this Episode."""
-from yield_control import AccumulationYieldController, BoundedQualityYieldController
+from yield_control import AccumulationYieldController, BoundedQualityYieldController, FIXED_CONTROL
 
 KIND = 'hpc'
 
@@ -21,8 +21,8 @@ def yield_controller(initial_credit, settings, parent_input):
         profile = settings['results_yield_profiles'].get(key)
         if profile is None:
             raise ValueError('results_original_task_yield_profile_required:' + key)
-        return AccumulationYieldController('execution_result_acquisition', initial_credit, profile['cutoff'],
-                                           profile['parameters'])
+        return AccumulationYieldController('execution_result_acquisition', initial_credit, FIXED_CONTROL,
+                                           items=None)
     key = 'results:native_finite_' + KIND
     profile = settings['task_yield_profiles'].get(key)
     if profile is None:

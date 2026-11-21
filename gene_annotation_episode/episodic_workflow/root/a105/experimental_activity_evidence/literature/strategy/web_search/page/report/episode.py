@@ -1,6 +1,6 @@
-"""The source coverage improvement episode (A105): a private binding of the system's episode type. It reads one source
-in document order for the commissioned experimental-activity question and returns the commissioned saved result
-sheets with its typed investigation finding. It has no child."""
+"""The source coverage improvement episode (A105): a private binding of the system's episode type. A leaf extractor: it
+reads one source in document order, window after window, extracts one experiment type's grader inputs from each window and
+returns only the immutable leaf records. It has no child."""
 from episode_runtime import EpisodeBinding
 
 from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file

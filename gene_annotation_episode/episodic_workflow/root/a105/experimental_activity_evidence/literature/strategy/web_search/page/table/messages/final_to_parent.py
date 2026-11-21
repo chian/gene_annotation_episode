@@ -1,23 +1,24 @@
-"""The return. Always returned: the Episode's credit (the system hands it in ``completion``; it is the productivity
-signal and nothing restates it) and the finding: the controlled features code read from each current assay grading
-sheet the Episode saved (``INVESTIGATION_FINDING_FEATURES_a105.md``), each with its sheet reference, and the counts
-of the investigation. No model-written text is returned. Selectable: ``literature_screening_answers`` (span counts
-and whether the commissioned spans are covered) and ``literature_source_lead_dispositions`` (the count and
-references of the relevant lead sources)."""
-from method_loop import RecordForm
+"""The return: controlled data only. Always returned: the Episode's credit (the system hands it in ``completion``) and the
+finding, the counts of the fields of the held records of the table (how many they state, how many of those are newly
+stated, how many the form asked). Selectable: the references of the leaf records that stand, one per experiment ref
+(``internal_summary``: re-extractions of the table are superseded). No text."""
+from method_loop import Field, RecordForm
 
-from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_finding_forms import (
-    LEADS, SCREENING, finding_of, lead_answer, return_fields, screening_answer)
-
-RETURN_FORM = RecordForm(return_fields())
+FINDING_FORM = RecordForm({
+    'stated': Field('integer', 'How many fields the held records state, record by record'),
+    'newly_stated': Field('integer', 'How many distinct fields the held records state'),
+    'asked': Field('integer', 'How many fields the form asked'),
+})
+RETURN_FORM = RecordForm({
+    'credit': Field('number', "The Episode's credit when its controller stopped it"),
+    'finding': Field('record', 'The counts of the fields of the held records', form=FINDING_FORM),
+    'record_refs': Field('record_refs', 'The extraction records of the table that stand, one per experiment',
+                         required=False),
+})
 
 
 def final_to_parent(summary, completion, selection):
-    result = {'credit': completion['credit'],
-              'finding': finding_of(summary['assay_sheets'], summary['aggregation_sheets'],
-                                    summary['proposed_annotation_ref'], summary['no_applicable_spans'])}
-    if SCREENING in selection:
-        result[SCREENING] = screening_answer(summary['no_applicable_spans'], summary['screening_covered'])
-    if LEADS in selection:
-        result[LEADS] = lead_answer(summary['lead_source_refs'])
+    result = {'credit': completion['credit'], 'finding': summary['counts']}
+    if 'record_refs' in selection:
+        result['record_refs'] = summary['record_refs']
     return result

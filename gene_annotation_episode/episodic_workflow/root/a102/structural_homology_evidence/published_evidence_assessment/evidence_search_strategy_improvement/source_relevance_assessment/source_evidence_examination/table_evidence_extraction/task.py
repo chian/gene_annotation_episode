@@ -493,9 +493,14 @@ def decide(summary, feedback, ctx):
     """Ask the model for the next tool, shown the assignment, the custody of the source, its own read outcomes,
     the structure sheets it saved (their controlled features), the tools, the measured time, the credit definition
     and the yield table (the old decision state and inputs, over this episode's summary)."""
+    if not summary['input_list']:
+        # the selected table is consumed (a reasoning commit about it was accepted): nothing is offered; the yield
+        # estimator ends the episode, so a decision asked for with an empty input list is an error
+        raise LookupError('table_input_list_empty')
     names = offered(ctx.settings)
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
+               'input_list': summary['input_list'], 'consumed_inputs': summary['consumed_inputs'],
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],

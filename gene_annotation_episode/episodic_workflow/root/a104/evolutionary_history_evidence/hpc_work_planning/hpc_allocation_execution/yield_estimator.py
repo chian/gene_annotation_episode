@@ -8,7 +8,7 @@ README 7b: the credit accumulates, so the accumulation controller; the old episo
 ``{'cost': <old cutoff, > 0>, 'parameters': {...}}``. Nothing else ends this Episode."""
 import math
 
-from yield_control import AccumulationYieldController
+from yield_control import AccumulationYieldController, ADAPTIVE_CONTROL
 
 
 def yield_controller(initial_credit, settings, parent_input):
@@ -18,4 +18,4 @@ def yield_controller(initial_credit, settings, parent_input):
     if (isinstance(cost, bool) or not isinstance(cost, (int, float)) or not math.isfinite(cost) or cost <= 0
             or not isinstance(parameters, dict)):
         raise ValueError('explicit_hpc_commission_yield_binding_required:hpc_execution')
-    return AccumulationYieldController('hpc_allocation_execution', initial_credit, cost, parameters)
+    return AccumulationYieldController('hpc_allocation_execution', initial_credit, ADAPTIVE_CONTROL, items=None)

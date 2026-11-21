@@ -83,6 +83,8 @@ TOOL_INSTRUCTION = (
     'evidence_type (the kind of gene-context evidence it reports, or none_applicable). No text of yours is returned '
     'to your parent. Selecting report does not end the investigation; report '
     'again when new outcomes change the assessment. Only the numerical controller decides when your work ends. '
+    'The input list is the assigned sources not yet consumed; a source handed to the child as a prior-search source '
+    'or named in a reported assessment is consumed, and a consumed source is unavailable to the child. '
     'Do not execute native provider tools. The host executes your selected action.')
 
 
@@ -334,6 +336,9 @@ def present(summary, text):
     section(parts, 'Parent constraints', context.get('constraints'))
     section(parts, 'Parent-supplied context', context.get('context'))
     section(parts, 'Parent-selected evidence operands', context.get('evidence_refs'))
+    section(parts, 'Input list: assigned sources not yet consumed (a source handed to the child investigation as a '
+                   'prior-search source or named in a reported assessment is consumed and is not offered again)',
+            summary['input_list'])
     section(parts, 'Callable sources', source_operands(summary['source_custody']))
     named = {operation: name for name, operation in OPERATIONS.items()}
     section(parts, 'Callable operations', [{'tool': named[entry['name']], 'operation': entry['name'],
@@ -361,6 +366,7 @@ def decide(summary, feedback, ctx):
                'literature_source_custody': summary['source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
+               'input_list': summary['input_list'], 'consumed_source_refs': summary['consumed_source_refs'],
                'child_reports': summary['child_reports'],
                'current_report': summary['report'], 'report_lifecycle': summary['report_lifecycle'],
                'visual_evidence': summary['visual_evidence'],
@@ -386,6 +392,12 @@ def action(response, summary, records, ctx):
     except (KeyError, TypeError, ValueError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
     if name in CHILD_SLOTS:
+        # A consumed source is not offered: the child takes only sources not yet consumed (the input list).
+        handed = [reference for reference in arguments.get('prior_search_refs', ())
+                  if reference in summary['consumed_source_refs']]
+        if handed:
+            raise Rejected(rejection_feedback(ValueError('prior_search_refs_consumed:' + ', '.join(map(str, handed))),
+                                              category='action_contract'))
         return ChildCall(name, arguments)
     if name == 'report':
         return ToolCall('report', {'report': arguments})

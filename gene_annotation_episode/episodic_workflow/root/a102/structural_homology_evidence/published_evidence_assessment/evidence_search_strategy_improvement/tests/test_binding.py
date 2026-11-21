@@ -181,7 +181,8 @@ def test_the_controller_follows_the_commissioned_task_kind():
 def test_the_acquisition_and_access_tools_and_the_search_child_are_in_the_selection_schema_and_its_transport():
     task = importlib.import_module(PACKAGE + '.task')
     summary = {'task': LEADS_TASK, 'reasoning_schema': {'type': 'object', 'properties': {'terms': {'type': 'array'}},
-                                                         'required': ['terms'], 'additionalProperties': False}}
+                                                         'required': ['terms'], 'additionalProperties': False},
+               'input_list': [{'source_ref': 'src_1'}, {'source_ref': 'src_2'}]}
     names = task.offered({})
     assert 'execution_estimate' not in names and names[-2:] == ['structure_populate', 'reason']
     for name in ('public_literature_search', 'public_literature_read', 'public_ncbi_search', 'public_pmc_asset',
@@ -192,3 +193,23 @@ def test_the_acquisition_and_access_tools_and_the_search_child_are_in_the_select
     assert len(schema['properties']['selection']['anyOf']) == len(names) + 1
     assert task.generation_schema(schema)
     assert task.INPUT_SCHEMAS['public.ncbi.search']['properties']['database'] == {'enum': ['pubmed']}
+
+
+def test_a_result_handed_to_a_search_child_is_consumed_and_the_empty_input_list_offers_no_child():
+    task = importlib.import_module(PACKAGE + '.task')
+    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    outcomes = [{'kind': 'child', 'arguments': {'search': {'search_result_refs': ['src_1']}}},
+                {'kind': 'tool', 'produced': []}]
+    view = type('View', (), {'outcomes': outcomes})()
+    assert summary_module.consumed_sources(view) == ['src_1']
+    names = task.offered({})
+    base = {'task': LEADS_TASK, 'reasoning_schema': {'type': 'object', 'properties': {}, 'required': [],
+                                                      'additionalProperties': False}}
+    open_schema = task.selection_schema(names, {**base, 'input_list': [{'source_ref': 'src_2'}]})
+    child = open_schema['properties']['selection']['anyOf'][-1]
+    assert child['properties']['arguments']['properties']['search']['properties']['search_result_refs'][
+        'items'] == {'enum': ['src_2']}
+    with pytest.raises(Exception, match='literature_input_consumed_or_unlisted'):
+        task.checked_search({'question_context_refs': [], 'search_result_refs': ['src_1']}, None, ['src_2'])
+    empty = task.selection_schema(names, {**base, 'input_list': []})
+    assert len(empty['properties']['selection']['anyOf']) == len(names)

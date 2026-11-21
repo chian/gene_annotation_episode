@@ -498,6 +498,7 @@ def decide(summary, feedback, ctx):
                'literature_history_meaning': summary['literature_history_meaning'],
                'credit_binding': summary['credit_binding'],
                'structure_sheets': summary['structure_sheets'],
+               'input_list': summary['input_list'], 'input_list_meaning': INPUT_LIST_MEANING,
                'tools': catalog(names, summary), 'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
@@ -505,6 +506,24 @@ def decide(summary, feedback, ctx):
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge')), context,
                         generation_schema(selection_schema(names, summary)))
+
+
+INPUT_LIST_MEANING = ('input_list is the byte windows [start, end] of the assigned source, in document order, that no '
+                      'source.read of the page source in the page representation has delivered yet. A window a read '
+                      'delivered is consumed and no longer offered: source.read of the page source and its '
+                      'representation must start inside a window of input_list.')
+
+
+def read_offered(name, arguments, summary):
+    """Whether the tool call is offered: any tool but ``source_read`` of the page source in the page representation,
+    which is offered only when it starts inside a window of ``input_list`` (a read that starts in consumed bytes, or
+    before the starting window, is not offered)."""
+    page = summary['literature_assignment']['page']
+    if name != 'source_read' or arguments['source_ref'] != page['source_ref'] \
+            or arguments.get('representation', 'text') != page['representation']:
+        return True
+    offset = arguments.get('offset', 0)
+    return any(start <= offset < end for start, end in summary['input_list'])
 
 
 def empty_commit(commit, schema, processing):
@@ -534,5 +553,7 @@ def action(response, summary, records, ctx):
                                    'proposed_annotation_ref': summary['proposed_annotation_ref']})
     except (ValueError, KeyError, TypeError, ValidationError, ContractError) as error:
         raise Rejected(rejection_feedback(error, category='selection'))
+    if not read_offered(name, arguments, summary):
+        raise Rejected(rejection_feedback(ValueError('source_read_window_consumed'), category='selection'))
     return ToolCall(name, {'arguments': arguments, 'scope': summary['scope'],
                            'page_source_ref': summary['literature_assignment']['page']['source_ref']})

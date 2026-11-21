@@ -71,8 +71,9 @@ REASONING_END = 'Reasoning owns scientific interpretation'
 TAIL_START = 'When annotation_score is supplied'
 TAIL_END = 'Do not execute native provider tools.'
 CHILD_OPERANDS = (
-    '{"objective": <what the child should investigate, as text>, "search_result_refs": [<sources this '
-    'investigation holds that a search returned and that the child should consider>]}')
+    '{"objective": <what the child should investigate, as text>, "search_result_refs": [<sources of the input '
+    'list (held, not yet handed to a child) that the child should consider; a source handed out is consumed and '
+    'no longer offered>]}')
 TOOL_INSTRUCTION = (
     'Select one operation per answer: give its name in operation and its operands as JSON text in arguments_json. '
     'An access or acquisition operation takes its own operands. The child operation (source_relevance_assessment) '
@@ -282,7 +283,8 @@ TOOLS = {'tool_catalog': tool_catalog, 'state_query': state_query, 'source_read'
 def offered(summary):
     """The model's operation names: the catalog's operations (dots out), ``report`` and the child slot."""
     named = {operation: name for name, operation in OPERATIONS.items()}
-    return [named[entry['name']] for entry in summary['catalog']] + ['report', *CHILD_SLOTS]
+    # The child is offered only while the input list holds an unconsumed candidate source.
+    return [named[entry['name']] for entry in summary['catalog']] + ['report', *(CHILD_SLOTS if summary['input_list'] else ())]
 
 
 def output_schema(names):
@@ -338,6 +340,8 @@ def present(summary, text):
                                             'meaning': entry.get('description', ''),
                                             'operands': entry['input_schema']} for entry in summary['catalog']])
     section(parts, 'Child investigation', {'source_relevance_assessment': CHILD_OPERANDS})
+    section(parts, 'Input list: candidate sources not yet handed to the child (a source handed out is consumed and '
+                   'is no longer offered)', summary['input_list'])
     section(parts, 'Returned by the child investigation', summary['child_reports'])
     section(parts, 'Return', 'Report the strategy with the report tool: ' + json.dumps(REPORT_FORM.as_record(), sort_keys=True))
     return '\n'.join(parts)
@@ -360,6 +364,8 @@ def decide(summary, feedback, ctx):
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
                'child_reports': summary['child_reports'],
+               'input_list': summary['input_list'],
+               'consumed_search_result_refs': summary['consumed_search_result_refs'],
                'current_report': summary['report'], 'report_lifecycle': summary['report_lifecycle'],
                'visual_evidence': summary['visual_evidence'],
                'time_accounting': time_accounting(ctx.clock.progress_time)}
@@ -370,8 +376,9 @@ def decide(summary, feedback, ctx):
     return ModelRequest('REASONING', text, context, output_schema(offered(summary)))
 
 
-def child_operands(arguments, records):
-    """The model's operands of the child commission: an objective text and the returned sources this episode holds."""
+def child_operands(arguments, records, input_list):
+    """The model's operands of the child commission: an objective text and sources of the input list (held and not
+    yet consumed by an earlier commission)."""
     if type(arguments.get('objective')) is not str or not arguments['objective'].strip():
         raise ValueError('child_operands_need_an_objective_text')
     sources = arguments.get('search_result_refs')
@@ -380,6 +387,8 @@ def child_operands(arguments, records):
     for reference in sources:
         if type(reference) is not str or not records.holds(reference):
             raise ValueError('child_record_not_held:' + repr(reference))
+        if reference not in input_list:
+            raise ValueError('child_source_not_in_input_list_or_already_consumed:' + repr(reference))
     return {'objective': arguments['objective'], 'search_result_refs': sources}
 
 
@@ -395,7 +404,7 @@ def action(response, summary, records, ctx):
         if not isinstance(arguments, dict):
             raise ValueError('arguments_json_must_be_a_JSON_object')
         if name in CHILD_SLOTS:
-            arguments = child_operands(arguments, records)
+            arguments = child_operands(arguments, records, summary['input_list'])
     except (KeyError, TypeError, ValueError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
     if name in CHILD_SLOTS:

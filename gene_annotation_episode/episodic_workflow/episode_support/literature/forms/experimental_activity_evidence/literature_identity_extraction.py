@@ -35,7 +35,7 @@ from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
     CODE_STAMPED_IDENTITY, IDENTITY_FIELDS, IDENTITY_NORMALIZED_REF_FIELDS, IDENTITY_QUANTITY_OF_FIELD, IDENTITY_UNAVAILABLE_REASONS,
-    IDENTITY_UNIT_CANONICAL, LEAF_RECORD_IDENTITY, NAME_MAX_CHARS, NAME_MAX_WORDS, UNAVAILABLE_NOT_STATED, canonical_value, is_name,
+    IDENTITY_UNIT_CANONICAL, LEAF_RECORD_IDENTITY, LEAF_RECORD_REF_KEY, NAME_MAX_CHARS, NAME_MAX_WORDS, UNAVAILABLE_NOT_STATED, canonical_value, is_name,
     normalize_identity_ref, validate_identity)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS
 
@@ -244,3 +244,54 @@ def with_identity(record, answer, chunk, chunk_offset):
     spans = identity_spans(answer, chunk, chunk_offset)
     provenance = {name: {'span_ref': 'span_identity_' + name, 'support': answer[name]['support']} for name in ASKED if answer[name]['status'] == 'stated'}
     return {**record, **keys, 'spans': {**record['spans'], **spans}, 'identity_provenance': provenance}
+
+
+# The fields of a leaf record: what its form asked and what it states (the leaf field-counting rule,
+# literature_leaf_extraction.field_counts).
+_RESERVED = ('quantities', 'facts', 'spans', 'preparations', 'choice_support', 'identity_provenance', 'unavailable_reasons')
+_OPERAND_KEYS = ('status', 'value', 'unit', 'source_refs')
+
+
+def _operand_names(record):
+    names = ['quantities.' + name for name in record.get('quantities') or {}]
+    names += ['operands.' + key for key, item in record.items() if key not in _RESERVED and isinstance(item, dict) and all(k in item for k in _OPERAND_KEYS)]
+    return names
+
+
+def _read_operand(record, name):
+    kind, key = name.split('.', 1)
+    return record['quantities'][key] if kind == 'quantities' else record[key]
+
+
+def asked_fields(record):
+    """The names of the fields the leaf record's form asked (those the record carries, the asked identity keys included)."""
+    return (_operand_names(record) + ['choices.' + name for name in record.get('choice_support') or {}]
+            + ['facts.' + name for name in record.get('facts') or {}] + ['identity.' + name for name in ASKED])
+
+
+def stated_fields(record):
+    """The names, among ``asked_fields(record)``, that the leaf record states: a quantity or operand with status 'point', a fact
+    whose answer is neither 'unknown' nor 'not_applicable', a choice that is not None, an asked identity key that is not None."""
+    stated = [name for name in _operand_names(record) if _read_operand(record, name)['status'] == 'point']
+    stated += ['choices.' + name for name in record.get('choice_support') or {} if record.get(name) is not None]
+    stated += ['facts.' + name for name, item in (record.get('facts') or {}).items() if item['answer'] not in ('unknown', 'not_applicable')]
+    stated += ['identity.' + name for name in ASKED if record.get(name) is not None]
+    return stated
+
+
+def one_record_per_experiment(held):
+    """The leaf records that stand, one per experiment ref (``LEAF_RECORD_REF_KEY``, 'experiment_ref': kind, source and window):
+    ``held`` is the (record ref, leaf record) pairs in arrival order. A re-extraction of the same experiment supersedes, it is not
+    merged: the record that stands is the one stating the most fields (``stated_fields``), ties broken by the latest. Returns the
+    record refs that stand, in the arrival order of their experiment refs' first records. A record ref held twice is one record."""
+    standing, order = {}, []
+    for ref, record in held:
+        key = record[LEAF_RECORD_REF_KEY]
+        if key not in standing:
+            order.append(key)
+        elif standing[key][0] == ref:
+            continue
+        count = len(stated_fields(record))
+        if key not in standing or count >= standing[key][1]:
+            standing[key] = (ref, count)
+    return [standing[key][0] for key in order]

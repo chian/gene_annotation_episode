@@ -94,8 +94,34 @@ FINDING = {'source_claim': 'claim', 'source_subject': 'subject', 'qualification'
 
 def _summary(**changes):
     value = {'assignment': {'scope': SCOPE, 'page': {'source_ref': 'src_1'}},
-             'catalog': [{'name': 'source.read'}], 'report': None, 'report_sources_held': {}}
+             'catalog': [{'name': 'source.read'}], 'report': None, 'report_sources_held': {},
+             'input_list': [[0, 10], [10, 20]]}
     return {**value, **changes}
+
+
+def test_the_input_list_shrinks_as_windows_are_read_and_an_empty_list_offers_nothing():
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.gene_context_evidence import (
+        reading_windows as library)
+    windows = library.reading_windows(5, 10, 32)
+    assert windows == [[5, 15], [15, 25], [25, 32]]
+    read = {'kind': 'tool', 'tool': 'source_read',
+            'outcome': {'status': 'completed', 'result': {'artifact_ref': 'art_1', 'start': 5, 'end': 25}}}
+    other = {**read, 'outcome': {'status': 'completed', 'result': {'artifact_ref': 'art_2', 'start': 0, 'end': 99}}}
+    spans = library.read_spans([read, other], 'art_1')
+    assert library.remaining_windows(windows, spans) == [[25, 32]]
+    with pytest.raises(LookupError):
+        decide(_summary(input_list=[]), None, None)
+
+
+def test_a_read_touching_no_unconsumed_window_is_rejected():
+    from ..task import action
+    summary = _summary(input_list=[[10, 20]])
+    summary['assignment']['page'] = {'source_ref': 'src_1', 'representation': 'text'}
+    consumed = {'tool': 'source_read', 'arguments_json': json.dumps({'source_ref': 'src_1', 'offset': 0, 'limit': 10})}
+    with pytest.raises(Rejected):
+        action(consumed, summary, None, None)
+    live = {'tool': 'source_read', 'arguments_json': json.dumps({'source_ref': 'src_1', 'offset': 5, 'limit': 10})}
+    assert action(live, summary, None, None).name == 'source_read'
 
 
 def test_the_first_unit_is_the_catalog_lookup():

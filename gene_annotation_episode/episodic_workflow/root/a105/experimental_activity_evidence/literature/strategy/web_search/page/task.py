@@ -12,16 +12,22 @@ commission of a child. The task always offers a unit and never ends the Episode:
 Children. The old ``_CHILDREN['literature_page']`` is ``('literature_table', 'literature_ordered',
 'literature_targeted')``: the slots below are those three roles under the names of their folders. The model selects
 one slot with the child's objective, the page it reads and its selection; ``messages/msg_to_child.py`` builds the
-commission. What a child returns is its credit and the controlled features of its sheets.
+commission. Every child is a leaf extractor: what it returns is its credit, its field counts and its leaf records.
 
 Tools offered: the access tools the A105 tool library implements; the population operations when
 ``settings['rate_population']`` is true, each under its flag (``literature_population_route``); ``reason``, the old
 required-grading action (``literature_reasoning.reason``). The owner's grading instructions are part of every
 decision's instructions. ``update_sheet`` (A105 scoring paradigm, OWNER_DECISION 10) is the page's own unit: it groups the
-leaf records the ``chunk`` children returned into graders and updates the persistent subscoring sheet, the credit and the
+leaf records the ``chunk``, ``table`` and ``report`` children returned into graders and updates the persistent subscoring sheet, the credit and the
 per-annotation scores (``update_sheet``, ``literature_page_update.page_update``). The old ``report`` tool is gone, and so are the copies of the owner's grader and reader
 instructions that were parked in ``internal_summary.py``: the texts are in the library prompt files and reach the
-model through ``grading_section``."""
+model through ``grading_section``.
+
+The page's input list (nano-graphrag's page, ``literature_page_content``): the source is split into candidate input units
+(table regions and prose chunks); before the page plans, ``assess_content`` (decided by code, no model call) has Jev
+measure every candidate once against the commission's information needs and holds the assessment; the model is shown
+Jev's probabilities for the unconsumed candidates only, and a chunk or table child takes one unconsumed candidate, a
+report every remaining chunk. A candidate handed to a child is consumed and offered no more."""
 import json
 
 from jsonschema import ValidationError
@@ -32,6 +38,11 @@ from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.instruction_spans import replace_span
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import (
     ExperimentalContractError)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
+    representation_content)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_page_content import (
+    assess_page_content, page_candidates)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.jev_client import JevDecisionClient
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_claim import (
     PARTNER_VALUE_TYPES, claim_of_hypothesis)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_identity import (
@@ -76,9 +87,6 @@ CHILD_SLOTS = {
     'chunk': 'experimental_activity_evidence/literature/strategy/web_search/page/chunk',
 }
 SERVICES = ()
-INTEGER = {'type': 'integer', 'minimum': 0}
-TEXT = {'type': 'string', 'minLength': 1}
-REPRESENTATIONS = ['text', 'original', 'stdout', 'stderr']
 
 # The access tools of the old ``_ACCESS_TOOLS`` that the A105 tool library implements; the descriptions and input
 # schemas are the library's own (``A105ToolRegistry.catalog``).
@@ -127,37 +135,60 @@ BRIEF = (
     'evidence in this source (evidence_in_table, evidence_in_passages) or that it does not know '
     '(evidence_location_unknown). It tells you where to look first; it prescribes no tool and no child.\n'
     'YOUR OWN TOOLS (context.tools) do ordinary one-off work directly:\n'
-    '- state_query reads records you hold, for example a commissioned experiment reference whose anchor (start, end) '
-    'is the byte interval where the source states that experiment.\n'
+    '- state_query reads records you hold. For an a105_experiments task you do not need it: the commissioned experiments '
+    'and their anchors are in context.commissioned_experiments, what the children returned is in context.child_returns '
+    'and context.covered_windows, and the sheet is in context.sheet_update; reading leaf records, the hypothesis or the '
+    'molecules earns nothing.\n'
     '- source_read and source_locate read a byte window of the source and locate a literal phrase in it; the pdf, '
     'archive, sequence-reference and experimental-record tools read a source held in that representation.\n'
     '- reason commits your own interpretation together with its grading sheet (or a source-grounded '
     'no_applicable_evidence, or the source_lead of a verified_source_leads task), for evidence you have read '
     'yourself.\n'
-    'THE CHILDREN (context.child_options gives the arguments of each): a child is a narrower investigation that needs '
-    'iteration of its own and passes back only a summary (its credit, the counts of its finding and the features of '
-    'the sheets it saved). No child is compulsory and no order is prescribed. Delegating is the right choice when the '
-    'part to examine is a job of several steps in itself:\n'
-    '- table: a whole table or sheet to work through (many rows, headers, footnotes, row '
-    'selections, or several experiments in one table). Its selection is a sheet (sheet_key, offset, limit, '
-    'header_row, optional where) or one byte window of the page (representation, offset, limit).\n'
-    '- chunk: a leaf extractor of ONE byte window for ONE experiment_type; it returns only its leaf record. Its '
-    'records earn credit only through update_sheet (below).\n'
-    '- report: a long document to be read in order, window after window, when where the '
-    'evidence stands is not known. Its selection is the window the reading starts at.\n'
+    'THE PAGE\'S CANDIDATES: the source is split, before you plan, into candidate input units: every table region '
+    'detected in it (source_table:<id>) and the prose chunks of the running text between them (prose_chunk:<index>), '
+    'each with its byte interval (context.content_candidates). Jev has measured every candidate once against the '
+    'information needs of this commission (context.content_assessment.information_needs: for each commissioned '
+    'experiment its result and the identity of the claim\'s molecules): context.content_assessment shows, for the '
+    'candidates not yet consumed only, the top needs of each table region, the best single chunk per experiment and the '
+    'top chunks per need, each with Jev\'s probability that it could contribute. Jev probabilities are planning '
+    'evidence. They do not select a child, admit evidence, assign credit, or decide whether the page continues.\n'
+    'THE CHILDREN (context.child_options lists the children valid now, with what each would read): every child is a '
+    'leaf extractor for ONE experiment_type; it grades nothing and passes back only its credit, the counts of its '
+    'finding and its leaf records, which earn credit only through update_sheet (below). A candidate handed to a child '
+    'is consumed: it is not offered again and its probabilities are no longer shown. No child is compulsory and no '
+    'order is prescribed:\n'
+    '- chunk: ONE unconsumed prose chunk (candidate_id), the right choice when one or a few chunks appear able to '
+    'supply the needed evidence.\n'
+    '- table: ONE unconsumed table region (candidate_id). A table option exists only for a table region actually '
+    'detected in this page; use its Jev probabilities to judge whether it is likely to hold the requested information.\n'
+    '- report: every remaining prose chunk read in document order, window after window, each once; the right choice '
+    'when useful pieces appear distributed across chunks or isolated chunks would lose their relationships.\n'
     'When one read shows you the evidence in full (a short source, one small block of numbers), reading and grading '
     'it yourself is ordinary work and needs no child. A commission carries an objective of the child\'s own fixed '
     'vocabulary: grade_reported_experiment when the selection is known to report a commissioned experiment with its '
     'measurements; find_applicable_evidence when whether the selection holds applicable evidence is still open.\n'
     'UPDATE_SHEET (a105_experiments tasks): the tool update_sheet takes no argument. Code groups every leaf record your '
-    'chunk children returned into graders (one experiment = one grader; same document and experiment type merge unless '
+    'leaf children (chunk, table, report) returned into graders (one experiment = one grader; same document and '
+    'experiment type merge unless '
     'a stated identity feature conflicts), converts each grader, scores it against the commissioned annotation and '
     'updates the persistent subscoring sheet, the main scoring sheet, the credit and the per-annotation scores. For an '
-    'a105_experiments task the credit of this episode is credit_unit times the credit of the latest update_sheet '
-    '(context.sheet_update); nothing is earned before it runs.\n'
-    'CREDIT (context.credit_binding, context.action_yields): one credit_unit for each answer to the commissioned '
+    'a105_experiments task the credit of this episode is credit_unit times the larger of the best leaf child credit '
+    '(child_returns: the share of its asked fields it newly stated) and the credit of the latest update_sheet '
+    '(context.sheet_update). For an a105_experiments task the commissioned experiments are already given in '
+    'context.commissioned_experiments: each one\'s experiment_ref, assay_type and anchor (start, end), the byte '
+    'interval where the source states it; no state_query is needed. The whole job is two steps and nothing else earns '
+    'anything (not reading, not locating, not reason, whose sheets earn nothing here): '
+    '(1) for each experiment, one leaf child on the unconsumed candidate that holds its evidence (the chunk or table '
+    'candidate whose byte interval covers its anchor, or whose Jev probabilities are highest for its needs; a report '
+    'child when the evidence runs over several chunks), with the experiment_type of the method the candidate reports '
+    '(the commissioned assay type is a class such as ligand_binding; the child takes the specific method, for example '
+    'spr, itc or fp); read the candidate once with source_read only if the method is not evident, and not again; '
+    '(2) update_sheet once the children have returned.\n'
+    'context.source_bytes is the byte length of the assigned source and context.covered_windows lists the byte windows '
+    '(offset, end, experiment_type, slot) your leaf children already read.\n'
+    'CREDIT FOR ALL OTHER TASK KINDS (context.credit_binding, context.action_yields): one credit_unit for each answer to the commissioned '
     'task. For an a105_experiments task the answer is the current grading sheet of each commissioned experiment (the '
-    'experiment_ref and assay_type of literature_task.experiments), saved by your reason or returned by a child. '
+    'experiment_ref and assay_type of literature_task.experiments), saved by your reason. '
     'It earns the share of the unit that its fields earn: the nine quantities, the prediction model and the criteria '
     'of its assay type. A field that was entered earns its share. A field left null or unknown is classified when '
     'the sheet is saved, automatically and with no action of yours, against the source windows read: justified when '
@@ -170,8 +201,7 @@ BRIEF = (
     'settles; leave null or unknown only what it does not state. Do not write a value or a support the source does '
     'not give to make a sheet look complete: an honest unknown is a correct grading and earns its share, an invented '
     'support is a wrong grading. Reading, locating, navigation and repeated work earn nothing by themselves. A '
-    'child\'s credit is in context.child_returns; the sheets it returned are answers of this episode and earn by '
-    'the same counts. Only the numerical controller ends the episode.\n\n')
+    'child returns no sheet and answers none of these task kinds. Only the numerical controller ends the episode.\n\n')
 RETURN_GUIDANCE = ('\nWhat returns to your parent is your credit, the per-annotation scores and the features code reads '
                    'from the subscoring rows of your latest update_sheet (evidence type, number of assays, '
                    'independent groups, relative deviation, support, opposition, net, status) and the references of '
@@ -181,15 +211,6 @@ LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection a
                  'inspected source, its anchored reference subject, whether it is a useful lead for the original '
                  'question and the exact witnessed byte interval. A search hit or title alone verifies nothing.')
 
-# The old ``_PAGE`` of a child (the page it reads), ``_WINDOW`` and ``_TABLE`` (what it reads of it).
-PAGE_SCHEMA = obj({'source_ref': TEXT, 'representation': {'enum': REPRESENTATIONS}, 'artifact_ref': TEXT})
-WINDOW_SCHEMA = obj({'source_ref': TEXT, 'representation': {'enum': REPRESENTATIONS}, 'offset': INTEGER,
-                     'limit': {'type': 'integer', 'minimum': 1}})
-WHERE_SCHEMA = obj({'column': {'type': 'string', 'pattern': '^[A-Z]+$'}, 'match': {'enum': ['equals', 'contains']},
-                    'value': TEXT, 'case_sensitive': {'type': 'boolean'}}, required=['match', 'value'])
-TABLE_SCHEMA = obj({'source_ref': TEXT, 'sheet_key': TEXT, 'offset': INTEGER, 'limit': INTEGER,
-                    'header_row': {'type': 'integer', 'minimum': 1}, 'where': WHERE_SCHEMA},
-                   required=['source_ref', 'sheet_key', 'offset', 'limit'])
 # What this episode asks of a child: one value of the child's fixed vocabulary (controlled messaging: the child's
 # model is never shown text this episode's model wrote). The three children take the same two values.
 OBJECTIVE = {'enum': ['grade_reported_experiment', 'find_applicable_evidence'],
@@ -199,41 +220,60 @@ OBJECTIVE = {'enum': ['grade_reported_experiment', 'find_applicable_evidence'],
                             'find_applicable_evidence: whether the selection holds an experiment or result '
                             'applicable to the proposed annotation is still open; the child reads it, grades what '
                             'is applicable and otherwise declares that it holds no applicable evidence.'}
-CHILD_ARGUMENTS = {
+EXPERIMENT_TYPE = {'enum': list(EXPERIMENT_TYPES), 'description': 'The kind of experiment whose grader inputs are extracted'}
+# The three children are leaf extractors of this episode's own source, for one kind of experiment. A chunk or table child
+# takes ONE unconsumed candidate of its kind (the enum of ``candidate_id`` is built at each decision from the page's
+# input list, so a consumed candidate cannot be selected); a report takes every remaining prose chunk.
+CHILD_DESCRIPTIONS = {
     'table': (
-        'Reads ONE table, sheet or tabular block of numbers of a source of this assignment and grades the '
-        'experiments it reports. Selection: a sheet (sheet_key with its rows, header and an optional literal row '
-        'filter) or one byte window of the page that holds the table. The right choice when a whole table is a job '
-        'of several steps in itself: many rows, headers and footnotes to work through, row selections to revise, or '
-        'several experiments reported in one table.',
-        obj({'objective': OBJECTIVE, 'page': PAGE_SCHEMA, 'selection': {'anyOf': [TABLE_SCHEMA, WINDOW_SCHEMA]}})),
-    'report': (
-        'Reads one source of this assignment in document order from one window, continuing, rereading or changing '
-        'the window as its outcomes warrant, and grades the experiments it meets. The right choice when a long '
-        'document has to be read in order, window after window, because where the evidence stands is not known.',
-        obj({'objective': OBJECTIVE, 'page': PAGE_SCHEMA, 'selection': WINDOW_SCHEMA})),
-    'chunk': (
-        'A leaf extractor: reads ONE byte window of a source of this assignment and extracts, for ONE kind of '
+        'A leaf extractor for ONE unconsumed table region of this source (candidate_id): it extracts, for ONE kind of '
         'experiment (experiment_type), exactly the inputs that experiment\'s grader needs, each with its quote. It '
-        'grades and judges nothing and returns only the immutable leaf record. Commission it once per window and kind. '
-        'The right choice when a passage of the running text reports an experiment of a known kind. This episode '
-        'groups the leaf records of its chunks into graders and updates the subscoring sheet itself (update_sheet).',
-        obj({'objective': OBJECTIVE, 'page': PAGE_SCHEMA, 'selection': WINDOW_SCHEMA,
-             'experiment_type': {'enum': list(EXPERIMENT_TYPES),
-                                 'description': 'The kind of experiment whose grader inputs are extracted'}})),
+        'grades and judges nothing and returns only the immutable leaf record. The right choice when a table reports '
+        'an experiment of a known kind. The region is consumed.'),
+    'report': (
+        'A leaf extractor that reads every remaining prose chunk of this source in document order, window after window '
+        '(consecutive chunks form one window), each once, and extracts from each window, for ONE kind of experiment '
+        '(experiment_type), exactly the inputs that experiment\'s grader needs, each with its quote. It grades and '
+        'judges nothing and returns only the immutable leaf records, one per window. The chunks it reads are consumed.'),
+    'chunk': (
+        'A leaf extractor: reads ONE unconsumed prose chunk of this source (candidate_id) and extracts, for ONE kind of '
+        'experiment (experiment_type), exactly the inputs that experiment\'s grader needs, each with its quote. It '
+        'grades and judges nothing and returns only the immutable leaf record. The chunk is consumed. This episode '
+        'groups the leaf records of its chunk, table and report children into graders and updates the subscoring '
+        'sheet itself (update_sheet).'),
 }
+CANDIDATES_OF_SLOT = {'chunk': 'unconsumed_chunk_ids', 'table': 'unconsumed_table_ids'}
+ASSESS = 'assess_content'
 
-CHILD_GUIDANCE = ('\nA child, when you select one, is selected with its objective (a value of its vocabulary), the '
-                  'page it reads and its selection. What it returns is shown to you as child_returns (its credit and '
-                  'the counts of its finding) and, for table and report, assay_sheets (the features of the sheets it '
-                  'saved). A chunk child returns only its leaf records (context.leaf_record_refs): it earns this '
+
+def available_slots(summary):
+    """The child slots valid now (nano-graphrag ``PageChildProposer._valid_children``): chunk while an unconsumed prose
+    chunk remains, table while an unconsumed table region remains, report while a remaining chunk can be read."""
+    return [slot for slot in CHILD_SLOTS
+            if (summary['report_windows'] if slot == 'report' else summary[CANDIDATES_OF_SLOT[slot]])]
+
+
+def child_arguments(slot, summary):
+    """The arguments a child takes now: the objective, the experiment type and, for chunk and table, one unconsumed
+    candidate of its kind."""
+    if slot == 'report':
+        return obj({'objective': OBJECTIVE, 'experiment_type': EXPERIMENT_TYPE})
+    return obj({'objective': OBJECTIVE, 'experiment_type': EXPERIMENT_TYPE,
+                'candidate_id': {'enum': list(summary[CANDIDATES_OF_SLOT[slot]]),
+                                 'description': 'One unconsumed candidate of context.content_candidates'}})
+
+CHILD_GUIDANCE = ('\nA child, when you select one, is selected with its objective (a value of its vocabulary), its '
+                  'experiment_type and, for chunk and table, the candidate_id it reads. What it returns is shown to '
+                  'you as child_returns (its credit, the counts of its finding, its candidate or windows and '
+                  'experiment_type). Every child '
+                  'returns only its leaf records (context.leaf_record_refs): it earns this '
                   'episode credit only through update_sheet, which groups every leaf record held into graders (one '
                   'experiment, one grader), scores them against the commissioned annotation and updates the '
                   'subscoring sheet; its result is context.sheet_update (scores, features and credit). Run '
-                  'update_sheet when the leaf records you want are held; it can be run again after more chunks '
+                  'update_sheet when the leaf records you want are held; it can be run again after more children '
                   'return and always starts from the sheet you were given.')
 UPDATE_SHEET_DESCRIPTION = (
-    'Group all the leaf records returned by chunk children into graders, update the persistent subscoring sheet with '
+    'Group all the leaf records returned by chunk, table and report children into graders, update the persistent subscoring sheet with '
     'them, and so update the main scoring sheet, the credit and the per-annotation scores of the commissioned '
     'annotation (context.sheet_update). It takes no argument: code derives everything from the records held. It '
     'earns credit only for resolution newly gained; repeating a held fact earns nothing.')
@@ -256,26 +296,32 @@ def instructions(*, knowledge, leads, populations):
     return text + CHILD_GUIDANCE + RETURN_GUIDANCE
 
 
-def selection_schema(names, commit_schema, leads, settings):
-    """What the model answers with: one tool and its arguments, or one child slot and its arguments (the old action
-    schema: kinds ``tool`` and ``child``)."""
+def selection_schema(names, commit_schema, leads, settings, summary):
+    """What the model answers with: one tool and its arguments, or one valid child slot and its arguments (the old
+    action schema: kinds ``tool`` and ``child``); a chunk or table child names only an unconsumed candidate."""
     tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
              for entry in catalog(names, commit_schema, leads, settings)]
-    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': CHILD_ARGUMENTS[slot][1]})
-                for slot in CHILD_SLOTS]
+    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': child_arguments(slot, summary)})
+                for slot in available_slots(summary)]
     return obj({'selection': {'anyOf': [*tools, *children]}})
 
 
-def offered(settings):
+def offered(settings, summary):
     """The tools offered now (library names): the access tools, the population operations under their flags,
-    the reasoning commit."""
-    return [*ACCESS_NAMES, *(entry['name'] for entry in population_entries(settings)), 'reason', 'update_sheet']
+    the reasoning commit, and ``update_sheet`` only while the page holds leaf records its latest update did not group
+    (``summary['unused_leaf_record_refs']``): an update without one regroups the same records and changes nothing."""
+    update = ['update_sheet'] if summary['unused_leaf_record_refs'] else []
+    return [*ACCESS_NAMES, *(entry['name'] for entry in population_entries(settings)), 'reason', *update]
 
 
 def offered_actions(summary, ctx):
-    """The action types offered at this decision, by the names the runner records: each tool offered by ``offered``
-    (the list ``decide`` and ``action`` use) under its python name, then each child slot of ``selection_schema``."""
-    return [*(TOOL_NAMES.get(name, name) for name in offered(ctx.settings)), *CHILD_SLOTS]
+    """The action types offered at this decision, by the names the runner records. Before Jev has assessed the page's
+    candidates the one action is ``assess_content`` (nano-graphrag assesses the page content before the page plans);
+    after it, each tool offered by ``offered`` (the list ``decide`` and ``action`` use) under its python name, then each
+    child slot valid now (``available_slots``: only for unconsumed candidates)."""
+    if summary['content_assessment_ref'] is None:
+        return [ASSESS]
+    return [*(TOOL_NAMES.get(name, name) for name in offered(ctx.settings, summary)), *available_slots(summary)]
 
 
 def catalog(names, commit_schema, leads, settings):
@@ -457,8 +503,8 @@ def prior_sheet_state(store, state_refs):
 
 
 def update_sheet(arguments, ctx):
-    """The page's update of the persistent subscoring sheet (OWNER_DECISION 10). Reads the immutable leaf records the chunk
-    children returned and the sheet states passed in, groups the leaf records into graders (``group_leaf_records``: one
+    """The page's update of the persistent subscoring sheet (OWNER_DECISION 10). Reads the immutable leaf records the leaf
+    children (chunk, table, report) returned and the sheet states passed in, groups the leaf records into graders (``group_leaf_records``: one
     experiment = one grader, default merge, split on a positive identity conflict), finalizes every grader
     (``finalize_grader``), and runs ``page_update`` (merged record, grade, convert, bearing and direction against the claim of
     the commissioned hypothesis, subscoring rows, main sheet, axis, credit, scores, features). Every call regroups ALL the leaf
@@ -482,6 +528,24 @@ def update_sheet(arguments, ctx):
                              'scores': [update['scores'][name] for name in sorted(update['scores'])],
                              'credit': [{name: axis[name] for name in AXIS_CREDIT_CHANNEL} for axis in update['axis']],
                              'features': update['features']}}
+
+
+async def assess_content(arguments, ctx):
+    """The page's content assessment (nano-graphrag ``PageChildProposer._ensure_content_assessment`` with
+    ``assess_page_content``): the source's bytes are read through custody and split into the candidate input units
+    (``page_candidates``, the same split the summary makes), Jev measures every candidate once against every
+    information need of the commission, and this unit holds the assessment as an artifact the page keeps
+    (``content_assessment_ref``). The library functions are pure; this unit alone writes. The Jev client reads its
+    credential from the private credential store (``jev_client``); a missing credential or a failed call raises."""
+    content = representation_content(ctx.store, arguments['source_ref'], arguments['representation'])
+    candidates = page_candidates(content)
+    assessment = await assess_page_content(JevDecisionClient.from_credential_store(), goal=arguments['goal'],
+                                           page_context=arguments['page_context'],
+                                           needs=arguments['information_needs'], candidates=candidates,
+                                           content=content)
+    ref = ctx.store.artifact(canonical(assessment), 'application/json')
+    return {'status': 'completed', 'assessment_ref': ref, 'candidate_count': len(candidates),
+            'need_count': len(arguments['information_needs']), 'request_count': len(assessment['requests'])}
 
 
 async def state_query(arguments, ctx):
@@ -705,14 +769,28 @@ TOOLS = {
     'literature_ratio_source_populate': literature_ratio_source_populate,
     'literature_controlled_response_source_v3_populate': literature_controlled_response_source_v3_populate,
     'literature_gel_populate': literature_gel_populate,
-    'reason': reason, 'update_sheet': update_sheet}
+    'reason': reason, 'update_sheet': update_sheet, ASSESS: assess_content}
 
 
-def child_options():
-    """The children the model may select: slot, description and the arguments it takes (the old
-    ``child_option_information``, over this episode's own slots)."""
-    return [{'slot': slot, 'description': CHILD_ARGUMENTS[slot][0], 'arguments': CHILD_ARGUMENTS[slot][1]}
-            for slot in CHILD_SLOTS]
+def child_options(summary):
+    """The children valid now (nano-graphrag ``_valid_children``): slot, description, the arguments it takes and what it
+    would read: for table each unconsumed region (byte interval, parser hint, exact beginning), for chunk each
+    unconsumed prose chunk (byte interval), for report the windows of the remaining chunks in document order."""
+    candidates = {item['candidate_id']: item for item in summary['content_candidates']}
+    options = []
+    for slot in available_slots(summary):
+        if slot == 'report':
+            reads = {'unprocessed_chunk_count': len(summary['unconsumed_chunk_ids']),
+                     'reading_order': 'document_order', 'windows': summary['report_windows']}
+        else:
+            reads = {'candidates': [
+                {'candidate_id': ref, 'start_offset': candidates[ref]['start'], 'end_offset': candidates[ref]['end'],
+                 **({'parser_hint': candidates[ref]['parser_hint'],
+                     'exact_table_beginning': summary['table_previews'][ref]} if slot == 'table' else {})}
+                for ref in summary[CANDIDATES_OF_SLOT[slot]]]}
+        options.append({'slot': slot, 'description': CHILD_DESCRIPTIONS[slot],
+                        'arguments': child_arguments(slot, summary), 'reads': reads})
+    return options
 
 
 
@@ -720,8 +798,14 @@ def decide(summary, feedback, ctx):
     """Ask the model for the next tool or child, shown the assignment, the custody of the source, its own read
     outcomes, the goal plan, the features of the sheets it saved and its children returned, the children's returns,
     the tools, the measured time and the yield table (the old decision state and inputs, over this episode's
-    summary)."""
-    names = offered(ctx.settings)
+    summary). Before Jev has assessed the page's candidates the decision is the assessment itself, made by code with
+    no model call (nano-graphrag assesses before its page proposer is asked)."""
+    if summary['content_assessment_ref'] is None:
+        return ToolCall(ASSESS, {'source_ref': summary['page']['source_ref'],
+                                 'representation': summary['page']['representation'],
+                                 'goal': summary['jev_goal'], 'page_context': summary['jev_page_context'],
+                                 'information_needs': summary['information_needs']})
+    names = offered(ctx.settings, summary)
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings['knowledge_library_directory']
     context = {'commission': summary['commission'], 'goal': GOAL, 'scope': summary['scope'],
@@ -733,8 +817,14 @@ def decide(summary, feedback, ctx):
                'credit_binding': summary['credit_binding'], 'last_local_outcome': summary['last_local_outcome'],
                'held_record_refs': summary['held_record_refs'], 'assay_sheets': summary['assay_sheets'],
                'aggregation_sheets': summary['aggregation_sheets'], 'child_returns': summary['child_returns'],
+               'source_bytes': summary['source_bytes'], 'covered_windows': summary['covered_windows'],
+               'commissioned_experiments': summary['commissioned_experiments'],
                'leaf_record_refs': summary['leaf_record_refs'], 'sheet_update': summary['sheet_update'],
-               'child_options': child_options(),
+               'content_candidates': [item for item in summary['content_candidates']
+                                      if item['candidate_id'] not in summary['consumed_candidate_ids']],
+               'consumed_candidate_ids': summary['consumed_candidate_ids'],
+               'content_assessment': summary['planner_context'],
+               'child_options': child_options(summary),
                'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     if ctx.settings['rate_population']:
@@ -746,7 +836,8 @@ def decide(summary, feedback, ctx):
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads,
                                                   populations=offered_populations(ctx.settings)), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings)))
+                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings,
+                                                           summary)))
 
 
 def action(response, summary, records, ctx):
@@ -754,10 +845,10 @@ def action(response, summary, records, ctx):
     selects no offered tool or slot, arguments that do not fit its schema, or an empty reasoning commit without a
     source lead or a no-applicable-evidence declaration is invalid. What the child commission names is not checked
     here: a wrong commission fails where the child is built."""
-    names = offered(ctx.settings)
+    names = offered(ctx.settings, summary)
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads, ctx.settings)
+    schema = selection_schema(names, commit_schema, leads, ctx.settings, summary)
     try:
         value = decode_response(response, schema)
         validate_schema(value, schema)

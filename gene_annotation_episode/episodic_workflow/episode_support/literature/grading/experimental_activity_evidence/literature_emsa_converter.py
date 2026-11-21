@@ -26,7 +26,7 @@ sheet, in 'qualitative_effect' ({'statement', 'support_refs', 'fraction_shifted'
   statement          'interaction_detected' (a shifted band is stated), 'interaction_not_detected' (no shift is stated) or 'interaction_not_stated'
   support_refs       the spans of the fact that states it (empty when not stated)
   fraction_shifted   the stated percent of the probe shifted at the highest protein concentration, or None
-The merger (literature_binding_merger.py) reads 'qualitative_effect' to take such a result into the row's interpretations and its own qualitative block.
+The scoring reads 'qualitative_effect': its statement fixes the direction (literature_direction.py) and its support refs join the row (literature_row.py).
 
 Criteria mapping (EMSA criteria -> sheet criteria), declared in CRITERIA_MAP
 ---------------------------------------------------------------------------

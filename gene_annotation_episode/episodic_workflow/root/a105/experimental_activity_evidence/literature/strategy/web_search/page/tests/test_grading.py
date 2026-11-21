@@ -1,6 +1,6 @@
 """The A105 grading of the source examination and of the reading children it commissions, through the real runner
-on a real Store. Offline: the first decision offers ``reason``, the three children and the owner's grading
-instructions; a ``reason`` unit saves the grading sheet; the finding is the controlled features read from it. With the
+on a real Store. Offline: the first decision is code's Jev assessment of the page's candidates against the commission's
+information needs, and the candidates of a real paper and the report's windows over the remaining chunks. With the
 real model (``-m model_run``): the examination runs to the stop of its yield estimator, a child it commissions
 returns only its credit and the controlled features of its sheets, and a resume replays the recorded answers."""
 import asyncio
@@ -9,12 +9,16 @@ import json
 
 import pytest
 
-from episode_runtime import BindingRegistry, ChildCall, ModelRequest, RunJournal, ToolCall, link, resume
+from episode_runtime import BindingRegistry, ChildCall, RunJournal, ToolCall, link, resume
 from gene_annotation_episode.model_provider import ModelProvider, load_config
-from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.experimental_activity_evidence.literature_assay_grading_prompt import (
-    ASSAY_GRADING_TASK)
 
-from .grading_world import CHILD_PATHS, SETTINGS, held_world, reasoning_selection
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests import (
+    spr_passages)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_page_content import (
+    PROSE_CHUNK, page_candidates, report_windows)
+
+from .grading_world import CHILD_PATHS, SETTINGS, held_world
+from .test_branch_page_model_run import popz_world
 
 PACKAGE = __name__.rsplit('.', 2)[0]
 EPISODE = importlib.import_module(PACKAGE + '.episode').SourceEvidenceExamination
@@ -38,37 +42,56 @@ def linked_run(directory, world, run_id, settings=SETTINGS):
                 collaborators=world['collaborators'])
 
 
-def test_the_next_decision_offers_reason_the_children_and_the_owners_grading_instructions(tmp_path):
-    world = held_world(tmp_path)
-    run = linked_run(tmp_path, world, 'a105-examination-decision')
-    request = asyncio.run(run.next_decision())
+def test_the_first_decision_is_the_jev_assessment_of_every_candidate_against_the_commissions_needs(tmp_path):
+    """Offline, on the real PopZ page of the page test: before the page plans, its first decision is made by code (no
+    model call): ``assess_content`` of the page's candidates (the prose chunks of the source, byte offsets) against the
+    information needs of the commission (the result and the molecule identity of the commissioned SPR experiment). Every
+    candidate is unconsumed, the input list is the candidates, and the one action offered is the assessment."""
+    world = popz_world(tmp_path)
+    run = linked_run(tmp_path, world, 'a105-examination-assessment-decision')
+    decision = asyncio.run(run.next_decision())
     summary = EPISODE()._summary(run.view)
-    assert summary['assay_sheets'] == [] and summary['child_returns'] == []
+    content = world['text'].encode('utf-8')
+    candidates = page_candidates(content)
+    assert summary['content_candidates'] == candidates and candidates
+    assert all(item['candidate_type'] == PROSE_CHUNK for item in candidates)        # the paragraph holds no table
+    assert candidates[0]['start'] == 0 and candidates[-1]['end'] == len(content)
+    assert summary['consumed_candidate_ids'] == [] and summary['content_assessment_ref'] is None
+    assert summary['unconsumed_chunk_ids'] == [item['candidate_id'] for item in candidates]
+    assert summary['input_list'] == summary['unconsumed_chunk_ids']
+    assert summary['report_windows'] == [[0, len(content)]]                        # consecutive chunks: one window
+    assert [need['need_id'] for need in summary['information_needs']] == [
+        'result:' + world['assay'], 'identity:' + world['assay']]
+    assert summary['jev_goal']['claim'] == {'predicate': 'binds', 'subject_id': 'PopZ', 'partner_id': 'ParB'}
+    assert isinstance(decision, ToolCall) and decision.name == 'assess_content'
+    assert decision.arguments['information_needs'] == summary['information_needs']
+    assert EPISODE.offered_actions(summary, None) == ['assess_content']
     assert EPISODE.credit(summary, run.view.records) == 0
-    assert isinstance(request, ModelRequest) and ASSAY_GRADING_TASK in request.instructions
-    tools = {entry['name'] for entry in request.context['tools']}
-    assert 'reason' in tools and 'report' not in tools
-    assert {option['slot'] for option in request.context['child_options']} == set(EPISODE.child_slots)
+    assert list((tmp_path / 'model_calls').glob('call-*')) == []
     world['store'].close()
 
 
-def test_the_reason_unit_saves_the_sheet_and_the_finding_is_its_features(tmp_path):
-    world = held_world(tmp_path)
-    run = linked_run(tmp_path, world, 'a105-examination-reason')
-    asyncio.run(run.next_decision())
-    summary = EPISODE()._summary(run.view)
-    unit = asyncio.run(run.run_unit(ToolCall('reason', {
-        'arguments': reasoning_selection(world), 'scope': world['scope'], 'page_source_ref': world['source'],
-        'assignment': summary['literature_assignment'], 'requested': summary['requested'],
-        'proposed_annotation_ref': world['proposed'], 'examined_windows': []})))
-    assert unit['outcome']['status'] == 'completed', json.dumps(unit['outcome'])[:2000]
-    sheet_ref = unit['outcome']['evidence_processing']['gradings'][0]['result']['sheet_ref']
-    summary = EPISODE()._summary(run.view)
-    assert [features['sheet_refs'] for features in summary['assay_sheets']] == [[sheet_ref]]
-    assert EPISODE.credit(summary, run.view.records) == 1.0
-    result = EPISODE.final_to_parent(summary, {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 1.0}, ())
-    assert EPISODE.return_form.select(()).admit(result, 'return') == result
-    world['store'].close()
+def test_the_candidates_of_a_real_paper_cover_its_text_and_the_report_reads_each_remaining_chunk_once():
+    """On the real text of Bowman et al. 2008 (``spr_passages.PRIMARY``): the candidates are in document order with
+    byte offsets that decode; consecutive prose chunks overlap by at most nano-graphrag's overlap and no prose chunk holds
+    a table's bytes; with one chunk consumed the report's windows hold every remaining chunk exactly once and none of the
+    consumed one's bytes outside its overlaps with its neighbours."""
+    content = spr_passages.PRIMARY.read_text(encoding='utf-8').encode('utf-8')
+    candidates = page_candidates(content)
+    chunks = [item for item in candidates if item['candidate_type'] == PROSE_CHUNK]
+    tables = [item for item in candidates if item['candidate_type'] != PROSE_CHUNK]
+    assert len(chunks) > 3
+    for item in candidates:
+        content[item['start']:item['end']].decode('utf-8')
+    for chunk in chunks:
+        assert not any(chunk['start'] < table['end'] and table['start'] < chunk['end'] for table in tables)
+    consumed = chunks[1]['candidate_id']
+    remaining = {item['candidate_id'] for item in chunks} - {consumed}
+    windows = report_windows(candidates, remaining)
+    for chunk in chunks:
+        inside = [window for window in windows if window[0] <= chunk['start'] and chunk['end'] <= window[1]]
+        assert len(inside) == (0 if chunk['candidate_id'] == consumed else 1)
+    assert all(earlier[1] <= later[0] for earlier, later in zip(windows, windows[1:]))
 
 
 @pytest.mark.model_run

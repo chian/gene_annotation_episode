@@ -52,7 +52,9 @@ The kinds of held graded source read, by the content of their retained sheet:
   in the set one measurement: its value is the SHARE of the group's sequences that fall in the target's cluster (0 to 1), the
   same scale as the other tests (about 1 for a strong typical result, as the other tests' values; the MSA's count is weighted
   by W = 1 / E to land there). A candidate with no sequence in the set gives no measurement. The measurement also records
-  ``size`` and ``in_target_cluster``, and its ``dataset``: the graded search the set is drawn from. The owner: "You only can
+  ``size`` and ``in_target_cluster``, and its ``dataset``: the graded search the set is drawn from. The ``size`` is the
+  candidate's evidence: the credit of a cluster test weighs each differential by the weaker side's ``size / (size + 4)`` and each
+  entry by its own (``differential_credit.cluster_evidence``; the owner: "clusters with little data earn less"). The owner: "You only can
   earn one credit for one dataset - you can improve a clustering to earn more, but you cannot replicate". So all the
   clusterings of one dataset together earn the largest test credit among them (a later one earns only its improvement over the
   best so far; a replicate earns 0), and a candidate's value on the cluster sheet from one dataset is its largest value over
