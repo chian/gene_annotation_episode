@@ -17,15 +17,18 @@ actual structural statistics; a prediction's confidence describes the model and 
 
 ```
 structural_homology_evidence      HEAD. Model-routed. Forecast yield controller, differential credit (SOP 7 to 9).
-├─ structure_search               CHILD. One search of one structure database with one model of the target = one test.
+└─ structure_search               CHILD. One search of one structure database with one model of the target = one test.
 │     get_model   tool of the child: obtain a model of the target from one source (round 1: alphafold_db, esmfold)
 │     estimate    gated, from the estimate ledger          (the job-child shape of SOP Step 4)
 │     launch      submit the search to the Foldseek server
 │     fix         only after a failed launch
 │     monitor     one status request after a stated wait
-│     extract     fetch the result, name the hits, grade: one unit
-└─ reason                         the head's reasoning commit (ceiling 0, as in A101)
+      extract     fetch the result, name the hits, grade: one unit
 ```
+
+The head has no `reason` action (the owner, 2026-11-21: "i don't see why reason needs to be an explicit child"). In A101
+it is an action whose ceiling is always 0, so the gate never lets it run; an action that can never be taken is not offered
+here. The head's actions are only the ones that can earn; when none is worth its cost the yield controller stops the episode.
 
 Later rounds, in this order, each only after the one before ran for real: (2) `pdb100` and `cath50` as databases of
 `structure_search` (their hits need a name lookup: PDB chain to UniProt; CATH domain to superfamily), and the model source
@@ -92,7 +95,7 @@ No request carries a name, an email or a key. The job route for the Foldseek ser
   the arithmetic and the measurements reader under `LIB/grading/structural_homology_evidence/` (the repository's per-axis
   library convention; A101's modules name A101's sheet families and stay untouched).
 - Ceilings: `structure_search` = the proved bound of one search test (the hits it can name x the family weight, by
-  `test_ceiling`, as A101's `bvbrc_blast`); 0 for a search of a database and model already held or commissioned; `reason` 0.
+  `test_ceiling`, as A101's `bvbrc_blast`); 0 for a search of a database and model already held or commissioned.
 - Controller: forecast, with `CEILING_VERSIONS` per action, `outcome_pending`, `resume_action` (the head finishes parked
   jobs) and `best_arguments`, as in A101's head. Exchange rate: 0.006 to start, PROVISIONAL (A101's value; the owner on a
   first figure: "you have to start somewhere that's fine"). It is re-derived from A102's own resolved forecast rows after
