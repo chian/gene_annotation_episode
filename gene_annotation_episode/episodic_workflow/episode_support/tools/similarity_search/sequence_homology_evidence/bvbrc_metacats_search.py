@@ -58,19 +58,26 @@ def alignment_source(reader, row):
 
 
 def plan(reader, alignment_ref):
-    """What the job is built from, read from the held alignment product row ``alignment_ref``: ``{'rows', 'target_id',
-    'groups', 'source_ref', 'query_ref', 'alignment_artifact'}``. The groups are ``build_groups`` over the sheet's reference
-    sequences (each named as the alignment names it, with its candidate)."""
+    """What the job is built from, read from the held alignment product row ``alignment_ref`` and the sheet of its source (the
+    records the child returned; the alignment artifact is NOT opened here, so the head can call this): ``{'target_id',
+    'groups', 'source_ref', 'query_ref', 'alignment_artifact', 'columns'}``. The groups are ``build_groups`` over the sheet's
+    reference sequences (each named as the alignment names it, with its candidate); the alignment holds every sequence the
+    sheet lists (the grading checked it)."""
     row, problem = require_product(reader, alignment_ref, ALIGNMENT_KIND)
     if problem is not None:
         raise ValueError(problem)
     source, sheet = alignment_source(reader, row)
-    rows = parse_alignment(reader.get_artifact(row['artifact_ref']).decode('ascii'))
     target_id = sheet['alignment']['target_name']
     members = {item['name']: item['candidate'] for item in sheet['references']}
-    groups = build_groups(members, target_id, [name for name, _ in rows])
-    return {'rows': rows, 'target_id': target_id, 'groups': groups, 'source_ref': source['id'],
-            'query_ref': source['operand_refs'][0], 'alignment_artifact': row['artifact_ref']}
+    groups = build_groups(members, target_id, list(members))
+    return {'target_id': target_id, 'groups': groups, 'source_ref': source['id'],
+            'query_ref': source['operand_refs'][0], 'alignment_artifact': row['artifact_ref'],
+            'columns': sheet['alignment']['columns']}
+
+
+def alignment_rows(reader, planned):
+    """The rows of the held alignment (read in the child, which holds the artifact)."""
+    return parse_alignment(reader.get_artifact(planned['alignment_artifact']).decode('ascii'))
 
 
 def held_alignments(reader):
@@ -104,7 +111,7 @@ def reusable_report(reader, alignment_ref, p_value):
 def planned_size(planned):
     """The size of the job the plan gives: the sequences in groups, the groups and the alignment's columns."""
     return {'sequences': sum(len(group['ids']) for group in planned['groups']), 'groups': len(planned['groups']),
-            'columns': len(planned['rows'][0][1])}
+            'columns': planned['columns']}
 
 
 # -- the binding -----------------------------------------------------------------------------------------------------
@@ -123,7 +130,8 @@ def prepare(ctx, request, commission):
     """The job of one launch: the groups and the derived alignment built by code from the held alignment, kept as artifacts
     and given as the job's two inputs."""
     planned = plan(ctx.store, commission['alignment_ref'])
-    alignment_ref = ctx.store.artifact(derived_alignment(planned['rows'], planned['groups']).encode('ascii'), 'text/plain')
+    alignment_ref = ctx.store.artifact(derived_alignment(alignment_rows(ctx.store, planned), planned['groups']).encode(
+        'ascii'), 'text/plain')
     groups_ref = ctx.store.artifact(group_file_text(planned['groups']).encode('ascii'), 'text/tab-separated-values')
     size = planned_size(planned)
     return {'job': {'application': 'MetaCATS', 'p_value': request['p_value'], 'alignment_file': ALIGNMENT_FILE,
@@ -150,7 +158,7 @@ def extract(ctx, handoff_ref, request, commission):
     (result_ref,) = [item['ref'] for item in fetched['results'] if item['name'] == CHISQ_FILE]
     planned = plan(store, commission['alignment_ref'])
     try:
-        grading = {'sheet': grade(planned['rows'], planned['groups'], planned['target_id'],
+        grading = {'sheet': grade(alignment_rows(store, planned), planned['groups'], planned['target_id'],
                                   store.get_artifact(result_ref).decode('ascii'), p_value=request['p_value'])}
     except ValueError as error:
         return {**_failed('grading_refused', False, reason=str(error)), 'closure_ref': fetched['closure_ref']}

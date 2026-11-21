@@ -55,8 +55,8 @@ def build_groups(members, target_id, sequences):
     product}`` (the reference sequences of the candidates), ``sequences`` the identifiers the alignment holds. The target
     is in no group; a member the alignment does not hold is not in a group; a candidate with fewer than
     ``MINIMUM_GROUP_SIZE`` sequences makes no group. Each group is ``{'label', 'product', 'ids'}``, in the order of the
-    sorted product names; the ids keep the alignment's order."""
-    held = [name for name in sequences if name != target_id and name in members]
+    sorted product names; the ids are sorted (so the group file does not depend on the order the aligner wrote)."""
+    held = sorted(name for name in sequences if name != target_id and name in members)
     products = sorted({members[name] for name in held})
     groups = [{'product': product, 'ids': [name for name in held if members[name] == product]} for product in products]
     groups = [group for group in groups if len(group['ids']) >= MINIMUM_GROUP_SIZE]
