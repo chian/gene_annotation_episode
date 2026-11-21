@@ -38,11 +38,14 @@ Decisions of reading.
 - Arrival order: the order of `reader.refs()`, the custody's receipt order (the journal's receipts, by row id, each recorded once): the records the parent passed in, in the order given, then the head's own units in their order (and what a child returned, at the unit that returned it). The summary's `held_record_refs` is the same order (`records.refs()`). It is the same on each recomputation and on resume.
 - A candidate is (vocabulary, identifier or else name). A Pfam family, a BV-BRC product and a reference sequence are three vocabularies and different candidates; nothing merges them yet (no mapping between a family and a product exists in the head).
 - A database search is read by the content of its sheet (a `blast_database_sheet` with `reference_metadata`), not by provider: a hit's function is `reference_metadata[association.metadata_index].functions[...].function` (for BV-BRC the `product`; never the feature's `annotation`). A hit with no function is unlabelled and enters no measurement. The same function on several hits: replicates (the function takes their mean).
+  [Superseded 2026-11-21: a candidate's value in a test is the mean of its replicates (kept), but the score is no longer a mean over tests; see the section 2026-11-21 at the end.]
 - The measurements of different targets are never compared: the credit is the sum over the targets of the credit of each target.
 - `tests` shows, for each test, the number of admitted candidates it measured.
 - Cutoff of the accumulation controller: 0.1, in the credit's units (an admitted candidate earns up to 1; a differential earns the size of a gap). The episode continues while a unit is expected to earn more than 0.1, the move the owner's example calls small ("S_B only moves +0.1"). The continuation key stays `A101:a101_native_sequence_correspondence` (the key `read_from_parent` gives a commission that names no `a101_task`; the declaration is checked against the new definition record, not against the key).
+  [Superseded 2026-11-21: a candidate's score is now a sum over sheets, so an admitted candidate no longer earns "up to 1"; the cutoff 0.1 stays.]
 - `HEAD/goal.py` also stated the old credit and was reworded.
 - Credit definition record: kind `a101_differential_credit`, version `a101_differential_credit_v1`. `A101SequenceCredit` (the index reader) keeps its own record (it is stamped in the index sheet's policy).
+  [Superseded 2026-11-21: the record is now version `a101_differential_credit_v2`; see the section 2026-11-21 at the end.]
 
 ## Check against the lead's trial (a direct call on stored records of run D1, workspace `runs/bvbrc_a101_ws_D`; not a real run; launcher `runs/trial_D1`)
 
@@ -83,3 +86,18 @@ Target: E. coli K-12 RecA (UniProt P0A7G6, 352 residues), workspace `runs/a101_d
 - The scan: one to three Pfam families (RecA, PF00154, and its C-terminal domain family), the credit rising by each family's score at the scan unit.
 - The search: the lead expects one product among the 300 hits; I expect one dominant product (a RecA name) with a score near 0.9 and possibly one or two rare variants (a differently written RecA name or "hypothetical protein") with a score near 0.8 or less. Credit at the extract unit rises by the sum of those scores (about 1 to 3).
 - Credit at the end about 2 to 4; no differential; the leading candidate a RecA product (or the PF00154 family if its score is higher).
+
+## 2026-11-21: the credit is additive, and every episode supplies a ceiling
+
+The owner's rule, verbatim: "the graders should additively add to the subscoring sheets and then the subscoring sheets additively add to the score".
+
+What the code now does (commit `b1b8f6049`):
+
+- A candidate's value in one test is the mean of its replicates (the same function on several hits of that test).
+- A subscoring sheet is a test kind. A candidate's sheet value is the SUM of its values over the tests of that kind.
+- The candidate's score is the SUM of its sheet values. The old mean over tests and the old mean of test values are gone.
+- Entry (a candidate's own score, once, when it first has a value above zero) and differentials are unchanged, except that a differential is now the difference of two candidates' values in one test.
+- One test is one graded source, `method@source` (commit `f227c34a8`), so different jobs are never pooled as replicates.
+- The alignment's measurement counts only new conserved distinguishing sites (`a101_conserved_sites.md`).
+- The head's credit definition record is version `a101_differential_credit_v2`. A run whose continuation settings carry the old `credit_definition` fails with `scientific_yield_credit_definition_mismatch`.
+- Every episode's credit now also supplies `ceiling` (commit `b755bea1a`; the runner checks it and journals the offered ceilings). `UNBOUNDED` is used where an action's gain truly has no limit. The owner's meaning: "UNBOUNDED filled in everywhere is bad; UNBOUNDED where truly unbounded is right". The older statements here of "no maximum" or an `up to 1` per candidate are history.

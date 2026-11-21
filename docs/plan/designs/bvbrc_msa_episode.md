@@ -67,6 +67,7 @@ Target CspA (P0A9X9, 70 residues), workspace `runs/a101_msa_ws_M1`, run `runs/a1
 4. The alignment: sequences = 1 + (candidates x per_candidate, fewer where a candidate has fewer distinct sequences); columns 70 to 75; the target's own row present.
 5. The credit: the MSA test is the second test of the product candidates that took part. Each took part candidate's value is the mean over its references of identical columns / 70, which I expect
    0.55 to 0.95 (CspA-like products near 0.9, the CspB/CspG/CspI family lower, near 0.65 to 0.8). The candidate's score becomes the mean of its search value and its MSA value; the differential of a pair of
+   [Superseded 2026-11-21: a score is no longer the mean of its test values: it is the sum over subscoring sheets of the sheet values; see a101_differential_credit.md, section 2026-11-21.]
    candidates is |change of A's score - change of B's score| (nonzero unless both move equally); expected credit gain of the MSA extract unit 0.05 to 0.5. A candidate not chosen is unchanged.
 6. The head's later units: reasoning commits until the estimator stops it (as H1: about 10 to 19 units).
 
