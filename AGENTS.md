@@ -233,6 +233,8 @@ omit a returned invalid outcome from the iterator or invent progress for it.
 
 # Evidence-axis bookkeeping
 
+To build another evidence axis (A102 to A110) the way A101 was built, follow [the evidence-axis build SOP](docs/sop/evidence_axis_build_sop.md).
+
 Read [the central evidence-axis ledger](docs/EVIDENCE_AXIS_LEDGER.md) before
 reporting axis status. Confirm changes in executable code and, for execution
 claims, retained results/receipts before recording them. Update the affected

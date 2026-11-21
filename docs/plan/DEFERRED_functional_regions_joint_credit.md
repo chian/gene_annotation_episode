@@ -26,7 +26,7 @@ Marks: **[owner]** = said by the owner. **[inference]** = proposed by Claude, no
 - **[inference]** Keep those two as separate recorded quantities and combine them only in scoring, so the formula can
   change later without losing data.
 - **[inference]** Near-duplicate exemplars are not independent support. Counting independent exemplars needs
-  clustering (this is a use for all-vs-all, which does not exist yet).
+  clustering (this is a use for the clustering of the A101 `all_vs_all` child).
 
 ## Outcomes, support and credit
 
@@ -59,7 +59,7 @@ All of this is a proposal for the owner to strike or correct.
   no free-text ask.
 - **Return up.** The axis declares what it can return, including references to the region records it produced. The
   parent selects them. Credit and finding are always returned.
-- **Alignment.** The root commissions an ordinary pairwise run (later a database or all-vs-all run) between exemplar
+- **Alignment.** The root commissions an ordinary alignment run (a pairwise run, or a database or all-vs-all run) between exemplar
   and target, passing both sequences as records. The pairwise chain already works at leaf level.
 - **Projector at the root.** A deterministic composition. It reads only the records it actually received or produced,
   through the custody reader: the region records and the alignment sheets, as references passed up. It computes the

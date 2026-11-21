@@ -20,16 +20,17 @@ never-run all-vs-all library: `all_vs_all.md`.
 
 One child episode, `HEAD/all_vs_all` (the standard files; no children of its own, so no `msg_to_child` or `read_from_child`). The head's model
 commissions it with controlled fields only: `query_ref` (the target), `search_ref` (a held graded BV-BRC search), `candidates` (two or
-more product candidates admitted from it), `per_candidate` (2 to 20), `inflations` (a non-empty subset of the fixed set 1.4, 2.0, 4.0: the
-values the clustering may use) (the bound local resource each tool runs on is named by the child's model). Three one-shot
-tools, each one unit, each through `execute_on_local_resource` (the local inspection point) with its job folder in the run's local resource
-workspace, each keeping a labelled data product (`records/data_products.py`) that the next requires (`require_product`):
+more product candidates admitted from it) and `per_candidate` (2 to 20). The child's own model names the bound local resource each tool runs on
+and tunes the clustering. Five one-shot tools, each one unit, each through `execute_on_local_resource` (the local inspection point) with its job
+folder in the run's local resource workspace, each keeping a labelled data product (`records/data_products.py`) that the next requires
+(`require_product`):
 
 | tool (model's JSON) | its one check | what runs | product (EDAM data / format) |
 |---|---|---|---|
 | `prepare_database` (`resource_id`) | local resource bound; set of at least 2 sequences; no database of this commission held (reuse key); no earlier failure; `makeblastdb`, `blastdbcmd`, python exist | the set's hit sequences fetched once by md5 (`sequences_by_md5`), the set kept as `protein_sequences`; `makeblastdb` (existing `prepare_locally`); the database files packed into ONE tar | `blast_protein_database`: data_1233 Sequence set (protein) / format_3981 TAR |
 | `all_vs_all_blast` (`resource_id`, `database_ref`) | the database is a held `blast_protein_database` product (`require_product`); no matrix of it held; no earlier failure; `blastp` exists | a new job folder: the driver unpacks the tar there and runs `blastp -db` of every sequence of the set; report parsed and checked for self-hits | `sequence_similarity_matrix`: data_2082 Matrix / format_3475 TSV |
-| `cluster` (`resource_id`, `matrix_ref`, `inflation`) | the matrix is a held `sequence_similarity_matrix` product; inflation one of the commission's; the same matrix at the same inflation not held (reuse key); no earlier failure; `mcl` exists | `mcl --abc -I <inflation>` on the score-ratio graph; the clusters graded into the cluster sheet | `sequence_clusters`: data_1245 Sequence cluster (protein) / format_2171 Sequence cluster format (protein) |
+| `cluster` (`resource_id`, `matrix_ref`, `inflation`, `contrast`) | the matrix is a held `sequence_similarity_matrix` product; inflation one of 1.4, 2.0, 4.0 and contrast one of none, rescale, percentile_25, _50, _75, _90 (`cluster_sheet.INFLATIONS`, `CONTRASTS`); the same tuning of the same matrix not tried before; no earlier failure; `mcl` exists | `mcl --abc -I <inflation>` on the score-ratio graph as the contrast leaves it. A TRY: the clusters are kept as a working result, the child's model is shown controlled facts of them, and nothing is graded | `sequence_clusters`: data_1245 Sequence cluster (protein) / format_2171 Sequence cluster format (protein) |
+| `commit_clustering` (`clusters_ref`) | a held clustering; none committed yet | the committed clustering is graded into the cluster sheet: the one graded source the head reads | (the graded source) |
 | `hold` (a reason) | always valid | nothing | none |
 
 EDAM was read from https://edamontology.org/EDAM.tsv on 2026-11-21 (all six terms exist, none obsolete). EDAM has no term for a BLAST
@@ -57,8 +58,8 @@ matrix holds every ordered pair, the self pairs included (a sequence that did no
 MCL (Markov Cluster, van Dongen; the established method for BLAST similarity graphs: TribeMCL, OrthoMCL), run as the program `mcl` (22-282,
 built from the official source under `resources/software/mcl-22-282`, recorded in `resources/software/mcl.json`), on a graph whose edge weights
 are the BLAST SCORE RATIO `bits(a, b) / min(bits(a, a), bits(b, b))` in [0, 1] (the larger of the two directions of the pair; capped at 1), so
-sequence length does not dominate a bit score. The one parameter is the inflation (lower is coarser), from the fixed set 1.4, 2.0, 4.0. It works on
-the weights themselves, with no cutoff to choose, and a chain of weak links through a multi-domain sequence does not merge two families (it does
+sequence length does not dominate a bit score. The child's model tunes two parameters from fixed sets: the inflation (lower is coarser; 1.4, 2.0 or 4.0) and the graph contrast (none, rescale of the ratios to the set's own range, or only the edges at or above the 25th, 50th, 75th or 90th percentile of the set's ratios). MCL works on
+the weights themselves, and a chain of weak links through a multi-domain sequence does not merge two families (it does
 under single linkage or connected components). A sequence with no edge is a cluster of its own (mcl reads edges, so it is absent from its output).
 
 ## The cluster test the head reads
@@ -70,18 +71,17 @@ is the subscore of a hit's alignments (0 to 1; 0.8 to 0.96 for a typical strong 
 result (all of a candidate's sequences cluster with the target) and 0 when none does (a candidate with value 0 is not admitted); the MSA count is
 weighted by W = 1/E to be on the same scale. The measurement also keeps `size` and `in_target_cluster`.
 
-One clustering per commission: after the first graded clustering the child's target is reached and `cluster` is no longer offered. Clustering the
-same matrix again would repeat evidence and, being additive, be paid again; the head refuses an identical commission.
+One clustering is graded per commission: the tries of `cluster` are not graded, and `commit_clustering` grades one of them, once. Grading several clusterings of one matrix would repeat evidence and, being additive, be paid again; the head refuses an identical commission.
 
 ## Credit and ceilings
 
 Child credit (`all_vs_all/credit.py`): the head's three child units, each earned once and read from the products held: `handoff_unit` for the database,
-`information_unit` for the matrix, `graded_unit` for the graded clustering; a refused or repeated step earns 0. Child ceiling: each tool's unit while
-its check can pass, else 0. Yield: the completion controller to the commission's target.
+`information_unit` for the matrix, `graded_unit` for the committed (graded) clustering; a refused or repeated step earns 0, and a try earns nothing. Child
+ceiling: each tool's unit while its check can pass, else 0 (`cluster` and `hold` 0). Yield: the completion controller to the commission's target.
 
-Head ceiling for `all_vs_all` (`differential_credit.cluster_commission_ceiling`): the most the cluster test can add from the current state: one test
-measures the named candidates, each value in [0, 1], bounded as every such test is (`test_ceiling`: a pair of listed candidates at most 1, a candidate
-the test admits at most 1, a single listed candidate 0); a commission identical to one already graded (same search, candidates, per_candidate) 0.
+Head ceiling for `all_vs_all` (`HEAD/credit.ceiling`, `test_ceiling` of the family `cluster`): the most the cluster test can add from the current state: one test
+measures the named candidates, each raw value in [0, 1], bounded as every such test is (`test_ceiling`: a pair of listed candidates at most the cluster sheet's weight, a candidate
+the test admits at most that weight, a single listed candidate 0); a commission identical to one already commissioned (same search, candidates, per_candidate) 0.
 
 ## What was reused and what was not
 
@@ -117,5 +117,4 @@ through the library functions with the head's stored custody (harness in the ses
 - MCL at inflation 1.4, 2.0 and 4.0: ONE cluster of all 30 sequences each time. scipy average-linkage of 1 - score ratio, cut at 0.5 and at 0.7: also one
   cluster. Both agree: this set (one cold-shock-domain family of 70-residue proteins) is not separated by the clustering, so each candidate's share is 1.0
   (CspA 10/10, CspB/CspG/CspI 10/10, CspC 9/9). The test is uninformative on this set; it would be informative for candidate groups that are different families.
-- Each of the three clusterings is a graded source and a test; read by the head's `candidate_measurements` (nine measurements of 1.0). The three tests sum
-  on the sheet `cluster:mcl` to 3.0 for each candidate, which is why one clustering per commission is the rule.
+- Graded as three sources, the three clusterings would be three tests read by the head's `candidate_measurements` (nine measurements of 1.0) and would sum on the sheet `cluster:mcl` to 3.0 for each candidate, which is why only one committed clustering is graded.

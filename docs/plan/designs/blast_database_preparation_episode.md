@@ -1,3 +1,5 @@
+Removed from the A101 head on 2026-11-21: database preparation became the `prepare_database` tool of the `all_vs_all` child, so it is no longer a child of the head.
+
 # blast_database_preparation: the child episode, local part (2026-11-20)
 
 Governed by `a101_tree.md`. The model is the router; code checks and carries out. `launch_local` is a TOOL of this

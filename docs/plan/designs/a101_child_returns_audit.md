@@ -38,7 +38,7 @@ head reads them through `read_from_child.RETURNED`. Graded lists (extract functi
 | 12 | `internal_summary.py` `data_products`, `reusable_alignments` | row fields `locations`, `settings`, `used[1]` | row only | OK; `used[1]` is the search source: relies on the order `[sequence_ref, search, feature_group_ref]` |
 | 13 | `internal_summary._named` -> `records.named_references` | held records only; names filtered with `records.holds` | n/a | OK |
 | 14 | `internal_summary._held_comparisons` | `get_artifact(source['auxiliary_artifact_refs'][0])` for pairwise sources | the head's own units | OK |
-| 15 | `msg_to_child._bvbrc_metacats` / `_custody` | the commission passes the alignment ROW, the msa source, its named records that the head holds. The alignment artifact (`msa.afa`, the row's `artifact_ref` and the source's `artifact_ref`) is not held by the head | NOT HELD | will fail the metacats commission or the child: the child's `alignment_rows` does `get_artifact(planned['alignment_artifact'])`. Not a head read; no run reached it (C1 and C2 never ran the metacats child). Fix: bvbrc_msa returns the alignment artifact (`result_ref`) in `graded_refs`, then `_custody` passes it through the source's named refs |
+| 15 | `msg_to_child._bvbrc_metacats` / `_custody` | the commission passes the alignment ROW, the msa source, its named records that the head holds. The alignment artifact (`msa.afa`, the row's `artifact_ref` and the source's `artifact_ref`) was not held by the head when audited | NOT HELD when audited | the child's `alignment_rows` does `get_artifact(planned['alignment_artifact'])`. Not a head read; no run had reached it. Built since: each child's returned lists are closed under naming (`returned_with_names`), so the alignment artifact is in `bvbrc_msa`'s `graded_refs` and `_custody` passes it |
 | 16 | `bvbrc_msa_alignment.reusable_alignment` (working tree) | `_plan(reader, ...)`: `search_rows` reads search source, its grading and the target length | runs in the child on what the head passed (`_custody([query, search])` gives source, grading, target sequence) | OK if the commission passes them; not a head read |
 
 No other head-side read of `input_refs`, `plan` files, report files, `locations`, `used` or `derived_from` was found. `locations`
@@ -80,11 +80,8 @@ returned. Items the head does use or must pass on: the alignment artifact `msa.a
 (reply artifacts, staged inputs, plan, group file, metadata JSON, BLAST report) are private to their child today and are
 named by returned rows and sources; the head uses none of them (it uses only the rows' `detail`/`estimates`).
 
-## Smallest fixes
+## What was built from this audit
 
-1. msa: return the alignment artifact (`result_ref`) in `graded_refs`; or have MetaCATS be given it another way (#15).
-2. For each other private artifact: the rule says either return it or stop naming it. Rows and sources are written by
-   `job_access` and `store.put`, so the names cannot be removed from them; the practical reading is that the head never
-   opens them and only the heads' own reads (the table above) must stay inside what is returned.
-3. Never add a head read of `input_refs`, plan or report files. Anything the head needs about the job goes into the handoff
-   row's `estimates` at launch (as the msa `identity` does).
+1. Every child's returned lists (`handoff_refs`, `check_refs`, `closure_refs`, `graded_refs`) are closed under naming by `LIB/jobs/job_records.returned_with_names`: the records the child chooses to return, with everything they name, recursively (`a101_child_returns.md`).
+2. Anything private is not named in what is returned: the MSA no longer stages `plan.json` as a job input; the job's identity is kept in the handoff row's `estimates`.
+3. The head adds no read of `input_refs`, plan or report files. Anything the head needs about a job goes into the handoff row's `estimates` at launch (as the msa `identity` does).

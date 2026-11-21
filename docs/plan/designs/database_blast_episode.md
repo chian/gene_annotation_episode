@@ -1,3 +1,5 @@
+Removed from the A101 head on 2026-11-21: the hosted NCBI search stayed queued at the service for hours in every run, and the head now searches databases through its `bvbrc_blast` child.
+
 # database_blast: a child episode of the A101 head (hosted NCBI BLAST search)
 
 Written 2026-11-20. Governs where it differs from `a101_tree.md` about this episode's leaves: `launch_api`, `monitor` and

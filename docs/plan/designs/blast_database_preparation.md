@@ -1,3 +1,5 @@
+Removed from the A101 head on 2026-11-21: database preparation became the `prepare_database` tool of the `all_vs_all` child (the library modules this note designs are what that tool calls).
+
 # BLAST database and data preparation: design record, phase 1 (2026-11-20)
 
 Fork F2. Nothing here has been run. No workload was started; the five new library modules were only syntax-checked

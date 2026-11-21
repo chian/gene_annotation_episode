@@ -1,20 +1,18 @@
 # The real entry: `run` and `resume` on the application command line
 
-Status: design, written before the code (2026-11-20).
+Status: built (2026-11-20): `gene_annotation_episode/run_command.py`, with its subcommands in `gene_annotation_episode/cli.py`.
 
-## What exists
+## The pieces
 
-- `python -m gene_annotation_episode` (`gene_annotation_episode/cli.py`) has `init`, `add-material`, `status`, `artifact`
-  and `export`. They register caller material in a workspace (the run's `Store`) and read it back. No command starts an
-  episode run.
-- `episode_runtime` is a library. A run starts with `link(registry, entry_path, entry_input, run_id=..., journal=...,
-  collaborators=...)` and is replayed with `resume(registry, run_id=..., journal=..., collaborators=...)`.
-  The four collaborators are `store`, `model_provider`, `continuation` (settings by binding path) and `services`
-  (name -> factory). The runner records everything (commissions, units, model calls, receipts, returns, resume).
-- Everything that started a run before this was a script written for one test (a world file in a `tests/` folder).
-  By the owner's definition that is not a real run, and no such file is kept in the repository.
+- `python -m gene_annotation_episode` (`gene_annotation_episode/cli.py`) registers caller material in a workspace (the run's `Store`) with `init` and
+  `add-material`, reads it back with `status`, `artifact` and `export`, and starts and reads runs with `run`, `resume`, `report`, and registers the
+  run's other inputs with `propose-annotation` and `freeze-libraries` (below).
+- `episode_runtime` is a library. A run starts with `link(registry, entry_path, entry_input, run_id=..., journal=..., collaborators=...)` and is
+  replayed with `resume(registry, run_id=..., journal=..., collaborators=...)`. The four collaborators are `store`, `model_provider`, `continuation`
+  (settings by binding path) and `services` (name -> factory). The runner records everything (commissions, units, model calls, receipts, returns, resume).
+- A script written for one test (a world file in a `tests/` folder) is not a real run by the owner's definition, and no such file is kept in the repository.
 
-## What this adds
+## What `run` and `resume` are
 
 Two subcommands of the application CLI, in one new module (`gene_annotation_episode/run_command.py`) that `cli.py`
 calls. They contain no episode code and no recording or replay code: the system records everything.
@@ -61,15 +59,12 @@ The runner is generic and must stay so; the application CLI is where a caller al
 caller's next step (run) belongs there. Episode folders stay free of run harness code, and nothing is written into
 a `tests/` folder.
 
-## Real-run recipe for the first real run: the head and its `pairwise_blast` tool (written before it is run)
+## Real-run recipe (the head and its `pairwise_blast` tool)
 
 `pairwise_blast` is a tool of the head (`a101_tree.md`), not an episode.
 
 1. `init` a workspace with the 76-residue ubiquitin target and `add-material` the 78-residue reference.
 2. Write the head's commission (its assignment form) and the continuation and services files for the run.
-3. `run --entry sequence_homology_evidence` with the real model. The prediction is written in the run's own record
-   before the run: the model chooses the `pairwise_blast` tool with controlled arguments; the unit runs `blastp`,
-   fetches and grades; the head's credit rises from the saved sheet.
+3. `run --entry sequence_homology_evidence` with the real model, through the launcher.
 4. `resume` the same run id into a fresh model-call directory: the model is asked nothing and the result is the same.
-5. Refusal runs from the same command: a tool call naming a record the head does not hold; `blastn` on a protein;
-   a repeat of the same comparison (it earns nothing).
+5. Refusals from the same command: a tool call naming a record the head does not hold; `blastn` on a protein; a repeat of the same comparison.

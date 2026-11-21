@@ -52,7 +52,7 @@ The alignment is a row of the work table `data_products` (`records/data_products
 the MetaCATS child reads the workspace path from `locations` and the local copy from `artifact_ref`. Deviations from the lead's wording: `settings` also holds the candidates and `per_candidate`
 (otherwise two different alignments of the same search would have one reuse key), and `used` is the target's sequence artifact and the search source (the hit sequences are fetched only inside the launch, so
 the reuse key must not depend on them; the hit sequences are `derived_from`, as the `protein_sequences` product).
-The graded source (provider `bvbrc_msa`, artifact = the alignment, `operand_refs` = [target]) carries the sheet `msa_alignment_sheet_v1` and is what the head's credit reads.
+The graded source (provider `bvbrc_msa`, artifact = the alignment, `operand_refs` = [target]) carries the sheet `msa_alignment_sheet_v1` and is what the head's credit reads: its measurement is the count of NEW conserved distinguishing sites times the weight W = 1/E, and its ceiling is derived from the target positions not yet identified (`a101_conserved_sites.md`).
 
 ## Run M1: prediction (written before the run)
 
@@ -65,10 +65,7 @@ Target CspA (P0A9X9, 70 residues), workspace `runs/a101_msa_ws_M1`, run `runs/a1
    `launch`, `monitor` (wait at least 60 s: first status `finished`), `extract`: 4 units, credit 4.0 = target, stop at the extract. The ledger gets one row of kind `bvbrc_msa:bvbrc_msa:MSA:muscle:protein`
    with job facts `{service, application, sequences, residues, longest}` and a measured duration (service's own) of 10 to 30 s.
 4. The alignment: sequences = 1 + (candidates x per_candidate, fewer where a candidate has fewer distinct sequences); columns 70 to 75; the target's own row present.
-5. The credit: the MSA test is the second test of the product candidates that took part. Each took part candidate's value is the mean over its references of identical columns / 70, which I expect
-   0.55 to 0.95 (CspA-like products near 0.9, the CspB/CspG/CspI family lower, near 0.65 to 0.8). the differential of a pair of
-   candidates is |change of A's score - change of B's score| (nonzero unless both move equally); expected credit gain of the MSA extract unit 0.05 to 0.5. A candidate not chosen is unchanged.
-6. The head's later units: reasoning commits until the estimator stops it (as H1: about 10 to 19 units).
+5. The head's later units: reasoning commits until the estimator stops it (as H1: about 10 to 19 units).
 
 ## Run M1: observed (`runs/a101_msa_run_M1d`, workspace `runs/a101_msa_ws_M1`, journal `journal_M1.sqlite3`, report `report_M1.json`, run id `a101_msa_M1b`; the run FAILED in the head after the MSA child returned)
 
@@ -81,9 +78,7 @@ Alignment: 41 sequences, 70 columns, the target's row 0; 10 references per candi
 
 Data product row (the alignment; `state.sqlite3`, table `episode_work_rows`, work table `data_products`): `kind` multiple_sequence_alignment, `edam_data` http://edamontology.org/data_0863, `edam_format` http://edamontology.org/format_1984, `generated_by` row_e184... (the handoff), `used` [target sequence artifact, search source_c135...], `derived_from` [row_48c6... (the protein_sequences product)], `settings` {aligner muscle, alphabet protein, application MSA, candidates [4 names], per_candidate 10}, `locations` [{service bvbrc_workspace, path /<user>/home/gene_annotation_episode_a101/job_88af.../.msa/msa.afa}], `reuse_key` 04d4e3c1....
 
-Values of the MSA test (the sheet, read directly from the grading artifact; mean over 10 references of identical columns / 70): CspA product 0.9814 (0.957 to 1.0), CspB/CspG/CspI 0.8486 (0.814 to 0.886), CspC 0.7557 (0.714 to 0.771), "Cold shock protein of CSP family" 0.8086 (0.771 to 0.900).
-
-Against the prediction: chain as predicted (scan, search, MSA commissioned with 4 candidates, per_candidate 10, estimate basis `no_earlier_measurement`, 4 child units, credit 4.0); the estimate was 120 s (predicted 30 to 120) and the measured duration 15 s (predicted 10 to 30); the alignment had 41 sequences / 70 columns (predicted 70 to 75 columns: it is 70, the target's length); values 0.76 to 0.98 (predicted 0.55 to 0.95); the credit gain was predicted 0.05 to 0.5 and is, by hand, about 0.13. Not observed: the head's units after the child.
+Against the prediction: chain as predicted (scan, search, MSA commissioned with 4 candidates, per_candidate 10, estimate basis `no_earlier_measurement`, 4 child units, credit 4.0); the estimate was 120 s (predicted 30 to 120) and the measured duration 15 s (predicted 10 to 30); the alignment had 41 sequences / 70 columns (predicted 70 to 75 columns: it is 70, the target's length); not observed: the head's units after the child.
 
 ### Defect and fix
 
@@ -93,7 +88,7 @@ The MSA extract kept each reference with `sequence_ref` = the hit's sequence art
 
 Answer from the code first: no head path reads a `sequence_ref` the head may not hold. `internal_summary.held_sequences` keeps only records whose `sequence_ref` is set, so the alignment's and the BLAST's reference records (now `sequence_ref` null) are not held sequences and the pairwise tool and `held_searches` do not see them; the only artifact reads of sequences are of `input_` records (the target) and, in the child, of the target.
 
-Prediction (the model may choose differently; not steered): scan, `bvbrc_blast`, then `bvbrc_msa` with 2 to 4 candidates and `per_candidate` 5 to 10. The head summarises after the MSA child with no custody error. Its credit after the MSA unit rises by the sum of the differentials, expected 0.05 to 0.3 (M1 by hand: 0.127 with four candidates at 10 each), equal to my hand arithmetic from the sheet and the search scores to within 0.001. The ledger gets a BLAST row (expected learned from earlier searches, measured about 60 to 120 s from the task record) and an MSA row (basis now `learned_from_earlier_jobs`, one measured job of 15 s; measured 10 to 30 s). The head's return carries `candidates` with the changed scores and `data_product_refs` with the `protein_sequences` and `multiple_sequence_alignment` rows.
+Prediction (the model may choose differently; not steered): scan, `bvbrc_blast`, then `bvbrc_msa` with 2 to 4 candidates and `per_candidate` 5 to 10. The head summarises after the MSA child with no custody error. Its credit rises after the MSA unit by the entries and differentials of the candidates the alignment measures. The ledger gets a BLAST row (expected learned from earlier searches, measured about 60 to 120 s from the task record) and an MSA row (basis now `learned_from_earlier_jobs`, one measured job of 15 s; measured 10 to 30 s). The head's return carries `candidates` with their scores and `data_product_refs` with the `protein_sequences` and `multiple_sequence_alignment` rows.
 
 ## Run M2: observed (`runs/a101_msa_run_M2`, fresh workspace `runs/a101_msa_ws_M2`, run id `a101_msa_M2`; FAILED again in the head after the MSA child returned)
 

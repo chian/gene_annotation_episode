@@ -1,8 +1,8 @@
 # bvbrc_blast: a child episode of the A101 head (BLAST through the BV-BRC application service)
 
-Written 2026-11-20. Pattern: `database_blast_episode.md`. This episode searches one protein query against a precomputed
+Written 2026-11-20. Pattern: the shared job-child shape (`LIB/tools/similarity_search/sequence_homology_evidence/bvbrc_job_child.py`). This episode searches one protein query against a precomputed
 BV-BRC database with the `Homology` application of the BV-BRC application service, on the owner's account, through an
-authenticated route of the job service. Its actions are not those of `database_blast` (owner's decision below).
+authenticated route of the job service. Its actions are the owner's (below).
 
 ## What exists, and what is written (step zero)
 
@@ -11,9 +11,9 @@ authenticated route of the job service. Its actions are not those of `database_b
 | `BvbrcJobRoute` (`jobs/bvbrc_job_route.py`) | `BVBRCAnalysisClient` (transport: login from the environment variable `authorization_env`, sent only to the configured origins), `prepare_rpc_request`, `decode_rpc_response`, `parse_task_records`, `parse_workspace_records`, `prepare_application('Homology', ...)` (retained definition), `parse_sequences`, from `ApiJobRoute` (subclassed; every contacting method replaced, `_send` made unreachable): `spacing`, `_contact`, `_directory`, `_recorded`, `_publish`, `wait`; `JobAccess` calls it | the route protocol over this service: submit = `Workspace.ls /` (the login's home) + `Workspace.create` (one folder per job) + `AppService.start_app2`; status = `AppService.query_tasks`; results = `Workspace.ls` of the result folder; read = `Workspace.get_download_url` + `download`. The public route sends no credential and is not changed. `api_bvbrc_appservice.py` (per-axis copies) is the old selected-call service with effect reservation and publication, not a job route: not used; I did not edit any file under another axis's name. The state map (`queued`, `pending`, `running`, `in-progress`, `completed`, `failed`, `deleted`) is a private name in the gene_context copy of that service, so it is written again here (7 entries). |
 | registration (`jobs/job_services.py`) | the `remote` list of the other people's uncommitted `api` change | one optional key `bvbrc`; **this file carries the other people's uncommitted `api` change and is NOT committed by me** |
 | `record_estimate`, `launch_search`, `monitor_search`, `fetch_and_grade_search` (`tools/.../bvbrc_blast_search.py`) | `JobAccess.launch/check/fetch`, `wait_for_job`, `EstimateTable.expect/resolve/kind_statistics`, `database_blast_search`: `search_facts`, `timing`, `seconds_until_allowed`, `failure_code`, `now_text`, `seconds_between`, `_failed`, `_ended`, `_observations`; `grade_blast_result` (database mode), `retain_tool_grading`, `SEARCHES`, `progress_information` | `database_blast_search.submit_search` / `check_search` / `fetch_and_grade_search` are specific to the public service (job fields read by `checked_analysis_kind`, handle-keyed estimates, report name, database name, one-handoff `search_view`); the estimate is now its own earlier action (own key), so the status request resolves that key |
-| the five checks (`check_estimate`, `check_launch`, `check_fix`, `check_monitor`, `check_extract`), `check_commission`, `episode_state`, `search_view` (latest handoff) | the pattern of `database_blast_search.check_*` | new conditions below; `search_state` of the public module knows one handoff and no fix |
+| the five checks (`check_estimate`, `check_launch`, `check_fix`, `check_monitor`, `check_extract`), `check_commission`, `episode_state`, `search_view` (latest handoff) | the pattern of the checks of `database_blast_search` (a library module kept for its helpers) | new conditions below; `search_state` of the public module knows one handoff and no fix |
 | `credit.py`, `yield_estimator.py` | `progress_information`, `AccumulationYieldController` | units: estimate held, handoff, new status facts, graded |
-| the head's wiring | `selection_schema`, `child_option`, `CHILD_SLOTS`, `COMMISSIONS`, `COMMISSION_CHECKS`, `SELECTABLE`, `CHILD_DESCRIPTIONS`, `_custody` | entries beside `database_blast`'s; no summary view of held searches (one loop, nothing is passed back) |
+| the head's wiring | `selection_schema`, `child_option`, `CHILD_SLOTS`, `COMMISSIONS`, `COMMISSION_CHECKS`, `SELECTABLE`, `CHILD_DESCRIPTIONS`, `_custody` | entries of its own (the head's `bvbrc_searches` view of held searches came with parking, below) |
 
 ## Actions
 
@@ -23,9 +23,9 @@ having made an estimate] launch job, fix mistakes/reason, monitor/update estimat
 Owner: "I think we can work on that in one loop first and then we can practice the detaching while monitoring (i.e., come
 back to this process later or wait overall) after we get these basic forms down"
 
-Built (the five things named; a sixth may be added later): `estimate`, `launch`, `fix`, `monitor`, `extract`. No `hold`,
-no later-visit path: the head commissions the child once and passes nothing back; a repeat commission of the same query,
-program and database is refused (it would submit again).
+Built (the five things named; a sixth may be added later): `estimate`, `launch`, `fix`, `monitor`, `extract`. No `hold`.
+A repeat commission of the same query, program and database is refused (it would submit again), unless it continues a
+search that is outstanding (parking, below).
 
 - `estimate` {program, database, expected_seconds, basis}: no search is running or waiting for a fix; program/database fit the
   query; seconds in range; `basis` agrees with the learned statistics (`learned_from_earlier_searches` only when the table
@@ -70,18 +70,14 @@ wait the model may choose, not a limit on the search.
 ## Predictions
 
 Run A (`runs/bvbrc_a101_run_A1`, workspace `runs/bvbrc_a101_ws_A`: the target only, E. coli K-12 RecA P0A7G6, 353 aa):
-1. The head's model is offered `reason` and `bvbrc_blast` (not `pairwise_blast`: one held sequence; not `database_blast`: no
-   `api` resource is bound) and commissions `bvbrc_blast` with blastp, bacteria-archaea, resource `bvbrc`.
+1. The head's model is offered `reason` and `bvbrc_blast` (not `pairwise_blast`: one held sequence) and commissions `bvbrc_blast` with blastp, bacteria-archaea, resource `bvbrc`.
 2. The child: `estimate` first (basis `no_earlier_measurement`: the table is new; the number is the model's guess), then
    `launch` (accepted after about 30 s of spacing sleeps inside the unit), then `monitor` two to four times (queued or
    running, then finished: the one outside run took about 2 minutes), `extract` (graded: 300 hits, features with no function rows).
-   Child credit about 1 (estimate) + 1 (handoff) + 2 or 3 (new facts) + 1 (graded) = 5 or 6; then a few `estimate` repeats
-   (no credit) until the controller stops it; state `extracted`.
-3. The head's credit is above 0 after the return: the hits cover the whole query (identical RecA proteins of E. coli
-   genomes), so near 1 (above 0.9); the head's estimator then ends it.
-4. The estimate table: one resolved search of the kind `bvbrc_blast:bvbrc_homology:bacteria-archaea:blastp` whose duration is
+   State `extracted`.
+3. The estimate table: one resolved search of the kind `bvbrc_blast:bvbrc_homology:bacteria-archaea:blastp` whose duration is
    the first observation of `finished` (about 120 to 180 s).
-5. No file of the run, the workspace, the journal or the model-call folders contains `sig=` followed by hex.
+4. No file of the run, the workspace, the journal or the model-call folders contains `sig=` followed by hex.
 
 ## Names of the hits: multistep extract (owner's instruction, 2026-11-20)
 
@@ -94,8 +90,9 @@ BV-BRC's public Data API, grade with the result as reference metadata, keep the 
 - Requests (`bvbrc_hit_metadata.py`, calling `encode_native_query` and `BVBRCDataClient.query_prepared`; public, NO login sent,
   none was refused): `genome_feature` by `patric_id` in batches of 100 (fields `patric_id`, `feature_id`, `product`,
   `annotation`, `pgfam_id`, `plfam_id`, `genome_id`, `taxon_id`, `aa_length`, `aa_sequence_md5`), `protein_family_ref` by
-  `family_id` (`family_type`, `family_product`), `genome` by `genome_id` in batches of 100 (`genome_name`, `taxon_id`): 7
-  requests for 300 hits, 10 s apart. `genome_name` is not a `genome_feature` field of the registry, hence the third collection.
+  `family_id` (`family_type`, `family_product`), `genome` by `genome_id` in batches of 100 (`genome_name`, `taxon_id`),
+  10 s apart (7 requests for all 300 hits). How many hits are named is set by `bvbrc_hit_metadata.name_hits`: batches of 100 in the order of the per-hit value,
+  stopping when a batch adds no new product and moves no candidate's score by more than 0.01 (`bvbrc_msa_episode.md`, follow-on 1). `genome_name` is not a `genome_feature` field of the registry, hence the third collection.
   Lineage nodes need a rank, which the genome record does not give: no lineage is supplied.
 - The grader's metadata row (legacy association, `blast_database_grader._attach_metadata`: matched on `accession` and the native
   `taxid`; a differing taxon is refused as `metadata_taxon_conflicts_with_native`): `{'accession', 'taxid', 'source', 'functions':
@@ -113,13 +110,12 @@ BV-BRC's public Data API, grade with the result as reference metadata, keep the 
 - The reference records of the hits take the product as label (a copy of the report with titles set is given to the shared
   `_observations`; the stored report and the grading are not changed).
 - Estimate table: one expectation per launch, written by `launch` just before the submission (the `estimate` action records
-  nothing on the table: a revised estimate, or one made when no launch can follow, leaves no row). Not yet changed: the
-  `<kind>:remaining` revision rows of the monitor.
+  nothing on the table: a revised estimate, or one made when no launch can follow, leaves no row).
 
 Prediction, run C (`runs/bvbrc_a101_run_C1`, fresh workspace `runs/bvbrc_a101_ws_C`, same estimate table; 4th submission):
 1. The head commissions `bvbrc_blast`; the child's estimate is `learned_from_earlier_searches` near 76 s (median of 66.4 and
    85.5); `launch`; one or two `monitor`; `extract` takes about 70 to 80 s longer than before (7 data requests, 10 s apart).
-2. The Store accepts the source of provider `bvbrc_homology` and the head's credit counts it with no further call (about 1).
+2. The Store accepts the source of provider `bvbrc_homology`.
 3. The sheet's `functions` has one row, `RecA protein`, with `supporting_group_count` about 300 (the hits are distinct
    accessions), `groups_without_function` 0, the metadata accounting 300 of 300, 7 data requests, no failure; the top hits are
    RecA proteins of Enterobacterales with `PGF_00047078` and a genus-level `PLF_...` family.
@@ -140,14 +136,12 @@ workspace `runs/bvbrc_a101_ws_A`, journal `journal_A2.sqlite3`, report `report_A
 2. Child: `estimate` (basis `no_earlier_measurement`, 180 s), `launch` (accepted), ONE `monitor` (wait 60 s, expected remaining
    120 s: it showed `finished` already), `extract` (graded: 300 hits, 300 comparison observations, 0 unprojected), then five
    `estimate` repeats (the model's choice; the one action left; no credit), then the controller stopped it (`yield_stop`,
-   9 units). Child credit 4.0 (estimate 1, handoff 1, finished fact 1, graded 1). Predicted two to four monitors and credit 5 or
-   6: not as predicted (the search was faster than the first wait: 66.4 s from submission to the first observation of `finished`,
+   9 units). Child credit 4.0 (estimate 1, handoff 1, finished fact 1, graded 1). Predicted two to four monitors:
+   not as predicted (the search was faster than the first wait: 66.4 s from submission to the first observation of `finished`,
    the earlier outside run took about 110 s).
-3. The head's credit after the graded return: 0.99999998 (comparison_count 300, one region, no uncovered region): predicted
-   above 0.9, observed. Its estimator ended it after that one unit.
-4. The estimate table: the kind `bvbrc_blast:bvbrc_homology:bacteria-archaea:blastp` got the resolution 66.443147 s
+3. The estimate table: the kind `bvbrc_blast:bvbrc_homology:bacteria-archaea:blastp` got the resolution 66.443147 s
    (outcome `finished`). The five estimate repeats after the extract read it (`learned_from_earlier_searches`, 66.443147 s).
-5. Token search: no file of any run directory, workspace, journal or model-call folder holds `sig=` followed by hex
+4. Token search: no file of any run directory, workspace, journal or model-call folder holds `sig=` followed by hex
    (`grep -rlaE 'sig=[0-9a-f]{16,}'` over every `runs/bvbrc_*`: 0 files). The name `KB_AUTH_TOKEN` appears (services file, journal).
 
 Defects found and fixed in this run: (a) the continuation file must name the settings of every child slot of the head, also
@@ -164,7 +158,7 @@ Prediction written after A and before B: the model's first estimate is learned f
 Observed: first estimate `learned_from_earlier_searches`, 66.443147 s (the measured duration of A, as predicted); `launch`;
 `monitor` (wait 11 s: `running`), `monitor` (wait 61 s: `finished`), `extract` (300 hits), six `estimate` repeats (75.95 s,
 the median of 66.44 and 85.45), `yield_stop`, 11 units, child credit 5.0 (estimate, handoff, running, finished, graded). The measured
-duration of the second search resolved at 85.452264 s. Head credit 0.99999998 again.
+duration of the second search resolved at 85.452264 s. 
 
 ### Refusals (direct calls of the checks, NOT a real run: `runs/bvbrc_refuse_check_1`; no service contacted)
 
@@ -182,9 +176,7 @@ launch, a failed search) were not exercised against the service: not verified in
 
 - The service answered faster than the hours-long public queue: 66 to 110 s for a 353-residue query over 23.9 million proteins.
 - Hit titles are empty in the report (`blast_out.metadata.json` is `{}`): the sheet has no function labels (`functions` empty).
-- The repeated `estimate` actions after the extract leave open expectation rows in the estimate table (they never resolve);
-  `<kind>:remaining` revision rows stay open as well.
-- A search still running when the estimator stops the child (the later "detaching" case) did not occur: not verified.
+- A search still running when the child's controller winds the child down did not occur: not verified.
 
 ### Run C: the names of the hits (`runs/bvbrc_a101_run_C1`, workspace `runs/bvbrc_a101_ws_C`, journal `journal_C1.sqlite3`, report `report_C1.json`)
 
@@ -193,7 +185,7 @@ launch, a failed search) were not exercised against the service: not verified in
    75.95); `launch`; two `monitor` (11 s: `running`; 61 s: `finished`); `extract`; five `estimate` repeats; `yield_stop` at 10
    units; child credit 5.0 (estimate, handoff, running, finished, graded). The duration measured and recorded: 87.169109 s.
 2. The Store admitted the extract with the source of provider `bvbrc_homology` (the coordinator's change of `state.py` worked at
-   its first run) and the head's credit counted it with no further call: 0.99999998, `comparison_count` 300, one unit.
+   its first run).
 3. The finding's identification: one function row, `RecA protein`, `supporting_group_count` 300, `groups_without_function` 0,
    `conditional_weight` 1.0, `max_bit_score` 717.613, `unannotated_fraction` 0.0; `metadata_hit_count` 300,
    `metadata_covered_count` 300, `data_request_count` 7, no failed data request, none refused (the Data API was used without the
@@ -244,7 +236,6 @@ workspace `runs/bvbrc_a101_ws_D`; the services file names the global ledger.
    product name is expected among the hits (unlike RecA, where all 300 were one product).
 4. Afterwards the ledger holds 4 measured searches and no open row; the trend has two query lengths and still no
    line (fewer than five searches).
-5. The head's credit is close to 1 with no further call.
 
 ### Run D1: observed (`runs/bvbrc_a101_run_D1`, workspace `runs/bvbrc_a101_ws_D`)
 
@@ -257,7 +248,6 @@ workspace `runs/bvbrc_a101_ws_D`; the services file names the global ledger.
    "hypothetical protein".
 4. As predicted: the ledger holds 4 measured searches, no open row, one kind; the trend has two query lengths and
    no line. The ten repeat `estimate` units of the wind-down wrote nothing to the ledger.
-5. The head's credit: 0.9716 with no further call (1 head unit).
 
 ### Run E1: prediction (written before the run)
 
@@ -271,7 +261,6 @@ that the ledger reaches five measured searches of three lengths and the size lin
 3. `extract`: the products are RNA polymerase beta subunits, essentially one product.
 4. Afterwards the ledger holds 5 measured searches of 3 query lengths and the trend carries `size_fit` (the
    least-squares line of seconds against query length).
-5. The head's credit is close to 1 with no further call.
 
 ## Parking and resuming (owner's instruction, 2026-11-20; "park" is the word)
 
@@ -297,7 +286,7 @@ Design (nothing of `episode_runtime`, `method_loop` or `yield_control` is change
   the target (which the controller requires) and below the one-unit credit still missing before the target, so it does not stop
   early on forecast; it stops at the target at once (exact zero remaining credit). A search that keeps running, or failed at the
   service, leaves the target unreached; the controller then winds the child down.
-- Resume: the head's `held_searches` view (as `database_blast`'s) of the job rows of kind `bvbrc`; its commission check admits a
+- Resume: the head's `held_searches` view of the job rows of kind `bvbrc`; its commission check admits a
   continuation (same query, program, database, resource, `until` extracted) and refuses a second submission; `msg_to_child` passes
   back, in custody, the handoff, status and closure records and `known_ended`; the child rebuilds its state from them
   (`resumed_rows`: the estimate recorded with the launch and the launch, and the state the latest status shows), so the launch
@@ -323,7 +312,6 @@ Design (nothing of `episode_runtime`, `method_loop` or `yield_control` is change
    query length explains little of the duration (three searches of the same length took 66.4, 85.5 and 87.2 s). The
    trend therefore also gives the median distance of the measured durations from the line
    (`typical_distance_seconds`), added after this run.
-5. The head's credit: 1.0 with no further call.
 
 ### Run P1: prediction (written before the run)
 
@@ -343,15 +331,14 @@ Query: E. coli K-12 chaperone protein DnaK (UniProt P0A6Y8, 638 residues: a four
    `extract` (about 70 s longer for the 7 data requests); target 2.0 (ended + graded), `yield_stop` at the extract, no wind-down.
    The Homology service sees ONE job folder for this query; the ledger has one row for the launch, resolved with the measured
    duration (about 90 s, from the submission to the first `finished` status).
-4. The head's credit counts the graded result with no further call (near 1).
-5. The identification names `Chaperone protein DnaK` (a single product or a few close variants of it).
+4. The identification names `Chaperone protein DnaK` (a single product or a few close variants of it).
 
 ### Run P1: observed (`runs/bvbrc_a101_run_P1`, workspace `runs/bvbrc_a101_ws_F`, journal `journal_P1.sqlite3`, report `report_P1.json`)
 
 Submission 1 of 3 for this step. The head's model first sent off `hmmer_profile_scan` (Pfam-A, local), then commissioned `bvbrc_blast`
 with `until: extracted`: a valid one-loop run, not the park path. Child: `estimate` (78 s, learned), `launch`, one `monitor` (wait 90 s: `finished`),
 `extract` (300 hits, 300 of 300 metadata, 7 data requests): 4 units, credit 4.0 = the target, `yield_stop` exactly at the extract (no
-wind-down unit; the completion controller did what it was built for). Head credit 0.99999999999999, 2 head units, 6 model calls.
+wind-down unit; the completion controller did what it was built for). 2 head units, 6 model calls.
 The model did not park. What in the description led it there: the description said what each `until` means but nothing that made
 waiting cost anything; the head had also already used its other tool, so the work left was the search itself. The description now says
 (a fact of the system, not a recommendation) that while a child runs the head does nothing else.
@@ -376,26 +363,20 @@ Submission 2 of 3 for this step. The model parked this time (with the amended de
   credit 2.0 = the target (ended + graded), `yield_stop` at the extract, no wind-down. No second submission: one job folder
   (`job_fe0c02496d9e6d44e9bf832c7e7e63f8`) and one ledger row (query length 548) resolved with 93.671343 s (`finished`); the ledger holds 7
   measured searches and no open row.
-- The head's credit counted the graded result with no further call: 0.9999999999981; 3 head units; 7 model calls (the cold one-loop
+- 3 head units; 7 model calls (the cold one-loop
   runs: B1 12, C1 11, D1 16, P1 6 calls); wall time from the first to the last model call 136 s (B1 264 s, C1 341 s, D1 356 s,
   P1 172 s). The one-loop runs lost most of their time to the repeated estimate units after the extract, which the completion
   controller has removed (P1 has none); the park path also overlapped the scan with the search.
 
-### Run P2b: prediction (written before the run)
+### Run P2b: goal and setting
 
 Goal: the head ends while the search is parked, and a later head run resumes the SAME search. Query: E. coli K-12 elongation factor Tu
-(UniProt P0CE47, 394 residues), fresh workspace `runs/bvbrc_a101_ws_H`, run `runs/bvbrc_a101_run_P2b`. The head's yield setting
-(`cutoff`) is set to 2.0, above the 1.0 maximum of its bounded credit, so that its estimator stops it after its first unit (a setting of
-the run, not a choice of the model: the model's `until` is its own). Submission 3 of 3 (the last).
-1. If the model's first action is the `bvbrc_blast` commission with `until: launched`: the child parks (2 units, credit 2.0); the head's
-   estimator ends the head after that one unit (credit 0); the head's return finding has `waiting_searches` with this search and
-   `outstanding_handoff_count` 1, and carries the handoff and status records. If the model's first action is something else, the head
-   ends without a search (no submission is made): I would report it and repeat with another workspace (no submission spent).
-2. The return visit (`runs/bvbrc_a101_run_P2c`, the same workspace, the head's cutoff back to 0.1): the commission passes the returned records
-   in `evidence_refs`; the head's `bvbrc_searches` shows the search outstanding with the seconds since its launch (minutes) and expected
-   remaining 0; its model commissions `bvbrc_blast` with `until: extracted`; the child's first `monitor` shows `finished`, `extract`, 2 units,
-   credit 2.0 (the minimum wait: 0, since the last contact is old); one job folder and one ledger row, resolved (measured from the
-   submission to the first `finished` status, so several minutes, not the true service time: the ledger row records an upper bound).
+(UniProt P0CE47, 394 residues), fresh workspace `runs/bvbrc_a101_ws_H`, run `runs/bvbrc_a101_run_P2b`. The head's yield setting (`cutoff`) of
+that date was set above its credit's maximum, so that its estimator stopped it after its first unit (a setting of the run, not a choice of the
+model: the model's `until` is its own). Submission 3 of 3 (the last). The return visit (`runs/bvbrc_a101_run_P2c`, the same workspace): the
+commission passes the returned records in `evidence_refs`; the head's `bvbrc_searches` shows the search outstanding with the seconds since its
+launch; its model commissions `bvbrc_blast` with `until: extracted`; the child's first `monitor` shows `finished`, then `extract`; one job
+folder and one ledger row, resolved.
 
 ### Run P2b: observed (`runs/bvbrc_a101_run_P2b` ... `P2b7`, workspace `runs/bvbrc_a101_ws_H`)
 

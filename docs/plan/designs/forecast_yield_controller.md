@@ -42,7 +42,8 @@ formula enters only through `credit.ceiling` (the most the credit can rise if an
   forecast row (the same row the model is shown) with its threshold (expected seconds x exchange rate). If it is not
   worth it the response is raised as `Rejected` (no unit, the model decides again) with feedback `{'status': 'invalid',
   'category': 'forecast', 'code': 'action_forecast_not_worth_its_cost', 'detail': {action_type, ceiling, forecast_gain,
-  expected_seconds, threshold}}`. An unknown forecast (no history anywhere for an UNBOUNDED action) is not refused;
+  expected_seconds, threshold, choose_from}}` (`choose_from`: the best commission's arguments, when the episode supplies the optional
+  `best_arguments`; the row the model is shown carries them as `best_arguments`, and its ceiling and forecast are those of exactly that commission). An unknown forecast (no history anywhere for an UNBOUNDED action) is not refused;
   only episodes with a forecast controller are gated. The `action_forecasts` rows the model sees gain `worth`.
   It is a forecast comparison, never a limit on the episode.
 - Stop: the episode stops when no offered action's forecast exceeds `expected seconds x exchange_rate`. Stopping is
@@ -59,7 +60,7 @@ formula enters only through `credit.ceiling` (the most the credit can rise if an
 Declaration to put in the continuation settings of the head (the other agent edits `runs/` settings; this is the exact entry):
 `yield_bindings["A101:a101_native_sequence_correspondence"] = {"kind": "forecast", "parameters": {
 "exchange_rate": 0.0065, "forget_old_rows": true, "job_kinds": {}}, "credit_definition": A101DifferentialCredit().as_record()}`
-(credit definition v2, unchanged).
+(the definition record is `HEAD/credit.py` `A101DifferentialCredit`).
 
 ## Wiring (why here)
 
@@ -89,15 +90,14 @@ and is never part of a history. Only the runner writes; no tool or model is hand
 
 ## Choices made where the brief left room
 
-- Prior with history: the capped ledger counts alone (not added to Beta(1,1)), so a kind that always earned nothing
-  forecasts 0 until it earns; uninformative only with no history.
+- A kind whose history (ledger and this run) always earned nothing forecasts 0 until it earns; with no history anywhere its share is one half.
 - Binding path is the runner's (`sequence_homology_evidence`), not an `a101/` prefix.
-- The credit's `yield_method` of the head is now `forecast`; its definition record stays v2.
+- The credit's `yield_method` of the head is `forecast`.
 - Resolve-after-crash: a unit re-run after its resolve was written but before its journal row would find different seconds and raise `identity_conflict` (loud, not repaired).
 
 ## Findings from the direct check (labelled; see the report)
 
-With no ledger history of the new kinds the prior is uninformative and the loose ceilings dominate: `hmmer_profile_scan`
+With no history of a kind its share is one half, so a loose ceiling dominates: `hmmer_profile_scan`
 has ceiling 53275 (the profile database size), so its forecast stays in the thousands and the head never stops by the
 rule while it is offered; a tighter ceiling or the ledger's own history of its fractions is what stops it. This is the
 formula working as specified, and it is the ceiling's looseness, not the controller, that has to change.

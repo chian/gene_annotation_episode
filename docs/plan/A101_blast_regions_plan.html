@@ -76,8 +76,8 @@
 <script type="application/json" id="plan">
 {
  "title": "A101 plan: BLAST uses, the grading chain, and functional regions",
- "date": "2026-11-20",
- "purpose": "One record of the decisions, the tree, the status and the next work for A101 sequence homology. The design of the tree is docs/plan/designs/a101_tree.md. Statuses change only with a real command-line run as evidence; nothing here is owner-verified unless marked.",
+ "date": "2026-11-21",
+ "purpose": "One record of the decisions, the tree, the status and the next work for A101 sequence homology. The tree as the code stands is docs/plan/designs/a101_tree.md. Statuses change only with a real command-line run as evidence; nothing here is owner-verified unless marked.",
  "rules": "Rules: (1) A decision is marked 'owner' only if the owner said it; my inferences are marked 'inference' and stay proposals. (2) A status moves only with evidence (run directory). (3) Old code is read for intention only; everything is built in the new paradigm.",
  "status_legend": [
   [
@@ -135,19 +135,19 @@
     ]
    },
    {
-    "kind": "blast_database_preparation, local",
+    "kind": "hmmer_profile_scan (tool of the head)",
     "cells": [
      [
       "designed",
-      "a101_tree.md"
+      "a101_differential_credit.md"
      ],
      [
-      "none",
-      ""
+      "built",
+      "head tool + library function"
      ],
      [
-      "none",
-      ""
+      "real",
+      "runs/a101_diff_run_H1"
      ],
      [
       "none",
@@ -156,19 +156,19 @@
     ]
    },
    {
-    "kind": "all_vs_all_blast, local",
+    "kind": "bvbrc_blast (child: BV-BRC Homology)",
     "cells": [
      [
       "designed",
-      "a101_tree.md"
+      "bvbrc_blast_episode.md"
      ],
      [
-      "none",
-      ""
+      "built",
+      "shared bvbrc_job_child.py; estimate, launch, fix, monitor, extract"
      ],
      [
-      "none",
-      ""
+      "real",
+      "runs/bvbrc_a101_run_B1 to E1, P1, P2a (parked and resumed)"
      ],
      [
       "none",
@@ -177,19 +177,19 @@
     ]
    },
    {
-    "kind": "database_blast, hosted service",
+    "kind": "bvbrc_msa (child: BV-BRC MSA)",
     "cells": [
      [
       "designed",
-      "a101_tree.md"
+      "bvbrc_msa_episode.md, a101_conserved_sites.md"
      ],
      [
-      "none",
-      ""
+      "built",
+      "same shape; conserved-site measurement"
      ],
      [
-      "none",
-      ""
+      "real",
+      "runs/a101_conserved_run_C2"
      ],
      [
       "none",
@@ -198,7 +198,49 @@
     ]
    },
    {
-    "kind": "cluster leaves (all actions)",
+    "kind": "bvbrc_metacats (child: BV-BRC MetaCATS)",
+    "cells": [
+     [
+      "designed",
+      "bvbrc_metacats_episode.md"
+     ],
+     [
+      "built",
+      "same shape; gives no candidate measurement"
+     ],
+     [
+      "real",
+      "runs/a101_conserved_run_C2"
+     ],
+     [
+      "none",
+      ""
+     ]
+    ]
+   },
+   {
+    "kind": "all_vs_all (child, local)",
+    "cells": [
+     [
+      "designed",
+      "all_vs_all_episode.md"
+     ],
+     [
+      "built",
+      "prepare_database, all_vs_all_blast, cluster, commit_clustering, hold; being wired into the head"
+     ],
+     [
+      "none",
+      "no real run through the head recorded"
+     ],
+     [
+      "none",
+      ""
+     ]
+    ]
+   },
+   {
+    "kind": "cluster leaves (HPC)",
     "cells": [
      [
       "none",
@@ -219,11 +261,11 @@
     ]
    },
    {
-    "kind": "hmmer",
+    "kind": "HMMER child episode",
     "cells": [
      [
       "none",
-      "after BLAST"
+      "the tool exists"
      ],
      [
       "none",
@@ -266,129 +308,63 @@
   {
    "name": "sequence_homology_evidence (the A101 head)",
    "status": "real",
-   "intent": "Holds the records and decides which analysis to commission next; its credit is the native sequence correspondence read from the graded sheets it holds.",
-   "note": "Run for real from the command line with its pairwise_blast tool (runs/a101_patternA_run_4). No child episode is built yet, so no child slot is declared.",
+   "intent": "Holds the records and decides what to run or commission next; its credit is the owner's differential credit over the candidate annotations the graded sheets it holds give.",
+   "note": "Run for real from the command line (runs/a101_patternA_run_4 and the later chains).",
    "children": [
     {
-     "name": "pairwise_blast: TOOL of the head",
+     "name": "reason, execute_selected_tool: tools of the head",
      "status": "real",
-     "intent": "One query against one subject on a local resource: run, fetch and grade as one unit.",
-     "note": "The model fills out one request; check_pairwise_request checks it before anything runs; a correct request ran blastp on the first call; the graded comparison counts in the credit at once.",
+     "intent": "Commit a typed interpretation; run a tool the commission selected through the library's registry.",
+     "note": "",
      "children": []
     },
     {
-     "name": "blast_database_preparation: CHILD EPISODE",
-     "status": "designed",
-     "intent": "Builds or masks a database from a sequence set; returns a prepared-data record the head holds and passes on.",
-     "note": "Second pattern (local part).",
-     "children": [
-      {
-       "name": "launch_local: TOOL",
-       "status": "designed",
-       "intent": "A small set: build and check as one unit; writes the prepared-data record.",
-       "note": "",
-       "children": []
-      },
-      {
-       "name": "launch_hpc: CHILD EPISODE",
-       "status": "none",
-       "intent": "Starts a long job that detaches; ends at the handoff.",
-       "note": "Built last (cluster).",
-       "children": []
-      },
-      {
-       "name": "monitor: CHILD EPISODE",
-       "status": "none",
-       "intent": "Iterates visits on a long job.",
-       "note": "Built last (cluster).",
-       "children": []
-      },
-      {
-       "name": "results: CHILD EPISODE",
-       "status": "none",
-       "intent": "Acquires a long job's result; the usable check is automatic in its fetch.",
-       "note": "Built last (cluster).",
-       "children": []
-      }
-     ]
+     "name": "pairwise_blast: TOOL of the head",
+     "status": "real",
+     "intent": "One query against one reference sequence on a local resource: run, fetch and grade as one unit.",
+     "note": "The model fills out one request; check_pairwise_request checks it before anything runs; the graded comparison counts in the credit at once.",
+     "children": []
     },
     {
-     "name": "database_blast: CHILD EPISODE",
-     "status": "designed",
-     "intent": "One query against a reference set: identification; feeds both the identification sheet and the correspondence sheet.",
-     "note": "Not local. Built after the local part.",
-     "children": [
-      {
-       "name": "launch_api: CHILD EPISODE",
-       "status": "none",
-       "intent": "Submits to the hosted service; ends at the handoff.",
-       "note": "",
-       "children": []
-      },
-      {
-       "name": "launch_hpc: CHILD EPISODE",
-       "status": "none",
-       "intent": "Custom database: a prepared-data record named by the head.",
-       "note": "Built last (cluster).",
-       "children": []
-      },
-      {
-       "name": "monitor: CHILD EPISODE",
-       "status": "none",
-       "intent": "Iterates visits on the search.",
-       "note": "",
-       "children": []
-      },
-      {
-       "name": "results: CHILD EPISODE",
-       "status": "none",
-       "intent": "Fetches the report; grading into both sheets is automatic in its fetch.",
-       "note": "",
-       "children": []
-      }
-     ]
+     "name": "hmmer_profile_scan: TOOL of the head",
+     "status": "real",
+     "intent": "One protein against a profile database on a local resource: run, fetch and grade as one unit.",
+     "note": "Each matched family is a candidate of vocabulary profile_family.",
+     "children": []
     },
     {
-     "name": "all_vs_all_blast: CHILD EPISODE",
-     "status": "designed",
-     "intent": "A set against itself: relationships, clusters and the family context of the target.",
-     "note": "A repeat of the second pattern (local part).",
-     "children": [
-      {
-       "name": "launch_local: TOOL",
-       "status": "designed",
-       "intent": "A small set: run, fetch, graph, cluster and family-context sheet as one unit.",
-       "note": "",
-       "children": []
-      },
-      {
-       "name": "launch_hpc: CHILD EPISODE",
-       "status": "none",
-       "intent": "Chunked large sets.",
-       "note": "Built last (cluster).",
-       "children": []
-      },
-      {
-       "name": "monitor: CHILD EPISODE",
-       "status": "none",
-       "intent": "Iterates visits on a long job.",
-       "note": "Built last (cluster).",
-       "children": []
-      },
-      {
-       "name": "results: CHILD EPISODE",
-       "status": "none",
-       "intent": "Graph, clustering and family-context sheet automatic in its fetch.",
-       "note": "Built last (cluster).",
-       "children": []
-      }
-     ]
+     "name": "bvbrc_blast: CHILD EPISODE",
+     "status": "real",
+     "intent": "One protein query against the precomputed BV-BRC database through the BV-BRC application service.",
+     "note": "Tools of the child: estimate, launch, fix, monitor, extract. Can be parked and resumed.",
+     "children": []
     },
     {
-     "name": "hmmer",
+     "name": "bvbrc_msa: CHILD EPISODE",
+     "status": "real",
+     "intent": "The target aligned with sequences of several candidates of a graded search; measured by new conserved distinguishing sites.",
+     "note": "Tools of the child: estimate, launch, fix, monitor, extract.",
+     "children": []
+    },
+    {
+     "name": "bvbrc_metacats: CHILD EPISODE",
+     "status": "real",
+     "intent": "A held alignment tested with MetaCATS; confirms which distinguishing sites are statistically supported, gives no measurement.",
+     "note": "Tools of the child: estimate, launch, fix, monitor, extract.",
+     "children": []
+    },
+    {
+     "name": "all_vs_all: CHILD EPISODE",
+     "status": "built",
+     "intent": "The target and sequences of several candidates searched against themselves with BLAST+ on a local resource and clustered with MCL.",
+     "note": "Tools of the child: prepare_database, all_vs_all_blast, cluster, commit_clustering, hold. Being wired into the head; no real run through the head recorded.",
+     "children": []
+    },
+    {
+     "name": "hmmer: CHILD EPISODE",
      "status": "none",
      "intent": "To be built out after the BLAST part.",
-     "note": "",
+     "note": "The folder holds only __init__.py; the head's HMMER use is its tool.",
      "children": []
     },
     {
@@ -518,7 +494,7 @@
    "id": "D17",
    "who": "owner",
    "date": "2026-11-20",
-   "text": "Credit is only for what is gained. Nothing is earned for repeating something already known. (The current flat unit earned once when a grading is stored is a simplification to revisit.)",
+   "text": "Credit is only for what is gained. Nothing is earned for repeating something already known.",
    "why": "Credit is progress; a repeat gains nothing."
   },
   {
@@ -562,13 +538,6 @@
    "date": "2026-11-20",
    "text": "Anything nested in the tree is a child episode. A leaf is a tool or a child episode. Grading is automatic, never an episode.",
    "why": "So a head with nested nodes always has children."
-  },
-  {
-   "id": "D24",
-   "who": "owner",
-   "date": "2026-11-20",
-   "text": "The approved A101 tree: head; pairwise_blast; blast_database_preparation (launch_local, launch_hpc, monitor, results); database_blast (launch_api, launch_hpc, monitor, results); all_vs_all_blast (launch_local, launch_hpc, monitor, results); hmmer, to be built out after the BLAST part. The head holds the prepared-data record and names it in later commissions.",
-   "why": "Action-oriented episodes: everything about an episode in one place, where it can be tuned."
   },
   {
    "id": "D25",
@@ -662,53 +631,52 @@
    "status": "real",
    "depends": [],
    "owner": "Claude",
-   "evidence": "runs/a101_patternA_run_4 (first call succeeds, credit 0.947 after the one unit, yield stop), runs/a101_patternA_resume_4 (0 model calls), runs/a101_patternA_run_5 (later visit: credit continues; a repeated request is rejected with its fix-list and no unit)",
-   "prediction": "Written before each run in docs/plan/designs/a101_tree.md.",
+   "evidence": "runs/a101_patternA_run_4, runs/a101_patternA_resume_4, runs/a101_patternA_run_5",
+   "prediction": "",
    "note": "Runs 1 to 3 failed or were stopped; what each showed is in a101_tree.md. Not owner-verified."
   },
   {
    "id": "N2",
-   "title": "Pattern B: blast_database_preparation child episode with its launch_local tool; the head's child wiring; a real run through the head",
-   "status": "designed",
+   "title": "Pattern B: the BV-BRC job child shape (estimate, launch, fix, monitor, extract; ledger; park and resume) on bvbrc_blast, then bvbrc_msa and bvbrc_metacats",
+   "status": "real",
    "depends": [
     "N1"
    ],
    "owner": "Claude",
-   "evidence": "",
+   "evidence": "runs/bvbrc_a101_run_C1 to E1, P1, P2a; runs/a101_conserved_run_C2",
    "prediction": "",
-   "note": ""
+   "note": "The head ending while a search is parked and a later head run resuming it was not achieved (bvbrc_blast_episode.md, run P2b)."
   },
   {
    "id": "N3",
-   "title": "all_vs_all_blast child episode, local part (a repeat of pattern B); real run through the head",
-   "status": "designed",
+   "title": "all_vs_all child, local; wired into the head; real run through the head",
+   "status": "built",
    "depends": [
     "N2"
    ],
    "owner": "Claude",
    "evidence": "",
    "prediction": "",
-   "note": "Parallel with N4."
+   "note": "The child is built; the head's wiring is in progress."
   },
   {
    "id": "N4",
-   "title": "Pattern C: database_blast with launch_api, monitor and results child episodes against the hosted service; real run through the head",
-   "status": "designed",
+   "title": "Forecast yield controller over the head's ceilings; the final two-protein runs",
+   "status": "built",
    "depends": [
     "N2"
    ],
    "owner": "Claude",
    "evidence": "",
    "prediction": "",
-   "note": "Parallel with N3."
+   "note": "Final runs in progress by another agent."
   },
   {
    "id": "N5",
-   "title": "Cluster leaves for the three actions (launch_hpc, monitor, results)",
+   "title": "Cluster leaves (HPC)",
    "status": "none",
    "depends": [
-    "N3",
-    "N4"
+    "N3"
    ],
    "owner": "Claude",
    "evidence": "",
@@ -717,10 +685,10 @@
   },
   {
    "id": "N6",
-   "title": "HMMER arms",
+   "title": "HMMER child episode",
    "status": "none",
    "depends": [
-    "N4"
+    "N3"
    ],
    "owner": "Claude",
    "evidence": "",

@@ -2,7 +2,7 @@
 
 ## The rule (owner's decision, 2026-11-20)
 
-"head cannot read child directly. child has to offer it up and head takes what it takes." The rule that follows: WHAT A
+"head cannot read child directly. child has to offer it up and head takes what it takes." And: "either the child intends the head to use the file or not". The rule that follows: WHAT A
 CHILD RETURNS, IT RETURNS FOR THE HEAD TO USE, AND EVERYTHING THE RETURNED RECORDS NAME IS ALSO RETURNED TO THE HEAD (or
 already held by it). Anything private stays inside the child and is never named in what it returns. There is no sealed
 or unread field.
@@ -31,38 +31,8 @@ or unread field.
   `held_searches` matches the query among `input_` records; MetaCATS's head-side `plan` reads the sheet and not the
   alignment (harmless, equivalent; not rewritten without a run to verify).
 
-## Run R1: prediction (written before the run)
+## What the head's credit does with what is returned
 
-Target: CspA P0A9X9 (70 residues), fresh workspace `runs/a101_returns_ws_R1`, run `runs/a101_returns_run_R1`, local and
-BV-BRC bound, Pfam, the yield settings of H1, the global ledger. One `Homology`, one `MSA`, one `MetaCATS` submission at
-most.
+The graded records a child returns (`graded_refs`) are what the head's credit reads, as soon as they are held: the owner's differential credit, additive over tests and subscoring sheets (`a101_differential_credit.md`). The owner's rule, verbatim: "the graders should additively add to the subscoring sheets and then the subscoring sheets additively add to the score". One test is one graded source, `<kind>@<source reference>`. Every episode's credit also supplies `ceiling`; `UNBOUNDED` is used where an action's gain truly has no limit ("UNBOUNDED filled in everywhere is bad; UNBOUNDED where truly unbounded is right").
 
-1. The head summarises after every child returns, with no `CustodyError`. After bvbrc_blast returns, the head holds the
-   handoff, check and closure rows and the report, reply, metadata and query artifacts; after bvbrc_msa returns it holds
-   `msa.afa`, `sequences.fasta`, `group.json`, replies.
-2. The credit after each unit is the sum of the entry scores of the candidates admitted plus differentials (credit
-   definition `a101_differential_credit_v1`). The search admits product candidates (H1 gave five products, scores
-   0.80 to 0.96; the batched naming may change them); the profile scan admits the family CSD (0.82 in H1). No differential
-   arises before the MSA. After the MSA unit the alignment's `alignment` observations are a second test every aligned
-   product underwent: each underwent test 1 (search) and test 2 (MSA); a differential is the absolute difference of the
-   two candidates' score moves in a test both underwent; I will compute each by hand from the scores before and after.
-3. If the model commissions MetaCATS, the child opens `msa.afa` in `prepare` and `extract` because the head held and passed
-   it; the groups are the aligned products with at least two sequences each.
-4. Ledger rows: expected (the model's estimate), measured (the service task record's submit to completion) and observed
-   (the first status showing the end), one row per launch.
-5. Count check: every record each returned list names is held by the head (equal count, none missing).
-
-## 2026-11-21: the credit is additive, and every episode supplies a ceiling
-
-The owner's rule, verbatim: "the graders should additively add to the subscoring sheets and then the subscoring sheets additively add to the score".
-
-What the code now does (commit `b1b8f6049`):
-
-- A candidate's value in one test is the mean of its replicates (the same function on several hits of that test).
-- A subscoring sheet is a test kind. A candidate's sheet value is the SUM of its values over the tests of that kind.
-- The candidate's score is the SUM of its sheet values.
-- Entry (a candidate's own score, once, when it first has a value above zero) and differentials are unchanged, except that a differential is now the difference of two candidates' values in one test.
-- One test is one graded source, `method@source` (commit `f227c34a8`), so different jobs are never pooled as replicates.
-- The alignment's measurement counts only new conserved distinguishing sites (`a101_conserved_sites.md`).
-- The head's credit definition record is version `a101_differential_credit_v2`. A run whose continuation settings carry the old `credit_definition` fails with `scientific_yield_credit_definition_mismatch`.
-- Every episode's credit now also supplies `ceiling` (commit `b755bea1a`; the runner checks it and journals the offered ceilings). `UNBOUNDED` is used where an action's gain truly has no limit. The owner's meaning: "UNBOUNDED filled in everywhere is bad; UNBOUNDED where truly unbounded is right". The older statements here of "no maximum" or an `up to 1` per candidate are history.
+Run R1 (`runs/a101_returns_run_R1`, resumed as R1d) is described in `a101_conserved_sites.md`.
