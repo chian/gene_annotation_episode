@@ -20,9 +20,12 @@ child's folder keeps its own five-action ``decide``/``action``/``TOOLS``; each b
         size_field='residues',             # the job fact the duration trend is fitted against
         kind=lambda fields: 'MSA:muscle:protein',   # the application part of the ledger kind
         field_problems=lambda request, commission: [...],   # the application's own checks of request fields
-        prepare=lambda ctx, request, commission: {'job': {...}, 'inputs': {name: artifact ref}, 'job_facts': {...}},
+        prepare=lambda ctx, request, commission: {'job': {...}, 'inputs': {name: artifact ref}, 'job_facts': {...},
+                                                  'identity': {...optional: kept in the handoff row's estimates...}},
         extract=lambda ctx, handoff_ref, request, commission: {...outcome...},
-        describe_identity=lambda reader, handoff: {...controlled identity of the job...},
+        describe_identity=lambda reader, handoff: {...controlled identity of the job; it must read only the handoff row
+                                                    (``handoff['detail']['estimates']['identity']`` when ``prepare``
+                                                    returned one): a parent holds the row, not the job's input artifacts...},
         after_launch=None)                 # optional: records the inputs' data products after the launch; returns row refs
 
 ``commission`` is the child's own controlled dictionary (a ``read_from_parent`` result part), handed unchanged to the
@@ -380,7 +383,8 @@ def launch_job(ctx, binding, *, request, estimate, commission):
     launched = access.launch(ctx, request['resource_id'], prepared['job'], inputs=prepared['inputs'], name=binding.child,
                              estimates={'kind': kind, 'estimate_key': handle,
                                         'predicted_seconds': estimate['expected_seconds'],
-                                        'duration_basis': estimate['basis'], 'request': dict(request)})
+                                        'duration_basis': estimate['basis'], 'request': dict(request),
+                                        'identity': prepared.get('identity')})
     if launched['status'] != 'completed':
         failure = launched['failure']
         _ended(table, handle, 'submit_failed:' + failure_code(failure['code']), seconds_between(started, now_text()))

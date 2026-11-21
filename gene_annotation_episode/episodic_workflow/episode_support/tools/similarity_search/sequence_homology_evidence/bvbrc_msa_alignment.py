@@ -153,7 +153,9 @@ def prepare(ctx, request, commission):
     lengths = [len(target), *(len(row['sequence']) for row in rows)]
     return {'job': {'application': 'MSA', 'aligner': ALIGNER, 'alphabet': ALPHABET, 'sequences_file': SEQUENCES_FILE},
             'inputs': {SEQUENCES_FILE: fasta_ref, PLAN_FILE: plan_ref},
-            'job_facts': {'sequences': len(lengths), 'residues': sum(lengths), 'longest': max(lengths)}}
+            'job_facts': {'sequences': len(lengths), 'residues': sum(lengths), 'longest': max(lengths)},
+            'identity': {'query_ref': commission['query_ref'], 'search_ref': commission['search_ref'],
+                         'candidates': sorted(commission['candidates']), 'per_candidate': request['per_candidate']}}
 
 
 def after_launch(ctx, request, commission, prepared, launched):
@@ -166,11 +168,9 @@ def after_launch(ctx, request, commission, prepared, launched):
 
 
 def describe_identity(reader, handoff):
-    """The controlled identity of a held MSA job: its target, search, candidates and sequences per candidate (from the
-    plan the job was given)."""
-    plan = json.loads(reader.get_artifact(handoff['detail']['input_refs'][PLAN_FILE]))
-    return {'query_ref': plan['query_ref'], 'search_ref': plan['search_ref'], 'candidates': sorted(plan['candidates']),
-            'per_candidate': plan['per_candidate']}
+    """The controlled identity of a held MSA job (target, search, candidates, sequences per candidate), kept by ``prepare``
+    in the handoff row's estimates: the head holds the row, not the plan artifact the job was given."""
+    return handoff['detail']['estimates']['identity']
 
 
 def reusable_alignment(reader, commission, per_candidate):
