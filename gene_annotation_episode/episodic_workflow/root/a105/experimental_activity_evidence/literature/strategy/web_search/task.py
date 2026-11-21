@@ -727,3 +727,12 @@ def action(response, summary, records, ctx):
     return ToolCall(name, {'arguments': arguments, 'scope': summary['scope'],
                            'assignment': summary['literature_assignment'], 'requested': summary['requested'],
                            'proposed_annotation_ref': summary['proposed_annotation_ref']})
+
+
+def offered_actions(summary, ctx):
+    """The action types offered at this decision: the names of the tools ``decide`` shows (the same ``catalog`` over
+    the same ``offered`` list) and the child slots."""
+    names = offered(ctx.settings)
+    leads = summary['task']['kind'] == 'verified_source_leads'
+    tools = [entry['name'] for entry in catalog(names, summary['reasoning_schema'], leads, ctx.settings)]
+    return [*tools, *CHILD_SLOTS]
