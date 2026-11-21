@@ -1,5 +1,14 @@
-"""The route of ``job_access`` to the BV-BRC application service: one ``Homology`` (BLAST) search of one query against a
-precomputed BV-BRC database, run on the owner's BV-BRC account.
+"""The route of ``job_access`` to the BV-BRC application service: one job of an application of ``APPLICATIONS``
+(``Homology``: a BLAST search of one query against a precomputed BV-BRC database; ``MSA``: a multiple sequence
+alignment of protein sequences), run on the owner's BV-BRC account.
+
+One route and one table of applications. Every application shares ``AppService.start_app2``, ``AppService.query_tasks``,
+the Workspace result calls, the spacing and the one-submission-per-handle record; an application is an entry of
+``APPLICATIONS``: the keys of its job (``job``, always led by ``application``), ``prepare`` (the job and its staged
+files to the facts the request is built from), ``parameters`` (the application's parameters from those facts and the
+job's folder), ``output_file`` (the basename of the result files), ``bulk`` (the prepared fact that holds the staged text,
+kept out of the job's native request) and ``result_files`` (what the application writes, for ``describe``). A child that
+needs another application adds an entry; nothing else of the route changes.
 
 ``BvbrcJobRoute`` is one resource of the ``JobAccess`` service (``episode_runtime/job_access.py`` states the route
 protocol). It is the authenticated sibling of ``api_job_route.ApiJobRoute``, which sends no credential and stays that
@@ -15,17 +24,21 @@ definition), the sequence parser, and from ``ApiJobRoute`` the provider spacing 
 (``spacing``, ``_contact``), the job directory, the atomic record write and ``wait`` (inherited, unchanged). Every method
 that contacts the service is replaced here; ``_send`` of the public route is made unreachable.
 
-The job is ``{'program', 'database', 'query_file'}``: ``database`` is a name of ``PRECOMPUTED_DATABASES`` (a value of the
-application's ``db_precomputed_database`` with ``db_source`` ``precomputed_database``), ``query_file`` the staged query.
+The ``Homology`` job is ``{'application', 'program', 'database', 'query_file'}``: ``database`` is a name of
+``PRECOMPUTED_DATABASES`` (a value of the application's ``db_precomputed_database`` with ``db_source``
+``precomputed_database``), ``query_file`` the staged query. The ``MSA`` job is ``{'application', 'aligner', 'alphabet',
+'sequences_file'}``: ``sequences_file`` the staged FASTA (at least two sequences), sent as the application's
+``fasta_keyboard_input`` with ``input_type`` ``input_sequence``.
 
 * ``submit``: finds the home workspace of the login in the service (the listing of ``/``: the one workspace named
   ``home`` the login owns), creates ONE folder for the job under ``<home>/<root_folder>/<handle>`` (the owner's folder
   of this work; the application writes its result files below it, in the folder ``.<output_file>`` it makes) and starts
-  ``Homology`` with ``AppService.start_app2``. At most one submission per handle (an intent file before the first
+  the job's application with ``AppService.start_app2``. At most one submission per handle (an intent file before the first
   contact that writes, the service's answer after): an intent without an answer is ``submission_outcome_unknown``.
 * ``status``: ``AppService.query_tasks`` for the task, the application's state mapped to a job state.
-* ``results``: the files of the result folder (a Workspace listing); ``read``: one file by its download address
-  (``Workspace.get_download_url``, then the download), kept in the job's directory. The address is never kept.
+* ``results``: the files of the result folder (a Workspace listing; each entry also names ``workspace_path``, where the
+  file lies in the BV-BRC workspace); ``read``: one file by its download address (``Workspace.get_download_url``, then
+  the download), kept in the job's directory. The address is never kept.
 
 The provider spacing is kept by sleeping before a contact that is part of one operation (a submission, a fetch has
 several), and by refusing a status request that would come too early (``provider_spacing_required``: nothing sent). A
@@ -63,16 +76,16 @@ from .api_job_route import (CATALOG_FILE, ENDED, INTENT_FILE, REQUEST_FILE, RESU
                             STATUS_FILE, SUBMISSION_FILE, ApiJobRoute, _publish, utc_now)
 
 SERVICE = 'bvbrc_blast'
-APPLICATION = 'Homology'
 CONFIGURATION = ('service', 'endpoints', 'authorization_env', 'workspace', 'root_folder', 'request_spacing_seconds',
                  'poll_spacing_seconds', 'transport_timeout_seconds')
-JOB = ('program', 'database', 'query_file')
 # The precomputed protein databases the route offers, by the value of ``db_precomputed_database``: the application's
 # ``db_type``, the unit of its sequences and the file name the report names as its database (``search_target.db``,
 # the last path component).
 PRECOMPUTED_DATABASES = {
     'bacteria-archaea': {'db_type': 'faa', 'unit': 'aa', 'database_file': 'bacteria-archaea.features.faa'}}
-OUTPUT_FILE = 'blast'
+MSA_ALIGNERS = ('Muscle',)
+MSA_ALPHABETS = ('protein',)
+SPECS = Path(__file__).parents[1] / 'forms' / 'application_service_specs' / 'original'
 # The service's task states (``query_tasks``: the ``status`` field) as job states.
 STATES = {'queued': 'queued', 'pending': 'queued', 'running': 'running', 'in-progress': 'running',
           'completed': 'finished', 'failed': 'failed', 'deleted': 'failed'}
@@ -113,6 +126,88 @@ def refusal(error):
     raise error
 
 
+def _homology_prepare(job, files):
+    """The facts a ``Homology`` request is built from, with the query read: a job that is not of the form raises
+    ``ValueError``."""
+    if job['program'] not in blast.PROGRAM_UNITS or job['database'] not in PRECOMPUTED_DATABASES:
+        raise ValueError('bvbrc_blast_job_program_or_database_invalid')
+    units = blast.PROGRAM_UNITS[job['program']]
+    if units[1] != PRECOMPUTED_DATABASES[job['database']]['unit']:
+        raise ValueError('bvbrc_blast_job_database_does_not_hold_what_the_program_searches')
+    text = files[job['query_file']].decode('ascii')
+    records = parse_sequences(text, format='fasta' if text.lstrip().startswith('>') else 'raw', name='query')
+    if len(records) != 1:
+        raise ValueError('bvbrc_blast_job_requires_a_single_query_sequence')
+    query = records[0]
+    return {'program': job['program'], 'database': job['database'], 'query_title': query.name,
+            'query_length': len(query.sequence), 'input_type': 'aa' if units[0] == 'aa' else 'dna',
+            'sequence_sha256': hashlib.sha256(query.sequence.encode()).hexdigest(),
+            'query_fasta': '>' + query.name + '\n' + query.sequence + '\n'}
+
+
+def _homology_parameters(prepared, folder, output_file):
+    catalog = PRECOMPUTED_DATABASES[prepared['database']]
+    return {'input_type': prepared['input_type'], 'input_source': 'fasta_data',
+            'input_fasta_data': prepared['query_fasta'], 'db_type': catalog['db_type'],
+            'db_source': 'precomputed_database', 'db_precomputed_database': prepared['database'],
+            'blast_program': prepared['program'], 'output_path': folder, 'output_file': output_file}
+
+
+def _msa_prepare(job, files):
+    """The facts an ``MSA`` request is built from, with the sequences read: at least two protein sequences with distinct
+    names, of the aligner and alphabet the route offers."""
+    if job['aligner'] not in MSA_ALIGNERS or job['alphabet'] not in MSA_ALPHABETS:
+        raise ValueError('bvbrc_msa_job_aligner_or_alphabet_invalid')
+    text = files[job['sequences_file']].decode('ascii')
+    records = parse_sequences(text, format='fasta', name='sequence')
+    if len(records) < 2 or len({record.name for record in records}) != len(records):
+        raise ValueError('bvbrc_msa_job_requires_two_or_more_sequences_with_distinct_names')
+    return {'aligner': job['aligner'], 'alphabet': job['alphabet'], 'sequence_count': len(records),
+            'residues': sum(len(record.sequence) for record in records),
+            'sequences_sha256': hashlib.sha256(text.encode()).hexdigest(), 'sequences_fasta': text}
+
+
+def _msa_parameters(prepared, folder, output_file):
+    return {'input_type': 'input_sequence', 'alphabet': prepared['alphabet'], 'aligner': prepared['aligner'],
+            'fasta_keyboard_input': prepared['sequences_fasta'], 'output_path': folder, 'output_file': output_file}
+
+
+def native_params(application, parameters):
+    """The ``start_app2`` operands of ``application`` with ``parameters``, checked against the retained definition of the
+    application (``forms/application_service_specs/original/<application>.json``, the service's own app spec): every
+    parameter is declared by it, an enum parameter takes a declared value and every required parameter is given. The
+    ``Homology`` entry goes through ``prepare_application`` instead (it holds the checks of that application)."""
+    definition = json.loads((SPECS / (application + '.json')).read_text())
+    declared = {item['id']: item for item in definition['parameters']}
+    unknown = sorted(set(parameters) - set(declared))
+    missing = sorted(name for name, item in declared.items() if item.get('required') == 1 and name not in parameters)
+    wrong = sorted(name for name, value in parameters.items() if 'enum' in declared.get(name, {})
+                   and value not in declared[name]['enum'])
+    if unknown or missing or wrong:
+        raise ValueError('bvbrc_' + application + '_application_request_invalid:' + repr(
+            {'unknown': unknown, 'missing': missing, 'wrong': wrong}))
+    return [definition['id'], parameters, {}]
+
+
+def _homology_native(prepared, parameters):
+    application = prepare_application('Homology', parameters, {})
+    if application['status'] != 'ok':
+        raise ValueError('bvbrc_blast_application_request_invalid:' + application['diagnostics'][0]['code'])
+    return application['value']['native_params']
+
+
+# The applications the route submits, by the BV-BRC application id (see the module's description).
+APPLICATIONS = {
+    'Homology': {'job': ('application', 'program', 'database', 'query_file'), 'prepare': _homology_prepare,
+                 'parameters': _homology_parameters, 'native': _homology_native, 'output_file': 'blast',
+                 'bulk': 'query_fasta',
+                 'result_files': {'blast_out.raw.json': 'the single-query JSON15 report'}},
+    'MSA': {'job': ('application', 'aligner', 'alphabet', 'sequences_file'), 'prepare': _msa_prepare,
+            'parameters': _msa_parameters, 'native': lambda prepared, parameters: native_params('MSA', parameters),
+            'output_file': 'msa', 'bulk': 'sequences_fasta',
+            'result_files': {'msa.afa': 'the aligned FASTA of the sequences'}}}
+
+
 class BvbrcJobRoute(ApiJobRoute):
     """The BV-BRC ``Homology`` jobs of one run, below one workspace directory."""
 
@@ -142,13 +237,14 @@ class BvbrcJobRoute(ApiJobRoute):
 
     def describe(self):
         configuration = self.configuration
-        return {'resource_id': self.resource_id, 'kind': self.kind, 'service': SERVICE, 'application': APPLICATION,
+        return {'resource_id': self.resource_id, 'kind': self.kind, 'service': SERVICE, 'applications': sorted(APPLICATIONS),
                 'base_url': configuration['endpoints']['AppService'],
                 'authentication': 'environment_variable:' + configuration['authorization_env'],
                 'request_spacing_seconds': configuration['request_spacing_seconds'],
                 'poll_spacing_seconds': configuration['poll_spacing_seconds'], 'cancel_offered': False,
-                'job': list(JOB), 'databases': json.loads(json.dumps(PRECOMPUTED_DATABASES)),
-                'states': dict(STATES), 'result_files': {'blast_out.raw.json': 'the single-query JSON15 report'}}
+                'jobs': {name: list(spec['job']) for name, spec in APPLICATIONS.items()},
+                'databases': json.loads(json.dumps(PRECOMPUTED_DATABASES)), 'states': dict(STATES),
+                'result_files': {name: dict(spec['result_files']) for name, spec in APPLICATIONS.items()}}
 
     # -- one service request ----------------------------------------------------------------------------------
     def _request(self, method, params, action, *, remote_id=None, wait=True):
@@ -186,23 +282,14 @@ class BvbrcJobRoute(ApiJobRoute):
 
     # -- submit -----------------------------------------------------------------------------------------------
     def prepare(self, job, files):
-        """The request the job is, with its query read: a job that is not of the form raises ``ValueError``."""
-        if not isinstance(job, dict) or set(job) != set(JOB):
-            raise ValueError('bvbrc_blast_job_requires_exactly:' + ','.join(JOB))
-        if job['program'] not in blast.PROGRAM_UNITS or job['database'] not in PRECOMPUTED_DATABASES:
-            raise ValueError('bvbrc_blast_job_program_or_database_invalid')
-        units = blast.PROGRAM_UNITS[job['program']]
-        if units[1] != PRECOMPUTED_DATABASES[job['database']]['unit']:
-            raise ValueError('bvbrc_blast_job_database_does_not_hold_what_the_program_searches')
-        text = files[job['query_file']].decode('ascii')
-        records = parse_sequences(text, format='fasta' if text.lstrip().startswith('>') else 'raw', name='query')
-        if len(records) != 1:
-            raise ValueError('bvbrc_blast_job_requires_a_single_query_sequence')
-        query = records[0]
-        return {'program': job['program'], 'database': job['database'], 'query_title': query.name,
-                'query_length': len(query.sequence), 'input_type': 'aa' if units[0] == 'aa' else 'dna',
-                'sequence_sha256': hashlib.sha256(query.sequence.encode()).hexdigest(),
-                'query_fasta': '>' + query.name + '\n' + query.sequence + '\n'}
+        """The request the job is, with its input read: a job that is not of the form of its application raises
+        ``ValueError``."""
+        if not isinstance(job, dict) or job.get('application') not in APPLICATIONS:
+            raise ValueError('bvbrc_job_requires_an_application_of:' + ','.join(sorted(APPLICATIONS)))
+        spec = APPLICATIONS[job['application']]
+        if set(job) != set(spec['job']):
+            raise ValueError('bvbrc_' + job['application'] + '_job_requires_exactly:' + ','.join(spec['job']))
+        return {'application': job['application'], **spec['prepare'](job, files)}
 
     def submit(self, handle, job, files, owner):
         prepared = self.prepare(job, files)
@@ -212,22 +299,17 @@ class BvbrcJobRoute(ApiJobRoute):
             if (directory / INTENT_FILE).exists():
                 raise RouteRequestError('submission_outcome_unknown', {'job': handle, 'sent': 'unknown'})
             folder = self._home() + '/' + self.configuration['root_folder'] + '/' + handle
-            catalog = PRECOMPUTED_DATABASES[prepared['database']]
-            parameters = {'input_type': prepared['input_type'], 'input_source': 'fasta_data',
-                          'input_fasta_data': prepared['query_fasta'], 'db_type': catalog['db_type'],
-                          'db_source': 'precomputed_database', 'db_precomputed_database': prepared['database'],
-                          'blast_program': prepared['program'], 'output_path': folder, 'output_file': OUTPUT_FILE}
-            application = prepare_application(APPLICATION, parameters, {})
-            if application['status'] != 'ok':
-                raise ValueError('bvbrc_blast_application_request_invalid:' + application['diagnostics'][0]['code'])
+            spec = APPLICATIONS[prepared['application']]
+            output_file = spec['output_file']
+            parameters = spec['parameters'](prepared, folder, output_file)
+            native_params_ = spec['native'](prepared, parameters)
             directory.mkdir(parents=True, exist_ok=True)
-            _publish(directory / REQUEST_FILE, {**prepared, 'output_path': folder, 'output_file': OUTPUT_FILE})
+            _publish(directory / REQUEST_FILE, {**prepared, 'output_path': folder, 'output_file': output_file})
             (directory / INTENT_FILE).touch()
             made = {'outcome': 'refused', 'failure': None}
             try:
                 self._request('Workspace.create', [{'objects': [[folder, 'folder']]}], 'submit')
-                value, snapshot = self._request('AppService.start_app2', application['value']['native_params'],
-                                                'submit')
+                value, snapshot = self._request('AppService.start_app2', native_params_, 'submit')
             except RouteRequestError as error:
                 if error.failure['code'] == SPACING:
                     raise
@@ -251,7 +333,8 @@ class BvbrcJobRoute(ApiJobRoute):
         request = self._recorded(directory / REQUEST_FILE)
         return {'native': {'service': SERVICE, 'remote_id': made['remote_id'], 'expected_seconds': None,
                            'directory': str(directory),
-                           'request': {name: request[name] for name in request if name != 'query_fasta'}},
+                           'request': {name: request[name] for name in request
+                            if name != APPLICATIONS[request['application']]['bulk']}},
                 'submitted_at': made['submitted_at'], 'adopted': adopted, 'reply': made['reply']}
 
     # -- status -----------------------------------------------------------------------------------------------
@@ -289,7 +372,7 @@ class BvbrcJobRoute(ApiJobRoute):
                 'job': handle, 'state': None if known is None else known['state']})
         if not (directory / CATALOG_FILE).exists():
             made = self._recorded(directory / SUBMISSION_FILE)
-            folder = made['output_path'] + '/.' + OUTPUT_FILE
+            folder = made['output_path'] + '/.' + self._recorded(directory / REQUEST_FILE)['output_file']
             value, snapshot = self._request('Workspace.ls', [{'paths': [folder], 'excludeDirectories': 1}],
                                             'fetch', remote_id=native['remote_id'])
             parsed = parse_workspace_records(value, operation='ls', requested_paths=[folder])
@@ -300,7 +383,8 @@ class BvbrcJobRoute(ApiJobRoute):
             _publish(directory / RESULT_OBJECTS_FILE, {row['name']: row['object_path'] for row in files})
             _publish(directory / CATALOG_FILE, [{'name': row['name'], 'bytes': row['size'],
                                                  'media_type': MEDIA_TYPES.get(row['name'].rsplit('.', 1)[-1],
-                                                                               'application/octet-stream')}
+                                                                               'application/octet-stream'),
+                                                 'workspace_path': row['object_path']}
                                                 for row in files])
         return self._recorded(directory / CATALOG_FILE)
 
@@ -328,4 +412,4 @@ class BvbrcJobRoute(ApiJobRoute):
             return stream.read(limit)
 
 
-__all__ = ['APPLICATION', 'BvbrcJobRoute', 'CONFIGURATION', 'OUTPUT_FILE', 'PRECOMPUTED_DATABASES', 'SERVICE', 'STATES']
+__all__ = ['APPLICATIONS', 'BvbrcJobRoute', 'CONFIGURATION', 'PRECOMPUTED_DATABASES', 'SERVICE', 'STATES', 'native_params']

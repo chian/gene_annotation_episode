@@ -1,0 +1,591 @@
+"""The shared machinery of the child episodes that run one job of a BV-BRC application service (``jobs/bvbrc_job_route``)
+in the shape the owner ordered: ``estimate`` (the model commits the expected seconds, shown what the ledger learned),
+``launch`` (refused unless an estimate is held), ``fix`` (only after a failure), ``monitor`` (a wait, one status request,
+a revised remaining time) and ``extract`` (fetch and grade in the same unit), with a bounded four-unit credit, the
+completion controller, the state read from held job rows, resume from passed-back records, the wait notice and the
+global estimate ledger (one row per launch; the measured duration is the service's own).
+
+HOW A CHILD BINDS THIS. The child's ``task.py`` creates ONE ``JobApplication`` and passes it to the functions here (the
+child's folder keeps its own five-action ``decide``/``action``/``TOOLS``; each body is a call of this module):
+
+    APPLICATION = JobApplication(
+        application='MSA',                 # the BV-BRC application id (an entry of bvbrc_job_route.APPLICATIONS)
+        child='bvbrc_msa',                 # the job name; the ledger kind and the handoff's estimate kind start with it
+        service='bvbrc_msa',               # the ``service`` fact written into each ledger row
+        provider='bvbrc_msa',              # the provider of the source of the graded result
+        product_kind='multiple_sequence_alignment',  # the data-product kind its extract records (records/data_products)
+        request_fields=('per_candidate', 'resource_id'),   # what a launch request restates (``resource_id`` always)
+        estimate_fields=('per_candidate',),                # what an estimate restates (subset)
+        field_schemas={'per_candidate': {...JSON schema...}, 'resource_id': {'type': 'string', 'minLength': 1}},
+        size_field='residues',             # the job fact the duration trend is fitted against
+        kind=lambda fields: 'MSA:muscle:protein',   # the application part of the ledger kind
+        field_problems=lambda request, commission: [...],   # the application's own checks of request fields
+        prepare=lambda ctx, request, commission: {'job': {...}, 'inputs': {name: artifact ref}, 'job_facts': {...}},
+        extract=lambda ctx, handoff_ref, request, commission: {...outcome...},
+        describe_identity=lambda reader, handoff: {...controlled identity of the job...})
+
+``commission`` is the child's own controlled dictionary (a ``read_from_parent`` result part), handed unchanged to the
+three callables. ``prepare`` runs in the launch unit (it may fetch and keep artifacts); ``extract`` runs in the extract unit
+and must fetch through ``ctx.services['job_access']`` and return ``status``, ``failure_code``, ``retryable``,
+``closure_ref``, ``graded_refs`` and ``record_refs`` (a failure by ``failed``). The child's ``credit.py`` is
+``bounded_credit``; its ``yield_estimator.py`` is ``completion_controller``; ``read_from_parent`` takes ``COMMON_ASSIGNMENT``
+and ``read_common``; its summary uses ``unit_row``, ``episode_state``, ``job_view``, ``resumed_rows`` and ``job_notice``;
+its return uses ``COMMON_FINDING`` and ``common_finding``; its description of itself starts from ``common_instructions``.
+What the model answers is ``output_schema``; the checks are ``check_estimate``, ``check_launch``, ``check_fix``,
+``check_monitor`` and ``check_extract`` (each returns the things to fix; empty means it can run).
+
+Generalised from ``bvbrc_blast_search`` (which is unchanged in behaviour and is not rebound to this module): the functions
+are the same, with the program-and-database pair replaced by the application's request fields."""
+from dataclasses import dataclass
+import json
+import math
+from typing import Callable
+
+from episode_runtime.job_access import job_handle
+from yield_control import CompletionYieldController
+from method_loop import ChoiceField, Field
+
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.duration_trend import duration_trend
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import checks, closure, job_rows
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_wait import wait_for_job
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
+    ENDED_STATES, FAILURE_CODES, SPACING, _choose, _ended, _failed, failure_code, now_text, search_facts,
+    seconds_between, seconds_until_allowed, timing)
+
+ROUTE_KIND = 'bvbrc'
+ACTIONS = ('estimate', 'launch', 'fix', 'monitor', 'extract')
+STATES = ('no_estimate', 'estimated', 'launched', 'finished', 'extracted', 'failed')
+UNTIL = ('launched', 'extracted')
+ENDED_JOB_STATES = ('finished', 'failed', 'unknown')
+ESTIMATE_BASES = ('learned_from_earlier_jobs', 'no_earlier_measurement')
+ESTIMATE_RANGE = (1, 604800)
+WAIT_RANGE_MAX = 1800
+CLOCK_MARGIN_SECONDS = 1.0
+LEDGER_ROWS = 500
+UNITS = ('handoff_unit', 'information_unit', 'graded_unit')
+PRIOR = ('handoff_refs', 'check_refs', 'closure_refs')
+
+
+@dataclass(frozen=True)
+class JobApplication:
+    application: str
+    child: str
+    service: str
+    provider: str
+    product_kind: str
+    request_fields: tuple
+    estimate_fields: tuple
+    field_schemas: dict
+    size_field: str
+    kind: Callable
+    field_problems: Callable
+    prepare: Callable
+    extract: Callable
+    describe_identity: Callable
+
+
+def ledger_kind(binding, fields):
+    """The kind a job is recorded under on the estimate ledger: later jobs of the same service and application settings
+    read what earlier ones measured."""
+    return binding.child + ':' + binding.service + ':' + binding.kind(fields)
+
+
+def learned(table, binding, fields, size):
+    """What the ledger has learned of this kind of job (``duration_trend``: how many were measured, their band, the
+    latest, and the line of duration against ``binding.size_field`` once enough different sizes are measured)."""
+    return duration_trend(table.read('rows', ledger_kind(binding, fields), LEDGER_ROWS),
+                          size_field=binding.size_field, size=size)
+
+
+# -- what the episode holds ------------------------------------------------------------------------------------------
+def job_view(reader, binding):
+    """The latest job of this binding the episode holds, from its job ledger rows: ``{'handoff', 'checks', 'closure'}``,
+    or ``None`` while it holds no handoff. A launch after a fix is a second handoff: the latest is the job."""
+    handoffs = [row for row in job_rows(reader) if row['event'] == 'handoff'
+                and row['detail']['estimates']['kind'].startswith(binding.child + ':')]
+    if not handoffs:
+        return None
+    handoff = handoffs[-1]
+    return {'handoff': handoff, 'checks': checks(reader, handoff['job']), 'closure': closure(reader, handoff['job'])}
+
+
+def held_jobs(reader, binding):
+    """The jobs of this binding the parent holds: one row per handoff, with its request, the identity the binding
+    describes, the state its latest held check showed (``submitted`` before any), whether it is outstanding (no closure
+    held and not shown failed or lost) and the references of its rows: an outstanding job is continued by a later
+    commission (``until`` ``extracted``)."""
+    found = []
+    for handoff in (row for row in job_rows(reader) if row['event'] == 'handoff'
+                    and row['detail']['kind'] == ROUTE_KIND
+                    and row['detail']['estimates']['kind'].startswith(binding.child + ':')):
+        shown, ended = checks(reader, handoff['job']), closure(reader, handoff['job'])
+        state = 'submitted' if not shown else shown[-1]['detail']['state']
+        found.append({'handoff_ref': handoff['id'], 'resource_id': handoff['detail']['resource_id'],
+                      'request': handoff['detail']['estimates']['request'],
+                      'identity': binding.describe_identity(reader, handoff), 'latest_state': state,
+                      'closed': ended is not None, 'outstanding': ended is None and state not in ('failed', 'unknown'),
+                      'known_ended': state in ENDED_JOB_STATES, 'launched_at': handoff['at'],
+                      'check_refs': [row['id'] for row in shown],
+                      'closure_refs': [] if ended is None else [ended['id']],
+                      'estimated_seconds': handoff['detail']['estimates']['predicted_seconds'],
+                      'estimate_basis': handoff['detail']['estimates']['duration_basis']})
+    return found
+
+
+def job_notice(facts, revised_remaining=None):
+    """The wait notice of a job launched and not extracted: seconds since the launch (as of the latest thing the holder
+    knows), the estimated total seconds and the expected remaining seconds (the estimate minus the elapsed, not below
+    zero, unless a status request came with a revised remaining time, which is the later fact). ``facts`` is
+    ``search_facts``."""
+    elapsed = 0.0 if facts['latest_check'] is None else facts['latest_check']['observed_seconds']
+    estimated = facts['predicted_seconds']
+    remaining = revised_remaining if revised_remaining is not None else max(estimated - elapsed, 0.0)
+    return {'seconds_since_launch': elapsed, 'estimated_seconds': estimated, 'expected_remaining_seconds': remaining}
+
+
+def resumed_rows(binding, job):
+    """The unit rows a passed-back job stands for in ``episode_state``: its estimate and launch (as recorded with the
+    handoff) and, when it holds status records, the state the latest shows."""
+    handoff = job['handoff']
+    estimates = handoff['detail']['estimates']
+    request = estimates['request']
+    done = {'status': 'completed', 'failure_code': None, 'retryable': False}
+    rows = [{'action': 'estimate', **done, 'estimate': {**{name: request[name] for name in binding.estimate_fields},
+                                                         'expected_seconds': estimates['predicted_seconds'],
+                                                         'basis': estimates['duration_basis']}},
+            {'action': 'launch', **done, 'request': dict(request)}]
+    if job['checks']:
+        latest = job['checks'][-1]['detail']
+        rows.append({'action': 'monitor', **done, 'state': latest['state'], 'result_available': latest['result_available'],
+                     'waited_seconds': 0})
+    return rows
+
+
+def episode_state(rows):
+    """The state the episode's own units give, walked in order (``bvbrc_blast_search.episode_state``, with the
+    request a dictionary of the binding's request fields). ``rows`` are the unit rows: ``action``, ``status``,
+    ``failure_code``, ``retryable`` and by action ``estimate``, ``request``, ``state`` and ``fix``. Returns ``{'state',
+    'estimate', 'request', 'failed_request', 'fixed_field', 'last_failure_code', 'estimates_made', 'launches'}``."""
+    held = {'estimate': None, 'request': None, 'failed_request': None, 'fixed_field': None, 'last_failure_code': None,
+            'estimates_made': 0, 'launches': 0}
+    active = finished = extracted = needs_fix = False
+
+    def failed(code):
+        nonlocal active, finished, needs_fix
+        active = finished = False
+        needs_fix = True
+        held['failed_request'], held['fixed_field'], held['last_failure_code'] = held['request'], None, code
+
+    for row in rows:
+        ok = row['status'] == 'completed'
+        if row['action'] == 'estimate' and ok:
+            held['estimate'] = row['estimate']
+            held['estimates_made'] += 1
+        elif row['action'] == 'launch':
+            held['launches'] += 1
+            held['estimate'] = None
+            if ok:
+                held['request'], held['fixed_field'] = row['request'], None
+                active, finished, needs_fix = True, False, False
+            else:
+                held['request'] = row['request']
+                failed(row['failure_code'])
+        elif row['action'] == 'monitor':
+            if not ok:
+                if not row['retryable']:
+                    failed(row['failure_code'])
+            elif row['state'] == 'finished':
+                active, finished = False, True
+            elif row['state'] in ('failed', 'unknown'):
+                failed({'failed': 'service_reported_failed', 'unknown': 'service_lost_the_job'}[row['state']])
+        elif row['action'] == 'extract':
+            if ok:
+                finished, extracted = False, True
+            else:
+                failed(row['failure_code'])
+        elif row['action'] == 'fix' and ok:
+            needs_fix, held['fixed_field'] = False, row['fix']['field']
+    state = ('extracted' if extracted else 'failed' if needs_fix else 'finished' if finished else
+             'launched' if active else 'estimated' if held['estimate'] is not None else 'no_estimate')
+    return {'state': state, **held}
+
+
+def unit_row(position, unit):
+    """One summary row of a completed unit of the loop (``unit``: ``tool``, ``outcome``)."""
+    outcome = unit['outcome']
+    row = {'position': position, 'action': unit['tool'], 'status': outcome['status'],
+           'failure_code': outcome.get('failure_code'), 'retryable': outcome.get('retryable', False)}
+    if outcome['status'] == 'completed':
+        if unit['tool'] == 'estimate':
+            row['estimate'] = outcome['estimate']
+        elif unit['tool'] == 'monitor':
+            row.update(state=outcome['state'], result_available=outcome['result_available'],
+                       waited_seconds=outcome['waited_seconds'],
+                       expected_remaining_seconds=outcome['expected_remaining_seconds'])
+        elif unit['tool'] == 'fix':
+            row['fix'] = outcome['fix']
+    if unit['tool'] == 'launch':
+        row['request'] = outcome['request']
+    return row
+
+
+# -- the checks: the things to fix in the model's JSON -----------------------------------------------------------------
+def check_estimate(binding, request, *, state, learned_trend, commission):
+    """``request``: the binding's ``estimate_fields``, ``expected_seconds``, ``basis``. The conditions: no job is
+    running or waiting for a fix; the application's own checks of the fields pass; the seconds are in range; the basis
+    says what the estimate rests on: ``learned_from_earlier_jobs`` only when the ledger has measured jobs of this kind,
+    ``no_earlier_measurement`` only when it has none."""
+    problems = list(binding.field_problems(request, commission))
+    if state['state'] in ('launched', 'finished', 'failed'):
+        problems.append(_choose('action', {'launched': 'job_running_monitor_it', 'finished': 'job_finished_extract_it',
+                                           'failed': 'failure_needs_a_fix'}[state['state']]))
+    if not ESTIMATE_RANGE[0] <= request['expected_seconds'] <= ESTIMATE_RANGE[1]:
+        problems.append(_choose('expected_seconds', 'expected_seconds_out_of_range', minimum=ESTIMATE_RANGE[0],
+                                maximum=ESTIMATE_RANGE[1]))
+    found = learned_trend['measured']
+    if (request['basis'] == 'learned_from_earlier_jobs') != (found > 0):
+        problems.append(_choose('basis', 'basis_does_not_match_the_learned_statistics', measured_jobs=found,
+                                choose_from=['learned_from_earlier_jobs' if found else 'no_earlier_measurement']))
+    return problems
+
+
+def check_launch(binding, request, *, state, fields, resources, commission, reusable=None):
+    """``request``: the binding's ``request_fields``. The conditions: an estimate is held (the gate: nothing is
+    launched before one is made) and it restates the same estimate fields; the application's own checks pass; the
+    resource is a bound BV-BRC service; no job is running, finished or extracted; the first request is the commission's,
+    after a failure only after a fix, with a request that differs from the failed one in the field the fix named; and the
+    product this job would make is not already held (``reusable``: the held product row, from the binding's
+    ``find_reusable``)."""
+    problems = list(binding.field_problems(request, commission))
+    if state['estimate'] is None:
+        problems.append(_choose('action', 'estimate_required', take_first='estimate'))
+    elif any(state['estimate'][name] != request[name] for name in binding.estimate_fields):
+        problems.append(_choose('action', 'differs_from_the_estimate', estimate={
+            name: state['estimate'][name] for name in binding.estimate_fields}))
+    if resources.get(request['resource_id']) != ROUTE_KIND:
+        problems.append(_choose('resource_id', 'resource_is_not_a_bvbrc_service',
+                                choose_from=[name for name, kind in resources.items() if kind == ROUTE_KIND]))
+    if state['state'] in ('launched', 'finished', 'extracted'):
+        problems.append(_choose('action', {'launched': 'job_already_launched', 'finished': 'job_already_finished',
+                                           'extracted': 'result_already_held'}[state['state']]))
+    elif state['state'] == 'failed':
+        problems.append(_choose('action', 'fix_required_after_the_failure', take_first='fix'))
+    elif state['failed_request'] is None:
+        for name in binding.request_fields:
+            if request[name] != fields[name]:
+                problems.append(_choose(name, 'differs_from_the_commission', commission=fields[name]))
+    elif request[state['fixed_field']] == state['failed_request'][state['fixed_field']]:
+        problems.append(_choose(state['fixed_field'], 'repeats_the_failed_request_in_the_fixed_field',
+                                failed=state['failed_request'][state['fixed_field']]))
+    if reusable is not None:
+        problems.append(_choose('action', binding.product_kind + '_already_held', row=reusable['id']))
+    return problems
+
+
+def check_fix(binding, request, *, state):
+    """``request``: ``failure_code``, ``field``. A failure is waiting for its fix, the code is that of the last failure
+    and the field is one of the request's (``resource_id`` excluded only when it is the sole field)."""
+    if state['state'] != 'failed':
+        return [_choose('action', 'nothing_to_fix')]
+    problems = []
+    if request['failure_code'] != state['last_failure_code']:
+        problems.append(_choose('failure_code', 'is_not_the_last_failure', choose_from=[state['last_failure_code']]))
+    if request['field'] not in binding.request_fields:
+        problems.append(_choose('field', 'is_not_a_request_field', choose_from=list(binding.request_fields)))
+    return problems
+
+
+def _held(request, job):
+    if job is None:
+        return [_choose('handoff_ref', 'no_job_held')]
+    if request['handoff_ref'] != job['handoff']['id']:
+        return [_choose('handoff_ref', 'handoff_is_not_the_held_job', choose_from=[job['handoff']['id']])]
+    return []
+
+
+def minimum_wait(description, facts, now):
+    """The fewest seconds a status request of the held job must wait (0 when it may be made now): what
+    ``seconds_until_allowed`` gives and the clock margin when it is above 0."""
+    allowed = seconds_until_allowed(description, facts, now)
+    return 0.0 if allowed <= 0 else math.ceil(allowed + CLOCK_MARGIN_SECONDS)
+
+
+def check_monitor(request, *, state, job, minimum):
+    """``request``: ``handoff_ref``, ``wait_seconds``, ``expected_remaining_seconds``. A job is launched and not known to
+    have ended; the handoff is the held job; the wait is within its range, whose lower end is ``minimum``."""
+    problems = _held(request, job)
+    if not problems and state['state'] != 'launched':
+        problems.append(_choose('action', {'no_estimate': 'nothing_launched', 'estimated': 'nothing_launched',
+                                           'finished': 'job_already_shows_finished', 'extracted': 'result_already_held',
+                                           'failed': 'job_failed_fix_required'}[state['state']]))
+    if not minimum <= request['wait_seconds'] <= WAIT_RANGE_MAX:
+        problems.append(_choose('wait_seconds', 'wait_seconds_out_of_range', minimum=minimum, maximum=WAIT_RANGE_MAX))
+    if not 0 <= request['expected_remaining_seconds'] <= ESTIMATE_RANGE[1]:
+        problems.append(_choose('expected_remaining_seconds', 'expected_seconds_out_of_range', minimum=0,
+                                maximum=ESTIMATE_RANGE[1]))
+    return problems
+
+
+def check_extract(request, *, state, job):
+    """``request``: ``handoff_ref``. The handoff is the held job and its latest monitor shows it finished with results
+    available; the result is not already held."""
+    problems = _held(request, job)
+    if not problems and state['state'] != 'finished':
+        problems.append(_choose('action', {'no_estimate': 'nothing_launched', 'estimated': 'nothing_launched',
+                                           'launched': 'job_not_known_to_be_finished', 'extracted': 'result_already_held',
+                                           'failed': 'job_failed_fix_required'}[state['state']]))
+    return problems
+
+
+def check_resource_and_continuation(request, *, resources, jobs, same):
+    """The commission conditions every child shares: the resource is a bound BV-BRC service; a job outstanding for this
+    commission (``same(job)``: the job's identity and request are the commission's) is continued with ``until``
+    ``extracted`` and one that is not the commission's blocks it; a job already closed for it is not commissioned again."""
+    problems = []
+    if resources.get(request['resource_id']) != ROUTE_KIND:
+        problems.append(_choose('resource_id', 'resource_is_not_a_bvbrc_service',
+                                choose_from=[name for name, kind in resources.items() if kind == ROUTE_KIND]))
+    for job in jobs:
+        if job['outstanding'] and not same(job):
+            problems.append(_choose('until', 'commission_must_continue_the_outstanding_job', job=job['identity']))
+        if job['outstanding'] and same(job) and request['until'] != 'extracted':
+            problems.append(_choose('until', 'a_continuation_follows_the_job_to_its_result', choose_from=['extracted']))
+        if job['closed'] and same(job):
+            problems.append(_choose('until', 'job_already_held'))
+    return problems
+
+
+# -- the tools -------------------------------------------------------------------------------------------------------
+def record_estimate(ctx, *, estimate):
+    """The estimate the model committed, as the outcome of its unit. The ledger gets ONE expectation per launch, written
+    by ``launch_job`` just before the submission."""
+    return {'status': 'completed', 'failure_code': None, 'retryable': False, 'record_refs': [], 'estimate': dict(estimate)}
+
+
+def launch_job(ctx, binding, *, request, estimate, commission):
+    """One submission of the job the held estimate was made for. The binding prepares the job (its inputs kept through
+    custody); the expectation is recorded on the ledger first (one row per launch, keyed by the job handle, with the
+    job's facts); a failed submission resolves it with that outcome."""
+    access, table = ctx.services['job_access'], ctx.services['estimate_table']
+    prepared = binding.prepare(ctx, request, commission)
+    handle = job_handle(ctx.operation_key, request['resource_id'], binding.child)
+    kind = ledger_kind(binding, request)
+    started = now_text()
+    table.expect(kind, {'gain': {'value': 0.0, 'lower': 0.0, 'upper': 0.0}, 'cost': 0.0,
+                        'duration_seconds': estimate['expected_seconds'], 'duration_basis': estimate['basis'],
+                        'job': {'service': binding.service, 'application': binding.application,
+                                **prepared['job_facts']}}, key=handle, at=started)
+    launched = access.launch(ctx, request['resource_id'], prepared['job'], inputs=prepared['inputs'], name=binding.child,
+                             estimates={'kind': kind, 'estimate_key': handle,
+                                        'predicted_seconds': estimate['expected_seconds'],
+                                        'duration_basis': estimate['basis'], 'request': dict(request)})
+    if launched['status'] != 'completed':
+        failure = launched['failure']
+        _ended(table, handle, 'submit_failed:' + failure_code(failure['code']), seconds_between(started, now_text()))
+        return {**_failed(failure['code'], False, sent=failure['detail'].get('sent'),
+                          http_status=failure['detail'].get('http_status'),
+                          rpc_error=failure['detail'].get('rpc_error')), 'handoff_refs': [], 'request': dict(request)}
+    return {'status': 'completed', 'failure_code': None, 'retryable': False, 'handoff_refs': [launched['handoff_ref']],
+            'record_refs': [launched['handoff_ref'], launched['reply_ref']], 'request': dict(request),
+            'predicted_seconds': estimate['expected_seconds'], 'duration_basis': estimate['basis'],
+            'submitted_at': launched['submitted_at']}
+
+
+def service_seconds(store, reply_ref):
+    """The seconds the service's own task record gives from the submission of the job to its completion, or ``None``
+    when the record names no completion time."""
+    reply = json.loads(store.get_artifact(reply_ref))
+    if not reply.get('submit_time') or not reply.get('completed_time'):
+        return None
+    return seconds_between(*(reply[name].replace(' ', 'T') + '+00:00' for name in ('submit_time', 'completed_time')))
+
+
+async def monitor_job(ctx, binding, *, handoff_ref, wait_seconds, expected_remaining_seconds):
+    """One status request of the held job after the wait. What it shows is kept as a check row. The first request that
+    shows the job ended (or a failed request) resolves the launch's ledger row with the service's own duration."""
+    table = ctx.services['estimate_table']
+    handoff = job_view(ctx.store, binding)['handoff']
+    estimates = handoff['detail']['estimates']
+    checked = await wait_for_job(ctx, handoff_ref, seconds=wait_seconds)
+    if checked['status'] != 'completed':
+        code = failure_code(checked['failure']['code'])
+        retryable = code == SPACING
+        if not retryable:
+            _ended(table, estimates['estimate_key'], 'check_failed:' + code, seconds_between(handoff['at'], now_text()))
+        return {**_failed(code, retryable, waited_seconds=checked['waited_seconds']), 'handoff_refs': []}
+    if checked['state'] in ENDED_STATES:
+        observed = seconds_between(handoff['at'], checked['observed_at'])
+        measured = service_seconds(ctx.store, checked['reply_ref'])
+        table.resolve(estimates['estimate_key'], {
+            'gain': 0.0, 'cost': 0.0, 'outcome': checked['state'], 'observed_seconds': observed,
+            'duration_seconds': observed if measured is None else measured,
+            'duration_source': 'first_status_showing_the_end' if measured is None else 'service_task_record'},
+            at=now_text())
+    return {'status': 'completed', 'failure_code': None, 'retryable': False, 'state': checked['state'],
+            'result_available': checked['result_available'], 'check_ref': checked['check_ref'],
+            'record_refs': [checked['check_ref'], checked['reply_ref']], 'waited_seconds': checked['waited_seconds'],
+            'expected_remaining_seconds': expected_remaining_seconds}
+
+
+# -- the model's answer ----------------------------------------------------------------------------------------------
+def output_schema(binding, state):
+    """The answer: one defined action with its controlled fields. ``fix`` is offered only while a failure waits."""
+    def one(name, **fields):
+        return {'type': 'object', 'additionalProperties': False, 'required': ['name', *fields],
+                'properties': {'name': {'type': 'string', 'enum': [name]}, **fields}}
+    handoff = {'type': 'string', 'minLength': 1}
+    seconds = {'type': 'number', 'minimum': 0, 'maximum': ESTIMATE_RANGE[1]}
+    schemas = binding.field_schemas
+    options = [
+        one('estimate', **{name: schemas[name] for name in binding.estimate_fields},
+            expected_seconds={'type': 'number', 'minimum': ESTIMATE_RANGE[0], 'maximum': ESTIMATE_RANGE[1]},
+            basis={'type': 'string', 'enum': list(ESTIMATE_BASES)}),
+        one('launch', **{name: schemas[name] for name in binding.request_fields}),
+        one('monitor', handoff_ref=handoff, wait_seconds={'type': 'number', 'minimum': 0, 'maximum': WAIT_RANGE_MAX},
+            expected_remaining_seconds=seconds),
+        one('extract', handoff_ref=handoff)]
+    if state == 'failed':
+        options.append(one('fix', failure_code={'type': 'string', 'enum': list(FAILURE_CODES)},
+                           field={'type': 'string', 'enum': list(binding.request_fields)}))
+    return {'type': 'object', 'additionalProperties': False, 'required': ['action'],
+            'properties': {'action': {'anyOf': options}}}
+
+
+def common_instructions(what, result):
+    """The parts of a child's instructions every child shares, with ``what`` (the work, one sentence) and ``result``
+    (what graded result means here)."""
+    return (
+        'You are the agent for one job of the BV-BRC application service: ' + what + ' The commission\'s until says where '
+        'this commission ends. launched: estimate and launch, and the episode ends the moment the launch completes (the job '
+        'keeps running at the service and the parent is told how long to expect; a later commission resumes it). extracted: '
+        'follow the job to its graded result; when resumed is true the job was launched by an earlier commission (state '
+        'launched or finished): do not estimate or launch, monitor it and extract. The episode ends by itself when its '
+        'credit reaches the target of the commission; you cannot end it.\n\n'
+        'You do not write a request. You answer with one action as JSON; code checks your JSON before anything runs and '
+        'runs the job.\n'
+        '- estimate: before anything is launched, the seconds you expect the job to take (expected_seconds), with its basis: '
+        'learned_from_earlier_jobs when learned_durations shows measured jobs of that kind (then rest the number on them: '
+        'measured is how many, typical_seconds their median, latest_seconds the newest first, and size_fit, when present, a '
+        'line of seconds against the job size with the seconds it gives for this job), no_earlier_measurement when it shows '
+        'none. You may estimate again to revise it while nothing is launched.\n'
+        '- launch: the job, with the fields of the commission. Refused unless an estimate is held (state estimated). One '
+        'launch per estimate. Refused when the product it would make is already held.\n'
+        '- monitor: one status request of the launched job (handoff_ref: the handoff record in job). wait_seconds is how long '
+        'the unit waits before it asks: at least minimum_wait_seconds and at most the maximum shown. '
+        'expected_remaining_seconds is your revised expectation of the time left. The first request that shows the job ended '
+        'records the measured duration (the service\'s own), which the next estimate learns from. No deadline, no cancel.\n'
+        '- extract: only when the latest monitor shows the job finished (state finished). Code fetches the result files and '
+        'grades them in the same unit: ' + result + '\n'
+        '- fix: only after a failure (state failed): the failure code you address (last_failure_code) and the request field '
+        'you will change. Only after a fix does a launch pass, with a request that differs from the failed one in that '
+        'field, after a new estimate.\n'
+        'If your JSON is wrong you are told each problem as a code with the field it concerns (feedback.problems) and nothing '
+        'has run; fix those fields and answer again.\n\n'
+        'Credit is bounded and only for what is new in this commission: four things, each worth its unit once: an estimate '
+        'held (credit.information_unit), the job launched (credit.handoff_unit), the job known ended (credit.information_unit: '
+        'the first status that shows finished or failed) and the graded result (credit.graded_unit). When the target cannot be '
+        'reached a few actions that earn nothing follow and the yield controller ends the episode. You cannot end it.')
+
+
+# -- the commission, the credit, the controller, the return --------------------------------------------------------------
+COMMON_ASSIGNMENT = {
+    'until': ChoiceField('text', 'Where this commission ends: launched (estimate and launch, then park and return) or '
+                                 'extracted (follow the job to its graded result)', UNTIL),
+    'handoff_unit': Field('number', 'The credit of the established handoff (positive)'),
+    'information_unit': Field('number', 'The credit of an estimate held and of a status request that shows a fact the '
+                                       'earlier ones did not (positive)'),
+    'graded_unit': Field('number', 'The credit of the established graded result (positive)'),
+    'handoff_refs': Field('record_refs', 'The handoff record of a job an earlier visit launched, passed back in custody',
+                          required=False),
+    'check_refs': Field('record_refs', 'The status records of that job, passed back in custody', required=False),
+    'closure_refs': Field('record_refs', 'The closure record of that job, passed back in custody', required=False),
+    'known_ended': Field('boolean', 'Whether a passed-back status record already shows the job ended', required=False),
+}
+
+
+def read_common(assignment, name):
+    """The part of ``read_from_parent`` every child shares: ``units``, ``until``, ``prior``, ``resumed``,
+    ``known_ended`` and the commission's finite ``target``: the credit still obtainable under ``until`` (the estimate and
+    the launch unless a handoff is passed back; the job known ended, unless already known, and the graded result for
+    ``until`` ``extracted``)."""
+    if any(not math.isfinite(assignment[unit]) or assignment[unit] <= 0 for unit in UNITS):
+        raise ValueError(name + '_credit_units_must_be_positive')
+    units, until = {unit: assignment[unit] for unit in UNITS}, assignment['until']
+    prior = {key: list(assignment.get(key, [])) for key in PRIOR}
+    resumed, known_ended = bool(prior['handoff_refs']), assignment.get('known_ended', False)
+    if until == 'launched' and resumed:
+        raise ValueError(name + '_a_continuation_follows_the_job_to_its_result')
+    target = 0.0 if resumed else units['information_unit'] + units['handoff_unit']
+    if until == 'extracted':
+        target += units['graded_unit'] + (0.0 if known_ended else units['information_unit'])
+    return {'units': units, 'until': until, 'prior': prior, 'resumed': resumed, 'known_ended': known_ended,
+            'target': target}
+
+
+def bounded_credit(summary, records, provider):
+    """Credit, bounded and counted only when new in this commission: an estimate held, the job launched (once, however
+    many launches a fix needed), the job known ended (the first new status row that shows it) and the graded result (a held
+    source of ``provider``). Each term is counted exactly where ``read_common`` put its unit into the target."""
+    units, until, prior = summary['units'], summary['until'], summary['prior']
+    rows = summary['unit_rows']
+    new = not summary['resumed']
+    estimate = new and any(row['action'] == 'estimate' and row['status'] == 'completed' for row in rows)
+    handoff = new and any(row['action'] == 'launch' and row['status'] == 'completed' for row in rows)
+    extracted = until == 'extracted'
+    ended = extracted and not summary['known_ended'] and any(
+        row['event'] == 'check' and row['id'] not in prior['check_refs'] and row['detail']['state'] in ENDED_JOB_STATES
+        for row in job_rows(records))
+    graded = extracted and any(source['provider'] == provider for source in records.list('source'))
+    return ((units['information_unit'] if estimate else 0.0) + (units['handoff_unit'] if handoff else 0.0)
+            + (units['information_unit'] if ended else 0.0) + (units['graded_unit'] if graded else 0.0))
+
+
+def completion_controller(name, initial_credit, settings, parent_input):
+    """The completion controller: continue until the credit reaches the commission's target; the cost is
+    ``settings['cost']`` times the smallest credit unit of the commission."""
+    cost = settings['cost'] * min(parent_input['units'].values())
+    return CompletionYieldController(name, initial_credit, cost, parent_input['target'], settings['parameters'])
+
+
+COMMON_FINDING = {
+    'parked': Field('boolean', 'The job is launched and not extracted: this child parked, and the parent is shown the wait '
+                               'notice (seconds since the launch, estimated seconds, expected remaining seconds)',
+                    required=False),
+    'seconds_since_launch': Field('number', 'The seconds from the launch to the latest thing the child knew', required=False),
+    'expected_remaining_seconds': Field('number', 'The seconds still expected: the estimate minus the seconds since the '
+                                                  'launch (not below zero), or the revised figure of a status request',
+                                        required=False),
+    'estimated_seconds': Field('number', 'The seconds the job was expected to take, as estimated before the launch',
+                               required=False),
+    'estimate_basis': ChoiceField('text', 'What the estimate rested on', ESTIMATE_BASES, required=False),
+    'observed_seconds': Field('number', 'The seconds from the launch to the latest status request', required=False),
+    'seconds_past_estimate': Field('number', 'The observed seconds minus the estimated seconds', required=False),
+    'last_failure_code': ChoiceField('text', 'The failure code of the last failure', FAILURE_CODES, required=False),
+}
+
+
+def common_finding(summary):
+    """The values of ``COMMON_FINDING`` from the summary (``notice``, ``job`` facts, ``last_failure_code``)."""
+    finding, job = {}, summary['job']
+    if summary['notice'] is not None:
+        finding.update(parked=True, seconds_since_launch=summary['notice']['seconds_since_launch'],
+                       expected_remaining_seconds=summary['notice']['expected_remaining_seconds'])
+    if job is not None:
+        if job['predicted_seconds'] is not None:
+            finding['estimated_seconds'] = job['predicted_seconds']
+            finding['estimate_basis'] = job['prediction_basis']
+        if job['latest_check'] is not None:
+            finding['observed_seconds'] = job['latest_check']['observed_seconds']
+            if job['predicted_seconds'] is not None:
+                finding['seconds_past_estimate'] = job['latest_check']['observed_seconds'] - job['predicted_seconds']
+    if summary['last_failure_code'] is not None:
+        finding['last_failure_code'] = summary['last_failure_code']
+    return finding
+
+
+__all__ = ['ACTIONS', 'COMMON_ASSIGNMENT', 'COMMON_FINDING', 'ESTIMATE_BASES', 'ESTIMATE_RANGE', 'FAILURE_CODES',
+           'JobApplication', 'ROUTE_KIND', 'STATES', 'UNTIL', 'WAIT_RANGE_MAX', 'bounded_credit', 'check_estimate',
+           'check_extract', 'check_fix', 'check_launch', 'check_monitor', 'check_resource_and_continuation',
+           'common_finding', 'common_instructions', 'completion_controller', 'episode_state', 'held_jobs', 'job_notice',
+           'job_view', 'launch_job', 'ledger_kind', 'learned', 'minimum_wait', 'monitor_job', 'output_schema',
+           'read_common', 'record_estimate', 'resumed_rows', 'search_facts', 'timing', 'unit_row']

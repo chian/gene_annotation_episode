@@ -25,6 +25,7 @@ counts it as missing, never as a hit with no function. A feature that comes back
 
 What exists and is called: the request builder ``encode_native_query`` (with its field registry), the public data client
 ``BVBRCDataClient.query_prepared`` and ``blast_database_grading_inputs.metadata_accounting``."""
+import hashlib
 import json
 import time
 
@@ -95,6 +96,23 @@ def lookup(accessions):
             'failures': state['failures'], 'responses': state['responses'], 'duplicate_feature_ids': duplicates}
 
 
+def sequences_by_md5(md5s):
+    """The protein sequences of the BV-BRC ``feature_sequence`` collection (public Data API, no login; its key ``md5``
+    is a hit feature's ``aa_sequence_md5``), in batches of ``BATCH`` at least ``SPACING_SECONDS`` apart: ``{'sequences':
+    {md5: sequence}, 'requests', 'failures', 'responses'}``. A sequence is kept only when the MD5 of its text is the md5
+    it was asked for (``ValueError`` with the md5 otherwise); an md5 the service did not return is absent."""
+    client = BVBRCDataClient()
+    state = {'requests': 0, 'failures': [], 'responses': []}
+    found = {}
+    for batch in _batches(sorted(set(md5s))):
+        for record in _ask(client, 'feature_sequence', 'md5', batch, ['md5', 'sequence_type', 'sequence'], state) or []:
+            if hashlib.md5(record['sequence'].encode('ascii')).hexdigest() != record['md5']:
+                raise ValueError('bvbrc_sequence_does_not_match_its_md5:' + record['md5'])
+            found[record['md5']] = record['sequence']
+    return {'sequences': found, 'requests': state['requests'], 'failures': state['failures'],
+            'responses': state['responses']}
+
+
 def reference_metadata(found):
     """The grader's reference-metadata rows (legacy association, matched by ``accession`` and the native ``taxid``) from
     the records ``lookup`` found: one row per feature that has a ``product``. A feature without one has a row without
@@ -114,4 +132,4 @@ def reference_metadata(found):
     return rows
 
 
-__all__ = ['BATCH', 'SOURCE', 'SPACING_SECONDS', 'lookup', 'reference_metadata']
+__all__ = ['BATCH', 'SOURCE', 'SPACING_SECONDS', 'lookup', 'reference_metadata', 'sequences_by_md5']

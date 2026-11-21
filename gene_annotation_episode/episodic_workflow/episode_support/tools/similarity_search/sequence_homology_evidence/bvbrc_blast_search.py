@@ -141,7 +141,8 @@ def held_searches(reader, sequences):
     and the references of its handoff, status and closure rows: an outstanding search is continued by a later commission
     (``until`` ``extracted``). ``sequences`` is ``{subject record: its sequence artifact}``."""
     found = []
-    for handoff in (row for row in job_rows(reader) if row['event'] == 'handoff' and row['detail']['kind'] == ROUTE_KIND):
+    for handoff in (row for row in job_rows(reader) if row['event'] == 'handoff' and row['detail']['kind'] == ROUTE_KIND
+                    and row['detail']['estimates']['kind'].startswith(JOB_NAME + ':')):
         shown, ended = checks(reader, handoff['job']), closure(reader, handoff['job'])
         state = 'submitted' if not shown else shown[-1]['detail']['state']
         request = handoff['detail']['native']['request']
@@ -416,7 +417,7 @@ def launch_search(ctx, *, request, estimate, sequence_ref):
     first (one row per launch, keyed by the launch's job handle, kept in the handoff row so the status requests resolve
     it); a failed submission resolves it with that outcome."""
     access, table = ctx.services['job_access'], ctx.services['estimate_table']
-    job = {'program': request['program'], 'database': request['database'], 'query_file': QUERY_FILE}
+    job = {'application': 'Homology', 'program': request['program'], 'database': request['database'], 'query_file': QUERY_FILE}
     handle = job_handle(ctx.operation_key, request['resource_id'], JOB_NAME)
     started = now_text()
     table.expect(search_kind(request['program'], request['database']),
