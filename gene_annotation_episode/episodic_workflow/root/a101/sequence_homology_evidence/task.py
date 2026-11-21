@@ -547,6 +547,24 @@ def selection_schema(summary, tools, resources, databases):
     return obj({'selection': {'anyOf': options}})
 
 
+def offered_actions(summary, ctx):
+    """The action types this decision offers, by the names a unit is recorded under (``ToolCall.name``, ``ChildCall.slot``):
+    ``reason``; ``execute_selected_tool`` while the commission selects tools (every selected tool is run by this one
+    tool); ``pairwise_blast`` and ``hmmer_profile_scan`` while their options are offered; and each child slot offered.
+    Built from the functions ``decide`` offers the model with (``selected_tools``, ``pairwise_options``,
+    ``profile_scan_options``, ``offered_children``)."""
+    tools = selected_tools(ctx.settings, summary['selection'])
+    resources = bound_resources(ctx)
+    names = ['reason']
+    if tools:
+        names.append('execute_selected_tool')
+    if pairwise_options(summary, resources):
+        names.append(PAIRWISE_TOOL)
+    if profile_scan_options(summary, resources, ctx.settings.get('profile_databases', {})):
+        names.append(PROFILE_TOOL)
+    return names + offered_children(summary, resources)
+
+
 def decide(summary, feedback, ctx):
     """Ask the model for the next unit, shown the commission, the selected process library entries, the working
     state of the scope, its own outcomes and its children's reports, the tools and children it may use, the
