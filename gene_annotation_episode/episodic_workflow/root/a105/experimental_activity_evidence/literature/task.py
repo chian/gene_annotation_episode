@@ -136,8 +136,8 @@ CHILD_DESCRIPTION = (
     'Investigate which search approach is productive. Keep the information objective and evidence context '
     'separate from a literal provider query; the child revises terms or source choices in light of actual '
     'search/read outcomes and can commission an investigation of which returned sources deserve examination. The '
-    'sources handed to it are taken from the input list (the sources not yet consumed) and are consumed: they are '
-    'not offered again. This child is where published experiments get graded: below it the returned sources are '
+    'searches handed to it are taken from the input list (the provider search responses not yet consumed; an article '
+    'or other source you hold is never offered to it) and are consumed: they are not offered again. This child is where published experiments get graded: below it the returned sources are '
     'measured against the claim, a selected source is examined as a page, and the page extracts each experiment it '
     'reports and writes its grading sheet row; the sheet states and the credit come back to you. Your own searches '
     'and reads earn no credit, and reading a source yourself does not grade it.')
@@ -170,8 +170,8 @@ HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_lite
 CHILD_GUIDANCE = ('\nSelect the strategy child (the investigation of which search approach is productive) with its '
                   'objective and the sources you hold that it is to build on when a narrower question warrants '
                   'iteration; what it returns is shown to you as child_returns. A child earns credit in this '
-                  'episode only through the records it returns. Your input list (input_list) is the sources not yet '
-                  'consumed: a source handed to the child, or worked on by one of your units (a reasoning commit or a '
+                  'episode only through the records it returns. Your input list (input_list) is the search responses (searches) not yet '
+                  'consumed (an article or other held source stays usable by your own tools but is not offered to the child): a source handed to the child, or worked on by one of your units (a reasoning commit or a '
                   'population operation naming it), is consumed and is not offered again; reading or locating in a '
                   'source does not consume it. The child takes only sources of the input list.')
 

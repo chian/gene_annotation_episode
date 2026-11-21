@@ -65,12 +65,23 @@ def held_world(directory, task_kind='a105_experiments'):
                                   'artifact_ref': response, 'text_ref': None, 'request_ref': None,
                                   'version': None, 'retrieved_at': None, 'parent_source_refs': []},
                        origin='caller')['id']
-    held = [target, source, artifact, assay, reaction, proposed, search, response]
+    full_text = store.artifact('Full text of PMC200', 'text/plain')
+    article = store.put('source', {'provider': 'europepmc', 'accession': 'PMC200',
+                                   'uri': 'https://www.ebi.ac.uk/europepmc/webservices/rest/PMC200/fullTextXML',
+                                   'artifact_ref': full_text, 'text_ref': full_text, 'request_ref': None,
+                                   'version': None, 'retrieved_at': None, 'parent_source_refs': []},
+                        origin='caller')['id']
+    listing = store.put('source', {'provider': 'pmc_cloud_versions', 'accession': 'PMC200',
+                                   'uri': 'https://pmc-oa-opendata.s3.amazonaws.com/', 'artifact_ref': response,
+                                   'text_ref': None, 'request_ref': None, 'version': None, 'retrieved_at': None,
+                                   'parent_source_refs': []}, origin='caller')['id']
+    held = [target, source, artifact, assay, reaction, proposed, search, response, article, full_text, listing]
     assignment = {'version': 'strategy_assignment_v1', 'question_context_refs': [], 'prior_search_refs': [search],
                   'literature_task': task, 'proposed_annotation_ref': proposed, 'scope': scope,
                   'received_record_refs': held}
     names = {'store': store, 'target': target, 'source': source, 'artifact': artifact, 'assay': assay,
-             'reaction': reaction, 'proposed': proposed, 'scope': scope, 'search': search}
+             'reaction': reaction, 'proposed': proposed, 'scope': scope, 'search': search,
+             'article': article, 'listing': listing}
     return {**names, 'input': {'assignment': assignment, 'message': {'objective': 'grade the table'},
                                'selection': []}}
 

@@ -34,7 +34,7 @@ page candidate, and only when the task names exactly one."""
 import json
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
-    article_sources, hit_candidate, is_search_response, ranked_hits, search_planner_context)
+    article_sources, hit_candidate, ranked_hits, search_planner_context, source_kind)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reasoning import (
     no_applicable_spans, relevant_lead_sources, screening_covered)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
@@ -87,7 +87,7 @@ def search_hits(search_result_refs, records):
     contents = []
     for ref in search_result_refs:
         source = records.get(ref)
-        if not is_search_response(source):
+        if source_kind(source) != 'search_response':
             raise ValueError('search_result_is_not_a_search_response:' + ref)
         contents.append(records.get_artifact(source['artifact_ref']))
     return ranked_hits(contents)

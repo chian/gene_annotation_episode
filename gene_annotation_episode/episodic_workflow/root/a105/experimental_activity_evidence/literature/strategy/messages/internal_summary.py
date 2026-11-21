@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
     credit_binding)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
-    is_search_response)
+    source_kind)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_assay_grading_features import (
     current_aggregation_features, current_sheet_features)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
@@ -39,18 +39,18 @@ SOURCE = 'source'
 
 
 def search_results(parent, outcomes, records):
-    """The search results this episode works through, in the order they became known (nano-graphrag
-    ``web_search_binding``: the buffered search results): the earlier search results it was given
-    (``prior_search_refs``), then every retained search response its own acquisition units returned (the
-    ``record_refs`` of their outcomes that are held source records of a provider search response; an article it
-    fetched is not a search result), each once. Each is a hit list: the web search child works on its hits."""
+    """The searches this episode works through, in the order they became known (nano-graphrag
+    ``web_search_binding``: the buffered search results): the earlier searches it was given (``prior_search_refs``),
+    then every source its own acquisition units returned (the ``record_refs`` of their outcomes that are held source
+    records), each once, and only provider search responses (a hit list: the web search child works on its hits).
+    Strategy's role is searches: an article or any other source (a file or version listing) is not a search and is
+    never handed on."""
     found = list(parent['strategy']['prior_search_refs'])
     for outcome in outcomes:
         if outcome['kind'] == 'tool' and outcome['tool'] in ACQUISITION_TOOLS:
             found.extend(ref for ref in outcome['outcome']['record_refs']
-                         if records.holds(ref) and records.get(ref)['record_type'] == SOURCE
-                         and is_search_response(records.get(ref)))
-    return list(dict.fromkeys(found))
+                         if records.holds(ref) and records.get(ref)['record_type'] == SOURCE)
+    return [ref for ref in dict.fromkeys(found) if source_kind(records.get(ref)) == 'search_response']
 
 
 def consumed_results(children):

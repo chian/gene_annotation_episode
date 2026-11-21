@@ -14,8 +14,8 @@ always offers a unit and never ends the Episode: only the yield controller does.
 
 Child. The old ``_CHILDREN['literature_strategy']`` is ``('literature_search',)``: the slot below is that role under
 the name of its folder. The model selects it with the child's objective and the search results whose sources are to
-be assessed (sources this episode holds: the earlier search results it was given and the sources its own searches
-acquired); ``messages/msg_to_child.py`` builds the commission. A child is a unit like any other: what it earns in this episode is
+be assessed (searches only: provider search responses this episode was given or its own units acquired; an article
+or any other source is never offered or handed on); ``messages/msg_to_child.py`` builds the commission. A child is a unit like any other: what it earns in this episode is
 this episode's own credit.
 
 Tools offered. The access tools are the ones the A105 tool library implements (its ``A105ToolRegistry.catalog``
@@ -132,10 +132,10 @@ REPRESENTATIONS = ['text', 'original', 'stdout', 'stderr']
 OBJECTIVE = {'type': 'string', 'minLength': 1,
              'description': 'What the child should investigate in the returned sources and why'}
 CHILD_DESCRIPTION = (
-    'Investigate which hits of the UNCONSUMED search result lists (input_list: the earlier search result lists you '
-    'were given and the search responses your own searches acquired) merit examination for the assigned question. '
-    'Search results are source-discovery information: the child measures each hit of the lists you hand it '
-    'against the question, fetches the full text of the hit it picks, examines that original article and its '
+    'Investigate which hits of the UNCONSUMED searches (input_list: the search responses you were given or your own '
+    'searches acquired; you hold and pass searches only, never articles) merit examination for the assigned '
+    'question. Search results are source-discovery information: the child measures each hit of the searches you '
+    'hand it against the question, fetches the full text of the hit it picks, examines that original article and its '
     'conditions before asserting biological evidence. The lists handed to the child are consumed: they are not '
     'offered again, and an article its pages examined is not fetched again. This child is where published '
     'experiments get graded: it has a selected article examined as a page, and the page extracts each '
@@ -168,7 +168,7 @@ HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
                     'no new action and does not execute or credit the historical work again.\n')
 CHILD_GUIDANCE = ('\nSelect the search child (the assessment of which returned sources merit examination) with its '
-                  'objective and the search result lists (search responses you hold) whose hits it assesses when that is the '
+                  'objective and the searches (search responses you hold) whose hits it assesses when that is the '
                   'better way to use returned search results; what it returns is shown to you as child_returns. A child earns credit in '
                   'this episode only through the records it returns.')
 

@@ -52,15 +52,16 @@ def test_the_first_decision_offers_reason_with_the_owners_grading_instructions(t
     world['store'].close()
 
 
-def test_a_search_result_is_a_retained_search_response_never_an_article_the_episode_fetched(tmp_path):
-    """The web search child works on the hits of the result lists it is handed; an article this episode fetched is not a
-    list, so it is not offered as a search result (it was, and the child then took a whole article for a result)."""
+def test_the_list_handed_on_holds_only_searches_of_the_three_kinds_of_source(tmp_path):
+    """Strategy's role is searches: of a search response, a fetched article and a PMC version listing (given or produced
+    by its own units) only the search response is handed to the web search child."""
     world = held_world(tmp_path)
     run = linked_run(tmp_path, world, 'a105-upper-results')
     asyncio.run(run.next_decision())
     summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
-    parent = {'strategy': {'prior_search_refs': [world['search']]}}
-    outcomes = [{'kind': 'tool', 'tool': 'public_literature_read', 'outcome': {'record_refs': [world['source']]}},
+    parent = {'strategy': {'prior_search_refs': [world['search'], world['article'], world['listing']]}}
+    outcomes = [{'kind': 'tool', 'tool': 'public_literature_read',
+                 'outcome': {'record_refs': [world['article'], world['listing']]}},
                 {'kind': 'tool', 'tool': 'public_literature_search', 'outcome': {'record_refs': [world['search']]}}]
     assert summary_module.search_results(parent, outcomes, run.view.records) == [world['search']]
     world['store'].close()

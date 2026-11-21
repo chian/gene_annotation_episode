@@ -17,6 +17,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     credit_binding)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_assay_grading_features import (
     current_aggregation_features, current_sheet_features)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
+    source_kind)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -105,7 +107,10 @@ def internal_summary(view):
     consumed = consumed_inputs(task, view.outcomes, spans, covered)
     items = ([span['source_ref'] for span in task['examined']] if task.get('answer_kind') == 'screening'
              else work_sources(literature, task, view.outcomes, records))
-    input_list = [ref for ref in dict.fromkeys(items) if ref not in consumed]
+    # Only what the strategy child accepts is offered to it: its role is searches, so only provider search responses.
+    # An article or any other held source stays usable by this episode's own tools but is not offered to the child.
+    input_list = [ref for ref in dict.fromkeys(items)
+                  if ref not in consumed and source_kind(records.get(ref)) == 'search_response']
     assignment = {**literature, 'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref'],
                   **parent['requested']}
     return {

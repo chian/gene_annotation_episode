@@ -58,12 +58,34 @@ def held_world(directory, task_kind='a105_experiments'):
              'credit_unit': 1.0})
     page = {'version': 'page_assignment_v1', 'source_ref': source, 'representation': 'original',
             'artifact_ref': artifact, 'question_context_refs': [], 'prior_delivery_refs': []}
-    held = [target, source, artifact, assay, reaction, proposed]
-    assignment = {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': [source],
+    # The three kinds of source for the search route: a provider search response (a hit list), a fetched article (a
+    # full text with its PMCID) and a PMC version listing (neither).
+    response = store.artifact(json.dumps({'resultList': {'result': [
+        {'pmcid': 'PMC100', 'pmid': '1', 'title': 'PopZ binds ParB'}]}}), 'application/json')
+    search = store.put('source', {'provider': 'europepmc', 'accession': None,
+                                  'uri': 'https://www.ebi.ac.uk/europepmc/webservices/rest/search',
+                                  'artifact_ref': response, 'text_ref': None, 'request_ref': None,
+                                  'version': None, 'retrieved_at': None, 'parent_source_refs': []},
+                       origin='caller')['id']
+    full_text = store.artifact('Full text of PMC200', 'text/plain')
+    article = store.put('source', {'provider': 'europepmc', 'accession': 'PMC200',
+                                   'uri': 'https://www.ebi.ac.uk/europepmc/webservices/rest/PMC200/fullTextXML',
+                                   'artifact_ref': full_text, 'text_ref': full_text, 'request_ref': None,
+                                   'version': None, 'retrieved_at': None, 'parent_source_refs': [],
+                                   'publication_identifiers': [{'namespace': 'pmcid', 'value': 'PMC200'}]},
+                        origin='caller')['id']
+    listing = store.put('source', {'provider': 'pmc_cloud_versions', 'accession': 'PMC200',
+                                   'uri': 'https://pmc-oa-opendata.s3.amazonaws.com/', 'artifact_ref': response,
+                                   'text_ref': None, 'request_ref': None, 'version': None, 'retrieved_at': None,
+                                   'parent_source_refs': []}, origin='caller')['id']
+    held = [target, source, artifact, assay, reaction, proposed, search, response, article, full_text, listing]
+    assignment = {'version': 'literature_assignment_v1', 'question_context_refs': [],
+                  'source_refs': [source, search, article, listing],
                   'literature_task': task, 'proposed_annotation_ref': proposed, 'scope': scope,
                   'received_record_refs': held}
     names = {'store': store, 'target': target, 'source': source, 'artifact': artifact, 'assay': assay,
-             'reaction': reaction, 'proposed': proposed, 'scope': scope}
+             'reaction': reaction, 'proposed': proposed, 'scope': scope, 'search': search, 'article': article,
+             'listing': listing}
     return {**names, 'input': {'assignment': assignment, 'message': {'objective': 'grade the table'},
                                'selection': []}}
 

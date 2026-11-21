@@ -50,3 +50,15 @@ def test_the_first_decision_offers_reason_with_the_owners_grading_instructions(t
     assert summary['assay_sheets'] == [] and EPISODE.credit(summary, run.view.records) == 0
     world['store'].close()
 
+
+def test_the_input_list_offers_the_strategy_child_only_search_responses(tmp_path):
+    """The sources held are a caller's file, a search response, a fetched article and a PMC version listing; strategy's
+    role is searches, so only the search response is offered. The others stay held, usable by the episode's own tools."""
+    world = held_world(tmp_path)
+    run = linked_run(tmp_path, world, 'a105-upper-offered')
+    asyncio.run(run.next_decision())
+    summary = EPISODE()._summary(run.view)
+    assert summary['input_list'] == [world['search']]
+    assert {world['source'], world['article'], world['listing']} <= set(summary['held_record_refs'])
+    world['store'].close()
+

@@ -179,6 +179,21 @@ def is_search_response(source):
     return source['provider'] == SEARCH_PROVIDER and source['uri'] == SEARCH_URI
 
 
+def is_article(source):
+    """Whether a source record is a fetched article: a full text (``public.literature.read``) of a publication, which
+    carries its PMCID as the accession and a text representation."""
+    return (source['provider'] == SEARCH_PROVIDER and not is_search_response(source) and bool(source['accession'])
+            and bool(source['text_ref']))
+
+
+def source_kind(source):
+    """What a source record is for the search route: ``search_response`` (a provider's hit list), ``article`` (a fetched
+    full text with a PMCID) or ``other`` (for example a PMC file listing or version listing, or a caller's file)."""
+    if is_search_response(source):
+        return 'search_response'
+    return 'article' if is_article(source) else 'other'
+
+
 def provider_hits(content):
     """The hits of one retained search response, in the provider's order. A hit carries its identifiers, title,
     journal, year and the abstract the provider returned. Only a hit with a PMCID is an item: the PMCID is what the
@@ -233,5 +248,6 @@ def hit_candidate(hit):
             'description': f"{hit['journal']}, {hit['year']}. {hit['abstract']}"}
 
 
-__all__ = ['JEV_PAGE_TEXT_TOKEN_LIMIT', 'SEARCH_PAGE_SELECTION_VERSION', 'article_sources', 'assess_search_results',
-           'hit_candidate', 'is_search_response', 'provider_hits', 'ranked_hits', 'search_planner_context']
+__all__ = ['JEV_PAGE_TEXT_TOKEN_LIMIT', 'SEARCH_PAGE_SELECTION_VERSION', 'article_sources',
+           'assess_search_results', 'hit_candidate', 'is_article', 'is_search_response', 'provider_hits', 'ranked_hits',
+           'search_planner_context', 'source_kind']

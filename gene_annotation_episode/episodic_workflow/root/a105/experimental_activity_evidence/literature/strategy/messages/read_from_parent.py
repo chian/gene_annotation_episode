@@ -86,8 +86,8 @@ REQUESTED = (REQUESTED_ASSAY_GRADING, REQUESTED_AGGREGATION, REQUESTED_QUANTITY,
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The strategy assignment version', 'strategy_assignment_v1'),
     'question_context_refs': Field('record_refs', 'Records giving the assigned question its context'),
-    'prior_search_refs': Field('record_refs', 'The sources earlier searches returned, which the search approach may '
-                               'build on'),
+    'prior_search_refs': Field('record_refs', 'The searches (provider search responses) earlier work returned, '
+                               'which the search approach may build on'),
     'literature_task': Field('record', 'The commissioned literature task: its kind (verified_source_leads, '
                              'source_answer, a105_experiments or a105_assembly), evidence_axis A105, credit_unit '
                              'and, for a source answer, answer_kind with its source_refs (assessment), examined '
