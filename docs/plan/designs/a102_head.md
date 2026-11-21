@@ -336,3 +336,37 @@ Order I expect from the head's model: `structure_search` afdb-swissprot (as in t
 (with the held model) or `site_correspondence annotated`, then `partner_contacts` on the pdb100 search; `site_correspondence catalytic`
 for afdb; the head ends by its estimator when every offered action's forecast (share x ceiling, and the ceilings of repeats are 0)
 is below the expected seconds times 0.006, or by having nothing left to offer. At most 1 pdb100 search per run (3 Foldseek tickets cap).
+
+## What happened with partner_contacts (real runs, 2026-11-21, worktree `gae_a102_66cef935e`, commit `66cef935e`)
+
+Runs used: 2 of 4. Foldseek tickets 2 per run (afdb-swissprot, pdb100). RCSB entry-file downloads: CspA 80 (+1 refused by length: 4BTS), RecA 160.
+Both runs closed by `yield_stop`, no failure, no `episode_ceiling_exceeded`, no custody error, `outstanding_handoff_count` 0; the unit's local US-align
+jobs ran through the job service (CspA 8 jobs, RecA 16, one job directory each; handoff and closure rows in the unit's `record_refs`: CspA 109 refs of which 93
+graded). CspA: `runs/a102_partner_ws_cspa_1`, run dir `runs/a102_partner_run_cspa_1`, id `a102_partner_cspa_1`, 5 units, credit 338.78. RecA:
+`runs/a102_partner_ws_reca_1`, `runs/a102_partner_run_reca_1`, id `a102_partner_reca_1`, 3 units, credit 30.64. Workspace builder: the scratchpad
+`build_ws2.py` (as the site runs, plus settings `python_executable`, `usalign_executable_directory`).
+
+| run | unit | action | ceiling | rise | credit after | unit s | next decision: partner forecast / threshold |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| CspA | 0 | structure_search afdb-swissprot | 1000 | 41.41 | 41.41 | 186.9 | |
+| CspA | 1 | site_correspondence annotated | 4225 | 3.651 | 45.06 | 42.2 | |
+| CspA | 2 | structure_search pdb100 (held model) | 9255 | 262.68 | 307.74 | 133.5 | partner_contacts 3199.5 / 0.80 |
+| CspA | 3 | partner_contacts | 6399 | 31.04 | 338.78 | 466.8 | |
+| CspA | 4 | site_correspondence catalytic | 4225 | 0 | 338.78 | 16.2 | none worth: stop |
+| RecA | 0 | structure_search afdb-swissprot | 1000 | 6.25 | 6.25 | 336.8 | |
+| RecA | 1 | structure_search pdb100 | 1135 | 12.68 | 18.93 | 275.9 | partner_contacts 13.47 / 2.80 |
+| RecA | 2 | partner_contacts | 2776 | 11.71 | 30.64 | 915.7 | site (81) 0.03 / 0.17 not worth; stop |
+
+The ceiling of `partner_contacts` = 6320 + 79 = 6399 for CspA (as predicted by the direct check: 159 candidates of the search; 79 possible partners).
+
+Predicted against observed:
+* CspA order: afdb search, site annotated, pdb100 search, partner_contacts, site catalytic: as expected (pdb100 search then the tool). Ended by the estimator.
+* Entries: predicted 233 of 496 skipped, 40 to 100 asked, settle after 4 to 10 batches. Observed 233 skipped, 80 asked (1 too large), 8 batches, stopped `settled`, 183 not asked: in the range. Unit time predicted 60 to 180 s; OBSERVED 466.8 s (about 5.8 s per file: the US-align jobs and the 0.5 s spacing; the estimate was too low). RecA: 193 skipped, 160 asked, 16 batches, settled, 915.7 s.
+* Nucleic acid: predicted RNA about 17 hits, E 0.2 to 0.3, DNA 2 hits E 0.17. Observed: 50 hits with a nucleic acid, 46 RNA; RNA value 0.088, DNA 0.1436 (the mean over many more hits, among them Y-box and others with lower E); ZN: not a candidate (E 0 is no admission); MG 0.1228 (predicted 0.49 only if 2I5M were reached: its hit set differed); the other partners BUA, WO4, MOO near 0.003 or 0.001.
+* Product test: CspB leads by it, 0.436 (predicted near 0.54), Y-box-binding protein 1 0.374 (predicted 0.37), Y-box-binding protein 2 0.337. 24 products measured.
+* Best hit contact residues: 3PF5 B (CspB with RNA; rank 12, B 0.758, E 0.588, F 0.776): contact residues land on the target's K10, W11, N13, F18, F20, D29, F31, H33 (and Q to A at 63: class 0), as predicted (W11, F18, F20, F31, H33, K10 all in place with scores 0.85 to 0.98). Y-box 2 (7F3L) and Y-box 1 (5YTV) land on the same target positions and add N to K at 16 (score 0).
+* Credit rise of the unit: predicted 0.9 to 10; OBSERVED 31.04 (more partners and products measured: 13 partners, 24 products; ceiling 6399).
+* RecA: predicted ADP, AGS, MG, DNA as partners, product test RecA 0.22 against RadA 0.08. Observed: the unit asked 160 files and found 262 hits with partners, 28 partner candidates measured (25 ligands, 1 nucleic acid: dna from 43 hits; MN 0.478 leads, then DTP 0.158, BEF 0.13, CA, POP, AGS 0.102, MG 0.101, ALF, GTP, ... ADP 0.067): DNA is NOT among the leading ones as predicted (its mean E is low), ADP at 0.067 is low. Product test: "Protein RecA" 0.203, RadA 0.075 (predicted 0.22 and 0.08: close; the leading hit 8GMS F with AGS has F 0.865, E 0.578, P-loop residues 69 to 74 in place).
+* Second-pdb100 behaviour: in both runs the model took the pdb100 search before the tool and never asked for site_correspondence on it (refused by construction).
+
+Unit durations are far above the earlier direct-check stand-in (one hundred twenty seconds): the cost of the unit is the US-align job per batch and the downloads; `partner_contacts` took 466.8 s and 915.7 s, which is also the learned `seconds` the controller will carry.
