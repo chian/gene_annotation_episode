@@ -6,7 +6,7 @@ function; a feature the sheet leaves without a value is absent), the estimated a
 its latest status request), how far past the estimate that is, and the last failure code (a fixed vocabulary; absent when
 none). Selectable: ``execution_handoff_refs`` (the handoff records), ``check_refs`` (the status records),
 ``closure_refs`` (the closure records of the fetch) and ``graded_refs`` (the graded records: the source, the grading
-artifact, the search row, the hit references and the comparison observations)."""
+artifact, the search row, the report data product (``sequence_search_results``), the hit references and the comparison observations)."""
 from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_database_features import (
@@ -70,7 +70,7 @@ RETURN_FORM = RecordForm({
     'execution_handoff_refs': Field('record_refs', 'The handoff records of the searches launched', required=False),
     'check_refs': Field('record_refs', 'The status records of the search', required=False),
     'closure_refs': Field('record_refs', 'The closure record of the fetched report', required=False),
-    'graded_refs': Field('record_refs', 'The graded records: the source, the grading artifact, the search row, the hit '
+    'graded_refs': Field('record_refs', 'The graded records: the source, the grading artifact, the search row, the report data product, the hit '
                                         'references and the comparison observations', required=False),
 })
 

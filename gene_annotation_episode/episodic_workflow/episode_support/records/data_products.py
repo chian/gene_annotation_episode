@@ -33,6 +33,12 @@ KINDS = {
                           'Sequence set (protein), FASTA'),
     'sequence_search_results': ('http://edamontology.org/data_0857', 'http://edamontology.org/format_3464',
                                 'Sequence search results, JSON (BLAST JSON report)'),
+    # data_0858 Sequence signature matches (synonym: Sequence-profile alignment): a sequence scanned against a profile
+    # database (data_0857 is a search of a database of sequences). EDAM.tsv, read 2026-11-21: neither obsolete. The
+    # HMMER domain table has whitespace-aligned columns, not tabs, so TSV (format_3475) would mislabel it; EDAM has no
+    # format for it closer than format_2330 Textual format.
+    'profile_scan_results': ('http://edamontology.org/data_0858', 'http://edamontology.org/format_2330',
+                             'Sequence signature matches, textual (HMMER hmmscan domain table)'),
     'alignment_position_report': ('http://edamontology.org/data_0867', 'http://edamontology.org/format_3475',
                                   'Sequence alignment report, TSV (statistics per alignment position)'),
 }
