@@ -47,7 +47,7 @@ def _rows(outcomes):
 
 def internal_summary(view):
     parent, records = view.parent_input, view.records
-    commission = {key: parent[key] for key in ('query_ref', 'search_ref', 'candidates', 'per_candidate', 'inflations')}
+    commission = {key: parent[key] for key in ('query_ref', 'search_ref', 'candidates', 'per_candidate')}
     members = run.set_members(records, commission, parent['per_candidate'])
     rows = _rows(view.outcomes)
     held = [row for row in products(records) if row['kind'] in KINDS]
