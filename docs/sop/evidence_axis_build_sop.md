@@ -66,7 +66,14 @@ asking, in this order, and writing the answers down in your axis's tree note bef
    would be 0).
 5. Order. Build first what is distinctive and what the others depend on. An analysis that only repeats another axis's
    evidence in a new form comes last.
-6. Inventory BOTH ways before designing: what the repository already has for every row (the old library often holds the
+6. Light and heavy. The owner (2026-11-21): "it's important to recognize that there are good tools but there are also high
+   resource tools and they have to be worked on separately. We can build basics first with lighter tools and should then
+   remember the whole design". So the table lists the major tools of the field for each row even when they are heavy (a GPU,
+   HPC, a large database, a build, a service that discourages automated use), each with what it adds and why it waits, in a
+   "heavy tools, later or on HPC" table of the tree note. Build the basics with the light tools; do not let "has a keyless
+   web interface" decide what the axis IS. Never state a tool's limitation from memory: verify it (Step 11) or mark it
+   unverified (A102 first excluded DALI on an unverified claim that its server required an email address; it does not).
+7. Inventory BOTH ways before designing: what the repository already has for every row (the old library often holds the
    axis's distinctive analyses: for A102 the feature-geometry, reference-trait and RNA secondary-structure code), and which
    tools run today. An inventory scoped by another axis's tree finds only that tree again.
 
