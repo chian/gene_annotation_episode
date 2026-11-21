@@ -258,3 +258,17 @@ workspace `runs/bvbrc_a101_ws_D`; the services file names the global ledger.
 4. As predicted: the ledger holds 4 measured searches, no open row, one kind; the trend has two query lengths and
    no line. The ten repeat `estimate` units of the wind-down wrote nothing to the ledger.
 5. The head's credit: 0.9716 with no further call (1 head unit).
+
+### Run E1: prediction (written before the run)
+
+Target: E. coli K-12 RNA polymerase subunit beta, RpoB (UniProt P0A8V2, 1342 residues): a third query length, so
+that the ledger reaches five measured searches of three lengths and the size line can be fitted. Fresh workspace
+`runs/bvbrc_a101_ws_E`, the global ledger. This is the sixth Homology submission.
+1. The first estimate has the basis `learned_from_earlier_searches`, about 86 s (4 measured, typical 86.31 s, no
+   line yet).
+2. One ledger row for the launch with `query_length` 1342. The duration is not predictable from the ledger (the 70
+   residue query took longer than the 353 residue ones): between 80 and 150 s.
+3. `extract`: the products are RNA polymerase beta subunits, essentially one product.
+4. Afterwards the ledger holds 5 measured searches of 3 query lengths and the trend carries `size_fit` (the
+   least-squares line of seconds against query length).
+5. The head's credit is close to 1 with no further call.
