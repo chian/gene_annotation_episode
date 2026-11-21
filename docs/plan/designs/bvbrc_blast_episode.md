@@ -220,3 +220,28 @@ What would let code call two hits "the same candidate" (over these 300 hits, `bv
 - `genome_id` / `taxon_id` differ for every hit (300 genomes), so organism alone does not merge hits.
 
 No `sig=` followed by hex in any file of runs C1, `bvbrc_a101_ws_C`, the estimate table or the data probes.
+
+## The global estimate ledger (owner's next step 1), first wiring
+
+One ledger file for every run: `resources/estimate_ledger.sqlite3` (outside version control, outlasts runs). It was
+seeded with the three measured searches of runs A, B and C (their own keys, times and durations, with the job facts
+they had: BV-BRC Homology, blastp, bacteria-archaea, query length 353). A launch now writes the job's facts into its
+ledger row (`job`: service, program, database, query length); the status requests no longer write `:remaining` rows
+(the revised remaining time stays in the unit's outcome), so the ledger holds one row per launch. The estimate action
+is shown `duration_trend` of the kind (`episode_support/jobs/duration_trend.py`): how many were measured, the 10th,
+50th and 90th percentile seconds, the latest durations newest first, and, once at least five searches of at least two
+query lengths are measured, a least-squares line of seconds against query length with what it gives for this query.
+
+### Run D1: prediction (written before the run)
+
+Target: E. coli K-12 cold shock protein CspA (UniProt P0A9X9, 70 residues), a different size from RecA; fresh
+workspace `runs/bvbrc_a101_ws_D`; the services file names the global ledger.
+1. The child's first estimate has the basis `learned_from_earlier_searches` and rests on the ledger: about 85 s
+   (the trend shows 3 measured, typical 85.45 s, latest 87.17, 85.45, 66.44; no size line yet).
+2. `launch` writes exactly one ledger row, carrying `query_length` 70. One or two monitors; the measured duration
+   is between 60 and 90 s (not known: a shorter query against the same database).
+3. `extract`: products are cold shock proteins; because the Csp family has several paralogues, more than one
+   product name is expected among the hits (unlike RecA, where all 300 were one product).
+4. Afterwards the ledger holds 4 measured searches and no open row; the trend has two query lengths and still no
+   line (fewer than five searches).
+5. The head's credit is close to 1 with no further call.
