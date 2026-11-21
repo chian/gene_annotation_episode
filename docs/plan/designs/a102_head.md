@@ -158,7 +158,7 @@ The ledger: the head's row `structural_homology_evidence:structure_search` (fore
    `control_count` 1, 9 naming batches (899 named, 100 not asked: the naming settled), only 18 candidates; the leading are RecA products and
    homologs, with mean B 0.61 down to 0.33: Protein RecA 2 0.6147; Protein RecA 0.6126; Protein RecA 1 0.5486; Mitochondrial DNA repair protein recA
    homolog 0.5346; DNA repair protein recA homolog 3, mitochondrial 0.5142; Protein RecA, plasmid 0.5007; DNA repair protein recA homolog 1,
-   chloroplastic 0.4786; DNA repair protein recA homolog 2, mitochondrial 0.4445; Protein RecA, chromosomal 0.4401; Putative DNA repair protein recA
+   chloroplastic 0.4786; DNA repair protein recA homolog 2, mitochondrial 0.4449; Protein RecA, chromosomal 0.4401; Putative DNA repair protein recA
    homolog 4 0.3266. NOT as predicted: no RadA/Rad51-named candidate among the 18, and the B values are lower than 0.8 (the target is 353
    residues and a hit's B is divided by the target length plus the hit length, so partial matches score low).
 3. Credit 6.2504 (below the ceiling 1000; the ceiling after the unit 0, threshold 1.3037 = 217.28 s x 0.006); `outstanding_handoff_count` 0; no custody error.
