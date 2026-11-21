@@ -59,5 +59,4 @@ def read_from_parent(assignment, message):
             'tool_request': assignment.get('tool_request'),
             'scope': assignment['scope'],
             'received_record_refs': list(assignment.get('received_record_refs', [])),
-            'input_refs': list(assignment.get('input_refs', [])),
-            'launch_instructions': message.get('launch_instructions')}
+            'input_refs': list(assignment.get('input_refs', []))}

@@ -5,7 +5,10 @@ sections 2.7, 3.3 and 4, the "core" fields; adopted by the owner on 19 November 
 What a feature is: the evidence type (the sheet's ``assay_type``), the quantity kind, the sheet, experiment and
 assertion references, the value, status, unit and origin of the measured effect, the effect variance, the signed log
 evidence ratio and its status, the prediction model, the status of every interpretation criterion, and whether the
-evidence ratio rests on synthetic or proposed inputs. No model-written text: the cells' reasons, conditions, formulas
+evidence ratio rests on synthetic or proposed inputs; and the classification of the fields the sheet leaves unknown
+(``literature_unknown_classification``: how many fields the grading has and leaves unknown, whether a classification of
+them against the source is held and, when one is, how many it holds justified and unjustified; credit reads these).
+No model-written text: the cells' reasons, conditions, formulas
 and meanings, the support passages and the assessment's ``investigation_finding`` stay in the Episode that saved the
 sheet, behind its reference. A number the sheet leaves unavailable is absent from the features (its status says
 why); the forms declare those fields not required.
@@ -17,6 +20,8 @@ import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import (
     ASSAY_TYPES, CRITERIA, CRITERIA_BY_TYPE, QUANTITY_KINDS, _quantity_unit_supported)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_unknown_classification import (
+    CLASSIFICATION_STATUSES, classification_features)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_assay_grading_storage import (
     LiteratureAssayGradingRepository)
 
@@ -61,9 +66,15 @@ FEATURES = {
     **{name + '_status': ('choice', CRITERION_STATUSES) for name in CRITERIA},
     'evidence_uses_synthetic_input': ('boolean',),
     'evidence_uses_proposed_input': ('boolean',),
+    'graded_field_count': ('count',),
+    'unknown_field_count': ('count',),
+    'unknown_classification_status': ('choice', CLASSIFICATION_STATUSES),
+    'justified_unknown_count': ('count',),
+    'unjustified_unknown_count': ('count',),
 }
-# The numbers a sheet can leave without a value.
-OPTIONAL = ('source_log_evidence_ratio', 'effect_value', 'effect_variance')
+# The numbers a sheet can leave without a value, and the counts of a classification that is not held.
+OPTIONAL = ('source_log_evidence_ratio', 'effect_value', 'effect_variance', 'justified_unknown_count',
+            'unjustified_unknown_count')
 MEANINGS = {
     'evidence_type': 'The A105 evidence type: the assay type the sheet was graded as',
     'quantity_kind': 'The kind of native quantity the measured effect is',
@@ -86,6 +97,15 @@ MEANINGS = {
                          'does not carry it' for name in CRITERIA},
     'evidence_uses_synthetic_input': 'Whether the log evidence ratio rests on a synthetic input',
     'evidence_uses_proposed_input': 'Whether the log evidence ratio rests on a proposed input',
+    'graded_field_count': 'The fields of the grading: its nine quantities, its prediction model and the criteria '
+                          'it carries',
+    'unknown_field_count': 'The fields the grading leaves unknown (a null quantity, a null prediction model, a '
+                           'criterion unknown)',
+    'unknown_classification_status': 'Whether a classification of the unknown fields against the source is held',
+    'justified_unknown_count': 'Unknown fields the classification holds justified (the source does not state '
+                               'them); absent when not classified',
+    'unjustified_unknown_count': 'Unknown fields the classification holds unjustified (the source states them); '
+                                 'absent when not classified',
 }
 
 
@@ -100,6 +120,8 @@ def validate_features(features):
             valid = type(value) in (int, float) and math.isfinite(value)
         elif rule[0] == 'nonnegative':
             valid = type(value) in (int, float) and math.isfinite(value) and value >= 0
+        elif rule[0] == 'count':
+            valid = type(value) is int and value >= 0
         elif rule[0] == 'choice':
             valid = value in rule[1]
         elif rule[0] == 'boolean':
@@ -115,6 +137,10 @@ def validate_features(features):
         raise ValueError('assay_grading_finding_feature_invalid:criterion_of_another_assay_type')
     if ('source_log_evidence_ratio' in features) != (features['source_log_evidence_ratio_status'] == 'conditional'):
         raise ValueError('assay_grading_finding_feature_invalid:source_log_evidence_ratio')
+    counts = [features[name] for name in ('justified_unknown_count', 'unjustified_unknown_count') if name in features]
+    if (features['unknown_classification_status'] == 'classified') != (len(counts) == 2) or (
+            counts and sum(counts) != features['unknown_field_count']):
+        raise ValueError('assay_grading_finding_feature_invalid:unknown_classification')
     return features
 
 
@@ -142,6 +168,7 @@ def sheet_features(reader, sheet_ref):
                               else 'not_selected') for name in CRITERIA},
         'evidence_uses_synthetic_input': 'synthetic' in ratio['input_origins'],
         'evidence_uses_proposed_input': 'proposed' in ratio['input_origins'],
+        **classification_features(reader, sheet_ref, selection),
     }
     for name, cell in (('source_log_evidence_ratio', ratio), ('effect_value', effect), ('effect_variance', variance)):
         if cell['value'] is not None:

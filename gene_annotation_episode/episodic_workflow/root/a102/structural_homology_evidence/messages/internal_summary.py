@@ -7,7 +7,8 @@ proposed annotation, the evidence and scope records), the credit view (``credit.
 records: the credit and its measured components, retained finding counts, inactive dependencies and sheets), the
 latest interpretation the head wrote with its ``report`` tool, the records its reasoning commits wrote, the
 revisions it prepared with ``process_revise``, the children it commissioned with what they returned (their credit,
-finding, process results and the progress observations a monitor delivered), a compact history of every unit and
+finding and process results), the outstanding jobs it holds with the latest check of each (the job ledger rows in
+its custody: a monitor's check rows are read there), a compact history of every unit and
 the controller's yield table. The old initial references (evidence references and the proposed annotation) are the
 parent input's custody records. Fields of the old decision state that came from the old runner (call counts, the
 last outcome index, the feedback, pending work, report deliveries and the journal views) are not carried.
@@ -18,6 +19,7 @@ import json
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.structural_homology_evidence.literature_structure_cells import (
     experimental_structure_arm)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import outstanding_jobs
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
 from .. import credit as credit_file
@@ -36,7 +38,7 @@ def unique(values):
 
 def internal_summary(view):
     parent = view.parent_input
-    report, committed, revisions, children, results, snapshots, history = None, [], [], [], [], {}, []
+    report, committed, revisions, children, results, history = None, [], [], [], [], []
     experimental = []
     for unit in view.outcomes:
         if unit['kind'] == 'tool':
@@ -54,7 +56,6 @@ def internal_summary(view):
             children.append({'slot': unit['slot'], 'child_credit': child['child_credit'],
                              'child_finding': child['child_finding']})
             results.extend(child['process_results'])
-            snapshots.update(child['progress_snapshots'])
             experimental.extend(child['experimental_structure_sheets'])
             history.append({'child': unit['slot'], 'credit': child['child_credit']})
     credit_view = credit_file.credit_view(parent, view.records)     # the comparative native arm
@@ -68,7 +69,9 @@ def internal_summary(view):
             'revisions': revisions,
             'children': children,
             'received_process_results': results,
-            'progress_snapshots': snapshots,
+            # the jobs whose handoff row this head holds and whose closure row it does not hold, with the check
+            # rows it holds of each (a monitor returned them): what a monitor commission passes in custody
+            'outstanding_jobs': outstanding_jobs(view.records),
             'outcome_history': history,
             'last_outcome': plain(view.outcomes[-1]) if view.outcomes else None,
             'controller': controller,

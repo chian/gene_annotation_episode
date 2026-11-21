@@ -1,22 +1,22 @@
-"""What the scientific parent gives: the results assignment, with the handoff of the work already submitted.
+"""What the scientific parent gives: the handed-off job, as the job ledger rows it holds, and the names of the
+result files it requests. This is the only place the assignment is read.
 
-``ASSIGNMENT_FORM`` has one field per property of the old ``RESULTS_SCHEMA`` (old ``from_parent.py``
-``assignment_schema``), under the same name. ``handoff`` is an ``execution_handoff_v1`` record; it holds nulls
-(``failure``, ``version``, ``content_sha256`` of an input), which the form has no type for, so it is one untyped
-``record`` field. The adapter that serves the episode is the one the handoff's ``resource_selection`` names
-(old ``_adapter``); the service ``resources`` selects it. The subject ``scope`` and the parent's ``initial_report``
-are fields of the commission's message, as in the old request message."""
+Controlled messaging: the job travels as record references (its handoff row and the check rows the parent holds),
+never as a described handoff; the requested data is a list of result file names, which the job's own result
+catalog validates at the fetch. The old ``handoff`` record (``execution_handoff_v1``) and the open
+``requested_data_selector`` are not fields of the form. The commission's message is not read."""
 from method_loop import DeclaredField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resource_records import RESULTS_VERSION
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The assignment version', RESULTS_VERSION),
-    'handoff': Field('record', 'The execution_handoff_v1 of the work whose results are acquired (fixed)'),
-    'requested_data_selector': Field('record', 'Which data the parent requests (fixed)'),
+    'job_refs': Field('record_refs', 'The job ledger rows of the one handed-off job whose results are acquired: '
+                                     'its handoff row and the check rows the parent holds, passed in custody'),
+    'requested_names': Field('list', 'The names of the result files the parent requests, as the job wrote them; '
+                                     'at least one'),
 })
 
 
 def read_from_parent(assignment, message):
-    return {**assignment, 'scope': message['scope'],
-            'initial_report': message['initial_report'] if 'initial_report' in message else None}
+    return {'job_refs': list(assignment['job_refs']), 'requested_names': list(assignment['requested_names'])}

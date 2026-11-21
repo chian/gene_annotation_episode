@@ -1,40 +1,41 @@
-"""What the commissioner gives: the monitor assignment (old ``monitor_assignment_v1``, from ``from_parent.py``
-``MonitorAssignment.assignment_schema``): the target, the fields the monitor may observe, the progress observations
-the commissioner already has and the record types whose committed records it may return. The information unit of
-the monitor's credit is a new field: the old binding took it from its configuration (``MonitorConfiguration``).
+"""What the commissioner gives: the job, passed in custody, and the limits of the assessment.
 
-The old admission (``MonitorAssignment._assignment`` / ``prepare_assignment``: the target handle must be an
-``execution_handle`` in scope, every known progress ref an observation of that same target, read through the old
-progress provider and ``services.reference_in_scope``) is not carried here: this function is handed no records and
-no services. A target that is not an execution handle fails at the first observation of it; a known progress ref
-that is not an observation of the target fails when the summary reads its snapshot (``messages/internal_summary.py``
-and ``credit.py``)."""
+The job is named by a record, never by text: ``handoff_refs`` holds the one handoff row of the job ledger that the
+launch wrote (``job_access.launch``) and the commissioner holds. ``known_progress_refs`` are the check rows of that
+job the commissioner already holds: what it already knows, so a check earns credit only for what they do not show
+(the old ``known_progress_refs`` baseline, now records in custody). ``dependency_handoff_refs`` are the handoff rows
+of the jobs the target directly depends on: the monitor may assess one of them through a monitor of its own kind,
+and can reach no other job (the old exposed direct dependencies; custody is what exposes them now).
+``requested_fields`` is what the monitor may observe of the job; ``information_unit`` the credit of one newly
+informative check.
+
+Not carried from the old ``monitor_assignment_v1``: ``target_handle`` (the handoff row names the job) and
+``permitted_committed_record_types`` (a job's results are records only after the result-acquisition child fetched
+them; a monitor returns none). This is the only place the assignment is read."""
 from method_loop import DeclaredField, Field, RecordForm, SubsetField
 
-from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import (
-    RECORD_SCHEMAS)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_progress import FIELDS
 
-FIELD_OPTIONS = ('execution_status', 'measurements', 'log_windows', 'committed_record_refs', 'dependencies',
-                 'result_available')
+FIELD_OPTIONS = (*FIELDS, 'log_windows')
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The version of this assignment form', 'monitor_assignment_v1'),
-    'target_handle': Field('text', 'The execution handle to assess'),
-    'requested_fields': SubsetField('text', 'The exposed fields the monitor may observe; it never observes more',
+    'version': DeclaredField('text', 'The version of this assignment form', 'monitor_assignment_v2'),
+    'handoff_refs': Field('record_refs', 'The handoff row of the job to assess: exactly one job ledger row, '
+                                         'passed in custody'),
+    'known_progress_refs': Field('record_refs', 'The check rows of that job the commissioner already holds'),
+    'dependency_handoff_refs': Field('record_refs', 'The handoff rows of the jobs the target directly depends on, '
+                                                    'which the monitor may assess through a monitor of its own '
+                                                    'kind'),
+    'requested_fields': SubsetField('text', 'What the monitor may observe of the job; it never observes more',
                                     FIELD_OPTIONS),
-    'known_progress_refs': Field('list', 'Progress observations the commissioner already has, each an observation '
-                                         'of the same target'),
-    'permitted_committed_record_types': SubsetField('text', 'The record types whose committed records the monitor '
-                                                            'may return', tuple(sorted(RECORD_SCHEMAS))),
-    'information_unit': Field('number', 'The credit of one newly informative received progress snapshot (the '
-                                        'old monitor configuration value; positive)'),
+    'information_unit': Field('number', 'The credit of one newly informative check (positive)'),
 })
 
 
 def read_from_parent(assignment, message):
-    return {'target_handle': assignment['target_handle'],
-            'requested_fields': list(assignment['requested_fields']),
+    (handoff_ref,) = assignment['handoff_refs']
+    return {'handoff_ref': handoff_ref,
             'known_progress_refs': list(assignment['known_progress_refs']),
-            'permitted_committed_record_types': list(assignment['permitted_committed_record_types']),
-            'information_unit': assignment['information_unit'],
-            'launch_instructions': message.get('launch_instructions')}
+            'dependency_handoff_refs': list(assignment['dependency_handoff_refs']),
+            'requested_fields': list(assignment['requested_fields']),
+            'information_unit': assignment['information_unit']}

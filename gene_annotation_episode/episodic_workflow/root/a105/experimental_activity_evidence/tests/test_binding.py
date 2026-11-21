@@ -13,11 +13,12 @@ from method_loop import FormError
 PACKAGE = __name__.rsplit('.', 2)[0]
 FOLDER = Path(__file__).resolve().parents[1]
 EPISODE = importlib.import_module(PACKAGE + '.episode').ExperimentalActivityEvidence
-CHILDREN = ('published_evidence_assessment',)
+CHILDREN = ('literature',)
 FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
          'messages/__init__.py', 'messages/read_from_parent.py', 'messages/msg_to_child.py',
          'messages/read_from_child.py', 'messages/internal_summary.py', 'messages/final_to_parent.py',
-         'tests/__init__.py', 'tests/test_binding.py', 'tests/grading_world.py', 'tests/test_grading.py'}
+         'tests/__init__.py', 'tests/test_binding.py', 'tests/grading_world.py', 'tests/test_grading.py',
+         'tests/test_decision_schema.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 OPTION = {'version': 'experimental_activity_evidence_option_ref_v1', 'library_id': 'a' * 64,
           'entry_sha256': 'b' * 64}
@@ -62,7 +63,7 @@ def test_the_class_inherits_only_the_episode_type_and_is_its_own_binding():
     assert PACKAGE.endswith(EPISODE.binding_path.replace('/', '.'))
     assert dict(EPISODE.child_slots) == {
         'experimental_activity_evidence': 'experimental_activity_evidence',
-        'published_evidence_assessment': 'experimental_activity_evidence/published_evidence_assessment'}
+        'literature': 'experimental_activity_evidence/literature'}
 
 
 def test_the_folder_holds_exactly_the_ten_files_of_an_episode_with_children_and_its_child_folder():
@@ -159,13 +160,13 @@ def test_the_literature_commission_passes_the_assignment_the_scope_every_held_re
             'credit_unit': 1.0}
     given = {'version': 'literature_assignment_v1', 'question_context_refs': ['ctx_1'], 'source_refs': ['src_1'],
              'literature_task': task, 'proposed_annotation_ref': 'hyp_1'}
-    message = EPISODE.msg_to_child('published_evidence_assessment',
+    message = EPISODE.msg_to_child('literature',
                                    {'objective': 'read', 'scope': SCOPE, 'assignment': given}, summary())
     assert message.assignment == {**given, 'scope': SCOPE, 'received_record_refs': ['hyp_1', 'sub_1']}
     assert message.selection == ('literature_source_lead_dispositions',)
     graded = {**given, 'literature_task': {**task, 'kind': 'a105_experiments'},
               'requested_assay_grading_components': ['score']}
-    selected = EPISODE.msg_to_child('published_evidence_assessment',
+    selected = EPISODE.msg_to_child('literature',
                                     {'objective': 'grade', 'scope': SCOPE, 'assignment': graded}, summary())
     assert selected.selection == ()
     with pytest.raises(LookupError):
@@ -194,7 +195,7 @@ def test_what_the_children_returned_is_their_credit_the_features_counts_and_refe
                'assay_count_with_evidence_ratio': 0, 'no_applicable_span_count': 0}
     result = {'credit': 1.0, 'finding': finding,
               'literature_source_lead_dispositions': {'relevant_lead_count': 1, 'lead_source_refs': ['src_1']}}
-    report = from_child('published_evidence_assessment', result, {}, None)
+    report = from_child('literature', result, {}, None)
     assert report['lead_source_refs'] == ['src_1'] and report['committed_record_refs'] == []
     own = from_child('experimental_activity_evidence',
                      {'credit': 2.0, 'finding': finding, 'committed_record_refs': ['a1']}, {}, None)

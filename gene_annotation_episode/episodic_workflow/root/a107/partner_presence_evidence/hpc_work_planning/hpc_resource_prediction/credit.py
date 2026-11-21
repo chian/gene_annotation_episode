@@ -18,13 +18,13 @@ def credit_view(state):
     ledger = state['ledger']
     if ledger is None:
         return {'credit': 0.0, 'model_quality_improvement': 0.0, 'prospective_validation_credit': 0.0,
-                'actual_job_credit_counted_here': False}
+                }
     entry, current = ledger['model_entry'], ledger['current_quality']
     gain = current - entry['quality'] if entry and current is not None and entry['quality'] is not None else 0.
     validation = ledger['validation_credit']
     return {'credit': ledger['commission']['credit']['model_scale'] * gain + validation,
             'model_quality_improvement': gain, 'prospective_validation_credit': validation,
-            'actual_job_credit_counted_here': False}
+            }
 
 
 def credit(summary, records):

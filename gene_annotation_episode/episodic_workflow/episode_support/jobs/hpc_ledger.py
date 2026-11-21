@@ -69,8 +69,10 @@ class HpcLedger:
         return self._store.table(HPC_LEDGER).select({'ledger': self.ledger, **where})
 
     def refs(self):
-        """The reference of every held row of this ledger, in receipt order (to pass or return in custody)."""
-        return [row['id'] for row in self._rows({})]
+        """The reference of every held row of this ledger and of every Store record a row names in its
+        ``source_refs``, in receipt order (to pass or return in custody: a pass carries only the records named,
+        so the artifact a row names travels with the row)."""
+        return list(dict.fromkeys(ref for row in self._rows({}) for ref in (row['id'], *row['source_refs'])))
 
     def read(self, identity):
         rows = self._rows({'identity': identity})

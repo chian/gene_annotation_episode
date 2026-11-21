@@ -7,7 +7,7 @@ credits at most the acquired-record unit: bounded quality with that maximum (the
 unit times the fraction the earlier results left uncovered, which needs the held results and so cannot be read
 here; the unit is the bound). The old exact-zero forecast, the practical-endpoint estimate and the typed and API
 profiles (a completion with the verified completion proof as target) are not carried: only the controller stops the
-Episode, and the typed and API targets are BLOCKED-ON-JOB-SERVICE."""
+Episode, and this episode acquires plain file results only."""
 from yield_control import AccumulationYieldController, BoundedQualityYieldController
 
 

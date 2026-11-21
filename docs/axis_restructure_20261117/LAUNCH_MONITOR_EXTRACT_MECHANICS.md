@@ -428,7 +428,7 @@ are real detached systemd services). The run's caller gets every factory from
 
 | Service name | Class, module | What a tool calls (`service = ctx.services[name]`) | What a decision reads (`.read(member, ...)`) |
 |---|---|---|---|
-| `job_access` | `JobAccess`, `episode_runtime/job_access.py` | `launch(ctx, resource_id, job, inputs=None, estimates=None, name='job')`, `check(ctx, handoff_ref, assess=None)`, `fetch(ctx, handoff_ref, names=None)`, `cancel(ctx, handoff_ref)`, `await run(ctx, resource_id, job, inputs=None, name='command')` (launch, wait, fetch in one unit) | `resources`, `describe(resource_id)` |
+| `job_access` | `JobAccess`, `episode_runtime/job_access.py` | `launch(ctx, resource_id, job, inputs=None, estimates=None, name='job')`, `check(ctx, handoff_ref, assess=None)`, `window(ctx, handoff_ref, name, offset=, limit=)` (one byte window of a file of the job, a log while it runs; no check and no closure), `fetch(ctx, handoff_ref, names=None)`, `cancel(ctx, handoff_ref)`, `await run(ctx, resource_id, job, inputs=None, name='command')` (launch, wait, fetch in one unit) | `resources`, `describe(resource_id)` |
 | `estimate_table` | `EstimateTable`, `episode_runtime/estimate_table.py` | `expect(kind, expectation, key=, at=)` before a costly action, `resolve(key, actual, at=)` after it; `observe(resource, kind, data, observed_at=, provenance=)`, `record(attempt_id=, profile=, observation=)` | `kind_statistics(kind)`, `rows(kind, limit)`, `expectation(key)`, `kinds`, `latest(resource, kind, now)`, `history(profile, now, queue_only, limit)`, `profiles(tools, now, limit)`, `policy`, `as_record` |
 | `native_events` | `NativeEvents`, `episode_support/jobs/native_events.py` | `await wait(ctx, condition)` (the receipts of the events come into custody), `receipt(ctx, handle, record_ref)`; the ledger's own `register_native_target`, `validate_event_targets`, `wait_events` (so `waiting.selected_wait(service, condition)` works) | `targets(handles)` |
 | `resource_adapter`, `resources` (one object) | `ResourceAdapters`, `episode_runtime/resource_adapters.py`; each bound resource is a `JobResourceAdapter` (`episode_support/jobs/job_resource_adapter.py`) | `prepare_assignment(ctx, assignment)`, `await execute(ctx, assignment, tool, arguments)`, `await check_handoff(ctx, handoff)` | `declared_capabilities`, `adapter_capabilities`, `bound_resource_ids`, `is_bound(resource_id)`, `catalog(assignment)`, `decision_context(assignment)`, `facts(assignment)` |
@@ -437,7 +437,7 @@ are real detached systemd services). The run's caller gets every factory from
 Not services, because they read nothing outside the Store:
 
 - **The job record kind** is the declared work table `JOB_LEDGER` (`episode_runtime/job_access.py`: columns
-  `job`, `event`, `at`, `detail`, `source_ref`, `result_refs`; key `job`, `event`, `at`; events `handoff`, `check`,
+  `job`, `event`, `at`, `detail`, `source_ref`, `result_refs`; key `job`, `event`, `at`; events `handoff`, `check`, `window`,
   `closure`). `job_access` writes the rows through `ctx.store` with the route's reply as an artifact, so the tool
   does not write them itself (section 7's example tool is replaced by one call). The readers for summaries and
   credit are `episode_support/jobs/job_records.py`: `outstanding_jobs(reader)`, `handoff`, `checks`, `closure`,
@@ -445,7 +445,7 @@ Not services, because they read nothing outside the Store:
 - **The HPC ledger** is the declared work table `HPC_LEDGER` (`episode_support/jobs/hpc_ledger.py`):
   `HpcLedger.open(ctx.store, commission)`, `HpcLedger.existing(reader, ledger_id)`, `put`, `read`, `records`,
   `freeze`, `score(measured_ref, log_score=, measured_value=, forecast_metric=)`, `accept`, `model_credit`,
-  `credit_view`, `refs` (the rows to pass or return in custody). An episode that named a `hpc_ledger` service drops
+  `credit_view`, `refs` (the rows, and the records they name in `source_refs`, to pass or return in custody). An episode that named a `hpc_ledger` service drops
   it from `SERVICES`. The old `once`, `cached` and `save_action` are not carried: the journal replays finished
   units.
 - **The action-value calculation** (section 13) is `episode_support/jobs/action_value.py`: `discrimination`,
@@ -477,6 +477,7 @@ the route is asked again with the same handle and returns the job it already has
 | `submit`, `launch_operation`, `api_operation` (a submission) | `job_access.launch(ctx, resource_id, job, inputs=, estimates=)` |
 | `status`, `observe_target`, `observe_progress`, `observe_queue` (as a `run` of the queue command), `read_progress` | `job_access.check(ctx, handoff_ref, assess=<the episode's own reading of the reply>)`; an earlier check is read from the held check rows |
 | `read_file`, `read_target`, `result_host`, `api_result_catalog`, `api_result_operation` | `job_access.fetch(ctx, handoff_ref, names=[...])` |
+| a log window of a job that still runs (`progress_log`, `read_output` of a live job) | `job_access.window(ctx, handoff_ref, name, offset=, limit=)`: the bytes come into custody as an artifact named by a `window` row; the job is not closed |
 | `handoff_refs`, `native_event_targets`, `describe_progress_target`, `describe_result_target` | the held handoff row (`job_records.handoff`, `outstanding_jobs`); its `detail['native']` names the event target |
 | `capabilities`, `api_capabilities`, `launch_catalog`, `api_catalog` | `job_access.read('resources')`, `.read('describe', resource_id)`; `resource_adapter.read('catalog', assignment)` |
 | `estimate_table.observe`, `latest`, `record`, `history`, `policy`, `as_record` | the same members (`record` takes `attempt_id`, not `key`) |
@@ -512,4 +513,6 @@ the route is asked again with the same handle and returns the job it already has
 10. **Real episodes on the services.** The carried launch, monitor, result-acquisition, resource and HPC planning
     episodes still raise at their `BLOCKED-ON-JOB-SERVICE` notes; each is rewritten onto the calls above in the
     episode stage. The only episode that runs on the services today is the test episode
-    `episode_support/jobs/tests/job_probe/`.
+    `episode_support/jobs/tests/job_probe/`. Since then the A104 monitor
+    (`root/a104/evolutionary_history_evidence/execution_progress_assessment`) runs on them: `MONITOR_PORT_RECIPE.md`
+    is its port and the steps for every other monitor; its reading of check rows is `episode_support/jobs/job_progress.py`.

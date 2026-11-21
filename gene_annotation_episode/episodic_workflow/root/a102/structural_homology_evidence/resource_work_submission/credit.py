@@ -1,14 +1,12 @@
-"""Credit: the operational credit of the launch role (old ``ResourceCredit.credit_view`` ->
-``services.bound_role_credit``, the credit view of the resource adapters over what the episode holds;
-``credit_kind`` was ``operational`` for every resource role, and the episode has no scientific credit of its own).
-
-Credit has no services. Each resource tool of ``task.py`` asks the resource adapter service for its credit view and
-returns the number in its outcome as ``adapter_credit``; the summary carries the latest one. A unit that does not
-touch the adapters (a lookup, a wait, a reasoning commitment, a child commission) changes nothing in the summary, so
-its credit is the same as before it (the old wait took ``last_observed_credit``). Credit is used exactly as the
-adapter measures it: never bounded, clamped or rescaled."""
+"""Credit: what the Episode holds of a usable execution handoff, in the two units the commission's completion
+target is split into (``read_from_parent``): one when it holds the handoff row of the launched work, the other
+when it holds a check row that found that job in a known state. Both are job ledger rows in custody (returned by a
+resource child, passed back by the commissioner, or written by this episode's own receiving check) and
+``internal_summary`` reads them. A reading of a resource, a library lookup, a commission that returns no handoff
+and a repeated check add nothing. The sum cannot pass the completion target; nothing is bounded or rescaled."""
 
 
 def credit(summary, records):
-    value = summary['adapter_credit']
-    return 0.0 if value is None else value
+    units = summary['launch_units']
+    return float(units['handoff_unit'] * summary['handoff_held']
+                 + units['check_unit'] * summary['usable_handoff_held'])

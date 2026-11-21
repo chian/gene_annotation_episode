@@ -1,401 +1,293 @@
-"""The A107 monitor's task: observe the assigned execution target, read what was delivered, read one retained log
-window, wait for native job events, or commission a monitor for one exposed direct dependency. One unit is one such
-action.
+"""The task: one selected action per unit on the job the commissioner handed over.
 
-Carried from the old ``progress_operations.py`` (``ProgressOperations.catalog`` and ``execute``), ``task.py``,
-``task_decision.py``, ``decision_inputs.py``, ``decision_state.py``, ``task_instructions.py``, ``goal.py`` (the goal
-instruction text) and ``waiting.py``. The task always offers a unit and never ends the Episode: only the yield
-controller does. The old ``redeliver_report`` and the wait on pending in-process children, the report update the
-model wrote, the decision-exchange loop and the saved-exchange checks are not carried (the return's facts are
-recorded facts: ``messages/final_to_parent.py``). The old wait on native job events is the tool ``wait_for_events``.
+The model is the router: it picks one defined action with controlled arguments (a probability, a held check
+reference, a log name with a byte window, a number of seconds, a dependency handle); code carries it out through the
+job services. The model writes and runs no command.
 
-The old tool names ``progress.observe``, ``progress.read`` and ``progress.log`` are ``progress_observe``,
-``progress_read`` and ``progress_log`` (a tool name is a lowercase identifier).
+| Action | Code | Service |
+|---|---|---|
+| ``progress_observe`` | one check of the job: ``job_access.check`` on the held handoff row, read by ``job_progress.status_reading``; the expectation of the check is recorded in the estimate table before the status request and resolved after it | ``job_access``, ``estimate_table`` |
+| ``progress_read`` | a check row the Episode holds, read again through custody | none |
+| ``progress_log`` | one byte window of a log of the job: ``job_access.window``; offered while the commissioner asked for log windows and the job's route keeps logs (a local or a PBS job; an API job has none) | ``job_access`` |
+| ``progress_wait`` | a wait for the job's end event or a reconsideration time: ``native_events.wait``; offered while the handoff names an event target and no end event was received | ``native_events`` |
+| ``monitor_dependency`` | a monitor of this episode's own kind for one job the target directly depends on (slot ``monitor``); offered while the commissioner passed dependencies | |
 
-An executed tool that returns an invalid outcome (an observation that expands the assigned fields, an unreceived
-progress reference, an unavailable log window) is still one unit: as before, it is a returned ``status: invalid``
-outcome that enters the iterator. A model answer that is malformed, or that commissions a child outside the
-exposed direct dependencies, is rejected in ``action`` (no unit).
+Carried from the old ``task.py`` (``ProgressMonitoringTask``), ``task_decision.py``, ``task_instructions.py``,
+``progress_operations.py`` (``progress.observe``, ``progress.read``, ``progress.log``) and ``waiting.py`` (the wait
+on native event targets). The old progress provider (``describe_progress_target``, ``observe_progress``,
+``read_progress``) is the job service now; a request the job service cannot answer is a returned ``failed`` outcome
+of its unit, with its credit like any other. The task always offers ``progress_observe`` and never ends the
+Episode. Not carried: the decision exchange, the report update the model wrote with each decision, the launch
+instruction and tool knowledge libraries in the request (a monitor launches nothing and runs no tool of those
+libraries), the progress-time receipt of the Episode's own units, the selection of fields per observation (one
+status request answers all of them; the assignment's ``requested_fields`` limits what is kept of it).
 
-Settings this episode reads (``ctx.settings``): ``cost`` and ``parameters`` (``yield_estimator.py``), and
-optionally ``launch_instructions_directory``, ``knowledge_library_directory`` (the old workflow's launch and
-tool-knowledge libraries) and ``execution_expectations`` (the old execution-expectation binding; when present the
-estimate table is needed).
+The request is written for the kind of route of the job at hand (``JOB_KINDS``, by the ``kind`` of the handoff
+row): a command the route runs (``local``, ``pbs``: return code, duration, elapsed seconds, logs) or a job a public
+web service works on (``api``: the service's status word, whether the finished job found hits, no log). For an API
+job ``decide`` reads the service's spacing between two status requests of one job from the route
+(``job_access.read('describe', resource_id)``) and shows it with the job: a check that comes earlier is not sent
+and is the returned ``failed`` outcome ``provider_spacing_required`` of its unit.
 
-BLOCKED-ON-JOB-SERVICE: the progress provider (``observe_progress``, ``read_progress``, ``describe_progress_target``,
-``direct_dependencies``, ``resolve``) is not wrapped as a service, nor is the native event ledger. The functions
-``describe_target``, ``direct_dependencies``, ``target_in_scope``, ``observe_target`` and ``snapshot_read`` name the
-service and the call they want and raise where they are reached.
-"""
-from __future__ import annotations
+Settings this episode reads (``ctx.settings``): ``cost`` (the cost of one unit, also the cost of a check in the
+estimate table) and ``parameters`` (``yield_estimator.py``)."""
+from datetime import datetime, timedelta, timezone
 
-from copy import deepcopy
-
-from jsonschema import ValidationError
+from jsonschema import Draft202012Validator, ValidationError
 
 from episode_runtime import ChildCall, ModelRequest, Rejected, ToolCall
 
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (
-    INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.service_calls.partner_presence_evidence.progress_provider import (
-    FIELDS, PROGRESS_VERSION)
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.waiting import selected_wait
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
-    rejection_feedback)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_progress import (
+    check_expectation, check_resolution, check_view, progress_information, status_reading)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import JOB_LEDGER
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.strict_output import (
     decode_strict_output, strict_output_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
-from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import (
-    ContractError, RECORD_SCHEMAS, REF, identity, obj, validate_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_presence_evidence.communication import plain
-from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
-    INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
+    rejection_feedback)
 
-from .goal import BINDING_PATH
+from . import goal as goal_file
 
-CHILD_SLOTS = {'monitor': BINDING_PATH}
-SERVICES = ('job_access', 'native_events')
-TRANSPORT_ERROR = 'a107_monitor_tool_argument_transport_unsupported'
+CHILD_SLOTS = {'monitor': goal_file.BINDING_PATH}
+SERVICES = ('job_access', 'estimate_table', 'native_events')
+# The kind of action a check of this monitor is in the estimate table.
+CHECK_KIND = 'A107 job progress check'
+# The largest log window one unit reads: its text is shown to the model in the next request.
+LOG_WINDOW_BYTES = 4000
+MODEL_ROLE = 'REASONING'
+# How the decision form travels to the model (the strict transport of an episode without a transport module of its
+# own): no open record is in the form, and no tool declares an argument transport.
+TRANSPORT = {'open_records_as_text': False,
+             'argument_transport_error': 'a107_monitor_tool_argument_transport_unsupported'}
 
-GOAL_INSTRUCTIONS = (
-    'Investigate which further exposed progress information is useful for the assigned target. Use actual '
-    'status, measured quantities, committed references and source-bound logs. Liveness establishes process '
-    'presence only; elapsed time alone establishes neither productive work nor a stall. Unknown information '
-    'stays unknown. Earlier outcomes and your admitted child forms inform later decisions. You may explicitly '
-    'commission an ordinary monitor for one exposed direct dependency; no descendant traversal, fanout, '
-    "cadence or depth is prescribed. Return the original parent's typed form at your closure even while the "
-    'target remains active. Do not report private reasoning, intentions or unrestricted findings. Recorded '
-    'facts use saved delivered observations; closure does not poll or compose another report with a model. '
-    "The monitor's information-credit projector and bound yield rule govern continuation. "
-    'Repeated observation identities and read timestamps alone earn no new information.')
-ACTION_BOUNDARY = """Do not emit a stop action or invent a
-turn budget, approval review, quality gate, experiment, term or observation.
-"""
-CREDIT_COMPONENT_GUIDANCE = """current_credit is the monitoring information credit of the current projection, with the
-projector recorded in credit_binding; it describes the progress proxy, not biological truth.
-"""
-HOST_EXECUTION_GUIDANCE = """Do not execute native provider tools. The host executes your selected action.
-"""
-NATIVE_EVENT_GUIDANCE = """
-Select wait_for_events to wait for a native notification target assigned or actually received by this episode. A
-target is registration metadata, not proof that submission succeeded. Its state_changed event means the original
-service exit receipt was committed; the service may still be closing, so this does not establish result readiness.
-after_cursor records an event cursor actually received, initially zero. Waiting only reports readiness and earns no
-credit. No event probability, gain or scientific credit follows from registration or passing time alone."""
+# What the request says of a job by the kind of its route: what a check shows beside the state and the availability
+# of results, which facts earn credit, and what earns none.
+COMMAND_JOB = {
+    'check_shows': 'its return code and duration once it has ended, its elapsed seconds while it runs and the size '
+                   'of its logs',
+    'facts': 'a state, the availability of results, a return code, a final duration, the availability of a log',
+    'no_credit': 'reading a check again, a log window, a wait, timestamps, the elapsed time of an unfinished job or '
+                 'growing log sizes'}
+SERVICE_JOB = {
+    'check_shows': "the web service's own status word (provider_status) and, once the job has finished, whether it "
+                   'found hits (has_hits). The job runs on a public web service: an unfinished job is reported as '
+                   'queued, because the service does not say whether it has begun, and the job has no return code, '
+                   'duration or log. The service asks for a minimum time between two status requests of one job '
+                   '(seconds_between_status_requests in job). A check that comes earlier is not sent: it writes no '
+                   'check record and returns failed with provider_spacing_required and retry_after_seconds, the '
+                   'seconds until a check can be sent',
+    'facts': "a state, the availability of results, the service's status word, whether the finished job found hits",
+    'no_credit': 'reading a check again, a check that was not sent or timestamps'}
+JOB_KINDS = {'local': COMMAND_JOB, 'pbs': COMMAND_JOB, 'api': SERVICE_JOB}
 
-_TEXT = {'type': 'string', 'minLength': 1}
-_FIELDS = {'type': 'array', 'items': {'enum': list(FIELDS)}, 'uniqueItems': True}
-_TYPES = {'type': 'array', 'uniqueItems': True, 'items': {'enum': sorted(RECORD_SCHEMAS)}}
-_REFS = {'type': 'array', 'items': REF, 'uniqueItems': True}
-EVENT_CONDITION = obj({'version': {'const': 'event_condition_v1'},
-                       'events': {'type': 'array', 'items': obj({'handle': _TEXT, 'event': _TEXT,
-                                                                  'after_cursor': {'type': 'integer', 'minimum': 0}})},
-                       'reconsider_at': {'type': ['string', 'null']}})
-
-
-# ---------------------------------------------------------------------------------------------------------------
-# What the job-access service is asked (BLOCKED-ON-JOB-SERVICE: no such service is built).
-
-def target_in_scope(ctx, summary):
-    """Whether the assigned target is an execution handle inside the scope (the old ``reference_in_scope``).
-
-    BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ``ctx.services['job_access'].read('resolve', target_handle,
-    scope, 'execution_handle')`` (a recorded read of a decision)."""
-    raise NotImplementedError("BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ctx.services['job_access']"
-                              ".read('resolve', summary['target_handle'], summary['scope'], 'execution_handle')")
-
-
-def describe_target(ctx, summary):
-    """What the progress provider says of the assigned target (the old ``describe_progress_target``).
-
-    BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ``ctx.services['job_access'].read('describe_progress_target',
-    target_handle, scope)`` (a recorded read of a decision)."""
-    raise NotImplementedError("BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ctx.services['job_access']"
-                              ".read('describe_progress_target', summary['target_handle'], summary['scope'])")
-
-
-def direct_dependencies(ctx, summary):
-    """The exposed direct dependencies of the assigned target (the old ``services.dependencies``).
-
-    BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ``ctx.services['job_access'].read('direct_dependencies',
-    target_handle, scope)`` (a recorded read of a decision)."""
-    raise NotImplementedError("BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ctx.services['job_access']"
-                              ".read('direct_dependencies', summary['target_handle'], summary['scope'])")
-
-
-def execution_expectations(ctx):
-    """The old ``decision_inputs`` execution expectations and resource estimates for role ``monitor``, which the old
-    workflow added only when an execution-expectation binding was configured.
-
-    BLOCKED-ON-JOB-SERVICE: estimate_table (README 5 item 19, not built); wanted call:
-    ``ctx.services['estimate_table'].read('execution_expectations', 'monitor')``."""
-    raise NotImplementedError("BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: ctx.services['estimate_table']"
-                              ".read('execution_expectations', 'monitor')")
-
-
-async def observe_target(ctx, arguments):
-    """One observation of the assigned target (the old ``services.observe_progress``).
-
-    BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ``await ctx.services['job_access'].observe_progress(
-    target_handle, requested_fields, scope, permitted_committed_record_types=..., operation_key=ctx.operation_key)``,
-    idempotent on ``ctx.operation_key``; it returns the ``progress_snapshot_v1`` record of the delivered
-    observation (its ``progress_ref`` is the observation's identity, an unchanged observation keeping its
-    original one)."""
-    raise NotImplementedError(
-        "BLOCKED-ON-JOB-SERVICE: job_access; wanted call: await ctx.services['job_access'].observe_progress("
-        "arguments['target_handle'], arguments['requested_fields'], arguments['scope'], "
-        "permitted_committed_record_types=arguments['permitted_committed_record_types'], "
-        'operation_key=ctx.operation_key)')
+ACTIONS = {
+    'progress_observe':
+        'Check the job: one fresh status request to its resource through the job service. It writes a check '
+        "record: the job's state (queued, running, finished, failed, cancelled or unknown), whether its results "
+        'are available, {check_shows}. Give informative_probability: your probability (0 to 1) that this check '
+        'shows a fact the checks before it do not. It is recorded before the request is made and compared with '
+        'what the check showed.',
+    'progress_read':
+        'Read again one check record you hold (check_ref, from checks). No request is made to the job.',
+    'progress_log':
+        "Read one byte window of the job's stdout.log or stderr.log as it is now: limit bytes from offset. The "
+        'text is shown to you with that unit in units. The sizes of the logs are in the latest check.',
+    'progress_wait':
+        "Wait for the job's end event, or until reconsider_after_seconds have passed, whichever comes first. The "
+        "event means the job's process has ended and its exit was recorded; it does not establish that results "
+        'are ready, so check the job afterwards. Waiting only reports readiness and earns nothing. The whole wait '
+        'is spent inside this episode: your commissioner receives nothing until the episode ends, and it can wait '
+        'for the job itself after your return. Wait only when you expect the job to end within the seconds you '
+        'give.',
+    'monitor_dependency':
+        'Commission a monitor of your own kind for one job in dependencies (a job your target directly depends '
+        'on). It returns its credit, what it found and its check records. No descendant traversal, fanout, '
+        'cadence or depth is prescribed.',
+}
+CONTEXT_GUIDE = (
+    'In the context: job is the job you were handed (launch_estimates is what its launch expected of it); now is '
+    'the UTC time of this decision; checks are the check records of the job you hold, the earliest first '
+    '(made_by says whether your commissioner handed it to you or you made it); units are your actions so far, in '
+    'order, with the credit each earned (the last one also shows the text of a log window or the detail of a '
+    'failed request); credit is your credit now, the unit of one informative check and the cost of one action; '
+    'earlier_checks_of_this_kind counts the checks of this kind made so far, in this and earlier runs (resolved: '
+    'compared with what the check showed; open: not answered), the credit they were expected to earn, the credit '
+    'they earned and the ratio of the two (correction); dependencies, when present, are the jobs your target '
+    'directly depends on; feedback, when present, says why your last answer was not accepted.\n')
+CREDIT_GUIDANCE = (
+    'Credit: you earn one information_unit for each check that shows a fact about its job which the checks before '
+    'it, including those your commissioner handed you, do not show: {facts}. A check that shows nothing new earns '
+    'nothing. Neither do {no_credit}. Repeated observation identities and read timestamps alone earn no new '
+    'information. Credit measures monitoring information, not scientific progress.\n')
+ACTION_BOUNDARY = (
+    'You cannot end this episode: its yield controller ends it when further actions are not expected to earn more '
+    'than they cost, and only then does your commissioner receive your return. When you expect no new fact soon, '
+    'select an action that takes no time (a check, or reading a check again): the controller then ends the episode '
+    'with what you have found. Do not emit a stop action or invent a turn budget, approval review, quality gate, '
+    'experiment, term or observation. Do not execute native provider tools or write commands. The host executes '
+    'your selected action.\n')
+RETURN_GUIDANCE = (
+    "What returns to your commissioner is your credit and the facts code reads from your latest check (the job's "
+    'state, whether results are available, when it was observed, the measurements your commissioner asked for) '
+    'with the references of your check records. No text of yours and no log text is returned.\n')
 
 
-def snapshot_read(ctx, reference):
-    """A received observation the summary holds no snapshot of (the old ``services.read_progress``).
-
-    BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ``ctx.services['job_access'].read_progress(reference,
-    scope)``."""
-    raise NotImplementedError("BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ctx.services['job_access']"
-                              '.read_progress(reference, scope)')
+def _object(properties):
+    return {'type': 'object', 'additionalProperties': False, 'required': list(properties), 'properties': properties}
 
 
-# ---------------------------------------------------------------------------------------------------------------
-# The tools.
-
-def _invalid(error):
-    detail = getattr(error, 'detail', None)
-    return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'progress_refs': [],
-            'feedback': {'category': 'arguments_or_reference', 'code': str(error),
-                         **({'detail': detail} if detail else {})}}
-
-
-def _committed(ctx, arguments, snapshot):
-    """The committed records of an observation whose type the parent permitted (each must be held)."""
-    return [reference for reference in snapshot['committed_record_refs']
-            if ctx.store.get(reference)['record_type'] in arguments['permitted_committed_record_types']]
-
-
-def _received_snapshot(ctx, arguments):
-    if not arguments['received']:
-        raise ContractError('monitor_progress_not_received')
-    if arguments['snapshot'] is None:
-        return snapshot_read(ctx, arguments['progress_ref'])
-    return arguments['snapshot']
-
-
-def _delivery(ctx, name, arguments, snapshot, operation):
-    committed = _committed(ctx, arguments, snapshot)
-    return {'status': 'completed',
-            'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': name, 'arguments': operation}),
-            'record_refs': committed, 'changed_record_refs': [], 'progress_refs': [snapshot['progress_ref']],
-            'snapshot': snapshot}
-
-
-async def progress_observe(arguments, ctx):
-    try:
-        if not set(arguments['requested_fields']) <= set(arguments['assigned_fields']):
-            raise ContractError('monitor_observation_expands_requested_fields')
-        if 'native_operation' in arguments:
-            raise NotImplementedError('native_observation_options_not_placed: the old shared-root '
-                                      'native_observation_options(native_operation, context) has no copy; its '
-                                      'result was passed as options of the observation')
-        snapshot = plain(await observe_target(ctx, arguments))
-        if snapshot['version'] != PROGRESS_VERSION or snapshot['target_handle'] != arguments['target_handle']:
-            raise ContractError('progress_job_target_mismatch')
-        operation = {key: arguments[key] for key in ('requested_fields', 'native_operation') if key in arguments}
-        return _delivery(ctx, 'progress_observe', arguments, snapshot, operation)
-    except ContractError as error:
-        return _invalid(error)
+# -- the tools ---------------------------------------------------------------------------------------------------
+def progress_observe(arguments, ctx):
+    """One check of the job. What is expected of it is recorded before the status request; what it gave (whether
+    it showed a new fact, in this monitor's credit units) after it. A request the route could not answer is the
+    returned outcome ``failed``: no check row, and the expectation stays open."""
+    table, expectation = ctx.services['estimate_table'], arguments['expectation']
+    held = (arguments['known_progress_refs'], arguments['requested_fields'], arguments['information_unit'])
+    before = progress_information(ctx.store, *held)['credit']
+    table.expect(CHECK_KIND, expectation, key=ctx.operation_key, at=datetime.now(timezone.utc).isoformat())
+    outcome = ctx.services['job_access'].check(ctx, arguments['handoff_ref'], assess=status_reading)
+    if outcome['status'] != 'completed':
+        return outcome
+    # Informative: the information credit of the held check rows rose. (An API route answers the status of an
+    # ended job from its record, with the time it was observed: that check is the row already held, not a new one.)
+    informative = progress_information(ctx.store, *held)['credit'] > before
+    table.resolve(ctx.operation_key, check_resolution(informative, expectation, outcome['state']),
+                  at=outcome['observed_at'])
+    return {**outcome, 'informative': informative}
 
 
 def progress_read(arguments, ctx):
-    try:
-        snapshot = _received_snapshot(ctx, arguments)
-        return _delivery(ctx, 'progress_read', arguments, snapshot, {'progress_ref': arguments['progress_ref']})
-    except ContractError as error:
-        return _invalid(error)
+    """A check row the Episode holds, read again through custody."""
+    row = ctx.store.table(JOB_LEDGER).get(arguments['check_ref'])
+    return {'status': 'completed', **check_view(row, arguments['requested_fields'])}
 
 
 def progress_log(arguments, ctx):
-    """One retained log window of a received observation, read through the held source and artifact."""
-    try:
-        snapshot = _received_snapshot(ctx, arguments)
-        if arguments['log_index'] >= len(snapshot['log_windows']):
-            raise ContractError('monitor_log_window_unavailable')
-        window = snapshot['log_windows'][arguments['log_index']]
-        if not ctx.store.holds(window['source_ref']) or not ctx.store.holds(window['artifact_ref']):
-            raise ContractError('monitor_log_source_not_held')
-        source = ctx.store.get(window['source_ref'])
-        if not any(source.get(key) == window['artifact_ref']
-                   for key in ('artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref')):
-            raise ContractError('progress_log_source_artifact_mismatch')
-        text = ''
-        if window['start_byte'] != window['end_byte']:
-            with ctx.store.open_artifact(window['artifact_ref']) as stream:
-                stream.seek(window['start_byte'])
-                data = stream.read(window['end_byte'] - window['start_byte'])
-            try:
-                text = data.decode('utf-8')
-            except UnicodeDecodeError:
-                raise ContractError('progress_log_window_not_utf8') from None
-    except ContractError as error:
-        return _invalid(error)
-    return {'status': 'completed', 'record_refs': [], 'changed_record_refs': [],
-            'progress_refs': [snapshot['progress_ref']],
-            'result': {'source_ref': window['source_ref'], 'artifact_ref': window['artifact_ref'],
-                       'start': window['start_byte'], 'end': window['end_byte'], 'text': text}}
+    """One byte window of a log of the job; the bytes come into custody and their text is returned."""
+    outcome = ctx.services['job_access'].window(ctx, arguments['handoff_ref'], arguments['log'],
+                                                offset=arguments['offset'], limit=arguments['limit'])
+    if outcome['status'] != 'completed':
+        return outcome
+    return {**outcome, 'text': ctx.store.get_artifact(outcome['content_ref']).decode('utf-8', 'replace')}
 
 
-async def wait_for_events(arguments, ctx):
-    """The old selected wait on native job events (``waiting.MonitorWaiting`` and ``jobs.waiting.selected_wait``):
-    it earns no credit; an event target the ledger cannot use is a failed outcome that enters the iterator."""
-    outcome = await selected_wait(ctx.services['native_events'], plain(arguments['condition']))
-    return {**outcome, 'progress_refs': []}
+async def progress_wait(arguments, ctx):
+    """Wait for the job's end event after the cursor last seen, or for the reconsideration time. The receipt of
+    the event comes into custody."""
+    outcome = await ctx.services['native_events'].wait(ctx, {
+        'version': 'event_condition_v1', 'reconsider_at': arguments['reconsider_at'],
+        'events': [{'handle': arguments['event_target'], 'event': 'state_changed',
+                    'after_cursor': arguments['after_cursor']}]})
+    if outcome['status'] != 'completed':
+        return {'status': 'failed', 'failure': {'code': outcome['feedback']['code'],
+                                                'detail': outcome['feedback']['detail']}}
+    wake = outcome['result']
+    return {'status': 'completed', 'woke_on': wake['reason'], 'observed_at': wake['observed_at'],
+            'reconsider_at': wake['reconsider_at'],
+            'event_cursor': max([arguments['after_cursor'], *(event['cursor'] for event in wake['events'])]),
+            'receipt_refs': outcome['record_refs']}
 
 
 TOOLS = {'progress_observe': progress_observe, 'progress_read': progress_read, 'progress_log': progress_log,
-         'wait_for_events': wait_for_events}
+         'progress_wait': progress_wait}
 
 
-# ---------------------------------------------------------------------------------------------------------------
-# Deciding.
-
-def tool_catalog(descriptor):
-    """The old ``ProgressOperations.catalog``; ``native_operation`` appears only when the target descriptor
-    supplies a ``selected_observation_schema``."""
-    properties = {'requested_fields': deepcopy(_FIELDS)}
-    selected_schema = (descriptor or {}).get('selected_observation_schema')
-    if selected_schema is not None:
-        if (selected_schema.get('type') != 'object' or selected_schema.get('additionalProperties') is not False
-                or set(selected_schema.get('properties', {})) != {'native_operation'}
-                or selected_schema.get('required') != ['native_operation']):
-            raise ContractError('progress_selected_observation_schema_invalid')
-        properties.update(deepcopy(selected_schema['properties']))
-    return [{'name': 'progress_observe',
-             'description': 'Observe selected exposed fields of your assigned target. Retain the original '
-                            'observation identity when facts are unchanged. This operation never traverses '
-                            'dependent work.', 'input_schema': obj(properties)},
-            {'name': 'progress_read', 'description': 'Read an already delivered exact progress observation.',
-             'input_schema': obj({'progress_ref': _TEXT})},
-            {'name': 'progress_log',
-             'description': 'Read one exact retained log window from an already delivered progress observation, '
-                            'preserving source/artifact byte custody.',
-             'input_schema': obj({'progress_ref': _TEXT, 'log_index': {'type': 'integer', 'minimum': 0}})},
-            {'name': 'wait_for_events',
-             'description': 'Wait for native job events named by registered targets this episode owns or received, '
-                            'or until a reconsideration time. Waiting reports readiness only and earns no credit.',
-             'input_schema': obj({'condition': EVENT_CONDITION})}]
+# -- the decision ------------------------------------------------------------------------------------------------
+def offered(summary):
+    """The actions this decision offers. A check is always offered, so a unit can always be accepted. A log window
+    and a wait are offered only for a job that has a log or an end event: an API job has neither."""
+    names = ['progress_observe']
+    if summary['checks']:
+        names.append('progress_read')
+    if 'log_windows' in summary['requested_fields'] and summary['job']['log_names']:
+        names.append('progress_log')
+    if summary['job']['event_target'] is not None and summary['event_cursor'] == 0:
+        names.append('progress_wait')
+    if summary['dependencies']:
+        names.append('monitor_dependency')
+    return names
 
 
-def selection_schema(descriptor, has_dependencies):
-    """What the model answers with: one tool and its arguments, or (when the assigned target exposes direct
-    dependencies) a monitor child for one of them (the old action schema over the tool and child kinds)."""
-    options = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
-               for entry in tool_catalog(descriptor)]
-    if has_dependencies:
-        options.append(obj({'kind': {'const': 'child'}, 'slot': {'const': 'monitor'},
-                            'arguments': obj({'dependency_handle': _TEXT, 'requested_fields': deepcopy(_FIELDS),
-                                              'known_progress_refs': deepcopy(_REFS),
-                                              'permitted_committed_record_types': deepcopy(_TYPES)})}))
-    return obj({'selection': {'anyOf': options}})
+def selection_schema(summary):
+    """The closed decision form: exactly one of the offered actions, each with its controlled arguments."""
+    arguments = {
+        'progress_observe': {'informative_probability': {'type': 'number', 'minimum': 0, 'maximum': 1}},
+        'progress_read': {'check_ref': {'enum': [check['check_ref'] for check in summary['checks']]}},
+        'progress_log': {'log': {'enum': summary['job']['log_names']}, 'offset': {'type': 'integer', 'minimum': 0},
+                         'limit': {'type': 'integer', 'minimum': 1, 'maximum': LOG_WINDOW_BYTES}},
+        'progress_wait': {'reconsider_after_seconds': {'type': 'number', 'minimum': 0}}}
+    options = []
+    for name in offered(summary):
+        if name == 'monitor_dependency':
+            options.append(_object({'kind': {'const': 'monitor_dependency'}, 'dependency_handle': {
+                'enum': [row['handle'] for row in summary['dependencies']]}}))
+        else:
+            options.append(_object({'kind': {'const': 'tool'}, 'tool': {'const': name},
+                                    'arguments': _object(arguments[name])}))
+    return _object({'selection': {'anyOf': options}})
 
 
-def instructions(*, knowledge, launch_library):
-    """The old composition (goal, action boundary, credit components, host execution, tool-knowledge and launch
-    library texts, native events); the resource-estimate, report, history, repair and pending-child paragraphs
-    describe inputs and actions this episode no longer has."""
-    text = GOAL_INSTRUCTIONS + '\n' + ACTION_BOUNDARY + CREDIT_COMPONENT_GUIDANCE + HOST_EXECUTION_GUIDANCE
-    if knowledge is not None:
-        text += KNOWLEDGE_INSTRUCTIONS
-    if launch_library is not None:
-        text += LAUNCH_INSTRUCTIONS
-    return text + NATIVE_EVENT_GUIDANCE
+def instructions(summary):
+    kind = JOB_KINDS[summary['job']['resource_kind']]
+    actions = ''.join('- ' + name + ': ' + ACTIONS[name].format(**kind) + '\n' for name in offered(summary))
+    return (goal_file.GOAL + '\n'
+            + 'Each decision selects exactly one action; the host carries it out and the next decision shows you '
+              'its outcome. The actions you can select now:\n' + actions
+            + CONTEXT_GUIDE + CREDIT_GUIDANCE.format(**kind) + RETURN_GUIDANCE + ACTION_BOUNDARY)
+
+
+def decision_context(summary, feedback, ctx):
+    """What the decision needs, and nothing of the controller's internals."""
+    job, information = summary['job'], summary['monitoring_information']
+    history = ctx.services['estimate_table'].read('kind_statistics', CHECK_KIND)
+    context = {
+        'job': {'handle': job['handle'], 'resource': job['resource_id'], 'resource_kind': job['resource_kind'],
+                'submitted_at': job['submitted_at'], 'launch_estimates': job['launch_estimates']},
+        'now': ctx.clock.now,
+        'checks': summary['checks'],
+        'units': summary['units'],
+        'credit': {'current': information['credit'], 'information_unit': information['information_unit'],
+                   'cost_of_one_action': ctx.settings['cost']},
+        'earlier_checks_of_this_kind': {name: history[name] for name in (
+            'resolved', 'open', 'expected_gain', 'obtained_gain', 'correction')}}
+    if job['resource_kind'] == 'api':
+        context['job']['seconds_between_status_requests'] = ctx.services['job_access'].read(
+            'describe', job['resource_id'])['poll_spacing_seconds']
+    if summary['dependencies']:
+        context['dependencies'] = [{name: row[name] for name in ('handle', 'resource_kind', 'submitted_at',
+                                                                 'latest_check')}
+                                   for row in summary['dependencies']]
+    if feedback is not None:
+        context['feedback'] = feedback
+    return context
 
 
 def decide(summary, feedback, ctx):
-    """Ask the model for the next action, shown the assignment, the target, the delivered observations, the
-    information credit and its meaning, the outcomes, the tools, the measured time, the yield table and the library
-    listings (the old decision state and inputs, over this episode's summary and the recorded service reads)."""
-    settings = ctx.settings
-    if not target_in_scope(ctx, summary):
-        raise ContractError('progress_target_unavailable_or_outside_scope')
-    descriptor = describe_target(ctx, summary)
-    dependencies = direct_dependencies(ctx, summary)
-    if settings.get('execution_expectations') is not None:
-        execution_expectations(ctx)
-    knowledge_directory = settings.get('knowledge_library_directory')
-    launch_directory = settings.get('launch_instructions_directory')
-    launch = None if launch_directory is None else LaunchInstructions(launch_directory)
-    knowledge = None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()
-    assignment = {key: summary[key] for key in ('version', 'target_handle', 'requested_fields',
-                                                'known_progress_refs', 'permitted_committed_record_types')}
-    context = {'goal': {'objective': summary['goal']['objective']},
-               'scope': summary['scope'],
-               'tools': tool_catalog(descriptor),
-               'visible_record_refs': summary['committed_record_refs'],
-               'time_accounting': time_accounting(ctx.clock.progress_time),
-               'monitor_assignment': assignment,
-               'monitor_target_description': plain(descriptor),
-               'monitor_direct_dependencies': plain(dependencies),
-               'monitor_received_progress_refs': summary['received_progress_refs'],
-               'monitor_information_meaning': summary['information_meaning'],
-               'monitor_goal': {**summary['goal'],
-                                'yield_settings': {'kind': 'information_accumulation', 'cutoff': settings['cost'],
-                                                   'uncertainty_alpha': settings['parameters']['uncertainty_alpha']}},
-               'outcome_history': summary['outcome_history'],
-               'last_local_outcome': summary['last_outcome']}
-    context = extend_context(context, {
-        'feedback': feedback, 'action_yields': summary['controller'], 'tool_knowledge': knowledge,
-        'child_options': ('monitor: commission an ordinary monitor for one exposed direct dependency of the '
-                          'assigned target; dependency_handle must be one of monitor_direct_dependencies.'
-                          if dependencies else None),
-        'launch_instruction_library': None if launch is None else launch.context(),
-        'selected_launch_instructions': (None if launch is None
-                                         else launch.materialize(summary['launch_instructions']))},
-        conflict='initial_binding_context_field_conflict')
-    schema = selection_schema(descriptor, bool(dependencies))
-    return ModelRequest('REASONING', instructions(knowledge=knowledge,
-                                                  launch_library=context.get('launch_instruction_library')),
-                        context, strict_output_schema(schema, open_records_as_text=False,
-                                                      argument_transport_error=TRANSPORT_ERROR))
+    return ModelRequest(MODEL_ROLE, instructions(summary), decision_context(summary, feedback, ctx),
+                        strict_output_schema(selection_schema(summary), **TRANSPORT))
 
 
 def action(response, summary, records, ctx):
-    """Turn the model's answer into one tool call or one monitor commission, or reject it (no unit). A tool is
-    handed no summary, so its call carries the assignment slice and the delivered snapshot it works from. A child
-    outside the exposed direct dependencies, a baseline the monitor does not hold or a record type beyond its own
-    are rejected here: the old runner refused them inside the child's preparation, before any child existed."""
-    dependencies = direct_dependencies(ctx, summary)
-    schema = selection_schema(describe_target(ctx, summary), bool(dependencies))
+    schema = selection_schema(summary)
     try:
-        value = decode_strict_output(response, schema, open_records_as_text=False,
-                                     argument_transport_error=TRANSPORT_ERROR)
-        validate_schema(value, schema)
-    except (ValueError, KeyError, TypeError, ValidationError, ContractError) as error:
-        raise Rejected(rejection_feedback(error, category='action_contract'))
-    selection = value['selection']
-    arguments = selection['arguments']
-    if selection['kind'] == 'child':
-        if arguments['dependency_handle'] not in [row['handle'] for row in dependencies]:
-            raise Rejected(rejection_feedback('monitor_child_target_not_exposed_direct_dependency',
-                                              category='action_contract'))
-        if not set(arguments['permitted_committed_record_types']) <= set(summary['permitted_committed_record_types']):
-            raise Rejected(rejection_feedback('monitor_child_expands_permitted_record_types',
-                                              category='action_contract'))
-        if any(reference not in summary['progress_snapshots'] for reference in arguments['known_progress_refs']):
-            raise Rejected(rejection_feedback('monitor_child_known_progress_not_received',
-                                              category='action_contract'))
-        return ChildCall(selection['slot'], {
-            'target_handle': arguments['dependency_handle'], 'requested_fields': arguments['requested_fields'],
-            'known_progress_refs': arguments['known_progress_refs'],
-            'permitted_committed_record_types': arguments['permitted_committed_record_types']})
-    name = selection['tool']
-    if name == 'wait_for_events':
-        return ToolCall(name, {'condition': arguments['condition']})
-    carried = {'target_handle': summary['target_handle'], 'scope': summary['scope'],
-               'permitted_committed_record_types': summary['permitted_committed_record_types']}
+        decoded = decode_strict_output(response, schema, **TRANSPORT)
+        Draft202012Validator(schema).validate(decoded)
+    except (ValueError, ValidationError) as error:
+        raise Rejected(rejection_feedback(error, category='action_contract')) from error
+    selected = decoded['selection']
+    if selected['kind'] == 'monitor_dependency':
+        return ChildCall('monitor', {'dependency_handle': selected['dependency_handle']})
+    name, arguments = selected['tool'], selected['arguments']
     if name == 'progress_observe':
-        return ToolCall(name, {**carried, 'assigned_fields': summary['requested_fields'], **arguments})
-    reference = arguments['progress_ref']
-    received = reference in summary['received_progress_refs']
-    return ToolCall(name, {**carried, **arguments, 'received': received,
-                           'snapshot': summary['progress_snapshots'].get(reference) if received else None})
+        return ToolCall(name, {
+            'handoff_ref': summary['handoff_ref'], 'known_progress_refs': summary['known_progress_refs'],
+            'requested_fields': summary['requested_fields'], 'information_unit': summary['information_unit'],
+            'expectation': check_expectation(arguments['informative_probability'], summary['information_unit'],
+                                             ctx.settings['cost'])})
+    if name == 'progress_read':
+        return ToolCall(name, {'check_ref': arguments['check_ref'],
+                               'requested_fields': summary['requested_fields']})
+    if name == 'progress_log':
+        return ToolCall(name, {'handoff_ref': summary['handoff_ref'], **arguments})
+    reconsider = datetime.fromisoformat(ctx.clock.now) + timedelta(seconds=arguments['reconsider_after_seconds'])
+    return ToolCall(name, {'event_target': summary['job']['event_target'], 'after_cursor': summary['event_cursor'],
+                           'reconsider_at': reconsider.isoformat()})

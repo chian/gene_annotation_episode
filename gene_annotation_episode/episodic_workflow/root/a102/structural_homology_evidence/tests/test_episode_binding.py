@@ -38,6 +38,10 @@ THOUGHT_REF = {'version': 'structural_homology_evidence_option_ref_v1', 'library
 SELECTION = {'version': 'structural_homology_evidence_selection_v3', 'evidence_axis': AXIS_REF,
              'thought_pattern': THOUGHT_REF, 'child_tool_info': []}
 REF = 'hypothesis_' + 'd' * 24
+# One outstanding job as ``job_records.outstanding_jobs`` lists it: its handoff row and one check row held.
+JOB = {'job': 'job_' + '1' * 32, 'resource_id': 'local_test', 'kind': 'local',
+       'submitted_at': '2026-11-19T00:00:00+00:00', 'estimates': {}, 'handoff_ref': 'row_' + 'a' * 64,
+       'latest_check': None, 'record_refs': ['row_' + 'a' * 64, 'row_' + 'b' * 64]}
 
 
 def episode_class(package=PACKAGE):
@@ -67,7 +71,7 @@ def parent_input(**changes):
 
 
 def summary(**changes):
-    value = {**parent_input(), 'progress_snapshots': {}, 'report': None, 'committed_record_refs': [],
+    value = {**parent_input(), 'outstanding_jobs': [JOB], 'report': None, 'committed_record_refs': [],
              'children': [], 'received_process_results': [], 'revisions': [],
              'credit_view': {'credit': 1.0, 'axis_components': {'A102': 1.0}}}
     return {**value, **changes}
@@ -179,21 +183,19 @@ def commission(slot):
                        'literature_task': {'kind': 'source_answer', 'answer_kind': 'screening'},
                        'received_record_refs': []},
         'execution_launch': {'requests': {'r': {}}, 'immutable_input_versions': [], 'constraints': {}},
-        'resource_launch': {'job_request': {}, 'immutable_input_versions': [], 'constraints': {},
-                            'software_knowledge_refs': [], 'resource_knowledge_refs': [],
-                            'input_refs': ['source_' + 'e' * 24]},
+        'resource_launch': {'work_refs': ['artifact_' + 'e' * 24], 'input_refs': ['artifact_' + 'f' * 24],
+                            'allowed_kinds': ['local']},
         'execution_results': {'handoff_ref': ['source_' + 'e' * 24], 'selector': {'paths': ['a']},
                               'resource_kind': 'local'},
-        'resource_results': {'handoff': {}, 'requested_data_selector': {}},
+        'resource_results': {'job_refs': ['row_' + 'e' * 24], 'requested_names': ['result.txt']},
         'hpc': {'input_refs': ['source_' + 'e' * 24], 'commission_id': 'c'},
-        'monitor': {'target_handle': 'target', 'requested_fields': ['execution_status'], 'known_progress_refs': [],
-                    'permitted_committed_record_types': []},
+        'monitor': {'handoff_ref': JOB['handoff_ref'], 'requested_fields': ['execution_status']},
     }[slot]
     units = {'execution_launch': {'handoff_unit': 1.0}, 'resource_launch': {'completion_target': 1.0},
              'execution_results': {'acquired_record_unit': 1.0}, 'monitor': {'information_unit': 1.0},
              'literature': {'credit_unit': 1.0}}.get(slot, {})
     task = importlib.import_module(PACKAGE + '.task')
-    texts = {} if slot == 'literature' else {'goal': 'g', 'purpose': 'p'}
+    texts = {} if slot in ('literature', 'monitor') else {'goal': 'g', 'purpose': 'p'}
     return {**texts, 'assignment': arguments, 'selection': [task.RETURN_FIELDS[slot][0]],
             'units': units}
 
@@ -213,8 +215,8 @@ def test_the_literature_commission_passes_no_text_a_fixed_objective_and_an_empty
     task = importlib.import_module(PACKAGE + '.task')
     message = episode_class().msg_to_child('literature', commission('literature'), summary())
     assert message.objective == 'assess_published_evidence' and message.message == {}
-    assert set(task.child_arguments('literature')['properties']) == {'assignment', 'selection'}
-    assert {'goal', 'purpose'} <= set(task.child_arguments('monitor')['properties'])
+    assert set(task.child_arguments('literature', summary())['properties']) == {'assignment', 'selection'}
+    assert {'goal', 'purpose'} <= set(task.child_arguments('hpc', summary())['properties'])
 
 
 def test_a_wrong_commission_fails_with_its_own_error():
@@ -231,16 +233,25 @@ def test_a_wrong_commission_fails_with_its_own_error():
         child_class(CHILDREN['hpc']).return_form.select(message.selection)
 
 
-def test_the_monitor_report_carries_its_delivered_observations_and_needs_their_snapshots():
+def test_the_monitor_report_keeps_the_references_of_the_check_rows_it_returned():
     cls = episode_class()
-    snapshot = {'version': 'progress_snapshot_v1', 'progress_ref': 'progress_' + 'a' * 24, 'target_handle': 't'}
-    result = {'credit': 1.0, 'finding': {'target_handle': 't'}, 'monitoring_progress_refs': [snapshot['progress_ref']],
-              'monitoring_progress_snapshots': {snapshot['progress_ref']: snapshot}}
+    result = {'credit': 1.0, 'check_refs': [JOB['record_refs'][1]],
+              'finding': {'observed': True, 'state': 'running', 'result_available': False,
+                          'observed_at_unix_seconds': 1795129893.5}}
+    child_class(CHILDREN['monitor']).return_form.select(()).admit(result, 'return')
     report = cls.read_from_child('monitor', result, summary(), None)
-    assert report['progress_snapshots'] == {snapshot['progress_ref']: snapshot}
-    assert report['returned'] == ['monitoring_progress_refs', 'monitoring_progress_snapshots']
-    with pytest.raises(ValueError, match='monitor_report_requires_progress_snapshots'):
-        cls.read_from_child('monitor', {**result, 'monitoring_progress_snapshots': {}}, summary(), None)
+    assert report['check_refs'] == [JOB['record_refs'][1]] and report['returned'] == ['check_refs']
+    assert report['child_credit'] == 1.0 and report['child_finding']['state'] == 'running'
+    # the commission of the monitor names the job by the rows this head holds: the handoff, and the checks as baseline
+    message = cls.msg_to_child('monitor', commission('monitor'), summary())
+    assert message.objective == 'assess_job_progress' and message.message == {}
+    assert message.assignment == {
+        'version': 'monitor_assignment_v2', 'handoff_refs': [JOB['handoff_ref']],
+        'known_progress_refs': [JOB['record_refs'][1]], 'dependency_handoff_refs': [],
+        'requested_fields': ['execution_status'], 'information_unit': 1.0}
+    with pytest.raises(KeyError):                             # a job this head does not hold
+        cls.msg_to_child('monitor', {**commission('monitor'), 'assignment': {
+            'handoff_ref': 'row_' + '0' * 64, 'requested_fields': []}}, summary())
     again = cls.read_from_child('structural_homology_evidence', {
         'credit': 2.0, 'finding': {}, 'structural_homology_evidence_results': [{'task': 'A102:x'}]}, summary(), None)
     assert again['process_results'] == [{'task': 'A102:x'}] and again['child_credit'] == 2.0

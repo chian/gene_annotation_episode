@@ -1,10 +1,10 @@
-"""What the parent gives: the practical assignment for the local resource (the old ``practical_assignment_v1``, one
-field per property of the old assignment schema, under the same names), and the records the job's inputs name.
+"""What the parent gives: the practical assignment for the local resource (``practical_assignment_v1``, one field
+per property of the assignment schema, under the same names).
 
-This is the only place the assignment is read. The old ``prepare_assignment`` check of the assignment itself
-(``validate_assignment``: version, resource kind, workspace, requested job, requirements, completion keys, initial
-context) is made here and raises. The old checks of the commissioning launch request against the old runner's
-``runtime_episodes`` table are old-runner machinery and are not carried: a wrong commission fails."""
+This is the only place the assignment is read. The check of the assignment itself (``validate_assignment``:
+version, resource kind, workspace, requested job, requirements, completion keys, initial context) is made here and
+raises. The parent input is the assignment and ``handoff_credit``: the credit the assignment's
+``requested_job_handoff`` requirements define, which is what a handoff earns and the target the Episode ends at."""
 import math
 
 from method_loop import ChoiceField, DeclaredField, Field, RecordForm
@@ -17,7 +17,7 @@ ASSIGNMENT_FORM = RecordForm({
     'assignment_id': Field('text', 'The identity of this assignment'),
     'resource_id': Field('text', 'The assigned local resource'),
     'resource_kind': DeclaredField('text', 'The resource kind: local', 'local'),
-    'workspace': Field('text', 'The absolute workspace on the resource every command and path stays inside'),
+    'workspace': Field('text', 'The absolute workspace of the assignment on the resource'),
     'endpoint': ChoiceField('text', 'The requested endpoint: a usable handoff or the completed job outputs',
                             ('usable_handoff', 'completed_job_outputs')),
     'requested_job': Field('record', 'The requested job: a generic argv and environment, or exactly one native '
@@ -29,23 +29,13 @@ ASSIGNMENT_FORM = RecordForm({
     'constraints': Field('record', "The commissioner's allocation constraints for the resource"),
     'launch_instructions': Field('record', 'The exact launch instruction sections selected for this assignment',
                                  required=False),
-    # New fields the final form needs (the old code read them from the commissioning request, not the assignment).
-    'record_refs': Field('record_refs', 'Every record the job inputs name (masking and utility inputs, pinned input '
-                                        'versions), passed in custody', required=False),
-    'scientific_task': Field('record', 'The scientific parent task: its scientific_question and selected_tool_info '
-                                       '(old services.scientific_parent_task)', required=False),
+    'scientific_manifest': Field('record', 'The native database scientific manifest', required=False),
 })
 
 
 def read_from_parent(assignment, message):
-    """The validated practical assignment as the parent input. The completion target is the credit the commissioned
-    requirements can earn: the sum of the credits of every original requirement, which the practical credit (the
-    sum of the satisfied ones) cannot pass."""
-    practical = {name: value for name, value in assignment.items() if name not in ('record_refs', 'scientific_task')}
-    practical = validate_assignment(practical)
-    target = math.fsum(item['credit'] for item in practical['progress_requirements'])
-    parent_input = {'assignment': practical, 'completion_target': target,
-                    'record_refs': list(assignment.get('record_refs', []))}
-    if 'scientific_task' in assignment:
-        parent_input['scientific_task'] = assignment['scientific_task']
-    return parent_input
+    """The validated practical assignment, with the credit a handoff earns."""
+    practical = validate_assignment(dict(assignment))
+    handoff_credit = math.fsum(item['credit'] for item in practical['progress_requirements']
+                               if item['predicate']['kind'] == 'requested_job_handoff')
+    return {'assignment': practical, 'handoff_credit': handoff_credit}

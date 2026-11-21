@@ -1,18 +1,20 @@
 """Real checks of the resource work submission binding: importing ``episode.py`` runs the system's class-definition
 checks, the folder holds exactly the ten-file set of an episode with children, no module imports another episode
-folder, the assignment and return forms admit what they declare, and the commissions the parent builds are
-admitted by the real forms of the three children (the children's modules are loaded here only as data: the
-episode itself imports none of them). The pure pieces (the slots offered, the action schema, the handoff facts,
-the credit, the controller, the report) behave as carried. Nothing is faked, and nothing contacts a remote
-service."""
+folder, the assignment is read once, the return is controlled data, and the pure pieces (which resources are
+launchable, the answer schema, the credit, the controller) behave as written. Nothing is faked, and nothing
+contacts a remote service."""
 import ast
 import importlib
 from pathlib import Path
 
 import pytest
 
-from episode_runtime import ChildMessage, EpisodeBinding
+from episode_runtime import EpisodeBinding
+from method_loop import FormError
 from yield_control import CompletionYieldController
+
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.tests.provider_schema_rules import (
+    violations)
 
 MODULE = ('gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.'
           'resource_work_submission')
@@ -23,23 +25,12 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
 EPISODE_PACKAGE = 'gene_annotation_episode.episodic_workflow.root'
 CHILDREN = {'launch_api': 'api_resource_work_execution', 'launch_local': 'local_resource_work_execution',
             'launch_hpc': 'hpc_resource_work_execution'}
-
-SELECTION = {'resource_id': 'ncbi_blast', 'kind': 'api',
-             'allocation': {'cpu': 1, 'memory_bytes': None, 'scratch_bytes': None},
-             'capability_binding_ref': 'binding_1'}
-ASSIGNMENT = {'version': 'resource_launch_assignment_v1', 'job_request': {'search': 'blastp'},
-              'immutable_input_versions': [{'reference': 'inp_1', 'version': None, 'content_sha256': None}],
-              'constraints': {}, 'software_knowledge_refs': [], 'resource_knowledge_refs': [],
-              'scope': {'subject_refs': ['inp_1']}, 'scope_refs': ['inp_1'], 'input_refs': ['inp_2'],
-              'completion_target': 2.0, 'adapter_assignment': {'version': 'practical_assignment_v1'}}
+ASSIGNMENT = {'version': 'resource_launch_assignment_v1', 'work_refs': ['art_work'], 'input_refs': ['art_input'],
+              'allowed_kinds': ['local', 'hpc'], 'completion_target': 2.0}
 
 
 def module(name):
     return importlib.import_module(MODULE + name)
-
-
-def child_module(slot, name):
-    return importlib.import_module(MODULE + '.' + CHILDREN[slot] + name)
 
 
 def folder_files():
@@ -54,19 +45,18 @@ def folder_files():
     return found
 
 
-def summary(**changes):
+def capability(resource_id, kind, availability='available', tools=('t',)):
+    return {'resource_id': resource_id, 'kind': kind, 'availability': availability, 'observed_at': 'now',
+            'provenance_refs': [], 'knowledge_entry_ids': [], 'tool_names': list(tools)}
+
+
+def parent_input(**changes):
     from_parent = module('.messages.read_from_parent')
-    admitted = from_parent.ASSIGNMENT_FORM.admit(ASSIGNMENT, 'assignment')
-    parent_input = from_parent.read_from_parent(admitted, {'purpose': 'x'})
-    return {'role': 'launch', 'assignment': parent_input['assignment'],
-            'adapter_assignment': parent_input['adapter_assignment'], 'scope': parent_input['scope'],
-            'scope_refs': parent_input['scope_refs'], 'input_refs': parent_input['input_refs'],
-            'completion_target': parent_input['completion_target'], 'message': parent_input['message'],
-            'adapter_facts': {}, 'child_handoffs': [], 'handoff_refs': [], 'commissions': [],
-            'adapter_credit': None, **changes}
+    return from_parent.read_from_parent(from_parent.ASSIGNMENT_FORM.admit({**ASSIGNMENT, **changes}, 'assignment'),
+                                        {})
 
 
-def test_the_class_passes_the_definition_checks():
+def test_the_class_passes_the_definition_checks_and_declares_the_defined_actions():
     episode = module('.episode')
     classes = [value for value in vars(episode).values()
                if isinstance(value, type) and value.__module__ == episode.__name__]
@@ -77,6 +67,9 @@ def test_the_class_passes_the_definition_checks():
     assert MODULE.endswith(goal.BINDING_PATH.replace('/', '.'))
     assert dict(classes[0].child_slots) == {
         slot: goal.BINDING_PATH + '/' + name for slot, name in CHILDREN.items()}
+    assert tuple(classes[0].services) == ('resource_adapter', 'instruction_libraries')
+    assert set(classes[0].tools) == {'inspect_resource', 'check_handoff', 'knowledge_lookup',
+                                     'launch_instruction_lookup'}
 
 
 def test_the_folder_holds_exactly_the_ten_file_set():
@@ -101,121 +94,68 @@ def test_no_module_imports_another_episode_folder():
                 raise AssertionError((relative, 'relative import above the episode folder'))
 
 
-def test_the_assignment_is_admitted_and_read_once_by_read_from_parent():
-    from_parent = module('.messages.read_from_parent')
-    admitted = from_parent.ASSIGNMENT_FORM.admit(ASSIGNMENT, 'assignment')
-    parent_input = from_parent.read_from_parent(admitted, {'purpose': 'x'})
-    assert parent_input['assignment']['resource_selection'] is None
-    assert parent_input['assignment']['launch_instructions'] is None
-    assert parent_input['completion_target'] == 2.0 and parent_input['input_refs'] == ['inp_2']
+def test_the_assignment_is_read_once_and_splits_the_target_into_the_two_launch_units():
+    assert parent_input() == {'work_ref': 'art_work', 'input_refs': ['art_input'],
+                              'allowed_kinds': ['local', 'hpc'], 'resource_id': None, 'completion_target': 2.0,
+                              'launch_units': {'handoff_unit': 1.0, 'check_unit': 1.0}}
+    assert parent_input(resource_id='local', job_refs=['row_1'])['resource_id'] == 'local'
+    form = module('.messages.read_from_parent').ASSIGNMENT_FORM
+    for wrong in ({**ASSIGNMENT, 'allowed_kinds': ['cloud']}, {**ASSIGNMENT, 'job_request': {'argv': ['true']}},
+                  {key: value for key, value in ASSIGNMENT.items() if key != 'work_refs'}):
+        with pytest.raises(FormError):
+            form.admit(wrong, 'assignment')
 
 
-def test_the_return_declares_credit_and_finding_required_and_the_old_fact_sources_selectable():
+def test_the_return_is_controlled_data_credit_finding_and_the_job_rows():
     final = module('.messages.final_to_parent')
     fields = final.RETURN_FORM.fields
-    assert fields['credit'].required and fields['credit'].type == 'number'
-    assert fields['finding'].required
-    for name in ('execution_handoff', 'execution_handoffs', 'adapter_facts', 'execution_handoff_refs'):
-        assert not fields[name].required
+    assert {name: (spec.type, spec.required) for name, spec in fields.items()} == {
+        'credit': ('number', True), 'finding': ('record', True), 'handoff_refs': ('record_refs', True),
+        'check_refs': ('record_refs', False)}
+    assert {name: spec.type for name, spec in final.FINDING_FORM.fields.items()} == {
+        'job_state': 'text', 'route_kind': 'text'}
+    with pytest.raises(FormError):
+        final.FINDING_FORM.admit({'job_state': 'finished', 'route_kind': 'a model-written qualification'}, 'finding')
 
 
-@pytest.mark.parametrize('slot', sorted(CHILDREN))
-def test_each_commission_is_admitted_by_the_childs_own_forms(slot):
-    to_child = module('.messages.msg_to_child')
-    arguments = {'objective': 'Investigate execution', 'resource_selection': {**SELECTION, 'kind': slot[7:]},
-                 'initial_report': {}}
-    if slot == 'launch_api':
-        arguments['facts'] = ['adapter_facts']
-    message = to_child.msg_to_child(slot, arguments, summary())
-    assert isinstance(message, ChildMessage)
-    form = child_module(slot, '.messages.read_from_parent').ASSIGNMENT_FORM
-    admitted = form.admit(message.assignment, 'assignment')
-    assert admitted['resource_selection']['kind'] == slot[7:]
-    returned = child_module(slot, '.messages.final_to_parent').RETURN_FORM
-    chosen = returned.select(message.selection)
-    assert {'credit', 'finding', 'execution_handoff', 'execution_handoffs'} <= set(chosen.fields)
-    from_child = module('.messages.read_from_child')
-    assert from_child.REF_FIELD[slot] in chosen.fields
-
-
-def test_a_commission_for_the_local_child_without_an_adapter_assignment_fails_in_the_childs_form():
-    to_child = module('.messages.msg_to_child')
-    arguments = {'objective': 'o', 'resource_selection': {**SELECTION, 'kind': 'local'}, 'initial_report': {}}
-    message = to_child.msg_to_child('launch_local', arguments, summary(adapter_assignment=None))
-    form = child_module('launch_local', '.messages.read_from_parent').ASSIGNMENT_FORM
-    with pytest.raises(ValueError):
-        form.admit(message.assignment, 'assignment')
-
-
-def test_the_children_are_offered_only_when_bound_with_tools_not_unavailable_and_permitted():
+def test_a_resource_is_launchable_only_when_bound_with_tools_not_unavailable_and_permitted():
     task = module('.task')
+    capabilities = task.capabilities_of(
+        [capability('a', 'api'), capability('l', 'local', 'unavailable'), capability('h', 'hpc', tools=()),
+         capability('m', 'local', 'unknown')], {})
+    everything = {'a', 'l', 'h', 'm'}
+    assert task.launchable(parent_input(allowed_kinds=['api', 'local', 'hpc']), capabilities, everything) == [
+        'a', 'm']
+    assert task.launchable(parent_input(allowed_kinds=['hpc']), capabilities, everything) == []
+    assert task.launchable(parent_input(allowed_kinds=['api', 'local']), capabilities, {'m'}) == ['m']
+    assert task.launchable(parent_input(allowed_kinds=['api', 'local'], resource_id='a'), capabilities,
+                           everything) == ['a']
+    replaced = task.capabilities_of([capability('a', 'api', 'unknown')], {'a': capability('a', 'api')})
+    assert replaced['a']['availability'] == 'available'
 
-    def capability(resource_id, kind, availability='available', tools=('t',)):
-        return {'resource_id': resource_id, 'kind': kind, 'availability': availability, 'observed_at': 'now',
-                'provenance_refs': [], 'knowledge_entry_ids': [], 'tool_names': list(tools)}
-    capabilities = [capability('a', 'api'), capability('l', 'local', 'unavailable'),
-                    capability('h', 'hpc', tools=())]
-    assert task.allowed_children({}, capabilities, {'a', 'l', 'h'}) == ['launch_api']
-    assert task.allowed_children({'constraints': {'allowed_kinds': ['hpc']}}, capabilities, {'a', 'l', 'h'}) == []
-    assert task.allowed_children({}, capabilities, set()) == []
-    declared = task.capabilities_of(capabilities, [], {'a'})
-    assert [value['tool_names'] for value in declared] == [['t'], [], []]
 
-
-def test_the_action_schema_is_offered_to_the_provider_transport():
+def test_the_answer_schema_is_one_the_model_endpoint_takes_and_offers_the_launch_once():
     task = module('.task')
-    schema = task._schema(['launch_api', 'launch_hpc'])
-    branches = schema['properties']['selection']['anyOf']
-    assert [branch['properties']['slot']['const'] for branch in branches if branch['properties']['kind']['const'] == 'child'] \
-        == ['launch_api', 'launch_hpc']
-    names = [branch['properties'].get('tool', {}).get('const') for branch in branches]
-    assert names[:3] == ['resource.capabilities', 'resource.inspect', 'resource.check_handoff']
-    assert task.generation_schema(schema)
-    assert task.generation_schema(task._schema([]))
+    capabilities = task.capabilities_of([capability('l', 'local'), capability('h', 'hpc')], {})
+    before = task.answer_schema({**parent_input(), 'jobs': []}, capabilities, {'l'})
+    after = task.answer_schema({**parent_input(), 'jobs': [{'handoff_ref': 'row_1'}]}, capabilities, {'l'})
+    assert violations(before) == [] and violations(after) == []
+    actions = [[branch['properties']['action']['enum'][0] for branch in schema['properties']['selection']['anyOf']]
+               for schema in (before, after)]
+    always = ['knowledge_lookup', 'launch_instruction_lookup']
+    assert actions == [['inspect_resource', 'launch_work', *always], ['inspect_resource', 'check_handoff', *always]]
 
 
-def test_the_handoffs_are_deduplicated_by_identity_and_a_single_one_is_the_handoff():
-    final = module('.messages.final_to_parent')
-    handoff = {'execution_handle': 'h1', 'resource_selection': SELECTION, 'state': 'usable'}
-    facts = final.handoff_facts({'execution_handoffs': [handoff], 'extra': 3, 'none': None}, [dict(handoff)])
-    assert facts['execution_handoffs'] == [handoff] and facts['execution_handoff'] == handoff
-    assert facts['extra'] == 3 and facts['none'] is None
-    second = {**handoff, 'execution_handle': 'h2'}
-    assert final.handoff_facts({}, [handoff, second])['execution_handoff'] is None
-
-
-def test_final_to_parent_returns_the_controllers_credit_and_the_selected_facts():
-    final = module('.messages.final_to_parent')
-    handoff = {'execution_handle': 'h1', 'resource_selection': SELECTION, 'state': 'usable'}
-    state = summary(child_handoffs=[handoff], handoff_refs=['art_1'],
-                    commissions=[{'slot': 'launch_api', 'finding': {}, 'usable_handoffs': [handoff]}])
-    result = final.final_to_parent(state, {'ended_by': 'yield_stop', 'units_consumed': 3, 'credit': 1.25},
-                                   ('execution_handoff', 'execution_handoff_refs'))
-    assert result['credit'] == 1.25 and result['finding']['usable_handoffs'] == 1
-    assert result['execution_handoff'] == handoff and result['execution_handoff_refs'] == ['art_1']
-    assert 'execution_handoffs' not in result
-    final.RETURN_FORM.select(('execution_handoff', 'execution_handoff_refs')).admit(result, 'result')
-
-
-def test_final_to_parent_returns_every_selectable_fact_and_the_form_admits_it():
-    final = module('.messages.final_to_parent')
-    handoff = {'execution_handle': 'h1', 'resource_selection': SELECTION, 'state': 'usable'}
-    state = summary(child_handoffs=[handoff], handoff_refs=['art_1'],
-                    commissions=[{'slot': 'launch_api', 'finding': {}, 'usable_handoffs': [handoff]}])
-    names = tuple(name for name in final.RETURN_FORM.fields if name not in ('credit', 'finding'))
-    result = final.final_to_parent(state, {'ended_by': 'yield_stop', 'units_consumed': 3, 'credit': 1.25}, names)
-    assert result['execution_handoffs'] == [handoff] and isinstance(result['adapter_facts'], dict)
-    final.RETURN_FORM.admit(result, 'result')
-
-
-def test_credit_is_the_adapters_credit_unbounded():
-    credit = module('.credit')
-    assert credit.credit({'adapter_credit': None}, None) == 0.0
-    assert credit.credit({'adapter_credit': 7.5}, None) == 7.5
+def test_credit_counts_the_held_handoff_and_its_usable_check_in_the_launch_units():
+    credit = module('.credit').credit
+    units = parent_input(completion_target=7.0)['launch_units']
+    assert credit({'launch_units': units, 'handoff_held': False, 'usable_handoff_held': False}, None) == 0.0
+    assert credit({'launch_units': units, 'handoff_held': True, 'usable_handoff_held': False}, None) == 3.5
+    assert credit({'launch_units': units, 'handoff_held': True, 'usable_handoff_held': True}, None) == 7.0
 
 
 def test_the_controller_is_the_completion_controller_with_the_commissioned_target():
     estimator = module('.yield_estimator')
     controller = estimator.yield_controller(0.0, {'cost': 0.01, 'parameters': {'uncertainty_alpha': 0.05}},
-                                            {'completion_target': 2.0})
-    assert isinstance(controller, CompletionYieldController)
+                                            parent_input())
+    assert isinstance(controller, CompletionYieldController) and controller.target == 2.0

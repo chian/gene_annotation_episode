@@ -29,7 +29,7 @@ def test_importing_episode_runs_the_class_definition_checks():
     assert dict(episode.child_slots) == {}
     assert set(episode.tools) == {'hpc_open', 'hpc_read', 'hpc_compare', 'hpc_history_refresh', 'hpc_discovery_run',
                                   'hpc_candidate_propose', 'hpc_queue_observe', 'hpc_model_fit'}
-    assert tuple(episode.services) == ('hpc_ledger', 'job_access', 'estimate_table')
+    assert tuple(episode.services) == ('job_access', 'estimate_table')
 
 
 def test_folder_holds_exactly_the_file_set_of_an_episode_without_children():
@@ -57,19 +57,24 @@ def test_no_module_imports_another_episode_folder():
                 assert not name.startswith('gene_annotation_episode.episodic_workflow.root'), (relative, name)
 
 
-def test_return_form_declares_credit_and_finding_required_and_the_old_facts_selectable():
-    fields = importlib.import_module(PACKAGE + '.messages.final_to_parent').RETURN_FORM.as_record()
-    assert fields['credit']['required'] and fields['finding']['required']
-    for name in ('hpc_credit', 'hpc_model_ref', 'hpc_accepted_obligations', 'hpc_result_refs'):
-        assert fields[name]['required'] is False
+def test_return_form_is_controlled_data_with_the_ledger_rows_always_returned():
+    form = importlib.import_module(PACKAGE + '.messages.final_to_parent').RETURN_FORM
+    fields = form.as_record()
+    assert {name for name, field in fields.items() if field['required']} == {'credit', 'finding', 'hpc_ledger_refs'}
+    assert {name for name, field in fields.items() if not field['required']} == {'hpc_result_refs'}
+    assert {field['type'] for field in fields.values()} == {'number', 'record', 'record_refs'}
+    finding = importlib.import_module(PACKAGE + '.messages.final_to_parent').FINDING_FORM.as_record()
+    assert {field['type'] for field in finding.values()} == {'boolean', 'integer'}       # no text passes
 
 
 def test_assignment_form_and_read_from_parent_need_exactly_one_commission_identity():
     module = importlib.import_module(PACKAGE + '.messages.read_from_parent')
     base = {'owner_episode_id': 'episode_1', 'scope': {'subject_refs': []}}
-    admitted = module.ASSIGNMENT_FORM.admit({**base, 'commission_id': 'c1'}, 'assignment')
+    admitted = module.ASSIGNMENT_FORM.admit({**base, 'commission_id': 'c1', 'ledger_row_refs': ['row_1']},
+                                            'assignment')
     parent = module.read_from_parent(admitted, {})
-    assert parent['commission_id'] == 'c1' and parent['commission_source_ref'] is None
+    assert parent == {'owner_episode_id': 'episode_1', 'commission_id': 'c1', 'commission_source_ref': None,
+                      'scope': {'subject_refs': []}}
     admitted = module.ASSIGNMENT_FORM.admit({**base, 'commission_source_ref': ['source_1']}, 'assignment')
     assert module.read_from_parent(admitted, {})['commission_source_ref'] == 'source_1'
     with pytest.raises(ValueError, match='exactly_one_commission_identity'):
@@ -97,23 +102,14 @@ def test_the_selection_offers_the_shared_history_tool_only_with_shared_memory():
     assert len(task.selection_schema(False)['properties']['selection']['anyOf']) == len(without)
 
 
-def test_the_ledger_is_not_available_without_its_service():
+def test_the_instructions_state_the_purpose_the_ledger_the_tools_and_the_credit():
     task = importlib.import_module(PACKAGE + '.task')
-    with pytest.raises(NotImplementedError, match='BLOCKED-ON-JOB-SERVICE: hpc_ledger'):
-        task._open_ledger(None, 'episode_1')
-
-
-def test_the_return_carries_credit_finding_and_every_selectable_fact_and_the_form_admits_it():
-    final = importlib.import_module(PACKAGE + '.messages.final_to_parent')
-    summary = {'ledger': {}, 'hpc_model_ref': 'reference_model', 'hpc_accepted_obligations': ['o1'],
-               'hpc_result_refs': ['source_r'],
-               'hpc_credit': {'model_quality_improvement': 0.25, 'prospective_validation_credit': 0.5},
-               'hpc_available_training_ids': ['t1', 't2'], 'hpc_candidates': ['c1'], 'hpc_latest_comparison': {}}
-    completion = {'ended_by': 'yield_stop', 'units_consumed': 3, 'credit': 2.0}
-    plain = final.final_to_parent(summary, completion, ())
-    assert plain['credit'] == 2.0 and plain['finding']['available_training_count'] == 2
-    final.RETURN_FORM.admit(plain, 'return')
-    every = tuple(sorted(name for name, field in final.RETURN_FORM.fields.items() if not field.required))
-    full = final.final_to_parent(summary, completion, every)
-    final.RETURN_FORM.select(every).admit(full, 'return')
-    assert full['hpc_result_refs'] == ['source_r']
+    text = task.INSTRUCTIONS
+    assert text.startswith('You are the resource-prediction episode of one HPC commission. Your job is to predict')
+    for phrase in ('record that expectation in the HPC ledger', 'What you are shown.', 'How to work.',
+                   'What earns credit.', 'The fixed reference and validation set cannot change.',
+                   'Unknown inputs stay unknown'):
+        assert phrase in text
+    for name in (entry['name'] for entry in task.catalog(False)):
+        assert name in text or name == 'hpc_read'
+    assert 'SSH' not in text and 'iterator' not in text and 'receipt' not in text

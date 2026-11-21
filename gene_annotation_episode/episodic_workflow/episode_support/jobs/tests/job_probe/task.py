@@ -15,6 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.gene_con
     log_score)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.gene_context_evidence.hpc_resource_prediction import (
     forecast_metric, measured_value)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc import hpc_queue, hpc_remote
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc_ledger import HpcLedger
 
 CHILD_SLOTS = {}
@@ -70,6 +71,14 @@ def fetch(arguments, ctx):
 
 def cancel(arguments, ctx):
     return ctx.services['job_access'].cancel(ctx, arguments['handoff_ref'])
+
+
+def window(arguments, ctx):
+    """One byte window of a file of the job (a log while it runs), in custody."""
+    outcome = ctx.services['job_access'].window(ctx, arguments['handoff_ref'], arguments['name'],
+                                                offset=arguments['offset'], limit=arguments['limit'])
+    _cut(arguments, ctx)
+    return outcome
 
 
 async def command(arguments, ctx):
@@ -145,6 +154,39 @@ def ledger_conflict(arguments, ctx):
     return {'refused': None}
 
 
+def ledger_source(arguments, ctx):
+    """Evidence made from an artifact of this unit: the row names the artifact in its ``source_refs``."""
+    ledger = HpcLedger.existing(ctx.store, arguments['ledger'])
+    artifact = ctx.store.artifact(arguments['text'].encode(), 'text/plain')
+    identity = ledger.put('launch_input', {'artifact_ref': artifact}, identity=arguments['identity'],
+                          source_refs=[artifact])
+    return {'identity': identity, 'artifact': artifact, 'refs': ledger.refs()}
+
+
+def ledger_read_source(arguments, ctx):
+    """Read the artifact a held row names: it is held only when it was passed with the row."""
+    ledger = HpcLedger.existing(ctx.store, arguments['ledger'])
+    artifact = ledger.read(arguments['identity'])['artifact_ref']
+    return {'text': ctx.store.get_artifact(artifact).decode(), 'refs': ledger.refs()}
+
+
+async def remote_write(arguments, ctx):
+    """Publish a file on the resource from an artifact of this unit (``hpc_remote.write_file``)."""
+    artifact = ctx.store.artifact(arguments['text'].encode(), 'text/plain')
+    return await hpc_remote.write_file(ctx, arguments['resource_id'], arguments['path'], artifact, name='write')
+
+
+async def remote_read(arguments, ctx):
+    """A bounded read of a file on the resource (``hpc_remote.read_file``)."""
+    return await hpc_remote.read_file(ctx, arguments['resource_id'], arguments['path'], arguments['limit'],
+                                      name='read')
+
+
+async def remote_queue(arguments, ctx):
+    """One queue observation on the resource (``hpc_queue.observe``)."""
+    return await hpc_queue.observe(ctx, arguments['resource_id'])
+
+
 def adapter_prepare(arguments, ctx):
     return ctx.services['resource_adapter'].prepare_assignment(ctx, arguments['assignment'])
 
@@ -163,9 +205,11 @@ def lookup(arguments, ctx):
 
 
 TOOLS = {'idle': idle, 'echo': echo, 'launch': launch, 'check': check, 'fetch': fetch, 'cancel': cancel,
-         'command': command, 'wait': wait, 'wait_condition': wait_condition, 'expect': expect, 'resolve': resolve,
+         'window': window, 'command': command, 'wait': wait, 'wait_condition': wait_condition, 'expect': expect, 'resolve': resolve,
          'measure': measure, 'ledger_forecast': ledger_forecast, 'ledger_score': ledger_score,
-         'ledger_conflict': ledger_conflict, 'adapter_prepare': adapter_prepare, 'adapter_execute': adapter_execute,
+         'ledger_conflict': ledger_conflict, 'ledger_source': ledger_source,
+         'ledger_read_source': ledger_read_source, 'remote_write': remote_write, 'remote_read': remote_read,
+         'remote_queue': remote_queue, 'adapter_prepare': adapter_prepare, 'adapter_execute': adapter_execute,
          'adapter_check': adapter_check, 'lookup': lookup}
 
 

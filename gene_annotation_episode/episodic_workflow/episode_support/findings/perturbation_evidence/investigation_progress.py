@@ -83,7 +83,7 @@ class ScientificFindingProgress:
             details_offset=details_offset)
 
 
-def project_finding_progress(store, scope, policy, *, known_assessment_refs,
+def project_finding_progress(records, scope, policy, *, known_assessment_refs,
                              details_limit=0, details_offset=0):
     """One explicit unit per distinct retained finding, never per operation.
 
@@ -94,6 +94,13 @@ def project_finding_progress(store, scope, policy, *, known_assessment_refs,
     frozen belief state: an authoritative correction can retire an old known
     finding before its replacement has been received. The replacement earns
     nothing until known; loss provenance remains explicit in detailed output.
+
+    ``records`` is the custody reader the caller was handed (the ``RecordReader`` of ``credit`` and
+    ``internal_summary``, or the scoped store of a tool unit): every record is read through it, so only records
+    the Episode holds are read and a reference it does not hold raises ``CustodyError``. No Store read snapshot is
+    opened: a reader has none, and what an Episode holds changes only through its own units. The spool of
+    ``_project_known`` is a private temporary database of this one call, never the Store; nothing is written
+    anywhere and the projection is the returned value.
     """
     if not isinstance(policy, FindingProgressPolicy):
         raise TypeError('explicit_finding_progress_policy_required')
@@ -103,12 +110,10 @@ def project_finding_progress(store, scope, policy, *, known_assessment_refs,
     if isinstance(known_assessment_refs, (str, bytes)):
         raise TypeError('explicit_known_assessment_references_required')
     known = sorted(set(known_assessment_refs))
-    with store.read_snapshot():
-        scope = store.validate_scope(scope)
-        return _project_snapshot(store, scope, policy, known, details_limit, details_offset)
+    return _project_known(records, records.validate_scope(scope), policy, known, details_limit, details_offset)
 
 
-def _project_snapshot(store, scope, policy, known, limit, offset):
+def _project_known(records, scope, policy, known, limit, offset):
     """Disk-backed dependency closure, unique keys, and requested details only."""
     spool = sqlite3.connect('')
     spool.row_factory = sqlite3.Row
@@ -118,19 +123,19 @@ def _project_snapshot(store, scope, policy, known, limit, offset):
             CREATE TABLE known_findings(key TEXT,ref TEXT,payload TEXT,PRIMARY KEY(key,ref));
             CREATE TABLE inactive(ref TEXT PRIMARY KEY,payload TEXT);
         ''')
-        validity = FindingValidity(store, scope, spool=spool)
-        normalizer = FindingIdentity(store)
+        validity = FindingValidity(records, scope, spool=spool)
+        normalizer = FindingIdentity(records)
         for row in validity.current_records():
-            if row['investigation_finding']['status'] != 'retained' or not target_eligible(store, row, scope):
+            if row['investigation_finding']['status'] != 'retained' or not target_eligible(records, row, scope):
                 continue
             value = normalizer.finding(row)
             spool.execute('INSERT INTO current_findings VALUES(?,?,?)',
                 (value['finding_key'], row['id'], canonical(value)))
         for ref in known:
-            row = store.require(ref, {'assessment'})
+            row = records.require(ref, {'assessment'})
             finding = row.get('investigation_finding')
             reason = ('typed_finding_not_recorded' if finding is None else
-                'finding_target_outside_scope' if not target_eligible(store, row, scope) else
+                'finding_target_outside_scope' if not target_eligible(records, row, scope) else
                 'scientific_finding_withdrawn' if finding['status'] == 'withdrawn' else None)
             if reason is None:
                 value = normalizer.finding(row)
@@ -147,11 +152,11 @@ def _project_snapshot(store, scope, policy, known, limit, offset):
             if reason == 'scientific_finding_withdrawn':
                 item['withdrawal_reason'] = finding['withdrawal_reason']
             elif reason == 'not_current_assessment_revision':
-                revision = [current['id'] for current in store.current_assessments()
-                    if store.assessment_key(current) == store.assessment_key(row)]
+                revision = [current['id'] for current in records.current_assessments()
+                    if records.assessment_key(current) == records.assessment_key(row)]
                 if revision:
                     item['current_assessment_ref'] = revision[0]
-                    replacement = store.get(revision[0]).get('investigation_finding', {})
+                    replacement = records.get(revision[0]).get('investigation_finding', {})
                     if replacement.get('status') == 'withdrawn':
                         item.update(reason='scientific_finding_withdrawn',
                                     withdrawal_reason=replacement['withdrawal_reason'])

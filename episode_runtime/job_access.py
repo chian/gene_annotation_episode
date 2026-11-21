@@ -17,6 +17,7 @@ the service: ``check``, ``fetch`` and ``cancel`` take the reference of a held ha
 | ``handoff`` | ``launch`` | resource id, route kind, the route's native identity of the job, digest of the job, the input references, the estimates made at launch |
 | ``check`` | ``check`` | state, whether results are available, the handoff reference, the caller's assessment |
 | ``closure`` | ``fetch``, ``cancel`` | outcome (``results_acquired``, ``cancelled``), state, the results (name, reference, bytes, sha256) |
+| ``window`` | ``window`` | the file name, the offset and limit asked, the bytes read and their sha256, the handoff reference; the bytes are the artifact in ``result_refs`` |
 
 **No relaunch on resume.** The job's handle is derived from the unit's ``ctx.operation_key``, so it is the same on
 every attempt of the unit. A unit that began and did not finish runs again with ``ctx.resumed`` true and
@@ -24,9 +25,9 @@ every attempt of the unit. A unit that began and did not finish runs again with 
 handle, takes it over (``ctx.store.reclaim``) and returns it: the route is not asked. When the attempt was cut
 before the row committed, ``launch`` asks the route again with the same handle, and a route submits a handle at
 most once: it returns the job it already holds under that handle, with its original submission time
-(``adopted``). ``check``, ``fetch`` and ``cancel`` take over their abandoned row in the same way. There is no
-table of operations that already ran: the receipts of the unit are the memory, and the journal replays a finished
-unit without running it.
+(``adopted``). ``check``, ``fetch``, ``cancel`` and ``window`` take over their abandoned row in the same way.
+There is no table of operations that already ran: the receipts of the unit are the memory, and the journal replays
+a finished unit without running it.
 
 **A request that fails** (transport down, scheduler error, results not available) is raised by the route as
 ``RouteRequestError`` and returned by the operation as ``{'status': 'failed', 'failure': {'code', 'detail'}}``: it
@@ -46,13 +47,14 @@ The route protocol (each method synchronous; replies are closed JSON):
 | ``submit(handle, job, files, owner)`` | ``{'native', 'submitted_at' (UTC text), 'adopted' (bool), 'reply'}``; at most one submission per handle |
 | ``status(handle, native)`` | ``{'state' (one of ``STATES``), 'result_available' (bool), 'observed_at' (UTC text), 'reply'}`` |
 | ``results(handle, native)`` | ``[{'name', 'bytes', 'media_type'}]``: the result files of a job that ended |
-| ``read(handle, native, name, offset, limit)`` | bytes of one result file |
+| ``read(handle, native, name, offset, limit)`` | bytes of one file of the job (a result; a log while the job runs) |
 | ``cancel(handle, native)`` | ``{'reply'}`` |
 | ``await wait(handle, native)`` | returns when the job has ended (used by ``run``) |
 """
 from __future__ import annotations
 
 from collections.abc import Mapping
+from datetime import datetime, timezone
 import hashlib
 
 from method_loop.jsonvalue import canonical, closed_copy, content_digest
@@ -82,7 +84,8 @@ def job_handle(operation_key, resource_id, name):
 
 
 class JobAccess:
-    """The routes of one run, and the launch, check, fetch and cancel of a job with its records in custody."""
+    """The routes of one run, and the launch, check, window, fetch and cancel of a job with its records in
+    custody."""
 
     def __init__(self, routes):
         if not isinstance(routes, Mapping) or not routes:
@@ -118,14 +121,16 @@ class JobAccess:
         return row
 
     @staticmethod
-    def _taken_over(ctx, handle, event):
-        """The row of ``event`` for ``handle`` that an abandoned attempt of this unit wrote, taken over as this
-        attempt's own with the artifacts it names; ``None`` when no attempt wrote one."""
+    def _taken_over(ctx, handle, event, detail=None):
+        """The row of ``event`` for ``handle`` (with the values ``detail`` in its detail, when given) that an
+        abandoned attempt of this unit wrote, taken over as this attempt's own with the artifacts it names;
+        ``None`` when no attempt wrote one."""
         if not ctx.resumed:
             return None
         rows = [item for item in ctx.abandoned
                 if item['written'] is not None and item['written']['table'] == JOB_LEDGER.name
-                and item['written']['job'] == handle and item['written']['event'] == event]
+                and item['written']['job'] == handle and item['written']['event'] == event
+                and all(item['written']['detail'][name] == value for name, value in (detail or {}).items())]
         if not rows:
             return None
         abandoned = {item['ref'] for item in ctx.abandoned}
@@ -206,6 +211,36 @@ class JobAccess:
         if status['state'] not in STATES or type(status['result_available']) is not bool:
             raise ValueError('job_route_status_invalid:' + repr(status['state']))
         return status
+
+    # -- window ----------------------------------------------------------------------------------------------
+    def window(self, ctx, handoff_ref, name, *, offset, limit):
+        """One byte window of a file of the job of the held handoff row (a log, also while the job runs): at most
+        ``limit`` bytes from ``offset``, read through the route. The bytes are written as an artifact and a
+        ``window`` row names it, so the window is a record of the job in custody. The job is not closed and its
+        state is not asked: this is no check and no fetch. A file the route does not have is a failed request."""
+        handoff = self._handoff(ctx, handoff_ref)
+        handle, resource_id = handoff['job'], handoff['detail']['resource_id']
+        asked = {'name': name, 'offset': offset, 'limit': limit}
+        row = self._taken_over(ctx, handle, 'window', asked)
+        replayed = row is not None
+        if row is None:
+            try:
+                data = self._route(resource_id).read(handle, handoff['detail']['native'], name, offset, limit)
+            except RouteRequestError as error:
+                return self._failed(handle, resource_id, error)
+            if type(data) is not bytes or len(data) > limit:
+                raise ValueError('job_route_window_invalid:' + repr(name))
+            with ctx.store.transaction():
+                content_ref = ctx.store.artifact(data, 'application/octet-stream')
+                detail = {'resource_id': resource_id, 'kind': handoff['detail']['kind'], **asked,
+                          'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest(),
+                          'handoff_ref': handoff_ref}
+                row = self._write(ctx, handle, 'window', datetime.now(timezone.utc).isoformat(), detail,
+                                  {**asked, 'bytes': len(data)}, [content_ref])
+        return {'status': 'completed', 'job': handle, 'resource_id': resource_id, 'name': row['detail']['name'],
+                'offset': row['detail']['offset'], 'limit': row['detail']['limit'], 'bytes': row['detail']['bytes'],
+                'sha256': row['detail']['sha256'], 'read_at': row['at'], 'replayed': replayed,
+                'window_ref': row['id'], 'content_ref': row['result_refs'][0], 'reply_ref': row['source_ref']}
 
     # -- fetch -----------------------------------------------------------------------------------------------
     def fetch(self, ctx, handoff_ref, *, names=None):

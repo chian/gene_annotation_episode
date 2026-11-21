@@ -13,8 +13,11 @@ the ``inprocess_completion_order``, the ``scientific_invocation_ref`` of the mes
 
 The ``ChildCall`` arguments are what ``task.py`` built from the model's selection: ``objective``, ``purpose``,
 ``scope``, ``initial_report`` (optional), ``assignment`` and ``return_fields``. The own slot and ``hpc`` are the
-children the model is offered; the other four slots carry the old assemblers with the child's own assignment in
-``assignment`` as the old ``episode_assignment`` (their old yield/handoff units ride in it)."""
+children the model is offered; the slots ``launch``, ``results`` and ``literature`` carry the old assemblers with
+the child's own assignment in ``assignment`` as the old ``episode_assignment`` (their old yield/handoff units ride
+in it). The ``monitor`` slot is commissioned on a job this episode holds (``_monitor``): its ``ChildCall`` arguments
+are ``handoff_ref`` (the held handoff row of the job), ``requested_fields``, ``information_unit`` and
+``return_fields``."""
 from episode_runtime import ChildMessage
 
 OWN = 'evolutionary_history_evidence'
@@ -30,7 +33,26 @@ def _message(arguments):
     return {'purpose': arguments['purpose'], 'initial_report': arguments.get('initial_report', {})}
 
 
+def _monitor(arguments, summary):
+    """The commission of the monitor for one outstanding job. The job is passed as records in custody, never by
+    name: the handoff row of the job ledger this episode holds (the launch child returned it in
+    ``execution_handoff_refs``, or the commissioner passed it back) and the check rows of that job it holds
+    (earlier monitors returned them in ``check_refs``), as the baseline of the new check. A handoff this episode
+    does not hold as an outstanding job fails here with its ``KeyError``. The monitor's required fields (credit,
+    finding, check rows) are always returned; ``return_fields`` selects its measurements."""
+    job = {item['handoff_ref']: item for item in summary['outstanding_jobs']}[arguments['handoff_ref']]
+    return ChildMessage(
+        objective='Assess the progress of job ' + job['job'] + '.', message={},
+        assignment={'version': 'monitor_assignment_v2', 'handoff_refs': [job['handoff_ref']],
+                    'known_progress_refs': job['record_refs'][1:], 'dependency_handoff_refs': [],
+                    'requested_fields': list(arguments['requested_fields']),
+                    'information_unit': arguments['information_unit']},
+        selection=tuple(_unique(arguments['return_fields'])))
+
+
 def msg_to_child(slot, arguments, summary):
+    if slot == 'monitor':
+        return _monitor(arguments, summary)
     message = _message(arguments)
     wanted = list(arguments['return_fields'])
     if slot == OWN:
@@ -49,9 +71,8 @@ def msg_to_child(slot, arguments, summary):
         assignment = {**arguments['assignment'], 'scope': arguments['scope']}
         selection = tuple(_unique(wanted))
     else:
-        # launch, monitor, results, literature: the old assemblers took the child's own assignment as written; the
-        # old monitor ``required_return_sources`` asks for the progress observations
+        # launch, results, literature: the old assemblers took the child's own assignment as written
         assignment = dict(arguments['assignment'])
-        selection = tuple(_unique([*(['monitoring_progress_refs'] if slot == 'monitor' else []), *wanted]))
+        selection = tuple(_unique(wanted))
     return ChildMessage(objective=arguments['objective'], message=message, assignment=assignment,
                         selection=selection)

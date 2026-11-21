@@ -21,9 +21,10 @@ artifacts (``summary['source_custody']``) and the proposed annotation.
 ``task.action`` took from the settings; the resources that already have a usable handoff from earlier launches of this
 episode are passed as ``received_handoff_resources`` (the old initial known handoff records).
 
-``monitor``: ``monitor_assignment_v1`` from the model's arguments, the scope, ``information_unit`` which
-``task.action`` took from the settings and the snapshots of the known progress observations this episode received
-(the old progress provider's read of a reference).
+``monitor``: ``monitor_assignment_v2`` for one job this episode holds as outstanding (``summary['outstanding_jobs']``):
+the job's handoff row of the job ledger and the check rows of it this episode holds, passed in custody, the fields
+the model asked to be observed and ``information_unit`` which ``task.action`` took from the settings. The model names
+the job by its held handoff reference; it writes no assignment.
 
 ``results``: ``execution_results_assignment_v1`` (the handoff, named in custody, the selector and the API service of
 the original job).
@@ -36,14 +37,14 @@ from episode_runtime import ChildMessage
 
 LITERATURE_VERSION = 'literature_assignment_v1'
 LAUNCH_VERSION = 'execution_launch_assignment_v1'
-MONITOR_VERSION = 'monitor_assignment_v1'
+MONITOR_VERSION = 'monitor_assignment_v2'
 RESULTS_VERSION = 'execution_results_assignment_v1'
 # The sources the old ``required_return_sources`` of each child binding required, plus the ones that keep this
-# episode's summary informed (a monitor's snapshots and state; a launch's completion).
-REQUIRED = {'literature': (), 'launch': ('execution_handoff_refs',), 'monitor': ('monitoring_progress_refs',),
+# episode's summary informed (a launch's completion). A monitor always returns its credit, its finding and its
+# check rows (``check_refs``); nothing more of it is required here.
+REQUIRED = {'literature': (), 'launch': ('execution_handoff_refs',), 'monitor': (),
             'results': (), 'perturbation_evidence': ('perturbation_evidence_results', 'committed_record_refs')}
-ALWAYS = {'literature': (), 'launch': ('execution_completed',),
-          'monitor': ('monitoring_progress_snapshots', 'monitoring_execution_state', 'monitoring_result_available'),
+ALWAYS = {'literature': (), 'launch': ('execution_completed',), 'monitor': (),
           'results': ('execution_completed',), 'perturbation_evidence': ()}
 
 
@@ -82,14 +83,15 @@ def launch(arguments, summary):
 
 
 def monitor(arguments, summary):
-    assignment = {'version': MONITOR_VERSION, 'scope': summary['scope'], 'target_handle': arguments['target_handle'],
-                  'requested_fields': arguments['requested_fields'],
-                  'known_progress_refs': arguments['known_progress_refs'],
-                  'permitted_committed_record_types': arguments['permitted_committed_record_types'],
+    """The commission of the monitor for one outstanding job. The job is passed as records in custody, never by
+    name: the handoff row of the job ledger this episode holds and the check rows of that job it holds (earlier
+    monitors returned them in ``check_refs``), as the baseline of the new check. A handoff this episode does not
+    hold as an outstanding job fails here with its ``KeyError``."""
+    job = {item['handoff_ref']: item for item in summary['outstanding_jobs']}[arguments['handoff_ref']]
+    assignment = {'version': MONITOR_VERSION, 'handoff_refs': [job['handoff_ref']],
+                  'known_progress_refs': job['record_refs'][1:], 'dependency_handoff_refs': [],
+                  'requested_fields': list(arguments['requested_fields']),
                   'information_unit': arguments['information_unit']}
-    known = {reference: summary['progress_snapshots'][reference] for reference in arguments['known_progress_refs']}
-    if known:
-        assignment['known_progress_snapshots'] = known
     return assignment, selection('monitor', arguments)
 
 

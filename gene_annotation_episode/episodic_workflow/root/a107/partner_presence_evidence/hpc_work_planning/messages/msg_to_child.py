@@ -12,6 +12,8 @@ fields the children's forms need and the old code did not send (each a "new fiel
 prediction reads with ``hpc_read``: a pass carries only the records named) and, for the allocation execution,
 ``input_refs`` (the records the planned jobs read). The prediction takes the commission source as one record in
 custody, the allocation execution as text (its form has no record field for it: it reads the commission from the ledger).
+Both are passed the ledger in custody: ``ledger_row_refs`` (every row this episode holds and the records they name) and,
+for the allocation execution, the ledger id (the prediction opens the ledger of its commission, which is the same id).
 
 ``launch``: the launch assignment the frozen plan carries (the old ``hpc.plan`` returned it, and the old
 ``authenticate_launch`` admitted the launch only if it equalled it: the commission is built from the plan, so it does),
@@ -21,8 +23,8 @@ the child's form needs and the old code did not send (each a "new field"): ``rec
 jobs read, named here), ``handoff_unit`` and ``acquired_record_unit`` (from the settings, via the ``ChildCall``
 arguments), ``scope`` and ``received_handoff_resources`` (the resource of a plan whose handoff this episode already
 holds). ``hpc_execution_job`` is what the old ``LaunchPreparation.initial_decision_context`` gave the launch side at its
-first decision: plan id, objective, the frozen scientific manifest, the acceptance predicates, the local input file
-holding the plan (``hpc_plan`` wrote it), the coordinator workspace and the instruction that reference files are inputs
+first decision: plan id, objective, the frozen scientific manifest, the acceptance predicates, the launch input (the
+artifact holding the plan, which the ledger names and ``record_refs`` passes) and the instruction that reference files are inputs
 and not a required procedure. It has no field of the child's assignment form, so it rides in the message. The old
 reservation of ``launch:<plan_id>`` in the ledger (one launch per plan, none after the allocation closed) is not
 written here (a commission has no write); ``task.py`` ``action`` rejects a second launch of a plan and a launch of a
@@ -42,34 +44,35 @@ from ..task import (EXECUTION_SELECTION, LAUNCH_JOB_INSTRUCTIONS, LAUNCH_SELECTI
 INITIAL_REPORT = 'nothing yet'
 
 
-def _sister_assignment(summary, owner):
-    return {'owner_episode_id': owner, 'scope': summary['scope']}
+def _sister_assignment(summary, view):
+    """What both sisters are given: the owner of the ledger (the old check that the owner is the commissioning
+    parent holds by construction), the scope, and the ledger's rows with the records they name, in custody."""
+    return {'owner_episode_id': view['owner_episode_id'], 'scope': summary['scope'],
+            'ledger_row_refs': list(view['ledger_refs'])}
 
 
 def msg_to_child(slot, arguments, summary):
     view = summary['ledger_view']
     if slot == 'hpc_prediction':
-        assignment = _sister_assignment(summary, view['owner_episode_id'])
+        assignment = _sister_assignment(summary, view)
         if summary['commission_id'] is not None:
             assignment['commission_id'] = summary['commission_id']
         else:
             assignment['commission_source_ref'] = [summary['commission_source_ref']]
         assignment['received_record_refs'] = list(dict.fromkeys(
             [*summary['received_record_refs'], *summary['result_refs'], *summary['result_artifact_refs']]))
-        return ChildMessage(objective='Improve the shared resource model of the HPC ledger of this commission',
-                            message={'initial_report': INITIAL_REPORT, 'launch_instructions':
-                                     summary['launch_instructions']},
-                            assignment=assignment, selection=PREDICTION_SELECTION)
+        return ChildMessage(objective='Predict the time and resources of the commissioned work and record the '
+                                      'expectation in the HPC ledger of this commission',
+                            message={}, assignment=assignment, selection=PREDICTION_SELECTION)
     if slot == 'hpc_execution':
-        assignment = _sister_assignment(summary, view['owner_episode_id'])
+        assignment = {**_sister_assignment(summary, view), 'ledger': view['ledger_id']}
         for name in ('commission_id', 'commission_source_ref'):
             if summary[name] is not None:
                 assignment[name] = summary[name]
         assignment['input_refs'] = list(summary['input_refs'])
-        return ChildMessage(objective='Prepare, launch, monitor and parse the selected work of the HPC ledger of '
-                                      'this commission',
-                            message={'initial_report': INITIAL_REPORT}, assignment=assignment,
-                            selection=EXECUTION_SELECTION)
+        return ChildMessage(objective='Plan the allocation from the HPC ledger of this commission and carry the '
+                                      'plan through',
+                            message={}, assignment=assignment, selection=EXECUTION_SELECTION)
     if slot == 'launch':
         plan = next(item for item in view['plans'] if item['plan_ref'] == arguments['plan_ref'])
         launch = plan['launch_assignment']
@@ -78,11 +81,11 @@ def msg_to_child(slot, arguments, summary):
                                           if item['plan_ref'] == plan['plan_ref']) else []
         job = {'plan_id': plan['plan_id'], 'objective': view['commission']['objective'],
                'scientific_manifest': plan['manifest'], 'scientific_acceptance': view['commission']['obligations'],
-               'supplied_input_file': plan['supplied_input_file'],
-               'coordinator_workspace': view['coordinator_workspace'], 'instructions': LAUNCH_JOB_INSTRUCTIONS}
+               'launch_input_ref': plan['launch_input_ref'], 'instructions': LAUNCH_JOB_INSTRUCTIONS}
         assignment = {'version': launch['version'], 'requests': launch['requests'],
                       'immutable_input_versions': launch['immutable_input_versions'],
-                      'constraints': launch['constraints'], 'record_refs': list(summary['input_refs']),
+                      'constraints': launch['constraints'],
+                      'record_refs': [*summary['input_refs'], plan['launch_input_ref']],
                       'handoff_unit': arguments['handoff_unit'],
                       'acquired_record_unit': arguments['acquired_record_unit'],
                       'scope': summary['scope'], 'received_handoff_resources': handed_off}

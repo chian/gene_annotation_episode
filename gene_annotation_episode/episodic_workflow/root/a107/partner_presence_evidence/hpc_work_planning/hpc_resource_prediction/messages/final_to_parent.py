@@ -1,57 +1,42 @@
-"""The report. ``RETURN_FORM`` declares required ``credit`` and ``finding`` and four selectable fields: ``hpc_credit``
-(signed measured credit; polling adds none), ``hpc_model_ref`` (immutable selected model identity),
-``hpc_accepted_obligations`` (obligations with accepted actual results) and ``hpc_result_refs`` (received owned result
-sources; ``record_refs``, so only sources this Episode holds). The facts come from the summary, which keeps the ledger's
-view from the last tool outcome. ``hpc_credit`` is the credit the controller stopped on (``completion['credit']``);
-no second credit is computed.
+"""What this episode returns to the planner that commissioned it: controlled data only.
 
-``finding`` is the episode's own typed finding: the model it ends on, with its held-out quality, its credit parts
-and what the finding does and does not establish."""
+The planner's next decision is whether the prediction was productive (its ``credit``, and the trend of it over
+commissions) and what it may now plan from. ``finding`` says, in counts and one boolean, what the ledger holds
+after this episode: whether it ends on a model it fitted, how many measured cases that model was trained on, and
+how many candidate portfolios, portfolio comparisons and queue observations the ledger has. ``hpc_ledger_refs`` are
+the rows of the HPC ledger this Episode holds (the commission row, which names the ledger, among them) with the
+records they name: the fitted model, the model choice, the comparisons and every other record of this episode
+reach the planner in custody, never as text. ``hpc_result_refs`` (selectable) are the result sources of the ledger
+this Episode holds.
+
+Not returned, because a reference or the credit already says it: the old ``hpc_credit`` (it restated the credit),
+``hpc_model_ref`` (the model is a row of the returned ledger), ``hpc_accepted_obligations`` (rows of the ledger) and
+the explanatory ``qualification`` text."""
 from method_loop import Field, RecordForm
 
-_QUALIFICATION = ('Model credit is the measured improvement of the held-out quality since this episode began plus '
-                  'the prospective validation credit of forecasts attributed to it; actual job credit is not counted '
-                  'here and the HPC parent later scores frozen predictions against real outcomes. Unknown inputs '
-                  'stay unknown.')
-
 FINDING_FORM = RecordForm({
-    'model_ref': Field('text', 'The immutable identity of the model this episode ends on'),
-    'model_quality_improvement': Field('number', 'Held-out quality of that model minus the quality at entry; zero '
-                                                 'when either is unmeasured'),
-    'prospective_validation_credit': Field('number', 'The validation credit attributed to this prediction episode'),
-    'available_training_count': Field('integer', 'How many measured cases are available for training'),
-    'candidate_count': Field('integer', 'How many executable portfolios the ledger holds'),
-    'comparison_made': Field('boolean', 'Whether any portfolio comparison exists in the ledger'),
-    'qualification': Field('text', 'What the finding does and does not establish'),
+    'model_fitted': Field('boolean', 'Whether this episode ends on a model it fitted (not the one it started from)'),
+    'training_cases_used': Field('integer', 'How many measured cases the current model was trained on'),
+    'candidates': Field('integer', 'How many candidate portfolios the ledger holds'),
+    'comparisons': Field('integer', 'How many portfolio comparisons the ledger holds'),
+    'queue_observations': Field('integer', 'How many queue observations the ledger holds'),
 })
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
-    'finding': Field('record', 'The model this episode ends on, with its measured credit', form=FINDING_FORM),
-    'hpc_credit': Field('number', 'Signed measured credit; repeated polling adds none.', required=False),
-    'hpc_model_ref': Field('text', 'Immutable selected prediction model identity (namespace hpc_model).',
-                           required=False),
-    'hpc_accepted_obligations': Field('list', 'Original obligations with accepted actual results.', required=False),
+    'finding': Field('record', 'What the ledger holds after this episode, in counts', form=FINDING_FORM),
+    'hpc_ledger_refs': Field('record_refs', 'The rows of the HPC ledger this Episode holds and the records they '
+                                            'name; the commission row names the ledger'),
     'hpc_result_refs': Field('record_refs', 'Sources containing original result bytes and attempt custody, that '
                                             'this episode holds.', required=False),
 })
 
 
-def hpc_facts(summary, completion):
-    """The recorded facts."""
-    return {'hpc_credit': completion['credit'], 'hpc_model_ref': summary['hpc_model_ref'],
-            'hpc_accepted_obligations': list(summary['hpc_accepted_obligations']),
-            'hpc_result_refs': list(summary['hpc_result_refs'])}
-
-
 def final_to_parent(summary, completion, selection):
-    facts = hpc_facts(summary, completion)
-    credit = summary['hpc_credit']
-    finding = {'model_ref': facts['hpc_model_ref'],
-               'model_quality_improvement': credit['model_quality_improvement'],
-               'prospective_validation_credit': credit['prospective_validation_credit'],
-               'available_training_count': len(summary['hpc_available_training_ids']),
-               'candidate_count': len(summary['hpc_candidates']),
-               'comparison_made': bool(summary['hpc_latest_comparison']),
-               'qualification': _QUALIFICATION}
-    result = {'credit': completion['credit'], 'finding': finding, **{name: facts[name] for name in selection}}
-    return result
+    state, ledger = summary['ledger_state'], summary['ledger']
+    finding = {'model_fitted': state['current_model_ref'] != ledger['model_entry']['model_ref'],
+               'training_cases_used': state['current_model_support']['observations'],
+               'candidates': len(state['candidates']), 'comparisons': len(state['comparison_refs']),
+               'queue_observations': len(state['queue_refs'])}
+    selectable = {'hpc_result_refs': list(summary['result_refs'])}
+    return {'credit': completion['credit'], 'finding': finding, 'hpc_ledger_refs': list(summary['ledger_refs']),
+            **{name: selectable[name] for name in selection}}

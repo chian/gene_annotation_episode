@@ -6,8 +6,7 @@ record, and it is the only place that decides ``usable``.
 **Usable** means every one of these facts holds, each checked from the receipt and the listing and none assumed:
 
 - the plan the receipt names is the plan that was run, and the staged input was verified against its digest;
-- every step of the plan ran and returned 0 (a database build: build, native summary, and a read-back of every sequence
-  whose entry and letter counts equal the input's);
+- every step of the plan ran and returned 0 (a database build: build, native summary, full integrity check);
 - the produced files are present and the route's listing agrees with the receipt on each file's size;
 - a database: the native summary parses and its sequence and letter counts equal the input's, and the files of the
   database (each volume the alias names, or the single set) are all there; a mask: the output parses and, for a
@@ -91,11 +90,8 @@ def evaluate(plan, plan_sha256, receipt, catalog, *, ended):
         facts['counts_match'] = (info is not None and info['sequences'] == stated['records']
                                  and info['letters'] == stated['residues'])
         check = steps.get('check')
-        readback = receipt.get('readback')
-        facts['integrity_ok'] = bool(check and check.get('ran') is True and check.get('returncode') == 0
-                                     and readback is not None and readback['entries'] == stated['records']
-                                     and readback['letters'] == stated['residues'])
-        facts['integrity_scope'] = 'readback'
+        facts['integrity_ok'] = bool(check and check.get('ran') is True and check.get('returncode') == 0)
+        facts['integrity_scope'] = 'full'
         if not failed_step and not never_ran:
             if not facts['inventory_complete']:
                 codes.append('inventory_incomplete')

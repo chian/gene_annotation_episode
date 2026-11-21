@@ -6,9 +6,12 @@ from pathlib import Path
 
 import pytest
 
-from episode_runtime import ChildCall, ChildMessage, EpisodeBinding, Rejected
+from episode_runtime import ChildCall, ChildMessage, EpisodeBinding
 from method_loop import FormError
 from yield_control import BoundedQualityYieldController
+
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.tests.provider_schema_rules import (
+    violations)
 
 from .. import episode as episode_module
 from ..credit import credit
@@ -18,7 +21,7 @@ from ..messages.final_to_parent import RETURN_FORM, final_to_parent
 from ..messages.msg_to_child import msg_to_child
 from ..messages.read_from_child import read_from_child
 from ..messages.read_from_parent import ASSIGNMENT_FORM, read_from_parent
-from ..task import CHILD_SLOTS, _selected_execution_task, action
+from ..task import action, output_schema
 from ..yield_estimator import yield_controller
 
 FOLDER = Path(episode_module.__file__).parent
@@ -36,7 +39,7 @@ def test_the_class_inherits_only_the_system_episode_type():
     assert PACKAGE.endswith(BINDING_PATH.replace('/', '.'))
     assert dict(ExecutionJobSubmission.child_slots) == {
         'launch_local': BINDING_PATH + '/local_job_execution', 'launch_hpc': BINDING_PATH + '/hpc_job_execution'}
-    assert tuple(ExecutionJobSubmission.services) == ('estimate_table',)
+    assert tuple(ExecutionJobSubmission.services) == ()
     assert set(ExecutionJobSubmission.tools) == {'execution_capabilities'}
 
 
@@ -130,6 +133,10 @@ def test_each_commission_is_a_child_message_on_its_slot():
     hpc = msg_to_child('launch_hpc', {'resource_id': 'aurora'}, summary)
     assert isinstance(local, ChildMessage) and isinstance(hpc, ChildMessage)
     assert local.selection == hpc.selection == ('execution_handoff_refs', 'execution_completed')
+    # Each launch child is given the request of its resource and nothing else.
+    assert local.assignment == summary['assignment']['requests']['workstation']
+    assert local.message == {'resource_id': 'workstation'}
+    assert hpc.assignment == summary['assignment']['requests']['aurora']
     with pytest.raises(ValueError, match='execution_launch_slot_unknown'):
         msg_to_child('launch_api', {'resource_id': 'aurora'}, summary)
 
@@ -157,3 +164,17 @@ def test_the_return_is_the_credit_the_finding_and_the_selected_facts():
     assert result['credit'] == 2.0 and result['execution_handoff_refs'] == ['rec_1']
     assert result['execution_completed'] is True and result['finding']['launches_run'] == 1
     RETURN_FORM.admit(result, 'return')
+
+
+def test_the_answer_is_the_one_defined_action_with_a_permitted_resource_and_code_makes_the_commission():
+    summary = {'permitted': _parent_input()['permitted']}
+    schema = output_schema(summary)
+    chosen = schema['properties']['action']['properties']
+    assert chosen['name']['enum'] == ['commission_launch']
+    assert chosen['resource_id']['enum'] == ['aurora', 'workstation']
+    assert violations(schema) == []
+    # The model names the resource; the slot is the launch child that owns the resource's kind.
+    assert action({'action': {'name': 'commission_launch', 'resource_id': 'workstation'}}, summary, None,
+                  None) == ChildCall('launch_local', {'resource_id': 'workstation'})
+    assert action({'action': {'name': 'commission_launch', 'resource_id': 'aurora'}}, summary, None,
+                  None) == ChildCall('launch_hpc', {'resource_id': 'aurora'})

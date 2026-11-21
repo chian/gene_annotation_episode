@@ -1,52 +1,44 @@
-"""What the commissioner supplies: the persisted ``resource_launch_assignment_v1`` (old ``from_parent.py``
-``ResourceFromParent.assignment_schema`` = ``LAUNCH_SCHEMA``), one field per property of that schema under its old
-name. This is the only place the assignment is read.
+"""What the commissioner supplies: the work to launch, the resources it permits and what a usable handoff is worth.
+This is the only place the assignment is read.
 
-Old ``prepare_assignment`` kept the schema properties and validated them; it returned the assignment unchanged
-(there is no adapter preparation at this level). ``resource_selection`` may be null in the old schema (no resource
-chosen yet); a form has no null, so the field is optional here and ``read_from_parent`` gives the old ``None``.
+Controlled messaging: the work is a record the commissioner holds (a JSON artifact with ``command``,
+``environment`` and ``inputs``) passed by reference in ``work_refs``, with the artifacts it stages in
+``input_refs``; this episode never reads the work, it passes both on in custody to the resource child it
+commissions. The old open records of the launch assignment (``job_request``, ``constraints``,
+``resource_selection``, ``adapter_assignment``) are not fields of the form: the constraints are the permitted
+kinds (a subset of a fixed vocabulary) and, when the commissioner fixed one, the resource id. A commissioner that
+returns to work it already had launched passes the job's ledger rows back in ``job_refs``; the episode then checks
+that handoff and launches nothing twice.
 
-New fields (the old code had them in the request message or in the old runner, not in the assignment):
-``scope`` and ``scope_refs`` (the subject scope of the old request and the records it names, passed in custody),
-``input_refs`` (the records of ``immutable_input_versions`` that the resource operations read),
-``completion_target`` (the credit a usable execution handoff earns, which the completion controller needs) and
-``adapter_assignment`` (optional: the existing immutable job assignment a local resource adapter prepared; the
-local child's form requires it and this parent has no adapter preparation to make it)."""
-from method_loop import DeclaredField, Field, RecordForm
+The completion target is split evenly between the two things that make a usable handoff: holding the handoff
+record of the launched work, and holding a receiving check that found the job in a known state. The same two units
+are what this episode gives the resource child it commissions (``msg_to_child``), so the child's credit and this
+episode's credit for what the child returns are the same number."""
+from method_loop import DeclaredField, Field, RecordForm, SubsetField
 
-from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resource_records import (
-    LAUNCH_SCHEMA, LAUNCH_VERSION, _validate)
+from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resource_records import LAUNCH_VERSION
+
+KINDS = ('api', 'local', 'hpc')
+HANDOFF_SHARE = 0.5
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The assignment version', LAUNCH_VERSION),
-    'job_request': Field('record', "The scientific parent's job, fixed"),
-    'immutable_input_versions': Field('list', 'reference, version and content_sha256 of each input, fixed'),
-    'constraints': Field('record', 'allowed_resource_ids, allowed_kinds, resource_id, kind; fixed'),
-    'resource_selection': Field('record', 'The one chosen resource: resource_id, kind, allocation, '
-                                'capability_binding_ref; omitted while no resource is chosen', required=False),
-    'software_knowledge_refs': Field('list', 'Knowledge entries about the software, fixed'),
-    'resource_knowledge_refs': Field('list', 'Knowledge entries about the resource, fixed'),
-    'launch_instructions': Field('record', 'The pinned launch-instruction selection (library_id, sections)',
-                                 required=False),
-    'adapter_assignment': Field('record', 'The existing immutable job assignment a local resource adapter '
-                                'prepared (a practical_assignment_v1); needed to commission the local child',
-                                required=False),
-    'scope': Field('record', 'The subject scope of the work (the old request scope)'),
-    'scope_refs': Field('record_refs', 'The records the scope names, passed in custody'),
-    'input_refs': Field('record_refs', 'The records of the immutable input versions the resource operations '
-                        'read, passed in custody'),
+    'work_refs': Field('record_refs', 'One record: the work to launch, a JSON artifact with command, environment '
+                                      'and inputs, held by the commissioner'),
+    'input_refs': Field('record_refs', 'The artifacts the work stages as its input files, passed in custody'),
+    'allowed_kinds': SubsetField('text', 'The kinds of resource the commissioner permits', KINDS),
+    'resource_id': Field('text', 'The one resource the commissioner fixed; omitted while the choice is this '
+                                 "episode's", required=False),
+    'job_refs': Field('record_refs', 'The job ledger rows of this work when it was already launched (its handoff '
+                                     'row and check rows), passed back in custody', required=False),
     'completion_target': Field('number', 'The credit a usable execution handoff earns'),
 })
 
-OLD_PROPERTIES = tuple(LAUNCH_SCHEMA['properties'])
-
 
 def read_from_parent(assignment, message):
-    launch = {name: assignment[name] for name in OLD_PROPERTIES if name in assignment}
-    launch.setdefault('resource_selection', None)
-    launch.setdefault('launch_instructions', None)
-    launch = _validate(launch, LAUNCH_SCHEMA)
-    return {'assignment': launch, 'adapter_assignment': assignment.get('adapter_assignment'),
-            'scope': assignment['scope'], 'scope_refs': assignment['scope_refs'],
-            'input_refs': assignment['input_refs'], 'completion_target': assignment['completion_target'],
-            'message': message}
+    target = assignment['completion_target']
+    return {'work_ref': assignment['work_refs'][0], 'input_refs': list(assignment['input_refs']),
+            'allowed_kinds': list(assignment['allowed_kinds']),
+            'resource_id': assignment['resource_id'] if 'resource_id' in assignment else None,
+            'completion_target': target,
+            'launch_units': {'handoff_unit': target * HANDOFF_SHARE, 'check_unit': target * (1 - HANDOFF_SHARE)}}

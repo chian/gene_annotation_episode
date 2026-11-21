@@ -48,6 +48,9 @@ SELECTION = {'version': 'selection_v1', 'evidence_axis': AXIS_REF, 'thought_patt
              'child_tool_info': [{'name': 'source.read', 'resources': 'local'}]}
 HYPOTHESIS = 'hypothesis_' + '1' * 24
 EVIDENCE = 'source_' + '2' * 24
+# One outstanding job as ``job_records.outstanding_jobs`` lists it: its handoff row and one check row held of it.
+JOB_HANDOFF, JOB_CHECK = 'row_' + '1' * 64, 'row_' + '2' * 64
+JOBS = [{'job': 'job_' + '3' * 32, 'handoff_ref': JOB_HANDOFF, 'record_refs': [JOB_HANDOFF, JOB_CHECK]}]
 
 
 def _assignment(**changes):
@@ -60,7 +63,8 @@ def _assignment(**changes):
 
 def _summary():
     parent = read_from_parent(ASSIGNMENT_FORM.admit(_assignment(), 'assignment'), {'note': 'x'})
-    return {**parent, 'goal': {'objective': 'investigate'}, 'record_refs': [HYPOTHESIS, EVIDENCE]}
+    return {**parent, 'goal': {'objective': 'investigate'}, 'record_refs': [HYPOTHESIS, EVIDENCE],
+            'outstanding_jobs': JOBS}
 
 
 def test_the_class_inherits_only_the_system_episode_type():
@@ -144,10 +148,17 @@ def test_each_commission_is_admitted_by_the_real_form_of_its_child():
     assert message.assignment['record_refs'] == [EVIDENCE]
     assert message.assignment['scientific_task']['scientific_question'] == 'investigate'
     LAUNCH_RETURN.select(message.selection)
-    monitor = {**arguments, 'information_unit': 1.0, 'target_handle': 'h', 'requested_fields': ['execution_status'],
-               'permitted_committed_record_types': [], 'facts': _facts('monitor')}
+    monitor = {'information_unit': 1.0, 'handoff_ref': JOB_HANDOFF, 'requested_fields': ['execution_status'],
+               'facts': _facts('monitor')}
     message = _admitted('monitor', monitor, MONITOR_FORM, MONITOR_RETURN)
-    assert 'monitoring_progress_refs' in message.selection
+    # The job is named by the records this episode holds; nothing the model wrote passes to the monitor.
+    assert message.assignment == {'version': 'monitor_assignment_v2', 'handoff_refs': [JOB_HANDOFF],
+                                  'known_progress_refs': [JOB_CHECK], 'dependency_handoff_refs': [],
+                                  'requested_fields': ['execution_status'], 'information_unit': 1.0}
+    assert message.selection == tuple(_facts('monitor')) and message.message == {}
+    assert message.objective == 'Assess the progress of job ' + JOBS[0]['job'] + '.'
+    with pytest.raises(KeyError):          # a job this episode does not hold as outstanding: the commission fails
+        msg_to_child('monitor', {**monitor, 'handoff_ref': 'row_' + '0' * 64}, _summary())
     results = {**arguments, 'acquired_record_unit': 1.0, 'handoff_ref': 'receipt_' + '5' * 24,
                'selector': {'paths': ['a']}, 'resource_kind': 'hpc', 'facts': _facts('results')}
     _admitted('results', results, RESULTS_FORM, RESULTS_RETURN)
@@ -180,10 +191,10 @@ def test_a_wrong_commission_fails_with_its_error():
 
 
 def test_read_from_child_keeps_credit_finding_and_the_facts_the_child_returned():
-    report = read_from_child('monitor', {'credit': 2.0, 'finding': {'observed': True}, 'monitoring_target_handle': 'h'},
+    report = read_from_child('monitor', {'credit': 2.0, 'finding': {'observed': True}, 'check_refs': [JOB_CHECK]},
                              {}, None)
     assert report == {'slot': 'monitor', 'child_credit': 2.0, 'finding': {'observed': True},
-                      'facts': {'monitoring_target_handle': 'h'}}
+                      'facts': {'check_refs': [JOB_CHECK]}}
 
 
 def test_the_controller_is_an_accumulation_controller_declared_for_this_credit():

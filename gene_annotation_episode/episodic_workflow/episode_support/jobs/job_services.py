@@ -20,6 +20,11 @@ The configuration names every part; nothing has a default:
 
 - ``local``: ``{resource_id: {'workspace', 'policy' ({'memory_bytes', 'scratch_bytes'}), 'cpu_threads'}}``;
 - ``pbs``: ``{resource_id: <the configuration of PbsSshRoute>}``;
+- ``api``: ``{resource_id: <the configuration of ApiJobRoute>}``: the public web services of the run
+  (``api_job_route.py``). A caller whose run has none names the configuration without this part
+  (``CONFIGURATION``) or with it empty (``API_CONFIGURATION``); no other key set is taken;
+- ``bvbrc``: ``{resource_id: <the configuration of BvbrcJobRoute>}``: the authenticated BV-BRC application service
+  (``bvbrc_job_route.py``), optional beside ``api``;
 - ``capabilities``: the declared capabilities, one per resource the run knows of;
 - ``event_ledger_directory``, ``estimate_table_path``, ``launch_instructions_directory``,
   ``tool_knowledge_directory``.
@@ -31,6 +36,8 @@ from episode_runtime.job_access import JobAccess
 from episode_runtime.resource_adapters import ResourceAdapters
 from gene_annotation_episode.local_job_policy import LocalJobPolicy
 
+from .api_job_route import ApiJobRoute
+from .bvbrc_job_route import BvbrcJobRoute
 from .instruction_libraries import InstructionLibraries
 from .job_resource_adapter import JobResourceAdapter
 from .local_job_route import LocalJobRoute
@@ -39,12 +46,21 @@ from .pbs_job_route import PbsSshRoute
 
 CONFIGURATION = ('local', 'pbs', 'capabilities', 'event_ledger_directory', 'estimate_table_path',
                  'launch_instructions_directory', 'tool_knowledge_directory')
+API_CONFIGURATION = (*CONFIGURATION, 'api')
+OPTIONAL_CONFIGURATION = ('api', 'bvbrc')
 
 
 def job_services(configuration):
     """``{service name: factory}`` for the job services of one run."""
-    if not isinstance(configuration, dict) or set(configuration) != set(CONFIGURATION):
-        raise ValueError('job_services_configuration_requires_exactly:' + ','.join(CONFIGURATION))
+    if (not isinstance(configuration, dict) or not set(CONFIGURATION) <= set(configuration)
+            or not set(configuration) - set(CONFIGURATION) <= set(OPTIONAL_CONFIGURATION)):
+        raise ValueError('job_services_configuration_requires_exactly:' + ','.join(CONFIGURATION)
+                         + ':or_with:' + ','.join(OPTIONAL_CONFIGURATION))
+    remote = [(PbsSshRoute, configuration['pbs'])]
+    if 'api' in configuration:
+        remote.append((ApiJobRoute, configuration['api']))
+    if 'bvbrc' in configuration:
+        remote.append((BvbrcJobRoute, configuration['bvbrc']))
     shared = {}
 
     def job_access():
@@ -54,10 +70,11 @@ def job_services(configuration):
                 settings['workspace'], LocalJobPolicy.from_config(settings['policy']),
                 configuration['event_ledger_directory'], resource_id=resource_id,
                 cpu_threads=settings['cpu_threads']) for resource_id, settings in configuration['local'].items()}
-            for resource_id, settings in configuration['pbs'].items():
-                if resource_id in routes:
-                    raise ValueError('job_resource_id_bound_twice:' + resource_id)
-                routes[resource_id] = PbsSshRoute(settings, resource_id=resource_id)
+            for route, bound in remote:
+                for resource_id, settings in bound.items():
+                    if resource_id in routes:
+                        raise ValueError('job_resource_id_bound_twice:' + resource_id)
+                    routes[resource_id] = route(settings, resource_id=resource_id)
             shared['job_access'] = JobAccess(routes)
         return shared['job_access']
 
@@ -81,4 +98,4 @@ def job_services(configuration):
     }
 
 
-__all__ = ['CONFIGURATION', 'job_services']
+__all__ = ['API_CONFIGURATION', 'CONFIGURATION', 'job_services']

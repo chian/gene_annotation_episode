@@ -1,26 +1,24 @@
-"""What the commissioner gives: the results assignment (old ``execution_results_assignment_v1``, the library
-``RESULTS_SCHEMA`` that ``from_parent.py`` (``ResultsFromParent.assignment_schema``) extended): the original
-handoff of the launched attempt and the selector of what to acquire from it.
+"""What the commissioner gives: the results assignment (``execution_results_assignment_v1``): the handoff of the
+launched job and the selector of what to acquire from it.
 
-Not carried from ``ResultsFromParent`` (README 3b P1, C3): ``prepare_assignment``'s restore of an already admitted
-original Results commission (``saved_commission.py``, old-runner machinery), its read of the handoff target
-(``job_progress_provider.targets.read_target``: BLOCKED-ON-JOB-SERVICE, the job records are not defined; the tool
-reads the handoff, ``task.py``), ``initial_references`` (the handoff ref is the one record the assignment names)
-and ``required_return_sources`` (``final_to_parent.py`` declares ``execution_result_refs`` required).
+This is the only place the assignment is read. ``handoff_ref`` is a ``record_refs`` field holding exactly one
+reference: the handoff row the job service wrote at the launch (a row of the job ledger), passed in custody. The
+selector names paths of result files inside the job's directory (``paths`` or ``path``, an ``offset`` and a
+``limit``): each requested path is read from ``offset`` (default 0) for ``limit`` bytes (default: to its end). The
+job's directory is in the handoff row, which only held records give: the paths are confined to it, and the job
+service's name of each path is computed, where the row is read (``messages/internal_summary.py``).
+``resource_kind`` names the kind of the resource the job runs on, which chooses the continuation profile
+(``yield_estimator.py``); ``acquired_record_unit`` is the credit of acquiring the whole requested selector. A
+wrong commission fails with its error.
 
 A typed selector (``local_file_source_selector_v1``, ``flux_balance_result_selector_v1``) selected the old local
 file source and flux balance result adapters (``LocalFileSourceResults``, ``NativeFluxBalanceResults``): no carried
-home exists for either, so a typed selector raises here, at the reading of the commission.
-
-``selector_windows`` is the old ``_windows(selector)`` of the library ``received_result_readers`` (not in
-``episode_support/``, and not read): rebuilt from the native selector schema alone (``paths`` or ``path``, an
-``offset`` and a ``limit``): each requested path is read from ``offset`` (default 0) for ``limit`` bytes (default:
-to its end)."""
+home exists for either, so a typed selector raises here, at the reading of the commission."""
 import math
 
 from jsonschema import Draft202012Validator
 
-from method_loop import DeclaredField, Field, RecordForm
+from method_loop import ChoiceField, DeclaredField, Field, RecordForm
 
 RESULTS_VERSION = 'execution_results_assignment_v1'
 _TEXT = {'type': 'string', 'minLength': 1}
@@ -34,14 +32,13 @@ KINDS = ('local', 'hpc')
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The version of this assignment form', RESULTS_VERSION),
-    'handoff_ref': Field('record_refs', 'The practical receipt of the launched attempt (exactly one), the target '
-                                        'the results are acquired from'),
-    'selector': Field('record', 'The requested paths and byte interval: paths or path, offset, limit'),
-    'constraints': Field('record', 'The commission\'s constraints', required=False),
-    'resource_kind': Field('text', 'The kind of the handed-off resource, local or hpc (new: the old binding read '
-                                   'it from the handoff target)'),
-    'acquired_record_unit': Field('number', 'The credit of acquiring the whole requested selector (new: the old '
-                                            'binding took it from its configuration; positive)'),
+    'handoff_ref': Field('record_refs', 'The handoff row of the launched job (exactly one), passed in custody: the '
+                                        'job the results are acquired from'),
+    'selector': Field('record', 'The requested paths inside the job\'s directory and their byte interval: paths or '
+                                'path, offset, limit'),
+    'resource_kind': ChoiceField('text', 'The kind of the resource the handed-off job runs on (it chooses the '
+                                         'continuation profile before any record is read)', KINDS),
+    'acquired_record_unit': Field('number', 'The credit of acquiring the whole requested selector (positive)'),
 })
 
 
@@ -62,14 +59,15 @@ def selector_windows(selector):
 
 
 def read_from_parent(assignment, message):
+    """The validated results assignment as the parent input: the assignment (version, the one handoff reference,
+    the selector), the requested windows, the resource kind and the credit unit."""
     if len(assignment['handoff_ref']) != 1:
         raise ValueError('results_assignment_requires_exactly_one_handoff')
-    if assignment['resource_kind'] not in KINDS:
-        raise ValueError('results_assignment_resource_kind_unknown')
     unit = assignment['acquired_record_unit']
     if not math.isfinite(unit) or unit <= 0:
         raise ValueError('explicit_positive_operational_credit_units_required')
-    return {'handoff_refs': list(assignment['handoff_ref']), 'handoff_ref': assignment['handoff_ref'][0],
-            'selector': dict(assignment['selector']), 'windows': selector_windows(assignment['selector']),
-            'constraints': dict(assignment.get('constraints', {})), 'resource_kind': assignment['resource_kind'],
+    selector = dict(assignment['selector'])
+    return {'assignment': {'version': assignment['version'], 'handoff_ref': assignment['handoff_ref'][0],
+                           'selector': selector},
+            'windows': selector_windows(selector), 'resource_kind': assignment['resource_kind'],
             'acquired_record_unit': unit}

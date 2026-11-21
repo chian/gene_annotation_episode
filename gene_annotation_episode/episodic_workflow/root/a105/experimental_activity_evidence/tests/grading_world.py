@@ -135,4 +135,4 @@ def reasoning_selection(world):
 MODEL_SETTINGS = {**SETTINGS, 'cost': 0.1}
 FLAGS_OFF = {name: False for name in FLAGS}
 # The three reading children take the same settings; the population route is off for the examination run.
-CHILD_PATHS = ('table_evidence_extraction', 'source_coverage_improvement', 'passage_evidence_extraction')
+CHILD_PATHS = ('table', 'report', 'chunk')

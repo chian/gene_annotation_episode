@@ -1,74 +1,45 @@
-"""The return: everything this episode can report to the scientific parent. Always returned: the Episode's credit and
-the finding (the state of the handoff whose results are acquired). Selectable: ``execution_handoff`` (a list of zero
-or one handoff: the single physical execution when exactly one is known), ``execution_handoffs``, ``adapter_facts``
-(the assigned adapter's own declared fact sources, by the adapter's names) and ``interpretation`` (the report value
-the model recorded with the ``report`` tool)."""
-from method_loop import Field, RecordForm
+"""The return, chosen for the scientific parent's next decision: interpret the acquired files, or come back for
+them later. Always returned: the credit (the system's), the finding (two values of fixed vocabularies: the state of
+the job at the latest status reading the Episode holds, and what its latest fetch came to), the acquired result
+files in the order of the requested names, and the closure row of the job (a parent that holds it no longer counts
+the job as outstanding). Selectable: the status check rows this Episode wrote. No text the model wrote and no
+description of the job is returned: the job's records are the references."""
+from episode_runtime.job_access import STATES
+from method_loop import ChoiceField, Field, RecordForm
+
+JOB_STATES = ('not_checked', *STATES)
+FETCH_OUTCOMES = ('not_requested', 'results_acquired', 'results_not_available', 'result_not_in_catalog',
+                  'request_failed')
 
 FINDING_FORM = RecordForm({
-    'resource_id': Field('text', 'The resource the handoff names'),
-    'kind': Field('text', 'The kind of that resource'),
-    'handoff_state': Field('text', 'usable when a recorded handoff is usable, unavailable when every recorded '
-                                   'handoff is unavailable, none when no handoff was recorded'),
-    'handoff_count': Field('integer', 'The number of distinct recorded execution identities'),
-    'failure_codes': Field('list', 'The failure codes the recorded handoffs and the last failed unit carry'),
+    'job_state': ChoiceField('text', 'The state of the job at the latest status reading this Episode holds',
+                             JOB_STATES),
+    'fetch_outcome': ChoiceField('text', 'What the latest fetch of this Episode came to', FETCH_OUTCOMES),
 })
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
-    'finding': Field('record', 'The state of the handoff whose results are acquired', form=FINDING_FORM),
-    'execution_handoff': Field('list', 'The latest original usable received or own selected check when exactly one '
-                                       'physical execution is known; empty for zero or several identities. No new '
-                                       'receiving check occurs at closure.', required=False),
-    'execution_handoffs': Field('list', 'For each distinct registry and execution handle, the available usable '
-                                        'check with latest original checked_at, in identity order. This records '
-                                        'available facts without selecting a resource or rechecking it.',
-                                required=False),
-    'adapter_facts': Field('record', "The assigned adapter's own declared fact sources, by the adapter's names",
-                           required=False),
-    'interpretation': Field('record', 'The latest interpretation the episode recorded for the parent', required=False),
+    'finding': Field('record', 'The state of the job and what the fetch came to', form=FINDING_FORM),
+    'result_refs': Field('record_refs', 'The distinct acquired requested result files, in the order of the '
+                                        'requested names'),
+    'closure_refs': Field('record_refs', 'The closure row of the job, written by the fetch'),
+    'check_refs': Field('record_refs', 'The status check rows this Episode wrote', required=False),
 })
 
 
-def facts_from(adapter_facts):
-    """The handoff facts over the assigned adapter's facts (``None``: no unit returned any)."""
-    values = {'execution_handoff': None, 'execution_handoffs': []}
-    for key, value in ({} if adapter_facts is None else adapter_facts).items():
-        if key == 'execution_handoffs':
-            values[key].extend(value)
-            continue
-        if key == 'execution_handoff':
-            continue
-        if value is not None:
-            values[key] = value
-        else:
-            values.setdefault(key, None)
-    identities = {(item['resource_selection']['capability_binding_ref'], item['execution_handle']): item
-                  for item in values['execution_handoffs']}
-    values['execution_handoffs'] = [identities[key] for key in sorted(identities)]
-    values['execution_handoff'] = values['execution_handoffs'][0] if len(identities) == 1 else None
-    return values
+def fetch_outcome(actions):
+    fetches = [item for item in actions if item['action'] == 'fetch_results']
+    if not fetches:
+        return 'not_requested'
+    if fetches[-1]['status'] == 'completed':
+        return 'results_acquired'
+    return fetches[-1]['failure'] if fetches[-1]['failure'] in FETCH_OUTCOMES else 'request_failed'
 
 
 def final_to_parent(summary, completion, selection):
-    facts = facts_from(summary['facts'])
-    handoffs = facts['execution_handoffs']
-    selected = summary['assignment']['handoff']['resource_selection']
-    codes = [item['failure']['code'] for item in handoffs if item['failure'] is not None]
-    last = summary['last_outcome']
-    if last is not None and last['status'] not in ('completed', 'partial') and last.get('feedback'):
-        codes.append(last['feedback'].get('code') or last['feedback'].get('category', 'work_failed'))
-    state = 'none' if not handoffs else 'usable' if any(item['state'] == 'usable' for item in handoffs) \
-        else 'unavailable'
     result = {'credit': completion['credit'],
-              'finding': {'resource_id': selected['resource_id'], 'kind': selected['kind'],
-                          'handoff_state': state, 'handoff_count': len(handoffs), 'failure_codes': codes}}
-    if 'execution_handoff' in selection:
-        result['execution_handoff'] = [] if facts['execution_handoff'] is None else [facts['execution_handoff']]
-    if 'execution_handoffs' in selection:
-        result['execution_handoffs'] = handoffs
-    if 'adapter_facts' in selection:
-        result['adapter_facts'] = {key: value for key, value in facts.items()
-                                   if key not in ('execution_handoff', 'execution_handoffs')}
-    if 'interpretation' in selection:
-        result['interpretation'] = summary['interpretation']
+              'finding': {'job_state': summary['job_state'], 'fetch_outcome': fetch_outcome(summary['actions'])},
+              'result_refs': list(dict.fromkeys(item['ref'] for item in summary['acquired'])),
+              'closure_refs': list(summary['closure_refs'])}
+    if 'check_refs' in selection:
+        result['check_refs'] = list(summary['check_refs'])
     return result

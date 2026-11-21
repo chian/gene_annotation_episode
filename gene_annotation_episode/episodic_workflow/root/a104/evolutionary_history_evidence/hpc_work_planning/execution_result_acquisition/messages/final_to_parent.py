@@ -1,118 +1,62 @@
-"""The return. Always returned: the Episode's credit (the system hands it in ``completion``), the finding (what was
-acquired and how it is qualified), the retained result records in custody and whether the requested acquisition is
-complete. Selectable: the handoff, file source, file capture, HSP and pairwise sources and every array-valued source
-of the typed result families. A generic native acquisition has no rows for the families of the typed targets:
-selecting one returns an empty list. Where a source name contains a dot (the masking and BLAST utility families) the
-field name has an underscore in its place: a form field name is a lowercase identifier."""
-from method_loop import Field, RecordForm
+"""The return: controlled fields only. Always returned: the Episode's credit (the system hands it in ``completion``;
+it is the productivity signal and no field restates it), the finding (whether the requested acquisition is complete,
+the state of the job as last observed, the counts of what was acquired and what was refused, how often the job
+service refused because the results of the job were not available, and the bytes retained), the result records this
+Episode retained and whether the requested acquisition is complete. No model-written text and no open record is
+returned.
 
-from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.evolutionary_history_evidence.hmmer_preparation_result_views import (
-    preparation_fact_sources)
-from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_masking.evolutionary_history_evidence.sequence_masking_result_views import (
-    masking_fact_sources)
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.blast_pairwise_result_views import (
-    native_blast_fact_sources)
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.blast_utility_result_views import (
-    blast_utility_fact_sources)
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.hmmer_native_result_views import (
-    native_hmmer_fact_sources)
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.native_blast_database_result_views import (
-    native_blast_database_fact_sources)
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.native_blast_standard_database_result_views import (
-    standard_blast_database_fact_sources)
+Selectable: ``execution_handoff_refs`` (the handoff row), ``execution_job_record_refs`` (the latest check row and
+the closure row of the job: the parent that holds the closure no longer counts the job as outstanding) and
+``execution_result_artifact_refs`` (the information artifact of each returned result record and the fetched files
+its windows lie in: what a later commission passes as ``initial_result_artifact_refs``)."""
+from method_loop import ChoiceField, Field, RecordForm
 
-# What the retained bytes are and are not.
-NATIVE_RESULT_ORIGIN = {'content_location': 'current_resource_filesystem', 'attempt_output_version': 'unverified',
-                        'window_consistency': 'separate_reads_no_atomic_file_snapshot',
-                        'completion_basis': 'requested_acquisition_and_observed_successful_attempt'}
+JOB_STATES = ('not_observed', 'queued', 'running', 'finished', 'failed', 'cancelled', 'unknown')
+ALWAYS = ('execution_result_refs', 'execution_completed')
 
 FINDING_FORM = RecordForm({
-    'complete': Field('boolean', 'Whether the requested windows are fully acquired from a completed, successful '
-                      'observation of the exact attempt. Yielding alone is false'),
-    'requested_paths': Field('list', 'The requested paths with their offset and limit'),
-    'acquired_window_count': Field('integer', 'How many byte windows were retained'),
-    'failure_count': Field('integer', 'How many windows were unavailable'),
-    'acquired_selector_fraction': Field('number', 'The mean over the requested paths of the newly covered fraction '
-                                        'of the requested byte positions'),
-    'observation_states': Field('list', 'The state and return code of each observation of the exact attempt'),
-    'qualification': Field('record', 'What the retained bytes are: current resource filesystem content, the attempt '
-                           'output version unverified, separate windows not an atomic snapshot'),
+    'execution_completed': Field('boolean', 'Whether the requested acquisition is complete: the job finished and '
+                                            'every requested byte is retained'),
+    'acquisitions': Field('integer', 'The number of selected operations that completed'),
+    'failure_count': Field('integer', 'The number of selected operations that returned a failed or an invalid '
+                                      'outcome'),
+    'job_state': ChoiceField('text', 'The state of the job in the latest check or closure row this episode holds',
+                             JOB_STATES),
+    'results_not_available': Field('integer', 'The number of fetches the job service refused because the results '
+                                              'of the job were not available (the job had not ended)'),
+    'windows_acquired': Field('integer', 'The number of byte windows this episode retained'),
+    'bytes_acquired': Field('integer', 'The number of bytes in the windows this episode retained'),
 })
-
-# The array-valued fact sources of the typed families that the library functions describe (meaning kept); a
-# generic native acquisition holds no rows of them.
-_FAMILIES = (native_hmmer_fact_sources, masking_fact_sources, blast_utility_fact_sources,
-             standard_blast_database_fact_sources, native_blast_database_fact_sources, preparation_fact_sources,
-             native_blast_fact_sources)
-
-
-def _family_fields():
-    fields = {}
-    for function in _FAMILIES:
-        for source, declared in function().items():
-            if declared['type'] != 'array':
-                continue
-            fields[source.replace('.', '_')] = Field('list', declared['meaning'], required=False)
-    return fields
-
-
-def _selectable():
-    return {
-        'execution_handoff_refs': Field('record_refs', 'Qualified original handoff sources actually available to '
-                                        'this episode. Failed attempts do not establish a successful endpoint.',
-                                        required=False),
-        'execution_blast_hsps': Field('list', 'Optional explicitly requested native measurements for all published '
-                                      'HSPs of an acquired result; a generic native acquisition has none.',
-                                      required=False),
-        'execution_blast_pairwise_result_refs': Field('record_refs', 'Pairwise BLAST result references; a generic '
-                                                      'native acquisition has none.', required=False),
-        'execution_file_source_refs': Field('record_refs', 'Source references for selected local file streams '
-                                            'retained by this results episode; no producing-execution or '
-                                            'atomic-version identity is established.', required=False),
-        'execution_file_capture_outcomes': Field('list', 'Recorded selected-file availability, original job status '
-                                                 'and file-custody qualifications; successful byte retention alone '
-                                                 'does not establish execution success or closed writers.',
-                                                 required=False),
-    }
-
-
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
-    'finding': Field('record', 'What was acquired and how it is qualified', form=FINDING_FORM),
-    'execution_result_refs': Field('record_refs', 'Qualified actual requested result acquisitions available to '
-                                   'this episode. Generic native windows retain current-filesystem observations'),
+    'finding': Field('record', 'Whether the requested acquisition is complete and its counts', form=FINDING_FORM),
+    'execution_result_refs': Field('record_refs', 'The result acquisitions this episode retained: one '
+                                   'episode.execution_result source record for each fetch and each further window'),
     'execution_completed': Field('boolean', 'Whether this assignment has actual verified endpoint information: '
-                                 'requested current-filesystem acquisition plus independently observed successful '
-                                 'exact execution, without a producing-attempt or atomic-version claim. Yielding '
-                                 'alone is false'),
-    **_selectable(),
-    **_family_fields(),
+                                 'the job finished and every requested byte is retained. Yielding alone is false'),
+    'execution_handoff_refs': Field('record_refs', 'The handoff row of the job', required=False),
+    'execution_job_record_refs': Field('record_refs', 'The job ledger rows this episode chose for its parent: the '
+                                       'latest check row it holds (the state of the job last observed) and, once '
+                                       'the results were fetched, the closure row of the job', required=False),
+    'execution_result_artifact_refs': Field('record_refs', 'The information artifact of each record in '
+                                            'execution_result_refs and the fetched files its windows lie in',
+                                            required=False),
 })
 
 
-def _facts(summary):
-    """The facts of a generic native target: every typed family empty, the handoff and the retained
-    results of the summary, and the completion of the requested acquisition."""
-    facts = {name: [] for name, spec in RETURN_FORM.fields.items() if spec.type == 'list'}
-    facts.update({name: [] for name, spec in RETURN_FORM.fields.items()
-                  if spec.type == 'record_refs' and not spec.required})
-    facts.update({'execution_handoff_refs': list(summary['handoff_refs']),
-                  'execution_result_refs': list(summary['result_refs']), 'execution_completed': summary['completed']})
-    return facts
-
-
-def _finding(summary, credit):
-    return {'complete': summary['completed'], 'requested_paths': summary['requested_paths'],
-            'acquired_window_count': summary['window_count'], 'failure_count': summary['failure_count'],
-            'acquired_selector_fraction': credit / summary['acquired_record_unit'],
-            'observation_states': summary['observation_states'], 'qualification': dict(NATIVE_RESULT_ORIGIN)}
+def _finding(summary):
+    windows = [window for result in summary['own'] for window in result['windows']]
+    rows = summary['acquisitions']
+    return {'execution_completed': summary['completed'],
+            'acquisitions': sum(1 for row in rows if row['status'] == 'completed'),
+            'failure_count': sum(1 for row in rows if row['status'] != 'completed'),
+            'job_state': summary['job']['last_observed_state'] or 'not_observed',
+            'results_not_available': sum(1 for row in rows if row['status'] == 'failed'
+                                         and row['failure_code'] == 'results_not_available'),
+            'windows_acquired': len(windows), 'bytes_acquired': sum(window['returned_bytes'] for window in windows)}
 
 
 def final_to_parent(summary, completion, selection):
-    facts = _facts(summary)
-    result = {'credit': completion['credit'], 'finding': _finding(summary, completion['credit']),
-              'execution_result_refs': facts['execution_result_refs'],
-              'execution_completed': facts['execution_completed']}
-    for name in selection:
-        result[name] = facts[name]
-    return result
+    facts = summary['execution_progress']
+    return {'credit': completion['credit'], 'finding': _finding(summary),
+            **{name: facts[name] for name in (*ALWAYS, *selection)}}

@@ -7,8 +7,11 @@ never added to this episode's credit: what the child graded counts here through 
 the sheets the child returned in ``finding.sheet_refs`` (now held).
 
 A recursive A103 child returns the controlled features of its sheets; the parent's model is shown those features and
-the count of returned references, not the references themselves. Every other child's finding is its own declared
-controlled form and is taken as it is, with the selected fact sources as reference counts."""
+the count of returned references, not the references themselves. The monitor returns its controlled finding (whether
+the job was observed, its state, whether its results are available, when) and its check rows (``check_refs``, now
+held: the summary reads them as the job's latest check); its selected measurements are ``{'known', 'value'}``
+numbers and are kept as they are. Every other child's finding is its own declared controlled form and is taken as it
+is, with the selected fact sources as reference counts."""
 
 
 def read_from_child(slot, result, summary, records):
@@ -17,7 +20,13 @@ def read_from_child(slot, result, summary, records):
         finding = {key: value for key, value in finding.items() if key != 'sheet_refs'}
         finding['returned_sheet_record_count'] = len(result['finding']['sheet_refs'])
     report = {'slot': slot, 'credit': result['credit'], 'finding': finding}
-    selected = {name: len(value) for name, value in result.items() if name not in ('credit', 'finding')}
+    returned = {name: value for name, value in result.items() if name not in ('credit', 'finding')}
+    if slot == 'execution_progress_assessment':
+        measurements = {name: value for name, value in returned.items() if not name.endswith('_refs')}
+        returned = {name: value for name, value in returned.items() if name.endswith('_refs')}
+        if measurements:
+            report['measurements'] = measurements
+    selected = {name: len(value) for name, value in returned.items()}
     if selected:
         report['selected_record_counts'] = selected
     return report

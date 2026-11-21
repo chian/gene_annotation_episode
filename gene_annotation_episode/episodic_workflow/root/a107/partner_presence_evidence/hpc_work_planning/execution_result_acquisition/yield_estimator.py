@@ -9,8 +9,7 @@ README 7b), chosen by the selector read from the parent input.
   ``yield_controller`` is handed none, so the maximum is the unit (credit counts only new positions, so it never
   passes the old maximum; only the forecast bound is looser);
 * a typed or API selector: the practical completion estimate (``PracticalYieldEstimator`` on a verified completion
-  proof). Those selectors are not carried (``messages/read_from_parent.py`` raises), so no completion controller is
-  built.
+  proof). This episode acquires plain file results only, so no completion controller is built.
 
 The old ``require_private_yield`` switch, the exact-zero forecast when nothing remained and the switch to the
 completion estimator on a proof are not carried: nothing but this controller stops the Episode. The ``<kind>`` is the

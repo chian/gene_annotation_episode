@@ -1,55 +1,45 @@
-"""The task: the model chooses one bounded acquisition per unit (an observation of the handed-off attempt, or a read of
-requested file windows) and the episode retains each result as a source record in custody.
+"""The task: acquire the requested result files of the handed-off A107 job through the job service.
 
-Carried from the old ``work_operations.py`` (``ResultsWorkOperations.catalog``, ``execute``),
-``result_records.py`` (``native_result_operation_catalog``), ``action_outcome.py`` (``_outcome``),
-``native_file_acquisition.py`` (``_execute_native_results``), ``result_publication.py`` (``_publish_result``),
-``task_instructions.py`` and ``instructions.py``, ``goal.py`` (the permitted actions: ``tool``; the ``wait`` action
-of an API target is wait/suspension machinery and API targets are not carried), ``initial_information.py``,
-``task_decision.py`` (the results decision inputs) and ``task.py`` (``apply_response``: an answer that does not fit
-the schema is rejected with its diagnostic). The old reasoning-commit, job-child, ``reads.map`` and report-update
-branches of ``task.py`` and the decision-exchange loop (``exchange_decision``) are not carried: ``reason`` is never
-permitted here, and a lookup is a tool.
+The model is the router: at each decision it selects one defined operation with controlled operands, and code
+carries it out. No operation runs a command the model wrote.
 
-The task always offers a unit and never ends the Episode: the Episode ends when its yield controller stops it. After
-the requested acquisition is complete a further action is an ordinary unit that returns an ``invalid`` outcome
-(``execution_results_assignment_already_completed``, the old refusal) and enters the iterator with its credit
-unchanged.
+The operations, on the ``job_access`` service and the Episode's store:
 
-Tool names are ``[a-z][a-z0-9_]*`` now: the old ``execution.results.status``, ``.collect`` and ``.read`` are
-``execution_results_status``, ``execution_results_collect`` and ``execution_results_read``.
+- ``execution_results_status``: one status request for the job of the held handoff row (``JobAccess.check``); the
+  service writes the check row.
+- ``execution_results_collect``: the fetch of the requested result files (``JobAccess.fetch`` with the job service's
+  names of the requested paths): each file becomes an artifact this Episode holds and the service writes the
+  closure row; the bounded first window of each requested path (``min(log_window_bytes, 1 MiB, length)``) is then
+  read from the fetched artifact through custody (``ctx.store.open_artifact``) and retained.
+- ``execution_results_read``: one further bounded window of a fetched file, inside the requested interval of its
+  path, read from the held artifact in the same way.
 
-Settings this episode reads (``ctx.settings``; the old ``configuration.py`` values): ``log_window_bytes`` (tools),
-``knowledge_library_directory`` and ``launch_instructions_directory`` (optional) and the yield profiles
-(``yield_estimator.py``).
+A window names the fetched artifact it lies in, where it lies, how many bytes it holds and their digest; the bytes
+stay in the fetched artifact. Each collect and read keeps its windows as a result record the Episode holds: an
+artifact with the information body and a ``source`` record of provider ``episode.execution_result`` over it. A
+request the job service refuses (the job has not ended: ``results_not_available``; a requested file the job did not
+leave: ``result_not_in_catalog``; the transport is down) is the ``failed`` outcome the service returns: it is an
+outcome of the unit and earns what the summary earns, nothing.
 
-BLOCKED-ON-JOB-SERVICE: the service ``job_access`` and the job record kind of the handoff are not provided. Wanted of
-``job_access``: reads for ``decide`` ``target(handoff_ref)`` and ``target_description(handoff_ref, selector)`` (the
-old ``job_progress_provider.targets.read_target`` and ``describe_target``); calls for the tools
-``observe_target(target, key=, resumed=)`` and ``read_file(target, path=, offset=, limit=, key=, resumed=)``,
-idempotent on the key (the old ``observe_target`` and ``read_file``). The handoff row is read at ``_read_target``,
-which raises."""
-import base64
-from copy import deepcopy
+The task always offers a unit and never ends the Episode; the yield controller stops it. This episode does not wait
+for a job: a status request stays available when nothing else is.
+
+Settings (``ctx.settings``): ``log_window_bytes`` (the bound of the first window ``execution_results_collect``
+retains of each requested path) and the yield profiles (``yield_estimator.py``)."""
+import hashlib
 
 from jsonschema import Draft202012Validator, ValidationError
 
 from episode_runtime import ModelRequest, Rejected, ToolCall
 
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (
-    INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.strict_output import (
     decode_strict_output, strict_output_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import (
-    ContractError, canonical, obj, validate_schema)
+    ContractError, canonical, obj)
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.practical_execution_records import (
     digest)
-from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
-from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
-    INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)
 
 from .goal import GOAL
 
@@ -60,161 +50,128 @@ TRANSPORT_ERROR = 'a107_execution_result_acquisition_selection_has_no_argument_t
 RESULT_PROVIDER = 'episode.execution_result'
 RESULT_VERSION = 'execution_result_information_v3'
 MEBIBYTE = 1024 * 1024
-NATIVE_RESULT_ORIGIN = {'content_location': 'current_resource_filesystem', 'attempt_output_version': 'unverified',
-                        'window_consistency': 'separate_reads_no_atomic_file_snapshot',
-                        'completion_basis': 'requested_acquisition_and_observed_successful_attempt'}
 
-_TEXT = {'type': 'string', 'minLength': 1}
 _OFFSET = {'type': 'integer', 'minimum': 0}
 _FILE_LIMIT = {'type': 'integer', 'minimum': 1, 'maximum': MEBIBYTE}
 
-# The old native result operation catalog (``native_result_operation_catalog``), under the new tool names.
-CATALOG = {
-    'execution_results_status': {
-        'description': 'Observe the exact handed-off physical attempt once.', 'input_schema': obj({})},
-    'execution_results_collect': {
-        'description': 'Observe the original attempt and acquire bounded first windows of the requested paths.',
-        'input_schema': obj({})},
-    'execution_results_read': {
-        'description': 'Acquire one selected bounded byte window within the original requested paths and interval.',
-        'input_schema': obj({'path': _TEXT, 'offset': _OFFSET, 'limit': _FILE_LIMIT})},
-}
+STATUS = {'name': 'execution_results_status',
+          'description': 'Ask the job service once for the state of the handed-off job (queued, running, finished, '
+                         'failed, cancelled or unknown) and whether its results are available. The check is '
+                         'recorded; no bytes are acquired.',
+          'input_schema': obj({})}
+COLLECT = {'name': 'execution_results_collect',
+           'description': 'Fetch the requested result files of the job through the job service. Each fetched file '
+                          'is kept whole, the job is closed, and the first window of each requested path (at most '
+                          'first_window_bytes) is retained. The job service refuses while the job has not ended '
+                          '(failure code results_not_available).',
+           'input_schema': obj({})}
 
 
-def operation_catalog():
-    return [{'name': name, **deepcopy(entry)} for name, entry in CATALOG.items()]
+def execution_results_status(arguments, ctx):
+    """One status request for the handed-off job. The job service writes the check row, with the route's reply as
+    its artifact, through the Episode's store: that row is the record of the observation. A request that fails is
+    the ``failed`` outcome the service returns."""
+    return ctx.services['job_access'].check(ctx, arguments['handoff_ref'])
 
 
-def _outcome(result=None, *, references=(), code=None):
-    """The old ``_outcome``: the outcome shape of a result operation, ``invalid`` when it carries a code."""
-    return {'status': 'invalid' if code else 'completed', 'record_refs': list(references),
-            'changed_record_refs': list(references), 'result': result,
-            'feedback': None if code is None else {'category': 'arguments_or_reference', 'code': code}}
+def _window(store, path, file, offset, limit):
+    """One byte window of a fetched result file, read through custody: the artifact it lies in, where it lies, the
+    bytes it holds and their digest."""
+    with store.open_artifact(file['ref']) as stream:
+        stream.seek(offset)
+        data = stream.read(limit)
+    return {'path': path, 'artifact_ref': file['ref'], 'offset': offset, 'returned_bytes': len(data),
+            'size_bytes': file['bytes'], 'sha256': hashlib.sha256(data).hexdigest()}
 
 
-def requested_windows(tool, window, requested, log_window_bytes):
-    """The windows one result action reads (the old ``_execute_native_results``): ``read`` one window that lies
-    inside a requested path and interval; ``collect`` the first window of every requested path, each up to
-    ``min(log_window_bytes, 1 MiB, length)``; ``status`` none."""
-    if tool == 'execution_results_read':
-        if window['path'] not in requested:
-            raise ValueError('execution_results_selector_conflict')
-        start, length = requested[window['path']]
-        if window['offset'] < start or (length is not None and window['offset'] + window['limit'] > start + length):
-            raise ValueError('execution_results_selector_conflict')
-        return [dict(window)]
-    if tool == 'execution_results_collect':
-        return [{'path': path, 'offset': start,
-                 'limit': min(log_window_bytes, MEBIBYTE, length) if length is not None
-                 else min(log_window_bytes, MEBIBYTE)} for path, (start, length) in requested.items()]
-    return []
+def _retain(ctx, tool_name, arguments, windows):
+    """Keep one acquisition as a result record this Episode holds: an artifact with its information body (the
+    assignment it serves, the closure row of the fetch and the windows) and a ``source`` record over it."""
+    closure = arguments['closure']
+    body = {'version': RESULT_VERSION, 'assignment': arguments['assignment'], 'tool_name': tool_name,
+            'closure_ref': closure['ref'], 'windows': windows}
+    with ctx.store.transaction():
+        artifact = ctx.store.artifact(canonical(body).encode('utf-8'), 'application/json')
+        source = ctx.store.put('source', {
+            'provider': RESULT_PROVIDER,
+            'accession': 'execution_result_' + digest([ctx.run_id, ctx.episode_id, ctx.operation_key]),
+            'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
+            'version': RESULT_VERSION, 'retrieved_at': closure['at']}, origin='tool')
+    return {'status': 'completed', 'result_ref': source['id'], 'artifact_ref': artifact}
 
 
-def validate_result_body(body, *, requested):
-    """The old ``_validate_result_body`` content checks: the closed field set, the origin and every window inside the
-    requested paths and intervals with bytes of the declared length. (The checks against the old journal, the saved
-    action row and the receipt files are the system's.)"""
-    fields = {'version', 'run_id', 'episode_id', 'assignment', 'handoff_refs', 'requested', 'operation_key',
-              'tool_name', 'arguments', 'target', 'observation', 'windows', 'failures', 'acquisition_origin'}
-    if (not isinstance(body, dict) or set(body) != fields or body['version'] != RESULT_VERSION
-            or body['acquisition_origin'] != NATIVE_RESULT_ORIGIN):
-        raise ValueError('invalid_execution_result_information')
-    for window in body['windows']:
-        if window['path'] not in requested:
-            raise ValueError('execution_result_selector_conflict')
-        raw = base64.b64decode(window['bytes_base64'], validate=True)
-        start, length = requested[window['path']]
-        if (window['offset'] < start or window['returned_bytes'] != len(raw)
-                or (length is not None and window['offset'] + len(raw) > start + length)
-                or window['size_bytes'] < 0):
-            raise ValueError('execution_result_window_conflict')
+def execution_results_collect(arguments, ctx):
+    """Fetch the requested result files of the handed-off job and retain the bounded first window of each requested
+    path. The job service fetches each file whole as an artifact this Episode holds and writes the closure row; a
+    request it refuses is the ``failed`` outcome it returns."""
+    requested, names = arguments['requested'], arguments['names']
+    fetched = ctx.services['job_access'].fetch(ctx, arguments['assignment']['handoff_ref'],
+                                               names=[names[path] for path in requested])
+    if fetched['status'] != 'completed':
+        return fetched
+    files = {item['name']: item for item in fetched['results']}
+    bound = min(ctx.settings['log_window_bytes'], MEBIBYTE)
+    windows = [_window(ctx.store, path, files[names[path]], start, bound if length is None else min(bound, length))
+               for path, (start, length) in requested.items()]
+    closure = {'ref': fetched['closure_ref'], 'at': fetched['closed_at']}
+    return _retain(ctx, 'execution_results_collect', {**arguments, 'closure': closure}, windows)
 
 
-def _read_target(ctx, handoff_refs):
-    """The execution target (handle, resource, workspace, assignment) the held handoff record names: the old
-    ``job_progress_provider.targets.read_target(handoff_ref, scope)``.
-
-    BLOCKED-ON-JOB-SERVICE: the job record kind of the handoff (the row the launching child writes and returns; no
-    job record kind or work table is declared); wanted call: ``row = ctx.store.table(JOB_LEDGER).get(handoff_refs[0])``
-    then ``ctx.services['job_access'].read_target(row)`` (``JOB_LEDGER`` is the job library's work table, not
-    written yet)."""
-    raise NotImplementedError(
-        'BLOCKED-ON-JOB-SERVICE: the handoff record kind and its work table (JOB_LEDGER); wanted call: '
-        "row = ctx.store.table(JOB_LEDGER).get(handoff_refs[0]); target = ctx.services['job_access']"
-        '.read_target(row)')
-
-
-def _publish(ctx, body):
-    """Retain the result (the old ``_publish_result``): its artifact and an ``episode.execution_result`` source,
-    both produced by this unit; the references are the source and its artifact."""
-    artifact = ctx.store.artifact(canonical(body).encode('utf-8'), 'application/json')
-    payload = {'provider': RESULT_PROVIDER,
-               'accession': 'execution_result_' + digest([ctx.run_id, ctx.episode_id, body['operation_key']]),
-               'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
-               'version': body['version'], 'retrieved_at': body['observation']['observed_at']}
-    return [ctx.store.put('source', payload, origin='tool')['id'], artifact]
-
-
-async def acquire(tool, arguments, ctx):
-    """Observe the attempt once and read the selected windows; retain the result as records held as produced.
-
-    The old ``_execute_native_results``. An argument or reference error is an ``invalid`` outcome (the old
-    ``execute`` returned it so); an unavailable file is recorded in ``failures``. The old immutable intent,
-    observation, window and receipt files are machinery: the system journals the unit and the job-access calls are
-    idempotent on ``ctx.operation_key``."""
-    operation, requested = arguments['operation'], {path: tuple(window) for path, window in
-                                                    arguments['requested'].items()}
-    try:
-        validate_schema(operation, CATALOG[tool]['input_schema'])
-        if arguments['completed']:
-            raise ValueError('execution_results_assignment_already_completed')
-        windows = requested_windows(tool, operation, requested, ctx.settings['log_window_bytes'])
-        target = _read_target(ctx, arguments['handoff_refs'])
-    except (ValueError, TypeError, ContractError) as error:
-        return _outcome(code=str(error))
-    access = ctx.services['job_access']
-    observation = await access.observe_target(target, key=ctx.operation_key, resumed=ctx.resumed)
-    acquired, failures = [], []
-    for index, window in enumerate(windows):
-        try:
-            acquired.append(await access.read_file(target, **window, key=ctx.operation_key + ':file:' + str(index),
-                                                   resumed=ctx.resumed))
-        except (ValueError, OSError) as error:
-            failures.append({'path': window['path'],
-                             'code': str(error) if isinstance(error, ValueError) else 'execution_result_file_unavailable',
-                             'exception_type': type(error).__name__})
-    body = {'version': RESULT_VERSION, 'run_id': ctx.run_id, 'episode_id': ctx.episode_id,
-            'assignment': arguments['assignment'], 'handoff_refs': arguments['handoff_refs'],
-            'requested': arguments['requested'], 'operation_key': ctx.operation_key, 'tool_name': tool,
-            'arguments': operation, 'target': target, 'observation': observation, 'windows': acquired,
-            'failures': failures, 'acquisition_origin': deepcopy(NATIVE_RESULT_ORIGIN)}
-    validate_result_body(body, requested=requested)
-    return _outcome(body, references=_publish(ctx, body))
-
-
-async def execution_results_status(arguments, ctx):
-    return await acquire('execution_results_status', arguments, ctx)
-
-
-async def execution_results_collect(arguments, ctx):
-    return await acquire('execution_results_collect', arguments, ctx)
-
-
-async def execution_results_read(arguments, ctx):
-    return await acquire('execution_results_read', arguments, ctx)
+def execution_results_read(arguments, ctx):
+    """Retain one selected byte window of a fetched result file. A window outside the requested interval of its path
+    is an invalid outcome."""
+    window = arguments['window']
+    start, length = arguments['requested'][window['path']]
+    if window['offset'] < start or (length is not None and window['offset'] + window['limit'] > start + length):
+        return {'status': 'invalid', 'feedback': {'category': 'arguments_or_reference',
+                                                  'code': 'execution_results_selector_conflict'}}
+    return _retain(ctx, 'execution_results_read', arguments,
+                   [_window(ctx.store, window['path'], arguments['file'], window['offset'], window['limit'])])
 
 
 TOOLS = {'execution_results_status': execution_results_status,
          'execution_results_collect': execution_results_collect,
          'execution_results_read': execution_results_read}
 
+RESULT_INSTRUCTIONS = (
+    '\n\nThe context shows the job (its last observed state and whether its results were fetched), the requested '
+    'paths with their byte intervals, and the outcome of every operation so far. The job service fetches the result '
+    'files of a job only once the job has ended: before that it refuses with the failure code '
+    'results_not_available, nothing is acquired and the job stays open for a later acquisition. This episode does '
+    'not wait for a job. A fetched file is the file of the job\'s directory as it stood at the fetch, kept whole '
+    'with its digest; a window is a part of that one fetched file. The state of the job does not establish that '
+    'the bytes are the output of that attempt.'
+    '\n\nCredit. The credit is the credit unit times the fraction of the requested bytes that the retained windows '
+    'cover, each byte position counted once whatever the read boundaries, averaged over the requested paths. Bytes '
+    'an earlier acquisition of this job already retained, a status request, a refused fetch and a window of bytes '
+    'already retained earn nothing. When the results are not available, or when every requested byte is retained, '
+    'select execution_results_status.')
+ANSWER_INSTRUCTION = (
+    '\n\nAnswer with one selection: kind "tool", the name of one of these operations in tool and its operands in '
+    'arguments (an empty object for an operation without operands). You select the operation; code carries it out. '
+    'No operation ends the episode: it ends when further operations no longer earn credit.')
 
-def selection_schema():
-    """What the model answers with: one of the three tools and its arguments (the old action schema, tool kind
-    only)."""
+
+def operation_catalog(summary):
+    """The operations offered now: a status request always, the fetch while the job is not closed, and a further
+    window once files are fetched."""
+    catalog = [STATUS]
+    if not summary['job']['closed']:
+        catalog.append(COLLECT)
+    if summary['fetched_files']:
+        catalog.append({'name': 'execution_results_read',
+                        'description': 'Retain one further byte window (path, offset, limit) of a fetched file, '
+                                       'inside the requested interval of that path.',
+                        'input_schema': obj({'path': {'type': 'string', 'enum': sorted(summary['fetched_files'])},
+                                             'offset': _OFFSET, 'limit': _FILE_LIMIT})})
+    return catalog
+
+
+def selection_schema(catalog):
+    """What the model answers with: one of the offered operations and its operands."""
     return obj({'selection': {'anyOf': [
-        obj({'kind': {'const': 'tool'}, 'tool': {'const': name}, 'arguments': entry['input_schema']})
-        for name, entry in CATALOG.items()]}})
+        obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
+        for entry in catalog]}})
 
 
 def generation_schema(schema):
@@ -225,62 +182,55 @@ def decode_response(value, schema):
     return decode_strict_output(value, schema, open_records_as_text=False, argument_transport_error=TRANSPORT_ERROR)
 
 
-def instructions(*, knowledge, launch_library):
-    """The old composition (the goal text, then the tool-knowledge and launch-library texts when those libraries are
-    present in the context). The reasoning-commit paragraph (``reason`` is never permitted), the report-repair
-    paragraph, the decision-exchange wording and the wait and native-event paragraphs (the ``wait`` action, API
-    targets only) describe actions this episode does not have."""
-    text = GOAL
-    if knowledge is not None:
-        text += KNOWLEDGE_INSTRUCTIONS
-    if launch_library is not None:
-        text += LAUNCH_INSTRUCTIONS
-    return text
+def instructions(catalog):
+    """What the episode is for, what a result acquisition means and earns, and the operations available now."""
+    operations = ''.join('\n- ' + entry['name'] + ': ' + entry['description'] for entry in catalog)
+    return GOAL + RESULT_INSTRUCTIONS + '\n\nOperations available now:' + operations + ANSWER_INSTRUCTION
+
+
+def decision_context(summary, feedback, settings):
+    """What the decision needs: the job, what was requested, what was acquired so far and the credit."""
+    job, fetched = summary['job'], summary['fetched_files']
+    return {'feedback': feedback,
+            'job': {'handoff_ref': summary['assignment']['handoff_ref'], 'job': job['job'],
+                    'resource_id': job['resource_id'], 'kind': job['kind'], 'submitted_at': job['submitted_at'],
+                    'last_observed_state': job['last_observed_state'] or 'not_observed',
+                    'last_observed_at': job['last_observed_at'], 'results_fetched': job['closed']},
+            'requested': [{'path': path, 'offset': start, 'limit': length,
+                           'fetched_file_bytes': fetched[path]['bytes'] if path in fetched else None}
+                          for path, (start, length) in summary['requested'].items()],
+            'first_window_bytes': min(settings['log_window_bytes'], MEBIBYTE),
+            'acquisitions': summary['acquisitions'], 'complete': summary['completed'],
+            'credit': summary['credit_view']}
 
 
 def decide(summary, feedback, ctx):
-    """Ask the model for the next acquisition, shown the assignment, the target and its description, the selected
-    execution task, the progress so far, the last outcomes, the tools, the measured time and the yield table."""
-    access = ctx.services['job_access']
-    selector = summary['assignment']['selector']
-    knowledge_directory = ctx.settings.get('knowledge_library_directory')
-    launch_directory = ctx.settings.get('launch_instructions_directory')
-    knowledge = None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()
-    launch = None if launch_directory is None else LaunchInstructions(launch_directory).context()
-    context = {
-        'goal': GOAL,
-        'execution_assignment': summary['assignment'],
-        'execution_target': access.read('target', summary['handoff_refs'][0]),
-        'execution_target_description': access.read('target_description', summary['handoff_refs'][0], selector),
-        'selected_execution_task': {'version': 'selected_execution_task_v1',
-                                    'scientific_task': summary['scientific_task'],
-                                    'constraints': summary['assignment']['constraints'], 'selector': selector,
-                                    'requested_paths': summary['requested_paths']},
-        'execution_progress': {'result_refs': summary['result_refs'], 'completed': summary['completed'],
-                               'window_count': summary['window_count'], 'failure_count': summary['failure_count'],
-                               'observations': summary['observation_states'], 'own_results': summary['own']},
-        'last_local_outcome': None if not summary['actions'] else summary['actions'][-1],
-        'actions': summary['actions'], 'tools': operation_catalog(),
-        'time_accounting': time_accounting(ctx.clock.progress_time)}
-    context = extend_context(context, {'feedback': feedback, 'action_yields': summary['action_yields'],
-                                       'tool_knowledge': knowledge, 'launch_instruction_library': launch},
-                             conflict='initial_binding_context_field_conflict')
-    return ModelRequest('REASONING', instructions(knowledge=knowledge, launch_library=launch), context,
-                        generation_schema(selection_schema()))
+    """One operation: the model selects it from the job, what was requested, what was acquired so far and the
+    credit."""
+    catalog = operation_catalog(summary)
+    return ModelRequest('REASONING', instructions(catalog), decision_context(summary, feedback, ctx.settings),
+                        generation_schema(selection_schema(catalog)))
 
 
 def action(response, summary, records, ctx):
-    """The one operation the model chose, or a rejection (no unit). An answer that does not fit the schema is
-    invalid. The tool travels with the assignment, the handoff, the requested windows and whether the acquisition
-    is already complete, because a tool is handed no summary; an unusable window (outside the requested paths and
-    intervals) is an ``invalid`` outcome of the unit, as the old ``execute`` returned it."""
-    schema = selection_schema()
+    """The one operation the answer selects, or a rejection (no unit): it names an offered operation with operands
+    that fit its schema. Every operand of the tool call that is not the model's own choice is taken from the
+    summary, because a tool is handed no summary; a window outside the requested interval is an ``invalid``
+    outcome of the unit."""
+    schema = selection_schema(operation_catalog(summary))
     try:
         value = decode_response(response, schema)
         Draft202012Validator(schema).validate(value)
         selection = value['selection']
     except (ValueError, KeyError, TypeError, ValidationError, ContractError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
-    return ToolCall(selection['tool'], {'operation': selection['arguments'], 'assignment': summary['assignment'],
-                                        'handoff_refs': summary['handoff_refs'], 'requested': summary['requested'],
-                                        'completed': summary['completed']})
+    tool, assignment = selection['tool'], summary['assignment']
+    if tool == 'execution_results_status':
+        return ToolCall(tool, {'handoff_ref': assignment['handoff_ref']})
+    if tool == 'execution_results_collect':
+        return ToolCall(tool, {'assignment': assignment, 'requested': summary['requested'],
+                               'names': summary['result_names']})
+    return ToolCall(tool, {'window': selection['arguments'],
+                           'file': summary['fetched_files'][selection['arguments']['path']],
+                           'closure': {'ref': summary['job']['closure_ref'], 'at': summary['job']['closed_at']},
+                           'assignment': assignment, 'requested': summary['requested']})

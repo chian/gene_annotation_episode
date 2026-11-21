@@ -57,8 +57,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.laun
     INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.evolutionary_history_evidence.process_options import (
     EvolutionaryHistoryEvidenceLibrary, catalog as process_catalog)
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.evolutionary_history_evidence.action_transport import (
-    decode_response, generation_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.strict_output import (
+    decode_strict_output, strict_output_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.construction_records import (
@@ -84,6 +84,9 @@ CHILD_SLOTS = {'evolutionary_history_evidence': 'evolutionary_history_evidence',
                'literature': _PREFIX + 'published_evidence_assessment'}
 SERVICES = ()
 MODEL_ROLE = 'REASONING'
+# How the action schema travels to the model: the model endpoint takes no open object, so a record whose fields the
+# schema leaves open (a child's ``scope`` and ``initial_report``) travels as JSON text and is decoded here.
+TRANSPORT = {'open_records_as_text': True, 'argument_transport_error': 'a104_tool_argument_transport_unsupported'}
 # The old ``allowed_child_roles``: the children the model is offered.
 OFFERED_CHILDREN = ('evolutionary_history_evidence', 'hpc')
 # The old ``_COMMON_TOOLS`` (a selected tool may not reuse one of these names or ``process.revise``).
@@ -505,11 +508,14 @@ def _child_option(slot, assignment_schema):
 
 
 def decision_schema(summary, settings):
-    """The action schema of this decision: every offered action, built from the pinned selection and the settings."""
-    commit = summary['reasoning_schema']
-    options = [{**obj({'kind': {'type': 'string', 'const': 'reason'}, 'commit': commit,
-                       'evidence_processing': obj({'kind': {'enum': ['no_applicable_evidence']}})},
-                      required=['kind', 'commit']),
+    """The action schema of this decision: every offered action, built from the pinned selection and the settings.
+    The committed interpretation is the tool ``reason``: the arguments of a tool whose schema is composed travel as
+    JSON text, and the Store's reasoning schema sent as output schema itself has more enum values than the model
+    endpoint takes in one schema."""
+    commit = obj({'commit': summary['reasoning_schema'],
+                  'evidence_processing': obj({'kind': {'enum': ['no_applicable_evidence']}})}, required=['commit'])
+    options = [{**obj({'kind': {'type': 'string', 'const': 'tool'}, 'tool': {'type': 'string', 'const': 'reason'},
+                       'arguments': commit}),
                 'description': REASONING_COMMIT_REQUIREMENT},
                ]
     entries = [*selected_tool_entries(summary, settings), *_common_entries(settings), *phylogeny_entries()]
@@ -572,21 +578,21 @@ def decide(summary, feedback, ctx):
     instructions = compose_instructions(replaces_default=replaces_default,
                                         tool_knowledge='tool_knowledge' in context,
                                         launch_library='launch_instruction_library' in context)
-    return ModelRequest(MODEL_ROLE, instructions, context, generation_schema(schema))
+    return ModelRequest(MODEL_ROLE, instructions, context, strict_output_schema(schema, **TRANSPORT))
 
 
 def _unit(selection, summary, records):
     kind = selection['kind']
-    if kind == 'reason':
-        payload = selection['commit']
-        commit_schema = summary['reasoning_schema']
-        if (set(commit_schema.get('required', commit_schema['properties'])) <= set(payload)
-                <= set(commit_schema['properties']) and all(value == [] for value in payload.values())
-                and selection.get('evidence_processing', {}).get('kind') != 'no_applicable_evidence'):
-            raise ValueError('empty_reasoning_commit')
-        return ToolCall('reason', {'commit': payload, 'scope': summary['scope']})
     if kind == 'tool':
         name, arguments = selection['tool'], selection['arguments']
+        if name == 'reason':
+            payload = arguments['commit']
+            commit_schema = summary['reasoning_schema']
+            if (set(commit_schema.get('required', commit_schema['properties'])) <= set(payload)
+                    <= set(commit_schema['properties']) and all(value == [] for value in payload.values())
+                    and arguments.get('evidence_processing', {}).get('kind') != 'no_applicable_evidence'):
+                raise ValueError('empty_reasoning_commit')
+            return ToolCall('reason', {'commit': payload, 'scope': summary['scope']})
         if name in PROCESS_LOOKUPS:
             return ToolCall('process_lookup', {'name': name, 'arguments': arguments})
         if name in KNOWLEDGE_LOOKUPS:
@@ -610,7 +616,7 @@ def action(response, summary, records, ctx):
     try:
         if not isinstance(response, dict) or set(response) != {'selection'}:
             raise ValueError('a104_decision_response_must_be_exactly_selection')
-        selection = decode_response(dict(response), schema)['selection']
+        selection = decode_strict_output(dict(response), schema, **TRANSPORT)['selection']
         Draft202012Validator(schema['properties']['selection']).validate(selection)
         return _unit(selection, summary, records)
     except (ValueError, KeyError, TypeError, ValidationError) as error:

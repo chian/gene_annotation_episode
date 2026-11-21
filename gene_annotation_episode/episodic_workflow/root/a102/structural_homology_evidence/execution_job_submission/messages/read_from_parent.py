@@ -8,7 +8,7 @@ least one: an API resource uses the API service's request form, a local or HPC r
 library).
 
 New fields (listed in the carry-over record as ``new field``): ``scope`` (the old context scope: the children's
-assignments and the typed reasoning commit name it), ``input_refs`` (the records the requests name, which the old
+assignments name it), ``input_refs`` (the records the requests name, which the old
 ``initial_references`` found: passed in custody), ``handoff_unit`` (the old ``configuration.handoff_unit``, which
 the credit needs and ``credit`` has no settings), ``already_handed_off_resource_ids`` (the resource ids the old
 ``initial_known_record_refs`` already held a usable handoff for) and ``scientific_task`` (the old

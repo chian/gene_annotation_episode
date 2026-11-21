@@ -1,389 +1,209 @@
-"""The task: choose which actual execution approach is productive for the assigned job, one unit at a time.
+"""The task: choose the resource the assigned work is launched on and commission the launch, one action per
+decision.
 
-Carried from the old ``task.py``, ``task_decision.py``, ``instructions.py``, ``decision_inputs.py``,
-``decision_context.py``, ``action_contract_feedback.py``, ``operations.py`` (``execute``), ``operation_catalog.py``
-(``catalog``), ``resource_inspection.py`` (``inspect_resource``), ``handoff_check.py`` (``check_selected_handoff``),
-``resource_selection.py`` (``capabilities``, ``_adapter``, ``_permitted``), ``child_commissioning.py``
-(``child_roles``, ``allowed_children``), ``resource_contracts.py`` (``_failure``, ``_outcome``,
-``_availability_failure``), ``episode.py`` (``permitted_common_actions``), ``goal.py`` (``instructions``) and
-``waiting.py`` (the wait).
+The model chooses one action of a fixed set and code runs it. It writes no command and no assignment: the work is
+the record the assignment names, and the commission of a resource child is written by ``msg_to_child``.
 
-Every decision is a model request. The model selects one unit each turn: ``resource.capabilities``,
-``resource.inspect`` or ``resource.check_handoff`` (the three tools of the old catalogue), a typed reasoning
-commitment (``reason``), a wait on native events (``wait``), a lookup into the tool-knowledge or
-launch-instruction library, or the commission of a resource child (``child``, one of the three slots offered by
-``allowed_children``: a slot is offered only when some capability of its kind is bound to an adapter, has tool
-names, is not unavailable and is permitted by the assignment's constraints). A commissioned child completes
-inside its unit; the old ``wait`` on a ``pending_child_`` handle and ``redeliver_report`` are not carried. The task
-always offers a unit and never ends the Episode; only the yield controller does. This file is a private copy: it
-imports nothing from another episode.
+| Action | Offered | What code does |
+|---|---|---|
+| ``inspect_resource`` (``resource_id``: a declared resource) | always | reads the resource through the resource adapter service: its declared availability, whether it is bound, and the facts of its adapter. An unbound, unavailable, unauthenticated or unknown resource is a failed reading with its own code |
+| ``launch_work`` (``resource_id``: a launchable resource) | until this Episode holds a handoff row | commissions the resource child of the resource's kind (``launch_api``, ``launch_local``, ``launch_hpc``), which launches the work once and returns the handoff and check rows in custody |
+| ``check_handoff`` (``handoff_ref``: a held handoff row) | once a handoff row is held | the receiving check through the adapter the handoff's resource selects: ``await check_handoff(ctx, {'resource_selection': {'resource_id'}, 'handoff_ref'})``, written as a check row in custody |
+| ``knowledge_lookup``, ``launch_instruction_lookup`` (``operation``: one of the library's operations; ``arguments``: the JSON text of that operation's arguments) | always | one lookup of the frozen tool-knowledge or launch-instruction library through the ``instruction_libraries`` service (the old lookups). They earn nothing |
 
-BLOCKED-ON-SERVICES. The old resource adapters (``resource_adapters``, explicit caller bindings keyed by
-``resource_id``; the A102 structural adapters were in the deleted shared root) are the service
-``resource_adapter``; no library module wraps it. The members this file calls on it (closed JSON in and out):
-``declared_capabilities()``, ``bound_resource_ids()``, ``adapter_capabilities()``, ``can_check_handoff(resource_id)``,
-``check_handoff(handoff, held, key=)`` (may be a coroutine), ``facts(assignment)`` (the handoffs and facts of
-EVERY configured adapter), ``credit_view(assignment, held_refs)`` and ``decision_context(assignment)``. Operations
-must be idempotent on the key. The native event ledger is the service ``native_events`` (``NativeEventLedger``;
-nothing wraps it as a service yet): ``validate_event_targets``, ``wait_events`` and the read member
-``targets(assignment)``."""
-import inspect
+A resource is launchable when it is bound to an adapter, has tools, is not declared unavailable, is of a kind the
+assignment permits and is the fixed resource when the assignment fixes one (the old ``allowed_children`` and
+``_permitted``). The resource service is the run's ``ResourceAdapters`` (declared as ``resource_adapter``):
+``decide`` and ``action`` read ``declared_capabilities``, ``adapter_capabilities`` and ``bound_resource_ids``
+through its read handle, so the system records them with the decision; ``decide`` reads the libraries' listing
+and operations the same way. The episode performs an execution act (it chooses a resource and commissions a
+launch); it reads no source and weighs no evidence, so it has no reasoning commit. The task always offers a unit and
+never ends the Episode: its yield controller does."""
 import json
 
 from jsonschema import Draft202012Validator, ValidationError
 
 from episode_runtime import ChildCall, ModelRequest, Rejected, ToolCall
 
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.instruction_spans import replace_span
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (
-    INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions, catalog as launch_catalog)
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.structural_homology_evidence.runtime_prompt import (
-    INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.waiting import selected_wait
+    catalog as launch_catalog)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.strict_output import (
-    decode_strict_output, strict_output_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resource_records import (
-    CAPABILITY_SCHEMA, HANDOFF_SCHEMA, RESOURCE_ROLES, SELECTION_SCHEMA, _string, _validate, obj)
-from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
-    INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge, catalog as knowledge_catalog)
+    catalog as knowledge_catalog)
 
-from .goal import GOAL
+from .goal import BINDING_PATH
 
-CHILD_SLOTS = {'launch_api': 'structural_homology_evidence/resource_work_submission/api_resource_work_execution',
-               'launch_local': 'structural_homology_evidence/resource_work_submission/local_resource_work_execution',
-               'launch_hpc': 'structural_homology_evidence/resource_work_submission/hpc_resource_work_execution'}
-SERVICES = ('resource_adapter', 'native_events')
+CHILD_SLOTS = {'launch_api': BINDING_PATH + '/api_resource_work_execution',
+               'launch_local': BINDING_PATH + '/local_resource_work_execution',
+               'launch_hpc': BINDING_PATH + '/hpc_resource_work_execution'}
+SERVICES = ('resource_adapter', 'instruction_libraries')
 ADAPTER = 'resource_adapter'
-EVENTS = 'native_events'
-# What each child declares as selectable beyond the facts every commission selects (see msg_to_child.py).
-EXTRA_FACTS = {'launch_api': ('adapter_facts',)}
+LIBRARIES = 'instruction_libraries'
+SLOT_OF_KIND = {'api': 'launch_api', 'local': 'launch_local', 'hpc': 'launch_hpc'}
+LOOKUPS = {'knowledge_lookup': knowledge_catalog, 'launch_instruction_lookup': launch_catalog}
+AVAILABILITY_FAILURE = {'unavailable': 'resource_unavailable',
+                        'authentication_required': 'resource_authentication_required',
+                        'unknown': 'resource_availability_unknown'}
 
-CATALOG = [
-    {'name': 'resource.capabilities',
-     'description': 'Read actual capability availability and configured resource information; this does not '
-                    'select or submit work.',
-     'input_schema': obj({})},
-    {'name': 'resource.inspect',
-     'description': 'Inspect one declared resource and its actual binding. Unavailable, unknown, '
-                    'unauthenticated and unbound resources return distinct structured failures; this does not '
-                    'submit work.',
-     'input_schema': obj({'resource_id': _string()})},
-    {'name': 'resource.check_handoff',
-     'description': 'Exercise the configured receiving interfaces of an explicitly supplied returned handoff. No '
-                    'submission or resource substitution.',
-     'input_schema': obj({'handoff': HANDOFF_SCHEMA})},
-]
-OPEN_RECORD = {'type': 'object'}
-HISTORY = ('Your own earlier selected actions and their exact outcomes are in completed_action_reports; reading '
-           'them executes and credits no work again.\n')
-CHILDREN = ('\nTo use a resource child, select a child action naming its slot (one of child_options), an '
-            'objective, the chosen resource_selection taken from resource_capabilities, and an initial_report. A '
-            'commissioned child completes inside that unit; its finding and execution handoffs are in the '
-            'outcome. Its execution handoffs are the facts this episode returns.\n')
-NATIVE_EVENTS = ('\nThe separate native_event_targets input names native notification targets assigned or actually '
-                 'received by this episode. A target is registration metadata, not proof that submission succeeded. '
-                 'Its state_changed event means the original service exit receipt was committed; the service may '
-                 'still be closing, so this does not establish result readiness or a child episode return. '
-                 'after_cursor records an event cursor actually received, initially zero. Select your own wait '
-                 'condition and subsequent status/monitor/result work. No event probability, gain or scientific '
-                 'credit follows from registration or passing time alone. Waiting reports readiness only and '
-                 'earns no credit.')
-TOOL_OF = {'resource.capabilities': 'resource_capabilities', 'resource.inspect': 'resource_inspect',
-           'resource.check_handoff': 'resource_check_handoff'}
-
-TRANSPORT = {'open_records_as_text': True, 'argument_transport_error': 'a102_tool_argument_transport_unsupported'}
-
-
-def generation_schema(schema):
-    """The provider's strict structured-output form of this episode's action schema."""
-    return strict_output_schema(schema, **TRANSPORT)
+INSTRUCTIONS = (
+    'You decide the next action of one episode of a gene annotation workflow: the submission of one piece of work '
+    'to a compute resource.\n'
+    'PURPOSE. The parent defined a piece of work as a record. Choose the resource it is launched on and commission '
+    'the launch there, until a usable handoff exists: a launched job whose handoff a receiving check has '
+    'confirmed. The job runs on after this episode: its results are acquired elsewhere.\n'
+    'ASSIGNED WORK. context.work_ref is the record that defines the work; code passes it to the launch, you never '
+    'write a command. context.resources lists every declared resource: its kind, its declared availability, '
+    'whether it is bound in this run, and whether the work may be launched on it (bound, not unavailable, of a '
+    'kind the parent permits). context.launched_jobs lists each job launched for this work, by its handoff '
+    'record, with the state its latest check saw.\n'
+    'ACTIONS. Answer with exactly one of the actions offered by the answer schema. Code executes it and you are '
+    'asked again; what each earlier action came to is in context.actions_so_far, what each launch commission '
+    'returned in context.commissions, what each reading returned in context.inspected, and what each lookup '
+    'returned in context.lookup_results.\n'
+    '- inspect_resource: read one declared resource, named by resource_id: its availability, whether it is bound, '
+    'and what its interface says of it.\n'
+    '- launch_work: commission the launch of the assigned work on one launchable resource, named by resource_id. '
+    'The resource child of that kind launches the work once and returns at handoff. Offered until a job is handed '
+    'off.\n'
+    '- check_handoff: one status request for a launched job, named by its handoff_ref: the receiving check of the '
+    'handoff.\n'
+    '- knowledge_lookup, launch_instruction_lookup: one operation of the frozen tool-knowledge library or of the '
+    'frozen launch-instruction library (context.libraries). operation is one of context.library_operations; '
+    'arguments is the JSON text of its arguments, valid against that operation\'s input_schema. The libraries '
+    'describe tools and resources; they select nothing and are not scientific evidence.\n'
+    'CREDIT. context.credit lists what earns credit and whether it is earned: holding the handoff record of the '
+    'launched work, and holding a receiving check that found the job in a known state. Nothing else earns '
+    'credit: not a reading or a lookup. You do not end the episode: it is stopped when both '
+    'are earned, or when further actions are not expected to earn more.')
 
 
-def decode_response(response, schema):
-    return decode_strict_output(response, schema, **TRANSPORT)
+def capabilities_of(declared, adapter_capabilities):
+    """Every declared capability by resource id; a bound adapter's own capability replaces its declaration."""
+    return {**{item['resource_id']: item for item in declared}, **adapter_capabilities}
 
 
-def _failure(code, references=()):
-    return {'code': code, 'affected_refs': list(references), 'diagnostic_ref': None, 'partial_record_refs': []}
+def launchable(summary, capabilities, bound):
+    """The resources the work may be launched on (see the module docstring)."""
+    return [resource_id for resource_id, capability in capabilities.items()
+            if resource_id in bound and capability['tool_names'] and capability['availability'] != 'unavailable'
+            and capability['kind'] in summary['allowed_kinds']
+            and summary['resource_id'] in (None, resource_id)]
 
 
-def _outcome(value=None, failure=None, record_refs=()):
-    return {'status': 'failed' if failure else 'completed', 'record_refs': list(record_refs),
-            'changed_record_refs': [], 'result': value, 'feedback': failure}
-
-
-def _availability_failure(capability):
-    return {'unavailable': 'resource_unavailable', 'authentication_required': 'resource_authentication_required',
-            'unknown': 'resource_availability_unknown'}.get(capability['availability'])
-
-
-def _permitted(assignment, capability):
-    constraints = assignment.get('constraints', {})
-    selection = assignment.get('resource_selection')
-    return ((selection is None or (capability['resource_id'] == selection['resource_id']
-                                   and capability['kind'] == selection['kind']))
-            and ('allowed_resource_ids' not in constraints or capability['resource_id'] in constraints['allowed_resource_ids'])
-            and ('allowed_kinds' not in constraints or capability['kind'] in constraints['allowed_kinds'])
-            and ('resource_id' not in constraints or capability['resource_id'] == constraints['resource_id'])
-            and ('kind' not in constraints or capability['kind'] == constraints['kind']))
-
-
-def capabilities_of(declared, adapter_capabilities, bound_ids):
-    """The old ``capabilities`` (called without a context): every declared capability, accurately, but never the
-    tools of an unbound one; each bound adapter's own capability replaces its declaration."""
-    values = {}
-    for capability in declared:
-        value = _validate(capability, CAPABILITY_SCHEMA)
-        if value['resource_id'] not in bound_ids:
-            value['tool_names'] = []
-        values[value['resource_id']] = value
-    for capability in adapter_capabilities:
-        value = _validate(capability, CAPABILITY_SCHEMA)
-        values[value['resource_id']] = value
-    return list(values.values())
-
-
-def allowed_children(assignment, capabilities, bound_ids):
-    """The old ``allowed_children`` of the ``launch`` role: a slot is offered only when some capability of its kind
-    is bound to a configured adapter, has tool names, is not unavailable and is permitted by the assignment."""
-    return [slot for slot, kind in RESOURCE_ROLES.items()
-            if any(value['kind'] == kind and value['resource_id'] in bound_ids and value['tool_names']
-                   and value['availability'] != 'unavailable' and _permitted(assignment, value)
-                   for value in capabilities)]
-
-
-async def _awaited(value):
-    return await value if inspect.isawaitable(value) else value
-
-
-def _read_capabilities(adapter):
-    bound = adapter.read('bound_resource_ids')
-    return capabilities_of(adapter.read('declared_capabilities'), adapter.read('adapter_capabilities'),
-                           set(bound)), bound
-
-
-def _capabilities(adapter):
-    """The capabilities as a tool sees them (the tool is handed the service itself)."""
-    bound = adapter.bound_resource_ids()
-    return capabilities_of(adapter.declared_capabilities(), adapter.adapter_capabilities(), set(bound)), bound
-
-
-def _measured(adapter, assignment, ctx):
-    """The adapters' credit view after an operation (credit has no services: the number rides in the outcome)."""
-    view = adapter.credit_view(assignment, list(ctx.store.refs()))
-    if 'credit' not in view:
-        raise ValueError('resource_credit_view_requires_credit')
-    return view['credit']
-
-
-def resource_capabilities(arguments, ctx):
-    adapter = ctx.services[ADAPTER]
-    capabilities, _ = _capabilities(adapter)
-    return {**_outcome({'capabilities': capabilities}),
-            'adapter_credit': _measured(adapter, arguments['assignment'], ctx)}
-
-
-def resource_inspect(arguments, ctx):
-    """The old ``inspect_resource``: distinct failures for an unbound, unavailable, unauthenticated or unknown
-    declared resource; it does not submit."""
-    adapter = ctx.services[ADAPTER]
-    reference = arguments['resource_id']
-    capabilities, bound = _capabilities(adapter)
-    capability = next((value for value in capabilities if value['resource_id'] == reference), None)
-    if capability is None:
-        reply = _outcome(failure=_failure('resource_not_bound', [reference]))
-    else:
-        code = _availability_failure(capability)
-        if code is None and reference not in bound:
-            code = 'resource_not_bound'
-        reply = _outcome({'capability': capability}, _failure(code, [reference]) if code else None)
-    return {**reply, 'adapter_credit': _measured(adapter, arguments['assignment'], ctx)}
-
-
-async def resource_check_handoff(arguments, ctx):
-    """The old ``check_selected_handoff``: exercise the receiving interface of an explicitly supplied handoff
-    through the adapter that owns it. No submission and no substitution. The handoff's own check records must be
-    held (a model-named record is asked with ``holds`` first); the adapters' facts, the handoff records written
-    through custody and the credit view after the check are the outcome."""
-    adapter = ctx.services[ADAPTER]
-    assignment, handoff = arguments['assignment'], arguments['handoff']
-    handle = handoff['execution_handle']
-    resource_id = handoff['resource_selection']['resource_id']
-    if (any(not ctx.store.holds(ref) for ref in handoff['check_record_refs'])
-            or resource_id not in adapter.bound_resource_ids()):
-        reply = _outcome(failure=_failure('invalid_resource_handoff', [handle]))
-    elif not adapter.can_check_handoff(resource_id):
-        reply = _outcome(failure=_failure('receiving_interface_unavailable'))
-    else:
-        held = {ref: ctx.store.get(ref) for ref in arguments['held_refs']}
-        try:
-            reply = await _awaited(adapter.check_handoff(handoff, held, key=ctx.operation_key))
-        except (ValueError, KeyError, OSError) as error:
-            if str(error) == 'resource_information_identity_conflict':
-                raise
-            reply = _outcome(failure=_failure('invalid_resource_handoff', [handle]))
-    facts = adapter.facts(assignment)
-    handoff_refs = [ctx.store.artifact(json.dumps(item, sort_keys=True), 'application/json')
-                    for item in facts.get('execution_handoffs', [])]
-    return {**reply, 'facts': facts, 'handoff_refs': handoff_refs,
-            'adapter_credit': _measured(adapter, assignment, ctx)}
-
-
-def reason(arguments, ctx):
-    """A typed reasoning commitment (old ``reason`` kind): committed through custody under this unit's key."""
-    return ctx.store.commit_reasoning(arguments['commit'], arguments['scope'], ctx.operation_key)
-
-
-async def wait(arguments, ctx):
-    """Wait for selected native job events (old ``waiting.py``). It earns no credit by itself."""
-    return await selected_wait(ctx.services[EVENTS], arguments['condition'])
-
-
-def knowledge_lookup(arguments, ctx):
-    return _outcome(ToolKnowledge(ctx.settings['tool_knowledge_directory']).execute(arguments['operation'],
-                                                                                   arguments['arguments']))
-
-
-def launch_instruction_lookup(arguments, ctx):
-    return _outcome(LaunchInstructions(ctx.settings['launch_instructions_directory']).execute(
-        arguments['operation'], arguments['arguments']))
-
-
-TOOLS = {'resource_capabilities': resource_capabilities, 'resource_inspect': resource_inspect,
-         'resource_check_handoff': resource_check_handoff, 'reason': reason, 'wait': wait,
-         'knowledge_lookup': knowledge_lookup, 'launch_instruction_lookup': launch_instruction_lookup}
+def _read(adapter):
+    capabilities = capabilities_of(adapter.read('declared_capabilities'), adapter.read('adapter_capabilities'))
+    return capabilities, adapter.read('bound_resource_ids')
 
 
 def _branch(properties):
     return {'type': 'object', 'additionalProperties': False, 'required': list(properties), 'properties': properties}
 
 
-def _child_branch(slot):
-    arguments = {'objective': {'type': 'string', 'minLength': 1}, 'resource_selection': SELECTION_SCHEMA,
-                 'initial_report': OPEN_RECORD}
-    if slot in EXTRA_FACTS:
-        arguments['facts'] = {'type': 'array', 'items': {'type': 'string', 'enum': list(EXTRA_FACTS[slot])}}
-    return _branch({'kind': {'type': 'string', 'const': 'child'}, 'slot': {'type': 'string', 'const': slot},
-                    'arguments': _branch(arguments)})
+def _one(value):
+    return {'type': 'string', 'enum': [value]}
 
 
-def _schema(slots):
-    branches = [_branch({'kind': {'type': 'string', 'const': 'tool'},
-                         'tool': {'type': 'string', 'const': item['name']}, 'arguments': item['input_schema']})
-                for item in CATALOG]
-    branches.append(_branch({'kind': {'type': 'string', 'const': 'reason'}, 'commit': OPEN_RECORD}))
-    branches[-1]['properties']['evidence_processing'] = {'type': 'object', 'properties': {'kind': {'type': 'string'}}}
-    branches.append(_branch({'kind': {'type': 'string', 'const': 'wait'}, 'condition': OPEN_RECORD}))
-    for name, library in (('knowledge_lookup', knowledge_catalog), ('launch_instruction_lookup', launch_catalog)):
-        branches.append(_branch({'kind': {'type': 'string', 'const': 'tool'},
-                                 'tool': {'type': 'string', 'const': name},
-                                 'arguments': _branch({'operation': {'type': 'string',
-                                                                     'enum': [item['name'] for item in library()]},
-                                                       'arguments': OPEN_RECORD})}))
-    branches.extend(_child_branch(slot) for slot in slots)
-    return {'type': 'object', 'additionalProperties': False, 'required': ['selection'],
-            'properties': {'selection': {'anyOf': branches}}}
-
-
-def _instructions():
-    text = replace_span(INSTRUCTIONS, 'A commissioned child returns ONLY', 'Do not execute native provider tools.',
-                        HISTORY + CHILDREN)
-    return (text + '\n' + GOAL + '\n' + REASONING_COMMIT_REQUIREMENT + KNOWLEDGE_INSTRUCTIONS
-            + LAUNCH_INSTRUCTIONS + NATIVE_EVENTS)
-
-
-def _context(summary, feedback, ctx, capabilities, slots):
-    """The old decision state and fresh decision inputs that a resource launch episode used."""
-    adapter = ctx.services[ADAPTER]
-    assignment = summary['assignment']
-    context = {'goal': GOAL, 'role': summary['role'], 'scope': summary['scope'], 'assignment': assignment,
-               'resource_capabilities': capabilities,
-               'resource_tool_estimates': adapter.read('decision_context', assignment).get('resource_tool_estimates', []),
-               'child_options': [{'slot': slot, 'kind': RESOURCE_ROLES[slot]} for slot in slots],
-               'current_credit': summary['adapter_credit'], 'action_yields': summary['action_yields'],
-               'last_local_outcome': summary['last_local_outcome'], 'feedback': summary['feedback'],
-               'completed_action_reports': summary['completed_action_reports'],
-               'time_accounting': time_accounting(ctx.clock.progress_time),
-               'native_event_targets': ctx.services[EVENTS].read('targets', assignment),
-               'tool_knowledge': ToolKnowledge(ctx.settings['tool_knowledge_directory']).context(),
-               'launch_instruction_library': LaunchInstructions(ctx.settings['launch_instructions_directory']).context(),
-               'rejection_feedback': feedback}
-    selected = LaunchInstructions(ctx.settings['launch_instructions_directory']).materialize(
-        assignment['launch_instructions'])
-    if selected is not None:
-        context['selected_launch_instructions'] = selected
-    return context
-
-
-def _offered(summary, ctx):
-    capabilities, bound = _read_capabilities(ctx.services[ADAPTER])
-    return capabilities, allowed_children(summary['assignment'], capabilities, bound)
+def answer_schema(summary, capabilities, bound):
+    """The action format: the actions offered where the Episode stands, each with its arguments."""
+    branches = [_branch({'action': _one('inspect_resource'),
+                         'resource_id': {'type': 'string', 'enum': list(capabilities)}})]
+    held = [job['handoff_ref'] for job in summary['jobs']]
+    offered = launchable(summary, capabilities, bound)
+    if held:
+        branches.append(_branch({'action': _one('check_handoff'), 'handoff_ref': {'type': 'string', 'enum': held}}))
+    elif offered:
+        branches.append(_branch({'action': _one('launch_work'),
+                                 'resource_id': {'type': 'string', 'enum': offered}}))
+    for name, catalog in LOOKUPS.items():
+        branches.append(_branch({'action': _one(name),
+                                 'operation': {'type': 'string', 'enum': [item['name'] for item in catalog()]},
+                                 'arguments': {'type': 'string'}}))
+    return _branch({'selection': {'anyOf': branches}})
 
 
 def decide(summary, feedback, ctx):
-    capabilities, slots = _offered(summary, ctx)
-    return ModelRequest('REASONING', _instructions(), _context(summary, feedback, ctx, capabilities, slots),
-                        generation_schema(_schema(slots)))
+    capabilities, bound = _read(ctx.services[ADAPTER])
+    offered = launchable(summary, capabilities, bound)
+    units = summary['launch_units']
+    libraries = ctx.services[LIBRARIES]
+    context = {'work_ref': summary['work_ref'],
+               'resources': [{'resource_id': resource_id, 'kind': capability['kind'],
+                              'availability': capability['availability'], 'bound': resource_id in bound,
+                              'launchable': resource_id in offered}
+                             for resource_id, capability in capabilities.items()],
+               'inspected': summary['inspections'],
+               'launched_jobs': [{name: job[name] for name in ('handoff_ref', 'resource_id', 'submitted_at',
+                                                              'state', 'result_available')}
+                                 for job in summary['jobs']],
+               'commissions': summary['commissions'], 'actions_so_far': summary['actions'],
+               'credit': [{'for': 'the handoff record of the launched work', 'credit': units['handoff_unit'],
+                           'earned': summary['handoff_held']},
+                          {'for': 'a receiving check that found the job in a known state',
+                           'credit': units['check_unit'], 'earned': summary['usable_handoff_held']}],
+               'libraries': libraries.read('context'), 'library_operations': libraries.read('catalog'),
+               'lookup_results': summary['lookups']}
+    if feedback is not None:
+        context['rejected_answer'] = feedback
+    return ModelRequest('REASONING', INSTRUCTIONS, context, answer_schema(summary, capabilities, bound))
 
 
-def _named_refs(value):
-    """The record references a model-built value names (``ref``, ``..._ref``, ``..._refs``), except the
-    ``@alias`` references of a reasoning commit to its own rows."""
-    found = []
-    if isinstance(value, dict):
-        for name, child in value.items():
-            if name == 'ref' or name.endswith('_ref'):
-                if not (isinstance(child, str) and child.startswith('@')):
-                    found.append(child)
-            elif name.endswith('_refs'):
-                found.extend(ref for ref in child if not (isinstance(ref, str) and ref.startswith('@')))
-            else:
-                found.extend(_named_refs(child))
-    elif isinstance(value, list):
-        for child in value:
-            found.extend(_named_refs(child))
-    return found
-
-
-def _empty_commit(selection, commit_schema):
-    payload = selection['commit']
-    return (set(commit_schema.get('required', commit_schema['properties'])) <= set(payload)
-            <= set(commit_schema['properties']) and all(value == [] for value in payload.values())
-            and selection.get('evidence_processing', {}).get('kind') != 'no_applicable_evidence')
+def selected_action(response, summary, capabilities, bound):
+    """The one action an answer selects, or its rejection: the answer must be one of the actions offered where the
+    Episode stands, with arguments that fit their format (for a lookup: JSON text of an object)."""
+    try:
+        Draft202012Validator(answer_schema(summary, capabilities, bound)).validate(response)
+        selection = response['selection']
+        if selection['action'] in LOOKUPS:
+            given = json.loads(selection['arguments'])
+            Draft202012Validator({'type': 'object'}).validate(given)
+    except (ValueError, ValidationError) as error:
+        raise Rejected(rejection_feedback(error, category='action_contract')) from error
+    if selection['action'] in LOOKUPS:
+        return ToolCall(selection['action'], {'operation': selection['operation'], 'arguments': given})
+    if selection['action'] == 'launch_work':
+        kind = capabilities[selection['resource_id']]['kind']
+        return ChildCall(SLOT_OF_KIND[kind], {'resource_id': selection['resource_id'], 'kind': kind})
+    if selection['action'] == 'check_handoff':
+        job = next(job for job in summary['jobs'] if job['handoff_ref'] == selection['handoff_ref'])
+        return ToolCall('check_handoff', {'resource_selection': {'resource_id': job['resource_id']},
+                                          'handoff_ref': job['handoff_ref']})
+    return ToolCall('inspect_resource', {'resource_id': selection['resource_id']})
 
 
 def action(response, summary, records, ctx):
-    _, slots = _offered(summary, ctx)
-    schema = _schema(slots)
-    try:
-        selection = decode_response(response, schema)['selection']
-        Draft202012Validator(schema['properties']['selection']).validate(selection)
-        if selection['kind'] == 'reason':
-            unheld = [ref for ref in _named_refs(selection['commit']) if not records.holds(ref)]
-            if unheld:
-                raise ValueError('record_not_held:' + ','.join(unheld))
-            commit_schema = records.reasoning_schema()
-            Draft202012Validator(commit_schema).validate(selection['commit'])
-            if _empty_commit(selection, commit_schema):
-                raise ValueError('empty_reasoning_commit')
-    except (ValueError, KeyError, TypeError, ValidationError) as error:
-        raise Rejected(rejection_feedback(error, category='action_contract'))
-    kind = selection['kind']
-    if kind == 'reason':
-        return ToolCall('reason', {'commit': selection['commit'], 'scope': summary['scope']})
-    if kind == 'wait':
-        return ToolCall('wait', {'condition': selection['condition']})
-    if kind == 'child':
-        return ChildCall(selection['slot'], selection['arguments'])
-    tool, given = selection['tool'], selection['arguments']
-    if tool in ('knowledge_lookup', 'launch_instruction_lookup'):
-        return ToolCall(tool, given)
-    if tool == 'resource.capabilities':
-        return ToolCall('resource_capabilities', {'assignment': summary['assignment']})
-    if tool == 'resource.inspect':
-        return ToolCall('resource_inspect', {'assignment': summary['assignment'], **given})
-    return ToolCall(TOOL_OF[tool], {'assignment': summary['assignment'], 'handoff': given['handoff'],
-                                    'held_refs': list(summary['input_refs'])})
+    capabilities, bound = _read(ctx.services[ADAPTER])
+    return selected_action(response, summary, capabilities, bound)
+
+
+def inspect_resource(arguments, ctx):
+    """The old ``inspect_resource``: one declared resource as the resource adapter service knows it. An unbound,
+    unavailable, unauthenticated or unknown resource is a failed reading with its own code; nothing is submitted."""
+    adapter = ctx.services[ADAPTER]
+    resource_id = arguments['resource_id']
+    capability = capabilities_of(adapter.declared_capabilities(), adapter.adapter_capabilities())[resource_id]
+    bound = adapter.is_bound(resource_id)
+    code = AVAILABILITY_FAILURE.get(capability['availability']) or (None if bound else 'resource_not_bound')
+    outcome = {'status': 'completed' if code is None else 'failed', 'resource_id': resource_id,
+               'kind': capability['kind'], 'availability': capability['availability'], 'bound': bound,
+               'facts': adapter.facts({'resource_selection': {'resource_id': resource_id}}) if bound else None}
+    return outcome if code is None else {**outcome, 'failure': {'code': code, 'detail': None}}
+
+
+async def check_handoff(arguments, ctx):
+    """The receiving check of a returned handoff, through the adapter the handoff's resource selects."""
+    return await ctx.services[ADAPTER].check_handoff(ctx, arguments)
+
+
+def knowledge_lookup(arguments, ctx):
+    """One operation of the frozen tool-knowledge library (the old ``knowledge_lookup``)."""
+    return ctx.services[LIBRARIES].execute(arguments['operation'], arguments['arguments'])
+
+
+def launch_instruction_lookup(arguments, ctx):
+    """One operation of the frozen launch-instruction library (the old ``launch_instruction_lookup``)."""
+    return ctx.services[LIBRARIES].execute(arguments['operation'], arguments['arguments'])
+
+
+TOOLS = {'inspect_resource': inspect_resource, 'check_handoff': check_handoff,
+         'knowledge_lookup': knowledge_lookup, 'launch_instruction_lookup': launch_instruction_lookup}

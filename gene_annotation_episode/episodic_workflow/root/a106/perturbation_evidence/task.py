@@ -39,6 +39,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.configuration.per
 from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbation_evidence.evidence_axis_contracts import (
     VERSION as EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry)
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.instruction_spans import replace_span
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_progress import FIELDS as JOB_PROGRESS_FIELDS
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (
     INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.perturbation_evidence.evidence_axis_instructions import (
@@ -74,10 +75,13 @@ CHILD_SLOTS = {
     'perturbation_evidence': 'perturbation_evidence',
 }
 SERVICES = ()
+# What a monitor may be asked to observe of a job (the monitor's ``requested_fields``).
+MONITOR_FIELDS = (*JOB_PROGRESS_FIELDS, 'log_windows')
 
 TEXT = {'type': 'string', 'minLength': 1}
 SHA256 = {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}
-OPEN_RECORD = {'type': 'object'}
+OPEN_RECORD = {'type': 'object'}   # travels as JSON text; an optional one may be null (the strict transport)
+OPEN_RECORDS = {'type': 'array', 'items': OPEN_RECORD}   # an array schema names its items
 UNIQUE_REFERENCES = {'type': 'array', 'items': REF, 'uniqueItems': True}
 REFERENCES = {'type': 'array', 'items': REF, 'minItems': 1, 'uniqueItems': True}
 RESOURCES = {'enum': ['api', 'local', 'hpc']}
@@ -94,18 +98,16 @@ FACTS = {
     'literature': ('literature_screening_answers', 'literature_source_lead_dispositions'),
     'launch': ('execution_handoff_refs', 'execution_result_refs', 'execution_completed',
                'bvbrc_appservice_support_refs', 'bvbrc_application_outcomes'),
-    'monitor': ('monitoring_progress_refs', 'monitoring_target_handle', 'monitoring_execution_state',
-                'monitoring_result_available', 'monitoring_observed_at_unix_seconds',
-                'monitoring_committed_record_refs', 'monitoring_dependency_handles',
-                'monitoring_progress_snapshots'),
+    'monitor': ('job_returncode', 'job_duration_seconds', 'job_elapsed_seconds', 'stdout_bytes', 'stderr_bytes',
+                'log_window_refs', 'event_receipt_refs'),
     'results': ('execution_handoff_refs', 'execution_completed', 'bvbrc_appservice_support_refs',
                 'bvbrc_application_outcomes'),
     'perturbation_evidence': ('perturbation_evidence_results', 'committed_record_refs'),
 }
 # The sources the old ``required_return_sources`` of each child binding required (this parent's own copy): a launch
-# returns the original handoff; a monitor the progress references; a child of this process its committed records
+# returns the original handoff; a monitor always returns its check rows; a child of this process its committed records
 # and, from the first level, its process results (the old rule of the path length is not carried).
-REQUIRED_FACTS = {'literature': (), 'launch': ('execution_handoff_refs',), 'monitor': ('monitoring_progress_refs',),
+REQUIRED_FACTS = {'literature': (), 'launch': ('execution_handoff_refs',), 'monitor': (),
                   'results': (), 'perturbation_evidence': ('perturbation_evidence_results', 'committed_record_refs')}
 # No text passes to a child: its objective is fixed by its slot in msg_to_child (controlled messaging).
 HEAD = {}
@@ -135,9 +137,10 @@ COMMISSION = {
               '(resource_id -> request), the immutable input versions, the constraints, optionally a pinned '
               'launch-instruction selection and the records the job inputs name (record_refs). It returns the '
               'references of the usable handoffs.',
-    'monitor': 'Commission one progress observation of a launched job: the target handle, the progress fields '
-               'requested, the progress observations already known and the committed record types permitted to be '
-               'exposed.',
+    'monitor': 'Commission one check of the progress of a job you hold as outstanding: handoff_ref (the handoff '
+               'reference of one job of outstanding_jobs) and requested_fields (what the monitor may observe of it). '
+               'It returns its credit, what it found of the job (its state, whether its results are available) and '
+               'its check records; return_facts selects its measurements.',
     'results': 'Commission the acquisition of the original results of a launched job through its handoff '
                '(handoff_ref, a handoff this episode holds), a selector naming which results and the API service of '
                'the original job. It returns the retained result records.',
@@ -148,26 +151,24 @@ COMMISSION = {
 }
 
 
-def commission_arguments(slot):
+def commission_arguments(slot, jobs):
     """What the model supplies for a child; ``msg_to_child`` makes the child's assignment from it, the summary and
-    the settings."""
+    the settings. ``jobs`` are the outstanding jobs of the summary: a monitor is commissioned on one of them, named
+    by its held handoff reference."""
     if slot == 'literature':
         return obj({**HEAD, 'question_context_refs': UNIQUE_REFERENCES, 'source_refs': REFERENCES,
                     'literature_task': LITERATURE_TASK, **facts_property(slot)},
                    required=['question_context_refs', 'source_refs', 'literature_task'])
     if slot == 'launch':
-        return obj({**HEAD, 'requests': OPEN_RECORD, 'immutable_input_versions': {'type': 'array'},
-                    'constraints': OPEN_RECORD, 'launch_instructions': {'type': ['object', 'null']},
+        return obj({**HEAD, 'requests': OPEN_RECORD, 'immutable_input_versions': OPEN_RECORDS,
+                    'constraints': OPEN_RECORD, 'launch_instructions': OPEN_RECORD,
                     'record_refs': UNIQUE_REFERENCES, **facts_property(slot)},
                    required=['requests', 'immutable_input_versions', 'constraints'])
     if slot == 'monitor':
-        return obj({**HEAD, 'target_handle': TEXT, 'requested_fields': {'type': 'array', 'items': TEXT,
-                                                                       'uniqueItems': True},
-                    'known_progress_refs': UNIQUE_REFERENCES,
-                    'permitted_committed_record_types': {'type': 'array', 'items': TEXT, 'uniqueItems': True},
-                    **facts_property(slot)},
-                   required=['target_handle', 'requested_fields', 'known_progress_refs',
-                             'permitted_committed_record_types'])
+        return obj({**HEAD, 'handoff_ref': {'enum': [job['handoff_ref'] for job in jobs]},
+                    'requested_fields': {'type': 'array', 'items': {'enum': list(MONITOR_FIELDS)},
+                                         'uniqueItems': True}, **facts_property(slot)},
+                   required=['handoff_ref', 'requested_fields'])
     if slot == 'results':
         return obj({**HEAD, 'handoff_ref': REF, 'selector': OPEN_RECORD, 'service': TEXT, **facts_property(slot)},
                    required=['handoff_ref', 'selector', 'service'])
@@ -330,6 +331,12 @@ def offered_slots(settings):
     return slots
 
 
+def commissionable(slots, jobs):
+    """The offered children that can be commissioned now: the monitor only while a job is outstanding (its
+    commission names one by its held handoff reference)."""
+    return [slot for slot in slots if slot != 'monitor' or jobs]
+
+
 def reason_schema(commit_schema):
     return source_location_inputs(obj({'commit': commit_schema}))
 
@@ -374,15 +381,16 @@ def selected_catalog(tools, selection):
              'input_schema': source_location_inputs(row['input_schema'])} for row in direct_tools(tools, selection)]
 
 
-def selection_schema(entries, selected, slots):
-    """What the model answers with: one tool and its arguments, or one commissioned child (the old action schema)."""
+def selection_schema(entries, selected, slots, jobs):
+    """What the model answers with: one tool and its arguments, or one commissioned child (the old action schema).
+    ``jobs`` are the outstanding jobs a monitor may be commissioned on."""
     return obj({'selection': {'anyOf': [
         *(obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
           for entry in entries),
         *(obj({'kind': {'const': 'tool'}, 'tool': {'const': 'selected_tool'},
                'arguments': obj({'name': {'const': row['name']}, 'arguments': row['input_schema']})})
           for row in selected),
-        *(obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': commission_arguments(slot)})
+        *(obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': commission_arguments(slot, jobs)})
           for slot in slots)]}})
 
 
@@ -528,7 +536,8 @@ def decide(summary, feedback, ctx):
         raise NotImplementedError('BLOCKED-ON-SUPPORT-ROUTES: annotation_support_routes of an evidence-axis entry '
                                   'need the bound annotation policy (scientific_support_metadata is not placed)')
     thought = library.resolve(selection['thought_pattern'])
-    slots = offered_slots(settings)
+    jobs = summary['outstanding_jobs']
+    slots = commissionable(offered_slots(settings), jobs)
     entries = catalog(settings, selection, summary, published)
     selected = selected_catalog(tools, selection)
     knowledge_directory = settings.get('knowledge_library_directory')
@@ -551,10 +560,12 @@ def decide(summary, feedback, ctx):
         'last_local_outcome': summary['last_local_outcome'],
         'held_record_refs': summary['held_record_refs'], 'current_report_update': summary['report'],
         'child_reports': summary['child_reports'], 'handoff_refs': summary['handoff_refs'],
+        'outstanding_jobs': [{name: job[name] for name in ('handoff_ref', 'job', 'resource_id', 'kind',
+                                                             'submitted_at', 'latest_check')} for job in jobs],
         'source_custody': sorted(summary['source_custody']),
         'tools': entries, 'selected_tools': selected,
         'child_options': [{'slot': slot, 'description': COMMISSION[slot],
-                           'input_schema': commission_arguments(slot)} for slot in slots],
+                           'input_schema': commission_arguments(slot, jobs)} for slot in slots],
         'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
@@ -565,7 +576,7 @@ def decide(summary, feedback, ctx):
                         reasoning=True, knowledge=context.get('tool_knowledge') is not None,
                         launch=launch_library is not None)
     return ModelRequest('REASONING', text, context,
-                        generation_schema(selection_schema(entries, selected, slots)))
+                        generation_schema(selection_schema(entries, selected, slots, jobs)))
 
 
 def empty_commit(commit, commit_schema):
@@ -590,10 +601,10 @@ def action(response, summary, records, ctx):
     selection = summary['selection']
     tools = tool_library(settings)
     published = entry_of(process_library(settings), selection)[1]
-    slots = offered_slots(settings)
+    slots = commissionable(offered_slots(settings), summary['outstanding_jobs'])
     entries = catalog(settings, selection, summary, published)
     selected = selected_catalog(tools, selection)
-    schema = selection_schema(entries, selected, slots)
+    schema = selection_schema(entries, selected, slots, summary['outstanding_jobs'])
     try:
         chosen = validate_selection_answer(decode_response(response, schema), schema)
         if chosen['kind'] == 'child':

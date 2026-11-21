@@ -27,6 +27,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.partner_p
     scoring_sheet)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.partner_presence_evidence.literature_partner_findings import (
     merged_sheet_features)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import outstanding_jobs
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -68,6 +69,9 @@ def internal_summary(view):
                                             tools=None, tool_of=None),
                'history_meaning': HISTORY_MEANING,
                'child_reports': child_reports,
+               # the jobs whose handoff row of the job ledger this Episode holds and whose closure row it does not
+               # hold, with the check rows it holds of each: what a monitor commission passes in custody
+               'outstanding_jobs': outstanding_jobs(view.records),
                'committed_record_refs': list(dict.fromkeys(committed)),
                'revisions': revisions,
                'received': received_evidence(view.records, parent['scope']),

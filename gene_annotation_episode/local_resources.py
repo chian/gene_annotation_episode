@@ -237,8 +237,11 @@ class LocalResources:
                 fields = line.split()
                 if len(fields) >= 4 and fields[0] not in registered and fields[2] in _LIVE:
                     if self.definition.get('workflow_slice'):
-                        observed_slice = _properties(fields[0]).get('Slice')
-                        if observed_slice and observed_slice != self.definition['workflow_slice']:
+                        # This read gives the unit's state and slice together; the listing above is older. A
+                        # unit that has ended since the listing has no slice any more and runs nothing.
+                        observed = _properties(fields[0])
+                        if (observed.get('ActiveState') in {'failed', 'inactive'}
+                                or observed.get('Slice') and observed['Slice'] != self.definition['workflow_slice']):
                             continue
                     jobs.append({'reservation_ref': None, 'execution_handle': fields[0],
                         'state': 'untracked_running',

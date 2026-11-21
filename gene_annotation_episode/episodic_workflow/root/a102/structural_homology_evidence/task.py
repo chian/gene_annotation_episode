@@ -60,8 +60,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.stru
     instruction_view)
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.structural_homology_evidence.runtime_prompt import (
     REASONING_COMMIT_REQUIREMENT)
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.service_calls.structural_homology_evidence.progress_provider import (
-    FIELDS as PROGRESS_FIELDS)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.waiting import selected_wait
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
@@ -95,6 +93,8 @@ CHILD_SLOTS = {
     'hpc': BINDING_PATH + '/hpc_work_planning',
     'monitor': BINDING_PATH + '/execution_progress_assessment',
 }
+# What a commission of the monitor may ask it to observe of a job (the monitor's own ``requested_fields`` options).
+MONITOR_FIELDS = ('execution_status', 'result_available', 'measurements', 'log_windows')
 SERVICES = ('tool_catalog', 'native_events')
 
 TRANSPORT_ERROR = 'a102_head_tool_argument_transport_unsupported'
@@ -102,7 +102,10 @@ NO_APPLICABLE_EVIDENCE = 'no_applicable_evidence'
 TEXT = {'type': 'string', 'minLength': 1}
 INTEGER = {'type': 'integer', 'minimum': 0}
 OPEN = {'type': 'object'}
-LIST = {'type': 'array'}
+# An array schema names its items: the model endpoint takes no array without them. Open records travel as JSON
+# text (``open_records_as_text``), one per item.
+RECORDS = {'type': 'array', 'items': OPEN}
+TEXTS = {'type': 'array', 'items': TEXT}
 
 # ---------------------------------------------------------------------------------------------------------------
 # Instruction text (the old ``goal.py`` instruction-entry text, preceded by the merged A102 guidance of
@@ -188,7 +191,9 @@ SELECTION_DESCRIPTION = {
     'execution_results': 'acquire the results of an already handed-off execution through its handoff',
     'resource_results': 'acquire requested data through the supplied receiving interface',
     'hpc': 'plan, launch, monitor and collect work on an HPC allocation',
-    'monitor': 'observe the progress of running work (an execution handle)',
+    'monitor': ('check one outstanding job this episode holds (handoff_ref: one of outstanding_jobs), in one '
+                'monitor visit; returns its credit, the state of the job and whether its results are available, '
+                'with its check records'),
 }
 CHILD_ASSIGNMENTS = {
     'structural_homology_evidence': obj({'selection': OPEN, 'evidence_refs': REFS, 'constraints': OPEN,
@@ -196,26 +201,42 @@ CHILD_ASSIGNMENTS = {
     'literature': obj({'question_context_refs': REFS, 'source_refs': REFS, 'literature_task': OPEN,
                        'received_record_refs': REFS},
                       ['question_context_refs', 'source_refs', 'literature_task', 'received_record_refs']),
-    'execution_launch': obj({'requests': OPEN, 'immutable_input_versions': LIST, 'constraints': OPEN,
-                             'launch_instructions': OPEN, 'input_refs': REFS, 'already_handed_off_resource_ids': LIST,
+    'execution_launch': obj({'requests': OPEN, 'immutable_input_versions': RECORDS, 'constraints': OPEN,
+                             'launch_instructions': OPEN, 'input_refs': REFS, 'already_handed_off_resource_ids': TEXTS,
                              'scientific_task': OPEN}, ['requests', 'immutable_input_versions', 'constraints']),
-    'resource_launch': obj({'job_request': OPEN, 'immutable_input_versions': LIST, 'constraints': OPEN,
-                            'resource_selection': OPEN, 'software_knowledge_refs': LIST,
-                            'resource_knowledge_refs': LIST, 'launch_instructions': OPEN, 'adapter_assignment': OPEN,
-                            'input_refs': REFS},
-                           ['job_request', 'immutable_input_versions', 'constraints', 'software_knowledge_refs',
-                            'resource_knowledge_refs', 'input_refs']),
+    # The resource launch takes controlled data only: the work is a record this head holds (``work_refs``), with
+    # the artifacts it stages (``input_refs``); the constraints are the permitted kinds and an optional fixed
+    # resource id; the rows of an earlier launch of the same work are passed back in ``job_refs``.
+    'resource_launch': obj({'work_refs': REFS, 'input_refs': REFS,
+                            'allowed_kinds': {'type': 'array', 'uniqueItems': True,
+                                              'items': {'enum': ['api', 'local', 'hpc']}},
+                            'resource_id': TEXT, 'job_refs': REFS},
+                           ['work_refs', 'input_refs', 'allowed_kinds']),
     'execution_results': obj({'handoff_ref': REFS, 'selector': OPEN, 'resource_kind': {'enum': ['local', 'hpc']},
                               'known_result_refs': REFS}, ['handoff_ref', 'selector', 'resource_kind']),
-    'resource_results': obj({'handoff': OPEN, 'requested_data_selector': OPEN}),
+    # The resource results take the job as its held ledger rows and the requested result file names.
+    'resource_results': obj({'job_refs': REFS, 'requested_names': TEXTS}),
     'hpc': obj({'commission_id': TEXT, 'commission_source_ref': REFS, 'tool_request': OPEN, 'input_refs': REFS},
                ['input_refs']),
-    'monitor': obj({'target_handle': TEXT, 'requested_fields': {'type': 'array', 'items': {'enum': list(PROGRESS_FIELDS)},
-                                                                 'uniqueItems': True},
-                    'known_progress_refs': REFS,
-                    'permitted_committed_record_types': {'type': 'array', 'uniqueItems': True,
-                                                         'items': {'enum': sorted(RECORD_SCHEMAS)}}}),
 }
+
+
+def monitor_assignment(summary):
+    """The model's part of a monitor commission, controlled values only: the handoff record of one outstanding job
+    this episode holds (the only way to name the job) and what the monitor may observe of it. ``msg_to_child``
+    builds the monitor's assignment from the rows this episode holds of that job."""
+    return obj({'handoff_ref': {'enum': [job['handoff_ref'] for job in summary['outstanding_jobs']]},
+                'requested_fields': {'type': 'array', 'uniqueItems': True, 'minItems': 1,
+                                     'items': {'enum': list(MONITOR_FIELDS)}}})
+
+
+def offered_children(summary):
+    """The children this decision offers. The monitor is offered while this episode holds an outstanding job (a
+    job ledger handoff row without its closure row): its commission names one of them."""
+    return [slot for slot in CHILD_SLOTS if slot != 'monitor' or summary['outstanding_jobs']]
+
+
+
 EXECUTION_FIELDS = ('execution_handoff_refs', 'execution_result_refs', 'execution_completed',
                     'execution_file_source_refs', 'execution_file_capture_outcomes',
                     'execution_protein_structure_projections', 'execution_protein_structure_saved_sheets',
@@ -224,29 +245,29 @@ RETURN_FIELDS = {
     'structural_homology_evidence': (RESULTS_SOURCE, COMMITTED_SOURCE),
     'literature': ('literature_screening_answers', 'literature_source_lead_dispositions'),
     'execution_launch': EXECUTION_FIELDS,
-    'resource_launch': ('execution_handoff', 'execution_handoffs', 'adapter_facts', 'execution_handoff_refs'),
-    'execution_results': (*EXECUTION_FIELDS, 'execution_result_origin'),
-    'resource_results': ('execution_handoff', 'execution_handoffs', 'adapter_facts', 'interpretation'),
+    'resource_launch': ('check_refs',),
+    'execution_results': ('execution_handoff_refs', 'execution_job_record_refs', 'execution_result_refs',
+                          'execution_completed'),
+    'resource_results': ('check_refs',),
     'hpc': ('hpc_credit', 'hpc_model_ref', 'hpc_accepted_obligations', 'hpc_result_refs'),
-    'monitor': ('monitoring_progress_refs', 'monitoring_target_handle', 'monitoring_execution_state',
-                'monitoring_result_available', 'monitoring_observed_at_unix_seconds',
-                'monitoring_committed_record_refs', 'monitoring_dependency_handles',
-                'monitoring_progress_snapshots'),
+    # the monitor always returns its credit, finding and check rows; these are its selectable measurements
+    'monitor': ('job_returncode', 'job_duration_seconds', 'job_elapsed_seconds', 'stdout_bytes', 'stderr_bytes',
+                'log_window_refs', 'event_receipt_refs'),
 }
 REQUIRED_WITH_ANNOTATION = {
     'structural_homology_evidence': (RESULTS_SOURCE, COMMITTED_SOURCE),
     'execution_launch': ('execution_handoff_refs',),
-    'monitor': ('monitoring_progress_refs', 'monitoring_progress_snapshots'),
 }
 UNIT_SETTINGS = {'execution_launch': 'handoff_unit', 'resource_launch': 'completion_target',
                  'execution_results': 'acquired_record_unit', 'monitor': 'information_unit'}
 
 
-def child_arguments(slot):
+def child_arguments(slot, summary):
     """The model's commission of a child: the assignment and the selection, and, for every slot but ``literature``
-    (whose objective is fixed and whose message is empty), the goal and purpose."""
-    texts = {} if slot == 'literature' else {'goal': TEXT, 'purpose': TEXT}
-    return obj({**texts, 'assignment': CHILD_ASSIGNMENTS[slot],
+    and ``monitor`` (whose objective is fixed and whose message is empty), the goal and purpose."""
+    texts = {} if slot in ('literature', 'monitor') else {'goal': TEXT, 'purpose': TEXT}
+    assignment = monitor_assignment(summary) if slot == 'monitor' else CHILD_ASSIGNMENTS[slot]
+    return obj({**texts, 'assignment': assignment,
                 'selection': {'type': 'array', 'uniqueItems': True, 'items': {'enum': list(RETURN_FIELDS[slot])}}})
 
 
@@ -876,8 +897,8 @@ def selection_schema(names, summary, contracts):
     schema over the tool and child kinds)."""
     tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
              for entry in catalog(names, summary, contracts)]
-    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': child_arguments(slot)})
-                for slot in CHILD_SLOTS]
+    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot},
+                     'arguments': child_arguments(slot, summary)}) for slot in offered_children(summary)]
     return obj({'selection': {'anyOf': tools + children}})
 
 
@@ -942,11 +963,13 @@ def decide(summary, feedback, ctx):
         'child_options': [{'slot': slot, 'description': SELECTION_DESCRIPTION[slot],
                            'return_fields': list(RETURN_FIELDS[slot]),
                            'required_return_fields': list(REQUIRED_WITH_ANNOTATION.get(slot, ()))
-                           if summary['proposed_annotation_ref'] else []} for slot in CHILD_SLOTS],
+                           if summary['proposed_annotation_ref'] else []} for slot in offered_children(summary)],
         'time_accounting': time_accounting(ctx.clock.progress_time),
         'last_local_outcome': summary['last_outcome'],
         'outcome_history': summary['outcome_history'],
-        'received_progress_snapshots': summary['progress_snapshots'],
+        'outstanding_jobs': [{name: job[name] for name in ('job', 'kind', 'submitted_at', 'handoff_ref',
+                                                           'latest_check')}
+                             for job in summary['outstanding_jobs']],
         'structural_homology_evidence': binding_block(summary, settings)}
     context['completed_work_axis_results'] = context.pop('_completed_work_axis_results')
     context = extend_context(context, {

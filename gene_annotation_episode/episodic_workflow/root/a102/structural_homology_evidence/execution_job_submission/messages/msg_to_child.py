@@ -14,8 +14,8 @@ child does not admit fails (rule 1); nothing is checked here.
   the old ``handoff_unit``). The child declares ``immutable_input_versions`` as a record, this episode holds a
   list (the old assignment): the list travels under the key ``input_versions``.
 * ``launch_local`` (``local_job_execution``) and ``launch_hpc`` (``hpc_job_execution``): the request is the
-  practical assignment, field for field. The local child also takes the records the job inputs name
-  (``record_refs``) and the scientific task of a native protein-structure job (``scientific_task``).
+  practical assignment, field for field, and nothing else. The local child launches that request's job unchanged
+  and returns at handoff.
 
 Every record the child's code will read is named: ``input_refs``, which this episode holds from its commissioner.
 The slots keep the old role names. The fields it selects are the handoff references and the completion; the
@@ -40,9 +40,9 @@ def msg_to_child(slot, arguments, summary):
             if name in request:
                 assignment[name] = request[name]
     elif slot == 'launch_local':
-        assignment = {**request, 'record_refs': list(summary['input_refs'])}
-        if summary['scientific_task'] is not None:
-            assignment['scientific_task'] = summary['scientific_task']
+        # The local launch child is given the request of the resource and nothing else: it launches that request's
+        # job as it is and returns at handoff.
+        assignment = dict(request)
     elif slot == 'launch_hpc':
         assignment = dict(request)
     else:

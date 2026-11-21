@@ -193,13 +193,12 @@ def compile_preparation(fields, *, input_bytes, software, python, scratch_bytes=
                                                                       'db_version')}})[:24]
         argv += ['-title', key]
         steps = [{'name': 'build', 'argv': argv, 'software': build}]
-        # The integrity step reads every sequence back (`blastdbcmd -entry all`): the driver counts the entries and
-        # their lengths and the receipt compares them with the input. `blastdbcheck` is not used: the bundled
-        # BLAST+ 2.17.0 raises an internal MetaData exception on every valid database it is given.
-        reader = _software(software['blastdbcmd'])
-        for name, flags in (('info', ['-db', DATABASE_PREFIX, '-info']),
-                            ('check', ['-db', DATABASE_PREFIX, '-entry', 'all', '-outfmt', '%a %l'])):
-            steps.append({'name': name, 'argv': [reader['executable'], *flags], 'software': reader})
+        for tool, flags in (('blastdbcmd', ['-db', DATABASE_PREFIX, '-info']),
+                            ('blastdbcheck', ['-db', DATABASE_PREFIX, '-dbtype', DBTYPE[fields['molecule']],
+                                              '-full'])):
+            checker = _software(software[tool])
+            steps.append({'name': 'info' if tool == 'blastdbcmd' else 'check',
+                          'argv': [checker['executable'], *flags], 'software': checker})
         prepared = PREPARED_KIND[(kind, fields['molecule'])]
         operation = {'molecule': fields['molecule'], 'parse_seqids': fields['parse_seqids'],
                      'hash_index': fields['hash_index'], 'db_version': fields['db_version'],

@@ -1,13 +1,13 @@
 """What this episode is for."""
 
 BINDING_PATH = 'evolutionary_history_evidence/execution_result_acquisition'
-GOAL = ('Acquire the original selected execution results through the original handoff. Choose bounded status or '
-        'requested file/page reads using actual preceding outcomes. Preserve partial bytes and native scores. Native '
-        'paths expose the current resource filesystem: the exact attempt observation does not establish that current '
-        'file bytes were produced by that attempt. Separate read windows are not an atomic file snapshot. The '
-        'scientific parent interprets the returned records. Original work, resource and selector stay fixed. Only '
-        'actual complete acquisition establishes this endpoint.')
-UNIT = ('One status observation of the handed-off attempt, or one bounded read of the requested result windows, '
-        'or one wait on the job service')
-RESULT = ('The retained result acquisitions of the handed-off job with their byte windows, the handoff, whether the '
-          'requested acquisition is complete, and any selected native result family facts')
+GOAL = ('Acquire the selected results of one handed-off job of the evolutionary history evidence axis through the '
+        'job service and return what was acquired. An earlier episode launched the job and handed it off; this '
+        'episode works from that handoff. Fetch the requested result files once the job has ended and retain the '
+        'requested bytes. Choose each operation from the actual preceding outcomes. Preserve partial bytes and '
+        'native scores. The scientific parent interprets the returned records. Original work, resource and selector '
+        'stay fixed. Only actual complete acquisition establishes this endpoint.')
+UNIT = ('One status request for the handed-off job, one fetch of its requested result files, or one bounded read of '
+        'a fetched file')
+RESULT = ('The credit, the counts of what was acquired and what was refused, whether the requested acquisition is '
+          'complete, and the references of the retained results and of the job records written')

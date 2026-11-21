@@ -18,8 +18,7 @@ of the continuation).
 New fields the final form needs, all listed in the carry-over record as ``new field``: ``record_refs`` (the old code
 read the job inputs from the Store by reference), ``handoff_unit`` and ``acquired_record_unit`` (old configuration
 values: ``credit`` has no settings, and the API child takes the first as its completion target), ``scope`` (the
-subject scope the old runner passed to ``prepare_assignment``; the API child requires it and the reason action
-commits in it), ``scientific_task`` (old
+subject scope the old runner passed to ``prepare_assignment``; the API child requires it), ``scientific_task`` (old
 ``services.scientific_parent_task``) and ``received_handoff_resources`` (the resources whose usable handoff the old
 receipts ledger already held at the start: the old ``initial_known_record_refs``)."""
 import math
@@ -57,7 +56,7 @@ ASSIGNMENT_FORM = RecordForm({
     'acquired_record_unit': Field('number', 'Operational credit unit of an acquired record (old configuration '
                                             'acquired_record_unit)'),
     'scope': Field('record', 'The subject scope fixed by the commissioner (old runner scope); an API request is '
-                             'commissioned with it and a reasoning commit is made in it', required=False),
+                             'commissioned with it', required=False),
     'scientific_task': Field('record', 'The scientific parent task: its scientific_question and selected_tool_info '
                                        '(old services.scientific_parent_task)', required=False),
     'received_handoff_resources': Field('list', 'The resource ids that already had a usable handoff when this launch '

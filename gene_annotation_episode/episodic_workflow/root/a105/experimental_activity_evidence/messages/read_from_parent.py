@@ -70,6 +70,9 @@ ASSIGNMENT_FORM = RecordForm({
                      form=CONTEXT_FORM),
     'revision_origin': Field('record', 'The process.revise preparation this selection came from, when it is a '
                              'revised selection', required=False, form=REVISION_ORIGIN_FORM),
+    'sheet_state_refs': Field('record_refs', 'The persisted subscoring-sheet states the commissioner holds before this '
+                              'run (the whole sheet), passed on to the children; absent for the first run of a sheet',
+                              required=False),
     'scope': Field('record', 'The Store scope of the commission (new field: the old request scope)'),
 })
 
@@ -87,4 +90,5 @@ def read_from_parent(assignment, message):
             'evidence_refs': assignment['evidence_refs'], 'constraints': assignment['constraints'],
             'evidence_task': assignment['context']['evidence_task'],
             'revision_origin': assignment.get('revision_origin'), 'scope': assignment['scope'],
+            'sheet_state_refs': list(assignment['sheet_state_refs']) if 'sheet_state_refs' in assignment else [],
             'message': message}

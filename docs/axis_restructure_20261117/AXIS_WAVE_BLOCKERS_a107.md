@@ -62,3 +62,8 @@ and uses `ledger.path` (`launch_input_path`, `export_closed`, provenance). It wa
 `partner_presence_evidence/task.py` `process_execution` raises `NotImplementedError('unplaced:execution_planning.read')`
 and `hpc_allocation_execution/task.py` raises `BLOCKED-ON-JOB-SERVICE` for the job ledger handoff record; neither is a
 grading item.
+
+Resolved on 19 November 2026 (section 4): the planning head, the prediction sister and the allocation sister run on
+`jobs/hpc_ledger.HpcLedger`; see `HPC_PORT_RECIPE.md` and `BRANCH_FIX_BLOCKERS_a107.md`. Of section 5, the
+`hpc_allocation_execution/task.py` handoff stub is replaced (`hpc_remote.handoff_target`); the head's
+`process_execution` stub is unchanged.

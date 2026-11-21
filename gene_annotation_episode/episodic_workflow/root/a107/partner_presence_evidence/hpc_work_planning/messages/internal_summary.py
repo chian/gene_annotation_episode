@@ -1,42 +1,49 @@
-"""Where the episode stands, as a pure function of the loop's view (carried from ``internal_summary.py``,
+"""Where the episode stands, as a function of the loop's view (carried from ``internal_summary.py``,
 ``decision_state.py``, ``decision_inputs.py``, ``task_state.py`` and ``waiting.py``).
 
-The parent input (commission identity, tool request, scope, received and input records, launch instruction selection),
-the ledger as the latest tool outcome showed it (``ledger_view``: credit view, commission, candidates, current model,
-plans, latest monitor, monitor controllers, queue references, result sources), the actions taken so far (the old
-``requested_action_history`` and ``completed_action_reports``), what each child commission returned (the old
-``hpc_launch_deliveries`` for the launches, and the reports of the monitor, results, prediction and allocation
-execution children), the result sources and their artifacts that this episode holds (the old ``hpc_result_refs``:
-those of the ledger known to this context), and the controller's yield table.
+The ledger is rows in custody, so the summary reads it where it stands: once ``hpc_open`` has returned the ledger
+id, ``task.ledger_view`` is computed over ``view.records`` (the rows this Episode wrote, the rows it was passed and
+the rows its sisters returned). A sister's work is therefore in the summary, and in the credit, of the unit that
+commissioned it. Before the first unit the ledger is not open: ``ledger_view`` is ``None`` and the task opens it.
 
-``ledger_stale`` is true when the last unit commissioned a sister (prediction or allocation execution): it changed the
-shared ledger, which this view has not read again; ``decide`` then reads it again. Until it has, the model identity, the
-accepted obligations and the result sources are those the sister returned in its report.
+For the model (``task.decide`` shows these and nothing else): ``commission``, ``ledger_state`` (current model and
+its support, the count of measured cases, candidates, queue and comparison records, the plans with whether each is
+handed off and closed, the latest monitor, the monitor controllers, the accepted obligations), ``predictions`` and
+``executions`` (what each sister commission returned: its credit and its counts), ``launches``, ``monitors`` and
+``acquisitions`` (the job children), ``credit`` (the ledger's credit and its components), ``units_so_far`` and
+``last_outcome``. For the commissions and the return: ``ledger_view`` in full, ``result_refs`` and
+``result_artifact_refs`` (the result sources of the ledger this Episode holds, and their artifacts).
 
-Not carried: ``pending_work``, ``waiting_support``, ``hpc_activity_decision`` (the old continuation estimator's
-journaled diagnostics: the wait-or-collect mode and the active next gain; the three controllers offer none) and
-``hpc_launch_report_form`` and ``hpc_report_form`` (the forms the old model repaired a child's report with: a child
-completes inside the unit that commissioned it, the system admits its result, and the parent writes no form)."""
-from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
+Not carried: the yield table of the controller and the progress clock in the request (old ``action_yields`` and
+``time_accounting``: estimator internals, nothing the model decides on), ``pending_work``, ``waiting_support``,
+``hpc_activity_decision``, ``hpc_launch_report_form`` and ``hpc_report_form``: a child completes inside the unit that
+commissioned it, the system admits its result, and the parent writes no form."""
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc_ledger import HpcLedger
 
-from ..task import INJECTED, LEDGER_SISTERS
+from ..task import INJECTED, ledger_view as view_of_ledger
+
+UNIT_CREDITS = ('handoff_unit', 'information_unit', 'acquired_record_unit')
 
 
 def internal_summary(view):
-    ledger_view, actions, stale, last_report = None, [], False, None
+    ledger_id, entry_credit, units, last = None, None, [], None
     launches, monitors, acquisitions, predictions, executions = [], [], [], [], []
-    for index, unit in enumerate(view.outcomes):
-        stale = False
+    for unit in view.outcomes:
         if unit['kind'] == 'tool':
             outcome = unit['outcome']
-            ledger_view = outcome['ledger_view']
-            actions.append({'index': index, 'kind': 'tool', 'name': unit['tool'], 'status': outcome['status'],
-                            'arguments': {name: value for name, value in unit['arguments'].items()
-                                          if name not in INJECTED}})
+            if unit['tool'] == 'hpc_open':
+                ledger_id, entry_credit = outcome['result']['ledger'], outcome['result']['credit_at_open']
+            units.append({'action': unit['tool'], 'status': outcome['status'],
+                          'arguments': {name: value for name, value in unit['arguments'].items()
+                                        if name not in INJECTED}})
+            last = {'action': unit['tool'], 'status': outcome['status'], 'result': outcome['result'],
+                    'feedback': outcome['feedback']}
             continue
         report = unit['report']
-        actions.append({'index': index, 'kind': 'child', 'name': unit['slot'], 'status': 'completed',
-                        'arguments': dict(unit['arguments'])})
+        units.append({'action': unit['slot'], 'status': 'completed',
+                      'arguments': {name: value for name, value in unit['arguments'].items()
+                                    if name not in UNIT_CREDITS}})
+        last = {'action': unit['slot'], 'status': 'completed', 'result': report, 'feedback': None}
         if unit['slot'] == 'launch':
             launches.append({'plan_ref': unit['arguments']['plan_ref'], 'handoff_refs': report['handoff_refs'],
                              'completed': report['completed']})
@@ -48,30 +55,32 @@ def internal_summary(view):
             predictions.append(report)
         else:
             executions.append(report)
-        if unit['slot'] in LEDGER_SISTERS:
-            stale, last_report = True, report
-    model_ref, model_refs, accepted, sources = None, None, None, []
-    result_refs, result_artifact_refs = [], []
-    if ledger_view is not None:
-        model_ref, model_refs = ledger_view['model_ref'], list(ledger_view['model_refs'])
-        accepted = [row['slot'].removeprefix('actual:') for row in ledger_view['credit']['contributions']
-                    if row['kind'] == 'actual']
-        sources = list(ledger_view['result_source_refs'])
-        if stale:
-            model_ref = last_report['model_ref']
-            if model_ref not in model_refs:
-                model_refs.append(model_ref)
-            accepted = list(last_report['accepted_obligations'])
-            sources.extend(last_report['result_refs'])
-        result_refs = [ref for ref in dict.fromkeys(sources) if view.records.holds(ref)]
-        for ref in result_refs:
-            artifact = view.records.get(ref)['artifact_ref']
-            if view.records.holds(artifact) and artifact not in result_artifact_refs:
-                result_artifact_refs.append(artifact)
-    state = view.controller_state
-    return {**view.parent_input, 'units_consumed': view.units_consumed, 'ledger_view': ledger_view,
-            'ledger_stale': stale, 'hpc_model_ref': model_ref, 'hpc_model_refs': model_refs,
-            'hpc_accepted_obligations': accepted, 'actions': actions, 'launches': launches, 'monitors': monitors,
-            'acquisitions': acquisitions, 'predictions': predictions, 'executions': executions,
-            'result_refs': result_refs, 'result_artifact_refs': result_artifact_refs,
-            'action_yields': None if state is None else yield_table(state, forecast_unit='credit')}
+    # The first unit opened the ledger: it is not one of the model's own units.
+    summary = {**view.parent_input, 'ledger': ledger_id, 'ledger_view': None, 'entry_credit': entry_credit,
+               'units_so_far': units[1:],
+               'last_outcome': last if len(units) > 1 else None, 'launches': launches, 'monitors': monitors,
+               'acquisitions': acquisitions, 'predictions': predictions, 'executions': executions,
+               'result_refs': [], 'result_artifact_refs': [], 'commission': None, 'ledger_state': None,
+               'credit': None}
+    if ledger_id is not None:
+        ledger = view_of_ledger(HpcLedger.existing(view.records, ledger_id))
+        result_refs = [ref for ref in dict.fromkeys(ledger['result_source_refs']) if view.records.holds(ref)]
+        artifacts = [view.records.get(ref)['artifact_ref'] for ref in result_refs]
+        summary.update({
+            'ledger_view': ledger, 'commission': ledger['commission'], 'result_refs': result_refs,
+            'result_artifact_refs': [ref for ref in dict.fromkeys(artifacts) if view.records.holds(ref)],
+            'credit': {'earned_by_this_episode': ledger['credit']['credit'] - entry_credit,
+                       'ledger_credit': ledger['credit']['credit'],
+                       'ledger_components': ledger['credit']['components']},
+            'ledger_state': {
+                'current_model_ref': ledger['model_ref'], 'current_model_support': ledger['model_support'],
+                'measured_cases': ledger['measured_cases'], 'model_refs': ledger['model_refs'],
+                'candidates': ledger['candidates'], 'queue_refs': ledger['queue_refs'],
+                'comparison_refs': ledger['comparison_refs'], 'latest_comparison': ledger['latest_comparison'],
+                'plans': [{name: plan[name] for name in ('plan_ref', 'candidate_id', 'handed_off', 'closed')}
+                          for plan in ledger['plans']],
+                'latest_monitor': ledger['latest_monitor'], 'monitor_controllers': ledger['monitor_controllers'],
+                'accepted_obligations': [row['slot'].removeprefix('actual:')
+                                         for row in ledger['credit']['contributions'] if row['kind'] == 'actual'],
+                'shared_history_refs': ledger['shared_history_refs'], 'tool_requests': ledger['tool_requests']}})
+    return summary

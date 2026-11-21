@@ -104,7 +104,7 @@ def submit(request,directory):
             found={'mode':'batch','name':name,'job_id':reply.strip(),'submitted_at':now()}
         else:
             wrapper=('sh job.sh > stdout.log 2> stderr.log; echo $? > exit_code.writing; '
-                     'mv exit_code.writing exit_code')
+                     'mv exit_code.writing exit_code; :')   # the shell stays (it does not exec mv) until the code is published
             child=subprocess.Popen(['sh','-c',wrapper,handle],cwd=directory,env={**os.environ,**job['env']},
                 stdin=subprocess.DEVNULL,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,
                 start_new_session=True)
@@ -125,11 +125,12 @@ def state(request,directory):
         else:value='unknown'
         return {'state':value,'observed_at':now(),'native':fields}
     code=os.path.join(directory,'exit_code')
+    # The process is looked for before the exit code: a job that ends between the two looks has written its code.
+    alive=running(request['handle']) is not None
     if os.path.exists(code):
         returncode=int(open(code).read().strip())
         return {'state':'finished' if returncode==0 else 'failed','observed_at':now(),
             'native':{'pid':made['pid'],'returncode':returncode}}
-    alive=running(request['handle']) is not None
     value='running' if alive else 'cancelled' if cancelled else 'unknown'
     return {'state':value,'observed_at':now(),'native':{'pid':made['pid'],'returncode':None}}
 def results(request,directory):

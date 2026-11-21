@@ -7,9 +7,12 @@ from pathlib import Path
 
 import pytest
 
-from episode_runtime import EpisodeBinding
+from episode_runtime import ChildCall, EpisodeBinding, Rejected
 from method_loop import FormError
 from yield_control import BoundedQualityYieldController
+
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.tests.provider_schema_rules import (
+    violations)
 
 MODULE = ('gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.'
           'execution_job_submission')
@@ -176,13 +179,31 @@ def test_the_controller_is_bounded_quality_with_the_credit_of_the_uncredited_req
         module('yield_estimator').yield_controller(0.0, {**settings, 'task_yield_profiles': {}}, read)
 
 
-def test_the_selection_schema_offers_one_child_per_kind_with_eligible_resources():
+def test_the_local_launch_child_is_commissioned_with_the_request_alone():
+    read = parent_input()
+    message = module('messages.msg_to_child').msg_to_child('launch_local', {'resource_id': 'box'}, read)
+    assert message.assignment == read['requests']['box']
+    assert message.selection == ('execution_handoff_refs', 'execution_completed')
+
+
+def test_the_answer_is_a_commission_of_a_permitted_resource():
     task = module('task')
-    summary = {**parent_input(), 'reasoning_schema': {'type': 'object', 'properties': {}, 'required': [],
-                                                      'additionalProperties': False}}
-    options = task.selection_schema(summary, summary['reasoning_schema'])['properties']['selection']['anyOf']
-    children = [option['properties'] for option in options if option['properties']['kind'] == {'const': 'child'}]
-    assert {item['slot']['const']: item['resource_id']['enum'] for item in children} == {
-        'launch_api': ['ncbi'], 'launch_local': ['box'], 'launch_hpc': ['cluster']}
-    narrowed = {**summary, 'eligible_resource_ids': ['box']}
-    assert len(task.selection_schema(narrowed, summary['reasoning_schema'])['properties']['selection']['anyOf']) == 3
+    episode = module('episode').ExecutionJobSubmission
+    assert set(episode.tools) == {'execution_capabilities'}
+    assert tuple(episode.services) == ('job_access',)
+    summary = parent_input()
+    assert task.answer_schema(summary)['properties']['action']['properties'] == {
+        'name': {'type': 'string', 'enum': ['commission_launch']},
+        'resource_id': {'type': 'string', 'enum': ['box', 'cluster', 'ncbi']}}
+    # The model names the resource; the slot is the resource child that owns the resource's kind.
+    for resource_id, slot in (('box', 'launch_local'), ('cluster', 'launch_hpc'), ('ncbi', 'launch_api')):
+        assert episode.action({'action': {'name': 'commission_launch', 'resource_id': resource_id}}, summary, None,
+                              None) == ChildCall(slot, {'resource_id': resource_id})
+    narrowed = task.answer_schema({**summary, 'eligible_resource_ids': ['box']})
+    assert narrowed['properties']['action']['properties']['resource_id']['enum'] == ['box']
+    # An answer outside the schema is rejected (no unit); the episode has no reasoning commit.
+    for answer in ({}, {'action': {'name': 'commission_launch', 'resource_id': 'nowhere'}},
+                   {'action': {'name': 'reason', 'kind': 'tool', 'arguments': {'commit': {'terms': []}}}}):
+        with pytest.raises(Rejected):
+            episode.action(answer, summary, None, None)
+

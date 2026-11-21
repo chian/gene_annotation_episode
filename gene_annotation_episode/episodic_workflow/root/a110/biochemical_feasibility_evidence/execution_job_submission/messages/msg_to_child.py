@@ -6,10 +6,10 @@ episode's own content was that the child's assignment is the selected request of
 ``episode_assignment``; ``prepare_child_request`` passed it through unchanged). A wrong commission fails: nothing
 here checks the request against the child.
 
-Slots: ``launch_local`` and ``launch_hpc`` (the practical execution children). The local child takes the records
-the job inputs name (``record_refs``) and the scientific parent task; the HPC child's assignment form admits
-neither, so neither is sent to it. Both declare ``execution_handoff_refs`` and ``execution_completed`` selectable,
-and this commission selects both (the old ``required_return_sources`` under an annotation task parent)."""
+Slots: ``launch_local`` and ``launch_hpc`` (the practical execution children). Each is given the request of its
+resource and nothing else: the local child launches that request's job as it is and returns at handoff. Both
+declare ``execution_handoff_refs`` and ``execution_completed`` selectable, and this commission selects both (the
+old ``required_return_sources`` under an annotation task parent)."""
 from episode_runtime import ChildMessage
 
 
@@ -24,13 +24,9 @@ def msg_to_child(slot, arguments, summary):
     resource_id = arguments['resource_id']
     request = _request(summary, arguments)
     if slot == 'launch_local':
-        assignment = {**request, 'record_refs': list(summary['record_refs'])}
-        if summary['scientific_task'] is not None:
-            assignment['scientific_task'] = summary['scientific_task']
         return ChildMessage(
-            objective='Execute the assigned job on the local resource ' + resource_id
-                      + ' until its requested handoff exists',
-            message={'resource_id': resource_id}, assignment=assignment,
+            objective='Launch the assigned job on the local resource ' + resource_id + ' and return its handoff',
+            message={'resource_id': resource_id}, assignment=request,
             selection=('execution_handoff_refs', 'execution_completed'))
     if slot == 'launch_hpc':
         return ChildMessage(

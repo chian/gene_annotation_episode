@@ -113,95 +113,21 @@ SELECTABLE = {
         'expression_nmf_failures': 'Recorded located NMF input, capture, calculation and delivery failures; no model-composed findi',
     },
     'results': {
-        'execution_hmmer_domain_rows': 'Explicitly selected native numerical rows with exact source and observation bindings. Unbound r',
-        'execution_nhmmer_locus_rows': 'Explicitly selected native numerical rows with exact source and observation bindings. Unbound r',
-        'execution_hmmalign_sequence_rows': 'Explicitly selected native numerical rows with exact source and observation bindings. Unbound r',
-        'execution_blast_standard_database_search_rows': 'Requested frozen search measurements with original identities, units and qualified missingness.',
-        'execution_blast_standard_database_search_statistic_rows': 'Requested frozen search_statistic measurements with original identities, units and qualified mi',
-        'execution_blast_standard_database_hsp_rows': 'Requested frozen hsp measurements with original identities, units and qualified missingness.',
-        'execution_blast_standard_database_sequence_hit_rows': 'Requested frozen sequence_hit measurements with original identities, units and qualified missin',
-        'execution_blast_standard_database_sequence_group_rows': 'Requested frozen sequence_group measurements with original identities, units and qualified miss',
-        'execution_blast_standard_database_sequence_function_rows': 'Requested frozen sequence_function measurements with original identities, units and qualified m',
-        'execution_blast_standard_database_sequence_population_rows': 'Requested frozen sequence_population measurements with original identities, units and qualified',
-        'execution_blast_standard_database_sequence_taxonomy_rows': 'Requested frozen sequence_taxonomy measurements with original identities, units and qualified m',
-        'execution_blast_standard_database_sequence_quality_rows': 'Requested frozen sequence_quality measurements with original identities, units and qualified mi',
-        'execution_blast_standard_database_pssm_matrix_rows': 'Requested frozen pssm_matrix measurements with original identities, units and qualified missing',
-        'execution_blast_standard_database_pssm_position_rows': 'Requested frozen pssm_position measurements with original identities, units and qualified missi',
-        'execution_blast_standard_database_pssm_cell_rows': 'Requested frozen pssm_cell measurements with original identities, units and qualified missingne',
-        'execution_blast_standard_database_sequence_record_quality_rows': 'Requested frozen sequence_record_quality measurements with original identities, units and quali',
-        'execution_blast_standard_database_result_refs': 'Frozen standard database result result_refs.',
-        'execution_blast_standard_database_failures': 'Frozen standard database result failures.',
-        'execution_blast_database_search_rows': 'Selected frozen search numerical components; null and measured zero are distinct. Full native a',
-        'execution_blast_database_hsp_rows': 'Selected frozen hsp numerical components; null and measured zero are distinct. Full native asso',
-        'execution_blast_database_sequence_hit_rows': 'Selected frozen sequence_hit numerical components; null and measured zero are distinct. Full na',
-        'execution_blast_database_sequence_group_rows': 'Selected frozen sequence_group numerical components; null and measured zero are distinct. Full',
-        'execution_blast_database_sequence_function_rows': 'Selected frozen sequence_function numerical components; null and measured zero are distinct. Fu',
-        'execution_blast_database_sequence_population_rows': 'Selected frozen sequence_population numerical components; null and measured zero are distinct.',
-        'execution_blast_database_sequence_taxonomy_rows': 'Selected frozen sequence_taxonomy numerical components; null and measured zero are distinct. Fu',
-        'execution_blast_database_sequence_quality_rows': 'Selected frozen sequence_quality numerical components; null and measured zero are distinct. Ful',
-        'execution_blast_database_profile_model_rows': 'Selected frozen profile_model numerical components; null and measured zero are distinct. Full n',
-        'execution_blast_database_profile_hsp_model_rows': 'Selected frozen profile_hsp_model numerical components; null and measured zero are distinct. Fu',
-        'execution_blast_database_profile_overlap_rows': 'Selected frozen profile_overlap numerical components; null and measured zero are distinct. Full',
-        'execution_blast_database_pssm_matrix_rows': 'Selected frozen pssm_matrix numerical components; null and measured zero are distinct. Full nat',
-        'execution_blast_database_pssm_cell_rows': 'Selected frozen pssm_cell numerical components; null and measured zero are distinct. Full nativ',
-        'execution_blast_database_pssm_position_rows': 'Selected frozen pssm_position numerical components; null and measured zero are distinct. Full n',
-        'execution_blast_database_iteration_inclusion_rows': 'Selected frozen iteration_inclusion numerical components; null and measured zero are distinct.',
-        'execution_blast_database_iteration_convergence_rows': 'Selected frozen iteration_convergence numerical components; null and measured zero are distinct',
-        'execution_blast_database_iteration_comparison_rows': 'Selected frozen iteration_comparison numerical components; null and measured zero are distinct.',
-        'execution_blast_database_vdb_subject_rows': 'Selected frozen vdb_subject numerical components; null and measured zero are distinct. Full nat',
-        'execution_blast_database_vdb_membership_rows': 'Selected frozen vdb_membership numerical components; null and measured zero are distinct. Full',
-        'execution_blast_database_vdb_sequence_group_rows': 'Selected frozen vdb_sequence_group numerical components; null and measured zero are distinct. F',
-        'execution_blast_database_vdb_sample_rows': 'Selected frozen vdb_sample numerical components; null and measured zero are distinct. Full nati',
-        'execution_blast_database_vdb_feature_rows': 'Selected frozen vdb_feature numerical components; null and measured zero are distinct. Full nat',
-        'execution_blast_database_vdb_feature_hsp_rows': 'Selected frozen vdb_feature_hsp numerical components; null and measured zero are distinct. Full',
-        'execution_blast_database_vdb_taxonomy_rows': 'Selected frozen vdb_taxonomy numerical components; null and measured zero are distinct. Full na',
-        'execution_blast_database_vdb_quality_rows': 'Selected frozen vdb_quality numerical components; null and measured zero are distinct. Full nat',
-        'execution_blast_database_vdb_population_rows': 'Selected frozen vdb_population numerical components; null and measured zero are distinct. Full',
-        'execution_blast_database_vdb_population_function_rows': 'Selected frozen vdb_population_function numerical components; null and measured zero are distin',
-        'execution_blast_database_sequence_record_quality_rows': 'Selected frozen sequence_record_quality numerical components; null and measured zero are distin',
-        'execution_blast_database_vdb_function_summary_rows': 'Selected frozen vdb_function_summary numerical components; null and measured zero are distinct.',
-        'execution_blast_database_vdb_function_rows': 'Selected frozen vdb_function numerical components; null and measured zero are distinct. Full na',
-        'execution_blast_database_vdb_function_contribution_rows': 'Selected frozen vdb_function_contribution numerical components; null and measured zero are dist',
-        'execution_blast_database_vdb_function_census_rows': 'Selected frozen vdb_function_census numerical components; null and measured zero are distinct.',
-        'execution_blast_database_result_refs': 'Frozen selected native database result result_refs.',
-        'execution_blast_database_failures': 'Frozen selected native database result failures.',
-        'execution_blast_database_vdb_function_saved_inputs': 'Exact admitted immutable VDB function generation available for a separately selected saved calc',
-        'execution_hmmer_preparation_rows': 'Requested saved numerical measurements and checks with exact row and artifact associations; gen',
-        'execution_hmmer_preparation_artifacts': 'Explicitly requested artifact occurrences and those required by selected rows/checks, preservin',
-        'execution_hmmer_preparation_population': 'Decoded saved row and selected artifact accounting; this is not biological completeness.',
-        'execution_hmmer_preparation_result_refs': 'Original HMMER preparation result references.',
-        'execution_hmmer_preparation_failures': 'Recorded typed acquisition, grading or projection failures with their original handoff and affe',
-        'execution_blast_pairwise_hsp_rows': 'Requested native pairwise BLAST numbers in original search/HSP order. Coverage uses explicit fu',
-        'execution_blast_pairwise_union_rows': 'Requested native pairwise BLAST numbers in original search/HSP order. Coverage uses explicit fu',
-        'expression_nmf_measurements': 'Requested native NMF diagnostics or calculated loading, contribution or residual quantities wit',
-        'expression_nmf_saved_sheets': 'Explicitly returned retained numerical-sheet identities for later selected calculation; no gran',
-        'expression_nmf_failures': 'Recorded located NMF input, capture, calculation and delivery failures; no model-composed findi',
-        'execution_rna_structure_comparison_projections': 'Exactly selected retained RNA comparison facts and required population qualifications; no impli',
-        'execution_rna_structure_summary_rows': 'Exactly requested original RNA quantities and specific qualifications; no annotation confidence',
-        'execution_rna_structure_pair_rows': 'Exactly requested original RNA quantities and specific qualifications; no annotation confidence',
-        'execution_rna_structure_stem_rows': 'Exactly requested original RNA quantities and specific qualifications; no annotation confidence',
-        'execution_rna_structure_region_rows': 'Exactly requested original RNA quantities and specific qualifications; no annotation confidence',
-        'execution_rna_structure_failure_rows': 'Exactly requested original RNA quantities and specific qualifications; no annotation confidence',
-        'execution_rna_structure_result_refs': 'Requested RNA result sources only; no auxiliary bytes or unrequested numerical rows.',
-        'execution_rna_structure_saved_sheet_inputs': 'Explicit original saved-sheet operands for deterministic recalculation; no new acquisition cred',
-        'execution_file_source_refs': 'Source references for selected local file streams actually retained by this results episode; no',
-        'execution_file_capture_outcomes': 'Recorded selected-file availability, original job status and file-custody qualifications; succe',
-        'execution_handoff_refs': 'Qualified original handoff sources actually available to this episode, including authenticated',
-        'execution_result_refs': 'Qualified actual requested result acquisitions available to this episode. Generic native window',
-        'execution_completed': 'Whether this assignment has actual verified endpoint information. Generic native results mean r',
-        'execution_result_origin': 'Actual acquisition semantics of retained results: current-file windows, original producer outpu',
-        'execution_blast_hsps': 'Optional explicitly requested native measurements for all published HSPs of this acquired resul',
-        'execution_blast_pairwise_result_refs': 'Native BLAST pairwise result references (old ``_blast_reference_source``, in no place now: type',
+        'execution_handoff_refs': 'The handoff row of the job this episode acquired results of',
+        'execution_job_record_refs': 'The latest check row the results episode holds and, once the results were fetched, the closure row of the job',
+        'execution_result_refs': 'The result acquisitions the results episode retained: each result record, its information artifact and the fetched files its windows lie in',
+        'execution_completed': 'Whether the job finished and every requested byte is retained. Yielding alone is false',
     },
+    # The monitor always returns its credit, its finding (whether the job was observed, its state, whether its results
+    # are available, when) and its check rows (``check_refs``); its measurements are selectable.
     'monitor': {
-        'monitoring_progress_refs': 'Original delivered progress observation identities, including those delivered by dependency mon',
-        'monitoring_target_handle': 'The immutable assigned semantic target handle.',
-        'monitoring_execution_state': 'Assigned target state in the latest delivered observation (pending, executing, returned, admitt',
-        'monitoring_result_available': 'Assigned target result availability in the latest delivered observation as {"value": ...}; valu',
-        'monitoring_observed_at_unix_seconds': 'Original assigned-target observation time, converted from UTC without refreshing it, as {"value',
-        'monitoring_committed_record_refs': 'Parent-permitted committed records actually delivered in these progress observations.',
-        'monitoring_dependency_handles': 'Exposed direct dependencies in the latest delivered assigned-target observation; no descendant',
-        'monitoring_progress_snapshots': "The delivered progress observations by identity, for the commissioning monitor's credit.",
+        'job_returncode': "The return code of the job's ended command, as {known, value}",
+        'job_duration_seconds': "The duration of the job's ended command in seconds, as {known, value}",
+        'job_elapsed_seconds': 'The elapsed seconds of the job still running at the latest check, as {known, value}',
+        'stdout_bytes': "The size of the job's stdout.log at the latest check, as {known, value}",
+        'stderr_bytes': "The size of the job's stderr.log at the latest check, as {known, value}",
+        'log_window_refs': 'The log windows the monitor read: each window row and the artifact of its bytes',
+        'event_receipt_refs': "The receipts of the job's end event a wait of the monitor brought into custody",
     },
     'hpc': {
         'hpc_credit': 'Signed measured credit; repeated polling adds none',
@@ -261,17 +187,7 @@ def assignment_for(slot, arguments, summary):
         return {'version': 'execution_results_assignment_v1', 'handoff_ref': arguments['handoff_ref'],
                 'selector': arguments['selector'], 'target': arguments['target'],
                 'acquired_record_unit': summary['acquired_record_unit'],
-                'scientific_task': scientific_task(summary),
                 **present(arguments, ('record_refs', 'initial_result_refs'))}
-    if slot == 'monitor':
-        # The old ``prepare_request`` kept the selected target, the known observations, the requested fields and the
-        # permitted records, and said this parent requests information and never polls.
-        return {'version': 'monitor_assignment_v1', 'scope': summary['scope'],
-                'target_handle': arguments['target_handle'], 'requested_fields': arguments['requested_fields'],
-                'known_progress_refs': arguments['known_progress_refs'],
-                'permitted_committed_record_types': arguments['permitted_committed_record_types'],
-                'information_unit': summary['information_unit'],
-                **present(arguments, ('known_progress_snapshots',))}
     if slot == 'hpc':
         return {'scope': summary['scope'],
                 **present(arguments, ('commission_id', 'commission_source_ref', 'tool_request',
@@ -279,8 +195,27 @@ def assignment_for(slot, arguments, summary):
     raise LookupError('unsupported_child_slot:' + slot)
 
 
+def monitor(arguments, summary):
+    """The commission of the monitor for one outstanding job (the old ``prepare_request``: this parent requests
+    information and never polls). The job is passed as records in custody, never by name: the handoff row of the job
+    ledger this episode holds and the check rows of that job it holds (earlier monitors returned them in
+    ``check_refs``), as the baseline of the new check. A handoff this episode does not hold as an outstanding job
+    fails here with its ``KeyError``. Nothing the model wrote passes: the objective names the job by its handle and
+    the message is empty."""
+    job = {item['handoff_ref']: item for item in summary['outstanding_jobs']}[arguments['handoff_ref']]
+    return ChildMessage(
+        objective='Assess the progress of job ' + job['job'] + '.', message={},
+        assignment={'version': 'monitor_assignment_v2', 'handoff_refs': [job['handoff_ref']],
+                    'known_progress_refs': job['record_refs'][1:], 'dependency_handoff_refs': [],
+                    'requested_fields': list(arguments['requested_fields']),
+                    'information_unit': summary['information_unit']},
+        selection=tuple(arguments['return_fields']))
+
+
 def msg_to_child(slot, arguments, summary):
+    if slot == 'monitor':
+        return monitor(arguments, summary)
     return ChildMessage(objective=arguments['objective'],
                         message={'purpose': arguments['purpose']},
                         assignment=assignment_for(slot, arguments, summary),
-                        selection=tuple(arguments['return_fields']))
+                        selection=tuple(arguments.get('return_fields', ())))

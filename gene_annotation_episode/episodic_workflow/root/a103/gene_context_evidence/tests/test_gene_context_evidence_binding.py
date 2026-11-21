@@ -153,10 +153,22 @@ def test_msg_to_child_selects_the_old_required_return_sources_and_inherits_the_p
     assert message.selection == ('committed_record_refs',)
     nested = module.msg_to_child('gene_context_evidence', arguments, {**summary, 'depth': 2})
     assert nested.selection == ('committed_record_refs',)
-    monitor = module.msg_to_child('execution_progress_assessment', {**arguments, 'child_values': {'information_unit': 1.0}},
-                                  summary)
-    assert monitor.selection == ('committed_record_refs', 'monitoring_progress_refs')
-    assert monitor.assignment['information_unit'] == 1.0
+    # The monitor is commissioned on a job this episode holds: the job is named by its rows, the objective is fixed
+    # and no text of the model is passed (one outstanding job as ``job_records.outstanding_jobs`` lists it).
+    job = {'job': 'job_' + '1' * 32, 'handoff_ref': 'row_' + 'a' * 64,
+           'record_refs': ['row_' + 'a' * 64, 'row_' + 'b' * 64]}
+    monitor = module.msg_to_child('execution_progress_assessment', {
+        'handoff_ref': job['handoff_ref'], 'requested_fields': ['execution_status'], 'select': ['job_returncode'],
+        'child_values': {'information_unit': 1.0}}, {**summary, 'outstanding_jobs': [job]})
+    assert monitor.selection == ('job_returncode',) and monitor.message == {}
+    assert monitor.assignment == {
+        'version': 'monitor_assignment_v2', 'handoff_refs': [job['handoff_ref']],
+        'known_progress_refs': [job['record_refs'][1]], 'dependency_handoff_refs': [],
+        'requested_fields': ['execution_status'], 'information_unit': 1.0}
+    child = importlib.import_module(PACKAGE + '.execution_progress_assessment.episode').ExecutionProgressAssessment
+    child.assignment_form.admit(monitor.assignment, 'assignment')
+    assert set(child.return_form.select(monitor.selection).fields) == {'credit', 'finding', 'check_refs',
+                                                                        'job_returncode'}
     with pytest.raises(LookupError):
         module.msg_to_child('unknown_slot', arguments, summary)
 

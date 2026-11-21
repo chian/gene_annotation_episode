@@ -34,7 +34,7 @@ def _control(arguments):
 
 
 def _properties(unit):
-    selected = ('LoadState', 'ActiveState', 'SubState', 'MemoryMax', 'MemorySwapMax',
+    selected = ('LoadState', 'ActiveState', 'SubState', 'Job', 'MemoryMax', 'MemorySwapMax',
                 'KillMode', 'OOMPolicy', 'ControlGroup','Slice','BindsTo')
     result = _control(['systemctl', '--user', 'show', unit,
                        *['--property='+name for name in selected]])
@@ -238,7 +238,10 @@ def resume_start(handle, *, cancel_event=None):
         if cancel_event is not None and cancel_event.is_set():
             raise AcquisitionError('local_job_cancelled', phase='local_preflight', operational=body['metadata'])
         props = _properties(body['unit'])
-        if props.get('ActiveState') in {'failed', 'inactive'} or props.get('LoadState') == 'not-found':
+        # ``systemd-run --no-block`` returns when the unit's start job is queued. Until the manager dispatches
+        # that job the unit is inactive and ``Job`` names it: such a unit is starting, not dead.
+        if (props.get('ActiveState') == 'failed' or props.get('LoadState') == 'not-found'
+                or props.get('ActiveState') == 'inactive' and not props.get('Job')):
             raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
                 operational={**body['metadata'], 'reason': 'service_did_not_initialize'})
         time.sleep(.01)

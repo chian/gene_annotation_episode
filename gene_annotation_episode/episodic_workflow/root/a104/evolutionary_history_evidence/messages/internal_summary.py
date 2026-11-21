@@ -13,6 +13,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.progress_
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.evolutionary_history_evidence.finding import (
     sheet_features, target_features)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import outstanding_jobs
 
 from ..credit import credit_projector, credit_view
 
@@ -62,6 +63,9 @@ def internal_summary(view):
                'child_returns': child_returns,
                'produced_refs': produced,
                'committed_record_refs': committed,
+               # the jobs whose handoff row this episode holds and whose closure row it does not hold, with the
+               # check rows it holds of each: what a monitor commission passes in custody
+               'outstanding_jobs': outstanding_jobs(view.records),
                'initial_selection_sha256': scientific_digest(parent['selection']),
                'permitted_children': list(PERMITTED_CHILDREN),
                'reasoning_schema': view.records.reasoning_schema(),

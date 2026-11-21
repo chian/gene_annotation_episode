@@ -4,7 +4,9 @@ its old names), the investigation progress of the retained findings held (the ol
 which the old ``commissioned_credit_presentation`` and ``standalone_credit_presentation`` showed), the credit
 binding (the projector's ``as_record()``), the visual evidence (the pixels of the latest completed ``image.view``), the latest page of the own outcomes (old ``episode.history``: the old reads
 of ``runtime_actions`` are the unit outcomes of ``view``), the last local outcome, the reports of the children, the
-handoffs and progress snapshots the children returned, the custody of the sources held (the records a commission
+handoffs the children returned, the outstanding jobs (the jobs whose handoff row of the job ledger this Episode
+holds and whose closure row it does not hold, with the check rows it holds of each: what a monitor commission
+passes in custody), the custody of the sources held (the records a commission
 of the literature child must name for each), the interpretation written, the records committed, the controller's
 yield table and the reasoning schema.
 
@@ -19,6 +21,7 @@ entries, the thought pattern, the resolved tools, ``annotation_support_routes``)
 which are files outside the Store: ``task.decide`` shows it."""
 from gene_annotation_episode.episodic_workflow.episode_support.findings.perturbation_evidence.investigation_progress import (
     FindingProgressPolicy, ScientificFindingProgress)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import outstanding_jobs
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -41,7 +44,7 @@ def internal_summary(view):
     written = [outcome['outcome']['report'] for outcome in tool_outcomes if outcome['tool'] == 'report']
     report = written[-1] if written else None
     last = view.outcomes[-1] if view.outcomes else None
-    launches, monitors, own = children(view, 'launch'), children(view, 'monitor'), children(view, 'perturbation_evidence')
+    launches, own = children(view, 'launch'), children(view, 'perturbation_evidence')
     committed = []
     for outcome in tool_outcomes:
         if outcome['tool'] == 'reason':
@@ -75,8 +78,7 @@ def internal_summary(view):
                                            for ref in report_['facts'].get('execution_handoff_refs', []))),
         'handoff_resources': list(dict.fromkeys(resource for report_ in launches
                                                 for resource in report_['finding']['handoff_resources'])),
-        'progress_snapshots': {reference: snapshot for report_ in monitors
-                               for reference, snapshot in report_['progress_snapshots'].items()},
+        'outstanding_jobs': outstanding_jobs(records),
         'visual_evidence': visual,
         'report': report,
         'report_source_held': ({} if report is None else

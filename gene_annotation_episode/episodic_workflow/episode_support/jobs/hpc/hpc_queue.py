@@ -10,9 +10,9 @@ import json
 import math
 import re
 import shlex
-import subprocess
 import time
-from urllib.request import urlopen
+
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.hpc_remote import command
 
 
 ACTIVITY_URL = 'https://status.alcf.anl.gov/aurora/activity.json'
@@ -177,31 +177,29 @@ def features(observation, candidate, *, job_id=None, score=None, priority=None):
         'interpretation': 'relative pressure, not dispatch rank; backfill, eligibility and reservations matter'}
 
 
-def observe(configuration):
-    """One read-only acquisition, using the caller's reuse-only SSH transport.
+QUEUE_SCRIPT = ('qstat -f -F json > jobs.json && qstat -Qf -F json > queues.json && '
+                '{ curl -sf ' + shlex.quote(ACTIVITY_URL) + ' > activity.json || echo "{}" > activity.json; }')
 
-    Sequential queries; no subprocess, HTTP or authentication retries. Keep
-    normalized selected fields and source hashes, excluding unrelated users'
-    environment variables and avoiding a multi-megabyte prompt per query.
+
+async def observe(ctx, resource_id, *, name='queue'):
+    """One read-only acquisition of the scheduler's jobs and queues and of the facility's activity status, as one
+    command on the resource through the run's job access (``hpc_remote.command``; the unit's ``ctx``).
+
+    ``{'status': 'completed', 'snapshot', 'acquisition'}``: normalized selected fields and source hashes, excluding
+    unrelated users' environment variables. The activity status is optional (``activity_failure``); a request the
+    route could not make, or a scheduler that did not answer, is ``{'status': 'failed', 'failure'}``.
     """
-    raw = {}
-    for name, argv in (('jobs', ['qstat', '-f', '-F', 'json']),
-                       ('queues', ['qstat', '-Qf', '-F', 'json'])):
-        result = subprocess.run([*configuration['ssh_argv'], shlex.join(argv)],
-            capture_output=True, text=True, timeout=60)
-        if result.returncode:
-            raise RuntimeError('queue_observation_failed:'+name+':'+str(result.returncode))
-        raw[name] = json.loads(result.stdout)
-    try:
-        with urlopen(ACTIVITY_URL, timeout=20) as response:
-            payload = response.read(8*1024*1024+1)
-            if len(payload) > 8*1024*1024:
-                raise ValueError('activity_response_too_large')
-            raw['activity'] = json.loads(payload)
-    except (OSError, ValueError) as error:
-        raw['activity'] = {}
-        raw['activity_failure'] = type(error).__name__
-    return {'snapshot': snapshot(raw['jobs'], raw['queues'], raw['activity']),
+    ran = await command(ctx, resource_id, QUEUE_SCRIPT, name=name)
+    if ran['status'] != 'completed':
+        return ran
+    if ran['returncode']:
+        return {'status': 'failed', 'failure': {'code': 'queue_observation_failed', 'detail': {
+            'returncode': ran['returncode'], 'stderr': ran['files']['stderr.log'].decode('utf-8', 'replace')}}}
+    activity = json.loads(ran['files']['activity.json'])
+    return {'status': 'completed',
+            'snapshot': snapshot(json.loads(ran['files']['jobs.json']), json.loads(ran['files']['queues.json']),
+                                 activity),
             'acquisition': {'jobs_command': ['qstat', '-f', '-F', 'json'],
-                'queues_command': ['qstat', '-Qf', '-F', 'json'],
-                'activity_url': ACTIVITY_URL, 'activity_failure': raw.get('activity_failure')}}
+                            'queues_command': ['qstat', '-Qf', '-F', 'json'],
+                            'activity_url': ACTIVITY_URL,
+                            'activity_failure': None if activity else 'activity_status_unavailable'}}

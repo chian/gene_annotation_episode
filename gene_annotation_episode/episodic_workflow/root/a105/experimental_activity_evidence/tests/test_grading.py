@@ -14,14 +14,13 @@ from .grading_world import SETTINGS, held_world, reasoning_selection
 PACKAGE = __name__.rsplit('.', 2)[0]
 EPISODE = importlib.import_module(PACKAGE + '.episode').ExperimentalActivityEvidence
 PATH = EPISODE.binding_path
-BELOW = {'': 'ExperimentalActivityEvidence', '.published_evidence_assessment': 'PublishedEvidenceAssessment',
-         '.published_evidence_assessment.evidence_search_strategy_improvement': 'EvidenceSearchStrategyImprovement',
-         '.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment':
-             'SourceRelevanceAssessment'}
-SEE = '.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination'
-BELOW.update({SEE: 'SourceEvidenceExamination', SEE + '.table_evidence_extraction': 'TableEvidenceExtraction',
-              SEE + '.source_coverage_improvement': 'SourceCoverageImprovement',
-              SEE + '.passage_evidence_extraction': 'PassageEvidenceExtraction'})
+BELOW = {'': 'ExperimentalActivityEvidence', '.literature': 'PublishedEvidenceAssessment',
+         '.literature.strategy': 'EvidenceSearchStrategyImprovement',
+         '.literature.strategy.web_search': 'SourceRelevanceAssessment'}
+SEE = '.literature.strategy.web_search.page'
+BELOW.update({SEE: 'SourceEvidenceExamination', SEE + '.table': 'TableEvidenceExtraction',
+              SEE + '.report': 'SourceCoverageImprovement',
+              SEE + '.chunk': 'PassageEvidenceExtraction'})
 CLASSES = [getattr(importlib.import_module(PACKAGE + name + '.episode'), cls) for name, cls in BELOW.items()]
 
 

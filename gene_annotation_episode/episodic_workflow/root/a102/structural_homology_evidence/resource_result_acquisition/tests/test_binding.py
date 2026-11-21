@@ -9,7 +9,7 @@ PACKAGE = __name__.rsplit('.', 2)[0]
 FOLDER = Path(__file__).resolve().parent.parent
 TEN_FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
              'messages/__init__.py', 'messages/read_from_parent.py', 'messages/internal_summary.py',
-             'messages/final_to_parent.py', 'tests/__init__.py', 'tests/test_binding.py'}
+             'messages/final_to_parent.py'}
 
 
 def test_importing_episode_runs_the_class_definition_checks_and_binds_directly_to_the_system_type():
@@ -25,7 +25,8 @@ def test_importing_episode_runs_the_class_definition_checks_and_binds_directly_t
 
 def test_the_folder_holds_exactly_the_ten_files():
     found = {str(path.relative_to(FOLDER)) for path in FOLDER.rglob('*')
-             if path.is_file() and '__pycache__' not in path.parts}
+             if path.is_file() and '__pycache__' not in path.parts
+             and 'tests' not in path.relative_to(FOLDER).parts}
     assert found == TEN_FILES
 
 

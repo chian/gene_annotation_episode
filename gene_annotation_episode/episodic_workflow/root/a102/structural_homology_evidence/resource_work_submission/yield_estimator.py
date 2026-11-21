@@ -1,8 +1,5 @@
-"""Continuation: the work has a definite end, a usable execution handoff for the assigned job, so the controller is
-the completion controller (README 7b). The old episode had no estimator of its own ("Only the configured local
-controller governs continuation") and handed the initial credit to the caller's controller factory.
-
-The target is the commission's ``completion_target`` (a new field of the assignment, read by ``read_from_parent``);
+"""Continuation: the work has a definite end, a usable execution handoff for the assigned work, so the controller
+is the completion controller. The target is the commission's ``completion_target`` (read by ``read_from_parent``);
 the cost and the estimator parameters are this episode's settings."""
 from yield_control import CompletionYieldController
 

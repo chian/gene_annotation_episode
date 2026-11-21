@@ -10,9 +10,10 @@ finding, the names of the fields it returned and, by slot:
 * ``structural_homology_evidence`` (the head again): the process results it returned
   (``structural_homology_evidence_results``), which join this head's own in its return;
 * ``monitor``: the old ``receive_progress`` read every ``episode_progress`` reference of the form through the
-  progress provider before granting the observations. A delivered progress reference now comes with its snapshot
-  (the monitor's ``monitoring_progress_snapshots``): the provider has no object any more, so a reference without a
-  snapshot raises. The delivered observations are in the report and so in the summary.
+  progress provider before granting the observations. The monitor now returns its controlled finding (whether the
+  job was observed, its state, whether its results are available, when) and the check rows it wrote
+  (``check_refs``), in custody: the report keeps their references, and the summary reads the rows through its
+  records (``outstanding_jobs``).
 
 Every other slot (``literature``, ``execution_launch``, ``resource_launch``, ``execution_results``,
 ``resource_results``, ``hpc``) reports credit, finding and the returned field names; their records are held in
@@ -25,17 +26,12 @@ BASE = ('credit', 'finding')
 
 def read_from_child(slot, result, summary, records):
     report = {'slot': slot, 'child_credit': result['credit'], 'child_finding': result['finding'],
-              'returned': sorted(set(result) - set(BASE)), 'process_results': [], 'progress_snapshots': {},
+              'returned': sorted(set(result) - set(BASE)), 'process_results': [], 'check_refs': [],
               'experimental_structure_sheets': []}
     if slot == 'literature':
         report['experimental_structure_sheets'] = list(result['finding']['structure_sheets'])
     elif slot == 'structural_homology_evidence':
         report['process_results'] = list(result.get('structural_homology_evidence_results', []))
     elif slot == 'monitor':
-        snapshots = result.get('monitoring_progress_snapshots', {})
-        for reference in result.get('monitoring_progress_refs', []):
-            if reference not in snapshots:
-                raise ValueError('monitor_report_requires_progress_snapshots')
-        report['progress_snapshots'] = {reference: snapshots[reference]
-                                        for reference in result.get('monitoring_progress_refs', [])}
+        report['check_refs'] = list(result['check_refs'])
     return report

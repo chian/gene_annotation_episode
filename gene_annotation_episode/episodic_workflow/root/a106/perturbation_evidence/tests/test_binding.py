@@ -19,7 +19,8 @@ EPISODE = importlib.import_module(PACKAGE + '.episode').PerturbationEvidence
 OWN_FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
              'messages/__init__.py', 'messages/read_from_parent.py', 'messages/msg_to_child.py',
              'messages/read_from_child.py', 'messages/internal_summary.py', 'messages/final_to_parent.py',
-             'tests/__init__.py', 'tests/test_binding.py'}
+             'tests/__init__.py', 'tests/test_binding.py', 'tests/test_decision_schema.py',
+             'tests/test_first_decision.py'}
 CHILDREN = ('execution_job_submission', 'execution_progress_assessment', 'execution_result_acquisition',
             'published_evidence_assessment')
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
@@ -35,6 +36,9 @@ SOURCE = 'source_' + 'c' * 24
 ARTIFACT = 'artifact_' + 'd' * 24
 CONTEXT = 'record_' + 'e' * 24
 HANDOFF = 'record_' + 'f' * 24
+# One outstanding job as ``job_records.outstanding_jobs`` lists it: its handoff row and one check row held of it.
+JOB_HANDOFF, JOB_CHECK = 'row_' + '1' * 64, 'row_' + '2' * 64
+JOBS = [{'job': 'job_' + '3' * 32, 'handoff_ref': JOB_HANDOFF, 'record_refs': [JOB_HANDOFF, JOB_CHECK]}]
 
 
 def option(slot, option_id):
@@ -67,7 +71,7 @@ def own_files():
 
 def summary_of(parent_input, **more):
     return {**parent_input, 'source_custody': {SOURCE: [SOURCE, ARTIFACT]}, 'handoff_resources': [],
-            'progress_snapshots': {}, **more}
+            'outstanding_jobs': [], **more}
 
 
 def test_the_class_inherits_only_the_episode_type_and_is_its_own_binding():
@@ -184,8 +188,11 @@ def test_the_model_is_offered_the_tools_the_reasoning_the_report_and_the_childre
     selected = [{'name': 'source.read', 'description': 'd', 'resources': 'local',
                  'input_schema': {'type': 'object', 'properties': {'source_ref': task.REF},
                                   'required': ['source_ref'], 'additionalProperties': False}}]
-    schema = task.selection_schema(entries, selected, list(SLOTS))
+    schema = task.selection_schema(entries, selected, task.commissionable(list(SLOTS), JOBS), JOBS)
     assert len(schema['properties']['selection']['anyOf']) == len(entries) + 1 + len(SLOTS)
+    # The monitor is offered only while a job is outstanding, and is commissioned on one by its held handoff.
+    assert task.commissionable(list(SLOTS), []) == [slot for slot in SLOTS if slot != 'monitor']
+    assert task.commission_arguments('monitor', JOBS)['properties']['handoff_ref'] == {'enum': [JOB_HANDOFF]}
     task.generation_schema(schema)
     answer = {'selection': {'kind': 'tool', 'tool': 'selected_tool',
                             'arguments': {'name': 'source.read', 'arguments': {'source_ref': SOURCE}}}}
@@ -223,7 +230,7 @@ def test_the_literature_commission_is_admitted_by_the_form_of_the_child_and_sele
     arguments = {'question_context_refs': [CONTEXT], 'source_refs': [SOURCE],
                  'literature_task': {'evidence_axis': 'A106', 'kind': 'verified_source_leads'}}
     task, parent_input = module('task'), EPISODE.read_from_parent(ASSIGNMENT, {})
-    schema = task.commission_arguments('literature')
+    schema = task.commission_arguments('literature', [])
     task.validate_schema(arguments, schema)
     message = commission('literature', arguments, summary_of(parent_input))
     read = child_module('published_evidence_assessment', 'messages.read_from_parent')
@@ -243,18 +250,17 @@ def test_the_literature_commission_is_admitted_by_the_form_of_the_child_and_sele
 
 def test_the_launch_monitor_and_results_commissions_are_admitted_by_the_forms_of_their_children():
     task, parent_input = module('task'), EPISODE.read_from_parent(ASSIGNMENT, {})
-    summary = summary_of(parent_input, handoff_resources=['bvbrc'],
-                         progress_snapshots={'progress_' + '1' * 24: {'target_handle': 'job_1'}})
+    summary = summary_of(parent_input, handoff_resources=['bvbrc'], outstanding_jobs=JOBS)
     launch = {'requests': {'bvbrc': {}}, 'immutable_input_versions': [],
-              'constraints': {}, 'launch_instructions': None, 'record_refs': [CONTEXT], 'handoff_unit': 1.0}
-    monitor = {'target_handle': 'job_1', 'requested_fields': [],
-               'known_progress_refs': ['progress_' + '1' * 24], 'permitted_committed_record_types': [],
-               'information_unit': 0.5}
+              'constraints': {}, 'record_refs': [CONTEXT], 'handoff_unit': 1.0}
+    monitor = {'handoff_ref': JOB_HANDOFF, 'requested_fields': ['execution_status'],
+               'return_facts': ['job_returncode'], 'information_unit': 0.5}
     results = {'handoff_ref': HANDOFF, 'selector': {'kind': 'all'},
                'service': 'bvbrc_appservice', 'return_facts': ['bvbrc_application_outcomes']}
     for slot, arguments in (('launch', launch), ('monitor', monitor), ('results', results)):
         task.validate_schema({key: value for key, value in arguments.items()
-                              if key not in ('handoff_unit', 'information_unit')}, task.commission_arguments(slot))
+                              if key not in ('handoff_unit', 'information_unit')},
+                             task.commission_arguments(slot, JOBS))
         message = commission(slot, arguments, summary)
         child = {'launch': 'execution_job_submission', 'monitor': 'execution_progress_assessment',
                  'results': 'execution_result_acquisition'}[slot]
@@ -266,8 +272,14 @@ def test_the_launch_monitor_and_results_commissions_are_admitted_by_the_forms_of
             assert set(form.record_refs(admitted)) == {CONTEXT} and admitted['received_handoff_resources'] == ['bvbrc']
             assert message.selection == ('execution_handoff_refs', 'execution_completed')
         if slot == 'monitor':
-            assert 'monitoring_progress_refs' in message.selection and admitted['information_unit'] == 0.5
-            assert admitted['known_progress_snapshots'] == summary['progress_snapshots']
+            # The job is named by the records this episode holds: its handoff row and the check row held of it.
+            assert admitted == {'version': 'monitor_assignment_v2', 'handoff_refs': [JOB_HANDOFF],
+                                'known_progress_refs': [JOB_CHECK], 'dependency_handoff_refs': [],
+                                'requested_fields': ['execution_status'], 'information_unit': 0.5}
+            assert set(form.record_refs(admitted)) == {JOB_HANDOFF, JOB_CHECK}
+            assert message.selection == ('job_returncode',)
+            with pytest.raises(KeyError):       # a job this episode does not hold as outstanding: the commission fails
+                commission('monitor', {**monitor, 'handoff_ref': HANDOFF}, summary)
         if slot == 'results':
             assert set(form.record_refs(admitted)) == {HANDOFF}
             assert 'bvbrc_application_outcomes' in message.selection

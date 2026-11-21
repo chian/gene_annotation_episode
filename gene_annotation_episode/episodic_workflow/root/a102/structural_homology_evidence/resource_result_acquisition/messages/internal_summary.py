@@ -1,33 +1,34 @@
-"""Where the episode stands, as a pure function of the loop's view (old ``internal_summary.py`` and
-``decision_state.py``): the admitted assignment, every unit outcome, the latest feedback, the latest credit view
-and resource facts the resource tools returned, the latest recorded interpretation and the controller state.
+"""Where the acquisition stands, as a pure function of the view: the handed-off job read from the job ledger rows
+the Episode holds (the handoff row the parent passed, every check and closure row it holds), the requested result
+files a held closure row names, and what each of the Episode's own actions came to. Nothing is read from a
+service: the job ledger rows are the record of the job."""
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import job_rows
 
-The role-specific fields of the old ``decision_context`` (``role``, ``assignment``, ``resource_capabilities``,
-``resource_tool_estimates``) need the resource service, which a summary cannot read: ``decide`` adds them."""
+NOT_CHECKED = 'not_checked'
+
+
+def _failure(outcome):
+    return None if outcome['status'] == 'completed' else outcome['failure']['code']
 
 
 def internal_summary(view):
-    parent = view.parent_input
-    summary = {
-        'assignment': {name: value for name, value in parent.items() if name not in ('scope', 'initial_report')},
-        'scope': parent['scope'],
-        'outcome_log': [], 'last_outcome': None, 'feedback': None,
-        'credit_view': None, 'facts': None, 'interpretation': parent['initial_report'],
-        'reasoning_schema': view.records.reasoning_schema(),
-        'controller': None if view.controller_state is None else view.controller_state.as_record(),
-        'units_consumed': view.units_consumed,
-    }
-    for position, unit in enumerate(view.outcomes):
-        outcome = unit['outcome']
-        name = unit['arguments']['tool'] if unit['tool'] == 'resource_tool' else unit['tool']
-        summary['outcome_log'].append({'position': position, 'tool': name, 'status': outcome['status'],
-                                       'record_refs': outcome['record_refs'], 'feedback': outcome.get('feedback')})
-        summary['last_outcome'] = outcome
-        summary['feedback'] = None if outcome['status'] in ('completed', 'partial') else outcome.get('feedback')
-        if outcome.get('credit_view') is not None:
-            summary['credit_view'] = outcome['credit_view']
-        if outcome.get('facts') is not None:
-            summary['facts'] = outcome['facts']
-        if unit['tool'] == 'report' and outcome['status'] == 'completed':
-            summary['interpretation'] = outcome['interpretation']
-    return summary
+    requested = view.parent_input['requested_names']
+    rows = job_rows(view.records)
+    handoff = next(row for row in rows if row['event'] == 'handoff')
+    readings = sorted((row for row in rows if row['job'] == handoff['job'] and row['event'] in ('check', 'closure')),
+                      key=lambda row: row['at'])
+    closures = [row for row in readings if row['event'] == 'closure']
+    files = {item['name']: item for row in closures for item in row['detail']['results']}
+    own_checks = [unit['outcome']['check_ref'] for unit in view.outcomes
+                  if unit['tool'] == 'check_job' and unit['outcome']['status'] == 'completed']
+    return {'requested_names': requested,
+            'job': {'handoff_ref': handoff['id'], 'job': handoff['job'],
+                    'resource_id': handoff['detail']['resource_id'], 'kind': handoff['detail']['kind'],
+                    'submitted_at': handoff['at']},
+            'job_state': readings[-1]['detail']['state'] if readings else NOT_CHECKED,
+            'result_available': any(row['event'] == 'closure' or row['detail']['result_available']
+                                    for row in readings),
+            'acquired': [{'name': name, 'ref': files[name]['ref']} for name in requested if name in files],
+            'closure_refs': [row['id'] for row in closures], 'check_refs': own_checks,
+            'actions': [{'action': unit['tool'], 'status': unit['outcome']['status'],
+                         'failure': _failure(unit['outcome'])} for unit in view.outcomes]}

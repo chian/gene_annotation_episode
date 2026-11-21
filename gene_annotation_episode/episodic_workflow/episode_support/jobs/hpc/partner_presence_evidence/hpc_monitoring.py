@@ -117,7 +117,11 @@ class MonitorCronController:
                 'wake_action': {'tool': 'hpc.monitor',
                                 'arguments': {'plan_ref': plans[0]['id'], 'refresh_queue': True}},
                 'valuation': selection}
-        return self.ledger.once(reference, 'monitor_schedule', calculate)
+        # The schedule is evidence of the unit that reserved it (``HpcLedger.put``: other content under the same
+        # identity is refused; a finished unit is replayed from the journal and never reserves again).
+        schedule = calculate()
+        self.ledger.put('monitor_schedule', schedule, identity=reference)
+        return schedule
 
     async def wait(self, schedule):
         import asyncio

@@ -22,6 +22,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.findings.experime
     FindingValidity, target_eligible)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_required_grading import (
     _matches_grading)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_unknown_classification import (
+    graded_share)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_aggregation_storage import (
     LiteratureA105AggregationRepository)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_assay_grading_storage import (
@@ -148,4 +150,38 @@ def task_credit(summary, records):
     return value
 
 
-__all__ = ['credit_binding', 'answers', 'task_credit']
+
+def classified_credit_binding(task_key, task):
+    """The credit definition the model is shown where credit rests on the classification of unknown fields."""
+    binding = credit_binding(task_key, task)
+    if task['kind'] != 'a105_experiments':
+        return binding
+    return {**binding, 'unit': 'graded_field_share_of_the_current_sheet_per_original_experiment',
+            'entered_field_credit': 'its_share', 'justified_unknown_field_credit': 'its_share',
+            'unjustified_unknown_field_credit': 'none', 'unclassified_unknown_field_credit': 'none'}
+
+
+def graded_experiment_shares(summary, records):
+    """For each answered experiment of an ``a105_experiments`` task, the share of the credit unit its current
+    sheet earns (``literature_unknown_classification.graded_share`` of the sheet's features: its entered fields and
+    the unknown fields its classification holds justified, over all its fields)."""
+    by_sheet = {features['sheet_refs'][0]: features for features in summary['assay_sheets']}
+    return [graded_share(by_sheet[answer['sheet_ref']]) for answer in graded_experiment_answers(summary, records)]
+
+
+def classified_task_credit(summary, records):
+    """``credit_unit`` for each answer to the commissioned task; for an ``a105_experiments`` task ``credit_unit``
+    times the graded share of each answered experiment's current sheet. Credit rests on the classification of the
+    fields a sheet leaves unknown, not on the sheet existing: unknown fields held unjustified earn nothing, so a
+    sheet of nothing but unjustified unknowns earns nothing; unknown fields held justified earn their share (the
+    partial or unresolved grading AGENTS.md requires for what a source does not give)."""
+    task = summary['task']
+    amount = (math.fsum(graded_experiment_shares(summary, records)) if task['kind'] == 'a105_experiments'
+              else len(answers(summary, records)))
+    value = task['credit_unit'] * amount
+    if not math.isfinite(value):
+        raise ValueError('literature_finite_task_credit_required')
+    return value
+
+__all__ = ['credit_binding', 'classified_credit_binding', 'answers', 'task_credit', 'graded_experiment_shares',
+           'classified_task_credit']

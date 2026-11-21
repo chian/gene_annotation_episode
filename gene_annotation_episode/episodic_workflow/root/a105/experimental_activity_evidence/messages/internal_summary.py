@@ -12,8 +12,6 @@ reads of ``runtime_actions``, ``runtime_forms`` and the receipt ledger are the u
 unit's outcome, a child unit's ``report``) and the records this Episode holds."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reasoning import (
     no_applicable_spans)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_assay_grading_features import (
-    current_aggregation_features, current_sheet_features, merged_sheet_features)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -39,8 +37,9 @@ def internal_summary(view):
     children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
     last = view.outcomes[-1] if view.outcomes else None
     tools = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
-    own_sheets = current_sheet_features(records)
-    returned_sheets = [features for outcome in children for features in outcome['report']['assay_sheets']]
+    # The sheet: what the latest child returned (the whole subscoring sheet as it stands after it, from the states this
+    # episode passed to it); before any child returned, the states this episode was given, no scores, no features.
+    sheet_state_refs = children[-1]['report']['sheet_state_refs'] if children else parent['sheet_state_refs']
     return {
         **{name: parent[name] for name in ('selection', 'proposed_annotation_ref', 'evidence_refs', 'constraints',
                                            'evidence_task', 'revision_origin', 'scope')},
@@ -55,15 +54,14 @@ def internal_summary(view):
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),
         'child_returns': [{'slot': outcome['slot'], 'objective': outcome['message']['objective'],
-                           'credit': outcome['report']['credit'], **outcome['report']['counts']}
+                           'credit': outcome['report']['credit'], 'scores': outcome['report']['scores'],
+                           'features': outcome['report']['features']}
                           for outcome in children],
-        'own_assay_sheets': own_sheets,
-        'assay_sheets': merged_sheet_features(own_sheets, returned_sheets),
-        'aggregation_sheets': merged_sheet_features(current_aggregation_features(records),
-                                                    [features for outcome in children
-                                                     for features in outcome['report']['aggregation_sheets']]),
+        'sheet_state_refs': sheet_state_refs,
+        'scores': children[-1]['report']['scores'] if children else [],
+        'features': children[-1]['report']['features'] if children else [],
         'no_applicable_spans': no_applicable_spans(view.outcomes, records),
         'committed_record_refs': list(dict.fromkeys([
             *committed(view), *(ref for outcome in children for ref in outcome['report']['committed_record_refs']),
-            *(features['sheet_refs'][0] for features in returned_sheets)])),
+            *sheet_state_refs])),
     }

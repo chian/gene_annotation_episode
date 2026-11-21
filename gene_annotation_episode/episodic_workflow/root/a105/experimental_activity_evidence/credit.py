@@ -6,12 +6,12 @@ is the library's own and is unchanged: ``finding_unit`` times the number of dist
 target-eligible typed findings among the assessments this Episode holds; revision, activity and repeated reading
 earn nothing and annotation support stays separate.
 
-What a child returns is its credit and the controlled features of its grading sheets; its assessments stay inside
-the child. The children's graded experiments therefore enter this credit through the features: ``finding_unit`` for
-each distinct experiment graded in a returned sheet for the proposed annotation that the head's own sheets do not
-already grade. A105 evidence processing: an accepted interpretation earns credit only through its saved subscoring
-sheet; the head's own sheets are written by its ``reason`` unit together with the interpretation, and a returned
-sheet was written the same way by the child that returns it. Never bounded, clamped or rescaled."""
+What a child returns is its credit, its per-annotation scores, the features of its subscoring rows and its sheet states;
+its assessments stay inside the child. The children's credit therefore enters this credit as returned (the page child
+credits the change of the resolution of the sheet, see the page ``credit.py``); this level computes nothing from the
+scores or features. Never bounded, clamped or rescaled."""
+import math
+
 from gene_annotation_episode.episodic_workflow.episode_support.findings.experimental_activity_evidence.investigation_progress import (
     FindingProgressPolicy, ScientificFindingProgress, project_finding_progress)
 
@@ -35,15 +35,11 @@ def finding_progress(records, scope, finding_unit):
                                     details_limit=DETAILS_LIMIT, details_offset=0)
 
 
-def returned_experiments(summary):
-    """The experiments graded for the proposed annotation in sheets the children returned and not in the head's own
-    sheets."""
-    own = {features['experiment_refs'][0] for features in summary['own_assay_sheets']}
-    proposed = [summary['proposed_annotation_ref']]
-    return {features['experiment_refs'][0] for features in summary['assay_sheets']
-            if features['assertion_refs'] == proposed} - own
-
-
 def credit(summary, records):
-    unit = summary['evidence_task']['credit_unit']
-    return float(summary['progress']['credit']) + unit * len(returned_experiments(summary))
+    """The head's own finding progress plus what its children earned (OWNER_DECISION 10: the page updates the subscoring
+    sheet and produces the credit; the levels above only receive it and compute nothing). The children return only their
+    credit, scores, features and sheet states, so the children's credits are added as returned."""
+    value = float(summary['progress']['credit']) + math.fsum(child['credit'] for child in summary['child_returns'])
+    if not math.isfinite(value):
+        raise ValueError('literature_finite_task_credit_required')
+    return value

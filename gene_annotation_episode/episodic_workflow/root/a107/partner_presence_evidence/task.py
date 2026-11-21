@@ -42,6 +42,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.part
     instruction_view)
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.scientific_instruction_text import (
     REASONING_COMMIT_REQUIREMENT)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_progress import FIELDS as JOB_PROGRESS_FIELDS
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import rejection_feedback
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.strict_output import (
     decode_strict_output, strict_output_schema)
@@ -149,11 +150,16 @@ CHILD_OPTIONS = {
               'local or HPC); returns the original handoff records of the launched jobs.',
     'results': 'Acquire the selected execution results of a handed-off job (bounded status or file/page reads); '
                'returns the retained result acquisitions and the selected native result family facts.',
-    'monitor': 'Observe the progress of one pending execution handle; requests information and never polls here; '
-               'returns the observed progress records.',
+    'monitor': 'Check the progress of one job you hold as outstanding: handoff_ref (the handoff reference of one of '
+               'the outstanding jobs) and requested_fields (what the monitor may observe of it). This parent '
+               'requests information and never polls here. Returns its credit, what it found of the job (its '
+               'state, whether its results are available) and its check records; return_fields selects its '
+               'measurements.',
     'hpc': 'Plan, predict, allocate, launch, monitor and accept HPC work for the assigned computation; returns the '
            'plan, the allocation outcome and the execution handoffs.'}
 
+# What a monitor may be asked to observe of a job (the monitor's ``requested_fields``).
+MONITOR_FIELDS = (*JOB_PROGRESS_FIELDS, 'log_windows')
 TEXT = {'type': 'string', 'minLength': 1}
 REFS = {'type': 'array', 'items': REF, 'uniqueItems': True}
 OBJECT = {'type': 'object'}
@@ -172,11 +178,8 @@ CHILD_FIELDS = {
                ['requests', 'immutable_input_versions', 'constraints']),
     'results': ({'handoff_ref': TEXT, 'selector': OBJECT, 'target': OBJECT, 'record_refs': REFS,
                  'initial_result_refs': REFS}, ['handoff_ref', 'selector', 'target']),
-    'monitor': ({'target_handle': TEXT, 'requested_fields': {'type': 'array', 'items': TEXT, 'uniqueItems': True},
-                 'known_progress_refs': {'type': 'array', 'items': TEXT, 'uniqueItems': True},
-                 'permitted_committed_record_types': {'type': 'array', 'items': TEXT, 'uniqueItems': True},
-                 'known_progress_snapshots': OBJECT},
-                ['target_handle', 'requested_fields', 'known_progress_refs', 'permitted_committed_record_types']),
+    'monitor': ({'requested_fields': {'type': 'array', 'items': {'enum': list(MONITOR_FIELDS)},
+                                      'uniqueItems': True}}, ['requested_fields']),
     'hpc': ({'commission_id': TEXT, 'commission_source_ref': REFS, 'tool_request': OBJECT,
              'received_record_refs': REFS, 'input_refs': REFS}, []),
 }
@@ -222,33 +225,50 @@ def offered_catalog(summary, ctx):
     return entries
 
 
-def child_arguments(slot):
+def commissionable(jobs):
+    """The children that can be commissioned now: the monitor only while a job is outstanding."""
+    return [slot for slot in CHILD_SLOTS if slot != 'monitor' or jobs]
+
+
+def child_arguments(slot, jobs):
+    """What the model supplies to commission a child. ``return_fields`` is the selectable fields it wants of what
+    the child declares; a child that declares none has no ``return_fields`` (an array schema needs its ``items``,
+    and an ``enum`` of no names admits nothing). A monitor is commissioned on one of ``jobs`` (the outstanding jobs
+    of the summary), named by its held handoff reference; no text of the model passes to it."""
     properties, required = CHILD_FIELDS[slot]
     names = sorted(SELECTABLE[slot])
-    returned = ({'type': 'array', 'items': {'enum': names}, 'uniqueItems': True} if names
-                else {'type': 'array', 'maxItems': 0})
-    fields = {'objective': TEXT, 'purpose': TEXT, 'return_fields': returned, **properties}
-    return obj(fields, ['objective', 'purpose', 'return_fields', *required])
+    head = ({'handoff_ref': {'enum': [job['handoff_ref'] for job in jobs]}} if slot == 'monitor'
+            else {'objective': TEXT, 'purpose': TEXT})
+    fields = {**head, **properties}
+    if names:
+        fields['return_fields'] = {'type': 'array', 'items': {'enum': names}, 'uniqueItems': True}
+    return obj(fields, [*head, *(['return_fields'] if names else []), *required])
 
 
 def action_schema(catalog, summary):
-    """What the model answers with: one tool (the selected tools, the lookups, ``process.revise``, the report), one
-    reasoning commit, or one child commission with the return fields it wants."""
+    """What the model answers with: one tool (the selected tools, the lookups, ``process.revise``, the reasoning
+    commit), or one child commission with the return fields it wants. The reasoning commit is the tool ``reason``:
+    the arguments of a tool whose schema is composed travel as JSON text, and the Store's reasoning schema sent as
+    output schema itself has more enum values than the model endpoint takes in one schema."""
+    reason_entry = {'name': 'reason', 'input_schema': obj({'commit': summary['reasoning_schema']})}
     branches = [{'type': 'object', 'additionalProperties': False, 'required': ['kind', 'tool', 'arguments'],
                  'properties': {'kind': {'const': 'tool'}, 'tool': {'const': entry['name']},
-                                'arguments': entry['input_schema']}} for entry in catalog]
-    branches.append({'type': 'object', 'additionalProperties': False, 'required': ['kind', 'commit'],
-                     'properties': {'kind': {'const': 'reason'}, 'commit': summary['reasoning_schema']}})
+                                'arguments': entry['input_schema']}} for entry in (*catalog, reason_entry)]
+    jobs = summary['outstanding_jobs']
     branches.extend({'type': 'object', 'additionalProperties': False, 'required': ['kind', 'slot', 'arguments'],
                      'properties': {'kind': {'const': 'child'}, 'slot': {'const': slot},
-                                    'arguments': child_arguments(slot)}} for slot in CHILD_SLOTS)
+                                    'arguments': child_arguments(slot, jobs)}} for slot in commissionable(jobs))
     return {'type': 'object', 'additionalProperties': False, 'required': ['selection'],
             'properties': {'selection': {'anyOf': branches}}}
 
 
+# How the action schema travels to the model: the model endpoint takes no open object, so a record whose fields the
+# schema leaves open (the ``OBJECT`` arguments of a commission) travels as JSON text and is decoded in ``action``.
+TRANSPORT = {'open_records_as_text': True, 'argument_transport_error': 'a107_argument_transport_not_carried'}
+
+
 def transport(schema):
-    return strict_output_schema(schema, open_records_as_text=False,
-                                argument_transport_error='a107_argument_transport_not_carried')
+    return strict_output_schema(schema, **TRANSPORT)
 
 
 # The private copies of the old presentation helpers (``_section``, ``_values``, ``_scalar``, ``_table``): a section
@@ -292,10 +312,10 @@ def render_prompt(summary, axis, thought, catalog, ctx, feedback):
                                                ((entry['name'], entry.get('description', '')) for entry in catalog)))
     for entry in catalog:
         section(parts, 'Operands for ' + entry['name'], entry['input_schema'])
-    section(parts, 'Permitted child roles', sorted(CHILD_SLOTS))
-    section(parts, 'Child construction and requested facts', CHILD_OPTIONS)
-    section(parts, 'Return fields each child can be asked for',
-            {slot: SELECTABLE[slot] for slot in CHILD_SLOTS})
+    slots = commissionable(summary['outstanding_jobs'])
+    section(parts, 'Permitted child roles', sorted(slots))
+    section(parts, 'Child construction and requested facts', {slot: CHILD_OPTIONS[slot] for slot in slots})
+    section(parts, 'Return fields each child can be asked for', {slot: SELECTABLE[slot] for slot in slots})
     section(parts, 'Evidence through child returns', EVIDENCE_THROUGH_CHILDREN)
     section(parts, 'Tool knowledge', ctx.services['tool_knowledge'].read('context'))
     section(parts, 'Launch instruction library', ctx.services['launch_instructions'].read('context'))
@@ -306,6 +326,9 @@ def render_prompt(summary, axis, thought, catalog, ctx, feedback):
     section(steering, 'Prepared alternative processes', summary['revisions'])
     section(steering, 'Received A107 evidence', summary['received'])
     section(steering, 'Received child reports', summary['child_reports'])
+    section(steering, 'Outstanding jobs (a monitor is commissioned on one by its handoff_ref)',
+            [{name: job[name] for name in ('handoff_ref', 'job', 'resource_id', 'kind', 'submitted_at',
+                                           'latest_check')} for job in summary['outstanding_jobs']])
     section(steering, 'Own earlier outcomes', {'meaning': summary['history_meaning'], 'page': summary['own_outcomes']})
     section(steering, 'Feedback on your last answer', feedback)
     return '\n'.join(parts) + '\n\n' + '\n'.join(steering)
@@ -354,10 +377,9 @@ def action(response, summary, records, ctx):
     catalog = offered_catalog(summary, ctx)
     schema = action_schema(catalog, summary)
     try:
-        decoded = decode_strict_output(response, transport(schema), open_records_as_text=False,
-                                       argument_transport_error='a107_argument_transport_not_carried')
+        decoded = decode_strict_output(response, schema, **TRANSPORT)
         Draft202012Validator(schema).validate(decoded)
-    except ValidationError as error:
+    except (ValidationError, ValueError) as error:   # an answer that does not fit, or JSON text that does not parse
         raise Rejected(rejection_feedback(error, category='action_contract'))
     selection = decoded['selection']
     try:
@@ -366,11 +388,11 @@ def action(response, summary, records, ctx):
             for name in RECORD_ARGUMENTS[slot]:
                 check_held(records, arguments.get(name) or ())
             return ChildCall(slot, arguments)
-        if selection['kind'] == 'reason':
-            if empty_commit(selection['commit'], records.reasoning_schema()):
-                raise ValueError('empty_reasoning_commit')
-            return ToolCall('reason', {'commit': selection['commit'], 'scope': summary['scope']})
         tool, arguments = selection['tool'], selection['arguments']
+        if tool == 'reason':
+            if empty_commit(arguments['commit'], records.reasoning_schema()):
+                raise ValueError('empty_reasoning_commit')
+            return ToolCall('reason', {'commit': arguments['commit'], 'scope': summary['scope']})
         if tool == 'process.revise':
             return ToolCall('process_revise', {'revision': arguments, 'selection': summary['selection']})
         if tool in (*LIBRARY_TOOLS, *KNOWLEDGE_TOOLS):

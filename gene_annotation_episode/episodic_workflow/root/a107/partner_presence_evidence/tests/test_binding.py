@@ -26,7 +26,7 @@ CHILD_FOLDERS = {name for name in CHILDREN.values() if name}
 FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
          'messages/__init__.py', 'messages/read_from_parent.py', 'messages/msg_to_child.py',
          'messages/read_from_child.py', 'messages/internal_summary.py', 'messages/final_to_parent.py',
-         'tests/__init__.py', 'tests/test_binding.py'}
+         'tests/__init__.py', 'tests/test_binding.py', 'tests/test_decision_schema.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 SOURCE, ARTIFACT, SUBJECT = 'source_' + 'a' * 24, 'artifact_' + 'b' * 24, 'input_' + 'c' * 24
 LIBRARY_ID, ENTRY = 'd' * 64, 'e' * 64
@@ -40,6 +40,9 @@ ASSIGNMENT = {'selection': SELECTION, 'evidence_refs': [SOURCE], 'constraints': 
               'scope': {'subject_refs': [SUBJECT]}, 'received_record_refs': [SOURCE, ARTIFACT, SUBJECT],
               'finding_unit': 1.0, 'handoff_unit': 2.0, 'acquired_record_unit': 3.0, 'information_unit': 4.0}
 COMPLETION = {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 2.5}
+# One outstanding job as ``job_records.outstanding_jobs`` lists it: its handoff row and one check row held of it.
+JOB_HANDOFF, JOB_CHECK = 'row_' + '1' * 64, 'row_' + '2' * 64
+JOBS = [{'job': 'job_' + '3' * 32, 'handoff_ref': JOB_HANDOFF, 'record_refs': [JOB_HANDOFF, JOB_CHECK]}]
 
 
 def files():
@@ -174,10 +177,10 @@ def test_the_model_can_name_every_child_slot_and_the_tools_of_the_task():
                                'knowledge_read'}
     assert set(EPISODE.tools) == set(task.TOOLS)
     for slot in CHILDREN:
-        schema = task.child_arguments(slot)
+        schema = task.child_arguments(slot, JOBS)
         names = sorted(importlib.import_module(PACKAGE + '.messages.msg_to_child').SELECTABLE[slot])
-        returned = schema['properties']['return_fields']
-        assert (returned['items']['enum'] == names) if names else returned['maxItems'] == 0
+        fields = schema['properties']
+        assert (fields['return_fields']['items']['enum'] == names) if names else 'return_fields' not in fields
 
 
 @pytest.mark.parametrize('slot', [slot for slot, child in CHILDREN.items() if child])
@@ -208,8 +211,9 @@ def arguments_for(slot, task):
         'known_progress_refs': [], 'permitted_committed_record_types': [], 'known_progress_snapshots': {},
         'commission_id': 'c', 'commission_source_ref': [SOURCE], 'tool_request': {}, 'received_record_refs': [SOURCE],
         'input_refs': [SOURCE]}
-    properties = task.child_arguments(slot)['properties']
-    return {**values, **{name: samples[name] for name in properties if name not in values}}
+    properties = task.child_arguments(slot, JOBS)['properties']
+    chosen = {**values, **{name: samples[name] for name in properties if name not in values}}
+    return {**chosen, 'handoff_ref': JOB_HANDOFF} if slot == 'monitor' else chosen
 
 
 @pytest.mark.parametrize('slot', [slot for slot, child in CHILDREN.items() if child])
@@ -218,7 +222,7 @@ def test_the_commission_of_each_child_uses_only_fields_the_child_declares_and_fi
     to_child = importlib.import_module(PACKAGE + '.messages.msg_to_child')
     admitted = EPISODE.assignment_form.admit(ASSIGNMENT, 'test')
     summary = {**EPISODE.read_from_parent(admitted, {}), 'objective': 'the question',
-               'held_record_refs': [ARTIFACT, SOURCE, SUBJECT]}
+               'held_record_refs': [ARTIFACT, SOURCE, SUBJECT], 'outstanding_jobs': JOBS}
     selectable = sorted(to_child.SELECTABLE[slot])[:2]
     arguments = {**arguments_for(slot, task), 'return_fields': selectable}
     message = EPISODE.msg_to_child(slot, arguments, summary)
@@ -228,8 +232,17 @@ def test_the_commission_of_each_child_uses_only_fields_the_child_declares_and_fi
     for name, (_, value) in declared.items():
         if value is not None:
             assert message.assignment[name] == value
-    assert message.selection == tuple(selectable) and message.objective == 'o'
-    assert message.message == {'purpose': 'p'}
+    assert message.selection == tuple(selectable)
+    if slot == 'monitor':
+        # The job is named by the records this episode holds; nothing the model wrote passes to the monitor.
+        assert message.assignment == {'version': 'monitor_assignment_v2', 'handoff_refs': [JOB_HANDOFF],
+                                      'known_progress_refs': [JOB_CHECK], 'dependency_handoff_refs': [],
+                                      'requested_fields': ['execution_status'], 'information_unit': 4.0}
+        assert message.message == {} and message.objective == 'Assess the progress of job ' + JOBS[0]['job'] + '.'
+        with pytest.raises(KeyError):      # a job this episode does not hold as outstanding: the commission fails
+            EPISODE.msg_to_child(slot, {**arguments, 'handoff_ref': 'row_' + '0' * 64}, summary)
+    else:
+        assert message.objective == 'o' and message.message == {'purpose': 'p'}
 
 
 def test_the_commission_of_the_head_itself_is_admitted_by_its_own_form():

@@ -7,8 +7,8 @@ GOAL = ('Choose which permitted concrete execution request to commission on an e
         'constraints and pinned instructions. A resource child owns iterative execution in the shared loop. Receive '
         'its requested typed handoff; no infrastructure chooses an approach. Actual received usable handoff '
         'completes this launch endpoint with exact zero future credit.')
-UNIT = ('One selected action: a read of the configured resource capabilities, a typed reasoning commit, or one '
-        'commission of a resource child (API, local or HPC job execution) that carries out one permitted concrete '
-        'execution request on an explicit resource_id')
+UNIT = ('One action: the lookup of the configured resources, or one commission of a '
+        'resource child (API, local or HPC job execution) that carries out one permitted concrete execution '
+        'request on an explicit resource_id')
 RESULT = ('The usable handoff facts of the commissioned execution requests: the resources that handed off, whether '
           'a handoff is verified complete, and the references that hold the handoffs')

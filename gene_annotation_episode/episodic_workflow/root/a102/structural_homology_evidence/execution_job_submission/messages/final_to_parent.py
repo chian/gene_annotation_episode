@@ -28,7 +28,6 @@ FINDING_FORM = RecordForm({
                          items=COMMISSION_FORM),
     'handoff_resource_ids': Field('list', 'The resources with a usable received handoff'),
     'new_handoff_count': Field('integer', 'How many of them were not already handed off at the commission'),
-    'qualification': Field('text', 'What the finding does and does not establish'),
 })
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
@@ -64,9 +63,7 @@ def final_to_parent(summary, completion, selection):
                                 'completed': commission['completed']}
                                for commission in summary['commissions']],
                'handoff_resource_ids': list(summary['handed_off']),
-               'new_handoff_count': len(summary['new_handoff_resource_ids']),
-               'qualification': ('a handoff is usable when its resource child returned handoff references; the '
-                                 'record itself is not re-read here, and no result was acquired')}
+               'new_handoff_count': len(summary['new_handoff_resource_ids'])}
     recorded = facts(summary)
     result = {'credit': completion['credit'], 'finding': finding, **{name: recorded[name] for name in selection}}
     return result

@@ -16,6 +16,7 @@ Not carried: ``working_state`` (the old ``workflow.working_state(self)``: the he
 ``pending_work``, ``report_deliveries``, ``report_lifecycle``, ``delivery_status``, ``visual_evidence`` (a query of the
 old ``runtime_actions`` table), ``job_episode_options``, ``available_report_facts`` (the parent selects the child's
 declared fields), ``contract_information_profile`` and the other pieces of the old decision exchange."""
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import outstanding_jobs
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
 from ..credit import finding_progress
@@ -61,4 +62,7 @@ def internal_summary(view):
             'interpretation': interpretation, 'interpretation_source_held': source_held, 'children': children,
             'committed_record_refs': _dedupe(committed), 'reasoning_schema': view.records.reasoning_schema(),
             'investigation_progress': finding_progress(view.records, parent),
+            # the jobs whose handoff row of the job ledger this Episode holds and whose closure row it does not hold,
+            # with the check rows it holds of each: what a monitor commission passes in custody
+            'outstanding_jobs': outstanding_jobs(view.records),
             'action_yields': None if state is None else yield_table(state, forecast_unit='credit')}

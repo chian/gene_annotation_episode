@@ -34,8 +34,6 @@ FINDING_FORM = RecordForm({
     'new_handoff_count': Field('integer', 'The handoffs of resources that had none when this launch began'),
     'launches_run': Field('integer', 'The launch children commissioned'),
     'launches': Field('list', 'Each launch child commissioned, in order', items=LAUNCH_FORM),
-    'qualification': Field('text', 'What the recorded handoffs establish: a received handoff is not a finished job '
-                                   'and a missing reply does not establish that no job was created'),
 })
 
 _FAMILY_SOURCE_FUNCTIONS = (native_hmmer_fact_sources, standard_blast_database_fact_sources,
@@ -100,11 +98,7 @@ def final_to_parent(summary, completion, selection):
                           'new_handoff_count': new, 'launches_run': len(summary['launches']),
                           'launches': [{'slot': launch['slot'], 'resource_id': launch['resource_id'],
                                         'completed': launch['completed'], 'handoff_refs': launch['handoff_refs']}
-                                       for launch in summary['launches']],
-                          'qualification': ('a usable original handoff was received from a launch child'
-                                            if established else
-                                            'no usable original handoff was received; a missing reply does not '
-                                            'establish that no job was created')}}
+                                       for launch in summary['launches']]}}
     for name in selection:
         result[name] = recorded[name]
     return result

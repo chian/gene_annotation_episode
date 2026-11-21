@@ -1,4 +1,5 @@
-"""The task: plan, launch, observe and parse real allocation work and commission the sisters, one action per unit.
+"""The task: bring one HPC commission to completion by commissioning the prediction and the allocation-execution
+sisters over the commission's HPC ledger, or by a single planning action of its own; one action per unit.
 
 Carried from the old ``work_operations.py`` (``catalog``, ``execute``), ``portfolio_state.py``,
 ``received_evidence.py``, ``measured_history.py``, ``portfolio_candidates.py``, ``portfolio_comparison.py``,
@@ -11,46 +12,45 @@ commission of the ``hpc_prediction``, ``hpc_execution``, ``launch``, ``monitor``
 always offers a unit and never ends the Episode: only the yield controller does. The old ``wait`` and
 ``redeliver_report`` actions, the decision exchange and the report-repair instruction text are not carried.
 
-Tool names are ``[a-z][a-z0-9_]*`` now: ``hpc.read`` is ``hpc_read``, ``hpc.monitor.wait`` is ``hpc_monitor_wait``,
-and so on. ``hpc_open`` is new: it is the episode's initial lookup (the old ``state`` and ``initialize``, which every
-old tool call repeated): ``decide`` issues it first and again after a unit that commissioned the prediction or the
-allocation execution sister, because those sisters change the shared ledger and the old ``decision_context`` read the
-ledger live at every decision (``credit`` has no services and the ledger is outside the Store, so the credit of such a
-unit is measured by the unit that reads the ledger again). The model is not offered it. A tool returns a failure of
-the model's arguments as an outcome (``status`` ``invalid``) and raises for a broken ledger or receipt. Every outcome
-carries ``ledger_view``: what the ledger shows after the tool. Its ``credit`` is the ledger's credit view:
-``credit.py`` reads the number from it.
+**The ledger** is the work table ``HPC_LEDGER`` in custody (``episode_support/jobs/hpc_ledger.py``), and this
+episode owns it. ``hpc_open`` (the first unit: ``decide`` issues it, the model is not offered it) opens the ledger
+of the assignment's commission with ``HpcLedger.open(ctx.store, commission)`` and records the owner; rows an
+earlier episode of this commission wrote and the commissioner passed (``received_record_refs``) are found under
+it. Every later tool is handed the ledger id in its arguments and reads the held rows with
+``HpcLedger.existing(ctx.store, ledger)``. A sister is commissioned with the ledger id and the ledger's rows
+(``ledger_row_refs``); the rows it wrote come back in ``hpc_ledger_refs`` of its return and are held from then on.
+``internal_summary`` reads the ledger through ``view.records`` at every decision, so a sister's work is in the
+credit of the unit that commissioned it and in the next decision's view: nothing is read again and nothing is
+stale. A frozen plan's launch input is an artifact the ledger names (the row ``launch_input:<plan_id>``), passed
+to the launch child in custody: there is no directory and no local file.
 
-This episode OWNS the ledger (``HPCLedger``, one SQLite file per HPC parent, shared with its two sisters under
-``<directory>/hpc/<digest(run_id, episode_id)>``): ``hpc_open`` creates it from the commission and records the owner
-identity; every other tool opens it with ``HPCLedger.open_existing``. BLOCKED-ON-STORE-ACCESS (library not carried):
-``HPCLedger`` opens its own SQLite file by path; the intended form is a declared work table read and written through
-``ctx.store.table(...)``, passed to the sisters in custody.
+**The prompt** is ``INSTRUCTIONS`` (what the episode is for, what the model is shown, how to work, what earns
+credit) and the descriptions of ``TOOL_CATALOG`` and ``CHILD_CATALOG``; ``decide`` shows the commission, the
+resource, the ledger, what the sisters and the job children returned, the credit and the episode's own units, and
+nothing of the yield controller or the progress clock.
 
-Settings this episode reads (``ctx.settings``, its entry of the run's ``continuation`` collaborator; the old
-``configuration.py`` values): ``directory`` (the root of the ledgers and the launch input files), ``resources`` (the
-configured resources by id; one must be a ``pbs_ssh`` resource), ``commissions`` (the configured commissions by id,
-for ``commission_id``), ``shared_execution_memory`` (boolean: whether the shared timing memory is used),
-``handoff_unit``, ``information_unit`` and ``acquired_record_unit`` (the credits one received handoff, one informative
-progress snapshot and one acquired selector earn in the three job children; they ride in the child commissions),
-``launch_instruction_directory`` and ``tool_knowledge_directory`` (optional library directories) and the yield settings
-``cost`` and ``parameters`` (``yield_estimator.py``).
+Tool names are ``[a-z][a-z0-9_]*``: ``hpc.read`` is ``hpc_read``, ``hpc.monitor.wait`` is ``hpc_monitor_wait``, and
+so on. A tool returns a failure of the model's arguments as an outcome (``status`` ``invalid``), a request the
+resource did not answer as an outcome (``status`` ``failed``), and raises for a broken ledger or receipt.
 
-BLOCKED-ON-JOB-SERVICE: every call that reaches the scheduler, the resource or the shared timing memory, and the read
-of the handoff record the launch child returned, are not provided. ``handoff_target``, ``observe_target``,
-``read_window``, ``write_allocation_control``, ``observe_queue_value``, ``run_command``, ``estimate_latest``,
-``estimate_observe``, ``estimate_history``, ``estimate_policy`` and ``estimate_record`` each name the call they want
-and raise where they are reached. ``decide`` reads ``ctx.services['estimate_table']`` for the tool estimates when the
-shared memory is configured: no such service exists, so such a run cannot be linked until the caller supplies one.
+**The resource** is reached only through the run's ``job_access`` service: ``hpc_remote.command``, ``read_file``
+and ``write_file`` (one login-mode command on the route bound to the commission's resource id),
+``hpc_queue.observe``, and for a handed-off job ``hpc_remote.handoff_target`` (the held ``JOB_LEDGER`` handoff row
+the launch child returned) and ``job_status`` (one status request, written as the job's check row). **The shared
+timing memory** is the ``estimate_table`` service (``latest``, ``observe``, ``history``, ``policy``, ``record``,
+and ``profiles`` for the decision), used when the setting ``shared_execution_memory`` is true.
 
-No elapsed-time or count cutoff is carried: the old discovery ``timeout=90`` and output truncation and the old
-first-2000-observations slice of the shared history are not in this episode's code (README rule 2)."""
+Settings this episode reads (``ctx.settings``): ``resources`` (the configured resources by id; the commission's is
+a ``pbs_ssh`` resource with its ``account``, ``workspace`` and ``python_executable``), ``commissions`` (the
+configured commissions by id, for ``commission_id``), ``shared_execution_memory`` (boolean), ``handoff_unit``,
+``information_unit`` and ``acquired_record_unit`` (the credits one received handoff, one informative progress
+snapshot and one acquired selector earn in the three job children; they ride in the child commissions) and the
+yield settings ``cost`` and ``parameters`` (``yield_estimator.py``)."""
 import base64
 from copy import deepcopy
 from datetime import datetime, timezone
 import hashlib
 import json
-from pathlib import Path
 import shlex
 import time
 
@@ -64,34 +64,23 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_pre
     plain)
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.partner_presence_evidence.execution_guidance import (
     resource_identity)
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (
-    INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc import hpc_queue
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc import hpc_queue, hpc_remote
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.hpc_queue import canonical, digest
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.partner_presence_evidence import (
-    hpc_prediction as prediction)
+    hpc_commission_sources, hpc_prediction as prediction)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.partner_presence_evidence.hpc_campaign import (
-    accepts, bind_progress, build_plan, incorporate_progress, telemetry, timestamp, validate_commission)
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.partner_presence_evidence import (
-    hpc_commission_sources)
+    accepts, bind_progress, build_plan, incorporate_progress, telemetry, validate_commission)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.partner_presence_evidence.hpc_history import (
     closed_measurement)
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.partner_presence_evidence.hpc_ledger import (
-    HPCLedger)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc_ledger import HpcLedger
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.partner_presence_evidence.hpc_monitoring import (
     MonitorCronController)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.partner_presence_evidence.hpc_resource_prediction import (
-    forecast_metric, pbs_resource_metrics, physical_attempt_key)
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.partner_presence_evidence.practical_execution_state import (
-    _immutable)
+    forecast_metric, measured_value, pbs_resource_metrics, physical_attempt_key)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
-from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import (
-    time_accounting, yield_table)
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import (
     RECORD_SCHEMAS)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
-    INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)
 
 _PREFIX = 'partner_presence_evidence/hpc_work_planning/'
 CHILD_SLOTS = {'launch': _PREFIX + 'execution_job_submission',
@@ -104,86 +93,112 @@ MODEL_ROLE = 'REASONING'
 PROJECT_DIRECTORY = '/lus/flare/projects/BioReason-Aurora-Test'
 MONITOR_FIELD_OPTIONS = ('execution_status', 'measurements', 'log_windows', 'committed_record_refs', 'dependencies',
                          'result_available')
-# The selectable return fields each child declares that this episode asks for (README 3b C4: the parent selects).
+# The selectable return fields each child declares that this episode asks for (the parent selects). A sister's
+# credit, finding and ledger rows are required fields of its return and cannot be selected.
 LAUNCH_SELECTION = ('execution_handoff_refs', 'execution_completed')
 MONITOR_SELECTION = ('monitoring_progress_refs', 'monitoring_execution_state', 'monitoring_result_available',
                      'monitoring_observed_at_unix_seconds', 'monitoring_committed_record_refs',
                      'monitoring_progress_snapshots')
 RESULTS_SELECTION = ('execution_result_refs', 'execution_result_artifact_refs', 'execution_completed')
-PREDICTION_SELECTION = ('hpc_credit', 'hpc_model_ref', 'hpc_accepted_obligations', 'hpc_result_refs')
-EXECUTION_SELECTION = ('hpc_credit', 'hpc_model_ref', 'hpc_accepted_obligations', 'hpc_result_refs',
-                       'hpc_result_artifact_refs')
+PREDICTION_SELECTION = ()
+EXECUTION_SELECTION = ('hpc_result_refs', 'hpc_result_artifact_refs')
 # The keys the action adds to every tool's arguments: they come from the commission, not from the model.
-INJECTED = ('commission_id', 'commission_source_ref', 'tool_request', 'scope')
-# The sisters change the shared ledger: after one of them the ledger is read again (``hpc_open``).
-LEDGER_SISTERS = ('hpc_prediction', 'hpc_execution')
+INJECTED = ('ledger', 'commission_id', 'commission_source_ref', 'tool_request', 'scope')
 
 INSTRUCTIONS = (
-    'Iterate toward the original accomplishment while balancing expected credit against real elapsed time and '
-    'resource demand. The hpc parent can commission hpc_prediction and hpc_execution as sisters (the child slots '
-    'hpc_prediction and hpc_execution): prediction fits/measures/compares; execution prepares, launches, monitors '
-    'and parses the selected work. Both assignments are built from hpc_commission and carry this episode as the '
-    'owner of the ledger (hpc_owner_episode_id). Both sisters inherit exactly hpc_scope, including an empty '
-    'subject_refs list for an operational task with no biological inputs. Candidate IDs, model IDs, queue '
-    'observations and resource IDs are not biological subject_refs. Use the shared current model and comparisons; '
-    'resource observations and candidate requests are different quantities. If suitable history is available, a '
-    'prediction iteration can improve sizing before launching. No historical validation support means no invented '
-    'model-improvement credit. Queue/setup costs belong to an allocation, which should carry enough useful work. '
-    'When candidates are absent, discover the remote environment and documentation with hpc_discovery_run, then '
-    'design candidate portfolios with hpc_candidate_propose. Discover is for lightweight inspection; leave '
-    'installation and file staging to Launch, and scientific computation to the actual allocation. You choose the '
-    'real inputs, database, executable commands, resources, worker code and preparation instructions. Never '
-    'fabricate inputs or receipts. Every work unit writes result.json and progress.json under '
-    'os.environ["HPC_UNIT_DIRECTORY"], its original per-unit working directory. The allocation workspace is for '
-    'staged inputs, not these unit outputs; its fields must satisfy the caller acceptance predicates. The '
-    'environment contains HPC_UNIT_DIRECTORY. Candidate files use relative paths; {allocation_workspace} expands '
-    'in files, argv, environment and preparation. Compute commands must run on allocated compute nodes using the '
-    'facility launcher. Commission hpc_prediction only when model improvement warrants its own iteration. Compare '
-    'portfolios using current queue features and measured history. A plan freezes its original forecast, '
-    'scientific manifest and acceptance criteria. Commission launch (the child slot launch) with that actual job '
-    'and resource: name the plan_ref of a frozen plan; the launch commission is built from that plan. The '
-    'execution agent chooses its scripts, environment and operational commands from the supplied resource '
-    'instructions and observations. Supplied reference sources are available in the local input file; do not '
-    'transcribe them into a child goal or prescribe a setup/submit sequence. A plan is launched once: the launch '
-    'child returns the received handoff reference, and a launch must not be commissioned again for the same plan. '
-    'Attach that received handoff with hpc_handoff. Use hpc_monitor once when another observation can affect your '
-    'decision; it revises conditional predictions and attainable credit. Use hpc_results directly for known '
-    'parsing. Commission the monitor and results children only for actual investigation. Completed unit outputs '
-    'can await parsing while PBS is still running or cleaning up. When a monitor shows completed units whose '
-    'outputs are not yet parsed, use hpc_results for those original outputs; completion is not acceptance. When '
-    'hpc_monitor_controllers is present, select hpc_monitor_wait for a scheduled observation: its attached '
-    'controller evaluates the conditional forecast, persists a wake time, and executes the original monitor at '
-    'that time. This preserves pending accomplishment value across waits without credit for sleeping. The timer '
-    'cannot turn into another unobserved wait. Do not poll for credit or duplicate a submitted attempt. Never '
-    'replace an uncertain submission. Accepted accomplishment, model improvement, and fixed prospective forecast '
-    'validation are the only parent credit components; launch-local credits are not added again. Read the owner '
-    'commission with hpc_read (reference commission) when you need it again. Answer with one selection from the '
-    'offered actions and its arguments as JSON object text in arguments_json (the actions list gives the argument '
-    'schema of each).')
+    'You are the HPC planning episode of one commission and the owner of its HPC ledger. Your job is to bring the '
+    'commissioned computation to completion on the HPC resource by commissioning two sister episodes that work '
+    'over the ledger: hpc_prediction, which predicts the time and resources the work needs and records that '
+    'expectation in the ledger (a fitted model and a comparison of the candidate portfolios), and hpc_execution, '
+    'which plans the allocation from the ledger, has the plan launched, observes the job and parses and accepts '
+    'its results. You may also take a single planning step yourself with a tool. Iterate toward the original '
+    'accomplishment while balancing expected credit against real elapsed time and resource demand.\n\n'
+    'What you are shown. commission: the work, its obligations with their credit and acceptance predicates, the '
+    'cost preferences and limits. resource: the configured HPC resource. ledger: what the HPC ledger of this '
+    'commission holds now: the current resource model and its support, how many measured cases there are to fit '
+    'and validate on, the candidate portfolios, the queue observations, the latest comparison, the frozen plans '
+    'with whether each is handed off and closed, the latest monitor and the monitor controllers. Both sisters '
+    'work on this ledger; what a sister records is in it as soon as the sister returns. predictions and '
+    'executions: what each sister commission returned, its credit and its counts. launches, monitors and '
+    'acquisitions: what the job children you commissioned yourself returned. credit: what this episode has earned so '
+    'far, and the ledger\'s credit by component. '
+    'units_so_far and last_outcome: what you already did and what the last action returned. actions: '
+    'every action you can select now, with its argument schema.\n\n'
+    'How to work. Each decision selects exactly one action; it runs as one unit. Commission hpc_prediction when '
+    'model improvement warrants its own iteration: when the model is prior-only or there are measured cases it '
+    'was not fitted on, a prediction iteration improves the sizing before anything is launched. No historical '
+    'validation support means no invented model-improvement credit. Commission hpc_execution to plan the '
+    'allocation from the ledger and carry the plan through. A sister\'s credit, and the trend of its credit over '
+    'your commissions of it, say whether it was productive: do not commission again a sister that has just '
+    'returned no credit unless the ledger has changed so that it has new work. The tools are the single steps of '
+    'the same work, for a step you take yourself: hpc_queue_observe, hpc_compare, hpc_plan (a plan freezes its '
+    'original forecast, scientific manifest and acceptance criteria), launch (a plan is launched once and a '
+    'launch must not be commissioned again for the same plan), hpc_handoff, hpc_monitor when another observation '
+    'can affect your decision, and hpc_results (completion is not acceptance). Queue and setup costs belong to an '
+    'allocation, which should carry enough useful work. When candidates are absent, discover the remote '
+    'environment and documentation with hpc_discovery_run, then design candidate portfolios with '
+    'hpc_candidate_propose. Every work unit of a candidate writes result.json and progress.json under '
+    'os.environ["HPC_UNIT_DIRECTORY"]; the fields of result.json must satisfy the acceptance predicates. '
+    'Candidate files use relative paths; {allocation_workspace} expands in files, argv, environment and '
+    'preparation. Compute commands must run on allocated compute nodes using the facility launcher. When the '
+    'ledger shows a monitor controller for a plan, select hpc_monitor_wait for a scheduled observation, without '
+    'credit for sleeping. Commission the monitor and results children only for actual investigation. Never '
+    'fabricate inputs or receipts, never duplicate a submitted attempt and never replace an uncertain submission. '
+    'When an action or a sister reports that the resource could not be reached, do not repeat it: without a '
+    'queue observation no plan can be frozen, and nothing may be invented in its place.\n\n'
+    'What earns credit. The ledger\'s credit has three components and no other: accepted accomplishment (an '
+    'obligation whose unit completed with return code 0 and whose result satisfies its acceptance predicate earns '
+    'the obligation\'s credit, once), model improvement (the measured held-out improvement of the model the '
+    'prediction sister fits), and fixed prospective forecast validation (a forecast frozen at planning is scored '
+    'against the measured outcome; signed). A commission earns what the sister\'s work adds to the ledger; '
+    'launch-local credits are not added again. Observing, comparing, planning, launching, waiting and polling '
+    'earn nothing by themselves: do not poll for credit. You do not end the episode: it ends by itself when '
+    'further units stop earning.\n\n'
+    'Answer with one selection from actions and its arguments as JSON object text in arguments_json.')
 
 LAUNCH_JOB_INSTRUCTIONS = (
-    'The supplied local input file contains the frozen scientific manifest and reference source files. Use general '
-    'terminal commands on the coordinator or assigned resource as needed; choose your scripts, environment and '
-    'transfer method. Do not transcribe supplied source code into a child goal. Reference implementation files are '
-    'available inputs, not a required execution procedure. Preserve original unit identities, scientific inputs, '
-    'output/progress formats and acceptance predicates. Run computation in the actual allocation and retain its '
-    'original identity. An uncertain submission must be investigated rather than duplicated.')
+    'The supplied launch input (a record passed with this commission) contains the frozen scientific manifest and '
+    'reference source files. Choose your scripts, environment and transfer method. Do not transcribe supplied '
+    'source code into a child goal. Reference implementation files are available inputs, not a required execution '
+    'procedure. Preserve original unit identities, scientific inputs, output/progress formats and acceptance '
+    'predicates. Run computation in the actual allocation and retain its original identity. An uncertain '
+    'submission must be investigated rather than duplicated.')
 
 _TEXT = {'type': 'string', 'minLength': 1}
 _STRINGS = {'type': 'array', 'uniqueItems': True, 'items': _TEXT}
 
-# The old tool catalogue (``HPCWorkOperations.catalog``), under the new tool names. ``shared`` entries first.
+# The tools the model may select (the old ``HPCWorkOperations.catalog``), each with what it records in the ledger.
 TOOL_CATALOG = {
-    'hpc_read': ('Read retained HPC evidence by its exact identity.', obj({'reference': _TEXT})),
-    'hpc_compare': ('Compare all approved portfolios; no work is selected or launched.',
+    'hpc_queue_observe': ('Observe the scheduler queue and the facility status once on the resource and record the '
+                          'observation in the ledger (a queue_ref). hpc_compare and hpc_plan need one; hpc_plan '
+                          'needs it fresh.', obj({})),
+    'hpc_compare': ('Forecast every candidate portfolio under one model and one queue observation and record the '
+                    'comparison in the ledger: predicted times, success probability, expected credit and net '
+                    'expected value per candidate. model_ref is one of the ledger\'s model_refs, queue_ref one of '
+                    'its queue_refs. No work is selected or launched.',
                     obj({'model_ref': _TEXT, 'queue_ref': _TEXT})),
-    'hpc_history_refresh': ('Read age-weighted shared timing history once. No remote discovery, polling credit, or '
-                            'new scientific work.', obj({})),
-    'hpc_discovery_run': ('Run one lightweight remote inspection or documentation retrieval through the '
-                          'established SSH transport. No job submission, installation or scientific computation; '
-                          'those belong to Launch and the allocation.', obj({'command': _TEXT})),
+    'hpc_plan': ('Freeze one candidate portfolio as a plan in the ledger, with its forecast under model_ref and the '
+                 'fresh queue observation queue_ref, its scientific manifest and its launch assignment. The queue '
+                 'of the candidate must be an enabled, started execution queue and the candidate within its node '
+                 'and walltime limits. Returns the plan_ref to launch.',
+                 obj({'candidate_id': _TEXT, 'model_ref': _TEXT, 'queue_ref': _TEXT})),
+    'hpc_handoff': ('Attach the handoff the launch of a plan returned (a handoff_ref of launches) to that plan in '
+                    'the ledger, so that the original job can be monitored and its results parsed.',
+                    obj({'plan_ref': _TEXT, 'handoff_ref': _TEXT})),
+    'hpc_monitor': ('Observe the original job of a handed-off plan and its progress once; record the measurement, '
+                    'score the frozen forecasts it settles, and update and freeze the conditional forecast. '
+                    'refresh_queue also takes a new queue observation.',
+                    obj({'plan_ref': _TEXT, 'refresh_queue': {'type': 'boolean'}})),
+    'hpc_monitor_wait': ('Use the monitor controller attached to a plan: it values a later observation from the '
+                         'conditional forecast, waits until its wake time and then observes this original job '
+                         'exactly once. No earned credit for waiting.', obj({'plan_ref': _TEXT})),
+    'hpc_results': ('Parse the compact results of the original allocation of a handed-off plan, publish each as a '
+                    'source record and apply the commission\'s acceptance predicates: an accepted obligation earns '
+                    'its credit.', obj({'plan_ref': _TEXT})),
+    'hpc_allocation_order': ('Reorder the pending units of a running allocation at the next unit boundary, '
+                             'retaining all unstarted work.', obj({'plan_ref': _TEXT, 'unit_ids': _STRINGS})),
     'hpc_candidate_propose': (
-        'Retain an executable portfolio selected by this episode. candidate_json is JSON with id, queue, nodes, '
+        'Record an executable portfolio in the ledger. candidate_json is JSON with id, queue, nodes, '
         'wall_seconds (PBS allocation request), features (numeric map including worker_threads/workload sizes), '
         'optional resource_capacity {cpu_threads, memory_bytes} describing actual allocation capacity, units '
         '(unit_id, obligation_id, argv, environment, effort, optional reports_progress), optional files [{path: '
@@ -191,37 +206,33 @@ TOOL_CATALOG = {
         'finite number expressing relative work, for example 1.0; workload sizes belong in features. No per-unit '
         'execution timers. Use {allocation_workspace} for the eventual directory. Existing candidate identities '
         'are immutable.', obj({'candidate_json': _TEXT})),
-    'hpc_queue_observe': ('Acquire PBS queue and ALCF score/status once and transform them.', obj({})),
-    'hpc_plan': ('Freeze one useful portfolio and its forecasts; return a concrete launch assignment.',
-                 obj({'candidate_id': _TEXT, 'model_ref': _TEXT, 'queue_ref': _TEXT})),
-    'hpc_handoff': ('Bind the original received PBS handoff to the exact frozen portfolio.',
-                    obj({'plan_ref': _TEXT, 'handoff_ref': _TEXT})),
-    'hpc_monitor': ('Observe the original job and progress once; update and freeze conditional forecasts.',
-                    obj({'plan_ref': _TEXT, 'refresh_queue': {'type': 'boolean'}})),
-    'hpc_monitor_wait': ('Use the attached forecast-valued monitor controller: persist a timer, release the '
-                         'coordinator while waiting, then observe this original job exactly once when due. No '
-                         'earned credit for waiting.', obj({'plan_ref': _TEXT})),
-    'hpc_results': ('Parse compact results from the original allocation and apply original acceptance '
-                    'predicates.', obj({'plan_ref': _TEXT})),
-    'hpc_allocation_order': ('Reorder original pending units at the next unit boundary, retaining all unstarted '
-                             'work.', obj({'plan_ref': _TEXT, 'unit_ids': _STRINGS})),
+    'hpc_discovery_run': ('Run one read-only shell command on the login node of the resource, in the project '
+                          'directory, and record its output in the ledger: a lightweight inspection or a '
+                          'documentation lookup. No job submission, installation or scientific computation; '
+                          'those belong to the launch and the allocation.', obj({'command': _TEXT})),
+    'hpc_read': ('Read one record of the ledger by its exact identity: a model_ref, a queue_ref, a plan_ref, a '
+                 'comparison_ref, a result source, or commission.', obj({'reference': _TEXT})),
+    'hpc_history_refresh': ('Read the shared timing history of earlier runs once and record it in the ledger. No '
+                            'remote discovery, polling credit, or new scientific work.', obj({})),
 }
 # The children the model may commission (the old child roles ``hpc_prediction``, ``hpc_execution``, ``launch``,
-# ``monitor`` and ``results``). The commission is built in ``messages/msg_to_child.py`` from these arguments and the
-# summary.
+# ``monitor`` and ``results``). The commission is built in ``messages/msg_to_child.py`` from these arguments and
+# the summary.
 CHILD_CATALOG = {
-    'hpc_prediction': ('Commission the resource-prediction sister: it fits, measures and compares the resource model '
-                       'over this ledger. Only when model improvement warrants its own iteration. Its assignment is '
-                       'built from this commission and this ledger.', obj({})),
-    'hpc_execution': ('Commission the allocation-execution sister: it prepares, plans, launches, monitors and '
-                      'parses the selected work over this ledger. Its assignment is built from this commission and '
-                      'this ledger.', obj({})),
-    'launch': ('Commission the launch of one frozen plan on its explicit resource; returns the received handoff '
-               'reference. Launched once per plan. launch_instructions is the selection of launch instruction '
-               'sections for this launch, when you have one.',
+    'hpc_prediction': ('Commission the resource-prediction sister over this ledger: it fits the time/resource '
+                       'model on the measured cases, measures its held-out quality and compares the candidate '
+                       'portfolios, and returns what it recorded. It earns the measured model improvement.',
+                       obj({})),
+    'hpc_execution': ('Commission the allocation-execution sister over this ledger: it plans the allocation from '
+                      'the ledger (queue observation, comparison, frozen plan), has the plan launched, observes '
+                      'the job and parses and accepts its results, and returns what it recorded. It earns the '
+                      'accepted accomplishment and the forecast validation.', obj({})),
+    'launch': ('Commission the launch child to submit one frozen plan on its resource; it returns the handoff '
+               'reference of the submitted job. Launched once per plan. launch_instructions is the selection of '
+               'launch instruction sections for this launch, when you have one.',
                obj({'plan_ref': _TEXT, 'launch_instructions': {'type': 'object'}}, required=['plan_ref'])),
-    'monitor': ('Commission the monitor child to report the state of one execution target (a handoff handle). This '
-                'parent requests information; it never polls here.',
+    'monitor': ('Commission the monitor child to report the state of one execution target (a handoff handle). For '
+                'actual investigation only: hpc_monitor is the ordinary observation.',
                 obj({'target_handle': _TEXT,
                      'requested_fields': {'type': 'array', 'uniqueItems': True,
                                           'items': {'type': 'string', 'enum': list(MONITOR_FIELD_OPTIONS)}},
@@ -230,139 +241,29 @@ CHILD_CATALOG = {
                                                           'items': {'type': 'string',
                                                                     'enum': sorted(RECORD_SCHEMAS)}}},
                     required=['target_handle', 'requested_fields', 'permitted_committed_record_types'])),
-    'results': ('Commission the result-acquisition child for actual investigation of result files of a received '
-                'handoff; known parsing is done directly with hpc_results.',
+    'results': ('Commission the result-acquisition child to investigate result files of a received handoff. For '
+                'actual investigation only: known parsing is done directly with hpc_results.',
                 obj({'handoff_ref': _TEXT, 'selector': {'type': 'object'}, 'constraints': {'type': 'object'}},
                     required=['handoff_ref', 'selector'])),
 }
 
+# ------------------------------------------------------------------------------------------- the ledger's state
 
-# ---------------------------------------------------------------- the missing job services (BLOCKED-ON-JOB-SERVICE)
+class ResourceRequestFailed(Exception):
+    """A request the resource did not answer (``failure`` is ``{'code', 'detail'}``, as ``hpc_remote`` returned
+    it). The tool that made the request returns it as a failed unit."""
 
-def handoff_target(store, handoff_ref):
-    """The execution target (handle, resource, workspace, assignment) the held handoff record names: the old
-    ``targets.read_target(handoff_ref, scope)`` of ``ExecutionTargetReader``.
-
-    BLOCKED-ON-JOB-SERVICE: job ledger handoff record (the handoff row the launching child writes and returns; no
-    job record kind is declared); wanted call: ``store.table(JOB_LEDGER).get(handoff_ref)`` read as the execution
-    target (``JOB_LEDGER`` is the job library's work table, not written yet)."""
-    raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: job ledger handoff record; wanted call: '
-                              'ctx.store.table(JOB_LEDGER).get(handoff_ref) as the execution target')
-    return store.table(None).get(handoff_ref)
+    def __init__(self, failure):
+        super().__init__(failure['code'])
+        self.failure = failure
 
 
-async def observe_target(target, key, ctx):
-    """One observation of the original job: the old ``targets.observe_target(target, operation_key=key)``.
+def answered(reply):
+    """``reply`` of a request to the resource when it was answered; ``ResourceRequestFailed`` otherwise."""
+    if reply['status'] != 'completed':
+        raise ResourceRequestFailed(reply['failure'])
+    return reply
 
-    BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ``await ctx.services['job_access'].observe_target(target,
-    key=key, resumed=ctx.resumed)``, idempotent on ``key``."""
-    raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: job_access; wanted call: await '
-                              "ctx.services['job_access'].observe_target(target, key=key, resumed=ctx.resumed)")
-    return await ctx.services['job_access'].observe_target(target, key=key, resumed=ctx.resumed)
-
-
-async def read_window(target, path, limit, key, ctx):
-    """One bounded read of a file of the allocation: the old ``targets.read_file(target, path=path, offset=0,
-    limit=limit + 1, operation_key=key)``.
-
-    BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ``await ctx.services['job_access'].read_file(target,
-    path=path, offset=0, limit=limit + 1, key=key, resumed=ctx.resumed)``, idempotent on ``key``."""
-    raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: job_access; wanted call: await '
-                              "ctx.services['job_access'].read_file(target, path=path, offset=0, limit=limit + 1, "
-                              'key=key, resumed=ctx.resumed)')
-    return await ctx.services['job_access'].read_file(target, path=path, offset=0, limit=limit + 1, key=key,
-                                                      resumed=ctx.resumed)
-
-
-async def write_allocation_control(target, unit_ids, key, ctx):
-    """Write the unit order into the allocation: the old ``targets.operations[resource_id].write_allocation_control(
-    assignment, execution_id, **native_identity, unit_ids=..., operation_key=key)``.
-
-    BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ``await ctx.services['job_access'].write_allocation_control(
-    target, unit_ids=unit_ids, key=key, resumed=ctx.resumed)``, idempotent on ``key``."""
-    raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: job_access; wanted call: await '
-                              "ctx.services['job_access'].write_allocation_control(target, unit_ids=unit_ids, "
-                              'key=key, resumed=ctx.resumed)')
-    return await ctx.services['job_access'].write_allocation_control(target, unit_ids=unit_ids, key=key,
-                                                                     resumed=ctx.resumed)
-
-
-async def observe_queue_value(configuration, key, ctx):
-    """One read-only acquisition of the PBS queue and facility status: the old ``hpc_queue.observe(configuration)``
-    (library function over the resource's SSH transport).
-
-    BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ``await ctx.services['job_access'].observe_queue(
-    configuration, key=key)`` (the service wraps ``hpc_queue.observe``)."""
-    raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: job_access; wanted call: await '
-                              "ctx.services['job_access'].observe_queue(configuration, key=key)")
-    return await ctx.services['job_access'].observe_queue(configuration, key=key)
-
-
-async def run_command(configuration, command, key, ctx):
-    """One lightweight remote command over the resource's established SSH transport: the old ``subprocess.run([*
-    configuration['ssh_argv'], command], ...)``. The old 90-second timeout and the truncation of the output were
-    limits of that call; the service owns whatever limits it has.
-
-    BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ``await ctx.services['job_access'].run_command(configuration,
-    command, key=key)`` returning ``{'command', 'returncode', 'stdout', 'stderr', 'observed_at', 'truncated'}``."""
-    raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: job_access; wanted call: await '
-                              "ctx.services['job_access'].run_command(configuration, command, key=key)")
-    return await ctx.services['job_access'].run_command(configuration, command, key=key)
-
-
-def estimate_latest(ctx, resource, kind):
-    """The old ``memory.latest(resource, kind)`` (``{'state', 'age_seconds', 'data', ...}``).
-
-    BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: ``ctx.services['estimate_table'].latest(resource,
-    kind)``."""
-    raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: '
-                              "ctx.services['estimate_table'].latest(resource, kind)")
-    return ctx.services['estimate_table'].latest(resource, kind)
-
-
-def estimate_observe(ctx, resource, kind, data, *, observed_at, provenance):
-    """The old ``memory.observe(resource, kind, data, observed_at=..., provenance=...)``.
-
-    BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: ``ctx.services['estimate_table'].observe(resource, kind,
-    data, observed_at=observed_at, provenance=provenance, key=ctx.operation_key)``."""
-    raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: '
-                              "ctx.services['estimate_table'].observe(resource, kind, data, observed_at=observed_at, "
-                              'provenance=provenance, key=ctx.operation_key)')
-    return ctx.services['estimate_table'].observe(resource, kind, data, observed_at=observed_at,
-                                                  provenance=provenance, key=ctx.operation_key)
-
-
-def estimate_history(ctx, query, *, now, queue_only=False):
-    """The old ``memory.history(query, now=now, queue_only=queue_only)`` (every row: the old call kept the first
-    2000, a count limit that is not carried).
-
-    BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: ``ctx.services['estimate_table'].history(query, now=now,
-    queue_only=queue_only)``."""
-    raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: '
-                              "ctx.services['estimate_table'].history(query, now=now, queue_only=queue_only)")
-    return ctx.services['estimate_table'].history(query, now=now, queue_only=queue_only)
-
-
-def estimate_policy(ctx):
-    """The old ``memory.as_record()['policy']``.
-
-    BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: ``ctx.services['estimate_table'].policy()``."""
-    raise NotImplementedError("BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: "
-                              "ctx.services['estimate_table'].policy()")
-    return ctx.services['estimate_table'].policy()
-
-
-def estimate_record(ctx, measurement):
-    """The old ``memory.record(**closed_measurement(...))`` of a closed allocation.
-
-    BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: ``ctx.services['estimate_table'].record(**measurement,
-    key=ctx.operation_key)``."""
-    raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: '
-                              "ctx.services['estimate_table'].record(**measurement, key=ctx.operation_key)")
-    return ctx.services['estimate_table'].record(**measurement, key=ctx.operation_key)
-
-
-# ------------------------------------------------------------------------------------------- the owner ledger state
 
 def memory_enabled(ctx):
     return bool(ctx.settings['shared_execution_memory'])
@@ -440,26 +341,37 @@ def last_forecast(ledger, plan):
     return {'conditional_prediction': plan['original_prediction'], 'forecast_ref': forecasts[0]['id']}
 
 
-def launch_input_path(ledger, plan_id):
-    return (ledger.path.parent / 'launch-inputs' / (plan_id + '.json')).resolve()
+def launch_input_ref(ledger, plan_id):
+    """The artifact that holds the frozen plan for its launch: the ledger names it (``hpc_plan`` wrote it)."""
+    return ledger.read('launch_input:' + plan_id)['artifact_ref']
 
 
-def ledger_view(ledger, ctx):
-    """What the owner ledger shows now: the old ``HPCSummary.decision_context`` ledger fields, with the credit view
-    the old ``HPCEpisodeCredit.credit_view`` read."""
+def ledger_view(ledger):
+    """What the ledger of the commission shows now, from the rows this Episode holds: for the model's next decision
+    (``internal_summary`` reads it through ``view.records`` and arranges it), for the commissions (``plans`` with
+    their launch assignment, manifest and launch input; ``ledger_refs`` to pass a sister), for the credit
+    (``credit``) and for the return (``ledger_refs``: every held row and the records they name)."""
     commission = ledger.commission
     model_ref = current_model(ledger)
     closed = {row['body']['plan_id'] for row in ledger.records('closed')}
+    handed_off = {row['body']['plan_id'] for row in ledger.records('handoff')}
     plans = [{'plan_ref': row['id'], 'plan_id': row['body']['plan_id'], 'candidate_id': row['body']['candidate_id'],
-              'closed': row['body']['plan_id'] in closed, 'launch_assignment': row['body']['launch_assignment'],
-              'manifest': row['body']['manifest'],
-              'supplied_input_file': str(launch_input_path(ledger, row['body']['plan_id']))}
+              'handed_off': row['body']['plan_id'] in handed_off, 'closed': row['body']['plan_id'] in closed,
+              'launch_assignment': row['body']['launch_assignment'], 'manifest': row['body']['manifest'],
+              'launch_input_ref': launch_input_ref(ledger, row['body']['plan_id'])}
              for row in ledger.records('plan')]
-    view = {'credit': ledger.credit_view(), 'owner_episode_id': ledger.read('owner')['episode_id'],
-            'commission': commission, 'candidates': candidates_of(ledger), 'model_ref': model_ref,
+    cases = measured_history(ledger)
+    return {'ledger_id': ledger.ledger, 'ledger_refs': ledger.refs(), 'credit': ledger.credit_view(),
+            'owner_episode_id': ledger.read('owner')['episode_id'],
+            'commission': {name: commission[name] for name in ('objective', 'resource_id', 'obligations',
+                                                                 'preferences', 'limits', 'credit')},
+            'measured_cases': {'validation': len(commission['validation_ids']),
+                               'training': len(set(cases) - set(commission['validation_ids']))},
+            'candidates': candidates_of(ledger), 'model_ref': model_ref,
             'model_refs': [row['id'] for row in ledger.records('model')],
             'model_support': prediction.predict(ledger.read(model_ref), {})['support'],
             'tool_requests': [row['body'] for row in ledger.records('tool_request')],
+            'comparison_refs': [row['id'] for row in ledger.records('comparison')],
             'latest_comparison': [{**row, 'body': {key: value for key, value in row['body'].items()
                                                    if key not in ('episode_id', 'operation_key')}}
                                   for row in ledger.records('comparison')[-1:]],
@@ -467,21 +379,22 @@ def ledger_view(ledger, ctx):
             'monitor_controllers': ledger.records('monitor_controller'),
             'queue_refs': [row['id'] for row in ledger.records('queue')],
             'result_source_refs': [row['body']['source_ref'] for row in ledger.records('result')],
-            'coordinator_workspace': str(Path(ctx.settings['directory']).resolve()),
-            'available_training_ids': sorted(set(measured_history(ledger)) - set(commission['validation_ids']))}
-    if memory_enabled(ctx):
-        view['shared_history_refs'] = [row['id'] for row in ledger.records('shared_history')]
-    return view
+            'shared_history_refs': [row['id'] for row in ledger.records('shared_history')]}
 
 
-def completed(ledger, ctx, result, references=(), artifacts=()):
+def completed(result, references=(), artifacts=()):
     return {'status': 'completed', 'record_refs': list(references), 'artifact_refs': list(artifacts),
-            'result': result, 'feedback': None, 'ledger_view': ledger_view(ledger, ctx)}
+            'result': result, 'feedback': None}
 
 
-def invalid(ledger, ctx, feedback):
-    return {'status': 'invalid', 'record_refs': [], 'artifact_refs': [], 'result': None, 'feedback': feedback,
-            'ledger_view': ledger_view(ledger, ctx)}
+def invalid(feedback):
+    return {'status': 'invalid', 'record_refs': [], 'artifact_refs': [], 'result': None, 'feedback': feedback}
+
+
+def failed(failure):
+    """A request the resource did not answer: an outcome of the unit, with the route's own failure."""
+    return {'status': 'failed', 'record_refs': [], 'artifact_refs': [], 'result': None,
+            'feedback': {'category': 'resource_request', **failure}}
 
 
 def argument_error(code, **more):
@@ -489,8 +402,9 @@ def argument_error(code, **more):
 
 
 def shared_history(ledger, ctx):
-    """The shared timing history for this resource (the old ``_shared_history``); no row is dropped to a count."""
+    """The shared timing history for this resource (the old ``_shared_history``), from the estimate table."""
     commission = ledger.commission
+    memory = ctx.services['estimate_table']
     profile = commission.get('execution_profile')
     resource = resource_identity(commission['resource_id'], resource_of(ledger, ctx))
     # Queue timing is resource-wide. Work timing requires explicit matching algorithm, parameters, software and
@@ -498,9 +412,9 @@ def shared_history(ledger, ctx):
     query = profile or {'resource_id': resource, 'backend': 'hpc', 'tool': 'allocation',
                         'implementation': 'unspecified', 'parameters': 'unspecified', 'hardware': resource}
     now = time.time()
-    rows = {row['id']: row for row in estimate_history(ctx, query, now=now, queue_only=True)}
+    rows = {row['id']: row for row in memory.history(query, now=now, queue_only=True)}
     if profile:
-        rows.update({row['id']: row for row in estimate_history(ctx, profile, now=now)})
+        rows.update({row['id']: row for row in memory.history(profile, now=now)})
     queues = {candidate['queue'] for candidate in candidates_of(ledger)}
     model_features = {item['name'] for item in commission['model']['features']}
     filtered = []
@@ -516,15 +430,15 @@ def shared_history(ledger, ctx):
             filtered.append(row)
     original = {row['id'] for row in commission['history']}
     original_attempts = {physical_attempt_key(row) for row in commission['history']} - {None}
-    return {'captured_at': now, 'policy': estimate_policy(ctx),
+    return {'captured_at': now, 'policy': memory.policy(),
             'observations': [row for row in filtered if row['id'] not in original
                              and physical_attempt_key(row) not in original_attempts]}
 
 
-def ledger_directory(ctx):
-    """This episode's own ledger: it owns it (the old ``state``: ``directory / 'hpc' / digest([run_id, owner])`` with
-    the owner the episode itself)."""
-    return Path(ctx.settings['directory']) / 'hpc' / digest([ctx.run_id, ctx.episode_id])
+def recorded(ledger, identity, kind, value):
+    """Keep ``value`` as the evidence ``identity`` of this unit."""
+    ledger.put(kind, value, identity=identity)
+    return value
 
 
 def commission_identity(arguments):
@@ -534,11 +448,7 @@ def commission_identity(arguments):
 
 def commission_of(arguments, ctx):
     """The commission of the assignment (the old ``HPCAssignment._commission``): a configured commission by id, or a
-    host grant read from a held Store source.
-
-    BLOCKED-ON-STORE-ACCESS (library not carried): ``hpc_commission_sources.read`` reads the grant through
-    ``store.db`` (``sqlite_master`` and a ``hpc_commission_sources`` table); the intended form is a declared work
-    table row (or the held source's artifact) read through ``ctx.store``. It is called as written with ``ctx.store``."""
+    host grant read from a held Store source."""
     resources = plain(ctx.settings['resources'])
     if arguments.get('commission_source_ref') is not None:
         return hpc_commission_sources.read(ctx.store, arguments['commission_source_ref'],
@@ -546,62 +456,46 @@ def commission_of(arguments, ctx):
     return validate_commission(plain(ctx.settings['commissions'][arguments['commission_id']]), resources)
 
 
-def resolve_tool_request(request, scope):
-    """Resolve the parent's tool request from its real frozen tool library (the old ``HPCAssignment._tool_request``:
-    ``partner_presence_evidence_binding.tool_library.resolve_invocations`` and ``parent_tool_info`` over the parent's
-    information catalog, then ``validate_schema`` of the arguments against the tool's input schema).
-
-    The parent's tool library and information catalog were attributes of the old A107 head binding, reached through
-    ``services.workflow``; no episode file or library function holds them now, so the request cannot be resolved."""
-    raise NotImplementedError('unplaced:partner_presence_evidence_binding.tool_library: a tool_request of the '
-                              'assignment cannot be resolved (the parent tool library and its information catalog '
-                              'were old-runner attributes of the A107 head and have no home)')
+def tool_request_record(request):
+    """What the ledger keeps of the commissioner's tool request (the old ``HPCAssignment._tool_request``): the
+    requested tool, its arguments, the tool that reads the result and the rule for carrying it out. The tool's
+    contract is the commissioner's: it knows what it asks for."""
+    return {'objective': request['objective'], 'tool': {'name': request['name'], 'resources': request['resources']},
+            'arguments': json.loads(request['arguments_json']), 'result_reader': request['result_reader'],
+            'execution_rule': 'Implement this exact requested computation through the HPC template. '
+                              'The declared resources describe the original callable; they do not grant a remote '
+                              'adapter. Establish the software, staged operands and owning result reader before '
+                              'launch. Return complete original artifacts for that reader; do not replace '
+                              'scientific grading with the allocation acceptance score.'}
 
 
 def open_ledger(arguments, ctx):
-    """The ledger of this episode, opened for a tool after ``hpc_open`` created it."""
-    ledger = HPCLedger.open_existing(ledger_directory(ctx))
-    original = ledger.read('owner')
-    if original['run_id'] != ctx.run_id or original['episode_id'] != ctx.episode_id:
-        raise ValueError('hpc_ledger_is_not_owned_by_this_episode')
-    return ledger
+    """The ledger of this episode as it holds it now (its own rows, the rows its sisters returned and the rows it
+    was passed), for a tool after ``hpc_open``."""
+    return HpcLedger.existing(ctx.store, arguments['ledger'])
 
 
 def create_ledger(arguments, ctx):
-    """Create the ledger from the commission and record this episode as its owner, with the reference model in place
-    (the old ``state`` and ``initialize``, which every old tool call repeated; both are idempotent)."""
-    resources = ctx.settings['resources']
-    if not any(row.get('kind') == 'pbs_ssh' for row in resources.values()):
-        raise ValueError('explicit_hpc_resource_required')
-    ledger = HPCLedger(ledger_directory(ctx), commission_of(arguments, ctx))
-    ledger.put('owner', {'run_id': ctx.run_id, 'episode_id': ctx.episode_id, 'scope': plain(arguments['scope']),
-                         **commission_identity(arguments)}, identity='owner')
-    if arguments.get('tool_request') is not None:
-        ledger.once('tool_request', 'tool_request',
-                    lambda: resolve_tool_request(plain(arguments['tool_request']), plain(arguments['scope'])))
+    """Open the ledger of the commission and put in place what it needs once: the owner (this Episode, unless an
+    earlier episode of the commission already owns the passed rows), the commissioner's tool request and the
+    reference model (the old ``state`` and ``initialize``)."""
+    ledger = HpcLedger.open(ctx.store, commission_of(arguments, ctx))
+    if not ledger.records('owner'):
+        ledger.put('owner', {'run_id': ctx.run_id, 'episode_id': ctx.episode_id,
+                             'scope': plain(arguments['scope']), **commission_identity(arguments)},
+                   identity='owner')
+    if arguments['tool_request'] is not None and not ledger.records('tool_request'):
+        ledger.put('tool_request', tool_request_record(plain(arguments['tool_request'])), identity='tool_request')
     if not ledger.records('model'):
-        prior = prediction.prior_model(ledger.commission['model'])
-        ledger.put('model', prior, identity='reference_model')
+        ledger.put('model', prediction.prior_model(ledger.commission['model']), identity='reference_model')
         if memory_enabled(ctx):
-            imported = ledger.once('shared_history_entry', 'shared_history', lambda: shared_history(ledger, ctx))
-            if imported['observations'] and not ledger.records('model_choice'):
+            imported = recorded(ledger, 'shared_history_entry', 'shared_history', shared_history(ledger, ctx))
+            if imported['observations']:
                 model = prediction.fit(ledger.commission['model'], imported['observations'])
                 reference = ledger.put('model', model)
                 ledger.put('model_choice', {'model_ref': reference, 'origin': 'shared_history_entry'},
                            identity='shared_history_initial_model')
     return ledger
-
-
-async def once(ledger, identity, kind, calculate):
-    """Recover a committed step without another observation (the old ``ledger.once``), for an awaited step."""
-    try:
-        return ledger.read(identity)
-    except ValueError as error:
-        if not str(error).startswith('unknown_hpc_evidence:'):
-            raise
-    value = await calculate()
-    ledger.put(kind, value, identity=identity)
-    return value
 
 
 def queue_snapshot(ledger, reference, *, require_fresh=False):
@@ -612,19 +506,22 @@ def queue_snapshot(ledger, reference, *, require_fresh=False):
     return observation
 
 
-async def observe_queue(ledger, ctx, key):
-    """One queue observation, from the shared memory while it is fresh (the old ``_observe_queue``)."""
+async def observe_queue(ledger, ctx, name):
+    """One queue observation ``{'snapshot', 'acquisition'}``: the shared memory's while it is fresh (the old
+    ``_observe_queue``), else one acquisition on the resource through the run's job access."""
     configuration = resource_of(ledger, ctx)
     resource = resource_identity(ledger.commission['resource_id'], configuration)
     if memory_enabled(ctx):
-        cached = estimate_latest(ctx, resource, 'queue')
+        cached = ctx.services['estimate_table'].latest(resource, 'queue')
         if cached['state'] == 'fresh' and cached['age_seconds'] <= ledger.commission['limits'][
                 'queue_max_age_seconds']:
             return cached['data']
-    value = await observe_queue_value(configuration, key, ctx)
+    acquired = answered(await hpc_queue.observe(ctx, ledger.commission['resource_id'], name=name))
+    value = {'snapshot': acquired['snapshot'], 'acquisition': acquired['acquisition']}
     if memory_enabled(ctx):
-        estimate_observe(ctx, resource, 'queue', value, observed_at=value['snapshot']['captured_at'],
-                         provenance=value['acquisition'])
+        ctx.services['estimate_table'].observe(resource, 'queue', value,
+                                               observed_at=value['snapshot']['captured_at'],
+                                               provenance=value['acquisition'])
     return value
 
 
@@ -648,7 +545,7 @@ def freeze_forecast(ledger, plan, predicted, reference, current, phase, key):
     slots = [slot['id'] for slot in ledger.commission['credit']['validation_slots']
              if slot['phase'] == phase and elapsed.get(slot['metric'], elapsed['work']) >= slot[
                  'minimum_elapsed_seconds'] and forecast_metric(predicted, slot['metric']) is not None]
-    body = ledger.once('issued:' + key, 'forecast_issue', lambda: {
+    body = recorded(ledger, 'issued:' + key, 'forecast_issue', {
         'plan_id': plan['plan_id'], 'issued_at': time.time(), 'prediction': predicted, 'reference': reference,
         'phase': phase, 'elapsed': elapsed, 'model_ref': plan.get('model_ref'),
         'prediction_episode_id': plan.get('prediction_episode_id')})
@@ -661,11 +558,7 @@ def measure(ledger, plan, observation, current, allocation):
     if current['queued_at'] is not None:
         metrics['queue'] = {'seconds': current['queue_elapsed_seconds'], 'censored': current['started_at'] is None,
                             'observed_at': current['started_at'] or now}
-    receipt = observation['native'].get('exit_receipt')
-    if receipt:
-        metrics['work'] = {'seconds': receipt['duration_seconds'], 'censored': current['state'] == 'failed',
-                           'observed_at': timestamp(receipt['finished_at'])}
-    elif current['started_at'] is not None:
+    if current['started_at'] is not None:
         metrics['work'] = {'seconds': current['work_elapsed_seconds'], 'censored': True, 'observed_at': now}
     if allocation and current['started_at'] is not None:
         metrics['setup'] = {'seconds': max(0., allocation['started_at'] - current['started_at']),
@@ -676,7 +569,8 @@ def measure(ledger, plan, observation, current, allocation):
     measured = {'plan_id': plan['plan_id'], 'metrics': metrics, 'observed_at': now,
                 'success': False if current['state'] == 'failed' else None}
     reference = ledger.put('measured', measured)
-    ledger.score(reference)
+    ledger.score(reference, log_score=prediction.log_score, measured_value=measured_value,
+                 forecast_metric=forecast_metric)
     return reference
 
 
@@ -684,13 +578,11 @@ def export_closed(ledger, ctx, plan):
     """Retained completed runs enter the shared history; no remote work (the old ``export_closed``)."""
     if not memory_enabled(ctx):
         return
-    if not any(row['body']['plan_id'] == plan['plan_id'] for row in ledger.records('closed')):
-        raise ValueError('only_closed_allocations_enter_shared_history')
-    measured = ledger.once('export_measurement:' + plan['plan_id'], 'export_measurement', lambda: [
+    measured = recorded(ledger, 'export_measurement:' + plan['plan_id'], 'export_measurement', [
         row for row in ledger.records('measured') if row['body']['plan_id'] == plan['plan_id']][-1])
-    handoff = [row['body'] for row in ledger.records('handoff') if row['body']['plan_id'] == plan['plan_id']][-1]
-    estimate_record(ctx, closed_measurement(ledger.commission, plan, measured, handoff, resources=ctx.settings[
-        'resources'], ledger_path=ledger.path))
+    handoff = ledger.read('handoff:' + plan['plan_id'])
+    ctx.services['estimate_table'].record(**closed_measurement(
+        ledger.commission, plan, measured, handoff, resources=ctx.settings['resources'], ledger=ledger.ledger))
 
 
 def read_evidence(arguments, ctx, ledger, reference):
@@ -734,38 +626,22 @@ def resolve_result_source(ctx, scope, reference):
 
 # ---------------------------------------------------------------------------------- the allocation of one frozen plan
 
-def original_target(arguments, ctx, ledger, plan):
-    """The target of the handoff attached to ``plan`` (the old ``_target``). The handoff record must be held."""
-    handoff = ledger.read('handoff:' + plan['plan_id'])
-    if not ctx.store.holds(handoff['handoff_ref']):
-        raise ValueError('original_handoff_not_received_by_this_parent')
-    target = handoff_target(ctx.store, handoff['handoff_ref'])
-    if target['assignment'] != plan['practical_assignment']:
-        raise ValueError('handoff_does_not_match_frozen_portfolio')
-    return target
+def original_target(ctx, ledger, plan):
+    """The handed-off job of ``plan`` (the old ``_target``): the held handoff row the ledger attached to it."""
+    return hpc_remote.handoff_target(ctx.store, ledger.read('handoff:' + plan['plan_id'])['handoff_ref'])
 
 
-async def window(target, path, limit, key, ctx):
-    value = await read_window(target, path, limit, key, ctx)
-    payload = base64.b64decode(value['bytes_base64'], validate=True)
-    if len(payload) != value['size_bytes'] or len(payload) > limit:
-        raise ValueError('compact_result_incomplete_or_too_large')
-    return value, payload
-
-
-async def window_value(target, path, limit, key, ctx):
-    return (await window(target, path, limit, key, ctx))[0]
-
-
-async def allocation_receipt(target, plan, key, ctx):
+async def allocation_receipt(ctx, target, plan, name):
+    """The allocation's own status file, or ``[None, why]`` while the runner has not written a readable one."""
     path = plan['manifest']['workspace'] + '/allocation-status.json'
-    try:
-        value_window, payload = await window(target, path, 512 * 1024, key, ctx)
-    except (FileNotFoundError, ValueError) as error:
-        # Absence before the runner starts is normal; other failures remain visible and do not manufacture a
-        # progress estimate.
-        return [None, {'path': path, 'failure': str(error)}]
-    value = json.loads(payload)
+    limit = 512 * 1024
+    read = await hpc_remote.read_file(ctx, target['resource_id'], path, limit, name=name)
+    if read['status'] != 'completed' and read['failure']['code'] != 'remote_file_unreadable':
+        raise ResourceRequestFailed(read['failure'])
+    if read['status'] != 'completed' or read['size_bytes'] > limit:
+        # Absence before the runner starts is normal; it does not manufacture a progress estimate.
+        return [None, {'path': path, 'failure': 'allocation_status_not_readable'}]
+    value = json.loads(base64.b64decode(read['bytes_base64'], validate=True))
     if (value['plan_id'] != plan['plan_id'] or value['job_id'] != target['execution_id']
             or value['manifest_sha256'] != plan['manifest_sha256']):
         raise ValueError('allocation_receipt_identity_conflict')
@@ -773,16 +649,17 @@ async def allocation_receipt(target, plan, key, ctx):
     if len({row['unit_id'] for row in value['units']}) != len(value['units']) or not {
             row['unit_id'] for row in value['units']} <= expected:
         raise ValueError('allocation_receipt_units_conflict')
-    return [value, value_window]
+    return [value, read]
 
 
 async def observe_allocation(ctx, ledger, plan, target, candidate, key):
     """One observation of the original job and its progress, with a measurement (the old
     ``_observe_original_allocation``, up to the branch on the tool)."""
-    observation = await once(ledger, 'status:' + key, 'native_status', lambda: observe_target(target, key, ctx))
-    allocation, allocation_window = await once(
-        ledger, 'allocation:' + key, 'allocation_snapshot',
-        lambda: allocation_receipt(target, plan, key + ':allocation', ctx))
+    status = answered(hpc_remote.job_status(ctx, target))
+    observation = recorded(ledger, 'status:' + key, 'native_status', {
+        name: status[name] for name in ('state', 'observed_at', 'native', 'check_ref')})
+    allocation, allocation_window = recorded(ledger, 'allocation:' + key, 'allocation_snapshot',
+                                             await allocation_receipt(ctx, target, plan, 'allocation:' + key))
     observation_ref = ledger.put('observation', {'plan_id': plan['plan_id'], 'observation': observation,
                                                  'allocation': allocation, 'allocation_window': allocation_window})
     current = telemetry(observation, allocation, candidate)
@@ -790,15 +667,18 @@ async def observe_allocation(ctx, ledger, plan, target, candidate, key):
         unit = next(row for row in candidate['units'] if row['unit_id'] == current['current_unit_id'])
         if unit.get('reports_progress', False):
             progress_path = plan['manifest']['workspace'] + '/units/' + unit['unit_id'] + '/progress.json'
-            try:
-                progress_window = await once(
-                    ledger, 'unit-progress:' + key, 'unit_progress',
-                    lambda: window_value(target, progress_path, 16384, key + ':progress', ctx))
-                progress = bind_progress(json.loads(base64.b64decode(progress_window['bytes_base64'],
-                                                                     validate=True)), plan['plan_id'])
-                current = incorporate_progress(current, progress, candidate)
-            except (OSError, ValueError, KeyError, TypeError) as error:
-                current['progress_failure'] = str(error)
+            read = await hpc_remote.read_file(ctx, target['resource_id'], progress_path, 16384,
+                                              name='progress:' + key)
+            if read['status'] != 'completed':
+                current['progress_failure'] = read['failure']['code']
+            else:
+                recorded(ledger, 'unit-progress:' + key, 'unit_progress', read)
+                try:
+                    progress = bind_progress(json.loads(base64.b64decode(read['bytes_base64'], validate=True)),
+                                             plan['plan_id'])
+                    current = incorporate_progress(current, progress, candidate)
+                except (ValueError, KeyError, TypeError) as error:
+                    current['progress_failure'] = str(error)
     prior_monitors = [row['body'] for row in ledger.records('monitor') if row['body']['plan_id'] == plan['plan_id']]
     if prior_monitors:
         previous = prior_monitors[-1]['conditional_prediction']['telemetry']
@@ -819,7 +699,7 @@ async def update_conditional_forecast(arguments, ctx, ledger, plan, target, cand
     queue_ref = plan['queue_ref']
     if arguments['refresh_queue']:
         queue_ref = 'queue:' + digest(key)
-        queue_value = await once(ledger, queue_ref, 'queue', lambda: observe_queue(ledger, ctx, key))
+        queue_value = recorded(ledger, queue_ref, 'queue', await observe_queue(ledger, ctx, 'queue:' + key))
         queue = hpc_queue.features(queue_value['snapshot'], candidate, job_id=target['execution_id'])
         refreshed = prediction.predict(ledger.read(current_model(ledger)),
                                        candidate_features(candidate, queue))['times']['queue']
@@ -846,7 +726,7 @@ async def update_conditional_forecast(arguments, ctx, ledger, plan, target, cand
 
 
 def publish_result(ctx, body):
-    artifact = ctx.store.artifact(canonical(body), 'application/json')
+    artifact = ctx.store.artifact(canonical(body).encode(), 'application/json')
     stored = ctx.store.put('source', {
         'provider': 'episode.hpc_result', 'accession': 'hpc_' + digest([ctx.run_id, ctx.episode_id, body]),
         'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
@@ -874,10 +754,12 @@ async def collect_original_results(arguments, ctx, ledger, plan, target, candida
             continue
         if row['result_path'] != expected_path or row['obligation_id'] != unit['obligation_id']:
             raise ValueError('result_not_owned_by_original_work_unit')
-        unit_key = key + ':' + unit['unit_id']
-        result_window = await once(
-            ledger, 'result-window:' + key + ':' + unit['unit_id'], 'result_window',
-            lambda: window_value(target, expected_path, commission['limits']['result_limit_bytes'], unit_key, ctx))
+        limit = commission['limits']['result_limit_bytes']
+        result_window = answered(await hpc_remote.read_file(ctx, target['resource_id'], expected_path, limit,
+                                                            name='result:' + key + ':' + unit['unit_id']))
+        if result_window['size_bytes'] > limit:
+            raise ValueError('compact_result_incomplete_or_too_large')
+        recorded(ledger, 'result-window:' + key + ':' + unit['unit_id'], 'result_window', result_window)
         payload = base64.b64decode(result_window['bytes_base64'], validate=True)
         if hashlib.sha256(payload).hexdigest() != row['result_sha256']:
             raise ValueError('result_changed_since_unit_completion')
@@ -911,7 +793,7 @@ def original_plan(ledger, arguments, ctx):
     """The frozen plan the arguments name, or the failure outcome when its handoff is not attached yet."""
     plan = ledger.read(arguments['plan_ref'])
     if not any(row['body']['plan_id'] == plan['plan_id'] for row in ledger.records('handoff')):
-        return plan, invalid(ledger, ctx, argument_error(
+        return plan, invalid(argument_error(
             'original_handoff_not_attached',
             recovery='If the launch child already returned its handoff, attach the returned reference with '
                      'hpc_handoff. Do not launch replacement work.'))
@@ -921,9 +803,10 @@ def original_plan(ledger, arguments, ctx):
 # ------------------------------------------------------------------------------------------------------------ tools
 
 def hpc_open(arguments, ctx):
-    """Open the ledger from the commission, creating it the first time (the old ``state`` and ``initialize``)."""
+    """Open the ledger of the commission, creating it when this Episode holds none of its rows. The ledger id is
+    what every later tool and every sister is handed; the credit the ledger already holds is not this episode's."""
     ledger = create_ledger(arguments, ctx)
-    return completed(ledger, ctx, None)
+    return completed({'ledger': ledger.ledger, 'credit_at_open': ledger.credit_view()['credit']})
 
 
 def hpc_read(arguments, ctx):
@@ -931,8 +814,8 @@ def hpc_read(arguments, ctx):
     try:
         result = read_evidence(arguments, ctx, ledger, arguments['reference'])
     except (ValueError, KeyError) as error:
-        return invalid(ledger, ctx, argument_error(str(error)))
-    return completed(ledger, ctx, result)
+        return invalid(argument_error(str(error)))
+    return completed(result)
 
 
 def hpc_compare(arguments, ctx):
@@ -940,44 +823,44 @@ def hpc_compare(arguments, ctx):
     try:
         result = {'comparisons': comparisons(ledger, arguments['model_ref'], arguments['queue_ref'])}
     except (ValueError, KeyError) as error:
-        return invalid(ledger, ctx, argument_error(
-            str(error), recovery='Use a model_ref from hpc_model_ref and a queue_ref from hpc_queue_observe or '
-                                 'hpc_queue_refs; a resource identity is not a queue observation.'))
+        return invalid(argument_error(
+            str(error), recovery='Use a model_ref of the ledger\'s model_refs and a queue_ref of its queue_refs '
+                                 '(hpc_queue_observe records one); a resource identity is not a queue '
+                                 'observation.'))
     result['comparison_ref'] = ledger.put('comparison', {**result, 'model_ref': arguments['model_ref'],
                                                          'queue_ref': arguments['queue_ref'],
                                                          'episode_id': ctx.episode_id,
                                                          'operation_key': ctx.operation_key})
-    return completed(ledger, ctx, result)
+    return completed(result)
 
 
 def hpc_history_refresh(arguments, ctx):
-    if not memory_enabled(ctx):
-        raise ValueError('hpc_history_refresh_requires_shared_execution_memory')
     ledger = open_ledger(arguments, ctx)
-    result = ledger.once('shared_history:' + ctx.operation_key, 'shared_history',
-                         lambda: shared_history(ledger, ctx))
-    return completed(ledger, ctx, result)
+    result = recorded(ledger, 'shared_history:' + ctx.operation_key, 'shared_history', shared_history(ledger, ctx))
+    return completed(result)
 
 
 async def hpc_discovery_run(arguments, ctx):
     ledger = open_ledger(arguments, ctx)
     configuration = resource_of(ledger, ctx)
     command = 'cd ' + shlex.quote(PROJECT_DIRECTORY) + ' && ' + arguments['command']
-
-    async def observe():
-        resource = resource_identity(ledger.commission['resource_id'], configuration)
-        cache_key = resource + ':' + digest(command)
-        if memory_enabled(ctx):
-            cached = estimate_latest(ctx, cache_key, 'inventory')
-            if cached['state'] == 'fresh':
-                return cached['data']
-        value = await run_command(configuration, command, ctx.operation_key, ctx)
-        if memory_enabled(ctx) and value['returncode'] == 0:
-            estimate_observe(ctx, cache_key, 'inventory', value, observed_at=value['observed_at'],
-                             provenance=[str(ledger.path), 'discovery:' + ctx.operation_key])
-        return value
-    result = await once(ledger, 'discovery:' + ctx.operation_key, 'discovery', observe)
-    return completed(ledger, ctx, result)
+    cache_key = resource_identity(ledger.commission['resource_id'], configuration) + ':' + digest(command)
+    cached = (ctx.services['estimate_table'].latest(cache_key, 'inventory') if memory_enabled(ctx)
+              else {'state': 'unknown'})
+    if cached['state'] == 'fresh':
+        value = cached['data']
+    else:
+        ran = await hpc_remote.command(ctx, ledger.commission['resource_id'], command, name='discovery')
+        if ran['status'] != 'completed':
+            return failed(ran['failure'])
+        value = {'command': arguments['command'], 'returncode': ran['returncode'],
+                 'stdout': ran['files']['stdout.log'].decode('utf-8', 'replace'),
+                 'stderr': ran['files']['stderr.log'].decode('utf-8', 'replace'), 'observed_at': time.time()}
+        if memory_enabled(ctx) and ran['returncode'] == 0:
+            ctx.services['estimate_table'].observe(cache_key, 'inventory', value, observed_at=value['observed_at'],
+                                                   provenance=[ledger.ledger, 'discovery:' + ctx.operation_key])
+    recorded(ledger, 'discovery:' + ctx.operation_key, 'discovery', value)
+    return completed(value)
 
 
 def hpc_candidate_propose(arguments, ctx):
@@ -992,20 +875,24 @@ def hpc_candidate_propose(arguments, ctx):
         validate_commission({**commission, 'candidates': candidates if prior else candidates + [candidate]},
                             ctx.settings['resources'])
     except (ValueError, KeyError, TypeError) as error:
-        return invalid(ledger, ctx, argument_error(str(error)))
+        return invalid(argument_error(str(error)))
     reference = ('caller_candidate:' + candidate['id'] if candidate in commission['candidates']
                  else ledger.put('candidate', candidate, identity='candidate:' + candidate['id']))
-    return completed(ledger, ctx, {'candidate_ref': reference, 'candidate_id': candidate['id']})
+    return completed({'candidate_ref': reference, 'candidate_id': candidate['id']})
 
 
 async def hpc_queue_observe(arguments, ctx):
     ledger = open_ledger(arguments, ctx)
+    try:
+        value = await observe_queue(ledger, ctx, 'queue')
+    except ResourceRequestFailed as error:
+        return failed(error.failure)
     reference = 'queue:' + digest(ctx.operation_key)
-    value = await once(ledger, reference, 'queue', lambda: observe_queue(ledger, ctx, ctx.operation_key))
+    recorded(ledger, reference, 'queue', value)
     result = {'queue_ref': reference,
               'features': [hpc_queue.features(value['snapshot'], candidate) for candidate in candidates_of(ledger)],
               'snapshot': value['snapshot']}
-    return completed(ledger, ctx, result)
+    return completed(result)
 
 
 def hpc_plan(arguments, ctx):
@@ -1013,17 +900,13 @@ def hpc_plan(arguments, ctx):
     commission = ledger.commission
     configuration = resource_of(ledger, ctx)
     existing = ledger.records('plan')
-    own = next((row for row in existing if row['body'].get('operation_key') == ctx.operation_key), None)
-    if own is not None:
-        plan = own['body']
-        forecast_ref = freeze_forecast(ledger, plan, plan['original_prediction'], plan['original_reference'], {},
-                                       'planned', ctx.operation_key)
-        plan_ref = own['id']
-    else:
+    candidate = next((row for row in candidates_of(ledger) if row['id'] == arguments['candidate_id']), None)
+    if candidate is None:
+        return invalid(argument_error('unknown_candidate:' + arguments['candidate_id']))
+    try:
+        # What the model named: a queue observation that must be fresh, and a model of the ledger.
         observed = queue_snapshot(ledger, arguments['queue_ref'], require_fresh=True)
-        candidate = next((row for row in candidates_of(ledger) if row['id'] == arguments['candidate_id']), None)
-        if candidate is None:
-            return invalid(ledger, ctx, argument_error('unknown_candidate:' + arguments['candidate_id']))
+        model = ledger.read(arguments['model_ref'])
         queue = hpc_queue.features(observed, candidate)
         rules = queue['queue_rules']
         if not rules or not rules['enabled'] or not rules['started'] or rules['type'] != 'Execution':
@@ -1032,43 +915,47 @@ def hpc_plan(arguments, ctx):
             if (rules['min_' + key] is not None and value < rules['min_' + key]
                     or rules['max_' + key] is not None and value > rules['max_' + key]):
                 raise ValueError('candidate_violates_observed_queue_limits')
-        plan = build_plan(commission, candidate, configuration, ledger.read('owner'), len(existing))
-        features = candidate_features(candidate, queue)
-        predicted = prediction.predict(ledger.read(arguments['model_ref']), features)
-        reference = prediction.predict(ledger.read('reference_model'), features)
-        plan.update(model_ref=arguments['model_ref'], queue_ref=arguments['queue_ref'],
-                    original_prediction=predicted, original_reference=reference, operation_key=ctx.operation_key)
-        choices = [row['body'] for row in ledger.records('model_choice')
-                   if row['body']['model_ref'] == arguments['model_ref']]
-        plan['prediction_episode_id'] = choices[-1].get('episode_id') if choices else None
-        plan_ref = ledger.put('plan', plan)
-        forecast_ref = freeze_forecast(ledger, plan, predicted, reference, {}, 'planned', ctx.operation_key)
-    # The frozen plan is supplied to the launch child as a local input file (the old first decision of the launch).
-    path = launch_input_path(ledger, plan['plan_id'])
-    path.parent.mkdir(exist_ok=True)
-    _immutable(path, plan)
+    except (ValueError, KeyError) as error:
+        return invalid(argument_error(
+            str(error), recovery='hpc_plan needs a queue_ref of the ledger\'s queue_refs that is still fresh '
+                                 '(hpc_queue_observe records one) and a model_ref of its model_refs.'))
+    plan = build_plan(commission, candidate, configuration, ledger.read('owner'), len(existing))
+    features = candidate_features(candidate, queue)
+    predicted = prediction.predict(model, features)
+    reference = prediction.predict(ledger.read('reference_model'), features)
+    plan.update(model_ref=arguments['model_ref'], queue_ref=arguments['queue_ref'],
+                original_prediction=predicted, original_reference=reference, operation_key=ctx.operation_key)
+    choices = [row['body'] for row in ledger.records('model_choice')
+               if row['body']['model_ref'] == arguments['model_ref']]
+    plan['prediction_episode_id'] = choices[-1].get('episode_id') if choices else None
+    plan_ref = ledger.put('plan', plan)
+    forecast_ref = freeze_forecast(ledger, plan, predicted, reference, {}, 'planned', ctx.operation_key)
+    # The frozen plan is the launch child's input: an artifact of this unit that the ledger names, so that it
+    # travels in custody with the ledger's rows (the old local input file).
+    artifact = ctx.store.artifact((canonical(plan) + '\n').encode(), 'application/json')
+    ledger.put('launch_input', {'plan_id': plan['plan_id'], 'artifact_ref': artifact},
+               identity='launch_input:' + plan['plan_id'], source_refs=[artifact])
     result = {'plan_ref': plan_ref, 'forecast_ref': forecast_ref,
               **{key: value for key, value in plan.items() if key != 'prediction_episode_id'},
-              'supplied_input_file': str(path)}
-    return completed(ledger, ctx, result)
+              'launch_input_ref': artifact}
+    return completed(result)
 
 
-async def hpc_handoff(arguments, ctx):
+def hpc_handoff(arguments, ctx):
     ledger = open_ledger(arguments, ctx)
     commission = ledger.commission
     plan = ledger.read(arguments['plan_ref'])
-    if not ctx.store.holds(arguments['handoff_ref']):
-        return invalid(ledger, ctx, argument_error('handoff_not_received'))
-    target = handoff_target(ctx.store, arguments['handoff_ref'])
-    if target['assignment'] != plan['practical_assignment']:
-        return invalid(ledger, ctx, argument_error('handoff_does_not_match_frozen_portfolio'))
+    target = hpc_remote.handoff_target(ctx.store, arguments['handoff_ref'])
+    if target['resource_id'] != commission['resource_id']:
+        return invalid(argument_error('handoff_does_not_match_frozen_portfolio'))
     ledger.put('handoff', {'handoff_ref': arguments['handoff_ref'], 'job_id': target['execution_id'],
-                           'plan_id': plan['plan_id']}, identity='handoff:' + plan['plan_id'])
+                           'plan_id': plan['plan_id']}, identity='handoff:' + plan['plan_id'],
+               source_refs=[arguments['handoff_ref']])
     result = {'plan_id': plan['plan_id'], 'job_id': target['execution_id']}
     if 'monitoring' in commission:
         result['monitor_controller_ref'] = MonitorCronController(ledger).attach(
             plan, target['execution_id'], commission['monitoring'])
-    return completed(ledger, ctx, result)
+    return completed(result)
 
 
 async def hpc_monitor(arguments, ctx):
@@ -1076,12 +963,15 @@ async def hpc_monitor(arguments, ctx):
     plan, failure = original_plan(ledger, arguments, ctx)
     if failure is not None:
         return failure
-    target = original_target(arguments, ctx, ledger, plan)
+    target = original_target(ctx, ledger, plan)
     candidate = candidate_of(ledger, plan)
-    observed = await observe_allocation(ctx, ledger, plan, target, candidate, ctx.operation_key)
-    result = await update_conditional_forecast(arguments, ctx, ledger, plan, target, candidate, observed,
-                                               ctx.operation_key)
-    return completed(ledger, ctx, result)
+    try:
+        observed = await observe_allocation(ctx, ledger, plan, target, candidate, ctx.operation_key)
+        result = await update_conditional_forecast(arguments, ctx, ledger, plan, target, candidate, observed,
+                                                   ctx.operation_key)
+    except ResourceRequestFailed as error:
+        return failed(error.failure)
+    return completed(result)
 
 
 async def hpc_monitor_wait(arguments, ctx):
@@ -1089,11 +979,11 @@ async def hpc_monitor_wait(arguments, ctx):
     plan, failure = original_plan(ledger, arguments, ctx)
     if failure is not None:
         return failure
-    target = original_target(arguments, ctx, ledger, plan)
+    target = original_target(ctx, ledger, plan)
     candidate = candidate_of(ledger, plan)
     key = ctx.operation_key
     if not any(row['body']['plan_id'] == plan['plan_id'] for row in ledger.records('monitor_controller')):
-        return invalid(ledger, ctx, argument_error(
+        return invalid(argument_error(
             'hpc_monitor_controller_not_attached',
             next_step='This original commission has no attached monitor controller. Use hpc_monitor on the '
                       'original plan, then hpc_results when its outputs are ready. Retain the original '
@@ -1103,30 +993,34 @@ async def hpc_monitor_wait(arguments, ctx):
         observed = await observe_allocation(ctx, ledger, plan, target, candidate, monitor_key)
         return await update_conditional_forecast({'refresh_queue': True}, ctx, ledger, plan, target, candidate,
                                                  observed, monitor_key)
-    if not any(row['body']['plan_id'] == plan['plan_id'] for row in ledger.records('monitor')):
-        await monitor_once(key + ':initial-monitor')
-    monitor = last_forecast(ledger, plan)
-    ready = uncollected_completed_unit_ids(ledger, plan, monitor['conditional_prediction'])
-    if monitor['conditional_prediction']['telemetry']['state'] in ('complete', 'failed'):
-        result = {'schedule': None, 'monitor': monitor, 'reason': 'observed_terminal_job_collect_now'}
-    elif ready:
-        result = {'schedule': None, 'monitor': monitor, 'reason': 'observed_unit_outputs_collect_now',
-                  'ready_unit_ids': sorted(ready)}
-    else:
-        controller = MonitorCronController(ledger)
-        schedule = controller.reserve(plan, candidate, monitor, key)
-        if schedule['job_id'] != target['execution_id']:
-            raise ValueError('monitor_schedule_original_job_conflict')
-        if schedule['valuation']['schedule']:
-            await controller.wait(schedule)
-            observed = await monitor_once(key + ':monitor')
-            ledger.put('monitor_wake', {'schedule_ref': schedule['schedule_ref'], 'job_id': target['execution_id'],
-                                        'observed': {'status': 'completed', 'result': observed}},
-                       identity='wake:' + key)
-            result = {'schedule': schedule, 'monitor': observed}
+    try:
+        if not any(row['body']['plan_id'] == plan['plan_id'] for row in ledger.records('monitor')):
+            await monitor_once(key + ':initial-monitor')
+        monitor = last_forecast(ledger, plan)
+        ready = uncollected_completed_unit_ids(ledger, plan, monitor['conditional_prediction'])
+        if monitor['conditional_prediction']['telemetry']['state'] in ('complete', 'failed'):
+            result = {'schedule': None, 'monitor': monitor, 'reason': 'observed_terminal_job_collect_now'}
+        elif ready:
+            result = {'schedule': None, 'monitor': monitor, 'reason': 'observed_unit_outputs_collect_now',
+                      'ready_unit_ids': sorted(ready)}
         else:
-            result = {'schedule': schedule, 'monitor': None}
-    return completed(ledger, ctx, result)
+            controller = MonitorCronController(ledger)
+            schedule = controller.reserve(plan, candidate, monitor, key)
+            if schedule['job_id'] != target['execution_id']:
+                raise ValueError('monitor_schedule_original_job_conflict')
+            if schedule['valuation']['schedule']:
+                await controller.wait(schedule)
+                observed = await monitor_once(key + ':monitor')
+                ledger.put('monitor_wake', {'schedule_ref': schedule['schedule_ref'],
+                                            'job_id': target['execution_id'],
+                                            'observed': {'status': 'completed', 'result': observed}},
+                           identity='wake:' + key)
+                result = {'schedule': schedule, 'monitor': observed}
+            else:
+                result = {'schedule': schedule, 'monitor': None}
+    except ResourceRequestFailed as error:
+        return failed(error.failure)
+    return completed(result)
 
 
 async def hpc_results(arguments, ctx):
@@ -1134,12 +1028,15 @@ async def hpc_results(arguments, ctx):
     plan, failure = original_plan(ledger, arguments, ctx)
     if failure is not None:
         return failure
-    target = original_target(arguments, ctx, ledger, plan)
+    target = original_target(ctx, ledger, plan)
     candidate = candidate_of(ledger, plan)
-    observed = await observe_allocation(ctx, ledger, plan, target, candidate, ctx.operation_key)
-    result, references, artifacts = await collect_original_results(arguments, ctx, ledger, plan, target, candidate,
-                                                                   observed, ctx.operation_key)
-    return completed(ledger, ctx, result, references, artifacts)
+    try:
+        observed = await observe_allocation(ctx, ledger, plan, target, candidate, ctx.operation_key)
+        result, references, artifacts = await collect_original_results(arguments, ctx, ledger, plan, target,
+                                                                       candidate, observed, ctx.operation_key)
+    except ResourceRequestFailed as error:
+        return failed(error.failure)
+    return completed(result, references, artifacts)
 
 
 async def hpc_allocation_order(arguments, ctx):
@@ -1147,15 +1044,23 @@ async def hpc_allocation_order(arguments, ctx):
     plan, failure = original_plan(ledger, arguments, ctx)
     if failure is not None:
         return failure
-    target = original_target(arguments, ctx, ledger, plan)
+    target = original_target(ctx, ledger, plan)
     candidate = candidate_of(ledger, plan)
     allowed = {unit['unit_id'] for unit in candidate['units']}
     if not set(arguments['unit_ids']) <= allowed:
-        return invalid(ledger, ctx, argument_error('only_original_work_units_can_be_selected'))
-    result = await write_allocation_control(target, arguments['unit_ids'], ctx.operation_key, ctx)
+        return invalid(argument_error('only_original_work_units_can_be_selected'))
+    # The allocation's runner reads this control file at its next unit boundary.
+    control = ctx.store.artifact(canonical({'manifest_sha256': plan['manifest_sha256'],
+                                            'unit_ids': arguments['unit_ids']}).encode(), 'application/json')
+    written = await hpc_remote.write_file(ctx, target['resource_id'],
+                                          plan['manifest']['workspace'] + '/allocation-control.json', control,
+                                          name='order')
+    if written['status'] != 'completed':
+        return failed(written['failure'])
     ledger.put('allocation_order', {'plan_id': plan['plan_id'], 'operation_key': ctx.operation_key,
-                                    'unit_ids': arguments['unit_ids'], 'receipt': result})
-    return completed(ledger, ctx, result)
+                                    'unit_ids': arguments['unit_ids'], 'receipt': written},
+               source_refs=[control])
+    return completed(written)
 
 
 TOOLS = {'hpc_open': hpc_open, 'hpc_read': hpc_read, 'hpc_compare': hpc_compare,
@@ -1169,10 +1074,10 @@ TOOLS = {'hpc_open': hpc_open, 'hpc_read': hpc_read, 'hpc_compare': hpc_compare,
 # -------------------------------------------------------------------------------------- deciding and choosing
 
 def offered(ctx):
-    """The actions this decision offers: every tool but ``hpc_open`` (the history refresh only with the shared
-    memory) and the five child commissions."""
+    """The actions this decision offers: the two sister commissions, every tool but ``hpc_open`` (the history
+    refresh only with the shared memory) and the three job children."""
     names = [name for name in TOOL_CATALOG if name != 'hpc_history_refresh' or memory_enabled(ctx)]
-    return names + list(CHILD_CATALOG)
+    return ['hpc_prediction', 'hpc_execution', *names, 'launch', 'monitor', 'results']
 
 
 def argument_schema(name):
@@ -1188,55 +1093,32 @@ def output_schema(names):
 
 
 def owner_arguments(summary, arguments):
-    """The arguments of a tool: the model's, and what the commission fixes (its identity, tool request and scope)."""
+    """The arguments of a tool: the model's, and what the commission fixes (the ledger id once it is open, the
+    commission identity, the tool request and the scope)."""
     return {**arguments, **{name: summary[name] for name in INJECTED}}
 
 
 def decide(summary, feedback, ctx):
-    view = summary['ledger_view']
-    if view is None or summary['ledger_stale']:
-        # The first part of the task: open (or read again) the ledger through the episode's own tool. A sister
-        # commissioned on the ledger has changed it.
+    """The first unit opens the ledger (no model is asked). After it the model is shown the commission, the
+    resource, the ledger, what the sisters and the job children returned, the credit and what it did so far, and
+    selects one action. The yield controller's own state and the progress clock are not shown: nothing in them
+    is the model's to decide."""
+    if summary['ledger_view'] is None:
         return ToolCall('hpc_open', owner_arguments(summary, {}))
-    settings = ctx.settings
     names = offered(ctx)
-    commission = view['commission']
     context = {
-        'hpc_commission': commission, 'hpc_owner_episode_id': view['owner_episode_id'],
-        'hpc_candidates': view['candidates'], 'hpc_resource': settings['resources'][commission['resource_id']],
-        'hpc_scope': summary['scope'],
-        'hpc_commission_identity': {name: summary[name] for name in ('commission_id', 'commission_source_ref')
-                                    if summary[name] is not None},
-        'hpc_launches': summary['launches'], 'hpc_predictions': summary['predictions'],
-        'hpc_executions': summary['executions'], 'hpc_monitors': summary['monitors'],
-        'hpc_acquisitions': summary['acquisitions'], 'hpc_tool_request': view['tool_requests'],
-        'hpc_model_ref': view['model_ref'], 'hpc_credit': view['credit'],
-        'hpc_latest_comparison': view['latest_comparison'], 'hpc_model_support': view['model_support'],
-        'hpc_plans': [{'plan_ref': plan['plan_ref'], 'candidate_id': plan['candidate_id']}
-                      for plan in view['plans']],
-        'hpc_latest_monitor': view['latest_monitor'], 'hpc_monitor_controllers': view['monitor_controllers'],
-        'hpc_queue_refs': view['queue_refs'], 'hpc_available_training_ids': view['available_training_ids'],
-        'requested_action_history': summary['actions'], 'feedback': feedback,
-        'time_accounting': time_accounting(ctx.clock.progress_time),
+        'commission': summary['commission'],
+        'resource': ctx.settings['resources'][summary['commission']['resource_id']],
+        'ledger': summary['ledger_state'], 'predictions': summary['predictions'],
+        'executions': summary['executions'], 'launches': summary['launches'], 'monitors': summary['monitors'],
+        'acquisitions': summary['acquisitions'], 'credit': summary['credit'],
+        'units_so_far': summary['units_so_far'], 'last_outcome': summary['last_outcome'], 'feedback': feedback,
         'actions': [{'selection': name, 'description': (TOOL_CATALOG.get(name) or CHILD_CATALOG[name])[0],
                      'input_schema': argument_schema(name)} for name in names]}
     if memory_enabled(ctx):
-        context['hpc_shared_history_refs'] = view['shared_history_refs']
-        # BLOCKED-ON-JOB-SERVICE: estimate_table; wanted call: the recorded read below (the old
-        # ``resource_estimator.estimate_context(execution_expectations.capture('hpc'))``). No such service exists.
-        context['resource_tool_estimates'] = ctx.services['estimate_table'].read('resource_tool_estimates', 'hpc')
-    instructions = INSTRUCTIONS
-    library = settings.get('launch_instruction_directory')
-    if library is not None:
-        context['launch_instruction_library'] = LaunchInstructions(library).context()
-        instructions += LAUNCH_INSTRUCTIONS
-    knowledge = settings.get('tool_knowledge_directory')
-    if knowledge is not None:
-        context['tool_knowledge'] = ToolKnowledge(knowledge).context()
-        instructions += KNOWLEDGE_INSTRUCTIONS
-    if summary['action_yields'] is not None:
-        context['action_yields'] = summary['action_yields']
-    return ModelRequest(MODEL_ROLE, instructions, context, output_schema(names))
+        # The measured execution profiles of earlier runs (a recorded read of the estimate table).
+        context['shared_timing_profiles'] = ctx.services['estimate_table'].read('profiles')
+    return ModelRequest(MODEL_ROLE, INSTRUCTIONS, context, output_schema(names))
 
 
 def action(response, summary, records, ctx):
@@ -1258,10 +1140,15 @@ def action(response, summary, records, ctx):
             plan = plans[arguments['plan_ref']]
             if plan['closed']:
                 raise ValueError('hpc_allocation_already_closed')
-            if any(item['plan_ref'] == arguments['plan_ref'] for item in summary['launches']):
+            if plan['handed_off'] or any(item['plan_ref'] == arguments['plan_ref'] for item in summary['launches']):
                 raise ValueError('hpc_plan_already_launched_once')
         if 'handoff_ref' in arguments and not records.holds(arguments['handoff_ref']):
             raise ValueError('record_not_held:' + arguments['handoff_ref'])
+        if selection == 'hpc_handoff' and not any(
+                item['plan_ref'] == arguments['plan_ref'] and arguments['handoff_ref'] in item['handoff_refs']
+                for item in summary['launches']):
+            # The handoff of a plan is the one the launch of that plan returned.
+            raise ValueError('handoff_does_not_match_frozen_portfolio')
     except (ValidationError, ValueError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
     if selection in TOOLS:

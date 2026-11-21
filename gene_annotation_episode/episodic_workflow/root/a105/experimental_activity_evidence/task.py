@@ -11,7 +11,7 @@ Carried from the old ``task.py`` (``ScientificTask.next/apply_response/execute``
 child. The task always offers a unit and never ends the Episode: only the yield controller does.
 
 Children. The old ``child_roles`` were this head itself (``experimental_activity_evidence``) and ``literature``
-(``published_evidence_assessment``); the slots below are those two, under the name of their folders.
+(its folder is ``literature``); the slots below are those two, under the name of their folders.
 ``messages/msg_to_child.py`` builds each commission.
 
 Tools offered. The registry tools are the A105 tool library's catalog (``A105ToolRegistry.catalog``); this episode
@@ -57,8 +57,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
     identity_schema, references_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_quantity_storage import (
     COMPONENTS as QUANTITY_COMPONENTS, quantity_population_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.experimental_activity_evidence.action_transport import (
-    decode_response, generation_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.strict_output import (
+    decode_strict_output, strict_output_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
@@ -74,11 +74,17 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowle
     INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
 
+from .goal import GOAL
+
 CHILD_SLOTS = {
     'experimental_activity_evidence': 'experimental_activity_evidence',
-    'published_evidence_assessment': 'experimental_activity_evidence/published_evidence_assessment',
+    'literature': 'experimental_activity_evidence/literature',
 }
 SERVICES = ()
+# How the action schema travels to the model: the model endpoint takes no open object, so a record whose fields the
+# schema leaves open (a child's ``scope``, the ``constraints`` of its assignment) travels as JSON text and is decoded
+# in ``action``.
+TRANSPORT = {'open_records_as_text': True, 'argument_transport_error': 'a105_tool_argument_transport_unsupported'}
 
 REVISION_ORIGIN_VERSION = 'experimental_activity_evidence_revision_origin_v1'
 CHILD_SELECTION_VERSION = 'experimental_activity_evidence_child_selection_v1'
@@ -216,7 +222,7 @@ CHILD_ARGUMENTS = {
         "sub-scope's subjects and the evidence. request_results asks for its recorded process result.",
         obj({'objective': OBJECTIVE, 'scope': SCOPE, 'assignment': HEAD_ASSIGNMENT,
              'request_results': {'type': 'boolean'}}, required=['objective', 'scope', 'assignment'])),
-    'published_evidence_assessment': (
+    'literature': (
         'Commission an A105 published-evidence assessment of one proposed annotation: it searches and reads the '
         'sources, grades each applicable experiment with its purpose-specific subscoring sheet and returns its '
         'credit, its typed findings and the typed answer its task requires. Name the sources and the question '
@@ -656,7 +662,7 @@ def decide(summary, feedback, ctx):
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(goal_text, knowledge=context.get('tool_knowledge')), context,
-                        generation_schema(selection_schema(names, commit_schema)))
+                        strict_output_schema(selection_schema(names, commit_schema), **TRANSPORT))
 
 
 def validate_selection(value, schema):
@@ -682,7 +688,7 @@ def action(response, summary, records, ctx):
     commit_schema = summary['reasoning_schema']
     schema = selection_schema(names, commit_schema)
     try:
-        selection = validate_selection(decode_response(response, schema), schema)
+        selection = validate_selection(decode_strict_output(response, schema, **TRANSPORT), schema)
         if selection['kind'] == 'child':
             for reference in named_records(selection['slot'], selection['arguments']):
                 if not records.holds(reference):

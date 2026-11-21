@@ -24,17 +24,18 @@ from episode_runtime import ChildMessage
 COMMITTED = 'committed_record_refs'
 SCREENING = 'literature_screening_answers'
 LEADS = 'literature_source_lead_dispositions'
+SHEET_STATE_REFS = 'sheet_state_refs'
 
 
 def head_message(arguments, summary):
     given, scope = arguments['assignment'], arguments['scope']
     proposed = given.get('proposed_annotation_ref', summary['proposed_annotation_ref'])
-    assignment = {**given, 'scope': scope,
+    assignment = {**given, 'scope': scope, SHEET_STATE_REFS: list(summary['sheet_state_refs']),
                   'evidence_refs': list(dict.fromkeys([*given['evidence_refs'], *scope['subject_refs'],
                                                        *([proposed] if proposed is not None else [])]))}
     if proposed is not None:
         assignment['proposed_annotation_ref'] = proposed
-    selection = []
+    selection = [SHEET_STATE_REFS]   # the child's persisted sheet states: the next run starts from them
     if summary['proposed_annotation_ref'] is not None:
         selection.append(COMMITTED)
     return ChildMessage(objective=arguments['objective'],
@@ -44,12 +45,13 @@ def head_message(arguments, summary):
 def literature_message(arguments, summary):
     given = arguments['assignment']
     task = given['literature_task']
-    selection = []
+    selection = [SHEET_STATE_REFS]   # the child's persisted sheet states: the next run starts from them
     if task['kind'] == 'verified_source_leads':
         selection.append(LEADS)
     if task.get('answer_kind') == 'screening':
         selection.append(SCREENING)
-    assignment = {**given, 'scope': arguments['scope'], 'received_record_refs': list(summary['held_record_refs'])}
+    assignment = {**given, 'scope': arguments['scope'], SHEET_STATE_REFS: list(summary['sheet_state_refs']),
+                  'received_record_refs': list(summary['held_record_refs'])}
     return ChildMessage(objective=arguments['objective'],
                         message={'objective': arguments['objective'], 'scope': arguments['scope']},
                         assignment=assignment, selection=tuple(selection))
@@ -57,6 +59,6 @@ def literature_message(arguments, summary):
 def msg_to_child(slot, arguments, summary):
     if slot == 'experimental_activity_evidence':
         return head_message(arguments, summary)
-    if slot == 'published_evidence_assessment':
+    if slot == 'literature':
         return literature_message(arguments, summary)
     raise LookupError('no_such_child_slot:' + slot)

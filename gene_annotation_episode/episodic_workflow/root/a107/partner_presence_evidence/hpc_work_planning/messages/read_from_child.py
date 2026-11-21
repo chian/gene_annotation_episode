@@ -2,14 +2,16 @@
 ``from_child_execution_progress_assessment.py``, ``from_child_execution_result_acquisition.py``,
 ``from_child_hpc_allocation_execution.py`` and ``from_child_hpc_resource_prediction.py``).
 
-Not carried: the old ``LaunchReceiptCustody.original_launch_handoff`` (it recovered the plan's handoff from the old
-runner's committed outcome tables across a report repair: the launch child's admitted result names its handoff records,
-the system receipts them and the unit outcome is in ``view.outcomes``), the old ``receive_progress`` (it admitted the
-monitor's ``episode_progress`` references into the old progress provider's received view: the monitor returns its
-progress observations in typed fields and records, read here and in the summary), and the old ``receive_report``,
-``receive_allocation_report`` and ``receive_prediction_report`` (the recorded admission, progress forms, receipts,
+A sister returns controlled data: its ``credit`` (was it productive), its ``finding`` (counts and a boolean of what
+the ledger holds after it) and, in custody, the ledger rows it holds (``hpc_ledger_refs``: the system receipts
+them, and the summary reads the ledger with them from then on) and the result sources it was asked for. The report
+keeps the credit and the counts for the next decision; the rows are not listed in it.
+
+Not carried: the old ``LaunchReceiptCustody.original_launch_handoff``, ``receive_progress``, ``receive_report``,
+``receive_allocation_report`` and ``receive_prediction_report`` (recorded admission, progress forms, receipts,
 timing receipts and tool attributions: custody and the typed result replace them). A child's own ``credit`` is
-information for the summary and is not added to this episode's credit."""
+information for the summary and is not added to this episode's credit: the ledger's credit already counts what the
+sister recorded."""
 
 
 def read_from_child(slot, result, summary, records):
@@ -30,10 +32,10 @@ def read_from_child(slot, result, summary, records):
                 'result_refs': list(result['execution_result_refs']),
                 'result_artifact_refs': list(result['execution_result_artifact_refs']),
                 'completed': result['execution_completed']}
-    if slot in ('hpc_prediction', 'hpc_execution'):
-        return {'slot': slot, 'child_credit': result['credit'], 'hpc_credit': result['hpc_credit'],
-                'model_ref': result['hpc_model_ref'], 'accepted_obligations': list(result['hpc_accepted_obligations']),
+    if slot == 'hpc_prediction':
+        return {'slot': slot, 'child_credit': result['credit'], **result['finding']}
+    if slot == 'hpc_execution':
+        return {'slot': slot, 'child_credit': result['credit'], **result['finding'],
                 'result_refs': list(result['hpc_result_refs']),
-                **({'result_artifact_refs': list(result['hpc_result_artifact_refs'])}
-                   if slot == 'hpc_execution' else {})}
+                'result_artifact_refs': list(result['hpc_result_artifact_refs'])}
     raise LookupError('hpc_work_planning_has_no_slot:' + slot)

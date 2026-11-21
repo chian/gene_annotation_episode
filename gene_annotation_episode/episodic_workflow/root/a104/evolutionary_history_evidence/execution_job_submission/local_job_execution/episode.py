@@ -1,4 +1,4 @@
-"""The A104 local job execution episode: the execution agent for one job on the local resource."""
+"""The A104 local job execution episode: the launch of one assigned job on one local resource, ended at handoff."""
 from episode_runtime import EpisodeBinding
 
 from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file

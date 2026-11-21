@@ -85,6 +85,13 @@ CHILD_SLOTS = {
     'resource_result_acquisition': 'gene_context_evidence/resource_result_acquisition',
 }
 SERVICES = ()
+# The monitor slot. Its commission is controlled values only: the handoff record of one outstanding job this episode
+# holds, what the monitor may observe of it (the monitor's own ``requested_fields`` options) and the measurements to
+# return (the monitor's selectable fields; its credit, finding and check rows are always returned).
+MONITOR = 'execution_progress_assessment'
+MONITOR_FIELDS = ('execution_status', 'result_available', 'measurements', 'log_windows')
+MONITOR_RETURN_FIELDS = ('job_returncode', 'job_duration_seconds', 'job_elapsed_seconds', 'stdout_bytes',
+                         'stderr_bytes', 'log_window_refs', 'event_receipt_refs')
 
 # The old ``_COMMON_TOOLS`` and ``process.revise``: a selected tool of the tool library may not reuse one of these
 # names (the old ``scientific_primitive_uses_common_tool_name``).
@@ -130,10 +137,15 @@ CHILD_ASSIGNMENTS = {
                                 'allowed_kinds, resource_id, kind}, "launch_instructions": {...optional...}, '
                                 '"record_refs": [<every record the job inputs name>], "scope": {...optional...}, '
                                 '"scientific_task": {...optional...}, "received_handoff_resources": [...optional...]}',
-    'execution_progress_assessment': 'an assessment of the progress of pending work: {"version": '
-                                     '"monitor_assignment_v1", "target_handle": <execution handle>, '
-                                     '"requested_fields": [...], "known_progress_refs": [...], '
-                                     '"permitted_committed_record_types": [...]}',
+    'execution_progress_assessment': 'one check of an outstanding job you hold (one monitor visit). Its operands are '
+                                     'not those of the other children: exactly {"handoff_ref": <the handoff_ref of '
+                                     'one of the outstanding jobs>, "requested_fields": [<what the monitor may '
+                                     'observe: execution_status, result_available, measurements, log_windows>], '
+                                     '"select": [<the measurements you want returned: job_returncode, '
+                                     'job_duration_seconds, job_elapsed_seconds, stdout_bytes, stderr_bytes, '
+                                     'log_window_refs, event_receipt_refs>]}; no objective, purpose or assignment. '
+                                     'It returns its credit, the state of the job and whether its results are '
+                                     'available, with its check records',
     'execution_result_acquisition': 'the acquisition of results: {"version": <the results assignment version>, '
                                     '"handoff_ref": [<the one original handoff record>], "selector": {...}, '
                                     '"resource_kind": "local"|"hpc"|"api", "workspace": <absolute path>, '
@@ -162,7 +174,8 @@ TOOL_INSTRUCTION = (
     'child operation takes {"objective": <what the child should do, as text>, "purpose": <what you use its return '
     'for>, "assignment": <the typed assignment of that child, below>, "select": [<the optional fact sources you want '
     'returned>]}. Name every record a child will read in its assignment: a passed record does not bring the records '
-    'it names. Only the numerical controller decides when your work ends. The host executes your selected '
+    'it names. execution_progress_assessment, offered while you hold an outstanding job, takes its own operands, '
+    'given with it. Only the numerical controller decides when your work ends. The host executes your selected '
     'action.')
 
 # The A103 grader: what the attachment sheet is, how it is filled, and what the credit reads from it (the sheet's
@@ -393,7 +406,13 @@ def offered(summary, settings):
     operations of the catalog, ``context.grade``, ``process.revise``, ``reason`` and the child slots."""
     lookups = [name for name in LOOKUPS if name not in KNOWLEDGE or 'knowledge_library_directory' in settings]
     return [*lookups, *(entry['name'] for entry in summary['catalog']), 'context.grade', 'process.revise', 'reason',
-            *CHILD_SLOTS]
+            *offered_children(summary)]
+
+
+def offered_children(summary):
+    """The children this decision offers. The monitor is offered while this episode holds an outstanding job (a job
+    ledger handoff row without its closure row): its commission names one of them."""
+    return [slot for slot in CHILD_SLOTS if slot != MONITOR or summary['outstanding_jobs']]
 
 
 def output_schema(names):
@@ -428,7 +447,10 @@ def present(summary, text, settings):
     section(parts, 'Callable operations', [{'operation': entry['name'], 'meaning': entry.get('description', ''),
                                             'operands': entry['input_schema']}
                                            for entry in [*lookups, *summary['catalog'], GRADE_ENTRY]])
-    section(parts, 'Child investigations', CHILD_ASSIGNMENTS)
+    section(parts, 'Child investigations', {slot: CHILD_ASSIGNMENTS[slot] for slot in offered_children(summary)})
+    section(parts, 'Outstanding jobs (each is named by its handoff_ref)',
+            [{name: job[name] for name in ('job', 'kind', 'submitted_at', 'handoff_ref', 'latest_check')}
+             for job in summary['outstanding_jobs']])
     section(parts, 'Returned by the child investigations', summary['child_reports'])
     section(parts, 'Current credit', summary['credit_view'])
     section(parts, 'Current A103 grading sheets (the controlled features code reads from them)', summary['finding'])
@@ -495,6 +517,22 @@ def child_operands(name, arguments, records, settings):
             'select': select, 'child_values': dict(settings.get('child_values', {}).get(name, {}))}
 
 
+def monitor_operands(arguments, summary, settings):
+    """The model's operands of a monitor commission, controlled values only: the handoff record of one outstanding
+    job this episode holds (the only way to name the job), what the monitor may observe of it and the measurements
+    to return. ``msg_to_child`` builds the monitor's assignment from the rows this episode holds of that job; the
+    monitor's own values come from the settings."""
+    fields = {'handoff_ref': {'enum': [job['handoff_ref'] for job in summary['outstanding_jobs']]},
+              'requested_fields': {'type': 'array', 'uniqueItems': True, 'minItems': 1,
+                                   'items': {'enum': list(MONITOR_FIELDS)}},
+              'select': {'type': 'array', 'uniqueItems': True, 'items': {'enum': list(MONITOR_RETURN_FIELDS)}}}
+    Draft202012Validator({'type': 'object', 'additionalProperties': False, 'properties': fields,
+                          'required': ['handoff_ref', 'requested_fields']}).validate(arguments)
+    return {'handoff_ref': arguments['handoff_ref'], 'requested_fields': arguments['requested_fields'],
+            'select': arguments.get('select', []),
+            'child_values': dict(settings.get('child_values', {}).get(MONITOR, {}))}
+
+
 def reasoning_payload(arguments, records):
     """The old admission of a ``reason`` selection: the payload fits the Store's reasoning schema, and a commit with
     every section empty is rejected before acquisition unless the selection declares ``no_applicable_evidence`` (the
@@ -523,6 +561,8 @@ def action(response, summary, records, ctx):
             raise ValueError('arguments_json_must_be_a_JSON_object')
         if name == 'reason':
             payload = reasoning_payload(arguments, records)
+        elif name == MONITOR:
+            arguments = monitor_operands(arguments, summary, ctx.settings)
         elif name in CHILD_SLOTS:
             arguments = child_operands(name, arguments, records, ctx.settings)
     except (KeyError, TypeError, ValueError, ValidationError) as error:

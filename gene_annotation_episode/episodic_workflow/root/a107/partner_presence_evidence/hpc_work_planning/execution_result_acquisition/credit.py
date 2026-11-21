@@ -1,23 +1,13 @@
 """Credit: the acquired-record unit times the mean, over the requested paths, of the fraction of the requested byte
-positions newly covered by retained windows.
-
-Carried from the old ``credit.py`` (``ResultsCredit._generic_result_selector_progress`` and the native branch of
-``_live_project_credit``; rule ``execution_received_selector_coverage_credit_v2``): each requested path counts the
-union of the retained windows once, whatever the read boundaries; byte positions the earlier results passed in
-custody (the old initial known records) already cover earn nothing. The old ``handoff_unit * handoff_count`` term was
-the configured handoff unit times a count fixed at zero: it never earned credit and is not carried. The old
-``credit_kind`` and the pinned closed credit view (``closed_credit.py``) are machinery: the system hands the credit
-its controller last saw to ``final_to_parent``. The count-based credit of local file sources and the credit views of
-the typed and API result hosts are not carried (their result host is BLOCKED-ON-JOB-SERVICE, see
-``messages/read_from_parent.py``).
-
-Credit is cumulative and never bounded, clamped or rescaled here; the ``min`` and ``max`` below only measure an
-interval of bytes."""
+positions newly covered by retained windows. Each requested byte position counts once however the reads are split,
+and the positions the earlier results passed in custody already cover earn nothing. The windows are those of the
+result records the Episode holds: the summary reads every result acquisition, the earlier ones (``initial``) and
+those of this Episode's own units (``own``), from its held record, so a status request, a refused fetch and a window
+of bytes already covered earn nothing. Never bounded or rescaled."""
 import math
 
 
 def _covered(windows, start, end):
-    """The number of byte positions of ``[start, end)`` inside the union of the windows."""
     intervals = sorted((max(start, window['offset']), min(end, window['offset'] + window['returned_bytes']))
                        for window in windows
                        if window['offset'] < end and window['offset'] + window['returned_bytes'] > start)
@@ -30,8 +20,9 @@ def _covered(windows, start, end):
 
 
 def selector_progress(requested, initial, own):
-    """Library candidate (the old ``_generic_result_selector_progress``): the mean newly covered fraction of the
-    requested byte positions. ``initial`` and ``own`` are lists of retained results, each with its windows."""
+    """The mean newly covered fraction of the requested byte positions. ``initial`` and ``own`` are lists of
+    retained results, each with its windows. An interval without a requested length ends at the size of the
+    fetched file."""
     if not requested:
         return 0.0
     fractions = []

@@ -1,18 +1,8 @@
-"""Credit: the operational credit of the assigned resource, as the last unit that asked for it returned it.
-
-Old ``credit.py``: ``credit_kind`` was ``operational`` for every resource role and ``credit_view(context,
-receiver_selection)`` was ``services.bound_role_credit``. ``credit`` here has no services, so the tool that obtained
-the value (every resource tool and every reasoning commit asks the resource service for its ``credit_view``)
-returned it in its outcome and the summary holds the latest one. A wait carries the credit unchanged. Nothing is
-bounded."""
-import math
+"""Credit: one for each requested result file the Episode holds. The summary names the requested files a held
+closure row of the job lists; a file counts when the Episode holds its artifact. A status check, a wait, a failed
+fetch and a repeated fetch change nothing here and so earn nothing. Nothing is bounded or rescaled; the target of
+the commission is the number of requested files (``yield_estimator.py``)."""
 
 
 def credit(summary, records):
-    view = summary['credit_view']
-    if view is None:
-        return 0.0
-    value = view['credit']
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
-        raise ValueError('resource_credit_view_credit_must_be_a_finite_number:' + repr(value)[:80])
-    return value
+    return float(sum(1 for item in summary['acquired'] if records.holds(item['ref'])))

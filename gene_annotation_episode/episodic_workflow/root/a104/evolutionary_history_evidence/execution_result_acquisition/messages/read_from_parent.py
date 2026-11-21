@@ -1,20 +1,19 @@
-"""What the parent gives: the original results assignment (the old ``execution_results_assignment_v1`` of
-``from_parent.assignment_schema``: ``handoff_ref`` and ``selector``, under the same names) and the records it passes.
+"""What the parent gives: the results assignment (``execution_results_assignment_v1``: ``handoff_ref`` and
+``selector``) and the records it passes.
 
-This is the only place the assignment is read. The old ``prepare_assignment`` validated the selector against the
-target the handoff names (``_selector``) and the native inputs the selector's family names. The target the handoff
-names was read by the old runner's progress provider from the handoff record; the parent now copies it into the
-assignment (``target``, a new field) and the selector is validated here against it. The checks of the commission
-against the parent's Launch form and the old runner's tables (``_recorded_results_assignment``, ``_launch``,
-``validate_selected_inputs``, the immutable input versions, the masking / utility / standard / native BLAST database
-and BV-BRC input validation against held records) are checks of a commission by its child; a wrong commission fails,
-so they are not carried (blocked file).
+This is the only place the assignment is read. The handoff arrives as a record reference: ``handoff_ref`` names the
+handoff row the job service wrote at the launch (a row of the job ledger), and the commissioner passes that row in
+custody in ``record_refs``. The commissioner also copies the execution target the handoff names into the assignment
+(``target``); for a plain file result its ``assignment.workspace`` is the job's directory (the handoff row's
+``detail['native']['directory']``), and the selector is validated here against it. A wrong commission fails with its
+error.
 
-The family of the target decides which of the old branches of this episode applies (the old ``self.native_*_results``
-objects, ``self.api_execution`` and ``self.local_file_sources``). Only the generic native byte-window family
-(``native_bytes``) is placed; the other families are named here and raise where their old class would have been
-called (``unplaced``): their classes are in no place now."""
+The family of the target decides which branch of this episode applies. Only the plain file results of a job
+(``native_bytes``: requested paths and byte intervals inside the job's directory) are placed; the other families
+are named here and raise where their old class would have been called (``unplaced``): their classes are in no place
+now."""
 import math
+from pathlib import Path
 
 from method_loop import DeclaredField, Field, RecordForm
 
@@ -57,22 +56,19 @@ UTILITY_SELECTOR_VERSIONS = ('native_blast_utility_result_selector_v1', 'native_
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The assignment version', RESULTS_VERSION),
-    'handoff_ref': Field('text', 'The original handoff: the execution target whose results are acquired'),
-    'selector': Field('record', 'The requested results: local file sources, native byte windows (paths, path, '
-                                'offset, limit) or a typed native result selector'),
-    # New fields the final form needs (the old code read them from the handoff record and the configuration).
-    'target': Field('record', 'The execution target the handoff names (execution_target_v1): the old '
-                              'targets.read_target(handoff_ref)'),
-    'acquired_record_unit': Field('number', 'The credit of one fully acquired requested selector (the old '
-                                            'acquired_record_unit of the configuration)'),
-    'record_refs': Field('record_refs', 'Every record the code reads: the handoff and the records the selected '
-                                        'native inputs name, passed in custody (the old initial_references)',
-                         required=False),
+    'handoff_ref': Field('text', 'The reference of the handoff row of the job whose results are acquired; the row '
+                                 'itself is passed in record_refs'),
+    'selector': Field('record', 'The requested results: plain file results (paths, or one path with offset and '
+                                'limit, inside the job\'s directory) or a typed native result selector'),
+    'target': Field('record', 'The execution target the handoff names (execution_target_v1); the commissioner '
+                              'builds it from the handoff row'),
+    'acquired_record_unit': Field('number', 'The credit of one fully acquired requested selector'),
+    'record_refs': Field('record_refs', 'Every record the code reads, passed in custody: the handoff row, the job '
+                                        'rows and result artifacts of an earlier acquisition, and the records the '
+                                        'selected native inputs name', required=False),
     'initial_result_refs': Field('record_refs', 'The earlier result acquisitions of this handoff that the parent '
-                                                'holds (the old initial known records); their artifacts are in '
-                                                'record_refs', required=False),
-    'scientific_task': Field('record', 'The scientific parent task: scientific_question and selected_tool_info '
-                                       '(old services.scientific_parent_task)', required=False),
+                                                'holds; the artifacts they name are in record_refs',
+                                 required=False),
 })
 
 
@@ -105,11 +101,19 @@ def family(target, selector):
 
 
 def windows(selector):
-    """The old ``_windows``: the requested byte windows by path as ``[offset, limit or None]``."""
+    """The requested byte interval of each path as ``[offset, limit or None]`` (``None``: to the end of the
+    file)."""
     values = {path: [0, None] for path in selector.get('paths', [])}
     if 'path' in selector:
         values[selector['path']] = [selector.get('offset', 0), selector.get('limit')]
     return values
+
+
+def result_names(target, requested):
+    """The job service's name of each requested path: its path inside the job's directory, which is how a route
+    lists the result files of a job."""
+    workspace = Path(target['assignment']['workspace']).resolve()
+    return {path: confined(path, workspace).relative_to(workspace).as_posix() for path in requested}
 
 
 def validated_selector(target, selector, kind):
@@ -150,7 +154,8 @@ def validated_selector(target, selector, kind):
 
 def read_from_parent(assignment, message):
     """The validated results assignment as the parent input: the assignment, its target, its family and validated
-    selector, the requested byte windows of a native byte family, the credit unit and the records passed."""
+    selector, the requested byte intervals of a plain file result with the job service's name of each path, the
+    credit unit and the records passed."""
     own = {name: assignment[name] for name in ('version', 'handoff_ref', 'selector')}
     own = checked(own, RESULTS_SCHEMA, 'invalid_execution_results_assignment')
     target = validate_target(assignment['target'])
@@ -161,10 +166,8 @@ def read_from_parent(assignment, message):
         raise ValueError('explicit_positive_operational_credit_units_required')
     kind = family(target, own['selector'])
     selector = validated_selector(target, own['selector'], kind)
-    parent_input = {'assignment': own, 'target': target, 'family': kind, 'selector': selector,
-                    'requested': windows(selector) if kind == 'native_bytes' else {},
-                    'acquired_record_unit': unit, 'record_refs': list(assignment.get('record_refs', [])),
-                    'initial_result_refs': list(assignment.get('initial_result_refs', []))}
-    if 'scientific_task' in assignment:
-        parent_input['scientific_task'] = assignment['scientific_task']
-    return parent_input
+    requested = windows(selector) if kind == 'native_bytes' else {}
+    return {'assignment': own, 'target': target, 'family': kind, 'selector': selector, 'requested': requested,
+            'result_names': result_names(target, requested) if kind == 'native_bytes' else {},
+            'acquired_record_unit': unit, 'record_refs': list(assignment.get('record_refs', [])),
+            'initial_result_refs': list(assignment.get('initial_result_refs', []))}

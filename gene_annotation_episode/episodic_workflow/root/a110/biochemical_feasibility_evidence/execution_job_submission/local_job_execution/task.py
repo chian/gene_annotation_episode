@@ -1,228 +1,101 @@
-"""The task: the execution agent for the assigned job on the local resource.
+"""The task: launch the assigned job on the assigned local resource. The Episode ends at handoff.
 
-The model writes the shell command; the episode's one tool, ``exec_command``, runs it on the local resource through
-the ``job_access`` service and returns the receipt of the command (its actual result and the validations of the
-original requirements it satisfied). The task always offers a unit and never ends the Episode: no stopping budget is
-added; the yield controller stops it when the commissioned requirements are met or the forecast no longer pays for
-another command.
+The model is the router. It answers with one defined action and that action's controlled fields, as JSON; code
+carries it out. There are two actions:
 
-BLOCKED-ON-JOB-SERVICE: the ``job_access`` service has no implementation yet (LAUNCH_MONITOR_EXTRACT_MECHANICS.md,
-section 5 and "Not provided yet" item 4). The tool names it and calls it; it raises where the call is made. The
-published ``PracticalReceiptInformation`` source of the old tool is not called either (BLOCKED-ON-STORE-ACCESS:
-``records/practical_receipt_information.py`` reads ``store.db`` and the old runner's tables); the saved receipt is an
-artifact the tool writes through ``ctx.store``.
+- ``launch_job``: start the assignment's requested job on the assignment's resource. The model names the resource
+  (the one value the assignment allows); ``action`` takes the job's command and environment from the assignment and
+  the tool calls the library's local wrapper (``resource_local.execute_on_local_resource``, the inspection point
+  before execution), which starts the detached job through the real ``job_access`` route and writes the job's
+  handoff row of ``JOB_LEDGER``. The model writes no command and nothing it writes is run.
+- ``hold_launch``: do not launch now, with a reason from a fixed vocabulary. It starts nothing and earns nothing.
 
-Settings (``ctx.settings``): ``resources`` (the configured resources by resource id), ``initial_information`` (the
-recorded inventory by resource id), ``coordinator_workspace``, ``launch_instructions_directory`` and
-``tool_knowledge_directory``."""
-import inspect
-import json
+A local assignment's constraints name the allocation the job is to run under; they are not a range to choose in, so
+``launch_job`` has no override field. The model sees the constraints beside the resource as ``job_access`` describes
+it and chooses whether to launch.
 
-from episode_runtime import ModelRequest, Rejected, ToolCall
+The task always offers a unit and never ends the Episode. The yield controller ends it: at the handoff, whose
+credit is the commission's target, or when further actions stop earning."""
+from episode_runtime import ModelRequest, ToolCall
 
-from gene_annotation_episode.episodic_workflow.episode_support.findings.biochemical_feasibility_evidence.terminal_scientific_evidence import (
-    terminal_artifact_paths)
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (
-    INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.biochemical_feasibility_evidence.terminal_execution import (
-    TerminalExecution)
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
-    rejection_feedback)
-from gene_annotation_episode.episodic_workflow.episode_support.records.biochemical_feasibility_evidence.domain import (
-    ContractError, validate_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.records.biochemical_feasibility_evidence.practical_execution_records import (
-    canonical, digest)
-from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
-from gene_annotation_episode.episodic_workflow.episode_support.tools.metabolic_feasibility.native_flux_balance_bindings import (
-    validate_flux_balance_bindings)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
-    INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.resource_local import execute_on_local_resource
 
 CHILD_SLOTS = {}
 SERVICES = ('job_access',)
+HOLD_REASONS = ('constraints_not_met', 'launch_failed')
 
-# The old ``operation_catalog('local')``: the one general capability.
-EXEC_COMMAND = {
-    'name': 'exec_command',
-    'description': 'Execute the shell command you write on the assigned resource. Use normal shell/file tools to '
-                   'inspect files, author scripts, prepare an environment, run software, or submit/observe the '
-                   'actual job as needed. Returns its actual output and saved action receipt. workdir and env apply '
-                   'to this command; select them explicitly on each action.',
-    'input_schema': {'type': 'object', 'properties': {
-        'cmd': {'anyOf': [{'type': 'string', 'minLength': 1},
-                          {'type': 'array', 'minItems': 1, 'items': {'type': 'string', 'minLength': 1}}]},
-        'workdir': {'type': 'string', 'minLength': 1},
-        'target': {'type': 'string', 'enum': ['resource', 'coordinator'],
-                   'description': 'Assigned resource (default), or local coordinator run directory for input-file '
-                                  'work.'},
-        'env': {'type': 'object', 'additionalProperties': {'type': 'string'}}},
-        'required': ['cmd', 'workdir', 'env'], 'additionalProperties': False}}
-
-# The old ``TerminalExecutionBehavior.instructions`` text, unchanged.
-GOAL_INSTRUCTION = (
-    "You are the execution agent for the actual job and resource assigned below. Use exec_command to write and run "
-    "the shell code needed for that job. Choose scripts, environment preparation, software invocation and recovery "
-    "from the actual resource instructions and observed results. No sequence of setup or job-stage operations is "
-    "prescribed. Preserve the caller's scientific inputs, desired outputs and acceptance criteria. Historical "
-    "inventory is context, not proof of present usability. Each command is one ordinary episode action: its actual "
-    "result and earned credit enter the iterator, including failure or zero progress. Host bookkeeping records "
-    "command versions and actual native job identities; do not maintain a parallel receipt ledger. If a submission "
-    "outcome is uncertain, investigate that original submission rather than create a duplicate. Use the provided "
-    "resource-specific instructions, account, storage and existing authentication route. workdir and env apply to "
-    "the selected command only. target=resource runs on the assigned resource; target=coordinator runs in the local "
-    "run directory for supplied-input and transport work. Both are ordinary journaled actions; resource computation "
-    "belongs on its actual allocation. For coordinator-side transfers, execution_resource.ssh_argv, when present, is "
-    "the exact configured transport prefix. Append the remote shell command as its final argument and preserve "
-    "stdin. The supplied configuration gives the existing connection details. target=resource uses that transport "
-    "directly. The episode iterator decides continuation from credit; add no stopping budget.")
-ANSWER_INSTRUCTION = (
-    ' Answer with tool exec_command and its operands as one JSON object in arguments_json: cmd, workdir, env and, '
-    'optionally, target.')
-RESOURCE_KEYS = ('kind', 'policy', 'account', 'ssh_argv', 'python_executable', 'scheduler')
-HANDOFF_STATUSES = ('submitted', 'running', 'completed')
+INSTRUCTIONS = (
+    'You are the launch agent for the one job and the one local resource assigned below. This episode exists to '
+    'start that job as a detached job on that resource and hand it off: the handoff record goes back to the '
+    'parent, and the episode ends there. It does not wait for the job, check it or collect its results; other '
+    'episodes do that from the handoff record.\n'
+    '\n'
+    'The job to run is assignment.requested_job, exactly as it is given. You do not write, change or run a '
+    'command: you choose an action and code carries it out. The caller\'s scientific inputs, desired outputs and '
+    'acceptance criteria are preserved because the requested job is launched unchanged.\n'
+    '\n'
+    'Your choice is whether, when and how to launch within the assignment\'s constraints. assignment.constraints '
+    'names the allocation the job is to run under (memory_bytes, scratch_bytes, or the allocation as a whole); '
+    'resource is the assigned resource as it is configured now, and resource.policy is the allocation it gives '
+    'every job. The recorded inventory in the assignment is context, not proof of present usability.\n'
+    '\n'
+    'Credit is the measure of this episode. A handoff is the only thing that earns credit: it earns '
+    'credit.handoff_earns, the credit the assignment\'s requested_job_handoff requirement defines, and the episode '
+    'ends when it is earned. Nothing else earns credit. Each action is one recorded unit: its actual result and '
+    'the credit it earned count, including a failed launch and zero progress. You cannot end the episode; it ends '
+    'at the handoff, or when further actions stop earning credit.\n'
+    '\n'
+    'Actions. Answer with exactly one, as JSON:\n'
+    '- launch_job, with resource_id (the assignment\'s resource_id): start the requested job as a detached job on '
+    'the assigned resource. Its result is the handoff, or the failure of the launch request. A failed launch '
+    'started no job; launching again is a new attempt.\n'
+    '- hold_launch, with reason: do not launch now. reason is constraints_not_met (the resource as configured does '
+    'not give the allocation the assignment\'s constraints name) or launch_failed (a launch request failed and '
+    'repeating it is not expected to succeed). A hold starts nothing and earns no credit.')
 
 
-def _resource_configuration(settings, assignment):
-    """The configured local resource of this assignment (old ``NativeConfiguration.__init__`` checks of one
-    resource: the resource is local, and its native flux-balance bindings are valid)."""
-    configuration = settings['resources'][assignment['resource_id']]
-    if configuration.get('kind') != 'local':
-        raise ValueError('execution_resource_kind_conflict')
-    if 'native_flux_balance' in configuration:
-        validate_flux_balance_bindings(configuration['native_flux_balance'])
-    return configuration
+async def launch_job(arguments, ctx):
+    """Start the assigned job through the library's local wrapper and return at handoff."""
+    return await execute_on_local_resource(ctx, arguments['resource_id'], arguments['command'],
+                                           arguments['environment'], wait=False)
 
 
-def _operations(settings, assignment):
-    """The local transport's own validation of the assignment and of an action (old ``TerminalExecution``); a
-    configuration or assignment it refuses raises and fails the run: it is not a model answer."""
-    operations = TerminalExecution(_resource_configuration(settings, assignment),
-                                   coordinator_workspace=settings['coordinator_workspace'],
-                                   artifact_selector=terminal_artifact_paths)
-    operations.validate_assignment(assignment)
-    return operations
+def hold_launch(arguments, ctx):
+    """Nothing is launched: the unit's outcome is the reason the model gave."""
+    return {'status': 'held', 'reason': arguments['reason']}
 
 
-def _handoff(receipt):
-    """Whether the command handed the requested job off (the old returnable practical receipt)."""
-    job = receipt['outcome']['facts'].get('requested_job')
-    return bool(job is not None and job['handoff'] is not None and job['status'] in HANDOFF_STATUSES)
+TOOLS = {'launch_job': launch_job, 'hold_launch': hold_launch}
 
 
-async def exec_command(arguments, ctx):
-    """Run the selected command through ``job_access`` and keep its receipt as a record the Episode holds.
-
-    The service executes once per ``ctx.operation_key`` and reports a failed command as a receipt, as the old
-    ``TerminalExecutionBehavior.execute`` did (begin the intent, run, finalize the scientific command proof, assess
-    the validations of the original requirements, finish the receipt)."""
-    service = ctx.services['job_access']
-    if not hasattr(service, 'exec_command'):
-        raise NotImplementedError('BLOCKED-ON-JOB-SERVICE: job_access.exec_command(assignment, arguments, *, key); '
-                                  'wanted call: await ctx.services["job_access"].exec_command('
-                                  'arguments["assignment"], arguments["arguments"], key=ctx.operation_key)')
-    reply = service.exec_command(arguments['assignment'], arguments['arguments'], key=ctx.operation_key)
-    if inspect.isawaitable(reply):
-        reply = await reply
-    receipt = reply['receipt']
-    receipt_ref = ctx.store.artifact(canonical(receipt), 'application/json')
-    return {'status': 'completed', 'receipt': receipt, 'receipt_ref': receipt_ref,
-            'operation_ref': digest(ctx.operation_key), 'handoff': _handoff(receipt)}
-
-
-TOOLS = {'exec_command': exec_command}
-
-
-def _resource(settings, assignment):
-    """The old ``_resource_information``: the configured resource and the recorded inventory (context only)."""
-    configuration = _resource_configuration(settings, assignment)
-    return {'resource_kind': 'local', 'workspace': configuration['workspace'],
-            **{name: configuration[name] for name in RESOURCE_KEYS if name in configuration},
-            'inventory_snapshot': settings['initial_information'].get(assignment['resource_id'])}
-
-
-def _capabilities(settings, assignment):
-    """The old ``execution_capabilities`` and ``initial_decision_context`` for this resource: configured operation
-    availability, with no deployment or authentication probe."""
-    configuration = _resource_configuration(settings, assignment)
-    if configuration.get('native_flux_balance'):
-        # old: native_flux_balance_tool_info.flux_balance_tool_contracts(...), in no place now
-        raise NotImplementedError('unplaced:flux_balance_tool_contracts')
-    return {'resource_id': assignment['resource_id'], 'resource_kind': 'local', 'availability': 'unknown',
-            'tool_names': [EXEC_COMMAND['name']],
-            **{name: configuration[name] for name in ('workspace', 'policy', 'account', 'python_executable')
-               if name in configuration},
-            'inventory_snapshot': settings['initial_information'].get(assignment['resource_id'])}
-
-
-def _instructions(settings, assignment):
-    library = LaunchInstructions(settings['launch_instructions_directory'])
-    text = GOAL_INSTRUCTION
-    selected = library.for_resource(_resource_configuration(settings, assignment))
-    if selected:
-        text += '\nResource instructions supplied from the frozen library:\n' + '\n\n'.join(
-            section['text'] for section in selected['sections'])
-    return text + KNOWLEDGE_INSTRUCTIONS + LAUNCH_INSTRUCTIONS + ANSWER_INSTRUCTION, library
-
-
-def _task_text(summary):
-    """The old selected-execution presentation, over this episode's own summary: the assignment, what the commands
-    did so far and the verified completion."""
-    parts = ['TASK', '', 'Execute the assigned job on the local resource.', '', 'Assignment', '',
-             json.dumps(summary['assignment'], indent=1, sort_keys=True)]
-    if summary['selected_execution_task'] is not None:
-        parts.extend(['', 'Selected execution task', '',
-                      json.dumps(summary['selected_execution_task'], indent=1, sort_keys=True)])
-    if summary['commands']:
-        parts.extend(['', 'Commands run so far', '', json.dumps(summary['commands'], indent=1, sort_keys=True)])
-    parts.extend(['', 'Progress', '', json.dumps({'execution_progress': summary['execution_progress'],
-                                                  'execution_completion': summary['execution_completion']},
-                                                 indent=1, sort_keys=True)])
-    return '\n'.join(parts)
-
-
-def _output_schema():
-    return {'type': 'object', 'additionalProperties': False, 'required': ['tool', 'arguments_json'],
-            'properties': {'tool': {'enum': ['exec_command']},
-                           'arguments_json': {'type': 'string',
-                                              'description': 'The exec_command operands as one JSON object: '
-                                                             + json.dumps(EXEC_COMMAND['input_schema'],
-                                                                          sort_keys=True)}}}
+def output_schema(assignment):
+    """The answer: one defined action with its controlled fields, every value from a fixed set."""
+    def one(name, field, values):
+        return {'type': 'object', 'additionalProperties': False, 'required': ['name', field],
+                'properties': {'name': {'type': 'string', 'enum': [name]},
+                               field: {'type': 'string', 'enum': list(values)}}}
+    return {'type': 'object', 'additionalProperties': False, 'required': ['action'],
+            'properties': {'action': {'anyOf': [one('launch_job', 'resource_id', [assignment['resource_id']]),
+                                                one('hold_launch', 'reason', HOLD_REASONS)]}}}
 
 
 def decide(summary, feedback, ctx):
-    """One command: the model chooses it from the assignment, the resource, the commands run and their credit."""
-    settings = ctx.settings
+    """One action: the model chooses it from the assignment, the resource, what its actions did and their credit."""
     assignment = summary['assignment']
-    instructions, library = _instructions(settings, assignment)
-    selected = library.materialize(assignment.get('launch_instructions'))
-    knowledge = ToolKnowledge(settings['tool_knowledge_directory'])
-    context = {'task': _task_text(summary), 'feedback': feedback, 'execution_assignment': assignment,
-               'execution_resource': _resource(settings, assignment),
-               'execution_resource_capabilities': [_capabilities(settings, assignment)],
-               'execution_initial_information': settings['initial_information'],
-               'coordinator_workspace': settings['coordinator_workspace'],
-               'execution_progress': summary['execution_progress'],
-               'execution_completion': summary['execution_completion'], 'commands': summary['commands'],
-               'launch_instruction_library': library.context(), 'tool_knowledge': knowledge.context(),
-               'selected_launch_instructions': selected, 'controller': summary['controller'],
-               'time_accounting': time_accounting(ctx.clock.progress_time)}
-    if summary['selected_execution_task'] is not None:
-        context['selected_execution_task'] = summary['selected_execution_task']
-    return ModelRequest('REASONING', instructions, context, _output_schema())
+    context = {'assignment': assignment,
+               'resource': ctx.services['job_access'].read('describe', assignment['resource_id']),
+               'actions_so_far': {'launches': summary['launches'], 'holds': summary['holds']},
+               'credit': {'handoff_earns': summary['handoff_credit'],
+                          'earned_by_each_action_so_far': summary['credit_by_action']}}
+    return ModelRequest('REASONING', INSTRUCTIONS, context, output_schema(assignment))
 
 
 def action(response, summary, records, ctx):
-    """The one command the answer selects, or a rejection: it names exec_command and operands that fit its schema
-    and the resource (a workdir inside the workspace, a command text, an environment)."""
-    operations = _operations(ctx.settings, summary['assignment'])
-    try:
-        if response['tool'] != 'exec_command':
-            raise ValueError('execution_tool_not_available')
-        arguments = json.loads(response['arguments_json'])
-        if not isinstance(arguments, dict):
-            raise ValueError('arguments_json_must_be_a_JSON_object')
-        validate_schema(arguments, EXEC_COMMAND['input_schema'])
-        operations.validate_action(summary['assignment'], 'exec_command', arguments)
-    except (KeyError, TypeError, ValueError, ContractError) as error:
-        raise Rejected(rejection_feedback(error, category='arguments_or_reference'))
-    return ToolCall('exec_command', {'arguments': arguments, 'assignment': summary['assignment']})
+    """The unit of the chosen action. The launch runs the assignment's own job: its command and environment are
+    taken from the assignment here, never from the answer."""
+    chosen = response['action']
+    if chosen['name'] == 'hold_launch':
+        return ToolCall('hold_launch', {'reason': chosen['reason']})
+    job = summary['assignment']['requested_job']
+    return ToolCall('launch_job', {'resource_id': chosen['resource_id'], 'command': job['argv'],
+                                   'environment': job['environment']})

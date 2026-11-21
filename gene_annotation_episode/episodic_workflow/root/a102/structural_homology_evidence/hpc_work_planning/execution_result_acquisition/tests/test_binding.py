@@ -1,29 +1,27 @@
 """The real checks of this episode's binding: importing ``episode.py`` runs the class-definition checks; the folder
 holds exactly the ten-file set of an episode without children; no module imports another episode folder; the
-episode's own form, credit, coverage, controller, report and blocked service calls behave on real data. Nothing here
-is faked and nothing contacts a remote service."""
+episode's own form, credit, coverage, controller and return behave on real data. The acquisition itself runs on a
+real job in ``test_plain_results.py``. Nothing here is faked and nothing contacts a remote service."""
 import ast
-import asyncio
-import base64
 import importlib
 from pathlib import Path
 
 import pytest
 
-from episode_runtime import DecisionClock, DecisionContext, EpisodeBinding, ModelRequest, Rejected, ToolCall
+from episode_runtime import EpisodeBinding
 from method_loop import FormError
 from yield_control import AccumulationYieldController, BoundedQualityYieldController
 
 PACKAGE = __name__.rsplit('.', 2)[0]
 FOLDER = Path(__file__).resolve().parents[1]
 EPISODE = importlib.import_module(PACKAGE + '.episode').ExecutionResultAcquisition
-TASK = importlib.import_module(PACKAGE + '.task')
 CREDIT = importlib.import_module(PACKAGE + '.credit')
 SUMMARY = importlib.import_module(PACKAGE + '.messages.internal_summary')
-FINAL = importlib.import_module(PACKAGE + '.messages.final_to_parent')
 FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
          'messages/__init__.py', 'messages/read_from_parent.py', 'messages/internal_summary.py',
-         'messages/final_to_parent.py', 'tests/__init__.py', 'tests/test_binding.py'}
+         'messages/final_to_parent.py', 'tests/__init__.py', 'tests/test_binding.py', 'tests/plain_world.py',
+         'tests/test_plain_results.py', 'tests/test_branch_execution_result_acquisition_model_run.py'}
+EPISODE_FILES = sorted(name for name in FILES if not name.startswith('tests/'))
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 ASSIGNMENT = {'version': 'execution_results_assignment_v1', 'handoff_ref': ['source_handoff'],
               'selector': {'path': '/lus/flare/projects/BioReason-Aurora-Test/chian/runs/job/out.log',
@@ -34,6 +32,7 @@ SETTINGS = {'results_yield_profiles': {'native_unbounded_hpc': {'cutoff': 0.1, '
             'task_yield_profiles': {'results:native_finite_hpc': {'cutoff': 0.1,
                                                                    'parameters': {'uncertainty_alpha': 0.1}}}}
 ASSIGNMENT_SETTINGS_LOCAL = {'results:native_finite_local': {'cutoff': 0.1, 'parameters': {'uncertainty_alpha': 0.1}}}
+FINISHED = {'detail': {'state': 'finished'}}
 
 
 def files():
@@ -70,14 +69,24 @@ def test_no_module_of_the_folder_imports_another_episode_folder():
                     str(path.relative_to(FOLDER)) + ' imports ' + module
 
 
+def test_the_episode_files_hold_no_stub_no_model_written_command_and_no_old_runner_text():
+    for name in EPISODE_FILES:
+        source = (FOLDER / name).read_text()
+        for unwanted in ('NotImplementedError(\'BLOCKED', 'BLOCKED-ON-JOB-SERVICE', 'exec_command', 'observe_target',
+                         'read_file', 'KNOWLEDGE_INSTRUCTIONS', 'LAUNCH_INSTRUCTIONS', 'time_accounting',
+                         'yield_table', 'base64'):
+            assert unwanted not in source, name + ' holds ' + unwanted
+
+
 def test_the_commission_form_admits_the_native_assignment_and_read_from_parent_derives_the_inputs():
-    parent_input = EPISODE.read_from_parent(admitted(known_result_refs=['artifact_1']), {'purpose': 'fetch'})
+    parent_input = EPISODE.read_from_parent(admitted(known_result_refs=['artifact_1']), {})
     assert parent_input['assignment'] == {'version': 'execution_results_assignment_v1',
                                           'handoff_ref': 'source_handoff', 'selector': ASSIGNMENT['selector']}
     assert parent_input['requested'] == {PATH: [0, 100]}
     assert parent_input['known_result_refs'] == ['artifact_1'] and parent_input['acquired_record_unit'] == 2.0
     assert parent_input['resource_kind'] == 'hpc'
-    assert parent_input['message'] == {'purpose': 'fetch'}
+    assert set(parent_input) == {'assignment', 'requested', 'known_result_refs', 'acquired_record_unit',
+                                 'resource_kind'}
     assert EPISODE.read_from_parent(admitted(selector={'paths': ['/a', '/b']}), {})['requested'] == {
         '/a': [0, None], '/b': [0, None]}
     with pytest.raises(FormError, match='unknown_field'):
@@ -99,31 +108,36 @@ def test_a_wrong_assignment_raises_where_it_is_read():
         EPISODE.read_from_parent(admitted(selector={'version': 'protein_structure_result_selector_v1'}), {})
 
 
-def test_the_return_declares_credit_and_finding_as_required_and_the_old_fact_sources_as_selectable():
+def test_the_return_declares_credit_and_finding_as_required_and_controlled_fields_only():
     fields = EPISODE.return_form.fields
     assert fields['credit'].required and fields['finding'].required
-    for name in ('execution_file_source_refs', 'execution_file_capture_outcomes', 'execution_handoff_refs',
-                 'execution_result_refs', 'execution_completed', 'execution_result_origin',
-                 'execution_protein_structure_projections', 'execution_protein_structure_saved_sheets',
-                 'execution_protein_structure_sequences', 'execution_protein_structure_failures'):
+    assert set(fields) == {'credit', 'finding', 'execution_handoff_refs', 'execution_job_record_refs',
+                           'execution_result_refs', 'execution_completed'}
+    for name in ('execution_handoff_refs', 'execution_job_record_refs', 'execution_result_refs',
+                 'execution_completed'):
         assert not fields[name].required
+    finding = fields['finding'].form.fields
+    types = {name: field.type for name, field in finding.items()}
+    assert types == {'execution_completed': 'boolean', 'acquisitions': 'integer', 'failure_count': 'integer',
+                     'job_state': 'text', 'results_not_available': 'integer', 'windows_acquired': 'integer',
+                     'bytes_acquired': 'integer'}
+    with pytest.raises(FormError):
+        fields['finding'].form.admit({'execution_completed': True, 'acquisitions': 1, 'failure_count': 0,
+                                      'job_state': 'the job looked fine to me', 'results_not_available': 0,
+                                      'windows_acquired': 1, 'bytes_acquired': 1}, 'finding')
 
 
 def window(offset, count, size=100, path=PATH):
     return {'path': path, 'offset': offset, 'returned_bytes': count, 'size_bytes': size}
 
 
-def result(ref, windows, *, initial=False, state='completed', returncode=0):
-    return {'ref': ref, 'initial': initial, 'failures': 0, 'windows': windows,
-            'observation': {'state': state, 'returncode': returncode}}
+def result(ref, windows, *, initial=False):
+    return {'ref': ref, 'artifact_ref': 'artifact_' + ref, 'initial': initial, 'windows': windows}
 
 
 def summary(results, requested=None):
-    requested = {PATH: [0, 100]} if requested is None else requested
-    missing = SUMMARY.uncovered_paths(requested, results)
-    return {'requested': requested, 'results': results, 'acquired_record_unit': 2.0, 'uncovered_paths': missing,
-            'completed': not missing, 'facts': {**SUMMARY.facts({'handoff_ref': 'h'}, results, None),
-                                                'execution_completed': not missing}}
+    return {'requested': {PATH: [0, 100]} if requested is None else requested, 'results': results,
+            'acquired_record_unit': 2.0}
 
 
 def test_credit_is_the_unit_times_the_newly_covered_share_and_bytes_are_credited_once():
@@ -142,24 +156,22 @@ def test_bytes_the_parent_already_held_earn_nothing_and_an_open_ended_path_count
     assert EPISODE.credit(summary([result('a', [window(0, 30, size=60)])], open_ended), None) == pytest.approx(1.0)
 
 
-def test_credit_is_not_bounded_and_the_file_has_no_stub():
-    source = (FOLDER / 'credit.py').read_text()
-    assert 'NotImplementedError' not in source
-    unit = 5.0
-    assert CREDIT.credit({**summary([result('a', [window(0, 100)])]), 'acquired_record_unit': unit}, None) == 5.0
+def test_credit_is_not_bounded():
+    assert CREDIT.credit({**summary([result('a', [window(0, 100)])]), 'acquired_record_unit': 5.0}, None) == 5.0
 
 
-def test_completion_needs_a_successful_attempt_observation_and_every_requested_byte_without_a_gap():
-    assert SUMMARY.uncovered_paths({PATH: [0, 100]}, []) == [PATH]
-    assert SUMMARY.uncovered_paths({PATH: [0, 100]}, [result('a', [window(0, 100)])]) == []
-    assert SUMMARY.uncovered_paths({PATH: [0, 100]}, [result('a', [window(0, 100)], state='running',
-                                                              returncode=None)]) == [PATH]
-    assert SUMMARY.uncovered_paths({PATH: [0, 100]}, [result('a', [window(0, 40)]),
-                                                      result('b', [window(60, 40)])]) == [PATH]
-    assert SUMMARY.uncovered_paths({PATH: [0, 100]}, [result('a', [window(0, 60)]),
-                                                      result('b', [window(50, 50)])]) == []
-    assert SUMMARY.uncovered_paths({PATH: [10, 20]}, [result('a', [window(10, 20)])]) == []
-    assert SUMMARY.uncovered_paths({PATH: [0, None]}, [result('a', [window(0, 40, size=40)])]) == []
+def test_completion_needs_the_closure_of_a_finished_job_and_every_requested_byte_without_a_gap():
+    assert SUMMARY._complete({PATH: [0, 100]}, FINISHED, []) is False
+    assert SUMMARY._complete({PATH: [0, 100]}, FINISHED, [result('a', [window(0, 100)])]) is True
+    assert SUMMARY._complete({PATH: [0, 100]}, None, [result('a', [window(0, 100)])]) is False
+    assert SUMMARY._complete({PATH: [0, 100]}, {'detail': {'state': 'failed'}},
+                             [result('a', [window(0, 100)])]) is False
+    assert SUMMARY._complete({PATH: [0, 100]}, FINISHED, [result('a', [window(0, 40)]),
+                                                          result('b', [window(60, 40)])]) is False
+    assert SUMMARY._complete({PATH: [0, 100]}, FINISHED, [result('a', [window(0, 60)]),
+                                                          result('b', [window(50, 50)])]) is True
+    assert SUMMARY._complete({PATH: [10, 20]}, FINISHED, [result('a', [window(10, 20)])]) is True
+    assert SUMMARY._complete({PATH: [0, None]}, FINISHED, [result('a', [window(0, 40, size=40)])]) is True
 
 
 def test_the_controller_is_bounded_for_a_finite_selector_and_accumulating_for_an_open_ended_one():
@@ -179,58 +191,3 @@ def test_the_controller_is_bounded_for_a_finite_selector_and_accumulating_for_an
         EPISODE.yield_controller(0.0, {**SETTINGS, 'task_yield_profiles': {}}, parent_input)
     with pytest.raises(ValueError, match='results_original_task_yield_profile_required:native_unbounded_hpc'):
         EPISODE.yield_controller(0.0, {**SETTINGS, 'results_yield_profiles': {}}, open_input)
-
-
-def test_the_selection_schema_and_its_strict_transport_build_and_the_windows_follow_the_request():
-    schema = TASK.selection_schema()
-    assert len(schema['properties']['selection']['anyOf']) == 3 and TASK.generation_schema(schema)
-    requested = {PATH: (0, 100), '/b': (0, None)}
-    assert TASK.requested_windows('execution_results_status', None, requested, 10) == []
-    assert TASK.requested_windows('execution_results_collect', None, requested, 10) == [
-        {'path': PATH, 'offset': 0, 'limit': 10}, {'path': '/b', 'offset': 0, 'limit': 10}]
-    assert TASK.requested_windows('execution_results_collect', None, {PATH: (0, 4)}, 10) == [
-        {'path': PATH, 'offset': 0, 'limit': 4}]
-    inside = {'path': PATH, 'offset': 20, 'limit': 30}
-    assert TASK.requested_windows('execution_results_read', inside, requested, 10) == [inside]
-    for window_ in ({'path': '/other', 'offset': 0, 'limit': 1}, {'path': PATH, 'offset': 90, 'limit': 20}):
-        with pytest.raises(ValueError, match='execution_results_selector_conflict'):
-            TASK.requested_windows('execution_results_read', window_, requested, 10)
-
-
-def test_a_result_body_is_validated_against_the_assignment_and_the_requested_windows():
-    assignment = {'version': 'execution_results_assignment_v1', 'handoff_ref': 'h', 'selector': {'path': PATH}}
-    data = b'abcde'
-    body = {'version': TASK.RESULT_VERSION, 'run_id': 'r', 'episode_id': 'e', 'assignment': assignment,
-            'operation_key': 'k', 'tool_name': 'execution_results_collect', 'arguments': {}, 'target': {},
-            'observation': {'state': 'completed', 'returncode': 0},
-            'windows': [{'path': PATH, 'offset': 0, 'returned_bytes': 5, 'size_bytes': 5,
-                         'bytes_base64': base64.b64encode(data).decode()}], 'failures': [],
-            'acquisition_origin': TASK.NATIVE_RESULT_ORIGIN}
-    TASK.validate_result_body(body, run_id='r', assignment=assignment, requested={PATH: (0, None)})
-    with pytest.raises(ValueError, match='execution_result_window_conflict'):
-        TASK.validate_result_body(body, run_id='r', assignment=assignment, requested={PATH: (0, 3)})
-    with pytest.raises(ValueError, match='execution_result_selector_conflict'):
-        TASK.validate_result_body(body, run_id='r', assignment=assignment, requested={'/other': (0, None)})
-    with pytest.raises(ValueError, match='invalid_execution_result_information'):
-        TASK.validate_result_body({**body, 'run_id': 'x'}, run_id='r', assignment=assignment, requested={PATH: (0, None)})
-
-
-def test_reading_the_handoff_and_the_job_access_calls_are_blocked_and_say_which_call_they_wanted():
-    with pytest.raises(NotImplementedError, match=r'BLOCKED-ON-JOB-SERVICE: job ledger handoff record; wanted call'):
-        TASK.handoff_target(None, 'source_handoff')
-    with pytest.raises(NotImplementedError, match=r'BLOCKED-ON-JOB-SERVICE: job_access; wanted call.*observe_target'):
-        asyncio.run(TASK.observe_target({}, None))
-    with pytest.raises(NotImplementedError, match=r'BLOCKED-ON-JOB-SERVICE: job_access; wanted call.*read_file'):
-        asyncio.run(TASK.read_window({}, {'path': PATH, 'offset': 0, 'limit': 1}, 'key', None))
-
-
-def test_the_return_carries_credit_the_finding_and_every_selectable_fact_and_the_form_admits_it():
-    state = {**summary([result('a', [window(0, 100)])]), 'requested': {PATH: [0, 100]}}
-    completion = {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 2.0}
-    names = tuple(name for name in EPISODE.return_form.fields if name not in ('credit', 'finding'))
-    returned = EPISODE.final_to_parent(state, completion, names)
-    assert returned['credit'] == 2.0 and returned['finding']['completed'] is True
-    assert returned['execution_completed'] is True and returned['execution_result_refs'] == ['a']
-    assert returned['execution_result_origin'] and returned['execution_file_source_refs'] == []
-    EPISODE.return_form.admit(returned, 'return')
-    EPISODE.return_form.admit(EPISODE.final_to_parent(state, completion, ()), 'return')

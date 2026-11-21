@@ -1,58 +1,62 @@
-"""The return. Always returned: the Episode's credit (the system hands it in ``completion``), the finding (what was
-acquired through the original handoff, how many windows were received and failed, whether the requested windows are
-covered), ``execution_result_refs`` (the original result acquisitions that contain windows: the job identity,
-preserved across a return), ``execution_result_artifact_refs`` (the artifacts of the returned result Sources, in
-custody, so the parent reads the receipt body through them) and ``execution_completed``. Selectable:
-``execution_handoff_refs``, ``execution_file_source_refs``, ``execution_file_capture_outcomes`` and
-``execution_result_origin``, the acquisition semantics of the retained results as ``{'value': ...}``, whose value is
-the origin when a window was received and null when none was."""
-from method_loop import Field, RecordForm
+"""The return: controlled fields only. Always returned: the Episode's credit (the system hands it in ``completion``;
+it is the productivity signal and no field restates it), the finding (whether the requested acquisition is
+complete, the state of the job as last observed, the counts of what was acquired and what was refused, how often
+the job service refused because the results of the job were not available, and the bytes retained),
+``execution_result_refs`` (the result acquisitions of this Episode that contain windows: the job identity,
+preserved across a return), ``execution_result_artifact_refs`` (the artifacts of the returned results, in custody:
+each information artifact and the fetched files its windows lie in, so the parent reads the acquired bytes through
+them) and ``execution_completed``. No model-written text and no open record is returned.
 
-from .internal_summary import facts
+Selectable: ``execution_handoff_refs`` (the handoff row) and ``execution_job_record_refs`` (the latest check row
+and the closure row of the job: the parent that holds the closure no longer counts the job as outstanding)."""
+from method_loop import ChoiceField, Field, RecordForm
+
+JOB_STATES = ('not_observed', 'queued', 'running', 'finished', 'failed', 'cancelled', 'unknown')
 
 FINDING_FORM = RecordForm({
-    'handoff_refs': Field('list', 'The original handoff the results are acquired through'),
-    'acquisition_count': Field('integer', 'The acquisitions of this episode that completed'),
-    'window_count': Field('integer', 'The byte windows actually received'),
-    'failure_count': Field('integer', 'The window reads that failed (kept as failures)'),
-    'acquired_selector_fraction': Field('number', 'The share of the requested selector byte positions received'),
-    'complete': Field('boolean', 'Whether every requested window is covered by a successful attempt observation'),
-    'qualification': Field('text', 'What the finding does and does not establish'),
+    'execution_completed': Field('boolean', 'Whether the requested acquisition is complete: the job finished and '
+                                            'every requested window is covered by retained bytes'),
+    'acquisitions': Field('integer', 'The number of selected operations that completed'),
+    'failure_count': Field('integer', 'The number of selected operations that returned a failed or an invalid '
+                                      'outcome'),
+    'job_state': ChoiceField('text', 'The state of the job in the latest check or closure row this episode holds',
+                             JOB_STATES),
+    'results_not_available': Field('integer', 'The number of fetches the job service refused because the results '
+                                              'of the job were not available (the job had not ended)'),
+    'windows_acquired': Field('integer', 'The number of byte windows this episode retained'),
+    'bytes_acquired': Field('integer', 'The number of bytes in the windows this episode retained'),
 })
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
-    'finding': Field('record', 'What was acquired through the original handoff', form=FINDING_FORM),
-    'execution_result_refs': Field('record_refs', 'Qualified actual requested result acquisitions that contain '
+    'finding': Field('record', 'Whether the requested acquisition is complete, the state of the job and the counts '
+                               'of what was acquired and refused', form=FINDING_FORM),
+    'execution_result_refs': Field('record_refs', 'The result acquisitions this episode retained that contain '
                                                   'windows: the job identity, preserved across a return'),
-    'execution_result_artifact_refs': Field('record_refs', 'The artifacts of the returned result Sources (new)'),
-    'execution_completed': Field('boolean', 'Whether this assignment has actual complete acquisition'),
-    'execution_handoff_refs': Field('record_refs', 'Qualified original handoff records', required=False),
-    'execution_file_source_refs': Field('record_refs', 'Source references of retained local file streams',
-                                        required=False),
-    'execution_file_capture_outcomes': Field('list', 'Recorded selected-file availability', required=False),
-    'execution_result_origin': Field('record', 'Actual acquisition semantics of retained results as {"value": ...}; '
-                                               'the value is null when no window was received', required=False),
+    'execution_result_artifact_refs': Field('record_refs', 'The artifacts of the returned results: each '
+                                            'information artifact and the fetched files its windows lie in'),
+    'execution_completed': Field('boolean', 'Whether this assignment has actual complete acquisition: the job '
+                                            'finished and every requested byte is retained. Yielding alone is false'),
+    'execution_handoff_refs': Field('record_refs', 'The handoff row of the job', required=False),
+    'execution_job_record_refs': Field('record_refs', 'The job ledger rows this episode chose for its parent: the '
+                                       'latest check row it holds (the state of the job last observed) and, once '
+                                       'the results were fetched, the closure row of the job', required=False),
 })
+ALWAYS = ('execution_result_refs', 'execution_result_artifact_refs', 'execution_completed')
 
-_QUALIFICATION = ('Native paths expose the current resource filesystem: the attempt observation does not establish '
-                  'that current file bytes were produced by that attempt; separate read windows are not an atomic '
-                  'file snapshot.')
+
+def _finding(summary):
+    windows = [window for result in summary['results'] for window in result['windows']]
+    rows = summary['acquisitions']
+    return {'execution_completed': summary['execution_progress']['execution_completed'],
+            'acquisitions': sum(1 for row in rows if row['status'] == 'completed'),
+            'failure_count': sum(1 for row in rows if row['status'] != 'completed'),
+            'job_state': summary['job']['last_observed_state'] or 'not_observed',
+            'results_not_available': sum(1 for row in rows if row['status'] == 'failed'
+                                         and row['failure_code'] == 'results_not_available'),
+            'windows_acquired': len(windows), 'bytes_acquired': sum(window['returned_bytes'] for window in windows)}
 
 
 def final_to_parent(summary, completion, selection):
-    recorded = facts(summary)
-    recorded['execution_result_origin'] = {'value': recorded['execution_result_origin']}
-    result_refs = [ref for ref, body in zip(summary['result_refs'], summary['results']) if body['windows']]
-    result = {'credit': completion['credit'],
-              'finding': {'handoff_refs': list(summary['handoff_refs']),
-                          'acquisition_count': len(summary['results']),
-                          'window_count': sum(len(body['windows']) for body in summary['results']),
-                          'failure_count': sum(len(body['failures']) for body in summary['results']),
-                          'acquired_selector_fraction': summary['acquired_selector_fraction'],
-                          'complete': recorded['execution_completed'], 'qualification': _QUALIFICATION},
-              'execution_result_refs': sorted(result_refs),
-              'execution_result_artifact_refs': list(summary['result_artifact_refs']),
-              'execution_completed': recorded['execution_completed']}
-    for name in selection:
-        result[name] = recorded[name]
-    return result
+    facts = summary['execution_progress']
+    return {'credit': completion['credit'], 'finding': _finding(summary),
+            **{name: facts[name] for name in (*ALWAYS, *selection)}}

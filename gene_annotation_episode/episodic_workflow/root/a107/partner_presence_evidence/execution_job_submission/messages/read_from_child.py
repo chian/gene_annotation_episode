@@ -1,11 +1,7 @@
-"""What the parent takes from a launch child's return: the original handoff records it returned, whether its
-requested endpoint was verified, and its own credit and finding as information for the summary.
-
-The old ``receive_report`` (three copies, ``from_child_<role>_job_execution.py``) only passed the admitted form to
-the progress provider, the receipts ledger and the timing-receipt table; all three are system custody now. A handoff
-counted as usable through ``handoff_receipts._received`` (``targets.usable_handoff``); here a launch child's report
-of an established handoff (``execution_completed`` with handoff references) is the count. All three children
-declare ``execution_handoff_refs`` and ``execution_completed`` selectable and ``msg_to_child`` selects both."""
+"""What the parent takes from a launch child's return, all of it controlled data: the handoff records it returned
+(record references, now in this Episode's custody), whether its handoff exists, its credit (the signal of whether
+the launch was productive) and its finding (counts). All three children declare ``execution_handoff_refs`` and
+``execution_completed`` selectable and ``msg_to_child`` selects both."""
 
 
 def read_from_child(slot, result, summary, records):

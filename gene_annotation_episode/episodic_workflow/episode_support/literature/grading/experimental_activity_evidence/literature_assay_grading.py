@@ -29,7 +29,11 @@ def _strings():
     return {'type': 'array', 'items': {'type': 'string', 'minLength': 1}, 'uniqueItems': True}
 
 def interpretation_schema():
-    return obj({'status': {'enum': ['supported', 'unknown', 'conflicting', 'not_applicable']}, 'support_refs': _strings()})
+    """An interpretation is a status with its support refs and, optionally, a degree: a number from 0 to 1 for how far the status holds (1 fully, 0 not at all).
+    The degree is carried with the interpretation and read by nothing in this sheet; an interpretation without a degree is exactly what it was."""
+    result = obj({'status': {'enum': ['supported', 'unknown', 'conflicting', 'not_applicable']}, 'support_refs': _strings()})
+    result['properties']['degree'] = {'type': 'number', 'minimum': 0, 'maximum': 1}
+    return result
 
 def operand_schema():
     result = obj({'value': {'type': ['number', 'null']}, 'unit': {'type': 'string', 'minLength': 1}, 'status': {'enum': ['point', 'bounded', 'unavailable']}, 'reason': {'type': ['string', 'null']}, 'measurement_keys': _strings(), 'source_refs': _strings(), 'origin': {'enum': list(ORIGINS)}, 'native_component': {'type': 'string', 'minLength': 1}})

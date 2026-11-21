@@ -37,6 +37,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.laun
     INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.scientific_instruction_text import (
     REASONING_COMMIT_REQUIREMENT)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_progress import FIELDS as JOB_PROGRESS_FIELDS
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.sequence_and_context_sources import (
     component_axis_native_hpc as native)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
@@ -191,11 +192,9 @@ MODEL_ROLE = 'REASONING'
 SELECTABLE = {
     'launch': ('execution_completed', 'execution_result_refs', 'execution_file_source_refs',
                'execution_file_capture_outcomes'),
-    'monitor': ('monitoring_progress_refs', 'monitoring_target_handle', 'monitoring_execution_state',
-                'monitoring_result_available', 'monitoring_observed_at_unix_seconds',
-                'monitoring_committed_record_refs', 'monitoring_dependency_handles',
-                'monitoring_progress_snapshots'),
-    'results': ('execution_handoff_refs', 'execution_file_source_refs', 'execution_file_capture_outcomes'),
+    'monitor': ('job_returncode', 'job_duration_seconds', 'job_elapsed_seconds', 'stdout_bytes', 'stderr_bytes',
+                'log_window_refs', 'event_receipt_refs'),
+    'results': ('execution_handoff_refs', 'execution_job_record_refs'),
     'hpc': ('hpc_credit', 'hpc_model_ref', 'hpc_accepted_obligations', 'hpc_result_refs'),
     'literature': (),
     'biochemical_feasibility_evidence': ('component_axis_native_component_records',
@@ -404,6 +403,22 @@ def _child(slot, properties, required, description):
     return (description, schema)
 
 
+# The monitor is commissioned on a job this episode holds as outstanding: the model names the job by its held handoff
+# reference and says what the monitor may observe of it; no text of the model passes to the monitor.
+MONITOR_FIELDS = (*JOB_PROGRESS_FIELDS, 'log_windows')
+MONITOR_DESCRIPTION = (
+    'Commission one check of the progress of a job you hold as outstanding: handoff_ref (the handoff reference of '
+    'one job of outstanding_jobs) and requested_fields (what the monitor may observe of it). This parent requests '
+    'information; it never polls here. It returns its credit, what it found of the job (its state, whether its '
+    'results are available) and its check records; facts selects its measurements.')
+
+
+def monitor_arguments(jobs):
+    return obj({'handoff_ref': {'enum': [job['handoff_ref'] for job in jobs]},
+                'requested_fields': {'type': 'array', 'items': {'enum': list(MONITOR_FIELDS)}, 'uniqueItems': True},
+                'facts': _facts('monitor')}, required=['handoff_ref', 'requested_fields'])
+
+
 CHILD_DEFINITIONS = {
     'launch': _child('launch', {
         'assignment': obj({'requests': {'type': 'object'}, 'immutable_input_versions': {'type': 'array'},
@@ -413,14 +428,8 @@ CHILD_DEFINITIONS = {
         'input_refs': _REFS}, ['assignment'],
         'Commission the launch of concrete execution requests on explicit resource ids; it returns the original '
         'handoff records. input_refs are the records the job inputs name, held by this episode.'),
-    'monitor': _child('monitor', {
-        'target_handle': _TEXT, 'requested_fields': _STRINGS, 'known_progress_refs': _STRINGS,
-        'permitted_committed_record_types': _STRINGS, 'known_progress_snapshots': {'type': 'object'}},
-        ['target_handle', 'requested_fields', 'permitted_committed_record_types'],
-        'Commission a monitor of one execution target (a handoff handle). This parent requests information; it '
-        'never polls here.'),
     'results': _child('results', {
-        'handoff_ref': _REF, 'selector': {'type': 'object'}, 'constraints': {'type': 'object'},
+        'handoff_ref': _REF, 'selector': {'type': 'object'},
         'resource_kind': {'enum': ['local', 'hpc']}}, ['handoff_ref', 'selector', 'resource_kind'],
         'Commission the acquisition of the original selected execution results through the original handoff '
         'record this episode holds.'),
@@ -459,7 +468,15 @@ def offered(ctx):
     return tools + slots
 
 
-def argument_schema(name):
+def commissionable(names, jobs):
+    """The offered actions that can be selected now: the monitor only while a job is outstanding (its commission
+    names one by its held handoff reference)."""
+    return [name for name in names if name != 'monitor' or jobs]
+
+
+def argument_schema(name, jobs):
+    if name == 'monitor':
+        return monitor_arguments(jobs)
     if name in TOOL_DEFINITIONS:
         return TOOL_DEFINITIONS[name][1]
     if name in CHILD_DEFINITIONS:
@@ -471,6 +488,8 @@ def argument_schema(name):
 
 
 def describe(name):
+    if name == 'monitor':
+        return MONITOR_DESCRIPTION
     if name in TOOL_DEFINITIONS:
         return TOOL_DEFINITIONS[name][0]
     if name in CHILD_DEFINITIONS:
@@ -567,17 +586,20 @@ def decide(summary, feedback, ctx):
         return ToolCall('process_entry', {})
     if summary['received'] is None:
         return ToolCall('received_evidence', {'record_refs': summary['record_refs'], 'scope': summary['scope']})
-    names = offered(ctx)
+    jobs = summary['outstanding_jobs']
+    names = commissionable(offered(ctx), jobs)
     progress = summary['investigation_progress']
     context = {
         'sections': prompt_sections(summary, names),
-        'actions': [{'selection': name, 'description': describe(name), 'input_schema': argument_schema(name)}
+        'actions': [{'selection': name, 'description': describe(name), 'input_schema': argument_schema(name, jobs)}
                     for name in names],
         'requested_action_history': summary['actions'], 'last_local_outcome': summary['last_outcome'],
         'current_credit': progress['credit'],
         'investigation_progress': {key: progress[key] for key in
                                    ('retained_finding_count', 'inactive_dependencies', 'detail_pages')},
         'received_evidence': summary['received'], 'child_reports': summary['children'],
+        'outstanding_jobs': [{name: job[name] for name in ('handoff_ref', 'job', 'resource_id', 'kind',
+                                                             'submitted_at', 'latest_check')} for job in jobs],
         'interpretation': summary['interpretation'], 'reasoning_commit_schema': summary['reasoning_schema'],
         'time_accounting': time_accounting(ctx.clock.progress_time), 'feedback': feedback}
     if summary['action_yields'] is not None:
@@ -639,14 +661,14 @@ def action(response, summary, records, ctx):
     A tool is called with its arguments and the scope (and, where the old runner supplied it, the permitted records
     and the selected tool names); a commission is called with the model's arguments and, for the three job
     children, the credit unit of that child from the settings."""
-    names = offered(ctx)
+    names = commissionable(offered(ctx), summary['outstanding_jobs'])
     try:
         Draft202012Validator(output_schema(names)).validate(response)
         selection = response['selection']
         arguments = json.loads(response['arguments_json'])
         if not isinstance(arguments, dict):
             raise ValueError('arguments_json_must_encode_an_object')
-        Draft202012Validator(argument_schema(selection)).validate(arguments)
+        Draft202012Validator(argument_schema(selection, summary['outstanding_jobs'])).validate(arguments)
         if selection == 'reason':
             _check_commit(arguments, records)
         for reference in _named_records(selection, arguments):

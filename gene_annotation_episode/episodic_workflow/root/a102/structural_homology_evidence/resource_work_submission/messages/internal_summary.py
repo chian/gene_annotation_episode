@@ -1,55 +1,53 @@
-"""Where the episode stands, as a pure function of the view (old ``internal_summary.py`` ``decision_context``, the
-general fields of ``decision_state.py`` that a resource episode used, and the state ``task_state.py`` kept).
+"""Where the episode stands, as a pure function of the view: the assignment, the launched jobs read from the job
+ledger rows it holds (the handoff and check rows its resource children returned and the check rows of its own
+receiving checks), whether a usable handoff is held (what ``credit.py`` counts), what each commission came to,
+what each reading of a resource and each library lookup returned, and what each of its own actions came to. The
+declared resources are read from the resource adapter service in ``decide``; a summary reads no service."""
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import job_rows
 
-The old own fields: ``role`` (``launch``), ``assignment`` (the admitted launch assignment, in full),
-``resource_capabilities`` (every declared capability; read from the resource adapter service in ``decide``, as the
-old context read them) and ``resource_tool_estimates`` (every adapter's duration information; a service read made
-in ``decide``). The old general fields kept here: the current credit, the controller state, the last outcome, the
-feedback of a failed unit and the completed-action reports (the old ``request_context`` lookups of the episode's
-own earlier attempts are this list). The adapters' recorded state (their facts, their credit) comes from what the
-operating tools returned in their outcomes; the execution handoffs of the resource children come from the child
-reports."""
-from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
+NOT_CHECKED = 'not_checked'
+UNKNOWN = 'unknown'
+LOOKUPS = ('knowledge_lookup', 'launch_instruction_lookup')
 
-CHECK = 'resource_check_handoff'
-RESOURCE_TOOLS = ('resource_capabilities', 'resource_inspect', CHECK)
+
+def _entry(unit):
+    """What one of the Episode's own tool units came to: a resource tool's failure is the code it gave; a lookup
+    has the status its library gave it."""
+    outcome = unit['outcome']
+    failed = unit['tool'] not in LOOKUPS and outcome['status'] != 'completed'
+    return {'action': unit['tool'], 'status': outcome['status'],
+            'failure': outcome['failure']['code'] if failed else None}
 
 
 def internal_summary(view):
     parent = view.parent_input
-    summary = {'role': 'launch', 'assignment': parent['assignment'],
-               'adapter_assignment': parent['adapter_assignment'], 'scope': parent['scope'],
-               'scope_refs': parent['scope_refs'], 'input_refs': parent['input_refs'],
-               'completion_target': parent['completion_target'], 'message': parent['message'],
-               'adapter_facts': {}, 'child_handoffs': [], 'handoff_refs': [], 'commissions': [],
-               'adapter_credit': None, 'feedback': None, 'last_local_outcome': None,
-               'completed_action_reports': [],
-               'action_yields': (None if view.controller_state is None
-                                 else yield_table(view.controller_state, forecast_unit='credit'))}
-    for index, unit in enumerate(view.outcomes):
+    rows = job_rows(view.records)
+    jobs = []
+    for row in rows:
+        if row['event'] != 'handoff':
+            continue
+        checks = sorted((item for item in rows if item['job'] == row['job'] and item['event'] == 'check'),
+                        key=lambda item: item['at'])
+        jobs.append({'handoff_ref': row['id'], 'job': row['job'], 'resource_id': row['detail']['resource_id'],
+                     'route_kind': row['detail']['kind'], 'submitted_at': row['at'],
+                     'state': checks[-1]['detail']['state'] if checks else NOT_CHECKED,
+                     'result_available': bool(checks) and checks[-1]['detail']['result_available'],
+                     'check_refs': [item['id'] for item in checks]})
+    commissions, inspections, lookups, actions = [], {}, [], []
+    for unit in view.outcomes:
         if unit['kind'] == 'child':
-            result, report = unit['result'], unit['report']
-            summary['commissions'].append({'slot': unit['slot'], 'finding': result['finding'],
-                                           'usable_handoffs': [item for item in report['execution_handoffs']
-                                                               if item['state'] == 'usable']})
-            summary['child_handoffs'].extend(report['execution_handoffs'])
-            summary['handoff_refs'] = list(dict.fromkeys([*summary['handoff_refs'], *report['handoff_refs']]))
-            summary['adapter_facts'] = {**summary['adapter_facts'], **report['adapter_facts']}
-            status, shown_result, feedback = 'completed', {'finding': result['finding']}, None
-            name, shown = unit['slot'], unit['arguments']
-        else:
-            name, outcome = unit['tool'], unit['outcome']
-            status, shown_result, feedback = outcome['status'], outcome.get('result'), outcome.get('feedback')
-            if name in RESOURCE_TOOLS:
-                summary['adapter_credit'] = outcome['adapter_credit']
-            if name == CHECK:
-                summary['adapter_facts'] = outcome['facts']
-                summary['handoff_refs'] = list(dict.fromkeys([*summary['handoff_refs'], *outcome['handoff_refs']]))
-            shown = {key: value for key, value in unit['arguments'].items()
-                     if key not in ('assignment', 'held_refs')}
-        summary['feedback'] = (None if status in ('completed', 'partial') else
-                               feedback or {'status': status, 'category': 'work_failed'})
-        summary['last_local_outcome'] = {'index': index, 'tool': name, 'selected': shown, 'status': status,
-                                         'result': shown_result, 'feedback': feedback}
-        summary['completed_action_reports'].append(summary['last_local_outcome'])
-    return summary
+            commissions.append({'resource_id': unit['arguments']['resource_id'],
+                                'kind': unit['arguments']['kind'], **unit['report']})
+            actions.append({'action': 'launch_work', 'resource_id': unit['arguments']['resource_id'],
+                            'status': 'completed', 'failure': None})
+            continue
+        outcome = unit['outcome']
+        if unit['tool'] == 'inspect_resource':
+            inspections[outcome['resource_id']] = {name: outcome[name] for name in ('availability', 'bound', 'facts')}
+        elif unit['tool'] in LOOKUPS:
+            lookups.append({'action': unit['tool'], **unit['arguments'], 'status': outcome['status'],
+                            'result': outcome['result'], 'feedback': outcome['feedback']})
+        actions.append(_entry(unit))
+    return {**parent, 'jobs': jobs, 'handoff_held': bool(jobs),
+            'usable_handoff_held': any(job['state'] not in (NOT_CHECKED, UNKNOWN) for job in jobs),
+            'commissions': commissions, 'inspections': inspections, 'lookups': lookups, 'actions': actions}

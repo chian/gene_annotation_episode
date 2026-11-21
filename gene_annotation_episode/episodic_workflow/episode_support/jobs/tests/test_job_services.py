@@ -7,11 +7,14 @@ transport, which carries a login-mode job end to end. No PBS scheduler exists on
 reaches the scheduler call and is refused there; nothing stands in for the scheduler. These tests need the
 workflow launcher (``tools/one_workflow.sh``): a local job runs inside the launcher's slice."""
 import asyncio
+import base64
 from datetime import datetime, timedelta, timezone
+import hashlib
 import json
 import math
 from pathlib import Path
 import sys
+import time
 
 import pytest
 
@@ -249,6 +252,47 @@ def test_a_job_is_cancelled_and_closed(world):
     assert cancelled['status'] == 'completed' and cancelled['outcome'] == 'cancelled'
     assert cancelled['state'] == 'cancelled' and cancelled['results'] == []
     assert after['state'] == 'cancelled' and result['outstanding_jobs'] == []
+
+
+def test_a_window_of_a_running_jobs_log_comes_into_custody_and_does_not_close_the_job(world):
+    release, ready = world['tmp'] / 'release', world['tmp'] / 'ready'
+    job = python_job("import pathlib,time\nprint('first line', flush=True)\n"
+                     "pathlib.Path(" + repr(str(ready)) + ").touch()\n"
+                     "while not pathlib.Path(" + repr(str(release)) + ").exists(): time.sleep(0.02)\n"
+                     "print('last line')")
+    first = run(world, 'logging', [launch_step(job)])
+    handoff_ref = first['outstanding_job_refs'][0]
+    while not ready.exists():          # the job has written its first line (a wait on the job, not on a clock)
+        time.sleep(0.02)
+    plan = [step('window', handoff_ref=handoff_ref, name='stdout.log', offset=0, limit=5, cut=None),
+            step('window', handoff_ref=handoff_ref, name='stdout.log', offset=6, limit=100, cut='after'),
+            step('window', handoff_ref=handoff_ref, name='no_such.log', offset=0, limit=10, cut=None),
+            step('check', handoff_ref=handoff_ref, cut=None)]
+    world['switch'].fail = True
+    with pytest.raises(RuntimeError, match='cut after the effect'):
+        run(world, 'reading', plan, job_refs=[handoff_ref])
+    world['switch'].fail = False
+    second = again(world, 'reading')
+    head, rest, missing, checked = outcomes(world, 'reading')
+    assert head['status'] == 'completed' and (head['name'], head['offset'], head['bytes']) == ('stdout.log', 0, 5)
+    assert world['store'].get_artifact(head['content_ref']) == b'first' and head['replayed'] is False
+    assert head['sha256'] == hashlib.sha256(b'first').hexdigest()
+    # The window is a row of the job in custody: produced by the unit, naming the artifact of its bytes.
+    receipts = {item['ref']: item for item in world['journal'].receipts('reading', path_of('reading'))}
+    assert receipts[head['window_ref']]['how'] == 'produced' and receipts[head['content_ref']]['unit'] == 0
+    assert {head['window_ref'], head['content_ref'], rest['window_ref'], rest['content_ref']} <= set(
+        second['record_refs'])
+    # The unit that was cut after its window took the abandoned row over: the route was not asked again.
+    assert rest['replayed'] is True and world['store'].get_artifact(rest['content_ref']) == b'line\n'
+    assert world['journal'].times_begun('reading', path_of('reading'), 1) == 2
+    # A file the route does not have is a failed request: a returned outcome and no row.
+    assert missing['status'] == 'failed' and missing['failure']['code'] == 'result_file_missing'
+    # A window is no check and no fetch: the job still runs and stays outstanding.
+    assert checked['state'] == 'running' and [item['job'] for item in second['outstanding_jobs']] == [head['job']]
+    release.touch()
+    with pytest.raises(CustodyError, match='record_not_held'):       # the handoff row was not passed
+        run(world, 'stranger_window', [step('window', handoff_ref=handoff_ref, name='stdout.log', offset=0,
+                                            limit=5, cut=None)])
 
 
 def test_job_records_are_read_only_in_custody_and_an_unbound_resource_is_refused(world):
@@ -504,6 +548,24 @@ def test_the_hpc_ledger_is_shared_in_custody_and_its_credit_is_derived_from_held
                                          obligation='structures', result_ref='r', model_ref='m', improvement=0.1)])
 
 
+def test_the_refs_of_a_ledger_carry_the_artifact_a_row_names(world):
+    commission = {'credit': {'model_scale': 1.0, 'validation_scale': 2.0, 'validation_slots': []}, 'obligations': {}}
+    forecast = {'plan_id': 'plan_1', 'issued_at': 1.0, 'elapsed': {}, 'prediction': {}, 'reference': {}}
+    first = run(world, 'planning', [
+        step('ledger_forecast', commission=commission, forecast=forecast, slots=[]),
+        step('ledger_source', ledger=earlier(0, 'ledger'), text='the frozen plan', identity='launch_input:plan_1')])
+    opened, named = outcomes(world, 'planning')
+    assert named['refs'] == [*opened['refs'], named['refs'][-2], named['artifact']]   # the row, then what it names
+    second = run(world, 'launching_from_the_ledger', [
+        step('ledger_read_source', ledger=opened['ledger'], identity='launch_input:plan_1')], job_refs=named['refs'])
+    read = outcomes(world, 'launching_from_the_ledger')[0]
+    assert read['text'] == 'the frozen plan' and read['refs'] == named['refs'] and second['record_refs'] == []
+    with pytest.raises(CustodyError):                          # the rows without the artifact they name
+        run(world, 'rows_only', [step('ledger_read_source', ledger=opened['ledger'],
+                                      identity='launch_input:plan_1')],
+            job_refs=[ref for ref in named['refs'] if ref != named['artifact']])
+
+
 # -- resource adapters -----------------------------------------------------------------------------------------
 def test_an_episode_works_through_the_adapter_its_assignment_selects(world):
     assignment = {'resource_selection': {'resource_id': LOCAL}, 'objective': 'answer'}
@@ -575,3 +637,29 @@ def test_the_services_configuration_names_every_part(world):
     assert sorted(job_services(world['configuration'])) == ['estimate_table', 'instruction_libraries', 'job_access',
                                                             'native_events', 'resource_adapter', 'resources']
     assert JOB_LEDGER.record_refs == ('source_ref', 'result_refs')
+
+
+# -- a remote resource's files and queue, through the route (hpc_remote, hpc_queue) -----------------------------
+def test_a_remote_file_is_written_and_read_and_the_queue_is_asked_through_the_route(world):
+    (world['tmp'] / 'allocation').mkdir()
+    path = str(world['tmp'] / 'allocation' / 'allocation-control.json')
+    text = '{"unit_ids":["u2","u1"]}'
+    run(world, 'remote_files', [
+        step('remote_write', resource_id=REMOTE, path=path, text=text),
+        step('remote_read', resource_id=REMOTE, path=path, limit=1024),
+        step('remote_read', resource_id=REMOTE, path=path, limit=4),
+        step('remote_read', resource_id=REMOTE, path=path + '.absent', limit=16),
+        step('remote_queue', resource_id=REMOTE)])
+    written, read, bounded, absent, queue = outcomes(world, 'remote_files')
+    assert written['status'] == 'completed' and (world['tmp'] / 'allocation' / 'allocation-control.json').read_text() == text
+    assert not (world['tmp'] / 'allocation' / 'allocation-control.json.writing').exists()
+    assert read['status'] == 'completed' and base64.b64decode(read['bytes_base64']).decode() == text
+    assert read['size_bytes'] == len(text) and world['store'].get_artifact(read['artifact_ref']).decode() == text
+    assert bounded['size_bytes'] == 5                          # one byte more than the limit: the file is larger
+    assert absent['status'] == 'failed' and absent['failure']['code'] == 'remote_file_unreadable'
+    # No PBS scheduler is installed here: the queue command fails on the resource and the request says so.
+    assert queue['status'] == 'failed' and queue['failure']['code'] == 'queue_observation_failed'
+    assert queue['failure']['detail']['returncode'] != 0
+    assert [build['name'] for build in world['journal'].service_builds('remote_files')] == ['job_access']
+    with pytest.raises(LookupError, match='job_resource_not_bound:nowhere'):
+        run(world, 'remote_nowhere', [step('remote_queue', resource_id='nowhere')])

@@ -5,6 +5,132 @@ This is the central progress record for evidence axes. Individual implementation
 documents and dated run reports supply detail; they do not independently set an
 axis's current status.
 
+## 2026-11-19 — A101 literature episodes: a commission-specific brief replaces the old investigation text
+
+Scope: the model request of the seven A101 literature episodes
+(`root/a101/sequence_homology_evidence/run` and the six beneath it (named then `published_evidence_assessment` and its six)) and the head's
+commission of the first; no axis or full-workflow validation, and no change of credit or tools. Each episode's
+instructions are its own brief (`BRIEF` in its `task.py`: 5,156 to 6,710 characters; the old shared text was 14,410
+to 14,639). The commissioner's objective is one value of the commissioned episode's own vocabulary (`OBJECTIVES` in
+each `messages/read_from_parent.py`), chosen by the commissioner's model from an enum (in the head:
+`LITERATURE_OBJECTIVE`). The context has no yield table, time accounting or `current_report_update`, and
+`own_literature_outcomes` is the latest page of every tool outcome, record lookups included. Evidence: real runner
+tests, 67 passed offline (`runs/a101prompt_8/`); with the real model 4 passed (`runs/a101prompt_6/`: head branches 1,
+2 and 3 and the pinned literature commission). The model run was made before the last two changes (the outcome page
+of every tool in place of the last outcome alone, and the sentence that `state_query` answers only for subjects
+inside the scope); those have the offline tests only. In the model run seven literature episodes ran four units each
+with credit 0. The two commissioned with `evidence_in_supplied_sources` read the supplied source and wrote a report.
+The five commissioned with `evidence_about_aligned_homolog` issued only `state_query` and wrote no report: 13 of
+their 20 calls were refused with `subject_outside_assigned_scope` (the aligned reference is held by the child but
+lies outside the scope of the commission). Open: that refusal (the tool library's scope rule or the scope the head
+passes); no tool of these episodes writes a record the A101 credit reads, so their credit cannot change and each
+ends after four units at the test cost of 0.1.
+
+## 2026-11-19 — A102 and A110 result acquisition run on the built job service (file result of a job)
+
+Scope: implementation of five episodes entered directly (group 2 of `EXTRACT_PORT_RECIPE.md`), and one branch run
+per axis: `root/a102/structural_homology_evidence/execution_result_acquisition`, its `hpc_work_planning/` and
+`hpc_work_planning/hpc_allocation_execution/` copies, `root/a110/biochemical_feasibility_evidence/execution_result_acquisition`
+and its `hpc_work_planning/` copy; no axis or full-workflow validation, and no parent builds the commission from a
+job ledger handoff row yet. As in A101: `JobAccess.check`, `JobAccess.fetch`, windows of the fetched artifact read
+through custody, credit over the windows of held result records, a return of controlled fields only, a rewritten
+model request; the three raising wrappers of each copy are removed. The job's directory is read from the held
+handoff row in `internal_summary` (these forms carry no workspace). The A102 head's and the A110 head's lists of
+this child's selectable fields follow the child's forms, and the A110 head no longer passes `constraints` to it.
+Evidence: real runner tests on real local jobs, 86 passed offline (`runs/extg2_8/`: 18 for each A102 copy, 16 for
+each A110 copy); with the real model 2 passed, a finished local job fetched, credit 1.0, ended by the yield
+controller, resumed with no new model call (`runs/extg2_6/` A102 head copy, 9 units; `runs/extg2_7/` A110 head
+copy, 12 units). Not run with the real model: the three planning and allocation copies, and the job that has not
+ended (run offline only). Not in this scope and still raising at its `BLOCKED-ON-JOB-SERVICE` notes:
+`root/a110/biochemical_feasibility_evidence/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition`
+(the same form; the recipe does not list it). In `runs/extg2_9/` the A110 head's binding test has 1 failure, for
+its `monitor` slot (that child's form changed elsewhere).
+
+## 2026-11-19 — A104 and A107 head result acquisition run on the built job service (plain file result of a job)
+
+Scope: implementation and one branch run each of two episodes,
+`root/a104/evolutionary_history_evidence/execution_result_acquisition` and
+`root/a107/partner_presence_evidence/execution_result_acquisition`, entered directly (group 1 of
+`EXTRACT_PORT_RECIPE.md`); no axis or full-workflow validation, and neither head builds the commission from the
+handoff row yet. As in A101: `JobAccess.check`, `JobAccess.fetch`, windows of the fetched artifact read through
+custody, credit over the windows of held result records, a return of controlled fields only, a rewritten model
+request; `wait`, `scientific_task` and the open return fields are removed. The A107 head's list of this child's
+selectable fields and its results assignment (`messages/msg_to_child.py`) follow the child's forms. Evidence: real
+runner tests on real local jobs, 31 passed offline (`runs/extg1_6/`: 16 A104, 15 A107); with the real model 2
+passed, a finished local job fetched, credit 1.0, ended by the yield controller, resumed with no new model call
+(`runs/extg1_4/` A104, 14 units; `runs/extg1_5/` A107, 10 units). Not run with the real model: the job that has not
+ended (run offline only). Not in this scope: the HPC planning copies of both axes (form 3 of the recipe). In
+`runs/extg1_6/` the A107 head's binding test has 3 failures for its `monitor` and `hpc` slots (those children's
+forms changed elsewhere); its `results` cases pass.
+
+## 2026-11-19 — A102 resource work (launch on a local resource, submission, result acquisition) runs on the job services
+
+Scope: implementation and branch runs of three episodes under `root/a102/structural_homology_evidence/`:
+`resource_work_submission/local_resource_work_execution`, `resource_work_submission` (over its local child) and
+`resource_result_acquisition`, each entered directly, and the two builders of the A102 head that commission them
+(`task.py` child tables, `messages/msg_to_child.py`); no axis or full-workflow validation. The model chooses among
+defined actions and writes no command: the job actions take arguments from fixed sets, the work is a record passed
+by reference and started only through the library's `execute_on_local_resource`; handoff, check and closure are
+job ledger rows in custody; credit is computed from held rows; the returns are controlled fields; the model
+requests were rewritten. Owner decisions of the same day: the submission keeps its two library lookups with the
+model's own arguments; the owner's `wait {seconds}` action was added to the local child and the acquisition over
+the new library wait runner (`episode_support/jobs/job_wait.py`, `WAIT_ACTION.md`); none of the three has `reason`
+(an execution act reads no source and weighs no evidence), and `reason` was removed the same way from the A102
+launch parent `execution_job_submission`. Evidence: real runner tests on real local jobs, 108 passed offline
+(`runs/fixres_18/`: the three episodes, the unported `api` and `hpc` resource children's binding tests, the
+head's tests and the launch parent's tests); with the real model 4 passed, in the order local launch
+(`runs/fixres_19/`, credit 7.0), result acquisition (`runs/fixres_20/`: a finished job, credit 1.0; a job still
+running, where the model checked, fetched too early, waited twice and fetched, credit 1.0) and submission over the
+local child (`runs/fixres_21/`, credit 7.0), each ended by its yield controller and resumed with no new model
+call; the launch parent's model run passed after the removal (`runs/fixres_22/`). Not done: the A102 `api` and
+`hpc` resource children (they wait for the wrappers of their kinds), and a head action that writes the work
+record, so the head cannot commission the launch end to end yet. Open items and the steps for A101 and A103:
+`docs/axis_restructure_20261117/RESOURCE_PORT_RECIPE.md`.
+
+## 2026-11-19 — A101, A102 and A103 monitors run on the built job services
+
+Scope: implementation and branch runs of three episodes, `root/a101/sequence_homology_evidence/execution_progress_assessment`,
+`root/a102/structural_homology_evidence/execution_progress_assessment` and
+`root/a103/gene_context_evidence/execution_progress_assessment` (the top-level monitors; not the `hpc_work_planning`
+copies), each a private copy of the A104 monitor by `MONITOR_PORT_RECIPE.md`, and their heads' commission of them
+(`messages/msg_to_child.py`, `outstanding_jobs` in the summary, the monitor offered in `task.py` only for a held
+outstanding job, by its handoff reference); no axis or full-workflow validation. The A101 monitor keeps its own
+continuation: a BLAST status target (`blast_status_target` of its assignment) gets the completion controller.
+Evidence: real runner tests on real local jobs, 97 passed offline (`runs/mong1_13/`: 17, 16 and 16 of the monitors;
+5, 34 and 9 of the heads' tests); with the real model 4, 3 and 4 passed (`runs/mong1_4/` A101, `runs/mong1_7/` A102,
+`runs/mong1_9/` A103: a job still running, credit 1.0, state running; a job already finished, credit 1.0, state
+finished with results available; a dependency monitor commissioned; for A101 and A103 the head commissioning the
+monitor on a job it holds), each Episode ended by its yield controller; the two entry runs of each axis resumed to
+the same result with no new model call. Not done: a check of an API job (the jobs of A101): `job_progress.READINGS` has no `api` reading, and the check raises
+`KeyError('api')` (`runs/mong1_p1/`); the A102 head cannot be stepped in a world, so its commission was run on the
+rows of a real job outside a head run. Open items: `docs/axis_restructure_20261117/BRANCH_FIX_BLOCKERS_monitor_G1.md`.
+
+## 2026-11-19 — A104 monitor runs on the built job services
+
+Scope: implementation and branch runs of one episode, `root/a104/evolutionary_history_evidence/execution_progress_assessment`,
+and the A104 head's commission of it (`messages/msg_to_child.py`, `outstanding_jobs` in its summary); no axis or
+full-workflow validation, and the head's model is still not offered the monitor. The job is passed as a record (its
+job ledger handoff row); a check is `JobAccess.check`, a log window the new `JobAccess.window`, the wait
+`NativeEvents.wait`; each check's expectation is recorded in the estimate table before the status request; credit is
+computed from the held check rows; the return is controlled fields only; the model request was rewritten. Evidence:
+real runner tests on real local jobs, 51 passed offline (`runs/fixmon_10/`: 15 of the monitor, 19 of the head, 17 of
+the job services); `episode_runtime/tests` 142 passed (`runs/fixmon_11/`); with the real model 4 passed
+(`runs/fixmon_9/`: a job still running, credit 1.0, state running; a job already finished, credit 1.0, state
+finished with results available; a dependency monitor commissioned; the head commissioning the monitor on a job it
+holds), each ended by its yield controller. Open items and the steps for the other monitors:
+`docs/axis_restructure_20261117/BRANCH_FIX_BLOCKERS_a104.md`, `MONITOR_PORT_RECIPE.md`.
+
+## 2026-11-19 — A101 result acquisition runs on the built job service (plain file result of a job)
+
+Scope: implementation and a branch run of one episode, `root/a101/sequence_homology_evidence/execution_result_acquisition`,
+entered directly (the head does not build its commission yet); no axis or full-workflow validation. The plain file
+result of a job is acquired with `JobAccess.check` and `JobAccess.fetch` and windows of the fetched artifact read
+through custody; the return is controlled fields only; the model request was rewritten. Evidence: real runner tests
+of the episode, 25 passed offline (`runs/fixext_14/`); with the real model 4 passed (`runs/fixext_15/`: a finished
+local job fetched, credit 1.0; a job that had not ended, credit 0, last seen running; the BLAST and phmmer gradings
+as before), each resumed with no new model call. Open items and the steps for the other axes:
+`docs/axis_restructure_20261117/BRANCH_FIX_BLOCKERS_a101.md`, `EXTRACT_PORT_RECIPE.md`.
+
 ## 2026-11-19 — A102 literature structure grading rebuilt on the new runner (pilot 102)
 
 Scope: implementation only, the seven A102 literature episodes and the head's summary rule; no workflow
@@ -19061,3 +19187,81 @@ dependency; actualpost7e3e5594 follows terminal28553/1 and confirms empty owned
 process state. No passing case or native/scientific claim is added. Evidence:
 `runs/root_original_goal_audit_01/`, `runs/main_a103_parent_review_01/`, and
 `runs/root_lumpy_fresh21_01/`.
+
+## 2026-11-19 — A107 HPC planning (planning head, resource prediction, allocation execution) runs on the HPC ledger work table
+
+Scope: implementation and branch runs of three episodes under
+`root/a107/partner_presence_evidence/hpc_work_planning/` (the head, `hpc_resource_prediction`,
+`hpc_allocation_execution`), each entered directly; no axis or full-workflow validation, and no HPC: nothing was
+authenticated to Aurora and nothing remote was contacted. The HPC ledger is the declared work table in custody
+(opened from the commission, its id passed to later tools and to the sisters, its rows passed and returned as
+record references); the frozen plan's launch input is an artifact the ledger names; the resource is reached only
+through `job_access` (`jobs/hpc/hpc_remote.py`, `hpc_queue.observe`); the three returns are controlled fields; the
+three model requests were rewritten (the prediction request went from 32.5 KB to 17.3 KB). Evidence: 263 passed
+offline over the subtree, the A107 head's tests and the job library (`runs/fixhpc_15/`), one failing test of the
+A107 head that names return fields this port removed (`BRANCH_FIX_BLOCKERS_a107.md`, section 4); with the real
+model 3 passed in order: prediction alone (`runs/fixhpc_12/`), allocation alone on a ledger the prediction's own
+tool created (`runs/fixhpc_13/`), the head over its sisters (`runs/fixhpc_14/`); each closed run resumed without a
+model call. Not exercised, because no scheduler exists here: a real queue observation, a frozen plan, handoff,
+monitoring and result parsing; the launch, monitor and results children under the subtree remain unported.
+Recipe for A102, A103, A104 and A110: `docs/axis_restructure_20261117/HPC_PORT_RECIPE.md`.
+
+## 2026-11-19 — Seven `execution_result_acquisition` episodes of A103, A104 and A107 acquire plain file results on the job service
+
+Scope: implementation and branch runs of seven result-acquisition episodes, each entered directly: the A103 head's
+child and the copies under `hpc_work_planning` and `hpc_work_planning/hpc_allocation_execution` of A103, A104 and
+A107 (form 3 of `docs/axis_restructure_20261117/EXTRACT_PORT_RECIPE.md`). No axis or full-workflow validation, no
+parent commissions them yet with a job ledger handoff row, and no HPC: the six copies under `hpc_work_planning` ran
+against the local route only, nothing was authenticated and nothing remote was contacted. The direct `access`
+calls and the raising handoff read are removed; status is `JobAccess.check`, the fetch is `JobAccess.fetch` with
+windows read from the fetched artifacts in custody, credit reads the windows of held result records, the returns
+are controlled fields, and the model request was rewritten (the model selects one of three defined operations;
+code carries it out). Evidence: 105 passed offline over the seven folders (`runs/extg3_9/`), 91 passed over the
+parents' tests that name the child (`runs/extg3_8/`); with the real model one finished local job per axis ended by
+its yield controller, its return admitted and its resume asked no model: A103 head (`runs/extg3_3/`, 10 units), A104
+planning copy (`runs/extg3_6/`, 12 units), A107 planning copy (`runs/extg3_7/`, 9 units). Before the port
+`next_decision` raised in each form (`runs/extg3_before1/`). Open items, including what a remote HPC fetch needs:
+`docs/axis_restructure_20261117/BRANCH_FIX_BLOCKERS_extract_G3.md`.
+
+## 2026-11-19 — A101 head commissions are controlled fields; A102, A106 and A108 heads reach their first decision offline
+
+Scope: the A101 head `sequence_homology_evidence` (its commissions of its children) and the library function
+`project_finding_progress` of A102, A106, A107 and A108. No axis or full-workflow validation; nothing remote was
+contacted. A101 head: the model no longer writes a child's assignment, objective or message; it chooses the
+controlled fields of the slot (`task.commission_fields`) and `msg_to_child` builds the child's assignment from them
+and the summary, passing every record the child reads in custody. Offered in the local-tool world: the published
+evidence assessment and the recursive investigation; the launch (BLAST request on a bound API resource), the
+monitor and the results acquisition are offered while the head holds what they are chosen from; the two resource
+children have no controlled commission and are not offered. Evidence: 11 passed offline over the head's tests
+(`runs/a101head_13/`). Real model, three branches (`runs/a101head_12/`, `runs/a101head_14/`): the stepped
+commission of the published evidence assessment (branch 3) ended by the yield controllers of child and head, its
+return admitted and its resume asked no model, in both runs; branch 2 did so once without commissioning a child
+(13 units); branches 1 and 2 otherwise FAIL after the model's correct commission, in the child:
+`A101ScoringUnavailable: a101_unsupported_score_profile` from `run/credit.py` (then `published_evidence_assessment`) when the
+commission passes a pairwise alignment observation. This is an open defect of the A101 literature subtree, not of
+the head. The launch and results commissions were form-tested (launch) or not run (results): no API job exists in
+the head's world. `project_finding_progress` reads through the custody reader with no Store snapshot; the A102,
+A106 and A108 heads now reach their first decision offline (`tests/test_first_decision.py` in each head, with the
+findings custody tests and those heads' tests: 106 passed and 1 failed, an A107 head binding test this work did not
+touch, `runs/a101head_11/`); the A107 head does not call the function and is still
+stopped at `decide` by services nothing implements. Open items:
+`docs/axis_restructure_20261117/BRANCH_FIX_BLOCKERS_head_a101.md`.
+
+## 2026-11-19 — A101 monitor checks a job of the API route; the public NCBI job stayed WAITING
+
+Scope: the A101 monitor `sequence_homology_evidence/execution_progress_assessment` on a job of `ApiJobRoute`, and
+the library reading it uses (`episode_support/jobs/job_progress.py`). Not in scope: the other monitors, the A101
+head, the result acquisition. Implementation: `READINGS['api']` (`provider_status`, `has_hits`), `LOGS` by route
+kind; the monitor offers a log window only for a job that keeps logs and writes its request for the job's kind;
+`ApiJobRoute` finds a job by its handle below its configured workspace (the comparison with the directory the
+handoff recorded is removed, so a copied run directory serves its job). Offline, real protocol server, no model:
+41 passed, 1 skipped (`runs/apimon_7/`); with the A104 monitor units as a check of the shared reading: 49 passed
+(`runs/apimon_3/`). Real model, real public service, one run (`runs/apimon_6/`, log `runs/apimon_6.log`): three
+monitor visits over the outstanding job FYZHMP6Y014 of the launch run `runs/fixapi_5/` (copied, not written);
+NCBI answered `Status=WAITING` at 2026-11-20T00:07:48Z, 00:08:53Z and 00:09:59Z; each visit was ended by its
+yield controller. The job never reported READY, so the result acquisition was not run on it: fetching a real
+public BLAST result through the A101 episodes is still not shown. Nothing was submitted.
+
+## 2026-11-19 — A101 literature episodes renamed to the reference names
+
+The seven A101 literature folders under `root/a101/sequence_homology_evidence/` were renamed to the grain names of the reference binding, nesting kept: `published_evidence_assessment` to `run`, `evidence_search_strategy_improvement` to `strategy`, `source_relevance_assessment` to `search`, `source_evidence_examination` to `page`, `table_evidence_extraction` to `source_table`, `source_coverage_improvement` to `report`, `passage_evidence_extraction` to `lexical_probe`. Binding paths, imports, child slots and tests follow; no behaviour changed.

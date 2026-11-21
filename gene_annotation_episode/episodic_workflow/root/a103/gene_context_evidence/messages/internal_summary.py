@@ -11,6 +11,7 @@ old ``initial_decision_context`` (``received_execution_context``: the A103 execu
 by ``a103_hpc.execution_findings``) has no module in the library today and is not shown (reported unplaced)."""
 from gene_annotation_episode.episodic_workflow.episode_support.findings.gene_context_evidence.investigation_finding import (
     context_finding, ungraded_measurements)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import outstanding_jobs
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -71,6 +72,9 @@ def internal_summary(view):
         'child_reports': child_reports,
         'revisions': revisions,
         'committed_record_refs': committed,
+        # the jobs whose handoff row this episode holds and whose closure row it does not hold, with the check rows
+        # it holds of each (a monitor returned them): what a monitor commission passes in custody
+        'outstanding_jobs': outstanding_jobs(view.records),
         'units_consumed': view.units_consumed,
         'action_yields': None if controller is None else yield_table(controller, forecast_unit='credit'),
         'finding': context_finding(view.records, credit_view, parent['scope']),

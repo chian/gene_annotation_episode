@@ -1,84 +1,93 @@
-"""The return of the monitor. Always returned: the Episode's credit (the system hands it in ``completion``) and the
-finding of what the monitor found of its assigned target. The parent selects among the monitoring facts, all taken from
-the delivered observations only (nothing is observed at closure and no model composes the return): the received
-progress references, the target handle, the latest execution state, result availability and observation time (each a
-record holding ``{'value': ...}``, with a null value while nothing was delivered), the permitted committed records, the
-exposed direct dependencies and the delivered progress observations by identity."""
-from __future__ import annotations
+"""The return: controlled fields only, read by code from the check rows this monitor holds. No text the model
+wrote and no log text is returned.
 
+Always returned: ``credit`` (the system's), ``finding`` (whether the job was observed and, from this monitor's
+latest check of it, its state from the job service's fixed vocabulary, whether its results are available and when it
+was observed) and ``check_refs`` (the check rows this monitor wrote and those its dependency monitors returned, in
+custody: the commissioner passes them back as the baseline of the next check, and reads a dependency's state from
+them). Selectable: the measurements of the latest check, each as ``{'known', 'value'}`` because a route does not
+report every one and unknown stays unknown, and the records of the log windows read and of the end-event receipts
+a wait brought into custody.
+
+Not carried from the old report: the count of newly informative snapshots (credit is that signal), the
+qualification text, the snapshots themselves and the committed record references (a monitor returns no result of
+the job)."""
 from datetime import datetime
 
-from method_loop import Field, RecordForm
+from method_loop import ChoiceField, Field, RecordForm
+
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_progress import JOB_STATES, LOG_NAMES
 
 FINDING_FORM = RecordForm({
-    'target_handle': Field('text', 'The assigned execution target'),
-    'observed': Field('boolean', 'Whether this monitor received an observation of the assigned target'),
-    'execution_state': Field('text', 'The assigned target state in its latest delivered observation',
-                             required=False),
-    'result_available': Field('boolean', 'Result availability in the latest delivered observation', required=False),
-    'received_progress_ref_count': Field('integer', 'How many progress observations this monitor received'),
-    'qualification': Field('text', 'What the finding does and does not establish'),
+    'observed': Field('boolean', 'Whether this monitor made a check of the job that the job service answered'),
+    'state': ChoiceField('text', "The job's state at this monitor's latest check", JOB_STATES, required=False),
+    'result_available': Field('boolean', "Whether the job's results were available at that check", required=False),
+    'observed_at_unix_seconds': Field('number', 'When that check observed the job (UTC, Unix seconds)',
+                                      required=False),
 })
+NUMBER_FORM = RecordForm({'known': Field('boolean', 'Whether the latest check reported the quantity'),
+                          'value': Field('number', 'The quantity, when known', required=False)})
+INTEGER_FORM = RecordForm({'known': Field('boolean', 'Whether the latest check reported the quantity'),
+                           'value': Field('integer', 'The quantity, when known', required=False)})
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
-    'finding': Field('record', 'What the monitor found of the assigned target', form=FINDING_FORM),
-    'monitoring_progress_refs': Field(
-        'list', 'Original delivered progress observation identities, including those delivered by dependency '
-                'monitors.', required=False),
-    'monitoring_target_handle': Field('text', 'The immutable assigned semantic target handle.', required=False),
-    'monitoring_execution_state': Field(
-        'record', 'Assigned target state in the latest delivered observation (pending, executing, returned, '
-                  'admitted) as {"value": state}; value is null without an observation.', required=False),
-    'monitoring_result_available': Field(
-        'record', 'Assigned target result availability in the latest delivered observation as {"value": ...}; '
-                  'value is null without an observation.', required=False),
-    'monitoring_observed_at_unix_seconds': Field(
-        'record', 'Original assigned-target observation time, converted from UTC without refreshing it, as '
-                  '{"value": ...}; value is null without an observation.', required=False),
-    'monitoring_committed_record_refs': Field(
-        'record_refs', 'Parent-permitted committed records actually delivered in these progress observations.',
-        required=False),
-    'monitoring_dependency_handles': Field(
-        'list', 'Exposed direct dependencies in the latest delivered assigned-target observation; no descendant '
-                'traversal.', required=False),
-    'monitoring_progress_snapshots': Field(
-        'record', "The delivered progress observations by identity, for the commissioning monitor's credit.",
-        required=False),
+    'finding': Field('record', 'What the monitor found of the job', form=FINDING_FORM),
+    'check_refs': Field('record_refs', 'The check rows this monitor wrote and those its dependency monitors '
+                                       'returned'),
+    'job_returncode': Field('record', "The return code of the job's ended command", required=False,
+                            form=INTEGER_FORM),
+    'job_duration_seconds': Field('record', "The duration of the job's ended command, in seconds", required=False,
+                                  form=NUMBER_FORM),
+    'job_elapsed_seconds': Field('record', 'The elapsed seconds of the job still running at the latest check',
+                                 required=False, form=NUMBER_FORM),
+    'stdout_bytes': Field('record', "The size of the job's stdout.log at the latest check", required=False,
+                          form=INTEGER_FORM),
+    'stderr_bytes': Field('record', "The size of the job's stderr.log at the latest check", required=False,
+                          form=INTEGER_FORM),
+    'log_window_refs': Field('record_refs', 'The log windows this monitor read: each window row and the artifact '
+                                            'of its bytes', required=False),
+    'event_receipt_refs': Field('record_refs', "The receipts of the job's end event that a wait brought into "
+                                               'custody: each receipt row and its artifact', required=False),
 })
 
-QUALIFICATION = ('Facts are those of delivered observations only. Liveness establishes process presence only; '
-                 'elapsed time alone establishes neither productive work nor a stall; unknown information stays '
-                 'unknown.')
+
+def _known(value):
+    return {'known': False} if value is None else {'known': True, 'value': value}
 
 
-def _timestamp_seconds(value):
-    """A UTC timestamp converted to unix seconds, without refreshing it."""
-    return datetime.fromisoformat(value.replace('Z', '+00:00')).timestamp()
+def _measured(latest, name):
+    return None if latest is None or name not in latest else latest[name]
+
+
+def _log_bytes(latest, name):
+    outputs = _measured(latest, 'outputs') or []
+    return next((output['bytes'] for output in outputs if output['name'] == name), None)
 
 
 def monitor_facts(summary):
-    """The recorded facts from the progress observations the monitor received ."""
-    latest = summary['latest_target_observation']
-    return {'monitoring_progress_refs': list(summary['received_progress_refs']),
-            'monitoring_target_handle': summary['target_handle'],
-            'monitoring_execution_state': {'value': latest['execution_status']['lifecycle_state'] if latest else None},
-            'monitoring_result_available': {'value': latest['result_available'] if latest else None},
-            'monitoring_observed_at_unix_seconds': {
-                'value': _timestamp_seconds(latest['observed_at']) if latest else None},
-            'monitoring_committed_record_refs': list(summary['committed_record_refs']),
-            'monitoring_dependency_handles': [row['handle'] for row in latest['dependencies']] if latest else [],
-            'monitoring_progress_snapshots': {reference: summary['progress_snapshots'][reference]
-                                              for reference in summary['received_progress_refs']}}
+    """The selectable facts, from this monitor's latest check of the job."""
+    latest = summary['latest']
+    stdout, stderr = LOG_NAMES
+    return {'job_returncode': _known(_measured(latest, 'returncode')),
+            'job_duration_seconds': _known(_measured(latest, 'duration_seconds')),
+            'job_elapsed_seconds': _known(_measured(latest, 'elapsed_seconds')),
+            'stdout_bytes': _known(_log_bytes(latest, stdout)),
+            'stderr_bytes': _known(_log_bytes(latest, stderr)),
+            'log_window_refs': list(summary['log_window_refs']),
+            'event_receipt_refs': list(summary['event_receipt_refs'])}
+
+
+def finding(summary):
+    latest = summary['latest']
+    if latest is None:
+        return {'observed': False}
+    found = {'observed': True,
+             'observed_at_unix_seconds': datetime.fromisoformat(latest['observed_at']).timestamp()}
+    found.update({name: latest[name] for name in ('state', 'result_available') if name in latest})
+    return found
 
 
 def final_to_parent(summary, completion, selection):
     facts = monitor_facts(summary)
-    latest = summary['latest_target_observation']
-    finding = {'target_handle': summary['target_handle'], 'observed': latest is not None,
-               'received_progress_ref_count': len(summary['received_progress_refs']),
-               'qualification': QUALIFICATION}
-    if latest is not None:
-        finding['execution_state'] = latest['execution_status']['lifecycle_state']
-        finding['result_available'] = latest['result_available']
-    result = {'credit': completion['credit'], 'finding': finding, **{name: facts[name] for name in selection}}
-    return result
+    return {'credit': completion['credit'], 'finding': finding(summary),
+            'check_refs': list(summary['received_check_refs']), **{name: facts[name] for name in selection}}

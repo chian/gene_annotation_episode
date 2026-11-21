@@ -1,7 +1,7 @@
 """The A107 result acquisition episode is a private binding in the ten-file form, reads a real assignment, offers the
-native result operations, prices acquisitions by requested-byte coverage and reports through its real return form.
-No unit is run: running one needs the ``job_access`` service, which does not exist yet (BLOCKED-ON-JOB-SERVICE), and
-nothing here stands in for it."""
+operations of a plain file result, prices acquisitions by requested-byte coverage and reports through its real
+return form. The plain file results of a job are run for real in ``test_plain_results.py``; the forms and the pure
+functions are checked here."""
 import ast
 from pathlib import Path
 
@@ -16,7 +16,7 @@ from .. import episode as episode_module
 from .. import task as task_file
 from ..episode import ExecutionResultAcquisition
 from ..goal import BINDING_PATH
-from ..messages.final_to_parent import NOT_DECLARABLE, RETURN_FORM, final_to_parent
+from ..messages.final_to_parent import FINDING_FORM, RETURN_FORM, final_to_parent
 from ..messages.read_from_parent import ASSIGNMENT_FORM, read_from_parent
 from ..yield_estimator import yield_controller
 
@@ -34,7 +34,7 @@ def test_the_class_inherits_only_the_system_episode_type():
     assert dict(ExecutionResultAcquisition.child_slots) == {}
     assert tuple(ExecutionResultAcquisition.services) == ('job_access',)
     assert set(ExecutionResultAcquisition.tools) == {'execution_results_status', 'execution_results_collect',
-                                                     'execution_results_read', 'wait'}
+                                                     'execution_results_read'}
 
 
 def test_the_folder_holds_exactly_the_ten_files():
@@ -58,20 +58,18 @@ def test_no_module_imports_another_episode_folder():
                 assert '.episodic_workflow.root' not in module or module.startswith(PACKAGE), (path, module)
 
 
-def test_the_return_form_declares_credit_and_finding_and_the_old_fact_sources_as_selectable():
+def test_the_return_form_declares_credit_and_finding_and_only_controlled_selectable_fields():
     required = {name for name, spec in RETURN_FORM.fields.items() if spec.required}
     assert required == {'credit', 'finding'}
-    for name in ('execution_handoff_refs', 'execution_result_refs', 'execution_completed', 'execution_result_origin',
-                 'execution_file_source_refs', 'execution_file_capture_outcomes', 'execution_blast_hsps',
-                 'execution_blast_pairwise_result_refs', 'execution_hmmer_domain_rows',
-                 'execution_blast_database_search_rows', 'execution_blast_standard_database_search_rows',
-                 'execution_hmmer_preparation_rows', 'execution_blast_pairwise_hsp_rows'):
-        assert name in RETURN_FORM.fields and not RETURN_FORM.fields[name].required, name
-    assert RETURN_FORM.fields['execution_result_refs'].type == 'record_refs'
-    # the sources whose classes are in no place for this axis are not declared (blocked file)
-    assert not any(name.startswith('bvbrc_') for name in RETURN_FORM.fields)
-    # the masking and utility sources have dotted names: a form field name is a lowercase identifier
-    assert len(NOT_DECLARABLE) == 21 and not set(NOT_DECLARABLE) & set(RETURN_FORM.fields)
+    selectable = {name: spec.type for name, spec in RETURN_FORM.fields.items() if not spec.required}
+    assert selectable == {'execution_handoff_refs': 'record_refs', 'execution_job_record_refs': 'record_refs',
+                          'execution_result_refs': 'record_refs', 'execution_completed': 'boolean'}
+    # The finding is counts, a flag and one fixed vocabulary: no open text, record or list.
+    assert {name: spec.type for name, spec in FINDING_FORM.fields.items()} == {
+        'execution_completed': 'boolean', 'acquisitions': 'integer',
+        'failure_count': 'integer', 'job_state': 'text', 'results_not_available': 'integer',
+        'windows_acquired': 'integer', 'bytes_acquired': 'integer'}
+    assert 'finished' in FINDING_FORM.fields['job_state'].options
 
 
 def _target(**changes):
@@ -88,7 +86,8 @@ def _target(**changes):
 
 def _assignment(**changes):
     value = {'version': 'execution_results_assignment_v1', 'handoff_ref': 'handoff_1',
-             'selector': {'paths': ['/work/space/out.txt'], 'path': '/work/space/log.txt', 'offset': 10, 'limit': 90},
+             'selector': {'paths': ['/work/space/out.txt'], 'path': '/work/space/logs/log.txt', 'offset': 10,
+                          'limit': 90},
              'target': _target(), 'acquired_record_unit': 2.0}
     value.update(changes)
     return value
@@ -98,16 +97,20 @@ def _admitted(**changes):
     return ASSIGNMENT_FORM.admit(_assignment(**changes), 'assignment')
 
 
-def test_the_assignment_is_read_once_and_gives_the_family_the_windows_and_the_unit():
+def test_the_assignment_is_read_once_and_gives_the_intervals_the_names_and_the_unit():
     parent_input = read_from_parent(_admitted(), {})
-    assert parent_input['family'] == 'native_bytes'
-    assert parent_input['requested'] == {'/work/space/out.txt': [0, None], '/work/space/log.txt': [10, 90]}
+    assert parent_input['requested'] == {'/work/space/out.txt': [0, None], '/work/space/logs/log.txt': [10, 90]}
+    # The job service names a result file by its path inside the job's directory.
+    assert parent_input['result_names'] == {'/work/space/out.txt': 'out.txt',
+                                            '/work/space/logs/log.txt': 'logs/log.txt'}
     assert parent_input['acquired_record_unit'] == 2.0 and parent_input['target']['handle'] == 'handoff_1'
 
 
 def test_a_wrong_commission_fails():
     with pytest.raises(FormError):
         ASSIGNMENT_FORM.admit(_assignment(version='other'), 'assignment')
+    with pytest.raises(FormError):
+        ASSIGNMENT_FORM.admit(_assignment(scientific_task={'scientific_question': 'free text'}), 'assignment')
     with pytest.raises(ValueError, match='execution_result_target_conflict'):
         read_from_parent(_admitted(handoff_ref='another'), {})
     with pytest.raises(ValueError, match='execution_results_paths_required'):
@@ -124,12 +127,12 @@ def test_the_families_that_are_in_no_place_now_raise_where_their_old_class_was_c
     api = _target(resource_kind='api', assignment={'version': 'api_service_assignment_v1', 'service': 'ncbi_blast'})
     with pytest.raises(NotImplementedError, match='unplaced:api_execution.validate_result_selector'):
         read_from_parent(_admitted(target=api, selector={'version': 'x'}), {})
-    infernal = {**_target()['assignment'], 'requested_job': {'native_infernal': {}}}
-    with pytest.raises(NotImplementedError, match='unplaced:native_infernal.result_selector'):
-        read_from_parent(_admitted(target=_target(assignment=infernal), selector={'paths': ['/work/space/o']}), {})
     typed = {**_target()['assignment'], 'requested_job': {'native_hmmer': {'program': 'phmmer'}}}
     with pytest.raises(Exception, match='native_hmmer_result_selector_invalid'):
         read_from_parent(_admitted(target=_target(assignment=typed), selector={'paths': ['/work/space/o']}), {})
+    infernal = {**_target()['assignment'], 'requested_job': {'native_infernal': {}}}
+    with pytest.raises(NotImplementedError, match='unplaced:native_infernal.result_selector'):
+        read_from_parent(_admitted(target=_target(assignment=infernal), selector={'paths': ['/work/space/o']}), {})
 
 
 def test_the_yield_controller_is_accumulation_for_an_unbounded_selector_and_bounded_for_a_finite_one():
@@ -147,72 +150,68 @@ def test_the_yield_controller_is_accumulation_for_an_unbounded_selector_and_boun
 
 
 def _window(path, offset, size, total):
-    return {'path': path, 'offset': offset, 'returned_bytes': size, 'size_bytes': total}
+    return {'path': path, 'artifact_ref': 'artifact_of_' + path, 'offset': offset, 'returned_bytes': size,
+            'size_bytes': total, 'sha256': '0' * 64}
 
 
-def _summary(family='native_bytes', **changes):
-    value = {'family': family, 'acquired_record_unit': 2.0,
+def _summary(**changes):
+    value = {'acquired_record_unit': 2.0,
              'requested': {'/a': [0, 100], '/b': [0, None]},
-             'results': [{'ref': 'r0', 'initial': True, 'state': 'completed', 'returncode': 0,
-                          'windows': [_window('/a', 0, 25, 100)], 'failures': []},
-                         {'ref': 'r1', 'initial': False, 'state': 'completed', 'returncode': 0,
-                          'windows': [_window('/a', 20, 30, 100), _window('/b', 0, 40, 80)], 'failures': []}]}
+             'job': {'closed': True, 'last_observed_state': 'finished'},
+             'fetched_files': {'/a': {'ref': 'artifact_of_/a', 'bytes': 100}},
+             'results': [{'ref': 'r0', 'artifact_ref': 'b0', 'initial': True,
+                          'windows': [_window('/a', 0, 25, 100)]},
+                         {'ref': 'r1', 'artifact_ref': 'b1', 'initial': False,
+                          'windows': [_window('/a', 20, 30, 100), _window('/b', 0, 40, 80)]}]}
     value.update(changes)
     return value
 
 
 def test_the_credit_counts_each_new_requested_byte_position_once_as_the_mean_over_paths():
     summary = _summary()
-    # /a: bytes 0-25 were already known, 20-50 now cover 25 new positions of 100; /b: 40 of 80 observed bytes
+    # /a: bytes 0-25 were already known, 20-50 now cover 25 new positions of 100; /b: 40 of the file's 80 bytes
     expected = 2.0 * (0.25 + 0.5) / 2
     assert credit_file.credit(summary, None) == pytest.approx(expected)
     assert credit_file.credit({**summary, 'results': summary['results'][:1]}, None) == 0.0
 
 
-def test_the_operations_offered_are_the_native_result_operations_and_a_typed_family_raises():
-    assert [entry['name'] for entry in task_file._catalog(_summary())] == [
-        'execution_results_status', 'execution_results_collect', 'execution_results_read']
-    arguments = {'requested': {'/a': [0, 100]}, 'arguments': {'path': '/a', 'offset': 90, 'limit': 20},
-                 'log_window_bytes': 8}
-    with pytest.raises(ValueError, match='execution_results_selector_conflict'):
-        task_file._windows('execution_results_read', arguments)
-    arguments['arguments']['limit'] = 10
-    assert task_file._windows('execution_results_read', arguments) == [arguments['arguments']]
-    assert task_file._windows('execution_results_collect', arguments) == [{'path': '/a', 'offset': 0, 'limit': 8}]
-    assert task_file._windows('execution_results_status', arguments) == []
-
-
-def _progress(**changes):
-    value = {'execution_handoff_refs': ['handoff_1'], 'execution_result_refs': ['r1'],
-             'execution_file_source_refs': [], 'execution_file_capture_outcomes': [],
-             'execution_result_origin': dict(task_file.NATIVE_RESULT_ORIGIN), 'execution_completed': False}
-    value.update(changes)
-    return value
+def test_the_operations_offered_follow_the_job():
+    names = lambda summary: [entry['name'] for entry in task_file._catalog(summary)]
+    assert names(_summary(job={'closed': False}, fetched_files={})) == ['execution_results_status',
+                                                                         'execution_results_collect']
+    assert names(_summary()) == ['execution_results_status', 'execution_results_read']
+    read = task_file._catalog(_summary())[1]
+    assert read['input_schema']['properties']['path'] == {'enum': ['/a']}
+    assert names(_summary(fetched_files={})) == ['execution_results_status']        # a cancelled job
 
 
 def _closed_summary(**changes):
-    value = {'assignment': {'version': 'execution_results_assignment_v1', 'handoff_ref': 'handoff_1', 'selector': {}},
-             'execution_progress': _progress(), 'execution_completed': False,
+    value = {'execution_progress': {'execution_handoff_refs': ['handoff_1'],
+                                    'execution_job_record_refs': ['row_check', 'row_closure'],
+                                    'execution_result_refs': ['r1', 'b1', 'artifact_of_/a', 'artifact_of_/b'],
+                                    'execution_completed': False},
+             'execution_completed': False,
              'acquisitions': [
-                 {'tool': 'execution_results_collect', 'arguments': {}, 'status': 'completed', 'source_ref': 'r1',
-                  'windows': [], 'failures': [], 'attempt_state': 'completed'},
-                 {'tool': 'execution_results_read', 'arguments': {}, 'status': 'invalid',
-                  'feedback': {'category': 'arguments_or_reference', 'code': 'x'}}]}
+                 {'tool': 'execution_results_collect', 'status': 'failed', 'failure_code': 'results_not_available'},
+                 {'tool': 'execution_results_status', 'status': 'completed', 'state': 'finished',
+                  'result_available': True},
+                 {'tool': 'execution_results_collect', 'status': 'completed', 'result_ref': 'r1', 'windows': []},
+                 {'tool': 'execution_results_read', 'status': 'invalid', 'window': {},
+                  'failure_code': 'execution_results_selector_conflict'}]}
     return _summary(**{**value, **changes})
 
 
-def test_the_return_reports_the_finding_the_selected_facts_and_the_form_admits_them():
+def test_the_return_is_the_credit_the_counts_and_the_selected_references():
     summary = _closed_summary()
-    completion = {'ended_by': 'yield_stop', 'units_consumed': 2, 'credit': 1.5}
-    names = ['execution_handoff_refs', 'execution_result_refs', 'execution_completed', 'execution_blast_hsps',
-             'execution_hmmer_domain_rows', 'execution_result_origin']
+    completion = {'ended_by': 'yield_stop', 'units_consumed': 4, 'credit': 1.5}
+    names = ['execution_handoff_refs', 'execution_result_refs', 'execution_completed']
     result = final_to_parent(summary, completion, names)
     assert result['credit'] == 1.5
-    assert result['finding']['execution_completed'] is False and result['finding']['acquisitions'] == 1
-    assert result['finding']['invalid_acquisitions'] == 1 and result['finding']['bytes_acquired'] == 70
-    assert result['execution_result_refs'] == ['r1'] and result['execution_hmmer_domain_rows'] == []
+    assert result['finding'] == {'execution_completed': False, 'acquisitions': 2,
+                                 'failure_count': 2, 'job_state': 'finished', 'results_not_available': 1,
+                                 'windows_acquired': 2, 'bytes_acquired': 70}
+    assert result['execution_result_refs'] == ['r1', 'b1', 'artifact_of_/a', 'artifact_of_/b']
+    assert set(result) == {'credit', 'finding', *names}
     RETURN_FORM.select(names).admit(result, 'result')
-    every = sorted(name for name, field in RETURN_FORM.fields.items() if not field.required)
-    RETURN_FORM.select(every).admit(final_to_parent(summary, completion, every), 'result')
-    empty = _closed_summary(execution_progress=_progress(execution_result_origin=None, execution_result_refs=[]))
-    assert final_to_parent(empty, completion, ['execution_result_origin'])['execution_result_origin'] == {}
+    every = [name for name in RETURN_FORM.fields if name not in ('credit', 'finding')]
+    RETURN_FORM.select(every).admit(final_to_parent(summary, completion, every), 'return')

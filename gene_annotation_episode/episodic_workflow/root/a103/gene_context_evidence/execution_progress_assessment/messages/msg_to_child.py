@@ -1,31 +1,23 @@
-"""The commission of a child monitor, carried from ``to_child_execution_progress_assessment.py``
-(``prepare_dependency_request``): a monitor assignment whose target is one exposed direct dependency of this
-monitor's own target and whose permitted committed record types do not exceed its own. The only child is this
-episode's own kind (slot ``monitor``).
+"""The commission of a dependency monitor: a monitor of this episode's own kind (slot ``monitor``) for one job the
+target directly depends on.
 
-Both old refusals are kept as the errors this function raises while it builds the commission:
-``monitor_child_target_not_exposed_direct_dependency`` and ``monitor_child_expands_permitted_record_types``. The
-parent selects the child's return fields it needs: the progress observation identities and their snapshots."""
+Carried from ``to_child_execution_progress_assessment.py`` (``prepare_dependency_request``). The dependency is one
+whose handoff row the commissioner passed to this monitor (``dependency_handoff_refs``); this function passes that
+row on in custody, with the check rows of that job this monitor already holds as the child's baseline. The child
+is handed no dependencies of its own: no descendant traversal. A handle that is not one of the passed dependencies
+fails here with its ``KeyError`` (the old ``monitor_child_target_not_exposed_direct_dependency``). The child's
+required fields (credit, finding, check rows) are all this monitor needs, so nothing more is selected."""
 from episode_runtime import ChildMessage
 
 
 def msg_to_child(slot, arguments, summary):
-    if slot != 'monitor':
-        raise ValueError('monitor_child_slot_unknown:' + repr(slot))
-    handle = arguments['dependency_handle']
-    if handle not in [row['handle'] for row in summary['monitor_direct_dependencies']]:
-        raise ValueError('monitor_child_target_not_exposed_direct_dependency')
-    permitted = summary['permitted_committed_record_types']
-    wanted = arguments.get('permitted_committed_record_types', permitted)
-    if not set(wanted) <= set(permitted):
-        raise ValueError('monitor_child_expands_permitted_record_types')
+    dependency = {row['handle']: row for row in summary['dependencies']}[arguments['dependency_handle']]
     return ChildMessage(
-        objective='Investigate which further exposed progress information is useful for the direct dependency '
-                  + handle + ' of ' + summary['target_handle'] + '; no descendant traversal, fanout, cadence or '
-                  'depth is prescribed.',
-        message={'launch_instructions': summary['launch_instructions']},
-        assignment={'version': 'monitor_assignment_v1', 'target_handle': handle,
-                    'requested_fields': list(summary['requested_fields']), 'known_progress_refs': [],
-                    'permitted_committed_record_types': list(wanted),
+        objective='Assess the progress of job ' + dependency['handle'] + ', which job '
+                  + summary['job']['handle'] + ' directly depends on.',
+        message={},
+        assignment={'version': 'monitor_assignment_v2', 'handoff_refs': [dependency['handoff_ref']],
+                    'known_progress_refs': list(dependency['check_refs']), 'dependency_handoff_refs': [],
+                    'requested_fields': list(summary['requested_fields']),
                     'information_unit': summary['information_unit']},
-        selection=('monitoring_progress_refs', 'monitoring_progress_snapshots'))
+        selection=())

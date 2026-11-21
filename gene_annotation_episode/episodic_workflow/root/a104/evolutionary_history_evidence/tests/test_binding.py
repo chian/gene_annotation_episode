@@ -22,7 +22,8 @@ CHILDREN = ('execution_job_submission', 'execution_progress_assessment', 'execut
 FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
          'messages/__init__.py', 'messages/read_from_parent.py', 'messages/msg_to_child.py',
          'messages/read_from_child.py', 'messages/internal_summary.py', 'messages/final_to_parent.py',
-         'tests/__init__.py', 'tests/test_binding.py', 'tests/a104_world.py', 'tests/test_a104_grading.py'}
+         'tests/__init__.py', 'tests/test_binding.py', 'tests/a104_world.py', 'tests/test_a104_grading.py',
+         'tests/test_decision_schema.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 SUMMARY = {'proposed_annotation_ref': 'hypothesis_' + 'a' * 24, 'record_refs': ['input_' + 'b' * 24],
            'path_depth': 1}

@@ -274,3 +274,25 @@ def test_all_schemas_validate_and_form_does_not_count_additional_assays():
         assert len(output['cells']) == 9
         assert output['assay_type'] == assay_type
         assert 'assay_count' not in output
+
+def test_an_interpretation_may_carry_a_degree_from_zero_to_one_and_nothing_in_the_sheet_reads_it():
+    base = fixture('ligand_binding', 'band_display_fraction')
+    criterion = next(name for name, item in base['interpretations'].items() if item['status'] == 'supported')
+    without = grade_assay(base)
+    for degree in (0, 0.0, 0.3, 1, 1.0):
+        inputs = deepcopy(base)
+        inputs['interpretations'][criterion]['degree'] = degree
+        validate_schema(inputs, assay_grading_input_schema())
+        sheet = grade_assay(inputs)
+        assert sheet['interpretations'][criterion]['degree'] == degree
+        assert sheet['cells'] == without['cells']                                              # the degree changes no cell: it travels
+        validate_schema(sheet, assay_grading_sheet_schema())
+    assert 'degree' not in without['interpretations'][criterion]                                # an interpretation without a degree is as before
+
+@pytest.mark.parametrize('degree', [-0.01, 1.01, 2, 'high', None, True])
+def test_a_degree_outside_zero_to_one_or_not_a_number_is_refused(degree):
+    inputs = fixture('ligand_binding', 'band_display_fraction')
+    criterion = next(name for name, item in inputs['interpretations'].items() if item['status'] == 'supported')
+    inputs['interpretations'][criterion]['degree'] = degree
+    with pytest.raises(ContractError):
+        grade_assay(inputs)

@@ -1,49 +1,18 @@
-"""How the A102 monitor's credit is counted (carried from ``credit.py`` and the check in ``yield_estimator.py``).
+"""Credit: the monitor's information credit, computed from the check rows the Episode holds.
 
-Credit kind ``monitoring``: the monitor's own ``ProgressInformationCredit`` (newly informative received progress
-snapshots times ``information_unit``) over the assignment's known baseline. ``credit`` has no services, so the
-progress reader of the old projector is a reader over the snapshots the summary holds: the baseline snapshots the
-commissioner passed, those this episode's observe tool returned in its outcomes and those its dependency monitors
-returned. A reference without a snapshot there would have been read from the old progress provider: that read
-raises where it is needed (BLOCKED-ON-JOB-SERVICE). The old estimator's rule that monitoring information credit
-cannot decrease lives here. Credit is never bounded, clamped or rescaled.
-"""
-from __future__ import annotations
+Carried from the old ``credit.py`` (``MonitorEpisodeCredit``: credit kind ``monitoring``; one explicit information
+unit per newly informative received progress snapshot, over the assignment's original baseline). The progress is
+now the check rows of the job ledger in the Episode's custody: those its own check units wrote and those its
+dependency monitors returned, in receipt order, over the baseline of check rows the commissioner passed. A check
+that shows no fact the earlier ones do not show earns nothing; neither do a re-read, a log window, a wait,
+timestamps, the elapsed time of an unfinished job or the size of its logs. Never bounded, clamped or rescaled.
 
-from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.progress_information_credit import ProgressInformationCredit
-
-
-class SummaryProgress:
-    """The ``read_progress(reference, scope)`` the projector calls, answered from the summary's snapshots."""
-
-    def __init__(self, snapshots):
-        self.snapshots = snapshots
-
-    def read_progress(self, reference, scope=None):
-        if reference not in self.snapshots:
-            raise NotImplementedError(
-                'BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ctx.services[\'job_access\'].read_progress('
-                + repr(reference) + ') for a progress observation received without its snapshot (credit and the '
-                'summary have no services)')
-        return {**self.snapshots[reference], 'progress_ref': reference}
-
-
-def checked_increment(previous, current):
-    """The old estimator's rule: monitoring information credit cannot decrease."""
-    if current < previous:
-        raise ValueError('monitor_information_credit_cannot_decrease')
-    return current
+``credit`` is handed no service: it reads the rows through ``records``. The count is
+``job_progress.progress_information`` with this episode's baseline, fields and unit. The old estimator's refusal of
+a decreasing credit is not carried: held rows are never taken away from a unit that completed."""
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_progress import progress_information
 
 
 def credit(summary, records):
-    projector = ProgressInformationCredit(SummaryProgress(summary['progress_snapshots']),
-                                          information_unit=summary['information_unit'])
-    refs = summary['received_progress_refs']
-
-    def over(received):
-        return projector(summary['scope'], initial_progress_refs=summary['known_progress_refs'],
-                         known_progress_refs=received)['credit']
-
-    current = over(refs)
-    previous = over(refs[:-1]) if refs else current
-    return checked_increment(previous, current)
+    return progress_information(records, summary['known_progress_refs'], summary['requested_fields'],
+                                summary['information_unit'])['credit']

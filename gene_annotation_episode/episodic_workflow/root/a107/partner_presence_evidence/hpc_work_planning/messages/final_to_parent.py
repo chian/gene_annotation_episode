@@ -1,60 +1,54 @@
-"""What this episode returns to its parent. ``credit`` is the Episode's credit as its controller last saw it
-(``completion['credit']``) and ``finding`` is the HPC work against the commission; both are always returned. The
-selectable facts are ``hpc_credit`` (signed measured credit, the same number as ``credit``; repeated polling adds
-none), ``hpc_model_ref`` (the immutable selected prediction model), ``hpc_accepted_obligations`` (original obligations
-with accepted actual results), ``hpc_result_refs`` (the sources holding the original result bytes, restricted to those
-this episode holds) and ``hpc_result_artifact_refs`` (the artifact of each result source: a returned source does not
-bring the artifact it names)."""
+"""What this episode returns to the evidence head that commissioned it: controlled data only.
+
+The head's next decision is whether the HPC work was productive (its ``credit``, and the trend of it over
+commissions) and what it may now use. ``finding`` says in counts what the commission has reached: the obligations
+with and without an accepted actual result, the plans frozen, handed off and closed, the result sources held, and
+how often each sister was commissioned. ``hpc_ledger_refs`` are the rows of the HPC ledger this Episode holds (its
+own, and those its sisters returned) with the records they name: the head holds the ledger in custody and passes
+it back (``received_record_refs``) when it commissions the HPC work of this commission again, so that a job left
+outstanding is found. Selectable: ``hpc_result_refs`` (the sources holding the original result bytes) and
+``hpc_result_artifact_refs`` (the artifact of each: a returned source does not bring the artifact it names).
+
+Not returned, because a reference or the credit already says it: the old ``hpc_credit`` (it restated the credit),
+``hpc_model_ref`` and ``hpc_accepted_obligations`` (rows of the returned ledger), the credit by component and the
+explanatory ``qualification`` text."""
 from method_loop import Field, RecordForm
 
 FINDING_FORM = RecordForm({
-    'accepted_obligations': Field('list', 'The original obligations with accepted actual results'),
-    'remaining_obligations': Field('list', 'The original obligations without an accepted actual result'),
-    'model_ref': Field('text', 'The immutable identity of the selected prediction model'),
-    'plans_frozen': Field('integer', 'How many portfolios were frozen into plans'),
+    'accepted_obligations': Field('integer', 'How many original obligations have an accepted actual result'),
+    'remaining_obligations': Field('integer', 'How many original obligations have no accepted actual result'),
+    'plans_frozen': Field('integer', 'How many portfolios are frozen into plans'),
+    'plans_handed_off': Field('integer', 'How many frozen plans have their launch handoff attached'),
     'plans_closed': Field('integer', 'How many frozen plans are closed (their allocation finished)'),
-    'results_published': Field('integer', 'How many original result sources this episode holds'),
-    'credit_components': Field('record', 'The ledger credit by component: actual, model and validation'),
-    'qualification': Field('text', 'What the finding does and does not establish'),
+    'results_held': Field('integer', 'How many original result sources this episode holds'),
+    'prediction_commissions': Field('integer', 'How often the prediction sister was commissioned'),
+    'execution_commissions': Field('integer', 'How often the allocation-execution sister was commissioned'),
 })
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
-    'finding': Field('record', 'What the HPC work accomplished against the commission', form=FINDING_FORM),
-    'hpc_credit': Field('number', 'Signed measured credit; repeated polling adds none', required=False),
-    'hpc_model_ref': Field('text', 'Immutable selected prediction model identity', required=False),
-    'hpc_accepted_obligations': Field('list', 'Original obligations with accepted actual results',
-                                      required=False),
+    'finding': Field('record', 'What the HPC work accomplished against the commission, in counts',
+                     form=FINDING_FORM),
+    'hpc_ledger_refs': Field('record_refs', 'The rows of the HPC ledger this Episode holds and the records they '
+                                            'name; the commission row names the ledger'),
     'hpc_result_refs': Field('record_refs', 'Sources containing original result bytes and attempt custody',
                              required=False),
     'hpc_result_artifact_refs': Field('record_refs', 'The artifact of each source named in hpc_result_refs (a '
-                                      'returned record does not bring the records it names; new field)',
-                                      required=False),
+                                      'returned record does not bring the records it names)', required=False),
 })
-
-_QUALIFICATION = ('Credit is the ledger\'s: accepted accomplishment, model improvement and validated forecasts only. '
-                  'A plan whose allocation is not closed has no accepted result yet, and completion of a unit is '
-                  'not acceptance.')
-
-
-def facts(summary, completion):
-    """The recorded facts, from the summary (what the ledger showed after the last tool, or what
-    the sister commissioned last returned about it)."""
-    return {'hpc_credit': completion['credit'], 'hpc_model_ref': summary['hpc_model_ref'],
-            'hpc_accepted_obligations': list(summary['hpc_accepted_obligations']),
-            'hpc_result_refs': list(summary['result_refs']),
-            'hpc_result_artifact_refs': list(summary['result_artifact_refs'])}
 
 
 def final_to_parent(summary, completion, selection):
-    recorded = facts(summary, completion)
-    view = summary['ledger_view']
-    accepted = recorded['hpc_accepted_obligations']
-    closed = [plan for plan in view['plans'] if plan['closed']]
+    view, state = summary['ledger_view'], summary['ledger_state']
+    accepted = len(state['accepted_obligations'])
     finding = {'accepted_obligations': accepted,
-               'remaining_obligations': sorted(set(view['commission']['obligations']) - set(accepted)),
-               'model_ref': recorded['hpc_model_ref'],
-               'plans_frozen': len(view['plans']), 'plans_closed': len(closed),
-               'results_published': len(summary['result_refs']),
-               'credit_components': dict(view['credit']['components']), 'qualification': _QUALIFICATION}
-    result = {'credit': completion['credit'], 'finding': finding, **{name: recorded[name] for name in selection}}
-    return result
+               'remaining_obligations': len(view['commission']['obligations']) - accepted,
+               'plans_frozen': len(view['plans']),
+               'plans_handed_off': sum(plan['handed_off'] for plan in view['plans']),
+               'plans_closed': sum(plan['closed'] for plan in view['plans']),
+               'results_held': len(summary['result_refs']),
+               'prediction_commissions': len(summary['predictions']),
+               'execution_commissions': len(summary['executions'])}
+    selectable = {'hpc_result_refs': list(summary['result_refs']),
+                  'hpc_result_artifact_refs': list(summary['result_artifact_refs'])}
+    return {'credit': completion['credit'], 'finding': finding, 'hpc_ledger_refs': list(view['ledger_refs']),
+            **{name: selectable[name] for name in selection}}

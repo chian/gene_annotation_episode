@@ -10,8 +10,8 @@ not send (each a "new field" in the carry-over record): ``record_refs`` (the rec
 here: a pass carries only the records named), ``handoff_unit`` and ``acquired_record_unit`` (from the settings, via
 the ``ChildCall`` arguments) and ``received_handoff_resources`` (the resource of a plan whose handoff this episode
 already holds). ``hpc_execution_job`` is what the old ``LaunchPreparation.initial_decision_context`` gave the launch
-side at its first decision: plan id, objective, the frozen scientific manifest, the acceptance predicates, the local
-input file holding the plan (``hpc_plan`` wrote it), the coordinator workspace and the instruction that reference
+side at its first decision: plan id, objective, the frozen scientific manifest, the acceptance predicates, the
+launch input (the artifact holding the plan, which the ledger names and ``record_refs`` passes) and the instruction that reference
 files are inputs and not a required procedure. It has no field of the child's assignment form, so it rides in the
 message. The old report-contract declaration, the receipt inheritance and the comparison of the launch with the
 plan's ledger rows (``authenticate_launch``: one reservation per plan, none after the plan is closed) are old-runner
@@ -40,11 +40,11 @@ def msg_to_child(slot, arguments, summary):
                                           if item['plan_ref'] == plan['plan_ref']) else []
         job = {'plan_id': plan['plan_id'], 'objective': view['commission']['objective'],
                'scientific_manifest': plan['manifest'], 'scientific_acceptance': view['commission']['obligations'],
-               'supplied_input_file': plan['supplied_input_file'],
-               'coordinator_workspace': view['coordinator_workspace'], 'instructions': LAUNCH_JOB_INSTRUCTIONS}
+               'launch_input_ref': plan['launch_input_ref'], 'instructions': LAUNCH_JOB_INSTRUCTIONS}
         assignment = {'version': launch['version'], 'requests': launch['requests'],
                       'immutable_input_versions': launch['immutable_input_versions'],
-                      'constraints': launch['constraints'], 'record_refs': list(summary['input_refs']),
+                      'constraints': launch['constraints'],
+                      'record_refs': [*summary['input_refs'], plan['launch_input_ref']],
                       'handoff_unit': arguments['handoff_unit'],
                       'acquired_record_unit': arguments['acquired_record_unit'],
                       'received_handoff_resources': handed_off}
