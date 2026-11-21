@@ -115,3 +115,60 @@ Target: E. coli RecA (P0A7G6), 353 residues (`runs/a101_goal12_ws_reca/target.fa
    "DNA repair protein RadA", "DNA repair protein RAD51 homolog"), the leading candidates with mean B above 0.8.
 3. Credit: the sum of the candidates' entry values (tens, below the ceiling 1000); one unit; ceiling after it 0; the head ends by its
    estimator with `outstanding_handoff_count` 0. The Foldseek duration observed: tens of seconds (CspA: 16.7 s). No custody error.
+
+## What happened (real runs, 2026-11-21, worktree `gae_a102_24c08fa33`, commit `24c08fa33`)
+
+Runs used: 3 of 5 (1 failed at the start, CspA 2, RecA 3). Foldseek tickets: 0 (run 1), 1 (CspA), 1 (RecA).
+
+* Run 1 `runs/a102_head_ws_cspa_1`, run dir `runs/a102_head_run_cspa_1`: `ValueError scientific_yield_credit_definition_mismatch`. The continuation
+  file's `credit_definition` was written by importing the head's `A102DifferentialCredit` from the MAIN checkout, where the other agent had since
+  changed `differential_credit.SHEET_WEIGHT`; the pinned worktree's record differed. Fix: the workspace builder imports from the pinned worktree
+  (not a code defect of the head). No model call, no ticket.
+* Run 2 CspA, `runs/a102_head_ws_cspa_2` (journal `journal_cspa.sqlite3`, run dir `runs/a102_head_run_cspa_2`), run id `a102_head_cspa_2`, ended by
+  `yield_stop` after 1 unit, 6 model calls, credit 39.3438, `outstanding_handoff_count` 0.
+* Run 3 RecA, `runs/a102_head_ws_reca_3` (run id `a102_head_reca_3`, run dir `runs/a102_head_run_reca_3`), 1 unit, 6 model calls, credit 6.2504.
+
+### CspA: predicted against observed
+
+1. Prediction: child's model picks `get_model` `alphafold_db`. OBSERVED otherwise: it picked `esmfold` (70 residues, mean pLDDT 88.54, no accession); the
+   rest as predicted (estimate 10 s `no_earlier_measurement`, launch, monitor 9 s, extract). One head unit `structure_search` (`until` extracted).
+2. Prediction: 976 hits, own entry a control, about 130 candidates, CspG/CapB/CspC leading, CspA about 0.90. OBSERVED: 754 hits (the ESMFold model has
+   another shape from the AlphaFold one), `control_count` 0 (an ESMFold model is no entry of the database), 135 candidates, 8 naming batches, all 754
+   named. Leading 10 (score): Probable cold shock protein A 0.9295; Cold shock protein CspC 0.9013; Cold shock-like protein CspC 0.8974; Cold
+   shock-like protein CspLA 0.8971; Cold shock protein CspD 0.8880; Cold shock protein 0.8811; Cold shock-like protein CspLB 0.8795; Cold shock protein
+   ScoF 0.8727; Cold shock-like protein CspE 0.8667; Cold shock protein CspB 0.8587. All in the cold shock family; CspG and CapB were not first (the
+   numbers of the prediction were those of the AlphaFold model).
+3. Prediction: credit 41.41 = the sum of the entry values. OBSERVED 39.3438 (the sum for these 135 candidates; one test, no differential); the
+   journal: offered ceiling 1000.0, chosen ceiling 1000.0, rise 39.3438 (below the ceiling).
+4. Prediction: after the unit the ceiling is 0, nothing is worth its cost, the head ends by its estimator. OBSERVED: the controller step rows show
+   `structure_search` ceiling 0.0, forecast 0.0, expected seconds 125.74 (the unit's measured seconds), threshold 0.7544 (= 125.74 x 0.006), worth false,
+   `decision_basis` `no_offered_action_forecast_exceeds_expected_seconds_times_exchange_rate_and_no_started_work_to_finish`; `outstanding_handoff_count` 0.
+5. Prediction: no custody error. OBSERVED: none; every record list the child returned was held by the head (the head's summary read the job rows and
+   the graded sheet after the child returned, and the closed lists went to the root form).
+
+The ledger: the head's row `structural_homology_evidence:structure_search` (forecast 500.0 = share 1/2 x ceiling 1000; no expected seconds; gain
+39.3438; unit seconds 125.74; outcome finished) and the Foldseek job row (estimate 10 s `no_earlier_measurement`; the observed duration 16.74 s,
+`duration_source` `first_status_showing_the_end`; the ticket carries no task times).
+
+### RecA: predicted against observed
+
+1. One head unit, then a yield stop: as predicted. The child's model picked `alphafold_db` this time: AlphaFold DB model, 353 residues, mean pLDDT 91.38;
+   the estimate was `learned_from_earlier_jobs` 16.7 s (the CspA job); the job took 24.34 s observed.
+2. Prediction: close to 1000 hits, RecA and RadA/Rad51-like recombinases dominate with mean B above 0.8. OBSERVED: exactly 1000 hits (the cap),
+   `control_count` 1, 9 naming batches (899 named, 100 not asked: the naming settled), only 18 candidates; the leading are RecA products and
+   homologs, with mean B 0.61 down to 0.33: Protein RecA 2 0.6147; Protein RecA 0.6126; Protein RecA 1 0.5486; Mitochondrial DNA repair protein recA
+   homolog 0.5346; DNA repair protein recA homolog 3, mitochondrial 0.5142; Protein RecA, plasmid 0.5007; DNA repair protein recA homolog 1,
+   chloroplastic 0.4786; DNA repair protein recA homolog 2, mitochondrial 0.4445; Protein RecA, chromosomal 0.4401; Putative DNA repair protein recA
+   homolog 4 0.3266. NOT as predicted: no RadA/Rad51-named candidate among the 18, and the B values are lower than 0.8 (the target is 353
+   residues and a hit's B is divided by the target length plus the hit length, so partial matches score low).
+3. Credit 6.2504 (below the ceiling 1000; the ceiling after the unit 0, threshold 1.3037 = 217.28 s x 0.006); `outstanding_handoff_count` 0; no custody error.
+
+The cap: the RecA search returned exactly 1000 hits, the `--max-seqs` default, which supports the bound `HIT_BOUND` = 1000 (it is reached, not
+exceeded).
+
+## Not exercised
+
+`until` `launched` (a parked job and `resume_action`), the resume commission, a passed model (`model_refs` with its artifact), a refused
+commission (a repeat) through the model, `fix` and a failed launch, the second database, a non-protein target. The exchange rate 0.006 is A101's
+and was not re-derived: the two head rows so far (CspA: gain 39.34 over 125.7 s = 0.313 per second; RecA: 6.25 over 217.3 s = 0.029 per second) are
+far above 0.006 per second, so it never stopped a first search; with one database the rate decides nothing yet.
