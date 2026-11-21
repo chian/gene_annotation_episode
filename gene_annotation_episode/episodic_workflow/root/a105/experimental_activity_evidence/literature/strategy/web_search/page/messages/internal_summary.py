@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
     representation_content)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_claim import (
-    PARTNER_VALUE_TYPES, claim_of_hypothesis)
+    PARTNER_VALUE_TYPES, claim_of_hypothesis, record_name)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_page_content import (
     CHUNK_SIZE, PROSE_CHUNK, SOURCE_TABLE, TABLE_PREVIEW_CHARS, candidate_text, information_needs, page_candidates,
     planner_context, report_windows)
@@ -71,7 +71,7 @@ def commission_claim(records, proposed):
     refs = list(hypothesis['subject_refs'])
     if hypothesis['value']['type'] in PARTNER_VALUE_TYPES:
         refs.append(hypothesis['value']['ref'])
-    return claim_of_hypothesis(hypothesis, {ref: records.get(ref)['label'] for ref in refs})
+    return claim_of_hypothesis(hypothesis, {ref: record_name(records.get(ref)) for ref in refs})
 
 
 def consumed_candidates(children, candidates, records):

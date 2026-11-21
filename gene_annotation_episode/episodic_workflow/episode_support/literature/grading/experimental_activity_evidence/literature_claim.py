@@ -50,6 +50,17 @@ def validate_claim(claim):
     return claim
 
 
+# Where each record type a hypothesis can point at keeps the molecule's name: a term or reference record in its
+# 'label', a caller's registered input (``init``: the FASTA record's own name) in its 'name'. A record of another type
+# is not a molecule of a claim and raises.
+RECORD_NAME_FIELD = {'term': 'label', 'reference': 'label', 'input': 'name'}
+
+
+def record_name(record):
+    """The molecule name a claim takes from ``record`` (a term, reference or input record)."""
+    return record[RECORD_NAME_FIELD[record['record_type']]]
+
+
 def _name_of(ref, names, role):
     if ref not in names:
         raise ValueError(f'the {role} record {ref!r} has no name in ``names``')

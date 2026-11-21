@@ -44,7 +44,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
     assess_page_content, page_candidates)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.jev_client import JevDecisionClient
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_claim import (
-    PARTNER_VALUE_TYPES, claim_of_hypothesis)
+    PARTNER_VALUE_TYPES, claim_of_hypothesis, record_name)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_identity import (
     finalize_grader, group_leaf_records)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_page_update import (
@@ -481,13 +481,13 @@ async def reason(arguments, ctx):
 
 def hypothesis_claim(store, hypothesis_ref):
     """The claim (predicate, subject, partner) of the commissioned hypothesis record, with the names read from the
-    records it points at (term and reference records carry their ``label``). A hypothesis that is no claim
-    (``literature_claim``) raises: the commission is wrong."""
+    records it points at (``literature_claim.record_name``: a term or reference record's label, a caller's registered
+    input's name). A hypothesis that is no claim (``literature_claim``) raises: the commission is wrong."""
     hypothesis = store.get(hypothesis_ref)
     refs = list(hypothesis['subject_refs'])
     if hypothesis['value']['type'] in PARTNER_VALUE_TYPES:
         refs.append(hypothesis['value']['ref'])
-    return claim_of_hypothesis(hypothesis, {ref: store.get(ref)['label'] for ref in refs})
+    return claim_of_hypothesis(hypothesis, {ref: record_name(store.get(ref)) for ref in refs})
 
 
 def prior_sheet_state(store, state_refs):
