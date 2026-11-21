@@ -57,7 +57,7 @@ def test_the_first_unit_opens_the_ledger_and_the_model_is_then_asked_with_the_le
 
 
 def test_fitting_the_measured_cases_earns_the_measured_improvement_and_a_bad_selection_is_an_invalid_unit(tmp_path):
-    world = hpc_world.world(tmp_path, [PATH], transport='local_shell', cost=0.0)
+    world = hpc_world.world(tmp_path, [PATH], transport='local_shell')
     run = linked(world)
     asyncio.run(run.run_unit(asyncio.run(run.next_decision())))
     refused = step(run, 'hpc_model_fit', training_ids=['case_1', 'case_7'])        # a validation case
@@ -85,7 +85,7 @@ def test_fitting_the_measured_cases_earns_the_measured_improvement_and_a_bad_sel
 
 
 def test_the_resource_is_reached_only_through_job_access_and_what_it_cannot_answer_is_a_returned_outcome(tmp_path):
-    world = hpc_world.world(tmp_path, [PATH], transport='local_shell', cost=0.0)
+    world = hpc_world.world(tmp_path, [PATH], transport='local_shell')
     run = linked(world)
     asyncio.run(run.run_unit(asyncio.run(run.next_decision())))
     # The command runs once on the route (a local shell here); the project directory does not exist on this machine.

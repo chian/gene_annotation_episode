@@ -4,9 +4,9 @@ returned None: the old runner's generic controller governed it). The credit is s
 is the accumulation controller (README 7b, old ``numerical.YieldController``). The cost is the old cutoff, now the
 episode's setting; ``parameters`` are its estimator settings. ``parent_input`` is not needed to build it (the unit of
 credit is in ``credit.py``). The old ``waiting.supports_wait = False`` has no counterpart: the system has no wait."""
-from yield_control import AccumulationYieldController
+from yield_control import ADAPTIVE_CONTROL, AccumulationYieldController
 
 
 def yield_controller(initial_credit, settings, parent_input):
-    return AccumulationYieldController('evidence_search_strategy_improvement', initial_credit, settings['cost'],
-                                       settings['parameters'])
+    return AccumulationYieldController('evidence_search_strategy_improvement', initial_credit, ADAPTIVE_CONTROL,
+                                       items=None)

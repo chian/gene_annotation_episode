@@ -9,6 +9,8 @@ The root-only ``reference_evidence_parent`` context is not
 this episode's."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.perturbation_evidence.literature_a106_findings import (
     own_findings)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.perturbation_evidence.literature_input_spans import (
+    consumed_and_remaining)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_population_route import (
     opened_population)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
@@ -35,7 +37,12 @@ def internal_summary(view):
               and last['outcome'].get('status') == 'completed' else [])
     assignment = {'version': 'reading_assignment_v1', 'page': page, 'selection': parent['selection'],
                   'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref']}
+    # The input list (nano-graphrag's processed chunk / row ids): the spans of the selected region (bytes of a window,
+    # matching rows of a table selection) still to be processed, in document order; a span is consumed once it has been
+    # read and a reasoning commit has completed after the read.
+    consumed, input_list = consumed_and_remaining(parent['selection'], outcomes)
     summary = {
+        'input_list': input_list, 'consumed_inputs': consumed,
         'literature_assignment': assignment,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],

@@ -30,7 +30,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
 from gene_annotation_episode.episodic_workflow.episode_support.readers.partner_presence_evidence.source_bytes import (
-    source_window)
+    source_window, source_window_selection)
+from gene_annotation_episode.episodic_workflow.episode_support.readers.partner_presence_evidence.source_windows import (
+    intersects)
 from gene_annotation_episode.episodic_workflow.episode_support.readers.partner_presence_evidence.source_locations import (
     locate, locate_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import (
@@ -204,10 +206,36 @@ def decide(summary, feedback, ctx):
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
                'partner_sheets': summary['partner_sheets'],
+               'input_list': summary['input_list'], 'input_representation': summary['input_representation'],
+               'input_list_meaning': INPUT_LIST_MEANING,
                'latest_failed_population': summary['literature_selected_population_attempt'],
                'action_yields': summary['action_yields'], 'feedback': feedback,
                'tools': list(offered().values()), 'time_accounting': time_accounting(ctx.clock.progress_time)}
     return ModelRequest('REASONING', instructions(summary['partner_requested']), context, output_schema())
+
+
+INPUT_LIST_MEANING = ('The unread byte windows [start, end] of the assigned source representation, in document order. '
+                      'A source_read of bytes consumes them: they are not offered again and a read of the page source '
+                      'that touches no unread window is refused. Locating a quote and grading consume nothing.')
+
+
+def refuse_consumed_read(arguments, summary, records):
+    """A ``source_read`` of the page's source in the listed representation must touch an unread window of the input
+    list. A read of another representation or of a derived source consumes nothing and is not restricted here; the
+    tool still checks the source. A refused read is not a unit."""
+    source_ref = summary['literature_assignment']['page']['source_ref']
+    if arguments.get('source_ref') != source_ref or not records.holds(source_ref):
+        return
+    try:
+        representation = source_window_selection(records.get(source_ref), arguments.get('representation', 'text'))[1]
+    except ContractError:
+        return
+    offset, limit = arguments.get('offset', 0), arguments.get('limit', 12000)
+    if representation != summary['input_representation'] or type(offset) is not int or type(limit) is not int:
+        return
+    if not intersects(summary['input_list'], offset, limit):
+        raise Rejected(rejection_feedback(ValueError('source_read_window_already_consumed'),
+                                          category='action_contract'))
 
 
 def action(response, summary, records, ctx):
@@ -223,5 +251,7 @@ def action(response, summary, records, ctx):
             raise ValueError('arguments_json_must_be_a_JSON_object')
     except (KeyError, TypeError, ValueError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
+    if name == 'source_read':
+        refuse_consumed_read(arguments, summary, records)
     return ToolCall(name, {'arguments': arguments, 'scope': summary['scope'],
                            'page_source_ref': summary['literature_assignment']['page']['source_ref']})

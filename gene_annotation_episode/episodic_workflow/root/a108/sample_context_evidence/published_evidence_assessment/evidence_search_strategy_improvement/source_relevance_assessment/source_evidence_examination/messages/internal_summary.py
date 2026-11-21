@@ -25,6 +25,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
     merged_findings, own_cell_refs, own_findings, screening_return)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_context_findings import (
     assessment_basis)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
+    representation_content)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_page_content import (
+    PROSE_CHUNK, SOURCE_TABLE, TABLE_PREVIEW_CHARS, candidate_text, page_candidates)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.domain import (
@@ -45,6 +49,36 @@ GRADING_NAMESPACE = 'literature_a108_grading_cells'
 AGGREGATION_NAMESPACE = 'literature_a108_aggregation_cells'
 POPULATION_TOOLS = ('literature_a108_grading_populate', 'literature_a108_aggregate')
 FAILED = ('invalid', 'failed', 'error')
+
+# The page's input list (nano-graphrag's page: ``PageRunState.processed_chunk_ids`` / ``remaining_chunks``): the
+# candidate input units of the commissioned representation (table regions and prose chunks, UTF-8 byte offsets, library
+# ``page_candidates``). A candidate lying inside a window a child was commissioned with is consumed and offered no more;
+# ``input_list`` is the unconsumed candidate ids in document order and the episode's yield estimator stops when it is
+# empty. A representation that is not UTF-8 text (a workbook, a PDF, an image) has no text candidates: its basis is
+# ``not_utf8``, its list is empty and its children keep their window / workbook selections (nothing to consume).
+TEXT_BASIS, BINARY_BASIS = 'text', 'not_utf8'
+
+
+def handed_windows(selection, page):
+    """The byte windows of the page's own source and representation a child commission handed out: the one window of a
+    window selection, every span of a ``spans`` selection; a workbook table selection (``sheet_key``) addresses rows,
+    not bytes, and hands out none; a window of another source or representation is not a window of this page."""
+    if 'sheet_key' in selection:
+        return []
+    windows = selection['spans'] if 'spans' in selection else [selection]
+    return [(window['offset'], window['offset'] + window['limit']) for window in windows
+            if window['source_ref'] == page['source_ref'] and window['representation'] == page['representation']]
+
+
+def consumed_candidates(children, candidates, page):
+    """The candidate ids the commissioned children were handed, in the order handed (nano-graphrag
+    ``processed_chunk_ids`` and ``selected_source_table_ids``): every candidate lying inside a handed window."""
+    consumed = []
+    for outcome in children:
+        for start, end in handed_windows(outcome['arguments']['selection'], page):
+            consumed.extend(candidate['candidate_id'] for candidate in candidates
+                            if start <= candidate['start'] and candidate['end'] <= end)
+    return list(dict.fromkeys(consumed))
 
 
 def completed(outcome):
@@ -125,7 +159,27 @@ def internal_summary(view):
     assignment = {**page, 'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref'],
                   **{name: parent[name] for name in (REQUESTED_GRADING, REQUESTED_AGGREGATION) if parent[name]}}
     binding = credit_binding(parent['task_key'], task)
+    content = representation_content(records, page['source_ref'], page['representation'])
+    try:
+        candidates, basis = page_candidates(content), TEXT_BASIS
+    except UnicodeDecodeError:
+        candidates, basis = [], BINARY_BASIS
+    consumed = consumed_candidates([outcome for outcome in view.outcomes if outcome['kind'] == 'child'],
+                                   candidates, page)
+    unconsumed = [candidate for candidate in candidates if candidate['candidate_id'] not in consumed]
     summary = {
+        'input_list': [candidate['candidate_id'] for candidate in unconsumed],
+        'input_list_basis': basis,
+        'content_candidates': candidates,
+        'consumed_candidate_ids': consumed,
+        'unconsumed_candidates': unconsumed,
+        'unconsumed_candidate_ids': [candidate['candidate_id'] for candidate in unconsumed],
+        'unconsumed_table_ids': [candidate['candidate_id'] for candidate in unconsumed
+                                 if candidate['candidate_type'] == SOURCE_TABLE],
+        'unconsumed_chunk_ids': [candidate['candidate_id'] for candidate in unconsumed
+                                 if candidate['candidate_type'] == PROSE_CHUNK],
+        'table_previews': {candidate['candidate_id']: candidate_text(content, candidate)[:TABLE_PREVIEW_CHARS]
+                           for candidate in unconsumed if candidate['candidate_type'] == SOURCE_TABLE},
         'literature_assignment': assignment,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],

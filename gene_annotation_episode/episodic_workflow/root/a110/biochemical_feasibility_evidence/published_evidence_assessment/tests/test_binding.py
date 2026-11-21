@@ -109,8 +109,11 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reaction_grad
     assert names[-2:] == ['literature_reaction_populate', 'literature_reaction_source_populate']
     assert {'public_literature_search', 'public_pmc_asset', 'public_brenda_graph_search'} <= set(names)
     assert 'reason' not in names and set(names) <= set(EPISODE.tools)
-    schema = task.selection_schema(names)
+    schema = task.selection_schema(names, ['src_1'])
     assert len(schema['properties']['selection']['anyOf']) == len(names) + 1
+    child = schema['properties']['selection']['anyOf'][-1]['properties']['arguments']
+    assert child['properties']['prior_search_refs']['items'] == {'enum': ['src_1']}
+    assert len(task.selection_schema(names, [])['properties']['selection']['anyOf']) == len(names)
     assert 'execution_estimate' in task.offered({'tool_registry': {'native_statistics': object()}})
 
 
@@ -150,6 +153,25 @@ def test_an_answer_that_selects_nothing_is_rejected_and_a_commission_naming_an_u
     call = EPISODE.action({'selection': {'kind': 'child', 'slot': CHILD, 'arguments': {
         'question_context_refs': ['context_' + 'a' * 24], 'prior_search_refs': []}}}, {'scope': {}}, None, Context())
     assert isinstance(call, ChildCall) and call.slot == CHILD
+
+
+def test_the_input_list_shrinks_as_sources_are_handed_out_or_read():
+    module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+
+    class Records:
+        def get(self, ref):
+            return {'record_type': 'source' if ref.startswith('src') else 'artifact'}
+
+    tool = {'kind': 'tool', 'tool': 'source_read', 'outcome': {'status': 'completed'},
+            'arguments': {'arguments': {'source_ref': 'src_1'}, 'scope': {}}, 'produced': []}
+    acquire = {'kind': 'tool', 'tool': 'public_literature_search', 'outcome': {'status': 'completed'},
+               'arguments': {'arguments': {'query': 'q'}, 'scope': {}}, 'produced': ['src_3', 'art_3']}
+    child = {'kind': 'child', 'slot': CHILD, 'arguments': {'prior_search_refs': ['src_3']}}
+    assignment = {'source_refs': ['src_1', 'src_2']}
+    assert module.work_sources(assignment, [acquire], Records()) == ['src_1', 'src_2', 'src_3']
+    assert module.consumed_inputs([]) == []
+    assert module.consumed_inputs([tool, acquire]) == ['src_1']
+    assert module.consumed_inputs([tool, acquire, child]) == ['src_1', 'src_3']
 
 
 def test_the_yield_controller_is_the_accumulation_controller_built_from_the_settings():

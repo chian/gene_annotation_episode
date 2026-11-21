@@ -215,7 +215,9 @@ RETURN_GUIDANCE = ('What returns to your parent is your credit and the features 
                    'values, statuses and missing reasons, counts, fixed values and record references); no prose is '
                    'returned. Selecting a tool or a child does not end your work: only the numerical controller '
                    'does.\n')
-TAIL_GUIDANCE = ('\nSelect a source examination as a child when a returned source may merit one; what it returns '
+TAIL_GUIDANCE = ('\nYour input list (input_list) is the returned sources not yet examined; a source handed to an '
+                 'examination is consumed and no longer offered. Select a source examination as a child when a '
+                 'source of the input list may merit one; what it returns '
                  '(its credit and the controlled features of its findings) is shown to you as examinations. Select '
                  'literature_reaction_populate or '
                  'literature_reaction_source_populate when a source you hold supplies the measured ratios, '
@@ -262,17 +264,22 @@ def catalog(names):
     return entries
 
 
-def child_catalog():
-    return [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot], 'input_schema': CHILD_ARGUMENTS[slot]}
-            for slot in CHILD_SLOTS]
+def child_catalog(summary):
+    """The children offered now: an examination takes ONE unconsumed item of the input list (``source_ref`` is an enum
+    of ``summary['input_list']``, so a consumed search result cannot be selected), and none is offered once the
+    list is empty (nano-graphrag ``PageChildProposer``: child options only for unconsumed inputs)."""
+    if not summary['input_list']:
+        return []
+    schema = {**PAGE, 'properties': {**PAGE['properties'], 'source_ref': {'enum': list(summary['input_list'])}}}
+    return [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot], 'input_schema': schema} for slot in CHILD_SLOTS]
 
 
-def selection_schema(names):
+def selection_schema(names, summary):
     """What the model answers with: one tool or one child and its arguments (the old action schema)."""
     options = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
                for entry in catalog(names)]
     options += [obj({'kind': {'const': 'child'}, 'slot': {'const': entry['slot']},
-                     'arguments': entry['input_schema']}) for entry in child_catalog()]
+                     'arguments': entry['input_schema']}) for entry in child_catalog(summary)]
     return obj({'selection': {'anyOf': options}})
 
 
@@ -493,14 +500,15 @@ def decide(summary, feedback, ctx):
                'visual_evidence': summary['visual_evidence'], 'last_local_outcome': summary['last_local_outcome'],
                'held_record_refs': summary['held_record_refs'], 'reaction_sheets': summary['reaction_sheets'],
                'investigation_finding': summary['investigation_finding'],
-               'tools': catalog(names), 'children': child_catalog(),
+               'input_list': summary['input_list'], 'consumed_input_ids': summary['consumed_input_ids'],
+               'tools': catalog(names), 'children': child_catalog(summary),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), family=summary['family']), context,
-                        strict_output_schema(selection_schema(names), open_records_as_text=False,
+                        strict_output_schema(selection_schema(names, summary), open_records_as_text=False,
                                              argument_transport_error=ARGUMENT_TRANSPORT_ERROR))
 
 
@@ -509,7 +517,7 @@ def action(response, summary, records, ctx):
     selects no offered tool or child, or arguments that do not fit its schema, is invalid. A commission naming a record this episode does not hold, or one the child does not
     admit, is not checked here: it fails with its own error."""
     names = offered(ctx.settings)
-    schema = selection_schema(names)
+    schema = selection_schema(names, summary)
     try:
         decoded = decode_strict_output(response, schema, open_records_as_text=False,
                                        argument_transport_error=ARGUMENT_TRANSPORT_ERROR)

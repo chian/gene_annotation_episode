@@ -20,6 +20,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
     ExperimentalContractError)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.biochemical_feasibility_evidence.literature_reaction_grader import (
     grader_instructions)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.biochemical_feasibility_evidence.literature_reading_windows import (
+    covered)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.biochemical_feasibility_evidence.literature_sequence_discovery import (
     references_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.biochemical_feasibility_evidence.literature_reaction_storage import (
@@ -391,6 +393,7 @@ def decide(summary, feedback, ctx):
     names = offered(ctx.settings)
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
+               'input_list': summary['input_list'], 'consumed_ranges': summary['consumed_ranges'],
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
@@ -431,6 +434,14 @@ def action(response, summary, records, ctx):
                                        argument_transport_error=ARGUMENT_TRANSPORT_ERROR)
         selection = validate_selection(decoded, schema)
         name, arguments = selection['tool'], selection['arguments']
+        if name == 'source_read':
+            # A consumed input is no longer offered: a read lying entirely inside text already read is refused.
+            page = summary['literature_assignment']['page']
+            start, limit = arguments.get('offset', 0), arguments.get('limit', 12000)
+            if (arguments['source_ref'] == page['source_ref']
+                    and arguments.get('representation', 'text') == page['representation']
+                    and covered(summary['consumed_ranges'], start, min(start + limit, summary['content_bytes']))):
+                raise ValueError('source_window_already_consumed:remaining_input_list_is_offered')
         if name == 'reason' and empty_commit(arguments['commit'], commit_schema):
             raise ValueError('empty_reasoning_commit')
     except (ValueError, KeyError, TypeError, ValidationError) as error:

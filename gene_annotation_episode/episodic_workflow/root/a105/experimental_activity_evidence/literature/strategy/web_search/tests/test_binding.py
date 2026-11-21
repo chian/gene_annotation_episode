@@ -143,8 +143,13 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_and
     assert {entry['name'] for entry in entries} <= set(EPISODE.tools)
     assert 'evidence_processing' in [entry for entry in entries if entry['name'] == 'reason'][0]['input_schema']['properties']
     for leads in (False, True):
-        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF)
+        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, ['src_1', 'src_2'])
         assert len(schema['properties']['selection']['anyOf']) == len(names) + len(task.CHILD_SLOTS)
+        child = schema['properties']['selection']['anyOf'][-1]
+        assert child['properties']['arguments']['properties']['page']['properties']['source_ref'] == {
+            'enum': ['src_1', 'src_2']}
+        empty = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, [])
+        assert len(empty['properties']['selection']['anyOf']) == len(names)
     assert set(task.CHILD_ARGUMENTS) == set(EPISODE.child_slots) == set(task.CHILD_SLOTS)
     assert len(task.POPULATIONS) == 35 and set(task.TOOL_NAMES.values()) == set(EPISODE.tools) - {'reason'}
     assert len(task.offered({'rate_population': True, **{name: True for name in FLAGS}})) == len(names) + 35

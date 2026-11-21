@@ -126,10 +126,10 @@ def test_the_model_is_offered_the_access_tools_the_graders_the_reasoning_and_the
     assert 'literature_a106_finalize' in opened and set(opened) <= set(EPISODE.tools)
     assert set(names) <= set(EPISODE.tools)
     for leads in (False, True):
-        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, NONE)
+        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, NONE, input_summary())
         assert len(schema['properties']['selection']['anyOf']) == len(names) + 3
         task.generation_schema(schema)
-    assert [entry['slot'] for entry in task.commissions()] == list(EPISODE.child_slots)
+    assert [entry['slot'] for entry in task.commissions(input_summary())] == list(EPISODE.child_slots)
     reason = [entry for entry in task.catalog(names, COMMIT_SCHEMA, True, NONE) if entry['name'] == 'reason'][0]
     assert 'source_lead' in reason['input_schema']['properties']
     assert 'source_lead' not in task.reason_schema(COMMIT_SCHEMA, False)['properties']
@@ -137,28 +137,48 @@ def test_the_model_is_offered_the_access_tools_the_graders_the_reasoning_and_the
     assert task.empty_commit({'terms': []}, COMMIT_SCHEMA) and not task.empty_commit({'terms': [{}]}, COMMIT_SCHEMA)
 
 
-WINDOW = {'source_ref': SRC, 'representation': 'original', 'offset': 0, 'limit': 100}
-TABLE = {'source_ref': SRC, 'sheet_key': 'rId1', 'representation': None, 'offset': 0, 'limit': 20,
-         'header_row': 1, 'where': {'column': None, 'match': 'contains', 'value': 'KO', 'case_sensitive': None}}
+def input_summary(consumed=()):
+    """The input-list part of the summary over a real source: a prose section, an HTML table and more prose; the
+    candidates ``consumed`` (ids) have been handed out."""
+    internal = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    content = (('Methods. ' + 'The knockout strain was grown in medium. ' * 80 + '\n') + '<table><tr><td>strain</td><td>growth</td></tr><tr><td>KO</td><td>1</td></tr></table>\n'
+               + ('Results. ' + 'Growth was reduced in the mutant. ' * 80)).encode('utf-8')
+    candidates = internal.page_candidates(content)
+    left = [item for item in candidates if item['candidate_id'] not in consumed]
+    return {'content_candidates': candidates, 'consumed_candidate_ids': list(consumed),
+            'unconsumed_table_ids': [i['candidate_id'] for i in left if i['candidate_type'] == internal.SOURCE_TABLE],
+            'unconsumed_chunk_ids': [i['candidate_id'] for i in left if i['candidate_type'] == internal.PROSE_CHUNK],
+            'report_windows': internal.report_windows(candidates, {item['candidate_id'] for item in left}),
+            'input_list': [item['candidate_id'] for item in left]}
+
+
+def commission_arguments(slot, summary):
+    table = summary['unconsumed_table_ids'][0]
+    return {'literature_table': {'candidate_id': table}, 'literature_ordered': {},
+            'literature_targeted': {'candidate_ids': [summary['unconsumed_chunk_ids'][0], table]}}[slot]
+
+
 COMMISSIONS = {
-    'literature_table': ('table_evidence_extraction', TABLE),
-    'literature_ordered': ('source_coverage_improvement', WINDOW),
-    'literature_targeted': ('passage_evidence_extraction', {'spans': [WINDOW]}),
+    'literature_table': 'table_evidence_extraction',
+    'literature_ordered': 'source_coverage_improvement',
+    'literature_targeted': 'passage_evidence_extraction',
 }
 
 
 @pytest.mark.parametrize('slot', sorted(COMMISSIONS))
 def test_each_commission_is_admitted_by_the_form_of_the_child_it_names(slot):
-    folder, selection = COMMISSIONS[slot]
+    folder = COMMISSIONS[slot]
     task = importlib.import_module(PACKAGE + '.task')
-    arguments = {'selection': selection}
+    held = input_summary()
+    arguments = commission_arguments(slot, held)
     task.validate_selection({'selection': {'kind': 'child', 'slot': slot, 'arguments': arguments}},
-                            task.selection_schema(task.offered(NONE, None), COMMIT_SCHEMA, True, NONE))
+                            task.selection_schema(task.offered(NONE, None), COMMIT_SCHEMA, True, NONE, held))
     summary = importlib.import_module(PACKAGE + '.messages.internal_summary')
     parent_input = EPISODE.read_from_parent(ASSIGNMENT, {})
     commission_summary = {'page': parent_input['page'], 'task': parent_input['task'],
                           'proposed_annotation_ref': parent_input['proposed_annotation_ref'],
-                          'scope': parent_input['scope'], 'received_record_refs': parent_input['received_record_refs']}
+                          'scope': parent_input['scope'], 'received_record_refs': parent_input['received_record_refs'],
+                          'content_candidates': held['content_candidates'], 'report_windows': held['report_windows']}
     assert summary.internal_summary is EPISODE.internal_summary
     message = EPISODE.msg_to_child(slot, ChildCall(slot, arguments).arguments, commission_summary)
     assert message.message == {} and message.objective == task_messages().OBJECTIVES[slot]
@@ -175,6 +195,40 @@ def test_each_commission_is_admitted_by_the_form_of_the_child_it_names(slot):
     selected.admit(returned, 'return')
     read = EPISODE.read_from_child(slot, returned, commission_summary, None)
     assert read == {'slot': slot, 'credit': 1.0, 'finding': EMPTY, 'lead_source_refs': [SRC]}
+
+
+def test_the_input_list_shrinks_as_candidates_are_handed_out_and_a_consumed_candidate_cannot_be_commissioned():
+    task = importlib.import_module(PACKAGE + '.task')
+    internal = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    held = input_summary()
+    table = held['unconsumed_table_ids'][0]
+    chunk = held['unconsumed_chunk_ids'][0]
+    parent_input = EPISODE.read_from_parent(ASSIGNMENT, {})
+    commission_summary = {**held, 'page': parent_input['page'], 'task': parent_input['task'],
+                          'proposed_annotation_ref': 'hyp_1', 'scope': parent_input['scope'],
+                          'received_record_refs': parent_input['received_record_refs']}
+    message = EPISODE.msg_to_child('literature_targeted', {'candidate_ids': [chunk, table]}, commission_summary)
+    outcome = {'kind': 'child', 'message': {'assignment': message.assignment}}
+    consumed = internal.consumed_candidates([outcome], held['content_candidates'])
+    assert set(consumed) == {chunk, table}
+    after = input_summary(consumed)
+    assert after['input_list'] == [item for item in held['input_list'] if item not in consumed]
+    assert chunk not in after['unconsumed_chunk_ids'] and after['unconsumed_table_ids'] == []
+    assert [entry['slot'] for entry in task.commissions(after)] == ['literature_ordered', 'literature_targeted']
+    with pytest.raises(Exception):
+        task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_table',
+                                               'arguments': {'candidate_id': table}}},
+                                task.selection_schema([], COMMIT_SCHEMA, False, NONE, after))
+    with pytest.raises(Exception):
+        task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_targeted',
+                                               'arguments': {'candidate_ids': [chunk]}}},
+                                task.selection_schema([], COMMIT_SCHEMA, False, NONE, after))
+    everything = input_summary([item['candidate_id'] for item in held['content_candidates']])
+    assert everything['input_list'] == [] and task.commissions(everything) == []
+    ordered = EPISODE.msg_to_child('literature_ordered', {}, commission_summary)
+    windows = internal.consumed_candidates([{'kind': 'child', 'message': {'assignment': ordered.assignment}}],
+                                           held['content_candidates'])
+    assert set(windows) == set(held['unconsumed_chunk_ids'][:len(windows)]) and windows
 
 
 def task_messages():

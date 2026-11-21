@@ -67,7 +67,6 @@ SERVICES = ()
 INTEGER = {'type': 'integer', 'minimum': 0}
 POSITIVE = {'type': 'integer', 'minimum': 1}
 TEXT = {'type': 'string', 'minLength': 1}
-REPRESENTATION = {'enum': ['text', 'original', 'stdout', 'stderr']}
 
 # The access tools of the old ``_ACCESS_TOOLS``; descriptions as the tool library states them.
 DESCRIPTIONS = {
@@ -154,34 +153,25 @@ INPUT_SCHEMAS = {
 INPUT_SCHEMAS['execution.estimate'] = {'anyOf': [
     obj({'tool': {'const': name}, 'arguments': INPUT_SCHEMAS[name]}) for name in ('source.xlsx.sheets', 'source.xlsx.rows')]}
 
-# The reading each investigation is commissioned with (the old ``_TABLE`` and ``_WINDOW`` of
-# ``source_contracts``). A table selection and a byte window are one record whose fields of the other shape are
-# null; ``msg_to_child`` drops the nulls, which is how the child's form takes the two shapes.
-WINDOW = obj({'source_ref': REF, 'representation': REPRESENTATION, 'offset': INTEGER, 'limit': POSITIVE})
-TABLE_OR_WINDOW = obj({
-    'source_ref': REF, 'sheet_key': {'type': ['string', 'null'], 'minLength': 1},
-    'representation': {'type': ['string', 'null'], 'enum': ['text', 'original', 'stdout', 'stderr', None]},
-    'offset': INTEGER, 'limit': INTEGER,
-    'header_row': {'type': ['integer', 'null'], 'minimum': 1},
-    'where': {**obj({'column': {'type': ['string', 'null'], 'pattern': '^[A-Z]+$'},
-                     'match': {'enum': ['equals', 'contains']}, 'value': TEXT,
-                     'case_sensitive': {'type': ['boolean', 'null']}}), 'type': ['object', 'null']}})
+# The investigations the model may commission and what each hands out of the page's input list (nano-graphrag's
+# ``PageChildProposer``): a table investigation one unconsumed table region (``candidate_id``), a targeted-passage
+# investigation one or more unconsumed candidates (``candidate_ids``), an ordered-reading investigation the first window
+# of the remaining prose in document order (no argument). ``msg_to_child`` turns the candidates into the byte windows
+# the children take; a candidate handed out is consumed and offered no more.
 COMMISSIONS = {
     'literature_table': {
-        'description': 'Commission an investigation of one selected table or sheet of this source and its '
-                       'scientific meaning: an XLSX table (source_ref, sheet_key, offset, limit, header_row, where; '
-                       'representation null) or an exact original-source byte window of an article XML table '
-                       '(source_ref, representation, offset, limit; sheet_key, header_row and where null). The '
-                       'investigation selects rows, headers, conditions and footnotes itself.',
-        'selection': TABLE_OR_WINDOW},
+        'description': 'Commission an investigation of ONE unconsumed table region of this source (candidate_id of '
+                       'context.content_candidates, a source_table) and its scientific meaning. The investigation '
+                       'selects rows, headers, conditions and footnotes itself. The region is consumed.'},
     'literature_ordered': {
-        'description': 'Commission an investigation of this source in document order, starting at one window and '
-                       'continuing by returned UTF-8 byte continuations.',
-        'selection': WINDOW},
+        'description': 'Commission an investigation that reads the remaining prose of this source in document order, '
+                       'starting at its first remaining window (context.report_windows[0]) and continuing by returned '
+                       'UTF-8 byte continuations. The chunks of the window it is handed are consumed.'},
     'literature_targeted': {
-        'description': 'Commission an investigation of supplied source-bound passages (one or more windows) of this '
-                       'source with their neighbouring context. Separate spans remain separate.',
-        'selection': obj({'spans': {'type': 'array', 'minItems': 1, 'items': WINDOW}})},
+        'description': 'Commission an investigation of supplied source-bound passages: one or more unconsumed '
+                       'candidates (candidate_ids of context.content_candidates, prose chunks or table regions) of '
+                       'this source with their neighbouring context. Separate spans remain separate. The candidates '
+                       'are consumed.'},
 }
 
 REASON_DESCRIPTION = ('Commit a typed scientific reasoning over the examined passages and the records you hold: '
@@ -194,7 +184,14 @@ HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_lite
 COMMISSION_GUIDANCE = ('\nCommission a table, ordered-reading or targeted-passage investigation of this exact source when '
                        'it is useful: each returns its credit, the controlled features of the '
                        'A106 sheets it saved and, for the commissioned task, its typed answers as counts and '
-                       'references. An investigation reads only the source this page assigns.')
+                       'references. An investigation reads only the source this page assigns.\n'
+                       'The source is split into candidate input units, table regions and prose chunks, each with its '
+                       'byte interval (context.content_candidates; context.input_list holds the ones still unconsumed, in '
+                       'document order). A candidate handed to an investigation is consumed: it is not offered again, '
+                       'and no investigation can be commissioned on it. A table investigation takes one unconsumed '
+                       'table region, a targeted one unconsumed candidates of your choice, an ordered one the first '
+                       'window of the remaining prose (context.report_windows). When no candidate remains, no '
+                       'investigation is offered.')
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
                  'inspected source, its anchored reference subject, whether it is a useful lead for the original '
                  'question and the exact witnessed byte interval. A search hit or title alone verifies nothing.')
@@ -251,27 +248,46 @@ def catalog(names, commit_schema, leads, settings):
     return entries
 
 
-def commission_arguments(slot):
-    """The arguments of a commission: the reading selection (the old child assignment's ``selection``). No text
-    passes to the investigation: its objective is fixed by its slot (``msg_to_child``)."""
-    return obj({'selection': COMMISSIONS[slot]['selection']})
+def available_slots(summary):
+    """The investigations valid now (nano-graphrag ``PageChildProposer._valid_children``): a table one while an
+    unconsumed table region remains, a targeted one while any candidate remains, an ordered one while a remaining
+    prose window can be read. With the input list empty none is offered."""
+    return [slot for slot in CHILD_SLOTS
+            if (summary['unconsumed_table_ids'] if slot == 'literature_table'
+                else summary['unconsumed_table_ids'] + summary['unconsumed_chunk_ids'] if slot == 'literature_targeted'
+                else summary['report_windows'])]
 
 
-def commissions():
-    """The investigations the model may commission, shown with the tools (the old ``child_option_information``
-    over ``_CHILDREN['literature_page']``)."""
+def commission_arguments(slot, summary):
+    """The arguments of a commission: only unconsumed candidates of the page's input list can be named (the enum is
+    built at each decision, so a consumed candidate cannot be selected). No text passes to the investigation: its
+    objective is fixed by its slot (``msg_to_child``)."""
+    if slot == 'literature_table':
+        return obj({'candidate_id': {'enum': list(summary['unconsumed_table_ids']),
+                                     'description': 'One unconsumed table region of context.content_candidates'}})
+    if slot == 'literature_targeted':
+        return obj({'candidate_ids': {
+            'type': 'array', 'minItems': 1, 'uniqueItems': True,
+            'items': {'enum': summary['unconsumed_table_ids'] + summary['unconsumed_chunk_ids']},
+            'description': 'Unconsumed candidates of context.content_candidates, one span each'}})
+    return obj({})
+
+
+def commissions(summary):
+    """The investigations the model may commission now, shown with the tools (the old ``child_option_information``
+    over ``_CHILDREN['literature_page']``), only for unconsumed input."""
     return [{'slot': slot, 'description': COMMISSIONS[slot]['description'],
-             'input_schema': commission_arguments(slot)} for slot in CHILD_SLOTS]
+             'input_schema': commission_arguments(slot, summary)} for slot in available_slots(summary)]
 
 
-def selection_schema(names, commit_schema, leads, settings):
+def selection_schema(names, commit_schema, leads, settings, summary):
     """What the model answers with: one tool and its arguments, or one commissioned investigation (the old action
     schema)."""
     return obj({'selection': {'anyOf': [
         *(obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
           for entry in catalog(names, commit_schema, leads, settings)),
         *(obj({'kind': {'const': 'child'}, 'slot': {'const': entry['slot']}, 'arguments': entry['input_schema']})
-          for entry in commissions())]}})
+          for entry in commissions(summary))]}})
 
 
 def within_source(store, reference, root, scope):
@@ -627,14 +643,21 @@ def decide(summary, feedback, ctx):
                'source_lead_dispositions': summary['source_lead_dispositions'],
                'child_reports': summary['child_reports'],
                'literature_experimental_work': summary['literature_experimental_work'],
-               'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings), 'child_options': commissions(),
+               'content_candidates': [item for item in summary['content_candidates']
+                                      if item['candidate_id'] not in summary['consumed_candidate_ids']],
+               'consumed_candidate_ids': summary['consumed_candidate_ids'],
+               'input_list': summary['input_list'], 'report_windows': summary['report_windows'],
+               'table_previews': summary['table_previews'],
+               'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings),
+               'child_options': commissions(summary),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings)))
+                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings,
+                                                           summary)))
 
 
 def empty_commit(commit, commit_schema):
@@ -650,7 +673,7 @@ def action(response, summary, records, ctx):
     names = offered(ctx.settings, summary['opened_population'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads, ctx.settings)
+    schema = selection_schema(names, commit_schema, leads, ctx.settings, summary)
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         if selection['kind'] == 'child':

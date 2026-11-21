@@ -190,6 +190,74 @@ CHILD_DESCRIPTIONS = {
                                    'select; separate spans stay separate.',
 }
 
+# The page's input list (``messages/internal_summary.py``; nano-graphrag's page offers child options only for
+# unconsumed inputs): the candidate input units of the assigned representation (table regions and prose chunks). The
+# model names candidates, never windows; a candidate handed to a child is consumed and offered no more, so every enum
+# below is built at each decision from the unconsumed ids. A representation that is not UTF-8 text has no candidates
+# (``input_list_basis`` is ``not_utf8``) and keeps the window / workbook selections above.
+CANDIDATE_DESCRIPTIONS = {
+    'table_evidence_extraction':
+        'Commission an investigation of one selected table of the assigned source: either ONE unconsumed table '
+        'region (candidate_id from context.unconsumed_candidates; the region is consumed) or a workbook table '
+        'selection (source_ref, sheet_key, offset, limit, optional header_row and where).',
+    'source_coverage_improvement':
+        'Commission an ordered reading of the assigned source in document order, starting at ONE unconsumed '
+        'candidate (candidate_id from context.unconsumed_candidates; its window is consumed).',
+    'passage_evidence_extraction':
+        'Commission an investigation of separate passages of the assigned source: one or more unconsumed '
+        'candidates (candidate_ids from context.unconsumed_candidates; each is consumed, separate spans stay '
+        'separate).',
+}
+
+
+def candidate_selection(slot, summary):
+    """The selection schema the model may answer ``slot`` with now, or ``None`` when the slot has nothing to take: a
+    table child takes an unconsumed table region or a workbook selection; the coverage and passage children take
+    unconsumed candidates only and are not offered when the input list is empty."""
+    if summary['input_list_basis'] != 'text':
+        return CHILD_SELECTIONS[slot]
+    if slot == 'table_evidence_extraction':
+        options = ([obj({'candidate_id': {'enum': summary['unconsumed_table_ids']}})]
+                   if summary['unconsumed_table_ids'] else [])
+        return {'anyOf': [*options, CHILD_SELECTIONS[slot]['anyOf'][0]]}
+    ids = summary['unconsumed_candidate_ids']
+    if not ids:
+        return None
+    if slot == 'source_coverage_improvement':
+        return obj({'candidate_id': {'enum': ids}})
+    return obj({'candidate_ids': {'type': 'array', 'minItems': 1, 'uniqueItems': True, 'items': {'enum': ids}}})
+
+
+def child_description(slot, summary):
+    return CHILD_DESCRIPTIONS[slot] if summary['input_list_basis'] != 'text' else CANDIDATE_DESCRIPTIONS[slot]
+
+
+def window_of(summary, candidate_id):
+    """The window of the assigned source and representation a candidate is (what the children's forms take)."""
+    page = summary['literature_assignment']
+    candidate = {item['candidate_id']: item for item in summary['content_candidates']}[candidate_id]
+    return {'source_ref': page['source_ref'], 'representation': page['representation'],
+            'offset': candidate['start'], 'limit': candidate['end'] - candidate['start']}
+
+
+def child_selection_of(selection, summary):
+    """The selection a child is commissioned with: a named candidate becomes its window, a workbook or window selection
+    (no candidates) passes unchanged."""
+    if 'candidate_id' in selection:
+        return window_of(summary, selection['candidate_id'])
+    if 'candidate_ids' in selection:
+        return {'spans': [window_of(summary, candidate_id) for candidate_id in selection['candidate_ids']]}
+    return selection
+
+
+INPUT_LIST_GUIDANCE = ('\nThe input list (context.input_list, with context.unconsumed_candidates) is the candidate input '
+                       'units of the assigned source: its table regions and prose chunks with their byte intervals. A '
+                       'child is commissioned with candidates of this list, never with a window of your own; a candidate '
+                       'handed to a child is consumed and no longer offered, so the list shrinks and a child with no '
+                       'unconsumed candidate left to take is not offered. A workbook table selection does not consume '
+                       'candidates. When the source is not UTF-8 text the list is empty and the children keep their '
+                       'window selections.')
+
 REASON_DESCRIPTION = ('Commit a typed scientific reasoning over the selected table or sheet and the records you hold: '
                       'extracted terms, source subjects, contexts, observations, hypotheses and assessments, each '
                       'with its exact source anchor, together with the contextual grader selected for the '
@@ -230,6 +298,7 @@ def instructions(*, knowledge, leads):
     text = replace_span(INSTRUCTIONS, HISTORY_START, HISTORY_END, HISTORY_GUIDANCE)
     text += '\n' + GOAL
     text += '\n' + REASONING_COMMIT_REQUIREMENT
+    text += INPUT_LIST_GUIDANCE
     text += GRADING_INSTRUCTIONS
     if knowledge is not None:
         text += KNOWLEDGE_INSTRUCTIONS
@@ -238,12 +307,14 @@ def instructions(*, knowledge, leads):
     return text + RETURN_GUIDANCE
 
 
-def offered(settings):
+def offered(settings, summary):
     """The tools offered now: the access tools (``execution_estimate`` only with timing statistics configured), the
-    two population operations, the reasoning commit, and the three child commissions."""
+    two population operations, the reasoning commit, and the child commissions that still have an unconsumed input
+    to take (``candidate_selection``)."""
     access = [name for name in LIBRARY_NAMES
               if name != 'execution_estimate' or 'native_statistics' in settings['tool_registry']]
-    return access + list(POPULATION_NAMES) + ['reason', *CHILD_SLOTS]
+    return (access + list(POPULATION_NAMES)
+            + ['reason', *(slot for slot in CHILD_SLOTS if candidate_selection(slot, summary) is not None)])
 
 
 def lead_schema():
@@ -272,15 +343,15 @@ def reason_schema(commit_schema, leads):
     return source_location_inputs(schema)
 
 
-def catalog(names, commit_schema, leads):
+def catalog(names, commit_schema, leads, summary):
     """The tools the model is shown: name, description and input schema (the old catalog; every input schema
-    is projected through source_location_inputs)."""
+    is projected through source_location_inputs). A child's schema names only the unconsumed inputs."""
     populations = {entry['name']: entry for entry in population_catalog()}
     entries = []
     for name in names:
         if name in CHILD_SLOTS:
-            entries.append({'name': name, 'description': CHILD_DESCRIPTIONS[name],
-                            'input_schema': obj({'objective': TEXT, 'selection': CHILD_SELECTIONS[name]})})
+            entries.append({'name': name, 'description': child_description(name, summary),
+                            'input_schema': obj({'objective': TEXT, 'selection': candidate_selection(name, summary)})})
         elif name == 'reason':
             entries.append({'name': 'reason', 'description': REASON_DESCRIPTION,
                             'input_schema': reason_schema(commit_schema, leads)})
@@ -294,11 +365,11 @@ def catalog(names, commit_schema, leads):
     return entries
 
 
-def selection_schema(names, commit_schema, leads):
+def selection_schema(names, commit_schema, leads, summary):
     """What the model answers with: one tool and its arguments (the old action schema)."""
     return obj({'selection': {'anyOf': [obj({'kind': {'const': 'child' if entry['name'] in CHILD_SLOTS else 'tool'},
                                              'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
-                                        for entry in catalog(names, commit_schema, leads)]}})
+                                        for entry in catalog(names, commit_schema, leads, summary)]}})
 
 
 def within_source(store, reference, root, scope):
@@ -621,7 +692,7 @@ def decide(summary, feedback, ctx):
     """Ask the model for the next tool or child commission, shown the assignment, the custody of the source, its own
     read outcomes, what its children returned, the controlled features of the saved sheets, the latest image it looked at, the saved sheets, the commissioned goal plan, the tools, the
     measured time and the yield table (the old decision state and inputs, over this episode's summary)."""
-    names = offered(ctx.settings)
+    names = offered(ctx.settings, summary)
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'commission_message': summary['literature_goal_plan']['commission_message'],
@@ -639,7 +710,11 @@ def decide(summary, feedback, ctx):
                'child_reports': summary['child_reports'],
                'source_lead_dispositions': summary['source_lead_dispositions'],
                'returned_leads': summary['lead_return'],
-               'tools': catalog(names, summary['reasoning_schema'], leads),
+               'input_list': summary['input_list'], 'input_list_basis': summary['input_list_basis'],
+               'unconsumed_candidates': summary['unconsumed_candidates'],
+               'consumed_candidate_ids': summary['consumed_candidate_ids'],
+               'table_previews': summary['table_previews'],
+               'tools': catalog(names, summary['reasoning_schema'], leads, summary),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'literature_selected_population_attempt': summary['literature_selected_population_attempt'],
@@ -647,7 +722,7 @@ def decide(summary, feedback, ctx):
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads)))
+                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, summary)))
 
 
 def empty_commit(commit, commit_schema):
@@ -670,15 +745,16 @@ def action(response, summary, records, ctx):
     selects no offered tool or child, arguments
     that do not fit its schema, or an empty reasoning commit (except a no-applicable-evidence declaration or a source
     lead) is invalid."""
-    names = offered(ctx.settings)
+    names = offered(ctx.settings, summary)
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads)
+    schema = selection_schema(names, commit_schema, leads, summary)
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         name, arguments = selection['tool'], selection['arguments']
         if name in CHILD_SLOTS:
-            return ChildCall(name, {'objective': arguments['objective'], 'selection': arguments['selection']})
+            return ChildCall(name, {'objective': arguments['objective'],
+                                    'selection': child_selection_of(arguments['selection'], summary)})
         if (name == 'reason' and empty_commit(arguments['commit'], commit_schema)
                 and arguments.get('evidence_processing', {}).get('kind') != 'no_applicable_evidence'
                 and not reasoning_has_task_content(summary['task'], arguments)):

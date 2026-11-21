@@ -11,7 +11,7 @@ no BLAST status target (no API execution), so there is no completion variant. No
 and nothing else ends this Episode."""
 import math
 
-from yield_control import AccumulationYieldController
+from yield_control import ADAPTIVE_CONTROL, AccumulationYieldController
 
 EPOCH = 'monitor'
 
@@ -25,4 +25,4 @@ def yield_controller(initial_credit, settings, parent_input):
     alpha = parameters.get('uncertainty_alpha') if isinstance(parameters, dict) else None
     if isinstance(alpha, bool) or not isinstance(alpha, (int, float)) or not 0 < alpha < 1:
         raise ValueError('monitor_information_yield_values_invalid')
-    return AccumulationYieldController(EPOCH, initial_credit, cost, parameters)
+    return AccumulationYieldController(EPOCH, initial_credit, ADAPTIVE_CONTROL, items=None)

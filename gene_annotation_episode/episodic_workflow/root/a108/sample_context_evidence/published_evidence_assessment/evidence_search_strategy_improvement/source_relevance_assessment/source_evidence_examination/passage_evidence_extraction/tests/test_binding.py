@@ -121,3 +121,27 @@ def test_the_model_is_offered_the_access_tools_the_populations_and_the_graded_re
     assert 'source_lead' not in task.reason_schema(COMMIT_SCHEMA, False)['properties']
     assert 'execution_estimate' in task.offered({'tool_registry': {'native_statistics': object()}})
     assert task.empty_commit({'terms': []}, COMMIT_SCHEMA) and not task.empty_commit({'terms': [{}]}, COMMIT_SCHEMA)
+
+
+def test_the_input_list_is_the_unprocessed_windows_and_a_read_inside_consumed_ones_is_refused():
+    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    task = importlib.import_module(PACKAGE + '.task')
+    windows = [{**WINDOW, 'offset': 0, 'limit': 10}, {**WINDOW, 'offset': 10, 'limit': 10}]
+    parent = {'page': PAGE, 'spans': windows}
+
+    class Records(dict):
+        def get(self, ref):
+            return self[ref]
+    records = Records({'rec_1': {'anchor': {'artifact_ref': 'art_1', 'start': 12, 'end': 15}},
+                       'src_1': {'text_ref': 'art_1', 'artifact_ref': 'art_o'}})
+    assert summary_module.input_list(parent, [], records) == ([], [[0, 10], [10, 20]])
+    anchored = {'record_refs': ['rec_1'], 'status': 'completed'}
+    assert summary_module.input_list(parent, [anchored], records) == ([[10, 20]], [[0, 10]])
+    declared = {'status': 'completed', 'record_refs': [], 'evidence_processing': {
+        'kind': 'no_applicable_evidence', 'reason': 'none',
+        'examined': [{'source_ref': 'src_1', 'representation': 'text', 'start': 0, 'end': 10}]}}
+    assert summary_module.input_list(parent, [declared, anchored], records) == ([[0, 10], [10, 20]], [])
+    summary = {'literature_assignment': {'page': PAGE}, 'consumed_inputs': [[0, 10]]}
+    assert task.consumed_read({'source_ref': 'src_1', 'offset': 2, 'limit': 5}, summary)
+    assert not task.consumed_read({'source_ref': 'src_1', 'offset': 8, 'limit': 5}, summary)
+    assert not task.consumed_read({'source_ref': 'src_1', 'representation': 'original', 'offset': 2, 'limit': 5}, summary)

@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.progress_
 
 
 def internal_summary(view):
-    summary = {**view.parent_input, 'operations_done': 0, 'capabilities': None, 'inventory_snapshot': None,
+    summary = {**view.parent_input, 'operations_done': 0, 'consumed_input_refs': [], 'capabilities': None, 'inventory_snapshot': None,
                'facts': {}, 'handoff_refs': [], 'support_refs': [], 'result_refs': [],
                'handoff_established': False, 'execution_completed': False, 'acquired_record_count': 0,
                'credit_units': None, 'api_received_progress': {}, 'last_local_outcome': None, 'feedback': None,
@@ -25,6 +25,9 @@ def internal_summary(view):
             summary['lookups'].append(returned)
             continue
         summary['operations_done'] += 1
+        summary['consumed_input_refs'] = [*summary['consumed_input_refs'],
+                                          *[ref for ref in outcome['arguments']['input_refs']
+                                            if ref not in summary['consumed_input_refs']]]
         summary['last_local_outcome'] = returned
         summary['feedback'] = returned['feedback']
         summary['credit_units'] = returned['credit_units']
@@ -42,6 +45,10 @@ def internal_summary(view):
                 'state': event['event']['state'], 'kind': event['event']['kind'],
                 'facts': event['event']['facts'], 'failure_code': event['event']['failure_code']}
     summary['acquired_record_count'] = len(summary['result_refs'])
+    # The input list (nano-graphrag input-list paradigm): the records the parent passed that no operation has been
+    # handed yet, in the order passed. A record handed to an operation is consumed and no longer offered; the
+    # yield estimator stops the episode when the list is empty.
+    summary['input_list'] = [ref for ref in summary['input_refs'] if ref not in summary['consumed_input_refs']]
     summary['facts_by_source'] = {
         'execution_handoff_refs': summary['handoff_refs'], 'execution_result_refs': summary['result_refs'],
         'bvbrc_appservice_support_refs': summary['support_refs'],

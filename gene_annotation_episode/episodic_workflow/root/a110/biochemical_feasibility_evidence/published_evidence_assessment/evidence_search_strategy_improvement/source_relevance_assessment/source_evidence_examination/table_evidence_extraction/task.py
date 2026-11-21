@@ -26,6 +26,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.biochemical_feasibility_evidence.literature_reaction_storage import (
     POPULATE_DESCRIPTION, SOURCE_POPULATE_DESCRIPTION, population_input_schema, populate_reaction_sheet,
     populate_reaction_source_sheet, source_population_input_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.gene_context_evidence.literature_selection_input_list import (
+    already_read)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
@@ -150,6 +152,9 @@ REASON_DESCRIPTION = ('Commit a typed scientific reasoning over the table rows, 
 POPULATE_NAMES = {'literature_reaction_populate': 'literature.reaction.populate',
                   'literature_reaction_source_populate': 'literature.reaction.source.populate'}
 
+INPUT_LIST_MEANING = ('The unread extents [start, end] of the commissioned selection, in document order (bytes of the '
+                      'window, or matching rows of the sheet). An extent a completed read has covered is consumed and '
+                      'is not offered again: a read wholly inside consumed extents is rejected.')
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
@@ -401,6 +406,7 @@ def decide(summary, feedback, ctx):
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
+               'input_list': summary['input_list'], 'input_list_meaning': INPUT_LIST_MEANING,
                'visual_evidence': summary['visual_evidence'], 'last_local_outcome': summary['last_local_outcome'],
                'held_record_refs': summary['held_record_refs'], 'reaction_sheets': summary['reaction_sheets'],
                'investigation_finding': summary['investigation_finding'],
@@ -440,6 +446,9 @@ def action(response, summary, records, ctx):
         name, arguments = selection['tool'], selection['arguments']
         if name == 'reason' and empty_commit(arguments['commit'], commit_schema):
             raise ValueError('empty_reasoning_commit')
+        if name in ('source_read', 'source_xlsx_rows') and already_read(
+                summary['literature_assignment']['selection'], summary['consumed_inputs'], name, arguments):
+            raise ValueError('input_already_consumed:' + name)
     except (ValueError, KeyError, TypeError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
     call = {'arguments': arguments, 'scope': summary['scope'],

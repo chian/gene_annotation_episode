@@ -20,8 +20,21 @@ HISTORY_MEANING = ('Own outcome metadata only. Inspect original source records a
 SOURCE_FIELDS = ('version', 'artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref', 'parent_source_refs')
 
 
+def consumed_results(children):
+    """The search results (source refs) handed to a relevance-assessment child, in the order handed out (nano-graphrag
+    ``web_search_binding``: a candidate source taken up is consumed and no longer offered)."""
+    return list(dict.fromkeys(ref for outcome in children
+                              for ref in outcome['arguments']['selection']['search_result_refs']))
+
+
 def internal_summary(view):
     parent = view.parent_input
+    # The input list (nano-graphrag's input-list paradigm): the search results of the assignment, in the order given,
+    # that no relevance-assessment child has yet been handed. A handed-out result is consumed; the list shrinks as
+    # children are commissioned and the yield estimator ends the episode when it is empty.
+    children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
+    consumed = consumed_results(children)
+    input_list = [ref for ref in parent['prior_search_refs'] if ref not in consumed]
     custody = []
     for reference in parent['prior_search_refs']:
         source = view.records.get(reference)
@@ -39,6 +52,7 @@ def internal_summary(view):
                'child_reports': child_reports,
                'partner_sheets': sheets,
                'partner_agreement': agreement(sheets),
+               'input_list': input_list, 'consumed_inputs': consumed,
                'units_consumed': view.units_consumed}
     if view.controller_state is not None:
         summary['yield_table'] = yield_table(view.controller_state, forecast_unit='finding')

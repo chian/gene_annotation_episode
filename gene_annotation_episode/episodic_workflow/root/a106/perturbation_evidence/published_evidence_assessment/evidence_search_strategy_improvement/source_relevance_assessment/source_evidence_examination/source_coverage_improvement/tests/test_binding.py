@@ -17,7 +17,7 @@ FOLDER = Path(__file__).resolve().parents[1]
 EPISODE = importlib.import_module(PACKAGE + '.episode').SourceCoverageImprovement
 FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
          'messages/__init__.py', 'messages/read_from_parent.py', 'messages/internal_summary.py',
-         'messages/final_to_parent.py', 'tests/__init__.py', 'tests/test_binding.py',
+         'messages/final_to_parent.py', 'tests/__init__.py', 'tests/test_binding.py', 'tests/test_input_list.py',
          'tests/a106_world.py', 'tests/test_a106_grading.py', 'tests/test_model_run.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 NONE = {'literature_populations': [], 'literature_evidence_origins': {}}

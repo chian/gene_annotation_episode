@@ -147,11 +147,12 @@ def test_the_model_is_offered_the_tools_the_reasoning_the_report_and_the_childre
     assert task.CONTRACT_TOOL in with_contract and task.CONTRACT_TOOL in EPISODE.tools
     for execution, slots in ((NO_EXECUTION, ['literature_strategy']),
                              (EXECUTION, ['literature_strategy', 'launch', 'results'])):
-        assert [entry['slot'] for entry in task.commissions(execution)] == slots == task.offered_slots(execution)
+        assert [entry['slot'] for entry in task.commissions(execution, [SRC])] == slots \
+            == task.offered_slots(execution, [SRC])
         assert set(slots) <= set(EPISODE.child_slots)
         for leads in (False, True):
             offered = task.offered(NONE, execution, None)
-            schema = task.selection_schema(offered, COMMIT_SCHEMA, leads, execution, NONE)
+            schema = task.selection_schema(offered, COMMIT_SCHEMA, leads, execution, NONE, [SRC])
             assert len(schema['properties']['selection']['anyOf']) == len(offered) + len(slots)
             task.generation_schema(schema)
     shown = {entry['name']: entry for entry in task.catalog(with_contract, COMMIT_SCHEMA, True, EXECUTION, NONE)}
@@ -170,10 +171,10 @@ def test_the_strategy_commission_is_admitted_by_the_form_of_the_child_and_select
     arguments = {'question_context_refs': [CTX],
                  'prior_search_refs': [SRC], 'literature_task': child_task}
     task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_strategy', 'arguments': arguments}},
-                            task.selection_schema(task.offered(NONE, NO_EXECUTION, None), COMMIT_SCHEMA, True, NO_EXECUTION, NONE))
+                            task.selection_schema(task.offered(NONE, NO_EXECUTION, None), COMMIT_SCHEMA, True, NO_EXECUTION, NONE, [SRC]))
     parent_input = EPISODE.read_from_parent(ASSIGNMENT, {})
     summary = {'task': parent_input['task'], 'proposed_annotation_ref': parent_input['proposed_annotation_ref'],
-               'scope': parent_input['scope'], 'source_custody': {SRC: [SRC, ART]}}
+               'scope': parent_input['scope'], 'source_custody': {SRC: [SRC, ART]}, 'input_list': [SRC]}
     message = EPISODE.msg_to_child('literature_strategy', ChildCall('literature_strategy', arguments).arguments,
                                    summary)
     read = child_module('evidence_search_strategy_improvement', 'messages.read_from_parent')
@@ -186,12 +187,34 @@ def test_the_strategy_commission_is_admitted_by_the_form_of_the_child_and_select
     assert set(message.selection) == {'literature_source_lead_dispositions'}
     assert 'credit' in selected.fields and 'finding' in selected.fields
     with pytest.raises(KeyError):      # a source this episode does not hold is a wrong commission: it fails
-        EPISODE.msg_to_child('literature_strategy', arguments, {**summary, 'source_custody': {}})
+        EPISODE.msg_to_child('literature_strategy', arguments, {**summary, 'input_list': []})
     returned = {'credit': 1.0, 'finding': EMPTY,
                 'literature_source_lead_dispositions': {'relevant_lead_count': 1, 'lead_source_refs': [SRC]}}
     selected.admit(returned, 'return')
     report = EPISODE.read_from_child('literature_strategy', returned, summary, None)
     assert report == {'slot': 'literature_strategy', 'credit': 1.0, 'finding': EMPTY, 'lead_source_refs': [SRC]}
+
+
+def test_the_input_list_is_the_only_offer_of_prior_searches_and_an_empty_list_offers_no_strategy_child():
+    task = importlib.import_module(PACKAGE + '.task')
+    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    child = task.commission_arguments('literature_strategy', [SRC, 'source_' + 'b' * 24])
+    assert child['properties']['prior_search_refs']['items'] == {'enum': [SRC, 'source_' + 'b' * 24]}
+    assert child['properties']['prior_search_refs']['minItems'] == 1
+    assert task.offered_slots(NO_EXECUTION, []) == [] and task.offered_slots(EXECUTION, []) == ['launch', 'results']
+
+    class Records:
+        def get(self, reference):
+            return {'record_type': 'source' if reference.startswith('src') else 'other'}
+
+    class View:
+        parent_input = {'literature': {'source_refs': ['src_1']}}
+        records = Records()
+        outcomes = [{'kind': 'tool', 'produced': ['src_2', 'rec_1']},
+                    {'kind': 'child', 'slot': 'literature_strategy', 'arguments': {'prior_search_refs': ['src_1']}},
+                    {'kind': 'child', 'slot': 'launch', 'arguments': {'requests': {}}}]
+    assert summary_module.held_sources(View) == ['src_1', 'src_2']
+    assert summary_module.consumed_sources(View) == ['src_1']
 
 
 def test_the_launch_and_results_commissions_are_admitted_by_the_forms_of_their_children():
@@ -201,7 +224,7 @@ def test_the_launch_and_results_commissions_are_admitted_by_the_forms_of_their_c
               'input_refs': [CTX]}
     results = {'handoff_ref': HANDOFF, 'selector': {'kind': 'all'},
                'service': 'bvbrc_appservice'}
-    schema = task.selection_schema(task.offered(NONE, EXECUTION, None), COMMIT_SCHEMA, False, EXECUTION, NONE)
+    schema = task.selection_schema(task.offered(NONE, EXECUTION, None), COMMIT_SCHEMA, False, EXECUTION, NONE, [SRC])
     for slot, arguments in (('launch', launch), ('results', results)):
         task.validate_selection({'selection': {'kind': 'child', 'slot': slot, 'arguments': arguments}}, schema)
     parent_input = EPISODE.read_from_parent(ASSIGNMENT, {})

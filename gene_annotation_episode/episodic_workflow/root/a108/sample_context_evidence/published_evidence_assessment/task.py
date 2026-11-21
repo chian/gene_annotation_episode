@@ -255,11 +255,44 @@ def instructions(*, knowledge, leads):
     return text + RETURN_GUIDANCE
 
 
-def offered(settings):
-    """The tools offered now: the access tools (``execution_estimate`` only with timing statistics configured), the
-    two population operations, the reasoning commit and the child commission."""
+def reads_source(schema):
+    """Whether the input schema names a ``source_ref`` property (a tool that reads an input-list source)."""
+    if isinstance(schema, list):
+        return any(reads_source(value) for value in schema)
+    if not isinstance(schema, dict):
+        return False
+    return 'source_ref' in (schema.get('properties') or {}) or any(reads_source(value) for value in schema.values())
+
+
+def bind_sources(schema, unconsumed):
+    """The schema with every ``source_ref`` property restricted to the unconsumed input-list sources (nano-graphrag:
+    options only for unconsumed inputs; a consumed source is no longer offered)."""
+    if isinstance(schema, list):
+        return [bind_sources(value, unconsumed) for value in schema]
+    if not isinstance(schema, dict):
+        return schema
+    result = {key: bind_sources(value, unconsumed) for key, value in schema.items()}
+    properties = result.get('properties')
+    if isinstance(properties, dict) and 'source_ref' in properties:
+        result['properties'] = {**properties, 'source_ref': {**properties['source_ref'], 'enum': list(unconsumed)}}
+    return result
+
+
+def child_arguments(unconsumed):
+    """What the child commission takes: prior_search_refs only among the unconsumed input-list sources."""
+    sources = ({'type': 'array', 'items': {**REF, 'enum': list(unconsumed)}, 'uniqueItems': True} if unconsumed
+               else {'type': 'array', 'maxItems': 0})
+    return obj({'objective': TEXT, 'prior_search_refs': sources,
+                'question_context_refs': CONTEXT_REFS})
+
+
+def offered(settings, unconsumed):
+    """The tools offered now: the access tools (``execution_estimate`` only with timing statistics configured; a tool
+    that reads a source only while an unconsumed input-list source remains), the two population operations, the
+    reasoning commit and the child commission."""
     access = [name for name in LIBRARY_NAMES
-              if name != 'execution_estimate' or 'native_statistics' in settings['tool_registry']]
+              if (name != 'execution_estimate' or 'native_statistics' in settings['tool_registry'])
+              and (unconsumed or not reads_source(INPUT_SCHEMAS[LIBRARY_NAMES[name]]))]
     return access + list(POPULATION_NAMES) + ['reason', *CHILD_SLOTS]
 
 
@@ -289,15 +322,15 @@ def reason_schema(commit_schema, leads):
     return source_location_inputs(schema)
 
 
-def catalog(names, commit_schema, leads):
+def catalog(names, commit_schema, leads, unconsumed):
     """The tools the model is shown: name, description and input schema (the old catalog; every input schema
-    is projected through source_location_inputs)."""
+    is projected through source_location_inputs; a source is named only among the unconsumed input-list sources)."""
     populations = {entry['name']: entry for entry in population_catalog()}
     entries = []
     for name in names:
         if name in CHILD_SLOTS:
             entries.append({'name': name, 'description': CHILD_DESCRIPTIONS[name],
-                            'input_schema': CHILD_ARGUMENTS})
+                            'input_schema': child_arguments(unconsumed)})
         elif name == 'reason':
             entries.append({'name': 'reason', 'description': REASON_DESCRIPTION,
                             'input_schema': reason_schema(commit_schema, leads)})
@@ -307,15 +340,16 @@ def catalog(names, commit_schema, leads):
                             'input_schema': source_location_inputs(entry['input_schema'])})
         else:
             entries.append({'name': name, 'description': DESCRIPTIONS[LIBRARY_NAMES[name]],
-                            'input_schema': source_location_inputs(INPUT_SCHEMAS[LIBRARY_NAMES[name]])})
+                            'input_schema': source_location_inputs(
+                                bind_sources(INPUT_SCHEMAS[LIBRARY_NAMES[name]], unconsumed))})
     return entries
 
 
-def selection_schema(names, commit_schema, leads):
+def selection_schema(names, commit_schema, leads, unconsumed):
     """What the model answers with: one tool and its arguments (the old action schema)."""
     return obj({'selection': {'anyOf': [obj({'kind': {'const': 'child' if entry['name'] in CHILD_SLOTS else 'tool'},
                                              'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
-                                        for entry in catalog(names, commit_schema, leads)]}})
+                                        for entry in catalog(names, commit_schema, leads, unconsumed)]}})
 
 
 def admitted(name, arguments):
@@ -641,7 +675,8 @@ def decide(summary, feedback, ctx):
     """Ask the model for the next tool or child commission, shown the assignment, the custody of the source, its own
     read outcomes, what its children returned, the interpretation so far, the latest image it looked at, the saved sheets, the commissioned goal plan, the tools, the
     measured time and the yield table (the old decision state and inputs, over this episode's summary)."""
-    names = offered(ctx.settings)
+    unconsumed = summary['input_list']
+    names = offered(ctx.settings, unconsumed)
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
@@ -657,7 +692,8 @@ def decide(summary, feedback, ctx):
                'last_local_outcome': summary['last_local_outcome'], 'held_record_refs': summary['held_record_refs'],
                'current_findings': summary['finding'], 'child_reports': summary['child_reports'],
                'source_lead_dispositions': summary['source_lead_dispositions'],
-               'tools': catalog(names, summary['reasoning_schema'], leads),
+               'input_list': unconsumed, 'consumed_source_refs': summary['consumed_source_refs'],
+               'tools': catalog(names, summary['reasoning_schema'], leads, unconsumed),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'literature_selected_population_attempt': summary['literature_selected_population_attempt'],
@@ -665,7 +701,8 @@ def decide(summary, feedback, ctx):
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads)))
+                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads,
+                                                                                            unconsumed)))
 
 
 def empty_commit(commit, commit_schema):
@@ -688,10 +725,10 @@ def action(response, summary, records, ctx):
     selects no offered tool or child,
     arguments that do not fit its schema, an empty reasoning commit (except a no-applicable-evidence declaration or a
     source lead) is invalid."""
-    names = offered(ctx.settings)
+    names = offered(ctx.settings, summary['input_list'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads)
+    schema = selection_schema(names, commit_schema, leads, summary['input_list'])
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         name, arguments = selection['tool'], selection['arguments']

@@ -3,6 +3,10 @@ source, the first page of the episode's own read and population outcomes, the co
 partner sheets it saved (read back from their cell rows through the scoped reader), the latest failed population
 attempt and the controller's yield table.
 
+The input list (nano-graphrag's source table: a region is consumed once processed): ``input_list`` holds the one selection
+of the commission, ``[[offset, end]]`` (bytes of the window, or the matching rows of the table), until a partner grader
+has completed on it, and is empty after that; ``consumed_inputs`` holds what has been processed.
+
 Carried from the old ``internal_summary.py`` (``decision_context``: ``literature_assignment``,
 ``literature_source_custody``, ``own_literature_outcomes``, ``literature_history_meaning``; ``facts`` -> the
 features of the held partner sheets; ``_population_task_context``) and from the old
@@ -38,9 +42,27 @@ def derived_sources(records, page_source_ref):
     return [row for row in records.list('source') if page_source_ref in row.get('parent_source_refs', ())]
 
 
+def selection_range(selection):
+    """The one input item of the commission (nano-graphrag's selected table region): ``[start, end]`` of the byte window
+    or of the table's matching rows; an empty selection holds no item."""
+    start, end = selection['offset'], selection['offset'] + selection['limit']
+    return [[start, end]] if end > start else []
+
+
+def processed_inputs(outcomes, items):
+    """The items consumed: the selection is processed once a partner grader has completed on it (nano-graphrag's
+    ``processed_row_ids``: a row is consumed when its query has been made, not when it has been read). A read or a locate
+    does not consume it; a failed grader call does not either."""
+    graded = any(row['kind'] == 'tool' and row['tool'] in POPULATION_TOOLS and row['outcome']['status'] not in FAILED
+                 for row in outcomes)
+    return list(items) if graded else []
+
+
 def internal_summary(view):
     parent = view.parent_input
     page = parent['page']
+    items = selection_range(parent['selection'])
+    consumed = processed_inputs(view.outcomes, items)
     source = view.records.get(page['source_ref'])
     sheets = current_sheet_features(view.records, view.outcomes)
     return {
@@ -59,6 +81,8 @@ def internal_summary(view):
         'literature_selected_population_attempt': latest_failed_population(view.outcomes),
         'partner_sheets': sheets,
         'partner_agreement': agreement(sheets),
+        'input_list': [item for item in items if item not in consumed],
+        'consumed_inputs': consumed,
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),

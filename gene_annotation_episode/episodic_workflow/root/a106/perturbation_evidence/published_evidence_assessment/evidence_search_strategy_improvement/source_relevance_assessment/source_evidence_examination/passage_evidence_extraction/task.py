@@ -543,10 +543,13 @@ def decide(summary, feedback, ctx):
     """Ask the model for the next tool, shown the assignment, the custody of the source, its own read outcomes,
     the controlled features of the A106 sheets it saved, the latest image it looked at, the tools, the measured time and the yield table
     (the old decision state and inputs, over this episode's summary)."""
+    if not summary['input_list']:
+        raise LookupError('passage_input_list_empty')   # every commissioned window is consumed; the yield estimator ends the episode
     names = offered(ctx.settings, summary['opened_population'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
+               'input_list': summary['input_list'], 'consumed_inputs': summary['consumed_inputs'],
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],

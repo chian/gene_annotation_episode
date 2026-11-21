@@ -205,12 +205,13 @@ def instructions(*, knowledge, leads):
     return text + RETURN_GUIDANCE
 
 
-def offered(settings):
+def offered(settings, input_list):
     """The tools offered now: the access tools (``execution_estimate`` only with timing statistics configured), the
-    two population operations, and the reasoning commit."""
+    two population operations, and the reasoning commit while the selected region is unconsumed (``input_list``
+    non-empty; nano-graphrag: a consumed table region is never offered again)."""
     access = [name for name in LIBRARY_NAMES
               if name != 'execution_estimate' or 'native_statistics' in settings['tool_registry']]
-    return access + list(POPULATION_NAMES) + ['reason']
+    return access + list(POPULATION_NAMES) + (['reason'] if input_list else [])
 
 
 def lead_schema():
@@ -589,7 +590,9 @@ def decide(summary, feedback, ctx):
     """Ask the model for the next tool, shown the assignment, the custody of the source, its own read outcomes, the
     interpretation so far, the latest image it looked at, the saved sheets, the commissioned goal plan, the tools, the
     measured time and the yield table (the old decision state and inputs, over this episode's summary)."""
-    names = offered(ctx.settings)
+    if not summary['input_list']:
+        raise LookupError('table_input_list_empty')   # the yield estimator ends the episode on an empty input list
+    names = offered(ctx.settings, summary['input_list'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
@@ -600,6 +603,7 @@ def decide(summary, feedback, ctx):
                'literature_received_fact_display': summary['literature_received_fact_display'],
                'literature_owned_population_sources': summary['literature_owned_population_sources'],
                'literature_goal_plan': summary['literature_goal_plan'],
+               'input_list': summary['input_list'], 'consumed_inputs': summary['consumed_inputs'],
                'graded_sheet_refs': summary['graded_sheet_refs'],
                'credit_binding': summary['credit_binding'], 'visual_evidence': summary['visual_evidence'],
                'last_local_outcome': summary['last_local_outcome'], 'held_record_refs': summary['held_record_refs'],
@@ -635,7 +639,7 @@ def action(response, summary, records, ctx):
     """Turn the model's answer into one tool call, or reject it (no unit). An answer that selects no offered tool,
     arguments that do not fit its schema, an empty reasoning commit (except a no-applicable-evidence declaration or a
     source lead) is invalid."""
-    names = offered(ctx.settings)
+    names = offered(ctx.settings, summary['input_list'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
     schema = selection_schema(names, commit_schema, leads)

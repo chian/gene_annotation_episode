@@ -18,7 +18,7 @@ EPISODE = importlib.import_module(PACKAGE + '.episode').SourceEvidenceExaminatio
 CHILDREN = [importlib.import_module(PACKAGE + '.' + name + '.episode') for name in
             ('table_evidence_extraction', 'source_coverage_improvement', 'passage_evidence_extraction')]
 PATH = EPISODE.binding_path
-SETTINGS = {'cost': 0.05, 'parameters': {'uncertainty_alpha': 0.05}}
+SETTINGS = {}      # the accumulation controllers take no settings
 RUN_ID = 'a107_examination_model_run'
 JOURNAL_PATH = ((PATH.replace('/', '__'), RUN_ID),)
 

@@ -42,6 +42,8 @@ def strategy(arguments, summary):
                  else (SCREENING,) if task['answer_kind'] == 'screening' else ())
     received = [*arguments['question_context_refs'], summary['proposed_annotation_ref']]
     for source_ref in arguments['prior_search_refs']:
+        if source_ref not in summary['input_list']:      # a consumed or unheld source is not offered
+            raise KeyError(source_ref)
         received.extend(summary['source_custody'][source_ref])
     assignment = {'version': 'strategy_assignment_v1', 'question_context_refs': arguments['question_context_refs'],
                   'prior_search_refs': arguments['prior_search_refs'], 'literature_task': task,

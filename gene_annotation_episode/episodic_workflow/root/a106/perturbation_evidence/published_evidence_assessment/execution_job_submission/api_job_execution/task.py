@@ -153,10 +153,24 @@ TOOLS = {'api_capabilities': api_capabilities, 'api_operation': api_operation,
          'launch_instruction_lookup': launch_instruction_lookup}
 
 
-def _schema():
+def _arguments_schema(name, summary):
+    """The arguments of a tool now. ``api_operation`` also names which of the input list's unconsumed records it
+    hands to the service (nano-graphrag input list: an item handed out is consumed and offered no more); a consumed
+    record cannot be named."""
+    schema = deepcopy(ARGUMENTS[name])
+    if name == 'api_operation':
+        unconsumed = list(summary['input_list'])
+        schema['required'] = [*schema['required'], 'input_refs']
+        schema['properties']['input_refs'] = (
+            {'type': 'array', 'uniqueItems': True, 'items': {'type': 'string', 'enum': unconsumed}} if unconsumed
+            else {'type': 'array', 'maxItems': 0})
+    return schema
+
+
+def _schema(summary):
     branches = [{'type': 'object', 'additionalProperties': False, 'required': ['kind', 'tool', 'arguments'],
                  'properties': {'kind': {'type': 'string', 'const': 'tool'}, 'tool': {'type': 'string', 'const': name},
-                                'arguments': deepcopy(ARGUMENTS[name])}} for name in OFFERED]
+                                'arguments': _arguments_schema(name, summary)}} for name in OFFERED]
     return {'type': 'object', 'additionalProperties': False, 'required': ['selection'],
             'properties': {'selection': {'anyOf': branches}}}
 
@@ -178,8 +192,10 @@ def _context(summary, feedback, ctx):
         'api_request': summary['request'],
         'api_received_progress': summary['api_received_progress'],
         'api_execution_completed': summary['execution_completed'],
-        'callable_operations': [{'name': name, 'description': DESCRIPTIONS[name], 'arguments_schema': ARGUMENTS[name]}
+        'callable_operations': [{'name': name, 'description': DESCRIPTIONS[name], 'arguments_schema': _arguments_schema(name, summary)}
                                 for name in OFFERED],
+        'input_list': summary['input_list'],
+        'consumed_input_refs': summary['consumed_input_refs'],
         'selected_launch_instructions': summary.get('launch_instructions'),
         'action_yields': summary.get('action_yields'),
         'last_local_outcome': summary['last_local_outcome'],
@@ -196,7 +212,7 @@ def decide(summary, feedback, ctx):
     if summary['capabilities'] is None:
         return ToolCall('api_capabilities', {'resource_id': summary['resource_id']})
     return ModelRequest('REASONING', _instructions(summary), _context(summary, feedback, ctx),
-                        generation_schema(_schema()))
+                        generation_schema(_schema(summary)))
 
 
 def _named_refs(value):
@@ -217,7 +233,7 @@ def _named_refs(value):
 
 
 def action(response, summary, records, ctx):
-    schema = _schema()
+    schema = _schema(summary)
     try:
         decoded = decode_response(response, schema)
         Draft202012Validator(schema).validate(decoded)
@@ -229,9 +245,11 @@ def action(response, summary, records, ctx):
         raise Rejected(rejection_feedback(error, category='action_contract'))
     tool, given = selection['tool'], selection['arguments']
     # The tool is handed no summary: the original assignment and the passed records ride in its arguments.
-    envelope = {'assignment': _assignment(summary), 'input_refs': summary['input_refs']}
+    # The records handed to the service are the unconsumed input records the operation names: they are consumed.
+    envelope = {'assignment': _assignment(summary)}
     if tool == 'api_operation':
-        return ToolCall(tool, {**envelope, 'operation': given['operation'], 'arguments': given['arguments']})
+        return ToolCall(tool, {**envelope, 'input_refs': given['input_refs'], 'operation': given['operation'],
+                               'arguments': given['arguments']})
     if tool == 'wait_for_service_job':
-        return ToolCall(tool, {**envelope, 'arguments': given})
+        return ToolCall(tool, {**envelope, 'input_refs': [], 'arguments': given})
     return ToolCall(tool, given)

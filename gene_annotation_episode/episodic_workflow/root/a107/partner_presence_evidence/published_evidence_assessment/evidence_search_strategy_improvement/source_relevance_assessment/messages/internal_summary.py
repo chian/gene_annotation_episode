@@ -27,11 +27,20 @@ def internal_summary(view):
         source = view.records.get(reference)
         custody.append({'source_ref': reference, **{key: source.get(key) for key in SOURCE_FIELDS}})
     child_reports = [outcome['report'] for outcome in view.outcomes if outcome['kind'] == 'child']
+    # The input list (nano-graphrag's input-list paradigm, ``processed_chunk_ids`` / ``remaining_chunks``): the located
+    # sources of the assignment, in the order the parent gave them. A source a source examination was commissioned
+    # for is consumed and no longer offered; the list shrinks by one per commissioned examination and is empty when
+    # every located source was handed out.
+    consumed = list(dict.fromkeys(outcome['arguments']['selection']['source_ref']
+                                  for outcome in view.outcomes if outcome['kind'] == 'child'))
+    input_list = [reference for reference in parent['search_result_refs'] if reference not in consumed]
     returned = [features for report in child_reports for features in report['partner_sheets']]
     sheets = merged_sheet_features(current_sheet_features(view.records, view.outcomes), returned)
     summary = {**parent,
                'held_record_refs': sorted(view.records.refs()),
                'source_custody': custody,
+               'consumed_source_refs': consumed,
+               'input_list': input_list,
                'own_literature_outcomes': outcome_page(view.outcomes, offset=0, limit=OUTCOME_PAGE_SIZE,
                                                        tools=(*OWN_TOOLS, *POPULATION_TOOLS),
                                                        tool_of=lambda row: row.get('tool')),

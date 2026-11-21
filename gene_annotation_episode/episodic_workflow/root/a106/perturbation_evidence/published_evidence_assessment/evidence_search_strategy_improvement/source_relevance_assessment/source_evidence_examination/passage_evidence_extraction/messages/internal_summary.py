@@ -24,12 +24,43 @@ HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through
                    'delivery does not establish scientific understanding, absence or resolved science.')
 
 
+def span_processed(span, page, reasons, records):
+    """A commissioned window is processed (consumed, nano-graphrag's processed chunk) once a reasoning commit has
+    dealt with it: the commit declared the window examined without applicable evidence
+    (``evidence_processing.examined``, which must cover it), or a record the commit made is anchored in the window's
+    bytes of the page's artifact."""
+    start, end = span['offset'], span['offset'] + span['limit']
+    covered = start
+    for outcome in reasons:
+        for examined in outcome.get('evidence_processing', {}).get('examined', []):
+            if ((examined['source_ref'], examined['artifact_ref']) == (page['source_ref'], page['artifact_ref'])
+                    and examined['start'] <= covered):
+                covered = max(covered, examined['end'])
+    if covered >= end:
+        return True
+    for outcome in reasons:
+        for ref in outcome.get('record_refs', []):
+            anchor = records.get(ref).get('anchor')
+            if (anchor is not None and anchor['artifact_ref'] == page['artifact_ref']
+                    and start <= anchor['start'] and anchor['end'] <= end):
+                return True
+    return False
+
+
 def internal_summary(view):
     parent = view.parent_input
     page, task = parent['page'], parent['task']
     source = view.records.get(page['source_ref'])
     outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
     reasons = [outcome['outcome'] for outcome in outcomes if outcome['tool'] == 'reason']
+    # The input list (nano-graphrag's remaining chunks): the commissioned windows still unprocessed, in the order
+    # assigned, as [offset, end] pairs; a processed window is consumed and no longer offered, and the yield
+    # estimator ends the episode when the list is empty.
+    committed = [outcome for outcome in reasons if outcome.get('status') in ('completed', 'partial')]
+    consumed = [[span['offset'], span['offset'] + span['limit']] for span in parent['spans']
+                if span_processed(span, page, committed, view.records)]
+    input_list = [[span['offset'], span['offset'] + span['limit']] for span in parent['spans']
+                  if [span['offset'], span['offset'] + span['limit']] not in consumed]
     last = outcomes[-1] if outcomes else None
     visual = (last['outcome'].get('visual_inputs', []) if last is not None and last['tool'] == 'image_view'
               and last['outcome'].get('status') == 'completed' else [])
@@ -49,6 +80,7 @@ def internal_summary(view):
         'held_record_refs': sorted(view.records.refs()),
         'last_local_outcome': None if last is None else {'tool': last['tool'], 'outcome': last['outcome']},
         'visual_evidence': visual,
+        'input_list': input_list, 'consumed_inputs': consumed,
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),

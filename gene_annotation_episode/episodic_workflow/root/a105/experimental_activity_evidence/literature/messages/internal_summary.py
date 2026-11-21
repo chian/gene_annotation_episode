@@ -9,8 +9,10 @@ Carried from the old ``internal_summary.py`` (``decision_context``: ``literature
 from ``goal.planning_context``). The old reads of ``runtime_actions`` and ``runtime_report_attempts`` are the unit
 outcomes of ``view``: a tool unit's outcome, and a child unit's ``report`` (what ``read_from_child`` made of the
 admitted result)."""
+import json
+
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reasoning import (
-    no_applicable_spans, relevant_lead_sources, screening_covered)
+    no_applicable_spans, relevant_lead_sources, screening_covered, spans_cover)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
     credit_binding)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_assay_grading_features import (
@@ -33,6 +35,56 @@ HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through
                    'delivery does not establish scientific understanding, absence or resolved science.')
 
 
+def named_sources(value):
+    """Every ``source_ref`` an executed unit's arguments name (a read, a population operation, a reasoning commit's
+    witnesses and the JSON arguments of its gradings)."""
+    found = []
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if key == 'source_ref' and isinstance(item, str):
+                found.append(item)
+            elif key == 'arguments' and isinstance(item, str):
+                found.extend(named_sources(json.loads(item)))
+            else:
+                found.extend(named_sources(item))
+    elif isinstance(value, list):
+        for item in value:
+            found.extend(named_sources(item))
+    return found
+
+
+def work_sources(literature, task, outcomes, records):
+    """The sources this episode works through, in the order they came: the sources the commission gave and the
+    sources its task names, then the sources its own acquisitions produced (nano-graphrag ``remaining_chunks``: the
+    items of the work before any is consumed)."""
+    sources = [*literature['source_refs'], *task.get('source_refs', ())]
+    if task.get('answer_kind') == 'measurement':
+        sources.append(task['selection']['source_ref'])
+    for outcome in outcomes:
+        if outcome['kind'] == 'tool':
+            sources.extend(ref for ref in outcome['produced'] if records.get(ref)['record_type'] == 'source')
+    return list(dict.fromkeys(sources))
+
+
+def consumed_inputs(task, outcomes, spans, covered):
+    """The sources consumed, in the order consumed (nano-graphrag ``processed_chunk_ids`` / ``processed_row_ids``): a
+    source handed to the strategy child as a prior-search source, and a source a completed or partial unit read or
+    processed (a read, a population operation, a reasoning commit naming it). For a screening answer a source is
+    consumed only when its commissioned spans are covered (declared to hold no applicable evidence, or returned
+    covered by the child), or when it was handed to the child."""
+    screening = task.get('answer_kind') == 'screening'
+    consumed = []
+    for outcome in outcomes:
+        if outcome['kind'] == 'child':
+            consumed.extend(outcome['arguments']['strategy']['prior_search_refs'])
+        elif not screening and outcome['outcome']['status'] in ('completed', 'partial'):
+            consumed.extend(named_sources(outcome['arguments']['arguments']))
+    if screening:
+        consumed.extend(span['source_ref'] for span in task['examined']
+                        if covered or spans_cover({'examined': [span]}, spans))
+    return list(dict.fromkeys(consumed))
+
+
 def internal_summary(view):
     parent = view.parent_input
     literature, task = parent['literature'], parent['task']
@@ -40,6 +92,14 @@ def internal_summary(view):
     children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
     last = view.outcomes[-1] if view.outcomes else None
     spans = no_applicable_spans(view.outcomes, records)
+    covered = screening_covered(task, view.outcomes, spans)
+    # The input list (nano-graphrag's input-list paradigm): the sources of the work not yet consumed, in the order they
+    # came (for a screening answer, the sources of the commissioned spans). A consumed source is not offered to the
+    # child again; the yield estimator ends the episode when the list is empty.
+    consumed = consumed_inputs(task, view.outcomes, spans, covered)
+    items = ([span['source_ref'] for span in task['examined']] if task.get('answer_kind') == 'screening'
+             else work_sources(literature, task, view.outcomes, records))
+    input_list = [ref for ref in dict.fromkeys(items) if ref not in consumed]
     assignment = {**literature, 'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref'],
                   **parent['requested']}
     return {
@@ -78,7 +138,8 @@ def internal_summary(view):
         'assay_sheets': current_sheet_features(records),
         'aggregation_sheets': current_aggregation_features(records),
         'no_applicable_spans': spans,
-        'screening_covered': screening_covered(task, view.outcomes, spans),
+        'screening_covered': covered,
+        'input_list': input_list, 'consumed_inputs': consumed,
         'lead_source_refs': (relevant_lead_sources(view.outcomes, parent['proposed_annotation_ref'], records)
                              if task['kind'] == 'verified_source_leads' else []),
     }

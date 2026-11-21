@@ -6,10 +6,12 @@ from unittest.mock import patch
 import pytest
 from real_time_credit_fixture import contexts_at, progress_time
 
+from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from yield_control import (
     NumericBand, STATUS_INSUFFICIENT, STATUS_NORMAL,
-    STATUS_UNIDENTIFIABLE, AccumulationYieldEstimator, SignedNumericBand, YieldEstimate,
+    STATUS_UNIDENTIFIABLE, SignedNumericBand, YieldState,
     BoundedQualityYieldController, CompletionYieldController, AccumulationYieldController, YieldParameters,
+    ADAPTIVE_CONTROL, FIXED_CONTROL, AccumulationControl,
     estimate_nonnegative_yield, estimate_score_yield, estimate_bounded_credit_yield, predicted_gain_upper_bound,
 )
 
@@ -70,11 +72,8 @@ def test_time_scale_is_measured_and_does_not_convert_credit_to_a_rate():
 
 
 def test_signed_correction_has_one_history_entry_and_two_time_aligned_marks():
-    estimator = AccumulationYieldEstimator(YieldParameters())
     history = [.8, .1, -.4, .2]
-    for value, context in zip(history, contexts_at((10, 15, 80, 120))):
-        result = estimator.observe(value, context=context)
-    assert estimator.scores == tuple(history)
+    result = estimate_score_yield(history, YieldParameters(), contexts=contexts_at((10, 15, 80, 120)))
     assert result.turns == 4
     assert result.diagnostics["negative_action_count"] == 1
     assert result.diagnostics["gain_component"]["turns"] == 4
@@ -84,26 +83,128 @@ def test_signed_correction_has_one_history_entry_and_two_time_aligned_marks():
     json.loads(json.dumps(result.as_record()))
 
 
-def test_cumulative_baseline_and_signed_delta_are_passed_unchanged():
-    controller = AccumulationYieldController("epoch-a", initial_credit=10, cost=.04,
-                                 settings=YieldParameters())
-    for n, credit in enumerate((10.5, 10.5, 10.1, 10.3)):
-        step = controller.observe(str(n), {"credit": credit}, is_root=True)
-    assert controller.estimator.scores == pytest.approx((.5, 0, -.4, .2))
-    assert step.credit == 10.3
-    assert step.marginal_credit == pytest.approx(.2)
-    assert step.requests_transition is False
-    assert controller.state().as_record()["initial_credit"] == 10
+def _accumulate(controller, discoveries, *, start=0.0, is_root=False):
+    credit, steps = start, []
+    for index, discovery in enumerate(discoveries):
+        credit += discovery
+        steps.append(controller.observe(str(index), {"credit": credit}, is_root=is_root))
+    return steps
+
+
+def test_accumulation_contract_takes_a_control_and_items_and_no_cost():
+    controller = AccumulationYieldController("epoch-a", 10, FIXED_CONTROL)
+    state = controller.state()
+    assert isinstance(state, YieldState) and not state.stop
+    assert state.estimate.expected_next_gain.status_code == STATUS_INSUFFICIENT
+    assert not hasattr(controller, "cost") and not hasattr(controller, "settings")
+    with pytest.raises(TypeError):
+        AccumulationYieldController("epoch-a", 0, .04, YieldParameters())
+    for control in (.04, YieldParameters(), AccumulationControl("adaptive_marginal_credit_threshold_v2",
+                                                                0.0, 0.0, 8, 8, 4, .05)):
+        with pytest.raises(ValueError, match="ADAPTIVE_CONTROL_or_FIXED_CONTROL"):
+            AccumulationYieldController("epoch-a", 0, control)
+    for items in (0, -1, True, 2.0, "3"):
+        with pytest.raises(ValueError, match="positive_integer"):
+            AccumulationYieldController("epoch-a", 0, ADAPTIVE_CONTROL, items=items)
+    assert (ADAPTIVE_CONTROL.gamma, ADAPTIVE_CONTROL.rho, ADAPTIVE_CONTROL.streak_length) == (0.0, 0.0, 4)
+    assert (FIXED_CONTROL.gamma, FIXED_CONTROL.rho, FIXED_CONTROL.streak_length) == (.06, 0.0, 4)
+    for control in (ADAPTIVE_CONTROL, FIXED_CONTROL):
+        assert (control.window_size, control.subsample_size, control.alpha) == (8, 4, .05)
+
+
+def test_accumulation_observation_is_the_marginal_credit_over_the_initial_credit():
+    controller = AccumulationYieldController("epoch-a", 10, ADAPTIVE_CONTROL)
+    steps = _accumulate(controller, (.5, 0, 2.25, 1), start=10)
+    assert [step.marginal_credit for step in steps] == [.5, 0, 2.25, 1]
+    assert steps[-1].credit == 13.75 and steps[-1].requests_transition is False
+    state = controller.state()
+    assert state.history == (.5, 0, 2.25, 1) and state.initial_credit == 10
+    assert state.estimate.incidence.observed_results == NumericBand.exact(3.75)
+    with pytest.raises(ValueError, match="accumulation_credit_cannot_fall"):
+        controller.observe("fell", {"credit": 13.5})
+    for value in (True, math.inf, math.nan, "0.2", None):
+        with pytest.raises(ValueError):
+            controller.observe("bad", value)
+    assert controller.state().history == (.5, 0, 2.25, 1)
+
+
+def test_accumulation_has_no_verdict_before_eight_units_and_stops_after_four_flat_units():
+    for control in (FIXED_CONTROL, ADAPTIVE_CONTROL):
+        steps = _accumulate(AccumulationYieldController("e", 0, control), [0] * 14)
+        assert all(step.estimate.expected_next_gain.status_code == STATUS_INSUFFICIENT for step in steps[:7])
+        assert [step.stop for step in steps[:10]] == [False] * 10
+        assert steps[7].decision.flat_streak == 1 and steps[10].stop
+        assert steps[10].decision.as_record()["stopped_by"] == ["estimator"]
+        assert steps[10].decision.outcome == "local_saturation"
+    fixed = _accumulate(AccumulationYieldController("e", 0, FIXED_CONTROL), [3, 2, 2, 1, 1, 1] + [0] * 10)
+    adaptive = _accumulate(AccumulationYieldController("e", 0, ADAPTIVE_CONTROL), [3, 2, 2, 1, 1, 1] + [0] * 10)
+    # The first stops of nano-graphrag's EstimatorController on the same identities (parity run, 2026-11-21).
+    assert [step.stop for step in fixed].index(True) == 12
+    assert [step.stop for step in adaptive].index(True) == 10
+    assert all(step.decision.as_record()["continuation_cost"] == .06 for step in fixed)
+    assert adaptive[-1].decision.threshold_update.version == "adaptive_marginal_credit_threshold_v2"
+    assert adaptive[-1].decision.gamma == adaptive[-1].decision.threshold_update.gamma.value > 0
+
+
+def test_accumulation_streak_resets_on_a_productive_unit():
+    steps = _accumulate(AccumulationYieldController("e", 0, FIXED_CONTROL), [1] * 20)
+    assert [step.stop for step in steps].index(True) == 18
+    assert not any(step.stop for step in steps[:18])
+
+
+def test_accumulation_stops_when_no_item_remains():
+    controller = AccumulationYieldController("e", 0, ADAPTIVE_CONTROL, items=3)
+    steps = _accumulate(controller, (4, 4, 4))
+    assert [step.stop for step in steps] == [False, False, True]
+    assert steps[-1].decision.as_record()["stopped_by"] == ["items"]
+    assert steps[-1].decision.items_remaining == 0 and controller.state().stop
+    with pytest.raises(RuntimeError, match="accumulation_no_item_left_for_unit"):
+        controller.observe("extra", {"credit": 12})
+
+
+def test_accumulation_replays_exactly_and_state_reads_do_not_move_the_warm_start():
+    sequence = [5, 4, 3, 3, 2, 2, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0]
+    plain = _accumulate(AccumulationYieldController("e", 0, ADAPTIVE_CONTROL), sequence)
+    read = AccumulationYieldController("e", 0, ADAPTIVE_CONTROL)
+    credit, steps = 0, []
+    for index, discovery in enumerate(sequence):
+        read.state()
+        credit += discovery
+        steps.append(read.observe(str(index), {"credit": credit}))
+        read.state()
+    assert [step.as_record() for step in steps] == [step.as_record() for step in plain]
+    json.loads(json.dumps(plain[-1].as_record()))
+
+
+def test_accumulation_reads_the_rank_not_the_progress_time():
+    plain = AccumulationYieldController("plain", 0, FIXED_CONTROL)
+    timed = AccumulationYieldController("timed", 0, FIXED_CONTROL)
+    for index, (score, context) in enumerate(zip((1, 1, 2, 2, 2, 3, 3, 3, 3), contexts_at(range(10, 100, 10)))):
+        left = plain.observe(str(index), {"credit": score})
+        right = timed.observe(str(index), {"credit": score, "estimation_context": context})
+        assert left.estimate.as_record() == right.estimate.as_record()
+        assert left.decision == right.decision
+
+
+def test_accumulation_state_is_a_yield_table():
+    controller = AccumulationYieldController("e", 0, ADAPTIVE_CONTROL)
+    _accumulate(controller, [3, 2, 2, 1, 1, 1, 0, 0, 0])
+    table = yield_table(controller.state(), forecast_unit="credit")
+    assert table["completed_units"] == 9 and table["current_credit"] == 10
+    assert table["expected_next_gain"]["status_code"] == STATUS_NORMAL
+    assert table["continuation_cost"] == controller.state().decision.gamma
+    assert table["parameters"]["threshold"] == "adaptive_marginal_credit_threshold_v2"
+    json.loads(json.dumps(table))
 
 
 def test_availability_and_failed_input_never_become_zero_observations():
-    estimator = AccumulationYieldEstimator()
     for value in (True, math.inf, math.nan, "0.2", None):
         with pytest.raises(ValueError):
-            estimator.observe(value)
-    assert estimator.scores == ()
+            estimate_score_yield((value,))
+    history = []
     for value in (.2, -.1, 0):
-        result = estimator.observe(value)
+        history.append(value)
+        result = estimate_score_yield(history)
         assert result.expected_next_gain.status_code == STATUS_INSUFFICIENT
         assert not predicted_gain_upper_bound(result.expected_next_gain, 1000).stop
     with patch("yield_control._RealTimeCreditFit.fit",
@@ -154,22 +255,9 @@ def test_controller_rule_is_exact_for_root_and_child_and_signed_band():
     assert predicted_gain_upper_bound(band,.03).projected_gain is band
     zero = NumericBand.exact(0)
     assert predicted_gain_upper_bound(zero,0).stop
-    for is_root in (False,True):
-        c = AccumulationYieldController("epoch",0,.03,YieldParameters())
-        with patch.object(c.estimator, "observe") as observe:
-            observe.return_value=YieldEstimate(2,band,c.settings,{})
-            assert c.observe("action",-.2,is_root).stop
-
-
-
-
-def test_default_context_is_not_an_implicit_new_time_formula():
-    plain = AccumulationYieldController("plain", 0, .04, YieldParameters())
-    supplied = AccumulationYieldController("supplied", 0, .04, YieldParameters())
-    for score in (1, 1.5):
-        left = plain.observe("work", {"credit": score})
-        right = supplied.observe("work", {"credit": score, "estimation_context": {"fixture_seconds": 100000}})
-        assert left.estimate.as_record() == right.estimate.as_record()
-        assert left.decision == right.decision
-    assert supplied.estimator.scores == (1, .5)
+    for is_root in (False, True):
+        steps = _accumulate(AccumulationYieldController("epoch", 0, FIXED_CONTROL), [0] * 11, is_root=is_root)
+        assert steps[-1].stop
+        assert steps[-1].decision.outcome == ("root_incomplete" if is_root else "local_saturation")
+        assert steps[-1].requests_transition is is_root
 

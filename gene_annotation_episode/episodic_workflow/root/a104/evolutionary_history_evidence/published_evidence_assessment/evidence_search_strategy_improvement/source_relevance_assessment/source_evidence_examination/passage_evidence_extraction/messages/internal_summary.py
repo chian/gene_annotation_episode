@@ -7,7 +7,12 @@ old ``internal_summary.py``: ``literature_assignment``, ``literature_source_cust
 
 The rate-population display contexts of the old file (``literature_experimental_work``, owned population sources,
 the latest failed population attempt, ``literature_completed_work``) are not carried; the saved assay-grading sheets
-are shown as their controlled features. The root-only ``reference_evidence_parent`` context is not this episode's."""
+are shown as their controlled features. The root-only ``reference_evidence_parent`` context is not this episode's.
+
+The input list (nano-graphrag ``PageRunState.remaining_chunks``): ``input_list`` holds the commissioned spans not yet
+processed, in the parent's order; ``processed_spans`` the consumed ones. A span is consumed when the episode's completed
+``source_read`` windows and ``no_applicable_evidence`` examined spans cover all its bytes; the list shrinks as spans are read
+or examined and the episode's yield estimator ends the episode when it is empty."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.evolutionary_history_evidence.literature_assay_grading_features import (
     current_sheet_features)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_assay_grading_storage import (
@@ -67,7 +72,39 @@ def internal_summary(view):
     summary['source_lead_dispositions'] = (lead_dispositions(summary, view.records)
                                            if task['kind'] == 'verified_source_leads' else [])
     summary['screening_answers'] = screening_answers(summary)
+    summary['processed_spans'], summary['input_list'] = input_list(parent['spans'], outcomes,
+                                                                   summary['no_applicable_evidence'])
     return summary
+
+
+def covered_intervals(outcomes, declared):
+    """The byte intervals the episode has handed out or processed, per (source, representation): each completed
+    ``source_read`` window and each source-grounded ``no_applicable_evidence`` examined span."""
+    intervals = {}
+    for outcome in outcomes:
+        result = outcome['outcome'].get('result') if outcome['tool'] == 'source_read' else None
+        if outcome['outcome'].get('status') == 'completed' and isinstance(result, dict):
+            intervals.setdefault((result['source_ref'], result['representation']), []).append(
+                (result['start'], result['end']))
+    for span in declared:
+        intervals.setdefault((span['source_ref'], span['representation']), []).append((span['start'], span['end']))
+    return intervals
+
+
+def input_list(spans, outcomes, declared):
+    """The input list (nano-graphrag ``processed_chunk_ids`` / ``remaining_chunks``): the commissioned spans, in the
+    parent's order, that the episode has not yet processed; a span is consumed once the episode's completed reads
+    and examined declarations together cover all of its bytes. Returns (processed spans, remaining spans)."""
+    intervals = covered_intervals(outcomes, declared)
+    processed, remaining = [], []
+    for span in spans:
+        start, end = span['offset'], span['offset'] + span['limit']
+        covered = start
+        for first, last in sorted(intervals.get((span['source_ref'], span['representation']), [])):
+            if first <= covered:
+                covered = max(covered, last)
+        (processed if covered >= end else remaining).append(span)
+    return processed, remaining
 
 
 def examined_span(records, span):

@@ -38,7 +38,7 @@ def summary():
     parent_input = EPISODE.read_from_parent(admitted, {})
     return {'assignment': parent_input['assignment'], 'scope': parent_input['scope'], 'finding_unit': 1.0,
             'received_record_refs': parent_input['received_record_refs'],
-            'requested_reaction_components': [],
+            'requested_reaction_components': [], 'input_list': ['src_1'], 'consumed_input_ids': [],
             'held_sources': {'src_1': {'artifact_ref': 'art_1', 'text_ref': None, 'stdout_ref': None,
                                        'stderr_ref': None, 'parent_source_refs': []},
                              'src_2': {'artifact_ref': 'art_2', 'text_ref': 'txt_2', 'stdout_ref': None,
@@ -113,8 +113,11 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reaction_grad
     assert names[-2:] == ['literature_reaction_populate', 'literature_reaction_source_populate']
     assert {'public_literature_search', 'public_pmc_asset', 'public_brenda_graph_search'} <= set(names)
     assert 'reason' not in names and set(names) <= set(EPISODE.tools)
-    schema = task.selection_schema(names)
+    schema = task.selection_schema(names, summary())
     assert len(schema['properties']['selection']['anyOf']) == len(names) + 1
+    child = schema['properties']['selection']['anyOf'][-1]['properties']['arguments']
+    assert child['properties']['source_ref'] == {'enum': ['src_1']}
+    assert len(task.selection_schema(names, {**summary(), 'input_list': []})['properties']['selection']['anyOf']) == len(names)
     assert 'execution_estimate' in task.offered({'tool_registry': {'native_statistics': object()}})
 
 
@@ -131,6 +134,14 @@ def test_what_the_commission_builds_is_admitted_by_the_real_child_form_and_names
         EPISODE.msg_to_child(CHILD, {**ARGUMENTS, 'source_ref': 'src_9'}, summary())
     with pytest.raises(KeyError):
         EPISODE.msg_to_child('no_such_slot', ARGUMENTS, summary())
+
+
+def test_an_examined_source_and_the_search_results_it_derives_from_are_consumed():
+    module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    held = summary()['held_sources']
+    children = [{'arguments': {'source_ref': 'src_2'}}]
+    assert module.consumed_search_results(children, held, {'src_1'}) == ['src_1']
+    assert module.consumed_search_results([], held, {'src_1'}) == []
 
 
 def test_a_child_return_becomes_the_parents_report_of_credit_and_controlled_finding():

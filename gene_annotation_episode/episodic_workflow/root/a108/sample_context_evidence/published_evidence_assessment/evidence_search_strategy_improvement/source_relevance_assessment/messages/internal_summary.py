@@ -99,12 +99,27 @@ def graded_assessments(records, reasons):
     return found
 
 
+def source_inputs(parent, custody, children):
+    """The input list (nano-graphrag ``PageRunState.processed_chunk_ids`` / ``remaining_chunks`` over this episode's
+    sources): the sources this episode works through, in the order they were handed to it (the search results, the
+    task's sources and screening spans, then any other source it holds), less the sources a source examination child
+    was commissioned on. A source handed to a child is consumed and is never offered again.
+    Returns ``(consumed_source_refs, input_list)``."""
+    task = parent['task']
+    listed = list(dict.fromkeys([*parent['search_result_refs'], *task.get('source_refs', ()),
+                                 *(span['source_ref'] for span in task.get('examined', ())), *custody]))
+    consumed = list(dict.fromkeys(outcome['arguments']['page']['source_ref'] for outcome in children))
+    return consumed, [ref for ref in listed if ref not in consumed]
+
+
 def internal_summary(view):
     parent = view.parent_input
     task = parent['task']
     records = view.records
     held = sorted(records.refs())
     custody = source_custody(records, held)
+    consumed_sources, input_list = source_inputs(parent, custody,
+                                                 [outcome for outcome in view.outcomes if outcome['kind'] == 'child'])
     outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
     child_reports = [{'slot': outcome['slot'], 'objective': outcome['message']['objective'],
                       'page': outcome['arguments']['page'], **outcome['report']}
@@ -144,6 +159,7 @@ def internal_summary(view):
         'literature_source_custody': [{'source_ref': reference, **custody[reference]} for reference in
                                       dict.fromkeys([*parent['search_result_refs'], *task.get('source_refs', [])])],
         'held_source_custody': custody,
+        'input_list': input_list, 'consumed_source_refs': consumed_sources,
         'proposed_annotation_subject_refs': records.get(parent['proposed_annotation_ref'])['subject_refs'],
         'own_literature_outcomes': outcome_page(outcomes, offset=0, limit=OUTCOME_PAGE_SIZE, tools=(*ACQUISITION_TOOLS, *READ_TOOLS),
                                                 tool_of=lambda outcome: outcome.get('tool')),

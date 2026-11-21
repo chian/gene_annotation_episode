@@ -100,3 +100,17 @@ def test_the_model_is_offered_the_access_tools_the_reaction_graders_and_the_reas
     assert 'report' not in EPISODE.tools and {'source_xlsx_sheets', 'source_xlsx_rows'} <= set(names)
     assert names[-3:] == ['literature_reaction_populate', 'literature_reaction_source_populate', 'reason']
     assert len(names) == 17 and set(names) <= set(EPISODE.tools)
+
+
+def test_the_input_list_is_the_unread_selection_and_a_consumed_read_is_rejected():
+    inputs = importlib.import_module('gene_annotation_episode.episodic_workflow.episode_support.literature.readers.'
+                                     'gene_context_evidence.literature_selection_input_list')
+    read = {'kind': 'tool', 'tool': 'source_read', 'outcome': {'status': 'completed'},
+            'arguments': {'arguments': {'source_ref': 'src_1', 'representation': 'original', 'offset': 2, 'limit': 3}}}
+    assert inputs.selection_input_list(WINDOW, []) == [[0, 10]]
+    assert inputs.selection_input_list(WINDOW, [read]) == [[0, 2], [5, 10]]
+    consumed = inputs.consumed_extents(WINDOW, [read])
+    assert inputs.already_read(WINDOW, consumed, 'source_read',
+                               {'source_ref': 'src_1', 'representation': 'original', 'offset': 3, 'limit': 1})
+    assert not inputs.already_read(WINDOW, consumed, 'source_read',
+                                   {'source_ref': 'src_1', 'representation': 'original', 'offset': 4, 'limit': 3})

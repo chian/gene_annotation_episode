@@ -20,8 +20,42 @@ HISTORY_MEANING = ('Own outcome metadata only. Inspect original source records a
 SOURCE_FIELDS = ('version', 'artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref', 'parent_source_refs')
 
 
+def named_references(value):
+    """Every record a model-written value names: a value under a key ``ref`` or ``..._ref``, or in a list under
+    ``..._refs``."""
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if (key == 'ref' or key.endswith('_ref')) and isinstance(child, str):
+                yield child
+            elif key.endswith('_refs') and isinstance(child, list):
+                yield from (item for item in child if isinstance(item, str))
+            else:
+                yield from named_references(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from named_references(child)
+
+
+def consumed_sources(outcomes, source_refs):
+    """The assigned sources this episode has consumed, in the order consumed (nano-graphrag ``processed_chunk_ids`` /
+    ``processed_row_ids``): a source handed to the strategy child as a prior-search source (an input handed out), and
+    a source a partner population operation that was not refused named (an input processed)."""
+    consumed = []
+    for outcome in outcomes:
+        if outcome['kind'] == 'child':
+            consumed.extend(outcome['arguments']['selection']['prior_search_refs'])
+        elif outcome['tool'] in POPULATION_TOOLS and outcome['outcome'].get('status') != 'invalid':
+            consumed.extend(reference for reference in named_references(outcome['arguments']['arguments'])
+                            if reference in source_refs)
+    return [reference for reference in dict.fromkeys(consumed) if reference in source_refs]
+
+
 def internal_summary(view):
     parent = view.parent_input
+    # The input list (nano-graphrag's input-list paradigm): the assigned sources not yet consumed, in assignment order.
+    # It shrinks as a source is handed to the child or populated into a partner sheet; the yield estimator stops the
+    # episode when it is empty.
+    consumed = consumed_sources(view.outcomes, parent['source_refs'])
     custody = []
     for reference in parent['source_refs']:
         source = view.records.get(reference)
@@ -31,6 +65,8 @@ def internal_summary(view):
     sheets = merged_sheet_features(current_sheet_features(view.records, view.outcomes), returned)
     summary = {**parent,
                'held_record_refs': sorted(view.records.refs()),
+               'consumed_source_refs': consumed,
+               'input_list': [reference for reference in parent['source_refs'] if reference not in consumed],
                'source_custody': custody,
                'own_literature_outcomes': outcome_page(view.outcomes, offset=0, limit=OUTCOME_PAGE_SIZE,
                                                        tools=(*OWN_TOOLS, *POPULATION_TOOLS),

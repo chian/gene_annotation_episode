@@ -38,12 +38,43 @@ def derived_sources(records, page_source_ref):
     return [row for row in records.list('source') if page_source_ref in row.get('parent_source_refs', ())]
 
 
+def covered_intervals(outcomes):
+    """The byte intervals the episode has handed out, per (source, representation): each completed ``source_read``
+    window."""
+    intervals = {}
+    for outcome in outcomes:
+        result = outcome['outcome'].get('result') if outcome['tool'] == 'source_read' else None
+        if outcome['outcome'].get('status') == 'completed' and isinstance(result, dict):
+            intervals.setdefault((result['source_ref'], result['representation']), []).append(
+                (result['start'], result['end']))
+    return intervals
+
+
+def input_list(spans, outcomes):
+    """The input list (nano-graphrag ``processed_chunk_ids`` / ``remaining_chunks``): the commissioned spans, in the
+    parent's order, the episode has not yet processed; a span is consumed once the episode's completed reads cover all
+    of its bytes. Returns (processed spans, remaining spans)."""
+    intervals = covered_intervals(outcomes)
+    processed, remaining = [], []
+    for span in spans:
+        start, end = span['offset'], span['offset'] + span['limit']
+        covered = start
+        for first, last in sorted(intervals.get((span['source_ref'], span['representation']), [])):
+            if first <= covered:
+                covered = max(covered, last)
+        (processed if covered >= end else remaining).append(span)
+    return processed, remaining
+
+
 def internal_summary(view):
     parent = view.parent_input
     page = parent['page']
     source = view.records.get(page['source_ref'])
     sheets = current_sheet_features(view.records, view.outcomes)
+    processed_spans, remaining_spans = input_list(parent['spans'], view.outcomes)
     return {
+        # The input list: the commissioned passages not yet read in full; a consumed passage is no longer offered.
+        'input_list': remaining_spans, 'processed_spans': processed_spans,
         'literature_assignment': {'version': 'reading_assignment_v1', 'page': page, 'selection': {'spans': parent['spans']}},
         'finding_unit': parent['finding_unit'],
         'scope': parent['scope'],

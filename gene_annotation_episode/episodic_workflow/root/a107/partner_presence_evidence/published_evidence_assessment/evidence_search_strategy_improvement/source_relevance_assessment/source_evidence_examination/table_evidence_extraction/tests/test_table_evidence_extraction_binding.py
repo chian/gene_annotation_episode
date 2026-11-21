@@ -88,3 +88,14 @@ def test_the_return_is_the_credit_and_the_controlled_sheet_features_and_the_form
                                    {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 1.5}, ())
     assert result == {'credit': 1.5, 'finding': {'partner_sheets': [], **counts}}
     final.RETURN_FORM.admit(result, 'return')
+
+
+def test_the_input_list_is_the_selection_until_a_grader_has_completed_on_it():
+    summary = importlib.import_module(MODULE + '.messages.internal_summary')
+    items = summary.selection_range({'offset': 10, 'limit': 5})
+    assert items == [[10, 15]] and summary.selection_range({'offset': 10, 'limit': 0}) == []
+    read = {'kind': 'tool', 'tool': 'source_read', 'outcome': {'status': 'completed'}}
+    failed = {'kind': 'tool', 'tool': 'literature_partner_populate', 'outcome': {'status': 'invalid'}}
+    graded = {'kind': 'tool', 'tool': 'literature_partner_populate', 'outcome': {'status': 'completed'}}
+    assert summary.processed_inputs([read, failed], items) == []
+    assert summary.processed_inputs([read, failed, graded], items) == items

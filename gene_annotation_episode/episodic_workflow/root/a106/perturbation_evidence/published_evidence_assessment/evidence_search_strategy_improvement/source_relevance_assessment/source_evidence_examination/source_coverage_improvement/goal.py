@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
 BINDING_PATH = 'perturbation_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement'
 ROLE_INSTRUCTION = ('Investigate the source in document order as useful for the assigned question. Use returned '
                     'UTF-8 byte continuations and retain representation identity. Decide whether to continue, '
-                    'reread, change the examined window or interpret obtained evidence from actual outcomes.')
+                    'change the examined window or interpret obtained evidence from actual outcomes.')
 GOAL = '\n\n'.join((ROLE_INSTRUCTION, PERTURBATION_TASK, A106_SUBSCORE_TASK))
 UNIT = ('one model-selected tool call on the assigned source (a catalog lookup, an access tool, a sheet population, '
         'the automatic A106 score judgment or a reasoning commit)')

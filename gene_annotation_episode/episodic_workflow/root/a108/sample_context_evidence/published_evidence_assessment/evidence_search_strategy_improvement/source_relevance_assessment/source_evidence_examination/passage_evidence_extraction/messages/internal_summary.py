@@ -84,6 +84,47 @@ def graded_assessments(records, reasons):
     return list(dict.fromkeys(found))
 
 
+def span_processed(span, page, reasons, records):
+    """A commissioned window is processed (consumed, nano-graphrag's processed chunk) once a completed reasoning commit
+    has dealt with it: the commit declared the window examined without applicable evidence
+    (``evidence_processing.examined``, whose witnesses together must cover it), or a record the commit made is anchored
+    within the window's bytes of the page's artifact."""
+    start, end = span['offset'], span['offset'] + span['limit']
+    covered = start
+    intervals = []
+    for outcome in reasons:
+        processing = outcome.get('evidence_processing') or {}
+        if processing.get('kind') != 'no_applicable_evidence' or not processing.get('reason'):
+            continue
+        for witness in processing['examined']:
+            source = records.get(witness['source_ref'])
+            artifact = source.get('artifact_ref' if witness['representation'] == 'original' else 'text_ref')
+            if (witness['source_ref'], artifact) == (page['source_ref'], page['artifact_ref']):
+                intervals.append((witness['start'], witness['end']))
+    for first, last in sorted(intervals):
+        if first <= covered:
+            covered = max(covered, last)
+    if covered >= end:
+        return True
+    for outcome in reasons:
+        for ref in outcome.get('record_refs', []):
+            anchor = records.get(ref).get('anchor')
+            if (anchor is not None and anchor['artifact_ref'] == page['artifact_ref']
+                    and start <= anchor['start'] and anchor['end'] <= end):
+                return True
+    return False
+
+
+def input_list(parent, reasons, records):
+    """``(consumed, input_list)``: the commissioned windows as ``[offset, end]`` pairs, in the order assigned, those a
+    completed commit has processed and those still to process. A consumed window is no longer offered; the episode's
+    yield estimator ends it when the input list is empty."""
+    page = parent['page']
+    pairs = [(span, [span['offset'], span['offset'] + span['limit']]) for span in parent['spans']]
+    done = [pair for span, pair in pairs if span_processed(span, page, reasons, records)]
+    return done, [pair for _, pair in pairs if pair not in done]
+
+
 def internal_summary(view):
     parent = view.parent_input
     page, task = parent['page'], parent['task']
@@ -95,7 +136,9 @@ def internal_summary(view):
               and last['outcome'].get('status') == 'completed' else [])
     assignment = {'version': 'reading_assignment_v1', 'page': page, 'selection': {'spans': parent['spans']},
                   'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref']}
+    consumed, remaining = input_list(parent, reasons, view.records)
     summary = {
+        'input_list': remaining, 'consumed_inputs': consumed,
         'literature_assignment': assignment,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],

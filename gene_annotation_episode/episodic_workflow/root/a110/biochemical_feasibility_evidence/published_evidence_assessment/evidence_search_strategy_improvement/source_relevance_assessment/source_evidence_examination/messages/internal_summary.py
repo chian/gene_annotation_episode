@@ -16,10 +16,44 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
     current_sheet_features, merged_sheet_features)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.literature_reaction_instructions import (
     selected_family)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
+    representation_content)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_page_content import (
+    PROSE_CHUNK, SOURCE_TABLE, TABLE_PREVIEW_CHARS, candidate_text, page_candidates)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
-OUTCOME_PAGE_SIZE = 8        # the old configuration outcome_page_size default
+# The page's input list (nano-graphrag's page: ``PageRunState.processed_chunk_ids`` / ``remaining_chunks``): the
+# candidate input units of the assigned representation (table regions and prose chunks, UTF-8 byte offsets, library
+# ``page_candidates``). A candidate lying inside a window a child was commissioned with is consumed and offered no more;
+# ``input_list`` is the unconsumed candidate ids in document order and the episode's yield estimator stops when it is
+# empty. A representation that is not UTF-8 text (a workbook, a PDF, an image) has no text candidates: its basis is
+# ``not_utf8``, its list is empty and its children keep their window / workbook selections (nothing to consume).
+TEXT_BASIS, BINARY_BASIS = 'text', 'not_utf8'
+
+
+def handed_windows(arguments):
+    """The byte windows a child commission handed out: every span of a passage commission, the one window of a
+    coverage or ``window`` table commission; a workbook table selection (``sheet_key``) addresses rows, not bytes."""
+    if 'spans' in arguments:
+        return [(span['offset'], span['offset'] + span['limit']) for span in arguments['spans']]
+    if 'sheet_key' in arguments:
+        return []
+    return [(arguments['offset'], arguments['offset'] + arguments['limit'])]
+
+
+def consumed_candidates(children, candidates):
+    """The candidate ids the commissioned children were handed, in the order handed (nano-graphrag
+    ``processed_chunk_ids`` and ``selected_source_table_ids``): every candidate lying inside a handed window."""
+    consumed = []
+    for outcome in children:
+        for start, end in handed_windows(outcome['arguments']):
+            consumed.extend(candidate['candidate_id'] for candidate in candidates
+                            if start <= candidate['start'] and candidate['end'] <= end)
+    return list(dict.fromkeys(consumed))
+
+
+OUTCOME_PAGE_SIZE = 8       # the old configuration outcome_page_size default
 READ_TOOLS = ('source_read', 'source_locate', 'source_sequence_scan', 'source_sequence_references',
               'source_experimental_records', 'source_xlsx_rows', 'source_pdf_text', 'image_view')
 CUSTODY_KEYS = ('version', 'artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref', 'parent_source_refs')
@@ -46,7 +80,26 @@ def internal_summary(view):
     assignment = dict(page)
     if requested:
         assignment['requested_reaction_components'] = parent['requested_reaction_components']
+    content = representation_content(view.records, page['source_ref'], page['representation'])
+    try:
+        candidates, basis = page_candidates(content), TEXT_BASIS
+    except UnicodeDecodeError:
+        candidates, basis = [], BINARY_BASIS
+    consumed = consumed_candidates(children, candidates)
+    unconsumed = [candidate for candidate in candidates if candidate['candidate_id'] not in consumed]
     return {
+        'input_list': [candidate['candidate_id'] for candidate in unconsumed],
+        'input_list_basis': basis,
+        'content_candidates': candidates,
+        'consumed_candidate_ids': consumed,
+        'unconsumed_candidates': unconsumed,
+        'unconsumed_candidate_ids': [candidate['candidate_id'] for candidate in unconsumed],
+        'unconsumed_table_ids': [candidate['candidate_id'] for candidate in unconsumed
+                                 if candidate['candidate_type'] == SOURCE_TABLE],
+        'unconsumed_chunk_ids': [candidate['candidate_id'] for candidate in unconsumed
+                                 if candidate['candidate_type'] == PROSE_CHUNK],
+        'table_previews': {candidate['candidate_id']: candidate_text(content, candidate)[:TABLE_PREVIEW_CHARS]
+                           for candidate in unconsumed if candidate['candidate_type'] == SOURCE_TABLE},
         'literature_assignment': assignment, 'page': page,
         'requested_reaction_components': parent['requested_reaction_components'],
         'family': selected_family(requested, set()),

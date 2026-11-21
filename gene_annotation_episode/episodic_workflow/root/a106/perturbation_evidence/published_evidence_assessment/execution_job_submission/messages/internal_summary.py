@@ -37,8 +37,14 @@ def internal_summary(view):
         if commission['handoff_refs']:
             handed_off.setdefault(commission['resource_id'], []).extend(commission['handoff_refs'])
     already = set(parent['already_handed_off_resource_ids'])
+    # The input list (nano-graphrag's input-list paradigm): the permitted resources whose request is still to be
+    # carried out. A resource already handed off, or commissioned once, is consumed and no longer offered.
+    consumed = sorted(already | {commission['resource_id'] for commission in commissions})
+    input_list = [resource_id for resource_id in parent['eligible_resource_ids'] if resource_id not in consumed]
     return {
         **parent,
+        'input_list': input_list,
+        'consumed_resource_ids': consumed,
         'capabilities': capabilities,
         'reasonings': reasonings,
         'commissions': commissions,

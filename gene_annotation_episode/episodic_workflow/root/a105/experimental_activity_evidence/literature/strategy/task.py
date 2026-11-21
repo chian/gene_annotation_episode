@@ -129,16 +129,35 @@ TEXT = {'type': 'string', 'minLength': 1}
 REPRESENTATIONS = ['text', 'original', 'stdout', 'stderr']
 
 
-SEARCH_SCHEMA = obj({'search_result_refs': {'type': 'array', 'items': TEXT, 'minItems': 1, 'uniqueItems': True}})
 OBJECTIVE = {'type': 'string', 'minLength': 1,
              'description': 'What the child should investigate in the returned sources and why'}
-CHILD_ARGUMENTS = {
-    'web_search': (
-        'Investigate which of the returned sources merit examination for the assigned question. Search results are '
-        'source-discovery information: the child examines the original sources and their conditions before '
-        'asserting biological evidence, and can commission the examination of a selected source.',
-        obj({'objective': OBJECTIVE, 'search': SEARCH_SCHEMA})),
-}
+CHILD_DESCRIPTION = (
+    'Investigate which of the UNCONSUMED search results (input_list: the earlier search results you were given and '
+    'the sources your own searches acquired) merit examination for the assigned question. Search results are '
+    'source-discovery information: the child examines the original sources and their conditions before '
+    'asserting biological evidence, and can commission the examination of a selected source. The results handed to '
+    'the child are consumed: they are not offered again.')
+
+
+def search_schema(input_list):
+    """The search results the model may hand to a child: only unconsumed ones (the input list), so a consumed
+    result cannot be selected."""
+    return obj({'search_result_refs': {'type': 'array', 'items': {'enum': list(input_list)}, 'minItems': 1,
+                                       'uniqueItems': True}})
+
+
+def child_arguments(slot, input_list):
+    """The description and arguments schema of a child, over the input list now."""
+    return CHILD_DESCRIPTION, obj({'objective': OBJECTIVE, 'search': search_schema(input_list)})
+
+
+def valid_slots(input_list):
+    """The child slots valid now: the search child while an unconsumed search result remains."""
+    return list(CHILD_SLOTS) if input_list else []
+
+
+# Static form (the declared shape of each child's arguments, without the input list), kept for the binding test.
+CHILD_ARGUMENTS = {slot: child_arguments(slot, ['<unconsumed search result>']) for slot in CHILD_SLOTS}
 
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
@@ -179,8 +198,9 @@ def offered(settings):
 
 def offered_actions(summary, ctx):
     """The action types offered at this decision, from the same ``offered`` and ``CHILD_SLOTS`` ``decide`` and
-    ``action`` use: the recorded tool names, ``reason`` and the child slots."""
-    return [*(TOOL_NAMES.get(name, name) for name in offered(ctx.settings)), *CHILD_SLOTS]
+    ``action`` use: the recorded tool names, ``reason`` and the child slots valid now (an unconsumed search result
+    remains)."""
+    return [*(TOOL_NAMES.get(name, name) for name in offered(ctx.settings)), *valid_slots(summary['input_list'])]
 
 
 def catalog(names, commit_schema, leads, settings):
@@ -202,13 +222,14 @@ def catalog(names, commit_schema, leads, settings):
     return entries
 
 
-def selection_schema(names, commit_schema, leads, settings):
+def selection_schema(names, commit_schema, leads, settings, summary):
     """What the model answers with: one tool and its arguments, or one child slot and its arguments (the old action
-    schema: kinds ``tool`` and ``child``)."""
+    schema: kinds ``tool`` and ``child``); a child names only unconsumed search results."""
     tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
              for entry in catalog(names, commit_schema, leads, settings)]
-    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': CHILD_ARGUMENTS[slot][1]})
-                for slot in CHILD_SLOTS]
+    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot},
+                     'arguments': child_arguments(slot, summary['input_list'])[1]})
+                for slot in valid_slots(summary['input_list'])]
     return obj({'selection': {'anyOf': [*tools, *children]}})
 
 
@@ -652,11 +673,12 @@ TOOLS = {
     'reason': reason}
 
 
-def child_options():
-    """The children the model may select: slot, description and the arguments it takes (the old
-    ``child_option_information``, over this episode's own slots)."""
-    return [{'slot': slot, 'description': CHILD_ARGUMENTS[slot][0], 'arguments': CHILD_ARGUMENTS[slot][1]}
-            for slot in CHILD_SLOTS]
+def child_options(summary):
+    """The children the model may select now: slot, description and the arguments it takes (the old
+    ``child_option_information``), over the unconsumed search results only."""
+    return [{'slot': slot, 'description': child_arguments(slot, summary['input_list'])[0],
+             'arguments': child_arguments(slot, summary['input_list'])[1]}
+            for slot in valid_slots(summary['input_list'])]
 
 
 def decide(summary, feedback, ctx):
@@ -679,7 +701,8 @@ def decide(summary, feedback, ctx):
                'credit_binding': summary['credit_binding'], 'last_local_outcome': summary['last_local_outcome'],
                'held_record_refs': summary['held_record_refs'], 'assay_sheets': summary['assay_sheets'],
                'aggregation_sheets': summary['aggregation_sheets'],
-               'child_returns': summary['child_returns'], 'child_options': child_options(),
+               'input_list': summary['input_list'], 'consumed_inputs': summary['consumed_inputs'],
+               'child_returns': summary['child_returns'], 'child_options': child_options(summary),
                'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     if ctx.settings['rate_population']:
@@ -691,7 +714,8 @@ def decide(summary, feedback, ctx):
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads,
                                                   populations=offered_populations(ctx.settings)), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings)))
+                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings,
+                                                            summary)))
 
 
 def validate_selection(value, schema):
@@ -708,7 +732,7 @@ def action(response, summary, records, ctx):
     names = offered(ctx.settings)
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads, ctx.settings)
+    schema = selection_schema(names, commit_schema, leads, ctx.settings, summary)
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         if selection['kind'] == 'child':

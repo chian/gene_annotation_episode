@@ -132,10 +132,12 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_the
     assert set(names) <= set(EPISODE.tools) and set(task.ACQUISITION_NAMES) <= set(names)
     assert len(task.ACQUISITION_NAMES) == 22 and 'public_literature_search' in names
     for leads in (False, True):
-        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, NONE)
+        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, NONE, [SRC])
         assert len(schema['properties']['selection']['anyOf']) == len(names) + 1
         task.generation_schema(schema)
-    assert [entry['slot'] for entry in task.commissions()] == list(EPISODE.child_slots)
+    assert [entry['slot'] for entry in task.commissions([SRC])] == list(EPISODE.child_slots)
+    assert task.commissions([]) == []      # an empty input list offers no examination
+    assert task.page_schema([SRC])['properties']['source_ref'] == {'enum': [SRC]}
     shown = {entry['name']: entry for entry in task.catalog(names, COMMIT_SCHEMA, True, NONE)}
     assert 'source_lead' in shown['reason']['input_schema']['properties']
     assert 'source_lead' not in task.reason_schema(COMMIT_SCHEMA, False)['properties']
@@ -150,7 +152,11 @@ def test_the_commission_is_admitted_by_the_form_of_the_page_child_and_selects_wh
     child_task = {'version': 'literature_local_task_v1', 'evidence_axis': 'A106', 'kind': 'verified_source_leads'}
     arguments = {'page': PAGE, 'literature_task': child_task}
     task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_page', 'arguments': arguments}},
-                            task.selection_schema(task.offered(NONE, None), COMMIT_SCHEMA, True, NONE))
+                            task.selection_schema(task.offered(NONE, None), COMMIT_SCHEMA, True, NONE, [SRC]))
+    with pytest.raises(Exception):      # a consumed source is no longer offered: the schema admits no page for it
+        task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_page', 'arguments': arguments}},
+                                task.selection_schema(task.offered(NONE, None), COMMIT_SCHEMA, True, NONE,
+                                                      ['source_' + 'b' * 24]))
     parent_input = EPISODE.read_from_parent(ASSIGNMENT, {})
     summary = {'task': parent_input['task'], 'proposed_annotation_ref': parent_input['proposed_annotation_ref'],
                'scope': parent_input['scope'], 'source_custody': {SRC: [SRC, ART]}}

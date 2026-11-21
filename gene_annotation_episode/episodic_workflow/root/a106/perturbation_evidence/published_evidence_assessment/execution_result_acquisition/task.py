@@ -184,8 +184,9 @@ def _schema(summary):
     for name in OFFERED:
         arguments = deepcopy(ARGUMENTS[name])
         if name == 'api_result_operation':
-            arguments['properties']['operation'] = {'type': 'string',
-                                                    'enum': [entry['name'] for entry in summary['catalog']]}
+            if not summary['input_list']:
+                continue  # every catalog operation is consumed: nothing left to offer
+            arguments['properties']['operation'] = {'type': 'string', 'enum': list(summary['input_list'])}
         branches.append({'type': 'object', 'additionalProperties': False, 'required': ['kind', 'tool', 'arguments'],
                          'properties': {'kind': {'type': 'string', 'const': 'tool'},
                                         'tool': {'type': 'string', 'const': name}, 'arguments': arguments}})
@@ -209,8 +210,12 @@ def _context(summary, feedback, ctx):
         'execution_target_description': summary['target_description'],
         'execution_completed': summary['execution_completed'],
         'callable_operations': [{'name': name, 'description': DESCRIPTIONS[name], 'arguments_schema': ARGUMENTS[name]}
-                                for name in OFFERED],
+                                for name in OFFERED if name != 'api_result_operation' or summary['input_list']],
         'result_catalog': summary['catalog'],
+        'input_list': summary['input_list'],
+        'consumed_inputs': summary['consumed_inputs'],
+        'input_list_note': ('The input list is the result-catalog operations not yet performed. A performed '
+                            'operation is consumed and no longer offered.'),
         'action_yields': summary.get('action_yields'),
         'last_local_outcome': summary['last_local_outcome'],
         'returned_feedback': summary['feedback'],

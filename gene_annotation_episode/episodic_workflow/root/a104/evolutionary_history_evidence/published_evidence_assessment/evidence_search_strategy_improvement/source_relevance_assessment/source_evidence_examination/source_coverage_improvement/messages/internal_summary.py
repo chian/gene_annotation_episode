@@ -8,6 +8,10 @@ latest image the model looked at, and the typed answers the commissioned task as
 The population display contexts of the old file (``literature_experimental_work``, owned population sources, the
 latest failed population attempt, ``literature_completed_work``) exist only under the old ``rate_population``
 configuration, which is off by default and not built here."""
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
+    representation_content)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.evolutionary_history_evidence.literature_reading_windows import (
+    consumed_ranges, reading_windows, remaining_windows)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.evolutionary_history_evidence.literature_assay_grading_features import (
     current_sheet_features)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.evolutionary_history_evidence.literature_assessment_features import (
@@ -37,7 +41,16 @@ def internal_summary(view):
               and last['outcome'].get('status') == 'completed' else [])
     assignment = {'version': 'reading_assignment_v1', 'page': page, 'selection': parent['window'],
                   'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref']}
+    # The input list (nano-graphrag ReportWindowSource): the windows of the source from the commissioned starting window
+    # to the end, in document order; a window the episode has read entirely is consumed and no longer offered.
+    content = representation_content(view.records, page['source_ref'], page['representation'])
+    windows = reading_windows(content, parent['window']['offset'], parent['window']['limit'])
+    ranges = consumed_ranges(view.outcomes, page['source_ref'], page['representation'])
+    remaining = remaining_windows(windows, ranges)
     summary = {
+        'input_list': remaining, 'consumed_windows': [window for window in windows if window not in remaining],
+        'consumed_ranges': ranges, 'windows_total': len(windows),
+        'content_bytes': len(content),
         'literature_assignment': assignment,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],

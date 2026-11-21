@@ -613,6 +613,11 @@ TOOLS = {'state_query': state_query, 'source_read': source_read, 'source_locate'
          'execution_estimate': execution_estimate, 'reason': reason}
 
 
+INPUT_LIST_MEANING = ('input_list is the commissioned spans you have not yet processed, in order; processed_spans are '
+                      'consumed (read in full or declared examined) and are not offered again. Work through the '
+                      'input_list; reading bytes outside the spans (neighbouring context) consumes none of them.')
+
+
 def decide(summary, feedback, ctx):
     """Ask the model for the next tool, shown the assignment, the custody of the source, its own read outcomes,
     the interpretation so far, the latest image it looked at, the tools, the measured time and the yield table
@@ -621,6 +626,8 @@ def decide(summary, feedback, ctx):
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
+               'input_list': summary['input_list'], 'processed_spans': summary['processed_spans'],
+               'input_list_meaning': INPUT_LIST_MEANING,
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],

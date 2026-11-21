@@ -56,6 +56,18 @@ REFERENCES = {'type': 'array', 'items': REF, 'uniqueItems': True}
 SEARCH = obj({'version': {'const': 'search_assignment_v1'}, 'question_context_refs': REFERENCES,
               'search_result_refs': REFERENCES})
 CHILD_SELECTIONS = {'literature_search': SEARCH}
+
+
+def search_schema(input_list):
+    """The search the model may select: ``search_result_refs`` are unconsumed search results (the input list), so a
+    consumed result cannot be selected again."""
+    return obj({**SEARCH['properties'], 'search_result_refs': {'type': 'array', 'minItems': 1, 'uniqueItems': True,
+                                                               'items': {'enum': list(input_list)}}})
+
+
+def valid_slots(input_list):
+    """The child slots valid now: the relevance assessment while an unconsumed search result remains."""
+    return list(CHILD_SLOTS) if input_list else []
 # The old ``_ROLE_INSTRUCTIONS`` of the child role, with what its selection is.
 CHILD_OPTIONS = {
     'literature_search':
@@ -115,16 +127,16 @@ def offered_catalog(entries):
     return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'])} for entry in result]
 
 
-def action_schema(catalog):
+def action_schema(catalog, input_list):
     """What the model answers with: one tool and its arguments, or one child and its selection (the old action
-    kinds ``tool`` and ``child``)."""
+    kinds ``tool`` and ``child``). A child is offered only for unconsumed search results (``input_list``)."""
     branches = [{'type': 'object', 'additionalProperties': False, 'required': ['kind', 'tool', 'arguments'],
                  'properties': {'kind': {'const': 'tool'}, 'tool': {'const': entry['name']},
                                 'arguments': entry['input_schema']}} for entry in catalog]
     branches.extend({'type': 'object', 'additionalProperties': False, 'required': ['kind', 'slot', 'arguments'],
                      'properties': {'kind': {'const': 'child'}, 'slot': {'const': slot},
-                                    'arguments': obj({'selection': CHILD_SELECTIONS[slot]})}}
-                    for slot in CHILD_SLOTS)
+                                    'arguments': obj({'selection': search_schema(input_list)})}}
+                    for slot in valid_slots(input_list))
     return {'type': 'object', 'additionalProperties': False, 'required': ['selection'],
             'properties': {'selection': {'anyOf': branches}}}
 
@@ -151,7 +163,11 @@ def render_prompt(summary, catalog, feedback):
              'prior_search_refs': summary['prior_search_refs'], 'partner_components': summary['partner_components']})
     section(parts, 'Representations available for selected sources', summary['source_custody'])
     section(parts, 'Available selected operations', catalog)
-    section(parts, 'Permitted narrower investigations', CHILD_OPTIONS)
+    section(parts, 'Input list: search results not yet handed to a relevance assessment (a handed-out result is '
+                   'consumed and no longer offered)', summary['input_list'])
+    section(parts, 'Consumed search results', summary['consumed_inputs'])
+    section(parts, 'Permitted narrower investigations',
+            {slot: text for slot, text in CHILD_OPTIONS.items() if slot in valid_slots(summary['input_list'])})
     steering = ['STEERING', '', STEERING]
     section(steering, 'Own action yields', summary.get('yield_table'))
     section(steering, 'Current partner sheets', {'sheets': summary['partner_sheets'],
@@ -166,7 +182,7 @@ def render_prompt(summary, catalog, feedback):
 def decide(summary, feedback, ctx):
     catalog = offered_catalog(ctx.services['tool_catalog'].read('entries'))
     return ModelRequest('REASONING', instructions(summary['partner_components'] is not None), {'prompt': render_prompt(summary, catalog, feedback)},
-                        transport(action_schema(catalog)))
+                        transport(action_schema(catalog, summary['input_list'])))
 
 
 def named_references(value):
@@ -196,7 +212,7 @@ def check_search(records, search):
 
 def action(response, summary, records, ctx):
     catalog = offered_catalog(ctx.services['tool_catalog'].read('entries'))
-    schema = action_schema(catalog)
+    schema = action_schema(catalog, summary['input_list'])
     try:
         decoded = decode_strict_output(response, transport(schema), open_records_as_text=False,
                                        argument_transport_error='a107_argument_transport_not_carried')

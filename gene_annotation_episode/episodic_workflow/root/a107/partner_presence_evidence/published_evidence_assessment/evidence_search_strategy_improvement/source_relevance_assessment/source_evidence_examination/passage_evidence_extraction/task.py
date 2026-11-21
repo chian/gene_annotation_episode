@@ -196,10 +196,30 @@ def output_schema():
                            'arguments_json': {'type': 'string', 'description': 'The operands as one JSON object'}}}
 
 
+INPUT_LIST_MEANING = ('input_list is the commissioned passages you have not yet read in full, in order; '
+                      'processed_spans are consumed and are not offered again: a source_read lying wholly inside '
+                      'processed passages is refused. Work through the input_list.')
+
+
+def consumed_read(arguments, summary):
+    """Whether a ``source_read`` window of the assigned source lies wholly inside the processed spans (a re-read of
+    consumed input)."""
+    page = summary['literature_assignment']['page']
+    if arguments.get('source_ref') != page['source_ref'] or not summary['processed_spans']:
+        return False
+    start = arguments.get('offset', 0)
+    end = start + arguments.get('limit', 0)
+    representation = arguments.get('representation', 'text')
+    return any(span['representation'] == representation and span['offset'] <= start
+               and end <= span['offset'] + span['limit'] for span in summary['processed_spans'])
+
+
 def decide(summary, feedback, ctx):
     """The model chooses one operation, shown the assignment, the custody of the source, its own outcomes, the
     features of the partner sheets it saved, the tools, the measured time and the yield table."""
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
+               'input_list': summary['input_list'], 'processed_spans': summary['processed_spans'],
+               'input_list_meaning': INPUT_LIST_MEANING,
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
@@ -221,6 +241,8 @@ def action(response, summary, records, ctx):
         arguments = json.loads(response['arguments_json'])
         if not isinstance(arguments, dict):
             raise ValueError('arguments_json_must_be_a_JSON_object')
+        if name == 'source_read' and consumed_read(arguments, summary):
+            raise ValueError('input_already_consumed')
     except (KeyError, TypeError, ValueError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
     return ToolCall(name, {'arguments': arguments, 'scope': summary['scope'],

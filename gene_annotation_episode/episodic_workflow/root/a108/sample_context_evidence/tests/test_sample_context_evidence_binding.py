@@ -110,8 +110,7 @@ def test_the_assignment_admits_the_head_assignment_and_read_from_parent_reads_it
 
 def test_the_yield_controller_is_accumulation():
     yield_file = importlib.import_module(MODULE + '.yield_estimator')
-    settings = {'cost': 0.5, 'parameters': {'uncertainty_alpha': 0.1}}
-    controller = yield_file.yield_controller(0.0, settings, parent_input())
+    controller = yield_file.yield_controller(0.0, {}, parent_input())
     assert type(controller).__name__ == 'AccumulationYieldController'
 
 

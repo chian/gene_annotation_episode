@@ -197,14 +197,22 @@ INPUT_SCHEMAS['execution.estimate'] = {'anyOf': [
 # What the one child takes as the model's selection: the returned sources whose relevance is assessed and the records
 # giving the question its context (the old child assignment's ``search_result_refs`` and ``question_context_refs``;
 # its version is fixed by ``msg_to_child``).
-SOURCE_REFS = {'type': 'array', 'items': REF, 'minItems': 1, 'uniqueItems': True}
 CONTEXT_REFS = {'type': 'array', 'items': REF, 'uniqueItems': True}
-CHILD_ARGUMENTS = obj({'objective': TEXT, 'search_result_refs': SOURCE_REFS, 'question_context_refs': CONTEXT_REFS})
+
+
+def child_arguments(input_list):
+    """The child commission's arguments (nano-graphrag input list): ``search_result_refs`` names sources of the
+    input list only, so a source already handed to the child (consumed) cannot be selected."""
+    sources = {'type': 'array', 'items': {**REF, 'enum': list(input_list)}, 'minItems': 1, 'uniqueItems': True}
+    return obj({'objective': TEXT, 'search_result_refs': sources, 'question_context_refs': CONTEXT_REFS})
+
+
 CHILD_DESCRIPTIONS = {
     'source_relevance_assessment': 'Commission an investigation of which of the returned sources merit examination '
-                                   'for the assigned question. search_result_refs names the returned sources (search '
-                                   'results you hold) and question_context_refs the records giving the question its '
-                                   'context.',
+                                   'for the assigned question. search_result_refs names UNCONSUMED sources of the '
+                                   'input list (search results you hold that no earlier commission took); a source '
+                                   'handed out is consumed and not offered again. question_context_refs names the '
+                                   'records giving the question its context.',
 }
 
 REASON_DESCRIPTION = ('Commit a typed scientific reasoning over the selected table or sheet and the records you hold: '
@@ -255,12 +263,13 @@ def instructions(*, knowledge, leads):
     return text + RETURN_GUIDANCE
 
 
-def offered(settings):
+def offered(settings, input_list):
     """The tools offered now: the access tools (``execution_estimate`` only with timing statistics configured), the
-    two population operations, the reasoning commit and the child commission."""
+    two population operations, the reasoning commit and, while the input list holds an unconsumed source, the child
+    commission."""
     access = [name for name in LIBRARY_NAMES
               if name != 'execution_estimate' or 'native_statistics' in settings['tool_registry']]
-    return access + list(POPULATION_NAMES) + ['reason', *CHILD_SLOTS]
+    return access + list(POPULATION_NAMES) + ['reason', *(CHILD_SLOTS if input_list else ())]
 
 
 def lead_schema():
@@ -289,15 +298,15 @@ def reason_schema(commit_schema, leads):
     return source_location_inputs(schema)
 
 
-def catalog(names, commit_schema, leads):
+def catalog(names, commit_schema, leads, input_list):
     """The tools the model is shown: name, description and input schema (the old catalog; every input schema
-    is projected through source_location_inputs)."""
+    is projected through source_location_inputs; the child accepts only unconsumed sources of ``input_list``)."""
     populations = {entry['name']: entry for entry in population_catalog()}
     entries = []
     for name in names:
         if name in CHILD_SLOTS:
             entries.append({'name': name, 'description': CHILD_DESCRIPTIONS[name],
-                            'input_schema': CHILD_ARGUMENTS})
+                            'input_schema': child_arguments(input_list)})
         elif name == 'reason':
             entries.append({'name': 'reason', 'description': REASON_DESCRIPTION,
                             'input_schema': reason_schema(commit_schema, leads)})
@@ -311,11 +320,11 @@ def catalog(names, commit_schema, leads):
     return entries
 
 
-def selection_schema(names, commit_schema, leads):
+def selection_schema(names, commit_schema, leads, input_list):
     """What the model answers with: one tool and its arguments (the old action schema)."""
     return obj({'selection': {'anyOf': [obj({'kind': {'const': 'child' if entry['name'] in CHILD_SLOTS else 'tool'},
                                              'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
-                                        for entry in catalog(names, commit_schema, leads)]}})
+                                        for entry in catalog(names, commit_schema, leads, input_list)]}})
 
 
 def admitted(name, arguments):
@@ -641,7 +650,7 @@ def decide(summary, feedback, ctx):
     """Ask the model for the next tool or child commission, shown the assignment, the custody of the source, its own
     read outcomes, what its children returned, the interpretation so far, the latest image it looked at, the saved sheets, the commissioned goal plan, the tools, the
     measured time and the yield table (the old decision state and inputs, over this episode's summary)."""
-    names = offered(ctx.settings)
+    names = offered(ctx.settings, summary['input_list'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
@@ -657,7 +666,9 @@ def decide(summary, feedback, ctx):
                'last_local_outcome': summary['last_local_outcome'], 'held_record_refs': summary['held_record_refs'],
                'current_findings': summary['finding'], 'child_reports': summary['child_reports'],
                'source_lead_dispositions': summary['source_lead_dispositions'],
-               'tools': catalog(names, summary['reasoning_schema'], leads),
+               'input_list': summary['input_list'],
+               'consumed_search_result_refs': summary['consumed_search_result_refs'],
+               'tools': catalog(names, summary['reasoning_schema'], leads, summary['input_list']),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'literature_selected_population_attempt': summary['literature_selected_population_attempt'],
@@ -665,7 +676,8 @@ def decide(summary, feedback, ctx):
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads)))
+                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads,
+                                                            summary['input_list'])))
 
 
 def empty_commit(commit, commit_schema):
@@ -688,14 +700,18 @@ def action(response, summary, records, ctx):
     selects no offered tool or child,
     arguments that do not fit its schema, an empty reasoning commit (except a no-applicable-evidence declaration or a
     source lead) is invalid."""
-    names = offered(ctx.settings)
+    names = offered(ctx.settings, summary['input_list'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads)
+    schema = selection_schema(names, commit_schema, leads, summary['input_list'])
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         name, arguments = selection['tool'], selection['arguments']
         if name in CHILD_SLOTS:
+            for reference in arguments['search_result_refs']:
+                if reference not in summary['input_list']:
+                    raise ContractError('literature_source_not_in_input_list_or_consumed',
+                                        detail={'reference': reference})
             for reference in (*arguments['search_result_refs'], *arguments['question_context_refs']):
                 if not records.holds(reference):
                     raise ContractError('literature_reference_unavailable', detail={'reference': reference})

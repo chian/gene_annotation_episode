@@ -73,6 +73,14 @@ def test_the_assignment_admits_the_old_assignment_and_the_return_declares_credit
     assert not final.RETURN_FORM.fields['execution_result_refs'].required
 
 
+def test_the_input_list_offers_only_unconsumed_input_records():
+    task = importlib.import_module(MODULE + '.task')
+    summary = {'input_list': ['a', 'b']}
+    schema = task._arguments_schema('api_operation', summary)
+    assert schema['properties']['input_refs']['items']['enum'] == ['a', 'b'] and 'input_refs' in schema['required']
+    assert task._arguments_schema('api_operation', {'input_list': []})['properties']['input_refs']['maxItems'] == 0
+
+
 def test_the_return_gives_credit_finding_and_every_selectable_fact_and_is_admitted():
     episode = importlib.import_module(MODULE + '.episode')
     cls = [value for value in vars(episode).values()

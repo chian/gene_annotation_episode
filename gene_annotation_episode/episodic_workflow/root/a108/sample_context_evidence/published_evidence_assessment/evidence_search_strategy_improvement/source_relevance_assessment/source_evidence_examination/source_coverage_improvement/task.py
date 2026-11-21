@@ -35,6 +35,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
     _Sources, _witness_schema, materialize_text_witness_inputs)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.sample_context_evidence.literature_investigation_prompt import (
     INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_reading_input_list import (
+    offered_offset)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_sequence_discovery import (
     references_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_context_findings import (
@@ -165,7 +167,12 @@ REASON_DESCRIPTION = ('Commit a typed scientific reasoning over the source and t
                       'investigation_finding (it stays in the assessment record; it is not returned). A commit with every '
                       'section empty is rejected.')
 
-HISTORY_START = "A commissioned child returns ONLY the parent's typed form."
+INPUT_LIST_MEANING = ('The unread content candidates (table regions and prose chunks, byte offsets of the assigned page '
+                      'representation) of the assigned source from the commissioned window on, in document order. A '
+                      'source.read of the page source that covers a candidate consumes it; a consumed candidate is no '
+                      'longer listed and a source.read of the page source must start inside a listed candidate.')
+
+HISTORY_START ="A commissioned child returns ONLY the parent's typed form."
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
                     'no new action and does not execute or credit the historical work again. There is no separate report to write: what you return to '
@@ -584,6 +591,7 @@ def decide(summary, feedback, ctx):
                                          'aggregation': summary['aggregation_cells']},
                'source_lead_dispositions': summary['source_lead_dispositions'],
                'literature_goal_plan': summary['literature_goal_plan'],
+               'input_list': summary['input_list'], 'input_list_meaning': INPUT_LIST_MEANING,
                'tools': catalog(names, summary['reasoning_schema'], leads),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
@@ -624,6 +632,11 @@ def action(response, summary, records, ctx):
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         name, arguments = selection['tool'], selection['arguments']
+        page = summary['literature_assignment']['page']
+        if (name == 'source_read' and arguments['source_ref'] == page['source_ref']
+                and arguments.get('representation', 'text') == page['representation']
+                and not offered_offset(summary['input_list'], arguments.get('offset', 0))):
+            raise ValueError('source_read_input_already_consumed')
         if name == 'reason' and empty_commit(arguments['commit'], commit_schema) \
                 and not has_task_content(arguments, leads):
             raise ValueError('empty_reasoning_commit')

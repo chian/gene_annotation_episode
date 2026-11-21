@@ -155,9 +155,38 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_and
     assert {entry['name'] for entry in entries} <= set(EPISODE.tools)
     assert 'evidence_processing' in [entry for entry in entries if entry['name'] == 'reason'][0]['input_schema']['properties']
     for leads in (False, True):
-        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF)
+        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, ['src_1', 'src_2'])
         assert len(schema['properties']['selection']['anyOf']) == len(names) + len(task.CHILD_SLOTS)
+        child = schema['properties']['selection']['anyOf'][-1]['properties']['arguments']
+        assert child['properties']['strategy']['properties']['prior_search_refs']['items'] == {
+            'enum': ['src_1', 'src_2']}
+        empty = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, [])
+        assert len(empty['properties']['selection']['anyOf']) == len(names)
     assert set(task.CHILD_ARGUMENTS) == set(EPISODE.child_slots) == set(task.CHILD_SLOTS)
     assert len(task.POPULATIONS) == 35 and set(task.TOOL_NAMES.values()) == set(EPISODE.tools) - {'reason'}
     assert len(task.offered({'rate_population': True, **{name: True for name in FLAGS}})) == len(names) + 35
+
+
+def test_the_input_list_is_the_unconsumed_sources_and_a_consumed_source_is_not_offered():
+    summary = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    task = importlib.import_module(PACKAGE + '.task')
+    leads = {'kind': 'verified_source_leads'}
+    read = {'kind': 'tool', 'tool': 'source_read', 'outcome': {'status': 'completed'},
+            'arguments': {'arguments': {'source_ref': 'src_1'}, 'scope': {}}}
+    invalid = {'kind': 'tool', 'tool': 'source_read', 'outcome': {'status': 'invalid'},
+               'arguments': {'arguments': {'source_ref': 'src_2'}, 'scope': {}}}
+    graded = {'kind': 'tool', 'tool': 'reason', 'outcome': {'status': 'completed'},
+              'arguments': {'arguments': {'evidence_processing': {'kind': 'graded', 'gradings': [
+                  {'arguments': '{"witness": {"source_ref": "src_3"}}'}]}}}}
+    child = {'kind': 'child', 'slot': 'strategy', 'arguments': {'objective': 'o',
+                                                                'strategy': {'prior_search_refs': ['src_4']}}}
+    assert summary.consumed_inputs(leads, [read, invalid, graded, child], [], False) == ['src_1', 'src_3', 'src_4']
+    span = {'source_ref': 'src_5', 'artifact_ref': 'art_5', 'start': 0, 'end': 10}
+    screening = {'kind': 'source_answer', 'answer_kind': 'screening', 'examined': [span]}
+    assert summary.consumed_inputs(screening, [read], [], False) == []
+    assert summary.consumed_inputs(screening, [read], [{**span, 'end': 12, 'representation': 'text'}], False) == ['src_5']
+    assert summary.consumed_inputs(screening, [], [], True) == ['src_5']
+    # a consumed source is not in the schema the child commission is validated against
+    schema = task.strategy_schema(['src_2'])
+    assert schema['properties']['prior_search_refs']['items'] == {'enum': ['src_2']}
 

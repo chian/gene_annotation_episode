@@ -77,14 +77,10 @@ def test_assignment_form_admits_the_monitor_assignment_and_refuses_more_fields_t
         form.admit({**assignment, 'requested_fields': ['private_reasoning']}, 'assignment')
 
 
-def test_yield_controller_is_accumulation_and_needs_its_own_settings():
+def test_yield_controller_is_accumulation_and_needs_no_settings():
     module = importlib.import_module(PACKAGE + '.yield_estimator')
-    controller = module.yield_controller(0.0, {'cost': 0.5, 'parameters': {'uncertainty_alpha': 0.1}}, {})
+    controller = module.yield_controller(0.0, {}, {})
     assert isinstance(controller, AccumulationYieldController)
-    with pytest.raises(ValueError, match='monitor_private_yield_binding_not_enabled'):
-        module.yield_controller(0.0, {}, {})
-    with pytest.raises(ValueError, match='monitor_information_yield_values_invalid'):
-        module.yield_controller(0.0, {'cost': 0.5, 'parameters': {'uncertainty_alpha': 1.5}}, {})
 
 
 def test_commission_of_a_child_monitor_names_an_exposed_direct_dependency_and_no_wider_record_types():

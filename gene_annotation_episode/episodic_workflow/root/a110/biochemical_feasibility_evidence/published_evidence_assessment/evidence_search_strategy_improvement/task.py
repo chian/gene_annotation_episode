@@ -193,15 +193,39 @@ REFERENCES = {'type': 'array', 'items': REF, 'uniqueItems': True}
 # The old ``search_assignment_v1`` of the child (the strategy assignment's counterpart) without its constant
 # ``version`` (``msg_to_child`` adds it): the question context and the sources the search returned.
 SEARCH = obj({'question_context_refs': REFERENCES, 'search_result_refs': REFERENCES})
-CHILD_ARGUMENTS = {'source_relevance_assessment': SEARCH}
+
+
+def search_schema(input_list):
+    """The child's arguments over the input list now (nano-graphrag's input-list paradigm): the sources the model may
+    hand to the assessor are only unconsumed ones, so a consumed source cannot be selected."""
+    return obj({'question_context_refs': REFERENCES,
+                'search_result_refs': {'type': 'array', 'items': {'enum': list(input_list)}, 'minItems': 1,
+                                       'uniqueItems': True}})
+
+
 # What the parent says to the model about each child (the old child option information).
 CHILD_DESCRIPTIONS = {
     'source_relevance_assessment':
-        'Commission an assessment of which returned sources merit examination: the records that give the question '
-        'its context and the sources your searches returned. The assessor investigates which of them deserve '
-        'examination, examines the selected sources and returns its credit and the controlled features '
-        'of the reaction sheets and findings it and its examinations hold.',
+        'Commission an assessment of which UNCONSUMED returned sources merit examination (input_list: the sources '
+        'earlier searches returned and the sources your own acquisitions returned, not yet handed to an assessor): '
+        'the records that give the question its context and the sources chosen from the input list. The assessor '
+        'investigates which of them deserve examination, examines the selected sources and returns its credit and '
+        'the controlled features of the reaction sheets and findings it and its examinations hold. The sources handed '
+        'to it are consumed: they are not offered again.',
 }
+
+
+def child_arguments(slot, input_list):
+    return {'source_relevance_assessment': search_schema(input_list)}[slot]
+
+
+def valid_slots(input_list):
+    """The child slots valid now: the assessment child while an unconsumed source remains."""
+    return list(CHILD_SLOTS) if input_list else []
+
+
+# Static form (the declared shape of each child's arguments, without the input list), kept for the binding test.
+CHILD_ARGUMENTS = {slot: child_arguments(slot, ['<unconsumed source>']) for slot in CHILD_SLOTS}
 
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
@@ -215,7 +239,9 @@ RETURN_GUIDANCE = ('What returns to your parent is your credit and the features 
                    'values, statuses and missing reasons, counts, fixed values and record references); no prose is '
                    'returned. Selecting a tool or a child does not end your work: only the numerical controller '
                    'does.\n')
-TAIL_GUIDANCE = ('\nSelect a source relevance assessment as a child when returned sources may merit examination; '
+TAIL_GUIDANCE = ('\nYour input list (input_list) is the returned sources not yet consumed: a source handed to an '
+                 'assessor is consumed and not offered again, and the child is offered only while one remains. '
+                 'Select a source relevance assessment as a child when returned sources may merit examination; '
                  'what it returns (its credit and the controlled features of its findings) is shown to you as '
                  'assessments. Select literature_reaction_populate or literature_reaction_source_populate when a '
                  'source you hold supplies the measured ratios, predictions or resource quantities of the assigned '
@@ -262,17 +288,19 @@ def catalog(names):
     return entries
 
 
-def child_catalog():
-    return [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot], 'input_schema': CHILD_ARGUMENTS[slot]}
-            for slot in CHILD_SLOTS]
+def child_catalog(input_list):
+    """The children the model may select now, over the unconsumed sources only."""
+    return [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot], 'input_schema': child_arguments(slot, input_list)}
+            for slot in valid_slots(input_list)]
 
 
-def selection_schema(names):
-    """What the model answers with: one tool or one child and its arguments (the old action schema)."""
+def selection_schema(names, input_list):
+    """What the model answers with: one tool or one child and its arguments (the old action schema); a child names
+    only unconsumed sources."""
     options = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
                for entry in catalog(names)]
     options += [obj({'kind': {'const': 'child'}, 'slot': {'const': entry['slot']},
-                     'arguments': entry['input_schema']}) for entry in child_catalog()]
+                     'arguments': entry['input_schema']}) for entry in child_catalog(input_list)]
     return obj({'selection': {'anyOf': options}})
 
 
@@ -493,14 +521,15 @@ def decide(summary, feedback, ctx):
                'visual_evidence': summary['visual_evidence'], 'last_local_outcome': summary['last_local_outcome'],
                'held_record_refs': summary['held_record_refs'], 'reaction_sheets': summary['reaction_sheets'],
                'investigation_finding': summary['investigation_finding'],
-               'tools': catalog(names), 'children': child_catalog(),
+               'input_list': summary['input_list'], 'consumed_inputs': summary['consumed_inputs'],
+               'tools': catalog(names), 'children': child_catalog(summary['input_list']),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), family=summary['family']), context,
-                        strict_output_schema(selection_schema(names), open_records_as_text=False,
+                        strict_output_schema(selection_schema(names, summary['input_list']), open_records_as_text=False,
                                              argument_transport_error=ARGUMENT_TRANSPORT_ERROR))
 
 
@@ -509,7 +538,7 @@ def action(response, summary, records, ctx):
     selects no offered tool or child, or arguments that do not fit its schema, is invalid. What
     the child does with its arguments is not checked here: a commission the child does not admit fails."""
     names = offered(ctx.settings)
-    schema = selection_schema(names)
+    schema = selection_schema(names, summary['input_list'])
     try:
         decoded = decode_strict_output(response, schema, open_records_as_text=False,
                                        argument_transport_error=ARGUMENT_TRANSPORT_ERROR)

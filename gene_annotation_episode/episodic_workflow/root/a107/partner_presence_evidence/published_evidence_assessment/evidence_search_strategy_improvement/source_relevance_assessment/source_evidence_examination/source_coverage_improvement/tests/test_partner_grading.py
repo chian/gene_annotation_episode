@@ -30,7 +30,7 @@ TASK = importlib.import_module(PACKAGE + '.task')
 SUMMARY = importlib.import_module(PACKAGE + '.messages.internal_summary')
 FINAL = importlib.import_module(PACKAGE + '.messages.final_to_parent')
 PATH = EPISODE.binding_path
-SETTINGS = {'cost': 0.0, 'parameters': {'uncertainty_alpha': 0.05}}
+SETTINGS = {}      # the accumulation controller takes no settings
 
 
 def stepped(tmp_path, run_id, **world):

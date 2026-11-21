@@ -35,6 +35,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     _resolve, lead_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_assay_inputs import (
     _Sources)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.evolutionary_history_evidence.literature_reading_windows import (
+    covered)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage import literature_population_route as route
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.perturbation_evidence.action_transport import (
     decode_response, generation_schema)
@@ -162,6 +164,9 @@ HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
                     'no new action and does not execute or credit the historical work again.\n')
+INPUT_LIST_MEANING = ('input_list: the windows [start, end] of the source, in document order, not yet read; a window '
+                      'read entirely is consumed and no longer offered (a source read lying entirely inside text '
+                      'already read is refused).')
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
                  'inspected source, its anchored reference subject, whether it is a useful lead for the original '
                  'question and the exact witnessed byte interval. A search hit or title alone verifies nothing.')
@@ -547,6 +552,8 @@ def decide(summary, feedback, ctx):
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
+               'input_list': summary['input_list'], 'consumed_ranges': summary['consumed_ranges'],
+               'input_list_meaning': INPUT_LIST_MEANING,
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
@@ -580,6 +587,14 @@ def action(response, summary, records, ctx):
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         name, arguments = selection['tool'], selection['arguments']
+        if name == 'source_read':
+            # A consumed input is no longer offered: a read lying entirely inside text already read is refused.
+            page = summary['literature_assignment']['page']
+            start, limit = arguments.get('offset', 0), arguments.get('limit', 12000)
+            if (type(start) is int and type(limit) is int and arguments.get('source_ref') == page['source_ref']
+                    and arguments.get('representation', 'text') == page['representation']
+                    and covered(summary['consumed_ranges'], start, min(start + limit, summary['content_bytes']))):
+                raise ValueError('source_window_already_consumed:remaining_input_list_is_offered')
         if name == 'reason' and empty_commit(arguments['commit'], commit_schema) and 'source_lead' not in arguments:
             raise ValueError('empty_reasoning_commit')
     except (ValueError, KeyError, TypeError, ValidationError) as error:

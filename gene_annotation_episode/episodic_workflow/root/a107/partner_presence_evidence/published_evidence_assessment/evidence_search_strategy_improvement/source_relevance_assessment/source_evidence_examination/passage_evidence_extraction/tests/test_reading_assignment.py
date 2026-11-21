@@ -51,3 +51,20 @@ def test_the_return_carries_credit_and_the_controlled_sheet_features_and_the_for
                              {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 0.5}, ())
     assert result == {'credit': 0.5, 'finding': {'partner_sheets': [], **counts}}
     RETURN_FORM.admit(result, 'return')
+
+
+def test_the_input_list_shrinks_as_spans_are_read_and_a_consumed_read_is_refused():
+    import importlib
+    base = ('gene_annotation_episode.episodic_workflow.root.a107.partner_presence_evidence.published_evidence_assessment'
+            '.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination'
+            '.passage_evidence_extraction')
+    summary = importlib.import_module(base + '.messages.internal_summary')
+    task = importlib.import_module(base + '.task')
+    spans = ASSIGNMENT['selection']['spans']
+    read = {'tool': 'source_read', 'outcome': {'status': 'completed', 'result': {
+        'source_ref': SOURCE, 'representation': 'text', 'start': 0, 'end': 300}}}
+    assert summary.input_list(spans, []) == ([], spans)
+    assert summary.input_list(spans, [read]) == (spans[:1], spans[1:])
+    state = {'literature_assignment': {'page': ASSIGNMENT['page']}, 'processed_spans': spans[:1]}
+    assert task.consumed_read({'source_ref': SOURCE, 'offset': 20, 'limit': 50}, state)
+    assert not task.consumed_read({'source_ref': SOURCE, 'offset': 900, 'limit': 50}, state)

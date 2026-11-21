@@ -154,12 +154,40 @@ def test_the_credit_is_real_code_and_counts_nothing_without_a_validated_lead():
 def test_the_model_is_offered_the_access_tools_the_reasoning_the_report_and_the_three_children():
     task = importlib.import_module(MODULE + '.task')
     episode = importlib.import_module(MODULE + '.episode')
-    names = task.offered({})
+    summary = {'input_list_basis': 'text', 'input_list': ['source_table:a', 'prose_chunk:0000'],
+               'unconsumed_candidate_ids': ['source_table:a', 'prose_chunk:0000'],
+               'unconsumed_table_ids': ['source_table:a']}
+    names = task.offered({}, summary)
     assert names[-4:] == ['reason', *task.CHILD_SLOTS] and 'report' not in names and len(names) == 18
     assert set(names) - set(task.CHILD_SLOTS) <= set(episode.SourceEvidenceExamination.tools)
     commit_schema = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
                      'properties': {'terms': {'type': 'array'}}}
-    schema = task.selection_schema(names, commit_schema, True)
+    schema = task.selection_schema(names, commit_schema, True, summary)
     assert len(schema['properties']['selection']['anyOf']) == len(names)
     kinds = [option['properties']['kind']['const'] for option in schema['properties']['selection']['anyOf']]
     assert kinds.count('child') == 3 and kinds.count('tool') == len(names) - 3
+    # The input list shrinks the offers: a consumed table is no longer offered, an empty list offers no reader child.
+    spent = {**summary, 'input_list': [], 'unconsumed_candidate_ids': [], 'unconsumed_table_ids': []}
+    assert task.offered({}, spent)[-2:] == ['reason', 'table_evidence_extraction']
+    only_chunk = {**summary, 'unconsumed_candidate_ids': ['prose_chunk:0000'], 'unconsumed_table_ids': []}
+    options = task.candidate_selection('table_evidence_extraction', only_chunk)['anyOf']
+    assert options == [task.CHILD_SELECTIONS['table_evidence_extraction']]
+    assert task.candidate_selection('source_coverage_improvement', only_chunk)['properties']['candidate_id'] == {
+        'enum': ['prose_chunk:0000']}
+    window = task.child_selection_of('passage_evidence_extraction', {'candidate_ids': ['prose_chunk:0000']}, {
+        'assignment': {'page': {'source_ref': 'src_1', 'representation': 'original'}},
+        'content_candidates': [{'candidate_id': 'prose_chunk:0000', 'start': 10, 'end': 40}]})
+    assert window == {'spans': [{'source_ref': 'src_1', 'representation': 'original', 'offset': 10, 'limit': 30}]}
+
+
+def test_the_input_list_is_the_unconsumed_candidates_and_a_handed_candidate_is_consumed():
+    summary_file = importlib.import_module(MODULE + '.messages.internal_summary')
+    candidates = [{'candidate_id': 'prose_chunk:0000', 'start': 0, 'end': 40},
+                  {'candidate_id': 'source_table:a', 'start': 40, 'end': 90},
+                  {'candidate_id': 'prose_chunk:0001', 'start': 90, 'end': 130}]
+    handed = [{'arguments': {'selection': {'source_ref': 's', 'representation': 'text', 'offset': 40, 'limit': 50}}},
+              {'arguments': {'selection': {'spans': [{'source_ref': 's', 'representation': 'text', 'offset': 0,
+                                                      'limit': 40}]}}},
+              {'arguments': {'selection': {'source_ref': 's', 'sheet_key': 'rId1', 'offset': 0, 'limit': 5}}}]
+    assert summary_file.consumed_candidates(handed[:1], candidates) == ['source_table:a']
+    assert summary_file.consumed_candidates(handed, candidates) == ['source_table:a', 'prose_chunk:0000']

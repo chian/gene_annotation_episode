@@ -10,7 +10,7 @@ validation ids, all training was used and every candidate had a fresh comparison
 deleted: nothing but this controller ends the Episode."""
 import math
 
-from yield_control import AccumulationYieldController
+from yield_control import AccumulationYieldController, ADAPTIVE_CONTROL
 
 
 def yield_controller(initial_credit, settings, parent_input):
@@ -20,4 +20,4 @@ def yield_controller(initial_credit, settings, parent_input):
     if (isinstance(cost, bool) or not isinstance(cost, (int, float)) or not math.isfinite(cost) or cost <= 0
             or not isinstance(parameters, dict)):
         raise ValueError('explicit_hpc_commission_yield_binding_required:hpc_prediction')
-    return AccumulationYieldController('hpc_resource_prediction', initial_credit, cost, parameters)
+    return AccumulationYieldController('hpc_resource_prediction', initial_credit, ADAPTIVE_CONTROL, items=None)

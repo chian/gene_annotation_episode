@@ -84,6 +84,20 @@ def graded_assessments(records, reasons):
     return list(dict.fromkeys(found))
 
 
+def selected_region(selection):
+    """The one region the commission selects, as ``[start, end]``: the rows ``[offset, offset + limit]`` of a table
+    selection, the bytes ``[offset, offset + limit]`` of a window selection."""
+    return [selection['offset'], selection['offset'] + selection['limit']]
+
+
+def table_inputs(selection, reasons):
+    """The input list (nano-graphrag ``SourceTableRun.processed_row_ids``: a selected table region is consumed once it
+    has been processed): the selected region of the commission, unconsumed until a reasoning over it has been committed
+    (a completed or partial ``reason`` outcome), and empty after that. Returns ``(consumed, input_list)``."""
+    region = selected_region(selection)
+    return ([region], []) if reasons else ([], [region])
+
+
 def internal_summary(view):
     parent = view.parent_input
     page, task = parent['page'], parent['task']
@@ -116,7 +130,9 @@ def internal_summary(view):
                   'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref'],
                   **{name: parent[name] for name in (REQUESTED_GRADING, REQUESTED_AGGREGATION) if parent[name]}}
     binding = credit_binding(parent['task_key'], task)
+    consumed_inputs, input_list = table_inputs(parent['selection'], reasons)
     summary = {
+        'input_list': input_list, 'consumed_inputs': consumed_inputs,
         'literature_assignment': assignment,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],

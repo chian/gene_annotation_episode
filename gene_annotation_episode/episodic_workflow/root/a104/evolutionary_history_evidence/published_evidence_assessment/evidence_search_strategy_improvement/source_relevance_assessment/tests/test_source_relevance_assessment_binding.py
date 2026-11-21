@@ -152,7 +152,8 @@ def test_the_credit_is_real_code_and_counts_nothing_without_a_validated_lead():
 def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_the_report_and_the_page_child():
     task = importlib.import_module(MODULE + '.task')
     episode = importlib.import_module(MODULE + '.episode')
-    names = task.offered({})
+    names = task.offered({}, ['src_1'])
+    assert task.offered({}, [])[-1] == 'reason'
     assert names[-2:] == ['reason', 'source_evidence_examination'] and 'report' not in names and len(names) == 34
     assert set(names) - set(task.CHILD_SLOTS) <= set(episode.SourceRelevanceAssessment.tools)
     assert {'public_literature_search', 'public_literature_read', 'public_ncbi_search', 'public_pmc_asset',
@@ -160,7 +161,10 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_the
     assert task.INPUT_SCHEMAS['public.ncbi.search']['properties']['database'] == {'enum': ['pubmed']}
     commit_schema = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
                      'properties': {'terms': {'type': 'array'}}}
-    schema = task.selection_schema(names, commit_schema, True)
+    schema = task.selection_schema(names, commit_schema, True, ['src_1'])
+    child = [option for option in schema['properties']['selection']['anyOf']
+             if option['properties']['kind']['const'] == 'child'][0]
+    assert child['properties']['arguments']['properties']['source_ref']['enum'] == ['src_1']
     assert len(schema['properties']['selection']['anyOf']) == len(names)
     kinds = [option['properties']['kind']['const'] for option in schema['properties']['selection']['anyOf']]
     assert kinds.count('child') == 1 and kinds.count('tool') == len(names) - 1

@@ -15,6 +15,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
     current_sheet_features)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.literature_reaction_instructions import (
     selected_family)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.gene_context_evidence.literature_selection_input_list import (
+    consumed_extents, selection_input_list)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -67,6 +69,11 @@ def internal_summary(view):
         'investigation_finding': investigation_finding(view.records, parent['scope'], parent['finding_unit'], known),
         'last_local_outcome': None if last is None else {'tool': last['tool'], 'outcome': last['outcome']},
         'visual_evidence': visual,
+        # The input list (nano-graphrag): what remains unread of the commissioned selection, [[start, end]] in document
+        # order (bytes of the window, or matching rows of the sheet); an extent a completed read has covered is
+        # consumed and is not offered again. Empty when all of it has been read.
+        'input_list': selection_input_list(parent['selection'], view.outcomes),
+        'consumed_inputs': consumed_extents(parent['selection'], view.outcomes),
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),

@@ -108,8 +108,9 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reaction_grad
     assert names[-2:] == ['literature_reaction_populate', 'literature_reaction_source_populate']
     assert {'public_literature_search', 'public_pmc_asset', 'public_brenda_graph_search'} <= set(names)
     assert 'reason' not in names and set(names) <= set(EPISODE.tools)
-    schema = task.selection_schema(names)
+    schema = task.selection_schema(names, ['src_1'])
     assert len(schema['properties']['selection']['anyOf']) == len(names) + 1
+    assert len(task.selection_schema(names, [])['properties']['selection']['anyOf']) == len(names)
     assert 'execution_estimate' in task.offered({'tool_registry': {'native_statistics': object()}})
 
 
@@ -134,4 +135,16 @@ def test_the_commission_passes_the_requested_reaction_cells():
     assert 'requested_reaction_components' not in plain.assignment
     requested = EPISODE.msg_to_child(CHILD, ARGUMENTS, {**summary(), 'requested_reaction_components': ['ratio_mean']})
     assert requested.assignment['requested_reaction_components'] == ['ratio_mean']
+
+
+def test_the_input_list_offers_only_unconsumed_sources_and_a_handed_source_is_consumed():
+    task = importlib.import_module(PACKAGE + '.task')
+    module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    children = [{'kind': 'child', 'arguments': {'question_context_refs': ['ctx_1'], 'search_result_refs': ['src_1']}}]
+    assert module.consumed_results(children) == ['src_1']
+    assert module.consumed_results([]) == []
+    schema = task.child_arguments(CHILD, ['src_2'])
+    assert schema['properties']['search_result_refs']['items'] == {'enum': ['src_2']}
+    assert task.child_catalog([]) == [] and task.valid_slots([]) == []
+    assert [entry['slot'] for entry in task.child_catalog(['src_2'])] == [CHILD]
 

@@ -155,7 +155,8 @@ def test_the_controller_is_accumulation_for_leads_and_completion_with_the_credit
 
 def test_the_model_is_offered_the_access_tools_the_population_tools_and_the_reasoning():
     task = importlib.import_module(PACKAGE + '.task')
-    names = task.offered({'tool_registry': {}})
+    names = task.offered({'tool_registry': {}}, [[0, 20]])
+    assert 'reason' not in task.offered({'tool_registry': {}}, [])
     assert 'execution_estimate' not in names and names[-1] == 'reason' and len(names) == 15
     assert {'literature_a108_grading_populate', 'literature_a108_aggregate'} <= set(names)
     assert set(names) <= set(EPISODE.tools)
@@ -166,7 +167,10 @@ def test_the_model_is_offered_the_access_tools_the_population_tools_and_the_reas
     assert 'source_lead' in reason['input_schema']['properties']
     assert 'evidence_processing' in reason['input_schema']['properties']
     assert 'source_lead' not in task.reason_schema(COMMIT_SCHEMA, False)['properties']
-    assert 'execution_estimate' in task.offered({'tool_registry': {'native_statistics': object()}})
+    assert 'execution_estimate' in task.offered({'tool_registry': {'native_statistics': object()}}, [[0, 20]])
+    summary = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    assert summary.table_inputs(TABLE, []) == ([], [[0, 20]])
+    assert summary.table_inputs(WINDOW, [{'status': 'completed'}]) == ([[0, 10]], [])
     assert task.empty_commit({'terms': []}, COMMIT_SCHEMA) and not task.empty_commit({'terms': [{}]}, COMMIT_SCHEMA)
     assert 'nothing you write in prose is returned' in task.instructions(knowledge=None, leads=False)
     assert 'source_lead' in task.instructions(knowledge=None, leads=True)

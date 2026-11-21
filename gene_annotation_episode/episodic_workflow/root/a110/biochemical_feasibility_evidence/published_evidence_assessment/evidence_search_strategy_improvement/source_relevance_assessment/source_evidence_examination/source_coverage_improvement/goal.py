@@ -4,7 +4,7 @@ reaction and resource paragraph) at 97308b94c."""
 
 BINDING_PATH = 'biochemical_feasibility_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement'
 GOAL = ('Investigate the source in document order as useful for the assigned question. Use returned UTF-8 byte '
-        'continuations and retain representation identity. Decide whether to continue, reread, change the examined '
+        'continuations and retain representation identity. Decide whether to continue, change the examined '
         'window or interpret obtained evidence from actual outcomes.\n'
         'Investigate the reported reaction and resource evidence for this source. Preserve source identity, exact '
         'conditions, units, uncertainty and byte anchors. Keep reported product ratios, resource budgets and named '

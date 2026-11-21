@@ -127,6 +127,34 @@ def test_the_model_is_offered_the_access_tools_the_graders_the_judgment_and_the_
     assert task.empty_commit({'terms': []}, COMMIT_SCHEMA) and not task.empty_commit({'terms': [{}]}, COMMIT_SCHEMA)
 
 
+def test_the_input_list_is_the_unprocessed_spans_of_the_selection_and_shrinks_with_read_and_commit():
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.perturbation_evidence import (
+        literature_input_spans as spans)
+    window = {'source_ref': 'src_1', 'representation': 'original', 'offset': 100, 'limit': 100}
+
+    def read(offset, limit, status='completed', **more):
+        arguments = {'source_ref': 'src_1', 'representation': 'original', 'offset': offset, 'limit': limit, **more}
+        return {'kind': 'tool', 'tool': 'source_read', 'arguments': {'arguments': arguments},
+                'outcome': {'status': status}}
+    commit = {'kind': 'tool', 'tool': 'reason', 'arguments': {'arguments': {}}, 'outcome': {'status': 'completed'}}
+    assert spans.consumed_and_remaining(window, []) == ([], [[100, 200]])
+    assert spans.consumed_and_remaining(window, [read(100, 50)]) == ([], [[100, 200]])   # read, not yet committed
+    assert spans.consumed_and_remaining(window, [read(100, 50, status='invalid'), commit]) == ([], [[100, 200]])
+    assert spans.consumed_and_remaining(window, [read(120, 30), commit]) == ([[120, 150]], [[100, 120], [150, 200]])
+    assert spans.consumed_and_remaining(window, [read(0, 500), commit]) == ([[0, 500]], [])
+    assert spans.consumed_and_remaining(window, [read(100, 100, representation='text'), commit])[1] == [[100, 200]]
+    consumed, _ = spans.consumed_and_remaining(window, [read(100, 100), commit])
+    assert spans.is_consumed_read(window, 'source_read', {'source_ref': 'src_1', 'representation': 'original',
+                                                          'offset': 110, 'limit': 20}, consumed)
+    assert not spans.is_consumed_read(window, 'source_read', {'source_ref': 'src_1', 'representation': 'original',
+                                                              'offset': 190, 'limit': 20}, consumed)
+    table = {'source_ref': 'src_1', 'sheet_key': 'rId1', 'offset': 0, 'limit': 20, 'header_row': 1}
+    rows = {'kind': 'tool', 'tool': 'source_xlsx_rows', 'outcome': {'status': 'completed'},
+            'arguments': {'arguments': {'source_ref': 'src_1', 'sheet_key': 'rId1', 'offset': 0, 'limit': 10,
+                                        'header_row': 1, 'where': None}}}
+    assert spans.consumed_and_remaining(table, [rows, commit]) == ([[0, 10]], [[10, 20]])
+
+
 def test_the_selectable_answers_are_counts_and_references_and_are_admitted():
     form = EPISODE.return_form
     summary = {'a106_findings': {'intervention_assessments': [], 'a106_subscores': []},

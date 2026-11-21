@@ -7,14 +7,13 @@ limit. Every other task is a finite commission (old ``_FiniteLiteratureYieldCont
 experiments for ``a105_experiments`` and ``credit_unit`` otherwise, read from the parent input. The cost is the
 old task cutoff and the parameters the old ``uncertainty_alpha``, now the episode's settings. The old
 ``validate_yield_bindings`` checks of the cutoff and alpha are the controllers' own."""
-from yield_control import AccumulationYieldController, CompletionYieldController
+from yield_control import ADAPTIVE_CONTROL, AccumulationYieldController, CompletionYieldController
 
 
 def yield_controller(initial_credit, settings, parent_input):
     task = parent_input['task']
     if task['kind'] == 'verified_source_leads':
-        return AccumulationYieldController('strategy', initial_credit, settings['cost'],
-                                           settings['parameters'])
+        return AccumulationYieldController('strategy', initial_credit, ADAPTIVE_CONTROL, items=None)
     target = task['credit_unit'] * (len(task['experiments']) if task['kind'] == 'a105_experiments' else 1)
     return CompletionYieldController('strategy', initial_credit, settings['cost'], target,
                                      settings['parameters'])

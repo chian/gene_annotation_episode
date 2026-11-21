@@ -236,17 +236,23 @@ UNIQUE_REFERENCES = {'type': 'array', 'items': REF, 'uniqueItems': True}
 SPAN = obj({'source_ref': REF, 'artifact_ref': REF, 'start': {'type': 'integer', 'minimum': 0},
             'end': {'type': 'integer', 'minimum': 1}})
 TASK_VERSION = 'literature_local_task_v1'
-SEARCH_TASK = {'description': 'The A106 commissioned result of the source relevance assessment. Select only a task '
-                              'whose typed result this episode counts. A106 score computation is automatic work, '
-                              'not an episode-credit task.',
-               'anyOf': [obj({'version': {'const': TASK_VERSION}, 'evidence_axis': {'const': 'A106'},
-                              'kind': {'const': 'verified_source_leads'}}),
-                         obj({'version': {'const': TASK_VERSION}, 'evidence_axis': {'const': 'A106'},
-                              'kind': {'const': 'source_answer'}, 'answer_kind': {'const': 'assessment'},
-                              'source_refs': REFERENCES}),
-                         obj({'version': {'const': TASK_VERSION}, 'evidence_axis': {'const': 'A106'},
-                              'kind': {'const': 'source_answer'}, 'answer_kind': {'const': 'screening'},
-                              'examined': {'type': 'array', 'minItems': 1, 'items': SPAN}})]}
+def unconsumed_references(input_list):
+    """References to unconsumed input sources only (the input list: a consumed source is no longer offered)."""
+    return {'type': 'array', 'items': {'enum': list(input_list)}, 'minItems': 1, 'uniqueItems': True}
+
+
+def search_task(input_list):
+    return {'description': 'The A106 commissioned result of the source relevance assessment. Select only a task '
+                           'whose typed result this episode counts. A106 score computation is automatic work, '
+                           'not an episode-credit task.',
+            'anyOf': [obj({'version': {'const': TASK_VERSION}, 'evidence_axis': {'const': 'A106'},
+                           'kind': {'const': 'verified_source_leads'}}),
+                      obj({'version': {'const': TASK_VERSION}, 'evidence_axis': {'const': 'A106'},
+                           'kind': {'const': 'source_answer'}, 'answer_kind': {'const': 'assessment'},
+                           'source_refs': unconsumed_references(input_list)}),
+                      obj({'version': {'const': TASK_VERSION}, 'evidence_axis': {'const': 'A106'},
+                           'kind': {'const': 'source_answer'}, 'answer_kind': {'const': 'screening'},
+                           'examined': {'type': 'array', 'minItems': 1, 'items': SPAN}})]}
 COMMISSION = {
     'literature_search': 'Commission the assessment of which returned sources merit examination for the assigned '
                          'question. The search names the returned sources this episode holds (search_result_refs, '
@@ -261,7 +267,10 @@ HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read and acquisition outcomes are shown to you as own_literature_outcomes; '
                     'that page creates no new action and does not execute or credit the historical work again.\n')
-COMMISSION_GUIDANCE = ('\nCommission the assessment of returned sources you hold (literature_search) when it is '
+COMMISSION_GUIDANCE = ('\nYour input list (input_list) is the sources you hold that no assessment has been handed. '
+                       'A source handed to an assessment is consumed: it is not offered again, and once the list is '
+                       'empty no assessment can be commissioned.\n'
+                       'Commission the assessment of returned sources of the input list (literature_search) when it is '
                        'useful: it returns its credit, the controlled features of the A106 sheets saved below it and, for the literature task you choose for '
                        'it, its typed answers as counts and references.')
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
@@ -321,29 +330,32 @@ def catalog(names, commit_schema, leads, settings):
     return entries
 
 
-def commission_arguments():
-    """The arguments of a commission: the question the assessment is asked, free text for it, the question context
-    and returned sources it assesses and the typed answer asked of it (the old child assignment's
-    ``question_context_refs``, ``search_result_refs`` and ``literature_task``)."""
+def commission_arguments(input_list):
+    """The arguments of a commission: the question context and the sources it assesses, only sources of the input
+    list (unconsumed), and the typed answer asked of it (the old child assignment's ``question_context_refs``,
+    ``search_result_refs`` and ``literature_task``)."""
     return obj({'question_context_refs': UNIQUE_REFERENCES,
-                'search_result_refs': UNIQUE_REFERENCES, 'literature_task': SEARCH_TASK})
+                'search_result_refs': unconsumed_references(input_list), 'literature_task': search_task(input_list)})
 
 
-def commissions():
-    """The assessments the model may commission, shown with the tools (the old ``child_option_information``
-    over ``_CHILDREN['literature_strategy']``)."""
-    return [{'slot': slot, 'description': COMMISSION[slot], 'input_schema': commission_arguments()}
+def commissions(input_list):
+    """The assessments the model may commission now, shown with the tools (the old ``child_option_information``
+    over ``_CHILDREN['literature_strategy']``): none once the input list is empty (nano-graphrag: child options only
+    for unconsumed inputs)."""
+    if not input_list:
+        return []
+    return [{'slot': slot, 'description': COMMISSION[slot], 'input_schema': commission_arguments(input_list)}
             for slot in CHILD_SLOTS]
 
 
-def selection_schema(names, commit_schema, leads, settings):
+def selection_schema(names, commit_schema, leads, settings, input_list):
     """What the model answers with: one tool and its arguments, or one commissioned assessment (the old action
     schema)."""
     return obj({'selection': {'anyOf': [
         *(obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
           for entry in catalog(names, commit_schema, leads, settings)),
         *(obj({'kind': {'const': 'child'}, 'slot': {'const': entry['slot']}, 'arguments': entry['input_schema']})
-          for entry in commissions())]}})
+          for entry in commissions(input_list))]}})
 
 
 def admitted(name, arguments):
@@ -759,14 +771,17 @@ def decide(summary, feedback, ctx):
                'source_lead_dispositions': summary['source_lead_dispositions'],
                'child_reports': summary['child_reports'],
                'literature_experimental_work': summary['literature_experimental_work'],
-               'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings), 'child_options': commissions(),
+               'input_list': summary['input_list'], 'consumed_inputs': summary['consumed_inputs'],
+               'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings),
+               'child_options': commissions(summary['input_list']),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings)))
+                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings,
+                                                           summary['input_list'])))
 
 
 def empty_commit(commit, commit_schema):
@@ -782,7 +797,7 @@ def action(response, summary, records, ctx):
     names = offered(ctx.settings, summary['opened_population'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads, ctx.settings)
+    schema = selection_schema(names, commit_schema, leads, ctx.settings, summary['input_list'])
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         if selection['kind'] == 'child':

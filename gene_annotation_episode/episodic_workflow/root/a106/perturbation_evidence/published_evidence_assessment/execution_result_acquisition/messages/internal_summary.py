@@ -16,7 +16,8 @@ def internal_summary(view):
                'capabilities': None, 'inventory_snapshot': None, 'operations_done': 0, 'facts': {},
                'handoff_refs': [], 'support_refs': [], 'result_refs': [], 'execution_completed': False,
                'credit_units': None, 'handoff_identities': [], 'initial_handoff_identities': [],
-               'result_identities': [], 'last_local_outcome': None, 'feedback': None, 'lookups': []}
+               'result_identities': [], 'last_local_outcome': None, 'feedback': None, 'lookups': [],
+               'consumed_inputs': []}
     for outcome in view.outcomes:
         tool, returned = outcome['tool'], outcome['outcome']
         if tool == 'result_catalog':
@@ -29,6 +30,12 @@ def internal_summary(view):
             summary['lookups'].append(returned)
             continue
         summary['operations_done'] += 1
+        # nano-graphrag input list: a result-catalog operation the episode performed is consumed (an invalid
+        # selection did not perform it, so it stays offered). wait_for_service_job is not an input item.
+        if tool == 'api_result_operation' and returned['status'] != 'invalid':
+            name = outcome['arguments']['operation']
+            if name not in summary['consumed_inputs']:
+                summary['consumed_inputs'].append(name)
         summary['last_local_outcome'] = returned
         summary['feedback'] = returned['feedback']
         summary['credit_units'] = returned['credit_units']
@@ -39,6 +46,11 @@ def internal_summary(view):
                           ('result_identities', 'result_identities')):
             summary[key] = summary[key] + [item for item in returned[name] if item not in summary[key]]
         summary['execution_completed'] = summary['execution_completed'] or returned['execution_completed']
+    # The input list: the result-catalog operations not yet consumed, in catalog order; empty once all are consumed
+    # (the yield estimator, edited elsewhere, stops on the empty list). None until the catalog is read.
+    summary['input_list'] = (None if summary['catalog'] is None else
+                             [entry['name'] for entry in summary['catalog']
+                              if entry['name'] not in summary['consumed_inputs']])
     summary['facts_by_source'] = {
         'execution_handoff_refs': summary['handoff_refs'], 'execution_result_refs': summary['result_refs'],
         'bvbrc_appservice_support_refs': summary['support_refs'],

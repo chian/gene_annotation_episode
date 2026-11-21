@@ -81,7 +81,7 @@ def test_the_head_reaches_its_first_decision_with_the_finding_progress_read_thro
                   'context': {'evidence_task': {'version': 'evidence_axis_task_v1', 'kind': 'whole_axis_findings',
                                                 'evidence_axis': 'A106', 'credit_unit': 1.0}}}
     settings = {'process_library_directory': str(library.directory), 'tool_library_directory': str(tools.directory),
-                'child_roles': list(task.CHILD_SLOTS), 'cost': 0.01, 'parameters': {'uncertainty_alpha': 0.1},
+                'child_roles': list(task.CHILD_SLOTS),
                 'execution_handoff_unit': 1.0, 'monitoring_information_unit': 1.0}
     bindings = subtree()
     continuation = {binding.binding_path: {} for binding in bindings}

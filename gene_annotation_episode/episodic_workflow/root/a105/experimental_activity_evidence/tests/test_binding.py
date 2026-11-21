@@ -9,6 +9,7 @@ import pytest
 
 from episode_runtime import ChildMessage, EpisodeBinding
 from method_loop import FormError
+from yield_control import ADAPTIVE_CONTROL
 
 PACKAGE = __name__.rsplit('.', 2)[0]
 FOLDER = Path(__file__).resolve().parents[1]
@@ -86,10 +87,11 @@ def test_no_module_of_the_folder_imports_another_episode_folder():
                                for child in CHILDREN), str(path.relative_to(FOLDER)) + ' imports ' + module
 
 
-def test_the_yield_controller_is_the_accumulation_controller_from_the_settings():
-    controller = EPISODE.yield_controller(2.0, {'cost': 0.1, 'parameters': {'uncertainty_alpha': 0.1}},
-                                          parent_input())
-    assert type(controller).__name__ == 'AccumulationYieldController' and controller.cost == 0.1
+def test_the_yield_controller_is_the_adaptive_accumulation_controller_without_cost_or_settings():
+    controller = EPISODE.yield_controller(2.0, {}, parent_input())
+    assert type(controller).__name__ == 'AccumulationYieldController'
+    assert controller.control == ADAPTIVE_CONTROL and controller.items is None
+    assert not hasattr(controller, 'cost')
 
 
 def test_the_credit_is_real_code_over_the_finding_progress_projection():

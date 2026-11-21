@@ -179,9 +179,9 @@ def instructions(*, knowledge, launch_library):
 
 def child_options(summary):
     """The children the model may commission (the old ``allowed_children``): the API job execution child for each
-    eligible resource."""
+    unconsumed resource of the input list (a resource already handed off or commissioned is not offered again)."""
     return [{'resource_id': resource_id, 'resource_kind': 'api', 'child': CHILD_SLOT}
-            for resource_id in summary['eligible_resource_ids']]
+            for resource_id in summary['input_list']]
 
 
 def decide(summary, feedback, ctx):
@@ -218,7 +218,9 @@ def decide(summary, feedback, ctx):
         'selected_launch_instructions': (None if launch is None or summary['launch_instructions'] is None
                                          else launch.materialize(summary['launch_instructions']))},
         conflict='initial_binding_context_field_conflict')
-    schema = selection_schema(summary['eligible_resource_ids'], summary['reasoning_schema'])
+    schema = selection_schema(summary['input_list'], summary['reasoning_schema'])
+    context['input_list'] = list(summary['input_list'])
+    context['consumed_resource_ids'] = list(summary['consumed_resource_ids'])
     return ModelRequest('REASONING', instructions(knowledge=knowledge,
                                                   launch_library=context.get('launch_instruction_library')),
                         context, generation_schema(schema))
@@ -237,7 +239,7 @@ def action(response, summary, records, ctx):
     or a resource the commissioner did not permit is invalid. The capabilities tool is always acceptable, so a unit
     is always offered. A permitted resource that the run's settings do not bind is a configuration conflict and
     raises (the old ``execution_resource_not_bound``)."""
-    eligible = summary['eligible_resource_ids']
+    eligible = summary['input_list']
     commit_schema = summary['reasoning_schema']
     schema = selection_schema(eligible, commit_schema)
     try:

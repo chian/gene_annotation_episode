@@ -168,6 +168,11 @@ HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_lite
 RETURN_GUIDANCE = ('\nWhat returns to your parent is your credit and the counts code reads from the A108 sheets you saved, '
                    'with their references; nothing you write in prose is returned. Selecting a tool never ends your '
                    'work: only the numerical controller does.')
+INPUT_LIST_GUIDANCE = ('\nYour input list (input_list) holds the commissioned passages still to be processed, in the '
+                       'order assigned, as [start, end] byte offsets. A passage is consumed once a reasoning commit of '
+                       'yours has dealt with it (a no-applicable-evidence declaration whose examined witnesses cover it, '
+                       'or a record anchored within it; consumed_inputs lists them) and is no longer offered: a source '
+                       'read lying wholly inside consumed passages is refused. Work through the input list.')
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
                  'inspected source, its anchored reference subject, whether it is a useful lead for the original '
                  'question and the exact witnessed byte interval. A search hit or title alone verifies nothing.')
@@ -193,6 +198,7 @@ def instructions(*, knowledge, leads):
     text += '\n' + GOAL
     text += '\n' + REASONING_COMMIT_REQUIREMENT
     text += GRADING_INSTRUCTIONS
+    text += INPUT_LIST_GUIDANCE
     if knowledge is not None:
         text += KNOWLEDGE_INSTRUCTIONS
     if leads:
@@ -566,6 +572,7 @@ def decide(summary, feedback, ctx):
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
+               'input_list': summary['input_list'], 'consumed_inputs': summary['consumed_inputs'],
                'literature_experimental_work': summary['literature_experimental_work'],
                'literature_received_fact_display': summary['literature_received_fact_display'],
                'literature_goal_plan': {
@@ -598,6 +605,19 @@ def validate_selection(value, schema):
     return value['selection']
 
 
+def consumed_read(arguments, summary):
+    """Whether a ``source_read`` window of the assigned source lies wholly inside a consumed passage (a re-read of
+    consumed input)."""
+    page = summary['literature_assignment']['page']
+    if arguments.get('source_ref') != page['source_ref']:
+        return False
+    start = arguments.get('offset', 0)
+    end = start + arguments.get('limit', 12000)
+    if arguments.get('representation', 'text') != page['representation']:
+        return False
+    return any(first <= start and end <= last for first, last in summary['consumed_inputs'])
+
+
 def action(response, summary, records, ctx):
     """Turn the model's answer into one tool call, or reject it (no unit). An answer that selects no offered tool,
     arguments that do not fit its schema, or an empty reasoning commit that has neither the no-applicable-evidence
@@ -613,6 +633,8 @@ def action(response, summary, records, ctx):
                 and arguments.get('evidence_processing', {}).get('kind') != 'no_applicable_evidence'
                 and 'source_lead' not in arguments):
             raise ValueError('empty_reasoning_commit')
+        if name == 'source_read' and consumed_read(arguments, summary):
+            raise ValueError('input_already_consumed')   # a read wholly inside consumed passages: not offered again
     except (ValueError, KeyError, TypeError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
     return ToolCall(name, {'arguments': arguments, 'scope': summary['scope'],

@@ -33,11 +33,39 @@ HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through
                    'delivery does not establish scientific understanding, absence or resolved science.')
 
 
+SOURCE = 'source'
+
+
+def search_results(parent, outcomes, records):
+    """The search results this episode works through, in the order they became known (nano-graphrag
+    ``web_search_binding``: the buffered search results): the earlier search results it was given
+    (``prior_search_refs``), then every source its own acquisition units returned (the ``record_refs`` of their
+    outcomes that are held source records), each once."""
+    found = list(parent['strategy']['prior_search_refs'])
+    for outcome in outcomes:
+        if outcome['kind'] == 'tool' and outcome['tool'] in ACQUISITION_TOOLS:
+            found.extend(ref for ref in outcome['outcome']['record_refs']
+                         if records.holds(ref) and records.get(ref)['record_type'] == SOURCE)
+    return list(dict.fromkeys(found))
+
+
+def consumed_results(children):
+    """The search results handed to a search child, in the order handed out (nano-graphrag ``processed_chunk_ids`` /
+    ``processed_row_ids``: an item handed out is consumed and no longer offered)."""
+    return list(dict.fromkeys(ref for outcome in children
+                              for ref in outcome['arguments']['search']['search_result_refs']))
+
+
 def internal_summary(view):
     parent = view.parent_input
     strategy, task = parent['strategy'], parent['task']
     records = view.records
     children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
+    # The input list (nano-graphrag's input-list paradigm): the search results known to this episode (given and
+    # acquired) that no search child has yet been handed. A result handed out is consumed and never offered again;
+    # the yield estimator ends the episode when the list is empty.
+    consumed = consumed_results(children)
+    input_list = [ref for ref in search_results(parent, view.outcomes, records) if ref not in consumed]
     last = view.outcomes[-1] if view.outcomes else None
     spans = no_applicable_spans(view.outcomes, records)
     assignment = {**strategy, 'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref'],
@@ -61,6 +89,7 @@ def internal_summary(view):
         'held_record_refs': sorted(records.refs()),
         'last_local_outcome': (None if last is None else {'tool': last['tool'], 'outcome': last['outcome']}
                                if last['kind'] == 'tool' else {'slot': last['slot'], 'report': last['report']}),
+        'input_list': input_list, 'consumed_inputs': consumed,
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),

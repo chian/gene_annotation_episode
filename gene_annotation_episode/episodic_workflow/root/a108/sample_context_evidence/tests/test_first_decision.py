@@ -83,8 +83,7 @@ def test_the_head_reaches_its_first_decision_with_the_finding_progress_read_thro
                   'constraints': {}, 'scope': scope, 'received_record_refs': held,
                   'context': {'evidence_task': {'version': 'evidence_axis_task_v1', 'kind': 'whole_axis_findings',
                                                 'evidence_axis': 'A108', 'credit_unit': 1.0}}}
-    settings = {'process_library_directory': str(library.directory), 'tool_library_directory': str(tools.directory),
-                'cost': 0.01, 'parameters': {'uncertainty_alpha': 0.1}}
+    settings = {'process_library_directory': str(library.directory), 'tool_library_directory': str(tools.directory)}
     bindings = subtree()
     continuation = {binding.binding_path: {} for binding in bindings}
     continuation[PATH] = settings

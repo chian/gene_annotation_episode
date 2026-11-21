@@ -22,6 +22,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.evol
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.instruction_spans import replace_span
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_task_credit import (
     lead_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.evolutionary_history_evidence.literature_reading_windows import (
+    covered)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import (
@@ -53,7 +55,7 @@ XLSX_ESTIMATES = {'source.xlsx.sheets', 'source.xlsx.rows'}
 
 GOAL_INSTRUCTION = (
     'Investigate the source in document order as useful for the assigned question. Use returned UTF-8 byte '
-    'continuations and retain representation identity. Decide whether to continue, reread, change the examined '
+    'continuations and retain representation identity. Decide whether to continue, change the examined '
     'window or interpret obtained evidence from actual outcomes.\n'
     'This is an iterative scientific investigation in the shared Episode loop. Earlier outcomes inform later '
     'choices; no reading quota or complete-document requirement is prescribed. A one-off search/read is an '
@@ -318,6 +320,8 @@ def _task(summary, text):
     parts = ['TASK', '', text]
     _section(parts, 'Assigned work', {'goal': GOAL_INSTRUCTION.split('\n')[0], 'page': assignment['page'],
                                       'starting_window': assignment['selection']})
+    _section(parts, 'Input list (windows of the source not yet read, in document order; a window read entirely is '
+                    'consumed and no longer offered)', summary['input_list'])
     _section(parts, 'Fixed scope', summary['scope'])
     _section(parts, 'Commissioned task', summary['task'])
     _section(parts, 'Proposed annotation', summary['proposed_annotation_ref'])
@@ -339,6 +343,7 @@ def decide(summary, feedback, ctx):
         return ToolCall('tool_catalog', {'scope': summary['scope']})
     offered = _offered(summary)
     context = {'task': _task(summary, instructions()), 'feedback': feedback,
+               'input_list': summary['input_list'], 'consumed_ranges': summary['consumed_ranges'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'last_local_outcome': summary['last_local_outcome'], 'visual_evidence': summary['visual_evidence'],
                'assessments': summary['assessments'], 'literature_source_custody': summary['literature_source_custody'],
@@ -364,6 +369,16 @@ def action(response, summary, records, ctx):
         arguments = json.loads(response['arguments_json'])
         if not isinstance(arguments, dict):
             raise ValueError('arguments_json_must_be_a_JSON_object')
+        if name == 'source_read':
+            # A consumed input is no longer offered: a read lying entirely inside text already read is refused.
+            start = arguments.get('offset', 0)
+            if (type(start) is int and type(arguments.get('limit', 12000)) is int
+                    and arguments.get('source_ref') == summary['literature_assignment']['page']['source_ref']
+                    and arguments.get('representation', 'text') == summary['literature_assignment']['page'][
+                        'representation']
+                    and covered(summary['consumed_ranges'], start,
+                                min(start + arguments.get('limit', 12000), summary['content_bytes']))):
+                raise ValueError('source_window_already_consumed:remaining_input_list_is_offered')
         if name == 'reason':
             if set(arguments) - {'commit', 'source_lead'} or not isinstance(arguments.get('commit'), dict):
                 raise ValueError('reason_operands_are_commit_and_optionally_source_lead')

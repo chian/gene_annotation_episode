@@ -85,12 +85,10 @@ def test_assignment_form_and_read_from_parent_need_exactly_one_commission_identi
         module.ASSIGNMENT_FORM.admit({'owner_episode_id': 'episode_1', 'commission_id': 'c1'}, 'assignment')
 
 
-def test_yield_controller_is_accumulation_and_needs_the_commission_yield_binding_in_settings():
+def test_yield_controller_is_accumulation_and_takes_no_settings():
     module = importlib.import_module(PACKAGE + '.yield_estimator')
-    controller = module.yield_controller(0.0, {'cost': 0.5, 'parameters': {'uncertainty_alpha': 0.1}}, {})
+    controller = module.yield_controller(0.0, {}, {})
     assert isinstance(controller, AccumulationYieldController)
-    with pytest.raises(ValueError, match='hpc_commission_yield_binding_required'):
-        module.yield_controller(0.0, {}, {})
 
 
 def test_the_selection_offers_the_shared_history_tool_only_with_shared_memory():

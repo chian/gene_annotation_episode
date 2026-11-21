@@ -19,6 +19,9 @@ def msg_to_child(slot, arguments, summary):
     if slot != 'literature_strategy':
         raise ValueError('unsupported_literature_child_slot:' + str(slot))
     strategy = arguments['selection']
+    for reference in strategy['prior_search_refs']:
+        if reference not in summary['input_list']:      # a consumed or unassigned source is not offered
+            raise ValueError('prior_search_ref_not_in_input_list:' + str(reference))
     assignment = {name: strategy[name] for name in STRATEGY_FIELDS}
     assignment.update({'scope': summary['scope'], 'finding_unit': summary['finding_unit'],
                        'received_record_refs': summary['held_record_refs']})

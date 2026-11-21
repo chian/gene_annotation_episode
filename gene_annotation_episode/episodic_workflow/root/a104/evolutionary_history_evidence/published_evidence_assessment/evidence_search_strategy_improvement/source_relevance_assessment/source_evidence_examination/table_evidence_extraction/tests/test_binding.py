@@ -131,3 +131,16 @@ def test_the_sheet_key_lock_refuses_another_sheet_and_accepts_the_assigned_one()
                  'where': None}
     with pytest.raises(ContractError, match='literature_table_sheet_mismatch'):
         task.admitted(None, 'source.xlsx.rows', arguments, {}, source, 'rId1')
+
+
+def test_the_input_list_is_the_unread_selection_and_a_consumed_read_is_rejected():
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.gene_context_evidence import (
+        literature_selection_input_list as inputs)
+    window = {'source_ref': 's', 'representation': 'original', 'offset': 100, 'limit': 100}
+    read = {'kind': 'tool', 'tool': 'source_read', 'outcome': {'status': 'completed'},
+            'arguments': {'arguments': {'source_ref': 's', 'representation': 'original', 'offset': 120, 'limit': 30}}}
+    assert inputs.selection_input_list(window, []) == [[100, 200]]
+    assert inputs.selection_input_list(window, [read]) == [[100, 120], [150, 200]]
+    consumed = inputs.consumed_extents(window, [read])
+    assert inputs.already_read(window, consumed, 'source_read',
+                               {'source_ref': 's', 'representation': 'original', 'offset': 125, 'limit': 10})

@@ -128,3 +128,33 @@ def test_the_commission_of_each_child_is_admitted_by_the_childs_own_forms(slot):
     child.return_form.select(message.selection).admit({'credit': 1.0, 'finding': finding}, slot)
     assert EPISODE.read_from_child(slot, {'credit': 1.0, 'finding': finding}, summary, None) == {
         'slot': slot, 'credit': 1.0, **finding}
+
+
+def test_the_input_list_shrinks_as_children_are_handed_candidates_and_offers_only_unconsumed_ones():
+    task = importlib.import_module(PACKAGE + '.task')
+    summary_file = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    content = ('First paragraph about the partner.\n\n' + 'x ' * 3000).encode('utf-8')
+    candidates = summary_file.page_candidates(content)
+    assert len(candidates) >= 2
+    ids = [item['candidate_id'] for item in candidates]
+
+    def state(consumed):
+        left = [item for item in candidates if item['candidate_id'] not in consumed]
+        return {'page': PAGE, 'input_list_basis': 'text', 'content_candidates': candidates,
+                'unconsumed_candidate_ids': [item['candidate_id'] for item in left],
+                'unconsumed_table_ids': []}
+
+    full = task.candidate_selections(state([]))
+    assert full['literature_ordered']['properties']['candidate_id']['enum'] == ids
+    first = candidates[0]
+    handed = [{'outcome': None, 'kind': 'child', 'arguments': {'selection': task.window_of(state([]), ids[0])}}]
+    consumed = summary_file.consumed_candidates(handed, candidates)
+    assert ids[0] in consumed and set(consumed) <= set(ids)
+    assert task.window_of(state([]), ids[0])['limit'] == first['end'] - first['start']
+    empty = task.candidate_selections(state(ids))
+    assert set(empty) == {'literature_table'}
+    assert summary_file.consumed_candidates(
+        [{'arguments': {'selection': {'source_ref': SOURCE, 'sheet_key': 'rId1', 'offset': 0, 'limit': 5}}}],
+        candidates) == []
+    binary = task.candidate_selections({'page': PAGE, 'input_list_basis': 'not_utf8'})
+    assert set(binary) == set(task.CHILD_SLOTS)

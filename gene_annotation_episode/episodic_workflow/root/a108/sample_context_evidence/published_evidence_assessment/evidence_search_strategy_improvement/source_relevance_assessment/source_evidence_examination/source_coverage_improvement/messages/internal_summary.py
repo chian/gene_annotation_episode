@@ -15,6 +15,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
     lead_return, own_cell_refs, own_findings, screening_return)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_context_findings import (
     assessment_basis)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
+    representation_content)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_reading_input_list import (
+    input_list, read_ranges)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -119,6 +123,10 @@ def internal_summary(view):
     if (last is not None and last['tool'] in [route[3] for route in POPULATION_ROUTES]
             and last['outcome']['status'] in FAILED):
         attempt = {'tool': last['tool'], 'status': last['outcome']['status']}
+    # The input list (nano-graphrag remaining_chunks): the page source's unread content candidates from the commissioned
+    # window on, in document order; a candidate covered by this episode's own source.read windows is consumed.
+    reading = input_list(representation_content(records, page['source_ref'], page['representation']),
+                         parent['window']['offset'], read_ranges(outcomes, page['source_ref'], page['representation']))
     finding = {**own_findings(records), 'assessment_refs': graded_assessments(records, reasons)}
     summary = {
         'literature_assignment': assignment, 'requested': requested,
@@ -148,6 +156,8 @@ def internal_summary(view):
         'last_local_outcome': None if last is None else {'tool': last['tool'], 'outcome': last['outcome']},
         'visual_evidence': visual,
         'units_consumed': view.units_consumed,
+        'input_list': reading['input_list'], 'consumed_input_ids': reading['consumed_ids'],
+        'remaining_windows': reading['windows'],
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),
         'finding': finding,

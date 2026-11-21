@@ -42,10 +42,22 @@ EXPERIMENTAL_WORK = {'version': 'literature_experimental_task_v1', 'aspect': 'so
 LITERATURE = ('literature_search',)
 
 
+def consumed_sources(children):
+    """The sources handed to a source relevance assessment (nano-graphrag ``web_search_binding``: a candidate source
+    taken up is consumed), in the order handed out: the ``search_result_refs`` of each commission."""
+    return list(dict.fromkeys(ref for outcome in children for ref in outcome['arguments']['search_result_refs']))
+
+
 def internal_summary(view):
     parent = view.parent_input
     task = parent['task']
     sources = view.records.list('source')
+    # The input list (nano-graphrag's input-list paradigm): the sources this episode holds (returned search results and
+    # acquisitions, in the Store's order) that no assessment has been handed. A source handed out is consumed and no
+    # longer offered; the list shrinks as assessments are commissioned and the yield estimator ends the episode when it
+    # is empty.
+    consumed = consumed_sources([outcome for outcome in view.outcomes if outcome['kind'] == 'child'])
+    input_list = [source['id'] for source in sources if source['id'] not in consumed]
     outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
     reasons = [outcome['outcome'] for outcome in outcomes if outcome['tool'] == 'reason']
     last = view.outcomes[-1] if view.outcomes else None
@@ -89,6 +101,7 @@ def internal_summary(view):
                                else {'slot': last['slot'], 'report': last['report']}),
         'child_reports': children,
         'visual_evidence': visual,
+        'input_list': input_list, 'consumed_inputs': consumed,
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),

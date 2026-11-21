@@ -261,7 +261,10 @@ HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read and acquisition outcomes are shown to you as own_literature_outcomes; '
                     'that page creates no new action and does not execute or credit the historical work again.\n')
-COMMISSION_GUIDANCE = ('\nCommission the examination of one source you hold (literature_page) when it is useful: it '
+COMMISSION_GUIDANCE = ('\nYour input list (input_list) holds the sources still to be examined: the returned search '
+                       'results and the sources you hold. A source you commission is consumed and no longer offered; '
+                       'the examination can name only a source of the input list.'
+                       '\nCommission the examination of one source you hold (literature_page) when it is useful: it '
                        'returns its credit, the controlled features of the A106 sheets saved below it and, for the literature task you choose for it, its typed '
                        'answers as counts and references. The examination reads only the source its page assigns.')
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
@@ -321,27 +324,33 @@ def catalog(names, commit_schema, leads, settings):
     return entries
 
 
-def commission_arguments():
-    """The arguments of a commission: the question the examination is asked, free text for it, the page of the
-    source it examines and the typed answer asked of it (the old child assignment's page and ``literature_task``)."""
-    return obj({'page': PAGE, 'literature_task': PAGE_TASK})
+def page_schema(input_list):
+    """The page the model may select: ``source_ref`` is one of the unconsumed inputs (``summary['input_list']``), so a
+    source already handed to a page examination cannot be selected again (nano-graphrag's input list)."""
+    return obj({**PAGE['properties'], 'source_ref': {'enum': list(input_list)}})
 
 
-def commissions():
-    """The examinations the model may commission, shown with the tools (the old ``child_option_information``
-    over ``_CHILDREN['literature_search']``)."""
-    return [{'slot': slot, 'description': COMMISSION[slot], 'input_schema': commission_arguments()}
-            for slot in CHILD_SLOTS]
+def commission_arguments(input_list):
+    """The arguments of a commission: the page of the one unconsumed source it examines and the typed answer asked
+    of it (the old child assignment's page and ``literature_task``)."""
+    return obj({'page': page_schema(input_list), 'literature_task': PAGE_TASK})
 
 
-def selection_schema(names, commit_schema, leads, settings):
+def commissions(input_list):
+    """The examinations the model may commission now, shown with the tools (the old ``child_option_information``
+    over ``_CHILDREN['literature_search']``): none while the input list is empty."""
+    return [{'slot': slot, 'description': COMMISSION[slot], 'input_schema': commission_arguments(input_list)}
+            for slot in CHILD_SLOTS] if input_list else []
+
+
+def selection_schema(names, commit_schema, leads, settings, input_list):
     """What the model answers with: one tool and its arguments, or one commissioned examination (the old action
     schema)."""
     return obj({'selection': {'anyOf': [
         *(obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
           for entry in catalog(names, commit_schema, leads, settings)),
         *(obj({'kind': {'const': 'child'}, 'slot': {'const': entry['slot']}, 'arguments': entry['input_schema']})
-          for entry in commissions())]}})
+          for entry in commissions(input_list))]}})
 
 
 def admitted(name, arguments):
@@ -757,14 +766,17 @@ def decide(summary, feedback, ctx):
                'source_lead_dispositions': summary['source_lead_dispositions'],
                'child_reports': summary['child_reports'],
                'literature_experimental_work': summary['literature_experimental_work'],
-               'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings), 'child_options': commissions(),
+               'input_list': summary['input_list'], 'consumed_inputs': summary['consumed_inputs'],
+               'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings),
+               'child_options': commissions(summary['input_list']),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings)))
+                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings,
+                                                           summary['input_list'])))
 
 
 def empty_commit(commit, commit_schema):
@@ -780,7 +792,7 @@ def action(response, summary, records, ctx):
     names = offered(ctx.settings, summary['opened_population'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads, ctx.settings)
+    schema = selection_schema(names, commit_schema, leads, ctx.settings, summary['input_list'])
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         if selection['kind'] == 'child':

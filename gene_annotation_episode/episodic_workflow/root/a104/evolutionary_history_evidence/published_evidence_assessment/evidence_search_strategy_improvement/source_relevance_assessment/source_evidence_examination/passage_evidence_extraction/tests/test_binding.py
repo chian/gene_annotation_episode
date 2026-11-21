@@ -120,3 +120,16 @@ def test_the_model_is_offered_the_access_tools_and_the_graded_reasoning_and_ever
     assert task.ASSAY_GRADING_TASK in task.instructions(knowledge=None, leads=False)
     assert 'execution_estimate' in task.offered({'tool_registry': {'native_statistics': object()}})
     assert task.empty_commit({'terms': []}, COMMIT_SCHEMA) and not task.empty_commit({'terms': [{}]}, COMMIT_SCHEMA)
+
+
+def test_the_input_list_shrinks_as_spans_are_read_or_declared_examined():
+    summary = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    spans = [{'source_ref': 's', 'representation': 'text', 'offset': o, 'limit': 10} for o in (0, 10, 20)]
+    read = {'tool': 'source_read', 'outcome': {'status': 'completed', 'result': {
+        'source_ref': 's', 'representation': 'text', 'start': 0, 'end': 10}}}
+    assert summary.input_list(spans, [], []) == ([], spans)
+    assert summary.input_list(spans, [read], []) == (spans[:1], spans[1:])
+    half = {'source_ref': 's', 'representation': 'text', 'start': 10, 'end': 15}
+    assert summary.input_list(spans, [read], [half]) == (spans[:1], spans[1:])
+    other = {'source_ref': 's', 'representation': 'text', 'start': 15, 'end': 30}
+    assert summary.input_list(spans, [read], [half, other]) == (spans, [])

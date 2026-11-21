@@ -100,8 +100,10 @@ def test_the_model_can_name_the_child_and_the_acquisition_tools():
 
 def test_the_commission_of_the_child_passes_the_strategy_the_scope_and_the_held_records():
     summary = {'scope': {'subject_refs': []}, 'finding_unit': 1.0, 'partner_components': ['removal'],
-               'held_record_refs': [ARTIFACT, SOURCE]}
+               'held_record_refs': [ARTIFACT, SOURCE], 'input_list': [SOURCE]}
     message = EPISODE.msg_to_child('literature_strategy', {'selection': STRATEGY}, summary)
+    with pytest.raises(ValueError, match='prior_search_ref_not_in_input_list'):
+        EPISODE.msg_to_child('literature_strategy', {'selection': STRATEGY}, {**summary, 'input_list': []})
     assert message.assignment == {**STRATEGY, 'scope': summary['scope'], 'finding_unit': 1.0,
                                   'received_record_refs': [ARTIFACT, SOURCE],
                                   'literature_partner_components': ['removal']}
@@ -112,3 +114,28 @@ def test_the_commission_of_the_child_passes_the_strategy_the_scope_and_the_held_
                'distinct_experiment_count': 0}
     assert EPISODE.read_from_child('literature_strategy', {'credit': 1.0, 'finding': finding}, summary, None) == {
         'slot': 'literature_strategy', 'credit': 1.0, **finding}
+
+
+def test_the_input_list_shrinks_as_sources_are_handed_out_or_populated():
+    other = 'source_' + 'c' * 24
+    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    refs = [SOURCE, other]
+    child = {'kind': 'child', 'arguments': {'selection': STRATEGY}}
+    populate = {'kind': 'tool', 'tool': 'literature_partner_populate', 'outcome': {'status': 'completed'},
+                'arguments': {'tool': 'literature.partner.populate', 'arguments': {'sources': [{'source_ref': other}]}}}
+    refused = {**populate, 'outcome': {'status': 'invalid'}}
+    read = {'kind': 'tool', 'tool': 'source_read', 'outcome': {'status': 'completed'},
+            'arguments': {'tool': 'source.read', 'arguments': {'source_ref': SOURCE}}}
+    assert summary_module.consumed_sources([], refs) == []
+    assert summary_module.consumed_sources([read, refused], refs) == []
+    assert summary_module.consumed_sources([child], refs) == [SOURCE]
+    assert summary_module.consumed_sources([child, populate], refs) == [SOURCE, other]
+
+
+def test_only_unconsumed_sources_are_offered_to_the_child_and_no_child_when_the_list_is_empty():
+    task = importlib.import_module(PACKAGE + '.task')
+    schema = task.action_schema([], [SOURCE])
+    child = schema['properties']['selection']['anyOf'][0]
+    prior = child['properties']['arguments']['properties']['selection']['properties']['prior_search_refs']
+    assert prior['items'] == {'enum': [SOURCE]} and prior['minItems'] == 1
+    assert task.action_schema([], [])['properties']['selection']['anyOf'] == []

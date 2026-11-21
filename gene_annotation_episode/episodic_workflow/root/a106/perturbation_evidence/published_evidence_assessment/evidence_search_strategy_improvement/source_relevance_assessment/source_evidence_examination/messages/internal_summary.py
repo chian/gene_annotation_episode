@@ -11,6 +11,8 @@ reports ``read_from_child`` made).
 ``received_intervention_analysis_rows`` need the old library readers over ``runtime_*`` tables and the BV-BRC
 execution binding (``own_source_inputs``, ``intervention_execution_lookup``) and are not carried. The root-only
 ``reference_evidence_parent`` context is not this episode's."""
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_page_content import (
+    PROSE_CHUNK, SOURCE_TABLE, TABLE_PREVIEW_CHARS, candidate_text, page_candidates, report_windows)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.perturbation_evidence.literature_a106_findings import (
     merged_findings, own_findings)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_population_route import (
@@ -30,10 +32,40 @@ EXPERIMENTAL_WORK = {'version': 'literature_experimental_task_v1', 'aspect': 'so
                      'evidence_axis': 'A106'}
 
 
+def handed_windows(children):
+    """The byte windows the investigations commissioned so far were handed (the child's assignment selection, which
+    ``msg_to_child`` built from the candidates the model named): one window of a table or an ordered-reading commission,
+    each span of a targeted-passage commission."""
+    windows = []
+    for outcome in children:
+        selection = outcome['message']['assignment']['selection']
+        windows.extend(selection['spans'] if 'spans' in selection else [selection])
+    return windows
+
+
+def consumed_candidates(children, candidates):
+    """The candidate ids handed out, in document order (nano-graphrag ``selected_source_table_ids`` and
+    ``processed_chunk_ids``): a candidate lying inside a window a commissioned investigation was handed is consumed and
+    never offered again."""
+    windows = handed_windows(children)
+    return [candidate['candidate_id'] for candidate in candidates
+            if any(window['offset'] <= candidate['start'] and candidate['end'] <= window['offset'] + window['limit']
+                   for window in windows)]
+
+
 def internal_summary(view):
     parent = view.parent_input
     page, task = parent['page'], parent['task']
     source = view.records.get(page['source_ref'])
+    # The input list (nano-graphrag's page state): the source's candidate input units (table regions and prose chunks,
+    # UTF-8 byte offsets of the representation the page was assigned), the ones handed to an investigation consumed. Only
+    # unconsumed candidates are offered; the list shrinks as each investigation is commissioned and is empty when every
+    # candidate has been handed out (the yield estimator ends the episode on an empty list).
+    content = view.records.get_artifact(page['artifact_ref'])
+    candidates = page_candidates(content)
+    children_outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
+    consumed = consumed_candidates(children_outcomes, candidates)
+    unconsumed = [candidate for candidate in candidates if candidate['candidate_id'] not in consumed]
     outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
     reasons = [outcome['outcome'] for outcome in outcomes if outcome['tool'] == 'reason']
     last = view.outcomes[-1] if view.outcomes else None
@@ -77,6 +109,14 @@ def internal_summary(view):
                                          [child['report']['finding'] for child in children]),
         'opened_population': opened_population(view.outcomes),
         'source_leads': leads,
+        'content_candidates': candidates,
+        'consumed_candidate_ids': consumed,
+        'unconsumed_chunk_ids': [item['candidate_id'] for item in unconsumed if item['candidate_type'] == PROSE_CHUNK],
+        'unconsumed_table_ids': [item['candidate_id'] for item in unconsumed if item['candidate_type'] == SOURCE_TABLE],
+        'report_windows': report_windows(candidates, {item['candidate_id'] for item in unconsumed}),
+        'table_previews': {item['candidate_id']: candidate_text(content, item)[:TABLE_PREVIEW_CHARS]
+                           for item in unconsumed if item['candidate_type'] == SOURCE_TABLE},
+        'input_list': [item['candidate_id'] for item in unconsumed],
         'no_applicable_evidence': [span for outcome in reasons if 'evidence_processing' in outcome
                                    for span in outcome['evidence_processing']['examined']],
     }

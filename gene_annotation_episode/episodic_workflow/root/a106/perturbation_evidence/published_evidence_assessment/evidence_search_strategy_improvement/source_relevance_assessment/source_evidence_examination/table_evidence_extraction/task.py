@@ -35,6 +35,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     _resolve, lead_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_assay_inputs import (
     _Sources)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.perturbation_evidence.literature_input_spans import (
+    is_consumed_read)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage import literature_population_route as route
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.perturbation_evidence.action_transport import (
     decode_response, generation_schema)
@@ -162,6 +164,11 @@ HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
                     'no new action and does not execute or credit the historical work again.\n')
+INPUT_LIST_GUIDANCE = ('\nYour input list (input_list) holds the spans of the selected region still to be processed, in '
+                       'document order: [start, end] byte offsets of the selected window, or row offsets (counting '
+                       'matching rows) of the selected table. A span is consumed once you have read it and committed '
+                       'your reasoning after the read (consumed_inputs lists the consumed spans); a read that only '
+                       'repeats consumed spans is not offered again.')
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
                  'inspected source, its anchored reference subject, whether it is a useful lead for the original '
                  'question and the exact witnessed byte interval. A search hit or title alone verifies nothing.')
@@ -180,7 +187,7 @@ def instructions(*, knowledge, leads):
         text += KNOWLEDGE_INSTRUCTIONS
     if leads:
         text += LEAD_GUIDANCE
-    return text + route.GRADER_SECTION + route.RETURN_GUIDANCE
+    return text + INPUT_LIST_GUIDANCE + route.GRADER_SECTION + route.RETURN_GUIDANCE
 
 
 def offered(settings, opened):
@@ -554,6 +561,7 @@ def decide(summary, feedback, ctx):
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
+               'input_list': summary['input_list'], 'consumed_inputs': summary['consumed_inputs'],
                'credit_binding': summary['credit_binding'], 'visual_evidence': summary['visual_evidence'],
                'last_local_outcome': summary['last_local_outcome'], 'held_record_refs': summary['held_record_refs'],
                'a106_findings': summary['a106_findings'],
@@ -586,6 +594,8 @@ def action(response, summary, records, ctx):
         name, arguments = selection['tool'], selection['arguments']
         if name == 'reason' and empty_commit(arguments['commit'], commit_schema) and 'source_lead' not in arguments:
             raise ValueError('empty_reasoning_commit')
+        if is_consumed_read(summary['literature_assignment']['selection'], name, arguments, summary['consumed_inputs']):
+            raise ValueError('input_already_consumed')   # the selected span was read and committed: not offered again
     except (ValueError, KeyError, TypeError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
     return ToolCall(name, {'arguments': arguments, 'scope': summary['scope'],

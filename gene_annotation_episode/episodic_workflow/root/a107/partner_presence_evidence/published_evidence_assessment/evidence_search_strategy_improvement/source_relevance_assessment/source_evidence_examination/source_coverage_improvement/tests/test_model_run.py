@@ -15,7 +15,7 @@ from .partner_world import held_world, linked
 PACKAGE = __name__.rsplit('.', 2)[0]
 EPISODE = importlib.import_module(PACKAGE + '.episode').SourceCoverageImprovement
 PATH = EPISODE.binding_path
-SETTINGS = {'cost': 0.05, 'parameters': {'uncertainty_alpha': 0.05}}
+SETTINGS = {}      # the accumulation controller takes no settings
 RUN_ID = 'a107_leaf_model_run'
 JOURNAL_PATH = ((PATH.replace('/', '__'), RUN_ID),)
 

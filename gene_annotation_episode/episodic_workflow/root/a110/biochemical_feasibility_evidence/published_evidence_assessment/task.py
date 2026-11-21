@@ -191,8 +191,21 @@ POPULATE_NAMES = {'literature_reaction_populate': 'literature.reaction.populate'
 REFERENCES = {'type': 'array', 'items': REF, 'uniqueItems': True}
 # The old ``strategy_assignment_v1`` of the child (the literature assignment's counterpart) without its constant
 # ``version`` (``msg_to_child`` adds it): the question context and the sources earlier searches returned.
-STRATEGY = obj({'question_context_refs': REFERENCES, 'prior_search_refs': REFERENCES})
-CHILD_ARGUMENTS = {'evidence_search_strategy_improvement': STRATEGY}
+def strategy_schema(input_list):
+    """The sources the model may hand the child: one or more of the unconsumed sources (the input list), so a
+    consumed source cannot be handed out."""
+    return obj({'question_context_refs': REFERENCES,
+                'prior_search_refs': {'type': 'array', 'minItems': 1, 'uniqueItems': True,
+                                     'items': {'enum': list(input_list)}}})
+
+
+def valid_slots(input_list):
+    """The child slots valid now: the strategy child while an unconsumed source remains."""
+    return list(CHILD_SLOTS) if input_list else []
+
+
+# Static form (the declared shape of the child's arguments, without the input list), kept for the binding test.
+CHILD_ARGUMENTS = {'evidence_search_strategy_improvement': strategy_schema(['<unconsumed source>'])}
 # What the parent says to the model about each child (the old child option information).
 CHILD_DESCRIPTIONS = {
     'evidence_search_strategy_improvement':
@@ -219,7 +232,9 @@ TAIL_GUIDANCE = ('\nSelect an evidence search strategy investigation as a child 
                  'needs iteration; what it returns (its credit and the controlled features of its findings) is '
                  'shown to you as strategies. Select literature_reaction_populate or '
                  'literature_reaction_source_populate when a source you hold supplies the measured ratios, '
-                 'predictions or resource quantities of the assigned question.')
+                 'predictions or resource quantities of the assigned question. Your input list (input_list) is the '
+                 'sources not yet consumed: a source handed to the child as a prior-search source, or read or graded '
+                 'by one of your units, is consumed and is not offered to the child again.')
 
 
 def instructions(*, knowledge, family):
@@ -262,17 +277,20 @@ def catalog(names):
     return entries
 
 
-def child_catalog():
-    return [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot], 'input_schema': CHILD_ARGUMENTS[slot]}
-            for slot in CHILD_SLOTS]
+def child_catalog(input_list):
+    """The children offered now: the strategy child only while an unconsumed source remains, its sources the
+    unconsumed ones."""
+    return [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot], 'input_schema': strategy_schema(input_list)}
+            for slot in valid_slots(input_list)]
 
 
-def selection_schema(names):
-    """What the model answers with: one tool or one child and its arguments (the old action schema)."""
+def selection_schema(names, input_list):
+    """What the model answers with: one tool or one child and its arguments (the old action schema). A child is
+    offered only for unconsumed sources (``input_list``)."""
     options = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
                for entry in catalog(names)]
     options += [obj({'kind': {'const': 'child'}, 'slot': {'const': entry['slot']},
-                     'arguments': entry['input_schema']}) for entry in child_catalog()]
+                     'arguments': entry['input_schema']}) for entry in child_catalog(input_list)]
     return obj({'selection': {'anyOf': options}})
 
 
@@ -493,14 +511,15 @@ def decide(summary, feedback, ctx):
                'visual_evidence': summary['visual_evidence'], 'last_local_outcome': summary['last_local_outcome'],
                'held_record_refs': summary['held_record_refs'], 'reaction_sheets': summary['reaction_sheets'],
                'investigation_finding': summary['investigation_finding'],
-               'tools': catalog(names), 'children': child_catalog(),
+               'input_list': summary['input_list'], 'consumed_inputs': summary['consumed_inputs'],
+               'tools': catalog(names), 'children': child_catalog(summary['input_list']),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), family=summary['family']), context,
-                        strict_output_schema(selection_schema(names), open_records_as_text=False,
+                        strict_output_schema(selection_schema(names, summary['input_list']), open_records_as_text=False,
                                              argument_transport_error=ARGUMENT_TRANSPORT_ERROR))
 
 
@@ -510,7 +529,7 @@ def action(response, summary, records, ctx):
     is invalid. Records a commission names are not checked here: msg_to_child fails for a record the episode does
     not hold."""
     names = offered(ctx.settings)
-    schema = selection_schema(names)
+    schema = selection_schema(names, summary['input_list'])
     try:
         decoded = decode_strict_output(response, schema, open_records_as_text=False,
                                        argument_transport_error=ARGUMENT_TRANSPORT_ERROR)

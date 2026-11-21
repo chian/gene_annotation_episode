@@ -43,9 +43,33 @@ EXPERIMENTAL_WORK = {'version': 'literature_experimental_task_v1', 'aspect': 'so
 LITERATURE = ('literature_strategy',)
 
 
+def held_sources(view):
+    """The assigned sources and the sources the episode's own tool units produced, in order."""
+    references = list(view.parent_input['literature']['source_refs'])
+    for outcome in view.outcomes:
+        if outcome['kind'] == 'tool':
+            references.extend(outcome['produced'])
+    return [reference for reference in dict.fromkeys(references)
+            if view.records.get(reference).get('record_type') == 'source']
+
+
+def consumed_sources(view):
+    """The sources already handed to the strategy child as its prior search sources, in the order handed out
+    (nano-graphrag ``processed_chunk_ids``: an input handed out is consumed)."""
+    return list(dict.fromkeys(reference for outcome in view.outcomes
+                              if outcome['kind'] == 'child' and outcome['slot'] in LITERATURE
+                              for reference in outcome['arguments']['prior_search_refs']))
+
+
 def internal_summary(view):
     parent = view.parent_input
     task = parent['task']
+    # The input list (nano-graphrag's input-list paradigm): the held sources (assigned and acquired) no strategy child
+    # has been handed. Only these are offered to a commission; the list shrinks as a commission consumes its prior
+    # search sources and grows when an acquisition produces a new source. The yield estimator stops the episode when
+    # it is empty.
+    consumed = consumed_sources(view)
+    input_list = [reference for reference in held_sources(view) if reference not in consumed]
     sources = view.records.list('source')
     assigned = [view.records.require(reference, {'source'}) for reference in parent['literature']['source_refs']]
     outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
@@ -72,6 +96,7 @@ def internal_summary(view):
     reports = {slot: [outcome['report'] for outcome in view.outcomes
                       if outcome['kind'] == 'child' and outcome['slot'] == slot] for slot in EXECUTION_SLOTS}
     summary = {
+        'input_list': input_list, 'consumed_source_refs': consumed,
         'literature_assignment': assignment, 'literature': parent['literature'],
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],

@@ -130,10 +130,14 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_the
     assert set(names) <= set(EPISODE.tools) and set(task.ACQUISITION_NAMES) <= set(names)
     assert len(task.ACQUISITION_NAMES) == 22 and 'public_literature_search' in names
     for leads in (False, True):
-        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, NONE)
+        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, NONE, [SRC])
         assert len(schema['properties']['selection']['anyOf']) == len(names) + 1
         task.generation_schema(schema)
-    assert [entry['slot'] for entry in task.commissions()] == list(EPISODE.child_slots)
+        # An empty input list offers no commission at all.
+        assert len(task.selection_schema(names, COMMIT_SCHEMA, leads, NONE, [])['properties']['selection']['anyOf']) \
+            == len(names)
+    assert [entry['slot'] for entry in task.commissions([SRC])] == list(EPISODE.child_slots)
+    assert task.commissions([]) == []
     shown = {entry['name']: entry for entry in task.catalog(names, COMMIT_SCHEMA, True, NONE)}
     assert 'source_lead' in shown['reason']['input_schema']['properties']
     assert 'source_lead' not in task.reason_schema(COMMIT_SCHEMA, False)['properties']
@@ -149,7 +153,12 @@ def test_the_commission_is_admitted_by_the_form_of_the_search_child_and_selects_
     arguments = {'question_context_refs': [CTX],
                  'search_result_refs': [SRC], 'literature_task': child_task}
     task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_search', 'arguments': arguments}},
-                            task.selection_schema(task.offered(NONE, None), COMMIT_SCHEMA, True, NONE))
+                            task.selection_schema(task.offered(NONE, None), COMMIT_SCHEMA, True, NONE, [SRC]))
+    # A consumed source (one not in the input list) is refused by the offered schema.
+    other = 'source_' + 'b' * 24
+    with pytest.raises(Exception):
+        task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_search', 'arguments': arguments}},
+                                task.selection_schema(task.offered(NONE, None), COMMIT_SCHEMA, True, NONE, [other]))
     parent_input = EPISODE.read_from_parent(ASSIGNMENT, {})
     summary = {'task': parent_input['task'], 'proposed_annotation_ref': parent_input['proposed_annotation_ref'],
                'scope': parent_input['scope'], 'source_custody': {SRC: [SRC, ART]}}
@@ -172,6 +181,14 @@ def test_the_commission_is_admitted_by_the_form_of_the_search_child_and_selects_
     selected.admit(returned, 'return')
     read = EPISODE.read_from_child('literature_search', returned, summary, None)
     assert read == {'slot': 'literature_search', 'credit': 1.0, 'finding': EMPTY, 'lead_source_refs': [SRC]}
+
+
+def test_the_input_list_is_the_held_sources_not_yet_handed_to_an_assessment():
+    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    children = [{'kind': 'child', 'slot': 'literature_search', 'arguments': {'search_result_refs': [SRC]}},
+                {'kind': 'child', 'slot': 'literature_search', 'arguments': {'search_result_refs': [SRC, 'x']}}]
+    assert summary_module.consumed_sources(children) == [SRC, 'x']
+    assert summary_module.consumed_sources([]) == []
 
 
 def test_read_from_child_reads_only_the_answers_the_commission_selected():

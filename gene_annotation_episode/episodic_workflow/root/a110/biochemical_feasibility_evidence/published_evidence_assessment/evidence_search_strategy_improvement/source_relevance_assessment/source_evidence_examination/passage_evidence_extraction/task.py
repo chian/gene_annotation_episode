@@ -392,6 +392,7 @@ def decide(summary, feedback, ctx):
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
                'literature_source_custody': summary['literature_source_custody'],
+               'input_list': summary['input_list'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
                'visual_evidence': summary['visual_evidence'], 'last_local_outcome': summary['last_local_outcome'],

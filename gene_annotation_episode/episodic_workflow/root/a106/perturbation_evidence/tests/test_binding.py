@@ -124,10 +124,10 @@ def test_the_commission_form_admits_the_assignment_and_the_parent_input_is_read_
 
 def test_the_controller_is_an_accumulation_controller_built_from_the_parent_input_alone():
     parent_input = EPISODE.read_from_parent(ASSIGNMENT, {})
-    controller = EPISODE.yield_controller(0, {'cost': 0.1, 'parameters': {'uncertainty_alpha': 0.1}}, parent_input)
+    controller = EPISODE.yield_controller(0, {}, parent_input)
     assert type(controller).__name__ == 'AccumulationYieldController'
     with pytest.raises(ValueError, match='scientific_yield_binding_missing_for_task'):
-        EPISODE.yield_controller(0, {'cost': 0.1, 'parameters': {}}, {**parent_input, 'task_key': 'A105:x'})
+        EPISODE.yield_controller(0, {}, {**parent_input, 'task_key': 'A105:x'})
 
 
 def test_the_return_declares_credit_and_finding_as_required_and_returns_the_systems_credit():

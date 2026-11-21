@@ -22,14 +22,28 @@ OBJECTIVES = {'literature_table': 'investigate_selected_table', 'literature_orde
               'literature_targeted': 'investigate_selected_passages'}
 
 
-def without_nulls(value):
-    """The model's selection names every field of the table and window shapes and leaves those of the other shape
-    null; the child's form takes a field only when it is present."""
-    if isinstance(value, dict):
-        return {name: without_nulls(item) for name, item in value.items() if item is not None}
-    if isinstance(value, list):
-        return [without_nulls(item) for item in value]
-    return value
+def window(summary, start, end):
+    """A byte window of the assigned source in its assigned representation (the child's WINDOW shape)."""
+    page = summary['page']
+    return {'source_ref': page['source_ref'], 'representation': page['representation'], 'offset': start,
+            'limit': end - start}
+
+
+def selection_of(slot, arguments, summary):
+    """The reading the investigation is handed, built from the input list (``summary['content_candidates']`` and its
+    unconsumed remainder, ``internal_summary``): ``literature_table`` the one table region the model named,
+    ``literature_targeted`` the prose chunks and table regions it named (one span each), ``literature_ordered`` the first
+    window of the remaining prose in document order (``report_windows``). What is handed out is consumed
+    (``internal_summary.consumed_candidates``)."""
+    candidates = {item['candidate_id']: item for item in summary['content_candidates']}
+    if slot == 'literature_table':
+        item = candidates[arguments['candidate_id']]
+        return window(summary, item['start'], item['end'])
+    if slot == 'literature_targeted':
+        return {'spans': [window(summary, candidates[name]['start'], candidates[name]['end'])
+                          for name in arguments['candidate_ids']]}
+    start, end = summary['report_windows'][0]
+    return window(summary, start, end)
 
 
 def msg_to_child(slot, arguments, summary):
@@ -39,7 +53,7 @@ def msg_to_child(slot, arguments, summary):
     selection = ((LEADS,) if task['kind'] == 'verified_source_leads'
                  else (SCREENING,) if task['answer_kind'] == 'screening' else ())
     assignment = {'version': 'reading_assignment_v1', 'page': summary['page'],
-                  'selection': without_nulls(arguments['selection']), 'literature_task': task,
+                  'selection': selection_of(slot, arguments, summary), 'literature_task': task,
                   'proposed_annotation_ref': summary['proposed_annotation_ref'], 'scope': summary['scope'],
                   'received_record_refs': list(summary['received_record_refs'])}
     return ChildMessage(objective=OBJECTIVES[slot], message={},

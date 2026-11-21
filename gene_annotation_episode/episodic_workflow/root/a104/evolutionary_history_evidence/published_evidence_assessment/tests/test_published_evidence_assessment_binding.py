@@ -97,7 +97,7 @@ def test_the_assignment_admits_a_literature_assignment_and_read_from_parent_retu
 def summary_for(kind='verified_source_leads'):
     from_parent = importlib.import_module(MODULE + '.messages.read_from_parent')
     admitted = from_parent.ASSIGNMENT_FORM.admit(literature(kind), 'assignment')
-    return {'assignment': from_parent.read_from_parent(admitted, {})}
+    return {'assignment': from_parent.read_from_parent(admitted, {}), 'input_list': ['src_1']}
 
 
 def test_the_commission_is_admitted_by_the_form_of_its_real_child():
@@ -164,7 +164,7 @@ def test_the_controller_is_built_from_the_commissioned_task():
 def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_the_report_and_the_strategy_child():
     task = importlib.import_module(MODULE + '.task')
     episode = importlib.import_module(MODULE + '.episode')
-    names = task.offered({})
+    names = task.offered({}, ['src_1'])
     assert names[-2:] == ['reason', 'evidence_search_strategy_improvement'] and 'report' not in names and len(names) == 34
     assert set(names) - set(task.CHILD_SLOTS) <= set(episode.PublishedEvidenceAssessment.tools)
     assert {'public_literature_search', 'public_literature_read', 'public_ncbi_search', 'public_pmc_asset',
@@ -172,7 +172,37 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_the
     assert task.INPUT_SCHEMAS['public.ncbi.search']['properties']['database'] == {'enum': ['pubmed']}
     commit_schema = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
                      'properties': {'terms': {'type': 'array'}}}
-    schema = task.selection_schema(names, commit_schema, True)
+    schema = task.selection_schema(names, commit_schema, True, ['src_1'])
     assert len(schema['properties']['selection']['anyOf']) == len(names)
     kinds = [option['properties']['kind']['const'] for option in schema['properties']['selection']['anyOf']]
     assert kinds.count('child') == 1 and kinds.count('tool') == len(names) - 1
+
+
+def test_the_input_list_is_the_only_offer_of_prior_searches_and_an_empty_list_offers_no_child():
+    task = importlib.import_module(MODULE + '.task')
+    to_child = importlib.import_module(MODULE + '.messages.msg_to_child')
+    child = task.child_input('evidence_search_strategy_improvement', ['src_1', 'src_2'])
+    assert child['properties']['prior_search_refs']['items'] == {'enum': ['src_1', 'src_2']}
+    assert child['properties']['prior_search_refs']['minItems'] == 1
+    emptied = task.offered({}, [])
+    assert 'evidence_search_strategy_improvement' not in emptied and emptied[-1] == 'reason'
+    arguments = {'objective': 'o', 'question_context_refs': ['ctx_1'], 'prior_search_refs': ['src_0'],
+                 'custody_refs': [], 'context_refs': []}
+    with pytest.raises(KeyError):
+        to_child.msg_to_child('evidence_search_strategy_improvement', arguments, summary_for())
+
+
+def test_a_source_handed_to_the_strategy_child_is_consumed_and_a_produced_source_joins_the_list():
+    summary_module = importlib.import_module(MODULE + '.messages.internal_summary')
+
+    class Records:
+        def get(self, reference):
+            return {'record_type': 'source' if reference.startswith('src') else 'other'}
+
+    class View:
+        parent_input = {'literature': {'source_refs': ['src_1']}}
+        records = Records()
+        outcomes = [{'kind': 'tool', 'produced': ['src_2', 'rec_1']},
+                    {'kind': 'child', 'arguments': {'prior_search_refs': ['src_1']}}]
+    assert summary_module.held_sources(View) == ['src_1', 'src_2']
+    assert summary_module.consumed_sources(View) == ['src_1']

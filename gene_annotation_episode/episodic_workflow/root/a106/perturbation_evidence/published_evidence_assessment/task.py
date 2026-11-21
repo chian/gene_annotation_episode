@@ -290,7 +290,11 @@ HISTORY_GUIDANCE = ('Your own earlier read and acquisition outcomes are shown to
 COMMISSION_GUIDANCE = ('\nCommission a search strategy investigation (literature_strategy) when a narrower question '
                        'warrants iteration: it returns its credit, the controlled features of the A106 sheets '
                        'saved below it and, for the literature task you choose for it, its typed answers as counts and '
-                       'references.')
+                       'references. The input list (context.input_list) is the held sources not yet handed to a '
+                       'strategy child (the assigned sources, then the sources your acquisitions produced): a source '
+                       'handed to the child as a prior search is consumed (context.consumed_source_refs) and is not '
+                       'offered again; the child takes only sources of the input list, and is not offered once the '
+                       'list is empty.')
 EXECUTION_GUIDANCE = ('\nWhen execution resources are configured (execution_resources), commission the launch of '
                       'a permitted execution request (launch) and, from the handoff it returns, the acquisition of '
                       'its results (results); the received intervention analysis rows are shown as '
@@ -339,10 +343,10 @@ def offered(settings, execution, opened):
     return tools + route.offered_population_tools(opened) + ['reason']
 
 
-def offered_slots(execution):
+def offered_slots(execution, input_list):
     """The children offered now: the old ``analysis_children`` offered ``launch`` and ``results`` only when an
-    execution binding was configured."""
-    return ['literature_strategy', *(EXECUTION_SLOTS if execution['resource_ids'] else ())]
+    execution binding was configured; the strategy child only while the input list holds an unconsumed source."""
+    return [*(['literature_strategy'] if input_list else ()), *(EXECUTION_SLOTS if execution['resource_ids'] else ())]
 
 
 def reason_schema(commit_schema, leads):
@@ -393,13 +397,17 @@ def catalog(names, commit_schema, leads, execution, settings):
     return entries
 
 
-def commission_arguments(slot):
+def commission_arguments(slot, input_list):
     """The arguments of a commission: the child assignment's own properties (no text passes to the child: its
     objective is fixed by its slot in ``msg_to_child``), which this episode does not fill itself (the old child assignments:
     ``strategy_assignment_v1``, ``execution_launch_assignment_v1``, ``execution_results_assignment_v1``)."""
     head = {}
     if slot == 'literature_strategy':
-        return obj({**head, 'question_context_refs': UNIQUE_REFERENCES, 'prior_search_refs': UNIQUE_REFERENCES,
+        # The prior searches are chosen among the input list only (the held sources no strategy child has been
+        # handed); a source handed out is consumed and offered no more.
+        return obj({**head, 'question_context_refs': UNIQUE_REFERENCES,
+                    'prior_search_refs': {'type': 'array', 'items': {'enum': list(input_list)}, 'uniqueItems': True,
+                                          'minItems': 1, 'description': 'Unconsumed sources of input_list only'},
                     'literature_task': STRATEGY_TASK})
     if slot == 'launch':
         return obj({**head, 'requests': OPEN_RECORD, 'immutable_input_versions': {'type': 'array'},
@@ -410,20 +418,20 @@ def commission_arguments(slot):
     return obj({**head, 'handoff_ref': REF, 'selector': OPEN_RECORD, 'service': TEXT})
 
 
-def commissions(execution):
+def commissions(execution, input_list):
     """The children the model may commission, shown with the tools (the old ``child_option_information``)."""
-    return [{'slot': slot, 'description': COMMISSION[slot], 'input_schema': commission_arguments(slot)}
-            for slot in offered_slots(execution)]
+    return [{'slot': slot, 'description': COMMISSION[slot], 'input_schema': commission_arguments(slot, input_list)}
+            for slot in offered_slots(execution, input_list)]
 
 
-def selection_schema(names, commit_schema, leads, execution, settings):
+def selection_schema(names, commit_schema, leads, execution, settings, input_list):
     """What the model answers with: one tool and its arguments, or one commissioned child (the old action
     schema)."""
     return obj({'selection': {'anyOf': [
         *(obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
           for entry in catalog(names, commit_schema, leads, execution, settings)),
         *(obj({'kind': {'const': 'child'}, 'slot': {'const': entry['slot']}, 'arguments': entry['input_schema']})
-          for entry in commissions(execution))]}})
+          for entry in commissions(execution, input_list))]}})
 
 
 def admitted(name, arguments):
@@ -884,7 +892,8 @@ def decide(summary, feedback, ctx):
                'literature_experimental_work': summary['literature_experimental_work'],
                'execution_resources': execution,
                'tools': catalog(names, summary['reasoning_schema'], leads, execution, ctx.settings),
-               'child_options': commissions(execution),
+               'input_list': summary['input_list'], 'consumed_source_refs': summary['consumed_source_refs'],
+               'child_options': commissions(execution, summary['input_list']),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     launch_library = None if launch_directory is None else LaunchInstructions(launch_directory)
     context = extend_context(context, {
@@ -895,7 +904,8 @@ def decide(summary, feedback, ctx):
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads,
                                                    execution=execution, launch_library=launch_library),
                         context, generation_schema(selection_schema(names, summary['reasoning_schema'], leads,
-                                                                    execution, ctx.settings)))
+                                                                    execution, ctx.settings,
+                                                                    summary['input_list'])))
 
 
 def empty_commit(commit, commit_schema):
@@ -914,7 +924,7 @@ def action(response, summary, records, ctx):
     names = offered(ctx.settings, execution, summary['opened_population'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads, execution, ctx.settings)
+    schema = selection_schema(names, commit_schema, leads, execution, ctx.settings, summary['input_list'])
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         if selection['kind'] == 'child':

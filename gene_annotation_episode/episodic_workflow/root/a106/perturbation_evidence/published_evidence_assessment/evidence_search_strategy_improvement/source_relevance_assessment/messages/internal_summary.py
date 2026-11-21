@@ -66,10 +66,16 @@ def internal_summary(view):
                              'report': outcome['report']})
         elif outcome['tool'] == 'reason' and 'literature_source_lead' in outcome['outcome']:
             leads.append(outcome['outcome']['literature_source_lead'])
+    # The input list (nano-graphrag's list of inputs the episode works through): the returned search results, then the
+    # other sources this episode holds. A source handed to a page examination is consumed and no longer offered.
+    consumed = list(dict.fromkeys(child['arguments']['page']['source_ref'] for child in children))
+    candidates = list(dict.fromkeys([*parent['search']['search_result_refs'], *(source['id'] for source in sources)]))
+    input_list = [ref for ref in candidates if ref not in consumed]
     assignment = {**parent['search'], 'literature_task': task,
                   'proposed_annotation_ref': parent['proposed_annotation_ref']}
     summary = {
         'literature_assignment': assignment, 'search': parent['search'],
+        'input_list': input_list, 'consumed_inputs': consumed,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],
         'literature_source_custody': [{'source_ref': source['id'], **{key: source.get(key) for key in CUSTODY_KEYS}}

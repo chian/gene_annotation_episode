@@ -99,10 +99,31 @@ def graded_assessments(records, reasons):
     return found
 
 
+SEARCH_TOOLS = ('public_literature_search', 'public_ncbi_search')
+
+
+def candidate_sources(parent, outcomes, records):
+    """The candidate sources of the episode's input list (nano-graphrag web search state: search results and
+    candidate sources), in arrival order: the prior search results the assignment names, the task's own sources, then
+    the source records this episode's own searches returned and it holds."""
+    found = [*parent['prior_search_refs'], *parent['task'].get('source_refs', [])]
+    for outcome in outcomes:
+        if outcome['kind'] == 'tool' and outcome['tool'] in SEARCH_TOOLS:
+            found.extend(ref for ref in outcome['outcome'].get('record_refs', ())
+                         if ref.startswith('source_') and records.holds(ref))
+    return list(dict.fromkeys(found))
+
+
 def internal_summary(view):
     parent = view.parent_input
     task = parent['task']
     records = view.records
+    # The input list: candidate sources not yet handed to the assessment child; a source handed out is consumed and
+    # no longer offered (nano-graphrag ``PageRunState.processed_chunk_ids`` / ``remaining_chunks``). The yield
+    # estimator (another agent's) stops when it is empty.
+    consumed = list(dict.fromkeys(ref for outcome in view.outcomes if outcome['kind'] == 'child'
+                                  for ref in outcome['arguments']['search_result_refs']))
+    input_list = [ref for ref in candidate_sources(parent, view.outcomes, records) if ref not in consumed]
     held = sorted(records.refs())
     custody = source_custody(records, held)
     outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
@@ -166,6 +187,8 @@ def internal_summary(view):
         'last_local_outcome': None if last is None else {'tool': last['tool'], 'outcome': last['outcome']},
         'visual_evidence': visual,
         'units_consumed': view.units_consumed,
+        'input_list': input_list,
+        'consumed_search_result_refs': consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),
         'child_reports': child_reports,

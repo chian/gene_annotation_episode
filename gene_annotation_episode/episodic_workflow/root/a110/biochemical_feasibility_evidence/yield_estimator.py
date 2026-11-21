@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.configuration.yie
     checked_yield_declaration)
 from gene_annotation_episode.episodic_workflow.episode_support.findings.biochemical_feasibility_evidence.investigation_progress import (
     FindingProgressPolicy, ScientificFindingProgress)
-from yield_control import AccumulationYieldController, YieldParameters
+from yield_control import AccumulationYieldController, ADAPTIVE_CONTROL
 
 _KINDS = ('accumulation', 'bounded_quality', 'completion')
 
@@ -34,5 +34,5 @@ def yield_controller(initial_credit, settings, parent_input):
     declaration = checked_yield_declaration(settings['yield_bindings'], task, credit_definition=projector.as_record(),
                                             yield_method=projector.yield_method, code_prefix='scientific')
     _declaration_shape(task, declaration)
-    return AccumulationYieldController('biochemical_feasibility_evidence', initial_credit, declaration['cutoff'],
-                                       YieldParameters(**declaration['parameters']))
+    return AccumulationYieldController('biochemical_feasibility_evidence', initial_credit, ADAPTIVE_CONTROL,
+                                       items=None)

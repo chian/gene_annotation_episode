@@ -10,6 +10,10 @@ features of the held partner sheets; ``_population_task_context``) and from the 
 ``sqlite_master`` are ``view.outcomes`` and ``view.records``."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.partner_presence_evidence.literature_partner_findings import (
     agreement, current_sheet_features)
+from gene_annotation_episode.episodic_workflow.episode_support.readers.partner_presence_evidence.source_bytes import (
+    source_window_selection)
+from gene_annotation_episode.episodic_workflow.episode_support.readers.partner_presence_evidence.source_windows import (
+    read_ranges, remaining_windows)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -38,10 +42,23 @@ def derived_sources(records, page_source_ref):
     return [row for row in records.list('source') if page_source_ref in row.get('parent_source_refs', ())]
 
 
+def input_windows(view, page, window):
+    """The input list (nano-graphrag ``ReportWindowSource``): the windows of the page's source, in the page's
+    representation, not yet read, in document order. They run from the assigned window's offset to the end of the
+    representation, cut at the assigned window's limit; a ``source_read`` that returned bytes consumes them, so the
+    list shrinks to the unread remainder and is empty when everything has been read."""
+    source = view.records.get(page['source_ref'])
+    artifact_ref, representation, _ = source_window_selection(source, page['representation'])
+    size = view.records.get(artifact_ref)['size']
+    consumed = read_ranges(view.outcomes, page['source_ref'], representation)
+    return (remaining_windows(size, window['offset'], window['limit'], consumed), representation, consumed)
+
+
 def internal_summary(view):
     parent = view.parent_input
     page = parent['page']
     source = view.records.get(page['source_ref'])
+    windows, representation, consumed = input_windows(view, page, parent['window'])
     sheets = current_sheet_features(view.records, view.outcomes)
     return {
         'literature_assignment': {'version': 'reading_assignment_v1', 'page': page, 'selection': parent['window']},
@@ -58,6 +75,10 @@ def internal_summary(view):
         'literature_selected_population_attempt': latest_failed_population(view.outcomes),
         'partner_sheets': sheets,
         'partner_agreement': agreement(sheets),
+        # The input list: the unread byte windows [start, end] of the page's source representation, document order.
+        'input_list': windows,
+        'input_representation': representation,
+        'consumed_ranges': consumed,
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),

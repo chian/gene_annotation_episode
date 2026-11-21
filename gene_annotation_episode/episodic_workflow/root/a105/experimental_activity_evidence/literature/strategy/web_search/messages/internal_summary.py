@@ -33,11 +33,22 @@ HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through
                    'delivery does not establish scientific understanding, absence or resolved science.')
 
 
+def consumed_results(children):
+    """The search results (source refs) handed to a page child, in the order handed out (nano-graphrag
+    ``web_search_binding``: a candidate source taken up is consumed and no longer offered)."""
+    return list(dict.fromkeys(outcome['arguments']['page']['source_ref'] for outcome in children))
+
+
 def internal_summary(view):
     parent = view.parent_input
     search, task = parent['search'], parent['task']
     records = view.records
     children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
+    # The input list (nano-graphrag's input-list paradigm): the search results of the assignment, in the order the
+    # search returned them, that no page child has yet been handed. A handed-out result is consumed; the list shrinks
+    # by one per page commissioned and the yield estimator ends the episode when it is empty.
+    consumed = consumed_results(children)
+    input_list = [ref for ref in search['search_result_refs'] if ref not in consumed]
     last = view.outcomes[-1] if view.outcomes else None
     spans = no_applicable_spans(view.outcomes, records)
     assignment = {**search, 'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref'],
@@ -61,6 +72,7 @@ def internal_summary(view):
         'held_record_refs': sorted(records.refs()),
         'last_local_outcome': (None if last is None else {'tool': last['tool'], 'outcome': last['outcome']}
                                if last['kind'] == 'tool' else {'slot': last['slot'], 'report': last['report']}),
+        'input_list': input_list, 'consumed_inputs': consumed,
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),

@@ -101,8 +101,21 @@ def test_the_model_is_offered_the_access_tools_the_reaction_graders_and_the_chil
     assert 'execution_estimate' not in names and len(names) == 16 and 'report' not in EPISODE.tools
     assert names[-2:] == ['literature_reaction_populate', 'literature_reaction_source_populate']
     assert 'reason' not in names and set(names) <= set(EPISODE.tools)
-    schema = task.selection_schema(names)
+    candidates = [{'candidate_id': 'chunk_1', 'candidate_type': 'prose_chunk', 'start': 0, 'end': 10},
+                  {'candidate_id': 'table_1', 'candidate_type': 'source_table', 'start': 10, 'end': 20}]
+    listed = {**summary(), 'input_list_basis': 'text', 'content_candidates': candidates,
+              'unconsumed_candidate_ids': ['chunk_1', 'table_1'], 'unconsumed_table_ids': ['table_1']}
+    schema = task.selection_schema(names, listed)
     assert len(schema['properties']['selection']['anyOf']) == len(names) + len(CHILDREN)
+    # the input list: only unconsumed candidates are offered; an empty list offers no coverage / passage child
+    assert task.child_arguments('source_coverage_improvement', listed)['properties']['candidate_id']['enum'] == [
+        'chunk_1', 'table_1']
+    assert task.child_arguments_of('passage_evidence_extraction', {'candidate_ids': ['table_1']}, listed) == {
+        'spans': [{**WINDOW, 'offset': 10, 'limit': 10}]}
+    assert task.child_arguments_of('table_evidence_extraction', {'candidate_id': 'table_1'}, listed)['kind'] == 'window'
+    emptied = {**listed, 'unconsumed_candidate_ids': [], 'unconsumed_table_ids': []}
+    assert [entry['slot'] for entry in task.child_catalog(emptied)] == ['table_evidence_extraction']
+    assert len(task.selection_schema(names, emptied)['properties']['selection']['anyOf']) == len(names) + 1
     assert 'execution_estimate' in task.offered({'tool_registry': {'native_statistics': 'timing_statistics'}})
 
 

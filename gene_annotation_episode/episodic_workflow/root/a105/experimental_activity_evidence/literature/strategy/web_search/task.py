@@ -139,13 +139,30 @@ OBJECTIVE = {'enum': ['evidence_in_table', 'evidence_in_passages', 'evidence_loc
                             'evidence_in_passages: it is stated in particular passages of the running text. '
                             'evidence_location_unknown: where the source holds it, or whether it holds any, is not '
                             'known.'}
-CHILD_ARGUMENTS = {
-    'page': (
-        'Investigate where and how one exact source of the search results should be examined, in one of its '
-        'representations; the child chooses ordinary source operations or selected table, ordered-reading or '
-        'targeted-passage investigations of it.',
-        obj({'objective': OBJECTIVE, 'page': PAGE_SCHEMA})),
-}
+CHILD_DESCRIPTION = (
+    'Investigate where and how one exact UNCONSUMED source of the search results (input_list) should be examined, in '
+    'one of its representations; the child chooses ordinary source operations or selected table, ordered-reading or '
+    'targeted-passage investigations of it. The source is consumed: it is not offered again.')
+
+
+def page_schema(input_list):
+    """The page the model may select: ``source_ref`` is one of the unconsumed search results (the input list), so a
+    consumed result cannot be selected."""
+    return obj({**PAGE_SCHEMA['properties'], 'source_ref': {'enum': list(input_list)}})
+
+
+def child_arguments(slot, input_list):
+    """The description and arguments schema of a child, over the input list now."""
+    return CHILD_DESCRIPTION, obj({'objective': OBJECTIVE, 'page': page_schema(input_list)})
+
+
+def valid_slots(input_list):
+    """The child slots valid now: the page child while an unconsumed search result remains."""
+    return list(CHILD_SLOTS) if input_list else []
+
+
+# Static form (the declared shape of each child's arguments, without the input list), kept for the binding test.
+CHILD_ARGUMENTS = {slot: child_arguments(slot, ['<unconsumed search result>']) for slot in CHILD_SLOTS}
 
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
@@ -203,13 +220,14 @@ def catalog(names, commit_schema, leads, settings):
     return entries
 
 
-def selection_schema(names, commit_schema, leads, settings):
+def selection_schema(names, commit_schema, leads, settings, input_list):
     """What the model answers with: one tool and its arguments, or one child slot and its arguments (the old action
-    schema: kinds ``tool`` and ``child``)."""
+    schema: kinds ``tool`` and ``child``). A child is offered only for an unconsumed search result (``input_list``)."""
     tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
              for entry in catalog(names, commit_schema, leads, settings)]
-    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': CHILD_ARGUMENTS[slot][1]})
-                for slot in CHILD_SLOTS]
+    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot},
+                     'arguments': child_arguments(slot, input_list)[1]})
+                for slot in valid_slots(input_list)]
     return obj({'selection': {'anyOf': [*tools, *children]}})
 
 
@@ -653,11 +671,11 @@ TOOLS = {
     'reason': reason}
 
 
-def child_options():
-    """The children the model may select: slot, description and the arguments it takes (the old
-    ``child_option_information``, over this episode's own slots)."""
-    return [{'slot': slot, 'description': CHILD_ARGUMENTS[slot][0], 'arguments': CHILD_ARGUMENTS[slot][1]}
-            for slot in CHILD_SLOTS]
+def child_options(input_list):
+    """The children the model may select now: slot, description and the arguments it takes (the old
+    ``child_option_information``), only for the unconsumed search results of the input list."""
+    return [{'slot': slot, 'description': child_arguments(slot, input_list)[0],
+             'arguments': child_arguments(slot, input_list)[1]} for slot in valid_slots(input_list)]
 
 
 def decide(summary, feedback, ctx):
@@ -680,7 +698,8 @@ def decide(summary, feedback, ctx):
                'credit_binding': summary['credit_binding'], 'last_local_outcome': summary['last_local_outcome'],
                'held_record_refs': summary['held_record_refs'], 'assay_sheets': summary['assay_sheets'],
                'aggregation_sheets': summary['aggregation_sheets'],
-               'child_returns': summary['child_returns'], 'child_options': child_options(),
+               'child_returns': summary['child_returns'], 'input_list': summary['input_list'],
+               'consumed_inputs': summary['consumed_inputs'], 'child_options': child_options(summary['input_list']),
                'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     if ctx.settings['rate_population']:
@@ -692,7 +711,8 @@ def decide(summary, feedback, ctx):
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads,
                                                   populations=offered_populations(ctx.settings)), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings)))
+                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings,
+                                                           summary['input_list'])))
 
 
 def validate_selection(value, schema):
@@ -709,7 +729,7 @@ def action(response, summary, records, ctx):
     names = offered(ctx.settings)
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads, ctx.settings)
+    schema = selection_schema(names, commit_schema, leads, ctx.settings, summary['input_list'])
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         if selection['kind'] == 'child':
@@ -735,4 +755,4 @@ def offered_actions(summary, ctx):
     names = offered(ctx.settings)
     leads = summary['task']['kind'] == 'verified_source_leads'
     tools = [entry['name'] for entry in catalog(names, summary['reasoning_schema'], leads, ctx.settings)]
-    return [*tools, *CHILD_SLOTS]
+    return [*tools, *valid_slots(summary['input_list'])]

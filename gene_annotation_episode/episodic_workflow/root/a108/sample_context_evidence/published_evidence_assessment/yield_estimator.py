@@ -8,13 +8,13 @@ the old ``maximum_credit``, the task's ``credit_unit``, read from the parent inp
 the parameters the old ``uncertainty_alpha``: both are the episode's settings. The old ``None`` (no private yield
 binding) is not carried: the controller is always built from the task. The old ``validate_yield_bindings`` checked the
 owner's declarations when the binding was constructed; the controllers' own checks replace it."""
-from yield_control import AccumulationYieldController, CompletionYieldController
+from yield_control import ADAPTIVE_CONTROL, AccumulationYieldController, CompletionYieldController
 
 
 def yield_controller(initial_credit, settings, parent_input):
     task = parent_input['task']
     if task['kind'] == 'verified_source_leads':
-        return AccumulationYieldController('published_evidence_assessment', initial_credit, settings['cost'],
-                                           settings['parameters'])
+        return AccumulationYieldController('published_evidence_assessment', initial_credit, ADAPTIVE_CONTROL,
+                                           items=None)
     return CompletionYieldController('published_evidence_assessment', initial_credit, settings['cost'],
                                      task['credit_unit'], settings['parameters'])

@@ -1,7 +1,11 @@
 """The four yield controllers, as equal peers.
 
 * ``AccumulationYieldController`` -- credit that accumulates without a declared
-  limit (``AccumulationYieldEstimator``).
+  limit: nano-graphrag's ``EstimatorController`` (its incidence estimator, its
+  normalized marginal hypervolume statistic and its flat-streak stop rule, with
+  the adaptive or the fixed threshold), configured by ``ADAPTIVE_CONTROL`` or
+  ``FIXED_CONTROL``, and optionally the number of items of the episode's input
+  list; it takes no cost (see the section ``AccumulationYieldController`` below).
 * ``BoundedQualityYieldController`` -- a quality credit whose definition
   declares a maximum; the maximum limits the forecast of further credit, never
   the credit itself (``BoundedQualityYieldEstimator``).
@@ -15,9 +19,10 @@
   actions realized before, in this episode and in the estimate ledger, and it stops when no offered action's forecast
   exceeds its expected cost at the declared exchange rate (see the section ``ForecastYieldController`` below).
 
-The first three receive one cumulative credit per completed action, pass the
-raw signed difference to their estimator, and stop only when the estimator's
-available upper bound on the next marginal credit is at or below its cost.
+The bounded-quality and completion controllers receive one cumulative credit per
+completed action, pass the raw signed difference to their estimator, and stop
+only when the estimator's available upper bound on the next marginal credit is
+at or below its cost.
 Credits are never bounded, clamped or rescaled; unknown forecasts stay unknown.
 
 The estimator fits every raw marginal credit against its measured progress
@@ -29,7 +34,7 @@ bands subtract to an approximate, uncalibrated signed interval.
 from dataclasses import dataclass, replace
 import math
 from numbers import Real
-from statistics import NormalDist
+from statistics import NormalDist, median
 from typing import Mapping, Sequence
 
 # The version of the per-unit progress-time receipt every estimator reads (``estimation_context["progress_time"]``).
@@ -54,8 +59,11 @@ UNCERTAINTY_LAPLACE = 2
 # ============================================================================
 # Incidence estimation, from nano-graphrag question_pipeline/utilities/rarefaction.py
 # (revision 60a167f9eeda0c9ea2ca294724174948947baf3f), reduced to the parts the
-# three controllers use: the numeric band, the quadrature kernel and the
-# full-history MAP fit, with real progress time as the explanatory coordinate.
+# bounded-quality and completion controllers use: the numeric band, the
+# quadrature kernel and the full-history MAP fit, with real progress time as the
+# explanatory coordinate. The accumulation controller's estimator (its own
+# section below) reuses the band, the kernel, the prior, the box and the BFGS
+# arithmetic of this fit, with the unit's rank as the coordinate.
 #
 # MIT License
 #
@@ -347,7 +355,7 @@ class _RealTimeCreditFit:
 
 
 # ============================================================================
-# Real-time credit-mark estimation shared by the three estimators.
+# Real-time credit-mark estimation shared by the bounded-quality and completion estimators.
 # ============================================================================
 
 def _score(value: object, name: str) -> float:
@@ -664,30 +672,8 @@ def estimate_bounded_credit_yield(scores: Sequence[Real], parameters=None, *, co
 
 
 # ============================================================================
-# The three estimators: one history entry per completed action, signed.
+# The bounded-quality and completion estimators: one history entry per completed action, signed.
 # ============================================================================
-
-class AccumulationYieldEstimator:
-    """Credit that accumulates without a declared limit."""
-
-    def __init__(self, parameters=None):
-        self.parameters = _parameters(parameters)
-        self._scores, self._contexts = [], []
-        self._current = estimate_score_yield((), self.parameters, contexts=())
-
-    @property
-    def scores(self):
-        return tuple(self._scores)
-
-    def observe(self, marginal_credit, *, context=None):
-        scores, contexts = [*self._scores, _signed(marginal_credit)], [*self._contexts, context]
-        current = estimate_score_yield(scores, self.parameters, contexts=contexts)
-        self._scores, self._contexts, self._current = scores, contexts, current
-        return current
-
-    def state(self):
-        return self._current
-
 
 class BoundedQualityYieldEstimator:
     """A quality credit whose definition declares its maximum."""
@@ -839,39 +825,711 @@ def _completed(value):
 
 
 # ============================================================================
-# The three yield controllers. Same shape: observe(unit_label, value, is_root),
-# state(), transitioned(epoch); a runtime owns action completion.
+# AccumulationYieldController: nano-graphrag's EstimatorController
+# (question_pipeline/utilities/rarefaction.py at the revision above, MIT notice above) in this library.
+#
+# The estimator (``_IncidenceEstimator``): unit r (rank r = 1, 2, ... in this controller; every unit the runtime
+# hands over is an observed unit: the system has no failed or excluded unit) has the discovery d_r. With the
+# potential  eta_r(z) = beta - delta (r - 1) + z  (z the latent of the 15-point Gauss-Hermite rule), the unit's
+# likelihood is  sum_z w_z sigmoid(observation_intercept + coupling eta) exp(d eta - e^eta) / d!  (an observed unit's
+# softplus term), with the same priors and box as nano-graphrag, fitted by MAP/BFGS over the full history, warm
+# started from the previous fit (beta = log 0.25, log delta = log 0.05 and the identity curvature at the start of an
+# epoch). The coupling is identifiable only with failed units, so it stays 0 here, as nano-graphrag keeps it without
+# them. No fit before W = 8 attempted and m = 4 observed units (``insufficient``). From the fit: the next unit's
+# discoveries (rank T + 1), the remaining discoveries  m1 / (1 - m2 / m1)  (m1, m2 the discoveries at ranks T + 1,
+# T + 2) and the expected total (observed + remaining), each a Laplace band at alpha 0.05.
+#
+# The statistic (``_NumericalController.expected_next_volume_credit``): the expected next marginal hypervolume
+# credit, the relaxed geometric volume of the progress observed / expected total after the next unit minus now,
+# with the conservative outer interval band. One channel ("overall"), so the volume is the progress itself.
+#
+# The stop rule (``_NumericalController.observe``): a unit is flat when that band is normal and its upper bound is
+# at or below gamma; a non-flat or unavailable unit resets the streak; ``streak_length`` = 4 consecutive flat units
+# stop the episode. rho = 0 labels the stop (convergence when the remaining discoveries' upper bound is at or below
+# rho, otherwise saturation); it does not gate it. gamma is fixed (``FIXED_CONTROL``, 0.06, nano-graphrag's
+# lexical-probe/chunk grain) or adaptive (``ADAPTIVE_CONTROL``, nano-graphrag's page, report and source-table grains:
+# after every unit gamma = max(one-result resolution, 0.1 x median of the productive realized hypervolume credits of
+# the last W units, or the last such median carried); while neither exists there is no verdict and the streak is kept).
+#
+# The observation. nano-graphrag hands its controller, per completed unit, the accepted result identities of the unit
+# (provider_binding.py, ``TableGoalState.preview``: ``identities = tuple(dict.fromkeys(identity for identity, _ in
+# previewed.incidence))``); its estimator's discovery d_r is the number of those identities it had not seen before in
+# the epoch, and the observed total is the number of distinct identities seen. The runtime here hands the
+# controller, per completed unit, the episode's cumulative credit (``{'credit', 'estimation_context'}``), and an
+# accumulating credit counts what the episode newly holds; so d_r is the unit's marginal credit (the rise of the
+# cumulative credit over the previous unit) and the observed total is the sum of the marginal credits since the
+# controller was built (credit minus initial credit). One credit unit is one result in the one-result resolution.
+# Discoveries are real numbers here (nano-graphrag's are integer counts; at integer credits the arithmetic is the
+# same); a credit that falls is not an observation of this model and raises. The progress-time receipt of the
+# estimation context is not read: the coordinate is the unit's rank, as in nano-graphrag.
+#
+# The items. ``items`` is None or the number of items of the episode's input list when the episode starts. Every
+# completed unit consumes one item; the controller stops when nano-graphrag's rule stops it or when no item remains.
 # ============================================================================
 
-class AccumulationYieldController:
-    """Continue while more accumulating credit is forecast above the cost."""
+ACCUMULATION_ESTIMATOR_VERSION = "preferential_incidence_estimator_v2"
+ACCUMULATION_CONTROLLER_VERSION = "preferential_discovery_controller_v7"
+VOLUME_CREDIT_VERSION = "relaxed_geometric_hypervolume_v5"
+ADAPTIVE_THRESHOLD_VERSION = "adaptive_marginal_credit_threshold_v2"
+FIXED_THRESHOLD_VERSION = "fixed_marginal_credit_threshold_v1"
+DEFAULT_EFFICIENCY_FRACTION = 0.1
+VOLUME_RELAXATION_FACTOR = 2.0
+MIN_DISCOVERABLE_COUNT = 1.0
+ACCUMULATION_CHANNEL = "overall"
 
-    def __init__(self, epoch, initial_credit, cost, settings=None):
+
+@dataclass(frozen=True)
+class AccumulationControl:
+    """One of nano-graphrag's two controller declarations (provider_binding.py): ``threshold`` is the threshold
+    policy (adaptive or fixed), ``gamma`` the starting threshold, ``rho`` the convergence label, ``streak_length``
+    the flat units that stop, ``window_size`` (W) the attempted and ``subsample_size`` (m) the observed units before
+    the first fit, ``alpha`` the band level. An episode uses ``ADAPTIVE_CONTROL`` or ``FIXED_CONTROL``."""
+    threshold: str
+    gamma: float
+    rho: float
+    streak_length: int
+    window_size: int
+    subsample_size: int
+    alpha: float
+
+    def as_record(self):
+        return {"version": ACCUMULATION_CONTROLLER_VERSION, "threshold": self.threshold, "gamma": self.gamma,
+                "rho": {ACCUMULATION_CHANNEL: self.rho}, "streak_length": self.streak_length,
+                "window_size": self.window_size, "subsample_size": self.subsample_size, "alpha": self.alpha}
+
+
+# nano-graphrag DEFAULT_PAGE_CONTROL / DEFAULT_REPORT_CONTROL / DEFAULT_SOURCE_TABLE_CONTROL with
+# ``adaptive_marginal_credit_threshold``.
+ADAPTIVE_CONTROL = AccumulationControl(ADAPTIVE_THRESHOLD_VERSION, 0.0, 0.0, 4, 8, 4, 0.05)
+# nano-graphrag DEFAULT_CHUNK_CONTROL of the lexical-probe grain, whose threshold is kept fixed.
+FIXED_CONTROL = AccumulationControl(FIXED_THRESHOLD_VERSION, 0.06, 0.0, 4, 8, 4, 0.05)
+
+
+def _softplus(value):
+    if value > 0.0:
+        return value + math.log1p(math.exp(-value))
+    return math.log1p(math.exp(value))
+
+
+def _laplace_band(value, variance, alpha, lower_floor):
+    """nano-graphrag ``NumericBand.laplace`` with its ``lower_floor``."""
+    point = _finite_number("Laplace value", value)
+    variance_value = _finite_number("Laplace variance", variance)
+    floor = _finite_number("Laplace lower_floor", lower_floor)
+    if variance_value < 0.0:
+        raise ArithmeticError(f"Laplace variance must be non-negative, got {variance_value}")
+    radius = NormalDist().inv_cdf(1.0 - alpha / 2.0) * math.sqrt(variance_value)
+    return NumericBand(point, max(floor, point - radius), point + radius, STATUS_NORMAL, UNCERTAINTY_LAPLACE, alpha)
+
+
+def _coded_of(codes):
+    return NumericBand.coded(STATUS_UNIDENTIFIABLE if STATUS_UNIDENTIFIABLE in codes else STATUS_INSUFFICIENT)
+
+
+@dataclass(frozen=True)
+class AccumulationIncidence:
+    """nano-graphrag ``IncidenceEstimate`` of the one channel: observed and expected total, remaining and next
+    discoveries."""
+    units: int
+    observed_results: NumericBand
+    expected_results: NumericBand
+    remaining_results: NumericBand
+    expected_next_discoveries: NumericBand
+    diagnostics: dict
+
+    def as_record(self):
+        return {"method_version": ACCUMULATION_ESTIMATOR_VERSION, "channel": ACCUMULATION_CHANNEL,
+                "incidence_samples": self.units, "observed_results": self.observed_results.as_record(),
+                "expected_results": self.expected_results.as_record(),
+                "remaining_results": self.remaining_results.as_record(),
+                "control_statistics": {"expected_next_discoveries": self.expected_next_discoveries.as_record()},
+                "diagnostics": dict(self.diagnostics)}
+
+
+class _AccumulationIncidenceEstimator:
+    """nano-graphrag ``_IncidenceEstimator`` over the discoveries of observed units (see the section comment)."""
+
+    def __init__(self, control):
+        self.control = control
+        self._discoveries = []
+        self._fit_parameters = [math.log(0.25), math.log(0.05), 0.0, 0.0]
+        self._fit_inverse_hessian = _RealTimeCreditFit._identity()
+        self._fit_cache = None
+
+    @property
+    def units(self):
+        return len(self._discoveries)
+
+    @property
+    def distinct(self):
+        return math.fsum(self._discoveries)
+
+    def observe(self, discovery):
+        self._discoveries.append(discovery)
+        self._fit_cache = None
+
+    @staticmethod
+    def observation_loss(parameters, rank, discovery):
+        beta, log_delta, observation_intercept, coupling = parameters
+        delta = math.exp(float(log_delta))
+        potentials = tuple(beta - delta * (rank - 1) + latent for latent in _QUADRATURE_LATENT)
+        terms = tuple(
+            weight
+            - _softplus(-(observation_intercept + coupling * potential))
+            + discovery * potential
+            - math.exp(max(-50.0, min(50.0, potential)))
+            - math.lgamma(discovery + 1.0)
+            for weight, potential in zip(_LOG_QUADRATURE_WEIGHTS, potentials))
+        return -_logsumexp(terms)
+
+    @classmethod
+    def history_loss(cls, parameters, discoveries):
+        return _RealTimeCreditFit.prior_loss(parameters) + sum(
+            cls.observation_loss(parameters, rank, discovery)
+            for rank, discovery in enumerate(discoveries, start=1))
+
+    @classmethod
+    def history_gradient(cls, parameters, discoveries):
+        gradient = []
+        for index in range(3):
+            width = 1e-4 * (1.0 + abs(float(parameters[index])))
+            upper = list(parameters)
+            lower = list(parameters)
+            upper[index] += width
+            lower[index] -= width
+            upper = _RealTimeCreditFit.project(upper)
+            lower = _RealTimeCreditFit.project(lower)
+            denominator = upper[index] - lower[index]
+            if denominator == 0.0:
+                gradient.append(0.0)
+                continue
+            gradient.append((cls.history_loss(upper, discoveries) - cls.history_loss(lower, discoveries))
+                            / denominator)
+        gradient.append(0.0)
+        return gradient
+
+    def _fit_full_history(self, discoveries):
+        """Warm-started full-history MAP fit (nano-graphrag ``_fit_full_history``, coupling not identifiable)."""
+        parameters = _RealTimeCreditFit.project(self._fit_parameters)
+        inverse_hessian = [row.copy() for row in self._fit_inverse_hessian]
+        objective = self.history_loss(parameters, discoveries)
+        gradient = self.history_gradient(parameters, discoveries)
+        for _iteration in range(100):
+            if max(abs(value) for value in gradient[:3]) <= 1e-6:
+                break
+            direction = [-value for value in _RealTimeCreditFit._matrix_vector(inverse_hessian, gradient)]
+            direction[3] = 0.0
+            directional_derivative = _RealTimeCreditFit._dot(gradient, direction)
+            if directional_derivative >= 0.0 or not math.isfinite(directional_derivative):
+                direction = [-value for value in gradient]
+                directional_derivative = -_RealTimeCreditFit._dot(gradient, gradient)
+                inverse_hessian = _RealTimeCreditFit._identity()
+            step = 1.0
+            candidate = parameters
+            candidate_objective = objective
+            while step >= 2.0 ** -20:
+                trial = _RealTimeCreditFit.project([value + step * direction[index]
+                                                    for index, value in enumerate(parameters)])
+                trial_objective = self.history_loss(trial, discoveries)
+                if trial_objective <= objective + 1e-4 * step * directional_derivative:
+                    candidate = trial
+                    candidate_objective = trial_objective
+                    break
+                step *= 0.5
+            if candidate == parameters:
+                break
+            candidate_gradient = self.history_gradient(candidate, discoveries)
+            displacement = [candidate[index] - parameters[index] for index in range(4)]
+            gradient_change = [candidate_gradient[index] - gradient[index] for index in range(4)]
+            inverse_hessian = _RealTimeCreditFit._bfgs_update(inverse_hessian, displacement, gradient_change)
+            parameters = candidate
+            objective = candidate_objective
+            gradient = candidate_gradient
+        for index in range(4):
+            inverse_hessian[3][index] = 0.0
+            inverse_hessian[index][3] = 0.0
+        self._fit_parameters = parameters.copy()
+        self._fit_inverse_hessian = [row.copy() for row in inverse_hessian]
+        return parameters, tuple(tuple(row) for row in inverse_hessian), objective
+
+    @staticmethod
+    def metric_discovery(parameters, rank):
+        beta, log_delta, observation_intercept, coupling = parameters
+        delta = math.exp(float(log_delta))
+        return sum(
+            math.exp(weight)
+            * (1.0 / (1.0 + math.exp(max(-50.0, min(50.0, -(observation_intercept + coupling
+                                                             * (beta - delta * (rank - 1.0) + latent)))))))
+            * math.exp(max(-50.0, min(50.0, beta - delta * (rank - 1.0) + latent)))
+            for weight, latent in zip(_LOG_QUADRATURE_WEIGHTS, _QUADRATURE_LATENT))
+
+    @classmethod
+    def metric_remaining(cls, parameters, next_rank):
+        first = cls.metric_discovery(parameters, next_rank)
+        if first == 0.0:
+            return 0.0
+        second = cls.metric_discovery(parameters, next_rank + 1)
+        ratio = second / first
+        if not math.isfinite(ratio) or ratio >= 1.0:
+            return None
+        return max(0.0, first / max(1e-12, 1.0 - ratio))
+
+    @staticmethod
+    def optional_metric_variance(parameters, covariance, metric):
+        gradient = [0.0 for _ in parameters]
+        for index in range(len(parameters)):
+            step = 1e-4 * (1.0 + abs(float(parameters[index])))
+            upper = parameters.copy()
+            lower = parameters.copy()
+            upper[index] += step
+            lower[index] -= step
+            upper_value = metric(upper)
+            lower_value = metric(lower)
+            if upper_value is None or lower_value is None:
+                return None
+            gradient[index] = (upper_value - lower_value) / (2.0 * step)
+        variance = sum(gradient[row] * covariance[row][column] * gradient[column]
+                       for row in range(len(gradient)) for column in range(len(gradient)))
+        return max(0.0, variance)
+
+    def _fit(self):
+        discoveries = tuple(self._discoveries)
+        if len(discoveries) < self.control.window_size or len(discoveries) < self.control.subsample_size:
+            return None
+        parameters, covariance, objective = self._fit_full_history(discoveries)
+        if not all(math.isfinite(value) for row in covariance for value in row):
+            return ()
+        return parameters, covariance, objective
+
+    def snapshot(self):
+        cache_key = len(self._discoveries)
+        if self._fit_cache is not None and self._fit_cache[0] == cache_key:
+            return self._fit_cache[1]
+        attempted = len(self._discoveries)
+        alpha = self.control.alpha
+        fit = self._fit()
+        if fit is None:
+            expected = remaining = next_discovery = NumericBand.coded(STATUS_INSUFFICIENT)
+            fit_diagnostics = {}
+        elif not fit:
+            expected = remaining = next_discovery = NumericBand.coded(STATUS_UNIDENTIFIABLE)
+            fit_diagnostics = {}
+        else:
+            parameters, covariance, objective = fit
+            next_rank = attempted + 1
+            next_point = self.metric_discovery(parameters, next_rank)
+            next_variance = _RealTimeCreditFit.metric_variance(
+                parameters, covariance, lambda values: self.metric_discovery(values, next_rank))
+            next_discovery = _laplace_band(next_point, next_variance, alpha, 0.0)
+            remaining_point = self.metric_remaining(parameters, next_rank)
+            remaining_variance = (None if remaining_point is None else self.optional_metric_variance(
+                parameters, covariance, lambda values: self.metric_remaining(values, next_rank)))
+            if remaining_variance is None:
+                remaining = expected = NumericBand.coded(STATUS_UNIDENTIFIABLE)
+            else:
+                remaining = _laplace_band(remaining_point, remaining_variance, alpha, 0.0)
+                expected = _laplace_band(self.distinct + remaining_point, remaining_variance, alpha, self.distinct)
+            fit_diagnostics = {"yield_intercept": float(parameters[0]), "rank_decay": math.exp(float(parameters[1])),
+                               "observation_intercept": float(parameters[2]), "fit_objective": objective}
+        estimate = AccumulationIncidence(
+            attempted, NumericBand.exact(self.distinct), expected, remaining, next_discovery,
+            {"minimum_attempts": self.control.window_size, "minimum_evaluated": self.control.subsample_size,
+             "alpha": alpha, "attempted_units": attempted, "observed_units": attempted, **fit_diagnostics})
+        self._fit_cache = (cache_key, estimate)
+        return estimate
+
+
+def _volume_relaxation(axis_count):
+    return 1.0 / (VOLUME_RELAXATION_FACTOR * axis_count)
+
+
+def _progress_denominator(expected_results, minimum_reachable_results):
+    """Normalize progress on a total that can contain the stated results."""
+    if expected_results <= 0.0:
+        raise ValueError("positive expected_results required")
+    return max(MIN_DISCOVERABLE_COUNT, expected_results, minimum_reachable_results)
+
+
+def _relaxed_geometric_volume(progress):
+    """geomean(epsilon + progress) - epsilon with epsilon = 1 / (2C) for C axes (one axis here: the progress)."""
+    values = tuple(_finite_number(f"progress[{index}]", value) for index, value in enumerate(progress))
+    epsilon = _volume_relaxation(len(values))
+    if any(value < 0.0 or value > 1.0 for value in values):
+        raise ValueError("every progress coordinate must be in [0, 1]")
+    volume = math.exp(sum(math.log(epsilon + value) for value in values) / len(values)) - epsilon
+    return min(1.0, max(0.0, volume))
+
+
+def expected_next_volume_credit(estimate):
+    """The expected next marginal hypervolume credit of one channel's estimate, with its outer interval band, and the
+    channel's record (nano-graphrag ``_NumericalController.expected_next_volume_credit``)."""
+    total = estimate.expected_results
+    next_discoveries = estimate.expected_next_discoveries
+    bands = (total, next_discoveries)
+    unavailable = [band.status_code for band in bands if band.status_code]
+    if unavailable:
+        return _coded_of(unavailable), {}
+    observed = estimate.observed_results.value
+    if total.value < observed or total.upper < observed:
+        return NumericBand.coded(STATUS_UNIDENTIFIABLE), {}
+    if total.value == 0.0:
+        if observed != 0.0 or next_discoveries.upper > 0.0:
+            return NumericBand.coded(STATUS_UNIDENTIFIABLE), {}
+        p_now = p_now_lower = p_now_upper = 1.0
+        p_next = p_next_lower = p_next_upper = 1.0
+        p_increment_lower = p_increment_upper = 0.0
+        point_denominator = MIN_DISCOVERABLE_COUNT
+    else:
+        point_open = total.value > observed or next_discoveries.value > 0.0
+        interval_open = total.upper > observed or next_discoveries.upper > 0.0
+        point_denominator = _progress_denominator(total.value,
+                                                  observed + (MIN_DISCOVERABLE_COUNT if point_open else 0.0))
+        interval_minimum = observed + (MIN_DISCOVERABLE_COUNT if interval_open else 0.0)
+        lower_denominator = max(MIN_DISCOVERABLE_COUNT, interval_minimum, total.lower)
+        upper_denominator = max(MIN_DISCOVERABLE_COUNT, interval_minimum, total.upper)
+        p_now = min(1.0, observed / point_denominator)
+        p_next = min(1.0, (observed + next_discoveries.value) / point_denominator)
+        if total.upper == 0.0:
+            return NumericBand.coded(STATUS_UNIDENTIFIABLE), {}
+        p_now_lower = min(1.0, observed / upper_denominator)
+        p_next_lower = min(1.0, (observed + next_discoveries.lower) / upper_denominator)
+        p_now_upper = min(1.0, observed / lower_denominator)
+        p_next_upper = min(1.0, (observed + next_discoveries.upper) / lower_denominator)
+
+        def axis_increment(total_value, discovery):
+            if total_value <= 0.0:
+                return 0.0
+            return max(0.0, min(1.0, (observed + discovery) / total_value) - min(1.0, observed / total_value))
+
+        total_lower = max(MIN_DISCOVERABLE_COUNT, interval_minimum, total.lower)
+        total_upper = max(total_lower, total.upper)
+        upper_candidates = [total_lower, total_upper]
+        peak = observed + next_discoveries.upper
+        if total_lower <= peak <= total_upper:
+            upper_candidates.append(peak)
+        p_increment_lower = min(axis_increment(candidate, next_discoveries.lower)
+                                for candidate in (total_lower, total_upper))
+        p_increment_upper = max(axis_increment(candidate, next_discoveries.upper) for candidate in upper_candidates)
+    record = {
+        "current_expected_results": total.value, "current_expected_results_lower": total.lower,
+        "current_expected_results_upper": total.upper, "progress_denominator": point_denominator,
+        "axis_completed_by_zero_expectation": float(total.value == 0.0), "current_observed_results": observed,
+        "expected_next_discoveries": next_discoveries.value,
+        "expected_next_discoveries_lower": next_discoveries.lower,
+        "expected_next_discoveries_upper": next_discoveries.upper,
+        "current_progress": p_now, "current_progress_lower": p_now_lower, "current_progress_upper": p_now_upper,
+        "projected_progress": p_next, "projected_progress_lower": p_next_lower,
+        "projected_progress_upper": p_next_upper, "progress_increment": max(0.0, p_next - p_now),
+        "progress_increment_lower": p_increment_lower, "progress_increment_upper": p_increment_upper,
+        "volume_axis_count": 1.0, "volume_relaxation_factor": VOLUME_RELAXATION_FACTOR,
+        "volume_relaxation_epsilon": _volume_relaxation(1)}
+    point = max(0.0, _relaxed_geometric_volume((p_next,)) - _relaxed_geometric_volume((p_now,)))
+    lower = max(0.0, _relaxed_geometric_volume((min(1.0, p_now_lower + p_increment_lower),))
+                - _relaxed_geometric_volume((p_now_lower,)))
+    upper = min(1.0, max(0.0, _relaxed_geometric_volume((min(1.0, p_now_upper + p_increment_upper),))
+                         - _relaxed_geometric_volume((p_now_upper,))))
+    lower = min(lower, point)
+    upper = max(upper, point)
+    if all(band.uncertainty_code == UNCERTAINTY_EXACT for band in bands):
+        return NumericBand.exact(point), record
+    return NumericBand(point, lower, upper, STATUS_NORMAL, max(band.uncertainty_code for band in bands),
+                       max(band.alpha for band in bands if band.alpha > 0.0)), record
+
+
+@dataclass(frozen=True)
+class AccumulationVolumeCredit:
+    """nano-graphrag ``VolumeCredit``: the unit's realized marginal hypervolume on the frozen pre-unit scale
+    (``score``) and the expected next marginal hypervolume (``expected_next_score``, the stop statistic)."""
+    score: NumericBand
+    expected_next_score: NumericBand
+    before_volume: float
+    after_volume: float
+    channel: dict
+
+    def as_record(self):
+        return {"version": VOLUME_CREDIT_VERSION, "score": self.score.as_record(),
+                "expected_next_score": self.expected_next_score.as_record(), "before_volume": self.before_volume,
+                "after_volume": self.after_volume, "channels": {ACCUMULATION_CHANNEL: dict(self.channel)}}
+
+
+def assign_volume_credit(before, after):
+    """The completed unit's realized marginal hypervolume (nano-graphrag ``_NumericalController.assign_volume_credit``),
+    normalized by the expected total before the unit."""
+    expected_next_score, record = expected_next_volume_credit(after)
+
+    def coded(status):
+        return AccumulationVolumeCredit(NumericBand.coded(status), expected_next_score, float(status), float(status),
+                                        record)
+
+    normalization = before.expected_results
+    if normalization.status_code != STATUS_NORMAL:
+        return coded(STATUS_UNIDENTIFIABLE if normalization.status_code == STATUS_UNIDENTIFIABLE
+                     else STATUS_INSUFFICIENT)
+    raw_expected_total = normalization.value
+    observed_before = before.observed_results.value
+    observed_after = after.observed_results.value
+    if observed_after < observed_before:
+        return coded(STATUS_UNIDENTIFIABLE)
+    if raw_expected_total == 0.0:
+        if observed_before != 0.0 or observed_after != 0.0:
+            return coded(STATUS_UNIDENTIFIABLE)
+        progress_before = progress_after = 1.0
+        expected_total = MIN_DISCOVERABLE_COUNT
+    else:
+        if observed_before > raw_expected_total:
+            return coded(STATUS_UNIDENTIFIABLE)
+        expected_total = _progress_denominator(raw_expected_total, observed_after)
+        progress_before = observed_before / expected_total
+        progress_after = min(1.0, observed_after / expected_total)
+    record = {**record, "raw_expected_results": raw_expected_total,
+              "normalization_expected_results": expected_total,
+              "axis_completed_by_zero_expectation": float(raw_expected_total == 0.0),
+              "normalization_lower": normalization.lower, "normalization_upper": normalization.upper,
+              "observed_before": observed_before, "observed_after": observed_after,
+              "progress_before": progress_before, "progress_after": progress_after}
+    before_volume = _relaxed_geometric_volume((progress_before,))
+    after_volume = _relaxed_geometric_volume((progress_after,))
+    return AccumulationVolumeCredit(NumericBand.exact(max(0.0, after_volume - before_volume)), expected_next_score,
+                                    before_volume, after_volume, record)
+
+
+def one_result_resolution(estimate):
+    """The smallest hypervolume gain from one more result (one credit unit) on the open axis (nano-graphrag
+    ``_one_result_resolution``)."""
+    if estimate.expected_results.status_code != STATUS_NORMAL:
+        return _coded_of((estimate.expected_results.status_code,))
+    total = estimate.expected_results.value
+    observed = estimate.observed_results.value
+    if total < observed:
+        return NumericBand.coded(STATUS_UNIDENTIFIABLE)
+    next_discovery = estimate.expected_next_discoveries
+    if total == 0.0:
+        if observed != 0.0 or next_discovery.upper > 0.0:
+            return NumericBand.coded(STATUS_UNIDENTIFIABLE)
+        return NumericBand.exact(0.0)
+    if not (observed < total or next_discovery.upper > 0.0):
+        return NumericBand.exact(0.0)
+    denominator = _progress_denominator(total, observed + MIN_DISCOVERABLE_COUNT)
+    before = _relaxed_geometric_volume((min(1.0, observed / denominator),))
+    increment = max(0.0, _relaxed_geometric_volume((min(1.0, (observed + 1.0) / denominator),)) - before)
+    return NumericBand.exact(increment if increment > 0.0 else 0.0)
+
+
+@dataclass(frozen=True)
+class AccumulationThreshold:
+    """nano-graphrag ``ThresholdUpdate``: one threshold decision."""
+    gamma: NumericBand
+    one_result_resolution: NumericBand
+    productive_unit_baseline: NumericBand
+    efficiency_fraction: float
+    recent_credit_count: int
+    recent_productive_count: int
+    baseline_carried: bool
+    ready: bool
+    version: str
+
+    @classmethod
+    def fixed(cls, gamma):
+        return cls(NumericBand.exact(gamma), NumericBand.coded(STATUS_INSUFFICIENT),
+                   NumericBand.coded(STATUS_INSUFFICIENT), 0.0, 0, 0, False, True, FIXED_THRESHOLD_VERSION)
+
+    def as_record(self):
+        return {"version": self.version, "ready": self.ready, "gamma": self.gamma.as_record(),
+                "one_result_resolution": self.one_result_resolution.as_record(),
+                "productive_unit_baseline": self.productive_unit_baseline.as_record(),
+                "efficiency_fraction": self.efficiency_fraction, "recent_credit_count": self.recent_credit_count,
+                "recent_productive_count": self.recent_productive_count, "baseline_carried": self.baseline_carried}
+
+
+def adaptive_marginal_credit_threshold(estimate, recent_realized_credits, last_productive_baseline):
+    """gamma from the current one-result resolution and the recent productive realized credit (nano-graphrag
+    ``adaptive_marginal_credit_threshold``)."""
+    resolution = one_result_resolution(estimate)
+    productive = tuple(value for value in recent_realized_credits if value > 0.0)
+    carried = False
+    if productive:
+        baseline = NumericBand.exact(median(productive))
+    elif last_productive_baseline is not None:
+        baseline = NumericBand.exact(last_productive_baseline)
+        carried = True
+    else:
+        baseline = NumericBand.coded(STATUS_INSUFFICIENT)
+    candidates = []
+    if resolution.status_code == STATUS_NORMAL:
+        candidates.append(resolution.value)
+    if baseline.status_code == STATUS_NORMAL:
+        candidates.append(DEFAULT_EFFICIENCY_FRACTION * baseline.value)
+    if candidates:
+        gamma, ready = NumericBand.exact(max(candidates)), True
+    else:
+        gamma, ready = _coded_of((resolution.status_code, baseline.status_code)), False
+    return AccumulationThreshold(gamma, resolution, baseline, DEFAULT_EFFICIENCY_FRACTION,
+                                 len(recent_realized_credits), len(productive), carried, ready,
+                                 ADAPTIVE_THRESHOLD_VERSION)
+
+
+@dataclass(frozen=True)
+class AccumulationEstimate:
+    """The estimator's report after a unit: the incidence estimate, the volume credit of the last unit (``None``
+    before any unit) and the stop statistic ``expected_next_gain`` (the expected next marginal hypervolume credit)."""
+    incidence: AccumulationIncidence
+    volume_credit: object
+    expected_next_gain: NumericBand
+    control: AccumulationControl
+
+    def as_record(self):
+        return {"turns": self.incidence.units, "expected_next_gain": self.expected_next_gain.as_record(),
+                "parameters": self.control.as_record(), "incidence": self.incidence.as_record(),
+                "volume_credit": None if self.volume_credit is None else self.volume_credit.as_record(),
+                "provenance": accumulation_provenance()}
+
+
+@dataclass(frozen=True)
+class AccumulationDecision:
+    """nano-graphrag ``ControllerVerdict`` and the items. ``stop`` is the verdict's stop or no item remaining
+    (``stopped_by``). In the record, ``projected_gain`` is the stop statistic's band and ``continuation_cost`` the
+    threshold gamma its upper bound was compared with (the names the runtime's yield table reads)."""
+    stop: bool
+    outcome: str
+    flat_streak: int
+    gamma: float
+    control: AccumulationControl
+    expected_next_hypervolume_credit: NumericBand
+    threshold_update: AccumulationThreshold
+    channel: dict
+    items: object
+    items_remaining: object
+    stopped_by: tuple
+
+    def as_record(self):
+        return {"stop": self.stop, "projected_gain": self.expected_next_hypervolume_credit.as_record(),
+                "continuation_cost": self.gamma,
+                "decision_basis": "flat_streak_of_expected_next_hypervolume_credit_at_or_below_gamma_or_no_item_left",
+                "outcome": self.outcome, "flat_streak": self.flat_streak,
+                "controller": {**self.control.as_record(), "gamma": self.gamma},
+                "threshold_update": self.threshold_update.as_record(),
+                "channels": {ACCUMULATION_CHANNEL: dict(self.channel)}, "items": self.items,
+                "items_remaining": self.items_remaining, "stopped_by": list(self.stopped_by)}
+
+
+def accumulation_provenance():
+    return {"controller": ACCUMULATION_CONTROLLER_VERSION, "estimator": ACCUMULATION_ESTIMATOR_VERSION,
+            "volume_credit": VOLUME_CREDIT_VERSION, "source_repository": "nano-graphrag",
+            "source_path": "question_pipeline/utilities/rarefaction.py", "source_revision": SOURCE_REVISION,
+            "source_license": "MIT; notice in yield_control/__init__.py",
+            "observation": "unit_marginal_credit_as_distinct_new_identity_count",
+            "observed_total": "sum_of_marginal_credits_since_the_controller_was_built",
+            "fit_coordinate": "unit_rank", "failed_units": "none_the_system_has_no_failed_unit",
+            "stop": "streak_of_flat_units_or_no_item_left"}
+
+
+class AccumulationYieldController:
+    """Continue while nano-graphrag's estimator controller does not stop and an item remains (see the section
+    comment). ``control`` is ``ADAPTIVE_CONTROL`` or ``FIXED_CONTROL``; ``items`` is None or the number of items of
+    the episode's input list at its start (a positive integer: the loop runs at least one unit). No cost."""
+
+    def __init__(self, epoch, initial_credit, control, *, items=None):
         self.epoch = _epoch(epoch)
         self.initial_credit = _signed(initial_credit, "initial_credit")
-        self.cost = _score(cost, "continuation cost")
-        self.settings = _parameters(settings)
-        self.estimator = AccumulationYieldEstimator(self.settings)
+        if not isinstance(control, AccumulationControl) or control not in (ADAPTIVE_CONTROL, FIXED_CONTROL):
+            raise ValueError("accumulation_control_must_be_ADAPTIVE_CONTROL_or_FIXED_CONTROL")
+        if items is not None and (type(items) is not int or items < 1):
+            raise ValueError("accumulation_items_must_be_None_or_a_positive_integer")
+        self.control = control
+        self.items = items
+        self._items_remaining = items
+        self._estimator = _AccumulationIncidenceEstimator(control)
+        self._gamma = control.gamma
+        self._threshold_update = AccumulationThreshold.fixed(control.gamma)
+        self._flat_streak = 0
+        self._recent_realized_credits = []
+        self._last_productive_baseline = None
         self._current_credit = self.initial_credit
+        self._history = []
+        self._volume_credit = None
+        self._decision = self._record({}, NumericBand.coded(STATUS_INSUFFICIENT), False,
+                                      "awaiting_eligible_observation")
+
+    def _record(self, channel, expected_next, stop, outcome):
+        exhausted = self._items_remaining == 0
+        return AccumulationDecision(stop or exhausted, outcome, self._flat_streak, self._gamma, self.control,
+                                    expected_next, self._threshold_update, channel, self.items,
+                                    self._items_remaining,
+                                    (("estimator",) if stop else ()) + (("items",) if exhausted else ()))
+
+    def _verdict(self, after, volume_credit, is_root):
+        """nano-graphrag ``_NumericalController.observe`` for the one channel."""
+        remaining = after.remaining_results
+        done = remaining.status_code == STATUS_NORMAL and remaining.upper <= self.control.rho
+        channel = {"expected_next_discoveries": after.expected_next_discoveries.as_record(), "done": done,
+                   "remaining_status_code": remaining.status_code, "remaining_upper": remaining.upper,
+                   "rho": self.control.rho, "hypervolume_axis": dict(volume_credit.channel)}
+        expected_next = volume_credit.expected_next_score
+        flat = expected_next.status_code == STATUS_NORMAL and expected_next.upper <= self._gamma
+        if not flat:
+            self._flat_streak = 0
+            return self._record(channel, expected_next, False,
+                                "insufficient" if expected_next.status_code != STATUS_NORMAL else "continuing")
+        self._flat_streak += 1
+        if self._flat_streak >= self.control.streak_length:
+            if done:
+                outcome = "whole_convergence" if is_root else "local_convergence"
+            else:
+                outcome = "root_incomplete" if is_root else "local_saturation"
+            return self._record(channel, expected_next, True, outcome)
+        return self._record(channel, expected_next, False, "flat_progressing")
 
     def observe(self, unit_label, value, is_root=False):
-        cumulative, context = _completed(value)
-        delta = cumulative - self._current_credit
-        estimate = self.estimator.observe(delta, context=context)
+        cumulative, _context = _completed(value)
+        discovery = cumulative - self._current_credit
+        if discovery < 0:
+            raise ValueError(f"accumulation_credit_cannot_fall:{unit_label}:{discovery!r}")
+        if self._items_remaining == 0:
+            raise RuntimeError(f"accumulation_no_item_left_for_unit:{unit_label}")
+        before = self._estimator.snapshot()
+        self._estimator.observe(discovery)
+        after = self._estimator.snapshot()
+        volume_credit = assign_volume_credit(before, after)
+        if volume_credit.score.status_code == STATUS_NORMAL:
+            self._recent_realized_credits = [*self._recent_realized_credits,
+                                             volume_credit.score.value][-self.control.window_size:]
+        if self.control.threshold == ADAPTIVE_THRESHOLD_VERSION:
+            update = adaptive_marginal_credit_threshold(after, tuple(self._recent_realized_credits),
+                                                        self._last_productive_baseline)
+        else:
+            update = AccumulationThreshold.fixed(self._gamma)
+        if (update.productive_unit_baseline.status_code == STATUS_NORMAL
+                and update.productive_unit_baseline.value > 0.0):
+            self._last_productive_baseline = update.productive_unit_baseline.value
+        if update.ready:
+            self._gamma = update.gamma.value
+        self._threshold_update = update
+        if self._items_remaining is not None:
+            self._items_remaining -= 1
         self._current_credit = cumulative
-        return YieldStep(str(unit_label), cumulative, delta, estimate,
-                         predicted_gain_upper_bound(estimate.expected_next_gain, self.cost), bool(is_root))
+        self._history.append(discovery)
+        self._volume_credit = volume_credit
+        if update.ready:
+            self._decision = self._verdict(after, volume_credit, bool(is_root))
+        else:
+            # nano-graphrag ``defer``: no verdict, the flat streak is kept.
+            self._decision = self._record({}, volume_credit.expected_next_score, False, "threshold_insufficient")
+        estimate = AccumulationEstimate(after, volume_credit, volume_credit.expected_next_score, self.control)
+        return YieldStep(str(unit_label), cumulative, discovery, estimate, self._decision, bool(is_root),
+                         self._decision.outcome == "root_incomplete")
 
     def state(self):
-        estimate = self.estimator.state()
-        return YieldState(self.epoch, self.initial_credit, self._current_credit, self.estimator.scores,
-                          estimate, predicted_gain_upper_bound(estimate.expected_next_gain, self.cost))
+        incidence = self._estimator.snapshot()
+        expected_next, _channel = expected_next_volume_credit(incidence)
+        return YieldState(self.epoch, self.initial_credit, self._current_credit, tuple(self._history),
+                          AccumulationEstimate(incidence, self._volume_credit, expected_next, self.control),
+                          self._decision)
 
-    def transitioned(self, epoch):
-        if epoch == self.epoch:
-            raise ValueError("An explicit new epoch must have a distinct id")
-        return AccumulationYieldController(epoch, self._current_credit, self.cost, self.settings)
 
+# ============================================================================
+# The bounded-quality and completion yield controllers. Same shape: observe(unit_label, value, is_root),
+# state(), transitioned(epoch); a runtime owns action completion.
+# ============================================================================
 
 class BoundedQualityYieldController:
     """Continue while more quality credit, within the declared maximum, is forecast above the cost."""

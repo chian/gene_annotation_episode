@@ -193,7 +193,13 @@ RETURN_GUIDANCE = ('What returns to your parent is your credit and the features 
                    'and missing reasons, counts, fixed values and record references); no prose is returned. What an '
                    'investigation returns is shown to you as investigations: its credit and those features. '
                    'Selecting a tool or a child does not end your work: only the numerical controller does.\n')
-TAIL_GUIDANCE = ('\nSelect a table, ordered-reading or targeted-passage investigation as a child when a part of the '
+TAIL_GUIDANCE = ('\nThe input list (context.input_list, with context.unconsumed_candidates) is the candidate input '
+                 'units of the assigned source: its table regions and prose chunks with their byte intervals. A child '
+                 'is commissioned with candidates of this list, never with a window of your own; a candidate handed '
+                 'to a child is consumed and no longer offered, so the list shrinks and a child with no unconsumed '
+                 'candidate left to take is not offered. An XLSX sheet selection does not consume candidates. When '
+                 'the source is not UTF-8 text the list is empty and the children keep their window selections.'
+                 '\nSelect a table, ordered-reading or targeted-passage investigation as a child when a part of the '
                  'source needs one. Select literature_reaction_populate or literature_reaction_source_populate when '
                  'the examined source supplies the measured ratios, predictions or resource quantities of the '
                  'assigned question.')
@@ -239,17 +245,85 @@ def catalog(names):
     return entries
 
 
-def child_catalog():
-    return [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot], 'input_schema': CHILD_ARGUMENTS[slot]}
-            for slot in CHILD_SLOTS]
+# The page's input list (``messages/internal_summary.py``; nano-graphrag's page offers child options only for
+# unconsumed inputs): the candidate input units of the assigned representation (table regions and prose chunks). The
+# model names candidates, never windows; a candidate handed to a child is consumed and offered no more, so every enum
+# below is built at each decision from the unconsumed ids. A representation that is not UTF-8 text has no candidates
+# (``input_list_basis`` is ``not_utf8``) and keeps the window / workbook arguments above.
+CANDIDATE_DESCRIPTIONS = {
+    'table_evidence_extraction':
+        'Commission an investigation of one selected table: ONE unconsumed table region of this source '
+        '(candidate_id from context.unconsumed_candidates; the region is consumed) or an XLSX sheet (sheet_key, '
+        'rows, header row, optional literal row filter). It reads and grades that table and returns its credit and '
+        'the controlled features of its reaction sheets and committed findings.',
+    'source_coverage_improvement':
+        'Commission an ordered reading of this source in document order, starting at ONE unconsumed candidate '
+        '(candidate_id from context.unconsumed_candidates; its window is consumed); it continues by the returned '
+        'byte continuations and returns its credit and the controlled features of its reaction sheets and '
+        'committed findings.',
+    'passage_evidence_extraction':
+        'Commission an investigation of one or more unconsumed candidates of this source '
+        '(candidate_ids from context.unconsumed_candidates; each is consumed); it reads their neighboring context '
+        'and returns its credit and the controlled features of its reaction sheets and committed findings. '
+        'Separate candidates remain separate.',
+}
 
 
-def selection_schema(names):
+def child_arguments(slot, summary):
+    """The arguments schema the model may answer ``slot`` with now, or ``None`` when the slot has nothing to take: a
+    table child takes an unconsumed table region or a workbook selection; the coverage and passage children take
+    unconsumed candidates only and are not offered when the input list is empty."""
+    if summary['input_list_basis'] != 'text':
+        return CHILD_ARGUMENTS[slot]
+    if slot == 'table_evidence_extraction':
+        options = ([obj({'candidate_id': {'enum': summary['unconsumed_table_ids']}})]
+                   if summary['unconsumed_table_ids'] else [])
+        return {'anyOf': [*options, TABLE]}
+    ids = summary['unconsumed_candidate_ids']
+    if not ids:
+        return None
+    if slot == 'source_coverage_improvement':
+        return obj({'candidate_id': {'enum': ids}})
+    return obj({'candidate_ids': {'type': 'array', 'minItems': 1, 'uniqueItems': True, 'items': {'enum': ids}}})
+
+
+def window_of(summary, candidate_id):
+    """The window of the assigned source and representation a candidate is (what the children's forms take)."""
+    page = summary['page']
+    candidate = {item['candidate_id']: item for item in summary['content_candidates']}[candidate_id]
+    return {'source_ref': page['source_ref'], 'representation': page['representation'],
+            'offset': candidate['start'], 'limit': candidate['end'] - candidate['start']}
+
+
+def child_arguments_of(slot, arguments, summary):
+    """The arguments a child is commissioned with: a named candidate becomes its window (a table child's window
+    carries its ``kind``), a workbook table or window selection (no candidates) passes unchanged."""
+    if 'candidate_id' in arguments:
+        window = window_of(summary, arguments['candidate_id'])
+        return {'kind': 'window', **window} if slot == 'table_evidence_extraction' else window
+    if 'candidate_ids' in arguments:
+        return {'spans': [window_of(summary, candidate_id) for candidate_id in arguments['candidate_ids']]}
+    return arguments
+
+
+def child_catalog(summary):
+    """The children the model is shown: only those that still have an unconsumed input to take."""
+    entries = []
+    for slot in CHILD_SLOTS:
+        schema = child_arguments(slot, summary)
+        if schema is not None:
+            entries.append({'slot': slot, 'input_schema': schema,
+                            'description': (CHILD_DESCRIPTIONS if summary['input_list_basis'] != 'text'
+                                            else CANDIDATE_DESCRIPTIONS)[slot]})
+    return entries
+
+
+def selection_schema(names, summary):
     """What the model answers with: one tool or one child and its arguments (the old action schema)."""
     options = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
                for entry in catalog(names)]
     options += [obj({'kind': {'const': 'child'}, 'slot': {'const': entry['slot']},
-                     'arguments': entry['input_schema']}) for entry in child_catalog()]
+                     'arguments': entry['input_schema']}) for entry in child_catalog(summary)]
     return obj({'selection': {'anyOf': options}})
 
 
@@ -425,14 +499,18 @@ def decide(summary, feedback, ctx):
                'visual_evidence': summary['visual_evidence'], 'last_local_outcome': summary['last_local_outcome'],
                'held_record_refs': summary['held_record_refs'], 'reaction_sheets': summary['reaction_sheets'],
                'investigation_finding': summary['investigation_finding'],
-               'tools': catalog(names), 'children': child_catalog(),
+               'input_list': summary['input_list'], 'input_list_basis': summary['input_list_basis'],
+               'unconsumed_candidates': summary['unconsumed_candidates'],
+               'consumed_candidate_ids': summary['consumed_candidate_ids'],
+               'table_previews': summary['table_previews'],
+               'tools': catalog(names), 'children': child_catalog(summary),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), family=summary['family']), context,
-                        strict_output_schema(selection_schema(names), open_records_as_text=False,
+                        strict_output_schema(selection_schema(names, summary), open_records_as_text=False,
                                              argument_transport_error=ARGUMENT_TRANSPORT_ERROR))
 
 
@@ -441,7 +519,7 @@ def action(response, summary, records, ctx):
     selects no offered tool or child, arguments that do not fit its schema is invalid. What a child's arguments mean to the child is not checked here: a commission
     the child does not admit fails."""
     names = offered(ctx.settings)
-    schema = selection_schema(names)
+    schema = selection_schema(names, summary)
     try:
         decoded = decode_strict_output(response, schema, open_records_as_text=False,
                                        argument_transport_error=ARGUMENT_TRANSPORT_ERROR)
@@ -449,7 +527,7 @@ def action(response, summary, records, ctx):
         selection = decoded['selection']
         arguments = selection['arguments']
         if selection['kind'] == 'child':
-            return ChildCall(selection['slot'], arguments)
+            return ChildCall(selection['slot'], child_arguments_of(selection['slot'], arguments, summary))
         name = selection['tool']
     except (ValueError, KeyError, TypeError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))

@@ -54,9 +54,15 @@ PROPOSAL_ERRORS = (ContractError, CustodyError, ValueError, KeyError, TypeError)
 REFERENCES = {'type': 'array', 'items': REF, 'uniqueItems': True}
 # What the model supplies to commission the child: the strategy assignment (the child's old assignment schema,
 # ``strategy_assignment_v1``). The scope, the finding unit and the records passed are this episode's own.
-STRATEGY = obj({'version': {'const': 'strategy_assignment_v1'}, 'question_context_refs': REFERENCES,
-                'prior_search_refs': REFERENCES})
-CHILD_SELECTIONS = {'literature_strategy': STRATEGY}
+def strategy_selection(input_list):
+    """The strategy assignment the model may select. The prior-search sources are drawn from the input list (the
+    assigned sources not yet consumed) only: a consumed source is not offered and cannot be handed out again."""
+    return obj({'version': {'const': 'strategy_assignment_v1'}, 'question_context_refs': REFERENCES,
+                'prior_search_refs': {'type': 'array', 'items': {'enum': list(input_list)}, 'uniqueItems': True,
+                                      'minItems': 1, 'description': 'Unconsumed sources of input_list only'}})
+
+
+CHILD_SELECTIONS = {'literature_strategy': strategy_selection}
 # The old ``_ROLE_INSTRUCTIONS`` of the child role, with what its selection is.
 CHILD_OPTIONS = {
     'literature_strategy':
@@ -115,16 +121,17 @@ def offered_catalog(entries):
     return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'])} for entry in result]
 
 
-def action_schema(catalog):
+def action_schema(catalog, input_list):
     """What the model answers with: one tool and its arguments, or one child and its selection (the old action
-    kinds ``tool`` and ``child``)."""
+    kinds ``tool`` and ``child``). The child is offered only while the input list holds a source, and its selection
+    accepts only sources of the input list."""
     branches = [{'type': 'object', 'additionalProperties': False, 'required': ['kind', 'tool', 'arguments'],
                  'properties': {'kind': {'const': 'tool'}, 'tool': {'const': entry['name']},
                                 'arguments': entry['input_schema']}} for entry in catalog]
     branches.extend({'type': 'object', 'additionalProperties': False, 'required': ['kind', 'slot', 'arguments'],
                      'properties': {'kind': {'const': 'child'}, 'slot': {'const': slot},
-                                    'arguments': obj({'selection': CHILD_SELECTIONS[slot]})}}
-                    for slot in CHILD_SLOTS)
+                                    'arguments': obj({'selection': CHILD_SELECTIONS[slot](input_list)})}}
+                    for slot in CHILD_SLOTS if input_list)
     return {'type': 'object', 'additionalProperties': False, 'required': ['selection'],
             'properties': {'selection': {'anyOf': branches}}}
 
@@ -150,8 +157,12 @@ def render_prompt(summary, catalog, feedback):
             {'question_context_refs': summary['question_context_refs'],
              'source_refs': summary['source_refs'], 'partner_components': summary['partner_components']})
     section(parts, 'Representations available for selected sources', summary['source_custody'])
+    section(parts, 'Input list: assigned sources not yet consumed (a source handed to the strategy child as a '
+                   'prior-search source, or named in a partner population operation that was accepted, is consumed '
+                   'and is not offered again)', summary['input_list'])
     section(parts, 'Available selected operations', catalog)
-    section(parts, 'Permitted narrower investigations', CHILD_OPTIONS)
+    if summary['input_list']:
+        section(parts, 'Permitted narrower investigations', CHILD_OPTIONS)
     steering = ['STEERING', '', STEERING]
     section(steering, 'Own action yields', summary.get('yield_table'))
     section(steering, 'Current partner sheets', {'sheets': summary['partner_sheets'],
@@ -166,7 +177,7 @@ def render_prompt(summary, catalog, feedback):
 def decide(summary, feedback, ctx):
     catalog = offered_catalog(ctx.services['tool_catalog'].read('entries'))
     return ModelRequest('REASONING', instructions(summary['partner_components'] is not None), {'prompt': render_prompt(summary, catalog, feedback)},
-                        transport(action_schema(catalog)))
+                        transport(action_schema(catalog, summary['input_list'])))
 
 
 def named_references(value):
@@ -187,7 +198,7 @@ def named_references(value):
 
 def action(response, summary, records, ctx):
     catalog = offered_catalog(ctx.services['tool_catalog'].read('entries'))
-    schema = action_schema(catalog)
+    schema = action_schema(catalog, summary['input_list'])
     try:
         decoded = decode_strict_output(response, transport(schema), open_records_as_text=False,
                                        argument_transport_error='a107_argument_transport_not_carried')

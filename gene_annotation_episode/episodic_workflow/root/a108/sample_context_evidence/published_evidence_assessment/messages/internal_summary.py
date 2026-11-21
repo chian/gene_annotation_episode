@@ -98,6 +98,36 @@ def graded_assessments(records, reasons):
     return found
 
 
+def input_sources(parent, records, custody):
+    """The sources this episode works through, in order (nano-graphrag: the inputs of the episode): the sources it
+    starts from (the assignment's, then the task's), then the sources it acquired itself, except a source another
+    held source derives from (an archive whose member was extracted is not a separate item)."""
+    starting = list(dict.fromkeys([*parent['source_refs'], *parent['task'].get('source_refs', [])]))
+    derived_from = {parent_ref for entry in custody.values() for parent_ref in entry.get('parent_source_refs') or ()}
+    acquired = [ref for ref in custody if ref not in starting and records.receipt(ref)['how'] == 'produced'
+                and ref not in derived_from]
+    return [ref for ref in (*starting, *acquired) if ref in custody]
+
+
+def consumed_sources(outcomes, task, reasons, spans, records):
+    """The input sources consumed: handed to a child (``prior_search_refs`` and the task's sources, which
+    ``msg_to_child`` always hands over) or processed by a committed reasoning (the source of each record it
+    committed, each source it declared examined without applicable evidence). Order of consumption; an item once
+    consumed stays consumed."""
+    consumed = []
+    for outcome in outcomes:
+        if outcome['kind'] == 'child':
+            consumed.extend(outcome['arguments']['prior_search_refs'])
+            consumed.extend(task.get('source_refs', []))
+    for outcome in reasons:
+        for ref in outcome['record_refs']:
+            source = records.get(ref).get('source_ref')
+            if source is not None:
+                consumed.append(source)
+    consumed.extend(span['source_ref'] for span in spans)
+    return list(dict.fromkeys(consumed))
+
+
 def internal_summary(view):
     parent = view.parent_input
     task = parent['task']
@@ -137,7 +167,11 @@ def internal_summary(view):
                   'proposed_annotation_ref': parent['proposed_annotation_ref'],
                   **{name: parent[name] for name in (REQUESTED_GRADING, REQUESTED_AGGREGATION) if parent[name]}}
     binding = credit_binding(parent['task_key'], task)
+    # The input list (nano-graphrag input list): the sources still to work through, unconsumed ones only.
+    consumed = consumed_sources(view.outcomes, task, reasons, spans, records)
     summary = {
+        'input_list': [ref for ref in input_sources(parent, records, custody) if ref not in consumed],
+        'consumed_source_refs': consumed,
         'literature_assignment': assignment,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],

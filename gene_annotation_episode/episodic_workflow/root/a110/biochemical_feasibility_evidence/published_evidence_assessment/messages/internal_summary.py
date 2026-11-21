@@ -19,6 +19,8 @@ through ``store.db`` and ``runtime_actions``), ``component_axis_source_origin`` 
 ``component_axis_source_access`` (they read the old workflow's journal and the parent's request), and the
 root-only ``reference_evidence_parent`` context. The saved reaction sheets are
 the work table of the reaction repository and the sheet features the children return."""
+import json
+
 from gene_annotation_episode.episodic_workflow.episode_support.findings.biochemical_feasibility_evidence.investigation_finding_features import (
     investigation_finding)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.biochemical_feasibility_evidence.literature_reaction_cells import (
@@ -43,6 +45,48 @@ HISTORY_MEANING = ('Own outcome metadata only. Inspect original source records a
 EXPERIMENTAL_WORK = {'version': 'literature_experimental_task_v1', 'aspect': 'source_experimental_evidence'}
 
 
+def named_sources(value):
+    """Every ``source_ref`` an executed unit's arguments name (a read, a locate, a population operation; a JSON
+    string under ``arguments`` is read as the JSON it carries)."""
+    found = []
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if key == 'source_ref' and isinstance(item, str):
+                found.append(item)
+            elif key == 'arguments' and isinstance(item, str):
+                found.extend(named_sources(json.loads(item)))
+            else:
+                found.extend(named_sources(item))
+    elif isinstance(value, list):
+        for item in value:
+            found.extend(named_sources(item))
+    return found
+
+
+def work_sources(assignment, outcomes, records):
+    """The sources this episode works through, in the order they came (nano-graphrag ``remaining_chunks``: the items
+    of the work before any is consumed): the sources the assignment hands over, then the sources its own acquisitions
+    produced."""
+    sources = list(assignment['source_refs'])
+    for outcome in outcomes:
+        if outcome['kind'] == 'tool':
+            sources.extend(ref for ref in outcome['produced'] if records.get(ref)['record_type'] == 'source')
+    return list(dict.fromkeys(sources))
+
+
+def consumed_inputs(outcomes):
+    """The sources consumed, in the order consumed (nano-graphrag ``processed_chunk_ids``): a source handed to the
+    strategy child as a prior-search source, and a source a completed or partial tool unit read, located or
+    graded (the ``source_ref`` its arguments name)."""
+    consumed = []
+    for outcome in outcomes:
+        if outcome['kind'] == 'child':
+            consumed.extend(outcome['arguments']['prior_search_refs'])
+        elif outcome['outcome']['status'] in ('completed', 'partial'):
+            consumed.extend(named_sources(outcome['arguments']['arguments']))
+    return list(dict.fromkeys(consumed))
+
+
 def internal_summary(view):
     parent = view.parent_input
     assignment = parent['assignment']
@@ -59,7 +103,12 @@ def internal_summary(view):
         last_local = {'tool': last['tool'], 'outcome': last['outcome']}
     else:
         last_local = {'slot': last['slot'], 'report': last['report']}
+    # The input list (nano-graphrag's input-list paradigm): the sources of the work not yet consumed, in the order they
+    # came. A consumed source is not offered to the child again; the yield estimator ends the episode when it is empty.
+    consumed = consumed_inputs(view.outcomes)
+    input_list = [ref for ref in work_sources(assignment, view.outcomes, view.records) if ref not in consumed]
     return {
+        'input_list': input_list, 'consumed_inputs': consumed,
         'literature_assignment': assignment, 'assignment': assignment,
         'requested_reaction_components': parent['requested_reaction_components'],
         'family': selected_family(requested, set()),

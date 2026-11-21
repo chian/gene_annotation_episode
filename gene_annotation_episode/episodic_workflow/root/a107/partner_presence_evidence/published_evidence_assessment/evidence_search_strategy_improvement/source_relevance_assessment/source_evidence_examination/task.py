@@ -95,7 +95,12 @@ CHILD_OPTIONS = {
 }
 CHILD_GUIDANCE = ('You may commission a table, ordered-reading or targeted-passage investigation of this source '
                   'with a child selection; it returns its credit and the controlled features of the partner sheets '
-                  'it saved, which you receive among received child reports.')
+                  'it saved, which you receive among received child reports. When the source is UTF-8 text the '
+                  'children are commissioned with candidates of the input list (candidate_id, candidate_ids), never '
+                  'with a window of your own: a candidate handed to a child is consumed and no longer offered, and a '
+                  'child with no unconsumed candidate left to take is not offered. A workbook table selection '
+                  'consumes no candidate. A source that is not UTF-8 text has an empty list and the children keep '
+                  'their window selections.')
 RETURN_GUIDANCE = ('What returns to your parent is your credit and the features code reads from the partner sheets '
                    'you and your children saved; no prose of yours is returned. Selecting a tool or a child does not '
                    'end your work: only the numerical controller does.')
@@ -128,17 +133,56 @@ def child_selections(page):
             'literature_targeted': obj({'spans': {'type': 'array', 'minItems': 1, 'items': window}})}
 
 
-def action_schema(page):
+def candidate_selections(summary):
+    """The child selections the model may answer with now, by slot (only slots with something left to take). The model
+    names the page's input list entries, never a window of its own: a table child takes one unconsumed table region
+    or a workbook table selection; the ordered child starts at one unconsumed candidate; the targeted child takes
+    one or more unconsumed candidates. A candidate handed to a child is consumed (``internal_summary``), so each enum
+    is built from the unconsumed ids at every decision and a slot with no unconsumed input is not offered. A
+    representation that is not UTF-8 text has no candidates and keeps the window / workbook selections."""
+    selections = child_selections(summary['page'])
+    if summary['input_list_basis'] != 'text':
+        return selections
+    ids, tables = summary['unconsumed_candidate_ids'], summary['unconsumed_table_ids']
+    offered_now = {'literature_table': {'anyOf': [*([obj({'candidate_id': {'enum': tables}})] if tables else []),
+                                                  selections['literature_table']['anyOf'][0]]}}
+    if ids:
+        offered_now['literature_ordered'] = obj({'candidate_id': {'enum': ids}})
+        offered_now['literature_targeted'] = obj({'candidate_ids': {'type': 'array', 'minItems': 1, 'uniqueItems': True,
+                                                                    'items': {'enum': ids}}})
+    return offered_now
+
+
+def window_of(summary, candidate_id):
+    """The window of the examined source and representation an input list entry is (what the children's forms take)."""
+    page = summary['page']
+    candidate = {item['candidate_id']: item for item in summary['content_candidates']}[candidate_id]
+    return {'source_ref': page['source_ref'], 'representation': page['representation'],
+            'offset': candidate['start'], 'limit': candidate['end'] - candidate['start']}
+
+
+def commissioned_selection(selection, summary):
+    """The selection a child is commissioned with: a named candidate becomes its window; a workbook or window selection
+    (no candidates) passes unchanged."""
+    if 'candidate_id' in selection:
+        return window_of(summary, selection['candidate_id'])
+    if 'candidate_ids' in selection:
+        return {'spans': [window_of(summary, candidate_id) for candidate_id in selection['candidate_ids']]}
+    return selection
+
+
+def action_schema(summary):
     """What the model answers with: one tool and its operands as JSON text, or one child and its selection (the old
-    action kinds ``tool`` and ``child``)."""
+    action kinds ``tool`` and ``child``); a child only with an unconsumed input of the page's input list."""
+    selections = candidate_selections(summary)
     branches = [{'type': 'object', 'additionalProperties': False, 'required': ['kind', 'tool', 'arguments_json'],
                  'properties': {'kind': {'const': 'tool'}, 'tool': {'enum': list(offered())},
                                 'arguments_json': {'type': 'string',
                                                    'description': 'The operands as one JSON object'}}}]
     branches.extend({'type': 'object', 'additionalProperties': False, 'required': ['kind', 'slot', 'arguments'],
                      'properties': {'kind': {'const': 'child'}, 'slot': {'const': slot},
-                                    'arguments': obj({'selection': child_selections(page)[slot]})}}
-                    for slot in CHILD_SLOTS)
+                                    'arguments': obj({'selection': selections[slot]})}}
+                    for slot in CHILD_SLOTS if slot in selections)
     return {'type': 'object', 'additionalProperties': False, 'required': ['selection'],
             'properties': {'selection': {'anyOf': branches}}}
 
@@ -162,7 +206,12 @@ def render_prompt(summary, feedback):
             {'page': summary['page'], 'partner_components': summary['partner_components']})
     section(parts, 'Representations available for selected sources', summary['source_custody'])
     section(parts, 'Available selected operations', list(offered().values()))
-    section(parts, 'Permitted narrower investigations', CHILD_OPTIONS)
+    section(parts, 'Input list (unconsumed candidate inputs of the examined source, document order)',
+            {'input_list': summary['input_list'], 'basis': summary['input_list_basis'],
+             'candidates': summary['unconsumed_candidates'], 'table_previews': summary['table_previews'],
+             'consumed': summary['consumed_candidate_ids']})
+    section(parts, 'Permitted narrower investigations',
+            {slot: text for slot, text in CHILD_OPTIONS.items() if slot in candidate_selections(summary)})
     steering = ['STEERING', '', STEERING]
     section(steering, 'Own action yields', summary.get('yield_table'))
     section(steering, 'Current partner sheets', {'sheets': summary['partner_sheets'],
@@ -176,18 +225,19 @@ def render_prompt(summary, feedback):
 
 def decide(summary, feedback, ctx):
     return ModelRequest('REASONING', instructions(summary['partner_components'] is not None),
-                        {'prompt': render_prompt(summary, feedback)}, transport(action_schema(summary['page'])))
+                        {'prompt': render_prompt(summary, feedback)}, transport(action_schema(summary)))
 
 
 def action(response, summary, records, ctx):
-    schema = action_schema(summary['page'])
+    schema = action_schema(summary)
     try:
         decoded = decode_strict_output(response, transport(schema), open_records_as_text=False,
                                        argument_transport_error='a107_argument_transport_not_carried')
         Draft202012Validator(schema).validate(decoded)
         selection = decoded['selection']
         if selection['kind'] == 'child':
-            return ChildCall(selection['slot'], selection['arguments'])
+            return ChildCall(selection['slot'], {'selection': commissioned_selection(
+                selection['arguments']['selection'], summary)})
         arguments = json.loads(selection['arguments_json'])
         if not isinstance(arguments, dict):
             raise ValueError('arguments_json_must_be_a_JSON_object')

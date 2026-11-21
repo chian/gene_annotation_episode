@@ -28,6 +28,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
+from .msg_to_child import source_closure
+
 OUTCOME_PAGE_SIZE = 8        # the old configuration outcome_page_size default
 ACQUISITION_TOOLS = ('public_literature_search', 'public_literature_read', 'public_literature_sequence_identity',
                      'public_ncbi_search', 'public_pmc_versions', 'public_pmc_files', 'public_pmc_asset',
@@ -43,11 +45,27 @@ HISTORY_MEANING = ('Own outcome metadata only. Inspect original source records a
 EXPERIMENTAL_WORK = {'version': 'literature_experimental_task_v1', 'aspect': 'source_experimental_evidence'}
 
 
+def consumed_search_results(children, held_sources, search_result_refs):
+    """The handed-over search results the examinations consumed, in the order consumed (nano-graphrag
+    ``processed_row_ids`` / ``processed_chunk_ids``): a source handed to an examination child consumes itself and every
+    search result it derives from (``parent_source_refs``). A source commissioned is consumed when it is commissioned."""
+    consumed = []
+    for outcome in children:
+        consumed.extend(ref for ref in source_closure(held_sources, outcome['arguments']['source_ref'])
+                        if ref in search_result_refs)
+    return list(dict.fromkeys(consumed))
+
+
 def internal_summary(view):
     parent = view.parent_input
     assignment = parent['assignment']
     held_sources = {row['id']: {key: row.get(key) for key in CUSTODY_KEYS} for row in view.records.list('source')}
     children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
+    # The input list (nano-graphrag's input list paradigm): the search results the parent handed over that no
+    # examination has consumed yet, in the order handed over. An item handed to an examination is consumed and is no
+    # longer offered; the yield estimator (another owner's) stops the episode when the list is empty.
+    consumed = consumed_search_results(children, held_sources, set(assignment['search_result_refs']))
+    input_list = [ref for ref in assignment['search_result_refs'] if ref not in consumed]
     known = [row['id'] for row in view.records.list('assessment')]
     requested = {'requested_reaction_components'} if parent['requested_reaction_components'] else set()
     last = view.outcomes[-1] if view.outcomes else None
@@ -68,6 +86,7 @@ def internal_summary(view):
         'literature_source_custody': [{'source_ref': reference, **held_sources[reference]}
                                       for reference in assignment['search_result_refs']],
         'held_sources': held_sources,
+        'input_list': input_list, 'consumed_input_ids': consumed,
         'own_literature_outcomes': outcome_page(view.outcomes, offset=0, limit=OUTCOME_PAGE_SIZE,
                                                 tools=(*ACQUISITION_TOOLS, *READ_TOOLS),
                                                 tool_of=lambda outcome: outcome.get('tool')),

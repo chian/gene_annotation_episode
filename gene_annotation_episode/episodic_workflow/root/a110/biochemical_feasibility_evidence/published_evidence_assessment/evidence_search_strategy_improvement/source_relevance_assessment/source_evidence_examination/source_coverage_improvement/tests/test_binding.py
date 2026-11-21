@@ -19,7 +19,7 @@ FEATURES_MODULE = importlib.import_module('gene_annotation_episode.episodic_work
 FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
          'messages/__init__.py', 'messages/read_from_parent.py', 'messages/internal_summary.py',
          'messages/final_to_parent.py', 'tests/__init__.py', 'tests/test_binding.py',
-         'tests/test_reaction_grading.py', 'tests/test_model_run.py'}
+         'tests/test_reaction_grading.py', 'tests/test_input_list.py', 'tests/test_model_run.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 COMMIT_SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
                  'properties': {'terms': {'type': 'array'}}}

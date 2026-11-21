@@ -108,3 +108,26 @@ def test_the_controlled_report_is_admitted_and_the_returned_finding_is_read_by_c
     assert all(hasattr(spec, 'options') for spec in fields.values() if spec.type == 'text')
     empty = final.finding_of(None)
     assert final.RETURN_FORM.fields['finding'].form.admit(empty, 'finding') == empty
+
+
+def test_the_input_list_shrinks_as_children_consume_candidates_and_offers_only_unconsumed_windows():
+    """The page's input list: candidates of the source; a window handed to a child consumes the candidates inside it,
+    the list shrinks, a selection holding only consumed input is not offered, an empty list offers no child."""
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.gene_context_evidence import (
+        literature_input_list as inputs)
+    content = ('word ' * 1500).encode('utf-8')
+    first = inputs.input_list_state(content, [])
+    assert len(first['input_list']) > 2 and first['consumed'] == []
+    chunk = first['unconsumed'][0]
+    selection = {'spans': [{'source_ref': 's', 'representation': 'text', 'offset': chunk['start'],
+                            'limit': chunk['end'] - chunk['start']}]}
+    commission = {'slot': 'passage_evidence_extraction', 'selection': selection, 'finding': {'reported': False}}
+    second = inputs.input_list_state(content, [commission])
+    assert chunk['candidate_id'] in second['consumed'] and chunk['candidate_id'] not in second['input_list']
+    assert len(second['input_list']) < len(first['input_list'])
+    assert not inputs.selection_offered('passage_evidence_extraction', selection, second['unconsumed'])
+    assert inputs.selection_offered('passage_evidence_extraction', selection, first['unconsumed'])
+    everything = {'offset': 0, 'limit': len(content)}
+    done = inputs.input_list_state(content, [{'slot': 'source_coverage_improvement', 'selection': everything,
+                                              'finding': {'reported': False}}])
+    assert done['input_list'] == [] and done['remaining_windows'] == []

@@ -63,8 +63,7 @@ def commission():
 
 def settings(**more):
     """The settings every episode of the subtree is linked with (its entry of ``continuation``)."""
-    return {'cost': 0.02, 'parameters': {'uncertainty_alpha': 0.05},
-            'resources': {RESOURCE: {'kind': 'pbs_ssh', 'workspace': PROJECT + '/chian/runs',
+    return {'resources': {RESOURCE: {'kind': 'pbs_ssh', 'workspace': PROJECT + '/chian/runs',
                                      'account': 'BioReason-Aurora-Test', 'python_executable': '/usr/bin/python3'}},
             'commissions': {'c1': commission()}, 'shared_execution_memory': False,
             'handoff_unit': 1.0, 'information_unit': 1.0, 'acquired_record_unit': 1.0, **more}

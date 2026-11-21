@@ -43,11 +43,35 @@ HISTORY_MEANING = ('Own outcome metadata only. Inspect original source records a
 EXPERIMENTAL_WORK = {'version': 'literature_experimental_task_v1', 'aspect': 'source_experimental_evidence'}
 
 
+def search_results(assignment, outcomes, records):
+    """The search results this episode works through, in the order they became known (nano-graphrag
+    ``web_search_binding``: the buffered search results): the earlier search results it was given
+    (``prior_search_refs``), then every source its own acquisition units returned (the ``record_refs`` of their
+    outcomes that are held source records), each once."""
+    found = list(assignment['prior_search_refs'])
+    for outcome in outcomes:
+        if outcome['kind'] == 'tool' and outcome['tool'] in ACQUISITION_TOOLS:
+            found.extend(ref for ref in outcome['outcome']['record_refs']
+                         if records.holds(ref) and records.get(ref)['record_type'] == 'source')
+    return list(dict.fromkeys(found))
+
+
+def consumed_results(children):
+    """The search results handed to an assessment child, in the order handed out (nano-graphrag
+    ``processed_chunk_ids`` / ``processed_row_ids``: an item handed out is consumed and no longer offered)."""
+    return list(dict.fromkeys(ref for outcome in children for ref in outcome['arguments']['search_result_refs']))
+
+
 def internal_summary(view):
     parent = view.parent_input
     assignment = parent['assignment']
     held_sources = {row['id']: {key: row.get(key) for key in CUSTODY_KEYS} for row in view.records.list('source')}
     children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
+    # The input list (nano-graphrag's input-list paradigm): the search results known to this episode (given and
+    # acquired) that no assessment child has yet been handed. A result handed out is consumed and never offered
+    # again; the yield estimator (owned elsewhere) ends the episode when the list is empty.
+    consumed = consumed_results(children)
+    input_list = [ref for ref in search_results(assignment, view.outcomes, view.records) if ref not in consumed]
     known = [row['id'] for row in view.records.list('assessment')]
     requested = {'requested_reaction_components'} if parent['requested_reaction_components'] else set()
     last = view.outcomes[-1] if view.outcomes else None
@@ -83,6 +107,7 @@ def internal_summary(view):
         'investigation_finding': investigation_finding(view.records, parent['scope'], parent['finding_unit'], known),
         'last_local_outcome': last_local,
         'visual_evidence': visual,
+        'input_list': input_list, 'consumed_inputs': consumed,
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),

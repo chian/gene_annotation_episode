@@ -199,7 +199,11 @@ def output_schema():
 def decide(summary, feedback, ctx):
     """The model chooses one operation, shown the assignment, the custody of the source, its own outcomes, the
     features of the partner sheets it saved, the tools, the measured time and the yield table."""
-    context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
+    if not summary['input_list']:
+        # The selection has been processed and is consumed: nothing is offered, the yield estimator ends the episode.
+        raise LookupError('table_input_list_empty')
+    context = {'goal': GOAL, 'scope': summary['scope'], 'input_list': summary['input_list'],
+               'consumed_inputs': summary['consumed_inputs'], 'literature_assignment': summary['literature_assignment'],
                'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
                'literature_history_meaning': summary['literature_history_meaning'],
