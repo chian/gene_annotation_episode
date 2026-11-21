@@ -11,17 +11,30 @@ outcomes of ``view``: a tool unit's outcome, and a child unit's ``report`` (what
 admitted result).
 
 The search step's Jev measurement (nano-graphrag ``web_search_binding``: ``assess_page_candidate`` and
-``SearchPageProposer``): every search result of the assignment is a possible page child with its provider rank (its
-position in ``search_result_refs``, the order the search returned it), a title and a description read from its source
-record. ``jev_search_goal`` is the immutable Search Goal Jev measures them against (the runner's goal record of this
+``SearchPageProposer``): a search result is ONE HIT of a result list the assignment names (``search_result_refs`` are
+retained Europe PMC search responses): its PMCID, provider rank (its position among the distinct publications of the
+lists, in the order they were returned), title and a description (journal, year and the abstract the provider returned).
+Two hits of the same publication are one result, and an article a page has examined (``examined_article_refs`` of the
+assignment: the articles the pages of earlier runs examined and returned, plus this episode's own pages) is not a result
+any more. An article that is merely held (a model fetched it with a read tool) stays a result: its work is not done.
+``jev_search_goal`` is the immutable Search Goal Jev measures them against (the runner's goal record of this
 episode, as nano-graphrag's ``goal.as_record()``, with the results and subject the commission requests);
 ``search_assessment_ref`` is the assessment the code-decided ``assess_search_results`` unit holds, and
 ``search_planner_context`` is that assessment over the unconsumed results only with the measured outcomes of the
-prior page children (``prior_page_outcomes``)."""
+prior page children (``prior_page_outcomes``).
+
+The model picks an unconsumed hit; code fetches its full text (``fetch_search_hit``, the operation of
+``public.literature.read``; an article already held is opened without a new fetch) and, when the fetch completed,
+commissions the page on the article (``pending_page``). A hit is consumed by its fetch; a hit whose fetch failed is reported in ``hit_fetches`` with the
+provider status and is never opened.
+
+A task naming specific sources (``named_source_refs``: the ``source_answer`` kinds) has no hits to choose from: the page
+of this commission can examine only the source the task names (the page refuses any other), so that source alone is the
+page candidate, and only when the task names exactly one."""
 import json
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
-    search_planner_context)
+    article_sources, hit_candidate, is_search_response, ranked_hits, search_planner_context)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reasoning import (
     no_applicable_spans, relevant_lead_sources, screening_covered)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
@@ -46,27 +59,67 @@ HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through
                    'delivery does not establish scientific understanding, absence or resolved science.')
 
 
-def consumed_results(children):
-    """The search results (source refs) handed to a page child, in the order handed out (nano-graphrag
-    ``web_search_binding``: a candidate source taken up is consumed and no longer offered)."""
-    return list(dict.fromkeys(outcome['arguments']['page']['source_ref'] for outcome in children))
-
-
 ASSESS = 'assess_search_results'
-DESCRIPTION_KEYS = ('provider', 'accession', 'uri', 'version', 'retrieved_at')
+FETCH = 'fetch_search_hit'
 
 
-def search_result_candidates(search_result_refs, records):
-    """Each search result as a possible page child (nano-graphrag's provider result): its id (the source ref the planner
-    selects), its provider rank (1-based position in the order the search returned it), a title (the source's accession,
-    else its uri, else its provider) and a description (the source record's provider metadata, as ``key=value``)."""
-    candidates = []
-    for rank, ref in enumerate(search_result_refs, start=1):
+def named_page_sources(parent):
+    """The sources a page of this commission can examine when the task names specific sources: the page refuses a
+    source other than the one it is assigned, and a task that names several distinct sources assigns none of them."""
+    named = parent['named_source_refs']
+    return named if len(named) == 1 else []
+
+
+def consumed_results(outcomes, named):
+    """The search results handed out, in the order handed out (nano-graphrag ``web_search_binding``: a result taken up
+    is consumed and no longer offered): the hits this episode fetched, whether the fetch completed or failed; under a
+    task that names its sources, the sources handed to a page."""
+    if named:
+        return list(dict.fromkeys(outcome['arguments']['page']['source_ref'] for outcome in outcomes
+                                  if outcome['kind'] == 'child'))
+    return list(dict.fromkeys(outcome['arguments']['arguments']['hit'] for outcome in outcomes
+                              if outcome['kind'] == 'tool' and outcome['tool'] == FETCH))
+
+
+def search_hits(search_result_refs, records):
+    """The distinct hits of the result lists the assignment names, each with its provider rank (``ranked_hits``). A
+    result list that is not a retained search response is a wrong commission and fails."""
+    contents = []
+    for ref in search_result_refs:
         source = records.get(ref)
-        title = source.get('accession') or source.get('uri') or source.get('provider') or ''
-        description = '; '.join(f'{key}={source[key]}' for key in DESCRIPTION_KEYS if source.get(key))
-        candidates.append({'result_id': ref, 'provider_rank': rank, 'title': str(title), 'description': description})
-    return candidates
+        if not is_search_response(source):
+            raise ValueError('search_result_is_not_a_search_response:' + ref)
+        contents.append(records.get_artifact(source['artifact_ref']))
+    return ranked_hits(contents)
+
+
+def hit_fetches(outcomes):
+    """What each fetch of a hit came to, for the model: the hit, the unit's status and, when the provider refused,
+    its status code; a hit whose fetch did not complete is never opened."""
+    return [{'hit': outcome['arguments']['arguments']['hit'], 'status': outcome['outcome']['status'],
+             'provider_status': (outcome['outcome']['feedback'] or {}).get('code')}
+            for outcome in outcomes if outcome['kind'] == 'tool' and outcome['tool'] == FETCH]
+
+
+def page_of(records, source_ref):
+    """The page the child is commissioned on, from the source record alone: its text representation when the source
+    holds one, else its original bytes, with that representation's artifact; no earlier delivery is held for a source
+    the search just returned. The model does not type any of these."""
+    source = records.get(source_ref)
+    representation = 'text' if source.get('text_ref') is not None else 'original'
+    return {'source_ref': source_ref, 'representation': representation,
+            'artifact_ref': source['text_ref' if representation == 'text' else 'artifact_ref'],
+            'prior_delivery_refs': []}
+
+
+def pending_page(last, records):
+    """The page commission code makes straight after a fetch that completed (the commission the model chose when it
+    picked the hit: its objective, on the article that was fetched); None at every other point."""
+    if last is None or last['kind'] != 'tool' or last['tool'] != FETCH or last['outcome']['status'] != 'completed':
+        return None
+    chosen = last['arguments']['arguments']
+    return {'hit': chosen['hit'], 'objective': chosen['objective'],
+            'page': page_of(records, last['outcome']['result']['source_ref'])}
 
 
 def label_of(records, ref):
@@ -98,8 +151,8 @@ def prior_page_outcomes(children, ranks):
     """The compact measured outcome of each page child, in the order commissioned (nano-graphrag
     ``record_page_outcome``): the result it was handed and its provider rank, how it ended, its units, its credit and
     the counts of its finding."""
-    return [{'result_id': outcome['arguments']['page']['source_ref'],
-             'provider_rank': ranks[outcome['arguments']['page']['source_ref']],
+    return [{'result_id': outcome['arguments'].get('hit', outcome['arguments']['page']['source_ref']),
+             'provider_rank': ranks.get(outcome['arguments'].get('hit')),
              'objective': outcome['arguments']['objective'], 'ended_by': outcome['completion']['ended_by'],
              'units_consumed': outcome['completion']['units_consumed'], 'credit': outcome['report']['credit'],
              'distinct_findings': len(outcome['report']['features']), 'scores': len(outcome['report']['scores']),
@@ -112,21 +165,31 @@ def internal_summary(view):
     search, task = parent['search'], parent['task']
     records = view.records
     children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
-    # The input list (nano-graphrag's input-list paradigm): the search results of the assignment, in the order the
-    # search returned them, that no page child has yet been handed. A handed-out result is consumed; the list shrinks
-    # by one per page commissioned, and once it is empty no page child is offered (``task.valid_slots``). The yield
-    # estimator does not pass it as items (``items=None``), so an empty list ends no episode: the accumulation
-    # controller of a verified_source_leads commission (``ADAPTIVE_CONTROL``, no cost) stops after 4 flat units in a
-    # row (expected next credit's upper bound at or below the adaptive gamma, once W = 8 attempted, m = 4 observed).
-    consumed = consumed_results(children)
-    input_list = [ref for ref in search['search_result_refs'] if ref not in consumed]
+    # The input list (nano-graphrag's input-list paradigm): the hits of the result lists of the assignment, in the order
+    # the search returned them, that this episode has not fetched and whose article no page has examined (a page of an
+    # earlier run, named by ``examined_article_refs`` of the assignment, or a page of this episode). An item leaves the
+    # list when its work is done, not when it is held: an article a model fetched by hand stays a hit until a page has
+    # examined it. A fetched hit is consumed; the list shrinks by one per hit fetched, and once it is empty no hit is
+    # offered (``task.offered_actions``).
+    # The yield estimator does not pass it as items (``items=None``), so an empty list ends no episode: the
+    # accumulation controller of a verified_source_leads commission (``ADAPTIVE_CONTROL``, no cost) stops after 4
+    # flat units in a row (expected next credit's upper bound at or below the adaptive gamma, once W = 8 attempted,
+    # m = 4 observed). Under a task that names its sources the list is the one named source not yet handed to a page.
+    named = bool(parent['named_source_refs'])
+    consumed = consumed_results(view.outcomes, named)
+    hits = [] if named else search_hits(search['search_result_refs'], records)
+    examined = set(parent['examined_article_refs']) | {outcome['arguments']['page']['source_ref']
+                                                      for outcome in children}
+    held = {} if named else article_sources(records)
+    candidates = [hit_candidate(hit) for hit in hits if not examined.intersection(held.get(hit['pmcid'], ()))]
+    input_list = ([ref for ref in named_page_sources(parent) if ref not in consumed] if named
+                  else [item['result_id'] for item in candidates if item['result_id'] not in consumed])
     # Jev's measurement of the search results (nano-graphrag ``SearchPageProposer``): held once by the code-decided
     # ``assess_search_results`` unit; the planner sees it for the unconsumed results only.
-    candidates = search_result_candidates(search['search_result_refs'], records)
     assessed = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool' and outcome['tool'] == ASSESS]
     assessment_ref = assessed[-1]['outcome']['assessment_ref'] if assessed else None
     assessment = None if assessment_ref is None else json.loads(records.get_artifact(assessment_ref))
-    page_outcomes = prior_page_outcomes(children, {item['result_id']: item['provider_rank'] for item in candidates})
+    page_outcomes = prior_page_outcomes(children, {hit['pmcid']: hit['provider_rank'] for hit in hits})
     last = view.outcomes[-1] if view.outcomes else None
     spans = no_applicable_spans(view.outcomes, records)
     assignment = {**search, 'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref'],
@@ -150,7 +213,9 @@ def internal_summary(view):
         'held_record_refs': sorted(records.refs()),
         'last_local_outcome': (None if last is None else {'tool': last['tool'], 'outcome': last['outcome']}
                                if last['kind'] == 'tool' else {'slot': last['slot'], 'report': last['report']}),
-        'input_list': input_list, 'consumed_inputs': consumed,
+        'input_list': input_list, 'consumed_inputs': consumed, 'named_source_refs': parent['named_source_refs'],
+        'hit_fetches': hit_fetches(view.outcomes), 'pending_page': pending_page(last, records),
+        'examined_article_refs': [outcome['arguments']['page']['source_ref'] for outcome in children],
         'search_result_candidates': candidates,
         'jev_search_goal': search_goal(view, task, parent['task_key'], parent['proposed_annotation_ref'], records),
         'search_assessment_ref': assessment_ref,

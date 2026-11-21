@@ -132,12 +132,13 @@ REPRESENTATIONS = ['text', 'original', 'stdout', 'stderr']
 OBJECTIVE = {'type': 'string', 'minLength': 1,
              'description': 'What the child should investigate in the returned sources and why'}
 CHILD_DESCRIPTION = (
-    'Investigate which of the UNCONSUMED search results (input_list: the earlier search results you were given and '
-    'the sources your own searches acquired) merit examination for the assigned question. Search results are '
-    'source-discovery information: the child examines the original sources and their conditions before '
-    'asserting biological evidence, and can commission the examination of a selected source. The results handed to '
-    'the child are consumed: they are not offered again. This child is where published experiments get graded: it '
-    'measures each result against the claim, has a selected source examined as a page, and the page extracts each '
+    'Investigate which hits of the UNCONSUMED search result lists (input_list: the earlier search result lists you '
+    'were given and the search responses your own searches acquired) merit examination for the assigned question. '
+    'Search results are source-discovery information: the child measures each hit of the lists you hand it '
+    'against the question, fetches the full text of the hit it picks, examines that original article and its '
+    'conditions before asserting biological evidence. The lists handed to the child are consumed: they are not '
+    'offered again, and an article its pages examined is not fetched again. This child is where published '
+    'experiments get graded: it has a selected article examined as a page, and the page extracts each '
     'experiment it reports and writes its grading sheet row; the sheet states and the credit come back to you. Your '
     'own searches and reads earn no credit, and reading a source yourself does not grade it.')
 
@@ -167,8 +168,8 @@ HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
                     'no new action and does not execute or credit the historical work again.\n')
 CHILD_GUIDANCE = ('\nSelect the search child (the assessment of which returned sources merit examination) with its '
-                  'objective and the search results (sources you hold) it assesses when that is the better way to '
-                  'use returned sources; what it returns is shown to you as child_returns. A child earns credit in '
+                  'objective and the search result lists (search responses you hold) whose hits it assesses when that is the '
+                  'better way to use returned search results; what it returns is shown to you as child_returns. A child earns credit in '
                   'this episode only through the records it returns.')
 
 

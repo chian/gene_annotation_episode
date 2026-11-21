@@ -107,6 +107,9 @@ ASSIGNMENT_FORM = RecordForm({
     'sheet_state_refs': Field('record_refs', 'The persisted subscoring-sheet states the commissioner holds before this '
                               'run (the whole sheet), passed on to the web search and its first page; absent for the '
                               'first run of a sheet', required=False),
+    'examined_article_refs': Field('record_refs', 'The article sources a page of an earlier strategy run of this '
+                                   'literature examination already examined, passed on to the web search so their hits '
+                                   'are not offered again; absent when none was', required=False),
     'scope': Field('record', 'The Store scope of the commission (new field: old request scope)'),
     'received_record_refs': Field('record_refs', 'The earlier search-result sources and their artifacts, the proposed '
                                   'annotation and the records of the commissioned task, and every record the '
@@ -188,6 +191,8 @@ def read_from_parent(assignment, message):
     strategy = {name: assignment[name] for name in ('version', 'question_context_refs', 'prior_search_refs')}
     return {'strategy': strategy, 'task': task, 'task_key': task_key(task),
             'proposed_annotation_ref': assignment['proposed_annotation_ref'],
+            'examined_article_refs': list(assignment['examined_article_refs'])
+            if 'examined_article_refs' in assignment else [],
             'requested': {name: assignment[name] for name in REQUESTED if name in assignment},
             'scope': assignment['scope'], 'received_record_refs': assignment['received_record_refs'],
             'sheet_state_refs': list(assignment['sheet_state_refs']) if 'sheet_state_refs' in assignment else [],

@@ -128,6 +128,9 @@ def internal_summary(view):
         'held_record_refs': sorted(records.refs()),
         'last_local_outcome': (None if last is None else {'tool': last['tool'], 'outcome': last['outcome']}
                                if last['kind'] == 'tool' else {'slot': last['slot'], 'report': last['report']}),
+        # The articles the pages of this episode's strategy children examined, passed to each later strategy child.
+        'examined_article_refs': list(dict.fromkeys(ref for outcome in children
+                                                    for ref in outcome['report']['examined_article_refs'])),
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),

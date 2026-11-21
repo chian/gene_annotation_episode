@@ -28,8 +28,27 @@ CRITERIA = ('measurement_identity', 'calibration_applicability', 'matrix_interfe
             'sampling_basis', 'rate_regime', 'normalization_basis')
 
 
-def held_world(directory, task_kind='a105_experiments'):
-    """The Store, the entry input of the episode at ``assignment_version`` and the records the model would name."""
+def hit(pmcid, pmid, doi, title):
+    return {'id': pmid, 'source': 'MED', 'pmid': pmid, 'pmcid': pmcid, 'doi': doi, 'title': title,
+            'journalInfo': {'journal': {'title': 'Journal of Tests'}}, 'pubYear': '2024',
+            'abstractText': 'Abstract of ' + title + '.'}
+
+
+# What a Europe PMC search returns (``public.literature.search`` retains it as one source): five entries, of which one has
+# no PMCID (nothing to fetch), one repeats the first hit's PMCID and one is the same publication as the third by its DOI.
+SEARCH_RESPONSE = {'version': '6.9', 'hitCount': 5, 'resultList': {'result': [
+    hit('PMC100', '1', '10.1/a', 'PopZ binds ParB'),
+    {'id': '2', 'source': 'MED', 'pmid': '2', 'doi': '10.1/b', 'title': 'No full text', 'abstractText': 'x'},
+    hit('PMC100', '9', '10.1/z', 'PopZ binds ParB again'),
+    hit('PMC300', '3', '10.1/c', 'A third article'),
+    hit('PMC301', '4', '10.1/c', 'The third article, other record')]}}
+HITS = ['PMC100', 'PMC300']
+
+
+def held_world(directory, task_kind='a105_experiments', held_articles=(), examined_articles=()):
+    """The Store, the entry input of the episode at ``assignment_version`` and the records the model would name.
+    ``search_result_refs`` is a retained search response; ``held_articles`` are PMCIDs of articles held in full and
+    ``examined_articles`` the held ones an earlier run's page examined (the assignment names them)."""
     store = Store(directory / 'store')
     store.create_problem(raw_sequence='ATGGCT', molecule='dna')
     target = store.problem()['subject_refs'][0]
@@ -58,12 +77,31 @@ def held_world(directory, task_kind='a105_experiments'):
              'credit_unit': 1.0})
     page = {'version': 'page_assignment_v1', 'source_ref': source, 'representation': 'original',
             'artifact_ref': artifact, 'question_context_refs': [], 'prior_delivery_refs': []}
-    held = [target, source, artifact, assay, reaction, proposed]
-    assignment = {'version': 'search_assignment_v1', 'question_context_refs': [], 'search_result_refs': [source],
+    if task_kind == 'named_assessment':
+        task = {'version': 'literature_local_task_v1', 'kind': 'source_answer', 'answer_kind': 'assessment',
+                'evidence_axis': 'A105', 'credit_unit': 1.0, 'source_refs': [source]}
+    response = store.artifact(json.dumps(SEARCH_RESPONSE), 'application/json')
+    search = store.put('source', {'provider': 'europepmc', 'accession': None,
+                                  'uri': 'https://www.ebi.ac.uk/europepmc/webservices/rest/search',
+                                  'artifact_ref': response, 'text_ref': None, 'request_ref': None,
+                                  'version': None, 'retrieved_at': None, 'parent_source_refs': []},
+                       origin='caller')['id']
+    articles = []
+    for pmcid in held_articles:
+        full_text = store.artifact('Full text of ' + pmcid, 'text/plain')
+        articles.append(store.put('source', {'provider': 'europepmc', 'accession': pmcid, 'uri': None,
+                                             'artifact_ref': full_text, 'text_ref': full_text, 'request_ref': None,
+                                             'version': None, 'retrieved_at': None, 'parent_source_refs': []},
+                                  origin='caller')['id'])
+    held = [target, source, artifact, assay, reaction, proposed, search, response, *articles]
+    assignment = {'version': 'search_assignment_v1', 'question_context_refs': [], 'search_result_refs': [search],
                   'literature_task': task, 'proposed_annotation_ref': proposed, 'scope': scope,
                   'received_record_refs': held}
+    if examined_articles:
+        assignment['examined_article_refs'] = [ref for ref, pmcid in zip(articles, held_articles)
+                                               if pmcid in examined_articles]
     names = {'store': store, 'target': target, 'source': source, 'artifact': artifact, 'assay': assay,
-             'reaction': reaction, 'proposed': proposed, 'scope': scope}
+             'reaction': reaction, 'proposed': proposed, 'scope': scope, 'search': search, 'articles': articles}
     return {**names, 'input': {'assignment': assignment, 'message': {'objective': 'grade the table'},
                                'selection': []}}
 

@@ -162,6 +162,18 @@ def test_a_source_is_the_lead_only_when_its_sheet_row_of_the_claim_is_measured_a
     assert lead(given, 'src_1', 'hyp_1', ['state_given'], update(('hyp_2', 'measured', 'row:new'))) == []
 
 
+def test_the_experiment_type_of_a_leaf_is_offered_with_its_plain_line_for_the_claims_class_only():
+    task_module = importlib.import_module(PACKAGE + '.task')
+    binds = {'jev_goal': {'claim': {'predicate': 'binds', 'subject_id': 'PopZ', 'partner_id': 'ParB'}},
+             'report_windows': [[0, 10]], 'unconsumed_chunk_ids': ['prose_chunk:0000'], 'unconsumed_table_ids': []}
+    schema = task_module.child_arguments('chunk', binds)['properties']['experiment_type']
+    assert len(schema['enum']) == 25 and 'spectro_direct' not in schema['enum']
+    assert '- proximity: Proximity labelling' in schema['description'] and '- pulldown: Pull-down' in schema['description']
+    assert 'commission no leaf for it' in schema['description'] and 'no_applicable_evidence' in schema['description']
+    catalyzes = {'jev_goal': {'claim': {'predicate': 'catalyzes', 'subject_id': 'E', 'partner_id': 'S'}}}
+    assert task_module.child_arguments('report', catalyzes)['properties']['experiment_type']['enum'] == ['spectro_direct']
+
+
 def test_the_page_offers_the_leaf_children_and_the_sheet_ceiling_under_a_verified_source_leads_task():
     credit_module = importlib.import_module(PACKAGE + '.credit')
     task_module = importlib.import_module(PACKAGE + '.task')

@@ -21,13 +21,16 @@ from episode_runtime import ChildMessage
 SCREENING = 'literature_screening_answers'
 LEADS = 'literature_source_lead_dispositions'
 SHEET_STATE_REFS = 'sheet_state_refs'
+EXAMINED = 'examined_article_refs'
 
 
 def msg_to_child(slot, arguments, summary):
     if slot != 'web_search':
         raise LookupError('no_such_child_slot:' + slot)
     task = summary['task']
-    selection = [SHEET_STATE_REFS]   # the web search's persisted sheet states: the next run starts from them
+    # the web search's persisted sheet states (the next run starts from them) and the articles its pages examined (the
+    # next run does not fetch them again)
+    selection = [SHEET_STATE_REFS, EXAMINED]
     if task['kind'] == 'verified_source_leads':
         selection.append(LEADS)
     if task.get('answer_kind') == 'screening':
@@ -36,7 +39,8 @@ def msg_to_child(slot, arguments, summary):
                   'question_context_refs': summary['strategy']['question_context_refs'],
                   'search_result_refs': arguments['search']['search_result_refs'],
                   'literature_task': task, 'proposed_annotation_ref': summary['proposed_annotation_ref'],
-                  **summary['requested'], SHEET_STATE_REFS: list(summary['sheet_state_refs']), 'scope': summary['scope'],
+                  **summary['requested'], SHEET_STATE_REFS: list(summary['sheet_state_refs']),
+                  EXAMINED: list(summary['all_examined_article_refs']), 'scope': summary['scope'],
                   'received_record_refs': list(summary['held_record_refs'])}
     return ChildMessage(objective=arguments['objective'],
                         message={'objective': arguments['objective'], 'task_key': summary['task_key']},

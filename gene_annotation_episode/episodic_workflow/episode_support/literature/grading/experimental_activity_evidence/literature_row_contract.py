@@ -149,6 +149,51 @@ CLAIM_PREDICATES_BY_CLASS = {
     # (the record's target_id). NOT symmetric. Spelling 'catalyzes' as the A105 hypotheses and A104 already use.
     'activity_rate': ('catalyzes',),
 }
+
+# What each experiment type is, in one plain line: the method and what it reports. This is the one place; the page shows these
+# lines to its model where it names a leaf's experiment_type (only the types of the claim's class). A test fails when a type of
+# CLASS_OF_EXPERIMENT_TYPE has no line.
+EXPERIMENT_TYPE_LINES = {
+    'spr': 'Surface plasmon resonance: one partner immobilised on a chip, the other flowed over it; reports association and dissociation rates and the KD.',
+    'itc': 'Isothermal titration calorimetry: one partner titrated into the other in a calorimeter; reports the KD, the stoichiometry and the binding enthalpy.',
+    'bli': 'Biolayer interferometry: one partner on a biosensor tip dipped into the other; reports association and dissociation rates and the KD.',
+    'gci': 'Grating-coupled interferometry (waveguide chip, as SPR): one partner on a chip, the other flowed over; reports association and dissociation rates and the KD.',
+    'fp': 'Fluorescence polarisation (anisotropy): a fluorescent partner whose polarisation rises when it binds; reports the KD or Ki from a titration or competition.',
+    'fret': 'Forster resonance energy transfer in vitro: donor and acceptor fluorophores on the two partners; reports energy transfer on binding and a KD from a titration.',
+    'mst': 'Microscale thermophoresis: a fluorescent partner whose movement in a temperature gradient changes on binding; reports the KD.',
+    'trp_quenching': 'Intrinsic tryptophan fluorescence quenching: the protein\'s own tryptophan fluorescence drops on binding; reports the KD from a titration.',
+    'fcs': 'Fluorescence correlation spectroscopy: diffusion time of a fluorescent partner slows on binding; reports the KD or the bound fraction.',
+    'elisa': 'Enzyme-linked immunosorbent assay: one partner coated on a plate, the other detected by an antibody; reports a binding signal or an apparent KD.',
+    'alphascreen': 'AlphaScreen / AlphaLISA: donor and acceptor beads on the two partners give a luminescent signal when close; reports the signal, an apparent KD or an IC50.',
+    'radioligand': 'Radioligand binding: a radiolabelled ligand bound to its target, free ligand separated; reports the KD, Bmax or a Ki from competition.',
+    'spa': 'Scintillation proximity assay: a radiolabelled ligand binds a target on a scintillant bead and only bound ligand gives a signal; reports the KD or a Ki.',
+    'pulldown': 'Pull-down or co-immunoprecipitation: a tagged or antibody-captured bait is isolated and the prey is detected by blot or mass spectrometry; reports detected or not detected, often a fold enrichment.',
+    'emsa': 'Electrophoretic mobility shift assay (gel shift): a labelled nucleic acid shifts on a gel when bound; reports the shift and the KD from a titration.',
+    'sec': 'Size-exclusion chromatography (gel filtration): the elution volume of a mixture compared with the single partners; reports complex formation and its apparent size.',
+    'dialysis': 'Equilibrium dialysis or ultrafiltration: ligand concentrations on the two sides of a membrane; reports the bound amount, the KD and the stoichiometry.',
+    'auc': 'Analytical ultracentrifugation (sedimentation velocity or equilibrium): sedimentation of the mixture; reports complex species, their mass and a KD.',
+    'dsf': 'Differential scanning fluorimetry (thermal shift, thermofluor): melting temperature of the protein with and without partner; reports the change in melting temperature.',
+    'cetsa': 'Cellular thermal shift assay: thermal stability of a target protein in cells or lysate with and without a ligand; reports the shift in aggregation temperature or an isothermal dose response.',
+    'bret': 'Bioluminescence resonance energy transfer in living cells: luciferase and fluorescent fusions of the two partners; reports an energy transfer ratio and a BRET50 or saturation curve.',
+    'y2h': 'Yeast two-hybrid: the two partners fused to the halves of a transcription factor, a reporter or growth in yeast shows interaction; reports growth or reporter activity, detected or not.',
+    'split_reporter': 'Split reporter or protein-fragment complementation (split luciferase, split GFP, BiFC): the two partners fused to halves of a reporter that reconstitutes on binding; reports a signal, detected or not.',
+    'pla': 'Proximity ligation assay: antibodies against the two partners with ligatable oligonucleotides give a fluorescent spot when the partners are within about 40 nm in fixed cells; reports spots per cell, detected or not.',
+    'proximity': 'Proximity labelling in cells (BioID, TurboID, APEX): a labelling enzyme fused to a bait biotinylates nearby proteins, which are identified by mass spectrometry or blot; reports enrichment over a control, detected or not.',
+    'spectro_direct': 'Continuous direct spectrophotometric enzyme assay: absorbance of a substrate or product read over time in a cuvette or plate; reports the rate, kcat, Km or specific activity.',
+}
+
+
+def experiment_types_of_class(sheet_class):
+    """The experiment types of one sheet class, in registry order."""
+    return tuple(name for name in EXPERIMENT_TYPES if CLASS_OF_EXPERIMENT_TYPE[name] == sheet_class)
+
+
+def class_of_predicate(predicate):
+    """The one sheet class whose claims carry this predicate; a predicate no class lists raises."""
+    classes = [sheet for sheet, predicates in CLAIM_PREDICATES_BY_CLASS.items() if predicate in predicates]
+    if len(classes) != 1:
+        raise ValueError(f'the predicate {predicate!r} belongs to {len(classes)} classes, not one')
+    return classes[0]
 # A symmetric predicate holds both ways: 'A binds B' is 'B binds A'. A result whose target is the claim's partner and whose
 # partner is the claim's subject is then direct for the claim (bearing, reason partner_route).
 SYMMETRIC_PREDICATES = ('binds',)

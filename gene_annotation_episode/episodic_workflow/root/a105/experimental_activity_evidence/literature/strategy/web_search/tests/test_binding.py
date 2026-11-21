@@ -3,12 +3,15 @@ holds exactly the ten-file set of an episode with a child (its child episode fol
 imports another episode folder; the episode's own forms and functions behave on real data. Nothing here is faked."""
 import ast
 import importlib
+import json
 from pathlib import Path
 
 import pytest
 
 from episode_runtime import ChildMessage, EpisodeBinding
 from method_loop import FormError
+
+from .grading_world import SEARCH_RESPONSE
 
 PACKAGE = __name__.rsplit('.', 2)[0]
 FOLDER = Path(__file__).resolve().parents[1]
@@ -146,6 +149,40 @@ class HeldSources:
         return self.sources[ref]
 
 
+def test_the_sources_a_task_names_are_the_only_sources_a_page_of_the_commission_can_examine():
+    admitted = EPISODE.assignment_form.admit(assignment(), 'test')
+    task = {'version': 'literature_local_task_v1', 'evidence_axis': 'A105', 'credit_unit': 1.0, 'kind': 'source_answer'}
+    span = {'source_ref': 'source_' + 'a' * 24, 'artifact_ref': 'artifact_' + 'a' * 24, 'start': 5, 'end': 9}
+
+    def named(literature_task):
+        return EPISODE.read_from_parent({**admitted, 'literature_task': literature_task}, {})['named_source_refs']
+    assert EPISODE.read_from_parent(admitted, {})['named_source_refs'] == []     # verified_source_leads names none
+    assert named({**task, 'answer_kind': 'assessment', 'source_refs': ['source_' + 'c' * 24]}) == ['source_' + 'c' * 24]
+    assert named({**task, 'answer_kind': 'screening', 'examined': [span, span]}) == ['source_' + 'a' * 24]
+    assert named({**task, 'answer_kind': 'screening', 'examined': [span, {**span, 'source_ref': 'source_' + 'd' * 24}]}
+                 ) == ['source_' + 'a' * 24, 'source_' + 'd' * 24]
+
+
+def test_the_return_declares_the_articles_its_pages_examined_and_returns_them_when_selected():
+    final = importlib.import_module(PACKAGE + '.messages.final_to_parent')
+    summary = {'scores': [], 'features': [], 'examined_article_refs': ['src_1'], 'sheet_state_refs': []}
+    result = final.final_to_parent(summary, {'credit': 1.0}, ['examined_article_refs'])
+    assert result['examined_article_refs'] == ['src_1']
+    assert EPISODE.return_form.admit(result, 'test')['examined_article_refs'] == ['src_1']
+    assert 'examined_article_refs' not in final.final_to_parent(summary, {'credit': 1.0}, [])
+
+
+def test_a_search_result_is_one_distinct_hit_of_a_result_list_with_a_pmcid():
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
+        ranked_hits)
+    second = {'resultList': {'result': [{'pmcid': 'PMC300', 'title': 'repeated'}, {'pmcid': 'PMC400', 'pmid': '7',
+                                                                                   'title': 'new', 'pubYear': 2020}]}}
+    hits = ranked_hits([json.dumps(SEARCH_RESPONSE), json.dumps(second)])
+    # no PMCID: not an item; the same PMCID or the same DOI: one publication; the rank counts the distinct items
+    assert [(hit['pmcid'], hit['provider_rank']) for hit in hits] == [('PMC100', 1), ('PMC300', 2), ('PMC400', 3)]
+    assert hits[2]['year'] == '2020' and hits[2]['journal'] == '' and hits[0]['journal'] == 'Journal of Tests'
+
+
 def test_the_page_of_a_search_result_is_filled_by_code_from_its_source_record():
     task = importlib.import_module(PACKAGE + '.task')
     held = HeldSources({'src_text': {'text_ref': 'art_text', 'artifact_ref': 'art_orig'},
@@ -166,15 +203,29 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_and
     assert {entry['name'] for entry in entries} <= set(EPISODE.tools)
     assert 'evidence_processing' in [entry for entry in entries if entry['name'] == 'reason'][0]['input_schema']['properties']
     for leads in (False, True):
-        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, ['src_1', 'src_2'])
-        assert len(schema['properties']['selection']['anyOf']) == len(names) + len(task.CHILD_SLOTS)
-        child = schema['properties']['selection']['anyOf'][-1]
+        # over hits the model picks a hit (the tool that has code fetch it and commission the page); no page child is
+        # offered to it, and a consumed hit is not selectable
+        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, ['PMC1', 'PMC2'], False)
+        options = schema['properties']['selection']['anyOf']
+        assert len(options) == len(names) + 1
+        pick = options[-1]['properties']
+        assert pick['kind'] == {'const': 'tool'} and pick['tool'] == {'const': task.FETCH}
+        assert pick['arguments']['properties']['hit'] == {'enum': ['PMC1', 'PMC2']}
+        assert not [option for option in options if option['properties']['kind'] == {'const': 'child'}]
+        # under a task that names its source the page child is offered on the named source alone
+        named = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, ['src_1'], True)
+        child = named['properties']['selection']['anyOf'][-1]
+        assert child['properties']['kind'] == {'const': 'child'}
         assert child['properties']['arguments']['properties']['page']['properties']['source_ref'] == {
-            'enum': ['src_1', 'src_2']}
-        empty = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, [])
-        assert len(empty['properties']['selection']['anyOf']) == len(names)
+            'enum': ['src_1']}
+        assert len(named['properties']['selection']['anyOf']) == len(names) + len(task.CHILD_SLOTS)
+        for named_mode in (False, True):
+            empty = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, [], named_mode)
+            assert len(empty['properties']['selection']['anyOf']) == len(names)
     assert set(task.CHILD_ARGUMENTS) == set(EPISODE.child_slots) == set(task.CHILD_SLOTS)
+    assert task.valid_slots([], True) == [] and task.valid_slots(['src_1'], False) == []
+    assert task.valid_slots(['src_1'], True) == list(task.CHILD_SLOTS)
     assert len(task.POPULATIONS) == 35 and set(task.TOOL_NAMES.values()) == set(EPISODE.tools) - {
-        'reason', task.ASSESS}
+        'reason', task.ASSESS, task.FETCH}
     assert len(task.offered({'rate_population': True, **{name: True for name in FLAGS}})) == len(names) + 35
 

@@ -58,12 +58,19 @@ def held_world(directory, task_kind='a105_experiments'):
              'credit_unit': 1.0})
     page = {'version': 'page_assignment_v1', 'source_ref': source, 'representation': 'original',
             'artifact_ref': artifact, 'question_context_refs': [], 'prior_delivery_refs': []}
-    held = [target, source, artifact, assay, reaction, proposed]
-    assignment = {'version': 'strategy_assignment_v1', 'question_context_refs': [], 'prior_search_refs': [source],
+    response = store.artifact(json.dumps({'resultList': {'result': [
+        {'pmcid': 'PMC100', 'pmid': '1', 'title': 'PopZ binds ParB'}]}}), 'application/json')
+    search = store.put('source', {'provider': 'europepmc', 'accession': None,
+                                  'uri': 'https://www.ebi.ac.uk/europepmc/webservices/rest/search',
+                                  'artifact_ref': response, 'text_ref': None, 'request_ref': None,
+                                  'version': None, 'retrieved_at': None, 'parent_source_refs': []},
+                       origin='caller')['id']
+    held = [target, source, artifact, assay, reaction, proposed, search, response]
+    assignment = {'version': 'strategy_assignment_v1', 'question_context_refs': [], 'prior_search_refs': [search],
                   'literature_task': task, 'proposed_annotation_ref': proposed, 'scope': scope,
                   'received_record_refs': held}
     names = {'store': store, 'target': target, 'source': source, 'artifact': artifact, 'assay': assay,
-             'reaction': reaction, 'proposed': proposed, 'scope': scope}
+             'reaction': reaction, 'proposed': proposed, 'scope': scope, 'search': search}
     return {**names, 'input': {'assignment': assignment, 'message': {'objective': 'grade the table'},
                                'selection': []}}
 

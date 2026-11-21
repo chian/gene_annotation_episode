@@ -4,13 +4,20 @@ grading sheets in one unit, and for a verified-source-leads commission validated
 source-cell families when the settings turn the population route on. The finding returned is the controlled features of the saved grading sheets.
 
 The search step's Jev measurement (nano-graphrag ``web_search_binding``, ``SEARCH_PAGE_SELECTION_VERSION``
-``model_planned_from_jev_evidence_v5``): before this episode plans, ``assess_search_results`` (decided by code, no model
-call) has Jev measure every search result once, from its held text, against the immutable Search Goal
-(``search_result_assessment.assess_search_results``) and holds the assessment as an artifact. Every later decision shows
-the model nano-graphrag's candidate view for the UNCONSUMED results only (``context.page_candidates``: each result's Jev
-probability, provider rank, title and description, and the measured outcomes of the prior page children); the model
-selects one result per page child, and a result handed to a page is consumed. Jev is planning evidence, not the
-selection policy.
+``model_planned_from_jev_evidence_v5``): a search result is ONE HIT of a provider's result list (``messages/
+internal_summary.py``: its PMCID, rank, title, journal, year and the abstract the provider returned), not a fetched
+document. Before this episode plans, ``assess_search_results`` (decided by code, no model call) has Jev measure every
+hit once, from its description, against the immutable Search Goal (``search_result_assessment.assess_search_results``)
+and holds the assessment as an artifact. Every later decision shows the model nano-graphrag's candidate view for the
+UNCONSUMED hits only (``context.page_candidates``: each hit's Jev probability, provider rank, title and description,
+and the measured outcomes of the prior page children); the model picks one hit with the objective of its examination
+(the tool ``fetch_search_hit``), code fetches that hit's full text (the operation of ``public.literature.read``), and,
+when the fetch completed, code commissions the page on the fetched article with no model call (an article already held
+is opened without a new fetch: no second record of it). A hit is consumed by its fetch; a hit whose fetch failed is shown in ``context.hit_fetches`` with the provider status and is never opened. Jev
+is planning evidence, not the selection policy.
+
+A task that names specific sources (``named_source_refs``) has no hits to choose from: the page refuses any source
+but the one it is assigned, so under such a task the page child is offered on the one named source only.
 
 Carried from the old task.py (``LiteratureOperations.catalog`` / ``execute``), source_operations.py
 (``LiteratureSourceOperations._tool_arguments`` / ``_materialize_text_arguments``), task_decision.py,
@@ -22,9 +29,9 @@ grading/experimental_interpretation.py (``reasoning_action_schema``, ``reasoning
 always offers a unit and never ends the Episode: only the yield controller does.
 
 Child. The old ``_CHILDREN['literature_search']`` is ``('literature_page',)``: the slot below is that role under the
-name of its folder. The model selects it with the child's objective and the page it examines (a source of the search
-results, its representation and artifact, and the records earlier examinations of it delivered);
-``messages/msg_to_child.py`` builds the commission. A child is a unit like any other: what it earns in this episode is
+name of its folder. Code commissions it on the article fetched for the hit the model picked, with the model's objective
+and the page it examines (the article, its representation and artifact, and the records earlier examinations of it
+delivered); ``messages/msg_to_child.py`` builds the commission. A child is a unit like any other: what it earns in this episode is
 this episode's own credit.
 
 Tools offered. The access tools are the ones the A105 tool library implements (its ``A105ToolRegistry.catalog``
@@ -65,7 +72,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.experimental_activity_evidence.action_transport import (
     decode_response, generation_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
-    assess_search_results as assess_results)
+    article_sources, assess_search_results as assess_results)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.jev_client import JevDecisionClient
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
@@ -89,6 +96,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
     REPOSITORIES, authorize_record_access, authorize_source_access, population_entries, reader_cells,
     run_population as population_unit)
 from .goal import GOAL
+from .messages.internal_summary import page_of
 
 CHILD_SLOTS = {
     'page': 'experimental_activity_evidence/literature/strategy/web_search/page',
@@ -152,20 +160,31 @@ OBJECTIVE = {'enum': ['evidence_in_table', 'evidence_in_passages', 'evidence_loc
                             'evidence_location_unknown: where the source holds it, or whether it holds any, is not '
                             'known.'}
 CHILD_DESCRIPTION = (
-    'Investigate where and how one exact UNCONSUMED source of the search results (input_list) should be examined; you '
+    'Investigate where and how the one source the commissioned task names (input_list) should be examined; you '
     'name only the source (its representation and artifact are filled from its record: its text when it has one, '
     'else its original bytes); the child chooses ordinary source operations or selected table, ordered-reading or '
-    'targeted-passage investigations of it. Choose the result from context.page_candidates (its Jev probability, '
-    'provider rank, title, description and the measured outcomes of the previous page children). The source is '
-    'consumed: it is not offered again. The page child is where published experiments get graded: it measures the '
-    'passages and tables of the source against the claim, extracts each experiment the source reports and writes '
-    'its grading sheet row; the sheet states and the credit come back to you. Your own reads earn no credit, and '
-    'reading a source yourself does not grade it.')
+    'targeted-passage investigations of it. The source is consumed: it is not offered again. The page child is where '
+    'published experiments get graded: it measures the passages and tables of the source against the claim, extracts '
+    'each experiment the source reports and writes its grading sheet row; the sheet states and the credit come back '
+    'to you. Your own reads earn no credit, and reading a source yourself does not grade it.')
+# The tool the model picks a hit with. Code fetches the hit's full text and commissions the page on it.
+FETCH = 'fetch_search_hit'
+FETCH_DESCRIPTION = (
+    'Pick one UNCONSUMED hit of the search results (input_list: PMCIDs) to have examined, with where you expect the '
+    'evidence of the commissioned task in it. Choose the hit from context.page_candidates (its Jev probability, '
+    'provider rank, title, description and the measured outcomes of the previous page children). Code then fetches the '
+    'hit\'s full text (the operation of public_literature_read; an article already held is opened without a new '
+    'fetch) and, when that completes, commissions the page child '
+    'on the article with no further choice of yours; a hit whose fetch fails is consumed, is shown in '
+    'context.hit_fetches with the provider status and is never opened. The hit is consumed: it is not offered again. '
+    'The page child is where published experiments get graded: it measures the passages and tables of the article '
+    'against the claim, extracts each experiment it reports and writes its grading sheet row; the sheet states and '
+    'the credit come back to you. Your own reads earn no credit, and reading a source yourself does not grade it.')
 
 
 def page_schema(input_list):
-    """The page the model may select: ``source_ref`` is one of the unconsumed search results (the input list), so a
-    consumed result cannot be selected."""
+    """The page the model may select under a task that names its source: ``source_ref`` is one of the unconsumed
+    named sources (the input list), so a consumed source cannot be selected."""
     return obj({**PAGE_SCHEMA['properties'], 'source_ref': {'enum': list(input_list)}})
 
 
@@ -174,9 +193,21 @@ def child_arguments(slot, input_list):
     return CHILD_DESCRIPTION, obj({'objective': OBJECTIVE, 'page': page_schema(input_list)})
 
 
-def valid_slots(input_list):
-    """The child slots valid now: the page child while an unconsumed search result remains."""
-    return list(CHILD_SLOTS) if input_list else []
+def fetch_entry(input_list):
+    """The hit-picking tool the model is shown, over the unconsumed hits (the input list): the objective and the hit."""
+    return {'name': FETCH, 'description': FETCH_DESCRIPTION,
+            'input_schema': obj({'objective': OBJECTIVE, 'hit': {'enum': list(input_list)}})}
+
+
+def valid_slots(input_list, named):
+    """The child slots the model may select now: the page child while the one named source of a task that names its
+    source is unconsumed. Under any other task a page is commissioned by code after a hit is fetched."""
+    return list(CHILD_SLOTS) if input_list and named else []
+
+
+def hit_tools(input_list, named):
+    """The hit-picking tool while an unconsumed hit remains (a task that names its source has none)."""
+    return [fetch_entry(input_list)] if input_list and not named else []
 
 
 # Static form (the declared shape of each child's arguments, without the input list), kept for the binding test.
@@ -186,17 +217,22 @@ HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
                     'no new action and does not execute or credit the historical work again.\n')
-CHILD_GUIDANCE = ('\nSelect the page child (the examination of one selected source) with its objective and the page '
-                  'it examines when that is the better way to examine a returned source; what it returns is shown '
-                  'to you as child_returns. A child earns credit in this episode only through the records it '
-                  'returns.\nJev has measured every search result once against the Search Goal. '
-                  'context.page_candidates shows, for the UNCONSUMED results only, each one\'s provider rank, title, '
-                  'description and Jev assessment (relevance_probability: Jev\'s probability that the result can '
-                  'contribute to the Search Goal), and the measured results of the previous page children '
-                  '(previous_page_children). These are measurements for your planning, not a rule that the largest '
-                  'probability must be selected: use them and the realized results of previous pages to choose the '
-                  'next result worth examining. One page child takes one result; the numerical controller alone '
-                  'decides whether the search continues.')
+CHILD_GUIDANCE = ('\nPick a hit (fetch_search_hit, with the objective of its examination) when that is the better way '
+                  'to examine a returned search result: code fetches the hit\'s full text and has the page child '
+                  'examine the fetched article; what the page returns is shown to you as child_returns. A child '
+                  'earns credit in this episode only through the records it returns.\nA search result is one hit of '
+                  'a provider\'s result list (its PMCID, title, journal, year and abstract). Jev has measured every '
+                  'hit once against the Search Goal. context.page_candidates shows, for the UNCONSUMED hits only, '
+                  'each one\'s provider rank, title, description and Jev assessment (relevance_probability: Jev\'s '
+                  'probability that the hit can contribute to the Search Goal), and the measured results of the '
+                  'previous page children (previous_page_children). These are measurements for your planning, not a '
+                  'rule that the largest probability must be selected: use them and the realized results of previous '
+                  'pages to choose the next hit worth examining. context.hit_fetches shows which hits were fetched '
+                  'and the provider status of a fetch that failed (that hit is never opened). One page child takes '
+                  'one hit; a publication is one hit however many lists returned it, and an article a page has already '
+                  'examined is not offered again (an article that was only read is still offered, and is opened '
+                  'without a new fetch); the numerical controller alone decides whether the search continues. When '
+                  'the commissioned task names its source, there are no hits: the page child examines that source.')
 
 
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
@@ -245,14 +281,15 @@ def catalog(names, commit_schema, leads, settings):
     return entries
 
 
-def selection_schema(names, commit_schema, leads, settings, input_list):
+def selection_schema(names, commit_schema, leads, settings, input_list, named):
     """What the model answers with: one tool and its arguments, or one child slot and its arguments (the old action
-    schema: kinds ``tool`` and ``child``). A child is offered only for an unconsumed search result (``input_list``)."""
+    schema: kinds ``tool`` and ``child``). A hit is picked only while one is unconsumed (``input_list``); a child is
+    offered only under a task that names its source (``named``) and while that source is unconsumed."""
     tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
-             for entry in catalog(names, commit_schema, leads, settings)]
+             for entry in [*catalog(names, commit_schema, leads, settings), *hit_tools(input_list, named)]]
     children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot},
                      'arguments': child_arguments(slot, input_list)[1]})
-                for slot in valid_slots(input_list)]
+                for slot in valid_slots(input_list, named)]
     return obj({'selection': {'anyOf': [*tools, *children]}})
 
 
@@ -380,33 +417,36 @@ def reason(arguments, ctx):
 ASSESS = 'assess_search_results'
 
 
-def result_text(store, reference):
-    """The held text of one search result, read through custody: its text representation, else its original bytes
-    when they are UTF-8 text, else nothing (the measurement then reads its description, as nano-graphrag does)."""
-    source = store.get(reference)
-    for key in ('text_ref', 'artifact_ref'):
-        if source.get(key) is None:
-            continue
-        try:
-            return store.get_artifact(source[key]).decode('utf-8')
-        except UnicodeDecodeError:
-            continue
-    return ''
-
-
 async def assess_search_results(arguments, ctx):
     """The search step's Jev measurement (nano-graphrag ``SearchPageProposer._issue`` with ``assess_page_candidate``):
-    every search result's held text is read through custody, Jev measures each once against the Search Goal, and this
-    unit holds the assessment as an artifact the episode keeps (``search_assessment_ref``). The library function is
-    pure; this unit alone writes. The Jev client reads its key (``TYPESAFE_API_KEY``) from the repository's ``.env`` at
-    run time (``jev_client``); a missing key or a failed call raises."""
-    results = [{**item, 'text': result_text(ctx.store, item['result_id'])} for item in arguments['results']]
+    Jev measures each hit once against the Search Goal, from its description (the journal, year and abstract the
+    provider returned: a hit holds no other text, as in nano-graphrag), and this unit holds the assessment as an
+    artifact the episode keeps (``search_assessment_ref``). The library function is pure; this unit alone writes. The
+    Jev client reads its key (``TYPESAFE_API_KEY``) from the repository's ``.env`` at run time (``jev_client``); a
+    missing key or a failed call raises."""
+    results = arguments['results']
     assessment = await assess_results(JevDecisionClient.from_repository_env(), goal=arguments['goal'],
                                       results=results)
     ref = ctx.store.artifact(canonical(assessment), 'application/json')
     return {'status': 'completed', 'assessment_ref': ref, 'result_count': len(results),
             'window_count': sum(len(item['window_probabilities']) for item in assessment['assessments']),
             'request_count': sum(item['attempts'] for item in assessment['assessments'])}
+
+
+async def fetch_search_hit(arguments, ctx):
+    """The full text of the picked hit: the operation of ``public.literature.read`` on the hit's PMCID, run by code
+    for the model's pick. Its outcome is the unit's outcome like any other, whatever the provider answered: a failed
+    fetch is an outcome that consumes the hit and is reported to the model with the provider status. An article this
+    episode already holds in full (a model read it, or an earlier run fetched it) is not fetched again: the unit
+    completes on the held source, so the article has one record. The page the model chose the hit for is commissioned
+    by code once this unit completed (``decide``)."""
+    pmcid = arguments['arguments']['hit']
+    held = article_sources(ctx.store).get(pmcid)
+    if held:
+        return {'status': 'completed',
+                'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': FETCH, 'arguments': arguments}),
+                'record_refs': [], 'changed_record_refs': [], 'result': {'source_ref': held[0]}, 'feedback': None}
+    return await run_access_tool('public.literature.read', {**arguments, 'arguments': {'pmcid': pmcid}}, ctx)
 
 
 async def state_query(arguments, ctx):
@@ -725,14 +765,14 @@ TOOLS = {
     'literature_ratio_source_populate': literature_ratio_source_populate,
     'literature_controlled_response_source_v3_populate': literature_controlled_response_source_v3_populate,
     'literature_gel_populate': literature_gel_populate,
-    'reason': reason, ASSESS: assess_search_results}
+    'reason': reason, ASSESS: assess_search_results, FETCH: fetch_search_hit}
 
 
-def child_options(input_list):
+def child_options(input_list, named):
     """The children the model may select now: slot, description and the arguments it takes (the old
-    ``child_option_information``), only for the unconsumed search results of the input list."""
+    ``child_option_information``), only for the unconsumed named source of the input list."""
     return [{'slot': slot, 'description': child_arguments(slot, input_list)[0],
-             'arguments': child_arguments(slot, input_list)[1]} for slot in valid_slots(input_list)]
+             'arguments': child_arguments(slot, input_list)[1]} for slot in valid_slots(input_list, named)]
 
 
 def decide(summary, feedback, ctx):
@@ -746,9 +786,13 @@ def decide(summary, feedback, ctx):
     "Carried over" table).
 
     Before Jev has measured the search results the decision is that measurement, made by code with no model call
-    (nano-graphrag assesses every buffered result before its page proposer is asked)."""
+    (nano-graphrag assesses every buffered result before its page proposer is asked). Straight after the fetch of a
+    picked hit completed the decision is the page on the fetched article, also made by code with no model call."""
     if assessment_pending(summary):
         return ToolCall(ASSESS, {'goal': summary['jev_search_goal'], 'results': summary['search_result_candidates']})
+    if summary['pending_page'] is not None:
+        return ChildCall('page', summary['pending_page'])
+    named = bool(summary['named_source_refs'])
     names = offered(ctx.settings)
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings['knowledge_library_directory']
@@ -761,9 +805,11 @@ def decide(summary, feedback, ctx):
                'held_record_refs': summary['held_record_refs'], 'assay_sheets': summary['assay_sheets'],
                'aggregation_sheets': summary['aggregation_sheets'],
                'child_returns': summary['child_returns'], 'input_list': summary['input_list'],
-               'consumed_inputs': summary['consumed_inputs'], 'child_options': child_options(summary['input_list']),
-               'page_candidates': summary['search_planner_context'],
-               'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings),
+               'consumed_inputs': summary['consumed_inputs'],
+               'child_options': child_options(summary['input_list'], named),
+               'page_candidates': summary['search_planner_context'], 'hit_fetches': summary['hit_fetches'],
+               'tools': [*catalog(names, summary['reasoning_schema'], leads, ctx.settings),
+                         *hit_tools(summary['input_list'], named)],
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     if ctx.settings['rate_population']:
         context['literature_experimental_work'] = {'version': 'literature_experimental_task_v1',
@@ -775,18 +821,7 @@ def decide(summary, feedback, ctx):
     return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads,
                                                   populations=offered_populations(ctx.settings)), context,
                         generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings,
-                                                           summary['input_list'])))
-
-
-def page_of(records, source_ref):
-    """The page the child is commissioned on, from the source record alone: its text representation when the source
-    holds one, else its original bytes, with that representation's artifact; no earlier delivery is held for a source
-    the search just returned. The model does not type any of these."""
-    source = records.get(source_ref)
-    representation = 'text' if source.get('text_ref') is not None else 'original'
-    return {'source_ref': source_ref, 'representation': representation,
-            'artifact_ref': source['text_ref' if representation == 'text' else 'artifact_ref'],
-            'prior_delivery_refs': []}
+                                                           summary['input_list'], named)))
 
 
 def validate_selection(value, schema):
@@ -803,7 +838,8 @@ def action(response, summary, records, ctx):
     names = offered(ctx.settings)
     leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads, ctx.settings, summary['input_list'])
+    schema = selection_schema(names, commit_schema, leads, ctx.settings, summary['input_list'],
+                              bool(summary['named_source_refs']))
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         if selection['kind'] == 'child':
@@ -827,11 +863,16 @@ def assessment_pending(summary):
 
 def offered_actions(summary, ctx):
     """The action types offered at this decision: before Jev has measured the search results the one action is
-    ``assess_search_results``; after it, the names of the tools ``decide`` shows (the same ``catalog`` over the same
-    ``offered`` list) and the child slots."""
+    ``assess_search_results``; straight after a fetched hit it is the page; otherwise the names of the tools ``decide``
+    shows (the same ``catalog`` over the same ``offered`` list, and the hit-picking tool while a hit remains) and the
+    child slots."""
     if assessment_pending(summary):
         return [ASSESS]
+    if summary['pending_page'] is not None:
+        return list(CHILD_SLOTS)
+    named = bool(summary['named_source_refs'])
     names = offered(ctx.settings)
     leads = summary['task']['kind'] == 'verified_source_leads'
-    tools = [entry['name'] for entry in catalog(names, summary['reasoning_schema'], leads, ctx.settings)]
-    return [*tools, *valid_slots(summary['input_list'])]
+    tools = [entry['name'] for entry in [*catalog(names, summary['reasoning_schema'], leads, ctx.settings),
+                                         *hit_tools(summary['input_list'], named)]]
+    return [*tools, *valid_slots(summary['input_list'], named)]

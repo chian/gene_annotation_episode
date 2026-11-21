@@ -109,6 +109,9 @@ ASSIGNMENT_FORM = RecordForm({
     'sheet_state_refs': Field('record_refs', 'The persisted subscoring-sheet states the commissioner holds before this '
                               'run (the whole sheet), passed in custody to the first page; absent for the first run of '
                               'a sheet', required=False),
+    'examined_article_refs': Field('record_refs', 'The article sources a page of an earlier web-search run of this '
+                                   'search already examined: their hits are not offered again; absent when none was',
+                                   required=False),
     'scope': Field('record', 'The Store scope of the commission (new field: old request scope)'),
     'received_record_refs': Field('record_refs', 'The search-result sources and their artifacts, the proposed '
                                   'annotation and the records of the commissioned task, and every record the '
@@ -188,8 +191,15 @@ def read_from_parent(assignment, message):
         if span['end'] <= span['start']:
             raise ContractError('literature_task_screening_span_invalid')
     search = {name: assignment[name] for name in ('version', 'question_context_refs', 'search_result_refs')}
-    return {'search': search, 'task': task, 'task_key': task_key(task),
+    # The sources a task of kind source_answer names (its assessed sources, its examined spans' sources, its
+    # measurement selection's source): the only sources a page of this commission can examine.
+    named = (task.get('source_refs', []) + [span['source_ref'] for span in task.get('examined', [])]
+             + ([task['selection']['source_ref']] if task.get('answer_kind') == 'measurement' else []))
+    return {'search': search, 'named_source_refs': list(dict.fromkeys(named)), 'task': task,
+            'task_key': task_key(task),
             'proposed_annotation_ref': assignment['proposed_annotation_ref'],
+            'examined_article_refs': list(assignment['examined_article_refs'])
+            if 'examined_article_refs' in assignment else [],
             'requested': {name: assignment[name] for name in REQUESTED if name in assignment},
             'scope': assignment['scope'], 'received_record_refs': assignment['received_record_refs'],
             'sheet_state_refs': list(assignment['sheet_state_refs']) if 'sheet_state_refs' in assignment else [],

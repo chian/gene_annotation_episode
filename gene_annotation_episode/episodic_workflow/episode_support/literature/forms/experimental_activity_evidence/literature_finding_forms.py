@@ -141,6 +141,15 @@ def screening_answer(no_applicable_spans, covered):
     return {'examined_span_count': len(no_applicable_spans), 'commissioned_spans_covered': covered}
 
 
-__all__ = ['SCREENING', 'LEADS', 'SHEET_FORM', 'FINDING_FORM', 'LEAD_FORM', 'SCREENING_FORM', 'return_fields',
+EXAMINED = 'examined_article_refs'
+
+
+def examined_field():
+    """The field an Episode that fetches articles to have a page examine them adds to its own return fields: the
+    article sources its pages examined, so its parent does not have them fetched and examined again."""
+    return Field('record_refs', 'The article sources a page of this Episode examined', required=False)
+
+
+__all__ = ['EXAMINED', 'examined_field', 'SCREENING', 'LEADS', 'SHEET_FORM', 'FINDING_FORM', 'LEAD_FORM', 'SCREENING_FORM', 'return_fields',
            'finding_of', 'lead_answer', 'screening_answer', 'SHEET_STATE_REFS', 'SCORE_FORM', 'SHEET_FEATURES_FORM',
            'SHEET_FINDING_FORM', 'sheet_return_fields', 'sheet_finding_of']

@@ -53,7 +53,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reasoning import (
     REASON_DESCRIPTION, empty_commit, reason as reasoning_unit, reason_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
-    AXIS_CREDIT_CHANNEL, EXPERIMENT_TYPES)
+    AXIS_CREDIT_CHANNEL, EXPERIMENT_TYPE_LINES, class_of_predicate, experiment_types_of_class)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.experimental_activity_evidence.literature_grading_instructions import (
     grading_section)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.experimental_activity_evidence.literature_investigation_prompt import (
@@ -191,7 +191,10 @@ BRIEF = (
     'chunk or table candidate whose byte interval covers the experiment\'s anchor; otherwise the candidate whose Jev '
     'probabilities are highest for the needs; a report child when the evidence runs over several chunks), with the '
     'experiment_type of the method the candidate reports (a commissioned assay type is a class such as '
-    'ligand_binding; the child takes the specific method, for example spr, itc or fp); read the candidate once with '
+    'ligand_binding; the child takes the specific method, for example spr, itc or fp; each type is described in one line in '
+    'the experiment_type of the child\'s arguments: name a type only when the passage reports that method, and when '
+    'the passage reports a method that is none of them commission no leaf for it, cover it with reason and its '
+    'no_applicable_evidence); read the candidate once with '
     'source_read only if the method is not evident, and not again; '
     '(2) update_sheet once the children have returned.\n'
     'context.source_bytes is the byte length of the assigned source and context.covered_windows lists the byte windows '
@@ -225,7 +228,18 @@ OBJECTIVE = {'enum': ['grade_reported_experiment', 'find_applicable_evidence'],
                             'find_applicable_evidence: whether the selection holds an experiment or result '
                             'applicable to the proposed annotation is still open; the child reads it, grades what '
                             'is applicable and otherwise declares that it holds no applicable evidence.'}
-EXPERIMENT_TYPE = {'enum': list(EXPERIMENT_TYPES), 'description': 'The kind of experiment whose grader inputs are extracted'}
+EXPERIMENT_TYPE_RULE = ('Name the type only when the passage reports that method. When the passage reports a method that is '
+                        'none of these, commission no leaf for it: the candidate is covered through reason and its '
+                        'source-grounded no_applicable_evidence.')
+
+
+def experiment_type_schema(summary):
+    """The experiment types the model may name for a leaf: those of the sheet class of the claim's predicate, each with its
+    one plain line (what the method is and what it reports), and the rule for a passage whose method is none of them."""
+    names = experiment_types_of_class(class_of_predicate(summary['jev_goal']['claim']['predicate']))
+    lines = '\n'.join(f'- {name}: {EXPERIMENT_TYPE_LINES[name]}' for name in names)
+    return {'enum': list(names), 'description': 'The method the passage reports, whose grader inputs are extracted. '
+                                                 + EXPERIMENT_TYPE_RULE + '\n' + lines}
 # The three children are leaf extractors of this episode's own source, for one kind of experiment. A chunk or table child
 # takes ONE unconsumed candidate of its kind (the enum of ``candidate_id`` is built at each decision from the page's
 # input list, so a consumed candidate cannot be selected); a report takes every remaining prose chunk.
@@ -262,8 +276,8 @@ def child_arguments(slot, summary):
     """The arguments a child takes now: the objective, the experiment type and, for chunk and table, one unconsumed
     candidate of its kind."""
     if slot == 'report':
-        return obj({'objective': OBJECTIVE, 'experiment_type': EXPERIMENT_TYPE})
-    return obj({'objective': OBJECTIVE, 'experiment_type': EXPERIMENT_TYPE,
+        return obj({'objective': OBJECTIVE, 'experiment_type': experiment_type_schema(summary)})
+    return obj({'objective': OBJECTIVE, 'experiment_type': experiment_type_schema(summary),
                 'candidate_id': {'enum': list(summary[CANDIDATES_OF_SLOT[slot]]),
                                  'description': 'One unconsumed candidate of context.content_candidates'}})
 

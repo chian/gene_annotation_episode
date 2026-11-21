@@ -22,9 +22,12 @@ What differs here, and why:
 - The Jev client here has the multi-question ``nouls`` call; a request asks it the one named question nano-graphrag's
   ``noul`` asks.
 
-Every function is pure: nothing here reads or writes the Store. The parent reads the results' text through custody and
-holds the assessment record it is handed."""
+Nothing here writes the Store; ``article_sources`` only reads through the custody reader it is handed. The parent
+holds the assessment record it is handed. A search result is one hit of a provider's result list (``ranked_hits``),
+not a fetched document."""
 from __future__ import annotations
+
+import json
 
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.jev_client import (
     JEV_EVALUATION_TOKEN_BUDGET, JEV_TOKEN_BOUND, JEV_TOKEN_ESTIMATE_MULTIPLIER, JEV_TOKEN_HEADROOM, token_bound,
@@ -160,5 +163,75 @@ def search_planner_context(assessment, unconsumed_ids, prior_outcomes):
             'previous_page_children': [dict(item) for item in prior_outcomes]}
 
 
-__all__ = ['JEV_PAGE_TEXT_TOKEN_LIMIT', 'SEARCH_PAGE_SELECTION_VERSION', 'assess_search_results',
-           'search_planner_context']
+# ---------------------------------------------------------------------------------------------------------------
+# The unit of a search result: ONE HIT of a provider's result list (nano-graphrag: one Firecrawl result), never a
+# whole fetched document and never the response that holds the list. The functions below read the hits out of the
+# retained Europe PMC search responses (the sources ``public.literature.search`` stores) and say which articles a
+# Store already holds in full (and under which source), so a held article is opened without a second fetch.
+# ---------------------------------------------------------------------------------------------------------------
+SEARCH_PROVIDER = 'europepmc'
+SEARCH_URI = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search'
+IDENTIFIERS = ('pmcid', 'pmid', 'doi')
+
+
+def is_search_response(source):
+    """Whether a source record is a retained Europe PMC search response (a hit list), not a fetched article."""
+    return source['provider'] == SEARCH_PROVIDER and source['uri'] == SEARCH_URI
+
+
+def provider_hits(content):
+    """The hits of one retained search response, in the provider's order. A hit carries its identifiers, title,
+    journal, year and the abstract the provider returned. Only a hit with a PMCID is an item: the PMCID is what the
+    full-text fetch (``public.literature.read``) takes."""
+    hits = []
+    for entry in json.loads(content)['resultList']['result']:
+        if not entry.get('pmcid'):
+            continue
+        hits.append({'pmcid': entry['pmcid'], 'pmid': entry.get('pmid'), 'doi': entry.get('doi'),
+                     'title': entry.get('title') or '',
+                     'journal': ((entry.get('journalInfo') or {}).get('journal') or {}).get('title') or '',
+                     'year': str(entry.get('pubYear') or ''), 'abstract': entry.get('abstractText') or ''})
+    return hits
+
+
+def ranked_hits(contents):
+    """The distinct publications of the retained responses ``contents`` (bytes, in the order the parent holds them),
+    each once, with its provider rank: the 1-based position in the order they were returned. Two hits that share any
+    identifier (PMCID, PMID or DOI) are one publication and the first keeps its rank."""
+    seen = {name: set() for name in IDENTIFIERS}
+    ranked = []
+    for content in contents:
+        for hit in provider_hits(content):
+            if any(hit[name] in seen[name] for name in IDENTIFIERS if hit[name]):
+                continue
+            for name in IDENTIFIERS:
+                if hit[name]:
+                    seen[name].add(hit[name])
+            ranked.append({**hit, 'provider_rank': len(ranked) + 1})
+    return ranked
+
+
+def article_sources(records):
+    """The articles ``records`` (a custody reader) already holds in full: for each PMCID the source references (sorted)
+    of the sources ``public.literature.read`` stored (accession the PMCID, a text representation). Holding an article
+    is not the work done on it: whether a page examined it is carried as record references by the episodes."""
+    held = {}
+    for ref in sorted(records.refs()):
+        if not ref.startswith('source_'):
+            continue
+        source = records.get(ref)
+        if source['provider'] == SEARCH_PROVIDER and source['accession'] and source['text_ref']:
+            held.setdefault(source['accession'], []).append(ref)
+    return held
+
+
+def hit_candidate(hit):
+    """One hit as a possible page child: its id (the PMCID the planner selects), its provider rank, its title and its
+    description (journal, year and the abstract the provider returned, which Jev measures when the result has no
+    other text, as nano-graphrag does)."""
+    return {'result_id': hit['pmcid'], 'provider_rank': hit['provider_rank'], 'title': hit['title'],
+            'description': f"{hit['journal']}, {hit['year']}. {hit['abstract']}"}
+
+
+__all__ = ['JEV_PAGE_TEXT_TOKEN_LIMIT', 'SEARCH_PAGE_SELECTION_VERSION', 'article_sources', 'assess_search_results',
+           'hit_candidate', 'is_search_response', 'provider_hits', 'ranked_hits', 'search_planner_context']

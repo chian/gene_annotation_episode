@@ -13,6 +13,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     no_applicable_spans, relevant_lead_sources, screening_covered)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
     credit_binding)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
+    is_search_response)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_assay_grading_features import (
     current_aggregation_features, current_sheet_features)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
@@ -39,13 +41,15 @@ SOURCE = 'source'
 def search_results(parent, outcomes, records):
     """The search results this episode works through, in the order they became known (nano-graphrag
     ``web_search_binding``: the buffered search results): the earlier search results it was given
-    (``prior_search_refs``), then every source its own acquisition units returned (the ``record_refs`` of their
-    outcomes that are held source records), each once."""
+    (``prior_search_refs``), then every retained search response its own acquisition units returned (the
+    ``record_refs`` of their outcomes that are held source records of a provider search response; an article it
+    fetched is not a search result), each once. Each is a hit list: the web search child works on its hits."""
     found = list(parent['strategy']['prior_search_refs'])
     for outcome in outcomes:
         if outcome['kind'] == 'tool' and outcome['tool'] in ACQUISITION_TOOLS:
             found.extend(ref for ref in outcome['outcome']['record_refs']
-                         if records.holds(ref) and records.get(ref)['record_type'] == SOURCE)
+                         if records.holds(ref) and records.get(ref)['record_type'] == SOURCE
+                         and is_search_response(records.get(ref)))
     return list(dict.fromkeys(found))
 
 
@@ -54,6 +58,14 @@ def consumed_results(children):
     ``processed_row_ids``: an item handed out is consumed and no longer offered)."""
     return list(dict.fromkeys(ref for outcome in children
                               for ref in outcome['arguments']['search']['search_result_refs']))
+
+
+def examined_article_refs(parent, children):
+    """The article sources the pages of the web-search children examined (what this episode returns), and with the ones
+    this episode was given, every article examined so far (passed to each later web-search child, so a hit whose work
+    is done is not offered again)."""
+    own = list(dict.fromkeys(ref for outcome in children for ref in outcome['report']['examined_article_refs']))
+    return own, list(dict.fromkeys([*parent['examined_article_refs'], *own]))
 
 
 def internal_summary(view):
@@ -67,6 +79,7 @@ def internal_summary(view):
     # no longer offered (``task.valid_slots``), and an accumulating task stops only by its controller's flat-unit rule.
     consumed = consumed_results(children)
     input_list = [ref for ref in search_results(parent, view.outcomes, records) if ref not in consumed]
+    examined = examined_article_refs(parent, children)
     last = view.outcomes[-1] if view.outcomes else None
     spans = no_applicable_spans(view.outcomes, records)
     assignment = {**strategy, 'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref'],
@@ -91,6 +104,9 @@ def internal_summary(view):
         'last_local_outcome': (None if last is None else {'tool': last['tool'], 'outcome': last['outcome']}
                                if last['kind'] == 'tool' else {'slot': last['slot'], 'report': last['report']}),
         'input_list': input_list, 'consumed_inputs': consumed,
+        # The articles the pages of this episode's web-search children examined (returned to the commissioner), and,
+        # with the ones this episode was given, every article examined so far: passed to each later web-search child.
+        'examined_article_refs': examined[0], 'all_examined_article_refs': examined[1],
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),
