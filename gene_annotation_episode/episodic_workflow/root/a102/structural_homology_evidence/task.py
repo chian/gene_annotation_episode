@@ -1,1021 +1,264 @@
-"""The A102 head's task: look up the process and tool-knowledge libraries, use the selected library tools, commit
-typed reasoning, write its interpretation, prepare a revision for a new child, wait for native job events, or
-commission one of its children. One unit is one such action.
+"""The task of the A102 head: one model-chosen unit per decision. In round 1 the head has one action, the commission of its
+child ``structure_search``: the model chooses the controlled fields of the commission (the target, the structure database, the
+Foldseek resource, the model of the target and where the commission ends) and code builds the child's assignment
+(``messages/msg_to_child.py``). It never ends the Episode: only the yield controller does. The head has no tool of its own yet
+(``TOOLS`` is empty) and no ``reason`` action.
 
-Carried from the old ``task.py``, ``decision_delivery.py``, ``decision_presentation.py``, ``task_instructions.py``,
-``child_commissioning.py``, ``child_message_owners.py``, ``operations.py``, ``scientific_commission_catalog.py``,
-``task_state.py``, ``task_waiting.py`` and ``goal.py`` (the instruction text) at ``97308b94c``. The task always
-offers a unit and never ends the Episode: only the yield controller does. The old ``redeliver_report`` and the
-wait on pending in-process children, the report update the model wrote with every action, the decision-exchange
-loop (``request_context``), the saved-exchange and execution-context checks, the replay and checkpoint code and the
-old report delivery are not carried (the closing interpretation is the ``report`` tool's outcome:
-``messages/final_to_parent.py``). The old wait on native job events is the tool ``wait_for_events``.
+The child. A slot is offered while its commission can be stated from what this episode holds: a protein sequence of the scope
+(a target whose molecule is not protein gets no commission) and a bound Foldseek resource (``commission_fields``). ONE
+deterministic check of the filled commission runs in ``action`` before any child exists (``COMMISSION_CHECKS``): a search of the
+same query, database and model already graded or already commissioned is refused with its fix list, except the resume of the
+parked job (the same fields, ``until`` ``extracted``). A Foldseek job a child launched and returned parked is always finished
+(``resume_action``: the episode does not stop while one is parked, and once it is due, or when nothing else is worth its cost,
+its resume is the unit; the rule is the system's, ``method_loop.episode_type``). The service ``job_access`` is read for the bound
+resources a commission may name (``bound_resources``).
 
-The old tool names ``process.search``, ``process.entry``, ``process.sources``, ``process.revise``,
-``knowledge.search`` and so on are ``process_search``, ``process_entry``, ``process_sources``, ``process_revise``,
-``knowledge_search`` ...: a tool name here is a lowercase identifier. A library tool keeps its library name with
-its dots as underscores (``source.read`` is ``source_read``).
+Settings: ``yield_bindings`` (``yield_estimator.py``)."""
+from jsonschema import Draft202012Validator, ValidationError
 
-The tools of the old operation catalogue that read the old runner or the old shared root are not carried:
-``episode.history``, ``episode.credit``, ``episode.annotation_score`` and ``episode.monitoring_information`` showed
-the Episode its own journal views (they are the summary: ``messages/internal_summary.py``);
-``episode.estimate_wait``, ``process.execution`` and ``execution.estimate`` for planning need the estimate table
-and the execution-planning catalogue (``execution_estimate`` the library tool is carried; the planning read is
-not); ``process.tools`` returned the selectable tool catalogue (the service ``tool_catalog``); and
-``shared.request_information``, ``shared.publish_information``, ``shared.resolve_information_need``,
-``shared.read_information`` and ``shared.list_information`` were the shared information board between episodes of
-the old runner, which has no object any more.
+from episode_runtime import ChildCall, ModelRequest, Rejected
 
-An executed tool that returns an invalid outcome is still one unit, as before. A model answer that is malformed, that
-names a record the Episode does not hold, that asks for an empty reasoning commit or that selects too few return
-fields of a child is rejected in ``action`` (no unit): that is the validation of a model answer, never a check of a
-commission (what ``msg_to_child`` builds is not checked).
-
-Settings this episode reads (``ctx.settings``): ``yield_bindings`` (``yield_estimator.py``);
-``process_library_directory`` (the frozen ``StructuralHomologyEvidenceLibrary`` snapshot the old head was
-constructed with: the process lookups and the evidence-axis and thought-pattern entries the model is shown);
-optionally ``knowledge_library_directory`` and ``launch_instructions_directory`` (the old workflow's tool-knowledge
-and launch libraries) and ``tool_registry`` (the old ``ToolRegistry`` configuration); and, for a child that needs its
-credit unit from this head, ``handoff_unit`` (execution launch), ``completion_target`` (resource launch),
-``acquired_record_unit`` (execution results) and ``information_unit`` (monitor).
-
-BLOCKED-ON-TOOL-CATALOG-SERVICE: the schemas of the library tools the commission selected came from the old
-``services.tool_catalog(scope)`` (``ToolRegistry.catalog``, which needs the Store). No service wraps it:
-``library_catalog`` and ``resolved_tool_info`` name the service and the call they want and raise where they are
-reached (only when the selection names a library tool, or a revision names one). The library tools themselves call
-``ToolRegistry`` over ``ctx.store``: library not carried.
-"""
-from __future__ import annotations
-
-from jsonschema import ValidationError
-
-from episode_runtime import ChildCall, CustodyError, ModelRequest, Rejected, ToolCall
-
-from gene_annotation_episode.episodic_workflow.episode_support.configuration.structural_homology_evidence.process_options import (
-    StructuralHomologyEvidenceLibrary, catalog as process_catalog)
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (
-    INSTRUCTIONS as LAUNCH_INSTRUCTIONS, LaunchInstructions)
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.structural_homology_evidence.evidence_axis_instructions import (
-    instruction_view)
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.structural_homology_evidence.runtime_prompt import (
-    REASONING_COMMIT_REQUIREMENT)
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.waiting import selected_wait
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
+from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.foldseek_job_route import DATABASES
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
-from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.strict_output import (
-    decode_strict_output, strict_output_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
-from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.construction_records import (
-    CHILD_SELECTION_VERSION, REVISION_ORIGIN_VERSION, SELECTION_VERSION, scientific_digest,
-    scientific_invocation_ref, validate_child_selection, validate_option_ref, validate_revision_origin)
-from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import (
-    ContractError, RECORD_SCHEMAS, REF, REFS, identity, obj, validate_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.structural_homology_evidence.tools import (
-    ToolRegistry)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_information import (
-    RESOURCE_KINDS, make_tool_info, tool_info_selection)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
-    INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge, catalog as knowledge_catalog)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence import (
+    foldseek_search as foldseek)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.structure_search_child import (
+    ROUTE_KIND, UNTIL, _choose, seconds_between)
 
-from .goal import BINDING_PATH, GOAL
-from .messages.final_to_parent import COMMITTED_SOURCE, RESULTS_SOURCE
+from .credit import OBTAIN, commissioned, queries
+from .goal import GOAL
 
-CHILD_SLOTS = {
-    'structural_homology_evidence': BINDING_PATH,
-    'execution_launch': BINDING_PATH + '/execution_job_submission',
-    'resource_launch': BINDING_PATH + '/resource_work_submission',
-    'execution_results': BINDING_PATH + '/execution_result_acquisition',
-    'resource_results': BINDING_PATH + '/resource_result_acquisition',
-    'hpc': BINDING_PATH + '/hpc_work_planning',
-    'monitor': BINDING_PATH + '/execution_progress_assessment',
-}
-# What a commission of the monitor may ask it to observe of a job (the monitor's own ``requested_fields`` options).
-MONITOR_FIELDS = ('execution_status', 'result_available', 'measurements', 'log_windows')
-SERVICES = ('tool_catalog', 'native_events')
+CHILD_SLOTS = {'structure_search': 'structural_homology_evidence/structure_search'}
+TOOLS = {}
+SERVICES = ('job_access',)
+SLOT = 'structure_search'
+LEADING = 10
 
-TRANSPORT_ERROR = 'a102_head_tool_argument_transport_unsupported'
-NO_APPLICABLE_EVIDENCE = 'no_applicable_evidence'
-TEXT = {'type': 'string', 'minLength': 1}
-INTEGER = {'type': 'integer', 'minimum': 0}
-OPEN = {'type': 'object'}
-# An array schema names its items: the model endpoint takes no array without them. Open records travel as JSON
-# text (``open_records_as_text``), one per item.
-RECORDS = {'type': 'array', 'items': OPEN}
-TEXTS = {'type': 'array', 'items': TEXT}
+INSTRUCTIONS = (
+    GOAL + '\n\n'
+    'You are the head of this investigation. At each decision you choose exactly one action, from the actions offered '
+    '(child_options), by answering with the controlled fields of its commission; code builds everything the child is told. '
+    'The child owns its own iterative work, and the configured yield controller owns continuation: you cannot end the '
+    'episode. Recorded facts come from actual records and are shown to you as they are: the targets with their molecule and '
+    'length, the models held (origin, residues, mean pLDDT: a model\'s own confidence, not similarity), the graded searches, '
+    'the outstanding jobs with the seconds since their launch and the seconds still expected, the leading candidates with '
+    'their scores and subscoring sheets, your earlier units and the yield table. A model that is not held is obtained by the '
+    'child when the commission names obtain_one. Waiting and unchanged observations do not manufacture progress.')
 
-# ---------------------------------------------------------------------------------------------------------------
-# Instruction text (the old ``goal.py`` instruction-entry text, preceded by the merged A102 guidance of
-# ``scientific_guidance.py``; ``task_instructions.compose_instructions`` appended the rest).
-
-GUIDANCE = ('A102 owns comparative and experimental structural evidence. Scientific descendants remain A102. Use '
-            'either path or both as useful, and return their separate scientific quantities and shared '
-            'dependencies.\n\n')
-INVESTIGATION = (
-    "Determine what the supplied target does within the parent's assigned question, scope and constraints. Start "
-    'with the supplied sequence, selected file contents or snippets, preserving their boundaries, completeness and '
-    'known context. No initial candidate annotation or publicly searchable name is required. Possible functions can '
-    'emerge from the evidence and be compared or revised. Apply the complete selected investigation instructions and '
-    'thought-pattern guidance on every decision. Use actual outcomes and received child results to choose and '
-    'revise your approach. Selected instructions describe how to investigate; they are not evidence about this '
-    'target. Preserve the measured subject, conditions, controls, native measurements, uncertainty and limits of '
-    'inference when interpreting evidence. Missing information remains unknown.\n\n'
-    'Choose an available tool, commit a scientific interpretation with the reason tool, write your interpretation '
-    'with the report tool, commission a scoped child and select the fields of its return you want, or wait for '
-    'native job events with wait_for_events when that informs the investigation. Use only the selected actual tools '
-    'and their supplied resource instructions; choose callable operands through the declared response contract. '
-    "Preserve the parent's exact requested result meanings and allowed values. Recorded facts come from actual "
-    'records. Keep inherited information distinct from new findings and completed work distinct from attempts. '
-    'Return valid partial findings and specific failures through your report.\n\n'
-    'Keep the assigned evidence axis, thought pattern and selected tools for this episode. process_revise prepares a '
-    'different thought pattern and/or tool selection for a new child; it does not change this episode or start '
-    'that child. To commission that alternative, copy its selection and revision_origin into the assignment of a '
-    'separately selected structural_homology_evidence child with its own objective, purpose and constraints. '
-    'Children own their iterative choices. The configured controller owns continuation. Waiting and unchanged '
-    'observations do not manufacture progress.')
-NATIVE_EVENT_GUIDANCE = (
-    '\nThe separate native_event_targets input names native notification targets assigned or actually received by '
-    'this episode. A target is registration metadata, not proof that submission succeeded. Its state_changed event '
-    'means the original service exit receipt was committed; the service may still be closing, so this does not '
-    'establish result readiness or a child episode return. after_cursor records an event cursor actually received, '
-    'initially zero. Select wait_for_events with your own wait condition and subsequent status, monitor or result '
-    'work. Request the native_event_targets source in a child return when that handoff is needed. No event '
-    'probability, gain or scientific credit follows from registration or passing time alone.')
-TAIL_GUIDANCE = ('\nSelect report with your interpretation of the evidence when the outcomes warrant it. Writing it '
-                 'can be repeated and the latest one is what is returned; it does not end your work: only the '
-                 'numerical controller does.')
-
-PROCESS_REVISE_DESCRIPTION = (
-    'Prepare a different thought pattern and/or selected actual tools for a new child investigating the same '
-    "evidence axis. Return its selection for a separately selected child commission. Copy result.selection and "
-    'revision_origin into that assignment. Changes no current process, starts no child and records no biological '
-    'observation. Select the actual tool/resource choices from the tool catalogue for the desired investigation.')
-REASON_DESCRIPTION = (
-    'Commit one typed scientific reasoning payload about the evidence, using the common reasoning commit schema. A '
-    'payload with every section empty is rejected before it runs and creates no unit, unless evidence_processing '
-    'declares no_applicable_evidence with its reason and the exact examined byte spans.')
-REPORT_DESCRIPTION = (
-    'Write your interpretation of the evidence: what the target does within the assigned question, its '
-    'qualification, and what stays unresolved. Writing it can be repeated and the latest one is what is returned.')
-WAIT_DESCRIPTION = (
-    'Wait for native job events named by registered targets this episode owns or received, or until a '
-    'reconsideration time. Waiting reports readiness only and earns no credit.')
-
-_REVISION_ARGUMENTS = obj({'thought_pattern': OPEN, 'child_tool_info': {
-    'type': 'array', 'items': obj({'name': TEXT, 'resources': {'enum': list(RESOURCE_KINDS)}})}})
-_EVENT_CONDITION = obj({'version': {'const': 'event_condition_v1'},
-                        'events': {'type': 'array', 'items': obj({'handle': TEXT, 'event': TEXT,
-                                                                   'after_cursor': INTEGER})},
-                        'reconsider_at': {'type': ['string', 'null']}})
-EVIDENCE_PROCESSING = obj({
-    'kind': {'const': NO_APPLICABLE_EVIDENCE}, 'reason': TEXT,
-    'examined': {'type': 'array', 'minItems': 1, 'items': obj({
-        'source_ref': REF, 'representation': {'enum': ['original', 'text']}, 'start': INTEGER,
-        'end': {'type': 'integer', 'minimum': 1}})}})
-REPORT_SCHEMA = obj({'interpretation': TEXT, 'qualification': TEXT})
-
-# ---------------------------------------------------------------------------------------------------------------
-# The children: what the model chooses of each commission (the old ``to_child_*.py``: goal, purpose and the
-# assignment; the typed return form the model wrote is now the selection of the child's own declared fields), the
-# child's selectable return fields, the fields that must be selected when the head has a proposed annotation
-# (the old ``required_return_sources``), and the settings key of each credit unit the child needs.
-
-SELECTION_DESCRIPTION = {
-    'structural_homology_evidence': 'the head again, with the selection and revision_origin a process_revise returned',
-    'execution_launch': 'launch a concrete execution request on an explicit resource_id',
-    'resource_launch': 'choose and launch an execution approach for a job on a resource',
-    'execution_results': 'acquire the results of an already handed-off execution through its handoff',
-    'resource_results': 'acquire requested data through the supplied receiving interface',
-    'hpc': 'plan, launch, monitor and collect work on an HPC allocation',
-    'monitor': ('check one outstanding job this episode holds (handoff_ref: one of outstanding_jobs), in one '
-                'monitor visit; returns its credit, the state of the job and whether its results are available, '
-                'with its check records'),
-}
-CHILD_ASSIGNMENTS = {
-    'structural_homology_evidence': obj({'selection': OPEN, 'evidence_refs': REFS, 'constraints': OPEN,
-                                         'revision_origin': OPEN}, ['selection', 'evidence_refs', 'constraints']),
-    'execution_launch': obj({'requests': OPEN, 'immutable_input_versions': RECORDS, 'constraints': OPEN,
-                             'launch_instructions': OPEN, 'input_refs': REFS, 'already_handed_off_resource_ids': TEXTS,
-                             'scientific_task': OPEN}, ['requests', 'immutable_input_versions', 'constraints']),
-    # The resource launch takes controlled data only: the work is a record this head holds (``work_refs``), with
-    # the artifacts it stages (``input_refs``); the constraints are the permitted kinds and an optional fixed
-    # resource id; the rows of an earlier launch of the same work are passed back in ``job_refs``.
-    'resource_launch': obj({'work_refs': REFS, 'input_refs': REFS,
-                            'allowed_kinds': {'type': 'array', 'uniqueItems': True,
-                                              'items': {'enum': ['api', 'local', 'hpc']}},
-                            'resource_id': TEXT, 'job_refs': REFS},
-                           ['work_refs', 'input_refs', 'allowed_kinds']),
-    'execution_results': obj({'handoff_ref': REFS, 'selector': OPEN, 'resource_kind': {'enum': ['local', 'hpc']},
-                              'known_result_refs': REFS}, ['handoff_ref', 'selector', 'resource_kind']),
-    # The resource results take the job as its held ledger rows and the requested result file names.
-    'resource_results': obj({'job_refs': REFS, 'requested_names': TEXTS}),
-    'hpc': obj({'commission_id': TEXT, 'commission_source_ref': REFS, 'tool_request': OPEN, 'input_refs': REFS},
-               ['input_refs']),
+# What the model is told of the child it may commission: what the child does, the controlled fields of its commission (the model
+# chooses values; code builds the child's assignment) and what comes back. Facts the system enforces; no recommendation.
+CREDIT_TEXT = ('Your credit counts possible annotations (candidates). A candidate found with positive evidence is admitted to the '
+               'list and earns its score; a possible annotation with no positive evidence is not on the list. Applying the same '
+               'test to candidates already on the list earns by how differently they respond: the size of the difference of the '
+               'moves of their scores. A repeat earns nothing.')
+PARKED_TEXT = ('A parked job is always finished: this episode does not end while one is parked; once its expected remaining '
+               'seconds have passed, or when none of your other actions is worth its cost, code commissions its continuation '
+               '(until extracted) as the next unit without asking you; before then you may do other work worth its cost.')
+CHILD_DESCRIPTIONS = {
+    SLOT: (
+        'Search the structure of one protein sequence of your scope against one structure database on the Foldseek web server '
+        '(the StructureSearch application; no key, no login), through one model of the target. The alignment mode is fixed '
+        '(tmalign, a global TM-align alignment). The result is a ranked list of hits, each with its aligned residue pairs. For '
+        'each hit code superposes the aligned C-alpha atoms and computes the index B = [2 n / (target length + hit length)] / '
+        '[1 + (RMSD / 2 A)^2] (n the aligned pairs, RMSD in angstroms), looks up the hit\'s UniProt recommended protein name, and '
+        'each distinct product name is a candidate (vocabulary product) whose value in the test is the mean B of its hits; the '
+        'hit that is the target\'s own model in its own database is a control and gives no value to any candidate; a hit never '
+        'asked about (the naming stops once the candidates settle) names no candidate. ' + CREDIT_TEXT + ' Fill the five fields '
+        'of its commission: query_ref (a protein sequence of your scope; targets gives the molecule of each), database (the '
+        'structure database; afdb-swissprot holds AlphaFold models of reviewed UniProt entries), resource_id (a foldseek '
+        'resource of bound_resources), model_ref (a model of that target in held_models, passed to the child as it is, or '
+        'obtain_one: the child then obtains a model itself, from a source of its own choosing) and until. Code checks the '
+        'commission before the child is commissioned; if something is wrong it comes back in feedback with the things to fix and '
+        'nothing was commissioned. While a child runs, you do nothing else: your next decision comes after it returns. What '
+        'until means: with until launched the child estimates the duration, launches the search and returns at once; the search '
+        'then keeps running at the service, you can use your other actions while it runs, and the child is said to be parked. '
+        + PARKED_TEXT + ' With until extracted the child follows the search to its end, waiting between status requests for as '
+        'long as the search takes, and extracts the result into the graded sheet; it is also how a parked search is continued: '
+        'while structure_search_jobs shows a search of the target as outstanding, commissioning the child again with the same '
+        'query, database and resource, the model that search was given and until extracted continues that search and submits '
+        'nothing (code passes back the records the child returned). What comes back: the state of the search (no_model, '
+        'model_held, estimated, launched, finished, extracted or failed), the model\'s origin, residues and mean pLDDT, the hit, '
+        'named, not-asked and candidate counts, the seconds estimated and observed, the last failure code and the credit; the '
+        'models and the graded sheet are kept as labelled data products. When the search is parked (parked true) the report is a '
+        'wait notice: seconds_since_launch, estimated_seconds and expected_remaining_seconds (the estimate minus the seconds '
+        'since the launch, not below zero, or the later revised figure of a status request), and structure_search_jobs keeps '
+        'showing the search with the seconds since its launch and the seconds still expected as of each decision. A search of '
+        'the same target, database and model that is graded, or that failed, is not commissioned again.'),
 }
 
 
-def monitor_assignment(summary):
-    """The model's part of a monitor commission, controlled values only: the handoff record of one outstanding job
-    this episode holds (the only way to name the job) and what the monitor may observe of it. ``msg_to_child``
-    builds the monitor's assignment from the rows this episode holds of that job."""
-    return obj({'handoff_ref': {'enum': [job['handoff_ref'] for job in summary['outstanding_jobs']]},
-                'requested_fields': {'type': 'array', 'uniqueItems': True, 'minItems': 1,
-                                     'items': {'enum': list(MONITOR_FIELDS)}}})
-
-
-def offered_children(summary):
-    """The children this decision offers. The monitor is offered while this episode holds an outstanding job (a
-    job ledger handoff row without its closure row): its commission names one of them."""
-    return [slot for slot in CHILD_SLOTS if slot != 'monitor' or summary['outstanding_jobs']]
-
-
-
-EXECUTION_FIELDS = ('execution_handoff_refs', 'execution_result_refs', 'execution_completed',
-                    'execution_file_source_refs', 'execution_file_capture_outcomes',
-                    'execution_protein_structure_projections', 'execution_protein_structure_saved_sheets',
-                    'execution_protein_structure_sequences', 'execution_protein_structure_failures')
-RETURN_FIELDS = {
-    'structural_homology_evidence': (RESULTS_SOURCE, COMMITTED_SOURCE),
-    'execution_launch': EXECUTION_FIELDS,
-    'resource_launch': ('check_refs',),
-    'execution_results': ('execution_handoff_refs', 'execution_job_record_refs', 'execution_result_refs',
-                          'execution_completed'),
-    'resource_results': ('check_refs',),
-    'hpc': ('hpc_credit', 'hpc_model_ref', 'hpc_accepted_obligations', 'hpc_result_refs'),
-    # the monitor always returns its credit, finding and check rows; these are its selectable measurements
-    'monitor': ('job_returncode', 'job_duration_seconds', 'job_elapsed_seconds', 'stdout_bytes', 'stderr_bytes',
-                'log_window_refs', 'event_receipt_refs'),
-}
-REQUIRED_WITH_ANNOTATION = {
-    'structural_homology_evidence': (RESULTS_SOURCE, COMMITTED_SOURCE),
-    'execution_launch': ('execution_handoff_refs',),
-}
-UNIT_SETTINGS = {'execution_launch': 'handoff_unit', 'resource_launch': 'completion_target',
-                 'execution_results': 'acquired_record_unit', 'monitor': 'information_unit'}
-
-
-def child_arguments(slot, summary):
-    """The model's commission of a child: the assignment and the selection, and, for every slot but ``monitor``
-    (whose objective is fixed and whose message is empty), the goal and purpose."""
-    texts = {} if slot == 'monitor' else {'goal': TEXT, 'purpose': TEXT}
-    assignment = monitor_assignment(summary) if slot == 'monitor' else CHILD_ASSIGNMENTS[slot]
-    return obj({**texts, 'assignment': assignment,
-                'selection': {'type': 'array', 'uniqueItems': True, 'items': {'enum': list(RETURN_FIELDS[slot])}}})
-
-
-# ---------------------------------------------------------------------------------------------------------------
-# The library tools (the old selected tools of ``selection.child_tool_info``, run through the ``ToolRegistry``).
-
-LIBRARY_TOOLS = ('public.rcsb.entry',
-                 'public.rcsb.file',
-                 'public.emdb.entry',
-                 'public.alphafold.prediction',
-                 'public.alphafold.file',
-                 'state.query',
-                 'source.read',
-                 'source.locate',
-                 'result.blast.hsp',
-                 'image.view',
-                 'public.pmc.versions',
-                 'public.pmc.files',
-                 'public.pmc.asset',
-                 'source.archive.members',
-                 'source.archive.extract',
-                 'source.xlsx.sheets',
-                 'source.xlsx.rows',
-                 'source.pdf.info',
-                 'source.pdf.text',
-                 'source.pdf.page',
-                 'material.parse',
-                 'material.annotations',
-                 'material.from_source',
-                 'material.read',
-                 'material.members',
-                 'material.errors',
-                 'material.member',
-                 'material.header',
-                 'library.members',
-                 'library.select',
-                 'library.read',
-                 'reads.inspect',
-                 'sequence.inspect',
-                 'sequence.view',
-                 'translation.codes',
-                 'sequence.translate',
-                 'reads.align',
-                 'reads.map',
-                 'sequence.align',
-                 'sequence.sites',
-                 'public.uniprot.search',
-                 'public.uniprot.record',
-                 'public.ncbi.search',
-                 'public.ncbi.sequence',
-                 'public.taxonomy',
-                 'public.literature.search',
-                 'public.literature.read',
-                 'public.search.jobs',
-                 'public.blast.search',
-                 'public.blast.collect',
-                 'public.sabiork.search',
-                 'public.sabiork.read',
-                 'public.brenda.search',
-                 'public.brenda.read',
-                 'public.brenda.graph_search',
-                 'public.bioassay.search',
-                 'public.bioassay.read',
-                 'public.chembl.search',
-                 'public.chembl.read',
-                 'public.mavedb.search',
-                 'public.mavedb.read',
-                 'source.experimental.records',
-                 'public.literature.sequence_identity',
-                 'source.sequence.references',
-                 'source.sequence.scan',
-                 'public.ncbi.entrez',
-                 'execution.estimate',
-                 'inspect_protein_structure',
-                 'extract_protein_structure_sequence',
-                 'compare_protein_structures')
-LIBRARY_NAMES = {name.replace('.', '_'): name for name in LIBRARY_TOOLS}
-# Tools whose reads are bound to the records this Episode holds (the old ``permitted_record_refs``).
-HELD_SOURCE_TOOLS = ('source.locate', 'result.blast.hsp', 'source.sequence.scan', 'source.sequence.references',
-                     'source.experimental.records', 'inspect_protein_structure', 'extract_protein_structure_sequence',
-                     'compare_protein_structures')
-
-
-def python_name(dotted):
-    return dotted.replace('.', '_')
-
-
-def invalid(operation_ref, error):
-    detail = {'detail': error.detail} if getattr(error, 'detail', None) else {}
-    return {'status': 'invalid', 'operation_ref': operation_ref, 'record_refs': [], 'changed_record_refs': [],
-            'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': str(error), **detail}}
-
-
-async def run_tool(name, envelope, ctx):
-    """Execute one library tool over ``ctx.store``. A failed selected operation is an outcome (the old
-    ``record_execution_failure``); a custody error is not."""
-    arguments, scope = envelope['arguments'], envelope['scope']
-    registry = ToolRegistry(ctx.store, **ctx.settings.get('tool_registry', {}))
-    permitted = tuple(ctx.store.refs()) if name in HELD_SOURCE_TOOLS else None
-    try:
-        return await registry.execute_async(name, arguments, scope=scope, operation_key=ctx.operation_key,
-                                            permitted_record_refs=permitted)
-    except (CustodyError, NotImplementedError):
-        raise
-    except ContractError as error:
-        return invalid(identity('operation', {'key': ctx.operation_key, 'name': name, 'arguments': arguments}), error)
-    except Exception as error:   # the old record_execution_failure: a failed selected operation is an outcome
-        return failure_outcome(ctx.store, error, category='episode_execution', cause_code='selected_operation_failed')
-
-
-async def public_rcsb_entry(arguments, ctx):
-    return await run_tool('public.rcsb.entry', arguments, ctx)
-
-
-async def public_rcsb_file(arguments, ctx):
-    return await run_tool('public.rcsb.file', arguments, ctx)
-
-
-async def public_emdb_entry(arguments, ctx):
-    return await run_tool('public.emdb.entry', arguments, ctx)
-
-
-async def public_alphafold_prediction(arguments, ctx):
-    return await run_tool('public.alphafold.prediction', arguments, ctx)
-
-
-async def public_alphafold_file(arguments, ctx):
-    return await run_tool('public.alphafold.file', arguments, ctx)
-
-
-async def state_query(arguments, ctx):
-    return await run_tool('state.query', arguments, ctx)
-
-
-async def source_read(arguments, ctx):
-    return await run_tool('source.read', arguments, ctx)
-
-
-async def source_locate(arguments, ctx):
-    return await run_tool('source.locate', arguments, ctx)
-
-
-async def result_blast_hsp(arguments, ctx):
-    return await run_tool('result.blast.hsp', arguments, ctx)
-
-
-async def image_view(arguments, ctx):
-    return await run_tool('image.view', arguments, ctx)
-
-
-async def public_pmc_versions(arguments, ctx):
-    return await run_tool('public.pmc.versions', arguments, ctx)
-
-
-async def public_pmc_files(arguments, ctx):
-    return await run_tool('public.pmc.files', arguments, ctx)
-
-
-async def public_pmc_asset(arguments, ctx):
-    return await run_tool('public.pmc.asset', arguments, ctx)
-
-
-async def source_archive_members(arguments, ctx):
-    return await run_tool('source.archive.members', arguments, ctx)
-
-
-async def source_archive_extract(arguments, ctx):
-    return await run_tool('source.archive.extract', arguments, ctx)
-
-
-async def source_xlsx_sheets(arguments, ctx):
-    return await run_tool('source.xlsx.sheets', arguments, ctx)
-
-
-async def source_xlsx_rows(arguments, ctx):
-    return await run_tool('source.xlsx.rows', arguments, ctx)
-
-
-async def source_pdf_info(arguments, ctx):
-    return await run_tool('source.pdf.info', arguments, ctx)
-
-
-async def source_pdf_text(arguments, ctx):
-    return await run_tool('source.pdf.text', arguments, ctx)
-
-
-async def source_pdf_page(arguments, ctx):
-    return await run_tool('source.pdf.page', arguments, ctx)
-
-
-async def material_parse(arguments, ctx):
-    return await run_tool('material.parse', arguments, ctx)
-
-
-async def material_annotations(arguments, ctx):
-    return await run_tool('material.annotations', arguments, ctx)
-
-
-async def material_from_source(arguments, ctx):
-    return await run_tool('material.from_source', arguments, ctx)
-
-
-async def material_read(arguments, ctx):
-    return await run_tool('material.read', arguments, ctx)
-
-
-async def material_members(arguments, ctx):
-    return await run_tool('material.members', arguments, ctx)
-
-
-async def material_errors(arguments, ctx):
-    return await run_tool('material.errors', arguments, ctx)
-
-
-async def material_member(arguments, ctx):
-    return await run_tool('material.member', arguments, ctx)
-
-
-async def material_header(arguments, ctx):
-    return await run_tool('material.header', arguments, ctx)
-
-
-async def library_members(arguments, ctx):
-    return await run_tool('library.members', arguments, ctx)
-
-
-async def library_select(arguments, ctx):
-    return await run_tool('library.select', arguments, ctx)
-
-
-async def library_read(arguments, ctx):
-    return await run_tool('library.read', arguments, ctx)
-
-
-async def reads_inspect(arguments, ctx):
-    return await run_tool('reads.inspect', arguments, ctx)
-
-
-async def sequence_inspect(arguments, ctx):
-    return await run_tool('sequence.inspect', arguments, ctx)
-
-
-async def sequence_view(arguments, ctx):
-    return await run_tool('sequence.view', arguments, ctx)
-
-
-async def translation_codes(arguments, ctx):
-    return await run_tool('translation.codes', arguments, ctx)
-
-
-async def sequence_translate(arguments, ctx):
-    return await run_tool('sequence.translate', arguments, ctx)
-
-
-async def reads_align(arguments, ctx):
-    return await run_tool('reads.align', arguments, ctx)
-
-
-async def reads_map(arguments, ctx):
-    return await run_tool('reads.map', arguments, ctx)
-
-
-async def sequence_align(arguments, ctx):
-    return await run_tool('sequence.align', arguments, ctx)
-
-
-async def sequence_sites(arguments, ctx):
-    return await run_tool('sequence.sites', arguments, ctx)
-
-
-async def public_uniprot_search(arguments, ctx):
-    return await run_tool('public.uniprot.search', arguments, ctx)
-
-
-async def public_uniprot_record(arguments, ctx):
-    return await run_tool('public.uniprot.record', arguments, ctx)
-
-
-async def public_ncbi_search(arguments, ctx):
-    return await run_tool('public.ncbi.search', arguments, ctx)
-
-
-async def public_ncbi_sequence(arguments, ctx):
-    return await run_tool('public.ncbi.sequence', arguments, ctx)
-
-
-async def public_taxonomy(arguments, ctx):
-    return await run_tool('public.taxonomy', arguments, ctx)
-
-
-async def public_literature_search(arguments, ctx):
-    return await run_tool('public.literature.search', arguments, ctx)
-
-
-async def public_literature_read(arguments, ctx):
-    return await run_tool('public.literature.read', arguments, ctx)
-
-
-async def public_search_jobs(arguments, ctx):
-    return await run_tool('public.search.jobs', arguments, ctx)
-
-
-async def public_blast_search(arguments, ctx):
-    return await run_tool('public.blast.search', arguments, ctx)
-
-
-async def public_blast_collect(arguments, ctx):
-    return await run_tool('public.blast.collect', arguments, ctx)
-
-
-async def public_sabiork_search(arguments, ctx):
-    return await run_tool('public.sabiork.search', arguments, ctx)
-
-
-async def public_sabiork_read(arguments, ctx):
-    return await run_tool('public.sabiork.read', arguments, ctx)
-
-
-async def public_brenda_search(arguments, ctx):
-    return await run_tool('public.brenda.search', arguments, ctx)
-
-
-async def public_brenda_read(arguments, ctx):
-    return await run_tool('public.brenda.read', arguments, ctx)
-
-
-async def public_brenda_graph_search(arguments, ctx):
-    return await run_tool('public.brenda.graph_search', arguments, ctx)
-
-
-async def public_bioassay_search(arguments, ctx):
-    return await run_tool('public.bioassay.search', arguments, ctx)
-
-
-async def public_bioassay_read(arguments, ctx):
-    return await run_tool('public.bioassay.read', arguments, ctx)
-
-
-async def public_chembl_search(arguments, ctx):
-    return await run_tool('public.chembl.search', arguments, ctx)
-
-
-async def public_chembl_read(arguments, ctx):
-    return await run_tool('public.chembl.read', arguments, ctx)
-
-
-async def public_mavedb_search(arguments, ctx):
-    return await run_tool('public.mavedb.search', arguments, ctx)
-
-
-async def public_mavedb_read(arguments, ctx):
-    return await run_tool('public.mavedb.read', arguments, ctx)
-
-
-async def source_experimental_records(arguments, ctx):
-    return await run_tool('source.experimental.records', arguments, ctx)
-
-
-async def public_literature_sequence_identity(arguments, ctx):
-    return await run_tool('public.literature.sequence_identity', arguments, ctx)
-
-
-async def source_sequence_references(arguments, ctx):
-    return await run_tool('source.sequence.references', arguments, ctx)
-
-
-async def source_sequence_scan(arguments, ctx):
-    return await run_tool('source.sequence.scan', arguments, ctx)
-
-
-async def public_ncbi_entrez(arguments, ctx):
-    return await run_tool('public.ncbi.entrez', arguments, ctx)
-
-
-async def execution_estimate(arguments, ctx):
-    return await run_tool('execution.estimate', arguments, ctx)
-
-
-async def inspect_protein_structure(arguments, ctx):
-    return await run_tool('inspect_protein_structure', arguments, ctx)
-
-
-async def extract_protein_structure_sequence(arguments, ctx):
-    return await run_tool('extract_protein_structure_sequence', arguments, ctx)
-
-
-async def compare_protein_structures(arguments, ctx):
-    return await run_tool('compare_protein_structures', arguments, ctx)
-
-
-# ---------------------------------------------------------------------------------------------------------------
-# What the tool catalogue service is asked (BLOCKED-ON-TOOL-CATALOG-SERVICE: no such service is built).
-
-def library_catalog(ctx, names):
-    """The contracts (description and input schema) of the selected library tools (the old
-    ``services.tool_catalog(scope)``).
-
-    BLOCKED-ON-TOOL-CATALOG-SERVICE: tool_catalog; wanted call: ``ctx.services['tool_catalog'].read('catalog')``
-    (a recorded read of a decision), which returns ``{dotted name: {'description', 'input_schema', ...}}`` for the
-    tools of the configured ``ToolRegistry``. Reached only when the selection names a library tool."""
-    if not names:
-        return {}
-    raise NotImplementedError("BLOCKED-ON-TOOL-CATALOG-SERVICE: tool_catalog; wanted call: ctx.services"
-                              "['tool_catalog'].read('catalog')")
-    return ctx.services['tool_catalog'].read('catalog')
-
-
-def resolved_tool_info(ctx, selectors):
-    """The tool information of selected tools (the old ``tool_library.resolve_tool_info(selected, catalog)``).
-
-    BLOCKED-ON-TOOL-CATALOG-SERVICE: tool_catalog; wanted call: ``ctx.services['tool_catalog'].catalog()`` (a
-    tool is handed the service itself). Reached only when the revision names a tool."""
-    if not selectors:
-        return []
-    raise NotImplementedError("BLOCKED-ON-TOOL-CATALOG-SERVICE: tool_catalog; wanted call: ctx.services"
-                              "['tool_catalog'].catalog()")
-    catalog = ctx.services['tool_catalog'].catalog()
-    return [make_tool_info({'name': row['name'], **catalog[row['name']]}, row['resources']) for row in selectors]
-
-
-# ---------------------------------------------------------------------------------------------------------------
-# The tools.
-
-def process_search(arguments, ctx):
-    return StructuralHomologyEvidenceLibrary(ctx.settings['process_library_directory']).execute(
-        'process.search', arguments)
-
-
-def process_entry(arguments, ctx):
-    return StructuralHomologyEvidenceLibrary(ctx.settings['process_library_directory']).execute(
-        'process.entry', arguments)
-
-
-def process_sources(arguments, ctx):
-    return StructuralHomologyEvidenceLibrary(ctx.settings['process_library_directory']).execute(
-        'process.sources', arguments)
-
-
-def knowledge_search(arguments, ctx):
-    return ToolKnowledge(ctx.settings['knowledge_library_directory']).execute('knowledge.search', arguments)
-
-
-def knowledge_entry(arguments, ctx):
-    return ToolKnowledge(ctx.settings['knowledge_library_directory']).execute('knowledge.entry', arguments)
-
-
-def knowledge_read(arguments, ctx):
-    return ToolKnowledge(ctx.settings['knowledge_library_directory']).execute('knowledge.read', arguments)
-
-
-def process_revise(arguments, ctx):
-    """The old ``process.revise``: prepare a different thought pattern and tool selection for a separately
-    commissioned child. It changes no current process, starts no child and records no biological observation. The
-    thought pattern must be an option of the commission's own library; an invalid request is an ``invalid``
-    outcome that enters the iterator, as before."""
-    initial = arguments['selection']
-    revision = {key: arguments[key] for key in ('thought_pattern', 'child_tool_info')}
-    operation_ref = identity('operation', {'key': ctx.operation_key, 'name': 'process.revise', 'arguments': revision})
-    try:
-        thought = validate_option_ref(revision['thought_pattern'])
-        if thought['slot'] != 'thought_pattern' or thought['library_id'] != initial['evidence_axis']['library_id']:
-            raise ContractError('scientific_selection_library_mismatch')
-        StructuralHomologyEvidenceLibrary(ctx.settings['process_library_directory']).resolve(thought)
-        information = resolved_tool_info(ctx, tool_info_selection(revision['child_tool_info']))
-        proposed = {'version': SELECTION_VERSION, 'evidence_axis': initial['evidence_axis'],
-                    'thought_pattern': thought, 'child_tool_info': information}
-        child_selection = validate_child_selection({
-            'version': CHILD_SELECTION_VERSION, 'parent_selection_sha256': scientific_digest(initial),
-            'selection': proposed})
-        origin = validate_revision_origin({
-            'version': REVISION_ORIGIN_VERSION,
-            'parent_invocation_ref': scientific_invocation_ref(ctx.run_id, ((ctx.binding_path, ctx.episode_id),)),
-            'preparation_operation_ref': operation_ref})
-    except ValueError as error:
-        return invalid(operation_ref, error)
-    return {'status': 'completed', 'operation_ref': operation_ref, 'record_refs': [], 'changed_record_refs': [],
-            'result': child_selection, 'revision_origin': origin, 'feedback': None}
-
-
-def reason(arguments, ctx):
-    """One typed reasoning commit (the old ``reason`` action; the head had no ``execute_reasoning`` of its own).
-    The Store commit is receipted as produced by this unit. The ``evidence_processing`` declaration the answer
-    carried rides in the outcome."""
-    result = dict(ctx.store.commit_reasoning(arguments['commit'], arguments['scope'], ctx.operation_key))
-    if 'evidence_processing' in arguments:
-        result['evidence_processing'] = arguments['evidence_processing']
-    return result
-
-
-def report(arguments, ctx):
-    """The closing value the model writes: its interpretation. It is this unit's outcome; the summary holds the
-    latest one and ``final_to_parent`` returns it as the finding."""
-    return {'report': arguments}
-
-
-async def wait_for_events(arguments, ctx):
-    """The old selected wait on native job events (``task_waiting`` and ``jobs.waiting.selected_wait``): it earns
-    no credit; an event target the ledger cannot use is a failed outcome that enters the iterator."""
-    return await selected_wait(ctx.services['native_events'], arguments['condition'])
-
-
-TOOLS = {'process_search': process_search, 'process_entry': process_entry, 'process_sources': process_sources,
-         'knowledge_search': knowledge_search, 'knowledge_entry': knowledge_entry, 'knowledge_read': knowledge_read,
-         'process_revise': process_revise, 'reason': reason, 'report': report, 'wait_for_events': wait_for_events,
-         'public_rcsb_entry': public_rcsb_entry,
-         'public_rcsb_file': public_rcsb_file,
-         'public_emdb_entry': public_emdb_entry,
-         'public_alphafold_prediction': public_alphafold_prediction,
-         'public_alphafold_file': public_alphafold_file,
-         'state_query': state_query,
-         'source_read': source_read,
-         'source_locate': source_locate,
-         'result_blast_hsp': result_blast_hsp,
-         'image_view': image_view,
-         'public_pmc_versions': public_pmc_versions,
-         'public_pmc_files': public_pmc_files,
-         'public_pmc_asset': public_pmc_asset,
-         'source_archive_members': source_archive_members,
-         'source_archive_extract': source_archive_extract,
-         'source_xlsx_sheets': source_xlsx_sheets,
-         'source_xlsx_rows': source_xlsx_rows,
-         'source_pdf_info': source_pdf_info,
-         'source_pdf_text': source_pdf_text,
-         'source_pdf_page': source_pdf_page,
-         'material_parse': material_parse,
-         'material_annotations': material_annotations,
-         'material_from_source': material_from_source,
-         'material_read': material_read,
-         'material_members': material_members,
-         'material_errors': material_errors,
-         'material_member': material_member,
-         'material_header': material_header,
-         'library_members': library_members,
-         'library_select': library_select,
-         'library_read': library_read,
-         'reads_inspect': reads_inspect,
-         'sequence_inspect': sequence_inspect,
-         'sequence_view': sequence_view,
-         'translation_codes': translation_codes,
-         'sequence_translate': sequence_translate,
-         'reads_align': reads_align,
-         'reads_map': reads_map,
-         'sequence_align': sequence_align,
-         'sequence_sites': sequence_sites,
-         'public_uniprot_search': public_uniprot_search,
-         'public_uniprot_record': public_uniprot_record,
-         'public_ncbi_search': public_ncbi_search,
-         'public_ncbi_sequence': public_ncbi_sequence,
-         'public_taxonomy': public_taxonomy,
-         'public_literature_search': public_literature_search,
-         'public_literature_read': public_literature_read,
-         'public_search_jobs': public_search_jobs,
-         'public_blast_search': public_blast_search,
-         'public_blast_collect': public_blast_collect,
-         'public_sabiork_search': public_sabiork_search,
-         'public_sabiork_read': public_sabiork_read,
-         'public_brenda_search': public_brenda_search,
-         'public_brenda_read': public_brenda_read,
-         'public_brenda_graph_search': public_brenda_graph_search,
-         'public_bioassay_search': public_bioassay_search,
-         'public_bioassay_read': public_bioassay_read,
-         'public_chembl_search': public_chembl_search,
-         'public_chembl_read': public_chembl_read,
-         'public_mavedb_search': public_mavedb_search,
-         'public_mavedb_read': public_mavedb_read,
-         'source_experimental_records': source_experimental_records,
-         'public_literature_sequence_identity': public_literature_sequence_identity,
-         'source_sequence_references': source_sequence_references,
-         'source_sequence_scan': source_sequence_scan,
-         'public_ncbi_entrez': public_ncbi_entrez,
-         'execution_estimate': execution_estimate,
-         'inspect_protein_structure': inspect_protein_structure,
-         'extract_protein_structure_sequence': extract_protein_structure_sequence,
-         'compare_protein_structures': compare_protein_structures}
-
-
-# ---------------------------------------------------------------------------------------------------------------
-# Deciding.
-
-def selected_library_names(summary):
-    """The library tools this commission selected (``selection.child_tool_info``), by their tool names here."""
-    return [python_name(row['name']) for row in summary['selection']['child_tool_info']
-            if python_name(row['name']) in LIBRARY_NAMES]
-
-
-def offered(summary, settings):
-    """The tools offered now: the process lookups, the revision, the reasoning commit, the report and the wait,
-    the knowledge lookups when a knowledge library is configured, and the selected library tools."""
-    names = ['process_search', 'process_entry', 'process_sources', 'process_revise', 'reason', 'report',
-             'wait_for_events']
-    if settings.get('knowledge_library_directory') is not None:
-        names += ['knowledge_search', 'knowledge_entry', 'knowledge_read']
-    return {'own': names, 'library': selected_library_names(summary)}
-
-
-def reason_schema(summary):
-    """The reason tool's arguments: the common commit, plus the declaration that the examined evidence contains
-    nothing applicable (the old ``reasoning_action_schema`` envelope)."""
-    return obj({'commit': summary['reasoning_schema'], 'evidence_processing': EVIDENCE_PROCESSING}, ['commit'])
-
-
-def catalog(names, summary, contracts):
-    """The tools the model is shown: name, description and input schema."""
-    own = {entry['name']: entry for entry in (*process_catalog(), *knowledge_catalog())}
-    entries = []
-    for name in names['own']:
-        if name == 'process_revise':
-            entries.append({'name': name, 'description': PROCESS_REVISE_DESCRIPTION, 'input_schema': _REVISION_ARGUMENTS})
-        elif name == 'reason':
-            entries.append({'name': name, 'description': REASON_DESCRIPTION, 'input_schema': reason_schema(summary)})
-        elif name == 'report':
-            entries.append({'name': name, 'description': REPORT_DESCRIPTION, 'input_schema': REPORT_SCHEMA})
-        elif name == 'wait_for_events':
-            entries.append({'name': name, 'description': WAIT_DESCRIPTION,
-                            'input_schema': obj({'condition': _EVENT_CONDITION})})
-        else:
-            entry = own[name.replace('_', '.', 1)]
-            entries.append({'name': name, 'description': entry['description'], 'input_schema': entry['input_schema']})
-    for name in names['library']:
-        entry = contracts[LIBRARY_NAMES[name]]
-        entries.append({'name': name, 'description': entry['description'], 'input_schema': entry['input_schema']})
-    return entries
-
-
-def selection_schema(names, summary, contracts):
-    """What the model answers with: one tool and its arguments, or one child and its commission (the old action
-    schema over the tool and child kinds)."""
-    tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
-             for entry in catalog(names, summary, contracts)]
-    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot},
-                     'arguments': child_arguments(slot, summary)}) for slot in offered_children(summary)]
-    return obj({'selection': {'anyOf': tools + children}})
-
-
-def instructions(*, knowledge, launch_library):
-    """The old composition: the merged A102 guidance and instruction-entry text (which replaced the default
-    instructions), the reasoning-commit requirement, the tool-knowledge and launch library texts when they are
-    offered, and the native-event paragraph. The paragraphs about repairing an undelivered child report, about a
-    pending in-process child and about the ``request_context`` exchange describe actions that no longer exist."""
-    text = GUIDANCE + INVESTIGATION + '\n' + REASONING_COMMIT_REQUIREMENT
-    if knowledge is not None:
-        text += KNOWLEDGE_INSTRUCTIONS
-    if launch_library is not None:
-        text += LAUNCH_INSTRUCTIONS
-    return text + NATIVE_EVENT_GUIDANCE + TAIL_GUIDANCE
-
-
-def binding_block(summary, settings):
-    """The old ``internal_summary.decision_context`` block ``structural_homology_evidence``: the selection, the
-    evidence-axis view, the thought pattern, the selected tool information and the assignment. The entries come
-    from the frozen library snapshot (immutable files)."""
-    library = StructuralHomologyEvidenceLibrary(settings['process_library_directory'])
-    selection = summary['selection']
-    thought = library.resolve(selection['thought_pattern'])
-    fields = ('id', 'name', 'description', 'use_when', 'live_alternatives', 'decision_guidance',
-              'outcome_contingencies', 'boundary')
-    return {'selection': {**selection, 'child_tool_info': [{'name': row['name'], 'resources': row['resources']}
-                                                            for row in selection['child_tool_info']]},
-            'evidence_axis': instruction_view(library.resolve(selection['evidence_axis'])),
-            'thought_pattern': {name: thought[name] for name in fields if name in thought},
-            'assignment': {key: summary[key] for key in ('selection', 'proposed_annotation_ref', 'evidence_refs',
-                                                         'constraints', 'context', 'revision_origin')},
-            'permitted_children': list(CHILD_SLOTS)}
+def bound_resources(ctx):
+    """The resources bound to the job service, each with its kind, which a commission may name (read through the service's read
+    handle, so the read is recorded with the decision)."""
+    return {resource['resource_id']: resource['kind'] for resource in ctx.services['job_access'].read('resources')}
+
+
+def commission_fields(slot, summary, resources):
+    """What the model supplies to commission ``slot``, as ``(properties, required)``: controlled values only. ``None`` while
+    this episode holds nothing the commission could be chosen from (no protein sequence in the scope, or no bound Foldseek
+    resource): the slot is then not offered. The model is one of the held models of the targets, or ``obtain_one`` while a target
+    has none."""
+    targets = queries(summary)
+    services = [name for name, kind in resources.items() if kind == ROUTE_KIND]
+    if not targets or not services:
+        return None
+    models = [row['id'] for row in summary['model_rows'] if row['query_ref'] in targets]
+    if any(all(row['query_ref'] != target for row in summary['model_rows']) for target in targets):
+        models.append(OBTAIN)
+    properties = {'query_ref': {'type': 'string', 'enum': targets}, 'database': {'type': 'string', 'enum': list(DATABASES)},
+                  'resource_id': {'type': 'string', 'enum': services}, 'model_ref': {'type': 'string', 'enum': models},
+                  'until': {'type': 'string', 'enum': list(UNTIL)}}
+    return properties, list(properties)
+
+
+def check_structure_search(commission, summary, resources, records):
+    """The things to fix in a commission of ``structure_search``: the child's own commission check
+    (``foldseek_search.check_commission``: the query is a protein sequence of the scope, the database is offered, the model is a
+    held model product, the resource is a bound Foldseek service, an outstanding job of this search is continued with ``until``
+    ``extracted`` and another one blocks it, a search of the same query, database and model graded, or commissioned and not
+    outstanding, is not commissioned again), over the graded searches the credit's own reader gives (``held_searches``) and the
+    jobs read from the job ledger rows the head holds; and that the model is of the query."""
+    model_ref = None if commission['model_ref'] == OBTAIN else commission['model_ref']
+    request = {'query_ref': commission['query_ref'], 'database': commission['database'],
+               'resource_id': commission['resource_id'], 'until': commission['until'], 'model_ref': model_ref}
+    searches = [{'query_ref': target, 'database': database, 'model_sha256': sha}
+                for target, pairs in summary['held_searches'].items() for database, sha in pairs]
+    problems = foldseek.check_commission(
+        request, scope_subjects=summary['scope']['subject_refs'], sequences=summary['held_sequences'], resources=resources,
+        jobs=summary['structure_search_jobs'],
+        commissioned=[(query, database, None if model == OBTAIN else model) for query, database, model in commissioned(summary)],
+        models={row['id']: row for row in summary['model_rows']}, searches=searches)
+    mine = [row['id'] for row in summary['model_rows'] if row['query_ref'] == commission['query_ref']]
+    if model_ref is not None and mine and model_ref not in mine:
+        problems.append(_choose('model_ref', 'model_is_not_of_the_query', choose_from=mine))
+    if model_ref is None and mine:
+        problems.append(_choose('model_ref', 'a_model_of_the_query_is_held', choose_from=mine))
+    return problems
+
+
+COMMISSIONS = {SLOT: commission_fields}
+COMMISSION_CHECKS = {SLOT: check_structure_search}
+
+
+def jobs_view(jobs, now):
+    """The searches this episode's child launched as the model sees them at ``now`` (the decision's recorded time): each with
+    its state, whether it is outstanding, and for an outstanding one the seconds since its launch and the seconds still
+    expected: the estimate recorded with its launch minus those seconds, not below zero. Facts, never a deadline."""
+    shown = []
+    for job in jobs:
+        row = {'handoff_ref': job['handoff_ref'], 'query_ref': job['identity']['query_ref'],
+               'database': job['identity']['database'], 'resource_id': job['resource_id'], 'latest_state': job['latest_state'],
+               'outstanding': job['outstanding'], 'closed': job['closed'], 'estimated_seconds': job['estimated_seconds']}
+        if job['outstanding']:
+            elapsed = seconds_between(job['launched_at'], now)
+            row.update(seconds_since_launch=elapsed, expected_remaining_seconds=max(job['estimated_seconds'] - elapsed, 0.0))
+        shown.append(row)
+    return shown
+
+
+def offered_children(summary, resources):
+    """The children this decision offers: those whose commission this episode can state now."""
+    return [slot for slot in CHILD_SLOTS if COMMISSIONS[slot](summary, resources) is not None]
+
+
+def child_option(slot, summary, resources):
+    """One child the model may commission: its name and the controlled fields of its commission."""
+    properties, required = COMMISSIONS[slot](summary, resources)
+    properties = {'name': {'type': 'string', 'enum': [slot]}, **properties}
+    return {'type': 'object', 'additionalProperties': False, 'required': ['name', *required], 'properties': properties}
+
+
+def selection_schema(summary, resources):
+    """What the model answers with: one commission of one offered child."""
+    return {'type': 'object', 'additionalProperties': False, 'required': ['action'],
+            'properties': {'action': {'anyOf': [child_option(slot, summary, resources)
+                                                for slot in offered_children(summary, resources)]}}}
+
+
+def offered_actions(summary, ctx):
+    """The action types this decision offers, by the names a unit is recorded under (``ChildCall.slot``): each child slot whose
+    commission can be stated (``offered_children``, the function ``decide`` offers the model with)."""
+    return offered_children(summary, bound_resources(ctx))
+
+
+def parked_jobs(summary):
+    """The jobs of this episode's child that are parked (outstanding: launched, no closure held, not shown failed or lost),
+    from the summary's view of the job ledger rows."""
+    return [job for job in summary['structure_search_jobs'] if job['outstanding']]
+
+
+def resume_commission(job, summary):
+    """The commission that resumes the parked ``job``: the job's own commission again with ``until`` ``extracted`` (the one
+    commission of it the head's check accepts while it is outstanding; it submits nothing): the search's query, database and
+    resource and the model the job was given (the held model row of its SHA-256)."""
+    identity = job['identity']
+    model = next(row['id'] for row in summary['model_rows'] if row['settings']['sha256'] == identity['model_sha256'])
+    return {'query_ref': identity['query_ref'], 'database': identity['database'], 'resource_id': job['resource_id'],
+            'model_ref': model, 'until': 'extracted'}
+
+
+def resume_action(summary, records, ctx):
+    """The resume this episode owes (``method_loop.episode_type``; the owner, 2026-11-21: "the head must finish parked jobs"):
+    ``None`` while no job is parked, else the resume of one parked job as ``{'action_type': its slot, 'arguments':
+    resume_commission(...), 'due': ...}``. ``due`` is True once the job's expected remaining seconds have passed: the estimate
+    recorded with its launch minus the seconds from the launch to this decision's recorded time (the wait notice ``jobs_view``
+    shows), at or below zero. The job chosen: the earliest launched among the due ones, else the earliest launched. The
+    commission passes the head's own check (``COMMISSION_CHECKS``), else this raises: a resume the check refuses is a fault of
+    the episode."""
+    parked = parked_jobs(summary)
+    if not parked:
+        return None
+    remaining = lambda job: job['estimated_seconds'] - seconds_between(job['launched_at'], ctx.clock.now)
+    due = [job for job in parked if remaining(job) <= 0]
+    job = min(due or parked, key=lambda item: item['launched_at'])
+    arguments = resume_commission(job, summary)
+    problems = COMMISSION_CHECKS[SLOT](arguments, summary, bound_resources(ctx), records)
+    if problems:
+        raise ContractError('a102_resume_commission_refused_by_its_check:' + SLOT + ':' + repr(problems))
+    return {'action_type': SLOT, 'arguments': arguments, 'due': bool(due)}
 
 
 def decide(summary, feedback, ctx):
-    """Ask the model for the next action, shown the goal and scope, the working state (interpretation, committed
-    records, revisions, children's reports), the held records, the credit and its components, the credit binding,
-    the outcomes, the tools and children, the measured time, the yield table and the library listings (the old
-    decision state and inputs, over this episode's summary and the recorded service reads)."""
-    settings = ctx.settings
-    names = offered(summary, settings)
-    contracts = library_catalog(ctx, names['library'])
-    view = summary['credit_view']
-    knowledge_directory = settings.get('knowledge_library_directory')
-    launch_directory = settings.get('launch_instructions_directory')
-    launch = None if launch_directory is None else LaunchInstructions(launch_directory)
-    knowledge = None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()
+    """Ask the model for the next unit, shown the commission's scope (the targets), the resources, the models, the graded
+    searches, the jobs, the leading candidates, its own outcomes, the child it may use, the measured time and the yield table."""
+    resources = bound_resources(ctx)
+    offered = offered_children(summary, resources)
     context = {
-        'goal': {'objective': summary['goal']['objective'], 'detail': GOAL},
-        'scope': summary['scope'],
-        'working_state': {'interpretation': summary['report'], 'committed_record_refs': summary['committed_record_refs'],
-                          'revisions': summary['revisions'], 'children': summary['children']},
-        'visible_record_refs': summary['visible_record_refs'],
-        'current_credit': view['credit'],
-        'current_evidence_vector': view.get('axis_components'),
-        'credit_binding': summary['credit_definition'],
-        'investigation_progress': {key: view[key] for key in ('retained_finding_count', 'inactive_dependencies',
-                                                              'detail_pages') if key in view},
-        '_completed_work_axis_results': {key: view[key] for key in ('a102_sheet', 'target_sheets', 'tool_attachments',
-                                                                    'source_contributions') if key in view},
-        'tools': catalog(names, summary, contracts),
-        'child_options': [{'slot': slot, 'description': SELECTION_DESCRIPTION[slot],
-                           'return_fields': list(RETURN_FIELDS[slot]),
-                           'required_return_fields': list(REQUIRED_WITH_ANNOTATION.get(slot, ()))
-                           if summary['proposed_annotation_ref'] else []} for slot in offered_children(summary)],
-        'time_accounting': time_accounting(ctx.clock.progress_time),
-        'last_local_outcome': summary['last_outcome'],
-        'outcome_history': summary['outcome_history'],
-        'outstanding_jobs': [{name: job[name] for name in ('job', 'kind', 'submitted_at', 'handoff_ref',
-                                                           'latest_check')}
-                             for job in summary['outstanding_jobs']],
-        'structural_homology_evidence': binding_block(summary, settings)}
-    context['completed_work_axis_results'] = context.pop('_completed_work_axis_results')
-    context = extend_context(context, {
-        'feedback': feedback, 'action_yields': summary['controller'], 'tool_knowledge': knowledge,
-        'launch_instruction_library': None if launch is None else launch.context()},
-        conflict='initial_binding_context_field_conflict')
-    schema = selection_schema(names, summary, contracts)
-    return ModelRequest('REASONING', instructions(knowledge=knowledge,
-                                                  launch_library=context.get('launch_instruction_library')),
-                        context, strict_output_schema(schema, open_records_as_text=True,
-                                                      argument_transport_error=TRANSPORT_ERROR))
-
-
-def empty_commit(commit, schema, processing):
-    """The old test of ``apply_response``: every section of the commit is empty and the answer is not the
-    ``no_applicable_evidence`` declaration (the head had no ``reasoning_has_task_content``)."""
-    required = set(schema.get('required', schema['properties']))
-    return (required <= set(commit) <= set(schema['properties']) and all(value == [] for value in commit.values())
-            and (processing or {}).get('kind') != NO_APPLICABLE_EVIDENCE)
+        'goal': GOAL, 'scope': summary['scope'], 'targets': summary['targets'], 'bound_resources': resources,
+        'held_models': [{'row_ref': row['id'], 'query_ref': row['query_ref'], 'origin': row['settings']['origin'],
+                         'residues': row['settings']['residues_covered'], 'mean_plddt': row['settings']['mean_plddt']}
+                        for row in summary['model_rows']],
+        'graded_searches': [{key: row[key] for key in ('source_ref', 'query_ref', 'database', 'hit_count', 'named_count',
+                                                       'candidate_count')} for row in summary['graded_searches']],
+        'structure_search_jobs': jobs_view(summary['structure_search_jobs'], ctx.clock.now),
+        'candidates': [{'target_ref': ref, 'candidate_count': row['candidate_count'], 'leading': row['candidates']}
+                       for ref, row in summary['credit_table'].items()],
+        'own_outcomes': [{key: row[key] for key in ('position', 'slot', 'arguments', 'child_state', 'credit', 'parked')}
+                         for row in summary['units']],
+        'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot]}
+                          for slot in offered],
+        'yield_table': summary['yield_table'], 'time_accounting': time_accounting(ctx.clock.progress_time),
+        'feedback': feedback}
+    return ModelRequest('REASONING', INSTRUCTIONS, {key: value for key, value in context.items() if value is not None},
+                        selection_schema(summary, resources))
 
 
 def action(response, summary, records, ctx):
-    """Turn the model's answer into one tool call or one child commission, or reject it (no unit). An answer that
-    selects no offered tool or child, arguments that do not fit the schema, an empty reasoning commit, a child
-    commission is not checked here: msg_to_child builds it and any error in it fails the run.
-    A tool is handed no summary, so its call carries the scope (and, for a revision, the selection) it works from.
-    The credit units a child needs are the settings of this Episode: a missing one raises (a wrong commission
-    fails)."""
-    names = offered(summary, ctx.settings)
-    schema = selection_schema(names, summary, library_catalog(ctx, names['library']))
+    """Turn the model's answer into one commission, or reject it (no unit): an answer that does not fit the schema, or a
+    commission the check finds something to fix in (rejected with the things to fix)."""
+    resources = bound_resources(ctx)
     try:
-        value = decode_strict_output(response, schema, open_records_as_text=True,
-                                     argument_transport_error=TRANSPORT_ERROR)
-        validate_schema(value, schema)
-        selection = value['selection']
-        if selection['kind'] != 'child' and selection['tool'] == 'reason':
-            arguments = selection['arguments']
-            if empty_commit(arguments['commit'], summary['reasoning_schema'], arguments.get('evidence_processing')):
-                raise ValueError('empty_reasoning_commit')
-    except (ValueError, KeyError, TypeError, ValidationError, ContractError) as error:
-        raise Rejected(rejection_feedback(error, category='action_contract'))
-    arguments = selection['arguments']
-    if selection['kind'] == 'child':
-        slot = selection['slot']
-        units = {}
-        if slot in UNIT_SETTINGS:
-            units[UNIT_SETTINGS[slot]] = ctx.settings[UNIT_SETTINGS[slot]]
-        return ChildCall(slot, {**arguments, 'units': units})
-    name = selection['tool']
-    if name in LIBRARY_NAMES:
-        return ToolCall(name, {'arguments': arguments, 'scope': summary['scope']})
-    if name == 'process_revise':
-        return ToolCall(name, {**arguments, 'selection': summary['selection']})
-    if name == 'reason':
-        return ToolCall(name, {**arguments, 'scope': summary['scope']})
-    return ToolCall(name, arguments)
+        Draft202012Validator(selection_schema(summary, resources)).validate(response)
+    except (ValueError, KeyError, TypeError, ContractError, ValidationError) as error:
+        raise Rejected(rejection_feedback(error, category='action_contract')) from error
+    chosen = response['action']
+    slot = chosen['name']
+    commission = {key: value for key, value in chosen.items() if key != 'name'}
+    problems = COMMISSION_CHECKS[slot](commission, summary, resources, records)
+    if problems:
+        raise Rejected({'status': 'invalid', 'category': slot + '_commission',
+                        'detail': {'commission': commission, 'fix': problems}})
+    return ChildCall(slot, commission)

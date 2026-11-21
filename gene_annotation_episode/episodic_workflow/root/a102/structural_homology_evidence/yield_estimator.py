@@ -1,47 +1,35 @@
-"""The A102 head's continuation (carried from ``yield_estimator.py`` and the yield checks of ``episode.py`` at
-``97308b94c``).
+"""Continuation: the forecast controller (``ForecastYieldController``) over the differential credit. The credit (``credit.py``)
+is a sum that grows with every admitted candidate annotation and every differential and has no fixed maximum, but every
+action the head offers has a ceiling (``credit.ceiling``: the most the credit can rise if that action is the next unit). The
+forecast of an offered action is therefore a formula, not the model's estimate: the share of its ceiling such actions realized
+before (this episode's units and the estimate ledger's history of the kind ``structural_homology_evidence:<action type>``)
+times the ceiling. The episode stops when no offered action's forecast exceeds its expected seconds times the exchange rate
+and no parked job is owed its continuation (``yield_control``, section ``ForecastYieldController``; the design is
+``docs/plan/designs/forecast_yield_controller.md``).
 
-The old head declared, per commissioned task ``A102:<task>``, one of the three estimators in its configured
-``yield_bindings``: ``{'kind', 'cutoff', 'parameters' ({'uncertainty_alpha'}), 'credit_definition'}``. The
-declaration had to exist, its ``credit_definition`` had to equal the projector's record and its ``kind`` the
-projector's ``yield_method``; ``accumulation`` was ``YieldController``, ``bounded_quality`` was
-``BoundedYieldController`` with ``projector.native_score_maximum`` as its maximum. They are now the accumulation
-and the bounded-quality controllers (README 7b); the old ``completion`` kind had no target and no A102 projector's
-``yield_method`` is ``completion``, so a ``completion`` declaration fails at the declaration check, as a
-declaration for another kind would. The old cutoff is the controller's ``cost``.
+The controller is opened through the library's ``checked_yield_declaration`` (the declaration for the task key
+``A102:a102_structural_correspondence`` as ``read_from_parent`` reads it must name exactly this credit definition,
+``A102DifferentialCredit().as_record()``, and the kind ``forecast``) and ``open_yield_controller``, which takes the
+declaration's parameters: ``exchange_rate``, ``forget_old_rows`` and ``job_kinds``. The run's continuation declares
+``exchange_rate`` 0.006, ``forget_old_rows`` true and ``job_kinds`` ``{}``. PROVISIONAL: 0.006 is A101's value (the owner on a
+first figure: "you have to start somewhere that's fine"); it is A101's rate for A101's credit scale and is to be re-derived from
+A102's own resolved forecast rows after the first real runs (``docs/plan/designs/a102_head.md``). It reads what
+``read_from_parent`` produced (the task key), never the assignment; the declarations are this episode's settings
+(``settings['yield_bindings']``).
 
-The head's ``settings`` (its entry of the run's ``continuation`` collaborator) hold ``yield_bindings``: the
-declarations by task key. Everything else is read from the parent input: the task key, the projector's record,
-its estimator kind and its declared maximum (``messages/read_from_parent.py`` made them from the assignment).
-"""
-from __future__ import annotations
-
+The definition each action's learned shares are on (``forecast_definitions``: per action type, the digest of the credit
+definition record and that action's own ceiling version, ``credit.CEILING_VERSIONS``) is handed to the controller."""
 from gene_annotation_episode.episodic_workflow.episode_support.configuration.yield_declarations import (
-    checked_yield_declaration, open_yield_controller)
+    checked_yield_declaration, forecast_definitions, open_yield_controller)
 
-EPOCH = 'structural_homology_evidence'
-KINDS = ('accumulation', 'bounded_quality', 'completion')
-
-
-def check_declarations(declarations):
-    """The old ``__init__`` check of each declaration: exactly kind, cutoff, parameters (``uncertainty_alpha``
-    only) and credit_definition."""
-    for task, declaration in declarations.items():
-        if (not isinstance(task, str) or ':' not in task or not isinstance(declaration, dict)
-                or set(declaration) != {'kind', 'cutoff', 'parameters', 'credit_definition'}
-                or declaration['kind'] not in KINDS or not isinstance(declaration['parameters'], dict)
-                or set(declaration['parameters']) != {'uncertainty_alpha'}
-                or not isinstance(declaration['credit_definition'], dict) or not declaration['credit_definition']):
-            raise ValueError('scientific_yield_task_binding_invalid:' + str(task))
+from .credit import CEILING_VERSIONS, A102DifferentialCredit
 
 
 def yield_controller(initial_credit, settings, parent_input):
-    declarations = settings['yield_bindings']
-    check_declarations(declarations)
-    declaration = checked_yield_declaration(
-        declarations, parent_input['task_key'], credit_definition=parent_input['credit_definition'],
-        yield_method=parent_input['yield_method'], code_prefix='scientific')
-    maximum = parent_input['native_score_maximum'] if declaration['kind'] == 'bounded_quality' else None
-    return open_yield_controller(declaration['kind'], epoch=EPOCH, initial_credit=initial_credit,
-                                 cutoff=declaration['cutoff'], parameters=declaration['parameters'],
-                                 maximum_credit=maximum)
+    projector = A102DifferentialCredit()
+    declaration = checked_yield_declaration(settings['yield_bindings'], parent_input['yield_task'],
+                                            credit_definition=projector.as_record(),
+                                            yield_method=projector.yield_method, code_prefix='scientific')
+    return open_yield_controller(declaration['kind'], epoch='structural_homology_evidence', initial_credit=initial_credit,
+                                 parameters=declaration['parameters'],
+                                 definition=forecast_definitions(projector.as_record(), CEILING_VERSIONS))

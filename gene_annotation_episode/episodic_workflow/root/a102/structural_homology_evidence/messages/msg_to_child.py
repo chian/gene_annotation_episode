@@ -1,107 +1,82 @@
-"""What the A102 head sends each of its children (carried from the ``to_child_*.py`` files and the
-``child_message_owners.py`` role table at ``97308b94c``; the literature child is removed).
+"""The commission of the child. A commission is controlled data only: the model chooses among values this episode holds
+(``task.commission_fields``: a protein sequence of the scope, a database and a bound Foldseek resource of fixed sets, a held model
+of the target or the fixed value that tells the child to obtain one, and where the commission ends), and this file builds the
+child's assignment, in the child's own form, from those choices and this episode's summary. The model writes no assignment,
+objective or message: the objective is this episode's own fixed text and the message is empty. A commission the child does not admit
+fails (the check is the head's ``task.check_structure_search``, before the child exists).
 
-Every old ``to_child_*`` did the same: the model chose the child's goal, purpose, typed return form and initial
-report; a required return source had to appear in the form exactly once; the role had to be allowed; the assignment
-the model chose was prepared for the child (a monitor's against the monitor's own form; the head's own with its
-filled invocation). Here the parent writes the commission:
-the objective is the model's ``goal`` and the ``purpose`` rides in the message (except for ``monitor``: a fixed objective and an empty message; the monitor's assignment is ``monitor_assignment_v2``, the handoff row and the check rows of one outstanding job this head holds), the typed return form is the selection
-of the child's own declared fields (rule 5), and the assignment carries the old assignment keys under their names.
-The record references the model names, and the ones this head adds (the proposed annotation, the scope's records),
-travel as ``record_refs`` fields: a record this head does not hold fails the commission with ``CustodyError``.
+Every record the child's code reads is named in a ``record_refs`` field of the assignment: the query subject record and, in
+``input_refs``, every held record it names (a subject and its sequence artifact: ``_custody`` over the summary's ``named_refs``).
+WHEN A HELD MODEL IS PASSED the row of the data product ``protein_structure_model`` goes in ``model_refs`` and, in ``input_refs``,
+the artifact it names (the model file the child stages for the job): a data-product row passed alone does not hold the artifact it
+names (``docs/plan/designs/a102_structure_search_episode.md``). When this episode holds an outstanding job of the search that the
+commission names (``summary['structure_search_jobs']``), the commission continues it: code passes back, in custody, the records the
+child returned for it, its handoff, status and closure rows with everything they name (the model file the job was given and its
+identity: a continuation reads its model from the handoff row, so no model is passed), and nothing is submitted again. The credit
+units are this episode's ``child_credit_units``: ``handoff_unit`` for the handoff, ``information_unit`` for an estimate held and a
+status request that shows something new, ``acquired_record_unit`` for the graded result and ``model_unit`` for a model the child
+obtained.
 
-The old roles ``launch`` and ``results`` each had two homes, so each has two slots here (``execution_launch``,
-``resource_launch``, ``execution_results``, ``resource_results``). What this head fills beyond the model's choice
-(new fields of the children's forms, which the old head did not send because the old children took them from their
-runner): ``scope`` for the children whose forms take one and the credit units in ``arguments['units']``
-(``handoff_unit``, ``completion_target``, ``acquired_record_unit``, ``information_unit``: this head's settings,
-read in ``task.action``). A wrong commission raises: an unknown slot is a ``KeyError``, a missing unit or field is a
-``KeyError``.
-
-The old closed-commission replay of the head's own invocation (``prepare_invocation`` with ``closed_context``:
-journal rows, ``EpisodeReturnRecords``) and the old filled-process record are old-runner machinery, not carried.
-"""
-from __future__ import annotations
-
+Required return fields: every kind of record the child returns for its job (handoff, status, closure and graded records), so that
+this episode holds the job's rows, reads its state from them and can pass them back on a later visit."""
 from episode_runtime import ChildMessage
 
-from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resource_records import (
-    LAUNCH_VERSION as RESOURCE_LAUNCH_VERSION, RESULTS_VERSION as RESOURCE_RESULTS_VERSION)
+from ..credit import OBTAIN
 
-EXECUTION_LAUNCH_VERSION = 'execution_launch_assignment_v1'
-EXECUTION_RESULTS_VERSION = 'execution_results_assignment_v1'
-MONITOR_VERSION = 'monitor_assignment_v2'
-
-
-def only(source, names):
-    """The optional assignment fields the model supplied."""
-    return {name: source[name] for name in names if name in source}
-
-
-def structural_homology_evidence(chosen, units, summary):
-    return {'selection': chosen['selection'], 'evidence_refs': chosen['evidence_refs'],
-            'constraints': chosen['constraints'], 'context': summary['context'], 'scope': summary['scope'],
-            'scope_refs': summary['scope_refs'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],
-            **only(chosen, ('revision_origin',))}
+OBJECTIVES = {
+    'structure_search': 'Search the target sequence against the structure database through a model of the target on the Foldseek '
+                        'structure search server, in this one commission: obtain the model unless one is passed, estimate the '
+                        'duration, launch the search and, when the commission goes to its result, monitor it until the service '
+                        'has ended it and extract the graded result, and return what it established.',
+}
+REQUIRED_RETURN = {
+    'structure_search': ('execution_handoff_refs', 'execution_check_refs', 'execution_closure_refs', 'graded_refs'),
+}
 
 
-def execution_launch(chosen, units, summary):
-    return {'version': EXECUTION_LAUNCH_VERSION, 'requests': chosen['requests'],
-            'immutable_input_versions': chosen['immutable_input_versions'], 'constraints': chosen['constraints'],
-            'scope': summary['scope'], 'handoff_unit': units['handoff_unit'],
-            **only(chosen, ('launch_instructions', 'input_refs', 'already_handed_off_resource_ids',
-                            'scientific_task'))}
+def _custody(references, summary):
+    """The held records ``references`` with every held record they name, and those name in turn (the summary's
+    ``named_refs``): a pass carries only the records named, and the child's code follows the names (a subject to its sequence, a
+    model row to its file)."""
+    found, pending = [], list(references)
+    while pending:
+        reference = pending.pop(0)
+        if reference not in found:
+            found.append(reference)
+            pending.extend(summary['named_refs'].get(reference, []))
+    return found
 
 
-def resource_launch(chosen, units, summary):
-    return {'version': RESOURCE_LAUNCH_VERSION, 'work_refs': chosen['work_refs'],
-            'input_refs': chosen['input_refs'], 'allowed_kinds': chosen['allowed_kinds'],
-            'completion_target': units['completion_target'], **only(chosen, ('resource_id', 'job_refs'))}
+def _structure_search(arguments, summary):
+    """The assignment of one structure search: the query and its sequence in custody, the database, the resource, ``until``, the
+    four credit units, the held model (its row in ``model_refs``, the row and the artifact it names in custody) when one is
+    passed, and, when the commission continues an outstanding job of the same search, the records of that job passed back."""
+    query, units = arguments['query_ref'], summary['child_credit_units']
+    named = [ref for ref in _custody([query], summary) if ref != query]
+    assignment = {'query_refs': [query], 'database': arguments['database'], 'resource_id': arguments['resource_id'],
+                  'until': arguments['until'], 'handoff_unit': units['handoff_unit'],
+                  'information_unit': units['information_unit'], 'graded_unit': units['acquired_record_unit'],
+                  'model_unit': units['model_unit']}
+    held = [job for job in summary['structure_search_jobs'] if job['outstanding'] and job['resource_id'] == arguments['resource_id']
+            and job['identity']['query_ref'] == query and job['identity']['database'] == arguments['database']]
+    if held:
+        (job,) = held
+        rows = [job['handoff_ref'], *job['check_refs'], *job['closure_refs']]
+        assignment.update(handoff_refs=[job['handoff_ref']], check_refs=job['check_refs'], closure_refs=job['closure_refs'],
+                          known_ended=job['known_ended'],
+                          input_refs=list(dict.fromkeys([*named, *(ref for ref in _custody(rows, summary) if ref not in rows)])))
+    elif arguments['model_ref'] != OBTAIN:
+        model = arguments['model_ref']
+        assignment.update(model_refs=[model], input_refs=list(dict.fromkeys(
+            [*named, *(ref for ref in _custody([model], summary) if ref != model)])))
+    else:
+        assignment['input_refs'] = named
+    return assignment
 
 
-def execution_results(chosen, units, summary):
-    return {'version': EXECUTION_RESULTS_VERSION, 'handoff_ref': chosen['handoff_ref'],
-            'selector': chosen['selector'], 'acquired_record_unit': units['acquired_record_unit'],
-            'resource_kind': chosen['resource_kind'], **only(chosen, ('known_result_refs',))}
-
-
-def resource_results(chosen, units, summary):
-    return {'version': RESOURCE_RESULTS_VERSION, 'job_refs': chosen['job_refs'],
-            'requested_names': chosen['requested_names']}
-
-
-def hpc(chosen, units, summary):
-    return {'scope': summary['scope'], 'input_refs': chosen['input_refs'],
-            **only(chosen, ('commission_id', 'commission_source_ref', 'tool_request'))}
-
-
-def monitor(chosen, units, summary):
-    """The assignment of the monitor for one outstanding job. The job is passed as records in custody, never by
-    name: the handoff row of the job ledger this head holds (a launch child returned it, or the commissioner
-    passed it) and the check rows of that job it holds (earlier monitors returned them in ``check_refs``), as the
-    baseline of the new check. A handoff this head does not hold as an outstanding job fails here with its
-    ``KeyError``."""
-    job = {item['handoff_ref']: item for item in summary['outstanding_jobs']}[chosen['handoff_ref']]
-    return {'version': MONITOR_VERSION, 'handoff_refs': [job['handoff_ref']],
-            'known_progress_refs': job['record_refs'][1:], 'dependency_handoff_refs': [],
-            'requested_fields': list(chosen['requested_fields']), 'information_unit': units['information_unit']}
-
-
-ASSIGNMENTS = {'structural_homology_evidence': structural_homology_evidence,
-               'execution_launch': execution_launch, 'resource_launch': resource_launch,
-               'execution_results': execution_results, 'resource_results': resource_results, 'hpc': hpc,
-               'monitor': monitor}
-
-
-# No text passes to the monitor: its objective is fixed by the slot and its message is empty (controlled messaging;
-# the model chooses the held handoff record, the fields to observe and the selection).
-MONITOR_OBJECTIVE = 'assess_job_progress'
+ASSIGNMENTS = {'structure_search': _structure_search}
 
 
 def msg_to_child(slot, arguments, summary):
-    assignment = ASSIGNMENTS[slot](arguments['assignment'], arguments['units'], summary)
-    if slot == 'monitor':
-        return ChildMessage(objective=MONITOR_OBJECTIVE, message={}, assignment=assignment,
-                            selection=tuple(arguments['selection']))
-    return ChildMessage(objective=arguments['goal'], message={'purpose': arguments['purpose']},
-                        assignment=assignment, selection=tuple(arguments['selection']))
+    return ChildMessage(objective=OBJECTIVES[slot], message={}, assignment=ASSIGNMENTS[slot](arguments, summary),
+                        selection=REQUIRED_RETURN[slot])

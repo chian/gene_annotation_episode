@@ -1,4 +1,4 @@
-"""The A102 structural homology evidence head: a private binding on the system's episode base type."""
+"""The A102 structural-homology evidence episode (``structural_homology_evidence``)."""
 from episode_runtime import EpisodeBinding
 
 from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file
@@ -16,8 +16,13 @@ class StructuralHomologyEvidence(EpisodeBinding):
     tools = task_file.TOOLS
     services = task_file.SERVICES
     decide = task_file.decide
+    offered_actions = task_file.offered_actions
+    resume_action = task_file.resume_action
     action = task_file.action
     credit = credit_file.credit
+    ceiling = credit_file.ceiling
+    best_arguments = credit_file.best_arguments
+    outcome_pending = credit_file.outcome_pending
     yield_controller = yield_file.yield_controller
     assignment_form = from_parent_file.ASSIGNMENT_FORM
     read_from_parent = from_parent_file.read_from_parent

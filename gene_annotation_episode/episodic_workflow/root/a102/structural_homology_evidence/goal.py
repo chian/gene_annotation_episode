@@ -1,19 +1,25 @@
-"""What this episode is for (carried from the old ``goal.py`` and ``scientific_guidance.py`` at ``97308b94c``: the
-guidance sentences of the merged A102 axis and the instruction-entry goal text; the instruction composition is in
-``task.py``)."""
+"""What this episode is for: the A102 structural-homology evidence investigation of the assigned subject. The goal names what
+this episode's own cycle improves: the possible annotations of the scope's target that graded structural evidence supports,
+each with its score. ``UNIT`` and ``RESULT`` describe one unit and the return.
+
+The text of the goal is carried from the old head's ``goal.py`` (the instruction-entry goal text and the guidance sentences of
+the merged A102 axis, commit ``97308b94c``) and from the axis's entry of the process library; the sentences that named the
+old machinery (a thought pattern and a tool selection revised for a new child, the old units) are not carried."""
 
 BINDING_PATH = 'structural_homology_evidence'
-GOAL = ("Determine what the supplied target does within the parent's assigned question, scope and constraints, "
-        'through comparative and experimental structural evidence. Start with the supplied sequence, selected file '
-        'contents or snippets, preserving their boundaries, completeness and known context. No initial candidate '
-        'annotation or publicly searchable name is required. Possible functions can emerge from the evidence and be '
-        'compared or revised. Preserve the measured subject, conditions, controls, native measurements, uncertainty '
-        'and limits of inference when interpreting evidence. Missing information remains unknown. Keep the assigned '
-        'evidence axis, thought pattern and selected tools; a different thought pattern or tool selection is '
-        'prepared for a new child, not for this episode.')
-UNIT = ('One model-selected action: a tool (a process or knowledge lookup, a selected library tool, a typed '
-        'reasoning commit, a revision of the thought pattern and tool selection for a new child, a wait for native '
-        'job events, or the written interpretation) or one commission of a child (the structural head again, '
-        'published evidence assessment, a launch, a results acquisition, HPC work planning or a progress monitor)')
-RESULT = ('The head credit, the typed finding (the interpretation it wrote and what it committed and commissioned), '
-          'and when selected the process results, the committed records and the protein-structure action facts')
+GOAL = ('A102 owns structural evidence for the assigned scope: what the scope\'s target resembles in structure, and how '
+        'well. From the supplied sequence only (no name, no accession and no structure are required) this episode '
+        'compares the structure or a model of the target with the structures of functionally characterized proteins, '
+        'through comparative and experimental structural evidence. It keeps each structure\'s origin (experimental or '
+        'predicted), the matched extent and the actual structural statistics; a prediction\'s confidence describes the '
+        'model and is not similarity. Possible functions can emerge from the evidence and be compared or revised. This '
+        'episode improves that evidence: the possible annotations of the target that graded structural correspondence '
+        'supports, each with its score, which is what its credit counts: a possible annotation found with positive '
+        'evidence earns its score, applying the same test to candidates already listed earns by how differently they '
+        'respond, and a repeat earns nothing. Preserve the measured subject, the native statistics, the uncertainty and '
+        'the limits of inference; missing information remains unknown. Starting or waiting on a job is operational '
+        'progress, not structural evidence. Report resemblance as resemblance, not as proof of function. Only the yield '
+        'controller ends the episode.')
+UNIT = 'One commission of a child episode'
+RESULT = ('The qualified structural findings: the graded structure searches the episode holds, the models of the target '
+          'they used, the possible annotations found with their scores (the leading ones), and the differential credit')
