@@ -39,11 +39,19 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.similarit
     saved_grading_features)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_graders import (
     grade_blast_result)
+from gene_annotation_episode.episodic_workflow.episode_support.acquisition.service_calls.api_bvbrc import (
+    DEFAULT_BASE_URL as DATA_BASE_URL)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_database_grading_inputs import (
+    metadata_accounting)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.bvbrc_job_route import PRECOMPUTED_DATABASES
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import checks, closure, job_rows
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_wait import wait_for_job
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import (
-    ContractError)
+    ContractError, canonical)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
+    document as blast_document)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_hit_metadata import (
+    lookup, reference_metadata)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     PROGRAM_UNITS)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
@@ -58,6 +66,7 @@ JOB_NAME = 'bvbrc_blast'
 QUERY_FILE = 'query.fasta'
 REPORT = 'blast_out.raw.json'
 ROUTE_KIND = 'bvbrc'
+METADATA_PROVIDER = 'bvbrc_data'
 # The precomputed databases, by name as the application takes it (``db_precomputed_database``), with the unit of their
 # sequences. Each was run against the live service before it was added (the design note records which).
 DATABASES = {name: spec['unit'] for name, spec in PRECOMPUTED_DATABASES.items()}
@@ -317,32 +326,32 @@ def check_commission(request, *, programs, sequences, scope_subjects, resources,
 
 # -- the tools --------------------------------------------------------------------------------------------------------
 def record_estimate(ctx, *, estimate):
-    """Record the expected duration of the coming launch on the estimate table, before the launch: the expectation under
-    a key of this unit (``estimate_key``), of the kind of the search, with the basis the model named."""
-    key = job_handle(ctx.operation_key, 'estimate', JOB_NAME)
-    ctx.services['estimate_table'].expect(
-        search_kind(estimate['program'], estimate['database']),
-        {'gain': {'value': 0.0, 'lower': 0.0, 'upper': 0.0}, 'cost': 0.0,
-         'duration_seconds': estimate['expected_seconds'], 'duration_basis': estimate['basis']},
-        key=key, at=now_text())
-    return {'status': 'completed', 'failure_code': None, 'retryable': False, 'record_refs': [],
-            'estimate': {**estimate, 'estimate_key': key}}
+    """The estimate the model committed, as the outcome of its unit. Nothing is written on the estimate table here: the
+    table gets ONE expectation per launch, written by ``launch_search`` just before the submission, so a revised estimate
+    or an estimate made when no launch can follow leaves no row."""
+    return {'status': 'completed', 'failure_code': None, 'retryable': False, 'record_refs': [], 'estimate': dict(estimate)}
 
 
 def launch_search(ctx, *, request, estimate, sequence_ref):
-    """One submission of the search the held estimate was made for: the estimate's key is kept in the handoff row, so
-    the status requests resolve it. A failed submission resolves the estimate with that outcome."""
+    """One submission of the search the held estimate was made for. The expectation is recorded on the estimate table
+    first (one row per launch, keyed by the launch's job handle, kept in the handoff row so the status requests resolve
+    it); a failed submission resolves it with that outcome."""
     access, table = ctx.services['job_access'], ctx.services['estimate_table']
     job = {'program': request['program'], 'database': request['database'], 'query_file': QUERY_FILE}
+    handle = job_handle(ctx.operation_key, request['resource_id'], JOB_NAME)
     started = now_text()
+    table.expect(search_kind(request['program'], request['database']),
+                 {'gain': {'value': 0.0, 'lower': 0.0, 'upper': 0.0}, 'cost': 0.0,
+                  'duration_seconds': estimate['expected_seconds'], 'duration_basis': estimate['basis']},
+                 key=handle, at=started)
     launched = access.launch(ctx, request['resource_id'], job, inputs={QUERY_FILE: sequence_ref}, name=JOB_NAME,
                              estimates={'kind': search_kind(request['program'], request['database']),
-                                        'estimate_key': estimate['estimate_key'],
+                                        'estimate_key': handle,
                                         'predicted_seconds': estimate['expected_seconds'],
                                         'duration_basis': estimate['basis']})
     if launched['status'] != 'completed':
         failure = launched['failure']
-        _ended(table, estimate['estimate_key'], 'submit_failed:' + failure_code(failure['code']),
+        _ended(table, handle, 'submit_failed:' + failure_code(failure['code']),
                seconds_between(started, now_text()))
         return {**_failed(failure['code'], False, sent=failure['detail'].get('sent'),
                           http_status=failure['detail'].get('http_status'),
@@ -382,14 +391,15 @@ async def monitor_search(ctx, *, handoff_ref, wait_seconds, expected_remaining_s
             'expected_remaining_seconds': expected_remaining_seconds}
 
 
-def _grading(store, result_ref, fields, query_ref, sequence):
-    """The grading of the fetched report into the database sheet of the original query: a report of another query or
-    database is refused (``ValueError`` with its code). The report names its database by the file the service searched
-    (``search_target.db``): its last path component is the database's file."""
+def _grading(store, result_ref, fields, query_ref, sequence, metadata):
+    """The grading of the fetched report into the database sheet of the original query, with the hits' reference
+    metadata: a report of another query or database is refused (``ValueError`` with its code). The report names its
+    database by the file the service searched (``search_target.db``): its last path component is the database's file."""
     operand = {'subject_ref': query_ref, 'sequence_sha256': hashlib.sha256(sequence.encode()).hexdigest(),
                'database': fields['database']}
     grading = grade_blast_result(store.get_artifact(result_ref), mode='database', resource='api',
-                                 output_format='json2', request=operand, _retain_correspondence=True)
+                                 output_format='json2', request=operand, reference_metadata=metadata,
+                                 _retain_correspondence=True)
     normalized = grading['sheet']['normalized_result']
     if normalized['mode'] != 'database' or normalized['query']['length'] != len(sequence):
         raise ValueError('result_of_another_query')
@@ -398,39 +408,76 @@ def _grading(store, result_ref, fields, query_ref, sequence):
     return grading
 
 
+def _accessions(report):
+    """The accession of the first description of each hit of the report, in hit order (``accession``, else ``id``)."""
+    found = []
+    for hit in blast_document(report)['search'].get('hits', []):
+        first = (hit.get('description') or [{}])[0]
+        found.append(first.get('accession') or first.get('id'))
+    return found
+
+
+def _named(report, rows):
+    """The report with each hit's title set to the product its metadata row names (the label of its reference record);
+    only the copy given to the reference records is changed, never the stored report or the grading."""
+    document = json.loads(report)
+    products = {row['accession']: row['functions'][0]['function'] for row in rows if row['functions']}
+    for entry in document['BlastOutput2']:
+        for hit in entry['report']['results']['search'].get('hits', []):
+            first = hit['description'][0]
+            first['title'] = products.get(first.get('accession') or first.get('id'), first.get('title'))
+    return json.dumps(document).encode()
+
+
 def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
-    """Fetch the report of the finished search and grade it in the same unit into the database sheet, kept through
+    """Fetch the report of the finished search, learn what its hits are from BV-BRC's data service
+    (``bvbrc_hit_metadata``) and grade the report with that as reference metadata, all in the same unit, kept through
     custody as ``database_blast_search.fetch_and_grade_search`` keeps its sheet: the grading artifact, a source of the
     provider over the fetched report, the search row that enters the search into the A101 sheet's tool profile, one
-    reference record per hit and one comparison observation per alignment (what the head's credit reads). No step
-    stands between the fetch and the grading."""
+    reference record per hit (its accession and, where the service named it, its product as label) and one comparison
+    observation per alignment (what the head's credit reads), and the metadata the hits were graded with (an artifact
+    with BV-BRC's field names, and its source). A hit with no metadata is counted as missing by
+    ``metadata_accounting``. No step stands between the fetch and the grading."""
     store = ctx.store
     fetched = ctx.services['job_access'].fetch(ctx, handoff_ref, names=[REPORT])
     if fetched['status'] != 'completed':
         return {**_failed(fetched['failure']['code'], False), 'closure_ref': None}
     (result_ref,) = [item['ref'] for item in fetched['results'] if item['name'] == REPORT]
+    report = store.get_artifact(result_ref)
     sequence = store.get_artifact(store.get(query_ref)['sequence_ref']).decode('ascii').upper()
+    found = lookup(_accessions(report))
+    rows = reference_metadata(found)
     try:
-        grading = _grading(store, result_ref, fields, query_ref, sequence)
+        grading = _grading(store, result_ref, fields, query_ref, sequence, rows)
     except (ValueError, ContractError) as error:
         code = str(error) if str(error) in FAILURE_CODES else 'grading_refused'
         return {**_failed(code, False, reason=str(error)), 'closure_ref': fetched['closure_ref']}
     normalized = grading['sheet']['normalized_result']
+    accounting = metadata_accounting(normalized, rows)
     with store.transaction():
         grading_ref = retain_tool_grading(store, provider=PROVIDER, native_artifact_ref=result_ref, grading=grading)
         source = store.put('source', {
             'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': result_ref, 'text_ref': None,
             'request_ref': None, 'version': normalized['search']['version'], 'retrieved_at': None,
             'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [query_ref]}, origin='tool')
+        metadata_ref = store.artifact(canonical({key: found[key] for key in (
+            'features', 'families', 'genomes', 'requests', 'failures', 'responses', 'duplicate_feature_ids')}),
+            'application/json')
+        metadata_source = store.put('source', {
+            'provider': METADATA_PROVIDER, 'accession': None, 'uri': DATA_BASE_URL, 'artifact_ref': metadata_ref,
+            'text_ref': None, 'request_ref': None, 'version': None, 'retrieved_at': None,
+            'auxiliary_artifact_refs': [], 'operand_refs': [query_ref]}, origin='tool')
         search = store.table(SEARCHES).put({'source_ref': source['id'], 'query_ref': query_ref, 'profile': 'blast'})
         observations, references, unprojected = _observations(
-            store, store.get_artifact(result_ref), grading, grading_ref, result_ref, source['id'], query_ref,
+            store, _named(report, rows), grading, grading_ref, result_ref, source['id'], query_ref,
             fields['program'], len(sequence))
-    refs = [source['id'], grading_ref, search['id'], *references, *observations]
+    refs = [source['id'], grading_ref, search['id'], metadata_source['id'], *references, *observations]
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'closure_ref': fetched['closure_ref'],
             'graded_refs': refs, 'record_refs': [*refs, fetched['closure_ref']],
             'hit_count': len(grading['sheet']['hits']), 'observation_count': len(observations),
-            'unprojected_alignment_count': unprojected}
+            'unprojected_alignment_count': unprojected, 'metadata_covered_count': accounting['covered_count'],
+            'metadata_hit_count': accounting['hit_accession_count'], 'metadata_request_count': found['requests'],
+            'metadata_failure_count': len(found['failures']), 'metadata_complete': accounting['complete']}
 
 
 __all__ = ['ACTIONS', 'DATABASES', 'ESTIMATE_BASES', 'ESTIMATE_RANGE', 'FAILURE_CODES', 'PROVIDER', 'REQUEST_FIELDS',

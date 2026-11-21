@@ -83,6 +83,49 @@ Run A (`runs/bvbrc_a101_run_A1`, workspace `runs/bvbrc_a101_ws_A`: the target on
    the first observation of `finished` (about 120 to 180 s).
 5. No file of the run, the workspace, the journal or the model-call folders contains `sig=` followed by hex.
 
+## Names of the hits: multistep extract (owner's instruction, 2026-11-20)
+
+Owner: "there are other bv-brc functions that will get names for you, perhaps you need to add those to the episode and make
+that part of the multistep grading". `extract` stays one action and one unit; inside it: fetch the report, look up the hits in
+BV-BRC's public Data API, grade with the result as reference metadata, keep the records. No model step in between.
+
+- Hit id to feature id (verified live, 300 of 300 hits): the report's description has `accession` `<genome_id>.peg.<n>` and `id`
+  `gnl|fig|<genome_id>.peg.<n>`; the Data API's `genome_feature` `patric_id` is `fig|<accession>`.
+- Requests (`bvbrc_hit_metadata.py`, calling `encode_native_query` and `BVBRCDataClient.query_prepared`; public, NO login sent,
+  none was refused): `genome_feature` by `patric_id` in batches of 100 (fields `patric_id`, `feature_id`, `product`,
+  `annotation`, `pgfam_id`, `plfam_id`, `genome_id`, `taxon_id`, `aa_length`, `aa_sequence_md5`), `protein_family_ref` by
+  `family_id` (`family_type`, `family_product`), `genome` by `genome_id` in batches of 100 (`genome_name`, `taxon_id`): 7
+  requests for 300 hits, 10 s apart. `genome_name` is not a `genome_feature` field of the registry, hence the third collection.
+  Lineage nodes need a rank, which the genome record does not give: no lineage is supplied.
+- The grader's metadata row (legacy association, `blast_database_grader._attach_metadata`: matched on `accession` and the native
+  `taxid`; a differing taxon is refused as `metadata_taxon_conflicts_with_native`): `{'accession', 'taxid', 'source', 'functions':
+  [{'function', 'source', ...}], 'origin' (dict)}`; optional `lineage`, `assembly`, `sequence_group`, `study_groups`. The
+  registry's `_import_blast` (`tools.py`) joins no metadata at all: the join is the grader's.
+- Terms (BV-BRC to this project): `product` = the hit's function (name); `annotation` = who assigned the name, kept as the
+  function row's `source`, never as a function or label; `patric_id` = accession (with `fig|`); `pgfam_id` / `plfam_id` = the
+  cross-genus and genus-level family ids. The stored responses (an artifact of the unit, with its source of provider
+  `bvbrc_data`) keep BV-BRC's field names, and each function row carries `bvbrc_feature` and `bvbrc_families` with them.
+- `annotation` on the live service: over the 300 hits of the stored report only the value `PATRIC` came back and no feature id
+  came back twice (checked outside a run, `runs/bvbrc_meta_probe_1`). If one did, the record whose `annotation` sorts first as
+  text is taken (a stated rule, independent of arrival order) and `duplicate_feature_ids` counts it.
+- A hit with no metadata is counted as missing by `metadata_accounting` (`covered_count`, `missing_accessions`), never as a hit
+  with no function; a data request that fails leaves its hits without rows and is counted.
+- The reference records of the hits take the product as label (a copy of the report with titles set is given to the shared
+  `_observations`; the stored report and the grading are not changed).
+- Estimate table: one expectation per launch, written by `launch` just before the submission (the `estimate` action records
+  nothing on the table: a revised estimate, or one made when no launch can follow, leaves no row). Not yet changed: the
+  `<kind>:remaining` revision rows of the monitor.
+
+Prediction, run C (`runs/bvbrc_a101_run_C1`, fresh workspace `runs/bvbrc_a101_ws_C`, same estimate table; 4th submission):
+1. The head commissions `bvbrc_blast`; the child's estimate is `learned_from_earlier_searches` near 76 s (median of 66.4 and
+   85.5); `launch`; one or two `monitor`; `extract` takes about 70 to 80 s longer than before (7 data requests, 10 s apart).
+2. The Store accepts the source of provider `bvbrc_homology` and the head's credit counts it with no further call (about 1).
+3. The sheet's `functions` has one row, `RecA protein`, with `supporting_group_count` about 300 (the hits are distinct
+   accessions), `groups_without_function` 0, the metadata accounting 300 of 300, 7 data requests, no failure; the top hits are
+   RecA proteins of Enterobacterales with `PGF_00047078` and a genus-level `PLF_...` family.
+4. The estimate table gains one row for this launch (open until resolved, then resolved) and none from the repeated `estimate`
+   actions after the extract.
+
 ## Observed
 
 `Homology` submissions made: 3 in total (the one outside run `runs/bvbrc_route_check_1*` task 24003087; run A2; run B1).

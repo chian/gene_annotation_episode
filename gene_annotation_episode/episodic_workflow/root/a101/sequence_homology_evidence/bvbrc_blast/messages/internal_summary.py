@@ -41,6 +41,9 @@ def internal_summary(view):
                       'molecule': record.get('molecule'), 'length': len(sequence)},
             'unit_rows': rows, 'state_facts': facts, 'state': facts['state'],
             'last_failure_code': facts['last_failure_code'], 'search': search_facts(search), 'graded': graded,
+            'metadata': [{name: unit['outcome'][name] for name in ('metadata_covered_count', 'metadata_hit_count',
+                                                                    'metadata_request_count')}
+                         for unit in view.outcomes if unit['tool'] == 'extract' and unit['outcome']['status'] == 'completed'],
             'handoff_refs': [ref for unit in view.outcomes if unit['tool'] == 'launch'
                              for ref in unit['outcome']['handoff_refs']],
             'check_refs': [unit['outcome']['check_ref'] for unit in view.outcomes

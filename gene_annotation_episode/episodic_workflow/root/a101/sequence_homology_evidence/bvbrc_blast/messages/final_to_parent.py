@@ -35,6 +35,11 @@ FINDING_FORM = RecordForm({
     'hit_count': Field('integer', 'The hits of the graded sheet', required=False),
     'identification': Field('record', 'The controlled identification features of the graded sheet', required=False,
                             form=IDENTIFICATION_FORM),
+    'metadata_hit_count': Field('integer', 'The hits of the report that the data service was asked about', required=False),
+    'metadata_covered_count': Field('integer', 'The hits whose feature the data service described (a hit without it is '
+                                               'missing, not a hit with no function)', required=False),
+    'data_request_count': Field('integer', 'The requests made to the data service for the names of the hits',
+                                required=False),
     'estimated_seconds': Field('number', 'The seconds the search was expected to take, as estimated before the launch',
                                required=False),
     'estimate_basis': ChoiceField('text', 'What the estimate rested on', ESTIMATE_BASES, required=False),
@@ -62,6 +67,11 @@ def final_to_parent(summary, completion, selection):
         finding['hit_count'] = graded['hit_count']
         finding['identification'] = {name: value for name, value in graded['features'].items()
                                      if name not in ('sheet_refs',)}
+    if summary['metadata']:
+        counts = summary['metadata'][-1]
+        finding.update(metadata_hit_count=counts['metadata_hit_count'],
+                       metadata_covered_count=counts['metadata_covered_count'],
+                       data_request_count=counts['metadata_request_count'])
     if search is not None:
         if search['predicted_seconds'] is not None:
             finding['estimated_seconds'] = search['predicted_seconds']
