@@ -274,13 +274,40 @@ def all_vs_all_best(summary, records):
     return best
 
 
+def bvbrc_blast_best(summary, records):
+    """``(ceiling, arguments)`` of ``bvbrc_blast`` over the scope's held sequences with no graded search (the ceiling
+    ``ceiling`` gives with ``arguments`` ``None``; the first query on a tie). The arguments are the continuation of the
+    query's outstanding search (its query, program, database and resource, and ``until`` ``extracted``: the one commission
+    of that query the head's check accepts while it is outstanding; it extracts what the launch started, so its ceiling is
+    the search's), or ``None`` when the query has no outstanding search (a new search: its fields are the model's)."""
+    standing, limit, best = candidate_standing(records, summary['scope'], held_sources(records)), bvbrc_hit_bound(), None
+    for query in (ref for ref in summary['scope']['subject_refs'] if ref in summary['held_sequences']):
+        searches = [row for row in summary['bvbrc_searches'] if row['query_ref'] == query]
+        if any(row['closed'] for row in searches):
+            continue
+        products = [candidate for candidate in standing.get(query, {}) if candidate.startswith('product:')]
+        value = test_ceiling(standing.get(query, {}), products, 'database_search', unseen=limit, limit=limit)
+        if best is None or value > best[0] + 1e-12:
+            best = (value, [row for row in searches if row['outstanding']])
+    if best is None:
+        return (0.0, None)
+    value, outstanding = best
+    return (value, None if not outstanding else {
+        'query_ref': outstanding[0]['query_ref'], 'program': outstanding[0]['program'],
+        'database': outstanding[0]['database'], 'resource_id': outstanding[0]['resource_id'], 'until': 'extracted'})
+
+
 def best_arguments(summary, records, action_type, ctx):
     """The commission that reaches the action's ceiling asked with ``arguments`` ``None`` (``ceiling``), as the arguments a
     decision can name, or ``None`` when no choice of arguments changes the action's ceiling or none can earn
-    (``reason``, and the actions whose arguments the ceiling does not distinguish here). For ``bvbrc_msa``:
+    (``reason``, and the actions whose arguments the ceiling does not distinguish here). For ``bvbrc_blast``: the
+    continuation (``until`` ``extracted``) of the outstanding search of the query that reaches the ceiling, when it has one
+    (``bvbrc_blast_best``; a new search: ``None``). For ``bvbrc_msa``:
     the query, the search, the candidates (a subset of those admitted) and the sequences per candidate (``msa_best``). For
     ``bvbrc_metacats``: the query and the alignment (``metacats_best``). For ``all_vs_all``: the query, the search, the
     candidates and the sequences per candidate (``all_vs_all_best``)."""
+    if action_type == 'bvbrc_blast':
+        return bvbrc_blast_best(summary, records)[1]
     if action_type == 'bvbrc_msa':
         return msa_best(summary, records)[1]
     if action_type == 'bvbrc_metacats':
@@ -288,6 +315,17 @@ def best_arguments(summary, records, action_type, ctx):
     if action_type == 'all_vs_all':
         return all_vs_all_best(summary, records)[1]
     return None
+
+
+def outcome_pending(summary, records, position):
+    """Whether the outcome of unit ``position`` is pending (``method_loop.episode_type``; ``summary`` after the unit): a
+    child commission whose child returned parked (``bvbrc_blast``, ``bvbrc_msa`` or ``bvbrc_metacats``: its job launched and
+    not extracted, by ``until`` ``launched`` or wound down before the job ended). Its rise (0: nothing is extracted yet) does
+    not measure its action and its seconds cover only the launch, so the forecast controller learns neither from it and
+    its ledger row is resolved ``pending``; the commission that continues the job (``until`` ``extracted``) is the
+    observation. A tool unit ends its work in the unit and is never pending."""
+    row = summary['units'][position]
+    return row['kind'] == 'child' and row['parked']
 
 
 # What ``ceiling`` (and the library's ``test_ceiling``, ``msa_test_ceiling``, ``metacats_test_ceiling`` and
@@ -366,7 +404,8 @@ def ceiling(summary, records, action_type, arguments, ctx):
     An action the head's request checks would refuse as a repeat earns nothing, so its ceiling is 0: a pairwise
     comparison already held (``held_comparisons``), a profile scan of the same query and database already held
     (``held_profile_scans``), a search of the same query, program and database already graded (a closed search of
-    ``bvbrc_searches``; an outstanding one can still be continued and keeps its ceiling)."""
+    ``bvbrc_searches``; an outstanding one can still be continued and keeps its ceiling: the continuation, ``until``
+    ``extracted``, extracts what the launch started, so its ceiling is the search's, and ``best_arguments`` names it)."""
     if action_type == 'reason':
         return 0.0
     if action_type == 'bvbrc_metacats':

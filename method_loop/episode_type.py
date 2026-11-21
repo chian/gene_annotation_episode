@@ -11,7 +11,7 @@ services (``BoundEpisode``); this type only calls them, and an episode's own fil
 |---|---|
 | ``goal.py`` | ``binding_path``, ``goal``, ``unit``, ``result`` (text) |
 | ``task.py`` | ``child_slots`` ({slot: child binding path}), ``tools`` ({name: ``tool(arguments, ctx)``}), ``services`` (names), ``decide(summary, feedback, ctx)``, ``offered_actions(summary, ctx)`` -> the action types this decision offers, ``action(response, summary, records, ctx)`` |
-| ``credit.py`` | ``credit(summary, records)`` -> finite number; ``ceiling(summary, records, action_type, arguments, ctx)`` -> ``UNBOUNDED`` or a finite number >= 0 |
+| ``credit.py`` | ``credit(summary, records)`` -> finite number; ``ceiling(summary, records, action_type, arguments, ctx)`` -> ``UNBOUNDED`` or a finite number >= 0; optional ``best_arguments(summary, records, action_type, ctx)`` and ``outcome_pending(summary, records, position)`` (``OPTIONAL_MEMBERS``) |
 | ``yield_estimator.py`` | ``yield_controller(initial_credit, settings, parent_input)`` -> a ``yield_control`` controller |
 | ``messages/read_from_parent.py`` | ``assignment_form``, ``read_from_parent(assignment, message)`` -> parent input |
 | ``messages/msg_to_child.py`` | ``msg_to_child(slot, arguments, summary)`` -> ``ChildMessage(objective, message, assignment, selection)`` |
@@ -65,7 +65,13 @@ The loop of one Episode:
    'action_forecast_not_worth_its_cost', 'detail': {action_type, ceiling, forecast_gain, expected_seconds,
    threshold, and ``choose_from``: the best commission's arguments when the episode supplies ``best_arguments``}}``; an unknown
    forecast is not refused), and it records the unit's forecast before the unit and its result after it in the
-   estimate ledger (``episode_runtime.forecast_ledger``).
+   estimate ledger (``episode_runtime.forecast_ledger``). A unit whose outcome is pending (the optional member
+   ``outcome_pending``, below: its action started work, such as a job a child launched and returned parked, that a later
+   unit of the same action finishes) is not an observation of its action: the controller learns no share and no unit
+   seconds of its action from it, and its ledger row is resolved ``pending``, which no history reads. An Episode with a
+   forecast controller and child slots must supply ``outcome_pending`` (a child can park): without it the unit's facts
+   raise ``forecast_episode_with_children_must_supply_outcome_pending``; one without children has none to declare (a tool
+   unit ends its work in the unit).
 4. Each unit's controller input is ``{'credit': credit(internal_summary(view.with_unit(outcome)), records),
    'estimation_context': {'progress_time': bound.progress.receipt(position)}}``. The episode's yield controller
    observes it and alone decides whether the Episode stops: nothing else ends an Episode. The controller is built
@@ -177,9 +183,12 @@ SUPPLIED_BY_FILE = MappingProxyType({
     'messages/final_to_parent.py': ('return_form', 'final_to_parent'),
 })
 CHILD_MEMBERS = ('msg_to_child', 'read_from_child')
-# A member an episode may supply: ``credit.py`` ``best_arguments(summary, records, action_type, ctx)`` returns the arguments of
-# the action whose ceiling is the one asked with ``arguments`` None (a dict), or None when no choice of arguments matters.
-OPTIONAL_MEMBERS = ('best_arguments',)
+# The members an episode may supply: ``credit.py`` ``best_arguments(summary, records, action_type, ctx)`` returns the arguments of
+# the action whose ceiling is the one asked with ``arguments`` None (a dict), or None when no choice of arguments matters;
+# ``credit.py`` ``outcome_pending(summary, records, position)`` (``summary`` after unit ``position``) returns ``True`` when
+# that unit's outcome is pending (its action started work that a later unit of the same action finishes: a child that
+# returned parked), else ``False``. An Episode with a forecast controller and child slots must supply it.
+OPTIONAL_MEMBERS = ('best_arguments', 'outcome_pending')
 SUPPLIED = tuple(name for names in SUPPLIED_BY_FILE.values() for name in names)
 # Each function member: the parameters it takes, and the module (below the episode package) that defines it.
 SIGNATURES = MappingProxyType({
@@ -188,6 +197,7 @@ SIGNATURES = MappingProxyType({
     'credit': ('summary', 'records'),
     'ceiling': ('summary', 'records', 'action_type', 'arguments', 'ctx'),
     'best_arguments': ('summary', 'records', 'action_type', 'ctx'),
+    'outcome_pending': ('summary', 'records', 'position'),
     'offered_actions': ('summary', 'ctx'),
     'yield_controller': ('initial_credit', 'settings', 'parent_input'),
     'read_from_parent': ('assignment', 'message'),
@@ -197,7 +207,7 @@ SIGNATURES = MappingProxyType({
     'final_to_parent': ('summary', 'completion', 'selection'),
 })
 FILE_OF = MappingProxyType({
-    'decide': 'task', 'action': 'task', 'offered_actions': 'task', 'credit': 'credit', 'ceiling': 'credit', 'best_arguments': 'credit', 'yield_controller': 'yield_estimator',
+    'decide': 'task', 'action': 'task', 'offered_actions': 'task', 'credit': 'credit', 'ceiling': 'credit', 'best_arguments': 'credit', 'outcome_pending': 'credit', 'yield_controller': 'yield_estimator',
     'read_from_parent': 'messages.read_from_parent', 'msg_to_child': 'messages.msg_to_child',
     'read_from_child': 'messages.read_from_child', 'internal_summary': 'messages.internal_summary',
     'final_to_parent': 'messages.final_to_parent'})
@@ -535,14 +545,29 @@ class _SystemSource:
             raise ValueError('forecast_requires_measured_unit_seconds:' + self._binding.binding_path)
         return now['elapsed_seconds'] - before['elapsed_seconds']
 
+    def _pending(self, summary, position):
+        """Whether unit ``position``'s outcome is pending, from the episode's ``outcome_pending`` (``summary`` after the
+        unit). An Episode without children has no unit that can be pending; one with children must answer."""
+        path = self._binding.binding_path
+        member = getattr(type(self._binding), 'outcome_pending', None)
+        if member is None:
+            if self._binding.child_slots:
+                raise TypeError('forecast_episode_with_children_must_supply_outcome_pending:' + path)
+            return False
+        pending = member(summary, self._bound.reader, position)
+        if type(pending) is not bool:
+            raise TypeError('episode_outcome_pending_must_be_a_boolean:' + path + ':' + repr(pending))
+        return pending
+
     def _forecast_facts(self, summary, position, chosen):
         """What a ``ForecastYieldController`` is given with the completion of unit ``position``: the action and its
-        ceiling, the unit's measured seconds, and the ceilings the next decision offers (computed from the summary
-        after the unit, as that decision will compute them)."""
+        ceiling, the unit's measured seconds, whether its outcome is pending, and the ceilings the next decision offers
+        (computed from the summary after the unit, as that decision will compute them)."""
         context = self._bound.decision_context(position + 1)
         offered = self._offered_ceilings(summary, context)
         return {'action_type': chosen['action_type'], 'ceiling': _written(chosen['ceiling']),
                 'unit_seconds': self._unit_seconds(position), 'decision_seconds': chosen['decision_seconds'],
+                'pending': self._pending(summary, position),
                 'next_offered': {name: _written(ceiling) for name, ceiling in offered.items()}}
 
     def _ceiling_of(self, summary, action_type, arguments, context):
@@ -642,7 +667,7 @@ class _SystemSource:
         facts = record.as_record()['estimation_context'].get('forecast')
         if facts is not None:
             self._bound.forecast_ledger.resolve(position, rise, facts['unit_seconds'], facts['decision_seconds'],
-                                                self._bound.progress.receipt(position)['captured_at'])
+                                                facts['pending'], self._bound.progress.receipt(position)['captured_at'])
         return record
 
     def _choosing(self, view):

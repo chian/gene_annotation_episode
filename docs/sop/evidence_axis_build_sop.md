@@ -59,6 +59,7 @@ definition raises `TypeError` for a member in the wrong file or with the wrong a
 | `credit.py` | `credit` | `(summary, records)`: a finite number |
 | `credit.py` | `ceiling` | `(summary, records, action_type, arguments, ctx)`: `UNBOUNDED` or a finite number >= 0 |
 | `credit.py` | `best_arguments` (optional) | `(summary, records, action_type, ctx)`: the arguments that reach the ceiling asked with `arguments` None, or None |
+| `credit.py` | `outcome_pending` (optional; required with a forecast controller and child slots) | `(summary, records, position)`: True when that unit's outcome is pending (a child returned parked), else False |
 | `yield_estimator.py` | `yield_controller` | `(initial_credit, settings, parent_input)` |
 | `messages/read_from_parent.py` | `assignment_form`, `read_from_parent` | `(assignment, message)`: the parent input |
 | `messages/msg_to_child.py` | `msg_to_child` | `(slot, arguments, summary)`: a `ChildMessage` |

@@ -962,15 +962,21 @@ class CompletionYieldController:
 #   ceiling (``ForecastParameters.definition_of(k)``: the credit's definition and k's own ceiling version, so changing
 #   one action's ceiling discards only that action's shares): a share learned under another definition is on another
 #   scale and is not used; with no such row the ledger has no half.
+# * a pending unit is not an observation: a unit whose outcome is pending (its action started work, e.g. a job a child
+#   launched and returned parked, that a later unit of the same action finishes and extracts) has a rise that measures
+#   nothing of its action yet, and seconds that cover only the start. It gives no share or gain of its kind, and its
+#   seconds are not its kind's unit seconds, in this episode's own history (``pending`` of the unit's facts) as in the
+#   ledger (its row is resolved with the outcome ``pending``, which the ledger's history skips). The later unit that
+#   continues the work is the observation, as usual. There is no default: every unit's facts say whether it is pending.
 # * an UNBOUNDED action: there is no ceiling to scale, so the forecast is the typical gain of k, by the same rule: the
 #   mean of the ledger's mean gain and this episode's recency-weighted mean gain, or the one that exists. With no unit of k anywhere
 #   the forecast is unknown, and an unknown forecast never lets the episode stop (as in the three controllers,
 #   unknown stays unknown).
 # * the cost of ``a`` is its expected seconds: for an action type of ``job_kinds`` whose ledger kind has measured
 #   jobs, the median job duration plus the median seconds the model took to decide; otherwise the median measured
-#   wall seconds of the units of k (ledger history and this episode); with none, the median unit seconds of this
+#   wall seconds of the units of k that are not pending (ledger history and this episode); with none, the median unit seconds of this
 #   episode so far; with none, unknown (cost 0 in the stop rule). Seconds are not credit: the ledger's seconds of k
-#   (unit and decision seconds) are every resolved row of k, whatever definition it was recorded under.
+#   (unit and decision seconds) are every resolved row of k that is not pending, whatever definition it was recorded under.
 # * the stop rule: stop when no offered action's forecast exceeds expected seconds x ``exchange_rate``.
 # * the per-action gate (``method_loop.episode_type``): the same threshold also refuses the model's chosen action
 #   before it runs when its forecast does not exceed it (the owner: "since the numbers for credit are very similar, you
@@ -1065,7 +1071,7 @@ def _forecast_parameters(value):
 
 def _forecast_context(context):
     """The facts of one completed unit the system puts in its estimation context (``estimation_context['forecast']``)."""
-    required = {"action_type", "ceiling", "unit_seconds", "decision_seconds", "next_offered"}
+    required = {"action_type", "ceiling", "unit_seconds", "decision_seconds", "pending", "next_offered"}
     if not isinstance(context, Mapping) or not isinstance(context.get("forecast"), Mapping):
         raise ValueError("forecast_controller_requires_estimation_context_forecast")
     facts = context["forecast"]
@@ -1075,6 +1081,8 @@ def _forecast_context(context):
         raise ValueError("forecast_action_type_required")
     for name in ("unit_seconds", "decision_seconds"):
         _score(facts[name], name)
+    if type(facts["pending"]) is not bool:
+        raise ValueError("forecast_pending_must_be_a_boolean")
     if _is_ceiling_number(facts["ceiling"]):
         _score(facts["ceiling"], "ceiling")
     elif facts["ceiling"] != UNBOUNDED_TEXT:
@@ -1100,7 +1108,8 @@ def _recent(values):
 
 def forecast_actions(parameters, observations, histories, offered):
     """One row per offered action (``{action type: ceiling number or 'unbounded'}``), from this episode's own
-    ``observations`` (each ``{'action_type', 'ceiling', 'gain', 'unit_seconds', 'decision_seconds'}``) and the
+    ``observations`` (each ``{'action_type', 'ceiling', 'gain', 'unit_seconds', 'decision_seconds', 'pending'}``;
+    a pending unit gives its kind no share, gain or unit seconds) and the
     ledger's ``histories`` (``{action type: {'rows': [{'ceiling', 'gain', 'weight'}], 'seconds': [{'seconds',
     'decision_seconds'}], 'job_seconds': [seconds]}}``: ``rows`` the shares, of the action's own definition only;
     ``seconds`` every resolved row of the kind whatever its definition): ``{'action_type', 'ceiling', 'forecast_gain' (``None``: unknown),
@@ -1111,7 +1120,7 @@ def forecast_actions(parameters, observations, histories, offered):
     rows = []
     for action_type, ceiling in offered.items():
         history = histories[action_type]
-        own = [item for item in observations if item["action_type"] == action_type]
+        own = [item for item in observations if item["action_type"] == action_type and not item["pending"]]
         if _is_ceiling_number(ceiling):
             if ceiling == 0:
                 forecast = 0.0
@@ -1203,6 +1212,7 @@ class ForecastYieldState:
 def forecast_provenance():
     return {"controller": FORECAST_VERSION, "forecast": "realized_fraction_times_ceiling_or_typical_gain_if_unbounded",
             "fraction": "mean_of_ledger_mean_and_own_recency_weighted_mean_each_one_half_own_half_life_one_unit",
+            "pending": "a_pending_unit_gives_its_kind_no_share_gain_or_unit_seconds_own_or_ledger",
             "cost": "expected_seconds", "stop": "no_offered_forecast_exceeds_expected_seconds_times_exchange_rate",
             "model_estimates": False}
 
@@ -1212,7 +1222,7 @@ class ForecastYieldController:
 
     The system attaches the estimate-ledger access once (``attach``) and gives each completed unit's facts in its
     estimation context (``estimation_context['forecast']``: the action type and its ceiling, the unit's measured
-    seconds and decision seconds, and the ceilings the next decision offers). Nothing here writes the ledger."""
+    seconds and decision seconds, whether its outcome is pending, and the ceilings the next decision offers). Nothing here writes the ledger."""
 
     def __init__(self, epoch, initial_credit, settings):
         self.epoch = _epoch(epoch)
@@ -1248,7 +1258,8 @@ class ForecastYieldController:
         delta = cumulative - self._current_credit
         self._observations = (*self._observations, {
             "action_type": facts["action_type"], "ceiling": facts["ceiling"], "gain": delta,
-            "unit_seconds": facts["unit_seconds"], "decision_seconds": facts["decision_seconds"]})
+            "unit_seconds": facts["unit_seconds"], "decision_seconds": facts["decision_seconds"],
+            "pending": facts["pending"]})
         self._scores = (*self._scores, delta)
         self._current_credit = cumulative
         rows = self._rows(self._observations, facts["next_offered"])

@@ -44,13 +44,33 @@ formula enters only through `credit.ceiling` (the most the credit can rise if an
   episode's own share (bounded) or own mean gain (UNBOUNDED) of `k` is a recency-weighted mean: the latest own unit of
   `k` has weight 1 and each earlier one half the weight of the one after it (half-life: one unit). The ledger's half
   and the equal weighting of ledger and own history are unchanged.
+- A pending unit is not an observation (owner, 2026-11-21). A unit whose outcome is pending (its action started work that a
+  later unit of the same action finishes: a child that returned parked, its job launched and not extracted) has a rise that
+  measures nothing of `k` yet (by design 0: nothing is extracted) and seconds that cover only the launch. It gives `k` no
+  share, no gain and no unit seconds, neither in this episode's own history (`pending` of the unit's facts;
+  `forecast_actions` skips it) nor in the ledger (its row is resolved with outcome `pending`, which `history` skips for the
+  shares and the seconds). The later unit that continues the work (the same action, `until` extracted) is the observation,
+  as usual. Its decision seconds and the episode's median unit (the last fallback of expected seconds) still count it. The
+  episode says which units are pending through the optional member `credit.py` `outcome_pending(summary, records,
+  position)`; there is no default: an episode with a forecast controller and child slots that does not supply it raises
+  `forecast_episode_with_children_must_supply_outcome_pending` (one without children has no unit that can be pending). The
+  A101 head: a child unit whose child returned `parked` (`bvbrc_blast`, `bvbrc_msa`, `bvbrc_metacats`). Found in a real run:
+  `runs/a101_goal7_ws_reca` (journal `journal_reca.sqlite3`): the head commissioned `bvbrc_blast` `until launched`, the child
+  launched and returned parked (rise 0), and the controller learned that 0 as `bvbrc_blast`'s own share (recency weighted:
+  own share 0 against the ledger's 0.0115), so at `model_calls_reca/call-00004` the row was forecast 1.79 over 348.2 s
+  (threshold 2.09), not worth it; the head ran `hmmer_profile_scan` and stopped by its estimator with the search outstanding
+  (`outstanding_handoff_count` 1), never extracted, and the ledger row of the launch unit recorded gain 0 for `bvbrc_blast`.
+  Recomputed under the rule (direct check, not a real run, `runs/pending_outcome_check_3`): share 0.0115 (the ledger's
+  four rows), forecast 3.589, expected seconds 355.4 (the ledger's nine unit seconds, the 47.4 s launch unit left out),
+  threshold 2.132, worth it, and the stop decision after the scan does not stop (`bvbrc_blast` still worth it); the
+  launch unit's ledger row is resolved `pending`.
 - `UNBOUNDED`: forecast = typical gain of `k` by the same rule: the mean of the ledger's mean gain and this episode's mean
   gain, or the one that exists. With no unit of `k` anywhere it is **unknown**, and an unknown forecast never lets the
   episode stop (unknown stays unknown, as in the other controllers).
 - Cost = expected seconds. Action type in `job_kinds` whose ledger kind has measured finished jobs: median job
   duration (ledger, `duration_seconds` of the service's own task record) + median seconds the model took to decide (this
-  episode's decisions, else the kind's ledger rows). Otherwise the median measured seconds of units of `k` (ledger + this
-  episode). With none, the median unit seconds of this episode so far. With none: unknown (counted as 0 in the stop rule).
+  episode's decisions, else the kind's ledger rows). Otherwise the median measured seconds of the units of `k` that are not
+  pending (ledger + this episode). With none, the median unit seconds of this episode so far. With none: unknown (counted as 0 in the stop rule).
   A unit's seconds are measured from the previous unit's progress receipt to its own, so the decision time is in it.
 - Per-action gate (owner, 2026-11-21: "since the numbers for credit are very similar, you should be able to find one
   threshold to cap wasteful actions reasonably well"; "if you did this right 4-7 is on your thresholding"): after the
@@ -85,8 +105,9 @@ Declaration to put in the continuation settings of the head (the other agent edi
   place that has both the offered ceilings and the summary. A stop is decided after each unit but the next decision's
   offered actions are not yet asked, so the source computes the ceilings the next decision will offer from the summary after the
   unit (the same functions) and puts them in the unit's controller input (`estimation_context['forecast']`), together with
-  the action type, its ceiling, the measured unit seconds and the decision seconds. The controller input is journaled, so
-  resume and replay rebuild the controller exactly. Nothing changes for the three older controllers (the source acts only when
+  the action type, its ceiling, the measured unit seconds, the decision seconds and `pending` (the episode's
+  `outcome_pending`). The controller input is journaled, so resume and replay rebuild the controller exactly; a journal
+  written before `pending` existed raises `forecast_context_requires_exactly` on resume (loud, not repaired). Nothing changes for the three older controllers (the source acts only when
   `view.controller_state` is a `ForecastYieldState`).
 - The runner (`episode_runtime/runner.py`) builds a `ForecastLedger` per Episode (`episode_runtime/forecast_ledger.py`),
   hands it to a `ForecastYieldController` once (read: `history`) and gives the source the writing side. The ledger service is
@@ -102,12 +123,13 @@ Declaration to put in the continuation settings of the head (the other agent edi
 Kind `<binding path>:<action type>`, key `forecast:<episode id>:<position>`. Before the unit, `expect`: gain band
 `{value: forecast, lower: 0, upper: ceiling}` (unbounded: upper = value; an unknown forecast is written as value 0 with
 `forecast: null`), `cost` = expected seconds, plus `ceiling`, `forecast`, `expected_seconds`, `seconds_basis`. After the unit, `resolve`:
-`gain` = rise, `cost` = `duration_seconds` = the unit's seconds, `decision_seconds`, outcome `finished`. A unit that fails stays open
-and is never part of a history. Only the runner writes; no tool or model is handed the table.
+`gain` = rise, `cost` = `duration_seconds` = the unit's seconds, `decision_seconds`, outcome `finished`, or `pending` when the
+unit's outcome is pending (the same facts; `history` skips the row; any other outcome raises `forecast_row_outcome_unknown`).
+A unit that fails stays open and is never part of a history. Only the runner writes; no tool or model is handed the table.
 Every `expect` also writes `definition`, the definition of the unit's action (`ForecastParameters.definition_of(action type)`,
 handed to the `ForecastLedger` by `ForecastYieldController.attach` through `ForecastLedger.define`). `history` returns
-`rows` (the shares: `ceiling`, `gain`, `weight`) only of resolved rows whose `definition` equals the action's, and `seconds`
-(`seconds`, `decision_seconds`) of every resolved row of the kind, whatever its definition. The history stays recorded in the
+`rows` (the shares: `ceiling`, `gain`, `weight`) only of resolved `finished` rows whose `definition` equals the action's, and
+`seconds` (`seconds`, `decision_seconds`) of every resolved `finished` row of the kind, whatever its definition. The history stays recorded in the
 journal under `forecast_history.<action type>`, so a resumed run sees the history it first saw. A history journaled before
 the per-action rule has no `seconds` and raises `forecast_history_journaled_before_per_action_definitions:<action type>` on
 resume (loud, not repaired); a unit that was expected and not journaled before a crash is expected again and, if its
@@ -137,3 +159,8 @@ that narrow.
 
 No real run, no model call; the live write of ledger rows through a run (`expect`/`resolve`) was exercised only on a scratch table;
 a resumed run on another boot (receipts unavailable) raises; `next_decision` (stepped, no model) does not add `action_forecasts`.
+The pending rule ran in no real run (direct check only). The real ledger's row of the reca launch unit
+(`forecast:episode_18d798d0ca56fbbc7daccbf4f42951a3ef438677abddff11daccdafc8bf87165:0`, `bvbrc_blast`) was written before the
+rule as `finished` with gain 0 and 47.4 s and is unchanged (the ledger is not rewritten here): until it is resolved
+`pending`, later runs read it as a 0 share and a 47.4 s unit of `bvbrc_blast` (on a copy: the ledger's share falls from
+0.0115 to about 0.0092 and its median seconds from 355.4 to 348.2 s).

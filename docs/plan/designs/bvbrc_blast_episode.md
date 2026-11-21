@@ -299,6 +299,17 @@ Design (nothing of `episode_runtime`, `method_loop` or `yield_control` is change
   `outstanding_handoff_count`, with the handoff and status records in its selectable lists.
 - The head's three choices stay with its model, from its existing actions; the description of the child says what `until` means
   and what the notice is, and does not say which to choose.
+- The head's forecast (2026-11-21, `forecast_yield_controller.md`): the unit of a commission whose child returned parked is
+  pending (`HEAD/credit.py` `outcome_pending`): its rise (0, nothing extracted) is not learned as `bvbrc_blast`'s share and its
+  seconds (the launch only) are not its unit seconds, in the run's own history or in the ledger (row resolved `pending`); the
+  resuming commission is the observation. While a search is outstanding its ceiling stays the search's (the continuation
+  extracts what the launch started; only a closed search gives 0), the head's check accepts only the continuation (same query,
+  program, database, resource, `until` extracted; `until` launched is refused with
+  `a_continuation_follows_the_search_to_its_result`), and the `bvbrc_blast` row shown to the model names it as
+  `best_arguments` (`bvbrc_blast_best`). Found in the real run `runs/a101_goal7_ws_reca` (RecA, `until launched`): the parked
+  unit's 0 made the resume not worth it (forecast 1.79 < threshold 2.09), the head stopped with the search outstanding and the
+  RecA product never became a candidate; under the rule (direct check, not a real run) the resume row is forecast 3.589 over
+  355.4 s (threshold 2.132), worth it, with `best_arguments` the continuation.
 
 ### Run E1: observed (`runs/bvbrc_a101_run_E1`, workspace `runs/bvbrc_a101_ws_E`)
 

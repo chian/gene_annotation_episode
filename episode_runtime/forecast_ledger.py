@@ -23,6 +23,12 @@ are only the resolved rows of the action kind whose recorded definition is the a
 ceiling is on another scale. Seconds are not credit: the measured seconds of ``history`` (``seconds``: unit and decision
 seconds) are every resolved row of the kind whatever its definition, and the job durations (``job_seconds``, the service
 jobs' own rows) likewise. Writing or reading without a definition raises.
+
+A pending unit (``pending`` of the unit's forecast facts: its action started work, such as a job a child launched and
+returned parked, that a later unit of the same action finishes) is resolved with the outcome ``pending``: its rise and
+seconds are written as the facts they are, and ``history`` skips the row for both the shares and the seconds, since its
+rise measures nothing of its action yet and its seconds cover only the start. The later unit that continues the work is
+resolved ``finished`` and is the observation. A forecast row resolved with any other outcome raises.
 """
 from __future__ import annotations
 
@@ -32,6 +38,7 @@ from yield_control import UNBOUNDED_TEXT
 
 KEY_PREFIX = 'forecast:'
 OUTCOME = 'finished'
+PENDING = 'pending'
 ROWS_LIMIT = 1_000_000
 
 
@@ -76,6 +83,7 @@ class ForecastLedger:
         """The recorded history of ``action_type`` for the controller: ``{'rows': [{'ceiling', 'gain', 'weight'}],
         'seconds': [{'seconds', 'decision_seconds'}], 'job_seconds': [seconds]}``: ``rows`` (the shares) only those
         recorded under the action's definition, ``seconds`` every resolved row of the kind whatever its definition;
+        a row resolved ``pending`` is in neither;
         ``job_prefix`` (or ``None``) names the ledger kinds of the jobs the action launches and ``forget`` weights the
         rows by the table's forgetting policy (and drops those past it). A history journaled before the seconds were
         kept apart (no ``seconds``) raises: it cannot be read under this rule."""
@@ -104,6 +112,10 @@ class ForecastLedger:
             if row['actual'] is None or row['key'].startswith(own) or weight(row) is None:
                 continue
             actual, expected = row['actual'], row['expected']
+            if actual['outcome'] == PENDING:
+                continue
+            if actual['outcome'] != OUTCOME:
+                raise RuntimeError('forecast_row_outcome_unknown:' + row['key'] + ':' + str(actual['outcome']))
             seconds.append({'seconds': actual['duration_seconds'], 'decision_seconds': actual['decision_seconds']})
             if expected.get('definition') == definition:
                 rows.append({'ceiling': expected['ceiling'], 'gain': actual['gain'], 'weight': weight(row)})
@@ -130,8 +142,11 @@ class ForecastLedger:
             'ceiling': ceiling, 'forecast': forecast, 'expected_seconds': row['expected_seconds'],
             'seconds_basis': row['seconds_basis'], 'definition': self._defined(action_type)}, key=self.key(position), at=at)
 
-    def resolve(self, position, rise, unit_seconds, decision_seconds, at):
-        """Record what unit ``position`` obtained: the rise of the credit and its measured seconds."""
+    def resolve(self, position, rise, unit_seconds, decision_seconds, pending, at):
+        """Record what unit ``position`` obtained: the rise of the credit and its measured seconds, with the outcome
+        ``finished``, or ``pending`` when the unit's outcome is pending (``history`` then skips the row)."""
+        if type(pending) is not bool:
+            raise ValueError('forecast_ledger_pending_must_be_a_boolean')
         self._table().resolve(self.key(position), {
-            'gain': rise, 'cost': unit_seconds, 'outcome': OUTCOME, 'duration_seconds': unit_seconds,
-            'decision_seconds': decision_seconds}, at=at)
+            'gain': rise, 'cost': unit_seconds, 'outcome': PENDING if pending else OUTCOME,
+            'duration_seconds': unit_seconds, 'decision_seconds': decision_seconds}, at=at)

@@ -96,7 +96,10 @@ def internal_summary(view):
             report = outcome['report']
             row = {'position': position, 'kind': 'child', 'slot': outcome['slot'], 'status': 'completed',
                    'arguments': outcome['arguments'], 'child_state': report['finding'].get('state'),
-                   'credit': report['credit'], 'record_refs': list(report['record_refs'])}
+                   'credit': report['credit'], 'record_refs': list(report['record_refs']),
+                   # the child returned parked (its job launched, not extracted: the job children set ``parked`` true then
+                   # and only then): the unit's outcome is pending (``credit.outcome_pending``)
+                   'parked': report['finding'].get('parked') is True}
             committed.extend(ref for ref in report['graded_refs'] if ref not in committed)
             child_reports.append({'slot': outcome['slot'], **report})
             handoff_refs.extend(ref for ref in report['handoff_refs'] if ref not in handoff_refs)
