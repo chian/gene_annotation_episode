@@ -40,11 +40,16 @@ def internal_summary(view):
     # The sheet: what the latest child returned (the whole subscoring sheet as it stands after it, from the states this
     # episode passed to it); before any child returned, the states this episode was given, no scores, no features.
     sheet_state_refs = children[-1]['report']['sheet_state_refs'] if children else parent['sheet_state_refs']
+    working_state = records.reasoning_view(parent['scope'])
+    # The Store lists the context sources of the problem and of the subjects whether or not this episode holds them;
+    # the model is shown only the ones it holds.
+    working_state['supplied_context_source_refs'] = [
+        ref for ref in working_state['supplied_context_source_refs'] if records.holds(ref)]
     return {
         **{name: parent[name] for name in ('selection', 'proposed_annotation_ref', 'evidence_refs', 'constraints',
                                            'evidence_task', 'revision_origin', 'scope')},
         'held_record_refs': sorted(records.refs()),
-        'working_state': records.reasoning_view(parent['scope']),
+        'working_state': working_state,
         'reasoning_schema': records.reasoning_schema(),
         'progress': finding_progress(records, parent['scope'], unit), 'credit_binding': credit_binding(unit),
         'own_outcomes': outcome_page(tools, offset=0, limit=OUTCOME_PAGE_SIZE),

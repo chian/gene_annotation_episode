@@ -207,3 +207,115 @@ def test_the_page_commissioned_for_popz_binds_parb_returns_credit_scores_feature
     assert again == result
     assert len(list((tmp_path / 'model_calls').glob('call-*'))) == calls
     store.close()
+
+
+# ---- The first activity_rate type, spectro_direct (SOP step 8): the same page run, commissioned for 'ThdF catalyzes flavin reduction' over the real paragraph of
+# J Biol Chem 2025 (PMC11795597, CC BY 4.0) on the kinetics of the flavin reductase ThdF (the paragraph the chunk test uses). The class's predicate is
+# catalyzes (subject the enzyme; the claim's partner is null when the value is a reaction term).
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests import spectro_direct_passages
+
+
+def dfra_world(directory):
+    """The page commissioned for the hypothesis 'ThdF catalyzes flavin reduction': the source is the real paragraph between a lead-in and a tail; the hypothesis
+    is the claim (subject ThdF, predicate catalyzes, the value a reaction term as the existing A105 hypotheses carry, so the claim's partner is null)."""
+    world = held_world(directory)
+    store, paragraph = world['store'], spectro_direct_passages.REAL
+    text = 'Preceding text. ' + paragraph + ' Following text.'
+    artifact = store.artifact(text, 'text/plain')
+    source = store.put('source', {'provider': 'real_a105_dfra_paragraph', 'accession': None, 'uri': None,
+                                  'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
+                                  'version': None, 'retrieved_at': None, 'parent_source_refs': []},
+                       origin='caller')['id']
+
+    def reference(kind, label):
+        return store.put('reference', {'reference_type': kind, 'source_ref': source, 'accession': label.lower(),
+                                       'label': label, 'sequence_ref': None, 'molecule': None, 'length': None,
+                                       'term_refs': [], 'context_refs': [], 'anchor': None}, origin='caller')['id']
+    dfra = reference('protein', 'ThdF')
+    dhf = store.put('term', {'namespace': 'synthetic', 'accession': 'flavin_reduction', 'label': 'Flavin reduction',
+                             'term_type': 'reaction', 'source_ref': source, 'anchor': None}, origin='caller')['id']
+    proposed = store.put('hypothesis', {'subject_refs': [dfra], 'predicate': 'catalyzes',
+                                        'value': {'type': 'term_ref', 'ref': dhf}, 'context_refs': []},
+                         origin='reasoning')['id']
+    start = len('Preceding text. '.encode())
+    quote = paragraph[:60]
+    assay = store.put('reference', {'reference_type': 'assay', 'source_ref': source, 'accession': 'thdf_flavin_reductase_kinetics',
+                                    'label': 'ThdF flavin reductase kinetics', 'sequence_ref': None, 'molecule': None, 'length': None,
+                                    'term_refs': [], 'context_refs': [],
+                                    'anchor': {'source_ref': source, 'artifact_ref': artifact, 'start': start,
+                                               'end': start + len(quote.encode()), 'quote': quote}},
+                      origin='caller')['id']
+    assignment = dict(world['input']['assignment'])
+    assignment.update({'source_ref': source, 'artifact_ref': artifact, 'proposed_annotation_ref': proposed,
+                       'literature_task': {'version': 'literature_local_task_v1', 'kind': 'a105_experiments',
+                                           'evidence_axis': 'A105', 'credit_unit': 1.0,
+                                           'experiments': [{'experiment_ref': assay, 'assay_type': 'activity_rate'}]},
+                       'received_record_refs': [world['target'], source, artifact, assay, dfra, dhf, proposed]})
+    world.update({'source': source, 'artifact': artifact, 'assay': assay, 'proposed': proposed, 'text': text,
+                  'input': {'assignment': assignment, 'message': {'objective': OBJECTIVE},
+                            'selection': ['sheet_state_refs']}})
+    return world
+
+
+@pytest.mark.model_run
+def test_the_page_commissioned_for_thdf_catalyzes_flavin_reduction_returns_credit_scores_features_and_a_directly_bearing_row(tmp_path):
+    world = dfra_world(tmp_path)
+    store = world['store']
+    run_id = 'a105-page-thdf-flavin-reduction'
+    registry, journal, run = linked(tmp_path, world, run_id)
+    closed = asyncio.run(run.run())
+    result = closed['result'].as_record()
+    units = journal.units(run_id, ((EPISODE().grain_name, run_id),))
+    trace = [(unit[2]['kind'], unit[2].get('tool') or unit[2].get('slot')) for unit in units]
+    print('PAGE_UNITS', trace)
+    print_inputs(store, units)
+    assert trace[0] == ('tool', 'assess_content')
+    requests = recorded_requests(tmp_path)
+    retried, failed, reasons = rejection_facts(requests, units)
+    print('PAGE_MODEL_CALLS', len(requests), 'REJECTED_RETRIED', json.dumps(retried), 'REJECTED_FAILED', failed)
+    for name, reason in reasons:
+        print('PAGE_REJECTION', name, json.dumps(reason)[:400])
+    for unit in units:
+        if unit[2]['kind'] == 'child':
+            print('PAGE_CHILD_REPORT', unit[2]['slot'], json.dumps(unit[2]['report'])[:1500])
+            print('PAGE_CHILD_EXPERIMENT_TYPE', unit[2]['arguments'].get('experiment_type'))
+        elif unit[2]['tool'] == 'update_sheet':
+            print('PAGE_UPDATE_SHEET_OUTCOME', json.dumps(unit[2]['outcome'])[:3000])
+    print('PAGE_RETURN', json.dumps(result))
+    print('PAGE_CREDIT', result['credit'])
+    print('PAGE_SCORES', json.dumps(result['finding']['scores']))
+    print('PAGE_FEATURES', json.dumps(result['finding']['features']))
+    assert journal.run_state(run_id)[1]['ended_by'] == 'yield_stop'
+    assert failed == 0, ('a refused page answer was never followed by an accepted one', reasons)
+    chunks = [unit for unit in units if unit[2]['kind'] == 'child' and unit[2]['slot'] == 'chunk']
+    updates = [unit for unit in units if unit[2]['kind'] == 'tool' and unit[2]['tool'] == 'update_sheet']
+    assert chunks and updates
+    assert any(unit[2]['arguments'].get('experiment_type') == 'spectro_direct' for unit in chunks)      # the page chose the new type
+    assert EPISODE.return_form.select(('sheet_state_refs',)).admit(result, 'return') == result
+    assert set(result) == {'credit', 'finding', 'sheet_state_refs'}
+    assert set(result['finding']) == {'scores', 'features'}      # no raw record, no grader, no leaf record
+    assert 0 <= result['credit'] <= 1
+    scores = result['finding']['scores']
+    assert scores and all(score['target_id'] == 'thdf' for score in scores)
+    features = result['finding']['features']
+    assert any(item['target_id'] == 'thdf' and item['assertion_ref'] == world['proposed'] and item['experiments'] >= 1 for item in features)      # bearing direct
+    refs = result['sheet_state_refs']
+    assert refs and len(set(refs)) == len(refs)
+    assert refs == updates[-1][2]['outcome']['sheet_update']['sheet_state_refs']
+    for ref in refs:
+        held = json.loads(store.get_artifact(ref))
+        row = held['row']
+        print('PAGE_ROW', json.dumps(row)[:1500])
+        for member in held['member_results']:
+            print('PAGE_RESULT', json.dumps({name: member[name] for name in ('experiment_type', 'bearing', 'direction', 'log_ratio', 'weight', 'effect_support', 'measured_effect', 'effect_unit', 'direction_field_support', 'statement')}))
+            assert member['sheet'] == 'activity_rate' and member['experiment_type'] == 'spectro_direct' and member['bearing'] == 'direct'
+            assert member['direction'] in ('supports', 'neutral') and member['direction'] != 'opposes'      # a stated rate never opposes
+            assert member['direction'] != 'supports' or 0 < member['log_ratio'] <= 1.2      # QUALITATIVE_LOG_RATIO['spectro_direct']
+            assert 0 <= member['weight'] <= 1
+        assert row['sheet'] == 'activity_rate' and row['assertion_ref'] == world['proposed']
+    calls = len(list((tmp_path / 'model_calls').glob('call-*')))
+    again = asyncio.run(resume(registry, run_id=run_id, journal=journal,
+                               collaborators=world['collaborators']).run())['result'].as_record()
+    assert again == result
+    assert len(list((tmp_path / 'model_calls').glob('call-*'))) == calls
+    store.close()

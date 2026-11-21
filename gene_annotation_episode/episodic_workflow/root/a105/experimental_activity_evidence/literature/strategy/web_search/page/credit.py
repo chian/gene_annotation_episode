@@ -34,6 +34,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
     canonical)
 
 
+SHEET_KINDS = ('a105_experiments', 'verified_source_leads')   # the task kinds credited through the page's sheet
+
+
 async def classify_unknowns(outcome, scope, windows, ctx):
     """The tail of a grading unit: classify the unknown fields of each sheet the unit saved against ``windows`` (the
     spans of the source this Episode read) and save each result as a held record. ``outcome`` is the unit's outcome;
@@ -61,7 +64,8 @@ async def classify_unknowns(outcome, scope, windows, ctx):
 
 
 def credit(summary, records):
-    """For an ``a105_experiments`` task the credit is ``credit_unit`` times the larger of two measures of progress: the
+    """For an ``a105_experiments`` or a ``verified_source_leads`` task (the sheet route: a page opened on a search result
+    for the claim has no commissioned experiments and credits the same way) the credit is ``credit_unit`` times the larger of two measures of progress: the
     best credit of a leaf child, ``chunk``, ``table`` or ``report`` (the share of the asked fields it newly stated: the uncertainty it lessened) and the
     credit of the page's latest sheet update (A105 scoring paradigm, OWNER_DECISION 10: the update of the subscoring sheet
     produces the credit in the same step: the change of the resolution R of the rows, then of 1 - mean R over the
@@ -69,7 +73,7 @@ def credit(summary, records):
     update regroups all the leaf records from the states the page was given, so the latest update is the page's whole
     sheet credit, not an increment. The other task kinds keep the library's classified task credit."""
     task = summary['task']
-    if task['kind'] != 'a105_experiments':
+    if task['kind'] not in SHEET_KINDS:
         return classified_task_credit(summary, records)
     update = summary['sheet_update']
     # The chunk's own progress counts: when a leaf extractor states fields of the experiment, the uncertainty about it has
@@ -89,7 +93,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
     every arguments that type can take now). The bound does not depend on the arguments or on ``ctx``. ``action_type`` is the name
     the runner records: a tool name (``task.TOOLS``) or a child slot (``task.CHILD_SLOTS``); any other name raises.
 
-    a105_experiments task. The credit is ``credit_unit`` times the larger of the best leaf child credit and the latest
+    a105_experiments and verified_source_leads tasks (the sheet route). The credit is ``credit_unit`` times the larger of the best leaf child credit and the latest
     ``update_sheet`` credit, each at most 1: a leaf's credit is a share of its asked fields (newly stated / asked; for
     ``report`` half a share of windows plus half such a share), and the sheet credit is the one axis of the one commissioned
     candidate (``page_update`` is handed one claim and ``merge_main`` refuses any other candidate's row), the mean over its
@@ -98,11 +102,9 @@ def ceiling(summary, records, action_type, arguments, ctx):
     ``update_sheet`` (with a leaf record held; without one a sheet update cannot exist) can raise it; every other action
     (tools, ``reason``) has ceiling 0.
 
-    Every other task kind: the credit is ``credit_unit`` for each answer, and a task holds at most one answer
-    (``verified_source_leads``: one per relevant source). The tail ``classify_unknowns`` of ``reason`` earns nothing for
-    these kinds. The children are leaf extractors: they return no lead, no screening and no sheet, so their ceiling is 0.
-    verified_source_leads: one ``reason`` carries at most one source lead and so changes at most one source's
-    disposition: ceiling ``credit_unit``; the access tools, population operations and ``update_sheet`` produce none: 0.
+    Every other task kind: the credit is ``credit_unit`` for each answer, and a task holds at most one answer. The tail
+    ``classify_unknowns`` of ``reason`` earns nothing for these kinds. The children are leaf extractors: they return no
+    lead, no screening and no sheet, so their ceiling is 0.
     screening: answered once the commissioned spans are covered, by a ``reason`` declaring no applicable evidence:
     ``credit_unit`` if not covered now, else 0; other actions 0.
     assessment, measurement, a105_assembly: one answer, a retained assessment, a quantity sheet or an aggregation
@@ -115,14 +117,12 @@ def ceiling(summary, records, action_type, arguments, ctx):
     task = summary['task']
     unit = task['credit_unit']
     populations = {episode_task.TOOL_NAMES[name] for name in episode_task.POPULATIONS}
-    if task['kind'] == 'a105_experiments':
+    if task['kind'] in SHEET_KINDS:
         if action_type in episode_task.CHILD_SLOTS or (action_type == 'update_sheet'
                                                       and summary['unused_leaf_record_refs']):
             return max(0.0, unit - credit(summary, records))
         return 0.0
     remaining = unit * (1 - len(answers(summary, records)))
-    if task['kind'] == 'verified_source_leads':
-        return float(unit) if action_type == 'reason' else 0.0
     if task.get('answer_kind') == 'screening':
         return float(remaining) if action_type == 'reason' else 0.0
     if action_type == 'reason' or action_type in populations:

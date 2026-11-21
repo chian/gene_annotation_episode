@@ -80,6 +80,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 PREPARATION_KEYS = tuple(k for k in ROW_DEPENDENCE_KEYS if k.endswith('_preparation_ref'))
 POOLED_UNIT_BY_CLASS = {'ligand_binding': 'nM'}      # the pooled native unit of each class; other classes add theirs with their converters
 KNOWN_DIRECTIONS = ('supports', 'opposes', 'neutral')
+# Classes whose results are NOT pooled (decided 2026-11-21, owner to confirm): the effect of an activity_rate result is ONE of several quantities in different
+# units (kcat/Km, kcat, specific activity, a fold over the control), chosen per experiment, so no two results need share a unit and no mean of them has one. The
+# row's pooled effect, variance and precision (and the relative deviation) are null for such a class; the direction, strength and weight are unaffected.
+NOT_POOLED_CLASSES = ('activity_rate',)
 
 
 def _check_result(result):
@@ -176,6 +180,8 @@ def _scores(groups):
 
 
 def _pool(sheet, groups):
+    if sheet in NOT_POOLED_CLASSES:
+        return None, None, None
     unit = POOLED_UNIT_BY_CLASS.get(sheet)
     group_effects = []
     for group in groups:

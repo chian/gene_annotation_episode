@@ -140,8 +140,10 @@ def test_the_credit_is_real_code_and_counts_the_answers():
     credit_module = importlib.import_module(PACKAGE + '.credit')
     assert EPISODE.credit is credit_module.credit
     summary = {'task': {'kind': 'verified_source_leads', 'credit_unit': 2.0}, 'task_key': 'A105:verified_source_leads',
-               'lead_source_refs': ['src_1'], 'proposed_annotation_ref': 'hyp_1'}
-    assert credit_module.credit(summary, None) == 2.0
+               'lead_source_refs': ['src_1', 'src_2'], 'own_lead_source_refs': ['src_2'],
+               'child_returns': [{'credit': 0.5}, {'credit': 0.25}], 'proposed_annotation_ref': 'hyp_1'}
+    # the credit the child returned plus credit_unit for each lead the episode's own reason units validated
+    assert credit_module.credit(summary, None) == 2.75
     screening = {'task': {'kind': 'source_answer', 'answer_kind': 'screening', 'credit_unit': 3.0, 'examined': []},
                  'proposed_annotation_ref': 'hyp_1', 'screening_covered': True}
     assert credit_module.credit(screening, None) == 3.0
@@ -180,7 +182,8 @@ def test_the_input_list_is_the_unconsumed_sources_and_a_consumed_source_is_not_o
                   {'arguments': '{"witness": {"source_ref": "src_3"}}'}]}}}}
     child = {'kind': 'child', 'slot': 'strategy', 'arguments': {'objective': 'o',
                                                                 'strategy': {'prior_search_refs': ['src_4']}}}
-    assert summary.consumed_inputs(leads, [read, invalid, graded, child], [], False) == ['src_1', 'src_3', 'src_4']
+    # a read is a look, not the work on the source: it consumes nothing, so src_1 can still go to the strategy child
+    assert summary.consumed_inputs(leads, [read, invalid, graded, child], [], False) == ['src_3', 'src_4']
     span = {'source_ref': 'src_5', 'artifact_ref': 'art_5', 'start': 0, 'end': 10}
     screening = {'kind': 'source_answer', 'answer_kind': 'screening', 'examined': [span]}
     assert summary.consumed_inputs(screening, [read], [], False) == []

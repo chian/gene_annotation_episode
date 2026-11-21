@@ -108,6 +108,8 @@ templates (step 7 below), the sources searched, the class core, the direction an
 | 18 | `product_immunodetection` | Antibody detection of the modified product (TR-FRET/HTRF, ELISA, AlphaScreen) | Immuno, stopped |
 | 19 | `zymogram` | In-gel activity staining (zymography) | Gel, qualitative |
 
+Built so far (2026-11-21): `spectro_direct` (row 1), through SOP steps 1 to 8; see `A105_ACTIVITY_RATE_INVENTORY.md` section 6c.
+
 ## 7. How to add an experiment (the repeatable procedure; each step is hand-written)
 
 1. Inventory entry: the experiment's name and family; what it evidences (which sheet); its native outputs and units;

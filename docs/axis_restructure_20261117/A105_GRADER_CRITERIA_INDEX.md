@@ -16,6 +16,28 @@ question does not apply to this record). A **threshold constant** is a named num
 marks a number that is a judgment an expert should confirm or change. **FIXED_BY_DEFINITION** marks a physical
 constant or unit conversion that is not a judgment.
 
+## Spectro_direct (continuous direct spectrophotometric enzyme assay; class activity_rate), draft 2026-11-21
+
+Declared in `literature_spectro_direct_criteria.py` (criteria in `SPECTRO_DIRECT_CRITERIA`; it has no constants: the grader only records facts).
+Evaluated in `literature_spectro_direct_grader.py`. Judged and mapped to the activity_rate sheet in `literature_spectro_direct_converter.py`, where
+every EXPERT_REVIEW number lives with its Q1-Q5 reasons.
+
+| Criterion id | Question | Rule in words |
+| --- | --- | --- |
+| `spontaneous_reaction_control` | Was the spontaneous change of substrate or cofactor set aside? | A no-enzyme blank or an inactive-enzyme control stated as done is enough; a stated "no" fails. |
+| `substrate_independent_signal` | Was a no-substrate control done? | The one fact decides. |
+| `enzyme_dependence` | Was the rate proportional to the enzyme amount? | The one fact decides. |
+| `product_identity` | Was the absorbance change shown to be the claimed reaction? | The one fact decides. |
+| `extinction_coefficient_stated` | Is the extinction coefficient stated with its wavelength? | Both stated is supported; otherwise unknown. |
+| `absorbance_range` | Did the absorbance stay in the linear range? | The highest absorbance is recorded; the converter judges it on the stray-light bias (1 full, 3 zero). |
+| `initial_rate_regime` | Is the rate an initial rate? | A stated "no" fails; the percent consumed is recorded and judged (10 full, 90 zero); else the linear-progress fact. |
+| `enzyme_substrate_ratio` | Is the enzyme small against substrate plus Km? | E / (S + Km) is recorded and judged on the log scale (0.01 full, 1 zero). |
+| `substrate_range` | Did the substrate series bracket the Km? | Count, lowest and highest over the Km are recorded and judged (6 concentrations, 0.2 Km, 10 Km). |
+| `active_enzyme_amount` | Was the active enzyme amount determined? | The one fact decides. |
+| `replicates` | Enough independent replicates? | Independence "no" fails; the count is recorded and judged (3, sqrt(n / 3)). |
+| `native_reaction` | Is the substrate the native one? | The one fact decides. |
+| `purified_enzyme` | Was the enzyme purified? | The one fact decides. |
+
 ## SPR (surface plasmon resonance)
 
 Declared in `literature_spr_criteria.py` (criteria in `SPR_CRITERIA`, numbers as named constants at the top).

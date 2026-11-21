@@ -121,11 +121,54 @@ def test_the_credit_is_real_code_and_counts_the_answers():
     credit_module = importlib.import_module(PACKAGE + '.credit')
     assert EPISODE.credit is credit_module.credit
     assert 'NotImplementedError' not in (FOLDER / 'credit.py').read_text()
-    summary = {'task': {'kind': 'verified_source_leads', 'credit_unit': 2.0}, 'task_key': 'A105:verified_source_leads',
-               'lead_source_refs': ['src_1', 'src_2'], 'proposed_annotation_ref': 'hyp_1'}
-    assert credit_module.credit(summary, None) == 4.0
+    # A verified_source_leads page is credited through its sheet, like an a105_experiments page: no commissioned
+    # experiment and no pre-made record is needed.
+    for kind, extra in (('verified_source_leads', {}), ('a105_experiments', {'experiments': []})):
+        task = {'kind': kind, 'credit_unit': 2.0, **extra}
+        none_yet = {'task': task, 'child_returns': [], 'sheet_update': None}
+        assert credit_module.credit(none_yet, None) == 0.0
+        updated = {'task': task, 'child_returns': [{'credit': 0.25}],
+                   'sheet_update': {'credit': [{'credit': 0.5}, {'credit': 0.25}]}}
+        assert credit_module.credit(updated, None) == 1.5
+        leaf_only = {'task': task, 'child_returns': [{'credit': 0.5}, {'credit': 0.75}], 'sheet_update': None}
+        assert credit_module.credit(leaf_only, None) == 1.5
     screening = {'task': {'kind': 'source_answer', 'answer_kind': 'screening', 'credit_unit': 3.0,
                           'examined': [{'source_ref': 's', 'artifact_ref': 'a', 'start': 0, 'end': 10}]},
                  'proposed_annotation_ref': 'hyp_1', 'screening_covered': False}
     assert credit_module.credit(screening, None) == 0
 
+
+
+class HeldArtifacts:
+    def __init__(self, artifacts):
+        self.artifacts = artifacts
+
+    def get_artifact(self, ref):
+        return self.artifacts[ref]
+
+
+def test_a_source_is_the_lead_only_when_its_sheet_row_of_the_claim_is_measured_and_the_page_wrote_it():
+    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    given = HeldArtifacts({'state_given': '{"row": {"row_ref": "row:given"}}'})
+
+    def update(*rows):
+        return {'features': [{'assertion_ref': ref, 'status': status, 'sheet_ref': row} for ref, status, row in rows]}
+    lead = summary_module.bearing_lead_sources
+    assert lead(given, 'src_1', 'hyp_1', ['state_given'], None) == []
+    assert lead(given, 'src_1', 'hyp_1', ['state_given'], update(('hyp_1', 'measured', 'row:new'))) == ['src_1']
+    assert lead(given, 'src_1', 'hyp_1', [], update(('hyp_1', 'measured_zero', 'row:new'))) == ['src_1']
+    assert lead(given, 'src_1', 'hyp_1', ['state_given'], update(('hyp_1', 'unknown', 'row:new'))) == []
+    assert lead(given, 'src_1', 'hyp_1', ['state_given'], update(('hyp_1', 'measured', 'row:given'))) == []
+    assert lead(given, 'src_1', 'hyp_1', ['state_given'], update(('hyp_2', 'measured', 'row:new'))) == []
+
+
+def test_the_page_offers_the_leaf_children_and_the_sheet_ceiling_under_a_verified_source_leads_task():
+    credit_module = importlib.import_module(PACKAGE + '.credit')
+    task_module = importlib.import_module(PACKAGE + '.task')
+    task = {'kind': 'verified_source_leads', 'credit_unit': 2.0}   # no commissioned experiments
+    summary = {'task': task, 'child_returns': [], 'sheet_update': None, 'unused_leaf_record_refs': ['leaf_1']}
+    for slot in CHILDREN:
+        assert credit_module.ceiling(summary, None, slot, None, None) == 2.0
+    assert credit_module.ceiling(summary, None, 'update_sheet', None, None) == 2.0
+    assert credit_module.ceiling(summary, None, 'reason', None, None) == 0.0
+    assert not hasattr(task_module, 'LEAD_GUIDANCE')

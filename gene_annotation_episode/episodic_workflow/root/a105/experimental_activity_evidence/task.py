@@ -167,6 +167,26 @@ OTHER_REQUESTED = (
     'requested_gel_component_keys')
 
 
+# What each literature_task kind is for, and what it earns (read from credit.py and literature/credit.py).
+KIND_DESCRIPTIONS = {
+    'verified_source_leads': (
+        'Send this kind for a claim that has no graded evidence yet. The literature child searches for sources, '
+        'opens the pages it finds, extracts the experiments they report and grades them on the claim. It returns '
+        'its credit and the states of the subscoring sheet. It needs no experiment record beforehand; it finds out '
+        'whether a source reports an experiment at all.'),
+    'source_answer': (
+        'Send this kind only to answer one question about sources you already hold: assess them, screen named '
+        'spans, or read one measurement. It earns the credit unit once, for that one answer. It does not search '
+        'for sources.'),
+    'a105_experiments': (
+        'Send this kind only for experiment records you already hold. It grades each named experiment on its '
+        'assay type and earns credit by the change of the sheet. Without held experiment records it cannot be '
+        'used.'),
+    'a105_assembly': (
+        'Send this kind only to combine experiments that are already graded into one aggregation sheet. It earns '
+        'the credit unit once, for that one sheet.')}
+
+
 def literature_task_schema():
     """The commissioned literature result and its explicit local credit unit (the old ``goal.task_schema``)."""
     yield_settings = obj({'kind': {'enum': ['accumulation', 'remaining_commissioned_credit']},
@@ -181,20 +201,25 @@ def literature_task_schema():
     span = obj({'source_ref': REF, 'artifact_ref': REF, 'start': {'type': 'integer', 'minimum': 0},
                 'end': {'type': 'integer', 'minimum': 1}})
     return {'anyOf': [
-        task_object({**base, 'kind': {'const': 'verified_source_leads'}}),
-        task_object({**base, 'kind': {'const': 'source_answer'}, 'answer_kind': {'const': 'assessment'},
-                     'source_refs': refs}),
-        task_object({**base, 'kind': {'const': 'source_answer'}, 'answer_kind': {'const': 'screening'},
+        task_object({**base, 'kind': {'const': 'verified_source_leads', 'description': KIND_DESCRIPTIONS[
+            'verified_source_leads']}}),
+        task_object({**base, 'kind': {'const': 'source_answer', 'description': KIND_DESCRIPTIONS['source_answer']},
+                     'answer_kind': {'const': 'assessment'}, 'source_refs': refs}),
+        task_object({**base, 'kind': {'const': 'source_answer', 'description': KIND_DESCRIPTIONS['source_answer']},
+                     'answer_kind': {'const': 'screening'},
                      'examined': {'type': 'array', 'minItems': 1, 'items': span}}),
-        task_object({**base, 'kind': {'const': 'source_answer'}, 'answer_kind': {'const': 'measurement'},
+        task_object({**base, 'kind': {'const': 'source_answer', 'description': KIND_DESCRIPTIONS['source_answer']},
+                     'answer_kind': {'const': 'measurement'},
                      'selection': quantity_population_schema(),
                      'components': {'type': 'array', 'minItems': 1, 'uniqueItems': True,
                                     'items': {'enum': ['reported_value', 'reported_spread',
                                                        'relative_reported_spread']}}}),
-        task_object({**base, 'kind': {'const': 'a105_experiments'},
+        task_object({**base, 'kind': {'const': 'a105_experiments', 'description': KIND_DESCRIPTIONS[
+            'a105_experiments']},
                      'experiments': {'type': 'array', 'minItems': 1,
                                      'items': obj({'experiment_ref': REF, 'assay_type': {'enum': list(ASSAY_TYPES)}})}}),
-        task_object({**base, 'kind': {'const': 'a105_assembly'}, 'experiment_refs': refs,
+        task_object({**base, 'kind': {'const': 'a105_assembly', 'description': KIND_DESCRIPTIONS['a105_assembly']},
+                     'experiment_refs': refs,
                      'metrics': {'type': 'array', 'minItems': 1, 'uniqueItems': True,
                                  'items': {'enum': ['reliability', 'validity', 'relevance', 'attribution',
                                                     'overall']}}})]}
@@ -226,7 +251,9 @@ CHILD_ARGUMENTS = {
         'Commission an A105 published-evidence assessment of one proposed annotation: it searches and reads the '
         'sources, grades each applicable experiment with its purpose-specific subscoring sheet and returns its '
         'credit, its typed findings and the typed answer its task requires. Name the sources and the question '
-        'context it starts from.',
+        'context it starts from. For a claim with no graded evidence yet, set literature_task.kind to '
+        "'verified_source_leads': the child searches, opens pages and grades what it finds, and returns the sheet "
+        "states and its credit. Use 'a105_experiments' only for experiment records you already hold.",
         obj({'objective': OBJECTIVE, 'scope': SCOPE, 'assignment': literature_assignment_schema()})),
 }
 
@@ -277,7 +304,14 @@ EVIDENCE_AXIS_ENTRY_GOAL = (
     "are available; their descriptions do not grant execution. The configured controller owns continuation.")
 CHILD_GUIDANCE = ('\nSelect a child with its objective, scope and assignment when a narrower question warrants '
                   'iteration; what it returns is shown to you as child_returns. A child earns credit in this '
-                  'episode only through the records it returns.')
+                  'episode only through the records it returns.\n'
+                  'What earns credit here: a retained finding from a committed reasoning assessment with its grading '
+                  'sheet (reason), and the credit a child returns. Your own searches and reads (the public and '
+                  'source tools, process_search, process_entry, process_sources, process_revise) earn no credit; '
+                  'they can only prepare a commission or a commit. A paper you read yourself earns nothing until a '
+                  'child or a reasoning commit grades it. For a claim with no graded evidence yet, commission the '
+                  "literature child with literature_task.kind 'verified_source_leads'; it does the searching, "
+                  "page reading and grading. 'a105_experiments' is only for experiment records you already hold.")
 REVISE_DESCRIPTION = ('Prepare a different thought pattern and/or selected actual tools for a new child investigating '
                       'the same evidence axis. Return its selection for a separately selected child commission with '
                       "the child's scope, constraints and typed return. Copy result.selection and revision_origin "

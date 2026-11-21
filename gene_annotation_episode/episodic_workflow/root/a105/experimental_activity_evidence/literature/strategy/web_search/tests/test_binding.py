@@ -127,12 +127,35 @@ def mid_summary(**changes):
 def test_the_credit_is_real_code_and_counts_the_answers():
     credit_module = importlib.import_module(PACKAGE + '.credit')
     assert EPISODE.credit is credit_module.credit
+    # verified_source_leads: the credit its page children returned (the pages' sheet credit) plus credit_unit for each
+    # lead its own reason units validated; a page child's lead is not counted twice.
     summary = {'task': {'kind': 'verified_source_leads', 'credit_unit': 2.0}, 'task_key': 'A105:verified_source_leads',
-               'lead_source_refs': ['src_1'], 'proposed_annotation_ref': 'hyp_1'}
-    assert credit_module.credit(summary, None) == 2.0
+               'lead_source_refs': ['src_1', 'src_2'], 'own_lead_source_refs': ['src_2'],
+               'child_returns': [{'credit': 0.5}, {'credit': 0.25}], 'proposed_annotation_ref': 'hyp_1'}
+    assert credit_module.credit(summary, None) == 2.75
     screening = {'task': {'kind': 'source_answer', 'answer_kind': 'screening', 'credit_unit': 3.0, 'examined': []},
                  'proposed_annotation_ref': 'hyp_1', 'screening_covered': True}
     assert credit_module.credit(screening, None) == 3.0
+
+
+class HeldSources:
+    def __init__(self, sources):
+        self.sources = sources
+
+    def get(self, ref):
+        return self.sources[ref]
+
+
+def test_the_page_of_a_search_result_is_filled_by_code_from_its_source_record():
+    task = importlib.import_module(PACKAGE + '.task')
+    held = HeldSources({'src_text': {'text_ref': 'art_text', 'artifact_ref': 'art_orig'},
+                        'src_orig': {'text_ref': None, 'artifact_ref': 'art_orig'}})
+    assert task.page_of(held, 'src_text') == {'source_ref': 'src_text', 'representation': 'text',
+                                              'artifact_ref': 'art_text', 'prior_delivery_refs': []}
+    assert task.page_of(held, 'src_orig') == {'source_ref': 'src_orig', 'representation': 'original',
+                                              'artifact_ref': 'art_orig', 'prior_delivery_refs': []}
+    # the model names the source and nothing else of the page
+    assert set(task.PAGE_SCHEMA['properties']) == {'source_ref'}
 
 
 def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_and_the_child():

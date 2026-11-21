@@ -16,10 +16,16 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 def credit(summary, records):
     """For an ``a105_experiments`` task the credit is what the page children earned (OWNER_DECISION 10: the page updates the
     subscoring sheet and produces the credit; this level only receives it and computes nothing). Each page starts from the
-    sheet the previous page returned, so the page credits add up. The other task kinds keep the library's task credit."""
-    if summary['task']['kind'] != 'a105_experiments':
+    sheet the previous page returned, so the page credits add up. For a ``verified_source_leads`` task a page opened on a
+    search result for the claim earns the same page credit, which is counted the same way; the credit of the leads this
+    episode's own ``reason`` units validated (``own_lead_source_refs``) is added to it, ``credit_unit`` each. The other
+    task kinds keep the library's task credit."""
+    task = summary['task']
+    if task['kind'] not in ('a105_experiments', 'verified_source_leads'):
         return task_credit(summary, records)
     value = math.fsum(child['credit'] for child in summary['child_returns'])
+    if task['kind'] == 'verified_source_leads':
+        value += task['credit_unit'] * len(summary['own_lead_source_refs'])
     if not math.isfinite(value):
         raise ValueError('literature_finite_task_credit_required')
     return value

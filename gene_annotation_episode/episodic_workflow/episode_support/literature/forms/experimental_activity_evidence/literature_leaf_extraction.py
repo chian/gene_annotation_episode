@@ -27,13 +27,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
     literature_emsa_extraction, literature_fcs_extraction, literature_fp_extraction, literature_fret_extraction,
     literature_gci_extraction, literature_itc_extraction, literature_mst_extraction, literature_pla_extraction,
     literature_proximity_extraction, literature_pulldown_extraction, literature_radioligand_extraction,
-    literature_sec_extraction, literature_spa_extraction, literature_split_reporter_extraction, literature_spr_extraction,
+    literature_sec_extraction, literature_spa_extraction, literature_spectro_direct_extraction, literature_split_reporter_extraction, literature_spr_extraction,
     literature_trp_extraction, literature_y2h_extraction)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.experimental_activity_evidence.action_transport import (
     decode_response, generation_schema)
 
 # The extraction module of each experiment type: the commission's controlled value picks it (code, never the model).
-FORMS = {'spr': literature_spr_extraction, 'itc': literature_itc_extraction, 'bli': literature_bli_extraction, 'gci': literature_gci_extraction, 'fp': literature_fp_extraction, 'fret': literature_fret_extraction, 'mst': literature_mst_extraction, 'trp_quenching': literature_trp_extraction, 'fcs': literature_fcs_extraction, 'elisa': literature_elisa_extraction, 'alphascreen': literature_alpha_extraction, 'radioligand': literature_radioligand_extraction, 'spa': literature_spa_extraction, 'pulldown': literature_pulldown_extraction, 'emsa': literature_emsa_extraction, 'sec': literature_sec_extraction, 'dialysis': literature_dialysis_extraction, 'auc': literature_auc_extraction, 'split_reporter': literature_split_reporter_extraction, 'cetsa': literature_cetsa_extraction, 'y2h': literature_y2h_extraction, 'dsf': literature_dsf_extraction, 'pla': literature_pla_extraction, 'proximity': literature_proximity_extraction, 'bret': literature_bret_extraction}
+FORMS = {'spr': literature_spr_extraction, 'itc': literature_itc_extraction, 'bli': literature_bli_extraction, 'gci': literature_gci_extraction, 'fp': literature_fp_extraction, 'fret': literature_fret_extraction, 'mst': literature_mst_extraction, 'trp_quenching': literature_trp_extraction, 'fcs': literature_fcs_extraction, 'elisa': literature_elisa_extraction, 'alphascreen': literature_alpha_extraction, 'radioligand': literature_radioligand_extraction, 'spa': literature_spa_extraction, 'pulldown': literature_pulldown_extraction, 'emsa': literature_emsa_extraction, 'sec': literature_sec_extraction, 'dialysis': literature_dialysis_extraction, 'auc': literature_auc_extraction, 'split_reporter': literature_split_reporter_extraction, 'cetsa': literature_cetsa_extraction, 'y2h': literature_y2h_extraction, 'dsf': literature_dsf_extraction, 'pla': literature_pla_extraction, 'proximity': literature_proximity_extraction, 'bret': literature_bret_extraction, 'spectro_direct': literature_spectro_direct_extraction}
 
 SPR_INSTRUCTIONS = (
     'You are the extraction step of a system that scores how well published experiments support a proposed '
@@ -986,6 +986,47 @@ BRET_INSTRUCTIONS = (
     'itself states the value or fact; implied if the quote states it only by implication; about_something_else if the '
     'quote is on the topic but is really about another measurement or condition. For an unavailable field set support '
     'to null.')
+SPECTRO_DIRECT_INSTRUCTIONS = (
+    'You are the extraction step of a system that scores how well published experiments support a proposed '
+    'annotation of a protein. You are given one {text} of text from a published source. The {text} may report a '
+    'continuous direct spectrophotometric enzyme assay: a purified or crude enzyme is mixed with its substrate and the '
+    'absorbance of a chromophore that changes by itself during the reaction (for example NADH or NADPH at 340 nm, or a '
+    'nitrophenol product at 405 nm) is read continuously; the initial slope is turned into a rate with an extinction '
+    'coefficient, and kinetic constants (kcat, Km, kcat/Km) or a specific activity are derived. The assay says how fast '
+    'the enzyme converts the substrate. Controls (a reaction without the enzyme, with an inactive enzyme, or without the '
+    'substrate), the share of the substrate consumed, the enzyme amount against the substrate, the substrate range '
+    'against the Km and the absorbance range decide how much the rate means. A fixed program will later check the '
+    'quality of that experiment from the statements and numbers you extract, so you extract exactly the items listed in '
+    'the answer form and nothing else. You do not judge the experiment, you do not decide whether it is good, and you '
+    'add no commentary.\n'
+    'What to return: one JSON object that answers every field of the answer form. Each field is either stated or '
+    'unavailable.\n'
+    '- stated: the {text} itself says it. Give the value (a number, a list of numbers, or one word of the fixed list the '
+    'field offers), its unit from the fixed list the field offers, and the quote, which is the exact words of the {text} '
+    'that state it, copied character for character (including any special spaces, signs, superscripts and Greek letters). '
+    'Keep the quote short, only the words that state this value, but long enough that it occurs once in the {text}. You '
+    'give no positions; a program finds them.\n'
+    '- unavailable: the {text} does not state it. Give the reason from the fixed list and set value, unit and quote to '
+    'null. Never guess, never infer a value the {text} does not state, never calculate one from other numbers (for '
+    'example never work out a kcat/Km from a kcat and a Km, a specific activity from a rate and a protein amount, or a '
+    'percent consumed from a concentration), and never write 0 for a value that is not given. For a yes/no field, answer no '
+    'only when the {text} says the thing was not done or did not happen; silence is unavailable, not no.\n'
+    'Give a value only in the field whose meaning it has: the catalytic efficiency kcat/Km, the turnover number kcat (a '
+    'rate per enzyme, per second or per minute), the specific activity (a rate per mass of protein, in U/mg) and the fold '
+    'over the control are four different fields, and a plain rate in uM/min is none of them; each uncertainty goes in the '
+    'spread field of the quantity it belongs to, only when the {text} states it, and the spread kind (standard error, '
+    'standard deviation or confidence interval) only when the {text} names it; a Km, a single substrate concentration '
+    'of the measurement and the list of concentrations of the saturation curve are three different fields; a control '
+    'without the enzyme, a control with an inactive enzyme and a control without the substrate are three different '
+    'controls. Convert a value to the unit the field offers only when the conversion is exact (for example 0.2 mM is '
+    '200 uM, 6.2 x 10^3 M^-1 cm^-1 is 6.2 mM^-1 cm^-1). If the {text} gives a value in a unit the field does not offer, '
+    'answer unavailable with the reason unit_not_in_vocabulary. If the {text} reports no such spectrophotometric enzyme '
+    'assay at all, every field is unavailable. If it reports several such assays, extract the one that measures the '
+    'activity of the enzyme the {text} is about on its substrate, using only statements about that assay.\n'
+    'For every stated field also give support, which says how well the quote supports that value: direct if the quote '
+    'itself states the value or fact; implied if the quote states it only by implication; about_something_else if the '
+    'quote is on the topic but is really about another measurement or condition. For an unavailable field set support '
+    'to null.')
 # The same plain rule for every experiment type, added to the type's instructions.
 QUOTE_UNIQUENESS = (
     '\nBefore you answer, check every quote: the exact quote text must appear only once in the {text}. The same words '
@@ -1007,7 +1048,7 @@ IDENTITY_PARAGRAPH = (
     'molecule the target is tested against, only when the {text} names it. Give a number only when the {text} writes it, '
     'and a class only when the {text} states what the class describes. The reference to a figure, table or section is '
     'the quote of the reference as the {text} writes it, with its kind, number and panel letter.')
-INSTRUCTIONS = {'spr': SPR_INSTRUCTIONS, 'itc': ITC_INSTRUCTIONS, 'bli': BLI_INSTRUCTIONS, 'gci': GCI_INSTRUCTIONS, 'fp': FP_INSTRUCTIONS, 'fret': FRET_INSTRUCTIONS, 'mst': MST_INSTRUCTIONS, 'trp_quenching': TRP_INSTRUCTIONS, 'fcs': FCS_INSTRUCTIONS, 'elisa': ELISA_INSTRUCTIONS, 'alphascreen': ALPHA_INSTRUCTIONS, 'radioligand': RADIOLIGAND_INSTRUCTIONS, 'spa': SPA_INSTRUCTIONS, 'pulldown': PULLDOWN_INSTRUCTIONS, 'emsa': EMSA_INSTRUCTIONS, 'sec': SEC_INSTRUCTIONS, 'dialysis': DIALYSIS_INSTRUCTIONS, 'auc': AUC_INSTRUCTIONS, 'split_reporter': SPLIT_REPORTER_INSTRUCTIONS, 'cetsa': CETSA_INSTRUCTIONS, 'y2h': Y2H_INSTRUCTIONS, 'dsf': DSF_INSTRUCTIONS, 'pla': PLA_INSTRUCTIONS, 'proximity': PROXIMITY_INSTRUCTIONS, 'bret': BRET_INSTRUCTIONS}
+INSTRUCTIONS = {'spr': SPR_INSTRUCTIONS, 'itc': ITC_INSTRUCTIONS, 'bli': BLI_INSTRUCTIONS, 'gci': GCI_INSTRUCTIONS, 'fp': FP_INSTRUCTIONS, 'fret': FRET_INSTRUCTIONS, 'mst': MST_INSTRUCTIONS, 'trp_quenching': TRP_INSTRUCTIONS, 'fcs': FCS_INSTRUCTIONS, 'elisa': ELISA_INSTRUCTIONS, 'alphascreen': ALPHA_INSTRUCTIONS, 'radioligand': RADIOLIGAND_INSTRUCTIONS, 'spa': SPA_INSTRUCTIONS, 'pulldown': PULLDOWN_INSTRUCTIONS, 'emsa': EMSA_INSTRUCTIONS, 'sec': SEC_INSTRUCTIONS, 'dialysis': DIALYSIS_INSTRUCTIONS, 'auc': AUC_INSTRUCTIONS, 'split_reporter': SPLIT_REPORTER_INSTRUCTIONS, 'cetsa': CETSA_INSTRUCTIONS, 'y2h': Y2H_INSTRUCTIONS, 'dsf': DSF_INSTRUCTIONS, 'pla': PLA_INSTRUCTIONS, 'proximity': PROXIMITY_INSTRUCTIONS, 'bret': BRET_INSTRUCTIONS, 'spectro_direct': SPECTRO_DIRECT_INSTRUCTIONS}
 
 
 # Shown only from the second extraction of a window on: what the earlier extraction already states and leaves unstated.

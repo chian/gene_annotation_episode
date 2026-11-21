@@ -6,7 +6,7 @@ read."""
 from method_loop import ChoiceField, Field, RecordForm
 
 REPRESENTATIONS = ('text', 'original', 'stdout', 'stderr')   # the page's own vocabulary (page/messages/read_from_parent.py)
-EXPERIMENT_TYPES = ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis', 'auc', 'cetsa', 'split_reporter', 'dsf', 'y2h', 'pla', 'proximity', 'bret')
+EXPERIMENT_TYPES = ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis', 'auc', 'cetsa', 'split_reporter', 'dsf', 'y2h', 'pla', 'proximity', 'bret', 'spectro_direct')
 ASSIGNMENT_FORM = RecordForm({
     'source_ref': Field('text', 'The source the chunk is taken from'),
     'passed_refs': Field('record_refs', 'The source and the artifact of its text, passed in custody'),

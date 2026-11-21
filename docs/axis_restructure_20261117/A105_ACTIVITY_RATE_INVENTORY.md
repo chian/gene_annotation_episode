@@ -629,6 +629,45 @@ Earlier analysis:
 5. **Direction and strength** of a quantitative activity result: section 4 (same paradigm as binding, class-scoped function,
    anchors per quantity, larger is stronger, best-determined quantity first).
 
+## 6c. Built: `spectro_direct` (the first type, 2026-11-21; all numbers EXPERT_REVIEW, owner to confirm)
+
+Built by SOP steps 1 to 8; the other 18 types copy it. Files (`G` and `F` as in the SOP): `F/literature_spectro_direct_record.py`,
+`F/literature_spectro_direct_extraction.py`, `G/literature_spectro_direct_criteria.py`, `G/literature_spectro_direct_grader.py`,
+`G/literature_spectro_direct_converter.py`, the registrations (SOP step 4) and the tests listed in the build report.
+
+- **Record** (30 fields): the four effect quantities each with its own spread (`catalytic_efficiency`, `turnover`, `specific_activity`,
+  `rate_over_control`), `km`, `substrate_concentration`, `enzyme_concentration`, `substrate_consumed_percent`, `wavelength`,
+  `extinction_coefficient`, `absorbance_max`, `enzyme_mass`, `replicate_count`, the substrate series, the spread kind and 11 facts (three
+  controls, enzyme dependence, linear progress curve, active-site determination, native substrate, purified enzyme, product identified,
+  independent replicates, activity detected above the control). Unit vocabularies per quantity; the converter turns another unit of the
+  vocabulary into the anchor unit by an exact factor (FIXED_BY_DEFINITION).
+- **Effect** = the best-determined stated quantity (class order); the spread of THAT quantity gives the variance (standard error, or standard
+  deviation over n with independent replicates supported; a confidence interval is not converted).
+- **Qualitative path** (decision 5): only when no quantity is stated, the fact `activity_detected_above_control` gives `interaction_detected`
+  ("activity detected") or `interaction_not_detected` ("activity not detected", opposes).
+- **Criteria** (13, grader) -> sheet criteria: background_alternatives (spontaneous_reaction_control, substrate_independent_signal),
+  attribution_supported (enzyme_dependence, product_identity), calibration_applicability (extinction_coefficient_stated, absorbance_range),
+  rate_regime (initial_rate_regime, enzyme_substrate_ratio), kinetic_model (substrate_range), normalization_basis (active_enzyme_amount),
+  sampling_basis (replicates), assertion_relevance (native_reaction), condition_scope (purified_enzyme).
+- **Researched curves** (reasons in the converter docstring, Q1-Q5): share of the substrate consumed 10 percent full to 90 percent zero, judged on
+  the bias 1 - f / -ln(1 - f) of the averaged rate; enzyme over substrate plus Km 0.01 full to 1 zero (log scale); substrate series 6 concentrations
+  full, 2 zero (residual degrees of freedom), lowest at most 0.2 Km and highest at least 10 Km (zero end 1 Km, fractional saturation); highest
+  absorbance 1 full to 3 zero on the stray-light bias at 1 percent stray light; replicates sqrt(n / 3).
+- **Unknown weights**: type default 0.85; background_alternatives 0.75, attribution_supported 0.80, calibration_applicability 0.90,
+  normalization_basis 0.90, sampling_basis 0.90 (chain in the converter docstring and `A105_ASSAY_CALIBRATION_DETAILS.md`).
+- **QUALITATIVE_LOG_RATIO** 1.2 (a stated rate at full strength, and "activity not detected").
+- **Class gaps found by the build and fixed in `G` (decided 2026-11-21, owner to confirm)**: (1) `literature_assay_grading._quantity_unit_supported`
+  accepts the unit `fold` for the kind `rate_ratio` (the class anchor unit of the rate over the paper's own control); (2) the result field `effect_unit`
+  is now a unit spelling (`UNIT_PATTERN`, new field kind `unit`) instead of a record reference, because the activity units hold `^` (`s^-1`,
+  `M^-1s^-1`); the page run failed on it; (3) `literature_row.NOT_POOLED_CLASSES = ('activity_rate',)`: the effect of a result is one of four
+  quantities in different units, so the row's pooled effect, variance and precision are null for the class (the page run would have raised
+  "no pooled unit is declared"). A claim whose partner is a named substrate must match the record's stated substrate (partner_contradicts_claim).
+- **Real paragraph**: the Results paragraph on the steady-state kinetics of the flavin reductase ThdF, J Biol Chem 2025, doi
+  10.1016/j.jbc.2024.108128, PMC11795597, PMID 39725031, CC BY 4.0 (Europe PMC full-text XML; the publisher's non-breaking spaces and minus signs
+  kept). It states Km for NADH (19.5 uM) and FAD (0.34 uM) and kcat 0.21 +- 0.08 s^-1 (12.7 +- 4.9 min^-1) for ThdF, and cites the constants of
+  three other enzymes (the distractors). A first choice, a paragraph on DfrA and DfrB (PMC6193120), was dropped: it names two enzymes, the model left
+  the target unavailable as ambiguous in the page run (twice), so no claim could bear.
+
 ## 7. What is still open
 
 - Owner confirmation or correction of the 19 types, including the boundary questions that are not about merging

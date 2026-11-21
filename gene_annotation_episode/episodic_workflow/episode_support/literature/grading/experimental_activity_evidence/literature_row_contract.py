@@ -112,11 +112,18 @@ FEATURES_VERSION = 'a105_investigation_features_v1'
 # ---------------------------------------------------------------------------------------------------------------
 CLASSES = ('activity_rate', 'endpoint_conversion', 'product_distribution', 'reaction_coupling', 'ligand_binding', 'transport_response', 'protein_signal', 'protein_amount')
 
-EXPERIMENT_TYPES = ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis', 'auc', 'dsf', 'cetsa', 'bret', 'y2h', 'split_reporter', 'pla', 'proximity')
+EXPERIMENT_TYPES = ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis', 'auc', 'dsf', 'cetsa', 'bret', 'y2h', 'split_reporter', 'pla', 'proximity',
+                    'spectro_direct')
 
-# The 25 experiment types all belong to the ligand_binding class. Types of the other seven classes are added with
-# those classes (their converters do not exist yet).
-CLASS_OF_EXPERIMENT_TYPE = {experiment_type: 'ligand_binding' for experiment_type in EXPERIMENT_TYPES}
+# The class of each experiment type: the first 25 belong to ligand_binding; the activity_rate class has its first type, spectro_direct
+# (2026-11-21); the other types of that class and of the other six classes are added with their converters.
+CLASS_OF_EXPERIMENT_TYPE = {
+    'spr': 'ligand_binding', 'itc': 'ligand_binding', 'bli': 'ligand_binding', 'gci': 'ligand_binding', 'fp': 'ligand_binding', 'fret': 'ligand_binding', 'mst': 'ligand_binding',
+    'trp_quenching': 'ligand_binding', 'fcs': 'ligand_binding', 'elisa': 'ligand_binding', 'alphascreen': 'ligand_binding', 'radioligand': 'ligand_binding', 'spa': 'ligand_binding',
+    'pulldown': 'ligand_binding', 'emsa': 'ligand_binding', 'sec': 'ligand_binding', 'dialysis': 'ligand_binding', 'auc': 'ligand_binding', 'dsf': 'ligand_binding', 'cetsa': 'ligand_binding',
+    'bret': 'ligand_binding', 'y2h': 'ligand_binding', 'split_reporter': 'ligand_binding', 'pla': 'ligand_binding', 'proximity': 'ligand_binding',
+    'spectro_direct': 'activity_rate',
+}
 
 # ---------------------------------------------------------------------------------------------------------------
 # (3) Vocabularies
@@ -177,6 +184,8 @@ WEIGHT_UNKNOWN_BY_TYPE = {
     'fcs': 0.80, 'elisa': 0.70, 'alphascreen': 0.65, 'radioligand': 0.85, 'spa': 0.80, 'pulldown': 0.70, 'emsa': 0.75,
     'sec': 0.75, 'dialysis': 0.85, 'auc': 0.85, 'dsf': 0.70, 'cetsa': 0.65, 'bret': 0.70, 'y2h': 0.60,
     'split_reporter': 0.65, 'pla': 0.55, 'proximity': 0.60,
+    # spectro_direct (2026-11-21, owner to confirm; the answer chain is in literature_spectro_direct_converter.py and A105_ASSAY_CALIBRATION_DETAILS.md): an absolute rate with a well-known reference range of kcat and kcat/Km, a little under the KD anchor.
+    'spectro_direct': 0.85,
 }
 # Per sheet criterion overrides where the answers differ within an assay (same document).
 WEIGHT_UNKNOWN_BY_CRITERION = {
@@ -203,6 +212,8 @@ WEIGHT_UNKNOWN_BY_CRITERION = {
     'split_reporter': {'binding_controls': 0.55, 'binding_regime': 0.60},
     'pla': {'binding_controls': 0.50, 'calibration_applicability': 0.50, 'binding_regime': 0.70, 'sampling_basis': 0.80},
     'proximity': {'binding_parameter_definition': 0.55, 'calibration_applicability': 0.85, 'sampling_basis': 0.80},
+    # spectro_direct: the blank is what separates activity from spontaneous chemistry (a real gap); a contaminating activity or a second reaction on the chromophore is the attribution risk; the extinction coefficient of the common chromophores, the mass basis of a specific activity and triplicate practice are benign when unstated.
+    'spectro_direct': {'background_alternatives': 0.75, 'attribution_supported': 0.80, 'calibration_applicability': 0.90, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
 }
 if set(WEIGHT_UNKNOWN_BY_TYPE) != set(EXPERIMENT_TYPES) or not set(WEIGHT_UNKNOWN_BY_CRITERION) <= set(EXPERIMENT_TYPES):
     raise ValueError('WEIGHT_UNKNOWN_BY_TYPE must name exactly the EXPERIMENT_TYPES (and the overrides only those)')
@@ -338,6 +349,7 @@ QUALITATIVE_LOG_RATIO = {   # OWNER_DECISION 2
     'pla': 0.5,             # EXPERT_REVIEW: in-situ proximity ligation shows nearness within about 40 nm, not binding.
     'y2h': 0.4,             # EXPERT_REVIEW: heterologous nuclear reporter; high false-positive and false-negative rates.
     'split_reporter': 0.4,  # EXPERT_REVIEW: reporter reconstitution can occur through proximity or forced association; weakest direct-binding evidence.
+    'spectro_direct': 1.2,  # EXPERT_REVIEW, owner to confirm (decided 2026-11-21): a direct continuous absorbance readout of the reaction on purified enzyme is the standard evidence of catalysis, so a stated rate is strong (below SPR 1.5: the chromophore change names a reaction only when the product is identified, and that is a weight criterion, not this magnitude). The same constant is the magnitude of 'activity not detected': an absent signal is limited by the assay's detection limit and the substrate and conditions tried, so it is not stronger than 1.2.
 }
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -411,7 +423,8 @@ ACTIVITY_QUANTITY_OF_KIND = {'catalytic_efficiency': 'catalytic_efficiency', 'tu
 # (4) Field lists. Each field: kind, plus lo/hi for numbers, vocab for vocabularies, nullable.
 #   kinds: 'vocab', 'number' (finite float or int, not bool), 'count' (int >= 0), 'ref' (a record reference: no
 #   whitespace, <= 200 chars; never prose), 'map' (a controlled mapping, checked by its own rule), 'bool' (true or
-#   false), 'refs' (a list of distinct record references; lo = the least length, default 1).
+#   false), 'refs' (a list of distinct record references; lo = the least length, default 1), 'unit' (a unit spelling,
+#   UNIT_PATTERN, defined just below).
 # ---------------------------------------------------------------------------------------------------------------
 REF_PATTERN = re.compile(r'^[A-Za-z0-9_.:/#@+\-]{1,200}$')
 # A UNIT of a stated value: a spelling from a record form's fixed UNITS vocabulary. It is short and never prose, but it
@@ -458,7 +471,7 @@ RESULT_FIELDS = {
     'interpretations': _f('map', required=False),                # {criterion: {'status': CRITERION_STATUS, 'degree': 0..1 or null}}
     'measured_effect': _f('number', nullable=True, required=False),     # native scale of the class; null = none
     'effect_variance': _f('number', lo=0.0, nullable=True, required=False),   # variance of the effect, in the square of effect_unit
-    'effect_unit': _f('ref', nullable=True, required=False),     # unit of measured_effect (required when it is given)
+    'effect_unit': _f('unit', nullable=True, required=False),     # unit of measured_effect (required when it is given); a unit spelling (UNIT_PATTERN), since an activity_rate unit holds '^' ('s^-1', 'M^-1s^-1')
     'analyte_preparation_ref': _f('ref', nullable=True, required=False),      # ROW_DEPENDENCE_KEYS; null = unknown = dependent
     'immobilized_preparation_ref': _f('ref', nullable=True, required=False),
     'surface_ref': _f('ref', nullable=True, required=False),
@@ -998,6 +1011,9 @@ def _check_field(owner, name, spec, value):
     elif kind == 'ref':
         if not isinstance(value, str) or not REF_PATTERN.match(value):
             raise ValueError(f'{owner}.{name} must be a record reference, not prose: {value!r}')
+    elif kind == 'unit':
+        if not isinstance(value, str) or not UNIT_PATTERN.match(value):
+            raise ValueError(f'{owner}.{name} must be a unit spelling (UNIT_PATTERN), not prose: {value!r}')
     elif kind == 'name':
         if not is_name(value):
             raise ValueError(f'{owner}.{name} must be a molecule name (a short exact name, not prose): {value!r}')

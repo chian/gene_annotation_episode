@@ -1,7 +1,8 @@
 """The task: examine the assigned source through the access tools, commission a table, ordered-reading or
 targeted-passage investigation of it, populate the source-cell families when the settings turn the population route
-on, and commit reasoning on what it says together with its grading sheets (and, for a verified-source-leads
-commission, a validated source lead).
+on, and commit reasoning on what it says together with its grading sheets. For a verified-source-leads commission the
+page runs the same sheet route as for a105_experiments (assess_content, leaf children, update_sheet) from the claim
+alone; the source is that task's lead when its sheet row bears on the claim (``messages/internal_summary.py``).
 
 Carried from the old task.py (``SourceTask.catalog`` / ``_tool_arguments`` / ``execute``), task_decision.py,
 task_instructions.py, source_contracts.py (``_ROLE_INSTRUCTIONS``, ``_CHILDREN``, ``_TABLE``, ``_WINDOW``,
@@ -135,20 +136,20 @@ BRIEF = (
     'evidence in this source (evidence_in_table, evidence_in_passages) or that it does not know '
     '(evidence_location_unknown). It tells you where to look first; it prescribes no tool and no child.\n'
     'YOUR OWN TOOLS (context.tools) do ordinary one-off work directly:\n'
-    '- state_query reads records you hold. For an a105_experiments task you do not need it: the commissioned experiments '
-    'and their anchors are in context.commissioned_experiments, what the children returned is in context.child_returns '
-    'and context.covered_windows, and the sheet is in context.sheet_update; reading leaf records, the hypothesis or the '
-    'molecules earns nothing.\n'
+    '- state_query reads records you hold. For the sheet route (below) you do not need it: what the children returned '
+    'is in context.child_returns and context.covered_windows, and the sheet is in context.sheet_update (for an '
+    'a105_experiments task the commissioned experiments and their anchors are in context.commissioned_experiments); '
+    'reading leaf records, the hypothesis or the molecules earns nothing.\n'
     '- source_read and source_locate read a byte window of the source and locate a literal phrase in it; the pdf, '
     'archive, sequence-reference and experimental-record tools read a source held in that representation.\n'
     '- reason commits your own interpretation together with its grading sheet (or a source-grounded '
-    'no_applicable_evidence, or the source_lead of a verified_source_leads task), for evidence you have read '
+    'no_applicable_evidence: the examined spans hold no applicable experiment or result), for evidence you have read '
     'yourself.\n'
     'THE PAGE\'S CANDIDATES: the source is split, before you plan, into candidate input units: every table region '
     'detected in it (source_table:<id>) and the prose chunks of the running text between them (prose_chunk:<index>), '
     'each with its byte interval (context.content_candidates). Jev has measured every candidate once against the '
-    'information needs of this commission (context.content_assessment.information_needs: for each commissioned '
-    'experiment its result and the identity of the claim\'s molecules): context.content_assessment shows, for the '
+    'information needs of this commission (context.content_assessment.information_needs: the identity of the '
+    'claim\'s molecules and, for each commissioned experiment if there are any, its result): context.content_assessment shows, for the '
     'candidates not yet consumed only, the top needs of each table region, the best single chunk per experiment and the '
     'top chunks per need, each with Jev\'s probability that it could contribute. Jev probabilities are planning '
     'evidence. They do not select a child, admit evidence, assign credit, or decide whether the page continues.\n'
@@ -167,29 +168,37 @@ BRIEF = (
     'it yourself is ordinary work and needs no child. A commission carries an objective of the child\'s own fixed '
     'vocabulary: grade_reported_experiment when the selection is known to report a commissioned experiment with its '
     'measurements; find_applicable_evidence when whether the selection holds applicable evidence is still open.\n'
-    'UPDATE_SHEET (a105_experiments tasks): the tool update_sheet takes no argument. Code groups every leaf record your '
+    'THE SHEET ROUTE (a105_experiments and verified_source_leads tasks). For a verified_source_leads task this source '
+    'is a search result for the claim: no experiment is commissioned and none is known beforehand, whether the source '
+    'reports an experiment bearing on the claim is what you find out. The route is the same: the candidates Jev ranks '
+    'for the claim\'s needs, a leaf child on each candidate that appears to report an experiment (with the '
+    'experiment_type of the method the passage reports), then update_sheet. A source whose sheet row bears on the '
+    'claim (a measured row of the proposed annotation that this page wrote) is the lead of the task; when the '
+    'candidates hold no applicable experiment or result, say so with reason and its source-grounded '
+    'no_applicable_evidence.\n'
+    'UPDATE_SHEET: the tool update_sheet takes no argument. Code groups every leaf record your '
     'leaf children (chunk, table, report) returned into graders (one experiment = one grader; same document and '
     'experiment type merge unless '
     'a stated identity feature conflicts), converts each grader, scores it against the commissioned annotation and '
-    'updates the persistent subscoring sheet, the main scoring sheet, the credit and the per-annotation scores. For an '
-    'a105_experiments task the credit of this episode is credit_unit times the larger of the best leaf child credit '
+    'updates the persistent subscoring sheet, the main scoring sheet, the credit and the per-annotation scores. On the '
+    'sheet route the credit of this episode is credit_unit times the larger of the best leaf child credit '
     '(child_returns: the share of its asked fields it newly stated) and the credit of the latest update_sheet '
     '(context.sheet_update). For an a105_experiments task the commissioned experiments are already given in '
     'context.commissioned_experiments: each one\'s experiment_ref, assay_type and anchor (start, end), the byte '
     'interval where the source states it; no state_query is needed. The whole job is two steps and nothing else earns '
     'anything (not reading, not locating, not reason, whose sheets earn nothing here): '
-    '(1) for each experiment, one leaf child on the unconsumed candidate that holds its evidence (the chunk or table '
-    'candidate whose byte interval covers its anchor, or whose Jev probabilities are highest for its needs; a report '
-    'child when the evidence runs over several chunks), with the experiment_type of the method the candidate reports '
-    '(the commissioned assay type is a class such as ligand_binding; the child takes the specific method, for example '
-    'spr, itc or fp); read the candidate once with source_read only if the method is not evident, and not again; '
+    '(1) one leaf child on each unconsumed candidate that holds an experiment (for an a105_experiments task the '
+    'chunk or table candidate whose byte interval covers the experiment\'s anchor; otherwise the candidate whose Jev '
+    'probabilities are highest for the needs; a report child when the evidence runs over several chunks), with the '
+    'experiment_type of the method the candidate reports (a commissioned assay type is a class such as '
+    'ligand_binding; the child takes the specific method, for example spr, itc or fp); read the candidate once with '
+    'source_read only if the method is not evident, and not again; '
     '(2) update_sheet once the children have returned.\n'
     'context.source_bytes is the byte length of the assigned source and context.covered_windows lists the byte windows '
     '(offset, end, experiment_type, slot) your leaf children already read.\n'
-    'CREDIT FOR ALL OTHER TASK KINDS (context.credit_binding, context.action_yields): one credit_unit for each answer to the commissioned '
-    'task. For an a105_experiments task the answer is the current grading sheet of each commissioned experiment (the '
-    'experiment_ref and assay_type of literature_task.experiments), saved by your reason. '
-    'It earns the share of the unit that its fields earn: the nine quantities, the prediction model and the criteria '
+    'CREDIT FOR THE OTHER TASK KINDS (source_answer, a105_assembly; context.credit_binding, context.action_yields): one '
+    'credit_unit for each answer to the commissioned task. A grading sheet saved by your reason '
+    'earns the share of the unit that its fields earn: the nine quantities, the prediction model and the criteria '
     'of its assay type. A field that was entered earns its share. A field left null or unknown is classified when '
     'the sheet is saved, automatically and with no action of yours, against the source windows read: justified when '
     'those windows do not state it, which is a correct partial grading and earns its share; unjustified when they '
@@ -207,10 +216,6 @@ RETURN_GUIDANCE = ('\nWhat returns to your parent is your credit, the per-annota
                    'independent groups, relative deviation, support, opposition, net, status) and the references of '
                    'the persisted sheet states; no prose of yours and no raw record is returned. Selecting a tool '
                    'does not end your work: only the numerical controller does.')
-LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
-                 'inspected source, its anchored reference subject, whether it is a useful lead for the original '
-                 'question and the exact witnessed byte interval. A search hit or title alone verifies nothing.')
-
 # What this episode asks of a child: one value of the child's fixed vocabulary (controlled messaging: the child's
 # model is never shown text this episode's model wrote). The three children take the same two values.
 OBJECTIVE = {'enum': ['grade_reported_experiment', 'find_applicable_evidence'],
@@ -279,7 +284,7 @@ UPDATE_SHEET_DESCRIPTION = (
     'earns credit only for resolution newly gained; repeating a held fact earns nothing.')
 
 
-def instructions(*, knowledge, leads, populations):
+def instructions(*, knowledge, populations):
     """This episode's brief first (what it is for, what the commissioner asked, the children and tools and when each
     is the right choice, what earns credit), then the old task_instructions.instructions: the investigation text,
     this episode's goal, the reasoning-commit requirement, the owner's grading section with the offered sheet
@@ -291,16 +296,14 @@ def instructions(*, knowledge, leads, populations):
     text += grading_section(populations)
     if knowledge is not None:
         text += KNOWLEDGE_INSTRUCTIONS
-    if leads:
-        text += LEAD_GUIDANCE
     return text + CHILD_GUIDANCE + RETURN_GUIDANCE
 
 
-def selection_schema(names, commit_schema, leads, settings, summary):
+def selection_schema(names, commit_schema, settings, summary):
     """What the model answers with: one tool and its arguments, or one valid child slot and its arguments (the old
     action schema: kinds ``tool`` and ``child``); a chunk or table child names only an unconsumed candidate."""
     tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
-             for entry in catalog(names, commit_schema, leads, settings)]
+             for entry in catalog(names, commit_schema, settings)]
     children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot}, 'arguments': child_arguments(slot, summary)})
                 for slot in available_slots(summary)]
     return obj({'selection': {'anyOf': [*tools, *children]}})
@@ -324,7 +327,7 @@ def offered_actions(summary, ctx):
     return [*(TOOL_NAMES.get(name, name) for name in offered(ctx.settings, summary)), *available_slots(summary)]
 
 
-def catalog(names, commit_schema, leads, settings):
+def catalog(names, commit_schema, settings):
     """The tools the model is shown: python tool name, description and input schema (the old catalog; every input
     schema is projected through ``source_location_inputs``)."""
     population = {entry['name']: entry for entry in population_entries(settings)}
@@ -332,7 +335,7 @@ def catalog(names, commit_schema, leads, settings):
     for name in names:
         if name == 'reason':
             entries.append({'name': 'reason', 'description': REASON_DESCRIPTION,
-                            'input_schema': reason_schema(commit_schema, leads)})
+                            'input_schema': reason_schema(commit_schema, False)})
         elif name == 'update_sheet':
             entries.append({'name': 'update_sheet', 'description': UPDATE_SHEET_DESCRIPTION, 'input_schema': obj({})})
         elif name in population:
@@ -807,7 +810,6 @@ def decide(summary, feedback, ctx):
                                  'goal': summary['jev_goal'], 'page_context': summary['jev_page_context'],
                                  'information_needs': summary['information_needs']})
     names = offered(ctx.settings, summary)
-    leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings['knowledge_library_directory']
     context = {'commission': summary['commission'], 'goal': GOAL, 'scope': summary['scope'],
                'literature_assignment': summary['literature_assignment'],
@@ -826,7 +828,7 @@ def decide(summary, feedback, ctx):
                'consumed_candidate_ids': summary['consumed_candidate_ids'],
                'content_assessment': summary['planner_context'],
                'child_options': child_options(summary),
-               'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings),
+               'tools': catalog(names, summary['reasoning_schema'], ctx.settings),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     if ctx.settings['rate_population']:
         context['literature_experimental_work'] = {'version': 'literature_experimental_task_v1',
@@ -835,9 +837,9 @@ def decide(summary, feedback, ctx):
         'feedback': feedback, 'action_yields': summary['action_yields'],
         'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
         conflict='initial_binding_context_field_conflict')
-    return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads,
+    return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'),
                                                   populations=offered_populations(ctx.settings)), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings,
+                        generation_schema(selection_schema(names, summary['reasoning_schema'], ctx.settings,
                                                            summary)))
 
 
@@ -847,9 +849,8 @@ def action(response, summary, records, ctx):
     source lead or a no-applicable-evidence declaration is invalid. What the child commission names is not checked
     here: a wrong commission fails where the child is built."""
     names = offered(ctx.settings, summary)
-    leads = summary['task']['kind'] == 'verified_source_leads'
     commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads, ctx.settings, summary)
+    schema = selection_schema(names, commit_schema, ctx.settings, summary)
     try:
         value = decode_response(response, schema)
         validate_schema(value, schema)
@@ -857,7 +858,7 @@ def action(response, summary, records, ctx):
         if selection['kind'] == 'child':
             return ChildCall(selection['slot'], selection['arguments'])
         name, arguments = selection['tool'], selection['arguments']
-        if name == 'reason' and empty_commit(arguments['commit'], commit_schema) and 'source_lead' not in arguments and (
+        if name == 'reason' and empty_commit(arguments['commit'], commit_schema) and (
                 arguments.get('evidence_processing', {}).get('kind') != 'no_applicable_evidence'):
             raise ValueError('empty_reasoning_commit')
     except (ValueError, KeyError, TypeError, ValidationError) as error:

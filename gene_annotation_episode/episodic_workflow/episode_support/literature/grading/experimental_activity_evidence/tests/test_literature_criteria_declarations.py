@@ -12,7 +12,7 @@ import inspect
 import re
 from pathlib import Path
 import pytest
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence import literature_alpha_criteria, literature_alpha_grader, literature_radioligand_criteria, literature_radioligand_grader, literature_spa_criteria, literature_spa_grader, literature_bli_criteria, literature_bli_grader, literature_elisa_criteria, literature_elisa_grader, literature_fcs_criteria, literature_fcs_grader, literature_fp_criteria, literature_fp_grader, literature_fret_criteria, literature_fret_grader, literature_gci_criteria, literature_gci_grader, literature_itc_criteria, literature_itc_grader, literature_mst_criteria, literature_mst_grader, literature_spr_criteria, literature_spr_grader, literature_trp_criteria, literature_trp_grader
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence import literature_alpha_criteria, literature_alpha_grader, literature_radioligand_criteria, literature_radioligand_grader, literature_spa_criteria, literature_spa_grader, literature_bli_criteria, literature_bli_grader, literature_elisa_criteria, literature_elisa_grader, literature_fcs_criteria, literature_fcs_grader, literature_fp_criteria, literature_fp_grader, literature_fret_criteria, literature_fret_grader, literature_gci_criteria, literature_gci_grader, literature_itc_criteria, literature_itc_grader, literature_mst_criteria, literature_mst_grader, literature_spr_criteria, literature_spr_grader, literature_trp_criteria, literature_trp_grader, literature_spectro_direct_criteria, literature_spectro_direct_grader
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_alpha_grader import grade_alpha
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_radioligand_grader import grade_radioligand
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spa_grader import grade_spa
@@ -38,6 +38,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_mst_grader import grade_mst
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spr_grader import grade_spr
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_trp_grader import grade_trp
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spectro_direct_grader import grade_spectro_direct
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests import spectro_direct_cases
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests import alpha_cases, radioligand_cases, spa_cases, bli_cases, elisa_cases, fcs_cases, fp_cases, fret_cases, gci_cases, itc_cases, mst_cases, spr_cases, trp_cases
 
 INDEX = Path(__file__).resolve().parents[7] / 'docs' / 'axis_restructure_20261117' / 'A105_GRADER_CRITERIA_INDEX.md'
@@ -58,7 +60,8 @@ GRADERS = {'spr': (literature_spr_criteria, literature_spr_grader, literature_sp
            'pulldown': (literature_pulldown_criteria, literature_pulldown_grader, literature_pulldown_criteria.PULLDOWN_CRITERIA, {0, 1}),
            'emsa': (literature_emsa_criteria, literature_emsa_grader, literature_emsa_criteria.EMSA_CRITERIA, {0, 1}),
            'sec': (literature_sec_criteria, literature_sec_grader, literature_sec_criteria.SEC_CRITERIA, {0, 1}),
-           'dialysis': (literature_dialysis_criteria, literature_dialysis_grader, literature_dialysis_criteria.DIALYSIS_CRITERIA, {0, 1})}
+           'dialysis': (literature_dialysis_criteria, literature_dialysis_grader, literature_dialysis_criteria.DIALYSIS_CRITERIA, {0, 1}),
+           'spectro_direct': (literature_spectro_direct_criteria, literature_spectro_direct_grader, literature_spectro_direct_criteria.SPECTRO_DIRECT_CRITERIA, {0, 1})}
 
 
 def constants(criteria_module):
@@ -729,7 +732,31 @@ def sec_variants():
     return out
 
 
+def spectro_direct_variants():
+    out = []
+    for answer in ('no', 'unknown', 'not_applicable'):
+        record = spectro_direct_cases.synthetic_record()
+        for name in spectro_direct_cases.FACTS:
+            record['facts'][name] = spectro_direct_cases.fact(answer, ['s'] if answer == 'no' else [])
+        out.append(record)
+    unstated = spectro_direct_cases.synthetic_record()
+    for name in ('substrate_consumed_percent', 'km', 'absorbance_max', 'replicate_count', 'extinction_coefficient'):
+        unstated['quantities'][name] = {**unstated['quantities'][name], 'status': 'unavailable', 'value': None}
+    unstated['facts']['linear_progress_curve'] = spectro_direct_cases.fact('yes', ['s'])
+    out.append(unstated)
+    consumed_yes = spectro_direct_cases.synthetic_record()
+    consumed_yes['quantities']['substrate_consumed_percent'] = {**consumed_yes['quantities']['substrate_consumed_percent'], 'status': 'unavailable', 'value': None}
+    out.append(consumed_yes)
+    no_independence = spectro_direct_cases.synthetic_record()
+    no_independence['facts']['independent_replicates'] = spectro_direct_cases.fact('unknown')
+    no_independence['quantities']['replicate_count'] = {**no_independence['quantities']['replicate_count'], 'status': 'unavailable', 'value': None}
+    out.append(no_independence)
+    return out
+
+
 def records(kind):
+    if kind == 'spectro_direct':
+        return [grade_spectro_direct(r) for r in (spectro_direct_cases.synthetic_record(), spectro_direct_cases.sparse_record(), spectro_direct_cases.real_record(), *spectro_direct_variants())]
     if kind == 'dialysis':
         return [grade_dialysis(r) for r in dialysis_variants()]
     if kind == 'sec':
@@ -770,7 +797,7 @@ def records(kind):
     return [grade_itc(itc_cases.synthetic_record()), grade_itc(itc_cases.sparse_record()), grade_itc(mutated)]
 
 
-@pytest.mark.parametrize('kind', ['spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis'])
+@pytest.mark.parametrize('kind', ['spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis', 'spectro_direct'])
 def test_declaration_is_complete_and_constants_are_defined_once_with_a_marker(kind):
     criteria_module, grader_module, declared, _ = GRADERS[kind]
     assert len({c['id'] for c in declared}) == len(declared)
@@ -788,14 +815,14 @@ def test_declaration_is_complete_and_constants_are_defined_once_with_a_marker(ki
         assert any(name in c['thresholds'] for c in declared), name
 
 
-@pytest.mark.parametrize('kind', ['spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis'])
+@pytest.mark.parametrize('kind', ['spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis', 'spectro_direct'])
 def test_grader_evaluates_exactly_the_declared_criteria_in_order(kind):
     criteria_module, grader_module, declared, _ = GRADERS[kind]
     assert grader_module.CRITERIA == tuple(c['id'] for c in declared)
     assert tuple(grader_module.EVALUATORS) == grader_module.CRITERIA
 
 
-@pytest.mark.parametrize('kind', ['spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis'])
+@pytest.mark.parametrize('kind', ['spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis', 'spectro_direct'])
 def test_every_returned_status_and_reason_is_a_declared_case(kind):
     declared = {c['id']: {(status, reason) for status, reason, _ in c['returns']} for c in GRADERS[kind][2]}
     seen = 0
@@ -806,7 +833,7 @@ def test_every_returned_status_and_reason_is_a_declared_case(kind):
     assert seen >= 2 * len(declared)
 
 
-@pytest.mark.parametrize('kind', ['spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis'])
+@pytest.mark.parametrize('kind', ['spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis', 'spectro_direct'])
 def test_no_inline_threshold_number_in_the_grader(kind):
     _, grader_module, _, allowed = GRADERS[kind]
     numbers = {node.value for node in ast.walk(ast.parse(inspect.getsource(grader_module))) if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)) and not isinstance(node.value, bool)}

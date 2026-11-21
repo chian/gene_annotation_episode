@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
     CHUNK_SIZE, PROSE_CHUNK, SOURCE_TABLE, TABLE_PREVIEW_CHARS, candidate_text, information_needs, page_candidates,
     planner_context, report_windows)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reasoning import (
-    no_applicable_spans, relevant_lead_sources, screening_covered)
+    no_applicable_spans, screening_covered)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_task_answers import (
     classified_credit_binding)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_unknown_classification import (
@@ -72,6 +72,29 @@ def commission_claim(records, proposed):
     if hypothesis['value']['type'] in PARTNER_VALUE_TYPES:
         refs.append(hypothesis['value']['ref'])
     return claim_of_hypothesis(hypothesis, {ref: record_name(records.get(ref)) for ref in refs})
+
+
+def credit_binding(task_key, task):
+    """The credit definition the model is shown. Under a verified_source_leads commission the page's credit is the sheet's
+    (``credit.py``): the resolution its sheet update gains for the proposed annotation, and a source whose sheet row bears
+    on the claim is the lead."""
+    binding = classified_credit_binding(task_key, task)
+    if task['kind'] != 'verified_source_leads':
+        return binding
+    return {**binding, 'unit': 'sheet_resolution_gain_of_the_proposed_annotation_per_source'}
+
+
+def bearing_lead_sources(records, source_ref, proposed, base_state_refs, sheet_update):
+    """The verified source lead of a page: the page's source when its latest sheet update holds a row of the proposed
+    annotation that is measured (``status`` not ``unknown``) and that the page itself wrote or changed (its ``sheet_ref``,
+    the content-addressed row reference, is not one of the rows of the states the page was given). No sheet update, or
+    only unknown or given rows: no lead."""
+    if sheet_update is None:
+        return []
+    given = {json.loads(records.get_artifact(ref))['row']['row_ref'] for ref in base_state_refs}
+    bears = any(features['assertion_ref'] == proposed and features['status'] != 'unknown'
+                and features['sheet_ref'] not in given for features in sheet_update['features'])
+    return [source_ref] if bears else []
 
 
 def consumed_candidates(children, candidates, records):
@@ -156,9 +179,9 @@ def internal_summary(view):
         'source_examination_goal': {'objective': parent['objective']['value'],
                                     'proposed_annotation_ref': parent['proposed_annotation_ref'],
                                     'commissioned_result': task,
-                                    'progress_definition': classified_credit_binding(parent['task_key'], task),
+                                    'progress_definition': credit_binding(parent['task_key'], task),
                                     'planning_question': PLANNING_QUESTION},
-        'credit_binding': classified_credit_binding(parent['task_key'], task),
+        'credit_binding': credit_binding(parent['task_key'], task),
         'reasoning_schema': records.reasoning_schema(),
         'held_record_refs': sorted(records.refs()),
         'last_local_outcome': (None if last is None else {'tool': last['tool'], 'outcome': last['outcome']}
@@ -213,6 +236,6 @@ def internal_summary(view):
         'no_applicable_spans': spans,
         'examined_windows': examined_windows(view.outcomes),
         'screening_covered': screening_covered(task, view.outcomes, spans),
-        'lead_source_refs': (relevant_lead_sources(view.outcomes, parent['proposed_annotation_ref'], records)
-                             if task['kind'] == 'verified_source_leads' else []),
+        'lead_source_refs': bearing_lead_sources(records, page['source_ref'], parent['proposed_annotation_ref'],
+                                                 parent['sheet_state_refs'], sheet_update),
     }

@@ -68,16 +68,19 @@ def work_sources(literature, task, outcomes, records):
 
 def consumed_inputs(task, outcomes, spans, covered):
     """The sources consumed, in the order consumed (nano-graphrag ``processed_chunk_ids`` / ``processed_row_ids``): a
-    source handed to the strategy child as a prior-search source, and a source a completed or partial unit read or
-    processed (a read, a population operation, a reasoning commit naming it). For a screening answer a source is
-    consumed only when its commissioned spans are covered (declared to hold no applicable evidence, or returned
-    covered by the child), or when it was handed to the child."""
+    source handed to the strategy child as a prior-search source, and a source a completed or partial unit WORKED on
+    (a population operation, a reasoning commit naming it). Looking at a source is not the work on it: a read or a
+    locate (``READ_TOOLS``) consumes nothing, so a source this episode has only read can still be handed to the
+    strategy child (the real head run of 2026-11-21 lost the child after one read of its only source). For a screening
+    answer a source is consumed only when its commissioned spans are covered (declared to hold no applicable evidence,
+    or returned covered by the child), or when it was handed to the child."""
     screening = task.get('answer_kind') == 'screening'
     consumed = []
     for outcome in outcomes:
         if outcome['kind'] == 'child':
             consumed.extend(outcome['arguments']['strategy']['prior_search_refs'])
-        elif not screening and outcome['outcome']['status'] in ('completed', 'partial'):
+        elif (not screening and outcome['tool'] not in READ_TOOLS
+              and outcome['outcome']['status'] in ('completed', 'partial')):
             consumed.extend(named_sources(outcome['arguments']['arguments']))
     if screening:
         consumed.extend(span['source_ref'] for span in task['examined']
@@ -145,4 +148,10 @@ def internal_summary(view):
         'input_list': input_list, 'consumed_inputs': consumed,
         'lead_source_refs': (relevant_lead_sources(view.outcomes, parent['proposed_annotation_ref'], records)
                              if task['kind'] == 'verified_source_leads' else []),
+        # The lead sources this episode's own reason units validated (the child's leads are credited through the credit
+        # the child returned, which ``credit.py`` adds).
+        'own_lead_source_refs': (relevant_lead_sources([outcome for outcome in view.outcomes
+                                                        if outcome['kind'] == 'tool'],
+                                                       parent['proposed_annotation_ref'], records)
+                                 if task['kind'] == 'verified_source_leads' else []),
     }

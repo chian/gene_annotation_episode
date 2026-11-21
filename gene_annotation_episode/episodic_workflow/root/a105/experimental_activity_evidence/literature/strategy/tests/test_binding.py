@@ -139,8 +139,10 @@ def test_the_credit_is_real_code_and_counts_the_answers():
     credit_module = importlib.import_module(PACKAGE + '.credit')
     assert EPISODE.credit is credit_module.credit
     summary = {'task': {'kind': 'verified_source_leads', 'credit_unit': 2.0}, 'task_key': 'A105:verified_source_leads',
-               'lead_source_refs': ['src_1'], 'proposed_annotation_ref': 'hyp_1'}
-    assert credit_module.credit(summary, None) == 2.0
+               'lead_source_refs': ['src_1', 'src_2'], 'own_lead_source_refs': ['src_2'],
+               'child_returns': [{'credit': 0.5}, {'credit': 0.25}], 'proposed_annotation_ref': 'hyp_1'}
+    # the credit the child returned plus credit_unit for each lead the episode's own reason units validated
+    assert credit_module.credit(summary, None) == 2.75
     screening = {'task': {'kind': 'source_answer', 'answer_kind': 'screening', 'credit_unit': 3.0, 'examined': []},
                  'proposed_annotation_ref': 'hyp_1', 'screening_covered': True}
     assert credit_module.credit(screening, None) == 3.0

@@ -168,8 +168,9 @@ CHILD_GUIDANCE = ('\nSelect the strategy child (the investigation of which searc
                   'objective and the sources you hold that it is to build on when a narrower question warrants '
                   'iteration; what it returns is shown to you as child_returns. A child earns credit in this '
                   'episode only through the records it returns. Your input list (input_list) is the sources not yet '
-                  'consumed: a source handed to the child, or read or processed by one of your units, is consumed '
-                  'and is not offered again; the child takes only sources of the input list.')
+                  'consumed: a source handed to the child, or worked on by one of your units (a reasoning commit or a '
+                  'population operation naming it), is consumed and is not offered again; reading or locating in a '
+                  'source does not consume it. The child takes only sources of the input list.')
 
 
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '

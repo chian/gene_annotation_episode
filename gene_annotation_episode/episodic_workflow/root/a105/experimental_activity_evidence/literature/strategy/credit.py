@@ -17,10 +17,15 @@ def credit(summary, records):
     """For an ``a105_experiments`` task the credit is what the web-search child earned (OWNER_DECISION 10: the page updates
     the subscoring sheet and produces the credit; the levels above only receive it and compute nothing). Each run starts
     from the sheet the previous child return held, so the returns add up. The other task kinds keep the library's task
-    credit."""
-    if summary['task']['kind'] != 'a105_experiments':
+    credit. For a ``verified_source_leads`` task the credit the child returned (its pages' sheet credit) is counted the
+    same way, and ``credit_unit`` each is added for the leads this episode's own ``reason`` units validated
+    (``own_lead_source_refs``)."""
+    task = summary['task']
+    if task['kind'] not in ('a105_experiments', 'verified_source_leads'):
         return task_credit(summary, records)
     value = math.fsum(child['credit'] for child in summary['child_returns'])
+    if task['kind'] == 'verified_source_leads':
+        value += task['credit_unit'] * len(summary['own_lead_source_refs'])
     if not math.isfinite(value):
         raise ValueError('literature_finite_task_credit_required')
     return value

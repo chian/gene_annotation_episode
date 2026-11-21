@@ -343,3 +343,22 @@ def test_the_commission_accepts_spa_as_an_experiment_type_and_the_earlier_ones_s
     from ..messages.read_from_parent import EXPERIMENT_TYPES
     assert EXPERIMENT_TYPES[:13] == ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa')     # the earlier ones are unchanged; pulldown follows
 
+
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests import spectro_direct_passages
+
+
+def spectro_direct_synthetic_world(tmp_path, name='world'):
+    data = spectro_direct_passages.SYNTHETIC.encode()
+    return held_world(tmp_path, 'Preceding text. ' + spectro_direct_passages.SYNTHETIC + ' Following text.', 16, len(data), name=name, experiment_type='spectro_direct')
+
+
+def spectro_direct_real_world(tmp_path):
+    text = 'Preceding text. ' + spectro_direct_passages.REAL + ' Following text.'
+    return held_world(tmp_path, text, 16, len(spectro_direct_passages.REAL.encode()), experiment_type='spectro_direct')
+
+
+def test_the_commission_accepts_spectro_direct_the_first_activity_rate_type_and_the_earlier_ones_still():
+    from ..messages.read_from_parent import EXPERIMENT_TYPES
+    assert EXPERIMENT_TYPES[:13] == ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa')     # the earlier ones are unchanged
+    assert EXPERIMENT_TYPES[-1] == 'spectro_direct' and len(EXPERIMENT_TYPES) == 26
+

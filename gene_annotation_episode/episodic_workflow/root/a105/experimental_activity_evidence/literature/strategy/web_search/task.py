@@ -138,11 +138,11 @@ SOURCE_READ_TOOLS = ('source.read', 'source.locate', 'source.sequence.references
 
 INTEGER = {'type': 'integer', 'minimum': 0}
 TEXT = {'type': 'string', 'minLength': 1}
-REPRESENTATIONS = ['text', 'original', 'stdout', 'stderr']
 
 
-PAGE_SCHEMA = obj({'source_ref': TEXT, 'representation': {'enum': REPRESENTATIONS}, 'artifact_ref': TEXT,
-                   'prior_delivery_refs': {'type': 'array', 'items': TEXT, 'uniqueItems': True}})
+# The model names only the source (one of the unconsumed search results). The representation, its artifact and the
+# prior deliveries are known to code from the source record, and ``action`` fills them (``page_of``).
+PAGE_SCHEMA = obj({'source_ref': TEXT})
 # What this episode asks of the page child: one value of the child's fixed vocabulary (controlled messaging: the
 # child's model is never shown text this episode's model wrote).
 OBJECTIVE = {'enum': ['evidence_in_table', 'evidence_in_passages', 'evidence_location_unknown'],
@@ -152,8 +152,9 @@ OBJECTIVE = {'enum': ['evidence_in_table', 'evidence_in_passages', 'evidence_loc
                             'evidence_location_unknown: where the source holds it, or whether it holds any, is not '
                             'known.'}
 CHILD_DESCRIPTION = (
-    'Investigate where and how one exact UNCONSUMED source of the search results (input_list) should be examined, in '
-    'one of its representations; the child chooses ordinary source operations or selected table, ordered-reading or '
+    'Investigate where and how one exact UNCONSUMED source of the search results (input_list) should be examined; you '
+    'name only the source (its representation and artifact are filled from its record: its text when it has one, '
+    'else its original bytes); the child chooses ordinary source operations or selected table, ordered-reading or '
     'targeted-passage investigations of it. Choose the result from context.page_candidates (its Jev probability, '
     'provider rank, title, description and the measured outcomes of the previous page children). The source is '
     'consumed: it is not offered again.')
@@ -774,6 +775,17 @@ def decide(summary, feedback, ctx):
                                                            summary['input_list'])))
 
 
+def page_of(records, source_ref):
+    """The page the child is commissioned on, from the source record alone: its text representation when the source
+    holds one, else its original bytes, with that representation's artifact; no earlier delivery is held for a source
+    the search just returned. The model does not type any of these."""
+    source = records.get(source_ref)
+    representation = 'text' if source.get('text_ref') is not None else 'original'
+    return {'source_ref': source_ref, 'representation': representation,
+            'artifact_ref': source['text_ref' if representation == 'text' else 'artifact_ref'],
+            'prior_delivery_refs': []}
+
+
 def validate_selection(value, schema):
     validate_schema(value, schema)
     return value['selection']
@@ -792,11 +804,8 @@ def action(response, summary, records, ctx):
     try:
         selection = validate_selection(decode_response(response, schema), schema)
         if selection['kind'] == 'child':
-            page = selection['arguments']['page']
-            for reference in (page['source_ref'], page['artifact_ref'], *page['prior_delivery_refs']):
-                if not records.holds(reference):
-                    raise ContractError('literature_reference_unavailable', detail={'reference': reference})
-            return ChildCall(selection['slot'], selection['arguments'])
+            page = page_of(records, selection['arguments']['page']['source_ref'])
+            return ChildCall(selection['slot'], {**selection['arguments'], 'page': page})
         name, arguments = selection['tool'], selection['arguments']
         if name == 'reason' and empty_commit(arguments['commit'], commit_schema) and 'source_lead' not in arguments and (
                 arguments.get('evidence_processing', {}).get('kind') != 'no_applicable_evidence'):

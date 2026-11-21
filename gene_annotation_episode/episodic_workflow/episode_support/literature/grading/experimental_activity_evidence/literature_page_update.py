@@ -45,7 +45,7 @@ STAMPS. A subscoring row rests on several results; the page stamps dataset_ref /
 handed to merge_main only when ALL its member results share one non-null value; otherwise None (the row is its own dependence
 unit). Judgement call, flagged for the owner.
 
-CONVERTERS. All 25 are named convert_<module suffix> and take one argument, the grade dict of the type's grade function.
+CONVERTERS. All 26 (25 ligand_binding and the activity_rate type spectro_direct) are named convert_<module suffix> and take one argument, the grade dict of the type's grade function.
 The suffix differs from the experiment type for trp_quenching (convert_trp) and alphascreen (convert_alpha).
 """
 import hashlib
@@ -98,6 +98,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_sec_converter import convert_sec
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_sheet_features import row_features
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spa_converter import convert_spa
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spectro_direct_converter import convert_spectro_direct
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_split_reporter_converter import convert_split_reporter
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spr_converter import convert_spr
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_trp_converter import convert_trp
@@ -109,6 +110,7 @@ CONVERTERS = {
     'radioligand': convert_radioligand, 'spa': convert_spa, 'pulldown': convert_pulldown, 'emsa': convert_emsa, 'sec': convert_sec,
     'dialysis': convert_dialysis, 'auc': convert_auc, 'dsf': convert_dsf, 'cetsa': convert_cetsa, 'bret': convert_bret,
     'y2h': convert_y2h, 'split_reporter': convert_split_reporter, 'pla': convert_pla, 'proximity': convert_proximity,
+    'spectro_direct': convert_spectro_direct,
 }
 
 

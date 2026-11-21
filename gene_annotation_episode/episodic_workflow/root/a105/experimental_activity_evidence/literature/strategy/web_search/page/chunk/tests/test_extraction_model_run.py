@@ -1137,6 +1137,50 @@ def test_a_synthetic_pulldown_passage_stating_every_field_is_filled_and_every_cr
     world['store'].close()
 
 
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests import spectro_direct_passages
+from .test_extraction_leaf import spectro_direct_real_world, spectro_direct_synthetic_world
+
+
+@pytest.mark.model_run
+def test_the_real_spectro_direct_paragraph_of_pmc11795597_states_only_what_it_states(tmp_path):
+    """The real Results paragraph on the steady-state kinetics of the flavin reductase ThdF of PMC11795597 (J Biol Chem 2025, doi 10.1016/j.jbc.2024.108128, CC BY 4.0).
+    Pass: no call is rejected without a later accepted call; every field a call states is in the allowed set ``REAL_ALLOWED`` (the fields the paragraph clearly states by their
+    general meaning, each with the values it allows) with a quote that occurs exactly once in the chunk; nothing outside the allowed set is stated. Which allowed fields a call
+    leaves unavailable is printed, not required."""
+    world = spectro_direct_real_world(tmp_path)
+    run = linked(world, 'a105-extract-spectro_direct-real-real')
+    result, calls, units = finish(world, run, 'a105-extract-spectro_direct-real-real')
+    calls = no_unrecovered_rejection(calls, units)
+    allowed = spectro_direct_passages.REAL_ALLOWED
+    for call in calls:
+        answer = type_answer(call)
+        stated = {name for name in answer if answer[name]['status'] == 'stated'}
+        print('STATED FIELDS', call['position'], sorted(stated))
+        print('SUPPORT CLASSES', call['position'], {support: sum(answer[name]['support'] == support for name in stated) for support in ('direct', 'implied', 'about_something_else')})      # informational only: no class distribution is asserted
+        print('ALLOWED BUT NOT STATED', call['position'], sorted(set(allowed) - stated))
+        assert stated <= set(allowed), sorted(stated - set(allowed))
+        for name in stated:         # every stated field has an allowed value and unit, and its quote occurs exactly once in the chunk
+            assert (answer[name]['value'], answer[name].get('unit')) in allowed[name], (name, answer[name]['value'], answer[name].get('unit'))
+            assert quote_span(spectro_direct_passages.REAL, answer[name]['quote']) is not None
+    assert result['finding']['newly_stated'] < result['finding']['asked']
+    world['store'].close()
+
+
+@pytest.mark.model_run
+def test_a_synthetic_spectro_direct_passage_stating_every_field_is_filled_and_every_criterion_decided(tmp_path):
+    world = spectro_direct_synthetic_world(tmp_path)
+    run = linked(world, 'a105-extract-spectro_direct-synthetic-real')
+    result, calls, units = finish(world, run, 'a105-extract-spectro_direct-synthetic-real')
+    calls = no_unrecovered_rejection(calls, units)
+    for call in calls:
+        answer = type_answer(call)
+        unstated = [name for name in answer if answer[name]['status'] != 'stated']
+        print('NOT STATED', call['position'], unstated)
+        assert unstated == [] and set(answer) == set(spectro_direct_passages.SYNTHETIC_STATED)
+    assert result['finding']['newly_stated'] > 0 and result['credit'] == result['finding']['newly_stated'] / result['finding']['asked']
+    world['store'].close()
+
+
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests import proximity_passages
 from .test_extraction_leaf import proximity_real_world, proximity_synthetic_world
 

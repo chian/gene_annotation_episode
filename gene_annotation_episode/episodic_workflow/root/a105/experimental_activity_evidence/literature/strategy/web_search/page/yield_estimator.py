@@ -1,8 +1,8 @@
 """Continuation from the commissioned task, carried from the old ``yield_estimator.py``
 (``SourceYield.yield_controller`` -> ``_private_yield_controller``; README 7b).
 
-``verified_source_leads`` accumulates (old ``YieldController``): one credit unit per verified source, without
-limit. Every other task is a finite commission (old ``_FiniteLiteratureYieldController`` with
+``verified_source_leads`` accumulates (old ``YieldController``), without limit; its credit is the page's sheet credit
+(``credit.py``), the same as an ``a105_experiments`` page's. Every other task is a finite commission (old ``_FiniteLiteratureYieldController`` with
 ``_RemainingCommissionedCredit``): the target is ``credit_unit``, read from the parent input, for every such task.
 For an ``a105_experiments`` commission the credit is the change of the resolution of the one commissioned candidate's
 subscoring sheet (``credit.py``), so the one ``credit_unit`` is the whole resolution going from 0 to 1; it is no longer

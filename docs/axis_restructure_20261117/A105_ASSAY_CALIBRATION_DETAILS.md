@@ -789,6 +789,35 @@ All are tagged `EXPERT_REVIEW`. The reason is the converter's, shortened. Citati
   degree ... Conflicting only when the stated incubation is shorter" (the old rule). The code below it is the new
   curve. It is not changed here, because no code was edited.
 
+## 3b. activity_rate class (2026-11-21, owner to confirm; citations from memory, not verified)
+
+### Spectro_direct (continuous direct spectrophotometric assay), u = 0.85; BA 0.75, AS 0.80, CA 0.90, NB 0.90, SB 0.90
+
+- **Q1:** the rate of an enzyme-dependent absorbance change of a chromophore, turned into an absolute rate (per mg, per enzyme)
+  by a stated extinction coefficient. Absolute; kcat, Km and kcat/Km are well-defined constants.
+- **Q2:** yes. The range of enzyme kcat (median about 10 s^-1) and kcat/Km (median about 1e5 M^-1 s^-1) is well known
+  (Bar-Even et al. 2011); the class strength anchors are built on it. A purified enzyme with a continuous assay and a stated absolute
+  rate is the standard evidence of a catalytic activity.
+- **Q3:** an unstated blank is usually benign for a strong rate and the dominant false positive for a weak one (which the noise end of the
+  strength scale already lowers); an unstated extinction coefficient of a common chromophore (NAD(P)H 6220 M^-1 cm^-1 at 340 nm) is read
+  from the literature and is off by a factor, not meaningless.
+- **Q4:** a background or a contaminating activity counted as the enzyme's gives a wrong direction for a weak rate and a wrong magnitude
+  for a strong one: less severe than a pull-down band (a pure artefact), more severe than a KD (a magnitude only).
+- **Q5:** the default sits just under the KD anchor 0.90; the criteria that guard against a false activity are lower; the benign ones
+  equal the anchor.
+
+| sheet criterion | members | u |
+| --- | --- | --- |
+| BA background_alternatives | spontaneous_reaction_control g, substrate_independent_signal p | 0.75 |
+| AS attribution_supported | enzyme_dependence p, product_identity p | 0.80 |
+| CA calibration_applicability | extinction_coefficient_stated b, absorbance_range b | 0.90 |
+| RR rate_regime | initial_rate_regime p, enzyme_substrate_ratio p | 0.85 (default) |
+| KM kinetic_model | substrate_range p | 0.85 (default) |
+| NB normalization_basis | active_enzyme_amount b | 0.90 |
+| SB sampling_basis | replicates b | 0.90 |
+| AR assertion_relevance | native_reaction p | 0.85 (default) |
+| CS condition_scope | purified_enzyme p | 0.85 (default) |
+
 ## 4. Notes for the owner's decision
 
 - **Per type or per type and sheet criterion.**

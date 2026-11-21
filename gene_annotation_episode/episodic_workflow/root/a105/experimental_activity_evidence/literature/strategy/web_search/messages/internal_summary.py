@@ -177,4 +177,10 @@ def internal_summary(view):
         'screening_covered': screening_covered(task, view.outcomes, spans),
         'lead_source_refs': (relevant_lead_sources(view.outcomes, parent['proposed_annotation_ref'], records)
                              if task['kind'] == 'verified_source_leads' else []),
+        # The lead sources this episode's own reason units validated (the page children's leads are not among them: a
+        # page child's lead is credited through its credit, which ``credit.py`` adds).
+        'own_lead_source_refs': (relevant_lead_sources([outcome for outcome in view.outcomes
+                                                        if outcome['kind'] == 'tool'],
+                                                       parent['proposed_annotation_ref'], records)
+                                 if task['kind'] == 'verified_source_leads' else []),
     }

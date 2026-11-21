@@ -90,6 +90,8 @@ def _variance_units(unit):
 
 def _quantity_unit_supported(kind, unit):
     dimensionless = {'fraction', 'dimensionless'}
+    if kind == 'rate_ratio':      # 2026-11-21: 'fold' is the unit of the rate over the paper's own control (the activity_rate anchor unit, ACTIVITY_STRENGTH_ANCHORS['rate_over_control']); added with spectro_direct
+        return unit in dimensionless | {'fold'}
     if kind in ('rate_ratio', 'conversion_fraction', 'conversion_difference', 'completion_time_ratio', 'product_fraction', 'product_fraction_ratio', 'equilibrium_fraction', 'equilibrium_ratio', 'productive_fraction', 'stoichiometric_ratio', 'kinetic_parameter_ratio', 'log_kinetic_parameter_ratio', 'partner_response_fraction', 'binding_parameter_ratio', 'log_binding_parameter_ratio', 'binding_discrimination_ratio', 'log_binding_discrimination', 'transport_rate_ratio', 'log_transport_rate_ratio', 'substrate_saturation', 'substrate_response_ratio', 'log_substrate_response', 'signal_ratio', 'signal_difference', 'log_signal_ratio', 'protein_amount_ratio', 'sites_per_monomer', 'active_fraction'):
         return unit in dimensionless
     if kind == 'band_display_fraction':
