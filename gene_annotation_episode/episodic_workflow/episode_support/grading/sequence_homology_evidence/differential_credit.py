@@ -226,6 +226,34 @@ def msa_test_ceiling(held, maxima, measurable):
     (removing or adding a group can move columns), so the positions of one group in a new alignment context are
     not fixed by its sequences; a count of residues or a share argument over the sequences would need the columns
     fixed. Those parts keep the open bound (every position not seen as a matched site of the candidate)."""
+    return vertex_maximum(held, maxima, measurable)
+
+
+def metacats_test_ceiling(held, maxima, measurable):
+    """The most one further MetaCATS report of a named alignment can add to the credit of one target: a PROVED maximum.
+
+    ``held`` is ``standing`` of the target; ``measurable`` lists the candidates (identifiers) of the alignment's groups;
+    ``maxima`` maps each to ``m_c`` = (its matched conserved sites in that alignment, with a target position, that no held
+    MetaCATS report confirmed: ``candidate_measurements.unconfirmed_matched_sites``) x ``SITE_WEIGHT`` x ``SHEET_WEIGHT['msa']``.
+
+    Proof. The report's value for ``c`` is ``W`` x (its matched sites of that alignment whose column is significant and that no
+    earlier report confirmed) (``confirmed_site_values``); a confirmed site is one of the alignment's matched sites of ``c``
+    (fixed by the held alignment's sheet, whatever columns the service finds significant), and a site already confirmed is not
+    counted, so the count is between 0 and the number of matched sites not yet confirmed; weighted by the msa sheet's weight,
+    ``0 <= v_c <= m_c``. A candidate with ``m_c`` = 0 gets no measurement (it earns nothing and makes no pair). The report is
+    one test appended last, so the credit rises by the entries of the candidates it admits (each ``v_c``) plus ``|v_a - v_b|``
+    for each pair of listed candidates it measures (``differential_credit``; it is no dataset test, so nothing else changes).
+    That rise is convex in ``v`` on the box ``0 <= v_c <= m_c``, so its maximum is at a vertex, the bound ``vertex_maximum``
+    computes (the same as for an alignment: ``msa_test_ceiling`` step 3). A report of an alignment already analysed by a held
+    report is refused by the request check (the reuse key), so its ceiling is 0; the caller decides that."""
+    return vertex_maximum(held, maxima, measurable)
+
+
+def vertex_maximum(held, maxima, measurable):
+    """The largest rise of the credit over values ``0 <= v_c <= maxima[c]`` of the ``measurable`` candidates in one test appended
+    last: the entries of the candidates not listed (each at its maximum) plus, over the sets ``S`` of listed candidates at their
+    maximum (the others at 0), ``sum_{a<b in S} |m_a - m_b| + sum_{a in S, b not in S} m_a``; above 16 listed candidates the
+    looser ``sum over pairs of max(m_a, m_b)``. The vertex argument is ``msa_test_ceiling``'s step 3."""
     measured = [candidate for candidate in dict.fromkeys(measurable) if maxima[candidate] > 0]
     listed = [candidate for candidate in measured if held.get(candidate, {}).get('listed')]
     new = math.fsum(maxima[candidate] for candidate in measured if candidate not in listed)

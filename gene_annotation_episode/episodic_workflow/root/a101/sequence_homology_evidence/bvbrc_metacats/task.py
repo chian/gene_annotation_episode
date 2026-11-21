@@ -37,8 +37,8 @@ INSTRUCTIONS = common_instructions(
     'is one fixed value, not your choice. planned shows the size of the job '
     '(sequences, groups, columns and the size of each candidate group).',
     'the service\'s table of the positions that differ between the groups at the fixed p-value is read and, for each such '
-    'position, the residue counts per group and the target\'s residue are saved; the significant positions confirm which '
-    'distinguishing sites of the alignment are statistically supported; the head\'s credit takes no measurement from them; '
+    'position, the residue counts per group and the target\'s residue are saved; a candidate\'s conserved site of the alignment '
+    'whose column is significant is confirmed, and the head\'s credit counts each candidate\'s newly confirmed sites; '
     'when no position is significant the sheet says so; nothing more '
     'is needed for the result to count.')
 

@@ -21,9 +21,12 @@ from method_loop import UNBOUNDED
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
     NativeCorrespondenceScoring)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
-    SITE_WEIGHT, alignment_contexts, candidate_standing, candidate_table, dataset_bests, held_sources, matched_positions_taken)
+    SITE_WEIGHT, alignment_contexts, candidate_standing, candidate_table, dataset_bests, held_sources, matched_positions_taken,
+    unconfirmed_matched_sites)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
-    SHEET_WEIGHT, dataset_test_ceiling, msa_test_ceiling, test_ceiling)
+    SHEET_WEIGHT, dataset_test_ceiling, metacats_test_ceiling, msa_test_ceiling, test_ceiling)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
+    bvbrc_metacats_search as metacats)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.msa_alignment_sheet import (
     MINIMUM_GROUP_SIZE)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_msa_alignment import (
@@ -59,7 +62,7 @@ class A101DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v4', 'axis': 'A101',
+        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v5', 'axis': 'A101',
                 'measurement': 'subscore_of_one_references_alignments_over_the_scope_regions',
                 'subscore_version': VERSION,
                 'candidates': 'product_from_database_search_functions_profile_family_reference_sequence',
@@ -71,6 +74,7 @@ class A101DifferentialCredit:
                 'differential': 'abs_difference_of_score_moves_of_two_listed_candidates_in_a_test_both_underwent',
                 'credit': 'sum_of_entry_scores_and_differentials', 'maximum': 'none',
                 'dataset': 'tests_of_one_dataset_earn_their_largest_test_credit_once_and_sheet_reads_largest_value',
+                'metacats': 'matched_conserved_sites_confirmed_significant_not_confirmed_before_times_site_weight_msa_family',
                 'repeat': 'earns_nothing'}
 
 
@@ -174,13 +178,57 @@ def msa_best(summary, records):
     return best
 
 
+def metacats_refused(summary, records, alignment_ref):
+    """Whether the head's check refuses a MetaCATS commission of this alignment as a repeat (``task.check_bvbrc_metacats``,
+    ``bvbrc_metacats_search.check_commission``): a report of its groups is held (the reuse check), or it was commissioned and
+    no outstanding job of it is continued."""
+    if metacats.reusable_report(records, alignment_ref) is not None:
+        return True
+    commissioned = [row['arguments']['alignment_ref'] for row in summary['units']
+                    if row['kind'] == 'child' and row['slot'] == 'bvbrc_metacats']
+    groups = metacats.group_artifact_ref(metacats.plan(records, alignment_ref))
+    return alignment_ref in commissioned and not any(
+        job['outstanding'] and job['identity']['groups_ref'] == groups for job in summary['bvbrc_metacats_jobs'])
+
+
+def metacats_value(summary, records, alignment_ref, standing=None):
+    """The proved maximum of one commission of ``bvbrc_metacats`` of the held alignment ``alignment_ref`` (see ``ceiling``): 0 when
+    the check refuses it as a repeat; else ``differential_credit.metacats_test_ceiling`` over the alignment's group candidates,
+    each at most (its matched sites in the alignment not yet confirmed) x ``SITE_WEIGHT`` x the msa sheet's weight."""
+    if metacats_refused(summary, records, alignment_ref):
+        return 0.0
+    scope, sources = summary['scope'], held_sources(records)
+    target, open_sites = unconfirmed_matched_sites(records, scope, sources, alignment_ref)
+    names = [group['product'] for group in metacats.plan(records, alignment_ref)['groups']]
+    if standing is None:
+        standing = candidate_standing(records, scope, sources)
+    return metacats_test_ceiling(standing.get(target, {}),
+                                 {'product:' + name: open_sites.get(name, 0) * SITE_WEIGHT * SHEET_WEIGHT['msa'] for name in names},
+                                 ['product:' + name for name in names])
+
+
+def metacats_best(summary, records):
+    """``(ceiling, arguments)`` of the commission of ``bvbrc_metacats`` with the largest proved maximum among the alignments a
+    commission may name now (``summary['metacats_options']``; the first found on a tie), as ``{'query_ref', 'alignment_ref'}``
+    (the resource and ``until`` do not change the ceiling). ``(0.0, None)`` when none can earn."""
+    best, standing = (0.0, None), candidate_standing(records, summary['scope'], held_sources(records))
+    for item in summary['metacats_options']:
+        value = metacats_value(summary, records, item['alignment_ref'], standing)
+        if value > best[0] + 1e-12:
+            best = (value, {'query_ref': item['query_ref'], 'alignment_ref': item['alignment_ref']})
+    return best
+
+
 def best_arguments(summary, records, action_type, ctx):
     """The commission that reaches the action's ceiling asked with ``arguments`` ``None`` (``ceiling``), as the arguments a
     decision can name, or ``None`` when no choice of arguments changes the action's ceiling or none can earn
-    (``reason``, ``bvbrc_metacats``, and the actions whose arguments the ceiling does not distinguish here). For ``bvbrc_msa``:
-    the query, the search, the candidates (a subset of those admitted) and the sequences per candidate (``msa_best``)."""
+    (``reason``, and the actions whose arguments the ceiling does not distinguish here). For ``bvbrc_msa``:
+    the query, the search, the candidates (a subset of those admitted) and the sequences per candidate (``msa_best``). For
+    ``bvbrc_metacats``: the query and the alignment (``metacats_best``)."""
     if action_type == 'bvbrc_msa':
         return msa_best(summary, records)[1]
+    if action_type == 'bvbrc_metacats':
+        return metacats_best(summary, records)[1]
     return None
 
 
@@ -227,7 +275,15 @@ def ceiling(summary, records, action_type, arguments, ctx):
       identical to one already commissioned or already graded (the search, the candidates, the sequences per candidate) earns 0.
       With ``arguments`` ``None``: the largest over the held graded searches with their admitted candidates (the bound only grows
       with candidates; the dataset's best is the same for every commission of that search).
-    * ``bvbrc_metacats``: 0. A MetaCATS report gives no measurement (``candidate_measurements``).
+    * ``bvbrc_metacats``: derived from the current state, as a proved maximum (proof in
+      ``differential_credit.metacats_test_ceiling``). The owner: "It's wrong that it has no credit. i told you it gains credit by
+      confirming conserved sites in comparison to a gene family." A report of the named alignment measures the alignment's group
+      candidates; a candidate's value is ``SITE_WEIGHT`` x (its matched conserved sites of that alignment confirmed by the report
+      and by no earlier held report), so at most ``SITE_WEIGHT`` x (its matched sites there not yet confirmed:
+      ``candidate_measurements.unconfirmed_matched_sites``) x the msa sheet's weight, and the rise is at most the vertex maximum
+      over those bounds. An alignment the head's check refuses (a report of it held: the reuse check; or commissioned and not
+      continued) earns 0. With ``arguments`` ``None``: the largest over the alignments a commission may name now
+      (``metacats_best``), and ``best_arguments`` names that commission.
     * ``hmmer_profile_scan``: the scan of the target ``query_ref`` against the profile database ``database`` reports
       each family at most once, so it measures at most as many families as the database holds profiles (``model_count``
       of the manifest the setting ``profile_databases`` names; the family's own reporting threshold only lowers the
@@ -239,8 +295,12 @@ def ceiling(summary, records, action_type, arguments, ctx):
     comparison already held (``held_comparisons``), a profile scan of the same query and database already held
     (``held_profile_scans``), a search of the same query, program and database already graded (a closed search of
     ``bvbrc_searches``; an outstanding one can still be continued and keeps its ceiling)."""
-    if action_type == 'reason' or action_type == 'bvbrc_metacats':
+    if action_type == 'reason':
         return 0.0
+    if action_type == 'bvbrc_metacats':
+        if arguments is None:
+            return metacats_best(summary, records)[0]
+        return metacats_value(summary, records, arguments['alignment_ref'])
     scope = summary['scope']
     standing = candidate_standing(records, scope, held_sources(records))
     sequences = [ref for ref in scope['subject_refs'] if ref in summary['held_sequences']]

@@ -54,8 +54,22 @@ The kinds of held graded source read, by the content of their retained sheet:
   best so far; a replicate earns 0), and a candidate's value on the cluster sheet from one dataset is its largest value over
   that dataset's clusterings (``differential_credit``). ``dataset_bests`` gives each dataset's best so far (what the
   ceiling reads).
-* a MetaCATS report (``metacats_sheet_v1``) gives no measurement: its significant positions are kept on its own sheet and
-  confirm which distinguishing sites are statistically supported; they are not used as a filter of the sites.
+* a MetaCATS report (``metacats_sheet_v1``): the owner (2026-11-21): "It's wrong that it has no credit. i told you it gains
+  credit by confirming conserved sites in comparison to a gene family." MetaCATS ran on a held alignment with the alignment's
+  candidate groups (each group one product candidate's reference sequences, a gene family) and reports the alignment positions
+  where the groups' residue frequencies differ significantly (p fixed at ``bvbrc_metacats_analysis.P_VALUE``). The job took a
+  DERIVED alignment (the held one without the target's row) with every column kept, so a reported ``Position`` is the 1-based
+  column of the held alignment (verified on the stored real reports: the per-group residue counts of every significant row equal
+  the held alignment's column of that number). A matched conserved site of a candidate (``msa_alignment_sheet.conserved_sites``
+  of that alignment: identity (target position, residue, candidate), the group conserving the target's own residue there; the
+  column is mapped to the target's residue position through the target's row, and a column where the target has a gap is
+  identified by nothing) is CONFIRMED when its column is significant. Test ``msa:bvbrc_metacats:confirmed_sites`` (family
+  ``msa``, so the msa sheet weight applies), one test per report; for each candidate with at least one matched site in the
+  alignment that no earlier held MetaCATS confirmed, one measurement: value = (its matched sites confirmed by this report and by
+  no earlier one) x ``SITE_WEIGHT`` (a confirmed site is one of the sites, so the same scale); it also records ``confirmed`` and
+  ``unconfirmed_before`` (the sites it could confirm). Confirmation is cumulative over the held reports in arrival order.
+  ``unconfirmed_matched_sites`` gives, for an alignment, each candidate's matched sites not yet confirmed (what the ceiling
+  reads).
 
 A candidate is identified by its vocabulary and its identifier (its name when it has none). Candidates of different
 vocabularies are different candidates: nothing merges a family with a product or a sequence.
@@ -79,8 +93,14 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     compile_native_sheet, hmmer_comparisons, route_native_grading)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
+from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import products
 
 VOCABULARIES = ('product', 'profile_family', 'reference_sequence')
+METACATS_SHEET = 'metacats_sheet_v1'
+METACATS_TEST = 'msa:bvbrc_metacats:confirmed_sites'
+ALIGNMENT_KIND = 'multiple_sequence_alignment'
+REPORT_KIND = 'alignment_position_report'
+ALIGNMENT_PROVIDER = 'bvbrc_msa'
 DATABASE_SHEETS = ('blast_database_sheet_v1', 'blast_database_sheet_v2', 'blast_database_sheet_v3')
 PAIRWISE_SHEET = 'blast_pairwise_sheet_v1'
 PROFILE_SHEET = 'hmmer_search_sheet_v1'
@@ -200,6 +220,56 @@ def _held_cluster(source, grading):
             for candidate, share, size, inside in group_values(sheet)], 0
 
 
+def alignment_sheet(reader, alignment_ref):
+    """The graded sheet (``msa_alignment_sheet_v1``) of the held alignment data product ``alignment_ref``: the sheet of the held
+    source of provider ``bvbrc_msa`` whose artifact the product row labels."""
+    (row,) = [item for item in products(reader, ALIGNMENT_KIND) if item['id'] == alignment_ref]
+    (source,) = [item for item in reader.list('source')
+                 if item['provider'] == ALIGNMENT_PROVIDER and item['artifact_ref'] == row['artifact_ref']]
+    (entry,) = source_tool_grading_entries(reader, source['id'])
+    return entry['grading']['sheet']
+
+
+def analysed_alignment(reader, source):
+    """The alignment data product (its row reference) a held MetaCATS source analysed: the report product labelling the source's
+    table is ``derived_from`` it."""
+    (report,) = [item for item in products(reader, REPORT_KIND) if item['artifact_ref'] == source['artifact_ref']]
+    (alignment_ref,) = report['derived_from']
+    return alignment_ref
+
+
+def confirmed_site_values(sites, significant_columns, confirmed, target):
+    """The measurements of one MetaCATS report given the conserved-site section's ``sites`` of the alignment it analysed, the
+    alignment columns it found significant (its ``Position`` values: the derived alignment kept every column) and ``confirmed``,
+    the matched-site identities (target, target position, residue, candidate) earlier reports confirmed, which this call extends.
+    Only a matched site with a target position counts (a column where the target has a gap is identified by nothing). Returns
+    ``[(candidate, value, confirmed, unconfirmed_before)]`` for each candidate with at least one matched site not confirmed
+    before: ``confirmed`` = those of them whose column is significant, ``value`` = ``confirmed`` x ``SITE_WEIGHT``."""
+    found, newly = {}, []
+    for site in sites:
+        key = (target, site['target_position'], site['residue'], site['candidate'])
+        if not site['matched'] or site['target_position'] is None or key in confirmed:
+            continue
+        held = found.setdefault(site['candidate'], [0, 0])
+        held[1] += 1
+        if site['column'] in significant_columns:
+            held[0] += 1
+            newly.append(key)
+    confirmed.update(newly)
+    return [(candidate, count * SITE_WEIGHT, count, open_count) for candidate, (count, open_count) in found.items()]
+
+
+def _held_metacats(reader, source, grading, confirmed):
+    """A graded MetaCATS report (``metacats_sheet_v1``): test ``METACATS_TEST``; one measurement per candidate with matched sites
+    of the analysed alignment that no earlier report confirmed (``confirmed_site_values``)."""
+    sheet = alignment_sheet(reader, analysed_alignment(reader, source))
+    significant = {position['position'] for position in grading['sheet']['significant_positions']}
+    return [(METACATS_TEST, 'product', candidate, None, value, {'weight': SITE_WEIGHT, 'confirmed': count,
+                                                               'unconfirmed_before': open_count})
+            for candidate, value, count, open_count
+            in confirmed_site_values(sheet['conserved_sites']['sites'], significant, confirmed, source['operand_refs'][0])], 0
+
+
 def _profile_scan(source, grading, value_of):
     accessions = {hit['target_name']: hit['target_accession'] for hit in grading['sheet']['hits']}
     families = _by(hmmer_comparisons(grading), 'target_name')
@@ -216,11 +286,12 @@ def _pairwise(reader, source, grading, value_of):
 
 
 def _read(reader, scope, sources):
-    """The measurements in arrival order, the unlabelled hits of each target and the identified conserved sites (target,
-    target position, residue, candidate name) of the held alignments."""
+    """The measurements in arrival order, the unlabelled hits of each target, the identified conserved sites (target,
+    target position, residue, candidate name) of the held alignments and the matched sites the held MetaCATS reports confirmed
+    (the same identities)."""
     scope = reader.validate_scope(scope)
     measurements, unlabelled = [], {target: 0 for target in scope['subject_refs']}
-    identified = set()
+    identified, confirmed = set(), set()
     for reference in sources:
         source = reader.get(reference)
         for entry in source_tool_grading_entries(reader, reference):
@@ -234,6 +305,8 @@ def _read(reader, scope, sources):
                 read = lambda s, g, v: _held_msa(s, g, identified)
             elif sheet['schema'] == CLUSTER_SHEET:
                 read = lambda s, g, v: _held_cluster(s, g)
+            elif sheet['schema'] == METACATS_SHEET:
+                read = lambda s, g, v: _held_metacats(reader, s, g, confirmed)
             elif sheet['schema'] == PAIRWISE_SHEET:
                 read = lambda s, g, v: _pairwise(reader, s, g, v)
             else:
@@ -246,7 +319,7 @@ def _read(reader, scope, sources):
                 rows, supplied_length=length, regions=regions)['value'])
             unlabelled[target] += missing
             measurements.extend(_measurement(target, row[0] + '@' + reference, *row[1:5], reference, *row[5:]) for row in found)
-    return measurements, unlabelled, identified
+    return measurements, unlabelled, identified, confirmed
 
 
 def candidate_measurements(reader, scope, sources):
@@ -258,16 +331,32 @@ def candidate_measurements(reader, scope, sources):
 def candidate_standing(reader, scope, sources):
     """Where each candidate stands, per target of the scope (``{target: differential_credit.standing(its
     measurements)}``), after the graded ``sources``: what a further test's ceiling is computed from."""
-    measurements, _, _ = _read(reader, scope, sources)
+    measurements = _read(reader, scope, sources)[0]
     return {target: standing(rows) for target, rows in _by(measurements, 'target').items()}
 
 
 def dataset_bests(reader, scope, sources):
     """Per target of the scope, ``{dataset: best}``: for each dataset (the graded search a held clustering's set is drawn from)
     the largest test credit of its held clusterings (``differential_credit(...)['datasets']``), what the dataset already earned."""
-    measurements, _, _ = _read(reader, scope, sources)
+    measurements = _read(reader, scope, sources)[0]
     return {target: {dataset: held['best'] for dataset, held in differential_credit(rows)['datasets'].items()}
             for target, rows in _by(measurements, 'target').items()}
+
+
+def unconfirmed_matched_sites(reader, scope, sources, alignment_ref):
+    """``(target, {candidate name: count})`` for the held alignment data product ``alignment_ref``: per candidate, its matched
+    sites in that alignment (with a target position) that no held MetaCATS report has confirmed (``confirmed_site_values``):
+    the most a MetaCATS report of that alignment can confirm for it."""
+    confirmed = _read(reader, scope, sources)[3]
+    (source,) = [item for item in reader.list('source') if item['provider'] == ALIGNMENT_PROVIDER and item['artifact_ref']
+                 == next(row['artifact_ref'] for row in products(reader, ALIGNMENT_KIND) if row['id'] == alignment_ref)]
+    target = source['operand_refs'][0]
+    open_sites = {}
+    for site in alignment_sheet(reader, alignment_ref)['conserved_sites']['sites']:
+        if site['matched'] and site['target_position'] is not None and (
+                target, site['target_position'], site['residue'], site['candidate']) not in confirmed:
+            open_sites[site['candidate']] = open_sites.get(site['candidate'], 0) + 1
+    return target, open_sites
 
 
 def matched_positions_taken(reader, scope, sources):
@@ -321,7 +410,7 @@ def candidate_table(reader, scope, sources):
     ``tests`` (each test applied to the target with ``candidate_count``, the admitted candidates it measured),
     ``differentials`` (each: the ``test``, the two candidates and the ``value``), ``unlabelled_hit_count`` and the
     target's ``credit``), and the ``credit`` of the scope: the sum over its targets."""
-    measurements, unlabelled, _ = _read(reader, scope, sources)
+    measurements, unlabelled = _read(reader, scope, sources)[:2]
     targets = {}
     for target, rows in _by(measurements, 'target').items():
         result = differential_credit(rows)

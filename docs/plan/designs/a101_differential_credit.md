@@ -41,7 +41,7 @@ Decisions of reading.
 - The measurements of different targets are never compared: the credit is the sum over the targets of the credit of each target.
 - `tests` shows, for each test, the number of admitted candidates it measured.
 - The head's stopping is the forecast controller over the credit's ceilings (`forecast_yield_controller.md`). The continuation key is `A101:a101_native_sequence_correspondence` (the key `read_from_parent` gives a commission that names no `a101_task`; the declaration is checked against the credit definition record, not against the key).
-- Credit definition record: kind `a101_differential_credit`, the version `A101DifferentialCredit.as_record()` gives (`a101_differential_credit_v4`, which carries the sheet weights and the dataset rule). A run whose continuation settings carry another version's record fails with `scientific_yield_credit_definition_mismatch`. `A101SequenceCredit` (the index reader) keeps its own record (it is stamped in the index sheet's policy).
+- Credit definition record: kind `a101_differential_credit`, the version `A101DifferentialCredit.as_record()` gives (`a101_differential_credit_v5`, which carries the sheet weights, the dataset rule and the MetaCATS confirmation rule). A run whose continuation settings carry another version's record fails with `scientific_yield_credit_definition_mismatch`. `A101SequenceCredit` (the index reader) keeps its own record (it is stamped in the index sheet's policy).
 
 ## Check against the lead's trial (a direct call on stored records of run D1, workspace `runs/bvbrc_a101_ws_D`; not a real run; launcher `runs/trial_D1`)
 

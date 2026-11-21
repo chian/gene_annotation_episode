@@ -285,8 +285,11 @@ scorer computes from the filled slots. The same analysis uses the same sheet wit
   that needs another step's output asks for its KIND with `require_product`, never a file name. The owner: "MetaCATS needs to have
   a requirement that it needs an input MSA, which means we need to start storing and labeling data and data products for reuse"
   (`bvbrc_msa_episode.md`). The reuse refusal lives only in the request checks (before anything runs).
-- What a result is NOT: a test that gives no usable measurement gives no measurement. MetaCATS in A101 gives none; the owner:
-  "MetaCATS doesn't even help reach much of a conclusion with p values.... that's not the part that matters".
+- What a result is NOT: a test that gives no usable measurement gives no measurement. A p-value is not the measurement: the owner,
+  "MetaCATS doesn't even help reach much of a conclusion with p values.... that's not the part that matters", and "It's wrong that
+  it has no credit. i told you it gains credit by confirming conserved sites in comparison to a gene family." (2026-11-21). So
+  MetaCATS is measured by the candidates' matched conserved sites of the analysed alignment whose columns it finds significant and
+  no earlier report confirmed, x W, on the msa family (`a101_conserved_sites.md`).
 
 **Where A101 does it.** Measurements and the test names: `LIB/grading/sequence_homology_evidence/candidate_measurements.py`.
 Arithmetic: `LIB/grading/sequence_homology_evidence/differential_credit.py`. Sheets: `msa_alignment_sheet.py`, `cluster_sheet.py`,
@@ -539,7 +542,7 @@ Read at the time of writing (2026-11-21), from the notes and the code:
   Its design note is being updated by the agent that wires it. Before copying it, read the code of `HEAD/all_vs_all/task.py`: the child
   runs `prepare_database`, `all_vs_all_blast`, `cluster` (a tuning try that grades nothing) and `commit_clustering` (the one clustering
   the head reads).
-- The scoring sheet's weights (`SHEET_WEIGHT`, `TYPICAL_STRONG_VALUE`) and the head's credit record `a101_differential_credit_v3` are in
+- The scoring sheet's weights (`SHEET_WEIGHT`, `TYPICAL_STRONG_VALUE`) and the head's credit record `a101_differential_credit_v5` are in
   the working tree and derive from a single target; they are to be re-derived and the continuation files of earlier runs name `v2`.
 - The weight W = 1/E (E = 7) rests on seven alignments of one 70-residue target.
 - A parked job resumed by a later head run, after the head itself ended while the job was parked, was not achieved (`bvbrc_blast_episode.md`,

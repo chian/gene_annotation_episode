@@ -34,12 +34,14 @@ GROUP_FILE = 'groups.tsv'
 # (the rule of the conserved sites, ``msa_alignment_sheet``); the p-value of MetaCATS is not a choice of the model: one fixed value.
 P_VALUE = 0.05
 P_VALUES = (P_VALUE,)   # the route (``bvbrc_job_route``) checks a job's p-value against this set: the one fixed value
-SHEET_MEANING = ('the significant positions confirm which distinguishing sites (the conserved-site grading of the alignment) '
-                 'are statistically supported; they are not a filter of the sites and give no measurement of their own')
+SHEET_MEANING = ('the significant positions are columns of the analysed alignment (the job took it without the target row, every '
+                 'column kept); a matched conserved site of a candidate (the conserved-site grading of the alignment) whose column '
+                 'is significant is confirmed, and each candidate is measured by its matched sites confirmed here and by no '
+                 'earlier report, times the site weight')
 MINIMUM_GROUP_SIZE = 2
 MINIMUM_GROUPS = 2
 SCHEMA = 'metacats_sheet_v1'
-_COUNT = re.compile(r'(\d+) (\S+)')
+_COUNT = re.compile(r'(\d+) ([^\s,]+)')   # a cell is '6 A, 1 P, 3 V': the comma is not part of the residue
 
 
 def parse_alignment(text):

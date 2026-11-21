@@ -37,7 +37,7 @@ sequence_homology_evidence                    HEAD: holds the records, decides w
 │   └─ tools of the child: estimate, launch, fix, monitor, extract
 ├─ bvbrc_msa                                  CHILD: the target aligned with sequences of several candidates of a graded search (MSA application, Muscle)
 │   └─ tools of the child: estimate, launch, fix, monitor, extract
-├─ bvbrc_metacats                             CHILD: a held alignment tested with MetaCATS; gives no candidate measurement
+├─ bvbrc_metacats                             CHILD: a held alignment tested with MetaCATS; confirms the candidates' conserved sites
 │   └─ tools of the child: estimate, launch, fix, monitor, extract
 ├─ all_vs_all                                 CHILD: the target and sequences of several candidates searched against themselves with BLAST+ on a local resource and clustered with MCL
 │   └─ tools of the child: prepare_database, all_vs_all_blast, cluster, commit_clustering, hold
