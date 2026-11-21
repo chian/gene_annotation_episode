@@ -131,7 +131,7 @@ def _plan(store, request, commission):
 def feature_group_bytes(plan):
     """The feature group of the plan's hits (their ``feature_id``s, in plan order) as the closed JSON the job is given
     (``group.json``): the route creates the BV-BRC feature group object from it and BV-BRC reads the sequences itself."""
-    return canonical({'feature_ids': [row['feature_id'] for row in plan]})
+    return canonical({'feature_ids': [row['feature_id'] for row in plan]}).encode('ascii')
 
 
 def feature_group_ref(plan):
