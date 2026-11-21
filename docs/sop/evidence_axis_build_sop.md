@@ -564,7 +564,7 @@ Read at the time of writing (2026-11-21), from the notes and the code:
   Its design note is being updated by the agent that wires it. Before copying it, read the code of `HEAD/all_vs_all/task.py`: the child
   runs `prepare_database`, `all_vs_all_blast`, `cluster` (a tuning try that grades nothing) and `commit_clustering` (the one clustering
   the head reads).
-- The scoring sheet's weights (`SHEET_WEIGHT`, `TYPICAL_STRONG_VALUE`) and the head's credit record `a101_differential_credit_v5` are in
+- The scoring sheet's weights (`SHEET_WEIGHT`, `TYPICAL_STRONG_VALUE`) and the head's credit record `a101_differential_credit_v6` are in
   the working tree and derive from a single target; they are to be re-derived and the continuation files of earlier runs name `v2`.
 - The weight W = 1/E (E = 7) rests on seven alignments of one 70-residue target.
 - A parked job resumed by a later head run, after the head itself ended while the job was parked, was not achieved (`bvbrc_blast_episode.md`,
