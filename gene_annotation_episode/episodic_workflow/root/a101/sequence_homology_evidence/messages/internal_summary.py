@@ -8,10 +8,16 @@ For the commissions (``task.commission_fields``, ``msg_to_child``) the summary a
 chosen from and built with: ``held_record_refs`` (the held records), ``held_sequences`` (the held records
 that carry a sequence, each with its molecule: what the two sequences of a comparison are chosen from),
 ``held_comparisons`` (the pairwise comparisons already held: what the check refuses to run again), ``bvbrc_searches`` (the BV-BRC searches this episode holds, with their records: what a commission of ``bvbrc_blast`` continues), ``held_clusterings`` (the committed clusterings of the ``all_vs_all`` child), ``held_source_refs`` (the held sources) and ``named_refs`` (for each held
-record, job ledger rows included, the held records it names: what travels in custody beside it)."""
+record, job ledger rows included, the held records it names: what travels in custody beside it).
+
+``returned_refs`` are the record lists ``final_to_parent`` returns (``committed_record_refs``, ``execution_handoff_refs``,
+``execution_check_refs``, ``execution_closure_refs``, ``data_product_refs``), each CLOSED UNDER NAMING by
+``job_records.returned_with_names`` (the records chosen with everything they name, recursively, among the held records), as every
+child's returned lists are: the parent holds what a returned record names."""
 import json
 
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import named_records, outstanding_jobs
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import (
+    named_records, outstanding_jobs, returned_with_names)
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.construction_records import (
     scientific_digest)
@@ -122,8 +128,11 @@ def internal_summary(view):
             'initial_selection_sha256': scientific_digest(parent['selection']),
             'permitted_children': sorted(CHILD_SLOTS),
             'units': units, 'last_local_outcome': last, 'child_reports': child_reports,
-            'committed_record_refs': committed, 'handoff_refs': handoff_refs, 'check_refs': check_refs,
-            'closure_refs': closure_refs,
+            'handoff_refs': handoff_refs,
+            'returned_refs': {name: returned_with_names(records, refs) for name, refs in (
+                ('committed_record_refs', committed), ('execution_handoff_refs', handoff_refs),
+                ('execution_check_refs', check_refs), ('execution_closure_refs', closure_refs),
+                ('data_product_refs', [row['id'] for row in held_products]))},
             'held_record_refs': held,
             'held_source_refs': [row['id'] for row in records.list('source')],
             'held_comparisons': _held_comparisons(records),
@@ -144,7 +153,6 @@ def internal_summary(view):
             'data_products': [{'row_ref': row['id'], 'kind': row['kind'], 'edam_data': row['edam_data'],
                                'edam_format': row['edam_format'], 'locations': row['locations'],
                                'settings': row['settings']} for row in held_products],
-            'data_product_refs': [row['id'] for row in held_products],
             'alignment_product_refs': [row['id'] for row in alignments],
             'reusable_alignments': alignments,
             'evidence_refs': [row['id'] for kind in EVIDENCE_RECORD_TYPES for row in records.list(kind)],

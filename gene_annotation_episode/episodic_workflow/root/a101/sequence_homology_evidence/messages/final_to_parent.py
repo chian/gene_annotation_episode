@@ -6,7 +6,11 @@ whether to come back for an outstanding job, and that is what it needs.
 
 Selectable: ``committed_record_refs`` (the records this episode committed through its reasoning units and the graded
 records of its comparisons: the records its credit reads, which a parent passes back on a later visit) and
-``execution_handoff_refs`` (the handoff records its launches returned), ``execution_check_refs`` and ``execution_closure_refs`` (the status and closure records its children returned)."""
+``execution_handoff_refs`` (the handoff records its launches returned), ``execution_check_refs`` and
+``execution_closure_refs`` (the status and closure records its children returned) and ``data_product_refs`` (the held
+data-product rows). EVERY RETURNED RECORD LIST IS CLOSED UNDER NAMING: each is ``internal_summary``'s ``returned_refs`` entry, built with
+``job_records.returned_with_names`` (the records chosen with everything they name among the records held), so the parent holds
+whatever a returned record names."""
 from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.axis_features import (
@@ -101,14 +105,5 @@ def final_to_parent(summary, completion, selection):
               'finding': {'evidence_axis': 'A101', 'targets': summary['axis_findings'],
                           'outstanding_handoff_count': summary['outstanding_handoff_count'],
                           **({'waiting_searches': waiting} if waiting else {})}}
-    if 'committed_record_refs' in selection:
-        result['committed_record_refs'] = summary['committed_record_refs']
-    if 'execution_handoff_refs' in selection:
-        result['execution_handoff_refs'] = summary['handoff_refs']
-    if 'execution_check_refs' in selection:
-        result['execution_check_refs'] = summary['check_refs']
-    if 'data_product_refs' in selection:
-        result['data_product_refs'] = summary['data_product_refs']
-    if 'execution_closure_refs' in selection:
-        result['execution_closure_refs'] = summary['closure_refs']
+    result.update({name: refs for name, refs in summary['returned_refs'].items() if name in selection})
     return result

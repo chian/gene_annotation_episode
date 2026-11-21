@@ -14,9 +14,9 @@ or unread field.
   one step: a Store record names what the Store's rule says (`reader.named_references`); an artifact names none; a job
   ledger row names its reply artifact (`source_ref`), `result_refs`, the artifacts a handoff staged (`detail.input_refs`, a
   mapping the Store rule does not follow) and the handoff a check or closure belongs to (`detail.handoff_ref`).
-- Each child's `internal_summary` builds its returned lists through it (the child's `final_to_parent` receives only the
-  summary, no reader, so the closing runs where the records are read): a BV-BRC child its `handoff_refs`, `check_refs`,
-  `closure_refs` and `graded_refs`; `all_vs_all` its `graded_refs` only (below).
+- Each episode's `internal_summary` builds its returned lists through it (`final_to_parent` receives only the summary, no
+  reader, so the closing runs where the records are read): a BV-BRC child its `handoff_refs`, `check_refs`, `closure_refs`
+  and `graded_refs`; `all_vs_all` its `graded_refs` only (below); the head its five lists (`returned_refs`, below).
 - The head's summary `named_refs` covers every held reference, job rows included, through the same `named_records`; a
   commission that continues a held job (`msg_to_child._continued`) passes back the rows and, in `input_refs`, every held
   record they name. The head's `outstanding_handoff_count` is the number of held handoff rows whose closure row it does not
@@ -88,6 +88,25 @@ Direct check (not a real run): on a scratchpad copy of `runs/a101_goal7_ws_cspa`
 stored hit metadata and the 6 gradings with a store stub that captures the rows they write: 7 rows (1 `search_hit_metadata`, 6
 `tool_grading_sheet`), and every reference each row names was already held by the head in that run, so the closing adds only
 the rows; the head would list 18 product rows (11 + 7).
+
+## The head's own return is closed under naming (2026-11-21)
+
+An independent check of run `runs/a101_goal8_run_cspa_2a5c36f0e` (workspace `runs/a101_goal8_ws_cspa`) found the head's return not closed
+under naming: `committed_record_refs` listed its profile scan's source and three product rows but not the files they name, and
+`data_product_refs` listed product rows without their artifacts; 13 held records were in no returned list. The head's `internal_summary`
+now builds `returned_refs`, one entry per returned list (`committed_record_refs`, `execution_handoff_refs`, `execution_check_refs`,
+`execution_closure_refs`, `data_product_refs`), each through `returned_with_names`, and `final_to_parent` returns the selected entries from
+it. The unclosed `committed_record_refs`, `check_refs`, `closure_refs` and `data_product_refs` of the summary are gone; `handoff_refs`
+stays as the handoffs shown to the head's model.
+
+Direct check (not a real run): on a scratchpad copy of `runs/a101_goal8_ws_cspa`, the head's `internal_summary` and `final_to_parent` (every
+list selected) run over a custody reader of the head's receipts. Before: 957 held, 944 in some returned list, 4 named by a returned record and
+not returned (`committed_record_refs` 915 with 4 named outside it; `data_product_refs` 23 with all 23 artifacts named outside it). After:
+named-but-not-returned 0 in each list and over their union (`committed_record_refs` 919, `data_product_refs` 46, handoff 18, check 26,
+closure 29), 948 in some returned list. The 9 held records in no returned list are named by no returned record: the head's entry hypothesis,
+one held artifact that nothing names, and the profile scan's local job (its handoff and closure rows and the five files only those rows
+name: the staged query FASTA, the two replies, `result.json` and `stderr.log`; the scan's three graded texts are returned as its labelled
+products), which the scan closes inside its unit.
 
 ## What the head's credit does with what is returned
 
