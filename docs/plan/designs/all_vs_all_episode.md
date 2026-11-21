@@ -72,6 +72,19 @@ result (all of a candidate's sequences cluster with the target) and 0 when none 
 weighted by W = 1/E to be on the same scale. The measurement also keeps `size` and `in_target_cluster`, and its `dataset`: the graded BV-BRC
 search the set's sequences are drawn from (the commission's `search_ref`).
 
+THE CREDIT WEIGHS THE EVIDENCE (credit definition `a101_differential_credit_v6`). The owner (2026-11-21), on a second clustering that earned 0.90
+almost entirely by adding "hypothetical protein" (1 sequence, 0/1 in the target's cluster) to the same clustering: "that seems like a cheat, you need a
+better cluster metric the weights overall evidence not just goodness of clusters ... more data is better and clusters with little data earn less";
+the approved rule is "pair x weaker side". The value stays the plain share (the score and the sheet value are unchanged), but each candidate has an
+evidence `r(n) = n / (n + 4)` for its `n` sequences in the set (`differential_credit.cluster_evidence`, `CLUSTER_PSEUDO_COUNT` = 4: 1 sequence 0.2,
+4 sequences 0.5, 18 sequences 0.82): in a cluster test each differential is `min(r_a, r_b) x |d_a - d_b|` (a pair is only as good as its weaker side)
+and a candidate the test admits enters with `r(n) x` its entry score. Every other family (search, scan, alignment, MetaCATS, pairwise) has evidence 1.
+A shrunk value, `(in + 2) / (n + 4)`, was tried first and rejected: it made the cheat larger (goal10 unit 5 would have earned 1.186 instead of 0.896),
+because a one-sequence candidate held near 1/2 sits far from the low-valued groups and every pair pays the distance; no value given to it brings
+its pair credit below about 0.70 there, so the pairs themselves must be weighed. The cluster sheet's weight stays 1: the leading candidate's share
+over the 21 committed clusterings of the stored real runs (`a101_goal3_ws_cspa` to `a101_goal10_ws_cspa`; the RecA runs hold none) has median 1.0
+(1.0 in 15, 15/18 in 6), derivation beside `TYPICAL_STRONG_VALUE`.
+
 ONE CREDIT FOR ONE DATASET. The owner (2026-11-21, verbatim): "You only can earn one credit for one dataset - you can improve a clustering to earn
 more, but you cannot replicate". All the committed clusterings of one dataset together earn at most one test's credit
 (`differential_credit`): each clustering is computed as a test at its own place in the order (its entries and differentials as for any test),
@@ -87,30 +100,35 @@ Child credit (`all_vs_all/credit.py`): the head's three child units, each earned
 `information_unit` for the matrix, `graded_unit` for the committed (graded) clustering; a refused or repeated step earns 0, and a try earns nothing. Child
 ceiling: each tool's unit while its check can pass, else 0 (`cluster` and `hold` 0; `commit_clustering` 0 until two tries of the matrix with different tunings are held). Yield: the completion controller to the commission's target.
 
-Head ceiling for `all_vs_all` (`HEAD/credit.ceiling`): the proved, tight maximum the cluster test can add from the current state
-(`differential_credit.cluster_test_ceiling`, proof in its docstring). The test measures each named candidate once, its value w x its share in the
-target's cluster, in [0, w] (w the cluster sheet's weight); appended last, its own credit (the entries it admits plus |v_a - v_b| over the listed pairs)
-is convex on that box, so it is largest at a vertex: with l listed and u unlisted candidates named, w (u + floor(l^2 / 4)) (half the listed candidates
-wholly in the target's cluster, the other half wholly outside; two candidates on the same side earn 0). Every named candidate has at least one sequence in
-the set, so that partition is an outcome the clustering can give: the bound is reached. The dataset already earned its best test credit, so the ceiling is
-that vertex bound minus the dataset's best so far, floored at 0 (`dataset_test_ceiling`; `candidate_measurements.dataset_bests`); a commission identical to
-one already commissioned or graded (same search, candidates, per_candidate) 0. With no arguments the ceiling is that of the best commission the head's check
-accepts now (`HEAD/credit.all_vs_all_best`: larger candidate sets first, the first found on a tie, the largest per_candidate not yet commissioned with that
-set), and `best_arguments` names it, so the row the model sees and a refusal's `choose_from` name a commission that reaches the row's ceiling.
+Head ceiling for `all_vs_all` (`HEAD/credit.ceiling`, ceiling version `a101_ceiling_v4`): the proved, tight maximum the cluster test can add from
+the current state (`differential_credit.cluster_test_ceiling`, proof in its docstring). The commission's plan is deterministic, so each named
+candidate's sequences `n_c` in the set, and so its evidence `r_c`, are known before the job (`HEAD/credit.all_vs_all_sizes`, `plan_rows` as
+`all_vs_all_run.set_members`). The test measures each named candidate once, its value w x its share in the target's cluster, in [0, w] (w the cluster
+sheet's weight); appended last, its own credit (`r_c` x the entry of each candidate it admits plus `min(r_a, r_b) |v_a - v_b|` over the listed pairs)
+is convex on that box, so it is largest at a vertex: w (the sum of `r_c` over the unlisted candidates plus the largest weighted cut of the listed ones,
+a pair across the cut earning `min(r_a, r_b)`; `cluster_vertex_bound`, every cut up to 16 listed candidates, above that the sum over all pairs). Every
+named candidate has at least one sequence in the set, so the partition of that cut is an outcome the clustering can give: the bound is reached. The
+dataset already earned its best test credit, so the ceiling is that vertex bound minus the dataset's best so far, floored at 0 (`dataset_test_ceiling`;
+`candidate_measurements.dataset_bests`); a commission of the same search and candidates as one already commissioned or graded 0. With no arguments
+the ceiling is that of the best commission the head's check accepts now (`HEAD/credit.all_vs_all_best`): the bound never falls when a candidate is
+added or `per_candidate` rises, so the best is at the largest `per_candidate`, among the sets reached from each option's full set by removing one
+candidate at a time through sets already commissioned (larger sets first, the first found on a tie); `best_arguments` names it, so the row the model
+sees and a refusal's `choose_from` name a commission that reaches the row's ceiling.
 
-Direct check (labelled: NOT a real run) on a scratchpad copy of `runs/a101_goal5_ws_cspa` (state, journal `journal_cspa.sqlite3`, artifacts; run dir
-`runs/a101_goal5_run_cspa_c60596441`), the head's summary and custody rebuilt as they stood before each unit (journal receipts of earlier units); the
-recomputed old ceilings equal the journal's. Head units 2, 5, 7, 8 were `all_vs_all` of one search (all named candidates listed):
+Direct check (labelled: NOT a real run) on scratchpad copies of `runs/a101_goal10_ws_cspa` and `runs/a101_goal9_ws_cspa`, the head's custody rebuilt as
+it stood before each unit (journal receipts of earlier units; under the old code the recomputed credits and ceilings equal the journal's). The committed
+clusterings are CspA 15/18, CSP family 1/16, CspB/CspG/CspI 0/20 (goal9: 0/18, 0/20, 0/19), CspC 0/9 and, in goal10 unit 5 and every goal9 one,
+"hypothetical protein" 0/1:
 
-| unit | named | dataset best before | ceiling of the unit's commission, old (journal) -> new | rise | row ceiling (no arguments), old (journal) -> new |
-|---|---|---|---|---|---|
-| 2 | 4 | 0 | 6.0 -> 4.0 | 3.125 | 10.0 -> 6.0 |
-| 5 | 4 | 3.125 | 2.875 -> 0.875 | 0 | 6.875 -> 2.875 |
-| 7 | 5 | 3.125 | 6.875 -> 2.875 | 1.5417 | 6.875 -> 2.875 |
-| 8 | 5 | 4.6667 | 5.3333 -> 1.3333 | 0 | 5.3333 -> 1.3333 |
+| run, unit | credit earned, v5 -> v6 | ceiling of the unit's commission, v3 -> v4 | row ceiling (no arguments), v3 -> v4 |
+|---|---|---|---|
+| goal10, unit 2 (first all_vs_all, 4 candidates) | 2.5625 -> 1.9687 | 4.0 -> 3.0028 | 6.0 -> 3.4028 |
+| goal10, unit 5 (the same plus "hypothetical protein") | 0.8958 -> 0.1792 | 3.4375 -> 1.4341 | 3.4375 -> 1.4341 |
+| goal9, unit 3 (first all_vs_all, 5 candidates) | 3.4583 -> 2.1478 | 6.0 -> 3.4028 | 6.0 -> 3.4028 |
+| goal9, units 6 and 7 (replicates) | 0 -> 0 | 0 -> 0 | 0.5417 -> 0.8550 |
 
-Every rise is at or below the new ceiling. The best commission at each point was the search with all five admitted products at per_candidate 20; the
-head's check accepts it (no problems), and its ceiling equals the row's.
+Every rise is at or below its ceiling. The second clustering of goal10 now earns 0.18: the one-sequence candidate weighs 0.2 in each of its pairs.
+The credit after the last unit is 11.6100 in both runs (12.9205 under v5); no other unit changed.
 
 ## What was reused and what was not
 
@@ -210,5 +228,4 @@ at 20, 19 and 18 sequences per candidate (calls 12, 28, 34); the second and thir
 commission's identity held `per_candidate` and the best commission then lowered the count by one. The identity of a commission is
 now the search and the sorted candidates only (`all_vs_all_run.commission_keys`, `check_commission`): the same candidates of
 the same search again, with any count, are a replicate and refused (`this_set_was_already_commissioned`); its ceiling is 0 and
-the best commission (`credit.all_vs_all_best`) skips it. Improving a clustering is the child's tuning of its tries. The
-ceiling version of `all_vs_all` is `a101_ceiling_v3`.
+the best commission (`credit.all_vs_all_best`) skips it. Improving a clustering is the child's tuning of its tries.
