@@ -8,7 +8,13 @@ custody reader of the episode): the held sources and their retained gradings. On
 graded result for one target of the scope, valued by the existing subscore of A101 (``compile_native_sheet`` over that
 reference's alignments, the target's length and the scope's regions of the target); nothing is recalculated.
 
-Three kinds of held graded source are read, by the content of their retained sheet:
+ONE TEST IS ONE GRADED SOURCE: one job or tool run, made under the same conditions for every candidate it measured.
+Its name is the kind of test below followed by ``@<source reference>``, so two jobs of one method on different inputs
+(two alignments of different candidate sets, MetaCATS on two alignments) are two tests and are never pooled as
+replicates, and a later test never changes an earlier test's differentials. Replicates are the measurements of one
+candidate within one test (the hits of one search that share a product).
+
+The kinds of held graded source read, by the content of their retained sheet:
 
 * a database search with names (a ``blast_database_sheet`` whose ``reference_metadata`` gives each hit its functions):
   test ``database_search:<provider>:<program>:<database>``; each hit names a candidate of vocabulary ``product``: its
@@ -169,7 +175,7 @@ def _read(reader, scope, sources):
             found, missing = read(source, grading, lambda rows: compile_native_sheet(
                 rows, supplied_length=length, regions=regions)['value'])
             unlabelled[target] += missing
-            measurements.extend(_measurement(target, *row, reference) for row in found)
+            measurements.extend(_measurement(target, row[0] + '@' + reference, *row[1:], reference) for row in found)
     return measurements, unlabelled
 
 
