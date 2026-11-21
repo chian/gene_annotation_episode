@@ -282,3 +282,57 @@ run (899 hits asked, 889 with sites, 10 UniProt requests) took about 40 s per de
 
 A failed site source (a fault of UniProt or M-CSA after a passed check); a model request refused by the check (the model never asked a graded pair: the schema offers only
 valid pairs); a pdb100 search through the tool (refused by construction, not tried); a second search of the same target for the tool; resume.
+
+## The tool `partner_contacts` in the head (wired 2026-11-21)
+
+Step zero: called as it is: `check_partner_contacts_request`, `partner_search_inputs`, `partner_contacts(ctx, *, search_ref, resource_id)`
+(async), `held_partner_analyses`, `differential_credit.site_test_ceiling` and `bound_partner_test_ceiling`, `ToolCall`. New in the
+head: `task.partner_options` (one option per graded pdb100 search whose request passes the check, with the bound local resources),
+`task.check_partner_request`, `task.partner_contacts_tool`, `credit.analysed_searches`, `credit.offered_partner_searches`,
+`credit.partner_value`, the `ceiling` and `best_arguments` branches, `internal_summary` (`search_inputs` replaces `site_searches`
+and is `partner_search_inputs`; `partner_test_rows`, `held_partner_analyses`; candidates BY KIND), `final_to_parent` (partner
+candidates, counts per kind, `partner_tests`). SERVICES stays `('job_access',)` (the job goes through `execute_on_local_resource`,
+as A101's `hmmer_profile_scan`); the head's continuation settings gain `python_executable` and `usalign_executable_directory`
+(`resources/software/usalign.json`: `resources/software/usalign-20261019/bin`). The credit definition is version
+`a102_differential_credit_v3` (it names the partner measurement and candidates and the two new test kinds; `sheet_weights` carries
+`bound_partner` 1.0). `CEILING_VERSIONS['partner_contacts']` = `a102_ceiling_v1`.
+
+* Request: action `partner_contacts`, fields `search_ref` (a held graded pdb100 search with raw result, model, hit metadata and the
+  partner metadata, not yet analysed) and `resource_id` (a bound local resource). A search graded before the entry contents existed
+  in the hit metadata is refused by the check with `search_predates_the_partner_metadata`.
+* Ceiling = `site_test_ceiling` over the product candidates of the named search + `bound_partner_test_ceiling` over the set of
+  partner candidates the search's entries make possible (`partner_contacts.possible_partners`; the proof is in the docstring: the
+  entry contents RCSB lists are an upper set, and the unit fails with `grading_refused` if a file shows a partner outside it).
+  0 for an analysed search; with arguments `None` the largest over the searches still offered. Direct check on the stored data
+  (not a real run): CspA P = 79 candidates, ceiling 79 (rise 0.8985 earlier); RecA P = 72, ceiling 72 (rise 2.826).
+* The library fix (commit `0ff712e14`): the pdb100 hit lookup also asks `nonpolymer_entities { nonpolymer_comp { chem_comp { id } } }`
+  (verified live; the polymer types were already asked); the hit rows carry `entry_nonpolymer_components` and `entry_polymer_types`;
+  an entry whose contents show no non-additive ligand and no nucleic acid is not downloaded (`no_partner_in_entry`, counted on the
+  sheet as `entries_skipped_no_partner`); an entry whose contents RCSB did not state is not asked (`entry_contents_unknown`);
+  branched (glycan) entities are facts beside the protein partners, since RCSB's non-polymer entities do not list them (the
+  branched entity's component ids could not be found in the GraphQL schema within the request limit).
+
+## Prediction for the runs with partner_contacts, written before them
+
+Direct-check numbers: `a102_partner_contacts.md` and the re-check of `runs/a102_partner_fix/` (stored searches, 80 files, the new
+unit: the same candidate tables, CspA 25 files asked and 55 of the 80 skipped, RecA 43 asked and 37 skipped).
+
+CspA (P0A9X9, 70 residues), if the model searches pdb100 and then takes `partner_contacts`:
+1. Entries: of the 496 entry files of the stored pdb100 search, 233 are skipped without a download (no non-additive ligand and no
+   nucleic acid in the entry), 263 are left to ask. I expect the settling rule to stop the unit after 4 to 10 batches (40 to 100
+   files asked, a few `too_large` such as 4BTS), not to walk all 263. The unit takes about 1.5 s per file (download spacing 0.5 s plus
+   one local US-align job per batch of 10): 60 to 180 s.
+2. Nucleic acid found among the cold-shock, Y-box and Lin-28 structures: `nucleic_acid:rna` (about 17 hits in the direct check, mean E near
+   0.24; with fewer files asked the count is lower, mean E 0.2 to 0.3) and `nucleic_acid:dna` (2 hits, E near 0.17); `ligand:ZN` at E 0
+   (the zinc of the knuckles of Y-box and Lin-28, 4 hits) if those entries are reached; `ligand:MG` 0.49 only if CspB 2I5M is reached.
+3. Product test: Cold shock protein CspB leads by it near 0.54 (2 of 16 hits with partners); Y-box-binding protein 1 about 0.37.
+4. The best hit's contact residues (3PF5 chain B, CspB with RNA, TM 0.865 by the target) land on the target's K10, W11, N13, F18, F20,
+   D29, F31, H33 (9 contact residues, all aligned): W11, F18, F20, F31, H33, K10 are among them.
+5. Credit rise of the unit near 0.9 to 10 (the earlier rises: test 1 +9.64, test 2 +0.90 on the stored 80 files), far below its ceiling
+   (about 6320 + 79 for the stored search).
+RecA (P0A7G6, 353 residues): 193 of 597 files skipped; the partners ADP, the ATP analogue AGS, MG and DNA (`nucleic_acid:dna`: 3 hits, E near
+0.42), DTP, ANP; product test RecA 0.22 against RadA 0.08 ("Protein RecA" 35/57 hits with partners; RadA 7/15).
+Order I expect from the head's model: `structure_search` afdb-swissprot (as in the earlier runs), then either `structure_search` pdb100
+(with the held model) or `site_correspondence annotated`, then `partner_contacts` on the pdb100 search; `site_correspondence catalytic`
+for afdb; the head ends by its estimator when every offered action's forecast (share x ceiling, and the ceilings of repeats are 0)
+is below the expected seconds times 0.006, or by having nothing left to offer. At most 1 pdb100 search per run (3 Foldseek tickets cap).

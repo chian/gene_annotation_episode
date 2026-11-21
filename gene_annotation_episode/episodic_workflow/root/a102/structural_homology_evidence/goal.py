@@ -20,6 +20,8 @@ GOAL = ('A102 owns structural evidence for the assigned scope: what the scope\'s
         'the limits of inference; missing information remains unknown. Starting or waiting on a job is operational '
         'progress, not structural evidence. Report resemblance as resemblance, not as proof of function. Only the yield '
         'controller ends the episode.')
-UNIT = 'One action: one commission of a child episode (a structure search) or one call of a tool (a site correspondence test)'
-RESULT = ('The qualified structural findings: the graded structure searches and site tests the episode holds, the models of the '
-          'target they used, the possible annotations found with their scores (the leading ones), and the differential credit')
+UNIT = ('One action: one commission of a child episode (a structure search) or one call of a tool (a site correspondence test, '
+        'or a partner-contacts analysis of a graded solved-structure search)')
+RESULT = ('The qualified structural findings: the graded structure searches, site tests and partner-contacts analyses the episode '
+          'holds, the models of the target they used, the possible annotations found with their scores (the leading products, and '
+          'the ligands and nucleic acids bound to the matched proteins), and the differential credit')

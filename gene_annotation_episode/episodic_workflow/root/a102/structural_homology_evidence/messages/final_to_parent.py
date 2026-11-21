@@ -1,6 +1,7 @@
 """The return. Always returned: ``credit`` (``completion['credit']``: the productivity signal, which no field restates) and
 ``finding``: per target of the scope its leading candidates (at most 10, the leading one first, each with its score and its
-subscoring sheets), the number of candidates, the counts of the hits of the graded searches (hits, named, not asked) and the
+subscoring sheets), the partner candidates (ligand: its chemical component id; nucleic_acid: dna or rna; at most 20), the number of
+candidates of each kind (product, ligand, nucleic_acid), the partner-contacts analyses (counts of their sheets), the counts of the hits of the graded searches (hits, named, not asked) and the
 facts of the model of the target (origin, residues, mean pLDDT 0 to 100: the model's own confidence, not similarity), and the
 number of handoffs still waiting for their closure. All of it numbers, counts, values of a fixed vocabulary, the
 annotation names of the candidates (names from the looked-up list of a database) and record references: no paragraph.
@@ -28,8 +29,10 @@ SHEET_FORM = RecordForm({
     'value': Field('number', 'The candidate\'s value on the sheet: the sum of its values in the tests of that kind'),
 })
 CANDIDATE_FORM = RecordForm({
-    'vocabulary': ChoiceField('text', 'The vocabulary of the candidate: product (the function name of a hit)', VOCABULARIES),
-    'name': Field('text', 'The candidate\'s name exactly as its source gives it'),
+    'vocabulary': ChoiceField('text', 'The vocabulary of the candidate: product (the function name of a hit), ligand (a ligand bound '
+                                      'to a matched protein) or nucleic_acid (DNA or RNA bound to it)', VOCABULARIES),
+    'name': Field('text', 'The candidate\'s name exactly as its source gives it: for a product its UniProt recommended name, for a '
+                          'ligand its chemical component id, for a nucleic acid dna or rna'),
     'score': Field('number', 'The candidate\'s annotation score: the sum of its sheet values, that is, of its mean value '
                              '(0 to 1) in each test it has undergone'),
     'sheets': Field('list', 'The candidate\'s subscoring sheets, one per kind of test it has undergone', items=SHEET_FORM),
@@ -49,6 +52,18 @@ SITE_TEST_FORM = RecordForm({
     'absent_within_count': Field('integer', 'The residues absent in the target inside the aligned span (a gap: the target lacks '
                                             'the residue there)'),
 })
+PARTNER_TEST_FORM = RecordForm({
+    'search_ref': Field('text', 'The graded pdb100 structure search whose matched proteins were analysed (a record reference)'),
+    'entries_asked': Field('integer', 'The solved structure files downloaded and read'),
+    'entries_skipped_no_partner': Field('integer', 'The solved structures not downloaded because their metadata shows no ligand '
+                                                   'outside the additive list and no nucleic acid'),
+    'entries_too_large': Field('integer', 'The solved structure files too large to be asked'),
+    'entries_not_obtained': Field('integer', 'The solved structure files that could not be obtained'),
+    'entries_not_asked': Field('integer', 'The solved structures the unit never reached (it stopped once the candidates settled)'),
+    'hits_with_partners': Field('integer', 'The matched proteins bound to a ligand or nucleic acid that is no additive'),
+    'candidates_measured': Field('integer', 'The product candidates the test measured'),
+    'partner_candidates_measured': Field('integer', 'The partner candidates (ligand, nucleic_acid) the test measured'),
+})
 TARGET_FORM = RecordForm({
     'target_ref': Field('text', 'The target: a subject record of the scope'),
     'molecule': ChoiceField('text', 'The molecule of the target', ('protein', 'dna', 'rna', 'unspecified')),
@@ -57,9 +72,16 @@ TARGET_FORM = RecordForm({
     'named_count': Field('integer', 'The hits that carry a product name'),
     'not_asked_count': Field('integer', 'The hits never asked about (the naming stopped once the candidates settled): their '
                                         'function is unknown, not absent'),
-    'candidate_count': Field('integer', 'The possible annotations found for the target'),
+    'candidate_count': Field('integer', 'The product candidates (possible annotations) found for the target'),
+    'ligand_candidate_count': Field('integer', 'The ligand candidates found for the target: ligands bound to its matched proteins'),
+    'nucleic_acid_candidate_count': Field('integer', 'The nucleic-acid candidates found for the target: dna or rna bound to its '
+                                                      'matched proteins'),
     'candidates': Field('list', 'The leading possible annotations found for the target (at most 10), each with its score, the '
                                 'leading one first', items=CANDIDATE_FORM),
+    'partner_candidates': Field('list', 'The partner candidates found for the target (ligand and nucleic_acid; at most 20), each with '
+                                        'its score, the leading one first', items=CANDIDATE_FORM),
+    'partner_tests': Field('list', 'The partner-contacts analyses of the target (each: its search and the counts of its sheet)',
+                           items=PARTNER_TEST_FORM),
     'site_tests': Field('list', 'The site tests of the target (each: its search, its site source and the counts of its sheet)',
                         items=SITE_TEST_FORM),
     'model_origin': ChoiceField('text', 'Where the model of the target came from', MODEL_ORIGINS, required=False),

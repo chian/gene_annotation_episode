@@ -6,7 +6,12 @@ a request (``search_ref`` and ``site_source``), ONE deterministic check (``check
 before anything runs and refuses with its fix list, and a request that passes runs as ONE unit (``site_correspondence``: ask the
 source, grade, keep the sheet through custody). The tool is offered only while a (graded search, site source) pair that can
 succeed is left (``credit.offered_site_pairs``: the head holds the search's raw result and model and the pair is not graded), so
-a request that passes the check works. It never ends the Episode: only the yield controller does. No ``reason`` action.
+a request that passes the check works. Its second tool is ``partner_contacts``: the same three things (the request ``search_ref`` and
+``resource_id``, ``check_partner_contacts_request`` run in ``action``, ONE async unit ``partner_contacts`` that downloads the solved
+structures of the matched entries, runs the local US-align jobs through the job service and keeps two gradings), offered only for a
+graded ``pdb100`` search that can be analysed (``credit.offered_partner_searches``) and a bound local resource, and whose programs
+exist (``partner_options``). Settings of the head: ``python_executable`` and ``usalign_executable_directory``. It never ends the
+Episode: only the yield controller does. No ``reason`` action.
 
 The child. A slot is offered while its commission can be stated from what this episode holds: a protein sequence of the scope
 (a target whose molecule is not protein gets no commission) and a bound Foldseek resource (``structure_search_fields``). ONE
@@ -31,10 +36,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
     foldseek_search as foldseek)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.site_correspondence import (
     check_site_correspondence_request, site_correspondence)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.partner_contacts import (
+    check_partner_contacts_request, partner_contacts)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.structure_search_child import (
     ROUTE_KIND, UNTIL, _choose, seconds_between)
 
-from .credit import OBTAIN, SITE_TOOL, commissioned, graded_site_pairs, offered_site_pairs, queries
+from .credit import (OBTAIN, PARTNER_TOOL, SITE_TOOL, analysed_searches, commissioned, graded_site_pairs, offered_partner_searches,
+                     offered_site_pairs, queries)
 from .goal import GOAL
 
 CHILD_SLOTS = {'structure_search': 'structural_homology_evidence/structure_search'}
@@ -48,7 +56,13 @@ def site_correspondence_tool(arguments, ctx):
     return site_correspondence(ctx, search_ref=arguments['search_ref'], site_source=arguments['site_source'])
 
 
-TOOLS = {SITE_TOOL: site_correspondence_tool}
+async def partner_contacts_tool(arguments, ctx):
+    """One partner-contacts analysis as one unit, by the library's one function (an async unit: its local alignment jobs go through
+    the job service). The arguments are the model's two controlled choices; the programs' locations are settings."""
+    return await partner_contacts(ctx, search_ref=arguments['search_ref'], resource_id=arguments['resource_id'])
+
+
+TOOLS = {SITE_TOOL: site_correspondence_tool, PARTNER_TOOL: partner_contacts_tool}
 
 INSTRUCTIONS = (
     GOAL + '\n\n'
@@ -59,7 +73,7 @@ INSTRUCTIONS = (
     'episode. Recorded facts come from actual records and are shown to you as they are: the targets with their molecule and '
     'length, the models held (origin, residues, mean pLDDT: a model\'s own confidence, not similarity), the graded searches, '
     'the outstanding jobs with the seconds since their launch and the seconds still expected, the leading candidates with '
-    'their scores and subscoring sheets, the site tests held, your earlier units and the yield table. A model that is not held is obtained by the '
+    'their scores and subscoring sheets (products, and the partners ligand and nucleic_acid), the site tests and partner tests held, your earlier units and the yield table. A model that is not held is obtained by the '
     'child when the commission names obtain_one. Waiting and unchanged observations do not manufacture progress.')
 
 # What the model is told of the child it may commission: what the child does, the controlled fields of its commission (the model
@@ -132,6 +146,39 @@ SITE_DESCRIPTION = (
     ' A failed outcome is a fault of the environment and the same request is not made again.')
 
 
+PARTNER_DESCRIPTION = (
+    'For the proteins that one graded pdb100 structure search matched in solved structures, show what is bound to them, a ligand or '
+    'DNA or RNA, and test whether the target has the contacting residues in place. What it needs: a graded pdb100 search that you '
+    'hold with its raw result, model and hit metadata (graded_searches gives each with its source_ref; searches of another '
+    'database are not offered), and a local resource of bound_resources for the alignment jobs. Fill out the two fields of its '
+    'request: search_ref and resource_id. What code does: it takes the matched proteins of the search in rank order, one solved '
+    'structure file at a time (the biological assembly the hit names, from files.rcsb.org; no name, email or key). A structure '
+    'whose entry the hit metadata shows to hold no ligand outside the list of crystallization and buffer components (BioLiP) and '
+    'no DNA or RNA is not downloaded (recorded no_partner_in_entry). The structure files it does download are kept as '
+    'experimental_structure products; one larger than 8 MiB is recorded too_large and not asked. A partner of the matched protein '
+    'is every other molecule of the structure with a heavy atom within 4.0 A of a heavy atom of the matched chain: a ligand '
+    '(by chemical component id; water is not a partner), a DNA or RNA chain; other protein chains and glycans are recorded as '
+    'facts only. A ligand on the BioLiP list of crystallization and buffer components is recorded as additive and is no '
+    'candidate and gives no contact residue. One local job per batch of ten structure files aligns the target model with each '
+    'matched chain by US-align; the alignments are kept as products. Per contact residue of the matched chain the score is the '
+    'class match times the kernel 1 / (1 + (d / 1 A)^2) of the distance d between the aligned target residue and the matched '
+    'residue after the superposition (a contact residue the alignment does not align to the target is absent: score 0, '
+    'recorded outside_the_alignment or within_the_alignment); F is the mean of the residue scores, E = B F with B the search\'s '
+    'index of the matched protein. The unit stops when a batch admits no new candidate in either test and moves no value by '
+    'more than 0.01, after at least two batches, or when every structure is done; matched proteins of structures never reached '
+    'are not_asked. It grades two tests and keeps both sheets: the matched proteins by their binding machinery '
+    '(site_correspondence:partner_contacts, candidates are the products, the value of a product is the mean E over its '
+    'matched proteins that have a ligand or nucleic-acid partner; a product none of whose matched proteins has one is not '
+    'measured, not zero) and the bound partners themselves (bound_partner:pdb100, candidates are ligand:<chemical component '
+    'id> and nucleic_acid:dna or nucleic_acid:rna; the value is the mean E of the matched proteins bound to it). Code checks the '
+    'request before anything runs; if something is wrong it comes back in feedback with the things to fix and nothing ran. A '
+    'request that passes runs as one unit with no second call; the same search is not analysed again. partner_tests shows the '
+    'analyses held: for each its search, the structure files asked, skipped without a partner, too large, not obtained, the '
+    'matched proteins with partners, the products measured and the partners measured. candidates shows the leading products '
+    'and the partner candidates, each with its score and subscoring sheets. ' + CREDIT_TEXT + ' A failed outcome is a fault of '
+    'the environment and the same request is not made again.')
+
+
 def bound_resources(ctx):
     """The resources bound to the job service, each with its kind, which a commission may name (read through the service's read
     handle, so the read is recorded with the decision)."""
@@ -196,8 +243,30 @@ def check_site_request(request, summary):
     """The things to fix in a request of ``site_correspondence``: the library's one check
     (``check_site_correspondence_request``) over the searches the head holds with their raw result and model
     (``site_correspondence.search_inputs`` as ``internal_summary`` reads it) and the site tests already graded."""
-    return check_site_correspondence_request(request, searches=summary['site_searches'], graded=graded_site_pairs(summary))
+    return check_site_correspondence_request(request, searches=summary['search_inputs'], graded=graded_site_pairs(summary))
 
+
+def partner_options(summary, resources, settings):
+    """The request of the ``partner_contacts`` tool as the model fills it out: one option per graded ``pdb100`` search that can be
+    analysed now (``credit.offered_partner_searches``), with the bound local resources. Only searches whose request passes the
+    library's check are offered, so a request taken from the schema works (the check also needs the programs and the python of
+    the settings). Empty while none can succeed."""
+    local = [name for name, kind in resources.items() if kind == 'local']
+    return [{'type': 'object', 'additionalProperties': False, 'required': ['name', 'search_ref', 'resource_id'],
+             'properties': {'name': {'type': 'string', 'enum': [PARTNER_TOOL]}, 'search_ref': {'type': 'string', 'enum': [search]},
+                            'resource_id': {'type': 'string', 'enum': local}}}
+            for search in offered_partner_searches(summary)
+            if local and not check_partner_request({'search_ref': search, 'resource_id': local[0]}, summary, resources, settings)]
+
+
+def check_partner_request(request, summary, resources, settings):
+    """The things to fix in a request of ``partner_contacts``: the library's one check (``check_partner_contacts_request``) over the
+    searches the head holds with their raw result, model, hit metadata and partner metadata (``partner_contacts.
+    partner_search_inputs`` as ``internal_summary`` reads it), the searches already analysed, the bound resources and the
+    programs of the settings."""
+    return check_partner_contacts_request(
+        request, searches=summary['search_inputs'], analysed=analysed_searches(summary), resources=resources,
+        usalign_directory=settings['usalign_executable_directory'], python=settings['python_executable'])
 
 COMMISSIONS = {SLOT: structure_search_fields}
 COMMISSION_CHECKS = {SLOT: check_structure_search}
@@ -231,18 +300,21 @@ def child_option(slot, summary, resources):
     return {'type': 'object', 'additionalProperties': False, 'required': ['name', *required], 'properties': properties}
 
 
-def selection_schema(summary, resources):
+def selection_schema(summary, resources, settings):
     """What the model answers with: one commission of one offered child, or one request of the tool."""
     return {'type': 'object', 'additionalProperties': False, 'required': ['action'],
             'properties': {'action': {'anyOf': [child_option(slot, summary, resources)
-                                                for slot in offered_children(summary, resources)] + site_options(summary)}}}
+                                                for slot in offered_children(summary, resources)] + site_options(summary)
+                                  + partner_options(summary, resources, settings)}}}
 
 
 def offered_actions(summary, ctx):
     """The action types this decision offers, by the names a unit is recorded under (``ChildCall.slot``, ``ToolCall.name``): each
     child slot whose commission can be stated (``offered_children``, the function ``decide`` offers the model with) and
-    ``site_correspondence`` while a request of it can succeed (``site_options``)."""
-    return offered_children(summary, bound_resources(ctx)) + ([SITE_TOOL] if site_options(summary) else [])
+    ``site_correspondence`` and ``partner_contacts`` while a request of it can succeed (``site_options``, ``partner_options``)."""
+    resources = bound_resources(ctx)
+    return (offered_children(summary, resources) + ([SITE_TOOL] if site_options(summary) else [])
+            + ([PARTNER_TOOL] if partner_options(summary, resources, ctx.settings) else []))
 
 
 def parked_jobs(summary):
@@ -304,17 +376,19 @@ def decide(summary, feedback, ctx):
         'graded_searches': [{key: row[key] for key in ('source_ref', 'query_ref', 'database', 'hit_count', 'named_count',
                                                        'candidate_count')} for row in summary['graded_searches']],
         'structure_search_jobs': jobs_view(summary['structure_search_jobs'], ctx.clock.now),
-        'candidates': [{'target_ref': ref, 'candidate_count': row['candidate_count'], 'leading': row['candidates']}
-                       for ref, row in summary['credit_table'].items()],
-        'site_tests': summary['site_test_rows'],
+        'candidates': [{'target_ref': ref, 'candidate_counts': row['candidate_counts'], 'leading_products': row['products'],
+                        'partners': row['partners']} for ref, row in summary['credit_table'].items()],
+        'site_tests': summary['site_test_rows'], 'partner_tests': summary['partner_test_rows'],
         'own_outcomes': [outcome_row(row) for row in summary['units']],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot]}
                           for slot in offered],
-        'tool_options': [{'name': SITE_TOOL, 'description': SITE_DESCRIPTION}] if site_options(summary) else None,
+        'tool_options': ([{'name': SITE_TOOL, 'description': SITE_DESCRIPTION}] if site_options(summary) else [])
+                        + ([{'name': PARTNER_TOOL, 'description': PARTNER_DESCRIPTION}]
+                           if partner_options(summary, resources, ctx.settings) else []) or None,
         'yield_table': summary['yield_table'], 'time_accounting': time_accounting(ctx.clock.progress_time),
         'feedback': feedback}
     return ModelRequest('REASONING', INSTRUCTIONS, {key: value for key, value in context.items() if value is not None},
-                        selection_schema(summary, resources))
+                        selection_schema(summary, resources, ctx.settings))
 
 
 def action(response, summary, records, ctx):
@@ -322,7 +396,7 @@ def action(response, summary, records, ctx):
     commission the check finds something to fix in (rejected with the things to fix)."""
     resources = bound_resources(ctx)
     try:
-        Draft202012Validator(selection_schema(summary, resources)).validate(response)
+        Draft202012Validator(selection_schema(summary, resources, ctx.settings)).validate(response)
     except (ValueError, KeyError, TypeError, ContractError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract')) from error
     chosen = response['action']
@@ -334,6 +408,12 @@ def action(response, summary, records, ctx):
             raise Rejected({'status': 'invalid', 'category': SITE_TOOL + '_request',
                             'detail': {'request': commission, 'fix': problems}})
         return ToolCall(SITE_TOOL, commission)
+    if slot == PARTNER_TOOL:
+        problems = check_partner_request(commission, summary, resources, ctx.settings)
+        if problems:
+            raise Rejected({'status': 'invalid', 'category': PARTNER_TOOL + '_request',
+                            'detail': {'request': commission, 'fix': problems}})
+        return ToolCall(PARTNER_TOOL, commission)
     problems = COMMISSION_CHECKS[slot](commission, summary, resources, records)
     if problems:
         raise Rejected({'status': 'invalid', 'category': slot + '_commission',

@@ -616,7 +616,8 @@ async def partner_contacts(ctx, *, search_ref, resource_id):
     jobs = [ref for job in walked['jobs'] for ref in (job['handoff_ref'], job['closure_ref'])]
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'graded_refs': graded, 'record_refs': [*graded, *jobs],
             'source_ref': first['id'], 'bound_partner_source_ref': second['id'],
-            'entries_asked': contacts['entries_asked'], 'entries_too_large': contacts['entries_too_large'],
+            'entries_asked': contacts['entries_asked'], 'entries_skipped_no_partner': contacts['entries_skipped_no_partner'],
+            'entries_too_large': contacts['entries_too_large'],
             'entries_not_asked': contacts['entries_not_asked'], 'hits_with_partners': contacts['hits_with_partners'],
             'product_candidates_measured': contacts['candidates_measured'], 'partner_candidates_measured': bound['candidates_measured'],
             'stopped': walked['stopped'], 'batch_count': walked['batches']}
