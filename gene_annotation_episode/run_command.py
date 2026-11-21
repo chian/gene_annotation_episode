@@ -102,6 +102,7 @@ def report(*, run_id, journal):
             'units': [{'label': label, 'unit': unit} for label, _, unit, _ in record.units(run_id, path)],
             'model_answers': [call['response'] for call in record.model_calls(run_id, path)],
             'controller_steps': record.controller_steps(run_id, path),
+            'ceilings': record.ceilings(run_id, path),
             'receipts': [{'ref': item['ref'], 'how': item['how']} for item in record.receipts(run_id, path)]})
     return {'run_id': run_id, 'run_state': record.run_state(run_id), 'failure': record.run_failure(run_id),
             'episodes': episodes}

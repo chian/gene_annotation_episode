@@ -10,8 +10,8 @@ services (``BoundEpisode``); this type only calls them, and an episode's own fil
 | Episode file | Members (signature) |
 |---|---|
 | ``goal.py`` | ``binding_path``, ``goal``, ``unit``, ``result`` (text) |
-| ``task.py`` | ``child_slots`` ({slot: child binding path}), ``tools`` ({name: ``tool(arguments, ctx)``}), ``services`` (names), ``decide(summary, feedback, ctx)``, ``action(response, summary, records, ctx)`` |
-| ``credit.py`` | ``credit(summary, records)`` -> finite number |
+| ``task.py`` | ``child_slots`` ({slot: child binding path}), ``tools`` ({name: ``tool(arguments, ctx)``}), ``services`` (names), ``decide(summary, feedback, ctx)``, ``offered_actions(summary, ctx)`` -> the action types this decision offers, ``action(response, summary, records, ctx)`` |
+| ``credit.py`` | ``credit(summary, records)`` -> finite number; ``ceiling(summary, records, action_type, arguments, ctx)`` -> ``UNBOUNDED`` or a finite number >= 0 |
 | ``yield_estimator.py`` | ``yield_controller(initial_credit, settings, parent_input)`` -> a ``yield_control`` controller |
 | ``messages/read_from_parent.py`` | ``assignment_form``, ``read_from_parent(assignment, message)`` -> parent input |
 | ``messages/msg_to_child.py`` | ``msg_to_child(slot, arguments, summary)`` -> ``ChildMessage(objective, message, assignment, selection)`` |
@@ -45,6 +45,16 @@ The loop of one Episode:
    record, ``result`` the child's admitted typed result, ``report`` what ``read_from_child`` made of it, called
    once). The unit's attempt is journaled before a tool runs or a child is built. A commission the child's forms
    do not admit, or that passes a record the Episode does not hold, raises and ends the run.
+   The action types are the name of a ``ToolCall`` (``tool``), the slot of a ``ChildCall`` and ``reason`` where the
+   episode's reasoning commit is a tool of that name: exactly the names a unit is recorded under. After ``decide``
+   the system asks ``ceiling(summary, records, action_type, None, ctx)`` for every offered action type, the MOST
+   the episode's credit can rise if that action is the next unit (over every arguments it can take now): a finite
+   number >= 0, or ``UNBOUNDED``, which a ceiling returns deliberately for an action whose gain has no finite
+   upper bound (there is no default: an episode answers for every action it offers). After ``action`` it asks again
+   with the chosen action type and its arguments, and after the unit it compares the credit's rise with that
+   ceiling: a rise above it (beyond 1e-9) raises ``episode_ceiling_exceeded:<episode>:<action type>:<rise>:<ceiling>``
+   (nothing exceeds ``UNBOUNDED``). The journal records, per unit, the offered ceilings, the chosen action's ceiling
+   and the rise. Nothing here changes what the model is shown or how the Episode stops.
 4. Each unit's controller input is ``{'credit': credit(internal_summary(view.with_unit(outcome)), records),
    'estimation_context': {'progress_time': bound.progress.receipt(position)}}``. The episode's yield controller
    observes it and alone decides whether the Episode stops: nothing else ends an Episode. The controller is built
@@ -140,8 +150,8 @@ class ChildMessage:
 
 SUPPLIED_BY_FILE = MappingProxyType({
     'goal.py': ('binding_path', 'goal', 'unit', 'result'),
-    'task.py': ('child_slots', 'tools', 'services', 'decide', 'action'),
-    'credit.py': ('credit',),
+    'task.py': ('child_slots', 'tools', 'services', 'decide', 'offered_actions', 'action'),
+    'credit.py': ('credit', 'ceiling'),
     'yield_estimator.py': ('yield_controller',),
     'messages/read_from_parent.py': ('assignment_form', 'read_from_parent'),
     'messages/msg_to_child.py': ('msg_to_child',),
@@ -156,6 +166,8 @@ SIGNATURES = MappingProxyType({
     'decide': ('summary', 'feedback', 'ctx'),
     'action': ('response', 'summary', 'records', 'ctx'),
     'credit': ('summary', 'records'),
+    'ceiling': ('summary', 'records', 'action_type', 'arguments', 'ctx'),
+    'offered_actions': ('summary', 'ctx'),
     'yield_controller': ('initial_credit', 'settings', 'parent_input'),
     'read_from_parent': ('assignment', 'message'),
     'msg_to_child': ('slot', 'arguments', 'summary'),
@@ -164,7 +176,7 @@ SIGNATURES = MappingProxyType({
     'final_to_parent': ('summary', 'completion', 'selection'),
 })
 FILE_OF = MappingProxyType({
-    'decide': 'task', 'action': 'task', 'credit': 'credit', 'yield_controller': 'yield_estimator',
+    'decide': 'task', 'action': 'task', 'offered_actions': 'task', 'credit': 'credit', 'ceiling': 'credit', 'yield_controller': 'yield_estimator',
     'read_from_parent': 'messages.read_from_parent', 'msg_to_child': 'messages.msg_to_child',
     'read_from_child': 'messages.read_from_child', 'internal_summary': 'messages.internal_summary',
     'final_to_parent': 'messages.final_to_parent'})
@@ -204,6 +216,19 @@ def _closed(value, what):
 def _credit(value, path):
     if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
         raise TypeError('episode_credit_must_be_a_finite_number:' + path + ':' + repr(value))
+    return value
+
+
+CEILING_TOLERANCE = 1e-9
+
+
+def _ceiling(value, path, action_type):
+    """A ceiling is ``UNBOUNDED`` or a finite number that is not below zero."""
+    if value is UNBOUNDED:
+        return value
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
+        raise TypeError('episode_ceiling_must_be_unbounded_or_a_finite_number_not_below_zero:' + path + ':'
+                        + str(action_type) + ':' + repr(value))
     return value
 
 
@@ -467,6 +492,42 @@ class _SystemSource:
         return JsonRecord({'credit': self._binding._credit_of(summary, self._bound),
                            'estimation_context': {'progress_time': self._bound.progress.receipt(position)}})
 
+    def _ceiling_of(self, summary, action_type, arguments, context):
+        return _ceiling(self._binding._member('ceiling')(summary, self._bound.reader, action_type, arguments, context),
+                        self._binding.binding_path, action_type)
+
+    def _offered(self, summary, position, context):
+        """The ceiling of every action type this decision offers (journaled for unit ``position``)."""
+        path = self._binding.binding_path
+        names = self._binding._member('offered_actions')(summary, context)
+        if (not isinstance(names, (list, tuple)) or len(set(names)) != len(names)
+                or any(type(name) is not str or not name for name in names)):
+            raise TypeError('episode_offered_actions_must_be_distinct_action_type_names:' + path + ':' + repr(names))
+        offered = {name: self._ceiling_of(summary, name, None, context) for name in names}
+        self._bound.ceilings.offered(position, offered)
+        return offered
+
+    def _chosen(self, position, decision, summary, context, offered):
+        """The action taken: its type, its ceiling (asked again with its arguments) and the credit before the unit."""
+        path = self._binding.binding_path
+        action_type = decision.name if isinstance(decision, ToolCall) else decision.slot
+        if action_type not in offered:
+            raise LookupError('episode_action_not_offered:' + path + ':' + str(action_type))
+        ceiling = self._ceiling_of(summary, action_type, _closed(dict(decision.arguments), 'ceiling_arguments'), context)
+        self._bound.ceilings.chosen(position, action_type, ceiling)
+        return {'action_type': action_type, 'ceiling': ceiling,
+                'before': self._binding._credit_of(summary, self._bound)}
+
+    def _unit_input(self, view, position, outcome, chosen):
+        """The controller input of a completed unit, after the credit's rise is compared with the ceiling of the action."""
+        record = self._controller_input(view, position, outcome)
+        rise = record.as_record()['credit'] - chosen['before']
+        self._bound.ceilings.rise(position, rise)
+        if chosen['ceiling'] is not UNBOUNDED and rise > chosen['ceiling'] + CEILING_TOLERANCE:
+            raise ValueError('episode_ceiling_exceeded:' + self._binding.binding_path + ':' + chosen['action_type']
+                             + ':' + repr(rise) + ':' + repr(chosen['ceiling']))
+        return record
+
     def _choosing(self, view):
         """The source is choosing the unit after ``view``: that unit's position and the summary it is chosen
         from."""
@@ -485,15 +546,18 @@ class _SystemSource:
         """The unit after ``view`` of an action the run's caller names in place of the episode's own decision
         (``EpisodeRun.run_unit``)."""
         position, summary = self._choosing(view)
-        return self._unit(view, position, action, summary)
+        context = self._bound.decision_context(position)
+        return self._unit(view, position, action, summary, context, self._offered(summary, position, context))
 
     async def next(self, view):
         position, summary = self._choosing(view)
         context = self._bound.decision_context(position)
         decide, act = self._binding._member('decide'), self._binding._member('action')
-        feedback = None
+        feedback = offered = None
         while True:
             decision = decide(summary, feedback, context)
+            if offered is None:
+                offered = self._offered(summary, position, context)
             if not isinstance(decision, ModelRequest):
                 break
             response = await self._bound.model.complete(decision.role, decision.instructions, decision.context,
@@ -505,19 +569,20 @@ class _SystemSource:
                 feedback = _closed(rejection.feedback, 'rejection_feedback')
                 continue
             break
-        return self._unit(view, position, decision, summary)
+        return self._unit(view, position, decision, summary, context, offered)
 
-    def _unit(self, view, position, decision, summary):
+    def _unit(self, view, position, decision, summary, context, offered):
         """The unit of an action. An action is a ``ToolCall`` or a ``ChildCall``: the task cannot end its
         Episode, so anything else is an error of the episode's ``decide`` or ``action``."""
-        if isinstance(decision, ToolCall):
-            return self._tool(view, position, decision)
-        if isinstance(decision, ChildCall):
-            return self._child(view, position, decision, summary)
+        if isinstance(decision, (ToolCall, ChildCall)):
+            chosen = self._chosen(position, decision, summary, context, offered)
+            if isinstance(decision, ToolCall):
+                return self._tool(view, position, decision, chosen)
+            return self._child(view, position, decision, summary, chosen)
         raise TypeError('task_action_must_be_a_ToolCall_or_a_ChildCall:' + self._binding.binding_path + ':'
                         + repr(decision))
 
-    def _tool(self, view, position, call):
+    def _tool(self, view, position, call, chosen):
         tools, bound = self._binding.tools, self._bound
         if call.name not in tools:
             raise LookupError('task_tool_not_declared:' + self._binding.binding_path + ':' + str(call.name))
@@ -534,9 +599,9 @@ class _SystemSource:
                                'produced': bound.custody.attempt_produced()}, 'tool_outcome')
             bound.custody.tool_returned(outcome['outcome'])
             return outcome
-        return Leaf(call, extract, lambda _call, outcome: self._controller_input(view, position, outcome), label)
+        return Leaf(call, extract, lambda _call, outcome: self._unit_input(view, position, outcome, chosen), label)
 
-    def _child(self, view, position, call, summary):
+    def _child(self, view, position, call, summary, chosen):
         binding, bound = self._binding, self._bound
         if call.slot not in self._builders:
             raise LookupError('task_child_slot_not_declared:' + binding.binding_path + ':' + str(call.slot))
@@ -563,7 +628,7 @@ class _SystemSource:
             report = _closed(read(call.slot, admitted, summary, bound.reader), 'child_report')
             outcome = {**asked, 'kind': 'child', 'completion': completion.as_record(), 'result': admitted,
                        'report': report}
-            return ChildProjection({REPORT_FIELD: report}, outcome, self._controller_input(view, position, outcome))
+            return ChildProjection({REPORT_FIELD: report}, outcome, self._unit_input(view, position, outcome, chosen))
         return ChildEpisodeUnit(child, project)
 
     def build_result(self, record):
@@ -573,6 +638,6 @@ class _SystemSource:
             self._binding._summary(self.episode.view_of(record)), completion, self._bound.selection))
 
 
-__all__ = ['ALWAYS_RETURNED', 'UNBOUNDED', 'ChildCall', 'ChildMessage', 'EpisodeBinding', 'ModelRequest', 'Rejected',
+__all__ = ['ALWAYS_RETURNED', 'CEILING_TOLERANCE', 'UNBOUNDED', 'ChildCall', 'ChildMessage', 'EpisodeBinding', 'ModelRequest', 'Rejected',
            'SUPPLIED_BY_FILE', 'SIGNATURES', 'ToolCall', 'YIELD_CONTROLLERS', 'closing_credit',
            'controller_input_schema']

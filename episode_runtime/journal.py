@@ -49,6 +49,8 @@ CREATE TABLE IF NOT EXISTS episodes(run_id TEXT NOT NULL, path TEXT NOT NULL, bi
 CREATE TABLE IF NOT EXISTS units(run_id TEXT NOT NULL, path TEXT NOT NULL, unit_index INTEGER NOT NULL,
     label TEXT NOT NULL, controller_input TEXT NOT NULL, outcome TEXT NOT NULL, episode_update TEXT,
     controller_step TEXT NOT NULL, PRIMARY KEY(run_id, path, unit_index));
+CREATE TABLE IF NOT EXISTS ceilings(run_id TEXT NOT NULL, path TEXT NOT NULL, unit_index INTEGER NOT NULL,
+    offered TEXT NOT NULL, chosen TEXT, rise TEXT, PRIMARY KEY(run_id, path, unit_index));
 CREATE TABLE IF NOT EXISTS attempts(run_id TEXT NOT NULL, path TEXT NOT NULL, unit_index INTEGER NOT NULL,
     label TEXT NOT NULL, operation_key TEXT NOT NULL, arguments_digest TEXT NOT NULL, state TEXT NOT NULL,
     begun INTEGER NOT NULL, PRIMARY KEY(run_id, path, unit_index));
@@ -238,6 +240,31 @@ class RunJournal:
             raise JournalError('recorded_units_not_contiguous:' + _path(path))
         return [(row[1], json.loads(row[2]), json.loads(row[3]), None if row[4] is None else json.loads(row[4]))
                 for row in rows]
+
+    def record_offered_ceilings(self, run_id, path, position, offered):
+        """Record the ceilings of every action type the decision for unit ``position`` offered (``{action type:
+        number or 'unbounded'}``). A decision made again for the same unit records again, and clears what followed."""
+        self.db.execute('INSERT OR REPLACE INTO ceilings VALUES(?,?,?,?,NULL,NULL)',
+                        (run_id, _path(path), position, canonical(offered)))
+
+    def record_chosen_ceiling(self, run_id, path, position, chosen):
+        """Record the action type unit ``position`` took and its ceiling (``{'action_type', 'ceiling'}``)."""
+        self.db.execute('UPDATE ceilings SET chosen=? WHERE run_id=? AND path=? AND unit_index=?',
+                        (canonical(chosen), run_id, _path(path), position))
+
+    def record_ceiling_rise(self, run_id, path, position, rise):
+        """Record how far the credit rose over unit ``position`` (the number its ceiling bounds)."""
+        self.db.execute('UPDATE ceilings SET rise=? WHERE run_id=? AND path=? AND unit_index=?',
+                        (canonical(rise), run_id, _path(path), position))
+
+    def ceilings(self, run_id, path):
+        """``{'position', 'offered', 'chosen', 'rise'}`` of each decision of the Episode, in order (``chosen`` and
+        ``rise`` are ``None`` for a decision whose unit did not complete)."""
+        return [{'position': row[0], 'offered': json.loads(row[1]),
+                 'chosen': None if row[2] is None else json.loads(row[2]),
+                 'rise': None if row[3] is None else json.loads(row[3])}
+                for row in self.db.execute('SELECT unit_index, offered, chosen, rise FROM ceilings WHERE run_id=? '
+                                           'AND path=? ORDER BY unit_index', (run_id, _path(path)))]
 
     def controller_steps(self, run_id, path):
         """The controller's recorded step for each completed unit, in order (why the Episode went on or stopped)."""

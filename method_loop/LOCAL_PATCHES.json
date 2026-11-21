@@ -56,10 +56,11 @@
     {
       "path": "episode_type.py",
       "upstream_sha256": null,
-      "local_sha256": "40967f1a0fc7848123a353547186f355e9e0230048e97bcccdee4bb0c074f256",
+      "local_sha256": "ecfec279144ef999131722036aa748b79e1e64fb91b91f52b7dfd3dda6f80930",
       "details": [
         "New: the concrete episode contract (EpisodeBinding, ChildCall, ChildMessage, ModelRequest, Rejected, ToolCall, SIGNATURES, SUPPLIED_BY_FILE, YIELD_CONTROLLERS, closing_credit, checked_members), moved from episode_runtime/episode_type.py by the owner's decision of 2026-11-20 so that the structure lives in method_loop and episode_runtime is the runner. Only its imports became relative to method_loop and its interface name now reads 'method_loop.episode_type.<role>'; nothing stored in a journal or run held the old string. It also imports yield_control. episode_runtime re-exports its names for the episodes until their imports are moved.",
-        "Outdated text left unchanged: SOURCE.json scope and this file's purpose and deleted_files still name episode_runtime/episode_type.py as the place of the Episode type; it is method_loop/episode_type.py."
+        "Outdated text left unchanged: SOURCE.json scope and this file's purpose and deleted_files still name episode_runtime/episode_type.py as the place of the Episode type; it is method_loop/episode_type.py.",
+        "Added (2026-11-21, owner's decision): credit.py supplies ceiling(summary, records, action_type, arguments, ctx) beside credit and task.py supplies offered_actions(summary, ctx) (episode_lacks_members otherwise); the constant UNBOUNDED (exported by method_loop) is what a ceiling returns, deliberately, for an action whose credit has no finite upper bound. The unit source asks for the ceiling of every offered action after decide, again for the chosen action after action, and raises episode_ceiling_exceeded:<episode>:<action type>:<rise>:<ceiling> when the credit's rise over the unit is above the ceiling by more than 1e-9; episode_runtime journals the offered ceilings, the chosen one and the rise (table ceilings)."
       ]
     },
     {

@@ -47,7 +47,7 @@ from .collaborators import STANDARD_COLLABORATORS, interface_failures
 from .journal import EpisodeRecorder, JournalError, RunJournal
 from .progress import ProgressClock
 from .recording import (Custody, DecisionContext, InitialCredit, RecordedModel, ServiceReads, UnitAttempts,
-                        UnitContext, UnitPosition, admit_entry, pass_records, return_records)
+                        UnitCeilings, UnitContext, UnitPosition, admit_entry, pass_records, return_records)
 from .services import DecisionServices, RunServices
 from .store_ledger import StoreLedger
 from .store_scope import RecordReader, ScopedStore, require_in_store
@@ -346,7 +346,8 @@ class BoundEpisode:
     ``store`` is the custody-scoped Store of its tools; ``services`` are the services the episode declared
     (handed to its tools); ``reads`` records what its decisions read from them; ``attempts`` journals each unit's
     attempt; ``initial_credit`` records the credit its yield controller is built from (computed when the Episode
-    is first entered, read from the journal ever after);
+    is first entered, read from the journal ever after); ``ceilings`` journals each decision's ceilings, the ceiling
+    of the action taken and the credit's actual rise;
     ``settings()`` is a copy of the episode's continuation settings; ``decision_context(position)`` is
     what ``decide`` and ``action`` receive (the services as read handles whose reads are recorded for that
     position) and ``context(attempt)`` what a tool receives.
@@ -373,6 +374,7 @@ class BoundEpisode:
     attempts: UnitAttempts
     initial_credit: InitialCredit
     continuation: Mapping
+    ceilings: UnitCeilings
 
     def settings(self):
         """A copy of the episode's own continuation settings (so no episode function can change the run's)."""
@@ -501,7 +503,8 @@ def _link(journal, run_id, entry, collaborators, prepared):
             custody, RecordReader(store, custody, rows), ScopedStore(store, custody, rows, (run_id, episode_id)),
             run_services.view(binding.services, custody), ServiceReads(journal, run_id, episode_path),
             UnitAttempts(journal, run_id, episode_path, custody, position),
-            InitialCredit(journal, run_id, episode_path), collaborators['continuation'][path])
+            InitialCredit(journal, run_id, episode_path), collaborators['continuation'][path],
+            UnitCeilings(journal, run_id, episode_path))
         bound_by_path[episode_path] = bound
         child_builders = {}
         for slot, child_path in binding.child_slots.items():

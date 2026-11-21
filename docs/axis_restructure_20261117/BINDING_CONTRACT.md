@@ -68,8 +68,10 @@ Each episode folder holds `goal.py`, `task.py`, `credit.py`, `yield_estimator.py
 | `task.py` | `tools` | `{name: tool}`; names `[a-z][a-z0-9_]*`; each `def tool(arguments, ctx)` or `async def tool(arguments, ctx)`, defined in `task.py` |
 | `task.py` | `services` | tuple of the distinct service names its functions need (`()` when none) |
 | `task.py` | `decide` | `def decide(summary, feedback, ctx)` returns `ModelRequest(role, instructions, context, output_schema)`, `ToolCall(name, arguments)` or `ChildCall(slot, arguments)`; nothing else (it cannot end the Episode) |
+| `task.py` | `offered_actions` | `def offered_actions(summary, ctx)` returns the list of the action types this decision offers, built from the same functions `decide` offers the model with: the name of a tool, the slot of a child, `reason` for a reasoning commit (exactly the names a unit is recorded under) |
 | `task.py` | `action` | `def action(response, summary, records, ctx)` returns `ToolCall` or `ChildCall`, or raises `Rejected(feedback)` |
 | `credit.py` | `credit` | `def credit(summary, records)` returns a finite number (never bounded, clamped or rescaled by the system) |
+| `credit.py` | `ceiling` | `def ceiling(summary, records, action_type, arguments, ctx)` returns the most `credit` can rise if the action `action_type` with `arguments` is the next unit (`arguments` `None`: over every arguments the action type can take now): a finite number >= 0, or `method_loop.UNBOUNDED` returned deliberately for an action whose gain has no finite upper bound. No default: the episode answers for every offered action. The system asks for every offered action after `decide`, again for the chosen action after `action`, and raises `episode_ceiling_exceeded:<episode>:<action type>:<rise>:<ceiling>` when the credit's rise over the unit is above the ceiling by more than 1e-9; the journal's `ceilings` table records the offered ceilings, the chosen one and the rise |
 | `yield_estimator.py` | `yield_controller` | `def yield_controller(initial_credit, settings, parent_input)` returns one of the three `yield_control` controllers |
 | `messages/read_from_parent.py` | `assignment_form` | a `RecordForm` |
 | `messages/read_from_parent.py` | `read_from_parent` | `def read_from_parent(assignment, message)` returns the parent input (closed JSON) |
@@ -191,6 +193,8 @@ def final_to_parent(summary, completion, selection):
 | `internal_summary(view)` | the `method_loop.EpisodeView`, below |
 | `decide(summary, feedback, ctx)` | the summary; the feedback of the last rejected model answer (`None` at first); the `DecisionContext` |
 | `action(response, summary, records, ctx)` | the model's response; the summary; the `RecordReader`; the same `DecisionContext` |
+| `ceiling(summary, records, action_type, arguments, ctx)` | the summary before the unit; the `RecordReader`; the action type; its arguments (`None` for every offered action); the same `DecisionContext` as `decide` |
+| `offered_actions(summary, ctx)` | the summary; the same `DecisionContext` as `decide` |
 | `credit(summary, records)` | the summary of the view as it stands once the unit completes; the `RecordReader` |
 | `yield_controller(initial_credit, settings, parent_input)` | `credit` of the summary before any unit, computed when the Episode is first entered and journaled (on resume the journaled value is handed over, "Resume"); the episode's settings; the parent input |
 | `read_from_parent(assignment, message)` | the admitted assignment and the commissioner's message |

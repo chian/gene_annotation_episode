@@ -60,6 +60,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 import threading
 
+from method_loop import UNBOUNDED
 from method_loop.jsonvalue import closed_copy, content_digest
 
 
@@ -411,6 +412,30 @@ class Attempt:
     resumed: bool
 
 
+class UnitCeilings:
+    """The journal of the ceilings of one Episode's decisions (``bound.ceilings``): what each offered action type could
+    add at most, the action type taken with its ceiling, and how far the credit actually rose. ``UNBOUNDED`` is
+    written as ``'unbounded'``."""
+
+    def __init__(self, journal, run_id, path):
+        self._journal, self._run_id, self._path = journal, run_id, tuple(path)
+
+    @staticmethod
+    def _written(ceiling):
+        return 'unbounded' if ceiling is UNBOUNDED else ceiling
+
+    def offered(self, position, ceilings):
+        self._journal.record_offered_ceilings(self._run_id, self._path, position,
+                                              {name: self._written(value) for name, value in ceilings.items()})
+
+    def chosen(self, position, action_type, ceiling):
+        self._journal.record_chosen_ceiling(self._run_id, self._path, position,
+                                            {'action_type': action_type, 'ceiling': self._written(ceiling)})
+
+    def rise(self, position, rise):
+        self._journal.record_ceiling_rise(self._run_id, self._path, position, rise)
+
+
 class UnitAttempts:
     """The journal of unit attempts for one Episode (``bound.attempts``)."""
 
@@ -475,4 +500,4 @@ class UnitContext:
 
 
 __all__ = ['Attempt', 'Custody', 'CustodyError', 'DecisionContext', 'InitialCredit', 'RecordedModel', 'ServiceReads',
-           'UnitAttempts', 'UnitContext', 'UnitPosition', 'admit_entry', 'pass_records', 'return_records']
+           'UnitAttempts', 'UnitCeilings', 'UnitContext', 'UnitPosition', 'admit_entry', 'pass_records', 'return_records']

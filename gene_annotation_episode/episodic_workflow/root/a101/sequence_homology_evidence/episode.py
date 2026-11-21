@@ -16,8 +16,10 @@ class SequenceHomologyEvidence(EpisodeBinding):
     tools = task_file.TOOLS
     services = task_file.SERVICES
     decide = task_file.decide
+    offered_actions = task_file.offered_actions
     action = task_file.action
     credit = credit_file.credit
+    ceiling = credit_file.ceiling
     yield_controller = yield_file.yield_controller
     assignment_form = from_parent_file.ASSIGNMENT_FORM
     read_from_parent = from_parent_file.read_from_parent
