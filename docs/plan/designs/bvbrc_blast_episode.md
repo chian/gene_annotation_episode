@@ -345,3 +345,21 @@ Query: E. coli K-12 chaperone protein DnaK (UniProt P0A6Y8, 638 residues: a four
    duration (about 90 s, from the submission to the first `finished` status).
 4. The head's credit counts the graded result with no further call (near 1).
 5. The identification names `Chaperone protein DnaK` (a single product or a few close variants of it).
+
+### Run P1: observed (`runs/bvbrc_a101_run_P1`, workspace `runs/bvbrc_a101_ws_F`, journal `journal_P1.sqlite3`, report `report_P1.json`)
+
+Submission 1 of 3 for this step. The head's model first sent off `hmmer_profile_scan` (Pfam-A, local), then commissioned `bvbrc_blast`
+with `until: extracted`: a valid one-loop run, not the park path. Child: `estimate` (78 s, learned), `launch`, one `monitor` (wait 90 s: `finished`),
+`extract` (300 hits, 300 of 300 metadata, 7 data requests): 4 units, credit 4.0 = the target, `yield_stop` exactly at the extract (no
+wind-down unit; the completion controller did what it was built for). Head credit 0.99999999999999, 2 head units, 6 model calls.
+The model did not park. What in the description led it there: the description said what each `until` means but nothing that made
+waiting cost anything; the head had also already used its other tool, so the work left was the search itself. The description now says
+(a fact of the system, not a recommendation) that while a child runs the head does nothing else.
+
+### Run P2a: prediction (written before the run)
+
+Query: E. coli K-12 GroEL (UniProt P0A6F5, 548 residues), fresh workspace `runs/bvbrc_a101_ws_G`, run `runs/bvbrc_a101_run_P2a`; the head's
+tools and the ledger as in P1; the description of the child as amended. I do not predict the model's `until`. If it parks: the child
+ends at the launch (2 units, credit 2.0), the head's model then does something (not predicted), a resuming commission continues
+the same search (one job, one ledger row) with the target 2.0 and ends at the extract. If it chooses `extracted` again: that is
+reported as the model not parking.
