@@ -63,7 +63,8 @@ The loop of one Episode:
    chosen action before any unit when its forecast (for the ceiling asked with its arguments) is not worth its
    cost, exactly like a ``Rejected`` (feedback ``{'status': 'invalid', 'category': 'forecast', 'code':
    'action_forecast_not_worth_its_cost', 'detail': {action_type, ceiling, forecast_gain, expected_seconds,
-   threshold}}``; an unknown forecast is not refused), and it records the unit's forecast before the unit and its result after it in the
+   threshold, and ``choose_from``: the best commission's arguments when the episode supplies ``best_arguments``}}``; an unknown
+   forecast is not refused), and it records the unit's forecast before the unit and its result after it in the
    estimate ledger (``episode_runtime.forecast_ledger``).
 4. Each unit's controller input is ``{'credit': credit(internal_summary(view.with_unit(outcome)), records),
    'estimation_context': {'progress_time': bound.progress.receipt(position)}}``. The episode's yield controller
@@ -176,6 +177,9 @@ SUPPLIED_BY_FILE = MappingProxyType({
     'messages/final_to_parent.py': ('return_form', 'final_to_parent'),
 })
 CHILD_MEMBERS = ('msg_to_child', 'read_from_child')
+# A member an episode may supply: ``credit.py`` ``best_arguments(summary, records, action_type, ctx)`` returns the arguments of
+# the action whose ceiling is the one asked with ``arguments`` None (a dict), or None when no choice of arguments matters.
+OPTIONAL_MEMBERS = ('best_arguments',)
 SUPPLIED = tuple(name for names in SUPPLIED_BY_FILE.values() for name in names)
 # Each function member: the parameters it takes, and the module (below the episode package) that defines it.
 SIGNATURES = MappingProxyType({
@@ -183,6 +187,7 @@ SIGNATURES = MappingProxyType({
     'action': ('response', 'summary', 'records', 'ctx'),
     'credit': ('summary', 'records'),
     'ceiling': ('summary', 'records', 'action_type', 'arguments', 'ctx'),
+    'best_arguments': ('summary', 'records', 'action_type', 'ctx'),
     'offered_actions': ('summary', 'ctx'),
     'yield_controller': ('initial_credit', 'settings', 'parent_input'),
     'read_from_parent': ('assignment', 'message'),
@@ -192,7 +197,7 @@ SIGNATURES = MappingProxyType({
     'final_to_parent': ('summary', 'completion', 'selection'),
 })
 FILE_OF = MappingProxyType({
-    'decide': 'task', 'action': 'task', 'offered_actions': 'task', 'credit': 'credit', 'ceiling': 'credit', 'yield_controller': 'yield_estimator',
+    'decide': 'task', 'action': 'task', 'offered_actions': 'task', 'credit': 'credit', 'ceiling': 'credit', 'best_arguments': 'credit', 'yield_controller': 'yield_estimator',
     'read_from_parent': 'messages.read_from_parent', 'msg_to_child': 'messages.msg_to_child',
     'read_from_child': 'messages.read_from_child', 'internal_summary': 'messages.internal_summary',
     'final_to_parent': 'messages.final_to_parent'})
@@ -282,7 +287,7 @@ def _check_function(name, key, function, expected, parameters, *, may_be_async):
 
 def _check_functions(cls, name, own, package):
     for key in SIGNATURES:
-        if key in CHILD_MEMBERS and key not in own:
+        if (key in CHILD_MEMBERS or key in OPTIONAL_MEMBERS) and key not in own:
             continue
         _check_function(name, key, vars(cls)[key], package + '.' + FILE_OF[key], SIGNATURES[key],
                         may_be_async=False)
@@ -325,7 +330,7 @@ class EpisodeBinding:
         missing = [key for key in SUPPLIED if key not in CHILD_MEMBERS and key not in own]
         if missing:
             raise TypeError('episode_lacks_members:' + name + ':' + ','.join(missing))
-        extra = sorted(own - set(SUPPLIED))
+        extra = sorted(own - set(SUPPLIED) - set(OPTIONAL_MEMBERS))
         if extra:
             raise TypeError('episode_members_outside_the_episode_files:' + name + ':' + ','.join(extra))
         for key in ('binding_path', 'goal', 'unit', 'result'):
@@ -566,14 +571,29 @@ class _SystemSource:
             return None
         return view.controller_state.forecast({name: _written(ceiling) for name, ceiling in offered.items()})
 
-    @staticmethod
-    def _shown(rows):
-        """The forecast rows as the model sees them: facts only."""
-        return [{'action_type': row['action_type'], 'ceiling': row['ceiling'],
-                 'forecast_gain': 'unknown' if row['forecast_gain'] is None else row['forecast_gain'],
-                 'expected_seconds': 'unknown' if row['expected_seconds'] is None else row['expected_seconds'],
-                 'worth': row['worth']}
-                for row in rows]
+    def _best(self, summary, action_type, context):
+        """The arguments of the commission that reaches the action's ceiling asked with ``arguments`` None, from the
+        episode's optional ``best_arguments`` (``None`` where the episode has none or no choice of arguments matters)."""
+        member = getattr(type(self._binding), 'best_arguments', None)
+        if member is None:
+            return None
+        best = member(summary, self._bound.reader, action_type, context)
+        return None if best is None else _closed(best, 'best_arguments')
+
+    def _shown(self, rows, summary=None, context=None):
+        """The forecast rows as the model sees them: facts only, and for an action with a best commission its arguments
+        (``best_arguments``: the ceiling and forecast of the row are those of exactly that commission)."""
+        shown = []
+        for row in rows:
+            item = {'action_type': row['action_type'], 'ceiling': row['ceiling'],
+                    'forecast_gain': 'unknown' if row['forecast_gain'] is None else row['forecast_gain'],
+                    'expected_seconds': 'unknown' if row['expected_seconds'] is None else row['expected_seconds'],
+                    'worth': row['worth']}
+            best = None if summary is None else self._best(summary, row['action_type'], context)
+            if best is not None:
+                item['best_arguments'] = best
+            shown.append(item)
+        return shown
 
     def _gate(self, view, decision, summary, context, offered):
         """The per-action gate of a ``ForecastYieldController``: the chosen action's forecast row, for its ceiling
@@ -586,10 +606,13 @@ class _SystemSource:
         rows = self._forecast_rows(view, {action_type: ceiling})
         if rows is not None and not rows[0]['worth']:
             row = rows[0]
+            detail = {'action_type': action_type, 'ceiling': row['ceiling'], 'forecast_gain': row['forecast_gain'],
+                      'expected_seconds': row['expected_seconds'], 'threshold': row['threshold']}
+            best = self._best(summary, action_type, context)
+            if best is not None:
+                detail['choose_from'] = best
             raise Rejected({'status': 'invalid', 'category': 'forecast', 'code': 'action_forecast_not_worth_its_cost',
-                            'detail': {'action_type': action_type, 'ceiling': row['ceiling'],
-                                       'forecast_gain': row['forecast_gain'],
-                                       'expected_seconds': row['expected_seconds'], 'threshold': row['threshold']}})
+                            'detail': detail})
 
     def _chosen(self, view, position, decision, summary, context, offered):
         """The action taken: its type, its ceiling (asked again with its arguments), the credit before the unit and
@@ -657,7 +680,7 @@ class _SystemSource:
                 break
             rows = self._forecast_rows(view, offered)
             if rows is not None:
-                decision = replace(decision, context={**decision.context, FORECASTS_KEY: self._shown(rows)})
+                decision = replace(decision, context={**decision.context, FORECASTS_KEY: self._shown(rows, summary, context)})
             response = await self._bound.model.complete(decision.role, decision.instructions, decision.context,
                                                         decision.output_schema)
             try:

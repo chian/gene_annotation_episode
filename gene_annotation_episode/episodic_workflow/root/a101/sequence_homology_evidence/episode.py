@@ -20,6 +20,7 @@ class SequenceHomologyEvidence(EpisodeBinding):
     action = task_file.action
     credit = credit_file.credit
     ceiling = credit_file.ceiling
+    best_arguments = credit_file.best_arguments
     yield_controller = yield_file.yield_controller
     assignment_form = from_parent_file.ASSIGNMENT_FORM
     read_from_parent = from_parent_file.read_from_parent
