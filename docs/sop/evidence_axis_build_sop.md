@@ -34,6 +34,50 @@ Rules that cut across every step:
 
 ---
 
+## Step 0A. Derive the tree from the axis's own question (before anything is built)
+
+**What to build.** A table of the analyses your axis needs, derived from what your axis can observe. Not a tree yet, and
+never a copy of another axis's tree.
+
+**The rule.** The owner (2026-11-21, on the first A102 design, which mapped A101's nodes onto structure: a search child for
+`bvbrc_blast`, a pairwise tool for `pairwise_blast`, an all-vs-all child for `all_vs_all`): "you in theory can do different
+things with 2D and 3D structure than you can with 1D sequences. Not everything is an enzyme. Some are RNA and more subject to
+2D structural assays ... The goal is to give you the right questions to ask and how to make decisions based on that
+information to build the tree. Not to do a direct mimic. Are there no functional tests, docking, binding, functional pocket
+comparisons ..., region comparisons, secondary structure comparisons in 3D structures, any of that? This is all just sequence
+homology under another name which is not the point".
+
+A101's tree is the answer to A101's question. Steps 1 to 12 below tell you how to BUILD a node (contract, tool or child,
+job child, custody, grading, credit, ceilings, controller). They do not tell you WHICH nodes your axis has. Find those by
+asking, in this order, and writing the answers down in your axis's tree note before any design:
+
+1. Targets. What kinds of target reach this axis (protein, RNA, a DNA region, a set)? Each kind may need its own analyses.
+   Read how the head learns the target's molecule type.
+2. Distinctive evidence. What can this axis observe that NO other axis can? Take the list from the axis's own
+   process-library entry (its investigation instructions and its evidence cases) and from what the field actually does with
+   this kind of data, not from an axis already built. Write one row per kind of evidence. If every row of your table has a
+   counterpart in another axis's tree, you have described that axis again under another name: start over.
+3. For each row: what question about function does it answer; what must exist first (a prerequisite is a data product some
+   step makes, Step 6); which program or service does it, verified live (Step 11); how long it takes (Step 2 then decides
+   tool or child); what exactly is measured, in its native statistic, and what makes a repeat; and whether it can tell
+   candidates apart or can only admit them.
+4. Dependencies. Which analyses consume another's product. This fixes who holds what and which steps are tools inside a
+   child (a prerequisite that earns nothing by itself cannot be an action of a head on the forecast controller: its ceiling
+   would be 0).
+5. Order. Build first what is distinctive and what the others depend on. An analysis that only repeats another axis's
+   evidence in a new form comes last.
+6. Inventory BOTH ways before designing: what the repository already has for every row (the old library often holds the
+   axis's distinctive analyses: for A102 the feature-geometry, reference-trait and RNA secondary-structure code), and which
+   tools run today. An inventory scoped by another axis's tree finds only that tree again.
+
+**Where A102 does it.** `docs/plan/designs/a102_tree.md` (the table of structural evidence by question, for protein and RNA
+targets), `a102_inventory_structure_specific.md`, `a102_tool_survey.md`.
+
+**How to check.** For each row of the table, name the other axis that could have produced the same evidence. A tree whose
+rows all have such a name is a mimic. Show the table to the owner before building more than one node.
+
+---
+
 ## Step 1. The episode contract
 
 **What to build.** One episode folder per node of your tree. Each folder holds exactly: `goal.py`, `task.py`, `credit.py`,
@@ -96,7 +140,7 @@ in `ceiling`, not in the run.
 
 ## Step 2. Tool or child episode
 
-**What to build.** For each analysis your axis needs, decide whether it is a tool of an episode or a child episode.
+**What to build.** For each analysis of your axis's table (Step 0A), decide whether it is a tool of an episode or a child episode.
 
 **The rule.** The owner's rulings, as the notes record them (`a101_tree.md`):
 
@@ -566,6 +610,10 @@ So:
     for it, or ask the owner to change them (`bvbrc_blast_episode.md`, run A defects).
 13. A one-family set clusters as one cluster, so a clustering test is uninformative on it (`all_vs_all_episode.md`, direct checks). A
     measurement that cannot separate the candidates earns little and its ceiling should say so.
+14. A tree copied from another axis. The first A102 design mapped A101's nodes onto structure and deferred the analyses only
+    structure can do (functional sites, pockets, secondary-structure arrangement, binding, RNA 2D structure) because A101 had
+    deferred its functional regions. The owner: "This is all just sequence homology under another name which is not the point".
+    Fix: Step 0A.
 
 ---
 
