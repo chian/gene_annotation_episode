@@ -72,3 +72,5 @@ would hit. The model cannot repair a wrong commission, so these are not offered 
 ## Head wiring, observed, run records
 
 (added after the runs)
+
+2026-11-21: this episode became the `prepare_database` tool of the `all_vs_all` child (owner: "i would say it almost is a tool of the all vs all blast yes?"); the folder `HEAD/blast_database_preparation` is removed and its library code (`blast_preparation_run`, `blast_preparation_job`, the receipt reader) is what `prepare_database` calls. See `all_vs_all_episode.md`. The `blastdbcheck` step was dropped (the bundled 2.17.0 fails it on every valid database).
