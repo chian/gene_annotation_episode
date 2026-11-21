@@ -29,6 +29,8 @@ import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.differential_credit import (
     differential_credit, standing)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.partner_contacts_sheet import (
+    CONTACTS_SCHEMA, PARTNERS_SCHEMA)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
     SCHEMA as SITE_SHEET)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.structure_search_sheet import (
@@ -36,7 +38,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
 
-VOCABULARIES = ('product',)
+VOCABULARIES = ('product', 'ligand', 'nucleic_acid')
 
 
 def held_sources(reader):
@@ -72,6 +74,29 @@ def site_rows(sheet):
     return [(row['product'], row['mean_E']) for row in sheet['candidates'] if row['mean_E'] is not None]
 
 
+def partner_contacts_test_name(sheet, source):
+    """The test of the partner contacts graded in ``sheet`` made by the held source ``source``: a ``site_correspondence`` test
+    (one family) of site source ``partner_contacts``."""
+    return 'site_correspondence:partner_contacts@' + source
+
+
+def bound_partner_test_name(sheet, source):
+    """The test of the bound partners graded in ``sheet`` made by the held source ``source``."""
+    return 'bound_partner:' + sheet['search_database'] + '@' + source
+
+
+def partner_contacts_rows(sheet):
+    """The ``(product, mean_E)`` of the candidates of a partner-contacts sheet that have a value (at least one hit with a
+    functional partner), in the sheet's order."""
+    return [(row['product'], row['mean_E']) for row in sheet['candidates'] if row['mean_E'] is not None]
+
+
+def bound_partner_rows(sheet):
+    """The ``(vocabulary, identifier, mean_E)`` of the partner candidates of a bound-partner sheet: ``ligand`` with the chemical
+    component id, ``nucleic_acid`` with ``dna`` or ``rna``."""
+    return [(row['kind'], row['identifier'], row['mean_E']) for row in sheet['candidates']]
+
+
 def search_rows(sheet):
     """The hit rows of a search sheet that name a candidate: ``(product, B)`` in rank order, for the hits with a product
     and a value."""
@@ -88,10 +113,18 @@ def _read(reader, scope, sources):
         source = reader.get(reference)
         for entry in source_tool_grading_entries(reader, reference):
             sheet = entry['grading']['sheet']
-            if sheet['schema'] not in (SEARCH_SHEET, SITE_SHEET):
+            if sheet['schema'] not in (SEARCH_SHEET, SITE_SHEET, CONTACTS_SCHEMA, PARTNERS_SCHEMA):
                 continue
             target = source['operand_refs'][0]
             if target not in scope['subject_refs']:
+                continue
+            if sheet['schema'] == CONTACTS_SCHEMA:
+                measurements.extend(_measurement(target, partner_contacts_test_name(sheet, reference), 'product', product, None,
+                                                 value, reference) for product, value in partner_contacts_rows(sheet))
+                continue
+            if sheet['schema'] == PARTNERS_SCHEMA:
+                measurements.extend(_measurement(target, bound_partner_test_name(sheet, reference), vocabulary, identifier, None,
+                                                 value, reference) for vocabulary, identifier, value in bound_partner_rows(sheet))
                 continue
             if sheet['schema'] == SITE_SHEET:
                 measurements.extend(_measurement(target, site_test_name(sheet, reference), 'product', product, None, value,
@@ -151,6 +184,23 @@ def held_site_tests(reader, scope, sources):
             sheet = entry['grading']['sheet']
             if sheet['schema'] == SITE_SHEET:
                 held[target].append((sheet['search_source_ref'], sheet['site_source']))
+    return held
+
+
+def held_partner_analyses(reader, scope, sources):
+    """Per target of the scope, the search source references whose ``partner_contacts`` the episode holds (graded), in arrival
+    order: a further ``partner_contacts`` of the same search is a repeat (it adds nothing) and the request check refuses it."""
+    scope = reader.validate_scope(scope)
+    held = {target: [] for target in scope['subject_refs']}
+    for reference in sources:
+        source = reader.get(reference)
+        target = source['operand_refs'][0] if source.get('operand_refs') else None
+        if target not in held:
+            continue
+        for entry in source_tool_grading_entries(reader, reference):
+            sheet = entry['grading']['sheet']
+            if sheet['schema'] == CONTACTS_SCHEMA:
+                held[target].append(sheet['search_source_ref'])
     return held
 
 

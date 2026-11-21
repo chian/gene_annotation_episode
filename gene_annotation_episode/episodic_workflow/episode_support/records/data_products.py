@@ -108,6 +108,22 @@ KINDS = {
     'functional_site_annotations': ('http://edamontology.org/data_1277', 'http://edamontology.org/format_3464',
                                     'Protein features, JSON (UniProt site features or M-CSA catalytic residues of the hits '
                                     'of a structure search)'),
+    # A solved structure the unit fetched (A102 ``partner_contacts``: the biological-assembly file of a PDB entry,
+    # ``<ID>-assembly<N>.cif.gz`` of https://files.rcsb.org/download/, kept as the mmCIF text it unpacks to). EDAM.tsv, read
+    # 2026-11-21 (https://edamontology.org/EDAM.tsv), neither obsolete: data_1460 Protein structure ("3D coordinate and
+    # associated data for a protein tertiary (3D) structure, or part of a structure, possibly in complex with other molecules"):
+    # the files hold the protein with its bound ligands and nucleic acids. Not data_0883 Structure (any macromolecule, wider
+    # than what is fetched) and not data_1461 Protein-ligand complex (many files hold no ligand). format_1477 mmCIF ("Entry
+    # format of PDB database in mmCIF format"). The gzip transfer form is in the settings (``download_bytes``,
+    # ``download_sha256``), not the format.
+    'experimental_structure': ('http://edamontology.org/data_1460', 'http://edamontology.org/format_1477',
+                               'Protein structure, mmCIF (the biological-assembly file of a solved PDB entry)'),
+    # The result of the pairwise structural alignments of one ``partner_contacts`` job batch (``usalign_driver``: per pair both
+    # TM-scores with their normalisations, RMSD, aligned length, sequence identity, the aligned residue pairs, the rotation and the
+    # translation). EDAM.tsv, read 2026-11-21, neither obsolete: data_0887 Structure alignment report ("An informative report of
+    # molecular tertiary structure alignment-derived data"), the same data type as ``structure_search_results``; format_3464 JSON.
+    'pairwise_structure_alignments': ('http://edamontology.org/data_0887', 'http://edamontology.org/format_3464',
+                                      'Structure alignment report, JSON (US-align alignments of the target with hit chains)'),
 }
 EDAM_SOURCE = 'https://edamontology.org/EDAM.tsv, read 2026-11-20'
 

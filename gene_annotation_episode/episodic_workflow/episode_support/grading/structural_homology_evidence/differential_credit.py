@@ -17,7 +17,8 @@ the subscoring sheet. Measurements are given in the order they arrived. The test
 - A candidate's value in one test is the mean of its measurements in that test (its replicates in that test: the hits of one
   structure search that share a product), times the weight of the test's family. Round 1 has one family, ``structure_search``,
   whose raw value (the index B of ``scoring.geometry``) lies in [0, 1]; the second family, ``site_correspondence``, has a raw
-  value (the mean E = B F of the hits with sites) in [0, 1] as well.
+  value (the mean E = B F of the hits with sites) in [0, 1] as well; the third, ``bound_partner`` (the mean E(hit, partner) = B F
+  of the hits bound to a partner), likewise in [0, 1].
 - A subscoring sheet is a kind of test: the part of the test name before ``@``
   (``structure_search:foldseek:tmalign:<database>``). A candidate's value on a sheet is the SUM of its values in the tests of
   that kind.
@@ -41,7 +42,9 @@ from itertools import combinations
 # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
 TYPICAL_STRONG_VALUE = {'structure_search': 1.0,
                         # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
-                        'site_correspondence': 1.0}
+                        'site_correspondence': 1.0,
+                        # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
+                        'bound_partner': 1.0}
 SHEET_WEIGHT = {family: 1 / value for family, value in TYPICAL_STRONG_VALUE.items()}
 
 
@@ -182,3 +185,35 @@ def site_test_ceiling(held, candidates):
     candidates = list(dict.fromkeys(candidates))
     listed = sum(1 for candidate in candidates if held.get(candidate, {}).get('listed'))
     return weight * float(len(candidates) - listed + listed * listed // 4)
+
+
+def bound_partner_test_ceiling(held, partner_slots):
+    """The most one ``bound_partner`` test (``partner_contacts``) can add to the credit of one target, from where the list stands
+    (``held`` is ``standing`` of the target), when the partners are not yet known: the candidates of the test are the partners
+    its hits are bound to (``ligand:<id>``, ``nucleic_acid:dna``, ``nucleic_acid:rna``) and nothing known before the unit runs
+    names them. ``partner_slots`` is the most partner candidates the unit can make (see below); ``held`` lists the partner
+    candidates already measured.
+
+    PROOF. A partner's value in the test is its mean ``E(hit, partner) = B F(hit, partner)`` over the hits bound to it; ``B`` is
+    in [0, 1] and ``F`` is a mean of residue scores, each a class match 0 or 1 times a kernel in (0, 1], so the value times the
+    family weight ``w`` is in [0, w], whatever the structures show. A partner no hit is bound to is not measured and earns
+    nothing. The test is appended last, so by the credit rule it earns the entry score of each candidate it admits (a
+    candidate not yet listed whose value is above 0: at most ``w``) plus ``|v_a - v_b|`` (at most ``w``) for each pair of
+    candidates both already listed that it measures; a listed candidate it does not measure earns nothing. The rise is
+    ``sum_{c not listed} v_c + sum_{a < b listed} |v_a - v_b|``, convex in ``v`` on the box ``0 <= v_c <= w`` and so largest at
+    a vertex (every ``v_c`` 0 or ``w``). With ``k`` partner candidates listed (all of them measured, the worst case) and ``u``
+    not listed a vertex puts ``s`` listed candidates at ``w``: ``w (u + s (k - s))``, largest at ``s = k // 2``: ``w (u + k^2 // 4)``
+    (as ``site_test_ceiling``). The unlisted ones are at most ``partner_slots - k`` (candidates the test makes that are not held):
+    the ceiling is ``w (max(partner_slots - k, 0) + k^2 // 4)``.
+
+    WHAT IS KNOWN BEFORE THE UNIT RUNS. The number of partner candidates is not known from the search: its held hit metadata (the
+    RCSB reply of ``pdb_chain_proteins.QUERY``) lists each entry's POLYMER entities only (the query asks ``polymer_entities``; it
+    asks no non-polymer entity, read in the query text), so it names no ligand and carries no entry's partner count. Nothing short of reading the files bounds the partners except the machine
+    bound the unit enforces: a file is at most ``partner_contacts.MAX_UNPACKED_BYTES`` unpacked and every atom row has at least
+    ``MIN_ATOM_ROW_BYTES`` bytes, so a file holds at most ``MAX_ATOMS_PER_FILE`` atoms and so at most that many molecules, and a
+    candidate needs a molecule of a hit's file. ``partner_slots`` is therefore ``(files the unit can ask) x
+    MAX_ATOMS_PER_FILE`` with the files the unit can ask at most the asked hits of the search (one file per hit at most): a
+    PROVED but very loose bound (the settling rule can stop the unit earlier, never later). It is a bound, not a forecast."""
+    weight = SHEET_WEIGHT['bound_partner']
+    listed = sum(1 for candidate, state in held.items() if state['listed'] and candidate.split(':', 1)[0] in ('ligand', 'nucleic_acid'))
+    return weight * float(max(partner_slots - listed, 0) + listed * listed // 4)
