@@ -2,9 +2,10 @@
 the held search gives, ``all_vs_all_run.set_members``); one row per completed unit; the data products the episode holds (the set,
 the database, the matrix, the clusters); the failed steps (what the checks refuse to run again); the committed clustering (the
 source of provider ``all_vs_all`` with its sheet's facts: the cluster count, the target's cluster size and each candidate's share
-of its sequences in it); the state; and the yield table. The returned record lists are closed under naming by
-``job_records.returned_with_names`` (the records the child returns together with everything they name among the records it
-holds), so the parent holds what the returned records name."""
+of its sequences in it); the state; and the yield table. The one returned record list, ``graded_refs`` (the labelled products and
+the committed clustering's source and grading), is closed under naming by ``job_records.returned_with_names`` (the records the
+child returns together with everything they name among the records it holds), so the parent holds what the returned records
+name. The jobs' ledger rows and what they name (plans, driver, staged graph, the files the jobs left) are never returned."""
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import returned_with_names
@@ -76,8 +77,6 @@ def internal_summary(view):
                                       if row['action'] == 'cluster' and row['status'] in ('completed', 'failed')],
             'committed': bool(clusterings), 'set_ids': [row['id'] for row in members], 'clusterings': clusterings,
             'matrix': [{'pair_count': outcome['pair_count']} for outcome in outcomes if 'pair_count' in outcome],
-            'handoff_refs': returned_with_names(records, [ref for outcome in outcomes for ref in outcome['handoff_refs']]),
-            'closure_refs': returned_with_names(records, [ref for outcome in outcomes for ref in outcome['closure_refs']]),
             'graded_refs': returned_with_names(records, [ref for outcome in outcomes for ref in outcome['graded_refs']]),
             'yield_table': (None if view.controller_state is None
                             else yield_table(view.controller_state, forecast_unit='all_vs_all_credit'))}

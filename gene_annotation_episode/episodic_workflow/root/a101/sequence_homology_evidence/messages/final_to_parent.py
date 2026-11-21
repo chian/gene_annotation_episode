@@ -70,8 +70,8 @@ FINDING_FORM = RecordForm({
     'waiting_searches': Field('list', 'The BV-BRC jobs (searches, alignments) launched and not extracted: for each the slot, the seconds since '
                                       'its launch and the seconds still expected, as the child last knew them',
                               items=WAITING_FORM, required=False),
-    'outstanding_handoff_count': Field('integer', 'Handoffs its launches returned for which no completed result '
-                                                  'acquisition has reported yet'),
+    'outstanding_handoff_count': Field('integer', 'The job handoffs it holds (its own and those its children returned) '
+                                                  'whose closure it does not hold'),
 })
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
@@ -90,14 +90,7 @@ RETURN_FORM = RecordForm({
 })
 
 
-# The slots whose report closes one handoff, by the state of the child's finding that does it. A child is added here when
-# built.
-CLOSING_STATES = {'bvbrc_blast': 'extracted', 'bvbrc_msa': 'extracted', 'bvbrc_metacats': 'extracted'}
-
-
 def final_to_parent(summary, completion, selection):
-    completed = sum(1 for row in summary['child_reports'] if row['slot'] in CLOSING_STATES
-                    and row['finding']['state'] == CLOSING_STATES[row['slot']])
     waiting = [{'slot': row['slot'], 'seconds_since_launch': row['finding']['seconds_since_launch'],
                 'expected_remaining_seconds': row['finding']['expected_remaining_seconds']}
                for index, row in enumerate(summary['child_reports'])
@@ -106,7 +99,7 @@ def final_to_parent(summary, completion, selection):
                            for later in summary['child_reports'][index + 1:])]
     result = {'credit': completion['credit'],
               'finding': {'evidence_axis': 'A101', 'targets': summary['axis_findings'],
-                          'outstanding_handoff_count': max(summary['handoff_count'] - completed, 0),
+                          'outstanding_handoff_count': summary['outstanding_handoff_count'],
                           **({'waiting_searches': waiting} if waiting else {})}}
     if 'committed_record_refs' in selection:
         result['committed_record_refs'] = summary['committed_record_refs']

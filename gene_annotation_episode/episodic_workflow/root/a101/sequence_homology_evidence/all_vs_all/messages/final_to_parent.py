@@ -1,10 +1,10 @@
-"""The return: controlled data only; no path and no text. EVERY RETURNED RECORD LIST IS CLOSED UNDER NAMING
-(``internal_summary`` builds each with ``job_records.returned_with_names``). Always: ``credit`` and the ``finding``: the state of
+"""The return: controlled data only; no path and no text. THE RETURNED RECORD LIST IS CLOSED UNDER NAMING
+(``internal_summary`` builds it with ``job_records.returned_with_names``). Always: ``credit`` and the ``finding``: the state of
 the work (``nothing_done``, ``database_ready``, ``matrix_ready``, ``tried`` or ``clustered``), the sequences and letters of the set, the pairs
 of the matrix, the number of tries and the committed clustering (inflation, contrast, cluster count, the target's cluster size) and the last failure code.
-Selectable: ``execution_handoff_refs``, ``closure_refs`` and ``graded_refs`` (the graded records: the set, database, matrix and
-clusters data-product rows with their artifacts, and each clustering's source and grading artifact, which the parent's credit
-reads)."""
+Selectable: ``graded_refs`` (the graded records: the set, database, matrix and clusters data-product rows with their artifacts,
+and each clustering's source and grading artifact, which the parent's credit reads). Nothing else is returned: the jobs this child
+runs are waited for and closed inside its own units, and their ledger rows and files stay in the child."""
 from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.cluster_sheet import (
@@ -35,8 +35,6 @@ FINDING_FORM = RecordForm({
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
     'finding': Field('record', 'The state of the work and its controlled facts', form=FINDING_FORM),
-    'execution_handoff_refs': Field('record_refs', 'The handoff records of the jobs run', required=False),
-    'closure_refs': Field('record_refs', 'The closure records of the jobs run', required=False),
     'graded_refs': Field('record_refs', 'The graded records: the data-product rows (set, database, matrix, clusters) with their '
                                         'artifacts, and each clustering\'s source and grading artifact', required=False),
 })
@@ -51,6 +49,5 @@ def final_to_parent(summary, completion, selection):
         finding['pair_count'] = summary['matrix'][-1]['pair_count']
     if summary['last_failure_code'] is not None:
         finding['last_failure_code'] = summary['last_failure_code']
-    facts = {'execution_handoff_refs': list(summary['handoff_refs']), 'closure_refs': list(summary['closure_refs']),
-             'graded_refs': list(summary['graded_refs'])}
+    facts = {'graded_refs': list(summary['graded_refs'])}
     return {'credit': completion['credit'], 'finding': finding, **{name: facts[name] for name in selection}}

@@ -14,7 +14,7 @@ error in the detail) and ``retryable`` false; the one exception is the service's
 What exists and is called, not written again: the route and its spacing (``bvbrc_job_route``), ``JobAccess.launch``,
 ``check`` and ``fetch`` (rows in custody), ``job_wait.wait_for_job`` (the wait of a status request),
 ``bvbrc_job_child``: ``search_facts``, ``timing``, ``seconds_until_allowed``, ``failure_code``, ``now_text``,
-``seconds_between``, ``_choose``, ``_failed`` and ``_ended`` (imported, not copied), the grader (``grade_blast_result``:
+``seconds_between``, ``_choose``, ``_failed``, ``_ended``, ``ledger_estimate`` and ``estimate_problems`` (imported, not copied), the grader (``grade_blast_result``:
 the report of ``blast_formatter -outfmt 15`` is the single-query JSON15 the BLAST parser takes), ``retain_tool_grading``,
 the search row ``SEARCHES``, ``job_progress.progress_information`` and the estimate table.
 
@@ -64,8 +64,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     PROGRAM_UNITS)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
-    FAILURE_CODES, SPACING, _choose, _ended, _failed, failure_code, now_text, search_facts, seconds_between,
-    seconds_until_allowed, timing)
+    FAILURE_CODES, SPACING, _choose, _ended, _failed, estimate_problems, failure_code, ledger_estimate, now_text,
+    search_facts, seconds_between, seconds_until_allowed, timing)
 
 # The source's provider names the service that ran the search. The Store admits an observation carrying native BLAST
 # rows from a source of this provider (``state.py``: ``NATIVE_BLAST_DATABASE_PROVIDERS``).
@@ -134,10 +134,15 @@ def learned_statistics(table, query_length):
     """What the estimate ledger has learned of each offered kind of search, by ``program:database`` (read through the
     table's read handle in a decision): the short trend of its measured durations (``duration_trend``: how many were
     measured, their band, the latest ones, and once enough searches of different query lengths are measured the line of
-    duration against query length with what it gives for a query of ``query_length``)."""
-    return {program + ':' + database: duration_trend(
-        table.read('rows', search_kind(program, database), LEDGER_ROWS), size_field='query_length', size=query_length)
-        for program, database in combinations()}
+    duration against query length with what it gives for a query of ``query_length``), with ``ledger_estimate``
+    (``bvbrc_job_child.ledger_estimate``): the basis and seconds an estimate of that kind of search must state."""
+    found = {}
+    for program, database in combinations():
+        trend = duration_trend(table.read('rows', search_kind(program, database), LEDGER_ROWS), size_field='query_length',
+                               size=query_length)
+        found[program + ':' + database] = {**trend,
+                                           'ledger_estimate': ledger_estimate(trend, 'learned_from_earlier_searches')}
+    return found
 
 
 # -- what the episode holds -----------------------------------------------------------------------------------------
@@ -291,9 +296,10 @@ def _program_and_database_problems(program, database, query_molecule):
 def check_estimate(request, *, state, learned, query_molecule):
     """``request``: ``program``, ``database``, ``expected_seconds``, ``basis``. The conditions: no search is running or
     waiting for a fix (an estimate is made before a launch, again to revise it, and again after a fix); the program
-    takes the query's molecule and the database holds what it searches; the seconds are in range; the basis says what the
-    estimate rests on: ``learned_from_earlier_searches`` only when the table has measured searches of this kind, and
-    ``no_earlier_measurement`` only when it has none (``learned`` is ``learned_statistics``)."""
+    takes the query's molecule and the database holds what it searches; the seconds are in range; the estimate is the
+    ledger's for this kind of search (``learned_statistics``' ``ledger_estimate``, which the decision shows): the basis says
+    what it rests on (``learned_from_earlier_searches`` only when the table has measured searches of this kind,
+    ``no_earlier_measurement`` only when it has none) and the seconds are the ledger's figure for it."""
     problems = _program_and_database_problems(request['program'], request['database'], query_molecule)
     if state['state'] in ('launched', 'finished', 'failed'):
         problems.append(_choose('action', {'launched': 'search_running_monitor_it', 'finished': 'search_finished_extract_it',
@@ -301,10 +307,9 @@ def check_estimate(request, *, state, learned, query_molecule):
     if not ESTIMATE_RANGE[0] <= request['expected_seconds'] <= ESTIMATE_RANGE[1]:
         problems.append(_choose('expected_seconds', 'expected_seconds_out_of_range', minimum=ESTIMATE_RANGE[0],
                                 maximum=ESTIMATE_RANGE[1]))
-    found = learned[request['program'] + ':' + request['database']]['measured']
-    if (request['basis'] == 'learned_from_earlier_searches') != (found > 0):
-        problems.append(_choose('basis', 'basis_does_not_match_the_learned_statistics', measured_searches=found,
-                                choose_from=['learned_from_earlier_searches' if found else 'no_earlier_measurement']))
+    trend = learned.get(request['program'] + ':' + request['database'])
+    if trend is not None:
+        problems.extend(estimate_problems(request, trend['ledger_estimate'], trend['measured'], 'measured_searches'))
     return problems
 
 

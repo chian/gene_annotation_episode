@@ -165,7 +165,7 @@ def commit_clustering(arguments, ctx):
 def hold(arguments, ctx):
     """Nothing is run: the unit's outcome is the reason."""
     return {'status': 'held', 'reason': arguments['reason'], 'failure_code': None, 'retryable': False, 'record_refs': [],
-            'graded_refs': [], 'handoff_refs': [], 'closure_refs': []}
+            'graded_refs': []}
 
 
 TOOLS = {'prepare_database': prepare_database, 'all_vs_all_blast': all_vs_all_blast, 'cluster': cluster,

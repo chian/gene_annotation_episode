@@ -1,5 +1,6 @@
 """The shared machinery of the child episodes that run one job of a BV-BRC application service (``jobs/bvbrc_job_route``)
-in the shape the owner ordered: ``estimate`` (the model commits the expected seconds, shown what the ledger learned),
+in the shape the owner ordered: ``estimate`` (the model commits the ledger's estimate, ``ledger_estimate``: the check
+refuses any other seconds or basis),
 ``launch`` (refused unless an estimate is held), ``fix`` (only after a failure), ``monitor`` (a wait, one status request,
 a revised remaining time) and ``extract`` (fetch and grade in the same unit), with a bounded four-unit credit, the
 completion controller, the state read from held job rows, resume from passed-back records, the wait notice and the
@@ -62,6 +63,9 @@ UNTIL = ('launched', 'extracted')
 ENDED_JOB_STATES = ('finished', 'failed', 'unknown')
 ESTIMATE_BASES = ('learned_from_earlier_jobs', 'no_earlier_measurement')
 ESTIMATE_RANGE = (1, 604800)
+# The seconds of the first job of a kind, when the ledger has measured none: the one figure not learned from the ledger (there
+# is nothing to learn from); the first measured job of the kind replaces it.
+FIRST_JOB_SECONDS = 120
 WAIT_RANGE_MAX = 1800
 CLOCK_MARGIN_SECONDS = 1.0
 LEDGER_ROWS = 500
@@ -181,11 +185,42 @@ def ledger_kind(binding, fields):
     return binding.child + ':' + binding.service + ':' + binding.kind(fields)
 
 
+def ledger_estimate(trend, learned_basis):
+    """THE ESTIMATE THE LEDGER GIVES for a job, from the trend of its kind (``duration_trend``): ``{'basis',
+    'expected_seconds'}``. With measured jobs the basis is ``learned_basis`` and the seconds are what the line of duration
+    against size gives for this job when the line is fitted, else the median of the measured jobs; with none the basis is
+    ``no_earlier_measurement`` and the seconds are ``FIRST_JOB_SECONDS``. Rounded to 0.1 s and held inside
+    ``ESTIMATE_RANGE``, so the figure the model is shown is the figure the check requires."""
+    if trend['measured']:
+        fit = trend['size_fit']
+        seconds = (fit['predicted_seconds'] if fit is not None and fit['predicted_seconds'] is not None
+                   else trend['typical_seconds'])
+        basis = learned_basis
+    else:
+        seconds, basis = FIRST_JOB_SECONDS, 'no_earlier_measurement'
+    return {'basis': basis, 'expected_seconds': min(max(round(seconds, 1), ESTIMATE_RANGE[0]), ESTIMATE_RANGE[1])}
+
+
+def estimate_problems(request, figure, found, field):
+    """The things to fix in an estimate's ``basis`` and ``expected_seconds`` against ``figure`` (``ledger_estimate``):
+    the basis must be the ledger's (``found`` measured jobs, reported as ``field``) and the seconds the ledger's figure."""
+    problems = []
+    if request['basis'] != figure['basis']:
+        problems.append(_choose('basis', 'basis_does_not_match_the_learned_statistics', **{field: found},
+                                choose_from=[figure['basis']]))
+    if request['expected_seconds'] != figure['expected_seconds']:
+        problems.append(_choose('expected_seconds', 'expected_seconds_is_not_the_ledger_estimate',
+                                choose_from=[figure['expected_seconds']]))
+    return problems
+
+
 def learned(table, binding, fields, size):
     """What the ledger has learned of this kind of job (``duration_trend``: how many were measured, their band, the
-    latest, and the line of duration against ``binding.size_field`` once enough different sizes are measured)."""
-    return duration_trend(table.read('rows', ledger_kind(binding, fields), LEDGER_ROWS),
-                          size_field=binding.size_field, size=size)
+    latest, and the line of duration against ``binding.size_field`` once enough different sizes are measured), with
+    ``ledger_estimate``: the basis and seconds an estimate of this job must state."""
+    trend = duration_trend(table.read('rows', ledger_kind(binding, fields), LEDGER_ROWS),
+                           size_field=binding.size_field, size=size)
+    return {**trend, 'ledger_estimate': ledger_estimate(trend, 'learned_from_earlier_jobs')}
 
 
 # -- what the episode holds ------------------------------------------------------------------------------------------
@@ -323,9 +358,10 @@ def unit_row(position, unit):
 # -- the checks: the things to fix in the model's JSON -----------------------------------------------------------------
 def check_estimate(binding, request, *, state, learned_trend, commission):
     """``request``: the binding's ``estimate_fields``, ``expected_seconds``, ``basis``. The conditions: no job is
-    running or waiting for a fix; the application's own checks of the fields pass; the seconds are in range; the basis
-    says what the estimate rests on: ``learned_from_earlier_jobs`` only when the ledger has measured jobs of this kind,
-    ``no_earlier_measurement`` only when it has none."""
+    running or waiting for a fix; the application's own checks of the fields pass; the seconds are in range; the estimate
+    is the ledger's (``learned_trend['ledger_estimate']``, which the decision shows): the basis says what it rests on
+    (``learned_from_earlier_jobs`` only when the ledger has measured jobs of this kind, ``no_earlier_measurement`` only
+    when it has none) and the seconds are the ledger's figure for it."""
     problems = list(binding.field_problems(request, commission))
     if state['state'] in ('launched', 'finished', 'failed'):
         problems.append(_choose('action', {'launched': 'job_running_monitor_it', 'finished': 'job_finished_extract_it',
@@ -333,10 +369,7 @@ def check_estimate(binding, request, *, state, learned_trend, commission):
     if not ESTIMATE_RANGE[0] <= request['expected_seconds'] <= ESTIMATE_RANGE[1]:
         problems.append(_choose('expected_seconds', 'expected_seconds_out_of_range', minimum=ESTIMATE_RANGE[0],
                                 maximum=ESTIMATE_RANGE[1]))
-    found = learned_trend['measured']
-    if (request['basis'] == 'learned_from_earlier_jobs') != (found > 0):
-        problems.append(_choose('basis', 'basis_does_not_match_the_learned_statistics', measured_jobs=found,
-                                choose_from=['learned_from_earlier_jobs' if found else 'no_earlier_measurement']))
+    problems.extend(estimate_problems(request, learned_trend['ledger_estimate'], learned_trend['measured'], 'measured_jobs'))
     return problems
 
 
@@ -556,11 +589,12 @@ def common_instructions(what, result):
         'credit reaches the target of the commission; you cannot end it.\n\n'
         'You do not write a request. You answer with one action as JSON; code checks your JSON before anything runs and '
         'runs the job.\n'
-        '- estimate: before anything is launched, the seconds you expect the job to take (expected_seconds), with its basis: '
-        'learned_from_earlier_jobs when learned_durations shows measured jobs of that kind (then rest the number on them: '
-        'measured is how many, typical_seconds their median, latest_seconds the newest first, and size_fit, when present, a '
-        'line of seconds against the job size with the seconds it gives for this job), no_earlier_measurement when it shows '
-        'none. You may estimate again to revise it while nothing is launched.\n'
+        '- estimate: before anything is launched, the seconds the job is expected to take (expected_seconds) and their basis, '
+        'both exactly as learned_durations.ledger_estimate gives them: the estimate comes from the ledger. With measured jobs '
+        'of this kind (measured is how many, typical_seconds their median, latest_seconds the newest first, size_fit, when '
+        'present, a line of seconds against the job size) the basis is learned_from_earlier_jobs and the seconds are what '
+        'size_fit gives for this job, else typical_seconds; with none the basis is no_earlier_measurement and the seconds are '
+        'the fixed first figure. Any other figure is refused.\n'
         '- launch: the job, with the fields of the commission. Refused unless an estimate is held (state estimated). One '
         'launch per estimate. Refused when the product it would make is already held.\n'
         '- monitor: one status request of the launched job (handoff_ref: the handoff record in job). wait_seconds is how long '
@@ -677,9 +711,9 @@ def common_finding(summary):
 
 
 __all__ = ['ACTIONS', 'COMMON_ASSIGNMENT', 'COMMON_FINDING', 'ESTIMATE_BASES', 'ESTIMATE_RANGE', 'FAILURE_CODES',
-           'JobApplication', 'ROUTE_KIND', 'STATES', 'UNTIL', 'WAIT_RANGE_MAX', 'bounded_credit', 'check_estimate',
+           'FIRST_JOB_SECONDS', 'JobApplication', 'ROUTE_KIND', 'STATES', 'UNTIL', 'WAIT_RANGE_MAX', 'bounded_credit', 'check_estimate',
            'check_extract', 'check_fix', 'check_launch', 'check_monitor', 'check_resource_and_continuation',
            'common_finding', 'common_instructions', 'completion_controller', 'episode_state', 'held_jobs', 'job_notice',
-           'job_view', 'launch_job', 'ledger_kind', 'learned', 'minimum_wait', 'monitor_job', 'output_schema',
+           'job_view', 'launch_job', 'ledger_estimate', 'ledger_kind', 'learned', 'estimate_problems', 'minimum_wait', 'monitor_job', 'output_schema',
            'read_common', 'record_estimate', 'resumed_rows', 'search_facts', 'seconds_between', 'seconds_until_allowed',
            'timing', 'unit_row']

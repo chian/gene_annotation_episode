@@ -160,8 +160,11 @@ estimate, extract results" (`bvbrc_blast_episode.md`). The built actions are fiv
 
 **The rule.**
 
-- Estimate (gated): `launch` is refused until an estimate is held (`estimate_required`). The estimate's basis must agree with the
-  ledger (`learned_from_earlier_jobs` only when measured jobs of that kind exist, otherwise `no_earlier_measurement`).
+- Estimate (gated): `launch` is refused until an estimate is held (`estimate_required`). Every job's estimate comes from the
+  ledger: the basis and the seconds must equal `ledger_estimate` (`bvbrc_job_child`), which the estimate decision shows in
+  `learned_durations`: `learned_from_earlier_jobs` with the size line's seconds for this job, else the median of the measured jobs;
+  `no_earlier_measurement` with the fixed first figure (`FIRST_JOB_SECONDS`) when none is measured. Any other figure is refused
+  with its field and `choose_from` the figure.
 - Launch, then `fix` only after a failure, with a request that differs from the failed one in the fixed field. Monitor: a wait
   inside a stated range, one status request, a revised remaining time. Extract: fetch and grade in one unit.
 - Until launched or extracted: the commission names `until`. With `launched` the child estimates, launches and returns at once
@@ -223,8 +226,13 @@ is never named in what it returns. There is no sealed field.
   launch (the MSA job `identity`).
 - Every child's returned record lists are closed under naming: `LIB/jobs/job_records.returned_with_names(reader, refs)` returns
   the records the child chooses to return with everything they name, recursively. Each child's `internal_summary` builds its
-  `handoff_refs`, `check_refs`, `closure_refs` and `graded_refs` through it. The child's `final_to_parent` receives only the
-  summary, so the closing happens where the records are read.
+  returned lists through it. The child's `final_to_parent` receives only the summary, so the closing happens where the records
+  are read.
+- Return a job's rows only when the head reads them: every file a returned row names comes with it. The BV-BRC children return
+  their handoff, check and closure rows (the head reads a job's state from them and passes them back to resume a parked job);
+  `all_vs_all` closes its jobs inside its units and returns only its labelled products and its graded clustering. The goal is
+  that every result the head holds is a labelled data product; what A101's head still holds unlabelled, and why, is in
+  `a101_child_returns.md`.
 - The parent selects optional return fields in `msg_to_child`; a child declares every field it can return; credit and finding are
   always returned.
 

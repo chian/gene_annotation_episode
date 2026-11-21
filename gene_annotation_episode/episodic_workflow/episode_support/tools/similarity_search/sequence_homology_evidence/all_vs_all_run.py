@@ -4,7 +4,10 @@ The commission: the target, a held graded BV-BRC search of it, the product candi
 (sequences of each) and the inflations the clustering may use. The model fills out one JSON for a tool; ONE deterministic
 check (``check_prepare``, ``check_blast``, ``check_cluster``) returns the things to fix, or the unit runs. Every tool runs
 in one unit through the existing local inspection point (``execute_on_local_resource``), in a job folder of the run's
-local resource, and keeps its product as a labelled data product (``records/data_products.py``).
+local resource, and keeps its product as a labelled data product (``records/data_products.py``). A unit's ``graded_refs`` (what
+the child returns) are only its labelled products and, for the committed clustering, the source and its grading: the jobs'
+ledger rows, the prepared-data row, the plans, the driver, the staged graph and the files the jobs left (the database's
+component files, the raw report, receipts, logs) stay in the child, which is the only one that reads them.
 
 1. ``prepare_database``: the SET is the target and, for each chosen candidate, its hits by the head's own selection rule
    (``bvbrc_msa_alignment.search_rows`` and ``plan_rows``: highest value in the search, one per distinct ``aa_sequence_md5``,
@@ -204,7 +207,7 @@ def clusters_settings(inflation, contrast):
 
 def _failed(code, record_refs=(), **facts):
     return {'status': 'failed', 'failure_code': code, 'retryable': False, 'record_refs': list(record_refs),
-            'graded_refs': [], 'handoff_refs': [], 'closure_refs': [], **facts}
+            'graded_refs': [], **facts}
 
 
 def _job_failure(ran, name):
@@ -324,9 +327,9 @@ async def prepare_database(ctx, resource_id, commission, per_candidate):
         database = record_product(store, artifact_ref=archive_ref, kind=DATABASE_KIND, generated_by=prepared['handoff_ref'],
                                   used=used, derived_from=[sequences['id']],
                                   settings={**database_settings(commission, per_candidate), 'files': names})
-    graded = [set_ref, sequences['id'], archive_ref, database['id'], prepared['prepared_ref']]
-    return {'status': 'completed', 'failure_code': None, 'retryable': False, 'record_refs': [*graded, *prepared['record_refs']],
-            'graded_refs': graded, 'handoff_refs': [prepared['handoff_ref']], 'closure_refs': [prepared['closure_ref']],
+    graded = [set_ref, sequences['id'], archive_ref, database['id']]
+    return {'status': 'completed', 'failure_code': None, 'retryable': False,
+            'record_refs': [*graded, *prepared['record_refs']], 'graded_refs': graded,
             'sequence_count': len(members), 'letters': sum(row['length'] for row in members),
             'file_count': len(names), 'database_ref': database['id'], 'set_product_ref': sequences['id']}
 
@@ -365,8 +368,7 @@ async def all_vs_all_blast(ctx, resource_id, database_ref, commission, per_candi
                                 settings=matrix_settings(commission, per_candidate))
     graded = [matrix_ref, matrix['id']]
     return {'status': 'completed', 'failure_code': None, 'retryable': False,
-            'record_refs': [*graded, plan_ref, report_ref, handoff, closure], 'graded_refs': graded,
-            'handoff_refs': [handoff], 'closure_refs': [closure], 'sequence_count': len(members),
+            'record_refs': [*graded, plan_ref, report_ref, handoff, closure], 'graded_refs': graded, 'sequence_count': len(members),
             'pair_count': sum(1 for edge in edges if not edge['self']), 'matrix_ref': matrix['id']}
 
 
@@ -408,7 +410,7 @@ async def cluster(ctx, resource_id, matrix_ref, inflation, contrast, commission,
                                   used=[matrix['artifact_ref']], derived_from=[matrix['id']], settings=settings)
     graded = [clusters_ref, held['id']]
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'record_refs': [*graded, graph_ref, handoff, closure],
-            'graded_refs': graded, 'handoff_refs': [handoff], 'closure_refs': [closure], 'clusters_ref': held['id'],
+            'graded_refs': graded, 'clusters_ref': held['id'],
             'same_as_held': held['settings']['inflation'] != inflation or held['settings']['contrast'] != contrast,
             'facts': facts}
 
@@ -437,7 +439,7 @@ def commit_clustering(ctx, clusters_ref, commission, per_candidate):
     graded = [source['id'], grading_ref, product['id']]
     sheet = grading['sheet']
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'record_refs': graded, 'graded_refs': graded,
-            'handoff_refs': [], 'closure_refs': [], 'inflation': settings['inflation'], 'contrast': settings['contrast'],
+            'inflation': settings['inflation'], 'contrast': settings['contrast'],
             'cluster_count': sheet['set']['cluster_count'], 'target_cluster_size': sheet['target_cluster']['size'],
             'source_ref': source['id']}
 

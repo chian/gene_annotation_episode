@@ -12,8 +12,10 @@ child returned for it: its handoff, status and closure records (the rows and wha
 are this episode's ``child_credit_units``: ``handoff_unit`` for the handoff, ``information_unit`` for a status request
 that shows something new and ``acquired_record_unit`` for the graded result.
 
-Required return fields: every kind of record the child returns for its search (handoff, status, closure and graded
-records), so that this episode holds the whole record of the search and can pass it back on a later visit."""
+Required return fields: of a BV-BRC child, every kind of record the child returns for its job (handoff, status, closure and
+graded records), so that this episode holds the job's rows, reads its state from them and can pass them back on a later
+visit; of ``all_vs_all``, which waits for and closes its own jobs inside its units, the graded records only (its labelled
+products and the committed clustering), so none of its job rows, and none of the files they name, reach this episode."""
 from episode_runtime import ChildMessage
 
 ANALYSIS_KIND = 'database_search'
@@ -38,7 +40,7 @@ REQUIRED_RETURN = {
     'bvbrc_blast': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
     'bvbrc_msa': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
     'bvbrc_metacats': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
-    'all_vs_all': ('execution_handoff_refs', 'closure_refs', 'graded_refs'),
+    'all_vs_all': ('graded_refs',),
 }
 
 

@@ -11,7 +11,7 @@ that carry a sequence, each with its molecule: what the two sequences of a compa
 record, job ledger rows included, the held records it names: what travels in custody beside it)."""
 import json
 
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import job_rows, named_records
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import named_records, outstanding_jobs
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.construction_records import (
     scientific_digest)
@@ -104,7 +104,6 @@ def internal_summary(view):
             closure_refs.extend(ref for ref in report['closure_refs'] if ref not in closure_refs)
         units.append(row)
         last = row
-    ended_inside_children = {ref for row in child_reports if row['slot'] == 'all_vs_all' for ref in row['handoff_refs']}
     held = [ref for ref in records.refs() if not ref.startswith('row_')]
     held_sequences = {ref: records.get(ref).get('molecule') for ref in held
                       if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')}
@@ -129,9 +128,9 @@ def internal_summary(view):
             'held_sequences': held_sequences,
             'bvbrc_searches': bvbrc.held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
             'named_refs': {ref: named_records(records, ref) for ref in records.refs()},
-            # the all_vs_all child's jobs are each waited for and closed inside its own units: they are never outstanding
-            'handoff_count': sum(1 for row in job_rows(records) if row['event'] == 'handoff'
-                                 and row['id'] not in ended_inside_children),
+            # the held handoffs whose closure is not held (``job_records.outstanding_jobs``): this episode's own local jobs
+            # (the profile scan) are closed in their unit; a child's job counts until the closure it returns is held
+            'outstanding_handoff_count': len(outstanding_jobs(records)),
             'msa_options': msa.msa_options(records, parent['scope'], table),
             'bvbrc_msa_jobs': job_child.held_jobs(records, msa.APPLICATION),
             'held_alignments': msa.graded_rows(records),

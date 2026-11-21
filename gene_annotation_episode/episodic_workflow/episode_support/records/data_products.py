@@ -39,6 +39,14 @@ KINDS = {
     # format for it closer than format_2330 Textual format.
     'profile_scan_results': ('http://edamontology.org/data_0858', 'http://edamontology.org/format_2330',
                              'Sequence signature matches, textual (HMMER hmmscan domain table)'),
+    # The two other texts the scan grades, of the same data type. EDAM.tsv, read 2026-11-21 (https://edamontology.org/EDAM.tsv),
+    # none obsolete: the per-sequence table is whitespace-aligned like the domain table (format_2330 Textual format); the
+    # report hmmscan writes on standard output is format_1421 HMMER profile alignment (sequences versus HMMs) ("Format used by
+    # the HMMER package for an alignment of a sequence against a hidden Markov model database").
+    'profile_scan_sequence_hits': ('http://edamontology.org/data_0858', 'http://edamontology.org/format_2330',
+                                   'Sequence signature matches, textual (HMMER hmmscan per-sequence table)'),
+    'profile_scan_report': ('http://edamontology.org/data_0858', 'http://edamontology.org/format_1421',
+                            'Sequence signature matches, HMMER profile alignment (sequences versus HMMs): the hmmscan report'),
     # The three products of the all-vs-all child. EDAM.tsv, read 2026-11-21 (https://edamontology.org/EDAM.tsv), none obsolete.
     # data_1233 Sequence set (protein) for the prepared BLAST database: EDAM has no term for a BLAST database, so the closest
     # one is the protein sequence set it holds, in format_3981 TAR format (the files makeblastdb wrote, packed in one archive).

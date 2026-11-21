@@ -16,5 +16,4 @@ GOAL = ('Establish, on a local resource, the sequence set of the assigned target
 UNIT = 'One defined action: prepare_database, all_vs_all_blast, cluster, commit_clustering or hold'
 RESULT = ('The state of the work (nothing_done, database_ready, matrix_ready, tried or clustered), the sequences and letters of the '
           'set, the pairs of the matrix, the number of tries, the committed clustering with its cluster count, the last failure code and '
-          'the credit; selectable: the handoff records, the closure records and the graded records (the data-product rows and the '
-          'committed clustering\'s source)')
+          'the credit; selectable: the graded records (the data-product rows and the committed clustering\'s source)')
