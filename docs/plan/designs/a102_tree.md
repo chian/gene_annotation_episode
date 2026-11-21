@@ -18,11 +18,11 @@ actual structural statistics; a prediction's confidence describes the model and 
 ```
 structural_homology_evidence      HEAD. Model-routed. Forecast yield controller, differential credit (SOP 7 to 9).
 └─ structure_search               CHILD. One search of one structure database with one model of the target = one test.
-│     get_model   tool of the child: obtain a model of the target from one source (round 1: alphafold_db, esmfold)
-│     estimate    gated, from the estimate ledger          (the job-child shape of SOP Step 4)
-│     launch      submit the search to the Foldseek server
-│     fix         only after a failed launch
-│     monitor     one status request after a stated wait
+      get_model   tool of the child: obtain a model of the target from one source (round 1: alphafold_db, esmfold)
+      estimate    gated, from the estimate ledger          (the job-child shape of SOP Step 4)
+      launch      submit the search to the Foldseek server
+      fix         only after a failed launch
+      monitor     one status request after a stated wait
       extract     fetch the result, name the hits, grade: one unit
 ```
 
