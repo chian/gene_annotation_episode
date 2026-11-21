@@ -185,3 +185,38 @@ launch, a failed search) were not exercised against the service: not verified in
 - The repeated `estimate` actions after the extract leave open expectation rows in the estimate table (they never resolve);
   `<kind>:remaining` revision rows stay open as well.
 - A search still running when the estimator stops the child (the later "detaching" case) did not occur: not verified.
+
+### Run C: the names of the hits (`runs/bvbrc_a101_run_C1`, workspace `runs/bvbrc_a101_ws_C`, journal `journal_C1.sqlite3`, report `report_C1.json`)
+
+4th `Homology` submission (4 of 6 used). Predicted against observed:
+1. As predicted: commission of `bvbrc_blast`; estimate `learned_from_earlier_searches`, 76 s (the model rounded the median
+   75.95); `launch`; two `monitor` (11 s: `running`; 61 s: `finished`); `extract`; five `estimate` repeats; `yield_stop` at 10
+   units; child credit 5.0 (estimate, handoff, running, finished, graded). The duration measured and recorded: 87.169109 s.
+2. The Store admitted the extract with the source of provider `bvbrc_homology` (the coordinator's change of `state.py` worked at
+   its first run) and the head's credit counted it with no further call: 0.99999998, `comparison_count` 300, one unit.
+3. The finding's identification: one function row, `RecA protein`, `supporting_group_count` 300, `groups_without_function` 0,
+   `conditional_weight` 1.0, `max_bit_score` 717.613, `unannotated_fraction` 0.0; `metadata_hit_count` 300,
+   `metadata_covered_count` 300, `data_request_count` 7, no failed data request, none refused (the Data API was used without the
+   login). Annotation: only `PATRIC` came back and no feature id twice (the rule for a duplicate was not needed).
+4. The estimate table gained ONE row for this launch (expectation 76 s, resolved 87.169109 s, `finished`), one open
+   `<kind>:remaining` row from the first monitor, and none from the five estimate repeats (earlier open rows of runs A and B stay).
+   The data lookups added about 70 s to the extract unit as predicted.
+
+Top five hits by bit score (all 717.613; accession, product, `pgfam_id`, `plfam_id`, genome):
+`300267.13.peg.3478` RecA protein PGF_00047078 PLF_620_00002096 (Shigella dysenteriae Sd197);
+`511145.12.peg.2790` RecA protein PGF_00047078 PLF_561_00001771 (E. coli K-12 MG1655);
+`556266.3.peg.1936` RecA protein PGF_00047078 PLF_561_00001771 (Shigella sp. D9);
+`685038.3.peg.2689` RecA protein PGF_00047078 PLF_561_00001771 (E. coli O83:H1 NRG 857C);
+`585057.6.peg.2993` RecA protein PGF_00047078 PLF_561_00001771 (E. coli IAI39). The reference records of the hits carry the accession
+and the product as label.
+
+What would let code call two hits "the same candidate" (over these 300 hits, `bvbrc_data` artifact of the run):
+- `pgfam_id` (cross-genus family): the same value, `PGF_00047078`, for all 300: it says "the same protein family", not a duplicate.
+- `plfam_id` (genus-level family): 53 distinct values; 15 hits have none (empty string): not usable alone.
+- `aa_sequence_md5`: 251 distinct values among 300 hits: 49 hits repeat another hit's exact protein sequence. This is the
+  exact-identity key. The sheet still reports `sequence_identity_unresolved: true` and counts 300 groups, because no
+  `sequence_group` is supplied to the grader (the legacy association joins hits only by accession). Supplying it (for
+  example `md5:<hash>`) would merge to 251 groups; not done, since it changes the sheet's counts and is the owner's choice.
+- `genome_id` / `taxon_id` differ for every hit (300 genomes), so organism alone does not merge hits.
+
+No `sig=` followed by hex in any file of runs C1, `bvbrc_a101_ws_C`, the estimate table or the data probes.
