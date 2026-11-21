@@ -1,5 +1,5 @@
 """The commission of the child. A commission is controlled data only: the model chooses among values this episode holds
-(``task.commission_fields``: a protein sequence of the scope, a database and a bound Foldseek resource of fixed sets, a held model
+(``task.structure_search_fields``: a protein sequence of the scope, a database and a bound Foldseek resource of fixed sets, a held model
 of the target or the fixed value that tells the child to obtain one, and where the commission ends), and this file builds the
 child's assignment, in the child's own form, from those choices and this episode's summary. The model writes no assignment,
 objective or message: the objective is this episode's own fixed text and the message is empty. A commission the child does not admit

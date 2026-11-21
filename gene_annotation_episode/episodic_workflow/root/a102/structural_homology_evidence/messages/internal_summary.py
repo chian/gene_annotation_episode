@@ -2,7 +2,7 @@
 commission), what the child reported, the graded searches and the models the episode holds, the job rows of the child's jobs, the
 candidates with their scores and the controller's yield table.
 
-For the commission (``task.commission_fields``, ``msg_to_child``) the summary also holds what a commission is chosen from and
+For the commission (``task.structure_search_fields``, ``msg_to_child``) the summary also holds what a commission is chosen from and
 built with: ``held_sequences`` (the held records that carry a sequence, each with its molecule), ``model_rows`` (the held data-product
 rows of kind ``protein_structure_model``, each with the target it was made from), ``graded_searches`` (the searches graded: what the
 decision shows), ``held_searches`` (per target the ``[database, model SHA-256]`` of each graded search, read by the credit's own reader:

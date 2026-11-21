@@ -5,7 +5,7 @@ Foldseek resource, the model of the target and where the commission ends) and co
 (``TOOLS`` is empty) and no ``reason`` action.
 
 The child. A slot is offered while its commission can be stated from what this episode holds: a protein sequence of the scope
-(a target whose molecule is not protein gets no commission) and a bound Foldseek resource (``commission_fields``). ONE
+(a target whose molecule is not protein gets no commission) and a bound Foldseek resource (``structure_search_fields``). ONE
 deterministic check of the filled commission runs in ``action`` before any child exists (``COMMISSION_CHECKS``): a search of the
 same query, database and model already graded or already commissioned is refused with its fix list, except the resume of the
 parked job (the same fields, ``until`` ``extracted``). A Foldseek job a child launched and returned parked is always finished
@@ -96,8 +96,8 @@ def bound_resources(ctx):
     return {resource['resource_id']: resource['kind'] for resource in ctx.services['job_access'].read('resources')}
 
 
-def commission_fields(slot, summary, resources):
-    """What the model supplies to commission ``slot``, as ``(properties, required)``: controlled values only. ``None`` while
+def structure_search_fields(summary, resources):
+    """What the model supplies to commission ``structure_search``, as ``(properties, required)``: controlled values only. ``None`` while
     this episode holds nothing the commission could be chosen from (no protein sequence in the scope, or no bound Foldseek
     resource): the slot is then not offered. The model is one of the held models of the targets, or ``obtain_one`` while a target
     has none."""
@@ -139,7 +139,7 @@ def check_structure_search(commission, summary, resources, records):
     return problems
 
 
-COMMISSIONS = {SLOT: commission_fields}
+COMMISSIONS = {SLOT: structure_search_fields}
 COMMISSION_CHECKS = {SLOT: check_structure_search}
 
 
