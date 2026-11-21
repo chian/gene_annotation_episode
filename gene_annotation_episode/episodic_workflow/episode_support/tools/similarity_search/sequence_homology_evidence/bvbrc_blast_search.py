@@ -424,7 +424,8 @@ def check_commission(request, *, programs, sequences, scope_subjects, resources,
                                     resource_id=search['resource_id']))
         if search['outstanding'] and same and request['until'] != 'extracted':
             problems.append(_choose('until', 'a_continuation_follows_the_search_to_its_result', choose_from=['extracted']))
-        if search['closed'] and same:
+        if search['closed'] and (search['program'], search['database']) == (program, database):
+            # the same query, program and database: held, whichever resource ran it (the reuse key of its product)
             problems.append(_choose('database', 'search_already_held'))
     if (query, program, database) in commissioned and not any(
             search['outstanding'] and (search['program'], search['database']) == (program, database) for search in held):
@@ -445,9 +446,6 @@ def launch_search(ctx, *, request, estimate, sequence_ref):
     first (one row per launch, keyed by the launch's job handle, kept in the handoff row so the status requests resolve
     it); a failed submission resolves it with that outcome."""
     access, table = ctx.services['job_access'], ctx.services['estimate_table']
-    held = reusable_search(ctx.store, sequence_ref, request['program'], request['database'])
-    if held is not None:   # same code and meaning as ``check_commission``'s refusal: the search is held, not repeated
-        raise ValueError('search_already_held:' + held['id'])
     job = {'application': 'Homology', 'program': request['program'], 'database': request['database'], 'query_file': QUERY_FILE}
     handle = job_handle(ctx.operation_key, request['resource_id'], JOB_NAME)
     started = now_text()

@@ -203,9 +203,6 @@ async def hmmer_profile_scan(ctx, *, query_ref, database, resource_id, executabl
     record = store.get(query_ref)
     residues = store.get_artifact(record['sequence_ref']).decode('ascii').upper()
     manifest_ref = store.artifact(Path(manifest_path).read_bytes(), 'application/json')   # the database's identity
-    held = find_reusable(store, PRODUCT_KIND, [record['sequence_ref'], manifest_ref], scan_settings(manifest))
-    if held is not None:   # same code and meaning as ``check_profile_scan_request``'s refusal: held, not repeated
-        raise ValueError('scan_already_held:' + held['id'])
     directory = Path(access.describe(resource_id)['workspace']) / job_handle(ctx.operation_key, resource_id, JOB_NAME)
     requested, inputs = _job(store, directory, query_ref, residues, manifest, executable_directory)
     request_ref = store.artifact(canonical(requested), 'application/json')
