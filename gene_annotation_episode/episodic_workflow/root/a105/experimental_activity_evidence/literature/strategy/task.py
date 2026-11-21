@@ -177,6 +177,12 @@ def offered(settings):
     return [*LIBRARY_NAMES, *(entry['name'] for entry in population_entries(settings)), 'reason']
 
 
+def offered_actions(summary, ctx):
+    """The action types offered at this decision, from the same ``offered`` and ``CHILD_SLOTS`` ``decide`` and
+    ``action`` use: the recorded tool names, ``reason`` and the child slots."""
+    return [*(TOOL_NAMES.get(name, name) for name in offered(ctx.settings)), *CHILD_SLOTS]
+
+
 def catalog(names, commit_schema, leads, settings):
     """The tools the model is shown: python tool name, description and input schema (the old catalog; every input
     schema is projected through ``source_location_inputs``)."""
