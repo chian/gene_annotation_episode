@@ -131,8 +131,8 @@ HISTORY_GUIDANCE = ('Your own earlier outcomes are shown to you as own_outcomes,
 # ``credit_binding`` has the fixed fields; ``candidates``, ``tests`` and ``differentials`` of the context are its data).
 CREDIT_TEXT = ('Your credit counts possible annotations (candidates). A candidate found with positive evidence is '
                'admitted to the list and earns its score; a possible annotation with no positive evidence is not on '
-               'the list. Applying the same test to candidates already on the list earns by how differently they '
-               'respond: the size of the difference of the moves of their scores. A repeat earns nothing.')
+               'the list. A test also earns the difference of the moves of the scores of the top two candidates '
+               'already on the list that it measures (those two, no other pair). A repeat earns nothing.')
 PAIRWISE_TOOL = 'pairwise_blast'
 PROFILE_TOOL = 'hmmer_profile_scan'
 DESCRIPTIONS = {
@@ -218,7 +218,7 @@ CHILD_DESCRIPTIONS = {
         'candidate with distinguishing sites that no earlier alignment you hold has identified, the measurement in one more '
         'test, msa, is the fraction of those new sites where the target carries the group\'s residue. Repeating the same '
         'residue pattern on the same sites adds nothing, and an alignment with no new distinguishing site earns nothing. '
-        'Candidates already on your list that both undergo this test can differentiate each other. ' + CREDIT_TEXT + ' Fill the six fields of its commission: query_ref (a protein sequence of your scope), '
+        'The top two candidates already on your list that undergo this test earn the difference of their moves. ' + CREDIT_TEXT + ' Fill the six fields of its commission: query_ref (a protein sequence of your scope), '
         'search_ref (a held graded BV-BRC search of that query; msa_options shows each with the product candidates you '
         'admitted from it), candidates (two or more of those product names, exactly as shown), per_candidate (2 to 20 '
         'sequences of each), resource_id (a bvbrc resource of bound_resources) and until. Code checks the commission before '
@@ -244,8 +244,8 @@ CHILD_DESCRIPTIONS = {
         'database, runs the all-against-all and tunes the clustering (the inflation and how the pairwise scores are contrasted), '
         'trying clusterings and committing one. The committed clustering is graded: for each candidate with sequences in the set, '
         'the measurement in one more test, cluster, is the share of that candidate\'s sequences that fall in the target\'s cluster '
-        '(0 to 1; about 1 when they cluster with the target, 0 when none does). Candidates already on your list that both undergo '
-        'this test can differentiate each other. ' + CREDIT_TEXT + ' Fill the four fields of its commission: query_ref (a protein '
+        '(0 to 1; about 1 when they cluster with the target, 0 when none does). The top two candidates already on your list that undergo '
+        'this test earn the difference of their moves. ' + CREDIT_TEXT + ' Fill the four fields of its commission: query_ref (a protein '
         'sequence of your scope), search_ref (a held graded BV-BRC search of that query; msa_options shows each with the product '
         'candidates you admitted from it), candidates (two or more of those product names, exactly as shown) and per_candidate (2 '
         'to 20 sequences of each). Code checks the commission before the child is commissioned; if something is wrong it comes back '

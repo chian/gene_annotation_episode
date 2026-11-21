@@ -402,14 +402,20 @@ episode holds, counted the moment a graded sheet is held. No reasoning commit sw
 - "with only one candidate known there is no need to differentiate"
 - "i resolved this by saying you need positive evidence to admit a possibility" and "so sometihgn random cannot be on the list at
   zero. i got rid of the possibity of zero basically"
+- When the sum over every pair was noticed (2026-11-21): "Do you not remember that you only do the differential between the top two candidates?"
 - On a second candidate entering and earning the leader's score: "that's a little bit weird ... I think we shoudl fix that really
   ... adding a possiblity should be good in that we are searching and finding nsomething positive, but finding better
   possibilities is better, right?"
 
 So: a candidate annotation is admitted on positive evidence (a first value above zero) and earns its own score once, at entry,
-and only that. A test that two candidates already on the list both undergo earns the absolute difference of their moves.
-Differentials count for tests after both candidates are listed. Credit is the sum of the entry scores and the differentials; it
-never falls; a repeat earns nothing. Measurements of different targets are never compared.
+and only that. THE DIFFERENTIAL OF A TEST IS ONE PAIR'S, the top two. Among the candidates already on the list before the test that
+the test measures, take the two with the highest scores before the test (a tie by the candidate key); the test earns the absolute
+difference of their two moves in it, and nothing for any other pair; with fewer than two such candidates, no differential (the owner:
+"(1) adding new possible annotations gets you a score (2) differentiating those scores ... for all possibilities"; "if S_A moves +0.5
+and S_B only moves +0.1, then you have differentiated the lead candidates by 0.4"; "you only do the differential between the top two
+candidates"). Credit is the sum of the entry scores and the differentials; it never falls; a repeat earns nothing. Measurements of
+different targets are never compared. Whatever is specific to one measurement (the cluster test's evidence weighting, one credit per
+dataset, the alignment's new sites) applies to that one pair or that test, never to a sum over pairs.
 
 Credit is NOT the annotation score. Credit is what the episode optimises (what was gained). The annotation score is a score per
 possible annotation (a candidate's score, the sum of its sheet values); the head returns the candidates with their scores, the
@@ -435,8 +441,9 @@ is going to earn very very little. that's the point of tying to ceiling values. 
 filled in everywhere:
 
 - An action the request checks would refuse as a repeat has ceiling 0.
-- A test that measures one listed candidate and admits none earns 0; a pair of listed candidates earns at most the family weight; a
-  candidate the test admits earns at most its entry (`differential_credit.test_ceiling`).
+- A test that measures one listed candidate and admits none earns 0; the ONE pair (the top two of the listed candidates it measures)
+  earns at most the family weight, only with two listed candidates measured; a candidate the test admits earns at most its entry
+  (`differential_credit.test_ceiling`): at most the entries of the candidates it can admit plus one pair's difference.
 - The alignment's ceiling is derived from the target positions not yet identified, with the proof written in the docstring of
   `differential_credit.msa_test_ceiling`.
 - When an action's ceiling depends on its arguments, supply `best_arguments` (optional) so the row shown to the model is the
@@ -621,6 +628,11 @@ So:
     structure can do (functional sites, pockets, secondary-structure arrangement, binding, RNA 2D structure) because A101 had
     deferred its functional regions. The owner: "This is all just sequence homology under another name which is not the point".
     Fix: Step 0A.
+15. The differential summed over every pair of listed candidates (A101, found 2026-11-21 in A102's 130 candidates: the credit of the
+    CspA candidate went from 41 to 304 after a second search, because every pair of 130 candidates earned its difference). The rule
+    is the top two only, and everything specific to a measurement (evidence weighting, one credit per dataset) applies to that one
+    pair. The owner: "Do you not remember that you only do the differential between the top two candidates?" Check: a test's credit
+    is at most its admitted entries plus ONE pair's difference, so the ceiling must not grow with the square of the candidate count.
 
 ---
 
