@@ -10,10 +10,13 @@ declaration; everything that differs between episodes is a parameter.
   (``credit_definition``: the episode's credit projector record) and this estimator kind (``yield_method``: the
   kind the projector's credit requires). It raises ``ValueError('<code_prefix>_yield_binding_missing_for_task:...')``,
   ``..._yield_credit_definition_mismatch:...`` or ``..._yield_method_credit_mismatch:...``.
-* ``open_yield_controller(kind, *, epoch, initial_credit, cutoff, parameters, maximum_credit=None, target=None)``
+* ``open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=None, maximum_credit=None, target=None)``
   opens the matching ``yield_control`` controller: ``'accumulation'`` (credit without a declared limit),
-  ``'bounded_quality'`` (a quality credit whose definition declares ``maximum_credit``) or ``'completion'``
-  (credit toward the commission's finite ``target``). An operand the kind does not take, a missing one, or any
+  ``'bounded_quality'`` (a quality credit whose definition declares ``maximum_credit``), ``'completion'``
+  (credit toward the commission's finite ``target``) or ``'forecast'`` (credit whose every offered action declares a
+  ceiling: ``ForecastYieldController``; its ``parameters`` are ``ForecastParameters`` (prior strength cap, exchange
+  rate, forgetting, job kinds), it takes no ``cutoff``: its cost of one more unit is the expected seconds of each
+  action times the exchange rate). An operand the kind does not take, a missing one, or any
   other kind raises. The controller is returned unchanged: it is a ``method_loop`` Controller, so
   ``build_controller`` returns it directly.
 """
@@ -24,9 +27,9 @@ from collections.abc import Mapping
 from method_loop.jsonvalue import canonical
 
 from yield_control import (AccumulationYieldController, BoundedQualityYieldController, CompletionYieldController,
-                           YieldParameters)
+                           ForecastParameters, ForecastYieldController, YieldParameters)
 
-KINDS = ('accumulation', 'bounded_quality', 'completion')
+KINDS = ('accumulation', 'bounded_quality', 'completion', 'forecast')
 
 
 def _prefix(code_prefix):
@@ -60,8 +63,14 @@ def _parameters(parameters):
     return YieldParameters(**parameters)
 
 
-def open_yield_controller(kind, *, epoch, initial_credit, cutoff, parameters, maximum_credit=None, target=None):
+def open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=None, maximum_credit=None, target=None):
     """The ``yield_control`` controller of ``kind`` (see the module docstring)."""
+    if kind == 'forecast':
+        if cutoff is not None or maximum_credit is not None or target is not None:
+            raise ValueError('forecast_yield_takes_no_cutoff_maximum_or_target')
+        return ForecastYieldController(epoch, initial_credit, ForecastParameters(**parameters))
+    if cutoff is None:
+        raise ValueError('yield_cutoff_required:' + str(kind))
     settings = _parameters(parameters)
     if kind == 'accumulation':
         if maximum_credit is not None or target is not None:

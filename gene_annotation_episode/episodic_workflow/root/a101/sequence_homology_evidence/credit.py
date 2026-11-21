@@ -52,7 +52,7 @@ class A101SequenceCredit(NativeCorrespondenceScoring):
 
 class A101DifferentialCredit:
     """The definition record of the head's credit and its estimator kind."""
-    yield_method = 'accumulation'
+    yield_method = 'forecast'
 
     def as_record(self):
         return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v2', 'axis': 'A101',

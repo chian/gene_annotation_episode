@@ -16,7 +16,7 @@ from collections.abc import Mapping
 
 from yield_control import PROGRESS_TIME_VERSION
 
-from yield_control import YieldState
+from yield_control import ForecastYieldState, YieldState
 
 _TIME_FIELDS = ('position', 'status', 'unavailable_reason', 'elapsed_seconds', 'reference_elapsed_seconds',
                 'captured_at', 'origin_captured_at', 'includes_idle_time', 'is_compute_consumption')
@@ -35,10 +35,17 @@ def time_accounting(receipt):
 
 def yield_table(controller_state, *, forecast_unit):
     """The yield forecast an episode's controller holds now (see the module docstring)."""
-    if not isinstance(controller_state, YieldState):
-        raise TypeError('yield_table_requires_a_yield_control_state:' + type(controller_state).__name__)
     if type(forecast_unit) is not str or not forecast_unit:
         raise ValueError('yield_table_forecast_unit_required')
+    if isinstance(controller_state, ForecastYieldState):
+        # The forecast of each offered action is added to the decision by the system (``action_forecasts``).
+        return {'version': 'episode_forecast_table_v1', 'epoch': controller_state.epoch,
+                'initial_credit': controller_state.initial_credit, 'current_credit': controller_state.current_credit,
+                'marginal_credits': list(controller_state.history), 'completed_units': len(controller_state.history),
+                'stop_requested': controller_state.stop, 'parameters': controller_state.parameters.as_record(),
+                'forecast_unit': forecast_unit}
+    if not isinstance(controller_state, YieldState):
+        raise TypeError('yield_table_requires_a_yield_control_state:' + type(controller_state).__name__)
     record = controller_state.as_record()
     decision = record['decision']
     return {'version': 'episode_yield_table_v1', 'epoch': record['epoch'],

@@ -1,16 +1,20 @@
-"""Continuation: the accumulation controller (``AccumulationYieldController``) of the differential credit. The credit
+"""Continuation: the forecast controller (``ForecastYieldController``) over the differential credit. The credit
 (``credit.py``) is a sum that grows with every admitted candidate annotation and every differential and has no fixed
-maximum, so its controller is the one for credit without a declared limit. The controller is opened through the library's
-``checked_yield_declaration`` (the declaration for the task key ``A101:<context.a101_task.name>``, or
-``A101:a101_native_sequence_correspondence`` when the commission names none, as ``read_from_parent`` reads it, must
-name exactly this credit definition, ``A101DifferentialCredit().as_record()``, and the kind ``accumulation``) and
-``open_yield_controller``, which takes the declaration's cutoff as the cost of one more unit and its parameters.
+maximum, but every action the head offers has a ceiling (``credit.ceiling``: the most the credit can rise if that action is
+the next unit, or ``UNBOUNDED`` for the one action whose gain has none). The forecast of an offered action is therefore
+a formula, not the model's estimate: the share of its ceiling such actions realized before (this episode's units and the
+estimate ledger's history of the kind ``a101/sequence_homology_evidence:<action type>``) times the ceiling, or, for
+``UNBOUNDED``, the typical gain of that kind. The episode stops when no offered action's forecast exceeds its expected
+seconds times the exchange rate (``yield_control``, section ``ForecastYieldController``; the design is
+``docs/plan/designs/forecast_yield_controller.md``).
 
-The cutoff is in the credit's own units: an admitted candidate earns up to 1 and a differential earns the size of a gap
-between the moves of two scores. The run's declaration chooses 0.1: the episode continues while it expects a unit
-to earn more than 0.1, the move the owner's example calls small (``S_B only moves +0.1``): a unit expected to differentiate
-candidates by no more than that is not worth another decision. It reads what ``read_from_parent`` produced (the task
-key), never the assignment; the declarations are this episode's settings (``settings['yield_bindings']``)."""
+The controller is opened through the library's ``checked_yield_declaration`` (the declaration for the task key
+``A101:<context.a101_task.name>``, or ``A101:a101_native_sequence_correspondence`` when the commission names none, as
+``read_from_parent`` reads it, must name exactly this credit definition, ``A101DifferentialCredit().as_record()``, and the
+kind ``forecast``) and ``open_yield_controller``, which takes the declaration's parameters: ``prior_strength_cap``,
+``exchange_rate``, ``forget_old_rows`` and ``job_kinds`` (the values and their reasons are in the design note). It reads
+what ``read_from_parent`` produced (the task key), never the assignment; the declarations are this episode's settings
+(``settings['yield_bindings']``)."""
 from gene_annotation_episode.episodic_workflow.episode_support.configuration.yield_declarations import (
     checked_yield_declaration, open_yield_controller)
 
@@ -23,4 +27,4 @@ def yield_controller(initial_credit, settings, parent_input):
                                             credit_definition=projector.as_record(),
                                             yield_method=projector.yield_method, code_prefix='scientific')
     return open_yield_controller(declaration['kind'], epoch='sequence_homology_evidence', initial_credit=initial_credit,
-                                 cutoff=declaration['cutoff'], parameters=declaration['parameters'])
+                                 parameters=declaration['parameters'])
