@@ -214,7 +214,7 @@ def extract(ctx, handoff_ref, request, commission):
         for row, plan_row in zip(sheet['references'], plan['references']):
             reference = store.put('reference', {
                 'reference_type': 'protein', 'source_ref': source['id'], 'accession': row['accession'],
-                'label': row['candidate'], 'sequence_ref': plan_row['sequence_ref'], 'molecule': 'protein',
+                'label': row['candidate'], 'sequence_ref': None, 'molecule': 'protein',
                 'length': row['length'], 'term_refs': [], 'context_refs': []}, origin='external')
             references.append(reference['id'])
             observations.append(store.put('observation', {

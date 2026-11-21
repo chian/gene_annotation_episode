@@ -146,7 +146,8 @@ def held_searches(reader, sequences):
         shown, ended = checks(reader, handoff['job']), closure(reader, handoff['job'])
         state = 'submitted' if not shown else shown[-1]['detail']['state']
         request = handoff['detail']['native']['request']
-        (query,) = [ref for ref, artifact in sequences.items() if artifact == handoff['detail']['input_refs'][QUERY_FILE]]
+        (query,) = [ref for ref, artifact in sequences.items() if ref.startswith('input_')
+                    and artifact == handoff['detail']['input_refs'][QUERY_FILE]]
         found.append({'handoff_ref': handoff['id'], 'resource_id': handoff['detail']['resource_id'], 'query_ref': query,
                       'program': request['program'], 'database': request['database'], 'latest_state': state,
                       'closed': ended is not None, 'outstanding': ended is None and state not in ('failed', 'unknown'),
