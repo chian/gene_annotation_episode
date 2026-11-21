@@ -40,10 +40,12 @@ from types import MappingProxyType
 from method_loop import (ClosedRecord, Commission, Context, Controller, Episode, EpisodeGoal, EpisodeRef,
                          EpisodeRequest, EpisodeTree, EpisodeUpdate, Grain, RecordForm, ResumeUnit,
                          YIELD_CONTROLLERS, closing_credit)
+from yield_control import ForecastYieldController
 from method_loop.jsonvalue import closed_copy, content_digest
 
 from .bindings import BindingRegistry
 from .collaborators import STANDARD_COLLABORATORS, interface_failures
+from .forecast_ledger import ForecastLedger
 from .journal import EpisodeRecorder, JournalError, RunJournal
 from .progress import ProgressClock
 from .recording import (Custody, DecisionContext, InitialCredit, RecordedModel, ServiceReads, UnitAttempts,
@@ -276,11 +278,13 @@ def _tree(bindings, top, collaborators, bound_by_path, journal, run_id):
                 raise LinkError('controller_opened_for_an_episode_the_runner_did_not_build:'
                                 + binding.binding_path + ':' + repr(episode_path))
             value = binding.build_controller(bound, bound.settings())
-            # Only the three ``yield_control`` controllers decide continuation.
+            # Only the four ``yield_control`` controllers decide continuation.
             if not isinstance(value, YIELD_CONTROLLERS):
                 raise LinkError('yield_controller_must_be_a_yield_control_controller:' + binding.binding_path)
             if not isinstance(value, Controller):
                 raise LinkError('build_controller returned another type:' + binding.binding_path)
+            if isinstance(value, ForecastYieldController):
+                value.attach(bound.forecast_ledger)
             if not isinstance(getattr(value.state(), 'stop', None), bool):
                 raise LinkError('controller_state_must_expose_a_boolean_stop:' + binding.binding_path)
             binding.declaration(value)
@@ -347,7 +351,9 @@ class BoundEpisode:
     (handed to its tools); ``reads`` records what its decisions read from them; ``attempts`` journals each unit's
     attempt; ``initial_credit`` records the credit its yield controller is built from (computed when the Episode
     is first entered, read from the journal ever after); ``ceilings`` journals each decision's ceilings, the ceiling
-    of the action taken and the credit's actual rise;
+    of the action taken and the credit's actual rise; ``forecast_ledger`` is the runner's access to the estimate ledger
+    for a ``ForecastYieldController`` (history read by the controller; the expectation and resolution of every unit
+    written by the Episode's source; given to no episode function);
     ``settings()`` is a copy of the episode's continuation settings; ``decision_context(position)`` is
     what ``decide`` and ``action`` receive (the services as read handles whose reads are recorded for that
     position) and ``context(attempt)`` what a tool receives.
@@ -375,6 +381,7 @@ class BoundEpisode:
     initial_credit: InitialCredit
     continuation: Mapping
     ceilings: UnitCeilings
+    forecast_ledger: ForecastLedger
 
     def settings(self):
         """A copy of the episode's own continuation settings (so no episode function can change the run's)."""
@@ -504,7 +511,9 @@ def _link(journal, run_id, entry, collaborators, prepared):
             run_services.view(binding.services, custody), ServiceReads(journal, run_id, episode_path),
             UnitAttempts(journal, run_id, episode_path, custody, position),
             InitialCredit(journal, run_id, episode_path), collaborators['continuation'][path],
-            UnitCeilings(journal, run_id, episode_path))
+            UnitCeilings(journal, run_id, episode_path),
+            ForecastLedger(run_services, custody, EpisodeRecorder(journal, run_id, episode_path),
+                           episode_id=episode_id, binding_path=path))
         bound_by_path[episode_path] = bound
         child_builders = {}
         for slot, child_path in binding.child_slots.items():

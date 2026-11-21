@@ -1,4 +1,4 @@
-"""The three yield controllers, as equal peers.
+"""The four yield controllers, as equal peers.
 
 * ``AccumulationYieldController`` -- credit that accumulates without a declared
   limit (``AccumulationYieldEstimator``).
@@ -10,8 +10,13 @@
   error, and the forecast is limited by the remaining distance, exactly zero at
   the target (``CompletionYieldEstimator``).
 
-Each controller receives one cumulative credit per completed action, passes the
-raw signed difference to its estimator, and stops only when the estimator's
+* ``ForecastYieldController`` -- credit whose every offered action declares a ceiling (the most the credit can rise
+  if that action is the next unit, or ``UNBOUNDED``); its forecast is a formula of the ceiling and of what such
+  actions realized before, in this episode and in the estimate ledger, and it stops when no offered action's forecast
+  exceeds its expected cost at the declared exchange rate (see the section ``ForecastYieldController`` below).
+
+The first three receive one cumulative credit per completed action, pass the
+raw signed difference to their estimator, and stop only when the estimator's
 available upper bound on the next marginal credit is at or below its cost.
 Credits are never bounded, clamped or rescaled; unknown forecasts stay unknown.
 
@@ -931,3 +936,288 @@ class CompletionYieldController:
         if epoch == self.epoch:
             raise ValueError("An explicit new epoch must have a distinct id")
         return CompletionYieldController(epoch, self._current_credit, self.cost, self.target, self.settings)
+
+
+
+# ============================================================================
+# ForecastYieldController: the fourth controller. A forecast that is a formula of each offered action's ceiling and of
+# what actions of its kind realized before; no estimator is fitted to the credit's history and the model estimates
+# nothing. The credit formula enters only through ``ceiling`` (``method_loop.episode_type``).
+#
+# For an offered action ``a`` of the action kind ``k`` (the episode's binding path and the action type):
+#
+# * a bounded action (a finite ceiling c): forecast = (realized fraction of k) x c, a ceiling of 0 forecasts 0. The
+#   realized fraction is the mean of a Beta(alpha, beta) posterior on obtained/ceiling. Its prior is the
+#   uninformative Beta(1, 1) when the ledger has no unit of k with a positive ceiling, otherwise the ledger's history
+#   of k as pseudo-counts (each earlier unit adds f to alpha and 1-f to beta, weighted by the row's age when old rows
+#   are forgotten) whose total strength is capped at ``prior_strength_cap`` (both counts scaled down together); this
+#   episode's own units of k then add f and 1-f each at full weight.
+# * an UNBOUNDED action: there is no ceiling to scale, so the forecast is the typical gain of k: the mean of the
+#   gains obtained, the ledger's history (total weight capped at ``prior_strength_cap``) pooled with this episode's
+#   own units at full weight. With no unit of k anywhere the forecast is unknown, and an unknown forecast never
+#   lets the episode stop (as in the three controllers, unknown stays unknown).
+# * the cost of ``a`` is its expected seconds: for an action type of ``job_kinds`` whose ledger kind has measured
+#   jobs, the median job duration plus the median seconds the model took to decide; otherwise the median measured
+#   wall seconds of the units of k (ledger history and this episode); with none, the median unit seconds of this
+#   episode so far; with none, unknown (cost 0 in the stop rule).
+# * the stop rule: stop when no offered action's forecast exceeds expected seconds x ``exchange_rate``.
+# ============================================================================
+
+FORECAST_VERSION = "forecast_yield_v1"
+UNBOUNDED_TEXT = "unbounded"
+FRACTION_TOLERANCE = 1e-9
+
+
+def _is_ceiling_number(value):
+    return not isinstance(value, str)
+
+
+def _median(values):
+    ordered = sorted(values)
+    middle = len(ordered) // 2
+    return ordered[middle] if len(ordered) % 2 else (ordered[middle - 1] + ordered[middle]) / 2.0
+
+
+def _fraction(gain, ceiling, what):
+    """What share of its ceiling a unit earned (a Beta observation); a unit that lost credit is an error here."""
+    fraction = gain / ceiling
+    if fraction < -FRACTION_TOLERANCE:
+        raise ValueError(f"forecast_cannot_learn_a_negative_rise:{what}:{gain!r}")
+    return min(1.0, max(0.0, fraction))
+
+
+@dataclass(frozen=True)
+class ForecastParameters:
+    """The parameter set of the forecast controller; nothing in it names a credit formula.
+
+    ``prior_strength_cap``: the most pseudo-observations the ledger's history of an action kind may weigh.
+    ``exchange_rate``: credit per second; an action is worth taking while its forecast gain exceeds its expected
+    seconds times this rate. ``forget_old_rows``: weight each ledger row by the estimate table's
+    ``ForgettingPolicy`` (rows past ``history_seconds`` are dropped, the rest halve every
+    ``history_half_life_seconds``). ``job_kinds``: action type -> the prefix of the ledger kinds of the jobs that
+    action launches, whose measured durations are its expected seconds."""
+    prior_strength_cap: float
+    exchange_rate: float
+    forget_old_rows: bool
+    job_kinds: Mapping
+
+    def __post_init__(self):
+        cap = _finite_number("prior_strength_cap", self.prior_strength_cap)
+        rate = _finite_number("exchange_rate", self.exchange_rate)
+        if cap <= 0 or rate < 0:
+            raise ValueError("prior_strength_cap_must_be_positive_and_exchange_rate_not_negative")
+        if type(self.forget_old_rows) is not bool:
+            raise ValueError("forget_old_rows_must_be_a_boolean")
+        if (not isinstance(self.job_kinds, Mapping)
+                or any(type(key) is not str or type(value) is not str or not key or not value
+                       for key, value in self.job_kinds.items())):
+            raise ValueError("job_kinds_must_map_action_types_to_ledger_kind_prefixes")
+        object.__setattr__(self, "job_kinds", dict(self.job_kinds))
+
+    def as_record(self):
+        return {"prior_strength_cap": self.prior_strength_cap, "exchange_rate": self.exchange_rate,
+                "forget_old_rows": self.forget_old_rows, "job_kinds": dict(self.job_kinds)}
+
+
+def _forecast_parameters(value):
+    if isinstance(value, ForecastParameters):
+        return value
+    if isinstance(value, Mapping):
+        return ForecastParameters(**value)
+    raise TypeError("forecast settings must be ForecastParameters or their record")
+
+
+def _forecast_context(context):
+    """The facts of one completed unit the system puts in its estimation context (``estimation_context['forecast']``)."""
+    required = {"action_type", "ceiling", "unit_seconds", "decision_seconds", "next_offered"}
+    if not isinstance(context, Mapping) or not isinstance(context.get("forecast"), Mapping):
+        raise ValueError("forecast_controller_requires_estimation_context_forecast")
+    facts = context["forecast"]
+    if set(facts) != required:
+        raise ValueError(f"forecast_context_requires_exactly:{sorted(required)}")
+    if type(facts["action_type"]) is not str or not facts["action_type"]:
+        raise ValueError("forecast_action_type_required")
+    for name in ("unit_seconds", "decision_seconds"):
+        _score(facts[name], name)
+    if _is_ceiling_number(facts["ceiling"]):
+        _score(facts["ceiling"], "ceiling")
+    elif facts["ceiling"] != UNBOUNDED_TEXT:
+        raise ValueError("forecast_ceiling_is_a_number_or_unbounded")
+    offered = facts["next_offered"]
+    if not isinstance(offered, Mapping):
+        raise ValueError("forecast_next_offered_must_map_action_types_to_ceilings")
+    for name, ceiling in offered.items():
+        if type(name) is not str or not name:
+            raise ValueError("forecast_offered_action_type_required")
+        if _is_ceiling_number(ceiling):
+            _score(ceiling, "offered ceiling")
+        elif ceiling != UNBOUNDED_TEXT:
+            raise ValueError("forecast_ceiling_is_a_number_or_unbounded")
+    return facts
+
+
+def forecast_actions(parameters, observations, histories, offered):
+    """One row per offered action (``{action type: ceiling number or 'unbounded'}``), from this episode's own
+    ``observations`` (each ``{'action_type', 'ceiling', 'gain', 'unit_seconds', 'decision_seconds'}``) and the
+    ledger's ``histories`` (``{action type: {'rows': [{'ceiling', 'gain', 'seconds', 'decision_seconds', 'weight'}],
+    'job_seconds': [seconds]}}``): ``{'action_type', 'ceiling', 'forecast_gain' (``None``: unknown),
+    'expected_seconds' (``None``: unknown), 'seconds_basis', 'threshold', 'worth'}``. The formulas are described
+    above."""
+    cap = parameters.prior_strength_cap
+    decision_pool = [item["decision_seconds"] for item in observations]
+    unit_pool = [item["unit_seconds"] for item in observations]
+    rows = []
+    for action_type, ceiling in offered.items():
+        history = histories[action_type]
+        own = [item for item in observations if item["action_type"] == action_type]
+        if _is_ceiling_number(ceiling):
+            if ceiling == 0:
+                forecast = 0.0
+            else:
+                alpha = beta = 0.0
+                for row in history["rows"]:
+                    if _is_ceiling_number(row["ceiling"]) and row["ceiling"] > 0:
+                        fraction = _fraction(row["gain"], row["ceiling"], action_type)
+                        alpha += row["weight"] * fraction
+                        beta += row["weight"] * (1.0 - fraction)
+                strength = alpha + beta
+                if strength > cap:
+                    alpha, beta = alpha * cap / strength, beta * cap / strength
+                if strength == 0:
+                    alpha, beta = 1.0, 1.0
+                for item in own:
+                    if _is_ceiling_number(item["ceiling"]) and item["ceiling"] > 0:
+                        fraction = _fraction(item["gain"], item["ceiling"], action_type)
+                        alpha, beta = alpha + fraction, beta + (1.0 - fraction)
+                forecast = alpha / (alpha + beta) * ceiling
+        else:
+            weight = math.fsum(row["weight"] for row in history["rows"])
+            held = min(weight, cap)
+            mean = math.fsum(row["weight"] * row["gain"] for row in history["rows"]) / weight if weight else 0.0
+            total = held + len(own)
+            forecast = (mean * held + math.fsum(item["gain"] for item in own)) / total if total else None
+        decision = (_median(decision_pool) if decision_pool
+                    else _median([row["decision_seconds"] for row in history["rows"]]) if history["rows"] else None)
+        action_seconds = [row["seconds"] for row in history["rows"]] + [item["unit_seconds"] for item in own]
+        if history["job_seconds"]:
+            seconds = _median(history["job_seconds"]) + (0.0 if decision is None else decision)
+            basis = "ledger_job_duration_plus_decision"
+        elif action_seconds:
+            seconds, basis = _median(action_seconds), "action_unit_history"
+        elif unit_pool:
+            seconds, basis = _median(unit_pool), "episode_median_unit"
+        else:
+            seconds, basis = None, "unknown"
+        threshold = (0.0 if seconds is None else seconds) * parameters.exchange_rate
+        rows.append({"action_type": action_type, "ceiling": ceiling if _is_ceiling_number(ceiling) else UNBOUNDED_TEXT,
+                     "forecast_gain": forecast, "expected_seconds": seconds, "seconds_basis": basis,
+                     "threshold": threshold, "worth": forecast is None or forecast > threshold})
+    return tuple(rows)
+
+
+@dataclass(frozen=True)
+class ForecastDecision:
+    stop: bool
+    rows: tuple
+
+    def as_record(self):
+        return {"stop": self.stop, "rows": [dict(row) for row in self.rows],
+                "decision_basis": "no_offered_action_forecast_exceeds_expected_seconds_times_exchange_rate"}
+
+
+@dataclass(frozen=True)
+class ForecastStep:
+    unit_label: str
+    credit: float
+    marginal_credit: float
+    decision: ForecastDecision
+    is_root: bool = False
+    requests_transition: bool = False
+
+    @property
+    def stop(self):
+        return self.decision.stop
+
+    def as_record(self):
+        return {"unit_label": self.unit_label, "credit": self.credit, "marginal_credit": self.marginal_credit,
+                "decision": self.decision.as_record(), "stop": self.stop, "is_root": self.is_root,
+                "requests_transition": self.requests_transition}
+
+
+class ForecastYieldState:
+    """What the forecast controller holds after its completed units. ``forecast(offered)`` gives the rows for a
+    decision that offers ``offered`` (``{action type: ceiling or 'unbounded'}``) from what has been learned so far."""
+
+    def __init__(self, epoch, initial_credit, current_credit, history, decision, parameters, forecast):
+        self.epoch, self.initial_credit, self.current_credit = epoch, initial_credit, current_credit
+        self.history, self.decision, self.parameters, self._forecast = history, decision, parameters, forecast
+
+    @property
+    def stop(self):
+        return self.decision.stop
+
+    def forecast(self, offered):
+        return self._forecast(offered)
+
+    def as_record(self):
+        return {"epoch": self.epoch, "initial_credit": self.initial_credit, "current_credit": self.current_credit,
+                "scores": list(self.history), "decision": self.decision.as_record(),
+                "parameters": self.parameters.as_record(), "provenance": forecast_provenance()}
+
+
+def forecast_provenance():
+    return {"controller": FORECAST_VERSION, "forecast": "realized_fraction_times_ceiling_or_typical_gain_if_unbounded",
+            "fraction": "beta_posterior_prior_uniform_or_capped_ledger_pseudo_counts_plus_own_units",
+            "cost": "expected_seconds", "stop": "no_offered_forecast_exceeds_expected_seconds_times_exchange_rate",
+            "model_estimates": False}
+
+
+class ForecastYieldController:
+    """Continue while some offered action is forecast to earn more than its expected seconds at the exchange rate.
+
+    The system attaches the estimate-ledger access once (``attach``) and gives each completed unit's facts in its
+    estimation context (``estimation_context['forecast']``: the action type and its ceiling, the unit's measured
+    seconds and decision seconds, and the ceilings the next decision offers). Nothing here writes the ledger."""
+
+    def __init__(self, epoch, initial_credit, settings):
+        self.epoch = _epoch(epoch)
+        self.initial_credit = _signed(initial_credit, "initial_credit")
+        self.settings = _forecast_parameters(settings)
+        self.exchange_rate = self.settings.exchange_rate
+        self._ledger, self._observations, self._scores = None, (), ()
+        self._current_credit = self.initial_credit
+        self._decision = ForecastDecision(False, ())
+
+    def attach(self, ledger):
+        """The runner's read access to the estimate ledger: ``ledger.history(action_type, job_prefix, forget)``."""
+        if self._ledger is not None:
+            raise RuntimeError("forecast_controller_already_has_a_ledger")
+        self._ledger = ledger
+
+    def _histories(self, offered):
+        if self._ledger is None:
+            raise RuntimeError("forecast_controller_has_no_ledger")
+        return {action_type: self._ledger.history(action_type, self.settings.job_kinds.get(action_type),
+                                                  self.settings.forget_old_rows) for action_type in offered}
+
+    def _rows(self, observations, offered):
+        return forecast_actions(self.settings, observations, self._histories(offered), offered)
+
+    def observe(self, unit_label, value, is_root=False):
+        cumulative, context = _completed(value)
+        facts = _forecast_context(context)
+        delta = cumulative - self._current_credit
+        self._observations = (*self._observations, {
+            "action_type": facts["action_type"], "ceiling": facts["ceiling"], "gain": delta,
+            "unit_seconds": facts["unit_seconds"], "decision_seconds": facts["decision_seconds"]})
+        self._scores = (*self._scores, delta)
+        self._current_credit = cumulative
+        rows = self._rows(self._observations, facts["next_offered"])
+        self._decision = ForecastDecision(not any(row["worth"] for row in rows), rows)
+        return ForecastStep(str(unit_label), cumulative, delta, self._decision, bool(is_root))
+
+    def state(self):
+        observations = self._observations
+        return ForecastYieldState(self.epoch, self.initial_credit, self._current_credit, self._scores,
+                                  self._decision, self.settings,
+                                  lambda offered: self._rows(observations, offered))

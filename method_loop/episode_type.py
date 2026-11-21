@@ -54,7 +54,13 @@ The loop of one Episode:
    with the chosen action type and its arguments, and after the unit it compares the credit's rise with that
    ceiling: a rise above it (beyond 1e-9) raises ``episode_ceiling_exceeded:<episode>:<action type>:<rise>:<ceiling>``
    (nothing exceeds ``UNBOUNDED``). The journal records, per unit, the offered ceilings, the chosen action's ceiling
-   and the rise. Nothing here changes what the model is shown or how the Episode stops.
+   and the rise. With the three older yield controllers nothing here changes what the model is shown or how the
+   Episode stops. With a ``ForecastYieldController`` the ceilings are its input: the system gives it, with each unit's
+   completion, the ceilings the next decision will offer, it adds the forecast of every offered action to the model's
+   request under the key ``action_forecasts`` (one row per offered action: ``action_type``, ``ceiling`` (a number or
+   ``'unbounded'``), ``forecast_gain`` and ``expected_seconds`` (numbers or ``'unknown'``); facts only, a task
+   changes nothing for it), and it records the unit's forecast before the unit and its result after it in the
+   estimate ledger (``episode_runtime.forecast_ledger``).
 4. Each unit's controller input is ``{'credit': credit(internal_summary(view.with_unit(outcome)), records),
    'estimation_context': {'progress_time': bound.progress.receipt(position)}}``. The episode's yield controller
    observes it and alone decides whether the Episode stops: nothing else ends an Episode. The controller is built
@@ -75,23 +81,29 @@ whose action the caller names. Steps 1, 4 and 5 are unchanged.
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import inspect
 import math
 import re
 import sys
+import time
 from types import MappingProxyType
 
 from . import (ChildEpisodeUnit, ChildProjection, Commission, EpisodeBindingDeclaration, EpisodeChildSlot,
                EpisodeControllerBinding, EpisodeFunctionBinding, EpisodeGoal, EpisodeRef, EpisodeRequest,
                EpisodeTopologyRole, EpisodeView, Episode, JsonRecord, Leaf, RecordForm, ReportContract)
 from .jsonvalue import closed_copy
-from yield_control import AccumulationYieldController, BoundedQualityYieldController, CompletionYieldController
+from yield_control import (AccumulationYieldController, BoundedQualityYieldController, CompletionYieldController,
+                           ForecastYieldController, ForecastYieldState, UNBOUNDED_TEXT)
 
 _NAME = re.compile(r'^[a-z][a-z0-9_]*$')
 _SEGMENT = r'[a-z][a-z0-9]*(?:_[a-z0-9]+)*'
 _BINDING_PATH = re.compile('^' + _SEGMENT + '(?:/' + _SEGMENT + ')*$')
-YIELD_CONTROLLERS = (AccumulationYieldController, BoundedQualityYieldController, CompletionYieldController)
+YIELD_CONTROLLERS = (AccumulationYieldController, BoundedQualityYieldController, CompletionYieldController,
+                     ForecastYieldController)
+# The one key under which the system adds the forecasts to the context of a decision's model request, when the
+# Episode's yield controller is a ``ForecastYieldController``.
+FORECASTS_KEY = 'action_forecasts'
 
 
 class _Unbounded:
@@ -464,6 +476,11 @@ def _report_contract(objective):
 
 def _controller_text(controller):
     """Progress and stopping text for the yield controller an episode actually built."""
+    if isinstance(controller, ForecastYieldController):
+        return ('credit(summary) rises by what the chosen action earns, at most its ceiling; each offered action is '
+                'forecast from its ceiling and what actions of its kind realized before',
+                'stops when no offered action\'s forecast gain exceeds its expected seconds times the exchange rate '
+                + repr(controller.exchange_rate))
     cost = controller.cost
     if isinstance(controller, AccumulationYieldController):
         return ('credit(summary) accumulates after each unit without a declared limit',
@@ -480,6 +497,11 @@ def _controller_text(controller):
     raise TypeError('episode_yield_controller_must_be_a_yield_control_controller:' + type(controller).__name__)
 
 
+def _written(ceiling):
+    """A ceiling as the journal and the forecast controller write it: a number, or ``'unbounded'``."""
+    return UNBOUNDED_TEXT if ceiling is UNBOUNDED else ceiling
+
+
 class _SystemSource:
     """The ``UnitSource`` of one Episode of an ``EpisodeBinding`` (see the module docstring)."""
 
@@ -487,45 +509,96 @@ class _SystemSource:
         self._binding, self._bound, self._builders = binding, bound, child_builders
         self.episode = None
 
-    def _controller_input(self, view, position, outcome):
+    def _controller_input(self, view, position, outcome, chosen=None):
         summary = self._binding._summary(view.with_unit(outcome))
-        return JsonRecord({'credit': self._binding._credit_of(summary, self._bound),
-                           'estimation_context': {'progress_time': self._bound.progress.receipt(position)}})
+        context = {'progress_time': self._bound.progress.receipt(position)}
+        if isinstance(view.controller_state, ForecastYieldState):
+            context['forecast'] = self._forecast_facts(summary, position, chosen)
+        return JsonRecord({'credit': self._binding._credit_of(summary, self._bound), 'estimation_context': context})
+
+    def _unit_seconds(self, position):
+        """The measured seconds of unit ``position``: from the progress receipt of the unit before it (the Episode's
+        origin for the first) to its own, so the model's decision time is in it."""
+        progress = self._bound.progress
+        now = progress.receipt(position)
+        before = progress.receipt(position - 1) if position else {'elapsed_seconds': 0.0, 'status': 'available'}
+        if now['status'] != 'available' or before['status'] != 'available':
+            raise ValueError('forecast_requires_measured_unit_seconds:' + self._binding.binding_path)
+        return now['elapsed_seconds'] - before['elapsed_seconds']
+
+    def _forecast_facts(self, summary, position, chosen):
+        """What a ``ForecastYieldController`` is given with the completion of unit ``position``: the action and its
+        ceiling, the unit's measured seconds, and the ceilings the next decision offers (computed from the summary
+        after the unit, as that decision will compute them)."""
+        context = self._bound.decision_context(position + 1)
+        offered = self._offered_ceilings(summary, context)
+        return {'action_type': chosen['action_type'], 'ceiling': _written(chosen['ceiling']),
+                'unit_seconds': self._unit_seconds(position), 'decision_seconds': chosen['decision_seconds'],
+                'next_offered': {name: _written(ceiling) for name, ceiling in offered.items()}}
 
     def _ceiling_of(self, summary, action_type, arguments, context):
         return _ceiling(self._binding._member('ceiling')(summary, self._bound.reader, action_type, arguments, context),
                         self._binding.binding_path, action_type)
 
-    def _offered(self, summary, position, context):
-        """The ceiling of every action type this decision offers (journaled for unit ``position``)."""
+    def _offered_ceilings(self, summary, context):
+        """The ceiling of every action type a decision offers."""
         path = self._binding.binding_path
         names = self._binding._member('offered_actions')(summary, context)
         if (not isinstance(names, (list, tuple)) or len(set(names)) != len(names)
                 or any(type(name) is not str or not name for name in names)):
             raise TypeError('episode_offered_actions_must_be_distinct_action_type_names:' + path + ':' + repr(names))
-        offered = {name: self._ceiling_of(summary, name, None, context) for name in names}
+        return {name: self._ceiling_of(summary, name, None, context) for name in names}
+
+    def _offered(self, summary, position, context):
+        """The ceiling of every action type this decision offers (journaled for unit ``position``)."""
+        offered = self._offered_ceilings(summary, context)
         self._bound.ceilings.offered(position, offered)
         return offered
 
-    def _chosen(self, position, decision, summary, context, offered):
-        """The action taken: its type, its ceiling (asked again with its arguments) and the credit before the unit."""
+    def _forecast_rows(self, view, offered):
+        """The forecast of every offered action, from what the controller has learned (``None`` when the Episode's
+        controller is not a ``ForecastYieldController``)."""
+        if not isinstance(view.controller_state, ForecastYieldState):
+            return None
+        return view.controller_state.forecast({name: _written(ceiling) for name, ceiling in offered.items()})
+
+    @staticmethod
+    def _shown(rows):
+        """The forecast rows as the model sees them: facts only."""
+        return [{'action_type': row['action_type'], 'ceiling': row['ceiling'],
+                 'forecast_gain': 'unknown' if row['forecast_gain'] is None else row['forecast_gain'],
+                 'expected_seconds': 'unknown' if row['expected_seconds'] is None else row['expected_seconds']}
+                for row in rows]
+
+    def _chosen(self, view, position, decision, summary, context, offered):
+        """The action taken: its type, its ceiling (asked again with its arguments), the credit before the unit and
+        the seconds the decision took. With a ``ForecastYieldController`` its forecast, for that ceiling, is recorded
+        in the estimate ledger before the unit runs."""
         path = self._binding.binding_path
         action_type = decision.name if isinstance(decision, ToolCall) else decision.slot
         if action_type not in offered:
             raise LookupError('episode_action_not_offered:' + path + ':' + str(action_type))
         ceiling = self._ceiling_of(summary, action_type, _closed(dict(decision.arguments), 'ceiling_arguments'), context)
         self._bound.ceilings.chosen(position, action_type, ceiling)
-        return {'action_type': action_type, 'ceiling': ceiling,
-                'before': self._binding._credit_of(summary, self._bound)}
+        chosen = {'action_type': action_type, 'ceiling': ceiling, 'decision_seconds': time.monotonic() - self._began,
+                  'before': self._binding._credit_of(summary, self._bound)}
+        rows = self._forecast_rows(view, {action_type: ceiling})
+        if rows is not None:
+            self._bound.forecast_ledger.expect(position, action_type, rows[0], context.clock.now)
+        return chosen
 
     def _unit_input(self, view, position, outcome, chosen):
         """The controller input of a completed unit, after the credit's rise is compared with the ceiling of the action."""
-        record = self._controller_input(view, position, outcome)
+        record = self._controller_input(view, position, outcome, chosen)
         rise = record.as_record()['credit'] - chosen['before']
         self._bound.ceilings.rise(position, rise)
         if chosen['ceiling'] is not UNBOUNDED and rise > chosen['ceiling'] + CEILING_TOLERANCE:
             raise ValueError('episode_ceiling_exceeded:' + self._binding.binding_path + ':' + chosen['action_type']
                              + ':' + repr(rise) + ':' + repr(chosen['ceiling']))
+        facts = record.as_record()['estimation_context'].get('forecast')
+        if facts is not None:
+            self._bound.forecast_ledger.resolve(position, rise, facts['unit_seconds'], facts['decision_seconds'],
+                                                self._bound.progress.receipt(position)['captured_at'])
         return record
 
     def _choosing(self, view):
@@ -533,6 +606,7 @@ class _SystemSource:
         from."""
         position = view.units_consumed
         self._bound.position.begin(position)
+        self._began = time.monotonic()
         return position, self._binding._summary(view)
 
     def next_decision(self, view):
@@ -560,6 +634,9 @@ class _SystemSource:
                 offered = self._offered(summary, position, context)
             if not isinstance(decision, ModelRequest):
                 break
+            rows = self._forecast_rows(view, offered)
+            if rows is not None:
+                decision = replace(decision, context={**decision.context, FORECASTS_KEY: self._shown(rows)})
             response = await self._bound.model.complete(decision.role, decision.instructions, decision.context,
                                                         decision.output_schema)
             try:
@@ -575,7 +652,7 @@ class _SystemSource:
         """The unit of an action. An action is a ``ToolCall`` or a ``ChildCall``: the task cannot end its
         Episode, so anything else is an error of the episode's ``decide`` or ``action``."""
         if isinstance(decision, (ToolCall, ChildCall)):
-            chosen = self._chosen(position, decision, summary, context, offered)
+            chosen = self._chosen(view, position, decision, summary, context, offered)
             if isinstance(decision, ToolCall):
                 return self._tool(view, position, decision, chosen)
             return self._child(view, position, decision, summary, chosen)

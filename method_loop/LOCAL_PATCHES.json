@@ -56,11 +56,12 @@
     {
       "path": "episode_type.py",
       "upstream_sha256": null,
-      "local_sha256": "ecfec279144ef999131722036aa748b79e1e64fb91b91f52b7dfd3dda6f80930",
+      "local_sha256": "41e3df740db15123d0ee5baf55a481774b6d86eac3c72354af8428e03f65da1f",
       "details": [
         "New: the concrete episode contract (EpisodeBinding, ChildCall, ChildMessage, ModelRequest, Rejected, ToolCall, SIGNATURES, SUPPLIED_BY_FILE, YIELD_CONTROLLERS, closing_credit, checked_members), moved from episode_runtime/episode_type.py by the owner's decision of 2026-11-20 so that the structure lives in method_loop and episode_runtime is the runner. Only its imports became relative to method_loop and its interface name now reads 'method_loop.episode_type.<role>'; nothing stored in a journal or run held the old string. It also imports yield_control. episode_runtime re-exports its names for the episodes until their imports are moved.",
         "Outdated text left unchanged: SOURCE.json scope and this file's purpose and deleted_files still name episode_runtime/episode_type.py as the place of the Episode type; it is method_loop/episode_type.py.",
-        "Added (2026-11-21, owner's decision): credit.py supplies ceiling(summary, records, action_type, arguments, ctx) beside credit and task.py supplies offered_actions(summary, ctx) (episode_lacks_members otherwise); the constant UNBOUNDED (exported by method_loop) is what a ceiling returns, deliberately, for an action whose credit has no finite upper bound. The unit source asks for the ceiling of every offered action after decide, again for the chosen action after action, and raises episode_ceiling_exceeded:<episode>:<action type>:<rise>:<ceiling> when the credit's rise over the unit is above the ceiling by more than 1e-9; episode_runtime journals the offered ceilings, the chosen one and the rise (table ceilings)."
+        "Added (2026-11-21, owner's decision): credit.py supplies ceiling(summary, records, action_type, arguments, ctx) beside credit and task.py supplies offered_actions(summary, ctx) (episode_lacks_members otherwise); the constant UNBOUNDED (exported by method_loop) is what a ceiling returns, deliberately, for an action whose credit has no finite upper bound. The unit source asks for the ceiling of every offered action after decide, again for the chosen action after action, and raises episode_ceiling_exceeded:<episode>:<action type>:<rise>:<ceiling> when the credit's rise over the unit is above the ceiling by more than 1e-9; episode_runtime journals the offered ceilings, the chosen one and the rise (table ceilings).",
+        "Added (2026-11-21, owner's decision): the fourth yield controller, yield_control.ForecastYieldController, is in YIELD_CONTROLLERS. When an Episode's controller state is a ForecastYieldState the unit source (a) gives the controller, in each unit's estimation_context['forecast'], the action type and its ceiling, the unit's measured seconds, the decision seconds and the ceilings the next decision offers (computed from the summary after the unit), (b) adds one row per offered action to the decision's ModelRequest context under the key action_forecasts (action_type, ceiling, forecast_gain, expected_seconds; facts only), and (c) records the chosen action's forecast in the estimate ledger before the unit and its rise and seconds after it, through BoundEpisode.forecast_ledger (episode_runtime/forecast_ledger.py). The three older controllers are untouched; the design is docs/plan/designs/forecast_yield_controller.md."
       ]
     },
     {
@@ -81,7 +82,15 @@
       ]
     }
   ],
-  "deleted_files": ["independent.py", "reconstruction.py", "episode_type.py (moved to episode_runtime/episode_type.py)", "archive.py (upstream; nothing set Episode.archive_record)", "durable.py (local; its commission/return/receiver-claim half deleted, its native event target half moved to gene_annotation_episode/episodic_workflow/episode_support/jobs/native_event_ledger.py)", "durable_worker.py (local; ran an Episode in a detached process)", "suspension.py (local; nothing bound a SuspensionState)"],
+  "deleted_files": [
+    "independent.py",
+    "reconstruction.py",
+    "episode_type.py (moved to episode_runtime/episode_type.py)",
+    "archive.py (upstream; nothing set Episode.archive_record)",
+    "durable.py (local; its commission/return/receiver-claim half deleted, its native event target half moved to gene_annotation_episode/episodic_workflow/episode_support/jobs/native_event_ledger.py)",
+    "durable_worker.py (local; ran an Episode in a detached process)",
+    "suspension.py (local; nothing bound a SuspensionState)"
+  ],
   "verification": [
     "episode_runtime/tests/test_system_recording.py",
     "episode_runtime/tests/test_probe_runs.py",

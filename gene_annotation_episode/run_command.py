@@ -55,7 +55,9 @@ def _collaborators(store, bindings, *, continuation, services, model_calls):
     """The four system collaborators. A service an episode declares that the job services do not offer fails here."""
     from .episodic_workflow.episode_support.jobs.job_services import job_services
     offered = job_services(services)
-    declared = sorted({name for binding in bindings for name in binding.services})
+    # The estimate ledger is the runner's own (a ``ForecastYieldController`` is given it by the runner): it is offered to
+    # every run, and an episode sees it only if it declares it.
+    declared = sorted({name for binding in bindings for name in binding.services} | {'estimate_table'})
     return {'store': store,
             'model_provider': ModelProvider(load_config(), Path(model_calls), Path(model_calls).parent),
             'continuation': continuation, 'services': {name: offered[name] for name in declared}}
