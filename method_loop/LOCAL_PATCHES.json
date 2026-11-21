@@ -40,9 +40,9 @@
     {
       "path": "__init__.py",
       "upstream_sha256": "15329d32cc2ae6160c2d292d6dd7f9f727b2a3a382e05eef51b45b7ccc3599a9",
-      "local_sha256": "1da7234fb2f98e698a377409ffd002ea5b24ba6401db7c27806d95d0d95344dd",
+      "local_sha256": "d7fe1a84e55e70dded29cb9fea0ed5ecdd613490bd52862d30fd638a84082814",
       "details": [
-        "Exports the typed forms, ChildProjection, EpisodeUpdate, EpisodeView, JsonRecord and ResumeUnit; no longer exports the deleted machinery (v9: nor SourceEnd, END_SOURCE_FAILED, SOURCE_END_KINDS, SOURCE_END_REASONS; v10: nor END_EXHAUSTED)."
+        "Exports the typed forms, ChildProjection, EpisodeUpdate, EpisodeView, JsonRecord and ResumeUnit; no longer exports the deleted machinery (v11: also exports the concrete episode contract of episode_type.py; v9: nor SourceEnd, END_SOURCE_FAILED, SOURCE_END_KINDS, SOURCE_END_REASONS; v10: nor END_EXHAUSTED)."
       ]
     },
     {
@@ -51,6 +51,15 @@
       "local_sha256": "46074984da7fd719ad9ea04126f86e2c3ef8c437cb91dd3b0b0ce8f59e162f47",
       "details": [
         "EpisodeBindingDeclaration gains the optional role internal_summary (an EpisodeFunctionBinding): the summary an Episode's task sees before each unit, a function of its EpisodeView."
+      ]
+    },
+    {
+      "path": "episode_type.py",
+      "upstream_sha256": null,
+      "local_sha256": "40967f1a0fc7848123a353547186f355e9e0230048e97bcccdee4bb0c074f256",
+      "details": [
+        "New: the concrete episode contract (EpisodeBinding, ChildCall, ChildMessage, ModelRequest, Rejected, ToolCall, SIGNATURES, SUPPLIED_BY_FILE, YIELD_CONTROLLERS, closing_credit, checked_members), moved from episode_runtime/episode_type.py by the owner's decision of 2026-11-20 so that the structure lives in method_loop and episode_runtime is the runner. Only its imports became relative to method_loop and its interface name now reads 'method_loop.episode_type.<role>'; nothing stored in a journal or run held the old string. It also imports yield_control. episode_runtime re-exports its names for the episodes until their imports are moved.",
+        "Outdated text left unchanged: SOURCE.json scope and this file's purpose and deleted_files still name episode_runtime/episode_type.py as the place of the Episode type; it is method_loop/episode_type.py."
       ]
     },
     {

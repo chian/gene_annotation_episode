@@ -1,8 +1,8 @@
-"""The generic episode runner and the Episode type: link, record and resume a subtree of episodes.
+"""The generic episode runner: link, record and resume a subtree of episodes.
 
 This package belongs to no episode tree. It knows no role, episode or evidence axis. Every episode binding
-inherits directly from ``EpisodeBinding`` (``episode_type.py``), which carries the system behaviour on top of the
-generic method loop (``method_loop``). The runner links a registry of binding instances below any entry
+inherits directly from ``EpisodeBinding`` (``method_loop/episode_type.py``), which carries the system behaviour on
+top of the generic method loop (``method_loop``). The runner links a registry of binding instances below any entry
 (grains -> declared tree -> Context -> entry Episode with child builders), gives each Episode its recording
 services (``recording.py``: model calls, record custody, unit attempts; ``store_scope.py``,
 ``work_tables.py`` and ``store_ledger.py``: the run's Store under custody, its work tables and the receipts of
@@ -21,8 +21,10 @@ to the runner.
 """
 from .bindings import BindingRegistry, MissingBinding
 from .collaborators import STANDARD_COLLABORATORS, interface_failures
-from .episode_type import (ChildCall, ChildMessage, EpisodeBinding, ModelRequest, Rejected, SIGNATURES,
-                           SUPPLIED_BY_FILE, ToolCall)
+# The episode contract is defined in method_loop (the owner's decision of 2026-11-20); episodes still import it from
+# here until their imports are moved (step 2).
+from method_loop import (ChildCall, ChildMessage, EpisodeBinding, ModelRequest, Rejected, SIGNATURES,
+                         SUPPLIED_BY_FILE, ToolCall)
 from .journal import JournalError, RunJournal
 from .progress import DecisionClock, ProgressClock
 from .recording import CustodyError, DecisionContext, UnitContext

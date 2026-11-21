@@ -7,7 +7,7 @@ grouped by what the code does. The system is three top-level packages of the
 repository, beside `gene_annotation_episode/`; none is inside `episode_support/`:
 `episode_runtime/` is the generic runner (linking, the run journal, custody, the
 Store under custody, resume) and holds the episode base type
-`episode_runtime/episode_type.py`; `method_loop/` is the generic method loop the
+`method_loop/episode_type.py`; `method_loop/` is the generic method loop the
 runner is built on; `yield_control/` holds the yield estimators.
 
 # Private episode bindings
@@ -15,7 +15,7 @@ runner is built on; `yield_control/` holds the yield estimators.
 Every episode is its own private binding. An episode never inherits from,
 subclasses or shares a behaviour module with another episode: tuning one
 episode must not change any other. Every episode binding inherits directly from
-the system's episode base type, `EpisodeBinding` in `episode_runtime/episode_type.py` (not in the
+the system's episode base type, `EpisodeBinding` in `method_loop/episode_type.py` (not in the
 generic `method_loop`), which carries the system
 behaviour (recording, custody, tracing, replay, the runner's hooks) and declares
 what each episode must supply; it inherits from nothing else. Similar episodes therefore have copies of

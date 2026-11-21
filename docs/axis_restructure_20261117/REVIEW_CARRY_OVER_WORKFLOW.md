@@ -33,7 +33,7 @@ are restated correctly except in the sentences quoted below.
 | Launcher command form | Run through `tools/one_workflow.sh --slot rvw0` | The brief's form fails; the form without the `mkdir` works (`runs/rvw0_1` to `rvw0_3`) |
 | Episode coverage | `git ls-tree -r 97308b94c`, folders with `episode.py` under `root/<axis>/<role>_evidence/**`, against line 6 | 202 = 202, each once, none extra |
 | Old function count | An `ast` listing over `git show 97308b94c:...`, run through the launcher (`runs/rvw0_4/functions/`) | 30,909 definitions in 7,408 files |
-| Signatures | `episode_runtime/episode_type.py` (`SIGNATURES`, `SUPPLIED_BY_FILE`, `SYSTEM_MEMBERS`, `__init_subclass__`) and the two worked examples | Lines 73 and 180 agree with the code |
+| Signatures | `method_loop/episode_type.py` (`SIGNATURES`, `SUPPLIED_BY_FILE`, `SYSTEM_MEMBERS`, `__init_subclass__`) and the two worked examples | Lines 73 and 180 agree with the code |
 | Control flow of the script | Dry run under `node` with stub `agent`, `parallel`, `phase`, `log` | Runs to the end; no unreplaced `<SLOT>`; the hole of finding 9 reproduced |
 
 Not checked: whether workflow subagents are given `AGENTS.md` (line 48 assumes it); how much context a Sonnet

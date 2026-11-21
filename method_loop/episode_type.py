@@ -72,10 +72,10 @@ import re
 import sys
 from types import MappingProxyType
 
-from method_loop import (ChildEpisodeUnit, ChildProjection, Commission, EpisodeBindingDeclaration, EpisodeChildSlot,
-                         EpisodeControllerBinding, EpisodeFunctionBinding, EpisodeGoal, EpisodeRef, EpisodeRequest,
-                         EpisodeTopologyRole, EpisodeView, Episode, JsonRecord, Leaf, RecordForm, ReportContract)
-from method_loop.jsonvalue import closed_copy
+from . import (ChildEpisodeUnit, ChildProjection, Commission, EpisodeBindingDeclaration, EpisodeChildSlot,
+               EpisodeControllerBinding, EpisodeFunctionBinding, EpisodeGoal, EpisodeRef, EpisodeRequest,
+               EpisodeTopologyRole, EpisodeView, Episode, JsonRecord, Leaf, RecordForm, ReportContract)
+from .jsonvalue import closed_copy
 from yield_control import AccumulationYieldController, BoundedQualityYieldController, CompletionYieldController
 
 _NAME = re.compile(r'^[a-z][a-z0-9_]*$')
@@ -183,7 +183,7 @@ def controller_input_schema():
 
 def _function(name, role, function):
     return EpisodeFunctionBinding(name=name, library=function.__module__, function_id=function.__qualname__,
-                                  interface='episode_runtime.episode_type.' + role,
+                                  interface='method_loop.episode_type.' + role,
                                   definition_id=function.__module__ + ':' + function.__qualname__)
 
 

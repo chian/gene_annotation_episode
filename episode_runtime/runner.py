@@ -38,12 +38,12 @@ import math
 from types import MappingProxyType
 
 from method_loop import (ClosedRecord, Commission, Context, Controller, Episode, EpisodeGoal, EpisodeRef,
-                         EpisodeRequest, EpisodeTree, EpisodeUpdate, Grain, RecordForm, ResumeUnit)
+                         EpisodeRequest, EpisodeTree, EpisodeUpdate, Grain, RecordForm, ResumeUnit,
+                         YIELD_CONTROLLERS, closing_credit)
 from method_loop.jsonvalue import closed_copy, content_digest
 
 from .bindings import BindingRegistry
 from .collaborators import STANDARD_COLLABORATORS, interface_failures
-from .episode_type import YIELD_CONTROLLERS, closing_credit
 from .journal import EpisodeRecorder, JournalError, RunJournal
 from .progress import ProgressClock
 from .recording import (Custody, DecisionContext, InitialCredit, RecordedModel, ServiceReads, UnitAttempts,

@@ -77,7 +77,7 @@ No real episode is in the new form yet: `grep 'class .*(EpisodeBinding)'` under 
 | S5 declaration | Stated as a description; built at every controller build and discarded (`runner.py:117`). Stopping text follows the controller kind |
 | S6 `read_from_child` twice | Fixed (one `project` callback, `episode_type.py:453-458`) |
 | S7 patch manifest | Fixed: all 12 hashes match; listed test files exist |
-| S8 episode type in the vendored library | Fixed: moved to `episode_runtime/episode_type.py`; `SOURCE.json` scope amended. `durable.py` with its own SQLite ledger is still in `method_loop` (section 4) |
+| S8 episode type in the vendored library | Fixed: moved to `method_loop/episode_type.py`; `SOURCE.json` scope amended. `durable.py` with its own SQLite ledger is still in `method_loop` (section 4) |
 | S9 fallback and optional hooks | Fixed (`method_loop/episode.py:1219-1230`; no `getattr(source, ..., None)` left) |
 | S10 import cycle | Not done (`yield_control/__init__.py:30`; function-level imports at `runner.py:97`, `episode_type.py:359`) |
 | S11 tests | Much improved (section 6) |

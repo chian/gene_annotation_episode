@@ -8,7 +8,7 @@ constructs its own binding instances.
 """
 from __future__ import annotations
 
-from .episode_type import EpisodeBinding, checked_members
+from method_loop import EpisodeBinding, checked_members
 
 
 class MissingBinding(LookupError):
